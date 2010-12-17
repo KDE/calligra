@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Kexi/Handler
 Comment=Kexi Project Handlers
 Comment[ca]=Gestors de projectes del Kexi
+Comment[ca@valencia]=Gestors de projectes del Kexi
 Comment[cs]=Ovladač projektů Kexi
 Comment[cy]=Trinyddion Prosiect Kexi
 Comment[da]=Kexi projekthåndtering
@@ -47,7 +48,6 @@ Comment[tg]=Нақшаҳои Kexi
 Comment[tr]=Kexi Proje İşleci
 Comment[uk]=Обробники проекту Kexi
 Comment[wa]=Apougneus d' fitchîs di prodjet Kexi
-Comment[x-test]=xxKexi Project Handlersxx
 Comment[zh_CN]=Kexi 项目处理器
 Comment[zh_TW]=Kexi 專案控管程式
 

@@ -19,7 +19,6 @@ Name[pt_BR]=Okular
 Name[sv]=okular
 Name[uk]=Okular
 Name[wa]=okular
-Name[x-test]=xxokularxx
 Name[zh_TW]=okular
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=okularpart

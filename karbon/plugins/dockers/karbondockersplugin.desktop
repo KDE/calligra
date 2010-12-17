@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Karbon Dockers plugin
 Name[ca]=Connector de Dockers per al Karbon
+Name[ca@valencia]=Connector de Dockers per al Karbon
 Name[da]=Docker-plugin til Karbon
 Name[de]=Karbon Docker-Modul
 Name[el]=Πρόσθετο προσάρτησης του Karbon
@@ -28,7 +29,6 @@ Name[sv]=Karbon dockningsinsticksprogram
 Name[tr]=Karbon Dockers eklentisi
 Name[uk]=Додаток Dockers для Karbon
 Name[wa]=Tchôke-divins di Karbon po les båres di wårdaedje
-Name[x-test]=xxKarbon Dockers pluginxx
 Name[zh_CN]=Karbon 停靠插件
 Name[zh_TW]=Karbon 嵌入外掛程式
 X-KDE-ServiceTypes=KOffice/Dock

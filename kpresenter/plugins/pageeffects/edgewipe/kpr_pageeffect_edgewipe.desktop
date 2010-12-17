@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Edge wipe
 Name[ca]=Esborrat de vora
+Name[ca@valencia]=Esborrat de vora
 Name[da]=Kantvisker
 Name[de]=Wischblende (Rand)
 Name[el]=Σβήσιμο άκρων
@@ -25,10 +26,10 @@ Name[ta]=முனை நீக்கி பக்க விளைவுகள�
 Name[tr]=Kenar temizleme
 Name[uk]=Витирання з країв
 Name[wa]=Schover l' boird evoye
-Name[x-test]=xxEdge wipexx
 Name[zh_TW]=邊緣掃描
 Comment=Edge Wipe Page Effects
 Comment[ca]=Efectes d'esborrat de vora de la pàgina
+Comment[ca@valencia]=Efectes d'esborrat de vora de la pàgina
 Comment[da]=Kantvisker-sideeffekter
 Comment[de]=Wischblenden-Seiteneffekte
 Comment[el]=Εφέ σελίδας σβήσιμο άκρων
@@ -53,7 +54,6 @@ Comment[ta]=முனை நீக்கி
 Comment[tr]=Kenar Temizleme Sayfa Efekti
 Comment[uk]=Ефект витирання сторінки з країв
 Comment[wa]=Efets d' pådje schover l' boird evoye
-Comment[x-test]=xxEdge Wipe Page Effectsxx
 Comment[zh_TW]=邊緣掃描頁面效果
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service

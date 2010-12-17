@@ -4,6 +4,7 @@ X-KDE-ServiceType=KOfficeGenericFilter
 Comment=KOffice Filter Wrapper
 Comment[bg]=Обвивка за филтър на KOffice
 Comment[ca]=Filtre de l'embolcall del KOffice
+Comment[ca@valencia]=Filtre de l'embolcall del KOffice
 Comment[cs]=Obecný filtr KOffice
 Comment[cy]=Lapiad Hidlen KOffice
 Comment[da]=KOffice-filteromslag
@@ -48,7 +49,6 @@ Comment[tr]=KOffice Filtre Kaydırması
 Comment[uk]=Обгортка фільтрів KOffice
 Comment[wa]=Passete po côper l' roye di KOffice
 Comment[xh]=Isisongeli Sesihluzi se KOffice
-Comment[x-test]=xxKOffice Filter Wrapperxx
 Comment[zh_CN]=KOffice 过滤器包装
 Comment[zh_TW]=KOffice 過濾器包裝
 

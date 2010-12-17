@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=Flow
+Name[pt]=Flow
+Name[sv]=Flow
+Name[uk]=Flow
 Exec=flow %u
 GenericName=Flowchart & Diagram Editing
 GenericName[ca]=Editor de diagrames de fluxos
+GenericName[ca@valencia]=Editor de diagrames de fluxos
 GenericName[cs]=Editor nákresů a diagramů
 GenericName[cy]=Golygu Siartiau Llif & Diagram
 GenericName[da]=Flydediagrammer & diagramredigering
@@ -46,9 +50,9 @@ GenericName[tg]=Ҷадвалҳо ва диаграмма
 GenericName[tr]=Diyagram Düzenleyici
 GenericName[uk]=Редагування діаграм та блок-схем
 GenericName[uz]=Sxema va diagrammalarni tahrirlash
+GenericName[uz@cyrillic]=Схема ва диаграммаларни таҳрирлаш
 GenericName[wa]=Aspougnaedje di grafikes matematikes eyet d' diyagrames
 GenericName[xh]=Umzobo wokulandelana kweenkqubo & Uhlelo lomzobo
-GenericName[x-test]=xxFlowchart & Diagram Editingxx
 GenericName[zh_TW]=流程圖與圖表編輯
 MimeType=application/vnd.oasis.opendocument.graphics;application/x-flow;
 Type=Application

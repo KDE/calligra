@@ -4,6 +4,7 @@ X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi DB Widgets
 Name[ca]=Estris DB del Kexi
+Name[ca@valencia]=Estris DB del Kexi
 Name[cy]=Celfigion Cronfa Ddata Kexi
 Name[da]=Kexi DB-kontroller
 Name[de]=Kexi-Datenbankelemente
@@ -47,8 +48,8 @@ Name[tg]=Виджетҳои Kexi DB
 Name[tr]=Kexi DB Parçacıkları
 Name[uk]=Віджети Kexi DB
 Name[uz]=Kexi maʼlumot baza vidjetlari
+Name[uz@cyrillic]=Kexi маълумот база виджетлари
 Name[wa]=Ahesses di BD di Kexi
-Name[x-test]=xxKexi DB Widgetsxx
 Name[zh_CN]=Kexi 数据库部件
 Name[zh_TW]=Kexi DB 視窗元件
 

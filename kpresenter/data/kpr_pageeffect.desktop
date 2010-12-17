@@ -4,6 +4,7 @@ X-KDE-ServiceType=KPresenter/PageEffect
 Comment=Page effect plugin for KPresenter
 Comment[bg]=Приставка за ефекти в страниците на KPresenter
 Comment[ca]=Connector d'efectes de pàgina per al KPresenter
+Comment[ca@valencia]=Connector d'efectes de pàgina per al KPresenter
 Comment[da]=Sideeffekt-plugin til KPresenter
 Comment[de]=Seiteneffektmodul für KPresenter
 Comment[el]=Πρόσθετο εφέ σελίδας για το KPresenter
@@ -30,7 +31,6 @@ Comment[sv]=Insticksprogram med sideffekter för KPresenter
 Comment[tr]=KPresenter için Sayfa efekti eklentisi
 Comment[uk]=Додаток ефектів сторінки для KPresenter
 Comment[wa]=Tchôke-divins d' efets po les pådjes po KPresenter
-Comment[x-test]=xxPage effect plugin for KPresenterxx
 Comment[zh_CN]=KPresenter 页面效果插件
 Comment[zh_TW]=KPresenter 頁面效果外掛程式
 [PropertyDef::X-KPresenter-Version]

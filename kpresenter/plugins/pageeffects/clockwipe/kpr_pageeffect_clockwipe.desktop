@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Clock wipe
 Name[ca]=Esborrat de rellotge
+Name[ca@valencia]=Esborrat de rellotge
 Name[da]=Urvisker
 Name[de]=Wischblende (Uhr)
 Name[el]=Ωρολογιακό σβήσιμο
@@ -25,10 +26,10 @@ Name[ta]=கடிகார நீக்கி
 Name[tr]=Saat temizleme
 Name[uk]=Витирання по колу
 Name[wa]=Schover l' ôrlodje evoye
-Name[x-test]=xxClock wipexx
 Name[zh_TW]=時鐘掃描
 Comment=Clock wipe Page Effects
 Comment[ca]=Efectes d'esborrat de rellotge de la pàgina
+Comment[ca@valencia]=Efectes d'esborrat de rellotge de la pàgina
 Comment[da]=Urvisker-sideeffekter
 Comment[de]=Wischblenden-Seiteneffekt (Uhr)
 Comment[el]=Εφέ σελίδας ωρολογιακό σβήσιμο
@@ -53,7 +54,6 @@ Comment[ta]=கடிகார நீக்கி பக்க விளைவ�
 Comment[tr]=Saat temizleme Sayfa Efekti
 Comment[uk]=Ефект витирання по колу
 Comment[wa]=Efets d' pådje schover l' ôrlodje evoye
-Comment[x-test]=xxClock wipe Page Effectsxx
 Comment[zh_TW]=時鐘掃描頁面效果
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service

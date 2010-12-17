@@ -20,7 +20,6 @@ Name[pt_BR]=FreOffice
 Name[sv]=FreOffice
 Name[uk]=FreOffice
 Name[wa]=FreOffice
-Name[x-test]=xxFreOfficexx
 Name[zh_TW]=FreOffice
 Exec=/usr/bin/FreOffice
 Icon=freoffice
