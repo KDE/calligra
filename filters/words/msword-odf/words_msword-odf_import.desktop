@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+<<<<<<< HEAD
 Name=KWord MS Word-ODF Import Filter
 Name[bg]=Филтър за импортиране от MS Word-ODF в KWord
 Name[ca]=Filtre d'importació MS Word-ODF per al KWord
@@ -34,6 +35,9 @@ Name[wa]=Passete d' abagaedje ODF-MS Word di KWord
 Name[x-test]=xxKWord MS Word-ODF Import Filterxx
 Name[zh_CN]=KWord MS Word-ODF 导入过滤器
 Name[zh_TW]=KWord MS Word-ODF 匯入過濾程式
+=======
+Name=Words MS Word-ODF Import Filter
+>>>>>>> Follow rename of KWord to Words
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/msword
 X-KDE-Weight=1

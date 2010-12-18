@@ -1,6 +1,6 @@
 include_directories( 
-	${CMAKE_SOURCE_DIR}/kword/part
-	${CMAKE_SOURCE_DIR}/kword/part/frames
+	${CMAKE_SOURCE_DIR}/words/part
+	${CMAKE_SOURCE_DIR}/words/part/frames
 	${KOTEXT_INCLUDES}
 	${KOKROSS_INCLUDES} )
 
@@ -21,7 +21,7 @@ qt4_wrap_cpp(krossmodulekword_PART_SRCS
 )
 
 kde4_add_plugin(krossmodulekword ${krossmodulekword_PART_SRCS})
-target_link_libraries(krossmodulekword kokross kwordprivate)
+target_link_libraries(krossmodulekword kokross wordsprivate)
 install(TARGETS krossmodulekword DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES krossmodulekword.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/kword/kpartplugins)
+install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/words/kpartplugins)

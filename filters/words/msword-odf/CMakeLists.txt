@@ -18,5 +18,5 @@ target_link_libraries(mswordodf_import kowv2 komain mso ${ZLIB_LIBRARIES})
 
 install(TARGETS mswordodf_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES  kword_msword-odf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_msword-odf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

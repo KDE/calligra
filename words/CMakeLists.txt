@@ -1,4 +1,4 @@
-project(kword)
+project(words)
 include_directories(
         ${KOMAIN_INCLUDES}
 )

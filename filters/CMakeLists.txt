@@ -47,9 +47,9 @@ if(SHOULD_BUILD_KCHART)
     macro_optional_add_subdirectory(kchart)
 endif(SHOULD_BUILD_KCHART)
 
-if (SHOULD_BUILD_KWORD)
-    macro_optional_add_subdirectory(kword)
-endif (SHOULD_BUILD_KWORD)
+if (SHOULD_BUILD_WORDS)
+    macro_optional_add_subdirectory(words)
+endif (SHOULD_BUILD_WORDS)
 
 if(SHOULD_BUILD_KPRESENTER)
     macro_optional_add_subdirectory(kpresenter)

@@ -262,7 +262,7 @@ void KWView::setupActions()
     actionCollection()->addAction("format_header", m_actionViewHeader);
     m_actionViewHeader->setCheckedState(KGuiItem(i18n("Disable Document Headers")));
     m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
-    m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in KWord.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
+    m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in Words.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
         m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(toggleHeader()));
@@ -271,7 +271,7 @@ void KWView::setupActions()
     actionCollection()->addAction("format_footer", m_actionViewFooter);
     m_actionViewFooter->setCheckedState(KGuiItem(i18n("Disable Document Footers")));
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
-    m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in KWord. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
+    m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in Words. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
         m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
@@ -424,7 +424,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     actionCollection()->addAction("view_formattingchars", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
-    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters."));
+    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Worda shows you tabs, spaces, carriage returns and other non-printing characters."));
 }
 
     action = new KAction(i18n("Select All Frames"), this);
@@ -508,7 +508,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
                     this, SLOT(viewTextMode()),
                     actionCollection(), "view_textmode");
             m_actionViewTextMode->setToolTip(i18n("Only show the text of the document"));
-            m_actionViewTextMode->setWhatsThis(i18n("Do not show any pictures, formatting or layout. KWord will display only the text for editing."));
+            m_actionViewTextMode->setWhatsThis(i18n("Do not show any pictures, formatting or layout. Words will display only the text for editing."));
 
             m_actionViewTextMode->setActionGroup(viewModeActionGroup);
             m_actionViewPageMode = new KToggleAction(i18n("Page Mode"), 0,
@@ -798,7 +798,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
                 this, SLOT(changePicture()),
                 actionCollection(), "change_picture");
         actionChangePicture->setToolTip(i18n("Change the picture in the currently selected frame"));
-        actionChangePicture->setWhatsThis(i18n("You can specify a different picture in the current frame.<br><br>KWord automatically resizes the new picture to fit within the old frame."));
+        actionChangePicture->setWhatsThis(i18n("You can specify a different picture in the current frame.<br><br>Words automatically resizes the new picture to fit within the old frame."));
 
         m_actionConfigureHeaderFooter=new KAction(i18n("Configure Header/Footer..."), 0,
                 this, SLOT(configureHeaderFooter()),
@@ -859,8 +859,8 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionApplyAutoFormat= new KAction(i18n("Apply Autocorrection"), 0,
                 this, SLOT(applyAutoFormat()),
                 actionCollection(), "apply_autoformat");
-        m_actionApplyAutoFormat->setToolTip(i18n("Manually force KWord to scan the entire document and apply autocorrection"));
-        m_actionApplyAutoFormat->setWhatsThis(i18n("Manually force KWord to scan the entire document and apply autocorrection."));
+        m_actionApplyAutoFormat->setToolTip(i18n("Manually force Words to scan the entire document and apply autocorrection"));
+        m_actionApplyAutoFormat->setWhatsThis(i18n("Manually force Words to scan the entire document and apply autocorrection."));
 
         m_actionCreateStyleFromSelection = new KAction(i18n("Create Style From Selection..."), 0,
                 this, SLOT(createStyleFromSelection()),
@@ -889,7 +889,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
                 this, SLOT(savePicture()),
                 actionCollection(), "save_picture");
         m_actionSavePicture->setToolTip(i18n("Save the picture in a separate file"));
-        m_actionSavePicture->setWhatsThis(i18n("Save the picture in the currently selected frame in a separate file, outside the KWord document."));
+        m_actionSavePicture->setWhatsThis(i18n("Save the picture in the currently selected frame in a separate file, outside the Words document."));
 
         m_actionAllowBgSpellCheck = new KToggleAction(i18n("Autospellcheck"), 0,
                 this, SLOT(autoSpellCheck()),
@@ -959,7 +959,7 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("KWord %1.%2.$3").arg(KOffice::versionMajor(),
+    dia->printer().setCreator(QString("Words %1.%2.$3").arg(KOffice::versionMajor(),
         KOffice::versionMinor(), KOffice::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;

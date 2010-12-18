@@ -1,3 +1,3 @@
 install( FILES
          defaultstyles.xml
-         DESTINATION ${DATA_INSTALL_DIR}/kword/styles)
+         DESTINATION ${DATA_INSTALL_DIR}/words/styles)

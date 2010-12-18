@@ -1,4 +1,4 @@
-project(kwordpart)
+project(wordspart)
 
 add_subdirectory( tests )
 
@@ -6,7 +6,7 @@ include_directories( ${KOTEXT_INCLUDES}  ${KDE4_INCLUDE_DIR}/threadweaver/ )
 
 ########### KWordPrivate library ###############
 
-set(kwordprivate_LIB_SRCS
+set(wordsprivate_LIB_SRCS
     KWFactory.cpp
     KWord.cpp
     KWApplicationConfig.cpp
@@ -71,14 +71,14 @@ set(kwordprivate_LIB_SRCS
     commands/KWChangePageStyleCommand.cpp
 )
 if( Soprano_FOUND )
-    set(kwordprivate_LIB_SRCS ${kwordprivate_LIB_SRCS}
+    set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
     )
 endif( Soprano_FOUND )
 
-kde4_add_ui_files(kwordprivate_LIB_SRCS
+kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
     dialogs/KWFrameGeometry.ui
     dialogs/KWFrameRunaroundProperties.ui
@@ -93,66 +93,66 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dockers/KWStatisticsDocker.ui
 )
 if( Soprano_FOUND )
-    kde4_add_ui_files(kwordprivate_LIB_SRCS
+    kde4_add_ui_files(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
     )
 endif( Soprano_FOUND )
 
 
-kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
+kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(kwordprivate komain)
+target_link_libraries(wordsprivate komain)
 if( Soprano_FOUND )
-    target_link_libraries(kwordprivate ${SOPRANO_LIBRARIES})
+    target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
-target_link_libraries(kwordprivate LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
-set_target_properties(kwordprivate
+set_target_properties(wordsprivate
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
-install(TARGETS kwordprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### KWordPart Library ###############
 
-set(kwordpart_PART_SRCS KWFactoryInit.cpp )
+set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
 
-kde4_add_plugin(kwordpart ${kwordpart_PART_SRCS})
+kde4_add_plugin(wordspart ${wordspart_PART_SRCS})
 
 
 
-target_link_libraries(kwordpart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kwordprivate )
+target_link_libraries(wordspart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} wordsprivate )
 
-install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### KWord exe ###############
 
-set(kword_KDEINIT_SRCS main.cpp )
+set(words_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(kword_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kword.png")
+kde4_add_app_icon(words_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/words.png")
 
-kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
+kde4_add_kdeinit_executable( words ${words_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kword")
-   set_target_properties(kword PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KWord 2")
+   set_target_properties(words PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(words PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
+   set_target_properties(words PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_kword  ${KDE4_KDEUI_LIBS} komain )
+target_link_libraries(kdeinit_words  ${KDE4_KDEUI_LIBS} komain )
 
-install(TARGETS kdeinit_kword  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_words  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( kword kdeinit_kword )
-install(TARGETS kword  ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries( words kdeinit_words )
+install(TARGETS words  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
 install( FILES words.rc words_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/words)
 install( FILES wordspart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS kword.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES kwordrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( PROGRAMS words.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
 kword_export.h

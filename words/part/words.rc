@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="125">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="125">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -176,33 +176,6 @@
   <Separator/>
   <Action name="extra_spellcheck"/>
 </ToolBar>
-<!--
-<ToolBar hidden="true" name="insert_toolbar" position="left"><Text>Insert</Text>
-  <Action name="insert_table"/>
-  <Action name="insert_picture"/>
-  <Separator/>
-  <Action name="tools_createtext"/>
-  <Action name="tools_formula"/>
-  <Action name="tools_part"/>
-</ToolBar>
-<ToolBar hidden="true" name="border_toolbar" position="top"><Text>Borders</Text>
-  <Action name="frame_style"/>
-  <Action name="border_outline"/>
-  <Action name="border_left"/>
-  <Action name="border_right"/>
-  <Action name="border_top"/>
-  <Action name="border_bottom"/>
-  <Action name="border_width"/>
-  <Action name="border_style"/>
-  <Action name="border_color"/>
-  <Action name="border_backgroundcolor"/>
-</ToolBar>
-<ToolBar hidden="true" name="mailmerge_toolbar" position="top"><Text>MailMerge</Text>
-  <Action name="mailmerge_draglabel"/>
-  <Action name="mailmerge_varchooser"/>
-  <Action name="edit_sldatabase"/>
-</ToolBar>
--->
 <Menu name="text_popup">
  <Action name="text_default"/>
  <Action name="format_font"/>

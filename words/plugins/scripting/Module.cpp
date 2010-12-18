@@ -1,5 +1,5 @@
 /*
- * This file is part of KWord
+ * This file is part of Words
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
@@ -42,7 +42,7 @@ extern "C"
 using namespace Scripting;
 
 Module::Module(QObject* parent)
-    : KoScriptingModule(parent, "KWord")
+    : KoScriptingModule(parent, "Words")
 {
 }
 

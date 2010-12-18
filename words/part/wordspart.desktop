@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+<<<<<<< HEAD
 Name=KOffice Word Processing Component
 Name[bg]=Компонент за текстообработка в KOffice
 Name[ca]=Component de processament de textos del KOffice
@@ -51,11 +52,16 @@ Name[x-test]=xxKOffice Word Processing Componentxx
 Name[zh_CN]=KOffice 字处理组件
 Name[zh_TW]=KOffice 文書處理文件
 X-KDE-Library=kwordpart
+=======
+Name=Calligra Word Processing Component
+X-KDE-Library=wordspart
+>>>>>>> Follow rename of KWord to Words
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.text
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template,application/x-kword
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;
 X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+<<<<<<< HEAD
 GenericName=Text Documents
 GenericName[bg]=Текстови документи
 GenericName[br]=Teulioù skrid
@@ -109,4 +115,8 @@ GenericName[x-test]=xxText Documentsxx
 GenericName[zh_CN]=文本文档
 GenericName[zh_TW]=文字文件
 Icon=kword
+=======
+GenericName=Word processor
+Icon=words
+>>>>>>> Follow rename of KWord to Words
 InitialPreference=3

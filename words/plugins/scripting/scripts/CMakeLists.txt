@@ -1,4 +1,4 @@
-install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/kword/scripts)
+install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/words/scripts)
 
 #install(FILES variable_readfile.py DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/variables)
 
@@ -11,7 +11,7 @@ install(FILES
     xmlviewer.py
     doctree.rb
     onlinehelp.py
-    DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)
+    DESTINATION ${DATA_INSTALL_DIR}/words/scripts/extensions)
 
 install(FILES
     sample_cursor.rb
@@ -25,4 +25,4 @@ install(FILES
     sample_variables.py
     sample_insertshape.py
     sample_allshapes.py
-    DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/samples)
+    DESTINATION ${DATA_INSTALL_DIR}/words/scripts/samples)

@@ -108,7 +108,7 @@ void KWApplicationConfig::load(KWDocument *document)
 
 //    m_layoutViewMode = KWViewMode::create(m_viewModeType, this, 0 /*no canvas*/);
 
-    KConfigGroup path = config->group("Kword Path");
+    KConfigGroup path = config->group("Words Path");
     if (path.exists()) {
 //        if (path.hasKey("expression path"))
 //            m_personalExpressionPath = path.readPathEntry("expression path", QStringList());

@@ -22,7 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// kword includes
 #include "KWDocument.h"
 #include "KWDocument_p.h"
 #include "KWFactory.h"
@@ -145,7 +144,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     resourceManager()->setOdfDocument(this);
 
     setComponentData(KWFactory::componentData(), false);
-    setTemplateType("kword_template");
+    setTemplateType("words_template");
 
     connect(&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
     connect(&m_frameLayout, SIGNAL(removedFrameSet(KWFrameSet*)), this, SLOT(removeFrameSet(KWFrameSet*)));
@@ -184,7 +183,7 @@ KWDocument::~KWDocument()
 
 void KWDocument::addShape(KoShape *shape)
 {
-    // KWord adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
+    // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
     // will call addFrameSet.  Which will itself call addFrame()
     // any call coming in here is due to the undo/redo framework or for nested frames
 
@@ -836,7 +835,7 @@ void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 void KWDocument::showErrorAndDie()
 {
     KMessageBox::error(widget(),
-                       i18n("Can not find needed text component, KWord will quit now"),
+                       i18n("Can not find needed text component, Words will quit now"),
                        i18n("Installation Error"));
     QCoreApplication::exit(10);
 }
