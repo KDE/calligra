@@ -31,6 +31,7 @@ Comment[sv]=Insticksprogram med animeringsåtgärderför KPresenter
 Comment[tr]=KPresenter için hareketli şekil eklentisi
 Comment[uk]=Додаток анімації форм для KPresenter
 Comment[wa]=Tchôke-divins d' animåcions de fômes po KPresenter
+Comment[x-test]=xxShape animation plugin for KPresenterxx
 Comment[zh_CN]=KPresenter 形状动画插件
 Comment[zh_TW]=KPresenter 元件動畫外掛程式
 [PropertyDef::X-KPresenter-Version]
