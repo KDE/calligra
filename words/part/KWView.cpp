@@ -424,7 +424,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     actionCollection()->addAction("view_formattingchars", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
-    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Worda shows you tabs, spaces, carriage returns and other non-printing characters."));
+    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
 }
 
     action = new KAction(i18n("Select All Frames"), this);
