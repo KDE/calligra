@@ -36,7 +36,7 @@ class QIODevice;
 /* 
  * TODO needs a file for playing, store it as a tmp file
  */
-class KPRESENTER_EXPORT KPrSoundData {
+class STAGE_EXPORT KPrSoundData {
 public:
     /**
      * The storage location

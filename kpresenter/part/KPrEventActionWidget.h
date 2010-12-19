@@ -32,7 +32,7 @@ class QUndoCommand;
  *
  * Each event action needs to implement this widget to make it configurable
  */
-class KPRESENTER_EXPORT KPrEventActionWidget : public QWidget
+class STAGE_EXPORT KPrEventActionWidget : public QWidget
 {
     Q_OBJECT
 public:

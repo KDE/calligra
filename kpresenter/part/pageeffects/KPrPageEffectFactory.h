@@ -28,7 +28,7 @@
 /**
  * Base class for a page effect factories
  */
-class KPRESENTER_EXPORT KPrPageEffectFactory
+class STAGE_EXPORT KPrPageEffectFactory
 {
 public:
     struct Properties {

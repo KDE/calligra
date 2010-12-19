@@ -35,7 +35,7 @@ class KPrDocument;
 
 #include "stage_export.h"
 
-class KPRESENTER_TEST_EXPORT KPrCustomSlideShows
+class STAGE_TEST_EXPORT KPrCustomSlideShows
 {
 public:
     KPrCustomSlideShows();

@@ -36,7 +36,7 @@ class KPrViewModePresenterView;
 class KActionMenu;
 class KoPAPageBase;
 
-class KPRESENTER_EXPORT KPrView : public KoPAView
+class STAGE_EXPORT KPrView : public KoPAView
 {
     Q_OBJECT
 public:

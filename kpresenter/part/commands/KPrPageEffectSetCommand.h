@@ -27,7 +27,7 @@
 class KoPAPageBase;
 class KPrPageEffect;
 
-class KPRESENTER_EXPORT KPrPageEffectSetCommand : public QUndoCommand
+class STAGE_EXPORT KPrPageEffectSetCommand : public QUndoCommand
 {
 public:
     KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEffect * pageEffect );

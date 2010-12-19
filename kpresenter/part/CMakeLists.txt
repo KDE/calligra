@@ -3,7 +3,7 @@ project(kpresenter)
 include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
 if(KDE4_BUILD_TESTS)
-    # only with this definition will the KPRESENTER_TEST_EXPORT macro do something
+    # only with this definition will the STAGE_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 

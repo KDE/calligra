@@ -25,7 +25,7 @@
 
 #include "stage_export.h"
 
-class KPRESENTER_EXPORT KPrPageEffectStrategy
+class STAGE_EXPORT KPrPageEffectStrategy
 {
 public:
     /**

@@ -32,7 +32,7 @@ class KoStore;
 /**
  * An collection of KPrSoundData objects to allow loading and saving them all together to the KoStore.
  */
-class KPRESENTER_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase {
+class STAGE_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase {
 public:
     /// constructor
     KPrSoundCollection(QObject *parent = 0);

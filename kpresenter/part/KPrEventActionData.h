@@ -27,7 +27,7 @@ class KoShape;
 class KoEventAction;
 class KPrSoundCollection;
 
-class KPRESENTER_EXPORT KPrEventActionData
+class STAGE_EXPORT KPrEventActionData
 {
 public:
     KPrEventActionData( KoShape * shape, KoEventAction * eventAction , KPrSoundCollection * soundCollection );

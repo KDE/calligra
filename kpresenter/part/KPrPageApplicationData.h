@@ -25,7 +25,7 @@
 
 class KPrPageEffect;
 
-class KPRESENTER_EXPORT KPrPageApplicationData : public KoShapeApplicationData
+class STAGE_EXPORT KPrPageApplicationData : public KoShapeApplicationData
 {
 public:
    KPrPageApplicationData();

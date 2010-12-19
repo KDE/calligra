@@ -44,7 +44,7 @@ class KPrAnimationData;
  * The state of the animation is kept in the animationData and is 
  * passed to the ainmation when it is run e.g. on a special view.
  */
-class KPRESENTER_TEST_EXPORT KPrShapeAnimationOld
+class STAGE_TEST_EXPORT KPrShapeAnimationOld
 {
 public:
     enum Type

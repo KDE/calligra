@@ -27,7 +27,7 @@
 class KAboutData;
 class KIconLoader;
 
-class KPRESENTER_EXPORT KPrFactory : public KPluginFactory
+class STAGE_EXPORT KPrFactory : public KPluginFactory
 {
     Q_OBJECT
 public:

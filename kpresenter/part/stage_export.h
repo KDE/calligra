@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRESENTER_EXPORT_H
-#define KPRESENTER_EXPORT_H
+#ifndef STAGE_EXPORT_H
+#define STAGE_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
@@ -26,37 +26,37 @@
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
 
-#ifndef KPRESENTER_EXPORT
+#ifndef STAGE_EXPORT
 # if defined(MAKE_KPRESENTERPRIVATE_LIB)
    /* We are building this library */
-#  define KPRESENTER_EXPORT KDE_EXPORT
+#  define STAGE_EXPORT KDE_EXPORT
 # else
    /* We are using this library */
-#  define KPRESENTER_EXPORT KDE_IMPORT
+#  define STAGE_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
-#define KPRESENTER_EXPORT KDE_EXPORT
+#define STAGE_EXPORT KDE_EXPORT
 
 #endif
 
 
-/* Now the same for KPRESENTER_TEST_EXPORT, if compiling with unit tests enabled */
+/* Now the same for STAGE_TEST_EXPORT, if compiling with unit tests enabled */
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
 # if defined(MAKE_KPRESENTERPRIVATE_LIB)
-#       define KPRESENTER_TEST_EXPORT KDE_EXPORT
+#       define STAGE_TEST_EXPORT KDE_EXPORT
 #   else
-#       define KPRESENTER_TEST_EXPORT KDE_IMPORT
+#       define STAGE_TEST_EXPORT KDE_IMPORT
 #   endif
 # else /* not windows */
-#   define KPRESENTER_TEST_EXPORT KDE_EXPORT
+#   define STAGE_TEST_EXPORT KDE_EXPORT
 # endif
 #else /* not compiling tests */
-#   define KPRESENTER_TEST_EXPORT
+#   define STAGE_TEST_EXPORT
 #endif
 
 #endif

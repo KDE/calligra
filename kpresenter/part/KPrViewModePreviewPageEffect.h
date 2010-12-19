@@ -32,7 +32,7 @@ class KPrPage;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 
-class KPRESENTER_EXPORT KPrViewModePreviewPageEffect : public KoPAViewMode
+class STAGE_EXPORT KPrViewModePreviewPageEffect : public KoPAViewMode
 {
 
     Q_OBJECT
