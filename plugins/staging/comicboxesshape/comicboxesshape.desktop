@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Comic Boxes Shape
+X-KDE-ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=comicboxesshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
