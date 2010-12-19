@@ -19,7 +19,7 @@
 #ifndef KPRPAGEAPPLICATIONDATA_H
 #define KPRPAGEAPPLICATIONDATA_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <KoShapeApplicationData.h>
 

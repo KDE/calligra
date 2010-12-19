@@ -25,7 +25,7 @@
 #include <QTimeLine>
 
 #include <KoXmlReaderForward.h>
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 class QPainter;
 class QGraphicsScene;

@@ -21,7 +21,7 @@
 #ifndef KPRVIEWMODEPREVIEWPAGEEFFECT_H
 #define KPRVIEWMODEPREVIEWPAGEEFFECT_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <KoPAViewMode.h>
 #include "KPrAnimationDirector.h"

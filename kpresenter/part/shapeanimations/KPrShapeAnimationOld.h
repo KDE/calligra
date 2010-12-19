@@ -22,7 +22,7 @@
 
 #include <QTimeLine>
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #define TIMEFACTOR 1000.0
 

@@ -20,7 +20,7 @@
 #ifndef KPRPAGEEFFECTSETCOMMAND_H
 #define KPRPAGEEFFECTSETCOMMAND_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <QUndoCommand>
 

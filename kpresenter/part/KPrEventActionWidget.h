@@ -22,7 +22,7 @@
 
 #include <QWidget>
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 class KPrEventActionData;
 class QUndoCommand;

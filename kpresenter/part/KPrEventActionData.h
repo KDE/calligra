@@ -20,7 +20,7 @@
 #ifndef KPREVENTACTIONDATA_H
 #define KPREVENTACTIONDATA_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 class KPrSoundCollection;
 class KoShape;

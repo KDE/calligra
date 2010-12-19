@@ -23,7 +23,7 @@
 
 #include "KPrPageEffect.h"
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 /**
  * Base class for a page effect factories

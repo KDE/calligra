@@ -22,7 +22,7 @@
 #define KPRFACTORY_H
 
 #include <KPluginFactory>
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 class KAboutData;
 class KIconLoader;

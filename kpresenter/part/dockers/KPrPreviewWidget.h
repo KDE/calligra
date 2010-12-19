@@ -20,7 +20,7 @@
 #ifndef KPRPREVIEWWIDGET_H
 #define KPRPREVIEWWIDGET_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <QWidget>
 #include <KoShape.h>

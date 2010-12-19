@@ -21,7 +21,7 @@
 #ifndef KPRVIEW_H
 #define KPRVIEW_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <QObject>
 
