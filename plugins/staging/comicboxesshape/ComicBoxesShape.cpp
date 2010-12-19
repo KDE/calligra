@@ -32,17 +32,15 @@
 
 ComicBoxesShape::ComicBoxesShape()
 {
+    moveTo(QPointF(0, 0));
+    lineTo(QPointF(0, 100));
+    lineTo(QPointF(100,100));
+    lineTo(QPointF(100, 0));
+    lineTo(QPointF(0, 0));
 }
 
 ComicBoxesShape::~ComicBoxesShape()
 {
-}
-
-void ComicBoxesShape::paint( QPainter &painter,
-                const KoViewConverter &converter )
-{
-  QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
-  painter.drawRect(target);
 }
 
 void ComicBoxesShape::saveOdf(KoShapeSavingContext & context) const

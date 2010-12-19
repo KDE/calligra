@@ -20,18 +20,15 @@
 #ifndef _COMICBOXESSHAPE_H_
 #define _COMICBOXESSHAPE_H_
 
-#include <KoShape.h>
+#include <KoPathShape.h>
 
 #define COMICBOXESSHAPEID "ComicBoxesShape"
 
-class ComicBoxesShape : public KoShape {
+class ComicBoxesShape : public KoPathShape {
   public:
     ComicBoxesShape();
     ~ComicBoxesShape();
 
-    // absolutly necessary:
-    void paint( QPainter &painter,
-                const KoViewConverter &converter );
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
   private:
