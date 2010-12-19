@@ -19,13 +19,13 @@
 #ifndef KPRPAGEAPPLICATIONDATA_H
 #define KPRPAGEAPPLICATIONDATA_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <KoShapeApplicationData.h>
 
 class KPrPageEffect;
 
-class KPRESENTER_EXPORT KPrPageApplicationData : public KoShapeApplicationData
+class STAGE_EXPORT KPrPageApplicationData : public KoShapeApplicationData
 {
 public:
    KPrPageApplicationData();

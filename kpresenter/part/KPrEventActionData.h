@@ -20,14 +20,14 @@
 #ifndef KPREVENTACTIONDATA_H
 #define KPREVENTACTIONDATA_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 class KPrSoundCollection;
 class KoShape;
 class KoEventAction;
 class KPrSoundCollection;
 
-class KPRESENTER_EXPORT KPrEventActionData
+class STAGE_EXPORT KPrEventActionData
 {
 public:
     KPrEventActionData( KoShape * shape, KoEventAction * eventAction , KPrSoundCollection * soundCollection );
