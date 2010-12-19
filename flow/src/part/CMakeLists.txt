@@ -46,3 +46,4 @@ install( PROGRAMS flow.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
 install( FILES flow.rc DESTINATION ${DATA_INSTALL_DIR}/flow)
+install( FILES flowrc DESTINATION ${CONFIG_INSTALL_DIR} )
