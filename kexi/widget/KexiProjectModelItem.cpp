@@ -100,7 +100,11 @@ QVariant KexiProjectModelItem::data(int column) const
 {
     Q_UNUSED(column);
     if (m_item) {
-        return m_item->captionOrName() + (m_dirty ? "*" : "");
+#ifdef KEXI_MOBILE
+        return m_item->captionOrName();
+#else
+        return m_item->name() + (m_dirty ? "*" : "");
+#endif
     } else if (m_info) {
         return m_info->groupName();
     } else   {
