@@ -23,7 +23,7 @@
 #include "migratemanager_p.h"
 #include "keximigrate.h"
 
-#include <klibloader.h>
+//#include <klibloader.h>
 #include <ktrader.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -212,14 +212,14 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     if (!drv) {
         setError(ERR_DRIVERMANAGER,
                  i18n("Could not load import/export database driver \"%1\".", name));
-        if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
-            m_componentLoadingErrors[KLibLoader::ErrNoServiceFound] = "ErrNoServiceFound";
-            m_componentLoadingErrors[KLibLoader::ErrServiceProvidesNoLibrary] = "ErrServiceProvidesNoLibrary";
-            m_componentLoadingErrors[KLibLoader::ErrNoLibrary] = "ErrNoLibrary";
-            m_componentLoadingErrors[KLibLoader::ErrNoFactory] = "ErrNoFactory";
-            m_componentLoadingErrors[KLibLoader::ErrNoComponent] = "ErrNoComponent";
-        }
-        m_serverResultName = m_componentLoadingErrors[m_serverResultNum];
+        //if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
+        //    m_componentLoadingErrors[KLibLoader::ErrNoServiceFound] = "ErrNoServiceFound";
+        //    m_componentLoadingErrors[KLibLoader::ErrServiceProvidesNoLibrary] = "ErrServiceProvidesNoLibrary";
+        //    m_componentLoadingErrors[KLibLoader::ErrNoLibrary] = "ErrNoLibrary";
+        //    m_componentLoadingErrors[KLibLoader::ErrNoFactory] = "ErrNoFactory";
+        //    m_componentLoadingErrors[KLibLoader::ErrNoComponent] = "ErrNoComponent";
+        //}
+        //m_serverResultName = m_componentLoadingErrors[m_serverResultNum];
         return 0;
     }
     KexiDBDbg << "loading succeeded:" << name;

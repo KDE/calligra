@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <klibloader.h>
+//#include <klibloader.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kiconloader.h>
