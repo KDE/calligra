@@ -1,6 +1,13 @@
 [Desktop Entry]
 Type=Application
 Name=Words
+Name[fr]=Words
+Name[nl]=Woorden
+Name[pt]=Words
+Name[pt_BR]=Palavras
+Name[sv]=Words
+Name[uk]=Words
+Name[x-test]=xxWordsxx
 Exec=words %u
 GenericName=Word Processor
 GenericName[bg]=Текстообработваща програма
@@ -43,6 +50,13 @@ GenericName[x-test]=xxWord Processorxx
 GenericName[zh_CN]=字处理
 GenericName[zh_TW]=文書處理器
 Comment=Write documents
+Comment[fr]=Documents texte
+Comment[nl]=Documenten wegschrijven
+Comment[pt]=Escrever documentos
+Comment[pt_BR]=Escrever documentos
+Comment[sv]=Skriv dokument
+Comment[uk]=Створення документів
+Comment[x-test]=xxWrite documentsxx
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;
 Icon=kword
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
