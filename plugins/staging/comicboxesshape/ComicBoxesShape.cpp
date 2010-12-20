@@ -32,11 +32,8 @@
 
 ComicBoxesShape::ComicBoxesShape()
 {
-    moveTo(QPointF(0, 0));
-    lineTo(QPointF(0, 100));
-    lineTo(QPointF(100,100));
-    lineTo(QPointF(100, 0));
-    lineTo(QPointF(0, 0));
+    recreatePath();
+    setSize(QSizeF(100, 100));
 }
 
 ComicBoxesShape::~ComicBoxesShape()
@@ -51,11 +48,57 @@ void ComicBoxesShape::saveOdf(KoShapeSavingContext & context) const
     writer.addAttribute("xmlns:calligra", "http://calligra-suite.org/");
     saveOdfAttributes( context, OdfAllAttributes );
     saveOdfCommonChildElements( context );
+    writer.startElement("lines");
+    foreach(const QLineF& line, m_lines)
+    {
+        writer.startElement("line");
+        writer.addAttribute("x1", line.p1().x());
+        writer.addAttribute("y1", line.p1().y());
+        writer.addAttribute("x2", line.p2().x());
+        writer.addAttribute("y2", line.p2().y());
+        writer.endElement();
+    }
+    writer.endElement();
     writer.endElement(); // braindump:shape
 }
 
 bool ComicBoxesShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes( element, context, OdfAllAttributes );
+    KoXmlElement childElement;
+    forEachElement(childElement, element)
+    {
+        if(childElement.tagName() == "lines")
+        {
+            KoXmlElement lineElement;
+            forEachElement(lineElement, childElement)
+            {
+                if(lineElement.tagName() == "line")
+                {
+                    qreal x1 = lineElement.attribute("x1", "0").toDouble();
+                    qreal y1 = lineElement.attribute("y1", "0").toDouble();
+                    qreal x2 = lineElement.attribute("x2", "1").toDouble();
+                    qreal y2 = lineElement.attribute("y2", "1").toDouble();
+                    m_lines.push_back(QLineF(x1, y1, x2, y2));
+                }
+            }
+        }
+    }
+    
     return true;
+}
+
+void ComicBoxesShape::recreatePath()
+{
+    moveTo(QPointF(0, 0));
+    lineTo(QPointF(0, 1.0));
+    lineTo(QPointF(1.0, 1.0));
+    lineTo(QPointF(1.0, 0));
+    lineTo(QPointF(0, 0));
+    
+    foreach(const QLineF& line, m_lines)
+    {
+        moveTo(line.p1());
+        lineTo(line.p2());
+    }
 }
