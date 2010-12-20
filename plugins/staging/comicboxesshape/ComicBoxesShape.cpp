@@ -64,7 +64,6 @@ void ComicBoxesShape::saveOdf(KoShapeSavingContext & context) const
 
 bool ComicBoxesShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes( element, context, OdfAllAttributes );
     KoXmlElement childElement;
     forEachElement(childElement, element)
     {
@@ -84,12 +83,14 @@ bool ComicBoxesShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
             }
         }
     }
-    
+    recreatePath();
+    loadOdfAttributes( element, context, OdfAllAttributes );
     return true;
 }
 
 void ComicBoxesShape::recreatePath()
 {
+    clear();
     moveTo(QPointF(0, 0));
     lineTo(QPointF(0, 1.0));
     lineTo(QPointF(1.0, 1.0));
