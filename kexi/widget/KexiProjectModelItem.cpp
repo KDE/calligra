@@ -100,7 +100,7 @@ QVariant KexiProjectModelItem::data(int column) const
 {
     Q_UNUSED(column);
     if (m_item) {
-        return m_item->name() + (m_dirty ? "*" : "");
+        return m_item->captionOrName() + (m_dirty ? "*" : "");
     } else if (m_info) {
         return m_info->groupName();
     } else   {
