@@ -74,7 +74,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
         m_view->shell()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-            m_view->shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
+            m_view->shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
     }
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
