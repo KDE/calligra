@@ -18,8 +18,8 @@
 */
 
 
-#ifndef KSPREAD_REGION
-#define KSPREAD_REGION
+#ifndef CALLIGRA_TABLES_REGION
+#define CALLIGRA_TABLES_REGION
 
 #include <QList>
 #include <QRect>
@@ -48,7 +48,7 @@ class Sheet;
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * \since 1.5
  */
-class KSPREAD_EXPORT Region
+class CALLIGRA_TABLES_EXPORT Region
 {
 public:
     class Element;
@@ -663,4 +663,4 @@ inline QDebug operator<<(QDebug str, const KSpread::Region& r)
     return str << qPrintable(r.name());
 }
 
-#endif // KSPREAD_REGION
+#endif // CALLIGRA_TABLES_REGION

@@ -25,7 +25,7 @@
 #include <QRegion>
 #include <QTimer>
 #include <QRunnable>
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 #include <QMutex>
 #include <QMutexLocker>
 #endif
@@ -46,7 +46,7 @@ class KDE_NO_EXPORT StyleStorage::Private
 {
 public:
     Private()
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
         : cacheMutex(QMutex::Recursive)
 #endif
     {}
@@ -60,7 +60,7 @@ public:
     QCache<QPoint, Style> cache;
     QRegion cachedArea;
     StyleStorageLoaderJob* loader;
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutex cacheMutex;
 #endif
 
@@ -108,7 +108,7 @@ void StyleStorageLoaderJob::run()
     d->usedColumns.clear();
     d->usedRows.clear();
     {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
         QMutexLocker(&d->cacheMutex);
 #endif
         d->cachedArea = QRegion();
@@ -215,7 +215,7 @@ Style StyleStorage::contains(const QPoint& point) const
         return *styleManager()->defaultStyle();
 
     {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
         QMutexLocker ml(&d->cacheMutex);
 #endif
         // first, lookup point in the cache
@@ -234,7 +234,7 @@ Style StyleStorage::contains(const QPoint& point) const
     (*style) = composeStyle(subStyles);
 
     {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
         QMutexLocker ml(&d->cacheMutex);
 #endif
         // insert style into the cache
@@ -655,7 +655,7 @@ void StyleStorage::invalidateCache()
     if (d->loader && !d->loader->isFinished())
         return;
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     d->cache.clear();
@@ -820,7 +820,7 @@ void StyleStorage::invalidateCache(const QRect& rect)
     if (d->loader && !d->loader->isFinished())
         return;
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
 //     kDebug(36006) <<"StyleStorage: Invalidating" << rect;

@@ -47,7 +47,7 @@ Value func_dvarp(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_getpivotdata(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-KSPREAD_EXPORT_FUNCTION_MODULE("database", DatabaseModule)
+CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("database", DatabaseModule)
 
 
 DatabaseModule::DatabaseModule(QObject* parent, const QVariantList&)

@@ -29,8 +29,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CANVASBASE
-#define KSPREAD_CANVASBASE
+#ifndef CALLIGRA_TABLES_CANVASBASE
+#define CALLIGRA_TABLES_CANVASBASE
 
 #include <QList>
 
@@ -66,7 +66,7 @@ class SheetView;
 /**
  * The scrollable area showing the cells.
  */
-class KSPREAD_EXPORT CanvasBase : public KoCanvasBase
+class CALLIGRA_TABLES_EXPORT CanvasBase : public KoCanvasBase
 {
     friend class ColumnHeader;
     friend class RowHeader;
@@ -213,4 +213,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CANVAS
+#endif // CALLIGRA_TABLES_CANVAS

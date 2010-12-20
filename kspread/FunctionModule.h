@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FUNCTION_MODULE
-#define KSPREAD_FUNCTION_MODULE
+#ifndef CALLIGRA_TABLES_FUNCTION_MODULE
+#define CALLIGRA_TABLES_FUNCTION_MODULE
 
 #include <kofficeversion.h>
 
@@ -38,7 +38,7 @@ class Function;
  * \ingroup Value
  * A function module provides several Function objects.
  */
-class KSPREAD_EXPORT FunctionModule : public QObject
+class CALLIGRA_TABLES_EXPORT FunctionModule : public QObject
 {
     Q_OBJECT
 public:
@@ -95,9 +95,9 @@ private:
 /**
 * Register a function module when it is contained in a loadable plugin
 */
-#define KSPREAD_EXPORT_FUNCTION_MODULE(libname, classname) \
+#define CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE(libname, classname) \
     K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN(factory("kspread-functions-" #libname)) \
     K_EXPORT_PLUGIN_VERSION(KOFFICE_VERSION)
 
-#endif // KSPREAD_FUNCTION_MODULE
+#endif // CALLIGRA_TABLES_FUNCTION_MODULE

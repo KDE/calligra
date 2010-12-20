@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KSPREAD_FUNCTION_DESCRIPTION
-#define KSPREAD_FUNCTION_DESCRIPTION
+#ifndef CALLIGRA_TABLES_FUNCTION_DESCRIPTION
+#define CALLIGRA_TABLES_FUNCTION_DESCRIPTION
 
 #include <QList>
 #include <QStringList>
@@ -38,7 +38,7 @@ enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean
  * \ingroup Value
  * A function parameter.
  */
-class KSPREAD_EXPORT FunctionParameter
+class CALLIGRA_TABLES_EXPORT FunctionParameter
 {
 public:
     FunctionParameter();
@@ -65,7 +65,7 @@ private:
  * \ingroup Value
  * A function description.
  */
-class KSPREAD_EXPORT FunctionDescription
+class CALLIGRA_TABLES_EXPORT FunctionDescription
 {
 public:
     FunctionDescription();
@@ -120,4 +120,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FUNCTION_DESCRIPTION
+#endif // CALLIGRA_TABLES_FUNCTION_DESCRIPTION

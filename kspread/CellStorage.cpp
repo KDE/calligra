@@ -23,7 +23,7 @@
 #include "CellStorage_p.h"
 
 // Qt
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
@@ -87,7 +87,7 @@ public:
             , richTextStorage(new RichTextStorage())
             , rowRepeatStorage(new RowRepeatStorage())
             , undoData(0)
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
             , bigUglyLock(QReadWriteLock::Recursive)
 #endif
     {}
@@ -110,7 +110,7 @@ public:
             , richTextStorage(new RichTextStorage(*other.richTextStorage))
             , rowRepeatStorage(new RowRepeatStorage(*other.rowRepeatStorage))
             , undoData(0)
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
             , bigUglyLock(QReadWriteLock::Recursive)
 #endif
     {}
@@ -153,7 +153,7 @@ public:
     RowRepeatStorage*       rowRepeatStorage;
     CellStorageUndoData*    undoData;
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadWriteLock bigUglyLock;
 #endif
 };
@@ -263,7 +263,7 @@ Sheet* CellStorage::sheet() const
 
 void CellStorage::take(int col, int row)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
 
@@ -305,7 +305,7 @@ void CellStorage::take(int col, int row)
 
 Binding CellStorage::binding(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->bindingStorage->contains(QPoint(column, row));
@@ -313,7 +313,7 @@ Binding CellStorage::binding(int column, int row) const
 
 void CellStorage::setBinding(const Region& region, const Binding& binding)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // recording undo?
@@ -325,7 +325,7 @@ void CellStorage::setBinding(const Region& region, const Binding& binding)
 
 void CellStorage::removeBinding(const Region& region, const Binding& binding)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // recording undo?
@@ -337,7 +337,7 @@ void CellStorage::removeBinding(const Region& region, const Binding& binding)
 
 QString CellStorage::comment(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->commentStorage->contains(QPoint(column, row));
@@ -345,7 +345,7 @@ QString CellStorage::comment(int column, int row) const
 
 void CellStorage::setComment(const Region& region, const QString& comment)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // recording undo?
@@ -363,7 +363,7 @@ void CellStorage::setComment(const Region& region, const QString& comment)
 
 Conditions CellStorage::conditions(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->conditionsStorage->contains(QPoint(column, row));
@@ -371,7 +371,7 @@ Conditions CellStorage::conditions(int column, int row) const
 
 void CellStorage::setConditions(const Region& region, Conditions conditions)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // recording undo?
@@ -389,7 +389,7 @@ void CellStorage::setConditions(const Region& region, Conditions conditions)
 
 Database CellStorage::database(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     QPair<QRectF, Database> pair = d->databaseStorage->containedPair(QPoint(column, row));
@@ -405,7 +405,7 @@ Database CellStorage::database(int column, int row) const
 
 QList< QPair<QRectF, Database> > CellStorage::databases(const Region& region) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->databaseStorage->intersectingPairs(region);
@@ -413,7 +413,7 @@ QList< QPair<QRectF, Database> > CellStorage::databases(const Region& region) co
 
 void CellStorage::setDatabase(const Region& region, const Database& database)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // recording undo?
@@ -425,7 +425,7 @@ void CellStorage::setDatabase(const Region& region, const Database& database)
 
 Formula CellStorage::formula(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->formulaStorage->lookup(column, row, Formula::empty());
@@ -433,7 +433,7 @@ Formula CellStorage::formula(int column, int row) const
 
 void CellStorage::setFormula(int column, int row, const Formula& formula)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     Formula old = Formula::empty();
@@ -463,7 +463,7 @@ void CellStorage::setFormula(int column, int row, const Formula& formula)
 
 QString CellStorage::link(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->linkStorage->lookup(column, row);
@@ -471,7 +471,7 @@ QString CellStorage::link(int column, int row) const
 
 void CellStorage::setLink(int column, int row, const QString& link)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     QString old;
@@ -489,7 +489,7 @@ void CellStorage::setLink(int column, int row, const QString& link)
 
 QString CellStorage::namedArea(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     QPair<QRectF, QString> pair = d->namedAreaStorage->containedPair(QPoint(column, row));
@@ -502,7 +502,7 @@ QString CellStorage::namedArea(int column, int row) const
 
 QList< QPair<QRectF, QString> > CellStorage::namedAreas(const Region& region) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->namedAreaStorage->intersectingPairs(region);
@@ -510,7 +510,7 @@ QList< QPair<QRectF, QString> > CellStorage::namedAreas(const Region& region) co
 
 void CellStorage::setNamedArea(const Region& region, const QString& namedArea)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // recording undo?
@@ -527,7 +527,7 @@ void CellStorage::emitInsertNamedArea(const Region &region, const QString &named
 
 Style CellStorage::style(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->styleStorage->contains(QPoint(column, row));
@@ -535,7 +535,7 @@ Style CellStorage::style(int column, int row) const
 
 Style CellStorage::style(const QRect& rect) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->styleStorage->contains(rect);
@@ -543,7 +543,7 @@ Style CellStorage::style(const QRect& rect) const
 
 void CellStorage::setStyle(const Region& region, const Style& style)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // recording undo?
@@ -561,7 +561,7 @@ void CellStorage::setStyle(const Region& region, const Style& style)
 
 void CellStorage::insertSubStyle(const QRect &rect, const SharedSubStyle &subStyle)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->styleStorage->insert(rect, subStyle);
@@ -573,7 +573,7 @@ void CellStorage::insertSubStyle(const QRect &rect, const SharedSubStyle &subSty
 
 QString CellStorage::userInput(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->userInputStorage->lookup(column, row);
@@ -581,7 +581,7 @@ QString CellStorage::userInput(int column, int row) const
 
 void CellStorage::setUserInput(int column, int row, const QString& userInput)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     QString old;
@@ -599,7 +599,7 @@ void CellStorage::setUserInput(int column, int row, const QString& userInput)
 
 QSharedPointer<QTextDocument> CellStorage::richText(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->richTextStorage->lookup(column, row);
@@ -607,7 +607,7 @@ QSharedPointer<QTextDocument> CellStorage::richText(int column, int row) const
 
 void CellStorage::setRichText(int column, int row, QSharedPointer<QTextDocument> text)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     QSharedPointer<QTextDocument> old;
@@ -623,7 +623,7 @@ void CellStorage::setRichText(int column, int row, QSharedPointer<QTextDocument>
 
 Validity CellStorage::validity(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->validityStorage->contains(QPoint(column, row));
@@ -631,7 +631,7 @@ Validity CellStorage::validity(int column, int row) const
 
 void CellStorage::setValidity(const Region& region, Validity validity)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // recording undo?
@@ -649,7 +649,7 @@ void CellStorage::setValidity(const Region& region, Validity validity)
 
 Value CellStorage::value(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->valueStorage->lookup(column, row);
@@ -657,7 +657,7 @@ Value CellStorage::value(int column, int row) const
 
 Value CellStorage::valueRegion(const Region& region) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     // create a subStorage with adjusted origin
@@ -666,7 +666,7 @@ Value CellStorage::valueRegion(const Region& region) const
 
 void CellStorage::setValue(int column, int row, const Value& value)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // release any lock
@@ -703,7 +703,7 @@ void CellStorage::setValue(int column, int row, const Value& value)
 
 bool CellStorage::doesMergeCells(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
@@ -719,7 +719,7 @@ bool CellStorage::doesMergeCells(int column, int row) const
 
 bool CellStorage::isPartOfMerged(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
@@ -735,7 +735,7 @@ bool CellStorage::isPartOfMerged(int column, int row) const
 
 void CellStorage::mergeCells(int column, int row, int numXCells, int numYCells)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Start by unmerging the cells that we merge right now
@@ -751,7 +751,7 @@ void CellStorage::mergeCells(int column, int row, int numXCells, int numYCells)
 
 Cell CellStorage::masterCell(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
@@ -764,7 +764,7 @@ Cell CellStorage::masterCell(int column, int row) const
 
 int CellStorage::mergedXCells(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
@@ -778,7 +778,7 @@ int CellStorage::mergedXCells(int column, int row) const
 
 int CellStorage::mergedYCells(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
@@ -792,7 +792,7 @@ int CellStorage::mergedYCells(int column, int row) const
 
 QList<Cell> CellStorage::masterCells(const Region& region) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QList<QPair<QRectF, bool> > pairs = d->fusionStorage->intersectingPairs(region);
@@ -811,7 +811,7 @@ QList<Cell> CellStorage::masterCells(const Region& region) const
 
 bool CellStorage::locksCells(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
@@ -827,7 +827,7 @@ bool CellStorage::locksCells(int column, int row) const
 
 bool CellStorage::isLocked(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
@@ -843,7 +843,7 @@ bool CellStorage::isLocked(int column, int row) const
 
 bool CellStorage::hasLockedCells(const Region& region) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     typedef QPair<QRectF, bool> RectBoolPair;
@@ -869,7 +869,7 @@ bool CellStorage::hasLockedCells(const Region& region) const
 
 void CellStorage::lockCells(const QRect& rect)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Start by unlocking the cells that we lock right now
@@ -883,7 +883,7 @@ void CellStorage::lockCells(const QRect& rect)
 
 void CellStorage::unlockCells(int column, int row)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
@@ -909,7 +909,7 @@ void CellStorage::unlockCells(int column, int row)
 
 QRect CellStorage::lockedCells(int column, int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
@@ -924,7 +924,7 @@ QRect CellStorage::lockedCells(int column, int row) const
 
 void CellStorage::insertColumns(int position, int number)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
@@ -986,7 +986,7 @@ void CellStorage::insertColumns(int position, int number)
 
 void CellStorage::removeColumns(int position, int number)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
@@ -1046,7 +1046,7 @@ void CellStorage::removeColumns(int position, int number)
 
 void CellStorage::insertRows(int position, int number)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
@@ -1107,7 +1107,7 @@ void CellStorage::insertRows(int position, int number)
 
 void CellStorage::removeRows(int position, int number)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
@@ -1169,7 +1169,7 @@ void CellStorage::removeRows(int position, int number)
 
 void CellStorage::removeShiftLeft(const QRect& rect)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
@@ -1231,7 +1231,7 @@ void CellStorage::removeShiftLeft(const QRect& rect)
 
 void CellStorage::insertShiftRight(const QRect& rect)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
@@ -1292,7 +1292,7 @@ void CellStorage::insertShiftRight(const QRect& rect)
 
 void CellStorage::removeShiftUp(const QRect& rect)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
@@ -1354,7 +1354,7 @@ void CellStorage::removeShiftUp(const QRect& rect)
 
 void CellStorage::insertShiftDown(const QRect& rect)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
@@ -1415,7 +1415,7 @@ void CellStorage::insertShiftDown(const QRect& rect)
 
 Cell CellStorage::firstInColumn(int col, Visiting visiting) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     Q_UNUSED(visiting);
@@ -1434,7 +1434,7 @@ Cell CellStorage::firstInColumn(int col, Visiting visiting) const
 
 Cell CellStorage::firstInRow(int row, Visiting visiting) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     int newCol = 0;
@@ -1456,7 +1456,7 @@ Cell CellStorage::firstInRow(int row, Visiting visiting) const
 
 Cell CellStorage::lastInColumn(int col, Visiting visiting) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     Q_UNUSED(visiting);
@@ -1473,7 +1473,7 @@ Cell CellStorage::lastInColumn(int col, Visiting visiting) const
 
 Cell CellStorage::lastInRow(int row, Visiting visiting) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     Q_UNUSED(visiting);
@@ -1490,7 +1490,7 @@ Cell CellStorage::lastInRow(int row, Visiting visiting) const
 
 Cell CellStorage::nextInColumn(int col, int row, Visiting visiting) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     Q_UNUSED(visiting);
@@ -1508,7 +1508,7 @@ Cell CellStorage::nextInColumn(int col, int row, Visiting visiting) const
 
 Cell CellStorage::nextInRow(int col, int row, Visiting visiting) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     int newCol = 0;
@@ -1530,7 +1530,7 @@ Cell CellStorage::nextInRow(int col, int row, Visiting visiting) const
 
 Cell CellStorage::prevInColumn(int col, int row, Visiting visiting) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     Q_UNUSED(visiting);
@@ -1547,7 +1547,7 @@ Cell CellStorage::prevInColumn(int col, int row, Visiting visiting) const
 
 Cell CellStorage::prevInRow(int col, int row, Visiting visiting) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     Q_UNUSED(visiting);
@@ -1564,7 +1564,7 @@ Cell CellStorage::prevInRow(int col, int row, Visiting visiting) const
 
 int CellStorage::columns(bool includeStyles) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     int max = 0;
@@ -1585,7 +1585,7 @@ int CellStorage::columns(bool includeStyles) const
 
 int CellStorage::rows(bool includeStyles) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     int max = 0;
@@ -1606,7 +1606,7 @@ int CellStorage::rows(bool includeStyles) const
 
 CellStorage CellStorage::subStorage(const Region& region) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     CellStorage subStorage(d->sheet);
@@ -1663,7 +1663,7 @@ const ValueStorage* CellStorage::valueStorage() const
 
 void CellStorage::startUndoRecording()
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // If undoData is not null, the recording wasn't stopped.
@@ -1674,7 +1674,7 @@ void CellStorage::startUndoRecording()
 
 void CellStorage::stopUndoRecording(QUndoCommand *parent)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     // If undoData is null, the recording wasn't started.
@@ -1691,7 +1691,7 @@ void CellStorage::stopUndoRecording(QUndoCommand *parent)
 
 void CellStorage::loadConditions(const QList<QPair<QRegion, Conditions> >& conditions)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->conditionsStorage->load(conditions);
@@ -1699,7 +1699,7 @@ void CellStorage::loadConditions(const QList<QPair<QRegion, Conditions> >& condi
 
 void CellStorage::loadStyles(const QList<QPair<QRegion, Style> > &styles)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->styleStorage->load(styles);
@@ -1712,7 +1712,7 @@ void CellStorage::invalidateStyleCache()
 
 int CellStorage::rowRepeat(int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->rowRepeatStorage->rowRepeat(row);
@@ -1720,7 +1720,7 @@ int CellStorage::rowRepeat(int row) const
 
 int CellStorage::firstIdenticalRow(int row) const
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QReadLocker rl(&d->bigUglyLock);
 #endif
     return d->rowRepeatStorage->firstIdenticalRow(row);
@@ -1728,7 +1728,7 @@ int CellStorage::firstIdenticalRow(int row) const
 
 void CellStorage::setRowsRepeated(int row, int count)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->rowRepeatStorage->setRowRepeat(row, count);

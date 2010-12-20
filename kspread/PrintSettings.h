@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PRINT_SETTINGS
-#define KSPREAD_PRINT_SETTINGS
+#ifndef CALLIGRA_TABLES_PRINT_SETTINGS
+#define CALLIGRA_TABLES_PRINT_SETTINGS
 
 #include <KoPageLayout.h>
 
@@ -38,7 +38,7 @@ class Sheet;
 /**
  * Settings used for printing.
  */
-class KSPREAD_EXPORT PrintSettings
+class CALLIGRA_TABLES_EXPORT PrintSettings
 {
 public:
     enum PageOrder { TopToBottom, LeftToRight };
@@ -259,4 +259,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_PRINT_SETTINGS
+#endif // CALLIGRA_TABLES_PRINT_SETTINGS

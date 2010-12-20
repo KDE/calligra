@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALUE_PARSER
-#define KSPREAD_VALUE_PARSER
+#ifndef CALLIGRA_TABLES_VALUE_PARSER
+#define CALLIGRA_TABLES_VALUE_PARSER
 
 #include <QDateTime>
 
@@ -39,7 +39,7 @@ class Value;
  * Generates a Value by parsing an user input text.
  * Determines the most probable Value type, e.g. integer or date.
  */
-class KSPREAD_EXPORT ValueParser
+class CALLIGRA_TABLES_EXPORT ValueParser
 {
 public:
     /**
@@ -114,4 +114,4 @@ private:
 
 }  //namespace KSpread
 
-#endif  //KSPREAD_VALUE_PARSER
+#endif  //CALLIGRA_TABLES_VALUE_PARSER

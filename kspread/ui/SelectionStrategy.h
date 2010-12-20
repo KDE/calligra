@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SELECTION_STRATEGY
-#define KSPREAD_SELECTION_STRATEGY
+#ifndef CALLIGRA_TABLES_SELECTION_STRATEGY
+#define CALLIGRA_TABLES_SELECTION_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 #include "kspread_export.h"
@@ -36,7 +36,7 @@ namespace KSpread
  *
  * \see AbstractSelectionStrategy
  */
-class KSPREAD_EXPORT SelectionStrategy : public AbstractSelectionStrategy
+class CALLIGRA_TABLES_EXPORT SelectionStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
@@ -58,4 +58,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SELECTION_STRATEGY
+#endif // CALLIGRA_TABLES_SELECTION_STRATEGY

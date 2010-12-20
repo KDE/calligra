@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_MAP_VIEW_MODEL
-#define KSPREAD_MAP_VIEW_MODEL
+#ifndef CALLIGRA_TABLES_MAP_VIEW_MODEL
+#define CALLIGRA_TABLES_MAP_VIEW_MODEL
 
 #include "MapModel.h"
 
@@ -98,4 +98,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_MAP_VIEW_MODEL
+#endif // CALLIGRA_TABLES_MAP_VIEW_MODEL

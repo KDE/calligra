@@ -78,7 +78,7 @@ Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-KSPREAD_EXPORT_FUNCTION_MODULE("datetime", DateTimeModule)
+CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("datetime", DateTimeModule)
 
 
 DateTimeModule::DateTimeModule(QObject* parent, const QVariantList&)

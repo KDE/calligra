@@ -25,8 +25,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SORT_DIALOG
-#define KSPREAD_SORT_DIALOG
+#ifndef CALLIGRA_TABLES_SORT_DIALOG
+#define CALLIGRA_TABLES_SORT_DIALOG
 
 #include <KDialog>
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SORT_DIALOG
+#endif // CALLIGRA_TABLES_SORT_DIALOG

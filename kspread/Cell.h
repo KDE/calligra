@@ -32,8 +32,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CELL
-#define KSPREAD_CELL
+#ifndef CALLIGRA_TABLES_CELL
+#define CALLIGRA_TABLES_CELL
 
 #include <QDate>
 #include <QSharedDataPointer>
@@ -75,7 +75,7 @@ class Value;
  * storages in CellStorage. It provides methods to alter and retrieve this data
  * and methods related to loading and saving the contents.
  */
-class KSPREAD_EXPORT Cell
+class CALLIGRA_TABLES_EXPORT Cell
 {
 public:
     /**
@@ -659,4 +659,4 @@ inline QDebug operator<<(QDebug str, const KSpread::Cell& cell)
     return str << qPrintable(KSpread::Cell::columnName(cell.column()) + QString::number(cell.row()));
 }
 
-#endif  // KSPREAD_CELL
+#endif  // CALLIGRA_TABLES_CELL

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PAGE_MANAGER
-#define KSPREAD_PAGE_MANAGER
+#ifndef CALLIGRA_TABLES_PAGE_MANAGER
+#define CALLIGRA_TABLES_PAGE_MANAGER
 
 #include "kspread_export.h"
 
@@ -36,7 +36,7 @@ class Sheet;
  * printing, and TablePageManager, which does the same for the table shape in
  * page based hosting apps.
  */
-class KSPREAD_EXPORT PageManager
+class CALLIGRA_TABLES_EXPORT PageManager
 {
 public:
     /**
@@ -99,4 +99,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_PAGE_MANAGER
+#endif // CALLIGRA_TABLES_PAGE_MANAGER

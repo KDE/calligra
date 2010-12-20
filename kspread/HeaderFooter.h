@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_HEADER_FOOTER
-#define KSPREAD_HEADER_FOOTER
+#ifndef CALLIGRA_TABLES_HEADER_FOOTER
+#define CALLIGRA_TABLES_HEADER_FOOTER
 
 #include <KoPageLayout.h>
 
@@ -32,7 +32,7 @@ namespace KSpread
 {
 class Sheet;
 
-class KSPREAD_EXPORT HeaderFooter
+class CALLIGRA_TABLES_EXPORT HeaderFooter
 {
 public:
     explicit HeaderFooter(Sheet* sheet);
@@ -157,4 +157,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_HEADER_FOOTER
+#endif // CALLIGRA_TABLES_HEADER_FOOTER

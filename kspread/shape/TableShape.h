@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TABLE_SHAPE
-#define KSPREAD_TABLE_SHAPE
+#ifndef CALLIGRA_TABLES_TABLE_SHAPE
+#define CALLIGRA_TABLES_TABLE_SHAPE
 
 #include <QObject>
 
@@ -87,4 +87,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_TABLE_SHAPE
+#endif // CALLIGRA_TABLES_TABLE_SHAPE

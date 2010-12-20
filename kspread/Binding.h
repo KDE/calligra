@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_BINDING
-#define KSPREAD_BINDING
+#ifndef CALLIGRA_TABLES_BINDING
+#define CALLIGRA_TABLES_BINDING
 
 #include <QSharedDataPointer>
 #include <QVariant>
@@ -39,7 +39,7 @@ namespace KSpread
  * If a cell in the region is updated, the BindingManager informs this Binding, which
  * in turn informs the model it holds.
  */
-class KSPREAD_EXPORT Binding
+class CALLIGRA_TABLES_EXPORT Binding
 {
 public:
     Binding();
@@ -70,4 +70,4 @@ private:
 Q_DECLARE_METATYPE(KSpread::Binding)
 Q_DECLARE_TYPEINFO(KSpread::Binding, Q_MOVABLE_TYPE);
 
-#endif // KSPREAD_BINDING
+#endif // CALLIGRA_TABLES_BINDING

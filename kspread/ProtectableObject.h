@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PROTECTABLE_OBJECT
-#define KSPREAD_PROTECTABLE_OBJECT
+#ifndef CALLIGRA_TABLES_PROTECTABLE_OBJECT
+#define CALLIGRA_TABLES_PROTECTABLE_OBJECT
 
 #include <KoXmlReader.h>
 
@@ -35,7 +35,7 @@ namespace KSpread
  * The inheriting object decides which of its data should be protected.
  * It has to use isProtected() to check wether it's protected.
  */
-class KSPREAD_EXPORT ProtectableObject
+class CALLIGRA_TABLES_EXPORT ProtectableObject
 {
 public:
     enum Mode {
@@ -91,4 +91,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_PROTECTABLE_OBJECT
+#endif // CALLIGRA_TABLES_PROTECTABLE_OBJECT

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DELETE_COMMAND
-#define KSPREAD_DELETE_COMMAND
+#ifndef CALLIGRA_TABLES_DELETE_COMMAND
+#define CALLIGRA_TABLES_DELETE_COMMAND
 
 #include "DataManipulators.h"
 
@@ -74,4 +74,4 @@ protected:
 
 } // namespace KSpread
 
-#endif // KSPREAD_DELETE_COMMAND
+#endif // CALLIGRA_TABLES_DELETE_COMMAND

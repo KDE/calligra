@@ -26,8 +26,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VIEW
-#define KSPREAD_VIEW
+#ifndef CALLIGRA_TABLES_VIEW
+#define CALLIGRA_TABLES_VIEW
 
 #include <QList>
 #include <QPoint>
@@ -79,7 +79,7 @@ class TabBar;
  *  \li tab bar to select active worksheet
  *  \li status bar to show status messages
  */
-class KSPREAD_EXPORT View : public KoView
+class CALLIGRA_TABLES_EXPORT View : public KoView
 {
     Q_OBJECT
 
@@ -382,4 +382,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_VIEW
+#endif // CALLIGRA_TABLES_VIEW

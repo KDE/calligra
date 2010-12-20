@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_HEADERITEMS
-#define KSPREAD_HEADERITEMS
+#ifndef CALLIGRA_TABLES_HEADERITEMS
+#define CALLIGRA_TABLES_HEADERITEMS
 
 #include <QGraphicsWidget>
 #include "Headers.h"
@@ -39,7 +39,7 @@ class View;
 /**
  * The widget above the cells showing the column headers.
  */
-class KSPREAD_EXPORT ColumnHeaderItem : public QGraphicsWidget, public ColumnHeader
+class CALLIGRA_TABLES_EXPORT ColumnHeaderItem : public QGraphicsWidget, public ColumnHeader
 {
     Q_OBJECT
 public:
@@ -78,7 +78,7 @@ protected:
 /**
  * The widget left to the cells showing the row headers.
  */
-class KSPREAD_EXPORT RowHeaderItem : public QGraphicsWidget, public RowHeader
+class CALLIGRA_TABLES_EXPORT RowHeaderItem : public QGraphicsWidget, public RowHeader
 {
     Q_OBJECT
 public:
@@ -118,7 +118,7 @@ protected:
  * The widget in the top left corner of the canvas,
  * responsible for selecting all cells in a sheet.
  */
-class KSPREAD_EXPORT SelectAllButtonItem : public QGraphicsWidget, public SelectAllButton
+class CALLIGRA_TABLES_EXPORT SelectAllButtonItem : public QGraphicsWidget, public SelectAllButton
 {
     Q_OBJECT
 public:

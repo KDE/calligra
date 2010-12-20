@@ -17,8 +17,8 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
    MA  02110-1301  USA
 */
-#ifndef KSPREAD_RTREE_BENCHMARK_H
-#define KSPREAD_RTREE_BENCHMARK_H
+#ifndef CALLIGRA_TABLES_RTREE_BENCHMARK_H
+#define CALLIGRA_TABLES_RTREE_BENCHMARK_H
 
 #include <QObject>
 #include "RTree.h"
@@ -45,4 +45,4 @@ private:
 
 } // namepsace KSpread
 
-#endif // KSPREAD_RTREE_BENCHMARK_H
+#endif // CALLIGRA_TABLES_RTREE_BENCHMARK_H

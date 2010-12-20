@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALUECALC
-#define KSPREAD_VALUECALC
+#ifndef CALLIGRA_TABLES_VALUECALC
+#define CALLIGRA_TABLES_VALUECALC
 
 #include <map>
 
@@ -69,7 +69,7 @@ the Number object directly for that. This class is to be used for computations
 of more complicated and ranged functions.
 */
 
-class KSPREAD_EXPORT ValueCalc
+class CALLIGRA_TABLES_EXPORT ValueCalc
 {
 public:
     explicit ValueCalc(ValueConverter* c);
@@ -348,5 +348,5 @@ inline double approxFloor(double a)
 }  //namespace KSpread
 
 
-#endif // KSPREAD_VALUECALC
+#endif // CALLIGRA_TABLES_VALUECALC
 

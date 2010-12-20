@@ -24,8 +24,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PREFERENCE_DIALOG
-#define KSPREAD_PREFERENCE_DIALOG
+#ifndef CALLIGRA_TABLES_PREFERENCE_DIALOG
+#define CALLIGRA_TABLES_PREFERENCE_DIALOG
 
 #include <kpagedialog.h>
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_PREFERENCE_DIALOG
+#endif // CALLIGRA_TABLES_PREFERENCE_DIALOG

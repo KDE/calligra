@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_UTIL
-#define KSPREAD_UTIL
+#ifndef CALLIGRA_TABLES_UTIL
+#define CALLIGRA_TABLES_UTIL
 
 #include <QString>
 #include <QRect>
@@ -54,22 +54,22 @@ namespace Util
  * Converted are all characters matching [A-Za-z]+ regular expresion, the rest is ignored.
  * 0 is returned if no characters match.
  */
-KSPREAD_EXPORT int decodeColumnLabelText(const QString &labelText);
+CALLIGRA_TABLES_EXPORT int decodeColumnLabelText(const QString &labelText);
 
 /**
  * Call this function to decode the text of a row label to an integer,
  * e.g. B7 is translated to 7.
  */
-KSPREAD_EXPORT int decodeRowLabelText(const QString &labelText);
+CALLIGRA_TABLES_EXPORT int decodeRowLabelText(const QString &labelText);
 
 /**
  * Call this function to encode an integer to the text of the column label
  * i.e. 27->AA
  */
-KSPREAD_EXPORT QString encodeColumnLabelText(int column);
+CALLIGRA_TABLES_EXPORT QString encodeColumnLabelText(int column);
 
 //Return true when it's a reference to cell from sheet.
-KSPREAD_EXPORT bool localReferenceAnchor(const QString &_ref);
+CALLIGRA_TABLES_EXPORT bool localReferenceAnchor(const QString &_ref);
 
 // TODO Stefan: used nowhere
 int         penCompare(QPen const & pen1, QPen const & pen2);
@@ -132,7 +132,7 @@ QPen decodePen(const QString &str);
  * \note Use Region::loadOdf() for plain cell references.
  */
 // TODO check visibility
-KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
+CALLIGRA_TABLES_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
 
 /**
  * \ingroup OpenDocument
@@ -141,24 +141,24 @@ KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale 
  * @param locale The locale from which the expression should be converted.
  * \note Use Region::saveOdf() for plain cell references.
  */
-KSPREAD_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
+CALLIGRA_TABLES_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
 
 /**
  * \ingroup OpenDocument
  */
-KSPREAD_EXPORT QString convertRefToRange(const QString & sheet, const QRect & rect);
+CALLIGRA_TABLES_EXPORT QString convertRefToRange(const QString & sheet, const QRect & rect);
 
 /**
  * \ingroup OpenDocument
  */
-KSPREAD_EXPORT QString convertRefToBase(const QString & sheet, const QRect & rect);
+CALLIGRA_TABLES_EXPORT QString convertRefToBase(const QString & sheet, const QRect & rect);
 
 /**
  * \ingroup OpenDocument
  */
-KSPREAD_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
+CALLIGRA_TABLES_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
 }
 
 } // namespace KSpread
 
-#endif // KSPREAD_UTIL
+#endif // CALLIGRA_TABLES_UTIL

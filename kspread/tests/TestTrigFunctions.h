@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TEST_TRIG_FUNCTIONS
-#define KSPREAD_TEST_TRIG_FUNCTIONS
+#ifndef CALLIGRA_TABLES_TEST_TRIG_FUNCTIONS
+#define CALLIGRA_TABLES_TEST_TRIG_FUNCTIONS
 
 #include <QtGui>
 #include <QtTest/QtTest>
@@ -47,4 +47,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_TEST_TRIG_FUNCTIONS
+#endif // CALLIGRA_TABLES_TEST_TRIG_FUNCTIONS

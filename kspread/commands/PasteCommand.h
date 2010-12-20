@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PASTE_COMMAND
-#define KSPREAD_PASTE_COMMAND
+#ifndef CALLIGRA_TABLES_PASTE_COMMAND
+#define CALLIGRA_TABLES_PASTE_COMMAND
 
 #include "AbstractRegionCommand.h"
 
@@ -103,4 +103,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_PASTE_COMMAND
+#endif // CALLIGRA_TABLES_PASTE_COMMAND

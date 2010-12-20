@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_INSPECTOR
-#define KSPREAD_INSPECTOR
+#ifndef CALLIGRA_TABLES_INSPECTOR
+#define CALLIGRA_TABLES_INSPECTOR
 
 #include <kpagedialog.h>
 
@@ -42,4 +42,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_INSPECTOR
+#endif // CALLIGRA_TABLES_INSPECTOR

@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SHEET_PRINT
-#define KSPREAD_SHEET_PRINT
+#ifndef CALLIGRA_TABLES_SHEET_PRINT
+#define CALLIGRA_TABLES_SHEET_PRINT
 
 #include <QRectF>
 
@@ -41,7 +41,7 @@ class Sheet;
  * zooming, page limits and column/row repetitions.
  * \ingroup Printing
  */
-class KSPREAD_EXPORT SheetPrint
+class CALLIGRA_TABLES_EXPORT SheetPrint
 {
 public:
     explicit SheetPrint(Sheet * sheet = 0);
@@ -156,4 +156,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SHEET_PRINT
+#endif // CALLIGRA_TABLES_SHEET_PRINT

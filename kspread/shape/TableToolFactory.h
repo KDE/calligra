@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TABLE_TOOL_FACTORY
-#define KSPREAD_TABLE_TOOL_FACTORY
+#ifndef CALLIGRA_TABLES_TABLE_TOOL_FACTORY
+#define CALLIGRA_TABLES_TABLE_TOOL_FACTORY
 
 
 #include <KoToolFactoryBase.h>
@@ -37,4 +37,4 @@ public:
 
 } // namespace
 
-#endif // KSPREAD_TABLE_TOOL_FACTORY
+#endif // CALLIGRA_TABLES_TABLE_TOOL_FACTORY

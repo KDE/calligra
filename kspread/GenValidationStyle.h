@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KSPREAD_GENVALIDATIONSTYLE
-#define KSPREAD_GENVALIDATIONSTYLE
+#ifndef CALLIGRA_TABLES_GENVALIDATIONSTYLE
+#define CALLIGRA_TABLES_GENVALIDATIONSTYLE
 
 #include "kspread_export.h"
 
@@ -86,7 +86,7 @@ private:
  * \class GenValidationStyles
  * \ingroup OpenDocument
  */
-class KSPREAD_EXPORT GenValidationStyles
+class CALLIGRA_TABLES_EXPORT GenValidationStyles
 {
 public:
     GenValidationStyles();

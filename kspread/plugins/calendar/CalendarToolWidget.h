@@ -21,8 +21,8 @@
 *   OTHER DEALINGS IN THE SOFTWARE.                                       *
 ***************************************************************************/
 
-#ifndef KSPREAD_CALENDAR_TOOL_WIDGET
-#define KSPREAD_CALENDAR_TOOL_WIDGET
+#ifndef CALLIGRA_TABLES_CALENDAR_TOOL_WIDGET
+#define CALLIGRA_TABLES_CALENDAR_TOOL_WIDGET
 
 #include <ui_CalendarToolWidget.h>
 
@@ -145,4 +145,4 @@ signals:
 
 }
 
-#endif // KSPREAD_CALENDAR_TOOL_WIDGET
+#endif // CALLIGRA_TABLES_CALENDAR_TOOL_WIDGET

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FORMULA
-#define KSPREAD_FORMULA
+#ifndef CALLIGRA_TABLES_FORMULA
+#define CALLIGRA_TABLES_FORMULA
 
 #include <QHash>
 #include <QSharedDataPointer>
@@ -31,7 +31,7 @@
 #include "kspread_export.h"
 #include "Cell.h"
 
-#define KSPREAD_INLINE_ARRAYS
+#define CALLIGRA_TABLES_INLINE_ARRAYS
 
 class KLocale;
 
@@ -45,7 +45,7 @@ typedef QHash<Cell, Cell> CellIndirection;
  * \ingroup Value
  * A formula token.
  */
-class KSPREAD_EXPORT Token
+class CALLIGRA_TABLES_EXPORT Token
 {
 public:
     /**
@@ -293,7 +293,7 @@ protected:
  *
  *
  */
-class KSPREAD_EXPORT Formula
+class CALLIGRA_TABLES_EXPORT Formula
 {
 public:
     /**
@@ -445,4 +445,4 @@ inline uint qHash(const Formula& formula)
 Q_DECLARE_METATYPE(KSpread::Formula)
 Q_DECLARE_TYPEINFO(KSpread::Formula, Q_MOVABLE_TYPE);
 
-#endif // KSPREAD_FORMULA
+#endif // CALLIGRA_TABLES_FORMULA

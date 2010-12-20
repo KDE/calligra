@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KSPREAD_REGION_SELECTOR
-#define KSPREAD_REGION_SELECTOR
+#ifndef CALLIGRA_TABLES_REGION_SELECTOR
+#define CALLIGRA_TABLES_REGION_SELECTOR
 
 #include <QWidget>
 
@@ -40,7 +40,7 @@ class Selection;
  * A minimizable line edit for choosing cell regions.
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class KSPREAD_EXPORT RegionSelector : public QWidget
+class CALLIGRA_TABLES_EXPORT RegionSelector : public QWidget
 {
     Q_OBJECT
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_REGION_SELECTOR
+#endif // CALLIGRA_TABLES_REGION_SELECTOR

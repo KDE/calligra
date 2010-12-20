@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_ROW_COLUMN_FORMAT
-#define KSPREAD_ROW_COLUMN_FORMAT
+#ifndef CALLIGRA_TABLES_ROW_COLUMN_FORMAT
+#define CALLIGRA_TABLES_ROW_COLUMN_FORMAT
 
 #include <QBrush>
 
@@ -41,7 +41,7 @@ class RowFormatStorage;
 /**
  * A row style.
  */
-class KSPREAD_EXPORT RowFormat
+class CALLIGRA_TABLES_EXPORT RowFormat
 {
 public:
     RowFormat();
@@ -127,7 +127,7 @@ private:
 /**
  * A column style.
  */
-class KSPREAD_EXPORT ColumnFormat
+class CALLIGRA_TABLES_EXPORT ColumnFormat
 {
 public:
     ColumnFormat();
@@ -208,4 +208,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_ROW_COLUMN_FORMAT
+#endif // CALLIGRA_TABLES_ROW_COLUMN_FORMAT

@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef KSPREAD_SHEET_TEST
-#define KSPREAD_SHEET_TEST
+#ifndef CALLIGRA_TABLES_SHEET_TEST
+#define CALLIGRA_TABLES_SHEET_TEST
 
 #include <QtTest/QtTest>
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SHEET_TEST
+#endif // CALLIGRA_TABLES_SHEET_TEST

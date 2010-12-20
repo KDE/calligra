@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FUNCTION_MODULE_REGISTRY
-#define KSPREAD_FUNCTION_MODULE_REGISTRY
+#ifndef CALLIGRA_TABLES_FUNCTION_MODULE_REGISTRY
+#define CALLIGRA_TABLES_FUNCTION_MODULE_REGISTRY
 
 #include <QObject>
 
@@ -35,7 +35,7 @@ namespace KSpread
  * \ingroup Value
  * Registry for function modules.
  */
-class KSPREAD_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
+class CALLIGRA_TABLES_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
 {
 public:
     /**
@@ -69,4 +69,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FUNCTION_MODULE_REGISTRY
+#endif // CALLIGRA_TABLES_FUNCTION_MODULE_REGISTRY

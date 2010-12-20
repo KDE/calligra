@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DATABASE
-#define KSPREAD_DATABASE
+#ifndef CALLIGRA_TABLES_DATABASE
+#define CALLIGRA_TABLES_DATABASE
 
 #include <QSharedDataPointer>
 #include <QVariant>
@@ -42,7 +42,7 @@ class Region;
 /**
  * OpenDocument, 8.6.1 Database Range
  */
-class KSPREAD_EXPORT Database
+class CALLIGRA_TABLES_EXPORT Database
 {
 public:
     /**
@@ -140,4 +140,4 @@ private:
 Q_DECLARE_METATYPE(KSpread::Database)
 Q_DECLARE_TYPEINFO(KSpread::Database, Q_MOVABLE_TYPE);
 
-#endif // KSPREAD_DATABASE
+#endif // CALLIGRA_TABLES_DATABASE

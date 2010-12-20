@@ -28,8 +28,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DOCBASE_H
-#define KSPREAD_DOCBASE_H
+#ifndef CALLIGRA_TABLES_DOCBASE_H
+#define CALLIGRA_TABLES_DOCBASE_H
 
 #include <KoDocument.h>
 
@@ -44,7 +44,7 @@ class Map;
 class Sheet;
 class SheetAccessModel;
 
-class KSPREAD_EXPORT DocBase : public KoDocument
+class CALLIGRA_TABLES_EXPORT DocBase : public KoDocument
 {
     Q_OBJECT
 public:
@@ -160,4 +160,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_DOCBASE_H
+#endif // CALLIGRA_TABLES_DOCBASE_H

@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DAMAGES
-#define KSPREAD_DAMAGES
+#ifndef CALLIGRA_TABLES_DAMAGES
+#define CALLIGRA_TABLES_DAMAGES
 
 
 #include "kdebug.h"
@@ -37,7 +37,7 @@ class Region;
  * \ingroup Damages
  * An abstract damage.
  */
-class KSPREAD_EXPORT Damage
+class CALLIGRA_TABLES_EXPORT Damage
 {
 public:
     virtual ~Damage() {}
@@ -61,7 +61,7 @@ public:
  * \ingroup Damages
  * A cell range damage.
  */
-class KSPREAD_EXPORT CellDamage : public Damage
+class CALLIGRA_TABLES_EXPORT CellDamage : public Damage
 {
 public:
     enum Change {
@@ -110,7 +110,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CellDamage::Changes)
  * \ingroup Damages
  * A sheet damage.
  */
-class KSPREAD_EXPORT SheetDamage : public Damage
+class CALLIGRA_TABLES_EXPORT SheetDamage : public Damage
 {
 public:
 
@@ -183,7 +183,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
  * \ingroup Damages
  * A selection damage.
  */
-class KSPREAD_EXPORT SelectionDamage : public Damage
+class CALLIGRA_TABLES_EXPORT SelectionDamage : public Damage
 {
 public:
     SelectionDamage(const Region& region);
@@ -209,9 +209,9 @@ private:
   kDebug support
 ****************************************************************************/
 
-KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::Damage& d);
-KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::CellDamage& d);
-KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::SheetDamage& d);
-KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::SelectionDamage& d);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::Damage& d);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::CellDamage& d);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::SheetDamage& d);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::SelectionDamage& d);
 
-#endif // KSPREAD_DAMAGES
+#endif // CALLIGRA_TABLES_DAMAGES

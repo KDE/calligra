@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KSPREAD_FUNCTIONS
-#define KSPREAD_FUNCTIONS
+#ifndef CALLIGRA_TABLES_FUNCTIONS
+#define CALLIGRA_TABLES_FUNCTIONS
 
 #include <QList>
 #include <QSharedPointer>
@@ -66,7 +66,7 @@ typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
  * \ingroup Value
  * A function pointer and context.
  */
-class KSPREAD_EXPORT Function
+class CALLIGRA_TABLES_EXPORT Function
 {
 public:
     Function(const QString& name, FunctionPtr ptr);
@@ -102,4 +102,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FUNCTIONS
+#endif // CALLIGRA_TABLES_FUNCTIONS

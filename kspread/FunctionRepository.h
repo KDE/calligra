@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KSPREAD_FUNCTION_REPOSITORY
-#define KSPREAD_FUNCTION_REPOSITORY
+#ifndef CALLIGRA_TABLES_FUNCTION_REPOSITORY
+#define CALLIGRA_TABLES_FUNCTION_REPOSITORY
 
 #include <QSharedPointer>
 #include <QStringList>
@@ -36,7 +36,7 @@ class FunctionDescription;
  * \ingroup Value
  * The function repository.
  */
-class KSPREAD_EXPORT FunctionRepository
+class CALLIGRA_TABLES_EXPORT FunctionRepository
 {
 public:
     FunctionRepository();
@@ -83,4 +83,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FUNCTION_REPOSITORY
+#endif // CALLIGRA_TABLES_FUNCTION_REPOSITORY

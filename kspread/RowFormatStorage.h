@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_ROWFORMATSTORAGE_H
-#define KSPREAD_ROWFORMATSTORAGE_H
+#ifndef CALLIGRA_TABLES_ROWFORMATSTORAGE_H
+#define CALLIGRA_TABLES_ROWFORMATSTORAGE_H
 
 #include <Qt>
 
@@ -29,7 +29,7 @@ namespace KSpread {
 class Sheet;
 
 /** first and last row are both inclusive in all functions */
-class KSPREAD_EXPORT RowFormatStorage
+class CALLIGRA_TABLES_EXPORT RowFormatStorage
 {
 public:
     RowFormatStorage(Sheet* sheet);
@@ -87,5 +87,5 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_ROWFORMATSTORAGE_H
+#endif // CALLIGRA_TABLES_ROWFORMATSTORAGE_H
 

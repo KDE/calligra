@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CURRENCY
-#define KSPREAD_CURRENCY
+#ifndef CALLIGRA_TABLES_CURRENCY
+#define CALLIGRA_TABLES_CURRENCY
 
 #include <QHash>
 #include <QMetaType>
@@ -34,7 +34,7 @@ namespace KSpread
  * \class Currency
  * Currency format information.
  */
-class KSPREAD_EXPORT Currency
+class CALLIGRA_TABLES_EXPORT Currency
 {
 public:
     enum Format { Native, Gnumeric, OpenCalc, ApplixSpread, GobeProductiveSpread, HancomSheet };

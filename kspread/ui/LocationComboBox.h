@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KSPREAD_LOCATION_COMBOBOX
-#define KSPREAD_LOCATION_COMBOBOX
+#ifndef CALLIGRA_TABLES_LOCATION_COMBOBOX
+#define CALLIGRA_TABLES_LOCATION_COMBOBOX
 
 #include <kcombobox.h>
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_LOCATION_COMBOBOX
+#endif // CALLIGRA_TABLES_LOCATION_COMBOBOX

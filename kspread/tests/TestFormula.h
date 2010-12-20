@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TEST_FORMULA
-#define KSPREAD_TEST_FORMULA
+#ifndef CALLIGRA_TABLES_TEST_FORMULA
+#define CALLIGRA_TABLES_TEST_FORMULA
 
 #include <QtGui>
 #include <QtTest/QtTest>
@@ -51,4 +51,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_TEST_FORMULA
+#endif // CALLIGRA_TABLES_TEST_FORMULA

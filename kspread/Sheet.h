@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SHEET
-#define KSPREAD_SHEET
+#ifndef CALLIGRA_TABLES_SHEET
+#define CALLIGRA_TABLES_SHEET
 
 #include <QClipboard>
 #include <QHash>
@@ -88,7 +88,7 @@ template<typename T> class IntervalMap;
 /**
  * A sheet contains several cells.
  */
-class KSPREAD_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
+class CALLIGRA_TABLES_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
         public ProtectableObject
 {
     Q_OBJECT
@@ -960,4 +960,4 @@ private:
 
 } // namespace KSpread
 
-#endif  // KSPREAD_SHEET
+#endif  // CALLIGRA_TABLES_SHEET

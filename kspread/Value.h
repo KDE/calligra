@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALUE_H
-#define KSPREAD_VALUE_H
+#ifndef CALLIGRA_TABLES_VALUE_H
+#define CALLIGRA_TABLES_VALUE_H
 
 #include <complex>
 
@@ -51,7 +51,7 @@ class ValueStorage;
  *
  * Value uses implicit data sharing to reduce memory usage.
  */
-class KSPREAD_EXPORT Value
+class CALLIGRA_TABLES_EXPORT Value
 {
 
 public:
@@ -132,12 +132,12 @@ public:
      */
     explicit Value(long double f);
 
-#ifdef KSPREAD_HIGH_PRECISION_SUPPORT
+#ifdef CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
     /**
      * Creates a floating-point value.
      */
     explicit Value(Number f);
-#endif // KSPREAD_HIGH_PRECISION_SUPPORT
+#endif // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
     /**
      * Creates a complex number value.
@@ -517,14 +517,14 @@ Q_DECLARE_TYPEINFO(KSpread::Value, Q_MOVABLE_TYPE);
   QTextStream support
 ****************************************************************************/
 
-KSPREAD_EXPORT QTextStream& operator<<(QTextStream& ts, KSpread::Value::Type type);
-KSPREAD_EXPORT QTextStream& operator<<(QTextStream& ts, KSpread::Value value);
+CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, KSpread::Value::Type type);
+CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, KSpread::Value value);
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::Value& v);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::Value& v);
 QDebug operator<<(QDebug stream, const KSpread::Value::Format& f);
 
-#endif // KSPREAD_VALUE_H
+#endif // CALLIGRA_TABLES_VALUE_H

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CALENDAR_TOOL
-#define KSPREAD_CALENDAR_TOOL
+#ifndef CALLIGRA_TABLES_CALENDAR_TOOL
+#define CALLIGRA_TABLES_CALENDAR_TOOL
 
 #include <part/CellTool.h>
 
@@ -56,4 +56,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CALENDAR_TOOL
+#endif // CALLIGRA_TABLES_CALENDAR_TOOL

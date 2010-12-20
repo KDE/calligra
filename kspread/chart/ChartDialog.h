@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CHART_DIALOG
-#define KSPREAD_CHART_DIALOG
+#ifndef CALLIGRA_TABLES_CHART_DIALOG
+#define CALLIGRA_TABLES_CHART_DIALOG
 
 #include <KoShapeConfigFactoryBase.h>
 
@@ -110,4 +110,4 @@ public:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CHART_DIALOG
+#endif // CALLIGRA_TABLES_CHART_DIALOG

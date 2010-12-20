@@ -1,5 +1,5 @@
-#ifndef KSPREAD_TEST_RTREE
-#define KSPREAD_TEST_RTREE
+#ifndef CALLIGRA_TABLES_TEST_RTREE
+#define CALLIGRA_TABLES_TEST_RTREE
 
 #include <QtTest/QtTest>
 
@@ -24,4 +24,4 @@ private Q_SLOTS:
 
 } // namespace KSpread
 
-#endif // KSPREAD_TEST_RTREE
+#endif // CALLIGRA_TABLES_TEST_RTREE

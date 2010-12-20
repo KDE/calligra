@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_STYLE
-#define KSPREAD_STYLE
+#ifndef CALLIGRA_TABLES_STYLE
+#define CALLIGRA_TABLES_STYLE
 
 #include <QFont>
 #include <QSharedDataPointer>
@@ -53,13 +53,13 @@ typedef QHash<QString, Style>       Styles;
 // needs to be ordered (QMap) for the style dialog
 typedef QMap<QString, CustomStyle*> CustomStyles;
 
-KSPREAD_EXPORT uint qHash(const Style& style);
+CALLIGRA_TABLES_EXPORT uint qHash(const Style& style);
 
 /**
  * \ingroup Style
  * A cell style.
  */
-class KSPREAD_EXPORT Style
+class CALLIGRA_TABLES_EXPORT Style
 {
 public:
     enum HAlign {
@@ -383,7 +383,7 @@ private:
  * \ingroup Style
  * A named cell style.
  */
-class KSPREAD_EXPORT CustomStyle : public Style
+class CALLIGRA_TABLES_EXPORT CustomStyle : public Style
 {
 public:
     /**
@@ -452,7 +452,7 @@ private:
  * \ingroup Style
  * A single style attribute.
  */
-class KSPREAD_TEST_EXPORT SubStyle : public QSharedData
+class CALLIGRA_TABLES_TEST_EXPORT SubStyle : public QSharedData
 {
 public:
     SubStyle() {}
@@ -552,4 +552,4 @@ Q_DECLARE_TYPEINFO(KSpread::Style, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KSpread::CustomStyle, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KSpread::SharedSubStyle, Q_MOVABLE_TYPE);
 
-#endif // KSPREAD_STYLE
+#endif // CALLIGRA_TABLES_STYLE

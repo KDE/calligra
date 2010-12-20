@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DRAG_AND_DROP_STRATEGY
-#define KSPREAD_DRAG_AND_DROP_STRATEGY
+#ifndef CALLIGRA_TABLES_DRAG_AND_DROP_STRATEGY
+#define CALLIGRA_TABLES_DRAG_AND_DROP_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 #include "kspread_export.h"
@@ -32,7 +32,7 @@ namespace KSpread
  * The drag starts, if the mouse leaves the cell, where the mouse press occurred.
  * If this cell is not left, the cell becomes selected.
  */
-class KSPREAD_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
+class CALLIGRA_TABLES_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
@@ -57,4 +57,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_DRAG_AND_DROP_STRATEGY
+#endif // CALLIGRA_TABLES_DRAG_AND_DROP_STRATEGY

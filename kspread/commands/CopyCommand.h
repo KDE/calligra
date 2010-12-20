@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_COPY_COMMAND
-#define KSPREAD_COPY_COMMAND
+#ifndef CALLIGRA_TABLES_COPY_COMMAND
+#define CALLIGRA_TABLES_COPY_COMMAND
 
 #include <QDomDocument>
 
@@ -60,4 +60,4 @@ QString saveAsCSV(const Region& region);
 
 } // namespace KSpread
 
-#endif // KSPREAD_COPY_COMMAND
+#endif // CALLIGRA_TABLES_COPY_COMMAND

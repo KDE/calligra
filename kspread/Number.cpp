@@ -19,7 +19,7 @@
 
 #include "Number.h"
 
-#ifdef KSPREAD_HIGH_PRECISION_SUPPORT
+#ifdef CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
 #include <math.h>
 
@@ -434,4 +434,4 @@ Number atgh(const Number &n)
 
 }  // nsmespace KSpread
 
-#endif // KSPREAD_HIGH_PRECISION_SUPPORT
+#endif // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT

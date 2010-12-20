@@ -121,7 +121,7 @@ Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *);
 // Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-KSPREAD_EXPORT_FUNCTION_MODULE("math", MathModule)
+CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("math", MathModule)
 
 
 MathModule::MathModule(QObject* parent, const QVariantList&)

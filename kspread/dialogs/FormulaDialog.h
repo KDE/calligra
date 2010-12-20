@@ -24,8 +24,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FORMULA_DIALOG
-#define KSPREAD_FORMULA_DIALOG
+#ifndef CALLIGRA_TABLES_FORMULA_DIALOG
+#define CALLIGRA_TABLES_FORMULA_DIALOG
 
 #include <QCloseEvent>
 #include <QLabel>
@@ -191,4 +191,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FORMULA_DIALOG
+#endif // CALLIGRA_TABLES_FORMULA_DIALOG

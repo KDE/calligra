@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SHEETSELECTPAGE
-#define KSPREAD_SHEETSELECTPAGE
+#ifndef CALLIGRA_TABLES_SHEETSELECTPAGE
+#define CALLIGRA_TABLES_SHEETSELECTPAGE
 
 #include "ui_SheetSelectWidget.h"
 
@@ -105,4 +105,4 @@ protected slots:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SHEETSELECTPAGE
+#endif // CALLIGRA_TABLES_SHEETSELECTPAGE

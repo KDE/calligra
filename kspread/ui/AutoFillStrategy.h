@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_AUTOFILL_STRATEGY
-#define KSPREAD_AUTOFILL_STRATEGY
+#ifndef CALLIGRA_TABLES_AUTOFILL_STRATEGY
+#define CALLIGRA_TABLES_AUTOFILL_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 #include "kspread_export.h"
@@ -32,7 +32,7 @@ namespace KSpread
  * Created, when the user presses the left mouse button on the selection handle.
  * Nothing happens, if the selection did not change.
  */
-class KSPREAD_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
+class CALLIGRA_TABLES_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
@@ -54,4 +54,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_AUTOFILL_STRATEGY
+#endif // CALLIGRA_TABLES_AUTOFILL_STRATEGY

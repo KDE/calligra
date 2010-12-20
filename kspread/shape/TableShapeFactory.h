@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TABLE_SHAPE_FACTORY
-#define KSPREAD_TABLE_SHAPE_FACTORY
+#ifndef CALLIGRA_TABLES_TABLE_SHAPE_FACTORY
+#define CALLIGRA_TABLES_TABLE_SHAPE_FACTORY
 
 #include <QVariantList>
 
@@ -50,4 +50,4 @@ public:
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
 };
 
-#endif // KSPREAD_TABLE_SHAPE_FACTORY
+#endif // CALLIGRA_TABLES_TABLE_SHAPE_FACTORY

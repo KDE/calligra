@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CELL_STORAGE
-#define KSPREAD_CELL_STORAGE
+#ifndef CALLIGRA_TABLES_CELL_STORAGE
+#define CALLIGRA_TABLES_CELL_STORAGE
 
 #include <QPair>
 #include <QRect>
@@ -67,7 +67,7 @@ class ValueStorage;
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
-class KSPREAD_EXPORT CellStorage : public QObject
+class CALLIGRA_TABLES_EXPORT CellStorage : public QObject
 {
     Q_OBJECT
 public:
@@ -443,4 +443,4 @@ public:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CELL_STORAGE
+#endif // CALLIGRA_TABLES_CELL_STORAGE

@@ -109,7 +109,7 @@ Value func_yieldmat(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-KSPREAD_EXPORT_FUNCTION_MODULE("financial", FinancialModule)
+CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("financial", FinancialModule)
 
 
 FinancialModule::FinancialModule(QObject* parent, const QVariantList&)

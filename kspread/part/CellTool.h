@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CELL_TOOL
-#define KSPREAD_CELL_TOOL
+#ifndef CALLIGRA_TABLES_CELL_TOOL
+#define CALLIGRA_TABLES_CELL_TOOL
 
 #include <kspread/ui/CellToolBase.h>
 
@@ -30,7 +30,7 @@ namespace KSpread
 /**
  * The tool to change cell ranges.
  */
-class KSPREAD_EXPORT CellTool : public CellToolBase
+class CALLIGRA_TABLES_EXPORT CellTool : public CellToolBase
 {
     Q_OBJECT
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CELL_TOOL
+#endif // CALLIGRA_TABLES_CELL_TOOL

@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef KSPREAD_CELLEDITORBASE_H
-#define KSPREAD_CELLEDITORBASE_H
+#ifndef CALLIGRA_TABLES_CELLEDITORBASE_H
+#define CALLIGRA_TABLES_CELLEDITORBASE_H
 #include <kspread/kspread_export.h>
 
 class QFont;
@@ -29,7 +29,7 @@ class QWidget;
 namespace KSpread
 {
 
-class KSPREAD_EXPORT CellEditorBase
+class CALLIGRA_TABLES_EXPORT CellEditorBase
 {
 public:
     CellEditorBase();
@@ -49,4 +49,4 @@ public:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CELLEDITORBASE_H
+#endif // CALLIGRA_TABLES_CELLEDITORBASE_H

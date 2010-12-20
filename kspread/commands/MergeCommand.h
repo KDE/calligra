@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_MERGE_COMMAND
-#define KSPREAD_MERGE_COMMAND
+#ifndef CALLIGRA_TABLES_MERGE_COMMAND
+#define CALLIGRA_TABLES_MERGE_COMMAND
 
 #include "AbstractRegionCommand.h"
 
@@ -70,4 +70,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_MERGE_COMMAND
+#endif // CALLIGRA_TABLES_MERGE_COMMAND

@@ -26,8 +26,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CELL_TOOL_BASE
-#define KSPREAD_CELL_TOOL_BASE
+#ifndef CALLIGRA_TABLES_CELL_TOOL_BASE
+#define CALLIGRA_TABLES_CELL_TOOL_BASE
 
 #include <KoInteractionTool.h>
 
@@ -45,7 +45,7 @@ class CellEditorBase;
 /**
  * Abstract tool providing actions acting on cell ranges.
  */
-class KSPREAD_EXPORT CellToolBase : public KoInteractionTool
+class CALLIGRA_TABLES_EXPORT CellToolBase : public KoInteractionTool
 {
     Q_OBJECT
 
@@ -288,4 +288,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CELL_TOOL_BASE
+#endif // CALLIGRA_TABLES_CELL_TOOL_BASE

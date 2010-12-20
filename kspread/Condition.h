@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CONDITION_H
-#define KSPREAD_CONDITION_H
+#ifndef CALLIGRA_TABLES_CONDITION_H
+#define CALLIGRA_TABLES_CONDITION_H
 
 #include "Style.h"
 #include "Value.h"
@@ -52,7 +52,7 @@ class ValueParser;
  * Holds the actual condition and the applicable style for conditional
  * Cell formattings.
  */
-class KSPREAD_EXPORT Conditional
+class CALLIGRA_TABLES_EXPORT Conditional
 {
 public:
     enum Type { None, Equal, Superior, Inferior, SuperiorEqual,
@@ -81,7 +81,7 @@ uint qHash(const Conditional& condition);
  * \ingroup Style
  * Manages a set of conditions for a cell.
  */
-class KSPREAD_EXPORT Conditions
+class CALLIGRA_TABLES_EXPORT Conditions
 {
 public:
     /**
@@ -218,4 +218,4 @@ private:
 Q_DECLARE_METATYPE(KSpread::Conditions)
 Q_DECLARE_TYPEINFO(KSpread::Conditions, Q_MOVABLE_TYPE);
 
-#endif // KSPREAD_CONDITION_H
+#endif // CALLIGRA_TABLES_CONDITION_H

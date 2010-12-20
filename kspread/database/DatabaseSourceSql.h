@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DATABASE_SOURCE_SQL
-#define KSPREAD_DATABASE_SOURCE_SQL
+#ifndef CALLIGRA_TABLES_DATABASE_SOURCE_SQL
+#define CALLIGRA_TABLES_DATABASE_SOURCE_SQL
 
 #include "DatabaseSource.h"
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_DATABASE_SOURCE_SQL
+#endif // CALLIGRA_TABLES_DATABASE_SOURCE_SQL

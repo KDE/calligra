@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FIND_DIALOG
-#define KSPREAD_FIND_DIALOG
+#ifndef CALLIGRA_TABLES_FIND_DIALOG
+#define CALLIGRA_TABLES_FIND_DIALOG
 
 
 #include <kfinddialog.h>
@@ -123,4 +123,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FIND_DIALOG
+#endif // CALLIGRA_TABLES_FIND_DIALOG

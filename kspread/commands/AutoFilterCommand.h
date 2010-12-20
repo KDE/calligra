@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_AUTOFILTER_COMMAND
-#define KSPREAD_AUTOFILTER_COMMAND
+#ifndef CALLIGRA_TABLES_AUTOFILTER_COMMAND
+#define CALLIGRA_TABLES_AUTOFILTER_COMMAND
 
 #include "AbstractRegionCommand.h"
 
@@ -48,4 +48,4 @@ public:
 
 } // namespace KSpread
 
-#endif // KSPREAD_AUTOFILTER_COMMAND
+#endif // CALLIGRA_TABLES_AUTOFILTER_COMMAND

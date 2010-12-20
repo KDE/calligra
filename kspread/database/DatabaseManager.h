@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DATABASE_MANAGER
-#define KSPREAD_DATABASE_MANAGER
+#ifndef CALLIGRA_TABLES_DATABASE_MANAGER
+#define CALLIGRA_TABLES_DATABASE_MANAGER
 
 #include <QObject>
 
@@ -32,7 +32,7 @@ namespace KSpread
 {
 class Map;
 
-class KSPREAD_EXPORT DatabaseManager : public QObject
+class CALLIGRA_TABLES_EXPORT DatabaseManager : public QObject
 {
     Q_OBJECT
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_DATABASE_MANAGER
+#endif // CALLIGRA_TABLES_DATABASE_MANAGER

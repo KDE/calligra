@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_LINK_COMMAND
-#define KSPREAD_LINK_COMMAND
+#ifndef CALLIGRA_TABLES_LINK_COMMAND
+#define CALLIGRA_TABLES_LINK_COMMAND
 
 #include <QString>
 #include <QUndoCommand>
@@ -54,4 +54,4 @@ protected:
 
 } // namespace KSpread
 
-#endif // KSPREAD_LINK_COMMAND
+#endif // CALLIGRA_TABLES_LINK_COMMAND

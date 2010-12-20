@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TOOL_REGISTRY
-#define KSPREAD_TOOL_REGISTRY
+#ifndef CALLIGRA_TABLES_TOOL_REGISTRY
+#define CALLIGRA_TABLES_TOOL_REGISTRY
 
 #include <QObject>
 
@@ -31,7 +31,7 @@ namespace KSpread
  * Registry for tools.
  * \ingroup Plugin
  */
-class KSPREAD_EXPORT ToolRegistry : public QObject
+class CALLIGRA_TABLES_EXPORT ToolRegistry : public QObject
 {
 public:
     /**
@@ -59,4 +59,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_TOOL_REGISTRY
+#endif // CALLIGRA_TABLES_TOOL_REGISTRY

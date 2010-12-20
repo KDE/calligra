@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_MAP_MODEL
-#define KSPREAD_MAP_MODEL
+#ifndef CALLIGRA_TABLES_MAP_MODEL
+#define CALLIGRA_TABLES_MAP_MODEL
 
 #include <QAbstractListModel>
 
@@ -74,4 +74,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_MAP_MODEL
+#endif // CALLIGRA_TABLES_MAP_MODEL

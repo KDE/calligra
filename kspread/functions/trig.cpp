@@ -52,7 +52,7 @@ Value func_tanh(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pi(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-KSPREAD_EXPORT_FUNCTION_MODULE("trigonometry", TrigonometryModule)
+CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("trigonometry", TrigonometryModule)
 
 
 TrigonometryModule::TrigonometryModule(QObject* parent, const QVariantList&)

@@ -29,8 +29,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CANVAS
-#define KSPREAD_CANVAS
+#ifndef CALLIGRA_TABLES_CANVAS
+#define CALLIGRA_TABLES_CANVAS
 
 #include <QList>
 #include <QWidget>
@@ -71,7 +71,7 @@ class View;
 /**
  * The scrollable area showing the cells.
  */
-class KSPREAD_EXPORT Canvas : public QWidget, public CanvasBase
+class CALLIGRA_TABLES_EXPORT Canvas : public QWidget, public CanvasBase
 {
     friend class ColumnHeader;
     friend class RowHeader;
@@ -188,4 +188,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CANVAS
+#endif // CALLIGRA_TABLES_CANVAS

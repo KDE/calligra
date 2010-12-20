@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PASTE_STRATEGY
-#define KSPREAD_PASTE_STRATEGY
+#ifndef CALLIGRA_TABLES_PASTE_STRATEGY
+#define CALLIGRA_TABLES_PASTE_STRATEGY
 
 #include "SelectionStrategy.h"
 #include "kspread_export.h"
@@ -33,7 +33,7 @@ namespace KSpread
  *
  * \see QClipboard::Selection
  */
-class KSPREAD_EXPORT PasteStrategy : public SelectionStrategy
+class CALLIGRA_TABLES_EXPORT PasteStrategy : public SelectionStrategy
 {
 public:
     /**
@@ -55,4 +55,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_PASTE_STRATEGY
+#endif // CALLIGRA_TABLES_PASTE_STRATEGY

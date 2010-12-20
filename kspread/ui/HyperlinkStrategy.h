@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_HYPERLINK_STRATEGY
-#define KSPREAD_HYPERLINK_STRATEGY
+#ifndef CALLIGRA_TABLES_HYPERLINK_STRATEGY
+#define CALLIGRA_TABLES_HYPERLINK_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_HYPERLINK_STRATEGY
+#endif // CALLIGRA_TABLES_HYPERLINK_STRATEGY

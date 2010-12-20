@@ -42,7 +42,7 @@ Value func_true(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xor(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-KSPREAD_EXPORT_FUNCTION_MODULE("logic", LogicModule)
+CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("logic", LogicModule)
 
 
 LogicModule::LogicModule(QObject* parent, const QVariantList&)

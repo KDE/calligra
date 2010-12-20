@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SORT_MANIPULATOR
-#define KSPREAD_SORT_MANIPULATOR
+#ifndef CALLIGRA_TABLES_SORT_MANIPULATOR
+#define CALLIGRA_TABLES_SORT_MANIPULATOR
 
 #include "CellStorage.h"
 #include "DataManipulators.h"
@@ -31,7 +31,7 @@ class CellStorage;
  * \ingroup Commands
  * \brief Sorts the values in a cell range.
  */
-class KSPREAD_EXPORT SortManipulator : public AbstractDFManipulator
+class CALLIGRA_TABLES_EXPORT SortManipulator : public AbstractDFManipulator
 {
 public:
     SortManipulator();
@@ -100,4 +100,4 @@ protected:
 
 } // namespace KSpread
 
-#endif  // KSPREAD_SORT_MANIPULATOR
+#endif  // CALLIGRA_TABLES_SORT_MANIPULATOR

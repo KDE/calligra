@@ -77,7 +77,7 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *);
 
 
-KSPREAD_EXPORT_FUNCTION_MODULE("text", TextModule)
+CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("text", TextModule)
 
 
 TextModule::TextModule(QObject* parent, const QVariantList&)

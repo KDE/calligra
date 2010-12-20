@@ -18,15 +18,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_RECT_STORAGE
-#define KSPREAD_RECT_STORAGE
+#ifndef CALLIGRA_TABLES_RECT_STORAGE
+#define CALLIGRA_TABLES_RECT_STORAGE
 
 #include <QCache>
 #include <QRegion>
 #include <QTimer>
 #include <QRunnable>
 #include <QTime>
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 #include <QMutex>
 #include <QMutexLocker>
 #endif
@@ -60,7 +60,7 @@ class RectStorageLoader;
  * \note For data assigned to points use PointStorage.
  */
 template<typename T>
-class KSPREAD_EXPORT RectStorage
+class CALLIGRA_TABLES_EXPORT RectStorage
 {
 public:
     explicit RectStorage(Map* map);
@@ -179,7 +179,7 @@ private:
     QMap<int, QPair<QRectF, T> > m_possibleGarbage;
     QList<T> m_storedData;
     mutable QCache<QPoint, T> m_cache;
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     mutable QMutex m_mutex;
 #endif
     mutable QRegion m_cachedArea;
@@ -231,7 +231,7 @@ template<typename T>
 T RectStorage<T>::contains(const QPoint& point) const
 {
     ensureLoaded();
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&m_mutex);
 #endif
     if (!usedArea().contains(point))
@@ -529,7 +529,7 @@ void RectStorage<T>::invalidateCache(const QRect& invRect)
 {
     if (m_loader && !m_loader->isFinished())
         return;
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&m_mutex);
 #endif
     const QVector<QRect> rects = m_cachedArea.intersected(invRect).rects();
@@ -663,4 +663,4 @@ protected Q_SLOTS:
 
 } // namespace KSpread
 
-#endif // KSPREAD_RECT_STORAGE
+#endif // CALLIGRA_TABLES_RECT_STORAGE

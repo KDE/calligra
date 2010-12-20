@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_HEADERWIDGETS
-#define KSPREAD_HEADERWIDGETS
+#ifndef CALLIGRA_TABLES_HEADERWIDGETS
+#define CALLIGRA_TABLES_HEADERWIDGETS
 
 #include <QWidget>
 #include "Headers.h"

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_ABSTRACT_REGION_COMMAND
-#define KSPREAD_ABSTRACT_REGION_COMMAND
+#ifndef CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND
+#define CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND
 
 #include <QUndoCommand>
 
@@ -35,7 +35,7 @@ class Sheet;
  * \ingroup Commands
  * \brief Abstract base class for all region related operations.
  */
-class KSPREAD_EXPORT AbstractRegionCommand : public Region, public QUndoCommand
+class CALLIGRA_TABLES_EXPORT AbstractRegionCommand : public Region, public QUndoCommand
 {
 public:
     /**
@@ -143,4 +143,4 @@ protected:
 
 } // namespace KSpread
 
-#endif // KSPREAD_ABSTRACT_REGION_COMMAND
+#endif // CALLIGRA_TABLES_ABSTRACT_REGION_COMMAND

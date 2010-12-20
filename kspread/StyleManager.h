@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_STYLE_MANAGER
-#define KSPREAD_STYLE_MANAGER
+#ifndef CALLIGRA_TABLES_STYLE_MANAGER
+#define CALLIGRA_TABLES_STYLE_MANAGER
 
 #include "kspread_export.h"
 #include <KoXmlReader.h>
@@ -46,7 +46,7 @@ class ValueParser;
  * The StyleManager takes care of named styles. It also provides some static
  * methods for the preloading of OpenDocument autostyles.
  */
-class KSPREAD_EXPORT StyleManager
+class CALLIGRA_TABLES_EXPORT StyleManager
 {
     friend class StyleManagerDialog;
 
@@ -128,4 +128,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_STYLE_MANAGER
+#endif // CALLIGRA_TABLES_STYLE_MANAGER

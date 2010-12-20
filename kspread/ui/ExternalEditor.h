@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KSPREAD_EXTERNAL_EDITOR
-#define KSPREAD_EXTERNAL_EDITOR
+#ifndef CALLIGRA_TABLES_EXTERNAL_EDITOR
+#define CALLIGRA_TABLES_EXTERNAL_EDITOR
 
 #include <KTextEdit>
 
@@ -71,4 +71,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_EXTERNAL_EDITOR
+#endif // CALLIGRA_TABLES_EXTERNAL_EDITOR

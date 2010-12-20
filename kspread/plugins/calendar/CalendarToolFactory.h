@@ -17,13 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CALENDAR_TOOL_FACTORY
-#define KSPREAD_CALENDAR_TOOL_FACTORY
+#ifndef CALLIGRA_TABLES_CALENDAR_TOOL_FACTORY
+#define CALLIGRA_TABLES_CALENDAR_TOOL_FACTORY
 
 #include <part/CellToolFactory.h>
 #include <QObject>
 
-#define KSPREAD_CALENDAR_TOOL_ID "KSpreadCalendarToolId"
+#define CALLIGRA_TABLES_CALENDAR_TOOL_ID "KSpreadCalendarToolId"
 
 namespace KSpread
 {
@@ -40,4 +40,4 @@ public:
 
 } // namespace
 
-#endif // KSPREAD_CALENDAR_TOOL_FACTORY
+#endif // CALLIGRA_TABLES_CALENDAR_TOOL_FACTORY

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALUE_CONVERTER
-#define KSPREAD_VALUE_CONVERTER
+#ifndef CALLIGRA_TABLES_VALUE_CONVERTER
+#define CALLIGRA_TABLES_VALUE_CONVERTER
 
 #include "Value.h"
 
@@ -31,7 +31,7 @@ class ValueParser;
  * \ingroup Value
  * Converts between the different Value types.
  */
-class KSPREAD_EXPORT ValueConverter
+class CALLIGRA_TABLES_EXPORT ValueConverter
 {
 public:
     /**
@@ -107,4 +107,4 @@ private:
 
 }  //KSpread namespace
 
-#endif  //KSPREAD_VALUE_CONVERTER
+#endif  //CALLIGRA_TABLES_VALUE_CONVERTER

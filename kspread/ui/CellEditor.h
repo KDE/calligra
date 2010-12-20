@@ -19,8 +19,8 @@
 */
 
 
-#ifndef KSPREAD_CELL_EDITOR
-#define KSPREAD_CELL_EDITOR
+#ifndef CALLIGRA_TABLES_CELL_EDITOR
+#define CALLIGRA_TABLES_CELL_EDITOR
 
 #include <KGlobalSettings>
 #include <KTextEdit>
@@ -112,4 +112,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CELL_EDITOR
+#endif // CALLIGRA_TABLES_CELL_EDITOR

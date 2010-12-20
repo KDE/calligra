@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SELECTION
-#define KSPREAD_SELECTION
+#ifndef CALLIGRA_TABLES_SELECTION
+#define CALLIGRA_TABLES_SELECTION
 
 #include <QColor>
 #include <QList>
@@ -44,7 +44,7 @@ class CellEditor;
  * \author Torben Weis <weis@kde.org>
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class KSPREAD_EXPORT Selection : public KoToolSelection, public Region
+class CALLIGRA_TABLES_EXPORT Selection : public KoToolSelection, public Region
 {
     Q_OBJECT
 
@@ -415,4 +415,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SELECTION
+#endif // CALLIGRA_TABLES_SELECTION

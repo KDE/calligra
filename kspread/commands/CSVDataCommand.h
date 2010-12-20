@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CSV_DATA_COMMAND
-#define KSPREAD_CSV_DATA_COMMAND
+#ifndef CALLIGRA_TABLES_CSV_DATA_COMMAND
+#define CALLIGRA_TABLES_CSV_DATA_COMMAND
 
 #include "DataManipulators.h"
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CSV_DATA_COMMAND
+#endif // CALLIGRA_TABLES_CSV_DATA_COMMAND

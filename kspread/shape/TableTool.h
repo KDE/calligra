@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TABLE_TOOL
-#define KSPREAD_TABLE_TOOL
+#ifndef CALLIGRA_TABLES_TABLE_TOOL
+#define CALLIGRA_TABLES_TABLE_TOOL
 
 #include "CellToolBase.h"
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_TABLE_TOOL
+#endif // CALLIGRA_TABLES_TABLE_TOOL

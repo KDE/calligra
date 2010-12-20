@@ -20,8 +20,8 @@
 */
 
 
-#ifndef KSPREAD_SUBTOTAL_DIALOG
-#define KSPREAD_SUBTOTAL_DIALOG
+#ifndef CALLIGRA_TABLES_SUBTOTAL_DIALOG
+#define CALLIGRA_TABLES_SUBTOTAL_DIALOG
 
 #include <KDialog>
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SUBTOTAL_DIALOG
+#endif // CALLIGRA_TABLES_SUBTOTAL_DIALOG

@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SHEET_PRINT_P
-#define KSPREAD_SHEET_PRINT_P
+#ifndef CALLIGRA_TABLES_SHEET_PRINT_P
+#define CALLIGRA_TABLES_SHEET_PRINT_P
 
 #include <QList>
 
@@ -159,4 +159,4 @@ public:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SHEET_PRINT_P
+#endif // CALLIGRA_TABLES_SHEET_PRINT_P

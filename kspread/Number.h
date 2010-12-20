@@ -17,12 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_NUMBER_H
-#define KSPREAD_NUMBER_H
+#ifndef CALLIGRA_TABLES_NUMBER_H
+#define CALLIGRA_TABLES_NUMBER_H
 
-// #define KSPREAD_HIGH_PRECISION_SUPPORT
+// #define CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
-#ifndef KSPREAD_HIGH_PRECISION_SUPPORT
+#ifndef CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
 #include <math.h>
 
@@ -63,7 +63,7 @@ inline Number atgh(const Number &n)
 
 } // namespace KSpread
 
-#else // KSPREAD_HIGH_PRECISION_SUPPORT
+#else // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
 #include <QSharedDataPointer>
 
@@ -86,7 +86,7 @@ The class will be able to format itself into a string, using provided locale set
 Out-of-class methods for computations are provided
 */
 
-class KSPREAD_EXPORT Number
+class CALLIGRA_TABLES_EXPORT Number
 {
 public:
     enum Type {
@@ -185,7 +185,7 @@ private:
 
 // conversion to double ... when we add the option to #define the Number class as double, this routine should be kept in place, and it should simply return its parameter
 // usage of this function should eventually be removed, because places that use it are not ready for high precision support
-KSPREAD_EXPORT long double numToDouble(Number n);
+CALLIGRA_TABLES_EXPORT long double numToDouble(Number n);
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that
@@ -229,6 +229,6 @@ Number atgh(const Number &n);
 
 } // namespace KSpread
 
-#endif // KSPREAD_HIGH_PRECISION_SUPPORT
+#endif // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
-#endif // KSPREAD_NUMBER_H
+#endif // CALLIGRA_TABLES_NUMBER_H

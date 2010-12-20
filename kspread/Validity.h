@@ -31,8 +31,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALIDITY
-#define KSPREAD_VALIDITY
+#ifndef CALLIGRA_TABLES_VALIDITY
+#define CALLIGRA_TABLES_VALIDITY
 
 // Qt
 #include <QDate>
@@ -64,7 +64,7 @@ class ValueParser;
  *
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class KSPREAD_EXPORT Validity
+class CALLIGRA_TABLES_EXPORT Validity
 {
 public:
     /// The action invoked, if the validity check fails.
@@ -200,4 +200,4 @@ private:
 Q_DECLARE_METATYPE(KSpread::Validity)
 Q_DECLARE_TYPEINFO(KSpread::Validity, Q_MOVABLE_TYPE);
 
-#endif // KSPREAD_VALIDITY
+#endif // CALLIGRA_TABLES_VALIDITY

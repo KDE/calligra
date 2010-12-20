@@ -24,8 +24,8 @@
 */
 
 
-#ifndef KSPREAD_AUTOFILL_COMMAND
-#define KSPREAD_AUTOFILL_COMMAND
+#ifndef CALLIGRA_TABLES_AUTOFILL_COMMAND
+#define CALLIGRA_TABLES_AUTOFILL_COMMAND
 
 #include "DataManipulators.h"
 
@@ -88,4 +88,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_AUTOFILL_COMMAND
+#endif // CALLIGRA_TABLES_AUTOFILL_COMMAND

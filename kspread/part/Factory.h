@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FACTORY_H
-#define KSPREAD_FACTORY_H
+#ifndef CALLIGRA_TABLES_FACTORY_H
+#define CALLIGRA_TABLES_FACTORY_H
 
 #include <KPluginFactory>
 
@@ -30,7 +30,7 @@ class KIconLoader;
 namespace KSpread
 {
 
-class KSPREAD_EXPORT Factory : public KPluginFactory
+class CALLIGRA_TABLES_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:

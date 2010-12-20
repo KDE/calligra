@@ -27,8 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FORMAT
-#define KSPREAD_FORMAT
+#ifndef CALLIGRA_TABLES_FORMAT
+#define CALLIGRA_TABLES_FORMAT
 
 #include "kspread_export.h"
 
@@ -122,11 +122,11 @@ enum Type {
 };
 
 //helper functions for the formatting
-KSPREAD_EXPORT bool isDate(Type type);
-KSPREAD_EXPORT bool isTime(Type type);
-KSPREAD_EXPORT bool isFraction(Type type);
+CALLIGRA_TABLES_EXPORT bool isDate(Type type);
+CALLIGRA_TABLES_EXPORT bool isTime(Type type);
+CALLIGRA_TABLES_EXPORT bool isFraction(Type type);
 
 } // namespace Format
 } // namespace KSpread
 
-#endif // KSPREAD_FORMAT
+#endif // CALLIGRA_TABLES_FORMAT

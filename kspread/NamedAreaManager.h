@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_NAMED_AREA_MANAGER
-#define KSPREAD_NAMED_AREA_MANAGER
+#ifndef CALLIGRA_TABLES_NAMED_AREA_MANAGER
+#define CALLIGRA_TABLES_NAMED_AREA_MANAGER
 
 #include <QList>
 #include <QObject>
@@ -42,7 +42,7 @@ class Region;
 /**
  * Manages named cell areas.
  */
-class KSPREAD_EXPORT NamedAreaManager : public QObject
+class CALLIGRA_TABLES_EXPORT NamedAreaManager : public QObject
 {
     Q_OBJECT
 
@@ -105,4 +105,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_NAMED_AREA_MANAGER
+#endif // CALLIGRA_TABLES_NAMED_AREA_MANAGER

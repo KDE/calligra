@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_ROW_STYLE_COMMAND
-#define KSPREAD_ROW_STYLE_COMMAND
+#ifndef CALLIGRA_TABLES_ROW_STYLE_COMMAND
+#define CALLIGRA_TABLES_ROW_STYLE_COMMAND
 
 #include "AbstractRegionCommand.h"
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_ROW_STYLE_COMMAND
+#endif // CALLIGRA_TABLES_ROW_STYLE_COMMAND

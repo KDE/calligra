@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_MAP_ADAPTOR
-#define KSPREAD_MAP_ADAPTOR
+#ifndef CALLIGRA_TABLES_MAP_ADAPTOR
+#define CALLIGRA_TABLES_MAP_ADAPTOR
 
 #include <QStringList>
 
@@ -33,7 +33,7 @@ class Map;
 /**
 * The MapAdaptor class provides additional functionality to deal with sheets.
 */
-class KSPREAD_EXPORT MapAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_TABLES_EXPORT MapAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.map")

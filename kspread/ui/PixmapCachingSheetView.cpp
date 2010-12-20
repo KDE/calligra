@@ -29,7 +29,7 @@
 
 #include <kdebug.h>
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 #include <ThreadWeaver/Job>
 #include <ThreadWeaver/Weaver>
 #endif
@@ -49,7 +49,7 @@ public:
     QPixmap* getTile(const Sheet* sheet, int x, int y, CanvasBase* canvas);
 };
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 class TileDrawingJob : public ThreadWeaver::Job
 {
 public:
@@ -129,7 +129,7 @@ PixmapCachingSheetView::~PixmapCachingSheetView()
 
 void PixmapCachingSheetView::jobDone(ThreadWeaver::Job *tjob)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     TileDrawingJob* job = static_cast<TileDrawingJob*>(tjob);
     if (job->m_scale == d->lastScale) {
         int idx = job->m_x << 16 | job->m_y;
@@ -146,7 +146,7 @@ QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int
     int idx = x << 16 | y;
     if (tileCache.contains(idx)) return tileCache.object(idx);
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     TileDrawingJob* job = new TileDrawingJob(sheet, q, canvas, lastScale, x, y);
     QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)), q, SLOT(jobDone(ThreadWeaver::Job*)), Qt::QueuedConnection);
     ThreadWeaver::Weaver::instance()->enqueue(job);

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FILTER_POPUP
-#define KSPREAD_FILTER_POPUP
+#ifndef CALLIGRA_TABLES_FILTER_POPUP
+#define CALLIGRA_TABLES_FILTER_POPUP
 
 #include <QFrame>
 
@@ -61,4 +61,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FILTER_POPUP
+#endif // CALLIGRA_TABLES_FILTER_POPUP

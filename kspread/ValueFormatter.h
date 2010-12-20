@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALUE_FORMATTER
-#define KSPREAD_VALUE_FORMATTER
+#ifndef CALLIGRA_TABLES_VALUE_FORMATTER
+#define CALLIGRA_TABLES_VALUE_FORMATTER
 
 #include <QDateTime>
 
@@ -37,7 +37,7 @@ class ValueConverter;
  * \ingroup Value
  * Generates a textual representation of a Value with a given formatting.
  */
-class KSPREAD_EXPORT ValueFormatter
+class CALLIGRA_TABLES_EXPORT ValueFormatter
 {
 public:
     /**
@@ -137,4 +137,4 @@ private:
 
 }  //namespace KSpread
 
-#endif  //KSPREAD_VALUE_FORMATTER
+#endif  //CALLIGRA_TABLES_VALUE_FORMATTER

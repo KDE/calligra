@@ -27,8 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DOC
-#define KSPREAD_DOC
+#ifndef CALLIGRA_TABLES_DOC
+#define CALLIGRA_TABLES_DOC
 
 #include <QList>
 #include <QMap>
@@ -70,7 +70,7 @@ class SheetAccessModel;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSPREAD_EXPORT Doc : public DocBase
+class CALLIGRA_TABLES_EXPORT Doc : public DocBase
 {
     Q_OBJECT
     Q_PROPERTY(int syntaxVersion READ syntaxVersion)
@@ -199,4 +199,4 @@ private:
 
 } // namespace KSpread
 
-#endif /* KSPREAD_DOC */
+#endif /* CALLIGRA_TABLES_DOC */

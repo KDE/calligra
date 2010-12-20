@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PRECISION_COMMAND
-#define KSPREAD_PRECISION_COMMAND
+#ifndef CALLIGRA_TABLES_PRECISION_COMMAND
+#define CALLIGRA_TABLES_PRECISION_COMMAND
 
 #include "AbstractRegionCommand.h"
 
@@ -43,4 +43,4 @@ protected:
 
 }  // namespace KSpread
 
-#endif // KSPREAD_PRECISION_COMMAND
+#endif // CALLIGRA_TABLES_PRECISION_COMMAND

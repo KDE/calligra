@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SHEET_MODEL
-#define KSPREAD_SHEET_MODEL
+#ifndef CALLIGRA_TABLES_SHEET_MODEL
+#define CALLIGRA_TABLES_SHEET_MODEL
 
 #include <QAbstractTableModel>
 
@@ -34,7 +34,7 @@ class Sheet;
  * A model for a sheet.
  * \ingroup Model
  */
-class KSPREAD_EXPORT SheetModel : public QAbstractTableModel
+class CALLIGRA_TABLES_EXPORT SheetModel : public QAbstractTableModel
 {
 public:
     explicit SheetModel(Sheet* sheet);
@@ -63,4 +63,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SHEET_MODEL
+#endif // CALLIGRA_TABLES_SHEET_MODEL

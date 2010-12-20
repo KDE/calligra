@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DEPENDENCY_MANAGER
-#define KSPREAD_DEPENDENCY_MANAGER
+#ifndef CALLIGRA_TABLES_DEPENDENCY_MANAGER
+#define CALLIGRA_TABLES_DEPENDENCY_MANAGER
 
 #include <QObject>
 
@@ -34,7 +34,7 @@ class Region;
  * Manages the dependencies between cells caused by references in formulas.
  * This dependency information is used for the recalculation of the cells.
  */
-class KSPREAD_EXPORT DependencyManager : public QObject
+class CALLIGRA_TABLES_EXPORT DependencyManager : public QObject
 {
     Q_OBJECT
     friend class TestDependencies;
@@ -130,4 +130,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_DEPENDENCY_MANAGER
+#endif // CALLIGRA_TABLES_DEPENDENCY_MANAGER

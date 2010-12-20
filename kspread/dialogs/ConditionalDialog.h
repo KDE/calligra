@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CONDITIONAL_DIALOG
-#define KSPREAD_CONDITIONAL_DIALOG
+#ifndef CALLIGRA_TABLES_CONDITIONAL_DIALOG
+#define CALLIGRA_TABLES_CONDITIONAL_DIALOG
 
 #include <kdialog.h>
 #include <QWidget>
@@ -105,4 +105,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CONDITIONAL_DIALOG
+#endif // CALLIGRA_TABLES_CONDITIONAL_DIALOG

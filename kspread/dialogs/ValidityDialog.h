@@ -21,8 +21,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALIDITY_DIALOG
-#define KSPREAD_VALIDITY_DIALOG
+#ifndef CALLIGRA_TABLES_VALIDITY_DIALOG
+#define CALLIGRA_TABLES_VALIDITY_DIALOG
 
 #include <kpagedialog.h>
 
@@ -82,4 +82,4 @@ protected:
 
 } // namespace KSpread
 
-#endif // KSPREAD_VALIDITY_DIALOG
+#endif // CALLIGRA_TABLES_VALIDITY_DIALOG

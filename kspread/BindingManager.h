@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_BINDING_MANAGER
-#define KSPREAD_BINDING_MANAGER
+#ifndef CALLIGRA_TABLES_BINDING_MANAGER
+#define CALLIGRA_TABLES_BINDING_MANAGER
 
 #include <QObject>
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_BINDING_MANAGER
+#endif // CALLIGRA_TABLES_BINDING_MANAGER

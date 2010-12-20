@@ -27,8 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CALCULATION_SETTINGS
-#define KSPREAD_CALCULATION_SETTINGS
+#ifndef CALLIGRA_TABLES_CALCULATION_SETTINGS
+#define CALLIGRA_TABLES_CALCULATION_SETTINGS
 
 #include "kspread_export.h"
 
@@ -47,7 +47,7 @@ namespace KSpread
  * Calculation settings
  * \ingroup Value
  */
-class KSPREAD_EXPORT CalculationSettings
+class CALLIGRA_TABLES_EXPORT CalculationSettings
 {
 public:
     /**
@@ -156,4 +156,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CALCULATION_SETTINGS
+#endif // CALLIGRA_TABLES_CALCULATION_SETTINGS

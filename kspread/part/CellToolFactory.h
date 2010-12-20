@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CELL_TOOL_FACTORY
-#define KSPREAD_CELL_TOOL_FACTORY
+#ifndef CALLIGRA_TABLES_CELL_TOOL_FACTORY
+#define CALLIGRA_TABLES_CELL_TOOL_FACTORY
 
 #include <KoToolFactoryBase.h>
 
@@ -30,7 +30,7 @@ namespace KSpread
 /**
  * The Factory, that creates a CellTool.
  */
-class KSPREAD_EXPORT CellToolFactory : public KoToolFactoryBase
+class CALLIGRA_TABLES_EXPORT CellToolFactory : public KoToolFactoryBase
 {
 public:
     explicit CellToolFactory(const QString& id);
@@ -45,4 +45,4 @@ public:
 
 } // namespace
 
-#endif // KSPREAD_CELL_TOOL_FACTORY
+#endif // CALLIGRA_TABLES_CELL_TOOL_FACTORY

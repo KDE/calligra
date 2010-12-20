@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_LOCALIZATION
-#define KSPREAD_LOCALIZATION
+#ifndef CALLIGRA_TABLES_LOCALIZATION
+#define CALLIGRA_TABLES_LOCALIZATION
 
 #include <klocale.h>
 #include <KoXmlReader.h>
@@ -32,7 +32,7 @@ class QDomDocument;
 namespace KSpread
 {
 
-class KSPREAD_EXPORT Localization : public KLocale
+class CALLIGRA_TABLES_EXPORT Localization : public KLocale
 {
 public:
     Localization();
@@ -44,4 +44,4 @@ public:
 
 } //namespace KSpread
 
-#endif // KSPREAD_LOCALIZATION
+#endif // CALLIGRA_TABLES_LOCALIZATION

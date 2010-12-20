@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_REGION_MODEL
-#define KSPREAD_REGION_MODEL
+#ifndef CALLIGRA_TABLES_REGION_MODEL
+#define CALLIGRA_TABLES_REGION_MODEL
 
 #include "SheetModel.h"
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_REGION_MODEL
+#endif // CALLIGRA_TABLES_REGION_MODEL

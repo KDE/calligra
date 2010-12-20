@@ -23,8 +23,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_GOALSEEK_DIALOG
-#define KSPREAD_GOALSEEK_DIALOG
+#ifndef CALLIGRA_TABLES_GOALSEEK_DIALOG
+#define CALLIGRA_TABLES_GOALSEEK_DIALOG
 
 #include <kdialog.h>
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_GOALSEEK_DIALOG
+#endif // CALLIGRA_TABLES_GOALSEEK_DIALOG

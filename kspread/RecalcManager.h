@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_RECALC_MANAGER
-#define KSPREAD_RECALC_MANAGER
+#ifndef CALLIGRA_TABLES_RECALC_MANAGER
+#define CALLIGRA_TABLES_RECALC_MANAGER
 
 #include <Region.h>
 
@@ -48,7 +48,7 @@ class Sheet;
  * Cell value changes are blocked while doing this, i.e. they do not
  * trigger a new recalculation event.
  */
-class KSPREAD_EXPORT RecalcManager : public QObject
+class CALLIGRA_TABLES_EXPORT RecalcManager : public QObject
 {
     Q_OBJECT
 public:
@@ -128,4 +128,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_RECALC_MANAGER
+#endif // CALLIGRA_TABLES_RECALC_MANAGER

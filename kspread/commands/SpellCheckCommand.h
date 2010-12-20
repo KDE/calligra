@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SPELLCHECK_COMMAND
-#define KSPREAD_SPELLCHECK_COMMAND
+#ifndef CALLIGRA_TABLES_SPELLCHECK_COMMAND
+#define CALLIGRA_TABLES_SPELLCHECK_COMMAND
 
 #include <sonnet/backgroundchecker.h>
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SPELLCHECK_COMMAND
+#endif // CALLIGRA_TABLES_SPELLCHECK_COMMAND

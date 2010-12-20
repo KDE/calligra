@@ -24,8 +24,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SHEET_ADAPTOR
-#define KSPREAD_SHEET_ADAPTOR
+#ifndef CALLIGRA_TABLES_SHEET_ADAPTOR
+#define CALLIGRA_TABLES_SHEET_ADAPTOR
 
 #include <QtDBus/QtDBus>
 #include "kspread_export.h"
@@ -37,7 +37,7 @@ class Damage;
 class Sheet;
 class CellProxy;
 
-class KSPREAD_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_TABLES_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.sheet")
@@ -187,4 +187,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SHEET_ADAPTOR
+#endif // CALLIGRA_TABLES_SHEET_ADAPTOR

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_HEADERS
-#define KSPREAD_HEADERS
+#ifndef CALLIGRA_TABLES_HEADERS
+#define CALLIGRA_TABLES_HEADERS
 
 #include <QWidget>
 

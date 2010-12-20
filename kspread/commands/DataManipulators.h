@@ -18,8 +18,8 @@
 */
 
 
-#ifndef KSPREAD_DATA_MANIPULATORS
-#define KSPREAD_DATA_MANIPULATORS
+#ifndef CALLIGRA_TABLES_DATA_MANIPULATORS
+#define CALLIGRA_TABLES_DATA_MANIPULATORS
 
 #include "AbstractRegionCommand.h"
 #include "Global.h"
@@ -246,4 +246,4 @@ private:
 
 } // namespace KSpread
 
-#endif  // KSPREAD_DATA_MANIPULATORS
+#endif  // CALLIGRA_TABLES_DATA_MANIPULATORS

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FILTER
-#define KSPREAD_FILTER
+#ifndef CALLIGRA_TABLES_FILTER
+#define CALLIGRA_TABLES_FILTER
 
 #include <QHash>
 #include <QString>
@@ -37,7 +37,7 @@ class Map;
 /**
  * OpenDocument, 8.7.1 Table Filter
  */
-class KSPREAD_EXPORT Filter
+class CALLIGRA_TABLES_EXPORT Filter
 {
 public:
     enum Comparison {
@@ -121,4 +121,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FILTER
+#endif // CALLIGRA_TABLES_FILTER
