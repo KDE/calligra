@@ -76,6 +76,7 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
     {
         canvas()->updateCanvas(currentDraggingRect());
         m_currentPoint = event->point;
+        if(event->modifiers() & Qt::SHIFT) makeVerticalOrHorizontal(m_currentStartingPoint, m_currentPoint);
         canvas()->updateCanvas(currentDraggingRect());
     } else {
         event->ignore();
@@ -124,7 +125,9 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
         m_dragging = false;
         
         QPointF p1 = m_currentStartingPoint - m_currentShape->boundingRect().topLeft();
-        QPointF p2 = event->point - m_currentShape->boundingRect().topLeft();
+        QPointF p2 = event->point;
+        if(event->modifiers() & Qt::SHIFT) makeVerticalOrHorizontal(m_currentStartingPoint, p2);
+        p2 -= m_currentShape->boundingRect().topLeft();
         
         p1 = QPointF(p1.x() / m_currentShape->boundingRect().width(), p1.y() / m_currentShape->boundingRect().height() );
         p2 = QPointF(p2.x() / m_currentShape->boundingRect().width(), p2.y() / m_currentShape->boundingRect().height() );
@@ -160,6 +163,16 @@ QRectF ComicBoxesTool::currentDraggingRect() const
 QMap<QString, QWidget *> ComicBoxesTool::createOptionWidgets() {
   QMap<QString, QWidget *> widgets;
   return widgets;
+}
+
+void ComicBoxesTool::makeVerticalOrHorizontal(const QPointF& origin, QPointF& point)
+{
+    if( qAbs(origin.x() - point.x()) > qAbs(origin.y() - point.y()))
+    {
+        point.setY(origin.y());
+    } else {
+        point.setX(origin.x());        
+    }
 }
 
 #include "ComicBoxesTool.moc"

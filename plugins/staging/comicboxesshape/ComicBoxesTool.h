@@ -49,6 +49,7 @@ class ComicBoxesTool : public KoToolBase
 
 private:
     QRectF currentDraggingRect() const;
+    void makeVerticalOrHorizontal(const QPointF& origin, QPointF& point);
     
   private:
     ComicBoxesShape* m_currentShape;
