@@ -495,6 +495,9 @@ public:
 
     QStringList logMessages() const;
 
+    QList< QList<Node*> > m_pathlists;
+    bool criticalPathListCached;
+
 protected:
     virtual void changed( Schedule *sch );
 
@@ -510,9 +513,7 @@ private:
     QList<Node*> m_endNodes;
     QList<Node*> m_summarytasks;
     
-    QList< QList<Node*> > m_pathlists;
     QList<Node*> *m_currentCriticalPath;
-    bool criticalPathListCached;
     
     
     QList<Schedule::Log> m_log;

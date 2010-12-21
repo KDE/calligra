@@ -22,6 +22,9 @@ set(kplatoworkfactory_LIB_SRCS
 
     packagesettings.cpp
     taskcompletiondialog.cpp
+
+    ../KPlatoXmlLoader.cpp #NB
+    ../kptpackage.cpp
 )
 
 kde4_add_ui_files(kplatoworkfactory_LIB_SRCS
