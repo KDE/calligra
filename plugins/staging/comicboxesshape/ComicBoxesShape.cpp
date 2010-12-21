@@ -106,18 +106,17 @@ void ComicBoxesShape::recreatePath()
     setSize(s);
 }
 
+inline bool near(qreal a, qreal b)
+{
+    return qAbs(a - b) < 1e-6;
+}
+
 void ComicBoxesShape::addLine( const QLineF& _line )
 {
-    Q_ASSERT(_line.p1().x() >= 0.0);
-    Q_ASSERT(_line.p1().x() <= 1.0);
-    Q_ASSERT(_line.p2().x() >= 0.0);
-    Q_ASSERT(_line.p2().x() <= 1.0);
-    Q_ASSERT(_line.p1().y() >= 0.0);
-    Q_ASSERT(_line.p1().y() <= 1.0);
-    Q_ASSERT(_line.p2().y() >= 0.0);
-    Q_ASSERT(_line.p2().y() <= 1.0);
-    Q_ASSERT(_line.p1().x() == 0.0 || _line.p1().y() == 0.0 || _line.p1().x() == 1.0 || _line.p1().y() == 1.0 );
-    Q_ASSERT(_line.p2().x() == 0.0 || _line.p2().y() == 0.0 || _line.p2().x() == 1.0 || _line.p2().y() == 1.0 );
+    Q_ASSERT(QRectF(0,0,1,1).contains(_line.p1()));
+    Q_ASSERT(QRectF(0,0,1,1).contains(_line.p2()));
+    Q_ASSERT(near(_line.p1().x(), 0.0) || near(_line.p1().y(), 0.0) || near(_line.p1().x(), 1.0) || near(_line.p1().y(), 1.0 ) );
+    Q_ASSERT(near(_line.p2().x(), 0.0) || near(_line.p2().y(), 0.0) || near(_line.p2().x(), 1.0) || near(_line.p2().y(), 1.0 ) );
     m_lines.push_back(_line);
     recreatePath();
 }

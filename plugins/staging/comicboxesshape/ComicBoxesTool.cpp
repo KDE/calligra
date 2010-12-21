@@ -27,7 +27,7 @@
 #include "ComicBoxesShape.h"
 #include <QPainter>
 
-ComicBoxesTool::ComicBoxesTool(KoCanvasBase *canvas) : KoToolBase(canvas)
+ComicBoxesTool::ComicBoxesTool(KoCanvasBase *canvas) : KoToolBase(canvas), m_dragging(false)
 {
 }
 
@@ -82,12 +82,71 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
     }
 }
 
+inline bool near(qreal a, qreal b)
+{
+    return qAbs(a - b) < 1e-6;
+}
+
+bool tryIntersect( const QLineF& _l1, const QLineF& _l2, QPointF& pt )
+{
+    return _l1.intersect(_l2, &pt) != QLineF::NoIntersection && (near(pt.x(), 0.0) || near(pt.x(), 1.0) || near(pt.y(), 0.0) || near(pt.y(), 1.0)) && QRectF(0,0,1,1).contains(pt);
+}
+
+bool tryIntersects( const QLineF& _l, const QLineF& _l0, const QLineF& _l1, const QLineF& _l2, const QLineF& _l3, QPointF& pt1, QPointF& pt2 )
+{
+    QPointF* pt = &pt1;
+    if( tryIntersect(_l, _l0, *pt))
+    {
+        pt = &pt2;
+    }
+    if( tryIntersect(_l, _l1, *pt))
+    {
+        if( pt == &pt2) return true;
+        pt = &pt2;
+    }
+    if( tryIntersect(_l, _l2, *pt))
+    {
+        if( pt == &pt2) return true;
+        pt = &pt2;
+    }
+    if( tryIntersect(_l, _l3, *pt))
+    {
+        if( pt == &pt2) return true;
+        pt = &pt2;
+    }
+    return false;
+}
+
 void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     if(m_dragging)
     {
         m_dragging = false;
+        
+        QPointF p1 = m_currentStartingPoint - m_currentShape->boundingRect().topLeft();
+        QPointF p2 = event->point - m_currentShape->boundingRect().topLeft();
+        
+        p1 = QPointF(p1.x() / m_currentShape->boundingRect().width(), p1.y() / m_currentShape->boundingRect().height() );
+        p2 = QPointF(p2.x() / m_currentShape->boundingRect().width(), p2.y() / m_currentShape->boundingRect().height() );
+        
+        QLineF line(p1, p2);
+        
+        QLineF line0(QPointF(0,0), QPointF(1,0));
+        QLineF line1(QPointF(1,0), QPointF(1,1));
+        QLineF line2(QPointF(1,1), QPointF(0,1));
+        QLineF line3(QPointF(0,1), QPointF(0,0));
+        
+        QPointF p1_b, p2_b;
+        
+        if(tryIntersects(line, line0, line1, line2, line3, p1_b, p2_b) )
+        {
+            m_currentShape->addLine(QLineF(p1_b, p2_b));
+        }
+        
         canvas()->updateCanvas(currentDraggingRect().united(m_currentShape->boundingRect()));
+        
+        
+        
     } else {
         event->ignore();
     }
