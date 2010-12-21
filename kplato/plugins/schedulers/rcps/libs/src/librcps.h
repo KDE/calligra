@@ -20,7 +20,12 @@ struct rcps_solver;
 #define RCPS_RESOURCE_RENEWABLE		0
 #define RCPS_RESOURCE_NONRENEWABLE	1
 
-#define RCPS_CHECK_OK			0
+#define RCPS_CHECK_OK					0
+#define RCPS_CHECK_START_JOB_MISSING	1
+#define RCPS_CHECK_MULTIPLE_END_JOBS	2
+#define RCPS_CHECK_END_JOB_MISSING		4
+#define RCPS_CHECK_CIRCULAR_DEPENDENCY	8
+
 
 /* defines for the rcps_solver_getparam and _setparam methods */
 #define SOLVER_PARAM_POPSIZE 	0 /* population size, default is 600 */
@@ -35,8 +40,16 @@ struct rcps_solver;
 #define SUCCESSOR_START_START	1
 #define SUCCESSOR_FINISH_FINISH	2
 
+/* different types of fitness calculations */
+#define FITNESS_DEFAULT		0 	/* uses the jobs end time to minimize problem duration */
+#define FITNESS_WEIGHT		1	/* uses the weight assigned to the jobs to minimize problem duration */
+
+
 /* return the library version as a string (static, don't free it) */
 char *rcps_version();
+
+/* return an error string corresponding to code */
+char *rcps_error(int code);
 
 /* create and return a new problem structure */
 struct rcps_problem* rcps_problem_new();
@@ -44,6 +57,9 @@ struct rcps_problem* rcps_problem_new();
 /* clear and free a problem structure. this will also clear and free all
  * associated structures */
 void rcps_problem_free(struct rcps_problem *p);
+
+/* set fitness calculation mode */
+void rcps_problem_setfitness_mode(struct rcps_problem *problem, int mode);
 
 /* create a new resource structure */
 struct rcps_resource* rcps_resource_new();
@@ -98,6 +114,15 @@ char* rcps_job_getname(struct rcps_job *j);
 
 /* set the name, string is copied */
 void rcps_job_setname(struct rcps_job *j, const char *name);
+
+/* set earliest start time of this job */
+void rcps_job_setearliest_start(struct rcps_job *j, int time);
+
+/* get earliest start time of this job */
+int rcps_job_getearliest_start(struct rcps_job *j);
+
+/* set weight of this job to be used in fitness calculations */
+void rcps_job_setweight(struct rcps_job *j, int weight);
 
 /* add a job struct to a problem */
 void rcps_job_add(struct rcps_problem *p, struct rcps_job *j);

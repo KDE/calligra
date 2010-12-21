@@ -3,19 +3,34 @@
 #include <stdio.h>
 
 #include "fitness.h"
+#include "librcps.h"
 
 int fitness(struct rcps_problem *problem, struct rcps_genome *genome, 
 	struct rcps_phenotype *pheno) {
-	int max = -1;
+	int max = 0;
 	int i, j;
-	for (i = 0; i < problem->job_count; i++) {
-		int curr = pheno->job_start[problem->jobs[i]->index];
-		int modenum = problem->jobs[i]->genome_position >= 0 ?
-			genome->modes[problem->jobs[i]->genome_position] : 0;
-		curr += problem->jobs[i]->modes[modenum]->duration;
-		if (curr > max) {
-			max = curr;
+
+	switch (problem->fitness_mode) {
+	case FITNESS_WEIGHT:
+		for (i = 0; i < problem->job_count; i++) {
+			int job_end = pheno->job_start[problem->jobs[i]->index];
+			int modenum = problem->jobs[i]->genome_position >= 0 ?
+					genome->modes[problem->jobs[i]->genome_position] : 0;
+			job_end += problem->jobs[i]->modes[modenum]->duration;
+			max += job_end * problem->jobs[i]->weight;
 		}
+		break;
+	default:
+		for (i = 0; i < problem->job_count; i++) {
+			int curr = pheno->job_start[problem->jobs[i]->index];
+			int modenum = problem->jobs[i]->genome_position >= 0 ?
+				genome->modes[problem->jobs[i]->genome_position] : 0;
+			curr += problem->jobs[i]->modes[modenum]->duration;
+			if (curr > max) {
+				max = curr;
+			}
+		}
+		break;
 	}
 	// check if we have overused nonrenewable resources
 	if (pheno->overuse_count) {

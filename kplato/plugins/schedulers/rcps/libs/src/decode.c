@@ -223,7 +223,7 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 	for (i = 0; i < problem->job_count; i++) {
 		cjob = problem->jobs[genome->schedule[i]];
 		/* find the first possible start time through the predeccessors */
-		s = 0;
+		s = cjob->earliest_start;
 		for (j = 0; j < cjob->predeccessor_count; j++) {
 			pjob = cjob->predeccessors[j];
 			int rel_type = cjob->predeccessor_types[j];

@@ -48,6 +48,10 @@ void rcps_problem_free(struct rcps_problem *p) {
 	free(p);
 }
 
+void rcps_problem_setfitness_mode(struct rcps_problem *p, int mode) {
+	p->fitness_mode = mode;
+}
+
 struct rcps_resource* rcps_resource_new() {
 	struct rcps_resource *ret;
 	ret = (struct rcps_resource*)malloc(sizeof(struct rcps_resource));
@@ -152,6 +156,22 @@ void rcps_job_setname(struct rcps_job *j, const char *name) {
 	j->name = (char*)malloc((strlen(name)+1)*sizeof(char));
 	strcpy(j->name, name);
 }
+
+void rcps_job_setearliest_start(struct rcps_job *j, int time) {
+	j->earliest_start = time;
+}
+
+int rcps_job_getearliest_start(struct rcps_job *j) {
+	return j->earliest_start;
+}
+
+
+void rcps_job_setweight(struct rcps_job *j, int weight) {
+	j->weight = weight;
+}
+
+/* add a job struct to a problem */
+void rcps_job_add(struct rcps_problem *p, struct rcps_job *j);
 
 void rcps_job_add(struct rcps_problem *p, struct rcps_job *j) {
 	p->job_count++;
@@ -479,9 +499,111 @@ void rcps_solver_free(struct rcps_solver *s) {
 	free(s);
 }
 
+static char *check_ok = "Ok";
+static char *check_start_job_missing = "Start job missing";
+static char *check_multiple_end_jobs = "Multiple end jobs";
+static char *check_end_job_missing = "End job missing";
+static char *check_circular_dependency = "Circular dependency";
+static char *check_unknown_code = "Unknown error code";
+
+char *rcps_error(int code) {
+	char *r = check_unknown_code;
+	if (code == RCPS_CHECK_OK) {
+		r = check_ok;
+	} else if (code & RCPS_CHECK_START_JOB_MISSING) {
+		r = check_start_job_missing;
+	} else if (code & RCPS_CHECK_MULTIPLE_END_JOBS ) {
+		r = check_multiple_end_jobs;
+	} else if (code & RCPS_CHECK_END_JOB_MISSING ) {
+		r = check_end_job_missing;
+	} else if (code & RCPS_CHECK_CIRCULAR_DEPENDENCY ) {
+		r = check_circular_dependency;
+	}
+	return r;
+}
+
+int job_compare(const void *a, const void *b) {
+	return a - b;
+}
+
+int check_circulardependencies(struct rcps_job *job, struct slist *visited) {
+	int result = RCPS_CHECK_OK;
+	int i;
+	struct slist_node *n;
+	//printf("check_circulardependencies: %s visited: %i\n", job->name, slist_count(visited));
+	if ( slist_find(visited, job)) {
+		result = RCPS_CHECK_CIRCULAR_DEPENDENCY;
+		//printf("check_circulardependencies: %s already visited\n", job->name);
+	} else {
+		n = slist_node_new(job);
+		slist_add(visited, n);
+		for (i = 0; i < job->successor_count; ++i) {
+			result = check_circulardependencies( job->successors[ i ], visited );
+			if ( result != RCPS_CHECK_OK ) {
+				break;
+			}
+		}
+		// remove this job from the visited to avoid false positive
+		slist_unlink(visited, n);
+		slist_node_free(n, NULL);
+	}
+	return result;
+}
+/* all jobs must have successors except the end job, and all jobs must have predeccessors except the start job */
+int check_dependencies(struct rcps_problem *p) {
+	int result = RCPS_CHECK_OK;
+	int end_count = 0;
+	int i, k;
+	struct rcps_job *start_job;
+	struct slist *visited;
+	struct slist *has_predecessor = slist_new(job_compare);
+
+	for (i = 0; i < p->job_count; ++i) {
+		struct rcps_job *j = p->jobs[ i ];
+		//printf("check_dependencies: job %s successors: %i\n", j->name, j->successor_count);
+		if (j->successor_count == 0) {
+			++end_count;
+		} else {
+			for (k = 0; k < j->successor_count; ++k) {
+				//printf("check_dependencies: job %s successor[%i] = %s\n", j->name, k, j->successors[k]->name);
+				slist_add(has_predecessor, slist_node_new(j->successors[k]));
+			}
+		}
+	}
+	if (end_count > 1) {
+		result += RCPS_CHECK_MULTIPLE_END_JOBS;
+	} else if (end_count == 0) {
+		result += RCPS_CHECK_END_JOB_MISSING;
+	}
+	if (result == RCPS_CHECK_OK) {
+		start_job = 0;
+		for (i = 0; i < p->job_count; ++i) {
+			if (!slist_find(has_predecessor, p->jobs[i])) {
+				start_job = p->jobs[i];
+			}
+		}
+		if (start_job) {
+			/* All other jobs should be successors of the start job */
+			//printf("check_dependencies: check circular\n");
+			visited = slist_new(job_compare);
+			result += check_circulardependencies(start_job, visited);
+			slist_free(visited, NULL);
+		} else {
+			result += RCPS_CHECK_START_JOB_MISSING;
+		}
+
+	}
+	slist_free(has_predecessor, NULL);
+	//printf("check_dependencies: result=%i\n", result);
+	return result;
+}
+
 int rcps_check(struct rcps_problem *p) {
 	/* XXX check for structural problems */
-	return RCPS_CHECK_OK;
+	int result = RCPS_CHECK_OK;
+	result = check_dependencies( p );
+	printf("rcps_check: result='%s'\n", rcps_error(result));
+	return result;
 }
 
 int individual_cmp(const void *a, const void *b) {
