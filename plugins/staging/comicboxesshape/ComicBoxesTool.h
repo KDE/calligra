@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -47,8 +47,14 @@ class ComicBoxesTool : public KoToolBase
   protected:
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
+private:
+    QRectF currentDraggingRect() const;
+    
   private:
     ComicBoxesShape* m_currentShape;
+    bool m_dragging;
+    QPointF m_currentStartingPoint;
+    QPointF m_currentPoint;
 };
 
 #endif

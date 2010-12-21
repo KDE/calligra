@@ -25,6 +25,7 @@
 #include <KoSelection.h>
 
 #include "ComicBoxesShape.h"
+#include <QPainter>
 
 ComicBoxesTool::ComicBoxesTool(KoCanvasBase *canvas) : KoToolBase(canvas)
 {
@@ -55,21 +56,46 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
   Q_UNUSED(painter);
   Q_UNUSED(converter);
+  if(m_dragging)
+  {
+      painter.setPen(Qt::black);
+      painter.drawLine(converter.documentToView(m_currentStartingPoint),
+                       converter.documentToView(m_currentPoint) );
+  }
 }
 
 void ComicBoxesTool::mousePressEvent( KoPointerEvent *event )
 {
-  event->ignore();
+    m_dragging = true;
+    m_currentStartingPoint = event->point;
 }
 
 void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
 {
-  event->ignore();
+    if(m_dragging)
+    {
+        canvas()->updateCanvas(currentDraggingRect());
+        m_currentPoint = event->point;
+        canvas()->updateCanvas(currentDraggingRect());
+    } else {
+        event->ignore();
+    }
 }
 
 void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-  event->ignore();
+    if(m_dragging)
+    {
+        m_dragging = false;
+        canvas()->updateCanvas(currentDraggingRect().united(m_currentShape->boundingRect()));
+    } else {
+        event->ignore();
+    }
+}
+
+QRectF ComicBoxesTool::currentDraggingRect() const
+{
+    return QRectF(m_currentStartingPoint, m_currentPoint).normalized();
 }
 
 QMap<QString, QWidget *> ComicBoxesTool::createOptionWidgets() {
