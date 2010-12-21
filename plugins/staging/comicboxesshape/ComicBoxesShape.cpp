@@ -90,6 +90,7 @@ bool ComicBoxesShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
 
 void ComicBoxesShape::recreatePath()
 {
+    QSizeF s = size();
     clear();
     moveTo(QPointF(0, 0));
     lineTo(QPointF(0, 1.0));
@@ -102,4 +103,21 @@ void ComicBoxesShape::recreatePath()
         moveTo(line.p1());
         lineTo(line.p2());
     }
+    setSize(s);
+}
+
+void ComicBoxesShape::addLine( const QLineF& _line )
+{
+    Q_ASSERT(_line.p1().x() >= 0.0);
+    Q_ASSERT(_line.p1().x() <= 1.0);
+    Q_ASSERT(_line.p2().x() >= 0.0);
+    Q_ASSERT(_line.p2().x() <= 1.0);
+    Q_ASSERT(_line.p1().y() >= 0.0);
+    Q_ASSERT(_line.p1().y() <= 1.0);
+    Q_ASSERT(_line.p2().y() >= 0.0);
+    Q_ASSERT(_line.p2().y() <= 1.0);
+    Q_ASSERT(_line.p1().x() == 0.0 || _line.p1().y() == 0.0 || _line.p1().x() == 1.0 || _line.p1().y() == 1.0 );
+    Q_ASSERT(_line.p2().x() == 0.0 || _line.p2().y() == 0.0 || _line.p2().x() == 1.0 || _line.p2().y() == 1.0 );
+    m_lines.push_back(_line);
+    recreatePath();
 }

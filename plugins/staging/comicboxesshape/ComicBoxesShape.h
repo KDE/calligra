@@ -31,6 +31,7 @@ public:
 
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    void addLine( const QLineF& _line );
 private:
     void recreatePath();
 private:
