@@ -24,7 +24,9 @@
 
 #include <QSet>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class ColumnFormat;
 class RowFormat;
@@ -72,6 +74,7 @@ protected:
     Mode m_mode;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DELETE_COMMAND

@@ -35,7 +35,7 @@
 #include "Value.h"
 #include "ValueFormatter.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class RecalcManager::Private
 {

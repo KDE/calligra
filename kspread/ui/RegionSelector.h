@@ -32,7 +32,9 @@ class QDialog;
 class QEvent;
 class QObject;
 
-namespace KSpread
+namespace Caligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -72,6 +74,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_REGION_SELECTOR

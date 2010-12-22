@@ -44,7 +44,9 @@ class QSortFilterProxyModel;
 class KComboBox;
 class KLineEdit;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellEditorBase;
 class FunctionDescription;
@@ -186,9 +188,10 @@ private:
      */
     bool refresh_result;
 
-    KSpread::FunctionDescription* m_desc;
+    Calligra::Tables::FunctionDescription* m_desc;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FORMULA_DIALOG

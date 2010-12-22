@@ -27,7 +27,7 @@
 
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 SheetPropertiesDialog::SheetPropertiesDialog(QWidget* parent):
         KDialog(parent)

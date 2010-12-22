@@ -24,7 +24,7 @@
 
 #include "kspread_limits.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 RowRepeatStorage::RowRepeatStorage()
 {

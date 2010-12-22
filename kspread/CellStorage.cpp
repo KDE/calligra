@@ -62,7 +62,7 @@
 
 Q_DECLARE_METATYPE(QSharedPointer<QTextDocument>)
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 typedef RectStorage<QString> NamedAreaStorage;
 

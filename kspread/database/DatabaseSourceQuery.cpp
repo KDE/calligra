@@ -21,7 +21,7 @@
 
 #include <QString>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class DatabaseSourceQuery::Private
 {

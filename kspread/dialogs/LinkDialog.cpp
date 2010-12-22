@@ -45,7 +45,7 @@
 #include <kurlrequester.h>
 #include <kurlcompletion.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class LinkDialog::Private
 {

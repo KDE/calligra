@@ -24,7 +24,9 @@
 
 class QDate;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /* 0: US 30 / 360
@@ -51,6 +53,7 @@ CALLIGRA_TABLES_EXPORT long double yearFrac(const QDate& refDate, const QDate& s
 CALLIGRA_TABLES_EXPORT long double duration(const QDate& refDate, const QDate& settlement, const QDate& maturity, const long double& coup_, const long double& yield_, const int& freq, const int& basis, const long double& numOfCoups);
 CALLIGRA_TABLES_EXPORT long double pow1p(const long double& x, const long double& y);
 CALLIGRA_TABLES_EXPORT long double pow1pm1(const long double& x, const long double& y);
-} //namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

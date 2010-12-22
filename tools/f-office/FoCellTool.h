@@ -24,11 +24,11 @@
 
 #include <QPair>
 
-namespace KSpread {
+namespace Calligra { namespace Tables {
     class Cell;
     class CellTool;
     class CellEditorBase;
-}
+} }
 
 class FoExternalEditor;
 class FoCellEditor;
@@ -38,7 +38,7 @@ class KoCanvasBase;
 /**
  * The tool to change cell ranges.
  */
-class KSPREAD_EXPORT FoCellTool : public KSpread::CellTool
+class CALLIGRA_TABLES_EXPORT FoCellTool : public Calligra::Tables::CellTool
 {
     Q_OBJECT
 
@@ -84,7 +84,7 @@ public:
     bool isFontUnderline();
 
     // custom cell editor
-    virtual KSpread::CellEditorBase* editor() const;
+    virtual Calligra::Tables::CellEditorBase* editor() const;
     virtual bool createEditor(bool clear=true, bool focus=true);
 
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);

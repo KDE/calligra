@@ -65,13 +65,13 @@ using namespace Swinder;
 class ExcelExport::Private
 {
 public:
-    const KSpread::Doc* inputDoc;
+    const Calligra::Tables::Doc* inputDoc;
     QString outputFile;
     XlsRecordOutputStream* out;
-    QHash<KSpread::Style, unsigned> styles;
+    QHash<Calligra::Tables::Style, unsigned> styles;
     QList<FontRecord> fontRecords;
 
-    void convertStyle(const KSpread::Style& style, XFRecord& xf, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
+    void convertStyle(const Calligra::Tables::Style& style, XFRecord& xf, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
     unsigned fontIndex(const QFont& font, const QColor& color, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
 };
 
@@ -100,9 +100,9 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     if (!document)
         return KoFilter::StupidError;
 
-    d->inputDoc = qobject_cast<const KSpread::Doc*>(document);
+    d->inputDoc = qobject_cast<const Calligra::Tables::Doc*>(document);
     if (!d->inputDoc) {
-        kWarning() << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
+        kWarning() << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
         return KoFilter::WrongFormat;
     }
 
@@ -269,12 +269,12 @@ static unsigned convertColumnWidth(qreal width)
     return width / factor * 256;
 }
 
-void ExcelExport::collectStyles(KSpread::Sheet* sheet, QList<XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
+void ExcelExport::collectStyles(Calligra::Tables::Sheet* sheet, QList<XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
 {
     QRect area = sheet->cellStorage()->styleStorage()->usedArea();
     for (int row = area.top(); row <= area.bottom(); row++) {
         for (int col = area.left(); col <= area.right(); col++){
-            KSpread::Style s = sheet->cellStorage()->style(col, row);
+            Calligra::Tables::Style s = sheet->cellStorage()->style(col, row);
             unsigned& idx = d->styles[s];
             if (!idx) {
                 XFRecord xfr(0);
@@ -286,12 +286,12 @@ void ExcelExport::collectStyles(KSpread::Sheet* sheet, QList<XFRecord>& xfRecord
     }
 }
 
-void ExcelExport::buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable)
+void ExcelExport::buildStringTable(Calligra::Tables::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable)
 {
     unsigned useCount = 0;
-    const KSpread::ValueStorage* values = sheet->cellStorage()->valueStorage();
+    const Calligra::Tables::ValueStorage* values = sheet->cellStorage()->valueStorage();
     for (int i = 0; i < values->count(); i++) {
-        KSpread::Value v = values->data(i);
+        Calligra::Tables::Value v = values->data(i);
         if (v.isString()) {
             QString s = v.asString();
             if (!stringTable.contains(s)) {
@@ -303,7 +303,7 @@ void ExcelExport::buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& ss
     sst.setUseCount(sst.useCount() + useCount);
 }
 
-void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsigned>& sst)
+void ExcelExport::convertSheet(Calligra::Tables::Sheet* sheet, const QHash<QString, unsigned>& sst)
 {
     XlsRecordOutputStream& o = *d->out;
     {
@@ -347,7 +347,7 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
     {
         ColInfoRecord cir(0);
         for (int i = 1; i <= area.right(); ++i) {
-            const KSpread::ColumnFormat* column = sheet->columnFormat(i);
+            const Calligra::Tables::ColumnFormat* column = sheet->columnFormat(i);
             unsigned w = convertColumnWidth(column->width());
             if (w != cir.width() || column->isHidden() != cir.isHidden() || column->isDefault() != !cir.isNonDefaultWidth()) {
                 if (i > 1) {
@@ -382,9 +382,9 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
         for (int row = firstRow; row < lastRowP1; row++) {
             RowRecord rr(0);
 
-            KSpread::Cell first = sheet->cellStorage()->firstInRow(row);
-            if (first.isNull()) first = KSpread::Cell(sheet, 1, row);
-            KSpread::Cell last = sheet->cellStorage()->lastInRow(row);
+            Calligra::Tables::Cell first = sheet->cellStorage()->firstInRow(row);
+            if (first.isNull()) first = Calligra::Tables::Cell(sheet, 1, row);
+            Calligra::Tables::Cell last = sheet->cellStorage()->lastInRow(row);
             if (last.isNull()) last = first;
 
             rr.setRow(row-1);
@@ -402,15 +402,15 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
             db.setCellOffset(row - firstRow, o.pos() - lastStart);
             lastStart = o.pos();
 
-            KSpread::Cell first = sheet->cellStorage()->firstInRow(row);
-            if (first.isNull()) first = KSpread::Cell(sheet, 1, row);
-            KSpread::Cell last = sheet->cellStorage()->lastInRow(row);
+            Calligra::Tables::Cell first = sheet->cellStorage()->firstInRow(row);
+            if (first.isNull()) first = Calligra::Tables::Cell(sheet, 1, row);
+            Calligra::Tables::Cell last = sheet->cellStorage()->lastInRow(row);
             if (last.isNull()) last = first;
 
             for (int col = first.column(); col <= last.column(); col++) {
-                KSpread::Cell cell(sheet, col, row);
-                KSpread::Value val = cell.value();
-                KSpread::Style style = cell.style();
+                Calligra::Tables::Cell cell(sheet, col, row);
+                Calligra::Tables::Value val = cell.value();
+                Calligra::Tables::Style style = cell.style();
                 unsigned xfi = d->styles[style];
 
                 if (cell.isFormula()) {
@@ -423,25 +423,25 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
                     } else if (val.isBoolean()) {
                         fr.setResult(Value(val.asBoolean()));
                     } else if (val.isError()) {
-                        if (val == KSpread::Value::errorCIRCLE()) {
+                        if (val == Calligra::Tables::Value::errorCIRCLE()) {
                             fr.setResult(Value::errorREF());
-                        } else if (val == KSpread::Value::errorDEPEND()) {
+                        } else if (val == Calligra::Tables::Value::errorDEPEND()) {
                             fr.setResult(Value::errorREF());
-                        } else if (val == KSpread::Value::errorDIV0()) {
+                        } else if (val == Calligra::Tables::Value::errorDIV0()) {
                             fr.setResult(Value::errorDIV0());
-                        } else if (val == KSpread::Value::errorNA()) {
+                        } else if (val == Calligra::Tables::Value::errorNA()) {
                             fr.setResult(Value::errorNA());
-                        } else if (val == KSpread::Value::errorNAME()) {
+                        } else if (val == Calligra::Tables::Value::errorNAME()) {
                             fr.setResult(Value::errorNAME());
-                        } else if (val == KSpread::Value::errorNULL()) {
+                        } else if (val == Calligra::Tables::Value::errorNULL()) {
                             fr.setResult(Value::errorNULL());
-                        } else if (val == KSpread::Value::errorNUM()) {
+                        } else if (val == Calligra::Tables::Value::errorNUM()) {
                             fr.setResult(Value::errorNUM());
-                        } else if (val == KSpread::Value::errorPARSE()) {
+                        } else if (val == Calligra::Tables::Value::errorPARSE()) {
                             fr.setResult(Value::errorNA());
-                        } else if (val == KSpread::Value::errorREF()) {
+                        } else if (val == Calligra::Tables::Value::errorREF()) {
                             fr.setResult(Value::errorREF());
-                        } else if (val == KSpread::Value::errorVALUE()) {
+                        } else if (val == Calligra::Tables::Value::errorVALUE()) {
                             fr.setResult(Value::errorVALUE());
                         }
                     } else if (val.isString()) {
@@ -449,7 +449,7 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
                     } else {
                         fr.setResult(Value::empty());
                     }
-                    KSpread::Formula f = cell.formula();
+                    Calligra::Tables::Formula f = cell.formula();
                     QList<FormulaToken> tokens = compileFormula(f.tokens(), sheet);
                     foreach (const FormulaToken& t, tokens) {
                         fr.addToken(t);
@@ -480,25 +480,25 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
                         br.setValue(val.asBoolean() ? 1 : 0);
                     } else {
                         br.setError(true);
-                        if (val == KSpread::Value::errorCIRCLE()) {
+                        if (val == Calligra::Tables::Value::errorCIRCLE()) {
                             br.setValue(0x17);
-                        } else if (val == KSpread::Value::errorDEPEND()) {
+                        } else if (val == Calligra::Tables::Value::errorDEPEND()) {
                             br.setValue(0x17);
-                        } else if (val == KSpread::Value::errorDIV0()) {
+                        } else if (val == Calligra::Tables::Value::errorDIV0()) {
                             br.setValue(0x07);
-                        } else if (val == KSpread::Value::errorNA()) {
+                        } else if (val == Calligra::Tables::Value::errorNA()) {
                             br.setValue(0x2A);
-                        } else if (val == KSpread::Value::errorNAME()) {
+                        } else if (val == Calligra::Tables::Value::errorNAME()) {
                             br.setValue(0x1D);
-                        } else if (val == KSpread::Value::errorNULL()) {
+                        } else if (val == Calligra::Tables::Value::errorNULL()) {
                             br.setValue(0x00);
-                        } else if (val == KSpread::Value::errorNUM()) {
+                        } else if (val == Calligra::Tables::Value::errorNUM()) {
                             br.setValue(0x24);
-                        } else if (val == KSpread::Value::errorPARSE()) {
+                        } else if (val == Calligra::Tables::Value::errorPARSE()) {
                             br.setValue(0x2A);
-                        } else if (val == KSpread::Value::errorREF()) {
+                        } else if (val == Calligra::Tables::Value::errorREF()) {
                             br.setValue(0x17);
-                        } else if (val == KSpread::Value::errorVALUE()) {
+                        } else if (val == Calligra::Tables::Value::errorVALUE()) {
                             br.setValue(0x0F);
                         }
                     }
@@ -535,22 +535,22 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
 /**********************
     TokenStack
  **********************/
-class TokenStack : public QVector<KSpread::Token>
+class TokenStack : public QVector<Calligra::Tables::Token>
 {
 public:
     TokenStack();
     bool isEmpty() const;
     unsigned itemCount() const;
-    void push(const KSpread::Token& token);
-    KSpread::Token pop();
-    const KSpread::Token& top();
-    const KSpread::Token& top(unsigned index);
+    void push(const Calligra::Tables::Token& token);
+    Calligra::Tables::Token pop();
+    const Calligra::Tables::Token& top();
+    const Calligra::Tables::Token& top(unsigned index);
 private:
     void ensureSpace();
     unsigned topIndex;
 };
 
-TokenStack::TokenStack(): QVector<KSpread::Token>()
+TokenStack::TokenStack(): QVector<Calligra::Tables::Token>()
 {
     topIndex = 0;
     ensureSpace();
@@ -566,27 +566,27 @@ unsigned TokenStack::itemCount() const
     return topIndex;
 }
 
-void TokenStack::push(const KSpread::Token& token)
+void TokenStack::push(const Calligra::Tables::Token& token)
 {
     ensureSpace();
     insert(topIndex++, token);
 }
 
-KSpread::Token TokenStack::pop()
+Calligra::Tables::Token TokenStack::pop()
 {
-    return (topIndex > 0) ? KSpread::Token(at(--topIndex)) : KSpread::Token();
+    return (topIndex > 0) ? Calligra::Tables::Token(at(--topIndex)) : Calligra::Tables::Token();
 }
 
-const KSpread::Token& TokenStack::top()
+const Calligra::Tables::Token& TokenStack::top()
 {
     return top(0);
 }
 
-const KSpread::Token& TokenStack::top(unsigned index)
+const Calligra::Tables::Token& TokenStack::top(unsigned index)
 {
     if (topIndex > index)
         return at(topIndex - index - 1);
-    return KSpread::Token::null;
+    return Calligra::Tables::Token::null;
 }
 
 void TokenStack::ensureSpace()
@@ -597,40 +597,40 @@ void TokenStack::ensureSpace()
 
 // helper function: give operator precedence
 // e.g. '+' is 1 while '*' is 3
-static int opPrecedence(KSpread::Token::Op op)
+static int opPrecedence(Calligra::Tables::Token::Op op)
 {
     int prec = -1;
     switch (op) {
-    case KSpread::Token::Percent      : prec = 8; break;
-    case KSpread::Token::Caret        : prec = 7; break;
-    case KSpread::Token::Asterisk     : prec = 5; break;
-    case KSpread::Token::Slash        : prec = 6; break;
-    case KSpread::Token::Plus         : prec = 3; break;
-    case KSpread::Token::Minus        : prec = 3; break;
-    case KSpread::Token::Union        : prec = 2; break;
-    case KSpread::Token::Ampersand    : prec = 2; break;
-    case KSpread::Token::Intersect    : prec = 2; break;
-    case KSpread::Token::Equal        : prec = 1; break;
-    case KSpread::Token::NotEqual     : prec = 1; break;
-    case KSpread::Token::Less         : prec = 1; break;
-    case KSpread::Token::Greater      : prec = 1; break;
-    case KSpread::Token::LessEqual    : prec = 1; break;
-    case KSpread::Token::GreaterEqual : prec = 1; break;
-#ifdef KSPREAD_INLINE_ARRAYS
+    case Calligra::Tables::Token::Percent      : prec = 8; break;
+    case Calligra::Tables::Token::Caret        : prec = 7; break;
+    case Calligra::Tables::Token::Asterisk     : prec = 5; break;
+    case Calligra::Tables::Token::Slash        : prec = 6; break;
+    case Calligra::Tables::Token::Plus         : prec = 3; break;
+    case Calligra::Tables::Token::Minus        : prec = 3; break;
+    case Calligra::Tables::Token::Union        : prec = 2; break;
+    case Calligra::Tables::Token::Ampersand    : prec = 2; break;
+    case Calligra::Tables::Token::Intersect    : prec = 2; break;
+    case Calligra::Tables::Token::Equal        : prec = 1; break;
+    case Calligra::Tables::Token::NotEqual     : prec = 1; break;
+    case Calligra::Tables::Token::Less         : prec = 1; break;
+    case Calligra::Tables::Token::Greater      : prec = 1; break;
+    case Calligra::Tables::Token::LessEqual    : prec = 1; break;
+    case Calligra::Tables::Token::GreaterEqual : prec = 1; break;
+#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
         // FIXME Stefan: I don't know whether zero is right for this case. :-(
-    case KSpread::Token::CurlyBra     : prec = 0; break;
-    case KSpread::Token::CurlyKet     : prec = 0; break;
-    case KSpread::Token::Pipe         : prec = 0; break;
+    case Calligra::Tables::Token::CurlyBra     : prec = 0; break;
+    case Calligra::Tables::Token::CurlyKet     : prec = 0; break;
+    case Calligra::Tables::Token::Pipe         : prec = 0; break;
 #endif
-    case KSpread::Token::Semicolon    : prec = 0; break;
-    case KSpread::Token::RightPar     : prec = 0; break;
-    case KSpread::Token::LeftPar      : prec = -1; break;
+    case Calligra::Tables::Token::Semicolon    : prec = 0; break;
+    case Calligra::Tables::Token::RightPar     : prec = 0; break;
+    case Calligra::Tables::Token::LeftPar      : prec = -1; break;
     default: prec = -1; break;
     }
     return prec;
 }
 
-QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, KSpread::Sheet* sheet) const
+QList<FormulaToken> ExcelExport::compileFormula(const Calligra::Tables::Tokens &tokens, Calligra::Tables::Sheet* sheet) const
 {
     QList<FormulaToken> codes;
 
@@ -641,11 +641,11 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
 
     for (int i = 0; i <= tokens.count(); i++) {
         // helper token: InvalidOp is end-of-formula
-        KSpread::Token token = (i < tokens.count()) ? tokens[i] : KSpread::Token(KSpread::Token::Operator);
-        KSpread::Token::Type tokenType = token.type();
+        Calligra::Tables::Token token = (i < tokens.count()) ? tokens[i] : Calligra::Tables::Token(Calligra::Tables::Token::Operator);
+        Calligra::Tables::Token::Type tokenType = token.type();
 
         // unknown token is invalid
-        if (tokenType == KSpread::Token::Unknown) {
+        if (tokenType == Calligra::Tables::Token::Unknown) {
             // TODO
             break;
         }
@@ -653,21 +653,21 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
         // are we entering a function ?
         // if stack already has: id (
         if (syntaxStack.itemCount() >= 2) {
-            KSpread::Token par = syntaxStack.top();
-            KSpread::Token id = syntaxStack.top(1);
-            if (par.asOperator() == KSpread::Token::LeftPar)
+            Calligra::Tables::Token par = syntaxStack.top();
+            Calligra::Tables::Token id = syntaxStack.top(1);
+            if (par.asOperator() == Calligra::Tables::Token::LeftPar)
                 if (id.isIdentifier()) {
                     argStack.push(argCount);
                     argCount = 1;
                 }
         }
 
-#ifdef KSPREAD_INLINE_ARRAYS
+#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
         // are we entering an inline array ?
         // if stack already has: {
         if (syntaxStack.itemCount() >= 1) {
-            KSpread::Token bra = syntaxStack.top();
-            if (bra.asOperator() == KSpread::Token::CurlyBra) {
+            Calligra::Tables::Token bra = syntaxStack.top();
+            if (bra.asOperator() == Calligra::Tables::Token::CurlyBra) {
                 argStack.push(argCount);
                 argStack.push(1);   // row count
                 argCount = 1;
@@ -677,24 +677,24 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
 
         // for constants, push immediately to stack
         // generate code to load from a constant
-        if ((tokenType == KSpread::Token::Integer) || (tokenType == KSpread::Token::Float) ||
-                (tokenType == KSpread::Token::String) || (tokenType == KSpread::Token::Boolean) ||
-                (tokenType == KSpread::Token::Error)) {
+        if ((tokenType == Calligra::Tables::Token::Integer) || (tokenType == Calligra::Tables::Token::Float) ||
+                (tokenType == Calligra::Tables::Token::String) || (tokenType == Calligra::Tables::Token::Boolean) ||
+                (tokenType == Calligra::Tables::Token::Error)) {
             syntaxStack.push(token);
             switch (tokenType) {
-            case KSpread::Token::Integer:
+            case Calligra::Tables::Token::Integer:
                 codes.append(FormulaToken::createNum(token.asInteger()));
                 break;
-            case KSpread::Token::Float:
+            case Calligra::Tables::Token::Float:
                 codes.append(FormulaToken::createNum(token.asFloat()));
                 break;
-            case KSpread::Token::String:
+            case Calligra::Tables::Token::String:
                 codes.append(FormulaToken::createStr(token.asString()));
                 break;
-            case KSpread::Token::Boolean:
+            case Calligra::Tables::Token::Boolean:
                 codes.append(FormulaToken::createBool(token.asBoolean()));
                 break;
-            case KSpread::Token::Error:
+            case Calligra::Tables::Token::Error:
                 // TODO
                 codes.append(FormulaToken(FormulaToken::MissArg));
                 break;
@@ -706,24 +706,24 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
 
         // for cell, range, or identifier, push immediately to stack
         // generate code to load from reference
-        if ((tokenType == KSpread::Token::Cell) || (tokenType == KSpread::Token::Range) ||
-                (tokenType == KSpread::Token::Identifier)) {
+        if ((tokenType == Calligra::Tables::Token::Cell) || (tokenType == Calligra::Tables::Token::Range) ||
+                (tokenType == Calligra::Tables::Token::Identifier)) {
             syntaxStack.push(token);
 
-            if (tokenType == KSpread::Token::Cell) {
-                const KSpread::Region region(token.text(), d->inputDoc->map(), sheet);
+            if (tokenType == Calligra::Tables::Token::Cell) {
+                const Calligra::Tables::Region region(token.text(), d->inputDoc->map(), sheet);
                 if (!region.isValid() || !region.isSingular()) {
                     codes.append(FormulaToken::createRefErr());
                 } else {
-                    KSpread::Region::Element* e = *region.constBegin();
+                    Calligra::Tables::Region::Element* e = *region.constBegin();
                     codes.append(FormulaToken::createRef(e->rect().topLeft() - QPoint(1, 1), e->isRowFixed(), e->isColumnFixed()));
                 }
-            } else if (tokenType == KSpread::Token::Range) {
-                const KSpread::Region region(token.text(), d->inputDoc->map(), sheet);
+            } else if (tokenType == Calligra::Tables::Token::Range) {
+                const Calligra::Tables::Region region(token.text(), d->inputDoc->map(), sheet);
                 if (!region.isValid()) {
                     codes.append(FormulaToken::createAreaErr());
                 } else {
-                    KSpread::Region::Element* e = *region.constBegin();
+                    Calligra::Tables::Region::Element* e = *region.constBegin();
                     codes.append(FormulaToken::createArea(e->rect().adjusted(-1, -1, -1, -1), e->isTopFixed(), e->isBottomFixed(), e->isLeftFixed(), e->isRightFixed()));
                 }
             } else {
@@ -733,16 +733,16 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
         }
 
         // special case for percentage
-        if (tokenType == KSpread::Token::Operator)
-            if (token.asOperator() == KSpread::Token::Percent)
+        if (tokenType == Calligra::Tables::Token::Operator)
+            if (token.asOperator() == Calligra::Tables::Token::Percent)
                 if (syntaxStack.itemCount() >= 1)
                     if (!syntaxStack.top().isOperator()) {
                         codes.append(FormulaToken(FormulaToken::Percent));
                     }
 
         // for any other operator, try to apply all parsing rules
-        if (tokenType == KSpread::Token::Operator)
-            if (token.asOperator() != KSpread::Token::Percent) {
+        if (tokenType == Calligra::Tables::Token::Operator)
+            if (token.asOperator() != Calligra::Tables::Token::Percent) {
                 // repeat until no more rule applies
                 for (; ;) {
                     bool ruleFound = false;
@@ -751,17 +751,17 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     // id ( arg1 ; arg2 -> id ( arg
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 5)
-                            if ((token.asOperator() == KSpread::Token::RightPar) ||
-                                    (token.asOperator() == KSpread::Token::Semicolon)) {
-                                KSpread::Token arg2 = syntaxStack.top();
-                                KSpread::Token sep = syntaxStack.top(1);
-                                KSpread::Token arg1 = syntaxStack.top(2);
-                                KSpread::Token par = syntaxStack.top(3);
-                                KSpread::Token id = syntaxStack.top(4);
+                            if ((token.asOperator() == Calligra::Tables::Token::RightPar) ||
+                                    (token.asOperator() == Calligra::Tables::Token::Semicolon)) {
+                                Calligra::Tables::Token arg2 = syntaxStack.top();
+                                Calligra::Tables::Token sep = syntaxStack.top(1);
+                                Calligra::Tables::Token arg1 = syntaxStack.top(2);
+                                Calligra::Tables::Token par = syntaxStack.top(3);
+                                Calligra::Tables::Token id = syntaxStack.top(4);
                                 if (!arg2.isOperator())
-                                    if (sep.asOperator() == KSpread::Token::Semicolon)
+                                    if (sep.asOperator() == Calligra::Tables::Token::Semicolon)
                                         if (!arg1.isOperator())
-                                            if (par.asOperator() == KSpread::Token::LeftPar)
+                                            if (par.asOperator() == Calligra::Tables::Token::LeftPar)
                                                 if (id.isIdentifier()) {
                                                     ruleFound = true;
                                                     syntaxStack.pop();
@@ -774,15 +774,15 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     // id ( arg ; -> id ( arg
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 3)
-                            if ((token.asOperator() == KSpread::Token::RightPar) ||
-                                    (token.asOperator() == KSpread::Token::Semicolon)) {
-                                KSpread::Token sep = syntaxStack.top();
-                                KSpread::Token arg = syntaxStack.top(1);
-                                KSpread::Token par = syntaxStack.top(2);
-                                KSpread::Token id = syntaxStack.top(3);
-                                if (sep.asOperator() == KSpread::Token::Semicolon)
+                            if ((token.asOperator() == Calligra::Tables::Token::RightPar) ||
+                                    (token.asOperator() == Calligra::Tables::Token::Semicolon)) {
+                                Calligra::Tables::Token sep = syntaxStack.top();
+                                Calligra::Tables::Token arg = syntaxStack.top(1);
+                                Calligra::Tables::Token par = syntaxStack.top(2);
+                                Calligra::Tables::Token id = syntaxStack.top(3);
+                                if (sep.asOperator() == Calligra::Tables::Token::Semicolon)
                                     if (!arg.isOperator())
-                                        if (par.asOperator() == KSpread::Token::LeftPar)
+                                        if (par.asOperator() == Calligra::Tables::Token::LeftPar)
                                             if (id.isIdentifier()) {
                                                 ruleFound = true;
                                                 syntaxStack.pop();
@@ -795,13 +795,13 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     //  id ( arg ) -> arg
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 4) {
-                            KSpread::Token par2 = syntaxStack.top();
-                            KSpread::Token arg = syntaxStack.top(1);
-                            KSpread::Token par1 = syntaxStack.top(2);
-                            KSpread::Token id = syntaxStack.top(3);
-                            if (par2.asOperator() == KSpread::Token::RightPar)
+                            Calligra::Tables::Token par2 = syntaxStack.top();
+                            Calligra::Tables::Token arg = syntaxStack.top(1);
+                            Calligra::Tables::Token par1 = syntaxStack.top(2);
+                            Calligra::Tables::Token id = syntaxStack.top(3);
+                            if (par2.asOperator() == Calligra::Tables::Token::RightPar)
                                 if (!arg.isOperator())
-                                    if (par1.asOperator() == KSpread::Token::LeftPar)
+                                    if (par1.asOperator() == Calligra::Tables::Token::LeftPar)
                                         if (id.isIdentifier()) {
                                             ruleFound = true;
                                             syntaxStack.pop();
@@ -819,39 +819,39 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     // e.g. "2*PI()"
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 3) {
-                            KSpread::Token par2 = syntaxStack.top();
-                            KSpread::Token par1 = syntaxStack.top(1);
-                            KSpread::Token id = syntaxStack.top(2);
-                            if (par2.asOperator() == KSpread::Token::RightPar)
-                                if (par1.asOperator() == KSpread::Token::LeftPar)
+                            Calligra::Tables::Token par2 = syntaxStack.top();
+                            Calligra::Tables::Token par1 = syntaxStack.top(1);
+                            Calligra::Tables::Token id = syntaxStack.top(2);
+                            if (par2.asOperator() == Calligra::Tables::Token::RightPar)
+                                if (par1.asOperator() == Calligra::Tables::Token::LeftPar)
                                     if (id.isIdentifier()) {
                                         ruleFound = true;
                                         syntaxStack.pop();
                                         syntaxStack.pop();
                                         syntaxStack.pop();
-                                        syntaxStack.push(KSpread::Token(KSpread::Token::Integer));
+                                        syntaxStack.push(Calligra::Tables::Token(Calligra::Tables::Token::Integer));
                                         codes.append(FormulaToken::createFunc(id.text(), 0));
                                         Q_ASSERT(!argStack.empty());
                                         argCount = argStack.empty() ? 0 : argStack.pop();
                                     }
                         }
 
-#ifdef KSPREAD_INLINE_ARRAYS
+#ifdef CALLIGRA_TABLES_INLINE_ARRAYS
                     // rule for inline array elements, if token is ; or | or }
                     // { arg1 ; arg2 -> { arg
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 4)
-                            if ((token.asOperator() == KSpread::Token::Semicolon) ||
-                                    (token.asOperator() == KSpread::Token::CurlyKet) ||
-                                    (token.asOperator() == KSpread::Token::Pipe)) {
-                                KSpread::Token arg2 = syntaxStack.top();
-                                KSpread::Token sep = syntaxStack.top(1);
-                                KSpread::Token arg1 = syntaxStack.top(2);
-                                KSpread::Token bra = syntaxStack.top(3);
+                            if ((token.asOperator() == Calligra::Tables::Token::Semicolon) ||
+                                    (token.asOperator() == Calligra::Tables::Token::CurlyKet) ||
+                                    (token.asOperator() == Calligra::Tables::Token::Pipe)) {
+                                Calligra::Tables::Token arg2 = syntaxStack.top();
+                                Calligra::Tables::Token sep = syntaxStack.top(1);
+                                Calligra::Tables::Token arg1 = syntaxStack.top(2);
+                                Calligra::Tables::Token bra = syntaxStack.top(3);
                                 if (!arg2.isOperator())
-                                    if (sep.asOperator() == KSpread::Token::Semicolon)
+                                    if (sep.asOperator() == Calligra::Tables::Token::Semicolon)
                                         if (!arg1.isOperator())
-                                            if (bra.asOperator() == KSpread::Token::CurlyBra) {
+                                            if (bra.asOperator() == Calligra::Tables::Token::CurlyBra) {
                                                 ruleFound = true;
                                                 syntaxStack.pop();
                                                 syntaxStack.pop();
@@ -863,17 +863,17 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     //  { arg1 | arg2 -> { arg
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 4)
-                            if ((token.asOperator() == KSpread::Token::Semicolon) ||
-                                    (token.asOperator() == KSpread::Token::CurlyKet) ||
-                                    (token.asOperator() == KSpread::Token::Pipe)) {
-                                KSpread::Token arg2 = syntaxStack.top();
-                                KSpread::Token sep = syntaxStack.top(1);
-                                KSpread::Token arg1 = syntaxStack.top(2);
-                                KSpread::Token bra = syntaxStack.top(3);
+                            if ((token.asOperator() == Calligra::Tables::Token::Semicolon) ||
+                                    (token.asOperator() == Calligra::Tables::Token::CurlyKet) ||
+                                    (token.asOperator() == Calligra::Tables::Token::Pipe)) {
+                                Calligra::Tables::Token arg2 = syntaxStack.top();
+                                Calligra::Tables::Token sep = syntaxStack.top(1);
+                                Calligra::Tables::Token arg1 = syntaxStack.top(2);
+                                Calligra::Tables::Token bra = syntaxStack.top(3);
                                 if (!arg2.isOperator())
-                                    if (sep.asOperator() == KSpread::Token::Pipe)
+                                    if (sep.asOperator() == Calligra::Tables::Token::Pipe)
                                         if (!arg1.isOperator())
-                                            if (bra.asOperator() == KSpread::Token::CurlyBra) {
+                                            if (bra.asOperator() == Calligra::Tables::Token::CurlyBra) {
                                                 ruleFound = true;
                                                 syntaxStack.pop();
                                                 syntaxStack.pop();
@@ -887,12 +887,12 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     //  { arg } -> arg
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 3) {
-                            KSpread::Token ket = syntaxStack.top();
-                            KSpread::Token arg = syntaxStack.top(1);
-                            KSpread::Token bra = syntaxStack.top(2);
-                            if (ket.asOperator() == KSpread::Token::CurlyKet)
+                            Calligra::Tables::Token ket = syntaxStack.top();
+                            Calligra::Tables::Token arg = syntaxStack.top(1);
+                            Calligra::Tables::Token bra = syntaxStack.top(2);
+                            if (ket.asOperator() == Calligra::Tables::Token::CurlyKet)
                                 if (!arg.isOperator())
-                                    if (bra.asOperator() == KSpread::Token::CurlyBra) {
+                                    if (bra.asOperator() == Calligra::Tables::Token::CurlyBra) {
                                         ruleFound = true;
                                         syntaxStack.pop();
                                         syntaxStack.pop();
@@ -912,14 +912,14 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     // rule for parenthesis:  ( Y ) -> Y
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 3) {
-                            KSpread::Token right = syntaxStack.top();
-                            KSpread::Token y = syntaxStack.top(1);
-                            KSpread::Token left = syntaxStack.top(2);
+                            Calligra::Tables::Token right = syntaxStack.top();
+                            Calligra::Tables::Token y = syntaxStack.top(1);
+                            Calligra::Tables::Token left = syntaxStack.top(2);
                             if (right.isOperator())
                                 if (!y.isOperator())
                                     if (left.isOperator())
-                                        if (right.asOperator() == KSpread::Token::RightPar)
-                                            if (left.asOperator() == KSpread::Token::LeftPar) {
+                                        if (right.asOperator() == Calligra::Tables::Token::RightPar)
+                                            if (left.asOperator() == Calligra::Tables::Token::LeftPar) {
                                                 ruleFound = true;
                                                 syntaxStack.pop();
                                                 syntaxStack.pop();
@@ -935,13 +935,13 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     // e.g. "A * B" becomes 'A' if token is operator '+'
                     if (!ruleFound)
                         if (syntaxStack.itemCount() >= 3) {
-                            KSpread::Token b = syntaxStack.top();
-                            KSpread::Token op = syntaxStack.top(1);
-                            KSpread::Token a = syntaxStack.top(2);
+                            Calligra::Tables::Token b = syntaxStack.top();
+                            Calligra::Tables::Token op = syntaxStack.top(1);
+                            Calligra::Tables::Token a = syntaxStack.top(2);
                             if (!a.isOperator())
                                 if (!b.isOperator())
                                     if (op.isOperator())
-                                        if (token.asOperator() != KSpread::Token::LeftPar)
+                                        if (token.asOperator() != Calligra::Tables::Token::LeftPar)
                                             if (opPrecedence(op.asOperator()) >= opPrecedence(token.asOperator())) {
                                                 ruleFound = true;
                                                 syntaxStack.pop();
@@ -950,35 +950,35 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                                                 syntaxStack.push(b);
                                                 switch (op.asOperator()) {
                                                     // simple binary operations
-                                                case KSpread::Token::Plus:
+                                                case Calligra::Tables::Token::Plus:
                                                     codes.append(FormulaToken(FormulaToken::Add)); break;
-                                                case KSpread::Token::Minus:
+                                                case Calligra::Tables::Token::Minus:
                                                     codes.append(FormulaToken(FormulaToken::Sub)); break;
-                                                case KSpread::Token::Asterisk:
+                                                case Calligra::Tables::Token::Asterisk:
                                                     codes.append(FormulaToken(FormulaToken::Mul)); break;
-                                                case KSpread::Token::Slash:
+                                                case Calligra::Tables::Token::Slash:
                                                     codes.append(FormulaToken(FormulaToken::Div)); break;
-                                                case KSpread::Token::Caret:
+                                                case Calligra::Tables::Token::Caret:
                                                     codes.append(FormulaToken(FormulaToken::Power)); break;
-                                                case KSpread::Token::Ampersand:
+                                                case Calligra::Tables::Token::Ampersand:
                                                     codes.append(FormulaToken(FormulaToken::Concat)); break;
-                                                case KSpread::Token::Intersect:
+                                                case Calligra::Tables::Token::Intersect:
                                                     codes.append(FormulaToken(FormulaToken::Intersect)); break;
-                                                case KSpread::Token::Union:
+                                                case Calligra::Tables::Token::Union:
                                                     codes.append(FormulaToken(FormulaToken::Union)); break;
 
                                                     // simple value comparisons
-                                                case KSpread::Token::Equal:
+                                                case Calligra::Tables::Token::Equal:
                                                     codes.append(FormulaToken(FormulaToken::EQ)); break;
-                                                case KSpread::Token::Less:
+                                                case Calligra::Tables::Token::Less:
                                                     codes.append(FormulaToken(FormulaToken::LT)); break;
-                                                case KSpread::Token::Greater:
+                                                case Calligra::Tables::Token::Greater:
                                                     codes.append(FormulaToken(FormulaToken::GT)); break;
-                                                case KSpread::Token::NotEqual:
+                                                case Calligra::Tables::Token::NotEqual:
                                                     codes.append(FormulaToken(FormulaToken::NE)); break;
-                                                case KSpread::Token::LessEqual:
+                                                case Calligra::Tables::Token::LessEqual:
                                                     codes.append(FormulaToken(FormulaToken::LE)); break;
-                                                case KSpread::Token::GreaterEqual:
+                                                case Calligra::Tables::Token::GreaterEqual:
                                                     codes.append(FormulaToken(FormulaToken::GE)); break;
                                                 default: break;
                                                 };
@@ -990,21 +990,21 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     // action: push (op2) to result
                     // e.g.  "* - 2" becomes '*'
                     if (!ruleFound)
-                        if (token.asOperator() != KSpread::Token::LeftPar)
+                        if (token.asOperator() != Calligra::Tables::Token::LeftPar)
                             if (syntaxStack.itemCount() >= 3) {
-                                KSpread::Token x = syntaxStack.top();
-                                KSpread::Token op2 = syntaxStack.top(1);
-                                KSpread::Token op1 = syntaxStack.top(2);
+                                Calligra::Tables::Token x = syntaxStack.top();
+                                Calligra::Tables::Token op2 = syntaxStack.top(1);
+                                Calligra::Tables::Token op1 = syntaxStack.top(2);
                                 if (!x.isOperator())
                                     if (op1.isOperator())
                                         if (op2.isOperator())
-                                            if ((op2.asOperator() == KSpread::Token::Plus) ||
-                                                    (op2.asOperator() == KSpread::Token::Minus)) {
+                                            if ((op2.asOperator() == Calligra::Tables::Token::Plus) ||
+                                                    (op2.asOperator() == Calligra::Tables::Token::Minus)) {
                                                 ruleFound = true;
                                                 syntaxStack.pop();
                                                 syntaxStack.pop();
                                                 syntaxStack.push(x);
-                                                if (op2.asOperator() == KSpread::Token::Minus)
+                                                if (op2.asOperator() == Calligra::Tables::Token::Minus)
                                                     codes.append(FormulaToken(FormulaToken::UMinus));
                                                 else
                                                     codes.append(FormulaToken(FormulaToken::UPlus));
@@ -1015,19 +1015,19 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                     // conditions: op is unary, op is first in syntax stack, token is not '('
                     // action: push (op) to result
                     if (!ruleFound)
-                        if (token.asOperator() != KSpread::Token::LeftPar)
+                        if (token.asOperator() != Calligra::Tables::Token::LeftPar)
                             if (syntaxStack.itemCount() == 2) {
-                                KSpread::Token x = syntaxStack.top();
-                                KSpread::Token op = syntaxStack.top(1);
+                                Calligra::Tables::Token x = syntaxStack.top();
+                                Calligra::Tables::Token op = syntaxStack.top(1);
                                 if (!x.isOperator())
                                     if (op.isOperator())
-                                        if ((op.asOperator() == KSpread::Token::Plus) ||
-                                                (op.asOperator() == KSpread::Token::Minus)) {
+                                        if ((op.asOperator() == Calligra::Tables::Token::Plus) ||
+                                                (op.asOperator() == Calligra::Tables::Token::Minus)) {
                                             ruleFound = true;
                                             syntaxStack.pop();
                                             syntaxStack.pop();
                                             syntaxStack.push(x);
-                                            if (op.asOperator() == KSpread::Token::Minus)
+                                            if (op.asOperator() == Calligra::Tables::Token::Minus)
                                                 codes.append(FormulaToken(FormulaToken::UMinus));
                                             else
                                                 codes.append(FormulaToken(FormulaToken::UPlus));
@@ -1038,7 +1038,7 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                 }
 
                 // can't apply rules anymore, push the token
-                if (token.asOperator() != KSpread::Token::Percent)
+                if (token.asOperator() != Calligra::Tables::Token::Percent)
                     syntaxStack.push(token);
             }
     }
@@ -1047,7 +1047,7 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
     valid = false;
     if (syntaxStack.itemCount() == 2)
         if (syntaxStack.top().isOperator())
-            if (syntaxStack.top().asOperator() == KSpread::Token::InvalidOp)
+            if (syntaxStack.top().asOperator() == Calligra::Tables::Token::InvalidOp)
                 if (!syntaxStack.top(1).isOperator())
                     valid = true;
 
@@ -1060,7 +1060,7 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
 }
 
 
-void ExcelExport::Private::convertStyle(const KSpread::Style& style, XFRecord& xf, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
+void ExcelExport::Private::convertStyle(const Calligra::Tables::Style& style, XFRecord& xf, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
 {
     xf.setIsStyleXF(false);
     xf.setParentStyle(0);
@@ -1068,29 +1068,29 @@ void ExcelExport::Private::convertStyle(const KSpread::Style& style, XFRecord& x
     xf.setFontIndex(fontIdx < 4 ? fontIdx : fontIdx + 1);
     // TODO: number format
     switch (style.halign()) {
-    case KSpread::Style::Left:
+    case Calligra::Tables::Style::Left:
         xf.setHorizontalAlignment(XFRecord::Left); break;
-    case KSpread::Style::Center:
+    case Calligra::Tables::Style::Center:
         xf.setHorizontalAlignment(XFRecord::Centered); break;
-    case KSpread::Style::Right:
+    case Calligra::Tables::Style::Right:
         xf.setHorizontalAlignment(XFRecord::Right); break;
-    case KSpread::Style::Justified:
+    case Calligra::Tables::Style::Justified:
         xf.setHorizontalAlignment(XFRecord::Justified); break;
-    case KSpread::Style::HAlignUndefined:
+    case Calligra::Tables::Style::HAlignUndefined:
     default:
         xf.setHorizontalAlignment(XFRecord::General); break;
     }
     xf.setTextWrap(style.wrapText());
     switch (style.valign()) {
-    case KSpread::Style::Top:
+    case Calligra::Tables::Style::Top:
         xf.setVerticalAlignment(XFRecord::Top); break;
-    case KSpread::Style::Middle:
+    case Calligra::Tables::Style::Middle:
         xf.setVerticalAlignment(XFRecord::VCentered); break;
-    case KSpread::Style::Bottom:
+    case Calligra::Tables::Style::Bottom:
         xf.setVerticalAlignment(XFRecord::Bottom); break;
-    case KSpread::Style::VDistributed:
+    case Calligra::Tables::Style::VDistributed:
         xf.setVerticalAlignment(XFRecord::VDistributed); break;
-    case KSpread::Style::VJustified:
+    case Calligra::Tables::Style::VJustified:
         xf.setVerticalAlignment(XFRecord::VJustified); break;
     default:
         xf.setVerticalAlignment(XFRecord::Bottom); break;

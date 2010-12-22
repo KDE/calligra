@@ -28,7 +28,7 @@
 #include "RowFormatStorage.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // era: encode references absolutely
 QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)

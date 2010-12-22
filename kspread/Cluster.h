@@ -28,7 +28,9 @@
 
 class QPoint;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class ColumnFormat;
@@ -342,6 +344,7 @@ private:
     bool m_autoDelete;
 };
 
-} // namespace KSpread;
+} // namespace Tables
+} // namespace Calligra
 
 #endif

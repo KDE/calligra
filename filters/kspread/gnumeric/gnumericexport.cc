@@ -38,7 +38,7 @@
 // KOffice
 #include <KoDocumentInfo.h>
 
-// KSpread
+// Calligra::Tables
 #include <kspread/ApplicationSettings.h>
 #include <kspread/part/Canvas.h>
 #include <kspread/CellStorage.h>
@@ -55,7 +55,7 @@
 #include <kspread/ValueConverter.h>
 #include <kspread/part/View.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 K_PLUGIN_FACTORY(GNUMERICExportFactory, registerPlugin<GNUMERICExport>();)
 K_EXPORT_PLUGIN(GNUMERICExportFactory("calligrafilters"))
@@ -510,7 +510,7 @@ QDomElement GNUMERICExport::GetLinkStyle(QDomDocument gnumeric_doc)
 
     link_style.setAttribute("target", path);
 
-    // KSpread doesn't support link tips.
+    // Calligra Tables doesn't support link tips.
     link_style.setAttribute("tip", "");
 
     return link_style;
@@ -633,14 +633,14 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
     else
         cell_style.setAttribute("WrapText", "0");
 
-    // ShrinkToFit not supported by KSpread (?)
+    // ShrinkToFit not supported by Calligra Tables (?)
     cell_style.setAttribute("ShrinkToFit", "0");
 
     // I'm not sure about the rotation values.
     // I never got it to work in GNumeric.
     cell_style.setAttribute("Rotation", QString::number(-1*style.angle()));
 
-    // The indentation in GNumeric is an integer value. In KSpread, it's a double.
+    // The indentation in GNumeric is an integer value. In Calligra Tables, it's a double.
     // Save the double anyway, makes it even better when importing the document back in KSpread.
     // TODO verify if it's correct, in import we "* 10.0"
     cell_style.setAttribute("Indent", QString::number(style.indentation()));
@@ -924,8 +924,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const KSpread::Doc *>(document)) {    // it's safer that way :)
-        kWarning(30521) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
+    if (!qobject_cast<const Calligra::Tables::Doc *>(document)) {    // it's safer that way :)
+        kWarning(30521) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread") {

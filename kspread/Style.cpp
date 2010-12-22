@@ -44,7 +44,7 @@
 #include "StyleManager.h"
 #include "Util.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -52,7 +52,9 @@ using namespace KSpread;
 //
 /////////////////////////////////////////////////////////////////////////////
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 static uint calculateValue(QPen const & pen)
@@ -131,7 +133,8 @@ QString SubStyle::name(Style::Key key)
 
 SharedSubStyle SharedSubStyle::s_defaultStyle(new SubStyle());
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1200,7 +1203,7 @@ QString Style::saveOdf(KoGenStyle& style, KoGenStyles& mainStyles,
     } else
         keysToStore = QSet<Key>::fromList(d->subStyles.keys());
 
-    // KSpread::Style is definitly an OASIS auto style,
+    // Calligra::Tables::Style is definitly an OASIS auto style,
     // but don't overwrite it, if it already exists
     if (style.isEmpty())
         style = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
@@ -2451,7 +2454,7 @@ bool Style::operator==(const Style& other) const
     return true;
 }
 
-uint KSpread::qHash(const Style& style)
+uint Calligra::Tables::qHash(const Style& style)
 {
     uint hash = 0;
     foreach (const SharedSubStyle& ss, style.subStyles()) {

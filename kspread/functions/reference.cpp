@@ -36,7 +36,7 @@
 
 #include <KLocale>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // prototypes (sorted alphabetically)
 Value func_address(valVector args, ValueCalc *calc, FuncExtra *);
@@ -227,7 +227,7 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
     QString ref;
     for (int i = 1; i < l; ++i) {
         if (s[i] == ',' || s[i] == ')') {
-            if (!KSpread::Region(ref).isValid())
+            if (!Calligra::Tables::Region(ref).isValid())
                 return Value::errorVALUE();
             else {
                 ++num;
@@ -351,7 +351,7 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *e)
         ref = ref;
     }
 
-    const KSpread::Region region(ref, e->sheet->map(), e->sheet);
+    const Calligra::Tables::Region region(ref, e->sheet->map(), e->sheet);
     if (!region.isValid() || !region.isSingular())
         return Value::errorVALUE();
 

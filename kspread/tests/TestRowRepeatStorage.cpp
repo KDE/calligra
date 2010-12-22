@@ -25,7 +25,7 @@
 #include "../RowRepeatStorage.h"
 #include "../kspread_limits.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 void TestRowRepeatStorage::testEmptyStorage()
 {

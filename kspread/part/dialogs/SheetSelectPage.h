@@ -22,7 +22,9 @@
 
 #include "ui_SheetSelectWidget.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class SheetSelectWidget;
 
@@ -103,6 +105,7 @@ protected slots:
     void moveBottom();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEETSELECTPAGE

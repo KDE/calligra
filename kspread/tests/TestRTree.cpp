@@ -4,7 +4,7 @@
 
 #include "TestRTree.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class TestClass : public QSharedData
 {

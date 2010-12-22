@@ -32,7 +32,7 @@
 #include <kcalendarsystem.h>
 #include <KLocale>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // prototypes, sorted
 Value func_currentDate(valVector args, ValueCalc *calc, FuncExtra *);

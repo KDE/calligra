@@ -27,7 +27,9 @@
 
 class KoShape;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 
@@ -55,6 +57,7 @@ private:
     Map* m_map;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CHART_DATABASE_SELECTOR_FACTORY

@@ -24,7 +24,7 @@
 
 #include "CellTool.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 CellToolFactory::CellToolFactory(const QString& id)
         : KoToolFactoryBase(id)

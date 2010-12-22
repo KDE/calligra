@@ -29,7 +29,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CalculationSettings;
 class Value;
@@ -112,6 +114,7 @@ private:
     const CalculationSettings* m_settings;
 };
 
-}  //namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif  //CALLIGRA_TABLES_VALUE_PARSER

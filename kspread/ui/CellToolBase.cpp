@@ -145,7 +145,7 @@
 #include "SheetModel.h"
 #endif
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 CellToolBase::CellToolBase(KoCanvasBase* canvas)
         : KoInteractionTool(canvas)
@@ -3346,7 +3346,7 @@ void CellToolBase::inspector()
 {
     // useful to inspect objects
     Cell cell(selection()->activeSheet(), selection()->marker());
-    QPointer<KSpread::Inspector> ins = new KSpread::Inspector(cell);
+    QPointer<Calligra::Tables::Inspector> ins = new Calligra::Tables::Inspector(cell);
     ins->exec();
     delete ins;
 }

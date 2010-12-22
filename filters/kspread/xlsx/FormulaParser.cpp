@@ -80,11 +80,11 @@ static void replaceFormulaReference(Cell* referencedCell, Cell* thisCell, QStrin
     const QString ref = result.mid(cellReferenceStart, cellReferenceLength);
     QRegExp rx("(|\\$)[A-Za-z]+[0-9]+");
     if (rx.exactMatch(ref)) {
-        const int c = KSpread::Util::decodeColumnLabelText(ref) + thisCell->column - referencedCell->column;
-        const int r = KSpread::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
+        const int c = Calligra::Tables::Util::decodeColumnLabelText(ref) + thisCell->column - referencedCell->column;
+        const int r = Calligra::Tables::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
         result = result.replace(cellReferenceStart,
                                 cellReferenceLength, 
-                                KSpread::Util::encodeColumnLabelText(c) + QString::number(r) );
+                                Calligra::Tables::Util::encodeColumnLabelText(c) + QString::number(r) );
     }
 }
 

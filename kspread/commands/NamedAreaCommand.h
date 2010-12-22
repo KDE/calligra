@@ -23,7 +23,9 @@
 #include "AbstractRegionCommand.h"
 #include "Region.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -57,6 +59,7 @@ private:
     Region m_oldArea;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_NAMED_AREA_COMMAND

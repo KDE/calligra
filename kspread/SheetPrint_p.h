@@ -24,7 +24,9 @@
 
 #include <QList>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class HeaderFooter;
 class Sheet;
@@ -157,6 +159,7 @@ public:
     int m_maxCheckedNewPageY;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_PRINT_P

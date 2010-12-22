@@ -163,7 +163,7 @@
 #include "interfaces/ViewAdaptor.h"
 #include <QtDBus/QtDBus>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class ViewActions;
 
@@ -930,7 +930,7 @@ void View::initConfig()
     doc()->map()->settings()->setShowRowHeader(parameterGroup.readEntry("Row Header", true));
     if (!configFromDoc)
         doc()->map()->settings()->setCompletionMode((KGlobalSettings::Completion)parameterGroup.readEntry("Completion Mode", (int)(KGlobalSettings::CompletionAuto)));
-    doc()->map()->settings()->setMoveToValue((KSpread::MoveTo)parameterGroup.readEntry("Move", (int)(Bottom)));
+    doc()->map()->settings()->setMoveToValue((Calligra::Tables::MoveTo)parameterGroup.readEntry("Move", (int)(Bottom)));
     doc()->map()->settings()->setIndentValue(parameterGroup.readEntry("Indent", 10.0));
     doc()->map()->settings()->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc", (int)(SumOfNumber)));
     if (!configFromDoc)
@@ -1770,7 +1770,7 @@ void View::slotRename()
 //
 //------------------------------------------------
 
-void View::slotChangeSelection(const KSpread::Region& changedRegion)
+void View::slotChangeSelection(const Calligra::Tables::Region& changedRegion)
 {
     if (!changedRegion.isValid())
         return;
@@ -1799,7 +1799,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     d->canvas->validateSelection();
 }
 
-void View::slotScrollChoice(const KSpread::Region& changedRegion)
+void View::slotScrollChoice(const Calligra::Tables::Region& changedRegion)
 {
     if (!selection()->referenceSelectionMode() || !changedRegion.isValid()) {
         return;

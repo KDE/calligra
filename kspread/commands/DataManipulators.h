@@ -26,7 +26,9 @@
 #include "Style.h"
 #include "Value.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -244,6 +246,7 @@ private:
     Mode m_mode;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif  // CALLIGRA_TABLES_DATA_MANIPULATORS

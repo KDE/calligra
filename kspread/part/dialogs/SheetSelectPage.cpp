@@ -28,7 +28,7 @@
 // KOffice includes
 // KSpread includes
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 SheetSelectPage::SheetSelectPage(QWidget *parent)
         : QWidget(parent)

@@ -38,7 +38,9 @@
 #include "Style.h"
 #include "Value.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class Inspector::Private
@@ -59,9 +61,10 @@ public:
     void handleDep();
 };
 
-}
+} // namespace Tables
+} // namespace Calligra
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 static QString boolAsString(bool b)
 {

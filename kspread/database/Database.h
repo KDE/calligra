@@ -32,7 +32,9 @@ class QWidget;
 
 class KoXmlWriter;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class Filter;
@@ -135,9 +137,10 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_METATYPE(KSpread::Database)
-Q_DECLARE_TYPEINFO(KSpread::Database, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Tables::Database)
+Q_DECLARE_TYPEINFO(Calligra::Tables::Database, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_DATABASE

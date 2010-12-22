@@ -23,7 +23,9 @@
 #include <QtGui>
 #include <QtTest/QtTest>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestValue: public QObject
@@ -43,6 +45,7 @@ private Q_SLOTS:
     void testAssignment();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_VALUE

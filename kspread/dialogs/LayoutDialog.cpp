@@ -77,7 +77,7 @@
 #include "commands/StyleCommand.h"
 #include "commands/RowColumnManipulators.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 /***************************************************************************
  *

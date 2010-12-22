@@ -23,7 +23,7 @@
 #include <QCache>
 #include <QRect>
 #include <QPainter>
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 #include <QMutex>
 #include <QMutexLocker>
 #endif
@@ -37,7 +37,7 @@
 #include "RowFormatStorage.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 struct CellPaintData
 {
@@ -55,7 +55,7 @@ class SheetView::Private
 {
 public:
     Private()
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
         : cacheMutex(QMutex::Recursive)
 #endif
     {}
@@ -63,7 +63,7 @@ public:
     const KoViewConverter* viewConverter;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutex cacheMutex;
 #endif
     QRegion cachedArea;
@@ -73,7 +73,7 @@ public:
 
 public:
     Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells, const QRect& visRect);
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     CellView cellViewToProcess(Cell& cell, QPointF& coordinate, QSet<Cell>& processedObscuredCells,
                                SheetView* sheetView, const QRect& visRect);
 #else
@@ -109,7 +109,7 @@ Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
     return cell;
 }
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 CellView SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
         QSet<Cell>& processedObscuredCells, SheetView* sheetView, const QRect& visRect)
 #else
@@ -119,7 +119,7 @@ const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coord
 {
     const int col = cell.column();
     const int row = cell.row();
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     CellView cellView = sheetView->cellView(col, row);
 #else
     const CellView& cellView = sheetView->cellView(col, row);
@@ -185,7 +185,7 @@ const KoViewConverter* SheetView::viewConverter() const
     return d->viewConverter;
 }
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 CellView SheetView::cellView(int col, int row)
 #else
 const CellView& SheetView::cellView(int col, int row)
@@ -193,7 +193,7 @@ const CellView& SheetView::cellView(int col, int row)
 {
     Q_ASSERT(1 <= col && col <= KS_colMax);
     Q_ASSERT(1 <= row && col <= KS_rowMax);
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     if (!d->cache.contains(QPoint(col, row))) {
@@ -201,7 +201,7 @@ const CellView& SheetView::cellView(int col, int row)
         d->cache.insert(QPoint(col, row), v);
         d->cachedArea += QRect(col, row, 1, 1);
     }
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     CellView v = *d->cache.object(QPoint(col, row));
     return v;
 #else
@@ -211,7 +211,7 @@ const CellView& SheetView::cellView(int col, int row)
 
 void SheetView::setPaintCellRange(const QRect& rect)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     d->visibleRect = rect & QRect(1, 1, KS_colMax, KS_rowMax);
@@ -234,7 +234,7 @@ void SheetView::invalidateRegion(const Region& region)
 
 void SheetView::invalidate()
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     delete d->defaultCellView;
@@ -402,7 +402,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
 void SheetView::invalidateRange(const QRect& range)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     const int right  = range.right();
@@ -429,7 +429,7 @@ void SheetView::invalidateRange(const QRect& range)
 
 void SheetView::obscureCells(const QRect& range, const QPoint& position)
 {
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
     const int right = range.right();
@@ -444,7 +444,7 @@ void SheetView::obscureCells(const QRect& range, const QPoint& position)
     }
 }
 
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
 CellView SheetView::defaultCellView() const
 #else
 const CellView& SheetView::defaultCellView() const

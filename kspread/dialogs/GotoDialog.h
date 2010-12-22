@@ -29,7 +29,9 @@
 
 class KComboBox;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -53,6 +55,7 @@ protected:
     KComboBox* m_nameCell;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_GOTO_DIALOG

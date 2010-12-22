@@ -24,7 +24,9 @@
 
 #include <QObject>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class Map;
@@ -126,6 +128,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_RECALC_MANAGER

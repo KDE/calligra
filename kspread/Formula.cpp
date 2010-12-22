@@ -78,7 +78,9 @@ TODO - optimizations:
 - expression optimization (e.g. 1+2+A1 becomes 3+A1)
 */
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class Opcode
@@ -101,11 +103,11 @@ public:
 struct stackEntry {
     void reset() {
         row1 = col1 = row2 = col2 = -1;
-        reg = KSpread::Region();
+        reg = Calligra::Tables::Region();
         regIsNamedOrLabeled = false;
     }
     Value val;
-    KSpread::Region reg;
+    Calligra::Tables::Region reg;
     bool regIsNamedOrLabeled;
     int row1, col1, row2, col2;
 };
@@ -139,16 +141,17 @@ private:
     unsigned topIndex;
 };
 
-}
+} // namespace Tables
+} // namespace Calligra
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // for null token
 const Token Token::null;
 
 // helper function: return operator of given token text
 // e.g. '*' yields Operator::Asterisk, and so on
-Token::Op KSpread::matchOperator(const QString& text)
+Token::Op Calligra::Tables::matchOperator(const QString& text)
 {
     Token::Op result = Token::InvalidOp;
 
@@ -427,7 +430,7 @@ void TokenStack::ensureSpace()
  **********************/
 
 // helper function: return true for valid identifier character
-bool KSpread::isIdentifier(QChar ch)
+bool Calligra::Tables::isIdentifier(QChar ch)
 {
     return (ch.unicode() == '_') || (ch.unicode() == '$') || (ch.unicode() == '.') || (ch.isLetter());
 }

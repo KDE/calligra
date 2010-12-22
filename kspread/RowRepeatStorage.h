@@ -24,7 +24,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -53,6 +55,7 @@ private:
     QMap<int, int> m_data;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // ROWREPEATSTORAGE_H

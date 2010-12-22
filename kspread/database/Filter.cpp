@@ -33,7 +33,7 @@
 #include "Value.h"
 #include "ValueConverter.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class AbstractCondition
 {

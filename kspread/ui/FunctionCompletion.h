@@ -28,7 +28,9 @@
 
 class QListWidgetItem;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellEditor;
 
@@ -83,6 +85,7 @@ private:
     FunctionCompletion& operator=(const FunctionCompletion&);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FUNCTION_COMPLETION

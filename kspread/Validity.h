@@ -50,7 +50,9 @@
 
 #include "KoXmlReaderForward.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class OdfLoadingContext;
 class ValueConverter;
@@ -195,9 +197,10 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_METATYPE(KSpread::Validity)
-Q_DECLARE_TYPEINFO(KSpread::Validity, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Tables::Validity)
+Q_DECLARE_TYPEINFO(Calligra::Tables::Validity, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_VALIDITY

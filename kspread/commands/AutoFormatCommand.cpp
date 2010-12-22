@@ -28,7 +28,7 @@
 
 #include <QPen>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 AutoFormatCommand::AutoFormatCommand()
 {

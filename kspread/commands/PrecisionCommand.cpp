@@ -28,7 +28,7 @@
 #include "Sheet.h"
 #include "Style.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 PrecisionCommand::PrecisionCommand()
         : AbstractRegionCommand()

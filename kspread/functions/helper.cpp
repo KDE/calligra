@@ -68,7 +68,7 @@ void subMonths( QDate & date, int months )
 
 */
 
-int KSpread::daysPerYear(QDate const & date, int basis)
+int Calligra::Tables::daysPerYear(QDate const & date, int basis)
 {
     switch (basis) {
     case 0:
@@ -90,7 +90,7 @@ int KSpread::daysPerYear(QDate const & date, int basis)
     return -1;
 }
 
-int KSpread::daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
+int Calligra::Tables::daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
 {
     int day1, day2, month1, month2, year1, year2;
     bool isLeapYear = false;
@@ -136,7 +136,7 @@ int KSpread::daysBetweenDates(QDate const & date1, QDate const & date2, int basi
 }
 
 // the days360 method does implement the 30/360days method as used in e.g. the YEARFRAC function
-int KSpread::days360(int day1, int month1, int year1, bool leapYear1,
+int Calligra::Tables::days360(int day1, int month1, int year1, bool leapYear1,
                      int day2, int month2, int year2, bool leapYear2,
                      bool usaMethod)
 {
@@ -169,7 +169,7 @@ int KSpread::days360(int day1, int month1, int year1, bool leapYear1,
 
 
 // days360
-int KSpread::days360(const QDate& _date1, const QDate& _date2, bool european)
+int Calligra::Tables::days360(const QDate& _date1, const QDate& _date2, bool european)
 {
     int day1, month1, year1, day2, month2, year2;
 
@@ -188,7 +188,7 @@ int KSpread::days360(const QDate& _date1, const QDate& _date2, bool european)
 
 
 // // days360
-// int KSpread::days360( const QDate& _date1, const QDate& _date2, bool european )
+// int Calligra::Tables::days360( const QDate& _date1, const QDate& _date2, bool european )
 // {
 //   int day1, day2;
 //   int month1, month2;
@@ -242,7 +242,7 @@ int KSpread::days360(const QDate& _date1, const QDate& _date2, bool european)
 // }
 
 // yearFrac
-long double KSpread::yearFrac(const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis)
+long double Calligra::Tables::yearFrac(const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis)
 {
     QDate date1 = startDate;
     QDate date2 = endDate;
@@ -322,7 +322,7 @@ long double KSpread::yearFrac(const QDate& refDate, const QDate& startDate, cons
 }
 
 // pow1p calculate (1+x)^y accurately
-long double KSpread::pow1p(const long double& x, const long double& y)
+long double Calligra::Tables::pow1p(const long double& x, const long double& y)
 {
     if (fabs(x) > 0.5)
         return pow(1 + x, y);
@@ -331,7 +331,7 @@ long double KSpread::pow1p(const long double& x, const long double& y)
 }
 
 // pow1pm1 calculate ((1+x)^y)-1 accurately
-long double KSpread::pow1pm1(const long double& x, const long double& y)
+long double Calligra::Tables::pow1pm1(const long double& x, const long double& y)
 {
     if (x <= -1)
         return pow(1 + x, y) - 1;
@@ -339,7 +339,7 @@ long double KSpread::pow1pm1(const long double& x, const long double& y)
         return expm1(y * log1p(x));
 }
 
-long double KSpread::duration(const QDate& refDate, const QDate& settlement, const QDate& maturity,
+long double Calligra::Tables::duration(const QDate& refDate, const QDate& settlement, const QDate& maturity,
                               const long double& coup_, const long double& yield_, const int& freq, const int& basis, const long double& numOfCoups)
 {
     long double yield = yield_;

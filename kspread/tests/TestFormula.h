@@ -24,7 +24,9 @@
 #include <QtTest/QtTest>
 #include <Value.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestFormula: public QObject
@@ -49,6 +51,7 @@ private:
     Value evaluate(const QString&, Value&);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_FORMULA

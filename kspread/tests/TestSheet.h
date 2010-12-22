@@ -21,7 +21,9 @@
 
 #include <QtTest/QtTest>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class Doc;
@@ -43,6 +45,7 @@ private:
     Doc* m_doc;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_TEST

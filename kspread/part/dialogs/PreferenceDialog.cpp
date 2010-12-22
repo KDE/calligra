@@ -62,7 +62,7 @@
 #include "ui_FileOptionsWidget.h"
 #include "ui_InterfaceOptionsWidget.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class PreferenceDialog::Private
 {

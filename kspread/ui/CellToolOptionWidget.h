@@ -24,7 +24,9 @@
 
 class QToolButton;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellToolBase;
 class ExternalEditor;
@@ -78,6 +80,7 @@ private:
     Private *const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_TOOL_OPTION_WIDGET

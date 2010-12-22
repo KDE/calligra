@@ -36,7 +36,7 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class RegionSelector::Private
 {

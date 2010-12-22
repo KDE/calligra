@@ -25,7 +25,9 @@
 
 #define CALLIGRA_TABLES_CALENDAR_TOOL_ID "KSpreadCalendarToolId"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class CalendarToolFactory : public QObject, public CellToolFactory
@@ -38,6 +40,7 @@ public:
     KoToolBase* createTool(KoCanvasBase* canvas);
 };
 
-} // namespace
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CALENDAR_TOOL_FACTORY

@@ -25,7 +25,9 @@
 class QRect;
 class QSizeF;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class PrintSettings;
 class Sheet;
@@ -97,6 +99,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PAGE_MANAGER

@@ -30,7 +30,7 @@
 #include <QStack>
 #include <QVariantList>
 
-// namespace KSpread
+// namespace Calligra::Tables
 // {
 // class Sheet;
 // }

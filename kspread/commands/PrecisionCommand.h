@@ -22,7 +22,9 @@
 
 #include "AbstractRegionCommand.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -41,6 +43,7 @@ protected:
     virtual bool postProcessing();
 };
 
-}  // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PRECISION_COMMAND

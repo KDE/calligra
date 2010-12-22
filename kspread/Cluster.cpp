@@ -28,7 +28,7 @@
 #include "Cell.h"
 #include "RowColumnFormat.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 #if 0
 /****************************************************

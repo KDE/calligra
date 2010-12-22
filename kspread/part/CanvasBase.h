@@ -53,7 +53,9 @@ class QPainter;
 class KoPointerEvent;
 class KoZoomHandler;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Canvas;
 class ColumnHeader;
@@ -101,7 +103,7 @@ public:
     /**
      * @return the usual selection of cells
      */
-    virtual KSpread::Selection* selection() const = 0;
+    virtual Calligra::Tables::Selection* selection() const = 0;
 
     QPointF offset() const;
 
@@ -211,6 +213,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CANVAS

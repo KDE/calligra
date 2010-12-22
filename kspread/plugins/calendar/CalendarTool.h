@@ -22,7 +22,9 @@
 
 #include <part/CellTool.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class CalendarTool : public CellTool
@@ -54,6 +56,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CALENDAR_TOOL

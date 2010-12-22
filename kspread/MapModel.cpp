@@ -28,7 +28,7 @@
 
 #include <KIcon>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class MapModel::Private
 {

@@ -45,14 +45,14 @@
                                      cell.comment().contains(m_searchString, exactMatch) ||\
                                      cell.link().contains(m_searchString,exactMatch)
 
-using KSpread::CellEditorBase;
-using KSpread::CellStorage;
-using KSpread::Sheet;
-using KSpread::Cell;
-using KSpread::Style;
+using Calligra::Tables::CellEditorBase;
+using Calligra::Tables::CellStorage;
+using Calligra::Tables::Sheet;
+using Calligra::Tables::Cell;
+using Calligra::Tables::Style;
 
 FoCellTool::FoCellTool(KoCanvasBase* canvas)
-    : KSpread::CellTool(canvas),
+    : Calligra::Tables::CellTool(canvas),
       m_editor(0),
       m_currentfindPosition(0),
       m_searchCaseSensitive(false)
@@ -119,7 +119,7 @@ bool FoCellTool::isFontUnderline() {
     return style.underline();
 }
 
-KSpread::CellEditorBase* FoCellTool::editor() const
+Calligra::Tables::CellEditorBase* FoCellTool::editor() const
 {
    return m_editor;
 }
@@ -243,7 +243,7 @@ void FoCellTool::deleteEditor(bool saveChanges, bool expandMatrix)
 
 void FoCellTool::keyPressEvent(QKeyEvent *event)
 {
-    KSpread::CellTool::keyPressEvent(event);
+    Calligra::Tables::CellTool::keyPressEvent(event);
     /*if(event->key() == Qt::Key_Up ||
        event->key() == Qt::Key_Down ||
        event->key() == Qt::Key_Left ||
@@ -257,7 +257,7 @@ void FoCellTool::keyPressEvent(QKeyEvent *event)
 
 void FoCellTool::mousePressEvent(KoPointerEvent* event)
 {
-    KSpread::CellTool::mousePressEvent(event);
+    Calligra::Tables::CellTool::mousePressEvent(event);
     /* cancelCurrentStrategy();
     scrollToCell(selection()->cursor());
     createEditor(false);*/
@@ -275,7 +275,7 @@ void FoCellTool::slotSearchTextChanged(const QString &text)
 
 void FoCellTool::initializeFind()
 {
-    KSpread::Sheet * currentSheet = selection()->activeSheet();
+    Calligra::Tables::Sheet * currentSheet = selection()->activeSheet();
     QRect filledRect = currentSheet->usedArea(true);
     m_matchedPosition.clear();
     m_currentfindPosition=-1;
@@ -290,9 +290,9 @@ int FoCellTool::find()
 {
     //search row wise i.e reading order
     int row=m_findArea.left();
-    KSpread::Sheet * currentSheet = selection()->activeSheet();
+    Calligra::Tables::Sheet * currentSheet = selection()->activeSheet();
     while(row<=m_findArea.bottom()) {
-        KSpread::Cell cell = currentSheet->cellStorage()->firstInRow(row);
+        Calligra::Tables::Cell cell = currentSheet->cellStorage()->firstInRow(row);
         if(cell.isNull()) {
             row++;
             continue;
@@ -322,7 +322,7 @@ void FoCellTool::slotHighlight(QPoint goToCell)
 {
     //here we select the cell where the string was found.
     selection()->initialize(goToCell);
-    KSpread::CellToolBase::scrollToCell(goToCell);
+    Calligra::Tables::CellToolBase::scrollToCell(goToCell);
 }
 
 void FoCellTool::findNext()

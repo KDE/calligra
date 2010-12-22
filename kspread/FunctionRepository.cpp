@@ -34,7 +34,7 @@
 #include <KGlobal>
 #include <klocale.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class FunctionRepository::Private
 {

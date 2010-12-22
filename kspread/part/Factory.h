@@ -27,7 +27,9 @@
 class KAboutData;
 class KIconLoader;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class CALLIGRA_TABLES_EXPORT Factory : public KPluginFactory
@@ -49,6 +51,7 @@ private:
     static KAboutData* s_aboutData;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

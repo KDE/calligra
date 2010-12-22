@@ -44,7 +44,7 @@
 #include <kdebug.h>
 #include <qdom.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -571,7 +571,7 @@ bool Conditions::operator==(const Conditions& other) const
     return true;
 }
 
-uint KSpread::qHash(const Conditions &c)
+uint Calligra::Tables::qHash(const Conditions &c)
 {
     uint res = 0;
     foreach (const Conditional& co, c.conditionList()) {
@@ -580,7 +580,7 @@ uint KSpread::qHash(const Conditions &c)
     return res;
 }
 
-uint KSpread::qHash(const Conditional& c)
+uint Calligra::Tables::qHash(const Conditional& c)
 {
     return qHash(c.value1);
 }

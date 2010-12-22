@@ -80,7 +80,7 @@
 #include <QPainter>
 #include <QToolButton>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 void CellToolBase::Private::updateEditor(const Cell& cell)
 {
@@ -206,7 +206,7 @@ void CellToolBase::Private::processEnterKey(QKeyEvent* event)
     /* use the configuration setting to see which direction we're supposed to move
         when enter is pressed.
     */
-    KSpread::MoveTo direction = q->selection()->activeSheet()->map()->settings()->moveToValue();
+    Calligra::Tables::MoveTo direction = q->selection()->activeSheet()->map()->settings()->moveToValue();
 
 //if shift Button clicked inverse move direction
     if (event->modifiers() & Qt::ShiftModifier) {
@@ -251,7 +251,7 @@ void CellToolBase::Private::processArrowKey(QKeyEvent *event)
     /* save changes to the current editor */
     q->selection()->emitCloseEditor(true);
 
-    KSpread::MoveTo direction = Bottom;
+    Calligra::Tables::MoveTo direction = Bottom;
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
     switch (event->key()) {
@@ -795,7 +795,7 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     return true;
 }
 
-QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool extendSelection)
+QRect CellToolBase::Private::moveDirection(Calligra::Tables::MoveTo direction, bool extendSelection)
 {
     kDebug(36005) << "Canvas::moveDirection";
 
@@ -903,7 +903,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
     QPen pen(QApplication::palette().text().color(), q->canvas()->viewConverter()->viewToDocumentX(2.0));
     painter.setPen(pen);
 
-    const KSpread::Selection* selection = q->selection();
+    const Calligra::Tables::Selection* selection = q->selection();
     const QRect currentRange = selection->extendToMergedAreas(QRect(selection->anchor(), selection->marker()));
     Region::ConstIterator end(selection->constEnd());
     for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {

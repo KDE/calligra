@@ -26,7 +26,7 @@
 #include "ConditionsStorage.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 CondtionCommand::CondtionCommand()
         : AbstractRegionCommand()

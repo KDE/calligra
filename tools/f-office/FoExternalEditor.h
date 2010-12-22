@@ -28,13 +28,13 @@
 
 #include "ui/CellToolBase.h"
 
-namespace KSpread
+namespace Calligra { namespace Tables {
 {
     class CellToolBase;
     class CellEditorBase;
-}
-using KSpread::CellEditorBase;
-using KSpread::CellToolBase;
+} }
+using Calligra::Tables::CellEditorBase;
+using Calligra::Tables::CellToolBase;
 
 class FoExternalEditor : public QTextEdit
 {
@@ -43,7 +43,7 @@ public:
     FoExternalEditor(QWidget* parent = 0);
     ~FoExternalEditor();
 
-    void setCellTool(KSpread::CellToolBase* cellTool);
+    void setCellTool(Calligra::Tables::CellToolBase* cellTool);
     void insertOperator(QString opreatorCharacter);
 
 Q_SIGNALS:
@@ -65,7 +65,7 @@ private slots:
     void slotCursorPositionChanged();
 
 private:
-    KSpread::CellToolBase* cellTool;
+    Calligra::Tables::CellToolBase* cellTool;
     bool isArray;
 };
 

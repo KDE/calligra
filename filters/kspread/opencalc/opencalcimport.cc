@@ -64,7 +64,7 @@
 
 #define SECSPERDAY (24 * 60 * 60)
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 K_PLUGIN_FACTORY(OpenCalcImportFactory, registerPlugin<OpenCalcImport>();)
 K_EXPORT_PLUGIN(OpenCalcImportFactory("kspreadopencalcimport","calligrafilters"))
@@ -102,7 +102,7 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)
 
     translation = range;
 
-    const KSpread::Region region(range);
+    const Calligra::Tables::Region region(range);
     table = region.firstSheet()->sheetName();
     topLeft = region.firstRange().topLeft();
     botRight = region.firstRange().bottomRight();
@@ -117,7 +117,7 @@ OpenCalcImport::OpenCalcImport(QObject* parent, const QVariantList &)
 OpenCalcImport::~OpenCalcImport()
 {
     foreach(KoXmlElement* style, m_styles) delete style;
-    foreach(KSpread::Style* style, m_defaultStyles) delete style;
+    foreach(Calligra::Tables::Style* style, m_defaultStyles) delete style;
     foreach(QString* format, m_formats) delete format;
 }
 
@@ -184,7 +184,7 @@ bool OpenCalcImport::readRowFormat(KoXmlElement & rowNode, KoXmlElement * rowSty
     if (height != -1)
         table->rowFormats()->setRowHeight(row, row+number-1, height);
     for (int i = 0; i < number; ++i) {
-        table->cellStorage()->setStyle(KSpread::Region(QRect(1, row, KS_colMax, 1)), layout);
+        table->cellStorage()->setStyle(Calligra::Tables::Region(QRect(1, row, KS_colMax, 1)), layout);
 
 
         // if ( insertPageBreak ) TODO:
@@ -459,7 +459,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
             Style * layout = m_defaultStyles[psName];
 
             if (layout)
-                table->cellStorage()->setStyle(KSpread::Region(QPoint(columns, row)), *layout);
+                table->cellStorage()->setStyle(Calligra::Tables::Region(QPoint(columns, row)), *layout);
         }
         if (e.hasAttributeNS(ooNS::table, "formula")) {
             isFormula = true;
@@ -792,10 +792,10 @@ bool OpenCalcImport::readRowsAndCells(KoXmlElement & content, Sheet * table)
             table->rowFormats()->setHidden(backupRow, backupRow, true);
 
         for (i = 1; i < number; ++i) {
-            // FIXME KSPREAD_NEW_STYLE_STORAGE
+            // FIXME CALLIGRA_TABLES_NEW_STYLE_STORAGE
 //       layout = table->nonDefaultRowFormat( backupRow + i );
 //
-//       table->setStyle( KSpread::Region(QRect(1,backupRow + i,KS_colMax,1)), srcLayout );
+//       table->setStyle( Calligra::Tables::Region(QRect(1,backupRow + i,KS_colMax,1)), srcLayout );
 
             /*
              * TODO: Test: do we need to copy the cells, too?
@@ -931,7 +931,7 @@ bool OpenCalcImport::readColLayouts(KoXmlElement & content, Sheet * table)
             ColumnFormat * col = new ColumnFormat();
             col->setSheet(table);
             col->setColumn(column);
-            table->cellStorage()->setStyle(KSpread::Region(QRect(column, 1, 1, KS_rowMax)), styleLayout);
+            table->cellStorage()->setStyle(Calligra::Tables::Region(QRect(column, 1, 1, KS_rowMax)), styleLayout);
             if (width != -1.0)
                 col->setWidth(width);
 
@@ -1292,7 +1292,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
             OpenCalcPoint point(range);
 
             kDebug(30518) << "Print range:" << point.translation;
-            const KSpread::Region region(point.translation);
+            const Calligra::Tables::Region region(point.translation);
 
             kDebug(30518) << "Print table:" << region.firstSheet()->sheetName();
 
@@ -1381,7 +1381,7 @@ void OpenCalcImport::loadOasisAreaName(const KoXmlElement&body)
             OpenCalcPoint point(areaPoint);
             kDebug(30518) << "Area:" << point.translation;
 
-            const KSpread::Region region(point.translation);
+            const Calligra::Tables::Region region(point.translation);
 
             m_doc->map()->namedAreaManager()->insert(region, name);
             kDebug(30518) << "Area range:" << region.name();
@@ -2289,8 +2289,8 @@ KoFilter::ConversionStatus OpenCalcImport::convert(QByteArray const & from, QByt
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const KSpread::Doc *>(document)) {     // it's safer that way :)
-        kWarning(30518) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
+    if (!qobject_cast<const Calligra::Tables::Doc *>(document)) {     // it's safer that way :)
+        kWarning(30518) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
 

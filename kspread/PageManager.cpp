@@ -25,7 +25,7 @@
 #include "RowFormatStorage.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class PageManager::Private
 {

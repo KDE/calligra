@@ -22,7 +22,9 @@
 
 #include <QDomDocument>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Region;
 
@@ -58,6 +60,7 @@ QDomDocument saveAsHtml(const Region& region);
 QString saveAsCSV(const Region& region);
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_COPY_COMMAND

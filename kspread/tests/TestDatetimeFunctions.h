@@ -25,7 +25,9 @@
 
 #include <Value.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestDatetimeFunctions: public QObject
@@ -71,6 +73,7 @@ private:
     Value evaluate(const QString&, Value& ex);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_DATETIME_FUNCTIONS

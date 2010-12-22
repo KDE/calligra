@@ -25,7 +25,9 @@
 #include "AbstractRegionCommand.h"
 #include "Style.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -50,6 +52,7 @@ private:
     QList< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
-}  // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_BORDER_COLOR_COMMAND

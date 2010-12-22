@@ -39,7 +39,7 @@
 #include "Sheet.h"
 #include "Util.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)

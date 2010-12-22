@@ -33,7 +33,7 @@
 #include <QApplication>
 #include <QTextEdit>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class FormulaEditorHighlighter::Private
 {

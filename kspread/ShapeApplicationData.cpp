@@ -19,7 +19,7 @@
 
 #include "ShapeApplicationData.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class ShapeApplicationData::Private
 {

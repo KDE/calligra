@@ -29,7 +29,9 @@ class QCheckBox;
 class QPushButton;
 class KComboBox;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -121,6 +123,7 @@ private:
     FindOption *m_findOptions;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FIND_DIALOG

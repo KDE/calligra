@@ -25,7 +25,7 @@
 
 #include "BenchmarkPointStorage.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 void PointStorageBenchmark::testInsertionPerformance_loadingLike()
 {

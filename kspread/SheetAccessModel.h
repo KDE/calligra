@@ -21,10 +21,12 @@
 
 #include "Sheet.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
-    class Damage;
+class Damage;
 class Map;
 class Sheet;
 
@@ -65,4 +67,5 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra

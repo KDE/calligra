@@ -27,7 +27,7 @@
 
 #include <QAbstractItemModel>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class BindingManager::Private
 {

@@ -27,7 +27,9 @@
 
 #include <kpagedialog.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -58,6 +60,7 @@ private:
     Private * const d;
 };
 
-} // namepsace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif /* LINK_DIALOG */

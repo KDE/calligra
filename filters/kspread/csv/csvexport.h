@@ -27,10 +27,13 @@
 #include <KoFilter.h>
 #include <QVariantList>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 class Doc;
+}
 }
 
 class CSVExport : public KoFilter
@@ -44,7 +47,7 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray & from, const QByteArray & to);
 
 private:
-    QString exportCSVCell(const KSpread::Doc* doc, KSpread::Sheet const * const sheet,
+    QString exportCSVCell(const Calligra::Tables::Doc* doc, Calligra::Tables::Sheet const * const sheet,
                           int col, int row, QChar const & textQuote, QChar csvDelimiter);
 
 private:

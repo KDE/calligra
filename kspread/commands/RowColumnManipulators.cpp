@@ -36,7 +36,7 @@
 #include "Sheet.h"
 #include "Value.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 /***************************************************************************
   class ResizeColumnManipulator
@@ -616,7 +616,7 @@ bool InsertDeleteColumnManipulator::process(Element* element)
     return true;
 }
 
-bool elementLeftColumnLessThan(const KSpread::Region::Element *e1, const KSpread::Region::Element *e2)
+bool elementLeftColumnLessThan(const Calligra::Tables::Region::Element *e1, const Calligra::Tables::Region::Element *e2)
 {
     return e1->rect().left() < e2->rect().left();
 }
@@ -739,7 +739,7 @@ bool InsertDeleteRowManipulator::process(Element* element)
     return true;
 }
 
-bool elementTopRowLessThan(const KSpread::Region::Element *e1, const KSpread::Region::Element *e2)
+bool elementTopRowLessThan(const Calligra::Tables::Region::Element *e1, const Calligra::Tables::Region::Element *e2)
 {
     return e1->rect().top() < e2->rect().top();
 }

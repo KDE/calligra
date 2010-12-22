@@ -37,7 +37,9 @@
 
 using namespace std;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CalculationSettings;
 class ValueStorage;
@@ -507,24 +509,25 @@ private:
 
 uint qHash(const Value& value);
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_METATYPE(KSpread::Value)
-Q_DECLARE_TYPEINFO(KSpread::Value, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Tables::Value)
+Q_DECLARE_TYPEINFO(Calligra::Tables::Value, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
   QTextStream support
 ****************************************************************************/
 
-CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, KSpread::Value::Type type);
-CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, KSpread::Value value);
+CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value::Type type);
+CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value value);
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::Value& v);
-QDebug operator<<(QDebug stream, const KSpread::Value::Format& f);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Value& v);
+QDebug operator<<(QDebug stream, const Calligra::Tables::Value::Format& f);
 
 #endif // CALLIGRA_TABLES_VALUE_H

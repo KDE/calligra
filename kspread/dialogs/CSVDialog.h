@@ -26,7 +26,9 @@
 
 #include <KoCsvImportDialog.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -67,6 +69,7 @@ private:
     QString m_filename;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CVSDIALOG_H

@@ -36,7 +36,7 @@
 #include "DocBase.h"
 #include "SheetAccessModel.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class ChartDatabaseSelector::Private
 {

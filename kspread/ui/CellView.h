@@ -44,7 +44,9 @@
 class QFontMetricsF;
 class QRectF;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class Sheet;
@@ -328,8 +330,9 @@ protected:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CellView::Borders)
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_TYPEINFO(KSpread::CellView, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Tables::CellView, Q_MOVABLE_TYPE);
 
 #endif

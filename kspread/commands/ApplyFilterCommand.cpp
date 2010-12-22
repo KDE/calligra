@@ -31,7 +31,7 @@
 #include "database/Database.h"
 #include "database/Filter.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 ApplyFilterCommand::ApplyFilterCommand()
         : AbstractRegionCommand()

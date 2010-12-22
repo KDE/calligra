@@ -30,7 +30,7 @@
 #include <QTextCodec>
 #include <QValidator>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 CSVExportDialog::CSVExportDialog(QWidget * parent)
         : KDialog(parent),

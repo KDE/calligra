@@ -29,7 +29,9 @@
 
 class QDomElement;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean, KSpread_Any };
@@ -118,6 +120,7 @@ private:
     QList<FunctionParameter> m_params;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FUNCTION_DESCRIPTION

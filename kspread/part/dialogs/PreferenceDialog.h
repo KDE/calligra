@@ -34,7 +34,9 @@ namespace Sonnet
 class ConfigWidget;
 }
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class View;
 
@@ -72,6 +74,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PREFERENCE_DIALOG

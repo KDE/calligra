@@ -23,7 +23,7 @@
 
 #include "Value.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class Function::Private
 {

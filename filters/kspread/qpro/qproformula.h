@@ -21,7 +21,9 @@
 
 #include <qpro/formula.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 namespace QuattroPro
 {
@@ -33,6 +35,7 @@ public:
     ~Formula();
 };
 
+}
 }
 }
 

@@ -95,7 +95,9 @@
 #include "ValueConverter.h"
 #include "ValueStorage.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 template<typename T> class IntervalMap
@@ -1411,7 +1413,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     QPointer<KoUpdater> updater;
     if (doc() && doc()->progressUpdater()) {
         updater = doc()->progressUpdater()->startSubtask(1,
-                                                     "KSpread::Sheet::loadOdf");
+                                                     "Calligra::Tables::Sheet::loadOdf");
         updater->setProgress(0);
     }
 
@@ -3100,7 +3102,7 @@ bool Sheet::loadChildren(KoStore* _store)
 #if 0 // CALLIGRA_TABLES_KOPART_EMBEDDING
     foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
         if (object->sheet() == this && (object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART)) {
-            kDebug() << "KSpreadSheet::loadChildren";
+            kDebug() << "Calligra::Tables::Sheet::loadChildren";
             if (!dynamic_cast<EmbeddedKOfficeObject*>(object)->embeddedObject()->loadDocument(_store))
                 return false;
         }
@@ -3348,6 +3350,7 @@ void Sheet::printDebug()
 }
 #endif
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #include "Sheet.moc"

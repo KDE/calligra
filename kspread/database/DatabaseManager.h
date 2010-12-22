@@ -28,7 +28,9 @@
 
 class KoXmlWriter;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 
@@ -69,6 +71,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DATABASE_MANAGER

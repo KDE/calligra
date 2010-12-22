@@ -30,9 +30,12 @@
 #include <QString>
 #include <QList>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
+}
 }
 
 class QDomDocument;
@@ -91,7 +94,7 @@ public:
     static bool isEqual(CellStyle const * const t1, CellStyle const & t2);
 
     // all except the number style
-    static void loadData(CellStyle & cs, const KSpread::Cell& cell);
+    static void loadData(CellStyle & cs, const Calligra::Tables::Cell& cell);
 
     QString     name;
 
@@ -112,8 +115,8 @@ public:
     bool        hideFormula;
     bool        notProtected;
 
-    KSpread::Style::HAlign  alignX;
-    KSpread::Style::VAlign  alignY;
+    Calligra::Tables::Style::HAlign  alignX;
+    Calligra::Tables::Style::VAlign  alignY;
 };
 
 class ColumnStyle : public Style

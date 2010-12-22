@@ -22,7 +22,9 @@
 
 #include <KoPrintingDialog.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class View;
 class SheetSelectPage;
@@ -54,6 +56,7 @@ private:
     Private * const d;
 };
 
-}  //KSPread namespace
+} // namespace Tables
+} // namespace Calligra
 
 #endif

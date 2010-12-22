@@ -33,7 +33,9 @@ inline long double numToDouble(Number n)
     return n;
 }
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 inline Number log(const Number &n, Number base)
@@ -61,7 +63,8 @@ inline Number atgh(const Number &n)
     return ::atanh(n);
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #else // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
@@ -73,7 +76,9 @@ inline Number atgh(const Number &n)
 
 using namespace std;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -227,7 +232,8 @@ Number asinh(const Number &n);
 Number acosh(const Number &n);
 Number atgh(const Number &n);
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 

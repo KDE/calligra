@@ -38,7 +38,7 @@
 
 #include "commands/ApplyFilterCommand.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class FilterPopup::Private
 {

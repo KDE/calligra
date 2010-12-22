@@ -29,7 +29,9 @@
 class QDomElement;
 class QDomDocument;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class CALLIGRA_TABLES_EXPORT Localization : public KLocale
@@ -42,6 +44,7 @@ public:
     void defaultSystemConfig();
 };
 
-} //namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_LOCALIZATION

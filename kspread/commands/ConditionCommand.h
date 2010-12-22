@@ -25,7 +25,9 @@
 #include "AbstractRegionCommand.h"
 #include "Condition.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -48,6 +50,7 @@ private:
     QList< QPair<QRectF, Conditions> > m_undoData;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CONDITION_COMMAND

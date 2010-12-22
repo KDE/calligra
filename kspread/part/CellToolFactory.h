@@ -24,7 +24,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**

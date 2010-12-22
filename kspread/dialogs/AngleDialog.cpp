@@ -40,7 +40,7 @@
 #include "commands/StyleCommand.h"
 #include "commands/RowColumnManipulators.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)

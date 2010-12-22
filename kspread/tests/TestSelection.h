@@ -22,7 +22,9 @@
 
 #include <QtTest/QtTest>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestSelection : public QObject
@@ -38,6 +40,7 @@ private Q_SLOTS:
     void splitting();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_SELECTION

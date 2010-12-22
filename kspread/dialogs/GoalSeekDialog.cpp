@@ -47,7 +47,7 @@
 
 #include <math.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class GoalSeekDialog::Private
 {

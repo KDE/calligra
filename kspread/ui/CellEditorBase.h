@@ -26,7 +26,9 @@ class KoViewConverter;
 class QString;
 class QWidget;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class CALLIGRA_TABLES_EXPORT CellEditorBase
@@ -47,6 +49,7 @@ public:
     virtual void setActiveSubRegion(int index) = 0;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELLEDITORBASE_H

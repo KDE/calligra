@@ -36,7 +36,9 @@ inline uint qHash(const QPoint& point)
     return (static_cast<uint>(point.x()) << 16) + static_cast<uint>(point.y());
 }
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class Map;
@@ -415,7 +417,7 @@ private:
 ****************************************************************************/
 /**
  * Base class for region elements, which can be points or ranges.
- * This class is used by KSpread::Region and could not be used outside of it.
+ * This class is used by Calligra::Tables::Region and could not be used outside of it.
  *
  * Size:
  * m_sheet: 4 bytes
@@ -501,7 +503,7 @@ protected:
 
 /**
  * A point in a region.
- * This class is used by KSpread::Region and could not be used outside of it.
+ * This class is used by Calligra::Tables::Region and could not be used outside of it.
  *
  * Size:
  * m_sheet: 4 bytes
@@ -584,7 +586,7 @@ private:
 
 /**
  * A range in a region.
- * This class is used by KSpread::Region and could not be used outside of it.
+ * This class is used by Calligra::Tables::Region and could not be used outside of it.
  *
  * Size:
  * m_sheet: 4 bytes
@@ -649,16 +651,17 @@ private:
     bool m_fixedRight;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_TYPEINFO(KSpread::Region, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Tables::Region, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-inline QDebug operator<<(QDebug str, const KSpread::Region& r)
+inline QDebug operator<<(QDebug str, const Calligra::Tables::Region& r)
 {
     return str << qPrintable(r.name());
 }

@@ -126,7 +126,7 @@
 
 #define MIN_SIZE 10
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class CanvasItem::Private
 {

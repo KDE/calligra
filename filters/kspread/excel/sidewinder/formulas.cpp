@@ -853,7 +853,7 @@ static const FunctionEntry FunctionEntries[] = {
     { "STDEVA",          0, true },     // 366
     { "VARA",            0, true },     // 367
     { "BAHTTEXT",        1, false },    // 368
-    //TODO; following formulas are not supported in KSpread yet
+    //TODO; following formulas are not supported in Calligra Tables yet
     { "THAIDAYOFWEEK",   1, false },    // 369
     { "THAIDIGIT",       1, false },    // 370
     { "THAIMONTHOFYEAR", 1, false },    // 371

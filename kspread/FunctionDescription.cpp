@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 static ParameterType toType(const QString& type)
 {

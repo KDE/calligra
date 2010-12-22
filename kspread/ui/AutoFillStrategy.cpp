@@ -22,7 +22,7 @@
 #include "commands/AutoFillCommand.h"
 #include "Selection.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class AutoFillStrategy::Private
 {

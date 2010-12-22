@@ -22,7 +22,7 @@
 #include "commands/MergeCommand.h"
 #include "Selection.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class MergeStrategy::Private
 {

@@ -56,7 +56,9 @@ class QPen;
 class QResizeEvent;
 class QScrollBar;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class CellEditor;
@@ -184,6 +186,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CANVAS_ITEM

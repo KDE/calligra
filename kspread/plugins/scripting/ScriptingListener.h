@@ -25,7 +25,9 @@
 #include <QVariant>
 #include <QObject>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class Sheet;
@@ -54,7 +56,7 @@ class ScriptingCellListener : public QObject
 {
     Q_OBJECT
 public:
-    explicit ScriptingCellListener(KSpread::Sheet *sheet, const QRect& area);
+    explicit ScriptingCellListener(Calligra::Tables::Sheet *sheet, const QRect& area);
     virtual ~ScriptingCellListener();
 
 Q_SIGNALS:
@@ -81,6 +83,7 @@ private:
     Private* const d;
 };
 
-}
+} // namespace Tables
+} // namespace Calligra
 
 #endif

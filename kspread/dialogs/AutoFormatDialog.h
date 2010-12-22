@@ -29,7 +29,9 @@
 
 #include <kdialog.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -53,6 +55,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_AUTO_FORMAT_DIALOG

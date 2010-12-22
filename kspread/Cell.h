@@ -59,7 +59,9 @@ class KoGenStyle;
 class KoOdfLoadingContext;
 class KoShapeLoadingContext;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Doc;
 class Formula;
@@ -645,18 +647,19 @@ inline uint qHash(const Cell& cell)
     return (static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row());
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_TYPEINFO(KSpread::Cell, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Tables::Cell, Q_MOVABLE_TYPE);
 
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-inline QDebug operator<<(QDebug str, const KSpread::Cell& cell)
+inline QDebug operator<<(QDebug str, const Calligra::Tables::Cell& cell)
 {
-    return str << qPrintable(KSpread::Cell::columnName(cell.column()) + QString::number(cell.row()));
+    return str << qPrintable(Calligra::Tables::Cell::columnName(cell.column()) + QString::number(cell.row()));
 }
 
 #endif  // CALLIGRA_TABLES_CELL

@@ -37,7 +37,7 @@
 #include "commands/AutoFillCommand.h"
 #include "Localization.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class ListDialog::Private
 {

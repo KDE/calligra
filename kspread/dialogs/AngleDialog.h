@@ -28,7 +28,9 @@
 
 class KIntNumInput;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -50,6 +52,7 @@ protected:
     KIntNumInput *m_pAngle;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ANGLE_DIALOG

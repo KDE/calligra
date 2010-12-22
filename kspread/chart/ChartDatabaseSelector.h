@@ -23,7 +23,9 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 
@@ -56,6 +58,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CHART_DATABASE_SELECTOR

@@ -36,7 +36,7 @@
 #include <QFocusEvent>
 #include <QKeyEvent>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class ExternalEditor::Private
 {

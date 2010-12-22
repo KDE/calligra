@@ -26,10 +26,9 @@
 
 #include <Cell.h>
 
-/**
- * The KSpread namespace.
- */
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -52,6 +51,7 @@ protected:
     QString newLink;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_LINK_COMMAND

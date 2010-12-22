@@ -34,7 +34,9 @@ class QString;
 
 class KoXmlWriter;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 class Region;
@@ -103,6 +105,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_NAMED_AREA_MANAGER

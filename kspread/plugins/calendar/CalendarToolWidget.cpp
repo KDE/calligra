@@ -29,7 +29,9 @@
 
 #include <QPushButton>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 CalendarToolWidget::CalendarToolWidget(QWidget* parent)
@@ -134,6 +136,7 @@ QDate CalendarToolWidget::endDate() const
     return this->m_endDateWidget->date();
 }
 
-}
+} // namespace Tables
+} // namespace Calligra
 
 #include "CalendarToolWidget.moc"

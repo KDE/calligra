@@ -44,7 +44,7 @@ static QpFormulaConv gOverride[] = {
     {0,   0,                        0}
 };
 
-KSpread::QuattroPro::Formula::Formula(QpRecFormulaCell& pCell, QpTableNames& pTable)
+Calligra::Tables::QuattroPro::Formula::Formula(QpRecFormulaCell& pCell, QpTableNames& pTable)
         : QpFormula(pCell, pTable)
 {
     formulaStart("=");   // quattro pro starts formulas with "+"
@@ -58,6 +58,6 @@ KSpread::QuattroPro::Formula::Formula(QpRecFormulaCell& pCell, QpTableNames& pTa
     replaceFunc(gOverride);
 }
 
-KSpread::QuattroPro::Formula::~Formula()
+Calligra::Tables::QuattroPro::Formula::~Formula()
 {
 }

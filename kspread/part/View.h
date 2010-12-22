@@ -49,7 +49,9 @@ class KoCanvasController;
 class KoDocumentEntry;
 class KoZoomHandler;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class ColumnHeaderWidget;
@@ -380,6 +382,7 @@ private:
     void setHeaderMinima();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_VIEW

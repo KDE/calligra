@@ -25,10 +25,9 @@
 
 #include <QUndoCommand>
 
-/**
- * The KSpread namespace.
- */
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 
@@ -49,6 +48,7 @@ private:
     PrintSettings m_settings;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PAGE_LAYOUT_COMMAND

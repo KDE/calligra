@@ -31,7 +31,9 @@
 #include "kspread_export.h"
 #include <QString>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Damage;
 class Sheet;
@@ -185,6 +187,7 @@ private:
     QByteArray ident;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_ADAPTOR

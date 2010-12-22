@@ -22,7 +22,9 @@
 
 #include "SheetModel.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Region;
 
@@ -51,6 +53,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_REGION_MODEL

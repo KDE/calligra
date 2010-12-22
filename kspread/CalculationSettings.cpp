@@ -37,7 +37,7 @@
 
 #include <kdebug.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class CalculationSettings::Private
 {

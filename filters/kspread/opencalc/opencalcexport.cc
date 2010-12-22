@@ -59,7 +59,7 @@
 #include <kspread/Util.h>
 #include <kspread/part/View.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 typedef QList<QString> AreaList;
 
@@ -99,8 +99,8 @@ KoFilter::ConversionStatus OpenCalcExport::convert(const QByteArray & from,
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const KSpread::Doc *>(document)) {
-        kWarning(30518) << "document isn't a KSpread::Doc but a "
+    if (!qobject_cast<const Calligra::Tables::Doc *>(document)) {
+        kWarning(30518) << "document isn't a Calligra::Tables::Doc but a "
         << document->metaObject()->className() << endl;
         return KoFilter::NotImplemented;
     }
@@ -558,7 +558,7 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
     while (i <= maxCols) {
         int  repeated = 1;
         const Cell cell(sheet, i, row);
-        const KSpread::Style style = cell.style();
+        const Calligra::Tables::Style style = cell.style();
         QDomElement cellElem;
 
         if (!cell.isPartOfMerged())

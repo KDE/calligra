@@ -26,7 +26,9 @@
 
 #include <Value.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestFinancialFunctions: public QObject
@@ -105,6 +107,7 @@ private slots:
 //   Value evaluateShort(const QString&);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_FINANCIAL_FUNCTIONS

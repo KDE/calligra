@@ -49,7 +49,9 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoOasisSettings;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class ApplicationSettings;
 class BindingManager;
@@ -411,6 +413,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

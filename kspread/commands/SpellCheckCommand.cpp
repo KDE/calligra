@@ -34,7 +34,7 @@
 #include <sonnet/dialog.h>
 #include <sonnet/speller.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class SpellCheckCommand::Private
 {

@@ -30,7 +30,7 @@
 #include "Map.h"
 #include "Region.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class Sort;
 class SubtotalRules;
@@ -157,7 +157,7 @@ void Database::setDisplayFilterButtons(bool enable)
     d->displayFilterButtons = enable;
 }
 
-const KSpread::Region& Database::range() const
+const Calligra::Tables::Region& Database::range() const
 {
     return d->targetRangeAddress;
 }

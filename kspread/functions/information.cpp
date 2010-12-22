@@ -41,7 +41,7 @@
 
 #include <KoDocument.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // prototypes (sorted alphabetically)
 Value func_errortype(valVector args, ValueCalc *calc, FuncExtra *);
@@ -346,7 +346,7 @@ Value func_formula(valVector, ValueCalc *, FuncExtra *e)
 {
     if(e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1)
         return Value::errorVALUE();
-    const KSpread::Cell c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
+    const Calligra::Tables::Cell c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
     if (c.isNull())
         return Value::errorVALUE();
     if (!c.isFormula())

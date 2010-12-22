@@ -30,7 +30,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class AbstractSelectionStrategy::Private
 {

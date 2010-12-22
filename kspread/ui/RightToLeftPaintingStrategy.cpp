@@ -27,7 +27,7 @@
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class RightToLeftPaintingStrategy::Private
 {

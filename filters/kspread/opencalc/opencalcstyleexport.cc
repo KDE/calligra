@@ -30,7 +30,7 @@
 
 #include <qdom.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 OpenCalcStyles::OpenCalcStyles()
 {
@@ -212,23 +212,23 @@ void OpenCalcStyles::addCellStyles(QDomDocument & doc, QDomElement & autoStyles)
         if (t->bgColor.name() != "#ffffff")
             prop.setAttribute("fo:background-color", t->bgColor.name());
 
-        if (t->alignX != KSpread::Style::HAlignUndefined) {
+        if (t->alignX != Calligra::Tables::Style::HAlignUndefined) {
             QString value;
-            if (t->alignX == KSpread::Style::Center)
+            if (t->alignX == Calligra::Tables::Style::Center)
                 value = "center";
-            else if (t->alignX == KSpread::Style::Right)
+            else if (t->alignX == Calligra::Tables::Style::Right)
                 value = "end";
-            else if (t->alignX == KSpread::Style::Left)
+            else if (t->alignX == Calligra::Tables::Style::Left)
                 value = "start";
             prop.setAttribute("fo:text-align", value);
         }
 
-        if (t->alignY != KSpread::Style::Bottom)   // default in OpenCalc
-            prop.setAttribute("fo:vertical-align", (t->alignY == KSpread::Style::Middle ? "middle" : "top"));
+        if (t->alignY != Calligra::Tables::Style::Bottom)   // default in OpenCalc
+            prop.setAttribute("fo:vertical-align", (t->alignY == Calligra::Tables::Style::Middle ? "middle" : "top"));
 
         if (t->indent > 0.0) {
             prop.setAttribute("fo:margin-left", QString("%1pt").arg(t->indent));
-            if (t->alignX == KSpread::Style::HAlignUndefined)
+            if (t->alignX == Calligra::Tables::Style::HAlignUndefined)
                 prop.setAttribute("fo:text-align", "start");
         }
 
@@ -361,8 +361,8 @@ CellStyle::CellStyle()
         hideAll(false),
         hideFormula(false),
         notProtected(false),
-        alignX(KSpread::Style::HAlignUndefined),
-        alignY(KSpread::Style::Middle)
+        alignX(Calligra::Tables::Style::HAlignUndefined),
+        alignY(Calligra::Tables::Style::Middle)
 {
 }
 
@@ -408,8 +408,8 @@ bool CellStyle::isEqual(CellStyle const * const t1, CellStyle const & t2)
 // all except the number style
 void CellStyle::loadData(CellStyle & cs, const Cell& cell)
 {
-    const KSpread::Style style = cell.style();
-    const KSpread::Style* defaultStyle = cell.sheet()->map()->styleManager()->defaultStyle();
+    const Calligra::Tables::Style style = cell.style();
+    const Calligra::Tables::Style* defaultStyle = cell.sheet()->map()->styleManager()->defaultStyle();
 
     QFont font = style.font();
     if (font != defaultStyle->font())
@@ -423,46 +423,46 @@ void CellStyle::loadData(CellStyle & cs, const Cell& cell)
     if (bgColor != defaultStyle->backgroundColor())
         cs.bgColor = bgColor;
 
-    if (style.hasAttribute(KSpread::Style::HorizontalAlignment))
+    if (style.hasAttribute(Calligra::Tables::Style::HorizontalAlignment))
         cs.alignX = style.halign();
 
-    if (style.hasAttribute(KSpread::Style::VerticalAlignment))
+    if (style.hasAttribute(Calligra::Tables::Style::VerticalAlignment))
         cs.alignY = style.valign();
 
-    if (style.hasAttribute(KSpread::Style::Indentation))
+    if (style.hasAttribute(Calligra::Tables::Style::Indentation))
         cs.indent = style.indentation();
 
-    if (style.hasAttribute(KSpread::Style::Angle))
+    if (style.hasAttribute(Calligra::Tables::Style::Angle))
         cs.angle  = -style.angle();
 
-    if (style.hasAttribute(KSpread::Style::MultiRow))
+    if (style.hasAttribute(Calligra::Tables::Style::MultiRow))
         cs.wrap   = style.wrapText();
 
-    if (style.hasAttribute(KSpread::Style::VerticalText))
+    if (style.hasAttribute(Calligra::Tables::Style::VerticalText))
         cs.vertical = style.verticalText();
 
-    if (style.hasAttribute(KSpread::Style::DontPrintText))
+    if (style.hasAttribute(Calligra::Tables::Style::DontPrintText))
         cs.print = style.printText();
 
-    if (style.hasAttribute(KSpread::Style::LeftPen))
+    if (style.hasAttribute(Calligra::Tables::Style::LeftPen))
         cs.left  = style.leftBorderPen();
 
-    if (style.hasAttribute(KSpread::Style::RightPen))
+    if (style.hasAttribute(Calligra::Tables::Style::RightPen))
         cs.right = style.rightBorderPen();
 
-    if (style.hasAttribute(KSpread::Style::TopPen))
+    if (style.hasAttribute(Calligra::Tables::Style::TopPen))
         cs.top  = style.topBorderPen();
 
-    if (style.hasAttribute(KSpread::Style::BottomPen))
+    if (style.hasAttribute(Calligra::Tables::Style::BottomPen))
         cs.bottom  = style.bottomBorderPen();
 
-    if (style.hasAttribute(KSpread::Style::NotProtected))
+    if (style.hasAttribute(Calligra::Tables::Style::NotProtected))
         cs.notProtected = style.notProtected();
 
-    if (style.hasAttribute(KSpread::Style::HideAll))
+    if (style.hasAttribute(Calligra::Tables::Style::HideAll))
         cs.hideAll = style.hideAll();
 
-    if (style.hasAttribute(KSpread::Style::HideFormula))
+    if (style.hasAttribute(Calligra::Tables::Style::HideFormula))
         cs.hideFormula = style.hideFormula();
 }
 

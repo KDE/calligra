@@ -32,7 +32,9 @@ class QStringList;
 class KoGenStyles;
 class KoOdfStylesReader;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Conditions;
 class Map;
@@ -126,6 +128,7 @@ private:
     QHash<QString, QString>  m_oasisStyles;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_STYLE_MANAGER

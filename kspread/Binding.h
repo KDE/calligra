@@ -29,7 +29,9 @@
 
 class QAbstractItemModel;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -65,9 +67,10 @@ private:
     QExplicitlySharedDataPointer<Private> d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_METATYPE(KSpread::Binding)
-Q_DECLARE_TYPEINFO(KSpread::Binding, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Tables::Binding)
+Q_DECLARE_TYPEINFO(Calligra::Tables::Binding, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_BINDING

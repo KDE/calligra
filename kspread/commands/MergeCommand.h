@@ -22,7 +22,9 @@
 
 #include "AbstractRegionCommand.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class Selection;
@@ -68,6 +70,7 @@ private:
     Selection *m_selection;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_MERGE_COMMAND

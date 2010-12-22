@@ -53,7 +53,7 @@
 
 #include "part/View.h" // TODO: get rid of this dependency
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 QList<DocBase*> DocBase::Private::s_docs;
 int DocBase::Private::s_docId = 0;
@@ -208,7 +208,7 @@ bool DocBase::loadOdf(KoOdfReadStore & odfStore)
 {
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "KSpread::Doc::loadOdf");
+        updater = progressUpdater()->startSubtask(1, "Calligra::Tables::DocBase::loadOdf");
         updater->setProgress(0);
     }
 

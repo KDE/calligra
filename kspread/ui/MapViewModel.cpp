@@ -35,7 +35,7 @@
 #include <kparts/event.h>
 #include <KXMLGUIClient>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class MapViewModel::Private
 {

@@ -24,7 +24,9 @@
 
 #include "database/Database.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Filter;
 
@@ -57,6 +59,7 @@ private:
     QHash<int, bool> m_undoData;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_APPLYFILTER_COMMAND

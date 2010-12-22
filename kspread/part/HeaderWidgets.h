@@ -28,7 +28,9 @@ class QRubberBand;
 
 class KoCanvasBase;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Canvas;
 class Selection;
@@ -133,5 +135,7 @@ private Q_SLOTS:
     void toolChanged(const QString& toolId);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
+
 #endif

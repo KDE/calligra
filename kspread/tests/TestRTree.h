@@ -3,7 +3,9 @@
 
 #include <QtTest/QtTest>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestRTree: public QObject
@@ -22,6 +24,7 @@ private Q_SLOTS:
     void testPrimitive();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_RTREE

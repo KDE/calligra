@@ -23,7 +23,9 @@
 #include <QWidget>
 #include <QListWidgetItem>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class TableShape;
 class Sheet;
@@ -53,6 +55,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TABLE_TOOL

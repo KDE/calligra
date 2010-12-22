@@ -27,7 +27,7 @@
 #include "Sheet.h"
 #include "ValidityStorage.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 ValidityCommand::ValidityCommand()
         : AbstractRegionCommand()

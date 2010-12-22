@@ -22,7 +22,9 @@
 
 #include "DatabaseSource.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -46,6 +48,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DATABASE_SOURCE_TABLE

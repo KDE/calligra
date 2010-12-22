@@ -22,7 +22,9 @@
 
 #include "AbstractRegionCommand.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class RowFormat;
 
@@ -51,6 +53,7 @@ private:
     QMap<int, RowFormat *> m_rowFormats;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ROW_STYLE_COMMAND

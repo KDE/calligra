@@ -34,7 +34,7 @@
 #include <ThreadWeaver/Weaver>
 #endif
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 #define TILESIZE 256
 

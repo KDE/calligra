@@ -21,7 +21,9 @@
 
 #include <QObject>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class Map;
@@ -54,6 +56,7 @@ private:
     Sheet* m_sheet;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // TESTROWFORMATSTORAGE_H

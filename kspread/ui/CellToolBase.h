@@ -37,7 +37,9 @@
 
 class KoColor;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class SheetView;
 class CellEditorBase;
@@ -286,6 +288,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_TOOL_BASE

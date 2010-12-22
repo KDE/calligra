@@ -27,7 +27,9 @@
 #include "kspread_export.h"
 #include "FunctionModule.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -67,6 +69,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FUNCTION_MODULE_REGISTRY

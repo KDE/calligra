@@ -40,7 +40,7 @@
 #include <kspread/part/Doc.h>
 #include <kspread/Util.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 K_PLUGIN_FACTORY(HTMLExportFactory, registerPlugin<HTMLExport>();)
 K_EXPORT_PLUGIN(HTMLExportFactory("calligrafilters"))
@@ -92,8 +92,8 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
     if (!document)
         return KoFilter::StupidError;
 
-    if (!::qobject_cast<const KSpread::Doc *>(document)) {   // it's safer that way :)
-        kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
+    if (!::qobject_cast<const Calligra::Tables::Doc *>(document)) {   // it's safer that way :)
+        kWarning(30501) << "document isn't a Calligra::Tables::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
 

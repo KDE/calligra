@@ -26,7 +26,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class Map;
@@ -83,8 +85,8 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    CellDamage(const KSpread::Cell& cell, Changes changes);
-    CellDamage(KSpread::Sheet* sheet, const Region& region, Changes changes);
+    CellDamage(const Calligra::Tables::Cell& cell, Changes changes);
+    CellDamage(Calligra::Tables::Sheet* sheet, const Region& region, Changes changes);
 
     virtual ~CellDamage();
 
@@ -92,7 +94,7 @@ public:
         return Damage::Cell;
     }
 
-    KSpread::Sheet* sheet() const;
+    Calligra::Tables::Sheet* sheet() const;
     const Region& region() const;
 
     Changes changes() const;
@@ -126,7 +128,7 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    SheetDamage(KSpread::Sheet* sheet, Changes changes);
+    SheetDamage(Calligra::Tables::Sheet* sheet, Changes changes);
 
     virtual ~SheetDamage();
 
@@ -134,7 +136,7 @@ public:
         return Damage::Sheet;
     }
 
-    KSpread::Sheet* sheet() const;
+    Calligra::Tables::Sheet* sheet() const;
 
     Changes changes() const;
 
@@ -161,13 +163,13 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    WorkbookDamage(KSpread::Map* map, Changes changes);
+    WorkbookDamage(Calligra::Tables::Map* map, Changes changes);
     virtual ~WorkbookDamage();
 
     virtual Type type() const {
         return Damage::Workbook;
     }
-    KSpread::Map* map() const;
+    Calligra::Tables::Map* map() const;
     Changes changes() const;
 
 private:
@@ -202,16 +204,17 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::Damage& d);
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::CellDamage& d);
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::SheetDamage& d);
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const KSpread::SelectionDamage& d);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Damage& d);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::CellDamage& d);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::SheetDamage& d);
+CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::SelectionDamage& d);
 
 #endif // CALLIGRA_TABLES_DAMAGES

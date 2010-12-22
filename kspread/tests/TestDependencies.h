@@ -23,7 +23,9 @@
 #include <QtGui>
 #include <QtTest/QtTest>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellStorage;
 class Map;
@@ -45,6 +47,7 @@ private:
     Sheet* m_sheet;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_DEPENDENCIES

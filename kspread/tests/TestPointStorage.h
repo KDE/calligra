@@ -22,7 +22,9 @@
 
 #include <QtTest/QtTest>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class PointStorageTest : public QObject
@@ -56,6 +58,7 @@ private Q_SLOTS:
     void testSubStorage();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_POINT_STORAGE_TEST

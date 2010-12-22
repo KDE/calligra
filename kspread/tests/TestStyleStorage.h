@@ -22,7 +22,9 @@
 
 #include <QObject>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestStyleStorage : public QObject
@@ -32,6 +34,7 @@ private slots:
     void testGarbageCollection();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_STYLESTORAGE

@@ -22,7 +22,9 @@
 
 #include <kpagedialog.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 
@@ -40,6 +42,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_INSPECTOR

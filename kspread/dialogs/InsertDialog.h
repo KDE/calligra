@@ -31,7 +31,9 @@
 
 class QRadioButton;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -60,6 +62,7 @@ private:
     Mode insRem;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_INSERT_DIALOG

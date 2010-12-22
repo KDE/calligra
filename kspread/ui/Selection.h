@@ -32,7 +32,9 @@
 
 class KoCanvasBase;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellEditor;
 
@@ -398,7 +400,7 @@ class Selection::Range : public Region::Range
 {
 public:
     Range(const QRect& rect);
-    Range(const KSpread::Region::Point& tl, const KSpread::Region::Point& br);
+    Range(const Calligra::Tables::Region::Point& tl, const Calligra::Tables::Region::Point& br);
     Range(const QString& string);
     Range(const Region::Range& range);
 
@@ -413,6 +415,7 @@ private:
     QColor m_color;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SELECTION

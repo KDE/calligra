@@ -25,7 +25,9 @@
 
 #include <Value.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestTextFunctions: public QObject
@@ -65,6 +67,7 @@ private:
     Value evaluate(const QString&, Value& ex);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

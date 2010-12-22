@@ -28,7 +28,7 @@
 #include <KServiceTypeTrader>
 #include <KStandardDirs>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class FunctionModuleRegistry::Private
 {

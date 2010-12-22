@@ -26,9 +26,12 @@
 #include <QByteArray>
 #include <QVariantList>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
+}
 }
 
 class QpImport : public KoFilter
@@ -44,7 +47,7 @@ public:
     void InitTableName(int pIdx, QString& pResult);
 
 protected:
-    void setText(KSpread::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
+    void setText(Calligra::Tables::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 };
 
 class QpTableList : public QpTableNames
@@ -53,10 +56,10 @@ public:
     QpTableList();
     ~QpTableList();
 
-    void          table(unsigned pIdx, KSpread::Sheet* pTable);
-    KSpread::Sheet* table(unsigned pIdx);
+    void          table(unsigned pIdx, Calligra::Tables::Sheet* pTable);
+    Calligra::Tables::Sheet* table(unsigned pIdx);
 protected:
-    KSpread::Sheet* cTable[cNameCnt];
+    Calligra::Tables::Sheet* cTable[cNameCnt];
 };
 
 #endif // QPROIMPORT_H

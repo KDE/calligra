@@ -37,12 +37,12 @@
 
 #include <QPen>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 
 //used in Cell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
-int KSpread::Util::decodeColumnLabelText(const QString &labelText)
+int Calligra::Tables::Util::decodeColumnLabelText(const QString &labelText)
 {
     int col = 0;
     const int offset = 'a' - 'A';
@@ -69,7 +69,7 @@ int KSpread::Util::decodeColumnLabelText(const QString &labelText)
     return col;
 }
 
-int KSpread::Util::decodeRowLabelText(const QString &labelText)
+int Calligra::Tables::Util::decodeRowLabelText(const QString &labelText)
 {
     QRegExp rx("([A-Za-z]+)([0-9]+)");
     if(rx.exactMatch(labelText))
@@ -77,12 +77,12 @@ int KSpread::Util::decodeRowLabelText(const QString &labelText)
     return 0;
 }
 
-QString KSpread::Util::encodeColumnLabelText(int column)
+QString Calligra::Tables::Util::encodeColumnLabelText(int column)
 {
     return Cell::columnName(column);
 }
 
-QDomElement KSpread::NativeFormat::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
+QDomElement Calligra::Tables::NativeFormat::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
 {
     QDomElement e(doc.createElement(tagName));
 
@@ -102,7 +102,7 @@ QDomElement KSpread::NativeFormat::createElement(const QString & tagName, const 
     return e;
 }
 
-QDomElement KSpread::NativeFormat::createElement(const QString & tagname, const QPen & pen, QDomDocument & doc)
+QDomElement Calligra::Tables::NativeFormat::createElement(const QString & tagname, const QPen & pen, QDomDocument & doc)
 {
     QDomElement e(doc.createElement(tagname));
     e.setAttribute("color", pen.color().name());
@@ -111,7 +111,7 @@ QDomElement KSpread::NativeFormat::createElement(const QString & tagname, const 
     return e;
 }
 
-QFont KSpread::NativeFormat::toFont(KoXmlElement & element)
+QFont Calligra::Tables::NativeFormat::toFont(KoXmlElement & element)
 {
     QFont f;
     f.setFamily(element.attribute("family"));
@@ -149,7 +149,7 @@ QFont KSpread::NativeFormat::toFont(KoXmlElement & element)
     return f;
 }
 
-QPen KSpread::NativeFormat::toPen(KoXmlElement & element)
+QPen Calligra::Tables::NativeFormat::toPen(KoXmlElement & element)
 {
     bool ok;
     QPen p;
@@ -191,7 +191,7 @@ bool util_isRectValid(const QRect& rect)
 
 
 //not used anywhere
-int KSpread::Util::penCompare(QPen const & pen1, QPen const & pen2)
+int Calligra::Tables::Util::penCompare(QPen const & pen1, QPen const & pen2)
 {
     if (pen1.style() == Qt::NoPen && pen2.style() == Qt::NoPen)
         return 0;
@@ -224,7 +224,7 @@ int KSpread::Util::penCompare(QPen const & pen1, QPen const & pen2)
 }
 
 
-QString KSpread::Odf::convertRefToBase(const QString & sheet, const QRect & rect)
+QString Calligra::Tables::Odf::convertRefToBase(const QString & sheet, const QRect & rect)
 {
     QPoint bottomRight(rect.bottomRight());
 
@@ -238,7 +238,7 @@ QString KSpread::Odf::convertRefToBase(const QString & sheet, const QRect & rect
     return s;
 }
 
-QString KSpread::Odf::convertRefToRange(const QString & sheet, const QRect & rect)
+QString Calligra::Tables::Odf::convertRefToRange(const QString & sheet, const QRect & rect)
 {
     QPoint topLeft(rect.topLeft());
     QPoint bottomRight(rect.bottomRight());
@@ -262,12 +262,12 @@ QString KSpread::Odf::convertRefToRange(const QString & sheet, const QRect & rec
 
 // e.g.: Sheet4.A1:Sheet4.E28
 //used in Sheet::saveOdf
-QString KSpread::Odf::convertRangeToRef(const QString & sheetName, const QRect & _area)
+QString Calligra::Tables::Odf::convertRangeToRef(const QString & sheetName, const QRect & _area)
 {
     return sheetName + '.' + Cell::name(_area.left(), _area.top()) + ':' + sheetName + '.' + Cell::name(_area.right(), _area.bottom());
 }
 
-QString KSpread::Odf::encodePen(const QPen & pen)
+QString Calligra::Tables::Odf::encodePen(const QPen & pen)
 {
 //     kDebug()<<"encodePen( const QPen & pen ) :"<<pen;
     // NOTE Stefan: QPen api docs:
@@ -303,7 +303,7 @@ QString KSpread::Odf::encodePen(const QPen & pen)
     return s;
 }
 
-QPen KSpread::Odf::decodePen(const QString &border)
+QPen Calligra::Tables::Odf::decodePen(const QString &border)
 {
     QPen pen;
     //string like "0.088cm solid #800000"
@@ -343,7 +343,7 @@ QPen KSpread::Odf::decodePen(const QString &border)
 }
 
 //Return true when it's a reference to cell from sheet.
-bool KSpread::Util::localReferenceAnchor(const QString &_ref)
+bool Calligra::Tables::Util::localReferenceAnchor(const QString &_ref)
 {
     bool isLocalRef = (_ref.indexOf("http://") != 0 &&
                        _ref.indexOf("https://") != 0 &&
@@ -354,7 +354,7 @@ bool KSpread::Util::localReferenceAnchor(const QString &_ref)
 }
 
 
-QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* locale, QString namespacePrefix)
+QString Calligra::Tables::Odf::decodeFormula(const QString& expression, const KLocale* locale, QString namespacePrefix)
 {
     // parsing state
     enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
@@ -398,7 +398,7 @@ QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* lo
             else if (expression[i].unicode() == '[') {
                 ++i;
                 state = InReference;
-                // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
+                // NOTE Stefan: As long as Calligra::Tables does not support fixed sheets eat the dollar sign.
                 if (expression[i] == '$') ++i;
             }
 
@@ -528,7 +528,7 @@ QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* lo
     return result;
 }
 
-QString KSpread::Odf::encodeFormula(const QString& expr, const KLocale* locale)
+QString Calligra::Tables::Odf::encodeFormula(const QString& expr, const KLocale* locale)
 {
     // use locale settings
     const QString decimal = locale ? locale->decimalSymbol() : ".";

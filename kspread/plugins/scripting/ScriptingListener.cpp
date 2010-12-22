@@ -28,25 +28,28 @@
 
 #include <QAbstractItemModel>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 /// \internal d-pointer class.
 class ScriptingCellListener::Private
 {
 public:
-    KSpread::Sheet* sheet;
-    KSpread::Binding* cellbinding;
+    Calligra::Tables::Sheet* sheet;
+    Calligra::Tables::Binding* cellbinding;
 };
-}
+} // namespace Tables
+} // namespace Calligra
 
-ScriptingCellListener::ScriptingCellListener(KSpread::Sheet *sheet, const QRect& area)
+ScriptingCellListener::ScriptingCellListener(Calligra::Tables::Sheet *sheet, const QRect& area)
         : QObject()
         , d(new Private())
 {
     d->sheet = sheet;
-    d->cellbinding = new KSpread::Binding(Region(area, sheet));
+    d->cellbinding = new Calligra::Tables::Binding(Region(area, sheet));
     connect(d->cellbinding->model(), SIGNAL(changed(const Region&)), this, SLOT(slotChanged(const Region&)));
     sheet->cellStorage()->setBinding(Region(area, sheet), *d->cellbinding);
 }

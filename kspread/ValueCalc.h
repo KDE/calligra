@@ -36,7 +36,9 @@
 # undef min
 #endif
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class Doc;
@@ -345,7 +347,8 @@ inline double approxFloor(double a)
     return b;
 }
 
-}  //namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 
 #endif // CALLIGRA_TABLES_VALUECALC

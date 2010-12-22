@@ -23,7 +23,9 @@
 #include <QtGui>
 #include <QtTest/QtTest>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class PointStorageBenchmark : public QObject
@@ -46,6 +48,7 @@ private Q_SLOTS:
     void testIterationPerformance();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_POINT_STORAGE_BENCHMARK

@@ -23,7 +23,9 @@
 
 #include <KoToolFactoryBase.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TableToolFactory : public KoToolFactoryBase
@@ -35,6 +37,7 @@ public:
     KoToolBase* createTool(KoCanvasBase* canvas);
 };
 
-} // namespace
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TABLE_TOOL_FACTORY

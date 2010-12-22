@@ -23,7 +23,7 @@
 // #include <dcopclient.h>
 #include "AboutData.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {

@@ -37,7 +37,7 @@
 #include "Sheet.h"
 #include "Value.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // This is currently not called - but it's really convenient to call it from
 // gdb or from debug output to check that everything is set up ok.
@@ -214,12 +214,12 @@ QHash<Cell, int> DependencyManager::depths() const
     return d->depths;
 }
 
-KSpread::Region DependencyManager::consumingRegion(const Cell& cell) const
+Calligra::Tables::Region DependencyManager::consumingRegion(const Cell& cell) const
 {
     return d->consumingRegion(cell);
 }
 
-KSpread::Region DependencyManager::reduceToProvidingRegion(const Region& region) const
+Calligra::Tables::Region DependencyManager::reduceToProvidingRegion(const Region& region) const
 {
     Region providingRegion;
     QList< QPair<QRectF, Cell> > pairs;
@@ -306,7 +306,7 @@ void DependencyManager::Private::reset()
     consumers.clear();
 }
 
-KSpread::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
+Calligra::Tables::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
 {
     if (!consumers.contains(cell.sheet())) {
 //         kDebug(36002) << "No consumer tree found for the cell's sheet.";

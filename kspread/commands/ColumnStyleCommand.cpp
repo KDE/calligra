@@ -26,7 +26,7 @@
 #include "Sheet.h"
 #include "SheetPrint.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 ColumnStyleCommand::ColumnStyleCommand(QUndoCommand *parent)
         : AbstractRegionCommand(parent)

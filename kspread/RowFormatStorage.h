@@ -24,7 +24,8 @@
 
 #include "kspread_export.h"
 
-namespace KSpread {
+namespace Calligra {
+namespace Tables {
 
 class Sheet;
 
@@ -85,7 +86,8 @@ private:
 };
 
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ROWFORMATSTORAGE_H
 

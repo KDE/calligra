@@ -26,7 +26,8 @@ namespace ThreadWeaver {
     class Job;
 }
 
-namespace KSpread {
+namespace Calligra {
+namespace Tables {
 
 class PixmapCachingSheetView : public SheetView
 {
@@ -52,6 +53,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // PIXMAPCACHINGSHEETVIEW_H

@@ -26,7 +26,9 @@
 
 class QTextEdit;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 class Tokens;
@@ -91,6 +93,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FORMULA_EDITOR_HIGHLIGHTER

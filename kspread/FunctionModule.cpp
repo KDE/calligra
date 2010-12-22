@@ -23,7 +23,7 @@
 
 #include <QList>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class FunctionModule::Private
 {

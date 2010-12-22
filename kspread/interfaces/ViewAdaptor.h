@@ -31,7 +31,10 @@
 #include <QString>
 #include <QtDBus/QtDBus>
 #include "kspread_export.h"
-namespace KSpread
+
+namespace Calligra
+{
+namespace Tables
 {
 class View;
 class CellProxy;
@@ -254,6 +257,7 @@ private:
     CellProxy* m_proxy;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_VIEW_ADAPTOR

@@ -46,7 +46,7 @@
 #include "Sheet.h"
 #include "Util.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 struct NamedArea {
     QString name;
@@ -117,7 +117,7 @@ void NamedAreaManager::remove(Sheet* sheet)
     }
 }
 
-KSpread::Region NamedAreaManager::namedArea(const QString& name) const
+Calligra::Tables::Region NamedAreaManager::namedArea(const QString& name) const
 {
     if (!d->namedAreas.contains(name))
         return Region();

@@ -219,7 +219,7 @@ void XlsxXmlWorksheetReader::showWarningAboutWorksheetSize()
 
 inline static QString encodeLabelText(int col, int row)
 {
-    return KSpread::Util::encodeColumnLabelText(col) + QString::number(row);
+    return Calligra::Tables::Util::encodeColumnLabelText(col) + QString::number(row);
 }
 
 void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
@@ -830,7 +830,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(r)
     if (!r.isEmpty()) {
-        m_currentColumn = KSpread::Util::decodeColumnLabelText(r) - 1;
+        m_currentColumn = Calligra::Tables::Util::decodeColumnLabelText(r) - 1;
         if (m_currentColumn < 0)
             return KoFilter::WrongFormat;
     }
@@ -1079,10 +1079,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
         if (pos > 0) {
             const QString fromCell = ref.left(pos);
             const QString toCell = ref.mid(pos + 1);
-            const int c1 = KSpread::Util::decodeColumnLabelText(fromCell) - 1;
-            const int r1 = KSpread::Util::decodeRowLabelText(fromCell) - 1;
-            const int c2 = KSpread::Util::decodeColumnLabelText(toCell) - 1;
-            const int r2 = KSpread::Util::decodeRowLabelText(toCell) - 1;
+            const int c1 = Calligra::Tables::Util::decodeColumnLabelText(fromCell) - 1;
+            const int r1 = Calligra::Tables::Util::decodeRowLabelText(fromCell) - 1;
+            const int c2 = Calligra::Tables::Util::decodeColumnLabelText(toCell) - 1;
+            const int r2 = Calligra::Tables::Util::decodeRowLabelText(toCell) - 1;
             if (c1 >= 0 && r1 >= 0 && c2 >= c1 && r2 >= r1) {
                 for (int col = c1; col <= c2; ++col) {
                     for (int row = r1; row <= r2; ++row) {
@@ -1156,11 +1156,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
         QRegExp rx("([A-Za-z]+)([0-9]+)");
         if(rx.exactMatch(fromCell)) {
             const int fromRow = rx.cap(2).toInt() - 1;
-            const int fromCol = KSpread::Util::decodeColumnLabelText(fromCell) - 1;
+            const int fromCol = Calligra::Tables::Util::decodeColumnLabelText(fromCell) - 1;
             if(rx.exactMatch(toCell)) {
                 Cell* cell = m_context->sheet->cell(fromCol, fromRow, true);
                 cell->rowsMerged = rx.cap(2).toInt() - fromRow;
-                cell->columnsMerged = KSpread::Util::decodeColumnLabelText(toCell) - fromCol;
+                cell->columnsMerged = Calligra::Tables::Util::decodeColumnLabelText(toCell) - fromCol;
 
                 // correctly take right/bottom borders from the cells that are merged into this one
                 const KoGenStyle* origCellStyle = mainStyles->style(cell->styleName);
@@ -1288,8 +1288,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
     TRY_READ_ATTR_WITHOUT_NS(location)
     TRY_READ_ATTR_WITH_NS(r, id)
     if (!ref.isEmpty() && (!r_id.isEmpty() || !location.isEmpty())) {
-        const int col = KSpread::Util::decodeColumnLabelText(ref) - 1;
-        const int row = KSpread::Util::decodeRowLabelText(ref) - 1;
+        const int col = Calligra::Tables::Util::decodeColumnLabelText(ref) - 1;
+        const int row = Calligra::Tables::Util::decodeRowLabelText(ref) - 1;
         if(col >= 0 && row >= 0) {
             QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
             // it follows a hack to get right of the prepended m_context->path...

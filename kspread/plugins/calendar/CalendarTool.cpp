@@ -31,7 +31,7 @@
 #include <KCalendarSystem>
 #include <KMessageBox>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class CalendarTool::Private
 {

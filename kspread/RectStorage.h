@@ -39,7 +39,9 @@
 
 static const int g_garbageCollectionTimeOut = 100;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 template<typename T>
@@ -661,6 +663,7 @@ protected Q_SLOTS:
     }
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_RECT_STORAGE

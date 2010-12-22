@@ -31,7 +31,9 @@
 class QRadioButton;
 class KDoubleNumInput;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 class Sheet;
@@ -65,6 +67,7 @@ protected:
     QPoint  marker;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SERIES_DIALOG

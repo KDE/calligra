@@ -24,7 +24,9 @@
 
 #include "AbstractRegionCommand.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -47,6 +49,7 @@ private:
     QList< QPair<QRectF, Validity> > m_undoData;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_VALIDITY_COMMAND

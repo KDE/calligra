@@ -28,7 +28,9 @@
 
 class KLineEdit;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -52,6 +54,7 @@ protected:
     KLineEdit*  m_areaName;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ADD_NAMED_AREA_DIALOG

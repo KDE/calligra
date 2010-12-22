@@ -31,7 +31,7 @@
 
 #include <QByteArray>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // prototypes
 Value func_arabic(valVector args, ValueCalc *calc, FuncExtra *);

@@ -35,7 +35,7 @@
 
 #include <KLocale>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // Functions DOLLAR and FIXED convert data to double, hence they will not
 // support arbitrary precision, when it will be introduced.

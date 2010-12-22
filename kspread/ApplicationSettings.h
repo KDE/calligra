@@ -28,7 +28,9 @@
 #include "Global.h"
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -155,8 +157,8 @@ public:
      */
     void setCompletionMode(KGlobalSettings::Completion mode);
 
-    KSpread::MoveTo moveToValue() const;
-    void setMoveToValue(KSpread::MoveTo moveTo);
+    Calligra::Tables::MoveTo moveToValue() const;
+    void setMoveToValue(Calligra::Tables::MoveTo moveTo);
 
     /**
      * Method of calc
@@ -175,6 +177,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREADAPPLICATIONSETTINGS

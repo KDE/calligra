@@ -70,7 +70,7 @@
 // database
 #include "database/DatabaseManager.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class Map::Private
 {

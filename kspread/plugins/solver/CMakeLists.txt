@@ -1,6 +1,6 @@
 macro_optional_find_package(GSL)
 macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl"
-                  FALSE "1.7" "Required by KSpread's solver plugin")
+                  FALSE "1.7" "Required by Tables' solver plugin")
 
 if(GSL_FOUND)
 

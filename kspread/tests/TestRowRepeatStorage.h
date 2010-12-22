@@ -21,7 +21,9 @@
 
 #include <QObject>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestRowRepeatStorage : public QObject
@@ -51,6 +53,7 @@ private slots:
     void testRemoveShiftLeft();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // TESTROWREPEATSTORAGE_H

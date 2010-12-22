@@ -32,7 +32,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -127,6 +129,7 @@ CALLIGRA_TABLES_EXPORT bool isTime(Type type);
 CALLIGRA_TABLES_EXPORT bool isFraction(Type type);
 
 } // namespace Format
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FORMAT

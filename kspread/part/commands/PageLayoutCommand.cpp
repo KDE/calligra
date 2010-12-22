@@ -23,7 +23,7 @@
 
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // ----- PageLayoutCommand -----
 

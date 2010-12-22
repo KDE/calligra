@@ -28,7 +28,7 @@
 #include "../Sheet.h"
 #include "../RowColumnFormat.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 void TestRowFormatStorage::initTestCase()
 {

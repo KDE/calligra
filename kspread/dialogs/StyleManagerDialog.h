@@ -29,7 +29,9 @@ class QTreeWidgetItem;
 
 class KComboBox;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 class StyleManager;
@@ -64,6 +66,7 @@ private:
     KComboBox*      m_displayBox;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_STYLE_MANAGER_DIALOG

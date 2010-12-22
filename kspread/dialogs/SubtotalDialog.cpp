@@ -43,7 +43,7 @@
 // commands
 #include "commands/DataManipulators.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class SubtotalDialog::Private
 {

@@ -25,7 +25,9 @@
 class QLabel;
 class KoPointerEvent;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CanvasBase;
 class Selection;
@@ -204,5 +206,7 @@ protected:
     bool m_cellToolIsActive;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
+
 #endif

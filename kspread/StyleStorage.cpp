@@ -40,7 +40,7 @@
 
 static const int g_maximumCachedStyles = 10000;
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class KDE_NO_EXPORT StyleStorage::Private
 {
@@ -67,7 +67,7 @@ public:
     void ensureLoaded();
 };
 
-class KSpread::StyleStorageLoaderJob : public QRunnable
+class Calligra::Tables::StyleStorageLoaderJob : public QRunnable
 {
 public:
     StyleStorageLoaderJob(StyleStorage* storage, const QList<QPair<QRegion, Style> >& styles);

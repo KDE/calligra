@@ -37,7 +37,7 @@
 #include "ui/Selection.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)

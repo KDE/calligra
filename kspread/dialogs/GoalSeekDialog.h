@@ -30,7 +30,9 @@
 
 class QCloseEvent;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -64,6 +66,7 @@ private:
     void startCalc(double _start, double _goal);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_GOALSEEK_DIALOG

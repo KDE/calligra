@@ -25,7 +25,9 @@
 #include <QtGui>
 #include <QtTest/QtTest>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Value;
 
@@ -46,6 +48,7 @@ private:
     QString convertFromOpenFormula(const QString& expr);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_OPENFORMULA

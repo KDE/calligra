@@ -120,7 +120,7 @@
 
 #define MIN_SIZE 10
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class Canvas::Private
 {
@@ -366,7 +366,7 @@ SheetView* Canvas::sheetView(const Sheet* sheet) const
     return view()->sheetView(sheet);
 }
 
-KSpread::Selection* Canvas::selection() const
+Calligra::Tables::Selection* Canvas::selection() const
 {
     return view()->selection();
 }

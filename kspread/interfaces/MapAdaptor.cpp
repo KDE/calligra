@@ -31,7 +31,7 @@
 #include "Map.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 MapAdaptor::MapAdaptor(Map* map)
         : QDBusAbstractAdaptor(map)

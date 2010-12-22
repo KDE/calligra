@@ -96,7 +96,7 @@
 #include <QTextDocument>
 #include <QTextCursor>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class Cell::Private : public QSharedData
 {

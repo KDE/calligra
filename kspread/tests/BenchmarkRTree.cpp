@@ -26,7 +26,7 @@
 #include "RTree.h"
 
 using namespace std;
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 void RTreeBenchmark::init()
 {

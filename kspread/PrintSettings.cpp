@@ -34,7 +34,7 @@
 // Qt
 #include <QSize>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class PrintSettings::Private
 {
@@ -277,7 +277,7 @@ void PrintSettings::setCenterVertically(bool center)
     d->centerVertically = center;
 }
 
-const KSpread::Region& PrintSettings::printRegion() const
+const Calligra::Tables::Region& PrintSettings::printRegion() const
 {
     return d->printRegion;
 }

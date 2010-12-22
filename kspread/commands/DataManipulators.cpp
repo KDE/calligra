@@ -34,7 +34,7 @@
 #include <float.h>
 #include <math.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 AbstractDataManipulator::AbstractDataManipulator(QUndoCommand* parent)
         : AbstractRegionCommand(parent)
@@ -442,7 +442,9 @@ bool ShiftManipulator::process(Element* element)
     return true;
 }
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 bool topRowLessThan(const Region::Element *e1, const Region::Element *e2)
 {
@@ -453,7 +455,8 @@ bool leftColumnLessThan(const Region::Element *e1, const Region::Element *e2)
 {
     return e1->rect().top() < e2->rect().top();
 }
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 bool ShiftManipulator::preProcessing()
 {

@@ -45,7 +45,7 @@
 // Qt
 #include <QStyledItemDelegate>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 Q_DECLARE_METATYPE(Qt::CaseSensitivity)
 Q_DECLARE_METATYPE(Qt::SortOrder)

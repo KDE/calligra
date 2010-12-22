@@ -23,7 +23,9 @@
 #include <QObject>
 #include "RTree.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class RTreeBenchmark : public QObject
@@ -43,6 +45,7 @@ private:
     RTree<double> m_tree;
 };
 
-} // namepsace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_RTREE_BENCHMARK_H

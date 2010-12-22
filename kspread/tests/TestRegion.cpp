@@ -26,7 +26,7 @@
 #include "Region.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 void TestRegion::initTestCase()
 {

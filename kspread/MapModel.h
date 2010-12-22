@@ -24,7 +24,9 @@
 
 class QUndoCommand;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 class Sheet;
@@ -72,6 +74,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_MAP_MODEL

@@ -55,7 +55,9 @@ class QPen;
 class QResizeEvent;
 class QScrollBar;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class CellEditor;
@@ -95,7 +97,7 @@ public:
     }
 
     virtual Sheet* activeSheet() const;
-    virtual KSpread::Selection* selection() const;
+    virtual Calligra::Tables::Selection* selection() const;
     virtual void setCursor(const QCursor &cursor);
 
 public Q_SLOTS:
@@ -186,6 +188,7 @@ private:
     Private * const cd;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CANVAS

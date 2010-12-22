@@ -19,7 +19,7 @@
 
 #include "ApplicationSettings.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class ApplicationSettings::Private
 {
@@ -27,7 +27,7 @@ public:
     QColor gridColor;
     QColor pageBorderColor;
     KGlobalSettings::Completion completionMode;
-    KSpread::MoveTo moveTo;
+    Calligra::Tables::MoveTo moveTo;
     MethodOfCalc calcMethod;
     double indentValue;
     bool verticalScrollBar      : 1;
@@ -160,12 +160,12 @@ bool ApplicationSettings::showTabBar()const
     return d->showTabBar;
 }
 
-KSpread::MoveTo ApplicationSettings::moveToValue() const
+Calligra::Tables::MoveTo ApplicationSettings::moveToValue() const
 {
     return d->moveTo;
 }
 
-void ApplicationSettings::setMoveToValue(KSpread::MoveTo moveTo)
+void ApplicationSettings::setMoveToValue(Calligra::Tables::MoveTo moveTo)
 {
     d->moveTo = moveTo;
 }

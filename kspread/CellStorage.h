@@ -34,7 +34,9 @@ class KoXmlWriter;
 
 class QUndoCommand;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Binding;
 class BindingStorage;
@@ -441,6 +443,7 @@ public:
     }
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_STORAGE

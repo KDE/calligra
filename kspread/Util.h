@@ -40,7 +40,9 @@ class KLocale;
 bool util_isPointValid(const QPoint& point);
 bool util_isRectValid(const QRect& rect);
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class Map;
@@ -159,6 +161,7 @@ CALLIGRA_TABLES_EXPORT QString convertRefToBase(const QString & sheet, const QRe
 CALLIGRA_TABLES_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_UTIL

@@ -22,7 +22,9 @@
 
 #include "AbstractRegionCommand.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -46,6 +48,7 @@ public:
     virtual void undo();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_AUTOFILTER_COMMAND

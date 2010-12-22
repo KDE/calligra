@@ -25,7 +25,7 @@
 #include <KPluginFactory>
 #include <KLocale>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 K_PLUGIN_FACTORY(CalendarToolPluginFactory,
                  registerPlugin<CalendarToolFactory>();

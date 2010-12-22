@@ -27,7 +27,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Function;
 class FunctionDescription;
@@ -81,6 +83,7 @@ private:
     FunctionRepository& operator=(const FunctionRepository&);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FUNCTION_REPOSITORY

@@ -31,7 +31,9 @@
 class KComboBox;
 class KLineEdit;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 class Style;
@@ -103,6 +105,7 @@ private:
 
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CONDITIONAL_DIALOG

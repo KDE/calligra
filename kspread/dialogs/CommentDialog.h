@@ -28,7 +28,9 @@
 
 class KTextEdit;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -51,6 +53,7 @@ protected:
     KTextEdit *multiLine;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_COMMENT_DIALOG

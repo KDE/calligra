@@ -33,7 +33,9 @@ namespace KChart
 class ChartShape;
 }
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 
@@ -108,6 +110,7 @@ public:
     State m_state; ///< the current state
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CHART_DIALOG

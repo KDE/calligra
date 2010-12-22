@@ -81,7 +81,7 @@
 // ui
 #include "ui/Selection.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 /****************************************************************
  *

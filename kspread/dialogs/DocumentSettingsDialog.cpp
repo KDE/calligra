@@ -52,7 +52,7 @@
 #include "ui/Selection.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class DocumentSettingsDialog::Private
 {

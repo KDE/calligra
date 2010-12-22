@@ -37,7 +37,7 @@
 #include "TableShape.h"
 #include "TableToolFactory.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 K_PLUGIN_FACTORY(TableShapePluginFactory, registerPlugin<TableShapePlugin>();)
 K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))

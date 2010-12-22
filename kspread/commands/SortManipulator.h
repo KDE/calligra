@@ -23,7 +23,9 @@
 #include "CellStorage.h"
 #include "DataManipulators.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellStorage;
 
@@ -98,6 +100,7 @@ protected:
     QHash<Cell, Style> m_styles; // temporary
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif  // CALLIGRA_TABLES_SORT_MANIPULATOR

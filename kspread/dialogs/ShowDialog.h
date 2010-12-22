@@ -29,7 +29,9 @@
 
 class QListWidget;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -52,6 +54,7 @@ private:
     QListWidget *m_listWidget;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHOW_DIALOG

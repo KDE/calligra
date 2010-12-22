@@ -24,10 +24,9 @@
 #include <QString>
 #include <QUndoCommand>
 
-/**
- * The KSpread namespace.
- */
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 class Sheet;
@@ -183,6 +182,7 @@ protected:
     bool oldCapitalizeFirstLetter, newCapitalizeFirstLetter;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_COMMANDS

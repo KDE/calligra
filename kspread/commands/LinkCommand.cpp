@@ -26,7 +26,7 @@
 #include "Map.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 LinkCommand::LinkCommand(const Cell& c, const QString& text, const QString& link)
 {

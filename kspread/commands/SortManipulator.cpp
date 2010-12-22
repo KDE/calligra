@@ -27,7 +27,7 @@
 
 #include <klocale.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 SortManipulator::SortManipulator()
         : AbstractDFManipulator()

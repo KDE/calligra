@@ -29,7 +29,9 @@
 
 class KDatePicker;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -143,6 +145,7 @@ signals:
     void insertCalendar(const QDate &from, const QDate &to);
 };
 
-}
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CALENDAR_TOOL_WIDGET

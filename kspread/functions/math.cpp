@@ -46,7 +46,7 @@
 // needed by MDETERM and MINVERSE
 #include <Eigen/LU>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // RANDBINOM and RANDNEGBINOM won't support arbitrary precision
 

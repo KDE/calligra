@@ -38,7 +38,9 @@
 class KoOasisSettings;
 class KoResourceManager;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 class Sheet;
@@ -158,6 +160,7 @@ private:
     void loadOdfIgnoreList(const KoOasisSettings& settings);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DOCBASE_H

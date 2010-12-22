@@ -32,7 +32,7 @@
 
 #include "TestKspreadCommon.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:

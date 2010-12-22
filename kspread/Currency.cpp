@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 namespace Currency_LNS
 {

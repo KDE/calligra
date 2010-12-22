@@ -26,10 +26,9 @@
 
 #include "commands/AbstractRegionCommand.h"
 
-/**
- * The KSpread namespace.
- */
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 
@@ -49,6 +48,7 @@ private:
     Region m_oldPrintRegion;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_DEFINE_PRINT_RANGE_COMMAND

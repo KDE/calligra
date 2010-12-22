@@ -34,7 +34,7 @@
 #include "Map.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 //BEGIN NOTE Stefan: some words on operations
 //

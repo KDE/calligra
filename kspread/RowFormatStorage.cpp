@@ -26,7 +26,7 @@
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class RowFormatStorage::Private
 {

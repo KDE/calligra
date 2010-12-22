@@ -37,7 +37,9 @@ class KoGenStyles;
 class KoOdfStylesReader;
 class KoStyleStack;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Conditions;
 class CustomStyle;
@@ -546,10 +548,11 @@ public:
     Value1 value1;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_TYPEINFO(KSpread::Style, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KSpread::CustomStyle, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(KSpread::SharedSubStyle, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Tables::Style, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Tables::CustomStyle, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Calligra::Tables::SharedSubStyle, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_STYLE

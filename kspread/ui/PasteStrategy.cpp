@@ -27,7 +27,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class PasteStrategy::Private
 {

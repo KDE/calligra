@@ -45,7 +45,7 @@
 #include "commands/DataManipulators.h"
 #include "commands/RowColumnManipulators.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 SheetAdaptor::SheetAdaptor(Sheet* t)
         : QDBusAbstractAdaptor(t)
@@ -112,7 +112,7 @@ bool SheetAdaptor::setText(int x, int y, const QString& text, bool parse)
     //to true KSpread says: ASSERT: "f" in Dependencies.cpp (621)
     //kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
 
-    KSpread::DataManipulator *dm = new KSpread::DataManipulator();
+    Calligra::Tables::DataManipulator *dm = new Calligra::Tables::DataManipulator();
     dm->setSheet(m_sheet);
     dm->setValue(Value(text));
     dm->setParsing(parse);
@@ -126,29 +126,29 @@ bool SheetAdaptor::setText(const QString& cellname, const QString& text, bool pa
     return setText(location.x(), location.y(), text, parse);
 }
 
-QVariant valueToVariant(const KSpread::Value& value, Sheet* sheet)
+QVariant valueToVariant(const Calligra::Tables::Value& value, Sheet* sheet)
 {
     //Should we use following value-format enums here?
     //fmt_None, fmt_Boolean, fmt_Number, fmt_Percent, fmt_Money, fmt_DateTime, fmt_Date, fmt_Time, fmt_String
     switch (value.type()) {
-    case KSpread::Value::Empty:
+    case Calligra::Tables::Value::Empty:
         return QVariant();
-    case KSpread::Value::Boolean:
+    case Calligra::Tables::Value::Boolean:
         return QVariant(value.asBoolean());
-    case KSpread::Value::Integer:
+    case Calligra::Tables::Value::Integer:
         return static_cast<qint64>(value.asInteger());
-    case KSpread::Value::Float:
+    case Calligra::Tables::Value::Float:
         return (double) numToDouble(value.asFloat());
-    case KSpread::Value::Complex:
+    case Calligra::Tables::Value::Complex:
         return sheet->map()->converter()->asString(value).asString();
-    case KSpread::Value::String:
+    case Calligra::Tables::Value::String:
         return value.asString();
-    case KSpread::Value::Array: {
+    case Calligra::Tables::Value::Array: {
         QVariantList colarray;
         for (uint j = 0; j < value.rows(); j++) {
             QVariantList rowarray;
             for (uint i = 0; i < value.columns(); i++) {
-                KSpread::Value v = value.element(i, j);
+                Calligra::Tables::Value v = value.element(i, j);
                 rowarray.append(valueToVariant(v, sheet));
             }
             colarray.append(rowarray);
@@ -156,10 +156,10 @@ QVariant valueToVariant(const KSpread::Value& value, Sheet* sheet)
         return colarray;
     }
     break;
-    case KSpread::Value::CellRange:
+    case Calligra::Tables::Value::CellRange:
         //FIXME: not yet used
         return QVariant();
-    case KSpread::Value::Error:
+    case Calligra::Tables::Value::Error:
         return QVariant();
     }
     return QVariant();
@@ -181,7 +181,7 @@ bool SheetAdaptor::setValue(int x, int y, const QVariant& value)
 {
     Cell cell = Cell(m_sheet, x, y);
     if (! cell) return false;
-    KSpread::Value v = cell.value();
+    Calligra::Tables::Value v = cell.value();
     switch (value.type()) {
     case QVariant::Bool: v = Value(value.toBool()); break;
     case QVariant::ULongLong: v = Value(value.toLongLong()); break;

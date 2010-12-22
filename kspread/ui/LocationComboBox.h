@@ -28,7 +28,9 @@
 
 class QKeyEvent;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellToolBase;
 
@@ -73,6 +75,7 @@ private:
     KCompletion completionList;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_LOCATION_COMBOBOX

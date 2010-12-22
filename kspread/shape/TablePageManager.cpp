@@ -31,7 +31,7 @@
 
 #include <QList>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class TablePageManager::Private
 {

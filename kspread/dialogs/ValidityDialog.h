@@ -34,7 +34,9 @@ class KTextEdit;
 class KComboBox;
 class QCheckBox;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -80,6 +82,7 @@ protected:
     QLabel *validityLabelList;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_VALIDITY_DIALOG

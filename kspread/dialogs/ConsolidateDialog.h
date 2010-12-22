@@ -31,7 +31,9 @@
 
 #include <KDialog>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 class Sheet;
@@ -71,6 +73,7 @@ private:
     Private *const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CONSOLIDATE_DIALOG

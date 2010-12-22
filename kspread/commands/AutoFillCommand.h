@@ -34,7 +34,9 @@
 #include <QString>
 #include <QStringList>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class AutoFillSequence;
 class Cell;
@@ -86,6 +88,7 @@ private:
     QRect m_targetRange;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_AUTOFILL_COMMAND

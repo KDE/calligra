@@ -29,7 +29,9 @@
 #include "CellEditorBase.h"
 class KoViewConverter;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellToolBase;
 class Selection;
@@ -110,6 +112,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_EDITOR

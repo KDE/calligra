@@ -26,7 +26,9 @@
 
 #include <ui_SheetPropertiesWidget.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class SheetPropertiesWidget : public QWidget, public ::Ui::SheetPropertiesWidget
@@ -101,6 +103,7 @@ private:
     SheetPropertiesWidget* m_widget;
 };
 
-} // namespace
+} // namespace Tables
+} // namespace Calligra
 
 #endif /* SHEET_PROPERTIES_DIALOG */

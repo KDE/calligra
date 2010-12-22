@@ -26,7 +26,9 @@
 
 class QItemSelectionRange;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 
@@ -61,6 +63,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHEET_MODEL

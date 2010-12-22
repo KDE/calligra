@@ -29,8 +29,9 @@
 
 #include "ui_SpecialPasteWidget.h"
 
-
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -52,6 +53,7 @@ private:
     Selection* m_selection;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SPECIAL_PASTE_DIALOG

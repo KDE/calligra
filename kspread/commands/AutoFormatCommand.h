@@ -24,7 +24,9 @@
 
 #include <QList>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Style;
 
@@ -56,6 +58,7 @@ private:
     QList<Style> m_styles;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_AUTO_FORMAT_COMMAND

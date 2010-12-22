@@ -28,7 +28,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 
@@ -155,6 +157,7 @@ private:
     QString m_footMid;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_HEADER_FOOTER

@@ -24,7 +24,7 @@
 
 #include <qtest_kde.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class MyStyleStorage : public StyleStorage
 {

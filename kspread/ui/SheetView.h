@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SHEET_VIEW
-#define KSPREAD_SHEET_VIEW
+#ifndef CALLIGRA_TABLES_SHEET_VIEW
+#define CALLIGRA_TABLES_SHEET_VIEW
 
 #include <QObject>
 #include <QPoint>
@@ -35,7 +35,9 @@ class QSizeF;
 
 class KoViewConverter;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CellView;
 class Region;
@@ -47,7 +49,7 @@ class CanvasBase;
  * The SheetView controls the painting of the sheets' cells.
  * It caches a set of CellViews.
  */
-class KSPREAD_EXPORT SheetView : public QObject
+class CALLIGRA_TABLES_EXPORT SheetView : public QObject
 {
     Q_OBJECT
 
@@ -85,7 +87,7 @@ public:
      *
      * \return the CellView for the position
      */
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     CellView cellView(int col, int row);
 #else
     const CellView& cellView(int col, int row);
@@ -139,7 +141,7 @@ private:
      * Returns the default CellView.
      * Used by CellView.
      */
-#ifdef KSPREAD_MT
+#ifdef CALLIGRA_TABLES_MT
     CellView defaultCellView() const;
 #else
     const CellView& defaultCellView() const;
@@ -151,6 +153,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-#endif // KSPREAD_SHEET_VIEW
+#endif // CALLIGRA_TABLES_SHEET_VIEW

@@ -33,7 +33,9 @@ class QDomElement;
 class QDomDocument;
 class KoGenStyle;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 class RowFormatStorage;
@@ -206,6 +208,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ROW_COLUMN_FORMAT

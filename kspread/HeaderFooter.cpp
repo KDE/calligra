@@ -46,7 +46,7 @@
     } while(0)
 
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 HeaderFooter::HeaderFooter(Sheet *sheet)
         : m_pSheet(sheet)

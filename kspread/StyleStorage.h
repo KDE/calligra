@@ -29,7 +29,9 @@
 #include <Region.h>
 #include <Style.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Map;
 class OdfSavingContext;
@@ -232,6 +234,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_STYLE_STORAGE

@@ -31,7 +31,7 @@
 #include <Util.h>
 #include <Value.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }

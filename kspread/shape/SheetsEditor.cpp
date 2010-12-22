@@ -31,7 +31,7 @@
 #include "Sheet.h"
 #include "Map.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class SheetsEditor::Private
 {

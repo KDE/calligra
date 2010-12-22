@@ -22,7 +22,9 @@
 
 #include "Value.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CalculationSettings;
 class ValueParser;
@@ -105,6 +107,7 @@ private:
     const ValueParser* m_parser;
 };
 
-}  //KSpread namespace
+} // namespace Tables
+} // namespace Calligra
 
 #endif  //CALLIGRA_TABLES_VALUE_CONVERTER

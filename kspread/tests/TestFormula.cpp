@@ -22,7 +22,7 @@
 
 #include "TestKspreadCommon.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 static char encodeTokenType(const Token& token)
 {

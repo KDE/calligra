@@ -28,7 +28,7 @@
 #include <kcombobox.h>
 #include <klocale.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 FindOption::FindOption(QWidget *parent)
 {

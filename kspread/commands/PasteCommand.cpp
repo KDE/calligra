@@ -40,7 +40,7 @@
 // - Get plain text pasting right.
 
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class PasteCellCommand : public AbstractRegionCommand
 {

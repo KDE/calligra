@@ -26,7 +26,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -86,8 +88,9 @@ static inline uint qHash(const Currency& cur) {
     return ::qHash(cur.code());
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_METATYPE(KSpread::Currency)
+Q_DECLARE_METATYPE(Calligra::Tables::Currency)
 
 #endif

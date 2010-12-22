@@ -32,7 +32,9 @@
 #include <QResizeEvent>
 #include <QPaintEvent>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class TabBarPrivate;
 
@@ -265,5 +267,7 @@ private:
     TabBar& operator=(const TabBar&);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
+
 #endif // TABBAR_H

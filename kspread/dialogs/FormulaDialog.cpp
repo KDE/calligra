@@ -60,7 +60,7 @@
 #include <QSortFilterProxyModel>
 #include <QItemSelectionModel>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& formulaName)
         : KDialog(parent)

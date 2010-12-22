@@ -30,7 +30,9 @@
 
 #include "kspread_export.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Function;
 
@@ -90,7 +92,8 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 /**
 * Register a function module when it is contained in a loadable plugin

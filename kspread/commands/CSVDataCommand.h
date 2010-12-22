@@ -24,7 +24,9 @@
 
 #include <KoCsvImportDialog.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -64,6 +66,7 @@ private:
     QString m_documentThousandsSeparator;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CSV_DATA_COMMAND

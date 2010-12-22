@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef __KSPREAD_LATEX_TABLE_H__
-#define __KSPREAD_LATEX_TABLE_H__
+#ifndef __CALLIGRA_TABLES_LATEX_TABLE_H__
+#define __CALLIGRA_TABLES_LATEX_TABLE_H__
 
 #include <QString>
 #include <QList>
@@ -263,5 +263,5 @@ private:
     void generateBottomLineBorder(QTextStream&, int);
 };
 
-#endif /* __KSPREAD_LATEX_TABLE_H__ */
+#endif /* __CALLIGRA_TABLES_LATEX_TABLE_H__ */
 

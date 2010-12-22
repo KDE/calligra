@@ -37,7 +37,7 @@
 
 #include "commands/CommentCommand.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
         : KDialog(parent)

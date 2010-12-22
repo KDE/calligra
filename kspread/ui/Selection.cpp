@@ -35,7 +35,7 @@
 
 #include "ui/CellEditor.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // TODO
 // - Allow resizing of all ranges in a normal selection; not just the last one.
@@ -722,7 +722,7 @@ int Selection::setActiveElement(const Cell &cell)
     return -1;
 }
 
-KSpread::Region::Element* Selection::activeElement() const
+Calligra::Tables::Region::Element* Selection::activeElement() const
 {
     return (d->activeElement == cells().count()) ? 0 : cells()[d->activeElement];
 }
@@ -961,37 +961,37 @@ QRect Selection::extendToMergedAreas(const QRect& _area) const
     return area;
 }
 
-KSpread::Region::Point* Selection::createPoint(const QPoint& point) const
+Calligra::Tables::Region::Point* Selection::createPoint(const QPoint& point) const
 {
     return new Point(point);
 }
 
-KSpread::Region::Point* Selection::createPoint(const QString& string) const
+Calligra::Tables::Region::Point* Selection::createPoint(const QString& string) const
 {
     return new Point(string);
 }
 
-KSpread::Region::Point* Selection::createPoint(const Region::Point& point) const
+Calligra::Tables::Region::Point* Selection::createPoint(const Region::Point& point) const
 {
     return new Point(point);
 }
 
-KSpread::Region::Range* Selection::createRange(const QRect& rect) const
+Calligra::Tables::Region::Range* Selection::createRange(const QRect& rect) const
 {
     return new Range(rect);
 }
 
-KSpread::Region::Range* Selection::createRange(const KSpread::Region::Point& tl, const KSpread::Region::Point& br) const
+Calligra::Tables::Region::Range* Selection::createRange(const Calligra::Tables::Region::Point& tl, const Calligra::Tables::Region::Point& br) const
 {
     return new Range(tl, br);
 }
 
-KSpread::Region::Range* Selection::createRange(const QString& string) const
+Calligra::Tables::Region::Range* Selection::createRange(const QString& string) const
 {
     return new Range(string);
 }
 
-KSpread::Region::Range* Selection::createRange(const Region::Range& range) const
+Calligra::Tables::Region::Range* Selection::createRange(const Region::Range& range) const
 {
     return new Range(range);
 }
@@ -1118,7 +1118,7 @@ Selection::Range::Range(const QRect& range)
 {
 }
 
-Selection::Range::Range(const KSpread::Region::Point& tl, const KSpread::Region::Point& br)
+Selection::Range::Range(const Calligra::Tables::Region::Point& tl, const Calligra::Tables::Region::Point& br)
         : Region::Range(tl, br),
         m_color(Qt::black)
 {

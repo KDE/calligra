@@ -27,7 +27,9 @@
 #include "Number.h"
 #include "Style.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class CalculationSettings;
 class Value;
@@ -135,6 +137,7 @@ private:
     const ValueConverter* m_converter;
 };
 
-}  //namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif  //CALLIGRA_TABLES_VALUE_FORMATTER

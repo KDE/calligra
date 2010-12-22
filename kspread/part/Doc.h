@@ -57,7 +57,9 @@ class KoXmlWriter;
 
 #define MIME_TYPE "application/x-kspread"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 class Doc;
@@ -197,6 +199,7 @@ private:
     void loadPaper(KoXmlElement const & paper);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif /* CALLIGRA_TABLES_DOC */

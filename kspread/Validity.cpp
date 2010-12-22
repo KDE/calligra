@@ -37,7 +37,7 @@
 #include "ValueConverter.h"
 #include "ValueParser.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class Validity::Private : public QSharedData
 {

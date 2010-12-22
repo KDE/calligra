@@ -48,7 +48,7 @@
 //Added by qt3to4:
 #include <QGridLayout>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::WFlags fl)
         : QWidget(parent, fl)

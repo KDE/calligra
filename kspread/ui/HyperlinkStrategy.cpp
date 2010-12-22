@@ -34,7 +34,7 @@
 
 #include <QTimer>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class HyperlinkStrategy::Private
 {

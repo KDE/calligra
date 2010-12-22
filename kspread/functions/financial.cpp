@@ -41,7 +41,7 @@
 
 #include <math.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // prototypes (sorted)
 Value func_accrint(valVector args, ValueCalc *calc, FuncExtra *);

@@ -42,7 +42,7 @@
 #define M_LN2l 0.6931471805599453094172321214581766L
 #endif
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 // prototypes (sort alphabetically)
 Value func_base(valVector args, ValueCalc *calc, FuncExtra *);

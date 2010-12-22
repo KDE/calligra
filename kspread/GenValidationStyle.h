@@ -29,7 +29,9 @@
 
 class KoXmlWriter;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Validity;
 class ValueConverter;
@@ -107,6 +109,7 @@ private:
 
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

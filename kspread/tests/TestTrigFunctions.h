@@ -25,7 +25,9 @@
 
 #include <Value.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TestTrigFunctions: public QObject
@@ -45,6 +47,7 @@ private:
     Value evaluate(const QString&);
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_TEST_TRIG_FUNCTIONS

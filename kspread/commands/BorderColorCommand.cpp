@@ -31,7 +31,7 @@
 
 #include <QPen>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 BorderColorCommand::BorderColorCommand()
         : AbstractRegionCommand()

@@ -65,7 +65,9 @@ class KComboBox;
 class KComboBox;
 class KoUnitDoubleSpinBox;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 class CustomStyle;
@@ -717,6 +719,7 @@ protected:
     void applyStyle();
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_LAYOUT_DIALOG

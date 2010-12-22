@@ -30,7 +30,7 @@
 #include "Sheet.h"
 #include "Value.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class Binding::Private : public QSharedData
 {
@@ -72,7 +72,7 @@ QAbstractItemModel* Binding::model() const
     return d->model;
 }
 
-const KSpread::Region& Binding::region() const
+const Calligra::Tables::Region& Binding::region() const
 {
     return d->model->region();
 }
@@ -232,7 +232,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
     return variant;
 }
 
-const KSpread::Region& BindingModel::region() const
+const Calligra::Tables::Region& BindingModel::region() const
 {
     return m_region;
 }

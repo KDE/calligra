@@ -51,10 +51,10 @@ public:
     QHash<unsigned, unsigned> maxCellsInRow;
     QHash<unsigned, Column*> columns;
     QHash<unsigned, Row*> rows;
-    KSpread::PointStorage<Hyperlink> hyperlinks;
-    KSpread::PointStorage<QList<PictureObject*> > pictures;
-    KSpread::PointStorage<QList<ChartObject*> > charts;
-    KSpread::PointStorage<QList<OfficeArtObject*> > drawObjects;
+    Calligra::Tables::PointStorage<Hyperlink> hyperlinks;
+    Calligra::Tables::PointStorage<QList<PictureObject*> > pictures;
+    Calligra::Tables::PointStorage<QList<ChartObject*> > charts;
+    Calligra::Tables::PointStorage<QList<OfficeArtObject*> > drawObjects;
 
     bool visible;
     bool protect;

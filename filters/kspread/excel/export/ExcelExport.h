@@ -30,9 +30,11 @@
 #include <records.h>
 #include <QVariantList>
 
-namespace KSpread {
+namespace Calligra
+namespace Tables {
     class Sheet;
     class Tokens;
+}
 }
 
 namespace Swinder {
@@ -52,11 +54,11 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
-    QList<Swinder::FormulaToken> compileFormula(const KSpread::Tokens& tokens, KSpread::Sheet* sheet) const;
+    QList<Swinder::FormulaToken> compileFormula(const Calligra::Tables::Tokens& tokens, Calligra::Tables::Sheet* sheet) const;
 
-    void convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsigned>& sst);
-    void buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
-    void collectStyles(KSpread::Sheet* sheet, QList<Swinder::XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
+    void convertSheet(Calligra::Tables::Sheet* sheet, const QHash<QString, unsigned>& sst);
+    void buildStringTable(Calligra::Tables::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
+    void collectStyles(Calligra::Tables::Sheet* sheet, QList<Swinder::XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
 private:
     class Private;
     Private* d;

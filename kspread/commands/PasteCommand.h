@@ -29,7 +29,9 @@
 class QMimeData;
 class KoXmlDocument;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -101,6 +103,7 @@ private:
     bool                m_pasteFC;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_PASTE_COMMAND

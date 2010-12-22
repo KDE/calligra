@@ -48,7 +48,9 @@
 // - customizable button pixmaps
 // - use QStyle to paint the tabs & buttons (is it good/possible?)
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class TabBarPrivate
@@ -851,7 +853,8 @@ void TabBar::wheelEvent(QWheelEvent * e)
     emit tabChanged(d->tabs[ d->activeTab-1]);
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #include "TabBar.moc"
 

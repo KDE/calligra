@@ -30,7 +30,9 @@
 class QListWidget;
 class QListWidgetItem;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -56,6 +58,7 @@ protected:
     QList<int> listInt;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_SHOW_COL_ROW_DIALOG

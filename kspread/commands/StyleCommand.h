@@ -26,7 +26,9 @@
 #include "AbstractRegionCommand.h"
 #include "Style.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Style;
 
@@ -179,6 +181,7 @@ private:
     QList< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
-}  // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_STYLE_COMMAND

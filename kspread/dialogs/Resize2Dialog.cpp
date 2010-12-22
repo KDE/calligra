@@ -52,7 +52,7 @@
 // commands
 #include "commands/RowColumnManipulators.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
         : KDialog(parent)

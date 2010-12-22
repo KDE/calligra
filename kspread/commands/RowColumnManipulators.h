@@ -26,7 +26,9 @@
 
 #include "AbstractRegionCommand.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class ColumnFormat;
 class RowFormat;
@@ -205,6 +207,7 @@ private:
     RowFormat *m_template;
 };
 
-}  // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_ROW_COLUMN_MANIPULATORS

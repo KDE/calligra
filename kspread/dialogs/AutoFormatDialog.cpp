@@ -49,7 +49,7 @@
 
 #include "commands/AutoFormatCommand.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 struct Entry {
     QString xml;

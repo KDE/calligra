@@ -28,7 +28,7 @@
 #include "Validity.h"
 #include "ValueConverter.h"
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 GenValidationStyles::GenValidationStyles()
 {

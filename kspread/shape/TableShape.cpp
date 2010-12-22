@@ -46,7 +46,7 @@
 #include <SheetView.h>
 #include <StyleManager.h>
 
-using namespace KSpread;
+using namespace Calligra::Tables;
 
 class TableShape::Private
 {

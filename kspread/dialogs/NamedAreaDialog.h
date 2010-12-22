@@ -35,7 +35,9 @@ class KLineEdit;
 
 class KListWidget;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Region;
 class Selection;
@@ -94,6 +96,7 @@ private:
     QString     m_initialAreaName;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_NAMED_AREA_DIALOG

@@ -33,7 +33,9 @@
 
 class QDomElement;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 class Value;
@@ -100,6 +102,7 @@ private:
     Private * const d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_FUNCTIONS

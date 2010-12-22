@@ -35,7 +35,9 @@
 
 class KLocale;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 class Value;
@@ -440,9 +442,10 @@ inline uint qHash(const Formula& formula)
     return qHash(formula.expression());
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_METATYPE(KSpread::Formula)
-Q_DECLARE_TYPEINFO(KSpread::Formula, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Tables::Formula)
+Q_DECLARE_TYPEINFO(Calligra::Tables::Formula, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_FORMULA
