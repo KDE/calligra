@@ -70,7 +70,7 @@ inline Number atgh(const Number &n)
 
 #include <QSharedDataPointer>
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 #include <complex>
 

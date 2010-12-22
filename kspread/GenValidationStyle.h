@@ -22,7 +22,7 @@
 #ifndef CALLIGRA_TABLES_GENVALIDATIONSTYLE
 #define CALLIGRA_TABLES_GENVALIDATIONSTYLE
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 #include <QMap>
 #include <QString>

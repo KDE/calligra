@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_TABLES_STYLE_MANAGER
 #define CALLIGRA_TABLES_STYLE_MANAGER
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 #include <KoXmlReader.h>
 
 #include <Style.h>

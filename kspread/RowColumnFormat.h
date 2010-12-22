@@ -23,7 +23,7 @@
 
 #include <QBrush>
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 #include <KoXmlReader.h>
 
 #include "Global.h"

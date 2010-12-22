@@ -21,7 +21,7 @@
 #define CALLIGRA_TABLES_SHAPE_APPLICATION_DATA
 
 #include <KoShapeApplicationData.h>
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 namespace Calligra
 {

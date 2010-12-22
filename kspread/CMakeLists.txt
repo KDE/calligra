@@ -334,8 +334,8 @@ install( FILES  kspreadrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 
 install( FILES
-    kspread_export.h
-    kspread_limits.h
+    calligra_tables_export.h
+    calligra_tables_limits.h
 
     Cell.h
     CellStorage.h

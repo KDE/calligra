@@ -22,7 +22,7 @@
 
 #include <KoToolFactoryBase.h>
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 namespace Calligra
 {

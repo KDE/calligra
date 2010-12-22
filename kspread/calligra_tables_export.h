@@ -17,42 +17,42 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_EXPORT_H
-#define KSPREAD_EXPORT_H
+#ifndef CALLIGRA_TABLES_EXPORT_H
+#define CALLIGRA_TABLES_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-#ifndef KSPREAD_EXPORT
+#ifndef CALLIGRA_TABLES_EXPORT
 # if defined(MAKE_KSPREADCOMMON_LIB)
 /* We are building this library */
-#  define KSPREAD_EXPORT KDE_EXPORT
+#  define CALLIGRA_TABLES_EXPORT KDE_EXPORT
 # elif defined(MAKE_KSPREADSOLVER_LIB)
 /* We are building this library */
-#  define KSPREAD_EXPORT KDE_EXPORT
+#  define CALLIGRA_TABLES_EXPORT KDE_EXPORT
 # else
 /* We are using this library */
-#  define KSPREAD_EXPORT KDE_IMPORT
+#  define CALLIGRA_TABLES_EXPORT KDE_IMPORT
 # endif
 #endif
 
-# ifndef KSPREAD_EXPORT_DEPRECATED
-#  define KSPREAD_EXPORT_DEPRECATED KDE_DEPRECATED KSPREAD_EXPORT
+# ifndef CALLIGRA_TABLES_EXPORT_DEPRECATED
+#  define CALLIGRA_TABLES_EXPORT_DEPRECATED KDE_DEPRECATED CALLIGRA_TABLES_EXPORT
 # endif
 
 // now for tests
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
 # if defined(MAKE_KSPREADCOMMON_LIB)
-#       define KSPREAD_TEST_EXPORT KDE_EXPORT
+#       define CALLIGRA_TABLES_TEST_EXPORT KDE_EXPORT
 #   else
-#       define KSPREAD_TEST_EXPORT KDE_IMPORT
+#       define CALLIGRA_TABLES_TEST_EXPORT KDE_IMPORT
 #   endif
 # else /* not windows */
-#   define KSPREAD_TEST_EXPORT KDE_EXPORT
+#   define CALLIGRA_TABLES_TEST_EXPORT KDE_EXPORT
 # endif
 #else /* not compiling tests */
-#   define KSPREAD_TEST_EXPORT
+#   define CALLIGRA_TABLES_TEST_EXPORT
 #endif
 
 #endif

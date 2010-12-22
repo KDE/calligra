@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 #include "Cell.h"
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Sheet.h"

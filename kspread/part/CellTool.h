@@ -22,7 +22,7 @@
 
 #include <kspread/ui/CellToolBase.h>
 
-#include <kspread/kspread_export.h>
+#include <kspread/calligra_tables_export.h>
 
 namespace Calligra
 {

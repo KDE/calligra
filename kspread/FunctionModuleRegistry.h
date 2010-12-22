@@ -24,7 +24,7 @@
 
 #include <KoGenericRegistry.h>
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 #include "FunctionModule.h"
 
 namespace Calligra

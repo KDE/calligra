@@ -20,7 +20,7 @@
 #include "DragAndDropStrategy.h"
 
 #include "Cell.h"
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 #include "Selection.h"
 #include "Sheet.h"
 

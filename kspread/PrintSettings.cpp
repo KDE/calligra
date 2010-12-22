@@ -24,7 +24,7 @@
 #include "PrintSettings.h"
 
 // KSpread
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 #include "Region.h"
 
 // KOffice

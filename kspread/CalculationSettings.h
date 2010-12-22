@@ -30,7 +30,7 @@
 #ifndef CALLIGRA_TABLES_CALCULATION_SETTINGS
 #define CALLIGRA_TABLES_CALCULATION_SETTINGS
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 #include <KoXmlReader.h>
 

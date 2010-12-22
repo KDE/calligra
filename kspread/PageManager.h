@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_TABLES_PAGE_MANAGER
 #define CALLIGRA_TABLES_PAGE_MANAGER
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 class QRect;
 class QSizeF;

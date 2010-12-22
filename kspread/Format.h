@@ -30,7 +30,7 @@
 #ifndef CALLIGRA_TABLES_FORMAT
 #define CALLIGRA_TABLES_FORMAT
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 namespace Calligra
 {

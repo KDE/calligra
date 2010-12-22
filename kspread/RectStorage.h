@@ -31,7 +31,7 @@
 #include <QMutexLocker>
 #endif
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 #include "Map.h"
 #include "Region.h"

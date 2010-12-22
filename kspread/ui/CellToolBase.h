@@ -32,7 +32,7 @@
 #include <KoInteractionTool.h>
 
 #include <kspread/Cell.h>
-#include <kspread/kspread_export.h>
+#include <kspread/calligra_tables_export.h>
 #include "Selection.h"
 
 class KoColor;

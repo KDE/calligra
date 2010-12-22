@@ -28,7 +28,7 @@
 #include <QVector>
 #include <QPoint>
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 #include "Cell.h"
 
 #define CALLIGRA_TABLES_INLINE_ARRAYS

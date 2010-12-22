@@ -27,7 +27,7 @@
 #include "Number.h"
 #include "Value.h"
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 #ifdef max
 # undef max

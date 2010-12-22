@@ -19,7 +19,7 @@
 */
 #ifndef CALLIGRA_TABLES_CELLEDITORBASE_H
 #define CALLIGRA_TABLES_CELLEDITORBASE_H
-#include <kspread/kspread_export.h>
+#include <kspread/calligra_tables_export.h>
 
 class QFont;
 class KoViewConverter;

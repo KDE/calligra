@@ -21,7 +21,7 @@
 #define CALLIGRA_TABLES_DRAG_AND_DROP_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 namespace Calligra
 {

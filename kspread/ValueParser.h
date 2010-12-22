@@ -27,7 +27,7 @@
 #include "Format.h"
 #include "Number.h"
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 namespace Calligra
 {

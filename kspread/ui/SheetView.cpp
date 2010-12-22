@@ -31,7 +31,7 @@
 #include <KoViewConverter.h>
 
 #include "CellView.h"
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"

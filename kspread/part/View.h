@@ -38,7 +38,7 @@
 #include <QPointF>
 #include <KoView.h>
 #include <KoZoomMode.h>
-#include <kspread/kspread_export.h>
+#include <kspread/calligra_tables_export.h>
 
 class QAction;
 class QKeyEvent;

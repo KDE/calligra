@@ -32,7 +32,7 @@
 #include <klocale.h>
 
 // KSpread
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"

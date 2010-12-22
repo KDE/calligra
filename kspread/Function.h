@@ -29,7 +29,7 @@
 
 #include "Region.h"
 
-#include "kspread_export.h"
+#include "calligra_tables_export.h"
 
 class QDomElement;
 
