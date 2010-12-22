@@ -60,7 +60,7 @@ if(SHOULD_BUILD_KFORMULA)
 endif(SHOULD_BUILD_KFORMULA)
 
 if(SHOULD_BUILD_TABLES)
-    macro_optional_add_subdirectory(kspread)
+    macro_optional_add_subdirectory(tables)
 endif(SHOULD_BUILD_TABLES)
 
 if(SHOULD_BUILD_KARBON)

@@ -1,7 +1,7 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30528)
 
 include_directories( ${CMAKE_SOURCE_DIR}/filters/libmsooxml
-                     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx
+                     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx
 )
 
 ########### next target ###############
@@ -12,8 +12,8 @@ set(pptximport_PART_SRCS
     PptxXmlSlideReader.cpp
     PptxXmlCommentsReader.cpp
     PptxXmlCommentAuthorsReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/XlsxXmlChartReader.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/XlsxXmlChartReader.cpp
 )
 
 kde4_add_plugin(pptximport ${pptximport_PART_SRCS})
