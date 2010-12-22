@@ -112,6 +112,8 @@ protected:
 
 private:
     KLocale *locale() const;
+    int toRcpsTime( const DateTime &time ) const;
+    DateTime fromRcpsTime( int time ) const;
 
 private:
     MainSchedule *m_schedule;

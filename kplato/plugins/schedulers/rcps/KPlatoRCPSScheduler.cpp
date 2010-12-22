@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2009, 2010 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,6 +41,15 @@
 #define PROGRESS_MAX_VALUE 120000
 #define PROGRESS_INIT_VALUE 12000
 #define PROGRESS_INIT_STEP 2000
+
+/* low weight == late, high weight == early */
+#define WEIGHT_ASAP     10
+#define WEIGHT_ALAP     1
+#define WEIGHT_SNE      10
+#define WEIGHT_MSO      10
+#define WEIGHT_FNL      8
+#define WEIGHT_MFO      3
+#define WEIGHT_FI       10
 
 class ProgressInfo
 {
@@ -145,7 +154,11 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
         return 0;
     }
     int dur = 0;
-    if ( info->estimatetype == Estimate::Type_Effort ) {
+    if ( info->task->constraint() == Node::FixedInterval ) {
+        // duration may depend on daylight saving so we need to calculate
+        // NOTE: dur may not be correct if time != info->task->constraintStartTime, let's see what happends...
+        dur = ( info->task->constraintEndTime() - info->task->constraintStartTime() ).seconds() / m_timeunit;
+    } else if ( info->estimatetype == Estimate::Type_Effort ) {
         dur = info->task->requests().duration(
                     info->requests,
                     m_starttime.addSecs( time * m_timeunit ), 
@@ -199,6 +212,7 @@ void KPlatoRCPSScheduler::run()
         m_project->initiateCalculationLists( *m_schedule );
 
         m_problem = rcps_problem_new();
+        rcps_problem_setfitness_mode( m_problem, FITNESS_WEIGHT );
 
         m_recalculate = m_manager->recalculate();
         m_starttime =  m_recalculate ? m_manager->recalculateFrom() : m_project->constraintStartTime();
@@ -547,11 +561,50 @@ void KPlatoRCPSScheduler::addResources()
     }
 }
 
+int KPlatoRCPSScheduler::toRcpsTime( const DateTime &time ) const
+{
+    return m_starttime.secsTo( time ) / m_timeunit;
+}
+
+DateTime KPlatoRCPSScheduler::fromRcpsTime( int time ) const
+{
+    return m_starttime.addSecs( time * m_timeunit );
+}
+
 struct rcps_job *KPlatoRCPSScheduler::addTask( KPlato::Task *task )
 {
     struct rcps_job *job = rcps_job_new();
     rcps_job_setname( job, task->name().toLocal8Bit().data() );
     rcps_job_add( m_problem, job );
+    switch ( task->constraint() ) {
+        case Node::ASAP:
+            rcps_job_setweight( job, WEIGHT_ASAP );
+            break;
+        case Node::ALAP:
+            rcps_job_setweight( job, WEIGHT_ALAP );
+            break;
+        case Node::StartNotEarlier:
+            rcps_job_setearliest_start( job, toRcpsTime( task->constraintStartTime() ) );
+            rcps_job_setweight( job, WEIGHT_SNE );
+            break;
+        case Node::MustStartOn:
+            rcps_job_setearliest_start( job, toRcpsTime( task->constraintStartTime() ) );
+            rcps_job_setweight( job, WEIGHT_MFO );
+            break;
+        case Node::FinishNotLater:
+            rcps_job_setweight( job, WEIGHT_FNL );
+            break;
+        case Node::MustFinishOn:
+            rcps_job_setweight( job, WEIGHT_MFO );
+            break;
+        case Node::FixedInterval:
+            rcps_job_setearliest_start( job, toRcpsTime( task->constraintStartTime() ) );
+            rcps_job_setweight( job, WEIGHT_FI );
+            break;
+        default:
+            rcps_job_setweight( job, WEIGHT_ASAP );
+            break;
+    }
     m_taskmap[job] = task;
     return job;
 }
