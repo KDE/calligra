@@ -1,4 +1,5 @@
 
+set(LIBRCPS_INCLUDE_DIR libs/src)
 include_directories( ${LIBRCPS_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/kplato/libs/kernel ${KDE4_INCLUDES} )
 
 add_subdirectory( libs )
