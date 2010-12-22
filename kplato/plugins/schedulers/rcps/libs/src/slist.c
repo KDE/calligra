@@ -144,21 +144,21 @@ void slist_add_root(struct slist *l, struct slist_node *n) {
 	n->brothers[NODE_NEXT] = NULL;
 }
 
-inline void slist_inc_count(struct slist_node *n) {
+/*inline*/ void slist_inc_count(struct slist_node *n) {
 	while (n) {
 		n->count++;
 		n = n->parent;
 	}
 }
 
-inline void slist_dec_count(struct slist_node *n) {
+/*inline*/ void slist_dec_count(struct slist_node *n) {
 	while (n) {
 		n->count--;
 		n = n->parent;
 	}
 }
 
-inline int hmax(const int a, const int b) {
+/*inline*/ int hmax(const int a, const int b) {
 	return a > b ? a : b;
 }
 
@@ -213,7 +213,7 @@ struct slist_node *slist_sr(struct slist *l, struct slist_node *n, int dir) {
 	return pn;
 }
 
-inline struct slist_node *slist_dr(struct slist *l, struct slist_node *n, 
+/*inline*/ struct slist_node *slist_dr(struct slist *l, struct slist_node *n,
 		int dir) {
 	slist_sr(l, n->children[dir], dir);
 	return slist_sr(l, n, !dir);

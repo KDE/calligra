@@ -1,4 +1,12 @@
 
+set(CMAKE_THREAD_PREFER_PTHREAD 1)
+
+macro_optional_find_package(Threads)
+
+if(Threads_FOUND AND CMAKE_USE_PTHREADS_INIT AND CMAKE_THREAD_LIBS_INIT)
+    set(HAVE_PTHREADS 1)
+endif(Threads_FOUND AND CMAKE_USE_PTHREADS_INIT AND CMAKE_THREAD_LIBS_INIT)
+
 set(librcps_LIB_SRCS
     decode.c
     initial.c
@@ -15,7 +23,7 @@ kde4_add_library(librcps_plan SHARED ${librcps_LIB_SRCS})
 
 target_link_libraries(
     librcps_plan
-    pthread
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
 install(TARGETS librcps_plan ${INSTALL_TARGETS_DEFAULT_ARGS})

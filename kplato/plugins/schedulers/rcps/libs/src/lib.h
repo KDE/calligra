@@ -4,17 +4,17 @@
 #include <stdlib.h>
 
 /* return the bigger of the two arguments */
-static inline int max(const int a, const int b) {
+static /*inline*/ int max(const int a, const int b) {
 	return a > b ? a : b;
 }
 
 /* return the smaller of the two arguments */
-static inline int min(const int a, const int b) {
+static /*inline*/ int min(const int a, const int b) {
 	return a < b ? a : b;
 }
 
 /* return a random number between 0 and max (both inclusive)*/
-static inline int irand(const int max) {
+static /*inline*/ int irand(const int max) {
 	return (int) (1.0*max*rand()/(RAND_MAX+1.0));
 }
 
