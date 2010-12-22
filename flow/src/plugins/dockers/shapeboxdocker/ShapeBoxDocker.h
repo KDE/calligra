@@ -74,7 +74,7 @@ class ShapeBoxDocker : public QDockWidget
 
         void removeCollection(const QString& family);
 
-        /// Generate an icon from @p shape
+        /// Generate an icon from @p group
         QIcon generateShapeIcon(KoShape* shape);
 
     protected slots:
