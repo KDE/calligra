@@ -117,15 +117,15 @@ public:
      * This property specifies how text from another textframe will behave when this frame
      * intersects with it.
      */
-    KWord::TextRunAround textRunAround() const {
-        return m_runAround;
+    KWord::TextWrap textWrap() const {
+        return m_textWrap;
     }
     /**
      * Set the text runaround property for this frame.
      * This property specifies how text from another textframe will behave when this frame
      * intersects with it.
      */
-    void setTextRunAround(KWord::TextRunAround runAround, KWord::Through runThrought = KWord::Background);
+    void setTextWrap(KWord::TextWrap runAround, KWord::Through runThrought = KWord::Background);
 
     /**
      * The space between this frames edge and the text when that text runs around this frame.
@@ -203,8 +203,7 @@ private:
     bool m_copyToEverySheet;
     KWord::NewFrameBehavior m_newFrameBehavior;
     KWord::RunAroundSide m_runAroundSide;
-    KWord::TextRunAround m_runAround;
-    KWord::Through m_runThrough;
+    KWord::TextWrap m_textWrap;
     qreal m_runAroundDistance;
     // The page number is only used during loading.
     // It is set to the page number if the frame contains a page anchored frame.

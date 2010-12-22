@@ -1061,13 +1061,13 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem)
 
     switch (frameElem.attribute("runaround", "0").toInt()) {
     case 0:
-        frame->setTextRunAround(KWord::RunThrough);
+        frame->setTextWrap(KWord::RunThrough);
         break;
     case 2:
-        frame->setTextRunAround(KWord::NoRunAround);
+        frame->setTextWrap(KWord::NoRunAround);
         break;
     default:
-        frame->setTextRunAround(KWord::RunAround);
+        frame->setTextWrap(KWord::RunAround);
         break;
     }
 
