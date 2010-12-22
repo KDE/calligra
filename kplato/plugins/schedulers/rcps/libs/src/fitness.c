@@ -13,12 +13,17 @@ int fitness(struct rcps_problem *problem, struct rcps_genome *genome,
 	switch (problem->fitness_mode) {
 	case FITNESS_WEIGHT:
 		for (i = 0; i < problem->job_count; i++) {
-			int job_end = pheno->job_start[problem->jobs[i]->index];
+			int job_start = pheno->job_start[problem->jobs[i]->index];
 			int modenum = problem->jobs[i]->genome_position >= 0 ?
 					genome->modes[problem->jobs[i]->genome_position] : 0;
-			job_end += problem->jobs[i]->modes[modenum]->duration;
-			max += job_end * problem->jobs[i]->weight;
-		}
+            int dur = problem->jobs[i]->modes[modenum]->duration;
+			int job_end = job_start + dur;
+            int weight = problem->weight_callback == NULL ?
+                    problem->jobs[i]->weight :
+                    problem->weight_callback(job_start, dur, problem->jobs[i]->modes[modenum]->cb_arg);
+
+			max += job_end * weight;
+        }
 		break;
 	default:
 		for (i = 0; i < problem->job_count; i++) {

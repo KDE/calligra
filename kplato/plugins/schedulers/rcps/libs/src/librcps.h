@@ -281,6 +281,19 @@ void rcps_solver_set_duration_callback(struct rcps_solver *s,
 	int (*duration_callback)(int direction, int time, int nominal_duration, 
 		void *arg));
 
+/* register a callback that gets called every time we want to calculate
+ * the project fitness.
+ * arguments are the jobs start time, duration, and an argument that can be set per mode.
+ * should return the jobs weight of this mode.
+ * the weight does not need to be constant, itmay change dependent on eg start time or duration.
+ * the arg is set using rcps_mode_set_cbarg and is shared with rcps_solver_set_duration_callback().
+ */
+#define DURATION_FORWARD    0
+#define DURATION_BACKWARD   1
+void rcps_solver_set_weight_callback(struct rcps_solver *s,
+    int (*duration_callback)(int time, int duration,
+        void *arg));
+
 /* solve a problem */
 void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p);
 

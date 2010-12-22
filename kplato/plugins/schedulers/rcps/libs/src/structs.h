@@ -22,6 +22,8 @@ struct rcps_problem {
 	int *alternatives_max;
 	/* fitness calulation mode */
 	int fitness_mode;
+    /* weight callback */
+    int (*weight_callback)(int starttime, int duration, void *arg);
 };
 
 struct rcps_resource {
