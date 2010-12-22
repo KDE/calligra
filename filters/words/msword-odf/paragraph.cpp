@@ -25,6 +25,37 @@
 
 #include <kdebug.h>
 
+//specifies the type of alignment which is applied to the text that is entered
+//at the tab stop
+enum TabJC {
+    jcLeft,      //Left justification.
+    jcCenter,    //Center justification.
+    jcRight,     //Right justification.
+    jcDecimal,   //[1]
+    jcBar,       //Specifies that the current tab is a bar tab.
+    jcList = 0x6 //Specifies that the current tab is a list tab.
+};
+
+//specifies the characters that are used to fill in the space which is created
+//by a tab that ends at a custom tab stop.
+enum TabLC {
+    tlcNone,         //No leader.
+    tlcDot,          //Dot leader.
+    tlcHyphen,       //Dashed leader.
+    tlcUnderscore,   //Underscore leader.
+    tlcHeavy,        //Same as tlcUnderscore.
+    tlcMiddleDot,    //Centered dot leader.
+    tlcDefault = 0x7 //Same as tlcNone.
+};
+
+//[1] - Specifies that the current tab stop results in a location in the
+//document at which all following text is aligned around the first decimal
+//separator in the following text runs. If there is no decimal separator, text
+//is aligned around the implicit decimal separator after the last digit of the
+//first numeric value that appears in the following text. All text runs before
+//the first decimal character appear before the tab stop; all text runs after
+//it appear after the tab stop location.
+
 //define the static attribute
 QString Paragraph::m_bgColor = "";
 
@@ -158,7 +189,7 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     m_textStyles.push_back(textStyle);
 }
 
-void Paragraph::writeToFile(KoXmlWriter* writer)
+QString Paragraph::writeToFile(KoXmlWriter* writer)
 {
     kDebug(30513);
 
@@ -182,7 +213,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
                 m_dropCapStyleName= m_textStyles[0]->parentName();
             }
         }
-        return;
+        return QString();
     }
 
     // If there is a dropcap defined, then write it to the style.
@@ -326,6 +357,15 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
 
     writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
+    //TODO: insert <text:tab> elements at specified locations
+    if (m_paragraphProperties->pap().itbdMac) {
+	//checking the list tab
+        if (m_paragraphProperties->pap().rgdxaTab[0].tbd.jc == jcList) {
+            writer->startElement("text:tab", false);
+            writer->endElement();
+        }
+    }
+
     //if there's any paragraph content
     if (!m_textStrings.isEmpty()) {
         //Loop through each text strings and styles (equal # of both) and write
@@ -396,6 +436,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         writer->endElement(); //draw:frame
         writer->endElement(); //close the <text:p>
     }
+    return textStyleName;
 }
 
 void Paragraph::setParagraphStyle(const wvWare::Style* paragraphStyle)
@@ -683,26 +724,39 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
             tmpWriter.addAttributePt("style:position", (double)td.dxaTab / 20.0);
 
-            //td.tbd.jc = justification code
-            if (td.tbd.jc) { //0 = left-aligned = default, so that can just be ignored
-                if (td.tbd.jc == 1) {   //centered
-                    tmpWriter.addAttribute("style:type", "center");
-                } else if (td.tbd.jc == 2) {  //right-aligned
-                    tmpWriter.addAttribute("style:type", "right");
-                } else { //3 = decimal tab -> align on decimal point
-                    //4 = bar -> just creates a vertical bar at that point that's always visible
-                    kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
-                }
+            //td.tbd.jc = justification code, default "left" (can be ignored)
+            switch (td.tbd.jc) {
+            case jcCenter:
+                tmpWriter.addAttribute("style:type", "center");
+                break;
+            case jcRight:
+                tmpWriter.addAttribute("style:type", "right");
+                break;
+            case jcDecimal:
+            case jcBar:
+		//decimal tab -> align on decimal point
+                //bar -> just creates a vertical bar at that point that's always visible
+                kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
+                break;
+            default:
+//                 tmpWriter.addAttribute("style:type", "left");
+                break;
             }
-            //td.tbd.tlc = tab leader code
-            if (td.tbd.tlc) { //0 = no leader, which is default & can just be ignored
-                if (td.tbd.tlc == 1) {   //1 dotted leader
-                    tmpWriter.addAttribute("style:leader-text", ".");
-                } else if (td.tbd.tlc == 2) { //2 hyphenated leader
-                    tmpWriter.addAttribute("style:leader-text", "-");
-                }
-                //TODO 3 single line leader
-                //TODO 4 heavy line leader
+            //td.tbd.tlc = tab leader code, default no leader (can be ignored)
+            switch (td.tbd.tlc) {
+            case tlcDot:
+            case tlcMiddleDot:
+                tmpWriter.addAttribute("style:leader-text", ".");
+                break;
+            case tlcHyphen:
+                tmpWriter.addAttribute("style:leader-text", "-");
+                break;
+            case tlcUnderscore:
+            case tlcHeavy:
+                tmpWriter.addAttribute("style:leader-text", "_");
+                break;
+            default:
+                break;
             }
             tmpWriter.endElement();//style:tab-stop
         }
