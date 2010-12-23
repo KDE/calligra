@@ -27,7 +27,9 @@
 
 QString ComplexShapeHandler::defaultEquations()
 {
-    QString eqs = "<draw:equation draw:name=\"vc\" draw:formula=\"height / 2 \"/>";
+    QString eqs = "<draw:equation draw:name=\"width\" draw:formula=\"width\"/>";
+    eqs += "<draw:equation draw:name=\"height\" draw:formula=\"height\"/>";
+    eqs += "<draw:equation draw:name=\"vc\" draw:formula=\"height / 2 \"/>";
     eqs += "<draw:equation draw:name=\"hc\" draw:formula=\"width / 2 \"/>";
     eqs += "<draw:equation draw:name=\"hd2\" draw:formula=\"height / 2 \"/>";
     eqs += "<draw:equation draw:name=\"hd4\" draw:formula=\"height / 4 \"/>";
@@ -50,7 +52,12 @@ QString ComplexShapeHandler::defaultEquations()
     return eqs;
 }
 
-QString ComplexShapeHandler::getArgument(QString& function)
+QString ComplexShapeHandler::pathEquationsCreated()
+{
+    return pathEquations;
+}
+
+QString ComplexShapeHandler::getArgument(QString& function, bool equation)
 {
     QString argument;
     int separatorIndex = function.indexOf(' ');
@@ -67,9 +74,15 @@ QString ComplexShapeHandler::getArgument(QString& function)
         return argument;
     } // These values are defined for drawingML
     else if (argument == "h" || argument == "b") {
+        if (!equation) {
+            return "?height";
+        }
         return "height";
     }
     else if (argument == "w" || argument == "r") {
+        if (!equation) {
+            return "?width";
+        }
         return "width";
     }
     else if (argument == "t" || argument == "l") {
@@ -109,92 +122,93 @@ QString ComplexShapeHandler::createEquation(QString& function)
     QString first, second, third;
 
     if (operation == "val") {
-        return getArgument(function);
+        return getArgument(function, true);
     }
     else if (operation == "*/") {
-        first = getArgument(function);
-        second = getArgument(function);
-        third = getArgument(function);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
         return QString("%1 * %2 / %3").arg(first).arg(second).arg(third);
     }
     else if (operation == "+-") {
-        first = getArgument(function);
-        second = getArgument(function);
-        third = getArgument(function);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
         return QString("%1 + %2 - %3").arg(first).arg(second).arg(third);
     }
     else if (operation == "+/") {
-        first = getArgument(function);
-        second = getArgument(function);
-        third = getArgument(function);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
         return QString("%1 + %2 / %3").arg(first).arg(second).arg(third);
     }
     else if (operation == "abs") {
-        first = getArgument(function);
+        first = getArgument(function, true);
         return QString("abs(%1)").arg(first);
     }
     else if (operation == "at2") {
-        first = getArgument(function);
+        first = getArgument(function, true);
         return QString("atan(%1)").arg(first);
     }
     else if (operation == "abs") {
-        first = getArgument(function);
+        first = getArgument(function, true);
         return QString("abs(%1)").arg(first);
     }
     else if (operation == "cos") {
-        first = getArgument(function);
+        first = getArgument(function,true);
         return QString("cos(%1)").arg(first);
     }
     else if (operation == "sin") {
-        first = getArgument(function);
+        first = getArgument(function, true);
         return QString("sin(%1)").arg(first);
     }
     else if (operation == "sqrt") {
-        first = getArgument(function);
+        first = getArgument(function, true);
         return QString("sqrt(%1)").arg(first);
     }
     else if (operation == "tan") {
-        first = getArgument(function);
+        first = getArgument(function, true);
         return QString("tan(%1)").arg(first);
     }
     else if (operation == "min") {
-        first = getArgument(function);
-        second = getArgument(function);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
         return QString("min(%1, %2)").arg(first).arg(second);
     }
     else if (operation == "max") {
-        first = getArgument(function);
-        second = getArgument(function);
-        third = getArgument(function);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
         return QString("max(%1, %2)").arg(first).arg(second);
     }
     else if (operation == "?:") {
-        first = getArgument(function);
-        second = getArgument(function);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
         return QString("if(%1, %2, %3)").arg(first).arg(second).arg(third);
     }
     else if (operation == "cat2") {
-        first = getArgument(function);
-        second = getArgument(function);
-        third = getArgument(function);
-        return QString("%1 * cos ( atan (%2, %3) ) )").arg(first).arg(second).arg(third);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
+        return QString("%1 * cos ( atan (%2, %3) ) ").arg(first).arg(second).arg(third);
     }
     else if (operation == "sat2") {
-        first = getArgument(function);
-        second = getArgument(function);
-        third = getArgument(function);
-        return QString("%1 * sin ( atan (%2, %3) ) )").arg(first).arg(second).arg(third);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
+        return QString("%1 * sin ( atan (%2, %3) ) ").arg(first).arg(second).arg(third);
     }
     else if (operation == "mod") {
-        first = getArgument(function);
-        second = getArgument(function);
-        third = getArgument(function);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
         return QString("sqrt(%1 * %1 + %2 + %2 + %3 + %3 )").arg(first).arg(second).arg(third);
     }
     else if (operation == "pin") {
-        first = getArgument(function);
-        second = getArgument(function);
-        third = getArgument(function);
+        first = getArgument(function, true);
+        second = getArgument(function, true);
+        third = getArgument(function, true);
         return QString("if(%1 - %2, %1, if(%2 - %3, %3, %2))").arg(first).arg(second).arg(third);
     }
     else {
@@ -294,8 +308,18 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
         swAng = getArgument(swAng);
     }
 
-    return QString("T %1 %2 %3 %4 %5 %6 ").arg(getArgument(oldX)).arg(getArgument(oldY)).arg(getArgument(wR)).
-                                           arg(getArgument(hR)).arg(stAng).arg(swAng);
+    int index = pathEquationIndex;
+    ++pathEquationIndex;
+    // Converts ooxml 90 to normal anticlockwise unit circle -90
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"-1 * %2\"/>").arg(index).arg(stAng);
+
+    int index2 = pathEquationIndex;
+    ++pathEquationIndex;
+    // Convers ooxml clockwise swing angle to normal ánticlock wise end angle
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"?ooxmlArc%2 - %3\"/>").arg(index2).arg(index).arg(swAng);
+
+    return QString("T %1 %2 %3 %4 ?ooxmlArc%5 ?ooxmlArc%6 ").arg(getArgument(oldX)).arg(getArgument(oldY)).arg(getArgument(wR)).
+                                           arg(getArgument(hR)).arg(index).arg(index2);
 }
 
 QString ComplexShapeHandler::handle_pt(QXmlStreamReader* reader)
@@ -387,10 +411,10 @@ QString ComplexShapeHandler::handle_path(QXmlStreamReader* reader)
         reader->readNext();
         if (reader->isEndElement() && reader->name() == "path") {
             if (attrs.value("stroke") == "false") {
-                returnString += "F ";
-            }
-            if (attrs.value("fill") == "false") {
                 returnString += "S ";
+            }
+            if (attrs.value("fill") == "none") {
+                returnString += "F ";
             }
             break;
         }
@@ -423,6 +447,9 @@ QString ComplexShapeHandler::handle_path(QXmlStreamReader* reader)
 QString ComplexShapeHandler::handle_pathLst(QXmlStreamReader* reader)
 {
     QString returnString;
+
+    pathEquationIndex = 0;
+    pathEquations = "";
 
     while (!reader->atEnd()) {
         reader->readNext();

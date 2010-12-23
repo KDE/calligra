@@ -46,7 +46,7 @@ int main()
 
     QXmlStreamAttributes attrs;
 
-    QString currentShapeName, shapeDefinition, shapeAttributes;
+    QString currentShapeName, shapeDefinition, shapeAttributes, pathEquations;
 
     ComplexShapeHandler handler;
 
@@ -69,9 +69,11 @@ int main()
             if (xml.isEndElement() && xml.name() == currentShapeName) {
                 state = ShapeNameNext;
                 QString defaults = handler.defaultEquations().replace('"', "\\\"");
+                pathEquations = pathEquations.replace('"', "\\\"");
                 shapeDefinition = shapeDefinition.replace('"', "\\\"");
-                outStream << "equations[\"" << currentShapeName << "\"]=\"" << defaults << shapeDefinition << "\";" << "\n";
+                outStream << "equations[\"" << currentShapeName << "\"]=\"" << defaults << shapeDefinition << pathEquations << "\";" << "\n";
                 shapeDefinition = "";
+                pathEquations = "";
                 shapeAttributes = shapeAttributes.replace('"', "\\\"");
                 outStream << "attributes[\"" << currentShapeName << "\"]=\"" << shapeAttributes << "\";" << "\n";
                 shapeAttributes = "";
@@ -84,6 +86,7 @@ int main()
             }
             else if (xml.isStartElement() && xml.name() == "pathLst") {
                 shapeAttributes += handler.handle_pathLst(&xml);
+                pathEquations += handler.pathEquationsCreated();
             }
             else if (xml.isStartElement() && xml.name() == "ahLst") {
                 xml.skipCurrentElement();

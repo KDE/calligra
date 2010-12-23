@@ -37,6 +37,10 @@ public:
     // Set of default equations needed in order to support all variables which are possible in drawingML
     QString defaultEquations();
 
+    // pathLst needs to sometimes create extra equations on the fly because arcTo is defined in a way
+    // which is not compatible with odf. The equations created are returned by this function.
+    QString pathEquationsCreated();
+
     // Handles avLst items and creates equations out of them
     QString handle_avLst(QXmlStreamReader* reader);
 
@@ -44,11 +48,12 @@ public:
     QString handle_gdLst(QXmlStreamReader* reader);
 
     // Handles pathLst and creates a value which should be used for enhanced-path attribute
+    // Note: remember to check pathEquationsCreated() after using this one
     QString handle_pathLst(QXmlStreamReader* reader);
 
 private:
 
-    QString getArgument(QString& function);
+    QString getArgument(QString& function, bool equation = false);
 
     QString createEquation(QString& function);
 
@@ -72,6 +77,9 @@ private:
 
     // Storing the latest position where we are, this is needed in order to implment arcTo
     QString oldX, oldY;
+
+    int pathEquationIndex;
+    QString pathEquations;
 };
 
 #endif

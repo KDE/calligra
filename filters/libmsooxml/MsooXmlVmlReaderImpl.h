@@ -1086,10 +1086,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
             m_shapeTypeString += parameters.at(0) + "*" + parameters.at(1) + "/" + parameters.at(2);
         }
         else if (command == "abs") {
+            m_shapeTypeString += QString("abs(%1)").arg(parameters.at(0));
         }
         else if (command == "min") {
+            m_shapeTypeString += QString("min(%1, %2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "max") {
+            m_shapeTypeString += QString("max(%1, %2)").arg(parameters.at(0)).arg(parameters.at(1));
+        }
+        else if (command == "if") {
+            m_shapeTypeString += QString("if(%1, %2, %3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
     }
 
