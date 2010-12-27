@@ -1,3 +1,3 @@
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/calligratables/icons )
+kde4_install_icons( ${DATA_INSTALL_DIR}/tables/icons )
 
