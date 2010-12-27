@@ -63,6 +63,15 @@ private:
         qint64 calls;
     };
 
+    struct weight_info
+    {
+        KPlatoRCPSScheduler *self;
+        Task *task;
+        int weight;
+        int targettime;
+        bool isEndJob;
+    };
+
 public:
     KPlatoRCPSScheduler( Project *project, ScheduleManager *sm, QObject *parent = 0 );
     ~KPlatoRCPSScheduler();
@@ -73,9 +82,11 @@ public:
 
     static int progress_callback( int generations, int duration, void *arg );
     static int duration_callback( int direction, int time, int nominal_duration, void *arg );
+    static int weight_callback( int time, int duration, void *arg );
 
     int progress( int generations, int duration );
     int duration( int direction, int time, int nominal_duration, duration_info *info );
+    int weight( int time, int duration, weight_info *arg );
 
     /// Fill project data into RCPS structure
     int kplatoToRCPS();
@@ -126,6 +137,7 @@ private:
     bool m_backward;
     struct rcps_problem *m_problem;
     DateTime m_starttime;
+    DateTime m_targettime;
     qint64 m_timeunit;
     uint m_offsetFromTime_t;
     
@@ -135,7 +147,8 @@ private:
     struct rcps_job *m_jobstart, *m_jobend;
     
     QList<struct duration_info*> m_duration_info_list;
-    
+    QList<struct weight_info*> m_weight_info_list;
+
     ProgressInfo *m_progressinfo;
 };
 

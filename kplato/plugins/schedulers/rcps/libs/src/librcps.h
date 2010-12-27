@@ -61,6 +61,16 @@ void rcps_problem_free(struct rcps_problem *p);
 /* set fitness calculation mode */
 void rcps_problem_setfitness_mode(struct rcps_problem *problem, int mode);
 
+/* register a callback that gets called every time we want to calculate the project fitness.
+ * arguments are the jobs start time, duration, and an argument that can be set per job.
+ * should return the weight of this job.
+ * the weight does not need to be constant, it may change dependent on eg start time, duration or cost.
+ * the arg is set using rcps_job_set_cbarg.
+ */
+void rcps_problem_set_weight_callback(struct rcps_problem *p,
+    int (*weight_callback)(int time, int duration, void *arg));
+
+
 /* create a new resource structure */
 struct rcps_resource* rcps_resource_new();
 
@@ -123,6 +133,12 @@ int rcps_job_getearliest_start(struct rcps_job *j);
 
 /* set weight of this job to be used in fitness calculations */
 void rcps_job_setweight(struct rcps_job *j, int weight);
+
+/* set the argument for the weight callback */
+void rcps_job_set_cbarg(struct rcps_job *j, void *arg);
+
+/* retrieve the argument for the weight callback */
+void* rcps_job_get_cbarg(struct rcps_job *j);
 
 /* add a job struct to a problem */
 void rcps_job_add(struct rcps_problem *p, struct rcps_job *j);
@@ -280,19 +296,6 @@ void rcps_solver_set_progress_callback(struct rcps_solver *s,
 void rcps_solver_set_duration_callback(struct rcps_solver *s, 
 	int (*duration_callback)(int direction, int time, int nominal_duration, 
 		void *arg));
-
-/* register a callback that gets called every time we want to calculate
- * the project fitness.
- * arguments are the jobs start time, duration, and an argument that can be set per mode.
- * should return the jobs weight of this mode.
- * the weight does not need to be constant, itmay change dependent on eg start time or duration.
- * the arg is set using rcps_mode_set_cbarg and is shared with rcps_solver_set_duration_callback().
- */
-#define DURATION_FORWARD    0
-#define DURATION_BACKWARD   1
-void rcps_solver_set_weight_callback(struct rcps_solver *s,
-    int (*duration_callback)(int time, int duration,
-        void *arg));
 
 /* solve a problem */
 void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p);

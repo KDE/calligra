@@ -52,6 +52,10 @@ void rcps_problem_setfitness_mode(struct rcps_problem *p, int mode) {
 	p->fitness_mode = mode;
 }
 
+void rcps_problem_set_weight_callback(struct rcps_problem *p, int (*weight_callback)(int time, int duration, void *arg)) {
+    p->weight_callback = weight_callback;
+}
+
 struct rcps_resource* rcps_resource_new() {
 	struct rcps_resource *ret;
 	ret = (struct rcps_resource*)malloc(sizeof(struct rcps_resource));
@@ -168,6 +172,14 @@ int rcps_job_getearliest_start(struct rcps_job *j) {
 
 void rcps_job_setweight(struct rcps_job *j, int weight) {
 	j->weight = weight;
+}
+
+void rcps_job_set_cbarg(struct rcps_job* j, void* arg) {
+    j->cb_arg = arg;
+}
+
+void* rcps_job_get_cbarg(struct rcps_job* j) {
+    return j->cb_arg;
 }
 
 /* add a job struct to a problem */

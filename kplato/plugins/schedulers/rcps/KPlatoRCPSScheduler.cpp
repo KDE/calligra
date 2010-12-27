@@ -84,6 +84,7 @@ KPlatoRCPSScheduler::~KPlatoRCPSScheduler()
 {
     delete m_progressinfo;
     qDeleteAll( m_duration_info_list );
+    qDeleteAll( m_weight_info_list );
     rcps_problem_free( m_problem );
 }
 
@@ -183,6 +184,41 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
     info->cache[ time ] = dur;
     //info->task->schedule()->logDebug( QString( "Time=%1, duration=%2 ( %3, %4 )" ).arg( time ).arg( dur ).arg( fromRcpsTime( time ).toString() ).arg( Duration( (qint64)(dur) * m_timeunit * 1000 ).toDouble( Duration::Unit_h ) ) );
     return dur;
+}
+
+int KPlatoRCPSScheduler::weight_callback( int time, int duration, void *arg )
+{
+    //qDebug()<<"kplato_weight:"<<time<<nominal_duration<<arg;
+    Q_ASSERT( arg );
+    if ( arg == 0 ) {
+        return WEIGHT_ASAP;
+    }
+    KPlatoRCPSScheduler::weight_info *info = static_cast<KPlatoRCPSScheduler::weight_info*>( arg );
+    return info->self->weight( time, duration, info );
+}
+
+int KPlatoRCPSScheduler::weight( int time, int duration,  KPlatoRCPSScheduler::weight_info  *info )
+{
+    if ( m_haltScheduling || m_manager == 0 ) {
+        return WEIGHT_ASAP;
+    }
+    if ( m_manager->recalculate() && info->task->completion().isFinished() ) {
+        return 0;
+    }
+    int w = info->weight;
+    if ( info->isEndJob ) {
+        int t = time + duration;
+        if ( m_backward ) {
+            if ( t < info->targettime ) {
+                w = info->targettime - t * 10;
+            }
+        } else {
+            if ( t > info->targettime ) {
+                w = t - info->targettime * 10;
+            }
+        }
+    }
+    return w;
 }
 
 void KPlatoRCPSScheduler::run()
@@ -793,6 +829,15 @@ void KPlatoRCPSScheduler::addTasks()
     rcps_job_add( m_problem, m_jobend );
     mode = rcps_mode_new();
     rcps_mode_add( m_jobend, mode );
+    // add a weight callback
+    struct KPlatoRCPSScheduler::weight_info *info = new KPlatoRCPSScheduler::weight_info;
+    info->self = this;
+    info->weight = 0;
+    info->targettime = toRcpsTime( m_targettime );
+    info->isEndJob = true;
+
+    rcps_job_set_cbarg( m_jobend, info );
+    m_weight_info_list << info;
 
     for( int i = 0; i < rcps_job_count( m_problem ); ++i ) {
         kDebug()<<"Task:"<<rcps_job_getname( rcps_job_get(m_problem, i) );
