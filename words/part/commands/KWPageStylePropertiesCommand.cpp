@@ -135,7 +135,8 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
 void KWPageStylePropertiesCommand::redo()
 {
     QUndoCommand::redo();
-    m_style.priv()->copyProperties(m_styleAfter.priv());+    m_document->updatePagesForStyle(m_style);
+    m_style.priv()->copyProperties(m_styleAfter.priv());
+    m_document->updatePagesForStyle(m_style);
 #if 0
     m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();
