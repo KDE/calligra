@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=ServiceType
-X-KDE-ServiceType=KSpread/Plugin
-Comment=Plugin for KSpread
+X-KDE-ServiceType=CalligraTables/Plugin
+Comment=Plugin for Calligra Tables
 Comment[bg]=Приставка за KSpread
 Comment[ca]=Connector per al KSpread
 Comment[ca@valencia]=Connector per al KSpread
@@ -34,5 +34,5 @@ Comment[wa]=Tchôke-divins po KSpread
 Comment[x-test]=xxPlugin for KSpreadxx
 Comment[zh_CN]=KSpread 插件
 Comment[zh_TW]=KSpread 外掛程式
-[PropertyDef::X-KSpread-InterfaceVersion]
+[PropertyDef::X-CalligraTables-InterfaceVersion]
 Type=int

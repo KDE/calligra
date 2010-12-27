@@ -163,7 +163,7 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
             this, SLOT(addCommand(QUndoCommand *)));
 
     setComponentData(Factory::global(), false);
-    setTemplateType("kspread_template");
+    setTemplateType("tables_template");
 
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -212,7 +212,7 @@ void Doc::initConfig()
 {
     KSharedConfigPtr config = Factory::global().config();
 
-    const int page = config->group("KSpread Page Layout").readEntry("Default unit page", 0);
+    const int page = config->group("Tables Page Layout").readEntry("Default unit page", 0);
     setUnit(KoUnit((KoUnit::Unit) page));
 }
 
@@ -252,9 +252,9 @@ QDomDocument Doc::saveXML()
         static_cast<View *>(view)->selection()->emitCloseEditor(true);
     }
 
-    QDomDocument doc = KoDocument::createDomDocument("kspread", "spreadsheet", CURRENT_DTD_VERSION);
+    QDomDocument doc = KoDocument::createDomDocument("tables", "spreadsheet", CURRENT_DTD_VERSION);
     QDomElement spread = doc.documentElement();
-    spread.setAttribute("editor", "KSpread");
+    spread.setAttribute("editor", "Calligra Tables");
     spread.setAttribute("mime", "application/x-kspread");
     spread.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
 
@@ -323,8 +323,8 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
     map()->setSyntaxVersion(ok ? version : 0);
     if (map()->syntaxVersion() > CURRENT_SYNTAX_VERSION) {
         int ret = KMessageBox::warningContinueCancel(
-                      0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
-                              "When you open it with this version of KSpread, some information may be lost.", map()->syntaxVersion()),
+                      0, i18n("This document was created with a newer version of Calligra Tables (syntax version: %1)\n"
+                              "When you open it with this version of Calligra Tables, some information may be lost.", map()->syntaxVersion()),
                       i18n("File Format Mismatch"), KStandardGuiItem::cont());
         if (ret == KMessageBox::Cancel) {
             setErrorMessage("USER_CANCELED");

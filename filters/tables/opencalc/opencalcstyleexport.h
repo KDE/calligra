@@ -21,8 +21,8 @@
 #ifndef OPENCALCSTYLEEXPORT_H
 #define OPENCALCSTYLEEXPORT_H
 
-#include "kspread/Global.h"
-#include "kspread/Style.h"
+#include "tables/Global.h"
+#include "tables/Style.h"
 
 #include <QColor>
 #include <QFont>

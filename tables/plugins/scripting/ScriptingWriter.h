@@ -99,7 +99,7 @@ public Q_SLOTS:
     * is returned.
     */
     bool setSheet(const QString& sheetname) {
-        KSpread::Sheet* s = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        Calligra::Tables::Sheet* s = m_module->kspreadDoc()->map()->findSheet(sheetname);
         if (! s) return false;
         clearAll();
         m_sheet = s;
@@ -113,7 +113,7 @@ public Q_SLOTS:
     * explicit cell.
     */
     QString cell() {
-        return KSpread::Cell::name(m_column, m_row);
+        return Calligra::Tables::Cell::name(m_column, m_row);
     }
 
     /**
@@ -123,7 +123,7 @@ public Q_SLOTS:
     */
     bool setCell(const QString& cellname) {
         if (! m_sheet) return false;
-        const KSpread::Region region(cellname, m_sheet->doc()->map(), m_sheet);
+        const Calligra::Tables::Region region(cellname, m_sheet->doc()->map(), m_sheet);
         if (region.firstRange().isNull()) return false;
         QPoint point = region.firstRange().topLeft();
         m_column = point.x();
@@ -200,27 +200,27 @@ public Q_SLOTS:
     * false is returned.
     */
     bool setValue(const QVariant& value, bool parse = true) {
-        KSpread::Value v;
+        Calligra::Tables::Value v;
         if (parse)
-            v = KSpread::Value(value.toString());
+            v = Calligra::Tables::Value(value.toString());
         else {
-            const KSpread::CalculationSettings* settings = m_module->kspreadDoc()->map()->calculationSettings();
+            const Calligra::Tables::CalculationSettings* settings = m_module->kspreadDoc()->map()->calculationSettings();
             switch (value.type()) {
-            case QVariant::Invalid:     v = KSpread::Value(); break;
-            case QVariant::Bool:        v = KSpread::Value(value.toBool()); break;
-            case QVariant::Int:         v = KSpread::Value(value.toInt()); break;
-            case QVariant::ULongLong:   v = KSpread::Value(value.toLongLong()); break;
-            case QVariant::Double:      v = KSpread::Value(value.toDouble()); break;
-            case QVariant::String:      v = KSpread::Value(value.toString()); break;
-            case QVariant::Date:        v = KSpread::Value(value.toDate(), settings); break;
-            case QVariant::Time:        v = KSpread::Value(value.toTime(), settings); break;
-            case QVariant::DateTime:    v = KSpread::Value(value.toDateTime(), settings); break;
+            case QVariant::Invalid:     v = Calligra::Tables::Value(); break;
+            case QVariant::Bool:        v = Calligra::Tables::Value(value.toBool()); break;
+            case QVariant::Int:         v = Calligra::Tables::Value(value.toInt()); break;
+            case QVariant::ULongLong:   v = Calligra::Tables::Value(value.toLongLong()); break;
+            case QVariant::Double:      v = Calligra::Tables::Value(value.toDouble()); break;
+            case QVariant::String:      v = Calligra::Tables::Value(value.toString()); break;
+            case QVariant::Date:        v = Calligra::Tables::Value(value.toDate(), settings); break;
+            case QVariant::Time:        v = Calligra::Tables::Value(value.toTime(), settings); break;
+            case QVariant::DateTime:    v = Calligra::Tables::Value(value.toDateTime(), settings); break;
             default: return false;
             }
         }
-        //KSpread::Cell* c = getCell();
+        //Calligra::Tables::Cell* c = getCell();
         //c->setValue(v);
-        KSpread::Cell cell(m_sheet, m_column, m_row);
+        Calligra::Tables::Cell cell(m_sheet, m_column, m_row);
         if (!parse) {
             cell.setUserInput(value.toString());
             cell.setValue(v);
@@ -260,14 +260,14 @@ private:
     Q_DISABLE_COPY(ScriptingWriter)
 
     ScriptingModule* const m_module;
-    KSpread::Sheet* m_sheet;
+    Calligra::Tables::Sheet* m_sheet;
     int m_column, m_row;
-    KSpread::Cell* m_cell;
+    Calligra::Tables::Cell* m_cell;
 
-    KSpread::Cell* getCell() {
+    Calligra::Tables::Cell* getCell() {
         Q_ASSERT(m_sheet);
         if (m_cell) return m_cell;
-        m_cell = new KSpread::Cell(m_sheet, m_column, m_row);
+        m_cell = new Calligra::Tables::Cell(m_sheet, m_column, m_row);
         return m_cell;
     }
 

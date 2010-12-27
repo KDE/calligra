@@ -4,8 +4,8 @@ macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/s
 
 if(GSL_FOUND)
 
-include_directories( ${CMAKE_SOURCE_DIR}/kspread
-                     ${CMAKE_SOURCE_DIR}/kspread/ui
+include_directories( ${CMAKE_SOURCE_DIR}/tables
+                     ${CMAKE_SOURCE_DIR}/tables/ui
                      ${KOMAIN_INCLUDES} 
                      ${GSL_INCLUDE_DIR} )
 
@@ -28,7 +28,7 @@ kde4_add_plugin( kspreadsolver ${solver_PART_SRCS} )
 target_link_libraries( kspreadsolver
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
-	kspreadcommon
+        calligratablescommon
 )
 
 install(TARGETS kspreadsolver  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -36,6 +36,6 @@ install(TARGETS kspreadsolver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/kspread/kpartplugins)
+install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/tables/kpartplugins)
 
 endif(GSL_FOUND)

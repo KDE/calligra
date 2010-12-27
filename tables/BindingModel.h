@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_BINDING_MODEL
-#define KSPREAD_BINDING_MODEL
+#ifndef CALLIGRA_TABLES_BINDING_MODEL
+#define CALLIGRA_TABLES_BINDING_MODEL
 
 #include "Region.h"
 
@@ -27,7 +27,9 @@
 
 #include <QAbstractTableModel>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Binding;
 
@@ -66,6 +68,7 @@ private:
     Binding* m_binding;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-#endif // KSPREAD_BINDING_MODEL
+#endif // CALLIGRA_TABLES_BINDING_MODEL

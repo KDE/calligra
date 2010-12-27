@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-#include <kspread/Region.h>
+#include <tables/Region.h>
 
 class KoCanvasBase;
 

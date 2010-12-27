@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=KSpread
+Name=Calligra Tables
 Name[af]=Kspread
 Name[be]=KSpread
 Name[bg]=KSpread
@@ -58,7 +58,7 @@ Name[xh]=KSpread
 Name[x-test]=xxKSpreadxx
 Name[zh_CN]=KSpread
 Name[zh_TW]=工作表_KSpread
-Exec=kspread %u
+Exec=calligratables %u
 GenericName=Spreadsheet
 GenericName[bg]=Таблици
 GenericName[ca]=Full de càlcul
@@ -125,7 +125,7 @@ Type=Application
 Icon=kspread
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-DBUS-StartupType=multi
-X-DBUS-ServiceName=org.koffice.kspread
-X-DocPath=kspread/index.html
+X-DBUS-ServiceName=org.calligra.tables
+X-DocPath=tables/index.html
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;

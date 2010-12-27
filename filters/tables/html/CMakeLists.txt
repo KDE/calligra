@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/tables ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
 
 set(kspreadhtmlimport_PART_SRCS htmlimport.cc )
 kde4_add_plugin(kspreadhtmlimport ${kspreadhtmlimport_PART_SRCS})
@@ -9,7 +9,7 @@ install( FILES  kspread_html_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}
 set(kspreadhtmlexport_PART_SRCS htmlexport.cc exportdialog.cc )
 kde4_add_ui_files(kspreadhtmlexport_PART_SRCS exportwidget.ui )
 kde4_add_plugin(kspreadhtmlexport ${kspreadhtmlexport_PART_SRCS})
-target_link_libraries(kspreadhtmlexport kspreadcommon)
+target_link_libraries(kspreadhtmlexport calligratablescommon)
 install(TARGETS kspreadhtmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kspread_html_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

@@ -205,12 +205,12 @@ public slots:
             m_ranges.remove(sheetname);
             return;
         }
-        KSpread::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        Calligra::Tables::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
         if (! sheet) return;
         QVariantList ranges;
-        KSpread::Region region(range, m_module->kspreadDoc()->map(), sheet);
+        Calligra::Tables::Region region(range, m_module->kspreadDoc()->map(), sheet);
         if (! region.isValid()) return;
-        for (KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
+        for (Calligra::Tables::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
             const QRect rect = (*it)->rect();
             if (rect.isNull()) continue;
             ranges.append(rect);
@@ -256,19 +256,19 @@ public slots:
         QVariantList values;
         if (m_currentSheet && m_currentRow >= 0) {
             for (int col = m_currentLeft; col <= m_currentRight; ++col) {
-                KSpread::Cell cell(m_currentSheet, col, m_currentRow);
-                KSpread::Value value = cell.value();
+                Calligra::Tables::Cell cell(m_currentSheet, col, m_currentRow);
+                Calligra::Tables::Value value = cell.value();
 
-                //TODO add toVariant() method to KSpread::Value and use it here and in SheetAdaptor::valueToVariant
+                //TODO add toVariant() method to Calligra::Tables::Value and use it here and in SheetAdaptor::valueToVariant
                 //values << value.toVariant();
 
                 QVariant v;
                 switch (value.type()) {
-                case KSpread::Value::Empty: break;
-                case KSpread::Value::Boolean: v = value.asBoolean(); break;
-                case KSpread::Value::Integer: v = value.asInteger(); break;
-                case KSpread::Value::Float: v = (double) numToDouble(value.asFloat()); break;
-                case KSpread::Value::String: //fall through
+                case Calligra::Tables::Value::Empty: break;
+                case Calligra::Tables::Value::Boolean: v = value.asBoolean(); break;
+                case Calligra::Tables::Value::Integer: v = value.asInteger(); break;
+                case Calligra::Tables::Value::Float: v = (double) numToDouble(value.asFloat()); break;
+                case Calligra::Tables::Value::String: //fall through
                 default: v = value.asString(); break;
                 }
                 values << v;
@@ -302,7 +302,7 @@ private:
 
     enum State { Stopped, Running, Shutdown };
     State m_state;
-    KSpread::Sheet* m_currentSheet;
+    Calligra::Tables::Sheet* m_currentSheet;
     int m_currentRow, m_currentLeft, m_currentRight;
 
     void clear() {
@@ -325,22 +325,22 @@ private:
                 QRect rect(l[0].toInt(), l[1].toInt(), l[2].toInt(), l[3].toInt());
                 if (rect.isNull() || (rect.x() == 0 && rect.y() == 0 && rect.width() == 0 && rect.height() == 0)) continue;
                 //kDebug()<<"  string="<<r.toString()<<" rect="<<rect;
-                KSpread::Region region(rect, m_currentSheet);
+                Calligra::Tables::Region region(rect, m_currentSheet);
                 readRegion(region);
                 if (m_state != Running) break;
             }
         } else {
             QRect area = m_currentSheet->usedArea();
             if (area.isNull()) return;
-            KSpread::Region region(area, m_currentSheet);
+            Calligra::Tables::Region region(area, m_currentSheet);
             readRegion(region);
         }
     }
 
-    void readRegion(const KSpread::Region& region) {
+    void readRegion(const Calligra::Tables::Region& region) {
         if (! m_currentSheet || ! region.isValid()) return;
         //kDebug()<<"ScriptingReader::readRegion name="<<region.name(m_currentSheet);
-        for (KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
+        for (Calligra::Tables::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
             QRect range = (*it)->rect();
             if (range.isNull()) continue;
             //kDebug() <<"  name=" << (*it)->name(m_currentSheet) <<" range=" << range;

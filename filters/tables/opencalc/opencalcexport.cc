@@ -41,23 +41,23 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 
-#include <kspread/part/AboutData.h> // for version
-#include <kspread/part/Canvas.h>
-#include <kspread/CalculationSettings.h>
-#include <kspread/Cell.h>
-#include <kspread/part/Doc.h>
-#include <kspread/HeaderFooter.h>
-#include <kspread/calligra_tables_limits.h>
-#include <kspread/Map.h>
-#include <kspread/NamedAreaManager.h>
-#include <kspread/PrintSettings.h>
-#include <kspread/RowColumnFormat.h>
-#include <kspread/RowFormatStorage.h>
-#include <kspread/Sheet.h>
-#include <kspread/Style.h>
-#include <kspread/StyleManager.h>
-#include <kspread/Util.h>
-#include <kspread/part/View.h>
+#include <tables/part/AboutData.h> // for version
+#include <tables/part/Canvas.h>
+#include <tables/CalculationSettings.h>
+#include <tables/Cell.h>
+#include <tables/part/Doc.h>
+#include <tables/HeaderFooter.h>
+#include <tables/calligra_tables_limits.h>
+#include <tables/Map.h>
+#include <tables/NamedAreaManager.h>
+#include <tables/PrintSettings.h>
+#include <tables/RowColumnFormat.h>
+#include <tables/RowFormatStorage.h>
+#include <tables/Sheet.h>
+#include <tables/Style.h>
+#include <tables/StyleManager.h>
+#include <tables/Util.h>
+#include <tables/part/View.h>
 
 using namespace Calligra::Tables;
 
@@ -187,7 +187,7 @@ bool OpenCalcExport::exportDocInfo(KoStore * store, const Doc* ksdoc)
 
     QDomElement data = meta.createElement("meta:generator");
     QString app("KSpread ");
-    app += KSpread::version;
+    app += Calligra::Tables::version;
     data.appendChild(meta.createTextNode(app));
     officeMeta.appendChild(data);
 

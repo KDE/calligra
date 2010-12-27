@@ -29,7 +29,9 @@
 #include "ModelSupport.h"
 #include "SheetModel.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -103,6 +105,7 @@ RectStorageUndoCommand<T>& RectStorageUndoCommand<T>::operator<<(const QList<Pai
     return *this;
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_RECT_STORAGE_UNDO_COMMAND

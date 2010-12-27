@@ -34,11 +34,11 @@
 #include <KoDocumentInfo.h>
 #include <kofficeversion.h>
 
-#include <kspread/CellStorage.h>
-#include <kspread/Map.h>
-#include <kspread/Sheet.h>
-#include <kspread/part/Doc.h>
-#include <kspread/Util.h>
+#include <tables/CellStorage.h>
+#include <tables/Map.h>
+#include <tables/Sheet.h>
+#include <tables/part/Doc.h>
+#include <tables/Util.h>
 
 using namespace Calligra::Tables;
 

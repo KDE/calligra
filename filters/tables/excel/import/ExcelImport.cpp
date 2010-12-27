@@ -52,7 +52,7 @@
 #include <KoTextDocument.h>
 
 #include <DocBase.h>
-#include <kspread/Sheet.h>
+#include <tables/Sheet.h>
 #include <CalculationSettings.h>
 #include <CellStorage.h>
 #include <HeaderFooter.h>

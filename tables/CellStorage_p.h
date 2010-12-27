@@ -28,7 +28,9 @@
 #include "Validity.h"
 #include "Value.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class CellStorageUndoData
@@ -82,6 +84,7 @@ public:
     QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_CELL_STORAGE_P

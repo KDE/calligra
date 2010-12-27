@@ -32,7 +32,7 @@ class QDialog;
 class QEvent;
 class QObject;
 
-namespace Caligra
+namespace Calligra
 {
 namespace Tables
 {

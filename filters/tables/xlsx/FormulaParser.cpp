@@ -25,7 +25,7 @@
 #include "FormulaParser.h"
 #include "XlsxXmlWorksheetReader_p.h"
 
-#include <kspread/Util.h>
+#include <tables/Util.h>
 
 QString MSOOXML::convertFormula(const QString& formula)
 {

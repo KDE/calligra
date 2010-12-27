@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${CMAKE_CURRENT_SOURCE_DIR}/libqpro ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/tables ${CMAKE_CURRENT_SOURCE_DIR}/libqpro ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############
@@ -16,7 +16,7 @@ kde4_add_plugin(qproimport ${qproimport_PART_SRCS})
 
 
 
-target_link_libraries(qproimport kspreadcommon)
+target_link_libraries(qproimport calligratablescommon)
 
 install(TARGETS qproimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

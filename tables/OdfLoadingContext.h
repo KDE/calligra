@@ -26,7 +26,9 @@
 
 class KoShapeLoadingContext;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -45,6 +47,7 @@ public:
     QHash<QString, KoXmlElement> validities;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_ODF_LOADING_CONTEXT

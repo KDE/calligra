@@ -23,7 +23,9 @@
 #include "Database.h"
 #include "RectStorage.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -45,6 +47,7 @@ protected Q_SLOTS:
     }
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_DATABASE_STORAGE

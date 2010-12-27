@@ -1,4 +1,4 @@
-project(kspread)
+project(calligra-tables)
 
 add_subdirectory( data )
 add_subdirectory( shape )
@@ -182,7 +182,7 @@ SET (ui_DIR_SRCS
     ui/SheetView.cpp
 )
 
-SET (kspreadcommon_LIB_SRCS
+SET (calligratablescommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
@@ -197,7 +197,7 @@ SET (kspreadcommon_LIB_SRCS
     ${ui_DIR_SRCS}
     )
 
-set (kspreadodf_LIB_SRCS
+set (calligratablesodf_LIB_SRCS
     part/Digest.cpp
     ApplicationSettings.cpp
     Binding.cpp
@@ -246,7 +246,7 @@ set (kspreadodf_LIB_SRCS
     database/DatabaseManager.cpp
     database/Filter.cpp
 
-    # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libkspreadodf
+    # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligratablesodf
     Function.cpp
     FunctionDescription.cpp
     FunctionModule.cpp
@@ -260,22 +260,22 @@ set (kspreadodf_LIB_SRCS
     )
 
 
-kde4_add_library(kspreadodf SHARED ${kspreadodf_LIB_SRCS})
+kde4_add_library(calligratablesodf SHARED ${calligratablesodf_LIB_SRCS})
 
-target_link_libraries(kspreadodf komain)
-target_link_libraries(kspreadodf LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(calligratablesodf komain)
+target_link_libraries(calligratablesodf LINK_INTERFACE_LIBRARIES komain)
 
-set_target_properties(kspreadodf PROPERTIES
+set_target_properties(calligratablesodf PROPERTIES
    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
-install(TARGETS kspreadodf ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligratablesodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
+kde4_add_library(calligratablescommon SHARED ${calligratablescommon_LIB_SRCS})
 
-target_link_libraries(kspreadcommon
+target_link_libraries(calligratablescommon
     komain
-    kspreadodf
+    calligratablesodf
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_KUTILS_LIBS}
@@ -283,54 +283,54 @@ target_link_libraries(kspreadcommon
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
-target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES komain kspreadodf )
+target_link_libraries(calligratablescommon LINK_INTERFACE_LIBRARIES komain calligratablesodf )
 
-set_target_properties(kspreadcommon PROPERTIES
+set_target_properties(calligratablescommon PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
-install(TARGETS kspreadcommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligratablescommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### next target ###############
 
-SET (kspreadpart_PART_SRCS part/Factory_init.cpp )
+SET (calligratablespart_PART_SRCS part/Factory_init.cpp )
 
-kde4_add_plugin(kspreadpart ${kspreadpart_PART_SRCS})
+kde4_add_plugin(calligratablespart ${calligratablespart_PART_SRCS})
 
 
 
-target_link_libraries(kspreadpart kspreadcommon )
+target_link_libraries(calligratablespart calligratablescommon )
 
-install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligratablespart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
 
-SET (kspread_KDEINIT_SRCS part/Main.cpp )
+SET (calligratables_KDEINIT_SRCS part/Main.cpp )
 
-kde4_add_app_icon(kspread_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
+kde4_add_app_icon(calligratables_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
 
-kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
+kde4_add_kdeinit_executable( calligratables ${calligratables_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kspread")
-set_target_properties(kspread PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KSpread 2")
+set_target_properties(calligratables PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+set_target_properties(calligratables PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.tables")
+set_target_properties(calligratables PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Tables 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_kspread komain )
+target_link_libraries(kdeinit_calligratables komain )
 
-install(TARGETS kdeinit_kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligratables  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( kspread kdeinit_kspread )
-install(TARGETS kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries( calligratables kdeinit_calligratables )
+install(TARGETS calligratables  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
 install( FILES  tables.rc tables_readonly.rc tables.notifyrc DESTINATION ${DATA_INSTALL_DIR}/tables)
 install( FILES  tablespart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS  kspread.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES  kspread.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
-install( FILES  kspread_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-install( FILES  kspreadrc DESTINATION ${CONFIG_INSTALL_DIR})
+install( PROGRAMS  tables.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES  tables.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
+install( FILES  tables_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES  tablesrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 
 install( FILES
@@ -353,7 +353,7 @@ install( FILES
     Sheet.h
     Style.h
     Value.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/kspread COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES
     part/CanvasBase.h
     part/CanvasItem.h
@@ -363,13 +363,13 @@ install( FILES
     part/Headers.h
     part/ToolRegistry.h
     part/View.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/kspread/part COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/tables/part COMPONENT Devel)
 install( FILES
     ui/CellToolBase.h
     ui/CellEditorBase.h
     ui/Selection.h
     ui/SheetView.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/kspread/ui COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/tables/ui COMPONENT Devel)
 install( FILES
     database/Database.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/database COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/tables/database COMPONENT Devel)

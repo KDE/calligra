@@ -207,7 +207,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             body->addAttributePt("svg:y", EMU_TO_POINT(m_svgY));
         }
         if (m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col >= 0) {
-            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
+            body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
                 QString::number(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_row+1));
             body->addAttributePt("table:end-x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_colOff));
             body->addAttributePt("table:end-y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_rowOff));
@@ -835,7 +835,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
         if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
             f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
+            body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
             body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
             body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
         } else {

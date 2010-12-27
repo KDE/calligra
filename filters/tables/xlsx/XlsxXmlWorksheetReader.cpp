@@ -46,7 +46,7 @@
 #include <KoOdfGraphicStyles.h>
 #include <styles/KoCharacterStyle.h>
 
-#include <kspread/Util.h>
+#include <tables/Util.h>
 
 #include <QBrush>
 #include <QRegExp>

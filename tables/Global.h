@@ -34,7 +34,9 @@
 #include <kiconloader.h>
 #include <QTime>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class ElapsedTime
@@ -118,6 +120,7 @@ enum Operation {
 enum MoveTo { Bottom, Left, Top, Right, BottomFirst, NoMovement };
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

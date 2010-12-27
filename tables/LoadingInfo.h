@@ -20,13 +20,15 @@
 #ifndef KSPLOADINGINFO_H
 #define KSPLOADINGINFO_H
 
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 
 #include <QMap>
 #include <QPoint>
 #include <QPointF>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Sheet;
 
@@ -106,7 +108,8 @@ private:
     bool m_loadTemplate;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif /* KPRLOADINGINFO_H */
 

@@ -28,7 +28,9 @@
 // KSpread
 #include "StyleStorage.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -90,6 +92,7 @@ StyleStorageUndoCommand& StyleStorageUndoCommand::operator<<(const QList<Pair>& 
     return *this;
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_STYLE_STORAGE_UNDO_COMMAND

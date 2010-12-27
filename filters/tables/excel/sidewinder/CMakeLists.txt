@@ -2,9 +2,9 @@ include_directories(
     ${CMAKE_BINARY_DIR}/libs/store
     ${CMAKE_BINARY_DIR}/filters/
     ${CMAKE_SOURCE_DIR}/filters/libmso
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx # for Charting.h
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx # for Charting.h
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml  # for MsooXmlGlobal.h
-    ${CMAKE_SOURCE_DIR}/kspread # for PointStorage.h
+    ${CMAKE_SOURCE_DIR}/tables # for PointStorage.h
 )
 
 kde4_add_executable(recordsxml2cpp recordsxml2cpp.cpp)

@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${CMAKE_SOURCE_DIR}/filters/liboofilter ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/tables ${CMAKE_SOURCE_DIR}/filters/liboofilter ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
 
 
 ########### next target ###############
@@ -10,7 +10,7 @@ kde4_add_plugin(opencalcimport ${opencalcimport_PART_SRCS})
 
 
 
-target_link_libraries(opencalcimport kspreadcommon kowidgets)
+target_link_libraries(opencalcimport calligratablescommon kowidgets)
 
 install(TARGETS opencalcimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -23,7 +23,7 @@ kde4_add_plugin(opencalcexport ${opencalcexport_PART_SRCS})
 
 
 
-target_link_libraries(opencalcexport kspreadcommon)
+target_link_libraries(opencalcexport calligratablescommon)
 
 install(TARGETS opencalcexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

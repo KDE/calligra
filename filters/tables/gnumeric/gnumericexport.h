@@ -27,6 +27,7 @@
 #include <QVariantList>
 
 namespace Calligra
+{
 namespace Tables
 {
 class Cell;

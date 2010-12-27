@@ -20,7 +20,9 @@
 #ifndef KSPREAD_VALUE_STORAGE
 #define KSPREAD_VALUE_STORAGE
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -46,6 +48,7 @@ public:
     }
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_VALUE_STORAGE

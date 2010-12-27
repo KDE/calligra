@@ -34,7 +34,7 @@
 #include <CellStorage.h>
 #include <Formula.h>
 #include <Map.h>
-#include <kspread/Sheet.h>
+#include <tables/Sheet.h>
 #include <Region.h>
 #include <RowColumnFormat.h>
 #include <RowFormatStorage.h>

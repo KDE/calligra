@@ -25,11 +25,11 @@
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 
-#include <kspread/part/Doc.h>
-#include <kspread/Sheet.h>
-#include <kspread/Cell.h>
-#include <kspread/Value.h>
-#include <kspread/Map.h>
+#include <tables/part/Doc.h>
+#include <tables/Sheet.h>
+#include <tables/Cell.h>
+#include <tables/Value.h>
+#include <tables/Map.h>
 
 #include <qproimport.h>
 

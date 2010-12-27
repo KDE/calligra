@@ -20,9 +20,9 @@
 #ifndef CALLIGRA_TABLES_CELL_TOOL
 #define CALLIGRA_TABLES_CELL_TOOL
 
-#include <kspread/ui/CellToolBase.h>
+#include <tables/ui/CellToolBase.h>
 
-#include <kspread/calligra_tables_export.h>
+#include <tables/calligra_tables_export.h>
 
 namespace Calligra
 {

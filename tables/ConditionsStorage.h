@@ -23,7 +23,9 @@
 #include "Condition.h"
 #include "RectStorage.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -47,6 +49,7 @@ protected Q_SLOTS:
     }
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_CONDITIONS_STORAGE

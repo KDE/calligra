@@ -32,13 +32,13 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
-#include <kspread/CellStorage.h>
-#include <kspread/Map.h>
-#include <kspread/Sheet.h>
-#include <kspread/part/Doc.h>
-#include <kspread/Value.h>
-#include <kspread/part/View.h>
-#include <kspread/ui/Selection.h>
+#include <tables/CellStorage.h>
+#include <tables/Map.h>
+#include <tables/Sheet.h>
+#include <tables/part/Doc.h>
+#include <tables/Value.h>
+#include <tables/part/View.h>
+#include <tables/ui/Selection.h>
 
 #include <csvexportdialog.h>
 

@@ -24,7 +24,9 @@
 
 #include <QVariantList>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 class FinancialModule : public FunctionModule
@@ -36,6 +38,7 @@ public:
     QString descriptionFileName() const;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_FINANCIAL_MODULE

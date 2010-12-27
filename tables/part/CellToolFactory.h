@@ -45,6 +45,7 @@ public:
     void setIcon(const QString& icon);
 };
 
-} // namespace
+} // namespace Tables
+} // namespace Calligra
 
 #endif // CALLIGRA_TABLES_CELL_TOOL_FACTORY

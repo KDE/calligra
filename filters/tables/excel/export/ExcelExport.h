@@ -30,7 +30,7 @@
 #include <records.h>
 #include <QVariantList>
 
-namespace Calligra
+namespace Calligra {
 namespace Tables {
     class Sheet;
     class Tokens;

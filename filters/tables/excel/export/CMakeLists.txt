@@ -3,10 +3,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx
     ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
-    ${CMAKE_SOURCE_DIR}/kspread # for PointStorage
+    ${CMAKE_SOURCE_DIR}/tables # for PointStorage
 )
 
 add_custom_command(
@@ -47,7 +47,7 @@ set(excelexport_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 kde4_add_plugin(excelexport ${excelexport_SRCS})
 
 
-target_link_libraries(excelexport msooxml komain mso koodf ${ZLIB_LIBRARIES} kspreadcommon)
+target_link_libraries(excelexport msooxml komain mso koodf ${ZLIB_LIBRARIES} calligratablescommon)
 if(QCA2_FOUND) # because sidewinder depends on it
    target_link_libraries(excelexport ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)

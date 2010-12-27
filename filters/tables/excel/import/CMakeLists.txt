@@ -3,10 +3,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx
     ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
-    ${CMAKE_SOURCE_DIR}/kspread # for PointStorage
+    ${CMAKE_SOURCE_DIR}/tables # for PointStorage
 )
 
 add_custom_command(
@@ -56,7 +56,7 @@ endif(QCA2_FOUND)
 
 set(excelimport_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 kde4_add_plugin(excelimporttodoc ${excelimport_SRCS})
-target_link_libraries(excelimporttodoc kspreadodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
+target_link_libraries(excelimporttodoc calligratablesodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
 if(QCA2_FOUND)
    target_link_libraries(excelimporttodoc ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)

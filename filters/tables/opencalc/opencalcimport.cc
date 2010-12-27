@@ -43,24 +43,24 @@
 #include <KoStyleStack.h>
 #include <ooutils.h>
 
-#include <kspread/Cell.h>
-#include <kspread/CellStorage.h>
-#include <kspread/Condition.h>
-#include <kspread/part/Doc.h>
-#include <kspread/Global.h>
-#include <kspread/HeaderFooter.h>
-#include <kspread/Map.h>
-#include <kspread/NamedAreaManager.h>
-#include <kspread/PrintSettings.h>
-#include <kspread/Region.h>
-#include <kspread/RowColumnFormat.h>
-#include <kspread/RowFormatStorage.h>
-#include <kspread/Sheet.h>
-#include <kspread/Style.h>
-#include <kspread/StyleManager.h>
-#include <kspread/Validity.h>
-#include <kspread/Value.h>
-#include <kspread/ValueParser.h>
+#include <tables/Cell.h>
+#include <tables/CellStorage.h>
+#include <tables/Condition.h>
+#include <tables/part/Doc.h>
+#include <tables/Global.h>
+#include <tables/HeaderFooter.h>
+#include <tables/Map.h>
+#include <tables/NamedAreaManager.h>
+#include <tables/PrintSettings.h>
+#include <tables/Region.h>
+#include <tables/RowColumnFormat.h>
+#include <tables/RowFormatStorage.h>
+#include <tables/Sheet.h>
+#include <tables/Style.h>
+#include <tables/StyleManager.h>
+#include <tables/Validity.h>
+#include <tables/Value.h>
+#include <tables/ValueParser.h>
 
 #define SECSPERDAY (24 * 60 * 60)
 

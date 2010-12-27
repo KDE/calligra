@@ -39,7 +39,9 @@ class QFont;
 class QString;
 class KoGenStyle;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Cell;
 class ValueConverter;
@@ -213,9 +215,10 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-Q_DECLARE_METATYPE(KSpread::Conditions)
-Q_DECLARE_TYPEINFO(KSpread::Conditions, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Tables::Conditions)
+Q_DECLARE_TYPEINFO(Calligra::Tables::Conditions, Q_MOVABLE_TYPE);
 
 #endif // CALLIGRA_TABLES_CONDITION_H

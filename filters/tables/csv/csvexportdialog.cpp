@@ -20,8 +20,8 @@
 
 #include "csvexportdialog.h"
 
-#include "kspread/Map.h"
-#include "kspread/Sheet.h"
+#include "tables/Map.h"
+#include "tables/Sheet.h"
 
 #include <KApplication>
 #include <KCharsets>

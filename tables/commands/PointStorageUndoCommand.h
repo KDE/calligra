@@ -29,7 +29,9 @@
 // KSpread
 #include "Formula.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -106,6 +108,7 @@ PointStorageUndoCommand<T>& PointStorageUndoCommand<T>::operator<<(const QVector
     return *this;
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_POINT_STORAGE_UNDO_COMMAND

@@ -42,7 +42,7 @@
 #include <KoUnit.h>
 #include <QFontMetricsF>
 
-#include <kspread/Util.h>
+#include <tables/Util.h>
 
 #define MSOOXML_CURRENT_NS "xdr"
 #define MSOOXML_CURRENT_CLASS XlsxXmlDrawingReader

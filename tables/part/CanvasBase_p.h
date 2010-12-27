@@ -29,7 +29,9 @@ class QLabel;
 class KoShapeManager;
 class KoToolProxy;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class View;
 
@@ -51,6 +53,7 @@ public:
     QPointer<KoToolProxy> toolProxy;
 };
 
-} //namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

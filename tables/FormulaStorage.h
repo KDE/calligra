@@ -21,10 +21,12 @@
 #define KSPREAD_FORMULA_STORAGE
 
 #include "Formula.h"
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 #include "PointStorage.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -41,6 +43,7 @@ public:
     }
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_FORMULA_STORAGE

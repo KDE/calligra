@@ -28,13 +28,15 @@
 
 #include <KoRTree.h>
 
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 
 // Use dynamic_cast instead of cached root node
 // this is much slower but it is here so it is easy to check that still all works.
 //#define DYNAMIC_CAST
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -1091,6 +1093,7 @@ void RTree<T>::NonLeafNode::operator=(const NonLeafNode& other)
     }
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_RTREE

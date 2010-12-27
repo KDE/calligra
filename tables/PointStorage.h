@@ -17,19 +17,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_POINT_STORAGE
-#define KSPREAD_POINT_STORAGE
+#ifndef CALLIGRA_TABLES_POINT_STORAGE
+#define CALLIGRA_TABLES_POINT_STORAGE
 
 #include <QRect>
 #include <QString>
 #include <QVector>
 
 #include "Region.h"
-#include "kspread_limits.h"
+#include "calligra_tables_limits.h"
 
 // #define KSPREAD_POINT_STORAGE_HASH
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -872,6 +874,7 @@ private:
 #endif
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
-#endif // KSPREAD_POINT_STORAGE
+#endif // CALLIGRA_TABLES_POINT_STORAGE

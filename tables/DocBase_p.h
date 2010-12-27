@@ -39,7 +39,8 @@ typedef QMap<QString, QDomElement> SavedDocParts;
 
 class KoResourceManager;
 
-namespace KSpread {
+namespace Calligra {
+namespace Tables {
 class Map;
 class SheetAccessModel;
 
@@ -58,6 +59,7 @@ public:
     KoResourceManager *resourceManager;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_DOCBASE_P_H

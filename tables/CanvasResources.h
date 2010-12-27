@@ -22,7 +22,9 @@
 
 #include <KoResourceManager.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -35,6 +37,7 @@ enum {
 };
 } // namespace CanvasResource
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_CANVAS_RESOURCES

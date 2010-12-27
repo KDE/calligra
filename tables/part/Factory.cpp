@@ -76,10 +76,10 @@ const KComponentData &Factory::global()
     if (!s_global) {
         s_global = new KComponentData(aboutData());
 
-        s_global->dirs()->addResourceType("kspread_template", "data", "kspread/templates/");
+        s_global->dirs()->addResourceType("tables_template", "data", "tables/templates/");
         s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
-        s_global->dirs()->addResourceType("functions", "data", "kspread/functions/");
-        s_global->dirs()->addResourceType("sheet-styles", "data", "kspread/sheetstyles/");
+        s_global->dirs()->addResourceType("functions", "data", "tables/functions/");
+        s_global->dirs()->addResourceType("sheet-styles", "data", "tables/sheetstyles/");
     }
     return *s_global;
 }

@@ -17,14 +17,16 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_ABOUTDATA
-#define KSPREAD_ABOUTDATA
+#ifndef CALLIGRA_TABLES_ABOUTDATA
+#define CALLIGRA_TABLES_ABOUTDATA
 
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kofficeversion.h>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 static const char* description = I18N_NOOP("Calligra Spreadsheet Application");
@@ -34,9 +36,9 @@ static const char* version = KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData = new KAboutData("tables", 0, ki18n("Tables"),
+    KAboutData * aboutData = new KAboutData("tables", 0, ki18n("Calligra Tables"),
                                             version, ki18n(description), KAboutData::License_LGPL,
-                                            ki18n("(c) 1998-2010, The Tables Team"), KLocalizedString(),
+                                            ki18n("(c) 1998-2010, The Calligra Tables Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/tables/");
     aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
     aboutData->addAuthor(ki18n("Marijn Kruisselbrink"), ki18n("Maintainer"), "m.kruisselbrink@student.tue.nl");
@@ -87,6 +89,7 @@ KAboutData * newAboutData()
     return aboutData;
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

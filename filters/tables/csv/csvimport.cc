@@ -34,16 +34,16 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
-#include <kspread/CalculationSettings.h>
-#include <kspread/Cell.h>
-#include <kspread/part/Doc.h>
-#include <kspread/Global.h>
-#include <kspread/Map.h>
-#include <kspread/RowColumnFormat.h>
-#include <kspread/Sheet.h>
-#include <kspread/Style.h>
-#include <kspread/Value.h>
-#include <kspread/ValueConverter.h>
+#include <tables/CalculationSettings.h>
+#include <tables/Cell.h>
+#include <tables/part/Doc.h>
+#include <tables/Global.h>
+#include <tables/Map.h>
+#include <tables/RowColumnFormat.h>
+#include <tables/Sheet.h>
+#include <tables/Style.h>
+#include <tables/Value.h>
+#include <tables/ValueConverter.h>
 
 using namespace Calligra::Tables;
 

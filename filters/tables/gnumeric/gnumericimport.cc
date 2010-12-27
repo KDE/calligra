@@ -39,20 +39,20 @@
 #include <KoDocumentInfo.h>
 
 // Calligra Tables
-#include <kspread/ApplicationSettings.h>
-#include <kspread/Cell.h>
-#include <kspread/part/Doc.h>
-#include <kspread/HeaderFooter.h>
-#include <kspread/LoadingInfo.h>
-#include <kspread/Map.h>
-#include <kspread/NamedAreaManager.h>
-#include <kspread/PrintSettings.h>
-#include <kspread/Region.h>
-#include <kspread/RowColumnFormat.h>
-#include <kspread/Sheet.h>
-#include <kspread/Util.h>
-#include <kspread/Validity.h>
-#include <kspread/ValueParser.h>
+#include <tables/ApplicationSettings.h>
+#include <tables/Cell.h>
+#include <tables/part/Doc.h>
+#include <tables/HeaderFooter.h>
+#include <tables/LoadingInfo.h>
+#include <tables/Map.h>
+#include <tables/NamedAreaManager.h>
+#include <tables/PrintSettings.h>
+#include <tables/Region.h>
+#include <tables/RowColumnFormat.h>
+#include <tables/Sheet.h>
+#include <tables/Util.h>
+#include <tables/Validity.h>
+#include <tables/ValueParser.h>
 
 #include <math.h>
 

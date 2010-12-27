@@ -23,7 +23,9 @@
 #include "RectStorage.h"
 #include "Validity.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -48,6 +50,7 @@ protected Q_SLOTS:
     }
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_VALIDITY_STORAGE

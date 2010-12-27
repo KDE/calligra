@@ -31,7 +31,9 @@
 
 class KoShape;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -85,6 +87,7 @@ private:
     QHash < const Sheet*, QHash < int /*row*/, QMultiHash < int /*col*/, KoShape* > > > m_cellAnchoredShapes;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_ODF_SAVING_CONTEXT

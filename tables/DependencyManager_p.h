@@ -31,7 +31,9 @@
 #include "Region.h"
 #include "RTree.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Formula;
 class Map;
@@ -159,6 +161,7 @@ public:
     QHash<Cell, int> depths;
 };
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_DEPENDENCY_MANAGER_P

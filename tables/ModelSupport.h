@@ -27,7 +27,9 @@
 #include "Region.h"
 #include "Sheet.h"
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 
 /**
@@ -151,6 +153,7 @@ static inline QItemSelection fromRegion(const Region &region)
     return selection;
 }
 
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif // KSPREAD_MODEL_SUPPORT
