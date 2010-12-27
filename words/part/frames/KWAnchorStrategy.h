@@ -59,7 +59,7 @@ public:
      * @return will return true if the layout state has been changed.
      * @see isFinished()
      */
-    bool checkState(KoTextDocumentLayout::LayoutState *state, KWTextFrameSet *frameSet, bool runThrough);
+    bool checkState(KoTextDocumentLayout::LayoutState *state, KWTextFrameSet *frameSet);
 
     /**
      * @return if the anchor is placed properly and no more changes are required.

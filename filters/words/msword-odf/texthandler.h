@@ -123,14 +123,17 @@ public:
 
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
-    //void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
+    //void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp,
+    //const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
 
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
-    //void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle, const wvWare::Style* style, bool writeContentTags, QString namedStyle);
+    //void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle,
+    //const wvWare::Style* style, bool writeContentTags, QString namedStyle);
 
+    //TODO: let's try to solve all list related stuff locally in TextHandler
     bool listIsOpen(); //tell us whether a list is open
     void closeList();
-    QString m_listStyleName; //track the name of the list style
+
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
     int m_sectionNumber;
     QString getFont(unsigned fc) const;
@@ -223,17 +226,27 @@ private:
     bool m_insideDrawing;
     KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
 
-    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
-    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
-    int m_currentListID; //tracks the id of the current list - 0 if no list
-    //int m_previousListID; //track previous list, in case we need to continue the numbering
-    //QString m_previousListStyleName;
-    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
-
     //if TRUE, the fo:break-before="page" property is required because a manual
     //page break (an end-of-section character not at the end of a section) was
     //found in the main document
     bool m_breakBeforePage;
+
+    // ************************************************
+    //  List related
+    // ************************************************
+
+    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
+    void updateListStyle(QString textStyleName);
+
+    QString m_listStyleName; //track the name of the list style
+    bool m_listLevelStyleRequired; //track if a list-level-style is required for current paragraph
+    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
+    int m_currentListID; //tracks the id of the current list - 0 if no list
+    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_currentPPs; //paragraph properties
+
+    //int m_previousListID; //track previous list, in case we need to continue the numbering
+
+    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
 
     // ************************************************
     //  Field related

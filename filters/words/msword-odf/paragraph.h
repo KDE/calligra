@@ -29,7 +29,7 @@
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
-//TODO remove unneeded includes
+//TODO: remove unneeded includes
 #include <wv2/src/styles.h>
 #include <wv2/src/paragraphproperties.h>
 #include <wv2/src/functor.h>
@@ -44,7 +44,14 @@ public:
     explicit Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml = false, bool isHeading = false, bool inHeader = false, int outlineLevel = 0);
     ~Paragraph();
 
-    void writeToFile(KoXmlWriter* writer);
+    /**
+     * Write the paragraph content into the @writer
+     *
+     * @return the name of the last KoGenStyle inserted into the styles
+     * collection
+     */
+    QString writeToFile(KoXmlWriter* writer);
+
     void addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles, bool addCompleteElement=false);
     void openInnerParagraph();
     void closeInnerParagraph();

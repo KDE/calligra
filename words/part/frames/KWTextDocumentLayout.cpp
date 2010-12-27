@@ -538,7 +538,7 @@ void KWTextDocumentLayout::layout()
                             continue;
                         if (! frame->shape()->isVisible(true))
                             continue;
-                        if (frame->textRunAround() == KWord::RunThrough)
+                        if (frame->textWrap() == KWord::RunThrough)
                             continue;
                         if (frame->outlineShape()) {
                             if (frame->outlineShape()->zIndex() <= currentShape->zIndex())
@@ -580,18 +580,11 @@ void KWTextDocumentLayout::layout()
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             ADEBUG << "checking anchor";
             QPointF old;
-            KWFrame *frame = 0;
             if (strategy->anchoredShape()) {
                 old = strategy->anchoredShape()->position();
-                frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
             }
 
-            bool runThrough = false;
-            if (frame) {
-                runThrough = (frame->textRunAround() == KWord::RunThrough);
-            }
-
-            if (strategy->checkState(m_state, m_frameSet, runThrough)) {
+            if (strategy->checkState(m_state, m_frameSet)) {
                 ADEBUG << "  restarting line";
                 restartLine = true;
             }
@@ -620,7 +613,7 @@ void KWTextDocumentLayout::layout()
             ADEBUG << "  migrating strategy!";
             if (strategy->anchoredShape()) {
                 KWFrame *frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
-                if (! frame || frame->textRunAround() != KWord::RunThrough) {
+                if (! frame || frame->textWrap() != KWord::RunThrough) {
                     QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
                     matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                     matrix.translate(0, m_state->documentOffsetInShape());
@@ -842,7 +835,7 @@ void KWTextDocumentLayout::addOutlinesToPage(QList<Outline*> outlines, KoShape *
                     // add this shape to outlines
                     if (strategy->anchoredShape()) {
                         KWFrame *frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
-                        if (! frame || frame->textRunAround() != KWord::RunThrough) {
+                        if (! frame || frame->textWrap() != KWord::RunThrough) {
                             QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
                             matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                             matrix.translate(0, m_state->documentOffsetInShape());

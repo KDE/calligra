@@ -20,6 +20,17 @@
 #include "kptglobal.h"
 
 #include <klocale.h>
+#include <kdeversion.h>
+#include <KDebug>
+
+int planDebugArea() {
+#if KDE_IS_VERSION( 4, 3, 80 )
+    static int s_area = KDebug::registerArea( "plan" );
+#else
+    static int s_area = 0;
+#endif
+    return s_area;
+}
 
 namespace KPlato
 {

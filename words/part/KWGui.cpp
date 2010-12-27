@@ -70,7 +70,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
 
     if (m_view->shell())
     {
-        KoToolBoxFactory toolBoxFactory(m_canvasController, "KWord");
+        KoToolBoxFactory toolBoxFactory(m_canvasController, "Words");
         m_view->shell()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),

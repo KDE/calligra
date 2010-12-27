@@ -45,7 +45,7 @@ namespace Scripting
 * \code
 * import KWord
 * # Print the name of the main frameset.
-* fs = KWord.mainFrameSet()
+* fs = KWord.mainFrameSesettextaroundt()
 * if fs:
 *     print fs.name()
 * # Iterate over all framesets.

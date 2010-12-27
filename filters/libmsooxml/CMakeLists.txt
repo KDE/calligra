@@ -29,6 +29,8 @@ set(msooxml_LIB_SRCS
     MsooXmlDrawingTableStyleReader.cpp
     MsooXmlDrawingTableStyle.cpp
     VmlDrawingReader.cpp
+    PredefinedShapeHelper.cpp
+    ComplexShapeHandler.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp

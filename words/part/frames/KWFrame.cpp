@@ -36,7 +36,7 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         m_copyToEverySheet(true),
         m_newFrameBehavior(KWord::NoFollowupFrame),
         m_runAroundSide(KWord::BiggestRunAroundSide),
-        m_runAround(KWord::RunAround),
+        m_textWrap(KWord::RunAround),
         m_runAroundDistance(1.0),
         m_anchoredPageNumber(pageNumber),
         m_frameSet(parent),
@@ -64,10 +64,19 @@ KWFrame::~KWFrame()
     delete m_outline;
 }
 
-void KWFrame::setTextRunAround(KWord::TextRunAround runAround, KWord::Through runThrought)
+void KWFrame::setTextWrap(KWord::TextWrap textWrap, KWord::Through runThrought)
 {
-    m_runAround = runAround;
-    m_runThrough = runThrought;
+    m_textWrap = textWrap;
+
+    if (m_textWrap == KWord::RunThrough) {
+        if (runThrought == KWord::Background) {
+            m_shape->setRunThrough(-1);
+        } else {
+            m_shape->setRunThrough(1);
+        }
+    } else {
+        m_shape->setRunThrough(0);
+    }
 }
 
 void KWFrame::setFrameSet(KWFrameSet *fs)
@@ -88,7 +97,7 @@ void KWFrame::copySettings(const KWFrame *frame)
     setFrameOnBothSheets(frame->frameOnBothSheets());
     setRunAroundDistance(frame->runAroundDistance());
     setRunAroundSide(frame->runAroundSide());
-    setTextRunAround(frame->textRunAround());
+    setTextWrap(frame->textWrap());
     shape()->copySettings(frame->shape());
 }
 
@@ -101,7 +110,7 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     m_shape->setAdditionalStyleAttribute("style:vertical-pos", "from-top");
     m_shape->setAdditionalStyleAttribute("style:vertical-rel", "page");
     QString value;
-    switch (textRunAround()) {
+    switch (textWrap()) {
     case KWord::RunAround:
         switch (runAroundSide()) {
         case KWord::BiggestRunAroundSide: value = "biggest"; break;

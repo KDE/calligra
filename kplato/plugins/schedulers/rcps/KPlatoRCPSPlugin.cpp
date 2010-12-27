@@ -51,47 +51,10 @@ KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
 {
 }
 
-QStringList KPlatoRCPSPlugin::missingFunctions( Project &project, ScheduleManager *sm ) const
-{
-    bool alap = false;
-    bool timeconstraint = false;
-    foreach ( const Node *n, project.allNodes() ) {
-        if ( n->constraint() == Node::ALAP ) {
-            alap = true;
-        } else if ( n->constraint() != Node::ASAP ) {
-            timeconstraint = true;
-        }
-    }
-    QStringList lst;
-    if ( sm->schedulingDirection() ) {
-        lst << i18nc( "@item:inlistbox", "Scheduling backwards from target end time is not supported." );
-        lst << i18nc( "@item:inlistbox", "The project will be scheduled forward from target start time." );
-        lst << QString();
-    }
-    if ( timeconstraint ) {
-        lst << i18nc( "@item:inlistbox", "Scheduling tasks with time constraints is not supported." );
-        lst << i18nc( "@item:inlistbox", "Tasks will be scheduled As Soon As Possible (ASAP)." );
-        lst << QString();
-    }
-    if ( alap ) {
-        lst << i18nc( "@item:inlistbox", "Scheduling tasks As Late As Possible (ALAP) is not supported." );
-        lst << i18nc( "@item:inlistbox", "Tasks will be scheduled As Soon As Possible (ASAP)." );
-    }
-    return lst;
-}
-
 void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
 {
     foreach ( SchedulerThread *j, m_jobs ) {
         if ( j->manager() == sm ) {
-            return;
-        }
-    }
-    QStringList lst = missingFunctions( project, sm );
-    if ( ! lst.isEmpty() ) {
-        int result = KMessageBox::warningContinueCancelList( 0, i18nc( "@info", "<b>This scheduler does not support all the requested scheduling functionality.</b>" ), lst );
-        if ( result == KMessageBox::Cancel ) {
-            sm->setCalculationResult( KPlato::ScheduleManager::CalculationCanceled );
             return;
         }
     }

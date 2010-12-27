@@ -1298,6 +1298,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 {
     READ_PROLOGUE
 
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentPen = QPen();
+
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+
+    if (!idx.isEmpty()) {
+        int index = idx.toInt() - 1;
+        if (m_context->themes->formatScheme.lineStyles.size() > index) {
+            qreal penWidth = EMU_TO_POINT(m_context->themes->formatScheme.lineStyles.at(index).toDouble());
+            m_currentPen.setWidthF(penWidth);
+        }
+    }
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;

@@ -37,13 +37,13 @@ public:
     KexiFieldListModelItem *allColumnsItem;
     QList<KexiFieldListModelItem*> items;
 };
-    
+
 KexiFieldListModel::Private::Private() : schema(0), allColumnsItem(0)
 {
 
 }
 
-KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions options): QAbstractTableModel(parent)
+KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions /*options*/): QAbstractTableModel(parent)
                                       , d(new Private())
 {
 
@@ -89,13 +89,13 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
 }
 
 QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
-{    
+{
     KexiFieldListModelItem *item = 0;
-    
+
     if (index.row() < d->items.count()) {
         item = d->items[index.row()];
     }
-    
+
     if (item) {
         if (role == Qt::DisplayRole) {
             return item->data(index.column());
@@ -109,17 +109,17 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int KexiFieldListModel::columnCount(const QModelIndex& parent) const
+int KexiFieldListModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return (d->options & ShowDataTypes) ? 2 : 1;
 }
 
-int KexiFieldListModel::rowCount(const QModelIndex& parent) const
+int KexiFieldListModel::rowCount(const QModelIndex& /*parent*/) const
 {
     return d->items.count();
 }
 
-QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant KexiFieldListModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
@@ -127,7 +127,7 @@ QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation
     if (orientation == Qt::Horizontal)
         return i18n("Field Name");
     else
-        return QVariant();    
+        return QVariant();
 }
 
 QStringList KexiFieldListModel::mimeTypes() const
@@ -142,11 +142,11 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
     if (!d->schema) {
         return new QMimeData();
     }
-    
+
     QString sourceMimeType;
     QString sourceName;
     QStringList fields;
-    
+
     QMimeData *mimedata = new QMimeData();
     QByteArray fielddata;
     QDataStream stream1(&fielddata, QIODevice::WriteOnly);
@@ -156,16 +156,16 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
     } else if (d->schema->query()) {
         sourceMimeType = "kexi/query";
     }
-    
+
     sourceName = d->schema->name();
-    
+
     foreach (QModelIndex idx, indexes) {
         fields << data(idx, Qt::DisplayRole).toString();
     }
 
     stream1 << sourceMimeType << sourceName << fields;
     mimedata->setData("kexi/fields", fielddata);
-    
+
     return mimedata;
 }
 
