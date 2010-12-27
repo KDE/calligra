@@ -92,7 +92,10 @@ public slots:
 protected:
     void run();
 
-    void taskFromRCPS( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap );
+    void kplatoFromRCPSForward();
+    void kplatoFromRCPSBackward();
+    void taskFromRCPSForward( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap );
+    void taskFromRCPSBackward( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap );
     // NOTE:
     // Relation type not checked so only SF works ok
     // Real durations for early-/late start/finish not calculated so values are approximate
@@ -106,7 +109,8 @@ protected:
     struct rcps_job *addTask( KPlato::Task *task );
     struct rcps_job *addJob( const QString &name, int duration );
     void addDependencies();
-    void addDependencies( struct rcps_job *job, Task *task );
+    void addDependenciesForward( struct rcps_job *job, Task *task );
+    void addDependenciesBackward( struct rcps_job *job, Task *task );
     void addRequests();
     void addRequest( struct rcps_job *job, Task *task );
 
@@ -119,6 +123,7 @@ private:
     MainSchedule *m_schedule;
     bool m_recalculate;
     bool m_usePert;
+    bool m_backward;
     struct rcps_problem *m_problem;
     DateTime m_starttime;
     qint64 m_timeunit;
