@@ -29,7 +29,6 @@
 #include "ui/CellToolBase.h"
 
 namespace Calligra { namespace Tables {
-{
     class CellToolBase;
     class CellEditorBase;
 } }
