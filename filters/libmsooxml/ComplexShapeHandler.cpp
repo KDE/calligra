@@ -36,14 +36,14 @@ QString ComplexShapeHandler::defaultEquations()
     eqs += "<draw:equation draw:name=\"hd5\" draw:formula=\"height / 5 \"/>";
     eqs += "<draw:equation draw:name=\"hd6\" draw:formula=\"height / 6 \"/>";
     eqs += "<draw:equation draw:name=\"hd8\" draw:formula=\"height / 8 \"/>";
-    eqs += "<draw:equation draw:name=\"ss\" draw:formula=\"min (width, height)\"/>";
+    eqs += "<draw:equation draw:name=\"ss\" draw:formula=\"min(width, height)\"/>";
     eqs += "<draw:equation draw:name=\"wd2\" draw:formula=\"width / 2 \"/>";
     eqs += "<draw:equation draw:name=\"wd4\" draw:formula=\"width / 4 \"/>";
     eqs += "<draw:equation draw:name=\"wd5\" draw:formula=\"width / 5 \"/>";
     eqs += "<draw:equation draw:name=\"wd6\" draw:formula=\"width / 6 \"/>";
     eqs += "<draw:equation draw:name=\"wd8\" draw:formula=\"width / 8 \"/>";
     eqs += "<draw:equation draw:name=\"wd10\" draw:formula=\"width / 10 \"/>";
-    eqs += "<draw:equation draw:name=\"ls\" draw:formula=\"max (width, height)\"/>";
+    eqs += "<draw:equation draw:name=\"ls\" draw:formula=\"max(width, height)\"/>";
     eqs += "<draw:equation draw:name=\"ssd2\" draw:formula=\"?ss / 2 \"/>";
     eqs += "<draw:equation draw:name=\"ssd4\" draw:formula=\"?ss / 4 \"/>";
     eqs += "<draw:equation draw:name=\"ssd6\" draw:formula=\"?ss / 6 \"/>";
@@ -59,6 +59,9 @@ QString ComplexShapeHandler::pathEquationsCreated()
 
 QString ComplexShapeHandler::getArgument(QString& function, bool equation)
 {
+    // there can be extra spaces in the beginning/in the end, removing them is necessary
+    function = function.trimmed();
+
     QString argument;
     int separatorIndex = function.indexOf(' ');
     if (separatorIndex > 0) {
@@ -88,26 +91,26 @@ QString ComplexShapeHandler::getArgument(QString& function, bool equation)
     else if (argument == "t" || argument == "l") {
         return "0";
     }
-    else if (argument == "cd8") { // Converting to degrees
-        return QString("%1").arg(2700000/60000.0);
+    else if (argument == "cd8") {
+        return QString("%1").arg(2700000);
     }
     else if (argument == "cd4") {
-        return QString("%1").arg(5400000/60000.0);
+        return QString("%1").arg(5400000);
     }
     else if (argument == "cd2") {
-        return QString("%1").arg(10800000/60000.0);
+        return QString("%1").arg(10800000);
     }
     else if (argument == "7cd8") {
-        return QString("%1").arg(18900000/60000.0);
+        return QString("%1").arg(18900000);
     }
     else if (argument == "5cd8") {
-        return QString("%1").arg(13500000/60000.0);
+        return QString("%1").arg(13500000);
     }
     else if (argument == "3cd8") {
-        return QString("%1").arg(8100000/60000.0);
+        return QString("%1").arg(8100000);
     }
     else if (argument == "3cd4") {
-        return QString("%1").arg(16200000/60000.0);
+        return QString("%1").arg(16200000);
     }
     else {
        return QString("?%1").arg(argument);
@@ -128,19 +131,19 @@ QString ComplexShapeHandler::createEquation(QString& function)
         first = getArgument(function, true);
         second = getArgument(function, true);
         third = getArgument(function, true);
-        return QString("%1 * %2 / %3").arg(first).arg(second).arg(third);
+        return QString("(%1 * %2) / %3").arg(first).arg(second).arg(third);
     }
     else if (operation == "+-") {
         first = getArgument(function, true);
         second = getArgument(function, true);
         third = getArgument(function, true);
-        return QString("%1 + %2 - %3").arg(first).arg(second).arg(third);
+        return QString("(%1 + %2) - %3").arg(first).arg(second).arg(third);
     }
     else if (operation == "+/") {
         first = getArgument(function, true);
         second = getArgument(function, true);
         third = getArgument(function, true);
-        return QString("%1 + %2 / %3").arg(first).arg(second).arg(third);
+        return QString("(%1 + %2) / %3").arg(first).arg(second).arg(third);
     }
     else if (operation == "abs") {
         first = getArgument(function, true);
@@ -148,27 +151,29 @@ QString ComplexShapeHandler::createEquation(QString& function)
     }
     else if (operation == "at2") {
         first = getArgument(function, true);
-        return QString("atan(%1)").arg(first);
-    }
-    else if (operation == "abs") {
-        first = getArgument(function, true);
-        return QString("abs(%1)").arg(first);
+        second = getArgument(function, true);
+        // Converting to ooxml units, since sin/cos/tan functions assume that
+        // they will get thier inputs in those units
+        return QString("atan2(%1, %2) * 3437746.771").arg(second).arg(first);
     }
     else if (operation == "cos") {
         first = getArgument(function,true);
-        return QString("cos(%1)").arg(first);
+        second = getArgument(function, true);
+        return QString("%1 * cos(%2  * 0.000000291)").arg(first).arg(second);
     }
     else if (operation == "sin") {
         first = getArgument(function, true);
-        return QString("sin(%1)").arg(first);
+        second = getArgument(function, true);
+        return QString("%1 * sin(%2 * 0.000000291)").arg(first).arg(second);
     }
     else if (operation == "sqrt") {
         first = getArgument(function, true);
-        return QString("sqrt(%1)").arg(first);
+        return QString("sqrt( %1 )").arg(first);
     }
     else if (operation == "tan") {
         first = getArgument(function, true);
-        return QString("tan(%1)").arg(first);
+        second = getArgument(function, true);
+        return QString("%1 * tan(%2 * 0.000000291)").arg(first).arg(second);
     }
     else if (operation == "min") {
         first = getArgument(function, true);
@@ -178,38 +183,37 @@ QString ComplexShapeHandler::createEquation(QString& function)
     else if (operation == "max") {
         first = getArgument(function, true);
         second = getArgument(function, true);
-        third = getArgument(function, true);
         return QString("max(%1, %2)").arg(first).arg(second);
     }
     else if (operation == "?:") {
         first = getArgument(function, true);
         second = getArgument(function, true);
         third = getArgument(function, true);
-        return QString("if(%1, %2, %3)").arg(first).arg(second).arg(third);
+        return QString("if(max(%1, 0), %2, %3)").arg(first).arg(second).arg(third);
     }
     else if (operation == "cat2") {
         first = getArgument(function, true);
         second = getArgument(function, true);
         third = getArgument(function, true);
-        return QString("%1 * cos ( atan (%2, %3) ) ").arg(first).arg(second).arg(third);
+        return QString("%1 * cos(atan2(%2, %3)) ").arg(first).arg(third).arg(second);
     }
     else if (operation == "sat2") {
         first = getArgument(function, true);
         second = getArgument(function, true);
         third = getArgument(function, true);
-        return QString("%1 * sin ( atan (%2, %3) ) ").arg(first).arg(second).arg(third);
+        return QString("%1 * sin(atan2(%2, %3)) ").arg(first).arg(third).arg(second);
     }
     else if (operation == "mod") {
         first = getArgument(function, true);
         second = getArgument(function, true);
         third = getArgument(function, true);
-        return QString("sqrt(%1 * %1 + %2 + %2 + %3 + %3 )").arg(first).arg(second).arg(third);
+        return QString("sqrt(%1 * %1 + %2 * %2 + %3 * %3)").arg(first).arg(second).arg(third);
     }
     else if (operation == "pin") {
         first = getArgument(function, true);
         second = getArgument(function, true);
         third = getArgument(function, true);
-        return QString("if(%1 - %2, %1, if(%2 - %3, %3, %2))").arg(first).arg(second).arg(third);
+        return QString("if(max(%1 - %2, 0), %1, if(max(%2 - %3, 0), %3, %2))").arg(first).arg(second).arg(third);
     }
     else {
         qDebug() << "implement UNHANDLED element" << operation;
@@ -284,42 +288,144 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
             break;
         }
     }
-    QString wR = attrs.value("wR").toString();
-    QString hR = attrs.value("hR").toString();
-    QString stAng = attrs.value("stAng").toString();
-    QString swAng = attrs.value("swAng").toString();
 
-    // If angles are numbers, they must be converted to degrees
-    bool ok;
-    int startAngle = stAng.toInt(&ok);
-    if (ok) {
-        startAngle = startAngle / 60000;
-        stAng = QString("%1").arg(startAngle);
+    QString wR = attrs.value("wR").toString(); // vertical radius
+    QString hR = attrs.value("hR").toString(); // horiziontal radius
+    QString stAng = attrs.value("stAng").toString(); // start angle
+    QString swAng = attrs.value("swAng").toString(); // swing angle
+
+    wR = getArgument(wR);
+    hR = getArgument(hR);
+
+    if (pathWidth > 0 || pathHeight > 0) {
+        bool isNumber = false;
+        qreal number = wR.toInt(&isNumber);
+        if (pathWidth > 0 && isNumber) {
+            int relWidthIndex = pathEquationIndex;
+            ++pathEquationIndex;
+            pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 * ?width\"/>").
+                arg(relWidthIndex).arg(number/pathWidth);
+            wR = QString("?ooxmlArc%1 ").arg(relWidthIndex);
+        }
+        number = hR.toInt(&isNumber);
+        if (pathHeight > 0 && isNumber) {
+            int relHeightIndex = pathEquationIndex;
+            ++pathEquationIndex;
+            pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 * ?height\"/>").
+                arg(relHeightIndex).arg(number/pathHeight);
+            hR = QString("?ooxmlArc%1 ").arg(relHeightIndex);
+        }
+    }
+
+    stAng = getArgument(stAng);
+    swAng = getArgument(swAng);
+
+    // These equations convert ooxml arcTo to a form that is compatible with odf
+    // Notice that the angle system used in ooxlm is reverse to normal mathematical handling
+    // There seem to be two different ways of conversion, one to W, other one to T
+    // both of them need end angle, x1 and y1
+    // Most problematic case is when swAng is negative, when A should be used instead of W
+
+    int endAngleIndex = pathEquationIndex;
+    ++pathEquationIndex;
+    // Converts to end angle
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 + %3\"/>").
+         arg(endAngleIndex).arg(stAng).arg(swAng);
+
+    // Try for T
+    int centerXIndex = pathEquationIndex;
+    ++pathEquationIndex;
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 - %3 * cos(%4 * 0.000000291)\"/>").
+         arg(centerXIndex).arg(oldX).arg(wR).arg(stAng);
+
+    int centerYIndex = pathEquationIndex;
+    ++pathEquationIndex;
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 - %3 * sin(%4 * 0.000000291)\"/>").
+         arg(centerYIndex).arg(oldY).arg(hR).arg(stAng);
+
+    int widthIndex = pathEquationIndex;
+    ++pathEquationIndex;
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"2 * %2\"/>").arg(widthIndex).arg(wR);
+
+    int heightIndex = pathEquationIndex;
+    ++pathEquationIndex;
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"2 * %2\"/>").arg(heightIndex).arg(hR);
+
+    int odfStartAngleIndex = pathEquationIndex;
+    ++pathEquationIndex;
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"360 - %2 / 60000\"/>").
+         arg(odfStartAngleIndex).arg(stAng);
+
+    int odfEndAngleIndex = pathEquationIndex;
+    ++pathEquationIndex;
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"360 - ?ooxmlArc%2 / 60000\"/>").
+         arg(odfEndAngleIndex).arg(endAngleIndex);
+
+    QString path = QString("T ?ooxmlArc%1 ?ooxmlArc%2 ?ooxmlArc%3 ?ooxmlArc%4 ?ooxmlArc%5 ?ooxmlArc%6 ").arg(centerXIndex).arg(centerYIndex).
+        arg(widthIndex).arg(heightIndex).arg(odfStartAngleIndex).arg(odfEndAngleIndex);
+
+    oldX = QString("?ooxmlArc%1 + %2 * cos(?ooxmlArc%3 * 0.000000291)").arg(centerXIndex).arg(wR).arg(endAngleIndex);
+    oldY = QString("?ooxmlArc%1 + %2 * sin(?ooxmlArc%3 * 0.000000291)").arg(centerYIndex).arg(hR).arg(endAngleIndex);
+
+/*
+    // Try for W/A (commented out atm. T (above) seems to work better
+    // x1, y1 marks the upper left corner
+    int ellipseX1Index = pathEquationIndex;
+    ++pathEquationIndex;
+    // x1
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 - %3 * cos(%4 * 0.000000291) - %3 \"/>").
+         arg(ellipseX1Index).arg(oldX).arg(wR).arg(stAng);
+
+    int ellipseY1Index = pathEquationIndex;
+    ++pathEquationIndex;
+    // y1
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 - %3 * sin(%4 * 0.000000291) - %3 \"/>").
+         arg(ellipseY1Index).arg(oldY).arg(hR).arg(stAng);
+
+    // Try for W solution
+    // W clockwise- (x1 y1 x2 y2 x3 y3 x y) + The same as the “A” command except, that the arcto arc is drawn clockwise.
+
+    // x2, y2 marks the lower right corner
+    int ellipseX2Index = pathEquationIndex;
+    ++pathEquationIndex;
+    // x2
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"?ooxmlArc%2 + %3 * 2\"/>").
+        arg(ellipseX2Index).arg(ellipseX1Index).arg(wR);
+
+    int ellipseY2Index = pathEquationIndex;
+    ++pathEquationIndex;
+    // y2
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"?ooxmlArc%2 + %3 * 2\"/>").
+        arg(ellipseY2Index).arg(ellipseY1Index).arg(hR);
+
+    int arcEndX = pathEquationIndex;
+    ++pathEquationIndex;
+    // x4
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"?ooxmlArc%2 + %3 + %3 * cos(?ooxmlArc%4 * 0.000000291)\"/>").
+        arg(arcEndX).arg(ellipseX1Index).arg(wR).arg(endAngleIndex);
+
+    int arcEndY = pathEquationIndex;
+    ++pathEquationIndex;
+    // y4
+    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"?ooxmlArc%2 + %3 + %3 * sin(?ooxmlArc%4 * 0.000000291)\"/>").
+        arg(arcEndY).arg(ellipseY1Index).arg(hR).arg(endAngleIndex);
+
+    QString path;
+    bool signTest = true;
+    int temp = swAng.toInt(&signTest);
+
+    if (signTest && temp < 0) {
+        path = QString("A ?ooxmlArc%1 ?ooxmlArc%2 ?ooxmlArc%3 ?ooxmlArc%4 %5 %6 ?ooxmlArc%7 ?ooxmlArc%8 ").
+            arg(ellipseX1Index).arg(ellipseY1Index).arg(ellipseX2Index).arg(ellipseY2Index).arg(oldX).arg(oldY).arg(arcEndX).arg(arcEndY);
     }
     else {
-        stAng = getArgument(stAng);
+        path = QString("W ?ooxmlArc%1 ?ooxmlArc%2 ?ooxmlArc%3 ?ooxmlArc%4 %5 %6 ?ooxmlArc%7 ?ooxmlArc%8 ").
+            arg(ellipseX1Index).arg(ellipseY1Index).arg(ellipseX2Index).arg(ellipseY2Index).arg(oldX).arg(oldY).arg(arcEndX).arg(arcEndY);
     }
-    int swingAngle = swAng.toInt(&ok);
-    if (ok) {
-        swingAngle = swingAngle / 60000;
-        swAng = QString("%1").arg(swingAngle);
-    }
-    else {
-        swAng = getArgument(swAng);
-    }
-
-    int index = pathEquationIndex;
-    ++pathEquationIndex;
-    // Converts ooxml 90 to normal anticlockwise unit circle -90
-    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"-1 * %2\"/>").arg(index).arg(stAng);
-
-    int index2 = pathEquationIndex;
-    ++pathEquationIndex;
-    // Convers ooxml clockwise swing angle to normal ánticlock wise end angle
-    pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"?ooxmlArc%2 - %3\"/>").arg(index2).arg(index).arg(swAng);
-
-    return QString("T %1 %2 %3 %4 ?ooxmlArc%5 ?ooxmlArc%6 ").arg(getArgument(oldX)).arg(getArgument(oldY)).arg(getArgument(wR)).
-                                           arg(getArgument(hR)).arg(index).arg(index2);
+    oldX = QString("?ooxmlArc%1").arg(arcEndX);
+    oldY = QString("?ooxmlArc%1").arg(arcEndY);
+*/
+    return path;
 }
 
 QString ComplexShapeHandler::handle_pt(QXmlStreamReader* reader)
@@ -331,10 +437,33 @@ QString ComplexShapeHandler::handle_pt(QXmlStreamReader* reader)
             break;
         }
     }
+
     oldX = attrs.value("x").toString();
     oldY = attrs.value("y").toString();
+    oldX = getArgument(oldX);
+    oldY = getArgument(oldY);
 
-    return QString("%1 %2 ").arg(getArgument(oldX)).arg(getArgument(oldY));
+    if (pathWidth > 0 || pathHeight > 0) {
+        bool isNumber = false;
+        qreal number = oldX.toInt(&isNumber);
+        if (pathWidth > 0 && isNumber) {
+            int relWidthIndex = pathEquationIndex;
+            ++pathEquationIndex;
+            pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 * ?width\"/>").
+                arg(relWidthIndex).arg(number/pathWidth);
+            oldX = QString("?ooxmlArc%1 ").arg(relWidthIndex);
+        }
+        number = oldY.toInt(&isNumber);
+        if (pathHeight > 0 && isNumber) {
+            int relHeightIndex = pathEquationIndex;
+            ++pathEquationIndex;
+            pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 * ?height\"/>").
+                arg(relHeightIndex).arg(number/pathHeight);
+            oldY = QString("?ooxmlArc%1 ").arg(relHeightIndex);
+        }
+    }
+
+    return QString("%1 %2 ").arg(oldX).arg(oldY);
 }
 
 QString ComplexShapeHandler::handle_lnTo(QXmlStreamReader* reader)
@@ -404,8 +533,20 @@ QString ComplexShapeHandler::handle_cubicBezTo(QXmlStreamReader* reader)
 QString ComplexShapeHandler::handle_path(QXmlStreamReader* reader)
 {
     QString returnString;
+    pathWidth = 0;
+    pathHeight = 0;
 
     QXmlStreamAttributes attrs = reader->attributes();
+
+    QString width = attrs.value("w").toString();
+    QString height = attrs.value("h").toString();
+
+    if (!width.isEmpty()) {
+        pathWidth = width.toInt();
+    }
+    if (!height.isEmpty()) {
+        pathHeight = width.toInt();
+    }
 
     while (!reader->atEnd()) {
         reader->readNext();

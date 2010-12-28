@@ -153,11 +153,6 @@ protected:
     KoFilter::ConversionStatus read_r_m();
     KoFilter::ConversionStatus read_t_m();
 
-    // 2010 specific, meant to offer a choice between vml/drawingML
-    KoFilter::ConversionStatus read_AlternateContent();
-    KoFilter::ConversionStatus read_Choice();
-    KoFilter::ConversionStatus read_Fallback();
-
     enum posOffsetCaller {
         posOffset_positionH,
         posOffset_positionV
