@@ -43,7 +43,7 @@ set(wordsprivate_LIB_SRCS
 
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWFrameGeometry.cpp
-    dialogs/KWFrameRunaroundProperties.cpp
+    dialogs/KWRunAroundProperties.cpp
     dialogs/KWGeneralFrameProperties.cpp
     dialogs/KWFrameDialog.cpp
     dialogs/KWShapeConfigFactory.cpp
@@ -81,7 +81,7 @@ endif( Soprano_FOUND )
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
     dialogs/KWFrameGeometry.ui
-    dialogs/KWFrameRunaroundProperties.ui
+    dialogs/KWRunAroundProperties.ui
     dialogs/KWGeneralFrameProperties.ui
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui

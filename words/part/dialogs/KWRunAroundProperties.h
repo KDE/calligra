@@ -20,7 +20,7 @@
 #ifndef KWFRAMERUNAROUNDPROPERTIES_H
 #define KWFRAMERUNAROUNDPROPERTIES_H
 
-#include <ui_KWFrameRunaroundProperties.h>
+#include <ui_KWRunAroundProperties.h>
 #include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>
@@ -31,12 +31,12 @@ class KWFrame;
 class KoShape;
 
 /// A widget that is shown to allow the user to select the run around properties
-class KWFrameRunaroundProperties : public KoShapeConfigWidgetBase
+class KWRunAroundProperties : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
 public:
     /// constructor
-    explicit KWFrameRunaroundProperties(FrameConfigSharedState *state);
+    explicit KWRunAroundProperties(FrameConfigSharedState *state);
 
     /// load all info from the argument frames into this widget
     void open(const QList<KWFrame*> &frames);
@@ -51,7 +51,7 @@ public:
     }
 
 private:
-    Ui::KWFrameRunaroundProperties widget;
+    Ui::KWRunAroundProperties widget;
     FrameConfigSharedState *m_state;
 
     QButtonGroup *m_runAroundSide, *m_runAround;
