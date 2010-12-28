@@ -19,8 +19,6 @@
  */
 
 #include "Outline.h"
-#include "KWFrame.h"
-#include "KWOutlineShape.h"
 #include <KoShapeContainer.h>
 
 #include <qnumeric.h>

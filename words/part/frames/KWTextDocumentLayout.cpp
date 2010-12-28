@@ -27,8 +27,6 @@
 #include "../KWPageTextInfo.h"
 #include "KWAnchorStrategy.h"
 #include "KWOutlineShape.h"
-#include "Outline.h"
-#include "Line.h"
 
 #include <KoTextShapeData.h>
 #include <KoShapeContainer.h>
@@ -239,21 +237,19 @@ void KWTextDocumentLayout::layout()
     ;
 #endif
 
-    QList<Outline*> outlines;
     class End
     {
     public:
-        End(KoTextDocumentLayout::LayoutState *state, QList<Outline*> *outlines) {
-            m_state = state; m_outlines = outlines;
+        End(KoTextDocumentLayout::LayoutState *state) {
+            m_state = state;
         }
         ~End() {
-            m_state->end(); qDeleteAll(*m_outlines);
+            m_state->end();
         }
     private:
         KoTextDocumentLayout::LayoutState *m_state;
-        QList<Outline*> *m_outlines;
     };
-    End ender(m_state, &outlines); // poor mans finally{}
+    End ender(m_state); // poor mans finally{}
 
     if (! m_state->start())
         return;
@@ -264,7 +260,7 @@ void KWTextDocumentLayout::layout()
     int startOfBlock = -1; // the first position in a block (aka paragraph)
     int startOfBlockText = -1; // the first position of text in a block. Will be different only if anchors preceed text.
     KoShape *currentShape = 0;
-    Line line;
+
     while (m_state->shape) {
         ADEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines, we have" << m_activeAnchors.count() << "+" << m_newAnchors.count() <<"anchors";
 #ifndef DEBUG_ANCHORS
@@ -281,15 +277,14 @@ void KWTextDocumentLayout::layout()
             TDEBUG << "New shape";
             currentShape = m_state->shape;
             if (m_frameSet->kwordDocument()) {
-                // refresh the outlines cache.
-                qDeleteAll(outlines);
-                outlines.clear();
+                // refresh the registration of run around shapes.
+                m_state->unregisterAllRunAroundShapes();
 
                 // if we are on new page than clean up anchors
                 cleanupAnchors();
 
-                // if part of page is already layouted than check if there are some anchored shapes and add them to outline
-                addOutlinesToPage(outlines,currentShape,m_state);
+                // if part of page is already layouted than check if there are some anchored shapes and register them
+                addOutlinesToPage(currentShape, m_state);
 
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
@@ -317,10 +312,7 @@ void KWTextDocumentLayout::layout()
                         }
                         if (isChild)
                             continue;
-                        QTransform matrix =frame->shape()->absoluteTransformation(0);
-                        matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                        matrix.translate(0, m_state->documentOffsetInShape());
-                        outlines.append(new Outline(frame->shape(), matrix));
+                        m_state->registerRunAroundShape(frame->shape());
                     }
                 }
                 // set the page for the shape.
@@ -347,18 +339,8 @@ void KWTextDocumentLayout::layout()
                 restartLine = true;
             }
             if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {
-                // refresh outlines in case the shape moved.
-                foreach (Outline *outline, outlines) {
-                    if (outline->shape() == strategy->anchoredShape()) {
-                        ADEBUG << "  refreshing outline";
-                        QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
-                        matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                        matrix.translate(0, m_state->documentOffsetInShape());
-                        outline->changeMatrix(matrix);
-                        line.updateOutline(outline);
-                        break;
-                    }
-                }
+                // refresh registration in case the shape moved.
+                m_state->updateRunAroundShape(strategy->anchoredShape());
             }
             if (restartLine)
                 break;
@@ -371,15 +353,11 @@ void KWTextDocumentLayout::layout()
             ADEBUG << "  migrating strategy!";
             if (strategy->anchoredShape()) {
                 if (strategy->anchoredShape()->textRunAroundSide() != KoShape::RunThrough) {
-                    QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
-                    matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                    matrix.translate(0, m_state->documentOffsetInShape());
-                    Outline *outline = new Outline(strategy->anchoredShape(), matrix);
-                    outlines.append(outline);
-                    line.updateOutline(outline);
+                    m_state->registerRunAroundShape(strategy->anchoredShape());
+                    //line.updateOutline(outline);
                  }
                 restartLine = true;
-                ADEBUG << "adding child outline";
+                ADEBUG << "registering child for run around";
             }
             m_activeAnchors.append(strategy);
         }
@@ -447,7 +425,7 @@ void KWTextDocumentLayout::layout()
             return;
         }
         newParagraph = false;
-        line.setOutlines(outlines);
+        //line.setOutlines(outlines);
         const int anchorCount = m_newAnchors.count();
         line.fit();
         if (m_state->layout->lineCount() == 1 && anchorCount != m_newAnchors.count()) {
@@ -574,7 +552,7 @@ void KWTextDocumentLayout::cleanupAnchors()
     m_newAnchors.clear();
 }
 
-void KWTextDocumentLayout::addOutlinesToPage(QList<Outline*> outlines, KoShape *currentShape,LayoutState *state)
+void KWTextDocumentLayout::addOutlinesToPage(KoShape *currentShape, LayoutState *state)
 {
     KoShapeContainer *pageShape = dynamic_cast<KoShapeContainer*>(currentShape);
 
@@ -589,14 +567,10 @@ void KWTextDocumentLayout::addOutlinesToPage(QList<Outline*> outlines, KoShape *
             if (strategy->anchor()->shape() == child) {
                 // check if the shape is anchored to already layouted text
                 if (strategy->anchor()->positionInDocument() < state->cursorPosition()) {
-                    // add this shape to outlines
+                    // register this shape for text run around
                     if (strategy->anchoredShape()) {
                         if (strategy->anchoredShape()->textRunAroundSide() != KoShape::RunThrough) {
-                            QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
-                            matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                            matrix.translate(0, m_state->documentOffsetInShape());
-                            Outline *outline = new Outline(strategy->anchoredShape(), matrix);
-                            outlines.append(outline);
+                            m_state->registerRunAroundShape(strategy->anchoredShape());
                         }
                         m_activeAnchors.append(strategy);
                     }

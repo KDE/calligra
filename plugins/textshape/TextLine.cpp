@@ -17,10 +17,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Line.h"
+#include "TextLine.h"
 #include "Outline.h"
 
 const qreal RIDICULOUSLY_LARGE_NEGATIVE_INDENT = -5E6;
+#define MIN_WIDTH   0.01f
 
 Line::Line()
 {

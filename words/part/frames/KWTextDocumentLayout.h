@@ -26,9 +26,7 @@
 
 class KWTextFrameSet;
 class KWAnchorStrategy;
-class Outline;
 
-#define MIN_WIDTH   0.01f
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
  * other KWord objects.
@@ -57,7 +55,7 @@ private:
 
     void cleanupAnchors();
 
-    inline void addOutlinesToPage(QList<Outline*> outlines, KoShape *currentShape, LayoutState *state);
+    inline void addOutlinesToPage(KoShape *currentShape, LayoutState *state);
 
     KWTextFrameSet *m_frameSet;
     class DummyShape;

@@ -19,7 +19,7 @@
  */
 
 #include "Outline.h"
-#include "KWTextDocumentLayout.h"
+#include <KoTextDocumentLayout.h>
 
 #include <QList>
 #include <QTextLine>

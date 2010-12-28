@@ -38,8 +38,6 @@ set(wordsprivate_LIB_SRCS
     frames/KWCopyShape.cpp
     frames/KWAnchorStrategy.cpp
     frames/KWOutlineShape.cpp
-    frames/Outline.cpp
-    frames/Line.cpp
     frames/KWPageBackground.cpp
 
     dialogs/KWFrameConnectSelector.cpp
