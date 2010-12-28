@@ -1061,21 +1061,21 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem)
 
     switch (frameElem.attribute("runaround", "0").toInt()) {
     case 0:
-        frame->setTextWrap(KWord::RunThrough);
+        frame->shape()->setTextRunAroundSide(KoShape::RunThrough);
         break;
     case 2:
-        frame->setTextWrap(KWord::NoRunAround);
+        frame->shape()->setTextRunAroundSide(KoShape::NoRunAround);
         break;
     default:
-        frame->setTextWrap(KWord::RunAround);
+        frame->shape()->setTextRunAroundSide(KoShape::BiggestRunAroundSide);
         break;
     }
 
     QString side = frameElem.attribute("runaroundSide", "biggest");
     if (side == "left")
-        frame->setRunAroundSide(KWord::LeftRunAroundSide);
+        frame->shape()->setTextRunAroundSide(KoShape::LeftRunAroundSide);
     else if (side == "right")
-        frame->setRunAroundSide(KWord::RightRunAroundSide);
+        frame->shape()->setTextRunAroundSide(KoShape::RightRunAroundSide);
 
     int zIndex = frameElem.attribute("z-index", "0").toInt();
 

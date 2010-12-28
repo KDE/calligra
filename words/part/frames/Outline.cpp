@@ -41,16 +41,17 @@ Outline::Outline(KWFrame *frame, const QTransform &matrix)
         path = frame->shape()->parent()->outline().intersected(path);
         path = shape->transformation().inverted().map(path);
     }
-    init(matrix, path, frame->runAroundDistance());
-    if (frame->textWrap() == KWord::NoRunAround) {
+    shape = frame->shape();
+    init(matrix, path, shape->textRunAroundDistance());
+    if (shape->textRunAroundSide() == KoShape::NoRunAround) {
         m_side = Empty;
-    } else if (frame->runAroundSide() == KWord::LeftRunAroundSide) {
+    } else if (shape->textRunAroundSide() == KoShape::LeftRunAroundSide) {
         m_side = Left;
-    } else if (frame->runAroundSide() == KWord::RightRunAroundSide) {
+    } else if (shape->textRunAroundSide() == KoShape::RightRunAroundSide) {
         m_side = Right;
-    } else if (frame->runAroundSide() == KWord::BothRunAroundSide) {
+    } else if (shape->textRunAroundSide() == KoShape::BothRunAroundSide) {
         m_side = Both;
-    } else if (frame->runAroundSide() == KWord::BiggestRunAroundSide) {
+    } else if (shape->textRunAroundSide() == KoShape::BiggestRunAroundSide) {
         m_side = Bigger;
     }
 }
@@ -61,26 +62,22 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
     m_line(QRectF()),
     m_shape(shape)
 {
-    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    qreal distance = 0;
-    if (frame) {
-        distance = frame->runAroundDistance();
-        if (frame->textWrap() == KWord::NoRunAround) {
-            // make the shape take the full width of the text area
-            m_side = Empty;
-        } else if (frame->textWrap() == KWord::RunThrough) {
-            m_distance = 0;
-            // We don't exist.
-            return;
-        } else if (frame->runAroundSide() == KWord::LeftRunAroundSide) {
-            m_side = Left;
-        } else if (frame->runAroundSide() == KWord::RightRunAroundSide) {
-            m_side = Right;
-        } else if (frame->runAroundSide() == KWord::BothRunAroundSide) {
-            m_side = Both;
-        } else if (frame->runAroundSide() == KWord::BiggestRunAroundSide) {
-            m_side = Bigger;
-        }
+    qreal distance = shape->textRunAroundDistance();
+    if (shape->textRunAroundSide() == KoShape::NoRunAround) {
+        // make the shape take the full width of the text area
+        m_side = Empty;
+    } else if (shape->textRunAroundSide() == KoShape::RunThrough) {
+        m_distance = 0;
+        // We don't exist.
+        return;
+    } else if (shape->textRunAroundSide() == KoShape::LeftRunAroundSide) {
+        m_side = Left;
+    } else if (shape->textRunAroundSide() == KoShape::RightRunAroundSide) {
+        m_side = Right;
+    } else if (shape->textRunAroundSide() == KoShape::BothRunAroundSide) {
+        m_side = Both;
+    } else if (shape->textRunAroundSide() == KoShape::BiggestRunAroundSide) {
+        m_side = Bigger;
     }
     init(matrix, shape->outline(), distance);
 }

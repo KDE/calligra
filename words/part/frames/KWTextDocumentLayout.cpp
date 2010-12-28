@@ -538,7 +538,7 @@ void KWTextDocumentLayout::layout()
                             continue;
                         if (! frame->shape()->isVisible(true))
                             continue;
-                        if (frame->textWrap() == KWord::RunThrough)
+                        if (frame->shape()->textRunAroundSide() == KoShape::RunThrough)
                             continue;
                         if (frame->outlineShape()) {
                             if (frame->outlineShape()->zIndex() <= currentShape->zIndex())
@@ -612,8 +612,7 @@ void KWTextDocumentLayout::layout()
         foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             ADEBUG << "  migrating strategy!";
             if (strategy->anchoredShape()) {
-                KWFrame *frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
-                if (! frame || frame->textWrap() != KWord::RunThrough) {
+                if (strategy->anchoredShape()->textRunAroundSide() != KoShape::RunThrough) {
                     QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
                     matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                     matrix.translate(0, m_state->documentOffsetInShape());
@@ -834,8 +833,7 @@ void KWTextDocumentLayout::addOutlinesToPage(QList<Outline*> outlines, KoShape *
                 if (strategy->anchor()->positionInDocument() < state->cursorPosition()) {
                     // add this shape to outlines
                     if (strategy->anchoredShape()) {
-                        KWFrame *frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
-                        if (! frame || frame->textWrap() != KWord::RunThrough) {
+                        if (strategy->anchoredShape()->textRunAroundSide() != KoShape::RunThrough) {
                             QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
                             matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                             matrix.translate(0, m_state->documentOffsetInShape());

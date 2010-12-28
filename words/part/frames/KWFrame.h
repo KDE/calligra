@@ -158,9 +158,6 @@ private:
     KWord::FrameBehavior m_frameBehavior;
     bool m_copyToEverySheet;
     KWord::NewFrameBehavior m_newFrameBehavior;
-    KWord::RunAroundSide m_runAroundSide;
-    KWord::TextWrap m_textWrap;
-    qreal m_runAroundDistance;
     // The page number is only used during loading.
     // It is set to the page number if the frame contains a page anchored frame.
     // In all other cases it is set to -1.

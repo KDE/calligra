@@ -82,6 +82,7 @@ void KWFrame::copySettings(const KWFrame *frame)
 
 void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset) const
 {
+    QString value;
     switch (frameBehavior()) {
     case KWord::AutoCreateNewFrameBehavior:
         value = "auto-create-new-frame";
