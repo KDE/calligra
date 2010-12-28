@@ -99,50 +99,6 @@ public:
     }
 
     /**
-     * Return the side around text from another (text)frame should flow.
-     */
-    KWord::RunAroundSide runAroundSide() const {
-        return m_runAroundSide;
-    }
-    /**
-     * Set the side around text from another (text)frame should flow.
-     * @param side the requested side
-     */
-    void setRunAroundSide(KWord::RunAroundSide side) {
-        m_runAroundSide = side;
-    }
-
-    /**
-     * Return the text runaround property for this frame.
-     * This property specifies how text from another textframe will behave when this frame
-     * intersects with it.
-     */
-    KWord::TextWrap textWrap() const {
-        return m_textWrap;
-    }
-    /**
-     * Set the text runaround property for this frame.
-     * This property specifies how text from another textframe will behave when this frame
-     * intersects with it.
-     */
-    void setTextWrap(KWord::TextWrap runAround, KWord::Through runThrought = KWord::Background);
-
-    /**
-     * The space between this frames edge and the text when that text runs around this frame.
-     * @return the space around this frame to keep free from text
-     */
-    qreal runAroundDistance() const {
-        return m_runAroundDistance;
-    }
-    /**
-     * Set the space between this frames edge and the text when that text runs around this frame.
-     * @param distance the space around this frame to keep free from text
-     */
-    void setRunAroundDistance(qreal distance) {
-        m_runAroundDistance = distance;
-    }
-
-    /**
      * Each frame will be rendered by a shape which also holds the position etc.
      * @return the shape that represents this frame.
      */

@@ -35,9 +35,6 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         m_frameBehavior(KWord::AutoExtendFrameBehavior),
         m_copyToEverySheet(true),
         m_newFrameBehavior(KWord::NoFollowupFrame),
-        m_runAroundSide(KWord::BiggestRunAroundSide),
-        m_textWrap(KWord::RunAround),
-        m_runAroundDistance(1.0),
         m_anchoredPageNumber(pageNumber),
         m_frameSet(parent),
         m_outline(0)
@@ -64,21 +61,6 @@ KWFrame::~KWFrame()
     delete m_outline;
 }
 
-void KWFrame::setTextWrap(KWord::TextWrap textWrap, KWord::Through runThrought)
-{
-    m_textWrap = textWrap;
-
-    if (m_textWrap == KWord::RunThrough) {
-        if (runThrought == KWord::Background) {
-            m_shape->setRunThrough(-1);
-        } else {
-            m_shape->setRunThrough(1);
-        }
-    } else {
-        m_shape->setRunThrough(0);
-    }
-}
-
 void KWFrame::setFrameSet(KWFrameSet *fs)
 {
     if (fs == m_frameSet)
@@ -95,40 +77,11 @@ void KWFrame::copySettings(const KWFrame *frame)
     setFrameBehavior(frame->frameBehavior());
     setNewFrameBehavior(frame->newFrameBehavior());
     setFrameOnBothSheets(frame->frameOnBothSheets());
-    setRunAroundDistance(frame->runAroundDistance());
-    setRunAroundSide(frame->runAroundSide());
-    setTextWrap(frame->textWrap());
     shape()->copySettings(frame->shape());
 }
 
 void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset) const
 {
-    // frame properties first
-    m_shape->setAdditionalStyleAttribute("fo:margin", QString::number(runAroundDistance()) + "pt");
-    m_shape->setAdditionalStyleAttribute("style:horizontal-pos", "from-left");
-    m_shape->setAdditionalStyleAttribute("style:horizontal-rel", "page");
-    m_shape->setAdditionalStyleAttribute("style:vertical-pos", "from-top");
-    m_shape->setAdditionalStyleAttribute("style:vertical-rel", "page");
-    QString value;
-    switch (textWrap()) {
-    case KWord::RunAround:
-        switch (runAroundSide()) {
-        case KWord::BiggestRunAroundSide: value = "biggest"; break;
-        case KWord::LeftRunAroundSide: value = "left"; break;
-        case KWord::RightRunAroundSide: value = "right"; break;
-        case KWord::AutoRunAroundSide: value = "dynamic"; break;
-        case KWord::BothRunAroundSide: value = "parallel"; break;
-        }
-        break;
-    case KWord::RunThrough:
-        value = "run-through";
-        break;
-    case KWord::NoRunAround:
-        value = "none";
-        break;
-    }
-    m_shape->setAdditionalStyleAttribute("style:wrap", value);
-
     switch (frameBehavior()) {
     case KWord::AutoCreateNewFrameBehavior:
         value = "auto-create-new-frame";
