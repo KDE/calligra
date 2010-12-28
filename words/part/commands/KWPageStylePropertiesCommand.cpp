@@ -58,27 +58,26 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
             }
             page = page.next();
         }
-    }
 
-    // move
-    QList<KoShape *> shapes;
-    QList<QPointF> previousPositions;
-    QList<QPointF> newPositions;
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
-        foreach (KWFrame *frame, fs->frames()) {
-            const QPointF pos = frame->shape()->absolutePosition();
-            QMap<qreal,qreal>::Iterator iter = offsetsMap.lowerBound(pos.y());
-            --iter;
-            if (qAbs(iter.value()) > 1E-6) {
-                shapes.append(frame->shape());
-                previousPositions.append(frame->shape()->position());
-                newPositions.append(frame->shape()->position() + QPointF(0, iter.value()));
+        // move
+        QList<KoShape *> shapes;
+        QList<QPointF> previousPositions;
+        QList<QPointF> newPositions;
+        foreach (KWFrameSet *fs, m_document->frameSets()) {
+            foreach (KWFrame *frame, fs->frames()) {
+                const QPointF pos = frame->shape()->absolutePosition();
+                QMap<qreal,qreal>::Iterator iter = offsetsMap.lowerBound(pos.y());
+                --iter;
+                if (qAbs(iter.value()) > 1E-6) {
+                    shapes.append(frame->shape());
+                    previousPositions.append(frame->shape()->position());
+                    newPositions.append(frame->shape()->position() + QPointF(0, iter.value()));
+                }
             }
         }
+        if (shapes.count() > 0)
+            new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
     }
-    if (shapes.count() > 0)
-        new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
-
     // figure out which pages change.
     // create a list of  QMap<qreal /* posInDocument */, qreal *distance */ >
     //   which indicates that all frames after posInDocument have to move 'distance'
@@ -137,6 +136,7 @@ void KWPageStylePropertiesCommand::redo()
 {
     QUndoCommand::redo();
     m_style.priv()->copyProperties(m_styleAfter.priv());
+    m_document->updatePagesForStyle(m_style);
 #if 0
     m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();
@@ -147,6 +147,7 @@ void KWPageStylePropertiesCommand::undo()
 {
     QUndoCommand::undo();
     m_style.priv()->copyProperties(m_styleBefore.priv());
+    m_document->updatePagesForStyle(m_style);
 #if 0
     m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();

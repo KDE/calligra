@@ -167,6 +167,9 @@ public:
 
     bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
 
+    /// request a relayout of auto-generated frames on all pages of this argument style.
+    void updatePagesForStyle(const KWPageStyle &style);
+
 public slots:
     /// Relayout the pages
     void relayout();

@@ -54,6 +54,8 @@ struct rcps_job {
 	int weight;
 	/* time constraints etc. */
 	int earliest_start;
+    /* weight callback argument */
+    void *cb_arg;
 };
 
 struct rcps_mode {

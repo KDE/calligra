@@ -51,29 +51,10 @@ KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
 {
 }
 
-QStringList KPlatoRCPSPlugin::missingFunctions( Project &project, ScheduleManager *sm ) const
-{
-    QStringList lst;
-    if ( sm->schedulingDirection() ) {
-        lst << i18nc( "@item:inlistbox", "Scheduling backwards from target end time is not supported." );
-        lst << i18nc( "@item:inlistbox", "The project will be scheduled forward from target start time." );
-        lst << QString();
-    }
-    return lst;
-}
-
 void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
 {
     foreach ( SchedulerThread *j, m_jobs ) {
         if ( j->manager() == sm ) {
-            return;
-        }
-    }
-    QStringList lst = missingFunctions( project, sm );
-    if ( ! lst.isEmpty() ) {
-        int result = KMessageBox::warningContinueCancelList( 0, i18nc( "@info", "<b>This scheduler does not support all the requested scheduling functionality.</b>" ), lst );
-        if ( result == KMessageBox::Cancel ) {
-            sm->setCalculationResult( KPlato::ScheduleManager::CalculationCanceled );
             return;
         }
     }
