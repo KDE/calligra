@@ -28,7 +28,9 @@
 class QCloseEvent;
 class QWidget;
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 class Selection;
 
@@ -60,6 +62,7 @@ protected Q_SLOTS:
 };
 
 } // namespace Plugins
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif

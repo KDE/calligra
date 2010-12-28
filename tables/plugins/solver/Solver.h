@@ -24,14 +24,16 @@
 
 #include <kparts/plugin.h>
 
-#include <kspread_export.h>
+#include <calligra_tables_export.h>
 
 #include <Cell.h>
 
 class QObject;
 #include <QVariantList>
 
-namespace KSpread
+namespace Calligra
+{
+namespace Tables
 {
 namespace Plugins
 {
@@ -40,7 +42,7 @@ namespace Plugins
  * \class Solver Function Optimizer
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class KSPREAD_EXPORT Solver : public KParts::Plugin
+class CALLIGRA_TABLES_EXPORT Solver : public KParts::Plugin
 {
     Q_OBJECT
 
@@ -82,6 +84,7 @@ private:
 };
 
 } // namespace Plugins
-} // namespace KSpread
+} // namespace Tables
+} // namespace Calligra
 
 #endif
