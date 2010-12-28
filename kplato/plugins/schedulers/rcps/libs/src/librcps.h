@@ -62,13 +62,13 @@ void rcps_problem_free(struct rcps_problem *p);
 void rcps_problem_setfitness_mode(struct rcps_problem *problem, int mode);
 
 /* register a callback that gets called every time we want to calculate the project fitness.
- * arguments are the jobs start time, duration, and an argument that can be set per job.
- * should return the weight of this job.
+ * arguments are the jobs start time, duration, and an argument that can be set per job mode.
+ * should return the weight of this job mode.
  * the weight does not need to be constant, it may change dependent on eg start time, duration or cost.
- * the arg is set using rcps_job_set_cbarg.
+ * the arg is set using rcps_job_set_weight_cbarg.
  */
 void rcps_problem_set_weight_callback(struct rcps_problem *p,
-    int (*weight_callback)(int time, int duration, void *arg));
+    int (*weight_callback)(int time, int duration, int nominal_weight, void *arg));
 
 
 /* create a new resource structure */
@@ -134,12 +134,6 @@ int rcps_job_getearliest_start(struct rcps_job *j);
 /* set weight of this job to be used in fitness calculations */
 void rcps_job_setweight(struct rcps_job *j, int weight);
 
-/* set the argument for the weight callback */
-void rcps_job_set_cbarg(struct rcps_job *j, void *arg);
-
-/* retrieve the argument for the weight callback */
-void* rcps_job_get_cbarg(struct rcps_job *j);
-
 /* add a job struct to a problem */
 void rcps_job_add(struct rcps_problem *p, struct rcps_job *j);
 
@@ -194,6 +188,12 @@ void rcps_mode_set_cbarg(struct rcps_mode *m, void *arg);
 
 /* retrieve the argument for the duration callback */
 void* rcps_mode_get_cbarg(struct rcps_mode *m);
+
+/* set the argument for the weight callback */
+void rcps_mode_set_weight_cbarg(struct rcps_mode *m, void *arg);
+
+/* retrieve the argument for the weight callback */
+void* rcps_mode_get_weight_cbarg(struct rcps_mode *m);
 
 /* add a mode to a job */
 void rcps_mode_add(struct rcps_job *j, struct rcps_mode *m);
