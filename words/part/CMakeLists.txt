@@ -39,6 +39,7 @@ set(wordsprivate_LIB_SRCS
     frames/KWAnchorStrategy.cpp
     frames/KWOutlineShape.cpp
     frames/Outline.cpp
+    frames/Line.cpp
     frames/KWPageBackground.cpp
 
     dialogs/KWFrameConnectSelector.cpp
