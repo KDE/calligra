@@ -540,10 +540,7 @@ void KWTextDocumentLayout::layout()
                             continue;
                         if (frame->shape()->textRunAroundSide() == KoShape::RunThrough)
                             continue;
-                        if (frame->outlineShape()) {
-                            if (frame->outlineShape()->zIndex() <= currentShape->zIndex())
-                                continue;
-                        } else if (frame->shape()->zIndex() <= currentShape->zIndex()) {
+                        if (frame->shape()->zIndex() <= currentShape->zIndex()) {
                             continue;
                         }
                         if (! bounds.intersects(frame->shape()->boundingRect()))
@@ -557,12 +554,10 @@ void KWTextDocumentLayout::layout()
                         }
                         if (isChild)
                             continue;
-                        QTransform matrix = (frame->outlineShape()
-                                ? frame->outlineShape()
-                                : frame->shape())->absoluteTransformation(0);
+                        QTransform matrix =frame->shape()->absoluteTransformation(0);
                         matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                         matrix.translate(0, m_state->documentOffsetInShape());
-                        outlines.append(new Outline(frame, matrix));
+                        outlines.append(new Outline(frame->shape(), matrix));
                     }
                 }
                 // set the page for the shape.

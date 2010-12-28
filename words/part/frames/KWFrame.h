@@ -148,11 +148,6 @@ public:
      */
     void saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset = 0) const;
 
-    KWOutlineShape *outlineShape() const {
-        return m_outline;
-    }
-    void setOutlineShape(KWOutlineShape *outline);
-
 private:
     KoShape *m_shape;
     KWord::FrameBehavior m_frameBehavior;
@@ -164,7 +159,6 @@ private:
     int m_anchoredPageNumber;
 
     KWFrameSet *m_frameSet;
-    KWOutlineShape *m_outline;
 };
 
 #endif

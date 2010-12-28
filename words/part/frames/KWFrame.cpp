@@ -36,8 +36,7 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         m_copyToEverySheet(true),
         m_newFrameBehavior(KWord::NoFollowupFrame),
         m_anchoredPageNumber(pageNumber),
-        m_frameSet(parent),
-        m_outline(0)
+        m_frameSet(parent)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -58,7 +57,6 @@ KWFrame::~KWFrame()
             delete m_frameSet;
         m_frameSet = 0;
     }
-    delete m_outline;
 }
 
 void KWFrame::setFrameSet(KWFrameSet *fs)
@@ -133,9 +131,4 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
 bool KWFrame::isCopy() const
 {
     return dynamic_cast<KWCopyShape*>(shape());
-}
-
-void KWFrame::setOutlineShape(KWOutlineShape *outline)
-{
-    m_outline = outline;
 }

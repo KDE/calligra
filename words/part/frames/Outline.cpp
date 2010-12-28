@@ -25,44 +25,17 @@
 
 #include <qnumeric.h>
 
-Outline::Outline(KWFrame *frame, const QTransform &matrix)
-    : m_side(None),
-    m_polygon(QPolygonF()),
-    m_line(QRectF()),
-    m_shape(frame->shape())
-{
-    //TODO korinpa: check if outline is convex. otherwise do triangulation and create more convex outlines
-    KoShape *shape = frame->outlineShape();
-    if (shape == 0)
-        shape = frame->shape();
-    QPainterPath path = shape->outline();
-    if (frame->shape()->parent() && frame->shape()->parent()->isClipped(frame->shape())) {
-        path = shape->transformation().map(path);
-        path = frame->shape()->parent()->outline().intersected(path);
-        path = shape->transformation().inverted().map(path);
-    }
-    shape = frame->shape();
-    init(matrix, path, shape->textRunAroundDistance());
-    if (shape->textRunAroundSide() == KoShape::NoRunAround) {
-        m_side = Empty;
-    } else if (shape->textRunAroundSide() == KoShape::LeftRunAroundSide) {
-        m_side = Left;
-    } else if (shape->textRunAroundSide() == KoShape::RightRunAroundSide) {
-        m_side = Right;
-    } else if (shape->textRunAroundSide() == KoShape::BothRunAroundSide) {
-        m_side = Both;
-    } else if (shape->textRunAroundSide() == KoShape::BiggestRunAroundSide) {
-        m_side = Bigger;
-    }
-}
-
 Outline::Outline(KoShape *shape, const QTransform &matrix)
     : m_side(None),
     m_polygon(QPolygonF()),
     m_line(QRectF()),
     m_shape(shape)
 {
-    qreal distance = shape->textRunAroundDistance();
+    QPainterPath path = shape->outline();
+
+    //TODO check if path is convex. otherwise do triangulation and create more convex outlines
+    init(matrix, path, shape->textRunAroundDistance());
+
     if (shape->textRunAroundSide() == KoShape::NoRunAround) {
         // make the shape take the full width of the text area
         m_side = Empty;
@@ -79,7 +52,6 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
     } else if (shape->textRunAroundSide() == KoShape::BiggestRunAroundSide) {
         m_side = Bigger;
     }
-    init(matrix, shape->outline(), distance);
 }
 
 void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal distance)

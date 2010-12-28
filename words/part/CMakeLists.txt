@@ -65,7 +65,6 @@ set(wordsprivate_LIB_SRCS
     commands/KWNewPageStyleCommand.cpp
     commands/KWFrameDeleteCommand.cpp
     commands/KWFrameCreateCommand.cpp
-    commands/KWCreateOutlineCommand.cpp
     commands/KWClipFrameCommand.cpp
     commands/KWRemoveFrameClipCommand.cpp
     commands/KWChangePageStyleCommand.cpp
