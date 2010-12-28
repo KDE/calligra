@@ -64,6 +64,13 @@ static qreal yAtX(const QLineF &line, qreal x)
     return line.y1() + (x - line.x1()) / line.dx() * line.dy();
 }
 
+static qreal xAtY(const QLineF &line, qreal y)
+{
+    if (line.dx() == 0)
+        return line.x1();
+    return line.x1() + (y - line.y1()) / line.dy() * line.dx();
+}
+
 /// Returns 0, one or two points where the line intersects with the rectangle.
 static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
 {
@@ -73,7 +80,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
     // top edge
     if ((startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top()) ||
             (startOfLine.y() >= rect.top() && endOfLine.y() <= rect.top())) {
-        qreal x = Outline::xAtY(line, rect.top());
+        qreal x = xAtY(line, rect.top());
         if (x >= rect.left() && x <= rect.right() && x)
             answer.append(QPointF(x, rect.top()));
     }
@@ -89,7 +96,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
     // bottom edge
     if ((startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom()) ||
             (startOfLine.y() >= rect.bottom() && endOfLine.y() <= rect.bottom())) {
-        qreal x = Outline::xAtY(line, rect.bottom());
+        qreal x = xAtY(line, rect.bottom());
         if (x >= rect.left() && x <= rect.right())
             answer.append(QPointF(x, rect.bottom()));
     }
