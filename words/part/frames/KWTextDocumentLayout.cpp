@@ -364,7 +364,8 @@ void KWTextDocumentLayout::layout()
         m_newAnchors.clear();
         if (restartLine)
             continue;
-        line.createLine(m_state);
+
+        QTextLine line = m_state->createLine();
         if (!line.isValid()) { // end of parag
             const qreal posY = m_state->y();
             if (firstParagraph) {
@@ -425,9 +426,8 @@ void KWTextDocumentLayout::layout()
             return;
         }
         newParagraph = false;
-        //line.setOutlines(outlines);
         const int anchorCount = m_newAnchors.count();
-        line.fit();
+        m_state->fitLineForRunAround();
         if (m_state->layout->lineCount() == 1 && anchorCount != m_newAnchors.count()) {
             // start parag over so we can correctly take the just found anchors into account.
             m_state->layout->endLayout();
@@ -435,24 +435,24 @@ void KWTextDocumentLayout::layout()
             continue;
         }
 #ifdef DEBUG_TEXT
-        if (line.line.isValid()) {
+        if (line.isValid()) {
             QTextBlock b = document()->findBlock(m_state->cursorPosition());
             if (b.isValid()) {
-                TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
-                TDEBUG << "       1 @ " << line.line.position() << " from parag at pos " << b.position();
-                TDEBUG << "         y " << line.line.y() << " h" <<  line.line.height();
+                TDEBUG << "fitted line" << b.text().mid(line.textStart(), line.textLength());
+                TDEBUG << "       1 @ " << line.position() << " from parag at pos " << b.position();
+                TDEBUG << "         y " << line.y() << " h" <<  line.height();
             }
         }
 #endif
-        bottomOfText = line.line.y() + line.line.height();
+        bottomOfText = line.y() + line.height();
         if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1 && KWord::isHeaderFooter(m_frameSet)) {
             TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());
             m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
             cleanupAnchors();
             return;
         }
-        qreal lineheight = line.line.height();
-        while (m_state->addLine(line.line, line.processingLine()) == false) {
+        qreal lineheight = line.height();
+        while (m_state->addLine() == false) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
 
@@ -528,13 +528,13 @@ void KWTextDocumentLayout::layout()
                 m_state->clearTillEnd();
                 break; //break so the next line (which contain the same) is fitted on new shape
             }
-            line.fit(true);
+            m_state->fitLineForRunAround(true);
 #ifdef DEBUG_TEXT
-            if (line.line.isValid()) {
+            if (line.isValid()) {
                 QTextBlock b = document()->findBlock(m_state->cursorPosition());
                 if (b.isValid()) {
-                    TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
-                    TDEBUG << "       2 @ " << line.line.position() << " from parag at pos " << b.position();
+                    TDEBUG << "fitted line" << b.text().mid(line.textStart(), line.textLength());
+                    TDEBUG << "       2 @ " << line.position() << " from parag at pos " << b.position();
                 }
             }
 #endif
