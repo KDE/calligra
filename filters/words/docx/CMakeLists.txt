@@ -2,7 +2,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30526)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx # for Charting
 )
 
 ########### next target ###############
@@ -19,8 +19,8 @@ set(docximport_PART_SRCS
     DocxXmlFootnoteReader.cpp
     DocxXmlEndnoteReader.cpp
     DocxImport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/XlsxXmlChartReader.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/XlsxXmlChartReader.cpp
 )
 
 kde4_add_plugin(docximport ${docximport_PART_SRCS})

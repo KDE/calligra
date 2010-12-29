@@ -18,9 +18,9 @@ int fitness(struct rcps_problem *problem, struct rcps_genome *genome,
 					genome->modes[problem->jobs[i]->genome_position] : 0;
             int dur = problem->jobs[i]->modes[modenum]->duration;
 			int job_end = job_start + dur;
-            int weight = problem->weight_callback == NULL || problem->jobs[i]->cb_arg == NULL ?
-                    problem->jobs[i]->weight :
-                    problem->weight_callback(job_start, dur, problem->jobs[i]->cb_arg);
+            int weight = problem->weight_callback ?
+                    problem->weight_callback(job_start, dur, problem->jobs[i]->weight, problem->jobs[i]->modes[modenum]->weight_cb_arg) :
+                    problem->jobs[i]->weight;
 
 			max += job_end * weight;
         }
