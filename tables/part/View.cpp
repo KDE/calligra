@@ -723,8 +723,8 @@ void View::initView()
         shell()->createDockWidget(&toolBoxFactory);
 
         // Setup the tool options dock widget manager.
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
