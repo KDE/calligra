@@ -1,4 +1,5 @@
 [Desktop Entry]
+Type=Application
 Name=Flow
 Name[de]=Flow
 Name[et]=Flow
@@ -65,9 +66,12 @@ GenericName[xh]=Umzobo wokulandelana kweenkqubo & Uhlelo lomzobo
 GenericName[x-test]=xxFlowchart & Diagram Editingxx
 GenericName[zh_TW]=流程圖與圖表編輯
 MimeType=application/vnd.oasis.opendocument.graphics;application/x-flow;
-Type=Application
+X-KDE-ServiceTypes=Calligra/Application
 Icon=flow
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
+# application/vnd.oasis.opendocument.graphics is not on this list because Karbon has the default;
+# Flow will be used only in absence of Karbon
+X-Calligra-DefaultMimeTypes=application/x-flow
 X-DocPath=flow/index.html
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.koffice.flow

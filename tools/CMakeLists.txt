@@ -4,6 +4,10 @@ macro_optional_add_subdirectory( kthesaurus )
 macro_optional_add_subdirectory( quickprint )
 macro_optional_add_subdirectory( slidecompare )
 
+if(SHOULD_BUILD_CALLIGRA)
+  macro_optional_add_subdirectory(calligra)
+endif(SHOULD_BUILD_CALLIGRA)
+
 macro_optional_find_package(Okular)
 
 if(OKULAR_FOUND)
