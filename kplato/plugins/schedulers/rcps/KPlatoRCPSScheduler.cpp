@@ -186,21 +186,21 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
     return dur;
 }
 
-int KPlatoRCPSScheduler::weight_callback( int time, int duration, void *arg )
+int KPlatoRCPSScheduler::weight_callback( int time, int duration, int nominal_weight, void *arg )
 {
     //qDebug()<<"kplato_weight:"<<time<<nominal_duration<<arg;
     Q_ASSERT( arg );
     if ( arg == 0 ) {
-        return WEIGHT_ASAP;
+        return nominal_weight;
     }
     KPlatoRCPSScheduler::weight_info *info = static_cast<KPlatoRCPSScheduler::weight_info*>( arg );
-    return info->self->weight( time, duration, info );
+    return info->self->weight( time, duration, nominal_weight, info );
 }
 
-int KPlatoRCPSScheduler::weight( int time, int duration,  KPlatoRCPSScheduler::weight_info  *info )
+int KPlatoRCPSScheduler::weight( int time, int duration, int nominal_weight, KPlatoRCPSScheduler::weight_info  *info )
 {
     if ( m_haltScheduling || m_manager == 0 ) {
-        return WEIGHT_ASAP;
+        return nominal_weight;
     }
     if ( m_manager->recalculate() && info->task->completion().isFinished() ) {
         return 0;
@@ -836,7 +836,7 @@ void KPlatoRCPSScheduler::addTasks()
     info->targettime = toRcpsTime( m_targettime );
     info->isEndJob = true;
 
-    rcps_job_set_cbarg( m_jobend, info );
+    rcps_mode_set_weight_cbarg( mode, info );
     m_weight_info_list << info;
 
     for( int i = 0; i < rcps_job_count( m_problem ); ++i ) {

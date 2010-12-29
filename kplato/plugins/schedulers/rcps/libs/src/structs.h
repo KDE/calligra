@@ -23,7 +23,7 @@ struct rcps_problem {
 	/* fitness calulation mode */
 	int fitness_mode;
     /* weight callback */
-    int (*weight_callback)(int starttime, int duration, void *arg);
+    int (*weight_callback)(int starttime, int duration, int nominal_weight, void *arg);
 };
 
 struct rcps_resource {
@@ -54,15 +54,17 @@ struct rcps_job {
 	int weight;
 	/* time constraints etc. */
 	int earliest_start;
-    /* weight callback argument */
-    void *cb_arg;
 };
 
 struct rcps_mode {
 	int duration;
+    /* duration callback argument */
 	void *cb_arg;
 	struct rcps_request **requests;
 	int request_count;
+    /* weight callback argument */
+    void *weight_cb_arg;
+
 };
 
 struct rcps_request {

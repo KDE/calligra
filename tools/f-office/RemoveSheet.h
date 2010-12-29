@@ -22,20 +22,20 @@
 #include "Sheet.h"
 #include "Map.h"
 
-namespace KSpread {
+namespace Calligra { namespace Tables {
     class Sheet;
     class Map;
-}
+} }
 
 class RemoveSheet: public QUndoCommand
 {
 public:
-    explicit RemoveSheet(KSpread::Sheet* sheet);
+    explicit RemoveSheet(Calligra::Tables::Sheet* sheet);
 
     virtual void redo();
     virtual void undo();
 
 protected:
-    KSpread::Sheet* sheet;
-    KSpread::Map* map;
+    Calligra::Tables::Sheet* sheet;
+    Calligra::Tables::Map* map;
 };

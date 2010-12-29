@@ -5250,58 +5250,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
 }
 
 #undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "mc"
-
-#undef CURRENT_EL
-#define CURRENT_EL AlternateContent
-//! Alternate content handler
-// @todo, find out whether this is used outside docx
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_AlternateContent()
-{
-    READ_PROLOGUE
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF(Choice)
-            ELSE_TRY_READ_IF(Fallback)
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL Choice
-//! Choice handler
-// @todo implement if wanted..
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_Choice()
-{
-    READ_PROLOGUE
-    skipCurrentElement();
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL Fallback
-//! Fallback handler
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_Fallback()
-{
-    READ_PROLOGUE
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF_NS(w, pict)
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "m"
 
 #undef CURRENT_EL

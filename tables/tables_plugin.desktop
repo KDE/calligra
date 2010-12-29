@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=CalligraTables/Plugin
+Comment=Plugin for Calligra Tables
+[PropertyDef::X-CalligraTables-InterfaceVersion]
+Type=int

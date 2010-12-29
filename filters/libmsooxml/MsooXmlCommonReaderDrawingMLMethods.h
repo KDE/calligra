@@ -51,6 +51,8 @@ KoFilter::ConversionStatus read_cNvSpPr();
 KoFilter::ConversionStatus read_nvCxnSpPr();
 KoFilter::ConversionStatus read_grpSp();
 
+bool unsupportedPredefinedShape();
+
 KoFilter::ConversionStatus read_extLst();
 
 KoFilter::ConversionStatus read_grpSpPr();

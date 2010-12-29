@@ -82,11 +82,11 @@ public:
 
     static int progress_callback( int generations, int duration, void *arg );
     static int duration_callback( int direction, int time, int nominal_duration, void *arg );
-    static int weight_callback( int time, int duration, void *arg );
+    static int weight_callback( int time, int duration, int nominal_weight, void *arg );
 
     int progress( int generations, int duration );
     int duration( int direction, int time, int nominal_duration, duration_info *info );
-    int weight( int time, int duration, weight_info *arg );
+    int weight( int time, int duration, int nominal_weight, KPlatoRCPSScheduler::weight_info* info );
 
     /// Fill project data into RCPS structure
     int kplatoToRCPS();
