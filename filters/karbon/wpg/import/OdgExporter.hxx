@@ -39,6 +39,7 @@ public:
 			     const bool isFlatXML = false);
 	~OdgExporter();
 
+#if LIBWPG_VERSION_MINOR<2
 	void startGraphics(double imageWidth, double imageHeight);
 	void endGraphics();
 	void startLayer(unsigned int id);
@@ -72,6 +73,44 @@ private:
 	std::ostringstream m_value, m_name;
 	double m_width, m_height;
 	const bool m_isFlatXML;
+#else
+	virtual void startGraphics(const ::WPXPropertyList &propList);
+	virtual void endGraphics();
+	virtual void setStyle(const ::WPXPropertyList &propList, const ::WPXPropertyListVector &gradient);
+	virtual void startLayer(const ::WPXPropertyList &propList);
+	virtual void endLayer();
+	virtual void drawRectangle(const ::WPXPropertyList& propList);
+	virtual void drawEllipse(const ::WPXPropertyList& propList);
+	virtual void drawPolygon(const ::WPXPropertyListVector &vertices);
+	virtual void drawPath(const ::WPXPropertyListVector &path);
+	virtual void drawGraphicObject(const ::WPXPropertyList &propList, const ::WPXBinaryData &binaryData);
+	virtual void startEmbeddedGraphics(const ::WPXPropertyList &propList);
+	virtual void endEmbeddedGraphics();
+	virtual void drawPolyline(const ::WPXPropertyListVector &vertices);
+	virtual void startTextObject(const ::WPXPropertyList &propList, const ::WPXPropertyListVector &path);
+	virtual void endTextObject();
+	virtual void startTextLine(const ::WPXPropertyList &propList);
+	virtual void endTextLine();
+	virtual void startTextSpan(const ::WPXPropertyList &propList);
+	virtual void endTextSpan();
+	virtual void insertText(const ::WPXString &str);
+
+
+private:
+	std::vector <GraphicsElement *> mBodyElements;
+	std::vector <GraphicsElement *> mAutomaticStylesElements;
+	std::vector <GraphicsElement *> mStrokeDashElements;
+	std::vector <GraphicsElement *> mGradientElements;
+	GraphicsHandler *mpHandler;
+
+	int m_gradientIndex;
+	int m_dashIndex;
+	int m_styleIndex;
+	void writeStyle();
+	std::ostringstream m_value, m_name;
+	double m_width, m_height;
+	const bool m_isFlatXML;
+#endif
 };
 
 #endif // __ODGEXPORTER_H__

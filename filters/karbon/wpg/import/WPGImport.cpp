@@ -33,7 +33,11 @@
 #include <KoXmlWriter.h>
 
 #include <libwpg/libwpg.h>
+#if LIBWPG_VERSION_MINOR<2
 #include <libwpg/WPGStreamImplementation.h>
+#else
+#include <libwpd-stream/libwpd-stream.h>
+#endif
 
 #include "FileOutputHandler.hxx"
 #include "OdgExporter.hxx"
@@ -83,7 +87,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
     if (to != "application/vnd.oasis.opendocument.graphics")
         return KoFilter::NotImplemented;
 
-
+#if LIBWPG_VERSION_MINOR<2
     WPXInputStream* input = new libwpg::WPGFileStream(m_chain->inputFile().toLocal8Bit());
     if (input->isOLEStream()) {
         WPXInputStream* olestream = input->getDocumentOLEStream();
@@ -92,6 +96,16 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
             input = olestream;
         }
     }
+#else
+    WPXInputStream* input = new WPXFileStream(m_chain->inputFile().toLocal8Bit());
+    if (input->isOLEStream()) {
+        WPXInputStream* olestream = input->getDocumentOLEStream("Anything");
+        if (olestream) {
+            delete input;
+            input = olestream;
+        }
+     }
+#endif
 
     if (!libwpg::WPGraphics::isSupported(input)) {
         std::cerr << "ERROR: Unsupported file format (unsupported version) or file is encrypted!" << std::endl;
