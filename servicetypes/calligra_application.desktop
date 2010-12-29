@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Calligra/Application
+Comment=Calligra Application
+
+[PropertyDef::X-Calligra-DefaultMimeTypes]
+Type=QStringList
