@@ -16,7 +16,7 @@ kde4_add_plugin(kpresentereventactions ${kpresentereventactions_PART_SRCS})
 
 target_link_libraries(
     kpresentereventactions
-    kpresenterprivate
+    calligrastageprivate
     flake
     ${KDE4_KIO_LIBRARY}
     ${KDE4_PHONON_LIBRARY}
