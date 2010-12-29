@@ -284,7 +284,7 @@ void KWTextDocumentLayout::layout()
                 cleanupAnchors();
 
                 // if part of page is already layouted than check if there are some anchored shapes and register them
-                addOutlinesToPage(currentShape, m_state);
+                registerPageAnchoredShapes(currentShape, m_state);
 
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
@@ -552,7 +552,7 @@ void KWTextDocumentLayout::cleanupAnchors()
     m_newAnchors.clear();
 }
 
-void KWTextDocumentLayout::addOutlinesToPage(KoShape *currentShape, LayoutState *state)
+void KWTextDocumentLayout::registerPageAnchoredShapes(KoShape *currentShape, LayoutState *state)
 {
     KoShapeContainer *pageShape = dynamic_cast<KoShapeContainer*>(currentShape);
 

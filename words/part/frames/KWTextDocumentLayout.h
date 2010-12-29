@@ -55,7 +55,7 @@ private:
 
     void cleanupAnchors();
 
-    inline void addOutlinesToPage(KoShape *currentShape, LayoutState *state);
+    inline void registerPageAnchoredShapes(KoShape *currentShape, LayoutState *state);
 
     KWTextFrameSet *m_frameSet;
     class DummyShape;
