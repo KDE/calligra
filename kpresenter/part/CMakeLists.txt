@@ -141,16 +141,16 @@ target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-### kpresenterpart ###
-set(kpresenterpart_PART_SRCS KPrFactoryInit.cpp )
+### calligrastagepart ###
+set(calligrastagepart_PART_SRCS KPrFactoryInit.cpp )
 
-kde4_add_plugin(kpresenterpart ${kpresenterpart_PART_SRCS})
+kde4_add_plugin(calligrastagepart ${calligrastagepart_PART_SRCS})
 
 
 
-target_link_libraries(kpresenterpart calligrastageprivate )
+target_link_libraries(calligrastagepart calligrastageprivate )
 
-install(TARGETS kpresenterpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ### kdeinit kpresenter ###
 set(kpresenter_KDEINIT_SRCS main.cpp )
