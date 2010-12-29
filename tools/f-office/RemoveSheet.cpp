@@ -19,10 +19,10 @@
 
 #include "RemoveSheet.h"
 
-using KSpread::Sheet;
-using KSpread::Map;
+using Calligra::Tables::Sheet;
+using Calligra::Tables::Map;
 
-RemoveSheet::RemoveSheet(KSpread::Sheet* s)
+RemoveSheet::RemoveSheet(Calligra::Tables::Sheet* s)
 {
     sheet = s;
     map = sheet->map();

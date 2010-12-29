@@ -78,6 +78,8 @@ private:
     // Storing the latest position where we are, this is needed in order to implment arcTo
     QString oldX, oldY;
 
+    int pathWidth, pathHeight;
+
     int pathEquationIndex;
     QString pathEquations;
 };

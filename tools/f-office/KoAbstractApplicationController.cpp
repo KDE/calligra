@@ -55,7 +55,7 @@
 #include <Doc.h>
 #include <part/View.h>
 #include <Sheet.h>
-#include <kspread/ui/Selection.h>
+#include <tables/ui/Selection.h>
 #include <KWView.h>
 
 #include <KMimeType>
@@ -250,7 +250,7 @@ bool KoAbstractApplicationController::openDocument(const QString &fileName, bool
     if (m_type == SpreadsheetDocument) {
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
-        KSpread::View *kspreadView = qobject_cast<KSpread::View*>(m_view);
+        Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
         m_cellTool = dynamic_cast<FoCellTool *>(
             KoToolManager::instance()->toolById(kspreadView->selection()->canvas(), CellTool_ID));
         kspreadView->showTabBar(false);
@@ -520,7 +520,7 @@ int KoAbstractApplicationController::pageCount() const
     if (!m_doc)
         return 0;
     if (documentType() == SpreadsheetDocument) {
-        KSpread::Doc *kspreadDoc = qobject_cast<KSpread::Doc*>(m_doc);
+        Calligra::Tables::Doc *kspreadDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
         return kspreadDoc->map()->count();
     }
     return m_doc->pageCount();
@@ -624,13 +624,13 @@ void KoAbstractApplicationController::goToNextPage()
 
 void KoAbstractApplicationController::goToNextSheet()
 {
-    KSpread::View *kspreadView = qobject_cast<KSpread::View*>(m_view);
+    Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
     if (!kspreadView)
         return;
-    KSpread::Sheet *sheet = kspreadView->activeSheet();
+    Calligra::Tables::Sheet *sheet = kspreadView->activeSheet();
     if (!sheet)
         return;
-    KSpread::Doc *kspreadDoc = qobject_cast<KSpread::Doc*>(m_doc);
+    Calligra::Tables::Doc *kspreadDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
     if (!kspreadDoc)
         return;
     sheet = kspreadDoc->map()->nextSheet(sheet);
@@ -641,13 +641,13 @@ void KoAbstractApplicationController::goToNextSheet()
 
 void KoAbstractApplicationController::goToPreviousSheet()
 {
-    KSpread::View *kspreadView = qobject_cast<KSpread::View*>(m_view);
+    Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
     if (!kspreadView)
         return;
-    KSpread::Sheet *sheet = kspreadView->activeSheet();
+    Calligra::Tables::Sheet *sheet = kspreadView->activeSheet();
     if (!sheet)
         return;
-    KSpread::Doc *kspreadDoc = qobject_cast<KSpread::Doc*>(m_doc);
+    Calligra::Tables::Doc *kspreadDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
     if (!kspreadDoc)
         return;
     sheet = kspreadDoc->map()->previousSheet(sheet);
@@ -734,7 +734,7 @@ void KoAbstractApplicationController::addSheet()
 {
     if (documentType() == SpreadsheetDocument && m_view) {
         setDocumentModified(true);
-        KSpread::View *kspreadView = qobject_cast<KSpread::View*>(m_view);
+        Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
         kspreadView->insertSheet();
     }
 }
@@ -743,11 +743,11 @@ void KoAbstractApplicationController::removeSheet()
 {
     if (documentType() == SpreadsheetDocument && m_view) {
         if (askQuestion(ConfirmSheetDeleteQuestion, i18n("Do you want to delete the sheet?")) == QMessageBox::Yes) {
-            KSpread::View *kspreadView = qobject_cast<KSpread::View*>(m_view);
+            Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
             kspreadView->selection()->emitCloseEditor(false); // discard changes
             kspreadView->doc()->setModified(true);
             setDocumentModified(true);
-            KSpread::Sheet* tbl = kspreadView->activeSheet();
+            Calligra::Tables::Sheet* tbl = kspreadView->activeSheet();
             QUndoCommand* command = new RemoveSheet(tbl);
             kspreadView->doc()->addCommand(command);
         }
@@ -757,7 +757,7 @@ void KoAbstractApplicationController::removeSheet()
 QString KoAbstractApplicationController::currentSheetName() const
 {
     if (documentType() == SpreadsheetDocument && m_view) {
-            KSpread::View *kspreadView = qobject_cast<KSpread::View*>(m_view);
+            Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
         return kspreadView->activeSheet()->sheetName();
     }
     return QString();

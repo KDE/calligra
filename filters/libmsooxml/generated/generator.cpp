@@ -30,6 +30,11 @@
 // This small helper program is meant to be used for parsing ooxml 'presetShapeDefinitions.xml'
 // and to create a header file from it, header can then be used eg. in a constructor of a class to
 // have support for shapes defined in the xml
+
+// Note, presetShapeDefinitions has at least the following errors, which should be corrected manually
+// before running this program
+// 1. leftArrow <gd name="y1" fmla="+- vc 0 dy1"/>
+
 int main()
 {
     QFile inputFile("./presetShapeDefinitions.xml");

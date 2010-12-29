@@ -8,7 +8,7 @@ endif(QCA2_FOUND)
 include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIRECTORY}
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx # for Charting
 )
 
 ########### next target ###############
@@ -31,7 +31,7 @@ set(msooxml_LIB_SRCS
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
 )

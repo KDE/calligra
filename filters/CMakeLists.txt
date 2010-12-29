@@ -59,9 +59,9 @@ if(SHOULD_BUILD_KFORMULA)
     macro_optional_add_subdirectory(kformula)
 endif(SHOULD_BUILD_KFORMULA)
 
-if(SHOULD_BUILD_KSPREAD)
-    macro_optional_add_subdirectory(kspread)
-endif(SHOULD_BUILD_KSPREAD)
+if(SHOULD_BUILD_TABLES)
+    macro_optional_add_subdirectory(tables)
+endif(SHOULD_BUILD_TABLES)
 
 if(SHOULD_BUILD_KARBON)
   macro_optional_add_subdirectory(karbon)
