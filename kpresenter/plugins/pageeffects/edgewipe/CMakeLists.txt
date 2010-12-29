@@ -37,7 +37,7 @@ kde4_add_plugin(kpr_pageeffect_edgewipe ${kpr_pageeffect_edgewipe_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_edgewipe
-    kpresenterprivate
+    calligrastageprivate
     flake
     
     ${KDE4_KDECORE_LIBS}

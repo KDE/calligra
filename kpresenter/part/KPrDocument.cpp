@@ -83,7 +83,7 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
     Q_UNUSED( initOnce );
 
     setComponentData(KPrFactory::componentData(), false);
-    setTemplateType( "kpresenter_template" );
+    setTemplateType( "stage_template" );
 
     KoShapeLoadingContext::addAdditionalAttributeData( KoShapeLoadingContext::AdditionalAttributeData(
                                                        KoXmlNS::presentation, "placeholder",
@@ -297,7 +297,7 @@ KoPageApp::PageType KPrDocument::pageType() const
 
 void KPrDocument::initEmpty()
 {
-    QString fileName( KStandardDirs::locate( "kpresenter_template", "Screen/.source/emptyLandscape.otp", componentData() ) );
+    QString fileName( KStandardDirs::locate( "stage_template", "Screen/.source/emptyLandscape.otp", componentData() ) );
     setModified( true );
     bool ok = loadNativeFormat( fileName );
     if ( !ok ) {

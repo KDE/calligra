@@ -37,7 +37,7 @@ kde4_add_plugin(kpr_pageeffect_matrixwipe ${kpr_pageeffect_matrixwipe_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_matrixwipe
-    kpresenterprivate 
+    calligrastageprivate 
     flake 
     
     ${KDE4_KDECORE_LIBS}

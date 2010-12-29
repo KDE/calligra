@@ -12,7 +12,7 @@ kde4_add_plugin(kpr_pageeffect_barwipe ${kpr_pageeffect_barwipe_PART_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_barwipe
-    kpresenterprivate
+    calligrastageprivate
     flake 
     
     ${KDE4_KDECORE_LIBS}
