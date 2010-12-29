@@ -8,7 +8,7 @@ set(kpresentergenericimageexport_PART_SRCS genericimageexport.cpp ${libdialogfil
 
 kde4_add_plugin(kpresentergenericimageexport ${kpresentergenericimageexport_PART_SRCS})
 
-target_link_libraries(kpresentergenericimageexport  ${KDE4_KDECORE_LIBS} kpresenterprivate )
+target_link_libraries(kpresentergenericimageexport  ${KDE4_KDECORE_LIBS} calligrastageprivate )
 
 install(TARGETS kpresentergenericimageexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
