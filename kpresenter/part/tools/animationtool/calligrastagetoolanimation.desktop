@@ -35,7 +35,7 @@ Name[zh_CN]=动画工具
 Name[zh_TW]=動畫工具
 X-KDE-ServiceTypes=KOffice/Tool
 Type=Service
-X-KDE-Library=kpresentertoolanimation
+X-KDE-Library=calligrastagetoolanimation
 X-Flake-MinVersion=0
 X-Flake-PluginVersion=1
 
