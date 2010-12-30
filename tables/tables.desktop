@@ -1,5 +1,11 @@
 [Desktop Entry]
 Name=Calligra Tables
+Name[it]=Tables di Calligra
+Name[pt]=Tables do Calligra
+Name[pt_BR]=Calligra Tables
+Name[sv]=Calligra Tables
+Name[uk]=Tables Calligra
+Name[x-test]=xxCalligra Tablesxx
 Exec=calligratables %u
 GenericName=Spreadsheet
 GenericName[bg]=Таблици
