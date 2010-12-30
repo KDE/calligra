@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QTextStream>
+
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -32,6 +34,21 @@
 #include <KGuiItem>
 
 #include <kofficeversion.h>
+
+static void listApplicationNames()
+{
+    KServiceTypeTrader* trader = KServiceTypeTrader::self();
+    KService::List services = trader->query("Calligra/Application", "exist [X-KDE-NativeMimeType]");
+    QTextStream out(stdout, QIODevice::WriteOnly);
+    QStringList names;
+    foreach (KService::Ptr service, services) {
+        names.append(service->desktopEntryName());
+    }
+    names.sort();
+    foreach (const QString& name, names) {
+        out << name << '\n';
+    }
+}
 
 static void showWelcomeWindow()
 {
@@ -154,6 +171,7 @@ int main( int argc, char **argv )
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
+    options.add("apps", ki18n("Lists names of all available Calligra applications"));
     options.add("+FILES", ki18n("Files to open"));
     KCmdLineArgs::addCmdLineOptions( options );
 
@@ -161,6 +179,10 @@ int main( int argc, char **argv )
     KGlobal::locale()->insertCatalog("calligra");
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if (args->isSet("apps")) {
+        listApplicationNames();
+        return 0;
+    }
     if (args->count() == 0) {
         //! @todo show cool Welcome window for app selection
         showWelcomeWindow();
