@@ -295,7 +295,8 @@ void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoG
         else if ( series->spPr->lineFill.type == Charting::Fill::None )
             style.addProperty( "draw:stroke", "none", KoGenStyle::GraphicType );
     }
-    else if ( paletteSet && ( m_chart->m_impl->name() != "scatter" ) || m_chart->m_showLines )
+    else if (   (paletteSet && m_chart->m_impl->name() != "scatter")
+             || m_chart->m_showLines )
     {
         const int curSerNum = m_chart->m_series.indexOf( series );
         style.addProperty( "draw:stroke", "solid", KoGenStyle::GraphicType );
