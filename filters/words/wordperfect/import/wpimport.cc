@@ -28,11 +28,115 @@
 K_PLUGIN_FACTORY(WPImportFactory, registerPlugin<WPImport>();)
 K_EXPORT_PLUGIN(WPImportFactory("calligrafilters"))
 
+#ifndef LIBWPD_VERSION_MINOR
+#define LIBWPD_VERSION_MINOR 8
+#endif
+
 #include <libwpd/libwpd.h>
+#if LIBWPD_VERSION_MINOR>8
+#include <libwpd-stream/libwpd-stream.h>
+#else
 #include <libwpd/WPXStream.h>
 #include <libwpd/WPXHLListenerImpl.h>
+#endif
 
 
+#if LIBWPD_VERSION_MINOR>8
+class WPXMemoryInputStream : public WPXInputStream
+{
+public:
+    WPXMemoryInputStream(unsigned char *data, unsigned long size);
+    virtual ~WPXMemoryInputStream();
+
+    virtual bool isOLEStream() {
+        return false;
+    }
+    virtual WPXInputStream * getDocumentOLEStream(const char *name) {
+        return NULL;
+    }
+
+    const virtual unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
+    virtual int seek(long offset, WPX_SEEK_TYPE seekType);
+    virtual long tell();
+    virtual bool atEOS();
+
+private:
+    long m_offset;
+    size_t m_size;
+    unsigned char *m_data;
+};
+
+WPXMemoryInputStream::WPXMemoryInputStream(unsigned char *data, unsigned long size) :
+	WPXInputStream(),
+	m_offset(0),
+	m_size(size),
+	m_data(data)
+{
+}
+
+WPXMemoryInputStream::~WPXMemoryInputStream()
+{
+}
+
+const unsigned char * WPXMemoryInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
+{
+	numBytesRead = 0;
+
+	if (numBytes == 0)
+		return 0;
+	
+	int numBytesToRead;
+
+	if ((m_offset+numBytes) < m_size)
+		numBytesToRead = numBytes;
+	else
+		numBytesToRead = m_size - m_offset;
+	
+	numBytesRead = numBytesToRead; // about as paranoid as we can be..
+
+	if (numBytesToRead == 0)
+		return 0;
+
+	long oldOffset = m_offset;
+	m_offset += numBytesToRead;
+	
+	return &m_data[oldOffset];
+}
+
+int WPXMemoryInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
+{
+	if (seekType == WPX_SEEK_CUR)
+		m_offset += offset;
+	else if (seekType == WPX_SEEK_SET)
+		m_offset = offset;
+
+	if (m_offset < 0)
+	{
+		m_offset = 0;
+		return 1;
+	}
+	if ((long)m_offset > (long)m_size)
+	{
+		m_offset = m_size;
+		return 1;
+	}
+
+	return 0;
+}
+
+long WPXMemoryInputStream::tell()
+{
+	return m_offset;
+}
+
+bool WPXMemoryInputStream::atEOS()
+{
+	if ((long)m_offset == (long)m_size) 
+		return true; 
+
+	return false;
+}
+#else
 class WPXMemoryInputStream : public WPXInputStream
 {
 public:
@@ -125,13 +229,70 @@ bool WPXMemoryInputStream::atEOS()
 
     return false;
 }
+#endif
 
-
+#if LIBWPD_VERSION_MINOR>8
+class KWordListener : public WPXDocumentInterface
+#else
 class KWordListener : public WPXHLListenerImpl
+#endif
 {
 public:
     KWordListener();
     virtual ~KWordListener();
+#if LIBWPD_VERSION_MINOR>8
+	virtual void setDocumentMetaData(const WPXPropertyList &propList) {};
+	virtual void startDocument();
+	virtual void endDocument();
+	virtual void definePageStyle(const WPXPropertyList &propList) {};
+	virtual void openPageSpan(const WPXPropertyList &propList) {};
+	virtual void closePageSpan() {};
+	virtual void openHeader(const WPXPropertyList &propList) {};
+	virtual void closeHeader() {};
+	virtual void openFooter(const WPXPropertyList &propList) {};
+	virtual void closeFooter() {};
+	virtual void defineParagraphStyle(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops) {};
+	virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
+	virtual void closeParagraph();
+	virtual void defineCharacterStyle(const WPXPropertyList &propList) {};
+	virtual void openSpan(const WPXPropertyList &propList);
+	virtual void closeSpan();
+	virtual void defineSectionStyle(const WPXPropertyList &propList, const WPXPropertyListVector &columns) {};
+	virtual void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns) {};
+	virtual void closeSection() {};
+	virtual void insertTab();
+	virtual void insertSpace() {};
+	virtual void insertText(const WPXString &text);
+ 	virtual void insertLineBreak();
+	virtual void insertField(const WPXString &type, const WPXPropertyList &propList) {};
+	virtual void defineOrderedListLevel(const WPXPropertyList &propList) {};
+	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) {};	
+	virtual void openOrderedListLevel(const WPXPropertyList &propList) {};
+	virtual void openUnorderedListLevel(const WPXPropertyList &propList) {};
+	virtual void closeOrderedListLevel() {};
+	virtual void closeUnorderedListLevel() {};
+	virtual void openListElement(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops) {};
+	virtual void closeListElement() {};       
+	virtual void openFootnote(const WPXPropertyList &propList) {};
+	virtual void closeFootnote() {};
+	virtual void openEndnote(const WPXPropertyList &propList) {};
+	virtual void closeEndnote() {};
+	virtual void openComment(const WPXPropertyList &propList) {};
+	virtual void closeComment() {};
+	virtual void openTextBox(const WPXPropertyList &propList) {};
+	virtual void closeTextBox() {};
+ 	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns) {};
+ 	virtual void openTableRow(const WPXPropertyList &propList) {};
+	virtual void closeTableRow() {};
+ 	virtual void openTableCell(const WPXPropertyList &propList) {};
+	virtual void closeTableCell() {};
+	virtual void insertCoveredTableCell(const WPXPropertyList &propList) {};
+ 	virtual void closeTable() {};
+	virtual void openFrame(const WPXPropertyList &propList) {};
+	virtual void closeFrame() {};
+	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData &data) {};
+	virtual void insertEquation(const WPXPropertyList &propList, const WPXString &data) {};
+#else
 
     virtual void setDocumentMetaData(const WPXPropertyList &propList) {}
 
@@ -177,6 +338,7 @@ public:
     virtual void closeTableCell() {}
     virtual void insertCoveredTableCell(const WPXPropertyList &propList) {}
     virtual void closeTable() {}
+#endif
 
     QString root;
 
@@ -288,7 +450,11 @@ KoFilter::ConversionStatus WPImport::convert(const QByteArray& from, const QByte
 
     // open and parse the file
     KWordListener listener;
+#if LIBWPD_VERSION_MINOR>8
+    WPDResult error = WPDocument::parse(instream, static_cast<WPXDocumentInterface *>(&listener), NULL);
+#else
     WPDResult error = WPDocument::parse(instream, static_cast<WPXHLListenerImpl *>(&listener));
+#endif
     delete instream;
 
     if (error != WPD_OK)

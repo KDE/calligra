@@ -1,0 +1,5 @@
+L I B R C P S   T O D O
+=======================
+- callback to determine duration of task depending on schedule time
+- asap/alap local moving within slack
+- tasks that are fixed in time

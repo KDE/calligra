@@ -101,7 +101,7 @@ ShapeListView::ShapeListView(QWidget* parent) :
     setFocusPolicy(Qt::NoFocus);
     setFrameShape(QFrame::NoFrame);
     setIconSize(QSize(22, 22));
-    //setSpacing(1);
+    setSpacing(1);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListView::Adjust);

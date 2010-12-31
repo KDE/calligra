@@ -36,9 +36,9 @@
 #include <QKeyEvent>
 #include <QTextCursor>
 
-using namespace KSpread;
-using KSpread::CellEditorBase;
-using KSpread::CellToolBase;
+using namespace Calligra::Tables;
+using Calligra::Tables::CellEditorBase;
+using Calligra::Tables::CellToolBase;
 
 
 FoExternalEditor::FoExternalEditor(QWidget *parent)
@@ -64,7 +64,7 @@ FoExternalEditor::~FoExternalEditor()
 {
 }
 
-void FoExternalEditor::setCellTool(KSpread::CellToolBase* cellToolBase)
+void FoExternalEditor::setCellTool(Calligra::Tables::CellToolBase* cellToolBase)
 {
     cellTool=cellToolBase;
 }

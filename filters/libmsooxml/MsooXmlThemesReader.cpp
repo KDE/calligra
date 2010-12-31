@@ -237,6 +237,7 @@ DrawingMLFormatScheme::DrawingMLFormatScheme(const DrawingMLFormatScheme& format
         i.next();
         fillStyles.insert(i.key(), i.value()->clone());
     }
+    lineStyles = format.lineStyles;
 }
 
 DrawingMLFormatScheme& DrawingMLFormatScheme::operator=(const DrawingMLFormatScheme& format)
@@ -246,6 +247,8 @@ DrawingMLFormatScheme& DrawingMLFormatScheme::operator=(const DrawingMLFormatSch
         i.next();
         fillStyles.insert(i.key(), i.value()->clone());
     }
+    lineStyles = format.lineStyles;
+
     return *this;
 }
 
@@ -804,17 +807,57 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
  - [done] bgFillStyleLst (Background Fill Style List) §20.1.4.1.7
  - effectStyleLst (Effect Style List) §20.1.4.1.12
  - fillStyleLst (Fill Style List) §20.1.4.1.13
- - lnStyleLst (Line Style List) §20.1.4.1.21*/
+ - [done] lnStyleLst (Line Style List) §20.1.4.1.21*/
 KoFilter::ConversionStatus MsooXmlThemesReader::read_fmtScheme()
 {
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        //kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(bgFillStyleLst)
+            ELSE_TRY_READ_IF(lnStyleLst)
             SKIP_UNKNOWN
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lnStyleLst
+//! lnStyleLst (Line style list)
+KoFilter::ConversionStatus MsooXmlThemesReader::read_lnStyleLst()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(ln)
+            SKIP_UNKNOWN
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL ln
+//! lnStyleLst (Line style list)
+KoFilter::ConversionStatus MsooXmlThemesReader::read_ln()
+{
+    READ_PROLOGUE
+
+    QXmlStreamAttributes attrs = attributes();
+
+    TRY_READ_ATTR_WITHOUT_NS(w)
+
+    m_context->theme->formatScheme.lineStyles.push_back(w);
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            skipCurrentElement();
         }
     }
     READ_EPILOGUE

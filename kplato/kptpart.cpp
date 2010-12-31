@@ -33,6 +33,7 @@
 #include "kplatosettings.h"
 #include "kpttask.h"
 #include "KPlatoXmlLoader.h"
+#include "kptpackage.h"
 
 //#include "KDGanttViewTaskLink.h"
 
@@ -61,18 +62,6 @@
 
 namespace KPlato
 {
-
-// temporary convinience class
-class Package
-{
-public:
-    Package() {}
-    Project *project;
-    QString ownerId;
-    QString ownerName;
-
-    WorkPackageSettings settings;
-};
 
 Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         : KoDocument( parentWidget, parent, singleViewMode ),
@@ -204,13 +193,15 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
         }
         m_xmlLoader.setMimetype( value );
         QString message;
-        KPlatoXmlLoader loader( m_xmlLoader, m_config );
+        Project *newProject = new Project( m_config );
+        KPlatoXmlLoader loader( m_xmlLoader, newProject );
         bool ok = loader.load( plan );
         if ( ok ) {
-            setProject( &(m_xmlLoader.project()) );
+            setProject( newProject );
             setModified( false );
         } else {
             setErrorMessage( loader.errorMessage() );
+            delete newProject;
         }
         if (updater) {
             updater->setProgress(100); // the rest is only processing, not loading
@@ -223,9 +214,9 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
         setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan, got %1", value ) );
         return false;
     }
-    QString syntaxVersion = plan.attribute( "version", KPLATO_FILE_SYNTAX_VERSION );
+    QString syntaxVersion = plan.attribute( "version", PLAN_FILE_SYNTAX_VERSION );
     m_xmlLoader.setVersion( syntaxVersion );
-    if ( syntaxVersion > KPLATO_FILE_SYNTAX_VERSION ) {
+    if ( syntaxVersion > PLAN_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of Plan (syntax version: %1)\n"
                                "Opening it in this version of Plan will lose some information.", syntaxVersion ),
@@ -297,7 +288,7 @@ QDomDocument Part::saveXML()
     QDomElement doc = document.createElement( "kplato" );
     doc.setAttribute( "editor", "KPlato" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
-    doc.setAttribute( "version", KPLATO_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Save the project
@@ -318,8 +309,8 @@ QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *reso
     QDomElement doc = document.createElement( "kplatowork" );
     doc.setAttribute( "editor", "KPlato" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
-    doc.setAttribute( "version", KPLATOWORK_FILE_SYNTAX_VERSION );
-    doc.setAttribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "version", PLANWORK_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "plan-version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Work package info
@@ -461,6 +452,10 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
 Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &url )
 {
     QString value;
+    bool ok = true;
+    Project *proj = 0;
+    Package *package = 0;
+    QString timeTag;
     KoXmlElement plan = document.documentElement();
 
     // Check if this is the right app
@@ -469,74 +464,79 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
         kDebug() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
-    } else if ( value != "application/x-vnd.kde.kplato.work" ) {
-        kDebug() << "Unknown mime type " << value;
-        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
-        return false;
-    }
-    QString syntaxVersion = plan.attribute( "version", KPLATOWORK_FILE_SYNTAX_VERSION );
-    m_xmlLoader.setWorkVersion( syntaxVersion );
-    if ( syntaxVersion > KPLATOWORK_FILE_SYNTAX_VERSION ) {
-        int ret = KMessageBox::warningContinueCancel(
-                0, i18n( "This document was created with a newer version of KPlatoWork (syntax version: %1)\n"
-                "Opening it in this version of KPlatoWork will lose some information.", syntaxVersion ),
-                i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
-        if ( ret == KMessageBox::Cancel ) {
-            setErrorMessage( "USER_CANCELED" );
+    } else if ( value == "application/x-vnd.kde.kplato.work" ) {
+        m_xmlLoader.setMimetype( value );
+        m_xmlLoader.setWorkVersion( plan.attribute( "version", "0.0.0" ) );
+        proj = new Project( m_config );
+        KPlatoXmlLoader loader( m_xmlLoader, proj );
+        ok = loader.loadWorkpackage( plan );
+        if ( ! ok ) {
+            setErrorMessage( loader.errorMessage() );
+            delete proj;
             return false;
         }
-    }
-    m_xmlLoader.setVersion( plan.attribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION ) );
-/*
-#ifdef KOXML_USE_QDOM
-    int numNodes = plan.childNodes().count();
-#else
-    int numNodes = plan.childNodesCount();
-#endif
-*/
-    bool ok = true;
-    QString timeTag;
-    m_xmlLoader.startLoad();
-    Project *proj = new Project();
-    Package *package = new Package();
-    package->project = proj;
-    KoXmlNode n = plan.firstChild();
-    for ( ; ! n.isNull(); n = n.nextSibling() ) {
-        if ( ! n.isElement() ) {
-            continue;
-        }
-        KoXmlElement e = n.toElement();
-        if ( e.tagName() == "project" ) {
-            m_xmlLoader.setProject( proj );
-            ok = proj->load( e, m_xmlLoader );
-            if ( ! ok ) {
-                m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
-                //TODO add some ui here
+        package = loader.package();
+        timeTag = loader.timeTag();
+    } else if ( value != "application/x-vnd.kde.plan.work" ) {
+        kDebug() << "Unknown mime type " << value;
+        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
+        return false;
+    } else {
+        QString syntaxVersion = plan.attribute( "version", "0.0.0" );
+        m_xmlLoader.setWorkVersion( syntaxVersion );
+        if ( syntaxVersion > PLANWORK_FILE_SYNTAX_VERSION ) {
+            int ret = KMessageBox::warningContinueCancel(
+                    0, i18n( "This document was created with a newer version of PlanWork (syntax version: %1)\n"
+                    "Opening it in this version of PlanWork will lose some information.", syntaxVersion ),
+                    i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
+            if ( ret == KMessageBox::Cancel ) {
+                setErrorMessage( "USER_CANCELED" );
+                return false;
             }
-        } else if ( e.tagName() == "workpackage" ) {
-            timeTag = e.attribute( "time-tag" );
-            package->ownerId = e.attribute( "owner-id" );
-            package->ownerName = e.attribute( "owner" );
-            KoXmlElement elem;
-            forEachElement( elem, e ) {
-                if ( elem.tagName() != "settings" ) {
-                    continue;
+        }
+        m_xmlLoader.setVersion( plan.attribute( "kplato-version", PLAN_FILE_SYNTAX_VERSION ) );
+        m_xmlLoader.startLoad();
+        Project *proj = new Project();
+        Package *package = new Package();
+        package->project = proj;
+        KoXmlNode n = plan.firstChild();
+        for ( ; ! n.isNull(); n = n.nextSibling() ) {
+            if ( ! n.isElement() ) {
+                continue;
+            }
+            KoXmlElement e = n.toElement();
+            if ( e.tagName() == "project" ) {
+                m_xmlLoader.setProject( proj );
+                ok = proj->load( e, m_xmlLoader );
+                if ( ! ok ) {
+                    m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
+                    //TODO add some ui here
                 }
-                package->settings.usedEffort = (bool)elem.attribute( "used-effort" ).toInt();
-                package->settings.progress = (bool)elem.attribute( "progress" ).toInt();
-                package->settings.remainingEffort = (bool)elem.attribute( "remaining-effort" ).toInt();
-                package->settings.documents = (bool)elem.attribute( "documents" ).toInt();
+            } else if ( e.tagName() == "workpackage" ) {
+                timeTag = e.attribute( "time-tag" );
+                package->ownerId = e.attribute( "owner-id" );
+                package->ownerName = e.attribute( "owner" );
+                KoXmlElement elem;
+                forEachElement( elem, e ) {
+                    if ( elem.tagName() != "settings" ) {
+                        continue;
+                    }
+                    package->settings.usedEffort = (bool)elem.attribute( "used-effort" ).toInt();
+                    package->settings.progress = (bool)elem.attribute( "progress" ).toInt();
+                    package->settings.remainingEffort = (bool)elem.attribute( "remaining-effort" ).toInt();
+                    package->settings.documents = (bool)elem.attribute( "documents" ).toInt();
+                }
             }
         }
+        if ( proj->numChildren() > 0 ) {
+            WorkPackage &wp = static_cast<Task*>( proj->childNode( 0 ) )->workPackage();
+            if ( wp.ownerId().isEmpty() ) {
+                wp.setOwnerId( package->ownerId );
+                wp.setOwnerName( package->ownerName );
+            }
+        }
+        m_xmlLoader.stopLoad();
     }
-    WorkPackage &wp = static_cast<Task*>( proj->childNode( 0 ) )->workPackage();
-    if ( wp.ownerId().isEmpty() ) {
-        wp.setOwnerId( package->ownerId );
-        wp.setOwnerName( package->ownerName );
-    }
-
-    m_xmlLoader.stopLoad();
-
     if ( ok && proj->id() == project.id() && proj->childNode( 0 ) ) {
         ok = project.nodeDict().contains( proj->childNode( 0 )->id() );
         if ( ok && m_mergedPackages.contains( timeTag ) ) {

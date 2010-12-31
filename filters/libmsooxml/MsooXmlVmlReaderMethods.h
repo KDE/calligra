@@ -41,6 +41,8 @@ protected:
     KoFilter::ConversionStatus read_fill();
     KoFilter::ConversionStatus read_VML_background();
     KoFilter::ConversionStatus read_shapetype();
+    KoFilter::ConversionStatus read_formulas();
+    KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_shape();
     KoFilter::ConversionStatus read_imagedata();
     KoFilter::ConversionStatus read_textbox();
@@ -50,7 +52,7 @@ protected:
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
-    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart};
+    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
     KoFilter::ConversionStatus createFrameEnd();
@@ -96,3 +98,7 @@ protected:
     QString m_groupUnit; // pt, cm etc.
     qreal m_real_groupWidth;
     qreal m_real_groupHeight;
+
+    int m_formulaIndex;
+    QString m_shapeTypeString;
+    QMap<QString, QString> m_shapeTypeStrings;

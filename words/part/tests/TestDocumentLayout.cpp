@@ -521,7 +521,7 @@ void TestDocumentLayout::noRunAroundFrame()
     initForNewTest(loremIpsum);
     MockShape *picture = new MockShape();
     KWFrame frame(picture, frameSet);
-    frame.setTextRunAround(KWord::NoRunAround);
+    frame.setTextWrap(KWord::NoRunAround);
     picture->setSize(QSizeF(100, 100));
     picture->setPosition(QPointF(0, 0));
 

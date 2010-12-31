@@ -22,7 +22,7 @@
 #ifndef KEXIDB_DRIVER_MNGR_H
 #define KEXIDB_DRIVER_MNGR_H
 
-#include <klibloader.h>
+//#include <klibloader.h>
 #include <kservice.h>
 
 #include "driver.h"

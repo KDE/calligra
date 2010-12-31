@@ -185,7 +185,7 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
     Q_ASSERT( sid == sm->scheduleId() );
 
     XMLLoaderObject status;
-    status.setVersion( KPLATO_FILE_SYNTAX_VERSION );
+    status.setVersion( PLAN_FILE_SYNTAX_VERSION );
     status.setProject( mp );
     status.setProjectSpec( mp->timeSpec() );
 
@@ -385,7 +385,7 @@ void SchedulerThread::saveProject( Project *project, QDomDocument &document )
     QDomElement doc = document.createElement( "kplato" );
     doc.setAttribute( "editor", "KPlato" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
-    doc.setAttribute( "version", KPLATO_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
     project->save( doc );
 }
@@ -398,7 +398,7 @@ bool SchedulerThread::loadProject( Project *project, const KoXmlDocument &doc )
         return false;
     }
     XMLLoaderObject status;
-    status.setVersion( KPLATO_FILE_SYNTAX_VERSION );
+    status.setVersion( PLAN_FILE_SYNTAX_VERSION );
     status.setProject( project );
     return project->load( pel, status );
 }

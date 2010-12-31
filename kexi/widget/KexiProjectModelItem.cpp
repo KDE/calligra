@@ -28,13 +28,13 @@
 #include <kiconloader.h>
 
 KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelItem *p)
-    : m_parentItem(p), m_info(0), m_item(0), m_dirty(false)
+    : m_parentItem(p), m_info(0), m_dirty(false), m_item(0)
 {
     m_groupName = n;
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
-    : m_parentItem(p), m_info(&i), m_item(0), m_dirty(false)
+    : m_parentItem(p), m_info(&i), m_dirty(false), m_item(0)
 {
     m_icon = SmallIcon(i.itemIcon());
     m_fifoSorting = 1; //because this is top level item
@@ -100,7 +100,11 @@ QVariant KexiProjectModelItem::data(int column) const
 {
     Q_UNUSED(column);
     if (m_item) {
+#ifdef KEXI_MOBILE
+        return m_item->captionOrName();
+#else
         return m_item->name() + (m_dirty ? "*" : "");
+#endif
     } else if (m_info) {
         return m_info->groupName();
     } else   {
@@ -157,7 +161,7 @@ void KexiProjectModelItem::removeChild(const KexiPart::Item& item)
 KexiProjectModelItem* KexiProjectModelItem::modelItemFromItem(const KexiPart::Item& item) const
 {
     KexiProjectModelItem* itm = 0;
-    
+
     if (!m_item) {
         foreach(KexiProjectModelItem *child, m_childItems) {
             if (child->m_item) {

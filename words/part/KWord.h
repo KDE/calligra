@@ -56,7 +56,7 @@ namespace KWord
      * This property specifies how text from a text frame behaves when a frame with
      * one of these properties set on it intersects with it.
      */
-    enum TextRunAround {
+    enum TextWrap {
         NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
         RunAround,  ///< The text will run around the outline of the frame
         RunThrough  ///< The text will completely ignore the frame and layout as if it was not there

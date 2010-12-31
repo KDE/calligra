@@ -64,6 +64,39 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_fillImageRenderingStyleStretch = false;
 }
 
+bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
+{
+    // some conditions are not supported with custom shapes properly yet, remove them when possible
+
+    // Lines and connectors are handled elsewhere
+    if (m_contentType == "line" || m_contentType.contains("Connector")) {
+        return false;
+    }
+
+    // custom shape supports showing text lists
+    return true;
+
+    // Picture fill in custom-shape supported
+    if (!m_xlinkHref.isEmpty()) {
+        return true;
+    }
+
+    // Remove me when custom-shape suppors rotation
+    if (m_rot != 0) {
+        return true;
+    }
+
+    // These shapes are not properly supported atm. some have bugs in predefinedShapes.xml,
+    // some might have xml parser / calligra bugs
+    if (m_contentType == "circularArrow" || m_contentType == "curvedDownArrow" ||
+        m_contentType == "curvedLeftArrow" || m_contentType == "curvedUpArrow" ||
+        m_contentType == "curvedRightArrow" || m_contentType == "gear6" ||
+        m_contentType == "gear9") {
+        return true;
+    }
+    return false;
+}
+
 // ----------------------------------------------------------------
 
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName,
@@ -207,7 +240,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             body->addAttributePt("svg:y", EMU_TO_POINT(m_svgY));
         }
         if (m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col >= 0) {
-            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
+            body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
                 QString::number(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_row+1));
             body->addAttributePt("table:end-x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_colOff));
             body->addAttributePt("table:end-y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_rowOff));
@@ -712,17 +745,18 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
-    // Arc and straight connector are now simpilified to be a line, fix later
-    if (m_contentType == "line" || m_contentType == "arc") {
+    if (m_contentType == "line") {
         body->startElement("draw:line");
     }
-    else if (m_contentType.startsWith("straightConnector") || m_contentType.startsWith("curvedConnector") ||
-             m_contentType.startsWith("bentConnector")) {
-        body->startElement("draw:line"); // This should be maybe draw:connector but koffice doesn't seem to
+    else if (m_contentType.contains("Connector")) {
+        body->startElement("draw:line"); // This should be maybe draw:connector but calligra doesn't seem to
                                          // handle that element yet
     }
-    else {
+    else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
         body->startElement("draw:frame"); // CASE #P475
+    }
+    else {
+        body->startElement("draw:custom-shape");
     }
     if (!m_cNvPrName.isEmpty()) {
         body->addAttribute("draw:name", m_cNvPrName);
@@ -782,8 +816,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     if (m_svgWidth > -1 && m_svgHeight > -1) {
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
-            m_contentType.startsWith("curvedConnector") || m_contentType.startsWith("bentConnector")) {
+        if (m_contentType == "line" || m_contentType.contains("Connector")){
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
@@ -826,6 +859,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+            if (m_contentType != "rect" && !m_contentType.isEmpty() && !unsupportedPredefinedShape()) {
+                body->startElement("draw:enhanced-geometry");
+                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
+                body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
+                body->addCompleteElement(m_context->import->m_shapeHelper.equations.value(m_contentType).toUtf8());
+                body->endElement(); // draw:enhanced-geometry
+            }
         }
     }
 #elif defined(XLSXXMLDRAWINGREADER_CPP)
@@ -835,7 +875,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
         if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
             f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
+            body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
             body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
             body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
         } else {
@@ -1297,6 +1337,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 {
     READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentPen = QPen();
+
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+
+    if (!idx.isEmpty()) {
+        int index = idx.toInt();
+        if (m_context->themes->formatScheme.lineStyles.size() > index) {
+            qreal penWidth = EMU_TO_POINT(m_context->themes->formatScheme.lineStyles.at(index).toDouble());
+            m_currentPen.setWidthF(penWidth);
+        }
+    }
 
     while (!atEnd()) {
         readNext();
@@ -2561,6 +2615,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
             ELSE_TRY_READ_IF_NS(p, oleObj)
             ELSE_TRY_READ_IF_NS(a, tbl)
 #endif
+            else if (qualifiedName() == "mc:AlternateContent") {
+                TRY_READ(AlternateContent)
+            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -3430,21 +3487,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     while (true) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
-        // @todo: Hmm, are these color modifications only available for pptx?
-        if (QUALIFIED_NAME_IS(lumMod)) {
-            m_currentDoubleValue = &lumMod.value;
-            TRY_READ(lumMod)
-            lumMod.valid = true;
-        } else if (QUALIFIED_NAME_IS(lumOff)) {
-            m_currentDoubleValue = &lumOff.value;
-            TRY_READ(lumOff)
-            lumOff.valid = true;
+        if (isStartElement()) {
+            // @todo: Hmm, are these color modifications only available for pptx?
+            if (QUALIFIED_NAME_IS(lumMod)) {
+                m_currentDoubleValue = &lumMod.value;
+                TRY_READ(lumMod)
+                lumMod.valid = true;
+            } else if (QUALIFIED_NAME_IS(lumOff)) {
+                m_currentDoubleValue = &lumOff.value;
+                TRY_READ(lumOff)
+                lumOff.valid = true;
+            }
+            ELSE_TRY_READ_IF(shade)
+            ELSE_TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(satMod)
+            ELSE_TRY_READ_IF(alpha)
+            SKIP_UNKNOWN
         }
-        ELSE_TRY_READ_IF(shade)
-        ELSE_TRY_READ_IF(tint)
-        ELSE_TRY_READ_IF(satMod)
-        ELSE_TRY_READ_IF(alpha)
-        SKIP_UNKNOWN
     }
 
     QColor col = Qt::white;

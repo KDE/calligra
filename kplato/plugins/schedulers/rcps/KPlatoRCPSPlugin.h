@@ -60,10 +60,6 @@ public slots:
 protected slots:
     void slotStarted( SchedulerThread *job );
     void slotFinished( SchedulerThread *job );
-
-protected:
-    QStringList missingFunctions( Project &project, ScheduleManager *sm ) const;
-
 };
 
 

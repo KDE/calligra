@@ -51,7 +51,7 @@ KWAnchorStrategy::~KWAnchorStrategy()
 {
 }
 
-bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, KWTextFrameSet *frameSet, bool runThrough)
+bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, KWTextFrameSet *frameSet)
 {
     if (!m_anchor->shape()->parent()) {
         kDebug() << "no parent";
@@ -159,7 +159,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, KWTe
     //layout recalculation
 
     // if shape is RunThrough then the shape is not intersecting the text and no relayout is needed
-    if (runThrough) {
+    if (m_anchor->shape()->runThrough() != 0) {
         m_finished = true;
         return true;
     }
