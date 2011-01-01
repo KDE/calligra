@@ -3,6 +3,7 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR} )
 ########### Flake Plugin library ###############
 
 SET (comicboxesshape_LIB_SRCS
+    ComicBoxesLine.cpp
     ComicBoxesShape.cpp
     ComicBoxesShapeFactory.cpp
     ComicBoxesPlugin.cpp
