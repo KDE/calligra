@@ -31,6 +31,7 @@
 #include <limits>
 #include <cmath>
 
+#define HANDLE_SIZE 3
 
 inline bool near(qreal a, qreal b)
 {
@@ -111,8 +112,8 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
                 QLineF l = line->line();
                 painter.setPen(Qt::black);
                 painter.setBrush(Qt::white);
-                painter.drawEllipse(converter.documentToView(t.map(l.p1())), 3, 3);
-                painter.drawEllipse(converter.documentToView(t.map(l.p2())), 3, 3);
+                painter.drawEllipse(converter.documentToView(t.map(l.p1())), HANDLE_SIZE, HANDLE_SIZE);
+                painter.drawEllipse(converter.documentToView(t.map(l.p2())), HANDLE_SIZE, HANDLE_SIZE);
             }
         }
     }
@@ -149,7 +150,7 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
     {
         QTransform t = m_currentShape->lines2ShapeTransform();
         QLineF line = m_currentLine->line();
-        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized());
+        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized().adjusted(-HANDLE_SIZE, -HANDLE_SIZE, HANDLE_SIZE, HANDLE_SIZE));
         
         switch(m_currentPointOnTheLine)
         {
@@ -164,7 +165,7 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
         }
         m_currentShape->recreatePath();
         line = m_currentLine->line();
-        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized());
+        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized().adjusted(-HANDLE_SIZE, -HANDLE_SIZE, HANDLE_SIZE, HANDLE_SIZE));
         break;
     }
     default:
@@ -240,11 +241,11 @@ QPair<ComicBoxesLine*, ComicBoxesTool::Point> ComicBoxesTool::pointNear(const QP
     foreach(ComicBoxesLine* line, m_currentShape->lines())
     {
         QLineF l = line->line();
-        if(near(point, t.map(l.p1()), 3))
+        if(near(point, t.map(l.p1()), HANDLE_SIZE))
         {
             return QPair<ComicBoxesLine*, Point>(line, POINT_1);
         }
-        if(near(point, t.map(l.p2()), 3))
+        if(near(point, t.map(l.p2()), HANDLE_SIZE))
         {
             return QPair<ComicBoxesLine*, Point>(line, POINT_2);
         }
