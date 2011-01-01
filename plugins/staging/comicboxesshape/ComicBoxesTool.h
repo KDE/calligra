@@ -28,6 +28,10 @@ class KoShape;
 class ComicBoxesTool : public KoToolBase
 {
     Q_OBJECT
+    enum Mode {
+        NOTHING,
+        DRAGING_NEW_LINE
+    };
   public:
     explicit ComicBoxesTool(KoCanvasBase *canvas);
     ~ComicBoxesTool();
@@ -53,7 +57,7 @@ private:
     
   private:
     ComicBoxesShape* m_currentShape;
-    bool m_dragging;
+    Mode m_mode;
     QPointF m_currentStartingPoint;
     QPointF m_currentPoint;
 };

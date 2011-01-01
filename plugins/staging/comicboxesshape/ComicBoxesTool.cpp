@@ -31,7 +31,7 @@
 #include <limits>
 #include <cmath>
 
-ComicBoxesTool::ComicBoxesTool(KoCanvasBase *canvas) : KoToolBase(canvas), m_dragging(false)
+ComicBoxesTool::ComicBoxesTool(KoCanvasBase *canvas) : KoToolBase(canvas), m_mode(NOTHING)
 {
 }
 
@@ -61,11 +61,15 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
-    if(m_dragging)
+    switch(m_mode)
     {
+    case DRAGING_NEW_LINE:
         painter.setPen(Qt::black);
         painter.drawLine(converter.documentToView(m_currentStartingPoint),
                         converter.documentToView(m_currentPoint) );
+        break;
+    default:
+        break;
     }
     
     // Draw the handles
@@ -91,20 +95,22 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
 
 void ComicBoxesTool::mousePressEvent( KoPointerEvent *event )
 {
-    m_dragging = true;
+    m_mode = DRAGING_NEW_LINE;
     m_currentStartingPoint = event->point;
 }
 
 void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    if(m_dragging)
+    switch(m_mode)
     {
+    case DRAGING_NEW_LINE:
         canvas()->updateCanvas(currentDraggingRect());
         m_currentPoint = event->point;
         if(event->modifiers() & Qt::SHIFT) makeVerticalOrHorizontal(m_currentStartingPoint, m_currentPoint);
         canvas()->updateCanvas(currentDraggingRect());
-    } else {
-        event->ignore();
+        break;
+    default:
+        break;
     }
 }
 
@@ -133,9 +139,11 @@ inline qreal projection(const QLineF& l, const QPointF& pt_1 )
 
 void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-    if(m_dragging)
+    switch(m_mode)
     {
-        m_dragging = false;
+    case DRAGING_NEW_LINE:
+    {
+        m_mode = NOTHING;
         
         QPointF p1 = m_currentStartingPoint - m_currentShape->boundingRect().topLeft();
         QPointF p2 = event->point;
@@ -181,8 +189,9 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
         
         
         
-    } else {
-        event->ignore();
+    }
+    default:
+        break;
     }
 }
 
