@@ -134,9 +134,22 @@ void ComicBoxesShape::addLine( ComicBoxesLine* _line )
 void ComicBoxesShape::removeLine( ComicBoxesLine* _line )
 {
     Q_ASSERT(!_line->isAbsoluteLine());
+    
+    QList<ComicBoxesLine*> toremove;
+    foreach(ComicBoxesLine* line, m_lines)
+    {
+        if(line->line1() == _line || line->line2() == _line)
+        {
+            toremove.push_back(line);
+        }
+    }
+    foreach(ComicBoxesLine* line, toremove)
+    {
+        removeLine(line);
+    }
     m_lines.removeAll(_line);
-    delete _line;
     recreatePath();
+    delete _line;
 }
 
 QList<ComicBoxesLine*> ComicBoxesShape::lines()
