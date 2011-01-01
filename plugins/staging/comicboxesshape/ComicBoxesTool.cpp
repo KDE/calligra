@@ -32,6 +32,7 @@
 #include <cmath>
 
 #define HANDLE_SIZE 3
+#define HANDLE_POINT QPointF(3, 3)
 
 inline bool near(qreal a, qreal b)
 {
@@ -111,8 +112,19 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
             {
                 QLineF l = line->line();
                 painter.setPen(Qt::black);
-                painter.setBrush(Qt::white);
+                if(line == m_currentLine && m_currentPointOnTheLine == POINT_1)
+                {
+                    painter.setBrush(Qt::black);
+                } else {
+                    painter.setBrush(Qt::white);
+                }
                 painter.drawEllipse(converter.documentToView(t.map(l.p1())), HANDLE_SIZE, HANDLE_SIZE);
+                if(line == m_currentLine && m_currentPointOnTheLine == POINT_2)
+                {
+                    painter.setBrush(Qt::black);
+                } else {
+                    painter.setBrush(Qt::white);
+                }
                 painter.drawEllipse(converter.documentToView(t.map(l.p2())), HANDLE_SIZE, HANDLE_SIZE);
             }
         }
@@ -158,7 +170,7 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
             m_currentLine->setC1(qBound<qreal>(0, projection(m_currentLine->line1()->line(), t.inverted().map(event->point)), 1 ) );
             break;
         case POINT_2:
-            m_currentLine->setC2(qBound<qreal>(0, projection(m_currentLine->line2()->line(), t.inverted().map(event->point)) , 1) );
+            m_currentLine->setC2(qBound<qreal>(0, projection(m_currentLine->line2()->line(), t.inverted().map(event->point)), 1) );
             break;
         case POINT_NONE:
             qFatal("Impossible");
@@ -169,7 +181,13 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
         break;
     }
     default:
+    {
+        QPair<ComicBoxesLine*, Point> lp = pointNear(event->point);
+        m_currentLine = lp.first;
+        m_currentPointOnTheLine = lp.second;
+        canvas()->updateCanvas(QRectF(event->point - 2 * HANDLE_POINT, event->point + 2 * HANDLE_POINT) );
         break;
+    }
     }
 }
 
@@ -227,7 +245,15 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
         
     }
     case DRAGING_POINT:
+    {
         m_mode = NOTHING;
+        QLineF l = m_currentLine->line();
+        QTransform t = m_currentShape->lines2ShapeTransform();
+        QPointF pt = (m_currentPointOnTheLine == POINT_1) ? t.map(l.p1()) : t.map(l.p2());
+        canvas()->updateCanvas(QRectF(pt - HANDLE_POINT, pt + HANDLE_POINT) );
+        m_currentLine = 0;
+        m_currentPointOnTheLine = POINT_NONE;
+    }
         break;
     default:
         break;
