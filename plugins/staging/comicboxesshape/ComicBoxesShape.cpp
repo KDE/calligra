@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010,2011 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,14 +30,21 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
+#include "ComicBoxesLine.h"
+
 ComicBoxesShape::ComicBoxesShape()
 {
+    m_lines.push_back(new ComicBoxesLine(QLineF(0,0,0,1)));
+    m_lines.push_back(new ComicBoxesLine(QLineF(0,1,1,1)));
+    m_lines.push_back(new ComicBoxesLine(QLineF(1,1,1,0)));
+    m_lines.push_back(new ComicBoxesLine(QLineF(1,0,0,0)));
     recreatePath();
     setSize(QSizeF(100, 100));
 }
 
 ComicBoxesShape::~ComicBoxesShape()
 {
+    qDeleteAll(m_lines);
 }
 
 void ComicBoxesShape::saveOdf(KoShapeSavingContext & context) const
@@ -49,14 +56,17 @@ void ComicBoxesShape::saveOdf(KoShapeSavingContext & context) const
     saveOdfAttributes( context, OdfAllAttributes );
     saveOdfCommonChildElements( context );
     writer.startElement("lines");
-    foreach(const QLineF& line, m_lines)
+    foreach(ComicBoxesLine* line, m_lines)
     {
-        writer.startElement("line");
-        writer.addAttribute("x1", line.p1().x());
-        writer.addAttribute("y1", line.p1().y());
-        writer.addAttribute("x2", line.p2().x());
-        writer.addAttribute("y2", line.p2().y());
-        writer.endElement();
+        if(!line->isAbsoluteLine())
+        {
+            writer.startElement("line");
+            writer.addAttribute("c1", line->c1());
+            writer.addAttribute("c2", line->c2());
+            writer.addAttribute("l1", m_lines.indexOf(line->line1()));
+            writer.addAttribute("l2", m_lines.indexOf(line->line2()));
+            writer.endElement();
+        }
     }
     writer.endElement();
     writer.endElement(); // braindump:shape
@@ -74,11 +84,11 @@ bool ComicBoxesShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
             {
                 if(lineElement.tagName() == "line")
                 {
-                    qreal x1 = lineElement.attribute("x1", "0").toDouble();
-                    qreal y1 = lineElement.attribute("y1", "0").toDouble();
-                    qreal x2 = lineElement.attribute("x2", "1").toDouble();
-                    qreal y2 = lineElement.attribute("y2", "1").toDouble();
-                    m_lines.push_back(QLineF(x1, y1, x2, y2));
+                    qreal c1 = lineElement.attribute("c1", "0").toDouble();
+                    qreal c2 = lineElement.attribute("c2", "1").toDouble();
+                    int l1 = lineElement.attribute("l1", "0").toDouble();
+                    int l2 = lineElement.attribute("l2", "1").toDouble();
+                    m_lines.push_back(new ComicBoxesLine(m_lines[l1], c1, m_lines[l2], c2 ));
                 }
             }
         }
@@ -92,16 +102,12 @@ void ComicBoxesShape::recreatePath()
 {
     QSizeF s = size();
     clear();
-    moveTo(QPointF(0, 0));
-    lineTo(QPointF(0, 1.0));
-    lineTo(QPointF(1.0, 1.0));
-    lineTo(QPointF(1.0, 0));
-    lineTo(QPointF(0, 0));
     
-    foreach(const QLineF& line, m_lines)
+    foreach(ComicBoxesLine* line, m_lines)
     {
-        moveTo(line.p1());
-        lineTo(line.p2());
+        QLineF l = line->line();
+        moveTo(l.p1());
+        lineTo(l.p2());
     }
     setSize(s);
 }
@@ -111,12 +117,13 @@ inline bool near(qreal a, qreal b)
     return qAbs(a - b) < 1e-6;
 }
 
-void ComicBoxesShape::addLine( const QLineF& _line )
+void ComicBoxesShape::addLine( ComicBoxesLine* _line )
 {
-    Q_ASSERT(QRectF(0,0,1,1).contains(_line.p1()));
-    Q_ASSERT(QRectF(0,0,1,1).contains(_line.p2()));
-    Q_ASSERT(near(_line.p1().x(), 0.0) || near(_line.p1().y(), 0.0) || near(_line.p1().x(), 1.0) || near(_line.p1().y(), 1.0 ) );
-    Q_ASSERT(near(_line.p2().x(), 0.0) || near(_line.p2().y(), 0.0) || near(_line.p2().x(), 1.0) || near(_line.p2().y(), 1.0 ) );
     m_lines.push_back(_line);
     recreatePath();
+}
+
+QList<ComicBoxesLine*> ComicBoxesShape::lines()
+{
+    return m_lines;
 }

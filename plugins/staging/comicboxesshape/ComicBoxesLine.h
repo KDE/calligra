@@ -47,8 +47,12 @@ public:
      * This return the line in the box coordinate, or m_line if it is an absolute line
      */
     QLineF line() const;
+    qreal c1() const;
     void setC1(qreal _c1);
+    qreal c2() const;
     void setC2(qreal _c2);
+    ComicBoxesLine* line1();
+    ComicBoxesLine* line2();
 private:
     QLineF m_line;
     ComicBoxesLine* m_line1;

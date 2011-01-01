@@ -24,6 +24,7 @@
 
 #define COMICBOXESSHAPEID "ComicBoxesShape"
 
+class ComicBoxesLine;
 class ComicBoxesShape : public KoPathShape {
 public:
     ComicBoxesShape();
@@ -31,11 +32,12 @@ public:
 
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    void addLine( const QLineF& _line );
+    void addLine( ComicBoxesLine* _line );
+    QList<ComicBoxesLine*> lines();
 private:
     void recreatePath();
 private:
-    QList<QLineF> m_lines;
+    QList<ComicBoxesLine*> m_lines;
 };
 
 

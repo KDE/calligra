@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010,2011 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,6 +26,10 @@
 
 #include "ComicBoxesShape.h"
 #include <QPainter>
+
+#include "ComicBoxesLine.h"
+#include <limits>
+#include <cmath>
 
 ComicBoxesTool::ComicBoxesTool(KoCanvasBase *canvas) : KoToolBase(canvas), m_dragging(false)
 {
@@ -88,34 +92,22 @@ inline bool near(qreal a, qreal b)
     return qAbs(a - b) < 1e-6;
 }
 
-bool tryIntersect( const QLineF& _l1, const QLineF& _l2, QPointF& pt )
+// See http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
+
+inline qreal norm2_2(const QPointF& pt)
 {
-    return _l1.intersect(_l2, &pt) != QLineF::NoIntersection && (near(pt.x(), 0.0) || near(pt.x(), 1.0) || near(pt.y(), 0.0) || near(pt.y(), 1.0)) && QRectF(0,0,1,1).contains(pt);
+    return (pt.x() * pt.x() + pt.y() * pt.y());
 }
 
-bool tryIntersects( const QLineF& _l, const QLineF& _l0, const QLineF& _l1, const QLineF& _l2, const QLineF& _l3, QPointF& pt1, QPointF& pt2 )
+inline qreal norm2(const QPointF& pt)
 {
-    QPointF* pt = &pt1;
-    if( tryIntersect(_l, _l0, *pt))
-    {
-        pt = &pt2;
-    }
-    if( tryIntersect(_l, _l1, *pt))
-    {
-        if( pt == &pt2) return true;
-        pt = &pt2;
-    }
-    if( tryIntersect(_l, _l2, *pt))
-    {
-        if( pt == &pt2) return true;
-        pt = &pt2;
-    }
-    if( tryIntersect(_l, _l3, *pt))
-    {
-        if( pt == &pt2) return true;
-        pt = &pt2;
-    }
-    return false;
+    return std::sqrt(norm2_2(pt));
+}
+
+inline qreal projection(const QLineF& l, const QPointF& pt_1 )
+{
+    qreal top = (pt_1.x() - l.p1().x()) * (l.p2().x() - l.p1().x()) + (pt_1.y() - l.p1().y()) * (l.p2().y() - l.p1().y());
+    return top / norm2_2(l.p2() - l.p1());
 }
 
 void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -132,18 +124,36 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
         p1 = QPointF(p1.x() / m_currentShape->boundingRect().width(), p1.y() / m_currentShape->boundingRect().height() );
         p2 = QPointF(p2.x() / m_currentShape->boundingRect().width(), p2.y() / m_currentShape->boundingRect().height() );
         
-        QLineF line(p1, p2);
+        ComicBoxesLine* line1 = 0;
+        ComicBoxesLine* line2 = 0;
+        qreal c1, c2;
+        qreal dist1 = std::numeric_limits<qreal>::max();
+        qreal dist2 = std::numeric_limits<qreal>::max();
         
-        QLineF line0(QPointF(0,0), QPointF(1,0));
-        QLineF line1(QPointF(1,0), QPointF(1,1));
-        QLineF line2(QPointF(1,1), QPointF(0,1));
-        QLineF line3(QPointF(0,1), QPointF(0,0));
-        
-        QPointF p1_b, p2_b;
-        
-        if(tryIntersects(line, line0, line1, line2, line3, p1_b, p2_b) )
+        foreach(ComicBoxesLine* line, m_currentShape->lines())
         {
-            m_currentShape->addLine(QLineF(p1_b, p2_b));
+            QLineF l = line->line();
+            qreal u1 = projection(l, p1);
+            double d1 = norm2(l.pointAt(u1) - p1);
+            if( d1 < dist1 && u1 >= 0 && u1 <= 1 )
+            {
+                line1 = line;
+                c1 = u1;
+                dist1 = d1;
+            }
+            qreal u2 = projection(l, p2);
+            double d2 = norm2(l.pointAt(u2) - p2);
+            if( d2 < dist2 && u2 >= 0 && u2 <= 1 )
+            {
+                line2 = line;
+                c2 = u2;
+                dist2 = d2;
+            }
+        }
+        
+        if(line1 && line2 && line1 != line2)
+        {
+            m_currentShape->addLine(new ComicBoxesLine( line1, c1, line2, c2));
         }
         
         canvas()->updateCanvas(currentDraggingRect().united(m_currentShape->boundingRect()));

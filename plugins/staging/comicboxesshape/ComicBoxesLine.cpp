@@ -23,8 +23,10 @@ ComicBoxesLine::ComicBoxesLine(const QLineF& _line ) : m_line(_line), m_line1(0)
 {
 }
 
-ComicBoxesLine::ComicBoxesLine(ComicBoxesLine* _line1, qreal _c1, ComicBoxesLine* _line2, qreal _c2) : m_line1(_line1), m_line2(_line2), m_c1(_c1), m_c2(_c2)
+ComicBoxesLine::ComicBoxesLine(ComicBoxesLine* _line1, qreal _c1, ComicBoxesLine* _line2, qreal _c2) : m_line1(_line1), m_line2(_line2)
 {
+    setC1(_c1);
+    setC2(_c2);
 }
 
 bool ComicBoxesLine::isEditable() const
@@ -49,6 +51,11 @@ QLineF ComicBoxesLine::line() const
     }
 }
 
+qreal ComicBoxesLine::c1() const
+{
+    return m_c1;
+}
+
 void ComicBoxesLine::setC1(qreal _c1)
 {
     Q_ASSERT(_c1 >= 0);
@@ -56,9 +63,24 @@ void ComicBoxesLine::setC1(qreal _c1)
     m_c1 = _c1;
 }
 
+qreal ComicBoxesLine::c2() const
+{
+    return m_c2;
+}
+
 void ComicBoxesLine::setC2(qreal _c2)
 {
     Q_ASSERT(_c2 >= 0);
     Q_ASSERT(_c2 <= 1);
     m_c2 = _c2;
+}
+
+ComicBoxesLine* ComicBoxesLine::line1()
+{
+    return m_line1;
+}
+
+ComicBoxesLine* ComicBoxesLine::line2()
+{
+    return m_line2;
 }
