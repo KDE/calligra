@@ -149,22 +149,22 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
     {
         QTransform t = m_currentShape->lines2ShapeTransform();
         QLineF line = m_currentLine->line();
-        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())));
+        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized());
         
         switch(m_currentPointOnTheLine)
         {
         case POINT_1:
-            m_currentLine->setC1(projection(m_currentLine->line1()->line(), t.inverted().map(event->point)) );
+            m_currentLine->setC1(qBound<qreal>(0, projection(m_currentLine->line1()->line(), t.inverted().map(event->point)), 1 ) );
             break;
         case POINT_2:
-            m_currentLine->setC2(projection(m_currentLine->line2()->line(), t.inverted().map(event->point)) );
+            m_currentLine->setC2(qBound<qreal>(0, projection(m_currentLine->line2()->line(), t.inverted().map(event->point)) , 1) );
             break;
         case POINT_NONE:
             qFatal("Impossible");
         }
         m_currentShape->recreatePath();
         line = m_currentLine->line();
-        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())));
+        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized());
         break;
     }
     default:
