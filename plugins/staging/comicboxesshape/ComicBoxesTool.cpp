@@ -56,16 +56,37 @@ void ComicBoxesTool::activate(ToolActivation /*toolActivation*/, const QSet<KoSh
   }
   useCursor( QCursor( Qt::ArrowCursor ) );
 }
+
 void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-  Q_UNUSED(painter);
-  Q_UNUSED(converter);
-  if(m_dragging)
-  {
-      painter.setPen(Qt::black);
-      painter.drawLine(converter.documentToView(m_currentStartingPoint),
-                       converter.documentToView(m_currentPoint) );
-  }
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    if(m_dragging)
+    {
+        painter.setPen(Qt::black);
+        painter.drawLine(converter.documentToView(m_currentStartingPoint),
+                        converter.documentToView(m_currentPoint) );
+    }
+    
+    // Draw the handles
+    if(m_currentShape)
+    {
+        QTransform t;
+        t.translate(m_currentShape->position().x(), m_currentShape->position().y());
+        t.scale(m_currentShape->size().width(), m_currentShape->size().height());
+        foreach(ComicBoxesLine* line, m_currentShape->lines())
+        {
+            if(line->isEditable())
+            {
+                QLineF l = line->line();
+                painter.setPen(Qt::black);
+                painter.setBrush(Qt::white);
+                painter.drawEllipse(converter.documentToView(t.map(l.p1())), 3, 3);
+                painter.drawEllipse(converter.documentToView(t.map(l.p2())), 3, 3);
+            }
+        }
+    }
+  
 }
 
 void ComicBoxesTool::mousePressEvent( KoPointerEvent *event )
