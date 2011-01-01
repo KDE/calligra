@@ -25,11 +25,11 @@
 
 #include <klocale.h>
 
-// The KPlato file syntax is used in parts of the KPlatoWork file, so:
-// * If you change KPLATO_FILE_SYNTAX_VERSION, change KPLATOWORK_FILE_SYNTAX_VERSION too!
-// * You don't need to change KPLATO_FILE_SYNTAX_VERSION when you change KPLATOWORK_FILE_SYNTAX_VERSION
-#define KPLATO_FILE_SYNTAX_VERSION "0.6.5"
-#define KPLATOWORK_FILE_SYNTAX_VERSION "0.6.5"
+// The Plan file syntax is used in parts of the KPlatoWork file, so:
+// * If you change PLAN_FILE_SYNTAX_VERSION, change PLANWORK_FILE_SYNTAX_VERSION too!
+// * You don't need to change PLAN_FILE_SYNTAX_VERSION when you change KPLATOWORK_FILE_SYNTAX_VERSION
+#define PLAN_FILE_SYNTAX_VERSION "0.6.5"
+#define PLANWORK_FILE_SYNTAX_VERSION "0.6.5"
 
 #define CURRENTSCHEDULE     -1
 #define NOTSCHEDULED        -2

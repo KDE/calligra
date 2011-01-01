@@ -1300,11 +1300,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     }
 
     body = listBuf.originalWriter();
-    bool createTextBox = true;
+    bool createTextBox = false;
 
-    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
-        m_contentType.startsWith("curvedConnector") || m_contentType.startsWith("bentConnector")) {
-        createTextBox = false;
+    if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
+        createTextBox = true;
     }
 
     if (createTextBox) {

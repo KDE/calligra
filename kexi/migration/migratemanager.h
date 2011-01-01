@@ -23,7 +23,7 @@
 #include <qobject.h>
 #include <qmap.h>
 
-#include <klibloader.h>
+//#include <klibloader.h>
 #include <kservice.h>
 
 #include "keximigrate.h"

@@ -20,23 +20,25 @@
 #include <WPGImport.h>
 #include <WPGImport.moc>
 
-#include <QBuffer>
-#include <QByteArray>
-#include <QString>
-
-#include <kdebug.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
-#include <kpluginfactory.h>
-
 #include <KoXmlWriter.h>
 
-#include <libwpg/libwpg.h>
-#include <libwpg/WPGStreamImplementation.h>
+#include <kpluginfactory.h>
+#include <KDebug>
 
-#include "FileOutputHandler.hxx"
-#include "OdgExporter.hxx"
+
+#include <QtCore/QString>
+#include <QtCore/QFile>
+
+#include <libwpg/libwpg.h>
+#if LIBWPG_VERSION_MINOR<2
+#include <libwpg/WPGStreamImplementation.h>
+#else
+#include <libwpd-stream/libwpd-stream.h>
+#include <libwpd/libwpd.h>
+#endif
 
 #include <iostream>
 
@@ -52,38 +54,16 @@ WPGImport::~WPGImport()
 {
 }
 
-static QByteArray createManifest()
-{
-    KoXmlWriter* manifestWriter;
-    QByteArray manifestData;
-    QBuffer manifestBuffer(&manifestData);
-
-    manifestBuffer.open(QIODevice::WriteOnly);
-    manifestWriter = new KoXmlWriter(&manifestBuffer);
-
-    manifestWriter->startDocument("manifest:manifest");
-    manifestWriter->startElement("manifest:manifest");
-    manifestWriter->addAttribute("xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0");
-    manifestWriter->addManifestEntry("/", "application/vnd.oasis.opendocument.graphics");
-    //manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    manifestWriter->addManifestEntry("content.xml", "text/xml");
-    manifestWriter->endElement();
-    manifestWriter->endDocument();
-    delete manifestWriter;
-
-    return manifestData;
-}
-
 
 KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByteArray& to)
 {
     if (from != "application/x-wpg")
         return KoFilter::NotImplemented;
 
-    if (to != "application/vnd.oasis.opendocument.graphics")
+    if (to != "image/svg+xml")
         return KoFilter::NotImplemented;
 
-
+#if LIBWPG_VERSION_MINOR<2
     WPXInputStream* input = new libwpg::WPGFileStream(m_chain->inputFile().toLocal8Bit());
     if (input->isOLEStream()) {
         WPXInputStream* olestream = input->getDocumentOLEStream();
@@ -92,60 +72,40 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
             input = olestream;
         }
     }
+    libwpg::WPGString output;
+#else
+    WPXInputStream* input = new WPXFileStream(m_chain->inputFile().toLocal8Bit());
+    if (input->isOLEStream()) {
+        WPXInputStream* olestream = input->getDocumentOLEStream("Anything");
+        if (olestream) {
+            delete input;
+            input = olestream;
+        }
+     }
+     ::WPXString output;
+#endif
 
     if (!libwpg::WPGraphics::isSupported(input)) {
-        std::cerr << "ERROR: Unsupported file format (unsupported version) or file is encrypted!" << std::endl;
+        kWarning() << "ERROR: Unsupported file format (unsupported version) or file is encrypted!";
         delete input;
         return KoFilter::NotImplemented;
     }
 
-    // do the conversion
-    std::ostringstream tmpStringStream;
-    FileOutputHandler tmpHandler(tmpStringStream);
-    OdgExporter exporter(&tmpHandler);
-    libwpg::WPGraphics::parse(input, &exporter);
+    if (!libwpg::WPGraphics::generateSVG(input, output)) {
+        kWarning() << "ERROR: SVG Generation failed!";
+        delete input;
+        return KoFilter::ParsingError;
+    }
+
     delete input;
 
-
-    // create output store
-    KoStore* storeout;
-    storeout = KoStore::createStore(m_chain->outputFile(), KoStore::Write,
-                                    "application/vnd.oasis.opendocument.graphics", KoStore::Zip);
-
-    if (!storeout) {
-        kWarning() << "Couldn't open the requested file.";
-	delete storeout;
-        return KoFilter::FileNotFound;
+    QFile outputFile(m_chain->outputFile());
+    if(!outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        kWarning() << "ERROR: Could not open output file" << m_chain->outputFile();
+        return KoFilter::InternalError;
     }
-
-#if 0
-    if (!storeout->open("styles.xml")) {
-        kWarning() << "Couldn't open the file 'styles.xml'.";
-        return KoFilter::CreationError;
-    }
-    //storeout->write( createStyles() );
-    storeout->close();
-#endif
-
-    if (!storeout->open("content.xml")) {
-        kWarning() << "Couldn't open the file 'content.xml'.";
-	delete storeout;
-        return KoFilter::CreationError;
-    }
-    storeout->write(tmpStringStream.str().c_str());
-    storeout->close();
-
-    // store document manifest
-    storeout->enterDirectory("META-INF");
-    if (!storeout->open("manifest.xml")) {
-        kWarning() << "Couldn't open the file 'META-INF/manifest.xml'.";
-        return KoFilter::CreationError;
-    }
-    storeout->write(createManifest());
-    storeout->close();
-
-    // we are done!
-    delete storeout;
+    outputFile.write(output.cstr());
+    outputFile.close();
 
     return KoFilter::OK;
 }

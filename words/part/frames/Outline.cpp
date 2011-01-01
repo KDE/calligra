@@ -42,7 +42,7 @@ Outline::Outline(KWFrame *frame, const QTransform &matrix)
         path = shape->transformation().inverted().map(path);
     }
     init(matrix, path, frame->runAroundDistance());
-    if (frame->textRunAround() == KWord::NoRunAround) {
+    if (frame->textWrap() == KWord::NoRunAround) {
         m_side = Empty;
     } else if (frame->runAroundSide() == KWord::LeftRunAroundSide) {
         m_side = Left;
@@ -65,10 +65,10 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
     qreal distance = 0;
     if (frame) {
         distance = frame->runAroundDistance();
-        if (frame->textRunAround() == KWord::NoRunAround) {
+        if (frame->textWrap() == KWord::NoRunAround) {
             // make the shape take the full width of the text area
             m_side = Empty;
-        } else if (frame->textRunAround() == KWord::RunThrough) {
+        } else if (frame->textWrap() == KWord::RunThrough) {
             m_distance = 0;
             // We don't exist.
             return;

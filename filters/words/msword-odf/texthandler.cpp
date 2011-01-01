@@ -78,9 +78,10 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_annotationBuffer(0)
     , m_insideDrawing(false)
     , m_drawingWriter(0)
+    , m_breakBeforePage(false)
+    , m_listLevelStyleRequired(false)
     , m_currentListDepth(-1)
     , m_currentListID(0)
-    , m_breakBeforePage(false)
     , m_fieldType(UNSUPPORTED)
     , m_insideField(false)
     , m_fieldAfterSeparator(false)
@@ -753,13 +754,15 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
     }
 
-    // Set correct writer and style location.
+    //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
     bool inStylesDotXml = false;
 
     if (document()->writingHeader()) {
         inStylesDotXml = true;
     }
+
+    m_currentPPs = paragraphProperties;
 
     // Check list information, because that's bigger than a paragraph,
     // and we'll track that here in the TextHandler
@@ -790,6 +793,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
         // listInfo is our list properties object.
         const wvWare::ListInfo* listInfo = paragraphProperties->listInfo();
+
         //error (or currently unknown case)
         if (!listInfo) {
             kWarning() << "pap.ilfo is non-zero but there's no listInfo!";
@@ -867,6 +871,8 @@ void KWordTextHandler::paragraphEnd()
 {
     kDebug(30513) << "-----------------------------------------------";
 
+    bool chck_dropcaps = false;
+
     //add nested field snippets to this paragraph
     if (m_fldStates.empty()) {
         QList<QString>* flds = &fld_snippets;
@@ -886,25 +892,27 @@ void KWordTextHandler::paragraphEnd()
     //clear our paragraph flag
     //m_bInParagraph = false;
 
-    //write paragraph content to content.xml or styles.xml
-    //we could be writing to the body as normal, or
-    //we may need to write this to styles.xml
+    //write some debug messages
     if (m_insideFootnote) {
         kDebug(30513) << "writing a footnote";
-        m_paragraph->writeToFile(m_footnoteWriter);
     } else if (m_insideAnnotation) {
         kDebug(30513) << "writing an annotation";
-        m_paragraph->writeToFile(m_annotationWriter);
     } else if (m_insideDrawing) {
-        kDebug(30513) << "writing an drawing";
-        m_paragraph->writeToFile(m_drawingWriter);
+        kDebug(30513) << "writing a drawing";
     } else if (!document()->writingHeader()) {
         kDebug(30513) << "writing to body";
+        chck_dropcaps = true;
+    } else {
+        kDebug(30513) << "writing a header/footer";
+    }
 
-        // Need to call this before the drop cap test just below,
-        // because here is where the style is applied.
-        m_paragraph->writeToFile(m_bodyWriter);
+    //set correct writer and style location
+    KoXmlWriter* writer = currentWriter();
 
+    //write paragraph content
+    QString textStyleName = m_paragraph->writeToFile(writer);
+
+    if (chck_dropcaps) {
         // If this paragraph is a drop cap, it should be combined with
         // the next paragraph.  So store the drop cap data for future
         // use.  However, only do this if the last paragraph was *not*
@@ -920,9 +928,17 @@ void KWordTextHandler::paragraphEnd()
             m_hasStoredDropCap = false;
             m_dropCapString.clear();
         }
-    } else {
-        kDebug(30513) << "writing a header";
-        m_paragraph->writeToFile(document()->headerWriter());
+    }
+
+    //add the list-level-style information to the list-style if required
+    if (m_listLevelStyleRequired) {
+
+        //check the style returned by paragraph, we expect a text style
+        if (!textStyleName.contains('T')) {
+            textStyleName = QString();
+        }
+        updateListStyle(textStyleName);
+        m_listLevelStyleRequired = false;
     }
 
     delete m_paragraph;
@@ -1345,15 +1361,18 @@ QString KWordTextHandler::getFont(unsigned fc) const
 bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo)
 {
     kDebug(30513);
-    bool newListLevelStyle = false; //little flag to tell us whether or not to write that tag
+
+    m_listLevelStyleRequired = false;
     int nfc = listInfo->numberFormat();
+
     //check to see if we're in a heading instead of a list
     //if so, just return false so writeLayout can process the heading
     if (listInfo->lsid() == 1 && nfc == 255) {
         return false;
     }
 
-    m_usedListWriters.push(writer);		// put the currently used writer in the stack
+    //put the currently used writer in the stack
+    m_usedListWriters.push(writer);
 
     //process the different places we could be in a list
     if (m_currentListID != listInfo->lsid()) {
@@ -1365,7 +1384,6 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
-
         // Open <text:list> in the body
         writer->startElement("text:list");
 
@@ -1378,8 +1396,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             //need to create a style for this list
             KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
 
-            // If we're writing to styles.xml, the list style needs to go
-            // there as well.
+            // If writing to styles.xml, the list style needs to go there as well.
             if (document()->writingHeader())
                 listStyle.setAutoStyleInStylesDotXml(true);
 
@@ -1390,8 +1407,9 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         //set the list ID - now is safe as we are done using the old value
         m_currentListID = listInfo->lsid();
 
-        //set flag to true because it's a new list, so we need to write that tag
-        newListLevelStyle = true;
+        //a new list-level-style is required
+        m_listLevelStyleRequired = true;
+
         m_currentListDepth = pap.ilvl;
         if (m_currentListDepth > 0) {
             for (int i = 0; i < m_currentListDepth; i++) {
@@ -1399,7 +1417,8 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
                 writer->startElement("text:list");
             }
         }
-    } else if (pap.ilvl > m_currentListDepth) {
+    }
+    else if (pap.ilvl > m_currentListDepth) {
         //we're going to a new level in the list
         kDebug(30513) << "going to a new level in list" << m_currentListID;
         //open a new <text:list> or more levels if needed
@@ -1409,9 +1428,10 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             writer->startElement("text:list-item");
             writer->startElement("text:list");
         }
-        //it's a new level, so we need to configure this level
-        newListLevelStyle = true;
-    } else {
+        //a new list-level-style is required
+        m_listLevelStyleRequired = true;
+    }
+    else {
         qDebug() << "HMMM" << m_currentListDepth << pap.ilvl;
         // We're backing out one or more levels in the list.
         kDebug(30513) << "backing out one or more levels in list" << m_currentListID;
@@ -1426,172 +1446,201 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         writer->endElement();
     }
 
-    //write the style configuration tag if needed
-    if (newListLevelStyle) {
-        kDebug(30513) << "writing the list level style";
-        //create writer for this list
-        QBuffer buf;
-        buf.open(QIODevice::WriteOnly);
-        KoXmlWriter listStyleWriter(&buf);
-        KoGenStyle* listStyle = 0;
-        //text() returns a struct consisting of a UString text string (called text) & a pointer to a CHP (called chp)
-        wvWare::UString text = listInfo->text().text;
-        if (nfc == 23) { //bullets
-            kDebug(30513) << "bullets...";
-            listStyleWriter.startElement("text:list-level-style-bullet");
-            listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
-            if (text.length() == 1) {
-                // With bullets, text can only be one character, which
-                // tells us what kind of bullet to use
-                unsigned int code = text[0].unicode();
-                if ((code & 0xFF00) == 0xF000) {  // unicode: private use area (0xf000 - 0xf0ff)
-                    if (code >= 0x20) {
-                        // microsoft symbol charset shall apply here.
-                        code = Conversion::MS_SYMBOL_ENCODING[code%256];
-                    } else {
-                        code &= 0x00FF;
-                    }
-                }
-                listStyleWriter.addAttribute("text:bullet-char", QString(code).toUtf8());
-            } else
-                kWarning(30513) << "Bullet with more than one character, not supported";
-
-            listStyleWriter.startElement("style:list-level-properties");
-            if (listInfo->space())
-                listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-            listStyleWriter.endElement(); //style:list-level-properties
-            //close element
-            listStyleWriter.endElement(); //text:list-level-style-bullet
-        } else { //numbered/outline list
-            kDebug(30513) << "numbered/outline... nfc = " << nfc;
-            listStyleWriter.startElement("text:list-level-style-number");
-            listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
-            //*************************************
-            int depth = pap.ilvl; //both are 0 based
-            //int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
-            // Heading styles don't set the ilvl, but must have a depth coming
-            // from their heading level (the style's STI)
-            //bool isHeading = style->sti() >= 1 && style->sti() <= 9;
-            //if ( depth == 0 && isHeading )
-            //{
-            //    depth = style->sti() - 1;
-            //}
-            // Now we need to parse the text, to try and convert msword's powerful list template stuff
-            QString prefix, suffix;
-            bool depthFound = false;
-            bool anyLevelFound = false;
-            int displayLevels = 1;
-            // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
-            // But "Section <0>.<1>)" has both prefix and suffix.
-            // The common case is <0>.<1>.<2> (display-levels=3)
-            //loop through all of text
-            //this just sets depthFound & displayLevels & the suffix & prefix
-            for (int i = 0 ; i < text.length() ; ++i) {
-                short ch = text[i].unicode();
-                //kDebug(30513) << i <<":" << ch;
-                if (ch < 10) {   // List level place holder
-                    if (ch == pap.ilvl) {
-                        if (depthFound)
-                            kWarning(30513) << "ilvl " << pap.ilvl << " found twice in listInfo text...";
-                        else
-                            depthFound = true;
-                        suffix.clear(); // really should never do anthing so why is it here??
-                    } else {
-                        Q_ASSERT(ch < pap.ilvl);   // Can't see how level 1 would have a <0> in it...
-                        if (ch < pap.ilvl)
-                            ++displayLevels; // we found a 'parent level', to be displayed
-                    }
-                    anyLevelFound = true;
-                }
-                //if it's not a number < 10
-                else {
-                    //add it to suffix if we've found the level that we're at
-                    if (depthFound)
-                        suffix += QChar(ch);
-                    //or add it to prefix if we haven't
-                    else if (!anyLevelFound)
-                        prefix += QChar(ch);
-                }
-            }
-            if (displayLevels > 1) {
-                // This is a hierarchical list numbering e.g. <0>.<1>.
-                // (unless this is about a heading, in which case we've set numberingtype to 1 already
-                // so it will indeed look like that).
-                // The question is whether the '.' is the suffix of the parent level already..
-                //do I still need to keep the m_listSuffixes stuff?
-                if (depth > 0 && !prefix.isEmpty() && m_listSuffixes[ depth - 1 ] == prefix) {
-                    prefix.clear(); // it's already the parent's suffix -> remove it
-                    kDebug(30513) << "depth=" << depth << " parent suffix is" << prefix << " -> clearing";
-                }
-            }
-            //if ( isHeading )
-            //    numberingType = 1;
-            //this is where we actually write the information
-            if (depthFound) {
-                // Word6 models "1." as nfc=5
-                if (nfc == 5 && suffix.isEmpty())
-                    suffix = '.';
-                kDebug(30513) << " prefix=" << prefix << " suffix=" << suffix;
-                listStyleWriter.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
-                listStyleWriter.addAttribute("style:num-prefix", prefix);
-                listStyleWriter.addAttribute("style:num-suffix", suffix);
-                if (displayLevels > 1) {
-                    listStyleWriter.addAttribute("text:display-levels", displayLevels);
-                }
-                kDebug(30513) << "storing suffix" << suffix << " for depth" << depth;
-                m_listSuffixes[ depth ] = suffix;
-            } else {
-                kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text);
-            }
-
-            if (listInfo->startAtOverridden())   //||
-                //( numberingType == 1 && m_previousOutlineLSID != 0 && m_previousOutlineLSID != listInfo->lsid() ) ||
-                //( numberingType == 0 &&m_previousEnumLSID != 0 && m_previousEnumLSID != listInfo->lsid() ) )
-            {
-                //counterElement.setAttribute( "restart", "true" );
-            }
-
-            //listInfo->isLegal() hmm
-            //listInfo->notRestarted() [by higher level of lists] not supported
-            //listInfo->followingchar() ignored, it's always a space in KWord currently
-            //*************************************
-            listStyleWriter.startElement("style:list-level-properties");
-            switch (listInfo->alignment()) {
-            case 1:
-                listStyleWriter.addAttribute("fo:text-align", "center");
-                break;
-            case 2:
-                listStyleWriter.addAttribute("fo:text-align", "end");
-                break;
-            case 3:
-                listStyleWriter.addAttribute("fo:text-align", "justify");
-                break;
-            default:
-                break;
-            }
-
-            if (listInfo->space())
-                listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-            if (listInfo->indent())
-                listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);
-            listStyleWriter.endElement(); //style:list-level-properties
-            //close element
-            listStyleWriter.endElement(); //text:list-level-style-number
-        } //end numbered list stuff
-
-        //now add this info to our list style
-        QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-        listStyle = m_mainStyles->styleForModification(m_listStyleName);
-        //we'll add each one with a unique name
-        QString name("listlevels");
-        listStyle->addChildElement(name.append(QString::number(pap.ilvl)), contents);
-    }//end write list level stuff
-
     //we always want to open this tag
     writer->startElement("text:list-item");
 
     return true;
 } //writeListInfo()
+
+void KWordTextHandler::updateListStyle(QString textStyleName)
+{
+    kDebug(30513) << "writing the list-level-style";
+
+    const wvWare::Word97::PAP& pap = m_currentPPs->pap();
+    const wvWare::ListInfo* listInfo = m_currentPPs->listInfo();
+    if (!listInfo) {
+	return;
+    }
+    int nfc = listInfo->numberFormat();
+
+    //create writer for this list
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    KoXmlWriter listStyleWriter(&buf);
+    KoGenStyle* listStyle = 0;
+    //text() returns a struct consisting of a UString text string (called text) & a pointer to a CHP (called chp)
+    wvWare::UString text = listInfo->text().text;
+
+    //bulleted list
+    if (nfc == 23) {
+        kDebug(30513) << "bullets...";
+        listStyleWriter.startElement("text:list-level-style-bullet");
+        listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
+        if (text.length() == 1) {
+            // With bullets, text can only be one character, which
+            // tells us what kind of bullet to use
+            unsigned int code = text[0].unicode();
+            if ((code & 0xFF00) == 0xF000) {  // unicode: private use area (0xf000 - 0xf0ff)
+                if (code >= 0x20) {
+                    // microsoft symbol charset shall apply here.
+                    code = Conversion::MS_SYMBOL_ENCODING[code%256];
+                 } else {
+                    code &= 0x00FF;
+                 }
+            }
+            listStyleWriter.addAttribute("text:bullet-char", QString(code).toUtf8());
+        } else {
+            kWarning(30513) << "Bullet with more than one character, not supported";
+        }
+        if (!textStyleName.isNull()) {
+            listStyleWriter.addAttribute("text:style-name", textStyleName);
+        }
+
+        listStyleWriter.startElement("style:list-level-properties");
+        if (listInfo->space())
+            listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+        listStyleWriter.endElement(); //style:list-level-properties
+        //close element
+        listStyleWriter.endElement(); //text:list-level-style-bullet
+    }
+    //numbered/outline list
+    else {
+        kDebug(30513) << "numbered/outline... nfc = " << nfc;
+        listStyleWriter.startElement("text:list-level-style-number");
+        listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
+        if (!textStyleName.isNull()) {
+            listStyleWriter.addAttribute("text:style-name", textStyleName);
+        }
+
+        //*************************************
+        int depth = pap.ilvl; //both are 0 based
+        //int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
+        // Heading styles don't set the ilvl, but must have a depth coming
+        // from their heading level (the style's STI)
+        //bool isHeading = style->sti() >= 1 && style->sti() <= 9;
+        //if ( depth == 0 && isHeading )
+        //{
+        //    depth = style->sti() - 1;
+        //}
+
+        // Now we need to parse the text, to try and convert msword's powerful list template stuff
+        QString prefix, suffix;
+        bool depthFound = false;
+        bool anyLevelFound = false;
+        int displayLevels = 1;
+
+        // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
+        // But "Section <0>.<1>)" has both prefix and suffix.
+        // The common case is <0>.<1>.<2> (display-levels=3)
+        //loop through all of text
+        //this just sets depthFound & displayLevels & the suffix & prefix
+        for (int i = 0 ; i < text.length() ; ++i) {
+            short ch = text[i].unicode();
+            //kDebug(30513) << i <<":" << ch;
+            if (ch < 10) {   // List level place holder
+                if (ch == pap.ilvl) {
+                    if (depthFound) {
+                        kWarning(30513) << "ilvl " << pap.ilvl << " found twice in listInfo text...";
+                    }
+                    else {
+                        depthFound = true;
+                    }
+                    suffix.clear(); // really should never do anthing so why is it here??
+                } else {
+                    Q_ASSERT(ch < pap.ilvl);   // Can't see how level 1 would have a <0> in it...
+                    if (ch < pap.ilvl) {
+                        ++displayLevels; // we found a 'parent level', to be displayed
+                    }
+                }
+                anyLevelFound = true;
+            }
+            //if it's not a number < 10
+            else {
+                //add it to suffix if we've found the level that we're at
+                if (depthFound) {
+                    suffix += QChar(ch);
+                }
+                //or add it to prefix if we haven't
+                else if (!anyLevelFound) {
+                    prefix += QChar(ch);
+                }
+            }
+        }
+        if (displayLevels > 1) {
+            // This is a hierarchical list numbering e.g. <0>.<1>.
+            // (unless this is about a heading, in which case we've set numberingtype to 1 already
+            // so it will indeed look like that).
+            // The question is whether the '.' is the suffix of the parent level already..
+            //do I still need to keep the m_listSuffixes stuff?
+            if (depth > 0 && !prefix.isEmpty() && m_listSuffixes[ depth - 1 ] == prefix) {
+                prefix.clear(); // it's already the parent's suffix -> remove it
+                kDebug(30513) << "depth=" << depth << " parent suffix is" << prefix << " -> clearing";
+            }
+        }
+        //if ( isHeading )
+        //    numberingType = 1;
+        //this is where we actually write the information
+        if (depthFound) {
+            // Word6 models "1." as nfc=5
+            if (nfc == 5 && suffix.isEmpty())
+                suffix = '.';
+            kDebug(30513) << " prefix=" << prefix << " suffix=" << suffix;
+            listStyleWriter.addAttribute("style:num-format", Conversion::numberFormatCode(nfc));
+            listStyleWriter.addAttribute("style:num-prefix", prefix);
+            listStyleWriter.addAttribute("style:num-suffix", suffix);
+            if (displayLevels > 1) {
+                listStyleWriter.addAttribute("text:display-levels", displayLevels);
+            }
+            kDebug(30513) << "storing suffix" << suffix << " for depth" << depth;
+            m_listSuffixes[ depth ] = suffix;
+        } else {
+            kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text);
+        }
+
+        if (listInfo->startAtOverridden())   //||
+            //( numberingType == 1 && m_previousOutlineLSID != 0 && m_previousOutlineLSID != listInfo->lsid() ) ||
+            //( numberingType == 0 &&m_previousEnumLSID != 0 && m_previousEnumLSID != listInfo->lsid() ) )
+        {
+            //counterElement.setAttribute( "restart", "true" );
+        }
+
+        //listInfo->isLegal() hmm
+        //listInfo->notRestarted() [by higher level of lists] not supported
+        //listInfo->followingchar() ignored, it's always a space in KWord currently
+        //*************************************
+        listStyleWriter.startElement("style:list-level-properties");
+        switch (listInfo->alignment()) {
+        case 1:
+            listStyleWriter.addAttribute("fo:text-align", "center");
+            break;
+        case 2:
+            listStyleWriter.addAttribute("fo:text-align", "end");
+            break;
+        case 3:
+            listStyleWriter.addAttribute("fo:text-align", "justify");
+            break;
+        default:
+            break;
+        }
+
+        if (listInfo->space()) {
+            listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+        }
+        if (listInfo->indent()) {
+            listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);
+        }
+        listStyleWriter.endElement(); //style:list-level-properties
+        //close element
+        listStyleWriter.endElement(); //text:list-level-style-number
+    } //end numbered list stuff
+
+    //now add this info to our list style
+    QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+    listStyle = m_mainStyles->styleForModification(m_listStyleName);
+    //we'll add each one with a unique name
+    QString name("listlevels");
+    listStyle->addChildElement(name.append(QString::number(pap.ilvl)), contents);
+} //setListStyle
 
 void KWordTextHandler::closeList()
 {

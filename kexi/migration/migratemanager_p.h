@@ -73,7 +73,7 @@ protected:
     int m_serverResultNum;
     QString m_serverResultName;
     //! result names for KParts::ComponentFactory::ComponentLoadingError
-    QMap<int, QString> m_componentLoadingErrors;
+    //QMap<int, QString> m_componentLoadingErrors;
 
     bool lookupDriversNeeded : 1;
 

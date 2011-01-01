@@ -30,6 +30,8 @@
 #include <KoToolManager.h>
 #include <KoCreateShapesTool.h>
 #include <KoShape.h>
+#include <KoShapeGroup.h>
+#include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
 
 #include <klocale.h>
@@ -337,7 +339,7 @@ void ShapeBoxDocker::onLoadingFinished()
         temp.id = loader->collectionPath() + shape->name();
         temp.name = shape->name();
         temp.toolTip = shape->name();
-        //temp.icon = generateShapeIcon(shape);
+        temp.icon = generateShapeIcon(shape);
         templateList.append(temp);
         CollectionShapeFactory* factory =
                 new CollectionShapeFactory(loader->collectionPath() + shape->name(), shape);
@@ -371,17 +373,60 @@ void ShapeBoxDocker::removeCollection(const QString& family)
 QIcon ShapeBoxDocker::generateShapeIcon(KoShape* shape)
 {
     KoZoomHandler converter;
+    bool isGroup = (shape->size()==QSizeF(0,0)) ? true : false;
 
-    qreal diffx = 30 / converter.documentToViewX(shape->size().width());
-    qreal diffy = 30 / converter.documentToViewY(shape->size().height());
+    QRectF bound;
+    KoShapeGroup* group;
+    QList<KoShape*> sortedObjects;
+
+    if (isGroup == true) {
+        bool boundInitialized = false;
+        group = static_cast<KoShapeGroup*>(shape);
+        sortedObjects = group->shapes();
+        qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
+        foreach(KoShape * subShape, sortedObjects) {
+            if (! boundInitialized) {
+                bound = subShape->boundingRect();
+                boundInitialized = true;
+            } else
+                bound = bound.united(subShape->boundingRect());
+        }
+    } else {
+        bound = shape->boundingRect();
+    }
+
+    qreal diffx = 30 / converter.documentToViewX(bound.width());
+    qreal diffy = 30 / converter.documentToViewY(bound.height());
     converter.setZoom(qMin(diffx, diffy));
 
-    QPixmap pixmap(qRound(converter.documentToViewX(shape->size().width())) + 2, qRound(converter.documentToViewY(shape->size().height())) + 2);
+    QPixmap pixmap(qRound(converter.documentToViewX(bound.width())) + 2, qRound(converter.documentToViewY(bound.height())) + 2);
     pixmap.fill(Qt::white);
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
+
+    QTransform baseMatrix = shape->absoluteTransformation(&converter).inverted() * painter.transform();
     painter.translate(1, 1);
-    shape->paint(painter, converter);
+
+    if (isGroup == true) {
+        foreach(KoShape * subShape, sortedObjects) {
+            //kDebug(30006) <<"KoShapeContainer::painting shape:" << subShape->shapeId() <<"," << subShape->boundingRect();
+            if (!subShape->isVisible())
+                continue;
+            painter.save();
+            painter.setTransform(subShape->absoluteTransformation(&converter) * baseMatrix);
+            subShape->paint(painter, converter);
+            painter.restore();
+            if (subShape->border()) {
+                painter.save();
+                painter.setTransform(subShape->absoluteTransformation(&converter) * baseMatrix);
+                subShape->border()->paint(subShape, painter, converter);
+                painter.restore();
+            }
+        }
+    } else {
+        shape->paint(painter, converter);
+    }
+
     painter.end();
 
     return QIcon(pixmap);

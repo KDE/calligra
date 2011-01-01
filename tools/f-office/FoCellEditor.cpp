@@ -32,11 +32,11 @@
 #include <QFocusEvent>
 #include <QCursor>
 
-using KSpread::Cell;
-using KSpread::Selection;
-using KSpread::CellToolBase;
+using Calligra::Tables::Cell;
+using Calligra::Tables::Selection;
+using Calligra::Tables::CellToolBase;
 
-FoCellEditor::FoCellEditor(KSpread::CellToolBase *cellTool, QWidget *parent)
+FoCellEditor::FoCellEditor(Calligra::Tables::CellToolBase *cellTool, QWidget *parent)
     :QTextEdit(parent),
     m_cellTool(cellTool)
 {
@@ -173,7 +173,7 @@ void FoCellEditor::slotTextChanged()
         setGeometry(x(), y(), requiredWidth, requiredHeight);
     }
 
-#if 0 // KSPREAD_WIP_EDITOR_OVERHAUL
+#if 0 // CALLIGRA_TABLES_WIP_EDITOR_OVERHAUL
     const Cell cell(d->selection->activeSheet(), d->selection->marker());
     if ((cell.style().formatType()) == Format::Percentage) {
         if ((text.length() == 1) && text[0].isDigit()) {
@@ -182,7 +182,7 @@ void FoCellEditor::slotTextChanged()
             return;
         }
     }
-#endif // KSPREAD_WIP_EDITOR_OVERHAUL
+#endif // CALLIGRA_TABLES_WIP_EDITOR_OVERHAUL
 
     // update the external editor, but only if we have focus
     if (hasFocus()) {

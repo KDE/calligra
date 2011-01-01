@@ -64,14 +64,6 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         }
     }
 
-    //paint the original shape
-    painter.save();
-    m_original->paint(painter, converter);
-    painter.restore();
-    if (m_original->border()) {
-        m_original->border()->paint(m_original, painter, converter);
-    }
-
     //paint all child shapes
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
     if (container) {
@@ -80,6 +72,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         }
 
         QList<KoShape*> sortedObjects = container->shapes();
+        sortedObjects.append(m_original);
         qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
         // Do the following to revert the absolute transformation of the
@@ -90,7 +83,9 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 
         foreach(KoShape *shape, sortedObjects) {
             painter.save();
-            painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
+            if (shape != m_original) {
+                painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
+            }
             shape->paint(painter, converter);
             painter.restore();
             if (shape->border()) {
@@ -100,7 +95,16 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
                 painter.restore();
             }
         }
+    } else {
+        //paint the original shape
+        painter.save();
+        m_original->paint(painter, converter);
+        painter.restore();
+        if (m_original->border()) {
+            m_original->border()->paint(m_original, painter, converter);
+        }
     }
+
 }
 
 void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)

@@ -12,7 +12,7 @@ kde4_add_plugin(kpr_pageeffect_spacerotation ${kpr_pageeffect_spacerotation_PART
 
 target_link_libraries(
     kpr_pageeffect_spacerotation
-    kpresenterprivate
+    calligrastageprivate
     flake
 
     ${KDE4_KDECORE_LIBS}
