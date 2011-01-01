@@ -102,12 +102,20 @@ void ComicBoxesShape::recreatePath()
 {
     QSizeF s = size();
     clear();
-    
+    moveTo(QPointF(0, 0));
+    lineTo(QPointF(0, 1.0));
+    lineTo(QPointF(1.0, 1.0));
+    lineTo(QPointF(1.0, 0));
+    lineTo(QPointF(0, 0));
+
     foreach(ComicBoxesLine* line, m_lines)
     {
-        QLineF l = line->line();
-        moveTo(l.p1());
-        lineTo(l.p2());
+        if(!line->isAbsoluteLine())
+        {
+            QLineF l = line->line();
+            moveTo(l.p1());
+            lineTo(l.p2());
+        }
     }
     setSize(s);
 }
