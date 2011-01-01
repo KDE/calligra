@@ -31,6 +31,34 @@
 #include <limits>
 #include <cmath>
 
+
+inline bool near(qreal a, qreal b)
+{
+    return qAbs(a - b) < 1e-6;
+}
+
+inline bool near(const QPointF& a, const QPointF& b, qreal d)
+{
+    return (a - b).manhattanLength() < d;
+}
+
+inline qreal norm2_2(const QPointF& pt)
+{
+    return (pt.x() * pt.x() + pt.y() * pt.y());
+}
+
+inline qreal norm2(const QPointF& pt)
+{
+    return std::sqrt(norm2_2(pt));
+}
+
+// See http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
+inline qreal projection(const QLineF& l, const QPointF& pt_1 )
+{
+    qreal top = (pt_1.x() - l.p1().x()) * (l.p2().x() - l.p1().x()) + (pt_1.y() - l.p1().y()) * (l.p2().y() - l.p1().y());
+    return top / norm2_2(l.p2() - l.p1());
+}
+
 ComicBoxesTool::ComicBoxesTool(KoCanvasBase *canvas) : KoToolBase(canvas), m_mode(NOTHING)
 {
 }
@@ -75,9 +103,7 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
     // Draw the handles
     if(m_currentShape)
     {
-        QTransform t;
-        t.translate(m_currentShape->position().x(), m_currentShape->position().y());
-        t.scale(m_currentShape->size().width(), m_currentShape->size().height());
+        QTransform t = m_currentShape->lines2ShapeTransform();
         foreach(ComicBoxesLine* line, m_currentShape->lines())
         {
             if(line->isEditable())
@@ -95,8 +121,18 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
 
 void ComicBoxesTool::mousePressEvent( KoPointerEvent *event )
 {
-    m_mode = DRAGING_NEW_LINE;
-    m_currentStartingPoint = event->point;
+    QPair<ComicBoxesLine*, Point> ptn = pointNear(event->point);
+    
+    if(ptn.first)
+    {
+        m_mode = DRAGING_POINT;
+        m_currentLine = ptn.first;
+        m_currentPointOnTheLine = ptn.second;
+        Q_ASSERT(m_currentPointOnTheLine != POINT_NONE);
+    } else {
+        m_mode = DRAGING_NEW_LINE;
+        m_currentStartingPoint = event->point;
+    }
 }
 
 void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
@@ -109,32 +145,31 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
         if(event->modifiers() & Qt::SHIFT) makeVerticalOrHorizontal(m_currentStartingPoint, m_currentPoint);
         canvas()->updateCanvas(currentDraggingRect());
         break;
+    case DRAGING_POINT:
+    {
+        QTransform t = m_currentShape->lines2ShapeTransform();
+        QLineF line = m_currentLine->line();
+        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())));
+        
+        switch(m_currentPointOnTheLine)
+        {
+        case POINT_1:
+            m_currentLine->setC1(projection(m_currentLine->line1()->line(), t.inverted().map(event->point)) );
+            break;
+        case POINT_2:
+            m_currentLine->setC2(projection(m_currentLine->line2()->line(), t.inverted().map(event->point)) );
+            break;
+        case POINT_NONE:
+            qFatal("Impossible");
+        }
+        m_currentShape->recreatePath();
+        line = m_currentLine->line();
+        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())));
+        break;
+    }
     default:
         break;
     }
-}
-
-inline bool near(qreal a, qreal b)
-{
-    return qAbs(a - b) < 1e-6;
-}
-
-// See http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-
-inline qreal norm2_2(const QPointF& pt)
-{
-    return (pt.x() * pt.x() + pt.y() * pt.y());
-}
-
-inline qreal norm2(const QPointF& pt)
-{
-    return std::sqrt(norm2_2(pt));
-}
-
-inline qreal projection(const QLineF& l, const QPointF& pt_1 )
-{
-    qreal top = (pt_1.x() - l.p1().x()) * (l.p2().x() - l.p1().x()) + (pt_1.y() - l.p1().y()) * (l.p2().y() - l.p1().y());
-    return top / norm2_2(l.p2() - l.p1());
 }
 
 void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -155,7 +190,7 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
         
         ComicBoxesLine* line1 = 0;
         ComicBoxesLine* line2 = 0;
-        qreal c1, c2;
+        qreal c1 = 0, c2 = 0;
         qreal dist1 = std::numeric_limits<qreal>::max();
         qreal dist2 = std::numeric_limits<qreal>::max();
         
@@ -190,9 +225,32 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
         
         
     }
+    case DRAGING_POINT:
+        m_mode = NOTHING;
+        break;
     default:
         break;
     }
+}
+
+QPair<ComicBoxesLine*, ComicBoxesTool::Point> ComicBoxesTool::pointNear(const QPointF& point)
+{
+    QTransform t = m_currentShape->lines2ShapeTransform();
+    
+    foreach(ComicBoxesLine* line, m_currentShape->lines())
+    {
+        QLineF l = line->line();
+        if(near(point, t.map(l.p1()), 3))
+        {
+            return QPair<ComicBoxesLine*, Point>(line, POINT_1);
+        }
+        if(near(point, t.map(l.p2()), 3))
+        {
+            return QPair<ComicBoxesLine*, Point>(line, POINT_2);
+        }
+    }
+    
+    return QPair<ComicBoxesLine*, Point>(0, POINT_NONE);
 }
 
 QRectF ComicBoxesTool::currentDraggingRect() const

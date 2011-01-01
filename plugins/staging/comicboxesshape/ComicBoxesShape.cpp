@@ -135,3 +135,11 @@ QList<ComicBoxesLine*> ComicBoxesShape::lines()
 {
     return m_lines;
 }
+
+QTransform ComicBoxesShape::lines2ShapeTransform() const
+{
+    QTransform t;
+    t.translate(position().x(), position().y());
+    t.scale(size().width(), size().height());
+    return t;
+}

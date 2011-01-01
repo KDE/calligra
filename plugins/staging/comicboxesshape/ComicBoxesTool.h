@@ -21,7 +21,9 @@
 #define _COMICBOXESTOOL_H_
 
 #include <KoToolBase.h>
+#include <QPair>
 
+class ComicBoxesLine;
 class ComicBoxesShape;
 class KoShape;
 
@@ -30,7 +32,14 @@ class ComicBoxesTool : public KoToolBase
     Q_OBJECT
     enum Mode {
         NOTHING,
-        DRAGING_NEW_LINE
+        DRAGING_NEW_LINE,
+        DRAGING_POINT
+    };
+    /// This enum is used to define which end point of a line is selected.
+    enum Point {
+        POINT_NONE,
+        POINT_1,
+        POINT_2
     };
   public:
     explicit ComicBoxesTool(KoCanvasBase *canvas);
@@ -50,7 +59,13 @@ class ComicBoxesTool : public KoToolBase
     virtual void mouseReleaseEvent( KoPointerEvent *event );
   protected:
     virtual QMap<QString, QWidget *> createOptionWidgets();
-
+private:
+    /**
+     * @param point in document coordinates
+     * @return the end line point that is near the @p point
+     *         the ComicBoxesLine is set to 0 if no point
+     */         
+    QPair<ComicBoxesLine*, Point> pointNear(const QPointF& point);
 private:
     QRectF currentDraggingRect() const;
     void makeVerticalOrHorizontal(const QPointF& origin, QPointF& point);
@@ -60,6 +75,8 @@ private:
     Mode m_mode;
     QPointF m_currentStartingPoint;
     QPointF m_currentPoint;
+    ComicBoxesLine* m_currentLine;
+    Point m_currentPointOnTheLine;
 };
 
 #endif
