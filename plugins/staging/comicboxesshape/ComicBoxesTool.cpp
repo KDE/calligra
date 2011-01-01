@@ -137,11 +137,21 @@ void ComicBoxesTool::mousePressEvent( KoPointerEvent *event )
     QPair<ComicBoxesLine*, Point> ptn = pointNear(event->point);
     
     if(ptn.first)
-    {
-        m_mode = DRAGING_POINT;
+    {        
         m_currentLine = ptn.first;
         m_currentPointOnTheLine = ptn.second;
         Q_ASSERT(m_currentPointOnTheLine != POINT_NONE);
+        
+        if(event->modifiers() & Qt::ShiftModifier)
+        {
+            canvas()->updateCanvas(rectForCurrentLine());
+            m_currentShape->removeLine(m_currentLine);
+            m_currentLine = 0;
+            m_currentPointOnTheLine = POINT_NONE;
+            m_mode = NOTHING;
+        } else {
+            m_mode = DRAGING_POINT;
+        }        
     } else {
         m_mode = DRAGING_NEW_LINE;
         m_currentStartingPoint = event->point;
@@ -288,6 +298,13 @@ QRectF ComicBoxesTool::currentDraggingRect() const
 QMap<QString, QWidget *> ComicBoxesTool::createOptionWidgets() {
   QMap<QString, QWidget *> widgets;
   return widgets;
+}
+
+QRectF ComicBoxesTool::rectForCurrentLine() const
+{
+    QTransform t = m_currentShape->lines2ShapeTransform();
+    QLineF line = m_currentLine->line();
+    return QRectF(t.map(line.p1()), t.map(line.p2())).normalized();
 }
 
 void ComicBoxesTool::makeVerticalOrHorizontal(const QPointF& origin, QPointF& point)

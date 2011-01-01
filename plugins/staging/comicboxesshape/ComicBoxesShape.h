@@ -33,6 +33,7 @@ public:
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     void addLine( ComicBoxesLine* _line );
+    void removeLine( ComicBoxesLine* _line );
     QList<ComicBoxesLine*> lines();
     QTransform lines2ShapeTransform() const;
     void recreatePath();

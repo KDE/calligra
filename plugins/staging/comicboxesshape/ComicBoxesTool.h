@@ -57,7 +57,7 @@ class ComicBoxesTool : public KoToolBase
     virtual void mouseMoveEvent( KoPointerEvent *event );
     /// reimplemented
     virtual void mouseReleaseEvent( KoPointerEvent *event );
-  protected:
+protected:
     virtual QMap<QString, QWidget *> createOptionWidgets();
 private:
     /**
@@ -68,6 +68,7 @@ private:
     QPair<ComicBoxesLine*, Point> pointNear(const QPointF& point);
 private:
     QRectF currentDraggingRect() const;
+    QRectF rectForCurrentLine() const;
     void makeVerticalOrHorizontal(const QPointF& origin, QPointF& point);
     
   private:

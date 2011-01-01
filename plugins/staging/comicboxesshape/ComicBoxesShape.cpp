@@ -131,6 +131,14 @@ void ComicBoxesShape::addLine( ComicBoxesLine* _line )
     recreatePath();
 }
 
+void ComicBoxesShape::removeLine( ComicBoxesLine* _line )
+{
+    Q_ASSERT(!_line->isAbsoluteLine());
+    m_lines.removeAll(_line);
+    delete _line;
+    recreatePath();
+}
+
 QList<ComicBoxesLine*> ComicBoxesShape::lines()
 {
     return m_lines;
