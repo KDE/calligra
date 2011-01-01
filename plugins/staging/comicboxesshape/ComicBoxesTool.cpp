@@ -242,7 +242,7 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
         canvas()->updateCanvas(currentDraggingRect().united(m_currentShape->boundingRect()));
         
         
-        
+        break;
     }
     case DRAGING_POINT:
     {
