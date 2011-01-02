@@ -19,6 +19,10 @@
 
 #include "ComicBoxesLine.h"
 
+#include <QTransform>
+#include <cmath>
+#include "Utils.h"
+
 ComicBoxesLine::ComicBoxesLine(const QLineF& _line ) : m_line(_line), m_line1(0), m_line2(0)
 {
 }
@@ -27,6 +31,7 @@ ComicBoxesLine::ComicBoxesLine(ComicBoxesLine* _line1, qreal _c1, ComicBoxesLine
 {
     setC1(_c1);
     setC2(_c2);
+    setCP(QPointF(0.5, 0.0));
 }
 
 bool ComicBoxesLine::isEditable() const
@@ -73,6 +78,27 @@ void ComicBoxesLine::setC2(qreal _c2)
     Q_ASSERT(_c2 >= 0);
     Q_ASSERT(_c2 <= 1);
     m_c2 = _c2;
+}
+
+void ComicBoxesLine::setCP(const QPointF& _cp)
+{
+    m_cp = _cp;
+}
+
+QPointF ComicBoxesLine::cp() const
+{
+    return m_cp;
+}
+
+QTransform ComicBoxesLine::lineCoordinateToShapeCoordinate()
+{
+    QLineF l = line();
+    QTransform t;
+    t.translate(l.p1().x(), l.p1().y());
+    t.rotate(-l.angle());
+    qreal s = norm2(l.p1() - l.p2());
+    t.scale( s, s );
+    return t;
 }
 
 ComicBoxesLine* ComicBoxesLine::line1()

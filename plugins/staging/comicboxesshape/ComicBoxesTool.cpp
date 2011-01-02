@@ -19,47 +19,23 @@
 
 #include "ComicBoxesTool.h"
 
+#include <limits>
+
+#include <QPainter>
+
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
 #include "ComicBoxesShape.h"
-#include <QPainter>
 
 #include "ComicBoxesLine.h"
-#include <limits>
-#include <cmath>
+
+#include "Utils.h"
 
 #define HANDLE_SIZE 3
 #define HANDLE_POINT QPointF(3, 3)
-
-inline bool near(qreal a, qreal b)
-{
-    return qAbs(a - b) < 1e-6;
-}
-
-inline bool near(const QPointF& a, const QPointF& b, qreal d)
-{
-    return (a - b).manhattanLength() < d;
-}
-
-inline qreal norm2_2(const QPointF& pt)
-{
-    return (pt.x() * pt.x() + pt.y() * pt.y());
-}
-
-inline qreal norm2(const QPointF& pt)
-{
-    return std::sqrt(norm2_2(pt));
-}
-
-// See http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-inline qreal projection(const QLineF& l, const QPointF& pt_1 )
-{
-    qreal top = (pt_1.x() - l.p1().x()) * (l.p2().x() - l.p1().x()) + (pt_1.y() - l.p1().y()) * (l.p2().y() - l.p1().y());
-    return top / norm2_2(l.p2() - l.p1());
-}
 
 ComicBoxesTool::ComicBoxesTool(KoCanvasBase *canvas) : KoToolBase(canvas), m_mode(NOTHING)
 {
@@ -126,6 +102,13 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
                     painter.setBrush(Qt::white);
                 }
                 painter.drawEllipse(converter.documentToView(t.map(l.p2())), HANDLE_SIZE, HANDLE_SIZE);
+                if(line == m_currentLine && m_currentPointOnTheLine == POINT_CP)
+                {
+                    painter.setBrush(Qt::black);
+                } else {
+                    painter.setBrush(Qt::white);
+                }
+                painter.drawEllipse(converter.documentToView(t.map( line->lineCoordinateToShapeCoordinate().map( line->cp()))), HANDLE_SIZE, HANDLE_SIZE );
             }
         }
     }

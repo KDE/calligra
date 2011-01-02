@@ -22,6 +22,8 @@
 
 #include <QLineF>
 
+class QTransform;
+
 /**
  * Describe a line, it can either be absolute representing the extremeties of the page,
  * or relative to other lines.
@@ -51,6 +53,9 @@ public:
     void setC1(qreal _c1);
     qreal c2() const;
     void setC2(qreal _c2);
+    void setCP(const QPointF& );
+    QPointF cp() const;
+    QTransform lineCoordinateToShapeCoordinate();
     ComicBoxesLine* line1();
     ComicBoxesLine* line2();
 private:
@@ -58,6 +63,7 @@ private:
     ComicBoxesLine* m_line1;
     ComicBoxesLine* m_line2;
     qreal m_c1, m_c2;
+    QPointF m_cp;
     
 };
 

@@ -39,7 +39,8 @@ class ComicBoxesTool : public KoToolBase
     enum Point {
         POINT_NONE,
         POINT_1,
-        POINT_2
+        POINT_2,
+        POINT_CP
     };
   public:
     explicit ComicBoxesTool(KoCanvasBase *canvas);
