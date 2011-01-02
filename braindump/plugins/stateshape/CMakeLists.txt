@@ -1,4 +1,4 @@
-include_directories (${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} )
+include_directories (${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
@@ -22,12 +22,7 @@ kde4_add_plugin(stateshape ${stateshape_LIB_SRCS})
 
 target_link_libraries(
     stateshape
-    ${KOMAIN_LIBRARY}
-    ${FLAKE_LIBRARY}
-    ${KOODF_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KFILE_LIBRARY}
+    flake
     ${QT_QTCORE_LIBRARY}
     braindumpcore
     )

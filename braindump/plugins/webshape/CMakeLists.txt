@@ -1,4 +1,4 @@
-include_directories (${KDE4_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${KOFFICE_INCLUDE_DIR} )
+include_directories (${FLAKE_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
@@ -19,12 +19,7 @@ kde4_add_plugin(webshape ${webshape_LIB_SRCS})
 
 target_link_libraries(
     webshape
-    ${KOMAIN_LIBRARY}
-    ${KOODF_LIBRARY}
-    ${FLAKE_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KFILE_LIBRARY}
+    flake
     ${QT_QTCORE_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}
     )
