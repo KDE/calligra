@@ -154,8 +154,6 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
     case DRAGING_POINT:
     {
         QTransform t = m_currentShape->lines2ShapeTransform();
-        Curve line = m_currentLine->curve();
-        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized().adjusted(-HANDLE_SIZE, -HANDLE_SIZE, HANDLE_SIZE, HANDLE_SIZE));
         
         switch(m_currentPointOnTheLine)
         {
@@ -176,8 +174,7 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
             qFatal("Impossible");
         }
         m_currentShape->recreatePath();
-        line = m_currentLine->curve();
-        canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized().adjusted(-HANDLE_SIZE, -HANDLE_SIZE, HANDLE_SIZE, HANDLE_SIZE));
+        canvas()->updateCanvas(m_currentShape->boundingRect());
         break;
     }
     default:
