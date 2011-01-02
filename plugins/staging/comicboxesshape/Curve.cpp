@@ -23,15 +23,18 @@
 Curve::Curve(qreal x1, qreal y1, qreal x2, qreal y2) : m_p1(x1, y1), m_p2(x2, y2)
 {
     m_cp = 0.5 * (m_p1 + m_p2);
+    m_t = 0.5;
 }
 
-Curve::Curve(const QPointF& p1, const QPointF& cp, const QPointF& p2) : m_p1(p1), m_cp(cp), m_p2(p2)
+Curve::Curve(const QPointF& p1, const QPointF& cp, qreal t, const QPointF& p2) : m_p1(p1), m_cp(cp), m_p2(p2), m_t(t)
 {
 }
 
 QPointF Curve::quadControlPoint()
 {
-    return m_cp;
+    if(m_t == 0.0) return m_p1;
+    if(m_t == 1.0) return m_p2;
+    return (m_cp - (1 - m_t) * (1 - m_t) * m_p1 - m_t * m_t * m_p2 ) / ( 2 * (1 - m_t) * m_t ) ;
 }
 
 QPointF Curve::pointAt(qreal t)

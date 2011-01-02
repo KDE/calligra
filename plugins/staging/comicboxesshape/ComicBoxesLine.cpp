@@ -52,7 +52,7 @@ Curve ComicBoxesLine::curve() const
     } else {
         Curve l1 = m_line1->curve();
         Curve l2 = m_line2->curve();
-        return Curve(l1.pointAt(m_c1), lineCoordinateToShapeCoordinate().map(m_cp), l2.pointAt(m_c2));
+        return Curve(l1.pointAt(m_c1), lineCoordinateToShapeCoordinate().map(m_cp), m_cp.x(), l2.pointAt(m_c2));
     }
 }
 

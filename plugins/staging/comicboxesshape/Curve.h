@@ -27,7 +27,7 @@ class Curve
 public:
     Curve() {}
     Curve(qreal x1, qreal y1, qreal x2, qreal y2);
-    Curve(const QPointF& p1, const QPointF& cp, const QPointF& p2);
+    Curve(const QPointF& p1, const QPointF& cp, qreal t, const QPointF& p2);
     QPointF pointAt(qreal r);
     QPointF quadControlPoint();
     QPointF p1() const { return m_p1; }
@@ -35,6 +35,7 @@ public:
     QPointF p2() const { return m_p2; }
 private:
     QPointF m_p1, m_cp, m_p2;
+    qreal m_t;
 };
 
 #endif
