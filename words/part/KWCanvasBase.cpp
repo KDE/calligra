@@ -283,8 +283,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 {
     painter.translate(-m_documentOffset);
 
-    qDebug() << "KWCanvasBase::PAINT" << m_documentOffset << paintRect;
-
     if (m_viewMode->hasPages()) {
         int pageContentArea = 0;
 
