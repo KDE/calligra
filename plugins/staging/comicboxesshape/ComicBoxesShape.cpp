@@ -34,10 +34,10 @@
 
 ComicBoxesShape::ComicBoxesShape()
 {
-    m_lines.push_back(new ComicBoxesLine(QLineF(0,0,0,1)));
-    m_lines.push_back(new ComicBoxesLine(QLineF(0,1,1,1)));
-    m_lines.push_back(new ComicBoxesLine(QLineF(1,1,1,0)));
-    m_lines.push_back(new ComicBoxesLine(QLineF(1,0,0,0)));
+    m_lines.push_back(new ComicBoxesLine(Curve(0,0,0,1)));
+    m_lines.push_back(new ComicBoxesLine(Curve(0,1,1,1)));
+    m_lines.push_back(new ComicBoxesLine(Curve(1,1,1,0)));
+    m_lines.push_back(new ComicBoxesLine(Curve(1,0,0,0)));
     recreatePath();
     setSize(QSizeF(100, 100));
 }
@@ -112,9 +112,9 @@ void ComicBoxesShape::recreatePath()
     {
         if(!line->isAbsoluteLine())
         {
-            QLineF l = line->line();
+            Curve l = line->curve();
             moveTo(l.p1());
-            lineTo(l.p2());
+            curveTo( l.quadControlPoint(), l.p2());
         }
     }
     setSize(s);

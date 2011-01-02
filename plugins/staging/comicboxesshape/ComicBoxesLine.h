@@ -20,7 +20,7 @@
 #ifndef _COMIC_BOXES_LINE_H_
 #define _COMIC_BOXES_LINE_H_
 
-#include <QLineF>
+#include "Curve.h"
 
 class QTransform;
 
@@ -35,7 +35,7 @@ public:
      * This constructor define an absolute ComicBoxesLine, only used
      * to construct the border of the page.
      */
-    ComicBoxesLine(const QLineF& _line );
+    ComicBoxesLine(const Curve& _line );
     ComicBoxesLine(ComicBoxesLine* _line1, qreal _c1, ComicBoxesLine* _line2, qreal _c2);
     /**
      * @return true if the line can be edited
@@ -48,18 +48,18 @@ public:
     /**
      * This return the line in the box coordinate, or m_line if it is an absolute line
      */
-    QLineF line() const;
+    Curve curve() const;
     qreal c1() const;
     void setC1(qreal _c1);
     qreal c2() const;
     void setC2(qreal _c2);
     void setCP(const QPointF& );
     QPointF cp() const;
-    QTransform lineCoordinateToShapeCoordinate();
+    QTransform lineCoordinateToShapeCoordinate() const;
     ComicBoxesLine* line1();
     ComicBoxesLine* line2();
 private:
-    QLineF m_line;
+    Curve m_curve;
     ComicBoxesLine* m_line1;
     ComicBoxesLine* m_line2;
     qreal m_c1, m_c2;

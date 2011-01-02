@@ -17,33 +17,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QPoint>
-#include <cmath>
 #include "Curve.h"
+#include <qmath.h>
 
-inline bool near(qreal a, qreal b)
+Curve::Curve(qreal x1, qreal y1, qreal x2, qreal y2) : m_p1(x1, y1), m_p2(x2, y2)
 {
-    return qAbs(a - b) < 1e-6;
+    m_cp = 0.5 * (m_p1 + m_p2);
 }
 
-inline bool near(const QPointF& a, const QPointF& b, qreal d)
+Curve::Curve(const QPointF& p1, const QPointF& cp, const QPointF& p2) : m_p1(p1), m_cp(cp), m_p2(p2)
 {
-    return (a - b).manhattanLength() < d;
 }
 
-inline qreal norm2_2(const QPointF& pt)
+QPointF Curve::quadControlPoint()
 {
-    return (pt.x() * pt.x() + pt.y() * pt.y());
+    return m_cp;
 }
 
-inline qreal norm2(const QPointF& pt)
+QPointF Curve::pointAt(qreal t)
 {
-    return std::sqrt(norm2_2(pt));
-}
-
-// See http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-inline qreal projection(const Curve& l, const QPointF& pt_1 )
-{
-    qreal top = (pt_1.x() - l.p1().x()) * (l.p2().x() - l.p1().x()) + (pt_1.y() - l.p1().y()) * (l.p2().y() - l.p1().y());
-    return top / norm2_2(l.p2() - l.p1());
+// //     return (1 - t) * m_p1 + t * m_p2;
+    // http://en.wikipedia.org/wiki/Bézier_curve#Quadratic_B.C3.A9zier_curves
+    QPointF cpq = quadControlPoint();
+    return (1 - t) * (1-t) * m_p1 + 2 * (1-t)*t * cpq + t * t * m_p2;
 }

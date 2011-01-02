@@ -10,6 +10,7 @@ SET (comicboxesshape_LIB_SRCS
     ComicBoxesTool.cpp
     ComicBoxesToolFactory.cpp
     ComicBoxesCreationWidget.cpp
+    Curve.cpp
 )
 
 kde4_add_ui_files( comicboxesshape_LIB_SRCS

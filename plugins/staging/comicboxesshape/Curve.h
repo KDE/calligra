@@ -17,33 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QPoint>
-#include <cmath>
-#include "Curve.h"
+#ifndef _CURVE_H_
+#define _CURVE_H_
 
-inline bool near(qreal a, qreal b)
-{
-    return qAbs(a - b) < 1e-6;
-}
+#include <QPointF>
 
-inline bool near(const QPointF& a, const QPointF& b, qreal d)
+class Curve
 {
-    return (a - b).manhattanLength() < d;
-}
+public:
+    Curve() {}
+    Curve(qreal x1, qreal y1, qreal x2, qreal y2);
+    Curve(const QPointF& p1, const QPointF& cp, const QPointF& p2);
+    QPointF pointAt(qreal r);
+    QPointF quadControlPoint();
+    QPointF p1() const { return m_p1; }
+    QPointF cp() const { return m_cp; }
+    QPointF p2() const { return m_p2; }
+private:
+    QPointF m_p1, m_cp, m_p2;
+};
 
-inline qreal norm2_2(const QPointF& pt)
-{
-    return (pt.x() * pt.x() + pt.y() * pt.y());
-}
-
-inline qreal norm2(const QPointF& pt)
-{
-    return std::sqrt(norm2_2(pt));
-}
-
-// See http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
-inline qreal projection(const Curve& l, const QPointF& pt_1 )
-{
-    qreal top = (pt_1.x() - l.p1().x()) * (l.p2().x() - l.p1().x()) + (pt_1.y() - l.p1().y()) * (l.p2().y() - l.p1().y());
-    return top / norm2_2(l.p2() - l.p1());
-}
+#endif

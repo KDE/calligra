@@ -23,7 +23,7 @@
 #include <cmath>
 #include "Utils.h"
 
-ComicBoxesLine::ComicBoxesLine(const QLineF& _line ) : m_line(_line), m_line1(0), m_line2(0)
+ComicBoxesLine::ComicBoxesLine(const Curve& _line ) : m_curve(_line), m_line1(0), m_line2(0)
 {
 }
 
@@ -44,15 +44,15 @@ bool ComicBoxesLine::isAbsoluteLine() const
     return m_line1 == 0;
 }
 
-QLineF ComicBoxesLine::line() const
+Curve ComicBoxesLine::curve() const
 {
     if(isAbsoluteLine())
     {
-        return m_line;
+        return m_curve;
     } else {
-        QLineF l1 = m_line1->line();
-        QLineF l2 = m_line2->line();
-        return QLineF(l1.pointAt(m_c1), l2.pointAt(m_c2));
+        Curve l1 = m_line1->curve();
+        Curve l2 = m_line2->curve();
+        return Curve(l1.pointAt(m_c1), lineCoordinateToShapeCoordinate().map(m_cp), l2.pointAt(m_c2));
     }
 }
 
@@ -92,13 +92,21 @@ QPointF ComicBoxesLine::cp() const
     return m_cp;
 }
 
-QTransform ComicBoxesLine::lineCoordinateToShapeCoordinate()
+QTransform ComicBoxesLine::lineCoordinateToShapeCoordinate() const
 {
-    QLineF l = line();
+    // We cannot use the curve() function here, otherwise it loops
+    Curve l1 = m_line1->curve();
+    Curve l2 = m_line2->curve();
+    
+    QPointF p1 = l1.pointAt(m_c1);
+    QPointF p2 = l2.pointAt(m_c2);
+    
+    // Compute the transfo
+    QLineF l(p1, p2);
     QTransform t;
-    t.translate(l.p1().x(), l.p1().y());
+    t.translate(p1.x(), p1.y());
     t.rotate(-l.angle());
-    qreal s = norm2(l.p1() - l.p2());
+    qreal s = norm2(p1 - p2);
     t.scale( s, s );
     return t;
 }

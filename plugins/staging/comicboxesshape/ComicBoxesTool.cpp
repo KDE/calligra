@@ -86,7 +86,7 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
         {
             if(line->isEditable())
             {
-                QLineF l = line->line();
+                Curve c = line->curve();
                 painter.setPen(Qt::black);
                 if(line == m_currentLine && m_currentPointOnTheLine == POINT_1)
                 {
@@ -94,21 +94,21 @@ void ComicBoxesTool::paint( QPainter &painter, const KoViewConverter &converter)
                 } else {
                     painter.setBrush(Qt::white);
                 }
-                painter.drawEllipse(converter.documentToView(t.map(l.p1())), HANDLE_SIZE, HANDLE_SIZE);
+                painter.drawEllipse(converter.documentToView(t.map(c.p1())), HANDLE_SIZE, HANDLE_SIZE);
                 if(line == m_currentLine && m_currentPointOnTheLine == POINT_2)
                 {
                     painter.setBrush(Qt::black);
                 } else {
                     painter.setBrush(Qt::white);
                 }
-                painter.drawEllipse(converter.documentToView(t.map(l.p2())), HANDLE_SIZE, HANDLE_SIZE);
+                painter.drawEllipse(converter.documentToView(t.map(c.p2())), HANDLE_SIZE, HANDLE_SIZE);
                 if(line == m_currentLine && m_currentPointOnTheLine == POINT_CP)
                 {
                     painter.setBrush(Qt::black);
                 } else {
                     painter.setBrush(Qt::white);
                 }
-                painter.drawEllipse(converter.documentToView(t.map( line->lineCoordinateToShapeCoordinate().map( line->cp()))), HANDLE_SIZE, HANDLE_SIZE );
+                painter.drawEllipse(converter.documentToView(t.map( c.cp())), HANDLE_SIZE, HANDLE_SIZE );
             }
         }
     }
@@ -154,16 +154,16 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
     case DRAGING_POINT:
     {
         QTransform t = m_currentShape->lines2ShapeTransform();
-        QLineF line = m_currentLine->line();
+        Curve line = m_currentLine->curve();
         canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized().adjusted(-HANDLE_SIZE, -HANDLE_SIZE, HANDLE_SIZE, HANDLE_SIZE));
         
         switch(m_currentPointOnTheLine)
         {
         case POINT_1:
-            m_currentLine->setC1(qBound<qreal>(0, projection(m_currentLine->line1()->line(), t.inverted().map(event->point)), 1 ) );
+            m_currentLine->setC1(qBound<qreal>(0, projection(m_currentLine->line1()->curve(), t.inverted().map(event->point)), 1 ) );
             break;
         case POINT_2:
-            m_currentLine->setC2(qBound<qreal>(0, projection(m_currentLine->line2()->line(), t.inverted().map(event->point)), 1) );
+            m_currentLine->setC2(qBound<qreal>(0, projection(m_currentLine->line2()->curve(), t.inverted().map(event->point)), 1) );
             break;
         case POINT_CP:
         {
@@ -176,7 +176,7 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
             qFatal("Impossible");
         }
         m_currentShape->recreatePath();
-        line = m_currentLine->line();
+        line = m_currentLine->curve();
         canvas()->updateCanvas(QRectF(t.map(line.p1()), t.map(line.p2())).normalized().adjusted(-HANDLE_SIZE, -HANDLE_SIZE, HANDLE_SIZE, HANDLE_SIZE));
         break;
     }
@@ -215,7 +215,7 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
         
         foreach(ComicBoxesLine* line, m_currentShape->lines())
         {
-            QLineF l = line->line();
+            Curve l = line->curve();
             qreal u1 = projection(l, p1);
             double d1 = norm2(l.pointAt(u1) - p1);
             if( d1 < dist1 && u1 >= 0 && u1 <= 1 )
@@ -247,7 +247,7 @@ void ComicBoxesTool::mouseReleaseEvent( KoPointerEvent *event )
     case DRAGING_POINT:
     {
         m_mode = NOTHING;
-        QLineF l = m_currentLine->line();
+        Curve l = m_currentLine->curve();
         QTransform t = m_currentShape->lines2ShapeTransform();
         QPointF pt = (m_currentPointOnTheLine == POINT_1) ? t.map(l.p1()) : t.map(l.p2());
         canvas()->updateCanvas(QRectF(pt - HANDLE_POINT, pt + HANDLE_POINT) );
@@ -266,7 +266,7 @@ QPair<ComicBoxesLine*, ComicBoxesTool::Point> ComicBoxesTool::pointNear(const QP
     
     foreach(ComicBoxesLine* line, m_currentShape->lines())
     {
-        QLineF l = line->line();
+        Curve l = line->curve();
         if(near(point, t.map(l.p1()), HANDLE_SIZE))
         {
             return QPair<ComicBoxesLine*, Point>(line, POINT_1);
@@ -275,7 +275,7 @@ QPair<ComicBoxesLine*, ComicBoxesTool::Point> ComicBoxesTool::pointNear(const QP
         {
             return QPair<ComicBoxesLine*, Point>(line, POINT_2);
         }
-        if(near(point, t.map(line->lineCoordinateToShapeCoordinate().map(line->cp()) ), HANDLE_SIZE ))
+        if(near(point, t.map(l.cp()), HANDLE_SIZE ))
         {
             return QPair<ComicBoxesLine*, Point>(line, POINT_CP);
         }
@@ -297,7 +297,7 @@ QMap<QString, QWidget *> ComicBoxesTool::createOptionWidgets() {
 QRectF ComicBoxesTool::rectForCurrentLine() const
 {
     QTransform t = m_currentShape->lines2ShapeTransform();
-    QLineF line = m_currentLine->line();
+    Curve line = m_currentLine->curve();
     return QRectF(t.map(line.p1()), t.map(line.p2())).normalized();
 }
 
