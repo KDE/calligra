@@ -497,6 +497,11 @@ bool ImportTableWizard::doImport()
         return false;
     }
     
+    if (!m_alterSchemaWidget->newSchema()) {
+        msg.showErrorMessage(i18n("No table was selected to import."));
+        return false;
+    }
+    
     KexiPart::Item* partItemForSavedTable = project->createPartItem(part->info(), m_alterSchemaWidget->newSchema()->name());
     if (!partItemForSavedTable) {
         //  msg.showErrorMessage(project);
