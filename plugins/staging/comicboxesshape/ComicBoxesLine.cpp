@@ -82,6 +82,8 @@ void ComicBoxesLine::setC2(qreal _c2)
 
 void ComicBoxesLine::setCP(const QPointF& _cp)
 {
+    Q_ASSERT(_cp.x() >= 0);
+    Q_ASSERT(_cp.x() <= 1);
     m_cp = _cp;
 }
 

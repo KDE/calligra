@@ -165,6 +165,13 @@ void ComicBoxesTool::mouseMoveEvent( KoPointerEvent *event )
         case POINT_2:
             m_currentLine->setC2(qBound<qreal>(0, projection(m_currentLine->line2()->line(), t.inverted().map(event->point)), 1) );
             break;
+        case POINT_CP:
+        {
+            QPointF ncp = m_currentLine->lineCoordinateToShapeCoordinate().inverted().map( t.inverted().map(event->point)  );
+            ncp.setX(qBound<qreal>(0, ncp.x(), 1));
+            m_currentLine->setCP( ncp );
+        }
+            break;
         case POINT_NONE:
             qFatal("Impossible");
         }
