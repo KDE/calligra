@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=State Shape
+X-KDE-ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=stateshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
