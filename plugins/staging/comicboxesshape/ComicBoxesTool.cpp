@@ -268,6 +268,10 @@ QPair<ComicBoxesLine*, ComicBoxesTool::Point> ComicBoxesTool::pointNear(const QP
         {
             return QPair<ComicBoxesLine*, Point>(line, POINT_2);
         }
+        if(near(point, t.map(line->lineCoordinateToShapeCoordinate().map(line->cp()) ), HANDLE_SIZE ))
+        {
+            return QPair<ComicBoxesLine*, Point>(line, POINT_CP);
+        }
     }
     
     return QPair<ComicBoxesLine*, Point>(0, POINT_NONE);
