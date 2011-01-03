@@ -35,7 +35,7 @@ int main( int argc, char **argv )
   KCmdLineArgs::init( argc, argv, about );
 
   KCmdLineOptions options;
-  options.add("no-unique", ki18n("Use this option when debugging so that braindump is not launched as a KUniqueApplication"));
+  options.add("no-unique", ki18n("Use this option when debugging so that Braindump is not launched as a KUniqueApplication"));
   KCmdLineArgs::addCmdLineOptions( options );
 
   KApplication* app = 0;
