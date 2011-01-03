@@ -69,11 +69,11 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
     // some conditions are not supported with custom shapes properly yet, remove them when possible
 
     // Lines and connectors are handled elsewhere
-    if (m_contentType == "line" || m_contentType.contains("Connector")) {
+    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")) {
         return false;
     }
 
-    // custom shape supports showing text lists
+    // Remove me when 'T/U' pathshape interpreation from odf tech committee has been agreed
     return true;
 
     // Picture fill in custom-shape supported
@@ -745,7 +745,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
-    if (m_contentType == "line") {
+    if (m_contentType == "line" || m_contentType == "arc") {
         body->startElement("draw:line");
     }
     else if (m_contentType.contains("Connector")) {
@@ -816,7 +816,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     if (m_svgWidth > -1 && m_svgHeight > -1) {
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line" || m_contentType.contains("Connector")){
+        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")){
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
