@@ -19,7 +19,10 @@
 #include "kexireportview.h"
 #include <KoReportPage.h>
 #include "kexidbreportdata.h"
+
+#ifndef KEXI_MOBILE
 #include "keximigratereportdata.h"
+#endif
 
 #include <QLabel>
 #include <QBoxLayout>
@@ -77,9 +80,9 @@ KexiReportView::KexiReportView(QWidget *parent)
 #endif
     
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(i18n("Export: "), this));
-    a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
-    viewActions << (a = new KAction(KIcon("kword"), QString(), this));
+    //viewActions << (a = new KAction(i18n("Export: "), this));
+    //a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
+    viewActions << (a = new KAction(KIcon("kword"), " ", this));
 #else
     viewActions << (a = new KAction(KIcon("kword"), i18n("Save to KWord"), this));
 #endif
@@ -90,7 +93,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderODT()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("kspread"), QString(), this));
+    viewActions << (a = new KAction(KIcon("kspread"), " ", this));
 #else
     viewActions << (a = new KAction(KIcon("kspread"), i18n("Save to KSpread"), this));
 #endif
@@ -101,7 +104,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKSpread()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("text-html"), QString(), this));
+    viewActions << (a = new KAction(KIcon("text-html"), " ", this));
 #else
     viewActions << (a = new KAction(KIcon("text-html"), i18n("Export as Web Page"), this));
 #endif
@@ -123,6 +126,7 @@ KexiReportView::KexiReportView(QWidget *parent)
 
 KexiReportView::~KexiReportView()
 {
+    kDebug();
     delete m_preRenderer;
     delete m_kexi;
     delete m_functions;
@@ -334,8 +338,10 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
 
-            if (m_reportDocument)
+            if (m_reportDocument) {
+                kDebug() << "=======================================Deleting old document";
                 delete m_reportDocument;
+            }
             
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
@@ -366,10 +372,11 @@ KoReportData* KexiReportView::sourceData(QDomElement e)
     if (e.attribute("type") == "internal") {
         kodata = new KexiDBReportData(e.attribute("source"), KexiMainWindowIface::global()->project()->dbConnection());
     }
+#ifndef KEXI_MOBILE
     if (e.attribute("type") ==  "external") {
         kodata = new KexiMigrateReportData(e.attribute("source"));
     }
-
+#endif
     return kodata;
 }
 

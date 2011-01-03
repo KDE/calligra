@@ -89,6 +89,7 @@ ENDIF(KEXI_MOBILE)
 
 IF(KEXI_MOBILE)
   #Add Kexi mobile application subdir here
+  add_subdirectory( KexiMobile )
 ELSE(KEXI_MOBILE)
   set(kexi_SRCS main.cpp )
   kde4_add_app_icon(kexi_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kexi.png")
