@@ -1,0 +1,7 @@
+[Desktop Entry]                                                            
+Type=ServiceType                                                           
+X-KDE-ServiceType=Braindump/Extensions
+Comment=Extensions for braindump                                        
+
+[PropertyDef::X-Braindump-Version]
+Type=int

@@ -10,7 +10,7 @@ convert.cpp
 
 kde4_add_ui_files(htmlodf_export_PART_SRCS exportwidget.ui )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 kde4_add_plugin(htmlodf_export ${htmlodf_export_PART_SRCS})
 
