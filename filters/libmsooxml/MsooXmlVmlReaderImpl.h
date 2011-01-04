@@ -183,7 +183,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (!m_wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
         if (position.isEmpty() || position == "static") { // Default
-            bool asChar = true;
+            asChar = true;
             body->addAttribute("text:anchor-type", "as-char");
         }
         else {

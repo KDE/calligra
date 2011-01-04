@@ -51,9 +51,9 @@ TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
 
 
 TableShapeFactory::TableShapeFactory()
-        : KoShapeFactoryBase(TableShapeId, i18n("Table"))
+        : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"))
 {
-    setToolTip(i18n("Table Shape"));
+    setToolTip(i18n("Spreadsheet Shape"));
     setIcon("spreadsheetshape");
     setOdfElementNames(KoXmlNS::table, QStringList() << "table");
 }

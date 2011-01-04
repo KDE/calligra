@@ -75,20 +75,6 @@ public:
     QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 };
 
-//! Data structure collecting information about single slide/master slide
-class PptxSlideProperties
-{
-public:
-    PptxSlideProperties();
-    ~PptxSlideProperties();
-    //! Shapes map addressed by type
-    QMap<QString, PptxShapeProperties*> shapesMap;
-    //! Clear the shapes and shapesMap lists.
-    void clear();
-private:
-    Q_DISABLE_COPY(PptxSlideProperties)
-};
-
 //! Properties of a single placeholder for shapes defined by layouts
 class PptxPlaceholder
 {
@@ -103,15 +89,19 @@ public:
     int rot;
 };
 
-//! Data structure collecting information about single layout
-class PptxSlideLayoutProperties
+//! Data structure collecting information about single layout/master
+class PptxSlideProperties
 {
 public:
-    PptxSlideLayoutProperties();
-    ~PptxSlideLayoutProperties();
+    PptxSlideProperties();
+    ~PptxSlideProperties();
 
     //! Shapes map addressed by type
     QMap<QString, PptxShapeProperties*> shapesMap;
+
+    //! geometry type
+    QMap<QString, QString> contentTypeMap;
+
     //! The presentation:presentation-page-layout-name
     QString pageLayoutStyleName;
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
@@ -135,52 +125,22 @@ public:
     QMap<QString, QString> textBottomBorders;
     QMap<QString, QString> textTopBorders;
 
+    KoGenStyle m_drawingPageProperties;
+
+    // Layout specific
+
     // Extras frames such as pictures from layout, which should be put to the slide.
     QVector<QString> layoutFrames;
 
-    KoGenStyle m_drawingPageProperties;
-
     // Name of the slidemaster to be used with this layout
     QString m_slideMasterName;
-private:
 
-    Q_DISABLE_COPY(PptxSlideLayoutProperties)
-};
-
-//! Data structure collecting information about master slide
-class PptxSlideMasterPageProperties
-{
-public:
-    PptxSlideMasterPageProperties();
-    void clear();
+    // Master specific
+    MSOOXML::DrawingMLTheme theme;
 
     QMap<QString, QString> colorMap;
 
-    //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,KoGenStyle> > styles;
-
-    //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,KoGenStyle> > textStyles;
-
-    //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
-
-    //! Position of the text
-    QMap<QString, QString> textShapePositions;
-
-    //! Possible text shrinkage
-    QMap<QString, MSOOXML::Utils::autoFitStatus> m_textAutoFit;
-
-    //! Borders in the frame
-    QMap<QString, QString> textLeftBorders;
-    QMap<QString, QString> textRightBorders;
-    QMap<QString, QString> textBottomBorders;
-    QMap<QString, QString> textTopBorders;
-
-    // Them to which this masterslide refers to.
-    MSOOXML::DrawingMLTheme theme;
-
-    KoGenStyle m_drawingPageProperties;
+private:
 };
 
 //! A class reading MSOOXML PPTX markup - ppt/slides/slide*.xml part.
@@ -283,6 +243,9 @@ protected:
     // Inherits shape x, y, width etc. from slideLayout/slideMaster
     void inheritShapePosition();
 
+    // Inherits shapes geometry, fill color etc. from slideLayout/slideMaster
+    void inheritShapeGeometry();
+
 private:
     void init();
     class Private;
@@ -303,9 +266,9 @@ public:
         PptxImport& _import, const QString& _path, const QString& _file,
         uint _slideNumber,
         MSOOXML::DrawingMLTheme* _themes,
-        PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
-        PptxSlideLayoutProperties* _slideLayoutProperties,
-        PptxSlideMasterPageProperties* _slideMasterPageProperties,
+        PptxXmlSlideReader::Type _type,
+        PptxSlideProperties* _slideLayoutProperties,
+        PptxSlideProperties* _slideMasterPageProperties,
         MSOOXML::MsooXmlRelationships& _relationships,
         QMap<int, QString> _commentAuthors,
         QMap<QString, QString> masterColorMap,
@@ -318,9 +281,8 @@ public:
     const uint slideNumber;
     MSOOXML::DrawingMLTheme* themes;
     PptxXmlSlideReader::Type type;
-    PptxSlideProperties* slideProperties;
-    PptxSlideLayoutProperties* slideLayoutProperties;
-    PptxSlideMasterPageProperties* slideMasterPageProperties;
+    PptxSlideProperties* slideLayoutProperties;
+    PptxSlideProperties* slideMasterProperties;
     PptxActualSlideProperties currentSlideStyles;
 
     // There could potentially be multiple of these...todo
