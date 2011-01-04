@@ -331,7 +331,7 @@ set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${FLAKE_INCLUDES}
                     ${KOPAGEAPP_INCLUDES}
-					${KOMAIN_INCLUDES}
+                    ${KOMAIN_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/tools/koabstraction)
 
 # koproperty
