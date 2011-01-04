@@ -2,6 +2,7 @@
 Icon=skyline_morning
 Name=Skyline Morning
 Name[ca]=Horitzó matinal
+Name[ca@valencia]=Horitzó matinal
 Name[da]=Skyline Morning
 Name[de]=Horizont am Morgen
 Name[en_GB]=Skyline Morning
@@ -20,6 +21,7 @@ Name[x-test]=xxSkyline Morningxx
 Name[zh_TW]=Skyline Morning
 Comment=Skyline Morning
 Comment[ca]=Horitzó matinal
+Comment[ca@valencia]=Horitzó matinal
 Comment[da]=Skyline Morning
 Comment[de]=Horizont am Morgen
 Comment[en_GB]=Skyline Morning

@@ -2,6 +2,7 @@
 Icon=rounded_square
 Name=Rounded Square
 Name[ca]=Quadrat arrodonit
+Name[ca@valencia]=Quadrat arrodonit
 Name[da]=Rounded Square
 Name[de]=Abgerundetes Quadrat
 Name[en_GB]=Rounded Square
@@ -20,6 +21,7 @@ Name[x-test]=xxRounded Squarexx
 Name[zh_TW]=圓角方形
 Comment=Rounded Square
 Comment[ca]=Quadrat arrodonit
+Comment[ca@valencia]=Quadrat arrodonit
 Comment[da]=Afrundet firkant
 Comment[de]=Abgerundetes Quadrat
 Comment[en_GB]=Rounded Square

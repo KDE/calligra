@@ -144,7 +144,6 @@ NArgExpr::NArgExpr(int aClass, int token)
         : BaseExpr(token)
 {
     m_cl = aClass;
-//Qt 4 list.setAutoDelete(true);
 }
 
 NArgExpr::NArgExpr(const NArgExpr& expr)
@@ -157,6 +156,7 @@ NArgExpr::NArgExpr(const NArgExpr& expr)
 
 NArgExpr::~NArgExpr()
 {
+    qDeleteAll(list);
 }
 
 NArgExpr* NArgExpr::copy() const

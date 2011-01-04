@@ -1,5 +1,12 @@
 [Desktop Entry]
 Name=State Shape
+Name[et]=Olekukujund
+Name[nl]=Statusvorm
+Name[pt]=Forma de Estados
+Name[pt_BR]=Forma de estados
+Name[sv]=Tillståndsform
+Name[uk]=Форма стану
+Name[x-test]=xxState Shapexx
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=stateshape

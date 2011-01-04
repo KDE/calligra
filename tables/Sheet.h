@@ -39,8 +39,6 @@
 #include "Global.h"
 #include "ProtectableObject.h"
 
-#include "calligra_tables_export.h"
-
 class QAbstractItemModel;
 class QDomElement;
 class QUndoCommand;
