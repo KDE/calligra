@@ -47,7 +47,7 @@
 #include "Section.h"
 #include "ViewManager.h"
 #include "import/DockerManager.h"
-#include "import/ToolBoxFactory.h"
+#include "KoToolBoxFactory.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -156,7 +156,7 @@ void View::initGUI()
     connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint&)),
              this, SLOT(updateMousePosition(const QPoint&)));
 
-    ToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
+    KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     m_mainWindow->createDockWidget( &toolBoxFactory );
 
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );

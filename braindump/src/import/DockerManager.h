@@ -20,6 +20,8 @@
 #ifndef DOCKER_MANAGER_H
 #define DOCKER_MANAGER_H
 
+#include "komain_export.h"
+
 #include <QObject>
 #include <QMap>
 
@@ -28,15 +30,15 @@ class MainWindow;
 /**
    The docker manager makes sure that tool option widgets are shown at the right time.
  */
-class DockerManager : public QObject
+class KOMAIN_EXPORT DockerManager : public QObject
 {
     Q_OBJECT
 public:
     explicit DockerManager(MainWindow* mainWindow);
     ~DockerManager();
-    void removeUnusedOptionWidgets();
 
 public slots:
+    //void removeUnusedOptionWidgets();
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
@@ -44,6 +46,9 @@ public slots:
 
 
 private:
+    Q_PRIVATE_SLOT(d, void moveToolBarsBack())
+    Q_PRIVATE_SLOT(d, void moveToolBars())
+    Q_PRIVATE_SLOT(d, void restoringDone())
     class Private;
     Private * const d;
 };
