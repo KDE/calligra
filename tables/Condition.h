@@ -30,7 +30,6 @@
 #include <QSharedData>
 #include <QVariant>
 
-#include "calligra_tables_export.h"
 #include <KoXmlReader.h>
 
 class QColor;
