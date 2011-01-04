@@ -98,6 +98,8 @@ KexiDB
 **merged with Predicate
 *fix memory leak in query schema
 **merged with Predicate
+*fix memory leak (lexer was not released)
+**merged with Predicate
 
 2010-12-12
 Migration

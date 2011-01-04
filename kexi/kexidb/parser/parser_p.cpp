@@ -37,6 +37,8 @@ QList<Field*> fieldList;
 int current = 0;
 QByteArray ctoken;
 
+extern int yylex_destroy(void);
+
 //-------------------------------------
 
 Parser::Private::Private()
@@ -218,6 +220,7 @@ bool parseData(Parser *p, const char *data)
     }
 
 //  tableDict.clear();
+    yylex_destroy();
     parser = 0;
     return ok;
 }
