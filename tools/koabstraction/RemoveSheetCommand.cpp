@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,23 +17,25 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FOCELL_TOOL_FACTORY
-#define FOCELL_TOOL_FACTORY
+#include "RemoveSheetCommand.h"
 
-#include <KoToolFactoryBase.h>
+using Calligra::Tables::Sheet;
+using Calligra::Tables::Map;
 
-class FoCellTool;
-
-/**
- * The Factory, that creates a FoCellTool.
- */
-class FoCellToolFactory : public KoToolFactoryBase
+RemoveSheetCommand::RemoveSheetCommand(Calligra::Tables::Sheet* s)
 {
-public:
-    FoCellToolFactory();
-    ~FoCellToolFactory();
+    sheet = s;
+    map = sheet->map();
+    setText(i18n("Remove Sheet"));
+}
 
-    KoToolBase* createTool(KoCanvasBase* canvas);
-};
+void RemoveSheetCommand::redo()
+{
+    sheet->map()->removeSheet(sheet);
+}
 
-#endif // FOCELL_TOOL_FACTORY
+void RemoveSheetCommand::undo()
+{
+    sheet->map()->reviveSheet(sheet);
+}
+

@@ -1,0 +1,52 @@
+#add_subdirectory( tests )
+
+include_directories( ${KOABSTRACTION_INCLUDES})
+
+########### next target ###############
+
+set(koabstraction_LIB_SRCS
+    KoAbstractApplicationController.cpp
+    RemoveSheetCommand.cpp
+    KoCellToolFactory.cpp
+    KoCellTool.cpp
+    FoCellEditor.cpp #TODO move back to tools/f-office
+)
+
+kde4_add_library(koabstraction SHARED ${koabstraction_LIB_SRCS})
+
+target_link_libraries(koabstraction ${extra_libs}
+    ${QT_LIBRARIES} 
+    flake
+    komain
+    kotext
+    kopageapp
+    wordsprivate
+    calligratablescommon
+    ${MISSING_LIBS}
+)
+
+target_link_libraries(koabstraction LINK_INTERFACE_LIBRARIES
+    kotext
+    flake
+    komain
+    kotext
+    calligratablescommon
+    ${KDE4_KPARTS_LIBS}
+    ${QT_LIBRARIES}
+)
+
+set_target_properties(koabstraction PROPERTIES
+    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+)
+install(TARGETS koabstraction ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+########### install files ###############
+
+install( FILES
+    koabstraction_export.h
+    KoAbstractApplication.h
+    KoAbstractApplicationImpl.h
+    KoAbstractApplicationController.h
+    KoCellTool.h
+    KoExternalEditorInterface.h
+DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)

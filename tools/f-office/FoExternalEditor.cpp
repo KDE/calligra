@@ -24,26 +24,22 @@
 
 #include "FoExternalEditor.h"
 
-// KSpread
-#include "ui/CellToolBase.h"
-#include "Map.h"
-#include "Sheet.h"
+// Tables
+#include <tables/ui/CellToolBase.h>
+#include <tables/Map.h>
+#include <tables/Sheet.h>
 
-#include "FoCellEditor.h"
+#include <FoCellEditor.h>
 
 #include <QApplication>
 #include <QFocusEvent>
 #include <QKeyEvent>
 #include <QTextCursor>
 
-using namespace Calligra::Tables;
-using Calligra::Tables::CellEditorBase;
-using Calligra::Tables::CellToolBase;
-
-
-FoExternalEditor::FoExternalEditor(QWidget *parent)
+FoExternalEditor::FoExternalEditor(Calligra::Tables::CellToolBase* cellToolBase, QWidget *parent)
     : QTextEdit(parent),
-    cellTool(0),
+    KoExternalEditorInterface(cellToolBase),
+    cellTool(cellToolBase),
     isArray(false)
 {
     setMinimumHeight(58);
@@ -138,7 +134,7 @@ void FoExternalEditor::focusInEvent(QFocusEvent* event)
 {
     Q_ASSERT(cellTool);
     if (event->reason() != Qt::OtherFocusReason) {
-        cellTool->setLastEditorWithFocus(CellToolBase::ExternalEditor);
+        cellTool->setLastEditorWithFocus(Calligra::Tables::CellToolBase::ExternalEditor);
     }
    // grabKeyboard();
     // when the external editor gets focus, create also the internal editor
@@ -179,7 +175,7 @@ void FoExternalEditor::slotCursorPositionChanged()
     }
 }
 
-void FoExternalEditor::insertOperator(QString operatorCharacter)
+void FoExternalEditor::insertOperator(const QString& operatorCharacter)
 {
     insertPlainText(operatorCharacter);
     emit textChanged(toPlainText());

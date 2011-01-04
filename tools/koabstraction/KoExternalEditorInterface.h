@@ -2,6 +2,7 @@
  * This file is part of Maemo 5 Office UI for KOffice
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
  *
  * Contact: Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
@@ -22,12 +23,13 @@
  *
  */
 
-#ifndef FOEXTERNAL_EDITOR
-#define FOEXTERNAL_EDITOR
+#ifndef FOEXTERNAL_EDITOR_IFACE
+#define FOEXTERNAL_EDITOR_IFACE
 
-#include <QTextEdit>
+#include "koabstraction_export.h"
 
-#include <KoExternalEditorInterface.h>
+#include <QString>
+#include <QWidget>
 
 namespace Calligra { namespace Tables
 {
@@ -35,36 +37,38 @@ namespace Calligra { namespace Tables
     class CellEditorBase;
 } }
 
-class FoExternalEditor : public QTextEdit, public KoExternalEditorInterface
+/**
+ * Abstraction of external editor for spreadsheet's cell.
+ */
+class KOABSTRACTION_EXPORT KoExternalEditorInterface
 {
-    Q_OBJECT
 public:
-    FoExternalEditor(Calligra::Tables::CellToolBase* cellToolBase, QWidget* parent = 0);
-    ~FoExternalEditor();
+    KoExternalEditorInterface(Calligra::Tables::CellToolBase*) {}
+    virtual ~KoExternalEditorInterface() {}
 
-    void setCellTool(Calligra::Tables::CellToolBase* cellTool);
-    void insertOperator(QString opreatorCharacter);
+    virtual void insertOperator(const QString& operatorCharacter) = 0;
 
-    //! Implements KoExternalEditorInterface
-    virtual void insertOperator(const QString& operatorCharacter);
+    virtual void clear() = 0;
+
+    virtual void setText(const QString& text) = 0;
+
+    virtual void setPlainText(const QString& text) = 0;
+
+    virtual void setCursorPosition(int position) = 0;
+
+    virtual QString toPlainText() const = 0;
+
+    //! @return this object casted to QWidget* if it is derived from QWidget, otherwise 0.
+    QWidget* thisWidget() { return dynamic_cast<QWidget*>(this); }
+/*
 
 Q_SIGNALS:
     void textChanged(const QString &text);
 
 public Q_SLOTS:
-    virtual void clear() { QTextEdit::clear(); }
-
-    //! Implements KoExternalEditorInterface
-    virtual void setPlainText(const QString& text) { QTextEdit::setPlainText(text); }
-
-    //! Implements KoExternalEditorInterface
-    virtual QString toPlainText() const { return QTextEdit::toPlainText(); }
-
     void applyChanges();
     void discardChanges();
-    //! Implements KoExternalEditorInterface
-    void setText(const QString &text);
-    //! Implements KoExternalEditorInterface
+    void setText(const QSFoExternalEditortring &text);
     void setCursorPosition(int position);
 
 protected:
@@ -78,7 +82,7 @@ private slots:
 
 private:
     Calligra::Tables::CellToolBase* cellTool;
-    bool isArray;
+    bool isArray;*/
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,29 +17,25 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
-#include "FoCellToolFactory.h"
+#include <QUndoCommand>
 
-#include <klocale.h>
+#include <tables/Sheet.h>
+#include <tables/Map.h>
 
-#include "FoCellTool.h"
+namespace Calligra { namespace Tables {
+    class Sheet;
+    class Map;
+} }
 
-FoCellToolFactory::FoCellToolFactory()
-        : KoToolFactoryBase("FreOfficeCellToolId")
+class RemoveSheetCommand : public QUndoCommand
 {
-    setToolTip(i18n("Cell Tool"));
-    setIcon("kspread");
-    setToolType("KSpread");
-    setPriority(0);
-    setActivationShapeId("flake/always");
-}
+public:
+    explicit RemoveSheetCommand(Calligra::Tables::Sheet* sheet);
 
-FoCellToolFactory::~FoCellToolFactory()
-{
-}
+    virtual void redo();
+    virtual void undo();
 
-KoToolBase* FoCellToolFactory::createTool(KoCanvasBase* canvas)
-{
-    FoCellTool *cellTool=new FoCellTool(canvas);
-    return cellTool;
-}
+protected:
+    Calligra::Tables::Sheet* sheet;
+    Calligra::Tables::Map* map;
+};

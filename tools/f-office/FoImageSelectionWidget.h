@@ -35,10 +35,9 @@ class KoResourceManager;
  * Right now it only shows file dialog to select images. This should be extended to allow for browsing the gallery,
  * and snapping of pictures from the camera
  */
-class FoImageSelectionWidget: public QWidget
+class FoImageSelectionWidget
 {
 public:
-    FoImageSelectionWidget(QWidget *parent = 0);
     static KoShape *selectImageShape(KoResourceManager *documentResource, QWidget *parent = 0);
 };
 

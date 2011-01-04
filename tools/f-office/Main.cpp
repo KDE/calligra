@@ -68,7 +68,12 @@ int main(int argc, char *argv[])
                      &w, SLOT(showApplicationMenu()));
 
     if (arguments.size() > 1) {
-        w.openDocument(arguments[1],arguments.size() > 2 ? arguments[2].compare("false",Qt::CaseInsensitive) : false);
+        KoAbstractApplicationOpenDocumentArguments openArgs;
+        openArgs.documentsToOpen.append(arguments[1]);
+        if (arguments.size() > 2) {
+            openArgs.openAsTemplates = arguments[2].compare("false", Qt::CaseInsensitive);
+        }
+        w.openDocuments(openArgs);
     } else {
         QTimer::singleShot(5, &w, SLOT(checkDBusActivation()));
     }
