@@ -46,43 +46,26 @@ public:
     KoExternalEditorInterface(Calligra::Tables::CellToolBase*) {}
     virtual ~KoExternalEditorInterface() {}
 
+    //! Inserts operator @a operatorCharacter in the editor
     virtual void insertOperator(const QString& operatorCharacter) = 0;
 
+    //! Clears contents of the editor
     virtual void clear() = 0;
 
+    //! Sets the text of the editor to @a text, may be rich text
     virtual void setText(const QString& text) = 0;
 
+    //! Sets the plain text @a text for the editor
     virtual void setPlainText(const QString& text) = 0;
 
+    //! Sets the cursor position within the editor to @a position
     virtual void setCursorPosition(int position) = 0;
 
+    //! @return plain text representation of the editor's contents
     virtual QString toPlainText() const = 0;
 
     //! @return this object casted to QWidget* if it is derived from QWidget, otherwise 0.
     QWidget* thisWidget() { return dynamic_cast<QWidget*>(this); }
-/*
-
-Q_SIGNALS:
-    void textChanged(const QString &text);
-
-public Q_SLOTS:
-    void applyChanges();
-    void discardChanges();
-    void setText(const QSFoExternalEditortring &text);
-    void setCursorPosition(int position);
-
-protected:
-    void keyPressEvent(QKeyEvent *event);
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
-
-private slots:
-    void slotTextChanged();
-    void slotCursorPositionChanged();
-
-private:
-    Calligra::Tables::CellToolBase* cellTool;
-    bool isArray;*/
 };
 
 #endif
