@@ -1,11 +1,14 @@
 [Desktop Entry]
 Name=Stage
+Name[et]=Stage
 Name[it]=Stage
+Name[nl]=Stap
 Name[pt]=Stage
 Name[pt_BR]=Stage
 Name[sv]=Stage
 Name[uk]=Stage
 Name[x-test]=xxStagexx
+Name[zh_TW]=Stage
 Exec=kpresenter %u
 GenericName=Presentation
 GenericName[bg]=Екранни презентации

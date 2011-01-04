@@ -2,6 +2,7 @@
 Type=Service
 Name=KWord DICOM Structured Report Import Filter
 Name[ca]=Filtre d'importació d'informes estructurats DICOM per al KWord
+Name[ca@valencia]=Filtre d'importació d'informes estructurats DICOM per al KWord
 Name[da]=Importfilter til DICOM-strukturerede  rapporter til KWord
 Name[de]=KWord DICOM-Strukturreport-Importfilter
 Name[en_GB]=KWord DICOM Structured Report Import Filter
