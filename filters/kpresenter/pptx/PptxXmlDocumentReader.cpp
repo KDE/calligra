@@ -64,11 +64,9 @@ public:
     {
     }
     ~Private() {
-        qDeleteAll(masterSlidePropertiesMap);
         qDeleteAll(slideLayoutPropertiesMap);
     }
-    QMap<QString, PptxSlideProperties*> masterSlidePropertiesMap;
-    QMap<QString, PptxSlideLayoutProperties*> slideLayoutPropertiesMap;
+    QMap<QString, PptxSlideProperties*> slideLayoutPropertiesMap;
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
     bool sldSzRead;
     KoPageLayout pageLayout;
@@ -78,7 +76,7 @@ public:
     QVector<KoGenStyle> masterPageStyles;
     QVector<QString> masterPageFrames;
 
-    QMap<QString, PptxSlideMasterPageProperties> slideMasterPageProperties;
+    QMap<QString, PptxSlideProperties> slideMasterPageProperties;
     QMap<int, QString> commentAuthors;
 private:
 };
@@ -165,7 +163,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     return KoFilter::OK;
 }
 
-PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
+PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
     const QString& slidePath, const QString& slideFile)
 {
     const QString slideLayoutPathAndFile(m_context->relationships->targetForType(
@@ -180,7 +178,7 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     MSOOXML::Utils::splitPathAndFile(slideLayoutPathAndFile, &slideLayoutPath, &slideLayoutFile);
 
     // load layout or find in cache
-    PptxSlideLayoutProperties *result = d->slideLayoutPropertiesMap.value(slideLayoutPathAndFile);
+    PptxSlideProperties *result = d->slideLayoutPropertiesMap.value(slideLayoutPathAndFile);
     if (result)
         return result;
 
@@ -189,21 +187,18 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
     const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile,
          QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
-    PptxSlideProperties *masterSlideProperties =
-        d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
 
-    result = new PptxSlideLayoutProperties();
+    result = new PptxSlideProperties();
     result->m_slideMasterName = slideMasterPathAndFile;
 
     QMap<QString, QString> dummyoles;
 
-    MSOOXML::Utils::AutoPtrSetter<PptxSlideLayoutProperties> slideLayoutPropertiesSetter(result);
+    MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> slideLayoutPropertiesSetter(result);
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideLayoutPath, slideLayoutFile,
         0/*unused*/, &d->slideMasterPageProperties[slideMasterPathAndFile].theme,
         PptxXmlSlideReader::SlideLayout,
-        masterSlideProperties, //PptxSlideProperties
         result,
         &d->slideMasterPageProperties[slideMasterPathAndFile], //PptxSlideMasterPageProperties
         *m_context->relationships,
@@ -262,7 +257,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     QString slidePath, slideFile;
     MSOOXML::Utils::splitPathAndFile(slidePathAndFile, &slidePath, &slideFile);
 
-    PptxSlideLayoutProperties *slideLayoutProperties = this->slideLayoutProperties(slidePath, slideFile);
+    PptxSlideProperties *slideLayoutProperties = this->slideLayoutProperties(slidePath, slideFile);
     if (!slideLayoutProperties) {
         raiseError(i18n("Slide layout \"%1\" not found", slidePath + '/' + slideFile));
         return KoFilter::WrongFormat;
@@ -292,7 +287,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     QString slideMasterPath, slideMasterFile;
     MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
     const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
-    PptxSlideProperties *masterSlideProperties = d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
 
     // Delay the reding of a tableStyle until we find a table as we need the clrMap from the master slide
     const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
@@ -303,7 +297,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         d->slideNumber,
         &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme,
         PptxXmlSlideReader::Slide,
-        masterSlideProperties,
         slideLayoutProperties,
         &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName],
         *m_context->relationships,
@@ -411,7 +404,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
     // Reading the slidemaster theme
 
-    PptxSlideMasterPageProperties masterPageProperties;
+    PptxSlideProperties masterPageProperties;
 
     const QString slideThemePathAndFile(m_context->relationships->targetForType(
         slideMasterPath, slideMasterFile,
@@ -435,14 +428,11 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     QMap<QString, QString> dummyMap;
     QMap<QString, QString> dummyOles;
 
-    PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
-    MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> masterSlidePropertiesSetter(masterSlideProperties);
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideMasterPath, slideMasterFile,
         0/*unused*/, &masterPageProperties.theme,
         PptxXmlSlideReader::SlideMaster,
-        masterSlideProperties,
         0,
         &masterPageProperties,
         *m_context->relationships,
@@ -474,8 +464,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     }
 
     d->slideMasterPageProperties.insert(slideMasterPathAndFile, masterPageProperties);
-    d->masterSlidePropertiesMap.insert(slideMasterPathAndFile, masterSlideProperties);
-    masterSlidePropertiesSetter.release();
     d->masterPageDrawStyleNames.push_back(context.pageDrawStyleName);
     d->masterPageFrames += context.pageFrames;
     kDebug() << "d->masterPageDrawStyleName:" << d->masterPageDrawStyleNames.back();
