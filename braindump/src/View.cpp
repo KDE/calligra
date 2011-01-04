@@ -39,14 +39,15 @@
 #include <KoDrag.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
+#include "KoZoomController.h"
+#include <KoZoomAction.h>
 
 #include "Canvas.h"
 #include "RootSection.h"
 #include "Section.h"
 #include "ViewManager.h"
 #include "import/DockerManager.h"
-#include "import/ToolBoxFactory.h"
-#include "import/ZoomAction.h"
+#include "KoToolBoxFactory.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -72,7 +73,6 @@
 #include "SectionsBoxDock.h"
 #include "Layout.h"
 #include "SectionPropertiesDock.h"
-#include "import/ZoomController.h"
 #include "commands/RememberPositionCommand.h"
 
 View::View( RootSection *document, MainWindow* parent )
@@ -142,7 +142,7 @@ void View::initGUI()
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
-    m_zoomController = new ZoomController( m_canvasController, &m_zoomHandler, actionCollection());
+    m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection());
     connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, qreal ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
@@ -156,7 +156,7 @@ void View::initGUI()
     connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint&)),
              this, SLOT(updateMousePosition(const QPoint&)));
 
-    ToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
+    KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     m_mainWindow->createDockWidget( &toolBoxFactory );
 
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ), m_mainWindow->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
