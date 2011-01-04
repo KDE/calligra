@@ -47,7 +47,7 @@ public slots:
 
     /*!
      * Opens documents as specified by @a args.
-     * See documentation of @a KoAbstractApplicationOpenDocumentArgumentsfor explanation
+     * See documentation of @a KoAbstractApplicationOpenDocumentArguments for explanation
      * of arguments @a args.
      */
     virtual bool openDocuments(const KoAbstractApplicationOpenDocumentArguments& args);
