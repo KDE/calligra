@@ -27,6 +27,8 @@
 #include <KoShape.h>
 #include <KoDocument.h>
 
+#include "koabstraction_export.h"
+
 //TODO #include "CollaborateInterface.h"
 
 class QTextDocument;
@@ -37,15 +39,36 @@ class KUndoStack;
 class KoView;
 class KWView;
 class KoTextEditor;
+class KoCanvasController;
 class KoCanvasControllerWidget;
-class FoCellToolFactory;
-class FoCellTool;
-class StoreButtonPreview;
-class PresentationTool;
+class KoCellToolFactory;
+class KoCellTool;
+class KoExternalEditorInterface;
 
-//class KoAbstractApplicationSignalReceiver;
+//! Arguments for document opening
+class KOABSTRACTION_EXPORT KoAbstractApplicationOpenDocumentArguments {
+public:
+    KoAbstractApplicationOpenDocumentArguments();
 
-class KoAbstractApplicationController //TODO: public CollaborateInterface
+    /*!
+     * true if document(s) should be opened for editing. False by default.
+     */
+    bool editing;
+
+    /*!
+     * true if document(s) should be opened as templates.
+     * Implies editing mode. False by default.
+     */
+    bool openAsTemplates;
+
+    /*!
+     * List of documents to open. If empty, new document should be created.
+     */
+    QStringList documentsToOpen;
+};
+
+//! Abstraction of custom office application implementing fundamental features.
+class KOABSTRACTION_EXPORT KoAbstractApplicationController //TODO: public CollaborateInterface
 {
 public:
     KoAbstractApplicationController();
@@ -74,6 +97,10 @@ public:
                                    //!< with possible results: QMessageBox::Yes, QMessageBox::No
                                    //! Provides localized message.
     };
+
+    QStringList supportedExtensions() const;
+
+    QStringList supportedFilters() const;
 
     /*!
      * @return true if @a extension is supported by the application.
@@ -106,9 +133,21 @@ public:
     bool isSpreadsheetDocumentExtension(const QString& extension) const;
 
     /*!
-     * Opens document from @a fileName. If @a isNewDocument is true, new document is created.
+     * Convenience method: opens one document pointed by @a fileName for viewing.
      */
-    virtual bool openDocument(const QString &fileName, bool isNewDocument = false);
+    virtual bool openDocument(const QString &fileName);
+
+    /*!
+     * Convenience method: opens one document pointed by @a fileName for editing as template.
+     */
+    bool openDocumentAsTemplate(const QString &fileName);
+
+    /*!
+     * Opens documents as specified by @a args.
+     * See documentation of @a KoAbstractApplicationOpenDocumentArgumentsfor explanation
+     * of arguments @a args.
+     */
+    virtual bool openDocuments(const KoAbstractApplicationOpenDocumentArguments& args);
 
     /*!
      * Closes document without asking for confirmation. Can be reimplemented.
@@ -117,7 +156,7 @@ public:
 
     /*!
      * Opens document.
-     * @return true if document has been saved.
+     * @return true if document has been opened.
      */
     virtual bool openDocument();
 
@@ -125,6 +164,11 @@ public:
      * Shows document save dialog.
      */
     QString getSaveFileName();
+
+    /*!
+     * Name of the opened document file.
+     */
+    inline QString documentFileName() const { return m_fileName; }
 
     /*!
      * Saves document. Calls saveDocumentAs() if needed.
@@ -179,6 +223,11 @@ public:
     void toggleVirtualKeyboardVisibility();
 
 protected:
+    // tool identifiers
+    static QString panToolFactoryId();
+    static QString textToolFactoryId();
+    static QString cellToolFactoryId();
+
     // -- for implementation --
 
     /*!
@@ -192,10 +241,10 @@ protected:
     virtual QMessageBox::StandardButton askQuestion(QuestionType type, const QString& messageText = QString()) = 0;
 
     /*!
-     * Starts new instance of the application and opens document from @a fileName.
-     * If @a isNewDocument is true, new document is created.
+     * Starts new instance of the application and opens documents as specified by @a args.
+     * @return true on success.
      */
-    virtual void startNewInstance(const QString& fileName, bool isNewDocument) = 0;
+    virtual bool startNewInstance(const KoAbstractApplicationOpenDocumentArguments& args) = 0;
 
     /*!
      * Shows or hides progress bar indicator.
@@ -232,11 +281,6 @@ protected:
     virtual void setWindowTitle(const QString& title) = 0;
 
     /*!
-     * @return central widget for application view.
-     */
-    virtual QWidget* centralWidget () const = 0;
-
-    /*!
      * Update the enabled/disabled state of actions depending on if a document is currently
      * loaded.
      */
@@ -257,6 +301,13 @@ protected:
      */
     virtual bool isVirtualKeyboardVisible() const = 0;
 
+    /*!
+     * @return external cell editor for spreadsheets.
+     * 0 can be returned, in this case edited text will not be transferred to the editor 
+     * but application will still work properly.
+     */
+    virtual KoExternalEditorInterface* createExternalCellEditor(KoCellTool* cellTool) const = 0;
+
     // -- for possible reimplementation --
 
     /*!
@@ -264,6 +315,11 @@ protected:
      * @see document(), KWDocument::pageSetupChanged()
      */
     virtual void documentPageSetupChanged();
+
+    /*!
+     * @return true if editing mode is on.
+     */
+    bool editingMode() const;
 
     /*!
      * Sets editing mode on or off. @return true on success.
@@ -317,7 +373,12 @@ protected:
     /*!
      * @return controller.
      */
-    inline KoCanvasControllerWidget* controller() const { return m_controller; }
+    inline KoCanvasController* controller() const { return m_controller; }
+
+    /*!
+     * @return controller widget or 0 if controller is not based on QWidget.
+     */
+    KoCanvasControllerWidget* controllerWidget() const;
 
     /*!
      * @return text editor object.
@@ -327,7 +388,17 @@ protected:
     /*!
      * Pointer to KWView
      */
-    KWView* kwordView() const;
+    KWView* wordsView() const;
+
+    /*!
+     * Controls visibility of horizontal scroll bar of the document view.
+     */
+    void setHorizontalScrollBarVisible(bool set);
+
+    /*!
+     * Controls visibility of vertical scroll bar of the document view.
+     */
+    void setVerticalScrollBarVisible(bool set);
 
     /*!
      * Sets splash screen to @a splash.
@@ -382,17 +453,26 @@ protected:
      */
     QString currentSheetName() const;
 
-    StoreButtonPreview *storeButtonPreview() const;
+    KoCellTool* cellTool() const;
 
-    FoCellTool* cellTool() const;
-
-//! @todo remove
-    PresentationTool *presentationTool() const;
-
-//! @todo remove
-    void setPresentationTool(PresentationTool *tool);
+    /*!
+     * Invoked when the currently active tool changes.
+     */
+    virtual void activeToolChanged(KoCanvasController* canvas, int uniqueToolId);
 
     QSplashScreen* splash() const { return m_splash; }
+
+    /*!
+     * Updates window title for @a fileName name.
+     */
+    void updateWindowTitle(const QString& fileName);
+
+    /*!
+     * If @a set is true only document name is displayed and not application name.
+     * This is to conserve space on small displays.
+     * The default is false.
+     */
+    void setOnlyDisplayDocumentNameInTitle(bool set);
 
 //! @todo make private
     bool m_firstChar;
@@ -421,7 +501,7 @@ protected:
 private:
     inline QObject *thisObject() { return dynamic_cast<QObject*>(this); }
 
-    bool saveDocumentInternal(const QString& fileName);
+    bool saveDocumentInternal(QString fileName);
 
 #if 0
     /*!
@@ -429,6 +509,11 @@ private:
      */
     KoAbstractApplicationSignalReceiver *m_signalReceiver;
 #endif
+
+    /*!
+     * Central widget for application view.
+     */
+    QWidget* m_centralWidget;
 
     /*!
      * Name of the opened file.
@@ -440,6 +525,10 @@ private:
      */
     QString m_fileNameToOpen;
 
+    mutable QStringList m_supportedExtensions;
+
+    mutable QStringList m_supportedFilters;
+
     /*!
      * Pointer to KoDocument
      */
@@ -449,6 +538,11 @@ private:
      * true if document is currently being loaded
      */
     bool m_isLoading;
+
+    /*!
+     * true if editing mode is on
+     */
+    bool m_editingMode;
 
     /*!
      * flag for checking open document type
@@ -483,30 +577,31 @@ private:
     /*!
      * Pointer to KoCanvasController
      */
-    KoCanvasControllerWidget *m_controller;
+    KoCanvasController *m_controller;
 
     /*!
-     * Pointer to FreOffice CellTool
+     * Pointer to dedicated spreadsheet's CellTool
      */
-    FoCellTool *m_cellTool;
-
-    FoCellToolFactory *m_cellToolFactory;
+    KoCellTool *m_cellTool;
 
     /*!
-     * pointer to preview button store
+     * Pointer to factory providing spreadsheet's CellTool
      */
-    StoreButtonPreview *m_storeButtonPreview;
+    KoCellToolFactory *m_cellToolFactory;
 
     /*!
      * Pointer to splash class
      */
     QSplashScreen *m_splash;
-    /*!
-     * Pointer to presentation drawing tools
-     */
-    PresentationTool *m_presentationTool;
 
-//    friend class KoAbstractApplicationSignalReceiver;
+    /*!
+     * If @a set is true only document name is displayed and not application name.
+     * @see setOnlyDisplayDocumentNameInTitle()
+     */
+    bool m_onlyDisplayDocumentNameInTitle;
+
+    friend class KoCellTool;
+    friend class KoCellToolFactory;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,25 +17,29 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "RemoveSheet.h"
+#include "KoCellToolFactory.h"
+#include "KoAbstractApplicationController.h"
 
-using Calligra::Tables::Sheet;
-using Calligra::Tables::Map;
+#include <KLocale>
 
-RemoveSheet::RemoveSheet(Calligra::Tables::Sheet* s)
+#include "KoCellTool.h"
+
+KoCellToolFactory::KoCellToolFactory(KoAbstractApplicationController *controller)
+      : KoToolFactoryBase(KoAbstractApplicationController::cellToolFactoryId()),
+        m_controller(controller)
 {
-    sheet = s;
-    map = sheet->map();
-    setText(i18n("Remove Sheet"));
+    setToolTip(i18n("Cell Tool"));
+    setIcon("kspread");
+    setToolType("CalligraTables");
+    setPriority(0);
+    setActivationShapeId("flake/always");
 }
 
-void RemoveSheet::redo()
+KoCellToolFactory::~KoCellToolFactory()
 {
-    sheet->map()->removeSheet(sheet);
 }
 
-void RemoveSheet::undo()
+KoToolBase* KoCellToolFactory::createTool(KoCanvasBase* canvas)
 {
-    sheet->map()->reviveSheet(sheet);
+    return new KoCellTool(m_controller, canvas);
 }
-

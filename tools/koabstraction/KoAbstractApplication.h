@@ -24,6 +24,9 @@
 
 #include "KoAbstractApplicationController.h"
 
+//! Intermediate class defining slots for custom office application.
+//! Do not inherit it, instead define KoAbstractApplicationBase typedef,
+//! e.g. as QMainWindow and include KoAbstractApplication.h header.
 class KoAbstractApplication : public KoAbstractApplicationBase, public KoAbstractApplicationController
 {
     Q_OBJECT
@@ -33,9 +36,21 @@ public:
 
 public slots:
     /*!
-     * Opens document from @a fileName. If @a isNewDocument is true, new document is created.
+     * Convenience method: opens one document pointed by @a fileName for viewing.
      */
-    virtual bool openDocument(const QString &fileName, bool isNewDocument = false);
+    virtual bool openDocument(const QString &fileName);
+
+    /*!
+     * Convenience method: opens one document pointed by @a fileName for editing as template.
+     */
+    virtual bool openDocumentAsTemplate(const QString &fileName);
+
+    /*!
+     * Opens documents as specified by @a args.
+     * See documentation of @a KoAbstractApplicationOpenDocumentArgumentsfor explanation
+     * of arguments @a args.
+     */
+    virtual bool openDocuments(const KoAbstractApplicationOpenDocumentArguments& args);
 
     /*!
      * Shows or hides virtual keyboard.
@@ -134,6 +149,9 @@ protected slots:
     bool setEditingMode(bool set);
 
     void showEditingMode() { setEditingMode(true); }
+
+    //! Implemented for KoAbstractApplicationController
+    virtual void activeToolChanged(KoCanvasController* canvas, int uniqueToolId);
 };
 
 #endif

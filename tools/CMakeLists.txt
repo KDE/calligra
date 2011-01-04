@@ -9,7 +9,7 @@ macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.o
 
 if(OKULAR_FOUND)
     add_subdirectory( okularodpgenerator )
-endif()
+endif(OKULAR_FOUND)
 
 macro_optional_find_package(X11)
 macro_optional_find_package(Qt4)
@@ -22,6 +22,7 @@ macro_log_feature(OPENSSL_FOUND "OpenSSL" "A toolkit implementing the Secure Soc
 
 if(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
     if(Q_WS_X11 AND SHOULD_BUILD_TABLES)
+      macro_optional_add_subdirectory( koabstraction )
       macro_optional_add_subdirectory( f-office )
     endif(Q_WS_X11 AND SHOULD_BUILD_TABLES)
 endif(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)

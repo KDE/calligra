@@ -18,24 +18,23 @@
 */
 
 // Local
-#include "FoCellTool.h"
+#include "KoCellTool.h"
 
-#include "FoExternalEditor.h"
-#include "FoCellTool.h"
+#include "KoAbstractApplicationController.h"
+#include "KoExternalEditorInterface.h"
+#include "KoCellTool.h"
 #include "FoCellEditor.h"
 
 // KOffice
-#include "Cell.h"
-#include "Style.h"
+#include <tables/Cell.h>
+#include <tables/Style.h>
+#include <tables/CellStorage.h>
+#include <tables/Sheet.h>
 
 #include "KoColor.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 #include "KoViewConverter.h"
-#include "CellStorage.h"
-#include "Cell.h"
-#include "Sheet.h"
-#include "Style.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 
@@ -46,13 +45,7 @@
                                      cell.comment().contains(m_searchString, exactMatch) ||\
                                      cell.link().contains(m_searchString,exactMatch)
 
-using Calligra::Tables::CellEditorBase;
-using Calligra::Tables::CellStorage;
-using Calligra::Tables::Sheet;
-using Calligra::Tables::Cell;
-using Calligra::Tables::Style;
-
-FoCellTool::FoCellTool(KoCanvasBase* canvas)
+KoCellTool::KoCellTool(KoAbstractApplicationController *controller, KoCanvasBase* canvas)
     : Calligra::Tables::CellTool(canvas),
       m_editor(0),
       m_currentfindPosition(0),
@@ -60,81 +53,86 @@ FoCellTool::FoCellTool(KoCanvasBase* canvas)
 {
     m_searchString.clear();
     m_matchedPosition.clear();
-    m_externalEditor=new FoExternalEditor();
-    m_externalEditor->setCellTool(this);
+    m_externalEditor = controller->createExternalCellEditor(this);
     m_findArea.setCoords(0,0,0,0);
 }
 
-FoCellTool::~FoCellTool()
+KoCellTool::~KoCellTool()
 {
 }
 
-void FoCellTool::selectFontSize(int size){
+void KoCellTool::selectFontSize(int size){
     fontSize(size);
 
     //below function will automatically adjust size of row as per font size we select
     adjustRow();
 }
 
-void FoCellTool::selectFontType(const QString& fonttype){
+void KoCellTool::selectFontType(const QString& fonttype){
     font(fonttype);
 }
 
-void FoCellTool::selectTextColor(const QColor &color) {
+void KoCellTool::selectTextColor(const QColor &color) {
     KoColor *textcolor = new KoColor(color,KoColorSpaceRegistry::instance()->rgb16(0));
     changeTextColor(*textcolor);
 }
 
-void FoCellTool::selectTextBackgroundColor(const QColor &color) {
+void KoCellTool::selectTextBackgroundColor(const QColor &color) {
     KoColor *textbackgroundcolor = new KoColor(color,KoColorSpaceRegistry::instance()->rgb16(0));
     changeBackgroundColor(*textbackgroundcolor);
 }
 
-FoExternalEditor *FoCellTool::externalEditor()
+KoExternalEditorInterface* KoCellTool::externalEditor() const
 {
     return m_externalEditor;
 }
 
-int FoCellTool::getFontSize() {
-    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+int KoCellTool::getFontSize() {
+    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+        selection()->activeSheet(), selection()->marker()).style();
     return style.fontSize();
 }
 
-QString FoCellTool::getFontType() {
-    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+QString KoCellTool::getFontType() {
+    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+        selection()->activeSheet(), selection()->marker()).style();
     return style.fontFamily();
 }
 
-bool FoCellTool::isFontBold() {
-    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+bool KoCellTool::isFontBold() {
+    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+        selection()->activeSheet(), selection()->marker()).style();
     return style.bold();
 }
 
-bool FoCellTool::isFontItalic() {
-    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+bool KoCellTool::isFontItalic() {
+    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+        selection()->activeSheet(), selection()->marker()).style();
     return style.italic();
 }
 
-bool FoCellTool::isFontUnderline() {
-    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+bool KoCellTool::isFontUnderline() {
+    const Calligra::Tables::Style style = Calligra::Tables::Cell(
+        selection()->activeSheet(), selection()->marker()).style();
     return style.underline();
 }
 
-Calligra::Tables::CellEditorBase* FoCellTool::editor() const
+Calligra::Tables::CellEditorBase* KoCellTool::editor() const
 {
    return m_editor;
 }
 
-bool FoCellTool::createEditor(bool clear, bool /*focus*/)
+bool KoCellTool::createEditor(bool clear, bool /*focus*/)
 {
     bool status=false;
-    const Cell cell(selection()->activeSheet(), selection()->marker());
+    const Calligra::Tables::Cell cell(selection()->activeSheet(), selection()->marker());
 
     if (selection()->activeSheet()->isProtected() && !cell.style().notProtected())
         return false;
 
     if(!editor()) {
-        m_editor=new FoCellEditor(this,canvas()->canvasWidget());
+#warning TODO create abstract interface for cell editor
+        m_editor = new FoCellEditor(this, canvas()->canvasWidget());
         m_editor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         if(m_editor) {
             status=true;
@@ -172,7 +170,7 @@ bool FoCellTool::createEditor(bool clear, bool /*focus*/)
         ypos += canvas()->viewConverter()->viewToDocumentY(canvas()->canvasController()->canvasOffsetY());
 
         // Setup the editor's palette.
-        const Style style = cell.effectiveStyle();
+        const Calligra::Tables::Style style = cell.effectiveStyle();
         QPalette editorPalette(m_editor->palette());
         QColor color = style.fontColor();
         if (!color.isValid())
@@ -206,15 +204,20 @@ bool FoCellTool::createEditor(bool clear, bool /*focus*/)
             m_editor->setText(cell.userInput());
 
         }
-        if(clear) {
-            m_externalEditor->clear();
-        } else {
-            m_externalEditor->setPlainText(editor()->toPlainText());
-            m_externalEditor->setCursorPosition(m_externalEditor->toPlainText().length());
-            connect(((FoCellEditor*)m_editor), SIGNAL(textChanged(const QString &)),
-                    m_externalEditor, SLOT(setText(const QString &)));
-            connect(m_externalEditor, SIGNAL(textChanged(const QString &)),
-                    ((FoCellEditor*)m_editor), SLOT(setText(const QString &)));
+        if (m_externalEditor) {
+            if (clear) {
+                m_externalEditor->clear();
+            }
+            else {
+                m_externalEditor->setPlainText(editor()->toPlainText());
+                m_externalEditor->setCursorPosition(m_externalEditor->toPlainText().length());
+                connect(((FoCellEditor*)m_editor), SIGNAL(textChanged(const QString &)),
+                        this, SLOT(setExternalText(const QString &)));
+                if (dynamic_cast<QObject*>(m_externalEditor)) {
+                    connect(dynamic_cast<QObject*>(m_externalEditor), SIGNAL(textChanged(const QString &)),
+                            this, SLOT(setText(const QString &)));
+                }
+            }
         }
         m_editor->setFocus();
         m_editor->setCursorPosition(m_editor->toPlainText().length());
@@ -222,7 +225,19 @@ bool FoCellTool::createEditor(bool clear, bool /*focus*/)
     return status;
 }
 
-void FoCellTool::deleteEditor(bool saveChanges, bool expandMatrix)
+void KoCellTool::setText(const QString& text)
+{
+    if (sender() == m_editor) {
+        if (m_externalEditor) {
+            m_externalEditor->setText(text);
+        }
+    }
+    else if (sender() == dynamic_cast<QObject*>(m_externalEditor)) {
+        m_editor->setText(text);
+    }
+}
+
+void KoCellTool::deleteEditor(bool saveChanges, bool expandMatrix)
 {
     if(!m_editor) {
         return;
@@ -230,7 +245,7 @@ void FoCellTool::deleteEditor(bool saveChanges, bool expandMatrix)
     m_editorContents=m_editor->toPlainText();
 
     if (saveChanges) {
-        CellToolBase::applyUserInput(m_editorContents, expandMatrix);
+        Calligra::Tables::CellToolBase::applyUserInput(m_editorContents, expandMatrix);
     } else {
         selection()->update();
     }
@@ -242,7 +257,7 @@ void FoCellTool::deleteEditor(bool saveChanges, bool expandMatrix)
 
 
 
-void FoCellTool::keyPressEvent(QKeyEvent *event)
+void KoCellTool::keyPressEvent(QKeyEvent *event)
 {
     Calligra::Tables::CellTool::keyPressEvent(event);
     if(event->key() == Qt::Key_Up ||
@@ -258,7 +273,7 @@ void FoCellTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void FoCellTool::mousePressEvent(KoPointerEvent* event)
+void KoCellTool::mousePressEvent(KoPointerEvent* event)
 {
     Calligra::Tables::CellTool::mousePressEvent(event);
     if (selection()->isSingular()) {
@@ -272,7 +287,7 @@ void FoCellTool::mousePressEvent(KoPointerEvent* event)
     createEditor(false);*/
 }
 
-void FoCellTool::slotSearchTextChanged(const QString &text)
+void KoCellTool::slotSearchTextChanged(const QString &text)
 {
     if(text.isEmpty() || text.isNull()) {
         return;
@@ -282,7 +297,7 @@ void FoCellTool::slotSearchTextChanged(const QString &text)
     initializeFind();
 }
 
-void FoCellTool::initializeFind()
+void KoCellTool::initializeFind()
 {
     Calligra::Tables::Sheet * currentSheet = selection()->activeSheet();
     QRect filledRect = currentSheet->usedArea(true);
@@ -295,7 +310,7 @@ void FoCellTool::initializeFind()
     find();
 }
 
-int FoCellTool::find()
+int KoCellTool::find()
 {
     //search row wise i.e reading order
     int row=m_findArea.left();
@@ -327,14 +342,14 @@ int FoCellTool::find()
     return 0;
 }
 
-void FoCellTool::slotHighlight(QPoint goToCell)
+void KoCellTool::slotHighlight(QPoint goToCell)
 {
     //here we select the cell where the string was found.
     selection()->initialize(goToCell);
     Calligra::Tables::CellToolBase::scrollToCell(goToCell);
 }
 
-void FoCellTool::findNext()
+void KoCellTool::findNext()
 {
     if(m_currentfindPosition<(m_matchedPosition.length()-1) && m_currentfindPosition>=0) {
         m_currentfindPosition++;
@@ -345,7 +360,7 @@ void FoCellTool::findNext()
     slotHighlight(m_matchedPosition.value(m_currentfindPosition,QPoint(1,1)));
 }
 
-void FoCellTool::findPrevious()
+void KoCellTool::findPrevious()
 {
     if(m_currentfindPosition<(m_matchedPosition.length()-1) && m_currentfindPosition>=0) {
         m_currentfindPosition--;
@@ -356,7 +371,7 @@ void FoCellTool::findPrevious()
     slotHighlight(m_matchedPosition.value(m_currentfindPosition,QPoint(1,1)));
 }
 
-QPair<int,int> FoCellTool::currentSearchStatistics()
+QPair<int,int> KoCellTool::currentSearchStatistics()
 {
     if(m_currentfindPosition<0 || m_currentfindPosition>=m_matchedPosition.length()) {
         return qMakePair(0,0);
@@ -365,7 +380,9 @@ QPair<int,int> FoCellTool::currentSearchStatistics()
 }
 
 
-void FoCellTool::setCaseSensitive(bool isSensitive)
+void KoCellTool::setCaseSensitive(bool isSensitive)
 {
     m_searchCaseSensitive=isSensitive;
 }
+
+#include "KoCellTool.moc"

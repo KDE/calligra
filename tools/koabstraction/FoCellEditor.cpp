@@ -18,23 +18,15 @@
 */
 #include "FoCellEditor.h"
 
-#include "ui/Selection.h"
-#include "ui/CellToolBase.h"
-#include "KoViewConverter.h"
-#include "KoDpi.h"
-#include "KoUnit.h"
-#include "ui/CellEditorBase.h"
+#include <tables/ui/Selection.h>
+#include <tables/ui/CellToolBase.h>
+#include <tables/Cell.h>
+#include <KoViewConverter.h>
+#include <KoDpi.h>
+#include <KoUnit.h>
 
-#include "Cell.h"
-
-#include <QGtkStyle>
 #include <QScrollBar>
 #include <QFocusEvent>
-#include <QCursor>
-
-using Calligra::Tables::Cell;
-using Calligra::Tables::Selection;
-using Calligra::Tables::CellToolBase;
 
 FoCellEditor::FoCellEditor(Calligra::Tables::CellToolBase *cellTool, QWidget *parent)
     :QTextEdit(parent),
@@ -47,7 +39,7 @@ FoCellEditor::FoCellEditor(Calligra::Tables::CellToolBase *cellTool, QWidget *pa
     setFrameStyle(QFrame::NoFrame);
     setLineWidth(0);
     document()->setDocumentMargin(0);
-    const Cell cell(m_cellTool->selection()->activeSheet(), m_cellTool->selection()->marker());
+    const Calligra::Tables::Cell cell(m_cellTool->selection()->activeSheet(), m_cellTool->selection()->marker());
     const bool wrapText = cell.style().wrapText();
     Q_UNUSED(wrapText);
     setWordWrapMode(QTextOption::WordWrap);
@@ -217,7 +209,7 @@ void FoCellEditor::focusInEvent(QFocusEvent *event)
 {
     if (event->reason() != Qt::OtherFocusReason) {
         kDebug() << "induced by user";
-        m_cellTool->setLastEditorWithFocus(CellToolBase::EmbeddedEditor);
+        m_cellTool->setLastEditorWithFocus(Calligra::Tables::CellToolBase::EmbeddedEditor);
     }
     QTextEdit::focusInEvent(event);
 }
@@ -249,3 +241,5 @@ void FoCellEditor::keyPressEvent(QKeyEvent *event)
     }
     QTextEdit::keyPressEvent(event);
 }
+
+#include "FoCellEditor.moc"
