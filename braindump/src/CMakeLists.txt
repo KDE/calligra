@@ -43,9 +43,6 @@ set(braindump_SRCS
   import/ToolBoxFactory.cpp
   import/ToolDocker.cpp
   import/ToolDockerFactory.cpp
-  import/ZoomAction.cpp
-  import/ZoomController.cpp
-  import/ZoomInput.cpp
 )
 
 kde4_add_ui_files(braindump_SRCS
