@@ -31,8 +31,6 @@
 
 #include <kdebug.h>
 
-#include "calligra_tables_export.h"
-
 #include "Number.h"
 
 using namespace std;
