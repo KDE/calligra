@@ -21,50 +21,6 @@
 
 #include "KoAbstractApplication.h"
 
-// #include "Common.h"
-// #include <KoDocumentInfo.h>
-// #include <KoView.h>
-// #include <KoCanvasBase.h>
-// #include <kdemacros.h>
-// #include <KoCanvasControllerWidget.h>
-// #include <KoZoomMode.h>
-// #include <KoZoomController.h>
-// #include <KoToolProxy.h>
-// #include <KoToolBase.h>
-// #include <KoResourceManager.h>
-// #include <KoToolManager.h>
-// #include <KoShapeManager.h>
-// #include <KoShapeUserData.h>
-// #include <KoTextShapeData.h>
-// #include <KoSelection.h>
-// #include <KoPADocument.h>
-// #include <KoTextEditor.h>
-// #include <KoPAView.h>
-// #include <KoStore.h>
-// #include <KoCanvasBase.h>
-// #include <KoToolRegistry.h>
-// #include <styles/KoParagraphStyle.h>
-// #include <styles/KoListLevelProperties.h>
-// #include <KoList.h>
-// #include <Map.h>
-// #include <Doc.h>
-// #include <part/View.h>
-// #include <Sheet.h>
-// #include <tables/ui/Selection.h>
-// #include <KWView.h>
-// 
-// #include <KMimeType>
-// #include <KLocale>
-// #include <kparts/part.h>
-// #include <kparts/componentfactory.h>
-// #include <kparts/event.h>
-// #include <kundostack.h>
-// 
-// #include <QApplication>
-// #include <QFile>
-// #include <QtDebug>
-// #include <QSplashScreen>
-
 KoAbstractApplication::KoAbstractApplication(QWidget *parent)
     : KoAbstractApplicationBase(parent)
 {
