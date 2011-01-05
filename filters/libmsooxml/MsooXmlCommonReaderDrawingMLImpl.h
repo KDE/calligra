@@ -822,9 +822,31 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
                  << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
     }
+#endif
+
     if (m_svgWidth > -1 && m_svgHeight > -1) {
+#ifdef PPTXXMLSLIDEREADER_CPP
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")){
+#endif
+        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")) {
+#ifdef XLSXXMLDRAWINGREADER_CPP
+            XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+            body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
+            body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
+            QString y1 = EMU_TO_CM_STRING(f.m_rowOff);
+            QString y2 = EMU_TO_CM_STRING(f.m_rowOff + m_svgHeight);
+            QString x1 = EMU_TO_CM_STRING(f.m_colOff);
+            QString x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth);
+            if (m_rot != 0) {
+                qreal angle, xDiff, yDiff;
+                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                //! @todo, in case of connector, these should maybe be reversed?
+                x1 = EMU_TO_CM_STRING(f.m_colOff + xDiff);
+                y1 = EMU_TO_CM_STRING(f.m_rowOff + yDiff);
+                x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth - xDiff);
+                y2 = EMU_TO_CM_STRING(f.m_rowOff + m_svgHeight - yDiff);
+            }
+#else
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
@@ -838,6 +860,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
                 y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
             }
+#endif
             if (m_flipV) {
                 QString temp = y2;
                 y2 = y1;
@@ -854,6 +877,23 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:y2", y2);
         }
         else {
+#ifdef XLSXXMLDRAWINGREADER_CPP
+            // No rotation support for xlsx yet
+            if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+                XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+                body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
+                body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
+                if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+                    f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
+                    body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
+                    body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
+                    body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
+                } else {
+                    body->addAttributePt("svg:width", EMU_TO_POINT(m_svgWidth));
+                    body->addAttributePt("svg:height", EMU_TO_POINT(m_svgHeight));
+                }
+            }
+#else
             if (m_rot == 0) {
                 body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
                 body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -867,6 +907,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+#endif
             if (m_contentType == "custom") {
                 body->startElement("draw:enhanced-geometry");
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
@@ -883,26 +924,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             }
         }
     }
-#elif defined(XLSXXMLDRAWINGREADER_CPP)
-    if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
-        XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
-        body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
-        body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
-        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
-            f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-            body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
-            body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
-            body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
-        } else {
-            body->addAttributePt("svg:width", EMU_TO_POINT(m_svgWidth));
-            body->addAttributePt("svg:height", EMU_TO_POINT(m_svgHeight));
-        }
-    }
-#else
-#ifdef __GNUC__
-#warning TODO: docx
-#endif
-#endif // PPTXXMLSLIDEREADER_H
 }
 
 #undef CURRENT_EL
@@ -5021,7 +5042,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
-            ELSE_TRY_READ_IF(gradFill) // we do not support this properly, at least we get the color
+            //ELSE_TRY_READ_IF(gradFill) // we do not support this properly, thus disabded for the moment
             ELSE_TRY_READ_IF(latin)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
