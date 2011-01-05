@@ -25,7 +25,7 @@
 
 #include "AboutData.h"
 #include "MainWindow.h"
-#include "import/Global.h"
+#include "KoGlobal.h"
 #include "RootSection.h"
 #include "SectionsIO.h"
 
@@ -47,7 +47,7 @@ int main( int argc, char **argv )
   }
 
   KIconLoader::global()->addAppDir("koffice");
-  Global::initialize();
+  KoGlobal::initialize();
 
   KComponentData* m_documentData = new KComponentData(about);
   

@@ -76,12 +76,7 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
     // Remove me when 'T/U' pathshape interpreation from odf tech committee has been agreed
     return true;
 
-    // Picture fill in custom-shape supported
-    if (!m_xlinkHref.isEmpty()) {
-        return true;
-    }
-
-    // Remove me when custom-shape suppors rotation
+    // Remove me when custom-shape suppors rotation properly
     if (m_rot != 0) {
         return true;
     }
@@ -492,6 +487,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
             ELSE_WRONG_FORMAT
         }
     }
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    inheritShapeGeometry();
+#endif
+
     READ_EPILOGUE
 }
 
@@ -803,7 +803,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
 
-    // Inheriting shape placement information from layout/master
     inheritShapePosition();
 
     if (m_context->type == Slide) {
@@ -888,17 +887,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 #warning TODO: docx
 #endif
 #endif // PPTXXMLSLIDEREADER_H
-    // In case of a blipFill
-    if (!m_xlinkHref.isEmpty()) {
-        body->startElement("draw:image");
-        body->addAttribute("xlink:href", m_xlinkHref);
-        body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:show", "embed");
-        body->addAttribute("xlink:actuate", "onLoad");
-        body->endElement(); //draw:image
-        m_xlinkHref.clear();
-    }
-
 }
 
 #undef CURRENT_EL
@@ -1164,6 +1152,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             }
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IN_CONTEXT(blipFill)
+                if (!m_xlinkHref.isEmpty()) {
+                    KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
+                    fillStyle.addProperty("xlink:href", m_xlinkHref);
+                    fillStyle.addProperty("xlink:type", "simple");
+                    fillStyle.addProperty("xlink:actuate", "onLoad");
+                    const QString imageName = mainStyles->insert(fillStyle);
+                    m_currentDrawStyle->addProperty("draw:fill", "bitmap");
+                    m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
+                    m_xlinkHref.clear();
+                }
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP

@@ -2,6 +2,7 @@
 Type=Service
 Name=KSpread Microsoft Excel Export Filter
 Name[ca]=Filtre d'importació Microsoft Excel per al KSpread
+Name[ca@valencia]=Filtre d'importació Microsoft Excel per al KSpread
 Name[da]=KSpread Microsoft Excel eksportfilter
 Name[de]=KSpread MS-Excel-Exportfilter
 Name[en_GB]=KSpread Microsoft Excel Export Filter
