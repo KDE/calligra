@@ -427,7 +427,7 @@ void KWTextDocumentLayout::layout()
         }
         newParagraph = false;
         const int anchorCount = m_newAnchors.count();
-        m_state->fitLineForRunAround();
+        m_state->fitLineForRunAround( /* resetHorizontalPosition */ false );
         if (m_state->layout->lineCount() == 1 && anchorCount != m_newAnchors.count()) {
             // start parag over so we can correctly take the just found anchors into account.
             m_state->layout->endLayout();
@@ -528,7 +528,7 @@ void KWTextDocumentLayout::layout()
                 m_state->clearTillEnd();
                 break; //break so the next line (which contain the same) is fitted on new shape
             }
-            m_state->fitLineForRunAround(true);
+            m_state->fitLineForRunAround( /* resetHorizontalPosition */ true);
 #ifdef DEBUG_TEXT
             if (line.isValid()) {
                 QTextBlock b = document()->findBlock(m_state->cursorPosition());

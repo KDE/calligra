@@ -126,6 +126,30 @@ public:
     QRectF expandVisibleRect(const QRectF &rect) const {
         return rect; //FIXME is that correct?
     }
+
+    bool addLine() {
+        kDebug();
+        return true; // line successfully added
+    }
+
+    void registerRunAroundShape(KoShape* shape) {
+        kDebug() << shape;
+    }
+    void updateRunAroundShape(KoShape* shape) {
+        kDebug() << shape;
+    }
+    void unregisterAllRunAroundShapes() {
+        kDebug();
+    }
+    void fitLineForRunAround(bool resetHorizontalPosition) {
+        kDebug() << resetHorizontalPosition;
+    }
+
+    QTextLine createLine() {
+        QTextLayout *lay = m_doc->begin().layout();
+        return lay->createLine();
+    }
+
     QTextDocument *m_doc;
     QTextBlock m_currentBlock;
     qreal m_y;
@@ -181,7 +205,6 @@ void TestDocumentLayout::placeAnchoredFrame()
     anchor->setOffset(QPointF(23, 45));
     QTextCursor cursor(doc);
 
-#if 0
     KoInlineTextObjectManager *manager = new KoInlineTextObjectManager();
     layout->setInlineTextObjectManager(manager);
     MockLayoutState *state = new MockLayoutState(doc);
@@ -232,11 +255,6 @@ void TestDocumentLayout::placeAnchoredFrame()
     layout->layout();
     // image is 100 wide, now centered in a parent of 200 so X = 50
     QCOMPARE(picture->position(), QPointF(50, 0));
-#else
-    #ifdef __GNUC__
-        #warning TODO port unittest
-    #endif
-#endif
 }
 
 void TestDocumentLayout::placeAnchoredFrame2_data()
@@ -305,7 +323,6 @@ void TestDocumentLayout::placeAnchoredFrame2()
 
 void TestDocumentLayout::placeAnchoredFrame3()
 {
-#if 0
     // basic inline frame that acts like a really big character
     initForNewTest(QString(loremIpsum));
     MockShape *picture = new MockShape();
@@ -354,11 +371,6 @@ void TestDocumentLayout::placeAnchoredFrame3()
     QVERIFY(line.height() < 20);
     QCOMPARE(line.position().x(), 0.);
     QVERIFY(qAbs(line.position().y() - 14.4) <  0.125);
-#else
-    #ifdef __GNUC__
-        #warning TODO port unittest
-    #endif
-#endif
 }
 
 void TestDocumentLayout::insertPicture(QTextCursor &cursor, QPointF offSet, QSizeF size)
@@ -394,18 +406,12 @@ void TestDocumentLayout::testLine(int linenumber, QPointF position, qreal width)
 }
 
 void TestDocumentLayout::initAdvancedRunAroundTest() {
-#if 0
     initForNewTest(QString(loremIpsum));
     MockLayoutState *state = new MockLayoutState(doc);
     layout->setLayout(state);
     state->shape = shape1;
     KoInlineTextObjectManager *manager = new KoInlineTextObjectManager();
     layout->setInlineTextObjectManager(manager);
-#else
-    #ifdef __GNUC__
-        #warning TODO port unittest
-    #endif
-#endif
 }
 
 void TestDocumentLayout::testAdvancedRunAround1()
