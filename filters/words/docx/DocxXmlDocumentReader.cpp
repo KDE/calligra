@@ -5187,9 +5187,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
     READ_PROLOGUE
     readWrap();
 
-    saveStyleWrap("run-through");
-    m_currentDrawStyle->addProperty(QLatin1String("style:run-through"),
-                                    (m_behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground", KoGenStyle::GraphicType);
+    // Note that the name wrapThrough is misleading, it does not mean run-through it just means that wrapping
+    // happens potentially inside the container
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);

@@ -2,3 +2,5 @@
 *~
 .kateconfig
 CMakeLists.txt.user
+.directory
+

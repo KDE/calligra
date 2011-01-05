@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Quickstates Plugin
+
+X-KDE-ServiceTypes=Braindump/Extensions
+Type=Service
+X-KDE-Library=braindumpquickstates
+X-Braindump-Version=1
