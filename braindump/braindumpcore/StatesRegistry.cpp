@@ -133,7 +133,7 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename )
 
 StatesRegistry::StatesRegistry() : d(new Private) {
   KGlobal::mainComponent().dirs()->addResourceType("stateshape_states", "data", "stateshape/states/");
-  QStringList statesFilenames = KGlobal::mainComponent().dirs()->findAllResources("stateshape_states", "*.rc",  KStandardDirs::Recursive);
+  QStringList statesFilenames = KGlobal::mainComponent().dirs()->findAllResources("stateshape_states", "*.xml", KStandardDirs::Recursive);
 
   foreach(const QString& filename, statesFilenames)
   {

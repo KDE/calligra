@@ -31,7 +31,7 @@
 #include "commands/InsertSectionCommand.h"
 #include "commands/MoveSectionCommand.h"
 
-DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : DocumentSectionModel(parent), m_document(document)
+DocumentModel::DocumentModel( QObject* parent, RootSection* document ) : KoDocumentSectionModel(parent), m_document(document)
 {
   Q_ASSERT(m_document);
 }

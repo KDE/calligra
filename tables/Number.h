@@ -20,6 +20,8 @@
 #ifndef CALLIGRA_TABLES_NUMBER_H
 #define CALLIGRA_TABLES_NUMBER_H
 
+#include "calligra_tables_export.h"
+
 // #define CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
 #ifndef CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
@@ -69,8 +71,6 @@ inline Number atgh(const Number &n)
 #else // CALLIGRA_TABLES_HIGH_PRECISION_SUPPORT
 
 #include <QSharedDataPointer>
-
-#include "calligra_tables_export.h"
 
 #include <complex>
 

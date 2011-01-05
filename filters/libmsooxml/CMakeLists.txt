@@ -74,6 +74,8 @@ install( FILES
     MsooXmlDrawingTableStyleReader.h
     MsooXmlDrawingTableStyle.h
     VmlDrawingReader.h
+    ComplexShapeHandler.h
+    PredefinedShapeHelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )
 endif (FALSE)

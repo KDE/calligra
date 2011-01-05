@@ -87,21 +87,6 @@ PptxShapeProperties& PptxShapeProperties::operator=(const PptxShapeProperties &o
 
 // -------------------
 
-PptxSlideProperties::PptxSlideProperties()
-{
-}
-
-PptxSlideProperties::~PptxSlideProperties()
-{
-}
-
-void PptxSlideProperties::clear()
-{
-    shapesMap.clear();
-}
-
-// -------------------
-
 PptxPlaceholder::PptxPlaceholder()
 {
 }
@@ -118,23 +103,12 @@ PptxPlaceholder::~PptxPlaceholder()
 
 // -------------------
 
-PptxSlideLayoutProperties::PptxSlideLayoutProperties()
+PptxSlideProperties::PptxSlideProperties()
 {
     m_drawingPageProperties = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
 }
 
-PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
-{
-}
-
-// -------------------
-
-PptxSlideMasterPageProperties::PptxSlideMasterPageProperties()
-{
-    m_drawingPageProperties = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
-}
-
-void PptxSlideMasterPageProperties::clear()
+PptxSlideProperties::~PptxSlideProperties()
 {
 }
 
@@ -143,9 +117,9 @@ void PptxSlideMasterPageProperties::clear()
 PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxImport& _import, const QString& _path, const QString& _file,
     uint _slideNumber, MSOOXML::DrawingMLTheme* _themes,
-    PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
-    PptxSlideLayoutProperties* _slideLayoutProperties,
-    PptxSlideMasterPageProperties* _slideMasterPageProperties,
+    PptxXmlSlideReader::Type _type,
+    PptxSlideProperties* _slideLayoutProperties,
+    PptxSlideProperties* _slideMasterProperties,
     MSOOXML::MsooXmlRelationships& _relationships,
     QMap<int, QString> _commentAuthors,
     QMap<QString, QString> masterColorMap,
@@ -154,8 +128,8 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(_themes), type(_type),
-        slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
-        slideMasterPageProperties(_slideMasterPageProperties),
+        slideLayoutProperties(_slideLayoutProperties),
+        slideMasterProperties(_slideMasterProperties),
         commentAuthors(_commentAuthors),
         colorMap(masterColorMap), oleReplacements(_oleReplacements), firstReadingRound(false),
         tableStylesFilePath(_tableStylesFilePath)
@@ -473,7 +447,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                                                     *m_currentDrawStyle, KoGenStyle::DrawingPageType);
             // Only get properties from master page if they were not defined in the layout
             if (m_currentDrawStyle->isEmpty()) {
-                MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->m_drawingPageProperties,
+                MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->m_drawingPageProperties,
                                                         *m_currentDrawStyle, KoGenStyle::DrawingPageType);
             }
         } else {
@@ -865,7 +839,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMap()
         const QString handledAttr = attrs.at(index).name().toString();
         const QString attrValue = attrs.value(handledAttr).toString();
         m_context->colorMap[handledAttr] = attrValue;
-        m_context->slideMasterPageProperties->colorMap[handledAttr] = attrValue;
+        m_context->slideMasterProperties->colorMap[handledAttr] = attrValue;
         ++index;
     }
 
@@ -933,7 +907,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
     if (!m_currentDrawStyle->isEmpty()) {
         if (m_context->type == SlideMaster) {
             MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
-                                                m_context->slideMasterPageProperties->m_drawingPageProperties,
+                                                m_context->slideMasterProperties->m_drawingPageProperties,
                                                 KoGenStyle::DrawingPageType);
         } else if (m_context->type == SlideLayout) {
             MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
@@ -1513,10 +1487,10 @@ void PptxXmlSlideReader::saveCurrentListStyles()
 
     if (m_context->type == SlideMaster) {
         if (!d->phIdx.isEmpty()) {
-            m_context->slideMasterPageProperties->listStyles[d->phIdx] = m_currentCombinedBulletProperties;
+            m_context->slideMasterProperties->listStyles[d->phIdx] = m_currentCombinedBulletProperties;
         }
         if (!d->phType.isEmpty()) {
-            m_context->slideMasterPageProperties->listStyles[d->phType] = m_currentCombinedBulletProperties;
+            m_context->slideMasterProperties->listStyles[d->phType] = m_currentCombinedBulletProperties;
         }
     }
     else if (m_context->type == SlideLayout) {
@@ -1543,12 +1517,12 @@ void PptxXmlSlideReader::saveCurrentStyles()
     }
     if (m_context->type == SlideMaster) {
         if (!d->phIdx.isEmpty()) {
-            m_context->slideMasterPageProperties->textStyles[d->phIdx] = m_currentCombinedTextStyles;
-            m_context->slideMasterPageProperties->styles[d->phIdx] = m_currentCombinedParagraphStyles;
+            m_context->slideMasterProperties->textStyles[d->phIdx] = m_currentCombinedTextStyles;
+            m_context->slideMasterProperties->styles[d->phIdx] = m_currentCombinedParagraphStyles;
         }
         if (!d->phType.isEmpty()) {
-            m_context->slideMasterPageProperties->textStyles[d->phType] = m_currentCombinedTextStyles;
-            m_context->slideMasterPageProperties->styles[d->phType] = m_currentCombinedParagraphStyles;
+            m_context->slideMasterProperties->textStyles[d->phType] = m_currentCombinedTextStyles;
+            m_context->slideMasterProperties->styles[d->phType] = m_currentCombinedParagraphStyles;
         }
     }
     else if (m_context->type == SlideLayout) {
@@ -1575,20 +1549,20 @@ void PptxXmlSlideReader::saveBodyProperties()
     // Todo: extend this in the future to save other peroperties too
     if (m_context->type == SlideMaster) {
         if (!d->phIdx.isEmpty()) {
-            m_context->slideMasterPageProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
-            m_context->slideMasterPageProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
-            m_context->slideMasterPageProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
-            m_context->slideMasterPageProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
-            m_context->slideMasterPageProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideMasterPageProperties->m_textAutoFit[d->phIdx] = m_normAutoFit;
+            m_context->slideMasterProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
+            m_context->slideMasterProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
+            m_context->slideMasterProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
+            m_context->slideMasterProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
+            m_context->slideMasterProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
+            m_context->slideMasterProperties->m_textAutoFit[d->phIdx] = m_normAutoFit;
         }
         if (!d->phType.isEmpty()) {
-            m_context->slideMasterPageProperties->textShapePositions[d->phType] = m_shapeTextPosition;
-            m_context->slideMasterPageProperties->textLeftBorders[d->phType] = m_shapeTextLeftOff;
-            m_context->slideMasterPageProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
-            m_context->slideMasterPageProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
-            m_context->slideMasterPageProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideMasterPageProperties->m_textAutoFit[d->phType] = m_normAutoFit;
+            m_context->slideMasterProperties->textShapePositions[d->phType] = m_shapeTextPosition;
+            m_context->slideMasterProperties->textLeftBorders[d->phType] = m_shapeTextLeftOff;
+            m_context->slideMasterProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
+            m_context->slideMasterProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
+            m_context->slideMasterProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
+            m_context->slideMasterProperties->m_textAutoFit[d->phType] = m_normAutoFit;
         }
     }
     else if (m_context->type == SlideLayout) {
@@ -1632,57 +1606,57 @@ void PptxXmlSlideReader::inheritBodyProperties()
     if (!d->phIdx.isEmpty()) {
         // In all cases, we take them first from masterslide
 
-        position = m_context->slideMasterPageProperties->textShapePositions.value(d->phIdx);
+        position = m_context->slideMasterProperties->textShapePositions.value(d->phIdx);
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
         }
-        left = m_context->slideMasterPageProperties->textLeftBorders.value(d->phIdx);
+        left = m_context->slideMasterProperties->textLeftBorders.value(d->phIdx);
         if (!left.isEmpty()) {
             m_shapeTextLeftOff = left;
         }
-        right = m_context->slideMasterPageProperties->textRightBorders.value(d->phIdx);
+        right = m_context->slideMasterProperties->textRightBorders.value(d->phIdx);
         if (!right.isEmpty()) {
             m_shapeTextLeftOff = right;
         }
-        top = m_context->slideMasterPageProperties->textTopBorders.value(d->phIdx);
+        top = m_context->slideMasterProperties->textTopBorders.value(d->phIdx);
         if (!top.isEmpty()) {
             m_shapeTextLeftOff = top;
         }
-        bottom = m_context->slideMasterPageProperties->textBottomBorders.value(d->phIdx);
+        bottom = m_context->slideMasterProperties->textBottomBorders.value(d->phIdx);
         if (!bottom.isEmpty()) {
             m_shapeTextLeftOff = bottom;
         }
-        if (m_context->slideMasterPageProperties->m_textAutoFit.value(d->phIdx) != MSOOXML::Utils::autoFitUnUsed) {
+        if (m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx) != MSOOXML::Utils::autoFitUnUsed) {
              if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideMasterPageProperties->m_textAutoFit.value(d->phIdx);
+                 m_normAutoFit = m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx);
              }
         }
     }
     if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
-        position = m_context->slideMasterPageProperties->textShapePositions.value(d->phType);
+        position = m_context->slideMasterProperties->textShapePositions.value(d->phType);
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
         }
-        left = m_context->slideMasterPageProperties->textLeftBorders.value(d->phType);
+        left = m_context->slideMasterProperties->textLeftBorders.value(d->phType);
         if (!left.isEmpty()) {
             m_shapeTextLeftOff = left;
         }
-        right = m_context->slideMasterPageProperties->textRightBorders.value(d->phType);
+        right = m_context->slideMasterProperties->textRightBorders.value(d->phType);
         if (!right.isEmpty()) {
             m_shapeTextLeftOff = right;
         }
-        top = m_context->slideMasterPageProperties->textTopBorders.value(d->phType);
+        top = m_context->slideMasterProperties->textTopBorders.value(d->phType);
         if (!top.isEmpty()) {
             m_shapeTextLeftOff = top;
         }
-        bottom = m_context->slideMasterPageProperties->textBottomBorders.value(d->phType);
+        bottom = m_context->slideMasterProperties->textBottomBorders.value(d->phType);
         if (!bottom.isEmpty()) {
             m_shapeTextLeftOff = bottom;
         }
-        if (m_context->slideMasterPageProperties->m_textAutoFit.value(d->phType) != MSOOXML::Utils::autoFitUnUsed) {
+        if (m_context->slideMasterProperties->m_textAutoFit.value(d->phType) != MSOOXML::Utils::autoFitUnUsed) {
              if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideMasterPageProperties->m_textAutoFit.value(d->phType);
+                 m_normAutoFit = m_context->slideMasterProperties->m_textAutoFit.value(d->phType);
              }
         }
     }
@@ -1789,12 +1763,12 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
 
     if (!d->phIdx.isEmpty()) {
         // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phIdx][copyLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[d->phIdx][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
     if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phType][copyLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[d->phType][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
     if (!d->phType.isEmpty()) {
@@ -1848,7 +1822,7 @@ void PptxXmlSlideReader::inheritListStyles()
 
     // Masterslide layer
     if (!d->phType.isEmpty()) {
-        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterPageProperties->listStyles[d->phType]);
+        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[d->phType]);
         while (i.hasNext()) {
             i.next();
             if (i.value().isEmpty()) {
@@ -1860,7 +1834,7 @@ void PptxXmlSlideReader::inheritListStyles()
         }
     }
     if (!d->phIdx.isEmpty()) {
-        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterPageProperties->listStyles[d->phIdx]);
+        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[d->phIdx]);
         while (i.hasNext()) {
             i.next();
             if (i.value().isEmpty()) {
@@ -1947,14 +1921,14 @@ void PptxXmlSlideReader::inheritShapePosition()
         // Loading from master if needed
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             if (!props) {
-                props = m_context->slideProperties->shapesMap.value(d->phType);
+                props = m_context->slideMasterProperties->shapesMap.value(d->phType);
                 if (!props) {
-                    props = m_context->slideProperties->shapesMap.value(d->phIdx);
+                    props = m_context->slideMasterProperties->shapesMap.value(d->phIdx);
                 }
                 if (!props) {
                     // In case there was nothing for this even in slideMaster, let's default to 'body' text position
                     // Spec doesn't say anything about this case, but in reality there are such documents
-                    props = m_context->slideProperties->shapesMap.value("body");
+                    props = m_context->slideMasterProperties->shapesMap.value("body");
                 }
             }
         }
@@ -1965,8 +1939,44 @@ void PptxXmlSlideReader::inheritShapePosition()
             m_svgHeight = props->height;
             m_rot = props->rot;
             kDebug() << "Copied from PptxShapeProperties:"
-                     << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
-                     << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
+                     << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
+        }
+    }
+}
+
+void PptxXmlSlideReader::inheritShapeGeometry()
+{
+    // Inheriting shape geometry
+    if (m_contentType.isEmpty()) {
+        if (m_context->type == Slide) {
+            m_contentType = m_context->slideLayoutProperties->contentTypeMap.value(d->phType);
+            if (m_contentType == "custom") {
+                m_customEquations = m_contentType = m_context->slideLayoutProperties->contentEquations.value(d->phType);
+                m_customPath = m_contentType = m_context->slideLayoutProperties->contentPath.value(d->phType);
+            }
+            if (m_contentType.isEmpty()) {
+                m_contentType = m_context->slideLayoutProperties->contentTypeMap.value(d->phIdx);
+                if (m_contentType == "custom") {
+                    m_customEquations = m_contentType = m_context->slideLayoutProperties->contentEquations.value(d->phIdx);
+                    m_customPath = m_contentType = m_context->slideLayoutProperties->contentPath.value(d->phIdx);
+                }
+            }
+        }
+        if (m_context->type == Slide || m_context->type == SlideLayout) {
+            if (m_contentType.isEmpty()) {
+                m_contentType = m_context->slideMasterProperties->contentTypeMap.value(d->phType);
+                if (m_contentType == "custom") {
+                    m_customEquations = m_contentType = m_context->slideMasterProperties->contentEquations.value(d->phType);
+                    m_customPath = m_contentType = m_context->slideMasterProperties->contentPath.value(d->phType);
+                }
+                if (m_contentType.isEmpty()) {
+                    m_contentType = m_context->slideMasterProperties->contentTypeMap.value(d->phIdx);
+                    if (m_contentType == "custom") {
+                        m_customEquations = m_contentType = m_context->slideMasterProperties->contentEquations.value(d->phIdx);
+                        m_customPath = m_contentType = m_context->slideMasterProperties->contentPath.value(d->phIdx);
+                    }
+                }
+            }
         }
     }
 }
@@ -1983,12 +1993,12 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
     // it will be overwritten by values from 1, and since it's the first time, it will be initialized to
     // to empty
     if (!d->phIdx.isEmpty()) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phIdx][listLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[d->phIdx][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
     }
     if (!d->phType.isEmpty()) {
         // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phType][listLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[d->phType][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
     }
     if (!d->phType.isEmpty()) {
@@ -2020,9 +2030,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
 
     if (m_context->type == SlideLayout) {
         PptxShapeProperties* masterShapeProperties = 0;
-        masterShapeProperties = m_context->slideProperties->shapesMap.value(d->phType);
+        masterShapeProperties = m_context->slideMasterProperties->shapesMap.value(d->phType);
         if (!masterShapeProperties) {
-            masterShapeProperties = m_context->slideProperties->shapesMap.value(d->phIdx);
+            masterShapeProperties = m_context->slideMasterProperties->shapesMap.value(d->phIdx);
         }
         kDebug() << "masterShapeProperties:" << masterShapeProperties;
 
@@ -2040,9 +2050,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         }
         if (!d->phType.isEmpty()) {
             m_context->slideLayoutProperties->shapesMap[d->phType] = m_currentShapeProperties;
+            m_context->slideLayoutProperties->contentTypeMap[d->phType] = m_contentType;
+            m_context->slideLayoutProperties->contentPath[d->phType] = m_customPath;
+            m_context->slideLayoutProperties->contentEquations[d->phType] = m_customEquations;
         }
         if (!d->phIdx.isEmpty()) {
             m_context->slideLayoutProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
+            m_context->slideLayoutProperties->contentTypeMap[d->phIdx] = m_contentType;
+            m_context->slideLayoutProperties->contentPath[d->phIdx] = m_customPath;
+            m_context->slideLayoutProperties->contentEquations[d->phIdx] = m_customEquations;
         }
     }
     else if (m_context->type == SlideMaster) {
@@ -2055,10 +2071,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         }
 
         if (!d->phType.isEmpty()) {
-            m_context->slideProperties->shapesMap[d->phType] = m_currentShapeProperties;
+            m_context->slideMasterProperties->shapesMap[d->phType] = m_currentShapeProperties;
+            m_context->slideMasterProperties->contentTypeMap[d->phType] = m_contentType;
+            m_context->slideMasterProperties->contentPath[d->phType] = m_customPath;
+            m_context->slideMasterProperties->contentEquations[d->phType] = m_customEquations;
         }
         if (!d->phIdx.isEmpty()) {
-            m_context->slideProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
+            m_context->slideMasterProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
+            m_context->slideMasterProperties->contentTypeMap[d->phIdx] = m_contentType;
+            m_context->slideMasterProperties->contentPath[d->phIdx] = m_customPath;
+            m_context->slideMasterProperties->contentEquations[d->phIdx] = m_customEquations;
         }
     }
     if (m_context->type == SlideLayout) {

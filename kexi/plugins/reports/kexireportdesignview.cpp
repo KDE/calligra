@@ -34,11 +34,11 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
 
     m_reportDesigner = 0;
 
-    m_editCutAction = KStandardAction::cut(this, 0, 0);
+    m_editCutAction = KStandardAction::cut(this);
     m_editCutAction->setProperty("iconOnly", true);
-    m_editCopyAction = KStandardAction::copy(this, 0, 0);
+    m_editCopyAction = KStandardAction::copy(this);
     m_editCopyAction->setProperty("iconOnly", true);
-    m_editPasteAction = KStandardAction::paste(this, 0, 0);
+    m_editPasteAction = KStandardAction::paste(this);
     m_editPasteAction->setProperty("iconOnly", true);
     const KGuiItem del = KStandardGuiItem::del();
     m_editDeleteAction = new KAction(del.icon(), del.text(), this);

@@ -25,7 +25,7 @@
 
 #include "AboutData.h"
 #include "MainWindow.h"
-#include "import/Global.h"
+#include "KoGlobal.h"
 #include "RootSection.h"
 #include "SectionsIO.h"
 
@@ -35,7 +35,7 @@ int main( int argc, char **argv )
   KCmdLineArgs::init( argc, argv, about );
 
   KCmdLineOptions options;
-  options.add("no-unique", ki18n("Use this option when debugging so that braindump is not launched as a KUniqueApplication"));
+  options.add("no-unique", ki18n("Use this option when debugging so that Braindump is not launched as a KUniqueApplication"));
   KCmdLineArgs::addCmdLineOptions( options );
 
   KApplication* app = 0;
@@ -47,7 +47,7 @@ int main( int argc, char **argv )
   }
 
   KIconLoader::global()->addAppDir("koffice");
-  Global::initialize();
+  KoGlobal::initialize();
 
   KComponentData* m_documentData = new KComponentData(about);
   

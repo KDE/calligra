@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <states>
   <category id="todo" name="Todo"  priority="0" >
     <state id="unchecked" name="Unchecked" filename="unchecked.svg" priority="0" />

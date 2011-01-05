@@ -2,7 +2,7 @@
 ########### install files ###############
 
 install(FILES
-    states.rc
+    states.xml
     checked.svg
     unchecked.svg
     progress-00.svg

@@ -179,14 +179,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 
 #ifdef DOCXXMLDOCREADER_H
-    // These seem to be decent defaults
-    m_currentDrawStyle->addProperty("style:horizonal-pos", "from-left");
-    m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+    bool asChar = false;
     if (!m_wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
         if (position.isEmpty() || position == "static") { // Default
+            asChar = true;
             body->addAttribute("text:anchor-type", "as-char");
-            m_currentDrawStyle->addProperty("style:vertical-rel", "char"); // check this
         }
         else {
             body->addAttribute("text:anchor-type", "char");
@@ -196,6 +194,11 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else {
         body->addAttribute("text:anchor-type", m_anchorType);
+    }
+    if (!asChar) {
+        // These seem to be decent defaults
+        m_currentDrawStyle->addProperty("style:horizonal-pos", "from-left");
+        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
     }
 #endif
 

@@ -246,7 +246,10 @@ protected:
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
+
+    KoFilter::ConversionStatus fillStyleReadHelper(int& index);
     KoFilter::ConversionStatus read_bgFillStyleLst();
+    KoFilter::ConversionStatus read_fillStyleLst();
     KoFilter::ConversionStatus read_majorFont();
     KoFilter::ConversionStatus read_minorFont();
     KoFilter::ConversionStatus read_lnStyleLst();

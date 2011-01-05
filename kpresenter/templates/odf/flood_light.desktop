@@ -2,6 +2,7 @@
 Icon=flood_light
 Name=Flood Light
 Name[ca]=Inundació lleugera
+Name[ca@valencia]=Inundació lleugera
 Name[da]=Flood Light
 Name[de]=Flutlicht
 Name[en_GB]=Flood Light
@@ -20,6 +21,7 @@ Name[x-test]=xxFlood Lightxx
 Name[zh_TW]=Flood Light
 Comment=Flood Light
 Comment[ca]=Inundació lleugera
+Comment[ca@valencia]=Inundació lleugera
 Comment[da]=Flood Light
 Comment[de]=Flutlicht
 Comment[en_GB]=Flood Light

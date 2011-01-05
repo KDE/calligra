@@ -62,6 +62,9 @@ KexiDBReportData::~KexiDBReportData()
 {
     close();
     delete m_parser;
+    delete m_copySchema;
+    delete m_originalSchema;
+    delete m_cursor;    
 }
 
 bool KexiDBReportData::open()
@@ -106,6 +109,9 @@ bool KexiDBReportData::getSchema()
 {
     if ( m_connection )
     {
+        delete m_originalSchema;
+        delete m_copySchema;
+        
         if ( m_connection->tableSchema ( m_qstrQuery ) )
         {
             kDebug() << m_qstrQuery <<  " is a table..";

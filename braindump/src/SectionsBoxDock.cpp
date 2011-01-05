@@ -131,17 +131,17 @@ void SectionsBoxDock::slotSectionActivated(const QModelIndex& index)
 
 void SectionsBoxDock::slotMinimalView()
 {
-  m_wdgSectionsBox.listSections->setDisplayMode(DocumentSectionView::MinimalMode);
+  m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::MinimalMode);
 }
 
 void SectionsBoxDock::slotDetailedView()
 {
-  m_wdgSectionsBox.listSections->setDisplayMode(DocumentSectionView::DetailedMode);
+  m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::DetailedMode);
 }
 
 void SectionsBoxDock::slotThumbnailView()
 {
-  m_wdgSectionsBox.listSections->setDisplayMode(DocumentSectionView::ThumbnailMode);
+  m_wdgSectionsBox.listSections->setDisplayMode(KoDocumentSectionView::ThumbnailMode);
 }
 
 void SectionsBoxDock::slotRmClicked()
