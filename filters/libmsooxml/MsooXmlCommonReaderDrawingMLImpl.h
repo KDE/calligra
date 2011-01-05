@@ -47,6 +47,7 @@
 #include "Charting.h"
 #include "ChartExport.h"
 #include "XlsxXmlChartReader.h"
+#include "ComplexShapeHandler.h"
 
 #include <MsooXmlReader.h>
 #include <MsooXmlCommonReader.h>
@@ -67,6 +68,11 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
 {
     // some conditions are not supported with custom shapes properly yet, remove them when possible
+
+    // Custom geometry has its own handling
+    if (m_contentType == "custom") {
+        return false;
+    }
 
     // Lines and connectors are handled elsewhere
     if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")) {
@@ -752,10 +758,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->startElement("draw:line"); // This should be maybe draw:connector but calligra doesn't seem to
                                          // handle that element yet
     }
+    else if (m_contentType == "custom") { // custGeom
+        body->startElement("draw:custom-shape");
+    }
     else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
         body->startElement("draw:frame"); // CASE #P475
     }
-    else {
+    else { // For predefined shapes
         body->startElement("draw:custom-shape");
     }
     if (!m_cNvPrName.isEmpty()) {
@@ -858,7 +867,14 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-            if (m_contentType != "rect" && !m_contentType.isEmpty() && !unsupportedPredefinedShape()) {
+            if (m_contentType == "custom") {
+                body->startElement("draw:enhanced-geometry");
+                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
+                body->addAttribute("draw:enhanced-path", m_customPath);
+                body->addCompleteElement(m_customEquations.toUtf8());
+                body->endElement(); // draw:enhanced-geometry
+            }
+            else if (m_contentType != "rect" && !m_contentType.isEmpty() && !unsupportedPredefinedShape()) {
                 body->startElement("draw:enhanced-geometry");
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
                 body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
@@ -1099,7 +1115,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 
  Child elements:
     - [done] blipFill (Picture Fill) §20.1.8.14
-    - custGeom (Custom Geometry) §20.1.9.8
+    - [done] custGeom (Custom Geometry) §20.1.9.8
     - effectDag (Effect Container) §20.1.8.25
     - effectLst (Effect Container) §20.1.8.26
     - [done] extLst (Extension List) §20.1.2.2.15
@@ -1121,6 +1137,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
     m_noFill = false;
+    m_customPath = QString();
+    m_customEquations = QString();
 
     while (!atEnd()) {
         readNext();
@@ -1130,6 +1148,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             if (qualifiedName() == QLatin1String("a:xfrm")) {
                 TRY_READ(xfrm)
                 m_xfrm_read = true;
+            }
+            else if (qualifiedName() == "a:custGeom") {
+                TRY_READ(custGeom)
+                m_contentType = "custom";
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -2044,6 +2066,56 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
                 TRY_READ(lnSpc)
             }
             SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL custGeom
+//! custGeom Handler (Custom Geometry)
+/*
+ Parent elements:
+ - [done] spPr (§21.2.2.197);
+ - [done] spPr (§21.3.2.23);
+ - [done] spPr (§21.4.3.7);
+ - [done] spPr (§20.1.2.2.35);
+ - [done] spPr (§20.2.2.6);
+ - [done] spPr (§20.5.2.30);
+ - [done] spPr (§19.3.1.44)
+
+ Child elements:
+ - ahLst (List of Shape Adjust Handles) §20.1.9.1
+ - avLst (List of Shape Adjust Values) §20.1.9.5
+ - cxnLst (List of Shape Connection Sites) §20.1.9.10
+ - gdLst (List of Shape Guides) §20.1.9.12
+ - pathLst (List of Shape Paths) §20.1.9.16
+ - rect (Shape Text Rectangle) §20.1.9.22
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_custGeom()
+{
+    READ_PROLOGUE
+
+    ComplexShapeHandler handler;
+    m_customEquations = handler.defaultEquations();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (name() == "avLst") {
+                m_customEquations += handler.handle_avLst(this);
+            }
+            else if (name() == "gdLst") {
+                m_customEquations += handler.handle_gdLst(this);
+            }
+            else if (name() == "pathLst") {
+                m_customPath = handler.handle_pathLst(this);
+                m_customEquations += handler.pathEquationsCreated();
+            }
+
         }
     }
 

@@ -123,6 +123,10 @@ KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
 
+QString m_customPath;
+QString m_customEquations;
+KoFilter::ConversionStatus read_custGeom();
+
 qreal m_currentShadeLevel;
 qreal m_currentTint; // value of current tint
 int m_currentAlpha; // current alpha color value
