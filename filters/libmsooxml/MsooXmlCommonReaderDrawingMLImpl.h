@@ -1331,6 +1331,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+    int index = idx.toInt();
 
     while (!atEnd()) {
         readNext();
@@ -1347,8 +1350,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
         }
     }
 
-    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+    MSOOXML::DrawingMLFillBase *fillBase = m_context->themes->formatScheme.fillStyles.value(index);
+    if (fillBase) {
+        fillBase->writeStyles(*mainStyles, m_currentDrawStyle, m_currentColor);
+    }
 
     READ_EPILOGUE
 }
