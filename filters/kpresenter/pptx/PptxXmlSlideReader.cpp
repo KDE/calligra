@@ -1947,19 +1947,34 @@ void PptxXmlSlideReader::inheritShapePosition()
 void PptxXmlSlideReader::inheritShapeGeometry()
 {
     // Inheriting shape geometry
-    // Todo: once custom geometry is supported, this should somehow inherit that one too.
     if (m_contentType.isEmpty()) {
         if (m_context->type == Slide) {
             m_contentType = m_context->slideLayoutProperties->contentTypeMap.value(d->phType);
+            if (m_contentType == "custom") {
+                m_customEquations = m_contentType = m_context->slideLayoutProperties->contentEquations.value(d->phType);
+                m_customPath = m_contentType = m_context->slideLayoutProperties->contentPath.value(d->phType);
+            }
             if (m_contentType.isEmpty()) {
                 m_contentType = m_context->slideLayoutProperties->contentTypeMap.value(d->phIdx);
+                if (m_contentType == "custom") {
+                    m_customEquations = m_contentType = m_context->slideLayoutProperties->contentEquations.value(d->phIdx);
+                    m_customPath = m_contentType = m_context->slideLayoutProperties->contentPath.value(d->phIdx);
+                }
             }
         }
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             if (m_contentType.isEmpty()) {
                 m_contentType = m_context->slideMasterProperties->contentTypeMap.value(d->phType);
+                if (m_contentType == "custom") {
+                    m_customEquations = m_contentType = m_context->slideMasterProperties->contentEquations.value(d->phType);
+                    m_customPath = m_contentType = m_context->slideMasterProperties->contentPath.value(d->phType);
+                }
                 if (m_contentType.isEmpty()) {
                     m_contentType = m_context->slideMasterProperties->contentTypeMap.value(d->phIdx);
+                    if (m_contentType == "custom") {
+                        m_customEquations = m_contentType = m_context->slideMasterProperties->contentEquations.value(d->phIdx);
+                        m_customPath = m_contentType = m_context->slideMasterProperties->contentPath.value(d->phIdx);
+                    }
                 }
             }
         }
@@ -2036,10 +2051,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         if (!d->phType.isEmpty()) {
             m_context->slideLayoutProperties->shapesMap[d->phType] = m_currentShapeProperties;
             m_context->slideLayoutProperties->contentTypeMap[d->phType] = m_contentType;
+            m_context->slideLayoutProperties->contentPath[d->phType] = m_customPath;
+            m_context->slideLayoutProperties->contentEquations[d->phType] = m_customEquations;
         }
         if (!d->phIdx.isEmpty()) {
             m_context->slideLayoutProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
             m_context->slideLayoutProperties->contentTypeMap[d->phIdx] = m_contentType;
+            m_context->slideLayoutProperties->contentPath[d->phIdx] = m_customPath;
+            m_context->slideLayoutProperties->contentEquations[d->phIdx] = m_customEquations;
         }
     }
     else if (m_context->type == SlideMaster) {
@@ -2054,10 +2073,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         if (!d->phType.isEmpty()) {
             m_context->slideMasterProperties->shapesMap[d->phType] = m_currentShapeProperties;
             m_context->slideMasterProperties->contentTypeMap[d->phType] = m_contentType;
+            m_context->slideMasterProperties->contentPath[d->phType] = m_customPath;
+            m_context->slideMasterProperties->contentEquations[d->phType] = m_customEquations;
         }
         if (!d->phIdx.isEmpty()) {
             m_context->slideMasterProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
-            m_context->slideMasterProperties->contentTypeMap[d->phType] = m_contentType;
+            m_context->slideMasterProperties->contentTypeMap[d->phIdx] = m_contentType;
+            m_context->slideMasterProperties->contentPath[d->phIdx] = m_customPath;
+            m_context->slideMasterProperties->contentEquations[d->phIdx] = m_customEquations;
         }
     }
     if (m_context->type == SlideLayout) {

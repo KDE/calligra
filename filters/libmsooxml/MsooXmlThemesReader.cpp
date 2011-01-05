@@ -806,7 +806,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
  Child elements:
  - [done] bgFillStyleLst (Background Fill Style List) §20.1.4.1.7
  - effectStyleLst (Effect Style List) §20.1.4.1.12
- - fillStyleLst (Fill Style List) §20.1.4.1.13
+ - [done] fillStyleLst (Fill Style List) §20.1.4.1.13
  - [done] lnStyleLst (Line Style List) §20.1.4.1.21*/
 KoFilter::ConversionStatus MsooXmlThemesReader::read_fmtScheme()
 {
@@ -816,6 +816,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fmtScheme()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(bgFillStyleLst)
+            ELSE_TRY_READ_IF(fillStyleLst)
             ELSE_TRY_READ_IF(lnStyleLst)
             SKIP_UNKNOWN
         }
@@ -863,6 +864,117 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_ln()
     READ_EPILOGUE
 }
 
+KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
+{
+    QXmlStreamAttributes attrs;
+
+    if (isStartElement()) {
+        QString element = qualifiedName().toString();
+        if (element == "a:gradFill") {
+            QVector<qreal> shadeModifiers;
+            QVector<qreal> tintModifiers;
+            QVector<qreal> satModifiers;
+            QVector<int> alphaModifiers;
+            readNext(); // a:gsLst
+            while (true) {
+                readNext();
+                if (isStartElement() && qualifiedName() == "a:gs") {
+                    readNext();
+                    if (isStartElement() && qualifiedName() == "a:schemeClr") {
+                       qreal shadeModifier = 0;
+                       qreal tintModifier = 0;
+                       qreal satModifier = 0;
+                       int alphaModifier = 0;
+                       while (true) {
+                           readNext();
+                           if (isEndElement() && qualifiedName() == "a:schemeClr") {
+                               break;
+                           }
+                           if (isStartElement()) {
+                               attrs = attributes();
+                               TRY_READ_ATTR_WITHOUT_NS(val)
+                               if (qualifiedName() == "a:tint") {
+                                   tintModifier = val.toInt()/100000.0;
+                               }
+                               else if (qualifiedName() == "a:shade") {
+                                   shadeModifier = val.toInt()/100000.0;
+                               }
+                               else if (qualifiedName() == "a:satMod") {
+                                   satModifier = val.toDouble()/100000.0;
+                               }
+                               else if (qualifiedName() == "a:alpha") {
+                                  alphaModifier = val.toInt()/1000;
+                               }
+                           }
+                       }
+                       tintModifiers.push_back(tintModifier);
+                       shadeModifiers.push_back(shadeModifier);
+                       satModifiers.push_back(satModifier),
+                       alphaModifiers.push_back(alphaModifier);
+                    }
+                    else if (isEndElement() && qualifiedName() == "a:gs") {
+                        break;
+                    }
+                }
+                else if (isEndElement() && qualifiedName() == "a:gsLst") {
+                    break;
+                }
+            }
+            m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers, satModifiers, alphaModifiers);
+            while (true) {
+                readNext();
+                if (isEndElement() && qualifiedName() == element) {
+                    break;
+                }
+            }
+        }
+        // Commented out for now, until there's a nice implementation for duotone effect
+        /*else if (element == "a:blipFill") {
+            readNext(); // Going to a:blip
+            attrs = attributes();
+            TRY_READ_ATTR_WITH_NS(r, embed)
+            if (!r_embed.isEmpty()) {
+                const QString sourceName(m_relationships->target(m_path, m_file, r_embed));
+                QString destinationName = "Pictures/" + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+                RETURN_IF_ERROR( m_import->copyFile(sourceName, destinationName, false) )
+                addManifestEntryForFile(destinationName);
+                addManifestEntryForPicturesDir();
+                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLBlipFill(destinationName);
+            }
+            while (true) {
+                readNext();
+                if (isEndElement() && qualifiedName() == element) {
+                    break;
+                }
+            }
+        }*/
+        else { //if (element == "a:solidFill") { //For now, let's have this as default
+            m_context->theme->formatScheme.fillStyles[index] = new DrawingMLSolidFill;
+            skipCurrentElement();
+        } // todo, handle rest
+        ++index;
+    }
+
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fillStyleLst
+//! fillStyleLst (fill style list)
+KoFilter::ConversionStatus MsooXmlThemesReader::read_fillStyleLst()
+{
+    READ_PROLOGUE
+
+    int index = 1; // The first style goes to 1
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        fillStyleReadHelper(index);
+    }
+    READ_EPILOGUE
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL bgFillStyleLst
 //! bgFillStyleLst (background fill style list)
@@ -871,99 +983,11 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
     READ_PROLOGUE
 
     int index = 1001; // The first style goes to 1001
-    QString element;
-
-    QXmlStreamAttributes attrs;
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            element = qualifiedName().toString();
-            // Commented out for now, until there's a nice implementation for duotone effect
-            /*if (element == "a:blipFill") {
-                readNext(); // Going to a:blip
-                attrs = attributes();
-                TRY_READ_ATTR_WITH_NS(r, embed)
-                if (!r_embed.isEmpty()) {
-                    const QString sourceName(m_relationships->target(m_path, m_file, r_embed));
-                    QString destinationName = "Pictures/" + sourceName.mid(sourceName.lastIndexOf('/') + 1);
-                    RETURN_IF_ERROR( m_import->copyFile(sourceName, destinationName, false) )
-                    addManifestEntryForFile(destinationName);
-                    addManifestEntryForPicturesDir();
-                    m_context->theme->formatScheme.fillStyles[index] = new DrawingMLBlipFill(destinationName);
-                }
-                while (true) {
-                    readNext();
-                    if (isEndElement() && qualifiedName() == element) {
-                        break;
-                    }
-                }
-            }*/
-            if (element == "a:gradFill") {
-                QVector<qreal> shadeModifiers;
-                QVector<qreal> tintModifiers;
-                QVector<qreal> satModifiers;
-                QVector<int> alphaModifiers;
-                readNext(); // a:gsLst
-                while (true) {
-                    readNext();
-                    if (isStartElement() && qualifiedName() == "a:gs") {
-                        readNext();
-                        if (isStartElement() && qualifiedName() == "a:schemeClr") {
-                           qreal shadeModifier = 0;
-                           qreal tintModifier = 0;
-                           qreal satModifier = 0;
-                           int alphaModifier = 0;
-                           while (true) {
-                               readNext();
-                               if (isEndElement() && qualifiedName() == "a:schemeClr") {
-                                   break;
-                               }
-                               if (isStartElement()) {
-                                   attrs = attributes();
-                                   TRY_READ_ATTR_WITHOUT_NS(val)
-                                   if (qualifiedName() == "a:tint") {
-                                       tintModifier = val.toInt()/100000.0;
-                                   }
-                                   else if (qualifiedName() == "a:shade") {
-                                       shadeModifier = val.toInt()/100000.0;
-                                   }
-                                   else if (qualifiedName() == "a:satMod") {
-                                       satModifier = val.toDouble()/100000.0;
-                                   }
-                                   else if (qualifiedName() == "a:alpha") {
-                                      alphaModifier = val.toInt()/1000;
-                                   }
-                               }
-                           }
-                           tintModifiers.push_back(tintModifier);
-                           shadeModifiers.push_back(shadeModifier);
-                           satModifiers.push_back(satModifier),
-                           alphaModifiers.push_back(alphaModifier);
-                        }
-                        else if (isEndElement() && qualifiedName() == "a:gs") {
-                            break;
-                        }
-                    }
-                    else if (isEndElement() && qualifiedName() == "a:gsLst") {
-                        break;
-                    }
-                }
-                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers, satModifiers, alphaModifiers);
-                while (true) {
-                    readNext();
-                    if (isEndElement() && qualifiedName() == element) {
-                        break;
-                    }
-                }
-            }
-            else { //if (element == "a:solidFill") { //For now, let's have this as default
-                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLSolidFill;
-                skipCurrentElement();
-            } // todo, handle rest
-            ++index;
-        }
+        fillStyleReadHelper(index);
     }
     READ_EPILOGUE
 }
