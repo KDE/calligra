@@ -2,6 +2,13 @@
 Type=ServiceType
 X-KDE-ServiceType=Braindump/Extensions
 Comment=Extensions for Braindump
+Comment[it]=Estensioni per Braindump
+Comment[pt]=Extensões para o Braindump
+Comment[pt_BR]=Extensões para o Braindump
+Comment[sv]=Utökningar för Braindump
+Comment[uk]=Розширення для Braindump
+Comment[x-test]=xxExtensions for Braindumpxx
+Comment[zh_TW]=Braindump 的延伸功能
 
 [PropertyDef::X-Braindump-Version]
 Type=int

@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=Web Shape
 Name[et]=Veebikujund
+Name[it]=Forma Web
 Name[nl]=Webvorm
 Name[pt]=Forma da Web
 Name[pt_BR]=Forma da Web
 Name[sv]=Webbform
 Name[uk]=Форма мережі
 Name[x-test]=xxWeb Shapexx
+Name[zh_TW]=網頁元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=webshape
