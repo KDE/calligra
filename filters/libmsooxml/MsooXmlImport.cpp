@@ -323,7 +323,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
         unsigned rem = infoStream.size() - infoStream.tell();
         bytes_read = infoStream.read(buffer, qMin(4096u, rem));
         QByteArray encryptedVerifierHash(reinterpret_cast<const char*>(buffer), bytes_read);
-        const unsigned spinCount = 50000;
+        const int spinCount = 50000;
 
         bool first = true;
         while (true) {
@@ -429,7 +429,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             kDebug() << "unexpected element in key encryptor";
             return 0;
         }
-        unsigned spinCount = encryptedKey.attribute("spinCount").toInt();
+        const int spinCount = encryptedKey.attribute("spinCount").toInt();
         QByteArray keyDataSalt = QByteArray::fromBase64(keyData.attribute("saltValue").toLatin1());
         QByteArray salt = QByteArray::fromBase64(encryptedKey.attribute("saltValue").toLatin1());
         QByteArray encryptedVerifierHashInput = QByteArray::fromBase64(encryptedKey.attribute("encryptedVerifierHashInput").toLatin1());
