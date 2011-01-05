@@ -323,7 +323,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
         unsigned rem = infoStream.size() - infoStream.tell();
         bytes_read = infoStream.read(buffer, qMin(4096u, rem));
         QByteArray encryptedVerifierHash(reinterpret_cast<const char*>(buffer), bytes_read);
-        const int spinCount = 50000;
+        const int spinCount = 50000; //FIXME better use long int or qint32
 
         bool first = true;
         while (true) {
