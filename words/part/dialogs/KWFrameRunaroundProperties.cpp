@@ -52,7 +52,7 @@ void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames)
     m_frames = frames;
     GuiHelper::State layout = GuiHelper::Unset, runaround = GuiHelper::Unset, raDistance = GuiHelper::Unset;
     KWord::RunAroundSide side = KWord::BiggestRunAroundSide;
-    KWord::TextRunAround ra = KWord::RunAround;
+    KWord::TextWrap ra = KWord::RunAround;
     qreal distance = 10.0;
     foreach (KWFrame *frame, frames) {
         if (layout == GuiHelper::Unset) {
@@ -62,9 +62,9 @@ void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames)
             layout = GuiHelper::TriState;
 
         if (runaround == GuiHelper::Unset) {
-            ra = frame->textRunAround();
+            ra = frame->textWrap();
             runaround = GuiHelper::On;
-        } else if (ra != frame->textRunAround())
+        } else if (ra != frame->textWrap())
             runaround = GuiHelper::TriState;
 
         if (raDistance == GuiHelper::Unset) {
@@ -103,9 +103,9 @@ void KWFrameRunaroundProperties::save()
     foreach (KWFrame *frame, m_frames) {
         bool needRelayout = false;
         if (m_runAround->checkedId() != -1) {
-            KWord::TextRunAround rra = static_cast<KWord::TextRunAround>(m_runAround->checkedId());
-            if (frame->textRunAround() != rra) {
-                frame->setTextRunAround(rra);
+            KWord::TextWrap rra = static_cast<KWord::TextWrap>(m_runAround->checkedId());
+            if (frame->textWrap() != rra) {
+                frame->setTextWrap(rra);
                 needRelayout = true;
             }
         }

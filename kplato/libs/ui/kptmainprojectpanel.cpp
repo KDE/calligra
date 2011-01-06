@@ -66,9 +66,9 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     DateTime st = project.constraintStartTime();
     DateTime et = project.constraintEndTime();
     startDate->setDate(st.date());
-    startTime->setTime(st.time());
+    startTime->setTime( QTime( st.time().hour(), st.time().minute() ) );
     endDate->setDate(et.date());
-    endTime->setTime(et.time());
+    endTime->setTime( QTime( et.time().hour(), et.time().minute() ) );
     enableDateTime();
     namefield->setFocus();
 

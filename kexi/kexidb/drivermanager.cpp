@@ -25,7 +25,7 @@
 #include "driver_p.h"
 #include "error.h"
 
-#include <klibloader.h>
+//#include <klibloader.h>
 #include <kservicetypetrader.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -229,14 +229,14 @@ Driver* DriverManagerInternal::driver(const QString& name)
 
     if (!drv) {
         setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".", name));
-        if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
-            m_componentLoadingErrors[KLibLoader::ErrNoServiceFound] = "ErrNoServiceFound";
-            m_componentLoadingErrors[KLibLoader::ErrServiceProvidesNoLibrary] = "ErrServiceProvidesNoLibrary";
-            m_componentLoadingErrors[KLibLoader::ErrNoLibrary] = "ErrNoLibrary";
-            m_componentLoadingErrors[KLibLoader::ErrNoFactory] = "ErrNoFactory";
-            m_componentLoadingErrors[KLibLoader::ErrNoComponent] = "ErrNoComponent";
-        }
-        m_serverResultName = m_componentLoadingErrors[m_serverResultNum];
+        //if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
+        //    m_componentLoadingErrors[KLibLoader::ErrNoServiceFound] = "ErrNoServiceFound";
+        //    m_componentLoadingErrors[KLibLoader::ErrServiceProvidesNoLibrary] = "ErrServiceProvidesNoLibrary";
+        //    m_componentLoadingErrors[KLibLoader::ErrNoLibrary] = "ErrNoLibrary";
+        //    m_componentLoadingErrors[KLibLoader::ErrNoFactory] = "ErrNoFactory";
+        //    m_componentLoadingErrors[KLibLoader::ErrNoComponent] = "ErrNoComponent";
+        //}
+        //m_serverResultName = m_componentLoadingErrors[m_serverResultNum];
         return 0;
     }
     KexiDBDbg << "loading succeed:" << name;

@@ -35,6 +35,8 @@
 #include <KoOdfExporter.h>
 #include <KoXmlReader.h>
 
+#include "PredefinedShapeHelper.h"
+
 class QSize;
 class KZip;
 class KTemporaryFile;
@@ -86,6 +88,9 @@ public:
     On failure @a errorMessage is set. */
     KoFilter::ConversionStatus imageSize(const QString& sourceName, QSize& size);
 
+    //! Helper class to get information about predefined ooxml shapes
+    PredefinedShapeHelper m_shapeHelper;
+
 protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
                                                       KoOdfWriters *writers);
@@ -127,6 +132,7 @@ protected:
 
     QMap<QString, QVariant> documentProperties() const { return m_documentProperties; }
     QVariant documentProperty(const QString& propertyName) const { return m_documentProperties.value(propertyName); }
+
 private:
     //! Opens file for converting and performs convertions.
     //! @return status of convertion.

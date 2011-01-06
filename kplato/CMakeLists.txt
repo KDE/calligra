@@ -72,6 +72,7 @@ set(kplatoprivate_LIB_SRCS
 
     about/aboutpage.cpp
 
+    kptpackage.cpp
     KPlatoXmlLoader.cpp
 )
 

@@ -19,6 +19,8 @@
 
 #include "workpackage.h"
 
+#include "KPlatoXmlLoader.h" //NOTE: this file should probably be moved
+
 #include "part.h"
 #include "kptglobal.h"
 #include "kptnode.h"
@@ -177,6 +179,65 @@ bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status 
             status.setProject( m_project );
             kDebug()<<"loading new project";
             if ( ! ( ok = m_project->load( e, status ) ) ) {
+                status.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
+                KMessageBox::error( 0, i18n( "Failed to load project: %1" , m_project->name() ) );
+            }
+        }
+    }
+    if ( ok ) {
+        KoXmlNode n = element.firstChild();
+        for ( ; ! n.isNull(); n = n.nextSibling() ) {
+            if ( ! n.isElement() ) {
+                continue;
+            }
+            KoXmlElement e = n.toElement();
+            kDebug()<<e.tagName();
+            if ( e.tagName() == "workpackage" ) {
+                Task *t = static_cast<Task*>( m_project->childNode( 0 ) );
+                t->workPackage().setOwnerName( e.attribute( "owner" ) );
+                t->workPackage().setOwnerId( e.attribute( "owner-id" ) );
+
+                Resource *r = m_project->findResource( t->workPackage().ownerId() );
+                if ( r == 0 ) {
+                    kDebug()<<"Cannot find resource id!!"<<t->workPackage().ownerId()<<t->workPackage().ownerName();
+                }
+                kDebug()<<"is this me?"<<t->workPackage().ownerName();
+                KoXmlNode ch = e.firstChild();
+                for ( ; ! ch.isNull(); ch = ch.nextSibling() ) {
+                    if ( ! ch.isElement() ) {
+                        continue;
+                    }
+                    KoXmlElement el = ch.toElement();
+                    kDebug()<<el.tagName();
+                    if ( el.tagName() == "settings" ) {
+                        m_settings.loadXML( el );
+                    }
+                }
+            }
+        }
+    }
+    if ( ! m_project->scheduleManagers().isEmpty() ) {
+        // should be only one manager
+        m_project->setCurrentSchedule( m_project->scheduleManagers().first()->scheduleId() );
+    }
+    return ok;
+}
+
+bool WorkPackage::loadKPlatoXML( const KoXmlElement &element, XMLLoaderObject &status )
+{
+    bool ok = false;
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        kDebug()<<e.tagName();
+        if ( e.tagName() == "project" ) {
+            status.setProject( m_project );
+            KPlatoXmlLoader loader( status, m_project );
+            kDebug()<<"loading new project";
+            if ( ! ( ok = loader.load( m_project, e, status ) ) ) {
                 status.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
                 KMessageBox::error( 0, i18n( "Failed to load project: %1" , m_project->name() ) );
             }
@@ -400,8 +461,8 @@ QDomDocument WorkPackage::saveXML()
     QDomElement doc = document.createElement( "kplatowork" );
     doc.setAttribute( "editor", "KPlatoWork" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
-    doc.setAttribute( "version", KPLATOWORK_FILE_SYNTAX_VERSION );
-    doc.setAttribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "version", PLANWORK_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "kplato-version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Work package info

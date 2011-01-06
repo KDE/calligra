@@ -53,7 +53,7 @@
 #include <Doc.h>
 #include <part/View.h>
 #include <Sheet.h>
-#include <kspread/ui/Selection.h>
+#include <tables/ui/Selection.h>
 #include <KWView.h>
 
 #include <KMimeType>

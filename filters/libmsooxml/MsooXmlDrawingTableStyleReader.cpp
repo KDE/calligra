@@ -50,9 +50,9 @@ MsooXmlDrawingTableStyleReader::~MsooXmlDrawingTableStyleReader()
 }
 
 MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport* _import, const QString& _path, const QString& _file, DrawingMLTheme* _themes, TableStyleList* _styleList, QMap< QString, QString > _colorMap)
-: import(_import)
+: styleList(_styleList)
+, import(_import)
 , path(_path)
-, styleList(_styleList)
 , file(_file)
 , themes(_themes)
 , colorMap(_colorMap)

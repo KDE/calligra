@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2009, 2010 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +35,8 @@
 #include <KLocale>
 #include <KDebug>
 
+#include <iostream>
+
 #define GENERATION_MIN_LIMIT 5000
 
 #define PROGRESS_CALLBACK_FREQUENCY 100
@@ -42,13 +44,19 @@
 #define PROGRESS_INIT_VALUE 12000
 #define PROGRESS_INIT_STEP 2000
 
+/* low weight == late, high weight == early */
+#define WEIGHT_ASAP         50
+#define WEIGHT_ALAP         1
+#define WEIGHT_CONSTRAINT   1000
+#define WEIGHT_FINISH       1000
+
 class ProgressInfo
 {
 public:
-    explicit ProgressInfo() : init( true ), base( 0 ), duration( 0 ), progress( 0 ) {}
+    explicit ProgressInfo() : init( true ), base( 0 ), fitness( 0.0 ), progress( 0 ) {}
     bool init;
     int base;
-    int duration;
+    float fitness;
     int progress;
 };
 
@@ -56,7 +64,13 @@ public:
 KPlatoRCPSScheduler::KPlatoRCPSScheduler( Project *project, ScheduleManager *sm, QObject *parent )
     : SchedulerThread( project, sm, parent ),
     result( -1 ),
+    m_schedule( 0 ),
+    m_recalculate( false ),
+    m_usePert( false ),
+    m_backward( false ),
+    m_problem( 0 ),
     m_timeunit( 60 ),
+    m_offsetFromTime_t( 0 ),
     m_progressinfo( new ProgressInfo() )
 {
     connect(this, SIGNAL(sigCalculationStarted( Project*, ScheduleManager*)), project, SIGNAL(sigCalculationStarted( Project*, ScheduleManager*)));
@@ -69,6 +83,7 @@ KPlatoRCPSScheduler::~KPlatoRCPSScheduler()
 {
     delete m_progressinfo;
     qDeleteAll( m_duration_info_list );
+    qDeleteAll( m_weight_info_list );
     rcps_problem_free( m_problem );
 }
 
@@ -77,17 +92,17 @@ KLocale *KPlatoRCPSScheduler::locale() const
     return KGlobal::locale();
 }
 
-int KPlatoRCPSScheduler::progress_callback( int generations, int duration, void *arg )
+int KPlatoRCPSScheduler::progress_callback( int generations, int fitness, void *arg )
 {
     if ( arg == 0 ) {
         return -1;
     }
     KPlatoRCPSScheduler *self = static_cast<KPlatoRCPSScheduler*>( arg );
-    //qDebug()<<"KPlatoRCPSScheduler::progress_callback"<<generations<<duration<<self;
-    return self->progress( generations, duration );
+    //qDebug()<<"KPlatoRCPSScheduler::progress_callback"<<generations<<fitness<<arg;
+    return self->progress( generations, fitness );
 }
 
-int KPlatoRCPSScheduler::progress( int generations, int duration )
+int KPlatoRCPSScheduler::progress( int generations, int fitness )
 {
     if ( m_haltScheduling ) {
         qDebug()<<"KPlatoRCPSScheduler::progress:"<<"halt";
@@ -108,12 +123,14 @@ int KPlatoRCPSScheduler::progress( int generations, int duration )
     } else {
         m_progressinfo->progress = PROGRESS_INIT_VALUE + generations;
     }
-    if ( m_progressinfo->duration != duration ) {
-        m_progressinfo->duration = duration;
+    // detect change in fitness
+    if ( m_progressinfo->fitness != fitness ) {
+        m_progressinfo->fitness = fitness;
         m_progressinfo->base = generations;
     }
     m_manager->setProgress( m_progressinfo->progress );
     setProgress( m_progressinfo->progress );
+    // stop if fitness does not change in GENERATION_MIN_LIMIT generations
     int result = ( generations >= m_progressinfo->base + GENERATION_MIN_LIMIT ? 1 : 0 );
     if ( result ) {
         //qDebug()<<"KPlatoRCPSScheduler::progress, stop after"<<generations<<"generations, progress:"<<m_progressinfo->progress;
@@ -138,32 +155,135 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
         return nominal_duration;
     }
     ++(info->calls);
-    if ( info->cache.contains( time ) ) {
-        return info->cache[ time ];
+    if ( info->cache.contains( QPair<int, int>( time, direction ) ) ) {
+        return info->cache[ QPair<int, int>( time, direction ) ];
     }
     if ( m_manager->recalculate() && info->task->completion().isFinished() ) {
         return 0;
     }
     int dur = 0;
-    if ( info->estimatetype == Estimate::Type_Effort ) {
+    if ( info->task->constraint() == Node::FixedInterval ) {
+        // duration may depend on daylight saving so we need to calculate
+        // NOTE: dur may not be correct if time != info->task->constraintStartTime, let's see what happends...
+        dur = ( info->task->constraintEndTime() - info->task->constraintStartTime() ).seconds() / m_timeunit;
+    } else if ( info->estimatetype == Estimate::Type_Effort ) {
         dur = info->task->requests().duration(
                     info->requests,
-                    m_starttime.addSecs( time * m_timeunit ), 
+                    fromRcpsTime( time ),
                     info->estimate,
                     0, /*no schedule*/
-                    direction
+                    m_backward ? ! direction : direction
                 ).seconds() / m_timeunit;
+        //qDebug()<<info->task->name()<< QString( "duration_callback effort: backward=%5, direction=%6 (direction=%7); Time=%1, duration=%2 ( %3, %4 )" ).arg( time ).arg( dur ).arg( fromRcpsTime( time ).toString() ).arg( Duration( (qint64)(dur) * m_timeunit * 1000 ).toDouble( Duration::Unit_h ) ).arg( m_backward ).arg( direction ).arg( m_backward ? !direction : direction );
     } else {
         dur = info->task->length( 
-                    m_starttime.addSecs( time * m_timeunit ), 
+                    fromRcpsTime( time ),
                     info->estimate,
                     0, /*no schedule*/
-                    direction
+                    m_backward ? ! direction : direction
                 ).seconds() / m_timeunit;
     }
-    info->cache[ time ] = dur;
-    //qDebug()<<info->task->name()<<time<<"("<<m_starttime.addSecs( time * m_timeunit )<<")"<<dur<<"("<<((double)(dur)*m_timeunit/3600.)<<"hours )";
+    info->cache[ QPair<int, int>( time, direction ) ] = dur;
+    //info->task->schedule()->logDebug( QString( "duration_callback: Time=%1, duration=%2 ( %3, %4 )" ).arg( time ).arg( dur ).arg( fromRcpsTime( time ).toString() ).arg( Duration( (qint64)(dur) * m_timeunit * 1000 ).toDouble( Duration::Unit_h ) ) );
     return dur;
+}
+
+int KPlatoRCPSScheduler::weight_callback( int time, int duration, int nominal_weight, void *arg )
+{
+    //qDebug()<<"kplato_weight:"<<time<<nominal_weight<<arg;
+    Q_ASSERT( arg );
+    if ( arg == 0 ) {
+        return nominal_weight * time;
+    }
+    KPlatoRCPSScheduler::weight_info *info = static_cast<KPlatoRCPSScheduler::weight_info*>( arg );
+    return info->self->weight( time, duration, nominal_weight, info );
+}
+
+int KPlatoRCPSScheduler::weight( int time, int duration, int nominal_weight, KPlatoRCPSScheduler::weight_info  *info )
+{
+    if ( m_haltScheduling || m_manager == 0 ) {
+        return nominal_weight;
+    }
+    if ( m_manager->recalculate() && info->task->completion().isFinished() ) {
+        return 0;
+    }
+    int w = nominal_weight * time;
+    if ( info->isEndJob ) {
+        if ( info->finish == 0 ) {
+            info->finish = time;
+/*            const char *s = QString( "First  : %1 %2 %3 End job" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).toAscii();
+            std::cout<<s<<"\n";*/
+        }
+/*        w = WEIGHT_FINISH * info->finish / ( time > 0 ? time : 1 );
+        if ( time > info->targettime ) {
+            w = w + ( WEIGHT_CONSTRAINT * ( time - info->targettime ) );
+        }*/
+        if ( time > info->targettime ) {
+            w *= WEIGHT_CONSTRAINT;
+        }
+
+/*        const char *s = QString( "End job: %1 %2 %3 End job target: %4" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->targettime ).toAscii();
+        std::cout<<s<<"\n";*/
+    } else {
+        if ( m_backward ) {
+            switch ( info->task->constraint() ) {
+                case Node::FinishNotLater:
+                    w = WEIGHT_ASAP;
+                    if ( info->targettime > time ) {
+                        w = WEIGHT_CONSTRAINT * ( info->targettime - time );
+                    }
+                    break;
+                case Node::MustFinishOn:
+                    w = WEIGHT_CONSTRAINT * ( abs( info->targettime - time ) );
+                    break;
+                case Node::StartNotEarlier:
+                    w = WEIGHT_ASAP;
+                    if ( info->targettime < time ) {
+                        w = WEIGHT_CONSTRAINT * ( time - info->targettime );
+                    }
+                    break;
+                case Node::MustStartOn:
+                    w = WEIGHT_CONSTRAINT * ( abs( info->targettime - time ) );
+                    break;
+                case Node::FixedInterval:
+                    w = WEIGHT_CONSTRAINT * ( abs( info->targettime - time ) );
+                    break;
+                default:
+                    break;
+            }
+/*            const char *s = QString( "Backwrd: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toAscii();
+            std::cout<<s<<"\n";*/
+        } else {
+            switch ( info->task->constraint() ) {
+                case Node::StartNotEarlier:
+                    w = WEIGHT_ASAP;
+                    if ( info->targettime > time ) {
+                        w = WEIGHT_CONSTRAINT * ( info->targettime - time );
+                    }
+                    break;
+                case Node::MustStartOn:
+                    w = WEIGHT_CONSTRAINT * ( abs( info->targettime - time ) );
+                    break;
+                case Node::FinishNotLater:
+                    w = WEIGHT_ASAP;
+                    if ( info->targettime > time ) {
+                        w = WEIGHT_CONSTRAINT * ( info->targettime - time );
+                    }
+                    break;
+                case Node::MustFinishOn:
+                    w = WEIGHT_CONSTRAINT * ( abs( info->targettime - time ) );
+                    break;
+                case Node::FixedInterval:
+                    w = WEIGHT_CONSTRAINT * ( abs( info->targettime - time ) );
+                    break;
+                default:
+                    break;
+            }
+/*            const char *s = QString( "Forward: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toAscii();
+            std::cout<<s<<"\n";*/
+        }
+    }
+    return w;
 }
 
 void KPlatoRCPSScheduler::run()
@@ -182,7 +302,7 @@ void KPlatoRCPSScheduler::run()
         m_project = new Project();
         loadProject( m_project, m_pdoc );
         m_project->setName( "Schedule: " + m_project->name() ); //Debug
-
+        m_project->stopcalculation = false;
         m_manager = m_project->scheduleManager( m_mainmanagerId );
         Q_CHECK_PTR( m_manager );
         Q_ASSERT( m_manager->expected() );
@@ -199,16 +319,33 @@ void KPlatoRCPSScheduler::run()
         m_project->initiateCalculationLists( *m_schedule );
 
         m_problem = rcps_problem_new();
+        rcps_problem_setfitness_mode( m_problem, FITNESS_WEIGHT );
 
+        m_usePert = m_manager->usePert();
         m_recalculate = m_manager->recalculate();
-        m_starttime =  m_recalculate ? m_manager->recalculateFrom() : m_project->constraintStartTime();
+        if ( m_recalculate ) {
+            m_starttime =  m_manager->recalculateFrom();
+            m_backward = false;
+        } else {
+            m_backward = m_manager->schedulingDirection();
+            m_starttime = m_backward ? m_project->constraintEndTime() : m_project->constraintStartTime();
+        }
+        m_targettime = m_backward ? m_project->constraintStartTime() : m_project->constraintEndTime();
 
         m_project->setCurrentSchedule( m_manager->expected()->id() );
 
         m_schedule->setPhaseName( 0, i18n( "Init" ) );
-        if ( locale() ) {
-            m_schedule->logDebug( QString( "Schedule project using RCPS Scheduler, starting at %1" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
-            m_schedule->logInfo( i18n( "Schedule project from start time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 0 );
+        if ( ! m_backward && locale() ) {
+            m_schedule->logDebug( QString( "Schedule project using RCPS Scheduler, starting at %1" ).arg( QDateTime::currentDateTime().toString() ), 0 );
+            if ( m_recalculate ) {
+                m_schedule->logInfo( i18n( "Re-calculate project from start time: %1", locale()->formatDateTime( m_starttime ) ), 0 );
+            } else {
+                m_schedule->logInfo( i18n( "Schedule project from start time: %1", locale()->formatDateTime( m_starttime ) ), 0 );
+            }
+        }
+        if ( m_backward && locale() ) {
+            m_schedule->logDebug( QString( "Schedule project backward using RCPS Scheduler, starting at %1" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
+            m_schedule->logInfo( i18n( "Schedule project from end time: %1", locale()->formatDateTime( m_starttime ) ), 0 );
         }
 
         m_managerMutex.unlock();
@@ -247,9 +384,12 @@ int KPlatoRCPSScheduler::check()
 
 void KPlatoRCPSScheduler::solve()
 {
+    qDebug()<<"KPlatoRCPSScheduler::solve()";
     struct rcps_solver *s = rcps_solver_new();
     rcps_solver_set_progress_callback(s, PROGRESS_CALLBACK_FREQUENCY, this, &KPlatoRCPSScheduler::progress_callback);
     rcps_solver_set_duration_callback(s, &KPlatoRCPSScheduler::duration_callback );
+
+    rcps_problem_set_weight_callback( m_problem, &KPlatoRCPSScheduler::weight_callback );
 
     Q_ASSERT( check() == 0 );
     rcps_solver_solve( s, m_problem );
@@ -263,12 +403,14 @@ int KPlatoRCPSScheduler::kplatoToRCPS()
     addTasks();
     addDependencies();
     addRequests();
-    
+    setWeights();
+    setConstraints();
+
     int r = check();
     return r;
 }
 
-void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap )
+void KPlatoRCPSScheduler::taskFromRCPSForward( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap )
 {
     if ( m_haltScheduling || m_manager == 0 ) {
         return;
@@ -288,8 +430,8 @@ void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<N
 
         dur = duration_callback( 0, st, rcps_mode_getduration(mode), info );
 
-        for ( QMap<int, int>::ConstIterator it = info->cache.constBegin(); it != info->cache.constEnd(); ++it ) {
-            cs->logDebug( QString( "Task '%1' start: %2, duration: %3 (%4, %5 hours)" ).arg( rcps_job_getname(job) ).arg( it.key() ).arg( it.value() ).arg( m_starttime.addSecs( (it.key()*m_timeunit)).toString() ).arg( (double)(it.value())/60.0 ), 1 );
+        for ( QMap<QPair<int, int>, int>::ConstIterator it = info->cache.constBegin(); it != info->cache.constEnd(); ++it ) {
+            cs->logDebug( QString( "Task '%1' start: %2, duration: %3 (%4, %5 hours)" ).arg( rcps_job_getname(job) ).arg( it.key().first ).arg( it.value() ).arg( fromRcpsTime( it.key().first ).toString() ).arg( (double)(it.value())/60.0 ), 1 );
         }
     }
     DateTime start = m_starttime.addSecs(st * m_timeunit);
@@ -356,7 +498,16 @@ void KPlatoRCPSScheduler::taskFromRCPS( struct rcps_job *job, Task *task, QMap<N
 
 void KPlatoRCPSScheduler::kplatoFromRCPS()
 {
-    //qDebug()<<"KPlatoRCPSScheduler::kplatoFromRCPS:";
+    if ( m_backward ) {
+        kplatoFromRCPSBackward();
+    } else {
+        kplatoFromRCPSForward();
+    }
+}
+
+void KPlatoRCPSScheduler::kplatoFromRCPSForward()
+{
+    //qDebug()<<"KPlatoRCPSScheduler::kplatoFromRCPSForward:";
     MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
     QMap<Node*, QList<ResourceRequest*> > resourcemap;
     int count = rcps_job_count(m_problem);
@@ -372,7 +523,7 @@ void KPlatoRCPSScheduler::kplatoFromRCPS()
         if ( task == 0 ) {
             continue; //might be dummy task for lag, ...
         }
-        taskFromRCPS( job, task, resourcemap );
+        taskFromRCPSForward( job, task, resourcemap );
 
         if ( projectstart > task->startTime() ) {
             projectstart = task->startTime();
@@ -384,16 +535,166 @@ void KPlatoRCPSScheduler::kplatoFromRCPS()
     DateTime end = m_starttime.addSecs( et );
     m_project->setStartTime( projectstart );
     m_project->setEndTime( end );
+
+    adjustSummaryTasks( m_schedule->summaryTasks() );
+    
+    calculatePertValues( resourcemap );
+
     cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( projectstart ), locale()->formatDateTime( end ) ), 1 );
 
-    m_project->adjustSummarytask();
-    
+    if ( m_manager ) {
+        if ( locale() ) cs->logDebug( QString( "Project scheduling finished at %1" ).arg( QDateTime::currentDateTime().toString() ), 1 );
+        m_project->finishCalculation( *m_manager );
+        m_manager->scheduleChanged( cs );
+    }
+}
+
+void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap )
+{
+    if ( m_haltScheduling || m_manager == 0 ) {
+        return;
+    }
+    Schedule *cs = task->currentSchedule();
+    Q_ASSERT( cs );
+    struct rcps_mode *mode = rcps_mode_get( job, rcps_job_getmode_res( job ) );
+    /* get the duration of this mode */
+    KPlatoRCPSScheduler::duration_info *info = static_cast<KPlatoRCPSScheduler::duration_info*>( rcps_mode_get_cbarg( mode ) );
+    qint64 dur = 0;
+    qint64 st = rcps_job_getstart_res( job );
+    if ( info == 0 ) {
+        dur = rcps_mode_getduration( mode );
+    } else {
+        cs->logDebug( QString( "Task '%1' estimate: %2" ).arg( task->name() ).arg( task->estimate()->value( Estimate::Use_Expected, false ).toString() ), 1 );
+        cs->logDebug( QString( "Task '%1' duration called %2 times, cached values: %3" ).arg( rcps_job_getname( job ) ).arg( info->calls ).arg( info->cache.count() ) );
+
+        dur = duration_callback( 0, st, rcps_mode_getduration( mode ), info );
+
+        for ( QMap<QPair<int, int>, int>::ConstIterator it = info->cache.constBegin(); it != info->cache.constEnd(); ++it ) {
+            cs->logDebug( QString( "Task '%1' start: %2, duration: %3 (%4, %5 hours)" ).arg( rcps_job_getname(job) ).arg( it.key().first ).arg( it.value() ).arg( fromRcpsTime( it.key().first ).toString() ).arg( (double)(it.value())/60.0 ), 1 );
+        }
+    }
+    DateTime end = fromRcpsTime( st );
+    DateTime start = fromRcpsTime( st + dur );
+    if ( locale() ) {
+        cs->logDebug( QString( "Task '%1' start=%2, duration=%3: %4 - %5" ).arg( rcps_job_getname(job) ).arg( st ).arg( dur ).arg( locale()->formatDateTime( start ) ).arg( locale()->formatDateTime( end ) ), 1 );
+    }
+    task->setStartTime( start );
+    task->setEndTime( end );
+    for ( int reqs = 0; reqs < rcps_request_count( mode ); ++reqs ) {
+        struct rcps_request *req = rcps_request_get( mode, reqs );
+        struct rcps_alternative *alt = rcps_alternative_get( req, rcps_request_getalternative_res( req ) );
+        int amount = rcps_alternative_getamount( alt );
+        struct rcps_resource *res = rcps_alternative_getresource( alt );
+
+        cs->logDebug( QString( "Job %1: resource %2 is %3 available" ).arg( rcps_job_getname( job ) ).arg( rcps_resource_getname( res ) ).arg( amount ), 1 );
+
+        // do actual appoinments etc
+        ResourceRequest *r = m_requestmap.value( req );
+        if ( r == 0 ) {
+            cs->logWarning( i18n( "No resource request is registered" ), 1 );
+            continue;
+        }
+        resourcemap[ task ] << r;
+        cs->logDebug( QString( "Make appointments to resource %1" ).arg( r->resource()->name() ), 1 );
+        r->makeAppointment( cs, amount );
+    }
+    if ( m_recalculate ) {
+        if ( task->completion().isFinished() ) {
+            task->copySchedule();
+            if ( locale() && m_manager ) {
+                cs->logDebug( QString( "Task is completed, copied schedule: %2 to %3" ).arg( task->name() ).arg( locale()->formatDateTime( task->startTime() ) ).arg( locale()->formatDateTime( task->endTime() ) ), 1 );
+            }
+        } else if ( task->completion().isStarted() ) {
+            task->copyAppointments( DateTime(), start );
+            if ( locale() && m_manager ) {
+                cs->logDebug( QString( "Task is %4% completed, copied appointments from %2 to %3" ).arg( task->name() ).arg( locale()->formatDateTime( task->startTime() ) ).arg( locale()->formatDateTime( start ) ).arg( task->completion().percentFinished() ), 1 );
+            }
+        }
+    }
+    cs->setScheduled( true );
+    if ( task->estimate()->type() == Estimate::Type_Effort ) {
+        if ( task->appointmentStartTime().isValid() ) {
+            task->setStartTime( task->appointmentStartTime() );
+        }
+        if ( task->appointmentEndTime().isValid() ) {
+            task->setEndTime( task->appointmentEndTime() );
+        }
+    } else if ( task->estimate()->calendar() ) {
+        DateTime t = task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() );
+        if ( t.isValid() ) {
+            task->setStartTime( t );
+        }
+        t = task->estimate()->calendar()->firstAvailableBefore( task->endTime(), task->startTime() );
+        if ( t.isValid() ) {
+            task->setEndTime( t );
+        }
+    } //else  Fixed duration
+    task->setDuration( task->endTime() - task->startTime() );
+    if ( locale() ) {
+        cs->logInfo( i18n( "Scheduled task to start at %1 and finish at %2", locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( task->endTime() ) ), 1 );
+    }
+}
+
+
+void KPlatoRCPSScheduler::kplatoFromRCPSBackward()
+{
+    //qDebug()<<"KPlatoRCPSScheduler::kplatoFromRCPSBackward:";
+    MainSchedule *cs = static_cast<MainSchedule*>( m_project->currentSchedule() );
+    QMap<Node*, QList<ResourceRequest*> > resourcemap;
+    int count = rcps_job_count( m_problem );
+    int step = ( PROGRESS_MAX_VALUE - m_progressinfo->progress ) / count;
+    DateTime projectstart = fromRcpsTime( rcps_job_getstart_res( m_jobend ) );
+    for ( int i = 0; i < count; ++i ) {
+        m_progressinfo->progress += step;
+        m_manager->setProgress( m_progressinfo->progress );
+        setProgress( m_progressinfo->progress );
+
+        struct rcps_job *job = rcps_job_get( m_problem, i );
+        Task *task = m_taskmap.value( job );
+        if ( task == 0 ) {
+            continue; //might be dummy task for lag, ...
+        }
+        taskFromRCPSBackward( job, task, resourcemap );
+
+        if ( projectstart > task->startTime() ) {
+            projectstart = task->startTime();
+        }
+    }
+    DateTime end = fromRcpsTime( rcps_job_getstart_res( m_jobstart ) );
+    m_project->setStartTime( projectstart );
+    m_project->setEndTime( end );
+    cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( projectstart ), locale()->formatDateTime( end ) ), 1 );
+    if ( projectstart < m_project->constraintStartTime() ) {
+        cs->schedulingError = true;
+        cs->logError( i18n( "Must start project early in order to finish in time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 1 );
+    }
+    adjustSummaryTasks( m_schedule->summaryTasks() );
+
     calculatePertValues( resourcemap );
 
     if ( m_manager ) {
         if ( locale() ) cs->logDebug( QString( "Project scheduling finished at %1" ).arg( QDateTime::currentDateTime().toString() ), 1 );
         m_project->finishCalculation( *m_manager );
         m_manager->scheduleChanged( cs );
+    }
+}
+
+void KPlatoRCPSScheduler::adjustSummaryTasks( const QList<Node*> &nodes )
+{
+    foreach ( Node *n, nodes ) {
+        adjustSummaryTasks( n->childNodeIterator() );
+        if ( n->parentNode()->type() == Node::Type_Summarytask ) {
+            DateTime pt = n->parentNode()->startTime();
+            DateTime nt = n->startTime();
+            if ( ! pt.isValid() || pt > nt ) {
+                n->parentNode()->setStartTime( nt );
+            }
+            pt = n->parentNode()->endTime();
+            nt = n->endTime();
+            if ( ! pt.isValid() || pt < nt ) {
+                n->parentNode()->setEndTime( nt );
+            }
+        }
     }
 }
 
@@ -412,6 +713,28 @@ void KPlatoRCPSScheduler::calculatePertValues( const QMap<Node*, QList<ResourceR
         if ( n->isEndNode() ) {
             (void)calculateEarlyStuff( map,  static_cast<Task*>( n ) );
         }
+        switch ( n->constraint() ) {
+            case Node::StartNotEarlier:
+            case Node::MustStartOn:
+            case Node::FixedInterval:
+                n->schedule()->negativeFloat = n->startTime() > n->constraintStartTime()
+                            ? n->startTime() - n->constraintStartTime()
+                            :  n->constraintStartTime() - n->startTime();
+                break;
+            case Node::FinishNotLater:
+            case Node::MustFinishOn:
+                n->schedule()->negativeFloat = n->endTime() > n->constraintEndTime()
+                                ? n->endTime() - n->constraintEndTime()
+                                : n->constraintEndTime() - n->endTime();
+                break;
+            default:
+                break;
+        }
+        if ( n->schedule()->negativeFloat != 0 ) {
+            n->schedule()->schedulingError = true;
+            n->schedule()->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", n->constraintToString( true ), n->schedule()->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+        }
+
     }
 }
 
@@ -547,6 +870,16 @@ void KPlatoRCPSScheduler::addResources()
     }
 }
 
+int KPlatoRCPSScheduler::toRcpsTime( const DateTime &time ) const
+{
+    return ( m_backward ?  time.secsTo( m_starttime ) : m_starttime.secsTo( time ) ) / m_timeunit;
+}
+
+DateTime KPlatoRCPSScheduler::fromRcpsTime( int time ) const
+{
+    return m_starttime.addSecs( ( m_backward ? -time : time ) * m_timeunit );
+}
+
 struct rcps_job *KPlatoRCPSScheduler::addTask( KPlato::Task *task )
 {
     struct rcps_job *job = rcps_job_new();
@@ -569,10 +902,17 @@ void KPlatoRCPSScheduler::addTasks()
     QList<Node*> list = m_project->allNodes();
     for (int i = 0; i < list.count(); ++i) {
         Node *n = list.at(i);
-        if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
-            continue;
+        switch ( n->type() ) {
+            case Node::Type_Summarytask:
+                m_schedule->insertSummaryTask( n );
+                break;
+            case Node::Type_Task:
+            case Node::Type_Milestone:
+                addTask( static_cast<Task*>( n ) );
+                break;
+            default:
+                break;
         }
-        addTask( static_cast<Task*>( n ) );
     }
     // Add an end job
     m_jobend = rcps_job_new();
@@ -580,6 +920,16 @@ void KPlatoRCPSScheduler::addTasks()
     rcps_job_add( m_problem, m_jobend );
     mode = rcps_mode_new();
     rcps_mode_add( m_jobend, mode );
+    // add a weight callback argument
+    struct KPlatoRCPSScheduler::weight_info *info = new KPlatoRCPSScheduler::weight_info;
+    info->self = this;
+    info->task = 0;
+    info->targettime = toRcpsTime( m_targettime );
+    info->isEndJob = true;
+    info->finish = 0;
+
+    rcps_mode_set_weight_cbarg( mode, info );
+    m_weight_info_list[ m_jobend ] = info;
 
     for( int i = 0; i < rcps_job_count( m_problem ); ++i ) {
         kDebug()<<"Task:"<<rcps_job_getname( rcps_job_get(m_problem, i) );
@@ -597,7 +947,7 @@ struct rcps_job *KPlatoRCPSScheduler::addJob( const QString &name, int duration 
     return job;
 }
 
-void KPlatoRCPSScheduler::addDependencies( struct rcps_job *job, KPlato::Task *task )
+void KPlatoRCPSScheduler::addDependenciesForward( struct rcps_job *job, KPlato::Task *task )
 {
     if ( task->dependParentNodes().isEmpty() && task->parentProxyRelations().isEmpty() ) {
         rcps_job_successor_add( m_jobstart, job, SUCCESSOR_FINISH_START );
@@ -649,12 +999,76 @@ void KPlatoRCPSScheduler::addDependencies( struct rcps_job *job, KPlato::Task *t
     }
 }
 
+void KPlatoRCPSScheduler::addDependenciesBackward( struct rcps_job *job, KPlato::Task *task )
+{
+    if ( task->dependParentNodes().isEmpty() && task->parentProxyRelations().isEmpty() ) {
+        rcps_job_successor_add( job, m_jobend, SUCCESSOR_FINISH_START );
+        //qDebug()<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_jobend );
+    }
+    if ( task->dependChildNodes().isEmpty() && task->childProxyRelations().isEmpty() ) {
+        rcps_job_successor_add( m_jobstart, job, SUCCESSOR_FINISH_START );
+        //qDebug()<<rcps_job_getname( m_jobstart )<<"->"<<rcps_job_getname( job );
+    }
+    foreach ( Relation *r, task->dependParentNodes() ) {
+        Node *n = r->parent();
+        if ( n == 0 || n->type() == Node::Type_Summarytask ) {
+            continue;
+        }
+        int type = SUCCESSOR_FINISH_START;
+        switch ( r->type() ) {
+            case Relation::FinishStart: type = SUCCESSOR_FINISH_START; break;
+            case Relation::FinishFinish: type = SUCCESSOR_FINISH_FINISH; break;
+            case Relation::StartStart: type = SUCCESSOR_START_START; break;
+        }
+        if ( r->lag() == Duration::zeroDuration ) {
+            rcps_job_successor_add( job, m_taskmap.key( static_cast<Task*>( n ) ), type );
+            //qDebug()<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<type;
+        } else {
+            // Add a dummy job to represent the lag
+            struct rcps_job *dummy = addJob( r->lag().toString(), r->lag().seconds() / m_timeunit );
+            rcps_job_successor_add( job, dummy, type );
+            qDebug()<<rcps_job_getname( job )<<"->"<<"dummy lag"<<type;
+            int t = type == SUCCESSOR_FINISH_FINISH ? type : SUCCESSOR_FINISH_START;
+            rcps_job_successor_add( dummy, m_taskmap.key( static_cast<Task*>( n ) ), t );
+            //qDebug()<<"dummy lag"<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<t;
+        }
+    }
+    foreach ( Relation *r, task->parentProxyRelations() ) {
+        Node *n = r->parent();
+        if ( n == 0 || n->type() == Node::Type_Summarytask ) {
+            continue;
+        }
+        int type = SUCCESSOR_FINISH_START;
+        switch ( r->type() ) {
+            case Relation::FinishStart: type = SUCCESSOR_FINISH_START; break;
+            case Relation::FinishFinish: type = SUCCESSOR_FINISH_FINISH; break;
+            case Relation::StartStart: type = SUCCESSOR_START_START; break;
+        }
+        if ( r->lag() == Duration::zeroDuration ) {
+            rcps_job_successor_add( job, m_taskmap.key( static_cast<Task*>( n ) ), type );
+            //qDebug()<<rcps_job_getname( job )<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<type;
+        } else {
+            // Add a dummy job to represent the lag
+            struct rcps_job *dummy = addJob( r->lag().toString(), r->lag().seconds() / m_timeunit );
+            rcps_job_successor_add( job, dummy, type );
+            qDebug()<<rcps_job_getname( job )<<"->"<<"dummy lag"<<type;
+            int t = type == SUCCESSOR_FINISH_FINISH ? type : SUCCESSOR_FINISH_START;
+            rcps_job_successor_add( dummy, m_taskmap.key( static_cast<Task*>( n ) ), t );
+            //qDebug()<<"dummy lag"<<"->"<<rcps_job_getname( m_taskmap.key( static_cast<Task*>( n ) ) )<<t;
+        }
+    }
+}
+
 void KPlatoRCPSScheduler::addDependencies()
 {
     kDebug();
     QMap<struct rcps_job*, Task*> ::const_iterator it = m_taskmap.constBegin();
     for ( ; it != m_taskmap.constEnd(); ++it ) {
-        addDependencies(  it.key(), it.value() );
+        if ( m_backward ) {
+            addDependenciesBackward( it.key(), it.value() );
+        } else {
+            addDependenciesForward( it.key(), it.value() );
+        }
     }
 }
 
@@ -672,12 +1086,23 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
     kDebug();
     struct rcps_mode *mode = rcps_mode_new();
     rcps_mode_add( job, mode );
+    // add a weight callback argument
+    struct KPlatoRCPSScheduler::weight_info *wi = new KPlatoRCPSScheduler::weight_info;
+    wi->self = this;
+    wi->task = task;
+    wi->targettime = 0;
+    wi->isEndJob = false;
+    wi->finish = 0;
+
+    rcps_mode_set_weight_cbarg( mode, wi );
+    m_weight_info_list[ job ] = wi;
+
     if ( task->type() == Node::Type_Milestone || task->estimate() == 0 || ( m_recalculate && task->completion().isFinished() ) ) {
         rcps_mode_setduration(mode, 0);
         return;
     }
     if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() == 0 ) {
-        // Fixed duration, no callback needed
+        // Fixed duration, no duration callback needed
         rcps_mode_setduration(mode, task->estimate()->value( Estimate::Use_Expected, m_usePert ).seconds() / m_timeunit );
         return;
     }
@@ -695,7 +1120,8 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
     info->estimatetype = task->estimate()->type();
 
     rcps_mode_set_cbarg( mode, info );
-    m_duration_info_list << info;
+    m_duration_info_list[ job ] = info;
+
 
     foreach ( ResourceRequest *rr, info->requests ) {
         Resource *r = rr->resource();
@@ -710,6 +1136,124 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
         rcps_alternative_setresource( alt, m_resourcemap.key( r ) );
         rcps_alternative_setamount( alt, (double)r->units() * 100 / rr->units() );
         rcps_alternative_add( req, alt );
+    }
+}
+
+void KPlatoRCPSScheduler::setConstraints()
+{
+    for ( QMap<struct rcps_job*, Task*>::iterator it = m_taskmap.begin(); it != m_taskmap.end(); ++it ) {
+        Task *task = it.value();
+        struct rcps_job *job = it.key();
+        struct weight_info *wi = m_weight_info_list.value( job );
+        struct duration_info *di = m_duration_info_list.value( job );
+        switch ( task->constraint() ) {
+            case Node::MustStartOn:
+            case Node::StartNotEarlier:
+                wi->targettime = toRcpsTime( task->constraintStartTime() );
+                if ( m_backward ) {
+                    int d = 0;
+                    if ( di ) {
+                        // as m_bacward == true, DURATION_BACKWARD in rcps means forward in plan
+                        d = duration( DURATION_BACKWARD, wi->targettime, 0, di );
+                    }
+                    wi->targettime -= d;
+                }
+                rcps_job_setearliest_start( job, wi->targettime );
+                task->currentSchedule()->logDebug( QString( "%2 %3 %4: %5 (rcps=%6)")
+                            .arg( task->constraintToString() )
+                            .arg( m_backward?"backward":"forward")
+                            .arg( task->constraintStartTime().toString() )
+                            .arg( fromRcpsTime( wi->targettime ).toString() )
+                            .arg( wi->targettime ) );
+                break;
+            case Node::MustFinishOn:
+            case Node::FinishNotLater:
+                wi->targettime = toRcpsTime( task->constraintEndTime() );
+                if ( ! m_backward ) {
+                    int d = 0;
+                    if ( di ) {
+                        d = duration( DURATION_BACKWARD, wi->targettime, 0, di );
+                    }
+                    wi->targettime -= d;
+                }
+                rcps_job_setearliest_start( job, wi->targettime );
+                break;
+            case Node::FixedInterval:
+                wi->targettime = m_backward ? toRcpsTime( task->constraintEndTime() ) : toRcpsTime( task->constraintStartTime() );
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void KPlatoRCPSScheduler::setWeights()
+{
+    for ( QMap<struct rcps_job*, Task*>::iterator it = m_taskmap.begin(); it != m_taskmap.end(); ++it ) {
+        Task *task = it.value();
+        struct rcps_job *job = it.key();
+        struct weight_info *wi = m_weight_info_list.value( job );
+        if ( m_backward ) {
+            switch ( task->constraint() ) {
+                case Node::ASAP:
+                    rcps_job_setweight( job, WEIGHT_ALAP );
+                    break;
+                case Node::ALAP:
+                    rcps_job_setweight( job, WEIGHT_ASAP );
+                    break;
+                case Node::StartNotEarlier:
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                case Node::MustStartOn:
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                case Node::FinishNotLater:
+                    rcps_job_setearliest_start( job, toRcpsTime( task->constraintEndTime() ) );
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                case Node::MustFinishOn:
+                    rcps_job_setearliest_start( job, toRcpsTime( task->constraintEndTime() ) );
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                case Node::FixedInterval:
+                    rcps_job_setearliest_start( job, toRcpsTime( task->constraintEndTime() ) );
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                default:
+                    rcps_job_setweight( job, WEIGHT_ASAP );
+                    break;
+            }
+        } else {
+            switch ( task->constraint() ) {
+                case Node::ASAP:
+                    rcps_job_setweight( job, WEIGHT_ASAP );
+                    break;
+                case Node::ALAP:
+                    rcps_job_setweight( job, WEIGHT_ALAP );
+                    break;
+                case Node::StartNotEarlier:
+                    rcps_job_setearliest_start( job, toRcpsTime( task->constraintStartTime() ) );
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                case Node::MustStartOn:
+                    rcps_job_setearliest_start( job, toRcpsTime( task->constraintStartTime() ) );
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                case Node::FinishNotLater:
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                case Node::MustFinishOn:
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                case Node::FixedInterval:
+                    rcps_job_setearliest_start( job, toRcpsTime( task->constraintStartTime() ) );
+                    rcps_job_setweight( job, WEIGHT_CONSTRAINT );
+                    break;
+                default:
+                    rcps_job_setweight( job, WEIGHT_ASAP );
+                    break;
+            }
+        }
     }
 }
 

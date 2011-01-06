@@ -811,8 +811,12 @@ void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
 {
     // find all pages that have the page style set and re-layout them.
     Q_ASSERT(tfs->pageStyle().isValid());
+    updatePagesForStyle(tfs->pageStyle());
+}
+
+void KWDocument::updatePagesForStyle(const KWPageStyle &style)
+{
     PageProcessingQueue *ppq = 0;
-    const KWPageStyle style = tfs->pageStyle();
     foreach (KWPage page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
             if (ppq == 0)

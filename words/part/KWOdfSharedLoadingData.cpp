@@ -179,16 +179,16 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
             wrap = "biggest";
     }
     if (wrap == "none") {
-        frame->setTextRunAround(KWord::NoRunAround);
+        frame->setTextWrap(KWord::NoRunAround);
     } else if (wrap == "run-through") {
         QString runTrought = properties.attributeNS(KoXmlNS::style, "run-through", "background");
         if (runTrought == "background") {
-            frame->setTextRunAround(KWord::RunThrough, KWord::Background);
+            frame->setTextWrap(KWord::RunThrough, KWord::Background);
         } else {
-            frame->setTextRunAround(KWord::RunThrough, KWord::Foreground);
+            frame->setTextWrap(KWord::RunThrough, KWord::Foreground);
         }
     } else {
-        frame->setTextRunAround(KWord::RunAround);
+        frame->setTextWrap(KWord::RunAround);
         if (wrap == "biggest")
             frame->setRunAroundSide(KWord::BiggestRunAroundSide);
         else if (wrap == "left")

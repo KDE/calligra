@@ -47,6 +47,7 @@
 #include "Charting.h"
 #include "ChartExport.h"
 #include "XlsxXmlChartReader.h"
+#include "ComplexShapeHandler.h"
 
 #include <MsooXmlReader.h>
 #include <MsooXmlCommonReader.h>
@@ -62,6 +63,39 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
     m_fillImageRenderingStyleStretch = false;
+}
+
+bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
+{
+    // some conditions are not supported with custom shapes properly yet, remove them when possible
+
+    // Custom geometry has its own handling
+    if (m_contentType == "custom") {
+        return false;
+    }
+
+    // Lines and connectors are handled elsewhere
+    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")) {
+        return false;
+    }
+
+    // Remove me when 'T/U' pathshape interpreation from odf tech committee has been agreed
+    return true;
+
+    // Remove me when custom-shape suppors rotation properly
+    if (m_rot != 0) {
+        return true;
+    }
+
+    // These shapes are not properly supported atm. some have bugs in predefinedShapes.xml,
+    // some might have xml parser / calligra bugs
+    if (m_contentType == "circularArrow" || m_contentType == "curvedDownArrow" ||
+        m_contentType == "curvedLeftArrow" || m_contentType == "curvedUpArrow" ||
+        m_contentType == "curvedRightArrow" || m_contentType == "gear6" ||
+        m_contentType == "gear9") {
+        return true;
+    }
+    return false;
 }
 
 // ----------------------------------------------------------------
@@ -207,7 +241,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             body->addAttributePt("svg:y", EMU_TO_POINT(m_svgY));
         }
         if (m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col >= 0) {
-            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
+            body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
                 QString::number(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_row+1));
             body->addAttributePt("table:end-x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_colOff));
             body->addAttributePt("table:end-y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_rowOff));
@@ -459,6 +493,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
             ELSE_WRONG_FORMAT
         }
     }
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    inheritShapeGeometry();
+#endif
+
     READ_EPILOGUE
 }
 
@@ -712,17 +751,21 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
-    // Arc and straight connector are now simpilified to be a line, fix later
     if (m_contentType == "line" || m_contentType == "arc") {
         body->startElement("draw:line");
     }
-    else if (m_contentType.startsWith("straightConnector") || m_contentType.startsWith("curvedConnector") ||
-             m_contentType.startsWith("bentConnector")) {
-        body->startElement("draw:line"); // This should be maybe draw:connector but koffice doesn't seem to
+    else if (m_contentType.contains("Connector")) {
+        body->startElement("draw:line"); // This should be maybe draw:connector but calligra doesn't seem to
                                          // handle that element yet
     }
-    else {
+    else if (m_contentType == "custom") { // custGeom
+        body->startElement("draw:custom-shape");
+    }
+    else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
         body->startElement("draw:frame"); // CASE #P475
+    }
+    else { // For predefined shapes
+        body->startElement("draw:custom-shape");
     }
     if (!m_cNvPrName.isEmpty()) {
         body->addAttribute("draw:name", m_cNvPrName);
@@ -769,7 +812,6 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
 
-    // Inheriting shape placement information from layout/master
     inheritShapePosition();
 
     if (m_context->type == Slide) {
@@ -780,10 +822,31 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
                  << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
     }
+#endif
+
     if (m_svgWidth > -1 && m_svgHeight > -1) {
+#ifdef PPTXXMLSLIDEREADER_CPP
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
-            m_contentType.startsWith("curvedConnector") || m_contentType.startsWith("bentConnector")) {
+#endif
+        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")) {
+#ifdef XLSXXMLDRAWINGREADER_CPP
+            XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+            body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
+            body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
+            QString y1 = EMU_TO_CM_STRING(f.m_rowOff);
+            QString y2 = EMU_TO_CM_STRING(f.m_rowOff + m_svgHeight);
+            QString x1 = EMU_TO_CM_STRING(f.m_colOff);
+            QString x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth);
+            if (m_rot != 0) {
+                qreal angle, xDiff, yDiff;
+                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                //! @todo, in case of connector, these should maybe be reversed?
+                x1 = EMU_TO_CM_STRING(f.m_colOff + xDiff);
+                y1 = EMU_TO_CM_STRING(f.m_rowOff + yDiff);
+                x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth - xDiff);
+                y2 = EMU_TO_CM_STRING(f.m_rowOff + m_svgHeight - yDiff);
+            }
+#else
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
@@ -797,6 +860,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
                 y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
             }
+#endif
             if (m_flipV) {
                 QString temp = y2;
                 y2 = y1;
@@ -813,6 +877,23 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:y2", y2);
         }
         else {
+#ifdef XLSXXMLDRAWINGREADER_CPP
+            // No rotation support for xlsx yet
+            if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+                XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+                body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
+                body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
+                if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+                    f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
+                    body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
+                    body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
+                    body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
+                } else {
+                    body->addAttributePt("svg:width", EMU_TO_POINT(m_svgWidth));
+                    body->addAttributePt("svg:height", EMU_TO_POINT(m_svgHeight));
+                }
+            }
+#else
             if (m_rot == 0) {
                 body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
                 body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -826,39 +907,23 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-        }
-    }
-#elif defined(XLSXXMLDRAWINGREADER_CPP)
-    if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
-        XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
-        body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
-        body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
-        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
-            f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
-            body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
-            body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
-        } else {
-            body->addAttributePt("svg:width", EMU_TO_POINT(m_svgWidth));
-            body->addAttributePt("svg:height", EMU_TO_POINT(m_svgHeight));
-        }
-    }
-#else
-#ifdef __GNUC__
-#warning TODO: docx
 #endif
-#endif // PPTXXMLSLIDEREADER_H
-    // In case of a blipFill
-    if (!m_xlinkHref.isEmpty()) {
-        body->startElement("draw:image");
-        body->addAttribute("xlink:href", m_xlinkHref);
-        body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:show", "embed");
-        body->addAttribute("xlink:actuate", "onLoad");
-        body->endElement(); //draw:image
-        m_xlinkHref.clear();
+            if (m_contentType == "custom") {
+                body->startElement("draw:enhanced-geometry");
+                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
+                body->addAttribute("draw:enhanced-path", m_customPath);
+                body->addCompleteElement(m_customEquations.toUtf8());
+                body->endElement(); // draw:enhanced-geometry
+            }
+            else if (m_contentType != "rect" && !m_contentType.isEmpty() && !unsupportedPredefinedShape()) {
+                body->startElement("draw:enhanced-geometry");
+                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
+                body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
+                body->addCompleteElement(m_context->import->m_shapeHelper.equations.value(m_contentType).toUtf8());
+                body->endElement(); // draw:enhanced-geometry
+            }
+        }
     }
-
 }
 
 #undef CURRENT_EL
@@ -1071,7 +1136,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 
  Child elements:
     - [done] blipFill (Picture Fill) §20.1.8.14
-    - custGeom (Custom Geometry) §20.1.9.8
+    - [done] custGeom (Custom Geometry) §20.1.9.8
     - effectDag (Effect Container) §20.1.8.25
     - effectLst (Effect Container) §20.1.8.26
     - [done] extLst (Extension List) §20.1.2.2.15
@@ -1093,6 +1158,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
     m_noFill = false;
+    m_customPath = QString();
+    m_customEquations = QString();
 
     while (!atEnd()) {
         readNext();
@@ -1102,6 +1169,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             if (qualifiedName() == QLatin1String("a:xfrm")) {
                 TRY_READ(xfrm)
                 m_xfrm_read = true;
+            }
+            else if (qualifiedName() == "a:custGeom") {
+                TRY_READ(custGeom)
+                m_contentType = "custom";
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1124,6 +1195,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             }
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IN_CONTEXT(blipFill)
+                if (!m_xlinkHref.isEmpty()) {
+                    KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
+                    fillStyle.addProperty("xlink:href", m_xlinkHref);
+                    fillStyle.addProperty("xlink:type", "simple");
+                    fillStyle.addProperty("xlink:actuate", "onLoad");
+                    const QString imageName = mainStyles->insert(fillStyle);
+                    m_currentDrawStyle->addProperty("draw:fill", "bitmap");
+                    m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
+                    m_xlinkHref.clear();
+                }
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1250,6 +1331,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+    int index = idx.toInt();
 
     while (!atEnd()) {
         readNext();
@@ -1266,8 +1350,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
         }
     }
 
-    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+    MSOOXML::DrawingMLFillBase *fillBase = m_context->themes->formatScheme.fillStyles.value(index);
+    if (fillBase) {
+        fillBase->writeStyles(*mainStyles, m_currentDrawStyle, m_currentColor);
+    }
 
     READ_EPILOGUE
 }
@@ -1297,6 +1383,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 {
     READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentPen = QPen();
+
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+
+    if (!idx.isEmpty()) {
+        int index = idx.toInt();
+        if (m_context->themes->formatScheme.lineStyles.size() > index) {
+            qreal penWidth = EMU_TO_POINT(m_context->themes->formatScheme.lineStyles.at(index).toDouble());
+            m_currentPen.setWidthF(penWidth);
+        }
+    }
 
     while (!atEnd()) {
         readNext();
@@ -1999,6 +2099,56 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL custGeom
+//! custGeom Handler (Custom Geometry)
+/*
+ Parent elements:
+ - [done] spPr (§21.2.2.197);
+ - [done] spPr (§21.3.2.23);
+ - [done] spPr (§21.4.3.7);
+ - [done] spPr (§20.1.2.2.35);
+ - [done] spPr (§20.2.2.6);
+ - [done] spPr (§20.5.2.30);
+ - [done] spPr (§19.3.1.44)
+
+ Child elements:
+ - ahLst (List of Shape Adjust Handles) §20.1.9.1
+ - avLst (List of Shape Adjust Values) §20.1.9.5
+ - cxnLst (List of Shape Connection Sites) §20.1.9.10
+ - gdLst (List of Shape Guides) §20.1.9.12
+ - pathLst (List of Shape Paths) §20.1.9.16
+ - rect (Shape Text Rectangle) §20.1.9.22
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_custGeom()
+{
+    READ_PROLOGUE
+
+    ComplexShapeHandler handler;
+    m_customEquations = handler.defaultEquations();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (name() == "avLst") {
+                m_customEquations += handler.handle_avLst(this);
+            }
+            else if (name() == "gdLst") {
+                m_customEquations += handler.handle_gdLst(this);
+            }
+            else if (name() == "pathLst") {
+                m_customPath = handler.handle_pathLst(this);
+                m_customEquations += handler.pathEquationsCreated();
+            }
+
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL xfrm
 //! xfrm handler (2D Transform for Individual Objects)
 //! DrawingML ECMA-376, 20.1.7.6, p. 3187.
@@ -2561,6 +2711,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
             ELSE_TRY_READ_IF_NS(p, oleObj)
             ELSE_TRY_READ_IF_NS(a, tbl)
 #endif
+            else if (qualifiedName() == "mc:AlternateContent") {
+                TRY_READ(AlternateContent)
+            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -3430,21 +3583,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     while (true) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
-        // @todo: Hmm, are these color modifications only available for pptx?
-        if (QUALIFIED_NAME_IS(lumMod)) {
-            m_currentDoubleValue = &lumMod.value;
-            TRY_READ(lumMod)
-            lumMod.valid = true;
-        } else if (QUALIFIED_NAME_IS(lumOff)) {
-            m_currentDoubleValue = &lumOff.value;
-            TRY_READ(lumOff)
-            lumOff.valid = true;
+        if (isStartElement()) {
+            // @todo: Hmm, are these color modifications only available for pptx?
+            if (QUALIFIED_NAME_IS(lumMod)) {
+                m_currentDoubleValue = &lumMod.value;
+                TRY_READ(lumMod)
+                lumMod.valid = true;
+            } else if (QUALIFIED_NAME_IS(lumOff)) {
+                m_currentDoubleValue = &lumOff.value;
+                TRY_READ(lumOff)
+                lumOff.valid = true;
+            }
+            ELSE_TRY_READ_IF(shade)
+            ELSE_TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(satMod)
+            ELSE_TRY_READ_IF(alpha)
+            SKIP_UNKNOWN
         }
-        ELSE_TRY_READ_IF(shade)
-        ELSE_TRY_READ_IF(tint)
-        ELSE_TRY_READ_IF(satMod)
-        ELSE_TRY_READ_IF(alpha)
-        SKIP_UNKNOWN
     }
 
     QColor col = Qt::white;
@@ -4892,7 +5047,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
-            ELSE_TRY_READ_IF(gradFill) // we do not support this properly, at least we get the color
+            //ELSE_TRY_READ_IF(gradFill) // we do not support this properly, thus disabded for the moment
             ELSE_TRY_READ_IF(latin)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT

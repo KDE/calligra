@@ -60,7 +60,7 @@ namespace Scripting
 class Frame : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(TextRunAround)
+    Q_ENUMS(textWrap)
     Q_ENUMS(FrameBehavior)
 
 public:
@@ -71,7 +71,7 @@ public:
      * This property specifies how text from a text frame behaves when a frame with
      * one of these properties set on it intersects with it.
      */
-    enum TextRunAround {
+    enum TextWrap {
         NoRunAround = KWord::NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
         RunAround = KWord::RunAround, ///< The text will run around the outline of the frame
         RunThrough = KWord::RunThrough ///< The text will completely ignore the frame and layout as if it was not there
@@ -134,13 +134,13 @@ public slots:
 
     /** Return the text runaround property for this frame. This property specifies
     how text from another textframe will behave when this frame intersects with it. */
-    int textRunAround() const {
-        return m_frame->textRunAround();
+    int textWrap() const {
+        return m_frame->textWrap();
     }
     /**
     * Set the text runaround property for this frame.
     *
-    * Valid values for the parameter \p textrunaround are;
+    * Valid values for the parameter \p textWrap are;
     * \li NoRunAround = The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
     * \li RunAround = The text will run around the outline of the frame.
     * \li RunThrough = The text will completely ignore the frame and layout as if it was not there.
@@ -148,12 +148,12 @@ public slots:
     * Python sample that does set the round-around property of the both
     * frames myframe1 and myframe2;
     * \code
-    * myframe1.setTextRunAround(myframe.NoRunAround)
-    * myframe2.setTextRunAround(myframe.RunThrough)
+    * myframe1.setTextWrap(myframe.NoRunAround)
+    * myframe2.setTextWrap(myframe.RunThrough)
     * \endcode
     */
-    void setTextRunAround(int textrunaround) {
-        return m_frame->setTextRunAround((KWord::TextRunAround) textrunaround);
+    void setTextWrap(int textWrap) {
+        return m_frame->setTextWrap((KWord::TextWrap) textWrap);
     }
 
     /** Return the space between this frames edge and the text when that text runs around this frame. */

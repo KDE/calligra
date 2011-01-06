@@ -1391,7 +1391,7 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
         if (m_defs.contains(key)) {
             const KoXmlElement &a = m_defs[key];
             SvgStyles styles = mergeStyles(collectStyles(e), collectStyles(a));
-            if (a.tagName() == "g" || a.tagName() == "a") {
+            if (a.tagName() == "g" || a.tagName() == "a" || a.tagName() == "symbol") {
                 addGraphicContext();
                 setupTransform(a);
                 updateContext(a);
@@ -1533,7 +1533,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 
         if (b.tagName() == "svg") {
             shapes += parseSvg(b);
-        } else if (b.tagName() == "g" || b.tagName() == "a") {
+        } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
             // treat svg link <a> as group so we don't miss its child elements
             addGraphicContext();
             setupTransform(b);
@@ -1553,6 +1553,13 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
                 group->setName(b.attribute("id"));
 
             addToGroup(childShapes, group);
+            if(b.hasAttribute("viewBox")) {
+                QRectF viewBox = parseViewBox(b.attribute("viewBox"));
+                QTransform viewTransform;
+                viewTransform.translate(viewBox.x(), viewBox.y());
+                viewTransform.scale(group->size().width() / viewBox.width() , group->size().height() / viewBox.height());
+                group->applyAbsoluteTransformation(viewTransform);
+            }
             parseStyle(group, styles);   // apply style to this group after size is set
 
             shapes.append(group);

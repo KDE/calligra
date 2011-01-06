@@ -53,7 +53,7 @@ KexiFieldDrag::decode(QDropEvent* e, QString& sourceMimeType,
 /// implementation of KexiDataProviderDrag
 
 KexiDataProviderDrag::KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName,
-        QWidget *parent, const char *name)
+        QWidget *parent, const char */*name*/)
         : QDrag(parent)
 {
     QMimeData *mimedata = new QMimeData();
@@ -80,7 +80,7 @@ KexiDataProviderDrag::decode(QDropEvent* e, QString& sourceMimeType, QString& so
         e->accept();
         QDataStream stream1(&payload, QIODevice::ReadOnly);
 
-	stream1 >> sourceMimeType;
+        stream1 >> sourceMimeType;
         stream1 >> sourceName;
 //  kDebug() << "decoded:" << sourceMimeType <<"/"<<sourceName;
         return true;

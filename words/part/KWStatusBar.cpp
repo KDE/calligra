@@ -51,9 +51,7 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     KWDocument *document = view->kwdocument();
     m_statusbar->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    m_pageLabel = new QLabel(m_statusbar);
-    m_pageLabel->setFrameShape(QFrame::Panel);
-    m_pageLabel->setFrameShadow(QFrame::Sunken);
+    m_pageLabel = new QLabel();
     const QString s = i18nPage.subs("999").subs("999").toString();
     m_pageLabel->setMinimumWidth(QFontMetrics(m_pageLabel->font()).width(s));
     m_statusbar->addWidget(m_pageLabel);
@@ -68,8 +66,6 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showPage(bool)));
 
     m_modifiedLabel = new QLabel(m_statusbar);
-    m_modifiedLabel->setFrameShape(QFrame::Panel);
-    m_modifiedLabel->setFrameShadow(QFrame::Sunken);
     QFontMetrics fm(m_modifiedLabel->font());
     m_modifiedLabel->setMinimumWidth(qMax(fm.width(i18nModified), fm.width(i18nSaved)));
     m_statusbar->addWidget(m_modifiedLabel);
@@ -85,8 +81,6 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showModified(bool)));
 
     m_mousePosLabel = new QLabel(m_statusbar);
-    m_mousePosLabel->setFrameShape(QFrame::Panel);
-    m_mousePosLabel->setFrameShadow(QFrame::Sunken);
     m_mousePosLabel->setMinimumWidth(QFontMetrics(m_mousePosLabel->font()).width("9999:9999"));
     m_statusbar->addWidget(m_mousePosLabel);
     m_mousePosLabel->setVisible(document->config().statusBarShowMouse());

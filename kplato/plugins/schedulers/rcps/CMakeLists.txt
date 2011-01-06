@@ -1,6 +1,8 @@
 
+set(LIBRCPS_INCLUDE_DIR libs/src)
 include_directories( ${LIBRCPS_INCLUDE_DIR} ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/kplato/libs/kernel ${KDE4_INCLUDES} )
 
+add_subdirectory( libs )
 add_subdirectory( tests )
 
 SET ( RCPSScheduler_SRCS
@@ -14,8 +16,9 @@ target_link_libraries(
     kplatorcpsscheduler
     kplatokernel
     koodf
-    ${LIBRCPS_LIBRARIES}
-    )
+    librcps_plan
+#    ${LIBRCPS_LIBRARIES}
+)
 
 install( TARGETS kplatorcpsscheduler DESTINATION ${PLUGIN_INSTALL_DIR} )
 
