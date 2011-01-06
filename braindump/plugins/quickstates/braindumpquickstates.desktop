@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=Quickstates Plugin
 Name[et]=Olekuplugin
+Name[it]=Estensione per stati veloci
 Name[nl]=Plugin voor snelstatussen
 Name[pt]='Plugin' de Estados Rápidos
 Name[pt_BR]=Plug-in de estados rápidos
 Name[sv]=Insticksprogram med snabbtillstånd
 Name[uk]=Додаток станів
 Name[x-test]=xxQuickstates Pluginxx
+Name[zh_TW]=Quickstates 外掛程式
 
 X-KDE-ServiceTypes=Braindump/Extensions
 Type=Service

@@ -96,11 +96,14 @@ public:
     PptxSlideProperties();
     ~PptxSlideProperties();
 
-    //! Shapes map addressed by type
-    QMap<QString, PptxShapeProperties*> shapesMap;
-
     //! geometry type
     QMap<QString, QString> contentTypeMap;
+
+    //! geometry type
+    QMap<QString, QString> contentEquations;
+
+    //! geometry type
+    QMap<QString, QString> contentPath;
 
     //! The presentation:presentation-page-layout-name
     QString pageLayoutStyleName;
@@ -137,6 +140,9 @@ public:
 
     // Master specific
     MSOOXML::DrawingMLTheme theme;
+
+    //! Shapes map addressed by type
+    QMap<QString, PptxShapeProperties*> shapesMap;
 
     QMap<QString, QString> colorMap;
 
