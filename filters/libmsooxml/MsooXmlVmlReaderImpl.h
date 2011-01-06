@@ -59,6 +59,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     else if (startType == StraightConnectorStart) {
         body->startElement("draw:line");
     }
+    else if (startType == CustomStart) {
+        body->startElement("draw:custom-shape");
+    }
     else {
         body->startElement("draw:frame");
     }
@@ -176,14 +179,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 
 #ifdef DOCXXMLDOCREADER_H
-    // These seem to be decent defaults
-    m_currentDrawStyle->addProperty("style:horizonal-pos", "from-left");
-    m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+    bool asChar = false;
     if (!m_wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
         if (position.isEmpty() || position == "static") { // Default
+            asChar = true;
             body->addAttribute("text:anchor-type", "as-char");
-            m_currentDrawStyle->addProperty("style:vertical-rel", "char"); // check this
         }
         else {
             body->addAttribute("text:anchor-type", "char");
@@ -193,6 +194,11 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else {
         body->addAttribute("text:anchor-type", m_anchorType);
+    }
+    if (!asChar) {
+        // These seem to be decent defaults
+        m_currentDrawStyle->addProperty("style:horizonal-pos", "from-left");
+        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
     }
 #endif
 
@@ -674,6 +680,245 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
     READ_EPILOGUE
 }
 
+static QString getNumber(QString& source)
+{
+    QString number;
+    int index = 0;
+    bool numberOk = true;
+    while (true) {
+        QString(source.at(index)).toInt(&numberOk);
+        if (numberOk) {
+            number = number + source.at(index);
+            ++index;
+        }
+        else {
+            break;
+        }
+    }
+    source = source.mid(index);
+    return number;
+}
+
+static QString getArgument(QString& source, bool commaMeansZero, bool& wasCommand)
+{
+    wasCommand = false;
+    if (source.at(0) == ',') {
+        source = source.mid(1);
+        if (commaMeansZero) {
+            return "0";
+        }
+    }
+    bool isNumber;
+    QString(source.at(0)).toInt(&isNumber);
+    if (isNumber) {
+        return getNumber(source);
+    }
+    if (source.at(0) == '-') { //negative number
+        source = source.mid(1);
+        return QString("-%1").arg(getNumber(source));
+    }
+    if (source.at(0) == ',') { // case of 1,,2
+        return "0";
+    }
+    if (source.at(0) == '#') {
+        source = source.mid(1);
+        return QString("$%1").arg(getNumber(source));
+    }
+    if (source.at(0) == '@') {
+        source = source.mid(1);
+        return QString("?f%1").arg(getNumber(source));
+    }
+
+    wasCommand = true;
+    return "0"; // this means case 1,e
+}
+
+static QString convertToEnhancedPath(const QString& source)
+{
+    enum ConversionState {CommandExpected, ArgumentExpected};
+    QString parsedString = source;
+    QString returnedString;
+    ConversionState state = CommandExpected;
+    enum CommandType {MoveCommand, LineCommand, RelativeLineCommand, QuadEllipXCommand, QuadEllipYCommand,
+                      CurveCommand};
+    CommandType lastCommand = MoveCommand;
+    QString firstMoveX, firstMoveY, currentX, currentY;
+    bool argumentMove;
+    QChar command;
+    QString first, second, third, fourth, fifth, sixth;
+
+    while (true) {
+        if (parsedString.length() == 0) {
+            break;
+        }
+        while (parsedString.at(0) == ' ') {
+            parsedString = parsedString.trimmed();
+        }
+        switch (state) {
+        case CommandExpected:
+            command = parsedString.at(0);
+            parsedString = parsedString.mid(1);
+            state = ArgumentExpected;
+            if (command == 'm') {
+                lastCommand = MoveCommand;
+            }
+            else if (command == 'l') {
+                lastCommand = LineCommand;
+            }
+            else if (command == 'r') {
+                lastCommand = RelativeLineCommand;
+            }
+            else if (command == 'x') {
+                state = CommandExpected;
+                //returnedString += QString(" L%1 %2").arg(firstMoveX).arg(firstMoveY);
+                returnedString += " Z";
+            }
+            else if (command == 'e') {
+                returnedString += " N";
+                state = CommandExpected;
+            }
+            else if (command == 'c') {
+                lastCommand = CurveCommand;
+            }
+            else if (command == 'q') {
+                QChar subcommand = parsedString.at(0);
+                parsedString = parsedString.mid(1);
+                if (subcommand == 'x') {
+                    lastCommand = QuadEllipXCommand;
+                }
+                else {
+                    lastCommand = QuadEllipYCommand;
+                }
+            }
+            else if (command == 'n') {
+                QChar subcommand = parsedString.at(0);
+                parsedString = parsedString.mid(1);
+                if (subcommand == 'f') {
+                    returnedString += " F";
+                }
+                else {
+                    returnedString += " S";
+                }
+                state = CommandExpected;
+            }
+            break;
+        case ArgumentExpected:
+            switch (lastCommand) {
+            case MoveCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                firstMoveX = first;
+                firstMoveY = second;
+                currentX = first;
+                currentY = second;
+                returnedString += QString(" M %1 %2").arg(first).arg(second);
+                state = CommandExpected;
+                break;
+            case CurveCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                returnedString += QString(" C %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
+                                  arg(fourth).arg(fifth).arg(sixth);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
+                                      arg(fourth).arg(fifth).arg(sixth);
+                }
+                break;
+            case LineCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                returnedString += QString(" L %1 %2").arg(first).arg(second);
+                currentX = first;
+                currentY = second;
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    currentX = first;
+                    currentY = second;
+                    returnedString += QString(" %1 %2").arg(first).arg(second);
+                }
+                break;
+            case RelativeLineCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                returnedString += QString(" L %1 %2").arg(first.toInt() + currentX.toInt()).
+                                                     arg(second.toInt() + currentY.toInt());
+                currentX = first;
+                currentY = second;
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    currentX = first;
+                    currentY = second;
+                    returnedString += QString(" %1 %2").arg(first.toInt() + currentX.toInt()).
+                                                        arg(second.toInt() + currentY.toInt());
+                }
+                break;
+            case QuadEllipXCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                returnedString += QString(" X %1 %2").arg(first).arg(second);
+                currentX = first;
+                currentY = second;
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    currentX = first;
+                    currentY = second;
+                    returnedString += QString(" %1 %2").arg(first).arg(second);
+                }
+                break;
+            case QuadEllipYCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                returnedString += QString(" Y %1 %2").arg(first).arg(second);
+                currentX = first;
+                currentY = second;
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    currentX = first;
+                    currentY = second;
+                    returnedString += QString(" %1 %2").arg(first).arg(second);
+                }
+                break;
+            }
+        }
+    }
+
+    return returnedString;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL shapetype
 //! shapetype handler (Shape Template)
@@ -697,7 +942,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
  - complex (Complex) §14.2.2.7
  - extrusion (3D Extrusion) §14.2.2.11
  - fill (Shape Fill Properties) §14.1.2.5
- - formulas (Set of Formulas) §14.1.2.6
+ - [done] formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
  - imagedata (Image Data) §14.1.2.11
  - lock (Shape Protections) §14.2.2.18
@@ -715,14 +960,153 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
 {
     READ_PROLOGUE
-    //const QXmlStreamAttributes attrs(attributes());
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(adj)
+    TRY_READ_ATTR_WITHOUT_NS(coordsize)
+    TRY_READ_ATTR_WITHOUT_NS(id)
+    TRY_READ_ATTR_WITHOUT_NS(path)
+
+    // Using KoXmlWriters is another opinion, but this one is used to avoid
+    // hassle with deletions (koxmlwriter not deleting its device etc)
+    m_shapeTypeString = "<draw:enhanced-geometry ";
+
+    if (!adj.isEmpty()) {
+        QString tempModifiers = adj;
+        tempModifiers.replace(',', " ");
+        m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
+    }
+    if (!coordsize.isEmpty()) {
+        QString tempViewBox = "0 0 " + coordsize;
+        tempViewBox.replace(',', " ");
+        m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
+    }
+    if (!path.isEmpty()) {
+        QString enPath = convertToEnhancedPath(path);
+        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(enPath);
+    }
+
+    m_shapeTypeString += ">";
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-//            TRY_READ_IF()
+            TRY_READ_IF(formulas)
+            SKIP_UNKNOWN
         }
     }
+
+    m_shapeTypeString += "</draw:enhanced-geometry>";
+    m_shapeTypeStrings[id] = m_shapeTypeString;
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL formulas
+/* formulas handlers (Set of Formulas)
+
+ Parent elements:
+ - arc (§14.1.2.1);
+ - background (Part 1, §17.2.1);
+ - curve (§14.1.2.3);
+ - group (§14.1.2.7);
+ - image (§14.1.2.10);
+ - line (§14.1.2.12);
+ - object (Part 1, §17.3.3.19);
+ - oval (§14.1.2.13);
+ - pict (§9.2.2.2);
+ - pict (§9.5.1);
+ - polyline (§14.1.2.15);
+ - rect (§14.1.2.16);
+ - roundrect (§14.1.2.17);
+ - shape (§14.1.2.19);
+ - [done] shapetype (§14.1.2.20)
+
+ Child elements:
+ -  [done] f (Single Formula) §14.1.2.4
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_formulas()
+{
+    READ_PROLOGUE
+
+    m_formulaIndex = 0;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(f)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL f
+/*! f handler (Shape Definition)
+ Parent elements:
+ - [done] formulas (§14.1.2.6)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(eqn)
+    m_shapeTypeString += "\n<draw:equation ";
+    m_shapeTypeString += QString("draw:name=\"f%1\" draw:formula=\"").arg(m_formulaIndex);
+
+    if (!eqn.isEmpty()) {
+        eqn = eqn.trimmed();
+        eqn.replace('#', '$'); // value reference
+        eqn.replace('@', "?f"); // function reference
+        int commandIndex = eqn.indexOf(' ');
+        QString command = eqn.left(commandIndex);
+        eqn = eqn.mid(commandIndex + 1);
+        QList<QString> parameters;
+        while (true) {
+            commandIndex = eqn.indexOf(' ');
+            if (commandIndex < 0) {
+                parameters.append(eqn);
+                break;
+            }
+            parameters.append(eqn.left(commandIndex));
+            eqn = eqn.mid(commandIndex + 1);
+        }
+        if (command == "val") {
+            m_shapeTypeString += parameters.at(0);
+        }
+        else if (command == "sum") {
+            m_shapeTypeString += parameters.at(0) + "+" + parameters.at(1) + "-" + parameters.at(2);
+        }
+        else if (command == "prod") {
+            m_shapeTypeString += parameters.at(0) + "*" + parameters.at(1) + "/" + parameters.at(2);
+        }
+        else if (command == "abs") {
+            m_shapeTypeString += QString("abs(%1)").arg(parameters.at(0));
+        }
+        else if (command == "min") {
+            m_shapeTypeString += QString("min(%1, %2)").arg(parameters.at(0)).arg(parameters.at(1));
+        }
+        else if (command == "max") {
+            m_shapeTypeString += QString("max(%1, %2)").arg(parameters.at(0)).arg(parameters.at(1));
+        }
+        else if (command == "if") {
+            m_shapeTypeString += QString("if(%1, %2, %3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+        }
+    }
+
+    m_shapeTypeString += "\" ";
+    m_shapeTypeString += "/>";
+
+    ++m_formulaIndex;
+    readNext();
     READ_EPILOGUE
 }
 
@@ -796,6 +1180,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+    TRY_READ_ATTR_WITHOUT_NS(type)
 
     m_strokeWidth = 1 ; // This seems to be the default
 
@@ -820,12 +1205,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
     m_wrapRead = false;
 
+    bool isCustomShape = true;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(imagedata)
-            ELSE_TRY_READ_IF(textbox)
+            if (qualifiedName() == "v:imagedata") {
+                isCustomShape = false;
+                TRY_READ(imagedata)
+            }
+            else if (qualifiedName() == "v:textbox") {
+                isCustomShape = false;
+                TRY_READ(textbox)
+            }
             ELSE_TRY_READ_IF(stroke)
             else if (qualifiedName() == "w10:wrap") {
                 m_wrapRead = true;
@@ -839,8 +1232,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     if (m_outputFrames) {
         if (o_connectortype.isEmpty()) {
-            createFrameStart();
-        } else {
+            if (!isCustomShape) {
+                createFrameStart();
+            }
+            else {
+                createFrameStart(CustomStart);
+            }
+        }
+        else {
             createFrameStart(StraightConnectorStart);
         }
     }
@@ -848,6 +1247,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
+        if (isCustomShape) {
+            type = type.mid(1); // removes extra # from the start
+            body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+        }
         createFrameEnd();
     }
 

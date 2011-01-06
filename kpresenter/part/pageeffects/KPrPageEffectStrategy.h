@@ -23,9 +23,9 @@
 
 #include "KPrPageEffectFactory.h"
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
-class KPRESENTER_EXPORT KPrPageEffectStrategy
+class STAGE_EXPORT KPrPageEffectStrategy
 {
 public:
     /**

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Mind Tree
 Name[ca]=Arbre de ment
+Name[ca@valencia]=Arbre de ment
 Name[da]=Tanketræ
 Name[en_GB]=Mind Tree
 Name[es]=Árbol mental
@@ -15,6 +16,7 @@ Name[pt_BR]=Árvore Mental
 Name[sv]=Tanketräd
 Name[uk]=Дерево запам’ятовування
 Name[wa]=Coxhlaedje do tuzaedje
+Name[x-test]=xxMind Treexx
 Name[zh_TW]=心智圖
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service

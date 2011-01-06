@@ -13,7 +13,7 @@ Comment[eo]=Fenestraĵfabrikbazo
 Comment[es]=Base de fábrica de elementos
 Comment[et]=Vidinate põhibaas
 Comment[eu]=Trepeten faktoriaren oinarria
-Comment[fa]=پایۀ کارخانۀ عنصر
+Comment[fa]=پایه کارخانه عنصر
 Comment[fi]=Käyttöliittymäelementtien pohja
 Comment[fr]=Base de création de widgets
 Comment[fy]=Widget Factory Base
@@ -45,6 +45,7 @@ Comment[ta]=சாளர தொழிற்சாலை தளம்
 Comment[tr]=Widget Factory Base
 Comment[uk]=База фабрики віджетів
 Comment[wa]=Båze del fabrike d' ahesses
+Comment[x-test]=xxWidget Factory Basexx
 Comment[zh_CN]=基础组件工厂
 Comment[zh_TW]=視窗元件工廠基地
 

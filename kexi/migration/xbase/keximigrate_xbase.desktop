@@ -32,6 +32,7 @@ Name[tg]=xBase
 Name[tr]=xBase
 Name[uk]=xBase
 Name[wa]=xBase
+Name[x-test]=xxxBasexx
 Name[zh_CN]=xBase
 Name[zh_TW]=xBase
 Comment=xBase Migration Driver for Kexi
@@ -61,6 +62,7 @@ Comment[sv]=xBase-övergångsdrivrutin för Kexi
 Comment[tr]=Kexi için xBase Taşıma Sürücüsü
 Comment[uk]=Драйвер міграції xBase для Kexi
 Comment[wa]=Mineu d' migråcion d' xBase po Kexi
+Comment[x-test]=xxxBase Migration Driver for Kexixx
 Comment[zh_CN]=Kexi xBase 升迁驱动
 Comment[zh_TW]=Kexi 的 xBase 轉移驅動程式
 

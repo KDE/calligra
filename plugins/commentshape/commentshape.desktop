@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Comment Shape
 Name[ca]=Forma de comentaris
+Name[ca@valencia]=Forma de comentaris
 Name[da]=Kommentar-form
 Name[de]=Kommentar-Objekt
 Name[en_GB]=Comment Shape
@@ -18,6 +19,7 @@ Name[pt_BR]=Forma de Comentário
 Name[sv]=Kommentarform
 Name[uk]=Форма-коментар
 Name[wa]=Fôme di rawete di tecse
+Name[x-test]=xxComment Shapexx
 Name[zh_TW]=註解元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service

@@ -1,0 +1,29 @@
+
+set(CMAKE_THREAD_PREFER_PTHREAD 1)
+
+macro_optional_find_package(Threads)
+
+if(Threads_FOUND AND CMAKE_USE_PTHREADS_INIT AND CMAKE_THREAD_LIBS_INIT)
+    set(HAVE_PTHREADS 1)
+endif(Threads_FOUND AND CMAKE_USE_PTHREADS_INIT AND CMAKE_THREAD_LIBS_INIT)
+
+set(librcps_LIB_SRCS
+    decode.c
+    initial.c
+    fitness.c
+    librcps.c
+    ops.c
+    repair.c
+    slist.c
+)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+
+kde4_add_library(librcps_plan SHARED ${librcps_LIB_SRCS})
+
+target_link_libraries(
+    librcps_plan
+    ${CMAKE_THREAD_LIBS_INIT}
+)
+
+install(TARGETS librcps_plan ${INSTALL_TARGETS_DEFAULT_ARGS})

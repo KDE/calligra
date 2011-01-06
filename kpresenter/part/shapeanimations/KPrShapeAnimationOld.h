@@ -22,7 +22,7 @@
 
 #include <QTimeLine>
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #define TIMEFACTOR 1000.0
 
@@ -44,7 +44,7 @@ class KPrAnimationData;
  * The state of the animation is kept in the animationData and is 
  * passed to the ainmation when it is run e.g. on a special view.
  */
-class KPRESENTER_TEST_EXPORT KPrShapeAnimationOld
+class STAGE_TEST_EXPORT KPrShapeAnimationOld
 {
 public:
     enum Type

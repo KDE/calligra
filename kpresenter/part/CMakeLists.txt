@@ -3,7 +3,7 @@ project(kpresenter)
 include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
 if(KDE4_BUILD_TESTS)
-    # only with this definition will the KPRESENTER_TEST_EXPORT macro do something
+    # only with this definition will the STAGE_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
@@ -11,8 +11,8 @@ endif(KDE4_BUILD_TESTS)
 add_subdirectory(tests)
 add_subdirectory(tools)
 
-### kpresenterprivate ###
-set( kpresenterprivate_LIB_SRCS
+### calligrastageprivate ###
+set( calligrastageprivate_LIB_SRCS
      KPrFactory.cpp
      KPrDocument.cpp
      KPrDeclarations.cpp
@@ -126,7 +126,7 @@ set( kpresenterprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
-kde4_add_ui_files(kpresenterprivate_LIB_SRCS
+kde4_add_ui_files(calligrastageprivate_LIB_SRCS
      ui/KPrCustomSlideShowsDialog.ui
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
@@ -134,24 +134,24 @@ kde4_add_ui_files(kpresenterprivate_LIB_SRCS
      ui/KPrHtmlExport.ui
    )
 
-kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
+kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate kopageapp kowidgets ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
-target_link_libraries(kpresenterprivate LINK_INTERFACE_LIBRARIES kopageapp)
+target_link_libraries(calligrastageprivate kopageapp kowidgets ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
+target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
-set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kpresenterprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-### kpresenterpart ###
-set(kpresenterpart_PART_SRCS KPrFactoryInit.cpp )
+### calligrastagepart ###
+set(calligrastagepart_PART_SRCS KPrFactoryInit.cpp )
 
-kde4_add_plugin(kpresenterpart ${kpresenterpart_PART_SRCS})
+kde4_add_plugin(calligrastagepart ${calligrastagepart_PART_SRCS})
 
 
 
-target_link_libraries(kpresenterpart kpresenterprivate )
+target_link_libraries(calligrastagepart calligrastageprivate )
 
-install(TARGETS kpresenterpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ### kdeinit kpresenter ###
 set(kpresenter_KDEINIT_SRCS main.cpp )

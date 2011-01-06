@@ -38,7 +38,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
         MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                        tableStylesFile, &m_context->slideMasterPageProperties->theme,
+                                                                        tableStylesFile, &m_context->slideMasterProperties->theme,
                                                                         d->tableStyleList, m_context->colorMap);
         m_context->import->loadAndParseDocument(&tableStyleReader, m_context->tableStylesFilePath, &tableStyleReaderContext);
     }

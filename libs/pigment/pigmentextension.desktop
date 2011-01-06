@@ -21,12 +21,13 @@ Comment[nb]=En modul som implementerer en utvidelse til et fargerom for Pigment 
 Comment[nds]=En Moduul, dat en Verwiedern för den Bruuk mit Pigmentklöör-Bewerkensysteem na en Klöörruum inbuut
 Comment[nl]=Een module die een uitbreiding voor een kleurgebied implementeert van het Pigment Color Manipulation System
 Comment[pt]=Um módulo que implementa um espaço de cores completo para usar com o Sistema de Manipulação de Cores por Pigmentos
-Comment[pt_BR]=Um módulo que implementa uma extensão para espaço de cores do Sistema de Manipulação de Pigmeto de Cor
+Comment[pt_BR]=Um módulo que implementa uma extensão para espaço de cores do Sistema de Manipulação de Pigmento de Cor
 Comment[sv]=En modul som implementerar en fullständig färgrymd för användning med systemet för hantering av pigmentfärg
 Comment[ta]= தெளிவான வண்ணத்தின் சிறிய பகுதியை அதிகரித்து ஒரு கூரை உண்டாக்குகிறதுஉருவாக்கம் கணினி
 Comment[tr]=Pigment Rengi ile kullanmak için renk boşluğunu oluşturan bir modül
 Comment[uk]=Модуль впровадження повного простору кольорів для використання з системою керування кольорами пігментів (PCMS)
 Comment[wa]=On module ki dene on stindaedje as en espåce di coleur do Sistinme d' apougnaedje di pigmints d' coleurs
+Comment[x-test]=xxA module implementing an extension to a colorspace of the Pigment Color Manipulation Systemxx
 Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的模組
 [PropertyDef::X-Pigment-MinVersion]
 Type=int

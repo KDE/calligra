@@ -26,7 +26,7 @@ kde4_add_plugin(kpr_pageeffect_clockwipe ${kpr_pageeffect_clockwipe_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_clockwipe 
-    kpresenterprivate 
+    calligrastageprivate 
     flake
     
     ${KDE4_KDECORE_LIBS}

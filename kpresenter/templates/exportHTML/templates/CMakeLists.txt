@@ -1,1 +1,1 @@
-install(FILES Default.zip DESTINATION ${DATA_INSTALL_DIR}/kpresenter/templates/exportHTML/templates)
+install(FILES stage.zip DESTINATION ${DATA_INSTALL_DIR}/stage/templates/exportHTML/templates)

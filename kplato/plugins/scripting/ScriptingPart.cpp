@@ -40,9 +40,9 @@
 
 #include <kptview.h>
 
-int kplatoScriptingDebugArea() {
+int planScriptingDebugArea() {
 #if KDE_IS_VERSION( 4, 3, 80 )
-    static int s_area = KDebug::registerArea( "kplato (Scripting)" );
+    static int s_area = KDebug::registerArea( "plan (Scripting)" );
 #else
     static int s_area = 32010;
 #endif
@@ -54,12 +54,12 @@ K_EXPORT_PLUGIN( KPlatoScriptingFactory )
 KPlatoScriptingFactory::KPlatoScriptingFactory(const char *componentName, const char *catalogName, QObject *parent )
     : KPluginFactory( componentName, catalogName, parent )
 {
-    kDebug(kplatoScriptingDebugArea())<<parent;
+    kDebug(planScriptingDebugArea())<<parent;
 }
 
 QObject *KPlatoScriptingFactory::create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword)
 {
-    kDebug(kplatoScriptingDebugArea())<<iface<<parentWidget<<parent<<args<<keyword;
+    kDebug(planScriptingDebugArea())<<iface<<parentWidget<<parent<<args<<keyword;
     return new KPlatoScriptingPart( parent );
 }
 
@@ -76,7 +76,7 @@ KPlatoScriptingPart::KPlatoScriptingPart(QObject* parent, const QStringList& arg
 {
     setComponentData(KPlatoScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data","kplato/kpartplugins/scripting.rc"), true);
-    kDebug(kplatoScriptingDebugArea()) <<"KPlatoScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
+    kDebug(planScriptingDebugArea()) <<"KPlatoScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
 
 }
 

@@ -24,6 +24,7 @@
 #include "kpttask.h"
 
 #include <QObject>
+#include <QString>
 
 #define KPLATO_MAX_FILE_SYNTAX_VERSION "0.6.5"
 #define KPLATOWORK_MAX_FILE_SYNTAX_VERSION "0.6.5"
@@ -33,6 +34,7 @@ class KoXmlElement;
 namespace KPlato
 {
     class Config;
+    class Package;
     class XMLLoaderObject;
     class Project;
     class Task;
@@ -64,11 +66,11 @@ class KPlatoXmlLoader : public QObject
 {
     Q_OBJECT
 public:
-    KPlatoXmlLoader( XMLLoaderObject &loader, Config &config );
+    KPlatoXmlLoader( XMLLoaderObject &loader, Project *project );
 
     QString errorMessage() const;
-
-    bool loadWorkpackage( const KoXmlElement &plan );
+    Package *package() const;
+    QString timeTag() const;
 
     bool load( const KoXmlElement& plan );
     bool load( Project *project, const KoXmlElement &element, XMLLoaderObject &status );
@@ -85,8 +87,9 @@ public:
     bool load( Account::CostPlace *cp, const KoXmlElement &element, XMLLoaderObject &status );
     bool load( ScheduleManager *manager, const KoXmlElement &element, XMLLoaderObject &status );
     bool load( Schedule *schedule, const KoXmlElement &element, XMLLoaderObject &status );
-    MainSchedule *loadMainSchedule( ScheduleManager* manager, KoXmlElement element, XMLLoaderObject& status);
-    bool loadNodeSchedule( NodeSchedule* sch, KoXmlElement element, XMLLoaderObject& status);
+    MainSchedule *loadMainSchedule( ScheduleManager* manager, const KoXmlElement &element, XMLLoaderObject& status);
+    bool loadMainSchedule( MainSchedule* ms, const KoXmlElement &element, XMLLoaderObject& status);
+    bool loadNodeSchedule( NodeSchedule* sch, const KoXmlElement &element, XMLLoaderObject& status);
     bool load( WBSDefinition &def, const KoXmlElement &element, XMLLoaderObject &status );
     bool load( Documents &documents, const KoXmlElement &element, XMLLoaderObject &status );
     bool load( Document *document, const KoXmlElement &element, XMLLoaderObject &status );
@@ -97,13 +100,18 @@ public:
     bool loadWpLog( WorkPackage* wp, KoXmlElement &element, XMLLoaderObject status);
     bool load( Completion& completion, const KoXmlElement& element, XMLLoaderObject& status );
     bool load( Completion::UsedEffort *ue, const KoXmlElement& element, XMLLoaderObject& status );
+    bool load( Appointment *appointment, const KoXmlElement& element, XMLLoaderObject& status, Schedule &sch );
     bool load( AppointmentIntervalList &lst, const KoXmlElement& element, XMLLoaderObject& status );
     bool load( AppointmentInterval &interval, const KoXmlElement& element, XMLLoaderObject& status );
 
+    bool loadWorkpackage( const KoXmlElement &plan );
+
 private:
     XMLLoaderObject &m_loader;
-    Config &m_config;
+    Project *m_project;
     QString m_message;
+    Package *m_package;
+    QString m_timeTag;
 };
 
 #endif // KPLATOXMLLOADER_H

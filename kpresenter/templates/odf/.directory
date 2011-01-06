@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=Templates
 Name[ca]=Plantilles
+Name[ca@valencia]=Plantilles
 Name[cs]=Šablony
 Name[da]=Skabeloner
 Name[de]=Vorlagen
 Name[en_GB]=Templates
 Name[es]=Plantillas
 Name[et]=Mallid
+Name[fr]=Modèles
 Name[ga]=Teimpléid
 Name[it]=Modelli
 Name[nb]=Maler
@@ -17,4 +19,5 @@ Name[pt_BR]=Modelos
 Name[sv]=Mallar
 Name[uk]=Шаблони
 Name[wa]=Modeles
+Name[x-test]=xxTemplatesxx
 Name[zh_TW]=樣本

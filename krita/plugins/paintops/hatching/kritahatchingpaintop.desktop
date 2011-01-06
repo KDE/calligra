@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Hatching brush
 Name[ca]=Pinzell espès
+Name[ca@valencia]=Pinzell espès
 Name[da]=Skraveringspensel
 Name[en_GB]=Hatching brush
 Name[es]=Pincel de rayas
@@ -15,6 +16,7 @@ Name[pt_BR]=Pincel fino
 Name[sv]=Skrafferingspensel
 Name[uk]=Штриховий пензель
 Name[wa]=Pincea cotaeyaedje
+Name[x-test]=xxHatching brushxx
 Name[zh_TW]=影線筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

@@ -14,7 +14,7 @@ Comment[eo]=Kexi SQL-pelila kromaĵo
 Comment[es]=Complemento de controlador de SQL para Kexi
 Comment[et]=Kexi SQL-draiveri plugin
 Comment[eu]=Kexi-en SQL-kontrolatzailearen plugina
-Comment[fa]=وصلۀ گردانندۀ Kexi SQL
+Comment[fa]=وصله گرداننده Kexi SQL
 Comment[fi]=Kexi SQL-laajennus
 Comment[fr]=Module de pilotage SQL de Kexi
 Comment[fy]=Kexi SQL-stjoerprogramma plugin
@@ -50,6 +50,7 @@ Comment[uk]=Додаток драйвера SQL Kexi
 Comment[uz]=Kexi SQL-drayver plagini
 Comment[uz@cyrillic]=Kexi SQL-драйвер плагини
 Comment[wa]=Tchôke-divins mineu di SQL di Kexi
+Comment[x-test]=xxKexi SQL-Driver pluginxx
 Comment[zh_CN]=Kexi SQL 驱动插件
 Comment[zh_TW]=Kexi SQL-驅動外掛程式
 
