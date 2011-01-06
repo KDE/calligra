@@ -606,7 +606,8 @@ ListText::~ListText()
 ListInfo::ListInfo( Word97::PAP& pap, ListInfoProvider& listInfoProvider ) :
     m_linkedIstd( istdNil ), m_restartingCounter( false ), m_numberFormat( 0 ),
     m_alignment( 0 ), m_isLegal( false ), m_notRestarted( false ), m_prev( false ),
-    m_prevSpace( false ), m_isWord6( false ), m_followingChar( 0 ), m_lsid( 0 )
+    m_prevSpace( false ), m_isWord6( false ), m_followingChar( 0 ), m_lsid( 0 ),
+    m_space( 0 ), m_indent( 0 )
 {
     if ( !listInfoProvider.setPAP( &pap ) )
         return;
