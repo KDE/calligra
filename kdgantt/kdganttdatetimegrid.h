@@ -95,13 +95,11 @@ namespace KDGantt {
                                     qreal offset, QWidget* widget=0 );
         virtual void paintWeekScaleHeader( QPainter* painter, const QRectF& headerRect, const QRectF& exposedRect,
                                           qreal offset, QWidget* widget=0 );
-        virtual void paintMonthScaleHeader( QPainter* painter, const QRectF& headerRect, const QRectF& exposedRect,
+        virtual void paintMonthScaleHeader( QPainter* painter, Scale scale, const QRectF& headerRect, const QRectF& exposedRect,
                                            qreal offset, QWidget* widget=0 );
 
-        virtual void paintYearScaleHeader( QPainter* painter, const QRectF& headerRect, const QRectF& exposedRect,
-                                           qreal offset, QWidget* widget=0 );
 
-        int autoScale() const;
+        Scale autoScale() const;
     };
 }
 

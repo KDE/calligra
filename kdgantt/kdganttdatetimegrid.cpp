@@ -317,9 +317,9 @@ bool DateTimeGrid::mapFromChart( const Span& span, const QModelIndex& idx,
         && model()->setData( idx, qVariantFromValue(et), EndTimeRole );
 }
 
-int DateTimeGrid::autoScale() const
+DateTimeGrid::Scale DateTimeGrid::autoScale() const
 {
-    int scale = ScaleDay;
+    Scale scale = ScaleDay;
     if ( dayWidth() > 450) {
         scale = ScaleHour;
     } else if (dayWidth() * 30 < 20) {
@@ -374,6 +374,8 @@ void DateTimeGrid::paintGrid( QPainter* painter,
                     break;
                 case ScaleYear:
                     paintYearGrid(painter,sceneRect,exposedRect,rowController,widget);
+                    break;
+                case ScaleAuto: // for completeness and remove warning
                     break;
             }
             break;
@@ -464,6 +466,8 @@ void DateTimeGrid::paintMonthGrid( QPainter* painter,
                                   QWidget* widget )
 {
     //qDebug()<<"paintMonthGrid()"<<scale()<<dayWidth();
+
+    // Paint a dashed line between each month and a solid line between the years.
     QDateTime dt = d->chartXtoDateTime( exposedRect.left() );
     dt.setTime( QTime( 0, 0, 0, 0 ) );
     dt = dt.addDays( 1 - dt.date().day() );
@@ -493,7 +497,35 @@ void DateTimeGrid::paintYearGrid( QPainter* painter,
                                   AbstractRowController* rowController,
                                   QWidget* widget )
 {
-    paintMonthGrid(painter, sceneRect, exposedRect, rowController, widget);
+    //qDebug()<<"paintYearGrid()"<<scale()<<dayWidth();
+
+    Q_UNUSED(sceneRect);
+    Q_UNUSED(rowController)
+
+    // Paint a dashed line between each quarter and a solid line between the years.
+    QDateTime dt = d->chartXtoDateTime( exposedRect.left() );
+    dt.setTime( QTime( 0, 0, 0, 0 ) );
+    dt = dt.addDays( 1 - dt.date().day() );
+    for ( qreal x = d->dateTimeToChartX( dt ); x < exposedRect.right(); dt = dt.addDays( 1 ),x=d->dateTimeToChartX( dt ) ) {
+        QPen pen = painter->pen();
+        pen.setBrush( QApplication::palette().dark() );
+        if ( dt.date().addMonths( 1 ).month() == 1 && dt.date().addDays( 1 ).day() == 1 ) {
+            // Solid line at day 1 of each year.
+            pen.setStyle( Qt::SolidLine );
+        } else if ( dt.date().addMonths( 1 ).month() % 3 == 1 && dt.date().addDays( 1 ).day() == 1 ) {
+            // Dashed line between the quarters
+            pen.setStyle( Qt::DashLine );
+        } else {
+            pen.setStyle( Qt::NoPen );
+        }
+        painter->setPen( pen );
+        paintFreeDay( painter, x, exposedRect, dt.date(), widget );
+        if ( pen.style() != Qt::NoPen ) {
+            //qDebug()<<"paintYearGrid()"<<dt;
+            x += dayWidth() - 1;
+            painter->drawLine( QPointF( x, exposedRect.top() ), QPointF( x, exposedRect.bottom() ) );
+        }
+    }
 }
 
 void DateTimeGrid::paintFreeDay( QPainter* painter, qreal x, const QRectF& exposedRect, const QDate &dt, QWidget* widget )
@@ -570,10 +602,11 @@ void DateTimeGrid::paintHeader( QPainter* painter,  const QRectF& headerRect, co
         case ScaleHour: paintHourScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleDay: paintDayScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleWeek: paintWeekScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
-        case ScaleMonth: paintMonthScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
-        case ScaleYear: paintYearScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
+        case ScaleMonth: 
+        case ScaleYear: paintMonthScaleHeader(painter,scale(),headerRect,exposedRect,offset,widget); break;
         case ScaleAuto:
-            switch(autoScale()) {
+            Scale autoResult = autoScale();
+            switch(autoResult) {
                 case ScaleHour:
                     paintHourScaleHeader(painter,headerRect,exposedRect,offset,widget);
                     break;
@@ -584,11 +617,10 @@ void DateTimeGrid::paintHeader( QPainter* painter,  const QRectF& headerRect, co
                     paintWeekScaleHeader(painter,headerRect,exposedRect,offset,widget);
                     break;
                 case ScaleMonth:
-                    paintMonthScaleHeader(painter,headerRect,exposedRect,offset,widget);
-                    break;
                 case ScaleYear:
-                    //paintYearScaleHeader(painter,headerRect,exposedRect,offset,widget);
-                    paintMonthScaleHeader(painter,headerRect,exposedRect,offset,widget);
+                    paintMonthScaleHeader(painter,autoResult,headerRect,exposedRect,offset,widget);
+                    break;
+                case ScaleAuto: // For completeness and remove warning
                     break;
             }
             break;
@@ -749,8 +781,9 @@ void DateTimeGrid::paintWeekScaleHeader( QPainter* painter,  const QRectF& heade
 /*! Paints the month scale header.
  * \sa paintHeader()
  */
-void DateTimeGrid::paintMonthScaleHeader( QPainter* painter,  const QRectF& headerRect, const QRectF& exposedRect,
-                                        qreal offset, QWidget* widget )
+void DateTimeGrid::paintMonthScaleHeader( QPainter* painter, Scale scale,
+                                          const QRectF& headerRect, const QRectF& exposedRect,
+                                          qreal offset, QWidget* widget )
 {
     QStyle* style = widget?widget->style():QApplication::style();
 
@@ -764,7 +797,11 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter,  const QRectF& head
         QStyleOptionHeader opt;
         opt.init( widget );
         opt.rect = QRectF( x-offset, headerRect.top()+headerRect.height()/2., dayWidth()*dt.date().daysInMonth(), headerRect.height()/2. ).toRect();
-        opt.text = QDate::shortMonthName( dt.date().month() );
+        QString monthName = QDate::shortMonthName( dt.date().month() );
+        if (scale == ScaleYear)
+            opt.text = monthName.left(1);
+        else
+            opt.text = monthName;
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
         style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
@@ -799,6 +836,7 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter,  const QRectF& head
     }
 }
 
+#if 0
 /*! Paints the year scale header.
  * \sa paintHeader()
  */
@@ -856,6 +894,8 @@ void DateTimeGrid::paintYearScaleHeader( QPainter* painter,  const QRectF& heade
     }
 #endif
 }
+#endif
+
 
 #undef d
 
