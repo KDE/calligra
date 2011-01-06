@@ -32,29 +32,66 @@
 #include <qtest_kde.h>
 #include <kdebug.h>
 
+#include "tests/DateTimeTester.h"
+
 #include "tests/debug.cpp"
 
 namespace KPlato
 {
 
-void ProjectTester::initTestCase()
+static ResourceGroup *createWorkResources( Project &p, int count )
 {
-    m_project = new Project();
-    m_project->setName( "P1" );
-    // standard worktime defines 8 hour day as default
-    QVERIFY( m_project->standardWorktime() );
-    QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
-    m_calendar = new Calendar();
-    m_calendar->setDefault( true );
+    ResourceGroup *g = new ResourceGroup();
+    g->setName( "G1" );
+    p.addResourceGroup( g );
+
+    for ( int i = 0; i < count; ++i ) {
+        Resource *r = new Resource();
+        r->setName( QString( "R%1" ).arg( i + 1 ) );
+        p.addResource( g, r );
+    }
+    return g;
+}
+
+static void createRequest( Task *t, Resource *r )
+{
+    ResourceGroupRequest *gr = t->requests().find( r->parentGroup() );
+    if ( gr == 0 ) {
+        gr = new ResourceGroupRequest( r->parentGroup() );
+    }
+    t->addRequest( gr );
+    ResourceRequest *rr = new ResourceRequest( r, 100 );
+    gr->addResourceRequest( rr );
+}
+
+static Calendar *createCalendar( Project &p )
+{
+    Calendar *c = new Calendar();
+    c->setDefault( true );
     QTime t1( 9, 0, 0 );
     QTime t2 ( 17, 0, 0 );
     int length = t1.msecsTo( t2 );
     for ( int i=1; i <= 7; ++i ) {
-        CalendarDay *d = m_calendar->weekday( i );
+        CalendarDay *d = c->weekday( i );
         d->setState( CalendarDay::Working );
         d->addInterval( t1, length );
     }
-    m_project->addCalendar( m_calendar );
+    p.addCalendar( c );
+    return c;
+}
+
+void ProjectTester::initTestCase()
+{
+    m_project = new Project();
+    m_project->setName( "P1" );
+    m_project->setId( m_project->uniqueNodeId() );
+    m_project->registerNodeId( m_project );
+    m_project->setConstraintEndTime( m_project->constraintStartTime().addDays( 7 ) );
+    // standard worktime defines 8 hour day as default
+    QVERIFY( m_project->standardWorktime() );
+    QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
+
+    m_calendar = createCalendar( *m_project );
 
     m_task = 0;
     qDebug()<<"Project:"<<m_project->constraintStartTime()<<m_project->constraintEndTime();
@@ -68,7 +105,6 @@ void ProjectTester::cleanupTestCase()
 
 void ProjectTester::oneTask()
 {
-    
     QDate today = QDate::currentDate();
     QDate tomorrow = today.addDays( 1 );
     QDate yesterday = today.addDays( -1 );
@@ -87,12 +123,14 @@ void ProjectTester::oneTask()
     ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     
-    KPlatoRCPSPlugin rcps( 0, QVariantList() );
 
     QString s = "Calculate forward, Task: Fixed duration ------------------------------";
+    qDebug()<<s;
 
-    rcps.calculate( *m_project, sm, true/*nothread*/ );
-
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
     Debug::print( m_project, s );
     Debug::print( t, s );
 
@@ -100,10 +138,14 @@ void ProjectTester::oneTask()
     QCOMPARE( t->endTime(), DateTime(t->startTime().addDays( 1 )) );
 
     s = "Calculate forward, Task: Length --------------------------------------";
+    qDebug()<<s;
 
     t->estimate()->setCalendar( m_calendar );
 
-    rcps.calculate( *m_project, sm, true/*nothread*/ );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
 
     Debug::print( t, s );
 
@@ -111,6 +153,7 @@ void ProjectTester::oneTask()
     QCOMPARE( t->endTime(), DateTime( t->startTime().addMSecs( length ) ) );
 
     s = "Calculate forward, Task: Effort --------------------------------------";
+    qDebug()<<s;
 
     ResourceGroup *g = new ResourceGroup();
     m_project->addResourceGroup( g );
@@ -125,12 +168,166 @@ void ProjectTester::oneTask()
     gr->addResourceRequest( rr );
     t->estimate()->setType( Estimate::Type_Effort );
 
-    rcps.calculate( *m_project, sm, true/*nothread*/ );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
 
     Debug::print( t, s );
 
     QCOMPARE( t->startTime(), m_calendar->firstAvailableAfter( m_project->startTime(), m_project->endTime() ) );
     QCOMPARE( t->endTime(), DateTime( t->startTime().addMSecs( length ) ) );
+
+
+    s = "Calculate forward, Task: MustStartOn --------------------------------------";
+    qDebug()<<s;
+
+    t->setConstraint( Node::MustStartOn );
+    t->setConstraintStartTime( DateTime( tomorrow, t1, KDateTime::Spec::LocalZone() ) );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    s = "Calculate backward, Task: MustStartOn --------------------------------------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( true );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    s = "Calculate backward, Task: StartNotEarlier --------------------------------------";
+    qDebug()<<s;
+
+    t->setConstraint( Node::StartNotEarlier );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    s = "Calculate forward, Task: StartNotEarlier --------------------------------------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( false );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    s = "Calculate forward, Task: MustFinishOn --------------------------------------";
+    qDebug()<<s;
+
+    t->setConstraint( Node::MustFinishOn );
+    t->setConstraintEndTime( DateTime( tomorrow, t2, KDateTime::Spec::LocalZone() ) );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    s = "Calculate backward, Task: MustFinishOn --------------------------------------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( true );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    s = "Calculate backward, Task: FinishNotLater --------------------------------------";
+    qDebug()<<s;
+
+    t->setConstraint( Node::FinishNotLater );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    s = "Calculate forward, Task: FinishNotLater --------------------------------------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( false );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    s = "Calculate forward, Task: FixedInterval --------------------------------------";
+    qDebug()<<s;
+
+    t->setConstraint( Node ::FixedInterval );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
+
+    s = "Calculate backward, Task: FixedInterval --------------------------------------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( true );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( *m_project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( t, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
+
 }
 
 void ProjectTester::team()
@@ -159,8 +356,6 @@ void ProjectTester::team()
     task1->estimate()->setUnit( Duration::Unit_d );
     task1->estimate()->setExpectedEstimate( 2.0 );
     task1->estimate()->setType( Estimate::Type_Effort );
-
-    KPlatoRCPSPlugin rcps( 0, QVariantList() );
 
     QString s = "One team with one resource --------";
     qDebug()<<endl<<"Testing:"<<s;
@@ -191,7 +386,10 @@ void ProjectTester::team()
     project.addScheduleManager( sm );
     sm->createSchedules();
 
-    rcps.calculate( project, sm, true/*nothread*/ );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
 
 //     Debug::print( r1, s);
 //     Debug::print( r2, s);
@@ -212,7 +410,10 @@ void ProjectTester::team()
     project.addScheduleManager( sm );
     sm->createSchedules();
 
-    rcps.calculate( project, sm, true/*nothread*/ );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
 
 //     Debug::print( r1, s);
 //     Debug::print( r2, s);
@@ -232,7 +433,10 @@ void ProjectTester::team()
     project.addScheduleManager( sm );
     sm->createSchedules();
     
-    rcps.calculate( project, sm, true/*nothread*/ );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
 
     Debug::print( r1, s);
 //    Debug::print( r2, s);
@@ -254,7 +458,10 @@ void ProjectTester::team()
     project.addScheduleManager( sm );
     sm->createSchedules();
 
-    rcps.calculate( project, sm, true/*nothread*/ );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
 
 //    Debug::print( r1, s);
 //    Debug::print( r2, s);
@@ -274,7 +481,10 @@ void ProjectTester::team()
     project.addScheduleManager( sm );
     sm->createSchedules();
 
-    rcps.calculate( project, sm, true/*nothread*/ );
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
 
     Debug::print( r1, s);
 //    Debug::print( r2, s);
@@ -284,6 +494,171 @@ void ProjectTester::team()
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
+}
+
+void ProjectTester::mustStartOn()
+{
+    return;
+    Project project;
+    project.setId( project.uniqueNodeId() );
+    project.registerNodeId( &project );
+    project.setConstraintStartTime( DateTime::fromString( "2011-01-01T00:00:00" ) );
+    project.setConstraintEndTime( DateTime::fromString( "2011-01-12T00:00:00" ) );
+
+    createCalendar( project );
+
+    ResourceGroup *g = createWorkResources( project, 1 );
+
+    Task *t = project.createTask( &project );
+    t->setName( "T1" );
+    project.addTask( t, &project );
+    t->estimate()->setUnit( Duration::Unit_h );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+    createRequest( t, g->resourceAt( 0 ) );
+
+    t->setConstraint( Node::MustStartOn );
+    t->setConstraintStartTime( DateTime::fromString( "2011-01-01T11:00:00" ) );
+
+    ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
+    project.addScheduleManager( sm );
+
+    QString s = "Calculate forward, Task: MustStartOn ------------------------------";
+    qDebug()<<s;
+    Debug::print( t, s );
+
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( &project, s );
+    Debug::print( t, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+
+    s = "Calculate forward, 2 Tasks ------------------------------";
+    qDebug()<<s;
+
+    Task *t2 = project.createTask( &project );
+    t2->setName( "T2" );
+    project.addTask( t2, &project );
+    t2->estimate()->setUnit( Duration::Unit_d );
+    t2->estimate()->setExpectedEstimate( 10.0 );
+    t2->estimate()->setType( Estimate::Type_Effort );
+
+    createRequest( t2, g->resourceAt( 0 ) );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( &project, s );
+    Debug::print( t, s );
+    Debug::print( t2, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+
+    s = "Calculate backward, 2 Tasks ------------------------------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( true );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
+    Debug::print( &project, s );
+    Debug::print( t, s );
+    Debug::print( t2, s );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+}
+
+void ProjectTester::startNotEarlier()
+{
+    Project project;
+    project.setId( project.uniqueNodeId() );
+    project.registerNodeId( &project );
+    project.setConstraintStartTime( DateTime::fromString( "2011-01-01T00:00:00" ) );
+    project.setConstraintEndTime( DateTime::fromString( "2011-01-12T00:00:00" ) );
+
+    createCalendar( project );
+
+    ResourceGroup *g = createWorkResources( project, 1 );
+
+    Task *t = project.createTask( &project );
+    t->setName( "T1" );
+    project.addTask( t, &project );
+    t->estimate()->setUnit( Duration::Unit_h );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+    createRequest( t, g->resourceAt( 0 ) );
+
+    t->setConstraint( Node::StartNotEarlier );
+    t->setConstraintStartTime( DateTime::fromString( "2011-01-02T11:00:00" ) );
+
+    ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
+    project.addScheduleManager( sm );
+
+    QString s = "Calculate forward, Task: StartNotEarlier ------------------------------";
+    qDebug()<<s;
+    Debug::print( t, s );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( &project, s );
+    Debug::print( t, s );
+
+    QVERIFY( t->startTime() >= t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 1, 0 ) );
+
+    s = "Calculate forward, 2 Tasks ------------------------------";
+    qDebug()<<s;
+
+    Task *t2 = project.createTask( &project );
+    t2->setName( "T2" );
+    project.addTask( t2, &project );
+    t2->estimate()->setUnit( Duration::Unit_d );
+    t2->estimate()->setExpectedEstimate( 7.0 );
+    t2->estimate()->setType( Estimate::Type_Effort );
+
+    createRequest( t2, g->resourceAt( 0 ) );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( &project, s );
+    Debug::print( t, s );
+    Debug::print( t2, s );
+
+    QVERIFY( t->startTime() >= t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 1, 0 ) );
+
+    s = "Calculate backward, 2 Tasks ------------------------------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( true );
+
+    {
+        KPlatoRCPSPlugin rcps( 0, QVariantList() );
+        rcps.calculate( project, sm, true/*nothread*/ );
+    }
+
+    Debug::print( &project, s );
+    Debug::print( t, s );
+    Debug::print( t2, s );
+    Debug::printSchedulingLog( *sm, s );
+    
+    QVERIFY( t->startTime() >= t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 1, 0 ) );
 }
 
 } //namespace KPlato

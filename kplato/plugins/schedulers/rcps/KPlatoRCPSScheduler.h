@@ -29,6 +29,7 @@
 #include <QThread>
 #include <QObject>
 #include <QMap>
+#include <QList>
 
 class ProgressInfo;
 
@@ -59,7 +60,8 @@ private:
         Duration estimate;
         int estimatetype;
         QList<ResourceRequest*> requests;
-        QMap<int, int> cache;
+        // QPair< time, direction >, duration
+        QMap<QPair<int, int>, int> cache;
         qint64 calls;
     };
 
@@ -67,9 +69,9 @@ private:
     {
         KPlatoRCPSScheduler *self;
         Task *task;
-        int weight;
         int targettime;
         bool isEndJob;
+        int finish;
     };
 
 public:
@@ -80,11 +82,11 @@ public:
 
     int result;
 
-    static int progress_callback( int generations, int duration, void *arg );
+    static int progress_callback( int generations, int fitness, void* arg );
     static int duration_callback( int direction, int time, int nominal_duration, void *arg );
     static int weight_callback( int time, int duration, int nominal_weight, void *arg );
 
-    int progress( int generations, int duration );
+    int progress( int generations, int fitness );
     int duration( int direction, int time, int nominal_duration, duration_info *info );
     int weight( int time, int duration, int nominal_weight, KPlatoRCPSScheduler::weight_info* info );
 
@@ -107,12 +109,13 @@ protected:
     void kplatoFromRCPSBackward();
     void taskFromRCPSForward( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap );
     void taskFromRCPSBackward( struct rcps_job *job, Task *task, QMap<Node*, QList<ResourceRequest*> > &resourcemap );
-    // NOTE:
-    // Relation type not checked so only SF works ok
+
     // Real durations for early-/late start/finish not calculated so values are approximate
     void calculatePertValues( const QMap<Node*, QList<ResourceRequest*> > &map );
     Duration calculateLateStuff( const QMap<Node*, QList<ResourceRequest*> > &map, Task *task );
     Duration calculateEarlyStuff( const QMap<Node*, QList<ResourceRequest*> > &map, Task *task );
+
+    void adjustSummaryTasks( const QList<Node*> &nodes );
 
     void addResources();
     struct rcps_resource *addResource( KPlato::Resource *resource );
@@ -124,6 +127,8 @@ protected:
     void addDependenciesBackward( struct rcps_job *job, Task *task );
     void addRequests();
     void addRequest( struct rcps_job *job, Task *task );
+    void setConstraints();
+    void setWeights();
 
 private:
     KLocale *locale() const;
@@ -146,8 +151,8 @@ private:
     QMap<struct rcps_job*, Task*> m_taskmap;
     struct rcps_job *m_jobstart, *m_jobend;
     
-    QList<struct duration_info*> m_duration_info_list;
-    QList<struct weight_info*> m_weight_info_list;
+    QMap<struct rcps_job*, struct duration_info*> m_duration_info_list;
+    QMap<struct rcps_job*, struct weight_info*> m_weight_info_list;
 
     ProgressInfo *m_progressinfo;
 };
