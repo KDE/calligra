@@ -97,6 +97,7 @@ void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
 
     DateTimeGrid* const grid = qobject_cast< DateTimeGrid* >( view()->grid() );
     QAction* actionScaleAuto = 0;
+    QAction* actionScaleYear = 0;
     QAction* actionScaleMonth = 0;
     QAction* actionScaleWeek = 0;
     QAction* actionScaleDay = 0;
@@ -113,6 +114,9 @@ void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
         actionScaleAuto = new QAction( tr( "Auto" ), menuScale );
         actionScaleAuto->setCheckable( true );
         actionScaleAuto->setChecked( grid->scale() == DateTimeGrid::ScaleAuto );
+        actionScaleYear = new QAction( tr( "Year" ), menuScale );
+        actionScaleYear->setCheckable( true );
+        actionScaleYear->setChecked( grid->scale() == DateTimeGrid::ScaleYear );
         actionScaleMonth = new QAction( tr( "Month" ), menuScale );
         actionScaleMonth->setCheckable( true );
         actionScaleMonth->setChecked( grid->scale() == DateTimeGrid::ScaleMonth );
@@ -129,6 +133,9 @@ void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
         scaleGroup->addAction( actionScaleAuto );
         menuScale->addAction( actionScaleAuto );
     
+        scaleGroup->addAction( actionScaleYear );
+        menuScale->addAction( actionScaleYear );
+        
         scaleGroup->addAction( actionScaleMonth );
         menuScale->addAction( actionScaleMonth );
         
@@ -166,25 +173,35 @@ void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
         assert( grid != 0 );
         grid->setScale( DateTimeGrid::ScaleAuto );
     }
+    else if( action == actionScaleYear )
+    {
+        assert( grid != 0 );
+        grid->setScale( DateTimeGrid::ScaleYear );
+        grid->setDayWidth(1.);
+    }
     else if( action == actionScaleMonth )
     {
         assert( grid != 0 );
         grid->setScale( DateTimeGrid::ScaleMonth );
+        grid->setDayWidth(12.);
     }
     else if( action == actionScaleWeek )
     {
         assert( grid != 0 );
         grid->setScale( DateTimeGrid::ScaleWeek );
+        grid->setDayWidth(52.);
     }
     else if( action == actionScaleDay )
     {
         assert( grid != 0 );
         grid->setScale( DateTimeGrid::ScaleDay );
+        grid->setDayWidth(300.);
     }
     else if( action == actionScaleHour )
     {
         assert( grid != 0 );
         grid->setScale( DateTimeGrid::ScaleHour );
+        grid->setDayWidth(8000.);
     }
     else if( action == actionZoom )
     {

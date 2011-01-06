@@ -33,7 +33,7 @@ namespace KDGantt {
         Q_OBJECT
         KDGANTT_DECLARE_PRIVATE_DERIVED( DateTimeGrid )
     public:
-		enum Scale { ScaleAuto, ScaleHour, ScaleDay, ScaleWeek, ScaleMonth };
+        enum Scale { ScaleAuto, ScaleHour, ScaleDay, ScaleWeek, ScaleMonth, ScaleYear };
 	
         DateTimeGrid();
         virtual ~DateTimeGrid();
@@ -83,6 +83,8 @@ namespace KDGantt {
 
         virtual void paintMonthGrid( QPainter* painter, const QRectF& sceneRect, const QRectF& exposedRect, AbstractRowController* rowController = 0, QWidget* widget=0 );
         
+        virtual void paintYearGrid( QPainter* painter, const QRectF& sceneRect, const QRectF& exposedRect, AbstractRowController* rowController = 0, QWidget* widget=0 );
+        
         virtual void paintRowGrid( QPainter* painter, const QRectF& sceneRect, const QRectF& exposedRect, AbstractRowController* rowController = 0, QWidget* widget=0 );
 
         virtual void paintFreeDay( QPainter* painter, qreal x, const QRectF& exposedRect, const QDate &dt, QWidget* widget=0 );
@@ -94,6 +96,9 @@ namespace KDGantt {
         virtual void paintWeekScaleHeader( QPainter* painter, const QRectF& headerRect, const QRectF& exposedRect,
                                           qreal offset, QWidget* widget=0 );
         virtual void paintMonthScaleHeader( QPainter* painter, const QRectF& headerRect, const QRectF& exposedRect,
+                                           qreal offset, QWidget* widget=0 );
+
+        virtual void paintYearScaleHeader( QPainter* painter, const QRectF& headerRect, const QRectF& exposedRect,
                                            qreal offset, QWidget* widget=0 );
 
         int autoScale() const;

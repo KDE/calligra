@@ -322,6 +322,8 @@ int DateTimeGrid::autoScale() const
     int scale = ScaleDay;
     if ( dayWidth() > 450) {
         scale = ScaleHour;
+    } else if (dayWidth() * 30 < 20) {
+        scale = ScaleYear;
     } else if (dayWidth() * 7 < 20) {
         scale = ScaleMonth;
     } else if (dayWidth() < 12) {
@@ -353,6 +355,9 @@ void DateTimeGrid::paintGrid( QPainter* painter,
         case ScaleMonth:
             paintMonthGrid(painter,sceneRect,exposedRect,rowController,widget);
             break;
+        case ScaleYear:
+            paintYearGrid(painter,sceneRect,exposedRect,rowController,widget);
+            break;
         case ScaleAuto:
             switch(autoScale()) {
                 case ScaleHour:
@@ -366,6 +371,9 @@ void DateTimeGrid::paintGrid( QPainter* painter,
                     break;
                 case ScaleMonth:
                     paintMonthGrid(painter,sceneRect,exposedRect,rowController,widget);
+                    break;
+                case ScaleYear:
+                    paintYearGrid(painter,sceneRect,exposedRect,rowController,widget);
                     break;
             }
             break;
@@ -479,6 +487,15 @@ void DateTimeGrid::paintMonthGrid( QPainter* painter,
     }
 }
 
+void DateTimeGrid::paintYearGrid( QPainter* painter,
+                                  const QRectF& sceneRect,
+                                  const QRectF& exposedRect,
+                                  AbstractRowController* rowController,
+                                  QWidget* widget )
+{
+    paintMonthGrid(painter, sceneRect, exposedRect, rowController, widget);
+}
+
 void DateTimeGrid::paintFreeDay( QPainter* painter, qreal x, const QRectF& exposedRect, const QDate &dt, QWidget* widget )
 {
     if ( d->freeDays.contains( static_cast<Qt::DayOfWeek>( dt.dayOfWeek() ) ) ) {
@@ -550,10 +567,11 @@ void DateTimeGrid::paintHeader( QPainter* painter,  const QRectF& headerRect, co
                                 qreal offset, QWidget* widget )
 {
         switch(scale()) {
-                case ScaleHour: paintHourScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
+        case ScaleHour: paintHourScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleDay: paintDayScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleWeek: paintWeekScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleMonth: paintMonthScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
+        case ScaleYear: paintYearScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleAuto:
             switch(autoScale()) {
                 case ScaleHour:
@@ -566,6 +584,10 @@ void DateTimeGrid::paintHeader( QPainter* painter,  const QRectF& headerRect, co
                     paintWeekScaleHeader(painter,headerRect,exposedRect,offset,widget);
                     break;
                 case ScaleMonth:
+                    paintMonthScaleHeader(painter,headerRect,exposedRect,offset,widget);
+                    break;
+                case ScaleYear:
+                    //paintYearScaleHeader(painter,headerRect,exposedRect,offset,widget);
                     paintMonthScaleHeader(painter,headerRect,exposedRect,offset,widget);
                     break;
             }
@@ -775,6 +797,64 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter,  const QRectF& head
 
         dt.setDate( next );
     }
+}
+
+/*! Paints the year scale header.
+ * \sa paintHeader()
+ */
+void DateTimeGrid::paintYearScaleHeader( QPainter* painter,  const QRectF& headerRect, const QRectF& exposedRect,
+                                        qreal offset, QWidget* widget )
+{
+#if 1
+    // FIXME: Improve this with e.g. single letter months
+    paintMonthScaleHeader( painter, headerRect, exposedRect, offset, widget );
+#else
+    QStyle* style = widget?widget->style():QApplication::style();
+
+    // Paint a section for each month
+    QDateTime sdt = d->chartXtoDateTime( offset+exposedRect.left() );
+    sdt.setTime( QTime( 0, 0, 0, 0 ) );
+    sdt = sdt.addDays( 1 - sdt.date().day() );
+    QDateTime dt = sdt;
+    for ( qreal x = d->dateTimeToChartX( dt ); x < exposedRect.right()+offset;
+            dt = dt.addMonths( 1 ),x=d->dateTimeToChartX( dt ) ) {
+        QStyleOptionHeader opt;
+        opt.init( widget );
+        opt.rect = QRectF( x-offset, headerRect.top()+headerRect.height()/2., dayWidth()*dt.date().daysInMonth(), headerRect.height()/2. ).toRect();
+        opt.text = QDate::shortMonthName( dt.date().month() );
+        opt.textAlignment = Qt::AlignCenter;
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
+    }
+
+    // Paint a section for each year
+    dt = sdt;
+    for ( qreal x2 = d->dateTimeToChartX( dt ); x2 < exposedRect.right()+offset; x2=d->dateTimeToChartX( dt ) ) {
+        //qDebug()<<"paintMonthScaleHeader()"<<dt;
+        QDate next = dt.date().addYears( 1 );
+        next = next.addMonths( 1 - next.month() );
+
+        QStyleOptionHeader opt;
+        opt.init( widget );
+        opt.rect = QRectF( x2-offset, headerRect.top(), dayWidth()*dt.date().daysTo( next ), headerRect.height()/2. ).toRect();
+        opt.text = QString::number( dt.date().year() );
+        opt.textAlignment = Qt::AlignCenter;
+        // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        QStyleOptionHeader subopt = opt;
+        subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
+        if ( subopt.rect.isValid() ) {
+            style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
+        }
+
+        dt.setDate( next );
+    }
+#endif
 }
 
 #undef d
