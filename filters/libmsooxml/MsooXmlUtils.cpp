@@ -1590,6 +1590,19 @@ MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, q
     // SatMod can be for example 3.5 so converting RGB -> HSL is not an option
     // ADD INFO: MS document does not say that when calculating TINT and SHADE
     // That whether one should use normal RGB or linear RGB, check it!
+
+
+    // This method is used temporarily, it seems to produce visually better results than the lower one.
+    if (satMod > 0) {
+        QColor temp = QColor(red, green, blue);
+        qreal saturationFromFull = 1.0 - temp.saturationF();
+        temp = QColor::fromHsvF(temp.hueF(), temp.saturationF() + saturationFromFull / 10 * satMod, temp.valueF());
+        red = temp.red();
+        green = temp.green();
+        blue = temp.blue();
+    }
+
+    /*
     if (satMod > 0) {
         red = red * satMod;
         green = green * satMod;
@@ -1604,6 +1617,7 @@ MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, q
             blue = 255;
         }
     }
+    */
 
     color = QColor(red, green, blue);
 }
