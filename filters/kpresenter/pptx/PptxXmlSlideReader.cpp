@@ -985,7 +985,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
  - effectDag (Effect Container) §20.1.8.25
  - effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §19.2.1.12
- - gradFill (Gradient Fill) §20.1.8.33
+ - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
  - noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
@@ -1021,7 +1021,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                 kDebug() << fillImageName;
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
-                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
                 TRY_READ_IF_NS(a, gradFill)
                 m_currentDrawStyle->addProperty("draw:fill", "gradient");
                 const QString gradName = mainStyles->insert(m_currentGradientStyle);

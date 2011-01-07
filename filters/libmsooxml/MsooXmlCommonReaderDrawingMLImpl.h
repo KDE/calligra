@@ -616,7 +616,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
-                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
                 TRY_READ(gradFill)
                 m_currentDrawStyle->addProperty("draw:fill", "gradient");
                 const QString gradName = mainStyles->insert(m_currentGradientStyle);
@@ -1210,7 +1210,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #ifdef PPTXXMLSLIDEREADER_CPP
                 d->textBoxHasContent = true;
 #endif
-                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
                 TRY_READ(gradFill)
                 m_currentDrawStyle->addProperty("draw:fill", "gradient");
                 const QString gradName = mainStyles->insert(m_currentGradientStyle);
@@ -3271,9 +3271,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 {
     READ_PROLOGUE
 
-    QVector<QColor> colors;
-    QVector<int> positions;
-    QVector<int> alphas;
+    m_currentGradientStyle.addAttribute("svg:x1", "0%");
+    m_currentGradientStyle.addAttribute("svg:x2", "0%");
+    m_currentGradientStyle.addAttribute("svg:y1", "0%");
+    m_currentGradientStyle.addAttribute("svg:y2", "100%");
+
+    int index = 0;
 
     while (!atEnd()) {
         readNext();
@@ -3281,55 +3284,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(gs)) {
                 TRY_READ(gs)
-                colors.push_back(m_currentColor);
-                positions.push_back(m_gradPosition);
-                alphas.push_back(m_currentAlpha);
+                QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").arg(m_gradPosition/100.0).arg(m_currentColor.name());
+                QString name = QString("%1").arg(index);
+                m_currentGradientStyle.addChildElement(name, contents);
+                ++index;
             }
             ELSE_WRONG_FORMAT
         }
-    }
-
-    bool gradFilled = false;
-    // This gradient logic should be replace with a more generic one if possible
-    if (colors.size() == 3) {
-        // Case: axial gradient
-        if (positions.at(0) == 0 && positions.at(1) == 50  && positions.at(2) == 100 &&
-            colors.at(0) == colors.at(2) && colors.at(0) != colors.at(1)) {
-            m_currentGradientStyle.addAttribute("draw:style", "axial");
-            m_currentGradientStyle.addAttribute("draw:end-color", colors.at(0).name());
-            if (alphas.at(0) > 0) {
-                m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(alphas.at(0)));
-            }
-            else {
-                m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
-            }
-            if (alphas.at(2) > 0) {
-                m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(alphas.at(0)));
-            }
-            else {
-                m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
-            }
-            m_currentGradientStyle.addAttribute("draw:start-color", colors.at(1).name());
-            gradFilled = true;
-        }
-    }
-    // Currently used for all other encountered gradient types
-    if (colors.size() > 1 && !gradFilled) {
-        m_currentGradientStyle.addAttribute("draw:style", "linear");
-        if (alphas.at(0) > 0) {
-            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(alphas.at(0)));
-        }
-        else {
-            m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
-        }
-        if (alphas.at(alphas.size()-1) > 0) {
-            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(alphas.at(alphas.size()-1)));
-        }
-        else {
-            m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
-        }
-        m_currentGradientStyle.addAttribute("draw:start-color", colors.at(0).name());
-        m_currentGradientStyle.addAttribute("draw:end-color", colors.at(colors.size()-1).name());
     }
 
     READ_EPILOGUE
