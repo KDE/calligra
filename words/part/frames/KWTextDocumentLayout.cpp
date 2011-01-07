@@ -793,6 +793,12 @@ void KWTextDocumentLayout::layout()
                 m_state->clearTillEnd();
                 break; //break so the next line (which contain the same) is fitted on new shape
             }
+
+            // don't try to use line when layout is cleared
+            if (m_state->layout->lineCount() == 0) {
+                break;
+            }
+
             line.fit(true);
 #ifdef DEBUG_TEXT
             if (line.line.isValid()) {
