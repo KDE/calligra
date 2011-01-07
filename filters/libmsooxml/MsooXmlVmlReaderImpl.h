@@ -343,7 +343,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fill)
             else if (qualifiedName() == "v:textbox") {
@@ -480,7 +480,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rect)
             SKIP_UNKNOWN
@@ -520,7 +520,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fill)
             else if (qualifiedName() == "v:textbox") {
@@ -605,7 +605,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //            TRY_READ_IF(fill)
 //! @todo add ELSE_WRONG_FORMAT
@@ -646,7 +646,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
     //const QXmlStreamAttributes attrs(attributes());
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fill)
             ELSE_WRONG_FORMAT
@@ -990,7 +990,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(formulas)
             SKIP_UNKNOWN
@@ -1035,7 +1035,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_formulas()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(f)
             ELSE_WRONG_FORMAT
@@ -1249,7 +1249,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "v:imagedata") {
                 isCustomShape = false;
@@ -1380,7 +1380,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 #ifdef DOCXXMLDOCREADER_CPP
             TRY_READ_IF_NS(w, txbxContent)

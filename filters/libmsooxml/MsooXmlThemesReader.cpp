@@ -355,7 +355,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(themeElements)
             ELSE_TRY_READ_IF(custClrLst)
@@ -388,7 +388,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_themeElements()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(clrScheme)
             ELSE_TRY_READ_IF(extLst)
@@ -475,7 +475,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrSchemeLst()
    while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(extraClrScheme)
         }
@@ -497,7 +497,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrScheme()
    while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
         }
     }
@@ -558,7 +558,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
@@ -805,7 +805,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fmtScheme()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bgFillStyleLst)
             ELSE_TRY_READ_IF(fillStyleLst)
@@ -824,7 +824,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_lnStyleLst()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(ln)
             SKIP_UNKNOWN
@@ -848,7 +848,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_ln()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             skipCurrentElement();
         }
@@ -869,7 +869,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
             QVector<int> alphaModifiers;
             QVector<int> gradPositions;
             readNext(); // a:gsLst
-            while (true) {
+            while (!atEnd()) {
                 readNext();
                 if (isEndElement() && qualifiedName() == "a:gsLst") {
                     break;
@@ -887,7 +887,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
                        qreal tintModifier = 0;
                        qreal satModifier = 0;
                        int alphaModifier = 0;
-                       while (true) {
+                       while (!atEnd()) {
                            readNext();
                            if (isEndElement() && qualifiedName() == "a:schemeClr") {
                                break;
@@ -918,7 +918,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
                 }
             }
             m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers, satModifiers, alphaModifiers, gradPositions);
-            while (true) {
+            while (!atEnd()) {
                 readNext();
                 if (isEndElement() && qualifiedName() == element) {
                     break;
@@ -938,7 +938,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
                 addManifestEntryForPicturesDir();
                 m_context->theme->formatScheme.fillStyles[index] = new DrawingMLBlipFill(destinationName);
             }
-            while (true) {
+            while (!atEnd()) {
                 readNext();
                 if (isEndElement() && qualifiedName() == element) {
                     break;
@@ -966,7 +966,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fillStyleLst()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         fillStyleReadHelper(index);
     }
     READ_EPILOGUE
@@ -983,7 +983,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         fillStyleReadHelper(index);
     }
     READ_EPILOGUE
@@ -1006,7 +1006,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fontScheme()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(majorFont)
             ELSE_TRY_READ_IF(minorFont)
@@ -1024,7 +1024,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_majorFont()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "a:latin") {
                 const QXmlStreamAttributes attrs(attributes());
@@ -1055,7 +1055,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_minorFont()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "a:latin") {
                 const QXmlStreamAttributes attrs(attributes());
@@ -1082,4 +1082,3 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_SKIP()
 {
     SKIP_EVERYTHING_AND_RETURN
 }
-
