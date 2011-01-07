@@ -94,6 +94,7 @@ struct rcps_phenotype {
 	int overuse_count;
 	int overuse_amount;
 	int *job_start;
+    int *job_duration;
 };
 
 struct rcps_individual {
@@ -123,7 +124,7 @@ struct rcps_solver {
 	// the actual population;
 	struct rcps_population *population;
 	// progress callback and data
-	int (*progress_callback)(int generations, int duration, void *arg);
+	int (*progress_callback)(int generations, int fitness, void *arg);
 	void *cb_arg;
 	int cb_steps;
 	// duration callback

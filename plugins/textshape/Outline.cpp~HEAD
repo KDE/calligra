@@ -19,41 +19,9 @@
  */
 
 #include "Outline.h"
-#include "KWFrame.h"
-#include "KWOutlineShape.h"
 #include <KoShapeContainer.h>
 
 #include <qnumeric.h>
-
-Outline::Outline(KWFrame *frame, const QTransform &matrix)
-    : m_side(None),
-    m_polygon(QPolygonF()),
-    m_line(QRectF()),
-    m_shape(frame->shape())
-{
-    //TODO korinpa: check if outline is convex. otherwise do triangulation and create more convex outlines
-    KoShape *shape = frame->outlineShape();
-    if (shape == 0)
-        shape = frame->shape();
-    QPainterPath path = shape->outline();
-    if (frame->shape()->parent() && frame->shape()->parent()->isClipped(frame->shape())) {
-        path = shape->transformation().map(path);
-        path = frame->shape()->parent()->outline().intersected(path);
-        path = shape->transformation().inverted().map(path);
-    }
-    init(matrix, path, frame->runAroundDistance());
-    if (frame->textWrap() == KWord::NoRunAround) {
-        m_side = Empty;
-    } else if (frame->runAroundSide() == KWord::LeftRunAroundSide) {
-        m_side = Left;
-    } else if (frame->runAroundSide() == KWord::RightRunAroundSide) {
-        m_side = Right;
-    } else if (frame->runAroundSide() == KWord::BothRunAroundSide) {
-        m_side = Both;
-    } else if (frame->runAroundSide() == KWord::BiggestRunAroundSide) {
-        m_side = Bigger;
-    }
-}
 
 Outline::Outline(KoShape *shape, const QTransform &matrix)
     : m_side(None),
@@ -61,28 +29,27 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
     m_line(QRectF()),
     m_shape(shape)
 {
-    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    qreal distance = 0;
-    if (frame) {
-        distance = frame->runAroundDistance();
-        if (frame->textWrap() == KWord::NoRunAround) {
-            // make the shape take the full width of the text area
-            m_side = Empty;
-        } else if (frame->textWrap() == KWord::RunThrough) {
-            m_distance = 0;
-            // We don't exist.
-            return;
-        } else if (frame->runAroundSide() == KWord::LeftRunAroundSide) {
-            m_side = Left;
-        } else if (frame->runAroundSide() == KWord::RightRunAroundSide) {
-            m_side = Right;
-        } else if (frame->runAroundSide() == KWord::BothRunAroundSide) {
-            m_side = Both;
-        } else if (frame->runAroundSide() == KWord::BiggestRunAroundSide) {
-            m_side = Bigger;
-        }
+    QPainterPath path = shape->outline();
+
+    //TODO check if path is convex. otherwise do triangulation and create more convex outlines
+    init(matrix, path, shape->textRunAroundDistance());
+
+    if (shape->textRunAroundSide() == KoShape::NoRunAround) {
+        // make the shape take the full width of the text area
+        m_side = Empty;
+    } else if (shape->textRunAroundSide() == KoShape::RunThrough) {
+        m_distance = 0;
+        // We don't exist.
+        return;
+    } else if (shape->textRunAroundSide() == KoShape::LeftRunAroundSide) {
+        m_side = Left;
+    } else if (shape->textRunAroundSide() == KoShape::RightRunAroundSide) {
+        m_side = Right;
+    } else if (shape->textRunAroundSide() == KoShape::BothRunAroundSide) {
+        m_side = Both;
+    } else if (shape->textRunAroundSide() == KoShape::BiggestRunAroundSide) {
+        m_side = Bigger;
     }
-    init(matrix, shape->outline(), distance);
 }
 
 void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal distance)

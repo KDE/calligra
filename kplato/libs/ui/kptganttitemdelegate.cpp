@@ -47,11 +47,11 @@ GanttItemDelegate::GanttItemDelegate( QObject *parent )
     showTaskLinks( true ),
     showProgress( false ),
     showPositiveFloat( false ),
-    showNegativeFloat( false ), // NOTE: atm for test, activate when the ui can be changed
+    showNegativeFloat( true ), // NOTE: atm for test, activate when the ui can be changed
     showCriticalPath( false ),
     showCriticalTasks( false ),
     showAppointments( false ),
-    showTimeConstraint( false ), // NOTE: atm for test, activate when the ui can be changed
+    showTimeConstraint( true ), // NOTE: atm for test, activate when the ui can be changed
     showSchedulingError( false )
 {
     QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
@@ -363,38 +363,6 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<cr<<r<<boundingRect;
                 }
             }
-            if ( showTimeConstraint ) {
-                //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
-                painter->save();
-                painter->setBrush( QBrush( Qt::darkGray ) );
-                painter->setPen( Qt::black );
-                qreal h = r.height()/2.;
-                if ( hasStartConstraint( idx ) ) {
-                    int dw = itemStartConstraintWidth( opt, idx ) + h;
-                    QRectF cr( r.left()-dw, r.top() + h/2., h, h );
-                    QPainterPath p( cr.topLeft() );
-                    p.lineTo( cr.bottomLeft() );
-                    p.lineTo( cr.right(), cr.top() + cr.height()/2. );
-                    p.closeSubpath();
-                    painter->drawPath( p );
-                    if ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() != Node::StartNotEarlier ) {
-                        painter->fillPath( p, QBrush( Qt::black ) );
-                    }
-                }
-                if ( hasEndConstraint( idx ) ) {
-                    int dw = itemEndConstraintWidth( opt, idx );
-                    QRectF cr( r.right()+dw, r.top() + h/2., h, h );
-                    QPainterPath p( cr.topRight() );
-                    p.lineTo( cr.bottomRight() );
-                    p.lineTo( cr.left(), cr.top() + cr.height()/2. );
-                    p.closeSubpath();
-                    painter->drawPath( p );
-                    if ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() != Node::FinishNotLater ) {
-                        painter->fillPath( p, QBrush( Qt::black ) );
-                    }
-                }
-                painter->restore();
-            }
             bool critical = false;
             if ( showCriticalTasks ) {
                 critical = idx.model()->index( idx.row(), NodeModel::NodeCritical, idx.parent() ).data( Qt::DisplayRole ).toBool();
@@ -435,6 +403,38 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                 }
             }
             painter->restore();
+            if ( showTimeConstraint ) {
+                //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
+                painter->save();
+                painter->setBrush( QBrush( Qt::darkGray ) );
+                painter->setPen( Qt::black );
+                qreal h = r.height()/2.;
+                if ( hasStartConstraint( idx ) ) {
+                    int dw = itemStartConstraintWidth( opt, idx ) + h;
+                    QRectF cr( r.left()-dw, r.top() + h/2., h, h );
+                    QPainterPath p( cr.topLeft() );
+                    p.lineTo( cr.bottomLeft() );
+                    p.lineTo( cr.right(), cr.top() + cr.height()/2. );
+                    p.closeSubpath();
+                    painter->drawPath( p );
+                    if ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() != Node::StartNotEarlier ) {
+                        painter->fillPath( p, QBrush( Qt::red ) );
+                    }
+                }
+                if ( hasEndConstraint( idx ) ) {
+                    int dw = itemEndConstraintWidth( opt, idx );
+                    QRectF cr( r.right()+dw, r.top() + h/2., h, h );
+                    QPainterPath p( cr.topRight() );
+                    p.lineTo( cr.bottomRight() );
+                    p.lineTo( cr.left(), cr.top() + cr.height()/2. );
+                    p.closeSubpath();
+                    painter->drawPath( p );
+                    if ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() != Node::FinishNotLater ) {
+                        painter->fillPath( p, QBrush( Qt::red ) );
+                    }
+                }
+                painter->restore();
+            }
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
             case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;

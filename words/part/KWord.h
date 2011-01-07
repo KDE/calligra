@@ -43,33 +43,6 @@ namespace KWord
         CopyNewFrame        ///< On new page create a copy-frame and show that.
     };
 
-    /// The behavior other frames' text has when this property is set on a frame.
-    enum RunAroundSide {
-        BiggestRunAroundSide,   ///< Run other text around the side that has the most space
-        LeftRunAroundSide,      ///< Run other text around the left side of the frame
-        RightRunAroundSide,     ///< Run other text around the right side of the frame
-        AutoRunAroundSide,      ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
-        BothRunAroundSide       ///< Run other text around both sides of the shape
-    };
-
-    /**
-     * This property specifies how text from a text frame behaves when a frame with
-     * one of these properties set on it intersects with it.
-     */
-    enum TextWrap {
-        NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
-        RunAround,  ///< The text will run around the outline of the frame
-        RunThrough  ///< The text will completely ignore the frame and layout as if it was not there
-    };
-
-    /**
-     * TODO
-     */
-    enum Through {
-        Background,
-        Foreground
-    };
-
     enum FrameSetType {
         BackgroundFrameSet,
         TextFrameSet,

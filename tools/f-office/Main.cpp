@@ -42,6 +42,12 @@ int main(int argc, char *argv[])
     }
 
     HildonApplication a(argc, argv);
+
+    // check if we are running in meego-handset, and if so set 'meegotouch' as the widget style
+    if (qgetenv("X_DESKTOP_SESSION") == "X-MEEGO-HS") {
+        QApplication::setStyle("meegotouch");
+    }
+
     QStringList arguments = a.arguments();
     // remove graphicssystem attribute from the attribute list
     if (graphicsSystemIndex != -1) {

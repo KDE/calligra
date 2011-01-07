@@ -155,51 +155,6 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
     else
         frame->setNewFrameBehavior(KWord::NoFollowupFrame);
 
-    QString margin = properties.attributeNS(KoXmlNS::fo, "margin");
-    if (margin.isEmpty())
-        margin = properties.attributeNS(KoXmlNS::fo, "margin-left");
-    if (margin.isEmpty())
-        margin = properties.attributeNS(KoXmlNS::fo, "margin-top");
-    if (margin.isEmpty())
-        margin = properties.attributeNS(KoXmlNS::fo, "margin-bottom");
-    if (margin.isEmpty())
-        margin = properties.attributeNS(KoXmlNS::fo, "margin-right");
-    frame->setRunAroundDistance(KoUnit::parseValue(margin));
-
-    QString wrap;
-    if (properties.hasAttributeNS(KoXmlNS::style, "wrap")) {
-        wrap = properties.attributeNS(KoXmlNS::style, "wrap");
-    } else {
-        // no value given in the file, and for compatibility reasons we do some suggestion on
-        // what to use.
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-        if (tfs == 0)
-            wrap = "none";
-        else
-            wrap = "biggest";
-    }
-    if (wrap == "none") {
-        frame->setTextWrap(KWord::NoRunAround);
-    } else if (wrap == "run-through") {
-        QString runTrought = properties.attributeNS(KoXmlNS::style, "run-through", "background");
-        if (runTrought == "background") {
-            frame->setTextWrap(KWord::RunThrough, KWord::Background);
-        } else {
-            frame->setTextWrap(KWord::RunThrough, KWord::Foreground);
-        }
-    } else {
-        frame->setTextWrap(KWord::RunAround);
-        if (wrap == "biggest")
-            frame->setRunAroundSide(KWord::BiggestRunAroundSide);
-        else if (wrap == "left")
-            frame->setRunAroundSide(KWord::LeftRunAroundSide);
-        else if (wrap == "right")
-            frame->setRunAroundSide(KWord::RightRunAroundSide);
-        else if (wrap == "dynamic")
-            frame->setRunAroundSide(KWord::AutoRunAroundSide);
-        else if (wrap == "parallel")
-            frame->setRunAroundSide(KWord::BothRunAroundSide);
-    }
     frame->setFrameOnBothSheets(properties.attributeNS(KoXmlNS::koffice,
                 "frame-copy-to-facing-pages default").compare("true", Qt::CaseInsensitive));
     return true;

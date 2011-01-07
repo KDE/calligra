@@ -282,7 +282,7 @@ void rcps_solver_setparam(struct rcps_solver *s, int param, int value);
  */
 void rcps_solver_set_progress_callback(struct rcps_solver *s, 
 	int steps, void *arg,
-	int (*progress_callback)(int generations, int duration, void *arg));
+	int (*progress_callback)(int generations, int fitness, void *arg));
 
 /* register a callback that gets called every time we want to determine the 
  * duration of a mode at a given time. arguments are the 'nominal'
