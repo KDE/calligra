@@ -952,8 +952,8 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("Words %1.%2.$3").arg(KOffice::versionMajor(),
-        KOffice::versionMinor(), KOffice::versionRelease()));
+    dia->printer().setCreator(QString("KWord %1.%2.%3").arg(KOffice::versionMajor())
+                              .arg(KOffice::versionMinor()).arg(KOffice::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
