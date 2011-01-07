@@ -81,10 +81,12 @@ GanttChartDisplayOptionsPanel::GanttChartDisplayOptionsPanel( GanttItemDelegate 
     connect( ui_showResourceNames, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showDependencies, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showPositiveFloat, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showNegativeFloat, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showCriticalPath, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showCriticalTasks, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showCompletion, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showSchedulingError, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showTimeConstraint, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
 }
 
 void GanttChartDisplayOptionsPanel::slotOk()
@@ -93,10 +95,12 @@ void GanttChartDisplayOptionsPanel::slotOk()
     m_delegate->showResources = ui_showResourceNames->checkState() == Qt::Checked;
     m_delegate->showTaskLinks = ui_showDependencies->checkState() == Qt::Checked;
     m_delegate->showPositiveFloat = ui_showPositiveFloat->checkState() == Qt::Checked;
+    m_delegate->showNegativeFloat = ui_showNegativeFloat->checkState() == Qt::Checked;
     m_delegate->showCriticalPath = ui_showCriticalPath->checkState() == Qt::Checked;
     m_delegate->showCriticalTasks = ui_showCriticalTasks->checkState() == Qt::Checked;
     m_delegate->showProgress = ui_showCompletion->checkState() == Qt::Checked;
     m_delegate->showSchedulingError = ui_showSchedulingError->checkState() == Qt::Checked;
+    m_delegate->showTimeConstraint = ui_showTimeConstraint->checkState() == Qt::Checked;
 }
 
 void GanttChartDisplayOptionsPanel::setValues( const GanttItemDelegate &del )
@@ -105,10 +109,12 @@ void GanttChartDisplayOptionsPanel::setValues( const GanttItemDelegate &del )
     ui_showResourceNames->setCheckState( del.showResources ? Qt::Checked : Qt::Unchecked );
     ui_showDependencies->setCheckState( del.showTaskLinks ? Qt::Checked : Qt::Unchecked );
     ui_showPositiveFloat->setCheckState( del.showPositiveFloat ? Qt::Checked : Qt::Unchecked );
+    ui_showNegativeFloat->setCheckState( del.showNegativeFloat ? Qt::Checked : Qt::Unchecked );
     ui_showCriticalPath->setCheckState( del.showCriticalPath ? Qt::Checked : Qt::Unchecked );
     ui_showCriticalTasks->setCheckState( del.showCriticalTasks ? Qt::Checked : Qt::Unchecked );
     ui_showCompletion->setCheckState( del.showProgress ? Qt::Checked : Qt::Unchecked );
     ui_showSchedulingError->setCheckState( del.showSchedulingError ? Qt::Checked : Qt::Unchecked );
+    ui_showTimeConstraint->setCheckState( del.showTimeConstraint ? Qt::Checked : Qt::Unchecked );
 }
 
 void GanttChartDisplayOptionsPanel::setDefault()

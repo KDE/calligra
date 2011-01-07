@@ -105,10 +105,14 @@ KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
-bool m_gradRotation; //whethere there should be angle with gradient
+bool m_gradRotation; //whether there should be angle with gradient
 KoFilter::ConversionStatus read_gsLst();
 KoFilter::ConversionStatus read_gs();
 KoFilter::ConversionStatus read_prstGeom();
+KoFilter::ConversionStatus read_gd();
+bool m_contentAvLstExists; // whether avLst exists
+QMap<QString, QString> m_avModifiers;
+KoFilter::ConversionStatus read_avLst();
 enum noFillCaller {
         noFill_rPr
 };

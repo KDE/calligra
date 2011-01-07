@@ -5,6 +5,7 @@
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010 Casper Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -389,10 +390,7 @@ void KWDocument::addFrame(KWFrame *frame)
 {
     foreach (KoView *view, views()) {
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        if (frame->outlineShape())
-            canvas->shapeManager()->addShape(frame->outlineShape()->parent());
-        else
-            canvas->shapeManager()->addShape(frame->shape());
+        canvas->shapeManager()->addShape(frame->shape());
         canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
     if (frame->loadingPageNumber() > 0) {

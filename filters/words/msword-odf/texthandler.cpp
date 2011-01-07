@@ -1497,8 +1497,16 @@ void KWordTextHandler::updateListStyle(QString textStyleName)
         }
 
         listStyleWriter.startElement("style:list-level-properties");
-        if (listInfo->space())
-            listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+        if (listInfo->space()) {
+            // This produces wrong results (see the document attached to KDE bug 244411 and it's not clear why that is so. The
+            // specs say that the dxaSpace is the "minimum space between number and paragraph" and as such following should be
+            // right but it is not. So, we disabled it for now till someone has an idea why that is so.
+            //listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+        }
+        if (listInfo->indent()) {
+            // Is this correct?
+            listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);
+        }
         listStyleWriter.endElement(); //style:list-level-properties
         //close element
         listStyleWriter.endElement(); //text:list-level-style-bullet
@@ -1624,7 +1632,8 @@ void KWordTextHandler::updateListStyle(QString textStyleName)
         }
 
         if (listInfo->space()) {
-            listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+            // Disabled for now. Have a look at the comment at the other text:min-label-distance above to see why.
+            //listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
         }
         if (listInfo->indent()) {
             listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);

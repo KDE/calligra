@@ -65,7 +65,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 #endif
         }
 //! @todo add ELSE_WRONG_FORMAT
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
 //kDebug() << "{1}";
     READ_EPILOGUE
@@ -84,7 +84,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_AlternateContent()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(Choice)
             else if (!m_choiceAccepted && qualifiedName() == "mc:Fallback") {
@@ -115,7 +115,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Choice()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 #ifdef PPTXXMLSLIDEREADER_CPP
             TRY_READ_IF_NS(p, oleObj)
@@ -135,7 +135,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Fallback()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 #ifdef DOCXXMLDOCREADER_H
             TRY_READ_IF_NS(w, pict)

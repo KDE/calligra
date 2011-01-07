@@ -14,6 +14,8 @@ set(TestDocumentLayout_test_SRCS
     TestDocumentLayout.cpp
     TestLists.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp
     ../TableLayout.cpp
@@ -48,6 +50,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/FontDia.cpp
     ../dialogs/InsertCharacter.cpp
     ../dialogs/StyleManagerDialog.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
     ../dialogs/SimpleParagraphWidget.cpp
@@ -79,6 +82,8 @@ set(TestChangeListCommand_test_SRCS
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
     ../ToCGenerator.cpp
@@ -116,6 +121,8 @@ set(TestTableLayout_test_SRCS
     ../TableLayout.cpp
     ../TableLayoutData.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp
     ../ToCGenerator.cpp
@@ -135,6 +142,8 @@ set(TestSections_test_SRCS
     ../ListItemsHelper.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
 )
 kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
 target_link_libraries(TestSections kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
@@ -178,6 +187,7 @@ set(TestTextTool_test_SRCS
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/StyleManagerWelcome.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
     ../dialogs/ListStyleButton.cpp
@@ -188,6 +198,8 @@ set(TestTextTool_test_SRCS
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../ListItemsHelper.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
@@ -224,6 +236,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/InsertCharacter.cpp
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
     ../dialogs/ListStyleButton.cpp
@@ -254,6 +267,8 @@ set(TestChangeTrackedDelete_test_SRCS
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
     ../ToCGenerator.cpp

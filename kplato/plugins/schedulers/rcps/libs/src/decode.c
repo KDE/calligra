@@ -5,6 +5,8 @@
 #include "lib.h"
 #include "librcps.h"
 
+#include <stdio.h>
+
 #define UNSCHEDULED	-1
 
 // XXX this sizing might make sense on 32-bit platforms, but not on 64 bit?
@@ -100,6 +102,7 @@ int postpone(struct rcps_solver *solver, struct rcps_problem *problem,
 	if (solver->duration_callback) {
 		duration = solver->duration_callback(DURATION_FORWARD, start, 
 			cmode->duration, cmode->cb_arg);
+        //printf("postpone: %s direction=%d, start=%d = duration=%d\n", job->name, DURATION_FORWARD, start, duration);
 	}
 	
 	for (i = 0; i < cmode->request_count; i++) {
@@ -154,6 +157,7 @@ int postpone(struct rcps_solver *solver, struct rcps_problem *problem,
 	}
 	/* ok, do it at that time */
 	pheno->job_start[job->index] = start;
+    pheno->job_duration[job->index] = duration;
 	/* add the edges */
 	for (i = 0; i < cmode->request_count; i++) {
 		crequest = cmode->requests[i];
@@ -218,6 +222,10 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 	for (i = 0; i < problem->job_count; i++) {
 		pheno->job_start[i] = UNSCHEDULED;
 	}
+    pheno->job_duration = (int*)malloc(sizeof(int) * problem->job_count);
+    for (i = 0; i < problem->job_count; i++) {
+        pheno->job_duration[i] = 0;
+    }
 
 	/* now take every job in turn and schedule it */
 	for (i = 0; i < problem->job_count; i++) {
@@ -239,6 +247,7 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 						DURATION_FORWARD,
 						pheno->job_start[pjob->index],
 						duration, pjob->modes[cmi]->cb_arg);
+                    //printf("decode: %s direction=%d, start=%d = duration=%d\n", pjob->name, DURATION_FORWARD, pheno->job_start[pjob->index], duration);
 				}
 				s = max(s, pheno->job_start[pjob->index]
 					+ duration);
@@ -263,6 +272,7 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
                         : 0;
 				d2 = cjob->modes[cmi]->duration;
 				if (solver->duration_callback) {
+                    //printf( "duration callback backward: %s\n", cjob->name );
 					d2 = solver->duration_callback(
 						DURATION_BACKWARD,
 						pheno->job_start[pjob->index] + duration,

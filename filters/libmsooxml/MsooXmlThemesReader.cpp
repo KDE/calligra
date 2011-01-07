@@ -39,39 +39,31 @@
 
 using namespace MSOOXML;
 
-DrawingMLGradientFill::DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier, QVector<int> alphaModifier) 
-    : m_shadeModifier(shadeModifier),m_tintModifier(tintModifier), m_satModifier(satModifier), m_alphaModifier(alphaModifier)
+DrawingMLGradientFill::DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
+    QVector<int> alphaModifier, QVector<int> gradPositions)
+    : m_shadeModifier(shadeModifier),m_tintModifier(tintModifier), m_satModifier(satModifier),
+     m_alphaModifier(alphaModifier), m_gradPosition(gradPositions)
 {
 }
 
 void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color)
 {
-    KoGenStyle gradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+    KoGenStyle gradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
 
-    // This is over-simplified gradient style
-    gradientStyle.addAttribute("draw:style", "linear");
-    if (m_alphaModifier.at(0) > 0) {
-        gradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(m_alphaModifier.at(0)));
-    }
-    else {
-        gradientStyle.addAttribute("draw:start-intensity", "100%");
-    }
-    if (m_alphaModifier.at(m_alphaModifier.size()-1)) {
-        gradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(m_alphaModifier.at(m_alphaModifier.size() - 1)));
-    }
-    else {
-        gradientStyle.addAttribute("draw:end-intensity", "100%");
-    }
+    gradientStyle.addAttribute("svg:x1", "0%");
+    gradientStyle.addAttribute("svg:x2", "0%");
+    gradientStyle.addAttribute("svg:y1", "0%");
+    gradientStyle.addAttribute("svg:y2", "100%");
 
-    QColor startColor = color;
-    QColor endColor = color;
-
-    MSOOXML::Utils::modifyColor(startColor, m_tintModifier.at(0), m_shadeModifier.at(0), m_satModifier.at(0));
-    MSOOXML::Utils::modifyColor(endColor, m_tintModifier.at(m_tintModifier.size() - 1), m_shadeModifier.at(m_shadeModifier.size() - 1),
-        m_satModifier.at(m_satModifier.size() - 1));
-
-    gradientStyle.addAttribute("draw:start-color", startColor.name());
-    gradientStyle.addAttribute("draw:end-color", endColor.name());
+    int index = 0;
+    while (index < m_alphaModifier.size()) {
+        QColor gradColor = color;
+        MSOOXML::Utils::modifyColor(gradColor, m_tintModifier.at(index), m_shadeModifier.at(index), m_satModifier.at(index));
+        QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").arg(m_gradPosition.at(index)/100.0).arg(gradColor.name());
+        QString name = QString("%1").arg(index);
+        gradientStyle.addChildElement(name, contents);
+        ++index;
+    }
 
     graphicStyle->addProperty("draw:fill", "gradient");
     const QString gradName = styles.insert(gradientStyle);
@@ -363,7 +355,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(themeElements)
             ELSE_TRY_READ_IF(custClrLst)
@@ -396,7 +388,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_themeElements()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(clrScheme)
             ELSE_TRY_READ_IF(extLst)
@@ -483,7 +475,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrSchemeLst()
    while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(extraClrScheme)
         }
@@ -505,7 +497,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrScheme()
    while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
         }
     }
@@ -566,7 +558,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
@@ -813,7 +805,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fmtScheme()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bgFillStyleLst)
             ELSE_TRY_READ_IF(fillStyleLst)
@@ -832,7 +824,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_lnStyleLst()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(ln)
             SKIP_UNKNOWN
@@ -856,7 +848,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_ln()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             skipCurrentElement();
         }
@@ -875,17 +867,27 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
             QVector<qreal> tintModifiers;
             QVector<qreal> satModifiers;
             QVector<int> alphaModifiers;
+            QVector<int> gradPositions;
             readNext(); // a:gsLst
-            while (true) {
+            while (!atEnd()) {
                 readNext();
-                if (isStartElement() && qualifiedName() == "a:gs") {
+                if (isEndElement() && qualifiedName() == "a:gsLst") {
+                    break;
+                }
+                else if (isStartElement() && qualifiedName() == "a:gs") {
+                    attrs = attributes();
+                    TRY_READ_ATTR_WITHOUT_NS(pos)
+                    int gradPosition = pos.toInt() / 1000;
                     readNext();
-                    if (isStartElement() && qualifiedName() == "a:schemeClr") {
+                    if (isEndElement() && qualifiedName() == "a:gs") {
+                        break;
+                    }
+                    else if (isStartElement() && qualifiedName() == "a:schemeClr") {
                        qreal shadeModifier = 0;
                        qreal tintModifier = 0;
                        qreal satModifier = 0;
                        int alphaModifier = 0;
-                       while (true) {
+                       while (!atEnd()) {
                            readNext();
                            if (isEndElement() && qualifiedName() == "a:schemeClr") {
                                break;
@@ -907,21 +909,16 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
                                }
                            }
                        }
+                       gradPositions.push_back(gradPosition);
                        tintModifiers.push_back(tintModifier);
                        shadeModifiers.push_back(shadeModifier);
                        satModifiers.push_back(satModifier),
                        alphaModifiers.push_back(alphaModifier);
                     }
-                    else if (isEndElement() && qualifiedName() == "a:gs") {
-                        break;
-                    }
-                }
-                else if (isEndElement() && qualifiedName() == "a:gsLst") {
-                    break;
                 }
             }
-            m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers, satModifiers, alphaModifiers);
-            while (true) {
+            m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers, satModifiers, alphaModifiers, gradPositions);
+            while (!atEnd()) {
                 readNext();
                 if (isEndElement() && qualifiedName() == element) {
                     break;
@@ -941,7 +938,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
                 addManifestEntryForPicturesDir();
                 m_context->theme->formatScheme.fillStyles[index] = new DrawingMLBlipFill(destinationName);
             }
-            while (true) {
+            while (!atEnd()) {
                 readNext();
                 if (isEndElement() && qualifiedName() == element) {
                     break;
@@ -969,7 +966,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fillStyleLst()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         fillStyleReadHelper(index);
     }
     READ_EPILOGUE
@@ -986,7 +983,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         fillStyleReadHelper(index);
     }
     READ_EPILOGUE
@@ -1009,7 +1006,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fontScheme()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(majorFont)
             ELSE_TRY_READ_IF(minorFont)
@@ -1027,7 +1024,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_majorFont()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "a:latin") {
                 const QXmlStreamAttributes attrs(attributes());
@@ -1058,7 +1055,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_minorFont()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "a:latin") {
                 const QXmlStreamAttributes attrs(attributes());
@@ -1085,4 +1082,3 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_SKIP()
 {
     SKIP_EVERYTHING_AND_RETURN
 }
-

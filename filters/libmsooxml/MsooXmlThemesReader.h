@@ -160,7 +160,7 @@ class MSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
     // Simplified gradient constuctor
-    DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier, QVector<int> alphaModifier);
+    DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier, QVector<int> alphaModifier, QVector<int> gradPositions);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
 
     DrawingMLGradientFill* clone() const { return new DrawingMLGradientFill(*this); }
@@ -170,6 +170,7 @@ private:
     QVector<qreal> m_tintModifier;
     QVector<qreal> m_satModifier;
     QVector<int> m_alphaModifier;
+    QVector<int> m_gradPosition;
 };
 
 class MSOOXML_EXPORT DrawingMLFormatScheme
