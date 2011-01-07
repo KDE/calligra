@@ -27,7 +27,6 @@
 #include "../KWPageTextInfo.h"
 #include "KWAnchorStrategy.h"
 #include "KWOutlineShape.h"
-#include "Outline.h"
 
 #include <KoTextShapeData.h>
 #include <KoShapeContainer.h>
@@ -63,6 +62,13 @@ static qreal yAtX(const QLineF &line, qreal x)
     return line.y1() + (x - line.x1()) / line.dx() * line.dy();
 }
 
+static qreal xAtY(const QLineF &line, qreal y)
+{
+    if (line.dx() == 0)
+        return line.x1();
+    return line.x1() + (y - line.y1()) / line.dy() * line.dx();
+}
+
 /// Returns 0, one or two points where the line intersects with the rectangle.
 static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
 {
@@ -72,7 +78,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
     // top edge
     if ((startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top()) ||
             (startOfLine.y() >= rect.top() && endOfLine.y() <= rect.top())) {
-        qreal x = Outline::xAtY(line, rect.top());
+        qreal x = xAtY(line, rect.top());
         if (x >= rect.left() && x <= rect.right() && x)
             answer.append(QPointF(x, rect.top()));
     }
@@ -88,7 +94,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
     // bottom edge
     if ((startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom()) ||
             (startOfLine.y() >= rect.bottom() && endOfLine.y() <= rect.bottom())) {
-        qreal x = Outline::xAtY(line, rect.bottom());
+        qreal x = xAtY(line, rect.bottom());
         if (x >= rect.left() && x <= rect.right())
             answer.append(QPointF(x, rect.bottom()));
     }
@@ -221,251 +227,6 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     }
 }
 
-const qreal RIDICULOUSLY_LARGE_NEGATIVE_INDENT = -5E6;
-class Line
-{
-public:
-    Line() {
-        m_lineRect = QRectF();
-        m_updateValidOutlines = false;
-        m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-        m_processingLine = false;
-        m_restartOnNextShape = false;
-    }
-    void createLine(KoTextDocumentLayout::LayoutState *state) {
-        m_state = state;
-        line = m_state->layout->createLine();
-    }
-    void setRestartOnNextShape(bool restartOnNextShape)
-    {
-        m_restartOnNextShape = restartOnNextShape;
-    }
-    bool isValid() const {
-        return line.isValid();
-    }
-    void setOutlines(const QList<Outline*> &outlines) {
-        m_outlines = &outlines;
-    }
-    bool processingLine() {
-        return m_processingLine;
-    }
-    void updateOutline(Outline *outline) {
-        QRectF outlineLineRect = outline->cropToLine(m_lineRect);
-        if (outlineLineRect.isValid()) {
-            m_updateValidOutlines = true;
-        }
-    }
-    void fit(const bool resetHorizontalPosition = false) {
-        if (resetHorizontalPosition) {
-            m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-            m_processingLine = false;
-        }
-        const qreal maxLineWidth = m_state->width();
-        // Make sure at least some text is fitted if the basic width (page, table cell, column)
-        // is too small
-        if (maxLineWidth <= 0.) {
-            if (m_state->layout->lineCount() > 1 || m_state->layout->text().length() > 0)
-                line.setNumColumns(1);
-            line.setPosition(QPointF(m_state->x(), m_state->y()));
-            return;
-        }
-
-        // Too little width because of  wrapping is handled in the remainder of this method
-        line.setLineWidth(maxLineWidth);
-        const qreal maxLineHeight = line.height();
-        const qreal maxNaturalTextWidth = line.naturalTextWidth();
-        QRectF lineRect(m_state->x(), m_state->y(), maxLineWidth, maxLineHeight);
-        QRectF lineRectPart;
-        qreal movedDown = 0;
-        if (m_state->maxLineHeight() > 0) {
-            movedDown = m_state->maxLineHeight();
-        } else {
-            movedDown = 10;
-        }
-
-        while (!lineRectPart.isValid()) {
-            // The line rect could be split into no further linerectpart, so we have
-            // to move the lineRect down a bit and try again
-            // No line rect part was enough big, to fit the line. Recreate line rect further down
-            // (and that is devided into new line parts). Line rect is at different position to
-            // outlines, so new parts are completely different. if there are no outlines, then we
-            // have only one line part which is full line rect
-
-            lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
-            if (!lineRectPart.isValid()) {
-                m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-                lineRect = QRectF(m_state->x(), m_state->y() + movedDown, maxLineWidth, maxLineHeight);
-                movedDown += 10;
-            }
-        }
-
-        line.setLineWidth(m_textWidth);
-        line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
-        checkEndOfLine(lineRectPart, maxNaturalTextWidth);
-    }
-    QTextLine line;
-private:
-    KoTextDocumentLayout::LayoutState *m_state;
-    const QList<Outline*> *m_outlines;
-    QList<Outline*> m_validOutlines;
-    QList<QRectF> m_lineParts;
-    QRectF m_lineRect;
-    qreal m_horizontalPosition;
-    bool m_updateValidOutlines;
-    bool m_processingLine;
-    qreal m_textWidth;
-    bool m_restartOnNextShape;
-    void validateOutlines() {
-        m_validOutlines.clear();
-        foreach (Outline *outline, *m_outlines) {
-            validateOutline(outline);
-        }
-    }
-    void validateOutline(Outline *outline) {
-        QRectF outlineLineRect = outline->cropToLine(m_lineRect);
-        if (outlineLineRect.isValid()) {
-            m_validOutlines.append(outline);
-        }
-    }
-    void createLineParts() {
-        m_lineParts.clear();
-        if (m_validOutlines.isEmpty()) {
-            // Add whole line rect
-            m_lineParts.append(m_lineRect);
-        } else {
-            QList<QRectF> lineParts;
-            QRectF rightLineRect = m_lineRect;
-            qSort(m_validOutlines.begin(), m_validOutlines.end(), Outline::compareRectLeft);
-            // Devide rect to parts, part can be invalid when outlines are not disjunct.
-            foreach (Outline *validOutline, m_validOutlines) {
-                QRectF leftLineRect = validOutline->getLeftLinePart(rightLineRect);
-                lineParts.append(leftLineRect);
-                QRectF lineRect = validOutline->getRightLinePart(rightLineRect);
-                if (lineRect.isValid()) {
-                    rightLineRect = lineRect;
-                }
-            }
-            lineParts.append(rightLineRect);
-            Q_ASSERT(m_validOutlines.size() + 1 == lineParts.size());
-            // Select invalid parts because of wrap.
-            for (int i = 0; i < m_validOutlines.size(); i++) {
-                Outline *outline = m_validOutlines.at(i);
-                if (outline->noTextAround()) {
-                    lineParts.replace(i, QRectF());
-                    lineParts.replace(i + 1, QRect());
-                } else if (outline->textOnLeft()) {
-                    lineParts.replace(i + 1, QRect());
-                } else if (outline->textOnRight()) {
-                    lineParts.replace(i, QRectF());
-                } else if (outline->textOnBiggerSide()) {
-                    QRectF leftReft = outline->getLeftLinePart(m_lineRect);
-                    QRectF rightRect = outline->getRightLinePart(m_lineRect);
-                    if (leftReft.width() < rightRect.width()) {
-                        lineParts.replace(i, QRectF());
-                    } else {
-                        lineParts.replace(i + 1, QRectF());
-                    }
-                }
-            }
-            // Filter invalid parts.
-            foreach (QRectF rect, lineParts) {
-                if (rect.isValid()) {
-                    m_lineParts.append(rect);
-                }
-            }
-        }
-    }
-    QRectF minimizeHeightToLeastNeeded(const QRectF &lineRect) {
-        QRectF lineRectBase = lineRect;
-        // Get width of one char or shape (as-char).
-        m_textWidth = line.cursorToX(line.textStart() + 1) - line.cursorToX(line.textStart());
-        // Make sure width is not wider than state allows.
-        if (m_textWidth > m_state->width()) {
-            m_textWidth = m_state->width();
-        }
-        line.setLineWidth(m_textWidth);
-        // Base linerect height on the width calculated above.
-        lineRectBase.setHeight(line.height());
-        return lineRectBase;
-    }
-    void updateLineParts(const QRectF &lineRect) {
-        if (m_lineRect != lineRect || m_updateValidOutlines) {
-            m_lineRect = lineRect;
-            m_updateValidOutlines = false;
-            validateOutlines();
-            createLineParts();
-        }
-    }
-    QRectF getLineRectPart() {
-        //TODO korinpa: use binary search tree ?
-        QRectF retVal;
-        foreach (QRectF lineRectPart, m_lineParts) {
-            if (m_horizontalPosition <= lineRectPart.left() && m_textWidth <= lineRectPart.width()) {
-                retVal = lineRectPart;
-                break;
-            }
-        }
-        return retVal;
-    }
-    void setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent, const qreal maxNaturalTextWidth) {
-        qreal width = m_textWidth;
-        qreal maxWidth = minLineRectPart.width() - leftIndent;
-        qreal height;
-        qreal maxHeight = minLineRectPart.height();
-        qreal widthDiff = maxWidth - width;
-        //TODO korinpa: use binary shift ?
-        widthDiff /= 2;
-        while (width <= maxWidth && width <= maxNaturalTextWidth && widthDiff > MIN_WIDTH) {
-            line.setLineWidth(width + widthDiff);
-            height = line.height();
-            if (height <= maxHeight) {
-                width = width + widthDiff;
-                m_textWidth = width;
-            }
-            widthDiff /= 2;
-        }
-    }
-    QRectF getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
-        const qreal leftIndent = lineRect.left();
-        QRectF minLineRect = minimizeHeightToLeastNeeded(lineRect);
-        updateLineParts(minLineRect);
-
-        // Get appropriate line rect part, to fit line,
-        // using horizontal position, minimal height and width of line.
-        QRectF lineRectPart = getLineRectPart();
-        if (lineRectPart.isValid()) {
-            qreal x = lineRectPart.x();
-            qreal width = lineRectPart.width();
-
-            // Limit moved the left edge, keep the indent.
-            if (leftIndent < x) {
-                x += leftIndent;
-                width -= leftIndent;
-            }
-            line.setLineWidth(width);
-
-            // Check if line rect is big enough to fit line.
-            // Otherwise find shorter width, what means also shorter height of line.
-            // Condition is reverted.
-            if (line.height() > lineRectPart.height()) {
-                setMaxTextWidth(lineRectPart, leftIndent, maxNaturalTextWidth);
-            } else {
-                m_textWidth = width;
-            }
-        }
-        return lineRectPart;
-    }
-    void checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
-        if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
-            m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-            m_processingLine = false;
-        } else {
-            m_horizontalPosition = lineRectPart.right();
-            m_processingLine = true;
-        }
-    }
-};
-
 
 void KWTextDocumentLayout::layout()
 {
@@ -476,21 +237,19 @@ void KWTextDocumentLayout::layout()
     ;
 #endif
 
-    QList<Outline*> outlines;
     class End
     {
     public:
-        End(KoTextDocumentLayout::LayoutState *state, QList<Outline*> *outlines) {
-            m_state = state; m_outlines = outlines;
+        End(KoTextDocumentLayout::LayoutState *state) {
+            m_state = state;
         }
         ~End() {
-            m_state->end(); qDeleteAll(*m_outlines);
+            m_state->end();
         }
     private:
         KoTextDocumentLayout::LayoutState *m_state;
-        QList<Outline*> *m_outlines;
     };
-    End ender(m_state, &outlines); // poor mans finally{}
+    End ender(m_state); // poor mans finally{}
 
     if (! m_state->start())
         return;
@@ -501,7 +260,7 @@ void KWTextDocumentLayout::layout()
     int startOfBlock = -1; // the first position in a block (aka paragraph)
     int startOfBlockText = -1; // the first position of text in a block. Will be different only if anchors preceed text.
     KoShape *currentShape = 0;
-    Line line;
+
     while (m_state->shape) {
         ADEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines, we have" << m_activeAnchors.count() << "+" << m_newAnchors.count() <<"anchors";
 #ifndef DEBUG_ANCHORS
@@ -518,15 +277,14 @@ void KWTextDocumentLayout::layout()
             TDEBUG << "New shape";
             currentShape = m_state->shape;
             if (m_frameSet->kwordDocument()) {
-                // refresh the outlines cache.
-                qDeleteAll(outlines);
-                outlines.clear();
+                // refresh the registration of run around shapes.
+                m_state->unregisterAllRunAroundShapes();
 
                 // if we are on new page than clean up anchors
                 cleanupAnchors();
 
-                // if part of page is already layouted than check if there are some anchored shapes and add them to outline
-                addOutlinesToPage(outlines,currentShape,m_state);
+                // if part of page is already layouted than check if there are some anchored shapes and register them
+                registerPageAnchoredShapes(currentShape, m_state);
 
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
@@ -538,12 +296,9 @@ void KWTextDocumentLayout::layout()
                             continue;
                         if (! frame->shape()->isVisible(true))
                             continue;
-                        if (frame->textWrap() == KWord::RunThrough)
+                        if (frame->shape()->textRunAroundSide() == KoShape::RunThrough)
                             continue;
-                        if (frame->outlineShape()) {
-                            if (frame->outlineShape()->zIndex() <= currentShape->zIndex())
-                                continue;
-                        } else if (frame->shape()->zIndex() <= currentShape->zIndex()) {
+                        if (frame->shape()->zIndex() <= currentShape->zIndex()) {
                             continue;
                         }
                         if (! bounds.intersects(frame->shape()->boundingRect()))
@@ -557,12 +312,7 @@ void KWTextDocumentLayout::layout()
                         }
                         if (isChild)
                             continue;
-                        QTransform matrix = (frame->outlineShape()
-                                ? frame->outlineShape()
-                                : frame->shape())->absoluteTransformation(0);
-                        matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                        matrix.translate(0, m_state->documentOffsetInShape());
-                        outlines.append(new Outline(frame, matrix));
+                        m_state->registerRunAroundShape(frame->shape());
                     }
                 }
                 // set the page for the shape.
@@ -589,18 +339,8 @@ void KWTextDocumentLayout::layout()
                 restartLine = true;
             }
             if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {
-                // refresh outlines in case the shape moved.
-                foreach (Outline *outline, outlines) {
-                    if (outline->shape() == strategy->anchoredShape()) {
-                        ADEBUG << "  refreshing outline";
-                        QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
-                        matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                        matrix.translate(0, m_state->documentOffsetInShape());
-                        outline->changeMatrix(matrix);
-                        line.updateOutline(outline);
-                        break;
-                    }
-                }
+                // refresh registration in case the shape moved.
+                m_state->updateRunAroundShape(strategy->anchoredShape());
             }
             if (restartLine)
                 break;
@@ -612,24 +352,20 @@ void KWTextDocumentLayout::layout()
         foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             ADEBUG << "  migrating strategy!";
             if (strategy->anchoredShape()) {
-                KWFrame *frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
-                if (! frame || frame->textWrap() != KWord::RunThrough) {
-                    QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
-                    matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                    matrix.translate(0, m_state->documentOffsetInShape());
-                    Outline *outline = new Outline(strategy->anchoredShape(), matrix);
-                    outlines.append(outline);
-                    line.updateOutline(outline);
+                if (strategy->anchoredShape()->textRunAroundSide() != KoShape::RunThrough) {
+                    m_state->registerRunAroundShape(strategy->anchoredShape());
+                    //line.updateOutline(outline);
                  }
                 restartLine = true;
-                ADEBUG << "adding child outline";
+                ADEBUG << "registering child for run around";
             }
             m_activeAnchors.append(strategy);
         }
         m_newAnchors.clear();
         if (restartLine)
             continue;
-        line.createLine(m_state);
+
+        QTextLine line = m_state->createLine();
         if (!line.isValid()) { // end of parag
             const qreal posY = m_state->y();
             if (firstParagraph) {
@@ -690,9 +426,8 @@ void KWTextDocumentLayout::layout()
             return;
         }
         newParagraph = false;
-        line.setOutlines(outlines);
         const int anchorCount = m_newAnchors.count();
-        line.fit();
+        m_state->fitLineForRunAround( /* resetHorizontalPosition */ false );
         if (m_state->layout->lineCount() == 1 && anchorCount != m_newAnchors.count()) {
             // start parag over so we can correctly take the just found anchors into account.
             m_state->layout->endLayout();
@@ -700,24 +435,24 @@ void KWTextDocumentLayout::layout()
             continue;
         }
 #ifdef DEBUG_TEXT
-        if (line.line.isValid()) {
+        if (line.isValid()) {
             QTextBlock b = document()->findBlock(m_state->cursorPosition());
             if (b.isValid()) {
-                TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
-                TDEBUG << "       1 @ " << line.line.position() << " from parag at pos " << b.position();
-                TDEBUG << "         y " << line.line.y() << " h" <<  line.line.height();
+                TDEBUG << "fitted line" << b.text().mid(line.textStart(), line.textLength());
+                TDEBUG << "       1 @ " << line.position() << " from parag at pos " << b.position();
+                TDEBUG << "         y " << line.y() << " h" <<  line.height();
             }
         }
 #endif
-        bottomOfText = line.line.y() + line.line.height();
+        bottomOfText = line.y() + line.height();
         if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1 && KWord::isHeaderFooter(m_frameSet)) {
             TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());
             m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
             cleanupAnchors();
             return;
         }
-        qreal lineheight = line.line.height();
-        while (m_state->addLine(line.line, line.processingLine()) == false) {
+        qreal lineheight = line.height();
+        while (m_state->addLine() == false) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
 
@@ -799,13 +534,14 @@ void KWTextDocumentLayout::layout()
                 break;
             }
 
-            line.fit(true);
+            m_state->fitLineForRunAround( /* resetHorizontalPosition */ true );
+
 #ifdef DEBUG_TEXT
-            if (line.line.isValid()) {
+            if (line.isValid()) {
                 QTextBlock b = document()->findBlock(m_state->cursorPosition());
                 if (b.isValid()) {
-                    TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
-                    TDEBUG << "       2 @ " << line.line.position() << " from parag at pos " << b.position();
+                    TDEBUG << "fitted line" << b.text().mid(line.textStart(), line.textLength());
+                    TDEBUG << "       2 @ " << line.position() << " from parag at pos " << b.position();
                 }
             }
 #endif
@@ -823,7 +559,7 @@ void KWTextDocumentLayout::cleanupAnchors()
     m_newAnchors.clear();
 }
 
-void KWTextDocumentLayout::addOutlinesToPage(QList<Outline*> outlines, KoShape *currentShape,LayoutState *state)
+void KWTextDocumentLayout::registerPageAnchoredShapes(KoShape *currentShape, LayoutState *state)
 {
     KoShapeContainer *pageShape = dynamic_cast<KoShapeContainer*>(currentShape);
 
@@ -838,15 +574,10 @@ void KWTextDocumentLayout::addOutlinesToPage(QList<Outline*> outlines, KoShape *
             if (strategy->anchor()->shape() == child) {
                 // check if the shape is anchored to already layouted text
                 if (strategy->anchor()->positionInDocument() < state->cursorPosition()) {
-                    // add this shape to outlines
+                    // register this shape for text run around
                     if (strategy->anchoredShape()) {
-                        KWFrame *frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
-                        if (! frame || frame->textWrap() != KWord::RunThrough) {
-                            QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
-                            matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                            matrix.translate(0, m_state->documentOffsetInShape());
-                            Outline *outline = new Outline(strategy->anchoredShape(), matrix);
-                            outlines.append(outline);
+                        if (strategy->anchoredShape()->textRunAroundSide() != KoShape::RunThrough) {
+                            m_state->registerRunAroundShape(strategy->anchoredShape());
                         }
                         m_activeAnchors.append(strategy);
                     }

@@ -181,8 +181,6 @@ private slots:
     void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
-    /// create a KWOutlineShape for the selected frame(s).
-    void createCustomOutline();
     /// Wrap the selected frames into a clipping shape container.
     void createFrameClipping();
     /// unwrap the selected frames into a clipping shape container.
