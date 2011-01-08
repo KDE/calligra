@@ -38,6 +38,7 @@ private slots: // tests
 class KisColorSource;
 class KisPropertiesConfiguration;
 class KoID;
+class KisPainter;
 
 class PAINTOP_EXPORT KisColorSourceOption
 {
@@ -54,7 +55,7 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-    KisColorSource* createColorSource() const;
+    KisColorSource* createColorSource(const KisPainter* _painter) const;
     void setColorSourceType(Type _type);
     void setColorSourceType(const QString& _type);
     static QList<KoID> sourceIds();
