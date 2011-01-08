@@ -47,7 +47,9 @@ public:
       PLAIN,
       GRADIENT,
       UNIFORM_RANDOM,
-      TOTAL_RANDOM
+      TOTAL_RANDOM,
+      PATTERN,
+      PATTERN_LOCKED
     };
 public:
     KisColorSourceOption();
