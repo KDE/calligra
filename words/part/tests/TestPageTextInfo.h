@@ -20,6 +20,7 @@
 #ifndef KWPAGETEXTINFO_H
 #define KWPAGETEXTINFO_H
 
+<<<<<<< HEAD:words/part/tests/TestPageTextInfo.h
 #include <QObject>
 #include <QtTest/QtTest>
 #include <qtest_kde.h>
@@ -30,6 +31,38 @@ class TestPageTextInfo : public QObject
 private slots: // tests
     void init();
     void testPageNumber();
+=======
+#include <krita_export.h>
+#include <QList>
+
+class KisColorSource;
+class KisPropertiesConfiguration;
+class KoID;
+
+class PAINTOP_EXPORT KisColorSourceOption
+{
+public:
+    enum Type {
+      PLAIN,
+      GRADIENT,
+      UNIFORM_RANDOM,
+      TOTAL_RANDOM
+    };
+public:
+    KisColorSourceOption();
+    ~KisColorSourceOption();
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+    KisColorSource* createColorSource() const;
+    void setColorSourceType(Type _type);
+    void setColorSourceType(const QString& _type);
+    static QList<KoID> sourceIds();
+    
+private:
+    struct Private;
+    Private* const d;
+>>>>>>> add a widget to select the color source:krita/plugins/paintops/libpaintop/kis_color_source_option.h
 };
 
 #endif
