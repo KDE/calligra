@@ -1274,7 +1274,7 @@ QVariant ResourceAppointmentsRowModel::Private::externalData( int column, int ro
     return QVariant();
 }
 
-ResourceAppointmentsRowModel::Private::Private *ResourceAppointmentsRowModel::Private::intervalAt( int row ) const
+ResourceAppointmentsRowModel::Private *ResourceAppointmentsRowModel::Private::intervalAt( int row ) const
 {
     Q_ASSERT( type == OT_Appointment );
     Private *p = intervals.value( row );
