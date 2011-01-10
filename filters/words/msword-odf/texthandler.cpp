@@ -1287,7 +1287,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         m_mainStyles->insertFontFace(KoFontFace(fontName));
     }
 
-    //only show text that is not hidden
+    //only show text that is not hidden, TODO use text:display="none"
     if (chp->fVanish != 1) {
         //add text string and formatting style to m_paragraph
         m_paragraph->addRunOfText(newText, chp, fontName, m_parser->styleSheet());
