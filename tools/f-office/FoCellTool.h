@@ -20,7 +20,7 @@
 #ifndef FOCELL_TOOL
 #define FOCELL_TOOL
 
-#include "part/CellTool.h"
+#include "tables/part/CellTool.h"
 
 #include <QPair>
 

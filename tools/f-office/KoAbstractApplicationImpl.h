@@ -49,10 +49,10 @@
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
-#include <Map.h>
-#include <Doc.h>
-#include <part/View.h>
-#include <Sheet.h>
+#include <tables/Map.h>
+#include <tables/DocBase.h>
+#include <tables/part/View.h>
+#include <tables/Sheet.h>
 #include <tables/ui/Selection.h>
 #include <KWView.h>
 

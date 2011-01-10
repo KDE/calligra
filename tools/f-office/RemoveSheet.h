@@ -19,8 +19,8 @@
 
 #include <QUndoCommand>
 
-#include "Sheet.h"
-#include "Map.h"
+#include "tables/Sheet.h"
+#include "tables/Map.h"
 
 namespace Calligra { namespace Tables {
     class Sheet;

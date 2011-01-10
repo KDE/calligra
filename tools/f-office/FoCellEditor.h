@@ -21,7 +21,7 @@
 
 #include <QTextEdit>
 
-#include "ui/CellEditorBase.h"
+#include "tables/ui/CellEditorBase.h"
 
 class QString;
 class QFont;

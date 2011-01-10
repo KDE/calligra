@@ -25,17 +25,15 @@
 #include "FoCellEditor.h"
 
 // KOffice
-#include "Cell.h"
-#include "Style.h"
+#include "tables/Cell.h"
+#include "tables/Style.h"
 
 #include "KoColor.h"
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 #include "KoViewConverter.h"
-#include "CellStorage.h"
-#include "Cell.h"
-#include "Sheet.h"
-#include "Style.h"
+#include "tables/CellStorage.h"
+#include "tables/Sheet.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 

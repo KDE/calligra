@@ -18,14 +18,14 @@
 */
 #include "FoCellEditor.h"
 
-#include "ui/Selection.h"
-#include "ui/CellToolBase.h"
+#include "tables/ui/Selection.h"
+#include "tables/ui/CellToolBase.h"
 #include "KoViewConverter.h"
 #include "KoDpi.h"
 #include "KoUnit.h"
-#include "ui/CellEditorBase.h"
+#include "tables/ui/CellEditorBase.h"
 
-#include "Cell.h"
+#include "tables/Cell.h"
 
 #include <QGtkStyle>
 #include <QScrollBar>

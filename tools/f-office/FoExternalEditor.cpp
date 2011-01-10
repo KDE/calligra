@@ -25,9 +25,9 @@
 #include "FoExternalEditor.h"
 
 // KSpread
-#include "ui/CellToolBase.h"
-#include "Map.h"
-#include "Sheet.h"
+#include "tables/ui/CellToolBase.h"
+#include "tables/Map.h"
+#include "tables/Sheet.h"
 
 #include "FoCellEditor.h"
 

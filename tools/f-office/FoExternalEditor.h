@@ -26,7 +26,7 @@
 #define FOEXTERNAL_EDITOR
 #include <QTextEdit>
 
-#include "ui/CellToolBase.h"
+#include "tables/ui/CellToolBase.h"
 
 namespace Calligra { namespace Tables {
     class CellToolBase;
