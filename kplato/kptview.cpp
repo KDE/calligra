@@ -1546,9 +1546,6 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    if ( sm == currentScheduleManager() ) {
-        connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
-    }
 //    m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
 //    addStatusBarItem( m_text, 0, true );
     m_progress = new QProgressBar();
