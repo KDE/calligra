@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="125">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="126">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -40,7 +40,6 @@
   <Separator/>
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
-  <Action name="showStatusBar" />
   <Action name="view_toggledockers"/>
   <Action name="view_show_guides"/>
   <Action name="view_grid"/>
@@ -155,14 +154,12 @@
   <Action name="edit_sldatabase"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-  <Separator group="settings_show"/>
   <Action name="direct_cursor" group="settings_show"/>
-  <Separator group="settings_show"/>
   <Action name="configure_autocorrection" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
   <Action name="configure_footendnote" group="settings_show"/>
   <Action name="configure_change_tracking" group="settings_show"/>
-  <Separator group="settings_show"/>
+  <Action name="showStatusBar" group="settings_show"/>
   <Action name="configure" group="settings_configure"/>
  </Menu>
 </MenuBar>
