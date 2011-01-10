@@ -41,4 +41,4 @@ target_link_libraries(
 
 install(TARGETS krossmodulekplato DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES krossmodulekplato.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/kplato/kpartplugins)
+install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/plan/kpartplugins)
