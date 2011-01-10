@@ -24,7 +24,9 @@
 #include <KoViewConverter.h>
 #include <KoDpi.h>
 #include <KoUnit.h>
+#include <tables/ui/CellEditorBase.h>
 
+#include <QGtkStyle>
 #include <QScrollBar>
 #include <QFocusEvent>
 

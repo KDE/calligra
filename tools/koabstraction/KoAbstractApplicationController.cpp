@@ -49,7 +49,7 @@
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
 #include <tables/Map.h>
-#include <tables/part/Doc.h>
+#include <tables/DocBase.h>
 #include <tables/part/View.h>
 #include <tables/Sheet.h>
 #include <tables/ui/Selection.h>
@@ -592,8 +592,8 @@ int KoAbstractApplicationController::pageCount() const
     if (!m_doc)
         return 0;
     if (documentType() == SpreadsheetDocument) {
-        Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
-        return tablesDoc->map()->count();
+        Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+        return kspreadDoc->map()->count();
     }
     return m_doc->pageCount();
 }
@@ -702,8 +702,8 @@ void KoAbstractApplicationController::goToNextSheet()
     Calligra::Tables::Sheet *sheet = tablesView->activeSheet();
     if (!sheet)
         return;
-    Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
-    if (!tablesDoc)
+    Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+    if (!kspreadDoc)
         return;
     sheet = tablesDoc->map()->nextSheet(sheet);
     if (!sheet)
@@ -719,8 +719,8 @@ void KoAbstractApplicationController::goToPreviousSheet()
     Calligra::Tables::Sheet *sheet = tablesView->activeSheet();
     if (!sheet)
         return;
-    Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
-    if (!tablesDoc)
+    Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+    if (!kspreadDoc)
         return;
     sheet = tablesDoc->map()->previousSheet(sheet);
     if (!sheet)
@@ -831,13 +831,14 @@ void KoAbstractApplicationController::removeSheet()
 {
     if (documentType() == SpreadsheetDocument && m_view) {
         if (askQuestion(ConfirmSheetDeleteQuestion, i18n("Do you want to delete the sheet?")) == QMessageBox::Yes) {
-            Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
-            tablesView->selection()->emitCloseEditor(false); // discard changes
-            tablesView->doc()->setModified(true);
+            Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
+            Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+            kspreadView->selection()->emitCloseEditor(false); // discard changes
+            kspreadDoc->setModified(true);
             setDocumentModified(true);
-            Calligra::Tables::Sheet* tbl = tablesView->activeSheet();
-            QUndoCommand* command = new RemoveSheetCommand(tbl);
-            tablesView->doc()->addCommand(command);
+            Calligra::Tables::Sheet* tbl = kspreadView->activeSheet();
+            QUndoCommand* command = new RemoveSheet(tbl);
+            kspreadDoc->addCommand(command);
         }
     }
 }

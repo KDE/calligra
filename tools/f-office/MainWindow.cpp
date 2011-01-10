@@ -116,9 +116,9 @@
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
 #include <kundostack.h>
-#include <Map.h>
-#include <Doc.h>
-#include <part/View.h>
+#include <tables/Map.h>
+#include <tables/DocBase.h>
+#include <tables/part/View.h>
 #include <tables/Sheet.h>
 
 #include <X11/Xlib.h>
@@ -1496,8 +1496,8 @@ void MainWindow::toggleToolBar(bool show)
     KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     if (documentType() == SpreadsheetDocument) {
         KoToolManager::instance()->switchToolRequested(cellToolFactoryId());
-        Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(document());
-        tablesDoc->map()->setReadWrite(!show);
+        Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(document());
+        kspreadDoc->map()->setReadWrite(!show);
     }
     document()->setReadWrite(!show);
     m_ui->viewToolBar->setVisible(!show);
@@ -2046,9 +2046,9 @@ void MainWindow::documentPageSetupChanged()
     }
 
     if (documentType() == SpreadsheetDocument) {
-        Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(document());
-        if (tablesDoc->map()->count() > 0)
-            pageNo = i18n("pg%1 - pg%2", 1, QString::number(tablesDoc->map()->count()));
+        Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(document());
+        if (kspreadDoc->map()->count() > 0)
+            pageNo = i18n("pg%1 - pg%2", 1, QString::number(kspreadDoc->map()->count()));
     }
 
     m_ui->actionZoomLevel->setText(i18n("%1 %", QString::number(factor)));
