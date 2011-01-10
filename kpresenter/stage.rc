@@ -41,7 +41,6 @@
   <Action name="view_master"/>
   <Separator/>
   <Action name="view_formattingchars"/>
-  <Separator/>
   <Action name="view_guidelines"/>
   <Action name="add_guideline"/>
   <Action name="view_grid"/>
