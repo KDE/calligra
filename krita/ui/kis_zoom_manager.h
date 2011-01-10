@@ -65,7 +65,7 @@ private slots:
     void mousePositionChanged(const QPoint &pos);
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
-
+    void showGuides();
 
 private:
 
@@ -82,6 +82,7 @@ private:
     KAction * m_actualPixels;
     KAction * m_actualSize;
     KAction * m_fitToCanvas;
+    QAction * m_showGuidesAction;
 };
 
 #endif

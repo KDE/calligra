@@ -55,7 +55,7 @@ public:
     const KoViewConverter * viewConverter;
     KoToolProxy * toolProxy;
     QTimer blockMouseEvent;
-    
+
     bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick http://bugreports.qt.nokia.com/browse/QTBUG-8598
     QColor borderColor;
 };
@@ -106,6 +106,11 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     foreach(KisCanvasDecoration* deco, m_d->decorations) {
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter);
     }
+
+    // then paint the guides
+    m_d->canvas->view()->document()->guidesData().paintGuides(gc,
+                                                              *m_d->viewConverter,
+                                                              updateWidgetRect);
 
     gc.restore();
 }

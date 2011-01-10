@@ -249,7 +249,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
 
-    createManagers();
     createActions();
 
     m_d->controlFrame = new KisControlFrame(this);
@@ -258,6 +257,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
 
+    createManagers();
 
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 

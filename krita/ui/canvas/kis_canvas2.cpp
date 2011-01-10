@@ -528,6 +528,11 @@ void KisCanvas2::notifyZoomChanged()
     emit scrollAreaSizeChanged();
 }
 
+KoGuidesData *KisCanvas2::guidesData()
+{
+    return &m_d->view->document()->guidesData();
+}
+
 void KisCanvas2::preScale()
 {
     if (!m_d->currentCanvasIsOpenGL) {

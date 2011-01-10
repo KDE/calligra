@@ -30,6 +30,7 @@
 #include <kstatusbar.h>
 #include <kis_debug.h>
 
+#include <KoStandardAction.h>
 #include <KoView.h>
 #include <KoZoomAction.h>
 #include <KoRuler.h>
@@ -44,6 +45,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_image.h"
 #include "kis_statusbar.h"
+#include "kis_doc2.h"
 #include "kis_config.h"
 
 KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
@@ -59,6 +61,7 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_actualPixels(0)
         , m_actualSize(0)
         , m_fitToCanvas(0)
+        , m_showGuidesAction(0)
 {
 }
 
@@ -89,6 +92,11 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
                                           "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers."));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
+    m_showGuidesAction = KoStandardAction::showGuides(this, SLOT(showGuides()), this);
+    actionCollection->addAction(KoStandardAction::name(KoStandardAction::ShowGuides), m_showGuidesAction);
+    m_showGuidesAction->setChecked(m_view->document()->guidesData().showGuideLines());
+
+
     // Put the canvascontroller in a layout so it resizes with us
     QGridLayout * layout = new QGridLayout(m_view);
     layout->setSpacing(0);
@@ -101,11 +109,14 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->setUnit(KoUnit(KoUnit::Point));
     m_horizontalRuler->setVisible(show);
+    m_horizontalRuler->createGuideToolConnection(m_view->canvasBase());
     new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceManager());
+
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
     m_verticalRuler->setUnit(KoUnit(KoUnit::Point));
     m_verticalRuler->setVisible(show);
+    m_verticalRuler->createGuideToolConnection(m_view->canvasBase());
     m_showRulersAction->setChecked(show);
 
     layout->addWidget(m_horizontalRuler, 0, 1);
@@ -188,6 +199,12 @@ void KisZoomManager::pageOffsetChanged()
 {
     m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX() + m_view->canvasBase()->documentOrigin().x());
     m_verticalRuler->setOffset(m_canvasController->canvasOffsetY() + m_view->canvasBase()->documentOrigin().y());
+}
+
+void KisZoomManager::showGuides()
+{
+    m_view->document()->guidesData().setShowGuideLines(m_showGuidesAction->isChecked());
+    m_view->canvas()->update();
 }
 
 
