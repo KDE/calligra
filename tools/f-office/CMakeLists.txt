@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.6)
 
 add_definitions(-DNO_PIGMENT)
 
+set(KDE_MIN_VERSION "4.3.0")
+find_package(KDE4 4.3.0 REQUIRED)
+include(KDE4Defaults)
+
 find_package(Qt4 4.5.0 REQUIRED)
 SET(QT_USE_QTDBUS 1)
 SET(QT_USE_QTNETWORK TRUE)
@@ -9,7 +13,9 @@ SET(QT_USE_QTMAEMO5 TRUE)
 SET(QT_USE_QTXML TRUE)
 INCLUDE(${QT_USE_FILE})
 
-include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/words/part ${CMAKE_SOURCE_DIR}/tables/part ${CMAKE_SOURCE_DIR}/tables ${LIBXML2_INCLUDE_DIR})
+find_package(LibXml2 REQUIRED) # f-office uses xml2 directly
+
+include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/words/part ${CMAKE_SOURCE_DIR}/tables/part ${CMAKE_SOURCE_DIR}/tables ${LIBXML2_INCLUDE_DIR} ${KDE4_INCLUDES})
 
 SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
