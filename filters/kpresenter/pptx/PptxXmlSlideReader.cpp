@@ -1585,6 +1585,26 @@ void PptxXmlSlideReader::saveBodyProperties()
     }
 }
 
+void PptxXmlSlideReader::saveCurrentGraphicStyles()
+{
+    if (m_context->type == SlideLayout) {
+        if (!d->phType.isEmpty()) {
+            m_context->slideLayoutProperties->graphicStyles[d->phType] = *m_currentDrawStyle;
+        }
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideLayoutProperties->graphicStyles[d->phIdx] = *m_currentDrawStyle;
+        }
+    }
+    else if (m_context->type == SlideMaster) {
+        if (!d->phType.isEmpty()) {
+            m_context->slideMasterProperties->graphicStyles[d->phType] = *m_currentDrawStyle;
+        }
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideMasterProperties->graphicStyles[d->phIdx] = *m_currentDrawStyle;
+        }
+    }
+}
+
 void PptxXmlSlideReader::inheritBodyProperties()
 {
     // TODO:This might not be 100% correct, it is here only temporary until it is figured out what is the correct action plan
@@ -1946,7 +1966,7 @@ void PptxXmlSlideReader::inheritShapePosition()
 
 void PptxXmlSlideReader::inheritShapeGeometry()
 {
-    // Inheriting shape geometry
+    // Inheriting shape geometry type (not extends yet)
     if (m_contentType.isEmpty()) {
         if (m_context->type == Slide) {
             m_contentType = m_context->slideLayoutProperties->contentTypeMap.value(d->phType);
@@ -1976,6 +1996,38 @@ void PptxXmlSlideReader::inheritShapeGeometry()
                         m_customPath = m_contentType = m_context->slideMasterProperties->contentPath.value(d->phIdx);
                     }
                 }
+            }
+        }
+    }
+
+    bool drawingStyleInherited = false;
+    KoGenStyle inheritedStyle;
+    // Inheriting drawing style, this can be outline or fill style
+    if (m_context->type == Slide) {
+        inheritedStyle = m_context->slideLayoutProperties->graphicStyles.value(d->phType);
+        if (!inheritedStyle.isEmpty()) {
+            drawingStyleInherited = true;
+            MSOOXML::Utils::copyPropertiesFromStyle(inheritedStyle, *m_currentDrawStyle, KoGenStyle::GraphicType);
+        }
+        else {
+            inheritedStyle = m_context->slideLayoutProperties->graphicStyles.value(d->phIdx);
+            if (!inheritedStyle.isEmpty()) {
+                drawingStyleInherited = true;
+                MSOOXML::Utils::copyPropertiesFromStyle(inheritedStyle, *m_currentDrawStyle, KoGenStyle::GraphicType);
+            }
+        }
+    }
+    if ((!drawingStyleInherited && m_context->type == Slide) || m_context->type == SlideLayout) {
+        inheritedStyle = m_context->slideMasterProperties->graphicStyles.value(d->phType);
+        if (!inheritedStyle.isEmpty()) {
+            drawingStyleInherited = true;
+            MSOOXML::Utils::copyPropertiesFromStyle(inheritedStyle, *m_currentDrawStyle, KoGenStyle::GraphicType);
+        }
+        else {
+            inheritedStyle = m_context->slideMasterProperties->graphicStyles.value(d->phIdx);
+            if (!inheritedStyle.isEmpty()) {
+                drawingStyleInherited = true;
+                MSOOXML::Utils::copyPropertiesFromStyle(inheritedStyle, *m_currentDrawStyle, KoGenStyle::GraphicType);
             }
         }
     }

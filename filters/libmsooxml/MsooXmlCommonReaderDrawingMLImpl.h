@@ -1157,7 +1157,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
     - [done] extLst (Extension List) §20.1.2.2.15
     - [done] gradFill (Gradient Fill) §20.1.8.33
     - grpFill (Group Fill) §20.1.8.35
-    - ln (Outline) §20.1.2.2.24
+    - [done] ln (Outline) §20.1.2.2.24
     - [done] noFill (No Fill) §20.1.8.44
     - pattFill (Pattern Fill) §20.1.8.47
     - [done] prstGeom (Preset geometry) §20.1.9.18
@@ -1233,10 +1233,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
             }
             SKIP_UNKNOWN
-//! @todo a:prstGeom...
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    saveCurrentGraphicStyles();
+#endif
 
     READ_EPILOGUE
 }
