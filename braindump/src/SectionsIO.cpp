@@ -196,7 +196,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
   kDebug() << "Loading from " << fullFileName;
   
   const char* mimeType = KoOdf::mimeType(KoOdf::Text);
-  KoStore* store = KoStore::createStore(fullFileName + "/", KoStore::Read, mimeType, KoStore::Directory);
+  KoStore* store = KoStore::createStore(fullFileName + '/', KoStore::Read, mimeType, KoStore::Directory);
   KoOdfReadStore odfStore(store);
 
   QString errorMessage;
