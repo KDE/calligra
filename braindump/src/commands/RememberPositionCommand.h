@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
@@ -35,7 +36,7 @@ class KoShape;
  */
 class RememberPositionCommand : public QUndoCommand {
   public:
-    RememberPositionCommand(const QList<KoShape*>& _shapes, QUndoCommand *cmd = 0);
+    explicit RememberPositionCommand(const QList<KoShape*>& _shapes, QUndoCommand *cmd = 0);
     virtual ~RememberPositionCommand();
   public:
     virtual void undo();
