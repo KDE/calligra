@@ -205,8 +205,8 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 mystr.remove(0, 1);
             }
 
-            // ';' // first instance of a shared formula
-            // '.' // instance of a shared formula
+            // ';' // first instance (definition) of a shared formula
+            // '.' // instance (usage) of a shared formula
             // ':' // simple value
 
             bool isFormula = false;
@@ -222,9 +222,12 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 }
                 kDebug() << "Skipping value" << mystr.mid(0, pos);
                 mystr.remove(0, pos);
-                if (mystr.at(0) == '+')
-                    mystr[0] = '=';
-                Q_ASSERT(mystr.at(0) == '=');
+
+                if (contentType == ';') {
+                    if (mystr.at(0) == '+')
+                        mystr[0] = '=';
+                    Q_ASSERT(mystr.at(0) == '=');
+                }
             }
 
             // Replace part for this characters: <, >, &
