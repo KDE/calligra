@@ -1317,12 +1317,12 @@ void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
 
 QString MainWindow::showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
 {
-    return QFileDialog::getOpenFileName(this, caption, dir, filter, 0, QFileDialog::DontUseNativeDialog);
+    return QFileDialog::getOpenFileName(this, caption, dir, filter, 0);
 }
 
 QString MainWindow::showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
 {
-    return QFileDialog::getSaveFileName(this, caption, dir, filter, 0, QFileDialog::DontUseNativeDialog);
+    return QFileDialog::getSaveFileName(this, caption, dir, filter, 0);
 }
 
 void MainWindow::chooseDocumentType()
