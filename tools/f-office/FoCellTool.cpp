@@ -40,6 +40,7 @@
 #include "KoColorSpaceRegistry.h"
 
 #include <QApplication>
+#include <QKeyEvent>
 
 #define SEARCH_CONDITION(exactMatch) cell.displayText().contains(m_searchString, exactMatch) ||\
                                      cell.comment().contains(m_searchString, exactMatch) ||\
