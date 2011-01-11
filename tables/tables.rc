@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="KSpread" version="39">
+<gui name="KSpread" version="40">
 <MenuBar>
 <!-- <<<<<<<<<<<<<<<<<<<<<>>>>><   File Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="file"><text>&amp;File</text>
@@ -204,7 +204,7 @@
 </Menu>
 
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<<   Edit ToolBar   >>>>>>>>>>>>>>>>>>>>>>>>>>> -->
-<ToolBar fullWidth="true" iconText="icontextbottom" name="editToolBar"><text>Edit</text>
+<ToolBar fullWidth="true" name="editToolBar"><text>Edit</text>
  <Action name="edit_undo"/>
  <Action name="edit_redo"/>
  <Separator/>
@@ -214,7 +214,7 @@
 </ToolBar>
 
 <!-- <<<<<<<<<<<<<<<<<<<<<<   Navigation ToolBar   >>>>>>>>>>>>>>>>>>>>>>>> -->
-<ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="navigationToolBar"><text>Navigation</text>
+<ToolBar fullWidth="true" hidden="true" name="navigationToolBar"><text>Navigation</text>
  <Action name="go_first"/>
  <Action name="go_previous"/>
  <Action name="go_next"/>
@@ -226,11 +226,11 @@
 </ToolBar>
 
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<   Format ToolBar   >>>>>>>>>>>>>>>>>>>>>>>>>> -->
-<ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="fontPropertyToolBar"><text>Font</text>
+<ToolBar fullWidth="true" hidden="true" name="fontPropertyToolBar"><text>Font</text>
  <Action name="font"/>
  <Action name="fontSize"/>
 </ToolBar>
-<ToolBar fullWidth="true" iconText="icontextbottom" name="formatToolBar"><text>Format</text>
+<ToolBar fullWidth="true" name="formatToolBar"><text>Format</text>
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
@@ -254,7 +254,7 @@
 </ToolBar>
 
 <!-- <<<<<<<<<<<<<<<<<<<<<   Color/Border ToolBar   >>>>>>>>>>>>>>>>>>>>>>> -->
-<ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
+<ToolBar fullWidth="true" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
  <Action name="borderLeft"/>
  <Action name="borderTop"/>
  <Action name="borderRight"/>
