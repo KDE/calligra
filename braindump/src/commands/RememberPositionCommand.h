@@ -30,7 +30,7 @@ class KoShape;
 
 /**
  * This command should be used before an operation that can trigger a relayouting
- * that will destroy usefull position information. For instance, if you split a
+ * that will destroy useful position information. For instance, if you split a
  * group in a 'column' layout, then the layout will change all position of the shapes
  * when undoing, you will want to see the shapes to come back to their original position.
  */
