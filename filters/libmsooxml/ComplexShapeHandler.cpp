@@ -332,6 +332,7 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
     pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 + %3\"/>").
          arg(endAngleIndex).arg(stAng).arg(swAng);
 
+    /*
     // Try for T
     int centerXIndex = pathEquationIndex;
     ++pathEquationIndex;
@@ -366,8 +367,8 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
 
     oldX = QString("?ooxmlArc%1 + %2 * cos(?ooxmlArc%3 * 0.000000291)").arg(centerXIndex).arg(wR).arg(endAngleIndex);
     oldY = QString("?ooxmlArc%1 + %2 * sin(?ooxmlArc%3 * 0.000000291)").arg(centerYIndex).arg(hR).arg(endAngleIndex);
+    */
 
-/*
     // Try for W/A (commented out atm. T (above) seems to work better
     // x1, y1 marks the upper left corner
     int ellipseX1Index = pathEquationIndex;
@@ -424,7 +425,7 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
     }
     oldX = QString("?ooxmlArc%1").arg(arcEndX);
     oldY = QString("?ooxmlArc%1").arg(arcEndY);
-*/
+
     return path;
 }
 
