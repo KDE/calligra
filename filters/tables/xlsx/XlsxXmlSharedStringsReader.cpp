@@ -220,7 +220,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
             }
 //! @todo support phoneticPr
 //! @todo support rPh
-            ELSE_WRONG_FORMAT
+            //ELSE_WRONG_FORMAT
         }
     }
 

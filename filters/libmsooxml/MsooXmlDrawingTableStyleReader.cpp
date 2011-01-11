@@ -461,7 +461,13 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
 {
     READ_PROLOGUE
-    SKIP_EVERYTHING_AND_RETURN
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+    }
+
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL

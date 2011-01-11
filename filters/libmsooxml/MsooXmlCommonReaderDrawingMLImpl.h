@@ -79,9 +79,6 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
         return false;
     }
 
-    // Remove me when 'T/U' pathshape interpreation from odf tech committee has been agreed
-    return true;
-
     // Remove me when custom-shape suppors rotation properly
     if (m_rot != 0) {
         return true;
@@ -608,9 +605,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
                 // We must set the color immediately, otherwise currentColor may be modified by eg. ln
-                m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-                m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
-                m_currentColor = QColor();
+                if (m_currentColor != QColor()) {
+                    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+                    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                    m_currentColor = QColor();
+                }
             }
             else if ( qualifiedName() == QLatin1String("a:ln") ) {
                 TRY_READ(ln)
@@ -1195,10 +1194,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 d->textBoxHasContent = true; // We count normal fill and gardient as content
 #endif
                 TRY_READ(solidFill)
-                // We must set the color immediately, otherwise currentColor may be modified by eg. ln
-                m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-                m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
-                m_currentColor = QColor();
+                if (m_currentColor != QColor()) {
+                    // We must set the color immediately, otherwise currentColor may be modified by eg. ln
+                    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+                    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                    m_currentColor = QColor();
+                }
             }
             else if ( qualifiedName() == QLatin1String("a:ln") ) {
                 TRY_READ(ln)
@@ -3657,13 +3658,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     }
 
     col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
-
-#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-    m_currentPen.setColor(col);
-#endif
     m_currentColor = col;
 
     MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
+
+#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
+    m_currentPen.setColor(m_currentColor);
+#endif
 
     READ_EPILOGUE
 }
@@ -3945,7 +3946,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
         m_currentPen = QPen();
     }
 
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    if (m_currentPen != QPen()) {
+        KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    }
 
     READ_EPILOGUE
 }
