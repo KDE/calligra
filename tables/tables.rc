@@ -238,10 +238,12 @@
  <Action name="alignLeft"/>
  <Action name="alignCenter"/>
  <Action name="alignRight"/>
+ <!--
  <Separator/>
  <Action name="alignTop"/>
  <Action name="alignMiddle"/>
  <Action name="alignBottom"/>
+ -->
  <Action name="wrapText"/>
  <Separator/>
  <Action name="cellStyle"/>
