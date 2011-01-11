@@ -27,6 +27,7 @@
 #include <kactionmenu.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <kstatusbar.h>
 
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -159,6 +160,11 @@ void KPrView::blackPresentation()
     }
 }
 
+void KPrView::showStatusBar(bool toggled)
+{
+    statusBar()->setVisible(toggled);
+}
+
 void KPrView::initGUI()
 {
     // add page effect docker to the main window
@@ -233,6 +239,12 @@ this );
     action->setShortcut(QKeySequence("F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
+
+    KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
+    showStatusbarAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
+    showStatusbarAction->setToolTip(i18n("Shows or hides the status bar"));
+    actionCollection()->addAction("showStatusBar", showStatusbarAction);
+    connect(showStatusbarAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     action = new KAction( i18n( "Configure Slide Show..." ), this );
     actionCollection()->addAction( "slideshow_configure", action );

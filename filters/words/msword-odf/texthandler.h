@@ -236,7 +236,8 @@ private:
     // ************************************************
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
-    void updateListStyle(QString textStyleName);
+    QString createBulletStyle(const QString& textStyleName) const;
+    void updateListStyle(const QString& textStyleName);
 
     QString m_listStyleName; //track the name of the list style
     bool m_listLevelStyleRequired; //track if a list-level-style is required for current paragraph

@@ -778,6 +778,11 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
     // O(1) nextFootnote() call to something like an O(n) containsFootnote( start, lim )
     // Up to now Word 97, 2000, and 2002 seem to be bug compatible and fullfill that precondition.
     //
+
+    //only process the chunk if not marked hidden, TODO use text:display="none"
+    if(chp->fVanish == 1)
+        return;
+    
     while ( length > 0 ) {
         U32 disruption = 0xffffffff; // "infinity"
         U32 bkmk_length = 0; //num. of CPs enclosed in a bookmark

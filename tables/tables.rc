@@ -56,6 +56,8 @@
   <Action name="showPageBorders"/>
 <!--   <Action name="showCommentIndicator"/> -->
   <Separator/>
+  <Action name="zoom_out"/>
+  <Action name="zoom_in"/>
   <Action name="view_zoom"/>
   <Action name="view_fullscreen"/>
  </Menu>

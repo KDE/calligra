@@ -1287,7 +1287,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         m_mainStyles->insertFontFace(KoFontFace(fontName));
     }
 
-    //only show text that is not hidden
+    //only show text that is not hidden, TODO use text:display="none"
     if (chp->fVanish != 1) {
         //add text string and formatting style to m_paragraph
         m_paragraph->addRunOfText(newText, chp, fontName, m_parser->styleSheet());
@@ -1452,7 +1452,51 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     return true;
 } //writeListInfo()
 
-void KWordTextHandler::updateListStyle(QString textStyleName)
+
+QString KWordTextHandler::createBulletStyle(const QString& textStyleName) const
+{
+    const KoGenStyle* textStyle = m_mainStyles->style(textStyleName);
+
+    if (!textStyle) {
+        return QString();
+    }
+
+    KoGenStyle style(KoGenStyle::TextStyle, "text");
+    QString prop, value;
+
+    //copy only selected properties
+
+    prop = QString("fo:color");
+    value = textStyle->property(prop, KoGenStyle::TextType);
+    if (!value.isEmpty()) {
+        style.addProperty(prop, value, KoGenStyle::TextType);
+    }
+    prop = QString("fo:font-size");
+    value = textStyle->property(prop, KoGenStyle::TextType);
+    if (!value.isEmpty()) {
+        style.addProperty(prop, value, KoGenStyle::TextType);
+    }
+    prop = QString("fo:font-weight");
+    value = textStyle->property(prop, KoGenStyle::TextType);
+    if (!value.isEmpty()) {
+        style.addProperty(prop, value, KoGenStyle::TextType);
+    }
+    prop = QString("style:font-name");
+    value = textStyle->property(prop, KoGenStyle::TextType);
+    if (value.isEmpty()) {
+        const KoGenStyle* normal = m_mainStyles->style("Normal");
+        if (normal) {
+            value = normal->property(prop, KoGenStyle::TextType);
+        }
+    }
+    if (!value.isEmpty()) {
+        style.addProperty(prop, value, KoGenStyle::TextType);
+    }
+    //insert style into styles collection
+    return m_mainStyles->insert(style, QString("T"));
+}
+
+void KWordTextHandler::updateListStyle(const QString& textStyleName)
 {
     kDebug(30513) << "writing the list-level-style";
 
@@ -1471,6 +1515,14 @@ void KWordTextHandler::updateListStyle(QString textStyleName)
     //text() returns a struct consisting of a UString text string (called text) & a pointer to a CHP (called chp)
     wvWare::UString text = listInfo->text().text;
 
+    //NOTE: Reuse the automatic style of the text until we manage to process
+    //and store the bullet/number style.  The style will be placed into
+    //office:styles.  Only selected properties are copied.
+    QString bulletStyleName;
+    if (!textStyleName.isEmpty()) {
+        bulletStyleName = createBulletStyle(textStyleName);
+    }
+
     //bulleted list
     if (nfc == 23) {
         kDebug(30513) << "bullets...";
@@ -1484,16 +1536,17 @@ void KWordTextHandler::updateListStyle(QString textStyleName)
                 if (code >= 0x20) {
                     // microsoft symbol charset shall apply here.
                     code = Conversion::MS_SYMBOL_ENCODING[code%256];
-                 } else {
+                } else {
                     code &= 0x00FF;
-                 }
+                }
             }
             listStyleWriter.addAttribute("text:bullet-char", QString(code).toUtf8());
         } else {
             kWarning(30513) << "Bullet with more than one character, not supported";
         }
-        if (!textStyleName.isNull()) {
-            listStyleWriter.addAttribute("text:style-name", textStyleName);
+
+        if (!bulletStyleName.isEmpty()) {
+            listStyleWriter.addAttribute("text:style-name", bulletStyleName);
         }
 
         listStyleWriter.startElement("style:list-level-properties");
@@ -1516,8 +1569,9 @@ void KWordTextHandler::updateListStyle(QString textStyleName)
         kDebug(30513) << "numbered/outline... nfc = " << nfc;
         listStyleWriter.startElement("text:list-level-style-number");
         listStyleWriter.addAttribute("text:level", pap.ilvl + 1);
-        if (!textStyleName.isNull()) {
-            listStyleWriter.addAttribute("text:style-name", textStyleName);
+
+        if (!bulletStyleName.isEmpty()) {
+            listStyleWriter.addAttribute("text:style-name", bulletStyleName);
         }
 
         //*************************************
