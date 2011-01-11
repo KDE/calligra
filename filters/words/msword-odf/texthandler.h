@@ -286,7 +286,7 @@ private:
     void fld_restoreState();
 
     //storage for XML snippets of already processed fields
-    QList<QString> fld_snippets;
+    QList<QString> m_fld_snippets;
 
     //field type enumeration as defined in MS-DOC page 354/609
     enum fldType

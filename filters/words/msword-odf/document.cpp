@@ -340,6 +340,11 @@ void Document::processStyles()
             // had in the .doc.
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
             kDebug(30513) << "added style " << actualName;
+
+            //save names of TOC related styles
+            if (actualName.contains("TOC")) {
+                m_tocStyleNames.append(actualName);
+            }
         } else if (style && style->type() == wvWare::Style::sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
