@@ -42,7 +42,7 @@ namespace KPlato
 {
 
 class ScheduleManager;
-    
+
 Schedule::Schedule()
         : m_type( Expected ),
         m_id( 0 ),
@@ -758,7 +758,7 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     sch.setAttribute( "resource-not-available", resourceNotAvailable );
     sch.setAttribute( "scheduling-conflict", schedulingError );
     sch.setAttribute( "not-scheduled", notScheduled );
-    
+
     sch.setAttribute( "positive-float", positiveFloat.toString() );
     sch.setAttribute( "negative-float", negativeFloat.toString() );
     sch.setAttribute( "free-float", freeFloat.toString() );
@@ -1081,8 +1081,8 @@ MainSchedule::MainSchedule()
 MainSchedule::MainSchedule( Node *node, const QString& name, Schedule::Type type, long id )
     : NodeSchedule( node, name, type, id ),
     m_manager( 0 ),
-    m_currentCriticalPath( 0 ),
-    criticalPathListCached( false )
+    criticalPathListCached( false ),
+    m_currentCriticalPath( 0 )
 {
     //kDebug()<<"node name:"<<node->name();
     init();
@@ -1137,7 +1137,7 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
     s = sch.attribute( "end" );
     if ( !s.isEmpty() )
         endTime = DateTime::fromString( s, status.projectSpec() );
-    
+
     duration = Duration::fromString( sch.attribute( "duration" ) );
     schedulingError = sch.attribute( "scheduling-conflict", "0" ).toInt();
 
@@ -1199,7 +1199,7 @@ void MainSchedule::saveXML( QDomElement &element ) const
     element.setAttribute( "end", endTime.toString( KDateTime::ISODate ) );
     element.setAttribute( "duration", duration.toString() );
     element.setAttribute( "scheduling-conflict", schedulingError );
-    
+
     if ( ! m_pathlists.isEmpty() ) {
         QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );
         element.appendChild( lists );

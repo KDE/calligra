@@ -49,7 +49,7 @@ SchedulerPlugin::SchedulerPlugin(QObject *parent)
     m_synctimer.setInterval( 500 );
     connect(&m_synctimer, SIGNAL(timeout()), SLOT(slotSyncData()));
 }
- 
+
 SchedulerPlugin::~SchedulerPlugin()
 {
     foreach ( SchedulerThread *s, m_jobs ) {
@@ -145,6 +145,9 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
     ScheduleManager *sm = j->mainManager();
     Project *p = j->mainProject();
     Q_ASSERT( p == &(sm->project()) );
+#ifdef NDEBUG
+    Q_UNUSED(p)
+#endif
     QList<Schedule::Log> logs;
     //qDebug()<<"SchedulerPlugin::updateLog:"<<j<<logs.count();
     foreach ( const Schedule::Log log, j->log() ) {
@@ -155,6 +158,9 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
             l.resource = sm->project().findResource( l.resource->id() );
 //            qDebug()<<"SchedulerPlugin::updateLog: mapped"<<r<<l.resource;
             Q_ASSERT( r != l.resource );
+#ifdef NDEBUG
+            Q_UNUSED(r)
+#endif
             Q_ASSERT( l.resource->project() == p );
         }
         if ( l.node ) {
@@ -166,6 +172,9 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
             }
 //            qDebug()<<"SchedulerPlugin::updateLog: mapped"<<n<<l.node;
             Q_ASSERT( n != l.node );
+#ifdef NDEBUG
+            Q_UNUSED(n)
+#endif
             Q_ASSERT( l.node->projectNode() == p );
         }
         logs << l;
@@ -249,6 +258,9 @@ void SchedulerPlugin::updateAppointments( const Project *tp, const ScheduleManag
 
     bool ret = sm->loadMainSchedule( sm->expected(), se, status ); // also loads appointments
     Q_ASSERT( ret );
+#ifdef NDEBUG
+    Q_UNUSED(ret)
+#endif
     mp->setCurrentSchedule( sch->id() );
     sm->expected()->setPhaseNames( sch->phaseNames() );
     mp->changed( sm );
@@ -275,7 +287,7 @@ SchedulerThread::SchedulerThread( Project *project, ScheduleManager *manager, QO
 
     m_pdoc.setContent( document.toString() );
 
-    
+
     connect( this, SIGNAL(started()), this, SLOT(slotStarted()));
     connect( this, SIGNAL(finished()), this, SLOT(slotFinished()));
 }
