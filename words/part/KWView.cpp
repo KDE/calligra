@@ -237,8 +237,6 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("create_custom_outline");
     if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("showStatusBar");
-    if (action) action->setEnabled(readWrite);
 }
 
 void KWView::setupActions()
