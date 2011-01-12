@@ -109,6 +109,10 @@ void CalendarItemModel::slotCalendarInserted( const Calendar *calendar )
 {
     //kDebug()<<calendar->name();
     Q_ASSERT( calendar->parentCal() == m_calendar );
+#ifdef NDEBUG
+    Q_UNUSED(calendar)
+#endif
+
     endInsertRows();
     m_calendar = 0;
 }

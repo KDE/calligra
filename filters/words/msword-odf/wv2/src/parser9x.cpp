@@ -1,5 +1,6 @@
 /* This file is part of the wvWare 2 project
    Copyright (C) 2001-2003 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -778,11 +779,20 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
     // O(1) nextFootnote() call to something like an O(n) containsFootnote( start, lim )
     // Up to now Word 97, 2000, and 2002 seem to be bug compatible and fullfill that precondition.
     //
+
+    //only process the chunk if not marked hidden, TODO use text:display="none"
+    if (chp->fVanish == 1) {
+        return;
+    }
+
     while ( length > 0 ) {
+        U32 startCP = currentStart + chunk.m_position.offset + index;
         U32 disruption = 0xffffffff; // "infinity"
         U32 bkmk_length = 0; //num. of CPs enclosed in a bookmark
 
         if ( m_footnotes ) {
+            m_footnotes->check(startCP);
+
             U32 nextFtn = m_footnotes->nextFootnote();
             U32 nextEnd = m_footnotes->nextEndnote();
             disruption = nextFtn < nextEnd ? nextFtn : nextEnd;
@@ -791,6 +801,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                      " disruption=" << disruption << " length=" << length << endl;
 #endif
         } else if ( m_bookmarks ) {
+            m_bookmarks->check(startCP);
+
             U32 nextBkf = m_bookmarks->nextBookmarkStart();
             U32 nextBkl = m_bookmarks->nextBookmarkEnd();
             bkmk_length = nextBkl - nextBkf;
@@ -804,13 +816,12 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                      " disruption=" << disruption << " length=" << length << endl;
 #endif
         }
-        U32 startCP = currentStart + chunk.m_position.offset + index;
 
         if ( (disruption >= startCP) && (disruption < (startCP + length)) ) {
 
 #if defined WV2_DEBUG_FOOTNOTES || defined WV2_DEBUG_BOOKMARK
             wvlog << "startCP=" << startCP << " disruption=" << disruption << 
-		     " bkmk_length=" << bkmk_length << " length=" << length << endl;;
+		     " bkmk_length=" << bkmk_length << " length=" << length << endl;
 #endif
             U32 disLen = disruption - startCP;
             //there's something to be processed before the bookmark
@@ -830,16 +841,18 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             } 
             else if ( m_bookmarks ) {
 
-                //TODO: there may be a number of bookmarks having different
-                //lengths at the current CP
+                //TODO: There might a number of bookmarks to process at the
+                //current CP.  The first one gets processed, the rest is
+                //skipped at the moment.
 
-                //TODO: we need to handle a number of overlapping bookmarks in
-                //this chunk
+                //TODO: Bookmarks can overlap, handle all bookmarks of a chunk.
+
+                //TODO: A bookmark can denote text comrised of segments
+                //belonging into different chunks.
 
 		bool ok;
 		BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
 
-                //TODO: a bookmark can cover text from several chunks
                 if ( !(bkmk_length <= length) ) {
                     wvlog << "WARNING: bookmarks covering several chunks are not supported yet!";
                     processRun( chunk, chp, length, index, currentStart );

@@ -142,7 +142,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGen
             if (content.isNull())
                 continue;
 
-            masterStyle.addChildElement(QString::number(++index), content);
+            masterStyle.addChildElement(QString::number(++index), QString::fromUtf8(content));
         }
         // append the headerfooter-style to the main-style
         if (! masterStyle.isEmpty()) {

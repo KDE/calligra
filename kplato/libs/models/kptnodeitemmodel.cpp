@@ -2151,6 +2151,9 @@ void NodeItemModel::slotNodeRemoved( Node *node )
 {
     //kDebug()<<node->name();
     Q_ASSERT( node == m_node );
+#ifdef NDEBUG
+    Q_UNUSED(node)
+#endif
     endRemoveRows();
     m_node = 0;
 }

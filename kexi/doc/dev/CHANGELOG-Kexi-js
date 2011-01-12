@@ -92,6 +92,11 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+2011-01-09
+KexiDB
+*MySQL driver: add /var/run/mysql/mysql.sock to list of possible local socket paths
+*MySQL driver: mark "information_schema" as system database
+
 2011-01-03
 KexiDB
 *fix memory leak in multiargument expressions of any type

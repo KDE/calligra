@@ -39,6 +39,7 @@
 #include "KoColorSpaceRegistry.h"
 
 #include <QApplication>
+#include <QKeyEvent>
 
 #define SEARCH_CONDITION(exactMatch) cell.displayText().contains(m_searchString, exactMatch) ||\
                                      cell.comment().contains(m_searchString, exactMatch) ||\
@@ -259,20 +260,28 @@ void KoCellTool::deleteEditor(bool saveChanges, bool expandMatrix)
 void KoCellTool::keyPressEvent(QKeyEvent *event)
 {
     Calligra::Tables::CellTool::keyPressEvent(event);
-    /*if(event->key() == Qt::Key_Up ||
+    if(event->key() == Qt::Key_Up ||
        event->key() == Qt::Key_Down ||
        event->key() == Qt::Key_Left ||
        event->key() == Qt::Key_Right ||
        event->key() == Qt::Key_Enter ||
        event->key() == Qt::Key_Return) {
-        cancelCurrentStrategy();
-        createEditor(false,false);
-    }*/
+        Cell cell(selection()->activeSheet(), selection()->cursor());
+        m_externalEditor->setPlainText(cell.displayText());
+//        cancelCurrentStrategy();
+//        createEditor(false,false);
+    }
 }
 
 void KoCellTool::mousePressEvent(KoPointerEvent* event)
 {
     Calligra::Tables::CellTool::mousePressEvent(event);
+    if (selection()->isSingular()) {
+        Cell cell(selection()->activeSheet(), selection()->cursor());
+        m_externalEditor->setPlainText(cell.displayText());
+    } else {
+        m_externalEditor->setPlainText("");
+    }
     /* cancelCurrentStrategy();
     scrollToCell(selection()->cursor());
     createEditor(false);*/

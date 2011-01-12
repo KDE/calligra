@@ -29,9 +29,9 @@
 #include "StatesRegistry.h"
 
 StatesModel::StatesModel() {
-  foreach( QString catId, StatesRegistry::instance()->categorieIds())
+  foreach( const QString& catId, StatesRegistry::instance()->categorieIds())
   {
-    foreach( QString stateId, StatesRegistry::instance()->stateIds(catId)) {
+    foreach( const QString& stateId, StatesRegistry::instance()->stateIds(catId)) {
       const State* state = StatesRegistry::instance()->state(catId, stateId);
       Q_ASSERT(state);
       m_states.push_back(state);

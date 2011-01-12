@@ -236,7 +236,8 @@ private:
     // ************************************************
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
-    void updateListStyle(QString textStyleName);
+    QString createBulletStyle(const QString& textStyleName) const;
+    void updateListStyle(const QString& textStyleName);
 
     QString m_listStyleName; //track the name of the list style
     bool m_listLevelStyleRequired; //track if a list-level-style is required for current paragraph
@@ -285,7 +286,7 @@ private:
     void fld_restoreState();
 
     //storage for XML snippets of already processed fields
-    QList<QString> fld_snippets;
+    QList<QString> m_fld_snippets;
 
     //field type enumeration as defined in MS-DOC page 354/609
     enum fldType

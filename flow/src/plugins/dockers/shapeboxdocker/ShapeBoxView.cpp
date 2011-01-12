@@ -52,9 +52,9 @@ void SheetDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         QStyleOptionButton buttonOption;
 
         buttonOption.state = option.state;
-	#ifdef Q_WS_MAC
+        #ifdef Q_WS_MAC
         buttonOption.state |= QStyle::State_Raised;
-	#endif
+        #endif
         buttonOption.state &= ~QStyle::State_HasFocus;
 
         buttonOption.rect = option.rect;
@@ -76,7 +76,7 @@ void SheetDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
         // draw text
         QRect textrect = QRect(r.left() + i*2, r.top(), r.width() - ((5*i)/2), r.height());
-        QString text = elidedText(option.fontMetrics, textrect.width(), Qt::ElideMiddle, 
+        QString text = elidedText(option.fontMetrics, textrect.width(), Qt::ElideMiddle,
             model->data(index, Qt::DisplayRole).toString());
         m_view->style()->drawItemText(painter, textrect, Qt::AlignCenter,
             option.palette, m_view->isEnabled(), text);
@@ -110,7 +110,7 @@ ShapeListView::ShapeListView(QWidget* parent) :
     setDragDropMode(QAbstractItemView::DragDrop);
     setDropIndicatorShown(true);
 
-    connect(this, SIGNAL(pressed(QModelIndex)), this, SLOT(slotPressed(QModelIndex)));
+    //connect(this, SIGNAL(pressed(QModelIndex)), this, SLOT(slotPressed(QModelIndex)));
     setEditTriggers(QAbstractItemView::AnyKeyPressed);
 }
 
@@ -129,9 +129,9 @@ void ShapeListView::mouseMoveEvent(QMouseEvent *event)
     {
         int distance = (event->pos() - m_startPos).manhattanLength();
         if (distance >= QApplication::startDragDistance())
-	{
+        {
             ;//performDrag();
-	}
+        }
     }
     QListView::mouseMoveEvent(event);
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="kpresenter" version="123">
+<kpartgui name="kpresenter" version="124">
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />
@@ -37,7 +37,6 @@
             <Action name="view_masterpages"/>
             <Separator/>
             <Action name="view_rulers"/>
-            <Separator/>
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
             <Action name="view_show_guides"/>
@@ -80,6 +79,7 @@
             <Separator/>
         </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="showStatusBar" group="settings_show"/>
             <Action name="configure" group="settings_configure"/>
         </Menu>
     </MenuBar>

@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
  *
  * Contact: Manikandaprasad N C <manikandaprasad.chandrasekar@nokia.com>
  *
