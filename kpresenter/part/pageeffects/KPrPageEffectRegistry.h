@@ -27,7 +27,7 @@
 #include "KoXmlReaderForward.h"
 class KPrPageEffect;
 
-class KPRESENTER_EXPORT KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffectFactory *>
+class STAGE_EXPORT KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffectFactory *>
 {
 public:
     class Singleton;

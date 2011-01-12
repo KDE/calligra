@@ -136,8 +136,11 @@ public:
         
         bool isEmpty() { return !(m_running || m_startup || m_shutdown); }
         Node *node() const { return m_node; }
+        void setNode( Node *node );
+
         Resource *resource() const { return m_resource; }
-        
+        void setResource( Resource *resource );
+
         bool running() const { return m_running; }
         void setRunning(bool on );
         bool startup() const  { return m_startup; }
@@ -147,7 +150,10 @@ public:
     
         bool load(KoXmlElement &element, Project &project);
         void save(QDomElement &element) const;
-    
+        // for loading xml
+        void setObjectId( const QString &id );
+        QString objectId() const;
+
     private:
         Account *m_account;
         QString m_objectId;

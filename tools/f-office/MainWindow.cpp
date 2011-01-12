@@ -1488,7 +1488,7 @@ void MainWindow::toggleToolBar(bool show)
     KoToolManager::instance()->switchToolRequested(PanTool_ID);
     if (documentType() == SpreadsheetDocument) {
         KoToolManager::instance()->switchToolRequested(CellTool_ID);
-        KSpread::Doc *kspreadDoc = qobject_cast<KSpread::Doc*>(document());
+        Calligra::Tables::Doc *kspreadDoc = qobject_cast<Calligra::Tables::Doc*>(document());
         kspreadDoc->map()->setReadWrite(!show);
     }
     document()->setReadWrite(!show);
@@ -2040,7 +2040,7 @@ void MainWindow::documentPageSetupChanged()
     }
 
     if (documentType() == SpreadsheetDocument) {
-        KSpread::Doc *kspreadDoc = qobject_cast<KSpread::Doc*>(document());
+        Calligra::Tables::Doc *kspreadDoc = qobject_cast<Calligra::Tables::Doc*>(document());
         if (kspreadDoc->map()->count() > 0)
             pageNo = i18n("pg%1 - pg%2", 1, QString::number(kspreadDoc->map()->count()));
     }

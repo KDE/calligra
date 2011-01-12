@@ -35,6 +35,8 @@
 class QDomElement;
 class QStringList;
 
+class KPlatoXmlLoader;
+
 /// The main namespace
 namespace KPlato
 {
@@ -236,7 +238,7 @@ public:
 protected:
     virtual void changed( Schedule * /*sch*/ ) {}
     
-protected:
+public: // temporary
     QString m_name;
     Type m_type;
     long m_id;
@@ -255,6 +257,7 @@ protected:
     friend class Resource;
     friend class RecalculateProjectCmd;
     friend class ScheduleManager;
+    friend class KPlatoXmlLoader;
     /**
       * earlyStart is calculated by PERT/CPM.
       * A task may be scheduled to start later because of constraints
@@ -492,6 +495,9 @@ public:
 
     QStringList logMessages() const;
 
+    QList< QList<Node*> > m_pathlists;
+    bool criticalPathListCached;
+
 protected:
     virtual void changed( Schedule *sch );
 
@@ -507,9 +513,7 @@ private:
     QList<Node*> m_endNodes;
     QList<Node*> m_summarytasks;
     
-    QList< QList<Node*> > m_pathlists;
     QList<Node*> *m_currentCriticalPath;
-    bool criticalPathListCached;
     
     
     QList<Schedule::Log> m_log;

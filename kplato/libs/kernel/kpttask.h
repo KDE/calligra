@@ -355,8 +355,8 @@ public:
 class KPLATOKERNEL_EXPORT Task : public Node {
     Q_OBJECT
 public:
-    Task(Node *parent = 0);
-    Task(const Task &task, Node *parent = 0);
+    explicit Task(Node *parent = 0);
+    explicit Task(const Task &task, Node *parent = 0);
     ~Task();
 
     /// Return task type. Can be Type_Task, Type_Summarytask ot Type_Milestone.
@@ -393,8 +393,6 @@ public:
      */
     void calcResourceOverbooked();
     
-    void setConstraint(Node::ConstraintType type);
-
     /// Load from document
     virtual bool load(KoXmlElement &element, XMLLoaderObject &status );
     /// Save to document

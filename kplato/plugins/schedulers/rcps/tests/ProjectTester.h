@@ -40,6 +40,9 @@ private slots:
     void oneTask();
     void team();
 
+    void mustStartOn();
+    void startNotEarlier();
+
 private:
     Project *m_project;
     Calendar *m_calendar;

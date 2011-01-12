@@ -71,6 +71,9 @@ set(kplatoprivate_LIB_SRCS
     kptinsertfiledlg.cpp
 
     about/aboutpage.cpp
+
+    kptpackage.cpp
+    KPlatoXmlLoader.cpp
 )
 
 kde4_add_ui_files(kplatoprivate_LIB_SRCS

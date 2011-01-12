@@ -438,6 +438,7 @@ public:
     // and reset when the resource is removed from the project
     void setProject( Project *project );
 
+    void addExternalAppointment( const QString &id, Appointment *a );
 
     void addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load = 100 );
     void clearExternalAppointments();
@@ -472,12 +473,16 @@ public:
     /// Used by Project::load() after all resources have been loaded
     /// to translate resource ids to resources
     void resolveRequiredResources( Project &project );
+    /// @see resolveRequiredResources
+    void addRequiredId( const QString &id );
 
     /// Return the account
     Account *account() const { return cost.account; }
     /// Set the @p account
     void setAccount( Account *account );
 
+    // for xml loading code
+    
     class WorkInfoCache
     {
     public:

@@ -2,6 +2,7 @@
 Name=Charts
 Name[bg]=Диаграми
 Name[ca]=Diagrames
+Name[ca@valencia]=Diagrames
 Name[cs]=Grafy
 Name[da]=Diagrammer
 Name[de]=Diagramme
@@ -44,6 +45,7 @@ Name[tg]=Диаграмма
 Name[tr]=Çizelgeler
 Name[uk]=Діаграми
 Name[uz]=Diagrammalar
+Name[uz@cyrillic]=Диаграммалар
 Name[wa]=Grafikes
 Name[x-test]=xxChartsxx
 Name[zh_CN]=图表

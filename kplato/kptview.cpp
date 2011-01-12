@@ -245,7 +245,7 @@ View::View( Part* part, QWidget* parent )
     connect( actionInsertFile, SIGNAL( triggered( bool ) ), SLOT( slotInsertFile() ) );
 
     // ------ Settings
-    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlato..."), this);
+    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure Plan..."), this);
     actionCollection()->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
@@ -262,7 +262,7 @@ View::View( Part* part, QWidget* parent )
     connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
     // ------ Help
-    actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("KPlato Introduction"), this);
+    actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("Introduction to Plan"), this);
     actionCollection()->addAction("kplato_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 

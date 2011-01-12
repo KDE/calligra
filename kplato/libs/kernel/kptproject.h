@@ -44,6 +44,8 @@
 #include <klocale.h>
 #include <ktimezone.h>
 
+class KPlatoXmlLoader;
+
 /// The main namespace.
 namespace KPlato
 {
@@ -636,6 +638,8 @@ protected:
     void tasksBackward();
 
 protected:
+    friend class KPlatoXmlLoader;
+
     virtual void changed(Node *node);
     
     Accounts m_accounts;
@@ -658,7 +662,7 @@ protected:
 
 private:
     void init();
-    
+
     QHash<QString, ResourceGroup*> resourceGroupIdDict;
     QHash<QString, Resource*> resourceIdDict;
     QHash<QString, Node*> nodeIdDict;

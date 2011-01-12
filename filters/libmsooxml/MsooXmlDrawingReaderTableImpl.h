@@ -38,7 +38,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
         MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                        tableStylesFile, &m_context->slideMasterPageProperties->theme,
+                                                                        tableStylesFile, &m_context->slideMasterProperties->theme,
                                                                         d->tableStyleList, m_context->colorMap);
         m_context->import->loadAndParseDocument(&tableStyleReader, m_context->tableStylesFilePath, &tableStyleReaderContext);
     }
@@ -56,6 +56,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
             TRY_READ_IF(tblPr)
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -140,6 +141,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 //             ELSE_TRY_READ_IF(tableStyle)
             /*ELSE_*/TRY_READ_IF(tableStyleId)
 //             ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -215,6 +217,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
             TRY_READ_IF(tc)
 //             ELSE_TRY_READ_IF(extLst)
 //             ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -261,6 +264,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
             }
 //             ELSE_TRY_READ_IF(extLst)
             ELSE_TRY_READ_IF(tcPr)
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -280,7 +284,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     readNext();
     m_tableStyle = d->tableStyleList->tableStyle(text().toString());
     readNext();
- 
+
     READ_EPILOGUE
 }
 
@@ -315,9 +319,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
                 m_currentLocalStyleProperties->backgroundColor = m_currentColor;
                 m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
             }
-            else {
-                skipCurrentElement(); // Added to make sure that solidfill eg inside 'lnT' does not mess with the color
-            }
+            SKIP_UNKNOWN // Added to make sure that solidfill eg inside 'lnT' does not mess with the color
         }
     }
 
@@ -325,5 +327,3 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 
     READ_EPILOGUE
 }
-
-

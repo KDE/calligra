@@ -22,9 +22,9 @@ macro_log_feature(OPENSSL_FOUND "OpenSSL" "A toolkit implementing the Secure Soc
 
 
 if(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
-    if(Q_WS_X11 AND SHOULD_BUILD_KSPREAD)
+    if(Q_WS_X11 AND SHOULD_BUILD_TABLES)
       macro_optional_add_subdirectory( f-office )
-    endif(Q_WS_X11 AND SHOULD_BUILD_KSPREAD)
+    endif(Q_WS_X11 AND SHOULD_BUILD_TABLES)
 endif(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
 
 # strigi ships with the odfsaxanalyzer which does already fetch the meta-data of

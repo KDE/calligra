@@ -48,3 +48,11 @@ QString m_docPrDescr; //!< set by read_docPr()
 bool m_insideHdr; //!< used to indicate that we're parsing inside hdr (header)
 //! @todo set it
 bool m_insideFtr; //!< used to indicate that we're parsing inside ftr (footer)
+
+bool m_choiceAccepted; // Whether choice provided something we implement
+
+// 2010 specific, meant to offer choice between paths based on what is supported
+KoFilter::ConversionStatus read_AlternateContent();
+KoFilter::ConversionStatus read_Choice();
+KoFilter::ConversionStatus read_Fallback();
+

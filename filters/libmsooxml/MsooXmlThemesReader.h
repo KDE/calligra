@@ -184,6 +184,8 @@ public:
     DrawingMLFormatScheme& operator=(const DrawingMLFormatScheme& format);
 
     QMap<int, DrawingMLFillBase*> fillStyles;
+    // Stores currently only line width, should be made to store everything else too
+    QVector<QString> lineStyles;
 };
 
 //! Defines a single DrawingML theme.
@@ -244,9 +246,14 @@ protected:
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
+
+    KoFilter::ConversionStatus fillStyleReadHelper(int& index);
     KoFilter::ConversionStatus read_bgFillStyleLst();
+    KoFilter::ConversionStatus read_fillStyleLst();
     KoFilter::ConversionStatus read_majorFont();
     KoFilter::ConversionStatus read_minorFont();
+    KoFilter::ConversionStatus read_lnStyleLst();
+    KoFilter::ConversionStatus read_ln();
 
     //! Used for skipping a subtree - just reads and shows each element.
     //! called by BIND_READ_SKIP() macro.

@@ -39,6 +39,8 @@
 
 class QDomElement;
 
+class KPlatoXmlLoader;
+
 /// The main namespace.
 namespace KPlato
 {
@@ -585,6 +587,7 @@ public slots:
     void slotStandardWorktimeChanged( StandardWorktime* );
 
 protected:
+    friend class KPlatoXmlLoader;
     /**
      * Calculates and returns the duration of the node.
      * Reimplement.

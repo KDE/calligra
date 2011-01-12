@@ -92,10 +92,26 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+2011-01-03
+KexiDB
+*fix memory leak in multiargument expressions of any type
+**merged with Predicate
+*fix memory leak in query schema
+**merged with Predicate
+*fix memory leak (lexer was not released)
+**merged with Predicate
+
+2010-12-12
 Migration
 *fix saving recently visited directories for source and destination database in the migration wizard
 
 ~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
+
+2010-12-09
+Migration
+*Fix for MS Access import (did not honor encoding); this fixes using ICONV
+*a small fix for 'advanced options' button possition in the import wizard
+**BUG:259259
 
 2010-12-01
 Core

@@ -32,7 +32,7 @@ KPrAnimationToolFactory::KPrAnimationToolFactory()
     setToolTip(i18n("Animation tool"));
     setToolType(mainToolType());
     setPriority(40);
-    setIcon("animation-kpresenter");
+    setIcon("animation-stage");
     setActivationShapeId("flake/edit");
 }
 

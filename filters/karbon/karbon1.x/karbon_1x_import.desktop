@@ -3,6 +3,7 @@ Type=Service
 Name=Karbon 1.x Import Filter
 Name[bg]=Филтър за импортиране от Karbon 1.x
 Name[ca]=Filtre d'importació Karbon 1.x
+Name[ca@valencia]=Filtre d'importació Karbon 1.x
 Name[cs]=Importní filtr Karbon 1.x
 Name[da]=Karbon 1.x-importfilter
 Name[de]=Karbon 1.x Importfilter

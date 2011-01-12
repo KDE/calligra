@@ -51,6 +51,8 @@ KoFilter::ConversionStatus read_cNvSpPr();
 KoFilter::ConversionStatus read_nvCxnSpPr();
 KoFilter::ConversionStatus read_grpSp();
 
+bool unsupportedPredefinedShape();
+
 KoFilter::ConversionStatus read_extLst();
 
 KoFilter::ConversionStatus read_grpSpPr();
@@ -120,6 +122,10 @@ KoFilter::ConversionStatus read_shade();
 KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
+
+QString m_customPath;
+QString m_customEquations;
+KoFilter::ConversionStatus read_custGeom();
 
 qreal m_currentShadeLevel;
 qreal m_currentTint; // value of current tint

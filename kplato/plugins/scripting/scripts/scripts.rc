@@ -2,7 +2,7 @@
 <KrossScripting>
 
     <!--
-        The "Resource Busy Information" collection provides scripts to handle rbi content in KPlato.
+        The "Resource Busy Information" collection provides scripts to handle rbi content in Plan.
         //-->
     <collection name="Resource Busy Information" text="Resource Busy Information" comment="Handle resource busy information">
         <script text="Export Resource Busy Information" comment="Python script to export busy information to file"
@@ -19,24 +19,24 @@
                file="extensions/busyinfoclear.py" />
     </collection>
     <collection name="import" text="Import" comment="Import content">
-        <script text="Resources from KPlato File" comment="Python script to import resources from project file"
+        <script text="Resources from Plan File" comment="Python script to import resources from project file"
                name="pyimportresources"
                interpreter="python"
                file="extensions/resourcesimport.py" />
     </collection>
 
     <!--
-        The "export" collection provides scripts to export content from KPlato.
+        The "export" collection provides scripts to export content from Plan.
         //-->
 <!--    <collection name="export" text="Export" comment="Export busy info">
     </collection>-->
     
     <!--
         The "samples" collection provides misc example scripts to demonstrate
-        parts of the KPlato scripting functionality.
+        parts of the Plan scripting functionality.
         //-->
 <!--    <collection name="tools" text="Tools" comment="Miscellaneous scripts">
-       <script text="Online Help" comment="Python script that uses the KHTML Part to display the KPlato Scripting online help"
+       <script text="Online Help" comment="Python script that uses the KHTML Part to display the Plan Scripting online help"
                name="pyonlinehelp"
                interpreter="python"
                file="extensions/onlinehelp.py" />
@@ -45,9 +45,9 @@
 
     <!--
         The "samples" collection provides misc example scripts to demonstrate
-        parts of the KPlato scripting functionality.
+        parts of the Plan scripting functionality.
         //-->
-    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KPlato" enabled="false">
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with Plan" enabled="false">
         <script text="Print Project Information..." comment="Example python script that print project information"
             name="pysampleproject"
             interpreter="python"

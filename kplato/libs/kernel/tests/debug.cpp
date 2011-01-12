@@ -177,18 +177,20 @@ void print( Task *t, bool full = true ) {
             qDebug()<<printAvailable( rr->resource(), "   " + rr->resource()->name() );
         }
     }
-    Schedule *s = t->currentSchedule();
-    if ( s == 0 ) {
-        return;
-    }
     qDebug();
     qDebug()<<"Estimate   :"<<t->estimate()->expectedEstimate()<<Duration::unitToString(t->estimate()->unit())
-			<<t->estimate()->typeToString()<<(t->estimate()->calendar()?t->estimate()->calendar()->name():"Fixed");
-    foreach ( Appointment *a, s->appointments() ) {
-        qDebug()<<"Resource:"<<a->resource()->resource()->name()<<a->startTime().toString()<<a->endTime().toString();
-        if ( ! full ) { continue; }
-        foreach( const AppointmentInterval &i, a->intervals() ) {
-            qDebug()<<"  "<<i.startTime().toString()<<i.endTime().toString()<<i.load();
+			<<t->estimate()->typeToString()
+            <<(t->estimate()->type() == Estimate::Type_Duration
+                ? (t->estimate()->calendar()?t->estimate()->calendar()->name():"Fixed")
+                : "");
+    Schedule *s = t->currentSchedule();
+    if ( s ) {
+        foreach ( Appointment *a, s->appointments() ) {
+            qDebug()<<"Resource:"<<a->resource()->resource()->name()<<"booked:"<<a->startTime().toString()<<a->endTime().toString();
+            if ( ! full ) { continue; }
+            foreach( const AppointmentInterval &i, a->intervals() ) {
+                qDebug()<<"  "<<i.startTime().toString()<<i.endTime().toString()<<i.load();
+            }
         }
     }
     if ( t->runningAccount() ) {

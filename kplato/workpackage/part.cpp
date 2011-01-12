@@ -27,6 +27,8 @@
 #include "mainwindow.h"
 #include "workpackage.h"
 
+#include "KPlatoXmlLoader.h" //NB!
+
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
@@ -70,6 +72,7 @@
 
 #include <KoGlobal.h>
 #include <KoMainWindow.h>
+
 
 using namespace KPlato;
 
@@ -440,6 +443,21 @@ bool Part::loadWorkPackages()
 
 }
 
+bool Part::loadKPlatoWorkPackages()
+{
+    m_loadingFromProjectStore = true;
+    KStandardDirs *sd = componentData().dirs();
+    QStringList lst = sd->findAllResources( "projects", "*.kplatowork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
+    //kDebug()<<lst;
+    foreach ( const QString &file, lst ) {
+        if ( ! loadNativeFormatFromStore( file ) ) {
+            KMessageBox::information( 0, i18n( "Failed to load file:<br>%1" , file ) );
+        }
+    }
+    m_loadingFromProjectStore = false;
+    return true;
+}
+
 bool Part::loadNativeFormatFromStore(const QString& file)
 {
     KoStore * store = KoStore::createStore(file, KoStore::Read, "", KoStore::Auto);
@@ -519,7 +537,7 @@ bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& 
     return true;
 }
 
-bool Part::loadXML( const KoXmlDocument &document, KoStore* )
+bool Part::loadXML( const KoXmlDocument &document, KoStore* store )
 {
     kDebug();
     QString value;
@@ -531,26 +549,70 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
         kError() << "No mime type specified!" << endl;
         KMessageBox::error( 0, i18n( "Invalid document. No mimetype specified." ) );
         return false;
-    } else if ( value != "application/x-vnd.kde.kplato.work" ) {
+    } else if ( value == "application/x-vnd.kde.kplato.work" ) {
+        return loadKPlatoXML( document, store );
+    } else if ( value != "application/x-vnd.kde.plan.work" ) {
         kError() << "Unknown mime type " << value;
-        KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
+        KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
         return false;
     }
-    QString syntaxVersion = plan.attribute( "version", KPLATOWORK_FILE_SYNTAX_VERSION );
+    QString syntaxVersion = plan.attribute( "version", PLANWORK_FILE_SYNTAX_VERSION );
     m_xmlLoader.setWorkVersion( syntaxVersion );
-    if ( syntaxVersion > KPLATOWORK_FILE_SYNTAX_VERSION ) {
+    if ( syntaxVersion > PLANWORK_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
-                      0, i18n( "This document is a newer version than supported by KPlatoWork (syntax version: %1)<br>"
-                               "Opening it in this version of KPlatoWork will lose some information.", syntaxVersion ),
+                      0, i18n( "This document is a newer version than supported by PlanWork (syntax version: %1)<br>"
+                               "Opening it in this version of PlanWork will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {
             return false;
         }
     }
-    m_xmlLoader.setVersion( plan.attribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION ) );
+    m_xmlLoader.setVersion( plan.attribute( "plan-version", PLAN_FILE_SYNTAX_VERSION ) );
     m_xmlLoader.startLoad();
     WorkPackage *wp = new WorkPackage( m_loadingFromProjectStore );
     wp->loadXML( plan, m_xmlLoader );
+    m_xmlLoader.stopLoad();
+    if ( ! setWorkPackage( wp ) ) {
+        // rejected, so nothing changed...
+        return true;
+    }
+    emit changed();
+    return true;
+}
+
+bool Part::loadKPlatoXML( const KoXmlDocument &document, KoStore* )
+{
+    kDebug();
+    QString value;
+    KoXmlElement plan = document.documentElement();
+
+    // Check if this is the right app
+    value = plan.attribute( "mime", QString() );
+    if ( value.isEmpty() ) {
+        kError() << "No mime type specified!" << endl;
+        KMessageBox::error( 0, i18n( "Invalid document. No mimetype specified." ) );
+        return false;
+    } else if ( value != "application/x-vnd.kde.plan.work" ) {
+        kError() << "Unknown mime type " << value;
+        KMessageBox::error( 0, i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan.work, got %1", value ) );
+        return false;
+    }
+    QString syntaxVersion = plan.attribute( "version", KPLATOWORK_MAX_FILE_SYNTAX_VERSION );
+    m_xmlLoader.setWorkVersion( syntaxVersion );
+    if ( syntaxVersion > KPLATOWORK_MAX_FILE_SYNTAX_VERSION ) {
+        int ret = KMessageBox::warningContinueCancel(
+                      0, i18n( "This document is a newer version than supported by PlanWork (syntax version: %1)<br>"
+                               "Opening it in this version of PlanWork will lose some information.", syntaxVersion ),
+                      i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
+        if ( ret == KMessageBox::Cancel ) {
+            return false;
+        }
+    }
+    m_xmlLoader.setMimetype( value );
+    m_xmlLoader.setVersion( plan.attribute( "kplato-version", KPLATO_MAX_FILE_SYNTAX_VERSION ) );
+    m_xmlLoader.startLoad();
+    WorkPackage *wp = new WorkPackage( m_loadingFromProjectStore );
+    wp->loadKPlatoXML( plan, m_xmlLoader );
     m_xmlLoader.stopLoad();
     if ( ! setWorkPackage( wp ) ) {
         // rejected, so nothing changed...

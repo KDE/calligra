@@ -47,7 +47,7 @@ void MSOOXML_CURRENT_CLASS::doneInternal()
 //! t handler (Text)
 /*! ECMA-376, 17.3.3.31, p.389.
  Parent elements:
- - r (§22.1.2.87) - Shared ML
+ - [done] r (§22.1.2.87) - Shared ML
  - [done] r (§17.3.2.25)
  No child elements.
 */
@@ -68,6 +68,81 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 //kDebug() << "{1}";
+    READ_EPILOGUE
+}
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "mc"
+
+#undef CURRENT_EL
+#define CURRENT_EL AlternateContent
+//! Alternate content handler
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_AlternateContent()
+{
+    READ_PROLOGUE
+
+    m_choiceAccepted = false;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(Choice)
+            else if (!m_choiceAccepted && qualifiedName() == "mc:Fallback") {
+                TRY_READ(Fallback)
+            }
+            SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL Choice
+//! Choice handler
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Choice()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(Requires)
+
+    if (Requires != "v") {
+        skipCurrentElement();
+        READ_EPILOGUE
+    }
+    m_choiceAccepted = true;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+#ifdef PPTXXMLSLIDEREADER_CPP
+            TRY_READ_IF_NS(p, oleObj)
+#endif
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL Fallback
+//! Fallback handler
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Fallback()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+#ifdef DOCXXMLDOCREADER_H
+            TRY_READ_IF_NS(w, pict)
+#endif
+        }
+    }
+
     READ_EPILOGUE
 }
 
