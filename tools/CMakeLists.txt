@@ -9,8 +9,6 @@ macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.o
 
 if(OKULAR_FOUND)
     add_subdirectory( okularodpgenerator )
-else(OKULAR_FOUND)
-    message(STATUS "Did NOT find Okular libraries, Okular generator will not be build")
 endif(OKULAR_FOUND)
 
 macro_optional_find_package(X11)
