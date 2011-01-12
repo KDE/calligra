@@ -88,7 +88,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (!x_mar.isEmpty()) {
         if (m_insideGroup) {
             x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
-            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupUnit);
+            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
         } else {
             x_position = x_mar.left(x_mar.length() - 2).toDouble(); // removing the unit
             x_pos_string = x_mar;
@@ -97,7 +97,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     else if (!leftPos.isEmpty()) {
         if (m_insideGroup) {
             x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
-            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupUnit);
+            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
         } else {
             x_position = leftPos.left(leftPos.length() - 2).toDouble();
             x_pos_string = leftPos;
@@ -106,7 +106,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (!y_mar.isEmpty()) {
         if (m_insideGroup) {
             y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
-            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupUnit);
+            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
         } else {
             y_position = y_mar.left(y_mar.length() -2).toDouble();
             y_pos_string = y_mar;
@@ -115,7 +115,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     else if (!topPos.isEmpty()) {
         if (m_insideGroup) {
             y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
-            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupUnit);
+            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
         } else {
             y_position = topPos.left(topPos.length() - 2).toDouble();
             y_pos_string = topPos;
@@ -124,7 +124,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (!width.isEmpty()) {
         if (m_insideGroup) {
             widthValue = width.toInt() * m_real_groupWidth / m_groupWidth;
-            widthString = QString("%1%2").arg(widthValue).arg(m_groupUnit);
+            widthString = QString("%1%2").arg(widthValue).arg(m_groupWidthUnit);
         } else {
             widthValue = width.left(width.length() - 2).toDouble();
             widthString = width;
@@ -133,7 +133,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (!height.isEmpty()) {
         if (m_insideGroup) {
             heightValue = height.toInt() * m_real_groupHeight / m_groupHeight;
-            heightString = QString("%1%2").arg(heightValue).arg(m_groupUnit);
+            heightString = QString("%1%2").arg(heightValue).arg(m_groupHeightUnit);
         }
         else {
             heightValue = height.left(height.length() - 2).toDouble();
@@ -454,7 +454,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     const QString width(m_vmlStyle.value("width"));
     const QString height(m_vmlStyle.value("height"));
 
-    m_groupUnit = width.right(2); // pt, cm etc.
+    m_groupWidthUnit = width.right(2); // pt, cm etc.
+    m_groupHeightUnit = height.right(2);
     m_real_groupWidth = width.left(width.length() - 2).toDouble();
     m_real_groupHeight = height.left(height.length() - 2).toDouble();
 
@@ -483,6 +484,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rect)
+            ELSE_TRY_READ_IF(shapetype)
+            ELSE_TRY_READ_IF(roundrect)
+            ELSE_TRY_READ_IF(shape)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -740,12 +744,12 @@ static QString convertToEnhancedPath(const QString& source)
     QString returnedString;
     ConversionState state = CommandExpected;
     enum CommandType {MoveCommand, LineCommand, RelativeLineCommand, QuadEllipXCommand, QuadEllipYCommand,
-                      CurveCommand};
+                      CurveCommand, RelativeCurveCommand, ArcCommand, ArcToCommand, ArcCommandClock, ArcToCommandClock};
     CommandType lastCommand = MoveCommand;
     QString firstMoveX, firstMoveY, currentX, currentY;
     bool argumentMove;
     QChar command;
-    QString first, second, third, fourth, fifth, sixth;
+    QString first, second, third, fourth, fifth, sixth, seventh, eighth;
 
     while (true) {
         if (parsedString.length() == 0) {
@@ -770,15 +774,17 @@ static QString convertToEnhancedPath(const QString& source)
             }
             else if (command == 'x') {
                 state = CommandExpected;
-                //returnedString += QString(" L%1 %2").arg(firstMoveX).arg(firstMoveY);
                 returnedString += " Z";
             }
             else if (command == 'e') {
-                returnedString += " N";
+                //returnedString += " N";
                 state = CommandExpected;
             }
             else if (command == 'c') {
                 lastCommand = CurveCommand;
+            }
+            else if (command == 'v') {
+                lastCommand = RelativeCurveCommand;
             }
             else if (command == 'q') {
                 QChar subcommand = parsedString.at(0);
@@ -788,6 +794,26 @@ static QString convertToEnhancedPath(const QString& source)
                 }
                 else {
                     lastCommand = QuadEllipYCommand;
+                }
+            }
+            else if (command == 'a') {
+                QChar subcommand = parsedString.at(0);
+                parsedString = parsedString.mid(1);
+                if (subcommand == 'r') {
+                    lastCommand = ArcCommand;
+                }
+                else {
+                    lastCommand = ArcToCommand;
+                }
+            }
+            else if (command == 'w') {
+                QChar subcommand = parsedString.at(0);
+                parsedString = parsedString.mid(1);
+                if (subcommand == 'r') {
+                    lastCommand = ArcCommandClock;
+                }
+                else {
+                    lastCommand = ArcToCommandClock;
                 }
             }
             else if (command == 'n') {
@@ -814,6 +840,42 @@ static QString convertToEnhancedPath(const QString& source)
                 returnedString += QString(" M %1 %2").arg(first).arg(second);
                 state = CommandExpected;
                 break;
+            case RelativeCurveCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                first = QString("%1").arg(first.toInt() + currentX.toInt());
+                second = QString("%1").arg(second.toInt() + currentY.toInt());
+                third = QString("%1").arg(third.toInt() + currentX.toInt());
+                fourth = QString("%1").arg(fourth.toInt() + currentY.toInt());
+                currentX = QString("%1").arg(fifth.toInt() + currentX.toInt());
+                currentY = QString("%1").arg(sixth.toInt() + currentY.toInt());
+                returnedString += QString(" C %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
+                                  arg(fourth).arg(currentX).arg(currentY);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    first = QString("%1").arg(first.toInt() + currentX.toInt());
+                    second = QString("%1").arg(second.toInt() + currentY.toInt());
+                    third = QString("%1").arg(third.toInt() + currentX.toInt());
+                    fourth = QString("%1").arg(fourth.toInt() + currentY.toInt());
+                    currentX = QString("%1").arg(fifth.toInt() + currentX.toInt());
+                    currentY = QString("%1").arg(sixth.toInt() + currentY.toInt());
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
+                                      arg(fourth).arg(currentX).arg(currentY);
+                }
+                break;
             case CurveCommand:
                 first = getArgument(parsedString, true, argumentMove);
                 second = getArgument(parsedString, false, argumentMove);
@@ -823,6 +885,8 @@ static QString convertToEnhancedPath(const QString& source)
                 sixth = getArgument(parsedString, false, argumentMove);
                 returnedString += QString(" C %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
                                   arg(fourth).arg(fifth).arg(sixth);
+                currentX = fifth;
+                currentY = sixth;
                 while (true) {
                     first = getArgument(parsedString, false, argumentMove);
                     if (argumentMove) {
@@ -836,6 +900,8 @@ static QString convertToEnhancedPath(const QString& source)
                     sixth = getArgument(parsedString, false, argumentMove);
                     returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
                                       arg(fourth).arg(fifth).arg(sixth);
+                    currentX = fifth;
+                    currentY = sixth;
                 }
                 break;
             case LineCommand:
@@ -859,8 +925,9 @@ static QString convertToEnhancedPath(const QString& source)
             case RelativeLineCommand:
                 first = getArgument(parsedString, true, argumentMove);
                 second = getArgument(parsedString, false, argumentMove);
-                returnedString += QString(" L %1 %2").arg(first.toInt() + currentX.toInt()).
-                                                     arg(second.toInt() + currentY.toInt());
+                currentX = QString("%1").arg(first.toInt() + currentX.toInt());
+                currentY = QString("%1").arg(second.toInt() + currentY.toInt());
+                returnedString += QString(" L %1 %2").arg(currentX).arg(currentY);
                 currentX = first;
                 currentY = second;
                 while (true) {
@@ -870,10 +937,9 @@ static QString convertToEnhancedPath(const QString& source)
                         break;
                     }
                     second = getArgument(parsedString, false, argumentMove);
-                    currentX = first;
-                    currentY = second;
-                    returnedString += QString(" %1 %2").arg(first.toInt() + currentX.toInt()).
-                                                        arg(second.toInt() + currentY.toInt());
+                    currentX = QString("%1").arg(first.toInt() + currentX.toInt());
+                    currentY = QString("%1").arg(second.toInt() + currentY.toInt());
+                    returnedString += QString(" %1 %2").arg(currentX).arg(currentY);
                 }
                 break;
             case QuadEllipXCommand:
@@ -910,6 +976,134 @@ static QString convertToEnhancedPath(const QString& source)
                     currentX = first;
                     currentY = second;
                     returnedString += QString(" %1 %2").arg(first).arg(second);
+                }
+                break;
+            case ArcCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                seventh = getArgument(parsedString, false, argumentMove);
+                eighth = getArgument(parsedString, false, argumentMove);
+                currentX = seventh;
+                currentY = eighth;
+                returnedString += QString(" B %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    seventh = getArgument(parsedString, false, argumentMove);
+                    eighth = getArgument(parsedString, false, argumentMove);
+                    currentX = seventh;
+                    currentY = eighth;
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                        arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                }
+                break;
+            case ArcToCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                seventh = getArgument(parsedString, false, argumentMove);
+                eighth = getArgument(parsedString, false, argumentMove);
+                currentX = seventh;
+                currentY = eighth;
+                returnedString += QString(" A %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    seventh = getArgument(parsedString, false, argumentMove);
+                    eighth = getArgument(parsedString, false, argumentMove);
+                    currentX = seventh;
+                    currentY = eighth;
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                        arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                }
+                break;
+            case ArcCommandClock:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                seventh = getArgument(parsedString, false, argumentMove);
+                eighth = getArgument(parsedString, false, argumentMove);
+                currentX = seventh;
+                currentY = eighth;
+                returnedString += QString(" V %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    seventh = getArgument(parsedString, false, argumentMove);
+                    eighth = getArgument(parsedString, false, argumentMove);
+                    currentX = seventh;
+                    currentY = eighth;
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                        arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                }
+                break;
+            case ArcToCommandClock:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                seventh = getArgument(parsedString, false, argumentMove);
+                eighth = getArgument(parsedString, false, argumentMove);
+                currentX = seventh;
+                currentY = eighth;
+                returnedString += QString(" W %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    seventh = getArgument(parsedString, false, argumentMove);
+                    eighth = getArgument(parsedString, false, argumentMove);
+                    currentX = seventh;
+                    currentY = eighth;
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                        arg(fifth).arg(sixth).arg(seventh).arg(eighth);
                 }
                 break;
             }
@@ -1112,6 +1306,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
         }
         else if (command == "sqrt") {
             m_shapeTypeString += QString("sqrt(%1)").arg(parameters.at(0));
+        }
+        else if (command == "mid") {
+            m_shapeTypeString += QString("(%1 + %2)/2").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "mod") {
             m_shapeTypeString += QString("sqrt(%1 * %1 + %2 * %2 + %3 * %3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));

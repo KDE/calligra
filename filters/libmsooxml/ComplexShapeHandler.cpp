@@ -32,12 +32,15 @@ QString ComplexShapeHandler::defaultEquations()
     eqs += "<draw:equation draw:name=\"vc\" draw:formula=\"height / 2 \"/>";
     eqs += "<draw:equation draw:name=\"hc\" draw:formula=\"width / 2 \"/>";
     eqs += "<draw:equation draw:name=\"hd2\" draw:formula=\"height / 2 \"/>";
+    // Note, this is not defined, but is used
+    eqs += "<draw:equation draw:name=\"hd3\" draw:formula=\"height / 3 \"/>";
     eqs += "<draw:equation draw:name=\"hd4\" draw:formula=\"height / 4 \"/>";
     eqs += "<draw:equation draw:name=\"hd5\" draw:formula=\"height / 5 \"/>";
     eqs += "<draw:equation draw:name=\"hd6\" draw:formula=\"height / 6 \"/>";
     eqs += "<draw:equation draw:name=\"hd8\" draw:formula=\"height / 8 \"/>";
     eqs += "<draw:equation draw:name=\"ss\" draw:formula=\"min(width, height)\"/>";
     eqs += "<draw:equation draw:name=\"wd2\" draw:formula=\"width / 2 \"/>";
+    eqs += "<draw:equation draw:name=\"wd3\" draw:formula=\"width / 3 \"/>";
     eqs += "<draw:equation draw:name=\"wd4\" draw:formula=\"width / 4 \"/>";
     eqs += "<draw:equation draw:name=\"wd5\" draw:formula=\"width / 5 \"/>";
     eqs += "<draw:equation draw:name=\"wd6\" draw:formula=\"width / 6 \"/>";
