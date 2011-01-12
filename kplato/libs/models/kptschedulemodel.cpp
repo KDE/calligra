@@ -945,14 +945,46 @@ void ScheduleLogItemModel::setManager( ScheduleManager *manager )
 {
     kDebug()<<m_manager<<"->"<<manager;
     if ( manager != m_manager ) {
+        if ( m_manager ) {
+            disconnect( m_manager, SIGNAL(logInserted(MainSchedule*, int, int)), this, SLOT(slotLogInserted(MainSchedule*, int, int)));
+        }
         m_manager = manager;
         m_schedule = 0;
         clear();
         if ( m_manager ) {
             m_schedule = m_manager->expected();
             refresh();
+            connect( m_manager, SIGNAL(logInserted(MainSchedule*, int, int)), this, SLOT(slotLogInserted(MainSchedule*, int, int)));
         }
     }
+}
+
+void ScheduleLogItemModel::slotLogInserted( MainSchedule *s, int firstrow, int lastrow )
+{
+    for ( int i = firstrow; i <= lastrow; ++i ) {
+        addLogEntry( s->logs().value( i ), i + 1 );
+    }
+}
+
+//FIXME: This only add logs (insert is not used atm)
+void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
+{
+//     kDebug()<<log;
+    QList<QStandardItem*> lst;
+    if ( log.resource ) {
+        lst.append( new QStandardItem( log.resource->name() ) );
+    } else if ( log.node ) {
+        lst.append( new QStandardItem( log.node->name() ) );
+    } else {
+        lst.append(  new QStandardItem( "" ) );
+    }
+    lst.append( new QStandardItem( m_schedule->logPhase( log.phase ) ) );
+    QStandardItem *item = new QStandardItem( m_schedule->logSeverity( log.severity ) );
+    item->setData( log.severity );
+    lst.append( item );
+    lst.append( new QStandardItem( log.message ) );
+    appendRow( lst );
+//     kDebug()<<"added:"<<row<<rowCount()<<columnCount();
 }
 
 void ScheduleLogItemModel::refresh()
@@ -966,26 +998,10 @@ void ScheduleLogItemModel::refresh()
         kDebug()<<"No main schedule";
         return;
     }
-    kDebug()<<m_schedule<<m_schedule->logs().count();
-    QStandardItem *parentItem = invisibleRootItem();
-    QListIterator<Schedule::Log> it( m_schedule->logs() );
-    while ( it.hasNext() ) {
-        Schedule::Log log = it.next();
-        QList<QStandardItem*> lst;
-        if ( log.resource ) {
-            lst.append( new QStandardItem( log.resource->name() ) );
-        } else if ( log.node ) {
-            lst.append( new QStandardItem( log.node->name() ) );
-        } else {
-            lst.append(  new QStandardItem( "" ) );
-        }
-        lst.append( new QStandardItem( m_schedule->logPhase( log.phase ) ) );
-        QStandardItem *item = new QStandardItem( m_schedule->logSeverity( log.severity ) );
-        item->setData( log.severity );
-        lst.append( item );
-        lst.append( new QStandardItem( log.message ) );
-        parentItem->appendRow( lst );
-        //kDebug()<<rowCount()<<columnCount()<<parentItem<<lst;
+//     kDebug()<<m_schedule<<m_schedule->logs().count();
+    int i = 1;
+    foreach ( const Schedule::Log &l, m_schedule->logs() ) {
+        addLogEntry( l, i++ );
     }
 }
 
@@ -994,7 +1010,7 @@ void ScheduleLogItemModel::slotManagerChanged( ScheduleManager *manager )
     kDebug()<<m_manager<<manager;
     if ( m_manager == manager ) {
         //TODO
-        refresh();
+//        refresh();
     }
 }
 

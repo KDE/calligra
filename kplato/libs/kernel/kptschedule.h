@@ -212,12 +212,9 @@ public:
             Log() 
                 : node( 0 ), resource( 0 ), severity( 0 ), phase( -1 )
             {}
-            Log( const Node *n, int sev, const QString &msg, int ph = -1 )
-                : node( n ), resource( 0 ), message( msg ), severity( sev ), phase( ph )
-            {}
-            Log( const Node *n, const Resource *r, int sev, const QString &msg, int ph = -1 )
-                : node( n ), resource( r ), message( msg ), severity( sev ), phase( ph )
-            {}
+            Log( const Node *n, int sev, const QString &msg, int ph = -1 );
+            Log( const Node *n, const Resource *r, int sev, const QString &msg, int ph = -1 );
+
             const Node *node;
             const Resource *resource;
             QString message;
@@ -656,24 +653,28 @@ public:
     /// Load an existing MainSchedule
     bool loadMainSchedule( MainSchedule *schedule, KoXmlElement &element, XMLLoaderObject &status );
 
+    QMap< int, QString > phaseNames() const;
+
 public slots:
     /// Set maximum progress. Emits signal maxProgressChanged
     void setMaxProgress( int value );
     /// Set progress. Emits signal progressChanged
     void setProgress( int value );
 
-    /// Add @p log to expected()
-    /// Usually connected to sigLogAdded() (other manager) to syncronize this with the other manager
-    void slotAddLog( KPlato::Schedule::Log log );
-
+    /// Add the lis of logs @p log to expected()
     void slotAddLog( const QList<KPlato::Schedule::Log> &log );
+
+    void setPhaseNames( const QMap<int, QString> &phasenames );
 
 signals:
     void maxProgressChanged( int );
     void progressChanged( int );
 
-    /// Emitted by logAdded() (but not by slotAddLog())
-    /// Usually connected to slotAddLog() (other manager) to syncronize the other manager with this manager
+    /// Emitted by logAdded() when new log entries are added
+    void logInserted( MainSchedule*, int firstrow, int lastrow );
+
+    /// Emitted by logAdded()
+    /// Used by scheduling thread
     void sigLogAdded( Schedule::Log log );
 
 protected:
@@ -706,6 +707,6 @@ protected:
 
 } //namespace KPlato
 
-QDebug &operator<<( QDebug &dbg, const KPlato::Schedule::Log &log );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule::Log &log );
 
 #endif

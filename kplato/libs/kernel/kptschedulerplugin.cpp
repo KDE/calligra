@@ -148,15 +148,18 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
 #ifdef NDEBUG
     Q_UNUSED(p)
 #endif
+
+    if ( j->manager() ) {
+        sm->setPhaseNames( j->phaseNames() );
+    }
+
     QList<Schedule::Log> logs;
-    //qDebug()<<"SchedulerPlugin::updateLog:"<<j<<logs.count();
     foreach ( const Schedule::Log log, j->log() ) {
         // map log from temporary project to real project
         Schedule::Log l = log;
         if ( l.resource ) {
             const Resource *r = l.resource;
             l.resource = sm->project().findResource( l.resource->id() );
-//            qDebug()<<"SchedulerPlugin::updateLog: mapped"<<r<<l.resource;
             Q_ASSERT( r != l.resource );
 #ifdef NDEBUG
             Q_UNUSED(r)
@@ -170,7 +173,6 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
             } else {
                 l.node = sm->project().findNode( l.node->id() );
             }
-//            qDebug()<<"SchedulerPlugin::updateLog: mapped"<<n<<l.node;
             Q_ASSERT( n != l.node );
 #ifdef NDEBUG
             Q_UNUSED(n)
@@ -179,7 +181,9 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
         }
         logs << l;
     }
-    sm->slotAddLog( logs );
+    if ( ! logs.isEmpty() ) {
+        sm->slotAddLog( logs );
+    }
 }
 
 void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm ) const
@@ -330,7 +334,7 @@ int SchedulerThread::progress() const
 
 void SchedulerThread::slotAddLog( KPlato::Schedule::Log log )
 {
-    //qDebug()<<"SchedulerThread::slotAddLog:"<<log;
+//     kDebug()<<log;
     QMutexLocker m( &m_logMutex );
     m_logs << log;
 }
@@ -341,6 +345,12 @@ QList<Schedule::Log> SchedulerThread::log()
     QList<KPlato::Schedule::Log> l = m_logs;
     m_logs.clear();
     return l;
+}
+
+QMap<int, QString> SchedulerThread::phaseNames() const
+{
+    QMutexLocker m( &m_managerMutex );
+    return m_manager->phaseNames();
 }
 
 

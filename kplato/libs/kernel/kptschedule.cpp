@@ -43,6 +43,20 @@ namespace KPlato
 
 class ScheduleManager;
 
+Schedule::Log::Log( const Node *n, int sev, const QString &msg, int ph )
+    : node( n ), resource( 0 ), message( msg ), severity( sev ), phase( ph )
+{
+    Q_ASSERT( n );
+//     kDebug()<<*this<<nodeId;
+}
+
+Schedule::Log::Log( const Node *n, const Resource *r, int sev, const QString &msg, int ph )
+    : node( n ), resource( r ), message( msg ), severity( sev ), phase( ph )
+{
+    Q_ASSERT( r );
+//     kDebug()<<*this<<resourceId;
+}
+
 Schedule::Schedule()
         : m_type( Expected ),
         m_id( 0 ),
@@ -1317,8 +1331,16 @@ QList<Schedule::Log> MainSchedule::logs() const
     return m_log;
 }
 
-void MainSchedule::addLog( Schedule::Log &log )
+void MainSchedule::addLog( KPlato::Schedule::Log &log )
 {
+    Q_ASSERT( log.resource || log.node );
+#ifndef NDEBUG
+    if ( log.resource ) {
+        Q_ASSERT( manager()->project().findResource( log.resource->id() ) == log.resource );
+    } else if ( log.node ) {
+        Q_ASSERT( manager()->project().findNode( log.node->id() ) == log.node );
+    }
+#endif
     if ( log.phase == -1 && ! m_log.isEmpty() ) {
         log.phase = m_log.last().phase;
     }
@@ -1789,26 +1811,36 @@ void ScheduleManager::incProgress()
 void ScheduleManager::logAdded( Schedule::Log &log )
 {
     emit sigLogAdded( log );
-}
-
-void ScheduleManager::slotAddLog( KPlato::Schedule::Log log )
-{
-    if ( expected() ) {
-        //qDebug()<<"ScheduleManager::slotAddLog:"<<log;
-        expected()->addLog( log );
-        m_project.changed( this );
-    }
+    int row = expected()->logs().count() - 1;
+    emit logInserted( expected(), row, row );
 }
 
 void ScheduleManager::slotAddLog( const QList<KPlato::Schedule::Log> &log )
 {
-    if ( expected() ) {
-        foreach ( const KPlato::Schedule::Log &l, log ) {
-            expected()->addLog( const_cast<KPlato::Schedule::Log&>( l ) );
+    if ( expected() && ! log.isEmpty() ) {
+        int first = expected()->logs().count();
+        int last = first + log.count() - 1;
+        foreach ( KPlato::Schedule::Log l, log ) {
+            expected()->addLog( l );
         }
-        m_project.changed( this );
     }
 }
+
+QMap< int, QString > ScheduleManager::phaseNames() const
+{
+    if ( expected() ) {
+        return expected()->phaseNames();
+    }
+    return QMap<int, QString>();
+}
+
+void ScheduleManager::setPhaseNames( const QMap<int, QString> &phasenames )
+{
+    if ( expected() ) {
+        expected()->setPhaseNames( phasenames );
+    }
+}
+
 
 bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
 {
@@ -2078,9 +2110,9 @@ void MainSchedule::printDebug( const QString& _indent )
 
 } //namespace KPlato
 
-QDebug &operator<<( QDebug &dbg, const KPlato::Schedule::Log &log )
+QDebug operator<<( QDebug dbg, const KPlato::Schedule::Log &log )
 {
-    dbg.nospace()<<"Schedule::Log:"<<log.formatMsg();
+    dbg.nospace()<<"Schedule::Log: "<<log.formatMsg();
     return dbg.space();
 }
 
