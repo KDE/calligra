@@ -3,6 +3,7 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -94,14 +95,15 @@ public:
 
     virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
     virtual void tableEndFound();
+    virtual void bookmarkStart( const wvWare::BookmarkData& data );
+    virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
 #ifdef IMAGE_IMPORT
     virtual void inlineObjectFound(const wvWare::PictureData& data);
-#endif // IMAGE_IMPORT
     virtual void floatingObjectFound(unsigned int globalCP );
+#endif // IMAGE_IMPORT
 
-    virtual void bookmarkStart( const wvWare::BookmarkData& data );
-    virtual void bookmarkEnd( const wvWare::BookmarkData& data );
+    ///////// Our own interface
 
     /**
      * Paragraph can be present in {header, footer, footnote, endnote,
@@ -109,17 +111,19 @@ public:
      */
     KoXmlWriter* currentWriter() const;
 
-    ///////// Our own interface, also used by processStyles
+    // Provide access to private attributes for our handlers
+    Document* document() const { return m_document; }
+    void setDocument(Document * document) { m_document = document; }
 
-    Document* document() const {
-        return m_document;
-    }
-    void setDocument(Document * document) {
-        m_document = document;
-    }
-    bool pageNumberFieldType() const {
-        return m_fieldType == 33;
-    }
+    void set_breakBeforePage(bool val) { m_breakBeforePage = val; }
+    bool breakBeforePage(void) const { return m_breakBeforePage; }
+
+    int sectionNumber(void) const { return m_sectionNumber; }
+    QString getFont(unsigned fc) const;
+
+    //TODO: let's try to solve all list related stuff locally in TextHandler
+    bool listIsOpen(); //tell us whether a list is open
+    void closeList();
 
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
@@ -129,18 +133,6 @@ public:
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
     //void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle,
     //const wvWare::Style* style, bool writeContentTags, QString namedStyle);
-
-    //TODO: let's try to solve all list related stuff locally in TextHandler
-    bool listIsOpen(); //tell us whether a list is open
-    void closeList();
-
-    KoGenStyles* m_mainStyles; //this is for collecting most of the styles
-    int m_sectionNumber;
-    QString getFont(unsigned fc) const;
-
-    // Provide access to private attributes for our handlers
-    void set_breakBeforePage(bool val) { m_breakBeforePage = val; }
-    bool breakBeforePage(void) const { return m_breakBeforePage; }
 
     // Communication with Document, without having to know about Document
 signals:
@@ -161,14 +153,20 @@ protected:
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
 
 private:
+    KoGenStyles* m_mainStyles; //this is for collecting most of the styles
+
     // The document owning this text handler.
     Document* m_document;
 
     wvWare::SharedPtr<wvWare::Parser> m_parser;
+
     QString m_listSuffixes[9]; // The suffix for every list level seen so far
     QDomElement m_framesetElement;
+    int m_sectionNumber;  // number of sections processed
+    int m_tocNumber;      // number of TOC fields processed
     int m_footNoteNumber; // number of footnote _vars_ written out
-    int m_endNoteNumber; // number of endnote _vars_ written out
+    int m_endNoteNumber;  // number of endnote _vars_ written out
+
     //int m_textStyleNumber; //number of styles created for text family
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
@@ -256,13 +254,13 @@ private:
     //save/restore for processing field (very similar to the wv2 method)
     struct fld_State
     {
-        fld_State(int type, bool inside, bool afterSep, bool hyperLink, bool bkmkRef,
+        fld_State(int type, bool inside, bool afterSep, bool hyperLink, QString url,
                   QString inst, QString result, QString stlName, KoXmlWriter* writer, QBuffer* buf) :
         type(type),
         inside(inside),
         afterSeparator(afterSep),
         hyperLinkActive(hyperLink),
-        bkmkRefActive(bkmkRef),
+        hyperLinkUrl(url),
         instructions(inst),
         result(result),
         styleName(stlName),
@@ -273,7 +271,7 @@ private:
         bool inside;
         bool afterSeparator;
         bool hyperLinkActive;
-        bool bkmkRefActive;
+        QString hyperLinkUrl;
         QString instructions;
         QString result;
         QString styleName;
@@ -316,15 +314,15 @@ private:
     bool m_insideField;
     bool m_fieldAfterSeparator;
     bool m_hyperLinkActive;
-    bool m_bkmkRefActive;
 
     //writer and buffer used to place bookmark elements into the field result,
     //if bookmarks are not to be supported by your field type, use m_fldResult
     KoXmlWriter* m_fldWriter;
     QBuffer* m_fldBuffer;
 
-    QString m_fldInst;   //stores field instructions
-    QString m_fldResult; //stores the field result
+    QString m_hyperLinkUrl; //stores the location (bookmark/URL) to jump to
+    QString m_fldInst;      //stores field instructions
+    QString m_fldResult;    //stores the field result
 
     //KoGenStyle name for the <text:span> element encapsulating the field
     //result (if applicable)

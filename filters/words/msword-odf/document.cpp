@@ -496,9 +496,9 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     //NOTE: The first master-page-name has to be "Standard", kword has hard
     //coded that the value of fo:backgroud-color from this style is used for
     //the entire frameset.
-    if (m_textHandler->m_sectionNumber > 1) {
+    if (m_textHandler->sectionNumber() > 1) {
         masterStyleName.append("MP");
-        masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
+        masterStyleName.append(QString::number(m_textHandler->sectionNumber()));
     } else {
         masterStyleName.append("Standard");
     }
@@ -518,8 +518,8 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
         masterStyleName.clear();
         masterStyleName.append("First_Page");
 
-        if (m_textHandler->m_sectionNumber > 1) {
-            masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
+        if (m_textHandler->sectionNumber() > 1) {
+            masterStyleName.append(QString::number(m_textHandler->sectionNumber()));
         }
         masterStyle->addAttribute("style:display-name", masterStyleName);
         masterStyle->addAttribute("style:next-style-name", m_masterPageName_list.last());
@@ -1114,7 +1114,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
 
 bool Document::headersChanged(void) const
 {
-    int n = m_textHandler->m_sectionNumber - 1;
+    int n = m_textHandler->sectionNumber() - 1;
     bool ret = false;
 
     if (n < m_headersMask.size()) {

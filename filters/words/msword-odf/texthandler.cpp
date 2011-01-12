@@ -3,6 +3,7 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -61,9 +62,10 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
     : m_mainStyles(0)
-    , m_sectionNumber(0)
     , m_document(0)
     , m_parser(parser)
+    , m_sectionNumber(0)
+    , m_tocNumber(0)
     , m_footNoteNumber(0)
     , m_endNoteNumber(0)
     , m_index(0)
@@ -86,7 +88,6 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_insideField(false)
     , m_fieldAfterSeparator(false)
     , m_hyperLinkActive(false)
-    , m_bkmkRefActive(false)
     , m_fldWriter(0)
     , m_fldBuffer(0)
     , m_fldStart(0)
@@ -648,7 +649,7 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
     if (m_hyperLinkActive) {
         writer->startElement("draw:a");
         writer->addAttribute("xlink:type", "simple");
-        writer->addAttribute("xlink:href", QUrl(m_fldInst).toEncoded());
+        writer->addAttribute("xlink:href", QUrl(m_hyperLinkUrl).toEncoded());
     }
 
     //signal that we have a picture, provide the bodyWriter to GraphicsHandler
@@ -694,7 +695,7 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     if (m_hyperLinkActive) {
         writer->startElement("draw:a");
         writer->addAttribute("xlink:type", "simple");
-        writer->addAttribute("xlink:href", QUrl(m_fldInst).toEncoded());
+        writer->addAttribute("xlink:href", QUrl(m_hyperLinkUrl).toEncoded());
     }
 
     saveState();
@@ -990,6 +991,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         break;
     case TOC:
         kDebug(30513) << "processing field... TOC";
+        m_tocNumber++;
         break;
     case AUTHOR:
     case EDITTIME:
@@ -1019,40 +1021,135 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
     //process field instructions if required
     switch (m_fieldType) {
     case HYPERLINK:
-        inst->remove(" HYPERLINK ");
-        inst->replace('\"', "");
+    {
+        // Syntax: HYPERLINK field-argument [ switches ]
+        //
+        // When selected, causes control to jump to the location specified by
+        // text in field-argument.  That location can be a bookmark or a URL.
+        //
+        // Field Value: None
+        //
+        // TODO:
+        //
+        // \o field-argument - Text in this switch's field-argument specifies
+        // the ScreenTip text for the hyperlink.  field-argument which
+        // specifies a location in the file, such as bookmark, where this
+        // hyperlink will jump.
+        //
+        // \t field-argument - Text in this switch's field-argument specifies
+        // the target to which the link should be redirected.  Use this switch
+        // to link from a frames page to a page that you want to appear outside
+        // of the frames page.  The permitted values for text are: _top, whole
+        // page (the default); _self, same frame; _blank, new window; _parent,
+        // parent frame
+        //
+        // \m - Appends coordinates to a hyperlink for a server-side image map.
+        // \n - Causes the destination site to be opened in a new window.
 
-        //field-argument which specifies a location in the file, such as
-        //bookmark, where this hyperlink will jump
-        if (inst->contains("\\l")) {
-            inst->remove("\\l");
-            m_bkmkRefActive = true;
-	} else {
-            m_hyperLinkActive = true;
+        // \l field-argument - Text in this switch's field-argument specifies a
+        // location in the file, such as a bookmark, where to jump.
+        QRegExp rx("\\s\\\\l\\s\"(\\S+)\"");
+        m_hyperLinkActive = true;
+
+        if (rx.indexIn(*inst) >= 0) {
+            m_hyperLinkUrl = rx.cap(1).prepend("#");
+        } else {
+            rx = QRegExp("HYPERLINK\\s\"(\\S+)\"");
+            if (rx.indexIn(*inst) >= 0) {
+                m_hyperLinkUrl = rx.cap(1);
+            } else {
+                kDebug(30513) << "HYPERLINK: missing URL";
+            }
         }
-        *inst = inst->trimmed();
-	break;
+        break;
+    }
+    case PAGEREF:
+    {
+        // Syntax: PAGEREF field-argument [ switches ]
+        //
+        // Inserts the number of the page containing the bookmark specified by
+        // text in field-argument for a cross-reference.
+        //
+        // Field Value: The number of the page containing the bookmark.
+        //
+        // TODO:
+        //
+        // \p - Causes the field to display its position relative to the source
+        // bookmark.  If the PAGEREF field is on the same page as the bookmark,
+        // it omits "on page #" and returns "above" or "below" only.  If the
+        // PAGEREF field is not on the same page as the bookmark, the string
+        // "on page #" is used.
+
+        // \h - Creates a hyperlink to the bookmarked paragraph.
+        QRegExp rx("PAGEREF\\s(\\S+)");
+        if (rx.indexIn(*inst) >= 0) {
+            m_hyperLinkUrl = rx.cap(1);
+        }
+        rx = QRegExp("\\s\\\\h\\s");
+        if (rx.indexIn(*inst) >= 0) {
+            m_hyperLinkActive = true;
+            m_hyperLinkUrl.prepend("#");
+        }
+        break;
+    }
     case TOC:
     {
-        QList<QString> styleNames = document()->tocStyleNames();
-        *inst = inst->trimmed();
-
+        // Syntax: TOC [ switches ]
+        //
+        // Field Value: The table of contents.
+        //
         // TODO:
-        // \a field-argument -
-        // \b field-argument -
-        // \c field-argument -
-        // \d field-argument -
-        // \f field-argument -
-        // \l field-argument -
-        // \s field-argument -
-        // \t field-argument -
+        //
+        // \a field-argument - Includes captioned items, but omits caption
+        // labels and numbers.  The identifier designated by text in this
+        // switch's field-argument corresponds to the caption label.
+        //
+        // \b field-argument - Includes entries only from the portion of the
+        // document marked by the bookmark named by text in this switch's
+        // field-argument.
+        //
+        // \c field-argument - Includes figures, tables, charts, and other
+        // items that are numbered by a SEQ field.  The sequence identifier
+        // designated by text in this switch's field-argument, which
+        // corresponds to the caption label, shall match the identifier in the
+        // corresponding SEQ field.
+        //
+        // \d field-argument - When used with \s, the text in this switch's
+        // field-argument defines the separator between sequence and page
+        // numbers.  The default separator is a hyphen (-).
+        //
+        // \f field-argument - Includes only those TC fields whose identifier
+        // exactly matches the text in this switch's field-argument (which is
+        // typically a letter).
+        //
+        // \l field-argument - Includes TC fields that assign entries to one of
+        // the levels specified by text in this switch's field-argument as a
+        // range having the form startLevel-endLevel, where startLevel and
+        // endLevel are integers, and startLevel has a value equal-to or
+        // less-than endLevel.  TC fields that assign entries to lower levels
+        // are skipped.
+        //
+        // \s field-argument - For entries numbered with a SEQ field , adds a
+        // prefix to the page number.  The prefix depends on the type of entry.
+        // Text in this switch's field-argument shall match the identifier in
+        // the SEQ field.
+        //
+        // \t field-argument - Uses paragraphs formatted with styles other than
+        // the built-in heading styles.  Text in this switch's field-argument
+        // specifies those styles as a set of comma-separated doublets, with
+        // each doublet being a comma-separated set of style name and table of
+        // content level.  \t can be combined with \o.
+        //
         // \u - Uses the applied paragraph outline level.
         // \w - Preserves tab entries within table entries.
         // \x - Preserves newline characters within table entries.
         // \z - Hides tab leader and page numbers in Web layout view.
 
+        QRegExp rx;
+        QList<QString> styleNames = document()->tocStyleNames();
+
         // \h - Makes the table of contents entries hyperlinks.
-        QRegExp rx("\\s\\\\h\\s");
+        rx = QRegExp("\\s\\\\h\\s");
         bool hyperlink = false;
 
         if (rx.indexIn(*inst) >= 0) {
@@ -1074,12 +1171,11 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         // specified range of built-in heading styles.  Headings in a style
         // range are specified by text in field-argument.  If no heading range
         // is specified, all heading levels used in the document are listed.
-	rx = QRegExp("^TOC\\s\\\\o\\s\"(\\S+)\"");
-        QStringList levels_lst;
+        rx = QRegExp("\\s\\\\o\\s\"(\\S+)\"");
         uint levels;
 
         if (rx.indexIn(*inst) >= 0) {
-            levels_lst = rx.cap(1).split("-");
+            QStringList levels_lst = rx.cap(1).split("-");
             levels = levels_lst.last().toUInt();
         } else {
             levels = styleNames.size();
@@ -1098,7 +1194,7 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         //NOTE: text:table-of-content and text:index-body closed by fieldEnd f.
         KoXmlWriter* writer = currentWriter();
         writer->startElement("text:table-of-content");
-        writer->addAttribute("text:name", "_TOC0");
+        writer->addAttribute("text:name", QString().setNum(m_tocNumber).prepend("_TOC"));
         writer->startElement("text:table-of-content-source");
         writer->addAttribute("text:index-scope", "document");
         writer->addAttribute("text:outline-level", levels);
@@ -1110,22 +1206,34 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         for (uint i = 0; i < levels; i++) {
             writer->startElement("text:table-of-content-entry-template");
             writer->addAttribute("text:outline-level", i + 1);
-            writer->addAttribute("text:style-name", styleNames[i]);
+            writer->addAttribute("text:style-name", styleNames[i].toUtf8());
             if (hyperlink) {
                 writer->startElement("text:index-entry-link-start");
+                //TODO: Not provided in the TOC field, reuse from character
+                //styles used in text:index-body, processed later.
+//                 writer->addAttribute("text:style-name", "");
                 writer->endElement(); //text:index-entry-link-start
             }
+
+            //NOTE: Represents the chapter number where an index entry is located.
+//             writer->startElement("text:index-entry-chapter");
+//             writer->endElement(); //text:index-entry-chapter
+
             writer->startElement("text:index-entry-text");
             writer->endElement(); //text:index-entry-text
             if (pgnum) {
                 if (separator.isEmpty()) {
                     writer->startElement("text:index-entry-tab-stop");
-                    //TODO: not provided in the TOC field, reuse from paragraph
-                    //styles used in index-body
+                    //TODO: Not provided in the TOC field, reuse from paragraph
+                    //styles used in text:index-body, processed later.
                     writer->addAttribute("style:leader-char", ".");
                     //NOTE: "right" is the only option available
                     writer->addAttribute("style:type", "right");
                     writer->endElement(); //text:index-entry-tab-stop
+                } else {
+                    writer->startElement("text:index-entry-span");
+                    writer->addTextNode(separator);
+                    writer->endElement(); //text:index-entry-span
                 }
                 writer->startElement("text:index-entry-page-number");
                 writer->endElement(); //text:index-entry-page-number
@@ -1178,20 +1286,11 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         break;
     }
     case HYPERLINK:
+    {
         if (m_hyperLinkActive) {
             writer.startElement("text:a", false);
             writer.addAttribute("xlink:type", "simple");
-            writer.addAttribute("xlink:href", QUrl(*inst).toEncoded());
-            writer.startElement("text:span");
-            writer.addAttribute("text:style-name", m_fldStyleName.toUtf8());
-            writer.addCompleteElement(m_fldBuffer);
-            writer.endElement(); //text:span
-            writer.endElement(); //text:a
-        }
-        else if (m_bkmkRefActive) {
-            writer.startElement("text:bookmark-ref", false);
-            writer.addAttribute("text:reference-format","text");
-            writer.addAttribute("text:ref-name", *inst);
+            writer.addAttribute("xlink:href", QUrl(m_hyperLinkUrl).toEncoded());
             writer.startElement("text:span");
             writer.addAttribute("text:style-name", m_fldStyleName.toUtf8());
             writer.addCompleteElement(m_fldBuffer);
@@ -1200,6 +1299,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         }
         //else a frame or drawing shape acting as a hyperlink already processed
         break;
+    }
     case MACROBUTTON:
     {
         //TODO: nested fields support required
@@ -1220,24 +1320,28 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.endElement();
         break;
     case PAGEREF:
-        //NOTE: reference-format can be: chapter, direction, page, text
-        if (inst->contains("PAGEREF")) {
-            inst->remove("PAGEREF");
+    {
+        if (m_hyperLinkActive) {
+            writer.startElement("text:a", false);
+            writer.addAttribute("xlink:type", "simple");
+            writer.addAttribute("xlink:href", QUrl(m_hyperLinkUrl).toEncoded());
+            writer.startElement("text:span");
+            writer.addAttribute("text:style-name", m_fldStyleName.toUtf8());
+            writer.addCompleteElement(m_fldBuffer);
+            writer.endElement(); //text:span
+            writer.endElement(); //text:a
+        } else {
+            writer.startElement("text:bookmark-ref");
+            writer.addAttribute("text:reference-format", "page");
+            writer.addAttribute("text:ref-name", QUrl(m_hyperLinkUrl).toEncoded());
+            writer.startElement("text:span");
+            writer.addAttribute("text:style-name", m_fldStyleName.toUtf8());
+            writer.addCompleteElement(m_fldBuffer);
+            writer.endElement(); //text:span
+            writer.endElement(); //text:bookmark-ref
         }
-        //we should create a hyperlink to the bookmarked paragraph
-        if (inst->contains("\\h")) {
-            inst->remove("\\h");
-            tmp = "text";
-	} else {
-            tmp = "page";
-        }
-        *inst = inst->trimmed();
-        writer.startElement("text:bookmark-ref");
-        writer.addAttribute("text:reference-format", tmp);
-        writer.addAttribute("text:ref-name", *inst);
-        writer.addTextNode(m_fldResult);
-        writer.endElement();
         break;
+    }
     case SYMBOL:
     {
         //TODO: nested fields support required
@@ -1306,9 +1410,9 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     m_insideField = false;
     m_fieldAfterSeparator = false;
     m_hyperLinkActive = false;
-    m_bkmkRefActive = false;
 
     //cleanup
+    m_hyperLinkUrl.clear();
     m_fldInst.clear();
     m_fldResult.clear();
     m_fldStyleName.clear();
@@ -1366,8 +1470,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             KoXmlWriter* writer = m_fldWriter;
 	    switch (m_fieldType) {
 	    case PAGEREF:
-                //no bookmark support
-                m_fldResult.append(newText);
+                writer->addTextNode(newText);
                 break;
             case HYPERLINK:
                 if (newText == "\t") {
@@ -1901,14 +2004,14 @@ void KWordTextHandler::restoreState()
 void KWordTextHandler::fld_saveState()
 {
     m_fldStates.push(fld_State(m_fieldType, m_insideField, m_fieldAfterSeparator, m_hyperLinkActive,
-                               m_bkmkRefActive, m_fldInst, m_fldResult, m_fldStyleName, m_fldWriter, m_fldBuffer));
+                               m_hyperLinkUrl, m_fldInst, m_fldResult, m_fldStyleName, m_fldWriter, m_fldBuffer));
 
     //reset fields related variables
     m_fieldType = UNSUPPORTED;
     m_insideField = false;
     m_fieldAfterSeparator = false;
     m_hyperLinkActive = false;
-    m_bkmkRefActive = false;
+    m_hyperLinkUrl.clear();
     m_fldInst.clear();
     m_fldResult.clear();
     m_fldStyleName.clear();
@@ -1941,7 +2044,7 @@ void KWordTextHandler::fld_restoreState()
     m_insideField = s.inside;
     m_fieldAfterSeparator = s.afterSeparator;
     m_hyperLinkActive = s.hyperLinkActive;
-    m_bkmkRefActive = s.bkmkRefActive;
+    m_hyperLinkUrl = s.hyperLinkUrl;
     m_fldInst = s.instructions;
     m_fldResult = s.result;
     m_fldStyleName = s.styleName;
