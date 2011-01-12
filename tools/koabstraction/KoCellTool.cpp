@@ -266,7 +266,7 @@ void KoCellTool::keyPressEvent(QKeyEvent *event)
        event->key() == Qt::Key_Right ||
        event->key() == Qt::Key_Enter ||
        event->key() == Qt::Key_Return) {
-        Cell cell(selection()->activeSheet(), selection()->cursor());
+        Calligra::Tables::Cell cell(selection()->activeSheet(), selection()->cursor());
         m_externalEditor->setPlainText(cell.displayText());
 //        cancelCurrentStrategy();
 //        createEditor(false,false);
@@ -277,7 +277,7 @@ void KoCellTool::mousePressEvent(KoPointerEvent* event)
 {
     Calligra::Tables::CellTool::mousePressEvent(event);
     if (selection()->isSingular()) {
-        Cell cell(selection()->activeSheet(), selection()->cursor());
+        Calligra::Tables::Cell cell(selection()->activeSheet(), selection()->cursor());
         m_externalEditor->setPlainText(cell.displayText());
     } else {
         m_externalEditor->setPlainText("");
