@@ -1997,6 +1997,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
         BREAK_IF_END_OF(CURRENT_EL)
     }
 
+#if defined(PPTXXMLSLIDEREADER_CPP) or defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
+    // Where there is a hyperlink, hlink value should be used by default
+    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+    QString valTransformed = m_context->colorMap.value("hlink");
+    colorItem = m_context->themes->colorScheme.value(valTransformed);
+    if (colorItem) {
+        m_currentColor = colorItem->value();
+    }
+#endif
+
     READ_EPILOGUE
 }
 

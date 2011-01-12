@@ -559,6 +559,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 
     d->phType = "body";
 
+    m_currentCombinedBulletProperties.clear();
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -699,6 +701,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
 
     d->phType = "title";
 
+    m_currentCombinedBulletProperties.clear();
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -750,6 +754,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 
     d->phType = "other";
 
+    m_currentCombinedBulletProperties.clear();
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -768,6 +774,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
         }
     }
 
+    saveCurrentListStyles();
+    saveCurrentStyles();
+
+    // Seems like subtitle by default should point to othertyles, maybe also sldnum etc too.
+    d->phType = "subTitle";
     saveCurrentListStyles();
     saveCurrentStyles();
 
@@ -1213,6 +1224,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     // There is a hardcoded behaviour in MSoffice that ctrTitle refers also to "title"
     if (d->phType == "ctrTitle") {
         d->phType = "title";
+    }
+
+    // There seems to be some buggy ooxml software which creates documents with shapes with this ID
+    // It seems to be faulty and points to "body"
+    if (d->phIdx == "4294967295" && d->phType.isEmpty()) {
+        d->phIdx.clear();
+        d->phType = "body";
     }
 
     readNext();
@@ -1781,35 +1799,41 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
 {
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
-    if (!d->phIdx.isEmpty()) {
+    QString id = d->phIdx;
+    QString type = d->phType;
+    if (id.isEmpty() && type.isEmpty()) {
+        type = "other";
+    }
+
+    if (!id.isEmpty()) {
         // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[d->phIdx][copyLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[id][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[d->phType][copyLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[type][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         // Perhaps we need to get the properties from layout
         // Slidelayout needs to be here in case there was also lvl1ppr defined
         if (m_context->type == Slide || m_context->type == SlideLayout) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phType][copyLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[type][copyLevel],
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
-    if (!d->phIdx.isEmpty()) {
+    if (!id.isEmpty()) {
         // Perhaps we need to get the properties from layout
         // Slidelayout needs to be here in case there was also lvl1ppr defined
         if (m_context->type == Slide || m_context->type == SlideLayout) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phIdx][copyLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[id][copyLevel],
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
     // This line is needed in case slide defined it's own lvl1ppr
     if (m_context->type == Slide) {
-        QString slideIdentifier = d->phType + d->phIdx;
+        QString slideIdentifier = type + id;
 
         if (!slideIdentifier.isEmpty()) {
             MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.styles[slideIdentifier][copyLevel],
@@ -1840,9 +1864,15 @@ void PptxXmlSlideReader::inheritListStyles()
 {
     inheritDefaultListStyles();
 
+    QString id = d->phIdx;
+    QString type = d->phType;
+    if (id.isEmpty() && type.isEmpty()) {
+        type = "other";
+    }
+
     // Masterslide layer
-    if (!d->phType.isEmpty()) {
-        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[d->phType]);
+    if (!type.isEmpty()) {
+        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[type]);
         while (i.hasNext()) {
             i.next();
             if (i.value().isEmpty()) {
@@ -1853,8 +1883,8 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-    if (!d->phIdx.isEmpty()) {
-        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[d->phIdx]);
+    if (!id.isEmpty()) {
+        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[id]);
         while (i.hasNext()) {
             i.next();
             if (i.value().isEmpty()) {
@@ -1866,9 +1896,9 @@ void PptxXmlSlideReader::inheritListStyles()
         }
     }
     // Layout layer
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
-            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phType]);
+            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[type]);
             while (i.hasNext()) {
                 i.next();
                 if (i.value().isEmpty()) {
@@ -1880,9 +1910,9 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-    if (!d->phIdx.isEmpty()) {
+    if (!id.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
-            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phIdx]);
+            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[id]);
             while (i.hasNext()) {
                 i.next();
                 if (i.value().isEmpty()) {
@@ -1896,7 +1926,7 @@ void PptxXmlSlideReader::inheritListStyles()
     }
 
     if (m_context->type == Slide) {
-        QString slideIdentifier = d->phType + d->phIdx;
+        QString slideIdentifier = type + id;
 
         // Slide layer
         if (!slideIdentifier.isEmpty()) {
@@ -1944,11 +1974,6 @@ void PptxXmlSlideReader::inheritShapePosition()
                 props = m_context->slideMasterProperties->shapesMap.value(d->phType);
                 if (!props) {
                     props = m_context->slideMasterProperties->shapesMap.value(d->phIdx);
-                }
-                if (!props) {
-                    // In case there was nothing for this even in slideMaster, let's default to 'body' text position
-                    // Spec doesn't say anything about this case, but in reality there are such documents
-                    props = m_context->slideMasterProperties->shapesMap.value("body");
                 }
             }
         }
@@ -2040,37 +2065,43 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
+    QString id = d->phIdx;
+    QString type = d->phType;
+    if (id.isEmpty() && type.isEmpty()) {
+        type = "other";
+    }
+
     // Idx must be first for masterslide, due to initial use case
     // e.g. bodyList -> shape with type body id 1, if we come to shape and type is first
     // it will be overwritten by values from 1, and since it's the first time, it will be initialized to
     // to empty
-    if (!d->phIdx.isEmpty()) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[d->phIdx][listLevel],
+    if (!id.isEmpty()) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[id][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
     }
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[d->phType][listLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[type][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
     }
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             // pass properties from master to slide
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[d->phType][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[type][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
         }
     }
-    if (!d->phIdx.isEmpty()) {
+    if (!id.isEmpty()) {
         if (m_context->type == Slide || m_context->type == SlideLayout) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[d->phIdx][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[id][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
         }
     }
     if (m_context->type == Slide) {
-        QString slideIdentifier = d->phType + d->phIdx;
+        QString slideIdentifier = type + id;
 
         if (!slideIdentifier.isEmpty()) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[d->phType][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[slideIdentifier][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
         }
     }
