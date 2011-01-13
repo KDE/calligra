@@ -2976,10 +2976,8 @@ void MainWindow::collaborateDialog()
     }
     else
     {
-        if (m_collabDialog) {
-            delete m_collabDialog;
-            m_collabDialog = 0;
-        }
+        delete m_collabDialog;
+        m_collabDialog = 0;
         m_collabDialog = new CollabDialog(this);
 
         connect(m_collabDialog, SIGNAL(accepted()), this, SLOT(startCollaborating()));
