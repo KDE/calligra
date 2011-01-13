@@ -71,5 +71,5 @@ Icon=flow
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-DocPath=flow/index.html
 X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.koffice.flow
+X-DBUS-ServiceName=org.calligra-suite.flow
 Categories=Qt;KDE;Office;
