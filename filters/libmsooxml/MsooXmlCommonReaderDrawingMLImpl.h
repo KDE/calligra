@@ -3280,7 +3280,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
     }
 
     if (gradRotation) {
-        int angle = -m_gradAngle.toInt() / 60000 / 180 * M_PI;
+        qreal angle = -m_gradAngle.toDouble() / 60000.0 / 180.0 * M_PI;
         m_currentGradientStyle.addAttribute("svg:x1", QString("%1%").arg(50 - 50 * cos(angle)));
         m_currentGradientStyle.addAttribute("svg:y1", QString("%1%").arg(50 + 50 * sin(angle)));
         m_currentGradientStyle.addAttribute("svg:x2", QString("%1%").arg(50 + 50 * cos(angle)));

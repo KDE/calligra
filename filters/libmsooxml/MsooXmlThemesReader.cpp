@@ -56,7 +56,7 @@ void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphic
 {
     KoGenStyle gradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
 
-    int angle = -m_gradAngle.toInt() / 60000 / 180 * M_PI;
+    qreal angle = -m_gradAngle.toDouble() / 60000.0 / 180.0 * M_PI;
     gradientStyle.addAttribute("svg:x1", QString("%1%").arg(50 - 50 * cos(angle)));
     gradientStyle.addAttribute("svg:y1", QString("%1%").arg(50 + 50 * sin(angle)));
     gradientStyle.addAttribute("svg:x2", QString("%1%").arg(50 + 50 * cos(angle)));
@@ -875,7 +875,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
             QVector<qreal> satModifiers;
             QVector<int> alphaModifiers;
             QVector<int> gradPositions;
-            QString gradAngle = "270";
+            QString gradAngle = "16200000"; // 270 degrees as the default, that is, from up to down
             while (!atEnd()) {
                 readNext();
                 if (isEndElement() && qualifiedName() == "a:gradFill") {
