@@ -3256,7 +3256,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
 
  Child Elements:
  - [done] gsLst (Gradient Stop List) §20.1.8.37
- - lin (Linear Gradient Fill) §20.1.8.41
+ - [done] lin (Linear Gradient Fill) §20.1.8.41
  - path (Path Gradient) §20.1.8.46
  - tileRect (Tile Rectangle) §20.1.8.59
 
@@ -3267,23 +3267,58 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_gradRotation = false;
-    m_gradPosition = 0;
-
-    TRY_READ_ATTR_WITHOUT_NS(rotWithShape)
-    if (rotWithShape == "1") {
-        m_gradRotation = true;
-    }
+    bool gradRotation = false;
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gsLst)
+            else if (qualifiedName() == "a:lin") {
+                gradRotation = true;
+                TRY_READ(lin)
+            }
             SKIP_UNKNOWN
         }
     }
 
+    if (gradRotation) {
+        int angle = -m_gradAngle.toInt() / 60000 / 180 * M_PI;
+        m_currentGradientStyle.addAttribute("svg:x1", QString("%1%").arg(50 - 50 * cos(angle)));
+        m_currentGradientStyle.addAttribute("svg:y1", QString("%1%").arg(50 + 50 * sin(angle)));
+        m_currentGradientStyle.addAttribute("svg:x2", QString("%1%").arg(50 + 50 * cos(angle)));
+        m_currentGradientStyle.addAttribute("svg:y2", QString("%1%").arg(50 - 50 * sin(angle)));
+    } else {
+        m_currentGradientStyle.addAttribute("svg:x1", "50%");
+        m_currentGradientStyle.addAttribute("svg:y1", "0%");
+        m_currentGradientStyle.addAttribute("svg:x2", "50%");
+        m_currentGradientStyle.addAttribute("svg:y2", "100%");
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lin
+//! linear gradient fill
+/*
+ Parent Elements:
+ - [done] gradFill (§20.1.8.33)
+
+ Child Elements:
+ - none
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lin()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS_INTO(ang, m_gradAngle)
+
+qDebug() << "INLIN";
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3301,11 +3336,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 {
     READ_PROLOGUE
-
-    m_currentGradientStyle.addAttribute("svg:x1", "0%");
-    m_currentGradientStyle.addAttribute("svg:x2", "0%");
-    m_currentGradientStyle.addAttribute("svg:y1", "0%");
-    m_currentGradientStyle.addAttribute("svg:y2", "100%");
 
     int index = 0;
 

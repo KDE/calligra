@@ -105,7 +105,8 @@ KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
-bool m_gradRotation; //whether there should be angle with gradient
+QString m_gradAngle;
+KoFilter::ConversionStatus read_lin();
 KoFilter::ConversionStatus read_gsLst();
 KoFilter::ConversionStatus read_gs();
 KoFilter::ConversionStatus read_prstGeom();
