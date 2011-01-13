@@ -24,6 +24,8 @@
 #ifndef MSOOXMLVMLREADER_IMPL_H
 #define MSOOXMLVMLREADER_IMPL_H
 
+#include <math.h>
+
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "v"
 
@@ -744,7 +746,8 @@ static QString convertToEnhancedPath(const QString& source)
     QString returnedString;
     ConversionState state = CommandExpected;
     enum CommandType {MoveCommand, LineCommand, RelativeLineCommand, QuadEllipXCommand, QuadEllipYCommand,
-                      CurveCommand, RelativeCurveCommand, ArcCommand, ArcToCommand, ArcCommandClock, ArcToCommandClock};
+                      CurveCommand, RelativeCurveCommand, ArcCommand, ArcToCommand, ArcCommandClock, ArcToCommandClock,
+                      AngleEllipseToCommand, AngleEllipseCommand};
     CommandType lastCommand = MoveCommand;
     QString firstMoveX, firstMoveY, currentX, currentY;
     bool argumentMove;
@@ -777,7 +780,7 @@ static QString convertToEnhancedPath(const QString& source)
                 returnedString += " Z";
             }
             else if (command == 'e') {
-                //returnedString += " N";
+                returnedString += " N";
                 state = CommandExpected;
             }
             else if (command == 'c') {
@@ -791,9 +794,11 @@ static QString convertToEnhancedPath(const QString& source)
                 parsedString = parsedString.mid(1);
                 if (subcommand == 'x') {
                     lastCommand = QuadEllipXCommand;
+                    returnedString += " X";
                 }
                 else {
                     lastCommand = QuadEllipYCommand;
+                    returnedString += " Y";
                 }
             }
             else if (command == 'a') {
@@ -801,9 +806,19 @@ static QString convertToEnhancedPath(const QString& source)
                 parsedString = parsedString.mid(1);
                 if (subcommand == 'r') {
                     lastCommand = ArcCommand;
+                    returnedString += " B";
+                }
+                else if (subcommand == 'e') {
+                    lastCommand = AngleEllipseToCommand;
+                    returnedString += " T";
+                }
+                else if (subcommand == 'l') {
+                    lastCommand = AngleEllipseCommand;
+                    returnedString += " U";
                 }
                 else {
                     lastCommand = ArcToCommand;
+                    returnedString += " A";
                 }
             }
             else if (command == 'w') {
@@ -811,9 +826,11 @@ static QString convertToEnhancedPath(const QString& source)
                 parsedString = parsedString.mid(1);
                 if (subcommand == 'r') {
                     lastCommand = ArcCommandClock;
+                    returnedString += " V";
                 }
                 else {
                     lastCommand = ArcToCommandClock;
+                    returnedString += " W";
                 }
             }
             else if (command == 'n') {
@@ -928,8 +945,6 @@ static QString convertToEnhancedPath(const QString& source)
                 currentX = QString("%1").arg(first.toInt() + currentX.toInt());
                 currentY = QString("%1").arg(second.toInt() + currentY.toInt());
                 returnedString += QString(" L %1 %2").arg(currentX).arg(currentY);
-                currentX = first;
-                currentY = second;
                 while (true) {
                     first = getArgument(parsedString, false, argumentMove);
                     if (argumentMove) {
@@ -943,27 +958,10 @@ static QString convertToEnhancedPath(const QString& source)
                 }
                 break;
             case QuadEllipXCommand:
-                first = getArgument(parsedString, true, argumentMove);
-                second = getArgument(parsedString, false, argumentMove);
-                returnedString += QString(" X %1 %2").arg(first).arg(second);
-                currentX = first;
-                currentY = second;
-                while (true) {
-                    first = getArgument(parsedString, false, argumentMove);
-                    if (argumentMove) {
-                        state = CommandExpected;
-                        break;
-                    }
-                    second = getArgument(parsedString, false, argumentMove);
-                    currentX = first;
-                    currentY = second;
-                    returnedString += QString(" %1 %2").arg(first).arg(second);
-                }
-                break;
             case QuadEllipYCommand:
                 first = getArgument(parsedString, true, argumentMove);
                 second = getArgument(parsedString, false, argumentMove);
-                returnedString += QString(" Y %1 %2").arg(first).arg(second);
+                returnedString += QString(" %1 %2").arg(first).arg(second);
                 currentX = first;
                 currentY = second;
                 while (true) {
@@ -979,101 +977,8 @@ static QString convertToEnhancedPath(const QString& source)
                 }
                 break;
             case ArcCommand:
-                first = getArgument(parsedString, true, argumentMove);
-                second = getArgument(parsedString, false, argumentMove);
-                third = getArgument(parsedString, false, argumentMove);
-                fourth = getArgument(parsedString, false, argumentMove);
-                fifth = getArgument(parsedString, false, argumentMove);
-                sixth = getArgument(parsedString, false, argumentMove);
-                seventh = getArgument(parsedString, false, argumentMove);
-                eighth = getArgument(parsedString, false, argumentMove);
-                currentX = seventh;
-                currentY = eighth;
-                returnedString += QString(" B %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
-                    arg(fifth).arg(sixth).arg(seventh).arg(eighth);
-                while (true) {
-                    first = getArgument(parsedString, false, argumentMove);
-                    if (argumentMove) {
-                        state = CommandExpected;
-                        break;
-                    }
-                    second = getArgument(parsedString, false, argumentMove);
-                    third = getArgument(parsedString, false, argumentMove);
-                    fourth = getArgument(parsedString, false, argumentMove);
-                    fifth = getArgument(parsedString, false, argumentMove);
-                    sixth = getArgument(parsedString, false, argumentMove);
-                    seventh = getArgument(parsedString, false, argumentMove);
-                    eighth = getArgument(parsedString, false, argumentMove);
-                    currentX = seventh;
-                    currentY = eighth;
-                    returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
-                        arg(fifth).arg(sixth).arg(seventh).arg(eighth);
-                }
-                break;
             case ArcToCommand:
-                first = getArgument(parsedString, true, argumentMove);
-                second = getArgument(parsedString, false, argumentMove);
-                third = getArgument(parsedString, false, argumentMove);
-                fourth = getArgument(parsedString, false, argumentMove);
-                fifth = getArgument(parsedString, false, argumentMove);
-                sixth = getArgument(parsedString, false, argumentMove);
-                seventh = getArgument(parsedString, false, argumentMove);
-                eighth = getArgument(parsedString, false, argumentMove);
-                currentX = seventh;
-                currentY = eighth;
-                returnedString += QString(" A %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
-                    arg(fifth).arg(sixth).arg(seventh).arg(eighth);
-                while (true) {
-                    first = getArgument(parsedString, false, argumentMove);
-                    if (argumentMove) {
-                        state = CommandExpected;
-                        break;
-                    }
-                    second = getArgument(parsedString, false, argumentMove);
-                    third = getArgument(parsedString, false, argumentMove);
-                    fourth = getArgument(parsedString, false, argumentMove);
-                    fifth = getArgument(parsedString, false, argumentMove);
-                    sixth = getArgument(parsedString, false, argumentMove);
-                    seventh = getArgument(parsedString, false, argumentMove);
-                    eighth = getArgument(parsedString, false, argumentMove);
-                    currentX = seventh;
-                    currentY = eighth;
-                    returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
-                        arg(fifth).arg(sixth).arg(seventh).arg(eighth);
-                }
-                break;
             case ArcCommandClock:
-                first = getArgument(parsedString, true, argumentMove);
-                second = getArgument(parsedString, false, argumentMove);
-                third = getArgument(parsedString, false, argumentMove);
-                fourth = getArgument(parsedString, false, argumentMove);
-                fifth = getArgument(parsedString, false, argumentMove);
-                sixth = getArgument(parsedString, false, argumentMove);
-                seventh = getArgument(parsedString, false, argumentMove);
-                eighth = getArgument(parsedString, false, argumentMove);
-                currentX = seventh;
-                currentY = eighth;
-                returnedString += QString(" V %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
-                    arg(fifth).arg(sixth).arg(seventh).arg(eighth);
-                while (true) {
-                    first = getArgument(parsedString, false, argumentMove);
-                    if (argumentMove) {
-                        state = CommandExpected;
-                        break;
-                    }
-                    second = getArgument(parsedString, false, argumentMove);
-                    third = getArgument(parsedString, false, argumentMove);
-                    fourth = getArgument(parsedString, false, argumentMove);
-                    fifth = getArgument(parsedString, false, argumentMove);
-                    sixth = getArgument(parsedString, false, argumentMove);
-                    seventh = getArgument(parsedString, false, argumentMove);
-                    eighth = getArgument(parsedString, false, argumentMove);
-                    currentX = seventh;
-                    currentY = eighth;
-                    returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
-                        arg(fifth).arg(sixth).arg(seventh).arg(eighth);
-                }
-                break;
             case ArcToCommandClock:
                 first = getArgument(parsedString, true, argumentMove);
                 second = getArgument(parsedString, false, argumentMove);
@@ -1085,7 +990,7 @@ static QString convertToEnhancedPath(const QString& source)
                 eighth = getArgument(parsedString, false, argumentMove);
                 currentX = seventh;
                 currentY = eighth;
-                returnedString += QString(" W %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
                     arg(fifth).arg(sixth).arg(seventh).arg(eighth);
                 while (true) {
                     first = getArgument(parsedString, false, argumentMove);
@@ -1104,6 +1009,37 @@ static QString convertToEnhancedPath(const QString& source)
                     currentY = eighth;
                     returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
                         arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                }
+                break;
+            case AngleEllipseToCommand:
+            case AngleEllipseCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                // These are most likely wrong, spec does not mention which units the angle uses
+                // nor how the angle should be interpreted
+                currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
+                currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
+                returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
+                    currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth);
                 }
                 break;
             }
