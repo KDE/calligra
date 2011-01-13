@@ -1874,8 +1874,7 @@ bool MainWindow::openDocuments(const KoAbstractApplicationOpenDocumentArguments&
 
     if (documentType() == PresentationDocument) {
         //code related to the button previews
-        if (m_storeButtonPreview)
-            delete m_storeButtonPreview;
+        delete m_storeButtonPreview;
         m_storeButtonPreview = new StoreButtonPreview(document(), view());
         QObject::connect(m_storeButtonPreview, SIGNAL(goToPage(int)), this, SLOT(goToPage(int)));
     }
@@ -1935,10 +1934,8 @@ void MainWindow::closeDocument()
     fontStyleFrameDestructor();
     formatFrameDestructor();
 
-    if (m_slidingmotiondialog) {
-        delete m_slidingmotiondialog;
-        m_slidingmotiondialog = 0;
-    }
+    delete m_slidingmotiondialog;
+    m_slidingmotiondialog = 0;
 
     m_viewNumber++;
 }
@@ -2826,10 +2823,8 @@ void MainWindow::setUpSpreadEditorToolBar()
 {
     if (documentType() != SpreadsheetDocument)
         return;
-    if (m_spreadEditToolBar) {
-        delete m_spreadEditToolBar;
-        m_spreadEditToolBar=0;
-    }
+    delete m_spreadEditToolBar;
+    m_spreadEditToolBar=0;
     m_spreadEditToolBar = new QToolBar();
     m_spreadEditToolBar->setIconSize(QSize(48,48));
     addToolBar(Qt::BottomToolBarArea,m_spreadEditToolBar);
@@ -2845,40 +2840,28 @@ void MainWindow::setUpSpreadEditorToolBar()
 
     m_spreadEditToolBar->insertWidget(m_ui->actionCut, cellTool()->externalEditor()->thisWidget());
 
-    if(m_addAction) {
-        delete m_addAction;
-        m_addAction=0;
-    }
+    delete m_addAction;
+    m_addAction=0;
     m_addAction= new QAction(this);
     m_addAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Plus.png"));
-    if(m_subtractAction) {
-        delete m_subtractAction;
-        m_subtractAction=0;
-    }
+    delete m_subtractAction;
+    m_subtractAction=0;
     m_subtractAction= new QAction(this);
     m_subtractAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Subtract.png"));
-    if(m_multiplyAction) {
-        delete m_multiplyAction;
-        m_multiplyAction=0;
-    }
+    delete m_multiplyAction;
+    m_multiplyAction=0;
     m_multiplyAction= new QAction(this);
     m_multiplyAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Multiply.png"));
-    if(m_divideAction) {
-        delete m_divideAction;
-        m_divideAction=0;
-    }
+    delete m_divideAction;
+    m_divideAction=0;
     m_divideAction= new QAction(this);
     m_divideAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Divide.png"));
-    if(m_percentageAction) {
-        delete m_percentageAction;
-        m_percentageAction=0;
-    }
+    delete m_percentageAction;
+    m_percentageAction=0;
     m_percentageAction= new QAction(this);
     m_percentageAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Percentage.png"));
-    if(m_equalsAction) {
-        delete m_equalsAction;
-        m_equalsAction=0;
-    }
+    delete m_equalsAction;
+    m_equalsAction=0;
     m_equalsAction= new QAction(this);
     m_equalsAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Equal.png"));
 
@@ -2889,10 +2872,8 @@ void MainWindow::setUpSpreadEditorToolBar()
     m_spreadEditToolBar->addAction(m_percentageAction);
     m_spreadEditToolBar->addAction(m_equalsAction);
 
-    if(m_signalMapper) {
-        delete m_signalMapper;
-        m_signalMapper=0;
-    }
+    delete m_signalMapper;
+    m_signalMapper=0;
     m_signalMapper= new QSignalMapper(this);
     m_signalMapper->setMapping(m_addAction,QString("+"));
     m_signalMapper->setMapping(m_subtractAction,QString("-"));
