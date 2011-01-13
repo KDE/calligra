@@ -65,9 +65,7 @@ CalendarToolWidget::~CalendarToolWidget()
 
 bool CalendarToolWidget::buildDatePickerFrame()
 {
-    if (m_datePicker) {
-        delete m_datePicker; //destroyed signal is connected to datePickerDeleted()
-    }
+    delete m_datePicker; //destroyed signal is connected to datePickerDeleted()
 
     m_datePicker = new KDatePicker();
 
