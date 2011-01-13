@@ -7252,6 +7252,19 @@ struct PAP : public Shared {
      */
     DCS dcs;
 
+    /**
+     * An unsigned 8-bit integer value that specifies the outline level of the
+     * paragraph.  This value MUST be one of the following.
+     *
+     * 0x0 - 0x8
+     * The value is the zero-based outline level that this paragraph is in.
+     * 0x9
+     * The paragraph at any outline level; instead, the paragraph is body text.
+     *
+     * This MUST be ignored if the paragraph has an istd that is greater than
+     * or equal to 0x1 and less than or equal to 0x9.  By default, paragraphs
+     * are body text, and are therefore not in any outline level.
+     */
     S8 lvl;
 
     S8 fBiDi;

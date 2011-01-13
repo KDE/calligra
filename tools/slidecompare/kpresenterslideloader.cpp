@@ -34,9 +34,7 @@ KPresenterSlideLoader::~KPresenterSlideLoader() {
     close();
 }
 void KPresenterSlideLoader::close() {
-    if (m_doc) {
-        delete m_doc;
-    }
+    delete m_doc;
     m_doc = 0;
     version++;
     emit slidesChanged();

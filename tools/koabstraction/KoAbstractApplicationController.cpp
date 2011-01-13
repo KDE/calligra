@@ -420,10 +420,8 @@ void KoAbstractApplicationController::closeDocument()
         m_doc = 0;
         delete m_view;
         m_view = 0;
-        if (m_controller) {
-            delete m_controller;
-            m_controller = 0;
-        }
+        delete m_controller;
+        m_controller = 0;
         break;
     case SpreadsheetDocument:
         KoToolManager::instance()->removeCanvasController(m_controller);
@@ -445,10 +443,8 @@ void KoAbstractApplicationController::closeDocument()
         delete m_view;
         m_view = 0;
         m_editor=0;
-        if (m_controller) {
-            delete m_controller;
-            m_controller = 0;
-        }
+        delete m_controller;
+        m_controller = 0;
     }
 
     setCentralWidget(0);

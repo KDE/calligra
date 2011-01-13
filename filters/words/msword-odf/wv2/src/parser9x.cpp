@@ -791,17 +791,22 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
         U32 bkmk_length = 0; //num. of CPs enclosed in a bookmark
 
         if ( m_footnotes ) {
-            m_footnotes->check(startCP);
+            if (m_subDocument == Main) {
+                m_footnotes->check(startCP);
+            }
 
             U32 nextFtn = m_footnotes->nextFootnote();
             U32 nextEnd = m_footnotes->nextEndnote();
             disruption = nextFtn < nextEnd ? nextFtn : nextEnd;
+
 #ifdef WV2_DEBUG_FOOTNOTES
             wvlog << "nextFtn=" << nextFtn << " nextEnd=" << nextEnd <<
                      " disruption=" << disruption << " length=" << length << endl;
 #endif
         } else if ( m_bookmarks ) {
-            m_bookmarks->check(startCP);
+            if (m_subDocument == Main) {
+                m_bookmarks->check(startCP);
+            }
 
             U32 nextBkf = m_bookmarks->nextBookmarkStart();
             U32 nextBkl = m_bookmarks->nextBookmarkEnd();
@@ -827,18 +832,17 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             //there's something to be processed before the bookmark
             if ( disLen != 0 ) {
                 processRun( chunk, chp, disLen, index, currentStart );
+                length -= disLen;
+                index += disLen;
             }
-            length -= disLen;
-            index += disLen;
 
             if ( m_footnotes ) {
+                //TODO: support for bookmarks in the number of a footnote
                 m_customFootnote = chunk.m_text.substr(index, length);
                 emitFootnote( m_customFootnote, disruption, chp, length );
                 m_customFootnote = "";
-
                 length = 0;
-                index += length;
-            } 
+            }
             else if ( m_bookmarks ) {
 
                 //TODO: There might a number of bookmarks to process at the
@@ -857,7 +861,6 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                     wvlog << "WARNING: bookmarks covering several chunks are not supported yet!";
                     processRun( chunk, chp, length, index, currentStart );
                     length = 0;
-                    index += length;
                 } else {
                     m_textHandler->bookmarkStart( data );
                     if (bkmk_length > 0) {
@@ -868,18 +871,9 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                     }
                 }
             }
-        }
-        else {
-            //common case, no disruption at all (or the end of a disrupted chunk)
-            //In case of custom footnotes do not add label to footnote body.
-            if ( m_footnotes ) {
-                if (m_customFootnote.find(chunk.m_text.substr(index, length), 0) != 0) {
-                    processRun( chunk, chp, length, index, currentStart );
-                }
-            } else {
-                processRun( chunk, chp, length, index, currentStart );
-            }
-            break;   // should be faster than messing with length...
+        } else {
+            processRun( chunk, chp, length, index, currentStart );
+            break; // should be faster than messing with length...
         }
     }
 }
@@ -990,8 +984,10 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const W
 #endif
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
-    if ( ok )
-        m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
+    if ( ok ) {
+        m_textHandler->footnoteFound( data.type, characters, chp,
+                                      make_functor( *this, &Parser9x::parseFootnote, data ));
+    }
 }
 
 void Parser9x::emitBookmark( U32 globalCP )

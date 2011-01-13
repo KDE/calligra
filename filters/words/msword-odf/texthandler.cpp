@@ -787,6 +787,20 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
             //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
+
+        //NOTE: Applying a heading style, paragraph is probably a heading.
+        //MSWord outline level is ZERO based, whereas ODF has ONE based.
+        uint istd = paragraphProperties->pap().istd;
+        if ( (istd >= 0x1) && (istd <= 0x9) ) {
+            outlineLevel = paragraphProperties->pap().lvl;
+            if ( (outlineLevel >= 0x0) && (outlineLevel <= 0x8) ) {
+                isHeading = true;
+                outlineLevel++;
+            } else {
+                outlineLevel = 0;
+            }
+
+        }
     } else if (paragraphProperties->pap().ilfo > 0) {
 
         // We're in a list in the word document

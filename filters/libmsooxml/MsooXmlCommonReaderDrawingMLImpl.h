@@ -220,11 +220,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
     body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 #endif
-//todo        body->addAttribute("presentation:style-name", styleName);
-//! @todo for pptx: maybe use KoGenStyle::PresentationAutoStyle?
-    if (m_noFill) {
-        m_currentDrawStyle->addAttribute("style:fill", constNone);
-    }
 
     if (m_rot == 0) {
 #if defined(XLSXXMLDRAWINGREADER_CPP)
@@ -1172,7 +1167,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
     m_contentAvLstExists = false;
-    m_noFill = false;
     m_customPath = QString();
     m_customEquations = QString();
 
@@ -1199,13 +1193,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                     m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
                     m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
                     m_currentColor = QColor();
+                    if (m_currentAlpha > 0) {
+                        m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentAlpha));
+                    }
                 }
             }
             else if ( qualifiedName() == QLatin1String("a:ln") ) {
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
-                m_noFill = true;
+                m_currentDrawStyle->addAttribute("style:fill", constNone);
             }
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
@@ -3256,7 +3253,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
 
  Child Elements:
  - [done] gsLst (Gradient Stop List) §20.1.8.37
- - lin (Linear Gradient Fill) §20.1.8.41
+ - [done] lin (Linear Gradient Fill) §20.1.8.41
  - path (Path Gradient) §20.1.8.46
  - tileRect (Tile Rectangle) §20.1.8.59
 
@@ -3267,23 +3264,56 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_gradRotation = false;
-    m_gradPosition = 0;
-
-    TRY_READ_ATTR_WITHOUT_NS(rotWithShape)
-    if (rotWithShape == "1") {
-        m_gradRotation = true;
-    }
+    bool gradRotation = false;
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gsLst)
+            else if (qualifiedName() == "a:lin") {
+                gradRotation = true;
+                TRY_READ(lin)
+            }
             SKIP_UNKNOWN
         }
     }
 
+    if (gradRotation) {
+        qreal angle = -m_gradAngle.toDouble() / 60000.0 / 180.0 * M_PI;
+        m_currentGradientStyle.addAttribute("svg:x1", QString("%1%").arg(50 - 50 * cos(angle)));
+        m_currentGradientStyle.addAttribute("svg:y1", QString("%1%").arg(50 + 50 * sin(angle)));
+        m_currentGradientStyle.addAttribute("svg:x2", QString("%1%").arg(50 + 50 * cos(angle)));
+        m_currentGradientStyle.addAttribute("svg:y2", QString("%1%").arg(50 - 50 * sin(angle)));
+    } else {
+        m_currentGradientStyle.addAttribute("svg:x1", "50%");
+        m_currentGradientStyle.addAttribute("svg:y1", "0%");
+        m_currentGradientStyle.addAttribute("svg:x2", "50%");
+        m_currentGradientStyle.addAttribute("svg:y2", "100%");
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lin
+//! linear gradient fill
+/*
+ Parent Elements:
+ - [done] gradFill (§20.1.8.33)
+
+ Child Elements:
+ - none
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lin()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS_INTO(ang, m_gradAngle)
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3301,11 +3331,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 {
     READ_PROLOGUE
-
-    m_currentGradientStyle.addAttribute("svg:x1", "0%");
-    m_currentGradientStyle.addAttribute("svg:x2", "0%");
-    m_currentGradientStyle.addAttribute("svg:y1", "0%");
-    m_currentGradientStyle.addAttribute("svg:y2", "100%");
 
     int index = 0;
 

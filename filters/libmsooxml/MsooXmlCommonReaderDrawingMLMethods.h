@@ -105,7 +105,8 @@ KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
-bool m_gradRotation; //whether there should be angle with gradient
+QString m_gradAngle;
+KoFilter::ConversionStatus read_lin();
 KoFilter::ConversionStatus read_gsLst();
 KoFilter::ConversionStatus read_gs();
 KoFilter::ConversionStatus read_prstGeom();
@@ -236,9 +237,6 @@ QVector<GroupProp> m_svgProp; //! value of the parent
 bool m_flipH; //! set by read_xfrm()
 bool m_flipV; //! set by read_xfrm()
 int m_rot; //! set by read_xfrm()
-
-//! true if no fill should be applied for element; used e.g. by pic:spPr/a:noFill elem.
-bool m_noFill;
 
 QString m_xlinkHref; //!< set by read_blip()
 QString m_cNvPrId; //!< set by read_cNvPr()
