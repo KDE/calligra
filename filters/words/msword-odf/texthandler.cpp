@@ -1442,7 +1442,6 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 
     //reset
     delete m_fld;
-    m_fld = new fld_State();
 
     m_fldEnd++;
 
@@ -1450,6 +1449,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     if (!m_fldStates.empty()) {
         fld_restoreState();
     } else {
+        m_fld = new fld_State();
         QList<QString>* list = &m_fld_snippets;
         while (!list->isEmpty()) {
             //add writer content to m_paragraph as a runOfText with no text style
