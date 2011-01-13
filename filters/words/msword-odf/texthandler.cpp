@@ -84,12 +84,7 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_listLevelStyleRequired(false)
     , m_currentListDepth(-1)
     , m_currentListID(0)
-    , m_fieldType(UNSUPPORTED)
-    , m_insideField(false)
-    , m_fieldAfterSeparator(false)
-    , m_hyperLinkActive(false)
-    , m_fldWriter(0)
-    , m_fldBuffer(0)
+    , m_fld(new fld_State())
     , m_fldStart(0)
     , m_fldEnd(0)
 {
@@ -425,15 +420,15 @@ void KWordTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
     KoXmlWriter* writer;
     QBuffer buf;
 
-    if (!m_insideField) {
+    if (!m_fld->m_insideField) {
         buf.open(QIODevice::WriteOnly);
         writer = new KoXmlWriter(&buf);
     } else {
-        if (!m_fieldAfterSeparator) {
+        if (!m_fld->m_afterSeparator) {
             kWarning(30513) << "bookmark interfers with field instructions, omitting";
             return;
         } else {
-            writer = m_fldWriter;
+            writer = m_fld->m_writer;
         }
     }
     //get the name of the bookmark
@@ -454,7 +449,7 @@ void KWordTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
         writer->endElement();
     }
 
-    if (!m_insideField) {
+    if (!m_fld->m_insideField) {
         QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), 1);
         delete writer;
@@ -466,15 +461,15 @@ void KWordTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
     KoXmlWriter* writer;
     QBuffer buf;
 
-     if (!m_insideField) {
+     if (!m_fld->m_insideField) {
         buf.open(QIODevice::WriteOnly);
         writer = new KoXmlWriter(&buf);
     } else {
-        if (!m_fieldAfterSeparator) {
+        if (!m_fld->m_afterSeparator) {
             kWarning(30513) << "bookmark interfers with field instructions, omitting";
             return;
         } else {
-            writer = m_fldWriter;
+            writer = m_fld->m_writer;
         }
     }
 
@@ -491,7 +486,7 @@ void KWordTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
         writer->endElement();
     }
 
-    if (!m_insideField) {
+    if (!m_fld->m_insideField) {
         QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), 1);
         delete writer;
@@ -632,7 +627,7 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
     Q_ASSERT(m_paragraph);
 
     //ignore if field instructions are processed 
-    if (m_insideField && !m_fieldAfterSeparator) {
+    if (m_fld->m_insideField && !m_fld->m_afterSeparator) {
         kWarning(30513) << "Warning: Object located in field instractions, Ignoring!";
         return;
     }
@@ -646,18 +641,18 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
     KoXmlWriter* writer = m_drawingWriter;
 
     //frame or drawing shape acting as a hyperlink
-    if (m_hyperLinkActive) {
+    if (m_fld->m_hyperLinkActive) {
         writer->startElement("draw:a");
         writer->addAttribute("xlink:type", "simple");
-        writer->addAttribute("xlink:href", QUrl(m_hyperLinkUrl).toEncoded());
+        writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
     //signal that we have a picture, provide the bodyWriter to GraphicsHandler
     emit inlineObjectFound(data, m_drawingWriter);
 
-    if (m_hyperLinkActive) {
+    if (m_fld->m_hyperLinkActive) {
         writer->endElement();
-        m_hyperLinkActive = false;
+        m_fld->m_hyperLinkActive = false;
     }
 
     //now add content to our current paragraph
@@ -678,7 +673,7 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     Q_ASSERT(m_paragraph);
 
     //ignore if field instructions are processed
-    if (m_insideField && !m_fieldAfterSeparator) {
+    if (m_fld->m_insideField && !m_fld->m_afterSeparator) {
         kWarning(30513) << "Warning: Object located in field instractions, Ignoring!";
         return;
     }
@@ -692,19 +687,19 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     KoXmlWriter* writer = m_drawingWriter;
 
     //frame or drawing shape acting as a hyperlink
-    if (m_hyperLinkActive) {
+    if (m_fld->m_hyperLinkActive) {
         writer->startElement("draw:a");
         writer->addAttribute("xlink:type", "simple");
-        writer->addAttribute("xlink:href", QUrl(m_hyperLinkUrl).toEncoded());
+        writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
     saveState();
     emit floatingObjectFound(globalCP, m_drawingWriter);
     restoreState();
 
-    if (m_hyperLinkActive) {
+    if (m_fld->m_hyperLinkActive) {
         writer->endElement();
-        m_hyperLinkActive = false;
+        m_fld->m_hyperLinkActive = false;
     }
 
     //now add content to our current paragraph
@@ -969,20 +964,17 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     kDebug(30513) << "fld->flt:" << fld->flt << "(" << hex << fld->flt << ")";
 
     //nested field
-    if (m_insideField) {
+    if (m_fld->m_insideField) {
         fld_saveState();
+    } else {
+	delete m_fld;
     }
 
-    m_fieldType = fld->flt;
-    m_insideField = true;
-    m_fieldAfterSeparator = false;
-
-    m_fldBuffer = new QBuffer();
-    m_fldBuffer->open(QIODevice::WriteOnly);
-    m_fldWriter = new KoXmlWriter(m_fldBuffer);
+    m_fld = new fld_State((fldType)fld->flt);
+    m_fld->m_insideField = true;
 
     //check to see if we can process this field type or not
-    switch (m_fieldType) {
+    switch (m_fld->m_type) {
     case AUTHOR:
         break;
     case EQ:
@@ -1005,7 +997,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         break;
     case REF:
         kWarning(30513) << "Warning: unsupported field (REF)";
-        m_fieldType = UNSUPPORTED;
+        m_fld->m_type = UNSUPPORTED;
         break;
     case SUBJECT:
     case TITLE:
@@ -1024,8 +1016,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kWarning(30513) << "Warning: processing only a subset of field instructions!";
         break;
     default:
-        kWarning(30513) << "Warning: unrecognized field type" << m_fieldType << ", ignoring!";
-        m_fieldType = UNSUPPORTED;
+        kWarning(30513) << "Warning: unrecognized field type" << m_fld->m_type << ", ignoring!";
+        m_fld->m_type = UNSUPPORTED;
         break;
     }
     m_fldStart++;
@@ -1034,11 +1026,11 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/)
 {
     kDebug(30513) ;
-    m_fieldAfterSeparator = true;
-    QString* inst = &m_fldInst;
+    m_fld->m_afterSeparator = true;
+    QString* inst = &m_fld->m_instructions;
 
     //process field instructions if required
-    switch (m_fieldType) {
+    switch (m_fld->m_type) {
     case HYPERLINK:
     {
         // Syntax: HYPERLINK field-argument [ switches ]
@@ -1068,14 +1060,14 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         // \l field-argument - Text in this switch's field-argument specifies a
         // location in the file, such as a bookmark, where to jump.
         QRegExp rx("\\s\\\\l\\s\"(\\S+)\"");
-        m_hyperLinkActive = true;
+        m_fld->m_hyperLinkActive = true;
 
         if (rx.indexIn(*inst) >= 0) {
-            m_hyperLinkUrl = rx.cap(1).prepend("#");
+            m_fld->m_hyperLinkUrl = rx.cap(1).prepend("#");
         } else {
             rx = QRegExp("HYPERLINK\\s\"(\\S+)\"");
             if (rx.indexIn(*inst) >= 0) {
-                m_hyperLinkUrl = rx.cap(1);
+                m_fld->m_hyperLinkUrl = rx.cap(1);
             } else {
                 kDebug(30513) << "HYPERLINK: missing URL";
             }
@@ -1102,12 +1094,12 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         // \h - Creates a hyperlink to the bookmarked paragraph.
         QRegExp rx("PAGEREF\\s(\\S+)");
         if (rx.indexIn(*inst) >= 0) {
-            m_hyperLinkUrl = rx.cap(1);
+            m_fld->m_hyperLinkUrl = rx.cap(1);
         }
         rx = QRegExp("\\s\\\\h\\s");
         if (rx.indexIn(*inst) >= 0) {
-            m_hyperLinkActive = true;
-            m_hyperLinkUrl.prepend("#");
+            m_fld->m_hyperLinkActive = true;
+            m_fld->m_hyperLinkUrl.prepend("#");
         }
         break;
     }
@@ -1295,10 +1287,10 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buf);
-    QString* inst = &m_fldInst;
+    QString* inst = &m_fld->m_instructions;
     QString tmp;
 
-    switch (m_fieldType) {
+    switch (m_fld->m_type) {
     case EQ:
     {
         //TODO: nested fields support required
@@ -1318,13 +1310,13 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     }
     case HYPERLINK:
     {
-        if (m_hyperLinkActive) {
+        if (m_fld->m_hyperLinkActive) {
             writer.startElement("text:a", false);
             writer.addAttribute("xlink:type", "simple");
-            writer.addAttribute("xlink:href", QUrl(m_hyperLinkUrl).toEncoded());
+            writer.addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
             writer.startElement("text:span");
-            writer.addAttribute("text:style-name", m_fldStyleName.toUtf8());
-            writer.addCompleteElement(m_fldBuffer);
+            writer.addAttribute("text:style-name", m_fld->m_styleName.toUtf8());
+            writer.addCompleteElement(m_fld->m_buffer);
             writer.endElement(); //text:span
             writer.endElement(); //text:a
         }
@@ -1356,22 +1348,22 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         break;
     case PAGEREF:
     {
-        if (m_hyperLinkActive) {
+        if (m_fld->m_hyperLinkActive) {
             writer.startElement("text:a", false);
             writer.addAttribute("xlink:type", "simple");
-            writer.addAttribute("xlink:href", QUrl(m_hyperLinkUrl).toEncoded());
+            writer.addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
             writer.startElement("text:span");
-            writer.addAttribute("text:style-name", m_fldStyleName.toUtf8());
-            writer.addCompleteElement(m_fldBuffer);
+            writer.addAttribute("text:style-name", m_fld->m_styleName.toUtf8());
+            writer.addCompleteElement(m_fld->m_buffer);
             writer.endElement(); //text:span
             writer.endElement(); //text:a
         } else {
             writer.startElement("text:bookmark-ref");
             writer.addAttribute("text:reference-format", "page");
-            writer.addAttribute("text:ref-name", QUrl(m_hyperLinkUrl).toEncoded());
+            writer.addAttribute("text:ref-name", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
             writer.startElement("text:span");
-            writer.addAttribute("text:style-name", m_fldStyleName.toUtf8());
-            writer.addCompleteElement(m_fldBuffer);
+            writer.addAttribute("text:style-name", m_fld->m_styleName.toUtf8());
+            writer.addCompleteElement(m_fld->m_buffer);
             writer.endElement(); //text:span
             writer.endElement(); //text:bookmark-ref
         }
@@ -1449,21 +1441,8 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     }
 
     //reset
-    m_fieldType = UNSUPPORTED;
-    m_insideField = false;
-    m_fieldAfterSeparator = false;
-    m_hyperLinkActive = false;
-
-    //cleanup
-    m_hyperLinkUrl.clear();
-    m_fldInst.clear();
-    m_fldResult.clear();
-    m_fldStyleName.clear();
-
-    delete m_fldWriter;
-    m_fldWriter = 0;
-    delete m_fldBuffer;
-    m_fldBuffer = 0;
+    delete m_fld;
+    m_fld = new fld_State();
 
     m_fldEnd++;
 
@@ -1496,17 +1475,17 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         return;
     }
 
-    if (m_insideField) {
+    if (m_fld->m_insideField) {
         //processing field instructions
-        if (!m_fieldAfterSeparator) {
-            switch (m_fieldType) {
+        if (!m_fld->m_afterSeparator) {
+            switch (m_fld->m_type) {
             case EQ:
             case HYPERLINK:
             case MACROBUTTON:
             case PAGEREF:
             case SYMBOL:
             case TOC:
-                m_fldInst.append(newText);
+                m_fld->m_instructions.append(newText);
                 break;
             default:
                 kDebug(30513) << "Ignoring field instructions!";
@@ -1515,8 +1494,8 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         }
         //processing the field result
         else {
-            KoXmlWriter* writer = m_fldWriter;
-	    switch (m_fieldType) {
+            KoXmlWriter* writer = m_fld->m_writer;
+	    switch (m_fld->m_type) {
 	    case PAGEREF:
                 writer->addTextNode(newText);
                 break;
@@ -1548,8 +1527,8 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             //styles related information.  Reuse the addRunOfText function.
 
             //create a style for the <text:span> element (if applicable)
-            if (m_fldStyleName.isEmpty()) {
-                m_fldStyleName = m_paragraph->createTextStyle(chp, m_parser->styleSheet());
+            if (m_fld->m_styleName.isEmpty()) {
+                m_fld->m_styleName = m_paragraph->createTextStyle(chp, m_parser->styleSheet());
             }
             return;
         }
@@ -2050,20 +2029,10 @@ void KWordTextHandler::restoreState()
 
 void KWordTextHandler::fld_saveState()
 {
-    m_fldStates.push(fld_State(m_fieldType, m_insideField, m_fieldAfterSeparator, m_hyperLinkActive,
-                               m_hyperLinkUrl, m_fldInst, m_fldResult, m_fldStyleName, m_fldWriter, m_fldBuffer));
+    m_fldStates.push(m_fld);
 
     //reset fields related variables
-    m_fieldType = UNSUPPORTED;
-    m_insideField = false;
-    m_fieldAfterSeparator = false;
-    m_hyperLinkActive = false;
-    m_hyperLinkUrl.clear();
-    m_fldInst.clear();
-    m_fldResult.clear();
-    m_fldStyleName.clear();
-    m_fldWriter = 0;
-    m_fldBuffer = 0;
+    m_fld = 0;
 }
 
 void KWordTextHandler::fld_restoreState()
@@ -2073,28 +2042,17 @@ void KWordTextHandler::fld_restoreState()
         kWarning() << "Error: save/restore stack is corrupt!";
         return;
     }
-    fld_State s(m_fldStates.top());
-    m_fldStates.pop();
 
     //warn if pointers weren't reset properly, but restore state anyway
-    if (m_fldWriter != 0) {
-        kWarning() << "m_fldWriter pointer wasn't reset";
+    if (m_fld->m_writer != 0) {
+        kWarning() << "m_fld->m_writer pointer wasn't reset";
     }
-    m_fldWriter = s.writer;
-
-    if (m_fldBuffer != 0) {
-        kWarning() << "m_fldBuffer pointer wasn't reset";
+    if (m_fld->m_buffer != 0) {
+        kWarning() << "m_fld->m_buffer pointer wasn't reset";
     }
-    m_fldBuffer = s.buffer;
 
-    m_fieldType = s.type;
-    m_insideField = s.inside;
-    m_fieldAfterSeparator = s.afterSeparator;
-    m_hyperLinkActive = s.hyperLinkActive;
-    m_hyperLinkUrl = s.hyperLinkUrl;
-    m_fldInst = s.instructions;
-    m_fldResult = s.result;
-    m_fldStyleName = s.styleName;
+    m_fld = m_fldStates.top();
+    m_fldStates.pop();
 }
 
 #include "texthandler.moc"

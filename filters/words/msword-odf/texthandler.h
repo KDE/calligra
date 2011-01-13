@@ -251,41 +251,6 @@ private:
     //  Field related
     // ************************************************
 
-    //save/restore for processing field (very similar to the wv2 method)
-    struct fld_State
-    {
-        fld_State(int type, bool inside, bool afterSep, bool hyperLink, QString url,
-                  QString inst, QString result, QString stlName, KoXmlWriter* writer, QBuffer* buf) :
-        type(type),
-        inside(inside),
-        afterSeparator(afterSep),
-        hyperLinkActive(hyperLink),
-        hyperLinkUrl(url),
-        instructions(inst),
-        result(result),
-        styleName(stlName),
-        writer(writer),
-        buffer(buf) {}
-
-        int type;
-        bool inside;
-        bool afterSeparator;
-        bool hyperLinkActive;
-        QString hyperLinkUrl;
-        QString instructions;
-        QString result;
-        QString styleName;
-        KoXmlWriter* writer;
-        QBuffer* buffer;
-    };
-
-    std::stack<fld_State> m_fldStates;
-    void fld_saveState();
-    void fld_restoreState();
-
-    //storage for XML snippets of already processed fields
-    QList<QString> m_fld_snippets;
-
     //field type enumeration as defined in MS-DOC page 354/609
     enum fldType
     {
@@ -309,26 +274,70 @@ private:
         SHAPE = 0x5f
     };
 
-    //set to 0 for a field we can't handle, anything else is the field type
-    int m_fieldType;
+    //save/restore for processing field (very similar to the wv2 method)
+    struct fld_State
+    {
+        fld_State(fldType type = UNSUPPORTED) :
+            m_type(type),
+            m_insideField(false),
+            m_afterSeparator(false),
+            m_hyperLinkActive(false),
+            m_hyperLinkUrl(QString::null),
+            m_instructions(QString::null),
+            m_result(QString::null),
+            m_styleName(QString::null),
+            m_writer(0),
+            m_buffer(0)
+        {
+            m_buffer = new QBuffer();
+            m_buffer->open(QIODevice::WriteOnly);
+            m_writer = new KoXmlWriter(m_buffer);
+        }
 
-    //other field related variables
-    bool m_insideField;
-    bool m_fieldAfterSeparator;
-    bool m_hyperLinkActive;
+        ~fld_State()
+        {
+            delete m_writer;
+            m_writer = 0;
+            delete m_buffer;
+            m_buffer = 0;
+        }
 
-    //writer and buffer used to place bookmark elements into the field result,
-    //if bookmarks are not to be supported by your field type, use m_fldResult
-    KoXmlWriter* m_fldWriter;
-    QBuffer* m_fldBuffer;
+        //set to UNSUPPORTED for a field we can't handle, anything else is the field type
+        fldType m_type;
+        
+	//other field related variables
+        bool m_insideField;
+        bool m_afterSeparator;
+        bool m_hyperLinkActive;
+	
+	//stores the location (bookmark/URL) to jump to
+        QString m_hyperLinkUrl;
+        
+	//stores field instructions
+        QString m_instructions;
+        
+	//stores the field result
+        QString m_result;
+        
+	//KoGenStyle name for the <text:span> element encapsulating the field
+        //result (if applicable)
+        QString m_styleName;
+        
+	//writer and buffer used to place bookmark elements into the field result,
+        //if bookmarks are not to be supported by your field type, use m_result
+        KoXmlWriter* m_writer;
+        QBuffer* m_buffer;
+    };
 
-    QString m_hyperLinkUrl; //stores the location (bookmark/URL) to jump to
-    QString m_fldInst;      //stores field instructions
-    QString m_fldResult;    //stores the field result
+    std::stack<fld_State *> m_fldStates;
+    void fld_saveState();
+    void fld_restoreState();
 
-    //KoGenStyle name for the <text:span> element encapsulating the field
-    //result (if applicable)
-    QString m_fldStyleName;
+    //storage for XML snippets of already processed fields
+    QList<QString> m_fld_snippets;
+
+    // Current field.
+    fld_State *m_fld;
 
     //counters
     int m_fldStart;
