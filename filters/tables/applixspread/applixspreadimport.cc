@@ -28,6 +28,7 @@
 #include <math.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
+#include <tables/Util.h>
 
 K_PLUGIN_FACTORY(APPLIXSPREADImportFactory, registerPlugin<APPLIXSPREADImport>();)
 K_EXPORT_PLUGIN(APPLIXSPREADImportFactory("calligrafilters"))
@@ -55,6 +56,29 @@ QString APPLIXSPREADImport::nextLine(QTextStream & stream)
     }
     return s;
 }
+
+struct t_mycolor {
+    int r;
+    int g;
+    int b;
+
+    int c;
+    int m;
+    int y;
+    int k;
+};
+
+struct t_rc {
+    QStringList tabname;
+    QStringList rc;
+};
+
+// Store shared formula definitions
+struct t_sharedFormula {
+    int origRow;
+    int origColumn;
+    QString formula;
+};
 
 KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, const QByteArray& to)
 {
@@ -93,7 +117,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
     int  pos;
     QString  tabctr ;  // Tab control (current tab name)
     QStringList typefacetab;
-    QHash<QString, QString> sharedFormulas;
+    QHash<QString, t_sharedFormula> sharedFormulas;
 
     t_rc my_rc;
 
@@ -301,14 +325,19 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                     kError() << "Missing formula ID after" << mystr;
                 } else {
                     const QString key = formulaRefLine.mid(9);
-                    sharedFormulas.insert(key, mystr);
+                    t_sharedFormula sf;
+                    sf.origColumn = icol;
+                    sf.origRow = irow;
+                    sf.formula = mystr;
+                    sharedFormulas.insert(key, sf);
                 }
             } else if (contentType == '.') {
                 const QString key = mystr;
-                mystr = sharedFormulas.value(key);
+                const t_sharedFormula sf = sharedFormulas.value(key);
 
-                // TODO we need to adjust the formula! If it came from C1, with =A1+B1,
+                // adjust the formula: if it came from C1, with =A1+B1,
                 // and we're now in C3, then it needs to become =A3+B3, just like copy/paste would do.
+                mystr = Calligra::Tables::Util::adjustFormulaReference(sf.formula, sf.origRow, sf.origColumn, irow, icol);
             }
 
             /********************************************************************
