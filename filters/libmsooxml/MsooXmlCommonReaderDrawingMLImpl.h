@@ -220,11 +220,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
     body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 #endif
-//todo        body->addAttribute("presentation:style-name", styleName);
-//! @todo for pptx: maybe use KoGenStyle::PresentationAutoStyle?
-    if (m_noFill) {
-        m_currentDrawStyle->addAttribute("style:fill", constNone);
-    }
 
     if (m_rot == 0) {
 #if defined(XLSXXMLDRAWINGREADER_CPP)
@@ -1172,7 +1167,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
     m_contentAvLstExists = false;
-    m_noFill = false;
     m_customPath = QString();
     m_customEquations = QString();
 
@@ -1199,13 +1193,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                     m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
                     m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
                     m_currentColor = QColor();
+                    if (m_currentAlpha > 0) {
+                        m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentAlpha));
+                    }
                 }
             }
             else if ( qualifiedName() == QLatin1String("a:ln") ) {
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
-                m_noFill = true;
+                m_currentDrawStyle->addAttribute("style:fill", constNone);
             }
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
@@ -3315,8 +3312,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lin()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS_INTO(ang, m_gradAngle)
-
-qDebug() << "INLIN";
 
     readNext();
     READ_EPILOGUE

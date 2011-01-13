@@ -878,7 +878,10 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
             QString gradAngle = "270";
             while (!atEnd()) {
                 readNext();
-                if (isStartElement() && qualifiedName() == "a:lin") {
+                if (isEndElement() && qualifiedName() == "a:gradFill") {
+                    break;
+                }
+                else if (isStartElement() && qualifiedName() == "a:lin") {
                     attrs = attributes();
                     TRY_READ_ATTR_WITHOUT_NS(ang)
                     gradAngle = ang;
@@ -936,14 +939,8 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
                     }
                 }
             }
-            m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers, 
+            m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers,
                 satModifiers, alphaModifiers, gradPositions, gradAngle);
-            while (!atEnd()) {
-                readNext();
-                if (isEndElement() && qualifiedName() == element) {
-                    break;
-                }
-            }
         }
         // Commented out for now, until there's a nice implementation for duotone effect
         /*else if (element == "a:blipFill") {

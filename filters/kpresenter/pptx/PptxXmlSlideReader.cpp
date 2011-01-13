@@ -1802,7 +1802,7 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
     QString id = d->phIdx;
     QString type = d->phType;
     if (id.isEmpty() && type.isEmpty()) {
-        type = "other";
+        //type = "other"; // Commented out for now, as it seems these properties do not behave the same way
     }
 
     if (!id.isEmpty()) {
