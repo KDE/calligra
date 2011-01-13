@@ -136,10 +136,16 @@ void Footnotes97::check( U32 globalCP )
     while (nextFootnote() < globalCP) {
         ++( *m_footnoteRefIt );
         ++m_footnoteTxtIt;
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "Footnote skipped!";
+#endif
     }
 
     while (nextEndnote() < globalCP) {
         ++( *m_endnoteRefIt );
         ++m_endnoteTxtIt;
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "Endnote skipped!";
+#endif
     }
 }

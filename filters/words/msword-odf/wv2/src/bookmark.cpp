@@ -195,5 +195,8 @@ void Bookmarks::check( U32 globalCP )
         }
         ++( *m_startIt );
         ++m_nameIt;
+#ifdef WV2_DEBUG_BOOKMARK
+        wvlog << "Bookmark skipped!";
+#endif
     }
 }
