@@ -2971,7 +2971,7 @@ void MainWindow::collaborateDialog()
 {
     if(m_collab)
     {
-        QMessageBox::warning(this,"Collaborative Editing",QString("An active session already exists"),QMessageBox::Ok);
+        QMessageBox::warning(this,i18n("Collaborative Editing"),i18n("An active session already exists"),QMessageBox::Ok);
         return ;
     }
     else
