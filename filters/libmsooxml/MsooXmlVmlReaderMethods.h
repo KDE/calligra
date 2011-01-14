@@ -95,7 +95,8 @@ protected:
     int m_groupX;
     int m_groupY;
 
-    QString m_groupUnit; // pt, cm etc.
+    QString m_groupWidthUnit; // pt, cm etc.
+    QString m_groupHeightUnit;
     qreal m_real_groupWidth;
     qreal m_real_groupHeight;
 

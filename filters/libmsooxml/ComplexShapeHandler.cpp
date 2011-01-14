@@ -32,12 +32,15 @@ QString ComplexShapeHandler::defaultEquations()
     eqs += "<draw:equation draw:name=\"vc\" draw:formula=\"height / 2 \"/>";
     eqs += "<draw:equation draw:name=\"hc\" draw:formula=\"width / 2 \"/>";
     eqs += "<draw:equation draw:name=\"hd2\" draw:formula=\"height / 2 \"/>";
+    // Note, this is not defined, but is used
+    eqs += "<draw:equation draw:name=\"hd3\" draw:formula=\"height / 3 \"/>";
     eqs += "<draw:equation draw:name=\"hd4\" draw:formula=\"height / 4 \"/>";
     eqs += "<draw:equation draw:name=\"hd5\" draw:formula=\"height / 5 \"/>";
     eqs += "<draw:equation draw:name=\"hd6\" draw:formula=\"height / 6 \"/>";
     eqs += "<draw:equation draw:name=\"hd8\" draw:formula=\"height / 8 \"/>";
     eqs += "<draw:equation draw:name=\"ss\" draw:formula=\"min(width, height)\"/>";
     eqs += "<draw:equation draw:name=\"wd2\" draw:formula=\"width / 2 \"/>";
+    eqs += "<draw:equation draw:name=\"wd3\" draw:formula=\"width / 3 \"/>";
     eqs += "<draw:equation draw:name=\"wd4\" draw:formula=\"width / 4 \"/>";
     eqs += "<draw:equation draw:name=\"wd5\" draw:formula=\"width / 5 \"/>";
     eqs += "<draw:equation draw:name=\"wd6\" draw:formula=\"width / 6 \"/>";
@@ -332,6 +335,7 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
     pathEquations += QString("<draw:equation draw:name=\"ooxmlArc%1\" draw:formula=\"%2 + %3\"/>").
          arg(endAngleIndex).arg(stAng).arg(swAng);
 
+    /*
     // Try for T
     int centerXIndex = pathEquationIndex;
     ++pathEquationIndex;
@@ -366,8 +370,8 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
 
     oldX = QString("?ooxmlArc%1 + %2 * cos(?ooxmlArc%3 * 0.000000291)").arg(centerXIndex).arg(wR).arg(endAngleIndex);
     oldY = QString("?ooxmlArc%1 + %2 * sin(?ooxmlArc%3 * 0.000000291)").arg(centerYIndex).arg(hR).arg(endAngleIndex);
+    */
 
-/*
     // Try for W/A (commented out atm. T (above) seems to work better
     // x1, y1 marks the upper left corner
     int ellipseX1Index = pathEquationIndex;
@@ -424,7 +428,7 @@ QString ComplexShapeHandler::handle_arcTo(QXmlStreamReader* reader)
     }
     oldX = QString("?ooxmlArc%1").arg(arcEndX);
     oldY = QString("?ooxmlArc%1").arg(arcEndY);
-*/
+
     return path;
 }
 

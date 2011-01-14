@@ -30,13 +30,13 @@
 
 #include <klocalizedstring.h>
 
-NotifyDialog::NotifyDialog(QWidget *parent)
+NotifyDialog::NotifyDialog(const QString& messageText, QWidget *parent)
         : QDialog(parent),
         m_layout(0),
         m_label(0)
 {
     m_label = new QLabel(this);
-    m_label->setText(i18n("File type not supported"));
+    m_label->setText(messageText);
     m_layout = new QVBoxLayout(this);
     m_layout->addWidget(m_label);
     this->setLayout(m_layout);

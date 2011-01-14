@@ -33,7 +33,7 @@ FreeLayout::~FreeLayout() {
 
 QRectF FreeLayout::boundingBox() const {
   QRectF b = Layout::boundingBox();
-  qreal margin = qMin(200.0, 0.5 * (b.width() + b.height()) );
+  qreal margin = qMin<qreal>(200.0, 0.5 * (b.width() + b.height()) );
   return b.adjusted(-margin, -margin, margin, margin);
 }
 

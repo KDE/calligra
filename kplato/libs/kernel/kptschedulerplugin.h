@@ -152,6 +152,8 @@ public:
     int progress() const;
     QList<Schedule::Log> log();
 
+    QMap<int, QString> phaseNames() const;
+
     /// Save the @p project into @p document
     static void saveProject( Project *project, QDomDocument &document );
     /// Load the @p project from @p document

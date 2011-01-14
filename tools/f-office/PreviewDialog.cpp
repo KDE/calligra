@@ -79,6 +79,9 @@ PreviewWindow::PreviewWindow(KoDocument *doc, KoView *view, int currentPage, QLi
     {
         showThumbnail();
     }
+    QPushButton *insertSlide = new QPushButton("New Slide");
+    gridLayout->addWidget(insertSlide);
+    connect(insertSlide, SIGNAL(clicked()), this, SLOT(newSlide()));
 }
 
 void PreviewWindow::screenThumbnailClicked()

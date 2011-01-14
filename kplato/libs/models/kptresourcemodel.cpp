@@ -484,6 +484,9 @@ void ResourceItemModel::slotResourceInserted( const Resource *resource )
 {
     //kDebug()<<resource->name();
     Q_ASSERT( resource->parentGroup() == m_group );
+#ifdef NDEBUG
+    Q_UNUSED(resource)
+#endif
     endInsertRows();
     m_group = 0;
     emit layoutChanged(); //HACK to make the right view react! Bug in qt?
@@ -493,6 +496,9 @@ void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
 {
     //kDebug()<<resource->name();
     Q_ASSERT( m_resource == 0 );
+#ifdef NDEBUG
+    Q_UNUSED(resource)
+#endif
     m_resource = const_cast<Resource*>(resource);
     int row = index( resource ).row();
     beginRemoveRows( index( resource->parentGroup() ), row, row );
@@ -502,6 +508,9 @@ void ResourceItemModel::slotResourceRemoved( const Resource *resource )
 {
     //kDebug()<<resource->name();
     Q_ASSERT( resource == m_resource );
+#ifdef NDEBUG
+    Q_UNUSED(resource)
+#endif
     endRemoveRows();
     m_resource = 0;
 }
@@ -518,6 +527,9 @@ void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 {
     //kDebug()<<group->name();
     Q_ASSERT( group == m_group );
+#ifdef NDEBUG
+    Q_UNUSED(group)
+#endif
     endInsertRows();
     m_group = 0;
 }
@@ -535,6 +547,10 @@ void ResourceItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
 {
     //kDebug()<<group->name();
     Q_ASSERT( group == m_group );
+#ifdef NDEBUG
+    Q_UNUSED(group)
+#endif
+
     endRemoveRows();
     m_group = 0;
 }

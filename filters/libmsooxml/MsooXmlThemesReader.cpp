@@ -37,12 +37,18 @@
 
 #include <memory>
 
+#include <math.h>
+
+#ifndef M_PI
+#define M_PI 3.1415926535897932384626
+#endif
+
 using namespace MSOOXML;
 
 DrawingMLGradientFill::DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
-    QVector<int> alphaModifier, QVector<int> gradPositions)
+    QVector<int> alphaModifier, QVector<int> gradPositions, QString gradAngle)
     : m_shadeModifier(shadeModifier),m_tintModifier(tintModifier), m_satModifier(satModifier),
-     m_alphaModifier(alphaModifier), m_gradPosition(gradPositions)
+     m_alphaModifier(alphaModifier), m_gradPosition(gradPositions), m_gradAngle(gradAngle)
 {
 }
 
@@ -50,10 +56,11 @@ void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphic
 {
     KoGenStyle gradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
 
-    gradientStyle.addAttribute("svg:x1", "0%");
-    gradientStyle.addAttribute("svg:x2", "0%");
-    gradientStyle.addAttribute("svg:y1", "0%");
-    gradientStyle.addAttribute("svg:y2", "100%");
+    qreal angle = -m_gradAngle.toDouble() / 60000.0 / 180.0 * M_PI;
+    gradientStyle.addAttribute("svg:x1", QString("%1%").arg(50 - 50 * cos(angle)));
+    gradientStyle.addAttribute("svg:y1", QString("%1%").arg(50 + 50 * sin(angle)));
+    gradientStyle.addAttribute("svg:x2", QString("%1%").arg(50 + 50 * cos(angle)));
+    gradientStyle.addAttribute("svg:y2", QString("%1%").arg(50 - 50 * sin(angle)));
 
     int index = 0;
     while (index < m_alphaModifier.size()) {
@@ -868,62 +875,72 @@ KoFilter::ConversionStatus MsooXmlThemesReader::fillStyleReadHelper(int& index)
             QVector<qreal> satModifiers;
             QVector<int> alphaModifiers;
             QVector<int> gradPositions;
-            readNext(); // a:gsLst
+            QString gradAngle = "16200000"; // 270 degrees as the default, that is, from up to down
             while (!atEnd()) {
                 readNext();
-                if (isEndElement() && qualifiedName() == "a:gsLst") {
+                if (isEndElement() && qualifiedName() == "a:gradFill") {
                     break;
                 }
-                else if (isStartElement() && qualifiedName() == "a:gs") {
+                else if (isStartElement() && qualifiedName() == "a:lin") {
                     attrs = attributes();
-                    TRY_READ_ATTR_WITHOUT_NS(pos)
-                    int gradPosition = pos.toInt() / 1000;
-                    readNext();
-                    if (isEndElement() && qualifiedName() == "a:gs") {
-                        break;
-                    }
-                    else if (isStartElement() && qualifiedName() == "a:schemeClr") {
-                       qreal shadeModifier = 0;
-                       qreal tintModifier = 0;
-                       qreal satModifier = 0;
-                       int alphaModifier = 0;
-                       while (!atEnd()) {
-                           readNext();
-                           if (isEndElement() && qualifiedName() == "a:schemeClr") {
-                               break;
-                           }
-                           if (isStartElement()) {
-                               attrs = attributes();
-                               TRY_READ_ATTR_WITHOUT_NS(val)
-                               if (qualifiedName() == "a:tint") {
-                                   tintModifier = val.toInt()/100000.0;
-                               }
-                               else if (qualifiedName() == "a:shade") {
-                                   shadeModifier = val.toInt()/100000.0;
-                               }
-                               else if (qualifiedName() == "a:satMod") {
-                                   satModifier = val.toDouble()/100000.0;
-                               }
-                               else if (qualifiedName() == "a:alpha") {
-                                  alphaModifier = val.toInt()/1000;
-                               }
-                           }
-                       }
-                       gradPositions.push_back(gradPosition);
-                       tintModifiers.push_back(tintModifier);
-                       shadeModifiers.push_back(shadeModifier);
-                       satModifiers.push_back(satModifier),
-                       alphaModifiers.push_back(alphaModifier);
+                    TRY_READ_ATTR_WITHOUT_NS(ang)
+                    gradAngle = ang;
+                }
+                else if (isStartElement() && qualifiedName() == "a:gsLst") {
+                    while (!atEnd()) {
+                        readNext();
+                        if (isEndElement() && qualifiedName() == "a:gsLst") {
+                            break;
+                        }
+                        else if (isStartElement() && qualifiedName() == "a:gs") {
+                            attrs = attributes();
+                            TRY_READ_ATTR_WITHOUT_NS(pos)
+                            int gradPosition = pos.toInt() / 1000;
+                            qreal shadeModifier = 0;
+                            qreal tintModifier = 0;
+                            qreal satModifier = 0;
+                            int alphaModifier = 0;
+                            while (!atEnd()) {
+                                readNext();
+                                if (isEndElement() && qualifiedName() == "a:gs") {
+                                    break;
+                                }
+                                else if (isStartElement() && qualifiedName() == "a:schemeClr") {
+                                     while (!atEnd()) {
+                                         readNext();
+                                         if (isEndElement() && qualifiedName() == "a:schemeClr") {
+                                             break;
+                                         }
+                                         else if (isStartElement()) {
+                                             attrs = attributes();
+                                             TRY_READ_ATTR_WITHOUT_NS(val)
+                                             if (qualifiedName() == "a:tint") {
+                                                 tintModifier = val.toInt()/100000.0;
+                                             }
+                                             else if (qualifiedName() == "a:shade") {
+                                                 shadeModifier = val.toInt()/100000.0;
+                                             }
+                                             else if (qualifiedName() == "a:satMod") {
+                                                 satModifier = val.toDouble()/100000.0;
+                                             }
+                                             else if (qualifiedName() == "a:alpha") {
+                                                 alphaModifier = val.toInt()/1000;
+                                             }
+                                         }
+                                     }
+                                }
+                            }
+                            gradPositions.push_back(gradPosition);
+                            tintModifiers.push_back(tintModifier);
+                            shadeModifiers.push_back(shadeModifier);
+                            satModifiers.push_back(satModifier),
+                            alphaModifiers.push_back(alphaModifier);
+                        }
                     }
                 }
             }
-            m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers, satModifiers, alphaModifiers, gradPositions);
-            while (!atEnd()) {
-                readNext();
-                if (isEndElement() && qualifiedName() == element) {
-                    break;
-                }
-            }
+            m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers,
+                satModifiers, alphaModifiers, gradPositions, gradAngle);
         }
         // Commented out for now, until there's a nice implementation for duotone effect
         /*else if (element == "a:blipFill") {

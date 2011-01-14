@@ -1,19 +1,20 @@
 /* This file is part of the wvWare 2 project
-  Copyright (C) 2002-2003 KO GmbH <jean.nicolas.artaud@kogmbh.>
+   Copyright (C) 2002-2003 KO GmbH <jean.nicolas.artaud@kogmbh.>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License version 2 as published by the Free Software Foundation.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02111-1307, USA.
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "bookmark.h"
@@ -182,4 +183,20 @@ U32 Bookmarks::nextBookmarkEnd() const
         }
     }
     return ret;
+}
+
+void Bookmarks::check( U32 globalCP )
+{
+    while (nextBookmarkStart() < globalCP) {
+        if (m_nFib < Word8nFib) {
+            ++( *m_endIt );
+        } else {
+            ++m_endCP_It;
+        }
+        ++( *m_startIt );
+        ++m_nameIt;
+#ifdef WV2_DEBUG_BOOKMARK
+        wvlog << "Bookmark skipped!";
+#endif
+    }
 }

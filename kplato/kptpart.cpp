@@ -279,15 +279,15 @@ This test does not work any longer. KoXml adds a couple of elements not present 
 QDomDocument Part::saveXML()
 {
     kDebug();
-    QDomDocument document( "kplato" );
+    QDomDocument document( "plan" );
 
     document.appendChild( document.createProcessingInstruction(
                               "xml",
                               "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement doc = document.createElement( "kplato" );
-    doc.setAttribute( "editor", "KPlato" );
-    doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
+    doc.setAttribute( "editor", "Plan" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
     doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 

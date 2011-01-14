@@ -237,8 +237,6 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("create_custom_outline");
     if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("showStatusBar");
-    if (action) action->setEnabled(readWrite);
 }
 
 void KWView::setupActions()
@@ -331,6 +329,7 @@ void KWView::setupActions()
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
     KAction *action = new KAction(i18n("Select Bookmark..."), this);
+    action->setIconText(i18n("Bookmark"));
     action->setIcon(KIcon("bookmarks"));
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);

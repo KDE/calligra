@@ -20,17 +20,21 @@
 #ifndef FOCELL_TOOL
 #define FOCELL_TOOL
 
-#include "part/CellTool.h"
+#include "koabstraction_export.h"
+
+#include <tables/part/CellTool.h>
 
 #include <QPair>
 
-namespace Calligra { namespace Tables {
+namespace Calligra { namespace Tables
+{
     class Cell;
     class CellTool;
     class CellEditorBase;
 } }
 
-class FoExternalEditor;
+class KoAbstractApplicationController;
+class KoExternalEditorInterface;
 class FoCellEditor;
 
 class KoCanvasBase;
@@ -38,13 +42,13 @@ class KoCanvasBase;
 /**
  * The tool to change cell ranges.
  */
-class CALLIGRA_TABLES_EXPORT FoCellTool : public Calligra::Tables::CellTool
+class KOABSTRACTION_EXPORT KoCellTool : public Calligra::Tables::CellTool
 {
     Q_OBJECT
 
 public:
-    explicit FoCellTool(KoCanvasBase* canvas);
-    ~FoCellTool();
+    KoCellTool(KoAbstractApplicationController *controller, KoCanvasBase* canvas);
+    ~KoCellTool();
 
     /*!
      * Function for selecting font size
@@ -89,7 +93,7 @@ public:
 
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
 
-    FoExternalEditor *externalEditor();
+    KoExternalEditorInterface *externalEditor() const;
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(KoPointerEvent* event);
@@ -116,10 +120,13 @@ public slots:
     void findPrevious();
     void slotSearchTextChanged(const QString &text);
 
-private:
-    Q_DISABLE_COPY(FoCellTool)
+private slots:
+    void setText(const QString& text);
 
-    FoExternalEditor *m_externalEditor;
+private:
+    Q_DISABLE_COPY(KoCellTool)
+
+    KoExternalEditorInterface* m_externalEditor;
     FoCellEditor *m_editor;
     QString m_editorContents;
     QString m_searchString;

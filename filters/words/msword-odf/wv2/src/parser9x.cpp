@@ -1,5 +1,6 @@
 /* This file is part of the wvWare 2 project
    Copyright (C) 2001-2003 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -780,22 +781,33 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
     //
 
     //only process the chunk if not marked hidden, TODO use text:display="none"
-    if(chp->fVanish == 1)
+    if (chp->fVanish == 1) {
         return;
-    
+    }
+
     while ( length > 0 ) {
+        U32 startCP = currentStart + chunk.m_position.offset + index;
         U32 disruption = 0xffffffff; // "infinity"
         U32 bkmk_length = 0; //num. of CPs enclosed in a bookmark
 
         if ( m_footnotes ) {
+            if (m_subDocument == Main) {
+                m_footnotes->check(startCP);
+            }
+
             U32 nextFtn = m_footnotes->nextFootnote();
             U32 nextEnd = m_footnotes->nextEndnote();
             disruption = nextFtn < nextEnd ? nextFtn : nextEnd;
+
 #ifdef WV2_DEBUG_FOOTNOTES
             wvlog << "nextFtn=" << nextFtn << " nextEnd=" << nextEnd <<
                      " disruption=" << disruption << " length=" << length << endl;
 #endif
         } else if ( m_bookmarks ) {
+            if (m_subDocument == Main) {
+                m_bookmarks->check(startCP);
+            }
+
             U32 nextBkf = m_bookmarks->nextBookmarkStart();
             U32 nextBkl = m_bookmarks->nextBookmarkEnd();
             bkmk_length = nextBkl - nextBkf;
@@ -809,47 +821,46 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                      " disruption=" << disruption << " length=" << length << endl;
 #endif
         }
-        U32 startCP = currentStart + chunk.m_position.offset + index;
 
         if ( (disruption >= startCP) && (disruption < (startCP + length)) ) {
 
 #if defined WV2_DEBUG_FOOTNOTES || defined WV2_DEBUG_BOOKMARK
             wvlog << "startCP=" << startCP << " disruption=" << disruption << 
-		     " bkmk_length=" << bkmk_length << " length=" << length << endl;;
+		     " bkmk_length=" << bkmk_length << " length=" << length << endl;
 #endif
             U32 disLen = disruption - startCP;
             //there's something to be processed before the bookmark
             if ( disLen != 0 ) {
                 processRun( chunk, chp, disLen, index, currentStart );
+                length -= disLen;
+                index += disLen;
             }
-            length -= disLen;
-            index += disLen;
 
             if ( m_footnotes ) {
+                //TODO: support for bookmarks in the number of a footnote
                 m_customFootnote = chunk.m_text.substr(index, length);
                 emitFootnote( m_customFootnote, disruption, chp, length );
                 m_customFootnote = "";
-
                 length = 0;
-                index += length;
-            } 
+            }
             else if ( m_bookmarks ) {
 
-                //TODO: there may be a number of bookmarks having different
-                //lengths at the current CP
+                //TODO: There might a number of bookmarks to process at the
+                //current CP.  The first one gets processed, the rest is
+                //skipped at the moment.
 
-                //TODO: we need to handle a number of overlapping bookmarks in
-                //this chunk
+                //TODO: Bookmarks can overlap, handle all bookmarks of a chunk.
+
+                //TODO: A bookmark can denote text comrised of segments
+                //belonging into different chunks.
 
 		bool ok;
 		BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
 
-                //TODO: a bookmark can cover text from several chunks
                 if ( !(bkmk_length <= length) ) {
                     wvlog << "WARNING: bookmarks covering several chunks are not supported yet!";
                     processRun( chunk, chp, length, index, currentStart );
                     length = 0;
-                    index += length;
                 } else {
                     m_textHandler->bookmarkStart( data );
                     if (bkmk_length > 0) {
@@ -860,18 +871,9 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                     }
                 }
             }
-        }
-        else {
-            //common case, no disruption at all (or the end of a disrupted chunk)
-            //In case of custom footnotes do not add label to footnote body.
-            if ( m_footnotes ) {
-                if (m_customFootnote.find(chunk.m_text.substr(index, length), 0) != 0) {
-                    processRun( chunk, chp, length, index, currentStart );
-                }
-            } else {
-                processRun( chunk, chp, length, index, currentStart );
-            }
-            break;   // should be faster than messing with length...
+        } else {
+            processRun( chunk, chp, length, index, currentStart );
+            break; // should be faster than messing with length...
         }
     }
 }
@@ -982,8 +984,10 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const W
 #endif
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
-    if ( ok )
-        m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
+    if ( ok ) {
+        m_textHandler->footnoteFound( data.type, characters, chp,
+                                      make_functor( *this, &Parser9x::parseFootnote, data ));
+    }
 }
 
 void Parser9x::emitBookmark( U32 globalCP )
