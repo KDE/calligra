@@ -1310,7 +1310,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
     m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
     m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
-    m_indent(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize(UNUSED)
+    m_indent(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
 {
 }
 
@@ -1335,7 +1335,7 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::clear()
     m_picturePath = UNUSED;
     m_bulletSize = QSize();
     m_bulletColor = UNUSED;
-    m_bulletRelativeSize = UNUSED;
+    m_bulletRelativeSize = "100"; // by default bullet follows text size
 }
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setAlign(const QString& align)
@@ -1446,7 +1446,7 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::addInheritedValues(const P
     if (properties.m_bulletColor != UNUSED) {
         m_bulletColor = properties.m_bulletColor;
     }
-    if (properties.m_bulletRelativeSize != UNUSED) {
+    if (properties.m_bulletRelativeSize != "100") {
         m_bulletRelativeSize = properties.m_bulletRelativeSize;
     }
     if (!properties.m_bulletSize.isEmpty()) {
@@ -1500,15 +1500,8 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
     }
 
     if (!m_bulletSize.isEmpty()) {
-        //TODO sebsauer 2010-11-29; this does not work cause m_bulletSize is set in MsooXmlCommonReaderDrawingMLImpl.h to be the
-        //size of the image but that's not correct cause the image can be much larger then the bullet itself (e.g. the same image
-        //can be used in the document for different things like as background- and bullet-image and the sizes are independ of the
-        //original size of the picture. So, for now we are just hardcoding a width+height of 20pt. I choosed 20pt cause that's the
-        //same value used at PptToOdp.cpp if a the size should be relative to the fontsize.
-        
-        //returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
-        //    arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
-        returnValue += QString("fo:width=\"20pt\" fo:height=\"20pt\" ");
+        returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
+            arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
     }
 
     returnValue += "/>";
