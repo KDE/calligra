@@ -27,6 +27,7 @@
 #include "kexiactionproxy.h"
 
 class KexiWindow;
+class KexiRecordNavigatorHandler;
 
 namespace KoProperty
 {
@@ -124,6 +125,10 @@ public:
      If there's no such action, global shared action is enabled or disabled (if exists). */
     virtual void setAvailable(const QString& action_name, bool set);
 
+    /*! Override this function to return a navigation handler for the view
+     * returns 0 by default */
+    virtual KexiRecordNavigatorHandler* navigationHandler();
+    
 public slots:
     virtual void setFocus();
 

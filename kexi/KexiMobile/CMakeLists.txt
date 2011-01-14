@@ -8,7 +8,7 @@ include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}/kexi
     ${CMAKE_SOURCE_DIR}/kexi/core
     ${CMAKE_SOURCE_DIR}/kexi/widget
-	${CMAKE_SOURCE_DIR}/kexi/kexidb
+    ${CMAKE_SOURCE_DIR}/kexi/kexidb
 )
 
 set(KexiMobile_SRCS main.cpp

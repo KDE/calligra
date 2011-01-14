@@ -1,8 +1,9 @@
 #include "KexiMobileWidget.h"
 #include "KexiMobileNavigator.h"
-#include <core/KexiWindow.h>
 
-#include <kdebug.h>
+#include <core/KexiWindow.h>
+#include <QDebug>
+
 
 KexiMobileWidget::KexiMobileWidget(KexiProject* p) : m_project(p), m_navWidget(0), m_objectPage(0)
 {

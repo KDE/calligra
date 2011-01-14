@@ -14,15 +14,8 @@ set(kexiguiutils_LIB_SRCS
    kexicomboboxdropdownbutton.cpp
    kexidatetimeformatter.cpp
    KexiDockableWidget.cpp
+   kexirecordnavigator.cpp 
 )
-
-IF (KEXI_MOBILE)
-
-ELSE (KEXI_MOBILE)
-  LIST (APPEND kexiguiutils_LIB_SRCS
-  kexirecordnavigator.cpp 
-  )
-ENDIF (KEXI_MOBILE)
 
 # todo: use new Qt4's painting engine: kexigradientwidget.cpp 
 

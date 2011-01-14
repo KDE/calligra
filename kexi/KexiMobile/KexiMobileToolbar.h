@@ -25,6 +25,7 @@
 
 class QVBoxLayout;
 class QPushButton;
+class KexiRecordNavigatorHandler;
 
 class KexiMobileToolbar : public QToolBar
 {
@@ -33,15 +34,26 @@ public:
     KexiMobileToolbar(QWidget* parent = 0);
     virtual ~KexiMobileToolbar();
 
-
+    void setRecordHandler(KexiRecordNavigatorHandler *handler);
+    
 private:
 
     QAction *m_openFileAction;
     QAction *m_gotoNavigatorAction;
+    
+    QAction *m_previousRecord;
+    QAction *m_nextRecord;
+    QAction *m_recordNumber;
+    
+    KexiRecordNavigatorHandler *m_recordHandler;
 
 private slots:
   void openFileClicked();
   void gotoNavigatorClicked();
+  
+  //Record Navigation
+  void recordPrevious();
+  void recordNext();
   
 signals:
     void pageOpenFile();

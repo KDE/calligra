@@ -50,6 +50,7 @@ public:
     virtual void addNewRecordRequested() = 0;
 };
 
+#ifndef KEXI_MOBILE
 
 //! @short KexiRecordNavigator class provides a record navigator.
 /*! Record navigator is usually used for data tables (e.g. KexiTableView)
@@ -188,5 +189,5 @@ protected:
     class Private;
     Private * const d;
 };
-
+#endif
 #endif

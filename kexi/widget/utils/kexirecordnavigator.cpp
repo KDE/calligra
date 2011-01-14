@@ -40,6 +40,8 @@
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/utils.h>
 
+#ifndef KEXI_MOBILE
+
 //! @internal
 class KexiRecordNavigator::Private
 {
@@ -74,6 +76,8 @@ public:
     bool isInsertingEnabled;
 };
 
+#endif
+
 //--------------------------------------------------
 
 KexiRecordNavigatorHandler::KexiRecordNavigatorHandler()
@@ -85,6 +89,8 @@ KexiRecordNavigatorHandler::~KexiRecordNavigatorHandler()
 }
 
 //--------------------------------------------------
+
+#ifndef KEXI_MOBILE
 
 KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentView, int leftMargin)
         : QWidget(parent)
@@ -556,5 +562,6 @@ const KGuiItem& KexiRecordNavigator::Actions::moveToNewRecord()
 {
     return KexiRecordNavigatorActions_internal->moveToNewRecord;
 }
+#endif
 
 #include "kexirecordnavigator.moc"

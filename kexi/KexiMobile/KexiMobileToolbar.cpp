@@ -21,24 +21,41 @@
 #include "KexiMobileToolbar.h"
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <KIconLoader>
+#include <KIcon>
 #include <QAction>
 #include <kdebug.h>
 #include <QPushButton>
+#include <utils/kexirecordnavigator.h>
 
-KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent)
+KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
+				m_recordHandler(0)
 {
     setOrientation(Qt::Vertical);
-    KIconLoader *iconLoader = KIconLoader::global();
 
-    m_openFileAction = new QAction(iconLoader->loadIconSet("document-open", KIconLoader::MainToolbar), "Open", this);
-    m_gotoNavigatorAction = new QAction(iconLoader->loadIconSet("application-vnd.oasis.opendocument.database", KIconLoader::MainToolbar), "Project", this);
+    m_openFileAction = new QAction(KIcon("document-open"), "Open", this);
+    m_gotoNavigatorAction = new QAction(KIcon("application-vnd.oasis.opendocument.database"), "Project", this);
+    
+    
+    m_previousRecord = new QAction(KIcon("go-previous"), "Previous", this);
+    m_nextRecord = new QAction(KIcon("go-next"), "Next", this);
 
+    setIconSize(QSize(48,48));
+    
     addAction(m_openFileAction);
     addAction(m_gotoNavigatorAction);
+    
+    QWidget* spacer = new QWidget();
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    addWidget(spacer);
+
+    addAction(m_previousRecord);
+    addAction(m_nextRecord);
 
     connect(m_gotoNavigatorAction, SIGNAL(triggered(bool)), this, SLOT(gotoNavigatorClicked()));
     connect(m_openFileAction, SIGNAL(triggered(bool)), this, SLOT(openFileClicked()));
+    
+    connect(m_nextRecord, SIGNAL(triggered(bool)), this, SLOT(recordNext()));
+    connect(m_previousRecord, SIGNAL(triggered(bool)), this, SLOT(recordPrevious()));
 }
 
 KexiMobileToolbar::~KexiMobileToolbar()
@@ -54,8 +71,27 @@ void KexiMobileToolbar::gotoNavigatorClicked()
 
 void KexiMobileToolbar::openFileClicked()
 {
-    kDebug();
+    qDebug() << "Open File";
     emit(pageOpenFile());
+}
+
+void KexiMobileToolbar::recordNext()
+{
+	if (m_recordHandler) {
+		m_recordHandler->moveToNextRecordRequested();
+	}
+}
+
+void KexiMobileToolbar::recordPrevious()
+{
+	if (m_recordHandler) {
+		m_recordHandler->moveToPreviousRecordRequested();
+	}
+}
+
+void KexiMobileToolbar::setRecordHandler(KexiRecordNavigatorHandler* handler)
+{
+	m_recordHandler = handler;
 }
 
 #include "KexiMobileToolbar.moc"

@@ -36,10 +36,12 @@ class KRScriptFunctions;
 class KexiRecordNavigator;
 #endif
 
+#include <widget/utils/kexirecordnavigator.h>
+
 /**
  @author Adam Pigg <adam@piggz.co.uk>
 */
-class KexiReportView : public KexiView
+class KexiReportView : public KexiView, KexiRecordNavigatorHandler
 {
     Q_OBJECT
 public:
@@ -49,7 +51,16 @@ public:
 
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-
+    
+    virtual void addNewRecordRequested();
+    virtual void moveToFirstRecordRequested();
+    virtual void moveToLastRecordRequested();
+    virtual void moveToNextRecordRequested();
+    virtual void moveToPreviousRecordRequested();
+    virtual void moveToRecordRequested(uint r);
+    
+    virtual KexiRecordNavigatorHandler* navigationHandler();
+    
 private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
@@ -68,10 +79,6 @@ private:
     KoReportRendererFactory m_factory;
     
 private slots:
-    void nextPage();
-    void prevPage();
-    void firstPage();
-    void lastPage();
     void slotPrintReport();
     void slotRenderKSpread();
     void slotExportHTML();

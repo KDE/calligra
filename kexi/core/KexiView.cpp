@@ -678,4 +678,9 @@ void KexiView::setSortedProperties(bool set)
     d->sortedProperties = set;
 }
 
+KexiRecordNavigatorHandler* KexiView::navigationHandler()
+{
+	return 0;
+}
+
 #include "KexiView.moc"
