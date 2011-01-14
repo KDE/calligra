@@ -147,7 +147,7 @@ enum spacingType {
 };
 spacingType m_currentSpacingType; // determines how spcPct and spcPts should behave
 
-MSOOXML::Utils::autoFitStatus m_normAutoFit; // Whether text should be fitted to fit the shape
+MSOOXML::Utils::autoFitStatus m_normAutofit; // Whether text should be fitted to fit the shape
 
 KoFilter::ConversionStatus read_lnSpc();
 KoFilter::ConversionStatus read_spcPct();
@@ -183,7 +183,7 @@ KoFilter::ConversionStatus read_lvl8pPr();
 KoFilter::ConversionStatus read_lvl9pPr();
 KoFilter::ConversionStatus read_defRPr();
 KoFilter::ConversionStatus read_bodyPr();
-KoFilter::ConversionStatus read_normAutoFit();
+KoFilter::ConversionStatus read_normAutofit();
 KoFilter::ConversionStatus read_spAutoFit();
 
 KoFilter::ConversionStatus read_overrideClrMapping();

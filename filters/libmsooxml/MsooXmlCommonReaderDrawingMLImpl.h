@@ -758,7 +758,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     inheritDefaultBodyProperties();
     inheritBodyProperties(); // Properties may or may not override default ones.
 
-    if (m_normAutoFit == MSOOXML::Utils::autoFitOn) {
+    if (m_normAutofit == MSOOXML::Utils::autoFitOn) {
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
@@ -3975,6 +3975,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
                 m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
+                if (m_currentAlpha > 0) {
+                    m_currentDrawStyle->addProperty("svg:stroke-opacity", QString("%1%").arg(m_currentAlpha/100.0));
+                }
             }
             else if(qualifiedName() == QLatin1String("a:noFill")) {
                 m_currentDrawStyle->addProperty("draw:stroke", "none");
@@ -5283,7 +5286,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_shapeTextLeftOff.clear();
     m_shapeTextRightOff.clear();
 
-    m_normAutoFit =  MSOOXML::Utils::autoFitUnUsed;
+    m_normAutofit =  MSOOXML::Utils::autoFitUnUsed;
 
     if (!lIns.isEmpty()) {
         m_shapeTextLeftOff = lIns;
@@ -5323,16 +5326,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
             if (qualifiedName() == QLatin1String("a:spAutoFit")) {
                 TRY_READ(spAutoFit)
                 spAutoFit = true;
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:normAutofit")) {
-                TRY_READ(normAutoFit)
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                TRY_READ(normAutofit)
+                m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:prstTxWarp")) {
                 // The handling here is not correct but better than nothing
-                // Also normAutoFit = true seems to be correct for value 'textNoShape'
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                // Also normAutofit = true seems to be correct for value 'textNoShape'
+                m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             SKIP_UNKNOWN
         }
@@ -5354,7 +5357,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL normAutoFit
+#define CURRENT_EL normAutofit
 //! Normal autofit handler (Normal AutoFit)
 /*!
 
@@ -5363,7 +5366,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 
  No child elements.
 */
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_normAutoFit()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_normAutofit()
 {
     READ_PROLOGUE
     readNext();

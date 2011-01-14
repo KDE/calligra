@@ -1561,7 +1561,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
             m_context->slideMasterProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
             m_context->slideMasterProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideMasterProperties->m_textAutoFit[d->phIdx] = m_normAutoFit;
+            m_context->slideMasterProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideMasterProperties->textShapePositions[d->phType] = m_shapeTextPosition;
@@ -1569,7 +1569,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
             m_context->slideMasterProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
             m_context->slideMasterProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideMasterProperties->m_textAutoFit[d->phType] = m_normAutoFit;
+            m_context->slideMasterProperties->m_textAutoFit[d->phType] = m_normAutofit;
         }
     }
     else if (m_context->type == SlideLayout) {
@@ -1579,7 +1579,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideLayoutProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
             m_context->slideLayoutProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
             m_context->slideLayoutProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideLayoutProperties->m_textAutoFit[d->phIdx] = m_normAutoFit;
+            m_context->slideLayoutProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideLayoutProperties->textShapePositions[d->phType] = m_shapeTextPosition;
@@ -1587,7 +1587,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideLayoutProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
             m_context->slideLayoutProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
             m_context->slideLayoutProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideLayoutProperties->m_textAutoFit[d->phType] = m_normAutoFit;
+            m_context->slideLayoutProperties->m_textAutoFit[d->phType] = m_normAutofit;
         }
     }
 }
@@ -1654,8 +1654,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx);
              }
         }
     }
@@ -1682,8 +1682,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideMasterProperties->m_textAutoFit.value(d->phType) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideMasterProperties->m_textAutoFit.value(d->phType);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideMasterProperties->m_textAutoFit.value(d->phType);
              }
         }
     }
@@ -1712,8 +1712,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideLayoutProperties->m_textAutoFit.value(d->phType) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phType);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phType);
              }
         }
     }
@@ -1739,8 +1739,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx);
              }
         }
     }
