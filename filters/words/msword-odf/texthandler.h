@@ -272,8 +272,8 @@ private:
         //KEYWORDS = 0x12,
         //COMMENTS = 0x13,
         LAST_REVISED_BY = 0x14, ///< LASTSAVEDBY
-        //CREATEDATE = 0x15,
-        //SAVEDATE = 0x16,
+        CREATEDATE = 0x15,
+        SAVEDATE = 0x16,
         //PRINTDATE = 0x17,
         //REVNUM = 0x18,
         EDITTIME = 0x19,

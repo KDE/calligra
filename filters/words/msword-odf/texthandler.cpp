@@ -1006,6 +1006,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kWarning(30513) << "Warning: unsupported field (REF)";
         m_fld->m_type = UNSUPPORTED;
         break;
+    case CREATEDATE:
+    case SAVEDATE:
     case SUBJECT:
     case TITLE:
         break;
@@ -1389,7 +1391,8 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.startElement("text:subject");
         writer.endElement();
         break;
-    case DATE: {
+    case DATE:
+    {
         writer.startElement("text:date");
 
         NumberFormatParser::setStyles(m_mainStyles);
@@ -1402,7 +1405,8 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.endElement(); //text:date
         break;
     }
-    case TIME: {
+    case TIME:
+    {
         writer.startElement("text:time");
 
         NumberFormatParser::setStyles(m_mainStyles);
@@ -1413,6 +1417,26 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         //writer.addAttribute("text:time-value", );
         writer.addCompleteElement(m_fld->m_buffer);
         writer.endElement(); //text:time
+        break;
+    }
+    case CREATEDATE:
+    {
+        writer.startElement("text:creation-date");
+        NumberFormatParser::setStyles(m_mainStyles);
+        KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericTimeStyle);
+        writer.addAttribute("style:data-style-name", m_mainStyles->insert(style, "N"));
+        writer.addCompleteElement(m_fld->m_buffer);
+        writer.endElement(); //text:creation-date
+        break;
+    }
+    case SAVEDATE:
+    {
+        writer.startElement("text:modification-date");
+        NumberFormatParser::setStyles(m_mainStyles);
+        KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericTimeStyle);
+        writer.addAttribute("style:data-style-name", m_mainStyles->insert(style, "N"));
+        writer.addCompleteElement(m_fld->m_buffer);
+        writer.endElement(); //text:modification-date
         break;
     }
     case SYMBOL:
@@ -1528,6 +1552,8 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case SYMBOL:
             case TOC:
             case PAGE:
+            case CREATEDATE:
+            case SAVEDATE:
             case TIME:
             case DATE:
                 m_fld->m_instructions.append(newText);
@@ -1554,6 +1580,8 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                     writer->addTextNode(newText);
                 }
                 break;
+            case CREATEDATE:
+            case SAVEDATE:
             case AUTHOR:
             case EDITTIME:
             case FILENAME:
