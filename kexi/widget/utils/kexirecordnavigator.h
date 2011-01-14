@@ -48,6 +48,10 @@ public:
     virtual void moveToNextRecordRequested() = 0;
     virtual void moveToFirstRecordRequested() = 0;
     virtual void addNewRecordRequested() = 0;
+    
+    //!Allow the handler to tell the navigator about the records
+    virtual long recordCount() { return 0; }
+    virtual long currentRecord() { return 0; }
 };
 
 #ifndef KEXI_MOBILE

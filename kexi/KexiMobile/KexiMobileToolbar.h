@@ -46,6 +46,8 @@ private:
     QAction *m_recordNumber;
     
     KexiRecordNavigatorHandler *m_recordHandler;
+    
+    void updatePage();
 
 private slots:
   void openFileClicked();

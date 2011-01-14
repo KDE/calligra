@@ -38,6 +38,7 @@ KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
     
     m_previousRecord = new QAction(KIcon("go-previous"), "Previous", this);
     m_nextRecord = new QAction(KIcon("go-next"), "Next", this);
+    m_recordNumber = new QAction("0 of 0", this);
 
     setIconSize(QSize(48,48));
     
@@ -49,6 +50,7 @@ KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
     addWidget(spacer);
 
     addAction(m_previousRecord);
+    addAction(m_recordNumber);
     addAction(m_nextRecord);
 
     connect(m_gotoNavigatorAction, SIGNAL(triggered(bool)), this, SLOT(gotoNavigatorClicked()));
@@ -79,6 +81,7 @@ void KexiMobileToolbar::recordNext()
 {
 	if (m_recordHandler) {
 		m_recordHandler->moveToNextRecordRequested();
+		updatePage();
 	}
 }
 
@@ -86,12 +89,21 @@ void KexiMobileToolbar::recordPrevious()
 {
 	if (m_recordHandler) {
 		m_recordHandler->moveToPreviousRecordRequested();
+		updatePage();
 	}
 }
 
 void KexiMobileToolbar::setRecordHandler(KexiRecordNavigatorHandler* handler)
 {
 	m_recordHandler = handler;
+	updatePage();
+}
+
+void KexiMobileToolbar::updatePage()
+{
+	if (m_recordHandler) {
+		m_recordNumber->setText(QString("%1 of %2").arg(m_recordHandler->currentRecord()).arg(m_recordHandler->recordCount()));
+	}
 }
 
 #include "KexiMobileToolbar.moc"

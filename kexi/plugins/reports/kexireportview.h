@@ -58,6 +58,8 @@ public:
     virtual void moveToNextRecordRequested();
     virtual void moveToPreviousRecordRequested();
     virtual void moveToRecordRequested(uint r);
+    virtual long int currentRecord();
+    virtual long int recordCount();
     
     virtual KexiRecordNavigatorHandler* navigationHandler();
     

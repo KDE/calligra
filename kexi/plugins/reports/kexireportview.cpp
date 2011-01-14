@@ -400,3 +400,13 @@ KexiRecordNavigatorHandler* KexiReportView::navigationHandler()
 {
     return this;
 }
+
+long int KexiReportView::currentRecord()
+{
+    return m_currentPage;
+}
+
+long int KexiReportView::recordCount()
+{
+    return m_pageCount;
+}
