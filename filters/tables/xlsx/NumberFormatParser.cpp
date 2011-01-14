@@ -63,6 +63,12 @@ void NumberFormatParser::setStyles(KoGenStyles* styles)
 if( type == KoGenStyle::NumericDateStyle && TYPE == KoGenStyle::NumericTimeStyle )               \
 {                                                                                                \
 }                                                                                                \
+else if( type == KoGenStyle::NumericDateStyle && TYPE == KoGenStyle::NumericNumberStyle )        \
+{                                                                                                \
+}                                                                                                \
+else if( type == KoGenStyle::NumericTimeStyle && TYPE == KoGenStyle::NumericNumberStyle )        \
+{                                                                                                \
+}                                                                                                \
 else if( type == KoGenStyle::NumericTimeStyle && TYPE == KoGenStyle::NumericDateStyle )          \
 {                                                                                                \
     type = TYPE;                                                                                 \
@@ -242,7 +248,9 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
         case '0':
         case '?':
             SET_TYPE_OR_RETURN(KoGenStyle::NumericNumberStyle)
-            FINISH_PLAIN_TEXT_PART {
+            FINISH_PLAIN_TEXT_PART
+            // do following only if we are really a number and not part of another KoGenStyle like a date or time formatting
+            if (type == KoGenStyle::NumericNumberStyle || type == KoGenStyle::NumericFractionStyle || type == KoGenStyle::NumericScientificStyle) {
                 bool grouping = false;
                 bool gotDot = false;
                 bool gotE = false;
