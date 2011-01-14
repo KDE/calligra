@@ -25,6 +25,7 @@
 
 #include "texthandler.h"
 #include "conversion.h"
+#include "NumberFormatParser.h"
 
 #include <wv2/src/styles.h>
 #include <wv2/src/paragraphproperties.h>
@@ -967,7 +968,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     if (m_fld->m_insideField) {
         fld_saveState();
     } else {
-	delete m_fld;
+        delete m_fld;
     }
 
     m_fld = new fld_State((fldType)fld->flt);
@@ -987,6 +988,12 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         break;
     case MACROBUTTON:
         kDebug(30513) << "processing field... MACROBUTTON";
+        break;
+    case DATE:
+        kDebug(30513) << "processing field... DATE";
+        break;
+    case TIME:
+        kDebug(30513) << "processing field... TIME";
         break;
     case NUMPAGES:
     case PAGE:
@@ -1260,6 +1267,15 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         writer->startElement("text:index-body");
         break;
     }
+    case TIME:
+    case DATE: {
+        // Extract the interesting format-string. That means we translate something like 'TIME \@ "MMMM d, yyyy"' into 'MMMM d, yyyy'
+        // cause the NumberFormatParser doesn't handle it correct else.
+        QRegExp rx(".*\"(.*)\".*");
+        if (rx.indexIn(*inst) >= 0)
+            m_fld->m_instructions = rx.cap(1);
+        break;
+    }
     default:
         break;
     }
@@ -1373,6 +1389,30 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.startElement("text:subject");
         writer.endElement();
         break;
+    case DATE: {
+        writer.startElement("text:date");
+
+        NumberFormatParser::setStyles(m_mainStyles);
+        KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericDateStyle);
+        writer.addAttribute("text:style-name", m_mainStyles->insert(style, "N"));
+
+        //writer.addAttribute("text:date-value", "2011-01-14T12:38:31.99");
+        writer.addCompleteElement(m_fld->m_buffer); // January 14, 2011
+        writer.endElement(); //text:date
+        break;
+    }
+    case TIME: {
+        writer.startElement("text:time");
+
+        NumberFormatParser::setStyles(m_mainStyles);
+        KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericTimeStyle);
+        writer.addAttribute("text:style-name", m_mainStyles->insert(style, "N"));
+
+        //writer.addAttribute("text:time-value", );
+        writer.addCompleteElement(m_fld->m_buffer);
+        writer.endElement(); //text:time
+        break;
+    }
     case SYMBOL:
     {
         //TODO: nested fields support required
@@ -1485,6 +1525,9 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case PAGEREF:
             case SYMBOL:
             case TOC:
+            case PAGE:
+            case TIME:
+            case DATE:
                 m_fld->m_instructions.append(newText);
                 break;
             default:
@@ -1495,8 +1538,10 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         //processing the field result
         else {
             KoXmlWriter* writer = m_fld->m_writer;
-	    switch (m_fld->m_type) {
-	    case PAGEREF:
+            switch (m_fld->m_type) {
+            case TIME:
+            case DATE:
+            case PAGEREF:
                 writer->addTextNode(newText);
                 break;
             case HYPERLINK:

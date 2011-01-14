@@ -1,5 +1,11 @@
 add_subdirectory(wv2)
-INCLUDE_DIRECTORIES( ${GLIB2_INCLUDE_DIR} ${LIBGSF_INCLUDE_DIR} ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ../../libmso )
+
+INCLUDE_DIRECTORIES(
+    ${GLIB2_INCLUDE_DIR} ${LIBGSF_INCLUDE_DIR} ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR}
+    ../../libmso
+    ../../libmsooxml
+    ../../tables/xlsx/
+)
 
 set(mswordodf_import_PART_SRCS
    mswordodfimport.cpp
@@ -8,13 +14,17 @@ set(mswordodf_import_PART_SRCS
    texthandler.cpp
    paragraph.cpp
    tablehandler.cpp
-   graphicshandler.cpp )
+   graphicshandler.cpp
+   ../../tables/xlsx/NumberFormatParser.cpp
+)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 kde4_add_plugin(mswordodf_import ${mswordodf_import_PART_SRCS})
 
-target_link_libraries(mswordodf_import kowv2 komain mso ${ZLIB_LIBRARIES})
+#TODO cause of NumberFormatParser we depend on msooxml. Fix that!
+#target_link_libraries(mswordodf_import kowv2 komain mso ${ZLIB_LIBRARIES})
+target_link_libraries(mswordodf_import kowv2 komain mso msooxml ${ZLIB_LIBRARIES})
 
 install(TARGETS mswordodf_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
