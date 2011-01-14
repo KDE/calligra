@@ -165,6 +165,7 @@ bool m_listStylePropertiesAltered;
 bool m_previousListWasAltered;
 
 KoFilter::ConversionStatus read_buClr();
+KoFilter::ConversionStatus read_buClrTx();
 KoFilter::ConversionStatus read_buSzPct();
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();

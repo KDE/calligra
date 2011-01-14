@@ -1632,6 +1632,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
+    if (m_currentBulletProperties.bulletColor() == "UNUSED") {
+        m_listStylePropertiesAltered = true;
+        QString bulletColor = m_currentTextStyle.property("fo:color");
+        if (!bulletColor.isEmpty()) {
+            m_currentBulletProperties.setBulletColor(bulletColor);
+        }
+    }
     if (m_listStylePropertiesAltered) {
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
@@ -2057,7 +2064,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - [done] buBlip (Picture Bullet) §21.1.2.4.2
   - [done] buChar (Character Bullet) §21.1.2.4.3
   - [done] buClr (Color Specified) §21.1.2.4.4
-  - buClrTx (Follow Text) §21.1.2.4.5
+  - [done] buClrTx (Follow Text) §21.1.2.4.5
   - [done] buFont (Specified) §21.1.2.4.6
   - buFontTx (Follow text) §21.1.2.4.7
   - [done] buNone (No Bullet) §21.1.2.4.8
@@ -2128,6 +2135,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
+            ELSE_TRY_READ_IF(buClrTx)
             ELSE_TRY_READ_IF(buClr)
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
@@ -4351,6 +4359,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
             ELSE_TRY_READ_IF(buClr)
+            ELSE_TRY_READ_IF(buClrTx)
             ELSE_TRY_READ_IF(buSzPct)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
@@ -4405,7 +4414,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
   - [done] buBlip (Picture Bullet)              §21.1.2.4.2
   - [done] buChar (Character Bullet)            §21.1.2.4.3
   - [done] buClr (Color Specified)              §21.1.2.4.4
-  - buClrTx (Follow Text)                §21.1.2.4.5
+  - [done] buClrTx (Follow Text)                §21.1.2.4.5
   - [done] buFont (Specified)                   §21.1.2.4.6
   - buFontTx (Follow text)               §21.1.2.4.7
   - [done] buNone (No Bullet)                   §21.1.2.4.8
@@ -4640,6 +4649,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
     	m_listStylePropertiesAltered = true;
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buClrTx
+//! buClrTx - follow text
+/*!
+ Parent elements:
+ - defPPr  (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClrTx()
+{
+    READ_PROLOGUE
+    m_currentBulletProperties.setBulletColor("UNUSED");
+    readNext();
     READ_EPILOGUE
 }
 
