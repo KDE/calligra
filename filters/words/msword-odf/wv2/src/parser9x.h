@@ -274,17 +274,6 @@ namespace wvWare
         // Helper method to use std::accumulate in the table handling code
         static int accumulativeLength( int len, const Chunk& chunk );
 
-#undef PARSER9X_OBSOLETE
-#ifdef PARSER9X_OBSOLETE
-        void parsePictureEscher( const PictureData& data, OLEStreamReader* stream,
-                int totalPicfSize, int picfStartPos );
-        void parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream );
-        void parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream );
-        void parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream );
-
-        void parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties, U32* pib);
-#endif
-
         // Private variables, no access needed in 95/97 code
         // First all variables which don't change their state during
         // the parsing process. We don't have to save and restore those.
