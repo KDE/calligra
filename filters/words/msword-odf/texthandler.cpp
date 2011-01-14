@@ -1394,8 +1394,9 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 
         NumberFormatParser::setStyles(m_mainStyles);
         KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericDateStyle);
-        writer.addAttribute("text:style-name", m_mainStyles->insert(style, "N"));
+        writer.addAttribute("style:data-style-name", m_mainStyles->insert(style, "N"));
 
+        //writer.addAttribute("text:fixed", "true");
         //writer.addAttribute("text:date-value", "2011-01-14T12:38:31.99");
         writer.addCompleteElement(m_fld->m_buffer); // January 14, 2011
         writer.endElement(); //text:date
@@ -1406,8 +1407,9 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 
         NumberFormatParser::setStyles(m_mainStyles);
         KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericTimeStyle);
-        writer.addAttribute("text:style-name", m_mainStyles->insert(style, "N"));
+        writer.addAttribute("style:data-style-name", m_mainStyles->insert(style, "N"));
 
+        //writer.addAttribute("text:fixed", "true");
         //writer.addAttribute("text:time-value", );
         writer.addCompleteElement(m_fld->m_buffer);
         writer.endElement(); //text:time
