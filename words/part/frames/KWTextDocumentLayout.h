@@ -53,17 +53,9 @@ private:
 
     virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
-    void cleanupAnchors();
-
-    inline void registerPageAnchoredShapes(KoShape *currentShape, LayoutState *state);
-
     KWTextFrameSet *m_frameSet;
     class DummyShape;
     DummyShape * const m_dummyShape;
-
-    QList<KWAnchorStrategy*> m_activeAnchors;
-    QList<KWAnchorStrategy*> m_newAnchors;
-    QList<KWAnchorStrategy*> m_anchors;
 
     int m_lastKnownFrameCount;
 };

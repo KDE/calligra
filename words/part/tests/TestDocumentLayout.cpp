@@ -145,6 +145,18 @@ public:
         kDebug() << resetHorizontalPosition;
     }
 
+    void insertInlineObject(KoTextAnchor * textAnchor) {
+        kDebug();
+    }
+
+    void resetInlineObject(int resetPosition) {
+        kDebug();
+    }
+
+    void removeInlineObject(KoTextAnchor * textAnchor) {
+        kDebug();
+    }
+
     QTextLine createLine() {
         QTextLayout *lay = m_doc->begin().layout();
         return lay->createLine();
