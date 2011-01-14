@@ -22,7 +22,6 @@
  */
 #include "NumberFormatParser.h"
 
-#include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
@@ -132,23 +131,19 @@ static KoGenStyle styleFromTypeAndBuffer(KoGenStyle::Type type, const QBuffer& b
     return result;
 }
 
-KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
+KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyle::Type type)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter xmlWriter(&buffer);
 
-    KoGenStyle::Type type = KoGenStyle::ParagraphAutoStyle;
-
     QString plainText;
-
     QMap< QString, QString > conditions;
-
     QString condition;
 
     // this is for the month vs. minutes-context
     bool justHadHours = false;
-
+    // to skip escaped plain-text
     bool hadPlainText = false;
 
     for (int i = 0; i < numberFormat.length(); ++i) {
