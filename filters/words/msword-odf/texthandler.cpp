@@ -967,7 +967,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     if (m_fld->m_insideField) {
         fld_saveState();
     } else {
-	delete m_fld;
+        delete m_fld;
     }
 
     m_fld = new fld_State((fldType)fld->flt);
