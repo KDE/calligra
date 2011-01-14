@@ -85,6 +85,7 @@ enum blipFillCaller {
     blipFill_pic = 'p', //dml in pptx; for dml in docx use 'pic'
     blipFill_rPr = 'p', //dml
     blipFill_bgPr = 'a', // pptx
+    blipFill_grpSpPr = 'a'
 };
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
@@ -182,6 +183,7 @@ KoFilter::ConversionStatus read_lvl8pPr();
 KoFilter::ConversionStatus read_lvl9pPr();
 KoFilter::ConversionStatus read_defRPr();
 KoFilter::ConversionStatus read_bodyPr();
+KoFilter::ConversionStatus read_normAutoFit();
 KoFilter::ConversionStatus read_spAutoFit();
 
 KoFilter::ConversionStatus read_overrideClrMapping();
