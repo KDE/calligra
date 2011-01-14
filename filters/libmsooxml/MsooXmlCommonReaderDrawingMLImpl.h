@@ -4547,7 +4547,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
 
     if (!m_xlinkHref.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_xlinkHref);
-        m_currentBulletProperties.setBulletSize(m_imageSize);
         m_listStylePropertiesAltered = true;
     }
 
