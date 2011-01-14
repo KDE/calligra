@@ -265,7 +265,7 @@ private:
         //STYLEREF = 0x0a,
         //SEQ = 0x0c,
         TOC = 0x0d,
-        //TOC = 0x0e,
+        //INFO = 0x0e,
         TITLE = 0x0f,
         SUBJECT = 0x10,
         AUTHOR = 0x11,
