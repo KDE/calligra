@@ -329,6 +329,7 @@ void KWView::setupActions()
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
     KAction *action = new KAction(i18n("Select Bookmark..."), this);
+    action->setIconText(i18n("Bookmark"));
     action->setIcon(KIcon("bookmarks"));
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);

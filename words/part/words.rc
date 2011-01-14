@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="127">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Words" version="129">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -40,7 +40,6 @@
   <Separator/>
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
-  <Action name="view_toggledockers"/>
   <Action name="view_show_guides"/>
   <Action name="view_grid"/>
   <Action name="view_snaptogrid"/>
@@ -156,12 +155,13 @@
   <Action name="edit_sldatabase"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="view_toggledockers" group="settings_show"/>
+  <Action name="showStatusBar" group="settings_show"/>
   <Action name="direct_cursor" group="settings_show"/>
   <Action name="configure_autocorrection" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
   <Action name="configure_footendnote" group="settings_show"/>
   <Action name="configure_change_tracking" group="settings_show"/>
-  <Action name="showStatusBar" group="settings_show"/>
   <Action name="configure" group="settings_configure"/>
  </Menu>
 </MenuBar>
@@ -173,7 +173,13 @@
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>
   <Separator/>
-  <Action name="extra_spellcheck"/>
+  <Action name="edit_find"/>
+  <!--
+  <Action name="edit_findprevious"/>
+  <Action name="edit_findnext"/>
+  <Action name="edit_replace"/>
+  <Action name="select_bookmark"/>
+  -->
 </ToolBar>
 <Menu name="text_popup">
  <Action name="text_default"/>
