@@ -282,8 +282,8 @@ private:
         //NUMCHARS = 0x1c,
         FILENAME = 0x1d,
         //TEMPLATE = 0x1e,
-        //DATE = 0x1f,
-        //TIME = 0x20,
+        DATE = 0x1f,
+        TIME = 0x20,
         PAGE = 0x21,
         //EQUALS = 0x22, ///< the "=" sign
         //QUOTE = 0x23,
