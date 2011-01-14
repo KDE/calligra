@@ -15,10 +15,13 @@
 #include <KMimeType>
 #include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
+#include <kcmdlineargs.h>
 #include <kdebug.h>
 
 #include <QApplication>
 #include <QBuffer>
+#include <QDir>
+#include <QFileInfo>
 
 KoDocument* openFile(const QString &filename)
 {
@@ -30,7 +33,7 @@ KoDocument* openFile(const QString &filename)
                                QVariantList(), &error );
 
     if (!error.isEmpty()) {
-        kWarning()<< "Error cerating document" << mimetype << error;
+        qWarning() << "Error cerating document" << mimetype << error;
         return 0;
     }
 
@@ -45,6 +48,7 @@ KoDocument* openFile(const QString &filename)
             document->setReadWrite(false);
         }
         else {
+            kWarning(31000)<< "openUrl failed" << filename << mimetype << error;
             delete document;
             document = 0;
         }
@@ -93,14 +97,9 @@ QPixmap createSpreadsheetThumbnail(Calligra::Tables::Sheet* sheet, const QSize &
     QRect range(sheet->print()->cellRange(1));
     // paint also half cells on page edge
     range.setWidth(range.width() + 1);
-    //qDebug() << "Range:" << sheet->print()->cellRange(1);
-
     sheetView.setPaintCellRange(range); // first page
-    //qDebug() << "Count:" << sheet->print()->pageCount();
 
     QRect pRect(pageRect(pageLayout, thumbSize, zoomHandler));
-    //qDebug() << "pRect:" << pRect;
-    //qDebug() << "pageLayout:" << pageLayout.width << pageLayout.height;
 
     p.setClipRect(pRect);
     p.translate(pRect.topLeft());
@@ -113,13 +112,9 @@ QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
     QList<QPixmap> thumbnails;
 
-    int i = 0;
     if (KoPADocument *doc = qobject_cast<KoPADocument*>(document)) {
         foreach(KoPAPageBase *page, doc->pages(false)) {
-            // XXX: creates a pixmap, which is converted to an image and then
-            // copied to the image pointer we need for the list
             thumbnails.append(page->thumbnail(thumbSize));
-            kDebug() << "create thumbnail" << ++i;
         }
     }
     else if (Calligra::Tables::Doc *doc = qobject_cast<Calligra::Tables::Doc*>(document)) {
@@ -133,55 +128,108 @@ QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
     return thumbnails;
 }
 
-void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &filename)
+void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
 {
     int i = 0;
     for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
-        QString thumbFilename = QString("%1_thumb_%2.png").arg(filename).arg(++i);
+        QString thumbFilename = QString("%1/thumb_%2.png").arg(dir).arg(++i);
         it->save(thumbFilename, "PNG");
     }
 }
 
-bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &filename)
+bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &dir, bool verbose)
 {
+    bool success = true;
     int i = 0;
     for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
-        QString thumbFilename = QString("%1_thumb_%2.png").arg(filename).arg(++i);
+        QString thumbFilename = QString("%1/thumb_%2.png").arg(dir).arg(++i);
 
         QByteArray ba;
-        QBuffer buffer( &ba );
-        buffer.open( QIODevice::WriteOnly );
-        it->save( &buffer, "PNG" );
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        it->save(&buffer, "PNG");
 
         QFile file(thumbFilename);
-        if (!file.open( QFile::ReadOnly)) {
+        if (!file.open(QFile::ReadOnly)) {
             return false;
         }
         QByteArray baCheck(file.readAll());
-        kDebug() << "file" << i << (ba == baCheck ? "are identical": "differ" );
+
+        if (ba != baCheck) {
+            qDebug() << "Check failed:" << dir << "Page" << i << "differ";
+            success = false;
+        }
+        else if (verbose) {
+            qDebug() << "Check successful:" << dir << "Page" << i << "identical";
+        }
     }
-    return true;
+    return success;
 }
 
 int main(int argc, char *argv[])
 {
-    if (argc < 2) {
-        kDebug() << "please provide file";
-        exit(1);
-    }
+    KCmdLineArgs::init(argc, argv, "cstester", 0, KLocalizedString(), 0, KLocalizedString());
+
+    KCmdLineOptions options;
+    options.add("create", ki18n("create verification data for file"));
+    options.add("verbose", ki18n("be verbose"));
+    options.add("!verify", ki18n("verify the file"));
+    options.add( "+file", ki18n("file to use"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
     QApplication app(argc, argv);
 
-    QString filename(argv[1]);
-
-    KoDocument* document = openFile(filename);
-    if (!document) {
-        exit(2);
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if (args->isSet("create") && args->isSet("verify")) {
+        kError() << "create and verify cannot be used the same time";
+        exit(1);
     }
 
-    QList<QPixmap> thumbnails(createThumbnails(document, QSize(800,800)));
+    if (!args->isSet("create") && !args->isSet("verify")) {
+        kError() << "one of the options create or verify needs to be specified";
+        exit(1);
+    }
 
-    kDebug() << "created" << thumbnails.size() << "thumbnails";
-    saveThumbnails(thumbnails, "test");
-    //checkThumbnails(thumbnails, "test");
+    bool verbose = args->isSet("verbose");
+
+    int exitValue = 0;
+
+    int successful = 0;
+    int failed = 0;
+    for (int i=0; i < args->count(); ++i) {
+        QString filename(args->arg(i));
+        QFileInfo file(filename);
+        QString resDir(filename + ".check");
+        qDebug() << "filename" << filename << "path" << file.path() << file.completeBaseName() << resDir << file.absoluteFilePath();
+
+        // filename must be a absolute path
+        KoDocument* document = openFile(file.absoluteFilePath());
+        if (!document) {
+            exit(2);
+        }
+
+        QList<QPixmap> thumbnails(createThumbnails(document, QSize(800,800)));
+
+        qDebug() << "created" << thumbnails.size() << "thumbnails";
+        if (args->isSet("verify")) {
+            if (checkThumbnails(thumbnails, resDir, verbose)) {
+                ++successful;
+            }
+            else {
+                ++failed;
+                exitValue = 2;
+            }
+        }
+        else {
+            QDir dir(file.path());
+            dir.mkdir(file.fileName() + ".check");
+            saveThumbnails(thumbnails, resDir);
+        }
+    }
+
+    if (args->isSet("verify")) {
+        qDebug() << "Totals:" << successful << "passed" << failed << "failed";
+    }
+
+    return exitValue;
 }
