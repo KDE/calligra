@@ -41,7 +41,7 @@ class KexiRecordNavigator;
 /**
  @author Adam Pigg <adam@piggz.co.uk>
 */
-class KexiReportView : public KexiView, KexiRecordNavigatorHandler
+class KexiReportView : public KexiView, public KexiRecordNavigatorHandler
 {
     Q_OBJECT
 public:
@@ -60,9 +60,7 @@ public:
     virtual void moveToRecordRequested(uint r);
     virtual long int currentRecord();
     virtual long int recordCount();
-    
-    virtual KexiRecordNavigatorHandler* navigationHandler();
-    
+     
 private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;

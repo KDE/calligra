@@ -396,11 +396,6 @@ void KexiReportView::moveToRecordRequested(uint r)
 
 }
 
-KexiRecordNavigatorHandler* KexiReportView::navigationHandler()
-{
-    return this;
-}
-
 long int KexiReportView::currentRecord()
 {
     return m_currentPage;

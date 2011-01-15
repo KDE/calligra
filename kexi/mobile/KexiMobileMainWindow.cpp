@@ -17,6 +17,7 @@
 #include <kexipartinfo.h>
 #include <KexiWindow.h>
 #include <KexiView.h>
+#include <widget/utils/kexirecordnavigator.h>
 
 KexiMobileMainWindow::KexiMobileMainWindow()
 {
@@ -124,7 +125,10 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
     if (window) {
         m_mobile->setActiveObject(window);
     }
-    m_toolbar->setRecordHandler(window->selectedView()->navigationHandler());
+    kDebug() << window;
+    kDebug() << window->selectedView();
+    
+    m_toolbar->setRecordHandler(dynamic_cast<KexiRecordNavigatorHandler*>(window->selectedView()));
 
 #if 0
     if (window && !alreadyOpened) {
