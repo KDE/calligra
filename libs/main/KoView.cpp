@@ -29,6 +29,8 @@
 #include "KoMainWindow.h"
 #include "KoViewAdaptor.h"
 #include "KoDockFactoryBase.h"
+#include "dialogs/KoConfigurationDialog.h"
+#include "KoConfigurationDialogPage.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -443,6 +445,9 @@ void KoView::setupGlobalActions()
     KAction *actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView);
     connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
+
+    actionCollection()->addAction(KStandardAction::Preferences,
+                                  "configure", this, SLOT(showConfigurationDialog()));
 }
 
 void KoView::newView()
@@ -513,6 +518,19 @@ QList<QAction*> KoView::createChangeUnitActions()
         answer.value(currentUnit)->setChecked(true);
     return answer;
 }
+
+void KoView::showConfigurationDialog()
+{
+    KoConfigurationDialog dialog(this);
+    addCustomConfigurationDialogPages(&dialog);
+    dialog.exec();
+}
+
+void KoView::addCustomConfigurationDialogPages (KoConfigurationDialog* dialog)
+{
+    Q_UNUSED(dialog);
+}
+
 
 #include <KoView_p.moc>
 #include <KoView.moc>

@@ -84,7 +84,11 @@ set(komain_LIB_SRCS
     KoAction.cpp
     KoExecutePolicy.cpp
     KoJobsListPolicy.cpp
+
+    KoConfigurationDialogPage.cpp
+    dialogs/KoConfigurationDialog.cpp
 )
+
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         rdf/KoDocumentRdf.cpp
@@ -119,7 +123,10 @@ kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAuthorWidget.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
+
+   dialogs/KoOpenSaveConfigurationWidget.ui
 )
+
 if( Soprano_FOUND )
     kde4_add_ui_files( komain_LIB_SRCS
        rdf/KoDocumentRdfEditWidget.ui
@@ -220,4 +227,3 @@ if( Soprano_FOUND )
         rdf/KoSemanticStylesheetsEditor.h
     DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 endif( Soprano_FOUND )
-

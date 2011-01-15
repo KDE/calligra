@@ -183,6 +183,7 @@
   <Action name="showStatusBar" group="settings_show" />
   <Action name="configureNotifications" group="settings_configure"/>
   <Action name="preference" group="settings_configure"/>
+  <Action name="configure" group="settings_configure"/>
  </Menu>
 </MenuBar>
 
