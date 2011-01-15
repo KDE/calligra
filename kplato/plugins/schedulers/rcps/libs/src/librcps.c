@@ -487,9 +487,8 @@ struct rcps_solver* rcps_solver_new() {
 	if (ret) {
 		memset(ret, 0, sizeof(struct rcps_solver));
 	}
-	
-	ret->pop_size = DEFAULT_POP_SIZE;
-	ret->pop_size = DEFAULT_POP_SIZE;
+
+    ret->pop_size = DEFAULT_POP_SIZE;
 	ret->mut_sched = DEFAULT_MUT_SCHED;
 	ret->mut_mode = DEFAULT_MUT_MODE;
 	ret->mut_alt = DEFAULT_MUT_ALT;
@@ -620,8 +619,12 @@ int rcps_check(struct rcps_problem *p) {
 }
 
 int individual_cmp(const void *a, const void *b) {
-	return ((struct rcps_individual*)a)->fitness -
-		((struct rcps_individual*)b)->fitness;
+    return ((struct rcps_individual*)a)->fitness - ((struct rcps_individual*)b)->fitness;
+
+/*	float r = ((struct rcps_individual*)a)->fitness - ((struct rcps_individual*)b)->fitness;
+    if ( r < 0 ) return -1;
+    if ( r > 0 ) return 1;
+    return 0;*/
 }
 
 void add_individual(struct rcps_individual *ind, struct rcps_population *pop) {
@@ -664,7 +667,7 @@ struct rcps_population *new_population(struct rcps_solver *s,
 			struct rcps_phenotype *pheno = decode(s, problem, 
 				&ind->genome);
 			ind->fitness = fitness(problem, &ind->genome, pheno);
-			if ((best_fitness == -1) || (best_fitness > ind->fitness)) {
+			if ((best_fitness < 0) || (best_fitness > ind->fitness)) {
 				best_fitness = ind->fitness;
 			}
 			add_individual(ind, pop);
@@ -775,21 +778,22 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 		add_individual(son, s->population);
 		add_individual(daughter, s->population);
 		// check if we have a better individual, if yes reset count
-		i = ((struct rcps_individual*)slist_node_getdata(slist_first(
+        int f1, f2;
+		f1 = ((struct rcps_individual*)slist_node_getdata(slist_first(
 			s->population->individuals)))->fitness;
-		j = ((struct rcps_individual*)slist_node_getdata(slist_last(
+		f2 = ((struct rcps_individual*)slist_node_getdata(slist_last(
 			s->population->individuals)))->fitness;
 		// get the best overuse count
 		int best_overuse = son_overuse < daughter_overuse ?
 			son_overuse : daughter_overuse;
 		// check if we want to stop
-		if ((i < last_fitness) && (last_fitness != -1)) {
-			last_fitness = i;
+		if ((f1 < last_fitness) && (last_fitness < 0)) {
+			last_fitness = f1;
 			last_overuse = best_overuse;
 			count = 0;
 		}
-		else if (last_fitness == -1) {
-			last_fitness = i;
+		else if (last_fitness < 0) {
+			last_fitness = f1;
 			last_overuse = best_overuse;
 		}
 		count++;
@@ -844,7 +848,7 @@ void *threadfunc(void *a) {
 
 void rcps_solver_set_progress_callback(struct rcps_solver *s, 
 	int steps, void *arg,
-	int (*progress_callback)(int generations, int duration, void *arg)) {
+	int (*progress_callback)(int generations, int fitness, void *arg)) {
 	s->progress_callback = progress_callback;
 	s->cb_arg = arg;
 	s->cb_steps = steps;
@@ -951,9 +955,9 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 	s->reproductions = run_alg(s, p);
 #endif
 
-	i = ((struct rcps_individual*)slist_node_getdata(slist_first(
-		s->population->individuals)))->fitness;
-//	printf("cycles: \t%i\nfitness:\t%i\n", tcount, i);
+// 	float fit = ((struct rcps_individual*)slist_node_getdata(slist_first(
+// 		s->population->individuals)))->fitness;
+// 	printf("cycles: \t%i\nfitness:\t%f\n", tcount, fit);
 
 	// transfer the results to the problem structure
 	struct rcps_genome *genome = &((struct rcps_individual*)slist_node_getdata(

@@ -134,7 +134,7 @@ install(TARGETS kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES  planpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  plan.rc plan_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/plan)
 install( PROGRAMS  kplato.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES  kplatorc DESTINATION ${CONFIG_INSTALL_DIR})
+install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES kplatosettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 
 install(FILES
@@ -144,6 +144,6 @@ install(FILES
     about/tips.html
     about/tutorial.html
     about/kplato.css
-    DESTINATION ${DATA_INSTALL_DIR}/kplato/about
+    DESTINATION ${DATA_INSTALL_DIR}/plan/about
 )
 

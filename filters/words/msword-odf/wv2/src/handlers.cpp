@@ -129,35 +129,6 @@ void TableHandler::tableCellEnd()
 {
 }
 
-
-PictureHandler::~PictureHandler()
-{
-}
-
-void PictureHandler::bitmapData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/ )
-{
-}
-
-void PictureHandler::escherData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/, const wvWare::U8* /*rgbUid*/)
-{
-}
-
-void PictureHandler::escherData( std::vector<U8>, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/, const wvWare::U8* /*rgbUid*/)
-{
-}
-
-void PictureHandler::wmfData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/ )
-{
-}
-
-void PictureHandler::externalImage( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )
-{
-}
-
-void PictureHandler::officeArt(wvWare::OfficeArtProperties* /*artProperties*/)
-{
-}
-
 GraphicsHandler::~GraphicsHandler()
 {
 

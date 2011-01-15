@@ -30,6 +30,7 @@ Name[zh_TW]=RCPS 排程器
 Comment=Genetics based Resource Constrained Project Scheduler
 Comment[et]=Geneetilise algoritmi põhine ressursipiirangutega projektide ajakava
 Comment[it]=Pianificatore di progetto a risorse limitate basato su algoritmo genetico
+Comment[nb]=Genetisk basert Resource Constrained Project Scheduler
 Comment[nl]=Op genetica gebaseerde projectplanner voor hulpbronvoorwaarden
 Comment[pt]=Calendarização de Projectos com Conflitos de Recursos baseada em algoritmos genéticos
 Comment[pt_BR]=Calendarização de projetos com restrições de recursos baseada em algoritmos genéticos

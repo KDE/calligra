@@ -20,53 +20,6 @@
  */
 
 #include "KoAbstractApplication.h"
-#include "Common.h"
-#include "FoCellToolFactory.h"
-#include "FoCellTool.h"
-#include "PreviewDialog.h"
-
-#include <KoDocumentInfo.h>
-#include <KoView.h>
-#include <KoCanvasBase.h>
-#include <kdemacros.h>
-#include <KoCanvasControllerWidget.h>
-#include <KoZoomMode.h>
-#include <KoZoomController.h>
-#include <KoToolProxy.h>
-#include <KoToolBase.h>
-#include <KoResourceManager.h>
-#include <KoToolManager.h>
-#include <KoShapeManager.h>
-#include <KoShapeUserData.h>
-#include <KoTextShapeData.h>
-#include <KoSelection.h>
-#include <KoPADocument.h>
-#include <KoTextEditor.h>
-#include <KoPAView.h>
-#include <KoStore.h>
-#include <KoCanvasBase.h>
-#include <KoToolRegistry.h>
-#include <styles/KoParagraphStyle.h>
-#include <styles/KoListLevelProperties.h>
-#include <KoList.h>
-#include <Map.h>
-#include <Doc.h>
-#include <part/View.h>
-#include <Sheet.h>
-#include <tables/ui/Selection.h>
-#include <KWView.h>
-
-#include <KMimeType>
-#include <KLocale>
-#include <kparts/part.h>
-#include <kparts/componentfactory.h>
-#include <kparts/event.h>
-#include <kundostack.h>
-
-#include <QApplication>
-#include <QFile>
-#include <QtDebug>
-#include <QSplashScreen>
 
 KoAbstractApplication::KoAbstractApplication(QWidget *parent)
     : KoAbstractApplicationBase(parent)
@@ -98,8 +51,18 @@ bool KoAbstractApplication::doOpenDocument() { return KoAbstractApplicationContr
 
 bool KoAbstractApplication::openDocument() { return KoAbstractApplicationController::openDocument(); }
 
-bool KoAbstractApplication::openDocument(const QString &fileName, bool isNewDocument) {
-    return KoAbstractApplicationController::openDocument(fileName, isNewDocument);
+bool KoAbstractApplication::openDocuments(const KoAbstractApplicationOpenDocumentArguments& args)
+{
+    return KoAbstractApplicationController::openDocuments(args);
+}
+
+bool KoAbstractApplication::openDocument(const QString &fileName) {
+    return KoAbstractApplicationController::openDocument(fileName);
+}
+
+bool KoAbstractApplication::openDocumentAsTemplate(const QString &fileName)
+{
+    return KoAbstractApplicationController::openDocumentAsTemplate(fileName);
 }
 
 bool KoAbstractApplication::saveDocument() { return KoAbstractApplicationController::saveDocument(); }
@@ -122,3 +85,7 @@ bool KoAbstractApplication::setEditingMode(bool set) { return KoAbstractApplicat
 
 void KoAbstractApplication::toggleVirtualKeyboardVisibility() { KoAbstractApplicationController::toggleVirtualKeyboardVisibility(); }
 
+void KoAbstractApplication::activeToolChanged(KoCanvasController* canvas, int uniqueToolId)
+{
+    KoAbstractApplicationController::activeToolChanged(canvas, uniqueToolId);
+}

@@ -38,7 +38,7 @@ class MainWindow : public KXmlGuiWindow, public KoCanvasSupervisor {
   public:
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
     DockerManager* dockerManager();
-    void addStatusBarItem(QWidget*, int strech, View* view);
+    void addStatusBarItem(QWidget* _widget, int _stretch, View* _view);
     void removeStatusBarItem(QWidget*);
   private:
     void setupActions();

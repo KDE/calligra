@@ -22,7 +22,8 @@
 
 #include "kplatomodels_export.h"
 
-#include <kptitemmodelbase.h>
+#include "kptitemmodelbase.h"
+#include "kptschedule.h"
 
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
@@ -193,6 +194,11 @@ protected slots:
     void slotScheduleInserted( const MainSchedule *schedule );
     void slotScheduleToBeRemoved( const MainSchedule *schedule );
     void slotScheduleRemoved( const MainSchedule *schedule );
+
+    void slotLogInserted( MainSchedule*, int firstrow, int lastrow );
+
+protected:
+    void addLogEntry( const Schedule::Log &log, int row );
 
 private:
     Project *m_project;

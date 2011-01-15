@@ -6,7 +6,7 @@ kde4_add_ui_files(AsciiImport_PART_SRCS ImportDialogUI.ui )
 
 kde4_add_plugin(asciiimport ${AsciiImport_PART_SRCS})
 
-target_link_libraries(asciiimport kwordexportfilters)
+target_link_libraries(asciiimport komain)
 
 install(TARGETS asciiimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

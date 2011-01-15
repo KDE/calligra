@@ -116,6 +116,9 @@ public:
     //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 
+    //! Map of spPr based graphicStyles, these contain fillColor & outline
+    QMap<QString, KoGenStyle> graphicStyles;
+
     //! Position of the text
     QMap<QString, QString> textShapePositions;
 
@@ -196,7 +199,6 @@ protected:
     KoFilter::ConversionStatus read_clrMap();
     KoFilter::ConversionStatus read_clrMapOvr();
 
-//    KoGenStyle m_currentPageStyle;
     PptxXmlSlideReaderContext* m_context;
     PptxShapeProperties* m_currentShapeProperties;
 
@@ -210,7 +212,11 @@ protected:
     // can be used later for inheritance purposes
     void saveCurrentStyles();
 
+    // Saves current list styles
     void saveCurrentListStyles();
+
+    // Saves outline & fill style
+    void saveCurrentGraphicStyles();
 
     // Copies 9 lvls of text and paragraph styles to current styles
     void inheritAllTextAndParagraphStyles();

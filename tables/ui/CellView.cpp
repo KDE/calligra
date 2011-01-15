@@ -1122,8 +1122,9 @@ void CellView::paintText(QPainter& painter,
 
     // set a clipping region for non-rotated text
     painter.save();
-    if (tmpAngle == 0)
-        painter.setClipRect(QRectF(coordinate, QSizeF(d->width, d->height)));
+    if (tmpAngle == 0) {
+        painter.setClipRegion(painter.clipRegion().intersected(QRect(coordinate.x(), coordinate.y(), d->width, d->height)));
+    }
 
 
     // Actually paint the text.

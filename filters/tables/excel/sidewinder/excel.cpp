@@ -1766,6 +1766,7 @@ void MsoDrawingRecord::dump(std::ostream& out) const
 
 void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
+    Q_UNUSED(continuePositions);
     QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
     QBuffer buff(&byteArr);
     buff.open(QIODevice::ReadOnly);
@@ -2378,7 +2379,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             break;
             default:
               if (markerOrLength > 65535) {
-                printf("invalid length reading compobj stream: %ul\n", markerOrLength);
+                printf("invalid length reading compobj stream: %lu\n", markerOrLength);
               } else {
                 bytes_read = combObjStream->read( buffer, markerOrLength );
                 QString ansiString = readByteString(buffer, markerOrLength);

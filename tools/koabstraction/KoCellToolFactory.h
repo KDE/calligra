@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,25 +17,25 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QUndoCommand>
+#ifndef KOCELL_TOOL_FACTORY
+#define KOCELL_TOOL_FACTORY
 
-#include "Sheet.h"
-#include "Map.h"
+#include <KoToolFactoryBase.h>
 
-namespace Calligra { namespace Tables {
-    class Sheet;
-    class Map;
-} }
+class KoCellTool;
+class KoAbstractApplicationController;
 
-class RemoveSheet: public QUndoCommand
+/**
+ * The Factory, that creates a KoCellTool.
+ */
+class KoCellToolFactory : public KoToolFactoryBase
 {
 public:
-    explicit RemoveSheet(Calligra::Tables::Sheet* sheet);
+    KoCellToolFactory(KoAbstractApplicationController *controller);
+    ~KoCellToolFactory();
 
-    virtual void redo();
-    virtual void undo();
-
-protected:
-    Calligra::Tables::Sheet* sheet;
-    Calligra::Tables::Map* map;
+    KoToolBase* createTool(KoCanvasBase* canvas);
+    KoAbstractApplicationController *m_controller;
 };
+
+#endif // KOCELL_TOOL_FACTORY

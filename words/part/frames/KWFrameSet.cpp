@@ -81,12 +81,11 @@ void KWFrameSet::printDebug()
 
 void KWFrameSet::printDebug(KWFrame *frame)
 {
-    static const char * runaround[] = { "No Runaround", "Bounding Rect", "Skip", "ERROR" };
-    static const char * runaroundSide[] = { "Biggest", "Left", "Right", "Auto", "Both", "ERROR" };
+    static const char * runaroundSide[] = { "Biggest", "Left", "Right", "Auto", "Both", "No Runaround", "Trough", "ERROR" };
     static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
     static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
     kDebug(32001) << "     Rectangle :" << frame->shape()->position().x() << "," << frame->shape()->position().y() << frame->shape()->size().width() << "x" << frame->shape()->size().height();
-    kDebug(32001) << "     RunAround:" << runaround[frame->textWrap()] << "side:" << runaroundSide[frame->runAroundSide()];
+    kDebug(32001) << "     RunAround:" << runaroundSide[frame->shape()->textRunAroundSide()];
     kDebug(32001) << "     FrameBehavior:" << frameBh[frame->frameBehavior()];
     kDebug(32001) << "     NewFrameBehavior:" << newFrameBh[frame->newFrameBehavior()];
     if (!frame->shape()->background())

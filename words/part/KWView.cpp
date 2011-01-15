@@ -49,7 +49,6 @@
 #include "dialogs/KWInsertInlineNoteDialog.h"
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
-#include "commands/KWCreateOutlineCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
 
@@ -238,8 +237,6 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("create_custom_outline");
     if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("showStatusBar");
-    if (action) action->setEnabled(readWrite);
 }
 
 void KWView::setupActions()
@@ -332,6 +329,7 @@ void KWView::setupActions()
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
     KAction *action = new KAction(i18n("Select Bookmark..."), this);
+    action->setIconText(i18n("Bookmark"));
     action->setIcon(KIcon("bookmarks"));
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
@@ -450,12 +448,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action->setToolTip(i18n("Create a copy of the current frame, always showing the same contents"));
     action->setWhatsThis(i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies."));
     connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
-
-    action = new KAction(i18n("Create Custom Outline"), this);
-    actionCollection()->addAction("create_custom_outline", action);
-    action->setToolTip(i18n("Create a custom vector outline that text will run around"));
-    action->setWhatsThis(i18n("Text normally runs around the content of a shape, when you want a custom outline that is independent of the content you can create one and alter it with the vector tools"));
-    connect(action, SIGNAL(triggered()), this, SLOT(createCustomOutline()));
 
     action = new KAction(i18n("Create Frame-clip"), this);
     actionCollection()->addAction("create_clipped_frame", action);
@@ -959,8 +951,8 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("Words %1.%2.$3").arg(KOffice::versionMajor(),
-        KOffice::versionMinor(), KOffice::versionRelease()));
+    dia->printer().setCreator(QString("KWord %1.%2.%3").arg(KOffice::versionMajor())
+                              .arg(KOffice::versionMinor()).arg(KOffice::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -1294,31 +1286,6 @@ void KWView::editSelectAllFrames()
 void KWView::editDeleteSelection()
 {
     canvasBase()->toolProxy()->deleteSelection();
-}
-
-void KWView::createCustomOutline()
-{
-    QList<KWFrame *> frames = selectedFrames();
-    if (frames.count() == 0)
-        return;
-    if (frames.count() == 1) {
-        m_document->addCommand(new KWCreateOutlineCommand(m_document, frames.at(0)));
-    } else {
-        QUndoCommand *cmd = new QUndoCommand(i18n("Create outlines"));
-        foreach (KWFrame *frame, frames)
-            new KWCreateOutlineCommand(m_document, frame, cmd);
-        m_document->addCommand(cmd);
-    }
-
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    selection->deselectAll();
-    foreach (KWFrame *frame, frames) {
-        KoShapeContainer *group = frame->shape()->parent();
-        if (group)
-            selection->select(group);
-    }
-
-    KoToolManager::instance()->switchToolRequested("PathToolFactoryId");
 }
 
 void KWView::createFrameClipping()

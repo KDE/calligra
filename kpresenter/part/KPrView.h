@@ -99,6 +99,7 @@ protected slots:
     void drawOnPresentation();
     void highlightPresentation();
     void blackPresentation();
+    void showStatusBar(bool toggled);
 
 private:
     KActionMenu *m_actionStartPresentation;

@@ -21,7 +21,7 @@
 
 #include <QTextEdit>
 
-#include "ui/CellEditorBase.h"
+#include <tables/ui/CellEditorBase.h>
 
 class QString;
 class QFont;
@@ -29,7 +29,6 @@ class KoViewConverter;
 
 namespace Calligra { namespace Tables
 {
-    class CellEditorBase;
     class CellToolBase;
     class Selection;
 } }

@@ -559,6 +559,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 
     d->phType = "body";
 
+    m_currentCombinedBulletProperties.clear();
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -699,6 +701,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
 
     d->phType = "title";
 
+    m_currentCombinedBulletProperties.clear();
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -750,6 +754,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 
     d->phType = "other";
 
+    m_currentCombinedBulletProperties.clear();
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -768,6 +774,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
         }
     }
 
+    saveCurrentListStyles();
+    saveCurrentStyles();
+
+    // Seems like subtitle by default should point to othertyles, maybe also sldnum etc too.
+    d->phType = "subTitle";
     saveCurrentListStyles();
     saveCurrentStyles();
 
@@ -985,9 +996,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
  - effectDag (Effect Container) §20.1.8.25
  - effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §19.2.1.12
- - gradFill (Gradient Fill) §20.1.8.33
+ - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
- - noFill (No Fill) §20.1.8.44
+ - [done] noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
  - [done] solidFill (Solid Fill) §20.1.8.54
 */
@@ -1008,20 +1019,28 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                 TRY_READ_IF_NS(a, solidFill)
                 m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
                 m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                if (m_currentAlpha > 0) {
+                    m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentAlpha));
+                }
+            }
+            else if (qualifiedName() == QLatin1String("a:noFill")) {
+                m_currentDrawStyle->addAttribute("style:fill", constNone);
             }
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IF_NS_IN_CONTEXT(a, blipFill)
-                KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
-                fillImageStyle.addAttribute("xlink:href", m_xlinkHref);
-                //! @todo draw:name="???"
-                fillImageStyle.addAttribute("xlink:type", "simple");
-                fillImageStyle.addAttribute("xlink:show", "embed");
-                fillImageStyle.addAttribute("xlink:actuate", "onLoad");
-                fillImageName = mainStyles->insert(fillImageStyle);
-                kDebug() << fillImageName;
+                if (!m_xlinkHref.isEmpty()) {
+                    KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
+                    fillStyle.addProperty("xlink:href", m_xlinkHref);
+                    fillStyle.addProperty("xlink:type", "simple");
+                    fillStyle.addProperty("xlink:actuate", "onLoad");
+                    const QString imageName = mainStyles->insert(fillStyle);
+                    m_currentDrawStyle->addProperty("draw:fill", "bitmap");
+                    m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
+                    m_xlinkHref.clear();
+                }
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
-                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
                 TRY_READ_IF_NS(a, gradFill)
                 m_currentDrawStyle->addProperty("draw:fill", "gradient");
                 const QString gradName = mainStyles->insert(m_currentGradientStyle);
@@ -1033,25 +1052,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                 foundTile = true;
             }*/
 //! @todo add ELSE_WRONG_FORMAT
-        }
-    }
-
-    if (!fillImageName.isEmpty()) {
-        //! Setup slide's bitmap fill
-        m_currentDrawStyle->addProperty("draw:fill", "bitmap", KoGenStyle::DrawingPageType);
-        m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageName, KoGenStyle::DrawingPageType);
-        if (m_context->type != SlideMaster) {
-            if (!m_recentSourceName.isEmpty()) {
-                QSize size;
-                m_context->import->imageSize(m_recentSourceName, size);
-                kDebug() << "SIZE:" << size;
-                if (size.isValid()) {
-                    m_currentDrawStyle->addProperty("draw:fill-image-width",
-                        MSOOXML::Utils::cmString(POINT_TO_CM(size.width())), KoGenStyle::DrawingPageType);
-                    m_currentDrawStyle->addProperty("draw:fill-image-height",
-                        MSOOXML::Utils::cmString(POINT_TO_CM(size.height())), KoGenStyle::DrawingPageType);
-                }
-            }
         }
     }
 
@@ -1213,6 +1213,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     // There is a hardcoded behaviour in MSoffice that ctrTitle refers also to "title"
     if (d->phType == "ctrTitle") {
         d->phType = "title";
+    }
+
+    // There seems to be some buggy ooxml software which creates documents with shapes with this ID
+    // It seems to be faulty and points to "body"
+    if (d->phIdx == "4294967295" && d->phType.isEmpty()) {
+        d->phIdx.clear();
+        d->phType = "body";
     }
 
     readNext();
@@ -1554,7 +1561,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
             m_context->slideMasterProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
             m_context->slideMasterProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideMasterProperties->m_textAutoFit[d->phIdx] = m_normAutoFit;
+            m_context->slideMasterProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideMasterProperties->textShapePositions[d->phType] = m_shapeTextPosition;
@@ -1562,7 +1569,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
             m_context->slideMasterProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
             m_context->slideMasterProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideMasterProperties->m_textAutoFit[d->phType] = m_normAutoFit;
+            m_context->slideMasterProperties->m_textAutoFit[d->phType] = m_normAutofit;
         }
     }
     else if (m_context->type == SlideLayout) {
@@ -1572,7 +1579,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideLayoutProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
             m_context->slideLayoutProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
             m_context->slideLayoutProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideLayoutProperties->m_textAutoFit[d->phIdx] = m_normAutoFit;
+            m_context->slideLayoutProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideLayoutProperties->textShapePositions[d->phType] = m_shapeTextPosition;
@@ -1580,7 +1587,27 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideLayoutProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
             m_context->slideLayoutProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
             m_context->slideLayoutProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideLayoutProperties->m_textAutoFit[d->phType] = m_normAutoFit;
+            m_context->slideLayoutProperties->m_textAutoFit[d->phType] = m_normAutofit;
+        }
+    }
+}
+
+void PptxXmlSlideReader::saveCurrentGraphicStyles()
+{
+    if (m_context->type == SlideLayout) {
+        if (!d->phType.isEmpty()) {
+            m_context->slideLayoutProperties->graphicStyles[d->phType] = *m_currentDrawStyle;
+        }
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideLayoutProperties->graphicStyles[d->phIdx] = *m_currentDrawStyle;
+        }
+    }
+    else if (m_context->type == SlideMaster) {
+        if (!d->phType.isEmpty()) {
+            m_context->slideMasterProperties->graphicStyles[d->phType] = *m_currentDrawStyle;
+        }
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideMasterProperties->graphicStyles[d->phIdx] = *m_currentDrawStyle;
         }
     }
 }
@@ -1627,8 +1654,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx);
              }
         }
     }
@@ -1655,8 +1682,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideMasterProperties->m_textAutoFit.value(d->phType) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideMasterProperties->m_textAutoFit.value(d->phType);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideMasterProperties->m_textAutoFit.value(d->phType);
              }
         }
     }
@@ -1685,8 +1712,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideLayoutProperties->m_textAutoFit.value(d->phType) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phType);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phType);
              }
         }
     }
@@ -1712,8 +1739,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx);
              }
         }
     }
@@ -1761,35 +1788,41 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
 {
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
-    if (!d->phIdx.isEmpty()) {
+    QString id = d->phIdx;
+    QString type = d->phType;
+    if (id.isEmpty() && type.isEmpty()) {
+        //type = "other"; // Commented out for now, as it seems these properties do not behave the same way
+    }
+
+    if (!id.isEmpty()) {
         // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[d->phIdx][copyLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[id][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[d->phType][copyLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->styles[type][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         // Perhaps we need to get the properties from layout
         // Slidelayout needs to be here in case there was also lvl1ppr defined
         if (m_context->type == Slide || m_context->type == SlideLayout) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phType][copyLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[type][copyLevel],
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
-    if (!d->phIdx.isEmpty()) {
+    if (!id.isEmpty()) {
         // Perhaps we need to get the properties from layout
         // Slidelayout needs to be here in case there was also lvl1ppr defined
         if (m_context->type == Slide || m_context->type == SlideLayout) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phIdx][copyLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[id][copyLevel],
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
     // This line is needed in case slide defined it's own lvl1ppr
     if (m_context->type == Slide) {
-        QString slideIdentifier = d->phType + d->phIdx;
+        QString slideIdentifier = type + id;
 
         if (!slideIdentifier.isEmpty()) {
             MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.styles[slideIdentifier][copyLevel],
@@ -1820,9 +1853,15 @@ void PptxXmlSlideReader::inheritListStyles()
 {
     inheritDefaultListStyles();
 
+    QString id = d->phIdx;
+    QString type = d->phType;
+    if (id.isEmpty() && type.isEmpty()) {
+        type = "other";
+    }
+
     // Masterslide layer
-    if (!d->phType.isEmpty()) {
-        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[d->phType]);
+    if (!type.isEmpty()) {
+        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[type]);
         while (i.hasNext()) {
             i.next();
             if (i.value().isEmpty()) {
@@ -1833,8 +1872,8 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-    if (!d->phIdx.isEmpty()) {
-        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[d->phIdx]);
+    if (!id.isEmpty()) {
+        QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterProperties->listStyles[id]);
         while (i.hasNext()) {
             i.next();
             if (i.value().isEmpty()) {
@@ -1846,9 +1885,9 @@ void PptxXmlSlideReader::inheritListStyles()
         }
     }
     // Layout layer
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
-            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phType]);
+            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[type]);
             while (i.hasNext()) {
                 i.next();
                 if (i.value().isEmpty()) {
@@ -1860,9 +1899,9 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-    if (!d->phIdx.isEmpty()) {
+    if (!id.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
-            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phIdx]);
+            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[id]);
             while (i.hasNext()) {
                 i.next();
                 if (i.value().isEmpty()) {
@@ -1876,7 +1915,7 @@ void PptxXmlSlideReader::inheritListStyles()
     }
 
     if (m_context->type == Slide) {
-        QString slideIdentifier = d->phType + d->phIdx;
+        QString slideIdentifier = type + id;
 
         // Slide layer
         if (!slideIdentifier.isEmpty()) {
@@ -1925,11 +1964,6 @@ void PptxXmlSlideReader::inheritShapePosition()
                 if (!props) {
                     props = m_context->slideMasterProperties->shapesMap.value(d->phIdx);
                 }
-                if (!props) {
-                    // In case there was nothing for this even in slideMaster, let's default to 'body' text position
-                    // Spec doesn't say anything about this case, but in reality there are such documents
-                    props = m_context->slideMasterProperties->shapesMap.value("body");
-                }
             }
         }
         if (props) {
@@ -1946,7 +1980,7 @@ void PptxXmlSlideReader::inheritShapePosition()
 
 void PptxXmlSlideReader::inheritShapeGeometry()
 {
-    // Inheriting shape geometry
+    // Inheriting shape geometry type (not extends yet)
     if (m_contentType.isEmpty()) {
         if (m_context->type == Slide) {
             m_contentType = m_context->slideLayoutProperties->contentTypeMap.value(d->phType);
@@ -1979,6 +2013,38 @@ void PptxXmlSlideReader::inheritShapeGeometry()
             }
         }
     }
+
+    bool drawingStyleInherited = false;
+    KoGenStyle inheritedStyle;
+    // Inheriting drawing style, this can be outline or fill style
+    if (m_context->type == Slide) {
+        inheritedStyle = m_context->slideLayoutProperties->graphicStyles.value(d->phType);
+        if (!inheritedStyle.isEmpty()) {
+            drawingStyleInherited = true;
+            MSOOXML::Utils::copyPropertiesFromStyle(inheritedStyle, *m_currentDrawStyle, KoGenStyle::GraphicType);
+        }
+        else {
+            inheritedStyle = m_context->slideLayoutProperties->graphicStyles.value(d->phIdx);
+            if (!inheritedStyle.isEmpty()) {
+                drawingStyleInherited = true;
+                MSOOXML::Utils::copyPropertiesFromStyle(inheritedStyle, *m_currentDrawStyle, KoGenStyle::GraphicType);
+            }
+        }
+    }
+    if ((!drawingStyleInherited && m_context->type == Slide) || m_context->type == SlideLayout) {
+        inheritedStyle = m_context->slideMasterProperties->graphicStyles.value(d->phType);
+        if (!inheritedStyle.isEmpty()) {
+            drawingStyleInherited = true;
+            MSOOXML::Utils::copyPropertiesFromStyle(inheritedStyle, *m_currentDrawStyle, KoGenStyle::GraphicType);
+        }
+        else {
+            inheritedStyle = m_context->slideMasterProperties->graphicStyles.value(d->phIdx);
+            if (!inheritedStyle.isEmpty()) {
+                drawingStyleInherited = true;
+                MSOOXML::Utils::copyPropertiesFromStyle(inheritedStyle, *m_currentDrawStyle, KoGenStyle::GraphicType);
+            }
+        }
+    }
 }
 
 void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
@@ -1988,37 +2054,43 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
+    QString id = d->phIdx;
+    QString type = d->phType;
+    if (id.isEmpty() && type.isEmpty()) {
+        type = "other";
+    }
+
     // Idx must be first for masterslide, due to initial use case
     // e.g. bodyList -> shape with type body id 1, if we come to shape and type is first
     // it will be overwritten by values from 1, and since it's the first time, it will be initialized to
     // to empty
-    if (!d->phIdx.isEmpty()) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[d->phIdx][listLevel],
+    if (!id.isEmpty()) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[id][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
     }
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[d->phType][listLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterProperties->textStyles[type][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
     }
-    if (!d->phType.isEmpty()) {
+    if (!type.isEmpty()) {
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             // pass properties from master to slide
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[d->phType][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[type][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
         }
     }
-    if (!d->phIdx.isEmpty()) {
+    if (!id.isEmpty()) {
         if (m_context->type == Slide || m_context->type == SlideLayout) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[d->phIdx][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[id][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
         }
     }
     if (m_context->type == Slide) {
-        QString slideIdentifier = d->phType + d->phIdx;
+        QString slideIdentifier = type + id;
 
         if (!slideIdentifier.isEmpty()) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[d->phType][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[slideIdentifier][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
         }
     }

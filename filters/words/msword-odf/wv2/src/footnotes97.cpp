@@ -1,5 +1,6 @@
 /* This file is part of the wvWare 2 project
    Copyright (C) 2002-2003 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -128,4 +129,23 @@ void Footnotes97::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
 #ifdef WV2_DEBUG_FOOTNOTES
     wvlog << "Footnotes97::init() done" << endl;
 #endif
+}
+
+void Footnotes97::check( U32 globalCP )
+{
+    while (nextFootnote() < globalCP) {
+        ++( *m_footnoteRefIt );
+        ++m_footnoteTxtIt;
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "Footnote skipped!";
+#endif
+    }
+
+    while (nextEndnote() < globalCP) {
+        ++( *m_endnoteRefIt );
+        ++m_endnoteTxtIt;
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "Endnote skipped!";
+#endif
+    }
 }
