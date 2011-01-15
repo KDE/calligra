@@ -20,7 +20,11 @@
 
 #include <QLabel>
 #include <QIntValidator>
+
+#ifndef KEXI_MOBILE
 #include <Q3ScrollView>
+#endif
+
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QKeyEvent>

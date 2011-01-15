@@ -75,7 +75,6 @@ add_subdirectory( data )
 add_subdirectory( pics )
 add_subdirectory( plugins )
 add_subdirectory( tests )
-add_subdirectory( shapes )
 
 IF(KEXI_MOBILE)
 
@@ -83,12 +82,12 @@ ELSE(KEXI_MOBILE)
   add_subdirectory( main )
   add_subdirectory( formeditor )
   add_subdirectory( migration )
+  add_subdirectory( shapes )
 ENDIF(KEXI_MOBILE)
 
 ########### next target ###############
 
 IF(KEXI_MOBILE)
-  #Add Kexi mobile application subdir here
   add_subdirectory( KexiMobile )
 ELSE(KEXI_MOBILE)
   set(kexi_SRCS main.cpp )
