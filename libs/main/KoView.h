@@ -30,6 +30,8 @@ class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
 class KoZoomController;
+class KoConfigurationDialogPage;
+class KoConfigurationDialog;
 
 // KDE classes
 class KStatusBar;
@@ -302,7 +304,10 @@ protected:
      * Handles the event KParts::GUIActivateEvent.
      */
     virtual void guiActivateEvent(KParts::GUIActivateEvent *);
-
+    /**
+     * Subclasses can override this to add their custom configuration pages
+     */
+    virtual void addCustomConfigurationDialogPages(KoConfigurationDialog *dialog);
 
     /**
        Generate a name for this view.
@@ -336,6 +341,7 @@ signals:
 
 protected slots:
     virtual void slotAutoScroll();
+    void showConfigurationDialog();
 
 private:
     virtual void setupGlobalActions(void);

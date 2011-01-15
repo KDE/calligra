@@ -352,6 +352,8 @@ protected: // reimplementations
     virtual void updateReadWrite(bool readwrite);
     virtual void guiActivateEvent(KParts::GUIActivateEvent *ev);
     virtual KoPrintJob * createPrintJob();
+    virtual void addCustomConfigurationDialogPages (KoConfigurationDialog* dialog);
+
 public:
     virtual KoZoomController *zoomController() const;
 

@@ -10,7 +10,7 @@
    Copyright 1999-2001 Simon Hausmann <hausmann@kde.org>
    Copyright 1998-2000 Torben Weis <weis@kde.org>
    Copyright 2010 Boudewijn Rempt <boud@kogmbh.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -104,6 +104,7 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
+#include <KoConfigurationDialogPage.h>
 
 // KSpread includes
 #include "ApplicationSettings.h"
@@ -162,6 +163,7 @@
 // D-Bus
 #include "interfaces/ViewAdaptor.h"
 #include <QtDBus/QtDBus>
+#include <dialogs/KoConfigurationDialog.h>
 
 using namespace Calligra::Tables;
 
@@ -2131,6 +2133,21 @@ KoPrintJob * View::createPrintJob()
     // About to print; close the editor.
     selection()->emitCloseEditor(true); // save changes
     return new PrintJob(this);
+}
+
+void View::addCustomConfigurationDialogPages (KoConfigurationDialog* dialog)
+{
+    //Sample pages
+    //Add Tables configuration dialogs to standard configuration dialog
+    QWidget *widget = new QWidget;
+    SheetPropertiesWidget sheetPropertyWidget(this);
+    sheetPropertyWidget.setupUi(widget);
+
+    KoConfigurationDialogPage *page = new KoConfigurationDialogPage(widget);
+    page->setTitle("Tables custom page");
+    page->setIcon(KIcon("kde"));
+
+    dialog->addCustomPage(page);
 }
 
 #include "View.moc"
