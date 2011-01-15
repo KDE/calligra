@@ -25,22 +25,12 @@
 #include <QFile>
 #include <QObject>
 #include <QTextStream>
-//Added by qt3to4:
-#include <QByteArray>
-
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <kofficeversion.h>
 
-typedef struct {
-    int c;
-    int m;
-    int y;
-    int k;
-
-    int r;
-    int g;
-    int b;
-}t_mycolor;
+class KoOdfWriteStore;
+class QByteArray;
 
 class APPLIXWORDImport : public KoFilter
 {
@@ -53,12 +43,13 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
-protected:
+private:
     QChar   specCharfind(QChar , QChar);
     QString readTagLine(QTextStream &);
     void    replaceSpecial(QString &);
     QString nextLine(QTextStream &);
     int     readHeader(QTextStream &stream);
+    bool createMeta(KoOdfWriteStore &store);
 
 private:
     int m_stepsize;
