@@ -69,10 +69,10 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_tocNumber(0)
     , m_footNoteNumber(0)
     , m_endNoteNumber(0)
-    , m_index(0)
     , m_currentTable(0)
     , m_paragraph(0)
     , m_hasStoredDropCap(false)
+    , m_breakBeforePage(false)
     , m_insideFootnote(false)
     , m_footnoteWriter(0)
     , m_footnoteBuffer(0)
@@ -81,13 +81,13 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_annotationBuffer(0)
     , m_insideDrawing(false)
     , m_drawingWriter(0)
-    , m_breakBeforePage(false)
     , m_listLevelStyleRequired(false)
     , m_currentListDepth(-1)
     , m_currentListID(0)
     , m_fld(new fld_State())
     , m_fldStart(0)
     , m_fldEnd(0)
+//     , m_index(0)
 {
 #ifdef IMAGE_IMPORT
     kDebug(30513) << "we have image support";
@@ -537,28 +537,6 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     m_annotationBuffer = 0;
 }
 
-//create an element for the variable
-QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
-{
-    Q_UNUSED(chp);
-
-    kDebug(30513) ;
-    //m_paragraph += '#';
-
-    QDomElement formatElem;
-    //writeFormattedText(chp, m_currentStyle ? &m_currentStyle->chp() : 0);
-
-    //m_index += 1;
-
-    QDomElement varElem = m_formats.ownerDocument().createElement("VARIABLE");
-    QDomElement typeElem = m_formats.ownerDocument().createElement("TYPE");
-    typeElem.setAttribute("type", type);
-    typeElem.setAttribute("key", format);
-    varElem.appendChild(typeElem);
-    formatElem.appendChild(varElem);
-    return varElem;
-}
-
 void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
     kDebug(30513) ;
@@ -714,31 +692,6 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     m_drawingWriter = 0;
 }
 #endif // IMAGE_IMPORT
-
-QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
-{
-    Q_UNUSED(fsname);
-
-    kDebug(30513) ;
-    //m_paragraph += '#';
-
-    // Can't call writeFormat, we have no chp.
-    //QDomElement format( mainDocument().createElement( "FORMAT" ) );
-    //format.setAttribute( "id", 6 );
-    //format.setAttribute( "pos", m_index );
-    //format.setAttribute( "len", 1 );
-    //m_formats.appendChild( format );
-    //QDomElement formatElem = format;
-
-    //m_index += 1;
-
-    //QDomElement anchorElem = m_formats.ownerDocument().createElement( "ANCHOR" );
-    //anchorElem.setAttribute( "type", "frameset" );
-    //anchorElem.setAttribute( "instance", fsname );
-    //formatElem.appendChild( anchorElem );
-    return QDomElement();
-}
-
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
 
@@ -1629,14 +1582,15 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
 
 // Return the name of a font. We have to convert the Microsoft font names to
 // something that might just be present under X11.
-QString KWordTextHandler::getFont(unsigned fc) const
-{
+QString KWordTextHandler::getFont(unsigned ftc) const
+{ 
     kDebug(30513) ;
     Q_ASSERT(m_parser);
-    if (!m_parser)
-        return QString();
-    const wvWare::Word97::FFN& ffn(m_parser->font(fc));
 
+    if (!m_parser) {
+        return QString();
+    }
+    const wvWare::Word97::FFN& ffn(m_parser->font(ftc));
     QString fontName(Conversion::string(ffn.xszFfn));
     return fontName;
     /*
@@ -2129,5 +2083,58 @@ void KWordTextHandler::fld_restoreState()
     m_fld = m_fldStates.top();
     m_fldStates.pop();
 }
+
+// ************************************************
+//  Obsolete
+// ************************************************
+
+#ifdef TEXTHANDLER_OBSOLETE
+
+//create an element for the variable
+QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
+{
+    Q_UNUSED(chp);
+
+    kDebug(30513) ;
+    //m_paragraph += '#';
+
+    QDomElement formatElem;
+    //writeFormattedText(chp, m_currentStyle ? &m_currentStyle->chp() : 0);
+
+    //m_index += 1;
+
+    QDomElement varElem = m_formats.ownerDocument().createElement("VARIABLE");
+    QDomElement typeElem = m_formats.ownerDocument().createElement("TYPE");
+    typeElem.setAttribute("type", type);
+    typeElem.setAttribute("key", format);
+    varElem.appendChild(typeElem);
+    formatElem.appendChild(varElem);
+    return varElem;
+}
+
+QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
+{
+    Q_UNUSED(fsname);
+
+    kDebug(30513) ;
+    //m_paragraph += '#';
+
+    // Can't call writeFormat, we have no chp.
+    //QDomElement format( mainDocument().createElement( "FORMAT" ) );
+    //format.setAttribute( "id", 6 );
+    //format.setAttribute( "pos", m_index );
+    //format.setAttribute( "len", 1 );
+    //m_formats.appendChild( format );
+    //QDomElement formatElem = format;
+
+    //m_index += 1;
+
+    //QDomElement anchorElem = m_formats.ownerDocument().createElement( "ANCHOR" );
+    //anchorElem.setAttribute( "type", "frameset" );
+    //anchorElem.setAttribute( "instance", fsname );
+    //formatElem.appendChild( anchorElem );
+    return QDomElement();
+}
+#endif // TEXTHANDLER_OBSOLETE
 
 #include "texthandler.moc"
