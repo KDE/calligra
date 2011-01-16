@@ -34,7 +34,74 @@
 // Note, presetShapeDefinitions has at least the following errors, which should be corrected manually
 // before running this program
 // 1. leftArrow <gd name="y1" fmla="+- vc 0 dy1"/>
-
+// 2. 1nd upDownArrow should be replaced with upArrow, which could look something like
+//<upArrow>
+//    <avLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
+//      <gd name="adj1" fmla="val 50000"/>
+//      <gd name="adj2" fmla="val 50000"/>
+//    </avLst>
+//    <gdLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
+//      <gd name="maxAdj2" fmla="*/ 100000 h ss"/>
+//      <gd name="a1" fmla="pin 0 adj1 100000"/>
+//      <gd name="a2" fmla="pin 0 adj2 maxAdj2"/>
+//      <gd name="dy1" fmla="*/ ss a2 100000"/>
+//      <gd name="y1" fmla="+- t dy1 0"/>
+//      <gd name="dx1" fmla="*/ w a1 200000"/>
+//      <gd name="x1" fmla="+- hc 0 dx1"/>
+//      <gd name="x2" fmla="+- hc dx1 0"/>
+//      <gd name="dy2" fmla="*/ x1 dy1 wd2"/>
+//      <gd name="y2" fmla="+- y1 dy2 0"/>
+//    </gdLst>
+//    <ahLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
+//      <ahXY gdRefX="adj1" minX="0" maxX="100000">
+//        <pos x="x1" y="t"/>
+//      </ahXY>
+//      <ahXY gdRefY="adj2" minY="0" maxY="maxAdj2">
+//        <pos x="l" y="y1"/>
+//      </ahXY>
+//    </ahLst>
+//    <cxnLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
+//      <cxn ang="3cd4">
+//        <pos x="hc" y="t"/>
+//      </cxn>
+//      <cxn ang="cd2">
+//        <pos x="l" y="y1"/>
+//      </cxn>
+//      <cxn ang="cd4">
+//        <pos x="hc" y="b"/>
+//      </cxn>
+//      <cxn ang="0">
+//        <pos x="r" y="y1"/>
+//      </cxn>
+//    </cxnLst>
+//    <rect xmlns="http://schemas.openxmlformats.org/drawingml/2006/main" l="x1" t="t" r="x2" b="y2"/>
+//    <pathLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
+//      <path>
+//        <moveTo>
+//         <pt x="l" y="y1"/>
+//        </moveTo>
+//        <lnTo>
+//          <pt x="x1" y="y1"/>
+//        </lnTo>
+//        <lnTo>
+//          <pt x="x1" y="b"/>
+//        </lnTo>
+//        <lnTo>
+//          <pt x="x2" y="b"/>
+//        </lnTo>
+//        <lnTo>
+//          <pt x="x2" y="y1"/>
+//        </lnTo>
+//        <lnTo>
+//          <pt x="r" y="y1"/>
+//        </lnTo>
+//        <lnTo>
+//          <pt x="hc" y="t"/>
+//        </lnTo>
+//        <close/>
+//      </path>
+//    </pathLst>
+//  </upArrow>
 int main()
 {
     QFile inputFile("./presetShapeDefinitions.xml");

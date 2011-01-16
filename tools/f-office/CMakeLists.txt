@@ -9,7 +9,16 @@ SET(QT_USE_QTMAEMO5 TRUE)
 SET(QT_USE_QTXML TRUE)
 INCLUDE(${QT_USE_FILE})
 
-include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/words/part ${CMAKE_SOURCE_DIR}/tables/part ${CMAKE_SOURCE_DIR}/tables ${LIBXML2_INCLUDE_DIR})
+include_directories(
+    ${CMAKE_BINARY_DIR}
+    ${KOABSTRACTION_INCLUDES}
+    ${KOMAIN_INCLUDES}
+    ${KOPAGEAPP_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/words/part
+    ${CMAKE_SOURCE_DIR}/tables/part
+    ${CMAKE_SOURCE_DIR}/tables
+    ${LIBXML2_INCLUDE_DIR}
+)
 
 SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
@@ -17,7 +26,6 @@ QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
 find_library( QT_QMAEMO5_LIBRARY QtMaemo5 HINTS ${QT_LIBRARIES} )
 
 set(FreOfficeMocSrc_SRCS
-    KoAbstractApplication.h
     MainWindow.h 
     Accelerator.h 
     VirtualKeyBoard.h 
@@ -39,11 +47,9 @@ set(FreOfficeMocSrc_SRCS
     PresentationToolAdaptor.h 
     NotesDialog.h 
     PreviewButton.h 
-    FoCellToolFactory.h 
-    FoCellTool.h 
     SlidingMotionDialog.h 
     FoExternalEditor.h 
-    FoCellEditor.h 
+    #TODO re-add FoCellEditor.h 
     DigitalSignatureDialog.h
     FoImageSelectionWidget.h
     ConfirmationDialog.h
@@ -68,11 +74,10 @@ else(QT_QMAEMO5_LIBRARY)
   
 endif(QT_QMAEMO5_LIBRARY)
 
-#QT4_WRAP_CPP(FreOfficeMocSrc ${FreOfficeMocSrc_SRCS})
+QT4_WRAP_CPP(FreOfficeMocSrc ${FreOfficeMocSrc_SRCS})
 
 set(FreOffice_SRCS
     Main.cpp
-    KoAbstractApplicationController.cpp
     KoAbstractApplicationImpl.cpp
     ConfirmationDialog.cpp
     MainWindow.cpp 
@@ -95,13 +100,11 @@ set(FreOffice_SRCS
     PreviewDialog.cpp 
     MainWindowAdaptor.cpp 
     PresentationToolAdaptor.cpp 
-    NotesDialog.cpp PreviewButton.cpp 
-    FoCellTool.cpp 
-    FoCellToolFactory.cpp 
+    NotesDialog.cpp
+    PreviewButton.cpp 
     SlidingMotionDialog.cpp 
     FoExternalEditor.cpp 
-    FoCellEditor.cpp 
-    RemoveSheet.cpp 
+    #TODO re-add FoCellEditor.cpp
     DigitalSignatureDialog.cpp
     FoImageSelectionWidget.cpp
     ${FreOfficeUiSrc} 
@@ -110,21 +113,40 @@ set(FreOffice_SRCS
 )
 
 if(QT_QTOPENGL_FOUND)
-  list(APPEND FreOffice_SRCS GlWidget.cpp GlPresenter.cpp )
+    list(APPEND FreOffice_SRCS
+        GlWidget.cpp
+        GlPresenter.cpp
+    )
 endif(QT_QTOPENGL_FOUND)
 
-kde4_add_executable(FreOffice ${FreOffice_SRCS})
+add_executable(FreOffice ${FreOffice_SRCS})
 
-target_link_libraries(FreOffice ${QT_QTSQL_LIBRARY})
+target_link_libraries(FreOffice
+    ${LIBXML2_LIBRARIES}
+    ${OPENSSL_LIBRARIES}
+    ${X11_X11_LIB}
+    ${QT_LIBRARIES}
+    ${QT_QTSQL_LIBRARY}
+    ${QT_QTNETWORK_LIBRARIES}
+    koabstraction
+    komain
+    kopageapp
+    wordsprivate
+    calligratablescommon
+)
 
 if (QT_QTOPENGL_FOUND)
-    target_link_libraries(FreOffice ${QT_QTOPENGL_LIBRARY})
+    target_link_libraries(FreOffice
+        ${QT_QTOPENGL_LIBRARY}
+        ${OPENGL_LIBRARIES}
+    )
 endif (QT_QTOPENGL_FOUND)
 
 if(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${X11_X11_LIB} komain kopageapp wordsprivate calligratablescommon ${LIBXML2_LIBRARIES} ${OPENSSL_LIBRARIES} ${SOPRANO_LIBRARIES} )
-else(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} ${X11_X11_LIB} komain kopageapp wordsprivate calligratablescommon ${LIBXML2_LIBRARIES} ${OPENSSL_LIBRARIES} )
+    target_link_libraries(FreOffice
+        ${QT_QMAEMO5_LIBRARY}
+        ${SOPRANO_LIBRARIES}
+    )
 endif(QT_QMAEMO5_LIBRARY)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)

@@ -49,7 +49,7 @@ SchedulerPlugin::SchedulerPlugin(QObject *parent)
     m_synctimer.setInterval( 500 );
     connect(&m_synctimer, SIGNAL(timeout()), SLOT(slotSyncData()));
 }
- 
+
 SchedulerPlugin::~SchedulerPlugin()
 {
     foreach ( SchedulerThread *s, m_jobs ) {
@@ -145,16 +145,25 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
     ScheduleManager *sm = j->mainManager();
     Project *p = j->mainProject();
     Q_ASSERT( p == &(sm->project()) );
+#ifdef NDEBUG
+    Q_UNUSED(p)
+#endif
+
+    if ( j->manager() ) {
+        sm->setPhaseNames( j->phaseNames() );
+    }
+
     QList<Schedule::Log> logs;
-    //qDebug()<<"SchedulerPlugin::updateLog:"<<j<<logs.count();
     foreach ( const Schedule::Log log, j->log() ) {
         // map log from temporary project to real project
         Schedule::Log l = log;
         if ( l.resource ) {
             const Resource *r = l.resource;
             l.resource = sm->project().findResource( l.resource->id() );
-//            qDebug()<<"SchedulerPlugin::updateLog: mapped"<<r<<l.resource;
             Q_ASSERT( r != l.resource );
+#ifdef NDEBUG
+            Q_UNUSED(r)
+#endif
             Q_ASSERT( l.resource->project() == p );
         }
         if ( l.node ) {
@@ -164,13 +173,17 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
             } else {
                 l.node = sm->project().findNode( l.node->id() );
             }
-//            qDebug()<<"SchedulerPlugin::updateLog: mapped"<<n<<l.node;
             Q_ASSERT( n != l.node );
+#ifdef NDEBUG
+            Q_UNUSED(n)
+#endif
             Q_ASSERT( l.node->projectNode() == p );
         }
         logs << l;
     }
-    sm->slotAddLog( logs );
+    if ( ! logs.isEmpty() ) {
+        sm->slotAddLog( logs );
+    }
 }
 
 void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm ) const
@@ -249,6 +262,9 @@ void SchedulerPlugin::updateAppointments( const Project *tp, const ScheduleManag
 
     bool ret = sm->loadMainSchedule( sm->expected(), se, status ); // also loads appointments
     Q_ASSERT( ret );
+#ifdef NDEBUG
+    Q_UNUSED(ret)
+#endif
     mp->setCurrentSchedule( sch->id() );
     sm->expected()->setPhaseNames( sch->phaseNames() );
     mp->changed( sm );
@@ -275,7 +291,7 @@ SchedulerThread::SchedulerThread( Project *project, ScheduleManager *manager, QO
 
     m_pdoc.setContent( document.toString() );
 
-    
+
     connect( this, SIGNAL(started()), this, SLOT(slotStarted()));
     connect( this, SIGNAL(finished()), this, SLOT(slotFinished()));
 }
@@ -318,7 +334,7 @@ int SchedulerThread::progress() const
 
 void SchedulerThread::slotAddLog( KPlato::Schedule::Log log )
 {
-    //qDebug()<<"SchedulerThread::slotAddLog:"<<log;
+//     kDebug()<<log;
     QMutexLocker m( &m_logMutex );
     m_logs << log;
 }
@@ -329,6 +345,12 @@ QList<Schedule::Log> SchedulerThread::log()
     QList<KPlato::Schedule::Log> l = m_logs;
     m_logs.clear();
     return l;
+}
+
+QMap<int, QString> SchedulerThread::phaseNames() const
+{
+    QMutexLocker m( &m_managerMutex );
+    return m_manager->phaseNames();
 }
 
 

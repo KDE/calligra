@@ -386,6 +386,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                 } else if (tag.namespaceURI() == KoXmlNS::table) {
                     if (localName == "table") {
                         loadTable(tag, cursor);
+                            usedParagraph = false;
                     } else {
                         kWarning(32500) << "KoTextLoader::loadBody unhandled table::" << localName;
                     }
@@ -1089,6 +1090,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             If a heading has a numbering applied, the text of the formatted number can be included in a
             <text:number> element. This text can be used by applications that do not support numbering of
             headings, but it will be ignored by applications that support numbering.                   */
+        } else if ((isDrawNS) && localName == "a") { // draw:a
+            loadShapeWithHyperLink(ts, cursor);
         } else if (isDrawNS) {
             loadShape(ts, cursor);
         } else {
@@ -1195,11 +1198,6 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
 
 void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 {
-    //add block before table,
-    if (cursor.block().blockNumber() != 0) {
-        cursor.insertBlock(QTextBlockFormat());
-    }
-
     QTextTableFormat tableFormat;
     QString tableStyleName = tableElem.attributeNS(KoXmlNS::table, "style-name", "");
     if (!tableStyleName.isEmpty()) {
@@ -1346,15 +1344,31 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     cursor = tbl->lastCursorPosition();
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
     d->inTable = false;
-
 }
 
-void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
+void KoTextLoader::loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor& cursor)
+{
+    // get the hyperlink
+    QString hyperLink = element.attributeNS(KoXmlNS::xlink, "href");
+    KoShape *shape = 0;
+
+    //load the shape for hyperlink
+    KoXmlNode node = element.firstChild();
+    if (!node.isNull()) {
+        KoXmlElement ts = node.toElement();
+        shape = loadShape(ts, cursor);
+        if (shape) {
+            shape->setHyperLink(hyperLink);
+        }
+    }
+}
+
+KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
 {
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, d->context);
     if (!shape) {
         kDebug(32500) << "shape '" << element.localName() << "' unhandled";
-        return;
+        return 0;
     }
 
     QString anchorType;
@@ -1384,6 +1398,7 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     } else {
         d->textSharedData->shapeInserted(shape, element, d->context);
     }
+    return shape;
 }
 
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)

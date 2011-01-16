@@ -2250,6 +2250,8 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
     if ( duration == Duration::zeroDuration ) {
 #ifndef NDEBUG
         if ( sch ) sch->logDebug( "Calculate length: estimate == 0" );
+#else
+        Q_UNUSED(sch)
 #endif
         return l;
     }

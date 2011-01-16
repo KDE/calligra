@@ -20,13 +20,13 @@
 #ifndef _DOCUMENT_MODEL_H_
 #define _DOCUMENT_MODEL_H_
 
-#include "import/DocumentSectionModel.h"
+#include "KoDocumentSectionModel.h"
 
 class RootSection;
 class Section;
 class SectionGroup;
 
-class DocumentModel : public DocumentSectionModel {
+class DocumentModel : public KoDocumentSectionModel {
   public:
     enum Role {
       SectionPtr = 0x1252BAD

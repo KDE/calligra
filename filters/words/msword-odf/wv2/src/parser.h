@@ -43,7 +43,6 @@ struct STTBF;
 class InlineReplacementHandler;
 class SubDocumentHandler;
 class TableHandler;
-class PictureHandler;
 class TextHandler;
 class GraphicsHandler;
 class OLEStorage;
@@ -164,11 +163,7 @@ public:
      * We don't take ownership of the handler!
      */
     void setTableHandler( TableHandler* handler );
-    /**
-     * The picture handler passes the image/drawing data to the consumer.
-     * We don't take ownership of the handler!
-     */
-    void setPictureHandler( PictureHandler* handler );
+
     /**
      * The text handler is the main worker among all handlers. It's used to forward
      * the formatted text to the document, make sure that it's fast.
@@ -188,13 +183,11 @@ protected:
     InlineReplacementHandler* m_inlineHandler;
     SubDocumentHandler* m_subDocumentHandler;
     TableHandler* m_tableHandler;
-    PictureHandler* m_pictureHandler;
     TextHandler* m_textHandler;
     GraphicsHandler* m_graphicsHandler;
     bool m_ourInlineHandler;
     bool m_ourSubDocumentHandler;
     bool m_ourTableHandler;
-    bool m_ourPictureHandler;
     bool m_ourTextHandler;
     bool m_ourGraphicsHandler;
 

@@ -3,6 +3,7 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -94,14 +95,15 @@ public:
 
     virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
     virtual void tableEndFound();
+    virtual void bookmarkStart( const wvWare::BookmarkData& data );
+    virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
 #ifdef IMAGE_IMPORT
     virtual void inlineObjectFound(const wvWare::PictureData& data);
-#endif // IMAGE_IMPORT
     virtual void floatingObjectFound(unsigned int globalCP );
+#endif // IMAGE_IMPORT
 
-    virtual void bookmarkStart( const wvWare::BookmarkData& data );
-    virtual void bookmarkEnd( const wvWare::BookmarkData& data );
+    ///////// Our own interface
 
     /**
      * Paragraph can be present in {header, footer, footnote, endnote,
@@ -109,38 +111,22 @@ public:
      */
     KoXmlWriter* currentWriter() const;
 
-    ///////// Our own interface, also used by processStyles
+    /**
+     * @ftc index into the font table provided by Character properties (CHP)
+     * @return font name
+     */
+    QString getFont(unsigned ftc) const;
 
-    Document* document() const {
-        return m_document;
-    }
-    void setDocument(Document * document) {
-        m_document = document;
-    }
-    bool pageNumberFieldType() const {
-        return m_fieldType == 33;
-    }
-
-    // Write a <FORMAT> tag from the given CHP
-    // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
-    //void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp,
-    //const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
-
-    // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
-    //void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle,
-    //const wvWare::Style* style, bool writeContentTags, QString namedStyle);
+    // Provide access to private attributes for our handlers
+    Document* document() const { return m_document; }
+    void setDocument(Document * document) { m_document = document; }
+    void set_breakBeforePage(bool val) { m_breakBeforePage = val; }
+    bool breakBeforePage(void) const { return m_breakBeforePage; }
+    int sectionNumber(void) const { return m_sectionNumber; }
 
     //TODO: let's try to solve all list related stuff locally in TextHandler
     bool listIsOpen(); //tell us whether a list is open
     void closeList();
-
-    KoGenStyles* m_mainStyles; //this is for collecting most of the styles
-    int m_sectionNumber;
-    QString getFont(unsigned fc) const;
-
-    // Provide access to private attributes for our handlers
-    void set_breakBeforePage(bool val) { m_breakBeforePage = val; }
-    bool breakBeforePage(void) const { return m_breakBeforePage; }
 
     // Communication with Document, without having to know about Document
 signals:
@@ -153,25 +139,55 @@ signals:
     void tableFound(KWord::Table* table);
     void inlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
     void floatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
-    void updateListDepth(int);
-
-protected:
-    QDomElement insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format);
-    QDomElement insertAnchor(const QString& fsname);
-    KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
+/*     void updateListDepth(int); */
 
 private:
-    // The document owning this text handler.
-    Document* m_document;
+    KoGenStyles* m_mainStyles; //this is for collecting most of the styles
+    KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
+    Document* m_document; // The document owning this text handler
 
+    wvWare::SharedPtr<const wvWare::Word97::SEP> m_sep; //store section info for section end
     wvWare::SharedPtr<wvWare::Parser> m_parser;
-    QString m_listSuffixes[9]; // The suffix for every list level seen so far
-    QDomElement m_framesetElement;
+
+    int m_sectionNumber;  // number of sections processed
+    int m_tocNumber;      // number of TOC fields processed
     int m_footNoteNumber; // number of footnote _vars_ written out
-    int m_endNoteNumber; // number of endnote _vars_ written out
+    int m_endNoteNumber;  // number of endnote _vars_ written out
+
     //int m_textStyleNumber; //number of styles created for text family
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
+
+    KWord::Table* m_currentTable;
+    Paragraph *m_paragraph; //pointer to paragraph object
+#if 1
+    bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap
+    int        m_dcs_fdct;
+    int        m_dcs_lines;
+    qreal      m_dropCapDistance;
+#endif
+    QString    m_dropCapString;
+    QString    m_dropCapStyleName;
+
+    //if TRUE, the fo:break-before="page" property is required because a manual
+    //page break (an end-of-section character not at the end of a section) was
+    //found in the main document
+    bool m_breakBeforePage;
+
+    bool m_insideFootnote;
+    KoXmlWriter* m_footnoteWriter; //write the footnote data, then add it to bodyWriter
+    QBuffer* m_footnoteBuffer; //buffer for the footnote data
+
+    bool m_insideAnnotation;
+    KoXmlWriter* m_annotationWriter; //write the annotation data, then add it to bodyWriter
+    QBuffer* m_annotationBuffer; //buffer for the annotation data
+
+    bool m_insideDrawing;
+    KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
+
+    // ************************************************
+    //  State
+    // ************************************************
 
     //save/restore for processing footnotes (very similar to the wv2 method)
     struct State {
@@ -193,51 +209,15 @@ private:
     void saveState();
     void restoreState();
 
-    QStack <KoXmlWriter*> m_usedListWriters;
-
-    // Current paragraph
-    wvWare::SharedPtr<const wvWare::Word97::SEP> m_sep; //store section info for section end
-    enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
-    int m_index;
-    QDomElement m_formats;
-    QDomElement m_oldLayout;
-
-    KWord::Table* m_currentTable;
-
-    //pointer to paragraph object
-    Paragraph *m_paragraph;
-#if 1
-    bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap
-    int        m_dcs_fdct;
-    int        m_dcs_lines;
-    qreal      m_dropCapDistance;
-#endif
-    QString    m_dropCapString;
-    QString    m_dropCapStyleName;
-
-    bool m_insideFootnote;
-    KoXmlWriter* m_footnoteWriter; //write the footnote data, then add it to bodyWriter
-    QBuffer* m_footnoteBuffer; //buffer for the footnote data
-
-    bool m_insideAnnotation;
-    KoXmlWriter* m_annotationWriter; //write the annotation data, then add it to bodyWriter
-    QBuffer* m_annotationBuffer; //buffer for the annotation data
-
-    bool m_insideDrawing;
-    KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
-
-    //if TRUE, the fo:break-before="page" property is required because a manual
-    //page break (an end-of-section character not at the end of a section) was
-    //found in the main document
-    bool m_breakBeforePage;
-
     // ************************************************
     //  List related
     // ************************************************
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
-    void updateListStyle(QString textStyleName);
+    QString createBulletStyle(const QString& textStyleName) const;
+    void updateListStyle(const QString& textStyleName);
 
+    QString m_listSuffixes[9]; // The suffix for every list level seen so far
     QString m_listStyleName; //track the name of the list style
     bool m_listLevelStyleRequired; //track if a list-level-style is required for current paragraph
     int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
@@ -245,93 +225,202 @@ private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_currentPPs; //paragraph properties
 
     //int m_previousListID; //track previous list, in case we need to continue the numbering
-
     QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
+    QStack <KoXmlWriter*> m_usedListWriters;
 
     // ************************************************
     //  Field related
     // ************************************************
 
+    //field type enumeration as defined in [MS-DOC.pdf] page 356
+    enum fldType
+    {
+        UNSUPPORTED = 0,
+        //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
+        //REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
+        REF = 0x03, ///< Reference
+        //FTNREF = 0x05, ///< Identicial to NOTEREF (not a reference)
+        //SET = 0x06,
+        //IF = 0x07,
+        //INDEX = 0x08,
+        //STYLEREF = 0x0a,
+        //SEQ = 0x0c,
+        TOC = 0x0d,
+        //INFO = 0x0e,
+        TITLE = 0x0f,
+        SUBJECT = 0x10,
+        AUTHOR = 0x11,
+        //KEYWORDS = 0x12,
+        //COMMENTS = 0x13,
+        LAST_REVISED_BY = 0x14, ///< LASTSAVEDBY
+        CREATEDATE = 0x15,
+        SAVEDATE = 0x16,
+        //PRINTDATE = 0x17,
+        //REVNUM = 0x18,
+        EDITTIME = 0x19,
+        NUMPAGES = 0x1a,
+        //NUMWORDS = 0x1b,
+        //NUMCHARS = 0x1c,
+        FILENAME = 0x1d,
+        //TEMPLATE = 0x1e,
+        DATE = 0x1f,
+        TIME = 0x20,
+        PAGE = 0x21,
+        //EQUALS = 0x22, ///< the "=" sign
+        //QUOTE = 0x23,
+        //INCLUDE = 0x24,
+        PAGEREF = 0x25,
+        //ASK = 0x26,
+        //FILLIN = 0x27,
+        //DATA = 0x28,
+        //NEXT = 0x29,
+        //NEXTIF = 0x2a,
+        //SKIPIF = 0x2b,
+        //MERGEREC = 0x2c,
+        //DDE = 0x2d,
+        //DDEAUTO = 0x2e,
+        //GLOSSARY = 0x2f,
+        //PRINT = 0x30,
+        EQ = 0x31,
+        //GOTOBUTTON = 0x32,
+        MACROBUTTON = 0x33,
+        //AUTONUMOUT = 0x34,
+        //AUTONUMLGL = 0x35,
+        //AUTONUM = 0x36,
+        //IMPORT = 0x37,
+        //LINK = 0x38,
+        SYMBOL = 0x39,
+        //EMBED = 0x3a,
+        MERGEFIELD = 0x3b,
+        //USERNAME = 0x3c,
+        //USERINITIALS = 0x3d,
+        //USERADDRESS = 0x3e,
+        //BARCODE = 0x3f,
+        //DOCVARIABLE = 0x40,
+        //SECTION = 0x41,
+        //SECTIONPAGES = 0x42,
+        //INCLUDEPICTURE = 0x43,
+        //INCLUDETEXT = 0x44,
+        //FILESIZE = 0x45,
+        //FORMTEXT = 0x46,
+        //FORMCHECKBOX = 0x47,
+        //NOTEREF = 0x48,
+        //TOA = 0x49,
+        //MERGESEQ = 0x4b,
+        //AUTOTEXT = 0x4f,
+        //COMPARE = 0x50,
+        //ADDIN = 0x51,
+        //FORMDROPDOWN = 0x53,
+        //ADVANCE = 0x54,
+        //DOCPROPERTY = 0x55,
+        //CONTROL = 0x57,
+        HYPERLINK = 0x58,
+        //AUTOTEXTLIST = 0x59,
+        //LISTNUM = 0x5a,
+        //HTMLCONTROL = 0x5b,
+        //BIDIOUTLINE = 0x5c,
+        //ADDRESSBLOCK = 0x5d,
+        //GREETINGLINE = 0x5e,
+        SHAPE = 0x5f
+    };
+
     //save/restore for processing field (very similar to the wv2 method)
     struct fld_State
     {
-        fld_State(int type, bool inside, bool afterSep, bool hyperLink, bool bkmkRef,
-                  QString inst, QString result, QString stlName, KoXmlWriter* writer, QBuffer* buf) :
-        type(type),
-        inside(inside),
-        afterSeparator(afterSep),
-        hyperLinkActive(hyperLink),
-        bkmkRefActive(bkmkRef),
-        instructions(inst),
-        result(result),
-        styleName(stlName),
-        writer(writer),
-        buffer(buf) {}
+        fld_State(fldType type = UNSUPPORTED) :
+            m_type(type),
+            m_insideField(false),
+            m_afterSeparator(false),
+            m_hyperLinkActive(false),
+            m_hyperLinkUrl(QString::null),
+            m_instructions(QString::null),
+            m_result(QString::null),
+            m_styleName(QString::null),
+            m_writer(0),
+            m_buffer(0)
+        {
+            m_buffer = new QBuffer();
+            m_buffer->open(QIODevice::WriteOnly);
+            m_writer = new KoXmlWriter(m_buffer);
+        }
 
-        int type;
-        bool inside;
-        bool afterSeparator;
-        bool hyperLinkActive;
-        bool bkmkRefActive;
-        QString instructions;
-        QString result;
-        QString styleName;
-        KoXmlWriter* writer;
-        QBuffer* buffer;
+        ~fld_State()
+        {
+            delete m_writer;
+            m_writer = 0;
+            delete m_buffer;
+            m_buffer = 0;
+        }
+
+        //set to UNSUPPORTED for a field we can't handle, anything else is the field type
+        fldType m_type;
+        
+	//other field related variables
+        bool m_insideField;
+        bool m_afterSeparator;
+        bool m_hyperLinkActive;
+	
+	//stores the location (bookmark/URL) to jump to
+        QString m_hyperLinkUrl;
+        
+	//stores field instructions
+        QString m_instructions;
+        
+	//stores the field result
+        QString m_result;
+        
+	//KoGenStyle name for the <text:span> element encapsulating the field
+        //result (if applicable)
+        QString m_styleName;
+        
+	//writer and buffer used to place bookmark elements into the field result,
+        //if bookmarks are not to be supported by your field type, use m_result
+        KoXmlWriter* m_writer;
+        QBuffer* m_buffer;
     };
 
-    std::stack<fld_State> m_fldStates;
+    std::stack<fld_State *> m_fldStates;
     void fld_saveState();
     void fld_restoreState();
 
     //storage for XML snippets of already processed fields
-    QList<QString> fld_snippets;
+    QList<QString> m_fld_snippets;
 
-    //field type enumeration as defined in MS-DOC page 354/609
-    enum fldType
-    {
-        UNSUPPORTED = 0,
-        REF = 0x03,
-        TOC = 0x0d,
-        TITLE = 0x0f,
-        AUTHOR = 0x11,
-        EDITTIME = 0x19,
-        NUMPAGES = 0x1a,
-        FILENAME = 0x1d,
-        PAGE = 0x21,
-        PAGEREF = 0x25,
-        EQ = 0x31,
-        MACROBUTTON = 0x33,
-        SYMBOL = 0x39,
-        MERGEFIELD = 0x3b,
-        HYPERLINK = 0x58,
-        SHAPE = 0x5f
-    };
-
-    //set to 0 for a field we can't handle, anything else is the field type
-    int m_fieldType;
-
-    //other field related variables
-    bool m_insideField;
-    bool m_fieldAfterSeparator;
-    bool m_hyperLinkActive;
-    bool m_bkmkRefActive;
-
-    //writer and buffer used to place bookmark elements into the field result,
-    //if bookmarks are not to be supported by your field type, use m_fldResult
-    KoXmlWriter* m_fldWriter;
-    QBuffer* m_fldBuffer;
-
-    QString m_fldInst;   //stores field instructions
-    QString m_fldResult; //stores the field result
-
-    //KoGenStyle name for the <text:span> element encapsulating the field
-    //result (if applicable)
-    QString m_fldStyleName;
+    // Current field.
+    fld_State *m_fld;
 
     //counters
     int m_fldStart;
     int m_fldEnd;
+
+    // ************************************************
+    //  Obsolete
+    // ************************************************
+
+#ifdef TEXTHANDLER_OBSOLETE
+
+public:
+    // Write a <FORMAT> tag from the given CHP
+    // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
+    void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp,
+                            const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
+
+    // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
+    void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle,
+                     const wvWare::Style* style, bool writeContentTags, QString namedStyle);
+
+protected:
+    QDomElement insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format);
+    QDomElement insertAnchor(const QString& fsname);
+
+private:
+    enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
+
+    QDomElement m_framesetElement;
+    QDomElement m_oldLayout;
+    QDomElement m_formats;
+    int m_index;
+#endif
 };
 
 #endif // TEXTHANDLER_H

@@ -118,6 +118,7 @@ void MsooXmlReader::init()
     m_readUndoed = false;
 }
 
+/*
 static const char * tokenNames[] = {
     "NoToken", "Invalid", "StartDocument", "EndDocument",
     "StartElement", "EndElement", "Characters", "Comment",
@@ -131,6 +132,7 @@ static const char* tokenName(QXmlStreamReader::TokenType t)
         i = QXmlStreamReader::ProcessingInstruction + 1;
     return tokenNames[i];
 }
+*/
 
 bool MsooXmlReader::readBooleanAttr(const char* attrName, bool defaultValue) const
 {

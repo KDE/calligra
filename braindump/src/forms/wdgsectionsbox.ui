@@ -14,7 +14,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="searchLine"/>
+      <widget class="KLineEdit" name="searchLine"/>
      </item>
      <item>
       <widget class="QToolButton" name="bnViewMode"/>
@@ -22,7 +22,7 @@
     </layout>
    </item>
    <item>
-    <widget class="DocumentSectionView" name="listSections" native="true"/>
+    <widget class="KoDocumentSectionView" name="listSections" native="true"/>
    </item>
    <item>
     <layout class="QHBoxLayout">
@@ -185,9 +185,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>DocumentSectionView</class>
+   <class>KoDocumentSectionView</class>
    <extends></extends>
-   <header location="global">import/DocumentSectionView.h</header>
+   <header location="global">KoDocumentSectionView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

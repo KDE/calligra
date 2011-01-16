@@ -1122,8 +1122,9 @@ void CellView::paintText(QPainter& painter,
 
     // set a clipping region for non-rotated text
     painter.save();
-    if (tmpAngle == 0)
-        painter.setClipRect(QRectF(coordinate, QSizeF(d->width, d->height)));
+    if (tmpAngle == 0) {
+        painter.setClipRegion(painter.clipRegion().intersected(QRect(coordinate.x(), coordinate.y(), d->width, d->height)));
+    }
 
 
     // Actually paint the text.
@@ -1202,6 +1203,7 @@ void CellView::paintText(QPainter& painter,
 #endif
         QTextDocument* doc = d->richText->clone();
         doc->setDefaultTextOption(d->textOptions());
+        doc->setUseDesignMetrics(true);
         const QPointF position(coordinate.x() + indent,
                                coordinate.y() + d->textY - d->textHeight);
         painter.translate(position);
@@ -2232,5 +2234,6 @@ QTextOption CellView::Private::textOptions() const
     if (style.verticalText())
         options.setAlignment(Qt::AlignHCenter);
     options.setWrapMode(style.wrapText() ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
+    options.setUseDesignMetrics(true);
     return options;
 }

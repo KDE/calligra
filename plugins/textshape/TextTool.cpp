@@ -26,7 +26,7 @@
 #include "dialogs/SimpleCharacterWidget.h"
 #include "dialogs/SimpleParagraphWidget.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "dialogs/StylesWidget.h"
+#include "dialogs/SimpleStylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/InsertCharacter.h"
@@ -941,7 +941,6 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     m_changeTipPos = event->globalPos();
 
-    useCursor(Qt::IBeamCursor);
     if (event->buttons()) {
         updateSelectedShape(event->point);
     }
@@ -954,6 +953,11 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     int position = pointToPosition(event->point);
 
     if (event->buttons() == Qt::NoButton) {
+
+        if (m_textShapeData->endPosition() == position) {
+            useCursor(Qt::IBeamCursor);
+            return;
+        }
         QTextCursor cursor(*(m_textEditor.data()->cursor()));
         cursor.setPosition(position);
 
@@ -967,14 +971,23 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                 m_changeTipCursorPos = position;
         }
 
-        if (cursor.charFormat().isAnchor())
+        if (cursor.charFormat().isAnchor()) {
             useCursor(Qt::PointingHandCursor);
-        else
-            useCursor(Qt::IBeamCursor);
+            return;
+        }
 
+        // check if mouse pointer is not over shape with hyperlink
+        KoShape *selectedShape = canvas()->shapeManager()->shapeAt(event->point);
+        if (selectedShape != 0 && selectedShape != m_textShape && selectedShape->hyperLink().size() != 0) {
+            useCursor(Qt::PointingHandCursor);
+            return;
+        }
+
+        useCursor(Qt::IBeamCursor);
         return;
     }
 
+    useCursor(Qt::IBeamCursor);
     if (position == m_textEditor.data()->position()) return;
     if (position >= 0) {
         if (m_textEditor.data()->hasSelection())
@@ -992,6 +1005,14 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     event->ignore();
     editingPluginEvents();
+
+    // check if mouse pointer is not over some shape with hyperlink
+    KoShape *selectedShape = canvas()->shapeManager()->shapeAt(event->point);
+    if (selectedShape != 0 && selectedShape != m_textShape && selectedShape->hyperLink().size() != 0) {
+        QString url = selectedShape->hyperLink();
+        runUrl(event, url);
+        return;
+    }
 
     // Is there an anchor here ?
     if (m_textEditor.data()->charFormat().isAnchor() && !m_textEditor.data()->hasSelection()) {
@@ -1015,24 +1036,7 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
                 }
             }
 
-            bool isLocalLink = (anchor.indexOf("file:") == 0);
-            QString type = KMimeType::findByUrl(anchor, 0, isLocalLink)->name();
-
-            if (KRun::isExecutableFile(anchor, type)) {
-                QString question = i18n("This link points to the program or script '%1'.\n"
-                                        "Malicious programs can harm your computer. "
-                                        "Are you sure that you want to run this program?", anchor);
-                // this will also start local programs, so adding a "don't warn again"
-                // checkbox will probably be too dangerous
-                int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
-                if (choice != KMessageBox::Yes)
-                    return;
-            }
-
-            event->accept();
-            new KRun(m_textEditor.data()->charFormat().anchorHref(), 0);
-            m_textEditor.data()->setPosition(0);
-            ensureCursorVisible();
+            runUrl(event, anchor);
             return;
         } else {
             QStringList anchorList = m_textEditor.data()->charFormat().anchorNames();
@@ -1556,6 +1560,9 @@ void TextTool::repaintSelection(QTextCursor &cursor)
 }
 QRectF TextTool::caretRect(int position) const
 {
+    if (!m_textShapeData) {
+        return QRectF();
+    }
     QTextBlock block = m_textShapeData->document()->findBlock(position);
     if (!block.isValid())
         return QRectF();
@@ -1587,34 +1594,39 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     QMap<QString, QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
-    StylesWidget *styw = new StylesWidget(0);
+    SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
     connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
+
     // Connect to/with simple paragraph widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), spw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), spw, SLOT(setCurrentBlock(const QTextBlock&)));
-    connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
     connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
 
 
-
     // Connect to/with simple styles widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), styw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(styw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
-    connect(styw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
-    connect(styw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
+    connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
+    
+    // Connect to/with simple table widget (docker)
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
 
     updateStyleManager();
     if (m_textShape)
         updateActions();
     widgets.insert(i18n("Character"), scw);
     widgets.insert(i18n("Paragraph"), spw);
-    widgets.insert(i18n("Styles"), styw);
+    widgets.insert(i18n("Styles"), ssw);
     widgets.insert(i18n("Table"), stw);
     return widgets;
 }
@@ -2248,6 +2260,28 @@ void TextTool::writeConfig()
         interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
         interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
     }
+}
+
+void TextTool::runUrl(KoPointerEvent *event, QString &url)
+{
+    bool isLocalLink = (url.indexOf("file:") == 0);
+    QString type = KMimeType::findByUrl(url, 0, isLocalLink)->name();
+
+    if (KRun::isExecutableFile(url, type)) {
+        QString question = i18n("This link points to the program or script '%1'.\n"
+                                "Malicious programs can harm your computer. "
+                                "Are you sure that you want to run this program?", url);
+        // this will also start local programs, so adding a "don't warn again"
+        // checkbox will probably be too dangerous
+        int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
+        if (choice != KMessageBox::Yes)
+            return;
+    }
+
+    event->accept();
+    new KRun(url, 0);
+    m_textEditor.data()->setPosition(0);
+    ensureCursorVisible();
 }
 
 void TextTool::debugTextDocument()

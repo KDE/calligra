@@ -85,6 +85,7 @@ enum blipFillCaller {
     blipFill_pic = 'p', //dml in pptx; for dml in docx use 'pic'
     blipFill_rPr = 'p', //dml
     blipFill_bgPr = 'a', // pptx
+    blipFill_grpSpPr = 'a'
 };
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
@@ -105,10 +106,15 @@ KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
-bool m_gradRotation; //whethere there should be angle with gradient
+QString m_gradAngle;
+KoFilter::ConversionStatus read_lin();
 KoFilter::ConversionStatus read_gsLst();
 KoFilter::ConversionStatus read_gs();
 KoFilter::ConversionStatus read_prstGeom();
+KoFilter::ConversionStatus read_gd();
+bool m_contentAvLstExists; // whether avLst exists
+QMap<QString, QString> m_avModifiers;
+KoFilter::ConversionStatus read_avLst();
 enum noFillCaller {
         noFill_rPr
 };
@@ -122,6 +128,10 @@ KoFilter::ConversionStatus read_shade();
 KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
+
+QString m_customPath;
+QString m_customEquations;
+KoFilter::ConversionStatus read_custGeom();
 
 qreal m_currentShadeLevel;
 qreal m_currentTint; // value of current tint
@@ -137,7 +147,7 @@ enum spacingType {
 };
 spacingType m_currentSpacingType; // determines how spcPct and spcPts should behave
 
-MSOOXML::Utils::autoFitStatus m_normAutoFit; // Whether text should be fitted to fit the shape
+MSOOXML::Utils::autoFitStatus m_normAutofit; // Whether text should be fitted to fit the shape
 
 KoFilter::ConversionStatus read_lnSpc();
 KoFilter::ConversionStatus read_spcPct();
@@ -155,6 +165,7 @@ bool m_listStylePropertiesAltered;
 bool m_previousListWasAltered;
 
 KoFilter::ConversionStatus read_buClr();
+KoFilter::ConversionStatus read_buClrTx();
 KoFilter::ConversionStatus read_buSzPct();
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();
@@ -173,6 +184,7 @@ KoFilter::ConversionStatus read_lvl8pPr();
 KoFilter::ConversionStatus read_lvl9pPr();
 KoFilter::ConversionStatus read_defRPr();
 KoFilter::ConversionStatus read_bodyPr();
+KoFilter::ConversionStatus read_normAutofit();
 KoFilter::ConversionStatus read_spAutoFit();
 
 KoFilter::ConversionStatus read_overrideClrMapping();
@@ -228,9 +240,6 @@ QVector<GroupProp> m_svgProp; //! value of the parent
 bool m_flipH; //! set by read_xfrm()
 bool m_flipV; //! set by read_xfrm()
 int m_rot; //! set by read_xfrm()
-
-//! true if no fill should be applied for element; used e.g. by pic:spPr/a:noFill elem.
-bool m_noFill;
 
 QString m_xlinkHref; //!< set by read_blip()
 QString m_cNvPrId; //!< set by read_cNvPr()

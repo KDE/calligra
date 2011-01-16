@@ -2151,6 +2151,9 @@ void NodeItemModel::slotNodeRemoved( Node *node )
 {
     //kDebug()<<node->name();
     Q_ASSERT( node == m_node );
+#ifdef NDEBUG
+    Q_UNUSED(node)
+#endif
     endRemoveRows();
     m_node = 0;
 }
@@ -2619,12 +2622,15 @@ bool NodeItemModel::setConstraint( Node *node, const QVariant &value, int role )
 bool NodeItemModel::setConstraintStartTime( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
+        case Qt::EditRole: {
+            QDateTime dt = value.toDateTime();
+            dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
+            if ( dt == node->constraintStartTime().dateTime() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
+            emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, dt, "Modify constraint start time" ) );
             return true;
+        }
     }
     return false;
 }
@@ -2632,12 +2638,15 @@ bool NodeItemModel::setConstraintStartTime( Node *node, const QVariant &value, i
 bool NodeItemModel::setConstraintEndTime( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
+        case Qt::EditRole: {
+            QDateTime dt = value.toDateTime();
+            dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
+            if ( dt == node->constraintEndTime().dateTime() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );
+            emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, dt, "Modify constraint end time" ) );
             return true;
+        }
     }
     return false;
 }

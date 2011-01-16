@@ -29,8 +29,8 @@
 class KoGenStyles;
 
 /**
-*   The following classes deal with the creation of the table styles part, 
-*   specifically, we deal with the elements that start at the a:tblStyleLst §20.1.4.2.27, 
+*   The following classes deal with the creation of the table styles part,
+*   specifically, we deal with the elements that start at the a:tblStyleLst §20.1.4.2.27,
 *   you can find its part definition at Table Styles Part §14.2.9
 */
 namespace MSOOXML

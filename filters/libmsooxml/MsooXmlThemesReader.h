@@ -160,7 +160,8 @@ class MSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
     // Simplified gradient constuctor
-    DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier, QVector<int> alphaModifier);
+    DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
+                          QVector<int> alphaModifier, QVector<int> gradPositions, QString gradAngle);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
 
     DrawingMLGradientFill* clone() const { return new DrawingMLGradientFill(*this); }
@@ -170,6 +171,8 @@ private:
     QVector<qreal> m_tintModifier;
     QVector<qreal> m_satModifier;
     QVector<int> m_alphaModifier;
+    QVector<int> m_gradPosition;
+    QString m_gradAngle;
 };
 
 class MSOOXML_EXPORT DrawingMLFormatScheme
@@ -246,7 +249,10 @@ protected:
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
+
+    KoFilter::ConversionStatus fillStyleReadHelper(int& index);
     KoFilter::ConversionStatus read_bgFillStyleLst();
+    KoFilter::ConversionStatus read_fillStyleLst();
     KoFilter::ConversionStatus read_majorFont();
     KoFilter::ConversionStatus read_minorFont();
     KoFilter::ConversionStatus read_lnStyleLst();

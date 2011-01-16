@@ -29,14 +29,14 @@
 /**
  * The idea behind these classes is the following:
  * > A document has a list of table styles identifiable by ID.
- * > A table style has a number of properties to be used if the 
+ * > A table style has a number of properties to be used if the
  * table that references the style toogles them on.
  * > Those are stored on a table style properties.
  *
  * > Now the way a style for a cell is composed can be quite complex
  * depending on a lot of things. Mainly:
  *  > The properties toggled and their precedence,
- *    the rule of thumb for the precedence is that it's higher 
+ *    the rule of thumb for the precedence is that it's higher
  *    the more more specific it is.
  *  > The position in which the cell is. The styles have a
  *    particularly tricky property: borders. The styles can
@@ -52,7 +52,7 @@
 namespace MSOOXML
 {
 
-/// Reading and storage 
+/// Reading and storage
 
 struct MSOOXML_EXPORT TableStyleProperties
 {

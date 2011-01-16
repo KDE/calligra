@@ -105,7 +105,9 @@ MySqlDriver::drv_createConnection(ConnectionData &conn_data)
 
 bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 {
-    return n.toLower() == "mysql" || Driver::isSystemObjectName(n);
+    return QString::compare(n, "mysql", Qt::CaseInsensitive) == 0
+        || QString::compare(n, "information_schema", Qt::CaseInsensitive) == 0
+        || Driver::isSystemObjectName(n);
 }
 
 bool MySqlDriver::drv_isSystemFieldName(const QString&) const

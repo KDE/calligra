@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef BRAINDUMPCORE_EXPORT
-# if defined(MAKE_KOPROPERTIES_LIB)
+# if defined(MAKE_BRAINDUMPCORE_LIB)
 /* We are building this library */
 #  define BRAINDUMPCORE_EXPORT KDE_EXPORT
 # else

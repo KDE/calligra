@@ -6,142 +6,119 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
-    <height>137</height>
+    <width>417</width>
+    <height>219</height>
    </rect>
   </property>
   <property name="toolTip">
    <string/>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_3">
    <property name="margin">
     <number>0</number>
    </property>
    <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Additional text information</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="ui_showTaskName">
+        <property name="text">
+         <string>Task name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="ui_showResourceNames">
+        <property name="text">
+         <string>Resource names</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string/>
+      <string>Additional graphics information</string>
      </property>
      <property name="flat">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
-     <widget class="QCheckBox" name="ui_showTaskName">
-      <property name="geometry">
-       <rect>
-        <x>11</x>
-        <y>11</y>
-        <width>133</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show task name</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="ui_showResourceNames">
-      <property name="geometry">
-       <rect>
-        <x>202</x>
-        <y>11</y>
-        <width>169</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show resource names</string>
-      </property>
-     </widget>
-     <widget class="Line" name="line">
-      <property name="geometry">
-       <rect>
-        <x>11</x>
-        <y>39</y>
-        <width>360</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="ui_showDependencies">
-      <property name="geometry">
-       <rect>
-        <x>11</x>
-        <y>48</y>
-        <width>185</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show task dependencies</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="ui_showCriticalPath">
-      <property name="geometry">
-       <rect>
-        <x>201</x>
-        <y>49</y>
-        <width>139</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show critical path</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="ui_showCompletion">
-      <property name="geometry">
-       <rect>
-        <x>11</x>
-        <y>76</y>
-        <width>167</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show task completion</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="ui_showCriticalTasks">
-      <property name="geometry">
-       <rect>
-        <x>201</x>
-        <y>77</y>
-        <width>144</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show critical tasks</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="ui_showPositiveFloat">
-      <property name="geometry">
-       <rect>
-        <x>11</x>
-        <y>104</y>
-        <width>146</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show positive float</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="ui_showSchedulingError">
-      <property name="geometry">
-       <rect>
-        <x>201</x>
-        <y>105</y>
-        <width>175</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Show scheduling errors</string>
-      </property>
-     </widget>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="ui_showDependencies">
+        <property name="text">
+         <string>Task dependencies</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="ui_showCriticalPath">
+        <property name="text">
+         <string>Critical path</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="ui_showCompletion">
+        <property name="text">
+         <string>Task completion</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="ui_showCriticalTasks">
+        <property name="text">
+         <string>Critical tasks</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="ui_showPositiveFloat">
+        <property name="text">
+         <string>Positive float</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="ui_showTimeConstraint">
+        <property name="text">
+         <string>Time constraints</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="ui_showNegativeFloat">
+        <property name="text">
+         <string>Negative float</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="ui_showSchedulingError">
+        <property name="text">
+         <string>Scheduling errors</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

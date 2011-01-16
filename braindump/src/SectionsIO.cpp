@@ -178,7 +178,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
 bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::SaveContext::Version version)
 {
   Q_UNUSED(version);
-  // In case saving problem occured, try to recover a directory either new or old
+  // In case saving problem occurred, try to recover a directory either new or old
   QString fullFileName = sectionsIO->m_directory + filename;
   QString fullFileNameTmpNew = fullFileName + ".tmp_new/";
   QString fullFileNameTmpOld = fullFileName + ".tmp_old";
@@ -196,7 +196,7 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
   kDebug() << "Loading from " << fullFileName;
   
   const char* mimeType = KoOdf::mimeType(KoOdf::Text);
-  KoStore* store = KoStore::createStore(fullFileName + "/", KoStore::Read, mimeType, KoStore::Directory);
+  KoStore* store = KoStore::createStore(fullFileName + '/', KoStore::Read, mimeType, KoStore::Directory);
   KoOdfReadStore odfStore(store);
 
   QString errorMessage;

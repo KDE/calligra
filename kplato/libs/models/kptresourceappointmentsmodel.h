@@ -239,8 +239,6 @@ protected:
     QModelIndex createAppointmentIndex( int row, int column, Resource *r );
     QModelIndex createIntervalIndex( int row, int column, Appointment *a );
 
-    Private *find( void *ptr ) const;
-
 protected:
     QMap<void*, Private*> m_datamap;
 };

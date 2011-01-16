@@ -42,7 +42,7 @@ class RootSection : public QObject, public SectionGroup {
     KUndoStack* undoStack(); // TODO remove when it is again possible to hide the undo stack
     void setCurrentSection(Section* ); // TODO when the command statck is hidden again, remove
   signals:
-    /// This signal is emited when a command is executed in the undo stack
+    /// This signal is emitted when a command is executed in the undo stack
     void commandExecuted();
   private slots:
     void undoIndexChanged(int idx);
