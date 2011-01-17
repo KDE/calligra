@@ -19,3 +19,5 @@ endif (KEXI_MOBILE)
 
 #TODO add_subdirectory( relations )
 #TODO add_subdirectory(macros)
+
+add_subdirectory(autoforms)
