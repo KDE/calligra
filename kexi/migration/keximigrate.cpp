@@ -60,6 +60,7 @@ KexiMigrate::~KexiMigrate()
     qDeleteAll(m_kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport);
     m_kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport.clear();
     delete m_destPrj;
+    delete m_migrateData;
 }
 
 bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::ObjectStatus* result,
