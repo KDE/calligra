@@ -238,7 +238,7 @@ private:
         UNSUPPORTED = 0,
         //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
         //REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
-        REF = 0x03, ///< Reference
+        //REF = 0x03, ///< Reference
         //FTNREF = 0x05, ///< Identicial to NOTEREF (not a reference)
         //SET = 0x06,
         //IF = 0x07,
@@ -336,6 +336,7 @@ private:
             m_instructions(QString::null),
             m_result(QString::null),
             m_styleName(QString::null),
+            m_tocSeparator(QString::null),
             m_writer(0),
             m_buffer(0)
         {
@@ -369,10 +370,13 @@ private:
 	//stores the field result
         QString m_result;
         
-	//KoGenStyle name for the <text:span> element encapsulating the field
-        //result (if applicable)
+        //KoGenStyle name for the <text:span> element encapsulating content of the
+	//processed field (if applicable)
         QString m_styleName;
-        
+
+        //separates an TOC entry and its page number (if applicable)
+        QString m_tocSeparator;
+
 	//writer and buffer used to place bookmark elements into the field result,
         //if bookmarks are not to be supported by your field type, use m_result
         KoXmlWriter* m_writer;
@@ -392,6 +396,9 @@ private:
     //counters
     int m_fldStart;
     int m_fldEnd;
+
+    //character properties applied to the bunch of nested fields
+    wvWare::SharedPtr<const wvWare::Word97::CHP> m_fldChp;
 
     // ************************************************
     //  Obsolete
