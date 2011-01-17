@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
 
@@ -20,10 +21,12 @@
 
 #include "KoConfigurationDialogPage.h"
 
-KoConfigurationDialogPage::KoConfigurationDialogPage (QWidget* widget) : m_widget(widget)
+KoConfigurationDialogPage::KoConfigurationDialogPage (QWidget* parent)
+    : QWidget (parent)
 {
 
 }
+
 
 KoConfigurationDialogPage::~KoConfigurationDialogPage()
 {
@@ -48,9 +51,4 @@ KIcon KoConfigurationDialogPage::icon() const
 void KoConfigurationDialogPage::setIcon (const KIcon& icon)
 {
     m_icon = icon;
-}
-
-QWidget* KoConfigurationDialogPage::widget()
-{
-    return m_widget;
 }

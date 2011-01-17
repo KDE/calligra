@@ -18,24 +18,18 @@
 */
 
 
-#include "KoConfigurationDialog.h"
-#include "../KoView.h"
-#include "ui_KoOpenSaveConfigurationWidget.h"
-#include "../KoConfigurationDialogPage.h"
+#ifndef KOOPENSAVECONFIGURATIONDIALOGPAGE_H
+#define KOOPENSAVECONFIGURATIONDIALOGPAGE_H
 
-KoConfigurationDialog::KoConfigurationDialog (KoView* view) : KPageDialog (view)
+#include <KoConfigurationDialogPage.h>
+
+class KoOpenSaveConfigurationDialogPage : public KoConfigurationDialogPage
 {
-    setFaceType(List);
-}
 
-KoConfigurationDialog::~KoConfigurationDialog()
-{
-}
+    public:
+        explicit KoOpenSaveConfigurationDialogPage (QWidget* parent = 0);
+        virtual ~KoOpenSaveConfigurationDialogPage();
+        virtual QWidget* pageWidget();
+};
 
-void KoConfigurationDialog::addCustomPage (KoConfigurationDialogPage* page)
-{
-    KPageWidgetItem *item = addPage(page->pageWidget(), page->title());
-    item->setIcon(page->icon());
-}
-
-#include "KoConfigurationDialog.moc"
+#endif // KOOPENSAVECONFIGURATIONDIALOGPAGE_H
