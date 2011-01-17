@@ -83,8 +83,9 @@ void ImportTableWizard::back() {
 
 void ImportTableWizard::next() {
     if (currentPage() == m_importingPageItem) {
-        doImport();
-        KAssistantDialog::next();
+        if (doImport()) {
+            KAssistantDialog::next();
+        }
     }
     else {
         KAssistantDialog::next();
@@ -504,12 +505,13 @@ bool ImportTableWizard::doImport()
     
     KexiPart::Item* partItemForSavedTable = project->createPartItem(part->info(), m_alterSchemaWidget->newSchema()->name());
     if (!partItemForSavedTable) {
-        //  msg.showErrorMessage(project);
+        msg.showErrorMessage(project);
         return false;
     }
 
     //Create the table
     if (!m_currentDatabase->createTable(m_alterSchemaWidget->newSchema(), true)) {
+        msg.showErrorMessage(i18n("Unable to create table [%1]").arg(m_alterSchemaWidget->newSchema()->name()));
         return false;
     }
 

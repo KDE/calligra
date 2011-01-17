@@ -76,6 +76,7 @@ void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts)
 {
     m_originalSchema = ts;
     m_newSchema = new KexiDB::TableSchema(*ts, false);
+    m_newSchema->setName(m_originalSchema->name().replace('.', '_')); //Handle case where a file has been imported
 
     m_model->setSchema(m_newSchema);
     tableClicked(m_model->index(0,0));
