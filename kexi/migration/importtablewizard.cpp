@@ -558,6 +558,7 @@ bool ImportTableWizard::doImport()
     }
 
     //Import the data
+    QApplication::setOverrideCursor(Qt::BusyCursor);
     QList<QVariant> row;
     m_migrateDriver->moveFirst();
     do  {
@@ -567,7 +568,8 @@ bool ImportTableWizard::doImport()
         m_currentDatabase->insertRecord(*(m_alterSchemaWidget->newSchema()), row);
         row.clear();
     } while (m_migrateDriver->moveNext());
-
+    QApplication::restoreOverrideCursor();
+    
     //Done so save part and update gui
     partItemForSavedTable->setIdentifier(m_alterSchemaWidget->newSchema()->id());
     project->addStoredItem(part->info(), partItemForSavedTable);
