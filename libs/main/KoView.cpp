@@ -30,7 +30,7 @@
 #include "KoViewAdaptor.h"
 #include "KoDockFactoryBase.h"
 #include "dialogs/KoConfigurationDialog.h"
-#include "KoConfigurationDialogPage.h"
+#include "dialogs/KoOpenSaveConfigurationDialogPage.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -522,6 +522,11 @@ QList<QAction*> KoView::createChangeUnitActions()
 void KoView::showConfigurationDialog()
 {
     KoConfigurationDialog dialog(this);
+
+    //Add Open/Save config page
+    KoOpenSaveConfigurationDialogPage *openSaveConfigurationDialogPage = new KoOpenSaveConfigurationDialogPage(this);
+    dialog.addCustomPage(openSaveConfigurationDialogPage);
+
     addCustomConfigurationDialogPages(&dialog);
     dialog.exec();
 }

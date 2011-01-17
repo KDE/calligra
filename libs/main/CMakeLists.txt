@@ -87,6 +87,7 @@ set(komain_LIB_SRCS
 
     KoConfigurationDialogPage.cpp
     dialogs/KoConfigurationDialog.cpp
+    dialogs/KoOpenSaveConfigurationDialogPage.cpp
 )
 
 if( Soprano_FOUND )

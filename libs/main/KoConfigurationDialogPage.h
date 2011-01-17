@@ -24,26 +24,24 @@
 #include "komain_export.h"
 
 #include <KIcon>
+#include <QWidget>
 
-class QWidget;
-
-class KOMAIN_EXPORT KoConfigurationDialogPage
+class KOMAIN_EXPORT KoConfigurationDialogPage : public QWidget
 {
 
     public:
-        KoConfigurationDialogPage(QWidget *widget);
+        explicit KoConfigurationDialogPage (QWidget* parent = 0);
         virtual ~KoConfigurationDialogPage();
 
         QString title() const;
-        void setTitle(const QString &title);
+        void setTitle (const QString &title);
 
         KIcon icon() const;
-        void setIcon(const KIcon &icon);
+        void setIcon (const KIcon &icon);
 
-        QWidget *widget();
+        virtual QWidget *pageWidget() = 0;
 
     private:
-        QWidget *m_widget;
         QString m_title;
         KIcon m_icon;
 };

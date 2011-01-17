@@ -2137,8 +2137,7 @@ KoPrintJob * View::createPrintJob()
 
 void View::addCustomConfigurationDialogPages (KoConfigurationDialog* dialog)
 {
-    //Sample pages
-    //Add Tables configuration dialogs to standard configuration dialog
+    /*
     QWidget *widget = new QWidget;
     SheetPropertiesWidget sheetPropertyWidget(this);
     sheetPropertyWidget.setupUi(widget);
@@ -2147,7 +2146,7 @@ void View::addCustomConfigurationDialogPages (KoConfigurationDialog* dialog)
     page->setTitle("Tables custom page");
     page->setIcon(KIcon("kde"));
 
-    dialog->addCustomPage(page);
+    dialog->addCustomPage(page);*/
 }
 
 #include "View.moc"
