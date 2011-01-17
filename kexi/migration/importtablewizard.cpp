@@ -50,6 +50,7 @@
 #include <kexipart.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
+#include <widget/kexiprjtypeselector.h>
 
 using namespace KexiMigration;
 
@@ -58,11 +59,13 @@ using namespace KexiMigration;
 ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* parent, Qt::WFlags flags ) : KAssistantDialog ( parent, flags ) {
     m_currentDatabase = curDB;
     m_migrateDriver = 0;
+    m_prjSet = 0;
     m_migrateManager = new MigrateManager();
     m_importComplete = false;
     
     setupIntroPage();
     setupSrcConn();
+    setupSrcDB();
     setupTableSelectPage();
     setupAlterTablePage();
     setupImportingPage();
@@ -75,6 +78,9 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
 
 ImportTableWizard::~ImportTableWizard() {
   delete m_migrateManager;
+  delete m_prjSet;
+  delete m_srcConnSel;
+  
 }
 
 void ImportTableWizard::back() {
@@ -156,6 +162,17 @@ void ImportTableWizard::setupSrcConn()
     m_srcConnPageItem = new KPageWidgetItem(m_srcConnPageWidget, i18n("Select Location for Source Database"));
     addPage(m_srcConnPageItem);
 }
+
+void ImportTableWizard::setupSrcDB()
+{
+    // arrivesrcdbPage creates widgets on that page
+    m_srcDBPageWidget = new QWidget(this);
+    m_srcDBName = NULL;
+    
+    m_srcDBPageItem = new KPageWidgetItem(m_srcDBPageWidget, i18n("Select Source Database"));
+    addPage(m_srcDBPageItem);
+}
+
 
 void ImportTableWizard::setupTableSelectPage() {
     m_tablesPageWidget = new QWidget(this);
@@ -253,6 +270,8 @@ void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWi
     }
     else if (curPage == m_srcConnPageItem) {
         arriveSrcConnPage();
+    } else if (curPage == m_srcDBPageItem) {
+        arriveSrcDBPage();
     } else if (curPage == m_tablesPageItem) {
         arriveTableSelectPage();
     } else if (curPage == m_alterTablePageItem) {
@@ -267,6 +286,28 @@ void ImportTableWizard::slot_currentPageChanged(KPageWidgetItem* curPage,KPageWi
 void ImportTableWizard::arriveSrcConnPage()
 {
     kDebug();
+}
+
+void ImportTableWizard::arriveSrcDBPage()
+{
+    if (fileBasedSrcSelected()) {
+        //! @todo Back button doesn't work after selecting a file to import
+        //moved showPage(m_dstTypePage);
+    } else if (!m_srcDBName) {
+        m_srcDBPageWidget->hide();
+        kDebug() << "Looks like we need a project selector widget!";
+        
+        KexiDB::ConnectionData* condata = m_srcConnSel->selectedConnectionData();
+        if (condata) {
+            m_prjSet = new KexiProjectSet(*condata);
+            QVBoxLayout *vbox = new QVBoxLayout(m_srcDBPageWidget);
+            KexiUtils::setStandardMarginsAndSpacing(vbox);
+            m_srcDBName = new KexiProjectSelectorWidget(m_srcDBPageWidget, m_prjSet);
+            vbox->addWidget(m_srcDBName);
+            m_srcDBName->label()->setText(i18n("Select source database you wish to import:"));
+        }
+        m_srcDBPageWidget->show();
+    }
 }
 
 void ImportTableWizard::arriveTableSelectPage()
@@ -452,9 +493,10 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
             md->sourceName.clear();
         } else {
             md->source = m_srcConnSel->selectedConnectionData();
-            //md->sourceName = m_srcDBName->selectedProjectData()->databaseName();
+            md->sourceName = m_srcDBName->selectedProjectData()->databaseName();
             
         }
+        
         md->keepData = keepData;
         sourceDriver->setData(md);
         

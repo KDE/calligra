@@ -69,6 +69,7 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
 
 AlterSchemaWidget::~AlterSchemaWidget()
 {
+    delete m_model;
 
 }
 
