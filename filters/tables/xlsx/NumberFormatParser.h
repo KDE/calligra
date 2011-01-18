@@ -23,10 +23,11 @@
 #ifndef NUMBERFORMATPARSER_H
 #define NUMBERFORMATPARSER_H
 
+#include <KoGenStyle.h>
+
 class QColor;
 class QLocale;
 class QString;
-class KoGenStyle;
 class KoGenStyles;
 
 class NumberFormatParser
@@ -36,7 +37,7 @@ public:
     static QLocale locale(int langid);
 
     static void setStyles(KoGenStyles* styles);
-    static KoGenStyle parse(const QString& numberFormat);
+    static KoGenStyle parse(const QString& numberFormat, KoGenStyle::Type type = KoGenStyle::ParagraphAutoStyle);
     static bool isDateFormat(const QString& numberFormat);
 
 private:

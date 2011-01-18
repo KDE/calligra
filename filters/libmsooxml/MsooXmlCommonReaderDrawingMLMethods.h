@@ -85,6 +85,7 @@ enum blipFillCaller {
     blipFill_pic = 'p', //dml in pptx; for dml in docx use 'pic'
     blipFill_rPr = 'p', //dml
     blipFill_bgPr = 'a', // pptx
+    blipFill_grpSpPr = 'a'
 };
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
@@ -146,7 +147,7 @@ enum spacingType {
 };
 spacingType m_currentSpacingType; // determines how spcPct and spcPts should behave
 
-MSOOXML::Utils::autoFitStatus m_normAutoFit; // Whether text should be fitted to fit the shape
+MSOOXML::Utils::autoFitStatus m_normAutofit; // Whether text should be fitted to fit the shape
 
 KoFilter::ConversionStatus read_lnSpc();
 KoFilter::ConversionStatus read_spcPct();
@@ -164,6 +165,7 @@ bool m_listStylePropertiesAltered;
 bool m_previousListWasAltered;
 
 KoFilter::ConversionStatus read_buClr();
+KoFilter::ConversionStatus read_buClrTx();
 KoFilter::ConversionStatus read_buSzPct();
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();
@@ -182,6 +184,7 @@ KoFilter::ConversionStatus read_lvl8pPr();
 KoFilter::ConversionStatus read_lvl9pPr();
 KoFilter::ConversionStatus read_defRPr();
 KoFilter::ConversionStatus read_bodyPr();
+KoFilter::ConversionStatus read_normAutofit();
 KoFilter::ConversionStatus read_spAutoFit();
 
 KoFilter::ConversionStatus read_overrideClrMapping();

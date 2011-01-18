@@ -998,7 +998,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
  - extLst (Extension List) §19.2.1.12
  - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
- - noFill (No Fill) §20.1.8.44
+ - [done] noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
  - [done] solidFill (Solid Fill) §20.1.8.54
 */
@@ -1023,16 +1023,21 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                     m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentAlpha));
                 }
             }
+            else if (qualifiedName() == QLatin1String("a:noFill")) {
+                m_currentDrawStyle->addAttribute("style:fill", constNone);
+            }
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IF_NS_IN_CONTEXT(a, blipFill)
-                KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
-                fillImageStyle.addAttribute("xlink:href", m_xlinkHref);
-                //! @todo draw:name="???"
-                fillImageStyle.addAttribute("xlink:type", "simple");
-                fillImageStyle.addAttribute("xlink:show", "embed");
-                fillImageStyle.addAttribute("xlink:actuate", "onLoad");
-                fillImageName = mainStyles->insert(fillImageStyle);
-                kDebug() << fillImageName;
+                if (!m_xlinkHref.isEmpty()) {
+                    KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
+                    fillStyle.addProperty("xlink:href", m_xlinkHref);
+                    fillStyle.addProperty("xlink:type", "simple");
+                    fillStyle.addProperty("xlink:actuate", "onLoad");
+                    const QString imageName = mainStyles->insert(fillStyle);
+                    m_currentDrawStyle->addProperty("draw:fill", "bitmap");
+                    m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
+                    m_xlinkHref.clear();
+                }
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
                 m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
@@ -1047,25 +1052,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                 foundTile = true;
             }*/
 //! @todo add ELSE_WRONG_FORMAT
-        }
-    }
-
-    if (!fillImageName.isEmpty()) {
-        //! Setup slide's bitmap fill
-        m_currentDrawStyle->addProperty("draw:fill", "bitmap", KoGenStyle::DrawingPageType);
-        m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageName, KoGenStyle::DrawingPageType);
-        if (m_context->type != SlideMaster) {
-            if (!m_recentSourceName.isEmpty()) {
-                QSize size;
-                m_context->import->imageSize(m_recentSourceName, size);
-                kDebug() << "SIZE:" << size;
-                if (size.isValid()) {
-                    m_currentDrawStyle->addProperty("draw:fill-image-width",
-                        MSOOXML::Utils::cmString(POINT_TO_CM(size.width())), KoGenStyle::DrawingPageType);
-                    m_currentDrawStyle->addProperty("draw:fill-image-height",
-                        MSOOXML::Utils::cmString(POINT_TO_CM(size.height())), KoGenStyle::DrawingPageType);
-                }
-            }
         }
     }
 
@@ -1575,7 +1561,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
             m_context->slideMasterProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
             m_context->slideMasterProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideMasterProperties->m_textAutoFit[d->phIdx] = m_normAutoFit;
+            m_context->slideMasterProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideMasterProperties->textShapePositions[d->phType] = m_shapeTextPosition;
@@ -1583,7 +1569,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
             m_context->slideMasterProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
             m_context->slideMasterProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideMasterProperties->m_textAutoFit[d->phType] = m_normAutoFit;
+            m_context->slideMasterProperties->m_textAutoFit[d->phType] = m_normAutofit;
         }
     }
     else if (m_context->type == SlideLayout) {
@@ -1593,7 +1579,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideLayoutProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
             m_context->slideLayoutProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
             m_context->slideLayoutProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideLayoutProperties->m_textAutoFit[d->phIdx] = m_normAutoFit;
+            m_context->slideLayoutProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideLayoutProperties->textShapePositions[d->phType] = m_shapeTextPosition;
@@ -1601,7 +1587,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideLayoutProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
             m_context->slideLayoutProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
             m_context->slideLayoutProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideLayoutProperties->m_textAutoFit[d->phType] = m_normAutoFit;
+            m_context->slideLayoutProperties->m_textAutoFit[d->phType] = m_normAutofit;
         }
     }
 }
@@ -1668,8 +1654,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideMasterProperties->m_textAutoFit.value(d->phIdx);
              }
         }
     }
@@ -1696,8 +1682,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideMasterProperties->m_textAutoFit.value(d->phType) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideMasterProperties->m_textAutoFit.value(d->phType);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideMasterProperties->m_textAutoFit.value(d->phType);
              }
         }
     }
@@ -1726,8 +1712,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideLayoutProperties->m_textAutoFit.value(d->phType) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phType);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phType);
              }
         }
     }
@@ -1753,8 +1739,8 @@ void PptxXmlSlideReader::inheritBodyProperties()
             m_shapeTextLeftOff = bottom;
         }
         if (m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx) != MSOOXML::Utils::autoFitUnUsed) {
-             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
-                 m_normAutoFit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx);
+             if (m_normAutofit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutofit = m_context->slideLayoutProperties->m_textAutoFit.value(d->phIdx);
              }
         }
     }

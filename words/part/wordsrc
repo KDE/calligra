@@ -7,9 +7,5 @@ ShapePluginsDisabled=kritashape,videoshape
 TextInlinePluginsDisabled=kprvariables
 ToolPluginsDisabled=calligrastagetoolanimation,kopabackgroundtool
 
-
 [KoShapeCollection]
 QuickShapes=TextShapeID,PictureShape,ArtisticText
-
-[TemplateChooserDialog]
-AlwaysUseTemplate=Normal/A4.desktop

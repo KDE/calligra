@@ -549,7 +549,7 @@ QString ComplexShapeHandler::handle_path(QXmlStreamReader* reader)
         pathWidth = width.toInt();
     }
     if (!height.isEmpty()) {
-        pathHeight = width.toInt();
+        pathHeight = height.toInt();
     }
 
     while (!reader->atEnd()) {

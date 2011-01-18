@@ -25,6 +25,7 @@
 
 #include "texthandler.h"
 #include "conversion.h"
+#include "NumberFormatParser.h"
 
 #include <wv2/src/styles.h>
 #include <wv2/src/paragraphproperties.h>
@@ -68,10 +69,10 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_tocNumber(0)
     , m_footNoteNumber(0)
     , m_endNoteNumber(0)
-    , m_index(0)
     , m_currentTable(0)
     , m_paragraph(0)
     , m_hasStoredDropCap(false)
+    , m_breakBeforePage(false)
     , m_insideFootnote(false)
     , m_footnoteWriter(0)
     , m_footnoteBuffer(0)
@@ -80,13 +81,13 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_annotationBuffer(0)
     , m_insideDrawing(false)
     , m_drawingWriter(0)
-    , m_breakBeforePage(false)
     , m_listLevelStyleRequired(false)
     , m_currentListDepth(-1)
     , m_currentListID(0)
     , m_fld(new fld_State())
     , m_fldStart(0)
     , m_fldEnd(0)
+//     , m_index(0)
 {
 #ifdef IMAGE_IMPORT
     kDebug(30513) << "we have image support";
@@ -536,28 +537,6 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     m_annotationBuffer = 0;
 }
 
-//create an element for the variable
-QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
-{
-    Q_UNUSED(chp);
-
-    kDebug(30513) ;
-    //m_paragraph += '#';
-
-    QDomElement formatElem;
-    //writeFormattedText(chp, m_currentStyle ? &m_currentStyle->chp() : 0);
-
-    //m_index += 1;
-
-    QDomElement varElem = m_formats.ownerDocument().createElement("VARIABLE");
-    QDomElement typeElem = m_formats.ownerDocument().createElement("TYPE");
-    typeElem.setAttribute("type", type);
-    typeElem.setAttribute("key", format);
-    varElem.appendChild(typeElem);
-    formatElem.appendChild(varElem);
-    return varElem;
-}
-
 void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
     kDebug(30513) ;
@@ -713,31 +692,6 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     m_drawingWriter = 0;
 }
 #endif // IMAGE_IMPORT
-
-QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
-{
-    Q_UNUSED(fsname);
-
-    kDebug(30513) ;
-    //m_paragraph += '#';
-
-    // Can't call writeFormat, we have no chp.
-    //QDomElement format( mainDocument().createElement( "FORMAT" ) );
-    //format.setAttribute( "id", 6 );
-    //format.setAttribute( "pos", m_index );
-    //format.setAttribute( "len", 1 );
-    //m_formats.appendChild( format );
-    //QDomElement formatElem = format;
-
-    //m_index += 1;
-
-    //QDomElement anchorElem = m_formats.ownerDocument().createElement( "ANCHOR" );
-    //anchorElem.setAttribute( "type", "frameset" );
-    //anchorElem.setAttribute( "instance", fsname );
-    //formatElem.appendChild( anchorElem );
-    return QDomElement();
-}
-
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
 
@@ -967,7 +921,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     if (m_fld->m_insideField) {
         fld_saveState();
     } else {
-	delete m_fld;
+        delete m_fld;
     }
 
     m_fld = new fld_State((fldType)fld->flt);
@@ -988,6 +942,12 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case MACROBUTTON:
         kDebug(30513) << "processing field... MACROBUTTON";
         break;
+    case DATE:
+        kDebug(30513) << "processing field... DATE";
+        break;
+    case TIME:
+        kDebug(30513) << "processing field... TIME";
+        break;
     case NUMPAGES:
     case PAGE:
         m_paragraph->setContainsPageNumberField(true);
@@ -999,6 +959,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kWarning(30513) << "Warning: unsupported field (REF)";
         m_fld->m_type = UNSUPPORTED;
         break;
+    case CREATEDATE:
+    case SAVEDATE:
     case SUBJECT:
     case TITLE:
         break;
@@ -1260,6 +1222,15 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         writer->startElement("text:index-body");
         break;
     }
+    case TIME:
+    case DATE: {
+        // Extract the interesting format-string. That means we translate something like 'TIME \@ "MMMM d, yyyy"' into 'MMMM d, yyyy'
+        // cause the NumberFormatParser doesn't handle it correct else.
+        QRegExp rx(".*\"(.*)\".*");
+        if (rx.indexIn(*inst) >= 0)
+            m_fld->m_instructions = rx.cap(1);
+        break;
+    }
     default:
         break;
     }
@@ -1373,6 +1344,54 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.startElement("text:subject");
         writer.endElement();
         break;
+    case DATE:
+    {
+        writer.startElement("text:date");
+
+        NumberFormatParser::setStyles(m_mainStyles);
+        KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericDateStyle);
+        writer.addAttribute("style:data-style-name", m_mainStyles->insert(style, "N"));
+
+        //writer.addAttribute("text:fixed", "true");
+        //writer.addAttribute("text:date-value", "2011-01-14T12:38:31.99");
+        writer.addCompleteElement(m_fld->m_buffer); // January 14, 2011
+        writer.endElement(); //text:date
+        break;
+    }
+    case TIME:
+    {
+        writer.startElement("text:time");
+
+        NumberFormatParser::setStyles(m_mainStyles);
+        KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericTimeStyle);
+        writer.addAttribute("style:data-style-name", m_mainStyles->insert(style, "N"));
+
+        //writer.addAttribute("text:fixed", "true");
+        //writer.addAttribute("text:time-value", );
+        writer.addCompleteElement(m_fld->m_buffer);
+        writer.endElement(); //text:time
+        break;
+    }
+    case CREATEDATE:
+    {
+        writer.startElement("text:creation-date");
+        NumberFormatParser::setStyles(m_mainStyles);
+        KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericTimeStyle);
+        writer.addAttribute("style:data-style-name", m_mainStyles->insert(style, "N"));
+        writer.addCompleteElement(m_fld->m_buffer);
+        writer.endElement(); //text:creation-date
+        break;
+    }
+    case SAVEDATE:
+    {
+        writer.startElement("text:modification-date");
+        NumberFormatParser::setStyles(m_mainStyles);
+        KoGenStyle style = NumberFormatParser::parse(m_fld->m_instructions, KoGenStyle::NumericTimeStyle);
+        writer.addAttribute("style:data-style-name", m_mainStyles->insert(style, "N"));
+        writer.addCompleteElement(m_fld->m_buffer);
+        writer.endElement(); //text:modification-date
+        break;
+    }
     case SYMBOL:
     {
         //TODO: nested fields support required
@@ -1485,6 +1504,11 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case PAGEREF:
             case SYMBOL:
             case TOC:
+            case PAGE:
+            case CREATEDATE:
+            case SAVEDATE:
+            case TIME:
+            case DATE:
                 m_fld->m_instructions.append(newText);
                 break;
             default:
@@ -1495,8 +1519,10 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         //processing the field result
         else {
             KoXmlWriter* writer = m_fld->m_writer;
-	    switch (m_fld->m_type) {
-	    case PAGEREF:
+            switch (m_fld->m_type) {
+            case TIME:
+            case DATE:
+            case PAGEREF:
                 writer->addTextNode(newText);
                 break;
             case HYPERLINK:
@@ -1507,6 +1533,8 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                     writer->addTextNode(newText);
                 }
                 break;
+            case CREATEDATE:
+            case SAVEDATE:
             case AUTHOR:
             case EDITTIME:
             case FILENAME:
@@ -1554,14 +1582,15 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
 
 // Return the name of a font. We have to convert the Microsoft font names to
 // something that might just be present under X11.
-QString KWordTextHandler::getFont(unsigned fc) const
-{
+QString KWordTextHandler::getFont(unsigned ftc) const
+{ 
     kDebug(30513) ;
     Q_ASSERT(m_parser);
-    if (!m_parser)
-        return QString();
-    const wvWare::Word97::FFN& ffn(m_parser->font(fc));
 
+    if (!m_parser) {
+        return QString();
+    }
+    const wvWare::Word97::FFN& ffn(m_parser->font(ftc));
     QString fontName(Conversion::string(ffn.xszFfn));
     return fontName;
     /*
@@ -2054,5 +2083,58 @@ void KWordTextHandler::fld_restoreState()
     m_fld = m_fldStates.top();
     m_fldStates.pop();
 }
+
+// ************************************************
+//  Obsolete
+// ************************************************
+
+#ifdef TEXTHANDLER_OBSOLETE
+
+//create an element for the variable
+QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format)
+{
+    Q_UNUSED(chp);
+
+    kDebug(30513) ;
+    //m_paragraph += '#';
+
+    QDomElement formatElem;
+    //writeFormattedText(chp, m_currentStyle ? &m_currentStyle->chp() : 0);
+
+    //m_index += 1;
+
+    QDomElement varElem = m_formats.ownerDocument().createElement("VARIABLE");
+    QDomElement typeElem = m_formats.ownerDocument().createElement("TYPE");
+    typeElem.setAttribute("type", type);
+    typeElem.setAttribute("key", format);
+    varElem.appendChild(typeElem);
+    formatElem.appendChild(varElem);
+    return varElem;
+}
+
+QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
+{
+    Q_UNUSED(fsname);
+
+    kDebug(30513) ;
+    //m_paragraph += '#';
+
+    // Can't call writeFormat, we have no chp.
+    //QDomElement format( mainDocument().createElement( "FORMAT" ) );
+    //format.setAttribute( "id", 6 );
+    //format.setAttribute( "pos", m_index );
+    //format.setAttribute( "len", 1 );
+    //m_formats.appendChild( format );
+    //QDomElement formatElem = format;
+
+    //m_index += 1;
+
+    //QDomElement anchorElem = m_formats.ownerDocument().createElement( "ANCHOR" );
+    //anchorElem.setAttribute( "type", "frameset" );
+    //anchorElem.setAttribute( "instance", fsname );
+    //formatElem.appendChild( anchorElem );
+    return QDomElement();
+}
+#endif // TEXTHANDLER_OBSOLETE
 
 #include "texthandler.moc"

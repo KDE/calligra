@@ -164,7 +164,7 @@ static QString mirrorToOdf(bool flipH, bool flipV)
  - [done] spPr (Shape Properties) §19.3.1.44
  - [done] spPr (Shape Properties) §20.1.2.2.35 - DrawingML
  - style (Shape Style) §19.3.1.46
- - style (Shape Style) §20.1.2.2.37 - DrawingML
+ - [done] style (Shape Style) §20.1.2.2.37 - DrawingML
 */
 //! @todo support all elements
 //! CASE #P401
@@ -198,6 +198,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(nvPicPr)
+            ELSE_TRY_READ_IF(style)
             SKIP_UNKNOWN
         }
     }
@@ -573,13 +574,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
  - spTree (§19.3.1.45)
 
  Child elements:
- - blipFill (Picture Fill) §20.1.8.14
+ - [done] blipFill (Picture Fill) §20.1.8.14
  - effectDag (Effect Container) §20.1.8.25
  - effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §20.1.2.2.15
  - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
- - noFill (No Fill) §20.1.8.44
+ - [done] noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
  - scene3d (3D Scene Properties) §20.1.4.1.26
  - [done] solidFill (Solid Fill) §20.1.8.54
@@ -608,6 +609,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
             }
             else if ( qualifiedName() == QLatin1String("a:ln") ) {
                 TRY_READ(ln)
+            }
+            else if (qualifiedName() == QLatin1String("a:noFill")) {
+                m_currentDrawStyle->addAttribute("style:fill", constNone);
+            }
+            else if (qualifiedName() == QLatin1String("a:blipFill")) {
+                TRY_READ_IN_CONTEXT(blipFill)
+                if (!m_xlinkHref.isEmpty()) {
+                    KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
+                    fillStyle.addProperty("xlink:href", m_xlinkHref);
+                    fillStyle.addProperty("xlink:type", "simple");
+                    fillStyle.addProperty("xlink:actuate", "onLoad");
+                    const QString imageName = mainStyles->insert(fillStyle);
+                    m_currentDrawStyle->addProperty("draw:fill", "bitmap");
+                    m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
+                    m_xlinkHref.clear();
+                }
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
                 m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
@@ -741,7 +758,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     inheritDefaultBodyProperties();
     inheritBodyProperties(); // Properties may or may not override default ones.
 
-    if (m_normAutoFit == MSOOXML::Utils::autoFitOn) {
+    if (m_normAutofit == MSOOXML::Utils::autoFitOn) {
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
@@ -1088,8 +1105,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 //! style handler (Shape style)
 /*
  Parent elements:
- - cxnSp (§19.3.1.19);
- - pic (§19.3.1.37);
+ - [done] cxnSp (§19.3.1.19);
+ - [done] pic (§19.3.1.37);
  - [done] sp (§19.3.1.43)
 
  Child elements:
@@ -1103,12 +1120,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 {
     READ_PROLOGUE
-
-    // We don't want to overlap the current style
-    if (!m_currentDrawStyle->isEmpty()) {
-        skipCurrentElement();
-        READ_EPILOGUE
-    }
 
     while (!atEnd()) {
         readNext();
@@ -1352,6 +1363,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
     TRY_READ_ATTR_WITHOUT_NS(idx)
     int index = idx.toInt();
 
+    // If it has draw:fill it means that the style has already been defined
+    if (!m_currentDrawStyle->property("draw:fill").isEmpty()) {
+        skipCurrentElement();
+        READ_EPILOGUE
+    }
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1403,15 +1420,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentPen = QPen();
-
     TRY_READ_ATTR_WITHOUT_NS(idx)
 
     if (!idx.isEmpty()) {
         int index = idx.toInt();
         if (m_context->themes->formatScheme.lineStyles.size() > index) {
             qreal penWidth = EMU_TO_POINT(m_context->themes->formatScheme.lineStyles.at(index).toDouble());
-            m_currentPen.setWidthF(penWidth);
+            if (m_currentDrawStyle->property("svg:stroke-width").isEmpty()) {
+                m_currentDrawStyle->addPropertyPt("svg:stroke-width", penWidth);
+            }
         }
     }
 
@@ -1430,8 +1447,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
         }
     }
 
-    m_currentPen.setColor(m_currentColor);
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    if (m_currentDrawStyle->property("svg:stroke-color").isEmpty()) {
+        m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
+    }
+
+    // Todo, this would need to be read from theme
+    if (m_currentDrawStyle->property("draw:stroke").isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:stroke", "solid");
+    }
+    if (m_currentDrawStyle->property("draw:stroke-linejoin").isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:stroke-linejoin", "bevel");
+    }
 
     READ_EPILOGUE
 }
@@ -1604,6 +1630,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             textSize = textSize.left(textSize.length() - 2); // removes 'pt'
             qreal convertedSize = textSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
+        }
+    }
+    if (m_currentBulletProperties.bulletColor() == "UNUSED") {
+        m_listStylePropertiesAltered = true;
+        QString bulletColor = m_currentTextStyle.property("fo:color");
+        if (!bulletColor.isEmpty()) {
+            m_currentBulletProperties.setBulletColor(bulletColor);
         }
     }
     if (m_listStylePropertiesAltered) {
@@ -1877,7 +1910,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
             }
-            ELSE_TRY_READ_IF(ln)
+            //ELSE_TRY_READ_IF(ln) // Disabled as this is not supported by odf
             ELSE_TRY_READ_IF(hlinkClick)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -2031,7 +2064,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - [done] buBlip (Picture Bullet) §21.1.2.4.2
   - [done] buChar (Character Bullet) §21.1.2.4.3
   - [done] buClr (Color Specified) §21.1.2.4.4
-  - buClrTx (Follow Text) §21.1.2.4.5
+  - [done] buClrTx (Follow Text) §21.1.2.4.5
   - [done] buFont (Specified) §21.1.2.4.6
   - buFontTx (Follow text) §21.1.2.4.7
   - [done] buNone (No Bullet) §21.1.2.4.8
@@ -2102,6 +2135,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
+            ELSE_TRY_READ_IF(buClrTx)
             ELSE_TRY_READ_IF(buClr)
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
@@ -3848,7 +3882,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumOff()
     - gradFill (Gradient Fill) §20.1.8.33
     - headEnd (Line Head/End Style) §20.1.8.38
     - miter (Miter Line Join) §20.1.8.43
-    - noFill (No Fill) §20.1.8.44
+    - [done] noFill (No Fill) §20.1.8.44
     - pattFill (Pattern Fill) §20.1.8.47
     - [done] prstDash (Preset Dash) §20.1.8.48
     - round (Round Line Join) §20.1.8.52
@@ -3866,8 +3900,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     READ_PROLOGUE
     QXmlStreamAttributes attrs(attributes());
 
-    m_currentPen = QPen();
-
     //align
     TRY_READ_ATTR_WITHOUT_NS(algn)
     //center
@@ -3879,20 +3911,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 
     //line ending cap
     TRY_READ_ATTR_WITHOUT_NS(cap)
-    Qt::PenCapStyle penCap = m_currentPen.capStyle();
-    //flat
     if (cap.isEmpty() || cap == "sq") {
-       penCap = Qt::SquareCap;
+       m_currentDrawStyle->addProperty("svg:stroke-linecap", "square");
     }
-    //round
     else if (cap == "rnd") {
-        penCap = Qt::RoundCap;
+        m_currentDrawStyle->addProperty("svg:stroke-linecap", "round");
     }
-    //square
     else if (cap == "flat") {
-        penCap = Qt::FlatCap;
+        m_currentDrawStyle->addProperty("svg:stroke-linecap", "butt");
     }
-    m_currentPen.setCapStyle(penCap);
 
     //TODO
     //compound line type
@@ -3914,14 +3941,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     }
 
     TRY_READ_ATTR_WITHOUT_NS(w) //width
-    if(w.isEmpty()) {
-        w = "0";
+    qreal penWidth = 0;
+    if (!w.isEmpty()) {
+        penWidth = EMU_TO_POINT(w.toDouble());
+        m_currentDrawStyle->addPropertyPt("svg:stroke-width", penWidth);
+        // defaults..for now
+        m_currentDrawStyle->addProperty("draw:stroke", "solid");
+        m_currentDrawStyle->addProperty("draw:stroke-linejoin", "bevel");
     }
-    qreal penWidth = EMU_TO_POINT(w.toDouble());
-
-    m_currentPen.setWidthF(penWidth);
-
-    bool colorRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -3946,9 +3973,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 //             //miter line join
 //             else if(qualifiedName() == QLatin1String("a:miter")) {
 //             }
-//             //no fill
-//             else if(qualifiedName() == QLatin1String("a:noFill")) {
-//             }
 //             //pattern fill
 //             else if(qualifiedName() == QLatin1String("a:pattFill")) {
 //             }
@@ -3958,13 +3982,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
             //solid fill
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
-                colorRead = true;
+                m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
+                if (m_currentAlpha > 0) {
+                    m_currentDrawStyle->addProperty("svg:stroke-opacity", QString("%1%").arg(m_currentAlpha/100.0));
+                }
+            }
+            else if(qualifiedName() == QLatin1String("a:noFill")) {
+                m_currentDrawStyle->addProperty("draw:stroke", "none");
             }
             else if (qualifiedName() == QLatin1String("a:prstDash")) {
                 attrs = attributes();
                 TRY_READ_ATTR_WITHOUT_NS(val)
+                QPen pen;
+                pen.setWidthF(penWidth);
                 if (val == "dash") {
-                    m_currentPen.setStyle(Qt::DashLine);
+                    pen.setStyle(Qt::DashLine);
+                    m_currentDrawStyle->addProperty("draw:stroke", "dash");
+                    KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
+                    dashStyle.addAttribute("draw:style", "rect");
+                    QVector<qreal> dashes = pen.dashPattern();
+                    dashStyle.addAttribute("draw:dots1", static_cast<int>(1));
+                    dashStyle.addAttributePt("draw:dots1-length", dashes[0]*pen.widthF());
+                    dashStyle.addAttributePt("draw:distance", dashes[1]*pen.widthF());
+                    if (dashes.size() > 2) {
+                        dashStyle.addAttribute("draw:dots2", static_cast<int>(1));
+                        dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
+                    }
+                    QString dashStyleName = mainStyles->insert(dashStyle, "dash");
+                    m_currentDrawStyle->addProperty("draw:stroke-dash", dashStyleName);
                 }
             }
             SKIP_UNKNOWN
@@ -3972,17 +4017,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 //             else if(qualifiedName() == QLatin1String("a:tailEnd")) {
 //             }
         }
-    }
-
-    m_currentPen.setColor(m_currentColor);
-
-    // No color means that it should not have outline
-    if (!colorRead) {
-        m_currentPen = QPen();
-    }
-
-    if (m_currentPen != QPen()) {
-        KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
     }
 
     READ_EPILOGUE
@@ -4325,6 +4359,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
             ELSE_TRY_READ_IF(buClr)
+            ELSE_TRY_READ_IF(buClrTx)
             ELSE_TRY_READ_IF(buSzPct)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
@@ -4379,7 +4414,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
   - [done] buBlip (Picture Bullet)              §21.1.2.4.2
   - [done] buChar (Character Bullet)            §21.1.2.4.3
   - [done] buClr (Color Specified)              §21.1.2.4.4
-  - buClrTx (Follow Text)                §21.1.2.4.5
+  - [done] buClrTx (Follow Text)                §21.1.2.4.5
   - [done] buFont (Specified)                   §21.1.2.4.6
   - buFontTx (Follow text)               §21.1.2.4.7
   - [done] buNone (No Bullet)                   §21.1.2.4.8
@@ -4521,7 +4556,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
 
     if (!m_xlinkHref.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_xlinkHref);
-        m_currentBulletProperties.setBulletSize(m_imageSize);
         m_listStylePropertiesAltered = true;
     }
 
@@ -4615,6 +4649,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
     	m_listStylePropertiesAltered = true;
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buClrTx
+//! buClrTx - follow text
+/*!
+ Parent elements:
+ - defPPr  (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClrTx()
+{
+    READ_PROLOGUE
+    m_currentBulletProperties.setBulletColor("UNUSED");
+    readNext();
     READ_EPILOGUE
 }
 
@@ -5260,7 +5322,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_shapeTextLeftOff.clear();
     m_shapeTextRightOff.clear();
 
-    m_normAutoFit =  MSOOXML::Utils::autoFitUnUsed;
+    m_normAutofit =  MSOOXML::Utils::autoFitUnUsed;
 
     if (!lIns.isEmpty()) {
         m_shapeTextLeftOff = lIns;
@@ -5300,15 +5362,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
             if (qualifiedName() == QLatin1String("a:spAutoFit")) {
                 TRY_READ(spAutoFit)
                 spAutoFit = true;
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:normAutofit")) {
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                TRY_READ(normAutofit)
+                m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:prstTxWarp")) {
                 // The handling here is not correct but better than nothing
-                // Also normAutoFit = true seems to be correct for value 'textNoShape'
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                // Also normAutofit = true seems to be correct for value 'textNoShape'
+                m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             SKIP_UNKNOWN
         }
@@ -5326,6 +5389,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_currentPresentationStyle.addProperty("fo:wrap-option",
         wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
 #endif
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL normAutofit
+//! Normal autofit handler (Normal AutoFit)
+/*!
+
+ Parent elements:
+ - [done] bodyPr (§21.1.2.1.1)
+
+ No child elements.
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_normAutofit()
+{
+    READ_PROLOGUE
+    readNext();
     READ_EPILOGUE
 }
 
