@@ -26,10 +26,11 @@ class KoToolBoxFactory::Private {
 public:
     KoCanvasController *canvas;
     QString appName;
+    bool flakeToolsBelow;
 };
 
 
-KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& title)
+KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& title, bool flakeToolsBelow)
     : d( new Private())
 {
     if (title.isEmpty()) {
@@ -39,6 +40,7 @@ KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& ti
         d->appName = title;
     }
     d->canvas = canvas;
+    d->flakeToolsBelow = flakeToolsBelow;
 }
 
 KoToolBoxFactory::~KoToolBoxFactory() {
@@ -57,7 +59,7 @@ KoDockFactoryBase::DockPosition KoToolBoxFactory::defaultDockPosition() const
 
 QDockWidget* KoToolBoxFactory::createDockWidget()
 {
-    KoToolBox *box = new KoToolBox(d->canvas);
+    KoToolBox *box = new KoToolBox(d->canvas, d->flakeToolsBelow);
     KoToolBoxDocker *docker = new KoToolBoxDocker(box);
     docker->setWindowTitle(d->appName);
     docker->setObjectName("ToolBox_"+ d->appName);

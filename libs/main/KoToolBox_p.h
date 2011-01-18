@@ -52,7 +52,7 @@ class KoToolBox : public QWidget {
     Q_OBJECT
 public:
     /// constructor
-    explicit KoToolBox(KoCanvasController *canvas);
+    explicit KoToolBox(KoCanvasController *canvas, bool flakeToolsBelow = false);
     ~KoToolBox();
 
     /**

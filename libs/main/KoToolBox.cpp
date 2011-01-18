@@ -195,8 +195,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Seperators)
 class ToolBoxLayout : public QLayout
 {
 public:
-    ToolBoxLayout(QWidget *parent)
-        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0), m_currentWidth(0)
+    ToolBoxLayout(QWidget *parent, bool flakeToolsBelow)
+        : QLayout(parent), m_flakeToolsBelow(flakeToolsBelow), m_orientation(Qt::Vertical), m_currentHeight(0), m_currentWidth(0)
     {
         setSpacing(6);
     }
@@ -230,9 +230,10 @@ public:
         addChildWidget(section);
 
         QList<QWidgetItem*>::iterator iterator = m_sections.begin();
-        int defaults = 2; // skip the first two as they are the 'main' and 'dynamic' sections.
+        int defaults = (m_flakeToolsBelow) ? 0 : 2; // skip the first two as they are the 'main' and 'dynamic' sections (not if they are below the other tools)
         while (iterator != m_sections.end()) {
-            if (--defaults < 0 && static_cast<Section*> ((*iterator)->widget())->name() > section->name())
+            if ((--defaults < 0 && static_cast<Section*> ((*iterator)->widget())->name() > section->name()) ||
+                (m_flakeToolsBelow && static_cast<Section*> ((*iterator)->widget())->name() == "main"))
                 break;
             ++iterator;
         }
@@ -348,6 +349,7 @@ public:
 
 private:
     QList <QWidgetItem*> m_sections;
+    bool m_flakeToolsBelow;
     Qt::Orientation m_orientation;
     mutable int m_currentHeight, m_currentWidth;
 };
@@ -374,10 +376,10 @@ void KoToolBox::Private::addSection(Section *section, const QString &name)
     sections.insert(name, section);
 }
 
-KoToolBox::KoToolBox(KoCanvasController *canvas)
+KoToolBox::KoToolBox(KoCanvasController *canvas, bool flakeToolsBelow)
     : d( new Private(canvas))
 {
-    d->layout = new ToolBoxLayout(this);
+    d->layout = new ToolBoxLayout(this, flakeToolsBelow);
     // add defaults
     d->addSection(new Section(this), "main");
     d->addSection(new Section(this), "dynamic");
