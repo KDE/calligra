@@ -23,20 +23,14 @@
 #define PARAGRAPH_H
 
 #include <QBuffer>
-
-#include <qlist.h>
+#include <QList>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
-//TODO: remove unneeded includes
 #include <wv2/src/styles.h>
 #include <wv2/src/paragraphproperties.h>
-#include <wv2/src/functor.h>
-#include <wv2/src/functordata.h>
-#include <wv2/src/ustring.h>
 #include <wv2/src/parser.h>
-#include <wv2/src/fields.h>
 
 class Paragraph
 {
