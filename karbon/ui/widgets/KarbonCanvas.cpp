@@ -116,7 +116,7 @@ KoShapeManager * KarbonCanvas::shapeManager() const
     return d->shapeManager;
 }
 
-const KoViewConverter * KarbonCanvas::viewConverter() const
+KoViewConverter * KarbonCanvas::viewConverter() const
 {
     return &d->zoomHandler;
 }

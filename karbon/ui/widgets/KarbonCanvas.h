@@ -70,7 +70,7 @@ public:
     /// reimplemented from KoCanvasBase
     KoShapeManager *shapeManager() const;
     /// reimplemented from KoCanvasBase
-    const KoViewConverter *viewConverter() const;
+    KoViewConverter *viewConverter() const;
     /// reimplemented from KoCanvasBase
     KoToolProxy * toolProxy() const;
     /// reimplemented from KoCanvasBase

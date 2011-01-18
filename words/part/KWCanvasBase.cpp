@@ -338,7 +338,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
     }
 }
 
-const KoViewConverter *KWCanvasBase::viewConverter() const
+KoViewConverter *KWCanvasBase::viewConverter() const
 {
     return m_viewConverter;
 }
