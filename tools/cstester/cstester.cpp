@@ -1,3 +1,25 @@
+/*
+ * This file is part of Calligra
+ *
+ * Copyright (C) 2011 Nokia Corporation and/or its subsidiary( -ies ).
+ *
+ * Contact: Thorsten Zachmann thorsten.zachmann@nokia.com
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 as published by the Free Software Foundation.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ *
+ */
 #include <KoDocument.h>
 
 #include <KoPADocument.h>
@@ -10,6 +32,7 @@
 #include <tables/ui/SheetView.h>
 #include <tables/SheetPrint.h>
 #include <KoZoomHandler.h>
+#include <KoShapePainter.h>
 #include <QPainter>
 
 #include <KMimeType>
@@ -104,6 +127,12 @@ QPixmap createSpreadsheetThumbnail(Calligra::Tables::Sheet* sheet, const QSize &
     p.setClipRect(pRect);
     p.translate(pRect.topLeft());
     sheetView.paintCells(p, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0, 0));
+
+    const Qt::LayoutDirection direction = sheet->layoutDirection();
+
+    KoShapePainter shapePainter(direction == Qt::LeftToRight ? 0 : 0 /*RightToLeftPaintingStrategy(shapeManager, d->canvas)*/);
+    shapePainter.setShapes(sheet->shapes());
+    shapePainter.paint(p, zoomHandler);
 
     return thumbnail;
 }
