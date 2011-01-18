@@ -45,12 +45,15 @@ public:
     ~Paragraph();
 
     /**
-     * Write the paragraph content into the @writer
+     * Write the paragraph content into the @writer.
+     *
+     * While applying the paragraph style, store the tab leader (leader-text)
+     * chacter into @tabLeader if requested by the calling handler.
      *
      * @return the name of the last KoGenStyle inserted into the styles
-     * collection
+     * collection.
      */
-    QString writeToFile(KoXmlWriter* writer);
+    QString writeToFile(KoXmlWriter* writer, QChar* tabLeader=0);
 
     void addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles, bool addCompleteElement=false);
     void openInnerParagraph();
@@ -82,7 +85,7 @@ public:
     // them onto a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
-                                         bool setDefaultAlign, Paragraph *paragraph);
+                                         bool setDefaultAlign, Paragraph *paragraph, QChar* tabLeader=0);
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          QString bgColor,

@@ -866,25 +866,22 @@ void KWordTextHandler::paragraphEnd()
     KoXmlWriter* writer = currentWriter();
 
     //add nested field snippets to this paragraph
-    if (m_fld->m_insideField) {
+    if (m_fld->m_insideField && !m_fld_snippets.isEmpty()) {
         QList<QString>* flds = &m_fld_snippets;
-        if (!flds->isEmpty()) {
-            writer = m_fld->m_writer;
-        }
         while (!flds->isEmpty()) {
-            //add writer content to m_paragraph as a runOfText with no text style
+            //add writer content to m_paragraph as a runOfText with text style
             m_paragraph->addRunOfText(flds->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
         }
+        writer = m_fld->m_writer;
     }
 
-    //write paragraph content, reuse the text/paragraph style if applicable
-    QString styleName = m_paragraph->writeToFile(writer);
+    //write paragraph content, reuse text/paragraph style name if applicable
+    QString styleName = m_paragraph->writeToFile(writer, &m_fld->m_tabLeader);
 
     if (chck_dropcaps) {
-        // If this paragraph is a drop cap, it should be combined with
-        // the next paragraph.  So store the drop cap data for future
-        // use.  However, only do this if the last paragraph was *not*
-        // a dropcap.
+        // If this paragraph is a drop cap, it should be combined with the next
+        // paragraph.  So store the drop cap data for future use.  However,
+        // only do this if the last paragraph was *not* a dropcap.
         if (!m_hasStoredDropCap && m_paragraph->dropCapStatus() == Paragraph::IsDropCapPara) {
             m_paragraph->getDropCapData(&m_dropCapString, &m_dcs_fdct, &m_dcs_lines,
                                         &m_dropCapDistance, &m_dropCapStyleName);
@@ -932,18 +929,18 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kDebug(30513) << "processing field... EQ (Combined Characters)";
         break;
     case CREATEDATE:
-    case SAVEDATE:
     case DATE:
-    case TIME:
-    case PAGEREF:
     case HYPERLINK:
+    case PAGEREF:
+    case SAVEDATE:
+    case TIME:
     case TOC:
         kDebug(30513) << "Processing only a subset of field instructions!";
         kDebug(30513) << "Processing field result!";
         break;
+    case LAST_REVISED_BY:
     case NUMPAGES:
     case PAGE:
-    case LAST_REVISED_BY:
     case SUBJECT:
     case TITLE:
         kWarning(30513) << "Warning: field instructions not supported, storing as ODF field!";
@@ -1065,8 +1062,9 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
     }
     case TIME:
     case DATE: {
-        // Extract the interesting format-string. That means we translate something like 'TIME \@ "MMMM d, yyyy"' into 'MMMM d, yyyy'
-        // cause the NumberFormatParser doesn't handle it correct else.
+        // Extract the interesting format-string. That means we translate
+        // something like 'TIME \@ "MMMM d, yyyy"' into 'MMMM d, yyyy' cause
+        // the NumberFormatParser doesn't handle it correct else.
         QRegExp rx(".*\"(.*)\".*");
         if (rx.indexIn(*inst) >= 0)
             m_fld->m_instructions = rx.cap(1);
@@ -1373,6 +1371,13 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 
         if (rx.indexIn(*inst) >= 0) {
             separator = rx.cap(1);
+        } else {
+            // The tab leader character is not provided by the TOC field,
+            // reusing from the last paragraph style applied in index-body.
+            // If not provided, use the default value.
+            if (m_fld->m_tabLeader.isNull()) {
+                m_fld->m_tabLeader = QChar('.');
+            }
         }
 
         //NOTE: TOC content is not encapsulated in a paragraph
@@ -1409,9 +1414,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
             if (pgnum) {
                 if (separator.isEmpty()) {
                     cwriter->startElement("text:index-entry-tab-stop");
-                    //TODO: Not provided in the TOC field, reuse from paragraph
-                    //styles used in text:index-body, processed later.
-                    cwriter->addAttribute("style:leader-char", ".");
+                    cwriter->addAttribute("style:leader-char", m_fld->m_tabLeader);
                     //NOTE: "right" is the only option available
                     cwriter->addAttribute("style:type", "right");
                     cwriter->endElement(); //text:index-entry-tab-stop
@@ -1446,7 +1449,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         if (!m_fldStates.empty()) {
             m_fld_snippets.prepend(contents);
         } else {
-            //add writer content to m_paragraph as a runOfText with no text style
+            //add writer content to m_paragraph as a runOfText with text style
             m_paragraph->addRunOfText(contents, m_fldChp, QString(""), m_parser->styleSheet(), true);
         }
     }
@@ -1462,7 +1465,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         m_fld = new fld_State();
         QList<QString>* list = &m_fld_snippets;
         while (!list->isEmpty()) {
-            //add writer content to m_paragraph as a runOfText with no text style
+            //add writer content to m_paragraph as a runOfText with text style
             m_paragraph->addRunOfText(list->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
         }
         m_fldChp = 0;
@@ -1539,17 +1542,8 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                 kDebug(30513) << "Ignoring the field result.";
                 break;
             }
-
-            //store the formatting properties of the root field
-            switch (m_fld->m_type) {
-            case TOC:
-                //CHP of the first nested field will be used
-                break;
-            default:
-                if (!m_fldChp.data()) {
-                    m_fldChp = chp;
-                }
-                break;
+            if (!m_fldChp.data()) {
+                m_fldChp = chp;
             }
         }
         if (common_flag) {
