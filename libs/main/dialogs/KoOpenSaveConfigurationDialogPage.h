@@ -26,10 +26,10 @@
 class KoOpenSaveConfigurationDialogPage : public KoConfigurationDialogPage
 {
 
-    public:
-        explicit KoOpenSaveConfigurationDialogPage (QWidget* parent = 0);
-        virtual ~KoOpenSaveConfigurationDialogPage();
-        virtual QWidget* pageWidget();
+public:
+    explicit KoOpenSaveConfigurationDialogPage(QWidget* parent = 0);
+    virtual ~KoOpenSaveConfigurationDialogPage();
+    virtual QWidget* pageWidget();
 };
 
 #endif // KOOPENSAVECONFIGURATIONDIALOGPAGE_H

@@ -27,16 +27,17 @@
 #include "komain_export.h"
 
 class KoView;
+
 class KoConfigurationDialogPage;
 
 class KOMAIN_EXPORT KoConfigurationDialog : public KPageDialog
 {
-        Q_OBJECT
+    Q_OBJECT
 
-    public:
-        explicit KoConfigurationDialog (KoView *view);
-        virtual ~KoConfigurationDialog();
-        void addCustomPage(KoConfigurationDialogPage *page);
+public:
+    explicit KoConfigurationDialog(KoView *view);
+    virtual ~KoConfigurationDialog();
+    void addCustomPage(KoConfigurationDialogPage *page);
 };
 
 #endif // KOCONFIGURATIONDIALOG_H

@@ -2135,7 +2135,7 @@ KoPrintJob * View::createPrintJob()
     return new PrintJob(this);
 }
 
-void View::addCustomConfigurationDialogPages (KoConfigurationDialog* dialog)
+void View::addCustomConfigurationDialogPages(KoConfigurationDialog* dialog)
 {
     /*
     QWidget *widget = new QWidget;
