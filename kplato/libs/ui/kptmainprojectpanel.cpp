@@ -99,11 +99,11 @@ MacroCommand *MainProjectPanel::buildCommand() {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new NodeModifyLeaderCmd(project, leaderfield->text()));
     }
-    if (startDateTime() != project.constraintStartTime().dateTime()) {
+    if (startDateTime() != project.constraintStartTime()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(project, startDateTime()));
     }
-    if (endDateTime() != project.constraintEndTime().dateTime()) {
+    if (endDateTime() != project.constraintEndTime()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(project, endDateTime()));
     }

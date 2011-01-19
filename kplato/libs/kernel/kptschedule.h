@@ -126,6 +126,8 @@ public:
     int calculationMode() const { return m_calculationMode; }
     /// Return the list of appointments
     QList<Appointment*> appointments() const { return m_appointments; }
+    /// Return true if the @p which list is not empty
+    bool hasAppointments( int which ) const;
     /// Return the list of appointments
     /// @param which specifies which list is returned
     QList<Appointment*> appointments(int which) const;
@@ -142,10 +144,11 @@ public:
     DateTime appointmentStartTime() const;
     DateTime appointmentEndTime() const;
 
-    virtual Appointment appointmentIntervals( int which = Scheduling ) const;
+    virtual Appointment appointmentIntervals( int which = Scheduling, const DateTimeInterval &interval = DateTimeInterval() ) const;
+    void copyAppointments( CalculationMode from, CalculationMode to );
 
     virtual bool isOverbooked() const { return false; }
-    virtual bool isOverbooked( const KDateTime & /*start*/, const KDateTime & /*end*/ ) const { return false; }
+    virtual bool isOverbooked( const DateTime & /*start*/, const DateTime & /*end*/ ) const { return false; }
     virtual QStringList overbookedResources() const;
     /// Returns the first booked interval to @p node that intersects @p interval (limited to @p interval)
     virtual DateTimeInterval firstBookedInterval( const DateTimeInterval &interval, const Schedule *node ) const;
@@ -385,7 +388,7 @@ public:
     virtual void takeAppointment( Appointment *appointment, int type = Scheduling );
 
     virtual bool isOverbooked() const;
-    virtual bool isOverbooked( const KDateTime &start, const KDateTime &end ) const;
+    virtual bool isOverbooked( const DateTime &start, const DateTime &end ) const;
 
     virtual Resource *resource() const { return m_resource; }
     virtual double normalRatePrHour() const;
