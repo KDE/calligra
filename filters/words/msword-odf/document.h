@@ -28,7 +28,6 @@
 #include "pole.h"
 #include "tablehandler.h"
 
-
 #include <wv2/src/handlers.h>
 #include <wv2/src/functor.h>
 #include <wv2/src/functordata.h>
@@ -136,7 +135,12 @@ public:
     /**
      * @return the current background-color.
      */
-    QString currentBgColor() { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
+    QString currentBgColor(void) { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
+
+    /**
+     * @return the list of names of TOC related styles.
+     */
+    QList<QString> tocStyleNames(void) { return m_tocStyleNames; }
 
     /**
      * Checks if the header/footer content of the current section differs from
@@ -246,6 +250,10 @@ private:
     //A stack for backgroud-colors, which represets a background color context
     //for automatic colors.
     QStack<QString> m_bgColors;
+
+    //A list storing names of TOC related styles required in TextHandler to
+    //process the TOC field.
+    QList<QString> m_tocStyleNames;
 };
 
 #endif // DOCUMENT_H

@@ -42,7 +42,7 @@ class SectionShapeContainerModel: public KoShapeContainerModel
     bool isChildLocked(const KoShape *child) const;
   public:
     /**
-     * Determine wether to update or not the layout.
+     * Determine whether to update or not the layout.
      */
     void setUpdateLayout(bool v);
 

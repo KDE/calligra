@@ -189,13 +189,13 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     m_textStyles.push_back(textStyle);
 }
 
-QString Paragraph::writeToFile(KoXmlWriter* writer)
+QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
 {
     kDebug(30513);
 
     // Set up the paragraph style.
     applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle,
-                             m_inHeaderFooter && m_containsPageNumberField, this);
+                             m_inHeaderFooter && m_containsPageNumberField, this, tabLeader);
 
     // MS Word puts dropcap characters in its own paragraph with the
     // rest of the text in the subsequent paragraph. On the other
@@ -510,7 +510,7 @@ void Paragraph::setParagraphProperties(wvWare::SharedPtr<const wvWare::Paragraph
 
 void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
-                                         bool setDefaultAlign, Paragraph *paragraph)
+                                         bool setDefaultAlign, Paragraph *paragraph, QChar* tabLeader)
 {
     kDebug(30513);
 
@@ -704,7 +704,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
 #endif
     }
 
-//TODO introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
+    //TODO: introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
 
     // Tabulators
     //itbdMac = number of tabs stops defined for paragraph. Must be >= 0 and <= 64.
@@ -743,22 +743,28 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 break;
             }
             //td.tbd.tlc = tab leader code, default no leader (can be ignored)
+            QChar leader;
             switch (td.tbd.tlc) {
             case tlcDot:
             case tlcMiddleDot:
-                tmpWriter.addAttribute("style:leader-text", ".");
+                leader = QChar('.');
                 break;
             case tlcHyphen:
-                tmpWriter.addAttribute("style:leader-text", "-");
+                leader = QChar('-');
                 break;
             case tlcUnderscore:
             case tlcHeavy:
-                tmpWriter.addAttribute("style:leader-text", "_");
+                leader = QChar('_');
                 break;
             default:
                 break;
             }
+            tmpWriter.addAttribute("style:leader-text", leader);
             tmpWriter.endElement();//style:tab-stop
+
+            if (tabLeader) {
+                *tabLeader = leader;
+            }
         }
         tmpWriter.endElement();//style:tab-stops
         buf.close();

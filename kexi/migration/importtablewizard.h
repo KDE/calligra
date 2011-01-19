@@ -27,6 +27,8 @@ class KexiConnSelectorWidget;
 class QListWidget;
 class QLabel;
 class QProgressBar;
+class KexiProjectSelectorWidget;
+class KexiProjectSet;
 
 namespace KexiDB {
     class Connection;
@@ -66,7 +68,8 @@ Q_OBJECT
         QPointer<KexiMigration::KexiMigrate> m_migrateDriver;
         QListWidget *m_tableListWidget;
         AlterSchemaWidget *m_alterSchemaWidget;
-
+        KexiProjectSelectorWidget *m_srcDBName;
+        KexiProjectSet* m_prjSet;
         QString m_importTableName;
         
         bool fileBasedSrcSelected() const;
@@ -80,14 +83,15 @@ Q_OBJECT
         bool doImport();
         
         //Page Items
-        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem, *m_finishPageItem;
+        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem, *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem, *m_finishPageItem;
         
         //Page Widgets
-        QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_tablesPageWidget, *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;
+        QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget, *m_tablesPageWidget, *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;
 
         //Page Setup
         void setupIntroPage();
         void setupSrcConn();
+        void setupSrcDB();
         void setupTableSelectPage();
         void setupAlterTablePage();
         void setupImportingPage();
@@ -95,6 +99,7 @@ Q_OBJECT
         
         //Page Arrival
         void arriveSrcConnPage();
+        void arriveSrcDBPage();
         void arriveTableSelectPage();
         void arriveAlterTablePage();
         void arriveImportingPage();

@@ -68,6 +68,11 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, KWTe
     if (m_knowledgePoint < 0)
         return false;
 
+    // there should be always at least one line
+    if (state->layout->lineCount() == 0) {
+        return false;
+    }
+
     // second pass was needed, shape position is ok now
     if (m_makeSecondPass) {
         m_makeSecondPass = false;

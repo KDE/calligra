@@ -26,13 +26,11 @@
 #include <QPainterPath>
 
 class KoShape;
-class KWFrame;
 
 ///  Class that allows us with the runaround of QPainterPaths
 class Outline
 {
 public:
-    Outline(KWFrame *frame, const QTransform &matrix);
     Outline(KoShape *shape, const QTransform &matrix);
 
     void init(const QTransform &matrix, const QPainterPath &outline, qreal distance);

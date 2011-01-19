@@ -51,7 +51,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tblPr)
             ELSE_TRY_READ_IF(tblGrid)
@@ -127,7 +127,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //             TRY_READ_IF(blipFill)
 //             ELSE_TRY_READ_IF(effectDrag)
@@ -156,7 +156,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblGrid()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gridCol)
             ELSE_WRONG_FORMAT
@@ -184,7 +184,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gridCol()
 
     while(!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
 //         if(isStartElement()) {
 //             TRY_READ_IF(extLst)
 //         }
@@ -212,7 +212,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tc)
 //             ELSE_TRY_READ_IF(extLst)
@@ -248,7 +248,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if(qualifiedName() == "a:txBody") {
                 QBuffer* buffer = new QBuffer;
@@ -301,7 +301,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //             TRY_READ_IF(blipFill)
 //             ELSE_TRY_READ_IF(cell3D)

@@ -220,7 +220,12 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     //now create real content/body writers & dump the information there
     KoXmlWriter* realContentWriter = oasisStore.contentWriter();
+    if(!realContentWriter) {
+        kWarning(30513) << "Error writing content.";
+        return KoFilter::CreationError;
+    }
     realContentWriter->addCompleteElement(&contentBuf);
+
     KoXmlWriter *realBodyWriter = oasisStore.bodyWriter();
     realBodyWriter->addCompleteElement(&bodyBuf);
 

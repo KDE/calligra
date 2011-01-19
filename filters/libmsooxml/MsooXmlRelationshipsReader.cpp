@@ -131,7 +131,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationships()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(Relationship)
             ELSE_WRONG_FORMAT
@@ -147,7 +147,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationships()
  Parent elements:
     - [done] Relationships
 
-No child elements.
+ No child elements.
 */
 KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
 {
@@ -171,9 +171,6 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
     //kDebug() << "added target" << Target << "for type" << Type << "path=" << fixedPath << "key=" << targetKey(m_context->path + '/' + m_context->file, Type);
     m_context->targetsForTypes->insert(targetKey(m_context->path + '/' + m_context->file, Type), fixedPath + '/' + Target);
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }

@@ -39,6 +39,7 @@
 #include <KoShapeFactoryBase.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
 #include <KoShapeLoadingContext.h>
 #include <KoStyleManager.h>
 #include <KoOdfLoadingContext.h>
@@ -219,8 +220,29 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     if (updater) updater->setProgress(60);
 
-    // Let the TextShape handle loading the body element.
-    textShapeData.loadOdf(body, sc, m_document->documentRdfBase());
+    // load the main text shape right here so we can use the progress information of the KoTextLoader
+    KoTextLoader loader(sc, m_document->documentRdfBase(), 0);
+    QTextCursor cursor(textShapeData.document());
+
+    QPointer<KoUpdater> loadUpdater;
+    if (m_document->progressUpdater()) {
+        loadUpdater = m_document->progressUpdater()->startSubtask(5, "KWOdfLoader::loadOdf");
+        loadUpdater->setProgress(0);
+        connect(&loader, SIGNAL(sigProgress(int)), loadUpdater, SLOT(setProgress(int)));
+    }
+
+    loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
+
+    if (loadUpdater) {
+        loadUpdater->setProgress(100);
+    }
+
+    KoTextEditor *editor = KoTextDocument(textShapeData.document()).textEditor();
+    if (editor) // at one point we have to get the position from the odf doc instead.
+        editor->setPosition(0);
+    editor->finishedLoading();
+
+    if (updater) updater->setProgress(90);
 
     // Grab weak references to all the Rdf stuff that was loaded
     if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {

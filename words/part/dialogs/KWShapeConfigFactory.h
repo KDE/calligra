@@ -116,12 +116,12 @@ private:
 };
 
 /// factory to create a KWFrameRunaroundProperties widget
-class KWFrameRunaroundPropertiesFactory : public KoShapeConfigFactoryBase
+class KWRunAroundPropertiesFactory : public KoShapeConfigFactoryBase
 {
 public:
     /// constructor
-    explicit KWFrameRunaroundPropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
-    ~KWFrameRunaroundPropertiesFactory() {}
+    explicit KWRunAroundPropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
+    ~KWRunAroundPropertiesFactory() {}
 
     /// reimplemented method from superclass
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);

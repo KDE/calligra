@@ -5,7 +5,7 @@ set(applixspreadimport_PART_SRCS applixspreadimport.cc )
 
 kde4_add_plugin(applixspreadimport ${applixspreadimport_PART_SRCS})
 
-target_link_libraries(applixspreadimport komain)
+target_link_libraries(applixspreadimport komain calligratablescommon)
 
 install(TARGETS applixspreadimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

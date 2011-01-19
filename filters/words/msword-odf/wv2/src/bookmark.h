@@ -1,19 +1,20 @@
 /* This file is part of the wvWare 2 project
-  Copyright (C) 2002-2003 KO GmbH <jean.nicolas.artaud@kogmbh.>
+   Copyright (C) 2002-2003 KO GmbH <jean.nicolas.artaud@kogmbh.>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License version 2 as published by the Free Software Foundation.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02111-1307, USA.
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02111-1307, USA.
 */
 
 
@@ -49,23 +50,30 @@ namespace wvWare
             ~Bookmarks();
 
             /**
-            * Get the BookmarkData for the Bookmark-Start/End at @param globalCP.
-            * The @param ok flag is true if a bookmark has been found.
-            * If @param ok is false no bookmark has been found and the
-            * returned BookmarkData structure is invalid.
-            */
+             * Get the BookmarkData for the Bookmark-Start/End at @param globalCP.
+             * The @param ok flag is true if a bookmark has been found.
+             * If @param ok is false no bookmark has been found and the
+             * returned BookmarkData structure is invalid.
+             */
             BookmarkData bookmark( U32 globalCP, bool& ok );
 
             /**
-            * Returns the global CP of the next bookmark start,
-            * 0xffffffff if none exists.
-            */
+             * Returns the global CP of the next bookmark start,
+             * 0xffffffff if none exists.
+             */
             U32 nextBookmarkStart() const;
             /**
-            * Returns the global CP of the next bookmark end,
-            * 0xffffffff if none exists.
-            */
+             * Returns the global CP of the next bookmark end,
+             * 0xffffffff if none exists.
+             */
             U32 nextBookmarkEnd() const;
+
+            /**
+             * Check for unprocessed bookmars located before @param globalCP.
+             * This might be the result of a skipped chunk or overlapping.
+             * Any unprocessed bookmarks are skipped.
+             */
+            void check( U32 globalCP );
 
         private:
             Bookmarks( const Bookmarks& rhs );

@@ -1,6 +1,9 @@
 /* This file is part of the KOffice project
    Copyright (C) 2003 Werner Trobin <trobin@kde.org>
    Copyright (C) 2003 David Faure <faure@kde.org>
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
+   Copyright (C) 2010, 2011 Matus Hanzes <matus.hanzes@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -22,7 +25,6 @@
 #ifndef GRAPHICSHANDLER_H
 #define GRAPHICSHANDLER_H
 
-#include <wv2/src/functor.h>
 #include <wv2/src/handlers.h>
 #include "wv2/src/ms_odraw.h"
 #include "wv2/src/graphics.h"
@@ -33,12 +35,10 @@
 #include "writer.h"
 
 #include <QObject>
-#include <QHash>
 #include <QMap>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoStore.h>
-#include <vector>
 
 class DrawStyle;
 

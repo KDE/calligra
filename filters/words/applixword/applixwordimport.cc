@@ -19,17 +19,33 @@
 
 #include <QMessageBox>
 #include <QList>
+#include <QDateTime>
 #include <QTextStream>
 #include <QByteArray>
+#include <QColor>
 #include <applixwordimport.h>
 #include <applixwordimport.moc>
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
+#include <KoOdfWriteStore.h>
+#include <KoGenStyles.h>
+#include <KoXmlWriter.h>
 
 K_PLUGIN_FACTORY(APPLIXWORDImportFactory, registerPlugin<APPLIXWORDImport>();)
 K_EXPORT_PLUGIN(APPLIXWORDImportFactory("calligrafilters"))
 
+
+struct t_mycolor {
+    int c;
+    int m;
+    int y;
+    int k;
+
+    int r;
+    int g;
+    int b;
+};
 
 /******************************************************************************
  *  class: APPLIXWORDImport        function: APPLIXWORDImport                 *
@@ -87,7 +103,7 @@ APPLIXWORDImport::nextLine(QTextStream & stream)
 KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, const QByteArray& to)
 {
 
-    if (to != "application/x-kword" || from != "application/x-applix-word")
+    if (to != "application/vnd.oasis.opendocument.text" || from != "application/x-applix-word")
         return KoFilter::NotImplemented;
 
     QFile in(m_chain->inputFile());
@@ -98,18 +114,28 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     }
 
 
-    QString str;
+    //create output files
+    KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
+    if (!store || store->bad()) {
+        kWarning(30517) << "Unable to open output file!";
+        delete store;
+        return KoFilter::FileNotFound;
+    }
+    store->disallowNameExpansion();
+    KoOdfWriteStore odfStore(store);
+    odfStore.manifestWriter(to);
 
-    str += "<?xml version=\"1.0\"?>\n";
-    str += "<DOC  author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\">\n";
-    str += " <PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" columnspacing=\"2\" hType=\"0\" fType=\"0\" spHeadBody=\"9\" spFootBody=\"9\" >\n";
-    str += "  <PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
-    str += " </PAPER>\n";
-    str += " <ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" />\n";
-    str += " <FRAMESETS>\n";
-    str += "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\">\n";
-    str += "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaroundGap=\"2\" lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" brightpt=\"0\" btoppt=\"0\" bbottompt=\"0\" />\n";
+    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    if (!contentWriter) {
+        delete store;
+        return KoFilter::CreationError;
+    }
 
+    KoGenStyles mainStyles;
+    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
+
+    bodyWriter->startElement("office:body");
+    bodyWriter->startElement("office:text");
 
     QTextStream stream(&in);
 
@@ -124,6 +150,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     QString           mystr, textstr;
     QList<t_mycolor*>  mcol;
     QStringList       mcoltxt;
+    bool inParagraph = false;
 
     /**************************************************************************
      * Read header                                                            *
@@ -218,6 +245,12 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             mystr.remove(0, 5 + strlen(stylename));
             kDebug(30517) << " Para  Name:" << stylename;
             kDebug(30517) << "       Rest:" << mystr;
+
+            if (inParagraph)
+                bodyWriter->endElement(); // text:p
+
+            bodyWriter->startElement("text:p");
+            inParagraph = true;
         }
         /**********************************************************************
          * found a textstring                                                 *
@@ -304,82 +337,85 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             }
             kDebug(30517) << "";
 
-            // Replaces Part for & <>, applixwear special characters and qouts
+            // Replaces Part for & <>, applixware special characters and quotes
             replaceSpecial(textstr);
 
+            KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
+            //style.addAttribute("style:display-name", styleName);
 
-            // add text inside
-            str += "    <PARAGRAPH>\n";
-            str += "     <TEXT>";
-            str += textstr;
-            str += "</TEXT>\n";
-
-            if (bold == 1 || underline == 1 || italic == 1 || fontsize != 12 ||
-                    colpos != -1 || !fontname.isEmpty()) {
-                str += "     <LAYOUT>\n";
-                str += "      <FORMAT>\n";
+            //if (bold == 1 || underline == 1 || italic == 1 || fontsize != 12 ||
+            //        colpos != -1 || !fontname.isEmpty()) {
                 if (!fontname.isEmpty()) {
-                    str += "       <FONT name=\"";
-                    str += fontname;
-                    str += "\" />\n";
+                    style.addProperty("fo:font-family", fontname, KoGenStyle::TextType);
                 }
 
                 if (fontsize != 1) {
-                    str += "       <SIZE value=\"";
-                    str += QString::number(fontsize);
-                    str += "\" />\n";
+                    style.addPropertyPt("fo:font-size", fontsize, KoGenStyle::TextType);
                 }
 
                 if (italic == 1) {
-                    str += "       <ITALIC value=\"1\" />\n";
+                    style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
                 }
 
                 if (bold == 1) {
-                    str += "       <WEIGHT value=\"75\" />\n";
+                    style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
                 }
 
                 if (underline == 1) {
-                    str += "       <UNDERLINE value=\"1\" />\n";
+                   style.addProperty("style:text-underline-type", "single", KoGenStyle::TextType);
+                   style.addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
                 }
 
                 if (colpos != -1) {
                     t_mycolor *mc = mcol.at(colpos);
-                    str += "       <COLOR red=\"";
-
-                    str += QString::number(mc->r);
-                    str += "\" green=\"";
-                    str += QString::number(mc->g);
-                    str += "\" blue=\"";
-                    str += QString::number(mc->b);
-                    str += "\" />\n";
+                    QColor color(mc->r, mc->g, mc->b);
+                    style.addProperty("style:fo-color", color.name(), KoGenStyle::TextType);
                 }
+            //}
 
-                str += "      </FORMAT>\n";
-                str += "     </LAYOUT>\n";
+            if (!inParagraph) {
+                bodyWriter->startElement("text:p");
+                inParagraph = true;
             }
-            str += "    </PARAGRAPH>\n";
+
+            QString styleName = mainStyles.insert(style);
+            bodyWriter->startElement("text:span");
+            bodyWriter->addAttribute("text:style-name", styleName);
+            bodyWriter->addTextSpan(textstr);
+            bodyWriter->endElement(); // span
         }
 
     }
+    if (inParagraph)
+        bodyWriter->endElement(); // text:p
+
     emit sigProgress(100);
 
-    str += "  </FRAMESET>\n";
-    str += " </FRAMESETS>\n";
-    str += "</DOC>\n";
-    kDebug(30517) << "Text" << str;
+    bodyWriter->endElement(); // office:text
+    bodyWriter->endElement(); // office:body
 
-    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
-    if (!out) {
-        kError(30517) << "Unable to open output file!" << endl;
-        in.close();
-        return KoFilter::StorageCreationError;
+    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
+    odfStore.closeContentWriter();
+
+    //add manifest line for content.xml
+    odfStore.manifestWriter()->addManifestEntry("content.xml", "text/xml");
+    if (!mainStyles.saveOdfStylesDotXml(odfStore.store(), odfStore.manifestWriter())) {
+        delete store;
+        return KoFilter::CreationError;
+    }
+    if (!createMeta(odfStore)) {
+        kWarning() << "Error while trying to write 'meta.xml'. Partition full?";
+        delete store;
+        return KoFilter::CreationError;
     }
 
-    QByteArray cstring = str.toUtf8();
+    if ( !odfStore.closeManifestWriter() ) {
+        kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
+        delete store;
+        return KoFilter::CreationError;
+    }
 
-    out->write((const char*) cstring, cstring.length());
-
-    in.close();
+    delete store;
     return KoFilter::OK;
 }
 
@@ -388,7 +424,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
  *  function: specCharfind                                                    *
  ******************************************************************************/
 QChar
-APPLIXWORDImport::specCharfind(QChar a, QChar b)
+APPLIXWORDImport::specCharfind(QChar a, QChar b) // TODO share this code with applixspreadimport.cc
 {
     QChar chr;
 
@@ -712,3 +748,33 @@ APPLIXWORDImport::readHeader(QTextStream &stream)
         return false;
     } else return true;
 }
+
+bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
+{
+    if (!store.store()->open("meta.xml")) {
+        return false;
+    }
+
+    KoStoreDevice dev(store.store());
+    KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
+    xmlWriter->startElement("office:meta");
+
+    xmlWriter->startElement("meta:generator");
+    xmlWriter->addTextNode(QString("KOConverter/%1").arg(KOFFICE_VERSION_STRING));
+    xmlWriter->endElement();
+
+    xmlWriter->startElement("meta:creation-date");
+    xmlWriter->addTextNode(QDateTime::currentDateTime().toString(Qt::ISODate));
+    xmlWriter->endElement();
+
+    xmlWriter->endElement();
+    xmlWriter->endElement(); // root element
+    xmlWriter->endDocument(); // root element
+    delete xmlWriter;
+    if (!store.store()->close()) {
+        return false;
+    }
+    store.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
+    return true;
+}
+

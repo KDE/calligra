@@ -66,6 +66,11 @@ public:
 
     //!Read the data at the given row/field
     virtual QVariant drv_value(uint i);
+    
+    virtual bool drv_moveFirst();
+    
+    virtual bool drv_moveLast();
+     
 
   private:
     QString m_Folder;

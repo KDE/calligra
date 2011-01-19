@@ -20,12 +20,9 @@
  */
 
 #include "KoAbstractApplicationController.h"
-#include "Common.h"
-#include "FoCellToolFactory.h"
-#include "FoCellTool.h"
-#include "PreviewDialog.h"
-#include "PresentationTool.h"
-#include "RemoveSheet.h"
+#include "KoCellToolFactory.h"
+#include "KoCellTool.h"
+#include "RemoveSheetCommand.h"
 
 #include <KoDocumentInfo.h>
 #include <KoView.h>
@@ -51,12 +48,12 @@
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
-#include <Map.h>
-#include <Doc.h>
-#include <part/View.h>
-#include <Sheet.h>
+#include <tables/Map.h>
+#include <tables/part/Doc.h>
+#include <tables/part/View.h>
+#include <tables/Sheet.h>
 #include <tables/ui/Selection.h>
-#include <KWView.h>
+#include <words/part/KWView.h>
 
 #include <KMimeType>
 #include <KLocale>
@@ -64,6 +61,7 @@
 #include <kparts/componentfactory.h>
 #include <kparts/event.h>
 #include <kundostack.h>
+#include <kmimetypetrader.h>
 
 #include <QApplication>
 #include <QDesktopServices>
@@ -71,13 +69,38 @@
 #include <QFileInfo>
 #include <QtDebug>
 #include <QSplashScreen>
+#include <QTimer>
+
+/*!
+* extensions
+*/
+const QString EXT_PPS("pps");
+const QString EXT_PPSX("ppsx");
+const QString EXT_PPT("ppt");
+const QString EXT_PPTX("pptx");
+const QString EXT_ODP("odp");
+const QString EXT_DOC("doc");
+const QString EXT_DOCX("docx");
+const QString EXT_ODT("odt");
+const QString EXT_TXT("txt");
+const QString EXT_RTF("rtf");
+const QString EXT_ODS("ods");
+const QString EXT_XLS("xls");
+const QString EXT_XLSX("xlsx");
+
+KoAbstractApplicationOpenDocumentArguments::KoAbstractApplicationOpenDocumentArguments()
+    : editing(false), openAsTemplates(false)
+{
+}
 
 KoAbstractApplicationController::KoAbstractApplicationController()
     : m_firstChar(true),
       m_searchTextIndex(0),
       m_searchWholeWords(false),
+      m_centralWidget(0),
       m_doc(0),
       m_isLoading(false),
+      m_editingMode(false),
       m_type(NoDocument),
       m_currentPage(1),
       m_prevCurrentPage(0),
@@ -87,23 +110,42 @@ KoAbstractApplicationController::KoAbstractApplicationController()
       m_controller(0),
       m_cellTool(0),
       m_cellToolFactory(0),
-      m_storeButtonPreview(0),
       m_splash(0),
-      m_presentationTool(0)
+      m_onlyDisplayDocumentNameInTitle(false)
 {
 }
 
 KoAbstractApplicationController::~KoAbstractApplicationController()
 {
     closeDocument();
-//    delete m_signalReceiver;
     delete m_splash;
 }
 
-// QObject* KoAbstractApplicationController::signalReceiver() const
-// {
-//     return m_signalReceiver;
-// }
+KoCanvasControllerWidget* KoAbstractApplicationController::controllerWidget() const {
+    return dynamic_cast<KoCanvasControllerWidget*>(m_controller);
+}
+
+QStringList KoAbstractApplicationController::supportedExtensions() const
+{
+    if (m_supportedExtensions.isEmpty()) {
+        //Add Txt extension after adding ascii filter to koffice package
+        /*extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \*/
+        m_supportedExtensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT
+            << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_PPS << EXT_PPSX
+            << EXT_ODS << EXT_XLS << EXT_XLSX;
+    }
+    return m_supportedExtensions;
+}
+
+QStringList KoAbstractApplicationController::supportedFilters() const
+{
+    if (m_supportedFilters.isEmpty()) {
+        foreach (const QString& ext, supportedExtensions()) {
+            m_supportedFilters.append(QLatin1String("*.") + ext);
+        }
+    }
+    return m_supportedFilters;
+}
 
 bool KoAbstractApplicationController::isSupportedExtension(const QString& extension) const
 {
@@ -146,36 +188,58 @@ bool KoAbstractApplicationController::isSpreadsheetDocumentExtension(const QStri
        ||  0 == QString::compare(extension, EXT_XLSX, Qt::CaseInsensitive);
 }
 
-bool KoAbstractApplicationController::openDocument(const QString &fileName, bool isNewDocument)
+bool KoAbstractApplicationController::openDocument(const QString &fileName)
+{
+    KoAbstractApplicationOpenDocumentArguments args;
+    args.documentsToOpen.append(fileName);
+    return openDocuments(args);
+}
+
+bool KoAbstractApplicationController::openDocumentAsTemplate(const QString &fileName)
+{
+    KoAbstractApplicationOpenDocumentArguments args;
+    args.documentsToOpen.append(fileName);
+    args.openAsTemplates = true;
+    return openDocuments(args);
+}
+
+bool KoAbstractApplicationController::openDocuments(
+    const KoAbstractApplicationOpenDocumentArguments& args)
 {
     //check if the file exists
-    if (!QFile(fileName).exists()) {
-        showMessage(InformationMessage, i18n("No such file exists"));
+    const bool isNewDocument = args.documentsToOpen.isEmpty() || args.openAsTemplates;
+    const QString fileName = args.documentsToOpen.isEmpty()
+                             ? QString() : args.documentsToOpen.first();
+    if (!isNewDocument && !QFile(fileName).exists()) {
+        showMessage(InformationMessage, i18n("Document \"%1\" does not exist.",
+                                             QFileInfo(fileName).fileName()));
         return false;
     }
 
     //check if the format is supported for opening
     if (!isSupportedExtension( KMimeType::extractKnownExtension(fileName) )) {
-        showMessage(UnsupportedFileTypeMessage);
+        showMessage(UnsupportedFileTypeMessage,
+                    i18n("Could not open document \"%1\".\n"
+                         "This type is not supported.", QFileInfo(fileName).fileName()));
         qWarning() << "Currently this file format is not supported";
         return false;
     }
 
     //if the current instance has a document open start a new one
     if (m_doc) {
-        startNewInstance(fileName, isNewDocument);
-        return true;
+        return startNewInstance(args);
     }
 
     showUiBeforeDocumentOpening(isNewDocument); // <-- FOR IMPLEMENTATION
 
     setProgressIndicatorVisible(true);
     QString mimetype = KMimeType::findByPath(fileName)->name();
-    m_isLoading = true;
-
+    kDebug() << "mimetype:" << mimetype;
 
     QString error;
-    m_doc = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>(
+    m_isLoading = true;
+
+    m_doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(
                 mimetype, 0, 0, QString(), QVariantList(), &error);
 
     if (!m_doc) {
@@ -208,7 +272,7 @@ bool KoAbstractApplicationController::openDocument(const QString &fileName, bool
     m_doc->setAutoSave(0);
 
     // registering tools
-    m_cellToolFactory = new FoCellToolFactory();
+    m_cellToolFactory = new KoCellToolFactory(this);
    // m_spreadEdit->setCellTool(m_cellTool)
     KoToolRegistry::instance()->add(m_cellToolFactory);
 
@@ -250,41 +314,37 @@ bool KoAbstractApplicationController::openDocument(const QString &fileName, bool
     if (m_type == SpreadsheetDocument) {
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
-        Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
-        m_cellTool = dynamic_cast<FoCellTool *>(
-            KoToolManager::instance()->toolById(kspreadView->selection()->canvas(), CellTool_ID));
-        kspreadView->showTabBar(false);
-        kspreadView->setStyleSheet("* { color:white; } ");
+        Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+        m_cellTool = dynamic_cast<KoCellTool *>(
+            KoToolManager::instance()->toolById(tablesView->selection()->canvas(), cellToolFactoryId()));
+        tablesView->showTabBar(false);
+        tablesView->setStyleSheet("* { color:white; } ");
 
         //set the central widget. Note: The central widget for spreadsheet is m_view.
-        setCentralWidget(kspreadView);
+        setCentralWidget(tablesView);
     }
     else if(m_type == TextDocument && isTextDocumentExtension(ext)) {
-        m_editor = qobject_cast<KoTextEditor *>(kwordView()->canvasBase()->toolProxy()->selection());
+        m_editor = qobject_cast<KoTextEditor *>(wordsView()->canvasBase()->toolProxy()->selection());
 
-        //set the central widget here
-        setCentralWidget(m_controller);
+        if (controllerWidget()) {
+            setCentralWidget(controllerWidget());
+        }
     }
     else if (m_type == PresentationDocument) {
-        //set the central widget here
-        setCentralWidget(m_controller);
-
-        //code related to the button previews
-        if (m_storeButtonPreview)
-            delete m_storeButtonPreview;
-        m_storeButtonPreview = new StoreButtonPreview(m_doc, m_view);
-        QObject::connect(m_storeButtonPreview, SIGNAL(goToPage(int)), thisObject(), SLOT(goToPage(int)));
+        if (controllerWidget()) {
+            setCentralWidget(controllerWidget());
+        }
     } else {
         //condition required for plain text document that is opened.
-        setCentralWidget(m_controller);
+        if (controllerWidget()) {
+            setCentralWidget(controllerWidget());
+        }
     }
 
-    QWidget *thisWidget = dynamic_cast<QWidget*>(this);
-    if (thisWidget) {
-        thisWidget->setWindowTitle(i18n("%1 - %2", fname, applicationName()));
-    }
+    updateWindowTitle(fname);
 
-    m_controller->setProperty("FingerScrollable", true);
+    if (controllerWidget())
+        controllerWidget()->setProperty("FingerScrollable", true);
 
     QTimer::singleShot(250, thisObject(), SLOT(documentPageSetupChanged()));
 
@@ -299,10 +359,12 @@ bool KoAbstractApplicationController::openDocument(const QString &fileName, bool
     setProgressIndicatorVisible(false);
     m_isLoading = false;
 
+    QWidget *thisWidget = dynamic_cast<QWidget*>(this);
     if (thisWidget) {
         if (m_splash && !thisWidget->isActiveWindow()) {
             thisWidget->show();
-            m_splash->finish(m_controller);
+            if (controllerWidget())
+                m_splash->finish(controllerWidget());
             m_splash = 0;
         }
    }
@@ -316,20 +378,28 @@ bool KoAbstractApplicationController::openDocument(const QString &fileName, bool
        //have an unwanted widget in the view.
        QTimer::singleShot(1, thisObject(), SLOT(showEditingMode()));
        if (m_type == TextDocument) {
-           centralWidget()->setInputMethodHints(Qt::ImhNoAutoUppercase);
+            if (m_centralWidget)
+                m_centralWidget->setInputMethodHints(Qt::ImhNoAutoUppercase);
        }
    } else {
        //activate the pan tool.
-       setEditingMode(false);
+       setEditingMode(args.editing);
    }
 
     updateActions();
+
+    if (args.documentsToOpen.count() > 1) {
+        // open the other documents
+        KoAbstractApplicationOpenDocumentArguments newArgs(args);
+        newArgs.documentsToOpen.removeFirst();
+        return startNewInstance(newArgs);
+    }
     return true;
 }
 
 bool KoAbstractApplicationController::doOpenDocument()
 {
-    const bool result = openDocument(m_fileNameToOpen, false);
+    const bool result = openDocument(m_fileNameToOpen);
     m_fileNameToOpen.clear();
     return result;
 }
@@ -339,7 +409,7 @@ void KoAbstractApplicationController::closeDocument()
     if (m_doc == 0)
         return;
 
-    setWindowTitle(applicationName());
+    updateWindowTitle(QString());
     setCentralWidget(0);
     m_searchTextPositions.clear();
     // the presentation and text document instances seem to require different ways to do cleanup
@@ -350,10 +420,8 @@ void KoAbstractApplicationController::closeDocument()
         m_doc = 0;
         delete m_view;
         m_view = 0;
-        if (m_controller) {
-            delete m_controller;
-            m_controller = 0;
-        }
+        delete m_controller;
+        m_controller = 0;
         break;
     case SpreadsheetDocument:
         KoToolManager::instance()->removeCanvasController(m_controller);
@@ -366,8 +434,8 @@ void KoAbstractApplicationController::closeDocument()
         break;
     default:
         KoToolManager::instance()->removeCanvasController(m_controller);
-        if (kwordView())
-            kwordView()->canvasBase()->toolProxy()->deleteSelection();
+        if (wordsView())
+            wordsView()->canvasBase()->toolProxy()->deleteSelection();
 //??        delete m_undostack;
 //??        m_undostack = 0;
         delete m_doc;
@@ -375,10 +443,8 @@ void KoAbstractApplicationController::closeDocument()
         delete m_view;
         m_view = 0;
         m_editor=0;
-        if (m_controller) {
-            delete m_controller;
-            m_controller = 0;
-        }
+        delete m_controller;
+        m_controller = 0;
     }
 
     setCentralWidget(0);
@@ -471,16 +537,17 @@ bool KoAbstractApplicationController::saveDocumentAs()
         qWarning() << "No document to save";
         return false;
     }
+    /* js: why is this needed?
     if (m_fileName.isEmpty()) {
         m_fileName = NEW_WORDDOC;
-    }
+    }*/
     QString fileName = getSaveFileName();
     if (fileName.isEmpty())
         return false; // cancel
     return saveDocumentInternal(fileName);
 }
 
-bool KoAbstractApplicationController::saveDocumentInternal(const QString& fileName)
+bool KoAbstractApplicationController::saveDocumentInternal(QString fileName)
 {
     if (fileName.isEmpty()) {
         showMessage(InformationWithoutTimeoutMessage, i18n("No file name specified"));
@@ -494,8 +561,13 @@ bool KoAbstractApplicationController::saveDocumentInternal(const QString& fileNa
     else if (isSupportedExtension(ext)) { // not native
         showMessage(InformationWithoutTimeoutMessage, i18n("File will be saved in ODF"));
         KUrl newURL;
+#warning temporary rename!
+        fileName.replace(".doc", ".odt", Qt::CaseInsensitive);
+        fileName.replace(".ppt", ".odp", Qt::CaseInsensitive);
+        fileName.replace(".xls", ".ods", Qt::CaseInsensitive);
         newURL.setPath(fileName);
         KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+        kFatal() << mime;
         QString outputFormatString = mime->name();
         m_doc->setOutputMimeType(outputFormatString.toLatin1(), 0);
         ok = m_doc->saveAs(newURL);
@@ -520,13 +592,13 @@ int KoAbstractApplicationController::pageCount() const
     if (!m_doc)
         return 0;
     if (documentType() == SpreadsheetDocument) {
-        Calligra::Tables::Doc *kspreadDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
-        return kspreadDoc->map()->count();
+        Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
+        return tablesDoc->map()->count();
     }
     return m_doc->pageCount();
 }
 
-KWView* KoAbstractApplicationController::kwordView() const
+KWView* KoAbstractApplicationController::wordsView() const
 {
     return qobject_cast<KWView *>(m_view);
 }
@@ -624,36 +696,36 @@ void KoAbstractApplicationController::goToNextPage()
 
 void KoAbstractApplicationController::goToNextSheet()
 {
-    Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
-    if (!kspreadView)
+    Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+    if (!tablesView)
         return;
-    Calligra::Tables::Sheet *sheet = kspreadView->activeSheet();
+    Calligra::Tables::Sheet *sheet = tablesView->activeSheet();
     if (!sheet)
         return;
-    Calligra::Tables::Doc *kspreadDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
-    if (!kspreadDoc)
+    Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
+    if (!tablesDoc)
         return;
-    sheet = kspreadDoc->map()->nextSheet(sheet);
+    sheet = tablesDoc->map()->nextSheet(sheet);
     if (!sheet)
         return;
-    kspreadView->setActiveSheet(sheet);
+    tablesView->setActiveSheet(sheet);
 }
 
 void KoAbstractApplicationController::goToPreviousSheet()
 {
-    Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
-    if (!kspreadView)
+    Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+    if (!tablesView)
         return;
-    Calligra::Tables::Sheet *sheet = kspreadView->activeSheet();
+    Calligra::Tables::Sheet *sheet = tablesView->activeSheet();
     if (!sheet)
         return;
-    Calligra::Tables::Doc *kspreadDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
-    if (!kspreadDoc)
+    Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(m_doc);
+    if (!tablesDoc)
         return;
-    sheet = kspreadDoc->map()->previousSheet(sheet);
+    sheet = tablesDoc->map()->previousSheet(sheet);
     if (!sheet)
         return;
-    kspreadView->setActiveSheet(sheet);
+    tablesView->setActiveSheet(sheet);
 }
 
 void KoAbstractApplicationController::setSplashScreen(QSplashScreen* splash)
@@ -674,7 +746,26 @@ bool KoAbstractApplicationController::setEditingMode(bool set)
         return false;
 
     setVirtualKeyboardVisible(false);
+
+    if (set) {
+        switch (documentType()) {
+        case SpreadsheetDocument:
+            KoToolManager::instance()->switchToolRequested(cellToolFactoryId());
+            break;
+        default:
+            KoToolManager::instance()->switchToolRequested(textToolFactoryId());
+        }
+    }
+    else {
+        KoToolManager::instance()->switchToolRequested(panToolFactoryId());
+    }
+    m_editingMode = set;
     return true;
+}
+
+bool KoAbstractApplicationController::editingMode() const
+{
+    return m_editingMode;
 }
 
 bool KoAbstractApplicationController::triggerAction(const char* name)
@@ -721,9 +812,6 @@ bool KoAbstractApplicationController::handleCloseEvent(QCloseEvent *event)
 
 void KoAbstractApplicationController::resourceChanged(int key, const QVariant& value)
 {
-    if (m_presentationTool && m_presentationTool->toolsActivated() && documentType() == PresentationDocument) {
-        return;
-    }
     if (KoCanvasResource::CurrentPage == key) {
         m_currentPage = value.toInt();
         currentPageChanged();
@@ -734,8 +822,8 @@ void KoAbstractApplicationController::addSheet()
 {
     if (documentType() == SpreadsheetDocument && m_view) {
         setDocumentModified(true);
-        Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
-        kspreadView->insertSheet();
+        Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+        tablesView->insertSheet();
     }
 }
 
@@ -743,13 +831,13 @@ void KoAbstractApplicationController::removeSheet()
 {
     if (documentType() == SpreadsheetDocument && m_view) {
         if (askQuestion(ConfirmSheetDeleteQuestion, i18n("Do you want to delete the sheet?")) == QMessageBox::Yes) {
-            Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
-            kspreadView->selection()->emitCloseEditor(false); // discard changes
-            kspreadView->doc()->setModified(true);
+            Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+            tablesView->selection()->emitCloseEditor(false); // discard changes
+            tablesView->doc()->setModified(true);
             setDocumentModified(true);
-            Calligra::Tables::Sheet* tbl = kspreadView->activeSheet();
-            QUndoCommand* command = new RemoveSheet(tbl);
-            kspreadView->doc()->addCommand(command);
+            Calligra::Tables::Sheet* tbl = tablesView->activeSheet();
+            QUndoCommand* command = new RemoveSheetCommand(tbl);
+            tablesView->doc()->addCommand(command);
         }
     }
 }
@@ -757,28 +845,73 @@ void KoAbstractApplicationController::removeSheet()
 QString KoAbstractApplicationController::currentSheetName() const
 {
     if (documentType() == SpreadsheetDocument && m_view) {
-            Calligra::Tables::View *kspreadView = qobject_cast<Calligra::Tables::View*>(m_view);
-        return kspreadView->activeSheet()->sheetName();
+            Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
+        return tablesView->activeSheet()->sheetName();
     }
     return QString();
 }
 
-StoreButtonPreview* KoAbstractApplicationController::storeButtonPreview() const
-{
-    return m_storeButtonPreview;
-}
-
-FoCellTool* KoAbstractApplicationController::cellTool() const
+KoCellTool* KoAbstractApplicationController::cellTool() const
 {
     return m_cellTool;
 }
 
-PresentationTool* KoAbstractApplicationController::presentationTool() const
+void KoAbstractApplicationController::activeToolChanged(KoCanvasController* canvas, int uniqueToolId)
 {
-    return m_presentationTool;
+   QObject *canvasObject = dynamic_cast<QObject*>(canvas);
+   QString newTool = KoToolManager::instance()->activeToolId();
+   kDebug() << "-------------------------------" << newTool;
+   // only Pan tool or Text tool should ever be the active tool, so if
+   // another tool got activated, switch back to pan tool
+    if (newTool != panToolFactoryId() && newTool != textToolFactoryId() && newTool != cellToolFactoryId() 
+        && newTool != "InteractionTool") {
+        KoToolManager::instance()->switchToolRequested(panToolFactoryId());
+    }
+    else
+        kDebug() << "-ACCEPTED-";
+    canvasObject->setProperty("FingerScrollable", true);
 }
 
-void KoAbstractApplicationController::setPresentationTool(PresentationTool *tool)
+void KoAbstractApplicationController::updateWindowTitle(const QString& fileName)
 {
-    m_presentationTool = tool;
+    if (fileName.isEmpty())
+        setWindowTitle(applicationName());
+    else if (m_onlyDisplayDocumentNameInTitle)
+        setWindowTitle(fileName);
+    else
+        setWindowTitle(i18n("%1 - %2", fileName, applicationName()));
 }
+
+void KoAbstractApplicationController::setOnlyDisplayDocumentNameInTitle(bool set)
+{
+    if (m_onlyDisplayDocumentNameInTitle == set)
+        return;
+    m_onlyDisplayDocumentNameInTitle = set;
+    updateWindowTitle(m_fileName);
+}
+
+void KoAbstractApplicationController::setHorizontalScrollBarVisible(bool set)
+{
+    if (controllerWidget())
+        controllerWidget()->setHorizontalScrollBarPolicy(set ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
+    Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(view());
+    if (tablesView) {
+//! @todo not enough
+// this breaks panning!        tablesView->showHorizontalScrollBar(set);
+    }
+}
+
+void KoAbstractApplicationController::setVerticalScrollBarVisible(bool set)
+{
+    if (controllerWidget())
+        controllerWidget()->setVerticalScrollBarPolicy(set ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
+    Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(view());
+    if (tablesView) {
+//! @todo not enough
+// this breaks panning!        tablesView->showVerticalScrollBar(false);
+    }
+}
+
+QString KoAbstractApplicationController::panToolFactoryId() { return QLatin1String("PanTool"); }
+QString KoAbstractApplicationController::textToolFactoryId() { return QLatin1String("TextToolFactory_ID"); }
+QString KoAbstractApplicationController::cellToolFactoryId() { return QLatin1String("KoAbstractionCellToolFactory"); }

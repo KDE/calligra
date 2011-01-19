@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,35 +17,42 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWCREATEOUTLINECOMMAND_H
-#define KWCREATEOUTLINECOMMAND_H
 
-#include <QUndoCommand>
+#ifndef LISTSTYLEBUTTON_H
+#define LISTSTYLEBUTTON_H
 
-class KWFrame;
-class KoShapeControllerBase;
-class KoShapeContainer;
-class KWOutlineShape;
+#include <KoListStyle.h>
 
-/// The undo / redo command for creating a custom-runaround outline for an existing shape
-class KWCreateOutlineCommand : public QUndoCommand
+#include <QToolButton>
+#include <QPixmap>
+#include <QMap>
+
+class QMenu;
+class QAction;
+class ItemChooserAction;
+
+class FormattingButton : public QToolButton
 {
+    Q_OBJECT
 public:
-    explicit KWCreateOutlineCommand(KoShapeControllerBase *controller, KWFrame *frame, QUndoCommand *parent = 0);
-    ~KWCreateOutlineCommand();
+    FormattingButton( QWidget *parent = 0 );
 
-    /// (re)do the command
-    virtual void redo();
-    /// revert the actions done in redo
-    virtual void undo();
+    QString example(KoListStyle::Style type) const;
+    void addItem(QPixmap pm, int id);
+    void addAction(QAction *action);
+    void addSeparator();
+
+signals:
+    void itemTriggered(int id);
+
+private slots:
+    void itemSelected();
 
 private:
-    KoShapeControllerBase *m_controller;
-    KWFrame *m_frame;
-    KoShapeContainer *m_container;
-    KWOutlineShape *m_path;
-    bool m_deleteOnExit;
+    int m_lastId ;
+    QMenu *m_menu;
+    QMap<QObject *, int > m_styleMap;
+    ItemChooserAction *m_styleAction;
 };
 
 #endif
-
