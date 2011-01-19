@@ -29,21 +29,21 @@
 class KOMAIN_EXPORT KoConfigurationDialogPage : public QWidget
 {
 
-    public:
-        explicit KoConfigurationDialogPage (QWidget* parent = 0);
-        virtual ~KoConfigurationDialogPage();
+public:
+    explicit KoConfigurationDialogPage(QWidget* parent = 0);
+    virtual ~KoConfigurationDialogPage();
 
-        QString title() const;
-        void setTitle (const QString &title);
+    QString title() const;
+    void setTitle(const QString &title);
 
-        KIcon icon() const;
-        void setIcon (const KIcon &icon);
+    KIcon icon() const;
+    void setIcon(const KIcon &icon);
 
-        virtual QWidget *pageWidget() = 0;
+    virtual QWidget *pageWidget() = 0;
 
-    private:
-        QString m_title;
-        KIcon m_icon;
+private:
+    QString m_title;
+    KIcon m_icon;
 };
 
 #endif // KOCONFIGURATIONDIALOGPAGE_H

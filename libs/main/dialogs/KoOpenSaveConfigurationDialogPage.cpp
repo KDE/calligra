@@ -22,8 +22,8 @@
 #include "ui_KoOpenSaveConfigurationWidget.h"
 #include <QWidget>
 
-KoOpenSaveConfigurationDialogPage::KoOpenSaveConfigurationDialogPage (QWidget* parent)
-    : KoConfigurationDialogPage (parent)
+KoOpenSaveConfigurationDialogPage::KoOpenSaveConfigurationDialogPage(QWidget* parent)
+        : KoConfigurationDialogPage(parent)
 {
     setTitle("Open/Save Configuration");
     setIcon(KIcon("document-save"));

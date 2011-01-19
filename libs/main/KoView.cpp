@@ -531,7 +531,7 @@ void KoView::showConfigurationDialog()
     dialog.exec();
 }
 
-void KoView::addCustomConfigurationDialogPages (KoConfigurationDialog* dialog)
+void KoView::addCustomConfigurationDialogPages(KoConfigurationDialog* dialog)
 {
     Q_UNUSED(dialog);
 }

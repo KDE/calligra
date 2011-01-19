@@ -21,8 +21,8 @@
 
 #include "KoConfigurationDialogPage.h"
 
-KoConfigurationDialogPage::KoConfigurationDialogPage (QWidget* parent)
-    : QWidget (parent)
+KoConfigurationDialogPage::KoConfigurationDialogPage(QWidget* parent)
+        : QWidget(parent)
 {
 
 }
@@ -38,7 +38,7 @@ QString KoConfigurationDialogPage::title() const
     return m_title;
 }
 
-void KoConfigurationDialogPage::setTitle (const QString& title)
+void KoConfigurationDialogPage::setTitle(const QString& title)
 {
     m_title = title;
 }
@@ -48,7 +48,7 @@ KIcon KoConfigurationDialogPage::icon() const
     return m_icon;
 }
 
-void KoConfigurationDialogPage::setIcon (const KIcon& icon)
+void KoConfigurationDialogPage::setIcon(const KIcon& icon)
 {
     m_icon = icon;
 }
