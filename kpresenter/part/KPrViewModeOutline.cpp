@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
 * Copyright (C) 2010 Ludovic Delfau <ludovicdelfau@gmail.com>
 * Copyright (C) 2010 Julien Desgats <julien.desgats@gmail.com>
-* Copyright (C) 2010 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
-* Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+* Copyright (C) 2010-2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+* Copyright (C) 2010-2011 Benjamin Port <port.benjamin@gmail.com>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -41,6 +41,8 @@
 #include <QKeySequence>
 
 #include <KDebug>
+
+#include "KPrOutlineEditor.h"
 
 KPrViewModeOutline::KPrViewModeOutline( KoPAView * view, KoPACanvas * canvas )
 : KoPAViewMode(view, canvas)
@@ -468,72 +470,12 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
     }
 }
 
-void KPrViewModeOutline::KPrOutlineEditor::keyPressEvent(QKeyEvent *event)
+QTextFrame * KPrViewModeOutline::currentFrame()
 {
-    switch (event->key()) {
-        case Qt::Key_Tab:
-          /*  if (int(event->modifiers()) == 0) {
-                if(!outline->indent(true)) {
-                    // if no indentation has been done, a regular tab is inserted
-                    QTextEdit::keyPressEvent(event);
-                }
-            } else {*/
-                QTextEdit::keyPressEvent(event);
-            //}
-            break;
-        case Qt::Key_Backtab:
-            if (int(event->modifiers()) == Qt::ShiftModifier) {
-                // if no indentation has been done, event is not passed to ancestor because this will
-                // result in a focus lost
-                outline->indent(false);
-            } else {
-                QTextEdit::keyPressEvent(event);
-            }
-            break;
-        case Qt::Key_Return:
-            if (int(event->modifiers()) == 0) {
-
-                if (outline->m_link.value(outline->m_editor->textCursor().currentFrame()).type == Title) {
-                    outline->addSlide();
-                } else {
-                    // the native behaviour when adding an item is buggy as hell !
-                    QTextCursor cur = textCursor();
-                    QTextDocument* target = outline->m_link.value(cur.currentFrame()).textDocument;
-                    if (!(cur.currentList() && target)) {
-                        QTextEdit::keyPressEvent(event);
-                        break;
-                    }
-
-                    outline->disableSync();
-                    QTextEdit::keyPressEvent(event);
-                    outline->enableSync();
-                    QTextCursor targetCur(target);
-                    targetCur.setPosition(cur.position() - cur.currentFrame()->firstPosition() - 1);
-                    targetCur.insertText("\n");
-                }
-            } else if (int(event->modifiers()) == Qt::ControlModifier) {
-                outline->addSlide();
-            } else {
-                QTextEdit::keyPressEvent(event);
-            }
-            break;
-        case Qt::Key_Backspace:
-            if (int(event->modifiers()) == 0 && outline->m_link.value(outline->currentFrame()).type == Title
-                    && outline->currentFrame()->firstPosition() ==  textCursor().position()) {
-                outline->deleteSlide();
-                break;
-            }
-            // outline->disableSync();
-            QTextEdit::keyPressEvent(event);
-            // outline->enableSync();
-            break;
-        default:
-            kDebug()<< event->key();
-            QTextEdit::keyPressEvent(event);
-            break;
-    }
+    return m_editor->textCursor().currentFrame();
 }
 
-KPrViewModeOutline::KPrOutlineEditor::~KPrOutlineEditor()
+QMap<QTextFrame*, KPrViewModeOutline::FrameData> KPrViewModeOutline::link()
 {
+    return m_link;
 }

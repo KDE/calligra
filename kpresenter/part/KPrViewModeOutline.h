@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
 * Copyright (C) 2010 Ludovic Delfau <ludovicdelfau@gmail.com>
 * Copyright (C) 2010 Julien Desgats <julien.desgats@gmail.com>
-* Copyright (C) 2010 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
-* Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+* Copyright (C) 2010-2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+* Copyright (C) 2010-2011 Benjamin Port <port.benjamin@gmail.com>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@
 #include <QTextEdit>
 #include <QTextTableCell>
 
+class KPrOutlineEditor;
 class QKeyEvent;
 class QTextFrame;
 
@@ -44,6 +45,11 @@ class KPrViewModeOutline : public KoPAViewMode {
     Q_OBJECT;
 
     public:
+        struct FrameData {
+            QTextDocument * textDocument;
+            int             numSlide;
+            PlaceholderType type;
+        };
 
         KPrViewModeOutline( KoPAView * view, KoPACanvas * canvas );
         virtual ~KPrViewModeOutline();
@@ -64,9 +70,31 @@ class KPrViewModeOutline : public KoPAViewMode {
 
         void enableSync();
         void disableSync();
+        /**
+        * (Un)indents current line or selection.
+        * @param  indent  true to indent, false to unindent
+        * @return true if items has been (un)indented, false otherwise
+        */
+        bool indent(bool indentation = true);
+        QTextFrame * currentFrame();
+        void deleteSlide();
+        void addSlide();
+        void placeholderSwitch();
+        /**
+        * Try to put editor's cursor on the frame that corresponds to given description.
+        * @param  slide    slide number
+        * @param  type     shape's class
+        * @param  atBegin  if true cursot will be on first frame position, otherwise on last position
+        */
+
+        /**
+        * Fills the editor with presentation data
+        */
+        void setCursorTo(int slide, PlaceholderType type, bool atBegin=true);
+        void populate();
+        QMap<QTextFrame*, FrameData> link();
     public slots:
         virtual void updateActivePage( KoPAPageBase * page );
-    protected slots:
         /**
         * @brief Synchronize the editor with shapes.
         * @see QTextDocument::contentsChange
@@ -79,59 +107,12 @@ class KPrViewModeOutline : public KoPAViewMode {
         */
         void insertText(QTextDocument* sourceShape, QTextFrame* destDocument, QTextCharFormat *charFormat);
 
-    protected:
-        /**
-        * (Un)indents current line or selection.
-        * @param  indent  true to indent, false to unindent
-        * @return true if items has been (un)indented, false otherwise
-        */
-        bool indent(bool indentation = true);
-        void placeholderSwitch();
-
-        void addSlide();
-        void deleteSlide();
-
-        /**
-        * Try to put editor's cursor on the frame that corresponds to given description.
-        * @param  slide    slide number
-        * @param  type     shape's class
-        * @param  atBegin  if true cursot will be on first frame position, otherwise on last position
-        */
-        void setCursorTo(int slide, PlaceholderType type, bool atBegin=true);
-
-        /**
-        * Fills the editor with presentation data
-        */
-        void populate();
-
-        class KPrOutlineEditor : public QTextEdit {
-            public:
-                KPrOutlineEditor ( KPrViewModeOutline* out, QWidget * parent = 0 ) : QTextEdit(parent), outline(out) {};
-                KPrOutlineEditor ( KPrViewModeOutline* out, const QString & text, QWidget * parent = 0 ) : QTextEdit(text, parent), outline(out) {};
-                virtual ~KPrOutlineEditor();
-            protected:
-                virtual void keyPressEvent(QKeyEvent *event);
-
-                /**
-                * Since we want to catch ALL tab key events, we completely disable
-                * keyboard focus switching.
-                */
-                virtual bool focusNextPrevChild(bool next) { Q_UNUSED(next); return false; }
-            private:
-                KPrViewModeOutline *outline;
-        };
-
     private:
+        /**
+        * @brief The outline editor.
+        */
+        KPrOutlineEditor * m_editor;
 
-        QTextFrame * currentFrame() {
-            return m_editor->textCursor().currentFrame();
-        }
-
-        struct FrameData {
-            QTextDocument * textDocument;
-            int             numSlide;
-            PlaceholderType type;
-        };
 
         QTextFrameFormat m_titleFrameFormat;
         QTextFrameFormat m_defaultFrameFormat;
@@ -139,10 +120,6 @@ class KPrViewModeOutline : public KoPAViewMode {
         QTextCharFormat  m_defaultCharFormat;
         QTextListFormat  m_listFormat;
 
-        /**
-        * @brief The outline editor.
-        */
-        KPrOutlineEditor * m_editor;
 
         /**
         * @brief Link between frame in the editor and document in the shape.

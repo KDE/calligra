@@ -32,6 +32,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrMasterPage.cpp
      KPrNotes.cpp
      KPrViewModeOutline.cpp
+     KPrOutlineEditor.cpp
      KPrSoundData.cpp
      KPrSoundCollection.cpp
      KPrEventActionData.cpp
