@@ -53,13 +53,14 @@ set(FreOfficeMocSrc_SRCS
     DigitalSignatureDialog.h
     FoImageSelectionWidget.h
     ConfirmationDialog.h
+    FileChooserDialog.h
 )
 
 if(QT_QTOPENGL_FOUND)
   list(APPEND FreOfficeMocSrc_SRCS GlWidget.h GlPresenter.h)
 endif(QT_QTOPENGL_FOUND)
 
-QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui CollabDialog.ui)
+kde4_add_ui_files(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui FileChooserDialog.ui AboutDialog.ui CollabDialog.ui)
 
 if(QT_QMAEMO5_LIBRARY)
   list(APPEND FreOfficeMocSrc_SRCS
@@ -92,7 +93,7 @@ set(FreOffice_SRCS
     PresentationTool.cpp 
     DBusAdaptor.cpp 
     AboutDialog.cpp 
-    CollabDialog.cpp 
+    CollabDialog.cpp
     Collaborate.cpp 
     CollabServer.cpp 
     CollabClient.cpp 
@@ -107,6 +108,7 @@ set(FreOffice_SRCS
     #TODO re-add FoCellEditor.cpp
     DigitalSignatureDialog.cpp
     FoImageSelectionWidget.cpp
+    FileChooserDialog.cpp
     ${FreOfficeUiSrc} 
     ${FreOfficeMocSrc} 
     ${FreOffice_RCC_SRCS}

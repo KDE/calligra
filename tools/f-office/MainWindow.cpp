@@ -41,6 +41,7 @@
 #include "VirtualKeyBoard.h"
 #include "ConfirmationDialog.h"
 #include "PreviewDialog.h"
+#include "FileChooserDialog.h"
 
 #include <QFileDialog>
 #include <QUrl>
