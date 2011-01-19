@@ -53,8 +53,8 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     kDebug();
     started->setChecked(m_completion.isStarted());
     finished->setChecked(m_completion.isFinished());
-    startTime->setDateTime(m_completion.startTime().dateTime());
-    finishTime->setDateTime(m_completion.finishTime().dateTime());
+    startTime->setDateTime(m_completion.startTime());
+    finishTime->setDateTime(m_completion.finishTime());
     finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
     
     if (workTime) {
@@ -136,11 +136,11 @@ MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completio
     }
     if ( org.startTime() != curr.startTime() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime().dateTime() ) );
+        cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime() ) );
     }
     if ( org.finishTime() != curr.finishTime() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime().dateTime() ) );
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime() ) );
     }
     QList<QDate> orgdates = org.entries().keys();
     QList<QDate> currdates = curr.entries().keys();
@@ -280,7 +280,7 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
         QTime t = QTime::currentTime();
         t.setHMS( t.hour(), t.minute(), 0 );
         m_completion.setStartTime( KDateTime( QDateTime( QDate::currentDate(), t ) ) );
-        startTime->setDateTime( m_completion.startTime().dateTime() );
+        startTime->setDateTime( m_completion.startTime() );
         slotCalculateEffort();
     }
     enableWidgets();

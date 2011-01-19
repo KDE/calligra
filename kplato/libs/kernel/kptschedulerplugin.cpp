@@ -209,6 +209,13 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
             updateNode( tn, mn, sid, status );
         }
     }
+    foreach ( const Resource *tr, tp->resourceList() ) {
+        Resource *r = mp->findResource( tr->id() );
+        Q_ASSERT( r );
+        if ( r ) {
+            updateResource( tr, r, status );
+        }
+    }
     // update main schedule and appointments
     updateAppointments( tp, tm, mp, sm, status );
 }
@@ -240,6 +247,29 @@ void SchedulerPlugin::updateNode( const Node *tn, Node *mn, long sid, XMLLoaderO
     s->setDeleted( false );
     s->setNode( mn );
     mn->addSchedule( s );
+}
+
+void SchedulerPlugin::updateResource( const Resource *tr, Resource *r, XMLLoaderObject &status ) const
+{
+    QDomDocument doc( "tmp" );
+    QDomElement e = doc.createElement( "cache" );
+    doc.appendChild( e );
+    tr->saveCalendarIntervalsCache( e );
+
+    KoXmlDocument xd;
+    QString err;
+    xd.setContent( doc.toString(), &err );
+    KoXmlElement se = xd.documentElement();
+    Q_ASSERT( ! se.isNull() );
+    r->loadCalendarIntervalsCache( se, status );
+
+    Calendar *cr = tr->calendar();
+    Calendar *c = r->calendar();
+    if ( cr == 0 || c == 0 ) {
+        return;
+    }
+    kDebug()<<"cr:"<<cr->cacheVersion()<<"c"<<c->cacheVersion();
+    c->setCacheVersion( cr->cacheVersion() );
 }
 
 void SchedulerPlugin::updateAppointments( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm, XMLLoaderObject &status ) const
@@ -405,8 +435,8 @@ void SchedulerThread::saveProject( Project *project, QDomDocument &document )
     document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement doc = document.createElement( "kplato" );
-    doc.setAttribute( "editor", "KPlato" );
-    doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
+    doc.setAttribute( "editor", "Plan" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
     doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
     project->save( doc );

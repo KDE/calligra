@@ -161,6 +161,7 @@ protected:
     void copy( const Duration &d );
     
 private:
+    friend class DateTime;
     /**
      * Duration in milliseconds. Signed to allow for simple calculations which
      * might go negative for intermediate results.

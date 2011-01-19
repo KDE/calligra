@@ -535,7 +535,7 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( sm->expected() ) {
-                return sm->expected()->start().dateTime();
+                return sm->expected()->start();
             }
             break;
         case Qt::TextAlignmentRole:
@@ -558,7 +558,7 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( sm->expected() ) {
-                return sm->expected()->end().dateTime();
+                return sm->expected()->end();
             }
             break;
         case Qt::TextAlignmentRole:

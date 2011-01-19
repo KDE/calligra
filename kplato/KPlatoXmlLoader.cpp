@@ -1426,7 +1426,7 @@ bool KPlatoXmlLoader::load(AppointmentIntervalList& lst, const KoXmlElement& ele
         if (e.tagName() == "interval") {
             AppointmentInterval a;
             if ( load( a, e, status ) ) {
-                lst.inSort(a);
+                lst.add(a);
             } else {
                 kError()<<"Could not load interval";
             }

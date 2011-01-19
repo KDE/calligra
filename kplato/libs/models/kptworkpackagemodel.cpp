@@ -93,7 +93,7 @@ QVariant WorkPackageModel::transmitionTime( const WorkPackage *wp, int role ) co
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( wp->transmitionTime() );
         case Qt::EditRole:
-            return wp->transmitionTime().dateTime();
+            return wp->transmitionTime();
         case Qt::ToolTipRole: {
             int sts = wp->transmitionStatus();
             QString t = KGlobal::locale()->formatDateTime( wp->transmitionTime(), KLocale::LongDate, KLocale::TimeZone );
