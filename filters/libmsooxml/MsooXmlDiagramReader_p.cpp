@@ -22,7 +22,7 @@
  * 02110-1301 USA
  *
  */
-
+#include <QTextStream>
 #include "MsooXmlDiagramReader_p.h"
 
 #include <typeinfo>
@@ -30,6 +30,7 @@
 #include <QXmlStreamReader>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+
 
 #define MSOOXML_CURRENT_NS "dgm"
 #define MSOOXML_CURRENT_CLASS MsooXmlDiagramReader
@@ -75,9 +76,16 @@ void Context::setCurrentNode(AbstractNode* node) { m_currentNode = node; }
 AbstractNode::AbstractNode(const QString &tagName) : m_tagName(tagName), m_parent(0) {}
 AbstractNode::~AbstractNode() { qDeleteAll(children()); }
 
-void AbstractNode::dump(Context* context, int level) {
+void AbstractNode::dump(Context* context, int level) {    
     foreach(AbstractNode* node, children())
-        node->dump(context, level + 1);
+        node->dump(context, level + 1);    
+}
+
+void AbstractNode::dump( QTextStream& device ) {
+  foreach(AbstractNode* node, children())
+  {
+    node->dump( device );
+  }
 }
 
 void AbstractNode::readElement(Context*, MsooXmlDiagramReader*) {
@@ -181,6 +189,30 @@ void PointNode::readElement(Context* context, MsooXmlDiagramReader* reader) {
     }
 }
 
+void MSOOXML::Diagram::ConnectionNode::dump(QTextStream& device)
+{
+    foreach(AbstractNode* node, peers() )
+    {
+        ConnectionNode* connNode = dynamic_cast< ConnectionNode* > ( node );
+        PointNode* pointNode = dynamic_cast< PointNode* > ( node );
+        if ( connNode )
+            device << "\"" << m_tagName << m_modelId << "\" -> \"" << connNode->m_tagName << connNode->m_modelId << "\"\n";
+        else if ( pointNode )
+            device << "\"" << m_tagName << m_modelId << "\" -> \"" << pointNode->m_tagName << pointNode->m_modelId << "\"\n";
+    }
+    foreach(AbstractNode* node, children())
+    {
+        ConnectionNode* connNode = dynamic_cast< ConnectionNode* > ( node );
+        PointNode* pointNode = dynamic_cast< PointNode* > ( node );
+        if ( connNode )
+            device << "\"" << m_tagName << m_modelId << "\" -> \"" << connNode->m_tagName << connNode->m_modelId << "\"\n";
+        else if ( pointNode )
+            device << "\"" << m_tagName << m_modelId << "\" -> \"" << pointNode->m_tagName << pointNode->m_modelId << "\"\n";
+    }
+    MSOOXML::Diagram::AbstractNode::dump(device);
+}
+
+
 void PointNode::readAll(Context* context, MsooXmlDiagramReader* reader) {
     const QXmlStreamAttributes attrs(reader->attributes());
     TRY_READ_ATTR_WITHOUT_NS_INTO(modelId, m_modelId)
@@ -245,6 +277,30 @@ void ConnectionNode::dump(Context*, int level) {
     DEBUG_DUMP << "modelId=" << m_modelId << "type=" << m_type << "srcId=" << m_srcId << "destId=" << m_destId;
     //AbstractNode::dump(context, level);
 }
+
+void MSOOXML::Diagram::PointNode::dump(QTextStream& device)
+{
+    foreach(AbstractNode* node, peers() )
+    {
+        ConnectionNode* connNode = dynamic_cast< ConnectionNode* > ( node );
+        PointNode* pointNode = dynamic_cast< PointNode* > ( node );
+        if ( connNode )
+            device << "\"" << m_tagName << m_modelId << "\" -> \"" << connNode->m_tagName << connNode->m_modelId << "\"[label=\"" << /*m_tagName << m_modelId << " " <<*/ m_text << "\"]\n";
+        else if ( pointNode )
+            device << "\"" << m_tagName << m_modelId << "\" -> \"" << pointNode->m_tagName << pointNode->m_modelId << "\"[label=\"" << /*m_tagName << m_modelId << " " <<*/ m_text << "\"]\n";
+    }
+    foreach(AbstractNode* node, children())
+    {
+        ConnectionNode* connNode = dynamic_cast< ConnectionNode* > ( node );
+        PointNode* pointNode = dynamic_cast< PointNode* > ( node );
+        if ( connNode )
+            device << "\"" << m_tagName << m_modelId << "\" -> \"" << connNode->m_tagName << connNode->m_modelId << "\"[label=\"" << /*m_tagName << m_modelId << " " <<*/ m_text << "\"]\n";
+        else if ( pointNode )
+            device << "\"" << m_tagName << m_modelId << "\" -> \"" << pointNode->m_tagName << pointNode->m_modelId << "\"[label=\"" << /*m_tagName << m_modelId << " " <<*/ m_text << "\"]\n";
+    }
+    MSOOXML::Diagram::AbstractNode::dump(device);
+}
+
 
 void ConnectionNode::readElement(Context* context, MsooXmlDiagramReader* reader) {
     if (reader->isStartElement()) {
@@ -358,7 +414,9 @@ void AbstractAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
 
 void AbstractAtom::build(Context* context) {
     foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
-        atom->build(context);
+    {
+      atom->build(context);
+    }
 }
 
 void AbstractAtom::layoutAtom(Context* context) {
@@ -418,7 +476,9 @@ QList<AbstractNode*> AbstractAtom::fetchAxis(Context* context, QList<AbstractNod
             result.append(node);
         } else if(axis == QLatin1String("ch")) { // Child
             foreach(AbstractNode* n, node->children())
+            {
                 result.append(n);
+            }
         } else if(axis == QLatin1String("des")) { // Descendant
             foreach(AbstractNode* n, node->descendant())
                 result.append(n);
@@ -1016,6 +1076,12 @@ void ShapeAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
     AbstractAtom::readAll(context, reader);
 }
 
+// void ShapeAtom::build(Context* context) {
+//     QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
+//     context->m_parentLayout->setAxis(context, axis);
+//     AbstractAtom::build(context);
+// }
+
 //TODO use filters/libmso/ODrawToOdf.h
 void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
     Q_ASSERT(context->m_parentLayout);
@@ -1139,6 +1205,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
                 textlist.append(pn);
                 
     }
+        
     if(!textlist.isEmpty()) {
         xmlWriter->startElement("text:p");
         foreach(PointNode* pn, textlist) {
@@ -1530,9 +1597,23 @@ void ForEachAtom::build(Context* context) {
     QList<NodePair> newChildren;
 
     QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
+    //context->m_parentLayout->setAxis( context, axis );
+    //qDebug() << axis.count() << "\n";
     foreach(AbstractNode* node, axis) {
+//         const PointNode* pnd = dynamic_cast< PointNode* >( node );
+//         const bool text = pnd && !pnd->m_text.isEmpty();
+//         if ( text )
+//           qDebug() << "adasdasdsadsaasdsadasdasada\n";
+//         Q_ASSERT( text );
         QList<QExplicitlySharedDataPointer<AbstractAtom> > list;
         foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
+            LayoutNodeAtom* layNodeAtom = dynamic_cast< LayoutNodeAtom* >( atom.data() );
+            if ( layNodeAtom )
+            {
+                QList< AbstractNode* >  currentAxis;
+                currentAxis << node;
+                layNodeAtom->setAxis( context, currentAxis );
+            }
             QExplicitlySharedDataPointer<AbstractAtom> atomCopy(atom->clone());
             list.append(atomCopy);
         }
@@ -1541,7 +1622,7 @@ void ForEachAtom::build(Context* context) {
 
     AbstractNode* oldCurrentNode = context->currentNode();
     foreach(NodePair p, newChildren) {
-        context->setCurrentNode(p.first); // move on to the next node
+        context->setCurrentNode(p.first); // move on to the next node        
         foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, p.second) {
             m_parent->addChild(atom);
             atom->build(context);
