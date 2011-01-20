@@ -837,9 +837,13 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 
 PageProcessingQueue* KWDocument::pageQueue()
 {
+#if 0
+    return new PageProcessingQueue(this);
+#else
     if (!m_pageQueue)
         m_pageQueue = new PageProcessingQueue(this);
     return m_pageQueue;
+#endif
 }
 
 void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
