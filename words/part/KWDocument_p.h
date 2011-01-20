@@ -31,13 +31,16 @@ class PageProcessingQueue : public QObject
     Q_OBJECT
 public:
     explicit PageProcessingQueue(KWDocument *parent);
+
+    /// add and start delayed process
     void addPage(KWPage page);
 
 private slots:
+    /// process (and stops any delayed process)
     void process();
 
 private:
-    QList<KWPage> m_pages;
+    QList<int> m_pages;
     bool m_triggered;
     KWDocument *m_document;
 };
