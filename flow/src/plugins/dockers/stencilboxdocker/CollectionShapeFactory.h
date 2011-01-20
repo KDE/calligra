@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,19 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "shapeboxdocker/ShapeBoxDocker.h"
+#ifndef KOCOLLECTIONSHAPEFACTORY_H
+#define KOCOLLECTIONSHAPEFACTORY_H
 
-#include <KoDockRegistry.h>
+#include <KoShapeFactoryBase.h>
 
-#include <kpluginfactory.h>
+class KoShapeControllerBase;
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("flowdockersplugin"))
-
-Plugin::Plugin(QObject *parent, const QVariantList&)
-    : QObject(parent)
+class CollectionShapeFactory : public KoShapeFactoryBase
 {
-    Q_UNUSED(parent);
-    KoDockRegistry::instance()->add(new StencilBoxDockerFactory());
-}
+    public:
+        CollectionShapeFactory(const QString &id, KoShape* shape);
+        ~CollectionShapeFactory();
+
+        virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+        virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+
+    private:
+        KoShape* m_shape;
+};
+
+#endif //KOCOLLECTIONSHAPEFACTORY_H
