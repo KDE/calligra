@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include "shapeboxdocker/ShapeBoxDocker.h"
+#include "stencilboxdocker/StencilBoxDocker.h"
 
 #include <KoDockRegistry.h>
 
