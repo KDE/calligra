@@ -2337,8 +2337,9 @@ void PptToOdp::processTextLine(Writer& out,
     }
 
     PptTextCFRun cf(p->documentContainer, mh, tc, level);
-
     bool islist = (pf.isList() && (start < end));
+
+    //TODO: do not use static here!!!
     static bool first = true;
 
     if (islist) {
@@ -2420,23 +2421,59 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
 //         currentMaster = 0;
 //     }
 
+#ifdef DEBUG_PPTTOODP
+    QString txt = getText(tc);
+    txt.replace('\v', "<vt");
+    txt.replace('\r', "<cr>");
+    txt.replace('\n', "<newline>");
+    txt.replace('\t', "<tab>");
+    txt.replace('\f', "<ff>");
+    qDebug() << "Current textLine:" << txt << "| length:" << txt.length();
+#endif
+
+    // Let's assume text stored in paragraphs in examples below.
+    //
+    // Example:<cr>text1<cr>text2<cr>text3<cr><cr><cr>
+    // Result:
+    // <text:p/>
+    // <text:p><text:span>text1</text:span></text:p>
+    // <text:p><text:span>text2</text:span></text:p>
+    // <text:p><text:span>text3</text:span></text:p>
+    // <text:p/>
+    // <text:p/>
+    // <text:p/>
+    //
+    // Example:text1<cr>text2<cr>text3
+    // Result:
+    // <text:p><text:span>text1</text:span></text:p>
+    // <text:p><text:span>text2</text:span></text:p>
+    // <text:p><text:span>text3</text:span></text:p>
+
     static const QRegExp lineend("[\v\r]");
     const QString text = getText(tc);
+    bool missed_line = true;
 
     // loop over all the '\r' delimited lines
     // Paragraph formatting that applies to substring
     QStack<QString> levels;
     levels.reserve(5);
     int pos = 0;
+
     while (pos < text.length()) {
         int end = text.indexOf(lineend, pos);
-        if (end == -1) end = text.size();
-        if (pos != end) {
-            processTextLine(out, clientData, tc, text, pos, end, levels);
+        if (end == -1) {
+            end = text.size();
+            missed_line = false;
         }
-
+        processTextLine(out, clientData, tc, text, pos, end, levels);
         pos = end + 1;
     }
+    // catch the <cr> following text3 in example above
+    if (missed_line) {
+        int end = pos - 1;
+        processTextLine(out, clientData, tc, QString(QString::null), end, end, levels);
+    }
+
     // close all open text:list elements
     writeTextObjectDeIndent(out.xml, 0, levels);
 //     currentMaster = tmpMaster;
@@ -2782,86 +2819,110 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
 {
     switch (val) {
 
-    case ANM_AlphaLcPeriod:         //Example: a., b., c., ...Lowercase Latin character followed by a period.
+    //Example: a., b., c., ...Lowercase Latin character followed by a period.
+    case ANM_AlphaLcPeriod:
         numFormat = 'a';
         numSuffix = '.';
         break;
 
-    case ANM_AlphaUcPeriod:        //Example: A., B., C., ...Uppercase Latin character followed by a period.
+    //Example: A., B., C., ...Uppercase Latin character followed by a period.
+    case ANM_AlphaUcPeriod:
         numFormat = 'A';
         numSuffix = '.';
         break;
 
-    case ANM_ArabicParenRight:     //Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
+    //Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
+    case ANM_ArabicParenRight:
         numFormat = '1';
         numSuffix = ')';
         break;
 
-    case ANM_ArabicPeriod :        //Example: 1., 2., 3., ...Arabic numeral followed by a period.
+    //Example: 1., 2., 3., ...Arabic numeral followed by a period.
+    case ANM_ArabicPeriod:
         numFormat = '1';
         numSuffix = '.';
         break;
 
-    case ANM_RomanLcParenBoth:     //Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
+    //Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in
+    //parentheses.
+    case ANM_RomanLcParenBoth:
         numPrefix = '(';
         numFormat = 'i';
         numSuffix = ')';
         break;
 
-    case ANM_RomanLcParenRight:    //Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
+    //Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing
+    //parenthesis.
+    case ANM_RomanLcParenRight:
         numFormat = 'i';
         numSuffix = ')';
         break;
 
-    case ANM_RomanLcPeriod :        //Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
+    //Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
+    case ANM_RomanLcPeriod:
         numFormat = 'i';
         numSuffix = '.';
         break;
 
-    case ANM_RomanUcPeriod:         //Example: I., II., III., ...Uppercase Roman numeral followed by a period.
+    //Example: I., II., III., ...Uppercase Roman numeral followed by a period.
+    case ANM_RomanUcPeriod:
         numFormat = 'I';
         numSuffix = '.';
         break;
 
-    case ANM_AlphaLcParenBoth:      //Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
+    //Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in
+    //parentheses.
+    case ANM_AlphaLcParenBoth:
         numPrefix = '(';
         numFormat = 'a';
         numSuffix = ')';
         break;
 
-    case ANM_AlphaLcParenRight:     //Example: a), b), c), ...Lowercase alphabetic character followed by a closing
+    //Example: a), b), c), ...Lowercase alphabetic character followed by a
+    //closing
+    case ANM_AlphaLcParenRight:
         numFormat = 'a';
         numSuffix = ')';
         break;
 
-    case ANM_AlphaUcParenBoth:      //Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
+    //Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in
+    //parentheses.
+    case ANM_AlphaUcParenBoth:
         numPrefix = '(';
         numFormat = 'A';
         numSuffix = ')';
         break;
 
-    case ANM_AlphaUcParenRight:     //Example: A), B), C), ...Uppercase alphabetic character followed by a closing
+    //Example: A), B), C), ...Uppercase alphabetic character followed by a
+    //closing
+    case ANM_AlphaUcParenRight:
         numFormat = 'A';
         numSuffix = ')';
         break;
 
-    case ANM_ArabicParenBoth:       //Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
+    //Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
+    case ANM_ArabicParenBoth:
         numPrefix = '(';
         numFormat = '1';
         numSuffix = ')';
         break;
 
-    case ANM_ArabicPlain:           //Example: 1, 2, 3, ...Arabic numeral.
+    //Example: 1, 2, 3, ...Arabic numeral.
+    case ANM_ArabicPlain:
         numFormat = '1';
         break;
 
-    case ANM_RomanUcParenBoth:      //Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
+    //Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in
+    //parentheses.
+    case ANM_RomanUcParenBoth:
         numPrefix = '(';
         numFormat = 'I';
         numSuffix = ')';
         break;
 
-    case ANM_RomanUcParenRight:     //Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
+    //Example: I), II), III), ...Uppercase Roman numeral followed by a closing
+    //parenthesis.
+    case ANM_RomanUcParenRight:
         numFormat = 'I';
         numSuffix = ')';
         break;
