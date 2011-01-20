@@ -230,29 +230,35 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KWTextDocumentLayout::layout()
 {
-    TDEBUG << "starting layout pass" << ((void*)document())
+#ifdef TDEBUG
+    TDEBUG << "starting layout pass, document=" << ((void*)document()) << "frameSet=" << m_frameSet << "headerFooter=" << KWord::isHeaderFooter(m_frameSet)
 #ifdef DEBUG_ANCHORS
-     << "m_newAnchors" << m_newAnchors.count() << "m_activeAnchors" << m_activeAnchors.count();
-#else
+     << "m_newAnchors" << m_newAnchors.count() << "m_activeAnchors" << m_activeAnchors.count()
+#endif
     ;
 #endif
 
     class End
     {
     public:
-        End(KoTextDocumentLayout::LayoutState *state) {
+        End(KWTextFrameSet *frameSet, KoTextDocumentLayout::LayoutState *state) {
+            m_frameSet = frameSet;
             m_state = state;
+            //m_frameSet->setAllowLayout(false);
         }
         ~End() {
             m_state->end();
+            //m_frameSet->setAllowLayout(true);
         }
     private:
+        KWTextFrameSet *m_frameSet;
         KoTextDocumentLayout::LayoutState *m_state;
     };
-    End ender(m_state); // poor mans finally{}
+    End ender(m_frameSet, m_state); // poor mans finally{}
 
     if (! m_state->start())
         return;
+
     qreal endPos = 1E9;
     qreal bottomOfText = 0.0;
     bool newParagraph = true;
@@ -262,8 +268,8 @@ void KWTextDocumentLayout::layout()
     KoShape *currentShape = 0;
 
     while (m_state->shape) {
+#ifdef DEBUG_ANCHORS
         ADEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines, we have" << m_activeAnchors.count() << "+" << m_newAnchors.count() <<"anchors";
-#ifndef DEBUG_ANCHORS
         for (int i = 0; i < m_state->layout->lineCount(); ++i) {
             QTextLine line = m_state->layout->lineAt(i);
             ADEBUG << i << "]" << (line.isValid() ? QString("%1 - %2").arg(line.textStart()).arg(line.textLength()) : QString("invalid"));
@@ -421,7 +427,7 @@ void KWTextDocumentLayout::layout()
         }
         if (m_state->isInterrupted() || (newParagraph && m_state->y() > endPos)) {
             // enough for now. Try again later.
-            TDEBUG << "schedule a next layout due to having done a layout of quite some space";
+            kDebug() << "schedule a next layout due to having done a layout of quite some space, interrupted="<<m_state->isInterrupted()<<"m_state->y()="<<m_state->y()<<"endPos="<<endPos;
             scheduleLayoutWithoutInterrupt();
             return;
         }
@@ -452,6 +458,7 @@ void KWTextDocumentLayout::layout()
             return;
         }
         qreal lineheight = line.height();
+
         while (m_state->addLine() == false) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
@@ -462,6 +469,7 @@ void KWTextDocumentLayout::layout()
                     m_frameSet->requestMoreFrames(0);
                     return; // done!
                 }
+
                 if (KWord::isHeaderFooter(m_frameSet)) { // more text, lets resize the header/footer.
                     TDEBUG << "  header/footer is too small resize:" << lineheight;
                     m_frameSet->requestMoreFrames(lineheight);
