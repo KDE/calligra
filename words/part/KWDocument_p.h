@@ -30,7 +30,7 @@ class PageProcessingQueue : public QObject
 {
     Q_OBJECT
 public:
-    explicit PageProcessingQueue(KWDocument *parent);
+    explicit PageProcessingQueue(KWDocument *parent, bool deleteLater = false);
 
     /// add and start delayed process
     void addPage(KWPage page);
@@ -40,9 +40,10 @@ private slots:
     void process();
 
 private:
-    QList<int> m_pages;
-    bool m_triggered;
     KWDocument *m_document;
+    bool m_deleteLater;
+    bool m_triggered;
+    QList<int> m_pages;
 };
 
 #endif
