@@ -84,6 +84,7 @@
 #include <QThread>
 #include <QCoreApplication>
 #include <QTextBlock>
+#include <QTime>
 
 /// \internal
 // this class will be added to all views and be hidden by default.
@@ -984,19 +985,21 @@ void PageProcessingQueue::addPage(KWPage page)
 
 void PageProcessingQueue::process()
 {
+    QTime timer;
+    timer.start();
     m_triggered = false;
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
     foreach (int pageNumber, m_pages) {
         m_document->m_frameLayout.createNewFramesForPage(pageNumber);
     }
-    
+    kDebug() << "elapsedTime=" << timer.elapsed() << "pages=" << m_pages;
+    m_pages.clear();
     if (docIsEmpty)
         m_document->setEmpty();
     if (!docIsModified)
         m_document->setModified(false);
     if (m_deleteLater)
         deleteLater();
-    m_pages.clear();
     emit m_document->pageSetupChanged();
 }
