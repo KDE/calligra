@@ -80,10 +80,10 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     QTransform tr = shape->absoluteTransformation(&converter);
     QTransform offsetMatrix = tr * tm * tr.inverted();
 
-    QRectF shadowRect(QPointF(), shape->boundingRect().size()); //shape rectangle
+    QRectF shadowRect(QPointF(0, 0), shape->boundingRect().size()); //shape rectangle
 
     //convert relative radius to absolute radius
-    qreal absBR = d->blur*0.01*shape->boundingRect().width();
+    qreal absBR = d->blur*0.01*shadowRect.width();
     qreal expand = 3 * absBR; //blur would cause the shadow to be bigger
     QRectF clipRegion = shadowRect.adjusted(-expand, -expand, expand, expand);
     QRectF zoomedClipRegion = converter.documentToView(clipRegion);
