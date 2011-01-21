@@ -840,6 +840,8 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 
 PageProcessingQueue* KWDocument::pageQueue()
 {
+    //return new PageProcessingQueue(this, true);
+
     if (!m_pageQueue)
         m_pageQueue = new PageProcessingQueue(this);
     return m_pageQueue;
@@ -959,11 +961,12 @@ void KWDocument::saveConfig()
 
 
 // ************* PageProcessingQueue ************
-PageProcessingQueue::PageProcessingQueue(KWDocument *parent)
+PageProcessingQueue::PageProcessingQueue(KWDocument *parent, bool deleteLater)
     : QObject(parent)
+    , m_document(parent)
+    , m_deleteLater(deleteLater)
+    , m_triggered(false)
 {
-    m_document = parent;
-    m_triggered = false;
 }
 
 void PageProcessingQueue::addPage(KWPage page)
@@ -985,14 +988,15 @@ void PageProcessingQueue::process()
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
     foreach (int pageNumber, m_pages) {
-        kDebug() << "pageNumber=" << pageNumber;
         m_document->m_frameLayout.createNewFramesForPage(pageNumber);
     }
-    m_pages.clear();
+    
     if (docIsEmpty)
         m_document->setEmpty();
     if (!docIsModified)
         m_document->setModified(false);
-//     deleteLater();
+    if (m_deleteLater)
+        deleteLater();
+    m_pages.clear();
     emit m_document->pageSetupChanged();
 }
