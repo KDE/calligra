@@ -24,24 +24,40 @@
 namespace KPlato
 {
 
-DateTime::DateTime() : KDateTime() {
+DateTime::DateTime()
+    : QDateTime()
+{
 }
 
-DateTime::DateTime(const QDateTime &dt, const KDateTime::Spec &spec) : KDateTime(dt, spec) {
+DateTime::DateTime( const QDate &date )
+    : QDateTime( date )
+{
 }
 
-DateTime::DateTime(const KDateTime &dt) : KDateTime( dt ) {
+DateTime::DateTime( const QDate &date, const QTime &time, Qt::TimeSpec spec)
+    : QDateTime( date, time, spec)
+{
 }
 
-DateTime::DateTime(const QDate &date, const KDateTime::Spec &spec) : KDateTime(date, spec) {
+DateTime::DateTime( const QDateTime& other )
+    : QDateTime( other )
+{
 }
 
-DateTime::DateTime(const QDate &date, const QTime &time, const KDateTime::Spec &spec) : KDateTime(date, time, spec ) {
+DateTime::DateTime( const QDateTime &dt, const KDateTime::Spec &spec )
+    : QDateTime( KDateTime( dt, spec ).toLocalZone().dateTime() )
+{
 }
+
+DateTime::DateTime( const KDateTime &dt )
+    : QDateTime( dt.toLocalZone().dateTime() )
+{
+}
+
 
 void DateTime::add(const Duration &duration) {
     if (isValid()) {
-        KDateTime x = addMSecs(duration.milliseconds());
+        DateTime x = addMSecs(duration.milliseconds());
         setDate( x.date() );
         setTime( x.time() );
         //kDebug()<<toString();
@@ -49,10 +65,8 @@ void DateTime::add(const Duration &duration) {
 }
 
 void DateTime::subtract(const Duration &duration) {
-    if (isValid()) {
-        KDateTime x = addMSecs(-duration.milliseconds());
-        setDate( x.date() );
-        setTime( x.time() );
+    if (isValid() && duration.m_ms) {
+        *this = addMSecs(-duration.m_ms);
         //kDebug()<<toString();
     }
 }
@@ -60,15 +74,10 @@ void DateTime::subtract(const Duration &duration) {
 Duration DateTime::duration(const DateTime &dt) const {
     Duration dur;
     if (isValid() && dt.isValid()) {
-        qint64 s = secsTo_long( dt );
-        qint64 ms = dt.time().msec() - time().msec();
-        //kDebug()<<s<<","<<ms;
-        if ( ms < 0  && s > 0 ) {
-            s += 1;
-        } else if ( ms > 0 && s < 0 ) {
-            s -= 1;
-        }
-        dur = Duration( qAbs( (s * 1000 ) + ms ) );
+        //FIXME: Use msecsTo() when we demand Qt 4.7
+        //qint64 x = msecsTo( dt ); //NOTE: this does conversion to UTC (expensive)
+        qint64 x = secsTo( dt ) * 1000; //NOTE: this does conversion to UTC (expensive)
+        dur.m_ms = x < 0 ? -x : x;
     }
     //kDebug()<<dur.milliseconds();
     return dur;
@@ -104,14 +113,15 @@ DateTime DateTime::fromString( const QString dts, const KDateTime::Spec &spec )
     KDateTime dt = KDateTime::fromString(dts);
     if ( ! dt.isValid() ) {
         // try to parse in qt default format (used in early version)
-        return DateTime( QDateTime::fromString(dts), spec );
+        dt = KDateTime( QDateTime::fromString(dts), spec ).toLocalZone();
+        return dt.dateTime();
     }
     if ( dt.isClockTime() ) {
         // timezone offset missing, set to spec
-        return DateTime( dt.dateTime(), spec );
+        return DateTime( dt.toLocalZone().dateTime() );
     }
-    DateTime t = DateTime( dt.toTimeSpec( spec ) );
-    return t.isValid() ? t : DateTime( dt ); // try hard!
+    DateTime t = DateTime( dt.toTimeSpec( spec ).toLocalZone().dateTime() );
+    return t;
 }
 
 }  //KPlato namespace

@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "CalendarTester.h"
+#include "DateTimeTester.h"
 #include <kptcalendar.h>
 #include <kptdatetime.h>
 #include <kptduration.h>
@@ -24,12 +25,81 @@
 #include "kptappointment.h"
 
 
+#include <cstdlib>
+#include <qtest_kde.h>
+#include <QtCore/QDir>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kcalendarsystem.h>
+#include <ksystemtimezone.h>
+#include <kdatetime.h>
+#include <kconfiggroup.h>
+#include <QtDBus/QtDBus>
+
 #include <qtest_kde.h>
 
 #include "debug.cpp"
 
 namespace KPlato
 {
+
+void CalendarTester::initTestCase()
+{
+    cleanupTestCase();
+
+    mDataDir = QDir::homePath() + "/.kde-unit-test/kdatetimetest";
+    QVERIFY(QDir().mkpath(mDataDir));
+    QFile f;
+    f.setFileName(mDataDir + QLatin1String("/zone.tab"));
+    f.open(QIODevice::WriteOnly);
+    QTextStream fStream(&f);
+    fStream << "DE      +5230+01322     Europe/Berlin\n"
+               "EG  +3003+03115 Africa/Cairo\n"
+               "FR  +4852+00220 Europe/Paris\n"
+               "GB  +512830-0001845 Europe/London   Great Britain\n"
+               "US  +340308-1181434 America/Los_Angeles Pacific Time\n";
+    f.close();
+    QDir dir(mDataDir);
+    QVERIFY(dir.mkdir("Africa"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Cairo"), mDataDir + QLatin1String("/Africa/Cairo"));
+    QVERIFY(dir.mkdir("America"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Los_Angeles"), mDataDir + QLatin1String("/America/Los_Angeles"));
+    QVERIFY(dir.mkdir("Europe"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), mDataDir + QLatin1String("/Europe/Berlin"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/London"), mDataDir + QLatin1String("/Europe/London"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Paris"), mDataDir + QLatin1String("/Europe/Paris"));
+
+    KConfig config("ktimezonedrc");
+    KConfigGroup group(&config, "TimeZones");
+    group.writeEntry("ZoneinfoDir", mDataDir);
+    group.writeEntry("Zonetab", mDataDir + QString::fromLatin1("/zone.tab"));
+    group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
+    config.sync();
+}
+
+void CalendarTester::cleanupTestCase()
+{
+    removeDir(QLatin1String("kdatetimetest/Africa"));
+    removeDir(QLatin1String("kdatetimetest/America"));
+    removeDir(QLatin1String("kdatetimetest/Europe"));
+    removeDir(QLatin1String("kdatetimetest"));
+    removeDir(QLatin1String("share/config"));
+    QDir().rmpath(QDir::homePath() + "/.kde-unit-test/share");
+}
+
+void CalendarTester::removeDir(const QString &subdir)
+{
+    QDir local = QDir::homePath() + QLatin1String("/.kde-unit-test/") + subdir;
+    foreach(const QString &file, local.entryList(QDir::Files))
+        if(!local.remove(file))
+            qWarning("%s: removing failed", qPrintable( file ));
+    QCOMPARE((int)local.entryList(QDir::Files).count(), 0);
+    local.cdUp();
+    QString subd = subdir;
+    subd.remove(QRegExp("^.*/"));
+    local.rmpath(subd);
+}
+
 
 void CalendarTester::testSingleDay() {
     Calendar t("Test");
@@ -123,32 +193,61 @@ void CalendarTester::testCalendarWithParent() {
     
 }
 
-void CalendarTester::testTimezone() {
+void CalendarTester::testTimezone()
+{
     Calendar t("Test");
     QDate wdate(2006,1,2);
     DateTime before = DateTime(wdate.addDays(-1), QTime());
     DateTime after = DateTime(wdate.addDays(1), QTime());
     QTime t1(8,0,0);
     QTime t2(10,0,0);
-    DateTime wdt1(wdate, t1, KDateTime::Spec::UTC());
-    DateTime wdt2(wdate, t2, KDateTime::Spec::UTC());
+    DateTime wdt1(wdate, t1);
+    DateTime wdt2(wdate, t2);
     int length = t1.msecsTo( t2 );
     CalendarDay *day = new CalendarDay(wdate, CalendarDay::Working);
     day->addInterval(TimeInterval(t1, length));
     t.addDay(day);
+    Debug::print( &t, "Time zone testing" );
     QVERIFY(t.findDay(wdate) == day);
-    
-    DateTime dt1 = DateTime( wdate, t1.addSecs( 60*60 ), KDateTime::Spec::OffsetFromUTC(3600));
-    DateTime dt2 = DateTime( wdate, t2.addSecs( 60*60 ), KDateTime::Spec::OffsetFromUTC(-3600));
 
-    qDebug()<<wdt1<<wdt2;
-    qDebug()<<dt1<<dt2;
-    QCOMPARE(t.firstAvailableAfter(dt1,after), wdt1);
-    QCOMPARE(t.firstAvailableBefore(dt2, before), wdt2);
-    
+    // local zone: Europe/Berlin ( 1 hours from London )
+    KTimeZone lo = KSystemTimeZones::zone("Europe/London");
+    KDateTime dt1 = KDateTime( wdate, t1, lo ).addSecs( -2 * 3600 );
+    KDateTime dt2 = KDateTime( wdate, t2, lo ).addSecs( 0 * 3600 );
+
+    qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
+    qDebug()<<dt1<<dt2<<"("<<dt1.toLocalZone()<<dt2.toLocalZone()<<")";
+    QCOMPARE(t.firstAvailableAfter( DateTime( dt1 ), after ), wdt1 );
+    QCOMPARE(t.firstAvailableBefore( DateTime( dt2 ), before ), wdt2 );
+
     Duration e(0, 2, 0);
-    QCOMPARE((t.effort(dt1, dt2)).toString(), e.toString());
+    QCOMPARE( t.effort( DateTime( dt1 ), DateTime( dt2 ) ).toString(), e.toString() );
 
+    // local zone: Europe/Berlin ( 9 hours from America/Los_Angeles )
+    KTimeZone la = KSystemTimeZones::zone("America/Los_Angeles");
+    KDateTime dt3 = KDateTime( wdate, t1, la ).addSecs( -10 * 3600 );
+    KDateTime dt4 = KDateTime( wdate, t2, la ).addSecs( -8 * 3600 );
+
+    qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
+    qDebug()<<dt3<<dt4<<"("<<dt3.toLocalZone()<<dt4.toLocalZone()<<")";
+    QCOMPARE(t.firstAvailableAfter( DateTime( dt3 ), after ), wdt1 );
+    QCOMPARE(t.firstAvailableBefore( DateTime( dt4 ), before ), wdt2 );
+
+    QCOMPARE( t.effort( DateTime( dt3 ), DateTime( dt4 ) ).toString(), e.toString() );
+
+    QString s = "Test Cairo:";
+    qDebug()<<s;
+    // local zone: Europe/Berlin ( 1 hour from cairo )
+    KTimeZone ca = KSystemTimeZones::zone("Africa/Cairo");
+    KDateTime dt5 = KDateTime( wdate, t1, ca ).addSecs( 0 * 3600 );
+    KDateTime dt6 = KDateTime( wdate, t2, ca ).addSecs( 2 * 3600 );
+
+    qDebug()<<KDateTime( wdt1 )<<KDateTime( wdt2 );
+    qDebug()<<dt5<<dt6<<"("<<dt5.toLocalZone()<<dt6.toLocalZone()<<")";
+    QCOMPARE(t.firstAvailableAfter( DateTime( dt5 ), after ), wdt1 );
+    QCOMPARE(t.firstAvailableBefore( DateTime( dt6 ), before ), wdt2 );
+
+    QCOMPARE( t.effort( DateTime( dt5 ), DateTime( dt6 ) ).toString(), e.toString() );
 }
 
 void CalendarTester::workIntervals()
@@ -207,13 +306,13 @@ void CalendarTester::workIntervalsFullDays()
 
     QCOMPARE( day->numIntervals(), 1 );
     QVERIFY( day->intervalAt( 0 )->endsMidnight() );
-    
+
     DateTime start = day->start();
     DateTime end = day->end();
 
     QCOMPARE( t.workIntervals( start, end, 100. ).count(), 1 );
     QCOMPARE( t.workIntervals( before, after, 100. ).count(), 1 );
-    
+
     day = new CalendarDay( wdate.addDays( 1 ), CalendarDay::Working );
     day->addInterval( TimeInterval( QTime( 0, 0, 0), 24*60*60*1000 ) );
     t.addDay( day );

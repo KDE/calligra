@@ -681,10 +681,10 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
             cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
         }
         if ( org.startTime() != curr.startTime() ) {
-            cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime().dateTime() ) );
+            cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime() ) );
         }
         if ( org.finishTime() != curr.finishTime() ) {
-            cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime().dateTime() ) );
+            cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime() ) );
         }
     }
     QList<QDate> orgdates = org.entries().keys();
@@ -740,7 +740,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
     WorkPackage *wp = new WorkPackage( from->workPackage() );
     wp->setParentTask( to );
     if ( ! wp->transmitionTime().isValid() ) {
-        wp->setTransmitionTime( DateTime::currentLocalDateTime() );
+        wp->setTransmitionTime( DateTime::currentDateTime() );
     }
     wp->setTransmitionStatus( WorkPackage::TS_Receive );
     cmd->addCommand( new WorkPackageAddCmd( m_project, to, wp ) );

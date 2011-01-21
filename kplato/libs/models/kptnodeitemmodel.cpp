@@ -246,7 +246,7 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
                 return KGlobal::locale()->formatDateTime( node->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone );
             }
             case Qt::EditRole:
-                return node->constraintStartTime().dateTime();
+                return node->constraintStartTime();
             case Qt::StatusTipRole:
             case Qt::WhatsThisRole:
                 return QVariant();
@@ -269,7 +269,7 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
             break;
         }
         case Qt::EditRole:
-            return node->constraintStartTime().dateTime();
+            return node->constraintStartTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -285,10 +285,10 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
                 return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
             }
             case Qt::ToolTipRole: {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime().dateTime() );
+                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
             }
             case Qt::EditRole:
-                return node->constraintEndTime().dateTime();
+                return node->constraintEndTime();
             case Qt::StatusTipRole:
             case Qt::WhatsThisRole:
                 return QVariant();
@@ -306,12 +306,12 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
         case Qt::ToolTipRole: {
             int c = node->constraint();
             if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime().dateTime() );
+                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
             }
             break;
         }
         case Qt::EditRole:
-            return node->constraintEndTime().dateTime();
+            return node->constraintEndTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -694,7 +694,7 @@ QVariant NodeModel::startTime( const Node *node, int role ) const
             //kDebug()<<node->name()<<", "<<role;
             return i18n( "Scheduled start: %1", KGlobal::locale()->formatDateTime( node->startTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::EditRole:
-            return node->startTime( id() ).dateTime();
+            return node->startTime( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -711,7 +711,7 @@ QVariant NodeModel::endTime( const Node *node, int role ) const
             //kDebug()<<node->name()<<", "<<role;
             return i18n( "Scheduled finish: %1", KGlobal::locale()->formatDateTime( node->endTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::EditRole:
-            return node->endTime( id() ).dateTime();
+            return node->endTime( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -963,7 +963,7 @@ QVariant NodeModel::earlyStart( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->earlyStart( id() ).date() );
         case Qt::EditRole:
-            return t->earlyStart( id() ).dateTime();
+            return t->earlyStart( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -983,7 +983,7 @@ QVariant NodeModel::earlyFinish( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->earlyFinish( id() ).date() );
         case Qt::EditRole:
-            return t->earlyFinish( id() ).dateTime();
+            return t->earlyFinish( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1003,7 +1003,7 @@ QVariant NodeModel::lateStart( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->lateStart( id() ).date() );
         case Qt::EditRole:
-            return t->lateStart( id() ).dateTime();
+            return t->lateStart( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1023,7 +1023,7 @@ QVariant NodeModel::lateFinish( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->lateFinish( id() ).date() );
         case Qt::EditRole:
-            return t->lateFinish( id() ).dateTime();
+            return t->lateFinish( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1240,7 +1240,7 @@ QVariant NodeModel::startedTime( const Node *node, int role ) const
             break;
         case Qt::EditRole:
             if ( t->completion().isStarted() ) {
-                return t->completion().startTime().dateTime();
+                return t->completion().startTime();
             }
             return QDateTime::currentDateTime();
         case Qt::StatusTipRole:
@@ -1291,7 +1291,7 @@ QVariant NodeModel::finishedTime( const Node *node, int role ) const
             break;
         case Qt::EditRole:
             if ( t->completion().isFinished() ) {
-                return t->completion().finishTime().dateTime();
+                return t->completion().finishTime();
             }
             break;
         case Qt::StatusTipRole:
@@ -2625,7 +2625,7 @@ bool NodeItemModel::setConstraintStartTime( Node *node, const QVariant &value, i
         case Qt::EditRole: {
             QDateTime dt = value.toDateTime();
             dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
-            if ( dt == node->constraintStartTime().dateTime() ) {
+            if ( dt == node->constraintStartTime() ) {
                 return false;
             }
             emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, dt, "Modify constraint start time" ) );
@@ -2641,7 +2641,7 @@ bool NodeItemModel::setConstraintEndTime( Node *node, const QVariant &value, int
         case Qt::EditRole: {
             QDateTime dt = value.toDateTime();
             dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
-            if ( dt == node->constraintEndTime().dateTime() ) {
+            if ( dt == node->constraintEndTime() ) {
                 return false;
             }
             emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, dt, "Modify constraint end time" ) );
@@ -3780,7 +3780,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
                     case NodeModel::NodeName: return "Early Start";
                     case NodeModel::NodeType: return KDGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
-                    case NodeModel::NodeEndTime: return n->earlyStart( id() ).dateTime();
+                    case NodeModel::NodeEndTime: return n->earlyStart( id() );
                     default: break;
                 }
             }
@@ -3792,7 +3792,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
                     case NodeModel::NodeName: return "Late Finish";
                     case NodeModel::NodeType: return KDGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
-                    case NodeModel::NodeEndTime: return n->lateFinish( id() ).dateTime();
+                    case NodeModel::NodeEndTime: return n->lateFinish( id() );
                     default: break;
                 }
             }
@@ -3804,7 +3804,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
                     case NodeModel::NodeName: return "Late Start";
                     case NodeModel::NodeType: return KDGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
-                    case NodeModel::NodeEndTime: return n->lateStart( id() ).dateTime();
+                    case NodeModel::NodeEndTime: return n->lateStart( id() );
                     default: break;
                 }
             }
@@ -3816,7 +3816,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
                     case NodeModel::NodeName: return "Early Finish";
                     case NodeModel::NodeType: return KDGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
-                    case NodeModel::NodeEndTime: return n->earlyFinish( id() ).dateTime();
+                    case NodeModel::NodeEndTime: return n->earlyFinish( id() );
                     default: break;
                 }
             }
@@ -4116,7 +4116,7 @@ bool MilestoneItemModel::setConstraintStartTime( Node *node, const QVariant &val
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
+            if ( value.toDateTime() == node->constraintStartTime() ) {
                 return false;
             }
             emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
@@ -4129,7 +4129,7 @@ bool MilestoneItemModel::setConstraintEndTime( Node *node, const QVariant &value
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
+            if ( value.toDateTime() == node->constraintEndTime() ) {
                 return false;
             }
             emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );

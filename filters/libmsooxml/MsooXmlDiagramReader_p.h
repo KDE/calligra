@@ -39,6 +39,7 @@ namespace MSOOXML {
 }
 class KoXmlWriter;
 class KoGenStyles;
+class QTextStream;
 
 namespace MSOOXML { namespace Diagram {
 
@@ -109,6 +110,7 @@ class AbstractNode
         explicit AbstractNode(const QString &tagName);
         virtual ~AbstractNode();
         virtual void dump(Context* context, int level);
+        virtual void dump( QTextStream& device );
         virtual void readElement(Context*, MsooXmlDiagramReader*);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         AbstractNode* parent() const;
@@ -137,6 +139,7 @@ class PointNode : public AbstractNode
         explicit PointNode() : AbstractNode("dgm:pt") {}
         virtual ~PointNode() {}
         virtual void dump(Context* context, int level);
+        virtual void dump( QTextStream& device );
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
     private:
@@ -169,6 +172,7 @@ class ConnectionNode : public AbstractNode
         explicit ConnectionNode() : AbstractNode("dgm:cxn"), m_srcOrd(0), m_destOrd(0) {}
         virtual ~ConnectionNode() {}
         virtual void dump(Context*, int level);
+        virtual void dump( QTextStream& device );
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
 };
@@ -392,6 +396,7 @@ class ShapeAtom : public AbstractAtom
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
+        //virtual void build(Context* context);
 };
 
 /// This element specifies a particular data model point which is to be mapped to the containing layout node.

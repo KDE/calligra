@@ -39,6 +39,7 @@
 #include <QList>
 #include <kdebug.h>
 
+
 namespace KPlato
 {
 
@@ -403,8 +404,8 @@ void Task::save(QDomElement &element)  const {
     me.setAttribute("description", m_description);
 
     me.setAttribute("scheduling",constraintToString());
-    me.setAttribute("constraint-starttime",m_constraintStartTime.toString( KDateTime::ISODate ));
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( KDateTime::ISODate ));
+    me.setAttribute("constraint-starttime",m_constraintStartTime.toString( Qt::ISODate ));
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( Qt::ISODate ));
 
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
@@ -466,8 +467,8 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
     me.setAttribute("description", m_description);
 
     me.setAttribute("scheduling",constraintToString());
-    me.setAttribute("constraint-starttime",m_constraintStartTime.toString( KDateTime::ISODate ));
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( KDateTime::ISODate ));
+    me.setAttribute("constraint-starttime",m_constraintStartTime.toString( Qt::ISODate ));
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( Qt::ISODate ));
 
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
@@ -1096,7 +1097,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                 cs->earlyStart = workTimeAfter( cs->earlyStart );
                 m_durationForward = duration(cs->earlyStart, use, false);
                 m_earlyFinish = cs->earlyStart + m_durationForward;
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                 cs->logDebug("ASAP/ALAP: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + m_earlyFinish.toString() );
 #endif
                 if ( !cs->allowOverbooking() ) {
@@ -1109,7 +1110,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                     cs->setAllowOverbookingState( Schedule::OBS_Allow );
                     m_durationForward = duration(cs->earlyStart, use, false);
                     cs->setAllowOverbookingState( obs );
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                     cs->logDebug("ASAP/ALAP earliest possible: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + (cs->earlyStart+m_durationForward).toString() );
 #endif
                 }
@@ -1172,7 +1173,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                     m_durationForward = duration(cs->startTime, use, false);
                     cs->setAllowOverbookingState( obs );
                     m_earlyFinish = cs->earlyStart + m_durationForward;
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                     cs->logDebug("MSO/SNE earliest possible: " + cs->earlyStart.toString() + "+" + m_durationForward.toString() + "=" + (cs->earlyStart+m_durationForward).toString() );
 #endif
                 }
@@ -1338,9 +1339,9 @@ DateTime Task::calculateLateStart(int use) {
                 cs->lateFinish = workTimeBefore( cs->lateFinish );
                 m_durationBackward = duration(cs->lateFinish, use, true);
                 m_lateStart = cs->lateFinish - m_durationBackward;
-#ifndef NDEBUG
+//#ifndef PLAN_NLOGDEBUG
                 cs->logDebug("ASAP/ALAP: " + cs->lateFinish.toString() + "-" + m_durationBackward.toString() + "=" + m_lateStart.toString() );
-#endif
+//#endif
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = m_lateStart;
                     cs->endTime = cs->lateFinish;
@@ -1351,9 +1352,9 @@ DateTime Task::calculateLateStart(int use) {
                     cs->setAllowOverbookingState( Schedule::OBS_Allow );
                     m_durationBackward = duration(cs->lateFinish, use, true);
                     cs->setAllowOverbookingState( obs );
-#ifndef NDEBUG
+//#ifndef PLAN_NLOGDEBUG
                     cs->logDebug("ASAP/ALAP latest start possible: " + cs->lateFinish.toString() + "-" + m_durationBackward.toString() + "=" + (cs->lateFinish-m_durationBackward).toString() );
-#endif
+//#endif
                 }
                 break;
             case Node::MustStartOn:
@@ -1563,8 +1564,34 @@ DateTime Task::scheduleFromStartTime(int use) {
         case Node::ASAP:
             // cs->startTime calculated above
             //kDebug()<<m_name<<"ASAP:"<<cs->startTime<<"earliest:"<<cs->earlyStart;
+            if ( false/*useCalculateForwardAppointments*/
+                    && m_estimate->type() == Estimate::Type_Effort
+                    && ! cs->allowOverbooking()
+                    && cs->hasAppointments( Schedule::CalculateForward )
+                ) {
+#ifndef PLAN_NLOGDEBUG
+                cs->logDebug( "ASAP: " + cs->startTime.toString() + " earliest: " + cs->earlyStart.toString() );
+#endif
+                cs->copyAppointments( Schedule::CalculateForward, Schedule::Scheduling );
+                if ( cs->recalculate() && completion().isStarted() ) {
+                    // copy start times + appointments from parent schedule
+                    copyAppointments();
+                }
+                cs->startTime = cs->appointmentStartTime();
+                cs->endTime = cs->appointmentEndTime();
+                Q_ASSERT( cs->startTime.isValid() );
+                Q_ASSERT( cs->endTime.isValid() );
+                cs->duration = cs->endTime - cs->startTime;
+                if ( cs->lateFinish > cs->endTime ) {
+                    cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
+                } else {
+                    cs->positiveFloat = Duration::zeroDuration;
+                }
+                cs->logInfo( i18n( "Scheduled: %1 to %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( cs->endTime ) ) );
+                return cs->endTime;
+            }
             cs->startTime = workTimeAfter( cs->startTime, cs );
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
             cs->logDebug( "ASAP: " + cs->startTime.toString() + " earliest: " + cs->earlyStart.toString() );
 #endif
             cs->duration = duration(cs->startTime, use, false);
@@ -1915,13 +1942,13 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->schedulingError = true;
                 cs->negativeFloat = e - cs->lateFinish;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule within late finish. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                 cs->logDebug( "ASAP: late finish=" + cs->lateFinish.toString() + " end time=" + e.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
 #endif
             } else if ( e > cs->endTime ) {
                 cs->schedulingError = true;
                 cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to schedule within successors start time",  constraintToString() ) );
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                 cs->logDebug( "ASAP: succ. start=" + cs->endTime.toString() + " end time=" + e.toString() );
 #endif
             }
@@ -1930,7 +1957,7 @@ DateTime Task::scheduleFromEndTime(int use) {
                 if ( w > e ) {
                     cs->positiveFloat = w - e;
                 }
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                 cs->logDebug( "ASAP: positiveFloat=" + cs->positiveFloat.toString() );
 #endif
             }
@@ -1949,12 +1976,12 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->startTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                 cs->logDebug( "ALAP: earlyStart=" + cs->earlyStart.toString() + " cs->startTime=" + cs->startTime.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
 #endif
             } else if ( cs->lateFinish > cs->endTime ) {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                 cs->logDebug( "ALAP: positiveFloat=" + cs->positiveFloat.toString() );
 #endif
             }
@@ -2192,7 +2219,7 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
         return Duration::zeroDuration;
     }
     if (!time.isValid()) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         m_currentSchedule->logDebug( "Calculate duration: Start time is not valid" );
 #endif
         return Duration::zeroDuration;
@@ -2248,7 +2275,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
 
     Duration l;
     if ( duration == Duration::zeroDuration ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Calculate length: estimate == 0" );
 #else
         Q_UNUSED(sch)
@@ -2257,12 +2284,12 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
     }
     Calendar *cal = m_estimate->calendar();
     if ( cal == 0) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Calculate length: No calendar, return estimate " + duration.toString() );
 #endif
         return duration;
     }
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
     if ( sch ) sch->logDebug( "Calculate length from: " + time.toString() );
 #endif
     DateTime logtime = time;
@@ -2290,7 +2317,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
         }
     }
     if ( ! match ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
 #endif
         logtime = start;
@@ -2313,7 +2340,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")  match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
 #endif
         logtime = start;
@@ -2336,7 +2363,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" l="<<l.toString()<<" match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " = " + l.toString() + " (" + (duration - l).toString() + ')' );
 #endif
         logtime = start;
@@ -2358,7 +2385,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
         }
     }
     if ( ! match ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " l " + l.toString() + " (" + (duration - l).toString() + ')' );
 #endif
         for (int i=0; !match && i < 1000; ++i) {
@@ -2372,7 +2399,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
                 l += l1;
                 match = true;
             } else {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                 if ( sch ) sch->logDebug( "Got more than asked for, should not happen! Want: " + duration.toString(Duration::Format_Hour) + " got: " + l.toString(Duration::Format_Hour) );
 #endif
                 break;
@@ -2394,7 +2421,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
                 t = cal->firstAvailableBefore(end, projectNode()->constraintStartTime());
             }
         }
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Moved end to work: " + end.toString() + " -> " + t.toString() );
 #endif
     }
@@ -2402,7 +2429,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, Schedule *
     //kDebug()<<"<---"<<(backward?"(B)":"(F)")<<m_name<<":"<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" duration:"<<duration.toString(Duration::Format_Day);
     l = end>time ? end-time : time-end;
     if ( match ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Calculated length: " + time.toString() + " - " + end.toString() + " = " + l.toString() );
 #endif
     }
@@ -3407,8 +3434,8 @@ void Completion::saveXML(QDomElement &element )  const
     element.appendChild(el);
     el.setAttribute("started", m_started);
     el.setAttribute("finished", m_finished);
-    el.setAttribute("startTime", m_startTime.toString( KDateTime::ISODate ));
-    el.setAttribute("finishTime", m_finishTime.toString( KDateTime::ISODate ));
+    el.setAttribute("startTime", m_startTime.toString( Qt::ISODate ));
+    el.setAttribute("finishTime", m_finishTime.toString( Qt::ISODate ));
     el.setAttribute("entrymode", entryModeToString());
     foreach( const QDate &date, m_entries.uniqueKeys() ) {
         QDomElement elm = el.ownerDocument().createElement("completion-entry");
@@ -3570,7 +3597,7 @@ bool WorkPackage::loadLoggedXML(KoXmlElement &element, XMLLoaderObject &status )
     m_ownerName = element.attribute( "owner" );
     m_ownerId = element.attribute( "owner-id" );
     m_transmitionStatus = transmitionStatusFromString( element.attribute( "status" ) );
-    m_transmitionTime = DateTime( KDateTime::fromString( element.attribute( "time" ) ) );
+    m_transmitionTime = DateTime( DateTime::fromString( element.attribute( "time" ) ) );
     return m_completion.loadXML( element, status );
 }
 
@@ -3581,7 +3608,7 @@ void WorkPackage::saveLoggedXML(QDomElement &element) const
     el.setAttribute( "owner", m_ownerName );
     el.setAttribute( "owner-id", m_ownerId );
     el.setAttribute( "status", transmitionStatusToString( m_transmitionStatus ) );
-    el.setAttribute( "time", m_transmitionTime.toString( KDateTime::ISODate ) );
+    el.setAttribute( "time", m_transmitionTime.toString( Qt::ISODate ) );
     m_completion.saveXML( el );
 }
 

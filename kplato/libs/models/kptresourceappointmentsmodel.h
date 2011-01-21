@@ -41,6 +41,7 @@ class AppointmentInterval;
 class Resource;
 class ResourceGroup;
 class ScheduleManager;
+class MainSchedule;
 class Calendar;
 
 /**
@@ -241,6 +242,7 @@ protected:
 
 protected:
     QMap<void*, Private*> m_datamap;
+    MainSchedule *m_schedule;
 };
 
 /**
