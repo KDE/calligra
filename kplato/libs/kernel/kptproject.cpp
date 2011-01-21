@@ -81,7 +81,7 @@ void Project::init()
     //kDebug()<<m_spec.timeZone();
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
-        m_constraintStartTime = DateTime( QDate::currentDate(), QTime(), m_spec );
+        m_constraintStartTime = DateTime( QDate::currentDate() );
         m_constraintEndTime = m_constraintStartTime.addYears( 2 );
     }
 }
@@ -162,7 +162,7 @@ void Project::calculate( const DateTime &dt )
     }
     stopcalculation = false;
     KLocale *locale = KGlobal::locale();
-    DateTime time = dt.isValid() ? dt : DateTime( KDateTime::currentLocalDateTime() );
+    DateTime time = dt.isValid() ? dt : DateTime( QDateTime::currentDateTime() );
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
@@ -922,6 +922,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         QList<Calendar*> lst;
         while ( !cals.isEmpty() ) {
             Calendar *c = cals.takeFirst();
+            c->m_blockversion = true;
             if ( c->parentId().isEmpty() ) {
                 addCalendar( c, status.baseCalendar() ); // handle pre 0.6 version
                 added = true;
@@ -929,14 +930,17 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             } else {
                 Calendar *par = calendar( c->parentId() );
                 if ( par ) {
+                    par->m_blockversion = true;
                     addCalendar( c, par );
                     added = true;
                     //kDebug()<<"added:"<<c->name()<<" to parent:"<<par->name();
+                    par->m_blockversion = false;
                 } else {
                     lst.append( c ); // treat later
                     //kDebug()<<"treat later:"<<c->name();
                 }
             }
+            c->m_blockversion = false;
         }
         cals = lst;
     } while ( added );
@@ -1052,6 +1056,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                     add = true;
                 }
                 if ( sm ) {
+                    kDebug()<<"load schedule manager";
                     if ( sm->loadXML( el, status ) ) {
                         if ( add )
                             addScheduleManager( sm );
@@ -1124,8 +1129,8 @@ void Project::save( QDomElement &element ) const
     me.setAttribute( "timezone", m_spec.timeZone().name() );
     
     me.setAttribute( "scheduling", constraintToString() );
-    me.setAttribute( "start-time", m_constraintStartTime.toString( KDateTime::ISODate ) );
-    me.setAttribute( "end-time", m_constraintEndTime.toString( KDateTime::ISODate ) );
+    me.setAttribute( "start-time", m_constraintStartTime.toString( Qt::ISODate ) );
+    me.setAttribute( "end-time", m_constraintEndTime.toString( Qt::ISODate ) );
 
     m_wbsDefinition.saveXML( me );
     
@@ -1214,8 +1219,8 @@ void Project::saveWorkPackageXML( QDomElement &element, const Node *node, long i
     me.setAttribute( "timezone", m_spec.timeZone().name() );
     
     me.setAttribute( "scheduling", constraintToString() );
-    me.setAttribute( "start-time", m_constraintStartTime.toString( KDateTime::ISODate ) );
-    me.setAttribute( "end-time", m_constraintEndTime.toString( KDateTime::ISODate ) );
+    me.setAttribute( "start-time", m_constraintStartTime.toString( Qt::ISODate ) );
+    me.setAttribute( "end-time", m_constraintEndTime.toString( Qt::ISODate ) );
 
     QListIterator<ResourceGroup*> git( m_resourceGroups );
     while ( git.hasNext() ) {

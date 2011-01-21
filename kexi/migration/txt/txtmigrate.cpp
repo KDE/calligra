@@ -58,7 +58,7 @@ bool TxtMigrate::drv_disconnect()
 
 bool TxtMigrate::drv_tableNames(QStringList& tablenames)
 {
-  tablenames << "Table1";
+  tablenames << m_migrateData->source->dbFileName();
   return true;
 }
 
@@ -70,6 +70,7 @@ bool TxtMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableS
     {
       tableSchema.addField( new KexiDB::Field(m_FieldNames[i], KexiDB::Field::Text) );
     }
+    tableSchema.setName(originalName);
     return true;
   }
   return false;
@@ -99,6 +100,7 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
 
 bool TxtMigrate::drv_moveNext()
 {
+    kDebug();
   if (m_Row < m_FileRow)
   {
    m_Row++; 
@@ -118,6 +120,7 @@ bool TxtMigrate::drv_moveNext()
 
 bool TxtMigrate::drv_movePrevious()
 {
+    kDebug();
   if (m_Row > 0)
   {
     m_Row--;
@@ -128,7 +131,30 @@ bool TxtMigrate::drv_movePrevious()
 
 QVariant TxtMigrate::drv_value(uint i)
 {
-  return QVariant(m_FieldValues[m_Row][i]);
+    kDebug() << m_Row;
+    kDebug() << m_LastLine;
+    
+    if (m_Row >= 0)   {
+        return QVariant(m_FieldValues[m_Row][i]);
+    }
+    return QVariant();
 }
+
+bool TxtMigrate::drv_moveFirst()
+{
+    kDebug();
+    m_Row = -1;
+    return drv_moveNext();
+}
+
+bool TxtMigrate::drv_moveLast()
+{
+    kDebug();
+    
+    while(drv_moveNext()) {}
+    
+    return true;
+}
+
 
 }

@@ -183,7 +183,16 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         m_context->m_context->setCurrentNode(m_context->m_context->m_rootPoint);
 
         //for(QMap<QString, Diagram::PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) (*it)->dump(m_context->m_context, 0);
-        //m_context->m_context->m_rootPoint->dump(m_context->m_context, 0);
+#if 0
+        QFile visGraphFile( "graphDump" );
+        visGraphFile.open( QFile::WriteOnly | QFile::Truncate );
+        QTextStream visGraph( &visGraphFile );
+        visGraph << "digraph { \n";
+        m_context->m_context->m_rootPoint->dump( visGraph );
+        visGraph << "}\n";
+        visGraphFile.close();
+#endif
+        //Q_ASSERT( false );
     }
     else if (qualifiedName() == QLatin1String("dgm:layoutDef")) {
         m_type = LayoutDefType;

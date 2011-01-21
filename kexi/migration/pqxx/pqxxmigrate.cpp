@@ -89,6 +89,8 @@ bool PqxxMigrate::drv_readTableSchema(
 //moved    m_table->setCaption(table + " table");
 
     //Perform a query on the table to get some data
+    kDebug();
+    tableSchema.setName(originalName);
     if (!query("select * from \"" + originalName + "\" limit 1"))
         return false;
     //Loop round the fields
@@ -246,7 +248,7 @@ bool PqxxMigrate::query(const QString& statement)
 
     try {
         //Create a transaction
-        m_trans = new pqxx::nontransaction(*m_conn);
+        m_trans = new pqxx::nontransaction(*m_conn, "pqxxmigrate::query");
         //Create a result opject through the transaction
         m_res = new pqxx::result(m_trans->exec(statement.toLatin1().constData()));
         //Commit the transaction
@@ -601,15 +603,15 @@ bool PqxxMigrate::notEmpty(pqxx::oid /*table_uid*/, int /*col*/) const
 
 bool PqxxMigrate::drv_readFromTable(const QString & tableName)
 {
+    kDebug();
     bool ret;
     ret = false;
     
     try {
-        pqxx::nontransaction T(*m_conn);
-        
-        ret = query(QString("SELECT * FROM %1").arg(T.esc(tableName.toLocal8Bit()).c_str()));
+        ret = query(QString("SELECT * FROM %1").arg(m_conn->esc(tableName.toLocal8Bit()).c_str()));
         if (ret) {
             m_rows = m_res->size();
+            kDebug() << m_rows;
         }
         
     }
@@ -670,9 +672,11 @@ bool PqxxMigrate::drv_moveLast()
 
 QVariant PqxxMigrate::drv_value(uint i)
 {
-    QString str = (*m_res)[m_row][i].c_str();
-
-    return str;
+    if (m_row < m_rows) {
+        QString str = (*m_res)[m_row][i].c_str();
+        return str;
+    }
+    return QVariant();
 }
 
 #include "pqxxmigrate.moc"

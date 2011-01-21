@@ -1308,7 +1308,7 @@ void TaskWorkPackageView::slotWorkPackageSent( QList<Node*> &nodes, Resource *re
         WorkPackage *wp = new WorkPackage( static_cast<Task*>( n )->workPackage() );
         wp->setOwnerName( resource->name() );
         wp->setOwnerId( resource->id() );
-        wp->setTransmitionTime( DateTime::currentLocalDateTime() );
+        wp->setTransmitionTime( DateTime::currentDateTime() );
         wp->setTransmitionStatus( WorkPackage::TS_Send );
         m_cmd->addCommand( new WorkPackageAddCmd( static_cast<Project*>( n->projectNode() ), n, wp ) );
     }

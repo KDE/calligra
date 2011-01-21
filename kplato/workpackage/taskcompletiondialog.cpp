@@ -72,8 +72,8 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     m_completion = task->completion();
     started->setChecked(m_completion.isStarted());
     finished->setChecked(m_completion.isFinished());
-    startTime->setDateTime(m_completion.startTime().dateTime());
-    finishTime->setDateTime(m_completion.finishTime().dateTime());
+    startTime->setDateTime(m_completion.startTime());
+    finishTime->setDateTime(m_completion.finishTime());
     finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
     
     scheduledEffort = p.node()->estimate()->expectedValue();
@@ -141,10 +141,10 @@ QUndoCommand *TaskCompletionPanel::buildCommand()
         cmd->addCommand( new ModifyCompletionFinishedCmd(org, m_completion.isFinished() ) );
     }
     if ( org.startTime() != m_completion.startTime() ) {
-        cmd->addCommand( new ModifyCompletionStartTimeCmd(org, m_completion.startTime().dateTime() ) );
+        cmd->addCommand( new ModifyCompletionStartTimeCmd(org, m_completion.startTime() ) );
     }
     if ( org.finishTime() != m_completion.finishTime() ) {
-        cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, m_completion.finishTime().dateTime() ) );
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, m_completion.finishTime() ) );
     }
     QList<QDate> orgdates = org.entries().keys();
     QList<QDate> m_completiondates = m_completion.entries().keys();
@@ -189,7 +189,7 @@ void TaskCompletionPanel::slotStartedChanged(bool state) {
     m_completion.setStarted( state );
     if (state) {
         m_completion.setStartTime( KDateTime::currentLocalDateTime() );
-        startTime->setDateTime( m_completion.startTime().dateTime() );
+        startTime->setDateTime( m_completion.startTime() );
         slotCalculateEffort();
     }
     enableWidgets();

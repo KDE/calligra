@@ -580,7 +580,7 @@ QVariant PertResultItemModel::earlyStart( const Task *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->earlyStart( m_manager->scheduleId() ).dateTime();
+            return node->earlyStart( m_manager->scheduleId() );
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->earlyStart( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
@@ -595,7 +595,7 @@ QVariant PertResultItemModel::earlyFinish( const Task *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->earlyFinish( m_manager->scheduleId() ).dateTime();
+            return node->earlyFinish( m_manager->scheduleId() );
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->earlyFinish( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
@@ -610,7 +610,7 @@ QVariant PertResultItemModel::lateStart( const Task *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->lateStart( m_manager->scheduleId() ).dateTime();
+            return node->lateStart( m_manager->scheduleId() );
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->lateStart( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
@@ -626,7 +626,7 @@ QVariant PertResultItemModel::lateFinish( const Task *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->lateFinish( m_manager->scheduleId() ).dateTime();
+            return node->lateFinish( m_manager->scheduleId() );
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->lateFinish( m_manager->scheduleId() ).date() );
         case Qt::EditRole:

@@ -1360,7 +1360,8 @@ QDebug operator<<( QDebug dbg, const ResourceAppointmentsRowModel::Private* s )
 #endif
 
 ResourceAppointmentsRowModel::ResourceAppointmentsRowModel( QObject *parent )
-    : ItemModelBase( parent )
+    : ItemModelBase( parent ),
+    m_schedule( 0 )
 {
 }
 
@@ -1433,10 +1434,13 @@ void ResourceAppointmentsRowModel::setProject( Project *project )
 void ResourceAppointmentsRowModel::setScheduleManager( ScheduleManager *sm )
 {
     qDebug()<<"ResourceAppointmentsRowModel::setScheduleManager:"<<sm;
-    m_manager = sm;
-    qDeleteAll( m_datamap );
-    m_datamap.clear();
-    reset();
+    if ( sm == 0 || sm != m_manager || sm->expected() != m_schedule ) {
+        m_manager = sm;
+        m_schedule = sm ? sm->expected() : 0;
+        qDeleteAll( m_datamap );
+        m_datamap.clear();
+        reset();
+    }
 }
 
 long ResourceAppointmentsRowModel::id() const
@@ -1938,8 +1942,8 @@ QVariant ResourceAppointmentsGanttModel::data( const ResourceGroup *g, int colum
     Q_UNUSED(column);
     switch( role ) {
         case KDGantt::ItemTypeRole: return KDGantt::TypeSummary;
-        case KDGantt::StartTimeRole: return g->startTime( id() ).dateTime();
-        case KDGantt::EndTimeRole: return g->endTime( id() ).dateTime();
+        case KDGantt::StartTimeRole: return g->startTime( id() );
+        case KDGantt::EndTimeRole: return g->endTime( id() );
     }
     return QVariant();
 }
@@ -1949,8 +1953,8 @@ QVariant ResourceAppointmentsGanttModel::data( const Resource *r, int column, in
     Q_UNUSED(column);
     switch( role ) {
         case KDGantt::ItemTypeRole: return KDGantt::TypeSummary;
-        case KDGantt::StartTimeRole: return r->startTime( id() ).dateTime();
-        case KDGantt::EndTimeRole: return r->endTime( id() ).dateTime();
+        case KDGantt::StartTimeRole: return r->startTime( id() );
+        case KDGantt::EndTimeRole: return r->endTime( id() );
     }
     return QVariant();
 }
@@ -1960,8 +1964,8 @@ QVariant ResourceAppointmentsGanttModel::data( const Appointment *a, int column,
     Q_UNUSED(column);
     switch( role ) {
         case KDGantt::ItemTypeRole: return KDGantt::TypeMulti;
-        case KDGantt::StartTimeRole: return a->startTime().dateTime();
-        case KDGantt::EndTimeRole: return a->endTime().dateTime();
+        case KDGantt::StartTimeRole: return a->startTime();
+        case KDGantt::EndTimeRole: return a->endTime();
     }
     return QVariant();
 }
@@ -1971,8 +1975,8 @@ QVariant ResourceAppointmentsGanttModel::data( const AppointmentInterval *a, int
     Q_UNUSED(column);
     switch( role ) {
         case KDGantt::ItemTypeRole: return KDGantt::TypeTask;
-        case KDGantt::StartTimeRole: return a->startTime().dateTime();
-        case KDGantt::EndTimeRole: return a->endTime().dateTime();
+        case KDGantt::StartTimeRole: return a->startTime();
+        case KDGantt::EndTimeRole: return a->endTime();
     }
     return QVariant();
 }

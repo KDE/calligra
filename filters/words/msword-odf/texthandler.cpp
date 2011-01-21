@@ -87,6 +87,7 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_fld(new fld_State())
     , m_fldStart(0)
     , m_fldEnd(0)
+    , m_fldChp(0)
 //     , m_index(0)
 {
 #ifdef IMAGE_IMPORT
@@ -837,15 +838,6 @@ void KWordTextHandler::paragraphEnd()
 
     bool chck_dropcaps = false;
 
-    //add nested field snippets to this paragraph
-    if (m_fldStates.empty()) {
-        QList<QString>* flds = &m_fld_snippets;
-        while (!flds->isEmpty()) {
-            //add writer content to m_paragraph as a runOfText with no text style
-            m_paragraph->addRunOfText(flds->takeFirst(), 0, QString(""), m_parser->styleSheet());
-        }
-    }
-
     // If the last paragraph was a drop cap paragraph, combine it with
     // this one.
     if (m_hasStoredDropCap) {
@@ -873,14 +865,23 @@ void KWordTextHandler::paragraphEnd()
     //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
 
-    //write paragraph content
-    QString textStyleName = m_paragraph->writeToFile(writer);
+    //add nested field snippets to this paragraph
+    if (m_fld->m_insideField && !m_fld_snippets.isEmpty()) {
+        QList<QString>* flds = &m_fld_snippets;
+        while (!flds->isEmpty()) {
+            //add writer content to m_paragraph as a runOfText with text style
+            m_paragraph->addRunOfText(flds->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
+        }
+        writer = m_fld->m_writer;
+    }
+
+    //write paragraph content, reuse text/paragraph style name if applicable
+    QString styleName = m_paragraph->writeToFile(writer, &m_fld->m_tabLeader);
 
     if (chck_dropcaps) {
-        // If this paragraph is a drop cap, it should be combined with
-        // the next paragraph.  So store the drop cap data for future
-        // use.  However, only do this if the last paragraph was *not*
-        // a dropcap.
+        // If this paragraph is a drop cap, it should be combined with the next
+        // paragraph.  So store the drop cap data for future use.  However,
+        // only do this if the last paragraph was *not* a dropcap.
         if (!m_hasStoredDropCap && m_paragraph->dropCapStatus() == Paragraph::IsDropCapPara) {
             m_paragraph->getDropCapData(&m_dropCapString, &m_dcs_fdct, &m_dcs_lines,
                                         &m_dropCapDistance, &m_dropCapStyleName);
@@ -893,17 +894,13 @@ void KWordTextHandler::paragraphEnd()
             m_dropCapString.clear();
         }
     }
-
     //add the list-level-style information to the list-style if required
     if (m_listLevelStyleRequired) {
-
-        //check the style returned by paragraph, we expect a text style
-        if (!textStyleName.contains('T')) {
-            textStyleName = QString();
-        }
-        updateListStyle(textStyleName);
+        updateListStyle(styleName);
         m_listLevelStyleRequired = false;
     }
+    //provide the styleName to the current field
+    m_fld->m_styleName = styleName;
 
     delete m_paragraph;
     m_paragraph = 0;
@@ -927,61 +924,59 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     m_fld = new fld_State((fldType)fld->flt);
     m_fld->m_insideField = true;
 
-    //check to see if we can process this field type or not
     switch (m_fld->m_type) {
-    case AUTHOR:
-        break;
     case EQ:
         kDebug(30513) << "processing field... EQ (Combined Characters)";
         break;
+    case CREATEDATE:
+    case DATE:
     case HYPERLINK:
-        kDebug(30513) << "processing field... HYPERLINK";
+    case PAGEREF:
+    case SAVEDATE:
+    case TIME:
+    case TOC:
+        kDebug(30513) << "Processing only a subset of field instructions!";
+        kDebug(30513) << "Processing field result!";
         break;
     case LAST_REVISED_BY:
-        break;
-    case MACROBUTTON:
-        kDebug(30513) << "processing field... MACROBUTTON";
-        break;
-    case DATE:
-        kDebug(30513) << "processing field... DATE";
-        break;
-    case TIME:
-        kDebug(30513) << "processing field... TIME";
-        break;
     case NUMPAGES:
     case PAGE:
-        m_paragraph->setContainsPageNumberField(true);
-        break;
-    case PAGEREF:
-        kDebug(30513) << "processing field... PAGEREF";
-        break;
-    case REF:
-        kWarning(30513) << "Warning: unsupported field (REF)";
-        m_fld->m_type = UNSUPPORTED;
-        break;
-    case CREATEDATE:
-    case SAVEDATE:
     case SUBJECT:
     case TITLE:
+        kWarning(30513) << "Warning: field instructions not supported, storing as ODF field!";
+        kWarning(30513) << "Warning: ignoring field result!";
         break;
-    case TOC:
-        kDebug(30513) << "processing field... TOC";
-        m_tocNumber++;
+    case MACROBUTTON:
+    case SYMBOL:
+        kWarning(30513) << "Warning: processing only a subset of field instructions!";
+        kWarning(30513) << "Warning: ignoring field result!";
         break;
+    case AUTHOR:
     case EDITTIME:
     case FILENAME:
     case MERGEFIELD:
     case SHAPE:
-        kWarning(30513) << "Warning: field instructions not supported, storing field result!";
-        break;
-    case SYMBOL:
-        kWarning(30513) << "Warning: processing only a subset of field instructions!";
+        kWarning(30513) << "Warning: field instructions not supported!";
+        kWarning(30513) << "Warning: processing field result!";
         break;
     default:
         kWarning(30513) << "Warning: unrecognized field type" << m_fld->m_type << ", ignoring!";
         m_fld->m_type = UNSUPPORTED;
         break;
     }
+
+    switch (m_fld->m_type) {
+    case NUMPAGES:
+    case PAGE:
+        m_paragraph->setContainsPageNumberField(true);
+        break;
+    case TOC:
+        m_tocNumber++;
+        break;
+    default:
+        break;
+    }
+
     m_fldStart++;
 }//end fieldStart()
 
@@ -1065,167 +1060,11 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         }
         break;
     }
-    case TOC:
-    {
-        // Syntax: TOC [ switches ]
-        //
-        // Field Value: The table of contents.
-        //
-        // TODO:
-        //
-        // \a field-argument - Includes captioned items, but omits caption
-        // labels and numbers.  The identifier designated by text in this
-        // switch's field-argument corresponds to the caption label.
-        //
-        // \b field-argument - Includes entries only from the portion of the
-        // document marked by the bookmark named by text in this switch's
-        // field-argument.
-        //
-        // \c field-argument - Includes figures, tables, charts, and other
-        // items that are numbered by a SEQ field.  The sequence identifier
-        // designated by text in this switch's field-argument, which
-        // corresponds to the caption label, shall match the identifier in the
-        // corresponding SEQ field.
-        //
-        // \d field-argument - When used with \s, the text in this switch's
-        // field-argument defines the separator between sequence and page
-        // numbers.  The default separator is a hyphen (-).
-        //
-        // \f field-argument - Includes only those TC fields whose identifier
-        // exactly matches the text in this switch's field-argument (which is
-        // typically a letter).
-        //
-        // \l field-argument - Includes TC fields that assign entries to one of
-        // the levels specified by text in this switch's field-argument as a
-        // range having the form startLevel-endLevel, where startLevel and
-        // endLevel are integers, and startLevel has a value equal-to or
-        // less-than endLevel.  TC fields that assign entries to lower levels
-        // are skipped.
-        //
-        // \s field-argument - For entries numbered with a SEQ field , adds a
-        // prefix to the page number.  The prefix depends on the type of entry.
-        // Text in this switch's field-argument shall match the identifier in
-        // the SEQ field.
-        //
-        // \t field-argument - Uses paragraphs formatted with styles other than
-        // the built-in heading styles.  Text in this switch's field-argument
-        // specifies those styles as a set of comma-separated doublets, with
-        // each doublet being a comma-separated set of style name and table of
-        // content level.  \t can be combined with \o.
-        //
-        // \u - Uses the applied paragraph outline level.
-        // \w - Preserves tab entries within table entries.
-        // \x - Preserves newline characters within table entries.
-        // \z - Hides tab leader and page numbers in Web layout view.
-
-        QRegExp rx;
-        QList<QString> styleNames = document()->tocStyleNames();
-
-        // \h - Makes the table of contents entries hyperlinks.
-        rx = QRegExp("\\s\\\\h\\s");
-        bool hyperlink = false;
-
-        if (rx.indexIn(*inst) >= 0) {
-            hyperlink = true;
-        }
-
-        // \n field-argument - Without field-argument, omits page numbers from
-        // the table of contents.  Page numbers are omitted from all levels
-        // unless a range of entry levels is specified by text in this switch's
-        // field-argument.  A range is specified as for \l.
-        rx = QRegExp("\\s\\\\n\\s");
-        bool pgnum = true;
-
-        if (rx.indexIn(*inst) >= 0) {
-            pgnum = false;
-        }
-
-        // \o field-argument - Uses paragraphs formatted with all or the
-        // specified range of built-in heading styles.  Headings in a style
-        // range are specified by text in field-argument.  If no heading range
-        // is specified, all heading levels used in the document are listed.
-        rx = QRegExp("\\s\\\\o\\s\"(\\S+)\"");
-        uint levels;
-
-        if (rx.indexIn(*inst) >= 0) {
-            QStringList levels_lst = rx.cap(1).split("-");
-            levels = levels_lst.last().toUInt();
-        } else {
-            levels = styleNames.size();
-        }
-
-        // \p field-argument - text in this switch's field-argument specifies a
-        // sequence of characters that separate an entry and its page number.
-        // The default is a tab with leader dots.
-        rx = QRegExp("\\s\\\\p\\s\"(\\s)\"");
-        QString separator;
-
-        if (rx.indexIn(*inst) >= 0) {
-            separator = rx.cap(1);
-        }
-
-        //NOTE: text:table-of-content and text:index-body closed by fieldEnd f.
-        KoXmlWriter* writer = currentWriter();
-        writer->startElement("text:table-of-content");
-        writer->addAttribute("text:name", QString().setNum(m_tocNumber).prepend("_TOC"));
-        writer->startElement("text:table-of-content-source");
-        writer->addAttribute("text:index-scope", "document");
-        writer->addAttribute("text:outline-level", levels);
-        writer->addAttribute("text:relative-tab-stop-position", "false");
-        writer->addAttribute("text:use-index-marks", "false");
-        writer->addAttribute("text:use-index-source-styles", "false");
-        writer->addAttribute("text:use-outline-level", "true");
-
-        for (uint i = 0; i < levels; i++) {
-            writer->startElement("text:table-of-content-entry-template");
-            writer->addAttribute("text:outline-level", i + 1);
-            writer->addAttribute("text:style-name", styleNames[i].toUtf8());
-            if (hyperlink) {
-                writer->startElement("text:index-entry-link-start");
-                //TODO: Not provided in the TOC field, reuse from character
-                //styles used in text:index-body, processed later.
-//                 writer->addAttribute("text:style-name", "");
-                writer->endElement(); //text:index-entry-link-start
-            }
-
-            //NOTE: Represents the chapter number where an index entry is located.
-//             writer->startElement("text:index-entry-chapter");
-//             writer->endElement(); //text:index-entry-chapter
-
-            writer->startElement("text:index-entry-text");
-            writer->endElement(); //text:index-entry-text
-            if (pgnum) {
-                if (separator.isEmpty()) {
-                    writer->startElement("text:index-entry-tab-stop");
-                    //TODO: Not provided in the TOC field, reuse from paragraph
-                    //styles used in text:index-body, processed later.
-                    writer->addAttribute("style:leader-char", ".");
-                    //NOTE: "right" is the only option available
-                    writer->addAttribute("style:type", "right");
-                    writer->endElement(); //text:index-entry-tab-stop
-                } else {
-                    writer->startElement("text:index-entry-span");
-                    writer->addTextNode(separator);
-                    writer->endElement(); //text:index-entry-span
-                }
-                writer->startElement("text:index-entry-page-number");
-                writer->endElement(); //text:index-entry-page-number
-            }
-            if (hyperlink) {
-                writer->startElement("text:index-entry-link-end");
-                writer->endElement(); //text:index-entry-link-end
-            }
-            writer->endElement(); //text:table-of-content-entry-template
-        }
-
-        writer->endElement(); //text:table-of-content-source
-        writer->startElement("text:index-body");
-        break;
-    }
     case TIME:
     case DATE: {
-        // Extract the interesting format-string. That means we translate something like 'TIME \@ "MMMM d, yyyy"' into 'MMMM d, yyyy'
-        // cause the NumberFormatParser doesn't handle it correct else.
+        // Extract the interesting format-string. That means we translate
+        // something like 'TIME \@ "MMMM d, yyyy"' into 'MMMM d, yyyy' cause
+        // the NumberFormatParser doesn't handle it correct else.
         QRegExp rx(".*\"(.*)\".*");
         if (rx.indexIn(*inst) >= 0)
             m_fld->m_instructions = rx.cap(1);
@@ -1285,10 +1124,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
             writer.startElement("text:a", false);
             writer.addAttribute("xlink:type", "simple");
             writer.addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
-            writer.startElement("text:span");
-            writer.addAttribute("text:style-name", m_fld->m_styleName.toUtf8());
             writer.addCompleteElement(m_fld->m_buffer);
-            writer.endElement(); //text:span
             writer.endElement(); //text:a
         }
         //else a frame or drawing shape acting as a hyperlink already processed
@@ -1300,11 +1136,9 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         break;
     case MACROBUTTON:
     {
-        //TODO: nested fields support required
         QRegExp rx("MACROBUTTON\\s\\s?\\w+\\s\\s?(.+)$");
-        *inst = inst->trimmed();
         if (rx.indexIn(*inst) >= 0) {
-            m_paragraph->addRunOfText(rx.cap(1), chp, QString(""), m_parser->styleSheet());
+            writer.addTextNode(rx.cap(1));
         }
         break;
     }
@@ -1323,19 +1157,13 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
             writer.startElement("text:a", false);
             writer.addAttribute("xlink:type", "simple");
             writer.addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
-            writer.startElement("text:span");
-            writer.addAttribute("text:style-name", m_fld->m_styleName.toUtf8());
             writer.addCompleteElement(m_fld->m_buffer);
-            writer.endElement(); //text:span
             writer.endElement(); //text:a
         } else {
             writer.startElement("text:bookmark-ref");
             writer.addAttribute("text:reference-format", "page");
             writer.addAttribute("text:ref-name", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
-            writer.startElement("text:span");
-            writer.addAttribute("text:style-name", m_fld->m_styleName.toUtf8());
             writer.addCompleteElement(m_fld->m_buffer);
-            writer.endElement(); //text:span
             writer.endElement(); //text:bookmark-ref
         }
         break;
@@ -1394,7 +1222,6 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     }
     case SYMBOL:
     {
-        //TODO: nested fields support required
         QRegExp rx_txt("SYMBOL\\s{2}(\\S+)\\s+.+$");
         QString txt;
         *inst = inst->trimmed();
@@ -1427,7 +1254,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         if (tmp.isEmpty()) {
             tmp = "###";
         }
-        m_paragraph->addRunOfText(tmp, chp, QString(""), m_parser->styleSheet());
+        writer.addTextNode(tmp);
         break;
     }
     case TITLE:
@@ -1436,13 +1263,181 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         break;
     case TOC:
     {
-        //NOTE: Nested fields had been processed and wrote into content.xml by
-        //the writeToFile function.  The m_fldStates stack should be empty.
+        // Syntax: TOC [ switches ]
+        //
+        // Field Value: The table of contents.
+        //
+        // TODO:
+        //
+        // \a field-argument - Includes captioned items, but omits caption
+        // labels and numbers.  The identifier designated by text in this
+        // switch's field-argument corresponds to the caption label.
+        //
+        // \b field-argument - Includes entries only from the portion of the
+        // document marked by the bookmark named by text in this switch's
+        // field-argument.
+        //
+        // \c field-argument - Includes figures, tables, charts, and other
+        // items that are numbered by a SEQ field.  The sequence identifier
+        // designated by text in this switch's field-argument, which
+        // corresponds to the caption label, shall match the identifier in the
+        // corresponding SEQ field.
+        //
+        // \d field-argument - When used with \s, the text in this switch's
+        // field-argument defines the separator between sequence and page
+        // numbers.  The default separator is a hyphen (-).
+        //
+        // \f field-argument - Includes only those TC fields whose identifier
+        // exactly matches the text in this switch's field-argument (which is
+        // typically a letter).
+        //
+        // \l field-argument - Includes TC fields that assign entries to one of
+        // the levels specified by text in this switch's field-argument as a
+        // range having the form startLevel-endLevel, where startLevel and
+        // endLevel are integers, and startLevel has a value equal-to or
+        // less-than endLevel.  TC fields that assign entries to lower levels
+        // are skipped.
+        //
+        // \s field-argument - For entries numbered with a SEQ field , adds a
+        // prefix to the page number.  The prefix depends on the type of entry.
+        // Text in this switch's field-argument shall match the identifier in
+        // the SEQ field.
+        //
+        // \t field-argument - Uses paragraphs formatted with styles other than
+        // the built-in heading styles.  Text in this switch's field-argument
+        // specifies those styles as a set of comma-separated doublets, with
+        // each doublet being a comma-separated set of style name and table of
+        // content level.  \t can be combined with \o.
+        //
+        // \u - Uses the applied paragraph outline level.
+        // \w - Preserves tab entries within table entries.
+        // \x - Preserves newline characters within table entries.
+        // \z - Hides tab leader and page numbers in Web layout view.
+
+        //NOTE: Nested fields had been processed and wrote into m_fld->m_writer
+        //by the writeToFile function.  The m_fldStates stack should be empty.
         Q_ASSERT(m_fldStates.empty());
 
-        KoXmlWriter* out_writer = currentWriter();
-        out_writer->endElement(); //text:index-body
-        out_writer->endElement(); //text:table-of-content
+        QRegExp rx;
+        QString hlinkStyleName;
+        QList<QString> styleNames = document()->tocStyleNames();
+
+        // \h - Makes the table of contents entries hyperlinks.
+        rx = QRegExp("\\s\\\\h\\s");
+        bool hyperlink = false;
+
+        if (rx.indexIn(*inst) >= 0) {
+            hyperlink = true;
+        }
+
+        //hyperlink style info not provided by the TOC field, reusing the text
+        //style of text:index-body content, expecting a text style
+        if (m_fld->m_styleName.contains('T')) {
+            hlinkStyleName = m_mainStyles->style(m_fld->m_styleName)->parentName();
+        } else {
+            kDebug(30513) << "TOC: Missing text style to format the hyperlink!";
+        }
+
+        // \n field-argument - Without field-argument, omits page numbers from
+        // the table of contents.  Page numbers are omitted from all levels
+        // unless a range of entry levels is specified by text in this switch's
+        // field-argument.  A range is specified as for \l.
+        rx = QRegExp("\\s\\\\n\\s");
+        bool pgnum = true;
+
+        if (rx.indexIn(*inst) >= 0) {
+            pgnum = false;
+        }
+
+        // \o field-argument - Uses paragraphs formatted with all or the
+        // specified range of built-in heading styles.  Headings in a style
+        // range are specified by text in field-argument.  If no heading range
+        // is specified, all heading levels used in the document are listed.
+        rx = QRegExp("\\s\\\\o\\s\"(\\S+)\"");
+        uint levels;
+
+        if (rx.indexIn(*inst) >= 0) {
+            QStringList levels_lst = rx.cap(1).split("-");
+            levels = levels_lst.last().toUInt();
+        } else {
+            levels = styleNames.size();
+        }
+
+        // \p field-argument - text in this switch's field-argument specifies a
+        // sequence of characters that separate an entry and its page number.
+        // The default is a tab with leader dots.
+        rx = QRegExp("\\s\\\\p\\s\"(\\s)\"");
+        QString separator;
+
+        if (rx.indexIn(*inst) >= 0) {
+            separator = rx.cap(1);
+        } else {
+            // The tab leader character is not provided by the TOC field,
+            // reusing from the last paragraph style applied in index-body.
+            // If not provided, use the default value.
+            if (m_fld->m_tabLeader.isNull()) {
+                m_fld->m_tabLeader = QChar('.');
+            }
+        }
+
+        //NOTE: TOC content is not encapsulated in a paragraph
+        KoXmlWriter* cwriter = currentWriter();
+        cwriter->startElement("text:table-of-content");
+        cwriter->addAttribute("text:name", QString().setNum(m_tocNumber).prepend("_TOC"));
+        cwriter->startElement("text:table-of-content-source");
+        cwriter->addAttribute("text:index-scope", "document");
+        cwriter->addAttribute("text:outline-level", levels);
+        cwriter->addAttribute("text:relative-tab-stop-position", "false");
+        cwriter->addAttribute("text:use-index-marks", "false");
+        cwriter->addAttribute("text:use-index-source-styles", "false");
+        cwriter->addAttribute("text:use-outline-level", "true");
+
+        for (uint i = 0; i < levels; i++) {
+            cwriter->startElement("text:table-of-content-entry-template");
+            cwriter->addAttribute("text:outline-level", i + 1);
+            cwriter->addAttribute("text:style-name", styleNames[i].toUtf8());
+
+            if (hyperlink) {
+                cwriter->startElement("text:index-entry-link-start");
+                if (!hlinkStyleName.isEmpty()) {
+                    cwriter->addAttribute("text:style-name", hlinkStyleName);
+                }
+                cwriter->endElement(); //text:index-entry-link-start
+            }
+
+            //Represents the chapter number where an index entry is located.
+            cwriter->startElement("text:index-entry-chapter");
+            cwriter->endElement(); //text:index-entry-chapter
+
+            cwriter->startElement("text:index-entry-text");
+            cwriter->endElement(); //text:index-entry-text
+            if (pgnum) {
+                if (separator.isEmpty()) {
+                    cwriter->startElement("text:index-entry-tab-stop");
+                    cwriter->addAttribute("style:leader-char", m_fld->m_tabLeader);
+                    //NOTE: "right" is the only option available
+                    cwriter->addAttribute("style:type", "right");
+                    cwriter->endElement(); //text:index-entry-tab-stop
+                } else {
+                    cwriter->startElement("text:index-entry-span");
+                    cwriter->addTextNode(separator);
+                    cwriter->endElement(); //text:index-entry-span
+                }
+                cwriter->startElement("text:index-entry-page-number");
+                cwriter->endElement(); //text:index-entry-page-number
+            }
+            if (hyperlink) {
+                cwriter->startElement("text:index-entry-link-end");
+                cwriter->endElement(); //text:index-entry-link-end
+            }
+            cwriter->endElement(); //text:table-of-content-entry-template
+        }
+
+        cwriter->endElement(); //text:table-of-content-source
+        cwriter->startElement("text:index-body");
+        cwriter->addCompleteElement(m_fld->m_buffer);
+        cwriter->endElement(); //text:index-body
+        cwriter->endElement(); //text:table-of-content
         break;
     }
     default:
@@ -1454,14 +1449,13 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         if (!m_fldStates.empty()) {
             m_fld_snippets.prepend(contents);
         } else {
-            //add writer content to m_paragraph as a runOfText with no text style
-            m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
+            //add writer content to m_paragraph as a runOfText with text style
+            m_paragraph->addRunOfText(contents, m_fldChp, QString(""), m_parser->styleSheet(), true);
         }
     }
 
     //reset
     delete m_fld;
-
     m_fldEnd++;
 
     //nested field
@@ -1471,9 +1465,10 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         m_fld = new fld_State();
         QList<QString>* list = &m_fld_snippets;
         while (!list->isEmpty()) {
-            //add writer content to m_paragraph as a runOfText with no text style
-            m_paragraph->addRunOfText(list->takeFirst(), 0, QString(""), m_parser->styleSheet());
+            //add writer content to m_paragraph as a runOfText with text style
+            m_paragraph->addRunOfText(list->takeFirst(), m_fldChp, QString(""), m_parser->styleSheet(), true);
         }
+        m_fldChp = 0;
     }
 } //end fieldEnd()
 
@@ -1520,11 +1515,11 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         else {
             KoXmlWriter* writer = m_fld->m_writer;
             switch (m_fld->m_type) {
-            case TIME:
+            case CREATEDATE:
+            case SAVEDATE:
             case DATE:
+            case TIME:
             case PAGEREF:
-                writer->addTextNode(newText);
-                break;
             case HYPERLINK:
                 if (newText == "\t") {
                     writer->startElement("text:tab", false);
@@ -1533,15 +1528,13 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                     writer->addTextNode(newText);
                 }
                 break;
-            case CREATEDATE:
-            case SAVEDATE:
             case AUTHOR:
             case EDITTIME:
             case FILENAME:
             case MERGEFIELD:
             case SHAPE:
             case TOC:
-                //Ignoring any nested fields around the result!
+                //NOTE: Ignoring bookmarks in the field result!
                 kDebug(30513) << "Processing field result as vanilla text string.";
                 common_flag = true;
                 break;
@@ -1549,15 +1542,16 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                 kDebug(30513) << "Ignoring the field result.";
                 break;
             }
-        }
-        if (!common_flag) {
-            //TODO: This is a temporary solution in which we ignore a lot of
-            //styles related information.  Reuse the addRunOfText function.
-
-            //create a style for the <text:span> element (if applicable)
-            if (m_fld->m_styleName.isEmpty()) {
-                m_fld->m_styleName = m_paragraph->createTextStyle(chp, m_parser->styleSheet());
+            if (!m_fldChp.data()) {
+                m_fldChp = chp;
             }
+        }
+        if (common_flag) {
+            //the root field controls formatting of child fields
+            if (m_fldChp.data()) {
+                chp = m_fldChp;
+            }
+        } else {
             return;
         }
     }
@@ -1803,7 +1797,9 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName)
     //and store the bullet/number style.  The style will be placed into
     //office:styles.  Only selected properties are copied.
     QString bulletStyleName;
-    if (!textStyleName.isEmpty()) {
+
+    //check the styleName, we expect a text style
+    if (textStyleName.contains('T')) {
         bulletStyleName = createBulletStyle(textStyleName);
     }
 

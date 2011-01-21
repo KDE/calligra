@@ -41,6 +41,7 @@
 #include "VirtualKeyBoard.h"
 #include "ConfirmationDialog.h"
 #include "PreviewDialog.h"
+#include "FileChooserDialog.h"
 
 #include <QFileDialog>
 #include <QUrl>
@@ -1318,11 +1319,9 @@ void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
 
 QString MainWindow::showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
 {
-    QList<HildonMenu *> all_dlg = findChildren<HildonMenu *>();
-    foreach(HildonMenu *menu, all_dlg)
-        menu->close();
-
-    return QFileDialog::getOpenFileName(this, caption, dir, filter, 0, QFileDialog::DontUseNativeDialog);
+    FileChooserDialog fileDialog(this);
+    fileDialog.exec();
+    return fileDialog.getFilePath();
 }
 
 QString MainWindow::showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter)

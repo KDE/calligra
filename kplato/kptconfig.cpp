@@ -62,24 +62,24 @@ void Config::setDefaultValues( Task &task )
     task.setConstraintEndTime( DateTime() );
     switch ( KPlatoSettings::startTimeUsage() ) {
         case 0:
-            task.setConstraintStartTime( DateTime( QDateTime::currentDateTime(), KDateTime::Spec::LocalZone() ) );
+            task.setConstraintStartTime( DateTime( QDateTime::currentDateTime() ) );
             break;
         case 1:
-            task.setConstraintStartTime( DateTime( QDate::currentDate(), KPlatoSettings::constraintStartTime().time(), KDateTime::Spec::LocalZone() ) );
+            task.setConstraintStartTime( DateTime( QDate::currentDate(), KPlatoSettings::constraintStartTime().time() ) );
             break;
         default:
-            task.setConstraintStartTime( DateTime( KPlatoSettings::constraintStartTime(), KDateTime::Spec::LocalZone() ) );
+            task.setConstraintStartTime( DateTime( KPlatoSettings::constraintStartTime() ) );
             break;
     }
     switch ( KPlatoSettings::endTimeUsage() ) {
         case 0:
-            task.setConstraintEndTime( DateTime( QDateTime::currentDateTime(), KDateTime::Spec::LocalZone() ) );
+            task.setConstraintEndTime( DateTime( QDateTime::currentDateTime() ) );
             break;
         case 1:
-            task.setConstraintEndTime( DateTime( QDate::currentDate(), KPlatoSettings::constraintEndTime().time(), KDateTime::Spec::LocalZone() ) );
+            task.setConstraintEndTime( DateTime( QDate::currentDate(), KPlatoSettings::constraintEndTime().time() ) );
             break;
         default:
-            task.setConstraintEndTime( DateTime( KPlatoSettings::constraintEndTime(), KDateTime::Spec::LocalZone() ) );
+            task.setConstraintEndTime( DateTime( KPlatoSettings::constraintEndTime() ) );
             break;
     }
 

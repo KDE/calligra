@@ -17,8 +17,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOSHAPEBOXDOCKER_H
-#define KOSHAPEBOXDOCKER_H
+#ifndef KOSTENCILBOXDOCKER_H
+#define KOSTENCILBOXDOCKER_H
 
 #include "CollectionItemModel.h"
 
@@ -40,10 +40,10 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QSortFilterProxyModel;
 
-class ShapeBoxDockerFactory : public KoDockFactoryBase
+class StencilBoxDockerFactory : public KoDockFactoryBase
 {
     public:
-        ShapeBoxDockerFactory();
+        StencilBoxDockerFactory();
 
         QString id() const;
         QDockWidget* createDockWidget();
@@ -53,11 +53,11 @@ class ShapeBoxDockerFactory : public KoDockFactoryBase
         }
 };
 
-class ShapeBoxDocker : public QDockWidget
+class StencilBoxDocker : public QDockWidget
 {
     Q_OBJECT
     public:
-        explicit ShapeBoxDocker(QWidget* parent = 0);
+        explicit StencilBoxDocker(QWidget* parent = 0);
 
     protected:
         /**

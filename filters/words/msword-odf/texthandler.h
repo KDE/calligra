@@ -33,6 +33,7 @@
 #include <wv2/src/functordata.h>
 #include <wv2/src/lists.h>
 #include <QString>
+#include <QChar>
 #include <QObject>
 #include <QDomElement>
 #include <QBuffer>
@@ -238,7 +239,7 @@ private:
         UNSUPPORTED = 0,
         //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
         //REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
-        REF = 0x03, ///< Reference
+        //REF = 0x03, ///< Reference
         //FTNREF = 0x05, ///< Identicial to NOTEREF (not a reference)
         //SET = 0x06,
         //IF = 0x07,
@@ -334,8 +335,9 @@ private:
             m_hyperLinkActive(false),
             m_hyperLinkUrl(QString::null),
             m_instructions(QString::null),
-            m_result(QString::null),
+/*             m_result(QString::null), */
             m_styleName(QString::null),
+            m_tabLeader(QChar::Null),
             m_writer(0),
             m_buffer(0)
         {
@@ -355,25 +357,28 @@ private:
         //set to UNSUPPORTED for a field we can't handle, anything else is the field type
         fldType m_type;
         
-	//other field related variables
+        //other field related variables
         bool m_insideField;
         bool m_afterSeparator;
         bool m_hyperLinkActive;
 	
-	//stores the location (bookmark/URL) to jump to
+        //stores the location (bookmark/URL) to jump to
         QString m_hyperLinkUrl;
         
-	//stores field instructions
+        //stores field instructions
         QString m_instructions;
         
-	//stores the field result
-        QString m_result;
+        //stores the field result
+/*         QString m_result; */
         
-	//KoGenStyle name for the <text:span> element encapsulating the field
-        //result (if applicable)
+        //KoGenStyle name for the <text:span> element encapsulating content of the
+        //processed field (if applicable)
         QString m_styleName;
-        
-	//writer and buffer used to place bookmark elements into the field result,
+
+        //the tab leader character for a TOC entry
+        QChar m_tabLeader;
+
+        //writer and buffer used to place bookmark elements into the field result,
         //if bookmarks are not to be supported by your field type, use m_result
         KoXmlWriter* m_writer;
         QBuffer* m_buffer;
@@ -392,6 +397,9 @@ private:
     //counters
     int m_fldStart;
     int m_fldEnd;
+
+    //character properties applied to the bunch of nested fields
+    wvWare::SharedPtr<const wvWare::Word97::CHP> m_fldChp;
 
     // ************************************************
     //  Obsolete

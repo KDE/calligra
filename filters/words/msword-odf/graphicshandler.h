@@ -25,7 +25,6 @@
 #ifndef GRAPHICSHANDLER_H
 #define GRAPHICSHANDLER_H
 
-#include <wv2/src/functor.h>
 #include <wv2/src/handlers.h>
 #include "wv2/src/ms_odraw.h"
 #include "wv2/src/graphics.h"
@@ -36,12 +35,10 @@
 #include "writer.h"
 
 #include <QObject>
-#include <QHash>
 #include <QMap>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoStore.h>
-#include <vector>
 
 class DrawStyle;
 

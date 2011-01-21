@@ -23,11 +23,10 @@
 #ifndef TABLEHANDLER_H
 #define TABLEHANDLER_H
 
-#include <wv2/src/functor.h>
 #include <wv2/src/word97_generated.h> // for TAP
 #include <wv2/src/handlers.h>
-#include <QString>
 #include <QObject>
+#include <QString>
 #include <QList>
 #include <deque>
 #include <QRectF>

@@ -8,11 +8,11 @@ include_directories(${KDE4_INCLUDE_DIR}
 set(flowdockers_SRCS
     Plugin.cpp
     
-    shapeboxdocker/ShapeBoxDocker.cpp
-    shapeboxdocker/ShapeBoxView.cpp
-    shapeboxdocker/CollectionItemModel.cpp
-    shapeboxdocker/CollectionShapeFactory.cpp
-    shapeboxdocker/OdfCollectionLoader.cpp
+    stencilboxdocker/StencilBoxDocker.cpp
+    stencilboxdocker/StencilBoxView.cpp
+    stencilboxdocker/CollectionItemModel.cpp
+    stencilboxdocker/CollectionShapeFactory.cpp
+    stencilboxdocker/OdfCollectionLoader.cpp
 )
 
 kde4_add_plugin(flowdockersplugin ${flowdockers_SRCS})

@@ -29,7 +29,7 @@ SectionPropertiesDock::SectionPropertiesDock() :
 {
   QWidget* mainWidget = new QWidget(this);
   setWidget(mainWidget);
-  setWindowTitle("Dump properties");
+  setWindowTitle(i18n("Dump properties"));
   
   m_wdgSectionProperties.setupUi(mainWidget);
   

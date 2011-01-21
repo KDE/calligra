@@ -119,6 +119,9 @@ void print( Resource *r, const QString &str, bool full = true ) {
     qDebug()<<"External appointments:"<<r->numExternalAppointments();
     foreach ( Appointment *a, r->externalAppointmentList() ) {
         qDebug()<<"   appointment:"<<a->startTime().toString()<<a->endTime().toString();
+        foreach( const AppointmentInterval &i, a->intervals() ) {
+            qDebug()<<"      "<<i.startTime().toString()<<i.endTime().toString()<<i.load();
+        }
     }
 }
 static

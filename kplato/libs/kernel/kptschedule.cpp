@@ -454,6 +454,16 @@ DateTime Schedule::appointmentEndTime() const
     return dt;
 }
 
+bool Schedule::hasAppointments( int which ) const
+{
+    if ( which == CalculateForward ) {
+        return m_forward.isEmpty();
+    } else if ( which == CalculateBackward ) {
+        return m_backward.isEmpty();
+    }
+    return m_appointments.isEmpty();
+}
+
 QList<Appointment*> Schedule::appointments( int which ) const
 {
     if ( which == CalculateForward ) {
@@ -461,30 +471,51 @@ QList<Appointment*> Schedule::appointments( int which ) const
     } else if ( which == CalculateBackward ) {
         return m_backward;
     }
-    return appointments();
+    return m_appointments;
 }
 
-Appointment Schedule::appointmentIntervals( int which ) const
+Appointment Schedule::appointmentIntervals( int which, const DateTimeInterval &interval ) const
 {
     Appointment app;
     if ( which == Schedule::CalculateForward ) {
         //kDebug()<<"list == CalculateForward";
         foreach ( Appointment *a, m_forward ) {
-            app += *a;
+            app += interval.isValid() ? a->extractIntervals( interval ) : *a;
         }
         return app;
     } else if ( which == Schedule::CalculateBackward ) {
         //kDebug()<<"list == CalculateBackward";
         foreach ( Appointment *a, m_backward ) {
-            app += *a;
+            app += interval.isValid() ? a->extractIntervals( interval ) : *a;
         }
         //kDebug()<<"list == CalculateBackward:"<<m_backward.count();
         return app;
     }
     foreach ( Appointment *a, m_appointments ) {
-        app += *a;
+        app += interval.isValid() ? a->extractIntervals( interval ) : *a;
     }
     return app;
+}
+
+void Schedule::copyAppointments( Schedule::CalculationMode from, Schedule::CalculationMode to )
+{
+    switch ( to ) {
+        case Scheduling:
+            m_appointments.clear();
+            switch( from ) {
+                case CalculateForward:
+                    m_appointments = m_forward;
+                    break;
+                case CalculateBackward:
+                    m_appointments = m_backward;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case CalculateForward: break;
+        case CalculateBackward: break;
+    }
 }
 
 
@@ -744,25 +775,25 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     saveCommonXML( sch );
 
     if ( earlyStart.isValid() ) {
-        sch.setAttribute( "earlystart", earlyStart.toString( KDateTime::ISODate ) );
+        sch.setAttribute( "earlystart", earlyStart.toString( Qt::ISODate ) );
     }
     if ( lateStart.isValid() ) {
-        sch.setAttribute( "latestart", lateStart.toString( KDateTime::ISODate ) );
+        sch.setAttribute( "latestart", lateStart.toString( Qt::ISODate ) );
     }
     if ( earlyFinish.isValid() ) {
-        sch.setAttribute( "earlyfinish", earlyFinish.toString( KDateTime::ISODate ) );
+        sch.setAttribute( "earlyfinish", earlyFinish.toString( Qt::ISODate ) );
     }
     if ( lateFinish.isValid() ) {
-        sch.setAttribute( "latefinish", lateFinish.toString( KDateTime::ISODate ) );
+        sch.setAttribute( "latefinish", lateFinish.toString( Qt::ISODate ) );
     }
     if ( startTime.isValid() )
-        sch.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
+        sch.setAttribute( "start", startTime.toString( Qt::ISODate ) );
     if ( endTime.isValid() )
-        sch.setAttribute( "end", endTime.toString( KDateTime::ISODate ) );
+        sch.setAttribute( "end", endTime.toString( Qt::ISODate ) );
     if ( workStartTime.isValid() )
-        sch.setAttribute( "start-work", workStartTime.toString( KDateTime::ISODate ) );
+        sch.setAttribute( "start-work", workStartTime.toString( Qt::ISODate ) );
     if ( workEndTime.isValid() )
-        sch.setAttribute( "end-work", workEndTime.toString( KDateTime::ISODate ) );
+        sch.setAttribute( "end-work", workEndTime.toString( Qt::ISODate ) );
 
     sch.setAttribute( "duration", duration.toString() );
 
@@ -943,7 +974,7 @@ bool ResourceSchedule::isOverbooked() const
     return false;
 }
 
-bool ResourceSchedule::isOverbooked( const KDateTime &start, const KDateTime &end ) const
+bool ResourceSchedule::isOverbooked( const DateTime &start, const DateTime &end ) const
 {
     if ( m_resource == 0 )
         return false;
@@ -1007,9 +1038,9 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
     }
     Appointment a;
     if ( checkExternalAppointments() ) {
-        a.setIntervals( m_resource->externalAppointments() );
+        a.setIntervals( m_resource->externalAppointments( interval ) );
     }
-    a.merge( appointmentIntervals( m_calculationMode ) );
+    a.merge( appointmentIntervals( m_calculationMode, interval ) );
     if ( a.isEmpty() || a.startTime() >= interval.second || a.endTime() <= interval.first ) {
         //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
         return DateTimeInterval( interval.first, interval.second );
@@ -1209,8 +1240,8 @@ void MainSchedule::saveXML( QDomElement &element ) const
 {
     saveCommonXML( element );
 
-    element.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
-    element.setAttribute( "end", endTime.toString( KDateTime::ISODate ) );
+    element.setAttribute( "start", startTime.toString( Qt::ISODate ) );
+    element.setAttribute( "end", endTime.toString( Qt::ISODate ) );
     element.setAttribute( "duration", duration.toString() );
     element.setAttribute( "scheduling-conflict", schedulingError );
 
@@ -1946,7 +1977,7 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     el.setAttribute( "baselined", m_baselined );
     el.setAttribute( "scheduler-plugin-id", m_schedulerPluginId );
     el.setAttribute( "recalculate", m_recalculate );
-    el.setAttribute( "recalculate-from", m_recalculateFrom.toString( KDateTime::ISODate ) );
+    el.setAttribute( "recalculate-from", m_recalculateFrom.toString( Qt::ISODate ) );
     foreach ( MainSchedule *s, schedules() ) {
         //kDebug()<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"");
         if ( !s->isDeleted() /*&& s->isScheduled()*/ ) {

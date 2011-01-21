@@ -31,6 +31,7 @@
 
 #include <QString>
 #include <QList>
+#include <QSharedData>
 
 #include <kdebug.h>
 
@@ -48,16 +49,28 @@ class EffortCost;
 class EffortCostMap;
 class Schedule;
 class XMLLoaderObject;
+class DateTimeInterval;
 
-class KPLATOKERNEL_EXPORT AppointmentInterval {
+class AppointmentIntervalData : public QSharedData
+{
+public:
+    AppointmentIntervalData() : load( 0 ) {}
+    AppointmentIntervalData( const AppointmentIntervalData &other )
+        : QSharedData( other ), start( other.start ), end( other.end ), load( other.load ) {}
+    ~AppointmentIntervalData() {}
+
+    DateTime start;
+    DateTime end;
+    double load; //percent
+};
+
+class KPLATOKERNEL_EXPORT AppointmentInterval
+{
 public:
     AppointmentInterval();
     AppointmentInterval(const AppointmentInterval &AppointmentInterval);
     AppointmentInterval(const DateTime &start, const DateTime &end, double load=100);
     ~AppointmentInterval();
-    
-    void set(DateTime &start, DateTime &end, double load=100);
-    void set(DateTime &start, Duration &duration, double load=100);
     
     Duration effort() const;
     Duration effort(const DateTime &start, const DateTime end) const;
@@ -66,12 +79,12 @@ public:
     bool loadXML(KoXmlElement &element, XMLLoaderObject &status);
     void saveXML(QDomElement &element) const;
     
-    const DateTime &startTime() const { return m_start; }
-    void setStartTime(const DateTime &time) { m_start = time; }
-    const DateTime &endTime() const { return m_end; }
-    void setEndTime(const DateTime &time) { m_end = time; }
-    double load() const { return m_load; }
-    void setLoad(double load) { m_load = load; }
+    const DateTime &startTime() const;
+    void setStartTime( const DateTime &time );
+    const DateTime &endTime() const;
+    void setEndTime( const DateTime &time );
+    double load() const;
+    void setLoad( double load );
     
     bool isValid() const;
     AppointmentInterval firstInterval(const AppointmentInterval &interval, const DateTime &from) const;
@@ -79,12 +92,15 @@ public:
     bool operator==( const AppointmentInterval &interval ) const;
     bool operator<( const AppointmentInterval &interval ) const;
 
+    bool intersects( const AppointmentInterval &other ) const;
+    AppointmentInterval interval( const DateTime &start, const DateTime &end ) const;
+
+    QString toString() const;
+
 private:
-    DateTime m_start;
-    DateTime m_end;
-    double m_load; //percent
+    QSharedDataPointer<AppointmentIntervalData> d;
 };
-QDebug &operator<<( QDebug &dbg, const KPlato::AppointmentInterval &i );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::AppointmentInterval& i );
 
 
 /**
@@ -92,14 +108,12 @@ QDebug &operator<<( QDebug &dbg, const KPlato::AppointmentInterval &i );
  * The intervals do not overlap, an interval does not start before the
  * previous interval ends.
  */
-class KPLATOKERNEL_EXPORT AppointmentIntervalList : public QMap<AppointmentInterval, AppointmentInterval> {
+class KPLATOKERNEL_EXPORT AppointmentIntervalList : public QMultiMap<QDate, AppointmentInterval> {
 public:
     /// Add @p interval to the list. Handle overlapping with existsing intervals.
     void add( const AppointmentInterval &interval );
     /// Add an interval to the list. Handle overlapping with existsing intervals.
     void add( const DateTime &st, const DateTime &et, double load );
-    /// Add the interval @p a to the list. Assumes no overlap.
-    void inSort(const AppointmentInterval &a);
     /// Load intervals from document
     bool loadXML(KoXmlElement &element, XMLLoaderObject &status);
     /// Save intervals to document
@@ -120,6 +134,7 @@ public:
 protected:
     void subtract( const DateTime &st, const DateTime &et, double load );
 };
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::AppointmentIntervalList& i );
 
 /**
  * A Resource can be scheduled to be used at any time, 
@@ -195,9 +210,7 @@ public:
     Duration effort(const DateTime &start, const DateTime &end, EffortCostCalculationType type = ECCT_All) const;
     /// Returns the planned effort from start for the duration
     Duration effort(const DateTime &start, const Duration &duration, EffortCostCalculationType type = ECCT_All) const;
-    /// Returns the planned effort from time onwards
-    Duration effortFrom(const QDate &time, EffortCostCalculationType type = ECCT_All) const;
-    
+
     /// Returns the total planned effort for this appointment
     Duration plannedEffort(EffortCostCalculationType type = ECCT_All) const;
     /// Returns the planned effort on the date
@@ -220,7 +233,8 @@ public:
     int calculationMode() const { return m_calculationMode; }
     
     void merge(const Appointment &app);
-    
+    Appointment extractIntervals( const DateTimeInterval &interval ) const;
+
     void setAuxcilliaryInfo( const QString &info ) { m_auxcilliaryInfo = info; }
     QString auxcilliaryInfo() const { return m_auxcilliaryInfo; }
     

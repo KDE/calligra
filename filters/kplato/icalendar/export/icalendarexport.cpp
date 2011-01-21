@@ -143,11 +143,11 @@ void ICalendarExport::createTodos(KCal::CalendarLocal &cal, const Node *node, lo
     DateTime et = node->endTime(id);
     if (st.isValid()) {
         todo->setHasStartDate(true);
-        todo->setDtStart(st);
+        todo->setDtStart( KDateTime( st ) );
     }
     if (et.isValid()) {
         todo->setHasDueDate(true);
-        todo->setDtDue(et);
+        todo->setDtDue( KDateTime( et ) );
     }
     if (node->type() == Node::Type_Task) {
         const Task *task = qobject_cast<Task*>(const_cast<Node*>(node));
