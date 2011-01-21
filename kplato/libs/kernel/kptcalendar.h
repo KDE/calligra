@@ -194,6 +194,9 @@ public:
     TimeInterval *intervalAt( int index ) const;
     int indexOf( const TimeInterval *ti ) const;
     int numIntervals() const;
+
+    DateTime start() const;
+    DateTime end() const;
     
     QDate date() const { return m_date; }
     void setDate(const QDate& date) { m_date = date; }
@@ -576,6 +579,13 @@ protected:
      * Sets the load of each interval to @p load
      */
     AppointmentIntervalList workIntervals(const KDateTime &start, const KDateTime &end, double load) const;
+
+    /**
+     * Find the first available time backwards from @p time. Search until @p limit.
+     * Return invalid datetime if not available.
+     * If @p sch is not 0, the schedule is checked for availability.
+     */
+    DateTime firstAvailableBefore(const KDateTime &time, const KDateTime &limit, Schedule *sch = 0);
 
 private:
     QString m_name;
