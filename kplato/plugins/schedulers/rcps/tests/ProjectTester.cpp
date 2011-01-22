@@ -183,7 +183,7 @@ void ProjectTester::oneTask()
     qDebug()<<s;
 
     t->setConstraint( Node::MustStartOn );
-    t->setConstraintStartTime( DateTime( tomorrow, t1, KDateTime::Spec::LocalZone() ) );
+    t->setConstraintStartTime( DateTime( tomorrow, t1 ) );
 
     {
         KPlatoRCPSPlugin rcps( 0, QVariantList() );
@@ -244,7 +244,7 @@ void ProjectTester::oneTask()
     qDebug()<<s;
 
     t->setConstraint( Node::MustFinishOn );
-    t->setConstraintEndTime( DateTime( tomorrow, t2, KDateTime::Spec::LocalZone() ) );
+    t->setConstraintEndTime( DateTime( tomorrow, t2 ) );
 
     {
         KPlatoRCPSPlugin rcps( 0, QVariantList() );

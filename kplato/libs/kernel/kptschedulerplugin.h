@@ -96,6 +96,7 @@ protected slots:
 protected:
     void updateProject( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm ) const;
     void updateNode( const Node *tn, Node *mn, long sid, XMLLoaderObject &status ) const;
+    void updateResource( const KPlato::Resource *tr, Resource *r, XMLLoaderObject &status ) const;
     void updateAppointments( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm, XMLLoaderObject &status ) const;
 
     void updateProgress();

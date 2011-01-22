@@ -170,8 +170,8 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-//     Debug::print( m_project, t, s );
-//     Debug::printSchedulingLog( *sm, s );
+     Debug::print( m_project, t, s );
+     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -191,6 +191,7 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     Debug::print( m_project, t, s );
+    Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -210,7 +211,8 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-//    Debug::print( m_project, t, s );
+    Debug::print( m_project, s, true );
+    Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -253,6 +255,9 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     sm->createSchedules();
     m_project->calculate( *sm );
+
+    Debug::print( m_project, s, true );
+    Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -341,8 +346,8 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-//     Debug::print( m_project, t, s );
-//     Debug::printSchedulingLog( *sm, s );
+    Debug::print( m_project, s, true );
+    Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), DateTime( tomorrow, t1 ));
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
@@ -771,9 +776,9 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-//     Debug::print( m_project, t, s );
-//     Debug::print( m_project, tsk2, s );
-//     Debug::printSchedulingLog( *sm, s );
+    Debug::print( m_project, t, s );
+    Debug::print( m_project, tsk2, s );
+    Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->constraintStartTime() ) );
     QCOMPARE( t->lateStart(), tsk2->startTime() );
@@ -992,9 +997,9 @@ void ProjectTester::scheduleWithExternalAppointments()
     QString s = "Schedule with external appointments ----------";
     qDebug()<<endl<<"Testing:"<<s;
 
-//     Debug::print( r, s );
-//     Debug::print( &project, t, s );
-//     Debug::printSchedulingLog( *sm );
+    Debug::print( r, s );
+    Debug::print( &project, s, true );
+    Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), targetstart + Duration( 1, 0, 0 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );

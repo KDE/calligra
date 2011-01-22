@@ -255,13 +255,13 @@ public:
     ResourceGroup *parentGroup() const { return m_parent; }
     
     /// Set the time from when the resource is available to this project
-    void setAvailableFrom( const QDateTime &af ) { m_availableFrom = KDateTime( af ); changed();}
+    void setAvailableFrom( const QDateTime &af ) { m_availableFrom = af; changed();}
     /// Set the time from when the resource is available to this project
     void setAvailableFrom( const DateTime &af ) { m_availableFrom = af; changed(); }
     /// Return the time when the resource is available to this project
     const DateTime &availableFrom() const { return m_availableFrom;}
     /// Set the time when the resource is no longer available to this project
-    void setAvailableUntil( const QDateTime &au ) { m_availableUntil = KDateTime( au ); changed(); }
+    void setAvailableUntil( const QDateTime &au ) { m_availableUntil = au; changed(); }
     /// Set the time when the resource is no longer available to this project
     void setAvailableUntil( const DateTime &au ) { m_availableUntil = au; changed(); }
     /// Return the time when the resource is no longer available to this project.
@@ -298,7 +298,7 @@ public:
     /// check if overbooked on date.
     bool isOverbooked( const QDate &date ) const;
     /// check if overbooked within the interval start, end.
-    bool isOverbooked( const KDateTime &start, const KDateTime &end ) const;
+    bool isOverbooked( const DateTime &start, const DateTime &end ) const;
 
     double normalRate() const { return cost.normalRate; }
     void setNormalRate( double rate ) { cost.normalRate = rate; changed(); }
@@ -356,6 +356,10 @@ public:
     /// The load of the intervals is set to m_units
     /// Note: The list may contain intervals outside @p from, @p until
     void calendarIntervals( const DateTime &from, const DateTime &until ) const;
+    /// Load cache from @p element
+    bool loadCalendarIntervalsCache( const KoXmlElement& element, KPlato::XMLLoaderObject& status );
+    /// Save cache to @p element
+    void saveCalendarIntervalsCache( QDomElement &element ) const;
 
     /// Returns the effort that can be done starting at @p start within @p duration.
     /// The current schedule is used to check for appointments.
@@ -444,7 +448,7 @@ public:
     void clearExternalAppointments();
     void clearExternalAppointments( const QString id );
     AppointmentIntervalList externalAppointments( const QString &id );
-    AppointmentIntervalList externalAppointments() const;
+    AppointmentIntervalList externalAppointments( const DateTimeInterval &interval = DateTimeInterval() ) const;
 
     int numExternalAppointments() const { return m_externalAppointments.count(); }
     QList<Appointment*> externalAppointmentList() const { return m_externalAppointments.values(); }
@@ -489,11 +493,17 @@ public:
         WorkInfoCache() { clear(); }
         void clear() { start = end = DateTime(); effort = Duration::zeroDuration; intervals.clear(); version = -1; }
         bool isValid() const { return start.isValid() && end.isValid(); }
+        DateTime firstAvailableAfter( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const;
+        DateTime firstAvailableBefore( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const;
+
         DateTime start;
         DateTime end;
         Duration effort;
         AppointmentIntervalList intervals;
         int version;
+
+        bool load( const KoXmlElement& element, KPlato::XMLLoaderObject& status );
+        void save( QDomElement &element ) const;
     };
 
 signals:
@@ -553,6 +563,7 @@ public:
 #endif
 };
 
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Resource::WorkInfoCache &c );
 
 /**
  * Risk is associated with a resource/task pairing to indicate the planner's confidence in the

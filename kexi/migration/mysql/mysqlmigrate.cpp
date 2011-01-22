@@ -71,6 +71,7 @@ MySQLMigrate::MySQLMigrate(QObject *parent, const QVariantList& args) :
         KexiMigrate(parent, args)
         , d(new MySqlConnectionInternal(0))
         , m_mysqlres(0)
+        , m_dataRow(0)
 {
     KexiDB::DriverManager manager;
     m_kexiDBDriver = manager.driver("mysql");
@@ -80,9 +81,8 @@ MySQLMigrate::MySQLMigrate(QObject *parent, const QVariantList& args) :
 //! Destructor
 MySQLMigrate::~MySQLMigrate()
 {
-    if (m_mysqlres)
-        mysql_free_result(m_mysqlres);
-    m_mysqlres = 0;
+    mysql_free_result(m_mysqlres);
+    delete d;
 }
 
 
@@ -114,6 +114,7 @@ bool MySQLMigrate::drv_readTableSchema(
 // tableSchema.setCaption(table + " table");
 
     //Perform a query on the table to get some data
+    tableSchema.setName(originalName);
     QString query = QString("SELECT * FROM `") + drv_escapeIdentifier(originalName) + "` LIMIT 0";
     if (!d->executeSQL(query))
         return false;
@@ -508,6 +509,104 @@ void MySQLMigrate::getOptions(int flags, KexiDB::Field* fld)
 {
     fld->setUnsigned(flags & UNSIGNED_FLAG);
 }
+
+bool MySQLMigrate::drv_moveFirst()
+{
+    if (!m_mysqlres)
+        return false;
+    
+    m_row = 0;
+    getRow();
+    return true;
+}
+
+bool MySQLMigrate::drv_moveLast()
+{
+    if (!m_mysqlres)
+        return false;
+    
+    m_row = m_rows - 1;
+    getRow();
+    return true;
+}
+
+bool MySQLMigrate::drv_moveNext()
+{
+    if (!m_mysqlres)
+        return false;
+    
+    if (m_row < m_rows - 1) {
+        m_row ++;
+        getRow();
+        return true;
+    }
+    else
+    {
+        return false;
+    }     
+}
+
+bool MySQLMigrate::drv_movePrevious()
+{
+    if (!m_mysqlres)
+        return false;
+    
+    if (m_row > 0) {
+        m_row --;
+        getRow();
+        return true;
+    }
+    else
+    {
+        return false;
+    }  
+}
+
+bool MySQLMigrate::drv_readFromTable(const QString& tableName)
+{
+    kDebug();
+    
+    if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(tableName) + '`')) {
+        kDebug() << "Unable to execute SQL";
+        return false;
+    }
+    
+    m_mysqlres = mysql_store_result(d->mysql);
+    if(!m_mysqlres) {
+        return false;
+    }
+    
+    m_rows = mysql_num_rows(m_mysqlres);
+    kDebug() << m_rows;
+    
+    return true;
+}
+
+QVariant MySQLMigrate::drv_value(uint i)
+{
+    QString val;
+    if (m_dataRow) {
+        val = m_dataRow[i];
+    }else {
+        kDebug() << "No row";
+    }
+    
+    return val;
+}
+
+void MySQLMigrate::getRow()
+{
+    if (m_mysqlres) {
+        mysql_data_seek(m_mysqlres, m_row);
+        m_dataRow = mysql_fetch_row(m_mysqlres);
+    } else {
+        kDebug() << "No result";
+        m_dataRow = 0;   
+    }
+}
+
+
+
 
 
 #include "mysqlmigrate.moc"

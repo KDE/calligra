@@ -18,7 +18,7 @@
 
 */
 
-#include "ShapeBoxView.h"
+#include "StencilBoxView.h"
 #include "CollectionItemModel.h"
 
 #include <kdebug.h>

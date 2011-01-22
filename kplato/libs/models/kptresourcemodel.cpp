@@ -260,7 +260,7 @@ QVariant ResourceModel::availableFrom( const Resource *res, int role ) const
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( res->availableFrom() );
         case Qt::EditRole:
-            return res->availableFrom().dateTime();
+            return res->availableFrom();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
@@ -282,7 +282,7 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( res->availableUntil() );
         case Qt::EditRole:
-            return res->availableUntil().dateTime();
+            return res->availableUntil();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
@@ -885,7 +885,7 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toDateTime() == res->availableFrom().dateTime() ) {
+            if ( value.toDateTime() == res->availableFrom() ) {
                 return false;
             }
             emit executeCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), "Modify resource available from" ) );
@@ -898,7 +898,7 @@ bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value,
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toDateTime() == res->availableUntil().dateTime() ) {
+            if ( value.toDateTime() == res->availableUntil() ) {
                 return false;
             }
             emit executeCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), "Modify resource available until" ) );

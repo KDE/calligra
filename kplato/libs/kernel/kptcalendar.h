@@ -200,9 +200,6 @@ public:
     int state() const { return m_state; }
     void setState(int state) { m_state = state; }
 
-    DateTime start( const KDateTime::Spec &spec = KDateTime::Spec( KDateTime::LocalZone ) ) const;
-    DateTime end( const KDateTime::Spec &spec = KDateTime::Spec( KDateTime::LocalZone ) ) const;
-
     bool operator==(const CalendarDay *day) const;
     bool operator==(const CalendarDay &day) const;
     bool operator!=(const CalendarDay *day) const;
@@ -510,6 +507,9 @@ public:
     
     int cacheVersion() const;
     void incCacheVersion();
+    void setCacheVersion( int version );
+    bool loadCacheVersion( KoXmlElement &element, XMLLoaderObject &status );
+    void saveCacheVersion( QDomElement &element ) const;
 
 signals:
     void changed( Calendar* );
@@ -543,6 +543,12 @@ protected:
      */
     Duration effort(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
     /**
+     * Returns the amount of 'worktime' that can be done in the
+     * interval from @p start to @p end
+     * If @p sch is not 0, the schedule is checked for availability.
+     */
+    Duration effort(const KDateTime &start, const KDateTime &end, Schedule *sch=0) const;
+    /**
      * Returns the first 'work interval' on date for the interval 
      * starting at @p start and ending at @p start + @p length.
      * If no 'work interval' exists, returns a null interval.
@@ -551,13 +557,25 @@ protected:
      * If @p sch is not 0, the schedule is checked for availability.
      */
     TimeInterval firstInterval(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
-    
+    /**
+     * Returns the first 'work interval' for the interval
+     * starting at @p start and ending at @p end.
+     * If no 'work interval' exists, returns an interval with invalid DateTime.
+     */
+    DateTimeInterval firstInterval( const KDateTime &start, const KDateTime &end, Schedule *sch=0) const;
+
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval on date, starting at @p start and ending at @p start + @p length.
      * If @p sch is not 0, the schedule is checked for availability.
      */
     bool hasInterval(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
+
+    /**
+     * Returns the work intervals in the interval from @p start to @p end
+     * Sets the load of each interval to @p load
+     */
+    AppointmentIntervalList workIntervals(const KDateTime &start, const KDateTime &end, double load) const;
 
 private:
     QString m_name;
@@ -575,7 +593,8 @@ private:
     KDateTime::Spec m_spec;
     bool m_default; // this is the default calendar, only used for save/load
     int m_cacheversion; // incremented every time a calendar is changed
-    
+    friend class Project;
+    int m_blockversion; // don't update if true
 #ifndef NDEBUG
 public:
     void printDebug(const QString& indent=QString());

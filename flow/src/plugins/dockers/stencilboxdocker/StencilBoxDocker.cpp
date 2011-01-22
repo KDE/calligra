@@ -18,11 +18,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ShapeBoxDocker.h"
+#include "StencilBoxDocker.h"
 
 #include "OdfCollectionLoader.h"
 #include "CollectionShapeFactory.h"
-#include "ShapeBoxView.h"
+#include "StencilBoxView.h"
 
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
@@ -59,30 +59,30 @@
 #include <QPainter>
 
 //
-// ShapeBoxDockerFactory
+// StencilBoxDockerFactory
 //
 
-ShapeBoxDockerFactory::ShapeBoxDockerFactory()
+StencilBoxDockerFactory::StencilBoxDockerFactory()
     : KoDockFactoryBase()
 {
 }
 
-QString ShapeBoxDockerFactory::id() const
+QString StencilBoxDockerFactory::id() const
 {
-    return QString("FlowShapeBoxDocker");
+    return QString("FlowStencilBoxDocker");
 }
 
-QDockWidget* ShapeBoxDockerFactory::createDockWidget()
+QDockWidget* StencilBoxDockerFactory::createDockWidget()
 {
-    ShapeBoxDocker* docker = new ShapeBoxDocker();
+    StencilBoxDocker* docker = new StencilBoxDocker();
     return docker;
 }
 
 //
-// ShapeBoxDocker
+// StencilBoxDocker
 //
 
-ShapeBoxDocker::ShapeBoxDocker(QWidget* parent)
+StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     : QDockWidget(parent)
 {
     setWindowTitle(i18n("Shape Box"));
@@ -127,7 +127,7 @@ ShapeBoxDocker::ShapeBoxDocker(QWidget* parent)
         loadShapeCollections();
     }
     
-    loadDefaultShapes();
+    //loadDefaultShapes();
     regenerateProxyMap();
     m_treeWidget->setFamilyMap(m_proxyMap);
 
@@ -136,22 +136,22 @@ ShapeBoxDocker::ShapeBoxDocker(QWidget* parent)
     connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
 }
 
-void ShapeBoxDocker::getCollectionOnline()
+void StencilBoxDocker::getCollectionOnline()
 {
     ;//FIXME
 }
 
-void ShapeBoxDocker::installLocalCollection()
+void StencilBoxDocker::installLocalCollection()
 {
     ;//FIXME
 }
 
-void ShapeBoxDocker::createNewCollection()
+void StencilBoxDocker::createNewCollection()
 {
     ;//FIXME
 }
 
-void ShapeBoxDocker::locationChanged(Qt::DockWidgetArea area)
+void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 {
     switch(area) {
         case Qt::TopDockWidgetArea:
@@ -167,7 +167,7 @@ void ShapeBoxDocker::locationChanged(Qt::DockWidgetArea area)
     m_layout->invalidate();
 }
 
-void ShapeBoxDocker::reapplyFilter()
+void StencilBoxDocker::reapplyFilter()
 {
     QRegExp regExp(m_filterLineEdit->originalText(), Qt::CaseInsensitive, QRegExp::RegExp2);
     foreach(QSortFilterProxyModel* model, m_proxyMap)
@@ -177,7 +177,7 @@ void ShapeBoxDocker::reapplyFilter()
     m_treeWidget->filter();
 }
 
-void ShapeBoxDocker::regenerateProxyMap()
+void StencilBoxDocker::regenerateProxyMap()
 {
     QMapIterator<QString, CollectionItemModel*> i(m_modelMap);
     while(i.hasNext())
@@ -190,7 +190,7 @@ void ShapeBoxDocker::regenerateProxyMap()
 }
 
 /// Generate lists of shapes registered
-void ShapeBoxDocker::loadDefaultShapes()
+void StencilBoxDocker::loadDefaultShapes()
 {
     QMap<QString, QList<KoCollectionItem> > familyMap;
     foreach( const QString & id, KoShapeRegistry::instance()->keys() )
@@ -258,7 +258,7 @@ void ShapeBoxDocker::loadDefaultShapes()
 }
 
 /// Load shape collections to m_modelMap and register in the KoShapeRegistry
-void ShapeBoxDocker::loadShapeCollections()
+void StencilBoxDocker::loadShapeCollections()
 {
     QStringList dirs = KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections");
     foreach(const QString& path, dirs)
@@ -271,7 +271,7 @@ void ShapeBoxDocker::loadShapeCollections()
     }
 }
 
-bool ShapeBoxDocker::addCollection(const QString& path)
+bool StencilBoxDocker::addCollection(const QString& path)
 {
     QDir dir(path);
 
@@ -305,7 +305,7 @@ bool ShapeBoxDocker::addCollection(const QString& path)
     }
 }
 
-void ShapeBoxDocker::onLoadingFailed(const QString& reason)
+void StencilBoxDocker::onLoadingFailed(const QString& reason)
 {
     OdfCollectionLoader* loader = qobject_cast<OdfCollectionLoader*>(sender());
 
@@ -320,7 +320,7 @@ void ShapeBoxDocker::onLoadingFailed(const QString& reason)
     KMessageBox::error (this, reason, i18n("Collection Error"));
 }
 
-void ShapeBoxDocker::onLoadingFinished()
+void StencilBoxDocker::onLoadingFinished()
 {
     OdfCollectionLoader* loader = qobject_cast<OdfCollectionLoader*>(sender());
 
@@ -352,7 +352,7 @@ void ShapeBoxDocker::onLoadingFinished()
     loader->deleteLater();
 }
 
-void ShapeBoxDocker::removeCollection(const QString& family)
+void StencilBoxDocker::removeCollection(const QString& family)
 {
     if(m_modelMap.contains(family))
     {
@@ -370,7 +370,7 @@ void ShapeBoxDocker::removeCollection(const QString& family)
     }
 }
 
-QIcon ShapeBoxDocker::generateShapeIcon(KoShape* shape)
+QIcon StencilBoxDocker::generateShapeIcon(KoShape* shape)
 {
     KoZoomHandler converter;
     bool isGroup = (shape->size()==QSizeF(0,0)) ? true : false;

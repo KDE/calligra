@@ -18,8 +18,8 @@
 
 */
 
-#ifndef SHAPEBOXVIEW_H
-#define SHAPEBOXVIEW_H
+#ifndef STENCILBOXVIEW_H
+#define STENCILBOXVIEW_H
 
 #include <QTreeWidget>
 #include <QItemDelegate>
@@ -105,4 +105,4 @@ class CollectionTreeWidget : public QTreeWidget
         void slotIconMode();
 };
 
-#endif // SHAPEBOXVIEW_H
+#endif // STENCILBOXVIEW_H

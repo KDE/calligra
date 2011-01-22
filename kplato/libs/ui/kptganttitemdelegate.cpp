@@ -100,7 +100,7 @@ int GanttItemDelegate::itemFloatWidth( const KDGantt::StyleOptionGanttItem& opt,
     if ( ! et.isValid() ) {
         return 0.0;
     }
-    QDateTime dt = ( DateTime( KDateTime( et ) ) + Duration( fl, Duration::Unit_h ) ).dateTime();
+    QDateTime dt = ( DateTime( et ) + Duration( fl, Duration::Unit_h ) );
     int dw = 0;
     qreal v1 = 0.0;
     if ( dt.isValid() ) {
@@ -125,7 +125,7 @@ int GanttItemDelegate::itemNegativeFloatWidth( const KDGantt::StyleOptionGanttIt
         if ( ! st.isValid() ) {
             return 0;
         }
-        QDateTime dt = ( DateTime( KDateTime( st ) ) - Duration( fl, Duration::Unit_h ) ).dateTime();
+        QDateTime dt = ( DateTime( st ) - Duration( fl, Duration::Unit_h ) );
         if ( dt.isValid() ) {
             qreal v1 = opt.grid->mapToChart( dt );
             qreal v2 = opt.grid->mapToChart( st );
@@ -136,7 +136,7 @@ int GanttItemDelegate::itemNegativeFloatWidth( const KDGantt::StyleOptionGanttIt
         if ( ! et.isValid() ) {
             return 0;
         }
-        QDateTime dt = ( DateTime( KDateTime( et ) ) - Duration( fl, Duration::Unit_h ) ).dateTime();
+        QDateTime dt = ( DateTime( et ) - Duration( fl, Duration::Unit_h ) );
         if ( dt.isValid() ) {
             qreal v1 = opt.grid->mapToChart( dt );
             qreal v2 = opt.grid->mapToChart( et );
@@ -799,8 +799,8 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KDGa
         } else {
             painter->setBrush( defaultBrush( KDGantt::TypeTask ) );
         }
-        qreal v1 = opt.grid->mapToChart( i.startTime().dateTime() );
-        qreal v2 = opt.grid->mapToChart( i.endTime().dateTime() );
+        qreal v1 = opt.grid->mapToChart( i.startTime() );
+        qreal v2 = opt.grid->mapToChart( i.endTime() );
         QRectF rr( v1 - x0, r.y(), v2 - v1, r.height() );
         painter->drawRect( rr );
         if ( painter->boundingRect( rr, Qt::AlignCenter, txt ).width() < rr.width() ) {
