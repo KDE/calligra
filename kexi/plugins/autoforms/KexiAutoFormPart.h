@@ -1,6 +1,6 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) 2011  Adam Pigg <piggz1@gmail.com>
+    Kexi Auto Form Plugin
+    Copyright (C) 2011  Adam Pigg <adam@piggz.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@
 #define KEXIAUTOFORMPART_H
 
 #include <core/kexipart.h>
-
+#include <KexiWindowData.h>
 
 class KexiAutoFormPart : public KexiPart::Part
 {
@@ -32,6 +32,19 @@ public:
     virtual ~KexiAutoFormPart();
     
     virtual KexiView* createView(QWidget* parent, KexiWindow* window, KexiPart::Item& item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap< QString, QVariant >* staticObjectArgs = 0);
+    virtual KexiWindowData* createWindowData(KexiWindow* window);
+    
+    class TempData : public KexiWindowData
+    {
+    public:
+        TempData(QObject* parent);
+        QDomElement autoformDefinition;
+        
+        /*! true, if \a document member has changed in previous view. Used on view switching.
+         *  Check this flag to see if we should refresh data for DataViewMode. */
+        bool schemaChangedInPreviousView : 1;
+        QString name;
+    };
 };
 
 #endif // KEXIAUTOFORMPART_H

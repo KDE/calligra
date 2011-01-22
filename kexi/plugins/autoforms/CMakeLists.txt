@@ -11,6 +11,9 @@ set(kexihandler_autoform_SRCS
     KexiAutoForms.cpp
     KexiAutoFormPart.cpp
     KexiAutoFormView.cpp
+    widgets/AutoWidget.cpp
+    KexiAutoFormDesignView.cpp
+    designer/KexiAutoFormDesigner.cpp 
 )
 
 kde4_add_plugin(kexihandler_autoform ${kexihandler_autoform_SRCS})
@@ -21,6 +24,7 @@ target_link_libraries(kexihandler_autoform
     ${KDE4_KPARTS_LIBS}
     kexidb
     kexicore
+    kexiextendedwidgets
     kexiguiutils
 )
 

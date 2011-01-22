@@ -18,41 +18,30 @@
 */
 
 
-#include "KexiAutoFormView.h"
+#include "AutoWidget.h"
+#include <QLabel>
+#include <kexidb/field.h>
+#include <QHBoxLayout>
 
-void KexiAutoFormView::resizeEvent(QResizeEvent* event)
+AutoWidget::AutoWidget(KexiDB::Field* fld, QWidget* parent): QWidget(parent)
 {
-    //Handle screen rotation
-    QWidget::resizeEvent(event);
+    m_field = fld;
+    m_fieldLabel = new QLabel(m_field->captionOrName(), this);
+    
+    m_layout = new QHBoxLayout(this);
+    m_layout->addWidget(m_fieldLabel);
+    
+    setLayout(m_layout);
 }
 
-void KexiAutoFormView::addNewRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToFirstRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToNextRecordRequested()
+AutoWidget::~AutoWidget()
 {
 
 }
 
-void KexiAutoFormView::moveToPreviousRecordRequested()
+void AutoWidget::setValue(QVariant val)
 {
-
+m_OriginalValue = val;
 }
 
-void KexiAutoFormView::moveToLastRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToRecordRequested(uint r)
-{
-
-}
 

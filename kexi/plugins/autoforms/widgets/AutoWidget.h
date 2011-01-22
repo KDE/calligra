@@ -1,5 +1,5 @@
 /*
-    Kexi Auto Form Plugin
+    Kexi Auto Form Plugin*
     Copyright (C) 2011  Adam Pigg <adam@piggz.co.uk>
 
     This library is free software; you can redistribute it and/or
@@ -18,41 +18,37 @@
 */
 
 
-#include "KexiAutoFormView.h"
+#ifndef AUTOWIDGETBASE_H
+#define AUTOWIDGETBASE_H
 
-void KexiAutoFormView::resizeEvent(QResizeEvent* event)
-{
-    //Handle screen rotation
-    QWidget::resizeEvent(event);
+#include <QtGui/QWidget>
+#include <QVariant>
+
+class QLabel;
+class QHBoxLayout;
+namespace KexiDB {
+class Field;
 }
 
-void KexiAutoFormView::addNewRecordRequested()
+
+class AutoWidget : public QWidget
 {
+    Q_OBJECT
+public:
+    virtual ~AutoWidget();
+    virtual QVariant value() = 0;
+    virtual void setValue(QVariant val);
+    
+protected:
+    explicit AutoWidget(KexiDB::Field *fld, QWidget* parent = 0);
+    
+    KexiDB::Field *m_field;
+    
+    QVariant m_OriginalValue;
+    QHBoxLayout *m_layout;
+    
+private:
+    QLabel *m_fieldLabel;
+};
 
-}
-
-void KexiAutoFormView::moveToFirstRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToNextRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToPreviousRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToLastRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToRecordRequested(uint r)
-{
-
-}
-
+#endif // AUTOWIDGETBASE_H

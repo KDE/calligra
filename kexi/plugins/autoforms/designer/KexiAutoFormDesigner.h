@@ -1,6 +1,6 @@
 /*
-    Kexi Auto Form Plugin
-    Copyright (C) 2011  Adam Pigg <adam@piggz.co.uk>
+    <one line to give the library's name and an idea of what it does.>
+    Copyright (C) 2011  Adam Pigg <piggz1@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -18,41 +18,33 @@
 */
 
 
-#include "KexiAutoFormView.h"
+#ifndef KEXIAUTOFORMDESIGNER_H
+#define KEXIAUTOFORMDESIGNER_H
 
-void KexiAutoFormView::resizeEvent(QResizeEvent* event)
+#include <QtGui/QWidget>
+#include <QDomElement>
+
+class QComboBox;
+class QVBoxLayout;
+class KexiDataSourceComboBox;
+
+class KexiAutoFormDesigner : public QWidget
 {
-    //Handle screen rotation
-    QWidget::resizeEvent(event);
-}
+    Q_OBJECT
+public:
+    KexiAutoFormDesigner(QWidget *parent = 0);
+    KexiAutoFormDesigner(QDomElement document, QWidget* parent = 0);
+    
+    
+    
+    virtual ~KexiAutoFormDesigner();
+    
+private:
+    QVBoxLayout *m_layout;
+    KexiDataSourceComboBox *m_dataSource;
+    
+    void setupUi();
+    
+};
 
-void KexiAutoFormView::addNewRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToFirstRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToNextRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToPreviousRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToLastRecordRequested()
-{
-
-}
-
-void KexiAutoFormView::moveToRecordRequested(uint r)
-{
-
-}
-
+#endif // KEXIAUTOFORMDESIGNER_H
