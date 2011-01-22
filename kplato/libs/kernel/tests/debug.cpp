@@ -41,7 +41,17 @@ public:
 static
 void print( Calendar *c, const QString &str, bool full = true ) {
     Q_UNUSED(full);
-    qDebug()<<"Debug info: Calendar"<<c->name()<<str;
+    QString s;
+    switch ( c->timeSpec().type() ) {
+        case KDateTime::Invalid: s = "Invalid"; break;
+        case KDateTime::UTC: s = "UTC"; break;
+        case KDateTime::OffsetFromUTC: s = "OffsetFromUTC"; break;
+        case KDateTime::TimeZone: s = "TimeZone: " + c->timeSpec().timeZone().name(); break;
+        case KDateTime::LocalZone: s = "LocalZone"; break;
+        case KDateTime::ClockTime: s = "Clocktime"; break;
+    }
+
+    qDebug()<<"Debug info: Calendar"<<c->name()<<s<<str;
     for ( int wd = 1; wd <= 7; ++wd ) {
         CalendarDay *d = c->weekday( wd );
         qDebug()<<"   "<<wd<<":"<<d->stateToString( d->state() );
@@ -127,10 +137,10 @@ void print( Resource *r, const QString &str, bool full = true ) {
 static
 void print( Project *p, const QString &str, bool all = false ) {
     qDebug()<<"Debug info: Project"<<p->name()<<str;
-    qDebug()<<"project target start:"<<p->constraintStartTime().toString();
-    qDebug()<<"  project target end:"<<p->constraintEndTime().toString();
-    qDebug()<<"  project start time:"<<p->startTime().toString();
-    qDebug()<<"    project end time:"<<p->endTime().toString();
+    qDebug()<<"project target start:"<<QTest::toString( p->constraintStartTime() );
+    qDebug()<<"  project target end:"<<QTest::toString( p->constraintEndTime() );
+    qDebug()<<"  project start time:"<<QTest::toString( p->startTime() );
+    qDebug()<<"    project end time:"<<QTest::toString( p->endTime() );
     
     if ( ! all ) {
         return;
@@ -155,22 +165,22 @@ static
 void print( Task *t, bool full = true ) {
     Q_UNUSED(full);
     qDebug()<<"Task"<<t->name()<<t->typeToString()<<t->constraintToString();
-    qDebug()<<"     earlyStart:"<<t->earlyStart().toString();
-    qDebug()<<"      lateStart:"<<t->lateStart().toString();
-    qDebug()<<"    earlyFinish:"<<t->earlyFinish().toString();
-    qDebug()<<"     lateFinish:"<<t->lateFinish().toString();
-    qDebug()<<"      startTime:"<<t->startTime().toString();
-    qDebug()<<"        endTime:"<<t->endTime().toString();
+    qDebug()<<"     earlyStart:"<<QTest::toString( t->earlyStart() );
+    qDebug()<<"      lateStart:"<<QTest::toString( t->lateStart() );
+    qDebug()<<"    earlyFinish:"<<QTest::toString( t->earlyFinish() );
+    qDebug()<<"     lateFinish:"<<QTest::toString( t->lateFinish() );
+    qDebug()<<"      startTime:"<<QTest::toString( t->startTime() );
+    qDebug()<<"        endTime:"<<QTest::toString( t->endTime() );
     switch ( t->constraint() ) {
         case Node::MustStartOn:
         case Node::StartNotEarlier:
-            qDebug()<<"startConstraint:"<<t->constraintStartTime().toString();
+            qDebug()<<"startConstraint:"<<QTest::toString( t->constraintStartTime() );
             break;
         case Node::FixedInterval:
-            qDebug()<<"startConstraint:"<<t->constraintStartTime().toString();
+            qDebug()<<"startConstraint:"<<QTest::toString( t->constraintStartTime() );
         case Node::MustFinishOn:
         case Node::FinishNotLater:
-            qDebug()<<"  endConstraint:"<<t->constraintEndTime().toString();
+            qDebug()<<"  endConstraint:"<<QTest::toString( t->constraintEndTime() );
             break;
         default: break;
     }
@@ -189,10 +199,10 @@ void print( Task *t, bool full = true ) {
     Schedule *s = t->currentSchedule();
     if ( s ) {
         foreach ( Appointment *a, s->appointments() ) {
-            qDebug()<<"Resource:"<<a->resource()->resource()->name()<<"booked:"<<a->startTime().toString()<<a->endTime().toString();
+            qDebug()<<"Resource:"<<a->resource()->resource()->name()<<"booked:"<<QTest::toString( a->startTime() )<<QTest::toString( a->endTime() );
             if ( ! full ) { continue; }
             foreach( const AppointmentInterval &i, a->intervals() ) {
-                qDebug()<<"  "<<i.startTime().toString()<<i.endTime().toString()<<i.load();
+                qDebug()<<"  "<<QTest::toString( i.startTime() )<<QTest::toString( i.endTime() )<<i.load();
             }
         }
     }

@@ -63,6 +63,7 @@ void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect 
     m_context->m_rootLayout->m_values["t"] = rect.y();
     m_context->m_rootLayout->m_values["w"] = rect.width();
     m_context->m_rootLayout->m_values["h"] = rect.height();
+    //m_context->m_rootLayout->m_values["r"] = rect.right();
     //m_context->m_rootLayout->m_values["w"] = m_context->m_rootLayout->m_values["h"] = qMin(rect.width(),rect.height()); // square (not needed cause will be done by the "ar"-dgm:param)
     m_context->m_rootLayout->m_values["ctrX"] = 0.0;
     m_context->m_rootLayout->m_values["ctrY"] = 0.0;
@@ -183,7 +184,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         m_context->m_context->setCurrentNode(m_context->m_context->m_rootPoint);
 
         //for(QMap<QString, Diagram::PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) (*it)->dump(m_context->m_context, 0);
-#if 0
+#if 1
         QFile visGraphFile( "graphDump" );
         visGraphFile.open( QFile::WriteOnly | QFile::Truncate );
         QTextStream visGraph( &visGraphFile );
