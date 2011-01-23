@@ -353,6 +353,7 @@ install( FILES
     Sheet.h
     Style.h
     Value.h
+    ValueConverter.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES
     part/CanvasBase.h
