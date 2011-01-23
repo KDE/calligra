@@ -66,7 +66,11 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 
     m_widgetTree->m_form = 0;
     connect(m_widgetTree, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
+#ifdef __GNUC__
 #warning TODO connect(m_widgetTree, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
+#else
+#pragma WARNING( TODO connect(m_widgetTree, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*))); )
+#endif
 
     QVBoxLayout *vbox = new QVBoxLayout();
     l->addLayout(vbox, 0, 1);
