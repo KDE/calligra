@@ -195,14 +195,6 @@ protected:
 
     KoOdfWriters *m_writers; // Needed to create new relationship for header/footer
 
-    KoGenStyle m_currentTableCellStyle;
-    KoGenStyle m_currentTableCellStyleLeft;
-    KoGenStyle m_currentTableCellStyleRight;
-    KoGenStyle m_currentTableCellStyleTop;
-    KoGenStyle m_currentTableCellStyleBottom;
-    KoGenStyle m_currentTableCellStyleInsideV;
-    KoGenStyle m_currentTableCellStyleInsideH;
-
     enum BorderSide {
         TopBorder, BottomBorder, LeftBorder, RightBorder, InsideH, InsideV
     };

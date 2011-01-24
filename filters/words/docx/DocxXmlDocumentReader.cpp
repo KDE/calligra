@@ -3021,7 +3021,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_shd(shdCaller caller)
             m_currentParagraphStyle.addProperty("fo:background-color", fillColor);
         }
         if (caller == shd_tcPr) {
-            m_currentTableCellStyle.addProperty("fo:background-color", fillColor);
+            m_currentStyleProperties->backgroundColor = fillColor;
+            m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
         }
         if (caller == shd_rPr && val == "clear") {
             if (m_currentTextStyleProperties->background() == QBrush()) {
