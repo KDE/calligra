@@ -62,12 +62,12 @@ DocumentTableStyleConverterProperties::~DocumentTableStyleConverterProperties()
 {
 }
 
-void DocumentTableStyleConverterProperties::setStyleList(QMap<QString, TableStyleProperties*> styleList)
+void DocumentTableStyleConverterProperties::setStyleList(QMap< QString, DocumentTableStyle* > styleList)
 {
     m_styleList = styleList;
 }
 
-QMap<QString, TableStyleProperties*> DocumentTableStyleConverterProperties::styleList() const
+QMap< QString, DocumentTableStyle* > DocumentTableStyleConverterProperties::styleList() const
 {
     return m_styleList;
 }
@@ -90,7 +90,7 @@ void DocumentTableStyleConverter::applyBasedStylesProperties(DocumentTableStyle*
     }
 
     if(!style->baseStyleName().isEmpty()) {
-        TableStyleProperties* baseStyle = m_properties.styleList().value(style->baseStyleName());
+        DocumentTableStyle* baseStyle = m_properties.styleList().value(style->baseStyleName());
         applyBasedStylesProperties(baseStyle, odfStyle, row, column);
     }
 

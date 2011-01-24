@@ -50,11 +50,11 @@ public:
     DocumentTableStyleConverterProperties();
     virtual ~DocumentTableStyleConverterProperties();
 
-    QMap<QString, TableStyleProperties*> styleList() const;
-    void setStyleList(QMap<QString, TableStyleProperties*> styleList);
+    QMap<QString, DocumentTableStyle*> styleList() const;
+    void setStyleList(QMap<QString, DocumentTableStyle*> styleList);
 
 private:
-    QMap<QString, TableStyleProperties*> m_styleList;
+    QMap<QString, DocumentTableStyle*> m_styleList;
 };
 
 class MSOOXML_EXPORT DocumentTableStyleConverter : public TableStyleConverter
