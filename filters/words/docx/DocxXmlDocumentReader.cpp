@@ -4090,6 +4090,7 @@ void DocxXmlDocumentReader::defineTableStyles()
     MSOOXML::DocumentTableStyleConverterProperties converterProperties;
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
+    converterProperties.setStyleList(m_context->m_tableStyles);
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
 
     MSOOXML::DocumentTableStyleConverter styleConverter(converterProperties, m_currentTableStyle);
