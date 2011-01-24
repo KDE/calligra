@@ -221,7 +221,6 @@ protected:
     MSOOXML::DocumentTableStyle* m_currentTableStyle;
     MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
 
-protected:
     MSOOXML::TableStyleProperties* m_currentStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
 
