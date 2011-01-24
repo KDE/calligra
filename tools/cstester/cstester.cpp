@@ -35,6 +35,14 @@
 #include <KoShapePainter.h>
 #include <QPainter>
 
+#include <KWDocument.h>
+#include <KWPage.h>
+#include <frames/KWFrame.h>
+#include <frames/KWFrameSet.h>
+#include <frames/KWTextFrameSet.h>
+#include <frames/KWTextDocumentLayout.h>
+#include <KoTextShapeData.h>
+
 #include <KMimeType>
 #include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
@@ -137,6 +145,77 @@ QPixmap createSpreadsheetThumbnail(Calligra::Tables::Sheet* sheet, const QSize &
     return thumbnail;
 }
 
+QList<QPixmap> createWordsThumbnails(KWDocument *doc, const QSize &thumbSize)
+{
+    KoZoomHandler zoomHandler;
+    QList<KoShape*> shapes;
+    foreach(KWFrameSet *frameSet, doc->frameSets()) {
+        foreach(KWFrame *frame, frameSet->frames()) {
+            KoShape *shape = frame->shape();
+            shapes.append(shape);
+
+            // We need to call waitUntilReady so that the Layout is set on the text shape 
+            // representing the main text frame.
+            shape->waitUntilReady(zoomHandler, false);
+            KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+            if (textShapeData) {
+                // the foul is needed otherwise it does not work
+                textShapeData->foul();
+                KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(textShapeData->document()->documentLayout());
+                if (lay) {
+                    while (textShapeData->isDirty()){
+                        lay->scheduleLayout();
+                        QCoreApplication::processEvents();
+                    }
+                }
+            }
+        }
+    }
+
+    while (!doc->layoutFinishedAtleastOnce()) {
+        QCoreApplication::processEvents();
+
+        if (!QCoreApplication::hasPendingEvents())
+            break;
+    }
+
+    KWPageManager *manager = doc->pageManager();
+
+    // recreate the shape list as they are only created when the shape when the frames are added during first layout
+    shapes.clear();
+    foreach(KWFrameSet* frameSet, doc->frameSets()) {
+        foreach(KWFrame *frame, frameSet->frames()) {
+            shapes.append(frame->shape());
+        }
+    }
+
+    qDebug() << "Shapes" << shapes.size();
+
+    QList<QPixmap> thumbnails;
+
+    KoShapePainter shapePainter;
+    shapePainter.setShapes(shapes);
+    foreach(KWPage page, manager->pages()) {
+        QRectF pRect(page.rect(page.pageNumber()));
+        KoPageLayout layout;
+        layout.width = pRect.width();
+        layout.height = pRect.height();
+
+        setZoom(layout, thumbSize, zoomHandler);
+
+        QPixmap thumbnail(thumbSize);
+        thumbnail.fill(Qt::white);
+        QPainter p(&thumbnail);
+        p.setPen(Qt::black);
+        p.drawRect(pageRect(layout, thumbSize, zoomHandler));
+        shapePainter.paint(p, QRect(QPoint(0,0), thumbSize), pRect);
+
+        thumbnails.append(thumbnail);
+    }
+
+    return thumbnails;
+}
+
 QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
     QList<QPixmap> thumbnails;
@@ -152,6 +231,9 @@ QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
                 thumbnails.append(createSpreadsheetThumbnail(sheet, thumbSize));
             }
         }
+    }
+    else if (KWDocument *doc = qobject_cast<KWDocument*>(document)) {
+        thumbnails = createWordsThumbnails(doc, thumbSize);
     }
 
     return thumbnails;
