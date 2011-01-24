@@ -1024,13 +1024,13 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     //set the minimum height of header/footer to the full margin minus margin above header
     //problem with footer is that it is not possible to say how big the footer is.
     QString header("<style:header-style>");
-    header.append("<style:header-footer-properties fo:margin-bottom=\"");
+    header.append("<style:header-footer-properties fo:margin-top=\"");
     header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
     header.append("pt\" fo:min-height=\"14pt\"/>");
     header.append("</style:header-style>");
 
     QString footer("<style:footer-style>");
-    footer.append("<style:header-footer-properties fo:margin-top=\"");
+    footer.append("<style:header-footer-properties fo:margin-bottom=\"");
     if (sep->dyaBottom > (int)sep->dyaHdrBottom) {
         if ((sep->dyaBottom - sep->dyaHdrBottom) >= 400) {
             footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
