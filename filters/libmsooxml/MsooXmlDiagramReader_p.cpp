@@ -71,6 +71,53 @@ Context::~Context() {
 AbstractNode* Context::currentNode() const { return m_currentNode; }
 void Context::setCurrentNode(AbstractNode* node) { m_currentNode = node; }
 
+qreal ValueCache::rectValue( const QString& name ) const
+{
+    Q_ASSERT( rect.isValid() );
+    if ( name == "l")
+        return rect.left();
+    else if ( name == "r" )
+        return rect.right();
+    else if ( name == "w" )
+        return rect.width();
+    else if ( name == "h" )
+        return rect.height();
+    else if ( name == "t" )
+        return rect.top();
+    else if ( name == "b" )
+        return rect.bottom();
+    else
+        return -1;
+}
+void ValueCache::setRectValue( const QString& name, qreal value )
+{
+    Q_ASSERT( rect.isValid() );
+    if ( name == "l")
+    {
+        rect.moveLeft( value );
+    }
+    else if ( name == "r" )
+        rect.moveRight( value );
+    else if ( name == "w" )
+    {
+        Q_ASSERT( value > 0 );
+        rect.setWidth( value );
+    }
+    else if ( name == "h" )
+    {
+        Q_ASSERT( value > 0 );
+        rect.setHeight(value );
+    }
+    else if ( name == "t" )
+        rect.moveTop( value );
+    else if ( name == "b" )
+        rect.moveBottom(value );
+    Q_ASSERT( rect.isValid() );
+    Q_ASSERT( rect.left() >= 0 );
+    Q_ASSERT( rect.top() >= 0 );
+}
+//void setValue( const QString& name, qreal value );
+
 /****************************************************************************************************/
 
 AbstractNode::AbstractNode(const QString &tagName) : m_tagName(tagName), m_parent(0) {}
@@ -261,6 +308,11 @@ void PointListNode::dump(Context* context, int level) {
     AbstractNode::dump(context, level);
 }
 
+void PointListNode::dump( QTextStream& device )
+{
+    AbstractNode::dump( device );
+}
+
 /****************************************************************************************************/
 
 void PointListNode::readElement(Context* context, MsooXmlDiagramReader* reader) {
@@ -334,6 +386,11 @@ void ConnectionNode::readAll(Context* context, MsooXmlDiagramReader* reader) {
 void ConnectionListNode::dump(Context* context, int level) {
     //DEBUG_DUMP;
     AbstractNode::dump(context, level);
+}
+
+void ConnectionListNode::dump( QTextStream& device ) {
+    //DEBUG_DUMP;
+    AbstractNode::dump( device );
 }
 
 void ConnectionListNode::readElement(Context* context, MsooXmlDiagramReader* reader) {
@@ -1676,6 +1733,7 @@ void AbstractAlgorithm::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qre
     }
     l->m_values["ctrX"] = 0.0;
     l->m_values["ctrY"] = 0.0;
+    //l->m_values["r"] = l->m_values["l"] + l->m_values["w"];
     //l->m_values.remove("ctrX");
     //l->m_values.remove("ctrY");
     removeList << "ctrX" << "ctrY";
@@ -1861,7 +1919,7 @@ void AbstractAlgorithm::virtualDoLayout() {
             if (!c->m_refForName.isEmpty()) {
                 ref = context()->m_layoutMap.value(c->m_refForName);
                 Q_ASSERT(ref);
-                Q_ASSERT(ref != m_layout);
+//                Q_ASSERT(ref != m_layout);
                 if (ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
                     ref->layoutAtom(context());
                     Q_ASSERT(!ref->m_needsReinit);
@@ -1876,12 +1934,13 @@ void AbstractAlgorithm::virtualDoLayout() {
                 if(values.contains(c->m_refType))
                     value = values[c->m_refType];
                 if (value < 0.0) {
-                    Q_ASSERT( ! (ref && ref->algorithmImpl()) );
+                    //Q_ASSERT( ! (ref && ref->algorithmImpl()) );
                     AbstractAlgorithm* r = this;
                     //AbstractAlgorithm* r = layout()->algorithmImpl();
                     //AbstractAlgorithm* r = ref && ref->algorithmImpl() ? ref->algorithmImpl() : this;
 
                     value = r->defaultValue(c->m_refType, values);
+                    qDebug()  << r->name() << "\n";
                     Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg(c->m_type).arg(c->m_refType).toLocal8Bit());
                 }
             } else {
@@ -1994,7 +2053,7 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     QString endPts = layout()->algorithmParam("endPts");
     //if (!begPts.isEmpty() && !endPts.isEmpty()) kDebug()<<"begPts="<<begPts<<"endPts="<<endPts;
 
-    QMap<QString, qreal> srcValues = srcAtom->m_values;
+    ValueCache srcValues = srcAtom->m_values;
     QMap<QString, qreal> dstValues = dstAtom->m_values;
     QMap<QString, qreal> srcFactors = srcAtom->m_factors;
     QMap<QString, qreal> dstFactors = dstAtom->m_factors;
@@ -2271,7 +2330,13 @@ qreal TextAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QStr
         value = values.value("primFontSz") * 0.42;
     } else if (type == "rMarg") {
         value = values.value("primFontSz") * 0.42;
-    }
+    }/* else if ( type == "r" && values.contains( "w" ) ) {
+        value = values["l"] + values["w"];
+    } else if ( type == "l" && values.contains( "r" ) && values.contains( "w" ) ) {
+        value = values["r"] - values["w"];
+    } else if ( type == "l" ) {
+        value =  0;
+    }*/
     return value;
 }
 

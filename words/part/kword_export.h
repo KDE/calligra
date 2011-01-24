@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KWORD_EXPORT
-# if defined(MAKE_KWORDPRIVATE_LIB)
+# if defined(MAKE_WORDSPRIVATE_LIB)
 /* We are building this library */
 #  define KWORD_EXPORT KDE_EXPORT
 # else
@@ -46,7 +46,7 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KWORDPRIVATE_LIB)
+# if defined(MAKE_WORDSPRIVATE_LIB)
 #       define KWORD_TEST_EXPORT KDE_EXPORT
 #   else
 #       define KWORD_TEST_EXPORT KDE_IMPORT

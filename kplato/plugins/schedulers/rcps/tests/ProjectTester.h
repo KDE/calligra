@@ -44,6 +44,11 @@ private slots:
     void startNotEarlier();
 
 private:
+    void initTimezone();
+    void cleanupTimezone();
+    void removeDir(const QString &subdir);
+    QString mDataDir;
+
     Project *m_project;
     Calendar *m_calendar;
     Task *m_task;

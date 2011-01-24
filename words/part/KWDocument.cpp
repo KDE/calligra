@@ -372,11 +372,14 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if (tfs) {
         tfs->setPageManager(pageManager());
-        if (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
-                tfs->textFrameSetType() == KWord::OtherTextFrameSet) {
+        if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
                     this, SLOT(requestMoreSpace(KWTextFrameSet*)));
             connect(tfs, SIGNAL(layoutDone()), this, SLOT(mainTextFrameSetLayoutDone()));
+        }
+        else if (tfs->textFrameSetType() == KWord::OtherTextFrameSet) {
+            connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
+                    this, SLOT(requestMoreSpace(KWTextFrameSet*)));
         }
         else {
             connect(tfs, SIGNAL(decorationFrameResize(KWTextFrameSet*)),
