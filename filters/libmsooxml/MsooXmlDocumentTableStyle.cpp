@@ -99,9 +99,9 @@ void DocumentTableStyleConverter::applyBasedStylesProperties(DocumentTableStyle*
 
 KoCellStyle::Ptr DocumentTableStyleConverter::style(int row, int column)
 {
-    KoCellStyle::Ptr style = KoCellStyle::create();
+    KoCellStyle::Ptr odfStyle = KoCellStyle::create();
 
-    applyBasedStylesProperties(m_style, style, row, column);
+    applyBasedStylesProperties(m_style, odfStyle, row, column);
 
-    return style;
+    return odfStyle;
 }
