@@ -64,6 +64,7 @@ class Cell;
 class CellEditor;
 class CanvasItem;
 class ColumnHeader;
+class Damage;
 class Doc;
 class Sheet;
 class RowHeader;
@@ -115,6 +116,12 @@ public Q_SLOTS:
 
     void refreshSheetViews();
     void setActiveSheet(Sheet* sheet);
+
+    /**
+     * \ingroup Damages
+     * Handles damages that need visual updates.
+     */
+    void handleDamages(const QList<Damage*>& damages);
 Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
 
