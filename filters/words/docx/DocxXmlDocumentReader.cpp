@@ -121,6 +121,8 @@ void DocxXmlDocumentReader::init()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
     m_context = dynamic_cast<DocxXmlDocumentReaderContext*>(context);
+    Q_ASSERT(m_context);
+
     m_createSectionStyle = true;
     kDebug() << "=============================";
     readNext();
