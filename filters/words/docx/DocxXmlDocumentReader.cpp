@@ -3165,42 +3165,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
 {
     READ_PROLOGUE
 
-    QString side = QString();
+    const QXmlStreamAttributes attrs(attributes());
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                side = "top";
+                READ_ATTR(w)
+                m_currentStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
             }
             else if (QUALIFIED_NAME_IS(left)) {
-                side = "left";
+                READ_ATTR(w)
+                m_currentStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                side = "bottom";
+                READ_ATTR(w)
+                m_currentStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                side = "right";
-            }
-            else {
-                side = QString();
-            }
-        }
-        if (!(side == QString())) {
-            const QXmlStreamAttributes attrs(attributes());
-            TRY_READ_ATTR(w)
-            if (!w.isEmpty()) {
-                bool ok;
-                const qreal distance = qreal(TWIP_TO_POINT(w.toDouble(&ok)));
-                if (ok) {
-                    m_currentTableCellStyleLeft.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleRight.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleBottom.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleTop.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideV.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideH.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                }
+                READ_ATTR(w)
+                m_currentStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
             }
         }
     }
