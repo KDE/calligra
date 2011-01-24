@@ -50,6 +50,7 @@ class Task;
 class ScheduleManager;
 class XMLLoaderObject;
 class SchedulerPlugin;
+class KPlatoXmlLoaderBase;
 
 /**
  * The Schedule class holds data calculated during project
@@ -238,7 +239,7 @@ public:
 protected:
     virtual void changed( Schedule * /*sch*/ ) {}
     
-public: // temporary
+protected:
     QString m_name;
     Type m_type;
     long m_id;
@@ -257,7 +258,7 @@ public: // temporary
     friend class Resource;
     friend class RecalculateProjectCmd;
     friend class ScheduleManager;
-    friend class KPlatoXmlLoader;
+    friend class KPlatoXmlLoaderBase;
     /**
       * earlyStart is calculated by PERT/CPM.
       * A task may be scheduled to start later because of constraints
