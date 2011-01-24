@@ -28,6 +28,8 @@
 
 class KoGenStyles;
 
+#include <QMap>
+
 /**
 *   The following classes deal with the creation of the table styles part,
 *   specifically, we deal with the elements that start at the a:tblStyleLst §20.1.4.2.27,
@@ -40,10 +42,10 @@ class MsooXmlImport;
 class MSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path, const QString& _file, MSOOXML::DrawingMLTheme* _themes, MSOOXML::TableStyleList* _styleList, QMap< QString, QString > _colorMap);
+    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path, const QString& _file, MSOOXML::DrawingMLTheme* _themes, QMap< QString, MSOOXML::DrawingTableStyle* >* _styleList, QMap< QString, QString > _colorMap);
     virtual ~MsooXmlDrawingTableStyleContext();
 
-    TableStyleList* styleList;
+    QMap<QString, MSOOXML::DrawingTableStyle*>* styleList;
 
     //Those members are used by some methods included
     MsooXmlImport* import;
@@ -97,7 +99,7 @@ protected:
 private:
     MsooXmlDrawingTableStyleContext* m_context;
 
-    TableStyle m_currentStyle;
+    DrawingTableStyle* m_currentStyle;
     KoBorder::BorderData m_currentBorder;
     TableStyleProperties* m_currentTableStyleProperties;
 };

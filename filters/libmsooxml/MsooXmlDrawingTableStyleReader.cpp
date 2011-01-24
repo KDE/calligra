@@ -42,6 +42,10 @@ using namespace MSOOXML;
 
 MsooXmlDrawingTableStyleReader::MsooXmlDrawingTableStyleReader(KoOdfWriters* writers)
 : MsooXmlCommonReader(writers)
+, m_context(0)
+, m_currentStyle(0)
+, m_currentBorder()
+, m_currentTableStyleProperties()
 {
 }
 
@@ -49,7 +53,7 @@ MsooXmlDrawingTableStyleReader::~MsooXmlDrawingTableStyleReader()
 {
 }
 
-MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport* _import, const QString& _path, const QString& _file, DrawingMLTheme* _themes, TableStyleList* _styleList, QMap< QString, QString > _colorMap)
+MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport* _import, const QString& _path, const QString& _file, DrawingMLTheme* _themes, QMap< QString, DrawingTableStyle* >* _styleList, QMap< QString, QString > _colorMap)
 : styleList(_styleList)
 , import(_import)
 , path(_path)
@@ -103,6 +107,8 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
 {
     READ_PROLOGUE
 
+    m_currentStyle = new DrawingTableStyle;
+
     QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(styleId)
 
@@ -129,8 +135,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
         }
     }
 
-    m_context->styleList->insertStyle(styleId, m_currentStyle);
-    m_currentStyle = TableStyle();
+    m_context->styleList->insert(styleId, m_currentStyle);
 
     READ_EPILOGUE
 }
@@ -153,7 +158,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band1H()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::Band1Horizontal, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::Band1Horizontal, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -176,7 +181,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band1V()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::Band1Vertical, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::Band1Vertical, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 
@@ -200,7 +205,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band2H()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::Band2Horizontal, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::Band2Horizontal, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -223,7 +228,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band2V()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::Band2Horizontal, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::Band2Horizontal, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -246,7 +251,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_firstCol()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::FirstCol, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::FirstCol, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -269,7 +274,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_firstRow()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::FirstRow, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::FirstRow, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -292,7 +297,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_lastCol()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::LastCol, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::LastCol, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -315,7 +320,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_lastRow()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::LastRow, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::LastRow, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -338,7 +343,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_neCell()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::NeCell, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::NeCell, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -361,7 +366,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_nwCell()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::NwCell, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::NwCell, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -384,7 +389,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_seCell()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::SeCell, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::SeCell, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -407,7 +412,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_swCell()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::SwCell, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::SwCell, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -430,7 +435,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
         }
     }
 
-    m_currentStyle.addProperties(TableStyle::WholeTbl, m_currentTableStyleProperties);
+    m_currentStyle->addProperties(DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
