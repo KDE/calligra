@@ -190,6 +190,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 #endif
 
+    m_referredFont = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -967,6 +969,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
     // to write after the child elements are generated
     body = drawFrameBuf.setWriter(body);
+
+    m_referredFont = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1055,6 +1060,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     // to write after the child elements are generated
     body = drawFrameBuf.setWriter(body);
 
+    m_referredFont = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1112,7 +1119,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
  Child elements:
  - effectRef (Effect Reference) §20.1.4.2.8
  - [done] fillRef (Fill Reference) §20.1.4.2.10
- . fontRef (Font Reference) §20.1.4.1.17
+ . [done] fontRef (Font Reference) §20.1.4.1.17
  - [done] lnRef (Line Reference) §20.1.4.2.19
 
 */
@@ -1128,6 +1135,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
         if (isStartElement()) {
             TRY_READ_IF_NS(a, fillRef)
             ELSE_TRY_READ_IF_NS(a, lnRef)
+            ELSE_TRY_READ_IF_NS(a, fontRef)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1393,8 +1401,68 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL fontRef
+//! fontRef handler (Font reference)
+/*
+ Parent elements:
+ - [done] style (§21.3.2.24);
+ - [done] style (§21.4.2.28);
+ - [done] style (§20.1.2.2.37);
+ - [done] style (§20.5.2.31);
+ - [done] style (§19.3.1.46);
+ - tcTxStyle (§20.1.4.2.30)
+
+ Child elements:
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fontRef()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+
+    if (!idx.isEmpty()) {
+        QString font;
+        if (idx.startsWith("major")) {
+            font = m_context->themes->fontScheme.majorFonts.latinTypeface;
+        }
+        else if (idx.startsWith("minor")) {
+           font = m_context->themes->fontScheme.minorFonts.latinTypeface;
+        }
+        m_referredFont.addProperty("fo:font-family", font);
+    }
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(prstClr)
+            SKIP_UNKNOWN
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+    if (m_currentColor.isValid()) {
+        m_referredFont.addProperty("fo:color", m_currentColor.name());
+        m_currentColor = QColor();
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL lnRef
-//! fillREf handler (Line reference)
+//! fillRef handler (Line reference)
 /*
  Parent elements:
  - [done] style (§21.3.2.24);
@@ -1601,13 +1669,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
+#endif
     if (!rRead) {
+#ifdef PPTXXMLSLIDEREADER_CPP
         // We are inheriting to paragraph's text-properties because there is no text
         // and thus m_currentTextStyle is not used
         inheritDefaultTextStyle(m_currentParagraphStyle);
         inheritTextStyle(m_currentParagraphStyle);
-    }
 #endif
+    }
 
     body = textPBuf.originalWriter();
     if (m_listStylePropertiesAltered || m_previousListWasAltered) {
@@ -1773,6 +1843,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     inheritTextStyle(m_currentTextStyle);
 #endif
 
+    MSOOXML::Utils::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -1818,17 +1890,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
-}
-
-static QFont::Capitalization capToOdf(const QString& cap)
-{
-    if (cap == QLatin1String("small")) {
-        return QFont::SmallCaps;
-    }
-    else if (cap == QLatin1String("all")) {
-        return QFont::AllUppercase;
-    }
-    return QFont::MixedCase;
 }
 
 #undef CURRENT_EL
@@ -1918,7 +1979,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentTextStyleProperties->setForeground(m_currentColor);
+        m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
         m_currentColor = QColor();
     }
 
@@ -1936,7 +1997,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 
     TRY_READ_ATTR_WITHOUT_NS(cap);
     if (!cap.isEmpty()) {
-        m_currentTextStyleProperties->setFontCapitalization(capToOdf(cap));
+        if (cap == QLatin1String("small")) {
+            m_currentTextStyle.addProperty("fo:font-variant", "small-caps");
+        }
+        else if (cap == QLatin1String("all")) {
+            m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
+        }
     }
 
     TRY_READ_ATTR_WITHOUT_NS(spc)
@@ -3093,7 +3159,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
         else if (typeface.startsWith("+mn")) {
            font = m_context->themes->fontScheme.minorFonts.latinTypeface;
         }
-        m_currentTextStyleProperties->setFontFamily(font);
+        m_currentTextStyle.addProperty("fo:font-family", font);
     }
     TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
     if (!pitchFamily.isEmpty()) {
@@ -3691,7 +3757,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 #if defined(PPTXXMLSLIDEREADER_CPP) or defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
 
     QString valTransformed = m_context->colorMap.value(val);
-    colorItem = m_context->themes->colorScheme.value(valTransformed);
+
+    if (valTransformed.isEmpty()) {
+        // In some cases, such as fontRef, mapping is bypassed
+        colorItem = m_context->themes->colorScheme.value(val);
+    } else {
+        colorItem = m_context->themes->colorScheme.value(valTransformed);
+    }
 #else
     // This should most likely be checked from a color map, see above
     colorItem = m_context->themes->colorScheme.value(val);
@@ -4782,6 +4854,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     inheritTextStyle(m_currentTextStyle);
 #endif
 
+    MSOOXML::Utils::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -5204,7 +5278,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentTextStyleProperties->setForeground(m_currentColor);
+        m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
         m_currentColor = QColor();
     }
 
@@ -5226,7 +5300,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 
     TRY_READ_ATTR_WITHOUT_NS(cap);
     if (!cap.isEmpty()) {
-        m_currentTextStyleProperties->setFontCapitalization(capToOdf(cap));
+        if (cap == QLatin1String("small")) {
+            m_currentTextStyle.addProperty("fo:font-variant", "small-caps");
+        }
+        else if (cap == QLatin1String("all")) {
+            m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
+        }
     }
 
     TRY_READ_ATTR_WITHOUT_NS(spc)
