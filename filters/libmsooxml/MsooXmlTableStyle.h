@@ -43,7 +43,11 @@ struct MSOOXML_EXPORT TableStyleProperties
         Tl2brBorder = 32,
         TopBorder = 64,
         Tr2blBorder = 128,
-        BackgroundColor = 256
+        BackgroundColor = 256,
+        TopMargin = 512,
+        RightMargin = 1024,
+        BottomMargin = 2048,
+        LeftMargin = 4096
     };
     Q_DECLARE_FLAGS(Properties, Property)
     Properties setProperties;
@@ -58,6 +62,11 @@ struct MSOOXML_EXPORT TableStyleProperties
     KoBorder::BorderData tr2bl;
 
     QColor backgroundColor;
+
+    qreal topMargin;
+    qreal rightMargin;
+    qreal bottomMargin;
+    qreal leftMargin;
 };
 
 class MSOOXML_EXPORT TableStyle
