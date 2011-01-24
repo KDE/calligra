@@ -4451,7 +4451,35 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 delete body;
                 body = oldBody;
             }
-//             ELSE_TRY_READ_IF(tbl)
+            else if(QUALIFIED_NAME_IS(tbl)) {
+                KoTable* currentTable = m_table;
+                int currentRow =  m_currentTableRowNumber;
+                int currentColumn = m_currentTableColumnNumber;
+                MSOOXML::TableStyleProperties* currentDefaultCellStyle = m_currentDefaultCellStyle;
+                MSOOXML::TableStyleProperties* currentStyleProperties = m_currentStyleProperties;
+                MSOOXML::LocalTableStyles* currentLocalStyles = m_currentLocalTableStyles;
+                QString currentTableStyle = m_currentTableStyle;
+                KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+
+                QBuffer* buffer = new QBuffer;
+                KoXmlWriter* oldBody = body;
+                body = new KoXmlWriter(buffer, oldBody->indentLevel()+1);
+
+                TRY_READ(tbl)
+
+                KoRawCellChild* textChild = new KoRawCellChild(buffer);
+                cell->appendChild(textChild);
+                delete body;
+                body = oldBody;
+
+                m_table = currentTable;
+                m_currentTableRowNumber = currentRow;
+                m_currentTableColumnNumber = currentColumn;
+                m_currentDefaultCellStyle = currentDefaultCellStyle;
+                m_currentStyleProperties = currentStyleProperties;
+                m_currentLocalTableStyles = currentLocalStyles;
+                m_currentTableStyle = currentTableStyle;
+            }
             else if(QUALIFIED_NAME_IS(tblPr)) {
                 TRY_READ(tblPr)
                 m_currentLocalTableStyles->setLocalStyle(m_currentStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
