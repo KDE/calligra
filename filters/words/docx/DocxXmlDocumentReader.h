@@ -45,6 +45,7 @@ namespace MSOOXML
 class MsooXmlRelationships;
 class DocumentTableStyle;
 class TableStyleProperties;
+class LocalTableStyles;
 }
 
 class KoTable;
@@ -218,6 +219,7 @@ protected:
 
     KoTable* m_table;
     MSOOXML::DocumentTableStyle* m_currentTableStyle;
+    MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
 
 protected:
     MSOOXML::TableStyleProperties* m_currentStyleProperties;

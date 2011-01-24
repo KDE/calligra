@@ -4050,6 +4050,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     m_currentDefaultCellStyle = 0;
     m_currentStyleProperties = 0;
+    m_currentLocalTableStyles = new MSOOXML::LocalTableStyles;
+
     m_currentTableStyle = 0;
 
     while (!atEnd()) {
@@ -4088,6 +4090,7 @@ void DocxXmlDocumentReader::defineTableStyles()
     MSOOXML::DocumentTableStyleConverterProperties converterProperties;
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
+    converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
 
     MSOOXML::DocumentTableStyleConverter styleConverter(converterProperties, m_currentTableStyle);
     for(int row = 0; row < rowCount; ++row ) {
@@ -4440,7 +4443,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 body = oldBody;
             }
 //             ELSE_TRY_READ_IF(tbl)
-            ELSE_TRY_READ_IF(tcPr)
+            else if(QUALIFIED_NAME_IS(tblPr)) {
+                TRY_READ(tblPr)
+                m_currentLocalTableStyles->setLocalStyle(m_currentStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
+                m_currentStyleProperties = 0;
+            }
 //             ELSE_TRY_READ_IF(bookmarkStart)
 //             ELSE_TRY_READ_IF(bookmarkEnd)
 //! @todo add ELSE_WRONG_FORMAT
