@@ -34,6 +34,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
+#include <KoBorder.h>
 
 //#define NO_DRAWINGML_PICTURE // disables pic:pic, etc. in MsooXmlCommonReader
 
@@ -42,10 +43,11 @@ class DocxXmlDocumentReaderContext;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
+class DocumentTableStyle;
+class TableStyleProperties;
 }
 
 class KoTable;
-class TableStyleProperties;
 
 //! A class reading MSOOXML DOCX markup - document.xml part.
 class DocxXmlDocumentReader : public MSOOXML::MsooXmlCommonReader
@@ -223,7 +225,12 @@ protected:
     QMap<QString, BorderSide> m_textBorderPaddings;
 
     KoTable* m_table;
-    TableStyleProperties* m_currentStyleProperties;
+    MSOOXML::DocumentTableStyle* m_tableStyle;
+
+protected:
+    MSOOXML::TableStyleProperties* m_currentStyleProperties;
+    MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
+
 
 private:
     void init();
@@ -232,6 +239,9 @@ private:
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
     KoFilter::ConversionStatus readBorderElement(BorderSide borderSide, const char *borderSideName);
+
+    ///reads the border in a table style
+    KoBorder::BorderData getBorderData();
 
     //! Creates border style for readBorderElement().
     //! Result is added to m_borderStyles and m_borderPaddings
@@ -323,6 +333,8 @@ public:
     QMap<QString, QString> m_comments;
 
     QMap<QString, QString> m_endnotes;
+
+    QMap<QString, MSOOXML::DocumentTableStyle*> m_tableStyles;
 
 private:
 };

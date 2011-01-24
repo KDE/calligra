@@ -38,6 +38,9 @@
 #include <ChartExport.h>
 #include <XlsxXmlChartReader.h>
 
+#include <MsooXmlDocumentTableStyle.h>
+#include <MsooXmlTableStyle.h>
+
 #define MSOOXML_CURRENT_NS "w"
 #define MSOOXML_CURRENT_CLASS DocxXmlDocumentReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
@@ -3224,75 +3227,66 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
 {
     READ_PROLOGUE
 
-    m_borderStyles.clear();
-    m_borderPaddings.clear();
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
-                if (!m_borderStyles.key(TopBorder).isEmpty()) {
-                    m_currentTableCellStyleTop.addProperty("fo:border-top", m_borderStyles.key(TopBorder), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(TopBorder).isEmpty()) {
-                    m_currentTableCellStyleTop.addProperty("fo:padding-top", m_borderPaddings.key(TopBorder), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->top = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
             }
             else if (QUALIFIED_NAME_IS(left)) {
-                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
-                if (!m_borderStyles.key(LeftBorder).isEmpty()) {
-                    m_currentTableCellStyleLeft.addProperty("fo:border-left", m_borderStyles.key(LeftBorder), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(LeftBorder).isEmpty()) {
-                    m_currentTableCellStyleLeft.addProperty("fo:padding-left", m_borderPaddings.key(LeftBorder), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->left = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftBorder;
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
-                if (!m_borderStyles.key(BottomBorder).isEmpty()) {
-                    m_currentTableCellStyleBottom.addProperty("fo:border-bottom", m_borderStyles.key(BottomBorder), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(BottomBorder).isEmpty()) {
-                    m_currentTableCellStyleBottom.addProperty("fo:padding-bottom", m_borderPaddings.key(BottomBorder), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->bottom = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
-                if (!m_borderStyles.key(RightBorder).isEmpty()) {
-                    m_currentTableCellStyleRight.addProperty("fo:border-right", m_borderStyles.key(RightBorder), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(RightBorder).isEmpty()) {
-                    m_currentTableCellStyleRight.addProperty("fo:padding-right", m_borderPaddings.key(RightBorder), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->right = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightBorder;
             }
             else if (QUALIFIED_NAME_IS(insideV)) {
-                RETURN_IF_ERROR(readBorderElement(InsideV, "insideV"));
-                if (!m_borderStyles.key(InsideV).isEmpty()) {
-                    m_currentTableCellStyleInsideV.addProperty("fo:border-left", m_borderStyles.key(InsideV), KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideV.addProperty("fo:border-right", m_borderStyles.key(InsideV), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(InsideV).isEmpty()) {
-                    m_currentTableCellStyleInsideV.addProperty("fo:padding-left", m_borderPaddings.key(InsideV), KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideV.addProperty("fo:padding-right", m_borderPaddings.key(InsideV), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->insideV = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
             }
             else if (QUALIFIED_NAME_IS(insideH)) {
-                RETURN_IF_ERROR(readBorderElement(InsideH, "insideH"));
-                if (!m_borderStyles.key(InsideH).isEmpty()) {
-                    m_currentTableCellStyleInsideH.addProperty("fo:border-top", m_borderStyles.key(InsideH), KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideH.addProperty("fo:border-bottom", m_borderStyles.key(InsideH), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(InsideH).isEmpty()) {
-                    m_currentTableCellStyleInsideH.addProperty("fo:padding-top", m_borderPaddings.key(InsideH), KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideH.addProperty("fo:padding-bottom", m_borderPaddings.key(InsideH), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->insideH = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
             }
         }
     }
 
     READ_EPILOGUE
+}
+
+KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
+{
+    const QXmlStreamAttributes attrs(attributes());
+
+    KoBorder::BorderData borderData;
+
+    borderData.style = KoBorder::BorderSolid; //FIXME: respect other styles
+
+    QString themeColor = attrs.value(QUALIFIED_NAME(themeColor)).toString();
+
+    if(!themeColor.isEmpty()) {
+        MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+        colorItem = m_context->themes->colorScheme.value(themeColor);
+        if (colorItem) {
+            borderData.color = colorItem->value();
+        }
+    }
+    else {
+        QString color = attrs.value(QUALIFIED_NAME(color)).toString();
+        borderData.color = QColor(QString("#").append(color));
+    }
+
+    QString width = attrs.value(QUALIFIED_NAME(sz)).toString();
+    borderData.width = width.toDouble() / 8;
+
+    return borderData;
 }
 
 #undef CURRENT_EL
@@ -4061,11 +4055,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentTableRowNumber = 0;
     m_currentTableColumnNumber = 0;
 
+    m_currentDefaultCellStyle = 0;
+    m_currentStyleProperties = 0;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(tblPr)
+            if(QUALIFIED_NAME_IS(tblGrid)) {
+                TRY_READ(tblPr)
+                m_currentDefaultCellStyle = m_currentStyleProperties;
+                m_currentStyleProperties = 0;
+            }
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
 //             ELSE_TRY_READ_IF(bookmarkStart)
@@ -4122,13 +4123,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
 {
     READ_PROLOGUE
 
+    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //             TRY_READ_IF(tblStyle)
             /*ELSE_*/TRY_READ_IF(tblBorders)
-//             ELSE_TRY_READ_IF(tblCellMar)
+            ELSE_TRY_READ_IF(tblCellMar)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
