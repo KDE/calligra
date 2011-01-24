@@ -167,6 +167,7 @@ DrawingTableStyle::DrawingTableStyle()
 
 DrawingTableStyle::~DrawingTableStyle()
 {
+//     FIXME: we crash because of this.
 //     qDeleteAll(m_properties.values());
 }
 
