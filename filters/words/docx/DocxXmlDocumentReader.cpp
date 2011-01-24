@@ -3260,7 +3260,7 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
 
     borderData.style = KoBorder::BorderSolid; //FIXME: respect other styles
 
-    QString themeColor = attrs.value(QUALIFIED_NAME(themeColor)).toString();
+    TRY_READ_ATTR(themeColor)
 
     if(!themeColor.isEmpty()) {
         MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
@@ -3269,13 +3269,16 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
             borderData.color = colorItem->value();
         }
     }
-    else {
-        QString color = attrs.value(QUALIFIED_NAME(color)).toString();
-        borderData.color = QColor(QString("#").append(color));
+
+    //No themeColor or not valid color, fallback to the color attribute
+    if(!borderData.color.isValid()) {
+        TRY_READ_ATTR(color)
+        QString colorString = QString("#").append(color);
+        borderData.color = QColor(colorString);
     }
 
-    QString width = attrs.value(QUALIFIED_NAME(sz)).toString();
-    borderData.width = width.toDouble() / 8;
+    TRY_READ_ATTR(sz)
+    borderData.width = sz.toDouble() / 8.0;
 
     return borderData;
 }
@@ -4215,7 +4218,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
 
     TRY_READ_ATTR(w)
 
-    const qreal columnWidth = EMU_TO_POINT(w.toFloat());
+    const qreal columnWidth = w.toFloat() / 20.0;
 
     KoColumn* column = m_table->columnAt(m_currentTableColumnNumber++);
     KoColumnStyle::Ptr style = KoColumnStyle::create();
