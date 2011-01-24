@@ -18,11 +18,9 @@ DrawingTableStyleInstanceProperties::Roles DrawingTableStyleInstanceProperties::
     return m_role;
 }
 
-DrawingTableStyleInstanceProperties& DrawingTableStyleInstanceProperties::setRoles(DrawingTableStyleInstanceProperties::Roles roles)
+void DrawingTableStyleInstanceProperties::setRoles(DrawingTableStyleInstanceProperties::Roles roles)
 {
     m_role = roles;
-
-    return *this;
 }
 
 DrawingTableStyleInstance::DrawingTableStyleInstance(DrawingTableStyle* style, DrawingTableStyleInstanceProperties properties)

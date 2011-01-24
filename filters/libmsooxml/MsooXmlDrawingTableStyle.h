@@ -105,7 +105,7 @@ public:
     };
     Q_DECLARE_FLAGS(Roles, Role)
 
-    DrawingTableStyleInstanceProperties& setRoles(Roles roles);
+    void setRoles(Roles roles);
     Roles roles() const;
 
 private:
