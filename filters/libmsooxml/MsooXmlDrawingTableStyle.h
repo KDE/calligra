@@ -119,7 +119,7 @@ private:
 class MSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
-    DrawingTableStyleConverter(DrawingTableStyleConverterProperties properties, DrawingTableStyle* style =0);
+    DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
     virtual ~DrawingTableStyleConverter();
 
     KoCellStyle::Ptr style(int row, int column);
@@ -127,8 +127,8 @@ public:
 private:
     void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
 
-    DrawingTableStyle* m_style;
-    DrawingTableStyleConverterProperties m_properties;
+    DrawingTableStyle * const m_style;
+    DrawingTableStyleConverterProperties const& m_properties;
 };
 
 }
