@@ -79,6 +79,7 @@ KoFilter::ConversionStatus read_alpha();
 
 KoFilter::ConversionStatus read_satMod();
 KoFilter::ConversionStatus read_tile();
+KoFilter::ConversionStatus read_srcRect();
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
 KoFilter::ConversionStatus read_graphicData();
@@ -128,6 +129,8 @@ KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();
 KoFilter::ConversionStatus read_shade();
 KoFilter::ConversionStatus read_ln();
+KoFilter::ConversionStatus read_effectLst();
+KoFilter::ConversionStatus read_outerShdw();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
 
