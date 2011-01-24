@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 - 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -108,8 +108,12 @@ KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::AppointmentInte
  * The intervals do not overlap, an interval does not start before the
  * previous interval ends.
  */
-class KPLATOKERNEL_EXPORT AppointmentIntervalList : public QMultiMap<QDate, AppointmentInterval> {
+class KPLATOKERNEL_EXPORT AppointmentIntervalList
+{
 public:
+    AppointmentIntervalList();
+    AppointmentIntervalList( const QMultiMap<QDate, AppointmentInterval> &other );
+
     /// Add @p interval to the list. Handle overlapping with existsing intervals.
     void add( const AppointmentInterval &interval );
     /// Add an interval to the list. Handle overlapping with existsing intervals.
@@ -131,8 +135,17 @@ public:
     /// Return the effort limited to the interval @p start, @p end
     Duration effort(const DateTime &start, const DateTime &end) const;
 
+    QMultiMap<QDate, AppointmentInterval> map();
+    const QMultiMap<QDate, AppointmentInterval> &map() const;
+    bool isEmpty() const { return m_map.isEmpty(); }
+    void clear() { m_map.clear(); }
+
 protected:
+    void subtract( const AppointmentInterval &interval );
     void subtract( const DateTime &st, const DateTime &et, double load );
+
+private:
+    QMultiMap<QDate, AppointmentInterval> m_map;
 };
 KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::AppointmentIntervalList& i );
 
@@ -191,8 +204,8 @@ public:
     void setIntervals(const AppointmentIntervalList &lst);
     
     const AppointmentIntervalList &intervals() const { return m_intervals; }
-    int count() const { return m_intervals.count(); }
-    AppointmentInterval intervalAt( int index ) const { return m_intervals.values().value( index ); }
+    int count() const { return m_intervals.map().count(); }
+    AppointmentInterval intervalAt( int index ) const { return m_intervals.map().values().value( index ); }
     /// Return intervals between @p start and @p end
     AppointmentIntervalList intervals( const DateTime &start, const DateTime &end ) const;
 

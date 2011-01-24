@@ -6559,8 +6559,8 @@ bool SEP::read(OLEStreamReader *stream, bool preservePos) {
     yaPage=stream->readU16();
     dxaLeft=stream->readU16();
     dxaRight=stream->readU16();
-    dyaTop=stream->readU16();
-    dyaBottom=stream->readU16();
+    dyaTop=stream->readS16();
+    dyaBottom=stream->readS16();
     dzaGutter=stream->readU16();
     dmBinFirst=stream->readU16();
     dmBinOther=stream->readU16();

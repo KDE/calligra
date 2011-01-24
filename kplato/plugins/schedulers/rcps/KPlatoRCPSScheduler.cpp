@@ -484,7 +484,11 @@ void KPlatoRCPSScheduler::taskFromRCPSForward( struct rcps_job *job, Task *task,
         if ( task->appointmentEndTime().isValid() ) {
             task->setEndTime( task->appointmentEndTime() );
         }
-    } else if ( task->estimate()->calendar() ) {
+        if ( info && info->requests.isEmpty() ) {
+            cs->setResourceError( true );
+            cs->logError( i18n( "No resource has been allocated" ), 1 );
+        }
+   } else if ( task->estimate()->calendar() ) {
         DateTime t = task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() );
         if ( t.isValid() ) {
             task->setStartTime( t );
@@ -619,16 +623,13 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
     if ( task->estimate()->type() == Estimate::Type_Effort ) {
         if ( task->appointmentStartTime().isValid() ) {
             task->setStartTime( task->appointmentStartTime() );
-        } else {
-            task->setStartTime( task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() ) );
         }
         if ( task->appointmentEndTime().isValid() ) {
             task->setEndTime( task->appointmentEndTime() );
-        } else  {
-            task->setEndTime( task->estimate()->calendar()->firstAvailableBefore( task->endTime(), task->startTime() ) );
         }
-        if ( info->requests.isEmpty() ) {
-            cs->resourceError = true;
+        if ( info && info->requests.isEmpty() ) {
+            cs->setResourceError( true );
+            cs->logError( i18n( "No resource has been allocated" ), 1 );
         }
     } else if ( task->estimate()->calendar() ) {
         DateTime t = task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() );
@@ -676,7 +677,7 @@ void KPlatoRCPSScheduler::kplatoFromRCPSBackward()
     m_project->setEndTime( end );
     cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( projectstart ), locale()->formatDateTime( end ) ), 1 );
     if ( projectstart < m_project->constraintStartTime() ) {
-        cs->schedulingError = true;
+        cs->setSchedulingError( true );
         cs->logError( i18n( "Must start project early in order to finish in time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 1 );
     }
     adjustSummaryTasks( m_schedule->summaryTasks() );
@@ -718,6 +719,7 @@ void KPlatoRCPSScheduler::calculatePertValues( const QMap<Node*, QList<ResourceR
         if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
             continue;
         }
+        Task *t = static_cast<Task*>( n );
         if ( n->isStartNode() ) {
             (void)calculateLateStuff( map, static_cast<Task*>( n ) );
         }
@@ -728,22 +730,22 @@ void KPlatoRCPSScheduler::calculatePertValues( const QMap<Node*, QList<ResourceR
             case Node::StartNotEarlier:
             case Node::MustStartOn:
             case Node::FixedInterval:
-                n->schedule()->negativeFloat = n->startTime() > n->constraintStartTime()
+                n->schedule()->setNegativeFloat( n->startTime() > n->constraintStartTime()
                             ? n->startTime() - n->constraintStartTime()
-                            :  n->constraintStartTime() - n->startTime();
+                            :  n->constraintStartTime() - n->startTime() );
                 break;
             case Node::FinishNotLater:
             case Node::MustFinishOn:
-                n->schedule()->negativeFloat = n->endTime() > n->constraintEndTime()
+                n->schedule()->setNegativeFloat( n->endTime() > n->constraintEndTime()
                                 ? n->endTime() - n->constraintEndTime()
-                                : n->constraintEndTime() - n->endTime();
+                                : n->constraintEndTime() - n->endTime() );
                 break;
             default:
                 break;
         }
-        if ( n->schedule()->negativeFloat != 0 ) {
-            n->schedule()->schedulingError = true;
-            n->schedule()->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", n->constraintToString( true ), n->schedule()->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+        if ( t->negativeFloat() != 0 ) {
+            n->schedule()->setSchedulingError( true );
+            n->schedule()->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", n->constraintToString( true ), t->negativeFloat().toString( Duration::Format_i18nHour ) ) );
         }
 
     }

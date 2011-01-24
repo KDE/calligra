@@ -94,6 +94,7 @@
 #include "Validity.h"
 #include "ValueConverter.h"
 #include "ValueStorage.h"
+#include "database/Filter.h"
 
 namespace Calligra
 {
@@ -3313,6 +3314,31 @@ void Sheet::convertObscuringBorders()
         }
     }
 #endif
+}
+
+void Sheet::applyDatabaseFilter(const Database &database)
+{
+    Sheet* const sheet = database.range().lastSheet();
+    const QRect range = database.range().lastRange();
+    const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
+    const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
+    for (int i = start + 1; i <= end; ++i) {
+        const bool isFiltered = !database.filter().evaluate(database, i);
+//         kDebug() <<"Filtering column/row" << i <<"?" << isFiltered;
+        if (database.orientation() == Qt::Vertical) {
+            sheet->rowFormats()->setFiltered(i, i, isFiltered);
+        } else { // database.orientation() == Qt::Horizontal
+            sheet->nonDefaultColumnFormat(i)->setFiltered(isFiltered);
+        }
+    }
+    if (database.orientation() == Qt::Vertical)
+        sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::RowsChanged));
+    else // database.orientation() == Qt::Horizontal
+        sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::ColumnsChanged));
+
+    cellStorage()->setDatabase(database.range(), Database());
+    cellStorage()->setDatabase(database.range(), database);
+    map()->addDamage(new CellDamage(this, database.range(), CellDamage::Appearance));
 }
 
 /**********************

@@ -91,7 +91,7 @@ bool PqxxMigrate::drv_readTableSchema(
     //Perform a query on the table to get some data
     kDebug();
     tableSchema.setName(originalName);
-    if (!query("select * from \"" + originalName + "\" limit 1"))
+    if (!query("select * from " + drv_escapeIdentifier(originalName) + " limit 1"))
         return false;
     //Loop round the fields
     for (uint i = 0; i < (uint)m_res->columns(); i++) {
