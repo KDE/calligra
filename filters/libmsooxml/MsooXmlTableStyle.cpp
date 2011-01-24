@@ -206,26 +206,6 @@ QString TableStyle::id() const
     return m_id;
 }
 
-
-TableStyleList::TableStyleList()
-: m_styles()
-{
-}
-
-TableStyleList::~TableStyleList()
-{
-}
-
-TableStyle* TableStyleList::tableStyle(const QString& id) const
-{
-    return m_styles.value(id);
-}
-
-void TableStyleList::insertStyle(QString id, TableStyle* style)
-{
-    m_styles.insert(id, style);
-}
-
 LocalTableStyles::LocalTableStyles()
 {
 }

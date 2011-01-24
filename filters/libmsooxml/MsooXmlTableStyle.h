@@ -55,19 +55,6 @@ private:
     QString m_id;
 };
 
-class MSOOXML_EXPORT TableStyleList
-{
-public:
-    TableStyleList();
-    ~TableStyleList();
-
-    TableStyle* tableStyle(const QString& id) const;
-    void insertStyle(QString id, MSOOXML::TableStyle* style);
-
-private:
-    QMap<QString, TableStyle*> m_styles;
-};
-
 /// Instantiation classes
 
 class MSOOXML_EXPORT LocalTableStyles
