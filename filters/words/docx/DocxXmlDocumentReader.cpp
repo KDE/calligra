@@ -3300,7 +3300,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
     TRY_READ_ATTR(val)
 
     m_tableStyle = m_context->m_tableStyles.value(val);
+
     readNext();
+
     READ_EPILOGUE
 }
 
@@ -4067,7 +4069,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         }
     }
 
-//     defineStyles();
+    defineTableStyles();
 
     m_table->saveOdf(*body, *mainStyles);
 
@@ -4076,6 +4078,24 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentTableNumber++;
 
     READ_EPILOGUE
+}
+
+void DocxXmlDocumentReader::defineTableStyles()
+{
+    const int rowCount = m_table->rowCount();
+    const int columnCount = m_table->columnCount();
+
+    MSOOXML::DocumentTableStyleConverterProperties converterProperties;
+    converterProperties.setRowCount(rowCount);
+    converterProperties.setColumnCount(columnCount);
+
+    MSOOXML::DocumentTableStyleConverter styleConverter(converterProperties, m_tableStyle);
+    for(int row = 0; row < rowCount; ++row ) {
+        for(int column = 0; column < columnCount; ++column ) {
+            KoCellStyle::Ptr style = KoCellStyle::create();//styleConverter.style(row, column);
+            m_table->cellAt(row, column)->setStyle(style);
+        }
+    }
 }
 
 #undef CURRENT_EL
@@ -4162,6 +4182,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
     READ_EPILOGUE
 }
 

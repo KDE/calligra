@@ -223,7 +223,6 @@ protected:
     MSOOXML::TableStyleProperties* m_currentStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
 
-
 private:
     void init();
 
@@ -248,6 +247,7 @@ private:
     //! Applies border styles and paddings obtained in readBorderElement()
     //! to style @a style (paragraph or page...)
     void applyBorders(KoGenStyle *style, QMap<QString, BorderSide> sourceBorder, QMap<QString, BorderSide> sourcePadding);
+    void defineTableStyles();
 
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
