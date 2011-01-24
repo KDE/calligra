@@ -3297,7 +3297,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    m_currentTableStyle.setParentName(val);
+    m_tableStyle = m_context->m_tableStyles.value(val);
     readNext();
     READ_EPILOGUE
 }
@@ -4046,6 +4046,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     m_currentDefaultCellStyle = 0;
     m_currentStyleProperties = 0;
+    m_tableStyle = 0;
 
     while (!atEnd()) {
         readNext();
@@ -4118,8 +4119,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-//             TRY_READ_IF(tblStyle)
-            /*ELSE_*/TRY_READ_IF(tblBorders)
+            TRY_READ_IF(tblStyle)
+            ELSE_TRY_READ_IF(tblBorders)
             ELSE_TRY_READ_IF(tblCellMar)
 //! @todo add ELSE_WRONG_FORMAT
         }
