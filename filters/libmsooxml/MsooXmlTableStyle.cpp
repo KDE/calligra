@@ -21,9 +21,9 @@
 
 using namespace MSOOXML;
 
-TableStyleConverterProperties::TableStyleConverterProperties(int rowCount, int columnCount)
-: m_rowCount(rowCount)
-, m_columnCount(columnCount)
+TableStyleConverterProperties::TableStyleConverterProperties()
+: m_rowCount(1)
+, m_columnCount(1)
 , m_rowBandSize(1)
 , m_columnBandSize(1)
 , m_localStyles()

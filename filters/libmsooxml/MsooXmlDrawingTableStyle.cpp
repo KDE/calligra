@@ -3,8 +3,8 @@
 
 using namespace MSOOXML;
 
-DrawingTableStyleConverterProperties::DrawingTableStyleConverterProperties(int rowCount, int columnCount)
-: TableStyleConverterProperties(rowCount, columnCount)
+DrawingTableStyleConverterProperties::DrawingTableStyleConverterProperties()
+: TableStyleConverterProperties()
 , m_role(DrawingTableStyle::WholeTbl)
 {
 }

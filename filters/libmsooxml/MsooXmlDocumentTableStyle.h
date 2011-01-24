@@ -47,7 +47,7 @@ private:
 class MSOOXML_EXPORT DocumentTableStyleInstanceProperties : public TableStyleConverterProperties
 {
 public:
-    DocumentTableStyleInstanceProperties(int rowCount, int columnCount);
+    DocumentTableStyleInstanceProperties();
     virtual ~DocumentTableStyleInstanceProperties();
 
     QMap<QString, TableStyleProperties*> styleList() const;

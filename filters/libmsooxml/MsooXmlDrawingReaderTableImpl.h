@@ -79,7 +79,9 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     const int rowCount = m_table->rowCount();
     const int columnCount = m_table->columnCount();
 
-    MSOOXML::DrawingTableStyleConverterProperties converterProperties(rowCount, columnCount);
+    MSOOXML::DrawingTableStyleConverterProperties converterProperties;
+    converterProperties.setRowCount(rowCount);
+    converterProperties.setColumnCount(columnCount);
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(m_localTableStyles);
 

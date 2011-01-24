@@ -53,8 +53,8 @@ void DocumentTableStyle::setProperties(TableStyleProperties* properties)
     m_properties = properties;
 }
 
-DocumentTableStyleInstanceProperties::DocumentTableStyleInstanceProperties(int rowCount, int columnCount)
-: TableStyleConverterProperties(rowCount, columnCount)
+DocumentTableStyleInstanceProperties::DocumentTableStyleInstanceProperties()
+: TableStyleConverterProperties()
 {
 }
 

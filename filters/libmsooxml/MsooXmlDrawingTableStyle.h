@@ -91,7 +91,7 @@ private:
 class MSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
 {
 public:
-    DrawingTableStyleConverterProperties(int rowCount, int columnCount);
+    DrawingTableStyleConverterProperties();
     ~DrawingTableStyleConverterProperties();
 
     enum Role {

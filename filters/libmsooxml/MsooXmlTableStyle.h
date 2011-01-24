@@ -92,7 +92,7 @@ private:
 class MSOOXML_EXPORT TableStyleConverterProperties
 {
 public:
-    TableStyleConverterProperties(int rowCount, int columnCount);
+    TableStyleConverterProperties();
     virtual ~TableStyleConverterProperties();
 
     void setRowCount(int rowCount);
