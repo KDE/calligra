@@ -103,5 +103,12 @@ KoCellStyle::Ptr DocumentTableStyleConverter::style(int row, int column)
 
     applyBasedStylesProperties(m_style, odfStyle, row, column);
 
+    applyStyle(m_properties.localDefaultCellStyle(), odfStyle, row, column);
+
+    TableStyleProperties* localStyle = m_properties.localStyles().localStyle(row, column);
+    if(localStyle) {
+        TableStyleConverter::applyStyle(localStyle, odfStyle, row, column);
+    }
+
     return odfStyle;
 }
