@@ -171,6 +171,10 @@ KoCellStyle::Ptr TableStyleInstance::style(int row, int column)
 
 void TableStyleInstance::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
 {
+    if(!styleProperties) {
+        return;
+    }
+
     applyBordersStyle(styleProperties, style, row, column);
     applyBackground(styleProperties, style, row, column);
 }
@@ -178,14 +182,7 @@ void TableStyleInstance::applyStyle(TableStyleProperties* styleProperties, KoCel
 void TableStyleInstance::applyStyle(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
     TableStyleProperties* const styleProperties = m_style->properties(type);
-    if(!styleProperties) {
-        return;
-    }
-
-    //TODO apply other properties
-
-    applyBordersStyle(styleProperties, style, row, column);
-    applyBackground(styleProperties, style, row, column);
+    applyStyle(styleProperties, style, row, column);
 }
 
 void TableStyleInstance::applyBackground(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
