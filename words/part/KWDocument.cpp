@@ -355,8 +355,9 @@ void KWDocument::relayout()
             delete frame->shape();
         }
     }
+    PageProcessingQueue *ppq = pageQueue();
     foreach (const KWPage &page, pageManager()->pages())
-        pageQueue()->addPage(page);
+        ppq->addPage(page);
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
@@ -645,13 +646,14 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     // Here we look at point 'b'. We add pages so at least all frames have a page.
     // btw. the observent reader might notice that cases b and c are not mutually exclusive ;)
+    PageProcessingQueue *ppq = pageQueue();
     while (docHeight <= maxBottom) {
         kDebug(32001) << "KWDocument::endOfLoading appends a page";
         if (m_pageManager.pageCount() == 0) // apply the firstPageMasterName only on the first page
             lastpage = m_pageManager.appendPage(m_pageManager.pageStyle(firstPageMasterName));
         else // normally this shouldn't happen cause that loop is only run once...
             lastpage = m_pageManager.appendPage();
-        pageQueue()->addPage(lastpage);
+        ppq->addPage(lastpage);
         docHeight += lastpage.height();
         if (m_magicCurtain) {
             m_magicCurtain->revealFramesForPage(lastpage.pageNumber(), lastpage.offsetInDocument());
@@ -831,9 +833,10 @@ void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
 
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
+    PageProcessingQueue *ppq = pageQueue();
     foreach (KWPage page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
-            pageQueue()->addPage(page);
+            ppq->addPage(page);
         }
     }
 }
