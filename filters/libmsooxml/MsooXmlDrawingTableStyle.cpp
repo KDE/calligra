@@ -9,6 +9,8 @@ TableStyleInstanceProperties::TableStyleInstanceProperties(int rowCount, int col
 , m_rowBandSize(1)
 , m_columnBandSize(1)
 , m_role(TableStyle::WholeTbl)
+, m_localStyles()
+, m_localDefaultCellStyle(0)
 {
 }
 
@@ -41,6 +43,7 @@ TableStyleInstanceProperties& TableStyleInstanceProperties::rowBandSize(int size
 TableStyleInstanceProperties& TableStyleInstanceProperties::localStyles(const MSOOXML::LocalTableStyles& localStyles)
 {
     m_localStyles = localStyles;
+
     return *this;
 }
 
@@ -92,6 +95,8 @@ KoCellStyle::Ptr TableStyleInstance::style(int row, int column)
      const int lastColumn = m_properties.m_columnCount - 1 ;
 
     applyStyle(TableStyle::WholeTbl, cellStyle, row, column);
+
+    applyStyle(m_properties.m_localDefaultCellStyle, cellStyle, row, column);
 
     if(role & TableStyleInstanceProperties::ColumnBanded) {
         //Is the column in the even band?

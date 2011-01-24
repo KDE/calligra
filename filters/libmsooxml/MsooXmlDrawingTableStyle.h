@@ -47,6 +47,9 @@
  * For these reasons we don't apply styles directly but we instantiate
  * them for a specific table with a specific togglers for styles and
  * a size.
+ *
+ * Also, we might need to apply some local styles, those are styles
+ * that are defined directly in the table or in a cell.
  */
 
 namespace MSOOXML
@@ -154,7 +157,10 @@ public:
 
     TableStyleInstanceProperties& rowBandSize(int size);
     TableStyleInstanceProperties& columnBandSize(int size);
+    ///LocalStyles is a collection of cell<->style relationships
     TableStyleInstanceProperties& localStyles(const LocalTableStyles& localStyles);
+    ///LocalTableStyle is a style defined to be the default style of a table. Defined locally.
+    TableStyleInstanceProperties& localDefaulCelltStyle(MSOOXML::TableStyleProperties* properties);
 
     enum Role {
         FirstRow = 1,
@@ -180,6 +186,7 @@ private:
     int m_columnBandSize;
     Roles m_role;
     LocalTableStyles m_localStyles;
+    MSOOXML::TableStyleProperties* m_localDefaultCellStyle;
 };
 
 class MSOOXML_EXPORT TableStyleInstance
