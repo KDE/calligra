@@ -207,7 +207,17 @@ public:
     DateTime end() const { return endTime; }
 
     QStringList state() const;
-    
+
+    void setResourceError( bool on ) { resourceError = on; }
+    void setResourceOverbooked( bool on ) { resourceOverbooked = on; }
+    void setResourceNotAvailable( bool on ) { resourceNotAvailable = on; }
+    void setSchedulingError( bool on ) { schedulingError = on; }
+    void setNotScheduled( bool on ) { notScheduled = on; }
+
+    void setPositiveFloat( const Duration &f ) { positiveFloat = f; }
+    void setNegativeFloat( const Duration &f ) { negativeFloat = f; }
+    void setFreeFloat( const Duration &f ) { freeFloat = f; }
+
     virtual ScheduleManager *manager() const { return 0; }
     
     class Log {
