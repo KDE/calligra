@@ -134,9 +134,11 @@ bool FormulaDocument::saveOdf( SavingContext &context )
     if ( !bodyWriter )
         return false;
 
-    KoEmbeddedDocumentSaver& embeddedSaver = context.embeddedSaver;
+    KoEmbeddedDocumentSaver& embeddedDocSaver = context.embeddedDocSaver;
+    KoEmbeddedFileSaver&     embeddedFileSaver = context.embeddedFileSaver;
 
-    KoShapeSavingContext savingContext( *bodyWriter, mainStyles, embeddedSaver );
+    KoShapeSavingContext savingContext( *bodyWriter, mainStyles,
+                                        embeddedDocSaver, embeddedFileSaver );
 
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( "office:formula" );
