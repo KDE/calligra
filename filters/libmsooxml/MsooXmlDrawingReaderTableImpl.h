@@ -83,7 +83,7 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(m_localTableStyles);
 
-    MSOOXML::DrawingTableStyleConverter styleConverter(m_tableStyle, converterProperties);
+    MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, m_tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
             KoCellStyle::Ptr style = styleConverter.style(row, column);
