@@ -72,7 +72,7 @@ QMap<QString, TableStyleProperties*> DocumentTableStyleInstanceProperties::style
     return m_styleList;
 }
 
-DocumentTableStyleInstance::DocumentTableStyleInstance(DocumentTableStyle* style, DocumentTableStyleInstanceProperties properties)
+DocumentTableStyleInstance::DocumentTableStyleInstance(DocumentTableStyleInstanceProperties properties, DocumentTableStyle* style)
 : TableStyleConverter(properties.rowCount(), properties.columnCount() )
 {
 }

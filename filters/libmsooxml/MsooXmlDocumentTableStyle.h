@@ -60,7 +60,7 @@ private:
 class MSOOXML_EXPORT DocumentTableStyleInstance : public TableStyleConverter
 {
 public:
-    DocumentTableStyleInstance(DocumentTableStyle* style, DocumentTableStyleInstanceProperties properties);
+    DocumentTableStyleInstance(DocumentTableStyleInstanceProperties properties, DocumentTableStyle* style =0);
     virtual ~DocumentTableStyleInstance();
 
     virtual KoCellStyle::Ptr style(int row, int column);
