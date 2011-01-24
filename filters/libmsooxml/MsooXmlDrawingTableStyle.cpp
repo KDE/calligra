@@ -24,7 +24,7 @@ void DrawingTableStyleInstanceProperties::setRoles(DrawingTableStyleInstanceProp
 }
 
 DrawingTableStyleInstance::DrawingTableStyleInstance(DrawingTableStyle* style, DrawingTableStyleInstanceProperties properties)
-: TableStyleInstance(properties)
+: TableStyleInstance(properties.rowCount(), properties.columnCount())
 , m_style(style)
 , m_properties(properties)
 {
