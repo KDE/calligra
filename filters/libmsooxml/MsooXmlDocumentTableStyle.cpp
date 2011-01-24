@@ -24,7 +24,7 @@ using namespace MSOOXML;
 DocumentTableStyle::DocumentTableStyle()
 : TableStyle()
 , m_baseStyleName()
-, m_properties()
+, m_properties(0)
 {
 }
 
