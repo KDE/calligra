@@ -562,12 +562,12 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
             pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
         } else if (sep->brcTop.brcType == 0) {
             kDebug(30513) << "setting margin for no header and no top border...";
-            pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
+            pageLayoutStyle->addPropertyPt("fo:margin-top", qAbs((double)sep->dyaTop) / 20.0);
         }
         if (m_hasFooter_list[i]) {
             pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
         } else if (sep->brcBottom.brcType == 0) {
-            pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
+            pageLayoutStyle->addPropertyPt("fo:margin-bottom", qAbs((double)sep->dyaBottom) / 20.0);
         }
 
         pageLayoutName = m_mainStyles->insert(*pageLayoutStyle, "Mpm");
@@ -1025,15 +1025,20 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     //problem with footer is that it is not possible to say how big the footer is.
     QString header("<style:header-style>");
     header.append("<style:header-footer-properties fo:margin-top=\"");
-    header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
+    qreal headerMarginTop = qAbs(sep->dyaTop) - sep->dyaHdrTop;
+    if (headerMarginTop >= 400)
+        header.append(QString::number(headerMarginTop / 20.0));
+    else
+        header.append("14");
     header.append("pt\" fo:min-height=\"14pt\"/>");
     header.append("</style:header-style>");
 
     QString footer("<style:footer-style>");
     footer.append("<style:header-footer-properties fo:margin-bottom=\"");
-    if (sep->dyaBottom > (int)sep->dyaHdrBottom) {
-        if ((sep->dyaBottom - sep->dyaHdrBottom) >= 400) {
-            footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
+    if (qAbs(sep->dyaBottom) > (int)sep->dyaHdrBottom) {
+        qreal headerMarginBottom = qAbs(sep->dyaBottom) - sep->dyaHdrBottom;
+        if (headerMarginBottom >= 400) {
+            footer.append(QString::number(headerMarginBottom / 20.0));
         } else {
             footer.append("14");
         }
@@ -1103,11 +1108,11 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         pageLayoutStyle->addPropertyPt("fo:padding-left",
                                          (sep->dxaLeft - (sep->brcLeft.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-top",
-                                         (sep->dyaTop - (sep->brcTop.dptSpace * 20)) / 20);
+                                         (qAbs(sep->dyaTop) - (sep->brcTop.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-right",
                                          (sep->dxaRight - (sep->brcRight.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-bottom",
-                                         (sep->dyaBottom - (sep->brcBottom.dptSpace * 20)) / 20);
+                                         (qAbs(sep->dyaBottom) - (sep->brcBottom.dptSpace * 20)) / 20);
     }
     // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
