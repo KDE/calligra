@@ -89,11 +89,11 @@ private:
     QMap<QPair<int,int>, TableStyleProperties*> m_properties;
 };
 
-class MSOOXML_EXPORT TableStyleInstanceProperties
+class MSOOXML_EXPORT TableStyleConverterProperties
 {
 public:
-    TableStyleInstanceProperties(int rowCount, int columnCount);
-    virtual ~TableStyleInstanceProperties();
+    TableStyleConverterProperties(int rowCount, int columnCount);
+    virtual ~TableStyleConverterProperties();
 
     void setRowCount(int rowCount);
     int rowCount() const;
@@ -124,11 +124,11 @@ private:
     MSOOXML::TableStyleProperties* m_localDefaultCellStyle;
 };
 
-class MSOOXML_EXPORT TableStyleInstance
+class MSOOXML_EXPORT TableStyleConverter
 {
 public:
-    TableStyleInstance(int row, int column);
-    virtual ~TableStyleInstance();
+    TableStyleConverter(int row, int column);
+    virtual ~TableStyleConverter();
 
     virtual KoCellStyle::Ptr style(int row, int column) = 0;
 

@@ -54,7 +54,7 @@ void DocumentTableStyle::setProperties(TableStyleProperties* properties)
 }
 
 DocumentTableStyleInstanceProperties::DocumentTableStyleInstanceProperties(int rowCount, int columnCount)
-: TableStyleInstanceProperties(rowCount, columnCount)
+: TableStyleConverterProperties(rowCount, columnCount)
 {
 }
 
@@ -73,7 +73,7 @@ QMap<QString, TableStyleProperties*> DocumentTableStyleInstanceProperties::style
 }
 
 DocumentTableStyleInstance::DocumentTableStyleInstance(DocumentTableStyle* style, DocumentTableStyleInstanceProperties properties)
-: TableStyleInstance(properties.rowCount(), properties.columnCount() )
+: TableStyleConverter(properties.rowCount(), properties.columnCount() )
 {
 }
 

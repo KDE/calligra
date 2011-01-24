@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
+ * Copyright (C) 2010-2011 Carlos Licea <carlos@kdab.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -79,14 +79,14 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     const int rowCount = m_table->rowCount();
     const int columnCount = m_table->columnCount();
 
-    MSOOXML::DrawingTableStyleInstanceProperties styleProperties(rowCount, columnCount);
-    styleProperties.setRoles(m_activeRoles);
-    styleProperties.setLocalStyles(m_localTableStyles);
+    MSOOXML::DrawingTableStyleConverterProperties converterProperties(rowCount, columnCount);
+    converterProperties.setRoles(m_activeRoles);
+    converterProperties.setLocalStyles(m_localTableStyles);
 
-    MSOOXML::DrawingTableStyleInstance styleInstance(m_tableStyle, styleProperties);
+    MSOOXML::DrawingTableStyleConverter styleConverter(m_tableStyle, converterProperties);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
-            KoCellStyle::Ptr style = styleInstance.style(row, column);
+            KoCellStyle::Ptr style = styleConverter.style(row, column);
             m_table->cellAt(row, column)->setStyle(style);
         }
     }
@@ -102,27 +102,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(bandCol)
     if(MSOOXML::Utils::convertBooleanAttr(bandCol)) {
-        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::ColumnBanded;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::ColumnBanded;
     }
     TRY_READ_ATTR_WITHOUT_NS(bandRow)
     if(MSOOXML::Utils::convertBooleanAttr(bandRow)) {
-        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::RowBanded;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::RowBanded;
     }
     TRY_READ_ATTR_WITHOUT_NS(firstCol)
     if(MSOOXML::Utils::convertBooleanAttr(firstCol)) {
-        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::FirstCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstCol;
     }
     TRY_READ_ATTR_WITHOUT_NS(firstRow)
     if(MSOOXML::Utils::convertBooleanAttr(firstRow)) {
-        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::FirstRow;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstRow;
     }
     TRY_READ_ATTR_WITHOUT_NS(lastCol)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
-        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::FirstCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstCol;
     }
     TRY_READ_ATTR_WITHOUT_NS(lastRow)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
-        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::LastCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::LastCol;
     }
 //     TRY_READ_ATTR_WITHOUT_NS(rtl)
 

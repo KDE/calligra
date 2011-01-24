@@ -3,48 +3,48 @@
 
 using namespace MSOOXML;
 
-DrawingTableStyleInstanceProperties::DrawingTableStyleInstanceProperties(int rowCount, int columnCount)
-: TableStyleInstanceProperties(rowCount, columnCount)
+DrawingTableStyleConverterProperties::DrawingTableStyleConverterProperties(int rowCount, int columnCount)
+: TableStyleConverterProperties(rowCount, columnCount)
 , m_role(DrawingTableStyle::WholeTbl)
 {
 }
 
-DrawingTableStyleInstanceProperties::~DrawingTableStyleInstanceProperties()
+DrawingTableStyleConverterProperties::~DrawingTableStyleConverterProperties()
 {
 }
 
-DrawingTableStyleInstanceProperties::Roles DrawingTableStyleInstanceProperties::roles() const
+DrawingTableStyleConverterProperties::Roles DrawingTableStyleConverterProperties::roles() const
 {
     return m_role;
 }
 
-void DrawingTableStyleInstanceProperties::setRoles(DrawingTableStyleInstanceProperties::Roles roles)
+void DrawingTableStyleConverterProperties::setRoles(DrawingTableStyleConverterProperties::Roles roles)
 {
     m_role = roles;
 }
 
-DrawingTableStyleInstance::DrawingTableStyleInstance(DrawingTableStyle* style, DrawingTableStyleInstanceProperties properties)
-: TableStyleInstance(properties.rowCount(), properties.columnCount())
+DrawingTableStyleConverter::DrawingTableStyleConverter(DrawingTableStyle* style, DrawingTableStyleConverterProperties properties)
+: TableStyleConverter(properties.rowCount(), properties.columnCount())
 , m_style(style)
 , m_properties(properties)
 {
 }
 
-DrawingTableStyleInstance::~DrawingTableStyleInstance()
+DrawingTableStyleConverter::~DrawingTableStyleConverter()
 {
 }
 
-void DrawingTableStyleInstance::applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
+void DrawingTableStyleConverter::applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
     if(!m_style) {
         return;
     }
 
     TableStyleProperties* const styleProperties = m_style->properties(type);
-    TableStyleInstance::applyStyle(styleProperties, style, row, column);
+    TableStyleConverter::applyStyle(styleProperties, style, row, column);
 }
 
-KoCellStyle::Ptr DrawingTableStyleInstance::style(int row, int column)
+KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 {
     Q_ASSERT(row >= 0);
     Q_ASSERT(row < m_properties.rowCount());
@@ -76,15 +76,15 @@ KoCellStyle::Ptr DrawingTableStyleInstance::style(int row, int column)
     //
     //See MSOOXML Table Styles §17.7.6 for details
 
-     const DrawingTableStyleInstanceProperties::Roles& role = m_properties.roles();
+     const DrawingTableStyleConverterProperties::Roles& role = m_properties.roles();
      const int lastRow = m_properties.rowCount() - 1 ;
      const int lastColumn = m_properties.columnCount() - 1 ;
 
     applyStyle(DrawingTableStyle::WholeTbl, cellStyle, row, column);
 
-    TableStyleInstance::applyStyle(m_properties.localDefaultCellStyle(), cellStyle, row, column);
+    TableStyleConverter::applyStyle(m_properties.localDefaultCellStyle(), cellStyle, row, column);
 
-    if(role & DrawingTableStyleInstanceProperties::ColumnBanded) {
+    if(role & DrawingTableStyleConverterProperties::ColumnBanded) {
         //Is the column in the even band?
         if( (column % (m_properties.columnBandSize() * 2)) < m_properties.columnBandSize()) {
             applyStyle(DrawingTableStyle::Band1Vertical, cellStyle, row, column);
@@ -94,7 +94,7 @@ KoCellStyle::Ptr DrawingTableStyleInstance::style(int row, int column)
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::RowBanded) {
+    if(role & DrawingTableStyleConverterProperties::RowBanded) {
         //Is the row in the even band?
         if( (row % (m_properties.rowBandSize() * 2)) < m_properties.columnBandSize()) {
             applyStyle(DrawingTableStyle::Band1Horizontal, cellStyle, row, column);
@@ -104,49 +104,49 @@ KoCellStyle::Ptr DrawingTableStyleInstance::style(int row, int column)
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::FirstRow) {
+    if(role & DrawingTableStyleConverterProperties::FirstRow) {
         if(row == 0) {
             applyStyle(DrawingTableStyle::FirstRow, cellStyle, row, column);
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::LastRow) {
+    if(role & DrawingTableStyleConverterProperties::LastRow) {
         if(row == lastRow) {
             applyStyle(DrawingTableStyle::FirstRow, cellStyle, row, column);
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::FirstCol) {
+    if(role & DrawingTableStyleConverterProperties::FirstCol) {
         if(column == 0) {
             applyStyle(DrawingTableStyle::FirstCol, cellStyle, row, column);
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::LastCol) {
+    if(role & DrawingTableStyleConverterProperties::LastCol) {
         if(column == lastColumn) {
             applyStyle(DrawingTableStyle::LastCol, cellStyle, row, column);
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::NeCell) {
+    if(role & DrawingTableStyleConverterProperties::NeCell) {
         if(row == 0 && column == 0) {
             applyStyle(DrawingTableStyle::NwCell, cellStyle, row, column);
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::NwCell) {
+    if(role & DrawingTableStyleConverterProperties::NwCell) {
         if(row == 0 && column == lastColumn) {
             applyStyle(DrawingTableStyle::NeCell, cellStyle, row, column);
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::SeCell) {
+    if(role & DrawingTableStyleConverterProperties::SeCell) {
         if(row == lastRow && column == 0) {
             applyStyle(DrawingTableStyle::SwCell, cellStyle, row, column);
         }
     }
 
-    if(role & DrawingTableStyleInstanceProperties::SwCell) {
+    if(role & DrawingTableStyleConverterProperties::SwCell) {
         if(row == lastRow && column == lastColumn) {
             applyStyle(DrawingTableStyle::SeCell, cellStyle, row, column);
         }
@@ -154,7 +154,7 @@ KoCellStyle::Ptr DrawingTableStyleInstance::style(int row, int column)
 
     TableStyleProperties* localStyle = m_properties.localStyles().localStyle(row, column);
     if(localStyle) {
-        TableStyleInstance::applyStyle(localStyle, cellStyle, row, column);
+        TableStyleConverter::applyStyle(localStyle, cellStyle, row, column);
     }
 
     return cellStyle;

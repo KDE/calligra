@@ -40,12 +40,15 @@
  *    depending whether is in the outside of the table or
  *    if it's an inside border. That's why the size of the
  *    table is needed.
- * For these reasons we don't apply styles directly but we instantiate
- * them for a specific table with a specific togglers for styles and
- * a size.
  *
- * Also, we might need to apply some local styles, those are styles
- * that are defined directly in the table or in a cell.
+ * Also, we might need to apply local styles (styles to one cell,)
+ * or default styles for all the cells in a table. Defined in the very
+ * table.
+ *
+ * For these reasons we don't apply styles directly but we use a style
+ * converter for a specific table with a specific togglers for styles,
+ * specific local styles or specific default styles and size. This converter
+ * will give a KoCellStyle back.
  */
 
 namespace MSOOXML
@@ -85,11 +88,11 @@ private:
     //TODO handle the table background stored in the element TblBg
 };
 
-class MSOOXML_EXPORT DrawingTableStyleInstanceProperties : public TableStyleInstanceProperties
+class MSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
 {
 public:
-    DrawingTableStyleInstanceProperties(int rowCount, int columnCount);
-    ~DrawingTableStyleInstanceProperties();
+    DrawingTableStyleConverterProperties(int rowCount, int columnCount);
+    ~DrawingTableStyleConverterProperties();
 
     enum Role {
         FirstRow = 1,
@@ -113,11 +116,11 @@ private:
     Roles m_role;
 };
 
-class MSOOXML_EXPORT DrawingTableStyleInstance : public TableStyleInstance
+class MSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
-    DrawingTableStyleInstance(DrawingTableStyle* style, DrawingTableStyleInstanceProperties properties);
-    virtual ~DrawingTableStyleInstance();
+    DrawingTableStyleConverter(DrawingTableStyle* style, DrawingTableStyleConverterProperties properties);
+    virtual ~DrawingTableStyleConverter();
 
     KoCellStyle::Ptr style(int row, int column);
 
@@ -125,11 +128,11 @@ private:
     void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
 
     DrawingTableStyle* m_style;
-    DrawingTableStyleInstanceProperties m_properties;
+    DrawingTableStyleConverterProperties m_properties;
 };
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::DrawingTableStyleInstanceProperties::Roles)
+Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::DrawingTableStyleConverterProperties::Roles)
 
 #endif

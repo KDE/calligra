@@ -21,7 +21,7 @@
 
 using namespace MSOOXML;
 
-TableStyleInstanceProperties::TableStyleInstanceProperties(int rowCount, int columnCount)
+TableStyleConverterProperties::TableStyleConverterProperties(int rowCount, int columnCount)
 : m_rowCount(rowCount)
 , m_columnCount(columnCount)
 , m_rowBandSize(1)
@@ -31,83 +31,83 @@ TableStyleInstanceProperties::TableStyleInstanceProperties(int rowCount, int col
 {
 }
 
-TableStyleInstanceProperties::~TableStyleInstanceProperties()
+TableStyleConverterProperties::~TableStyleConverterProperties()
 {
 }
 
-void TableStyleInstanceProperties::setRowCount(int rowCount)
+void TableStyleConverterProperties::setRowCount(int rowCount)
 {
     m_rowCount = rowCount;
 }
 
-int TableStyleInstanceProperties::rowCount() const
+int TableStyleConverterProperties::rowCount() const
 {
     return m_rowCount;
 }
 
 
-void TableStyleInstanceProperties::setColumnCount(int columnCount)
+void TableStyleConverterProperties::setColumnCount(int columnCount)
 {
     m_columnCount = columnCount;
 }
 
-int TableStyleInstanceProperties::columnCount() const
+int TableStyleConverterProperties::columnCount() const
 {
     return m_columnCount;
 }
 
-void TableStyleInstanceProperties::setColumnBandSize(int size)
+void TableStyleConverterProperties::setColumnBandSize(int size)
 {
     Q_ASSERT(size >= 0);
     m_columnBandSize = size;
 }
 
-int TableStyleInstanceProperties::columnBandSize() const
+int TableStyleConverterProperties::columnBandSize() const
 {
     return m_columnBandSize;
 }
 
-void TableStyleInstanceProperties::setRowBandSize(int size)
+void TableStyleConverterProperties::setRowBandSize(int size)
 {
     m_rowBandSize = size;
 }
 
-int TableStyleInstanceProperties::rowBandSize() const
+int TableStyleConverterProperties::rowBandSize() const
 {
     return m_rowBandSize;
 }
 
-void TableStyleInstanceProperties::setLocalStyles(const MSOOXML::LocalTableStyles& localStyles)
+void TableStyleConverterProperties::setLocalStyles(const MSOOXML::LocalTableStyles& localStyles)
 {
     m_localStyles = localStyles;
 }
 
-LocalTableStyles TableStyleInstanceProperties::localStyles() const
+LocalTableStyles TableStyleConverterProperties::localStyles() const
 {
     return m_localStyles;
 }
 
-void TableStyleInstanceProperties::setLocalDefaulCelltStyle(TableStyleProperties* properties)
+void TableStyleConverterProperties::setLocalDefaulCelltStyle(TableStyleProperties* properties)
 {
     m_localDefaultCellStyle = properties;
 }
 
-TableStyleProperties* TableStyleInstanceProperties::localDefaultCellStyle() const
+TableStyleProperties* TableStyleConverterProperties::localDefaultCellStyle() const
 {
     return m_localDefaultCellStyle;
 }
 
-TableStyleInstance::TableStyleInstance(int row, int column)
+TableStyleConverter::TableStyleConverter(int row, int column)
 : m_row(row)
 , m_column(column)
 {
 }
 
-TableStyleInstance::~TableStyleInstance()
+TableStyleConverter::~TableStyleConverter()
 {
 }
 
-void TableStyleInstance::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
 {
     if(!styleProperties) {
         return;
@@ -117,7 +117,7 @@ void TableStyleInstance::applyStyle(TableStyleProperties* styleProperties, KoCel
     applyBackground(styleProperties, style, row, column);
 }
 
-void TableStyleInstance::applyBackground(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
 {
     Q_UNUSED(row);
     Q_UNUSED(column);
@@ -127,7 +127,7 @@ void TableStyleInstance::applyBackground(TableStyleProperties* styleProperties, 
     }
 }
 
-void TableStyleInstance::applyBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleConverter::applyBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
 {
     const int lastRow = m_row - 1;
     const int lastColumn = m_column - 1;
