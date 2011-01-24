@@ -104,6 +104,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
 
     createDefaultStyle(KoGenStyle::ParagraphStyle, "paragraph");
     createDefaultStyle(KoGenStyle::TextStyle, "text");
+    createDefaultStyle(KoGenStyle::TableStyle, "table");
     //createDefaultStyle(KoGenStyle::GraphicStyle, "graphic");
     //createDefaultStyle(KoGenStyle::TableRowStyle, "table-row");
     //createDefaultStyle("numbering");
