@@ -64,6 +64,7 @@ public:
     virtual ~DocumentTableStyleConverter();
 
     virtual KoCellStyle::Ptr style(int row, int column);
+    void applyBasedStylesProperties(MSOOXML::DocumentTableStyle* style, KoCellStyle::Ptr& odfStyle, int row, int column);
 
 private:
     DocumentTableStyleConverterProperties m_properties;

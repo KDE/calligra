@@ -83,9 +83,25 @@ DocumentTableStyleConverter::~DocumentTableStyleConverter()
 {
 }
 
+void DocumentTableStyleConverter::applyBasedStylesProperties(DocumentTableStyle* style, KoCellStyle::Ptr& odfStyle, int row, int column)
+{
+    if(!style) {
+        return;
+    }
+
+    if(!style->baseStyleName().isEmpty()) {
+        TableStyleProperties* baseStyle = m_properties.styleList().value(style->baseStyleName());
+        applyBasedStylesProperties(baseStyle, odfStyle, row, column);
+    }
+
+    applyStyle(style->properties(), odfStyle, row, column);
+}
+
 KoCellStyle::Ptr DocumentTableStyleConverter::style(int row, int column)
 {
-    KoCellStyle::Ptr style;
+    KoCellStyle::Ptr style = KoCellStyle::create();
+
+    applyBasedStylesProperties(m_style, style, row, column);
 
     return style;
 }
