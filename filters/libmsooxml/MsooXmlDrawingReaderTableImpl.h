@@ -29,8 +29,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 {
     READ_PROLOGUE
 
+    m_tableStyle = 0;
+
     if(!d->tableStyleList) {
-        d->tableStyleList = new MSOOXML::TableStyleList;
+        d->tableStyleList = new QMap<QString, MSOOXML::DrawingTableStyle*>;
 
         QString tableStylesFile;
         QString tableStylesPath;
@@ -77,12 +79,11 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     const int rowCount = m_table->rowCount();
     const int columnCount = m_table->columnCount();
 
-    MSOOXML::TableStyleInstanceProperties styleProperties(rowCount, columnCount);
-    styleProperties.roles(m_activeRoles)
-                   .localStyles(m_localTableStyles);
+    MSOOXML::DrawingTableStyleInstanceProperties styleProperties(rowCount, columnCount);
+    styleProperties.setRoles(m_activeRoles);
+    styleProperties.setLocalStyles(m_localTableStyles);
 
-    MSOOXML::TableStyleInstance styleInstance(&m_tableStyle, styleProperties);
-
+    MSOOXML::DrawingTableStyleInstance styleInstance(m_tableStyle, styleProperties);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
             KoCellStyle::Ptr style = styleInstance.style(row, column);
@@ -101,27 +102,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(bandCol)
     if(MSOOXML::Utils::convertBooleanAttr(bandCol)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::ColumnBanded;
+        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::ColumnBanded;
     }
     TRY_READ_ATTR_WITHOUT_NS(bandRow)
     if(MSOOXML::Utils::convertBooleanAttr(bandRow)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::RowBanded;
+        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::RowBanded;
     }
     TRY_READ_ATTR_WITHOUT_NS(firstCol)
     if(MSOOXML::Utils::convertBooleanAttr(firstCol)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::FirstCol;
     }
     TRY_READ_ATTR_WITHOUT_NS(firstRow)
     if(MSOOXML::Utils::convertBooleanAttr(firstRow)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstRow;
+        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::FirstRow;
     }
     TRY_READ_ATTR_WITHOUT_NS(lastCol)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::FirstCol;
     }
     TRY_READ_ATTR_WITHOUT_NS(lastRow)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::LastCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleInstanceProperties::LastCol;
     }
 //     TRY_READ_ATTR_WITHOUT_NS(rtl)
 
@@ -282,7 +283,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     READ_PROLOGUE
 
     readNext();
-    m_tableStyle = d->tableStyleList->tableStyle(text().toString());
+    m_tableStyle = d->tableStyleList->value(text().toString());
     readNext();
 
     READ_EPILOGUE

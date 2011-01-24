@@ -28,6 +28,7 @@ set(msooxml_LIB_SRCS
     ooxml_pole.cpp
     MsooXmlDrawingTableStyleReader.cpp
     MsooXmlDrawingTableStyle.cpp
+    MsooXmlTableStyle.cpp
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp

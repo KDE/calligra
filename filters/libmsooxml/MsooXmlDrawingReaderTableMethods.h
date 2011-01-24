@@ -40,8 +40,8 @@ protected:
     KoTable* m_table;
     QString m_currentTableName;
 
-    MSOOXML::TableStyle m_tableStyle;
-    MSOOXML::TableStyleInstanceProperties::Roles m_activeRoles;
+    MSOOXML::DrawingTableStyle* m_tableStyle;
+    MSOOXML::DrawingTableStyleInstanceProperties::Roles m_activeRoles;
 
     MSOOXML::TableStyleProperties* m_currentLocalStyleProperties;
     MSOOXML::LocalTableStyles m_localTableStyles;
