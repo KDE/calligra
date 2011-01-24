@@ -315,14 +315,16 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::OddPagesHeaderTextFrameSet:
         case KWord::EvenPagesHeaderTextFrameSet: {
             header = static_cast<KWTextFrame *>(frame);
-            minimumHeight[1] = qMax((qreal)10, page.pageStyle().headerDistance() + page.pageStyle().headerMinimumHeight());
+            minimumHeight[1] = qMax((qreal)10, page.pageStyle().headerMinimumHeight());
+            minimumHeight[2] = qMax((qreal)0, page.pageStyle().headerDistance());
             requestedHeight[1] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
             break;
         }
         case KWord::OddPagesFooterTextFrameSet:
         case KWord::EvenPagesFooterTextFrameSet: {
             footer = static_cast<KWTextFrame *>(frame);
-            minimumHeight[7] = qMax((qreal)10, page.pageStyle().footerDistance() + page.pageStyle().footerMinimumHeight());
+            minimumHeight[7] = qMax((qreal)10, page.pageStyle().footerMinimumHeight());
+            minimumHeight[6] = qMax((qreal)0, page.pageStyle().footerDistance());
             requestedHeight[7] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
             break;
         }
