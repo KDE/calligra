@@ -484,7 +484,11 @@ void KPlatoRCPSScheduler::taskFromRCPSForward( struct rcps_job *job, Task *task,
         if ( task->appointmentEndTime().isValid() ) {
             task->setEndTime( task->appointmentEndTime() );
         }
-    } else if ( task->estimate()->calendar() ) {
+        if ( info && info->requests.isEmpty() ) {
+            cs->resourceError = true;
+            cs->logError( i18n( "No resource has been allocated" ), 1 );
+        }
+   } else if ( task->estimate()->calendar() ) {
         DateTime t = task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() );
         if ( t.isValid() ) {
             task->setStartTime( t );
@@ -619,16 +623,13 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
     if ( task->estimate()->type() == Estimate::Type_Effort ) {
         if ( task->appointmentStartTime().isValid() ) {
             task->setStartTime( task->appointmentStartTime() );
-        } else {
-            task->setStartTime( task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() ) );
         }
         if ( task->appointmentEndTime().isValid() ) {
             task->setEndTime( task->appointmentEndTime() );
-        } else  {
-            task->setEndTime( task->estimate()->calendar()->firstAvailableBefore( task->endTime(), task->startTime() ) );
         }
-        if ( info->requests.isEmpty() ) {
+        if ( info && info->requests.isEmpty() ) {
             cs->resourceError = true;
+            cs->logError( i18n( "No resource has been allocated" ), 1 );
         }
     } else if ( task->estimate()->calendar() ) {
         DateTime t = task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() );
