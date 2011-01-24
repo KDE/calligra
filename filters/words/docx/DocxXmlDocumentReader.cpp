@@ -64,14 +64,6 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
 
 // ---------------------------------------------------------------------
 
-//! Column style info, allows to keep information about repeated columns
-class ColumnStyleInfo
-{
-public:
-    ColumnStyleInfo(KoGenStyle *s = 0) : count(0), style(s) {}
-    uint count;
-    KoGenStyle* style; //!< not owned
-};
 
 class DocxXmlDocumentReader::Private
 {
@@ -79,15 +71,6 @@ public:
     Private() {
     }
     ~Private() {
-    }
-
-    QList<ColumnStyleInfo> columnStyles; //!< for collecting column styles
-
-    void clearColumnStyles() {
-        foreach (const ColumnStyleInfo& info, columnStyles) {
-            delete info.style;
-        }
-        columnStyles.clear();
     }
 };
 
