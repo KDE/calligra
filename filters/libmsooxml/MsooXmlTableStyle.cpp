@@ -35,11 +35,9 @@ TableStyleInstanceProperties::~TableStyleInstanceProperties()
 {
 }
 
-TableStyleInstanceProperties& TableStyleInstanceProperties::setRowCount(int rowCount)
+void TableStyleInstanceProperties::setRowCount(int rowCount)
 {
     m_rowCount = rowCount;
-
-    return *this;
 }
 
 int TableStyleInstanceProperties::rowCount() const
@@ -48,11 +46,9 @@ int TableStyleInstanceProperties::rowCount() const
 }
 
 
-TableStyleInstanceProperties& TableStyleInstanceProperties::setColumnCount(int columnCount)
+void TableStyleInstanceProperties::setColumnCount(int columnCount)
 {
     m_columnCount = columnCount;
-
-    return *this;
 }
 
 int TableStyleInstanceProperties::columnCount() const
@@ -60,12 +56,10 @@ int TableStyleInstanceProperties::columnCount() const
     return m_columnCount;
 }
 
-TableStyleInstanceProperties& TableStyleInstanceProperties::setColumnBandSize(int size)
+void TableStyleInstanceProperties::setColumnBandSize(int size)
 {
     Q_ASSERT(size >= 0);
     m_columnBandSize = size;
-
-    return *this;
 }
 
 int TableStyleInstanceProperties::columnBandSize() const
@@ -73,11 +67,9 @@ int TableStyleInstanceProperties::columnBandSize() const
     return m_columnBandSize;
 }
 
-TableStyleInstanceProperties& TableStyleInstanceProperties::setRowBandSize(int size)
+void TableStyleInstanceProperties::setRowBandSize(int size)
 {
     m_rowBandSize = size;
-
-    return *this;
 }
 
 int TableStyleInstanceProperties::rowBandSize() const
@@ -85,11 +77,9 @@ int TableStyleInstanceProperties::rowBandSize() const
     return m_rowBandSize;
 }
 
-TableStyleInstanceProperties& TableStyleInstanceProperties::setLocalStyles(const MSOOXML::LocalTableStyles& localStyles)
+void TableStyleInstanceProperties::setLocalStyles(const MSOOXML::LocalTableStyles& localStyles)
 {
     m_localStyles = localStyles;
-
-    return *this;
 }
 
 LocalTableStyles TableStyleInstanceProperties::localStyles() const
@@ -97,11 +87,9 @@ LocalTableStyles TableStyleInstanceProperties::localStyles() const
     return m_localStyles;
 }
 
-TableStyleInstanceProperties& TableStyleInstanceProperties::setLocalDefaulCelltStyle(TableStyleProperties* properties)
+void TableStyleInstanceProperties::setLocalDefaulCelltStyle(TableStyleProperties* properties)
 {
     m_localDefaultCellStyle = properties;
-
-    return *this;
 }
 
 TableStyleProperties* TableStyleInstanceProperties::localDefaultCellStyle() const

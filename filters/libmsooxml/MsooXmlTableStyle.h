@@ -95,24 +95,24 @@ public:
     TableStyleInstanceProperties(int rowCount, int columnCount);
     virtual ~TableStyleInstanceProperties();
 
-    TableStyleInstanceProperties& setRowCount(int rowCount);
+    void setRowCount(int rowCount);
     int rowCount() const;
 
-    TableStyleInstanceProperties& setColumnCount(int columnCount);
+    void setColumnCount(int columnCount);
     int columnCount() const;
 
-    TableStyleInstanceProperties& setRowBandSize(int size);
+    void setRowBandSize(int size);
     int rowBandSize() const;
 
-    TableStyleInstanceProperties& setColumnBandSize(int size);
+    void setColumnBandSize(int size);
     int columnBandSize() const;
 
     ///LocalStyles is a collection of cell<->style relationships
-    TableStyleInstanceProperties& setLocalStyles(const LocalTableStyles& localStyles);
+    void setLocalStyles(const LocalTableStyles& localStyles);
     LocalTableStyles localStyles() const;
 
     ///LocalTableStyle is a style defined to be the default style of a table. Defined locally.
-    TableStyleInstanceProperties& setLocalDefaulCelltStyle(MSOOXML::TableStyleProperties* properties);
+    void setLocalDefaulCelltStyle(MSOOXML::TableStyleProperties* properties);
     TableStyleProperties* localDefaultCellStyle() const;
 
 private:
