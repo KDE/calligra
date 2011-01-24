@@ -217,7 +217,7 @@ protected:
     QMap<QString, BorderSide> m_textBorderPaddings;
 
     KoTable* m_table;
-    MSOOXML::DocumentTableStyle* m_tableStyle;
+    MSOOXML::DocumentTableStyle* m_currentTableStyle;
 
 protected:
     MSOOXML::TableStyleProperties* m_currentStyleProperties;
