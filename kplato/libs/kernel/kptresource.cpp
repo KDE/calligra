@@ -807,7 +807,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
 #endif
     double l = load * .01;
     AppointmentIntervalList lst = workIntervals( from, end );
-    foreach ( const AppointmentInterval &i, lst ) {
+    foreach ( const AppointmentInterval &i, lst.map() ) {
         m_currentSchedule->addAppointment( node, i.startTime(), i.endTime(), i.load() * l );
         foreach ( Resource *r, required ) {
             r->addAppointment( node, i.startTime(), i.endTime(), r->units() ); //FIXME: units may not be correct
@@ -961,18 +961,18 @@ void Resource::saveCalendarIntervalsCache( QDomElement &element ) const
 
 DateTime Resource::WorkInfoCache::firstAvailableAfter( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const
 {
-    AppointmentIntervalList::const_iterator it = intervals.constEnd();
+    QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constEnd();
     if ( start.isValid() && start <= time ) {
         // possibly usefull cache
-        it = intervals.lowerBound( time.date() );
+        it = intervals.map().lowerBound( time.date() );
     }
-    if ( it == intervals.constEnd() ) {
+    if ( it == intervals.map().constEnd() ) {
         // nothing cached, check the old way
         DateTime t = cal ? cal->firstAvailableAfter( time, limit, sch ) : DateTime();
         return t;
     }
     AppointmentInterval inp( time, limit );
-    for ( ; it != intervals.constEnd() && it.key() <= limit.date(); ++it ) {
+    for ( ; it != intervals.map().constEnd() && it.key() <= limit.date(); ++it ) {
         if ( ! it.value().intersects( inp ) && it.value() < inp ) {
             continue;
         }
@@ -987,7 +987,7 @@ DateTime Resource::WorkInfoCache::firstAvailableAfter( const DateTime &time, con
             return t;
         }
     }
-    if ( it == intervals.constEnd() ) {
+    if ( it == intervals.map().constEnd() ) {
         // ran out of cache, check the old way
         DateTime t = cal ? cal->firstAvailableAfter( time, limit, sch ) : DateTime();
         return t;
@@ -998,21 +998,18 @@ DateTime Resource::WorkInfoCache::firstAvailableAfter( const DateTime &time, con
 DateTime Resource::WorkInfoCache::firstAvailableBefore( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const
 {
     Q_ASSERT( time >= limit );
-    AppointmentIntervalList::const_iterator it = intervals.constBegin();
+    QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constBegin();
     if ( time.isValid() && limit.isValid() && end.isValid() && end >= time && ! intervals.isEmpty() ) {
         // possibly usefull cache
-        it = intervals.upperBound( time.date() );
-        if ( it != intervals.constBegin()) {
-            --it;
-        }
+        it = intervals.map().upperBound( time.date() );
     }
-    if ( it == intervals.constBegin() ) {
+    if ( it == intervals.map().constBegin() ) {
         // nothing cached, check the old way
         DateTime t = cal ? cal->firstAvailableBefore( time, limit, sch ) : DateTime();
         return t;
     }
     AppointmentInterval inp( limit, time );
-    for ( ; it != intervals.constBegin() && it.key() >= limit.date(); --it ) {
+    for ( --it; it != intervals.map().constBegin() && it.key() >= limit.date(); --it ) {
         if ( ! it.value().intersects( inp ) && inp < it.value() ) {
             continue;
         }
@@ -1027,7 +1024,7 @@ DateTime Resource::WorkInfoCache::firstAvailableBefore( const DateTime &time, co
             return t;
         }
     }
-    if ( it == intervals.constBegin() ) {
+    if ( it == intervals.map().constBegin() ) {
         // ran out of cache, check the old way
         DateTime t = cal ? cal->firstAvailableBefore( time, limit, sch ) : DateTime();
         return t;
@@ -1406,9 +1403,9 @@ void Resource::removeTeamMember( Resource *resource )
 
 QDebug operator<<( QDebug dbg, const KPlato::Resource::WorkInfoCache &c )
 {
-    dbg.nospace()<<"WorkInfoCache: ["<<" version="<<c.version<<" start="<<c.start.toString( Qt::ISODate )<<" end="<<c.end.toString( Qt::ISODate )<<" intervals="<<c.intervals.count();
+    dbg.nospace()<<"WorkInfoCache: ["<<" version="<<c.version<<" start="<<c.start.toString( Qt::ISODate )<<" end="<<c.end.toString( Qt::ISODate )<<" intervals="<<c.intervals.map().count();
     if ( ! c.intervals.isEmpty() ) {
-        foreach ( const AppointmentInterval &i, c.intervals ) {
+        foreach ( const AppointmentInterval &i, c.intervals.map() ) {
         dbg<<endl<<"   "<<i;
         }
     }
