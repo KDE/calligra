@@ -1437,7 +1437,6 @@ bool KPlatoXmlLoader::load(AppointmentIntervalList& lst, const KoXmlElement& ele
 
 bool KPlatoXmlLoader::load(AppointmentInterval& interval, const KoXmlElement& element, XMLLoaderObject& status)
 {
-    kDebug(kplatoXmlDebugArea())<<"interval";
     bool ok;
     QString s = element.attribute("start");
     if (!s.isEmpty()) {
@@ -1448,9 +1447,10 @@ bool KPlatoXmlLoader::load(AppointmentInterval& interval, const KoXmlElement& el
         interval.setEndTime( DateTime::fromString(s, status.projectSpec()) );
     }
     double l = element.attribute("load", "100").toDouble(&ok);
-    if (!ok) {
+    if (ok) {
         interval.setLoad( l );
     }
+    kDebug(kplatoXmlDebugArea())<<"interval:"<<interval;
     return interval.isValid();
 }
 
