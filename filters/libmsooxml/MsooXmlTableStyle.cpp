@@ -97,8 +97,9 @@ TableStyleProperties* TableStyleInstanceProperties::localDefaultCellStyle() cons
     return m_localDefaultCellStyle;
 }
 
-TableStyleInstance::TableStyleInstance(TableStyleInstanceProperties properties)
-: m_properties(properties)
+TableStyleInstance::TableStyleInstance(int row, int column)
+: m_row(row)
+, m_column(column)
 {
 }
 
@@ -128,8 +129,8 @@ void TableStyleInstance::applyBackground(TableStyleProperties* styleProperties, 
 
 void TableStyleInstance::applyBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
 {
-    const int lastRow = m_properties.rowCount() - 1;
-    const int lastColumn = m_properties.columnCount() - 1;
+    const int lastRow = m_row - 1;
+    const int lastColumn = m_column - 1;
 
     //Borders, are a bit tricky too; we have to take into account whether the cell 
     //has borders facing other cells or facing the border of the table.

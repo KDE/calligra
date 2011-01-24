@@ -127,7 +127,7 @@ private:
 class MSOOXML_EXPORT TableStyleInstance
 {
 public:
-    TableStyleInstance(TableStyleInstanceProperties properties);
+    TableStyleInstance(int row, int column);
     virtual ~TableStyleInstance();
 
     virtual KoCellStyle::Ptr style(int row, int column) = 0;
@@ -138,7 +138,9 @@ protected:
 private:
     void applyBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
     void applyBackground(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
-    TableStyleInstanceProperties m_properties;
+
+    int m_row;
+    int m_column;
 };
 
 }
