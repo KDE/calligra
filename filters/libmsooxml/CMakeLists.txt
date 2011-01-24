@@ -35,6 +35,7 @@ set(msooxml_LIB_SRCS
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
+    MsooXmlDocumentTableStyle.cpp
 )
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
