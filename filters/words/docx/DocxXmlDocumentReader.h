@@ -218,11 +218,13 @@ protected:
     QMap<QString, BorderSide> m_textBorderPaddings;
 
     KoTable* m_table;
-    MSOOXML::DocumentTableStyle* m_currentTableStyle;
+    QString m_currentTableStyle;
+
     MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
 
     MSOOXML::TableStyleProperties* m_currentStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
+    QString m_currentTableStyleBase;
 
 private:
     void init();

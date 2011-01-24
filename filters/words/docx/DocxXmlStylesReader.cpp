@@ -379,9 +379,14 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             ELSE_TRY_READ_IF(pPr)
             else if (QUALIFIED_NAME_IS(tblPr)) {
                 TRY_READ(tblPr)
+
                 MSOOXML::DocumentTableStyle* tableStyle = new MSOOXML::DocumentTableStyle;
                 tableStyle->setProperties(m_currentStyleProperties);
+                tableStyle->setBaseStyleName(m_currentTableStyle);
+
+                m_currentTableStyle.clear();
                 m_currentStyleProperties = 0;
+
                 m_context->m_tableStyles.insert(styleName, tableStyle);
             }
             ELSE_TRY_READ_IF(tblStylePr)

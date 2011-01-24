@@ -3302,7 +3302,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    m_currentTableStyle = m_context->m_tableStyles.value(val);
+    m_currentTableStyle = val;
 
     readNext();
 
@@ -4055,7 +4055,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentStyleProperties = 0;
     m_currentLocalTableStyles = new MSOOXML::LocalTableStyles;
 
-    m_currentTableStyle = 0;
+    m_currentTableStyle.clear();
 
     while (!atEnd()) {
         readNext();
@@ -4065,6 +4065,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
                 TRY_READ(tblPr)
                 m_currentDefaultCellStyle = m_currentStyleProperties;
                 m_currentStyleProperties = 0;
+
+                m_currentTableStyleBase = m_currentTableStyle;
+                m_currentTableStyle.clear();
             }
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
@@ -4098,7 +4101,9 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
     converterProperties.setLocalStyles(*m_currentLocalTableStyles);
 
-    MSOOXML::DocumentTableStyleConverter styleConverter(converterProperties, m_currentTableStyle);
+    MSOOXML::DocumentTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
+
+    MSOOXML::DocumentTableStyleConverter styleConverter(converterProperties, tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
             KoCellStyle::Ptr style = styleConverter.style(row, column);
