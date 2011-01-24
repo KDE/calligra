@@ -44,6 +44,8 @@ namespace MSOOXML
 class MsooXmlRelationships;
 }
 
+class KoTable;
+
 //! A class reading MSOOXML DOCX markup - document.xml part.
 class DocxXmlDocumentReader : public MSOOXML::MsooXmlCommonReader
 {
@@ -218,6 +220,8 @@ protected:
 
     // ! Same as above but for border padding
     QMap<QString, BorderSide> m_textBorderPaddings;
+
+    KoTable* m_table;
 
 private:
     void init();
