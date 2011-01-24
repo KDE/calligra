@@ -167,14 +167,18 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
         // NOTE: dur may not be correct if time != info->task->constraintStartTime, let's see what happends...
         dur = ( info->task->constraintEndTime() - info->task->constraintStartTime() ).seconds() / m_timeunit;
     } else if ( info->estimatetype == Estimate::Type_Effort ) {
-        dur = info->task->requests().duration(
-                    info->requests,
-                    fromRcpsTime( time ),
-                    info->estimate,
-                    0, /*no schedule*/
-                    m_backward ? ! direction : direction
-                ).seconds() / m_timeunit;
-        //qDebug()<<info->task->name()<< QString( "duration_callback effort: backward=%5, direction=%6 (direction=%7); Time=%1, duration=%2 ( %3, %4 )" ).arg( time ).arg( dur ).arg( fromRcpsTime( time ).toString() ).arg( Duration( (qint64)(dur) * m_timeunit * 1000 ).toDouble( Duration::Unit_h ) ).arg( m_backward ).arg( direction ).arg( m_backward ? !direction : direction );
+        if ( info->requests.isEmpty() ) {
+            dur = info->estimate.seconds() / m_timeunit;
+        } else {
+            dur = info->task->requests().duration(
+                        info->requests,
+                        fromRcpsTime( time ),
+                        info->estimate,
+                        0, /*no schedule*/
+                        m_backward ? ! direction : direction
+                    ).seconds() / m_timeunit;
+            //qDebug()<<info->task->name()<< QString( "duration_callback effort: backward=%5, direction=%6 (direction=%7); Time=%1, duration=%2 ( %3, %4 )" ).arg( time ).arg( dur ).arg( fromRcpsTime( time ).toString() ).arg( Duration( (qint64)(dur) * m_timeunit * 1000 ).toDouble( Duration::Unit_h ) ).arg( m_backward ).arg( direction ).arg( m_backward ? !direction : direction );
+        }
     } else {
         dur = info->task->length( 
                     fromRcpsTime( time ),
@@ -615,9 +619,16 @@ void KPlatoRCPSScheduler::taskFromRCPSBackward( struct rcps_job *job, Task *task
     if ( task->estimate()->type() == Estimate::Type_Effort ) {
         if ( task->appointmentStartTime().isValid() ) {
             task->setStartTime( task->appointmentStartTime() );
+        } else {
+            task->setStartTime( task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() ) );
         }
         if ( task->appointmentEndTime().isValid() ) {
             task->setEndTime( task->appointmentEndTime() );
+        } else  {
+            task->setEndTime( task->estimate()->calendar()->firstAvailableBefore( task->endTime(), task->startTime() ) );
+        }
+        if ( info->requests.isEmpty() ) {
+            cs->resourceError = true;
         }
     } else if ( task->estimate()->calendar() ) {
         DateTime t = task->estimate()->calendar()->firstAvailableAfter( task->startTime(), task->endTime() );

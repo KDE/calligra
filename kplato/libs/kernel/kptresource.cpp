@@ -999,10 +999,12 @@ DateTime Resource::WorkInfoCache::firstAvailableBefore( const DateTime &time, co
 {
     Q_ASSERT( time >= limit );
     AppointmentIntervalList::const_iterator it = intervals.constBegin();
-    if ( end.isValid() && end >= time && ! intervals.isEmpty() ) {
+    if ( time.isValid() && limit.isValid() && end.isValid() && end >= time && ! intervals.isEmpty() ) {
         // possibly usefull cache
         it = intervals.upperBound( time.date() );
-        --it;
+        if ( it != intervals.constBegin()) {
+            --it;
+        }
     }
     if ( it == intervals.constBegin() ) {
         // nothing cached, check the old way

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007 - 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +28,16 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
+#include <cstdlib>
+#include <qtest_kde.h>
+#include <QtCore/QDir>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kcalendarsystem.h>
+#include <ksystemtimezone.h>
+#include <kdatetime.h>
+#include <kconfiggroup.h>
+#include <QtDBus/QtDBus>
 
 #include <qtest_kde.h>
 #include <kdebug.h>
@@ -38,6 +48,62 @@
 
 namespace KPlato
 {
+
+void ProjectTester::initTimezone()
+{
+    cleanupTimezone();
+    mDataDir = QDir::homePath() + "/.rcps-unit-test/projecttest";
+    QVERIFY(QDir().mkpath(mDataDir));
+    QFile f;
+    f.setFileName(mDataDir + QLatin1String("/zone.tab"));
+    f.open(QIODevice::WriteOnly);
+    QTextStream fStream(&f);
+    fStream << "DE      +5230+01322     Europe/Berlin\n"
+               "EG  +3003+03115 Africa/Cairo\n"
+               "FR  +4852+00220 Europe/Paris\n"
+               "GB  +512830-0001845 Europe/London   Great Britain\n"
+               "US  +340308-1181434 America/Los_Angeles Pacific Time\n";
+    f.close();
+    QDir dir(mDataDir);
+    QVERIFY(dir.mkdir("Africa"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Cairo"), mDataDir + QLatin1String("/Africa/Cairo"));
+    QVERIFY(dir.mkdir("America"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Los_Angeles"), mDataDir + QLatin1String("/America/Los_Angeles"));
+    QVERIFY(dir.mkdir("Europe"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Berlin"), mDataDir + QLatin1String("/Europe/Berlin"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/London"), mDataDir + QLatin1String("/Europe/London"));
+    QFile::copy(QString::fromLatin1(KDESRCDIR) + QLatin1String("/Paris"), mDataDir + QLatin1String("/Europe/Paris"));
+
+    KConfig config("ktimezonedrc");
+    KConfigGroup group(&config, "TimeZones");
+    group.writeEntry("ZoneinfoDir", mDataDir);
+    group.writeEntry("Zonetab", mDataDir + QString::fromLatin1("/zone.tab"));
+    group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
+    config.sync();
+}
+
+void ProjectTester::cleanupTimezone()
+{
+    removeDir(QLatin1String("projecttest/Africa"));
+    removeDir(QLatin1String("projecttest/America"));
+    removeDir(QLatin1String("projecttest/Europe"));
+    removeDir(QLatin1String("projecttest"));
+    removeDir(QLatin1String("share/config"));
+    QDir().rmpath(QDir::homePath() + "/.rcps-unit-test/share");
+}
+
+void ProjectTester::removeDir(const QString &subdir)
+{
+    QDir local = QDir::homePath() + QLatin1String("/.rcps-unit-test/") + subdir;
+    foreach(const QString &file, local.entryList(QDir::Files))
+        if(!local.remove(file))
+            qWarning("%s: removing failed", qPrintable( file ));
+    QCOMPARE((int)local.entryList(QDir::Files).count(), 0);
+    local.cdUp();
+    QString subd = subdir;
+    subd.remove(QRegExp("^.*/"));
+    local.rmpath(subd);
+}
 
 static ResourceGroup *createWorkResources( Project &p, int count )
 {
@@ -82,6 +148,8 @@ static Calendar *createCalendar( Project &p )
 
 void ProjectTester::initTestCase()
 {
+    initTimezone();
+
     m_project = new Project();
     m_project->setName( "P1" );
     m_project->setId( m_project->uniqueNodeId() );
@@ -100,7 +168,9 @@ void ProjectTester::initTestCase()
 
 void ProjectTester::cleanupTestCase()
 {
+    qDebug()<<this<<m_project;
     delete m_project;
+    cleanupTimezone();
 }
 
 void ProjectTester::oneTask()
@@ -147,7 +217,8 @@ void ProjectTester::oneTask()
         rcps.calculate( *m_project, sm, true/*nothread*/ );
     }
 
-    Debug::print( t, s );
+    Debug::print( m_calendar, s );
+    Debug::print( m_project, s, true );
 
     QCOMPARE( t->startTime(), m_calendar->firstAvailableAfter( m_project->startTime(), m_project->endTime() ) );
     QCOMPARE( t->endTime(), DateTime( t->startTime().addMSecs( length ) ) );
