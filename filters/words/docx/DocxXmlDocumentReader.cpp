@@ -4079,6 +4079,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_table->saveOdf(*body, *mainStyles);
 
     delete m_table;
+    delete m_currentLocalTableStyles;
 
     m_currentTableNumber++;
 
