@@ -4151,6 +4151,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
 {
     READ_PROLOGUE
+
+    m_currentTableColumnNumber = 0;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
