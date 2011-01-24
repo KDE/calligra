@@ -44,11 +44,11 @@ private:
     TableStyleProperties* m_properties;
 };
 
-class MSOOXML_EXPORT DocumentTableStyleInstanceProperties : public TableStyleConverterProperties
+class MSOOXML_EXPORT DocumentTableStyleConverterProperties : public TableStyleConverterProperties
 {
 public:
-    DocumentTableStyleInstanceProperties();
-    virtual ~DocumentTableStyleInstanceProperties();
+    DocumentTableStyleConverterProperties();
+    virtual ~DocumentTableStyleConverterProperties();
 
     QMap<QString, TableStyleProperties*> styleList() const;
     void setStyleList(QMap<QString, TableStyleProperties*> styleList);
@@ -57,13 +57,17 @@ private:
     QMap<QString, TableStyleProperties*> m_styleList;
 };
 
-class MSOOXML_EXPORT DocumentTableStyleInstance : public TableStyleConverter
+class MSOOXML_EXPORT DocumentTableStyleConverter : public TableStyleConverter
 {
 public:
-    DocumentTableStyleInstance(DocumentTableStyleInstanceProperties properties, DocumentTableStyle* style =0);
-    virtual ~DocumentTableStyleInstance();
+    DocumentTableStyleConverter(DocumentTableStyleConverterProperties properties, DocumentTableStyle* style =0);
+    virtual ~DocumentTableStyleConverter();
 
     virtual KoCellStyle::Ptr style(int row, int column);
+
+private:
+    DocumentTableStyleConverterProperties m_properties;
+    DocumentTableStyle* m_style;
 };
 
 }

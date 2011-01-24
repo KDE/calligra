@@ -53,35 +53,37 @@ void DocumentTableStyle::setProperties(TableStyleProperties* properties)
     m_properties = properties;
 }
 
-DocumentTableStyleInstanceProperties::DocumentTableStyleInstanceProperties()
+DocumentTableStyleConverterProperties::DocumentTableStyleConverterProperties()
 : TableStyleConverterProperties()
 {
 }
 
-DocumentTableStyleInstanceProperties::~DocumentTableStyleInstanceProperties()
+DocumentTableStyleConverterProperties::~DocumentTableStyleConverterProperties()
 {
 }
 
-void DocumentTableStyleInstanceProperties::setStyleList(QMap<QString, TableStyleProperties*> styleList)
+void DocumentTableStyleConverterProperties::setStyleList(QMap<QString, TableStyleProperties*> styleList)
 {
     m_styleList = styleList;
 }
 
-QMap<QString, TableStyleProperties*> DocumentTableStyleInstanceProperties::styleList() const
+QMap<QString, TableStyleProperties*> DocumentTableStyleConverterProperties::styleList() const
 {
     return m_styleList;
 }
 
-DocumentTableStyleInstance::DocumentTableStyleInstance(DocumentTableStyleInstanceProperties properties, DocumentTableStyle* style)
+DocumentTableStyleConverter::DocumentTableStyleConverter(DocumentTableStyleConverterProperties properties, DocumentTableStyle* style)
 : TableStyleConverter(properties.rowCount(), properties.columnCount() )
+, m_properties(properties)
+, m_style(style)
 {
 }
 
-DocumentTableStyleInstance::~DocumentTableStyleInstance()
+DocumentTableStyleConverter::~DocumentTableStyleConverter()
 {
 }
 
-KoCellStyle::Ptr DocumentTableStyleInstance::style(int row, int column)
+KoCellStyle::Ptr DocumentTableStyleConverter::style(int row, int column)
 {
     KoCellStyle::Ptr style;
 
