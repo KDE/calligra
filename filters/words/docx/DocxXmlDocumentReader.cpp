@@ -3168,12 +3168,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs(attributes());
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            const QXmlStreamAttributes attrs(attributes());
             if (QUALIFIED_NAME_IS(top)) {
                 READ_ATTR(w)
                 m_currentStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
