@@ -373,4 +373,5 @@ install( FILES
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables/ui COMPONENT Devel)
 install( FILES
     database/Database.h
+    database/Filter.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables/database COMPONENT Devel)
