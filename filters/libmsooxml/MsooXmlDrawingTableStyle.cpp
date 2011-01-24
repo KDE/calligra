@@ -23,7 +23,7 @@ void DrawingTableStyleConverterProperties::setRoles(DrawingTableStyleConverterPr
     m_role = roles;
 }
 
-DrawingTableStyleConverter::DrawingTableStyleConverter(DrawingTableStyle* style, DrawingTableStyleConverterProperties properties)
+DrawingTableStyleConverter::DrawingTableStyleConverter(DrawingTableStyleConverterProperties properties, DrawingTableStyle* style)
 : TableStyleConverter(properties.rowCount(), properties.columnCount())
 , m_style(style)
 , m_properties(properties)
