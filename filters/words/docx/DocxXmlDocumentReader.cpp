@@ -4055,7 +4055,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if(QUALIFIED_NAME_IS(tblGrid)) {
+            if(QUALIFIED_NAME_IS(tblPr)) {
                 TRY_READ(tblPr)
                 m_currentDefaultCellStyle = m_currentStyleProperties;
                 m_currentStyleProperties = 0;
