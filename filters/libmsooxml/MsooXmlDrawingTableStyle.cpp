@@ -30,7 +30,6 @@ DrawingTableStyleInstance::DrawingTableStyleInstance(DrawingTableStyle* style, D
 , m_style(style)
 , m_properties(properties)
 {
-    Q_ASSERT(m_style);
 }
 
 DrawingTableStyleInstance::~DrawingTableStyleInstance()
@@ -39,10 +38,11 @@ DrawingTableStyleInstance::~DrawingTableStyleInstance()
 
 void DrawingTableStyleInstance::applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
+    if(!m_style) {
+        return;
+    }
+
     TableStyleProperties* const styleProperties = m_style->properties(type);
-
-    //TODO apply other properties
-
     TableStyleInstance::applyStyle(styleProperties, style, row, column);
 }
 
