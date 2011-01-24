@@ -1,7 +1,7 @@
 /*
  * This file is part of Calligra
  *
- * Copyright (C) 2011 Nokia Corporation and/or its subsidiary( -ies ).
+ * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
  *
  * Contact: Thorsten Zachmann thorsten.zachmann@nokia.com
  *
@@ -21,27 +21,9 @@
  *
  */
 #include <KoDocument.h>
-
 #include <KoPADocument.h>
-#include <KoPAPageBase.h>
-
-#include <tables/part/Doc.h>
-#include <tables/Sheet.h>
-#include <tables/Map.h>
-#include <tables/PrintSettings.h>
-#include <tables/ui/SheetView.h>
-#include <tables/SheetPrint.h>
-#include <KoZoomHandler.h>
-#include <KoShapePainter.h>
-#include <QPainter>
-
 #include <KWDocument.h>
-#include <KWPage.h>
-#include <frames/KWFrame.h>
-#include <frames/KWFrameSet.h>
-#include <frames/KWTextFrameSet.h>
-#include <frames/KWTextDocumentLayout.h>
-#include <KoTextShapeData.h>
+#include <tables/part/Doc.h>
 
 #include <KMimeType>
 #include <kmimetypetrader.h>
@@ -53,6 +35,11 @@
 #include <QBuffer>
 #include <QDir>
 #include <QFileInfo>
+#include <QPixmap>
+
+#include "CSThumbProviderStage.h"
+#include "CSThumbProviderTables.h"
+#include "CSThumbProviderWords.h"
 
 KoDocument* openFile(const QString &filename)
 {
@@ -87,156 +74,23 @@ KoDocument* openFile(const QString &filename)
     return document;
 }
 
-void setZoom(const KoPageLayout &pageLayout, const QSize &size, KoZoomHandler &zoomHandler)
-{
-    qreal zoom = size.width() / (zoomHandler.resolutionX() * pageLayout.width);
-    zoom = qMin(zoom, size.height() / (zoomHandler.resolutionY() * pageLayout.height));
-    zoomHandler.setZoom(zoom);
-}
-
-QRect pageRect(const KoPageLayout &pageLayout, const QSize &size, const KoZoomHandler &zoomHandler)
-{
-    int width = int(0.5 + zoomHandler.documentToViewX(pageLayout.width));
-    int height = int(0.5 + zoomHandler.documentToViewY(pageLayout.height));
-    int x = int((size.width() - width) / 2.0);
-    int y = int((size.height() - height) / 2.0);
-    return QRect(x, y, width, height);
-}
-
-QPixmap createSpreadsheetThumbnail(Calligra::Tables::Sheet* sheet, const QSize &thumbSize)
-{
-    QPixmap thumbnail(thumbSize);
-    thumbnail.fill(Qt::white);
-    QPainter p(&thumbnail);
-
-    KoPageLayout pageLayout;
-    pageLayout.format = KoPageFormat::IsoA4Size;
-    pageLayout.leftMargin = 0;
-    pageLayout.rightMargin = 0;
-    pageLayout.topMargin = 0;
-    pageLayout.bottomMargin = 0;
-    sheet->printSettings()->setPageLayout(pageLayout);
-    sheet->print()->setSettings(*sheet->printSettings(), true);
-
-    Calligra::Tables::SheetView sheetView(sheet);
-
-    // only paint first page for now
-    KoZoomHandler zoomHandler;
-    setZoom(pageLayout, thumbSize, zoomHandler);
-    sheetView.setViewConverter(&zoomHandler);
-
-    QRect range(sheet->print()->cellRange(1));
-    // paint also half cells on page edge
-    range.setWidth(range.width() + 1);
-    sheetView.setPaintCellRange(range); // first page
-
-    QRect pRect(pageRect(pageLayout, thumbSize, zoomHandler));
-
-    p.setClipRect(pRect);
-    p.translate(pRect.topLeft());
-    sheetView.paintCells(p, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0, 0));
-
-    const Qt::LayoutDirection direction = sheet->layoutDirection();
-
-    KoShapePainter shapePainter(direction == Qt::LeftToRight ? 0 : 0 /*RightToLeftPaintingStrategy(shapeManager, d->canvas)*/);
-    shapePainter.setShapes(sheet->shapes());
-    shapePainter.paint(p, zoomHandler);
-
-    return thumbnail;
-}
-
-QList<QPixmap> createWordsThumbnails(KWDocument *doc, const QSize &thumbSize)
-{
-    KoZoomHandler zoomHandler;
-    QList<KoShape*> shapes;
-    foreach(KWFrameSet *frameSet, doc->frameSets()) {
-        foreach(KWFrame *frame, frameSet->frames()) {
-            KoShape *shape = frame->shape();
-            shapes.append(shape);
-
-            // We need to call waitUntilReady so that the Layout is set on the text shape 
-            // representing the main text frame.
-            shape->waitUntilReady(zoomHandler, false);
-            KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-            if (textShapeData) {
-                // the foul is needed otherwise it does not work
-                textShapeData->foul();
-                KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(textShapeData->document()->documentLayout());
-                if (lay) {
-                    while (textShapeData->isDirty()){
-                        lay->scheduleLayout();
-                        QCoreApplication::processEvents();
-                    }
-                }
-            }
-        }
-    }
-
-    while (!doc->layoutFinishedAtleastOnce()) {
-        QCoreApplication::processEvents();
-
-        if (!QCoreApplication::hasPendingEvents())
-            break;
-    }
-
-    KWPageManager *manager = doc->pageManager();
-
-    // recreate the shape list as they are only created when the shape when the frames are added during first layout
-    shapes.clear();
-    foreach(KWFrameSet* frameSet, doc->frameSets()) {
-        foreach(KWFrame *frame, frameSet->frames()) {
-            shapes.append(frame->shape());
-        }
-    }
-
-    qDebug() << "Shapes" << shapes.size();
-
-    QList<QPixmap> thumbnails;
-
-    KoShapePainter shapePainter;
-    shapePainter.setShapes(shapes);
-    foreach(KWPage page, manager->pages()) {
-        QRectF pRect(page.rect(page.pageNumber()));
-        KoPageLayout layout;
-        layout.width = pRect.width();
-        layout.height = pRect.height();
-
-        setZoom(layout, thumbSize, zoomHandler);
-
-        QPixmap thumbnail(thumbSize);
-        thumbnail.fill(Qt::white);
-        QPainter p(&thumbnail);
-        p.setPen(Qt::black);
-        p.drawRect(pageRect(layout, thumbSize, zoomHandler));
-        shapePainter.paint(p, QRect(QPoint(0,0), thumbSize), pRect);
-
-        thumbnails.append(thumbnail);
-    }
-
-    return thumbnails;
-}
-
 QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
     QList<QPixmap> thumbnails;
 
+    CSThumbProvider *tp = 0;
+
     if (KoPADocument *doc = qobject_cast<KoPADocument*>(document)) {
-        foreach(KoPAPageBase *page, doc->pages(false)) {
-            thumbnails.append(page->thumbnail(thumbSize));
-        }
+        tp = new CSThumbProviderStage(doc);
     }
     else if (Calligra::Tables::Doc *doc = qobject_cast<Calligra::Tables::Doc*>(document)) {
-        if (0 != doc->map()) {
-            foreach(Calligra::Tables::Sheet* sheet, doc->map()->sheetList()) {
-                thumbnails.append(createSpreadsheetThumbnail(sheet, thumbSize));
-            }
-        }
+        tp = new CSThumbProviderTables(doc);
     }
     else if (KWDocument *doc = qobject_cast<KWDocument*>(document)) {
-        thumbnails = createWordsThumbnails(doc, thumbSize);
+        tp = new CSThumbProviderWords(doc);
     }
 
-    return thumbnails;
+    return tp->createThumbnails(thumbSize);
 }
 
 void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
