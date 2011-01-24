@@ -46,6 +46,7 @@
 #include <KoStoreDevice.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoEmbeddedFileSaver.h>
 #include <KoImageCollection.h>
 #include <KoDataCenterBase.h>
 #include <KoText.h>
@@ -362,7 +363,9 @@ bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext, const K
     KoGenStyles mainStyles;
     KoXmlWriter * bodyWriter = documentContext.odfStore.bodyWriter();
 
-    KoShapeSavingContext shapeContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
+    KoShapeSavingContext shapeContext(*bodyWriter, mainStyles,
+                                      documentContext.embeddedDocSaver,
+                                      documentContext.embeddedFileSaver);
 
     // save text styles
     saveOdfStyles(shapeContext);

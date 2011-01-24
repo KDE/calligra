@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,6 +36,7 @@
 #include <kio/netaccess.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoEmbeddedFileSaver.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
@@ -108,7 +110,8 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   Finally finaly(store);
 
   KoOdfWriteStore odfStore(store);
-  KoEmbeddedDocumentSaver embeddedSaver;
+  KoEmbeddedDocumentSaver embeddedDocSaver;
+  KoEmbeddedFileSaver     embeddedFileSaver;
   
   KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
   KoXmlWriter* contentWriter = odfStore.contentWriter();
@@ -119,7 +122,8 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   }
     
   KoGenStyles mainStyles;
-  KoShapeSavingContext * context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
+  KoShapeSavingContext * context = new KoShapeSavingContext(*bodyWriter, mainStyles,
+                                                            embeddedDocSaver, embeddedFileSaver);
   context->addOption(KoShapeSavingContext::DrawId);
 
   bodyWriter->startElement("office:body");
@@ -152,10 +156,14 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
       return false;
   }
 
-  // Save embedded objects
-  KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
-  if (not embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+  // Save embedded objects and files
+  KoOdfDocument::SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
+  if (not embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
       kDebug() << "save embedded documents failed";
+      return false;
+  }
+  if (not embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
+      kDebug() << "save embedded files failed";
       return false;
   }
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Ganesh Paramasivam <ganesh@crystalfab.com>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,6 +53,7 @@
 #include <KoParagraphStyle.h>
 #include <KoText.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoEmbeddedFileSaver.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoTextSharedSavingData.h>
@@ -161,10 +163,11 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
     KoGenStyles mainStyles;
     KoStyleManager *styleMan = KoTextDocument(document).styleManager();
     Q_UNUSED(styleMan);
-    KoEmbeddedDocumentSaver embeddedSaver;
+    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedFileSaver     embeddedFileSaver;
 
     KoGenChanges changes;
-    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
+    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedDocSaver, embeddedFileSaver);
 
     KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
     KoTextSharedSavingData *textSharedData = 0;

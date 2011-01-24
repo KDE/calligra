@@ -766,7 +766,8 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 bool KWDocument::saveOdf(SavingContext &documentContext)
 {
     KWOdfWriter writer(this);
-    return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
+    return writer.save(documentContext.odfStore,
+                       documentContext.embeddedDocSaver, documentContext.embeddedFileSaver);
 }
 
 QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) const

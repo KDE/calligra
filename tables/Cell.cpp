@@ -3,7 +3,7 @@
    Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
-   Copyright 2004-2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright 2004-2006, 2011 Inge Wallin <inge@lysator.liu.se>
    Copyright 1999-2002,2004,2005 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
@@ -88,6 +88,7 @@
 #include <KoTextDocument.h>
 #include <KoTextWriter.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoEmbeddedFileSaver.h>
 #include <KoParagraphStyle.h>
 
 #include <kdebug.h>
@@ -1216,8 +1217,10 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             QTextCharFormat format = style().asCharFormat();
             sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
 
-            KoEmbeddedDocumentSaver saver;
-            KoShapeSavingContext shapeContext(xmlwriter, mainStyles, saver);
+            KoEmbeddedDocumentSaver embeddedDocSaver;
+            KoEmbeddedFileSaver     embeddedFileSaver;
+            KoShapeSavingContext shapeContext(xmlwriter, mainStyles,
+                                              embeddedDocSaver, embeddedFileSaver);
             KoTextWriter writer(shapeContext);
 
             writer.write(doc.data(), 0);
