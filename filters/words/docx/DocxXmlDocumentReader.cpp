@@ -4047,7 +4047,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     READ_PROLOGUE
     m_table = new KoTable;
 
-    m_table->setName(QLatin1String("Table") + QString::number(m_currentTableNumber + 1));
+    m_table->setName(QLatin1String("Table") + QString::number(m_currentTableNumber++));
     m_currentTableRowNumber = 0;
     m_currentTableColumnNumber = 0;
 
@@ -4083,8 +4083,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     delete m_table;
     delete m_currentLocalTableStyles;
-
-    m_currentTableNumber++;
 
     READ_EPILOGUE
 }
