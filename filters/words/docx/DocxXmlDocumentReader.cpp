@@ -4101,7 +4101,7 @@ void DocxXmlDocumentReader::defineTableStyles()
     MSOOXML::DocumentTableStyleConverter styleConverter(converterProperties, m_currentTableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
-            KoCellStyle::Ptr style = KoCellStyle::create();//styleConverter.style(row, column);
+            KoCellStyle::Ptr style = styleConverter.style(row, column);
             m_table->cellAt(row, column)->setStyle(style);
         }
     }
