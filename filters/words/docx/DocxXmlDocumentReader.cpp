@@ -4096,6 +4096,7 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setColumnCount(columnCount);
     converterProperties.setStyleList(m_context->m_tableStyles);
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
+    converterProperties.setLocalStyles(*m_currentLocalTableStyles);
 
     MSOOXML::DocumentTableStyleConverter styleConverter(converterProperties, m_currentTableStyle);
     for(int row = 0; row < rowCount; ++row ) {
