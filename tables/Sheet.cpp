@@ -866,6 +866,71 @@ QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, 
     return newPoint;
 }
 
+QString Sheet::changeNameCellRefHelper(const QPoint& pos, const QRect& rect, bool fullRowOrColumn, ChangeRef ref,
+                                       int nbCol, const QPoint& point, bool isColumnFixed,
+                                       bool isRowFixed)
+{
+    const bool isFirstColumn = pos.x() == rect.left();
+    const bool isLastColumn = pos.x() == rect.right();
+    const bool isFirstRow = pos.y() == rect.top();
+    const bool isLastRow = pos.y() == rect.bottom();
+
+    QString newPoint;
+    int col = point.x();
+    int row = point.y();
+    // update column
+    if (isColumnFixed)
+        newPoint.append('$');
+    if (ref == ColumnInsert &&
+            col + nbCol <= KS_colMax &&
+            col >= pos.x() &&    // Column after the new one : +1
+            (fullRowOrColumn || row == pos.y())) {  // All rows or just one
+        newPoint += Cell::columnName(col + nbCol);
+    } else if (ref == ColumnRemove &&
+               (col > pos.x() ||
+                (col == pos.x() && isLastColumn)) &&    // Column after the deleted one : -1
+               (fullRowOrColumn || row == pos.y())) {  // All rows or just one
+        newPoint += Cell::columnName(col - nbCol);
+    } else
+        newPoint += Cell::columnName(col);
+
+    // Update row
+    if (isRowFixed)
+        newPoint.append('$');
+    if (ref == RowInsert &&
+            row + nbCol <= KS_rowMax &&
+            row >= pos.y() &&   // Row after the new one : +1
+            (fullRowOrColumn || col == pos.x())) {  // All columns or just one
+        newPoint += QString::number(row + nbCol);
+    } else if (ref == RowRemove &&
+               (row > pos.y() ||
+                (row == pos.y() && isLastRow)) &&   // Row after the deleted one : -1
+               (fullRowOrColumn || col == pos.x())) {  // All columns or just one
+        newPoint += QString::number(row - nbCol);
+    } else
+        newPoint += QString::number(row);
+
+    if (((ref == ColumnRemove
+            && col == pos.x() // Column is the deleted one : error
+            && (fullRowOrColumn || row == pos.y())
+            && (isFirstColumn && isLastColumn)) ||
+            (ref == RowRemove
+             && row == pos.y() // Row is the deleted one : error
+             && (fullRowOrColumn || col == pos.x())
+             && (isFirstRow && isLastRow)) ||
+            (ref == ColumnInsert
+             && col + nbCol > KS_colMax
+             && col >= pos.x()     // Column after the new one : +1
+             && (fullRowOrColumn || row == pos.y())) ||
+            (ref == RowInsert
+             && row + nbCol > KS_rowMax
+             && row >= pos.y() // Row after the new one : +1
+             && (fullRowOrColumn || col == pos.x())))) {
+        newPoint = '#' + i18n("Dependency") + '!';
+    }
+    return newPoint;
+}
+
 void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
                               const QString& tabname, int nbCol)
 {
@@ -908,12 +973,12 @@ void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef
                         if (element->sheet())
                             newText.append(element->sheet()->sheetName() + '!');
                         QString newPoint;
-                        newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
+                        newPoint = changeNameCellRefHelper(pos, element->rect(), fullRowOrColumn, ref,
                                                            nbCol, element->rect().topLeft(),
                                                            element->isColumnFixed(),
                                                            element->isRowFixed());
                         newText.append(newPoint + ':');
-                        newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
+                        newPoint = changeNameCellRefHelper(pos, element->rect(), fullRowOrColumn, ref,
                                                            nbCol, element->rect().bottomRight(),
                                                            element->isColumnFixed(),
                                                            element->isRowFixed());
