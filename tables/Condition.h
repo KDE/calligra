@@ -53,7 +53,7 @@ class ValueParser;
  * Holds the actual condition and the applicable style for conditional
  * Cell formattings.
  */
-class CALLIGRA_TABLES_EXPORT Conditional
+class CALLIGRA_TABLES_ODF_EXPORT Conditional
 {
 public:
     enum Type { None, Equal, Superior, Inferior, SuperiorEqual,
@@ -82,7 +82,7 @@ uint qHash(const Conditional& condition);
  * \ingroup Style
  * Manages a set of conditions for a cell.
  */
-class CALLIGRA_TABLES_EXPORT Conditions
+class CALLIGRA_TABLES_ODF_EXPORT Conditions
 {
 public:
     /**

@@ -30,7 +30,7 @@ namespace Tables {
 class Sheet;
 
 /** first and last row are both inclusive in all functions */
-class CALLIGRA_TABLES_EXPORT RowFormatStorage
+class CALLIGRA_TABLES_ODF_EXPORT RowFormatStorage
 {
 public:
     RowFormatStorage(Sheet* sheet);

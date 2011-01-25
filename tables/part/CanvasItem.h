@@ -75,7 +75,7 @@ class View;
 /**
  * The scrollable area showing the cells.
  */
-class CALLIGRA_TABLES_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
+class CALLIGRA_TABLES_COMMON_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
 {
     friend class ColumnHeaderItem;
     friend class RowHeaderItem;

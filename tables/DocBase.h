@@ -46,7 +46,7 @@ class Map;
 class Sheet;
 class SheetAccessModel;
 
-class CALLIGRA_TABLES_EXPORT DocBase : public KoDocument
+class CALLIGRA_TABLES_ODF_EXPORT DocBase : public KoDocument
 {
     Q_OBJECT
 public:

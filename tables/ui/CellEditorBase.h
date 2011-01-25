@@ -32,7 +32,7 @@ namespace Calligra
 namespace Tables
 {
 
-class CALLIGRA_TABLES_EXPORT CellEditorBase
+class CALLIGRA_TABLES_COMMON_EXPORT CellEditorBase
 {
 public:
     CellEditorBase();

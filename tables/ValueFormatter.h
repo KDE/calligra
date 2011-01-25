@@ -39,7 +39,7 @@ class ValueConverter;
  * \ingroup Value
  * Generates a textual representation of a Value with a given formatting.
  */
-class CALLIGRA_TABLES_EXPORT ValueFormatter
+class CALLIGRA_TABLES_ODF_EXPORT ValueFormatter
 {
 public:
     /**

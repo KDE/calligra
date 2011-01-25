@@ -55,13 +55,13 @@ typedef QHash<QString, Style>       Styles;
 // needs to be ordered (QMap) for the style dialog
 typedef QMap<QString, CustomStyle*> CustomStyles;
 
-CALLIGRA_TABLES_EXPORT uint qHash(const Style& style);
+CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
 
 /**
  * \ingroup Style
  * A cell style.
  */
-class CALLIGRA_TABLES_EXPORT Style
+class CALLIGRA_TABLES_ODF_EXPORT Style
 {
 public:
     enum HAlign {
@@ -385,7 +385,7 @@ private:
  * \ingroup Style
  * A named cell style.
  */
-class CALLIGRA_TABLES_EXPORT CustomStyle : public Style
+class CALLIGRA_TABLES_ODF_EXPORT CustomStyle : public Style
 {
 public:
     /**

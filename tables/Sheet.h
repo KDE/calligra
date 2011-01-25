@@ -88,7 +88,7 @@ template<typename T> class IntervalMap;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_TABLES_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
+class CALLIGRA_TABLES_ODF_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
         public ProtectableObject
 {
     Q_OBJECT

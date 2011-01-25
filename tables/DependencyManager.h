@@ -36,7 +36,7 @@ class Region;
  * Manages the dependencies between cells caused by references in formulas.
  * This dependency information is used for the recalculation of the cells.
  */
-class CALLIGRA_TABLES_EXPORT DependencyManager : public QObject
+class CALLIGRA_TABLES_ODF_EXPORT DependencyManager : public QObject
 {
     Q_OBJECT
     friend class TestDependencies;

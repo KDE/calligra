@@ -77,7 +77,7 @@ class Value;
  * storages in CellStorage. It provides methods to alter and retrieve this data
  * and methods related to loading and saving the contents.
  */
-class CALLIGRA_TABLES_EXPORT Cell
+class CALLIGRA_TABLES_ODF_EXPORT Cell
 {
 public:
     /**

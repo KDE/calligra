@@ -50,7 +50,7 @@ class Sheet;
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * \since 1.5
  */
-class CALLIGRA_TABLES_EXPORT Region
+class CALLIGRA_TABLES_ODF_EXPORT Region
 {
 public:
     class Element;

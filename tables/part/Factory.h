@@ -32,7 +32,7 @@ namespace Calligra
 namespace Tables
 {
 
-class CALLIGRA_TABLES_EXPORT Factory : public KPluginFactory
+class CALLIGRA_TABLES_COMMON_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:
