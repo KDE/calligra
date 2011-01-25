@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   Boston, MA 02111-1301, USA.
 */
 
 // This code is generated from the Microsoft HTML specification of the
@@ -6738,9 +6738,9 @@ std::string SEP::toString() const
     s += "\ndxaRight=";
     s += uint2string( dxaRight );
     s += "\ndyaTop=";
-    s += uint2string( dyaTop );
+    s += int2string( dyaTop );
     s += "\ndyaBottom=";
-    s += uint2string( dyaBottom );
+    s += int2string( dyaBottom );
     s += "\ndzaGutter=";
     s += uint2string( dzaGutter );
     s += "\ndmBinFirst=";

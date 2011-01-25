@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +24,14 @@
 #include "generated/simpleParser.h"
 
 class PptTextPFRun {
-    quint16 level_;
+    quint16 m_level;
 
     //default values of bullet properties (text type specific)
-    bool d_fHasBullet; //
+    bool m_fHasBullet;
+
+    //margin/ident for text with indentLevel == m_level (provided by TextRuler)
+    qint16 m_leftMargin;
+    qint16 m_indent;
 
     const MSO::TextPFException* pfs[6];
     const MSO::TextPFException9* pf9s[6];
@@ -39,9 +44,10 @@ public:
                           const MSO::MasterOrSlideContainer* m = 0,
                           const MSO::PptOfficeArtClientData* pcd = 0,
                           const MSO::TextContainer* tc = 0,
+                          const MSO::TextRuler* tr = 0,
                           quint32 start = 0);
 
-    quint16 level() const { return level_; }
+    quint16 level() const { return m_level; }
     bool isList() const;
 
     // TextPFException
@@ -87,7 +93,7 @@ public:
 
 class PptTextCFRun {
     QList<const MSO::TextCFException*> cfs;
-    quint16 level_;
+    quint16 m_level;
     bool cfrun_rm;
 public:
     PptTextCFRun(const MSO::DocumentContainer* d,

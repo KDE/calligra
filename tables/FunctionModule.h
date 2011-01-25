@@ -40,7 +40,7 @@ class Function;
  * \ingroup Value
  * A function module provides several Function objects.
  */
-class CALLIGRA_TABLES_EXPORT FunctionModule : public QObject
+class CALLIGRA_TABLES_ODF_EXPORT FunctionModule : public QObject
 {
     Q_OBJECT
 public:

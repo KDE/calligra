@@ -32,7 +32,7 @@ namespace Tables
 /**
  * The Factory, that creates a CellTool.
  */
-class CALLIGRA_TABLES_EXPORT CellToolFactory : public KoToolFactoryBase
+class CALLIGRA_TABLES_COMMON_EXPORT CellToolFactory : public KoToolFactoryBase
 {
 public:
     explicit CellToolFactory(const QString& id);

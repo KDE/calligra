@@ -155,7 +155,7 @@ public:
     //!used to figure out if a shape is a placeholder or not
     bool textBoxHasContent;
 
-    MSOOXML::TableStyleList* tableStyleList;
+    QMap<QString, MSOOXML::DrawingTableStyle*>* tableStyleList;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)

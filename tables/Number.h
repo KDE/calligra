@@ -91,7 +91,7 @@ The class will be able to format itself into a string, using provided locale set
 Out-of-class methods for computations are provided
 */
 
-class CALLIGRA_TABLES_EXPORT Number
+class CALLIGRA_TABLES_ODF_EXPORT Number
 {
 public:
     enum Type {
@@ -190,7 +190,7 @@ private:
 
 // conversion to double ... when we add the option to #define the Number class as double, this routine should be kept in place, and it should simply return its parameter
 // usage of this function should eventually be removed, because places that use it are not ready for high precision support
-CALLIGRA_TABLES_EXPORT long double numToDouble(Number n);
+CALLIGRA_TABLES_ODF_EXPORT long double numToDouble(Number n);
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,7 +53,7 @@ void SheetTest::testRemoveRows_data()
     QTest::newRow("range middle row")   << "=SUM(C4:C7)" << 5 << "=SUM(C4:C6)";
     QTest::newRow("range end row")      << "=SUM(C4:C7)" << 7 << "=SUM(C4:C6)";
     QTest::newRow("range after end")    << "=SUM(C4:C7)" << 8 << "=SUM(C4:C7)";
-    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 4 << "=#Dependency!";
+    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 4 << "=SUM(#Dependency!:#Dependency!)";
 
     QTest::newRow("2d range before start") << "=SUM(C4:E7)" << 3 << "=SUM(C3:E6)";
     QTest::newRow("2d range start row")    << "=SUM(C4:E7)" << 4 << "=SUM(C4:E6)";
@@ -90,7 +90,7 @@ void SheetTest::testRemoveColumns_data()
     QTest::newRow("range middle row")   << "=SUM(C4:E4)" << 4 << "=SUM(C4:D4)";
     QTest::newRow("range end row")      << "=SUM(C4:E4)" << 5 << "=SUM(C4:D4)";
     QTest::newRow("range after end")    << "=SUM(C4:E4)" << 6 << "=SUM(C4:E4)";
-    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 3 << "=#Dependency!";
+    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 3 << "=SUM(#Dependency!:#Dependency!)";
 
     QTest::newRow("2d range before start") << "=SUM(C4:E7)" << 2 << "=SUM(B4:D7)";
     QTest::newRow("2d range start row")    << "=SUM(C4:E7)" << 3 << "=SUM(C4:D7)";
