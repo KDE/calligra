@@ -115,7 +115,8 @@ bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
     return !m_shapeText.m_text.isEmpty();
 }
 
-void ODrawClient::processClientData(const MSO::OfficeArtClientData &o, Writer &out)
+void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox &ct,
+                                    const MSO::OfficeArtClientData &o, Writer &out)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
     QStringList lines = m_shapeText.m_text.split(QRegExp("[\n\r]"));
@@ -140,7 +141,8 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientData &o, Writer &o
     }
 }
 
-void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out)
+void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct,
+                                       const MSO::OfficeArtClientData *cd, Writer &out)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
 }
