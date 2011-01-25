@@ -4045,7 +4045,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 {
     READ_PROLOGUE
-    m_table = new KoTable;
+
+    KoTable table;
+    m_table = &table;
 
     m_table->setName(QLatin1String("Table") + QString::number(m_currentTableNumber++));
     m_currentTableRowNumber = 0;
@@ -4081,7 +4083,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     m_table->saveOdf(*body, *mainStyles);
 
-    delete m_table;
     delete m_currentLocalTableStyles;
 
     READ_EPILOGUE
@@ -4440,13 +4441,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
             if(qualifiedName() == "w:p") {
                 KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
 
-                QBuffer* buffer = new QBuffer;
+                QBuffer buffer;
                 KoXmlWriter* oldBody = body;
-                body = new KoXmlWriter(buffer, oldBody->indentLevel()+1);
+                KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
+                body = &newBody;
 
-                TRY_READ(p);
+                TRY_READ(p)
 
-                KoRawCellChild* textChild = new KoRawCellChild(buffer);
+                KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
                 delete body;
                 body = oldBody;
@@ -4461,15 +4463,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 QString currentTableStyle = m_currentTableStyle;
                 KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
 
-                QBuffer* buffer = new QBuffer;
+                QBuffer buffer;
                 KoXmlWriter* oldBody = body;
-                body = new KoXmlWriter(buffer, oldBody->indentLevel()+1);
+                KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
+                body = &newBody;
 
                 TRY_READ(tbl)
 
-                KoRawCellChild* textChild = new KoRawCellChild(buffer);
+                KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
-                delete body;
+
                 body = oldBody;
 
                 m_table = currentTable;
