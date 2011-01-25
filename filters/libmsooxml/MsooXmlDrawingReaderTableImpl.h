@@ -254,15 +254,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if(qualifiedName() == "a:txBody") {
-                QBuffer* buffer = new QBuffer;
+                QBuffer buffer;
+
                 KoXmlWriter* oldBody = body;
-                body = new KoXmlWriter(buffer, oldBody->indentLevel()+1);
+                KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
+                body = &newBody;
 
                 TRY_READ(DrawingML_txBody);
 
-                KoRawCellChild* textChild = new KoRawCellChild(buffer);
+                KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
-                delete body;
+
                 body = oldBody;
             }
 //             ELSE_TRY_READ_IF(extLst)
