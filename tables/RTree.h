@@ -747,14 +747,18 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int n
 
     QMap< int, QPair<QRectF, T> > result;
 
-    int shift = 0;
+    int shift = 0, endShift = number;
     // Don't process complete columns.
     if (this->m_boundingBox.top() != 1 || this->m_boundingBox.bottom() != KS_rowMax) {
         if (mode == CopyNone)
             shift = 0;
         else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.top())
             shift = number;
-        this->m_boundingBox.adjust(0, shift, 0, number);
+        if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.toRect().bottom())
+            endShift = number;
+        else
+            endShift = 0;
+        this->m_boundingBox.adjust(0, shift, 0, endShift);
     }
 
     for (int i = 0; i < this->childCount(); ++i) {
@@ -768,7 +772,12 @@ QMap< int, QPair<QRectF, T> > RTree<T>::LeafNode::insertRows(int position, int n
             shift = number;
         else
             shift = 0;
-        this->m_childBoundingBox[i].adjust(0, shift, 0, number);
+
+        if (position - (mode == CopyPrevious ? 1 : 0) < this->m_childBoundingBox[i].toRect().bottom())
+            endShift = number;
+        else
+            endShift = 0;
+        this->m_childBoundingBox[i].adjust(0, shift, 0, endShift);
     }
 
     return QMap< int, QPair<QRectF, T> >(); // FIXME

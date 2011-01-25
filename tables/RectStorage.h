@@ -350,7 +350,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
     // process the tree
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(1, KS_rowMax - number + 1, KS_colMax, number), T());
-    undoData << m_tree.insertRows(position, number);
+    undoData << m_tree.insertRows(position, number, RTree<T>::CopyCurrent);
     return undoData;
 }
 
@@ -364,7 +364,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number
     // process the tree
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(KS_colMax - number + 1, 1, number, KS_rowMax), T());
-    undoData << m_tree.insertColumns(position, number);
+    undoData << m_tree.insertColumns(position, number, RTree<T>::CopyCurrent);
     return undoData;
 }
 
