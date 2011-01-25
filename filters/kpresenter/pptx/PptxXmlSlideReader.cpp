@@ -155,7 +155,7 @@ public:
     //!used to figure out if a shape is a placeholder or not
     bool textBoxHasContent;
 
-    MSOOXML::TableStyleList* tableStyleList;
+    QMap<QString, MSOOXML::DrawingTableStyle*>* tableStyleList;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
@@ -994,7 +994,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
  Child elements:
  - [done] blipFill (Picture Fill) §20.1.8.14
  - effectDag (Effect Container) §20.1.8.25
- - effectLst (Effect Container) §20.1.8.26
+ - [done] effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §19.2.1.12
  - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
@@ -1022,6 +1022,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                 if (m_currentAlpha > 0) {
                     m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentAlpha));
                 }
+            }
+            else if (qualifiedName() == QLatin1String("a:effectLst")) {
+                TRY_READ(effectLst)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
                 m_currentDrawStyle->addAttribute("style:fill", constNone);

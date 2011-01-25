@@ -764,6 +764,10 @@ public:
      */
     HeaderFooter *headerFooter() const;
 
+    /**
+     * Applies a database filter.
+     */
+    void applyDatabaseFilter(const Database& database);
 #ifndef NDEBUG
     void printDebug();
 #endif

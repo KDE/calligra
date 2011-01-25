@@ -353,6 +353,7 @@ install( FILES
     Sheet.h
     Style.h
     Value.h
+    ValueConverter.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES
     part/CanvasBase.h
@@ -372,4 +373,5 @@ install( FILES
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables/ui COMPONENT Devel)
 install( FILES
     database/Database.h
+    database/Filter.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables/database COMPONENT Devel)

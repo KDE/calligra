@@ -34,6 +34,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
+#include <KoBorder.h>
 
 //#define NO_DRAWINGML_PICTURE // disables pic:pic, etc. in MsooXmlCommonReader
 
@@ -42,7 +43,12 @@ class DocxXmlDocumentReaderContext;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
+class DocumentTableStyle;
+class TableStyleProperties;
+class LocalTableStyles;
 }
+
+class KoTable;
 
 //! A class reading MSOOXML DOCX markup - document.xml part.
 class DocxXmlDocumentReader : public MSOOXML::MsooXmlCommonReader
@@ -190,14 +196,6 @@ protected:
 
     KoOdfWriters *m_writers; // Needed to create new relationship for header/footer
 
-    KoGenStyle m_currentTableCellStyle;
-    KoGenStyle m_currentTableCellStyleLeft;
-    KoGenStyle m_currentTableCellStyleRight;
-    KoGenStyle m_currentTableCellStyleTop;
-    KoGenStyle m_currentTableCellStyleBottom;
-    KoGenStyle m_currentTableCellStyleInsideV;
-    KoGenStyle m_currentTableCellStyleInsideH;
-
     enum BorderSide {
         TopBorder, BottomBorder, LeftBorder, RightBorder, InsideH, InsideV
     };
@@ -219,6 +217,15 @@ protected:
     // ! Same as above but for border padding
     QMap<QString, BorderSide> m_textBorderPaddings;
 
+    KoTable* m_table;
+    QString m_currentTableStyle;
+
+    MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
+
+    MSOOXML::TableStyleProperties* m_currentStyleProperties;
+    MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
+    QString m_currentTableStyleBase;
+
 private:
     void init();
 
@@ -226,6 +233,9 @@ private:
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
     KoFilter::ConversionStatus readBorderElement(BorderSide borderSide, const char *borderSideName);
+
+    ///reads the border in a table style
+    KoBorder::BorderData getBorderData();
 
     //! Creates border style for readBorderElement().
     //! Result is added to m_borderStyles and m_borderPaddings
@@ -240,6 +250,7 @@ private:
     //! Applies border styles and paddings obtained in readBorderElement()
     //! to style @a style (paragraph or page...)
     void applyBorders(KoGenStyle *style, QMap<QString, BorderSide> sourceBorder, QMap<QString, BorderSide> sourcePadding);
+    void defineTableStyles();
 
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
@@ -317,6 +328,8 @@ public:
     QMap<QString, QString> m_comments;
 
     QMap<QString, QString> m_endnotes;
+
+    QMap<QString, MSOOXML::DocumentTableStyle*> m_tableStyles;
 
 private:
 };

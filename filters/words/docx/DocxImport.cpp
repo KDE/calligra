@@ -184,6 +184,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 stylesPathAndFile, &stylesReader, writers, errorMessage, &context) )
+
+            mainContext.m_tableStyles = context.m_tableStyles;
         }
     }
 

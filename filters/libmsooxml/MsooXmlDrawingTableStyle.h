@@ -20,11 +20,7 @@
 #ifndef MSOOXMLDRAWINGTABLESTYLE_H
 #define MSOOXMLDRAWINGTABLESTYLE_H
 
-#include "msooxml_export.h"
-
-#include <KoCellStyle.h>
-
-#include <QFlags>
+#include <MsooXmlTableStyle.h>
 
 /**
  * The idea behind these classes is the following:
@@ -44,9 +40,15 @@
  *    depending whether is in the outside of the table or
  *    if it's an inside border. That's why the size of the
  *    table is needed.
- * For these reasons we don't apply styles directly but we instantiate
- * them for a specific table with a specific togglers for styles and
- * a size.
+ *
+ * Also, we might need to apply local styles (styles to one cell,)
+ * or default styles for all the cells in a table. Defined in the very
+ * table.
+ *
+ * For these reasons we don't apply styles directly but we use a style
+ * converter for a specific table with a specific togglers for styles,
+ * specific local styles or specific default styles and size. This converter
+ * will give a KoCellStyle back.
  */
 
 namespace MSOOXML
@@ -54,35 +56,7 @@ namespace MSOOXML
 
 /// Reading and storage
 
-struct MSOOXML_EXPORT TableStyleProperties
-{
-    enum Property {
-        BottomBorder = 1,
-        InsideHBorder = 2,
-        InsideVBorder = 4,
-        LeftBorder = 8,
-        RightBorder = 16,
-        Tl2brBorder = 32,
-        TopBorder = 64,
-        Tr2blBorder = 128,
-        BackgroundColor = 256
-    };
-    Q_DECLARE_FLAGS(Properties, Property)
-    Properties setProperties;
-
-    KoBorder::BorderData bottom;
-    KoBorder::BorderData insideH;
-    KoBorder::BorderData insideV;
-    KoBorder::BorderData left;
-    KoBorder::BorderData right;
-    KoBorder::BorderData tl2br;
-    KoBorder::BorderData top;
-    KoBorder::BorderData tr2bl;
-
-    QColor backgroundColor;
-};
-
-class MSOOXML_EXPORT TableStyle
+class MSOOXML_EXPORT DrawingTableStyle : public TableStyle
 {
 public:
     enum Type {
@@ -102,59 +76,23 @@ public:
         WholeTbl
     };
 
-    TableStyle();
-    ~TableStyle();
+    DrawingTableStyle();
+    virtual ~DrawingTableStyle();
 
-    void setId(const QString& id);
-    QString id() const;
-
+    ///the style takes ownership of the properties
     void addProperties(Type type, TableStyleProperties* properties);
     TableStyleProperties* properties(Type type) const;
 
 private:
-    QString m_id;
     QMap<Type, TableStyleProperties*> m_properties;
     //TODO handle the table background stored in the element TblBg
 };
 
-class MSOOXML_EXPORT TableStyleList
+class MSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
 {
 public:
-    TableStyleList();
-    ~TableStyleList();
-
-    TableStyle tableStyle(const QString& id) const;
-    void insertStyle(QString id, MSOOXML::TableStyle style);
-
-private:
-    QMap<QString, TableStyle> m_styles;
-};
-
-/// Instantiation classes
-
-class MSOOXML_EXPORT LocalTableStyles
-{
-public:
-    LocalTableStyles();
-    ~LocalTableStyles();
-
-    TableStyleProperties* localStyle(int row, int column);
-    void setLocalStyle(MSOOXML::TableStyleProperties* properties, int row, int column);
-
-private:
-    QMap<QPair<int,int>, TableStyleProperties*> m_properties;
-};
-
-class MSOOXML_EXPORT TableStyleInstanceProperties
-{
-    friend class TableStyleInstance;
-public:
-    TableStyleInstanceProperties(int rowCount, int columnCount);
-    ~TableStyleInstanceProperties();
-
-    TableStyleInstanceProperties& rowBandSize(int size);
-    TableStyleInstanceProperties& columnBandSize(int size);
-    TableStyleInstanceProperties& localStyles(const LocalTableStyles& localStyles);
+    DrawingTableStyleConverterProperties();
+    ~DrawingTableStyleConverterProperties();
 
     enum Role {
         FirstRow = 1,
@@ -171,38 +109,30 @@ public:
     };
     Q_DECLARE_FLAGS(Roles, Role)
 
-    TableStyleInstanceProperties& roles(Roles roles);
+    void setRoles(Roles roles);
+    Roles roles() const;
 
 private:
-    int m_rowCount;
-    int m_columnCount;
-    int m_rowBandSize;
-    int m_columnBandSize;
     Roles m_role;
-    LocalTableStyles m_localStyles;
 };
 
-class MSOOXML_EXPORT TableStyleInstance
+class MSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
-    TableStyleInstance(TableStyle* style, TableStyleInstanceProperties properties);
-    ~TableStyleInstance();
+    DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
+    virtual ~DrawingTableStyleConverter();
 
     KoCellStyle::Ptr style(int row, int column);
 
 private:
-    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
-    void applyStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
-    void applyBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
-    void applyBackground(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
 
-    TableStyle* m_style;
-    TableStyleInstanceProperties m_properties;
+    DrawingTableStyle * const m_style;
+    DrawingTableStyleConverterProperties const& m_properties;
 };
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::TableStyleInstanceProperties::Roles)
-Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::TableStyleProperties::Properties)
+Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::DrawingTableStyleConverterProperties::Roles)
 
 #endif
