@@ -36,7 +36,7 @@ namespace Tables
  * \class Currency
  * Currency format information.
  */
-class CALLIGRA_TABLES_EXPORT Currency
+class CALLIGRA_TABLES_ODF_EXPORT Currency
 {
 public:
     enum Format { Native, Gnumeric, OpenCalc, ApplixSpread, GobeProductiveSpread, HancomSheet };

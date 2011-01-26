@@ -23,13 +23,23 @@
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-#ifndef CALLIGRA_TABLES_EXPORT
+#ifndef CALLIGRA_TABLES_ODF_EXPORT
 # if defined(MAKE_CALLIGRATABLESODF_LIB)
 /* We are building this library */
-#  define CALLIGRA_TABLES_EXPORT KDE_EXPORT
+#  define CALLIGRA_TABLES_ODF_EXPORT KDE_EXPORT
 # else
 /* We are using this library */
-#  define CALLIGRA_TABLES_EXPORT KDE_IMPORT
+#  define CALLIGRA_TABLES_ODF_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef CALLIGRA_TABLES_COMMON_EXPORT
+# if defined(MAKE_CALLIGRATABLESCOMMON_LIB)
+/* We are building this library */
+#  define CALLIGRA_TABLES_COMMON_EXPORT KDE_EXPORT
+# else
+/* We are using this library */
+#  define CALLIGRA_TABLES_COMMON_EXPORT KDE_IMPORT
 # endif
 #endif
 

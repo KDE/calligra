@@ -32,7 +32,7 @@ namespace Tables
 /**
  * The tool to change cell ranges.
  */
-class CALLIGRA_TABLES_EXPORT CellTool : public CellToolBase
+class CALLIGRA_TABLES_COMMON_EXPORT CellTool : public CellToolBase
 {
     Q_OBJECT
 

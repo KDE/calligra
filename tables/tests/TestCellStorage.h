@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2008 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2011 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,49 +17,24 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_TOOL_REGISTRY
-#define CALLIGRA_TABLES_TOOL_REGISTRY
+#ifndef CALLIGRA_TABLES_CELL_STORAGE_TEST
+#define CALLIGRA_TABLES_CELL_STORAGE_TEST
 
-#include <QObject>
-
-#include "calligra_tables_export.h"
+#include <QtTest/QtTest>
 
 namespace Calligra
 {
 namespace Tables
 {
 
-/**
- * Registry for tools.
- * \ingroup Plugin
- */
-class CALLIGRA_TABLES_COMMON_EXPORT ToolRegistry : public QObject
+class CellStorageTest : public QObject
 {
-public:
-    /**
-     * Creates the registry.
-     */
-    ToolRegistry();
-    ~ToolRegistry();
-
-    /**
-     * \return the singleton instance
-     */
-    static ToolRegistry* instance();
-
-    /**
-     * Loads the tools.
-     * Depending on their activation state read from the config,
-     * the tools are added or removed from the registry.
-     */
-    void loadTools();
-
-private:
-    class Private;
-    Private * const d;
+    Q_OBJECT
+private Q_SLOTS:
+    void testMergedCellsInsertRowBug();
 };
 
 } // namespace Tables
 } // namespace Calligra
 
-#endif // CALLIGRA_TABLES_TOOL_REGISTRY
+#endif // CALLIGRA_TABLES_CELL_STORAGE_TEST

@@ -68,7 +68,7 @@ class SheetView;
 /**
  * The scrollable area showing the cells.
  */
-class CALLIGRA_TABLES_EXPORT CanvasBase : public KoCanvasBase
+class CALLIGRA_TABLES_COMMON_EXPORT CanvasBase : public KoCanvasBase
 {
     friend class ColumnHeader;
     friend class RowHeader;

@@ -42,7 +42,7 @@ class CellProxy;
 /**
 * The ViewAdaptor class provides access to a view on a KSpread document.
 */
-class CALLIGRA_TABLES_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_TABLES_COMMON_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.view")

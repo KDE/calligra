@@ -51,7 +51,7 @@ class ValueStorage;
  *
  * Value uses implicit data sharing to reduce memory usage.
  */
-class CALLIGRA_TABLES_EXPORT Value
+class CALLIGRA_TABLES_ODF_EXPORT Value
 {
 
 public:
@@ -518,14 +518,14 @@ Q_DECLARE_TYPEINFO(Calligra::Tables::Value, Q_MOVABLE_TYPE);
   QTextStream support
 ****************************************************************************/
 
-CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value::Type type);
-CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value value);
+CALLIGRA_TABLES_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value::Type type);
+CALLIGRA_TABLES_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value value);
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Value& v);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Value& v);
 QDebug operator<<(QDebug stream, const Calligra::Tables::Value::Format& f);
 
 #endif // CALLIGRA_TABLES_VALUE_H

@@ -1402,10 +1402,9 @@ void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                              Writer& out)
 {
     if (o.clientData && client && client->onlyClientData(*o.clientData)) {
-        client->processClientData(*o.clientData, out);
+        client->processClientData(*o.clientTextbox, *o.clientData, out);
     } else if (o.clientTextbox) {
-        client->processClientTextBox(*o.clientTextbox,
-                                     o.clientData.data(), out);
+        client->processClientTextBox(*o.clientTextbox, o.clientData.data(), out);
     }
 }
 
