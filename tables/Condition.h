@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 1998, 1999 Torben Weis <weis@kde.org>
    Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
 
@@ -53,7 +53,7 @@ class ValueParser;
  * Holds the actual condition and the applicable style for conditional
  * Cell formattings.
  */
-class CALLIGRA_TABLES_EXPORT Conditional
+class CALLIGRA_TABLES_ODF_EXPORT Conditional
 {
 public:
     enum Type { None, Equal, Superior, Inferior, SuperiorEqual,
@@ -82,7 +82,7 @@ uint qHash(const Conditional& condition);
  * \ingroup Style
  * Manages a set of conditions for a cell.
  */
-class CALLIGRA_TABLES_EXPORT Conditions
+class CALLIGRA_TABLES_ODF_EXPORT Conditions
 {
 public:
     /**

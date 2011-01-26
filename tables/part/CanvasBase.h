@@ -68,7 +68,7 @@ class SheetView;
 /**
  * The scrollable area showing the cells.
  */
-class CALLIGRA_TABLES_EXPORT CanvasBase : public KoCanvasBase
+class CALLIGRA_TABLES_COMMON_EXPORT CanvasBase : public KoCanvasBase
 {
     friend class ColumnHeader;
     friend class RowHeader;
@@ -178,7 +178,7 @@ public:
     virtual void disableAutoScroll() = 0;
 
     virtual void showContextMenu(const QPoint& globalPos) = 0;
-private:
+protected:
     /**
      * Returns the range of cells which appear in the specified area of the Canvas widget
      * For example, viewToCellCoordinates( QRect(0,0,width(),height()) ) returns a range containing all visible cells

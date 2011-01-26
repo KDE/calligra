@@ -51,7 +51,8 @@ public:
          * Process the client data into ODF in a host application specific
          * manner.
          **/
-        virtual void processClientData(const MSO::OfficeArtClientData& o,
+        virtual void processClientData(const MSO::OfficeArtClientTextBox& ct,
+                                       const MSO::OfficeArtClientData& o,
                                        Writer& out) = 0;
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,

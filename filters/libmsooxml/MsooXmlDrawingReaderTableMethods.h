@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
+ * Copyright (C) 2010-2011 Carlos Licea <carlos@kdab.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,8 +40,8 @@ protected:
     KoTable* m_table;
     QString m_currentTableName;
 
-    MSOOXML::TableStyle m_tableStyle;
-    MSOOXML::TableStyleInstanceProperties::Roles m_activeRoles;
+    MSOOXML::DrawingTableStyle* m_tableStyle;
+    MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
 
     MSOOXML::TableStyleProperties* m_currentLocalStyleProperties;
     MSOOXML::LocalTableStyles m_localTableStyles;

@@ -32,6 +32,7 @@
 #define MSOOXML_CURRENT_CLASS DocxXmlStylesReader
 
 #include <MsooXmlReader_p.h>
+#include <MsooXmlDocumentTableStyle.h>
 
 //#include <MsooXmlCommonReaderImpl.h> // this adds w:pPr, etc.
 
@@ -360,17 +361,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         else if (type == "paragraph") {
             m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, odfType.toLatin1());
         }
-        else if (type == "table") {
-            m_currentTableStyle = KoGenStyle(KoGenStyle::TableStyle, odfType.toLatin1());
-
-            // These are needed because ooxml stores table styles differently from odf
-            m_currentTableCellStyleLeft = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
-            m_currentTableCellStyleRight = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
-            m_currentTableCellStyleTop = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
-            m_currentTableCellStyleBottom = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
-            m_currentTableCellStyleInsideV = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
-            m_currentTableCellStyleInsideH = KoGenStyle(KoGenStyle::TableCellStyle, "table-cell");
-        }
     }
     MSOOXML::Utils::Setter<bool> currentTextStylePredefinedSetter(&m_currentTextStylePredefined, false);
     MSOOXML::Utils::Setter<bool> currentParagraphStylePredefinedSetter(&m_currentParagraphStylePredefined, false);
@@ -387,7 +377,18 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             TRY_READ_IF(name)
             ELSE_TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(pPr)
-            ELSE_TRY_READ_IF(tblPr)
+            else if (QUALIFIED_NAME_IS(tblPr)) {
+                TRY_READ(tblPr)
+
+                MSOOXML::DocumentTableStyle* tableStyle = new MSOOXML::DocumentTableStyle;
+                tableStyle->setProperties(m_currentStyleProperties);
+                tableStyle->setBaseStyleName(m_currentTableStyle);
+
+                m_currentTableStyle.clear();
+                m_currentStyleProperties = 0;
+
+                m_context->m_tableStyles.insert(styleName, tableStyle);
+            }
             ELSE_TRY_READ_IF(tblStylePr)
             else if (QUALIFIED_NAME_IS(basedOn)) {
                 READ_ATTR(val)
@@ -449,19 +450,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
             MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             styleName = mainStyles->insert(m_currentParagraphStyle, styleName, insertionFlags);
-        }
-        else if (type == "table") {
-            styleName = mainStyles->insert(m_currentTableStyle, styleName, insertionFlags);
-
-            // The names here are partly hard coded, it means in practise that if there was a style called
-            // 'style'-cellsLeft, then this logic would not work, however it is not very likely.
-            mainStyles->insert(m_currentTableCellStyleLeft, QString("%1-%2").arg(styleName).arg("cellsLeft"), insertionFlags);
-            mainStyles->insert(m_currentTableCellStyleRight, QString("%1-%2").arg(styleName).arg("cellsRight"), insertionFlags);
-            mainStyles->insert(m_currentTableCellStyleTop, QString("%1-%2").arg(styleName).arg("cellsTop"), insertionFlags);
-            mainStyles->insert(m_currentTableCellStyleBottom, QString("%1-%2").arg(styleName).arg("cellsBottom"), insertionFlags);
-            mainStyles->insert(m_currentTableCellStyleInsideV, QString("%1-%2").arg(styleName).arg("cellsInsideV"), insertionFlags);
-            mainStyles->insert(m_currentTableCellStyleInsideH, QString("%1-%2").arg(styleName).arg("cellsInsideH"), insertionFlags);
-
         }
         if (!nextStyleName.isEmpty()) {
             mainStyles->insertStyleRelation(styleName, nextStyleName, "style:next-style-name");

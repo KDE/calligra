@@ -115,7 +115,7 @@ bool MySQLMigrate::drv_readTableSchema(
 
     //Perform a query on the table to get some data
     tableSchema.setName(originalName);
-    QString query = QString("SELECT * FROM `") + drv_escapeIdentifier(originalName) + "` LIMIT 0";
+    QString query = QString("SELECT * FROM ") + drv_escapeIdentifier(originalName) + " LIMIT 0";
     if (!d->executeSQL(query))
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);

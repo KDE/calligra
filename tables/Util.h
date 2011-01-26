@@ -56,28 +56,28 @@ namespace Util
  * Converted are all characters matching [A-Za-z]+ regular expresion, the rest is ignored.
  * 0 is returned if no characters match.
  */
-CALLIGRA_TABLES_EXPORT int decodeColumnLabelText(const QString &labelText);
+CALLIGRA_TABLES_ODF_EXPORT int decodeColumnLabelText(const QString &labelText);
 
 /**
  * Call this function to decode the text of a row label to an integer,
  * e.g. B7 is translated to 7.
  */
-CALLIGRA_TABLES_EXPORT int decodeRowLabelText(const QString &labelText);
+CALLIGRA_TABLES_ODF_EXPORT int decodeRowLabelText(const QString &labelText);
 
 /**
  * Call this function to encode an integer to the text of the column label
  * i.e. 27->AA
  */
-CALLIGRA_TABLES_EXPORT QString encodeColumnLabelText(int column);
+CALLIGRA_TABLES_ODF_EXPORT QString encodeColumnLabelText(int column);
 
 /**
  * Generate and return the ODF formula for this cell (\p thisRow, \p thisColumn) based on the formula in the
  * defined cell (\p referencedRow, \p referencedColumn ).
  */
-CALLIGRA_TABLES_EXPORT QString adjustFormulaReference(const QString& formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn);
+CALLIGRA_TABLES_ODF_EXPORT QString adjustFormulaReference(const QString& formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn);
 
 //Return true when it's a reference to cell from sheet.
-CALLIGRA_TABLES_EXPORT bool localReferenceAnchor(const QString &_ref);
+CALLIGRA_TABLES_ODF_EXPORT bool localReferenceAnchor(const QString &_ref);
 
 // TODO Stefan: used nowhere
 int         penCompare(QPen const & pen1, QPen const & pen2);
@@ -140,7 +140,7 @@ QPen decodePen(const QString &str);
  * \note Use Region::loadOdf() for plain cell references.
  */
 // TODO check visibility
-CALLIGRA_TABLES_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
+CALLIGRA_TABLES_ODF_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0, QString namespacePrefix = QString());
 
 /**
  * \ingroup OpenDocument
@@ -149,22 +149,22 @@ CALLIGRA_TABLES_EXPORT QString decodeFormula(const QString& expr, const KLocale*
  * @param locale The locale from which the expression should be converted.
  * \note Use Region::saveOdf() for plain cell references.
  */
-CALLIGRA_TABLES_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
+CALLIGRA_TABLES_ODF_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
 
 /**
  * \ingroup OpenDocument
  */
-CALLIGRA_TABLES_EXPORT QString convertRefToRange(const QString & sheet, const QRect & rect);
+CALLIGRA_TABLES_ODF_EXPORT QString convertRefToRange(const QString & sheet, const QRect & rect);
 
 /**
  * \ingroup OpenDocument
  */
-CALLIGRA_TABLES_EXPORT QString convertRefToBase(const QString & sheet, const QRect & rect);
+CALLIGRA_TABLES_ODF_EXPORT QString convertRefToBase(const QString & sheet, const QRect & rect);
 
 /**
  * \ingroup OpenDocument
  */
-CALLIGRA_TABLES_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
+CALLIGRA_TABLES_ODF_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
 }
 
 } // namespace Tables

@@ -68,7 +68,7 @@ typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
  * \ingroup Value
  * A function pointer and context.
  */
-class CALLIGRA_TABLES_EXPORT Function
+class CALLIGRA_TABLES_ODF_EXPORT Function
 {
 public:
     Function(const QString& name, FunctionPtr ptr);

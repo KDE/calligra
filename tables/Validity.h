@@ -66,7 +66,7 @@ class ValueParser;
  *
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_TABLES_EXPORT Validity
+class CALLIGRA_TABLES_ODF_EXPORT Validity
 {
 public:
     /// The action invoked, if the validity check fails.

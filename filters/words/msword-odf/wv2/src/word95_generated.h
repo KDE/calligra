@@ -13,7 +13,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02111-1307, USA.
+   Boston, MA 02111-1301, USA.
 */
 
 // This code is generated from the Microsoft HTML specification of the
@@ -6431,12 +6431,12 @@ struct SEP : public Shared {
     /**
      * top margin default value is 1440 twips
      */
-    U16 dyaTop;
+    S16 dyaTop;
 
     /**
      * bottom margin default value is 1440 twips
      */
-    U16 dyaBottom;
+    S16 dyaBottom;
 
     /**
      * gutter width default value is 0 twips

@@ -88,7 +88,7 @@ private:
  * \class GenValidationStyles
  * \ingroup OpenDocument
  */
-class CALLIGRA_TABLES_EXPORT GenValidationStyles
+class CALLIGRA_TABLES_ODF_EXPORT GenValidationStyles
 {
 public:
     GenValidationStyles();

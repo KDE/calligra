@@ -1,8 +1,9 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
-   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
    Contact: Amit Aggarwal <amitcs06@gmail.com>
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -157,8 +158,8 @@ private:
 
     /**
      * Structure that influences all information that affects the style of a
-     * text:style.
-     * This is a convenience container for passing this information.
+     * text:style.  This is a convenience container for passing this
+     * information.
      **/
     class ListStyleInput {
     public:
@@ -199,15 +200,16 @@ private:
     QByteArray createContent(KoGenStyles& styles);
     void processSlideForBody(unsigned slideNo, Writer& out);
     void processTextForBody(const MSO::OfficeArtClientData* o,
-                            const MSO::TextContainer& tc, Writer& out);
+                            const MSO::TextContainer& tc, const MSO::TextRuler* tr, Writer& out);
 
     int processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
                         const QString& text, const int start, int end);
     int processTextSpans(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
                         const QString& text, int start, int end);
     void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
-                         const MSO::TextContainer& tc, const QString& text,
-                         int start, int end, QStack<QString>& levels);
+                         const MSO::TextContainer& tc, const MSO::TextRuler* tr,
+                         const QString& text, int start, int end,
+                         QStack<QString>& levels);
 
     /**
      * @brief Write declaration in the content body presentation
@@ -462,14 +464,14 @@ private:
     QString declarationStyleName;
 
     /**
-      * name for to use in the style:page-layout-name attribute for master
-      * slides (style:master-page)
-      */
+     * name for to use in the style:page-layout-name attribute for master
+     * slides (style:master-page)
+     */
     QString slidePageLayoutName;
     /**
-      * name for to use in the style:page-layout-name attribute for notes
-      * and handout slides (presentation:notes and style:handout-master)
-      */
+     * name for to use in the style:page-layout-name attribute for notes
+     * and handout slides (presentation:notes and style:handout-master)
+     */
     QString notesPageLayoutName;
 
     const ParsedPresentation* p;
@@ -510,8 +512,8 @@ private:
     }
 
     /**
-      * Look in blipStore for the id mapping to this object
-      **/
+     * Look in blipStore for the id mapping to this object
+     **/
     QByteArray getRgbUid(quint16 pib) const {
         // return 16 byte rgbuid for this given blip id
         if (p->documentContainer->drawingGroup.OfficeArtDgg.blipStore) {
@@ -539,12 +541,12 @@ private:
 
     QMap<const void*, QString> presentationPageLayouts;
     QMap<const void*, QString> drawingPageStyles;
-    typedef QMap<const MSO::MasterOrSlideContainer*, QMap<int, QString> >
-            MasterStyles;
+    typedef QMap<const MSO::MasterOrSlideContainer*, QMap<int, QString> > MasterStyles;
     MasterStyles masterGraphicStyles;
     MasterStyles masterPresentationStyles;
     QMap<const MSO::MasterOrSlideContainer*, QString> masterNames;
     QString notesMasterName;
+    bool m_isList;
 
     /**
     * @brief An usedDeclaration.
