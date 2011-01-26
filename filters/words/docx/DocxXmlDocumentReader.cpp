@@ -4601,9 +4601,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
     kDebug() << "oleName:" << oleName;
 
-    QString destinationName;
 //! @todo ooo saves binaries to the root dir; should we?
-    RETURN_IF_ERROR( copyFile(oleName, QString(), destinationName) )
+
+    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
+    RETURN_IF_ERROR( m_context->import->copyFile(oleName, destinationName, false ) )
+    addManifestEntryForFile(destinationName);
 
     while (!atEnd()) {
         readNext();

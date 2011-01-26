@@ -39,6 +39,8 @@
 #include <QRegExp>
 #include <QImage>
 #include <QInputDialog>
+#include <QImageReader>
+#include <QFileInfo>
 
 #include <kdeversion.h>
 #include <KDebug>
@@ -533,6 +535,20 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
 #endif
 }
 
+KoFilter::ConversionStatus MsooXmlImport::createImage(const QImage& source,
+                                       const QString& destinationName)
+{
+    if (!m_zip || !m_outputStore) {
+        return KoFilter::UsageError;
+    }
+    QString errorMessage;
+    const KoFilter::ConversionStatus status = Utils::createImage(errorMessage, source, m_outputStore, destinationName);
+    if (status != KoFilter::OK) {
+        kWarning() << "Failed to createImage:" << errorMessage;
+    }
+    return status;
+}
+
 KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
         const QString& destinationName, bool oleFile)
 {
@@ -545,6 +561,28 @@ KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
 //! @todo transmit the error to the GUI...
     if(status != KoFilter::OK)
         kWarning() << "Failed to copyFile:" << errorMessage;
+    return status;
+}
+
+KoFilter::ConversionStatus MsooXmlImport::imageFromFile(const QString& sourceName, QImage& image)
+{
+    if (!m_zip) {
+        return KoFilter::UsageError;
+    }
+
+    QString errorMessage;
+    KoFilter::ConversionStatus status = KoFilter::OK;
+
+    std::auto_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(m_zip, errorMessage, sourceName, status));
+    if (!inputDevice.get()) {
+        return status;
+    }
+    QImageReader r(inputDevice.get(), QFileInfo(sourceName).suffix().toLatin1());
+    if (!r.canRead()) {
+        return KoFilter::WrongFormat;
+    }
+    image = r.read();
+
     return status;
 }
 
