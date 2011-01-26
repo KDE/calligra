@@ -43,6 +43,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoEmbeddedFileSaver.h>
 #include "kowmfpaint.h"
 
 // Vector shape
@@ -198,7 +199,29 @@ void VectorShape::drawEmf(QPainter &painter) const
 
 void VectorShape::saveOdf(KoShapeSavingContext & context) const
 {
-    Q_UNUSED(context);
+    KoEmbeddedFileSaver &fileSaver = context.embeddedFileSaver();
+    KoXmlWriter         &xmlWriter = context.xmlWriter();
+
+    QString fileName = fileSaver.getFilename("VectorImages/Image");
+    char *mimeType;
+
+    switch (m_type) {
+    case VectorTypeWmf:
+        mimeType = "application/x-emf";
+        break;
+    case VectorTypeEmf:
+        mimeType = "application/x-wmf";
+        break;
+    default:
+        // FIXME: What here?
+        mimeType = "application/x-what";
+        break;
+    }
+
+    xmlWriter.startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
+    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType, m_contents);
+    xmlWriter.endElement(); // draw:frame
 }
 
 bool VectorShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
