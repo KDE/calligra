@@ -74,13 +74,20 @@ public:
             MsooXmlReaderContext* context = 0);
 
     /*! Copies file @a sourceName from the input archive to the output document
-     under @a destinationName name. @return KoFilter::OK on success.
-     On failure @a errorMessage is set.
-     KoFilter::UsageError is returned if this method is called outside
-     of the importing process, i.e. not from within parseParts(). */
+    under @a destinationName name. @return KoFilter::OK on success.
+    On failure @a errorMessage is set.
+    KoFilter::UsageError is returned if this method is called outside
+    of the importing process, i.e. not from within parseParts(). */
     KoFilter::ConversionStatus copyFile(const QString& sourceName,
                                         const QString& destinationName,
                                         bool oleFile);
+
+    /* Creates an image to the resulting odf with the given name */
+    KoFilter::ConversionStatus createImage(const QImage& source,
+                                           const QString& destinationName);
+
+    /*! @return image from the file for modifications */
+    KoFilter::ConversionStatus imageFromFile(const QString& sourceName, QImage& image);
 
     /*! @return size of image file @a sourceName read from zip archive @a zip.
     Size of the image is returned in @a size.

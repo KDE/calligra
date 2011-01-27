@@ -333,6 +333,44 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
 #undef BLOCK_SIZE
 
 #define BLOCK_SIZE 4096
+KoFilter::ConversionStatus Utils::createImage(QString& errorMessage,
+                                       const QImage& source, KoStore *outputStore,
+                                       const QString& destinationName)
+{
+    if (outputStore->hasFile(destinationName)) {
+        return KoFilter::OK;
+    }
+
+    KoFilter::ConversionStatus status = KoFilter::OK;
+    QByteArray array;
+    QBuffer inputDevice(&array);
+    inputDevice.open(QIODevice::ReadWrite);
+    QFileInfo info = QFileInfo(destinationName);
+    source.save(&inputDevice, info.suffix().toUtf8());
+    inputDevice.seek(0);
+
+    if (!outputStore->open(destinationName)) {
+        errorMessage = i18n("Could not open entry \"%1\" for writing.", destinationName);
+        return KoFilter::CreationError;
+    }
+    char block[BLOCK_SIZE];
+    while (true) {
+        const qint64 in = inputDevice.read(block, BLOCK_SIZE);
+        if (in <= 0) {
+            break;
+        }
+        if (in != outputStore->write(block, in)) {
+            errorMessage = i18n("Could not write block");
+            status = KoFilter::CreationError;
+            break;
+        }
+    }
+    outputStore->close();
+    return status;
+}
+#undef BLOCK_SIZE
+
+#define BLOCK_SIZE 4096
 KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessage,
                                            const QString& sourceName, KoStore *outputStore,
                                            const QString& destinationName, bool oleType)
@@ -427,10 +465,11 @@ static bool checkNsUri(const KoXmlElement& el, const char* expectedNsUri)
 bool Utils::convertBooleanAttr(const QString& value, bool defaultValue)
 {
     const QByteArray val(value.toLatin1());
-    if (val.isEmpty())
+    if (val.isEmpty()) {
         return defaultValue;
-kDebug() << val;
-    
+    }
+    kDebug() << val;
+
     return val != MsooXmlReader::constOff && val != MsooXmlReader::constFalse && val != MsooXmlReader::const0;
 }
 
