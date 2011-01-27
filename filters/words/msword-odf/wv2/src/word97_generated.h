@@ -8555,12 +8555,26 @@ struct SEP : public Shared {
     U32 dxaRight;
 
     /**
-     * default value is 1440 twipstop margin
+     * Specifies the height of the top margin, in twips.  A positive value
+     * indicates a minimum top margin; this margin MUST be grown to avoid
+     * overlapping the space that is occupied by headers.  A negative value
+     * indicates a fixed margin; the top margin MUST be the absolute value of
+     * the value that is specified by this SPRM regardless of the space that is
+     * occupied by headers.
+     *
+     * default value is 1440 twips
      */
     S32 dyaTop;
 
     /**
-     * default value is 1440 twipsbottom margin
+     * Specifies the height of the bottom margin, in twips.  A positive value
+     * specifies a minimum bottom margin; this margin MUST be grown to avoid
+     * overlapping the space that is occupied by footers or footnotes.  A
+     * negative value specifies a fixed margin; the bottom margin MUST be the
+     * absolute value of the value that is specified by this SPRM regardless of
+     * the space that is occupied by footers or footnotes.
+     *
+     * default value is 1440 twips
      */
     S32 dyaBottom;
 

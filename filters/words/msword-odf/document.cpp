@@ -1040,28 +1040,51 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     // change.  We are not able to store this into ODF properly.
 
     QString header("<style:header-style>");
-    header.append("<style:header-footer-properties fo:margin-bottom=\"");
+    header.append("<style:header-footer-properties");
+
+    // The spec says the top-margin MUST be grown to avoid overlapping the
+    // space that is occupied by headers.  Not ODF compatible.
+    if (sep->dyaTop >= 0) {
+        header.append(" style:dynamic-spacing=\"true\"");
+        header.append(" fo:margin-bottom=\"0pt\"");
+    } else {
+        //TODO: tests required, I would prefer margin-bottom set to ZERO
+        header.append(" style:dynamic-spacing=\"false\"");
+        header.append(" fo:margin-bottom=\"");
 #if 0
-    qreal headerMarginTop = qAbs(sep->dyaTop) - sep->dyaHdrTop;
-    if (headerMarginTop > 0) {
-        header.append(QString::number(headerMarginTop / 20.0));
-    } else
+        qreal headerMarginTop = qAbs(sep->dyaTop) - sep->dyaHdrTop;
+        if (headerMarginTop > 0) {
+            header.append(QString::number(headerMarginTop / 20.0));
+        } else
 #endif
-        header.append("0");
-    header.append("pt\" fo:min-height=\"14pt\"/>");
+            header.append("0");
+        header.append("pt\"");
+
+    }
+    header.append(" fo:min-height=\"14pt\"/>");
     header.append("</style:header-style>");
 
-    //
     QString footer("<style:footer-style>");
-    footer.append("<style:header-footer-properties fo:margin-top=\"");
-    qreal headerMarginBottom = qAbs(sep->dyaBottom) - sep->dyaHdrBottom;
-    if (headerMarginBottom >= 400) {
-        footer.append(QString::number(headerMarginBottom / 20.0));
-    } else {
-        footer.append("14");
-    }
+    footer.append("<style:header-footer-properties");
 
-    footer.append("pt\" fo:min-height=\"10pt\"/>");
+    // The spec says the bottom-margin MUST be grown to avoid overlapping the
+    // space that is occupied by footers or footnotes.  Not ODF compatible.
+    if (sep->dyaBottom > 0) {
+        footer.append(" style:dynamic-spacing=\"true\"");
+        footer.append(" fo:margin-top=\"0pt\"");
+    } else {
+        //TODO: tests required, I would prefer margin-top set to ZERO
+        footer.append(" style:dynamic-spacing=\"false\"");
+        footer.append(" fo:margin-top=\"");
+        qreal headerMarginBottom = qAbs(sep->dyaBottom) - sep->dyaHdrBottom;
+        if (headerMarginBottom >= 400) {
+            footer.append(QString::number(headerMarginBottom / 20.0));
+        } else {
+            footer.append("14");
+        }
+        footer.append("pt\"");
+    }
+    footer.append(" fo:min-height=\"10pt\"/>");
     footer.append("</style:footer-style>");
 
     pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);

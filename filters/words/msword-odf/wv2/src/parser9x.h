@@ -21,13 +21,11 @@
 
 #include "parser.h"
 #include "word97_generated.h"
+#include "wv2_export.h"
 
 #include <string>
 #include <list>
 #include <stack>
-#include "wv2_export.h"
-
-//#include "ms_odraw.h"
 
 namespace wvWare
 {
