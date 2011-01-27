@@ -81,7 +81,8 @@ namespace Role
         ExternalAppointments,
         ColumnTag,
         Planned,
-        Actual
+        Actual,
+        Foreground
     };
 } //namespace Role
 

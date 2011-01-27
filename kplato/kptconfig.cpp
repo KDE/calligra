@@ -28,6 +28,8 @@
 #include <kdebug.h>
 #include <kcomponentdata.h>
 
+#include <QBrush>
+
 namespace KPlato
 {
 
@@ -108,6 +110,123 @@ bool Config::checkForWorkPackages() const
 KUrl Config::retrieveUrl() const
 {
     return KPlatoSettings::retrieveUrl();
+}
+
+QBrush Config::summaryTaskDefaultColor() const
+{
+    QColor c = KPlatoSettings::summaryTaskDefaultColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::summaryTaskLevelColor_1() const
+{
+    QColor c = KPlatoSettings::summaryTaskLevelColor_1();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::summaryTaskLevelColor_2() const
+{
+    QColor c = KPlatoSettings::summaryTaskLevelColor_2();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::summaryTaskLevelColor_3() const
+{
+    QColor c = KPlatoSettings::summaryTaskLevelColor_3();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::summaryTaskLevelColor_4() const
+{
+    QColor c = KPlatoSettings::summaryTaskLevelColor_4();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::taskNormalColor() const
+{
+    QColor c = KPlatoSettings::taskNormalColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::taskErrorColor() const
+{
+    QColor c = KPlatoSettings::taskErrorColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::taskCriticalColor() const
+{
+    QColor c = KPlatoSettings::taskCriticalColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::taskFinishedColor() const
+{
+    QColor c = KPlatoSettings::taskFinishedColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::milestoneNormalColor() const
+{
+    QColor c = KPlatoSettings::milestoneNormalColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::milestoneErrorColor() const
+{
+    QColor c = KPlatoSettings::milestoneErrorColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::milestoneCriticalColor() const
+{
+    QColor c = KPlatoSettings::milestoneCriticalColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
+}
+
+QBrush Config::milestoneFinishedColor() const
+{
+    QColor c = KPlatoSettings::milestoneFinishedColor();
+    if ( KPlatoSettings::colorGradientType() == KPlatoSettings::EnumColorGradientType::Linear ) {
+        return gradientBrush( c );
+    }
+    return c;
 }
 
 }  //KPlato namespace

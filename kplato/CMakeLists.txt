@@ -56,6 +56,7 @@ set(kplatoprivate_LIB_SRCS
     kptconfig.cpp
     kpttaskdefaultpanel.cpp
     kptworkpackageconfigpanel.cpp
+    kptcolorsconfigpanel.cpp
 
     kptcontext.cpp
 
@@ -83,6 +84,7 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
 
     kptconfigtaskpanelbase.ui
     kptworkpackageconfigpanel.ui
+    kptcolorsconfigpanel.ui
 
     kptinsertfilepanel.ui
 )
