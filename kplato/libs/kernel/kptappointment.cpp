@@ -304,7 +304,6 @@ void AppointmentIntervalList::subtract( const DateTime &st, const DateTime &et, 
 void AppointmentIntervalList::subtract( const AppointmentInterval &interval )
 {
     //kDebug()<<st<<et<<load;
-    Q_ASSERT( st < et );
     if ( m_map.isEmpty() ) {
         return;
     }
@@ -313,6 +312,7 @@ void AppointmentIntervalList::subtract( const AppointmentInterval &interval )
     }
     const DateTime st = interval.startTime();
     const DateTime et = interval.endTime();
+    Q_ASSERT( st < et );
     const double load = interval.load();
 //     qDebug()<<"subtract:"<<*this<<endl<<"minus"<<interval;
     for ( QDate date = st.date(); date <= et.date(); date = date.addDays( 1 ) ) {
@@ -1025,10 +1025,10 @@ void Appointment::printDebug(const QString& _indent)
     if (!err) {
         kDebug()<<indent<<"  + Appointment to schedule:"<<m_node->name()<<" ("<<m_node->type()<<"):"<<" task="<<m_node->node()->name()<<", resource="<<m_resource->resource()->name();
     } else {
-        kDebug()<<indent<<"  +"<<m_intervals.count()<<" appointment intervals:";
+        kDebug()<<indent<<"  +"<<m_intervals.map().count()<<" appointment intervals:";
     }
     indent += "  + ";
-    foreach (const AppointmentInterval &i, m_intervals ) {
+    foreach (const AppointmentInterval &i, m_intervals.map() ) {
         kDebug()<<indent<<"----"<<i.startTime().toString()<<" -"<<i.endTime().toString()<<" load="<<i.load();
     }
 }
