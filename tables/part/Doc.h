@@ -72,7 +72,7 @@ class SheetAccessModel;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class CALLIGRA_TABLES_EXPORT Doc : public DocBase
+class CALLIGRA_TABLES_COMMON_EXPORT Doc : public DocBase
 {
     Q_OBJECT
     Q_PROPERTY(int syntaxVersion READ syntaxVersion)

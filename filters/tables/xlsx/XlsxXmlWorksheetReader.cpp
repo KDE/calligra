@@ -1336,10 +1336,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
-    QString fileName = link.right( link.lastIndexOf('/') +1 );
-    RETURN_IF_ERROR( copyFile(link, "Pictures/", fileName) )
-    m_context->sheet->setPictureBackgroundPath(fileName);
-    //NOTE manifest entry is added by copyFile
+    QString destinationName = QLatin1String("Pictures/") + link.mid(link.lastIndexOf('/') + 1);
+    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, true ) )
+    addManifestEntryForFile(destinationName);
+
+    m_context->sheet->setPictureBackgroundPath(destinationName);
 
     while (!atEnd()) {
         readNext();
@@ -1381,12 +1382,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     shapeId = "_x0000_s" + shapeId;
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
-    QString fileName = link.right( link.lastIndexOf('/') +1 );
-    RETURN_IF_ERROR( copyFile(link, "", fileName) )
+    QString destinationName = QLatin1String("") + link.mid(link.lastIndexOf('/') + 1);
+    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, true ) )
+    addManifestEntryForFile(destinationName);
 
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);
-    cell->appendOleObject( qMakePair<QString,QString>(fileName, m_context->oleReplacements.value(shapeId)), m_context->oleFrameBegins.value(shapeId));
+    cell->appendOleObject( qMakePair<QString,QString>(destinationName, m_context->oleReplacements.value(shapeId)), m_context->oleFrameBegins.value(shapeId));
 
     while (!atEnd()) {
         readNext();

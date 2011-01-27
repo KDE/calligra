@@ -71,7 +71,7 @@ the Number object directly for that. This class is to be used for computations
 of more complicated and ranged functions.
 */
 
-class CALLIGRA_TABLES_EXPORT ValueCalc
+class CALLIGRA_TABLES_ODF_EXPORT ValueCalc
 {
 public:
     explicit ValueCalc(ValueConverter* c);

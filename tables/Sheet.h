@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1998,1999 Torben Weis <weis@kde.org>
    Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
@@ -88,7 +88,7 @@ template<typename T> class IntervalMap;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_TABLES_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
+class CALLIGRA_TABLES_ODF_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
         public ProtectableObject
 {
     Q_OBJECT
@@ -764,6 +764,10 @@ public:
      */
     HeaderFooter *headerFooter() const;
 
+    /**
+     * Applies a database filter.
+     */
+    void applyDatabaseFilter(const Database& database);
 #ifndef NDEBUG
     void printDebug();
 #endif
@@ -937,6 +941,9 @@ protected:
      * \see changeNameCellRef()
      */
     QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
+                                    int NbCol, const QPoint& point, bool isColumnFixed,
+                                    bool isRowFixed);
+    QString changeNameCellRefHelper(const QPoint& pos, const QRect& rect, bool fullRowOrColumn, ChangeRef ref,
                                     int NbCol, const QPoint& point, bool isColumnFixed,
                                     bool isRowFixed);
 

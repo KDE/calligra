@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Matus Hanzes <matus.hanzes@ixonos.com>
+ * Copyright (C) 2011 Matus Hanzes <matus.hanzes@ixonos.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,106 +18,59 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWAnchorStrategy.h"
-#include "KWPageTextInfo.h"
-#include "KWTextFrameSet.h"
-#include "KWDocument.h"
-#include "KWFrame.h"
+#include"TextAnchorStrategy.h"
+#include"Layout.h"
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
-#include <KoTextBlockData.h>
 
-#include <QTextBlock>
-#include <QTextLine>
-
-#include <KDebug>
-
-KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
-        : m_anchor(anchor),
-        m_finished(false),
-        m_lastknownPosInDoc(-1),
-        m_makeSecondPass(false),
-        m_lastVerticalPos(KoTextAnchor::VTop),
-        m_lastVerticalRel(KoTextAnchor::VParagraph),
-        m_lastHorizontalPos(KoTextAnchor::HLeft),
-        m_lastHorizontalRel(KoTextAnchor::HPageContent),
-        m_lastParent(0)
+TextAnchorStrategy::TextAnchorStrategy(KoTextAnchor *anchor)
+        : KoAnchorStrategy(),
+          m_anchor(anchor),
+          m_knowledgePoint(-1),
+          m_finished(false),
+          m_relayoutNeeded(false),
+          m_relayoutPosition(0,0)
 {
     calculateKnowledgePoint();
 }
 
-KWAnchorStrategy::~KWAnchorStrategy()
+TextAnchorStrategy::~TextAnchorStrategy()
 {
 }
 
-bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, KWTextFrameSet *frameSet)
+bool TextAnchorStrategy::positionShape(KoTextDocumentLayout::LayoutState *state)
 {
+    if (m_finished) { // shape is in right position no second pass needed
+        return false;
+    }
+
     if (!m_anchor->shape()->parent()) {
-        kDebug() << "no parent";
         return false;
     }
 
     // get the page data
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     if (!data) {
-        kDebug() << "no text shape data found";
         return false;
     }
 
-    if (m_knowledgePoint < 0)
+    if (m_knowledgePoint < 0 ) {
+        calculateKnowledgePoint();
         return false;
+    }
+
+    if (m_knowledgePoint > state->cursorPosition()) {
+        return false;
+    }
 
     // there should be always at least one line
     if (state->layout->lineCount() == 0) {
         return false;
     }
 
-    // second pass was needed, shape position is ok now
-    if (m_makeSecondPass) {
-        m_makeSecondPass = false;
-        m_finished = true;
-        return true;
-    }
-
-    if (m_anchor->behavesAsCharacter()) {
-        //as-char means the horiz are invalid, but we need good values so let's just set them
-        m_anchor->setHorizontalRel(KoTextAnchor::HChar);
-        m_anchor->setHorizontalPos(KoTextAnchor::HLeft);
-    }
-
-    // check if there is change in anchor position and if yes than
-    if (m_lastknownPosInDoc != m_anchor->positionInDocument()
-            || m_lastOffset != m_anchor->offset()
-            || m_lastVerticalPos != m_anchor->verticalPos()
-            || m_lastVerticalRel != m_anchor->verticalRel()
-            || m_lastHorizontalPos != m_anchor->horizontalPos()
-            || m_lastHorizontalRel != m_anchor->horizontalRel()
-            || m_lastParent != m_anchor->shape()->parent()) { // different layout run
-        m_finished = false;
-        m_lastknownPosInDoc = m_anchor->positionInDocument();
-        m_lastOffset = m_anchor->offset();
-        m_lastVerticalPos = m_anchor->verticalPos();
-        m_lastVerticalRel = m_anchor->verticalRel();
-        m_lastHorizontalPos = m_anchor->horizontalPos();
-        m_lastHorizontalRel = m_anchor->horizontalRel();
-        m_lastParent = m_anchor->shape()->parent();
-        calculateKnowledgePoint();
-    }
-
-    // exit when finished or when we can expect another call with a higher cursor position
-    if (m_finished || (m_knowledgePoint > state->cursorPosition()))
-        return false;
-
-    // *** alter 'state' to relayout the part we want.
     QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
     QTextLayout *layout = block.layout();
-
-    KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
-    if (!pageInfo) {
-        m_finished = false;
-        return false;
-    }
 
     QRectF boundingRect = m_anchor->shape()->boundingRect();
     QRectF containerBoundingRect = m_anchor->shape()->parent()->boundingRect();
@@ -125,19 +78,17 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, KWTe
     QPointF newPosition;
 
     // set anchor bounding rectangle horizontal position and size
-    if (!countHorizontalRel(anchorBoundingRect, containerBoundingRect, pageInfo, state, block, layout)) {
-        m_finished = false;
+    if (!countHorizontalRel(anchorBoundingRect, containerBoundingRect, state, block, layout)) {
         return false;
     }
 
     // set anchor bounding rectangle vertical position
-    if (!countVerticalRel(anchorBoundingRect, containerBoundingRect, pageInfo, frameSet, data, block, layout)) {
-    m_finished = false;
-    return false;
+    if (!countVerticalRel(anchorBoundingRect, containerBoundingRect, data, block, layout)) {
+        return false;
     }
 
     // Set shape horizontal alignment inside anchor bounding rectangle
-    countHorizontalPos(newPosition, anchorBoundingRect, containerBoundingRect, pageInfo);
+    countHorizontalPos(newPosition, anchorBoundingRect, containerBoundingRect);
 
     // Set shape vertical alignment inside anchor bounding rectangle
     countVerticalPos(newPosition, anchorBoundingRect, containerBoundingRect);
@@ -145,60 +96,52 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, KWTe
     newPosition = newPosition + m_anchor->offset();
 
     //check the border of page an move the shape back to have it visible
-    checkPageBorder(newPosition, containerBoundingRect, pageInfo);
-
-    if (!m_finished && m_anchor->behavesAsCharacter()) {
-        // If it behaves like a char it's 'run around' already by the qt text flow.
-        // Only one pass needed
-        m_finished = true;
-    }
+    checkPageBorder(newPosition, containerBoundingRect);
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();
     m_anchor->shape()->setPosition(newPosition);
     m_anchor->shape()->update();
 
-    if (m_finished) // shape is in right position no second pass needed
-        return false;
-
-    //layout recalculation
-
-    // if shape is RunThrough then the shape is not intersecting the text and no relayout is needed
-    if (m_anchor->shape()->runThrough() != 0) {
-        m_finished = true;
-        return true;
-    }
-
     // check if the shape is intersecting the text if no than no relayout is needed
     QRectF shapeRect(newPosition.x(),newPosition.y(), m_anchor->shape()->size().width(),m_anchor->shape()->size().height());
-    QPointF relayoutPos(containerBoundingRect.x() + containerBoundingRect.width(), containerBoundingRect.y() + containerBoundingRect.height());
+    m_relayoutPosition.setX(containerBoundingRect.y() + containerBoundingRect.height());
 
-    if (!checkTextIntersecion(relayoutPos, shapeRect, containerBoundingRect, state, data)) {
+    if (checkTextIntersecion(m_relayoutPosition, shapeRect, containerBoundingRect, state, data) == false) {
+        m_relayoutNeeded = false;
         m_finished = true;
         return true;
     }
 
-    // if shape is positioned inside already layouted text, relayout is needed
-    calculateRelayoutPosition(relayoutPos, state, data);
-
-    m_makeSecondPass = true;
-    return false;
+    m_relayoutNeeded = true;
+    m_finished = true;
+    return true;
 }
 
-bool KWAnchorStrategy::isFinished()
+bool TextAnchorStrategy::isPositioned()
 {
-    // if, for the second time, we passed the point where the anchor was inserted, return true
     return m_finished;
 }
 
-KoShape *KWAnchorStrategy::anchoredShape() const
+void TextAnchorStrategy::reset()
 {
-    if (m_anchor->behavesAsCharacter())
-        return 0;
-    return m_anchor->shape();
+    calculateKnowledgePoint();
+    m_finished = false;
+    m_relayoutNeeded = false;
+    return;
 }
 
-void KWAnchorStrategy::calculateKnowledgePoint()
+bool TextAnchorStrategy::isRelayoutNeeded()
+{
+    return m_relayoutNeeded;
+}
+
+QPointF TextAnchorStrategy::relayoutPosition()
+{
+    return m_relayoutPosition;
+}
+
+void TextAnchorStrategy::calculateKnowledgePoint()
 {
     m_knowledgePoint = -1;
 
@@ -239,17 +182,15 @@ void KWAnchorStrategy::calculateKnowledgePoint()
    default :
        kDebug(32002) << "vertical-rel not handled";
    }
-
-   kDebug() << "m_knowledgePoint " << m_knowledgePoint;
 }
 
-bool KWAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, KWPageTextInfo *pageInfo,
+bool TextAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                           KoTextDocumentLayout::LayoutState *state, QTextBlock &block, QTextLayout *layout)
 {
     switch (m_anchor->horizontalRel()) {
      case KoTextAnchor::HPage:
-         anchorBoundingRect.setX(0);
-         anchorBoundingRect.setWidth(pageInfo->page().width());
+         anchorBoundingRect.setX(m_anchor->pageRect().x());
+         anchorBoundingRect.setWidth(m_anchor->pageRect().width());
          break;
 
      case KoTextAnchor::HParagraph:
@@ -285,12 +226,12 @@ bool KWAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF con
          int horizontalPos = m_anchor->horizontalPos();
          // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
          // than set anchorBoundingRect to HPageEndMargin area
-         if ((pageInfo->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
+         if ((m_anchor->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
                  horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
              anchorBoundingRect.setX(containerBoundingRect.x() + containerBoundingRect.width());
-             anchorBoundingRect.setWidth(pageInfo->page().width() - anchorBoundingRect.x());
+             anchorBoundingRect.setWidth(m_anchor->pageRect().width() - anchorBoundingRect.x());
          } else {
-             anchorBoundingRect.setX(0);
+             anchorBoundingRect.setX(m_anchor->pageRect().x());
              anchorBoundingRect.setWidth(containerBoundingRect.x());
          }
          break;
@@ -300,13 +241,13 @@ bool KWAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF con
          int horizontalPos = m_anchor->horizontalPos();
          // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
          // than set anchorBoundingRect to HPageStartMargin area
-         if ((pageInfo->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
+         if ((m_anchor->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
                  horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
-             anchorBoundingRect.setX(0);
+             anchorBoundingRect.setX(m_anchor->pageRect().x());
              anchorBoundingRect.setWidth(containerBoundingRect.x());
          } else {
              anchorBoundingRect.setX(containerBoundingRect.x() + containerBoundingRect.width());
-             anchorBoundingRect.setWidth(pageInfo->page().width() - anchorBoundingRect.x());
+             anchorBoundingRect.setWidth(m_anchor->pageRect().width() - anchorBoundingRect.x());
          }
          break;
      }
@@ -315,7 +256,7 @@ bool KWAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF con
          int horizontalPos = m_anchor->horizontalPos();
          // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
          // than set anchorBoundingRect to HParagraphEndMargin area
-         if ((pageInfo->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
+         if ((m_anchor->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
                  horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
              anchorBoundingRect.setX(state->x() + containerBoundingRect.x() + state->width());
              anchorBoundingRect.setWidth(containerBoundingRect.x() + containerBoundingRect.width() - anchorBoundingRect.x());
@@ -330,7 +271,7 @@ bool KWAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF con
          int horizontalPos = m_anchor->horizontalPos();
          // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
          // than set anchorBoundingRect to HParagraphStartMargin area
-         if ((pageInfo->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
+         if ((m_anchor->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
                  horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
              anchorBoundingRect.setX(containerBoundingRect.x());
              anchorBoundingRect.setWidth(state->x());
@@ -346,7 +287,7 @@ bool KWAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF con
     return true;
 }
 
-void KWAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect, KWPageTextInfo *pageInfo)
+void TextAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
 {
     switch (m_anchor->horizontalPos()) {
     case KoTextAnchor::HCenter:
@@ -356,7 +297,7 @@ void KWAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBou
     case KoTextAnchor::HFromInside:
     case KoTextAnchor::HInside:
     {
-        if (pageInfo->pageNumber()%2 == 1) {
+        if (m_anchor->pageNumber()%2 == 1) {
             newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x());
         } else {
             newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x() -
@@ -371,7 +312,7 @@ void KWAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBou
 
     case KoTextAnchor::HOutside:
     {
-        if (pageInfo->pageNumber()%2 == 1) {
+        if (m_anchor->pageNumber()%2 == 1) {
             newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
         } else {
             newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() +
@@ -388,102 +329,84 @@ void KWAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBou
     }
 }
 
-bool KWAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, KWPageTextInfo *pageInfo,
-                                        KWTextFrameSet *frameSet, KoTextShapeData *data, QTextBlock &block, QTextLayout *layout)
+bool TextAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
+                                          KoTextShapeData *data, QTextBlock &block, QTextLayout *layout)
 {
     switch (m_anchor->verticalRel()) {
-     case KoTextAnchor::VPage:
-         anchorBoundingRect.setY(pageInfo->page().offsetInDocument());
-         anchorBoundingRect.setHeight(pageInfo->page().height());
-         break;
+    case KoTextAnchor::VPage:
+     anchorBoundingRect.setY(m_anchor->pageRect().y());
+     anchorBoundingRect.setHeight(m_anchor->pageRect().height());
+     break;
 
-     case KoTextAnchor::VPageContent:
-         // find main frame
-         foreach (KWFrameSet *fs, frameSet->kwordDocument()->frameSets()) {
-             KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-             if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet) {
-                 foreach (KWFrame *frame, fs->frames()) { //find main frame for current page
-                     KoTextShapeData *tmpData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
-                     if(data != 0) {
-                         KWPageTextInfo *tmpPageInfo = dynamic_cast<KWPageTextInfo *>(tmpData->page());
-                         if (tmpPageInfo != 0) {
-                             if (tmpPageInfo->pageNumber() == pageInfo->pageNumber()) {//found main frame for current page
-                                 anchorBoundingRect.setY(frame->shape()->boundingRect().y());
-                                 anchorBoundingRect.setHeight(frame->shape()->boundingRect().height());
-                                 break;
-                             }
-                         }
-                     }
-                 }
-                 break;
-             }
-         }
-         break;
+    case KoTextAnchor::VPageContent:
+     anchorBoundingRect.setY(m_anchor->pageContentRect().y());
+     anchorBoundingRect.setHeight(m_anchor->pageContentRect().height());
+     break;
 
-     case KoTextAnchor::VParagraph:
-     case KoTextAnchor::VParagraphContent:
-         if (layout->lineCount() != 0) {
-             qreal top = layout->lineAt(0).y();
-             QTextLine tl = layout->lineAt(layout->lineCount() - 1);
-             anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
-             anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
-             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
-             if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
-                 anchorBoundingRect.setY(blockData->effectiveTop() + containerBoundingRect.y()  - data->documentOffset());
-             }
-         } else {
-             return false; // lets go for a second round.
+    case KoTextAnchor::VParagraph:
+    case KoTextAnchor::VParagraphContent:
+     if (layout->lineCount() != 0) {
+         qreal top = layout->lineAt(0).y();
+         QTextLine tl = layout->lineAt(layout->lineCount() - 1);
+         anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
+         anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
+         KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
+         if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
+             anchorBoundingRect.setY(blockData->effectiveTop() + containerBoundingRect.y()  - data->documentOffset());
          }
-         break;
-
-     case KoTextAnchor::VLine:
-         if (layout->lineCount()) {
-             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-             Q_ASSERT(tl.isValid());
-             anchorBoundingRect.setY(tl.y() - m_anchor->shape()->size().height()
-                             + containerBoundingRect.y() - data->documentOffset());
-             anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
-         } else {
-             return false; // lets go for a second round.
-         }
-         break;
-
-     case KoTextAnchor::VText: // same as char apparently only used when as-char
-     case KoTextAnchor::VChar:
-         if (layout->lineCount()) {
-             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-             Q_ASSERT(tl.isValid());
-             if (m_anchor->behavesAsCharacter() && m_anchor->verticalRel() == KoTextAnchor::VChar) {
-                 //char relative is behaving in a special way when as-char
-                 anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
-                 anchorBoundingRect.setHeight(tl.height());
-             } else {
-                 anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
-                 anchorBoundingRect.setHeight(tl.height());
-             }
-         } else {
-             return false; // lets go for a second round.
-         }
-         break;
-
-     case KoTextAnchor::VBaseline:
-         if (layout->lineCount()) {
-             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-             Q_ASSERT(tl.isValid());
-             anchorBoundingRect.setY(tl.y() + tl.ascent() - m_anchor->shape()->size().height()
-                + containerBoundingRect.y() - data->documentOffset());
-             anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
-         } else {
-             return false; // lets go for a second round.
-         }
-         break;
-     default :
-         kDebug(32002) << "vertical-rel not handled";
+     } else {
+         return false; // lets go for a second round.
      }
+     break;
+
+    case KoTextAnchor::VLine:
+     if (layout->lineCount()) {
+         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+         Q_ASSERT(tl.isValid());
+         anchorBoundingRect.setY(tl.y() - m_anchor->shape()->size().height()
+                         + containerBoundingRect.y() - data->documentOffset());
+         anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
+     } else {
+         return false; // lets go for a second round.
+     }
+     break;
+
+    case KoTextAnchor::VText: // same as char apparently only used when as-char
+    case KoTextAnchor::VChar:
+     if (layout->lineCount()) {
+         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+         Q_ASSERT(tl.isValid());
+         if (m_anchor->behavesAsCharacter() && m_anchor->verticalRel() == KoTextAnchor::VChar) {
+             //char relative is behaving in a special way when as-char
+             anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
+             anchorBoundingRect.setHeight(tl.height());
+         } else {
+             anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
+             anchorBoundingRect.setHeight(tl.height());
+         }
+     } else {
+         return false; // lets go for a second round.
+     }
+     break;
+
+    case KoTextAnchor::VBaseline:
+     if (layout->lineCount()) {
+         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+         Q_ASSERT(tl.isValid());
+         anchorBoundingRect.setY(tl.y() + tl.ascent() - m_anchor->shape()->size().height()
+            + containerBoundingRect.y() - data->documentOffset());
+         anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
+     } else {
+         return false; // lets go for a second round.
+     }
+     break;
+    default :
+     kDebug(32002) << "vertical-rel not handled";
+    }
     return true;
 }
 
-void KWAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
+void TextAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
 {
     switch (m_anchor->verticalPos()) {
     case KoTextAnchor::VBottom:
@@ -509,30 +432,30 @@ void KWAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBound
 
 }
 
-void KWAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect, KWPageTextInfo *pageInfo)
+void TextAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect)
 {
     //check left border and move the shape back to have the whole shape visible
-    if (newPosition.x() < -containerBoundingRect.x()) {
-        newPosition.setX(-containerBoundingRect.x());
+    if (newPosition.x() < m_anchor->pageRect().x() - containerBoundingRect.x()) {
+        newPosition.setX(m_anchor->pageRect().x() - containerBoundingRect.x());
     }
 
     //check right border and move the shape back to have the whole shape visible
-    if ((newPosition.x() + m_anchor->shape()->size().width()) > (pageInfo->page().width() -containerBoundingRect.x())) {
-        newPosition.setX(pageInfo->page().width() - m_anchor->shape()->size().width() - containerBoundingRect.x());
+    if ((newPosition.x() + m_anchor->shape()->size().width()) > (m_anchor->pageRect().x() + m_anchor->pageRect().width() - containerBoundingRect.x())) {
+        newPosition.setX(m_anchor->pageRect().x() + m_anchor->pageRect().width() - m_anchor->shape()->size().width() - containerBoundingRect.x());
     }
 
     //check top border and move the shape back to have the whole shape visible
-    if (newPosition.y() < (pageInfo->page().offsetInDocument() - containerBoundingRect.y())) {
-        newPosition.setY(pageInfo->page().offsetInDocument() - containerBoundingRect.y());
+    if (newPosition.y() < (m_anchor->pageRect().y() - containerBoundingRect.y())) {
+        newPosition.setY(m_anchor->pageRect().y() - containerBoundingRect.y());
     }
 
     //check bottom border and move the shape back to have the whole shape visible
-    if ((newPosition.y() + m_anchor->shape()->size().height()) > (pageInfo->page().offsetInDocument() + pageInfo->page().height() - containerBoundingRect.y())) {
-        newPosition.setY(pageInfo->page().offsetInDocument() + pageInfo->page().height() - m_anchor->shape()->size().height() - containerBoundingRect.y());
+    if ((newPosition.y() + m_anchor->shape()->size().height()) > (m_anchor->pageRect().y() + m_anchor->pageRect().height() - containerBoundingRect.y())) {
+        newPosition.setY(m_anchor->pageRect().y() + m_anchor->pageRect().height() - m_anchor->shape()->size().height() - containerBoundingRect.y());
     }
 }
 
-bool KWAnchorStrategy::checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect, KoTextDocumentLayout::LayoutState *state,
+bool TextAnchorStrategy::checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect, KoTextDocumentLayout::LayoutState *state,
                                             KoTextShapeData *data)
 {
     bool intersectionX = false;
@@ -576,16 +499,4 @@ bool KWAnchorStrategy::checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect
     }
 
     return false;
-}
-
-void KWAnchorStrategy::calculateRelayoutPosition(QPointF relayoutPos, KoTextDocumentLayout::LayoutState *state, KoTextShapeData *data)
-{
-
-    qreal recalcFrom = relayoutPos.y() + data->documentOffset();
-
-    do {
-        if (recalcFrom >= state->y()) {
-            break;
-        }
-    } while (state->previousParag());
 }
