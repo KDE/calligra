@@ -26,7 +26,6 @@
 #define GRAPHICSHANDLER_H
 
 #include <wv2/src/handlers.h>
-#include "wv2/src/ms_odraw.h"
 #include "wv2/src/graphics.h"
 #include "versionmagic.h"
 #include "document.h"

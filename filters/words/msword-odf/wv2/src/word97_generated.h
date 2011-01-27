@@ -892,8 +892,9 @@ struct WV2_EXPORT BRC {
     U16 brcType:8;
 
     /**
-     * width of space to maintain between border and text within border. Must
-     * be 0 when BRC is a substructure of TC. Stored in points.
+     * Specifies the distance from the text to the border, in points.  For page
+     * borders, sprmSPgbProp can specify that this value shall specify the
+     * distance from the edge of the page to the border.
      */
     U16 dptSpace:5;
 
@@ -8512,9 +8513,9 @@ struct SEP : public Shared {
     U16 pgbPageDepth:2;
 
     /**
-     * page border offset from:
-     * 0 offset from text
-     * 1 offset from edge of page
+     * Specifies from where the offset of the page border is measured:
+     * 0 - offset measured from the text
+     * 1 - offset measured from the edge of the page
      */
     U16 pgbOffsetFrom:3;
 

@@ -27,7 +27,7 @@
 #include <stack>
 #include "wv2_export.h"
 
-#include "ms_odraw.h"
+//#include "ms_odraw.h"
 
 namespace wvWare
 {

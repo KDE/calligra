@@ -23,9 +23,9 @@
 
 #include "tablehandler.h"
 #include "conversion.h"
+#include "msodraw.h"
 
 #include <wv2/src/word97_generated.h>
-#include <wv2/src/ms_odraw.h>
 
 #include <kdebug.h>
 #include <QList>
@@ -216,13 +216,13 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     QString align;
     if (m_floatingTable != true) {
         switch (tap->jc) {
-        case wvWare::hAlignLeft:
+        case hAlignLeft:
             align = QString("left");
             break;
-        case wvWare::hAlignCenter:
+        case hAlignCenter:
             align = QString("center");
             break;
-        case wvWare::hAlignRight:
+        case hAlignRight:
             align = QString("right");
             break;
         }
@@ -643,13 +643,13 @@ void KWordTableHandler::tableCellStart()
     //process vertical alignment information 
     QString align;
     switch (tc.vertAlign) {
-    case wvWare::vAlignTop:
+    case vAlignTop:
         align = QString("top");
         break;
-    case wvWare::vAlignMiddle:
+    case vAlignMiddle:
         align = QString("middle");
         break;
-    case wvWare::vAlignBottom:
+    case vAlignBottom:
         align = QString("bottom");
         break;
     }
