@@ -1590,6 +1590,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 {
     READ_PROLOGUE2(DrawingML_p)
 
+    m_largestParaFont = 0;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
@@ -1668,6 +1669,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         // and thus m_currentTextStyle is not used
         inheritDefaultTextStyle(m_currentParagraphStyle);
         inheritTextStyle(m_currentParagraphStyle);
+        QString fontSize = m_currentTextStyle.property("fo:font-size", KoGenStyle::TextType);
+        if (!fontSize.isEmpty()) {
+            fontSize.remove("pt");
+            qreal realSize = fontSize.toDouble();
+            if (realSize > m_largestParaFont) {
+                m_largestParaFont = realSize;
+            }
+        }
 #endif
     }
 
@@ -1776,7 +1785,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 #endif
 
-     setupParagraphStyle();
+     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
+     if (spcBef.contains("%")) {
+         spcBef.remove("%");
+         qreal percentage = spcBef.toDouble() / 100.0;
+         m_currentParagraphStyle.addPropertyPt("fo:margin-top", percentage * m_largestParaFont);
+     }
+     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
+     if (spcAft.contains("%")) {
+         spcAft.remove("%");
+         qreal percentage = spcAft.toDouble() / 100.0;
+         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", percentage * m_largestParaFont);
+     }
+
+     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
+     if (m_moveToStylesXml) {
+         mainStyles->markStyleForStylesXml(currentParagraphStyleName);
+     }
+     body->addAttribute("text:style-name", currentParagraphStyleName);
 
      (void)textPBuf.releaseWriter();
      body->endElement(); //text:p
@@ -1861,6 +1887,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+
+    QString fontSize = m_currentTextStyle.property("fo:font-size");
+    if (!fontSize.isEmpty()) {
+        fontSize.remove("pt");
+        qreal realSize = fontSize.toDouble();
+        if (realSize > m_largestParaFont) {
+            m_largestParaFont = realSize;
+        }
+    }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster) {
