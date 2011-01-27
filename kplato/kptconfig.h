@@ -45,6 +45,7 @@ public:
     virtual int minimumDurationUnit() const;
     virtual int maximumDurationUnit() const;
 
+    virtual bool summaryTaskLevelColorsEnabled() const;
     virtual QBrush summaryTaskDefaultColor() const;
     virtual QBrush summaryTaskLevelColor_1() const;
     virtual QBrush summaryTaskLevelColor_2() const;

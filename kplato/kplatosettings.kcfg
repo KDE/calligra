@@ -82,13 +82,16 @@
   <group name="TaskColors">
     <entry name="ColorGradientType" type="Enum">
       <label>Gradient</label>
-      <default>Linear</default>
       <choices>
         <choice name="Linear"><label>Linear</label></choice>
         <choice name="Flat"><label>Flat</label></choice>
       </choices>
+      <default>Linear</default>
     </entry>
-
+    <entry name="SummaryTaskLevelColorsEnabled" type="Bool">
+      <label>Enable summary task level colors</label>
+      <default>false</default>
+    </entry>
     <entry name="SummaryTaskDefaultColor" type="Color">
       <label>Summary task default color</label>
       <default>#0000ff</default>
@@ -123,7 +126,7 @@
     </entry>
     <entry name="TaskErrorColor" type="Color">
       <label>Task color in error state</label>
-      <default>#00ffff</default>
+      <default>#ffff00</default>
     </entry>
     <entry name="MilestoneNormalColor" type="Color">
       <label>Milestone color in normal state</label>
@@ -139,7 +142,7 @@
     </entry>
     <entry name="MilestoneErrorColor" type="Color">
       <label>Milestone color in error state</label>
-      <default>#00ffff</default>
+      <default>#ffff00</default>
     </entry>
   </group>
 

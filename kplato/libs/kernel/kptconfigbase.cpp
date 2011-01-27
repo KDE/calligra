@@ -59,15 +59,21 @@ void ConfigBase::setTaskDefaults( Task *task )
 
 QBrush ConfigBase::summaryTaskLevelColor( int level ) const
 {
-    kDebug()<<level;
-    switch ( level ) {
-        case 0: return summaryTaskLevelColor_1();
-        case 1: return summaryTaskLevelColor_1();
-        case 2: return summaryTaskLevelColor_1();
-        case 3: return summaryTaskLevelColor_1();
-        default: break;
+    if ( summaryTaskLevelColorsEnabled() ) {
+        switch ( level ) {
+            case 1: return summaryTaskLevelColor_1();
+            case 2: return summaryTaskLevelColor_2();
+            case 3: return summaryTaskLevelColor_3();
+            case 4: return summaryTaskLevelColor_4();
+            default: break;
+        }
     }
     return summaryTaskDefaultColor();
+}
+
+bool ConfigBase::summaryTaskLevelColorsEnabled() const
+{
+    return false;
 }
 
 QBrush ConfigBase::summaryTaskDefaultColor() const

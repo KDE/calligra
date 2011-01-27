@@ -503,12 +503,12 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                 int dw = itemNegativeFloatWidth( opt, idx );
                 if ( dw > 0 ) {
                     QRectF cr;
-                    qreal h = r.height()/4.;
+                    qreal h = ir.height()/4.;
                     if ( hasStartConstraint( idx ) ) {
-                        cr = QRectF( r.left(), r.bottom(), - dw + r.width(), -h );
+                        cr = QRectF( ir.left(), ir.bottom(), - dw + ir.width(), -h );
                         painter->fillRect( cr, painter->pen().brush() );
                     } else if ( hasEndConstraint( idx ) ) {
-                        cr = QRectF( r.left(), r.bottom(), -dw, -h );
+                        cr = QRectF( ir.left(), ir.bottom(), -dw, -h );
                         painter->fillRect( cr, painter->pen().brush() );
                     }
                     //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<cr<<r<<boundingRect;

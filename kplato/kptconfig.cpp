@@ -112,6 +112,7 @@ KUrl Config::retrieveUrl() const
     return KPlatoSettings::retrieveUrl();
 }
 
+
 QBrush Config::summaryTaskDefaultColor() const
 {
     QColor c = KPlatoSettings::summaryTaskDefaultColor();
@@ -119,6 +120,11 @@ QBrush Config::summaryTaskDefaultColor() const
         return gradientBrush( c );
     }
     return c;
+}
+
+bool Config::summaryTaskLevelColorsEnabled() const
+{
+    return KPlatoSettings::summaryTaskLevelColorsEnabled();
 }
 
 QBrush Config::summaryTaskLevelColor_1() const
