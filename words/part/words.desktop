@@ -57,6 +57,7 @@ GenericName[x-test]=xxWord Processorxx
 GenericName[zh_CN]=字处理
 GenericName[zh_TW]=文書處理器
 Comment=Write documents
+Comment[cs]=Zapsat dokumenty
 Comment[de]=Dokumente verfassen
 Comment[et]=Dokumentide kirjutamine
 Comment[fr]=Documents texte
