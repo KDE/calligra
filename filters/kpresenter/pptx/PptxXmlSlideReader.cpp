@@ -628,11 +628,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
 
-        // As it is primary an ole ole object, this one should have the highest priority
-        QString destinationName;
-
         body->startElement("draw:object-ole");
-        RETURN_IF_ERROR( copyFile(sourceName, "", destinationName))
+        QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+        addManifestEntryForFile(destinationName);
+
         body->addAttribute("xlink:href", destinationName);
         body->endElement(); // draw:object-ole
 
@@ -647,7 +647,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         // These should be one day part of ole shape functionality wise
         if (progId == "Paint.Picture" || name == "Bitmap Image") {
             body->startElement("draw:image");
-            RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
+            QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
+            addManifestEntryForFile(destinationName);
             addManifestEntryForPicturesDir();
             body->addAttribute("xlink:href", destinationName);
             body->addAttribute("xlink:show", "embed");
@@ -656,13 +658,17 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         }
         else if (progId == "Package") {
             body->startElement("draw:plugin"); // The mimetype is not told by the ole container, this is best guess
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
+            addManifestEntryForFile(destinationName);
             body->addAttribute("xlink:href", destinationName);
             body->endElement(); // draw:plugin
         }
         else if (progId.contains("AcroExch")) { // PDF
             body->startElement("draw:object"); // The mimetype is not told by the ole container, this is best guess
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
+            addManifestEntryForFile(destinationName);
             body->addAttribute("xlink:href", destinationName);
             body->endElement(); // draw:object
         }
@@ -1027,7 +1033,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                 TRY_READ(effectLst)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
-                m_currentDrawStyle->addAttribute("style:fill", constNone);
+                m_currentDrawStyle->addProperty("draw:fill", constNone);
             }
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IF_NS_IN_CONTEXT(a, blipFill)
