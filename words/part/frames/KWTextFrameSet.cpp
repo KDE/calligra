@@ -161,9 +161,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         if (m_allowLayoutRequests) {
             KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
             if (lay) {
-kDebug();
-//                 lay->scheduleLayout();
-//                 lay->relayout();
+                //lay->scheduleLayout();
                 emit lay->shapeAdded(frame->shape());
             }
         }
@@ -179,7 +177,7 @@ void KWTextFrameSet::updateTextLayout()
     }
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
     if (lay) {
-//         lay->scheduleLayout();
+        //lay->scheduleLayout();
         lay->relayout();
     }
 }

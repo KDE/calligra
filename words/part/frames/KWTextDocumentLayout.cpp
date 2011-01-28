@@ -248,11 +248,8 @@ void KWTextDocumentLayout::layout()
     };
     End ender(m_frameSet, m_state); // poor mans finally{}
 
-    //Q_ASSERT(m_state->layout);
     if (!m_state->start()) {
-        kDebug()<<"start failed";
-        //scheduleLayoutWithoutInterrupt();
-//         Q_ASSERT(false);
+        kDebug() << "start layouting failed";
         return;
     }
 
