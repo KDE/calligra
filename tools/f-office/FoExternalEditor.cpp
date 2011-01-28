@@ -24,17 +24,10 @@
 
 #include "FoExternalEditor.h"
 
-<<<<<<< HEAD
 // Tables
 #include <tables/ui/CellToolBase.h>
 #include <tables/Map.h>
 #include <tables/Sheet.h>
-=======
-// KSpread
-#include "tables/ui/CellToolBase.h"
-#include "tables/Map.h"
-#include "tables/Sheet.h"
->>>>>>> fix includes etc to work with the headers that calligra tables actually installs
 
 #include <FoCellEditor.h>
 
