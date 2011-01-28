@@ -244,4 +244,4 @@ void FoCellEditor::keyPressEvent(QKeyEvent *event)
     QTextEdit::keyPressEvent(event);
 }
 
-#include "FoCellEditor.moc"
+//#include "FoCellEditor.moc"

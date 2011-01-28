@@ -24,6 +24,9 @@
 
 #include "KoAbstractApplicationController.h"
 
+#include <QMainWindow>
+typedef QMainWindow KoAbstractApplicationBase;
+
 //! Intermediate class defining slots for custom office application.
 //! Do not inherit it, instead define KoAbstractApplicationBase typedef,
 //! e.g. as QMainWindow and include KoAbstractApplication.h header.
