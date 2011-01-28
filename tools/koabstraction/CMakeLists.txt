@@ -53,6 +53,6 @@ install( FILES
     KoAbstractApplicationImpl.h
     KoAbstractApplicationController.h
     KoCellTool.h
-    KoCellEditor.h
+    FoCellEditor.h
     KoExternalEditorInterface.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
