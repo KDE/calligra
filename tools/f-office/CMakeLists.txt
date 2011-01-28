@@ -69,19 +69,6 @@ endif(QT_QTOPENGL_FOUND)
 
 kde4_add_ui_files(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui FileChooserDialog.ui AboutDialog.ui CollabDialog.ui)
 
-if(QT_QMAEMO5_LIBRARY)
-  list(APPEND FreOfficeMocSrc_SRCS
-    FoDocumentRdf.h
-    RdfInfoDialog.h
-  )
-  list(APPEND FreOffice_SRCS
-    FoDocumentRdf.cpp
-    RdfInfoDialog.cpp
-  )
-else(QT_QMAEMO5_LIBRARY)
-  
-endif(QT_QMAEMO5_LIBRARY)
-
 QT4_WRAP_CPP(FreOfficeMocSrc ${FreOfficeMocSrc_SRCS})
 
 set(FreOffice_SRCS
