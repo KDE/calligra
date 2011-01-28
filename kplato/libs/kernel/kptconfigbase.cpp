@@ -23,6 +23,10 @@
 #include <KLocale>
 #include <kdebug.h>
 
+#include <QApplication>
+#include <QBrush>
+#include <QColor>
+
 namespace KPlato
 {
 
@@ -53,6 +57,90 @@ void ConfigBase::setTaskDefaults( Task *task )
     }
 }
 
+QBrush ConfigBase::summaryTaskLevelColor( int level ) const
+{
+    if ( summaryTaskLevelColorsEnabled() ) {
+        switch ( level ) {
+            case 1: return summaryTaskLevelColor_1();
+            case 2: return summaryTaskLevelColor_2();
+            case 3: return summaryTaskLevelColor_3();
+            case 4: return summaryTaskLevelColor_4();
+            default: break;
+        }
+    }
+    return summaryTaskDefaultColor();
+}
+
+bool ConfigBase::summaryTaskLevelColorsEnabled() const
+{
+    return false;
+}
+
+QBrush ConfigBase::summaryTaskDefaultColor() const
+{
+    return gradientBrush( Qt::blue );
+}
+
+QBrush ConfigBase::summaryTaskLevelColor_1() const
+{
+    return gradientBrush( Qt::blue );
+}
+
+QBrush ConfigBase::summaryTaskLevelColor_2() const
+{
+    return gradientBrush( Qt::blue );
+}
+
+QBrush ConfigBase::summaryTaskLevelColor_3() const
+{
+    return gradientBrush( Qt::blue );
+}
+
+QBrush ConfigBase::summaryTaskLevelColor_4() const
+{
+    return gradientBrush( Qt::blue );
+}
+
+QBrush ConfigBase::taskNormalColor() const
+{
+    return gradientBrush( Qt::green );
+}
+
+QBrush ConfigBase::taskErrorColor() const
+{
+    return gradientBrush( Qt::yellow );
+}
+
+QBrush ConfigBase::taskCriticalColor() const
+{
+    return gradientBrush( Qt::red );
+}
+
+QBrush ConfigBase::taskFinishedColor() const
+{
+    return gradientBrush( Qt::gray );
+}
+
+QBrush ConfigBase::milestoneNormalColor() const
+{
+    return gradientBrush( Qt::blue );
+}
+
+QBrush ConfigBase::milestoneErrorColor() const
+{
+    return gradientBrush( Qt::yellow );
+}
+
+QBrush ConfigBase::milestoneCriticalColor() const
+{
+    return gradientBrush( Qt::red );
+}
+
+QBrush ConfigBase::milestoneFinishedColor() const
+{
+    return gradientBrush( Qt::gray );
+}
+
 void ConfigBase::setLocale( KLocale *locale )
 {
     if ( locale != m_locale ) {
@@ -69,6 +157,15 @@ const KLocale *ConfigBase::locale() const
 KLocale *ConfigBase::locale()
 {
     return m_locale ? m_locale : KGlobal::locale();
+}
+
+//static
+QBrush ConfigBase::gradientBrush( const QColor &c )
+{
+    QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
+    b.setColorAt( 0., c );
+    b.setColorAt( 1., c.darker() );
+    return QBrush( b );
 }
 
 }  //KPlato namespace

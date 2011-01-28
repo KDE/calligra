@@ -892,8 +892,9 @@ struct WV2_EXPORT BRC {
     U16 brcType:8;
 
     /**
-     * width of space to maintain between border and text within border. Must
-     * be 0 when BRC is a substructure of TC. Stored in points.
+     * Specifies the distance from the text to the border, in points.  For page
+     * borders, sprmSPgbProp can specify that this value shall specify the
+     * distance from the edge of the page to the border.
      */
     U16 dptSpace:5;
 
@@ -8512,9 +8513,9 @@ struct SEP : public Shared {
     U16 pgbPageDepth:2;
 
     /**
-     * page border offset from:
-     * 0 offset from text
-     * 1 offset from edge of page
+     * Specifies from where the offset of the page border is measured:
+     * 0 - offset measured from the text
+     * 1 - offset measured from the edge of the page
      */
     U16 pgbOffsetFrom:3;
 
@@ -8554,12 +8555,26 @@ struct SEP : public Shared {
     U32 dxaRight;
 
     /**
-     * default value is 1440 twipstop margin
+     * Specifies the height of the top margin, in twips.  A positive value
+     * indicates a minimum top margin; this margin MUST be grown to avoid
+     * overlapping the space that is occupied by headers.  A negative value
+     * indicates a fixed margin; the top margin MUST be the absolute value of
+     * the value that is specified by this SPRM regardless of the space that is
+     * occupied by headers.
+     *
+     * default value is 1440 twips
      */
     S32 dyaTop;
 
     /**
-     * default value is 1440 twipsbottom margin
+     * Specifies the height of the bottom margin, in twips.  A positive value
+     * specifies a minimum bottom margin; this margin MUST be grown to avoid
+     * overlapping the space that is occupied by footers or footnotes.  A
+     * negative value specifies a fixed margin; the bottom margin MUST be the
+     * absolute value of the value that is specified by this SPRM regardless of
+     * the space that is occupied by footers or footnotes.
+     *
+     * default value is 1440 twips
      */
     S32 dyaBottom;
 

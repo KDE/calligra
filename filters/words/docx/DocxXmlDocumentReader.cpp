@@ -4450,7 +4450,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 
                 KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
-                delete body;
+
                 body = oldBody;
             }
             else if(QUALIFIED_NAME_IS(tbl)) {

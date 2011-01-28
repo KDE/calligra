@@ -90,6 +90,22 @@ QVariant NodeModel::name( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task:
+                    return m_project->config().taskNormalColor();
+                case Node::Type_Milestone:
+                    return m_project->config().milestoneNormalColor();
+                case Node::Type_Summarytask:
+                    return m_project->config().summaryTaskLevelColor( node->level() );
+                default:
+                    break;
+            }
+            break;
+        }
     }
     return QVariant();
 }
@@ -1478,6 +1494,17 @@ QVariant NodeModel::resourceIsMissing( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1500,6 +1527,17 @@ QVariant NodeModel::resourceIsOverbooked( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1522,6 +1560,17 @@ QVariant NodeModel::resourceIsNotAvailable( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1544,6 +1593,17 @@ QVariant NodeModel::schedulingConstraintsError( const Node *node, int role ) con
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1566,6 +1626,17 @@ QVariant NodeModel::nodeIsNotScheduled( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1588,6 +1659,17 @@ QVariant NodeModel::effortNotMet( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1686,6 +1768,17 @@ QVariant NodeModel::nodeIsCritical( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskNormalColor();
+                case Node::Type_Milestone: return m_project->config().milestoneNormalColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1699,6 +1792,17 @@ QVariant NodeModel::nodeInCriticalPath( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskNormalColor();
+                case Node::Type_Milestone: return m_project->config().milestoneNormalColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }

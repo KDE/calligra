@@ -864,14 +864,11 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 
 PageProcessingQueue* KWDocument::pageQueue()
 {
-#if 0
-    bool deleteLater = true;
-    return new PageProcessingQueue(this, deleteLater);
-#else
+    //return new PageProcessingQueue(this, true);
+
     if (!m_pageQueue)
         m_pageQueue = new PageProcessingQueue(this);
     return m_pageQueue;
-#endif
 }
 
 void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
@@ -1013,6 +1010,7 @@ void PageProcessingQueue::process()
 {
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
+<<<<<<< HEAD
     const QList<int> pages = m_pages;
     m_triggered = false;
     m_pages.clear();
@@ -1023,11 +1021,21 @@ void PageProcessingQueue::process()
         m_document->m_frameLayout.createNewFramesForPage(pageNumber);
     }
 
+=======
+    foreach (int pageNumber, m_pages) {
+        m_document->m_frameLayout.createNewFramesForPage(pageNumber);
+    }
+    
+>>>>>>> master
     if (docIsEmpty)
         m_document->setEmpty();
     if (!docIsModified)
         m_document->setModified(false);
     if (m_deleteLater)
         deleteLater();
+<<<<<<< HEAD
+=======
+    m_pages.clear();
+>>>>>>> master
     emit m_document->pageSetupChanged();
 }

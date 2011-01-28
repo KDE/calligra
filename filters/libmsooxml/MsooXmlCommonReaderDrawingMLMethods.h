@@ -92,6 +92,7 @@ enum blipFillCaller {
 };
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
+qreal m_largestParaFont; // Largest font used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
