@@ -2484,6 +2484,20 @@ int Project::takeScheduleManager( ScheduleManager *sm )
     return index;
 }
 
+void Project::moveScheduleManager( ScheduleManager *sm, ScheduleManager *newparent, int newindex )
+{
+    //kDebug()<<sm->name()<<newparent<<newindex;
+    emit scheduleManagerToBeMoved( sm );
+    if ( ! sm->parentManager() ) {
+        m_managers.removeAt( indexOf( sm ) );
+    }
+    sm->setParentManager( newparent, newindex );
+    if ( ! newparent ) {
+        m_managers.insert( newindex, sm );
+    }
+    emit scheduleManagerMoved( sm, newindex );
+}
+
 bool Project::isScheduleManager( void *ptr ) const
 {
     const ScheduleManager *sm = static_cast<ScheduleManager*>( ptr );

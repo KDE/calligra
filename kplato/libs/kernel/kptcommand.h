@@ -1510,6 +1510,22 @@ private:
     MacroCommand cmd;
 };
 
+class KPLATOKERNEL_EXPORT MoveScheduleManagerCmd : public NamedCommand
+{
+public:
+    MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager *m_sm;
+    ScheduleManager *m_oldparent;
+    int m_oldindex;
+    ScheduleManager *m_newparent;
+    int m_newindex;
+    MacroCommand m_cmd;
+};
+
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerNameCmd : public NamedCommand
 {
 public:

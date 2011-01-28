@@ -109,6 +109,8 @@ protected slots:
     void slotScheduleManagerInserted( const ScheduleManager *manager );
     void slotScheduleManagerToBeRemoved( const ScheduleManager *manager );
     void slotScheduleManagerRemoved( const ScheduleManager *manager );
+    void slotScheduleManagerToBeMoved( const ScheduleManager *manager );
+    void slotScheduleManagerMoved( const ScheduleManager *manager, int index );
     void slotScheduleToBeInserted( const ScheduleManager *manager, int row );
     void slotScheduleInserted( const MainSchedule *schedule );
     void slotScheduleToBeRemoved( const MainSchedule *schedule );

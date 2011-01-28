@@ -2923,6 +2923,26 @@ void DeleteScheduleManagerCmd::unexecute()
     cmd.unexecute();
 }
 
+MoveScheduleManagerCmd::MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm ),
+    m_oldparent( sm->parentManager() ),
+    m_newparent( newparent ),
+    m_newindex( newindex )
+{
+    m_oldindex = sm->parentManager() ? sm->parentManager()->indexOf( sm ) : sm->project().indexOf( sm );
+}
+
+void MoveScheduleManagerCmd::execute()
+{
+    m_sm->project().moveScheduleManager( m_sm, m_newparent, m_newindex );
+}
+
+void MoveScheduleManagerCmd::unexecute()
+{
+    m_sm->project().moveScheduleManager( m_sm, m_oldparent, m_oldindex );
+}
+
 ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name )
     : NamedCommand( name ),
     m_sm( sm ),
