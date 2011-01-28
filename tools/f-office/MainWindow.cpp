@@ -110,7 +110,6 @@
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KWDocument.h>
-#include <KWView.h>
 #include <KoShapeLayer.h>
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>

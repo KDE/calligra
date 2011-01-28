@@ -15,7 +15,7 @@ set(koabstraction_LIB_SRCS
 # generate KoAbstractApplication.moc which is not used by koabstraction but by users
 # of this library
 set_source_files_properties(KoAbstractApplicationController.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/KoAbstractApplication.moc)
-qt4_generate_moc(${CMAKE_CURRENT_SOURCE_DIR}/KoAbstractApplication.h ${CMAKE_CURRENT_BINARY_DIR}/KoAbstractApplication.moc)
+QT4_GENERATE_MOC(${CMAKE_CURRENT_SOURCE_DIR}/KoAbstractApplication.h ${CMAKE_CURRENT_BINARY_DIR}/KoAbstractApplication.moc)
 
 kde4_add_library(koabstraction SHARED ${koabstraction_LIB_SRCS})
 
@@ -53,5 +53,6 @@ install( FILES
     KoAbstractApplicationImpl.h
     KoAbstractApplicationController.h
     KoCellTool.h
+    KoCellEditor.h
     KoExternalEditorInterface.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
