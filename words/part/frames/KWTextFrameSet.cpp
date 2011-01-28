@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2006,2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -160,7 +161,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         if (m_allowLayoutRequests) {
             KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
             if (lay) {
-                lay->scheduleLayout();
+kDebug();
+//                 lay->scheduleLayout();
+//                 lay->relayout();
                 emit lay->shapeAdded(frame->shape());
             }
         }
@@ -175,25 +178,27 @@ void KWTextFrameSet::updateTextLayout()
         return;
     }
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
-    if (lay)
-        lay->scheduleLayout();
+    if (lay) {
+//         lay->scheduleLayout();
+        lay->relayout();
+    }
 }
 
 void KWTextFrameSet::requestMoreFrames(qreal textHeight)
 {
-    //kDebug() <<"KWTextFrameSet::requestMoreFrames" << textHeight;
     if (frameCount() == 0)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
-    if (!lastFrame)
-        return;
+    Q_ASSERT(lastFrame);
 
     if (KWord::isHeaderFooter(this)) {
         KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
         frame->setMinimumFrameHeight(frame->minimumFrameHeight() + textHeight + 1E-6);
+        kDebug()<<"Header/Footer frameSet="<<this<<"lastFrame="<<lastFrame<<"allowLayout="<<allowLayout()<<"textHeight="<<textHeight;
         if (allowLayout())
             emit decorationFrameResize(this);
     } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
+        kDebug()<<"AutoCreateNewFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"ReconnectNewFrame="<<(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)<<"textHeight="<<textHeight;
         if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
             emit moreFramesNeeded(this);
     } else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior
@@ -204,12 +209,15 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
             requestMoreFrames(0);
             return;
         }
+
         QSizeF size = shape->size();
         QPointF orig = shape->absolutePosition(KoFlake::TopLeftCorner);
         shape->setSize(QSizeF(size.width(), size.height() + textHeight + 1E-6));
         shape->setAbsolutePosition(orig, KoFlake::TopLeftCorner);
         shape->update(QRectF(0.0, size.height(), size.width(), textHeight + 1E-6));
         lastFrame->allowToGrow();
+        
+        kDebug()<<"AutoExtendFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"size="<<size<<"orig="<<orig<<"textHeight="<<textHeight;;
     }
 }
 
@@ -287,8 +295,8 @@ void KWTextFrameSet::setAllowLayout(bool allow)
     if (m_allowLayoutRequests && m_requestedUpdateTextLayout) {
         m_requestedUpdateTextLayout = false;
         KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
-        if (lay)
-            lay->scheduleLayout();
+//         if (lay)
+//             lay->scheduleLayout();
     }
 }
 

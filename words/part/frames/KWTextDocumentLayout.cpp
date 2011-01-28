@@ -229,9 +229,6 @@ void KWTextDocumentLayout::layout()
 #ifdef TDEBUG
     TDEBUG << "starting layout pass, document=" << ((void*)document()) << "frameSet=" << m_frameSet << "headerFooter=" << KWord::isHeaderFooter(m_frameSet);
 #endif
-#ifdef DEBUG_ANCHORS
-    ADEBUG << "m_newAnchors" << m_newAnchors.count() << "m_activeAnchors" << m_activeAnchors.count();
-#endif
 
     class End
     {
@@ -251,8 +248,13 @@ void KWTextDocumentLayout::layout()
     };
     End ender(m_frameSet, m_state); // poor mans finally{}
 
-    if (! m_state->start())
+    //Q_ASSERT(m_state->layout);
+    if (!m_state->start()) {
+        kDebug()<<"start failed";
+        //scheduleLayoutWithoutInterrupt();
+//         Q_ASSERT(false);
         return;
+    }
 
     qreal endPos = 1E9;
     qreal bottomOfText = 0.0;
@@ -263,11 +265,11 @@ void KWTextDocumentLayout::layout()
     KoShape *currentShape = 0;
 
     while (m_state->shape) {
-#ifdef DEBUG_ANCHORS
-        ADEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines, we have" << m_activeAnchors.count() << "+" << m_newAnchors.count() <<"anchors";
+#ifdef DEBUG_TEXT
+        TDEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines";
         for (int i = 0; i < m_state->layout->lineCount(); ++i) {
             QTextLine line = m_state->layout->lineAt(i);
-            ADEBUG << i << "]" << (line.isValid() ? QString("%1 - %2").arg(line.textStart()).arg(line.textLength()) : QString("invalid"));
+            TDEBUG << i << "]" << (line.isValid() ? QString("%1 - %2").arg(line.textStart()).arg(line.textLength()) : QString("invalid"));
         }
 #endif
 
