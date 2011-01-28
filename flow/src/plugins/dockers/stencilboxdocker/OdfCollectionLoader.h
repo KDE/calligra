@@ -34,6 +34,7 @@ class KoShapeLoadingContext;
 class QTimer;
 class KoShape;
 class KoFilterManager;
+class KoResourceManager;
 
 class OdfCollectionLoader : public QObject
 {
@@ -60,6 +61,7 @@ class OdfCollectionLoader : public QObject
         QTimer* m_loadingTimer;
         KoOdfLoadingContext* m_loadingContext;
         KoShapeLoadingContext* m_shapeLoadingContext;
+        KoResourceManager* m_resourceManager;
         KoXmlElement m_body;
         KoXmlElement m_page;
         KoXmlElement m_shape;
