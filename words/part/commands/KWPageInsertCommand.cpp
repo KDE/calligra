@@ -119,8 +119,7 @@ void KWPageInsertCommand::redo()
     if (d->shapeMoveCommand)
         d->shapeMoveCommand->redo();
     Q_ASSERT(d->page.isValid());
-    PageProcessingQueue *ppq = new PageProcessingQueue(d->document);
-    ppq->addPage(d->page);
+    d->document->pageQueue()->addPage(d->page);
 }
 
 void KWPageInsertCommand::undo()

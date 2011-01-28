@@ -21,6 +21,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template,appl
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;
 X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Word processor
+GenericName[cs]=Textový procesor
 GenericName[de]=Textverarbeitung
 GenericName[et]=Tekstitöötlus
 GenericName[fr]=Traitement de texte

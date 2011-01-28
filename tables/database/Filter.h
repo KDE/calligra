@@ -39,7 +39,7 @@ class Map;
 /**
  * OpenDocument, 8.7.1 Table Filter
  */
-class CALLIGRA_TABLES_EXPORT Filter
+class CALLIGRA_TABLES_ODF_EXPORT Filter
 {
 public:
     enum Comparison {

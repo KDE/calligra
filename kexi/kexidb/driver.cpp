@@ -326,7 +326,7 @@ QByteArray Driver::escapeIdentifier(const QByteArray& str, int options) const
         needOuterQuotes = true;
 
 // ... or if it's a keyword in the backends SQL dialect,
-    else if ((options & EscapeDriver) && d->driverSpecificSQLKeywords.contains(str))
+    else if ((options & EscapeDriver) && d->driverSpecificSQLKeywords.contains(str.toUpper()))
         needOuterQuotes = true;
 
 // ... or if the identifier has a space in it...

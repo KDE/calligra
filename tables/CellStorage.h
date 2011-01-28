@@ -69,7 +69,7 @@ class ValueStorage;
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
-class CALLIGRA_TABLES_EXPORT CellStorage : public QObject
+class CALLIGRA_TABLES_ODF_EXPORT CellStorage : public QObject
 {
     Q_OBJECT
 public:

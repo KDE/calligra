@@ -555,7 +555,7 @@ QString ComplexShapeHandler::handle_path(QXmlStreamReader* reader)
     while (!reader->atEnd()) {
         reader->readNext();
         if (reader->isEndElement() && reader->name() == "path") {
-            if (attrs.value("stroke") == "false") {
+            if (attrs.value("stroke") == "false" || attrs.value("stroke") == "0" ) {
                 returnString += "S ";
             }
             if (attrs.value("fill") == "none") {

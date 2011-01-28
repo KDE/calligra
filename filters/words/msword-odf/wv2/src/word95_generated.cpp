@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   Boston, MA 02111-1301, USA.
 */
 
 // This code is generated from the Microsoft HTML specification of the
@@ -6559,8 +6559,8 @@ bool SEP::read(OLEStreamReader *stream, bool preservePos) {
     yaPage=stream->readU16();
     dxaLeft=stream->readU16();
     dxaRight=stream->readU16();
-    dyaTop=stream->readU16();
-    dyaBottom=stream->readU16();
+    dyaTop=stream->readS16();
+    dyaBottom=stream->readS16();
     dzaGutter=stream->readU16();
     dmBinFirst=stream->readU16();
     dmBinOther=stream->readU16();
@@ -6738,9 +6738,9 @@ std::string SEP::toString() const
     s += "\ndxaRight=";
     s += uint2string( dxaRight );
     s += "\ndyaTop=";
-    s += uint2string( dyaTop );
+    s += int2string( dyaTop );
     s += "\ndyaBottom=";
-    s += uint2string( dyaBottom );
+    s += int2string( dyaBottom );
     s += "\ndzaGutter=";
     s += uint2string( dzaGutter );
     s += "\ndmBinFirst=";

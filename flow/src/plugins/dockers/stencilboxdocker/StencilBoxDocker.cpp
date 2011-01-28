@@ -85,7 +85,7 @@ QDockWidget* StencilBoxDockerFactory::createDockWidget()
 StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     : QDockWidget(parent)
 {
-    setWindowTitle(i18n("Shape Box"));
+    setWindowTitle(i18n("Stencil Box"));
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
 

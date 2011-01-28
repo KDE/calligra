@@ -34,7 +34,7 @@ namespace Calligra
 namespace Tables
 {
 
-class CALLIGRA_TABLES_EXPORT Localization : public KLocale
+class CALLIGRA_TABLES_ODF_EXPORT Localization : public KLocale
 {
 public:
     Localization();
