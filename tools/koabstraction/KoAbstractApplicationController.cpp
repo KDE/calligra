@@ -705,7 +705,7 @@ void KoAbstractApplicationController::goToNextSheet()
     Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
     if (!kspreadDoc)
         return;
-    sheet = tablesDoc->map()->nextSheet(sheet);
+    sheet = kspreadDoc->map()->nextSheet(sheet);
     if (!sheet)
         return;
     tablesView->setActiveSheet(sheet);
@@ -722,7 +722,7 @@ void KoAbstractApplicationController::goToPreviousSheet()
     Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
     if (!kspreadDoc)
         return;
-    sheet = tablesDoc->map()->previousSheet(sheet);
+    sheet = kspreadDoc->map()->previousSheet(sheet);
     if (!sheet)
         return;
     tablesView->setActiveSheet(sheet);
@@ -837,7 +837,7 @@ void KoAbstractApplicationController::removeSheet()
             kspreadDoc->setModified(true);
             setDocumentModified(true);
             Calligra::Tables::Sheet* tbl = kspreadView->activeSheet();
-            QUndoCommand* command = new RemoveSheet(tbl);
+            QUndoCommand* command = new RemoveSheetCommand(tbl);
             kspreadDoc->addCommand(command);
         }
     }
