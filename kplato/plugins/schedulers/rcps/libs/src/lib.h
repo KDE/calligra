@@ -4,12 +4,12 @@
 #include <stdlib.h>
 
 /* return the bigger of the two arguments */
-static /*inline*/ int max(const int a, const int b) {
-	return a > b ? a : b;
+static /*inline*/ int kpt_max(const int a, const int b) {
+        return a > b ? a : b;
 }
 
 /* return the smaller of the two arguments */
-static /*inline*/ int min(const int a, const int b) {
+static /*inline*/ int kpt_min(const int a, const int b) {
 	return a < b ? a : b;
 }
 

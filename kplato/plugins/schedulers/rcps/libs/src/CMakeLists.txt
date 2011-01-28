@@ -23,7 +23,7 @@ else()
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
-kde4_add_library(librcps_plan SHARED ${librcps_LIB_SRCS})
+kde4_add_library(librcps_plan STATIC ${librcps_LIB_SRCS})
 
 target_link_libraries(
     librcps_plan
