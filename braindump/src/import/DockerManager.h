@@ -30,7 +30,7 @@ class MainWindow;
 /**
    The docker manager makes sure that tool option widgets are shown at the right time.
  */
-class KOMAIN_EXPORT DockerManager : public QObject
+class DockerManager : public QObject
 {
     Q_OBJECT
 public:

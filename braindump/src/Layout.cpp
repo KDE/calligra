@@ -20,8 +20,13 @@
 #include "Layout.h"
 
 #include <KoShape.h>
+#include <KoViewConverter.h>
+#include <KoXmlReader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <Utils.h>
 #include <QEvent>
+#include <QPainter>
 #include <qcoreapplication.h>
 
 struct Layout::Private : public KoShape {
@@ -69,7 +74,7 @@ void Layout::Private::shapeChanged(ChangeType type, KoShape * shape) {
 
 void Layout::Private::triggerRelayout()
 {
-  if(not eventSent) {
+  if(!eventSent) {
     QCoreApplication::postEvent(self, new QEvent( QEvent::Type(event_type_delayed_relayout)));
     eventSent = true;
   }
@@ -99,7 +104,7 @@ void Layout::replaceLayout(Layout* layout) {
 
 void Layout::addShapes(QList<KoShape*> _shapes) {
   foreach(KoShape* shape, _shapes) {
-    Q_ASSERT(not d->shapes.contains(shape));
+    Q_ASSERT(!d->shapes.contains(shape));
     d->shapes.push_back(shape);
   }
   shapesAdded(_shapes);
@@ -110,7 +115,7 @@ void Layout::addShapes(QList<KoShape*> _shapes) {
 }
 
 void Layout::addShape(KoShape* _shape) {
-  Q_ASSERT(not d->shapes.contains(_shape));
+  Q_ASSERT(!d->shapes.contains(_shape));
   d->shapes.push_back(_shape);
   shapeAdded(_shape);
   _shape->addDependee(d);

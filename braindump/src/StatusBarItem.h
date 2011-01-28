@@ -31,7 +31,7 @@ struct MainWindow::StatusBarItem
   void ensureItemShown(KStatusBar * sb) {
     Q_ASSERT(m_widget);
     Q_ASSERT(sb);
-    if(not m_visible) {
+    if(!m_visible) {
       if(m_permanent) {
         sb->addPermanentWidget(m_widget, m_stretch);
       } else {
