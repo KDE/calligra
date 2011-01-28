@@ -177,6 +177,8 @@ void KWTextFrameSet::updateTextLayout()
     }
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
     if (lay) {
+        // Don't schedule the layout what would wait with the layout till the eventloop kicks
+        // in what sucks performance-wise. So, start the layouting right away.
         //lay->scheduleLayout();
         lay->relayout();
     }
