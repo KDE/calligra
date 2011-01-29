@@ -49,8 +49,11 @@ private slots:
     void subtractHour();
     void subtractMinute();
     void subtractSecond();
+
+#if QT_VERSION  >= 0x040700
     void subtractMillisecond();
-    
+#endif
+
     void addDay();
     void addHour();
     void addMinute();

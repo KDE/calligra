@@ -110,15 +110,14 @@
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KWDocument.h>
-#include <KWView.h>
 #include <KoShapeLayer.h>
 #include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
 #include <kundostack.h>
-#include <Map.h>
-#include <Doc.h>
-#include <part/View.h>
+#include <tables/Map.h>
+#include <tables/DocBase.h>
+#include <tables/part/View.h>
 #include <tables/Sheet.h>
 
 #include <X11/Xlib.h>
@@ -208,10 +207,6 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_slideNotesIcon(VIEW_NOTES_PIXMAP),
         m_presentationTool(0),
         m_storeButtonPreview(0)
-#ifdef Q_WS_MAEMO_5
-        ,m_foDocumentRdf(0),
-        m_rdfShortcut(0)
-#endif
 {
     setSplashScreen(aSplash);
     m_digitalSignatureDialog = 0;
@@ -1496,8 +1491,8 @@ void MainWindow::toggleToolBar(bool show)
     KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     if (documentType() == SpreadsheetDocument) {
         KoToolManager::instance()->switchToolRequested(cellToolFactoryId());
-        Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(document());
-        tablesDoc->map()->setReadWrite(!show);
+        Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(document());
+        kspreadDoc->map()->setReadWrite(!show);
     }
     document()->setReadWrite(!show);
     m_ui->viewToolBar->setVisible(!show);
@@ -1885,15 +1880,6 @@ void MainWindow::closeDocument()
 {
     KoAbstractApplication::closeDocument();
 
-#ifdef Q_WS_MAEMO_5
-    if (m_foDocumentRdf && documentType() == TextDocument) {
-        disconnect(m_rdfShortcut,SIGNAL(activated()),m_foDocumentRdf,SLOT(highlightRdf()));
-        delete m_rdfShortcut;
-        delete m_foDocumentRdf;
-        m_foDocumentRdf=0;
-        m_rdfShortcut=0;
-    }
-#endif
     if (m_digitalSignatureDialog && documentType() == TextDocument) {
         disconnect(m_ui->actionDigitalSignature,SIGNAL(triggered()),this,SLOT(showDigitalSignatureInfo()));
         QMenuBar* menu = menuBar();
@@ -2018,12 +2004,6 @@ bool MainWindow::doOpenDocument()
 // reimplemented
 void MainWindow::resourceChanged(int key, const QVariant& value)
 {
-#ifdef Q_WS_MAEMO_5
-    if (documentType() == TextDocument && m_ui->actionEdit->isChecked()) {
-        if (m_foDocumentRdf)
-            m_foDocumentRdf->findStatements(*textEditor()->cursor(), 1);
-    }
-#endif
     if (m_presentationTool && m_presentationTool->toolsActivated() && documentType() == PresentationDocument) {
         return;
     }
@@ -2046,9 +2026,9 @@ void MainWindow::documentPageSetupChanged()
     }
 
     if (documentType() == SpreadsheetDocument) {
-        Calligra::Tables::Doc *tablesDoc = qobject_cast<Calligra::Tables::Doc*>(document());
-        if (tablesDoc->map()->count() > 0)
-            pageNo = i18n("pg%1 - pg%2", 1, QString::number(tablesDoc->map()->count()));
+        Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(document());
+        if (kspreadDoc->map()->count() > 0)
+            pageNo = i18n("pg%1 - pg%2", 1, QString::number(kspreadDoc->map()->count()));
     }
 
     m_ui->actionZoomLevel->setText(i18n("%1 %", QString::number(factor)));
@@ -3378,26 +3358,6 @@ void MainWindow::showUiBeforeDocumentOpening(bool isNewDocument)
             connect(m_ui->actionDigitalSignature,SIGNAL(triggered()),this,SLOT(showDigitalSignatureInfo()));
         }
    }
-#ifdef Q_WS_MAEMO_5
-   if (documentType() == TextDocument)
-   {
-       /*
-        * intialising the rdf
-        */
-       KoStore::Backend backend = KoStore::Auto;
-       KoStore * store = KoStore::createStore(fileName, KoStore::Read, "", backend);
-
-       m_foDocumentRdf = new FoDocumentRdf(document(), textEditor());
-       if (!m_foDocumentRdf->loadOasis(store)) {
-           delete m_foDocumentRdf;
-           m_foDocumentRdf = 0;
-           return false;
-       }
-       delete store;
-       m_rdfShortcut= new QShortcut(QKeySequence(("Ctrl+R")),this);
-       connect(m_rdfShortcut,SIGNAL(activated()),m_foDocumentRdf,SLOT(highlightRdf()));
-   }
-#endif
 
     raiseWindow();
 }

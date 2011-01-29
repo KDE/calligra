@@ -36,7 +36,6 @@ set(wordsprivate_LIB_SRCS
     frames/KWTextFrame.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
-    frames/KWAnchorStrategy.cpp
     frames/KWOutlineShape.cpp
     frames/KWPageBackground.cpp
 
@@ -165,5 +164,6 @@ KWDocument.h
 KWApplicationConfig.h
 frames/KWFrameLayout.h
 KWViewMode.h
+KWView.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

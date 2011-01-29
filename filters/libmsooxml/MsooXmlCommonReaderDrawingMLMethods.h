@@ -92,6 +92,7 @@ enum blipFillCaller {
 };
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
+qreal m_largestParaFont; // Largest font used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
@@ -202,16 +203,8 @@ void algnToODF(const char * odfEl, const QString& emuValue);
 //! Sets fo:margin-* attribute of style:style/style:graphic-properties element. Used in read_anchor()
 void distToODF(const char * odfEl, const QString& emuValue);
 
-//! ODF 1.1., 15.14.9 Fill Image Rendering Style
-//! Set by read_stretch()
-bool m_fillImageRenderingStyleStretch;
-
 //! Used by read_wrap*()
 void readWrap();
-
-//! Copies file to destination directory. @a destinationName is set.
-KoFilter::ConversionStatus copyFile(
-    const QString& sourceName, const QString& destinationDir, QString& destinationName, bool oleType=false);
 
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
@@ -268,4 +261,6 @@ qreal* m_currentDoubleValue;
 
 bool    m_hyperLink;
 QString m_hyperLinkTarget;
+
+QString m_recentDestName; // recent image
 

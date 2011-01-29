@@ -145,6 +145,7 @@ private:
     const KWPageManager *m_pageManager;
     const KWDocument *m_kwordDocument;
     KWPageStyle m_pageStyle; // the page Style this frameset is associated with.
+    bool m_requestedUpdateTextLayout;
 
     // return true if frame1 is sorted before frame2
     static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);

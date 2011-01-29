@@ -1,9 +1,11 @@
-/* This file is part of the wvWare 2 project
-   Copyright (C) 2010 by Nokia
+/* This file is part of the KOffice project
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
+   modify it under the terms of the Library GNU General Public
+   version 2 of the License, or (at your option) version 3 or,
+   at the discretion of KDE e.V (which shall act as a proxy as in
+   section 14 of the GPLv3), any later version..
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,27 +15,24 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02111-1307, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef MS_ODRAW_H
-#define MS_ODRAW_H
-
-namespace wvWare
-{
+#ifndef MSODRAW_H
+#define MSODRAW_H
 
 typedef enum
 {
-    msosptNotPrimitive=0,
-    msosptRectangle=1,
-    msosptRoundRectangle=2,
-    msosptEllipse=3,
-    msosptDiamond=4,
-    msosptIsocelesTriangle=5,
-    msosptRightTriangle=6,
-    msosptParallelogram=7,
-    msosptTrapezoid=8,
-    msosptHexagon=9,
+    msosptNotPrimitive=0x0,
+    msosptRectangle=0x1,
+    msosptRoundRectangle=0x2,
+    msosptEllipse=0x3,
+    msosptDiamond=0x4,
+    msosptIsocelesTriangle=0x5,
+    msosptRightTriangle=0x6,
+    msosptParallelogram=0x7,
+    msosptTrapezoid=0x8,
+    msosptHexagon=0x9,
     msosptOctagon=0x0a,
     msosptPlus=0x0b,
     msosptStar=0x0c,
@@ -282,38 +281,18 @@ typedef enum
 //horizontal alignment
 typedef enum
 {
-    hAlignLeft = 0,
-    hAlignCenter = 1,
-    hAlignRight = 2
+    hAlignLeft   = 0x0,
+    hAlignCenter = 0x1,
+    hAlignRight  = 0x2
 } H_ALIGN;
 
 //vertical alignment
 typedef enum
 {
-    vAlignTop = 0,
-    vAlignMiddle = 1,
-    vAlignBottom = 2
+    vAlignTop    = 0x0,
+    vAlignMiddle = 0x1,
+    vAlignBottom = 0x2
 } V_ALIGN;
-
-typedef struct
-{
-    U8 r;
-    U8 g;
-    U8 b;
-} OfficeArtCOLORREF;
-
-typedef struct
-{
-    MSOSPT                  shapeType;
-    OfficeArtCOLORREF       color;
-    H_ALIGN                 align;
-    float                   height;
-    float                   width;
-    bool                    pib; //a BLIP has to be displayed in the picture shape
-} OfficeArtProperties;
-
-}
-
 
 #endif
 

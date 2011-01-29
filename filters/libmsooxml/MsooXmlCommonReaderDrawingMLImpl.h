@@ -62,7 +62,6 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_hyperLink = false;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
-    m_fillImageRenderingStyleStretch = false;
 }
 
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
@@ -96,30 +95,6 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
 }
 
 // ----------------------------------------------------------------
-
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName,
-                                                           const QString& destinationDir,
-                                                           QString& destinationName,
-                                                           bool oleType)
-{
-    destinationName = destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
-    if (oleType) {
-        // If it's of type ole, we don't know the file type, by default it has .bin
-        // ending which we're removing here.
-        destinationName.remove(".bin");
-    }
-
-    if (m_copiedFiles.contains(destinationName)) {
-        kDebug() << sourceName << "already copied - skipping";
-    }
-    else {
-//! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
-        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, oleType) )
-        addManifestEntryForFile(destinationName);
-        m_copiedFiles.insert(destinationName);
-    }
-    return KoFilter::OK;
-}
 
 // ================================================================
 // DrawingML tags
@@ -180,7 +155,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
-    m_fillImageRenderingStyleStretch = false;
     m_flipH = false;
     m_flipV = false;
     m_rot = 0;
@@ -1232,11 +1206,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                     }
                 }
             }
-            else if ( qualifiedName() == QLatin1String("a:ln") ) {
+            else if (qualifiedName() == QLatin1String("a:ln")) {
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
-                m_currentDrawStyle->addAttribute("style:fill", constNone);
+                m_currentDrawStyle->addProperty("draw:fill", constNone);
             }
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
@@ -1616,6 +1590,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 {
     READ_PROLOGUE2(DrawingML_p)
 
+    m_largestParaFont = 0;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
@@ -1694,6 +1669,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         // and thus m_currentTextStyle is not used
         inheritDefaultTextStyle(m_currentParagraphStyle);
         inheritTextStyle(m_currentParagraphStyle);
+        QString fontSize = m_currentTextStyle.property("fo:font-size", KoGenStyle::TextType);
+        if (!fontSize.isEmpty()) {
+            fontSize.remove("pt");
+            qreal realSize = fontSize.toDouble();
+            if (realSize > m_largestParaFont) {
+                m_largestParaFont = realSize;
+            }
+        }
 #endif
     }
 
@@ -1802,7 +1785,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 #endif
 
-     setupParagraphStyle();
+     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
+     if (spcBef.contains("%")) {
+         spcBef.remove("%");
+         qreal percentage = spcBef.toDouble() / 100.0;
+         m_currentParagraphStyle.addPropertyPt("fo:margin-top", percentage * m_largestParaFont);
+     }
+     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
+     if (spcAft.contains("%")) {
+         spcAft.remove("%");
+         qreal percentage = spcAft.toDouble() / 100.0;
+         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", percentage * m_largestParaFont);
+     }
+
+     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
+     if (m_moveToStylesXml) {
+         mainStyles->markStyleForStylesXml(currentParagraphStyleName);
+     }
+     body->addAttribute("text:style-name", currentParagraphStyleName);
 
      (void)textPBuf.releaseWriter();
      body->endElement(); //text:p
@@ -1887,6 +1887,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+
+    QString fontSize = m_currentTextStyle.property("fo:font-size");
+    if (!fontSize.isEmpty()) {
+        fontSize.remove("pt");
+        qreal realSize = fontSize.toDouble();
+        if (realSize > m_largestParaFont) {
+            m_largestParaFont = realSize;
+        }
+    }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster) {
@@ -2541,10 +2550,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
-        QString destinationName;
-
-        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
-        m_recentSourceName = sourceName;
+        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+        addManifestEntryForFile(destinationName);
+        m_recentDestName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
     }
@@ -2588,7 +2597,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
 {
     READ_PROLOGUE
 
-    m_fillImageRenderingStyleStretch = true;
     m_currentDrawStyle->addProperty("style:repeat", QLatin1String("stretch"));
 
     while (!atEnd()) {
@@ -2770,9 +2778,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(t)
 
-    //TODO: m_imageSize should be converted to cm and percentages here calculatted in relation to that
-    // and calligra should support fo:clip.
-    //m_currentDrawStyle->addProperty("fo:clip", QString("rect(%1, %2, %3, %4)").arg(5).arg(5).arg(5).arg(5));
+    if (!b.isEmpty()) {
+        qreal bReal = b.toDouble() / 100000;
+        qreal tReal = t.toDouble() / 100000;
+        qreal lReal = l.toDouble() / 100000;
+        qreal rReal = r.toDouble() / 100000;
+
+        int rectLeft = m_imageSize.rwidth() * lReal;
+        int rectTop = m_imageSize.rheight() * tReal;
+        int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
+        int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
+
+        QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
+            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);;
+        QImage image;
+        m_context->import->imageFromFile(m_recentDestName, image);
+        image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+        RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
+        addManifestEntryForFile(destinationName);
+        m_xlinkHref = destinationName;
+    }
 
     readNext();
     READ_EPILOGUE
@@ -2810,8 +2835,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
         TRY_READ_ATTR_WITHOUT_NS(r, r)
         TRY_READ_ATTR_WITHOUT_NS(r, t)*/
 //MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
-
-    //m_fillImageRenderingStyle = QLatin1String("stretch");
 
     readNext();
     READ_EPILOGUE
@@ -2979,8 +3002,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
     if (!expectEl(qn)) {
         return KoFilter::WrongFormat;
     }
-
-    m_fillImageRenderingStyleStretch = false;
 
     while (!atEnd()) {
         readNext();
@@ -5555,6 +5576,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     TRY_READ_ATTR_WITHOUT_NS(rIns)
     TRY_READ_ATTR_WITHOUT_NS(bIns)
     TRY_READ_ATTR_WITHOUT_NS(tIns)
+    TRY_READ_ATTR_WITHOUT_NS(vert)
+
+    // Todo
+    if (!vert.isEmpty()) {
+        if (vert == "vert270") {
+        }
+    }
+
 //TODO    TRY_READ_ATTR_WITHOUT_NS(fontAlgn)
 
     m_shapeTextPosition.clear();

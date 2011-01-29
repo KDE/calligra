@@ -47,7 +47,8 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
         m_frameOrderDirty(true),
         m_textFrameSetType(KWord::OtherTextFrameSet),
         m_pageManager(0),
-        m_kwordDocument(doc)
+        m_kwordDocument(doc),
+        m_requestedUpdateTextLayout(false)
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
     if (m_kwordDocument) {
@@ -72,7 +73,8 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         m_frameOrderDirty(true),
         m_textFrameSetType(type),
         m_pageManager(0),
-        m_kwordDocument(doc)
+        m_kwordDocument(doc),
+        m_requestedUpdateTextLayout(false)
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
     if (m_kwordDocument) {
@@ -168,8 +170,10 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 
 void KWTextFrameSet::updateTextLayout()
 {
-    if (! m_allowLayoutRequests)
+    if (! m_allowLayoutRequests) {
+        m_requestedUpdateTextLayout = true;
         return;
+    }
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
     if (lay)
         lay->scheduleLayout();
@@ -181,11 +185,14 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
     if (frameCount() == 0)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
+    if (!lastFrame)
+        return;
 
-    if (lastFrame && KWord::isHeaderFooter(this)) {
+    if (KWord::isHeaderFooter(this)) {
         KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
         frame->setMinimumFrameHeight(frame->minimumFrameHeight() + textHeight + 1E-6);
-        emit decorationFrameResize(this);
+        if (allowLayout())
+            emit decorationFrameResize(this);
     } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
         if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
             emit moreFramesNeeded(this);
@@ -277,7 +284,8 @@ void KWTextFrameSet::setAllowLayout(bool allow)
     if (allow == m_allowLayoutRequests)
         return;
     m_allowLayoutRequests = allow;
-    if (m_allowLayoutRequests) {
+    if (m_allowLayoutRequests && m_requestedUpdateTextLayout) {
+        m_requestedUpdateTextLayout = false;
         KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
         if (lay)
             lay->scheduleLayout();

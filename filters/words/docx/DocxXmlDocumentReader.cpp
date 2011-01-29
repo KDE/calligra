@@ -54,6 +54,45 @@
 #include <KoColumn.h>
 #include <KoRawCellChild.h>
 
+namespace {
+
+class BorderMap : public QMap<QString, KoBorder::BorderStyle>
+{
+public:
+    BorderMap() {
+        insert(QString(), KoBorder::BorderNone);
+        insert("nil", KoBorder::BorderNone);
+        insert("none", KoBorder::BorderNone);
+        insert("single", KoBorder::BorderSolid);
+        insert("thick", KoBorder::BorderSolid); //FIXME find a better representation
+        insert("double", KoBorder::BorderDouble);
+        insert("dotted", KoBorder::BorderDotted);
+        insert("dashed", KoBorder::BorderDashed);
+        insert("dotDash", KoBorder::BorderDashDotPattern);
+        insert("dotDotDash", KoBorder::BorderDashDotDotPattern);
+        insert("triple", KoBorder::BorderDouble); //FIXME
+        insert("thinThickSmallGap", KoBorder::BorderSolid); //FIXME
+        insert("thickThinSmallGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickThinSmallGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickMediumGap", KoBorder::BorderSolid); //FIXME
+        insert("thickThinMediumGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickThinMediumGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickLargeGap", KoBorder::BorderSolid); //FIXME
+        insert("thickThinLargeGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickThinLargeGap", KoBorder::BorderSolid); //FIXME
+        insert("wave", KoBorder::BorderSolid); //FIXME
+        insert("dobleWave", KoBorder::BorderSolid); //FIXME
+        insert("dashSmallGap", KoBorder::BorderSolid); //FIXME
+        insert("dashDotStroked", KoBorder::BorderSolid); //FIXME
+        insert("threeDEmboss", KoBorder::BorderSolid); //FIXME
+        insert("threeDEngrave", KoBorder::BorderSolid); //FIXME
+        insert("outset", KoBorder::BorderOutset);
+        insert("inset", KoBorder::BorderInset);
+    }
+} borderMap;
+
+}
+
 DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     DocxImport& _import,
     const QString& _path, const QString& _file,
@@ -3258,7 +3297,8 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
 
     KoBorder::BorderData borderData;
 
-    borderData.style = KoBorder::BorderSolid; //FIXME: respect other styles
+    TRY_READ_ATTR(val)
+    borderData.style = borderMap.value(val);
 
     TRY_READ_ATTR(themeColor)
 
@@ -4450,7 +4490,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 
                 KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
-                delete body;
+
                 body = oldBody;
             }
             else if(QUALIFIED_NAME_IS(tbl)) {
@@ -4601,9 +4641,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
     kDebug() << "oleName:" << oleName;
 
-    QString destinationName;
 //! @todo ooo saves binaries to the root dir; should we?
-    RETURN_IF_ERROR( copyFile(oleName, QString(), destinationName) )
+
+    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
+    RETURN_IF_ERROR( m_context->import->copyFile(oleName, destinationName, false ) )
+    addManifestEntryForFile(destinationName);
 
     while (!atEnd()) {
         readNext();

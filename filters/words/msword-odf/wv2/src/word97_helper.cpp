@@ -365,9 +365,16 @@ U16 determineParameterLength( U16 sprm, const U8* in, WordVersion version )
         static const char operandSizes[ 8 ] = { 1, 1, 2, 4, 2, 2, 0, 3 };
 
         int index = ( sprm & 0xE000 ) >> 13;
-        if ( operandSizes[ index ] != 0 )
+        if ( operandSizes[ index ] != 0 ) {
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "==> Size of the sprm argument:" << (U16) operandSizes[index] << endl;
+#endif
             return operandSizes[ index ];
+        }
         else {
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "==> Variable size of the sprm argument:";
+#endif
             // Get length of variable size operand.
             switch ( sprm ) {
                 case sprmTDefTable10:
@@ -1872,10 +1879,10 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             dxaRight = readU16( ptr );
             break;
         case SPRM::sprmSDyaTop:
-            dyaTop = readU16( ptr );
+            dyaTop = readS16( ptr );
             break;
         case SPRM::sprmSDyaBottom:
-            dyaBottom = readU16( ptr );
+            dyaBottom = readS16( ptr );
             break;
         case SPRM::sprmSDzaGutter:
             dzaGutter = readU16( ptr );

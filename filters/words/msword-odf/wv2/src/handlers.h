@@ -25,7 +25,6 @@
 #include "sharedptr.h"
 #include "functordata.h"
 #include "wv2_export.h"
-#include "ms_odraw.h"
 
 namespace wvWare {
 
