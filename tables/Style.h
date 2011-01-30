@@ -344,7 +344,7 @@ public:
     inline bool operator!=(const Style& other) const {
         return !operator==(other);
     }
-    friend uint qHash(const Style& style);
+    friend CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
     void operator=(const Style& style);
     Style operator-(const Style& style) const;
     void merge(const Style& style);
