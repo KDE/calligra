@@ -511,7 +511,7 @@ protected:
  * m_point: 8 bytes
  * sum: 16 bytes
  */
-class Region::Point : public Region::Element
+class CALLIGRA_TABLES_ODF_EXPORT Region::Point : public Region::Element
 {
 public:
     Point() : Element(), m_point() {}
@@ -594,7 +594,7 @@ private:
  * m_range: 16 bytes
  * sum: 24 bytes
  */
-class Region::Range : public Region::Element
+class CALLIGRA_TABLES_ODF_EXPORT Region::Range : public Region::Element
 {
 public:
     Range(const QRect&);
