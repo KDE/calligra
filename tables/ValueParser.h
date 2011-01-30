@@ -41,7 +41,7 @@ class Value;
  * Generates a Value by parsing an user input text.
  * Determines the most probable Value type, e.g. integer or date.
  */
-class CALLIGRA_TABLES_EXPORT ValueParser
+class CALLIGRA_TABLES_ODF_EXPORT ValueParser
 {
 public:
     /**

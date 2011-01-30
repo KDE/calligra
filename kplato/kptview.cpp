@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -110,6 +110,7 @@
 #include "kptpertresult.h"
 #include "kpttaskdefaultpanel.h"
 #include "kptworkpackageconfigpanel.h"
+#include "kptcolorsconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
 #include "reports/reportview.h"
@@ -1799,6 +1800,7 @@ void View::slotConfigure()
     }
     KConfigDialog *dialog = new KConfigDialog( this, "KPlato Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "view-task" );
+    dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), "fill-color" );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "kplatowork" );
 /*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
     connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/

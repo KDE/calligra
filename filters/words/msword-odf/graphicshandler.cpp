@@ -25,8 +25,7 @@
 #include "graphicshandler.h"
 #include "document.h"
 #include "conversion.h"
-
-#include <wv2/src/ms_odraw.h>
+#include "msodraw.h"
 
 #include "generated/leinputstream.h"
 #include "drawstyle.h"
@@ -1234,15 +1233,15 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     const float base_width = 6.1378;
 
     switch (ds.alignHR()) {
-    case wvWare::hAlignLeft:
+    case hAlignLeft:
         hrAlign = QString("left");
         xPos = QString::number(0.0f).append("in");
         break;
-    case wvWare::hAlignCenter:
+    case hAlignCenter:
         hrAlign = QString("center");
         xPos = QString::number((base_width / 2.0) - ((width * base_width) / 200.0)).append("in");
         break;
-    case wvWare::hAlignRight:
+    case hAlignRight:
         hrAlign = QString("right");
         xPos = QString::number(base_width - (width * base_width) / 100.0).append("in");
         break;

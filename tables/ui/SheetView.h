@@ -49,7 +49,7 @@ class CanvasBase;
  * The SheetView controls the painting of the sheets' cells.
  * It caches a set of CellViews.
  */
-class CALLIGRA_TABLES_EXPORT SheetView : public QObject
+class CALLIGRA_TABLES_COMMON_EXPORT SheetView : public QObject
 {
     Q_OBJECT
 

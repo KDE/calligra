@@ -34,7 +34,7 @@ namespace Tables
 {
 class Map;
 
-class CALLIGRA_TABLES_EXPORT DatabaseManager : public QObject
+class CALLIGRA_TABLES_ODF_EXPORT DatabaseManager : public QObject
 {
     Q_OBJECT
 

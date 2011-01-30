@@ -6,4 +6,4 @@ include_directories(
 
 add_subdirectory(src)
 add_subdirectory(templates)
-add_subdirectory(shapecollection)
+add_subdirectory(stencils)

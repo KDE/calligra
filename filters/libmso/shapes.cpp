@@ -1402,10 +1402,9 @@ void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                              Writer& out)
 {
     if (o.clientData && client && client->onlyClientData(*o.clientData)) {
-        client->processClientData(*o.clientData, out);
+        client->processClientData(*o.clientTextbox, *o.clientData, out);
     } else if (o.clientTextbox) {
-        client->processClientTextBox(*o.clientTextbox,
-                                     o.clientData.data(), out);
+        client->processClientTextBox(*o.clientTextbox, o.clientData.data(), out);
     }
 }
 
@@ -1577,17 +1576,3 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
 
 }
 
-void defineArrow(KoGenStyles& styles)
-{
-    KoGenStyle marker(KoGenStyle::MarkerStyle);
-    marker.addAttribute("draw:display-name", "msArrowEnd 5");
-    marker.addAttribute("svg:viewBox", "0 0 210 210");
-    marker.addAttribute("svg:d", "m105 0 105 210h-210z");
-    styles.insert(marker, "msArrowEnd_20_5", KoGenStyles::DontAddNumberToName);
-    // TODO: define proper styles for these arrows
-    KoGenStyles::InsertionFlags flags = KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
-    styles.insert(marker, "msArrowStealthEnd_20_5", flags);
-    styles.insert(marker, "msArrowDiamondEnd_20_5", flags);
-    styles.insert(marker, "msArrowOvalEnd_20_5", flags);
-    styles.insert(marker, "msArrowOpenEnd_20_5", flags);
-}

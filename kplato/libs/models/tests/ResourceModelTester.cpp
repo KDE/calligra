@@ -46,13 +46,13 @@ void ResourceModelTester::printDebug( long id ) const {
     qDebug()<<"Resource end  :"<<r->endTime( id ).toString();
     qDebug()<<"Appointments:"<<r->numAppointments( id )<<"(internal)";
     foreach ( Appointment *a, r->appointments( id ) ) {
-        foreach ( const AppointmentInterval &i, a->intervals() ) {
+        foreach ( const AppointmentInterval &i, a->intervals().map() ) {
             qDebug()<<"  "<<i.startTime().toString()<<"-"<<i.endTime().toString()<<";"<<i.load();
         }
     }
     qDebug()<<"Appointments:"<<r->numExternalAppointments()<<"(external)";
     foreach ( Appointment *a, r->externalAppointmentList() ) {
-        foreach ( const AppointmentInterval &i, a->intervals() ) {
+        foreach ( const AppointmentInterval &i, a->intervals().map() ) {
             qDebug()<<"  "<<i.startTime().toString()<<"-"<<i.endTime().toString()<<";"<<i.load();
         }
     }

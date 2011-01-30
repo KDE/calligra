@@ -74,9 +74,11 @@ void DateTime::subtract(const Duration &duration) {
 Duration DateTime::duration(const DateTime &dt) const {
     Duration dur;
     if (isValid() && dt.isValid()) {
-        //FIXME: Use msecsTo() when we demand Qt 4.7
-        //qint64 x = msecsTo( dt ); //NOTE: this does conversion to UTC (expensive)
-        qint64 x = secsTo( dt ) * 1000; //NOTE: this does conversion to UTC (expensive)
+#if QT_VERSION  >= 0x040700
+        qint64 x = msecsTo( dt ); //NOTE: this does conversion to UTC (expensive)
+#else
+        qint64 x = (qint64)secsTo( dt ) * 1000;
+#endif
         dur.m_ms = x < 0 ? -x : x;
     }
     //kDebug()<<dur.milliseconds();

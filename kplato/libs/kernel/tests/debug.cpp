@@ -129,7 +129,7 @@ void print( Resource *r, const QString &str, bool full = true ) {
     qDebug()<<"External appointments:"<<r->numExternalAppointments();
     foreach ( Appointment *a, r->externalAppointmentList() ) {
         qDebug()<<"   appointment:"<<a->startTime().toString()<<a->endTime().toString();
-        foreach( const AppointmentInterval &i, a->intervals() ) {
+        foreach( const AppointmentInterval &i, a->intervals().map() ) {
             qDebug()<<"      "<<i.startTime().toString()<<i.endTime().toString()<<i.load();
         }
     }
@@ -201,7 +201,7 @@ void print( Task *t, bool full = true ) {
         foreach ( Appointment *a, s->appointments() ) {
             qDebug()<<"Resource:"<<a->resource()->resource()->name()<<"booked:"<<QTest::toString( a->startTime() )<<QTest::toString( a->endTime() );
             if ( ! full ) { continue; }
-            foreach( const AppointmentInterval &i, a->intervals() ) {
+            foreach( const AppointmentInterval &i, a->intervals().map() ) {
                 qDebug()<<"  "<<QTest::toString( i.startTime() )<<QTest::toString( i.endTime() )<<i.load();
             }
         }
@@ -303,8 +303,8 @@ void print( const AppointmentInterval &i, const QString &indent = QString() )
 static
 void print( const AppointmentIntervalList &lst, const QString &s = QString() )
 {
-    qDebug()<<"Interval list:"<<lst.count()<<s;
-    foreach ( const AppointmentInterval &i, lst ) {
+    qDebug()<<"Interval list:"<<lst.map().count()<<s;
+    foreach ( const AppointmentInterval &i, lst.map() ) {
         print( i, "  " );
     }
 }

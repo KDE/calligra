@@ -1,6 +1,6 @@
 [koffice]
 DockerPlugins=Scripting
-DockerPluginsDisabled=
+DockerPluginsDisabled=kofficedockers
 FlakePlugins=
 FlakePluginsDisabled=
 ShapePlugins=

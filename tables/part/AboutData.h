@@ -41,7 +41,7 @@ KAboutData * newAboutData()
                                             ki18n("(c) 1998-2010, The Calligra Tables Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/tables/");
     aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
-    aboutData->addAuthor(ki18n("Marijn Kruisselbrink"), ki18n("Maintainer"), "m.kruisselbrink@student.tue.nl");
+    aboutData->addAuthor(ki18n("Marijn Kruisselbrink"), ki18n("Maintainer"), "mkruisselbrink@kde.org");
     aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("ODS and Excel, functions, scripting"), "mail@dipe.org");
     aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "montel@kde.org");
     aboutData->addAuthor(ki18n("John Dailey"), KLocalizedString(), "dailey@vt.edu");

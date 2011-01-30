@@ -49,7 +49,7 @@ namespace Tables
  * Calculation settings
  * \ingroup Value
  */
-class CALLIGRA_TABLES_EXPORT CalculationSettings
+class CALLIGRA_TABLES_ODF_EXPORT CalculationSettings
 {
 public:
     /**

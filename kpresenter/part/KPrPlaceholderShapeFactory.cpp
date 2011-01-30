@@ -24,6 +24,7 @@
 #include <KoXmlNS.h>
 #include <KoOdfWorkaround.h>
 #include "KPrPlaceholderShape.h"
+#include <KoShapeLoadingContext.h>
 
 #include <kdebug.h>
 

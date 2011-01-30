@@ -1,8 +1,9 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
-   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
    Contact: Amit Aggarwal <amitcs06@gmail.com>
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -87,78 +88,46 @@ public:
 private:
 
     /**
-     * Function that does the actual conversion.
-     *
-     * It is shared by the two convert() functions.
-     * @param input an open OLE container that contains the ppt data.
-     * @param output an open KoStore to write the odp into.
-     * @return result code of the conversion.
-     */
-    KoFilter::ConversionStatus doConversion(POLE::Storage& input,
-                                            KoStore* output);
+    * @brief Struct that contains precalculated style names based on
+    * TextCFException and TextPFException combinations.
+    *
+    * For each individual character in this object's text three styles apply:
+    * Paragraph style, List style and Character style. These are parsed from
+    * TextCFException and TextPFException. For each character there is a
+    * corresponding pair of TextCFException and TextPFException.
+    *
+    * Saving of styles is done before saving text contents so we'll cache
+    * the style names and pairs of TextCFException and TextPFException.
+    */
+    class StyleName
+    {
+    public:
+        /**
+        * @brief Text style name (e.g. T1)
+        *
+        */
+        QString text;
 
-    void createMainStyles(KoGenStyles& styles);
-    void defineDefaultTextStyle(KoGenStyles& styles);
-    void defineDefaultParagraphStyle(KoGenStyles& styles);
-    void defineDefaultSectionStyle(KoGenStyles& styles);
-    void defineDefaultRubyStyle(KoGenStyles& styles);
-    void defineDefaultTableStyle(KoGenStyles& styles);
-    void defineDefaultTableColumnStyle(KoGenStyles& styles);
-    void defineDefaultTableRowStyle(KoGenStyles& styles);
-    void defineDefaultTableCellStyle(KoGenStyles& styles);
-    void defineDefaultGraphicStyle(KoGenStyles& styles);
-    void defineDefaultPresentationStyle(KoGenStyles& styles);
-    void defineDefaultDrawingPageStyle(KoGenStyles& styles);
-    void defineDefaultChartStyle(KoGenStyles& styles);
+        /**
+        * @brief Paragraph style (e.g. P1)
+        *
+        */
+        QString paragraph;
 
-    /** define automatic styles for text, paragraphs, graphic and presentation
-      families
-      */
-    void defineMasterStyles(KoGenStyles& styles);
-    void defineAutomaticDrawingPageStyles(KoGenStyles& styles);
-
-    // we assume that these functions are the same for all style families
-    void defineDefaultTextProperties(KoGenStyle& style);
-    void defineDefaultParagraphProperties(KoGenStyle& style);
-    void defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles);
-
-    /* Extract data from TextCFException into the style */
-
-    void defineTextProperties(KoGenStyle& style,
-                              const PptTextCFRun* cf,
-                              const MSO::TextCFException9* cf9,
-                              const MSO::TextCFException10* cf10,
-                              const MSO::TextSIException* si);
-
-    void defineTextProperties(KoGenStyle& style,
-                              const MSO::TextCFException* cf,
-                              const MSO::TextCFException9* cf9,
-                              const MSO::TextCFException10* cf10,
-                              const MSO::TextSIException* si,
-                              const MSO::TextContainer* tc = NULL);
-
-    /* Extract data from TextPFException into the style */
-    void defineParagraphProperties(KoGenStyle& style,
-                                   const PptTextPFRun& pf);
-
-    /**
-     * Extract data into the drawing-page style
-     * @param KoGenStyle
-     * @param DrawStyle
-     * @param KoGenStyles
-     * @param ODrawToOdf
-     * @param pointer to a HeadersFootersAtom
-     * @param pointer to SlideFlags of presentation or notes slide
-     */
-    void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles,
-                                ODrawToOdf& odrawtoodf,
-                                const MSO::HeadersFootersAtom* hf,
-                                const MSO::SlideFlags* sf = NULL);
+        /**
+        * @brief List style (e.g. L1)
+        *
+        */
+        QString list;
+        StyleName() {}
+        StyleName(const QString& t, const QString& p, const QString& l)
+                : text(t), paragraph(p), list(l) {}
+    };
 
     /**
      * Structure that influences all information that affects the style of a
-     * text:style.
-     * This is a convenience container for passing this information.
+     * text:style.  This is a convenience container for passing this
+     * information.
      **/
     class ListStyleInput {
     public:
@@ -170,50 +139,6 @@ private:
 
         ListStyleInput() :cf(0), cf9(0), cf10(0), si(0) {}
     };
-    /* Extract data into the style element style:list */
-    void defineListStyle(KoGenStyle& style,
-                         const MSO::TextMasterStyleAtom& levels,
-                         const MSO::TextMasterStyle9Atom* levels9 = 0,
-                         const MSO::TextMasterStyle10Atom* levels10 = 0);
-    void defineListStyle(KoGenStyle& style, quint8 depth,
-                         ListStyleInput input,
-                         const MSO::TextMasterStyleLevel* level = 0,
-                         const MSO::TextMasterStyle9Level* level9 = 0,
-                         const MSO::TextMasterStyle10Level* level10 = 0);
-
-    void defineListStyle(KoGenStyle& style, quint8 depth,
-                         const ListStyleInput& info,
-                         const ListStyleInput& parent);
-
-    const MSO::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
-                                                quint32 textType, quint8 pp9rt);
-    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf);
-
-    const MSO::TextContainer* getTextContainer(
-            const MSO::PptOfficeArtClientTextBox* clientTextbox,
-            const MSO::PptOfficeArtClientData* clientData) const;
-    quint32 getTextType(const MSO::PptOfficeArtClientTextBox* clientTextbox,
-                        const MSO::PptOfficeArtClientData* clientData) const;
-    void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
-
-    QByteArray createContent(KoGenStyles& styles);
-    void processSlideForBody(unsigned slideNo, Writer& out);
-    void processTextForBody(const MSO::OfficeArtClientData* o,
-                            const MSO::TextContainer& tc, Writer& out);
-
-    int processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
-                        const QString& text, const int start, int end);
-    int processTextSpans(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
-                        const QString& text, int start, int end);
-    void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
-                         const MSO::TextContainer& tc, const QString& text,
-                         int start, int end, QStack<QString>& levels);
-
-    /**
-     * @brief Write declaration in the content body presentation
-     * @param xmlWriter XML writer to write
-     */
-    void processDeclaration(KoXmlWriter* xmlWriter);
 
     /**
       * @brief An enumeration that specifies an action that can be performed
@@ -264,6 +189,165 @@ private:
     }InteractiveInfoActionEnum;
 
     /**
+    * TextAutoNumberSchemeEnum
+    * Referenced by: TextAutoNumberScheme
+    * An enumeration that specifies the character sequence and delimiters to use for automatic
+    * numbering.
+    */
+    enum {
+        ANM_AlphaLcPeriod,      //0x0000  Example: a., b., c., ...Lowercase Latin character followed by a period.
+        ANM_AlphaUcPeriod ,     //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
+        ANM_ArabicParenRight,   //0x0002  Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
+        ANM_ArabicPeriod,       //0x0003  Example: 1., 2., 3., ...Arabic numeral followed by a period.
+        ANM_RomanLcParenBoth,   //0x0004  Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
+        ANM_RomanLcParenRight,  //0x0005  Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
+        ANM_RomanLcPeriod,      //0x0006  Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
+        ANM_RomanUcPeriod ,     //0x0007  Example: I., II., III., ...Uppercase Roman numeral followed by a period.
+        ANM_AlphaLcParenBoth,   //0x0008  Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
+        ANM_AlphaLcParenRight,  //0x0009  Example: a), b), c), ...Lowercase alphabetic character followed by a closing
+        ANM_AlphaUcParenBoth,   //0x000A  Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
+        ANM_AlphaUcParenRight,  //0x000B  Example: A), B), C), ...Uppercase alphabetic character followed by a closing
+        ANM_ArabicParenBoth,    //0x000C  Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
+        ANM_ArabicPlain,        //0x000D  Example: 1, 2, 3, ...Arabic numeral.
+        ANM_RomanUcParenBoth,   //0x000E  Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
+        ANM_RomanUcParenRight,  //0x000F  Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
+        //Future
+    } TextAutoNumberSchemeEnum;
+
+    /**
+    * Declaration Type
+    * Referenced by: Declaration Type
+    * A declaration type ex:- Header,Footer,DateTime
+    */
+    enum DeclarationType {
+        Footer,
+        Header,
+        DateTime
+    };
+
+    /**
+     * Function that does the actual conversion.
+     *
+     * It is shared by the two convert() functions.
+     * @param input an open OLE container that contains the ppt data.
+     * @param output an open KoStore to write the odp into.
+     * @return result code of the conversion.
+     */
+    KoFilter::ConversionStatus doConversion(POLE::Storage& input,
+                                            KoStore* output);
+
+    /**
+     * TODO:
+     */
+    bool parse(POLE::Storage& storage);
+
+    void createMainStyles(KoGenStyles& styles);
+    void defineDefaultTextStyle(KoGenStyles& styles);
+    void defineDefaultParagraphStyle(KoGenStyles& styles);
+    void defineDefaultSectionStyle(KoGenStyles& styles);
+    void defineDefaultRubyStyle(KoGenStyles& styles);
+    void defineDefaultTableStyle(KoGenStyles& styles);
+    void defineDefaultTableColumnStyle(KoGenStyles& styles);
+    void defineDefaultTableRowStyle(KoGenStyles& styles);
+    void defineDefaultTableCellStyle(KoGenStyles& styles);
+    void defineDefaultGraphicStyle(KoGenStyles& styles);
+    void defineDefaultPresentationStyle(KoGenStyles& styles);
+    void defineDefaultDrawingPageStyle(KoGenStyles& styles);
+    void defineDefaultChartStyle(KoGenStyles& styles);
+
+    /**
+     * define automatic styles for text, paragraphs, graphic and presentation
+     * families
+     */
+    void defineMasterStyles(KoGenStyles& styles);
+    void defineAutomaticDrawingPageStyles(KoGenStyles& styles);
+
+    // we assume that these functions are the same for all style families
+    void defineDefaultTextProperties(KoGenStyle& style);
+    void defineDefaultParagraphProperties(KoGenStyle& style);
+    void defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles);
+
+    /* Extract data from TextCFException into the style */
+
+    void defineTextProperties(KoGenStyle& style,
+                              const PptTextCFRun* cf,
+                              const MSO::TextCFException9* cf9,
+                              const MSO::TextCFException10* cf10,
+                              const MSO::TextSIException* si);
+
+    void defineTextProperties(KoGenStyle& style,
+                              const MSO::TextCFException* cf,
+                              const MSO::TextCFException9* cf9,
+                              const MSO::TextCFException10* cf10,
+                              const MSO::TextSIException* si,
+                              const MSO::TextContainer* tc = NULL);
+
+    /* Extract data from TextPFException into the style */
+    void defineParagraphProperties(KoGenStyle& style,
+                                   const PptTextPFRun& pf);
+
+    /**
+     * Extract data into the drawing-page style
+     * @param KoGenStyle
+     * @param DrawStyle
+     * @param KoGenStyles
+     * @param ODrawToOdf
+     * @param pointer to a HeadersFootersAtom
+     * @param pointer to SlideFlags of presentation or notes slide
+     */
+    void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles,
+                                ODrawToOdf& odrawtoodf,
+                                const MSO::HeadersFootersAtom* hf,
+                                const MSO::SlideFlags* sf = NULL);
+
+    /* Extract data into the style element style:list */
+    void defineListStyle(KoGenStyle& style,
+                         const MSO::TextMasterStyleAtom& levels,
+                         const MSO::TextMasterStyle9Atom* levels9 = 0,
+                         const MSO::TextMasterStyle10Atom* levels10 = 0);
+    void defineListStyle(KoGenStyle& style, quint8 depth,
+                         ListStyleInput input,
+                         const MSO::TextMasterStyleLevel* level = 0,
+                         const MSO::TextMasterStyle9Level* level9 = 0,
+                         const MSO::TextMasterStyle10Level* level10 = 0);
+
+    void defineListStyle(KoGenStyle& style, quint8 depth,
+                         const ListStyleInput& info,
+                         const ListStyleInput& parent);
+
+    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf);
+
+    const MSO::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
+                                                quint32 textType, quint8 pp9rt);
+
+    const MSO::TextContainer* getTextContainer(
+            const MSO::PptOfficeArtClientTextBox* clientTextbox,
+            const MSO::PptOfficeArtClientData* clientData) const;
+    quint32 getTextType(const MSO::PptOfficeArtClientTextBox* clientTextbox,
+                        const MSO::PptOfficeArtClientData* clientData) const;
+    void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
+
+    QByteArray createContent(KoGenStyles& styles);
+    void processSlideForBody(unsigned slideNo, Writer& out);
+    void processTextForBody(const MSO::OfficeArtClientData* o,
+                            const MSO::TextContainer& tc, const MSO::TextRuler* tr, Writer& out);
+
+    int processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
+                        const QString& text, const int start, int end);
+    int processTextSpans(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
+                        const QString& text, int start, int end);
+    void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
+                         const MSO::TextContainer& tc, const MSO::TextRuler* tr,
+                         const QString& text, int start, int end,
+                         QStack<QString>& levels);
+
+    /**
+     * @brief Write declaration in the content body presentation
+     * @param xmlWriter XML writer to write
+     */
+    void processDeclaration(KoXmlWriter* xmlWriter);
+
+    /**
       * @brief Converts vector of quint16 to String
       *
       * Powerpoint files have text as utf16.
@@ -302,7 +386,7 @@ private:
     /**
     * @brief Convert TextAlignmentEnum value to a string from ODF specification
     * An enumeration that specifies paragraph alignments.
-    * Name                              Value       Meaning
+    * Name                      Value       Meaning
     * Tx_ALIGNLeft              0x0000    For horizontal text, left aligned.
     *                                     For vertical text, top aligned.
     * Tx_ALIGNCenter            0x0001    For horizontal text, centered.
@@ -361,7 +445,7 @@ private:
      * presentation slide or notes slide MUST be provided if applicable.  This
      * method returns the rgb values the specified struct refers to.
      *
-     * @param color atored as OfficeArtCOLORREF to convert
+     * @param color stored as OfficeArtCOLORREF to convert
      * @param pointer to a MainMasterContainer or NotesContainer
      * @param pointer to a SlideContainer or NotesContainer
      * @return QColor value, may be undefined
@@ -369,43 +453,6 @@ private:
     QColor toQColor(const MSO::OfficeArtCOLORREF& color,
                     const MSO::StreamOffset* master = NULL,
                     const MSO::StreamOffset* common = NULL);
-
-    /**
-    * TextAutoNumberSchemeEnum
-    * Referenced by: TextAutoNumberScheme
-    * An enumeration that specifies the character sequence and delimiters to use for automatic
-    * numbering.
-    */
-    enum {
-        ANM_AlphaLcPeriod,      //0x0000  Example: a., b., c., ...Lowercase Latin character followed by a period.
-        ANM_AlphaUcPeriod ,     //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
-        ANM_ArabicParenRight,   //0x0002  Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
-        ANM_ArabicPeriod,       //0x0003  Example: 1., 2., 3., ...Arabic numeral followed by a period.
-        ANM_RomanLcParenBoth,   //0x0004  Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
-        ANM_RomanLcParenRight,  //0x0005  Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
-        ANM_RomanLcPeriod,      //0x0006  Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
-        ANM_RomanUcPeriod ,     //0x0007  Example: I., II., III., ...Uppercase Roman numeral followed by a period.
-        ANM_AlphaLcParenBoth,   //0x0008  Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
-        ANM_AlphaLcParenRight,  //0x0009  Example: a), b), c), ...Lowercase alphabetic character followed by a closing
-        ANM_AlphaUcParenBoth,   //0x000A  Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
-        ANM_AlphaUcParenRight,  //0x000B  Example: A), B), C), ...Uppercase alphabetic character followed by a closing
-        ANM_ArabicParenBoth,    //0x000C  Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
-        ANM_ArabicPlain,        //0x000D  Example: 1, 2, 3, ...Arabic numeral.
-        ANM_RomanUcParenBoth,   //0x000E  Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
-        ANM_RomanUcParenRight,  //0x000F  Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
-        //Future
-    } TextAutoNumberSchemeEnum;
-
-    /**
-    * Declaration Type
-    * Referenced by: Declaration Type
-    * A declaration type ex:- Header,Footer,DateTime
-    */
-    enum DeclarationType {
-        Footer,
-        Header,
-        DateTime
-    };
 
     /**
     * @brief processTextAutoNumberScheme : process the Textautoscheme to display the Bullet and numbering.
@@ -416,165 +463,6 @@ private:
     * @return none
     */
     void processTextAutoNumberScheme(int val, QString& numFormat, QString& numSuffix, QString& numPrefix);
-
-    /**
-    * @brief Struct that contains precalculated style names based on
-    * TextCFException and TextPFException combinations.
-    *
-    * For each individual character in this object's text three styles apply:
-    * Paragraph style, List style and Character style. These are parsed from
-    * TextCFException and TextPFException. For each character there is a
-    * corresponding pair of TextCFException and TextPFException.
-    *
-    * Saving of styles is done before saving text contents so we'll cache
-    * the style names and pairs of TextCFException and TextPFException.
-    *
-    *
-    */
-    class StyleName
-    {
-    public:
-        /**
-        * @brief Text style name (e.g. T1)
-        *
-        */
-        QString text;
-
-        /**
-        * @brief Paragraph style (e.g. P1)
-        *
-        */
-        QString paragraph;
-
-        /**
-        * @brief List style (e.g. L1)
-        *
-        */
-        QString list;
-        StyleName() {}
-        StyleName(const QString& t, const QString& p, const QString& l)
-                : text(t), paragraph(p), list(l) {}
-    };
-
-    QMap<QByteArray, QString> pictureNames;
-    QMap<quint16, QString> bulletPictureNames;
-    DateTimeFormat dateTime;
-    QString declarationStyleName;
-
-    /**
-      * name for to use in the style:page-layout-name attribute for master
-      * slides (style:master-page)
-      */
-    QString slidePageLayoutName;
-    /**
-      * name for to use in the style:page-layout-name attribute for notes
-      * and handout slides (presentation:notes and style:handout-master)
-      */
-    QString notesPageLayoutName;
-
-    const ParsedPresentation* p;
-
-    //Pointers to ppt specific information, try to avoid using those.
-    const MSO::SlideListWithTextSubContainerOrAtom* currentSlideTexts;
-    const MSO::MasterOrSlideContainer* currentMaster;
-    const MSO::SlideContainer* currentSlide;
-
-    bool parse(POLE::Storage& storage);
-
-    /**
-     * There is at most one SlideHeadersFootersContainer, but for some slides
-     * it is in a strange positions. This convenience function returns a pointer
-     * to the SlideHeadersFootersContainer or NULL if there is none.
-     **/
-    const MSO::SlideHeadersFootersContainer* getSlideHF() const {
-        return (p->documentContainer->slideHF)
-               ? p->documentContainer->slideHF.data()
-               : p->documentContainer->slideHF2.data();
-    }
-    const MSO::PerSlideHeadersFootersContainer* getPerSlideHF(
-            const MSO::SlideContainer* slide) const {
-        const MSO::PerSlideHeadersFootersContainer* hf = 0;
-        const MSO::MasterOrSlideContainer* master = p->getMaster(slide);
-        const MSO::MainMasterContainer* m1 =
-                (master) ?master->anon.get<MSO::MainMasterContainer>() :0;
-        const MSO::SlideContainer* m2 =
-                (master) ?master->anon.get<MSO::SlideContainer>() :0;
-        if (slide && slide->perSlideHFContainer) {
-            hf = slide->perSlideHFContainer.data();
-        } else if (m1 && m1->perSlideHeadersFootersContainer) {
-            hf = m1->perSlideHeadersFootersContainer.data();
-        } else if (m2 && m2->perSlideHFContainer) {
-            hf = m2->perSlideHFContainer.data();
-        }
-        return hf;
-    }
-
-    /**
-      * Look in blipStore for the id mapping to this object
-      **/
-    QByteArray getRgbUid(quint16 pib) const {
-        // return 16 byte rgbuid for this given blip id
-        if (p->documentContainer->drawingGroup.OfficeArtDgg.blipStore) {
-            const MSO::OfficeArtBStoreContainer* b
-            = p->documentContainer->drawingGroup.OfficeArtDgg.blipStore.data();
-            if (pib < b->rgfb.size()
-                    && b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>()) {
-                return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
-            }
-        }
-        if (pib != 0xFFFF && pib != 0) {
-            qDebug() << "Could not find image for pib " << pib;
-        }
-        return QByteArray();
-    }
-    const MSO::FontEntityAtom*
-    getFont(quint16 fontRef) {
-        const MSO::FontCollectionContainer* f =
-            p->documentContainer->documentTextInfo.fontCollection.data();
-        if (f && f->rgFontCollectionEntry.size() > fontRef) {
-            return &f->rgFontCollectionEntry[fontRef].fontEntityAtom;
-        }
-        return 0;
-    }
-
-    QMap<const void*, QString> presentationPageLayouts;
-    QMap<const void*, QString> drawingPageStyles;
-    typedef QMap<const MSO::MasterOrSlideContainer*, QMap<int, QString> >
-            MasterStyles;
-    MasterStyles masterGraphicStyles;
-    MasterStyles masterPresentationStyles;
-    QMap<const MSO::MasterOrSlideContainer*, QString> masterNames;
-    QString notesMasterName;
-
-    /**
-    * @brief An usedDeclaration.
-    * settings for slideNo &  usedeclaration name.
-    */
-    QHash<unsigned int/*slideNo*/,QString /*usedDeclarationName*/>usedFooterDeclaration;
-
-    /**
-    * @brief An usedDeclaration.
-    * settings for slideNo &  usedeclaration name.
-    */
-    QHash<unsigned int/*slideNo*/,QString/*usedDeclarationName*/>usedHeaderDeclaration;
-
-    /**
-    * @brief An usedDeclaration.
-    * settings for slideNo &  usedeclaration name.
-    */
-    QHash<unsigned int/*slideNo*/,QString/*usedDeclarationName*/>usedDateTimeDeclaration;
-
-    /**
-    * @brief An declaration.
-    * settings for declaration text and usedeclaration name.
-    */
-    QHash<DeclarationType/*type*/,QPair<QString/*declarationName*/,QString/*text*/> >declaration;
-
-    /**
-    * @brief An notesDeclaration.
-    * settings for notes declaration  text and usenotes declaration name.
-    */
-    QHash<DeclarationType/*type*/,QPair<QString /*declarationName*/,QString/*text*/> >notesDeclaration;
 
     /**
     * @brief find the text from  Declaration.
@@ -606,11 +494,127 @@ private:
      * @return pointer to the OfficeArtSpContainer
      */
     const MSO::OfficeArtSpContainer* retrieveMasterShape(quint32 spid) const;
+
+    /**
+     * There is at most one SlideHeadersFootersContainer, but for some slides
+     * it is in a strange positions. This convenience function returns a pointer
+     * to the SlideHeadersFootersContainer or NULL if there is none.
+     **/
+    const MSO::SlideHeadersFootersContainer* getSlideHF() const
+    {
+        return (p->documentContainer->slideHF)
+               ? p->documentContainer->slideHF.data()
+               : p->documentContainer->slideHF2.data();
+    }
+    const MSO::PerSlideHeadersFootersContainer*
+    getPerSlideHF(const MSO::SlideContainer* slide) const
+    {
+        const MSO::PerSlideHeadersFootersContainer* hf = 0;
+        const MSO::MasterOrSlideContainer* master = p->getMaster(slide);
+        const MSO::MainMasterContainer* m1 =
+                (master) ?master->anon.get<MSO::MainMasterContainer>() :0;
+        const MSO::SlideContainer* m2 =
+                (master) ?master->anon.get<MSO::SlideContainer>() :0;
+        if (slide && slide->perSlideHFContainer) {
+            hf = slide->perSlideHFContainer.data();
+        } else if (m1 && m1->perSlideHeadersFootersContainer) {
+            hf = m1->perSlideHeadersFootersContainer.data();
+        } else if (m2 && m2->perSlideHFContainer) {
+            hf = m2->perSlideHFContainer.data();
+        }
+        return hf;
+    }
+
+    /**
+     * Look in blipStore for the id mapping to this object
+     **/
+    QByteArray getRgbUid(quint16 pib) const
+    {
+        // return 16 byte rgbuid for this given blip id
+        if (p->documentContainer->drawingGroup.OfficeArtDgg.blipStore) {
+            const MSO::OfficeArtBStoreContainer* b
+            = p->documentContainer->drawingGroup.OfficeArtDgg.blipStore.data();
+            if (pib < b->rgfb.size()
+                    && b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>()) {
+                return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
+            }
+        }
+        if (pib != 0xFFFF && pib != 0) {
+            qDebug() << "Could not find image for pib " << pib;
+        }
+        return QByteArray();
+    }
+    const MSO::FontEntityAtom* getFont(quint16 fontRef)
+    {
+        const MSO::FontCollectionContainer* f =
+            p->documentContainer->documentTextInfo.fontCollection.data();
+        if (f && f->rgFontCollectionEntry.size() > fontRef) {
+            return &f->rgFontCollectionEntry[fontRef].fontEntityAtom;
+        }
+        return 0;
+    }
+
+    /**
+     * name for to use in the style:page-layout-name attribute for master
+     * slides (style:master-page)
+     */
+    QString slidePageLayoutName;
+    /**
+     * name for to use in the style:page-layout-name attribute for notes
+     * and handout slides (presentation:notes and style:handout-master)
+     */
+    QString notesPageLayoutName;
+
+    const ParsedPresentation* p;
+
+    //Pointers to ppt specific information, try to avoid using those.
+    const MSO::SlideListWithTextSubContainerOrAtom* m_currentSlideTexts;
+    const MSO::MasterOrSlideContainer* m_currentMaster;
+    const MSO::SlideContainer* m_currentSlide;
+
+    QMap<QByteArray, QString> pictureNames;
+    QMap<quint16, QString> bulletPictureNames;
+    DateTimeFormat dateTime;
+    QString declarationStyleName;
+
+    QMap<const void*, QString> presentationPageLayouts;
+    QMap<const void*, QString> drawingPageStyles;
+    typedef QMap<const MSO::MasterOrSlideContainer*, QMap<int, QString> > MasterStyles;
+    MasterStyles masterGraphicStyles;
+    MasterStyles masterPresentationStyles;
+    QMap<const MSO::MasterOrSlideContainer*, QString> masterNames;
+    QString notesMasterName;
+    bool m_isList; //true - processing a list, false - processing a paragraph
+
+    /**
+    * @brief An usedDeclaration.
+    * settings for slideNo &  usedeclaration name.
+    */
+    QHash<unsigned int/*slideNo*/,QString /*usedDeclarationName*/>usedFooterDeclaration;
+
+    /**
+    * @brief An usedDeclaration.
+    * settings for slideNo &  usedeclaration name.
+    */
+    QHash<unsigned int/*slideNo*/,QString/*usedDeclarationName*/>usedHeaderDeclaration;
+
+    /**
+    * @brief An usedDeclaration.
+    * settings for slideNo &  usedeclaration name.
+    */
+    QHash<unsigned int/*slideNo*/,QString/*usedDeclarationName*/>usedDateTimeDeclaration;
+
+    /**
+    * @brief An declaration.
+    * settings for declaration text and usedeclaration name.
+    */
+    QHash<DeclarationType/*type*/,QPair<QString/*declarationName*/,QString/*text*/> >declaration;
+
+    /**
+    * @brief An notesDeclaration.
+    * settings for notes declaration  text and usenotes declaration name.
+    */
+    QHash<DeclarationType/*type*/,QPair<QString /*declarationName*/,QString/*text*/> >notesDeclaration;
 };
 
-/**
- * Define the standard arrows used in PPT files.
- */
-void defineArrow(KoGenStyles& styles);
-
-#endif // POWERPOINTIMPORT_H
+#endif // PPTTOODP_H

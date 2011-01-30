@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -100,6 +101,7 @@ getTextMasterStyleLevel(const TextMasterStyleAtom* ms, quint16 level)
     }
     return l;
 }
+
 template <class Run>
 const Run* getRun(const QList<Run> &runs, quint32 start)
 {
@@ -362,6 +364,39 @@ void addStyle(const Style** list, const Style* style)
         *list = 0;
     }
 }
+
+qint16 leftMarginByTextRuler(const TextRuler* tr, quint16 level)
+{
+    if (!tr) {
+        return -1;
+    }
+    qint16 m = -1;
+    switch (level) {
+    case 0: if (tr->fLeftMargin1) m = tr->leftMargin1; break;
+    case 1: if (tr->fLeftMargin2) m = tr->leftMargin2; break;
+    case 2: if (tr->fLeftMargin3) m = tr->leftMargin3; break;
+    case 3: if (tr->fLeftMargin4) m = tr->leftMargin4; break;
+    case 4: if (tr->fLeftMargin5) m = tr->leftMargin5; break;
+    }
+    return m;
+}
+
+qint16 indentByTextRuler(const TextRuler* tr, quint16 level)
+{
+    if (!tr) {
+        return -1;
+    }
+    qint16 indent = -1;
+    switch (level) {
+    case 0: if (tr->fIndent1) indent = tr->indent1; break;
+    case 1: if (tr->fIndent2) indent = tr->indent2; break;
+    case 2: if (tr->fIndent3) indent = tr->indent3; break;
+    case 3: if (tr->fIndent4) indent = tr->indent4; break;
+    case 4: if (tr->fIndent5) indent = tr->indent5; break;
+    }
+    return indent;
+}
+
 } //namespace
 
 const TextCFRun* getCFRun(const TextContainer* tc, const quint32 start)
@@ -396,7 +431,7 @@ PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
              const MSO::MasterOrSlideContainer* m,
              quint32 textType)
 {
-    level_ = 0;
+    m_level = 0;
     *pfs = 0;
     addStyle(pfs, getLevelPF(m, textType, 0));
     addStyle(pfs, getDefaultLevelPF(d, 0));
@@ -413,6 +448,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
                            const MasterOrSlideContainer* m,
                            const PptOfficeArtClientData* pcd,
                            const TextContainer* tc,
+                           const TextRuler* tr,
                            quint32 start)
 {
     const TextPFRun* pfrun = getPFRun(tc, start);
@@ -422,6 +458,10 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
         // [MS-PPT].pdf says there are only 5 levels
         if (level > 4) level = 4;
     }
+    //Processing either OfficeArtClientTextbox or a SlideListWithTextContainer.
+    //The TextRulerAtom is provided only in case of OfficeArtClientTextbox.
+    m_leftMargin = leftMarginByTextRuler(tr, level);
+    m_indent = indentByTextRuler(tr, level);
 
     *pfs = 0;
     addStyle(pfs, (pfrun) ?&pfrun->pf :0);
@@ -441,13 +481,13 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
 
     // the level reported by PptPFRun is 0 when not bullets, i.e. no list is
     // active, 1 is lowest list level, 5 is the highest list level
-//     level_ = (level || fHasBullet()) ?level + 1 :0;
+//     m_level = (level || fHasBullet()) ?level + 1 :0;
 
     //NOTE: The previous assumption is not true, there are cases when
     //(indentLevel == 1 && fHasBullet == false).  We should interpret this text
     //as content of a paragraph with corresponding indentLevel, thus avoid
     //placing it into a text:list element.
-    level_ = level;
+    m_level = level;
 
     //NOTE: fine tuning on test documents required
 
@@ -456,17 +496,17 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
         switch (tc->textHeaderAtom.textType) {
         case Tx_TYPE_TITLE:
         case Tx_TYPE_CENTERTITLE:
-            d_fHasBullet = false;
+            m_fHasBullet = false;
             break;
         case Tx_TYPE_BODY:
-            d_fHasBullet = true;
+            m_fHasBullet = true;
             break;
         default:
-            d_fHasBullet = false;
+            m_fHasBullet = false;
             break;
         }
     } else {
-        d_fHasBullet = false;
+        m_fHasBullet = false;
     }
 }
 
@@ -486,7 +526,7 @@ PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
     //check DocumentContainer/DocumentTextInfoContainer/textCFDefaultsAtom
     cfs.append(getDefaultCF(d));
 
-    level_ = level;
+    m_level = level;
     cfrun_rm = false;
 }
 
@@ -522,7 +562,7 @@ TYPE PptTextPFRun::NAME() const \
     return DEFAULT; \
 }
 //     TYPE      PARENT       PRE NAME             TEST            DEFAULT
-GETTER(bool,     bulletFlags->,,  fHasBullet,      hasBullet,      d_fHasBullet)
+GETTER(bool,     bulletFlags->,,  fHasBullet,      hasBullet,      m_fHasBullet)
 GETTER(bool,     bulletFlags->,,  fBulletHasFont,  bulletHasFont,  false)
 GETTER(bool,     bulletFlags->,,  fBulletHasColor, bulletHasColor, false)
 GETTER(bool,     bulletFlags->,,  fBulletHasSize,  bulletHasSize,  false)
@@ -531,8 +571,6 @@ GETTER(quint16,  ,             ,  textAlignment,   align,          0)
 GETTER(qint16,   ,             ,  lineSpacing,     lineSpacing,    0)
 GETTER(qint16,   ,             ,  spaceBefore,     spaceBefore,    0)
 GETTER(qint16,   ,             ,  spaceAfter,      spaceAfter,     0)
-GETTER(quint16,  ,             ,  leftMargin,      leftMargin,     0)
-GETTER(quint16,  ,             ,  indent,          indent,         0)
 GETTER(quint16,  ,             ,  defaultTabSize,  defaultTabSize, 0)
 GETTER(TabStops, ,             *, tabStops,        tabStops,       0)
 GETTER(quint16,  ,             ,  fontAlign,       fontAlign,      0)
@@ -541,6 +579,27 @@ GETTER(bool,     wrapFlags->,  ,  wordWrap,        wordWrap,       false)
 GETTER(bool,     wrapFlags->,  ,  overflow,        overflow,       false)
 GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
 #undef GETTER
+
+#define GETTER(TYPE, TR_VAL, NAME, TEST, DEFAULT)	\
+TYPE PptTextPFRun::NAME() const \
+{ \
+    if (TR_VAL > 0) { \
+        return TR_VAL; \
+    } \
+    const MSO::TextPFException* const * p = pfs; \
+    while (*p) { \
+        if ((*p)->masks.TEST) { \
+            return (*p)->NAME; \
+        } \
+        ++p; \
+    } \
+    return DEFAULT; \
+}
+//     TYPE      TEXTRULER_VALUE   NAME             TEST            DEFAULT
+GETTER(quint16,  m_leftMargin,     leftMargin,      leftMargin,     0)
+GETTER(quint16,  m_indent,         indent,          indent,         0)
+#undef GETTER
+
 
 #define GETTER(TYPE, PRE, NAME, TEST, VALID, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \

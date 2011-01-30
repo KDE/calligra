@@ -101,6 +101,7 @@
 // KSpread
 #include "CalculationSettings.h"
 #include "CellStorage.h"
+#include "Damages.h"
 #include "Doc.h"
 #include "Global.h"
 #include "HeaderItems.h"
@@ -169,6 +170,8 @@ CanvasItem::CanvasItem(Doc *doc)
     d->selection->setActiveSheet(activeSheet());
     connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
+    connect(doc->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
+            SLOT(handleDamages(const QList<Damage*>&)));
 }
 
 CanvasItem::~CanvasItem()
@@ -396,6 +399,85 @@ RowHeader* CanvasItem::rowHeader() const
 void CanvasItem::setCursor(const QCursor &cursor)
 {
     QGraphicsWidget::setCursor(cursor);
+}
+
+void CanvasItem::handleDamages(const QList<Damage*>& damages)
+{
+    QRegion paintRegion;
+    enum { Nothing, Everything, Clipped } paintMode = Nothing;
+
+    QList<Damage*>::ConstIterator end(damages.end());
+    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage* damage = *it;
+        if (!damage) continue;
+
+        if (damage->type() == Damage::Cell) {
+            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            kDebug(36007) << "Processing\t" << *cellDamage;
+            Sheet* const damagedSheet = cellDamage->sheet();
+
+            if (cellDamage->changes() & CellDamage::Appearance) {
+                const Region& region = cellDamage->region();
+                sheetView(damagedSheet)->invalidateRegion(region);
+                paintMode = Everything;
+            }
+            continue;
+        }
+
+        if (damage->type() == Damage::Sheet) {
+            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            kDebug(36007) << *sheetDamage;
+            const SheetDamage::Changes changes = sheetDamage->changes();
+            if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
+//                d->tabBar->setTabs(doc()->map()->visibleSheets());
+                paintMode = Everything;
+            }
+            if (changes & (SheetDamage::Shown | SheetDamage::Hidden)) {
+//                updateShowSheetMenu();
+                paintMode = Everything;
+            }
+            // The following changes only affect the active sheet.
+            if (sheetDamage->sheet() != d->activeSheet) {
+                continue;
+            }
+            if (changes.testFlag(SheetDamage::ContentChanged)) {
+                update();
+                paintMode = Everything;
+            }
+            if (changes.testFlag(SheetDamage::PropertiesChanged)) {
+                sheetView(d->activeSheet)->invalidate();
+                paintMode = Everything;
+            }
+            if (sheetDamage->changes() & SheetDamage::ColumnsChanged)
+                columnHeader()->update();
+            if (sheetDamage->changes() & SheetDamage::RowsChanged)
+                rowHeader()->update();
+            continue;
+        }
+
+        if (damage->type() == Damage::Selection) {
+            SelectionDamage* selectionDamage = static_cast<SelectionDamage*>(damage);
+            kDebug(36007) << "Processing\t" << *selectionDamage;
+            const Region region = selectionDamage->region();
+
+            if (paintMode == Clipped) {
+                const QRectF rect = cellCoordinatesToView(region.boundingRect());
+                paintRegion += rect.toRect().adjusted(-3, -3, 4, 4);
+            } else {
+                paintMode = Everything;
+            }
+            continue;
+        }
+
+        kDebug(36007) << "Unhandled\t" << *damage;
+    }
+
+    // At last repaint the dirty cells.
+    if (paintMode == Clipped) {
+        update(paintRegion.boundingRect());
+    } else if (paintMode == Everything) {
+        update();
+    }
 }
 
 #include "CanvasItem.moc"

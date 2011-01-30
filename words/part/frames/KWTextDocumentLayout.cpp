@@ -25,7 +25,6 @@
 #include "../KWDocument.h"
 #include "../KWPage.h"
 #include "../KWPageTextInfo.h"
-#include "KWAnchorStrategy.h"
 #include "KWOutlineShape.h"
 
 #include <KoTextShapeData.h>
@@ -37,20 +36,15 @@
 #include <QList>
 #include <QPainterPath>
 #include <QTextBlock>
+#include <QRectF>
 
 // #define DEBUG_TEXT
-// #define DEBUG_ANCHORS
+
 
 #ifdef DEBUG_TEXT
 #define TDEBUG kDebug(32002)
 #else
 #define TDEBUG if(0) kDebug(32002)
-#endif
-
-#ifdef DEBUG_ANCHORS
-#define ADEBUG kDebug(32002)
-#else
-#define ADEBUG if(0) kDebug(32002)
 #endif
 
 // helper methods
@@ -146,8 +140,6 @@ KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
 
 KWTextDocumentLayout::~KWTextDocumentLayout()
 {
-    qDeleteAll(m_anchors);
-    m_anchors.clear();
     m_frameSet = 0;
     delete m_dummyShape;
 }
@@ -208,51 +200,53 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 #endif
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineTextObjectManager()->inlineTextObject(f.toCharFormat()));
     if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
-        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
-            if (strategy->anchor() == anchor)
-                return;
+
+        KoShape *parent = anchor->shape()->parent();
+        if (parent == 0) {
+            return;
         }
-        foreach (KWAnchorStrategy *strategy, m_anchors) {
-            if (strategy->anchor() == anchor) {
-                m_newAnchors.append(strategy);
-                return;
-            }
+
+        KWPage page = m_frameSet->pageManager()->page(parent);
+        QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
+        QRectF pageContentRect = parent->boundingRect();
+        int pageNumber = m_frameSet->pageManager()->pageNumber(parent);
+
+        anchor->setPageRect(pageRect);
+        //todo get the right position for headers and footers
+        anchor->setPageContentRect(pageContentRect);
+        anchor->setPageNumber(pageNumber);
+
+        // if there is no anchor strategy set send the textAnchor into the layout to create anchor strategy and position it
+        if (anchor->anchorStrategy() == 0) {
+            m_state->insertInlineObject(anchor);
         }
-        ADEBUG << "new anchor";
-        //initially place the shape far far down
-        anchor->shape()->setPosition(QPointF(0,100000000));
-        KWAnchorStrategy * strategy = new KWAnchorStrategy(anchor);
-        m_newAnchors.append(strategy);
-        m_anchors.append(strategy);
     }
 }
 
 
 void KWTextDocumentLayout::layout()
 {
-    TDEBUG << "starting layout pass" << ((void*)document())
-#ifdef DEBUG_ANCHORS
-     << "m_newAnchors" << m_newAnchors.count() << "m_activeAnchors" << m_activeAnchors.count();
-#else
-    ;
-#endif
-
     class End
     {
     public:
-        End(KoTextDocumentLayout::LayoutState *state) {
+        End(KWTextFrameSet *frameSet, KoTextDocumentLayout::LayoutState *state) {
+            m_frameSet = frameSet;
             m_state = state;
+            //m_frameSet->setAllowLayout(false);
         }
         ~End() {
             m_state->end();
+            //m_frameSet->setAllowLayout(true);
         }
     private:
+        KWTextFrameSet *m_frameSet;
         KoTextDocumentLayout::LayoutState *m_state;
     };
-    End ender(m_state); // poor mans finally{}
+    End ender(m_frameSet, m_state); // poor mans finally{}
 
     if (! m_state->start())
         return;
+
     qreal endPos = 1E9;
     qreal bottomOfText = 0.0;
     bool newParagraph = true;
@@ -262,59 +256,41 @@ void KWTextDocumentLayout::layout()
     KoShape *currentShape = 0;
 
     while (m_state->shape) {
-        ADEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines, we have" << m_activeAnchors.count() << "+" << m_newAnchors.count() <<"anchors";
-#ifndef DEBUG_ANCHORS
-        for (int i = 0; i < m_state->layout->lineCount(); ++i) {
-            QTextLine line = m_state->layout->lineAt(i);
-            ADEBUG << i << "]" << (line.isValid() ? QString("%1 - %2").arg(line.textStart()).arg(line.textLength()) : QString("invalid"));
-        }
-#endif
-        if (m_state->layout->lineCount() == 0 && startOfBlock != m_state->cursorPosition()) {  // new paragraph
-            startOfBlock = m_state->cursorPosition();
-            startOfBlockText = m_state->cursorPosition();
-        }
         if (m_state->shape != currentShape) { // next shape
             TDEBUG << "New shape";
             currentShape = m_state->shape;
             if (m_frameSet->kwordDocument()) {
-                // refresh the registration of run around shapes.
-                m_state->unregisterAllRunAroundShapes();
 
-                // if we are on new page than clean up anchors
-                cleanupAnchors();
-
-                // if part of page is already layouted than check if there are some anchored shapes and register them
-                registerPageAnchoredShapes(currentShape, m_state);
-
-                QRectF bounds = m_state->shape->boundingRect();
-                foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
-                    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-                    if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
-                        continue;
-                    foreach (KWFrame *frame, fs->frames()) {
-                        if (frame->shape() == currentShape)
-                            continue;
-                        if (! frame->shape()->isVisible(true))
-                            continue;
-                        if (frame->shape()->textRunAroundSide() == KoShape::RunThrough)
-                            continue;
-                        if (frame->shape()->zIndex() <= currentShape->zIndex()) {
-                            continue;
-                        }
-                        if (! bounds.intersects(frame->shape()->boundingRect()))
-                            continue;
-                        bool isChild = false;
-                        KoShape *parent = frame->shape()->parent();
-                        while (parent && !isChild) {
-                            if (parent == currentShape)
-                                isChild = true;
-                            parent = parent->parent();
-                        }
-                        if (isChild)
-                            continue;
-                        m_state->registerRunAroundShape(frame->shape());
-                    }
-                }
+                //todo do the logic how shapes from different frame sets interact with text
+//                QRectF bounds = m_state->shape->boundingRect();
+//                foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
+//                    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+//                    if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
+//                        continue;
+//                    foreach (KWFrame *frame, fs->frames()) {
+//                        if (frame->shape() == currentShape)
+//                            continue;
+//                        if (! frame->shape()->isVisible(true))
+//                            continue;
+//                        if (frame->shape()->textRunAroundSide() == KoShape::RunThrough)
+//                            continue;
+//                        if (frame->shape()->zIndex() <= currentShape->zIndex()) {
+//                            continue;
+//                        }
+//                        if (! bounds.intersects(frame->shape()->boundingRect()))
+//                            continue;
+//                        bool isChild = false;
+//                        KoShape *parent = frame->shape()->parent();
+//                        while (parent && !isChild) {
+//                            if (parent == currentShape)
+//                                isChild = true;
+//                            parent = parent->parent();
+//                        }
+//                        if (isChild)
+//                            continue;
+//                        m_state->registerRunAroundShape(frame->shape());
+//                    }
+//                }
                 // set the page for the shape.
                 KWPage page = m_frameSet->pageManager()->page(currentShape);
                 Q_ASSERT(page.isValid());
@@ -324,46 +300,6 @@ void KWTextDocumentLayout::layout()
                 data->setPage(new KWPageTextInfo(page));
             }
         }
-
-        // anchors might require us to do some layout again, give it the chance to 'do as it will'
-        bool restartLine = false;
-        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
-            ADEBUG << "checking anchor";
-            QPointF old;
-            if (strategy->anchoredShape()) {
-                old = strategy->anchoredShape()->position();
-            }
-
-            if (strategy->checkState(m_state, m_frameSet)) {
-                ADEBUG << "  restarting line";
-                restartLine = true;
-            }
-            if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {
-                // refresh registration in case the shape moved.
-                m_state->updateRunAroundShape(strategy->anchoredShape());
-            }
-            if (restartLine)
-                break;
-        }
-
-        if (restartLine) {
-            continue;
-        }
-        foreach (KWAnchorStrategy *strategy, m_newAnchors) {
-            ADEBUG << "  migrating strategy!";
-            if (strategy->anchoredShape()) {
-                if (strategy->anchoredShape()->textRunAroundSide() != KoShape::RunThrough) {
-                    m_state->registerRunAroundShape(strategy->anchoredShape());
-                    //line.updateOutline(outline);
-                 }
-                restartLine = true;
-                ADEBUG << "registering child for run around";
-            }
-            m_activeAnchors.append(strategy);
-        }
-        m_newAnchors.clear();
-        if (restartLine)
-            continue;
 
         QTextLine line = m_state->createLine();
         if (!line.isValid()) { // end of parag
@@ -405,7 +341,6 @@ void KWTextDocumentLayout::layout()
                 }
 
                 m_frameSet->layoutDone();
-                cleanupAnchors();
                 emit finishedLayout();
                 return; // done!
             } else if (m_state->shape == 0) {
@@ -421,19 +356,14 @@ void KWTextDocumentLayout::layout()
         }
         if (m_state->isInterrupted() || (newParagraph && m_state->y() > endPos)) {
             // enough for now. Try again later.
-            TDEBUG << "schedule a next layout due to having done a layout of quite some space";
+            kDebug() << "schedule a next layout due to having done a layout of quite some space, interrupted="<<m_state->isInterrupted()<<"m_state->y()="<<m_state->y()<<"endPos="<<endPos;
             scheduleLayoutWithoutInterrupt();
             return;
         }
         newParagraph = false;
-        const int anchorCount = m_newAnchors.count();
+
         m_state->fitLineForRunAround( /* resetHorizontalPosition */ false );
-        if (m_state->layout->lineCount() == 1 && anchorCount != m_newAnchors.count()) {
-            // start parag over so we can correctly take the just found anchors into account.
-            m_state->layout->endLayout();
-            m_state->layout->beginLayout();
-            continue;
-        }
+
 #ifdef DEBUG_TEXT
         if (line.isValid()) {
             QTextBlock b = document()->findBlock(m_state->cursorPosition());
@@ -448,10 +378,10 @@ void KWTextDocumentLayout::layout()
         if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1 && KWord::isHeaderFooter(m_frameSet)) {
             TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());
             m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
-            cleanupAnchors();
             return;
         }
         qreal lineheight = line.height();
+
         while (m_state->addLine() == false) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
@@ -462,6 +392,7 @@ void KWTextDocumentLayout::layout()
                     m_frameSet->requestMoreFrames(0);
                     return; // done!
                 }
+
                 if (KWord::isHeaderFooter(m_frameSet)) { // more text, lets resize the header/footer.
                     TDEBUG << "  header/footer is too small resize:" << lineheight;
                     m_frameSet->requestMoreFrames(lineheight);
@@ -550,39 +481,5 @@ void KWTextDocumentLayout::layout()
     if (requestFrameResize) {
         TDEBUG << "  requestFrameResize" << m_dummyShape->size().height();
         m_frameSet->requestMoreFrames(m_dummyShape->size().height());
-    }
-}
-
-void KWTextDocumentLayout::cleanupAnchors()
-{
-    m_activeAnchors.clear();
-    m_newAnchors.clear();
-}
-
-void KWTextDocumentLayout::registerPageAnchoredShapes(KoShape *currentShape, LayoutState *state)
-{
-    KoShapeContainer *pageShape = dynamic_cast<KoShapeContainer*>(currentShape);
-
-    if (!pageShape) {
-        return;
-    }
-
-    // check if page has already anchored shapes
-    foreach (KoShape * child,pageShape->shapes()) {
-        // check if the child shape has anchor strategy
-        foreach (KWAnchorStrategy *strategy, m_anchors) {
-            if (strategy->anchor()->shape() == child) {
-                // check if the shape is anchored to already layouted text
-                if (strategy->anchor()->positionInDocument() < state->cursorPosition()) {
-                    // register this shape for text run around
-                    if (strategy->anchoredShape()) {
-                        if (strategy->anchoredShape()->textRunAroundSide() != KoShape::RunThrough) {
-                            m_state->registerRunAroundShape(strategy->anchoredShape());
-                        }
-                        m_activeAnchors.append(strategy);
-                    }
-                }
-            }
-        }
     }
 }

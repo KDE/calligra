@@ -4,6 +4,7 @@
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -20,7 +21,6 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-
 */
 #include "generated/leinputstream.h"
 #include "document.h"
@@ -29,6 +29,7 @@
 #include "graphicshandler.h"
 #include "versionmagic.h"
 #include "drawstyle.h"
+#include "msodraw.h"
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -41,6 +42,7 @@
 #include <wv2/src/parserfactory.h>
 #include <wv2/src/paragraphproperties.h>
 #include <wv2/src/associatedstrings.h>
+
 #include <klocale.h>
 #include <KoStore.h>
 #include <KoFilterChain.h>
@@ -48,6 +50,13 @@
 
 #include <QBuffer>
 #include <QColor>
+
+//specifies the location from which the offset of a page border is measured
+enum PgbOffsetFrom {
+    pgbFromText,  //offset measured from the text
+    pgbFromEdge   //offset measured from the edge of the page
+};
+
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
@@ -558,16 +567,14 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 
         //set the margins - depends on whether a header/footer is present
         if (m_hasHeader_list[i]) {
-            kDebug(30513) << "setting margin for header...";
             pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
         } else if (sep->brcTop.brcType == 0) {
-            kDebug(30513) << "setting margin for no header and no top border...";
-            pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
+            pageLayoutStyle->addPropertyPt("fo:margin-top", qAbs((double)sep->dyaTop) / 20.0);
         }
         if (m_hasFooter_list[i]) {
             pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
         } else if (sep->brcBottom.brcType == 0) {
-            pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
+            pageLayoutStyle->addPropertyPt("fo:margin-bottom", qAbs((double)sep->dyaBottom) / 20.0);
         }
 
         pageLayoutName = m_mainStyles->insert(*pageLayoutStyle, "Mpm");
@@ -972,76 +979,112 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addProperty("style:print-orientation", landscape ? "landscape" : "portrait");
     pageLayoutStyle->addProperty("style:num-format", "1");
 
-    // Set default left/right margins for the case when there is no
-    // border.  This will be changed below if there are borders defined.
-    pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
-    pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
-
     DrawStyle ds = m_graphicsHandler->getDrawingStyle();
-
     switch (ds.fillType()) {
-        case 0: //msofillSolid
-        {
-            // PptToOdp::toQColor helper function can be used instead of this conversion
-            MSO::OfficeArtCOLORREF clr = ds.fillColor();
-            QColor color(clr.red, clr.green, clr.blue);
-            QString tmp = color.name();
-            pageLayoutStyle->addProperty("fo:background-color", tmp);
+    case msofillSolid:
+    {
+        // PptToOdp::toQColor helper function can be used instead of this conversion
+        MSO::OfficeArtCOLORREF clr = ds.fillColor();
+        QColor color(clr.red, clr.green, clr.blue);
+        QString tmp = color.name();
+        pageLayoutStyle->addProperty("fo:background-color", tmp);
 
-            //update the background-color information if required
-            if (tmp != currentBgColor()) {
-                updateBgColor(tmp);
-            }
-            break;
+        //update the background-color information if required
+        if (tmp != currentBgColor()) {
+            updateBgColor(tmp);
         }
-        case 0x3: //msofillPicture
-        {
-            // picture can be stored in OfficeArtBStoreContainer or in fillBlip_complex if complex = true
-            // only picture in OfficeArtBStoreContainer is handled now
-            QString filePath = m_graphicsHandler->getPicturePath(ds.fillBlip());
+        break;
+    }
+    case msofillPicture:
+    {
+        // picture can be stored in OfficeArtBStoreContainer or in fillBlip_complex if complex = true
+        // only picture in OfficeArtBStoreContainer is handled now
+        QString filePath = m_graphicsHandler->getPicturePath(ds.fillBlip());
 
-            if (!filePath.isEmpty()) {
-                QBuffer buffer;
-                KoXmlWriter bkgImageWriter(&buffer);
+        if (!filePath.isEmpty()) {
+            QBuffer buffer;
+            KoXmlWriter bkgImageWriter(&buffer);
 
-                bkgImageWriter.startElement("style:background-image");
-                bkgImageWriter.addAttribute("xlink:href", filePath);
-                bkgImageWriter.addAttribute("xlink:type", "simple");
-                bkgImageWriter.addAttribute("xlink:actuate", "onLoad");
-                bkgImageWriter.endElement(); //style:background-image
+            bkgImageWriter.startElement("style:background-image");
+            bkgImageWriter.addAttribute("xlink:href", filePath);
+            bkgImageWriter.addAttribute("xlink:type", "simple");
+            bkgImageWriter.addAttribute("xlink:actuate", "onLoad");
+            bkgImageWriter.endElement(); //style:background-image
 
-                QString contents = QString::fromUtf8(((QBuffer*)bkgImageWriter.device())->buffer(),
-                                             ((QBuffer*)bkgImageWriter.device())->buffer().size());
+            QString contents = QString::fromUtf8(((QBuffer*)bkgImageWriter.device())->buffer(),
+                                         ((QBuffer*)bkgImageWriter.device())->buffer().size());
 
-                pageLayoutStyle->addChildElement("0", contents);
-            }
+            pageLayoutStyle->addChildElement("0", contents);
         }
-            break;
-        default:
-            break;
+        break;
+    }
+    default:
+        break;
     }
 
-    //set the minimum height of header/footer to the full margin minus margin above header
-    //problem with footer is that it is not possible to say how big the footer is.
+    // NOTE: margin-top and margin-bottom are updated in slotSectionFound based
+    // on the information if the header/footer was empty/non-empty.
+    //
+    // Maybe we shoud set the minimum height of header/footer to qAbs(dyaTop -
+    // dyaHdrTop)/qAbs(dyaBottom - dyaHdrBottom)
+    //
+    // The height of both header and footer is unknown, so it's not possible to
+    // set margin-bottom for the header and margin-top for the footer properly.
+    // Both dyaTop and dyaBottom do not tell us where the header/footer ends.
+    //
+    // MSWord specific:
+    // For each x in {header, footer, body}, x has an independent ruler.
+    //
+    // Also both header and footer are treated like a separate document, so if
+    // you insert a border into the body, then header/footer margins do not
+    // change.  We are not able to store this into ODF properly.
+
     QString header("<style:header-style>");
-    header.append("<style:header-footer-properties fo:margin-bottom=\"");
-    header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
-    header.append("pt\" fo:min-height=\"14pt\"/>");
+    header.append("<style:header-footer-properties");
+
+    // The spec says the top-margin MUST be grown to avoid overlapping the
+    // space that is occupied by headers.  Not ODF compatible.
+    if (sep->dyaTop >= 0) {
+        header.append(" style:dynamic-spacing=\"true\"");
+        header.append(" fo:margin-bottom=\"0pt\"");
+    } else {
+        //TODO: tests required, I would prefer margin-bottom set to ZERO
+        header.append(" style:dynamic-spacing=\"false\"");
+        header.append(" fo:margin-bottom=\"");
+#if 0
+        qreal headerMarginTop = qAbs(sep->dyaTop) - sep->dyaHdrTop;
+        if (headerMarginTop > 0) {
+            header.append(QString::number(headerMarginTop / 20.0));
+        } else
+#endif
+            header.append("0");
+        header.append("pt\"");
+
+    }
+    header.append(" fo:min-height=\"14pt\"/>");
     header.append("</style:header-style>");
 
     QString footer("<style:footer-style>");
-    footer.append("<style:header-footer-properties fo:margin-top=\"");
-    if (sep->dyaBottom > (int)sep->dyaHdrBottom) {
-        if ((sep->dyaBottom - sep->dyaHdrBottom) >= 400) {
-            footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
+    footer.append("<style:header-footer-properties");
+
+    // The spec says the bottom-margin MUST be grown to avoid overlapping the
+    // space that is occupied by footers or footnotes.  Not ODF compatible.
+    if (sep->dyaBottom > 0) {
+        footer.append(" style:dynamic-spacing=\"true\"");
+        footer.append(" fo:margin-top=\"0pt\"");
+    } else {
+        //TODO: tests required, I would prefer margin-top set to ZERO
+        footer.append(" style:dynamic-spacing=\"false\"");
+        footer.append(" fo:margin-top=\"");
+        qreal headerMarginBottom = qAbs(sep->dyaBottom) - sep->dyaHdrBottom;
+        if (headerMarginBottom >= 400) {
+            footer.append(QString::number(headerMarginBottom / 20.0));
         } else {
             footer.append("14");
         }
+        footer.append("pt\"");
     }
-    else {
-        footer.append("14");
-    }
-    footer.append("pt\" fo:min-height=\"10pt\"/>");
+    footer.append(" fo:min-height=\"10pt\"/>");
     footer.append("</style:footer-style>");
 
     pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
@@ -1082,17 +1125,21 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
                                          Conversion::borderKOfficeAttributes(sep->brcBottom));
         }
     }
+    // Set default left/right margins for the case when there is no border.
+    // This will be changed below if there are borders defined.
+    pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
+    pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
+
     // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
-    if (sep->pgbOffsetFrom == 0) {
-        // page border offset is from the text
+    switch (sep->pgbOffsetFrom) {
+    case pgbFromText:
         pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);
         pageLayoutStyle->addPropertyPt("fo:padding-top",    sep->brcTop.dptSpace);
         pageLayoutStyle->addPropertyPt("fo:padding-right",  sep->brcRight.dptSpace);
         pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->brcBottom.dptSpace);
         // FIXME: How should fo:margin be created in this case?
-    } else {
-        // page border offset is from the edge of the page
-
+        break;
+    case pgbFromEdge:
         // Add margin. This value is fetched directly from the BRC's.
         pageLayoutStyle->addPropertyPt("fo:margin-left",   sep->brcLeft.dptSpace);
         pageLayoutStyle->addPropertyPt("fo:margin-top",    sep->brcTop.dptSpace);
@@ -1103,11 +1150,12 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         pageLayoutStyle->addPropertyPt("fo:padding-left",
                                          (sep->dxaLeft - (sep->brcLeft.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-top",
-                                         (sep->dyaTop - (sep->brcTop.dptSpace * 20)) / 20);
+                                         (qAbs(sep->dyaTop) - (sep->brcTop.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-right",
                                          (sep->dxaRight - (sep->brcRight.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-bottom",
-                                         (sep->dyaBottom - (sep->brcBottom.dptSpace * 20)) / 20);
+                                         (qAbs(sep->dyaBottom) - (sep->brcBottom.dptSpace * 20)) / 20);
+        break;
     }
     // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }

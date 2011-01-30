@@ -49,10 +49,6 @@ Duration::Duration( double value, Duration::Unit unit ) {
     else if (unit == Unit_Y) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 365 ));
 }
 
-Duration::Duration(const Duration &d) {
-    copy( d );
-}
-
 Duration::Duration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) {
     m_ms = ms;
     m_ms += static_cast<qint64>(s) * 1000; // cast to avoid potential overflow problem
@@ -71,9 +67,6 @@ Duration::Duration(const qint64 value, Duration::Unit unit) {
     else if (unit == Unit_M) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 30 ));
     else if (unit == Unit_Y) m_ms = (qint64)(value * (qint64)( 1000 * 60 * 60 ) * ( 24 * 365 ));
     else kError()<<"Unknown unit: "<<unit;
-}
-
-Duration::~Duration() {
 }
 
 void Duration::add(const Duration &delta) {
@@ -277,28 +270,6 @@ Duration Duration::fromString(const QString &s, Format format, bool *ok) {
     return tmp;
 }
 
-void Duration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds, unsigned *milliseconds) const {
-    qint64 ms;
-    qint64 tmp;
-
-    ms = m_ms;
-    tmp = ms / (1000 * 60 * 60 * 24);
-    *days = tmp;
-    ms -= tmp * (1000 * 60 * 60 * 24);
-    tmp = ms / (1000 * 60 * 60);
-    *hours = tmp;
-    ms -= tmp * (1000 * 60 * 60);
-    tmp = ms / (1000 * 60);
-    *minutes = tmp;
-    ms -= tmp * (1000 * 60);
-    tmp = ms / (1000);
-    if (seconds)
-        *seconds = tmp;
-    ms -= tmp * (1000);
-    if (milliseconds)
-        *milliseconds = ms;
-}
-
 QStringList Duration::unitList( bool trans )
 {
     QStringList lst;
@@ -346,9 +317,22 @@ bool Duration::valueFromString( const QString &value, double &rv, Unit &unit ) {
     return false;
 }
 
-void Duration::copy( const Duration &d )
+double Duration::toHours() const
 {
-    m_ms = d.m_ms;
+    return toDouble( Unit_h );
+}
+
+double Duration::toDouble( Unit u ) const
+{
+    if (u == Unit_ms) return (double)m_ms;
+    else if (u == Unit_s) return (double)m_ms/1000.0;
+    else if (u == Unit_m) return (double)m_ms/(1000.0*60.0);
+    else if (u == Unit_h) return (double)m_ms/(1000.0*60.0*60.0);
+    else if (u == Unit_d) return (double)m_ms/(1000.0*60.0*60.0*24.0);
+    else if (u == Unit_w) return (double)m_ms/(1000.0*60.0*60.0*24.0*7.0);
+    else if (u == Unit_M) return (double)m_ms/(1000.0*60.0*60.0*24.0*30); //Month
+    else if (u == Unit_Y) return (double)m_ms/(1000.0*60.0*60.0*24.0*365); // Year
+    return (double)m_ms;
 }
 
 }  //KPlato namespace

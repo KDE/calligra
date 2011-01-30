@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2005-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,7 @@ class Sheet;
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * \since 1.5
  */
-class CALLIGRA_TABLES_EXPORT Region
+class CALLIGRA_TABLES_ODF_EXPORT Region
 {
 public:
     class Element;

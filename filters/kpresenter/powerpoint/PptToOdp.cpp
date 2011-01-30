@@ -1,8 +1,9 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Yolla Indria <yolla.indria@gmail.com>
-   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
    Contact: Amit Aggarwal <amitcs06@gmail.com>
+   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +32,8 @@
 #include <KoXmlWriter.h>
 
 #include <QtCore/QBuffer>
+
+//#define DEBUG_PPTTOODP
 
 using namespace MSO;
 
@@ -198,8 +201,9 @@ private:
     QRectF getRect(const MSO::OfficeArtClientAnchor&);
     QString getPicturePath(int pib);
     bool onlyClientData(const MSO::OfficeArtClientData& o);
-    void processClientData(const MSO::OfficeArtClientData& clientData,
-                                   Writer& out);
+    void processClientData(const MSO::OfficeArtClientTextBox& ct,
+                           const MSO::OfficeArtClientData& cd,
+                           Writer& out);
     void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                               const MSO::OfficeArtClientData* cd,
                               Writer& out);
@@ -224,22 +228,24 @@ private:
         const MSO::OfficeArtSpContainer* defaultShape;
         const MSO::SlideListWithTextSubContainerOrAtom* slideTexts;
 
-        DrawClientData(): masterSlide(NULL), presSlide(NULL), notesMasterSlide(NULL),
-                          notesSlide(NULL), defaultShape(NULL), slideTexts(NULL) {};
+        DrawClientData(): masterSlide(0), presSlide(0), notesMasterSlide(0),
+                          notesSlide(0), defaultShape(0), slideTexts(0) {};
     };
     DrawClientData dc_data[1];
 
-    //an empty container passed to libmso in case we prefer default values of
-    //properties instead of drawingPrimaryOptions of the drawingGroup, looks
+    //An empty container passed to libmso in case we prefer default values of
+    //properties instead of drawingPrimaryOptions of the drawingGroup.  Looks
     //like in case of PPT the drawingGroup container has to be ignored
     const OfficeArtDggContainer drawingGroup_empty;
 
 public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
-    void setDrawClientData(const MasterOrSlideContainer* mc, const SlideContainer* sc,
-                           const NotesContainer* nmc, const NotesContainer* nc,
-                           const MSO::OfficeArtSpContainer* shape = NULL, 
-                           const MSO::SlideListWithTextSubContainerOrAtom* stc = NULL)
+    void setDrawClientData(const MSO::MasterOrSlideContainer* mc,
+                           const MSO::SlideContainer* sc,
+                           const MSO::NotesContainer* nmc,
+                           const MSO::NotesContainer* nc,
+                           const MSO::OfficeArtSpContainer* shape = 0,
+                           const MSO::SlideListWithTextSubContainerOrAtom* stc = 0)
     {
         dc_data->masterSlide = mc;
         dc_data->presSlide = sc;
@@ -267,40 +273,56 @@ bool PptToOdp::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
     const PptOfficeArtClientData* pcd = o.anon.get<PptOfficeArtClientData>();
     if (pcd && pcd->placeholderAtom && dc_data->slideTexts) {
         const PlaceholderAtom* pa = pcd->placeholderAtom.data();
-        if (pa->position >= 0
-                && pa->position < dc_data->slideTexts->atoms.size()) {
+        if (pa->position >= 0 &&
+            pa->position < dc_data->slideTexts->atoms.size())
+        {
             return true;
         }
     }
     return false;
 }
-void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientData& o,
-                               Writer& out)
+void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox& ct,
+                                             const MSO::OfficeArtClientData& o, Writer& out)
 {
+    const TextContainer* textContainer = 0;
+    const TextRuler* textRuler = 0;
+
+    const PptOfficeArtClientTextBox* tb = ct.anon.get<PptOfficeArtClientTextBox>();
+    if (tb) {
+        foreach(const TextClientDataSubContainerOrAtom& tc, tb->rgChildRec) {
+            if (tc.anon.is<TextRulerAtom>()) {
+                textRuler = &tc.anon.get<TextRulerAtom>()->textRuler;
+                break;
+	    }
+        }
+    }
     const PptOfficeArtClientData* pcd = o.anon.get<PptOfficeArtClientData>();
     if (pcd && pcd->placeholderAtom && dc_data->slideTexts) {
         const PlaceholderAtom* pa = pcd->placeholderAtom.data();
-        if (pa->position >= 0
-                && pa->position < dc_data->slideTexts->atoms.size()) {
-            const TextContainer& tc
-                    = dc_data->slideTexts->atoms[pa->position];
-            ppttoodp->processTextForBody(&o, tc, out);
+        if (pa->position >= 0 &&
+            pa->position < dc_data->slideTexts->atoms.size())
+        {
+            textContainer = &dc_data->slideTexts->atoms[pa->position];
+            ppttoodp->processTextForBody(&o, *textContainer, textRuler, out);
         }
     }
 }
-void PptToOdp::DrawClient::processClientTextBox(
-        const MSO::OfficeArtClientTextBox& ct,
-        const MSO::OfficeArtClientData* cd, Writer& out)
+void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
+                                                const MSO::OfficeArtClientData* cd, Writer& out)
 {
-    const PptOfficeArtClientTextBox* tb
-            = ct.anon.get<PptOfficeArtClientTextBox>();
+    const PptOfficeArtClientTextBox* tb = ct.anon.get<PptOfficeArtClientTextBox>();
     if (tb) {
+        const MSO::TextContainer* textContainer = 0;
+        const MSO::TextRuler* textRuler = 0;
+
         foreach(const TextClientDataSubContainerOrAtom& tc, tb->rgChildRec) {
             if (tc.anon.is<TextContainer>()) {
-                ppttoodp->processTextForBody(cd,
-                      *tc.anon.get<TextContainer>(), out);
-            }
+                textContainer = tc.anon.get<TextContainer>();
+            } else if (tc.anon.is<TextRulerAtom>()) {
+                textRuler = &tc.anon.get<TextRulerAtom>()->textRuler;
+	    }
         }
+        ppttoodp->processTextForBody(cd, *textContainer, textRuler, out);
     }
 }
 QString getMasterStyle(const QMap<int, QString>& map, int texttype) {
@@ -509,9 +531,10 @@ QString PptToOdp::DrawClient::formatPos(qreal v)
  */  
 PptToOdp::PptToOdp()
 : p(0),
-  currentSlideTexts(NULL),
-  currentMaster(NULL),
-  currentSlide(NULL)
+  m_currentSlideTexts(NULL),
+  m_currentMaster(NULL),
+  m_currentSlide(NULL),
+  m_isList(false)
 {
 }
 
@@ -954,6 +977,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:use-window-font-color
 }
 
+//NOTE: required by defineDefaultTextProperties and addTextStyles
 void PptToOdp::defineTextProperties(KoGenStyle& style,
                                     const MSO::TextCFException* cf,
                                     const TextCFException9* /*cf9*/,
@@ -973,11 +997,10 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
         }
     }
 
-    //NOTE: TOTALLY WRONG APPROACH !!!!!!!  You have to check the corresponding
-    //master shape if you don't have a color!!!  And check if there's a master
-    //slide for it!!! Check the previous implementation of defineTextProperties
-    
-
+    // NOTE: TOTALLY WRONG APPROACH !!!!!!!  You have to check the corresponding
+    // master shape if you don't have a color!!!  And check if there's a master
+    // slide for it!!!  Check the implementation of defineTextProperties above.
+    //
     // Use the color defined by the corresponding color scheme.  Let's create a
     // temporary OfficeArtCOLORREF to reuse the toQColor function.  The red
     // value will be treated as an index into the current color scheme table.
@@ -1002,17 +1025,17 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
             break;
         }
 
-	const MSO::MasterOrSlideContainer* m = currentMaster;
+	const MSO::MasterOrSlideContainer* m = m_currentMaster;
 	const MSO::MainMasterContainer* mm = NULL;
 	const MSO::SlideContainer* tm = NULL;
 
         if (m) {
             if (m->anon.is<MainMasterContainer>()) {
                 mm = m->anon.get<MainMasterContainer>();
-                color = toQColor(tmp, mm, currentSlide);
+                color = toQColor(tmp, mm, m_currentSlide);
             } else if (m->anon.is<SlideContainer>()) {
                 tm = m->anon.get<SlideContainer>();
-                color = toQColor(tmp, tm, currentSlide);
+                color = toQColor(tmp, tm, m_currentSlide);
             }
         }
         //TODO: hande the case of a notes master slide/notes slide pair
@@ -1142,9 +1165,8 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // fo:margin
     // fo:margin-bottom
     style.addProperty("fo:margin-bottom", paraSpacingToCm(pf.spaceAfter()), para);
-    // fo:margin-left
-    style.addProperty("fo:margin-left", pptMasterUnitToCm(pf.leftMargin()),
-                para);
+    // fo:margin-left - pf.leftMargin() is relevant only for a list
+    style.addProperty("fo:margin-left", "0cm", para);
     // fo:margin-right
     // fo:margin-top
     style.addProperty("fo:margin-top", paraSpacingToCm(pf.spaceBefore()), para);
@@ -1161,7 +1183,12 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     }
     // fo:text-align-last
     // fo:text-indent
-    style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.indent()), para);
+    if (m_isList) {
+        //text:space-before already set in style:list-level-properties
+        style.addProperty("fo:text-indent", "0cm", para);
+    } else {
+        style.addProperty("fo:text-indent", pptMasterUnitToCm(pf.indent()), para);
+    }
     // fo:widows
     // style:auto-text-indent
     // style:background-transparency
@@ -1374,7 +1401,7 @@ bulletSizeToSizeString(const PptTextPFRun& pf)
     }
     return QString();
 }
-void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
+void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
                                const ListStyleInput& i,
                                const ListStyleInput& p)
 {
@@ -1456,7 +1483,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
         out.startElement("text:list-level-style-number");
         out.addAttribute("style:num-format", "");
     }
-    out.addAttribute("text:level", level?level:1);
+    out.addAttribute("text:level", depth ? depth : 1);
 
     bool hasIndent = i.pf.level();
     out.startElement("style:list-level-properties");
@@ -1479,17 +1506,13 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
         out.addAttribute("style:vertical-rel", "line");
     }
     // svg:y
+
+    quint16 indent = i.pf.indent();
     // text:min-label-distance
     // text:min-label-width
-    if (imageBullet && !bulletSize.isNull()) {
-        out.addAttribute("text:min-label-width", bulletSize);
-    }
+    out.addAttribute("text:min-label-width", pptMasterUnitToCm(i.pf.leftMargin() - indent));
     // text:space-before
-    int spacebefore = i.pf.spaceBefore() + i.pf.leftMargin();
-    if (spacebefore != 0) {
-        out.addAttribute("text:space-before",
-                         paraSpacingToCm(spacebefore));
-    }
+    out.addAttribute("text:space-before", pptMasterUnitToCm(indent));
     out.endElement(); // style:list-level-properties
 
     if (!imageBullet) {
@@ -1576,7 +1599,7 @@ public:
 void PptToOdp::defineMasterStyles(KoGenStyles& styles)
 {
     foreach (const MSO::MasterOrSlideContainer* m, p->masters) {
-        currentMaster = m;
+        m_currentMaster = m;
         const SlideContainer* sc = m->anon.get<SlideContainer>();
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
 
@@ -1623,7 +1646,7 @@ void PptToOdp::defineMasterStyles(KoGenStyles& styles)
             masterPresentationStyles[m][5] = styles.insert(style);
         }
     }
-    currentMaster = NULL;
+    m_currentMaster = NULL;
 }
 const MSO::OfficeArtSpContainer*
 getMasterShape(const MSO::MasterOrSlideContainer* m) {
@@ -1762,6 +1785,24 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
     }
 }
 
+/**
+ * Define the standard arrows used in PPT files.
+ */
+void defineArrow(KoGenStyles& styles)
+{
+    KoGenStyle marker(KoGenStyle::MarkerStyle);
+    marker.addAttribute("draw:display-name", "msArrowEnd 5");
+    marker.addAttribute("svg:viewBox", "0 0 210 210");
+    marker.addAttribute("svg:d", "m105 0 105 210h-210z");
+    styles.insert(marker, "msArrowEnd_20_5", KoGenStyles::DontAddNumberToName);
+    // TODO: define proper styles for these arrows
+    KoGenStyles::InsertionFlags flags = KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
+    styles.insert(marker, "msArrowStealthEnd_20_5", flags);
+    styles.insert(marker, "msArrowDiamondEnd_20_5", flags);
+    styles.insert(marker, "msArrowOvalEnd_20_5", flags);
+    styles.insert(marker, "msArrowOpenEnd_20_5", flags);
+}
+
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
     /* This function is follows the flow of the styles.xml file.
@@ -1847,7 +1888,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     /*
       Define the automatic styles
      */
-    currentSlideTexts = 0;
+    m_currentSlideTexts = 0;
     defineMasterStyles(styles);
     defineAutomaticDrawingPageStyles(styles);
 
@@ -1877,7 +1918,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         writer.addAttribute("style:page-layout-name", notesPageLayoutName);
         writer.addAttribute("draw:style-name",
                             drawingPageStyles[p->notesMaster]);
-        currentMaster = 0;
+        m_currentMaster = 0;
 
         if (p->notesMaster->drawing.OfficeArtDg.groupShape) {
             const OfficeArtSpgrContainer& spgr = *(p->notesMaster->drawing.OfficeArtDg.groupShape).data();
@@ -1899,7 +1940,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoGenStyle master(KoGenStyle::MasterPageStyle);
         master.addAttribute("style:page-layout-name", slidePageLayoutName);
         master.addAttribute("draw:style-name", drawingPageStyles[m]);
-        currentMaster = m;
+        m_currentMaster = m;
         QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         KoXmlWriter writer(&buffer);
@@ -1920,7 +1961,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         }
         masterNames[m] = styles.insert(master, "M");
     }
-    currentMaster = NULL;
+    m_currentMaster = NULL;
 
     // Creating dateTime class object
     if (getSlideHF()) {
@@ -2039,7 +2080,6 @@ namespace
 * @brief Write text deindentations the specified amount. Actually it just
 * closes elements.
 *
-* Doesn't close the last text:list-item though.
 * @param xmlWriter XML writer to write closing tags
 * @param count how many lists and list items to leave open
 * @param levels the list of levels to remove from
@@ -2048,25 +2088,35 @@ void writeTextObjectDeIndent(KoXmlWriter& xmlWriter, const int count,
                              QStack<QString>& levels)
 {
     while (levels.size() > count) {
-        xmlWriter.endElement(); // text:list
+        xmlWriter.endElement(); //text:list-item
+        xmlWriter.endElement(); //text:list
         levels.pop();
-        if (levels.size()) {
-            xmlWriter.endElement(); // text:list-item
-        }
     }
 }
-void addListElement(KoXmlWriter& xmlWriter, QStack<QString>& levels,
-                    const QString& listStyle)
+void addListElement(KoXmlWriter& xmlWriter, const QString& listStyle,
+                    QStack<QString>& levels, int depth,
+                    const PptTextPFRun &pf)
 {
-    // if the context is a text:list, a text:list-item is needed
-    if (levels.size() > 0) {
-        xmlWriter.startElement("text:list-item");
-    }
+    levels.push(listStyle);
     xmlWriter.startElement("text:list");
     if (!listStyle.isEmpty()) {
         xmlWriter.addAttribute("text:style-name", listStyle);
+    } else {
+        qDebug() << "Warning: list style name not provided!";
     }
-    levels.push(listStyle);
+    xmlWriter.startElement("text:list-item");
+
+    //kpresenter requires the start-value here!
+    if (pf.fBulletHasAutoNumber()) {
+        xmlWriter.addAttribute("text:start-value", pf.startNum());
+    }
+
+    // add styleless levels to get the right level of indentation
+    while (levels.size() < depth) {
+        xmlWriter.startElement("text:list");
+        xmlWriter.startElement("text:list-item");
+        levels.push("");
+    }
 }
 }
 
@@ -2296,13 +2346,13 @@ QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf)
     ListStyleInput info;
     info.pf = pf;
     ListStyleInput parent;
-    defineListStyle(list, pf.level(), info, parent);
+    defineListStyle(list, pf.level() + 1, info, parent);
     return out.styles.insert(list);
 }
 
 void PptToOdp::processTextLine(Writer& out,
                                const MSO::OfficeArtClientData* clientData,
-                               const MSO::TextContainer& tc,
+                               const MSO::TextContainer& tc, const MSO::TextRuler* tr,
                                const QString& text, int start, int end,
                                QStack<QString>& levels)
 {
@@ -2310,10 +2360,8 @@ void PptToOdp::processTextLine(Writer& out,
     if (clientData) {
         pcd = clientData->anon.get<PptOfficeArtClientData>();
     }
-    PptTextPFRun pf(p->documentContainer, currentSlideTexts, currentMaster, pcd,
-                    &tc, start);
-
-    int level = pf.level();
+    PptTextPFRun pf(p->documentContainer, m_currentSlideTexts, m_currentMaster, pcd,
+                    &tc, tr, start);
 
     //The current TextCFException located in the TextContainer will be
     //prepended to the list in the processTextSpan function.
@@ -2322,8 +2370,8 @@ void PptToOdp::processTextLine(Writer& out,
     //TODO: support for notes master slide required!
 
     //prepare the masters hierarchy
-    if (currentMaster) {
-        const MasterOrSlideContainer* m = currentMaster;
+    if (m_currentMaster) {
+        const MasterOrSlideContainer* m = m_currentMaster;
         while (m) {
             mh.append(m);
             //masterIdRef MUST be 0x00000000 if the record that contains this
@@ -2336,38 +2384,26 @@ void PptToOdp::processTextLine(Writer& out,
         }
     }
 
-    PptTextCFRun cf(p->documentContainer, mh, tc, level);
-    bool islist = (pf.isList() && (start < end));
+    PptTextCFRun cf(p->documentContainer, mh, tc, pf.level());
+    m_isList = (pf.isList() && (start < end));
 
-    //TODO: do not use static here!!!
-    static bool first = true;
-
-    if (islist) {
+    if (m_isList) {
+        int depth = pf.level() + 1;
         QString listStyle = defineAutoListStyle(out, pf);
 
 	//check if we have the corresponding style for this level, if not then
 	//close the list and create a new one (K.I.S.S.)
 	if (!levels.isEmpty() && (levels.first() != listStyle)) {
             writeTextObjectDeIndent(out.xml, 0, levels);
-            first = true;
         }
         if (levels.isEmpty()) {
-            addListElement(out.xml, levels, listStyle);
-        }
-        // add styleless levels to get the right level of indentation
-        while (levels.size() < level) {
-            addListElement(out.xml, levels, "");
-        }
-        out.xml.startElement("text:list-item");
-
-        //kpresenter requires the start-value here!
-        if (first && pf.fBulletHasAutoNumber()) {
-            out.xml.addAttribute("text:start-value", pf.startNum());
-            first = false;
+            addListElement(out.xml, listStyle, levels, depth, pf);
+        } else {
+            out.xml.endElement(); //text:list-item
+            out.xml.startElement("text:list-item");
         }
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
-        first = true;
     }
 
     out.xml.startElement("text:p");
@@ -2376,15 +2412,12 @@ void PptToOdp::processTextLine(Writer& out,
     defineParagraphProperties(style, pf);
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
     processTextSpans(&cf, tc, out, text, start, end);
-    out.xml.endElement(); // text:p
-
-    if (islist) {
-        out.xml.endElement(); // text:list-item
-    }
+    out.xml.endElement(); //text:p
 }
 
 void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
-                                  const MSO::TextContainer& tc, Writer& out)
+                                  const MSO::TextContainer& tc, const MSO::TextRuler* tr,
+                                  Writer& out)
 {
     /* Text in a textcontainer is divided into sections.
        The sections occur on different levels:
@@ -2414,24 +2447,25 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
 //         }
 //     }
 
-//     const MSO::MasterOrSlideContainer* tmpMaster = currentMaster;
+//     const MSO::MasterOrSlideContainer* tmpMaster = m_currentMaster;
 //     // if this is not a presentation frame, set master to 0, to avoid the
 //     // text style from inheriting from the master style
 //     if (p == 0) {
-//         currentMaster = 0;
+//         m_currentMaster = 0;
 //     }
 
 #ifdef DEBUG_PPTTOODP
     QString txt = getText(tc);
+    int len = txt.length();
     txt.replace('\v', "<vt");
     txt.replace('\r', "<cr>");
     txt.replace('\n', "<newline>");
     txt.replace('\t', "<tab>");
     txt.replace('\f', "<ff>");
-    qDebug() << "Current textLine:" << txt << "| length:" << txt.length();
+    qDebug() << "Current textLine:" << txt << "| length:" << len;
 #endif
 
-    // Let's assume text stored in paragraphs in examples below.
+    // Let's assume text stored in paragraphs.
     //
     // Example:<cr>text1<cr>text2<cr>text3<cr><cr><cr>
     // Result:
@@ -2465,18 +2499,18 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
             end = text.size();
             missed_line = false;
         }
-        processTextLine(out, clientData, tc, text, pos, end, levels);
+        processTextLine(out, clientData, tc, tr, text, pos, end, levels);
         pos = end + 1;
     }
     // catch the <cr> following text3 in example above
     if (missed_line) {
         int end = pos - 1;
-        processTextLine(out, clientData, tc, QString(QString::null), end, end, levels);
+        processTextLine(out, clientData, tc, tr, QString(QString::null), end, end, levels);
     }
 
     // close all open text:list elements
     writeTextObjectDeIndent(out.xml, 0, levels);
-//     currentMaster = tmpMaster;
+//     m_currentMaster = tmpMaster;
 }
 
 void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
@@ -2550,10 +2584,10 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
             out.xml.addAttribute("presentation:use-footer-name", usedFooterDeclaration[slideNo]);
     }
 
-    currentSlideTexts = &p->documentContainer->slideList->rgChildRec[slideNo];
+    m_currentSlideTexts = &p->documentContainer->slideList->rgChildRec[slideNo];
     //TODO: try to avoid using those
-    currentMaster = master;
-    currentSlide = slide;
+    m_currentMaster = master;
+    m_currentSlide = slide;
 
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
@@ -2561,12 +2595,12 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
-        drawclient.setDrawClientData(master, slide, 0, 0, shape, currentSlideTexts);
+        drawclient.setDrawClientData(master, slide, 0, 0, shape, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
 
-    currentMaster = NULL;
-    currentSlide = NULL;
+    m_currentMaster = NULL;
+    m_currentSlide = NULL;
 
     if (slide->drawing.OfficeArtDg.shape) {
         // leave it out until it is understood
@@ -2576,14 +2610,14 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     // draw the notes
     const NotesContainer* nc = p->notes[slideNo];
     if (nc && nc->drawing.OfficeArtDg.groupShape) {
-        currentSlideTexts = 0;
+        m_currentSlideTexts = 0;
         out.xml.startElement("presentation:notes");
         value = drawingPageStyles[nc];
         if (!value.isEmpty()) {
             out.xml.addAttribute("draw:style-name", value);
         }
         const OfficeArtSpgrContainer& spgr = *(nc->drawing.OfficeArtDg.groupShape).data();
-        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, 0, currentSlideTexts);
+        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, 0, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
         out.xml.endElement();
     }
@@ -2593,11 +2627,17 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
 
 QString PptToOdp::paraSpacingToCm(int value) const
 {
+    // ParaSpacing specifies text paragraph spacing.
+    //
+    // x = value; x in <0, 13200>, specifies spacing as a percentage of the
+    // text line height.  x < 0, the absolute value specifies spacing in master
+    // units.
+
     if (value < 0) {
         unsigned int temp = -value;
         return pptMasterUnitToCm(temp);
     }
-
+    //FIXME: proper conversion!
     return pptMasterUnitToCm(value);
 }
 
@@ -2678,10 +2718,10 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
     }
 
     const QList<ColorStruct>* colorScheme = NULL;
-    const MSO::MasterOrSlideContainer* m = currentMaster;
+    const MSO::MasterOrSlideContainer* m = m_currentMaster;
     const MSO::MainMasterContainer* mmc = NULL;
     const MSO::SlideContainer* tmc = NULL;
-    const MSO::SlideContainer* sc = currentSlide;
+    const MSO::SlideContainer* sc = m_currentSlide;
 
     //TODO: hande the case of a notes master slide/notes slide pair
 //     const MSO::NotesContainer* nmc = NULL;
@@ -2938,10 +2978,10 @@ const TextContainer* PptToOdp::getTextContainer(
             const PptOfficeArtClientTextBox* clientTextbox,
             const PptOfficeArtClientData* clientData) const
 {
-    if (clientData && clientData->placeholderAtom && currentSlideTexts) {
+    if (clientData && clientData->placeholderAtom && m_currentSlideTexts) {
         const PlaceholderAtom* p = clientData->placeholderAtom.data();
-        if (p->position >= 0 && p->position < currentSlideTexts->atoms.size()) {
-            return &currentSlideTexts->atoms[p->position];
+        if (p->position >= 0 && p->position < m_currentSlideTexts->atoms.size()) {
+            return &m_currentSlideTexts->atoms[p->position];
         }
     }
     if (clientTextbox) {

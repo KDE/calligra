@@ -139,7 +139,8 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
         : KoDocument(parentWidget, parent, singleViewMode),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_magicCurtain(0),
-        m_mainFramesetEverFinished(false)
+        m_mainFramesetEverFinished(false),
+        m_pageQueue(0)
 {
     m_frameLayout.setDocument(this);
     resourceManager()->setOdfDocument(this);
@@ -354,7 +355,7 @@ void KWDocument::relayout()
             delete frame->shape();
         }
     }
-    PageProcessingQueue *ppq = new PageProcessingQueue(this);
+    PageProcessingQueue *ppq = pageQueue();
     foreach (const KWPage &page, pageManager()->pages())
         ppq->addPage(page);
 }
@@ -622,7 +623,6 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     KWPage lastpage = pageManager()->last();
     qreal docHeight = lastpage.isValid() ? (lastpage.offsetInDocument() + lastpage.height()) : 0.0;
-    PageProcessingQueue *ppq = new PageProcessingQueue(this);
 
     // insert pages
     qreal maxBottom = 0;
@@ -646,6 +646,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     // Here we look at point 'b'. We add pages so at least all frames have a page.
     // btw. the observent reader might notice that cases b and c are not mutually exclusive ;)
+    PageProcessingQueue *ppq = pageQueue();
     while (docHeight <= maxBottom) {
         kDebug(32001) << "KWDocument::endOfLoading appends a page";
         if (m_pageManager.pageCount() == 0) // apply the firstPageMasterName only on the first page
@@ -832,14 +833,21 @@ void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
 
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
-    PageProcessingQueue *ppq = 0;
+    PageProcessingQueue *ppq = pageQueue();
     foreach (KWPage page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
-            if (ppq == 0)
-                ppq = new PageProcessingQueue(this);
             ppq->addPage(page);
         }
     }
+}
+
+PageProcessingQueue* KWDocument::pageQueue()
+{
+    //return new PageProcessingQueue(this, true);
+
+    if (!m_pageQueue)
+        m_pageQueue = new PageProcessingQueue(this);
+    return m_pageQueue;
 }
 
 void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
@@ -956,19 +964,25 @@ void KWDocument::saveConfig()
 
 
 // ************* PageProcessingQueue ************
-PageProcessingQueue::PageProcessingQueue(KWDocument *parent)
+PageProcessingQueue::PageProcessingQueue(KWDocument *parent, bool deleteLater)
     : QObject(parent)
+    , m_document(parent)
+    , m_deleteLater(deleteLater)
+    , m_triggered(false)
 {
-    m_document = parent;
-    m_triggered = false;
 }
 
 void PageProcessingQueue::addPage(KWPage page)
 {
-    m_pages.append(page);
-    if (! m_triggered)
+    Q_ASSERT(page.isValid());
+    int pageNumber = page.pageNumber();
+    if(m_pages.contains(pageNumber))
+        return; // page is already queued
+    m_pages.append(pageNumber);
+    if (!m_triggered) {
+        m_triggered = true;
         QTimer::singleShot(0, this, SLOT(process()));
-    m_triggered = true;
+    }
 }
 
 void PageProcessingQueue::process()
@@ -976,16 +990,16 @@ void PageProcessingQueue::process()
     m_triggered = false;
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
-    foreach (const KWPage &page, m_pages) {
-        if (! page.isValid())
-            continue;
-        m_document->m_frameLayout.createNewFramesForPage(page.pageNumber());
+    foreach (int pageNumber, m_pages) {
+        m_document->m_frameLayout.createNewFramesForPage(pageNumber);
     }
+    
     if (docIsEmpty)
         m_document->setEmpty();
     if (!docIsModified)
         m_document->setModified(false);
+    if (m_deleteLater)
+        deleteLater();
     m_pages.clear();
-    deleteLater();
     emit m_document->pageSetupChanged();
 }

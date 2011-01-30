@@ -267,30 +267,30 @@ void CalendarTester::workIntervals()
     QVERIFY(t.findDay(wdate) == day);
     
     AppointmentIntervalList lst = t.workIntervals( before, after, 100. );
-    QCOMPARE( lst.count(), 1 );
-    QCOMPARE( wdate, lst.values().first().startTime().date() );
-    QCOMPARE( t1, lst.values().first().startTime().time() );
-    QCOMPARE( wdate, lst.values().first().endTime().date() );
-    QCOMPARE( t2, lst.values().first().endTime().time() );
-    QCOMPARE( 100., lst.values().first().load() );
+    QCOMPARE( lst.map().count(), 1 );
+    QCOMPARE( wdate, lst.map().values().first().startTime().date() );
+    QCOMPARE( t1, lst.map().values().first().startTime().time() );
+    QCOMPARE( wdate, lst.map().values().first().endTime().date() );
+    QCOMPARE( t2, lst.map().values().first().endTime().time() );
+    QCOMPARE( 100., lst.map().values().first().load() );
     
     QTime t3( 12, 0, 0 );
     day->addInterval( TimeInterval( t3, length ) );
     
     lst = t.workIntervals( before, after, 100. );
     Debug::print( lst );
-    QCOMPARE( lst.count(), 2 );
-    QCOMPARE( wdate, lst.values().first().startTime().date() );
-    QCOMPARE( t1, lst.values().first().startTime().time() );
-    QCOMPARE( wdate, lst.values().first().endTime().date() );
-    QCOMPARE( t2, lst.values().first().endTime().time() );
-    QCOMPARE( 100., lst.values().first().load() );
+    QCOMPARE( lst.map().count(), 2 );
+    QCOMPARE( wdate, lst.map().values().first().startTime().date() );
+    QCOMPARE( t1, lst.map().values().first().startTime().time() );
+    QCOMPARE( wdate, lst.map().values().first().endTime().date() );
+    QCOMPARE( t2, lst.map().values().first().endTime().time() );
+    QCOMPARE( 100., lst.map().values().first().load() );
     
-    QCOMPARE( wdate, lst.values().at( 1 ).startTime().date() );
-    QCOMPARE( t3, lst.values().at( 1 ).startTime().time() );
-    QCOMPARE( wdate, lst.values().at( 1 ).endTime().date() );
-    QCOMPARE( t3.addMSecs( length ), lst.values().at( 1 ).endTime().time() );
-    QCOMPARE( 100., lst.values().at( 1 ).load() );
+    QCOMPARE( wdate, lst.map().values().at( 1 ).startTime().date() );
+    QCOMPARE( t3, lst.map().values().at( 1 ).startTime().time() );
+    QCOMPARE( wdate, lst.map().values().at( 1 ).endTime().date() );
+    QCOMPARE( t3.addMSecs( length ), lst.map().values().at( 1 ).endTime().time() );
+    QCOMPARE( 100., lst.map().values().at( 1 ).load() );
 }
 
 void CalendarTester::workIntervalsFullDays()
@@ -310,8 +310,8 @@ void CalendarTester::workIntervalsFullDays()
     DateTime start = day->start();
     DateTime end = day->end();
 
-    QCOMPARE( t.workIntervals( start, end, 100. ).count(), 1 );
-    QCOMPARE( t.workIntervals( before, after, 100. ).count(), 1 );
+    QCOMPARE( t.workIntervals( start, end, 100. ).map().count(), 1 );
+    QCOMPARE( t.workIntervals( before, after, 100. ).map().count(), 1 );
 
     day = new CalendarDay( wdate.addDays( 1 ), CalendarDay::Working );
     day->addInterval( TimeInterval( QTime( 0, 0, 0), 24*60*60*1000 ) );
@@ -319,8 +319,8 @@ void CalendarTester::workIntervalsFullDays()
 
     end = day->end();
 
-    QCOMPARE( t.workIntervals( start, end, 100. ).count(), 2 );
-    QCOMPARE( t.workIntervals( before, after, 100. ).count(), 2 );
+    QCOMPARE( t.workIntervals( start, end, 100. ).map().count(), 2 );
+    QCOMPARE( t.workIntervals( before, after, 100. ).map().count(), 2 );
 
     day = new CalendarDay( wdate.addDays( 2 ), CalendarDay::Working );
     day->addInterval( TimeInterval( QTime( 0, 0, 0), 24*60*60*1000 ) );
@@ -328,8 +328,8 @@ void CalendarTester::workIntervalsFullDays()
 
     end = day->end();
 
-    QCOMPARE( t.workIntervals( start, end, 100. ).count(), 3 );
-    QCOMPARE( t.workIntervals( before, after, 100. ).count(), 3 );
+    QCOMPARE( t.workIntervals( start, end, 100. ).map().count(), 3 );
+    QCOMPARE( t.workIntervals( before, after, 100. ).map().count(), 3 );
 
 }
 
