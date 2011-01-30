@@ -428,10 +428,10 @@ public:
                             const StyleManager* manager) const;
 
 
-    bool operator==(const CustomStyle& other) const;
-    inline bool operator!=(const CustomStyle& other) const {
-        return !operator==(other);
-    }
+    //bool operator==(const CustomStyle& other) const;
+    //inline bool operator!=(const CustomStyle& other) const {
+    //    return !operator==(other);
+    //}
 
     /**
      * @return the number of references to this style.
