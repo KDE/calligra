@@ -164,5 +164,6 @@ KWDocument.h
 KWApplicationConfig.h
 frames/KWFrameLayout.h
 KWViewMode.h
+KWView.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

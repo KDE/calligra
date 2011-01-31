@@ -385,4 +385,4 @@ void KoCellTool::setCaseSensitive(bool isSensitive)
     m_searchCaseSensitive=isSensitive;
 }
 
-#include "KoCellTool.moc"
+//#include "KoCellTool.moc"

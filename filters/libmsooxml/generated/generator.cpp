@@ -143,7 +143,8 @@ int main()
                 QString defaults = handler.defaultEquations().replace('"', "\\\"");
                 pathEquations = pathEquations.replace('"', "\\\"");
                 shapeDefinition = shapeDefinition.replace('"', "\\\"");
-                outStream << "equations[\"" << currentShapeName << "\"]=\"" << defaults << shapeDefinition << pathEquations << "\";" << "\n";
+                outStream << "equations[\"" << currentShapeName << "\"]=\"" << defaults << "\"\"" << shapeDefinition << "\"\""
+                          << pathEquations << "\";" << "\n";
                 shapeDefinition = "";
                 pathEquations = "";
                 shapeAttributes = shapeAttributes.replace('"', "\\\"");

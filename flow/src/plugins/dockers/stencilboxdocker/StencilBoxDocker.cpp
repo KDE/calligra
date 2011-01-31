@@ -127,7 +127,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
         loadShapeCollections();
     }
     
-    //loadDefaultShapes();
+    loadDefaultShapes();
     regenerateProxyMap();
     m_treeWidget->setFamilyMap(m_proxyMap);
 
