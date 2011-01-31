@@ -199,7 +199,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     if (!asChar) {
         // These seem to be decent defaults
-        m_currentDrawStyle->addProperty("style:horizonal-pos", "from-left");
+        m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
         m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
     }
 #endif

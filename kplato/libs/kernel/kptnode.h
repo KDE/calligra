@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -458,7 +458,7 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc);
 
-    bool isBaselined( long int id ) const;
+    bool isBaselined( long int id = BASELINESCHEDULE ) const;
     /**
      * Return schedule with @p id
      * If @p id == CURRENTSCHEDULE, return m_currentSchedule

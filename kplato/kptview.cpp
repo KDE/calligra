@@ -840,6 +840,7 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
 
     connect( handler->scheduleEditor(), SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
     connect( handler->scheduleEditor(), SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+    connect( handler->scheduleEditor(), SIGNAL( moveScheduleManager(ScheduleManager*, ScheduleManager*, int)), SLOT(slotMoveScheduleManager(ScheduleManager*, ScheduleManager*, int)));
 
     connect( handler->scheduleEditor(), SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
@@ -1664,6 +1665,15 @@ void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
         return;
     }
     DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( *project, sm, i18n( "Delete schedule %1", sm->name() ) );
+    getPart() ->addCommand( cmd );
+}
+
+void View::slotMoveScheduleManager( ScheduleManager *sm, ScheduleManager *parent, int index )
+{
+    if ( sm == 0 ) {
+        return;
+    }
+    MoveScheduleManagerCmd *cmd =  new MoveScheduleManagerCmd( sm, parent, index, i18n( "Move schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
 }
 

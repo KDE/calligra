@@ -23,6 +23,7 @@
 #include "workbook.h"
 #include "utils.h"
 #include "objects.h"
+#include "conditionals.h"
 
 #include <PointStorage.h>
 

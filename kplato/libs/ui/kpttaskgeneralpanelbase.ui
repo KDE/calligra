@@ -125,7 +125,7 @@ This is not limited to persons available in a resource group but can be anyone. 
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="schedulingGroup">
      <property name="whatsThis">
       <string>Scheduling Configuration. These settings affect the actual scheduling of the task.
 
@@ -432,15 +432,15 @@ The estimation can be either effort based or duration based. If it is effort bas
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>DurationSpinBox</class>
