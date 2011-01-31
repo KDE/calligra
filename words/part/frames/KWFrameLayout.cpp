@@ -54,10 +54,8 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
 //kDebug() <<"createNewFramesForPage" << pageNumber;
     m_setup = false; // force reindexing of types
     KWPage page = m_pageManager->page(pageNumber);
-    if (!page.isValid()) {
-        kDebug()<<"Invalid pageNumber="<<pageNumber;
-        return;
-    }
+    Q_ASSERT(page.isValid());
+    if (!page.isValid()) return; // page already deleted, probably.
 
     // Header footer handling.
     // first make a list of all types.
@@ -319,16 +317,18 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::EvenPagesHeaderTextFrameSet: {
             header = static_cast<KWTextFrame *>(frame);
             minimumHeight[1] = qMax((qreal)10, page.pageStyle().headerMinimumHeight());
-            minimumHeight[2] = qMax((qreal)0, page.pageStyle().headerDistance());
             requestedHeight[1] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
+            if (minimumHeight[1] < page.pageStyle().headerDistance())
+                minimumHeight[2] = page.pageStyle().headerDistance() - minimumHeight[1];
             break;
         }
         case KWord::OddPagesFooterTextFrameSet:
         case KWord::EvenPagesFooterTextFrameSet: {
             footer = static_cast<KWTextFrame *>(frame);
             minimumHeight[7] = qMax((qreal)10, page.pageStyle().footerMinimumHeight());
-            minimumHeight[6] = qMax((qreal)0, page.pageStyle().footerDistance());
             requestedHeight[7] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
+            if(minimumHeight[7] < page.pageStyle().footerDistance())
+                minimumHeight[6] = page.pageStyle().footerDistance() - minimumHeight[7];
             break;
         }
         case KWord::MainTextFrameSet: {
