@@ -807,7 +807,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
     if (page.pageSide() == KWPage::PageSpread)
         pageDiff--;
     if (pageDiff >= (lastFrame->frameOnBothSheets() ? 1 : 2)) {
-        kDebug() << "frameSet=" << fs << "pageDiff=" << pageDiff << "pageCount=" << m_pageManager.pageCount() << "pageNumber=" << page.pageNumber();
+        //kDebug() << "frameSet=" << fs << "pageDiff=" << pageDiff << "pageCount=" << m_pageManager.pageCount() << "pageNumber=" << page.pageNumber();
 
         // its enough to just create a new frame.
         m_frameLayout.createNewFrameForPage(fs, page.pageNumber()
@@ -818,7 +818,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
         if (last.isValid())
             afterPageNum = last.pageNumber();
 
-        kDebug() << "frameSet=" << fs << "pageDiff=" << pageDiff << "pageCount=" << m_pageManager.pageCount() << "pageNumber=" << page.pageNumber() << "afterPageNum=" << afterPageNum;
+        //kDebug() << "frameSet=" << fs << "pageDiff=" << pageDiff << "pageCount=" << m_pageManager.pageCount() << "pageNumber=" << page.pageNumber() << "afterPageNum=" << afterPageNum;
 
         KWPageInsertCommand cmd(this, afterPageNum, masterPageName);
         cmd.redo(); // does also schedule an update using the PageProcessingQueue
@@ -995,15 +995,17 @@ void PageProcessingQueue::process()
 {
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
-    const QList<int> pages = m_pages;
+    QList<int> pages = m_pages;
     m_triggered = false;
     m_pages.clear();
 
-    //qSort(pages);
-    kDebug(32001) << "pages=" << pages;
+    QTime timer;
+    timer.start();
+    qSort(pages.begin(), pages.end());
     foreach (int pageNumber, pages) {
         m_document->m_frameLayout.createNewFramesForPage(pageNumber);
     }
+    kDebug(32001) << "pages=" << pages << "elapsed=" << timer.elapsed();
 
     if (docIsEmpty)
         m_document->setEmpty();
