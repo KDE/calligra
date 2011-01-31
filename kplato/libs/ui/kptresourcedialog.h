@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2010 Dag Andersen <kplato@kde.org>
+   Copyright (C) 2003 - 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,7 +42,7 @@ class MacroCommand;
 class ResourceDialogImpl : public QWidget, public Ui_ResourceDialogBase {
     Q_OBJECT
 public:
-    explicit ResourceDialogImpl( const Project &m_project, Resource &resource, QWidget *parent );
+    explicit ResourceDialogImpl( const Project &m_project, Resource &resource, bool baselined, QWidget *parent );
 
 public slots:
     void slotChanged();
