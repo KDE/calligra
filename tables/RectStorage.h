@@ -62,7 +62,7 @@ class RectStorageLoader;
  * \note For data assigned to points use PointStorage.
  */
 template<typename T>
-class CALLIGRA_TABLES_ODF_EXPORT RectStorage
+class RectStorage
 {
 public:
     explicit RectStorage(Map* map);

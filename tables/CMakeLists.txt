@@ -375,3 +375,8 @@ install( FILES
     database/Database.h
     database/Filter.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables/database COMPONENT Devel)
+install( FILES
+    commands/AbstractRegionCommand.h
+    commands/DataManipulators.h
+    commands/SortManipulator.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/tables/commands COMPONENT Devel)

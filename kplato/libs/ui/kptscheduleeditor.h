@@ -109,6 +109,8 @@ signals:
     */
     void scheduleSelectionChanged( ScheduleManager *sm );
     
+    void moveScheduleManager( ScheduleManager *sm, ScheduleManager *newparent, int index );
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -129,7 +131,8 @@ private slots:
     void slotAddSchedule();
     void slotAddSubSchedule();
     void slotDeleteSelection();
-    
+    void slotMoveLeft();
+
 private:
     ScheduleTreeView *m_view;
 
@@ -138,7 +141,7 @@ private:
     KAction *actionAddSchedule;
     KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;
-    
+    KAction *actionMoveLeft;
 };
 
 

@@ -63,6 +63,10 @@ KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags
 void KPrPageLayoutDocker::setView( KPrView* view )
 {
     Q_ASSERT( view );
+    if (m_view) {
+        // don't disconnect the m_view->proxyObject as the object is already deleted
+        disconnect(m_layoutsView, 0, this, 0);
+    }
     m_view = view;
     connect( m_view->proxyObject, SIGNAL( activePageChanged() ),
              this, SLOT( slotActivePageChanged() ) );

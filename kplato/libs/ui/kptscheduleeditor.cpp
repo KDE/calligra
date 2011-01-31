@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006-2007 Dag Andersen kplato@kde.org>
+  Copyright (C) 2006-2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -229,6 +229,7 @@ void ScheduleEditor::slotEnableActions()
         actionDeleteSelection->setEnabled( false );
         actionCalculateSchedule->setEnabled( false );
         actionBaselineSchedule->setEnabled( false );
+        actionMoveLeft->setEnabled( false );
         return;
     }
     QModelIndexList lst = m_view->selectedRows();
@@ -238,6 +239,7 @@ void ScheduleEditor::slotEnableActions()
         actionDeleteSelection->setEnabled( false );
         actionCalculateSchedule->setEnabled( false );
         actionBaselineSchedule->setEnabled( false );
+        actionMoveLeft->setEnabled( false );
         return;
     }
     if ( lst.count() > 1 ) {
@@ -246,6 +248,7 @@ void ScheduleEditor::slotEnableActions()
         actionDeleteSelection->setEnabled( false );
         actionCalculateSchedule->setEnabled( false );
         actionBaselineSchedule->setEnabled( false );
+        actionMoveLeft->setEnabled( false );
         return;
     }
     // one and only one manager selected
@@ -257,10 +260,12 @@ void ScheduleEditor::slotEnableActions()
     actionCalculateSchedule->setEnabled( ! ( sm->isBaselined() || sm->isChildBaselined() ) );
 
     actionBaselineSchedule->setIcon( KIcon( ( sm->isBaselined() ? "view-time-schedule-baselined-remove" : "view-time-schedule-baselined-add" ) ) );
-    
+
     // enable if scheduled and noone else is baselained
     bool en = sm->isScheduled() && ( sm->isBaselined() || ! m_view->project()->isBaselined() );
     actionBaselineSchedule->setEnabled( en );
+
+    actionMoveLeft->setEnabled( sm->parentManager() );
 }
 
 void ScheduleEditor::setupGui()
@@ -296,6 +301,11 @@ void ScheduleEditor::setupGui()
     actionCollection()->addAction("schedule_baseline", actionBaselineSchedule );
     connect( actionBaselineSchedule, SIGNAL( triggered( bool ) ), SLOT( slotBaselineSchedule() ) );
     addAction( name, actionBaselineSchedule );
+
+    actionMoveLeft  = new KAction(KIcon( "go-first" ), i18nc( "@action", "Detach" ), this );
+    actionCollection()->addAction("schedule_move_left", actionMoveLeft );
+    connect( actionMoveLeft, SIGNAL( triggered( bool ) ), SLOT( slotMoveLeft() ) );
+    addAction( name, actionMoveLeft );
 
 
     // Add the context menu actions for the view options
@@ -412,6 +422,21 @@ void ScheduleEditor::slotDeleteSelection()
     ScheduleManager *sm = m_view->selectedManager();
     if ( sm ) {
         emit deleteScheduleManager( m_view->project(), sm );
+    }
+}
+
+void ScheduleEditor::slotMoveLeft()
+{
+    ScheduleManager *sm = m_view->selectedManager();
+    if ( sm ) {
+        int index = -1;
+        for ( ScheduleManager *m = sm; m != 0; m = m->parentManager() ) {
+            if ( m->parentManager() == 0 ) {
+                 index = m->project().indexOf( m ) + 1;
+            }
+        }
+        kDebug()<<sm->name()<<index;
+        emit moveScheduleManager( sm, 0, index );
     }
 }
 
