@@ -346,7 +346,10 @@ void KWTextDocumentLayout::layout()
                     } while (lastFrame == 0);
                     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(lastFrame->shape()->userData());
                     Q_ASSERT(data);
-                    qreal spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
+                    // Now we probably need to shrink again to free space that is unused in the frame. Header/footer are special in that
+                    // we only change the minimum height but not there actual height like with every other frameset.
+                    qreal height = KWord::isHeaderFooter(m_frameSet) ? lastFrame->minimumFrameHeight() : lastFrame->shape()->size().height();
+                    qreal spaceLeft = height - bottomOfText + data->documentOffset();
                     data->wipe();
                     if (spaceLeft > 3) {
                         // note that this may delete the data and lastFrame !!  Do not access them after this point.
