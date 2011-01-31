@@ -194,11 +194,11 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
     if (KWord::isHeaderFooter(this)) {
         KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
         frame->setMinimumFrameHeight(frame->minimumFrameHeight() + textHeight + 1E-6);
-        //kDebug()<<"Header/Footer frameSet="<<this<<"lastFrame="<<lastFrame<<"allowLayout="<<allowLayout()<<"textHeight="<<textHeight;
+        //kDebug(32001)<<"Header/Footer frameSet="<<this<<"lastFrame="<<lastFrame<<"allowLayout="<<allowLayout()<<"textHeight="<<textHeight;
         if (allowLayout())
             emit decorationFrameResize(this);
     } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
-        //kDebug()<<"AutoCreateNewFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"ReconnectNewFrame="<<(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)<<"textHeight="<<textHeight;
+        //kDebug(32001)<<"AutoCreateNewFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"ReconnectNewFrame="<<(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)<<"textHeight="<<textHeight;
         if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
             emit moreFramesNeeded(this);
     } else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior
@@ -217,22 +217,23 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
         shape->update(QRectF(0.0, size.height(), size.width(), textHeight + 1E-6));
         lastFrame->allowToGrow();
         
-        //kDebug()<<"AutoExtendFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"size="<<size<<"orig="<<orig<<"textHeight="<<textHeight;;
+        //kDebug(32001)<<"AutoExtendFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"size="<<size<<"orig="<<orig<<"textHeight="<<textHeight;;
     }
 }
 
 void KWTextFrameSet::spaceLeft(qreal excessHeight)
 {
-//kDebug() <<"KWTextFrameSet::spaceLeft" << excessHeight;
     Q_ASSERT(excessHeight >= 0);
     if (m_frames.count() == 0)
         return;
     if (KWord::isHeaderFooter(this)) {
         KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
+        kDebug(32001) <<"KWTextFrameSet::spaceLeft" << frame->minimumFrameHeight() << excessHeight;
         frame->setMinimumFrameHeight(frame->minimumFrameHeight() - excessHeight);
         emit  decorationFrameResize(this);
         return;
     }
+    //kDebug(32001) <<"KWTextFrameSet::spaceLeft" << excessHeight;
     QList<KWFrame*>::Iterator iter = --m_frames.end();
     do {
         KWTextFrame *tf = dynamic_cast<KWTextFrame*>(*(iter));
@@ -249,7 +250,7 @@ void KWTextFrameSet::spaceLeft(qreal excessHeight)
 
 void KWTextFrameSet::framesEmpty(int emptyFrames)
 {
-    //kDebug() <<"KWTextFrameSet::framesEmpty" << emptyFrames;
+    //kDebug(32001) <<"KWTextFrameSet::framesEmpty" << emptyFrames;
     if (m_pageManager == 0) // be lazy; just refuse to delete frames if we don't know which are on which page
         return;
     if (KWord::isHeaderFooter(this)) // then we are deleted by the frameManager
