@@ -103,7 +103,7 @@ class Context
 class ValueCache
 {
 public:
-    ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ){}
+    ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), unmodified( true ), negativeWidth( false ){}
     class ResultWrapper
     {
         public:
@@ -125,6 +125,10 @@ public:
             const QString m_name;
       
     };
+    bool hasNegativeWidth()
+    {
+        return negativeWidth;
+    }
     qreal value( const QString& name, bool& valid ) const
     {
         valid = true;
@@ -174,6 +178,8 @@ public:
         result[ "b" ] = rect.bottom();
         result[ "w" ] = rect.width();
         result[ "h" ] = rect.height();
+        result[ "ctrX" ] = rect.center().rx();
+        result[ "ctrY" ] = rect.center().ry();
         return result;
     }
 private:
@@ -191,6 +197,10 @@ private:
             return true;
         else if ( name == "b" )
             return true;
+        else if ( name == "ctrX" )
+            return true;
+        else if ( name == "ctrY" )
+            return true;
         else
             return false;
     }
@@ -198,6 +208,8 @@ private:
     void setRectValue( const QString& name, qreal value );
     QMap< QString, qreal > mapping;
     QRectF rect;
+    bool unmodified;
+    bool negativeWidth;
 };
 
 /****************************************************************************************************
@@ -314,6 +326,8 @@ class AbstractAtom : public QSharedData
         QVector< QExplicitlySharedDataPointer<AbstractAtom> > children() const;
         void addChild(AbstractAtom* node);
         void addChild(QExplicitlySharedDataPointer<AbstractAtom> node);
+        void insertChild(int index, AbstractAtom* node);
+        void insertChild(int index, QExplicitlySharedDataPointer<AbstractAtom> node);
         void removeChild(QExplicitlySharedDataPointer<AbstractAtom> node);
     protected:
         QExplicitlySharedDataPointer<AbstractAtom> m_parent;
@@ -602,6 +616,7 @@ class AbstractAlgorithm {
         virtual void virtualDoInit();
         virtual void virtualDoLayout();
         virtual void virtualDoLayoutChildren();
+        void applyConstraints();
     private:
         Context* m_context;
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_layout;
