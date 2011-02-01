@@ -1,4 +1,4 @@
-#project(kplatowork)
+#project(planwork)
 
 add_subdirectory( templates )
 add_subdirectory( pics )
@@ -10,7 +10,7 @@ include_directories(${KPLATO_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CU
 
 ########### KPlatoWork private library ###############
 
-set(kplatoworkfactory_LIB_SRCS
+set(planworkfactory_LIB_SRCS
     factory.cpp
     mainwindow.cpp
     part.cpp
@@ -27,15 +27,15 @@ set(kplatoworkfactory_LIB_SRCS
     ../kptpackage.cpp
 )
 
-kde4_add_ui_files(kplatoworkfactory_LIB_SRCS
+kde4_add_ui_files(planworkfactory_LIB_SRCS
     packagesettings.ui
     taskcompletionpanel.ui
 )
 
-kde4_add_library(kplatoworkfactory SHARED ${kplatoworkfactory_LIB_SRCS})
+kde4_add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS})
 
 target_link_libraries(
-    kplatoworkfactory
+    planworkfactory
     kplatokernel
     kplatomodels
     kplatoui
@@ -45,58 +45,58 @@ target_link_libraries(
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
-set_target_properties(kplatoworkfactory PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatoworkfactory ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS planworkfactory ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### KPlatoWork part ###############
 
-set(kplatoworkpart_PART_SRCS factoryinit.cpp )
+set(planworkpart_PART_SRCS factoryinit.cpp )
 
 
-kde4_add_plugin(kplatoworkpart ${kplatoworkpart_PART_SRCS})
+kde4_add_plugin(planworkpart ${planworkpart_PART_SRCS})
 
-target_link_libraries(kplatoworkpart ${QT_QTCORE_LIBRARY} ${KDE4_KPARTS_LIBS} kplatoworkfactory)
+target_link_libraries(planworkpart ${QT_QTCORE_LIBRARY} ${KDE4_KPARTS_LIBS} planworkfactory)
 
-install(TARGETS kplatoworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS planworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### KPlatoWork application ###############
 
-set(kplatoworkapp_LIB_SRCS application.cpp )
+set(planworkapp_LIB_SRCS application.cpp )
 
 
-kde4_add_library(kplatoworkapp  SHARED ${kplatoworkapp_LIB_SRCS})
+kde4_add_library(planworkapp  SHARED ${planworkapp_LIB_SRCS})
 
 target_link_libraries(
-    kplatoworkapp
-    kplatoworkfactory
+    planworkapp
+    planworkfactory
     kplatokernel
     komain
     ${QT_QT3SUPPORT_LIBRARY}   
     )
 
-set_target_properties(kplatoworkapp PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(planworkapp PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatoworkapp ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS planworkapp ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-########### KPlatoWork executable ###############
+########### Calligra PlanWork executable ###############
 
-set(kplatowork_KDEINIT_SRCS main.cpp)
+set(calligraplanwork_KDEINIT_SRCS main.cpp)
 
-kde4_add_kdeinit_executable( kplatowork ${kplatowork_KDEINIT_SRCS})
+kde4_add_kdeinit_executable(calligraplanwork ${calligraplanwork_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kplato.work")
-   set_target_properties(kplatowork PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPlato Work 2")
+   set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.plan.work")
+   set_target_properties(calligraplanwork PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Plan Work")
 endif (Q_WS_MAC)
 
 target_link_libraries(
-    kdeinit_kplatowork
-    kplatoworkapp
+    kdeinit_calligraplanwork
+    planworkapp
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
@@ -104,19 +104,16 @@ target_link_libraries(
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
-install(TARGETS kdeinit_kplatowork  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( kplatowork kdeinit_kplatowork )
+target_link_libraries( calligraplanwork kdeinit_calligraplanwork )
 
-install(TARGETS kplatowork  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligraplanwork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
 install( FILES  planworkpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  planwork.rc planwork_readonly.rc planwork_mainwindow.rc DESTINATION ${DATA_INSTALL_DIR}/planwork)
-install( FILES  kplatoworkrc DESTINATION ${CONFIG_INSTALL_DIR})
-install( PROGRAMS  kplatowork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-
-
-
+install( FILES  planworkrc DESTINATION ${CONFIG_INSTALL_DIR})
+install( PROGRAMS  planwork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 

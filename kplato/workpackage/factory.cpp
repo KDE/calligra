@@ -73,11 +73,10 @@ const KComponentData &Factory::global()
         s_global = new KComponentData( aboutData() );
 
         // Add any application-specific resource directories here
-        s_global->dirs()->addResourceType("kplatowork_template", "data", "kplatowork/templates/");
-        s_global->dirs()->addResourceType("expression", "data", "kplatowork/expression/");
-        s_global->dirs()->addResourceType("projects", "data", "kplatowork/projects/");
+        s_global->dirs()->addResourceType("planwork_template", "data", "planwork/templates/");
+        s_global->dirs()->addResourceType("projects", "data", "planwork/projects/");
 
-//        s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
+        s_global->dirs()->addResourceType("kplatoprojects", "data", "kplatowork/projects/");
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");

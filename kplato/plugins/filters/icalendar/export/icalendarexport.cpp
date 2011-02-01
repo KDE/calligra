@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,23 +57,22 @@ ICalendarExport::ICalendarExport(QObject* parent, const QVariantList &)
 KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug() << from << to;
-    if ((from != "application/x-vnd.kde.kplato") || (to != "text/calendar")) {
+    if ( ( from != "application/x-vnd.kde.plan" ) || ( to != "text/calendar" ) ) {
         return KoFilter::NotImplemented;
     }
-    const Part *part = 0;
     bool batch = false;
-    if (m_chain->manager()) {
+    if ( m_chain->manager() ) {
         batch = m_chain->manager()->getBatchMode();
     }
-    if (batch) {
+    if ( batch ) {
         //TODO
         kDebug() << "batch";
-    } else {
-        //kDebug()<<"online";
-        part = qobject_cast<Part*>(m_chain->inputDocument());
+        return KoFilter::UsageError;
     }
+    kDebug()<<"online:"<<m_chain->inputDocument();
+    Part *part = dynamic_cast<Part*>( m_chain->inputDocument() );
     if (part == 0) {
-        kError() << "Cannot open KPlato document";
+        kError() << "Cannot open Plan document";
         return KoFilter::InternalError;
     }
     if (m_chain->outputFile().isEmpty()) {
