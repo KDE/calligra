@@ -36,7 +36,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-
+#include <KIcon>
 #include <kdebug.h>
 
 namespace KPlato
@@ -44,7 +44,8 @@ namespace KPlato
 
 //--------------------------------------
 AccountModel::AccountModel()
-    : QObject()
+    : QObject(),
+    m_project( 0 )
 {
 }
 
@@ -94,7 +95,15 @@ QVariant AccountModel::name( const Account *a, int role ) const
         case Qt::WhatsThisRole:
             return QVariant();
          case Qt::CheckStateRole:
-             return a->isDefaultAccount() ? Qt::Checked : Qt::Unchecked;
+             if ( a->isDefaultAccount() ) {
+                 return m_project && m_project->isBaselined() ? Qt::PartiallyChecked : Qt::Checked;
+             }
+             return  m_project && m_project->isBaselined() ? QVariant() : Qt::Unchecked;
+         case Qt::DecorationRole:
+             if ( a->isBaselined() ) {
+                return KIcon( "view-time-schedule-baselined" );
+             }
+             break;
     }
     return QVariant();
 }
@@ -197,6 +206,7 @@ void AccountItemModel::setProject( Project *project )
         disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
     }
     m_project = project;
+    m_model.m_project = project;
     if ( project ) {
         Accounts *acc = &( project->accounts() );
         kDebug()<<acc;
@@ -213,15 +223,22 @@ void AccountItemModel::setProject( Project *project )
 Qt::ItemFlags AccountItemModel::flags( const QModelIndex &index ) const
 {
     Qt::ItemFlags flags = ItemModelBase::flags( index );
-    if ( !m_readWrite ) {
+    if ( ! m_readWrite ) {
         return flags &= ~Qt::ItemIsEditable;
     }
-    if ( !index.isValid() ) {
+    if ( ! index.isValid() || ! m_project ) {
         return flags;
     }
-    if ( account ( index ) ) {
+    Account *a = account( index );
+    if ( a ) {
         switch ( index.column() ) {
-            case AccountModel::Name: flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable ); break;
+            case AccountModel::Name: {
+                if ( ! a->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                    flags |= Qt::ItemIsUserCheckable;
+                }
+                break;
+            }
             default: flags |= Qt::ItemIsEditable; break;
         }
     }

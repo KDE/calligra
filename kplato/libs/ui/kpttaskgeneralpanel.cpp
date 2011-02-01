@@ -57,6 +57,10 @@ TaskGeneralPanel::TaskGeneralPanel(Project &project, Task &task, QWidget *p, con
     wbslabel->setWhatsThis( s );
     wbsfield->setWhatsThis( s );
 
+    if ( task.isBaselined( BASELINESCHEDULE ) ) {
+        schedulingGroup->setEnabled( false );
+    }
+
 }
 
 void TaskGeneralPanel::setStartValues( Task &task ) {

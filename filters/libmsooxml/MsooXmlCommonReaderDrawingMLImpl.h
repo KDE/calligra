@@ -1605,6 +1605,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_prevListLevel = m_currentListLevel = 0;
 #endif
 
+    QString fontSize = QString();
+    QString bulletColor = QString();
+
     // Creating a list ouf of what we have, note that ppr maybe overwrite the list style if it wishes
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
@@ -1646,6 +1649,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 d->textBoxHasContent = true;
 #endif
                 TRY_READ(DrawingML_r)
+                if (fontSize.isEmpty()) {
+                    fontSize = m_currentTextStyle.property("fo:font-size");
+                }
+                if (bulletColor.isEmpty()) {
+                    bulletColor = m_currentTextStyle.property("fo:color");
+                }
             }
             else if (QUALIFIED_NAME_IS(fld)) {
                 rRead = true;
@@ -1669,7 +1678,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         // and thus m_currentTextStyle is not used
         inheritDefaultTextStyle(m_currentParagraphStyle);
         inheritTextStyle(m_currentParagraphStyle);
-        QString fontSize = m_currentTextStyle.property("fo:font-size", KoGenStyle::TextType);
+        fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
         if (!fontSize.isEmpty()) {
             fontSize.remove("pt");
             qreal realSize = fontSize.toDouble();
@@ -1694,22 +1703,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
         m_previousListWasAltered = false;
     }
+
     if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
         m_listStylePropertiesAltered = true;
-        QString textSize = m_currentTextStyle.property("fo:font-size");
-        if (!textSize.isEmpty()) {
-            textSize = textSize.left(textSize.length() - 2); // removes 'pt'
-            qreal convertedSize = textSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
+        if (!fontSize.isEmpty()) {
+            fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
+            qreal convertedSize = fontSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
+    /* Commented out for now, as this creates completely new lists which is not wanted
+       Maybe the correct behaviour would be to default to text color of the text in calligra instead of using this
     if (m_currentBulletProperties.bulletColor() == "UNUSED") {
         m_listStylePropertiesAltered = true;
-        QString bulletColor = m_currentTextStyle.property("fo:color");
         if (!bulletColor.isEmpty()) {
             m_currentBulletProperties.setBulletColor(bulletColor);
         }
-    }
+    }*/
+
     if (m_listStylePropertiesAltered) {
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
@@ -1876,7 +1887,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
     // elements
-    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
     body = rBuf.originalWriter();
 
@@ -1886,6 +1896,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
 
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
     QString fontSize = m_currentTextStyle.property("fo:font-size");

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -91,6 +92,8 @@ public:
     void insertChildren();
     int indexOf( Account *account ) const { return m_accountList.indexOf( account ); }
     
+    bool isBaselined( long id = BASELINESCHEDULE ) const;
+
     bool load(KoXmlElement &element, Project &project);
     void save(QDomElement &element) const;
     
@@ -133,7 +136,9 @@ public:
             m_shutdown = cp->m_shutdown;
         }
         ~CostPlace();
-        
+
+        bool isBaselined( long id = BASELINESCHEDULE ) const;
+
         bool isEmpty() { return !(m_running || m_startup || m_shutdown); }
         Node *node() const { return m_node; }
         void setNode( Node *node );
