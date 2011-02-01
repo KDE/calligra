@@ -101,9 +101,9 @@ QVariant NodeModel::name( const Node *node, int role ) const
             }
             switch ( node->type() ) {
                 case Node::Type_Task:
-                    return m_project->config().taskNormalColor();
+                    return static_cast<const Task*>( node )->completion().isFinished() ? m_project->config().taskFinishedColor() : m_project->config().taskNormalColor();
                 case Node::Type_Milestone:
-                    return m_project->config().milestoneNormalColor();
+                    return static_cast<const Task*>( node )->completion().isFinished() ? m_project->config().milestoneFinishedColor() : m_project->config().milestoneNormalColor();
                 case Node::Type_Summarytask:
                     return m_project->config().summaryTaskLevelColor( node->level() );
                 default:
