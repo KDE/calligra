@@ -57,3 +57,7 @@ In no partivular order or priority:
     Task splitting
     Non-mandatory resources
     Different types of schedule optimization: Cost, Resource leveling, etc
+
+* Fix d-n-d of vcards from kontact into resources
+
+* Use holidays file from kontact

@@ -46,13 +46,12 @@ public:
     void clear();
 
     //! @return true if this color style is valid
-    bool isValid(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
+    bool isValid(const MSOOXML::DrawingMLTheme *themes) const;
 
     //! @return value of this color style; for computing rgb, indexed, tint and theme attributes are used
-//! @todo use indexed
     QColor value(const MSOOXML::DrawingMLTheme *themes) const;
 
-    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, const char* debugElement);
+    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, const QVector<QString>& colors, const char* debugElement);
 
     bool automatic; //!< default: false
     int indexed; //!< default: -1
@@ -60,7 +59,7 @@ public:
     qreal tint; //!< tint value applied to the color, default is -1
     int theme; //!< default: -1
 
-    QColor themeColor(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
+    QColor themeColor(const MSOOXML::DrawingMLTheme *themes) const;
 };
 
 //! 22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
@@ -422,8 +421,10 @@ protected:
 class XlsxXmlStylesReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlStylesReaderContext(XlsxStyles& _styles);
+    XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart);
     XlsxStyles* styles;
+    bool skipFirstPart;
+    QVector<QString> colorIndices;
 };
 
 //! A class reading MSOOXML XLSX markup - styles.xml part.
@@ -473,6 +474,9 @@ protected:
     KoFilter::ConversionStatus read_left();
     KoFilter::ConversionStatus read_right();
     KoFilter::ConversionStatus read_diagonal();
+    KoFilter::ConversionStatus read_colors();
+    KoFilter::ConversionStatus read_indexedColors();
+    KoFilter::ConversionStatus read_rgbColor();
 
     uint m_fontStyleIndex;
     uint m_fillStyleIndex;
@@ -486,6 +490,8 @@ protected:
     XlsxFillStyle *m_currentFillStyle;
     XlsxCellFormat *m_currentCellFormat;
     XlsxBorderStyles *m_currentBorderStyle;
+
+    int m_colorIndex;
 
 private:
     void init();

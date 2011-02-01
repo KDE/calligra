@@ -118,23 +118,6 @@ kDebug() << tint << tintValue;
 
 //----------------------------------------------------------
 
-// This is default array of colors from MS
-const char* INDEXED_ARRAY[64] = {
-    "000000", "FFFFFF", "FF0000", "00FF00", "0000FF",
-    "FFFF00", "FF00FF", "00FFFF", "000000", "FFFFFF",
-    "FF0000", "00FF00", "0000FF", "FFFF00", "FF00FF",
-    "00FFFF", "800000", "008000", "000080", "808000",
-    "800080", "008080", "C0C0C0", "808080", "9999FF",
-    "993366", "FFFFCC", "CCFFFF", "660066", "FF8080",
-    "0066CC", "CCCCFF", "000080", "FF00FF", "FFFF00",
-    "00FFFF", "800080", "800000", "008080", "0000FF",
-    "00CCFF", "CCFFFF", "CCFFCC", "FFFF99", "99CCFF",
-    "FF99CC", "CC99FF", "FFCC99", "3366FF", "33CCCC",
-    "99CC00", "FFCC00", "FF9900", "FF6600", "666699",
-    "969696", "003366", "339966", "003300", "333300",
-    "993300", "993366", "333399", "333333"
-};
-
 XlsxColorStyle::XlsxColorStyle()
 {
     clear();
@@ -193,14 +176,14 @@ kDebug() << "rgb found:" << realColor.name();
 }
 
 KoFilter::ConversionStatus XlsxColorStyle::readAttributes(
-    const QXmlStreamAttributes& attrs, const char* debugElement)
+    const QXmlStreamAttributes& attrs, const QVector<QString>& colors, const char* debugElement)
 {
     automatic = MSOOXML::Utils::convertBooleanAttr(attrs.value("auto").toString());
     QString indexedStr;
     TRY_READ_ATTR_WITHOUT_NS_INTO(indexed, indexedStr)
     STRING_TO_INT(indexedStr, indexed, QLatin1String(debugElement) + "@indexed")
     if (indexed >= 0 && indexed < 64) {
-        rgb = QString("#%1").arg(INDEXED_ARRAY[indexed]);
+        rgb = QString("#%1").arg(colors.at(indexed));
     }
     else {
         rgb = readRgbAttribute(attrs);
@@ -806,9 +789,74 @@ bool XlsxCellFormat::setupCellStyle(
 
 //----------------------------------------------------------
 
-XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles)
-        : styles(&_styles)
+XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart)
+        : styles(&_styles), skipFirstPart(_skipFirstPart)
 {
+    // This is default array of colors from the spec
+    colorIndices.push_back("000000");
+    colorIndices.push_back("FFFFFF");
+    colorIndices.push_back("FF0000");
+    colorIndices.push_back("00FF00");
+    colorIndices.push_back("0000FF");
+    colorIndices.push_back("FFFF00");
+    colorIndices.push_back("FF00FF");
+    colorIndices.push_back("00FFFF");
+    colorIndices.push_back("000000");
+    colorIndices.push_back("FFFFFF");
+    colorIndices.push_back("FF0000");
+    colorIndices.push_back("00FF00");
+    colorIndices.push_back("0000FF");
+    colorIndices.push_back("FFFF00");
+    colorIndices.push_back("FF00FF");
+    colorIndices.push_back("00FFFF");
+    colorIndices.push_back("800000");
+    colorIndices.push_back("008000");
+    colorIndices.push_back("000080");
+    colorIndices.push_back("808000");
+    colorIndices.push_back("800080");
+    colorIndices.push_back("008080");
+    colorIndices.push_back("C0C0C0");
+    colorIndices.push_back("808080");
+    colorIndices.push_back("9999FF");
+    colorIndices.push_back("993366");
+    colorIndices.push_back("FFFFCC");
+    colorIndices.push_back("CCFFFF");
+    colorIndices.push_back("660066");
+    colorIndices.push_back("FF8080");
+    colorIndices.push_back("0066CC");
+    colorIndices.push_back("CCCCFF");
+    colorIndices.push_back("000080");
+    colorIndices.push_back("FF00FF");
+    colorIndices.push_back("FFFF00");
+    colorIndices.push_back("00FFFF");
+    colorIndices.push_back("800080");
+    colorIndices.push_back("800000");
+    colorIndices.push_back("008080");
+    colorIndices.push_back("0000FF");
+    colorIndices.push_back("00CCFF");
+    colorIndices.push_back("CCFFFF");
+    colorIndices.push_back("CCFFCC");
+    colorIndices.push_back("FFFF99");
+    colorIndices.push_back("99CCFF");
+    colorIndices.push_back("FF99CC");
+    colorIndices.push_back("CC99FF");
+    colorIndices.push_back("FFCC99");
+    colorIndices.push_back("3366FF");
+    colorIndices.push_back("33CCCC");
+    colorIndices.push_back("99CC00");
+    colorIndices.push_back("FFCC00");
+    colorIndices.push_back("FF9900");
+    colorIndices.push_back("FF6600");
+    colorIndices.push_back("666699");
+    colorIndices.push_back("969696");
+    colorIndices.push_back("003366");
+    colorIndices.push_back("339966");
+    colorIndices.push_back("003300");
+    colorIndices.push_back("333300");
+    colorIndices.push_back("993300");
+    colorIndices.push_back("993366");
+    colorIndices.push_back("333399");
+    colorIndices.push_back("333333");
 }
 
 class XlsxXmlStylesReader::Private
@@ -908,7 +956,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
  - cellStyles (Cell Styles) §18.8.8
  - cellStyleXfs (Formatting Records) §18.8.9
  - [done] cellXfs (Cell Formats) §18.8.10
- - colors (Colors) §18.8.11
+ - [done] colors (Colors) §18.8.11
  - dxfs (Formats) §18.8.15
  - extLst (Future Feature Data Storage Area) §18.2.10
  - [done] fills (Fills) §18.8.21
@@ -925,11 +973,18 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(fonts)
-            ELSE_TRY_READ_IF(fills)
-            ELSE_TRY_READ_IF(numFmts)
-            ELSE_TRY_READ_IF(cellXfs)
-            ELSE_TRY_READ_IF(borders)
+            // In the first round we read potential color overrides
+            if (m_context->skipFirstPart) {
+                TRY_READ_IF(colors)
+                SKIP_UNKNOWN
+            }
+            else {
+                TRY_READ_IF(fonts)
+                ELSE_TRY_READ_IF(fills)
+                ELSE_TRY_READ_IF(numFmts)
+                ELSE_TRY_READ_IF(cellXfs)
+                ELSE_TRY_READ_IF(borders)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1054,7 +1109,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
  Child elements:
  - [done] b (Bold) §18.8.2
  - charset (Character Set) §18.4.1
- - color (Data Bar Color) §18.3.1.15
+ - [done] color (Data Bar Color) §18.3.1.15
  - condense (Condense) §18.8.12
  - extend (Extend) §18.8.17
  - family (Font Family) §18.8.18
@@ -1340,7 +1395,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_color()
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentColorStyle->readAttributes(attrs, "color") )
+    RETURN_IF_ERROR( m_currentColorStyle->readAttributes(attrs, m_context->colorIndices, "color") )
 
     while (true) {
         readNext();
@@ -1732,7 +1787,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bgColor()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentFillStyle->bgColor.readAttributes(attrs, "bgColor") )
+    RETURN_IF_ERROR( m_currentFillStyle->bgColor.readAttributes(attrs, m_context->colorIndices, "bgColor") )
 
     readNext();
     READ_EPILOGUE
@@ -1757,7 +1812,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fgColor()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentFillStyle->fgColor.readAttributes(attrs, "fgColor") )
+    RETURN_IF_ERROR( m_currentFillStyle->fgColor.readAttributes(attrs, m_context->colorIndices, "fgColor") )
 
     readNext();
     READ_EPILOGUE
@@ -1992,3 +2047,83 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
     }
     READ_EPILOGUE
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL colors
+/*
+ Parent elements:
+ - [done] styleSheet (§18.8.39)
+
+ Child elements:
+ - [done] indexedColors (Color Indexes) §18.8.27
+ - mruColors (MRU Colors) §18.8.28
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_colors()
+{
+    READ_PROLOGUE
+
+    m_colorIndex = 0;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(indexedColors)) {
+                TRY_READ(indexedColors)
+            }
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL indexedColors
+/*
+ Parent elements:
+ - [done] colors (§18.8.11)
+
+ Child elements:
+ - [done] rgbColor (RGB Color) §18.8.34
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_indexedColors()
+{
+    READ_PROLOGUE
+
+    // In this element, we override the default colors
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(rgbColor)) {
+                TRY_READ(rgbColor)
+            }
+            ELSE_WRONG_FORMAT
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL rgbColor
+/*
+ Parent elements:
+ - [done] indexedColors (§18.8.27)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_rgbColor()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(rgb)
+    if (!rgb.isEmpty()) {
+        m_context->colorIndices[m_colorIndex] = rgb.right(rgb.length()-2);
+    }
+    ++m_colorIndex;
+    readNext();
+    READ_EPILOGUE
+}
+

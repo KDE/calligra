@@ -868,7 +868,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         KoCharacterStyle cellCharacterStyle;
         cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
 
-        if( cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSuperScript 
+        if( cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSuperScript
             || cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSubScript ) {
             KoGenStyle charStyle( KoGenStyle::TextStyle, "text" );
             cellCharacterStyle.saveOdf( charStyle );

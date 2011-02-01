@@ -1704,6 +1704,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_previousListWasAltered = false;
     }
 
+    // This approach has the risk that numbered lists might have different bullet sizes -> different lists
+    //  -> numbering won't work as expected
     if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
         m_listStylePropertiesAltered = true;
         if (!fontSize.isEmpty()) {
@@ -4249,9 +4251,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
                 m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
+                // Opacity is currently disabled as there's a bug somewhere which makes even 1% opacity hide lines.
+                /*
                 if (m_currentAlpha > 0) {
                     m_currentDrawStyle->addProperty("svg:stroke-opacity", QString("%1%").arg(m_currentAlpha/100.0));
-                }
+                }*/
             }
             else if(qualifiedName() == QLatin1String("a:noFill")) {
                 m_currentDrawStyle->addProperty("draw:stroke", "none");
