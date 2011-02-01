@@ -999,13 +999,13 @@ void PageProcessingQueue::process()
     m_triggered = false;
     m_pages.clear();
 
-    QTime timer;
-    timer.start();
+    //QTime timer;
+    //timer.start();
     qSort(pages.begin(), pages.end());
     foreach (int pageNumber, pages) {
         m_document->m_frameLayout.createNewFramesForPage(pageNumber);
     }
-    kDebug(32001) << "pages=" << pages << "elapsed=" << timer.elapsed();
+    //kDebug(32001) << "pages=" << pages << "elapsed=" << timer.elapsed();
 
     if (docIsEmpty)
         m_document->setEmpty();
