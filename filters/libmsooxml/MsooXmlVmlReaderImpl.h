@@ -1232,46 +1232,46 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
             m_shapeTypeString += QString("abs(%1)").arg(parameters.at(0));
         }
         else if (command == "min") {
-            m_shapeTypeString += QString("min(%1, %2)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("min(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "max") {
-            m_shapeTypeString += QString("max(%1, %2)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("max(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "if") {
-            m_shapeTypeString += QString("if(max(%1, 0), %2, %3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_shapeTypeString += QString("if(max(%1,0),%2,%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sqrt") {
             m_shapeTypeString += QString("sqrt(%1)").arg(parameters.at(0));
         }
         else if (command == "mid") {
-            m_shapeTypeString += QString("(%1 + %2)/2").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("(%1+%2)/2").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "mod") {
-            m_shapeTypeString += QString("sqrt(%1 * %1 + %2 * %2 + %3 * %3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_shapeTypeString += QString("sqrt(%1*%1+%2*%2+%3*%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "ellipse") {
-            m_shapeTypeString += QString("%3 - sqrt(1 - (%1/%2)*(%1/%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_shapeTypeString += QString("%3-sqrt(1-(%1/%2)*(%1/%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "atan2") {
-            m_shapeTypeString += QString("atan2(%2, %1)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("atan2(%2,%1)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "cosatan2") {
-            m_shapeTypeString += QString("%1 * cos(atan2(%3, %2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_shapeTypeString += QString("%1*cos(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sinatan2") {
-            m_shapeTypeString += QString("%1 * sin(atan2(%3, %2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_shapeTypeString += QString("%1*sin(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sumangle") {
-            m_shapeTypeString += QString("%1 + %2 * 65536 - %3 * 65536").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_shapeTypeString += QString("%1+%2*65536-%3*65536").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sin") {
-            m_shapeTypeString += QString("%1 * sin(%2 * 65536)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("%1*sin(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "cos") {
-            m_shapeTypeString += QString("%1 * cos(%2 * 65536)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("%1*cos(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "tan") {
-            m_shapeTypeString += QString("%1 * tan(%2 * 65536)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("%1*tan(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
         }
     }
 
