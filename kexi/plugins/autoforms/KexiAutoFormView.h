@@ -23,10 +23,16 @@
 
 #include <core/KexiView.h>
 #include <widget/utils/kexirecordnavigator.h>
+#include <widget/tableview/kexidataawareobjectiface.h>
+#include "../forms/kexidataprovider.h"
 
-
-class KexiAutoFormView : public KexiView, public KexiRecordNavigatorHandler
+class KexiAutoFormView : public KexiView, 
+                        public KexiRecordNavigatorHandler,
+                        public KexiDataAwareObjectInterface,
+                        public KexiFormDataProvider
 {
+Q_OBJECT
+KEXI_DATAAWAREOBJECTINTERFACE
 
 protected:
     virtual void resizeEvent(QResizeEvent* );

@@ -23,6 +23,7 @@
 
 #include <core/kexipart.h>
 #include <KexiWindowData.h>
+#include <QDomElement>
 
 class KexiAutoFormPart : public KexiPart::Part
 {
@@ -45,6 +46,8 @@ public:
         bool schemaChangedInPreviousView : 1;
         QString name;
     };
+private:
+    QString loadForm(const QString&);
 };
 
 #endif // KEXIAUTOFORMPART_H

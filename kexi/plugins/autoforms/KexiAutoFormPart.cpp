@@ -22,6 +22,7 @@
 #include "KexiAutoFormView.h"
 #include "KexiAutoFormDesignView.h"
 #include <KDebug>
+#include <core/KexiWindow.h>
 
 KexiAutoFormPart::KexiAutoFormPart(QObject* parent, const QVariantList& args): Part(parent, args)
 {
@@ -62,8 +63,8 @@ KexiView* KexiAutoFormPart::createView(QWidget* parent, KexiWindow* window, Kexi
 KexiWindowData* KexiAutoFormPart::createWindowData(KexiWindow* window)
 {
     kDebug();
-    const QString document(loadReport(window->partItem()->name()));
-    KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
+    const QString document(loadForm(window->partItem()->name()));
+    KexiAutoFormPart::TempData *td = new KexiAutoFormPart::TempData(window);
     
     QDomDocument doc;
     doc.setContent(document);
@@ -71,11 +72,9 @@ KexiWindowData* KexiAutoFormPart::createWindowData(KexiWindow* window)
     kDebug() << doc.toString();
     
     QDomElement root = doc.documentElement();
-    QDomElement korep = root.firstChildElement("autoform:content");
-    QDomElement conn = root.firstChildElement("connection");
+    QDomElement frm = root.firstChildElement("autoform:content");
     
-    td->reportDefinition = korep;
-    td->connectionDefinition = conn;
+    td->autoformDefinition = frm;
     
     td->name = window->partItem()->name();
     return td;
@@ -84,4 +83,9 @@ KexiWindowData* KexiAutoFormPart::createWindowData(KexiWindow* window)
 KexiAutoFormPart::TempData::TempData(QObject* parent): KexiWindowData(parent)
 {
 
+}
+
+QString KexiAutoFormPart::loadForm(const QString& )
+{
+return QString();
 }

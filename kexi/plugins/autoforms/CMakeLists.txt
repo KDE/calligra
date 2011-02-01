@@ -3,6 +3,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kexi
     ${CMAKE_SOURCE_DIR}/kexi/core
     ${CMAKE_SOURCE_DIR}/kexi/widget
+    ${CMAKE_SOURCE_DIR}/kexi/plugins/forms
     ${KDE4_INCLUDES}
 )
 
@@ -14,6 +15,8 @@ set(kexihandler_autoform_SRCS
     widgets/AutoWidget.cpp
     KexiAutoFormDesignView.cpp
     designer/KexiAutoFormDesigner.cpp 
+    ../forms/kexidataprovider.cpp
+    ../forms/kexiformdataiteminterface.cpp
 )
 
 kde4_add_plugin(kexihandler_autoform ${kexihandler_autoform_SRCS})
@@ -26,6 +29,7 @@ target_link_libraries(kexihandler_autoform
     kexicore
     kexiextendedwidgets
     kexiguiutils
+    kexidatatable
 )
 
 install(TARGETS kexihandler_autoform DESTINATION ${PLUGIN_INSTALL_DIR})
