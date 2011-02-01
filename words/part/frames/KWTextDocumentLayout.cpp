@@ -226,6 +226,10 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KWTextDocumentLayout::layout()
 {
+#ifdef TDEBUG
+    TDEBUG << "starting layout pass, document=" << ((void*)document()) << "frameSet=" << m_frameSet << "headerFooter=" << KWord::isHeaderFooter(m_frameSet);
+#endif
+
     class End
     {
     public:
@@ -244,8 +248,10 @@ void KWTextDocumentLayout::layout()
     };
     End ender(m_frameSet, m_state); // poor mans finally{}
 
-    if (! m_state->start())
+    if (!m_state->start()) {
+        kDebug() << "start layouting failed";
         return;
+    }
 
     qreal endPos = 1E9;
     qreal bottomOfText = 0.0;
@@ -256,6 +262,14 @@ void KWTextDocumentLayout::layout()
     KoShape *currentShape = 0;
 
     while (m_state->shape) {
+#ifdef DEBUG_TEXT
+        TDEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines";
+        for (int i = 0; i < m_state->layout->lineCount(); ++i) {
+            QTextLine line = m_state->layout->lineAt(i);
+            TDEBUG << i << "]" << (line.isValid() ? QString("%1 - %2").arg(line.textStart()).arg(line.textLength()) : QString("invalid"));
+        }
+#endif
+
         if (m_state->shape != currentShape) { // next shape
             TDEBUG << "New shape";
             currentShape = m_state->shape;
@@ -359,7 +373,7 @@ void KWTextDocumentLayout::layout()
         }
         if (m_state->isInterrupted() || (newParagraph && m_state->y() > endPos)) {
             // enough for now. Try again later.
-            kDebug() << "schedule a next layout due to having done a layout of quite some space, interrupted="<<m_state->isInterrupted()<<"m_state->y()="<<m_state->y()<<"endPos="<<endPos;
+            TDEBUG << "schedule a next layout due to having done a layout of quite some space, interrupted="<<m_state->isInterrupted()<<"m_state->y()="<<m_state->y()<<"endPos="<<endPos;
             scheduleLayoutWithoutInterrupt();
             return;
         }
