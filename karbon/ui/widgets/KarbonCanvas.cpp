@@ -174,7 +174,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     // check how big a single point is and paint a pixel grid if big enough
     const qreal pointSize = d->zoomHandler.zoomItX(1.0);
     if (pointSize > 10.0 && d->part->gridData().showGrid()) { 
-        // set a slightly lighter color that the current grid color
+        // set a slightly lighter color than the current grid color
         d->pixelGrid.setGridColor(d->part->gridData().gridColor().lighter(110));
         d->pixelGrid.paintGrid(painter, d->zoomHandler, updateRect);
     }
