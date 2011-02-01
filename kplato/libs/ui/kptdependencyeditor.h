@@ -261,9 +261,17 @@ public:
     void setSymbol( int type, const QRectF &rect );
     bool isEditable() const { return m_editable; }
     void setEditable( bool on ) { m_editable = on; }
+
+    DependencyScene *itemScene() const;
+
+protected:
+    void paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget );
+
 private:
     GanttItemDelegate m_delegate;
     bool m_editable;
+    int m_nodetype;
+    KDGantt::ItemType m_itemtype;
 };
 
 //-----------------------
@@ -314,7 +322,8 @@ public:
     ~DependencyScene();
     
     void setProject( Project *p ) { m_project = p; }
-    
+    Project *project() const { return m_project; }
+
     QList<QGraphicsItem*> itemList( int type ) const;
     void clearScene();
     
