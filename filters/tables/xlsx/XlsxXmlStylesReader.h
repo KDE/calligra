@@ -421,8 +421,10 @@ protected:
 class XlsxXmlStylesReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlStylesReaderContext(XlsxStyles& _styles);
+    XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart);
     XlsxStyles* styles;
+    bool skipFirstPart;
+    QVector<QString> colorIndices;
 };
 
 //! A class reading MSOOXML XLSX markup - styles.xml part.
@@ -490,7 +492,6 @@ protected:
     XlsxBorderStyles *m_currentBorderStyle;
 
     int m_colorIndex;
-    QVector<QString> m_colorIndices;
 
 private:
     void init();

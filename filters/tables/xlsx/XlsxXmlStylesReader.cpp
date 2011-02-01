@@ -789,9 +789,74 @@ bool XlsxCellFormat::setupCellStyle(
 
 //----------------------------------------------------------
 
-XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles)
-        : styles(&_styles)
+XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart)
+        : styles(&_styles), skipFirstPart(_skipFirstPart)
 {
+    // This is default array of colors from the spec
+    colorIndices.push_back("000000");
+    colorIndices.push_back("FFFFFF");
+    colorIndices.push_back("FF0000");
+    colorIndices.push_back("00FF00");
+    colorIndices.push_back("0000FF");
+    colorIndices.push_back("FFFF00");
+    colorIndices.push_back("FF00FF");
+    colorIndices.push_back("00FFFF");
+    colorIndices.push_back("000000");
+    colorIndices.push_back("FFFFFF");
+    colorIndices.push_back("FF0000");
+    colorIndices.push_back("00FF00");
+    colorIndices.push_back("0000FF");
+    colorIndices.push_back("FFFF00");
+    colorIndices.push_back("FF00FF");
+    colorIndices.push_back("00FFFF");
+    colorIndices.push_back("800000");
+    colorIndices.push_back("008000");
+    colorIndices.push_back("000080");
+    colorIndices.push_back("808000");
+    colorIndices.push_back("800080");
+    colorIndices.push_back("008080");
+    colorIndices.push_back("C0C0C0");
+    colorIndices.push_back("808080");
+    colorIndices.push_back("9999FF");
+    colorIndices.push_back("993366");
+    colorIndices.push_back("FFFFCC");
+    colorIndices.push_back("CCFFFF");
+    colorIndices.push_back("660066");
+    colorIndices.push_back("FF8080");
+    colorIndices.push_back("0066CC");
+    colorIndices.push_back("CCCCFF");
+    colorIndices.push_back("000080");
+    colorIndices.push_back("FF00FF");
+    colorIndices.push_back("FFFF00");
+    colorIndices.push_back("00FFFF");
+    colorIndices.push_back("800080");
+    colorIndices.push_back("800000");
+    colorIndices.push_back("008080");
+    colorIndices.push_back("0000FF");
+    colorIndices.push_back("00CCFF");
+    colorIndices.push_back("CCFFFF");
+    colorIndices.push_back("CCFFCC");
+    colorIndices.push_back("FFFF99");
+    colorIndices.push_back("99CCFF");
+    colorIndices.push_back("FF99CC");
+    colorIndices.push_back("CC99FF");
+    colorIndices.push_back("FFCC99");
+    colorIndices.push_back("3366FF");
+    colorIndices.push_back("33CCCC");
+    colorIndices.push_back("99CC00");
+    colorIndices.push_back("FFCC00");
+    colorIndices.push_back("FF9900");
+    colorIndices.push_back("FF6600");
+    colorIndices.push_back("666699");
+    colorIndices.push_back("969696");
+    colorIndices.push_back("003366");
+    colorIndices.push_back("339966");
+    colorIndices.push_back("003300");
+    colorIndices.push_back("333300");
+    colorIndices.push_back("993300");
+    colorIndices.push_back("993366");
+    colorIndices.push_back("333399");
+    colorIndices.push_back("333333");
 }
 
 class XlsxXmlStylesReader::Private
@@ -831,71 +896,6 @@ void XlsxXmlStylesReader::init()
     m_currentFontStyle = 0;
     m_currentFillStyle = 0;
     m_currentCellFormat = 0;
-    // This is default array of colors from the spec
-    m_colorIndices.push_back("000000");
-    m_colorIndices.push_back("FFFFFF");
-    m_colorIndices.push_back("FF0000");
-    m_colorIndices.push_back("00FF00");
-    m_colorIndices.push_back("0000FF");
-    m_colorIndices.push_back("FFFF00");
-    m_colorIndices.push_back("FF00FF");
-    m_colorIndices.push_back("00FFFF");
-    m_colorIndices.push_back("000000");
-    m_colorIndices.push_back("FFFFFF");
-    m_colorIndices.push_back("FF0000");
-    m_colorIndices.push_back("00FF00");
-    m_colorIndices.push_back("0000FF");
-    m_colorIndices.push_back("FFFF00");
-    m_colorIndices.push_back("FF00FF");
-    m_colorIndices.push_back("00FFFF");
-    m_colorIndices.push_back("800000");
-    m_colorIndices.push_back("008000");
-    m_colorIndices.push_back("000080");
-    m_colorIndices.push_back("808000");
-    m_colorIndices.push_back("800080");
-    m_colorIndices.push_back("008080");
-    m_colorIndices.push_back("C0C0C0");
-    m_colorIndices.push_back("808080");
-    m_colorIndices.push_back("9999FF");
-    m_colorIndices.push_back("993366");
-    m_colorIndices.push_back("FFFFCC");
-    m_colorIndices.push_back("CCFFFF");
-    m_colorIndices.push_back("660066");
-    m_colorIndices.push_back("FF8080");
-    m_colorIndices.push_back("0066CC");
-    m_colorIndices.push_back("CCCCFF");
-    m_colorIndices.push_back("000080");
-    m_colorIndices.push_back("FF00FF");
-    m_colorIndices.push_back("FFFF00");
-    m_colorIndices.push_back("00FFFF");
-    m_colorIndices.push_back("800080");
-    m_colorIndices.push_back("800000");
-    m_colorIndices.push_back("008080");
-    m_colorIndices.push_back("0000FF");
-    m_colorIndices.push_back("00CCFF");
-    m_colorIndices.push_back("CCFFFF");
-    m_colorIndices.push_back("CCFFCC");
-    m_colorIndices.push_back("FFFF99");
-    m_colorIndices.push_back("99CCFF");
-    m_colorIndices.push_back("FF99CC");
-    m_colorIndices.push_back("CC99FF");
-    m_colorIndices.push_back("FFCC99");
-    m_colorIndices.push_back("3366FF");
-    m_colorIndices.push_back("33CCCC");
-    m_colorIndices.push_back("99CC00");
-    m_colorIndices.push_back("FFCC00");
-    m_colorIndices.push_back("FF9900");
-    m_colorIndices.push_back("FF6600");
-    m_colorIndices.push_back("666699");
-    m_colorIndices.push_back("969696");
-    m_colorIndices.push_back("003366");
-    m_colorIndices.push_back("339966");
-    m_colorIndices.push_back("003300");
-    m_colorIndices.push_back("333300");
-    m_colorIndices.push_back("993300");
-    m_colorIndices.push_back("993366");
-    m_colorIndices.push_back("333399");
-    m_colorIndices.push_back("333333");
 }
 
 KoFilter::ConversionStatus XlsxXmlStylesReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -973,12 +973,18 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(fonts)
-            ELSE_TRY_READ_IF(fills)
-            ELSE_TRY_READ_IF(numFmts)
-            ELSE_TRY_READ_IF(cellXfs)
-            ELSE_TRY_READ_IF(borders)
-            ELSE_TRY_READ_IF(colors)
+            // In the first round we read potential color overrides
+            if (m_context->skipFirstPart) {
+                TRY_READ_IF(colors)
+                SKIP_UNKNOWN
+            }
+            else {
+                TRY_READ_IF(fonts)
+                ELSE_TRY_READ_IF(fills)
+                ELSE_TRY_READ_IF(numFmts)
+                ELSE_TRY_READ_IF(cellXfs)
+                ELSE_TRY_READ_IF(borders)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1103,7 +1109,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
  Child elements:
  - [done] b (Bold) §18.8.2
  - charset (Character Set) §18.4.1
- - color (Data Bar Color) §18.3.1.15
+ - [done] color (Data Bar Color) §18.3.1.15
  - condense (Condense) §18.8.12
  - extend (Extend) §18.8.17
  - family (Font Family) §18.8.18
@@ -1389,7 +1395,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_color()
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentColorStyle->readAttributes(attrs, m_colorIndices, "color") )
+    RETURN_IF_ERROR( m_currentColorStyle->readAttributes(attrs, m_context->colorIndices, "color") )
 
     while (true) {
         readNext();
@@ -1781,7 +1787,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bgColor()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentFillStyle->bgColor.readAttributes(attrs, m_colorIndices, "bgColor") )
+    RETURN_IF_ERROR( m_currentFillStyle->bgColor.readAttributes(attrs, m_context->colorIndices, "bgColor") )
 
     readNext();
     READ_EPILOGUE
@@ -1806,7 +1812,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fgColor()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentFillStyle->fgColor.readAttributes(attrs, m_colorIndices, "fgColor") )
+    RETURN_IF_ERROR( m_currentFillStyle->fgColor.readAttributes(attrs, m_context->colorIndices, "fgColor") )
 
     readNext();
     READ_EPILOGUE
@@ -2114,7 +2120,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_rgbColor()
 
     TRY_READ_ATTR_WITHOUT_NS(rgb)
     if (!rgb.isEmpty()) {
-        m_colorIndices[m_colorIndex] = rgb.right(rgb.length()-2);
+        m_context->colorIndices[m_colorIndex] = rgb.right(rgb.length()-2);
     }
     ++m_colorIndex;
     readNext();

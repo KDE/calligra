@@ -560,10 +560,15 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     // 2. parse styles
     XlsxStyles styles;
     {
+        // In first round we read color overrides, in 2nd round we can actually use them.
         XlsxXmlStylesReader stylesReader(writers);
-        XlsxXmlStylesReaderContext context(styles);
+        XlsxXmlStylesReaderContext context(styles, true);
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context))
+        XlsxXmlStylesReaderContext context2(styles, false);
+        context2.colorIndices = context.colorIndices; // Overriding default colors potentially
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
+                            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context2))
     }
     // 3. parse comments
     XlsxComments comments;
@@ -577,7 +582,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
 
     // 4. parse themes
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
-    
+
     // following is a workaround till the patch at https://bugs.freedesktop.org/show_bug.cgi?id=30417 is applied
     // so we are able to proper handle this case already before using the mimetype.
     if (partNames.isEmpty() && d->type != XlsxMacroDocument) {
