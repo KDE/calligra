@@ -47,7 +47,7 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
 
     QMap<int, int>::const_iterator iter = pageNumbers.constBegin();
     for (;iter != pageNumbers.constEnd(); ++iter) {
-        const KWPageManagerPrivate::Page page = pages.value(iter.value());
+        const KWPageManagerPrivate::Page &page = pages.value(iter.value());
         if (page.pageSide == KWPage::PageSpread && iter.key() % 2 == 1)
             continue;
         if (iter.key() == pageNum) {
