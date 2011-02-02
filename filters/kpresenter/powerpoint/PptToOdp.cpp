@@ -34,6 +34,7 @@
 #include <QtCore/QBuffer>
 
 //#define DEBUG_PPTTOODP
+#define FONTSIZE_MAX 4000 //according to MS-PPT
 
 using namespace MSO;
 
@@ -442,7 +443,7 @@ void PptToOdp::DrawClient::addTextStyles(
         PptTextPFRun pf(ppttoodp->p->documentContainer,
                         dc_data->masterSlide,
                         textType);
-        ppttoodp->defineParagraphProperties(style, pf);
+        ppttoodp->defineParagraphProperties(style, pf, 0);
         ppttoodp->defineTextProperties(style, &listStyle->lstLvl1->cf, 0, 0, 0);
     }
     bool isPlaceholder = cd && cd->placeholderAtom;
@@ -531,9 +532,9 @@ QString PptToOdp::DrawClient::formatPos(qreal v)
  */  
 PptToOdp::PptToOdp()
 : p(0),
-  m_currentSlideTexts(NULL),
-  m_currentMaster(NULL),
-  m_currentSlide(NULL),
+  m_currentSlideTexts(0),
+  m_currentMaster(0),
+  m_currentSlide(0),
   m_isList(false)
 {
 }
@@ -850,7 +851,7 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
         }
     }
     PptTextPFRun pf(p->documentContainer);
-    defineParagraphProperties(style, pf);
+    defineParagraphProperties(style, pf, 0);
 }
 
 void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles) {
@@ -1038,7 +1039,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
                 color = toQColor(tmp, tm, m_currentSlide);
             }
         }
-        //TODO: hande the case of a notes master slide/notes slide pair
+        //TODO: handle the case of a notes master slide/notes slide pair
 
         style.addProperty("fo:color", color.name(), text);
     }
@@ -1054,8 +1055,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     }
     // fo:font-size
     if (cf && cf->masks.size) {
-        style.addProperty("fo:font-size", pt(cf->fontSize),
-                          text);
+        style.addProperty("fo:font-size", pt(cf->fontSize), text);
     }
     // fo:font-style: "italic", "normal" or "oblique
     if (cf && cf->masks.italic && cf->fontStyle) {
@@ -1146,8 +1146,9 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:use-window-font-color
 }
 
-void PptToOdp::defineParagraphProperties(KoGenStyle& style,
-                                         const PptTextPFRun& pf) {
+void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& pf,
+                                         quint16 fs)
+{
     const KoGenStyle::PropertyType para = KoGenStyle::ParagraphType;
     // fo:background-color
     // fo:border
@@ -1162,14 +1163,15 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // fo:keep-together
     // fo:keep-with-next
     // fo:line-height
+    style.addProperty("fo:line-height", processParaSpacing(pf.lineSpacing(), fs, true), para);
     // fo:margin
     // fo:margin-bottom
-    style.addProperty("fo:margin-bottom", paraSpacingToCm(pf.spaceAfter()), para);
+    style.addProperty("fo:margin-bottom", processParaSpacing(pf.spaceAfter(), fs, false), para);
     // fo:margin-left - pf.leftMargin() is relevant only for a list
     style.addProperty("fo:margin-left", "0cm", para);
     // fo:margin-right
     // fo:margin-top
-    style.addProperty("fo:margin-top", paraSpacingToCm(pf.spaceBefore()), para);
+    style.addProperty("fo:margin-top", processParaSpacing(pf.spaceBefore(), fs, false), para);
     // fo:orphans
     // fo:padding
     // fo:padding-bottom
@@ -1198,6 +1200,8 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // style:border-line-width-right
     // style:border-line-width-top
     // style:font-independent-line-spacing
+    style.addProperty("style:font-independent-line-spacing",
+                      (pf.lineSpacing() >= 0) ? "true" : "false", para);
     // style:justify-single-word
     // style:line-break
     // style:line-height-at-least
@@ -2171,11 +2175,11 @@ int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
     return end;
 }
 
-int PptToOdp::processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
-                              const QString& text, const int start,
-                              int end)
+int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
+                              const QString& text, const int start, int end, quint16* p_fs)
 {
     int count = cf->addCurrentCFRun(tc, start);
+    *p_fs = cf->fontSize();
 
     //TODO: there's no TextCFRun in case we rely on TextCFExceptionAtom or
     //TextMasterStyleLevel, handle this case. (uzak)
@@ -2308,7 +2312,9 @@ int PptToOdp::processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Wr
         getMeta(*meta, out.xml);
     } else {
         int len = end - start;
-        if (text[end-1] == '\r' || text[end-1] == '\v') {
+        if ( (len > 0) &&
+             ( (text[end-1] == '\r') || (text[end-1] == '\v') ) )
+        {
             len--;
         }
         const QString txt
@@ -2320,22 +2326,26 @@ int PptToOdp::processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Wr
     return end;
 }
 
-int PptToOdp::processTextSpans(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
-			       const QString& text, int start, int end)
+int PptToOdp::processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
+			       const QString& text, int start, int end, quint16* p_fs)
 {
+    quint16 font_size = 0;
     int pos = start;
-    while (pos < end) {
-        int r = processTextSpan(cf, tc, out, text, pos, end);
+
+    //using the do while statement to catch empty line
+    do {
+        int r = processTextSpan(out, cf, tc, text, pos, end, &font_size);
+
+        if (font_size < *p_fs) {
+            *p_fs = font_size;
+        }
         if (r <= pos) {
             // some error
             qDebug() << "pos: " << pos << " end: " << end << " r: " << r;
             return -2;
         }
         pos = r;
-        if (pos == end) {
-            return 0;
-        }
-    }
+    } while (pos < end);
     return (pos == end) ?0 :-pos;
 }
 
@@ -2383,10 +2393,18 @@ void PptToOdp::processTextLine(Writer& out,
             }
         }
     }
-
     PptTextCFRun cf(p->documentContainer, mh, tc, pf.level());
-    m_isList = (pf.isList() && (start < end));
 
+    //spans have to be processed first to prepare the correct ParagraphStyle
+    QBuffer spans_buf;
+    spans_buf.open(QIODevice::WriteOnly);
+    KoXmlWriter writer(&spans_buf);
+    Writer o(writer, out.styles, out.stylesxml);
+
+    quint16 min_fontsize = FONTSIZE_MAX;
+    processTextSpans(o, &cf, tc, text, start, end, &min_fontsize);
+
+    m_isList = (pf.isList() && (start < end));
     if (m_isList) {
         int depth = pf.level() + 1;
         QString listStyle = defineAutoListStyle(out, pf);
@@ -2409,9 +2427,9 @@ void PptToOdp::processTextLine(Writer& out,
     out.xml.startElement("text:p");
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
-    defineParagraphProperties(style, pf);
+    defineParagraphProperties(style, pf, min_fontsize);
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
-    processTextSpans(&cf, tc, out, text, start, end);
+    out.xml.addCompleteElement(&spans_buf);
     out.xml.endElement(); //text:p
 }
 
@@ -2457,12 +2475,12 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
 #ifdef DEBUG_PPTTOODP
     QString txt = getText(tc);
     int len = txt.length();
-    txt.replace('\v', "<vt");
+    txt.replace('\v', "<vt>");
     txt.replace('\r', "<cr>");
     txt.replace('\n', "<newline>");
     txt.replace('\t', "<tab>");
     txt.replace('\f', "<ff>");
-    qDebug() << "Current textLine:" << txt << "| length:" << len;
+    qDebug() << "> current text:" << txt << "| length:" << len;
 #endif
 
     // Let's assume text stored in paragraphs.
@@ -2499,13 +2517,20 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
             end = text.size();
             missed_line = false;
         }
+#ifdef DEBUG_PPTTOODP
+	QString tmp = text.mid(pos, (end - pos));
+	tmp.replace(lineend, "");
+	qDebug() << "> current textLine:" << tmp;
+#endif
         processTextLine(out, clientData, tc, tr, text, pos, end, levels);
         pos = end + 1;
     }
-    // catch the <cr> following text3 in example above
+    // catch the <cr> following text3 in example above or an empty text string
     if (missed_line) {
-        int end = pos - 1;
-        processTextLine(out, clientData, tc, tr, QString(QString::null), end, end, levels);
+        if (!text.isEmpty()) {
+            pos--;
+        }
+        processTextLine(out, clientData, tc, tr, QString(QString::null), pos, pos, levels);
     }
 
     // close all open text:list elements
@@ -2625,7 +2650,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     out.xml.endElement(); // draw:page
 }
 
-QString PptToOdp::paraSpacingToCm(int value) const
+QString PptToOdp::processParaSpacing(int value, quint16 fs, bool percentage) const
 {
     // ParaSpacing specifies text paragraph spacing.
     //
@@ -2637,8 +2662,15 @@ QString PptToOdp::paraSpacingToCm(int value) const
         unsigned int temp = -value;
         return pptMasterUnitToCm(temp);
     }
-    //FIXME: proper conversion!
-    return pptMasterUnitToCm(value);
+
+    //NOTE: MS PowerPoint specific: lineHeight = fontSize + (1/4 * fontSize);
+    //IF a number of font sizes are used in a paragraph, then use the minimum.
+    if (percentage) {
+        return percent(value);
+    } else {
+        double lineHeight = fs + (0.25 * fs);
+        return pt(value * lineHeight / 100);
+    }
 }
 
 QString PptToOdp::pptMasterUnitToCm(unsigned int value) const
