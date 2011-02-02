@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=Plan KPlato Import Filter
-Name[xxx]=xxxPlan KPlato Import Filterxxx
 X-KDE-Export=application/x-vnd.kde.plan
 X-KDE-Import=application/x-vnd.kde.kplato
 X-KDE-Weight=1

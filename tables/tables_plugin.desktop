@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=CalligraTables/Plugin
 Comment=Plugin for Calligra Tables
 Comment[cs]=Modul pro Calligra Tables
+Comment[en_GB]=Plugin for Calligra Tables
 Comment[et]=Calligra Tablesi plugin
 Comment[it]=Estensione per Tables di Calligra
 Comment[nds]=Moduul för Calligra-Tables
