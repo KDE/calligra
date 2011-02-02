@@ -125,9 +125,7 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
     if (window) {
         m_mobile->setActiveObject(window);
     }
-    kDebug() << window;
-    kDebug() << window->selectedView();
-    
+
     m_toolbar->setRecordHandler(dynamic_cast<KexiRecordNavigatorHandler*>(window->selectedView()));
 
 #if 0

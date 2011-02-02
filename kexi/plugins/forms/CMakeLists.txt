@@ -40,6 +40,7 @@ target_link_libraries(
     kexicore
     kexiguiutils
 	kexidatatable
+	kexiextendedwidgets
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRARY}
@@ -52,9 +53,8 @@ install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 set(kexiformutils_LIB_SRCS 
-   kexiformdataiteminterface.cpp 
-   kexidataawarewidgetinfo.cpp 
-   kexidataprovider.cpp 
+ #  kexiformdataiteminterface.cpp 
+   kexidataawarewidgetinfo.cpp  
    kexiformscrollview.cpp 
    kexidbtextwidgetinterface.cpp 
    kexiformmanager.cpp 

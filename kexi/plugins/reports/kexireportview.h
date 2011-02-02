@@ -60,7 +60,7 @@ public:
     virtual void moveToRecordRequested(uint r);
     virtual long int currentRecord();
     virtual long int recordCount();
-     
+
 private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;

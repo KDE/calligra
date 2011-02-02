@@ -30,7 +30,7 @@
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include "widgets/kexidbform.h"
+//#include "widgets/kexidbform.h"
 
 KexiFormDataProvider::KexiFormDataProvider()
         : KexiDataItemChangesListener()
@@ -69,7 +69,9 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
             continue;
 #else
         //tmp: reject widgets within subforms
-        if (KexiUtils::findParent<const KexiDBForm*>(widget, "KexiDBSubForm"))
+        //if (KexiUtils::findParent<const KexiDBForm*>(widget, "KexiDBSubForm"))
+        //    continue;
+        if (KexiUtils::parentIs(widget, "KexiDBSubForm"))
             continue;
 #endif
         QString dataSource(formDataItem->dataSource().toLower());

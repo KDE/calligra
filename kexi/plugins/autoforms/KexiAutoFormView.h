@@ -24,7 +24,7 @@
 #include <core/KexiView.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/tableview/kexidataawareobjectiface.h>
-#include "../forms/kexidataprovider.h"
+#include <widget/kexidataprovider.h>
 
 class KexiAutoFormView : public KexiView, 
                         public KexiRecordNavigatorHandler,

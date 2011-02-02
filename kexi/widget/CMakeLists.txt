@@ -35,6 +35,8 @@ set(kexiextendedwidgets_LIB_SRCS
     KexiProjectModelItem.cpp
     KexiProjectTreeView.cpp
     KexiProjectNavigator.cpp
+    kexidataprovider.cpp
+    kexiformdataiteminterface.cpp
   )
 
 IF (KEXI_MOBILE)

@@ -95,6 +95,7 @@ void KexiMobileToolbar::recordPrevious()
 
 void KexiMobileToolbar::setRecordHandler(KexiRecordNavigatorHandler* handler)
 {
+	qDebug() << handler;
 	m_recordHandler = handler;
 	updatePage();
 }
