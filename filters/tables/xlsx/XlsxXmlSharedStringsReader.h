@@ -32,8 +32,11 @@ class XlsxImport;
 class XlsxXmlSharedStringsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    explicit XlsxXmlSharedStringsReaderContext(XlsxSharedStringVector& _strings);
+    explicit XlsxXmlSharedStringsReaderContext(XlsxSharedStringVector& _strings, MSOOXML::DrawingMLTheme* _themes,
+        QVector<QString>& _colorIndices);
     XlsxSharedStringVector* strings;
+    MSOOXML::DrawingMLTheme* themes;
+    QVector<QString>& colorIndices;
 };
 
 //! A class reading MSOOXML XLSX markup - sharedStrings.xml part.

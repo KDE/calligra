@@ -43,9 +43,6 @@
 
 //----------------------------------------------------------
 
-#include "ColorConversions.h"
-//! @todo only include for TINY target
-
 //! @return tinted value for @a color
 //! Alpha value is left unchanged.
 /*! @param color to be converted
@@ -60,8 +57,7 @@ static QColor tintedColor(const QColor& color, qreal tint)
         return color;
     }
     int h, l, s;
-    rgb_to_hls(color.red(), color.green(), color.blue(), &h, &l, &s);
-//    rgb_to_hls(0xec, 0xec, 0xec, &h, &l, &s);
+    color.getHsl(&h, &l, &s);
 //kDebug() << "hls before:" << h << l << s;
     if (tint < 0.0) {
         l = floor( l * (1.0 + tint) );
@@ -70,23 +66,11 @@ static QColor tintedColor(const QColor& color, qreal tint)
         l = floor( l * (1.0 - tint) + (HLSMAX - HLSMAX * (1.0 - tint)) );
     }
 //kDebug() << "hls after:" << h << l << s;
-    quint8 r, g, b;
-    hls_to_rgb(h, l, s, &r, &g, &b);
+    int r, g, b;
+    color.getRgb(&r, &g, &b);
 //kDebug() << "rgb:" << r << g << b << QColor(r, g, b, color.alpha()).name();
     return QColor(r, g, b, color.alpha());
 }
-#if 0
-static QColor tintedColor( const QColor & color, qreal tintfactor )
-{
-    QColor retColor;
-    const qreal  nonTindedPart = 1.0 - tintfactor;
-    const int tintedColor = 255 * nonTindedPart;
-    retColor.setRed( tintedColor + tintfactor * color.red() );
-    retColor.setGreen( tintedColor + tintfactor * color.green() );
-    retColor.setBlue( tintedColor + tintfactor * color.blue() );
-    return retColor;
-}
-#endif
 
 /*! @return color decoded from a "rgb" attribute of the current element
             or invalid QColor when reading was not possible.
@@ -131,7 +115,7 @@ void XlsxColorStyle::clear()
     theme = -1;
 }
 
-bool XlsxColorStyle::isValid(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const
+bool XlsxColorStyle::isValid(const MSOOXML::DrawingMLTheme *themes) const
 {
 kDebug() << "indexed:" << indexed << "rgb:" << rgb.name() << "tint:" << tint << "theme:" << theme;
     if (theme >= 0) {
@@ -141,10 +125,9 @@ kDebug() << themeColor(themes).isValid();
     return rgb.isValid();
 }
 
-QColor XlsxColorStyle::themeColor(const/* QMap<QString,*/ MSOOXML::DrawingMLTheme*/*> **/themes) const
+QColor XlsxColorStyle::themeColor(const MSOOXML::DrawingMLTheme *themes) const
 {
     Q_ASSERT(themes);
-//! @todo find proper theme, not just any
     const MSOOXML::DrawingMLTheme *themeObject = themes;
 kDebug() << themeObject;
     if (themeObject) {
@@ -189,6 +172,9 @@ KoFilter::ConversionStatus XlsxColorStyle::readAttributes(
         rgb = readRgbAttribute(attrs);
     }
     tint = readTintAttribute(attrs, debugElement);
+    if (rgb.isValid()) {
+        rgb = tintedColor(rgb, tint).name();
+    }
     QString themeStr;
     TRY_READ_ATTR_WITHOUT_NS_INTO(theme, themeStr)
     STRING_TO_INT(themeStr, theme, QLatin1String(debugElement) + "@theme")
@@ -223,7 +209,7 @@ XlsxBorderStyle::XlsxBorderStyle()
 {
 }
 
-QString XlsxBorderStyle::setupCellStyle(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const
+QString XlsxBorderStyle::setupCellStyle(const MSOOXML::DrawingMLTheme *themes) const
 {
     QString styleString = this->style;
 
@@ -270,7 +256,7 @@ XlsxBorderStyles::XlsxBorderStyles()
 {
 }
 
-void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const
+void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const MSOOXML::DrawingMLTheme *themes) const
 {
 //! @todo simplify if 2 or 4 sides are the same
     QString s;
@@ -297,7 +283,7 @@ void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QStrin
     }
 }
 
-static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyle& fg, qreal percent, const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes )
+static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyle& fg, qreal percent, const MSOOXML::DrawingMLTheme *themes )
 {
     const QColor bgColor = bg.theme >= 0 ? bg.themeColor( themes ) : bg.rgb.isValid() ? bg.rgb : QColor( Qt::white );
     const QColor fgColor = fg.theme >= 0 ? fg.themeColor( themes ) : fg.rgb;//.isValid() ? fg.rgb : QColor( Qt::black );
@@ -318,7 +304,7 @@ static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyl
     return result;
 }
 
-const XlsxColorStyle* XlsxFillStyle::realBackgroundColor( const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const
+const XlsxColorStyle* XlsxFillStyle::realBackgroundColor( const MSOOXML::DrawingMLTheme *themes) const
 {
     delete cachedRealBackgroundColor;
     cachedRealBackgroundColor = new XlsxColorStyle;
@@ -378,7 +364,7 @@ kDebug() << "patternType:" << patternType;
     return &bgColor;
 }
 
-void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const
+void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const MSOOXML::DrawingMLTheme *themes) const
 {
 //! @todo implement more styling;
 //!       use XlsxColorStyle::automatic, XlsxColorStyle::indexed, XlsxColorStyle::theme...
@@ -789,8 +775,8 @@ bool XlsxCellFormat::setupCellStyle(
 
 //----------------------------------------------------------
 
-XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart)
-        : styles(&_styles), skipFirstPart(_skipFirstPart)
+XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart, MSOOXML::DrawingMLTheme* _themes)
+        : styles(&_styles), skipFirstPart(_skipFirstPart), themes(_themes)
 {
     // This is default array of colors from the spec
     colorIndices.push_back("000000");
@@ -1121,7 +1107,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
  - [done] strike (Strike Through) §18.4.10
  - [done] sz (Font Size) §18.4.11
  - [done] u (Underline) §18.4.13
- - vertAlign (Vertical Alignment) §18.4.14
+ - [done] vertAlign (Vertical Alignment) §18.4.14
  Parent elements:
  - dxf (§18.8.14)
  - [done] fonts (§18.8.23)

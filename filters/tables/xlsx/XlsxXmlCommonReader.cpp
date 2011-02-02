@@ -54,7 +54,6 @@ XlsxXmlCommonReader::XlsxXmlCommonReader(KoOdfWriters *writers)
 
 XlsxXmlCommonReader::~XlsxXmlCommonReader()
 {
-    delete m_currentTextStyleProperties;
     delete d;
 }
 
@@ -119,6 +118,8 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
 
     QString readResult;
 
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -155,11 +156,11 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
  - family §18.8.18
  - i §18.8.26
  - outline §18.4.2
- - rFont §18.4.5
+ - [done] rFont §18.4.5
  - scheme §18.8.35
  - shadow §18.8.36
  - strike §18.4.10
- - sz §18.4.11
+ - [done] sz §18.4.11
  - u §18.4.13
  - [done] vertAlign §18.4.14
 
@@ -168,15 +169,16 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
 KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
 {
     READ_PROLOGUE
-    delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = new KoCharacterStyle;
-    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(vertAlign)
+            ELSE_TRY_READ_IF(sz)
+            ELSE_TRY_READ_IF(rFont)
+            ELSE_TRY_READ_IF(color)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -196,7 +198,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
  (if a smaller size is available) accordingly.
 
  Parent elements:
- - font (§18.8.22)
+ - [elsewhere] font (§18.8.22)
  - [done] rPr (§18.4.7)
 
  No child elements.
@@ -216,3 +218,99 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_vertAlign()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL sz
+//! fontSize
+/*
+ Parent elements:
+ - [elsewhere] font (§18.8.22);
+ - [done] rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_sz()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        m_currentTextStyleProperties->setFontPointSize(val.toDouble());
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL rFont
+//! font
+/*
+ Parent elements:
+ - [elsewhere] font (§18.8.22);
+ - [done] rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_rFont()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        m_currentTextStyle.addProperty("fo:font-family", val);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL color
+//! color
+/*
+ Parent elements:
+ - [elsewhere] font (§18.8.22);
+ - [done] rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_color()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(indexed)
+    TRY_READ_ATTR_WITHOUT_NS(rgb)
+    TRY_READ_ATTR_WITHOUT_NS(theme)
+    TRY_READ_ATTR_WITHOUT_NS(tint)
+
+    QColor currentColor;
+
+    if (!indexed.isEmpty()) {
+        int index = indexed.toInt();
+        if (index >= 0 && index < 64) {
+            currentColor = QString("#%1").arg(m_colorIndices.at(index));
+        }
+    }
+    if (!rgb.isEmpty()) {
+
+    }
+    if (!theme.isEmpty()) {
+
+    }
+    if (!tint.isEmpty()) {
+
+    }
+
+    if (currentColor.isValid()) {
+        m_currentTextStyle.addProperty("fo:color", currentColor.name());
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
