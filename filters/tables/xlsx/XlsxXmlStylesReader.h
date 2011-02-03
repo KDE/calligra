@@ -28,6 +28,8 @@
 #include <QtCore/QFlags>
 #include <QColor>
 
+#include "XlsxXmlCommonReader.h"
+
 class KoCharacterStyle;
 class KoGenStyle;
 class XlsxImport;
@@ -82,58 +84,7 @@ struct ST_VerticalAlignRun
 class XlsxFontStyle
 {
 public:
-    XlsxFontStyle();
-
-    //! 18.18.85 ST_UnderlineValues (Underline Types)
-    //! Represents the different types of possible underline formatting.
-    //! Used by u@val (§18.4.13) - SpreadsheetML
-    //! CASE #S1730
-    enum ST_UnderlineValue {
-        NoUnderline,
-        SingleUnderline, //!< The default
-        DoubleUnderline,
-        SingleAccountingUnderline,
-        DoubleAccountingUnderline
-    };
-
-    QString name;
-    ST_UnderlineValue underline;
-//! @todo charset
-    XlsxColorStyle color;
-//! @todo bool condense (Mac)
-//! @todo bool shadow (Mac)
-//! @todo extend
-//! @todo family
-//! @todo bool outline;
-//! @todo QString scheme;
-
-    ST_VerticalAlignRun vertAlign;
-
-    bool bold;
-    bool italic;
-    bool strike;
-
-    static ST_UnderlineValue ST_UnderlineValue_fromString(const QString& s);
-    void setUnderline(const QString& s);
-
-    void setSize(qreal size) {
-        m_defaultSize = false;
-        m_size = size;
-    }
-
-    qreal size() const { return m_size; }
-
-    //! Sets up @a cellStyle to match this cell text style.
-    //! @todo implement more styling
-    void setupCellTextStyle(const MSOOXML::DrawingMLTheme *themes, KoGenStyle* cellStyle) const;
-
-    //! Sets up @a characterStyle to match this font style.
-    //! @todo implement more formatting
-    void setupCharacterStyle(KoCharacterStyle* characterStyle) const;
-
-private:
-    qreal m_size;
-    bool m_defaultSize;
+    KoGenStyle textStyle;
 };
 
 //! @return QColor value for  ST_UnsignedIntHex (ARGB) (e.g. for 18.8.19 fgColor (Foreground Color) - SpreadsheetML only)
@@ -357,10 +308,6 @@ public:
         const MSOOXML::DrawingMLTheme *themes,
         KoGenStyle* cellStyle) const;
 
-    //! Sets up @a characterStyle to match this font style.
-//! @todo implement more formatting
-    bool setupCharacterStyle(const XlsxStyles *styles, KoCharacterStyle* characterStyle) const;
-
 private:
     //! Used by setupCellStyle()
     void setupCellStyleAlignment(KoGenStyle* cellStyle) const;
@@ -430,7 +377,7 @@ public:
 
 //! A class reading MSOOXML XLSX markup - styles.xml part.
 //! See ECMA-376, 12.3.20: Styles Part, p. 104
-class XlsxXmlStylesReader : public MSOOXML::MsooXmlReader
+class XlsxXmlStylesReader : public XlsxXmlCommonReader
 {
 public:
     explicit XlsxXmlStylesReader(KoOdfWriters *writers);
@@ -449,13 +396,7 @@ protected:
     KoFilter::ConversionStatus read_fonts();
     KoFilter::ConversionStatus read_font();
     KoFilter::ConversionStatus read_name();
-    KoFilter::ConversionStatus read_b();
-    KoFilter::ConversionStatus read_i();
-    KoFilter::ConversionStatus read_vertAlign();
-    KoFilter::ConversionStatus read_sz();
-    KoFilter::ConversionStatus read_strike();
-    KoFilter::ConversionStatus read_u();
-    KoFilter::ConversionStatus read_color();
+    KoFilter::ConversionStatus read_color2();
     KoFilter::ConversionStatus read_cellXfs();
     KoFilter::ConversionStatus read_xf();
     KoFilter::ConversionStatus read_alignment();

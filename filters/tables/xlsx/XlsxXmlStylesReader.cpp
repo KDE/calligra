@@ -184,16 +184,6 @@ kDebug() << "indexed:" << indexed << "rgb:" << rgb.name() << "tint:" << tint << 
 
 //----------------------------------------------------------
 
-XlsxFontStyle::XlsxFontStyle()
-        : underline(NoUnderline),
-        bold(false),
-        italic(false),
-        strike(false),
-        m_size(12.0),
-        m_defaultSize(true)
-{
-}
-
 XlsxFillStyle::XlsxFillStyle()
         : patternType(NonePatternType),
           cachedRealBackgroundColor( 0 )
@@ -394,155 +384,6 @@ void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const MSOOXML::Drawing
 
 //----------------------------------------------------------
 
-class ST_UnderlineValue_fromStringMap : public QMap<QString, XlsxFontStyle::ST_UnderlineValue>
-{
-public:
-    ST_UnderlineValue_fromStringMap() {
-        insert(QLatin1String("single"), XlsxFontStyle::SingleUnderline);
-        insert(QLatin1String("double"), XlsxFontStyle::DoubleUnderline);
-        insert(QLatin1String("singleAccounting"), XlsxFontStyle::SingleAccountingUnderline);
-        insert(QLatin1String("doubleAccounting"), XlsxFontStyle::DoubleAccountingUnderline);
-        insert(QLatin1String("none"), XlsxFontStyle::NoUnderline);
-    }
-};
-
-// static
-XlsxFontStyle::ST_UnderlineValue XlsxFontStyle::ST_UnderlineValue_fromString(const QString& s)
-{
-    K_GLOBAL_STATIC(ST_UnderlineValue_fromStringMap, s_ST_UnderlineValues)
-//    kDebug() << s;
-    const ST_UnderlineValue v = s_ST_UnderlineValues->value(s);
-//    kDebug() << v;
-    if (v == NoUnderline && s != "none")
-        return SingleUnderline; // default
-    return v;
-}
-
-void XlsxFontStyle::setUnderline(const QString& s)
-{
-    underline = ST_UnderlineValue_fromString(s);
-//    kDebug() << underline;
-}
-
-ST_VerticalAlignRun::ST_VerticalAlignRun(const QString& msooxmlName)
-{
-    if (msooxmlName == QLatin1String("subscript"))
-        value = SubscriptVerticalAlignRun;
-    else if (msooxmlName == QLatin1String("superscript"))
-        value = SuperscriptVerticalAlignRun;
-    else
-        value = BaselineVerticalAlignRun;
-}
-
-void ST_VerticalAlignRun::setupCharacterStyle(KoCharacterStyle* characterStyle) const
-{
-    switch (value) {
-    case SubscriptVerticalAlignRun:
-        characterStyle->setVerticalAlignment(QTextCharFormat::AlignSubScript);
-        break;
-    case SuperscriptVerticalAlignRun:
-        characterStyle->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-        break;
-    default:;
-    }
-}
-
-void XlsxFontStyle::setupCharacterStyle(KoCharacterStyle* characterStyle) const
-{
-    // line
-    switch (underline) {
-    case SingleUnderline:
-    case DoubleUnderline:
-    case SingleAccountingUnderline:
-    case DoubleAccountingUnderline:
-        characterStyle->setUnderlineStyle(KoCharacterStyle::SolidLine);
-        break;
-    case NoUnderline:
-    default:;
-    }
-
-    // # of lines
-    switch (underline) {
-    case SingleUnderline:
-    case SingleAccountingUnderline:
-        characterStyle->setUnderlineType(KoCharacterStyle::SingleLine);
-        break;
-    case DoubleUnderline:
-    case DoubleAccountingUnderline:
-        characterStyle->setUnderlineType(KoCharacterStyle::DoubleLine);
-        break;
-    case NoUnderline:
-    default:;
-    }
-
-//! @todo underlineWidth
-    switch (underline) {
-    case SingleUnderline:
-    case SingleAccountingUnderline:
-    case DoubleUnderline:
-    case DoubleAccountingUnderline:
-        characterStyle->setUnderlineWidth(KoCharacterStyle::AutoLineWeight, 1.0);
-        break;
-    case NoUnderline:
-    default:;
-    }
-
-    if (strike) {
-        characterStyle->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-        characterStyle->setStrikeOutType(KoCharacterStyle::SingleLine);
-    }
-
-    {
-        KoCharacterStyle::LineWeight weight;
-        qreal width;
-        characterStyle->underlineWidth(weight, width);
-
-/*        kDebug() << "underlineStyle:" << characterStyle->underlineStyle()
-        << "underlineType:" << characterStyle->underlineType()
-        << "underlineWeight:" << weight;*/
-    }
-
-    if (bold)
-        characterStyle->setFontWeight(QFont::Bold);
-    if (italic)
-        characterStyle->setFontItalic(true);
-    if (!m_defaultSize)
-        characterStyle->setFontPointSize(m_size);
-
-    vertAlign.setupCharacterStyle(characterStyle);
-}
-
-void XlsxFontStyle::setupCellTextStyle(
-    const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes,
-    KoGenStyle* cellStyle) const
-{
-    if (!name.isEmpty()) {
-#ifdef __GNUC__
-#warning TODO: we are saving with fo:font-family now because style:font-name is not properly supported by kotext; fix void KoCharacterStyle::loadOdf(KoOdfLoadingContext &context)...
-#endif
-//!@ todo reenable this        cellStyle->addProperty("style:font-name", name, KoGenStyle::TextType);
-        cellStyle->addProperty("fo:font-family", name, KoGenStyle::TextType);
-    }
-    // This is necessary because excel switches the indexes of 0 - 1 and 2 - 3 for theme colorindexes
-    // looks like it has a different internal indexing table
-    // i found the info here : http://blogs.msdn.com/b/excel/archive/2007/11/16/chart-pattern-fills.aspx
-    // and verified it
-    XlsxColorStyle changedColor( color );
-    if ( changedColor.theme == 0 )
-        changedColor.theme = 1;
-    else if ( changedColor.theme == 1 )
-        changedColor.theme = 0;
-    else if ( changedColor.theme == 2 )
-        changedColor.theme = 3;
-    else if ( changedColor.theme == 3 )
-        changedColor.theme = 2;
-    else if (changedColor.isValid(themes)) {
-        const QColor c(changedColor.value(themes));
-        cellStyle->addProperty("fo:color", c.name(), KoGenStyle::TextType);
-    }
-    //! @todo implement more styling
-}
-
 XlsxStyles::XlsxStyles()
 {
     // fill the default number formats
@@ -612,17 +453,6 @@ XlsxCellFormat::XlsxCellFormat()
 
 XlsxCellFormat::~XlsxCellFormat()
 {
-}
-
-bool XlsxCellFormat::setupCharacterStyle(const XlsxStyles *styles, KoCharacterStyle* characterStyle) const
-{
-    XlsxFontStyle* fontStyle = styles->fontStyle(fontId);
-    if (!fontStyle) {
-        kWarning() << "No font with ID:" << fontId;
-        return false;
-    }
-    fontStyle->setupCharacterStyle(characterStyle);
-    return true;
 }
 
 class ST_HorizontalAlignment_fromStringMap : public QMap<QString, XlsxCellFormat::ST_HorizontalAlignment>
@@ -754,7 +584,7 @@ bool XlsxCellFormat::setupCellStyle(
             kWarning() << "No font with ID:" << fontId;
             return false;
         }
-        fontStyle->setupCellTextStyle(themes, cellStyle);
+        MSOOXML::Utils::copyPropertiesFromStyle(fontStyle->textStyle, *cellStyle, KoGenStyle::TextType);
     }
     if (applyFill && fillId >= 0) {
         XlsxFillStyle *fillStyle = styles->fillStyle(fillId);
@@ -856,7 +686,7 @@ private:
 };
 
 XlsxXmlStylesReader::XlsxXmlStylesReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
+        : XlsxXmlCommonReader(writers)
         , m_context(0)
         , d(new Private)
 {
@@ -888,6 +718,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
 {
     m_context = dynamic_cast<XlsxXmlStylesReaderContext*>(context);
     Q_ASSERT(m_context);
+    m_colorIndices = m_context->colorIndices;
+    m_themes = m_context->themes;
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
     if (result == KoFilter::OK)
@@ -1129,6 +961,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
     m_currentFontStyle = new XlsxFontStyle;
     MSOOXML::Utils::AutoPtrSetter<XlsxFontStyle> currentFontStyleSetter(m_currentFontStyle);
 
+    m_currentFontStyle->textStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    m_currentTextStyleProperties = new KoCharacterStyle;
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1140,93 +975,35 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(i)
             ELSE_TRY_READ_IF(strike)
             ELSE_TRY_READ_IF(u)
-            else if (QUALIFIED_NAME_IS(color)) {
-                m_currentColorStyle = &m_currentFontStyle->color;
-                TRY_READ(color)
-                m_currentColorStyle = 0;
-            }
+            ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(vertAlign)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    READ_EPILOGUE_WITHOUT_RETURN
+    m_currentTextStyleProperties->saveOdf(m_currentFontStyle->textStyle);
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
 
     currentFontStyleSetter.release();
     m_context->styles->fontStyles[m_fontStyleIndex] = m_currentFontStyle;
     m_currentFontStyle = 0;
     m_fontStyleIndex++;
 
-    return KoFilter::OK;
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL sz
-//! sz handler (Font Size)
-/*! ECMA-376, 18.4.11, p. 1913.
- This element represents the point size (1/72 of an inch) of the Latin and East Asian text.
-
- No child elements.
- Parent elements:
- - [done] font (§18.8.22)
- - rPr (§18.4.7)
-
- @todo support all elements
-*/
-KoFilter::ConversionStatus XlsxXmlStylesReader::read_sz()
-{
-    Q_ASSERT(m_currentFontStyle);
-
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS(val)
-    bool ok;
-    m_currentFontStyle->setSize(val.toDouble(&ok));
-    if (!ok) {
-        raiseUnexpectedAttributeValueError(val, "sz");
-        return KoFilter::WrongFormat;
-    }
-
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
     READ_EPILOGUE
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL vertAlign
-//! vertAlign handler (Vertical Alignment)
-/*! ECMA-376, ???
-
- No child elements.
- Parent elements:
- - [done] font (§18.8.22)
-*/
-KoFilter::ConversionStatus XlsxXmlStylesReader::read_vertAlign()
-{
-    Q_ASSERT(m_currentFontStyle);
-
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS(val)
-    m_currentFontStyle->vertAlign = ST_VerticalAlignRun( val );
-
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
 #undef CURRENT_EL
 #define CURRENT_EL name
 //! name handler (Font Name)
 /*! ECMA-376, 18.8.29, p. 1973.
  This element specifies the face name of this font.
 
- No child elements.
  Parent elements:
  - [done] font (§18.8.22)
+
+ Child elements:
+ - none
 */
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_name()
 {
@@ -1234,116 +1011,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_name()
 
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_currentFontStyle->name)
+    TRY_READ_ATTR_WITHOUT_NS(val)
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+    if (!val.isEmpty()) {
+        m_currentFontStyle->textStyle.addProperty("fo:font-family", val);
     }
-    READ_EPILOGUE
-}
 
-#undef CURRENT_EL
-#define CURRENT_EL b
-//! b handler (Bold)
-/*! ECMA-376, 18.8.2, p. 1947.
- Displays characters in bold face font style.
-
- No child elements.
- Parent elements:
- - [done] font (§18.8.22)
- - rPr (§18.4.7)
-*/
-KoFilter::ConversionStatus XlsxXmlStylesReader::read_b()
-{
-    Q_ASSERT(m_currentFontStyle);
-
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    m_currentFontStyle->bold = readBooleanAttr("val", true);
-
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL i
-//! i handler (Italic)
-/*! ECMA-376, 18.8.26, p. 1969.
- Displays characters in italic font style.
-
- No child elements.
- Parent elements:
- - [done] font (§18.8.22)
- - rPr (§18.4.7)
-*/
-KoFilter::ConversionStatus XlsxXmlStylesReader::read_i()
-{
-    Q_ASSERT(m_currentFontStyle);
-
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    m_currentFontStyle->italic = readBooleanAttr("val", true);
-
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL strike
-//! strike handler (Strike Through)
-/*! ECMA-376, 18.4.10, p. 1913.
- This element draws a strikethrough line through the horizontal middle of the text.
-
- No child elements.
- Parent elements:
- - [done] font (§18.8.22)
- - rPr (§18.4.7)
-*/
-KoFilter::ConversionStatus XlsxXmlStylesReader::read_strike()
-{
-    Q_ASSERT(m_currentFontStyle);
-
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    m_currentFontStyle->strike = readBooleanAttr("val", true);
-
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL u
-//! u handler (Underline)
-/*! ECMA-376, 18.4.13, p. 1914.
- This element represents the underline formatting style.
-
- No child elements.
- Parent elements:
- - [done] font (§18.8.22)
- - rPr (§18.4.7)
-*/
-KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
-{
-    Q_ASSERT(m_currentFontStyle);
-
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    m_currentFontStyle->setUnderline(attrs.value("val").toString());
-
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 
@@ -1375,7 +1049,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_u()
 
  @todo support all elements
 */
-KoFilter::ConversionStatus XlsxXmlStylesReader::read_color()
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_color2()
 {
     Q_ASSERT(m_currentColorStyle);
 
@@ -1928,7 +1602,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bottom()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(color)) {
                 m_currentColorStyle = &m_currentBorderStyle->bottom.color;
-                TRY_READ(color)
+                TRY_READ(color2)
                 m_currentColorStyle = 0;
             }
             ELSE_WRONG_FORMAT
@@ -1953,7 +1627,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_top()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(color)) {
                 m_currentColorStyle = &m_currentBorderStyle->top.color;
-                TRY_READ(color)
+                TRY_READ(color2)
                 m_currentColorStyle = 0;
             }
             ELSE_WRONG_FORMAT
@@ -1977,7 +1651,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_left()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(color)) {
                 m_currentColorStyle = &m_currentBorderStyle->left.color;
-                TRY_READ(color)
+                TRY_READ(color2)
                 m_currentColorStyle = 0;
             }
             ELSE_WRONG_FORMAT
@@ -2001,7 +1675,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_right()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(color)) {
                 m_currentColorStyle = &m_currentBorderStyle->right.color;
-                TRY_READ(color)
+                TRY_READ(color2)
                 m_currentColorStyle = 0;
             }
             ELSE_WRONG_FORMAT
@@ -2025,7 +1699,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(color)) {
                 m_currentColorStyle = &m_currentBorderStyle->diagonal.color;
-                TRY_READ(color)
+                TRY_READ(color2)
                 m_currentColorStyle = 0;
             }
             ELSE_WRONG_FORMAT

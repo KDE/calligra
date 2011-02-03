@@ -48,6 +48,10 @@ protected:
     KoFilter::ConversionStatus read_sz();
     KoFilter::ConversionStatus read_rFont();
     KoFilter::ConversionStatus read_color();
+    KoFilter::ConversionStatus read_u();
+    KoFilter::ConversionStatus read_strike();
+    KoFilter::ConversionStatus read_b();
+    KoFilter::ConversionStatus read_i();
 
     KoCharacterStyle *m_currentTextStyleProperties;
 

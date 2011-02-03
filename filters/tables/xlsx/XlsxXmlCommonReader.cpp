@@ -176,7 +176,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
  - [done] r (§18.4.4)
 
  Child elements:
- - b §18.8.2
+ - [done] b §18.8.2
  - charset §18.4.1
  - color §18.3.1.15
  - condense §18.8.12
@@ -187,9 +187,9 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
  - [done] rFont §18.4.5
  - scheme §18.8.35
  - shadow §18.8.36
- - strike §18.4.10
+ - [done] strike §18.4.10
  - [done] sz §18.4.11
- - u §18.4.13
+ - [done] u §18.4.13
  - [done] vertAlign §18.4.14
 
  @todo support all child elements
@@ -207,6 +207,10 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
             ELSE_TRY_READ_IF(sz)
             ELSE_TRY_READ_IF(rFont)
             ELSE_TRY_READ_IF(color)
+            ELSE_TRY_READ_IF(u)
+            ELSE_TRY_READ_IF(i)
+            ELSE_TRY_READ_IF(b)
+            ELSE_TRY_READ_IF(strike)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -226,7 +230,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
  (if a smaller size is available) accordingly.
 
  Parent elements:
- - [elsewhere] font (§18.8.22)
+ - [done] font (§18.8.22)
  - [done] rPr (§18.4.7)
 
  No child elements.
@@ -237,10 +241,13 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_vertAlign()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(val)
-    ST_VerticalAlignRun vertAlign(val);
-    vertAlign.setupCharacterStyle(m_currentTextStyleProperties);
-//! @todo more QTextCharFormat::Align* styles?
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    if (val == "subscript") {
+        m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    }
+    else if (val == "superscript") {
+        m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    }
 
     readNext();
     READ_EPILOGUE
@@ -251,7 +258,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_vertAlign()
 //! fontSize
 /*
  Parent elements:
- - [elsewhere] font (§18.8.22);
+ - [done] font (§18.8.22);
  - [done] rPr (§18.4.7)
 
  Child elements:
@@ -261,7 +268,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_sz()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(val)
+    TRY_READ_ATTR_WITHOUT_NS(val)
 
     if (!val.isEmpty()) {
         m_currentTextStyleProperties->setFontPointSize(val.toDouble());
@@ -276,7 +283,6 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_sz()
 //! font
 /*
  Parent elements:
- - [elsewhere] font (§18.8.22);
  - [done] rPr (§18.4.7)
 
  Child elements:
@@ -286,10 +292,115 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rFont()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(val)
+    TRY_READ_ATTR_WITHOUT_NS(val)
 
     if (!val.isEmpty()) {
         m_currentTextStyle.addProperty("fo:font-family", val);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL i
+//! i handler (Italic)
+/*! ECMA-376, 18.8.26, p. 1969.
+ Displays characters in italic font style.
+
+ Parent elements:
+ - [done] font (§18.8.22)
+ - [done] rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_i()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    if (val == "1") {
+        m_currentTextStyleProperties->setFontItalic(true);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL b
+//! b handler (Bold)
+/*! ECMA-376, 18.8.2, p. 1947.
+ Displays characters in bold face font style.
+
+ Parent elements:
+ - [done] font (§18.8.22)
+ - rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_b()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    if (val == "1") {
+        m_currentTextStyleProperties->setFontWeight(QFont::Bold);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL strike
+//! strike handler (Strike Through)
+/*! ECMA-376, 18.4.10, p. 1913.
+ This element draws a strikethrough line through the horizontal middle of the text.
+
+ Parent elements:
+ - [done] font (§18.8.22)
+ - [done] rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_strike()
+{
+    READ_PROLOGUE
+
+    m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL u
+//! u handler (Underline)
+/*! ECMA-376, 18.4.13, p. 1914.
+ This element represents the underline formatting style.
+
+ Parent elements:
+ - [done] font (§18.8.22)
+ - [done] rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_u()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    if (!val.isEmpty()) {
+        MSOOXML::Utils::setupUnderLineStyle(val, m_currentTextStyleProperties);
     }
 
     readNext();
@@ -301,7 +412,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rFont()
 //! color
 /*
  Parent elements:
- - [elsewhere] font (§18.8.22);
+ - [done] font (§18.8.22);
  - [done] rPr (§18.4.7)
 
  Child elements:
@@ -352,7 +463,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_color()
     }
 
     if (currentColor.isValid()) {
-        m_currentTextStyle.addProperty("fo:color", currentColor.name());
+        m_currentTextStyleProperties->setForeground(QBrush(currentColor));
     }
 
     readNext();

@@ -858,20 +858,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 //    const bool addTextPElement = true;//m_value.isEmpty() || t != QLatin1String("s");
 
     if (!m_value.isEmpty()) {
-        KoCharacterStyle cellCharacterStyle;
-        cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
-
-        if( cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSuperScript
-            || cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSubScript ) {
-            KoGenStyle charStyle( KoGenStyle::TextStyle, "text" );
-            cellCharacterStyle.saveOdf( charStyle );
-            charStyleName = mainStyles->insert( charStyle, "T" );
-        }
-
-        if( !charStyleName.isEmpty() ) {
-            cell->charStyleName = charStyleName;
-        }
-
         /* depending on type: 18.18.11 ST_CellType (Cell Type), p. 2679:
             b (Boolean)  Cell containing a boolean.
             d (Date)     Cell contains a date in the ISO 8601 format.
@@ -973,10 +959,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         }
         KoGenStyle cellStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
 
-        if( charStyleName.isEmpty() ) {
-            KoCharacterStyle cellCharacterStyle;
-            cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
-            cellCharacterStyle.saveOdf(cellStyle);
+        if (charStyleName.isEmpty()) {
+            XlsxFontStyle* fontStyle = m_context->styles->fontStyle(cellFormat->fontId);
+            if (!fontStyle) {
+                kWarning() << "No font with ID:" << cellFormat->fontId;
+            } else {
+                MSOOXML::Utils::copyPropertiesFromStyle(fontStyle->textStyle, cellStyle, KoGenStyle::TextType);
+            }
         }
         if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
             return KoFilter::WrongFormat;
