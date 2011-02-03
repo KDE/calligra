@@ -26,8 +26,10 @@
 #include "XlsxImport.h"
 #include <MsooXmlSchemas.h>
 
+#include <KoXmlWriter.h>
+
 //#define MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_CLASS XlsxXmlCommentsReaderContext
+#define MSOOXML_CURRENT_CLASS XlsxXmlCommentsReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
@@ -44,10 +46,11 @@ XlsxComments::XlsxComments()
 {
 }
 
-XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes)
-    : MSOOXML::MsooXmlReaderContext()
-    , comments(&_comments)
+XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes,
+    QVector<QString>& _colorIndices)
+    : comments(&_comments)
     , themes(_themes)
+    , colorIndices(_colorIndices)
 {
 }
 
@@ -56,7 +59,7 @@ XlsxXmlCommentsReaderContext::~XlsxXmlCommentsReaderContext()
 }
 
 XlsxXmlCommentsReader::XlsxXmlCommentsReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlCommonReader(writers)
+    : XlsxXmlCommonReader(writers)
 {
 }
 
@@ -68,7 +71,8 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
 {
     m_context = dynamic_cast<XlsxXmlCommentsReaderContext*>(context);
     Q_ASSERT(m_context);
-
+    m_colorIndices = m_context->colorIndices;
+    m_themes = m_context->themes;
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
     if (result == KoFilter::OK)
@@ -212,7 +216,14 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comment()
 KoFilter::ConversionStatus XlsxXmlCommentsReader::read_text()
 {
     READ_PROLOGUE
-    m_currentCommentText.clear();
+
+    QByteArray commentData;
+    QBuffer commentBuffer(&commentData);
+    commentBuffer.open(QIODevice::WriteOnly);
+    KoXmlWriter commentWriter(&commentBuffer, 0/*indentation*/);
+    MSOOXML::Utils::XmlWriteBuffer buf;
+    body = buf.setWriter(&commentWriter);
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -224,38 +235,10 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_text()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    READ_EPILOGUE
-}
 
-#undef CURRENT_EL
-#define CURRENT_EL r
-KoFilter::ConversionStatus XlsxXmlCommentsReader::read_r()
-{
-    READ_PROLOGUE
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF(t)
-            //! @todo ELSE_TRY_READ_IF(rPr)
-            //! @todo add ELSE_WRONG_FORMAT
-        }
-    }
-    kDebug() << m_currentCommentText;
-    READ_EPILOGUE
-}
+    body = buf.releaseWriter();
+    commentBuffer.close();
+    m_currentCommentText = commentData;
 
-#undef CURRENT_EL
-#define CURRENT_EL t
-KoFilter::ConversionStatus XlsxXmlCommentsReader::read_t()
-{
-    READ_PROLOGUE
-    readNext();
-    //! @todo is trimming ok here?
-    m_currentCommentText += text().toString().trimmed();
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
     READ_EPILOGUE
 }

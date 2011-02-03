@@ -24,8 +24,7 @@
 #ifndef XLSXXMLCOMMENTSREADER_H
 #define XLSXXMLCOMMENTSREADER_H
 
-#include <MsooXmlCommonReader.h>
-
+#include "XlsxXmlCommonReader.h"
 #include <MsooXmlThemesReader.h>
 
 class XlsxXmlWorksheetReaderContext;
@@ -34,7 +33,7 @@ class XlsxComment
 {
 public:
     XlsxComment(uint authorId);
-    QStringList texts;
+    QString texts;
 //    QString ref;
     inline QString author(const XlsxComments* comments) const;
 private:
@@ -71,14 +70,16 @@ QString XlsxComment::author(const XlsxComments* comments) const
 class XlsxXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    explicit XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes);
+    explicit XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes,
+        QVector<QString>& _colorIndices);
     ~XlsxXmlCommentsReaderContext();
 
     XlsxComments* comments;
     MSOOXML::DrawingMLTheme* themes;
+    QVector<QString>& colorIndices;
 };
 
-class XlsxXmlCommentsReader : public MSOOXML::MsooXmlCommonReader
+class XlsxXmlCommentsReader : public XlsxXmlCommonReader
 {
 public:
     explicit XlsxXmlCommentsReader(KoOdfWriters *writers);
@@ -92,14 +93,12 @@ protected:
     KoFilter::ConversionStatus read_commentList();
     KoFilter::ConversionStatus read_comment();
     KoFilter::ConversionStatus read_text();
-    KoFilter::ConversionStatus read_r();
-    KoFilter::ConversionStatus read_t();
 
 private:
     KoFilter::ConversionStatus readInternal();
 
     XlsxXmlCommentsReaderContext *m_context;
-    QStringList m_currentCommentText;
+    QString m_currentCommentText;
     QString m_currentAuthor;
 };
 

@@ -32,7 +32,6 @@ class KoCharacterStyle;
 
 //! A class reading MSOOXML XLSX markup
 //! This is a base class implementing reading elements common to some XLSX content types.
-//! Currently this class is used by XlsxXmlSharedStringsReader (and shall be by XlsxXmlDocumentReader).
 class XlsxXmlCommonReader : public MSOOXML::MsooXmlReader
 {
 public:

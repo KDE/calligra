@@ -186,7 +186,6 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
     siBuffer.open(QIODevice::WriteOnly);
     KoXmlWriter siWriter(&siBuffer, 0/*indentation*/);
     MSOOXML::Utils::XmlWriteBuffer buf;
-    KoXmlWriter *origWriter = body;
     body = buf.setWriter(&siWriter);
 
     while (!atEnd()) {
@@ -203,8 +202,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
         }
     }
 
-    (void)buf.releaseWriter();
-    body = origWriter;
+    body = buf.releaseWriter();
     siBuffer.close();
     (*m_context->strings)[m_index] = siData;
 

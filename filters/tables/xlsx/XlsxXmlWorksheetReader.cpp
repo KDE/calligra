@@ -235,11 +235,9 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
     body->addTextNode(comment->author(m_context->comments));
     body->endElement(); // dc:creator
     //! @todo support dc:date
-    foreach (const QString& text, comment->texts) {
-        body->startElement("text:p");
-        body->addTextSpan(text);
-        body->endElement(); // text:p
-    }
+    body->startElement("text:p");
+    body->addCompleteElement(comment->texts.toUtf8());
+    body->endElement(); // text:p
     body->endElement(); // office:annotation
 }
 
