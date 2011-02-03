@@ -64,29 +64,6 @@ public:
     QColor themeColor(const MSOOXML::DrawingMLTheme *themes) const;
 };
 
-//! 22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
-struct ST_VerticalAlignRun
-{
-    enum Value {
-        BaselineVerticalAlignRun, //!< default
-        SubscriptVerticalAlignRun,
-        SuperscriptVerticalAlignRun
-    };
-    ST_VerticalAlignRun(const QString& msooxmlName = QString());
-    //! Sets up @a characterStyle to match this setting.
-    void setupCharacterStyle(KoCharacterStyle* characterStyle) const;
-
-    Value value;
-};
-
-//! Single XLSX font style definition as specified in ECMA-376, 18.8.23 (Fonts), p. 1964.
-/*! @see XlsxXmlStylesReader::read_fonts() */
-class XlsxFontStyle
-{
-public:
-    KoGenStyle textStyle;
-};
-
 //! @return QColor value for  ST_UnsignedIntHex (ARGB) (e.g. for 18.8.19 fgColor (Foreground Color) - SpreadsheetML only)
 //!         or invalid color if @a color is not in the expected format.
 //! @par val color value in AARRGGBB hexadecimal format
@@ -320,7 +297,7 @@ public:
     ~XlsxStyles();
 
     //! @return font style for id @a id (counted from 0)
-    XlsxFontStyle* fontStyle(int id) const {
+    KoGenStyle* fontStyle(int id) const {
         if (id < 0 || id >= fontStyles.size())
             return 0;
         return fontStyles[id];
@@ -356,7 +333,7 @@ public:
 protected:
     void setCellFormat(XlsxCellFormat *format, int cellFormatIndex);
 
-    QVector<XlsxFontStyle*> fontStyles;
+    QVector<KoGenStyle*> fontStyles;
     QVector<XlsxFillStyle*> fillStyles;
     QVector<XlsxBorderStyles*> borderStyles;
     QVector<XlsxCellFormat*> cellFormats;
@@ -428,7 +405,7 @@ protected:
     XlsxXmlStylesReaderContext* m_context;
 
     XlsxColorStyle *m_currentColorStyle; //!< set by read_color()
-    XlsxFontStyle *m_currentFontStyle;
+    KoGenStyle *m_currentFontStyle;
     XlsxFillStyle *m_currentFillStyle;
     XlsxCellFormat *m_currentCellFormat;
     XlsxBorderStyles *m_currentBorderStyle;

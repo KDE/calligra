@@ -579,12 +579,12 @@ bool XlsxCellFormat::setupCellStyle(
         setupCellStyleAlignment(cellStyle);
     }
     if (applyFont && fontId >= 0) {
-        XlsxFontStyle* fontStyle = styles->fontStyle(fontId);
+        KoGenStyle* fontStyle = styles->fontStyle(fontId);
         if (!fontStyle) {
             kWarning() << "No font with ID:" << fontId;
             return false;
         }
-        MSOOXML::Utils::copyPropertiesFromStyle(fontStyle->textStyle, *cellStyle, KoGenStyle::TextType);
+        MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, *cellStyle, KoGenStyle::TextType);
     }
     if (applyFill && fillId >= 0) {
         XlsxFillStyle *fillStyle = styles->fillStyle(fillId);
@@ -934,12 +934,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
  - [done] i (Italic) §18.8.26
  - [done] name (Font Name) §18.8.29
  - outline (Outline) §18.4.2
- - scheme (Scheme) §18.8.35
+ - [done] scheme (Scheme) §18.8.35
  - shadow (Shadow) §18.8.36
  - [done] strike (Strike Through) §18.4.10
  - [done] sz (Font Size) §18.4.11
  - [done] u (Underline) §18.4.13
  - [done] vertAlign (Vertical Alignment) §18.4.14
+
  Parent elements:
  - dxf (§18.8.14)
  - [done] fonts (§18.8.23)
@@ -958,10 +959,10 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
     }
 
     kDebug() << "font #" << m_fontStyleIndex;
-    m_currentFontStyle = new XlsxFontStyle;
-    MSOOXML::Utils::AutoPtrSetter<XlsxFontStyle> currentFontStyleSetter(m_currentFontStyle);
+    m_currentFontStyle = new KoGenStyle;
+    MSOOXML::Utils::AutoPtrSetter<KoGenStyle> currentFontStyleSetter(m_currentFontStyle);
 
-    m_currentFontStyle->textStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    m_currentFontStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     m_currentTextStyleProperties = new KoCharacterStyle;
 
     while (!atEnd()) {
@@ -977,11 +978,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(u)
             ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(vertAlign)
+            ELSE_TRY_READ_IF(scheme)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    m_currentTextStyleProperties->saveOdf(m_currentFontStyle->textStyle);
+    m_currentTextStyleProperties->saveOdf(*m_currentFontStyle);
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
@@ -1014,7 +1017,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_name()
     TRY_READ_ATTR_WITHOUT_NS(val)
 
     if (!val.isEmpty()) {
-        m_currentFontStyle->textStyle.addProperty("fo:font-family", val);
+        m_currentFontStyle->addProperty("fo:font-family", val);
     }
 
     readNext();
@@ -1028,8 +1031,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_name()
  One of the colors associated with the data bar or color scale.
  The auto attribute shall not be used in the context of data bars.
 
- Child elements:
- - stop (Gradient Stop) §18.8.38
  Parent elements:
  - [done] bottom (§18.8.6)
  - colorScale (§18.3.1.16)
@@ -1039,13 +1040,16 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_name()
  - [done] font (§18.8.22)
  - horizontal (§18.8.25)
  - mruColors (§18.8.28)
- - rPr (§18.4.7)
+ - [done] rPr (§18.4.7)
  - start (§18.8.37)
  - stop (§18.8.38)
  - [done] top (§18.8.43)
  - vertical (§18.8.44)
  - [done] left
  - [done] right
+
+ Child elements:
+ - none
 
  @todo support all elements
 */
@@ -1057,10 +1061,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_color2()
     const QXmlStreamAttributes attrs(attributes());
     RETURN_IF_ERROR( m_currentColorStyle->readAttributes(attrs, m_context->colorIndices, "color") )
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 

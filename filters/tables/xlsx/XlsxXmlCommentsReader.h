@@ -92,6 +92,7 @@ protected:
     KoFilter::ConversionStatus read_author();
     KoFilter::ConversionStatus read_commentList();
     KoFilter::ConversionStatus read_comment();
+    KoFilter::ConversionStatus read_commentPr();
     KoFilter::ConversionStatus read_text();
 
 private:

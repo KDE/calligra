@@ -178,14 +178,14 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
  Child elements:
  - [done] b §18.8.2
  - charset §18.4.1
- - color §18.3.1.15
+ - [done] color §18.3.1.15
  - condense §18.8.12
  - extend §18.8.17
  - family §18.8.18
- - i §18.8.26
+ - [done] i §18.8.26
  - outline §18.4.2
  - [done] rFont §18.4.5
- - scheme §18.8.35
+ - [done] scheme §18.8.35
  - shadow §18.8.36
  - [done] strike §18.4.10
  - [done] sz §18.4.11
@@ -330,6 +330,38 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_i()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL scheme
+//! scheme handler (Scheme)
+/*!
+
+ Parent elements:
+ - [done] font (§18.8.22)
+ - [done] rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_scheme()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    QString font;
+
+    if (val == "major") {
+        font = m_themes->fontScheme.majorFonts.latinTypeface;
+        m_currentTextStyle.addProperty("fo:font-family", font);
+    } else if (val == "minor") {
+        font = m_themes->fontScheme.minorFonts.latinTypeface;
+        m_currentTextStyle.addProperty("fo:font-family", font);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL b
 //! b handler (Bold)
 /*! ECMA-376, 18.8.2, p. 1947.
@@ -337,7 +369,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_i()
 
  Parent elements:
  - [done] font (§18.8.22)
- - rPr (§18.4.7)
+ - [done] rPr (§18.4.7)
 
  Child elements:
  - none

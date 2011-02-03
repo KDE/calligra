@@ -50,6 +50,7 @@ protected:
     KoFilter::ConversionStatus read_u();
     KoFilter::ConversionStatus read_strike();
     KoFilter::ConversionStatus read_b();
+    KoFilter::ConversionStatus read_scheme();
     KoFilter::ConversionStatus read_i();
 
     KoCharacterStyle *m_currentTextStyleProperties;

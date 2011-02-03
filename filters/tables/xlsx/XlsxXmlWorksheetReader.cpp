@@ -958,11 +958,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         KoGenStyle cellStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
 
         if (charStyleName.isEmpty()) {
-            XlsxFontStyle* fontStyle = m_context->styles->fontStyle(cellFormat->fontId);
+            KoGenStyle* fontStyle = m_context->styles->fontStyle(cellFormat->fontId);
             if (!fontStyle) {
                 kWarning() << "No font with ID:" << cellFormat->fontId;
             } else {
-                MSOOXML::Utils::copyPropertiesFromStyle(fontStyle->textStyle, cellStyle, KoGenStyle::TextType);
+                MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
             }
         }
         if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
