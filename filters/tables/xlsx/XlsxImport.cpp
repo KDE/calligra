@@ -28,7 +28,6 @@
 #include "XlsxXmlSharedStringsReader.h"
 #include "XlsxXmlStylesReader.h"
 #include "XlsxXmlCommentsReader.h"
-#include "XlsxSharedString.h"
 
 #include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
@@ -600,7 +599,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     }
 
     // 3. parse shared strings
-    XlsxSharedStringVector sharedStrings;
+    QVector<QString> sharedStrings;
     {
         XlsxXmlSharedStringsReader sharedStringsReader(writers);
         XlsxXmlSharedStringsReaderContext context(sharedStrings, &themes, colorContext.colorIndices);

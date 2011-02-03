@@ -49,8 +49,6 @@ protected:
     KoFilter::ConversionStatus read_rFont();
     KoFilter::ConversionStatus read_color();
 
-    QString m_text; //!< result of read_t() and read_r()
-
     KoCharacterStyle *m_currentTextStyleProperties;
 
     //! Used for creating style in w:pPr (style:style/@style:name attr)

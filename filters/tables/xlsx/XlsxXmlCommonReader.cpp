@@ -24,6 +24,8 @@
 #include "XlsxXmlCommonReader.h"
 #include "XlsxXmlStylesReader.h"
 
+#include <math.h>
+
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
@@ -62,6 +64,25 @@ void XlsxXmlCommonReader::init()
     m_currentTextStyleProperties = 0;
 }
 
+static QColor tintedColor(const QColor& color, qreal tint)
+{
+    const int HLSMAX = 255; // Used for computing tint
+    if (tint == 0.0 || !color.isValid()) {
+        return color;
+    }
+    int h, l, s;
+    color.getHsl(&h, &l, &s);
+    if (tint < 0.0) {
+        l = floor( l * (1.0 + tint) );
+    }
+    else {
+        l = floor( l * (1.0 - tint) + (HLSMAX - HLSMAX * (1.0 - tint)) );
+    }
+    int r, g, b;
+    color.getRgb(&r, &g, &b);
+    return QColor(r, g, b, color.alpha());
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL t
 //! t handler (Text)
@@ -81,14 +102,13 @@ void XlsxXmlCommonReader::init()
 KoFilter::ConversionStatus XlsxXmlCommonReader::read_t()
 {
     READ_PROLOGUE
-    readNext();
-
-    m_text = text().toString();
-
     while (!atEnd()) {
-        kDebug() << *this;
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        kDebug() << *this;
+        if (isCharacters()) {
+            body->addTextSpan(text().toString());
+        }
+        BREAK_IF_END_OF(CURRENT_EL)
     }
     READ_EPILOGUE
 }
@@ -116,24 +136,32 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
 {
     READ_PROLOGUE
 
-    QString readResult;
-
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+    MSOOXML::Utils::XmlWriteBuffer rBuf;
+    body = rBuf.setWriter(body);
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
-        TRY_READ_IF(rPr)
-        else if (QUALIFIED_NAME_IS(t)) {
-            TRY_READ(t)
-//! @todo
-            kDebug() << "readResult += m_text" << readResult << m_text;
-            readResult += m_text;
+        if (isStartElement()) {
+            TRY_READ_IF(rPr)
+            ELSE_TRY_READ_IF(t)
+            ELSE_WRONG_FORMAT
         }
-//! @todo support rPr
-//! @todo            ELSE_WRONG_FORMAT
     }
-    m_text = readResult;
+
+    body = rBuf.originalWriter();
+
+    body->startElement("text:span", false);
+    if (!m_currentTextStyle.isEmpty()) {
+        const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+        body->addAttribute("text:style-name", currentTextStyleName);
+    }
+
+    (void)rBuf.releaseWriter();
+
+    body->endElement(); //text:span
 
     READ_EPILOGUE
 }
@@ -298,13 +326,29 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_color()
         }
     }
     if (!rgb.isEmpty()) {
-
+        currentColor = rgb.right(rgb.length()-2);
     }
     if (!theme.isEmpty()) {
-
+        // Xlsx seems to switch these indices
+        if (theme == "0" ) {
+            theme = "1";
+        }
+        else if (theme == "1" ) {
+            theme = "0";
+        }
+        else if (theme == "2") {
+            theme = "3";
+        }
+        else if (theme == "3") {
+            theme = "2";
+        }
+        MSOOXML::DrawingMLColorSchemeItemBase *colorItemBase = m_themes->colorScheme.value(theme);
+        if (colorItemBase) {
+            currentColor = colorItemBase->value();
+        }
     }
     if (!tint.isEmpty()) {
-
+        currentColor = tintedColor(currentColor, tint.toDouble());
     }
 
     if (currentColor.isValid()) {

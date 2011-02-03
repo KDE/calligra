@@ -741,7 +741,7 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
 //! See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
 bool XlsxCellFormat::setupCellStyle(
     const XlsxStyles *styles,
-    const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes,
+    const MSOOXML::DrawingMLTheme *themes,
     KoGenStyle* cellStyle) const
 {
     kDebug() << "fontId:" << fontId << "fillId:" << fillId << "borderId:" << borderId;

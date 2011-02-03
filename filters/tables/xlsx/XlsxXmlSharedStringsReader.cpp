@@ -34,14 +34,9 @@
 
 #include <MsooXmlReader_p.h>
 
-XlsxSharedString::XlsxSharedString()
-    : m_isPlainText(true)
-{
-}
-
 // -------------------------------------------------------------
 
-XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(XlsxSharedStringVector& _strings, MSOOXML::DrawingMLTheme* _themes,
+XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QString>& _strings, MSOOXML::DrawingMLTheme* _themes,
     QVector<QString>& _colorIndices)
         : strings(&_strings), themes(_themes), colorIndices(_colorIndices)
 {
@@ -194,27 +189,14 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
     KoXmlWriter *origWriter = body;
     body = buf.setWriter(&siWriter);
 
-    bool plainTextSet = false;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(t)) {
-                TRY_READ(t)
-                (*m_context->strings)[m_index].setPlainText(m_text);
-                plainTextSet = true;
-            }
-            else if (QUALIFIED_NAME_IS(r)) {
-                TRY_READ(r)
-                body->startElement("text:span", false);
-                if (!m_currentTextStyle.isEmpty()) {
-                    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-                    body->addAttribute("text:style-name", currentTextStyleName);
-                }
-                body->addTextSpan(m_text);
-                body->endElement(); //text:span
-            }
+            TRY_READ_IF(t)
+            ELSE_TRY_READ_IF(r)
+            SKIP_UNKNOWN
 //! @todo support phoneticPr
 //! @todo support rPh
             //ELSE_WRONG_FORMAT
@@ -224,9 +206,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
     (void)buf.releaseWriter();
     body = origWriter;
     siBuffer.close();
-    if (!plainTextSet) {
-        (*m_context->strings)[m_index].setXml(siData);
-    }
+    (*m_context->strings)[m_index] = siData;
 
     m_index++;
     READ_EPILOGUE
