@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Calligra Project Management Component
+Name[pt]=Componente de Gestão de Projectos do Calligra
+Name[pt_BR]=Componente de gerenciamento de projetos do Calligra
+Name[sv]=Calligra-projekthanteringskomponent
+Name[uk]=Компонент керування проектами Calligra
+Name[x-test]=xxCalligra Project Management Componentxx
 X-KDE-Library=planworkpart
 MimeType=application/x-vnd.kde.plan.work;application/x-vnd.kde.kplato.work;
 Type=Service
