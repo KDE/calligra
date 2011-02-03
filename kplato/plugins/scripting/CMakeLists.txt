@@ -33,7 +33,7 @@ kde4_add_plugin(krossmodulekplato ${krossmodulekplato_PART_SRCS})
 target_link_libraries(
     krossmodulekplato
     kokross
-    kplatoprivate
+    planprivate
     kplatokernel
     kplatomodels
     komain

@@ -39,7 +39,7 @@ target_link_libraries(
     kplatokernel
     kplatomodels
     kplatoui
-    kplatoprivate
+    planprivate
 
     komain
     ${QT_QT3SUPPORT_LIBRARY}
