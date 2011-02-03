@@ -111,7 +111,7 @@ QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
 
 QVariant GanttItemDelegate::data( const QModelIndex& idx, int column, int role ) const
 {
-    kDebug()<<idx<<column<<role;
+    //kDebug()<<idx<<column<<role;
     QModelIndex i = idx.model()->index( idx.row(), column, idx.parent() );
     return i.data( role );
 }
