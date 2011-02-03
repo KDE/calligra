@@ -41,7 +41,7 @@
 XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     XlsxImport& _import,
     MSOOXML::DrawingMLTheme* _themes,
-    const XlsxSharedStringVector& _sharedStrings,
+    const QVector<QString>& _sharedStrings,
     const XlsxComments& _comments,
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships

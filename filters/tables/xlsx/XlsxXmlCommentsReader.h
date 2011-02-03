@@ -26,8 +26,9 @@
 
 #include <MsooXmlCommonReader.h>
 
-class XlsxXmlWorksheetReaderContext;
+#include <MsooXmlThemesReader.h>
 
+class XlsxXmlWorksheetReaderContext;
 class XlsxComments;
 class XlsxComment
 {
@@ -70,10 +71,11 @@ QString XlsxComment::author(const XlsxComments* comments) const
 class XlsxXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    explicit XlsxXmlCommentsReaderContext(XlsxComments& _comments);
+    explicit XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes);
     ~XlsxXmlCommentsReaderContext();
 
     XlsxComments* comments;
+    MSOOXML::DrawingMLTheme* themes;
 };
 
 class XlsxXmlCommentsReader : public MSOOXML::MsooXmlCommonReader

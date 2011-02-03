@@ -203,7 +203,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));
 
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(this);
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(actionCollection(), this);
     d->canvasController = canvasController;
     canvasController->setMinimumSize(QSize(viewMargin + 50, viewMargin + 50));
     d->canvasController->setCanvas(d->canvas);

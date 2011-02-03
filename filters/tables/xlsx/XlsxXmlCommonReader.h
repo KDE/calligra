@@ -24,6 +24,7 @@
 #ifndef XLSXXMLCOMMONREADER_H
 #define XLSXXMLCOMMONREADER_H
 
+#include <MsooXmlThemesReader.h>
 #include <MsooXmlReader.h>
 #include <KoGenStyle.h>
 
@@ -44,13 +45,22 @@ protected:
     KoFilter::ConversionStatus read_r();
     KoFilter::ConversionStatus read_rPr();
     KoFilter::ConversionStatus read_vertAlign();
-
-    QString m_text; //!< result of read_t() and read_r()
+    KoFilter::ConversionStatus read_sz();
+    KoFilter::ConversionStatus read_rFont();
+    KoFilter::ConversionStatus read_color();
+    KoFilter::ConversionStatus read_u();
+    KoFilter::ConversionStatus read_strike();
+    KoFilter::ConversionStatus read_b();
+    KoFilter::ConversionStatus read_i();
 
     KoCharacterStyle *m_currentTextStyleProperties;
 
     //! Used for creating style in w:pPr (style:style/@style:name attr)
     KoGenStyle m_currentTextStyle;
+
+    MSOOXML::DrawingMLTheme* m_themes;
+    QVector<QString> m_colorIndices;
+
 private:
     void init();
 

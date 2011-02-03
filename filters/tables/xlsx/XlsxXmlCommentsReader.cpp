@@ -44,9 +44,10 @@ XlsxComments::XlsxComments()
 {
 }
 
-XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments& _comments)
+XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes)
     : MSOOXML::MsooXmlReaderContext()
     , comments(&_comments)
+    , themes(_themes)
 {
 }
 

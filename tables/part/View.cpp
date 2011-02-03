@@ -677,7 +677,7 @@ void View::initView()
 
     // Setup the Canvas and its controller.
     d->canvas = new Canvas(this);
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(this);
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(actionCollection(), this);
     d->canvasController = canvasController;
     d->canvasController->setCanvas(d->canvas);
     d->canvasController->setCanvasMode(KoCanvasController::Spreadsheet);

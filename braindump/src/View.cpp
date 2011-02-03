@@ -134,7 +134,7 @@ void View::initGUI()
     setLayout( gridLayout );
 
     
-    m_canvasController = new KoCanvasControllerWidget( this );
+    m_canvasController = new KoCanvasControllerWidget( actionCollection(), this );
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
     
     createCanvas(0);

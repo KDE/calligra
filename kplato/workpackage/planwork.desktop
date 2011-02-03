@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Plan WorkPackage Handler
+Name[pt]=Tratamento de Pacotes de Trabalho do Plan
+Name[pt_BR]=Tratamento de pacotes de trabalho do Plan
+Name[sv]=Hantering av arbetspaket i Plan
+Name[uk]=Програма опрацювання робочих пакунків Plan
+Name[x-test]=xxPlan WorkPackage Handlerxx
 GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù
