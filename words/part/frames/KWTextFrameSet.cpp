@@ -179,8 +179,8 @@ void KWTextFrameSet::updateTextLayout()
     if (lay) {
         // Don't schedule the layout what would wait with the layout till the eventloop kicks
         // in what sucks performance-wise. So, start the layouting right away.
-        //lay->scheduleLayout();
-        lay->relayout();
+        lay->scheduleLayout();
+//         lay->relayout();
     }
 }
 
