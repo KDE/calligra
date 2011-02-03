@@ -288,7 +288,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         //Create Dockers
         createLayersTabDock();
 
-        KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
+        // set one whitespace as title to allow a one column toolbox
+        KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
