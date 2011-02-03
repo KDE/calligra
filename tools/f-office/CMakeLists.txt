@@ -25,7 +25,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/tables
     ${LIBXML2_INCLUDE_DIR}
     ${KDE4_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction # for now we just include koabstraction
 )
 
 SET(FreOffice_RCCS FreOffice.qrc)
@@ -65,8 +64,8 @@ set(FreOfficeMocSrc_SRCS
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplicationController.h
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/RemoveSheetCommand.h
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellToolFactory.h
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellTool.h
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.h
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellTool.h
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.h
     ${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplication.h
 )
 
@@ -113,11 +112,11 @@ set(FreOffice_SRCS
     ${FreOfficeUiSrc} 
     ${FreOfficeMocSrc} 
     ${FreOffice_RCC_SRCS}
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplicationController.cpp
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction/RemoveSheetCommand.cpp
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellToolFactory.cpp
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellTool.cpp
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplicationController.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/RemoveSheetCommand.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellToolFactory.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellTool.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.cpp
 )
 
 if(QT_QTOPENGL_FOUND)
@@ -136,7 +135,7 @@ target_link_libraries(FreOffice
     ${QT_LIBRARIES}
     ${QT_QTSQL_LIBRARY}
     ${QT_QTNETWORK_LIBRARIES}
-    #koabstraction # for now we directly include koabstraction
+    koabstraction
     komain
     kopageapp
     wordsprivate
