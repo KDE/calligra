@@ -427,22 +427,6 @@ getTextCFException(const MSO::TextContainer* tc, const int start)
     return &cfs[i].cf;
 }
 
-PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
-             const MSO::MasterOrSlideContainer* m,
-             quint32 textType)
-{
-    m_level = 0;
-    *pfs = 0;
-    addStyle(pfs, getLevelPF(m, textType, 0));
-    addStyle(pfs, getDefaultLevelPF(d, 0));
-    addStyle(pfs, getDefaultPF(d));
-
-    *pf9s = 0;
-    addStyle(pf9s, getLevelPF9(m, textType, 0));
-    addStyle(pf9s, getDefaultLevelPF9(d, textType, 0));
-    addStyle(pf9s, getDefaultPF9(d));
-}
-
 PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
                            const SlideListWithTextSubContainerOrAtom* texts,
                            const MasterOrSlideContainer* m,
@@ -530,6 +514,16 @@ PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
     cfrun_rm = false;
 }
 
+PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d)
+{
+    //check DocumentContainer/DocumentTextInfoContainer/textCFDefaultsAtom
+    cfs.append(getDefaultCF(d));
+    cfrun_rm = false;
+
+    //It MUST be less than or equal to 0x0005 (not required here)
+    m_level = 99;
+}
+
 int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer& tc, quint32 start)
 {
     int n = 0;
@@ -607,7 +601,7 @@ TYPE PptTextPFRun::NAME() const \
     const MSO::TextPFException* const * p = pfs; \
     while (*p) { \
         if ((*p)->masks.TEST) { \
- 	    if (VALID()) { \
+            if (VALID()) { \
                 return PRE (*p)->NAME; \
             } \
         } \

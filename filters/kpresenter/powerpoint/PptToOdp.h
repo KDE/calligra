@@ -267,23 +267,19 @@ private:
     void defineDefaultParagraphProperties(KoGenStyle& style);
     void defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles);
 
-    /* Extract data from TextCFException into the style */
-
+    /**
+     * Extract data from TextCFException into the style
+     * @param KoGenStyle of type TextStyle
+     * @param PptTextCFRun address
+     * @param TextCFException9 address
+     * @param TextCFException10 address
+     * @param TextSIException address
+     */
     void defineTextProperties(KoGenStyle& style,
                               const PptTextCFRun* cf,
                               const MSO::TextCFException9* cf9,
                               const MSO::TextCFException10* cf10,
                               const MSO::TextSIException* si);
-
-    /**
-     * Deprecated
-     */
-    void defineTextProperties(KoGenStyle& style,
-                              const MSO::TextCFException* cf,
-                              const MSO::TextCFException9* cf9,
-                              const MSO::TextCFException10* cf10,
-                              const MSO::TextSIException* si,
-                              const MSO::TextContainer* tc = NULL);
 
     /**
      * Extract data from TextPFException into the style

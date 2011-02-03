@@ -96,10 +96,23 @@ class PptTextCFRun {
     quint16 m_level;
     bool cfrun_rm;
 public:
+    /**
+     * All TextCFExceptions are required.
+     * @param DocumentContainer
+     * @param MasterOrSlideContainer hierarchy
+     * @param TextContainer
+     * @param level specifies the indentation level of the paragraph
+     */
     PptTextCFRun(const MSO::DocumentContainer* d,
                  QList<const MSO::MasterOrSlideContainer*> &mh,
                  const MSO::TextContainer& tc,
                  quint16 level);
+
+    /**
+     * Only default TextCFExceptions are required.
+     * @param DocumentContainer
+     */
+    PptTextCFRun(const MSO::DocumentContainer* d);
 
     /**
      * Add the TextCFException structure present in the current TextContainer,
