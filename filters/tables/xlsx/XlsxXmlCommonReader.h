@@ -28,11 +28,12 @@
 #include <MsooXmlReader.h>
 #include <KoGenStyle.h>
 
+#include <QColor>
+
 class KoCharacterStyle;
 
 //! A class reading MSOOXML XLSX markup
 //! This is a base class implementing reading elements common to some XLSX content types.
-//! Currently this class is used by XlsxXmlSharedStringsReader (and shall be by XlsxXmlDocumentReader).
 class XlsxXmlCommonReader : public MSOOXML::MsooXmlReader
 {
 public:
@@ -41,6 +42,8 @@ public:
     virtual ~XlsxXmlCommonReader();
 
 protected:
+    QColor tintedColor(const QColor& color, qreal tint);
+
     KoFilter::ConversionStatus read_t();
     KoFilter::ConversionStatus read_r();
     KoFilter::ConversionStatus read_rPr();
@@ -51,6 +54,7 @@ protected:
     KoFilter::ConversionStatus read_u();
     KoFilter::ConversionStatus read_strike();
     KoFilter::ConversionStatus read_b();
+    KoFilter::ConversionStatus read_scheme();
     KoFilter::ConversionStatus read_i();
 
     KoCharacterStyle *m_currentTextStyleProperties;

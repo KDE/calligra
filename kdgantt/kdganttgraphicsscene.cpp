@@ -31,6 +31,7 @@
 #include "kdganttsummaryhandlingproxymodel.h"
 #include "kdganttgraphicsview.h"
 
+#include <QApplication>
 #include <QToolTip>
 #include <QGraphicsSceneHelpEvent>
 #include <QTextDocument>
@@ -592,27 +593,33 @@ GraphicsItem* GraphicsScene::dragSource() const
     return d->dragSource;
 }
 
-QRectF GraphicsScene::printRect(bool drawRowLabels )
+#define KDGANTT_LIST_CHART_GAP 0.0
+QRectF GraphicsScene::printRect( bool drawRowLabels, GraphicsView *view )
 {
     assert(rowController());
 
     qreal leftEdge = sceneRect().left();
     QVector<QGraphicsTextItem*> labelItems;
-    if(drawRowLabels) {
+    if ( drawRowLabels ) {
         labelItems.reserve(d->items.size());
         qreal textWidth = 0.;
         qreal rowHeight = 0.;
         {Q_FOREACH( GraphicsItem* item, d->items ) {
             QModelIndex sidx = summaryHandlingModel()->mapToSource( item->index() );
-            if( sidx.parent().isValid() && sidx.parent().data( ItemTypeRole ).toInt() == TypeMulti ) {
+            if ( sidx.parent().isValid() && sidx.parent().data( ItemTypeRole ).toInt() == TypeMulti ) {
                 continue;
             }
-            const Span rg=rowController()->rowGeometry( sidx );
-            const QString txt = item->index().data( Qt::DisplayRole ).toString();
-            QGraphicsTextItem* ti = new QGraphicsTextItem(txt,0,this);
+            const Span rg = rowController()->rowGeometry( sidx );
+            const QString txt = " " + item->index().data( Qt::DisplayRole ).toString();
+            QGraphicsTextItem* ti = new QGraphicsTextItem( txt, 0, this );
             ti->setPos( 0, rg.start() );
-            if( ti->document()->size().width() > textWidth ) textWidth = ti->document()->size().width();
-            if( rg.length() > rowHeight ) rowHeight = rg.length();
+            ti->document()->size().setWidth( ti->document()->size().width() + KDGANTT_LIST_CHART_GAP );
+            if ( ti->document()->size().width() > textWidth ) {
+                textWidth = ti->document()->size().width();
+            }
+            if ( rg.length() > rowHeight ) {
+                rowHeight = rg.length();
+            }
             labelItems << ti;
         }}
         {Q_FOREACH( QGraphicsTextItem* item, labelItems ) {
@@ -621,80 +628,106 @@ QRectF GraphicsScene::printRect(bool drawRowLabels )
         }}
     }
     QRectF res = itemsBoundingRect();
-    qDeleteAll(labelItems);
+    if ( view ) {
+        res.setHeight( res.height() + view->headerHeight() );
+    }
+    qDeleteAll( labelItems );
     //qDebug()<<"printRect()"<<res;
     return res;
 }
 
 void GraphicsScene::print( QPainter* painter, const QRectF& target, const QRectF& source, bool drawRowLabels, GraphicsView *view )
 {
-  QRectF targetRect(target);
+    QRectF targetRect(target);
 
-  assert(rowController());
+    assert(rowController());
 
-  QVector<QGraphicsTextItem*> labelItems;
-  if(drawRowLabels) {
-  labelItems.reserve(d->items.size());
-  qreal leftEdge = sceneRect().left();
-  qreal textWidth = 0.;
-  qreal rowHeight = 0.;
-  {Q_FOREACH( GraphicsItem* item, d->items ) {
-    QModelIndex sidx = summaryHandlingModel()->mapToSource( item->index() );
-    if( sidx.parent().isValid() && sidx.parent().data( ItemTypeRole ).toInt() == TypeMulti ) {
-      continue;
-    }
-    const Span rg=rowController()->rowGeometry( sidx );
-    const QString txt = item->index().data( Qt::DisplayRole ).toString();
-    QGraphicsTextItem* ti = new QGraphicsTextItem(txt,0,this);
-    ti->setPos( 0, rg.start() );
-    if( ti->document()->size().width() > textWidth ) textWidth = ti->document()->size().width();
-    if( rg.length() > rowHeight ) rowHeight = rg.length();
-    labelItems << ti;
-  }}
-  {Q_FOREACH( QGraphicsTextItem* item, labelItems ) {
-      item->setPos( leftEdge-textWidth-rowHeight, item->pos().y() );
-      item->show();
-  }}
-  }
-  QRectF oldSceneRect( sceneRect() );
-  setSceneRect( itemsBoundingRect() );
-  QRectF sourceRect = source;
-  //qDebug()<<"GraphicsScene::print() 1"<<sceneRect()<<targetRect<<sourceRect;
-  //painter->drawRect( targetRect );
-  if ( view ) {
-    qreal height = sourceRect.height();
-    qreal width = sourceRect.width();
-    if ( view ) {
-        height += view->headerHeight();
-    }
     qreal scale = 1.0;
-    if ( width > target.width() ) {
-        scale = target.width() / width;
+    if ( source.width() > target.width() ) {
+        scale = target.width() / source.width();
     }
-    if ( height > target.height() ) {
-        scale = qMin( scale, target.height() / height );
+    if ( source.height() > target.height() ) {
+        scale = qMin( scale, target.height() / source.height() );
     }
-    QRectF t = targetRect;
-    QRectF s = sourceRect;
-    s.setHeight( view->headerHeight() );
-    t.setWidth( s.width() * scale );
-    t.setHeight( s.height() * scale );
-    view->renderHeader( painter, t, s, Qt::KeepAspectRatio );
-    targetRect.translate( (qreal)0.0, t.height() );
-    targetRect.setHeight( targetRect.height() - t.height() );
-  }
-  //qDebug()<<"GraphicsScene::print() 3"<<sceneRect()<<targetRect<<sourceRect;
-  
-  if ( targetRect.width() > sourceRect.width() && targetRect.height() > sourceRect.height() ) {
-      // do not scale up
-      targetRect.setSize( sourceRect.size() );
-      render( painter, targetRect, sourceRect, Qt::IgnoreAspectRatio );
-  } else {
-      render( painter, targetRect, sourceRect );
-  }
-  qDeleteAll(labelItems);
+    painter->scale( scale, scale );
+    targetRect.setWidth( targetRect.width() / scale );
+    targetRect.setHeight( targetRect.height() / scale );
 
-  setSceneRect( oldSceneRect );
+    qreal textWidth = 0.;
+    if (drawRowLabels) {
+        painter->save();
+
+        qreal top = view ? view->headerHeight() : 0.0;
+        {Q_FOREACH( GraphicsItem* item, d->items ) {
+            QModelIndex sidx = summaryHandlingModel()->mapToSource( item->index() );
+            if ( sidx.parent().isValid() && sidx.parent().data( ItemTypeRole ).toInt() == TypeMulti ) {
+                continue;
+            }
+            const Span rg = rowController()->rowGeometry( sidx );
+            const QString txt = " " + item->index().data( Qt::DisplayRole ).toString();
+            QRectF r( 0.0, rg.start() + top, 0.0, rg.length() );
+            r = painter->boundingRect( r, Qt::AlignLeft | Qt::AlignVCenter, txt );
+            painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, txt );
+            if ( r.width() > textWidth ) {
+                textWidth = r.width();
+            }
+        }}
+        painter->restore();
+        if ( view ) {
+            QStyle* style = QApplication::style();
+            QRectF r( 0.0, 0.0, textWidth, view->headerHeight() ); 
+            QStyleOptionHeader opt;
+            opt.init( view );
+            opt.rect = r.toRect();
+            opt.text = summaryHandlingModel()->headerData( 0, Qt::Horizontal, Qt::DisplayRole ).toString();
+            opt.textAlignment = Qt::AlignCenter;
+            // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
+            style->drawControl( QStyle::CE_HeaderSection, &opt, painter, view );
+            QStyleOptionHeader subopt = opt;
+            subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, view );
+            if ( subopt.rect.isValid() ) {
+                style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, view );
+            }
+        }
+        if ( textWidth > 0 ) {
+            textWidth += KDGANTT_LIST_CHART_GAP;
+        }
+    }
+    QRectF oldSceneRect( sceneRect() );
+    setSceneRect( itemsBoundingRect() );
+    QRectF sourceRect = source.adjusted( textWidth, (qreal)0.0, (qreal)0.0, (qreal)0.0 );
+    targetRect.adjust( textWidth, (qreal)0.0, (qreal)0.0, (qreal)0.0 );
+    //qDebug()<<"GraphicsScene::print() 1"<<"scene"<<sceneRect()<<"target"<<targetRect<<"source"<<source<<"sourceRect"<<sourceRect<<"text"<<textWidth<<"scale"<<scale;
+    if ( view ) {
+        qreal width = sourceRect.width();
+        qreal height = sourceRect.height();
+        qreal scale = 1.0;
+        if ( width > targetRect.width() ) {
+            scale = targetRect.width() / width;
+        }
+        if ( height > targetRect.height() ) {
+            scale = qMin( scale, targetRect.height() / height );
+        }
+        QRectF t = targetRect;
+        QRectF s = sourceRect;
+        s.setHeight( view->headerHeight() );
+        t.setWidth( s.width() * scale );
+        t.setHeight( s.height() * scale );
+        view->renderHeader( painter, t, s, Qt::KeepAspectRatio );
+        targetRect.translate( (qreal)0.0, t.height() );
+        targetRect.setHeight( targetRect.height() - t.height() );
+    }
+    //qDebug()<<"GraphicsScene::print() 3"<<sceneRect()<<targetRect<<sourceRect;
+
+    if ( targetRect.width() > sourceRect.width() && targetRect.height() > sourceRect.height() ) {
+        // do not scale up
+        sourceRect.setSize( targetRect.size() );
+        render( painter, targetRect, sourceRect, Qt::IgnoreAspectRatio );
+    } else {
+        render( painter, targetRect, sourceRect );
+    }
+
+    setSceneRect( oldSceneRect );
 }
 
 

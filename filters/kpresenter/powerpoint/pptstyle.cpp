@@ -19,8 +19,15 @@
 */
 
 #include "pptstyle.h"
-
+#include <QDebug>
 using namespace MSO;
+
+//prototypes of local functions
+const TextCFRun*
+getCFRun(const TextContainer* tc, const quint32 start);
+
+const TextCFException*
+getTextCFException(const TextContainer* tc, const int start);
 
 namespace {
 
@@ -399,7 +406,8 @@ qint16 indentByTextRuler(const TextRuler* tr, quint16 level)
 
 } //namespace
 
-const TextCFRun* getCFRun(const TextContainer* tc, const quint32 start)
+const TextCFRun*
+getCFRun(const TextContainer* tc, const quint32 start)
 {
     if (tc && tc->style) {
         return getRun<TextCFRun>(tc->style->rgTextCFRun, start);
@@ -427,22 +435,6 @@ getTextCFException(const MSO::TextContainer* tc, const int start)
     return &cfs[i].cf;
 }
 
-PptTextPFRun::PptTextPFRun(const MSO::DocumentContainer* d,
-             const MSO::MasterOrSlideContainer* m,
-             quint32 textType)
-{
-    m_level = 0;
-    *pfs = 0;
-    addStyle(pfs, getLevelPF(m, textType, 0));
-    addStyle(pfs, getDefaultLevelPF(d, 0));
-    addStyle(pfs, getDefaultPF(d));
-
-    *pf9s = 0;
-    addStyle(pf9s, getLevelPF9(m, textType, 0));
-    addStyle(pf9s, getDefaultLevelPF9(d, textType, 0));
-    addStyle(pf9s, getDefaultPF9(d));
-}
-
 PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
                            const SlideListWithTextSubContainerOrAtom* texts,
                            const MasterOrSlideContainer* m,
@@ -454,9 +446,25 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     const TextPFRun* pfrun = getPFRun(tc, start);
     quint16 level = 0;
     if (pfrun) {
+        m_count = pfrun->count;
         level = pfrun->indentLevel;
         // [MS-PPT].pdf says there are only 5 levels
-        if (level > 4) level = 4;
+        if (level > 4) {
+            level = 4;
+        }
+    } else {
+        //FIXME: looks like masters have this info stored somewhere else, we
+        //use the default values at the moment
+        m_count = -1;
+        level = 0;
+#if 0 
+        qDebug() << "==> TextPFRun missing!";
+        if (tc) {
+            qDebug() << "==> TextContainer present, what's going on?";
+        } else {
+            qDebug() << "==> TextContainer missing";
+        }
+#endif
     }
     //Processing either OfficeArtClientTextbox or a SlideListWithTextContainer.
     //The TextRulerAtom is provided only in case of OfficeArtClientTextbox.
@@ -527,7 +535,17 @@ PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
     cfs.append(getDefaultCF(d));
 
     m_level = level;
-    cfrun_rm = false;
+    m_cfrun_rm = false;
+}
+
+PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d)
+{
+    //check DocumentContainer/DocumentTextInfoContainer/textCFDefaultsAtom
+    cfs.append(getDefaultCF(d));
+    m_cfrun_rm = false;
+
+    //It MUST be less than or equal to 0x0005 (not required here)
+    m_level = 99;
 }
 
 int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer& tc, quint32 start)
@@ -535,16 +553,16 @@ int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer& tc, quint32 start)
     int n = 0;
 
     //remove pointer to TextCFException structure of the previous run of text
-    if (cfrun_rm) {
+    if (m_cfrun_rm) {
         cfs.removeFirst();
-        cfrun_rm = false;
+        m_cfrun_rm = false;
     }
 
     const TextCFRun* cfrun = getCFRun(&tc, start);
     if (cfrun) {
         cfs.prepend(&cfrun->cf);
         n = cfrun->count;
-        cfrun_rm = true;
+        m_cfrun_rm = true;
     }
     return n;
 }
@@ -607,7 +625,7 @@ TYPE PptTextPFRun::NAME() const \
     const MSO::TextPFException* const * p = pfs; \
     while (*p) { \
         if ((*p)->masks.TEST) { \
- 	    if (VALID()) { \
+            if (VALID()) { \
                 return PRE (*p)->NAME; \
             } \
         } \

@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
+ *
+ * Copyright (C) 2006-2011 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
- * Copyright (C) 2006,2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -190,6 +191,8 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
     Q_ASSERT(lastFrame);
+    if (!lastFrame)
+        return;
 
     if (KWord::isHeaderFooter(this)) {
         KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
@@ -197,7 +200,7 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
         //kDebug(32001)<<"Header/Footer frameSet="<<this<<"lastFrame="<<lastFrame<<"allowLayout="<<allowLayout()<<"textHeight="<<textHeight;
         if (allowLayout())
             emit decorationFrameResize(this);
-    } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
+    } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) { // textHeight==0 means a new-page-request
         //kDebug(32001)<<"AutoCreateNewFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"ReconnectNewFrame="<<(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)<<"textHeight="<<textHeight;
         if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
             emit moreFramesNeeded(this);

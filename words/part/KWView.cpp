@@ -64,7 +64,6 @@
 #include <KoStandardAction.h>
 #include <KoPasteController.h>
 #include <KoShape.h>
-#include <KoTextOnShapeContainer.h>
 #include <KoText.h>
 #include <KoFind.h>
 #include <KoShapeContainer.h>
@@ -456,10 +455,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action = new KAction(i18n("Remove Frame-clip"), this);
     actionCollection()->addAction("remove_clipped_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(removeFrameClipping()));
-
-    action = new KAction(i18n("Add Text on Shape"), this);
-    actionCollection()->addAction("add_text_on_shape", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(createTextOnShape()));
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
@@ -1362,33 +1357,6 @@ void KWView::setGuideVisibility(bool on)
 {
     m_document->guidesData().setShowGuideLines(on);
     m_canvas->update();
-}
-
-void KWView::createTextOnShape()
-{
-    QSet<KoShape *> frameShapes;
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = frameForShape(shape);
-        Q_ASSERT(frame);
-        if (frame->shape()->parent() == 0) {
-            frameShapes << frame->shape();
-        }
-    }
-#if 0
-    if (!frameShapes.isEmpty()) {
-        KoAddTextOnShapeCommand *cmd = new KoAddTextOnShapeCommand(frameShapes.toList(), m_document);
-        m_document->addCommand(cmd);
-    }
-#else
-    foreach (KoShape *shape, frameShapes) {
-        selection->deselect(shape);
-        KoTextOnShapeContainer *decorator = new KoTextOnShapeContainer(shape, m_document->resourceManager());
-        decorator->setPlainText("dummy text, la la la enzo");
-        m_document->addShape(decorator);
-        selection->select(decorator);
-    }
-#endif
 }
 
 // end of actions

@@ -26,8 +26,10 @@
 #include "XlsxImport.h"
 #include <MsooXmlSchemas.h>
 
+#include <KoXmlWriter.h>
+
 //#define MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_CLASS XlsxXmlCommentsReaderContext
+#define MSOOXML_CURRENT_CLASS XlsxXmlCommentsReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
@@ -44,10 +46,11 @@ XlsxComments::XlsxComments()
 {
 }
 
-XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes)
-    : MSOOXML::MsooXmlReaderContext()
-    , comments(&_comments)
+XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes,
+    QVector<QString>& _colorIndices)
+    : comments(&_comments)
     , themes(_themes)
+    , colorIndices(_colorIndices)
 {
 }
 
@@ -56,7 +59,7 @@ XlsxXmlCommentsReaderContext::~XlsxXmlCommentsReaderContext()
 }
 
 XlsxXmlCommentsReader::XlsxXmlCommentsReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlCommonReader(writers)
+    : XlsxXmlCommonReader(writers)
 {
 }
 
@@ -68,7 +71,8 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
 {
     m_context = dynamic_cast<XlsxXmlCommentsReaderContext*>(context);
     Q_ASSERT(m_context);
-
+    m_colorIndices = m_context->colorIndices;
+    m_themes = m_context->themes;
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
     if (result == KoFilter::OK)
@@ -114,6 +118,16 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::readInternal()
 
 #undef CURRENT_EL
 #define CURRENT_EL comments
+/*
+ Parent elements:
+ - root element
+
+ Child elements:
+ - [done] authors (Authors) §18.7.2
+ - [done] commentList (List of Comments) §18.7.4
+ - extLst (Future Feature Data Storage Area) §18.2.10
+
+*/
 KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comments()
 {
     READ_PROLOGUE
@@ -130,6 +144,14 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comments()
 }
 
 //! 18.7.2 authors (Authors)
+/*
+ Parent elements:
+ - [done] comments (§18.7.6)
+
+ Child elements:
+ - [done] author (Author) §18.7.1
+
+*/
 #undef CURRENT_EL
 #define CURRENT_EL authors
 KoFilter::ConversionStatus XlsxXmlCommentsReader::read_authors()
@@ -147,6 +169,13 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_authors()
 }
 
 //! 18.7.1 author (Author)
+/*
+ Parent elements:
+ - [done] authors (§18.7.2)
+
+ Child elements:
+ - none
+*/
 #undef CURRENT_EL
 #define CURRENT_EL author
 KoFilter::ConversionStatus XlsxXmlCommentsReader::read_author()
@@ -156,15 +185,45 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_author()
     const QString author(text().toString().trimmed());
     kDebug() << "Added author #" << (m_context->comments->count() + 1) << author;
     m_context->comments->m_authors.append(author);
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL commentPr
+/*
+ Parent elements:
+ - [done] comment (§18.7.3)
+
+ Child elements:
+ - anchor (Object Cell Anchor) §18.3.1.1
+
+*/
+KoFilter::ConversionStatus XlsxXmlCommentsReader::read_commentPr()
+{
+    READ_PROLOGUE
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            //TRY_READ_IF(anchor)
+            //ELSE_WRONG_FORMAT
+        }
     }
     READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL commentList
+/*
+ Parent elements:
+ - [done] comments (§18.7.6)
+
+ Child elements:
+ - [done] comment (Comment) §18.7.3
+
+*/
 KoFilter::ConversionStatus XlsxXmlCommentsReader::read_commentList()
 {
     READ_PROLOGUE
@@ -181,6 +240,15 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_commentList()
 
 #undef CURRENT_EL
 #define CURRENT_EL comment
+/*
+ Parent elements:
+ - [done] commentList (§18.7.4)
+
+ Child elements:
+ - [done] commentPr (Comment Properties) §18.7.5
+ - [done] text (Comment Text) §18.7.7
+
+*/
 KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comment()
 {
     READ_PROLOGUE
@@ -195,8 +263,8 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comment()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(text)
-            //! @todo ELSE_TRY_READ_IF(commentPr)
-            //! @todo add ELSE_WRONG_FORMAT
+            ELSE_TRY_READ_IF(commentPr)
+            ELSE_WRONG_FORMAT
         }
     }
     if (comment.get()) {
@@ -209,10 +277,28 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comment()
 
 #undef CURRENT_EL
 #define CURRENT_EL text
+/*
+ Parent elements:
+ - [done] comment (§18.7.3)
+
+ Child elements:
+ - phoneticPr (Phonetic Properties) §18.4.3
+ - [done] r (Rich Text Run) §18.4.4
+ - rPh (Phonetic Run) §18.4.6
+ - [done] t (Text) §18.4.12
+
+*/
 KoFilter::ConversionStatus XlsxXmlCommentsReader::read_text()
 {
     READ_PROLOGUE
-    m_currentCommentText.clear();
+
+    QByteArray commentData;
+    QBuffer commentBuffer(&commentData);
+    commentBuffer.open(QIODevice::WriteOnly);
+    KoXmlWriter commentWriter(&commentBuffer, 0/*indentation*/);
+    MSOOXML::Utils::XmlWriteBuffer buf;
+    body = buf.setWriter(&commentWriter);
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -224,38 +310,10 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_text()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    READ_EPILOGUE
-}
 
-#undef CURRENT_EL
-#define CURRENT_EL r
-KoFilter::ConversionStatus XlsxXmlCommentsReader::read_r()
-{
-    READ_PROLOGUE
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF(t)
-            //! @todo ELSE_TRY_READ_IF(rPr)
-            //! @todo add ELSE_WRONG_FORMAT
-        }
-    }
-    kDebug() << m_currentCommentText;
-    READ_EPILOGUE
-}
+    body = buf.releaseWriter();
+    commentBuffer.close();
+    m_currentCommentText = commentData;
 
-#undef CURRENT_EL
-#define CURRENT_EL t
-KoFilter::ConversionStatus XlsxXmlCommentsReader::read_t()
-{
-    READ_PROLOGUE
-    readNext();
-    //! @todo is trimming ok here?
-    m_currentCommentText += text().toString().trimmed();
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
     READ_EPILOGUE
 }

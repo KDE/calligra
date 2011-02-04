@@ -78,11 +78,6 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
         return false;
     }
 
-    // Remove me when custom-shape suppors rotation properly
-    if (m_rot != 0) {
-        return true;
-    }
-
     // These shapes are not properly supported atm. some have bugs in predefinedShapes.xml,
     // some might have xml parser / calligra bugs
     if (m_contentType == "circularArrow" || m_contentType == "curvedDownArrow" ||

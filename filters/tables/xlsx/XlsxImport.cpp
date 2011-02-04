@@ -611,7 +611,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     XlsxComments comments;
     {
         XlsxXmlCommentsReader commentsReader(writers);
-        XlsxXmlCommentsReaderContext context(comments, &themes);
+        XlsxXmlCommentsReaderContext context(comments, &themes, colorContext.colorIndices);
         RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
 //! @todo only support "xl/comments1.xml" filename for comments?
             "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )

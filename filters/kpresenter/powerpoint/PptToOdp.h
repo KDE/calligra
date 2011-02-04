@@ -267,23 +267,19 @@ private:
     void defineDefaultParagraphProperties(KoGenStyle& style);
     void defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles);
 
-    /* Extract data from TextCFException into the style */
-
+    /**
+     * Extract data from TextCFException into the style
+     * @param KoGenStyle of type TextStyle
+     * @param PptTextCFRun address
+     * @param TextCFException9 address
+     * @param TextCFException10 address
+     * @param TextSIException address
+     */
     void defineTextProperties(KoGenStyle& style,
                               const PptTextCFRun* cf,
                               const MSO::TextCFException9* cf9,
                               const MSO::TextCFException10* cf10,
                               const MSO::TextSIException* si);
-
-    /**
-     * Deprecated
-     */
-    void defineTextProperties(KoGenStyle& style,
-                              const MSO::TextCFException* cf,
-                              const MSO::TextCFException9* cf9,
-                              const MSO::TextCFException10* cf10,
-                              const MSO::TextSIException* si,
-                              const MSO::TextContainer* tc = NULL);
 
     /**
      * Extract data from TextPFException into the style
@@ -345,10 +341,27 @@ private:
                         const QString& text, const int start, int end, quint16* p_fs);
     int processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
 			 const QString& text, int start, int end, quint16* p_fs);
-    void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
-                         const MSO::TextContainer& tc, const MSO::TextRuler* tr,
-                         const QString& text, int start, int end,
-                         QStack<QString>& levels);
+
+    /**
+     * Process the content of a paragraph and write it into output file.
+     *
+     * @param out Writer
+     * @param cd provides access to additional text formatting in StyleTextProp9Atom
+     * @param tc provides access to text formatting in MasterTextPropAtom
+     * @param tr specifies tabbing, margins, and indentation for text
+     * @param text contains the text of the slide
+     * @param start specifies begging of the paragraph in text
+     * @param end specifies end of the paragraph in text
+     * @param levels provides info about each level of indentation
+     */
+    void processParagraph(Writer& out,
+                          const MSO::OfficeArtClientData* cd,
+                          const MSO::TextContainer& tc,
+                          const MSO::TextRuler* tr,
+                          const QString& text,
+                          int start,
+                          int end,
+                          QStack<QString>& levels);
 
     /**
      * @brief Write declaration in the content body presentation

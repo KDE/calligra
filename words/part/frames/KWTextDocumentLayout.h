@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright (C) 2006,2011 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -39,7 +40,7 @@ public:
     ~KWTextDocumentLayout();
 
     /// reimplemented from KoTextDocumentLayout::layout()
-    void layout();
+    virtual void layout();
 
     /// reimplemented from KoTextDocumentLayout::shapes()
     QList<KoShape*> shapes() const;
