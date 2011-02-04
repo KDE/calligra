@@ -35,7 +35,6 @@
 class QDomElement;
 class QStringList;
 
-class KPlatoXmlLoader;
 
 /// The main namespace
 namespace KPlato
