@@ -47,7 +47,7 @@ class CellEditorBase;
 /**
  * Abstract tool providing actions acting on cell ranges.
  */
-class CALLIGRA_TABLES_EXPORT CellToolBase : public KoInteractionTool
+class CALLIGRA_TABLES_COMMON_EXPORT CellToolBase : public KoInteractionTool
 {
     Q_OBJECT
 

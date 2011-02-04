@@ -27,18 +27,21 @@
 #define MSOOXMLXMLDIAGRAMREADER_P_H
 
 #include <cmath>
-#include <QString>
-#include <QList>
-#include <QVector>
-#include <QMap>
-#include <QPair>
-#include <QExplicitlySharedDataPointer>
+#include <QtCore/QString>
+#include <QtCore/QList>
+#include <QtCore/QVector>
+#include <QtCore/QMap>
+#include <QtCore/QPair>
+#include <QtCore/QRect>
+#include <QtCore/QExplicitlySharedDataPointer>
 
+extern QVariant val;
 namespace MSOOXML {
     class MsooXmlDiagramReader;
 }
 class KoXmlWriter;
 class KoGenStyles;
+class QTextStream;
 
 namespace MSOOXML { namespace Diagram {
 
@@ -97,6 +100,106 @@ class Context
         AbstractNode* m_currentNode;
 };
 
+class ValueCache
+{
+public:
+    ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ){}
+    class ResultWrapper
+    {
+        public:
+            ResultWrapper( ValueCache* parent, const QString& name ): m_parent( parent ), m_name( name ){}
+            ResultWrapper& operator= ( qreal value )
+            {
+                Q_ASSERT( m_parent );
+                m_parent->setValue( m_name, value );
+                return *this;
+            }
+            operator qreal() const
+            {
+                Q_ASSERT( m_parent );
+                bool valid = false;
+                return m_parent->value( m_name, valid );
+            }
+        private:
+            ValueCache* m_parent;
+            const QString m_name;
+      
+    };
+    qreal value( const QString& name, bool& valid ) const
+    {
+        valid = true;
+        if ( isRectValue( name ) )
+        {
+            return rectValue( name );
+        }
+        else
+        {
+            if ( ! mapping.contains( name ) )
+                valid = false;
+            return mapping[ name ];
+        }
+    }
+    bool valueExists( const QString& name )
+    {
+        return isRectValue( name ) || mapping.contains( name );
+    }
+    void setValue( const QString& name, qreal value )
+    {
+        if ( isRectValue( name ) )
+            setRectValue( name, value );
+        else
+            mapping[ name ] = value;
+    }
+    qreal operator[]( const QString& name ) const 
+    {
+        bool ok = false;
+        return value( name, ok );
+    }
+    
+    ResultWrapper operator[]( const char* name )
+    {
+        return ResultWrapper( this, QString::fromLatin1( name ) );
+    }
+
+    ResultWrapper operator[]( const QString& name )
+    {
+        return ResultWrapper( this, name );
+    }
+    operator QMap< QString, qreal >() const
+    {
+        QMap < QString, qreal > result = mapping;
+        result[ "l" ] = rect.left();
+        result[ "r" ] = rect.right();
+        result[ "t" ] = rect.top();
+        result[ "b" ] = rect.bottom();
+        result[ "w" ] = rect.width();
+        result[ "h" ] = rect.height();
+        return result;
+    }
+private:
+    bool isRectValue( const QString& name ) const
+    {
+        if ( name == "l")
+            return true;
+        else if ( name == "r" )
+            return true;
+        else if ( name == "w" )
+            return true;
+        else if ( name == "h" )
+            return true;
+        else if ( name == "t" )
+            return true;
+        else if ( name == "b" )
+            return true;
+        else
+            return false;
+    }
+    qreal rectValue( const QString& name ) const;
+    void setRectValue( const QString& name, qreal value );
+    QMap< QString, qreal > mapping;
+    QRectF rect;
+};
+
 /****************************************************************************************************
  * It follws the classes used within the data-model to build up a tree of data-nodes.
  */
@@ -109,6 +212,7 @@ class AbstractNode
         explicit AbstractNode(const QString &tagName);
         virtual ~AbstractNode();
         virtual void dump(Context* context, int level);
+        virtual void dump( QTextStream& device );
         virtual void readElement(Context*, MsooXmlDiagramReader*);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         AbstractNode* parent() const;
@@ -137,6 +241,7 @@ class PointNode : public AbstractNode
         explicit PointNode() : AbstractNode("dgm:pt") {}
         virtual ~PointNode() {}
         virtual void dump(Context* context, int level);
+        virtual void dump( QTextStream& device );
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
     private:
@@ -150,6 +255,7 @@ class PointListNode : public AbstractNode
         explicit PointListNode() : AbstractNode("dgm:ptLst") {}
         virtual ~PointListNode() {}
         virtual void dump(Context* context, int level);
+        virtual void dump( QTextStream& device );
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
 
@@ -169,6 +275,7 @@ class ConnectionNode : public AbstractNode
         explicit ConnectionNode() : AbstractNode("dgm:cxn"), m_srcOrd(0), m_destOrd(0) {}
         virtual ~ConnectionNode() {}
         virtual void dump(Context*, int level);
+        virtual void dump( QTextStream& device );
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
 };
@@ -180,6 +287,7 @@ class ConnectionListNode : public AbstractNode
         explicit ConnectionListNode() : AbstractNode("dgm:cxnLst") {}
         virtual ~ConnectionListNode() {}
         virtual void dump(Context* context, int level);
+        virtual void dump( QTextStream& device );
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
 
@@ -251,7 +359,8 @@ class LayoutNodeAtom : public AbstractAtom
 {
     public:
         QString m_name;
-        QMap<QString, qreal> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
+        ValueCache m_values;
+        //QMap<QString, qreal> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
         QMap<QString, qreal> m_factors;
         QMap<QString, int> m_countFactors;
         int m_rotateAngle;
@@ -392,6 +501,7 @@ class ShapeAtom : public AbstractAtom
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
+        //virtual void build(Context* context);
 };
 
 /// This element specifies a particular data model point which is to be mapped to the containing layout node.

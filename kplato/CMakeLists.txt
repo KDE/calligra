@@ -46,7 +46,7 @@ include_directories(${KPLATO_INCLUDES})
 
 ########### KPlato private library ###############
 
-set(kplatoprivate_LIB_SRCS
+set(planprivate_LIB_SRCS
     kptviewlistdocker.cpp
     kptviewlist.cpp
     kptviewlistdialog.cpp
@@ -56,6 +56,7 @@ set(kplatoprivate_LIB_SRCS
     kptconfig.cpp
     kpttaskdefaultpanel.cpp
     kptworkpackageconfigpanel.cpp
+    kptcolorsconfigpanel.cpp
 
     kptcontext.cpp
 
@@ -76,64 +77,65 @@ set(kplatoprivate_LIB_SRCS
     KPlatoXmlLoader.cpp
 )
 
-kde4_add_ui_files(kplatoprivate_LIB_SRCS
+kde4_add_ui_files(planprivate_LIB_SRCS
     kptviewlistaddview.ui
     kptviewlisteditview.ui
     kptviewlisteditcategory.ui
 
     kptconfigtaskpanelbase.ui
     kptworkpackageconfigpanel.ui
+    kptcolorsconfigpanel.ui
 
     kptinsertfilepanel.ui
 )
 
-kde4_add_kcfg_files(kplatosettings_SRCS kplatosettings.kcfgc)
+kde4_add_kcfg_files(plansettings_SRCS kplatosettings.kcfgc)
 
-kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS} ${kplatosettings_SRCS} )
+kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(kplatoprivate ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} ${QT_QT3SUPPORT_LIBRARY} komain)
+target_link_libraries(planprivate ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} ${QT_QT3SUPPORT_LIBRARY} komain)
 
-set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatoprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS planprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### KPlato part ###############
 
-set(kplatopart_PART_SRCS kptfactoryinit.cpp )
+set(planpart_PART_SRCS kptfactoryinit.cpp )
 
-kde4_add_plugin(kplatopart ${kplatopart_PART_SRCS})
+kde4_add_plugin(planpart ${planpart_PART_SRCS})
 
-target_link_libraries(kplatopart ${KDE4_KPARTS_LIBS} kplatoprivate)
+target_link_libraries(planpart ${KDE4_KPARTS_LIBS} planprivate)
 
-install(TARGETS kplatopart DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### KPlato executable ###############
 
-set(kplato_KDEINIT_SRCS main.cpp )
+set(calligraplan_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(kplato_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-kplato.png")
+kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-plan.png")
 
-kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
+kde4_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-   set_target_properties(kplato PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(kplato PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kplato")
-   set_target_properties(kplato PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPlato 2")
+   set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.plan")
+   set_target_properties(calligraplan PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Plan")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_kplato komain)
+target_link_libraries(kdeinit_calligraplan komain)
 
-install(TARGETS kdeinit_kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries(kplato kdeinit_kplato komain)
-install(TARGETS kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries(calligraplan kdeinit_calligraplan komain)
+install(TARGETS calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
 install( FILES  planpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  plan.rc plan_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/plan)
-install( PROGRAMS  kplato.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  plan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES kplatosettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 

@@ -28,6 +28,8 @@
 #include <QtCore/QFlags>
 #include <QColor>
 
+#include "XlsxXmlCommonReader.h"
+
 class KoCharacterStyle;
 class KoGenStyle;
 class XlsxImport;
@@ -46,13 +48,12 @@ public:
     void clear();
 
     //! @return true if this color style is valid
-    bool isValid(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
+    bool isValid(const MSOOXML::DrawingMLTheme *themes) const;
 
     //! @return value of this color style; for computing rgb, indexed, tint and theme attributes are used
-//! @todo use indexed
     QColor value(const MSOOXML::DrawingMLTheme *themes) const;
 
-    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, const char* debugElement);
+    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, const QVector<QString>& colors, const char* debugElement);
 
     bool automatic; //!< default: false
     int indexed; //!< default: -1
@@ -60,81 +61,7 @@ public:
     qreal tint; //!< tint value applied to the color, default is -1
     int theme; //!< default: -1
 
-    QColor themeColor(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
-};
-
-//! 22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
-struct ST_VerticalAlignRun
-{
-    enum Value {
-        BaselineVerticalAlignRun, //!< default
-        SubscriptVerticalAlignRun,
-        SuperscriptVerticalAlignRun
-    };
-    ST_VerticalAlignRun(const QString& msooxmlName = QString());
-    //! Sets up @a characterStyle to match this setting.
-    void setupCharacterStyle(KoCharacterStyle* characterStyle) const;
-
-    Value value;
-};
-
-//! Single XLSX font style definition as specified in ECMA-376, 18.8.23 (Fonts), p. 1964.
-/*! @see XlsxXmlStylesReader::read_fonts() */
-class XlsxFontStyle
-{
-public:
-    XlsxFontStyle();
-
-    //! 18.18.85 ST_UnderlineValues (Underline Types)
-    //! Represents the different types of possible underline formatting.
-    //! Used by u@val (§18.4.13) - SpreadsheetML
-    //! CASE #S1730
-    enum ST_UnderlineValue {
-        NoUnderline,
-        SingleUnderline, //!< The default
-        DoubleUnderline,
-        SingleAccountingUnderline,
-        DoubleAccountingUnderline
-    };
-
-    QString name;
-    ST_UnderlineValue underline;
-//! @todo charset
-    XlsxColorStyle color;
-//! @todo bool condense (Mac)
-//! @todo bool shadow (Mac)
-//! @todo extend
-//! @todo family
-//! @todo bool outline;
-//! @todo QString scheme;
-
-    ST_VerticalAlignRun vertAlign;
-
-    bool bold;
-    bool italic;
-    bool strike;
-
-    static ST_UnderlineValue ST_UnderlineValue_fromString(const QString& s);
-    void setUnderline(const QString& s);
-
-    void setSize(qreal size) {
-        m_defaultSize = false;
-        m_size = size;
-    }
-
-    qreal size() const { return m_size; }
-
-    //! Sets up @a cellStyle to match this cell text style.
-    //! @todo implement more styling
-    void setupCellTextStyle(const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes, KoGenStyle* cellStyle) const;
-
-    //! Sets up @a characterStyle to match this font style.
-    //! @todo implement more formatting
-    void setupCharacterStyle(KoCharacterStyle* characterStyle) const;
-
-private:
-    qreal m_size;
-    bool m_defaultSize;
+    QColor themeColor(const MSOOXML::DrawingMLTheme *themes) const;
 };
 
 //! @return QColor value for  ST_UnsignedIntHex (ARGB) (e.g. for 18.8.19 fgColor (Foreground Color) - SpreadsheetML only)
@@ -154,56 +81,6 @@ inline QColor ST_UnsignedIntHex_to_QColor(const QString& color)
     return c;
 }
 
-//! Single XLSX fill style definition as specified in ECMA-376, ECMA-376, 18.8.21, p. 1963.
-/*! @see XlsxXmlStylesReader::read_fills() */
-class XlsxFillStyle
-{
-public:
-    XlsxFillStyle();
-    ~XlsxFillStyle();
-
-    //! 18.18.55 ST_PatternType (Pattern Type), p. 2713
-    /*! Indicates the style of fill pattern being used for a cell format.
-        Compare to MSOOXML::DrawingMLPatternFillStyle which is different pattern type. */
-    enum ST_PatternType {
-        NonePatternType,
-        SolidPatternType,
-        DarkDownPatternType,
-        DarkGrayPatternType,
-        DarkGridPatternType,
-        DarkHorizontalPatternType,
-        DarkTrellisPatternType,
-        DarkUpPatternType,
-        DarkVerticalPatternType,
-        LightPatternType,
-        LightDownPatternType,
-        LightGrayPatternType,
-        LightGridPatternType,
-        LightHorizontalPatternType,
-        LightTrellisPatternType,
-        LightUpPatternType,
-        LightVerticalPatternType,
-        MediumGrayPatternType,
-        Gray0625PatternType,
-        Gray125PatternType
-    };
-
-    ST_PatternType patternType;
-    XlsxColorStyle bgColor;
-    XlsxColorStyle fgColor;
-
-    //! Sets up @a cellStyle to match this style.
-    //! @todo implement more styling
-    void setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
-
-    //! @return color style (bgColor or fgColor) depending on the pattern
-    //! Can return 0 if no fill should be painted.
-    const XlsxColorStyle* realBackgroundColor( const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const;
-
-private:
-    mutable XlsxColorStyle* cachedRealBackgroundColor;
-};
-
 //! Single XLSX border style definition
 /*! @see XlsxXmlStylesReader::read_borders() */
 class XlsxBorderStyle
@@ -213,7 +90,7 @@ public:
 
     KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs);
 
-    QString setupCellStyle(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
+    QString setupCellStyle(const MSOOXML::DrawingMLTheme *themes) const;
 
     XlsxColorStyle color;
 private:
@@ -227,7 +104,7 @@ class XlsxBorderStyles
 public:
     XlsxBorderStyles();
 
-    void setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const;
+    void setupCellStyle(KoGenStyle* cellStyle, const MSOOXML::DrawingMLTheme *themes) const;
 
     XlsxBorderStyle top;
     XlsxBorderStyle right;
@@ -355,12 +232,8 @@ public:
     //! @todo implement more styling
     bool setupCellStyle(
         const XlsxStyles *styles,
-        const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes,
+        const MSOOXML::DrawingMLTheme *themes,
         KoGenStyle* cellStyle) const;
-
-    //! Sets up @a characterStyle to match this font style.
-//! @todo implement more formatting
-    bool setupCharacterStyle(const XlsxStyles *styles, KoCharacterStyle* characterStyle) const;
 
 private:
     //! Used by setupCellStyle()
@@ -374,14 +247,14 @@ public:
     ~XlsxStyles();
 
     //! @return font style for id @a id (counted from 0)
-    XlsxFontStyle* fontStyle(int id) const {
+    KoGenStyle* fontStyle(int id) const {
         if (id < 0 || id >= fontStyles.size())
             return 0;
         return fontStyles[id];
     }
 
     //! @return fill style for id @a id (counted from 0)
-    XlsxFillStyle* fillStyle(int id) const {
+    KoGenStyle* fillStyle(int id) const {
         if (id < 0 || id >= fillStyles.size())
             return 0;
         return fillStyles[id];
@@ -402,7 +275,7 @@ public:
     }
 
     //! @return number format string for id @a (counted from 0)
-    QString numberFormatString( int id ) const 
+    QString numberFormatString( int id ) const
     {
         return numberFormatStrings[ id ];
     }
@@ -410,8 +283,8 @@ public:
 protected:
     void setCellFormat(XlsxCellFormat *format, int cellFormatIndex);
 
-    QVector<XlsxFontStyle*> fontStyles;
-    QVector<XlsxFillStyle*> fillStyles;
+    QVector<KoGenStyle*> fontStyles;
+    QVector<KoGenStyle*> fillStyles;
     QVector<XlsxBorderStyles*> borderStyles;
     QVector<XlsxCellFormat*> cellFormats;
     QMap< int, QString > numberFormatStrings;
@@ -422,13 +295,16 @@ protected:
 class XlsxXmlStylesReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlStylesReaderContext(XlsxStyles& _styles);
+    XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart, MSOOXML::DrawingMLTheme* _themes);
     XlsxStyles* styles;
+    bool skipFirstPart;
+    MSOOXML::DrawingMLTheme* themes;
+    QVector<QString> colorIndices;
 };
 
 //! A class reading MSOOXML XLSX markup - styles.xml part.
 //! See ECMA-376, 12.3.20: Styles Part, p. 104
-class XlsxXmlStylesReader : public MSOOXML::MsooXmlReader
+class XlsxXmlStylesReader : public XlsxXmlCommonReader
 {
 public:
     explicit XlsxXmlStylesReader(KoOdfWriters *writers);
@@ -446,15 +322,11 @@ protected:
     KoFilter::ConversionStatus read_numFmt();
     KoFilter::ConversionStatus read_fonts();
     KoFilter::ConversionStatus read_font();
-    KoFilter::ConversionStatus read_sz();
     KoFilter::ConversionStatus read_name();
-    KoFilter::ConversionStatus read_b();
-    KoFilter::ConversionStatus read_i();
-    KoFilter::ConversionStatus read_strike();
-    KoFilter::ConversionStatus read_u();
-    KoFilter::ConversionStatus read_vertAlign();
-    KoFilter::ConversionStatus read_color();
+    KoFilter::ConversionStatus read_color2();
     KoFilter::ConversionStatus read_cellXfs();
+    KoFilter::ConversionStatus read_dxfs();
+    KoFilter::ConversionStatus read_dxf();
     KoFilter::ConversionStatus read_xf();
     KoFilter::ConversionStatus read_alignment();
     KoFilter::ConversionStatus read_fills();
@@ -473,24 +345,28 @@ protected:
     KoFilter::ConversionStatus read_left();
     KoFilter::ConversionStatus read_right();
     KoFilter::ConversionStatus read_diagonal();
+    KoFilter::ConversionStatus read_colors();
+    KoFilter::ConversionStatus read_indexedColors();
+    KoFilter::ConversionStatus read_rgbColor();
 
-    uint m_fontStyleIndex;
-    uint m_fillStyleIndex;
     uint m_cellFormatIndex;
     uint m_borderStyleIndex;
 
     XlsxXmlStylesReaderContext* m_context;
 
+    QColor m_currentFgColor;
+    QColor m_currentBgColor;
+
     XlsxColorStyle *m_currentColorStyle; //!< set by read_color()
-    XlsxFontStyle *m_currentFontStyle;
-    XlsxFillStyle *m_currentFillStyle;
+    KoGenStyle *m_currentFontStyle;
+    KoGenStyle *m_currentFillStyle;
     XlsxCellFormat *m_currentCellFormat;
     XlsxBorderStyles *m_currentBorderStyle;
 
+    int m_colorIndex;
+
 private:
     void init();
-
-    void handlePatternType(const QString& patternType); //!< used by read_patternFill()
 
 //! @todo readTintAttribute(const QXmlStreamAttributes& attrs) const;
 

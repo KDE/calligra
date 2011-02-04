@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=Words
+Name[cs]=Words
 Name[de]=Words
+Name[en_GB]=Words
 Name[et]=Words
 Name[fr]=Words
 Name[it]=Words
@@ -56,7 +58,9 @@ GenericName[x-test]=xxWord Processorxx
 GenericName[zh_CN]=字处理
 GenericName[zh_TW]=文書處理器
 Comment=Write documents
+Comment[cs]=Zapsat dokumenty
 Comment[de]=Dokumente verfassen
+Comment[en_GB]=Write documents
 Comment[et]=Dokumentide kirjutamine
 Comment[fr]=Documents texte
 Comment[it]=Scrivi documenti

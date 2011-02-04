@@ -2,12 +2,18 @@ cmake_minimum_required(VERSION 2.6)
 
 add_definitions(-DNO_PIGMENT)
 
+set(KDE_MIN_VERSION "4.3.0")
+find_package(KDE4 4.3.0 REQUIRED)
+include(KDE4Defaults)
+
 find_package(Qt4 4.5.0 REQUIRED)
 SET(QT_USE_QTDBUS 1)
 SET(QT_USE_QTNETWORK TRUE)
 SET(QT_USE_QTMAEMO5 TRUE)
 SET(QT_USE_QTXML TRUE)
 INCLUDE(${QT_USE_FILE})
+
+find_package(LibXml2 REQUIRED) # f-office uses xml2 directly
 
 include_directories(
     ${CMAKE_BINARY_DIR}
@@ -18,6 +24,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/tables/part
     ${CMAKE_SOURCE_DIR}/tables
     ${LIBXML2_INCLUDE_DIR}
+    ${KDE4_INCLUDES}
 )
 
 SET(FreOffice_RCCS FreOffice.qrc)
@@ -54,6 +61,12 @@ set(FreOfficeMocSrc_SRCS
     FoImageSelectionWidget.h
     ConfirmationDialog.h
     FileChooserDialog.h
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplicationController.h
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/RemoveSheetCommand.h
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellToolFactory.h
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellTool.h
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.h
+    ${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplication.h
 )
 
 if(QT_QTOPENGL_FOUND)
@@ -61,19 +74,6 @@ if(QT_QTOPENGL_FOUND)
 endif(QT_QTOPENGL_FOUND)
 
 kde4_add_ui_files(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui FileChooserDialog.ui AboutDialog.ui CollabDialog.ui)
-
-if(QT_QMAEMO5_LIBRARY)
-  list(APPEND FreOfficeMocSrc_SRCS
-    FoDocumentRdf.h
-    RdfInfoDialog.h
-  )
-  list(APPEND FreOffice_SRCS
-    FoDocumentRdf.cpp
-    RdfInfoDialog.cpp
-  )
-else(QT_QMAEMO5_LIBRARY)
-  
-endif(QT_QMAEMO5_LIBRARY)
 
 QT4_WRAP_CPP(FreOfficeMocSrc ${FreOfficeMocSrc_SRCS})
 
@@ -112,6 +112,11 @@ set(FreOffice_SRCS
     ${FreOfficeUiSrc} 
     ${FreOfficeMocSrc} 
     ${FreOffice_RCC_SRCS}
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplicationController.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/RemoveSheetCommand.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellToolFactory.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellTool.cpp
+    #${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.cpp
 )
 
 if(QT_QTOPENGL_FOUND)

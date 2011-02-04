@@ -42,7 +42,7 @@ class Selection;
  * A minimizable line edit for choosing cell regions.
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_TABLES_EXPORT RegionSelector : public QWidget
+class CALLIGRA_TABLES_COMMON_EXPORT RegionSelector : public QWidget
 {
     Q_OBJECT
 

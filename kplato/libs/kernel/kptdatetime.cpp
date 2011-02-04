@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,7 +75,11 @@ void DateTime::subtract(const Duration &duration) {
 Duration DateTime::duration(const DateTime &dt) const {
     Duration dur;
     if (isValid() && dt.isValid()) {
+#if QT_VERSION  >= 0x040700
         qint64 x = msecsTo( dt ); //NOTE: this does conversion to UTC (expensive)
+#else
+        qint64 x = (qint64)secsTo( dt ) * 1000;
+#endif
         dur.m_ms = x < 0 ? -x : x;
     }
     //kDebug()<<dur.milliseconds();

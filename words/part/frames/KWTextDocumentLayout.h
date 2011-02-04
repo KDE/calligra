@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright (C) 2006,2011 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -39,7 +40,7 @@ public:
     ~KWTextDocumentLayout();
 
     /// reimplemented from KoTextDocumentLayout::layout()
-    void layout();
+    virtual void layout();
 
     /// reimplemented from KoTextDocumentLayout::shapes()
     QList<KoShape*> shapes() const;
@@ -53,17 +54,9 @@ private:
 
     virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
-    void cleanupAnchors();
-
-    inline void registerPageAnchoredShapes(KoShape *currentShape, LayoutState *state);
-
     KWTextFrameSet *m_frameSet;
     class DummyShape;
     DummyShape * const m_dummyShape;
-
-    QList<KWAnchorStrategy*> m_activeAnchors;
-    QList<KWAnchorStrategy*> m_newAnchors;
-    QList<KWAnchorStrategy*> m_anchors;
 
     int m_lastKnownFrameCount;
 };

@@ -90,6 +90,27 @@ QVariant NodeModel::name( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Qt::DecorationRole:
+            if ( node->isBaselined() ) {
+                return KIcon( "view-time-schedule-baselined" );
+            }
+            break;
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task:
+                    return static_cast<const Task*>( node )->completion().isFinished() ? m_project->config().taskFinishedColor() : m_project->config().taskNormalColor();
+                case Node::Type_Milestone:
+                    return static_cast<const Task*>( node )->completion().isFinished() ? m_project->config().milestoneFinishedColor() : m_project->config().milestoneNormalColor();
+                case Node::Type_Summarytask:
+                    return m_project->config().summaryTaskLevelColor( node->level() );
+                default:
+                    break;
+            }
+            break;
+        }
     }
     return QVariant();
 }
@@ -1478,6 +1499,17 @@ QVariant NodeModel::resourceIsMissing( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1500,6 +1532,17 @@ QVariant NodeModel::resourceIsOverbooked( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1522,6 +1565,17 @@ QVariant NodeModel::resourceIsNotAvailable( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1544,6 +1598,17 @@ QVariant NodeModel::schedulingConstraintsError( const Node *node, int role ) con
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1566,6 +1631,17 @@ QVariant NodeModel::nodeIsNotScheduled( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1588,6 +1664,17 @@ QVariant NodeModel::effortNotMet( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1686,6 +1773,17 @@ QVariant NodeModel::nodeIsCritical( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskNormalColor();
+                case Node::Type_Milestone: return m_project->config().milestoneNormalColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1699,6 +1797,17 @@ QVariant NodeModel::nodeInCriticalPath( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskNormalColor();
+                case Node::Type_Milestone: return m_project->config().milestoneNormalColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -2245,6 +2354,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
     }
     Node *n = node( index );
     if ( m_readWrite && n != 0 ) {
+        bool baselined = n->isBaselined();
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
             case NodeModel::NodeName: // name
@@ -2264,14 +2374,14 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case NodeModel::NodeOptimisticRatio: // optimisticRatio
             case NodeModel::NodePessimisticRatio: // pessimisticRatio
             {
-                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
             case NodeModel::NodeEstimateCalendar:
             {
-                if ( n->type() == Node::Type_Task )
+                if ( ! baselined && n->type() == Node::Type_Task )
                 {
                     flags |= Qt::ItemIsEditable;
                 }
@@ -2279,22 +2389,22 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             }
             case NodeModel::NodeRisk: // risktype
             {
-                if ( n->type() == Node::Type_Task ) {
+                if ( ! baselined && n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
             case NodeModel::NodeConstraint: // constraint type
-                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             case NodeModel::NodeConstraintStart: { // constraint start
-                if ( n->type() == Node::Type_Project ) {
+                if ( ! baselined && n->type() == Node::Type_Project ) {
                     flags |= Qt::ItemIsEditable;
                     break;
                 }
-                if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                if ( ! baselined && ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
                 int c = n->constraint();
@@ -2304,11 +2414,11 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case NodeModel::NodeConstraintEnd: { // constraint end
-                if ( n->type() == Node::Type_Project ) {
+                if ( ! baselined && n->type() == Node::Type_Project ) {
                     flags |= Qt::ItemIsEditable;
                     break;
                 }
-                if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                if ( ! baselined && ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
                 int c = n->constraint();
@@ -2318,7 +2428,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case NodeModel::NodeRunningAccount: // running account
-                if ( n->type() == Node::Type_Task ) {
+                if ( ! baselined && n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -2326,7 +2436,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case NodeModel::NodeStartupCost: // startup cost
             case NodeModel::NodeShutdownAccount: // shutdown account
             case NodeModel::NodeShutdownCost: { // shutdown cost
-                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;

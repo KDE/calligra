@@ -155,7 +155,7 @@ public:
     //!used to figure out if a shape is a placeholder or not
     bool textBoxHasContent;
 
-    MSOOXML::TableStyleList* tableStyleList;
+    QMap<QString, MSOOXML::DrawingTableStyle*>* tableStyleList;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
@@ -628,11 +628,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
 
-        // As it is primary an ole ole object, this one should have the highest priority
-        QString destinationName;
-
         body->startElement("draw:object-ole");
-        RETURN_IF_ERROR( copyFile(sourceName, "", destinationName))
+        QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+        addManifestEntryForFile(destinationName);
+
         body->addAttribute("xlink:href", destinationName);
         body->endElement(); // draw:object-ole
 
@@ -647,7 +647,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         // These should be one day part of ole shape functionality wise
         if (progId == "Paint.Picture" || name == "Bitmap Image") {
             body->startElement("draw:image");
-            RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
+            QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
+            addManifestEntryForFile(destinationName);
             addManifestEntryForPicturesDir();
             body->addAttribute("xlink:href", destinationName);
             body->addAttribute("xlink:show", "embed");
@@ -656,13 +658,17 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         }
         else if (progId == "Package") {
             body->startElement("draw:plugin"); // The mimetype is not told by the ole container, this is best guess
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
+            addManifestEntryForFile(destinationName);
             body->addAttribute("xlink:href", destinationName);
             body->endElement(); // draw:plugin
         }
         else if (progId.contains("AcroExch")) { // PDF
             body->startElement("draw:object"); // The mimetype is not told by the ole container, this is best guess
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
+            addManifestEntryForFile(destinationName);
             body->addAttribute("xlink:href", destinationName);
             body->endElement(); // draw:object
         }
@@ -774,11 +780,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
         }
     }
 
-    saveCurrentListStyles();
-    saveCurrentStyles();
-
-    // Seems like subtitle by default should point to othertyles, maybe also sldnum etc too.
-    d->phType = "subTitle";
     saveCurrentListStyles();
     saveCurrentStyles();
 
@@ -994,7 +995,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
  Child elements:
  - [done] blipFill (Picture Fill) §20.1.8.14
  - effectDag (Effect Container) §20.1.8.25
- - effectLst (Effect Container) §20.1.8.26
+ - [done] effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §19.2.1.12
  - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
@@ -1023,8 +1024,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                     m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentAlpha));
                 }
             }
+            else if (qualifiedName() == QLatin1String("a:effectLst")) {
+                TRY_READ(effectLst)
+            }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
-                m_currentDrawStyle->addAttribute("style:fill", constNone);
+                m_currentDrawStyle->addProperty("draw:fill", constNone);
             }
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IF_NS_IN_CONTEXT(a, blipFill)

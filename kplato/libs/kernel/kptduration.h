@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,14 +49,27 @@ public:
 
     //NOTE: These must match units in DurationSpinBox!
     enum Unit { Unit_Y, Unit_M, Unit_w, Unit_d, Unit_h, Unit_m, Unit_s, Unit_ms };
-    
+
+    /// Create a zero duration
     Duration();
-    Duration(const Duration &d);
+    /// Create a duration of @p value, the value is in @p unit (defaut unit is milliseconds)
+    explicit Duration(const qint64 value, Unit unit = Unit_ms);
+    /// Create a duration of @p value, the value is in @p unit (default is hours)
+    explicit Duration(double value, Unit unit = Unit_h);
+    /// Create a duration of @p d days, @p h hours, @p m minutes, @p s seconds and @p ms milliseconds
     Duration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
-    explicit Duration(const qint64 value, Unit = Unit_ms);
-    explicit Duration(double value, Unit unit = Unit_ms);
-    ~Duration();
-    
+
+    /// Return duration in milliseconds
+    qint64 milliseconds() const { return m_ms; }
+    /// Return duration in whole seconds
+    qint64 seconds() const { return m_ms / 1000; }
+    /// Return duration in whole minutes
+    qint64 minutes() const { return seconds() / 60; }
+    /// Return duration in whole hours
+    unsigned hours() const { return minutes() / 60; }
+    /// Return duration in whole days
+    unsigned days() const { return hours() / 24; }
+
     /**
      * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
      */
@@ -82,19 +95,6 @@ public:
      */
     void addDays(qint64 delta) { addHours(delta * 24); }
 
-    /// Return duration in milliseconds
-    qint64 milliseconds() const { return m_ms; }
-    /// Return duration in whole seconds
-    qint64 seconds() const { return m_ms / 1000; }
-    /// Return duration in whole minutes
-    qint64 minutes() const { return seconds() / 60; }
-    /// Return duration in whole hours
-    unsigned hours() const { return minutes() / 60; }
-    /// Return duration in whole days
-    unsigned days() const { return hours() / 24; }
-    /// Convert duration into @p days, @p hours, @p minutes, @p seconds and @p milliseconds
-    void get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds=0, unsigned *milliseconds=0) const;
-
     bool   operator==( const Duration &d ) const { return m_ms == d.m_ms; }
     bool   operator==( qint64 d ) const { return m_ms == d; }
     bool   operator!=( const Duration &d ) const { return m_ms != d.m_ms; }
@@ -107,7 +107,7 @@ public:
     bool   operator>( qint64 d ) const { return m_ms > d; }
     bool   operator>=( const Duration &d ) const { return m_ms >= d.m_ms; }
     bool   operator>=( qint64 d ) const { return m_ms >= d; }
-    Duration &operator=(const Duration &d ) { copy( d ); return *this;}
+    Duration &operator=(const Duration &d ) { m_ms = d.m_ms; return *this;}
     Duration operator*(int value) const; 
     Duration operator*(const double value) const;
     Duration operator*(const Duration value) const;
@@ -132,23 +132,19 @@ public:
     QString toString(Format format = Format_DayTime) const;
     /// Create a duration from string @p s with @p format
     static Duration fromString(const QString &s, Format format = Format_DayTime, bool *ok=0);
-    
+
+    /// Return the duration scaled to hours
+    double toHours() const;
     /**
-     * Converts Duration into a double and scales it to unit @p u
+     * Converts Duration into a double and scales it to unit @p u (default unit is hours)
      */
-    double toDouble(Unit u=Unit_ms) const { 
-        if (u == Unit_ms) return (double)m_ms;
-        else if (u == Unit_s) return (double)m_ms/1000.0;
-        else if (u == Unit_m) return (double)m_ms/(1000.0*60.0);
-        else if (u == Unit_h) return (double)m_ms/(1000.0*60.0*60.0);
-        else if (u == Unit_d) return (double)m_ms/(1000.0*60.0*60.0*24.0);
-        else if (u == Unit_w) return (double)m_ms/(1000.0*60.0*60.0*24.0*7.0);
-        else if (u == Unit_M) return (double)m_ms/(1000.0*60.0*60.0*24.0*30); //Month
-        else if (u == Unit_Y) return (double)m_ms/(1000.0*60.0*60.0*24.0*365); // Year
-        return (double)m_ms; 
-    }
+    double toDouble( Unit u = Unit_h ) const;
+
+    /// Return the list of units. Translated if @p trans is true.
     static QStringList unitList( bool trans = false );
+    /// Return @p unit in human readable form. Translated if @p trans is true.
     static QString unitToString( Duration::Unit unit, bool trans = false );
+    /// Convert @p unit name into Unit
     static Unit unitFromString( const QString &unit );
     /// Returns value and unit from a <value><unit> coded string in @p rv and @p unit.
     static bool valueFromString( const QString &value, double &rv, Unit &unit );
@@ -157,9 +153,6 @@ public:
      */
     static const Duration zeroDuration;
 
-protected:
-    void copy( const Duration &d );
-    
 private:
     friend class DateTime;
     /**
@@ -173,8 +166,8 @@ private:
     void add(const Duration &delta);
 
     /**
-        * Subtracts @param delta from *this. If @param delta > *this, *this is set to zeroDuration.
-        */
+    * Subtracts @param delta from *this. If @param delta > *this, *this is set to zeroDuration.
+    */
     void subtract(const Duration &delta);
 };
 

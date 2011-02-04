@@ -45,12 +45,6 @@ typedef QMainWindow KoAbstractApplicationBase;
 #include "CollabServer.h"
 #include "DigitalSignatureDialog.h"
 
-#ifdef Q_WS_MAEMO_5
-#include "FoDocumentRdf.h"
-#include "Accelerator.h"
-#endif
-
-
 class QPushButton;
 class QIcon;
 class QTextDocument;
@@ -859,12 +853,6 @@ private:
     QToolBar *m_spreadEditToolBar;
 
     DigitalSignatureDialog *m_digitalSignatureDialog;
-
-#ifdef Q_WS_MAEMO_5
-    FoDocumentRdf *m_foDocumentRdf;
-
-    QShortcut *m_rdfShortcut;
-#endif
 
 public slots:
     /*!

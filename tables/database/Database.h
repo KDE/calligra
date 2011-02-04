@@ -44,7 +44,7 @@ class Region;
 /**
  * OpenDocument, 8.6.1 Database Range
  */
-class CALLIGRA_TABLES_EXPORT Database
+class CALLIGRA_TABLES_ODF_EXPORT Database
 {
 public:
     /**

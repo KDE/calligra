@@ -35,7 +35,7 @@ namespace Tables
  *
  * \see QClipboard::Selection
  */
-class CALLIGRA_TABLES_EXPORT PasteStrategy : public SelectionStrategy
+class CALLIGRA_TABLES_COMMON_EXPORT PasteStrategy : public SelectionStrategy
 {
 public:
     /**

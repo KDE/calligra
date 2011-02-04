@@ -28,12 +28,14 @@ set(msooxml_LIB_SRCS
     ooxml_pole.cpp
     MsooXmlDrawingTableStyleReader.cpp
     MsooXmlDrawingTableStyle.cpp
+    MsooXmlTableStyle.cpp
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
+    MsooXmlDocumentTableStyle.cpp
 )
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})

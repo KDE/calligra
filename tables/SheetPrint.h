@@ -43,7 +43,7 @@ class Sheet;
  * zooming, page limits and column/row repetitions.
  * \ingroup Printing
  */
-class CALLIGRA_TABLES_EXPORT SheetPrint
+class CALLIGRA_TABLES_ODF_EXPORT SheetPrint
 {
 public:
     explicit SheetPrint(Sheet * sheet = 0);

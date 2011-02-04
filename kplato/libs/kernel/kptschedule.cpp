@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- Copyright (C) 2005 - 2007 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2005 - 2011 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -262,7 +262,7 @@ DateTimeInterval Schedule::firstBookedInterval( const DateTimeInterval &interval
             if ( i.isEmpty() ) {
                 break;
             }
-            return DateTimeInterval( i.values().first().startTime(), i.values().first().endTime() );
+            return DateTimeInterval( i.map().values().first().startTime(), i.map().values().first().endTime() );
         }
     }
     return DateTimeInterval();
@@ -980,7 +980,7 @@ bool ResourceSchedule::isOverbooked( const DateTime &start, const DateTime &end 
         return false;
     //kDebug()<<start.toString()<<" -"<<end.toString();
     Appointment a = appointmentIntervals();
-    foreach ( const AppointmentInterval &i, a.intervals() ) {
+    foreach ( const AppointmentInterval &i, a.intervals().map() ) {
         if ( ( !end.isValid() || i.startTime() < end ) &&
                 ( !start.isValid() || i.endTime() > start ) ) {
             if ( i.load() > m_resource->units() ) {
@@ -1015,7 +1015,7 @@ Duration ResourceSchedule::effort( const DateTimeInterval &interval ) const
     if ( a.isEmpty() || a.startTime() >= interval.second || a.endTime() <= interval.first ) {
         return eff;
     }
-    foreach ( const AppointmentInterval &i, a.intervals() ) {
+    foreach ( const AppointmentInterval &i, a.intervals().map() ) {
         if ( interval.second <= i.startTime() ) {
             break;
         }
@@ -1050,7 +1050,7 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
         return DateTimeInterval( interval.first, interval.second );
     }
     DateTimeInterval ci = interval;
-    foreach ( const AppointmentInterval &i, a.intervals() ) {
+    foreach ( const AppointmentInterval &i, a.intervals().map() ) {
         //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available check interval=%1 - %2" ).arg(i.startTime().toString()).arg(i.endTime().toString()) );
         if ( i.startTime() < ci.second && i.endTime() > ci.first ) {
             if ( ci.first >= i.startTime() && ci.second <= i.endTime() ) {

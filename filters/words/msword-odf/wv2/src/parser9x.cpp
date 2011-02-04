@@ -42,7 +42,6 @@
 #include "convert.h"
 #include "zcodec.hxx"
 #include "wvlog.h"
-#include "ms_odraw.h"
 
 #include <gsf/gsf-input.h>
 #include <gsf/gsf-output.h>
@@ -464,12 +463,15 @@ bool Parser9x::parseBody()
     m_subDocumentHandler->bodyStart();
 
     SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( 0 ) );
-    if ( !sep )
+    if ( !sep ) {
         sep = new Word97::SEP(); // don't pass 0 pointers in any case
-    m_textHandler->sectionStart( sep ); // First section, starting at CP 0
+    }
 #ifdef WV2_DEBUG_SECTIONS
     sep->dump();
 #endif
+
+    m_textHandler->sectionStart( sep ); // First section, starting at CP 0
+
     emitHeaderData( sep );
     sep = 0; // get rid of the huge SEP
 

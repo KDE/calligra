@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2003 Norbert Andres <nandres@web.de>
 
@@ -2712,8 +2712,20 @@ CustomStyle::CustomStyle(QString const & name, CustomStyle * parent)
         setParentName(parent->name());
 }
 
+CustomStyle::CustomStyle(const CustomStyle& style)
+        : Style(style), d(style.d)
+{
+}
+
 CustomStyle::~CustomStyle()
 {
+}
+
+CustomStyle& CustomStyle::operator=(const CustomStyle& style)
+{
+	Style::operator=(style);
+	d = style.d;
+	return *this;
 }
 
 Style::StyleType CustomStyle::type() const

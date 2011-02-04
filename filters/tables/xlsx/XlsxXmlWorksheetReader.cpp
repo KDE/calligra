@@ -80,8 +80,8 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const QString& _worksheetName,
     const QString& _state,
     const QString _path, const QString _file,
-    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/& _themes,
-    const XlsxSharedStringVector& _sharedStrings,
+    MSOOXML::DrawingMLTheme*& _themes,
+    const QVector<QString>& _sharedStrings,
     const XlsxComments& _comments,
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
@@ -235,11 +235,9 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
     body->addTextNode(comment->author(m_context->comments));
     body->endElement(); // dc:creator
     //! @todo support dc:date
-    foreach (const QString& text, comment->texts) {
-        body->startElement("text:p");
-        body->addTextSpan(text);
-        body->endElement(); // text:p
-    }
+    body->startElement("text:p");
+    body->addCompleteElement(comment->texts.toUtf8());
+    body->endElement(); // text:p
     body->endElement(); // office:annotation
 }
 
@@ -427,18 +425,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                             if(cell->text.isEmpty()) {
                                 body->addTextNode(cell->hyperlink());
                             }
-                            else if(cell->isPlainText) {
-                                body->addTextNode(cell->text);
-                            }
                             else {
                                 body->addCompleteElement(cell->text.toUtf8());
                             }
                             body->endElement(); // text:a
                         } else if (!cell->text.isEmpty()) {
-                            if(cell->isPlainText)
-                                body->addTextSpan(cell->text);
-                            else
-                                body->addCompleteElement(cell->text.toUtf8());
+                            body->addCompleteElement(cell->text.toUtf8());
                         }
                         if (!cell->charStyleName.isEmpty()) {
                             body->endElement(); // text:span
@@ -451,7 +443,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         foreach(XlsxDrawingObject* drawing, cell->embedded->drawings) {
                             drawing->save(body);
                         }
-                    
 
                         QPair<QString,QString> oleObject;
                         int listIndex = 0;
@@ -865,25 +856,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 //    const bool addTextPElement = true;//m_value.isEmpty() || t != QLatin1String("s");
 
     if (!m_value.isEmpty()) {
-        KoCharacterStyle cellCharacterStyle;
-        cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
-
-        if( cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSuperScript 
-            || cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSubScript ) {
-            KoGenStyle charStyle( KoGenStyle::TextStyle, "text" );
-            cellCharacterStyle.saveOdf( charStyle );
-            charStyleName = mainStyles->insert( charStyle, "T" );
-        }
-
-        if( !charStyleName.isEmpty() ) {
-            cell->charStyleName = charStyleName;
-        }
-
         /* depending on type: 18.18.11 ST_CellType (Cell Type), p. 2679:
             b (Boolean)  Cell containing a boolean.
             d (Date)     Cell contains a date in the ISO 8601 format.
             e (Error)    Cell containing an error.
-            inlineStr    (Inline String) Cell containing an (inline) rich string, i.e. 
+            inlineStr    (Inline String) Cell containing an (inline) rich string, i.e.
                          one not in the shared string table. If this cell type is used,
                          then the cell value is in the is element rather than the v
                          element in the cell (c element).
@@ -900,11 +877,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             if (!ok || stringIndex < 0 || stringIndex >= m_context->sharedStrings->size()) {
                 return KoFilter::WrongFormat;
             }
-            XlsxSharedString sharedstring = m_context->sharedStrings->at(stringIndex);
-            cell->text = sharedstring.data();
-            cell->isPlainText = sharedstring.isPlainText();
+            QString sharedstring = m_context->sharedStrings->at(stringIndex);
+            cell->text = sharedstring;
             cell->valueType = MsooXmlReader::constString;
-            m_value = sharedstring.data();
+            m_value = sharedstring;
             // no valueAttr
         } else if ((t.isEmpty() && !valueIsNumeric(m_value)) || t == QLatin1String("inlineStr")) {
 //! @todo handle value properly
@@ -981,10 +957,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         }
         KoGenStyle cellStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
 
-        if( charStyleName.isEmpty() ) {
-            KoCharacterStyle cellCharacterStyle;
-            cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
-            cellCharacterStyle.saveOdf(cellStyle);
+        if (charStyleName.isEmpty()) {
+            KoGenStyle* fontStyle = m_context->styles->fontStyle(cellFormat->fontId);
+            if (!fontStyle) {
+                kWarning() << "No font with ID:" << cellFormat->fontId;
+            } else {
+                MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
+            }
         }
         if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
             return KoFilter::WrongFormat;
@@ -1336,10 +1315,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
-    QString fileName = link.right( link.lastIndexOf('/') +1 );
-    RETURN_IF_ERROR( copyFile(link, "Pictures/", fileName) )
-    m_context->sheet->setPictureBackgroundPath(fileName);
-    //NOTE manifest entry is added by copyFile
+    QString destinationName = QLatin1String("Pictures/") + link.mid(link.lastIndexOf('/') + 1);
+    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, true ) )
+    addManifestEntryForFile(destinationName);
+
+    m_context->sheet->setPictureBackgroundPath(destinationName);
 
     while (!atEnd()) {
         readNext();
@@ -1381,12 +1361,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     shapeId = "_x0000_s" + shapeId;
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
-    QString fileName = link.right( link.lastIndexOf('/') +1 );
-    RETURN_IF_ERROR( copyFile(link, "", fileName) )
+    QString destinationName = QLatin1String("") + link.mid(link.lastIndexOf('/') + 1);
+    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, true ) )
+    addManifestEntryForFile(destinationName);
 
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);
-    cell->appendOleObject( qMakePair<QString,QString>(fileName, m_context->oleReplacements.value(shapeId)), m_context->oleFrameBegins.value(shapeId));
+    cell->appendOleObject( qMakePair<QString,QString>(destinationName, m_context->oleReplacements.value(shapeId)), m_context->oleFrameBegins.value(shapeId));
 
     while (!atEnd()) {
         readNext();

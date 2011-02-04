@@ -60,7 +60,7 @@ class Style;
  * corresponding SheetView. If the content of a Cell has changed, the CellView
  * will be destroyed and a new one will be created.
  */
-class CALLIGRA_TABLES_EXPORT CellView
+class CALLIGRA_TABLES_COMMON_EXPORT CellView
 {
     friend class SheetView;
     friend class PixmapCachingSheetView;

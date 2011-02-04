@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2003 Norbert Andres <nandres@web.de>
 
@@ -55,13 +55,13 @@ typedef QHash<QString, Style>       Styles;
 // needs to be ordered (QMap) for the style dialog
 typedef QMap<QString, CustomStyle*> CustomStyles;
 
-CALLIGRA_TABLES_EXPORT uint qHash(const Style& style);
+CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
 
 /**
  * \ingroup Style
  * A cell style.
  */
-class CALLIGRA_TABLES_EXPORT Style
+class CALLIGRA_TABLES_ODF_EXPORT Style
 {
 public:
     enum HAlign {
@@ -344,7 +344,7 @@ public:
     inline bool operator!=(const Style& other) const {
         return !operator==(other);
     }
-    friend uint qHash(const Style& style);
+    friend CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
     void operator=(const Style& style);
     Style operator-(const Style& style) const;
     void merge(const Style& style);
@@ -385,7 +385,7 @@ private:
  * \ingroup Style
  * A named cell style.
  */
-class CALLIGRA_TABLES_EXPORT CustomStyle : public Style
+class CALLIGRA_TABLES_ODF_EXPORT CustomStyle : public Style
 {
 public:
     /**
@@ -395,7 +395,9 @@ public:
      * \param parent The style whose attributes are inherited - the parent style.
      */
     explicit CustomStyle(const QString& name, CustomStyle* parent = 0);
+	CustomStyle(const CustomStyle& style);
     virtual ~CustomStyle();
+    CustomStyle& operator=(const CustomStyle& other);
 
     virtual StyleType type() const;
     void setType(StyleType type);
@@ -426,10 +428,10 @@ public:
                             const StyleManager* manager) const;
 
 
-    bool operator==(const CustomStyle& other) const;
-    inline bool operator!=(const CustomStyle& other) const {
-        return !operator==(other);
-    }
+    //bool operator==(const CustomStyle& other) const;
+    //inline bool operator!=(const CustomStyle& other) const {
+    //    return !operator==(other);
+    //}
 
     /**
      * @return the number of references to this style.

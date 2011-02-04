@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,25 +24,46 @@
 #include "generated/simpleParser.h"
 
 class PptTextPFRun {
-    quint16 level_;
+private:
+    //the indentation level of the paragraph
+    quint16 m_level;
+
+    //number of characters of the corresponding text to which this paragraph
+    //formatting applies
+    quint32 m_count;
 
     //default values of bullet properties (text type specific)
-    bool d_fHasBullet; //
+    bool m_fHasBullet;
+
+    //ident/margin for text with indentLevel == m_level (provided by TextRuler)
+    qint16 m_indent;
+    qint16 m_leftMargin;
 
     const MSO::TextPFException* pfs[6];
     const MSO::TextPFException9* pf9s[6];
 public:
-    explicit PptTextPFRun(const MSO::DocumentContainer* d,
-                          const MSO::MasterOrSlideContainer* m,
-                          quint32 textType);
+
+    /**
+     * Construct TextPFException and TextPFException9 hierarchy.
+     *
+     * @param DocumentContainer address
+     * @param texts together with @param pcd provides access to StyleTextProp9Atom
+     * @param m address of the MainMasterSlide/TitleMasterSlide
+     * @param pcd provides access to additional text formatting in StyleTextProp9Atom
+     * @param tc provides access to text formatting in MasterTextPropAtom
+     * @param tr specifies tabbing, margins, and indentation for text
+     * @param start specifies begging of the paragraph in the slide text
+     */
     explicit PptTextPFRun(const MSO::DocumentContainer* d = 0,
                           const MSO::SlideListWithTextSubContainerOrAtom* texts = 0,
                           const MSO::MasterOrSlideContainer* m = 0,
                           const MSO::PptOfficeArtClientData* pcd = 0,
                           const MSO::TextContainer* tc = 0,
+                          const MSO::TextRuler* tr = 0,
                           quint32 start = 0);
 
-    quint16 level() const { return level_; }
+    quint32 count() const { return m_count; }
+    quint16 level() const { return m_level; }
     bool isList() const;
 
     // TextPFException
@@ -73,9 +95,10 @@ public:
     qint16 startNum() const;
 
     /**
-     * Check the scheme field of the TextAutoNumberScheme structure, which
-     * specifies the automatic numbering scheme for text paragraphs.  The
-     * default value = ANM_ArabicPeriod was tested and discussed on the Office
+     * Check the scheme field of the TextAutoNumberScheme structure.
+     *
+     * Specifies the automatic numbering scheme for text paragraphs.  The
+     * default value is ANM_ArabicPeriod, tested and discussed on the Office
      * File Format Forum.
      *
      * @return the scheme describing the style of the number bullets
@@ -86,14 +109,33 @@ public:
 };
 
 class PptTextCFRun {
+private:
     QList<const MSO::TextCFException*> cfs;
-    quint16 level_;
-    bool cfrun_rm;
+
+    //the indentation level of the corresponding paragraph
+    quint16 m_level;
+
+    //each run of text has a separate character-level formatting provided by
+    //TextCFRun which is added/replaced on top of the cfs list
+    bool m_cfrun_rm;
 public:
+    /**
+     * Construct TextCFException hierarchy.
+     * @param DocumentContainer
+     * @param MasterOrSlideContainer hierarchy
+     * @param TextContainer
+     * @param level specifies the indentation level of the paragraph
+     */
     PptTextCFRun(const MSO::DocumentContainer* d,
                  QList<const MSO::MasterOrSlideContainer*> &mh,
                  const MSO::TextContainer& tc,
                  quint16 level);
+
+    /**
+     * Only default TextCFExceptions are required.
+     * @param DocumentContainer
+     */
+    PptTextCFRun(const MSO::DocumentContainer* d);
 
     /**
      * Add the TextCFException structure present in the current TextContainer,
@@ -122,10 +164,6 @@ public:
     qint16 position() const;
 };
 
-const MSO::TextCFRun* getCFRun(const MSO::TextContainer* tc, const quint32 start);
-
-const MSO::TextCFException*
-getTextCFException(const MSO::TextContainer* tc, const int start);
 
 template<class T>
 const T*

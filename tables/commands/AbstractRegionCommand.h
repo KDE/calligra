@@ -37,7 +37,7 @@ class Sheet;
  * \ingroup Commands
  * \brief Abstract base class for all region related operations.
  */
-class CALLIGRA_TABLES_EXPORT AbstractRegionCommand : public Region, public QUndoCommand
+class CALLIGRA_TABLES_COMMON_EXPORT AbstractRegionCommand : public Region, public QUndoCommand
 {
 public:
     /**

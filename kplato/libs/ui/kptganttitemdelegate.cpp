@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2008 - 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2008 - 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -65,8 +65,53 @@ GanttItemDelegate::GanttItemDelegate( QObject *parent )
     m_schedulingErrorBrush = QBrush( sb );
 }
 
+QString GanttItemDelegate::toolTip( const QModelIndex &idx ) const
+{
+    if ( !idx.isValid() || ! idx.model() ) {
+        return QString();
+    }
+    const QAbstractItemModel* model = idx.model();
+    if ( data( idx, NodeModel::NodeFinished, Qt::EditRole ).toBool() ) {
+        // finished
+        return i18nc( "@infot:tooltip",
+                "Name: %1<nl/>"
+                "Actual finish: %2<nl/>"
+                "Planned finish: %3<nl/>"
+                "Status: %4",
+                    model->data( idx, Qt::DisplayRole ).toString(),
+                    data( idx, NodeModel::NodeActualFinish, Qt::DisplayRole ).toString(),
+                    data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
+                    data( idx, NodeModel::NodeStatus, Qt::DisplayRole ).toString() );
+    }
+    if ( data( idx, NodeModel::NodeStarted, Qt::EditRole ).toBool() ) {
+        // started
+        return i18nc( "@info:tooltip",
+                "Name: %1<nl/>"
+                "Completion: %2 %<nl/>"
+                "Actual start: %3<nl/>"
+                "Planned: %4 - %5<nl/>"
+                "Status: %6",
+                    model->data( idx, Qt::DisplayRole ).toString(),
+                    data( idx, NodeModel::NodeCompleted, Qt::DisplayRole ).toString(),
+                    data( idx, NodeModel::NodeActualStart, Qt::DisplayRole ).toString(),
+                    data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
+                    data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
+                    data( idx, NodeModel::NodeStatus, Qt::DisplayRole ).toString() );
+    }
+    // Planned
+    return i18nc( "@infot:tooltip",
+            "Name: %1<nl/>"
+            "Planned: %2 - %3<nl/>"
+            "Status: %4",
+                model->data( idx, Qt::DisplayRole ).toString(),
+                data( idx, NodeModel::NodeStartTime, Qt::DisplayRole ).toString(),
+                data( idx, NodeModel::NodeEndTime, Qt::DisplayRole ).toString(),
+                data( idx, NodeModel::NodeSchedulingStatus, Qt::DisplayRole ).toString() );
+}
+
 QVariant GanttItemDelegate::data( const QModelIndex& idx, int column, int role ) const
 {
+    //kDebug()<<idx<<column<<role;
     QModelIndex i = idx.model()->index( idx.row(), column, idx.parent() );
     return i.data( role );
 }
@@ -327,7 +372,6 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
     QPen pen = defaultPen( typ );
     if ( opt.state & QStyle::State_Selected ) pen.setWidth( 2*pen.width() );
     painter->setPen( pen );
-    painter->setBrush( defaultBrush( typ ) );
 
     qreal pw = painter->pen().width()/2.;
     switch( typ ) {
@@ -363,16 +407,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<cr<<r<<boundingRect;
                 }
             }
-            bool critical = false;
-            if ( showCriticalTasks ) {
-                critical = idx.model()->index( idx.row(), NodeModel::NodeCritical, idx.parent() ).data( Qt::DisplayRole ).toBool();
-            }
-            if ( ! critical && showCriticalPath ) {
-                critical = idx.model()->index( idx.row(), NodeModel::NodeCriticalPath, idx.parent() ).data( Qt::DisplayRole ).toBool();
-            }
-            if ( critical ) {
-                painter->setBrush( m_criticalBrush );
-            }
+            bool normal = true;
             if ( showSchedulingError ) {
                 QList<int> lst;
                 lst << NodeModel::NodeAssignmentMissing
@@ -384,11 +419,27 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     QVariant v = data( idx, i, Qt::EditRole );
                     //kDebug()<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
                     if (  v.toBool() ) {
-                        painter->setBrush( m_schedulingErrorBrush );
+                        QVariant br = data( idx, i, Role::Foreground );
+                        painter->setBrush( br.isValid() ? br.value<QBrush>() : m_schedulingErrorBrush );
+                        normal = false;
                         break;
                     }
                 }
 
+            } else if ( showCriticalTasks ) {
+                bool critical = data( idx, NodeModel::NodeCritical, Qt::DisplayRole ).toBool();
+                if ( ! critical && showCriticalPath ) {
+                    critical = data( idx, NodeModel::NodeCriticalPath, Qt::DisplayRole ).toBool();
+                }
+                if ( critical ) {
+                    QVariant br = data( idx, NodeModel::NodeCritical, Role::Foreground );
+                    painter->setBrush( br.isValid() ? br.value<QBrush>() : m_criticalBrush );
+                    normal = false;
+                }
+            }
+            if ( normal ) {
+                QVariant br = idx.data( Role::Foreground );
+                painter->setBrush( br.isValid() ? br.value<QBrush>() : defaultBrush( typ ) );
             }
             painter->drawRect( r );
 
@@ -462,6 +513,8 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             path.closeSubpath();
             painter->setBrushOrigin( itemRect.topLeft() );
             painter->save();
+            QVariant br = idx.data( Role::Foreground );
+            painter->setBrush( br.isValid() ? br.value<QBrush>() : defaultBrush( typ ) );
             painter->translate( 0.5, 0.5 );
             painter->drawPath( path );
             painter->restore();
@@ -493,6 +546,55 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     painter->fillRect( cr, painter->pen().brush() );
                 }
             }
+            if ( showNegativeFloat ) {
+                int dw = itemNegativeFloatWidth( opt, idx );
+                if ( dw > 0 ) {
+                    QRectF cr;
+                    qreal h = ir.height()/4.;
+                    if ( hasStartConstraint( idx ) ) {
+                        cr = QRectF( ir.left(), ir.bottom(), - dw + ir.width(), -h );
+                        painter->fillRect( cr, painter->pen().brush() );
+                    } else if ( hasEndConstraint( idx ) ) {
+                        cr = QRectF( ir.left(), ir.bottom(), -dw, -h );
+                        painter->fillRect( cr, painter->pen().brush() );
+                    }
+                    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<cr<<r<<boundingRect;
+                }
+            }
+            bool normal = true;
+            if ( showSchedulingError ) {
+                QList<int> lst;
+                lst << NodeModel::NodeAssignmentMissing
+                    << NodeModel::NodeResourceOverbooked
+                    << NodeModel::NodeResourceUnavailable
+                    << NodeModel::NodeConstraintsError
+                    << NodeModel::NodeEffortNotMet;
+                foreach ( int i, lst ) {
+                    QVariant v = data( idx, i, Qt::EditRole );
+                    //kDebug()<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
+                    if (  v.toBool() ) {
+                        QVariant br = data( idx, i, Role::Foreground );
+                        painter->setBrush( br.isValid() ? br.value<QBrush>() : m_schedulingErrorBrush );
+                        normal = false;
+                        break;
+                    }
+                }
+
+            } else if ( showCriticalTasks ) {
+                bool critical = data( idx, NodeModel::NodeCritical, Qt::DisplayRole ).toBool();
+                if ( ! critical && showCriticalPath ) {
+                    critical = data( idx, NodeModel::NodeCriticalPath, Qt::DisplayRole ).toBool();
+                }
+                if ( critical ) {
+                    QVariant br = data( idx, NodeModel::NodeCritical, Role::Foreground );
+                    painter->setBrush( br.isValid() ? br.value<QBrush>() : m_criticalBrush );
+                    normal = false;
+                }
+            }
+            if ( normal ) {
+                QVariant br = idx.data( Role::Foreground );
+                painter->setBrush( br.isValid() ? br.value<QBrush>() : defaultBrush( typ ) );
+            }
             painter->restore();
 
             const QRectF r = QRectF( opt.rect ).adjusted( -pw, -pw, pw, pw );
@@ -505,10 +607,46 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             path.closeSubpath();
 
             painter->save();
+            QVariant br = idx.data( Role::Foreground );
+            painter->setBrush( br.isValid() ? br.value<QBrush>() : defaultBrush( typ ) );
             painter->translate( r.topLeft() );
             painter->translate( 0.5, 0.5 );
             painter->drawPath( path );
             painter->restore();
+
+            if ( showTimeConstraint ) {
+                //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
+                painter->save();
+                painter->setBrush( QBrush( Qt::darkGray ) );
+                painter->setPen( Qt::black );
+                qreal h = r.height()/2.;
+                if ( hasStartConstraint( idx ) ) {
+                    int dw = itemStartConstraintWidth( opt, idx ) + h;
+                    QRectF cr( r.left()-dw, r.top() + h/2., h, h );
+                    QPainterPath p( cr.topLeft() );
+                    p.lineTo( cr.bottomLeft() );
+                    p.lineTo( cr.right(), cr.top() + cr.height()/2. );
+                    p.closeSubpath();
+                    painter->drawPath( p );
+                    if ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() != Node::StartNotEarlier ) {
+                        painter->fillPath( p, QBrush( Qt::red ) );
+                    }
+                }
+                if ( hasEndConstraint( idx ) ) {
+                    int dw = itemEndConstraintWidth( opt, idx );
+                    QRectF cr( r.right()+dw, r.top() + h/2., h, h );
+                    QPainterPath p( cr.topRight() );
+                    p.lineTo( cr.bottomRight() );
+                    p.lineTo( cr.left(), cr.top() + cr.height()/2. );
+                    p.closeSubpath();
+                    painter->drawPath( p );
+                    if ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() != Node::FinishNotLater ) {
+                        painter->fillPath( p, QBrush( Qt::red ) );
+                    }
+                }
+                painter->restore();
+            }
+
             Qt::Alignment ta;
             switch( opt.displayPosition ) {
             case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
@@ -787,7 +925,7 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KDGa
     Appointment tot = *external + *internal;
     painter->save();
     // TODO check load vs units properly, it's not as simple as below!
-    foreach ( const AppointmentInterval &i, tot.intervals() ) {
+    foreach ( const AppointmentInterval &i, tot.intervals().map() ) {
         int il = i.load();
         QString txt = KGlobal::locale()->formatNumber( (double)il / (double)rl, 1 );
         QPen pen = painter->pen();

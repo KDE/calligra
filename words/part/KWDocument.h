@@ -42,7 +42,7 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class MagicCurtain;
-
+class PageProcessingQueue;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
 
@@ -170,6 +170,9 @@ public:
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
 
+    /// Returns the PageProcessingQueue used to queue and process page-updates.
+    PageProcessingQueue* pageQueue();
+
 public slots:
     /// Relayout the pages
     void relayout();
@@ -233,8 +236,8 @@ private:
     MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
     bool m_mainFramesetEverFinished;
 
-
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
+    PageProcessingQueue *m_pageQueue;
 };
 
 #endif

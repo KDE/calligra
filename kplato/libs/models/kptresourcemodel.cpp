@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen kplato@kde.org>
+  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -86,6 +87,13 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Qt::DecorationRole:
+            if ( res->isBaselined() ) {
+                return KIcon( "view-time-schedule-baselined" );
+             }
+             break;
+        default:
+            break;
     }
     return QVariant();
 }
@@ -627,8 +635,34 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
     }
     Resource *r = qobject_cast<Resource*>( object ( index ) );
     if ( r != 0 ) {
-        flags |= Qt::ItemIsEditable;
         flags |= Qt::ItemIsDragEnabled;
+        switch ( index.column() ) {
+            case ResourceModel::ResourceName:
+                flags |= Qt::ItemIsEditable;
+                break;
+            case ResourceModel::ResourceType:
+                if ( ! r->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            case ResourceModel::ResourceAccount:
+                if ( ! r->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            case ResourceModel::ResourceNormalRate:
+                if ( ! r->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            case ResourceModel::ResourceOvertimeRate:
+                if ( ! r->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            default:
+                flags |= Qt::ItemIsEditable;
+        }
         //kDebug()<<"resource"<<flags;
     } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
         flags |= Qt::ItemIsDropEnabled;

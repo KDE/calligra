@@ -1,6 +1,6 @@
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
-   Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2006 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

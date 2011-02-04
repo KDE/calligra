@@ -34,7 +34,7 @@ namespace Tables
  * Created, when the user presses the middle mouse button on the selection handle.
  * Nothing happens, if the selection did not change.
  */
-class CALLIGRA_TABLES_EXPORT MergeStrategy : public AbstractSelectionStrategy
+class CALLIGRA_TABLES_COMMON_EXPORT MergeStrategy : public AbstractSelectionStrategy
 {
 public:
     /**

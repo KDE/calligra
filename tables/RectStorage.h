@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2006,2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ class RectStorageLoader;
  * \note For data assigned to points use PointStorage.
  */
 template<typename T>
-class CALLIGRA_TABLES_EXPORT RectStorage
+class RectStorage
 {
 public:
     explicit RectStorage(Map* map);
@@ -350,7 +350,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
     // process the tree
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(1, KS_rowMax - number + 1, KS_colMax, number), T());
-    undoData << m_tree.insertRows(position, number);
+    undoData << m_tree.insertRows(position, number, RTree<T>::CopyCurrent);
     return undoData;
 }
 
@@ -364,7 +364,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number
     // process the tree
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(KS_colMax - number + 1, 1, number, KS_rowMax), T());
-    undoData << m_tree.insertColumns(position, number);
+    undoData << m_tree.insertColumns(position, number, RTree<T>::CopyCurrent);
     return undoData;
 }
 
