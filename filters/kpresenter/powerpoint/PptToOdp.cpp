@@ -34,6 +34,8 @@
 #include <QtCore/QBuffer>
 
 //#define DEBUG_PPTTOODP
+//#define USE_OFFICEARTDGG_CONTAINER
+
 #define FONTSIZE_MAX 4000 //according to MS-PPT
 
 using namespace MSO;
@@ -237,7 +239,9 @@ private:
     //An empty container passed to libmso in case we prefer default values of
     //properties instead of drawingPrimaryOptions of the drawingGroup.  Looks
     //like in case of PPT the drawingGroup container has to be ignored
-    const OfficeArtDggContainer drawingGroup_empty;
+#ifndef USE_OFFICEARTDGG_CONTAINER
+    const OfficeArtDggContainer m_drawingGroup_empty;
+#endif
 
 public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
@@ -287,7 +291,6 @@ void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox& 
 {
     const TextContainer* textContainer = 0;
     const TextRuler* textRuler = 0;
-
     const PptOfficeArtClientTextBox* tb = ct.anon.get<PptOfficeArtClientTextBox>();
     if (tb) {
         foreach(const TextClientDataSubContainerOrAtom& tc, tb->rgChildRec) {
@@ -487,10 +490,11 @@ void PptToOdp::DrawClient::addTextStyles(
 const MSO::OfficeArtDggContainer*
 PptToOdp::DrawClient::getOfficeArtDggContainer()
 {
-    //NOTE: use default values of properties, looks like in case of PPT the
-    //drawingGroup container has to be ignored
-//     return &ppttoodp->p->documentContainer->drawingGroup.OfficeArtDgg;
-    return &drawingGroup_empty;
+#ifdef USE_OFFICEARTDGG_CONTAINER
+    return &ppttoodp->p->documentContainer->drawingGroup.OfficeArtDgg;
+#else
+    return &m_drawingGroup_empty;
+#endif
 }
 
 const MSO::OfficeArtSpContainer* 
@@ -2152,13 +2156,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextCont
         getMeta(*meta, out.xml);
     } else {
         int len = end - start;
-        if ( (len > 0) &&
-             ( (text[end-1] == '\r') || (text[end-1] == '\v') ) )
-        {
-            len--;
-        }
-        const QString txt
-                = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
+        const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
         out.xml.addTextNode(txt);
     }
 
@@ -2179,7 +2177,7 @@ int PptToOdp::processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextCon
         if (font_size < *p_fs) {
             *p_fs = font_size;
         }
-        if (r <= pos) {
+        if (r < pos) {
             // some error
             qDebug() << "pos: " << pos << " end: " << end << " r: " << r;
             return -2;
@@ -2200,24 +2198,32 @@ QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf)
     return out.styles.insert(list);
 }
 
-void PptToOdp::processTextLine(Writer& out,
-                               const MSO::OfficeArtClientData* clientData,
-                               const MSO::TextContainer& tc, const MSO::TextRuler* tr,
-                               const QString& text, int start, int end,
-                               QStack<QString>& levels)
+void
+PptToOdp::processParagraph(Writer& out,
+                           const MSO::OfficeArtClientData* clientData,
+                           const MSO::TextContainer& tc,
+                           const MSO::TextRuler* tr,
+                           const QString& text,
+                           int start,
+                           int end,
+                           QStack<QString>& levels)
 {
+    //TODO: support for notes master slide required!
+
+#ifdef DEBUG_PPTTOODP
+    QString txt = text.mid(start, (end - start));
+    qDebug() << "\n> start:" << start << "| end:" << end;
+    qDebug() << "> current paragraph:" << txt;
+#endif
+
     const PptOfficeArtClientData* pcd = 0;
     if (clientData) {
         pcd = clientData->anon.get<PptOfficeArtClientData>();
     }
-    PptTextPFRun pf(p->documentContainer, m_currentSlideTexts, m_currentMaster, pcd,
-                    &tc, tr, start);
 
     //The current TextCFException located in the TextContainer will be
     //prepended to the list in the processTextSpan function.
     QList<const MasterOrSlideContainer*> mh;
-
-    //TODO: support for notes master slide required!
 
     //prepare the masters hierarchy
     if (m_currentMaster) {
@@ -2233,6 +2239,10 @@ void PptToOdp::processTextLine(Writer& out,
             }
         }
     }
+    //TODO: masters hierarchy?
+    PptTextPFRun pf(p->documentContainer, m_currentSlideTexts, m_currentMaster,
+                    pcd, &tc, tr, start);
+
     PptTextCFRun cf(p->documentContainer, mh, tc, pf.level());
 
     //spans have to be processed first to prepare the correct ParagraphStyle
@@ -2244,7 +2254,8 @@ void PptToOdp::processTextLine(Writer& out,
     quint16 min_fontsize = FONTSIZE_MAX;
     processTextSpans(o, &cf, tc, text, start, end, &min_fontsize);
 
-    m_isList = (pf.isList() && (start < end));
+    m_isList = ( pf.isList() && (start < end) );
+
     if (m_isList) {
         int depth = pf.level() + 1;
         QString listStyle = defineAutoListStyle(out, pf);
@@ -2320,7 +2331,7 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
     txt.replace('\n', "<newline>");
     txt.replace('\t', "<tab>");
     txt.replace('\f', "<ff>");
-    qDebug() << "> current text:" << txt << "| length:" << len;
+    qDebug() << "\n> current text:" << txt << "| length:" << len;
 #endif
 
     // Let's assume text stored in paragraphs.
@@ -2349,7 +2360,7 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
     // Paragraph formatting that applies to substring
     QStack<QString> levels;
     levels.reserve(5);
-    int pos = 0;
+    qint32 pos = 0;
 
     while (pos < text.length()) {
         int end = text.indexOf(lineend, pos);
@@ -2357,20 +2368,16 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
             end = text.size();
             missed_line = false;
         }
-#ifdef DEBUG_PPTTOODP
-	QString tmp = text.mid(pos, (end - pos));
-	tmp.replace(lineend, "");
-	qDebug() << "> current textLine:" << tmp;
-#endif
-        processTextLine(out, clientData, tc, tr, text, pos, end, levels);
+        processParagraph(out, clientData, tc, tr, text, pos, end, levels);
         pos = end + 1;
     }
+
     // catch the <cr> following text3 in example above or an empty text string
     if (missed_line) {
         if (!text.isEmpty()) {
             pos--;
         }
-        processTextLine(out, clientData, tc, tr, QString(QString::null), pos, pos, levels);
+        processParagraph(out, clientData, tc, tr, QString(QString::null), pos, pos, levels);
     }
 
     // close all open text:list elements
