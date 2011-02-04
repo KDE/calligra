@@ -70,7 +70,7 @@ SvgParser::SvgParser(KoResourceManager *documentResourceManager)
     m_styleAttributes << "fill" << "fill-rule" << "fill-opacity";
     m_styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
     m_styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
-    m_styleAttributes << "opacity" << "filter";
+    m_styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule";
 }
 
 SvgParser::~SvgParser()
@@ -157,6 +157,7 @@ void SvgParser::addGraphicContext()
         *gc = *(m_gc.top());
 
     gc->filterId.clear(); // filters are not inherited
+    gc->clipPathId.clear(); // clip paths are not inherited
     gc->display = true; // display is not inherited
     gc->opacity = 1.0; // opacity is not inherited
 
@@ -979,6 +980,17 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
             unsigned int end = params.indexOf(')', start);
             gc->filterId = params.mid(start, end - start);
         }
+    } else if (command == "clip-path") {
+        if (params != "none" && params.startsWith("url(")) {
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.indexOf(')', start);
+            gc->clipPathId = params.mid(start, end - start);
+        }
+    } else if (command == "clip-rule") {
+        if (params == "nonzero")
+            gc->clipRule = Qt::WindingFill;
+        else if (params == "evenodd")
+            gc->clipRule = Qt::OddEvenFill;
     }
 
     gc->fillColor = fillcolor;
@@ -1058,6 +1070,7 @@ void SvgParser::parseStyle(KoShape *obj, const SvgStyles &styles)
         applyStrokeStyle(obj);
     }
     applyFilter(obj);
+    applyClipping(obj);
 
     if (! gc->display)
         obj->setVisible(false);
@@ -1351,6 +1364,18 @@ void SvgParser::applyFilter(KoShape * shape)
         filterStack->setClipRect(objectFilterRegion);
         shape->setFilterEffectStack(filterStack);
     }
+}
+
+void SvgParser::applyClipping(KoShape *shape)
+{
+    SvgGraphicsContext *gc = m_gc.top();
+    if (! gc)
+        return;
+
+    if (gc->clipPathId.isEmpty())
+        return;
+    
+    kDebug(30514) << "applying clip path" << gc->clipPathId << "clip rule" << gc->clipRule;
 }
 
 void SvgParser::parseFont(const SvgStyles &styles)

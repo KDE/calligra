@@ -145,6 +145,9 @@ protected:
     /// Applies the current filter to the object
     void applyFilter(KoShape * shape);
 
+    /// Applies the current clip path to the object
+    void applyClipping(KoShape *shape);
+    
     /// Returns inherited attribute value for specified element
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
 
