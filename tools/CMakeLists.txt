@@ -25,11 +25,12 @@ macro_log_feature(OPENSSL_FOUND "OpenSSL" "A toolkit implementing the Secure Soc
 "FreOffice uses OpenSSL for digital signatures")
 
 
+# TODO why build koabstraction and f-office only on X11?
 if(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
-    if(Q_WS_X11 AND SHOULD_BUILD_TABLES)
+    if(Q_WS_X11 AND SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS AND SHOULD_BUILD_KPRESENTER)
       macro_optional_add_subdirectory( koabstraction )
       macro_optional_add_subdirectory( f-office )
-    endif(Q_WS_X11 AND SHOULD_BUILD_TABLES)
+    endif(Q_WS_X11 AND SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS AND SHOULD_BUILD_KPRESENTER)
 endif(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
 
 # strigi ships with the odfsaxanalyzer which does already fetch the meta-data of
