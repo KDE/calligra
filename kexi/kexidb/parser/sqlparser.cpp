@@ -799,6 +799,9 @@ enum yytokentype {
 #include "parser.h"
 #include "parser_p.h"
 #include "sqltypes.h"
+#ifdef Q_OS_SOLARIS
+#include <alloca.h>
+#endif
 
 int yylex();
 
