@@ -17,7 +17,11 @@ set(librcps_LIB_SRCS
     slist.c
 )
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+if (CMAKE_C_COMPILER_ID STREQUAL "SunPro")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -xc99")
+else()
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+endif()
 
 kde4_add_library(librcps_plan SHARED ${librcps_LIB_SRCS})
 
