@@ -190,6 +190,8 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
     Q_ASSERT(lastFrame);
+    if (!lastFrame)
+        return;
 
     if (KWord::isHeaderFooter(this)) {
         KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
