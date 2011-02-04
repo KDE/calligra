@@ -103,6 +103,7 @@
             </Menu>
             <Action name="object_group"/>
             <Action name="object_ungroup"/>
+            <Action name="object_clip"/>
         </Menu>
         <Menu name="path">
             <text>&amp;Path</text>

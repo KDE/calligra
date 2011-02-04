@@ -13,7 +13,7 @@
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
    Copyright (C) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (C) 2005-2009 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2009,2011 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
@@ -82,6 +82,7 @@
 #include <KoShapeBorderCommand.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoParameterToPathCommand.h>
+#include <KoShapeClipCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
@@ -172,6 +173,7 @@ public:
     KAction * pathSnapToGrid;
     KAction * configureAction;
     KAction * deleteSelectionAction;
+    KAction * clipObjects;
 
     KToggleAction * viewAction;
     KToggleAction * showRulerAction;
@@ -599,6 +601,34 @@ void KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distri
     d->canvas->addCommand(cmd);
 }
 
+void KarbonView::clipObjects()
+{
+    KoSelection* selection = d->canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    if( ! selectedShapes.count() )
+        return;
+
+    KoShape * shapeToClip = selectedShapes.first();
+    selectedShapes.removeOne( shapeToClip );
+
+    QList<KoPathShape*> clipPaths;
+    foreach( KoShape * shape, selectedShapes )
+    {
+        KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+        if( path )
+            clipPaths.append( path );
+    }
+
+    if( ! clipPaths.count() )
+        return;
+
+    QUndoCommand * cmd = new KoShapeClipCommand( d->part, shapeToClip, clipPaths );
+    d->canvas->addCommand( cmd );
+}
+
 void KarbonView::closePath()
 {
     // TODO add the new close path command here
@@ -904,6 +934,10 @@ void KarbonView::initActions()
     if (action) {
         action->setShortcut(QKeySequence("Ctrl+Shift+G"));
     }
+
+    d->clipObjects  = new KAction(KIcon("clip"), i18n("&Clip Objects"), this);
+    actionCollection()->addAction("object_clip", d->clipObjects );
+    connect(d->clipObjects, SIGNAL(triggered()), this, SLOT(clipObjects()));
 
     // object <-----
 
