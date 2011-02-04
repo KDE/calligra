@@ -443,8 +443,6 @@ void PptToOdp::DrawClient::addTextStyles(
     }
     if (out.stylesxml) {
         const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
-
-        //TODO: provide the corresponding TextRulerAtom
         PptTextPFRun pf(ppttoodp->p->documentContainer,
                         dc_data->slideTexts,
                         dc_data->masterSlide,
@@ -861,7 +859,6 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
             pf9 = &pp9->textDefaultsAtom->pf9;
         }
     }
-    //TODO: provide the default TextRulerAtom
     PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, 0);
 }
