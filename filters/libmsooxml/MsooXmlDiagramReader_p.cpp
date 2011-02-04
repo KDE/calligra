@@ -1129,7 +1129,7 @@ void ConstraintAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
 
 void ConstraintAtom::build(Context* context)
 {
-//     context->m_parentLayout->addConstraint( QExplicitlySharedDataPointer<ConstraintAtom>( this ) );
+//     context->m_parentLayout->addConstraint( QExplicitlySharedDataPointer<ConstraintAtom>( this ) );    
     QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
     QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > affectedLayouts;
     QVector< AbstractNode* > childDataPoints;
@@ -1140,16 +1140,18 @@ void ConstraintAtom::build(Context* context)
         kWarning() << "constraint for " << m_for << " is not supported";
         return;
     }
+    if ( m_fact == "-0.2" )
+        qDebug() << "yeah";
     if ( m_for == "ch" )
-    {        
+    {
         foreach( AbstractNode* atom, context->currentNode()->children() )
         {
             PointNode *ptNode = dynamic_cast< PointNode* >( atom );
             if ( !ptNode )
                 continue;
-            if ( !m_ptType.isEmpty() && m_ptType == ptNode->m_type )
+            if ( m_ptType.isEmpty() || m_ptType == ptNode->m_type )
                 childDataPoints.append( atom );
-            if ( !m_refPtType.isEmpty() && m_refPtType == ptNode->m_type )
+            if ( m_refPtType.isEmpty() || m_refPtType == ptNode->m_type )
                 refChildDataPoints.append( atom );
         }
         if ( m_ptType.isEmpty() )
@@ -1172,7 +1174,7 @@ void ConstraintAtom::build(Context* context)
                     continue;
                 QExplicitlySharedDataPointer<ConstraintAtom> clonedPtr( ptr->clone() );
                 addedConstraints.append( clonedPtr.data() );
-                curChild->addConstraint( clonedPtr );
+                curChild->addConstraint( clonedPtr );                
             }
         }        
     }
