@@ -81,56 +81,6 @@ inline QColor ST_UnsignedIntHex_to_QColor(const QString& color)
     return c;
 }
 
-//! Single XLSX fill style definition as specified in ECMA-376, ECMA-376, 18.8.21, p. 1963.
-/*! @see XlsxXmlStylesReader::read_fills() */
-class XlsxFillStyle
-{
-public:
-    XlsxFillStyle();
-    ~XlsxFillStyle();
-
-    //! 18.18.55 ST_PatternType (Pattern Type), p. 2713
-    /*! Indicates the style of fill pattern being used for a cell format.
-        Compare to MSOOXML::DrawingMLPatternFillStyle which is different pattern type. */
-    enum ST_PatternType {
-        NonePatternType,
-        SolidPatternType,
-        DarkDownPatternType,
-        DarkGrayPatternType,
-        DarkGridPatternType,
-        DarkHorizontalPatternType,
-        DarkTrellisPatternType,
-        DarkUpPatternType,
-        DarkVerticalPatternType,
-        LightPatternType,
-        LightDownPatternType,
-        LightGrayPatternType,
-        LightGridPatternType,
-        LightHorizontalPatternType,
-        LightTrellisPatternType,
-        LightUpPatternType,
-        LightVerticalPatternType,
-        MediumGrayPatternType,
-        Gray0625PatternType,
-        Gray125PatternType
-    };
-
-    ST_PatternType patternType;
-    XlsxColorStyle bgColor;
-    XlsxColorStyle fgColor;
-
-    //! Sets up @a cellStyle to match this style.
-    //! @todo implement more styling
-    void setupCellStyle(KoGenStyle* cellStyle, const MSOOXML::DrawingMLTheme *themes) const;
-
-    //! @return color style (bgColor or fgColor) depending on the pattern
-    //! Can return 0 if no fill should be painted.
-    const XlsxColorStyle* realBackgroundColor( const MSOOXML::DrawingMLTheme *themes) const;
-
-private:
-    mutable XlsxColorStyle* cachedRealBackgroundColor;
-};
-
 //! Single XLSX border style definition
 /*! @see XlsxXmlStylesReader::read_borders() */
 class XlsxBorderStyle
@@ -304,7 +254,7 @@ public:
     }
 
     //! @return fill style for id @a id (counted from 0)
-    XlsxFillStyle* fillStyle(int id) const {
+    KoGenStyle* fillStyle(int id) const {
         if (id < 0 || id >= fillStyles.size())
             return 0;
         return fillStyles[id];
@@ -334,7 +284,7 @@ protected:
     void setCellFormat(XlsxCellFormat *format, int cellFormatIndex);
 
     QVector<KoGenStyle*> fontStyles;
-    QVector<XlsxFillStyle*> fillStyles;
+    QVector<KoGenStyle*> fillStyles;
     QVector<XlsxBorderStyles*> borderStyles;
     QVector<XlsxCellFormat*> cellFormats;
     QMap< int, QString > numberFormatStrings;
@@ -399,15 +349,17 @@ protected:
     KoFilter::ConversionStatus read_indexedColors();
     KoFilter::ConversionStatus read_rgbColor();
 
-    uint m_fillStyleIndex;
     uint m_cellFormatIndex;
     uint m_borderStyleIndex;
 
     XlsxXmlStylesReaderContext* m_context;
 
+    QColor m_currentFgColor;
+    QColor m_currentBgColor;
+
     XlsxColorStyle *m_currentColorStyle; //!< set by read_color()
     KoGenStyle *m_currentFontStyle;
-    XlsxFillStyle *m_currentFillStyle;
+    KoGenStyle *m_currentFillStyle;
     XlsxCellFormat *m_currentCellFormat;
     XlsxBorderStyles *m_currentBorderStyle;
 
@@ -415,8 +367,6 @@ protected:
 
 private:
     void init();
-
-    void handlePatternType(const QString& patternType); //!< used by read_patternFill()
 
 //! @todo readTintAttribute(const QXmlStreamAttributes& attrs) const;
 

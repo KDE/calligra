@@ -28,6 +28,8 @@
 #include <MsooXmlReader.h>
 #include <KoGenStyle.h>
 
+#include <QColor>
+
 class KoCharacterStyle;
 
 //! A class reading MSOOXML XLSX markup
@@ -40,6 +42,8 @@ public:
     virtual ~XlsxXmlCommonReader();
 
 protected:
+    QColor tintedColor(const QColor& color, qreal tint);
+
     KoFilter::ConversionStatus read_t();
     KoFilter::ConversionStatus read_r();
     KoFilter::ConversionStatus read_rPr();

@@ -64,7 +64,7 @@ void XlsxXmlCommonReader::init()
     m_currentTextStyleProperties = 0;
 }
 
-static QColor tintedColor(const QColor& color, qreal tint)
+QColor XlsxXmlCommonReader::tintedColor(const QColor& color, qreal tint)
 {
     const int HLSMAX = 255; // Used for computing tint
     if (tint == 0.0 || !color.isValid()) {
