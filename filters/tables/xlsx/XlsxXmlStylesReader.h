@@ -375,6 +375,8 @@ protected:
     KoFilter::ConversionStatus read_name();
     KoFilter::ConversionStatus read_color2();
     KoFilter::ConversionStatus read_cellXfs();
+    KoFilter::ConversionStatus read_dxfs();
+    KoFilter::ConversionStatus read_dxf();
     KoFilter::ConversionStatus read_xf();
     KoFilter::ConversionStatus read_alignment();
     KoFilter::ConversionStatus read_fills();
@@ -397,7 +399,6 @@ protected:
     KoFilter::ConversionStatus read_indexedColors();
     KoFilter::ConversionStatus read_rgbColor();
 
-    uint m_fontStyleIndex;
     uint m_fillStyleIndex;
     uint m_cellFormatIndex;
     uint m_borderStyleIndex;

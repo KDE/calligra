@@ -704,7 +704,6 @@ XlsxXmlStylesReader::~XlsxXmlStylesReader()
 void XlsxXmlStylesReader::init()
 {
     m_defaultNamespace = "";
-    m_fontStyleIndex = 0;
     m_fillStyleIndex = 0;
     m_cellFormatIndex = 0;
     m_borderStyleIndex = 0;
@@ -775,7 +774,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
  - cellStyleXfs (Formatting Records) §18.8.9
  - [done] cellXfs (Cell Formats) §18.8.10
  - [done] colors (Colors) §18.8.11
- - dxfs (Formats) §18.8.15
+ - [done] dxfs (Formats) §18.8.15
  - extLst (Future Feature Data Storage Area) §18.2.10
  - [done] fills (Fills) §18.8.21
  - [done] fonts (Fonts) §18.8.23
@@ -802,6 +801,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
                 ELSE_TRY_READ_IF(numFmts)
                 ELSE_TRY_READ_IF(cellXfs)
                 ELSE_TRY_READ_IF(borders)
+                ELSE_TRY_READ_IF(dxfs)
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -831,14 +831,24 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
     uint countNumber = 0;
     STRING_TO_INT(count, countNumber, "styleSheet/fonts@count")
     m_context->styles->fontStyles.resize(countNumber);
-    m_fontStyleIndex = 0;
+    uint fontStyleIndex = 0;
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(font)
+            if (QUALIFIED_NAME_IS(font)) {
+                m_currentFontStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+                if (fontStyleIndex >= (uint)m_context->styles->fontStyles.size()) {
+                    raiseError(i18n("Declared number of font styles too small (%1)", m_context->styles->fontStyles.size()));
+                    return KoFilter::WrongFormat;
+                }
+                TRY_READ(font)
+                m_context->styles->fontStyles[fontStyleIndex] = m_currentFontStyle;
+                m_currentFontStyle = 0;
+                fontStyleIndex++;
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -909,12 +919,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
         m_context->styles->numberFormatStrings[ id ] = formatCode;
     }
 
-    while( true )
-    {
-        readNext();
-        BREAK_IF_END_OF( CURRENT_EL );
-    }
-
+    readNext();
     READ_EPILOGUE
 }
 
@@ -942,7 +947,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
  - [done] vertAlign (Vertical Alignment) §18.4.14
 
  Parent elements:
- - dxf (§18.8.14)
+ - [done] dxf (§18.8.14)
  - [done] fonts (§18.8.23)
  - ndxf (§18.11.1.4)
  - odxf (§18.11.1.6)
@@ -953,16 +958,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 {
     READ_PROLOGUE
 
-    if (m_fontStyleIndex >= (uint)m_context->styles->fontStyles.size()) {
-        raiseError(i18n("Declared number of font styles too small (%1)", m_context->styles->fontStyles.size()));
-        return KoFilter::WrongFormat;
-    }
-
-    kDebug() << "font #" << m_fontStyleIndex;
-    m_currentFontStyle = new KoGenStyle;
     MSOOXML::Utils::AutoPtrSetter<KoGenStyle> currentFontStyleSetter(m_currentFontStyle);
 
-    m_currentFontStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     m_currentTextStyleProperties = new KoCharacterStyle;
 
     while (!atEnd()) {
@@ -989,9 +986,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
     m_currentTextStyleProperties = 0;
 
     currentFontStyleSetter.release();
-    m_context->styles->fontStyles[m_fontStyleIndex] = m_currentFontStyle;
-    m_currentFontStyle = 0;
-    m_fontStyleIndex++;
 
     READ_EPILOGUE
 }
@@ -1062,6 +1056,75 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_color2()
     RETURN_IF_ERROR( m_currentColorStyle->readAttributes(attrs, m_context->colorIndices, "color") )
 
     readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL dxfs
+/*
+ Parent elements:
+ - [done] styleSheet (§18.8.39)
+
+ Child elements:
+ - [done] dxf (Formatting) §18.8.14
+
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxfs()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(dxf)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL dxf
+/*
+ Parent elements:
+ - [done] dxfs (§18.8.15);
+ - rfmt (§18.11.1.17)
+
+ Child elements:
+ - alignment (Alignment) §18.8.1
+ - border (Border) §18.8.4
+ - extLst (Future Feature Data Storage Area) §18.2.10
+ - fill (Fill) §18.8.20
+ - [done] font (Font) §18.8.22
+ - numFmt (Number Format) §18.8.30
+ - protection (Protection Properties) §18.8.33
+
+*/
+KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
+{
+    READ_PROLOGUE
+
+    KoGenStyle cellStyle(KoGenStyle::TableCellStyle, "table-cell");
+
+    m_currentFontStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(font)
+            SKIP_UNKNOWN
+        }
+    }
+
+    MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFontStyle, cellStyle, KoGenStyle::TextType);
+    mainStyles->insert(cellStyle, "ConditionalStyle", KoGenStyles::AllowDuplicates);
+
+    delete m_currentFontStyle;
+    m_currentFontStyle = 0;
+
     READ_EPILOGUE
 }
 
@@ -1514,6 +1577,14 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_gradientFill()
 #undef CURRENT_EL
 #define CURRENT_EL borders
 //! 18.8.5 borders (Borders), p. 1951
+/*
+ Parent elements:
+ - [done] styleSheet (§18.8.39)
+
+ Child elements:
+ - [done] border (Border) §18.8.4
+
+*/
 //! @todo support all elements
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
 {
@@ -1533,7 +1604,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(border)
-//todo            ELSE_WRONG_FORMAT
+            ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -1729,9 +1800,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_colors()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(indexedColors)) {
-                TRY_READ(indexedColors)
-            }
+            TRY_READ_IF(indexedColors)
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -1756,9 +1826,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_indexedColors()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(rgbColor)) {
-                TRY_READ(rgbColor)
-            }
+            TRY_READ_IF(rgbColor)
             ELSE_WRONG_FORMAT
         }
     }

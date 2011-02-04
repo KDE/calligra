@@ -469,7 +469,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_color()
         }
     }
     if (!rgb.isEmpty()) {
-        currentColor = rgb.right(rgb.length()-2);
+        currentColor = QString("#" + rgb.right(rgb.length()-2));
     }
     if (!theme.isEmpty()) {
         // Xlsx seems to switch these indices
