@@ -90,6 +90,8 @@ class Context
         QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_layoutMap;
         /// A PointNode=>LayoutNodeAtom map used to know which datapoint maps to which layoutnode.
         QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_pointLayoutMap;
+        /// A LayoutNodeAtom=>PointNode map used to know which layoutnode maps to which datapoint.
+        QMap< LayoutNodeAtom*, AbstractNode* > m_layoutPointMap;
 
         explicit Context();
         ~Context();
@@ -125,7 +127,7 @@ public:
             const QString m_name;
       
     };
-    bool hasNegativeWidth()
+    bool hasNegativeWidth() const
     {
         return negativeWidth;
     }
@@ -250,6 +252,7 @@ class PointNode : public AbstractNode
         QString m_type;
         QString m_cxnId;
         QString m_text;
+        QMap< QString, QString > prSet;
         explicit PointNode() : AbstractNode("dgm:pt") {}
         virtual ~PointNode() {}
         virtual void dump(Context* context, int level);
@@ -451,12 +454,16 @@ class ConstraintAtom : public AbstractAtom
         QString m_type;
         /// Specifies an absolute value instead of reference another constraint.
         QString m_value;
-        explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
-        virtual ~ConstraintAtom() {}
+        /// the actual node the constraint references
+        QExplicitlySharedDataPointer<LayoutNodeAtom> m_referencedLayout;
+        
+        explicit ConstraintAtom() : AbstractAtom("dgm:constr"), m_referencedLayout( 0 ) {}
+        virtual ~ConstraintAtom() { Q_ASSERT( false ); }
         virtual ConstraintAtom* clone();
         virtual void dump(Context*, int level);
         virtual void readAll(Context*, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
+        void applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom );
 };
 
 /// Rules indicate the ranges of values that a layout algorithm can use to modify the constraint values if it cannot lay out the graphic by using the constraints.
@@ -617,8 +624,9 @@ class AbstractAlgorithm {
         virtual void virtualDoLayout();
         virtual void virtualDoLayoutChildren();
         void applyConstraints();
+        QList<Context*> doubleLayoutContext;
     private:
-        Context* m_context;
+        Context* m_context;        
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_layout;
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_parentLayout;
         AbstractNode* m_oldCurrentNode;
