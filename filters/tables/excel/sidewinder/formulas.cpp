@@ -88,7 +88,7 @@ FormulaToken::~FormulaToken()
 FormulaToken FormulaToken::createBool(bool value)
 {
     FormulaToken t(Bool);
-    unsigned char data = value ? : 0;
+    unsigned char data = value ? 1: 0;
     t.setData(1, &data);
     return t;
 }
