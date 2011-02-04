@@ -47,7 +47,7 @@ class KPLATOUI_EXPORT GanttItemDelegate : public KDGantt::ItemDelegate
 public:
     GanttItemDelegate( QObject *parent = 0 );
 
-//    virtual QString toolTip( const QModelIndex& idx ) const;
+    virtual QString toolTip( const QModelIndex& idx ) const;
     virtual KDGantt::Span itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
     virtual void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
     

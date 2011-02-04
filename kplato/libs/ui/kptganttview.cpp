@@ -135,21 +135,42 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( TreeViewBase *view, GanttItemD
 }
 
 //-------------------------
-GanttPrintingOptions::GanttPrintingOptions( QWidget *parent )
+GanttPrintingOptions::GanttPrintingOptions()
+    : printRowLabels( true ),
+    singlePage( true )
+{
+}
+
+bool GanttPrintingOptions::loadContext( const KoXmlElement &settings )
+{
+    KoXmlElement e = settings.namedItem( "print-options" ).toElement();
+    if ( ! e.isNull() ) {
+        printRowLabels = (bool)( e.attribute( "print-rowlabels", "0" ).toInt() );
+        singlePage = (bool)( e.attribute( "print-singlepage", "0" ).toInt() );
+    }
+    return true;
+}
+
+void GanttPrintingOptions::saveContext( QDomElement &settings ) const
+{
+    QDomElement e = settings.ownerDocument().createElement( "print-options" );
+    settings.appendChild( e );
+    e.setAttribute( "print-rowlabels", printRowLabels );
+    e.setAttribute( "print-singlepage", singlePage );
+}
+
+GanttPrintingOptionsWidget::GanttPrintingOptionsWidget( QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
-    ui_printRowLabels->hide(); // TODO or remove?
-    setWindowTitle( i18n("Options") );
+    setWindowTitle( i18nc( "@title:tab", "Chart" ) );
 }
 
 //----------------
-GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
+GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
     : PrintingDialog( view ),
     m_gantt( gantt ),
-    m_options( 0 ),
-    m_singlePage( true ),
-    m_printRowLabels( true )
+    m_options( 0 )
 {
     m_headerHeight = gantt->graphicsView()->headerHeight();
     m_sceneRect = m_gantt->graphicsView()->printRect();
@@ -166,34 +187,51 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
         c -= printer().pageRect().height();
     }
     kDebug()<<m_sceneRect<<printer().pageRect()<<m_horPages<<m_vertPages;
-    printer().setFromTo( documentFirstPage(), documentLastPage() );
+    printer().setFromTo( documentFirstPage(), documentFirstPage() + ( m_horPages * m_vertPages  ) - 1 );
 }
 
 void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
-    if ( m_options ) {
-        m_singlePage = m_options->singlePage();
-        //m_printRowLabels = m_options->printRowLabels();
+    QList<int> pages;
+    pages << printer().fromPage();
+    if ( ! m_gantt->m_printOptions.singlePage ) {
+        int last = printer().toPage();
+        for ( int i = pages.first() + 1; i <= last; ++i ) {
+            pages << i;
+        }
     }
+    setPageRange( pages );
+
     PrintingDialog::startPrinting( removePolicy );
 }
 
 QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
 {
     //kDebug();
-    GanttPrintingOptions *w = new GanttPrintingOptions();
-    //w->setPrintRowLabels( m_printRowLabels );
-    w->setSinglePage( m_singlePage );
-
+    GanttPrintingOptionsWidget *w = new GanttPrintingOptionsWidget();
+    w->setPrintRowLabels( m_gantt->m_printOptions.printRowLabels );
+    connect(w->ui_printRowLabels, SIGNAL(toggled(bool)), SLOT(slotPrintRowLabelsToogled(bool)));
+    w->setSinglePage( m_gantt->m_printOptions.singlePage );
+    connect(w->ui_singlePage, SIGNAL(toggled(bool)), SLOT(slotSinglePageToogled(bool)));
     const_cast<GanttPrintingDialog*>( this )->m_options = w;
 
     return QList<QWidget*>() << createPageLayoutWidget() << m_options;
 }
 
+void GanttPrintingDialog::slotPrintRowLabelsToogled( bool on )
+{
+    m_gantt->m_printOptions.printRowLabels = on;
+}
+
+void GanttPrintingDialog::slotSinglePageToogled( bool on )
+{
+    m_gantt->m_printOptions.singlePage = on;
+}
+
 int GanttPrintingDialog::documentLastPage() const
 {
-    kDebug()<<m_horPages<<m_vertPages;
-    return m_singlePage ? documentFirstPage() : m_horPages * m_vertPages;
+    //kDebug()<<m_gantt->m_printOptions.singlePage<<m_horPages<<m_vertPages;
+    return m_gantt->m_printOptions.singlePage ? documentFirstPage() : m_horPages * m_vertPages;
 }
 
 
@@ -203,16 +241,18 @@ void GanttPrintingDialog::printPage( int page, QPainter &painter )
     int p = page - documentFirstPage();
     QRectF pageRect = printer().pageRect();
     pageRect.moveTo( 0, 0 );
-    int vert = m_singlePage ? 0 : p / m_horPages;
-    int hor = m_singlePage ? 0 : p % m_horPages;
-    if ( ! m_singlePage && documentLastPage() > documentFirstPage() ) {
+    bool singlePage = m_gantt->m_printOptions.singlePage;
+    int vert = singlePage ? 0 : p / m_horPages;
+    int hor = singlePage ? 0 : p % m_horPages;
+    if ( ! singlePage && documentLastPage() > documentFirstPage() ) {
         // print on multiple pages, so calculate rects to print
         qreal hh = vert == 0 ? m_headerHeight : 0;
         qreal ho = vert > 0 ? m_headerHeight : 0;
         sourceRect = QRectF( sourceRect.x() + ( pageRect.width() * hor ), sourceRect.y() + ( ( pageRect.height() * vert ) - ho ), pageRect.width(), pageRect.height() - hh );
         kDebug()<<p<<hor<<vert<<sourceRect;
     }
-    m_gantt->print( &painter, pageRect, sourceRect, m_printRowLabels, vert == 0 );
+    painter.setClipRect( pageRect.adjusted( -1.0, -1.0, 1.0, 1.0 ) );
+    m_gantt->print( &painter, pageRect, sourceRect, hor == 0 && m_gantt->m_printOptions.printRowLabels, vert == 0 );
 }
 
 //---------------------
@@ -299,6 +339,8 @@ bool GanttViewBase::loadContext( const KoXmlElement &settings )
         m_ganttdelegate->showCriticalTasks = (bool)( e.attribute( "show-criticaltasks", "0" ).toInt() );
         m_ganttdelegate->showPositiveFloat = (bool)( e.attribute( "show-positivefloat", "0" ).toInt() );
         m_ganttdelegate->showSchedulingError = (bool)( e.attribute( "show-schedulingerror", "0" ).toInt() );
+
+        m_printOptions.loadContext( e );
     }
     return true;
 }
@@ -318,6 +360,8 @@ void GanttViewBase::saveContext( QDomElement &settings ) const
     e.setAttribute( "show-criticaltasks", m_ganttdelegate->showCriticalTasks );
     e.setAttribute( "show-positivefloat", m_ganttdelegate->showPositiveFloat );
     e.setAttribute( "show-schedulingerror", m_ganttdelegate->showSchedulingError );
+
+    m_printOptions.saveContext( e );
 }
 
 //-------------------------------------------

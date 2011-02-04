@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
+ *
  * Copyright (C) 2010 Ko Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2006,2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,7 +42,6 @@
 
 // #define DEBUG_TEXT
 
-
 #ifdef DEBUG_TEXT
 #define TDEBUG kDebug(32002)
 #else
@@ -48,7 +49,6 @@
 #endif
 
 // helper methods
-
 static qreal yAtX(const QLineF &line, qreal x)
 {
     if (line.dy() == 0)
@@ -193,39 +193,39 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 {
     KoTextDocumentLayout::positionInlineObject(item, position, f);
 #ifndef DEBUG
-    if (inlineTextObjectManager() == 0) {
+    if (!inlineTextObjectManager()) {
         kWarning(32002) << "Need to call setInlineObjectTextManager on the KoTextDocument!!";
         return;
     }
 #endif
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineTextObjectManager()->inlineTextObject(f.toCharFormat()));
     if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
-
         KoShape *parent = anchor->shape()->parent();
-        if (parent == 0) {
-            return;
-        }
+        if (parent) {
+            KWPage page = m_frameSet->pageManager()->page(parent);
+            QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
+            QRectF pageContentRect = parent->boundingRect();
+            int pageNumber = m_frameSet->pageManager()->pageNumber(parent);
 
-        KWPage page = m_frameSet->pageManager()->page(parent);
-        QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
-        QRectF pageContentRect = parent->boundingRect();
-        int pageNumber = m_frameSet->pageManager()->pageNumber(parent);
+            anchor->setPageRect(pageRect);
+            //TODO get the right position for headers and footers
+            anchor->setPageContentRect(pageContentRect);
+            anchor->setPageNumber(pageNumber);
 
-        anchor->setPageRect(pageRect);
-        //todo get the right position for headers and footers
-        anchor->setPageContentRect(pageContentRect);
-        anchor->setPageNumber(pageNumber);
-
-        // if there is no anchor strategy set send the textAnchor into the layout to create anchor strategy and position it
-        if (anchor->anchorStrategy() == 0) {
-            m_state->insertInlineObject(anchor);
+            // if there is no anchor strategy set send the textAnchor into the layout to create anchor strategy and position it
+            if (!anchor->anchorStrategy()) {
+                m_state->insertInlineObject(anchor);
+            }
         }
     }
 }
 
-
 void KWTextDocumentLayout::layout()
 {
+#ifdef TDEBUG
+    TDEBUG << "starting layout pass, document=" << ((void*)document()) << "frameSet=" << m_frameSet << "headerFooter=" << KWord::isHeaderFooter(m_frameSet);
+#endif
+
     class End
     {
     public:
@@ -244,65 +244,91 @@ void KWTextDocumentLayout::layout()
     };
     End ender(m_frameSet, m_state); // poor mans finally{}
 
-    if (! m_state->start())
+    if (!m_state->start()) {
+        // This can happen if there is no QTextLayout set in the LayoutState what means we have nothing to do yet.
+        TDEBUG << "start layouting failed";
         return;
+    }
+
+#ifdef DEBUG_TEXT
+    class LayoutTime {
+    public:
+        LayoutTime(int index, const KWPage &page) : m_index(index), m_page(page) { m_timer.start(); }
+        ~LayoutTime() { kDebug() << /*"index=" << m_index <<*/ "page=" << m_page.pageNumber() << "elapsed=" << m_timer.elapsed() << debug; }
+        QString debug;
+    private:
+        int m_index;
+        KWPage m_page;
+        QTime m_timer;
+    };
+    static int s_index = 0;
+    LayoutTime layouttime(++s_index, m_frameSet->pageManager()->page(m_state->shape));
+#endif
 
     qreal endPos = 1E9;
     qreal bottomOfText = 0.0;
     bool newParagraph = true;
-    bool requestFrameResize = false, firstParagraph = true;
-    int startOfBlock = -1; // the first position in a block (aka paragraph)
-    int startOfBlockText = -1; // the first position of text in a block. Will be different only if anchors preceed text.
+    bool requestFrameResize = false;
+    bool firstParagraph = true;
     KoShape *currentShape = 0;
 
     while (m_state->shape) {
-        if (m_state->shape != currentShape) { // next shape
-            TDEBUG << "New shape";
-            currentShape = m_state->shape;
-            if (m_frameSet->kwordDocument()) {
+#ifdef DEBUG_TEXT
+        TDEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines";
+        for (int i = 0; i < m_state->layout->lineCount(); ++i) {
+            QTextLine line = m_state->layout->lineAt(i);
+            TDEBUG << i << "]" << (line.isValid() ? QString("%1 - %2").arg(line.textStart()).arg(line.textLength()) : QString("invalid"));
+        }
+#endif
 
-                //todo do the logic how shapes from different frame sets interact with text
-//                QRectF bounds = m_state->shape->boundingRect();
-//                foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
-//                    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-//                    if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
-//                        continue;
-//                    foreach (KWFrame *frame, fs->frames()) {
-//                        if (frame->shape() == currentShape)
-//                            continue;
-//                        if (! frame->shape()->isVisible(true))
-//                            continue;
-//                        if (frame->shape()->textRunAroundSide() == KoShape::RunThrough)
-//                            continue;
-//                        if (frame->shape()->zIndex() <= currentShape->zIndex()) {
-//                            continue;
-//                        }
-//                        if (! bounds.intersects(frame->shape()->boundingRect()))
-//                            continue;
-//                        bool isChild = false;
-//                        KoShape *parent = frame->shape()->parent();
-//                        while (parent && !isChild) {
-//                            if (parent == currentShape)
-//                                isChild = true;
-//                            parent = parent->parent();
-//                        }
-//                        if (isChild)
-//                            continue;
-//                        m_state->registerRunAroundShape(frame->shape());
-//                    }
-//                }
-                // set the page for the shape.
-                KWPage page = m_frameSet->pageManager()->page(currentShape);
-                Q_ASSERT(page.isValid());
-                KoTextShapeData *data = qobject_cast<KoTextShapeData*>(currentShape->userData());
-                Q_ASSERT(data);
-                data->setPageDirection(page.directionHint());
-                data->setPage(new KWPageTextInfo(page));
-            }
+        if (m_state->shape != currentShape) { // next shape
+            currentShape = m_state->shape;
+
+            //todo do the logic how shapes from different frame sets interact with text
+            // QRectF bounds = m_state->shape->boundingRect();
+            // Q_ASSERT_X(m_frameSet->kwordDocument());
+            // foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
+            //     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+            //     if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
+            //         continue;
+            //     foreach (KWFrame *frame, fs->frames()) {
+            //         if (frame->shape() == currentShape)
+            //             continue;
+            //         if (! frame->shape()->isVisible(true))
+            //             continue;
+            //         if (frame->shape()->textRunAroundSide() == KoShape::RunThrough)
+            //             continue;
+            //         if (frame->shape()->zIndex() <= currentShape->zIndex())
+            //             continue;
+            //         if (! bounds.intersects(frame->shape()->boundingRect()))
+            //             continue;
+            //         bool isChild = false;
+            //         KoShape *parent = frame->shape()->parent();
+            //         while (parent && !isChild) {
+            //             if (parent == currentShape)
+            //                 isChild = true;
+            //             parent = parent->parent();
+            //         }
+            //         if (isChild)
+            //             continue;
+            //         m_state->registerRunAroundShape(frame->shape());
+            //     }
+            // }
+
+            // set the page for the shape.
+            KWPage page = m_frameSet->pageManager()->page(currentShape);
+            Q_ASSERT(page.isValid());
+
+            KoTextShapeData *data = qobject_cast<KoTextShapeData*>(currentShape->userData());
+            Q_ASSERT(data);
+            data->setPageDirection(page.directionHint());
+            data->setPage(new KWPageTextInfo(page));
+
+            TDEBUG << "New shape, old=" << currentShape << "new=" << m_state->shape << "pageNumber=" << page.pageNumber();
         }
 
         QTextLine line = m_state->createLine();
-        if (!line.isValid()) { // end of parag
+        if (!line.isValid()) { // end of paragraph
             const qreal posY = m_state->y();
             if (firstParagraph) {
                 // start counting after the resumed paragraph
@@ -320,19 +346,20 @@ void KWTextDocumentLayout::layout()
                 if (framesInUse < frameCount && framesInUse != m_lastKnownFrameCount)
                     m_frameSet->framesEmpty(frameCount - framesInUse);
                 m_lastKnownFrameCount = frameCount;
-                if (requestFrameResize) // text ran out while placing it in the dummy shape.
+                if (requestFrameResize) { // text ran out while placing it in the dummy shape
+                    TDEBUG << "Text ran out while placing. Requesting more space=" << m_state->y() - m_dummyShape->textShapeData->documentOffset();
                     m_frameSet->requestMoreFrames(m_state->y() - m_dummyShape->textShapeData->documentOffset());
-                else {
-                    // if there is more space in the shape then there is text. Reset the no-grow bool.
+                } else {
+                    // if there is more space in the shape then there is text then try to free that space again
                     QList<KWFrame*>::const_iterator iter = m_frameSet->frames().end();
-                    KWTextFrame *lastFrame;
+                    KWTextFrame *lastFrame = 0;
                     do {
                         iter--;
                         lastFrame = dynamic_cast<KWTextFrame*>(*iter);
-                    } while (lastFrame == 0);
+                    } while (!lastFrame);
                     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(lastFrame->shape()->userData());
                     Q_ASSERT(data);
-                    // Now we probably need to shrink again to free space that is unused in the frame. Header/footer are special in that
+                    // now we probably need to shrink again to free space that is unused in the frame. Header/footer are special in that
                     // we only change the minimum height but not there actual height like with every other frameset.
                     qreal height = KWord::isHeaderFooter(m_frameSet) ? lastFrame->minimumFrameHeight() : lastFrame->shape()->size().height();
                     qreal spaceLeft = height - bottomOfText + data->documentOffset();
@@ -346,22 +373,22 @@ void KWTextDocumentLayout::layout()
                 m_frameSet->layoutDone();
                 emit finishedLayout();
                 return; // done!
-            } else if (m_state->shape == 0) {
+            } else if (!m_state->shape) {
                 TDEBUG << "encountered an 'end of page' break, we need an extra page to honor that!";
                 // encountered an 'end of page' break but we don't have any more pages(/shapes)
                 m_state->clearTillEnd();
                 m_frameSet->requestMoreFrames(0); // new page, please.
                 currentShape->update();
-                return;
+                return; // done!
             }
             newParagraph = true;
             continue;
         }
         if (m_state->isInterrupted() || (newParagraph && m_state->y() > endPos)) {
             // enough for now. Try again later.
-            kDebug() << "schedule a next layout due to having done a layout of quite some space, interrupted="<<m_state->isInterrupted()<<"m_state->y()="<<m_state->y()<<"endPos="<<endPos;
+            TDEBUG << "schedule a next layout due to having done a layout of quite some space, interrupted="<<m_state->isInterrupted()<<"m_state->y()="<<m_state->y()<<"endPos="<<endPos;
             scheduleLayoutWithoutInterrupt();
-            return;
+            return; // done!
         }
         newParagraph = false;
 
@@ -377,22 +404,24 @@ void KWTextDocumentLayout::layout()
             }
         }
 #endif
+
         bottomOfText = line.y() + line.height();
         if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1 && KWord::isHeaderFooter(m_frameSet)) {
             TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());
             m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
-            return;
+            return; // done!
         }
+
         qreal lineheight = line.height();
 
-        while (m_state->addLine() == false) {
-            if (m_state->shape == 0) { // no more shapes to put the text in!
+        while (!m_state->addLine()) {
+            if (!m_state->shape) { // no more shapes to put the text in
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
 
                 if (requestFrameResize) { // plenty more text, but first lets resize the shape.
                     TDEBUG << "  we need more space; we require at least:" << m_dummyShape->size().height();
-                    m_frameSet->requestMoreFrames(m_dummyShape->size().height());
-                    m_frameSet->requestMoreFrames(0);
+                    m_frameSet->requestMoreFrames(m_dummyShape->size().height()); // resize the frameset
+                    m_frameSet->requestMoreFrames(0); // add a new page including shape
                     return; // done!
                 }
 
@@ -411,8 +440,8 @@ void KWTextDocumentLayout::layout()
                     return; // done!
                 }
 
-                // find out the maximum size this frame can be extended to while still
-                // fitting in the page.  We'll continue doing layout and see if there is text till end of page.
+                // find out the maximum size this frame can be extended to while still fitting in
+                // the page. We'll continue doing layout and see if there is text till end of page.
                 KWPage page = m_frameSet->pageManager()->page(lastFrame->shape());
                 QRectF pageRect = page.rect();
                 pageRect.adjust(page.leftMargin(), page.topMargin(), -page.rightMargin(), -page.bottomMargin());
@@ -434,12 +463,14 @@ void KWTextDocumentLayout::layout()
                 const qreal maxFrameLength = qMin(down.length(), down2.length());
                 if (qAbs(maxFrameLength - currentShape->size().height()) < 1) {
                     m_state->clearTillEnd();
-                    TDEBUG << "  we need another page";
+                    TDEBUG << "  we need a new page";
                     m_frameSet->requestMoreFrames(0); // new page, please.
-                    return;
+                    return; // done!
                 }
                 KoTextShapeData *data = qobject_cast<KoTextShapeData*>(lastFrame->shape()->userData());
                 Q_ASSERT(data);
+
+                //TDEBUG << "maxFrameLength=" << maxFrameLength << "pageRect=" << pageRect << "height=" << currentShape->size().height() << "total=" << maxFrameLength - currentShape->size().height();
 
                 m_dummyShape->setSize(QSizeF(currentShape->size().width(), maxFrameLength - currentShape->size().height()));
                 m_dummyShape->textShapeData->setShapeMargins(data->shapeMargins());
@@ -449,7 +480,9 @@ void KWTextDocumentLayout::layout()
                     emit finishedLayout();
                     return; // done!
                 }
-                requestFrameResize = true;
+
+                // now set requestFrameResize to later do m_frameSet->requestMoreFrames(m_dummyShape->size().height())
+                requestFrameResize = true; // we need more
             }
             if (m_state->shape != currentShape) {
                 // we are in a new shape, and line was not added !
@@ -460,7 +493,7 @@ void KWTextDocumentLayout::layout()
                     data->foul();
                 }
                 m_state->clearTillEnd();
-                break; //break so the next line (which contain the same) is fitted on new shape
+                break; // break so the next line (which contain the same) is fitted on new shape
             }
 
             // don't try to use line when layout is cleared
@@ -468,6 +501,7 @@ void KWTextDocumentLayout::layout()
                 break;
             }
 
+            // set the width of the TextLine as needed to fit
             m_state->fitLineForRunAround( /* resetHorizontalPosition */ true );
 
 #ifdef DEBUG_TEXT
@@ -481,6 +515,7 @@ void KWTextDocumentLayout::layout()
 #endif
         }
     }
+
     if (requestFrameResize) {
         TDEBUG << "  requestFrameResize" << m_dummyShape->size().height();
         m_frameSet->requestMoreFrames(m_dummyShape->size().height());

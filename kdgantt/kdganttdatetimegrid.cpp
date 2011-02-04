@@ -646,7 +646,7 @@ void DateTimeGrid::paintHourScaleHeader( QPainter* painter,  const QRectF& heade
         opt.text = dt.time().toString( QString::fromAscii( "hh" ) );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -665,7 +665,7 @@ void DateTimeGrid::paintHourScaleHeader( QPainter* painter,  const QRectF& heade
         opt.text = QDate::longDayName( dt.date().dayOfWeek() );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -694,7 +694,7 @@ void DateTimeGrid::paintDayScaleHeader( QPainter* painter,  const QRectF& header
         opt.text = dt.toString( QString::fromAscii( "ddd" ) ).left( 1 );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -715,7 +715,7 @@ void DateTimeGrid::paintDayScaleHeader( QPainter* painter,  const QRectF& header
         opt.text = QString::number( dt.date().weekNumber() );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -746,7 +746,7 @@ void DateTimeGrid::paintWeekScaleHeader( QPainter* painter,  const QRectF& heade
         opt.text = QString::number( dt.date().weekNumber() );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -767,7 +767,7 @@ void DateTimeGrid::paintWeekScaleHeader( QPainter* painter,  const QRectF& heade
         opt.text = QDate::longMonthName( dt.date().month() );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -804,7 +804,7 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter, Scale scale,
             opt.text = monthName;
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -825,7 +825,7 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter, Scale scale,
         opt.text = QString::number( dt.date().year() );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -862,7 +862,7 @@ void DateTimeGrid::paintYearScaleHeader( QPainter* painter,  const QRectF& heade
         opt.text = QDate::shortMonthName( dt.date().month() );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {
@@ -883,7 +883,7 @@ void DateTimeGrid::paintYearScaleHeader( QPainter* painter,  const QRectF& heade
         opt.text = QString::number( dt.date().year() );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
-        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, widget );
+        style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
         QStyleOptionHeader subopt = opt;
         subopt.rect = style->subElementRect( QStyle::SE_HeaderLabel, &opt, widget );
         if ( subopt.rect.isValid() ) {

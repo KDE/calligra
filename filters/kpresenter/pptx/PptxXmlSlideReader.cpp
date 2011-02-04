@@ -783,11 +783,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     saveCurrentListStyles();
     saveCurrentStyles();
 
-    // Seems like subtitle by default should point to othertyles, maybe also sldnum etc too.
-    d->phType = "subTitle";
-    saveCurrentListStyles();
-    saveCurrentStyles();
-
     READ_EPILOGUE
 }
 

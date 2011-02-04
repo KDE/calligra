@@ -27,7 +27,6 @@
 
 #include <MsooXmlThemesReader.h>
 #include <MsooXmlCommonReader.h>
-#include "XlsxSharedString.h"
 
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
@@ -116,8 +115,8 @@ public:
         const QString& _worksheetName,
         const QString& _state,
         const QString _path, const QString _file,
-        /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/& _themes,
-        const XlsxSharedStringVector& _sharedStrings,
+        MSOOXML::DrawingMLTheme*& _themes,
+        const QVector<QString>& _sharedStrings,
         const XlsxComments& _comments,
         const XlsxStyles& _styles,
         MSOOXML::MsooXmlRelationships& _relationships,
@@ -131,8 +130,8 @@ public:
     const uint worksheetNumber;
     const QString worksheetName;
     QString state;
-    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>**/ themes;
-    const XlsxSharedStringVector *sharedStrings;
+    MSOOXML::DrawingMLTheme* themes;
+    const QVector<QString> *sharedStrings;
     const XlsxComments* comments;
     const XlsxStyles* styles;
 

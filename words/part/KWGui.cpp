@@ -60,7 +60,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     m_verticalRuler->setShowMousePosition(true);
 
     m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this);
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(this);
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(m_view->actionCollection(), this);
     m_canvasController = canvasController;
     m_canvasController->setMargin(10);
     m_canvasController->setCanvas(m_canvas);
