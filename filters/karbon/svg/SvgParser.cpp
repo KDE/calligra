@@ -1475,13 +1475,17 @@ void SvgParser::applyClipping(KoShape *shape)
     QList<KoPathShape*> pathShapes;
     foreach(KoShape *clipShape, clipShapes) {
         KoPathShape *path = dynamic_cast<KoPathShape*>(clipShape);
-        if (path) {
-            pathShapes.append(path);
-            if (boundingBoxUnits)
-                path->applyAbsoluteTransformation(shapeMatrix);
-        } else {
+        if (!path) {
+            ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(clipShape);
+            if (text) {
+                QPainterPath outline = text->absoluteTransformation(0).map(text->outline());
+                path = KoPathShape::createShapeFromPainterPath(outline);
+            }
             delete clipShape;
         }
+        pathShapes.append(path);
+        if (boundingBoxUnits)
+            path->applyAbsoluteTransformation(shapeMatrix);
     }
     
     removeGraphicContext();
