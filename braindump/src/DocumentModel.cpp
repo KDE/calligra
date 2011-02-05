@@ -42,7 +42,7 @@ DocumentModel::~DocumentModel()
 
 int DocumentModel::rowCount(const QModelIndex &parent) const
 {
-  if(not parent.isValid())
+  if(!parent.isValid())
   {
     return m_document->sections().count();
   } else {
@@ -65,7 +65,7 @@ QModelIndex DocumentModel::index(int row, int column, const QModelIndex& parent)
   } else {
     group = m_document;
   }
-  if(row >= 0 and row < group->sections().count() and column == 0)
+  if(row >= 0 && row < group->sections().count() && column == 0)
   {
     return createIndex(row, column, dataToIndex(group->sections()[row]));
   } else {
@@ -197,13 +197,13 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
   Q_UNUSED( column );
 
   // check if the action is supported
-  if( !data or (action != Qt::MoveAction and action != Qt::CopyAction ) )
+  if( !data || (action != Qt::MoveAction && action != Qt::CopyAction ) )
       return false;
   // check if the format is supported
   QStringList types = mimeTypes();
-  Q_ASSERT(not types.isEmpty());
+  Q_ASSERT(!types.isEmpty());
   QString format = types[0];
-  if( not data->hasFormat(format) )
+  if( !data->hasFormat(format) )
       return false;
   
   QByteArray encoded = data->data( format );
@@ -238,7 +238,7 @@ bool DocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action,
       m_document->addCommand(section, new InsertSectionCommand( m_document->sectionsIO(), new Section(*section), group, this, row));
     } else {
       int idx =group->indexOf(section);
-      if( 0 <= idx and idx < row ) {
+      if( 0 <= idx && idx < row ) {
         --row;
       }
       if(row < 0) {
@@ -267,19 +267,19 @@ void DocumentModel::removeSection( Section* section )
 
 void DocumentModel::insertSection( Section* section, SectionGroup* parentGrp, Section* before)
 {
-  Q_ASSERT( before == 0 or parentGrp == before->sectionParent());
+  Q_ASSERT( before == 0 || parentGrp == before->sectionParent());
   int idx = (before) ? parentGrp->sections().indexOf(before) : parentGrp->sections().count();
   insertSection( section, parentGrp, idx);
 }
 
 void DocumentModel::insertSection( Section* section, SectionGroup* parentGrp, int idx ) {
   QModelIndex parentIndex = index(parentGrp);
-  Q_ASSERT( idx >= 0 and idx <= parentGrp->sections().count());
+  Q_ASSERT( idx >= 0 && idx <= parentGrp->sections().count());
   beginInsertRows(parentIndex, idx, idx);
   parentGrp->insertSection(section, idx);
   Q_ASSERT(section->sectionParent() == parentGrp);
-  Q_ASSERT( ( not(parentIndex.isValid()) and section->sectionParent() == m_document )
-            or section->sectionParent() == dataFromIndex(parentIndex) );
+  Q_ASSERT( ( !(parentIndex.isValid()) && section->sectionParent() == m_document )
+            || section->sectionParent() == dataFromIndex(parentIndex) );
   endInsertRows();
 }
 

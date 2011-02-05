@@ -134,7 +134,7 @@ void View::initGUI()
     setLayout( gridLayout );
 
     
-    m_canvasController = new KoCanvasControllerWidget( this );
+    m_canvasController = new KoCanvasControllerWidget( actionCollection(), this );
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
     
     createCanvas(0);
@@ -209,7 +209,7 @@ void View::initActions()
 void View::loadExtensions()
 {
   KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Braindump/Extensions"),
-                            QString::fromLatin1("(Type == 'Service') and "
+                            QString::fromLatin1("(Type == 'Service') && "
                                                 "([X-Braindump-Version] == 1)"));
   KService::List::ConstIterator iter;
   for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
@@ -358,7 +358,7 @@ void View::canvasReceivedFocus()
 void View::documentRectChanged(const QRectF& bb) {
   QSizeF pageSize( 400, 400 );
   // Make sure we never use an empty size
-  if(not bb.isNull() and not bb.isEmpty())
+  if(!bb.isNull() && !bb.isEmpty())
   {
     pageSize = bb.size();
   }

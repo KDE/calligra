@@ -34,7 +34,7 @@ public:
     QRectF getGlobalRect(const MSO::OfficeArtClientAnchor& anchor);
     virtual QString getPicturePath(int pib);
     virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
-    virtual void processClientData(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData &o, Writer &out);
+    virtual void processClientData(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData &o, Writer &out);
     virtual void processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out);
     virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, Writer &out);
     virtual void addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, Writer &out, KoGenStyle &style);

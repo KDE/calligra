@@ -72,7 +72,7 @@ QVariant StatesModel::data(const QModelIndex & index, int role ) const
 }
 
 const State* StatesModel::stateAt(int index) const {
-  Q_ASSERT(index >= 0 and index < m_states.count());
+  Q_ASSERT(index >= 0 && index < m_states.count());
   return m_states[index];
 }
 
@@ -80,7 +80,7 @@ QModelIndex StatesModel::indexFor(const QString& catId, const QString& stateId) 
   for(int i = 0; i < m_states.count(); ++i)
   {
     const State* state = m_states[i];
-    if( state->category()->id() == catId and state->id() == stateId)
+    if( state->category()->id() == catId && state->id() == stateId)
     {
       return index(i, 0, QModelIndex());
     }

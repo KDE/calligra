@@ -19,6 +19,8 @@
 
 #include "StateTool.h"
 
+#include <QPainter>
+
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>

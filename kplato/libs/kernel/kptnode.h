@@ -39,7 +39,6 @@
 
 class QDomElement;
 
-class KPlatoXmlLoader;
 
 /// The main namespace.
 namespace KPlato
@@ -56,6 +55,7 @@ class WBSDefinition;
 class EffortCostMap;
 class EffortCost;
 class Calendar;
+class KPlatoXmlLoaderBase;
 
 /**
  * This class represents any node in the project, a node can be a project or
@@ -587,7 +587,7 @@ public slots:
     void slotStandardWorktimeChanged( StandardWorktime* );
 
 protected:
-    friend class KPlatoXmlLoader;
+    friend class KPlatoXmlLoaderBase;
     /**
      * Calculates and returns the duration of the node.
      * Reimplement.

@@ -36,6 +36,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QPixmap>
+#include <QTimer>
 
 #include "CSThumbProviderStage.h"
 #include "CSThumbProviderTables.h"
@@ -60,7 +61,7 @@ KoDocument* openFile(const QString &filename)
         url.setPath(filename);
 
         document->setCheckAutoSaveFile(false);
-        document->setAutoErrorHandlingEnabled(true);
+        document->setAutoErrorHandlingEnabled(false);
 
         if (document->openUrl(filename)) {
             document->setReadWrite(false);
@@ -97,7 +98,9 @@ void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
 {
     int i = 0;
     for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
-        QString thumbFilename = QString("%1/thumb_%2.png").arg(dir).arg(++i);
+        // it is not possible to use QString("%1/thumb_%2.png").arg(dir).arg(++i);
+        // as dir can contain % values which then might or might not be overwritten by the second arg
+        QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
         it->save(thumbFilename, "PNG");
     }
 }
@@ -190,11 +193,14 @@ int main(int argc, char *argv[])
             dir.mkdir(file.fileName() + ".check");
             saveThumbnails(thumbnails, resDir);
         }
+        delete document;
     }
 
     if (args->isSet("verify")) {
         qDebug() << "Totals:" << successful << "passed" << failed << "failed";
     }
 
+    QTimer::singleShot(1, &app, SLOT(quit()));
+    app.exec();
     return exitValue;
 }

@@ -34,9 +34,10 @@
 
 #include <QDateTime>
 
-using namespace KPlato;
-
 extern int kplatoXmlDebugArea();
+
+namespace KPlato
+{
 
 KPlatoXmlLoader::KPlatoXmlLoader( XMLLoaderObject &loader, Project* project )
     : KPlatoXmlLoaderBase(),
@@ -171,5 +172,7 @@ bool KPlatoXmlLoader::loadWorkpackage( const KoXmlElement& plan )
     }
     return ok;
 }
+
+} // namespace KPlato
 
 #include "KPlatoXmlLoader.moc"

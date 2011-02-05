@@ -44,7 +44,6 @@
 #include <klocale.h>
 #include <ktimezone.h>
 
-class KPlatoXmlLoader;
 
 /// The main namespace.
 namespace KPlato
@@ -56,6 +55,7 @@ class ScheduleManager;
 class XMLLoaderObject;
 class Task;
 class SchedulerPlugin;
+class KPlatoXmlLoaderBase;
 
 /**
  * Project is the main node in a project, it contains child nodes and
@@ -641,7 +641,7 @@ protected:
     void tasksBackward();
 
 protected:
-    friend class KPlatoXmlLoader;
+    friend class KPlatoXmlLoaderBase;
 
     virtual void changed(Node *node);
     

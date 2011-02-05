@@ -66,7 +66,7 @@ enum autoFitStatus {
     autoFitUnUsed, autoFitOn, autoFitOff
 };
 
-class ParagraphBulletProperties
+class MSOOXML_EXPORT ParagraphBulletProperties
 {
 public:
 
