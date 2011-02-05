@@ -23,7 +23,11 @@ else()
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
 
-kde4_add_library(librcps_plan STATIC ${librcps_LIB_SRCS})
+if(WIN32)
+    kde4_add_library(librcps_plan STATIC ${librcps_LIB_SRCS})
+else(WIN32)
+    kde4_add_library(librcps_plan SHARED ${librcps_LIB_SRCS})
+endif(WIN32)
 
 target_link_libraries(
     librcps_plan
