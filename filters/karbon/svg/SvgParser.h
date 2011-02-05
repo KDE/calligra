@@ -27,6 +27,7 @@
 #include "SvgFilterHelper.h"
 #include "SvgGraphicContext.h"
 #include "SvgCssHelper.h"
+#include "SvgClipPathHelper.h"
 
 #include <KoXmlReader.h>
 
@@ -77,6 +78,8 @@ protected:
     void parsePattern(SvgPatternHelper &pattern, const KoXmlElement &);
     /// Parses a filter element
     bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
+    /// Parses a clip path element
+    bool parseClipPath(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
     /// Parses a length attribute
     double parseUnit(const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF());
     /// parses a length attribute in x-direction
@@ -115,6 +118,8 @@ protected:
     SvgPatternHelper* findPattern(const QString &id);
     /// find filter with given id in filter map
     SvgFilterHelper* findFilter(const QString &id, const QString &href = 0);
+    /// find clip path with given id in clip path map
+    SvgClipPathHelper* findClipPath(const QString &id, const QString &href = 0);
 
     /// Creates style map from given xml element
     SvgStyles collectStyles(const KoXmlElement &);
@@ -153,11 +158,12 @@ protected:
 
 private:
     QSizeF m_documentSize;
-    QStack<SvgGraphicsContext*>    m_gc;
-    QMap<QString, SvgGradientHelper>  m_gradients;
+    QStack<SvgGraphicsContext*> m_gc;
+    QMap<QString, SvgGradientHelper> m_gradients;
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
-    QMap<QString, KoXmlElement>     m_defs;
+    QMap<QString, KoXmlElement> m_defs;
+    QMap<QString, SvgClipPathHelper> m_clipPaths;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes
     KoResourceManager *m_documentResourceManager;

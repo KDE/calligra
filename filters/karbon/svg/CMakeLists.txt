@@ -26,6 +26,7 @@ set(karbonsvgimport_PART_SRCS
     SvgPatternHelper.cpp
     SvgFilterHelper.cpp
     SvgCssHelper.cpp
+    SvgClipPathHelper.cpp
     ${SHAPES_SOURCES} 
 )
 
