@@ -52,6 +52,7 @@ namespace MSOOXML { namespace Diagram {
 }}
 
 using namespace MSOOXML::Diagram;
+using namespace MSOOXML;
 
 /****************************************************************************************************/
 

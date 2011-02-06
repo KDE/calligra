@@ -113,13 +113,13 @@ protected:
     /// find object with given if in given shape list
     KoShape * findObject(const QString &name, const QList<KoShape*> & shapes);
     /// find gradient with given id in gradient map
-    SvgGradientHelper* findGradient(const QString &id, const QString &href = 0);
+    SvgGradientHelper* findGradient(const QString &id, const QString &href = QString());
     /// find pattern with given id in pattern map
     SvgPatternHelper* findPattern(const QString &id);
     /// find filter with given id in filter map
-    SvgFilterHelper* findFilter(const QString &id, const QString &href = 0);
+    SvgFilterHelper* findFilter(const QString &id, const QString &href = QString());
     /// find clip path with given id in clip path map
-    SvgClipPathHelper* findClipPath(const QString &id, const QString &href = 0);
+    SvgClipPathHelper* findClipPath(const QString &id, const QString &href = QString());
 
     /// Creates style map from given xml element
     SvgStyles collectStyles(const KoXmlElement &);

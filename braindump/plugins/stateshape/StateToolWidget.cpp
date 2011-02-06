@@ -81,7 +81,7 @@ void StateToolWidget::save()
     KoCanvasBase* canvas = canvasController->canvas();
     const State* state = m_model->stateAt(
             m_proxyModel->mapToSource(m_proxyModel->index( m_widget.stateComboBox->currentIndex(), 0, QModelIndex()) ).row() );
-    if( state->category()->id() != m_shape->categoryId() or state->id() != m_shape->stateId() )
+    if( state->category()->id() != m_shape->categoryId() || state->id() != m_shape->stateId() )
     {
       canvas->addCommand(new StateShapeChangeStateCommand(m_shape, state->category()->id(), state->id() ));
     }

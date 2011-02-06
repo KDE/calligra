@@ -46,14 +46,14 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename )
 {
   QDomDocument doc;
   QFile file(_filename);
-  if(not file.open(QIODevice::ReadOnly) )
+  if(!file.open(QIODevice::ReadOnly) )
   {
     kError() << "Can't open " << _filename;
     return;
   }
   QString errMsg;
   int line, column;
-  if( not doc.setContent(&file, &errMsg, &line, &column) ) {
+  if(!doc.setContent(&file, &errMsg, &line, &column) ) {
     kError() << "At (" << line << ", " << column << ") " << errMsg;
     file.close();
     return;
@@ -68,9 +68,9 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename )
     return;
   }
   QDomNode nCat = docElem.firstChild();
-  while(not nCat.isNull()) {
+  while(!nCat.isNull()) {
     QDomElement eCat = nCat.toElement(); // try to convert the node to an element.
-    if(not eCat.isNull() and eCat.tagName() == "category")
+    if(!eCat.isNull() && eCat.tagName() == "category")
     {
       QString catId = eCat.attribute("id");
       QString catName = eCat.attribute("name");
@@ -82,23 +82,23 @@ void StatesRegistry::Private::parseStatesRC(const QString& _filename )
         if( categories.contains(catId) )
         {
           category = categories[catId];
-        } else if( not catName.isEmpty() ) {
+        } else if(!catName.isEmpty() ) {
           category = new StateCategory(catId, i18n(catName.toUtf8()), catPriority );
           categories[catId] = category;
         }
         if(category){
           // Parse the states
           QDomNode nState = eCat.firstChild();
-          while(not nState.isNull())
+          while(!nState.isNull())
           {
             QDomElement eState = nState.toElement();
-            if(not eState.isNull() and eState.tagName() == "state")
+            if(!eState.isNull() && eState.tagName() == "state")
             {
               QString stateId = eState.attribute("id");
               QString stateName = eState.attribute("name");
               QString stateFilename = eState.attribute("filename");
               int statePriority = eState.attribute("priority", "1000").toInt();
-              if(stateId.isEmpty() or stateName.isEmpty() or stateFilename.isEmpty())
+              if(stateId.isEmpty() || stateName.isEmpty() || stateFilename.isEmpty())
               {
                 kError() << "Missing attribute: id = " << stateId << " name = " << stateName << " filename = " << stateFilename;
               } else {
@@ -143,7 +143,7 @@ StatesRegistry::StatesRegistry() : d(new Private) {
 }
 
 const StatesRegistry* StatesRegistry::instance() {
-  if(not Private::s_instance)
+  if(!Private::s_instance)
   {
     Private::s_instance = new StatesRegistry;
   }

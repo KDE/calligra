@@ -94,7 +94,7 @@ void ColumnLayout::relayout() {
         break;
       }
     }
-    if(not dependOnOtherShape) {
+    if(!dependOnOtherShape) {
       shape->update();
       QRectF b;
       Utils::containerBoundRec(shape, b);

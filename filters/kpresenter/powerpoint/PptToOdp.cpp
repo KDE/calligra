@@ -204,7 +204,7 @@ private:
     QRectF getRect(const MSO::OfficeArtClientAnchor&);
     QString getPicturePath(int pib);
     bool onlyClientData(const MSO::OfficeArtClientData& o);
-    void processClientData(const MSO::OfficeArtClientTextBox& ct,
+    void processClientData(const MSO::OfficeArtClientTextBox* ct,
                            const MSO::OfficeArtClientData& cd,
                            Writer& out);
     void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
@@ -286,17 +286,19 @@ bool PptToOdp::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
     }
     return false;
 }
-void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox& ct,
+void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* ct,
                                              const MSO::OfficeArtClientData& o, Writer& out)
 {
     const TextContainer* textContainer = 0;
     const TextRuler* textRuler = 0;
-    const PptOfficeArtClientTextBox* tb = ct.anon.get<PptOfficeArtClientTextBox>();
-    if (tb) {
-        foreach(const TextClientDataSubContainerOrAtom& tc, tb->rgChildRec) {
-            if (tc.anon.is<TextRulerAtom>()) {
-                textRuler = &tc.anon.get<TextRulerAtom>()->textRuler;
-                break;
+    if (ct) {
+        const PptOfficeArtClientTextBox* tb = ct->anon.get<PptOfficeArtClientTextBox>();
+        if (tb) {
+            foreach(const TextClientDataSubContainerOrAtom& tc, tb->rgChildRec) {
+                if (tc.anon.is<TextRulerAtom>()) {
+                    textRuler = &tc.anon.get<TextRulerAtom>()->textRuler;
+                    break;
+                }
 	    }
         }
     }
@@ -441,8 +443,6 @@ void PptToOdp::DrawClient::addTextStyles(
     }
     if (out.stylesxml) {
         const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
-
-        //TODO: provide the corresponding TextRulerAtom
         PptTextPFRun pf(ppttoodp->p->documentContainer,
                         dc_data->slideTexts,
                         dc_data->masterSlide,
@@ -859,7 +859,6 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
             pf9 = &pp9->textDefaultsAtom->pf9;
         }
     }
-    //TODO: provide the default TextRulerAtom
     PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, 0);
 }

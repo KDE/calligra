@@ -372,7 +372,7 @@ void addStyle(const Style** list, const Style* style)
     }
 }
 
-qint16 leftMarginByTextRuler(const TextRuler* tr, quint16 level)
+qint16 getLeftMargin(const TextRuler* tr, quint16 level)
 {
     if (!tr) {
         return -1;
@@ -388,7 +388,16 @@ qint16 leftMarginByTextRuler(const TextRuler* tr, quint16 level)
     return m;
 }
 
-qint16 indentByTextRuler(const TextRuler* tr, quint16 level)
+qint16 getDefaultLeftMargin(const MSO::DocumentContainer* d, quint16 level)
+{
+    if (d && d->documentTextInfo.defaultRulerAtom) {
+        const MSO::TextRuler* tr = &d->documentTextInfo.defaultRulerAtom->defaultTextRuler;
+        return getLeftMargin(tr, level);
+    }
+    return -1;
+}
+
+qint16 getIndent(const TextRuler* tr, quint16 level)
 {
     if (!tr) {
         return -1;
@@ -402,6 +411,15 @@ qint16 indentByTextRuler(const TextRuler* tr, quint16 level)
     case 4: if (tr->fIndent5) indent = tr->indent5; break;
     }
     return indent;
+}
+
+qint16 getDefaultIndent(const MSO::DocumentContainer* d, quint16 level)
+{
+    if (d && d->documentTextInfo.defaultRulerAtom) {
+        const MSO::TextRuler* tr = &d->documentTextInfo.defaultRulerAtom->defaultTextRuler;
+        return getIndent(tr, level);
+    }
+    return -1;
 }
 
 } //namespace
@@ -468,8 +486,11 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     }
     //Processing either OfficeArtClientTextbox or a SlideListWithTextContainer.
     //The TextRulerAtom is provided only in case of OfficeArtClientTextbox.
-    m_leftMargin = leftMarginByTextRuler(tr, level);
-    m_indent = indentByTextRuler(tr, level);
+    m_leftMargin.append(getLeftMargin(tr, level));
+    m_indent.append(getIndent(tr, level));
+    //check DocumentContainer/DocumentTextInfoContainer/DefaultRulerAtom
+    m_leftMargin.append(getDefaultLeftMargin(d, level));
+    m_indent.append(getDefaultIndent(d, level));
 
     *pfs = 0;
     addStyle(pfs, (pfrun) ?&pfrun->pf :0);
@@ -601,8 +622,10 @@ GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
 #define GETTER(TYPE, TR_VAL, NAME, TEST, DEFAULT)	\
 TYPE PptTextPFRun::NAME() const \
 { \
-    if (TR_VAL > 0) { \
-        return TR_VAL; \
+    for (int i = 0; i < TR_VAL.size(); i++) { \
+        if (TR_VAL[i] > 0) { \
+            return TR_VAL[i]; \
+        } \
     } \
     const MSO::TextPFException* const * p = pfs; \
     while (*p) { \
