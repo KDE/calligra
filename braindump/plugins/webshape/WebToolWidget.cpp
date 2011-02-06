@@ -58,7 +58,7 @@ public:
   }
   virtual void undo()
   {
-    m_shape->setCached( not m_shape->isCached());
+    m_shape->setCached( !m_shape->isCached());
     if(m_shape->isCached())
     {
       m_shape->setCache(m_cache);
@@ -66,7 +66,7 @@ public:
   }
   virtual void redo()
   {
-    m_shape->setCached( not m_shape->isCached());
+    m_shape->setCached( !m_shape->isCached());
   }
 private:
   WebShape *m_shape;

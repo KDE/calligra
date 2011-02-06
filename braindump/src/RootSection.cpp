@@ -70,7 +70,7 @@ void RootSection::undoIndexChanged(int idx)
   const QUndoCommand* command = m_undoStack->command(idx - 1);
   kDebug() << idx << " " << command << " " << m_undoStack->count() << " " << m_undoStack->cleanIndex() << " " << m_undoStack->index();
   Section* section = m_commandsMap[command];
-  if(not section and idx == m_undoStack->count())
+  if(!section && idx == m_undoStack->count())
   {
     section = m_currentSection;
     m_commandsMap[command] = section;

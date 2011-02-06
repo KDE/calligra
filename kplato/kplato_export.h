@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KPLATO_EXPORT
-# if defined(MAKE_KPLATOPRIVATE_LIB)
+# if defined(MAKE_PLANPRIVATE_LIB)
    /* We are building this library */ 
 #  define KPLATO_EXPORT KDE_EXPORT
 # else
@@ -46,7 +46,7 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KPLATOPRIVATE_LIB)
+# if defined(MAKE_PLANPRIVATE_LIB)
 #       define KPLATO_TEST_EXPORT KDE_EXPORT
 #   else
 #       define KPLATO_TEST_EXPORT KDE_IMPORT

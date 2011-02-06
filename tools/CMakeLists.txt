@@ -3,7 +3,9 @@ macro_optional_add_subdirectory( thumbnail )
 macro_optional_add_subdirectory( kthesaurus )
 macro_optional_add_subdirectory( quickprint )
 macro_optional_add_subdirectory( slidecompare )
-macro_optional_add_subdirectory( cstester )
+if(SHOULD_BUILD_CSTESTER)
+    macro_optional_add_subdirectory( cstester )
+endif(SHOULD_BUILD_CSTESTER)
 
 if(SHOULD_BUILD_CALLIGRA)
   macro_optional_add_subdirectory(calligra)
@@ -24,12 +26,14 @@ macro_optional_find_package(OpenSSL) # f-office uses ssl directly
 macro_log_feature(OPENSSL_FOUND "OpenSSL" "A toolkit implementing the Secure Sockets Layer (SSL v2/v3) and Transport Layer Security (TLS v1) protocols" "http://openssl.org" FALSE "" 
 "FreOffice uses OpenSSL for digital signatures")
 
-
+# TODO why build koabstraction and f-office only on X11?
 if(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
-    if(Q_WS_X11 AND SHOULD_BUILD_TABLES)
-      macro_optional_add_subdirectory( koabstraction )
-      macro_optional_add_subdirectory( f-office )
-    endif(Q_WS_X11 AND SHOULD_BUILD_TABLES)
+    if(SHOULD_BUILD_KOABSTRACTION)
+        macro_optional_add_subdirectory(koabstraction)
+    endif(SHOULD_BUILD_KOABSTRACTION)
+    if(Q_WS_X11 AND SHOULD_BUILD_F_OFFICE)
+        macro_optional_add_subdirectory(f-office)
+    endif(Q_WS_X11 AND SHOULD_BUILD_F_OFFICE)
 endif(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
 
 # strigi ships with the odfsaxanalyzer which does already fetch the meta-data of

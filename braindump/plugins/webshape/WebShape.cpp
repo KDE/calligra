@@ -103,7 +103,7 @@ bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &cont
       m_webPage->mainFrame()->setContent(m_cache.toUtf8());
     }
   }
-  if(not m_cached)
+  if(!m_cached)
   {
     setUrl(m_url);
   }
@@ -127,7 +127,7 @@ void WebShape::setUrl( const KUrl& _url) {
 void WebShape::loadFinished(bool) {
   update();
   m_loaded = true;
-  if(not m_cacheLocked)
+  if(!m_cacheLocked)
   {
     updateCache();
   }

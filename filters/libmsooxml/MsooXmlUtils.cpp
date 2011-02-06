@@ -1346,14 +1346,14 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 // </units> -------------------
 
-MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
+Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
     m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
     m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
     m_indent(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
 {
 }
 
-MSOOXML_EXPORT bool Utils::ParagraphBulletProperties::isEmpty() const
+bool Utils::ParagraphBulletProperties::isEmpty() const
 {
     if (m_type == ParagraphBulletProperties::DefaultType) {
         return true;
@@ -1361,7 +1361,7 @@ MSOOXML_EXPORT bool Utils::ParagraphBulletProperties::isEmpty() const
     return false;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::clear()
+void Utils::ParagraphBulletProperties::clear()
 {
     m_startValue = UNUSED;
     m_type = ParagraphBulletProperties::DefaultType;
@@ -1377,85 +1377,85 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::clear()
     m_bulletRelativeSize = "100"; // by default bullet follows text size
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setAlign(const QString& align)
+void Utils::ParagraphBulletProperties::setAlign(const QString& align)
 {
     m_align = align;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletRelativeSize(int size)
+void Utils::ParagraphBulletProperties::setBulletRelativeSize(int size)
 {
     m_bulletRelativeSize = QString("%1").arg(size);
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletChar(const QString& bulletChar)
+void Utils::ParagraphBulletProperties::setBulletChar(const QString& bulletChar)
 {
     m_bulletChar = bulletChar;
     m_type = ParagraphBulletProperties::BulletType;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setStartValue(const QString& value)
+void Utils::ParagraphBulletProperties::setStartValue(const QString& value)
 {
     m_startValue = value;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
+void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
 {
     m_indent = QString("%1").arg(indent);
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setSuffix(const QString& suffixChar)
+void Utils::ParagraphBulletProperties::setSuffix(const QString& suffixChar)
 {
     m_suffix = suffixChar;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setNumFormat(const QString& numFormat)
+void Utils::ParagraphBulletProperties::setNumFormat(const QString& numFormat)
 {
     m_numFormat = numFormat;
     m_type = ParagraphBulletProperties::NumberType;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setPicturePath(const QString& picturePath)
+void Utils::ParagraphBulletProperties::setPicturePath(const QString& picturePath)
 {
     m_picturePath = picturePath;
     m_type = ParagraphBulletProperties::PictureType;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletSize(const QSize& size)
+void Utils::ParagraphBulletProperties::setBulletSize(const QSize& size)
 {
     m_bulletSize = size;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletFont(const QString& font)
+void Utils::ParagraphBulletProperties::setBulletFont(const QString& font)
 {
     m_bulletFont = font;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletColor(const QString& bulletColor)
+void Utils::ParagraphBulletProperties::setBulletColor(const QString& bulletColor)
 {
     m_bulletColor = bulletColor;
 }
 
-MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletColor() const
+QString Utils::ParagraphBulletProperties::bulletColor() const
 {
     return m_bulletColor;
 }
 
-MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletChar() const
+QString Utils::ParagraphBulletProperties::bulletChar() const
 {
     return m_bulletChar;
 }
 
-MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletFont() const
+QString Utils::ParagraphBulletProperties::bulletFont() const
 {
     return m_bulletFont;
 }
 
-MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletRelativeSize() const
+QString Utils::ParagraphBulletProperties::bulletRelativeSize() const
 {
     return m_bulletRelativeSize;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
+void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
 {
     // This function is intented for helping to inherit some values from other properties
     if (properties.m_type != ParagraphBulletProperties::DefaultType) {
@@ -1493,7 +1493,7 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::addInheritedValues(const P
     }
 }
 
-MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
+QString Utils::ParagraphBulletProperties::convertToListProperties() const
 {
     QString returnValue;
     QString ending;

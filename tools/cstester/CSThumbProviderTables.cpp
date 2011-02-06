@@ -81,7 +81,7 @@ QList<QPixmap> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 
             const Qt::LayoutDirection direction = sheet->layoutDirection();
 
-            KoShapePainter shapePainter(direction == Qt::LeftToRight ? 0 : 0 /*RightToLeftPaintingStrategy(shapeManager, d->canvas)*/);
+            KoShapePainter shapePainter(direction == Qt::LeftToRight ? (KoShapeManagerPaintingStrategy *)0 : (KoShapeManagerPaintingStrategy *)0 /*RightToLeftPaintingStrategy(shapeManager, d->canvas)*/);
             shapePainter.setShapes(sheet->shapes());
             shapePainter.paint(p, zoomHandler);
 

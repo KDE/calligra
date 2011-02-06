@@ -36,6 +36,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QPixmap>
+#include <QTimer>
 
 #include "CSThumbProviderStage.h"
 #include "CSThumbProviderTables.h"
@@ -60,7 +61,7 @@ KoDocument* openFile(const QString &filename)
         url.setPath(filename);
 
         document->setCheckAutoSaveFile(false);
-        document->setAutoErrorHandlingEnabled(true);
+        document->setAutoErrorHandlingEnabled(false);
 
         if (document->openUrl(filename)) {
             document->setReadWrite(false);
@@ -192,11 +193,14 @@ int main(int argc, char *argv[])
             dir.mkdir(file.fileName() + ".check");
             saveThumbnails(thumbnails, resDir);
         }
+        delete document;
     }
 
     if (args->isSet("verify")) {
         qDebug() << "Totals:" << successful << "passed" << failed << "failed";
     }
 
+    QTimer::singleShot(1, &app, SLOT(quit()));
+    app.exec();
     return exitValue;
 }

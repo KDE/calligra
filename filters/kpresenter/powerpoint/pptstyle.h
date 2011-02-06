@@ -36,8 +36,8 @@ private:
     bool m_fHasBullet;
 
     //ident/margin for text with indentLevel == m_level (provided by TextRuler)
-    qint16 m_indent;
-    qint16 m_leftMargin;
+    QList<qint16> m_indent;
+    QList<qint16> m_leftMargin;
 
     const MSO::TextPFException* pfs[6];
     const MSO::TextPFException9* pf9s[6];
