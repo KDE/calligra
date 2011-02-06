@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
  *
  * Contact: Manikandaprasad N C <manikandaprasad.chandrasekar@nokia.com>
  *
@@ -23,9 +24,9 @@
  *
  */
 
-#include "MainWindow.h"
 #include "ApplicationController.h"
-#include "ui_MainWindow.h"
+
+/*
 #include "Common.h"
 #include "ZoomDialog.h"
 #include "HildonMenu.h"
@@ -145,13 +146,14 @@
 
 #ifdef Q_WS_MAEMO_5
 
-bool MainWindow::enableAccelerator=false;
-bool MainWindow::enableScrolling=false;
-bool MainWindow::stopAcceleratorScrolling=true;
+bool ApplicationController::enableAccelerator=false;
+bool ApplicationController::enableScrolling=false;
+bool ApplicationController::stopAcceleratorScrolling=true;
 #endif
+*/
 
-MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
-        : KoAbstractApplication(new ApplicationController(this), parent),
+ApplicationController::ApplicationController(QObject *application)
+        : KoAbstractApplicationController(application),
         m_xcordinate(0),
         m_ycordinate(0),
         m_fontSizeDialog(0),
@@ -211,7 +213,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_presentationTool(0),
         m_storeButtonPreview(0)
 {
-    controller()->setSplashScreen(aSplash);
+    setSplashScreen(aSplash);
     m_digitalSignatureDialog = 0;
     m_closetemp = 0;
     m_collab = 0;
@@ -226,7 +228,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
     m_tempdialoglayout = 0;
     m_templatepreview = 0;
     m_tempselectiondialog = 0;
-    m_ui = new Ui::MainWindow;
+    m_ui = new Ui::ApplicationController;
     m_notesDialog = 0;
 #ifdef Q_WS_MAEMO_5
     m_fsAccButton = 0;
@@ -235,7 +237,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
     init();
 }
 
-void MainWindow::init()
+void ApplicationController::init()
 {
     m_ui->setupUi(this);
 
@@ -415,7 +417,7 @@ void MainWindow::init()
     insertButtonClicked();
 }
 
-MainWindow::~MainWindow()
+ApplicationController::~ApplicationController()
 {
     QMapIterator<QString, OfficeInterface*> i(loadedPlugins);
     while (i.hasNext())
@@ -431,12 +433,12 @@ MainWindow::~MainWindow()
     delete m_virtualKeyBoard;
 }
 
-void MainWindow::spaceHandlerForVirtualKeyboard()
+void ApplicationController::spaceHandlerForVirtualKeyboard()
 {
     textEditor()->insertText(" ");
 }
 
-void MainWindow::setVirtualKeyboardVisible(bool set)
+void ApplicationController::setVirtualKeyboardVisible(bool set)
 {
     if (set && !m_virtualKeyBoard) {
         m_virtualKeyBoard = new VirtualKeyBoard;
@@ -445,12 +447,12 @@ void MainWindow::setVirtualKeyboardVisible(bool set)
         m_virtualKeyBoard->ShowVirtualKeyBoard(this, textEditor()); // switches
 }
 
-bool MainWindow::isVirtualKeyboardVisible() const
+bool ApplicationController::isVirtualKeyboardVisible() const
 {
     return m_virtualKeyBoard && m_virtualKeyBoard->isVisible();
 }
 
-void MainWindow::showPreviewDialog()
+void ApplicationController::showPreviewDialog()
 {
     if (documentType() == PresentationDocument) {
         m_storeButtonPreview->showDialog(currentPage());
@@ -461,7 +463,7 @@ void MainWindow::showPreviewDialog()
     }
 }
 
-void MainWindow::spreadSheetInfo()
+void ApplicationController::spreadSheetInfo()
 {
     if(m_sheetInfoFrame) {
         m_sheetInfoFrame->hide();
@@ -499,7 +501,7 @@ void MainWindow::spreadSheetInfo()
     m_sheetName->setText(currentSheetName());
 }
 
-void MainWindow::openFormatFrame()
+void ApplicationController::openFormatFrame()
 {
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -557,7 +559,7 @@ void MainWindow::openFormatFrame()
     connect(m_bulletlist,SIGNAL(clicked()),this,SLOT(doBulletList()));
 }
 
-void MainWindow::openFontStyleFrame()
+void ApplicationController::openFontStyleFrame()
 {
     if(m_formatframe)
         m_formatframe->hide();
@@ -630,7 +632,7 @@ void MainWindow::openFontStyleFrame()
     connect(m_underline,SIGNAL(clicked()),this,SLOT(doUnderLine()));
 }
 
-void  MainWindow::showFontSizeDialog()
+void  ApplicationController::showFontSizeDialog()
 {
     if (m_fontstyleframe) {
         m_fontstyleframe->hide();
@@ -666,23 +668,23 @@ void  MainWindow::showFontSizeDialog()
     m_fontSizeDialog->exec();
 }
 
-void MainWindow::fontSizeRowSelected(QListWidgetItem *item)
+void ApplicationController::fontSizeRowSelected(QListWidgetItem *item)
 {
      int row=(item->text()).toInt();
      selectFontSize(row+4);
      m_fontSizeDialog->accept();
 }
 
-void MainWindow::fontSizeEntered()
+void ApplicationController::fontSizeEntered()
 {
     selectFontSize(m_fontSizeLineEdit->text().toInt());
 }
 
-void MainWindow:: openMathOpFrame() {
+void ApplicationController:: openMathOpFrame() {
 
 }
 
-void MainWindow::addMathematicalOperator(QString mathSymbol)
+void ApplicationController::addMathematicalOperator(QString mathSymbol)
 {
     Q_ASSERT(cellTool()->externalEditor());
     cellTool()->externalEditor()->insertOperator(mathSymbol);
@@ -692,7 +694,7 @@ void MainWindow::addMathematicalOperator(QString mathSymbol)
 // Styling functions //
 ///////////////////////
 
-void MainWindow::doSubScript()
+void ApplicationController::doSubScript()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -706,7 +708,7 @@ void MainWindow::doSubScript()
     setDocumentModified(true);
 }
 
-bool MainWindow::setSubScript(KoTextEditor *editor) {
+bool ApplicationController::setSubScript(KoTextEditor *editor) {
     if (editor){
         if (editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript ){
             editor->setVerticalTextAlignment(Qt::AlignVCenter);
@@ -718,7 +720,7 @@ bool MainWindow::setSubScript(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::doSuperScript()
+void ApplicationController::doSuperScript()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -732,7 +734,7 @@ void MainWindow::doSuperScript()
     setDocumentModified(true);
 }
 
-bool MainWindow::setSuperScript(KoTextEditor *editor) {
+bool ApplicationController::setSuperScript(KoTextEditor *editor) {
     if (editor) {
         if (editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript ) {
             editor->setVerticalTextAlignment(Qt::AlignVCenter);
@@ -744,7 +746,7 @@ bool MainWindow::setSuperScript(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::selectFontSize(int size)
+void ApplicationController::selectFontSize(int size)
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -758,7 +760,7 @@ void MainWindow::selectFontSize(int size)
     m_fontSizeDialog->hide();
 }
 
-bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
+bool ApplicationController::setFontSize(int size, KoTextEditor *editor) {
     if (editor) {
         editor->setFontSize(size);
         return true;
@@ -766,7 +768,7 @@ bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::selectFontType()
+void ApplicationController::selectFontType()
 {
     QString selectedfont=m_fontcombobox->currentText();
     if (m_fontstyleframe)
@@ -780,7 +782,7 @@ void MainWindow::selectFontType()
     setDocumentModified(true);
 }
 
-bool MainWindow::setFontType(const QString &font, KoTextEditor *editor) {
+bool ApplicationController::setFontType(const QString &font, KoTextEditor *editor) {
     if (editor) {
         editor->setFontFamily(font);
         return true;
@@ -788,7 +790,7 @@ bool MainWindow::setFontType(const QString &font, KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::selectTextColor()
+void ApplicationController::selectTextColor()
 {
     QColor color = QColorDialog::getColor(Qt::white,this);
     if (m_fontstyleframe)
@@ -802,7 +804,7 @@ void MainWindow::selectTextColor()
     setDocumentModified(true);
 }
 
-bool MainWindow::setTextColor(const QColor &color, KoTextEditor *editor) {
+bool ApplicationController::setTextColor(const QColor &color, KoTextEditor *editor) {
     if (editor) {
         editor->setTextColor(color);
         return true;
@@ -810,7 +812,7 @@ bool MainWindow::setTextColor(const QColor &color, KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::selectTextBackGroundColor()
+void ApplicationController::selectTextBackGroundColor()
 {
     QColor color = QColorDialog::getColor(Qt::white,this);
     if (m_fontstyleframe)
@@ -824,7 +826,7 @@ void MainWindow::selectTextBackGroundColor()
     setDocumentModified(true);
 }
 
-bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* editor) {
+bool ApplicationController::setTextBackgroundColor(const QColor &color, KoTextEditor* editor) {
     if (editor) {
         editor->setTextBackgroundColor(color);
         return true;
@@ -832,7 +834,7 @@ bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* edito
     return false;
 }
 
-void MainWindow::doBold()
+void ApplicationController::doBold()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -849,7 +851,7 @@ void MainWindow::doBold()
     setDocumentModified(true);
 }
 
-bool MainWindow::setBold(KoTextEditor *editor) {
+bool ApplicationController::setBold(KoTextEditor *editor) {
     if(editor) {
         QTextCharFormat textchar = editor->charFormat();
         if (textchar.fontWeight()==QFont::Bold) {
@@ -862,7 +864,7 @@ bool MainWindow::setBold(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::doItalic()
+void ApplicationController::doItalic()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -879,7 +881,7 @@ void MainWindow::doItalic()
     setDocumentModified(true);
 }
 
-bool MainWindow::setItalic(KoTextEditor *editor) {
+bool ApplicationController::setItalic(KoTextEditor *editor) {
     if(editor) {
         QTextCharFormat textchar = editor->charFormat();
         if (textchar.fontItalic()) {
@@ -892,7 +894,7 @@ bool MainWindow::setItalic(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::doUnderLine()
+void ApplicationController::doUnderLine()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -909,7 +911,7 @@ void MainWindow::doUnderLine()
     setDocumentModified(true);
 }
 
-bool MainWindow::setUnderline(KoTextEditor *editor) {
+bool ApplicationController::setUnderline(KoTextEditor *editor) {
     if(editor) {
         QTextCharFormat textchar = editor->charFormat();
         if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
@@ -922,7 +924,7 @@ bool MainWindow::setUnderline(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::doLeftAlignment()
+void ApplicationController::doLeftAlignment()
 {
     if (m_formatframe) {
         m_formatframe->hide();
@@ -935,7 +937,7 @@ void MainWindow::doLeftAlignment()
         m_collab->sendFormat(textEditor()->selectionStart(), textEditor()->selectionEnd(), Collaborate::FormatAlignLeft);
 }
 
-bool MainWindow::setLeftAlign(KoTextEditor *editor)
+bool ApplicationController::setLeftAlign(KoTextEditor *editor)
 {
     if (editor) {
         editor->setHorizontalTextAlignment(Qt::AlignLeft);
@@ -945,7 +947,7 @@ bool MainWindow::setLeftAlign(KoTextEditor *editor)
     return false;
 }
 
-void MainWindow::doJustify()
+void ApplicationController::doJustify()
 {
     if (m_formatframe)
         m_formatframe->hide();
@@ -957,7 +959,7 @@ void MainWindow::doJustify()
         m_collab->sendFormat(textEditor()->selectionStart(), textEditor()->selectionEnd(), Collaborate::FormatAlignJustify);
 }
 
-bool MainWindow::setJustify(KoTextEditor *editor) {
+bool ApplicationController::setJustify(KoTextEditor *editor) {
     if (editor) {
         editor->setHorizontalTextAlignment(Qt::AlignJustify);
         setDocumentModified(true);
@@ -966,7 +968,7 @@ bool MainWindow::setJustify(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::doRightAlignment()
+void ApplicationController::doRightAlignment()
 {
     if (m_formatframe)
         m_formatframe->hide();
@@ -978,7 +980,7 @@ void MainWindow::doRightAlignment()
         m_collab->sendFormat(textEditor()->selectionStart(), textEditor()->selectionEnd(), Collaborate::FormatAlignRight);
 }
 
-bool MainWindow::setRightAlign(KoTextEditor *editor) {
+bool ApplicationController::setRightAlign(KoTextEditor *editor) {
     if (editor) {
         editor->setHorizontalTextAlignment(Qt::AlignRight);
         setDocumentModified(true);
@@ -987,7 +989,7 @@ bool MainWindow::setRightAlign(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::doCenterAlignment()
+void ApplicationController::doCenterAlignment()
 {
     if (m_formatframe)
         m_formatframe->hide();
@@ -999,7 +1001,7 @@ void MainWindow::doCenterAlignment()
         m_collab->sendFormat(textEditor()->selectionStart(), textEditor()->selectionEnd(), Collaborate::FormatAlignCenter);
 }
 
-bool MainWindow::setCenterAlign(KoTextEditor *editor) {
+bool ApplicationController::setCenterAlign(KoTextEditor *editor) {
     if (editor) {
         editor->setHorizontalTextAlignment(Qt::AlignHCenter);
         setDocumentModified(true);
@@ -1008,7 +1010,7 @@ bool MainWindow::setCenterAlign(KoTextEditor *editor) {
     return true;
 }
 
-void MainWindow::activeFormatOptionCheck()
+void ApplicationController::activeFormatOptionCheck()
 {
     if (documentType() == PresentationDocument) {
         KoCanvasBase *canvasForChecking = controller()->canvas();
@@ -1083,7 +1085,7 @@ void MainWindow::activeFormatOptionCheck()
     }
 }
 
-void MainWindow::activeFontOptionCheck()
+void ApplicationController::activeFontOptionCheck()
 {
     if (documentType() == PresentationDocument) {
         KoCanvasBase *canvasForChecking = controller()->canvas();
@@ -1253,7 +1255,7 @@ void MainWindow::activeFontOptionCheck()
     }
 }
 
-void MainWindow::doNumberList()
+void ApplicationController::doNumberList()
 {
     if(m_formatframe->isVisible())
         m_formatframe->hide();
@@ -1270,7 +1272,7 @@ void MainWindow::doNumberList()
         m_collab->sendFormat(textEditor()->selectionStart(), textEditor()->selectionEnd(), Collaborate::FormatListNumber);
 }
 
-bool MainWindow::setNumberList(KoTextEditor *editor) {
+bool ApplicationController::setNumberList(KoTextEditor *editor) {
     if (editor) {
         doStyle(KoListStyle::DecimalItem, editor);
         return true;
@@ -1278,7 +1280,7 @@ bool MainWindow::setNumberList(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::doBulletList()
+void ApplicationController::doBulletList()
 {
     if (m_formatframe->isVisible())
         m_formatframe->hide();
@@ -1295,7 +1297,7 @@ void MainWindow::doBulletList()
     }
 }
 
-bool MainWindow::setBulletList(KoTextEditor *editor) {
+bool ApplicationController::setBulletList(KoTextEditor *editor) {
     if (editor) {
         doStyle(KoListStyle::DiscItem, editor);
         return true;
@@ -1303,7 +1305,7 @@ bool MainWindow::setBulletList(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
+void ApplicationController::doStyle(KoListStyle::Style style, KoTextEditor *editor)
 {
     KoParagraphStyle *parag = new KoParagraphStyle();
     KoListStyle *list = new KoListStyle(parag);
@@ -1315,14 +1317,14 @@ void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
     setDocumentModified(true);
 }
 
-QString MainWindow::showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
+QString ApplicationController::showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
 {
     FileChooserDialog fileDialog(this);
     fileDialog.exec();
     return fileDialog.getFilePath();
 }
 
-QString MainWindow::showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
+QString ApplicationController::showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
 {
     QList<HildonMenu *> all_dlg = findChildren<HildonMenu *>();
     foreach(HildonMenu *menu, all_dlg)
@@ -1331,7 +1333,7 @@ QString MainWindow::showGetSaveFileNameDialog(const QString& caption, const QStr
     return QFileDialog::getSaveFileName(this, caption, dir, filter, 0, QFileDialog::DontUseNativeDialog);
 }
 
-void MainWindow::chooseDocumentType()
+void ApplicationController::chooseDocumentType()
 {
     m_docdialog = new QDialog(this);
     Q_CHECK_PTR(m_docdialog);
@@ -1355,25 +1357,25 @@ void MainWindow::chooseDocumentType()
     connect(m_spreadsheet,SIGNAL(clicked()),this,SLOT(openNewSpreadSheet()));
 }
 
-void MainWindow::openNewDoc()
+void ApplicationController::openNewDoc()
 {
     m_docdialog->close();
     openDocumentAsTemplate(NEW_WORDDOC);
 }
 
-void MainWindow::openNewPresenter()
+void ApplicationController::openNewPresenter()
 {
     m_docdialog->close();
     templateSelectionDialog();
 }
 
-void MainWindow::openNewSpreadSheet()
+void ApplicationController::openNewSpreadSheet()
 {
    m_docdialog->close();
    openDocumentAsTemplate(NEW_SPREADSHEET);
 }
 
-void MainWindow::templateSelectionDialog()
+void ApplicationController::templateSelectionDialog()
 {
     if(m_tempselectiondialog){
         m_tempselectiondialog->show();
@@ -1422,7 +1424,7 @@ void MainWindow::templateSelectionDialog()
     connect(m_closetemp,SIGNAL(clicked()),SLOT(closeTempSelectionDialog()));
 }
 
-void MainWindow::selectedTemplatePreview(int number)
+void ApplicationController::selectedTemplatePreview(int number)
 {
     QString path = NEW_PRESENTER+m_temptitle.at(number);
     KoStore::Backend backend = KoStore::Auto;
@@ -1437,20 +1439,20 @@ void MainWindow::selectedTemplatePreview(int number)
     delete store;
 }
 
-void MainWindow::openSelectedTemplate()
+void ApplicationController::openSelectedTemplate()
 {
     newpresenter = NEW_PRESENTER+m_temptitle.at(m_templateWidget->currentRow());
     m_tempselectiondialog->accept();
     openDocumentAsTemplate(newpresenter);
 }
 
-void MainWindow::closeTempSelectionDialog()
+void ApplicationController::closeTempSelectionDialog()
 {
     if(m_tempselectiondialog)
         m_tempselectiondialog->hide();
 }
 
-QPushButton * MainWindow::addFormatFrameComponent(const QString &imagepath)
+QPushButton * ApplicationController::addFormatFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
     Q_CHECK_PTR(btn);
@@ -1460,7 +1462,7 @@ QPushButton * MainWindow::addFormatFrameComponent(const QString &imagepath)
     return btn;
 }
 
-QPushButton * MainWindow::addFontStyleFrameComponent(const QString &imagepath)
+QPushButton * ApplicationController::addFontStyleFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
     Q_CHECK_PTR(btn);
@@ -1471,7 +1473,7 @@ QPushButton * MainWindow::addFontStyleFrameComponent(const QString &imagepath)
     return btn;
 }
 
-QToolButton * MainWindow ::addNewDocument(const QString &docname)
+QToolButton * ApplicationController ::addNewDocument(const QString &docname)
 {
     QToolButton * toolbutton = new QToolButton(this);
     Q_CHECK_PTR(toolbutton);
@@ -1480,7 +1482,7 @@ QToolButton * MainWindow ::addNewDocument(const QString &docname)
     return toolbutton;
 }
 
-void MainWindow::openAboutDialog(void)
+void ApplicationController::openAboutDialog(void)
 {
     QList<HildonMenu *> all_dlg = findChildren<HildonMenu *>();
     foreach(HildonMenu *menu, all_dlg)
@@ -1489,7 +1491,7 @@ void MainWindow::openAboutDialog(void)
     dialog.exec();
 }
 
-void MainWindow::toggleToolBar(bool show)
+void ApplicationController::toggleToolBar(bool show)
 {
     KoToolManager::instance()->switchToolRequested(panToolFactoryId());
     if (documentType() == SpreadsheetDocument) {
@@ -1510,7 +1512,7 @@ void MainWindow::toggleToolBar(bool show)
     }
 }
 
-bool MainWindow::setEditingMode(bool set)
+bool ApplicationController::setEditingMode(bool set)
 {
     if (!KoAbstractApplication::setEditingMode(set))
         return false;
@@ -1567,7 +1569,7 @@ bool MainWindow::setEditingMode(bool set)
     return true;
 }
 
-void MainWindow::doUndo()
+void ApplicationController::doUndo()
 {
     if(m_formatframe)
         m_formatframe->hide();
@@ -1580,7 +1582,7 @@ void MainWindow::doUndo()
     }
 }
 
-void MainWindow::doRedo()
+void ApplicationController::doRedo()
 {
     if(m_formatframe)
         m_formatframe->hide();
@@ -1593,7 +1595,7 @@ void MainWindow::doRedo()
     }
 }
 
-void MainWindow::copy()
+void ApplicationController::copy()
 {
     if(   documentType() != PresentationDocument && documentType() != SpreadsheetDocument
        && !controller()->canvas()->toolProxy()->selection()->hasSelection())
@@ -1606,7 +1608,7 @@ void MainWindow::copy()
         m_formatframe->hide();
 }
 
-void MainWindow::cut()
+void ApplicationController::cut()
 {
     if(   documentType() != PresentationDocument && documentType() != SpreadsheetDocument
        && !controller()->canvas()->toolProxy()->selection()->hasSelection())
@@ -1619,7 +1621,7 @@ void MainWindow::cut()
         m_formatframe->hide();
 }
 
-void MainWindow::paste()
+void ApplicationController::paste()
 {
     controller()->canvas()->toolProxy()->paste();
 
@@ -1629,7 +1631,7 @@ void MainWindow::paste()
         m_formatframe->hide();
 }
 
-void MainWindow::showFullScreenPresentationIcons(void)
+void ApplicationController::showFullScreenPresentationIcons(void)
 {
     if (!controller())
         return;
@@ -1734,7 +1736,7 @@ void MainWindow::showFullScreenPresentationIcons(void)
 }
 ////////////////////////////////////////////////acc/////////////////////////////
 #ifdef Q_WS_MAEMO_5
-void MainWindow::switchToSlid()
+void ApplicationController::switchToSlid()
 {
 
      enableAccelerator=!enableAccelerator;
@@ -1756,7 +1758,7 @@ void MainWindow::switchToSlid()
       }
 
  }
-void MainWindow::enableDisableScrollingOption()
+void ApplicationController::enableDisableScrollingOption()
 {
 
     if(enableScrolling) {
@@ -1773,7 +1775,7 @@ void MainWindow::enableDisableScrollingOption()
 }
 
 
-void MainWindow::switchToScroll()
+void ApplicationController::switchToScroll()
 {
    enableScrolling=!enableScrolling;
 
@@ -1788,7 +1790,7 @@ void MainWindow::switchToScroll()
    }
 }
 
-void MainWindow::scrollAction()
+void ApplicationController::scrollAction()
 {
     controllerWidget()->verticalScrollBar()->
                   setSliderPosition (
@@ -1803,7 +1805,7 @@ void MainWindow::scrollAction()
     acceleratorForScrolAndSlide.resetScrollValues();
 }
 
-void MainWindow::closeAcceleratorSettings()
+void ApplicationController::closeAcceleratorSettings()
 {
     if(enableAccelerator) {
         m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
@@ -1825,7 +1827,7 @@ void MainWindow::closeAcceleratorSettings()
 #endif
 //////////////////////////////////////////////////////////////////////////////
 
-void MainWindow::slideTransitionDialog(){
+void ApplicationController::slideTransitionDialog(){
     m_slidingmotiondialog = new SlidingMotionDialog;
     m_slidingmotiondialog->m_select = gl_style ;
     m_slidingmotiondialog->m_time = gl_showtime / 1000;
@@ -1840,7 +1842,7 @@ void MainWindow::slideTransitionDialog(){
 
 }
 
-void MainWindow::slideNotesButtonClicked()
+void ApplicationController::slideNotesButtonClicked()
 {
     if(m_notesDialog) {
         disconnect(m_notesDialog,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
@@ -1856,7 +1858,7 @@ void MainWindow::slideNotesButtonClicked()
     m_notesDialog->showNotesDialog(currentPage());
 }
 
-void MainWindow::moveSlideFromNotesSlide(bool flag)
+void ApplicationController::moveSlideFromNotesSlide(bool flag)
 {
     if (flag) {
         goToNextPage();
@@ -1865,7 +1867,7 @@ void MainWindow::moveSlideFromNotesSlide(bool flag)
     }
 }
 
-bool MainWindow::openDocuments(const KoAbstractApplicationOpenDocumentArguments& args)
+bool ApplicationController::openDocuments(const KoAbstractApplicationOpenDocumentArguments& args)
 {
     const bool result = KoAbstractApplication::openDocuments(args);
 
@@ -1879,7 +1881,7 @@ bool MainWindow::openDocuments(const KoAbstractApplicationOpenDocumentArguments&
 }
 
 // Reimplemented
-void MainWindow::closeDocument()
+void ApplicationController::closeDocument()
 {
     KoAbstractApplication::closeDocument();
 
@@ -1928,7 +1930,7 @@ void MainWindow::closeDocument()
     m_viewNumber++;
 }
 
-void MainWindow::formatFrameDestructor() {
+void ApplicationController::formatFrameDestructor() {
     if(m_formatframe) {
         m_formatframe->hide();
 
@@ -1949,7 +1951,7 @@ void MainWindow::formatFrameDestructor() {
      }
 }
 
-void MainWindow::fontStyleFrameDestructor() {
+void ApplicationController::fontStyleFrameDestructor() {
     if(m_fontstyleframe) {
         m_fontstyleframe->close();
         delete m_bold;
@@ -1975,7 +1977,7 @@ void MainWindow::fontStyleFrameDestructor() {
     }
 }
 
-void MainWindow::raiseWindow(void)
+void ApplicationController::raiseWindow(void)
 {
     Display *display = QX11Info::display();
     XEvent e;
@@ -1990,7 +1992,7 @@ void MainWindow::raiseWindow(void)
 }
 
 // reimplemented
-bool MainWindow::openScheduledDocument()
+bool ApplicationController::openScheduledDocument()
 {
     if (!KoAbstractApplicationController::openScheduledDocument())
         return false;
@@ -2005,7 +2007,7 @@ bool MainWindow::openScheduledDocument()
 }
 
 // reimplemented
-void MainWindow::resourceChanged(int key, const QVariant& value)
+void ApplicationController::resourceChanged(int key, const QVariant& value)
 {
     if (m_presentationTool && m_presentationTool->toolsActivated() && documentType() == PresentationDocument) {
         return;
@@ -2013,7 +2015,7 @@ void MainWindow::resourceChanged(int key, const QVariant& value)
     KoAbstractApplication::resourceChanged(key, value);
 }
 
-void MainWindow::documentPageSetupChanged()
+void ApplicationController::documentPageSetupChanged()
 {
     KoAbstractApplication::documentPageSetupChanged();
 
@@ -2041,7 +2043,7 @@ void MainWindow::documentPageSetupChanged()
     m_hPage = controllerWidget()->horizontalScrollBar()->pageStep();
 }
 
-void MainWindow::fullScreen()
+void ApplicationController::fullScreen()
 {
     if (!m_ui)
         return;
@@ -2082,7 +2084,7 @@ void MainWindow::fullScreen()
     }
 }
 
-void MainWindow::zoomIn()
+void ApplicationController::zoomIn()
 {
     if (!view() || !m_ui)
         return;
@@ -2095,7 +2097,7 @@ void MainWindow::zoomIn()
     m_ui->actionZoomLevel->setText(i18n("%1 %", QString::number(factor)));
 }
 
-void MainWindow::zoomOut()
+void ApplicationController::zoomOut()
 {
     if (!view() || !m_ui)
         return;
@@ -2108,7 +2110,7 @@ void MainWindow::zoomOut()
     m_ui->actionZoomLevel->setText(i18n("%1 %", QString::number(factor)));
 }
 
-void MainWindow::zoom()
+void ApplicationController::zoom()
 {
     if (documentType() == SpreadsheetDocument) {
         ZoomDialog dlg(this);
@@ -2118,7 +2120,7 @@ void MainWindow::zoom()
     }
 }
 
-void MainWindow::zoomToPage()
+void ApplicationController::zoomToPage()
 {
     if (!view() || !m_ui)
         return;
@@ -2129,7 +2131,7 @@ void MainWindow::zoomToPage()
         m_ui->actionZoomLevel->setText("29%");
 }
 
-void MainWindow::zoomToPageWidth()
+void ApplicationController::zoomToPageWidth()
 {
     if (!view() || !m_ui)
         return;
@@ -2140,7 +2142,7 @@ void MainWindow::zoomToPageWidth()
         m_ui->actionZoomLevel->setText("100%");
 }
 
-/*void MainWindow::prevPage()
+/*void ApplicationController::prevPage()
 {
     if (!controller())
         return;
@@ -2150,7 +2152,7 @@ void MainWindow::zoomToPageWidth()
     controller()->pan(QPoint(0, -m_vPage));
 }
 
-void MainWindow::nextPage()
+void ApplicationController::nextPage()
 {
     if (!controller())
         return;
@@ -2160,7 +2162,7 @@ void MainWindow::nextPage()
     controller()->pan(QPoint(0, m_vPage));
 }*/
 
-void MainWindow::fsTimer()
+void ApplicationController::fsTimer()
 {
     if (!m_pressed) {
         m_fsTimer->stop();
@@ -2182,7 +2184,7 @@ void MainWindow::fsTimer()
     }
 }
 
-void MainWindow::fsButtonClicked()
+void ApplicationController::fsButtonClicked()
 {
     if (!m_ui)
         return;
@@ -2241,7 +2243,7 @@ static void findTextShapesRecursive(KoShapeContainer* con, KoPAPageBase* page,
     }
 }
 
-void MainWindow::startSearch()
+void ApplicationController::startSearch()
 {
     if (!m_search || !controller())
         return;
@@ -2340,7 +2342,7 @@ void MainWindow::startSearch()
     }
 }
 
-void MainWindow::findText(QList<QTextDocument*> aDocs,
+void ApplicationController::findText(QList<QTextDocument*> aDocs,
                           QList<QPair<KoPAPageBase*, KoShape*> > shapes,
                           const QString &aText)
 {
@@ -2374,7 +2376,7 @@ void MainWindow::findText(QList<QTextDocument*> aDocs,
         m_ui->actionSearchResult->setText(i18n("%1 of %2", 0, 0));
 }
 
-void MainWindow::highlightText(int aIndex)
+void ApplicationController::highlightText(int aIndex)
 {
     if (!controller() || !m_ui)
         return;
@@ -2417,7 +2419,7 @@ void MainWindow::highlightText(int aIndex)
                           m_searchTextPositions.at(aIndex).second.second);
 }
 
-void MainWindow::goToPreviousWord()
+void ApplicationController::goToPreviousWord()
 {
     if (documentType() == SpreadsheetDocument) {
         cellTool()->findPrevious();
@@ -2436,7 +2438,7 @@ void MainWindow::goToPreviousWord()
     highlightText(m_searchTextIndex);
 }
 
-void MainWindow::goToNextWord()
+void ApplicationController::goToNextWord()
 {
     if (documentType() == SpreadsheetDocument) {
         cellTool()->findNext();
@@ -2456,13 +2458,13 @@ void MainWindow::goToNextWord()
     highlightText(m_searchTextIndex);
 }
 
-void MainWindow::searchOptionChanged(int aCheckBoxState)
+void ApplicationController::searchOptionChanged(int aCheckBoxState)
 {
     m_searchCaseSensitive = aCheckBoxState == Qt::Checked;
     startSearch();
 }
 
-void MainWindow::updateActions()
+void ApplicationController::updateActions()
 {
     bool docLoaded = document();
     m_ui->actionSearch->setEnabled(docLoaded);
@@ -2477,7 +2479,7 @@ void MainWindow::updateActions()
     m_ui->actionSlidingMotion->setVisible(documentType() == PresentationDocument);
 }
 
-void MainWindow::setCentralWidget(QWidget *widget)
+void ApplicationController::setCentralWidget(QWidget *widget)
 {
     QMainWindow::setCentralWidget(widget);
     switch (documentType()) {
@@ -2493,7 +2495,7 @@ void MainWindow::setCentralWidget(QWidget *widget)
     };
 }
 
-bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+bool ApplicationController::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::ContextMenu)
         return true;
@@ -2681,25 +2683,25 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     //return QMainWindow::eventFilter(watched, event);
 }
 
-void MainWindow::showApplicationMenu()
+void ApplicationController::showApplicationMenu()
 {
     HildonMenu menu(this);
     menu.exec();
 }
 
 //Function to check if application has been started by DBus
-void MainWindow::checkDBusActivation()
+void ApplicationController::checkDBusActivation()
 {
     if (splash() && !isActiveWindow())
         openDocument();
 }
 
-void MainWindow::pluginOpen(bool /*newWindow*/, const QString& path)
+void ApplicationController::pluginOpen(bool /*newWindow*/, const QString& path)
 {
     openDocument(path);
 }
 
-void MainWindow::menuClicked(QAction* action)
+void ApplicationController::menuClicked(QAction* action)
 {
     if (!action->data().toBool())
     {
@@ -2715,7 +2717,7 @@ void MainWindow::menuClicked(QAction* action)
     pluginView->show();
 }
 
-void MainWindow::loadScrollAndQuit()
+void ApplicationController::loadScrollAndQuit()
 {
     // if no document is loaded, simply quit
     if (!document() || !controller()) {
@@ -2744,28 +2746,28 @@ void MainWindow::loadScrollAndQuit()
     }
 }
 
-void MainWindow::mousePressEvent( QMouseEvent *event )
+void ApplicationController::mousePressEvent( QMouseEvent *event )
 {
     if (m_presentationTool && m_presentationTool->toolsActivated()) {
         m_presentationTool->handleMainWindowMousePressEvent( event );
     }
 }
 
-void MainWindow::mouseMoveEvent( QMouseEvent *event )
+void ApplicationController::mouseMoveEvent( QMouseEvent *event )
 {
     if (m_presentationTool && m_presentationTool->toolsActivated()) {
         m_presentationTool->handleMainWindowMouseMoveEvent( event );
     }
 }
 
-void MainWindow::mouseReleaseEvent( QMouseEvent *event )
+void ApplicationController::mouseReleaseEvent( QMouseEvent *event )
 {
     if (m_presentationTool && m_presentationTool->toolsActivated()) {
         m_presentationTool->handleMainWindowMouseReleaseEvent( event );
     }
 }
 
-void MainWindow::paintEvent( QPaintEvent */*event*/ )
+void ApplicationController::paintEvent( QPaintEvent */*event*/ )
 {
     if (!m_presentationTool) {
         return;
@@ -2783,7 +2785,7 @@ void MainWindow::paintEvent( QPaintEvent */*event*/ )
     }
 }
 
-void MainWindow::disableFullScreenPresentationNavigation()
+void ApplicationController::disableFullScreenPresentationNavigation()
 {
     disconnect( m_fsPPTBackButton, SIGNAL( clicked() ), this, SLOT( goToPreviousPage() ) );
     disconnect( m_fsPPTForwardButton, SIGNAL( clicked() ), this, SLOT( goToNextPage() ) );
@@ -2791,7 +2793,7 @@ void MainWindow::disableFullScreenPresentationNavigation()
     m_fsPPTForwardButton->hide();
 }
 
-void MainWindow::enableFullScreenPresentationNavigation()
+void ApplicationController::enableFullScreenPresentationNavigation()
 {
     connect( m_fsPPTBackButton, SIGNAL( clicked() ), this, SLOT( goToPreviousPage() ) );
     connect( m_fsPPTForwardButton, SIGNAL( clicked() ), this, SLOT( goToNextPage() ) );
@@ -2801,7 +2803,7 @@ void MainWindow::enableFullScreenPresentationNavigation()
     m_fsPPTForwardButton->raise();
 }
 
-void MainWindow::setUpSpreadEditorToolBar()
+void ApplicationController::setUpSpreadEditorToolBar()
 {
     if (documentType() != SpreadsheetDocument)
         return;
@@ -2885,7 +2887,7 @@ void MainWindow::setUpSpreadEditorToolBar()
     m_spreadEditToolBar->hide();
 }
 
-void MainWindow::resetSpreadEditorToolBar()
+void ApplicationController::resetSpreadEditorToolBar()
 {
     if (documentType() != SpreadsheetDocument)
         return;
@@ -2926,7 +2928,7 @@ void MainWindow::resetSpreadEditorToolBar()
     m_spreadEditToolBar=0;
 }
 
-void MainWindow::startMathMode(bool start)
+void ApplicationController::startMathMode(bool start)
 {
     if (documentType() != SpreadsheetDocument)
         return;
@@ -2949,7 +2951,7 @@ void MainWindow::startMathMode(bool start)
 // Collaborative editing //
 ///////////////////////////
 
-void MainWindow::collaborateDialog()
+void ApplicationController::collaborateDialog()
 {
     if(m_collab)
     {
@@ -2971,7 +2973,7 @@ void MainWindow::collaborateDialog()
 
 }
 
-void MainWindow::closeCollabDialog() {
+void ApplicationController::closeCollabDialog() {
     qDebug() << "Collaborate-Dialog: closeDialog() called";
     //delete m_collabDialog;
     //m_collabDialog = 0;
@@ -2979,7 +2981,7 @@ void MainWindow::closeCollabDialog() {
     qDebug() << "Collaborate-Dialog: closeDialog() done";
 }
 
-void MainWindow::startCollaborating() {
+void ApplicationController::startCollaborating() {
     qDebug() << "Collaborate-Dialog: start ";
     if (m_collabDialog->isClient()) {
         if (document()) {
@@ -3025,23 +3027,23 @@ void MainWindow::startCollaborating() {
     qDebug() << "Collaborate-Dialog: end ----------------------------------------- ";
 }
 
-void MainWindow::collaborationCancelled() {
+void ApplicationController::collaborationCancelled() {
     closeCollabDialog();
 }
 
-void MainWindow::receivedString(uint start, uint end, QByteArray msg) {
+void ApplicationController::receivedString(uint start, uint end, QByteArray msg) {
     m_collabEditor->setPosition(start);
     m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
     m_collabEditor->insertText(msg);
 }
 
-void MainWindow::receivedBackspace(uint start, uint end) {
+void ApplicationController::receivedBackspace(uint start, uint end) {
     m_collabEditor->setPosition(start);
     m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
     m_collabEditor->deletePreviousChar();
 }
 
-void MainWindow::receivedFormat(uint start, uint end, Collaborate::FormatFlag format) {
+void ApplicationController::receivedFormat(uint start, uint end, Collaborate::FormatFlag format) {
     m_collabEditor->setPosition(start);
     m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
 
@@ -3084,39 +3086,39 @@ void MainWindow::receivedFormat(uint start, uint end, Collaborate::FormatFlag fo
     }
 }
 
-void MainWindow::receivedFontSize(uint start, uint end, uint size) {
+void ApplicationController::receivedFontSize(uint start, uint end, uint size) {
     m_collabEditor->setPosition(start);
     m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
     setFontSize(size, m_collabEditor);
 }
 
-void MainWindow::receivedFontType(uint start, uint end, const QString &font) {
+void ApplicationController::receivedFontType(uint start, uint end, const QString &font) {
     m_collabEditor->setPosition(start);
     m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
     setFontType(font, m_collabEditor);
 }
 
-void MainWindow::receivedTextColor(uint start, uint end, QRgb color) {
+void ApplicationController::receivedTextColor(uint start, uint end, QRgb color) {
     m_collabEditor->setPosition(start);
     m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
     setTextColor(QColor(color), m_collabEditor);
 }
 
-void MainWindow::receivedTextBackgroundColor(uint start, uint end, QRgb color) {
+void ApplicationController::receivedTextBackgroundColor(uint start, uint end, QRgb color) {
     m_collabEditor->setPosition(start);
     m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
     setTextBackgroundColor(QColor(color), m_collabEditor);
 }
 
-void MainWindow::error(quint16 err) {
+void ApplicationController::error(quint16 err) {
     qDebug() << "Collaborate: Error: " << err;
 }
 
-void MainWindow::collabSaveFile(const QString &filename) {
+void ApplicationController::collabSaveFile(const QString &filename) {
     document()->saveNativeFormat(filename);
 }
 
-void MainWindow::collabOpenFile(const QString &filename) {
+void ApplicationController::collabOpenFile(const QString &filename) {
     openDocument(filename);
     qDebug() << "============================================";
     m_collabEditor = new KoTextEditor(textEditor()->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(document()->createView(this))->kwcanvas()->toolProxy()->selection());
@@ -3126,7 +3128,7 @@ void MainWindow::collabOpenFile(const QString &filename) {
 ///////////////////////////
 ///////////////////////////
 #ifdef HAVE_OPENGL
-void MainWindow::glPresenter()
+void ApplicationController::glPresenter()
 {
     if (documentType() == PresentationDocument) {
     /*
@@ -3144,13 +3146,13 @@ void MainWindow::glPresenter()
     }
 }
 
-void MainWindow::glPresenterSet(int a , int b)
+void ApplicationController::glPresenterSet(int a , int b)
 {
     gl_showtime = b * 1000;
     gl_style = a;
 }
 #endif
-void MainWindow::showDigitalSignatureInfo()
+void ApplicationController::showDigitalSignatureInfo()
 {
     if (m_digitalSignatureDialog){
         m_digitalSignatureDialog->initializeDialog();
@@ -3158,12 +3160,12 @@ void MainWindow::showDigitalSignatureInfo()
     }
 }
 
-void MainWindow::enableSelectTool()
+void ApplicationController::enableSelectTool()
 {
     KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
 
-void MainWindow::insertImage()
+void ApplicationController::insertImage()
 {
     KoShape *shape;
     KoShapeCreateCommand *cmd;
@@ -3230,13 +3232,13 @@ void MainWindow::insertImage()
     }
 }
 
-void MainWindow::insertButtonClicked()
+void ApplicationController::insertButtonClicked()
 {
     m_ui->actionInsert->setVisible(false);
     m_ui->actionInsertImage->setVisible(true);
 }
 
-void MainWindow::showCCP()
+void ApplicationController::showCCP()
 {
     if(!m_ui->actionShowCCP->isChecked()) {
         m_ui->actionShowCCP->setChecked(false);
@@ -3251,7 +3253,7 @@ void MainWindow::showCCP()
     m_ui->actionPaste->setVisible(true);
 }
 
-void MainWindow::insertNewTextShape()
+void ApplicationController::insertNewTextShape()
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );
@@ -3268,7 +3270,7 @@ void MainWindow::insertNewTextShape()
     textShape->setVisible(true);
 }
 
-void MainWindow::insertNewTable()
+void ApplicationController::insertNewTable()
 {
     KoCanvasBase *canvasForChecking = controller()->canvas();
     Q_CHECK_PTR(canvasForChecking);
@@ -3282,12 +3284,12 @@ void MainWindow::insertNewTable()
 
 // KoAbstractApplication implementation
 
-void MainWindow::setWindowTitle(const QString& title)
+void ApplicationController::setWindowTitle(const QString& title)
 {
     QMainWindow::setWindowTitle(title);
 }
 
-void MainWindow::showMessage(KoAbstractApplication::MessageType type, const QString& messageText)
+void ApplicationController::showMessage(KoAbstractApplication::MessageType type, const QString& messageText)
 {
     switch (type) {
     case UnsupportedFileTypeMessage: {
@@ -3313,7 +3315,7 @@ void MainWindow::showMessage(KoAbstractApplication::MessageType type, const QStr
     }
 }
 
-bool MainWindow::startNewInstance(const KoAbstractApplicationOpenDocumentArguments& args)
+bool ApplicationController::startNewInstance(const KoAbstractApplicationOpenDocumentArguments& args)
 {
     QStringList cmdLineArgs;
     const QString fileName = args.documentsToOpen.isEmpty()
@@ -3323,7 +3325,7 @@ bool MainWindow::startNewInstance(const KoAbstractApplicationOpenDocumentArgumen
     return QProcess::startDetached(FREOFFICE_APPLICATION_PATH, cmdLineArgs);
 }
 
-void MainWindow::setProgressIndicatorVisible(bool visible)
+void ApplicationController::setProgressIndicatorVisible(bool visible)
 {
     unsigned long val = visible ? 1 : 0;
     Atom atom = XInternAtom(QX11Info::display(),
@@ -3333,7 +3335,7 @@ void MainWindow::setProgressIndicatorVisible(bool visible)
                     (unsigned char *) &val, 1);
 }
 
-void MainWindow::showUiBeforeDocumentOpening(bool isNewDocument)
+void ApplicationController::showUiBeforeDocumentOpening(bool isNewDocument)
 {
     m_ui->viewToolBar->show();
     m_ui->actionSlidingMotion->setVisible(false);
@@ -3365,12 +3367,12 @@ void MainWindow::showUiBeforeDocumentOpening(bool isNewDocument)
     raiseWindow();
 }
 
-QString MainWindow::applicationName() const
+QString ApplicationController::applicationName() const
 {
     return i18n("FreOffice");
 }
 
-QMessageBox::StandardButton MainWindow::askQuestion(QuestionType type, const QString& messageText)
+QMessageBox::StandardButton ApplicationController::askQuestion(QuestionType type, const QString& messageText)
 {
     switch (type) {
     case SaveDiscardCancelQuestion: {
@@ -3387,7 +3389,7 @@ QMessageBox::StandardButton MainWindow::askQuestion(QuestionType type, const QSt
     return QMessageBox::Cancel;
 }
 
-void MainWindow::handleCurrentPageChanged(int previousPage)
+void ApplicationController::handleCurrentPageChanged(int previousPage)
 {
     Q_UNUSED(previousPage);
     if (documentType() == PresentationDocument && isFullScreen()) {
@@ -3404,7 +3406,7 @@ void MainWindow::handleCurrentPageChanged(int previousPage)
     m_ui->actionPageNumber->setText(pageNo);
 }
 
-KoExternalEditorInterface* MainWindow::createExternalCellEditor(KoCellTool* cellTool) const
+KoExternalEditorInterface* ApplicationController::createExternalCellEditor(KoCellTool* cellTool) const
 {
     return new FoExternalEditor(cellTool);
 }

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -67,11 +67,24 @@ public:
     QStringList documentsToOpen;
 };
 
-//! Abstraction of custom office application implementing fundamental features.
-class KOABSTRACTION_EXPORT KoAbstractApplicationController //TODO: public CollaborateInterface
+//! Abstraction of custom office application's controller implementing fundamental features.
+/*! The controller implements standard behaviour for the application, which can be altered
+ * by reimplemented given methods or setting properties.
+ * Events of application are filtered by the controller, e.g. closeEvent().
+*/
+//! @todo public CollaborateInterface
+class KOABSTRACTION_EXPORT KoAbstractApplicationController : public QObject
 {
+    Q_OBJECT
+
 public:
-    KoAbstractApplicationController();
+    /*!
+     * Controller constructor, takes mandatory application object @a application.
+     * The controller implements standard behaviour for the application.
+     * @a application becomes also parent of the controller.
+     */
+    KoAbstractApplicationController(QObject *application);
+
     virtual ~KoAbstractApplicationController();
 
 #if 0
@@ -131,7 +144,189 @@ public:
      * Comparison is case insensitive.
      */
     bool isSpreadsheetDocumentExtension(const QString& extension) const;
+    
+    // tool identifiers
+    static QString panToolFactoryId();
+    static QString textToolFactoryId();
+    static QString cellToolFactoryId();
 
+    // -- for implementation --
+
+    /*!
+     * Shows message with text @a messageText of type @a type.
+     */
+    virtual void showMessage(MessageType type, const QString& messageText = QString()) = 0;
+
+    /*!
+     * Shows question message of type @a type with optional text @a messageText.
+     */
+    virtual QMessageBox::StandardButton askQuestion(QuestionType type, const QString& messageText = QString()) = 0;
+
+    /*!
+     * Starts new instance of the application and opens documents as specified by @a args.
+     * @return true on success.
+     */
+    virtual bool startNewInstance(const KoAbstractApplicationOpenDocumentArguments& args) = 0;
+
+    /*!
+     * Performs UI initialization needed before document opening.
+     */
+    virtual void showUiBeforeDocumentOpening(bool isNewDocument) = 0;
+
+    /*!
+     * Asks user for a file path name for opening and returns it.
+     * @return selected filename or empty string if selection was cancelled.
+     * See QFileDialog::getOpenFileName() for explanation of arguments.
+     */
+    virtual QString showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter) = 0;
+
+    /*!
+     * Asks user for a file path name for saving and returns it.
+     * @return selected filename or empty string if selection was cancelled.
+     * See QFileDialog::getSaveFileName() for explanation of arguments.
+     */
+    virtual QString showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter) = 0;
+
+    /*!
+     * Sets central widget for application view.
+     */
+    virtual void setCentralWidget(QWidget *widget) = 0;
+
+    /*!
+     * Update the enabled/disabled state of actions depending on if a document 
+     * is currently loaded.
+     */
+    virtual void updateActions() = 0;
+
+    /*!
+     * @return translated application name.
+     */
+    virtual QString applicationName() const = 0;
+
+    /*!
+     * @return true if virtual keyboard is visible.
+     */
+    virtual bool isVirtualKeyboardVisible() const = 0;
+
+    /*!
+     * @return external cell editor for spreadsheets.
+     * 0 can be returned, in this case edited text will not be transferred to the editor 
+     * but application will still work properly.
+     */
+    virtual KoExternalEditorInterface* createExternalCellEditor(KoCellTool* cellTool) const = 0;
+
+    /*!
+     * @return true if editing mode is on.
+     */
+    bool editingMode() const;
+
+    // -- for possible reimplementation --
+
+    /*!
+     * Called whenever page setup for document changes. Can be reimplemented.
+     * Default implementation just calls updateActions().
+     * @see document(), KWDocument::pageSetupChanged()
+     */
+    virtual void handleDocumentPageSetupChanged();
+
+    /*!
+     * Current page number has changed. Reaction on this should be implemented here.
+     * @a previousPage points to previously selected page. Use currentPage() to get
+     * number of the current page.
+     */
+    virtual void handleCurrentPageChanged(int previousPage) = 0;
+
+    // -- utilities --
+
+    /*!
+     * @return true if document is modified.
+     */
+    bool isDocumentModified() const;
+
+    /*!
+     * @return loaded document object.
+     */
+    inline KoDocument* document() const { return m_doc; }
+
+    /*!
+     * @return view.
+     */
+    inline KoView* view() const { return m_view; }
+
+    /*!
+     * @return canvas controller.
+     */
+    inline KoCanvasController* canvasController() const { return m_canvasController; }
+
+    /*!
+     * @return canvas controller widget or 0 if the controller is not based on QWidget.
+     */
+    KoCanvasControllerWidget* canvasControllerWidget() const;
+
+    /*!
+     * @return text editor object.
+     */
+    inline KoTextEditor* textEditor() const { return m_editor; }
+
+    /*!
+     * Pointer to KWView
+     */
+    KWView* wordsView() const;
+
+    /*!
+     * Sets splash screen to @a splash.
+     */
+    void setSplashScreen(QSplashScreen* splash);
+
+    /*!
+     * @return pointer to document's undo stack or 0 if there is no document.
+     */
+    inline KUndoStack* undoStack() const { return m_doc ? m_doc->undoStack() : 0; }
+
+    /*!
+     * Trigger an action from the action collection of the current KoView.
+     * @param name The name of the action to trigger
+     * @return bool Returns false if there was no action with the given name found
+     */
+    bool triggerAction(const char* name);
+
+    /*!
+     * Handles application's close event. @return true if close event can be accepted.
+     */
+    bool handleCloseEvent(QCloseEvent *event);
+
+    /*!
+     * Slot for reacting on resource changes in manager
+     * Can be reimplemented, do not forget about calling this implementation though.
+     */
+    virtual void resourceChanged(int key, const QVariant& value);
+
+    /*!
+     * @return name of the current sheet.
+     */
+    QString currentSheetName() const;
+
+    /*!
+     * @return pointer to the cell tool.
+     */
+    KoCellTool* cellTool() const;
+
+    /*!
+     * Invoked when the currently active tool changes.
+     */
+    virtual void activeToolChanged(KoCanvasController* canvas, int uniqueToolId);
+
+    /*!
+     * @return pointer to the splash widget or 0.
+     */
+    QSplashScreen* splash() const { return m_splash; }
+
+    /*!
+     * Updates window title for @a fileName name.
+     */
+    void updateWindowTitle(const QString& fileName);
+
+public slots:
     /*!
      * Convenience method: opens one document pointed by @a fileName for viewing.
      */
@@ -222,105 +417,6 @@ public:
      */
     void toggleVirtualKeyboardVisibility();
 
-protected:
-    // tool identifiers
-    static QString panToolFactoryId();
-    static QString textToolFactoryId();
-    static QString cellToolFactoryId();
-
-    // -- for implementation --
-
-    /*!
-     * Shows message with text @a messageText of type @a type.
-     */
-    virtual void showMessage(MessageType type, const QString& messageText = QString()) = 0;
-
-    /*!
-     * Shows question message of type @a type with optional text @a messageText.
-     */
-    virtual QMessageBox::StandardButton askQuestion(QuestionType type, const QString& messageText = QString()) = 0;
-
-    /*!
-     * Starts new instance of the application and opens documents as specified by @a args.
-     * @return true on success.
-     */
-    virtual bool startNewInstance(const KoAbstractApplicationOpenDocumentArguments& args) = 0;
-
-    /*!
-     * Shows or hides progress bar indicator.
-     */
-    virtual void setProgressIndicatorVisible(bool visible) = 0;
-
-    /*!
-     * Performs UI initialization needed before document opening.
-     */
-    virtual void showUiBeforeDocumentOpening(bool isNewDocument) = 0;
-
-    /*!
-     * Asks user for a file path name for opening and returns it.
-     * @return selected filename or empty string if selection was cancelled.
-     * See QFileDialog::getOpenFileName() for explanation of arguments.
-     */
-    virtual QString showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter) = 0;
-
-    /*!
-     * Asks user for a file path name for saving and returns it.
-     * @return selected filename or empty string if selection was cancelled.
-     * See QFileDialog::getSaveFileName() for explanation of arguments.
-     */
-    virtual QString showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter) = 0;
-
-    /*!
-     * Sets central widget for application view.
-     */
-    virtual void setCentralWidget(QWidget *widget) = 0;
-
-    /*!
-     * Sets main window's title to @a title.
-     */
-    virtual void setWindowTitle(const QString& title) = 0;
-
-    /*!
-     * Update the enabled/disabled state of actions depending on if a document is currently
-     * loaded.
-     */
-    virtual void updateActions() = 0;
-
-    /*!
-     * @return translated application name.
-     */
-    virtual QString applicationName() const = 0;
-
-    /*!
-     * Shows or hides virtual keyboard.
-     */
-    virtual void setVirtualKeyboardVisible(bool set) = 0;
-
-    /*!
-     * @return true if virtual keyboard is visible.
-     */
-    virtual bool isVirtualKeyboardVisible() const = 0;
-
-    /*!
-     * @return external cell editor for spreadsheets.
-     * 0 can be returned, in this case edited text will not be transferred to the editor 
-     * but application will still work properly.
-     */
-    virtual KoExternalEditorInterface* createExternalCellEditor(KoCellTool* cellTool) const = 0;
-
-    // -- for possible reimplementation --
-
-    /*!
-     * Called whenever page setup for document changes.
-     * @see document(), KWDocument::pageSetupChanged()
-     */
-    virtual void documentPageSetupChanged();
-
-    /*!
-     * @return true if editing mode is on.
-     */
-    bool editingMode() const;
-
     /*!
      * Sets editing mode on or off. @return true on success.
      * It is possible to reimplement this method to add more functionality;
@@ -329,66 +425,36 @@ protected:
     virtual bool setEditingMode(bool set);
 
     /*!
-     * Moves to next slide.
+     * Convenience slot, equivalent to setEditingMode(true).
+     * @return true on success.
      */
-    virtual void goToNextSlide() = 0;
+    bool setEditingMode();
 
     /*!
-     * Moves to previous slide.
+     * Convenience slot, equivalent to setEditingMode(false).
+     * @return true on success.
      */
-    virtual void goToPreviousSlide() = 0;
+    bool setViewingMode();
 
     /*!
-     * Current page number has changed. Reaction on this should be implemented here.
+     * Sets main window's title to @a title.
      */
-    virtual void currentPageChanged() = 0;
-
-    // -- utilities --
+    virtual void setWindowTitle(const QString& title) = 0;
 
     /*!
-     * Opens document (slot).
+     * Shows or hides virtual keyboard.
      */
-    virtual bool doOpenDocument();
+    virtual void setVirtualKeyboardVisible(bool set) = 0;
+
+    /*!
+     * Shows or hides progress bar indicator.
+     */
+    virtual void setProgressIndicatorVisible(bool visible) = 0;
 
     /*!
      * Sets document modification flag.
      */
-    void setDocumentModified(bool set) { if (m_doc) m_doc->setModified(set); }
-
-    /*!
-     * @return true if document is modified.
-     */
-    bool isDocumentModified() const { return m_doc ? m_doc->isModified() : false; }
-
-    /*!
-     * @return loaded document object.
-     */
-    inline KoDocument* document() const { return m_doc; }
-
-    /*!
-     * @return view.
-     */
-    inline KoView* view() const { return m_view; }
-
-    /*!
-     * @return controller.
-     */
-    inline KoCanvasController* controller() const { return m_controller; }
-
-    /*!
-     * @return controller widget or 0 if controller is not based on QWidget.
-     */
-    KoCanvasControllerWidget* controllerWidget() const;
-
-    /*!
-     * @return text editor object.
-     */
-    inline KoTextEditor* textEditor() const { return m_editor; }
-
-    /*!
-     * Pointer to KWView
-     */
-    KWView* wordsView() const;
+    void setDocumentModified(bool set);
 
     /*!
      * Controls visibility of horizontal scroll bar of the document view.
@@ -399,73 +465,19 @@ protected:
      * Controls visibility of vertical scroll bar of the document view.
      */
     void setVerticalScrollBarVisible(bool set);
-
+    
     /*!
-     * Sets splash screen to @a splash.
-     */
-    void setSplashScreen(QSplashScreen* splash);
-
-    /*!
-     * @return pointer to document's undo stack or 0 if there is no document.
-     */
-    inline KUndoStack* undoStack() const { return m_doc ? m_doc->undoStack() : 0; }
-
-    /*!
-     * Moves to next sheet.
-     */
-    void goToNextSheet();
-
-    /*!
-     * Moves to previous sheet.
-     */
-    void goToPreviousSheet();
-
-    /*!
-     * Trigger an action from the action collection of the current KoView.
-     * @param name The name of the action to trigger
-     * @return bool Returns false if there was no action with the given name found
-     */
-    bool triggerAction(const char* name);
-
-    /*!
-     * Handles application's close event. @return true if close event can be accepted.
-     */
-    bool handleCloseEvent(QCloseEvent *event);
-
-    /*!
-     * Slot for reacting on resource changes in manager
-     * Can be reimplemented, do not forget about calling this implementation though.
-     */
-    virtual void resourceChanged(int key, const QVariant& value);
-
-    /*!
-     * Slot
+     * Adds a new sheet.
+     * For spreadsheets documents only.
      */
     void addSheet();
 
     /*!
-     * Slot
+     * Removes current sheet.
+     * For spreadsheets documents only.
+     * @return true on successful removal.
      */
-    void removeSheet();
-
-    /*!
-     * @return name of the current sheet.
-     */
-    QString currentSheetName() const;
-
-    KoCellTool* cellTool() const;
-
-    /*!
-     * Invoked when the currently active tool changes.
-     */
-    virtual void activeToolChanged(KoCanvasController* canvas, int uniqueToolId);
-
-    QSplashScreen* splash() const { return m_splash; }
-
-    /*!
-     * Updates window title for @a fileName name.
-     */
-    void updateWindowTitle(const QString& fileName);
+    bool removeCurrentSheet();
 
     /*!
      * If @a set is true only document name is displayed and not application name.
@@ -473,6 +485,60 @@ protected:
      * The default is false.
      */
     void setOnlyDisplayDocumentNameInTitle(bool set);
+
+signals:
+    /*!
+     * Presentation has entered full screen mode.
+     */
+    void presentationStarted();
+    /*!
+     * Presentation has exited from full screen mode.
+     */
+    void presentationStopped();
+    /*!
+     * Presentation has moved to the next slide.
+     */
+    void nextSlide();
+    /*!
+     * Presentation has moved to the previous slide.
+     */
+    void previousSlide();
+
+protected slots:
+    /*!
+     * Moves to next slide.
+     * Default implementation just emits nextSlide() signal.
+     */
+    virtual void goToNextSlide();
+
+    /*!
+     * Moves to previous slide.
+     * Default implementation just emits previousSlide() signal.
+     */
+    virtual void goToPreviousSlide();
+
+    /*!
+     * Moves to next sheet.
+     */
+    virtual void goToNextSheet();
+
+    /*!
+     * Moves to previous sheet.
+     */
+    virtual void goToPreviousSheet();
+
+    /*!
+     * Opens document scheduled for opening (in m_fileNameToOpen).
+     * Used for delayed execution. Can be reimplemented.
+     * @return true on success.
+     */
+    virtual bool openScheduledDocument();
+
+protected:
+    /*!
+     * Filtering of the application's events.
+     */
+    bool eventFilter(QObject *watched, QEvent *event)
 
 //! @todo make private
     bool m_firstChar;
@@ -499,8 +565,6 @@ protected:
     bool m_searchCaseSensitive;
 
 private:
-    inline QObject *thisObject() { return dynamic_cast<QObject*>(this); }
-
     bool saveDocumentInternal(QString fileName);
 
 #if 0
@@ -509,7 +573,7 @@ private:
      */
     KoAbstractApplicationSignalReceiver *m_signalReceiver;
 #endif
-
+    
     /*!
      * Central widget for application view.
      */
@@ -521,7 +585,7 @@ private:
     QString m_fileName;
 
     /*!
-     * File name that will be opened by doOpenDocument().
+     * File name that will be opened by openScheduledDocument().
      */
     QString m_fileNameToOpen;
 
@@ -577,7 +641,7 @@ private:
     /*!
      * Pointer to KoCanvasController
      */
-    KoCanvasController *m_controller;
+    KoCanvasController *m_canvasController;
 
     /*!
      * Pointer to dedicated spreadsheet's CellTool

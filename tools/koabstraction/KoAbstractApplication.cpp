@@ -19,34 +19,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOABSTRACTAPPLICATION_H
-#define KOABSTRACTAPPLICATION_H
+#include "KoAbstractApplication.h"
 
-class KoAbstractApplicationController;
-
-//! Class for gluing KoAbstractApplicationController with the custom application implementation.
-//! It should be inherited, Do not inherit it, instead define KoAbstractApplicationBase typedef,
-//! e.g. as QMainWindow and include KoAbstractApplication.h header.
-class KoAbstractApplication
+KoAbstractApplication::KoAbstractApplication(KoAbstractApplicationController *controller)
 {
-public:
-    /*!
-     * Constructor, takes mandatory controller object implementation @a controller 
-     * which is then owned by the abstract application and available through
-     * @ref controller().
-     */
-    KoAbstractApplication(KoAbstractApplicationController *controller);
+}
 
-    virtual ~KoAbstractApplication();
-
-protected:
-    /*!
-     * @return controller the application's controller implementing fundamental features.
-     */
-    inline KoAbstractApplicationController* controller() { return m_ctr; }
-
-private:
-    KoAbstractApplicationController *m_ctr;
-};
-
-#endif
+KoAbstractApplication::~KoAbstractApplication()
+{
+}

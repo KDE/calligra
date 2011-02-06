@@ -6,16 +6,12 @@ include_directories( ${KOABSTRACTION_INCLUDES})
 
 set(koabstraction_LIB_SRCS
     KoAbstractApplicationController.cpp
+    KoAbstractApplication.cpp
     RemoveSheetCommand.cpp
     KoCellToolFactory.cpp
     KoCellTool.cpp
     FoCellEditor.cpp #TODO move back to tools/f-office
 )
-
-# generate KoAbstractApplication.moc which is not used by koabstraction but by users
-# of this library
-set_source_files_properties(KoAbstractApplicationController.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/KoAbstractApplication.moc)
-QT4_GENERATE_MOC(${CMAKE_CURRENT_SOURCE_DIR}/KoAbstractApplication.h ${CMAKE_CURRENT_BINARY_DIR}/KoAbstractApplication.moc)
 
 kde4_add_library(koabstraction SHARED ${koabstraction_LIB_SRCS})
 
@@ -50,7 +46,6 @@ install(TARGETS koabstraction ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES
     koabstraction_export.h
     KoAbstractApplication.h
-    KoAbstractApplicationImpl.h
     KoAbstractApplicationController.h
     KoCellTool.h
     FoCellEditor.h

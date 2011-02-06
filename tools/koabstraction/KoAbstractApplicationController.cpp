@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -93,7 +93,7 @@ KoAbstractApplicationOpenDocumentArguments::KoAbstractApplicationOpenDocumentArg
 {
 }
 
-KoAbstractApplicationController::KoAbstractApplicationController()
+KoAbstractApplicationController::KoAbstractApplicationController(QObject *application)
     : m_firstChar(true),
       m_searchTextIndex(0),
       m_searchWholeWords(false),
@@ -107,12 +107,15 @@ KoAbstractApplicationController::KoAbstractApplicationController()
       m_view(0),
       m_textDocument(0),
       m_editor(0),
-      m_controller(0),
+      m_canvasController(0),
       m_cellTool(0),
       m_cellToolFactory(0),
       m_splash(0),
       m_onlyDisplayDocumentNameInTitle(false)
 {
+    Q_ASSERT(application, "KoAbstractApplicationController",
+             "Application object must be provided to the controller");
+    application->installEventFilter(this);
 }
 
 KoAbstractApplicationController::~KoAbstractApplicationController()
@@ -121,8 +124,9 @@ KoAbstractApplicationController::~KoAbstractApplicationController()
     delete m_splash;
 }
 
-KoCanvasControllerWidget* KoAbstractApplicationController::controllerWidget() const {
-    return dynamic_cast<KoCanvasControllerWidget*>(m_controller);
+KoCanvasControllerWidget* KoAbstractApplicationController::controllerWidget() const
+{
+    return dynamic_cast<KoCanvasControllerWidget*>(m_canvasController);
 }
 
 QStringList KoAbstractApplicationController::supportedExtensions() const
@@ -284,9 +288,9 @@ bool KoAbstractApplicationController::openDocuments(
         return false; // Panic
     }
 
-    m_controller = controllers.first();
+    m_canvasController = controllers.first();
 
-    if (!m_controller) {
+    if (!m_canvasController) {
         setProgressIndicatorVisible(false);
         m_isLoading = false;
         return false;
@@ -308,11 +312,12 @@ bool KoAbstractApplicationController::openDocuments(
     else {
         m_type = TextDocument;
         // We need to get the page count again after layout rounds.
-        QObject::connect(m_doc, SIGNAL(pageSetupChanged()), thisObject(), SLOT(documentPageSetupChanged()));
+        QObject::connect(m_doc, SIGNAL(pageSetupChanged()),
+                         thisObject(), SLOT(handleDocumentPageSetupChanged()));
     }
 
     if (m_type == SpreadsheetDocument) {
-        KoToolManager::instance()->addController(m_controller);
+        KoToolManager::instance()->addController(m_canvasController);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
         Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(m_view);
         m_cellTool = dynamic_cast<KoCellTool *>(
@@ -346,9 +351,9 @@ bool KoAbstractApplicationController::openDocuments(
     if (controllerWidget())
         controllerWidget()->setProperty("FingerScrollable", true);
 
-    QTimer::singleShot(250, thisObject(), SLOT(documentPageSetupChanged()));
+    QTimer::singleShot(250, thisObject(), SLOT(handleDocumentPageSetupChanged()));
 
-    KoCanvasBase *canvas = m_controller->canvas();
+    KoCanvasBase *canvas = m_canvasController->canvas();
     QObject::connect(
         canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
         thisObject(), SLOT(resourceChanged(int, const QVariant &)));
@@ -397,7 +402,7 @@ bool KoAbstractApplicationController::openDocuments(
     return true;
 }
 
-bool KoAbstractApplicationController::doOpenDocument()
+bool KoAbstractApplicationController::openScheduledDocument()
 {
     const bool result = openDocument(m_fileNameToOpen);
     m_fileNameToOpen.clear();
@@ -415,16 +420,16 @@ void KoAbstractApplicationController::closeDocument()
     // the presentation and text document instances seem to require different ways to do cleanup
     switch (documentType()) {
     case PresentationDocument:
-        KoToolManager::instance()->removeCanvasController(m_controller);
+        KoToolManager::instance()->removeCanvasController(m_canvasController);
         delete m_doc;
         m_doc = 0;
         delete m_view;
         m_view = 0;
-        delete m_controller;
-        m_controller = 0;
+        delete m_canvasController;
+        m_canvasController = 0;
         break;
     case SpreadsheetDocument:
-        KoToolManager::instance()->removeCanvasController(m_controller);
+        KoToolManager::instance()->removeCanvasController(m_canvasController);
 //??        delete m_undostack;
 //??        m_undostack = 0;
         delete m_view;
@@ -433,7 +438,7 @@ void KoAbstractApplicationController::closeDocument()
         m_doc = 0;
         break;
     default:
-        KoToolManager::instance()->removeCanvasController(m_controller);
+        KoToolManager::instance()->removeCanvasController(m_canvasController);
         if (wordsView())
             wordsView()->canvasBase()->toolProxy()->deleteSelection();
 //??        delete m_undostack;
@@ -442,9 +447,9 @@ void KoAbstractApplicationController::closeDocument()
         m_doc = 0;
         delete m_view;
         m_view = 0;
-        m_editor=0;
-        delete m_controller;
-        m_controller = 0;
+        m_editor = 0;
+        delete m_canvasController;
+        m_canvasController = 0;
     }
 
     setCentralWidget(0);
@@ -515,7 +520,7 @@ bool KoAbstractApplicationController::openDocument()
         return false;
     }*/
     m_fileNameToOpen = file;
-    QTimer::singleShot(100, thisWidget, SLOT(doOpenDocument()));
+    QTimer::singleShot(100, thisWidget, SLOT(openScheduledDocument()));
     return true;
 }
 
@@ -603,7 +608,7 @@ KWView* KoAbstractApplicationController::wordsView() const
     return qobject_cast<KWView *>(m_view);
 }
 
-void KoAbstractApplicationController::documentPageSetupChanged()
+void KoAbstractApplicationController::handleDocumentPageSetupChanged()
 {
     updateActions();
 }
@@ -624,7 +629,7 @@ void KoAbstractApplicationController::goToPage(int page)
 //! these new functions solve problem in action next page which stops moving page from 13th page number
 void KoAbstractApplicationController::goToPreviousPage()
 {
-    if (!m_controller)
+    if (!m_canvasController)
         return;
     switch (documentType()) {
     case SpreadsheetDocument:
@@ -654,7 +659,7 @@ void KoAbstractApplicationController::goToPreviousPage()
 
 void KoAbstractApplicationController::goToNextPage()
 {
-    if (!m_controller)
+    if (!m_canvasController)
         return;
     switch (documentType()) {
     case SpreadsheetDocument:
@@ -685,7 +690,7 @@ void KoAbstractApplicationController::goToNextPage()
         int cur_page = m_currentPage;
         int next_page = cur_page+1;
         while(next_page != cur_page && documentType() == TextDocument) {
-            m_controller->pan(QPoint(0, 1));
+            m_canvasController->pan(QPoint(0, 1));
             cur_page = m_currentPage;
         }
         m_prevCurrentPage = m_currentPage;
@@ -709,6 +714,16 @@ void KoAbstractApplicationController::goToNextSheet()
     if (!sheet)
         return;
     tablesView->setActiveSheet(sheet);
+}
+
+void KoAbstractApplicationController::goToNextSlide()
+{
+    emit nextSlide();
+}
+
+void KoAbstractApplicationController::goToPreviousSlide()
+{
+    emit previousSlide();
 }
 
 void KoAbstractApplicationController::goToPreviousSheet()
@@ -768,6 +783,27 @@ bool KoAbstractApplicationController::editingMode() const
     return m_editingMode;
 }
 
+bool KoAbstractApplicationController::setEditingMode()
+{
+    return setEditingMode(true);
+}
+
+bool KoAbstractApplicationController::setViewingMode()
+{
+    return setEditingMode(false);
+}
+
+void KoAbstractApplicationController::setDocumentModified(bool set)
+{
+    if (m_doc)
+        m_doc->setModified(set);
+}
+
+bool KoAbstractApplicationController::isDocumentModified() const
+{
+    return m_doc ? m_doc->isModified() : false;
+}
+
 bool KoAbstractApplicationController::triggerAction(const char* name)
 {
     if (m_view) {
@@ -778,6 +814,19 @@ bool KoAbstractApplicationController::triggerAction(const char* name)
             action->activate(QAction::Trigger);
             return true;
         }
+    }
+    return false;
+}
+
+bool KoAbstractApplicationController::eventFilter(QObject *watched, QEvent *event)
+{
+    Q_UNUSED(watched);
+    switch (event->type()) {
+    case QEvent::CloseEvent:
+        if (handleCloseEvent(static_cast<QCloseEvent*>(event)))
+            return true;
+        break;
+    default;
     }
     return false;
 }
@@ -813,8 +862,9 @@ bool KoAbstractApplicationController::handleCloseEvent(QCloseEvent *event)
 void KoAbstractApplicationController::resourceChanged(int key, const QVariant& value)
 {
     if (KoCanvasResource::CurrentPage == key) {
+        const int prevPage = m_currentPage;
         m_currentPage = value.toInt();
-        currentPageChanged();
+        handleCurrentPageChanged(prevPage);
     }
 }
 
@@ -827,7 +877,7 @@ void KoAbstractApplicationController::addSheet()
     }
 }
 
-void KoAbstractApplicationController::removeSheet()
+bool KoAbstractApplicationController::removeCurrentSheet()
 {
     if (documentType() == SpreadsheetDocument && m_view) {
         if (askQuestion(ConfirmSheetDeleteQuestion, i18n("Do you want to delete the sheet?")) == QMessageBox::Yes) {
@@ -839,8 +889,10 @@ void KoAbstractApplicationController::removeSheet()
             Calligra::Tables::Sheet* tbl = kspreadView->activeSheet();
             QUndoCommand* command = new RemoveSheetCommand(tbl);
             kspreadDoc->addCommand(command);
+            return true;
         }
     }
+    return false;
 }
 
 QString KoAbstractApplicationController::currentSheetName() const

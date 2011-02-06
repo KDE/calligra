@@ -28,9 +28,6 @@
 
 #include <QtGui/QMainWindow>
 
-typedef QMainWindow KoAbstractApplicationBase;
-#include <KoAbstractApplication.h>
-
 #include <styles/KoListStyle.h>
 #include <KoPAView.h>
 
@@ -103,7 +100,6 @@ public:
 
     void disableFullScreenPresentationNavigation();
     void enableFullScreenPresentationNavigation();
-    void openNewDocumentType(QString type);
 
 private:
     Ui::MainWindow *m_ui;
@@ -516,7 +512,7 @@ private:
     virtual bool isVirtualKeyboardVisible() const;
 
     //! Implemented for KoAbstractApplication
-    virtual void currentPageChanged();
+    virtual void handleCurrentPageChanged(int previousPage);
 
     //! Implemented for KoAbstractApplication
     KoExternalEditorInterface* createExternalCellEditor(KoCellTool* cellTool) const;
