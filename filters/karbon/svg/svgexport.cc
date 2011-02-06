@@ -55,7 +55,7 @@
 #include "KoFilterEffect.h"
 #include "KoFilterEffectStack.h"
 #include "KoXmlWriter.h"
-
+#include "KoClipPath.h"
 #include <KPluginFactory>
 #include <KMimeType>
 #include <KTemporaryFile>
@@ -522,6 +522,7 @@ void SvgExport::getStyle(KoShape * shape, QTextStream * stream)
     getFill(shape, stream);
     getStroke(shape, stream);
     getEffects(shape, stream);
+    getClipping(shape, stream);
     if (! shape->isVisible())
         *stream << " display=\"none\"";
     if (shape->transparency() > 0.0)
@@ -640,6 +641,39 @@ void SvgExport::getEffects(KoShape *shape, QTextStream *stream)
     *m_defs << endl;
 
     *stream << " filter=\"url(#" << uid << ")\"";
+}
+
+void SvgExport::getClipping(KoShape *shape, QTextStream *stream)
+{
+    KoClipPath *clipPath = shape->clipPath();
+    if (!clipPath)
+        return;
+
+    KoPathShape *path = KoPathShape::createShapeFromPainterPath(clipPath->path());
+    if (!path)
+        return;
+
+    path->close();
+
+    QString uid = createUID();
+
+    printIndentation(m_defs, m_indent2);
+
+    *m_defs << "<clipPath id=\"" << uid << "\" clipPathUnits=\"userSpaceOnUse\">" << endl;
+    
+    printIndentation(m_defs, ++m_indent2);
+
+    *m_defs << "<path";
+    *m_defs << " d=\"" << path->toString(path->absoluteTransformation(0)*m_userSpaceMatrix) << "\"";
+    *m_defs << "/>" << endl;
+    
+    printIndentation(m_defs, --m_indent2);
+
+    *m_defs << "</clipPath>" << endl;
+    
+    *stream << " clip-path=\"url(#" << uid << ")\"";
+    if (clipPath->clipRule() != Qt::WindingFill)
+        *stream << " clip-rule=\"evenodd\"";
 }
 
 void SvgExport::saveText(ArtisticTextShape * text)
