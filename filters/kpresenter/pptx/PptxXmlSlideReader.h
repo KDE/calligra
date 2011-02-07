@@ -160,7 +160,9 @@ public:
     enum Type {
         Slide,
         SlideLayout,
-        SlideMaster
+        SlideMaster,
+        NotesMaster,
+        Notes
     };
 
     explicit PptxXmlSlideReader(KoOdfWriters *writers);
@@ -173,12 +175,15 @@ public:
 protected:
 
     KoFilter::ConversionStatus read_titleStyle();
+    KoFilter::ConversionStatus read_notesStyle();
     KoFilter::ConversionStatus read_bodyStyle();
     KoFilter::ConversionStatus read_otherStyle();
     KoFilter::ConversionStatus read_txStyles();
     KoFilter::ConversionStatus readInternal();
     KoFilter::ConversionStatus read_sld();
+    KoFilter::ConversionStatus read_notes();
     KoFilter::ConversionStatus read_sldInternal();
+    KoFilter::ConversionStatus read_notesMaster();
     KoFilter::ConversionStatus read_sldMaster(); //!< For SlideMaster mode
     KoFilter::ConversionStatus read_sldLayout(); //!< For SlideLayout mode
     KoFilter::ConversionStatus read_cSld();
