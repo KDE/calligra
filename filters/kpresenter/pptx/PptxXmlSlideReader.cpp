@@ -628,13 +628,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
 
-        body->startElement("draw:object-ole");
         QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
-        addManifestEntryForFile(destinationName);
-
-        body->addAttribute("xlink:href", destinationName);
-        body->endElement(); // draw:object-ole
+        KoFilter::ConversionStatus stat = m_context->import->copyFile(sourceName, destinationName, false );
+        // In case the file could not be find due to it being external we can at least do draw:image from below
+        if (stat == KoFilter::OK) {
+            body->startElement("draw:object-ole");
+            addManifestEntryForFile(destinationName);
+            body->addAttribute("xlink:href", destinationName);
+            body->endElement(); // draw:object-ole
+        }
 
         // Replacement
         body->startElement("draw:image");
@@ -1098,7 +1100,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     QByteArray placeholderEl;
     QBuffer placeholderElBuffer(&placeholderEl);
     placeholderElBuffer.open(QIODevice::WriteOnly);
-    delete m_placeholderElWriter;
     m_placeholderElWriter = new KoXmlWriter(&placeholderElBuffer, 0/*indentation*/);
     MSOOXML::Utils::AutoPtrSetter<KoXmlWriter> placeholderElWriterSetter(m_placeholderElWriter);
 
@@ -1164,8 +1165,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     }
 
     placeholderElBuffer.close();
-    m_currentPresentationPageLayoutStyle.addProperty(
-        QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
+    m_currentPresentationPageLayoutStyle.addProperty(QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
     placeholderElWriterSetter.release();
     delete m_placeholderElWriter;
     m_placeholderElWriter = 0;
