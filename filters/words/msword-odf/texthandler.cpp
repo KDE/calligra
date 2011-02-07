@@ -878,6 +878,9 @@ void KWordTextHandler::paragraphEnd()
     //write paragraph content, reuse text/paragraph style name if applicable
     QString styleName = m_paragraph->writeToFile(writer, &m_fld->m_tabLeader);
 
+    //provide the styleName to the current field
+    m_fld->m_styleName = styleName;
+
     if (chck_dropcaps) {
         // If this paragraph is a drop cap, it should be combined with the next
         // paragraph.  So store the drop cap data for future use.  However,
@@ -899,8 +902,6 @@ void KWordTextHandler::paragraphEnd()
         updateListStyle(styleName);
         m_listLevelStyleRequired = false;
     }
-    //provide the styleName to the current field
-    m_fld->m_styleName = styleName;
 
     delete m_paragraph;
     m_paragraph = 0;
@@ -1354,11 +1355,11 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         // range are specified by text in field-argument.  If no heading range
         // is specified, all heading levels used in the document are listed.
         rx = QRegExp("\\s\\\\o\\s\"(\\S+)\"");
-        uint levels;
+        int levels;
 
         if (rx.indexIn(*inst) >= 0) {
             QStringList levels_lst = rx.cap(1).split("-");
-            levels = levels_lst.last().toUInt();
+            levels = levels_lst.last().toInt();
         } else {
             levels = styleNames.size();
         }
@@ -1380,6 +1381,34 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
             }
         }
 
+        //post-process m_tocStyleNames
+        if (styleNames.size() < levels) {
+            if (styleNames.isEmpty()) {
+                for (int i = 0; i < levels; i++) {
+                    styleNames.append("Normal");
+                }
+            } else {
+                rx = QRegExp("\\D+(\\d)");
+                if (rx.indexIn(styleNames.first()) >= 0) {
+                    bool ok = false;
+                    uint n = rx.cap(1).toUInt(&ok, 10);
+                    if (!ok) {
+                        kDebug(30513) << "Conversion of QString to uint failed!";
+                    } else {
+                        for (uint i = 0; i < n; i++) {
+                            styleNames.prepend("Normal");
+                        }
+                    }
+                } else {
+                    kDebug(30513) << "Missing TOC related style with level info.";
+                    kDebug(30513) << "Not that bad actually.";
+                }
+                while (styleNames.size() < levels) {
+                    styleNames.append("Normal");
+                }
+            }
+        }
+
         //NOTE: TOC content is not encapsulated in a paragraph
         KoXmlWriter* cwriter = currentWriter();
         cwriter->startElement("text:table-of-content");
@@ -1392,7 +1421,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         cwriter->addAttribute("text:use-index-source-styles", "false");
         cwriter->addAttribute("text:use-outline-level", "true");
 
-        for (uint i = 0; i < levels; i++) {
+        for (int i = 0; i < levels; i++) {
             cwriter->startElement("text:table-of-content-entry-template");
             cwriter->addAttribute("text:outline-level", i + 1);
             cwriter->addAttribute("text:style-name", styleNames[i].toUtf8());
