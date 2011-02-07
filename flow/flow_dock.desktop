@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Flow/Dock
+Comment=Docker for Flow
