@@ -715,46 +715,50 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
     m_currentPPs = paragraphProperties;
 
-    // Check list information, because that's bigger than a paragraph,
-    // and we'll track that here in the TextHandler
+    // Check list information, because that's bigger than a paragraph, and
+    // we'll track that here in the TextHandler. NOT TRUE any more according to
+    // [MS-DOC] - v20100926
     //
-    // And heading information is here too, so track that for opening
-    // the Paragraph.
     bool isHeading = false;
     int outlineLevel = 0;
 
-    // ilfo = when non-zero, (1-based) index into the pllfo
-    // identifying the list to which the paragraph belongs.
+    //TODO: <text:numbered-paragraph>
+
+    //TODO: Put all the heading related logic here!
+    if (paragraphProperties) {
+        uint istd = paragraphProperties->pap().istd;
+
+        //Applying a heading style, paragraph is a heading.
+        if ( (istd >= 0x1) && (istd <= 0x9) ) {
+            isHeading = true;
+            //according to [MS-DOC] - v20100926
+            outlineLevel = istd - 1;
+            //MS-DOC outline level is ZERO based, whereas ODF has ONE based.
+            outlineLevel++;
+        }
+    }
+
+    // ilfo = when non-zero, (1-based) index into the pllfo identifying the
+    // list to which the paragraph belongs.
     if (!paragraphProperties) {
         // TODO: What to do here?
-    } else if (paragraphProperties->pap().ilfo == 0) {
+    } else if ( (paragraphProperties->pap().ilfo == 0)) {
 
-        // Not in a list at all in the word document, so check if we
-        // need to close one in the odt.
+        // Not in a list at all in the word document, so check if we need to
+        // close one in the odt.
 
         //kDebug(30513) << "Not in a list, so we may need to close a list.";
         if (listIsOpen()) {
             //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
-
-        //NOTE: Applying a heading style, paragraph is probably a heading.
-        //MSWord outline level is ZERO based, whereas ODF has ONE based.
-        uint istd = paragraphProperties->pap().istd;
-        if ( (istd >= 0x1) && (istd <= 0x9) ) {
-            outlineLevel = paragraphProperties->pap().lvl;
-            if ( (outlineLevel >= 0x0) && (outlineLevel <= 0x8) ) {
-                isHeading = true;
-                outlineLevel++;
-            } else {
-                outlineLevel = 0;
-            }
-
-        }
     } else if (paragraphProperties->pap().ilfo > 0) {
 
-        // We're in a list in the word document
-        kDebug(30513) << "we're in a list or heading";
+        // We're in a list in the word document.
+        //
+        // At the moment <text:numbered-paragraph> is not supported, we process
+        // the paragraph as an list-item instead.
+        kDebug(30513) << "we're in a list or numbered paragraph";
 
         // listInfo is our list properties object.
         const wvWare::ListInfo* listInfo = paragraphProperties->listInfo();
@@ -767,7 +771,6 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
             isHeading = true;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
         } else if (listInfo->lsid() == 1 && listInfo->numberFormat() == 255) {
-            // Looks like a heading, so that'll be processed in Paragraph.
             kDebug(30513) << "found heading, pap().ilvl="
                     << paragraphProperties->pap().ilvl;
             isHeading = true;

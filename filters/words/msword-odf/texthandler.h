@@ -333,11 +333,11 @@ private:
             m_insideField(false),
             m_afterSeparator(false),
             m_hyperLinkActive(false),
+            m_tabLeader(QChar::Null),
             m_hyperLinkUrl(QString::null),
+            m_styleName(QString::null),
             m_instructions(QString::null),
 /*             m_result(QString::null), */
-            m_styleName(QString::null),
-            m_tabLeader(QChar::Null),
             m_writer(0),
             m_buffer(0)
         {
@@ -361,22 +361,22 @@ private:
         bool m_insideField;
         bool m_afterSeparator;
         bool m_hyperLinkActive;
-	
-        //stores the location (bookmark/URL) to jump to
-        QString m_hyperLinkUrl;
-        
-        //stores field instructions
-        QString m_instructions;
-        
-        //stores the field result
-/*         QString m_result; */
-        
-        //KoGenStyle name for the <text:span> element encapsulating content of the
-        //processed field (if applicable)
-        QString m_styleName;
 
         //the tab leader character for a TOC entry
         QChar m_tabLeader;
+
+        //stores the location (bookmark/URL) to jump to
+        QString m_hyperLinkUrl;
+
+        //KoGenStyle name for the <text:span> element encapsulating content of the
+        //processed field (if applicable)
+        QString m_styleName;
+        
+        //stores field instructions
+        QString m_instructions;
+
+        //stores the field result
+/*         QString m_result; */
 
         //writer and buffer used to place bookmark elements into the field result,
         //if bookmarks are not to be supported by your field type, use m_result
