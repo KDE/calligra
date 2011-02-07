@@ -715,46 +715,50 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
     m_currentPPs = paragraphProperties;
 
-    // Check list information, because that's bigger than a paragraph,
-    // and we'll track that here in the TextHandler
+    // Check list information, because that's bigger than a paragraph, and
+    // we'll track that here in the TextHandler. NOT TRUE any more according to
+    // [MS-DOC] - v20100926
     //
-    // And heading information is here too, so track that for opening
-    // the Paragraph.
     bool isHeading = false;
     int outlineLevel = 0;
 
-    // ilfo = when non-zero, (1-based) index into the pllfo
-    // identifying the list to which the paragraph belongs.
+    //TODO: <text:numbered-paragraph>
+
+    //TODO: Put all the heading related logic here!
+    if (paragraphProperties) {
+        uint istd = paragraphProperties->pap().istd;
+
+        //Applying a heading style, paragraph is a heading.
+        if ( (istd >= 0x1) && (istd <= 0x9) ) {
+            isHeading = true;
+            //according to [MS-DOC] - v20100926
+            outlineLevel = istd - 1;
+            //MS-DOC outline level is ZERO based, whereas ODF has ONE based.
+            outlineLevel++;
+        }
+    }
+
+    // ilfo = when non-zero, (1-based) index into the pllfo identifying the
+    // list to which the paragraph belongs.
     if (!paragraphProperties) {
         // TODO: What to do here?
-    } else if (paragraphProperties->pap().ilfo == 0) {
+    } else if ( (paragraphProperties->pap().ilfo == 0)) {
 
-        // Not in a list at all in the word document, so check if we
-        // need to close one in the odt.
+        // Not in a list at all in the word document, so check if we need to
+        // close one in the odt.
 
         //kDebug(30513) << "Not in a list, so we may need to close a list.";
         if (listIsOpen()) {
             //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
-
-        //NOTE: Applying a heading style, paragraph is probably a heading.
-        //MSWord outline level is ZERO based, whereas ODF has ONE based.
-        uint istd = paragraphProperties->pap().istd;
-        if ( (istd >= 0x1) && (istd <= 0x9) ) {
-            outlineLevel = paragraphProperties->pap().lvl;
-            if ( (outlineLevel >= 0x0) && (outlineLevel <= 0x8) ) {
-                isHeading = true;
-                outlineLevel++;
-            } else {
-                outlineLevel = 0;
-            }
-
-        }
     } else if (paragraphProperties->pap().ilfo > 0) {
 
-        // We're in a list in the word document
-        kDebug(30513) << "we're in a list or heading";
+        // We're in a list in the word document.
+        //
+        // At the moment <text:numbered-paragraph> is not supported, we process
+        // the paragraph as an list-item instead.
+        kDebug(30513) << "we're in a list or numbered paragraph";
 
         // listInfo is our list properties object.
         const wvWare::ListInfo* listInfo = paragraphProperties->listInfo();
@@ -767,7 +771,6 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
             isHeading = true;
             outlineLevel = paragraphProperties->pap().ilvl + 1;
         } else if (listInfo->lsid() == 1 && listInfo->numberFormat() == 255) {
-            // Looks like a heading, so that'll be processed in Paragraph.
             kDebug(30513) << "found heading, pap().ilvl="
                     << paragraphProperties->pap().ilvl;
             isHeading = true;
@@ -878,6 +881,9 @@ void KWordTextHandler::paragraphEnd()
     //write paragraph content, reuse text/paragraph style name if applicable
     QString styleName = m_paragraph->writeToFile(writer, &m_fld->m_tabLeader);
 
+    //provide the styleName to the current field
+    m_fld->m_styleName = styleName;
+
     if (chck_dropcaps) {
         // If this paragraph is a drop cap, it should be combined with the next
         // paragraph.  So store the drop cap data for future use.  However,
@@ -899,8 +905,6 @@ void KWordTextHandler::paragraphEnd()
         updateListStyle(styleName);
         m_listLevelStyleRequired = false;
     }
-    //provide the styleName to the current field
-    m_fld->m_styleName = styleName;
 
     delete m_paragraph;
     m_paragraph = 0;
@@ -1354,11 +1358,11 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         // range are specified by text in field-argument.  If no heading range
         // is specified, all heading levels used in the document are listed.
         rx = QRegExp("\\s\\\\o\\s\"(\\S+)\"");
-        uint levels;
+        int levels;
 
         if (rx.indexIn(*inst) >= 0) {
             QStringList levels_lst = rx.cap(1).split("-");
-            levels = levels_lst.last().toUInt();
+            levels = levels_lst.last().toInt();
         } else {
             levels = styleNames.size();
         }
@@ -1380,6 +1384,34 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
             }
         }
 
+        //post-process m_tocStyleNames
+        if (styleNames.size() < levels) {
+            if (styleNames.isEmpty()) {
+                for (int i = 0; i < levels; i++) {
+                    styleNames.append("Normal");
+                }
+            } else {
+                rx = QRegExp("\\D+(\\d)");
+                if (rx.indexIn(styleNames.first()) >= 0) {
+                    bool ok = false;
+                    uint n = rx.cap(1).toUInt(&ok, 10);
+                    if (!ok) {
+                        kDebug(30513) << "Conversion of QString to uint failed!";
+                    } else {
+                        for (uint i = 0; i < n; i++) {
+                            styleNames.prepend("Normal");
+                        }
+                    }
+                } else {
+                    kDebug(30513) << "Missing TOC related style with level info.";
+                    kDebug(30513) << "Not that bad actually.";
+                }
+                while (styleNames.size() < levels) {
+                    styleNames.append("Normal");
+                }
+            }
+        }
+
         //NOTE: TOC content is not encapsulated in a paragraph
         KoXmlWriter* cwriter = currentWriter();
         cwriter->startElement("text:table-of-content");
@@ -1392,7 +1424,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         cwriter->addAttribute("text:use-index-source-styles", "false");
         cwriter->addAttribute("text:use-outline-level", "true");
 
-        for (uint i = 0; i < levels; i++) {
+        for (int i = 0; i < levels; i++) {
             cwriter->startElement("text:table-of-content-entry-template");
             cwriter->addAttribute("text:outline-level", i + 1);
             cwriter->addAttribute("text:style-name", styleNames[i].toUtf8());

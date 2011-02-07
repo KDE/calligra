@@ -273,6 +273,26 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL notes
+//! notes handler (Notes Slide)
+/*!
+
+ Child elements:
+    - clrMapOvr (Color Scheme Map Override) §19.3.1.7
+    - [done] cSld (Common Slide Data) §19.3.1.16
+    - extLst (Extension List with Modification Flag) §19.3.1.20
+    - timing (Slide Timing Information for a Slide Layout) §19.3.1.48
+    - transition (Slide Transition for a Slide Layout) §19.3.1.50
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_notes()
+{
+    READ_PROLOGUE
+    RETURN_IF_ERROR( read_sldInternal() )
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL sld
 //! sld handler (Presentation Slide)
 /*! This element specifies a slide.
@@ -289,6 +309,26 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 //! @todo support all child elements
 //! CASE #P300
 KoFilter::ConversionStatus PptxXmlSlideReader::read_sld()
+{
+    READ_PROLOGUE
+    RETURN_IF_ERROR( read_sldInternal() )
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL notesMaster
+//! notesMaster handler (Notes Master)
+/*! ECMA-376, 19.3.1.42, p. 2853.
+ This element specifies an instance of a slide master slide.
+
+ Child elements:
+    - [done] clrMap (Color Scheme Map) §19.3.1.6
+    - [done] cSld (Common Slide Data) §19.3.1.16
+    - extLst (Extension List with Modification Flag) §19.3.1.20
+    - hf (Header/Footer information for a master) §19.3.1.25
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_notesMaster()
 {
     READ_PROLOGUE
     RETURN_IF_ERROR( read_sldInternal() )
@@ -533,6 +573,59 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txStyles()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL notesStyle
+//! mptesStyle handler (Notes Master Text)
+/*!
+ Parent elements:
+    - [done] notesMaster (§19.3.1.52)
+
+ Child elements:
+    - defPPr (Default Paragraph Style)  §21.1.2.2.2
+    - extLst (Extension List)           §20.1.2.2.15
+    - [done] lvl1pPr (List Level 1 Text Style) §21.1.2.4.13
+    - [done] lvl2pPr (List Level 2 Text Style) §21.1.2.4.14
+    - [done] lvl3pPr (List Level 3 Text Style) §21.1.2.4.15
+    - [done] lvl4pPr (List Level 4 Text Style) §21.1.2.4.16
+    - [done] lvl5pPr (List Level 5 Text Style) §21.1.2.4.17
+    - [done] lvl6pPr (List Level 6 Text Style) §21.1.2.4.18
+    - [done] lvl7pPr (List Level 7 Text Style) §21.1.2.4.19
+    - [done] lvl8pPr (List Level 8 Text Style) §21.1.2.4.20
+    - [done] lvl9pPr (List Level 9 Text Style) §21.1.2.4.21
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_notesStyle()
+{
+    READ_PROLOGUE
+
+    d->phType = "notes";
+
+    m_currentCombinedBulletProperties.clear();
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, lvl1pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl2pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl3pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl4pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl5pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl6pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl7pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl8pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    saveCurrentListStyles();
+    saveCurrentStyles();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL bodyStyle
 //! bodyStyle handler (Slide Master Body Text)
 /*!
@@ -628,13 +721,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
 
-        body->startElement("draw:object-ole");
         QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
-        addManifestEntryForFile(destinationName);
-
-        body->addAttribute("xlink:href", destinationName);
-        body->endElement(); // draw:object-ole
+        KoFilter::ConversionStatus stat = m_context->import->copyFile(sourceName, destinationName, false );
+        // In case the file could not be find due to it being external we can at least do draw:image from below
+        if (stat == KoFilter::OK) {
+            body->startElement("draw:object-ole");
+            addManifestEntryForFile(destinationName);
+            body->addAttribute("xlink:href", destinationName);
+            body->endElement(); // draw:object-ole
+        }
 
         // Replacement
         body->startElement("draw:image");
@@ -796,10 +891,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     - [done] presentation (§19.2.1.26)
     - handoutMaster (§19.3.1.24)
     - notes (§19.3.1.26)
-    - notesMaster (§19.3.1.27)
+    - [done] notesMaster (§19.3.1.27)
     - [done] sld (§19.3.1.38)
-    - sldLayout (§19.3.1.39)
-    - sldMaster (§19.3.1.42)
+    - [done] sldLayout (§19.3.1.39)
+    - [done] sldMaster (§19.3.1.42)
+
  Child elements:
     - [done] bg (Slide Background) §19.3.1.1
     - controls (List of controls) §19.3.1.15
@@ -1098,7 +1194,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     QByteArray placeholderEl;
     QBuffer placeholderElBuffer(&placeholderEl);
     placeholderElBuffer.open(QIODevice::WriteOnly);
-    delete m_placeholderElWriter;
     m_placeholderElWriter = new KoXmlWriter(&placeholderElBuffer, 0/*indentation*/);
     MSOOXML::Utils::AutoPtrSetter<KoXmlWriter> placeholderElWriterSetter(m_placeholderElWriter);
 
@@ -1164,8 +1259,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     }
 
     placeholderElBuffer.close();
-    m_currentPresentationPageLayoutStyle.addProperty(
-        QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
+    m_currentPresentationPageLayoutStyle.addProperty(QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
     placeholderElWriterSetter.release();
     delete m_placeholderElWriter;
     m_placeholderElWriter = 0;

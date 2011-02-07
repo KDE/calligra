@@ -699,6 +699,10 @@ void Parser9x::processParagraph( U32 fc )
         delete props;
     }
     else {
+#ifdef WV2_DEBUG_PARAGRAPHS
+        props->pap().dump();
+#endif
+
         //Check if table skimming was active lately.  If yes, then this is the
         //paragraph behind the table (either a PARAGRAPH_MARK or a SECTION_MARK
         //follows a table)!
@@ -707,7 +711,6 @@ void Parser9x::processParagraph( U32 fc )
             wvlog << "A table was identified lately: informing the texthandler.";
             m_textHandler->tableEndFound();
         }
-
 
         // Now that we have the complete PAP, let's see if this paragraph belongs to a list
         props->createListInfo( *m_lists );

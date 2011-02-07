@@ -67,9 +67,12 @@ protected:
     KoFilter::ConversionStatus read_presentation();
     KoFilter::ConversionStatus read_sldMasterIdLst();
     KoFilter::ConversionStatus read_sldMasterId();
+    KoFilter::ConversionStatus read_notesMasterIdLst();
+    KoFilter::ConversionStatus read_notesMasterId();
     KoFilter::ConversionStatus read_sldIdLst();
     KoFilter::ConversionStatus read_sldId();
     KoFilter::ConversionStatus read_sldSz();
+    KoFilter::ConversionStatus read_notesSz();
     KoFilter::ConversionStatus read_defaultTextStyle();
 
     // Locates slide layout informaitons for given slide. Caches the result.

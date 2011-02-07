@@ -68,8 +68,8 @@ public:
     }
     QMap<QString, PptxSlideProperties*> slideLayoutPropertiesMap;
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
-    bool sldSzRead;
-    KoPageLayout pageLayout;
+    bool sldSzRead, noteSzRead;
+    KoPageLayout pageLayout, notePageLayout;
 
     // Several because there are several masterpages
     QVector<QString> masterPageDrawStyleNames;
@@ -106,7 +106,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     Q_ASSERT(m_context);
     d->slideNumber = 0;
     d->sldSzRead = false;
+    d->noteSzRead = false;
     d->pageLayout = KoPageLayout();
+    d->notePageLayout = KoPageLayout();
 
     const KoFilter::ConversionStatus result = readInternal();
 
@@ -377,6 +379,26 @@ void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL notesMasterId
+//! p:noteMasterId (Note Master ID)
+/*!
+ Parent elements:
+    - [done] noteMasterIdLst (§19.2.1.37)
+
+ Child elements:
+    - extLst (Extension List) §19.2.1.12
+*/
+KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR_WITH_NS(r, id)
+
+    SKIP_EVERYTHING
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL sldMasterId
 //! p:sldMasterId (Slide Master ID)
 /*! This element specifies a slide master that is available within the corresponding presentation.
@@ -471,7 +493,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     READ_EPILOGUE
 }
 
-
 #undef CURRENT_EL
 #define CURRENT_EL sldIdLst
 //! p:sldIdLst handler (List of Slide IDs)
@@ -493,6 +514,32 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
             ELSE_WRONG_FORMAT
         }
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL notesMasterIdLst
+//! p:noteMasterIdLst handler (List of Note Master IDs)
+/*!
+
+ Parent elements:
+ - [done] presentation (§19.2.1.26)
+
+ Child elements:
+ - [done] noteMasterId (Note Master ID) §19.2.1.36
+*/
+KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterIdLst()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(notesMasterId)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
     READ_EPILOGUE
 }
 
@@ -525,17 +572,54 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL sldSz
-//! p:sldSz handler (Presentation)
-/*! ECMA-376, 19.2.1.39, p. 2801.
- This element specifies the size of the presentation slide surface.
- 
+#define CURRENT_EL notesSz
+//! p:noteSz handler
+/*!
+
  Parent elements:
  - [done] presentation (§19.2.1.26)
 
  No child elements.
 */
-//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesSz()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR_WITHOUT_NS(cx)
+    READ_ATTR_WITHOUT_NS(cy)
+    int intCx = 0;
+    int intCy = 0;
+    STRING_TO_INT(cx, intCx, "notesSz@cx")
+    STRING_TO_INT(cy, intCy, "notesSz@cy")
+    //! @todo check "type" attr, e.g. 4x3
+
+    d->notePageLayout.width = EMU_TO_POINT(qreal(intCx));
+    d->notePageLayout.height = EMU_TO_POINT(qreal(intCy));
+    d->notePageLayout.leftMargin = 0.0;
+    d->notePageLayout.rightMargin = 0.0;
+    d->notePageLayout.topMargin = 0.0;
+    d->notePageLayout.bottomMargin = 0.0;
+
+    d->notePageLayout.orientation = d->notePageLayout.width > d->notePageLayout.height
+        ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+
+    readNext();
+
+    d->noteSzRead = true;
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL sldSz
+//! p:sldSz handler (Presentation)
+/*! ECMA-376, 19.2.1.39, p. 2801.
+ This element specifies the size of the presentation slide surface.
+
+ Parent elements:
+ - [done] presentation (§19.2.1.26)
+
+ No child elements.
+*/
 KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
 {
     READ_PROLOGUE
@@ -558,10 +642,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
     d->pageLayout.orientation = d->pageLayout.width > d->pageLayout.height
         ? KoPageFormat::Landscape : KoPageFormat::Portrait;
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
 
     d->sldSzRead = true;
     READ_EPILOGUE
@@ -577,7 +658,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             // Initializing the default style for the level
             // In the end, there should be 9 levels
@@ -619,14 +700,14 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
  Child elements:
     - ustDataLst (Customer Data List) §19.3.1.18
     - custShowLst (List of Custom Shows) §19.2.1.7
-    - defaultTextStyle (Presentation Default Text Style) §19.2.1.8
+    - [done] defaultTextStyle (Presentation Default Text Style) §19.2.1.8
     - embeddedFontLst (Embedded Font List) §19.2.1.10
     - extLst (Extension List) §19.2.1.12
     - handoutMasterIdLst (List of Handout Master IDs) §19.2.1.15
     - kinsoku (Kinsoku Settings) §19.2.1.17
     - modifyVerifier (Modification Verifier) §19.2.1.19
-    - notesMasterIdLst (List of Notes Master IDs) §19.2.1.21
-    - notesSz (Notes Slide Size) §19.2.1.22
+    - [done] notesMasterIdLst (List of Notes Master IDs) §19.2.1.21
+    - [done] notesSz (Notes Slide Size) §19.2.1.22
     - photoAlbum (Photo Album Information) §19.2.1.24
     - [done] sldIdLst (List of Slide IDs) §19.2.1.34
     - [done] sldMasterIdLst (List of Slide Master IDs) §19.2.1.37
@@ -647,12 +728,14 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         while (!atEnd()) {
             readNext();
             kDebug() << *this;
-            BREAK_IF_END_OF(CURRENT_EL);
+            BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(sldMasterIdLst)
                 ELSE_TRY_READ_IF(sldIdLst)
                 ELSE_TRY_READ_IF(sldSz)
-                //! @todo ELSE_TRY_READ_IF(notesSz)
+                ELSE_TRY_READ_IF(notesMasterIdLst)
+                ELSE_TRY_READ_IF(notesSz)
+                SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
             }
         }
@@ -660,10 +743,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
     else {
         while (!atEnd()) {
             readNext();
-            kDebug() << *this;
-            BREAK_IF_END_OF(CURRENT_EL);
+            BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(defaultTextStyle)
+                SKIP_UNKNOWN
             }
         }
     }
