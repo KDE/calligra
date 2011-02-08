@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007, 2008 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2007, 2008 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -109,6 +110,8 @@ protected slots:
     void slotScheduleManagerInserted( const ScheduleManager *manager );
     void slotScheduleManagerToBeRemoved( const ScheduleManager *manager );
     void slotScheduleManagerRemoved( const ScheduleManager *manager );
+    void slotScheduleManagerToBeMoved( const ScheduleManager *manager );
+    void slotScheduleManagerMoved( const ScheduleManager *manager, int index );
     void slotScheduleToBeInserted( const ScheduleManager *manager, int row );
     void slotScheduleInserted( const MainSchedule *schedule );
     void slotScheduleToBeRemoved( const MainSchedule *schedule );

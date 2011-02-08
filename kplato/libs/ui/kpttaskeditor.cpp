@@ -27,6 +27,7 @@
 #include "kptitemviewsettup.h"
 #include "kptworkpackagesenddialog.h"
 #include "kptworkpackagesendpanel.h"
+#include "kptdatetime.h"
 
 #include <KoDocument.h>
 
@@ -65,7 +66,8 @@ Qt::ItemFlags TaskEditorItemModel::flags( const QModelIndex &index ) const
             return QAbstractItemModel::flags( index );
         }
         Node *n = node( index );
-        if ( n && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+        bool baselined = n ? n->isBaselined() : false;
+        if ( n && ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
             return QAbstractItemModel::flags( index ) | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
         }
         return QAbstractItemModel::flags( index ) | Qt::ItemIsDropEnabled;
@@ -157,7 +159,12 @@ bool TaskEditorItemModel::setType( Node *node, const QVariant &value, int role )
             int v = value.toInt();
             switch ( v ) {
                 case 0: { // Milestone
-                    ModifyEstimateCmd *cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18n( "Set type to Milestone" ) );
+                    NamedCommand *cmd = 0;
+                    if ( node->constraint() == Node::FixedInterval ) {
+                        cmd = new NodeModifyConstraintEndTimeCmd( *node, node->constraintStartTime(), i18n( "Set type to Milestone" ) );
+                    } else {
+                        cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18n( "Set type to Milestone" ) );
+                    }
                     emit executeCommand( cmd );
                     return true;
                 }
@@ -166,8 +173,12 @@ bool TaskEditorItemModel::setType( Node *node, const QVariant &value, int role )
                     MacroCommand *m = new MacroCommand( i18n( "Set type to %1", Estimate::typeToString( (Estimate::Type)v, true ) ) );
                     m->addCommand( new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v ) );
                     if ( node->type() == Node::Type_Milestone ) {
-                        m->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), Duration::Unit_d ) );
-                        m->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 1.0 ) );
+                        if ( node->constraint() == Node::FixedInterval ) {
+                            m->addCommand( new NodeModifyConstraintEndTimeCmd( *node, node->constraintStartTime().addDays( 1 ) ) );
+                        } else {
+                            m->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), Duration::Unit_d ) );
+                            m->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 1.0 ) );
+                        }
                     }
                     emit executeCommand( m );
                     return true;
@@ -462,18 +473,44 @@ void TaskEditor::updateActionsEnabled( bool on )
     actionAddTask->setEnabled( o && n != p );
     actionAddMilestone->setEnabled( o && n != p );
 
+    o = on;
+    if ( o && p->isBaselined() ) {
+        // do not allow deleting tasks that is part of the baselined schedule
+        foreach ( Node *t, selectedNodes() ) {
+            if ( t->isBaselined() ) {
+                o = false;
+                break;
+            }
+        }
+    }
     int projSelected = selCount == 1 && n == 0;
-    actionDeleteTask->setEnabled( on && p && ! projSelected && selCount > 0 );
+    actionDeleteTask->setEnabled( o && p && ! projSelected && selCount > 0 );
+
+    bool baselined = false;
+    bool canaddsub = true;
+    bool canindent = p->canIndentTask( n );
+    if ( n && p->isBaselined() ) {
+        baselined = n->isBaselined();
+        if ( canindent ) {
+            Node *s = n->siblingBefore();
+            if ( s ) {
+                canindent = ! s->isBaselined();
+            }
+        }
+        if ( n->type() != Node::Type_Summarytask ) {
+            canaddsub = false;
+        }
+    }
 
     o = ( on && p && selCount == 1 );
 
-    menuAddSubTask->setEnabled( o );
-    actionAddSubtask->setEnabled( o );
-    actionAddSubMilestone->setEnabled( o );
-    actionMoveTaskUp->setEnabled( o && p->canMoveTaskUp( n ) );
-    actionMoveTaskDown->setEnabled( o && p->canMoveTaskDown( n ) );
-    actionIndentTask->setEnabled( o && p->canIndentTask( n ) );
-    actionUnindentTask->setEnabled( o && p->canUnindentTask( n ) );
+    menuAddSubTask->setEnabled( o && canaddsub );
+    actionAddSubtask->setEnabled( o && canaddsub );
+    actionAddSubMilestone->setEnabled( o && canaddsub );
+    actionMoveTaskUp->setEnabled( o && ! baselined && p->canMoveTaskUp( n ) );
+    actionMoveTaskDown->setEnabled( o && ! baselined && p->canMoveTaskDown( n ) );
+    actionIndentTask->setEnabled( o && canindent );
+    actionUnindentTask->setEnabled( o && ! baselined && p->canUnindentTask( n ) );
 }
 
 void TaskEditor::setupGui()

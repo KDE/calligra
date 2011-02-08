@@ -653,6 +653,7 @@ DependencyScene *DependencyNodeItem::itemScene() const
 {
     return static_cast<DependencyScene*>( scene() );
 }
+
 void DependencyNodeItem::setSymbol()
 {
     m_symbol->setSymbol( m_node->type(), itemScene()->symbolRect() );
@@ -887,18 +888,19 @@ QList<DependencyLinkItem*> DependencyNodeItem::successorItems( ConnectorType cty
 //--------------------
 void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
 {
-    KDGantt::ItemType itemtype = KDGantt::TypeNone;
+    m_nodetype = type;
+    m_itemtype = KDGantt::TypeNone;
     QPainterPath p;
     switch ( type ) {
         case Node::Type_Summarytask:
-            itemtype = KDGantt::TypeSummary;
+            m_itemtype = KDGantt::TypeSummary;
             p.moveTo( rect.topLeft() );
             p.lineTo( rect.topRight() );
             p.lineTo( rect.left() + rect.width() / 2.0, rect.bottom() );
             p.closeSubpath();
             break;
         case Node::Type_Task:
-            itemtype = KDGantt::TypeTask;
+            m_itemtype = KDGantt::TypeTask;
             p.moveTo( rect.topLeft() );
             p.lineTo( rect.topRight() );
             p.lineTo( rect.bottomRight() );
@@ -906,7 +908,7 @@ void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
             p.closeSubpath();
             break;
         case Node::Type_Milestone:
-            itemtype = KDGantt::TypeEvent;
+            m_itemtype = KDGantt::TypeEvent;
             p.moveTo( rect.left() + ( rect.width() / 2.0 ), rect.top() );
             p.lineTo( rect.right(), rect.top() + ( rect.height() / 2.0 ) );
             p.lineTo( rect.left() + ( rect.width() / 2.0 ), rect.bottom() );
@@ -917,7 +919,35 @@ void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
             break;
     }
     setPath( p );
-    setBrush( m_delegate.defaultBrush( itemtype ) );
+}
+
+void DependencyNodeSymbolItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *w )
+{
+    Project *p = itemScene()->project();
+    if ( p ) {
+        switch ( m_nodetype ) {
+            case Node::Type_Summarytask:
+                setBrush( p->config().summaryTaskDefaultColor() );
+                break;
+            case Node::Type_Task:
+                setBrush( p->config().taskNormalColor() );
+                break;
+            case Node::Type_Milestone:
+                setBrush( p->config().milestoneNormalColor() );
+                break;
+            default:
+                setBrush( m_delegate.defaultBrush( m_itemtype ) );
+                break;
+        }
+    } else {
+        setBrush( m_delegate.defaultBrush( m_itemtype ) );
+    }
+    QGraphicsPathItem::paint( painter, option, w );
+}
+
+DependencyScene *DependencyNodeSymbolItem::itemScene() const
+{
+    return static_cast<DependencyScene*>( scene() );
 }
 
 //--------------------
@@ -1589,6 +1619,7 @@ void DependencyView::slotFocusItemChanged( QGraphicsItem *item )
 void DependencyView::setItemScene( DependencyScene *scene )
 {
     setScene( scene );
+    scene->setProject( m_project );
     //slotResizeScene( m_treeview->viewport()->size() );
     if ( m_project ) {
         createItems();

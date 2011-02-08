@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2010 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,7 +43,7 @@
 namespace KPlato
 {
 
-ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resource, QWidget *parent )
+ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resource, bool baselined, QWidget *parent )
     : QWidget(parent),
     m_project( project ),
     m_resource( resource )
@@ -71,6 +71,12 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
         item = new QStandardItem( r->id() );
         items << item;
         m->appendRow( items );
+    }
+    if ( baselined ) {
+        type->setEnabled( false );
+        rateEdit->setEnabled( false );
+        overtimeEdit->setEnabled( false );
+        account->setEnabled( false );
     }
     // hide resource identity (last column)
     ui_teamView->setColumnHidden( m->columnCount() - 1, true );
@@ -216,7 +222,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    dia = new ResourceDialogImpl(project, m_resource, this);
+    dia = new ResourceDialogImpl(project, m_resource, resource->isBaselined(), this);
     setMainWidget(dia);
     KDialog::enableButtonOk(false);
 

@@ -1,3 +1,7 @@
+#ifdef _MSC_VER
+#define inline __inline
+#endif
+
 #include <stdlib.h>
 #include <assert.h>
 
@@ -85,6 +89,7 @@ int postpone(struct rcps_solver *solver, struct rcps_problem *problem,
 	int max_load;
 	int ltime;
 	int max_ltime;
+        int duration = 0;
 	struct rcps_request *crequest;
 	struct rcps_resource *cresource;
 	struct rcps_mode *cmode;
@@ -98,7 +103,7 @@ int postpone(struct rcps_solver *solver, struct rcps_problem *problem,
 		? genome->modes[job->genome_position]
 		: 0
 	];
-	int duration = cmode->duration;
+        duration = cmode->duration;
 	if (solver->duration_callback) {
 		duration = solver->duration_callback(DURATION_FORWARD, start, 
 			cmode->duration, cmode->cb_arg);
@@ -133,7 +138,7 @@ int postpone(struct rcps_solver *solver, struct rcps_problem *problem,
 				max_load = cedge->amount;
 			}
 			else if (cedge->time < (start + duration)) {
-				max_load = max(max_load, cedge->amount);
+                                max_load = kpt_max(max_load, cedge->amount);
 			}
 			cedge = cedge->next;
 		}
@@ -200,6 +205,7 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 	struct rcps_job *pjob;
 	struct rcps_phenotype *pheno;
 	struct decoding_state state;
+        struct edge *cedge, *tedge;
 
 	/* init the state */
 	state.res_load = (int*)malloc(sizeof(int) * problem->resource_count);
@@ -233,8 +239,9 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 		/* find the first possible start time through the predeccessors */
 		s = cjob->earliest_start;
 		for (j = 0; j < cjob->predeccessor_count; j++) {
+                        int rel_type = 0;
 			pjob = cjob->predeccessors[j];
-			int rel_type = cjob->predeccessor_types[j];
+                        rel_type = cjob->predeccessor_types[j];
 			// get the start time of the pjob, use genome_position here
 			assert(pheno->job_start[pjob->index] != UNSCHEDULED);
 			if (rel_type == SUCCESSOR_FINISH_START) {
@@ -249,14 +256,15 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 						duration, pjob->modes[cmi]->cb_arg);
                     //printf("decode: %s direction=%d, start=%d = duration=%d\n", pjob->name, DURATION_FORWARD, pheno->job_start[pjob->index], duration);
 				}
-				s = max(s, pheno->job_start[pjob->index]
+                                s = kpt_max(s, pheno->job_start[pjob->index]
 					+ duration);
 			}
 			else if (rel_type == SUCCESSOR_START_START) {
-				s = max(s, pheno->job_start[pjob->index]);
+                                s = kpt_max(s, pheno->job_start[pjob->index]);
 			}
 			else if (rel_type == SUCCESSOR_FINISH_FINISH) {
-				cmi = pjob->genome_position != -1
+                                int d2;
+                                cmi = pjob->genome_position != -1
                         ? genome->modes[pjob->genome_position]
                         : 0;
 				duration = pjob->modes[cmi]->duration;
@@ -266,7 +274,6 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 						pheno->job_start[pjob->index],
 						duration, pjob->modes[cmi]->cb_arg);
 				}
-				int d2;
 				cmi = cjob->genome_position != -1
                         ? genome->modes[cjob->genome_position]
                         : 0;
@@ -278,7 +285,7 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 						pheno->job_start[pjob->index] + duration,
 						d2, cjob->modes[cmi]->cb_arg);
 				}
-				s = max(s, pheno->job_start[pjob->index]
+                                s = kpt_max(s, pheno->job_start[pjob->index]
 					+ duration
 					- d2);
 			}
@@ -294,7 +301,6 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 		}
 	}
 	// free the internal state
-	struct edge *cedge, *tedge;
 	free(state.res_load);
 	for (i = 0; i < problem->resource_count; i++) {
 		cedge = state.res_edges[i];

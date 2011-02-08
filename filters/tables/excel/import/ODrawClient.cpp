@@ -115,7 +115,7 @@ bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
     return !m_shapeText.m_text.isEmpty();
 }
 
-void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox &ct,
+void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
                                     const MSO::OfficeArtClientData &o, Writer &out)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;

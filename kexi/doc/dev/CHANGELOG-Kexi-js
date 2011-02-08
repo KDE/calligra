@@ -92,6 +92,12 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+2011-02-04
+KexiDB
+*Fix Solaris build of kexidb 
+**BUG:265349
+**backported to 2.3.x
+
 2011-01-09
 KexiDB
 *MySQL driver: add /var/run/mysql/mysql.sock to list of possible local socket paths

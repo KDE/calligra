@@ -22,6 +22,8 @@
 #include <string.h>
 #include <iomanip>
 
+#include "XlsRecordOutputStream.h"
+
 namespace Swinder
 {
 

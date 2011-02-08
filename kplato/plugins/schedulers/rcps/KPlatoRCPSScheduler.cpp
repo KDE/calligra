@@ -195,7 +195,6 @@ int KPlatoRCPSScheduler::duration( int direction, int time, int nominal_duration
 int KPlatoRCPSScheduler::weight_callback( int time, int duration, int nominal_weight, void *arg )
 {
     //qDebug()<<"kplato_weight:"<<time<<nominal_weight<<arg;
-    Q_ASSERT( arg );
     if ( arg == 0 ) {
         return nominal_weight * time;
     }

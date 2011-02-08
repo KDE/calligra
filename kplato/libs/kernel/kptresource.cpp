@@ -147,6 +147,17 @@ bool ResourceGroup::isScheduled() const
     return false;
 }
 
+bool ResourceGroup::isBaselined( long id ) const
+{
+    foreach ( const Resource *r, m_resources ) {
+        if ( r->isBaselined() ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 void ResourceGroup::addResource(int index, Resource* resource, Risk*) {
     int i = index == -1 ? m_resources.count() : index;
     resource->setParentGroup( this );
@@ -677,6 +688,20 @@ Schedule *Resource::schedule( long id ) const
     return id == -1 ? m_currentSchedule : findSchedule( id );
 }
 
+bool Resource::isBaselined( long id ) const
+{
+    if ( m_type == Resource::Type_Team ) {
+        foreach ( const Resource *r, m_teamMembers ) {
+            if ( r->isBaselined( id ) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    Schedule *s = schedule( id );
+    return s ? s->isBaselined() : false;
+}
+
 Schedule *Resource::findSchedule( long id ) const
 {
     if ( m_schedules.contains( id ) ) {
@@ -997,7 +1022,9 @@ DateTime Resource::WorkInfoCache::firstAvailableAfter( const DateTime &time, con
 
 DateTime Resource::WorkInfoCache::firstAvailableBefore( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const
 {
-    Q_ASSERT( time >= limit );
+    if ( time <= limit ) {
+        return DateTime();
+    }
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constBegin();
     if ( time.isValid() && limit.isValid() && end.isValid() && end >= time && ! intervals.isEmpty() ) {
         // possibly usefull cache

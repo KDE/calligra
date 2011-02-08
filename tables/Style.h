@@ -344,7 +344,7 @@ public:
     inline bool operator!=(const Style& other) const {
         return !operator==(other);
     }
-    friend uint qHash(const Style& style);
+    friend CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
     void operator=(const Style& style);
     Style operator-(const Style& style) const;
     void merge(const Style& style);
@@ -395,7 +395,9 @@ public:
      * \param parent The style whose attributes are inherited - the parent style.
      */
     explicit CustomStyle(const QString& name, CustomStyle* parent = 0);
+	CustomStyle(const CustomStyle& style);
     virtual ~CustomStyle();
+    CustomStyle& operator=(const CustomStyle& other);
 
     virtual StyleType type() const;
     void setType(StyleType type);
@@ -426,10 +428,10 @@ public:
                             const StyleManager* manager) const;
 
 
-    bool operator==(const CustomStyle& other) const;
-    inline bool operator!=(const CustomStyle& other) const {
-        return !operator==(other);
-    }
+    //bool operator==(const CustomStyle& other) const;
+    //inline bool operator!=(const CustomStyle& other) const {
+    //    return !operator==(other);
+    //}
 
     /**
      * @return the number of references to this style.

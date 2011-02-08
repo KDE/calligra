@@ -37,7 +37,7 @@ void ViewManager::addShape(Section* section, KoShape* shape)
 {
   if(!shape)
     return;
-  if( not section) {
+  if( !section) {
     return;
   }
   foreach( View *view, m_views )
@@ -52,7 +52,7 @@ void ViewManager::removeShape(Section* section, KoShape* shape)
 {
   if(!shape)
     return;
-  if( not section) {
+  if( !section) {
     return;
   }
   foreach( View *view, m_views )
@@ -65,7 +65,7 @@ void ViewManager::removeShape(Section* section, KoShape* shape)
 
 void ViewManager::addView(View* view)
 {
-  Q_ASSERT(not m_views.contains(view));
+  Q_ASSERT(!m_views.contains(view));
   m_views.append(view);
 }
 void ViewManager::removeView(View* view)

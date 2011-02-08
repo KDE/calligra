@@ -29,21 +29,24 @@
 namespace KPlato
 {
 
-static const char* KPLATO_DESCRIPTION=I18N_NOOP("Plan - KDE Planning Tool");
+static const char* KPLATO_DESCRIPTION=I18N_NOOP("Calligra Plan - KDE Project Planning and Management Tool");
 static const char* KPLATO_VERSION=KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
     KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18n("Plan"),
                                            KPLATO_VERSION, ki18n(KPLATO_DESCRIPTION), KAboutData::License_GPL,
-                                           ki18n("(c) 1998-2010, The Plan Team"),
+                                           ki18n("(c) 1998-2011, The Plan Team"),
                                            KLocalizedString(),
                                            "http://www.calligra-suite.org/plan/" );
     aboutData->addAuthor(ki18n("Thomas Zander")); // please don't re-add, I don't like getting personal emails :)
     aboutData->addAuthor(ki18n("Bo Thorsen"), KLocalizedString(), "bo@sonofthor.dk");
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
     aboutData->addAuthor(ki18n("Raphael Langerhorst"),KLocalizedString(),"raphael.langerhorst@kdemail.net");
-    aboutData->addCredit(ki18n("Nuno Pinheiro and Danny Allen"), ki18n("Application icon for kplato"), "danny@dannyallen.co.uk");
+    aboutData->addCredit(ki18n("Nuno Pinheiro and Danny Allen"), ki18n("Application icon for plan"), "danny@dannyallen.co.uk");
+
+    aboutData->setProgramIconName( "calligraplan" );
+
     return aboutData;
 }
 

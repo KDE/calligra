@@ -18,10 +18,6 @@
  */
 
 
-#ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
-#define KDEWIN_STDINT_H
-#endif
-
 #include "kis_jpeg_converter.h"
 
 #include <stdio.h>
@@ -225,9 +221,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         m_image = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_image);
         m_image->lock();
-        if (profile && !profile->isSuitableForOutput()) {
-            m_image -> addAnnotation(KisAnnotationSP(new KisAnnotation(profile->name(), "", profile_rawdata)));
-        }
     }
 
     // Set resolution
@@ -616,26 +609,10 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         }
     }
 
-    // Save annotation
-    vKisAnnotationSP_it it = annotationsStart;
-    while (it != annotationsEnd) {
-        if (!(*it) || (*it)->type().isEmpty()) {
-            dbgFile << "Warning: empty annotation";
-            ++it;
-            continue;
-        }
+    const KoColorProfile* colorProfile = layer->colorSpace()->profile();
+    QByteArray colorProfileData = colorProfile->rawData();
 
-        dbgFile << "Trying to store annotation of type" << (*it) -> type() << " of size" << (*it) -> annotation() . size();
-
-        if ((*it) -> type().startsWith(QLatin1String("krita_attribute:"))) { // Attribute
-            // FIXME
-            dbgFile << "cannot save this annotation :" << (*it) -> type();
-        } else { // Profile
-            write_icc_profile(& cinfo, (uchar*)(*it)->annotation().data(), (*it)->annotation().size());
-        }
-        ++it;
-    }
-
+    write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
 
     // Write data information
 

@@ -535,7 +535,7 @@ char *rcps_error(int code) {
 }
 
 int job_compare(const void *a, const void *b) {
-	return a - b;
+        return (char *)a - (char *) b;
 }
 
 int check_circulardependencies(struct rcps_job *job, struct slist *visited) {
@@ -696,16 +696,19 @@ struct rcps_population *new_population(struct rcps_solver *s,
 
 int run_alg(struct rcps_solver *s, struct rcps_problem *p) { 
 	/* run the algorithm */
-	fflush(stderr);
 	int end = 0;
 	int count = 0;
 	int tcount = 0;
 	int lcount = 0;
 	int last_fitness = -1;
 	int last_overuse = 1;
-	// make this configurable
-	int breakoff_count = 100000 / s->jobs;
+        int breakoff_count =0;
 	int desperate = 0;
+
+        fflush(stderr);
+
+        // make this configurable
+        breakoff_count = 100000 / s->jobs;
 
 #ifdef HAVE_PTHREAD	
 	// XXX look at error code
@@ -713,10 +716,14 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 #endif
 	do {
 		// breed
-		struct rcps_individual *father;
+                int i,j;
+                int son_overuse, daughter_overuse, best_overuse;
+                int f1, f2;
+                struct rcps_individual *father;
 		struct rcps_individual *mother;
 		struct rcps_individual *son;
 		struct rcps_individual *daughter;
+                struct rcps_phenotype *pheno;
 
 		son = (struct rcps_individual*)malloc(sizeof(struct rcps_individual));
 		son->genome.schedule = (int*)malloc(sizeof(int) * p->job_count);
@@ -728,7 +735,6 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 		daughter->genome.alternatives = (int*)malloc(p->genome_alternatives * sizeof(int));
 		// select father and mother
 		// XXX we want a configurable bias towards better individuals here
-		int i,j;
 		i = irand(s->pop_size);
 		j = 1 + irand(s->pop_size - 1);
 		j = (i + j) % s->pop_size;
@@ -763,8 +769,7 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 			p->genome_alternatives, s->mut_mode);
 
 		// add to population
-		int son_overuse, daughter_overuse;
-		struct rcps_phenotype *pheno = decode(s, p, &son->genome);
+                pheno = decode(s, p, &son->genome);
 		son->fitness = fitness(p, &son->genome, pheno);
 		son_overuse = pheno->overuse_count;
 		pheno = decode(s, p, &daughter->genome);
@@ -778,13 +783,12 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 		add_individual(son, s->population);
 		add_individual(daughter, s->population);
 		// check if we have a better individual, if yes reset count
-        int f1, f2;
 		f1 = ((struct rcps_individual*)slist_node_getdata(slist_first(
 			s->population->individuals)))->fitness;
 		f2 = ((struct rcps_individual*)slist_node_getdata(slist_last(
 			s->population->individuals)))->fitness;
 		// get the best overuse count
-		int best_overuse = son_overuse < daughter_overuse ?
+                best_overuse = son_overuse < daughter_overuse ?
 			son_overuse : daughter_overuse;
 		// check if we want to stop
 		if ((f1 < last_fitness) && (last_fitness < 0)) {
@@ -862,7 +866,9 @@ void rcps_solver_set_duration_callback(struct rcps_solver *s,
 
 void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 	int i, j, k;
-	/* init the random number generator */
+        struct rcps_genome *genome;
+        struct rcps_phenotype *pheno;
+        /* init the random number generator */
 	srand(time(NULL));
 	/* fix the indices */
 	for (i = 0; i < p->job_count; i++) {
@@ -891,7 +897,7 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 		// do the modes
 		if (job->mode_count > 1) {
 			p->genome_modes++;
-			p->modes_max = realloc(p->modes_max, p->genome_modes*sizeof(int));
+                        p->modes_max = (int*) realloc(p->modes_max, p->genome_modes*sizeof(int));
 			p->modes_max[p->genome_modes-1] = job->mode_count;
 			job->genome_position = p->genome_modes-1;
 		}
@@ -908,7 +914,7 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 				// do the alternatives
 				if (request->alternative_count > 1) {
 					p->genome_alternatives++;
-					p->alternatives_max = realloc(p->alternatives_max, 
+                                        p->alternatives_max = (int*) realloc(p->alternatives_max,
 						p->genome_alternatives*sizeof(int));
 					p->alternatives_max[p->genome_alternatives-1] = 
 						request->alternative_count;
@@ -960,13 +966,13 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 // 	printf("cycles: \t%i\nfitness:\t%f\n", tcount, fit);
 
 	// transfer the results to the problem structure
-	struct rcps_genome *genome = &((struct rcps_individual*)slist_node_getdata(
+        genome = &((struct rcps_individual*)slist_node_getdata(
 		slist_first(s->population->individuals)))->genome;
 	// XXX we could save us this decoding step if we would keep the best ones
 	// from before, not really worth it
 	
 	// save a warning if the schedule is not valid
-	struct rcps_phenotype *pheno = decode(s, p, genome);
+        pheno = decode(s, p, genome);
 	if (pheno->overuse_count) {
 		s->warnings = 1;
 	}
@@ -975,16 +981,19 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 	}
 
 	for (i = 0; i < p->job_count; i++) {
-		struct rcps_job *job = p->jobs[i];
+                struct rcps_job *job;
+                struct rcps_mode *mode;
+                job = p->jobs[i];
 		job->res_start = pheno->job_start[job->index];
 		job->res_mode = 
 			job->genome_position == -1 
 				? 0 
 				: genome->modes[job->genome_position];
 			
-		struct rcps_mode *mode = job->modes[job->res_mode];		
+                mode = job->modes[job->res_mode];
 		for (j = 0; j < mode->request_count; j++) {
-			struct rcps_request *request = mode->requests[j];
+                        struct rcps_request *request;
+                        request = mode->requests[j];
 			request->res_alternative =
 				request->genome_position == -1 
 					? 0 

@@ -25,7 +25,6 @@
 #define XLSXXMLDOCREADER_H
 
 #include <MsooXmlThemesReader.h>
-#include "XlsxSharedString.h"
 
 #include <QMap>
 
@@ -39,13 +38,13 @@ class XlsxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 public:
     XlsxXmlDocumentReaderContext(XlsxImport& _import,
                                  MSOOXML::DrawingMLTheme* _themes,
-                                 const XlsxSharedStringVector& _sharedStrings,
+                                 const QVector<QString>& _sharedStrings,
                                  const XlsxComments& _comments,
                                  const XlsxStyles& _styles,
                                  MSOOXML::MsooXmlRelationships& _relationships);
     XlsxImport *import;
     MSOOXML::DrawingMLTheme *themes;
-    const XlsxSharedStringVector* sharedStrings;
+    const QVector<QString>* sharedStrings;
     const XlsxComments* comments;
     const XlsxStyles* styles;
 };

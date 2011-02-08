@@ -51,6 +51,7 @@ IF (TINY)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
+    set(SHOULD_BUILD_CSTESTER FALSE)
 ELSE(TINY)
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
@@ -69,7 +70,9 @@ ELSE(TINY)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
     set(SHOULD_BUILD_CALLIGRA TRUE)
+    set(SHOULD_BUILD_CSTESTER TRUE)
 ENDIF(TINY)
+set(SHOULD_BUILD_KOABSTRACTION FALSE) # the default
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something
@@ -328,14 +331,6 @@ endif(SHOULD_BUILD_SCRIPTING)
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
-# koabstraction depends on kotext & flake
-set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
-                    ${KOTEXT_INCLUDES}
-                    ${FLAKE_INCLUDES}
-                    ${KOPAGEAPP_INCLUDES}
-                    ${KOMAIN_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/tools/koabstraction)
-
 # koproperty
 SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
 SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})                   # TODO remove when we move to independent place
@@ -459,6 +454,35 @@ if(SHOULD_BUILD_BRAINDUMP)
   macro_optional_add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
 
+if(SHOULD_BUILD_TABLES AND BUILD_tables
+   AND SHOULD_BUILD_WORDS AND BUILD_words
+   AND SHOULD_BUILD_KPRESENTER AND BUILD_kpresenter)
+    set(SHOULD_BUILD_KOABSTRACTION TRUE)
+endif(SHOULD_BUILD_TABLES AND BUILD_tables
+   AND SHOULD_BUILD_WORDS AND BUILD_words
+   AND SHOULD_BUILD_KPRESENTER AND BUILD_kpresenter)
+
+if(SHOULD_BUILD_KOABSTRACTION AND BUILD_koabstraction)
+    # koabstraction depends on kotext & flake
+    set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
+                        ${KOTEXT_INCLUDES}
+                        ${FLAKE_INCLUDES}
+                        ${KOPAGEAPP_INCLUDES}
+                        ${KOMAIN_INCLUDES}
+                        ${CMAKE_SOURCE_DIR}/tools/koabstraction)
+else(SHOULD_BUILD_KOABSTRACTION AND BUILD_koabstraction)
+    set(SHOULD_BUILD_F_OFFICE FALSE)
+endif(SHOULD_BUILD_KOABSTRACTION AND BUILD_koabstraction)
+
+if(SHOULD_BUILD_TABLES AND BUILD_tables
+   AND SHOULD_BUILD_WORDS AND BUILD_words)
+    # build cstester
+else(SHOULD_BUILD_TABLES AND BUILD_tables
+   AND SHOULD_BUILD_WORDS AND BUILD_words)
+    set(SHOULD_BUILD_CSTESTER FALSE)
+endif(SHOULD_BUILD_TABLES AND BUILD_tables
+   AND SHOULD_BUILD_WORDS AND BUILD_words)
+
 macro_optional_add_subdirectory(doc)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
@@ -495,6 +519,7 @@ macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
 macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(f-office ${SHOULD_BUILD_F_OFFICE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
+macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

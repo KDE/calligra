@@ -30,7 +30,8 @@
 #include "ListItemsHelper.h"
 #include "TextShape.h"
 #include "ToCGenerator.h"
-#include "TextAnchorStrategy.h"
+#include "FloatingAnchorStrategy.h"
+#include "InlineAnchorStrategy.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
@@ -109,12 +110,18 @@ bool Layout::start()
     m_styleManager = KoTextDocument(m_parent->document()).styleManager();
     m_changeTracker = KoTextDocument(m_parent->document()).changeTracker();
     m_relativeTabs = KoTextDocument(m_parent->document()).relativeTabs();
-    if (m_reset)
+    if (m_reset) {
         resetPrivate();
-    else if (shape)
+    } else if (shape) {
         nextParag();
+    }
     m_reset = false;
-    return !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+
+    bool ok = !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+    if (!ok) {
+        kDebug() << "Starting layouting failed, shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
+    }
+    return ok;
 }
 
 void Layout::end()
@@ -157,9 +164,11 @@ qreal Layout::width()
     if (m_inTable) {
         QTextCursor tableFinder(m_block);
         QTextTable *table = tableFinder.currentTable();
-        m_tableLayout.setTable(table);
-        ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
-        m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        if (table) {
+            m_tableLayout.setTable(table);
+            ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
+            m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        }
     }
     if (m_newParag)
         ptWidth -= resolveTextIndent();
@@ -235,7 +244,7 @@ bool Layout::addLine()
 {
     QTextLine line = m_textLine.line;
     bool processingLine = m_textLine.processingLine();
- 
+
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
         QTextBlockFormat fmt = m_block.blockFormat();
@@ -1116,13 +1125,15 @@ void Layout::resetPrivate()
             if (m_block.layout() && m_block.layout()->lineCount() > 0) {
                 // block has been layouted. So use its offset.
                 m_y = m_block.layout()->lineAt(0).position().y();
-                if (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
+                while (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
                     // the last layed-out parag
                     Q_ASSERT(shapeNumber > 0);
                     // since we only recalc whole parags; we need to go back a little.
                     shapeNumber--;
                     shape = shapes[shapeNumber];
+                    Q_ASSERT(shape);
                     data = qobject_cast<KoTextShapeData*>(shape->userData());
+                    Q_ASSERT(data);
                     m_newShape = false;
                 }
                 if (m_y > data->documentOffset() + shape->size().height()) {
@@ -2293,11 +2304,12 @@ void Layout::updateFrameStack()
                 } else {
                     if (item.data()->tocFrame() == frame) {
                         break;
-                    }                    
+                    }
                 }
             }
             if (item.isNull()) {
                 ToCGenerator *tg = new ToCGenerator(frame);
+                tg->setPageWidth( shape->size().width() );
                 m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
                 // connect to FinishedLayout
                 QObject::connect(m_parent, SIGNAL(finishedLayout()),
@@ -2346,7 +2358,11 @@ void Layout::unregisterAllRunAroundShapes()
 void Layout::insertInlineObject(KoTextAnchor * textAnchor)
 {
     if (textAnchor != 0) {
-        textAnchor->setAnchorStrategy(new TextAnchorStrategy(textAnchor));
+        if (textAnchor->behavesAsCharacter()) {
+            textAnchor->setAnchorStrategy(new InlineAnchorStrategy(textAnchor));
+        } else {
+            textAnchor->setAnchorStrategy(new FloatingAnchorStrategy(textAnchor));
+        }
         m_textAnchors.append(textAnchor);
     }
 }
@@ -2402,7 +2418,8 @@ bool Layout::positionInlineObjects()
         m_textAnchorIndex++;
 
         // create outline if the shape is positioned inside text
-        if (textAnchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
+        if (textAnchor->shape()->textRunAroundSide() != KoShape::RunThrough &&
+            !textAnchor->behavesAsCharacter()) {
             updateRunAroundShape(textAnchor->shape());
             return true;
         }

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -2921,6 +2922,26 @@ void DeleteScheduleManagerCmd::unexecute()
 {
     AddScheduleManagerCmd::execute();
     cmd.unexecute();
+}
+
+MoveScheduleManagerCmd::MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm ),
+    m_oldparent( sm->parentManager() ),
+    m_newparent( newparent ),
+    m_newindex( newindex )
+{
+    m_oldindex = sm->parentManager() ? sm->parentManager()->indexOf( sm ) : sm->project().indexOf( sm );
+}
+
+void MoveScheduleManagerCmd::execute()
+{
+    m_sm->project().moveScheduleManager( m_sm, m_newparent, m_newindex );
+}
+
+void MoveScheduleManagerCmd::unexecute()
+{
+    m_sm->project().moveScheduleManager( m_sm, m_oldparent, m_oldindex );
 }
 
 ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name )

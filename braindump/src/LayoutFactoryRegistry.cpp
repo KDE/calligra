@@ -43,7 +43,7 @@ LayoutFactoryRegistry::~LayoutFactoryRegistry() {
 }
 
 LayoutFactoryRegistry* LayoutFactoryRegistry::instance() {
-  if(not Private::s_instance) {
+  if(!Private::s_instance) {
     Private::s_instance = new LayoutFactoryRegistry;
   }
   return Private::s_instance;

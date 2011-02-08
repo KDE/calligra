@@ -78,11 +78,6 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
         return false;
     }
 
-    // Remove me when custom-shape suppors rotation properly
-    if (m_rot != 0) {
-        return true;
-    }
-
     // These shapes are not properly supported atm. some have bugs in predefinedShapes.xml,
     // some might have xml parser / calligra bugs
     if (m_contentType == "circularArrow" || m_contentType == "curvedDownArrow" ||
@@ -247,7 +242,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
@@ -523,7 +518,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
@@ -715,7 +710,7 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     if (m_context->type == Slide) {
         m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
     }
-    else if (m_context->type == SlideMaster) {
+    else if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
     }
     else if (m_context->type == SlideLayout) {
@@ -752,7 +747,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->startElement("draw:custom-shape");
     }
     else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
-        body->startElement("draw:frame"); // CASE #P475
+#ifdef PPTXXMLSLIDEREADER_CPP
+        if (d->phType == "sldImg") {
+            body->startElement("draw:page-thumbnail"); // Special feature for presentation notes
+        } else {
+            body->startElement("draw:frame");
+        }
+#else
+        body->startElement("draw:frame");
+#endif
     }
     else { // For predefined shapes
         body->startElement("draw:custom-shape");
@@ -771,7 +774,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 
@@ -794,7 +797,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     //body->addAttribute("draw:style-name", );
     if (!m_currentPresentationStyle.isEmpty()) {
         presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
-        if (m_context->type == SlideMaster) {
+        if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
             mainStyles->markStyleForStylesXml(presentationStyleName);
         }
     }
@@ -1605,6 +1608,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_prevListLevel = m_currentListLevel = 0;
 #endif
 
+    QString fontSize = QString();
+    QString bulletColor = QString();
+
     // Creating a list ouf of what we have, note that ppr maybe overwrite the list style if it wishes
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
     QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
@@ -1646,6 +1652,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 d->textBoxHasContent = true;
 #endif
                 TRY_READ(DrawingML_r)
+                if (fontSize.isEmpty()) {
+                    fontSize = m_currentTextStyle.property("fo:font-size");
+                }
+                if (bulletColor.isEmpty()) {
+                    bulletColor = m_currentTextStyle.property("fo:color");
+                }
             }
             else if (QUALIFIED_NAME_IS(fld)) {
                 rRead = true;
@@ -1669,7 +1681,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         // and thus m_currentTextStyle is not used
         inheritDefaultTextStyle(m_currentParagraphStyle);
         inheritTextStyle(m_currentParagraphStyle);
-        QString fontSize = m_currentTextStyle.property("fo:font-size", KoGenStyle::TextType);
+        fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
         if (!fontSize.isEmpty()) {
             fontSize.remove("pt");
             qreal realSize = fontSize.toDouble();
@@ -1694,22 +1706,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
         m_previousListWasAltered = false;
     }
+
+    // This approach has the risk that numbered lists might have different bullet sizes -> different lists
+    //  -> numbering won't work as expected
     if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
         m_listStylePropertiesAltered = true;
-        QString textSize = m_currentTextStyle.property("fo:font-size");
-        if (!textSize.isEmpty()) {
-            textSize = textSize.left(textSize.length() - 2); // removes 'pt'
-            qreal convertedSize = textSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
+        if (!fontSize.isEmpty()) {
+            fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
+            qreal convertedSize = fontSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
+    /* Commented out for now, as this creates completely new lists which is not wanted
+       Maybe the correct behaviour would be to default to text color of the text in calligra instead of using this
     if (m_currentBulletProperties.bulletColor() == "UNUSED") {
         m_listStylePropertiesAltered = true;
-        QString bulletColor = m_currentTextStyle.property("fo:color");
         if (!bulletColor.isEmpty()) {
             m_currentBulletProperties.setBulletColor(bulletColor);
         }
-    }
+    }*/
+
     if (m_listStylePropertiesAltered) {
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
@@ -1745,7 +1761,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                  body->startElement("text:list");
                  if (listDepth == 0) {
                      QString listStyleName = mainStyles->insert(m_currentListStyle);
-                     if (m_context->type == SlideMaster) {
+                     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
                          mainStyles->markStyleForStylesXml(listStyleName);
                      }
                      Q_ASSERT(!listStyleName.isEmpty());
@@ -1779,11 +1795,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 
      body->startElement("text:p", false);
-#ifdef PPTXXMLSLIDEREADER_CPP
-     if (m_context->type == SlideMaster) {
-         m_moveToStylesXml = true;
-     }
-#endif
 
      QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
      if (spcBef.contains("%")) {
@@ -1799,9 +1810,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 
      QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
-     if (m_moveToStylesXml) {
+#ifdef PPTXXMLSLIDEREADER_CPP
+     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
          mainStyles->markStyleForStylesXml(currentParagraphStyleName);
      }
+#endif
      body->addAttribute("text:style-name", currentParagraphStyleName);
 
      (void)textPBuf.releaseWriter();
@@ -1876,7 +1889,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
     // elements
-    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
     body = rBuf.originalWriter();
 
@@ -1886,6 +1898,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
 
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
     QString fontSize = m_currentTextStyle.property("fo:font-size");
@@ -1898,7 +1911,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
     }
 #endif
@@ -3153,7 +3166,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
-    if (m_context->type == SlideMaster || m_context->type == SlideLayout) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster || m_context->type == SlideLayout) {
         inheritAllTextAndParagraphStyles();
     }
 #endif
@@ -4238,9 +4251,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
                 m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
+                // Opacity is currently disabled as there's a bug somewhere which makes even 1% opacity hide lines.
+                /*
                 if (m_currentAlpha > 0) {
                     m_currentDrawStyle->addProperty("svg:stroke-opacity", QString("%1%").arg(m_currentAlpha/100.0));
-                }
+                }*/
             }
             else if(qualifiedName() == QLatin1String("a:noFill")) {
                 m_currentDrawStyle->addProperty("draw:stroke", "none");
@@ -5057,7 +5072,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
     }
 #endif

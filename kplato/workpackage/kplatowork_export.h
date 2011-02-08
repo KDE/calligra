@@ -27,7 +27,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KPLATOWORK_EXPORT
-# if defined(MAKE_KPLATOWORKFACTORY_LIB)
+# if defined(MAKE_PLANWORKFACTORY_LIB)
    /* We are building this library */ 
 #  define KPLATOWORK_EXPORT KDE_EXPORT
 # else
@@ -46,7 +46,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KPLATOWORKAPP_EXPORT
-# if defined(MAKE_KPLATOWORKAPP_LIB)
+# if defined(MAKE_PLANWORKAPP_LIB)
    /* We are building this library */ 
 #  define KPLATOWORKAPP_EXPORT KDE_EXPORT
 # else
@@ -64,7 +64,7 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KPLATOWORKFACTORY_LIB)
+# if defined(MAKE_PLANWORKFACTORY_LIB)
 #       define KPLATOWORK_TEST_EXPORT KDE_EXPORT
 #   else
 #       define KPLATOWORK_TEST_EXPORT KDE_IMPORT

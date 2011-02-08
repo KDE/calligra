@@ -267,24 +267,29 @@ private:
     void defineDefaultParagraphProperties(KoGenStyle& style);
     void defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles);
 
-    /* Extract data from TextCFException into the style */
-
+    /**
+     * Extract data from TextCFException into the style
+     * @param KoGenStyle of type TextStyle
+     * @param PptTextCFRun address
+     * @param TextCFException9 address
+     * @param TextCFException10 address
+     * @param TextSIException address
+     */
     void defineTextProperties(KoGenStyle& style,
                               const PptTextCFRun* cf,
                               const MSO::TextCFException9* cf9,
                               const MSO::TextCFException10* cf10,
                               const MSO::TextSIException* si);
 
-    void defineTextProperties(KoGenStyle& style,
-                              const MSO::TextCFException* cf,
-                              const MSO::TextCFException9* cf9,
-                              const MSO::TextCFException10* cf10,
-                              const MSO::TextSIException* si,
-                              const MSO::TextContainer* tc = NULL);
-
-    /* Extract data from TextPFException into the style */
+    /**
+     * Extract data from TextPFException into the style
+     * @param KoGenStyle of type ParagraphStyle
+     * @param PptTextPFRun
+     * @param minimal size of the font used in the paragraph
+     */
     void defineParagraphProperties(KoGenStyle& style,
-                                   const PptTextPFRun& pf);
+                                   const PptTextPFRun& pf,
+                                   quint16 fs);
 
     /**
      * Extract data into the drawing-page style
@@ -332,14 +337,31 @@ private:
     void processTextForBody(const MSO::OfficeArtClientData* o,
                             const MSO::TextContainer& tc, const MSO::TextRuler* tr, Writer& out);
 
-    int processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
-                        const QString& text, const int start, int end);
-    int processTextSpans(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
-                        const QString& text, int start, int end);
-    void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
-                         const MSO::TextContainer& tc, const MSO::TextRuler* tr,
-                         const QString& text, int start, int end,
-                         QStack<QString>& levels);
+    int processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
+                        const QString& text, const int start, int end, quint16* p_fs);
+    int processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
+			 const QString& text, int start, int end, quint16* p_fs);
+
+    /**
+     * Process the content of a paragraph and write it into output file.
+     *
+     * @param out Writer
+     * @param cd provides access to additional text formatting in StyleTextProp9Atom
+     * @param tc provides access to text formatting in MasterTextPropAtom
+     * @param tr specifies tabbing, margins, and indentation for text
+     * @param text contains the text of the slide
+     * @param start specifies begging of the paragraph in text
+     * @param end specifies end of the paragraph in text
+     * @param levels provides info about each level of indentation
+     */
+    void processParagraph(Writer& out,
+                          const MSO::OfficeArtClientData* cd,
+                          const MSO::TextContainer& tc,
+                          const MSO::TextRuler* tr,
+                          const QString& text,
+                          int start,
+                          int end,
+                          QStack<QString>& levels);
 
     /**
      * @brief Write declaration in the content body presentation
@@ -366,22 +388,22 @@ private:
     QPair<QString, QString> findHyperlink(const quint32 id);
 
     /**
-    * @brief Convert paraspacing value to centimeters
+    * @brief Convert paraspacing value
     *
     * ParaSpacing is a 2-byte signed integer that specifies text paragraph
-    * spacing. It MUST be a value from the following table:
-    * Range                     Meaning
-    * 0 to 13200, inclusive.    The value specifies spacing as a percentage of the
-    *                           text line height.
-    * Less than 0.              The absolute value specifies spacing in master
-    *                           units.
+    * spacing.  It MUST be a value from the following intervals:
+    *
+    * x = value; x in <0, 13200>, specifies spacing as a percentage of the text
+    * line height.  x < 0, the absolute value specifies spacing in master units.
     *
     * master unit: A unit of linear measurement that is equal to 1/576 inch.
     *
-    * @brief value Value to convert
-    * @return value converted to centimeters
+    * @param value to convert
+    * @param size of the font
+    * @param percentage is preferred in case x in <0, 13200>
+    * @return processed value
     */
-    QString paraSpacingToCm(int value) const;
+    QString processParaSpacing(int value, quint16 fs, bool percentage = false) const;
 
     /**
     * @brief Convert TextAlignmentEnum value to a string from ODF specification

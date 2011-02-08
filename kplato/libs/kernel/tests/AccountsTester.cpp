@@ -32,6 +32,8 @@ namespace KPlato
 void AccountsTester::init()
 {
     project = new Project();
+    project->setId( project->uniqueCalendarId() );
+    project->registerNodeId( project );
     
     today = QDate::currentDate();
     tomorrow = today.addDays( 1 );

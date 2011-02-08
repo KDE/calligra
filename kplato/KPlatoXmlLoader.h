@@ -33,17 +33,15 @@ namespace KPlato
     class Package;
     class XMLLoaderObject;
     class Project;
-}
 
-
-class KPlatoXmlLoader : public KPlato::KPlatoXmlLoaderBase
+class KPlatoXmlLoader : public KPlatoXmlLoaderBase
 {
     Q_OBJECT
 public:
-    KPlatoXmlLoader( KPlato::XMLLoaderObject &loader, KPlato::Project *project );
+    KPlatoXmlLoader( XMLLoaderObject &loader, Project *project );
 
     QString errorMessage() const;
-    KPlato::Package *package() const;
+    Package *package() const;
     QString timeTag() const;
 
     using KPlatoXmlLoaderBase::load;
@@ -51,11 +49,13 @@ public:
     bool loadWorkpackage( const KoXmlElement &plan );
 
 private:
-    KPlato::XMLLoaderObject &m_loader;
-    KPlato::Project *m_project;
+    XMLLoaderObject &m_loader;
+    Project *m_project;
     QString m_message;
-    KPlato::Package *m_package;
+    Package *m_package;
     QString m_timeTag;
 };
+
+}
 
 #endif // KPLATOXMLLOADER_H

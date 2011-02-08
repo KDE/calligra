@@ -783,7 +783,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
 }
 
 #define blipFill_NS "a"
-#define SETUP_PARA_STYLE_IN_READ_P
 
 #include <MsooXmlCommonReaderImpl.h>
 

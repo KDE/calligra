@@ -2712,8 +2712,20 @@ CustomStyle::CustomStyle(QString const & name, CustomStyle * parent)
         setParentName(parent->name());
 }
 
+CustomStyle::CustomStyle(const CustomStyle& style)
+        : Style(style), d(style.d)
+{
+}
+
 CustomStyle::~CustomStyle()
 {
+}
+
+CustomStyle& CustomStyle::operator=(const CustomStyle& style)
+{
+	Style::operator=(style);
+	d = style.d;
+	return *this;
 }
 
 Style::StyleType CustomStyle::type() const

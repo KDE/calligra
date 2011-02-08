@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  Copyright (C) 2001 Thomas Zander zander@kde.org
  Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -101,6 +102,9 @@ public:
 
     bool isScheduled() const;
     
+    /// Return true if any resource in this group is baselined
+    bool isBaselined( long id = BASELINESCHEDULE ) const;
+
     /** Manage the resources in this list
      * <p>At some point we will have to look at not mixing types of resources
      * (e.g. you can't add a person to a list of computers
@@ -421,10 +425,14 @@ public:
     QHash<long, Schedule*> schedules() const { return m_schedules; }
     /**
      * Return schedule with @id
-     * If @id == -1, return m_currentSchedule
-     * Return 0 if schedule with @id doesn't exist.
+     * If @p id == CURRENTSCHEDULE, return m_currentSchedule
+     * Return 0 if schedule with @p id doesn't exist.
      */
-    Schedule *schedule( long id = -1 ) const;
+    Schedule *schedule( long id = CURRENTSCHEDULE ) const;
+    /// Returns true if schedule with @p id is baselined.
+    /// if Team resource, if any of the team members is baselined
+    /// By default returns true if any schedule is baselined
+    bool isBaselined( long id = BASELINESCHEDULE ) const;
     /**
      * Return schedule with @id
      * Return 0 if schedule with @id doesn't exist.

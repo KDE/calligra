@@ -23,6 +23,7 @@
 #include "msooxml_export.h"
 
 #include <KoCellStyle.h>
+#include <KoBorder.h>
 
 #include <QColor>
 #include <QFlags>

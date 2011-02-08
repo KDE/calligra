@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Flow Dockers plugin
 Name[de]=Flow-Docker-Modul
+Name[en_GB]=Flow Dockers plugin
 Name[et]=Flow dokkide plugin
 Name[fr]=Module externe de panneaux
 Name[it]=Estensione per i ganci di Flow
@@ -8,12 +9,12 @@ Name[nb]=Flow Dockers programtillegg
 Name[nds]=Andockmoduul för Flow
 Name[nl]=Vastzetterplugin voor Flow
 Name[pt]='Plugin' de Módulos Acopláveis do Flow
-Name[pt_BR]=Plug-in de Módulos Acopláveis do Flow
+Name[pt_BR]=Plug-in de módulos acopláveis do Flow
 Name[sv]=Flow dockningsinsticksprogram
 Name[uk]=Додаток панелей Flow
 Name[x-test]=xxFlow Dockers pluginxx
 Name[zh_TW]=Flow 嵌入外掛程式
-X-KDE-ServiceTypes=KOffice/Dock
+X-KDE-ServiceTypes=Flow/Dock
 Type=Service
 X-KDE-Library=flowdockersplugin
 X-Flake-MinVersion=0

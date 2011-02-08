@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000 Enno Bartels <ebartels@nwn.de>
+   Copyright (C) 2011 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +32,7 @@
 
 class KoOdfWriteStore;
 class QByteArray;
+class KoGenStyle;
 
 class APPLIXWORDImport : public KoFilter
 {
@@ -50,12 +52,13 @@ private:
     QString nextLine(QTextStream &);
     int     readHeader(QTextStream &stream);
     bool createMeta(KoOdfWriteStore &store);
+    bool parseFontProperty(const QString& type, KoGenStyle& style) const;
 
 private:
     int m_stepsize;
     int m_instep;
     int m_progress;
     QString m_nextPendingLine;
-
+    QMap<QString, QColor> m_colorMap;
 };
 #endif // APPLIXWORDIMPORT_H

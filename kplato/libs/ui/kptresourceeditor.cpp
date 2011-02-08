@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2010 Dag Andersen kplato@kde.org>
+  Copyright (C) 2006 - 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -252,11 +252,28 @@ void ResourceEditor::updateActionsEnabled(  bool on )
     QList<Resource*> resourceList = m_view->selectedResources();
     bool noresource = resourceList.isEmpty(); 
     bool resource = resourceList.count() == 1;
-    
+
     bool any = !nogroup || !noresource;
-    
+
     actionAddResource->setEnabled( o && ( (group  && noresource) || (resource && nogroup) ) );
     actionAddGroup->setEnabled( o );
+
+    if ( o && any ) {
+        foreach ( ResourceGroup *g, groupList ) {
+            if ( g->isBaselined() ) {
+                o = false;
+                break;
+            }
+        }
+    }
+    if ( o && any ) {
+        foreach ( Resource *r, resourceList ) {
+            if ( r->isBaselined() ) {
+                o = false;
+                break;
+            }
+        }
+    }
     actionDeleteSelection->setEnabled( o && any );
 }
 

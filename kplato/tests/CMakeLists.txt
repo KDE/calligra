@@ -13,11 +13,12 @@ endforeach(it)
  
 ########### next target ###############
 
-set(InsertFileTester_SRCS InsertFileTester.cpp)
- 
-kde4_add_unit_test(InsertFileTester TESTNAME KPlato-InsertFileTester  ${InsertFileTester_SRCS})
- 
-target_link_libraries(InsertFileTester  kplatoprivate kplatokernel komain ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+# NOTE: .kplato files is no longer native, so need some magic to run this test 
+# set(InsertFileTester_SRCS InsertFileTester.cpp)
+#  
+# kde4_add_unit_test(InsertFileTester TESTNAME KPlato-InsertFileTester  ${InsertFileTester_SRCS})
+#  
+# target_link_libraries(InsertFileTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
  
 
 ########## next target ###############
@@ -26,6 +27,6 @@ set(InsertProjectTester_SRCS InsertProjectTester.cpp)
  
 kde4_add_unit_test(InsertProjectTester TESTNAME KPlato-InsertProjectTester  ${InsertProjectTester_SRCS})
 
-target_link_libraries(InsertProjectTester  kplatoprivate kplatokernel komain ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(InsertProjectTester  planprivate kplatokernel komain ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########## next target ###############

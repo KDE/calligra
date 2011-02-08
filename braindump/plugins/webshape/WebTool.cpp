@@ -20,6 +20,7 @@
 #include "WebTool.h"
 
 #include <QUndoCommand>
+#include <QPainter>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>

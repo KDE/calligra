@@ -45,6 +45,7 @@
 #include <KAction>
 #include <KLocale>
 #include <KDebug>
+#include <KStandardDirs>
 #include <QUndoCommand>
 #include <QPointF>
 #include <QKeyEvent>
@@ -57,6 +58,10 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_currentStrategy(0)
     , m_oldSnapStrategies(0)
 {
+    QPixmap connectPixmap;
+    connectPixmap.load(KStandardDirs::locate("data", "koffice/icons/cursor_connect.png"));
+    m_connectCursor = QCursor(connectPixmap, 4, 1);
+
     m_alignPercent = new KAction(QString("%"), this);
     m_alignPercent->setCheckable(true);
     addAction("align-relative", m_alignPercent);
@@ -331,7 +336,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
             useCursor(hoverHandle >= 0 ? Qt::SizeAllCursor : Qt::PointingHandCursor);
         } else if (hoverShape) {
             setEditMode(hoverHandle >= 0 ? CreateConnection : Idle, hoverShape, hoverHandle);
-            useCursor(hoverHandle >= 0 ? Qt::DragLinkCursor : Qt::PointingHandCursor);
+            useCursor(hoverHandle >= 0 ? m_connectCursor : Qt::PointingHandCursor);
         } else {
             useCursor(Qt::ForbiddenCursor);
         }

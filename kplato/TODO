@@ -30,13 +30,13 @@ In no partivular order or priority:
 
 * Import task data from spreadsheet (User request)
 
-* Lock down some actions when a schedule is baselined. (Delete task, used resource ...)
-
-* Improve the graphical dependency editor, it is difficult to use with many tasks/dependencies.
+* Improve the graphical dependency editor:
+    It is difficult to use when there are many tasks/dependencies.
+    Collapse/expand summary tasks
+    'Tree' indication to better indicate which subtasks belongs to which summary task
+    Info view/docker to (optionally) show more information
 
 * Add a 'calendar' view for the resources (ala korganizer) to show appointments
-
-* Add 'unindent' schedule (to top) in schedules editor for cases where you reschedule frequently
 
 * Add possibility to automatically schedule after changes to the project.
 
@@ -51,3 +51,13 @@ In no partivular order or priority:
 	Remove the position diffrence of items in list and chart
 	Position correctly on start/end datetime (small offset now)
 
+* Add time period config to cost breakdown view
+
+* Improvements to rcps scheduler
+    Task splitting
+    Non-mandatory resources
+    Different types of schedule optimization: Cost, Resource leveling, etc
+
+* Fix d-n-d of vcards from kontact into resources
+
+* Use holidays file from kontact

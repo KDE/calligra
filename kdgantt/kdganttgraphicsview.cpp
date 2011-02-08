@@ -689,11 +689,11 @@ void GraphicsView::deleteSubtree( const QModelIndex& idx )
  */
 void GraphicsView::print( QPainter* painter, const QRectF& target, const QRectF& source, bool drawRowLabels, bool drawHeader )
 {
-  d->scene.print(painter,target,source,drawRowLabels,(drawHeader ? this : 0));
+    d->scene.print( painter, target, source, drawRowLabels, ( drawHeader ? this : 0 ) );
 }
-QRectF GraphicsView::printRect(bool drawRowLabels )
+QRectF GraphicsView::printRect(bool drawRowLabels, bool drawHeader )
 {
-    return d->scene.printRect(drawRowLabels);
+    return d->scene.printRect( drawRowLabels,(  drawHeader ? this : 0 ) );
 }
 
 void GraphicsView::renderHeader( QPainter* painter, const QRectF& target, const QRectF& source, Qt::AspectRatioMode aspectRatioMode )

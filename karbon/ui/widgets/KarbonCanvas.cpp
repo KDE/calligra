@@ -61,7 +61,11 @@ public:
             , part(0)
             , showMargins(false)
             , documentOffset(0, 0)
-            , viewMargin(100) {}
+            , viewMargin(100) 
+    {
+        pixelGrid.setGrid(1.0, 1.0);
+        pixelGrid.setShowGrid(true);
+    }
 
     ~KarbonCanvasPrivate() {
         delete toolProxy;
@@ -81,6 +85,7 @@ public:
     QPoint documentOffset; ///< the offset of the virtual canvas from the viewport
     int viewMargin;        ///< the view margin around the document in pixels
     QRectF documentViewRect; ///< the last calculated document view rect
+    KoGridData pixelGrid;  ///< pixel grid data
 };
 
 KarbonCanvas::KarbonCanvas(KarbonPart *p)
@@ -166,6 +171,13 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
 
     // paint the grid and guides
     painter.setRenderHint(QPainter::Antialiasing, false);
+    // check how big a single point is and paint a pixel grid if big enough
+    const qreal pointSize = d->zoomHandler.zoomItX(1.0);
+    if (pointSize > 10.0 && d->part->gridData().showGrid()) { 
+        // set a slightly lighter color than the current grid color
+        d->pixelGrid.setGridColor(d->part->gridData().gridColor().lighter(110));
+        d->pixelGrid.paintGrid(painter, d->zoomHandler, updateRect);
+    }
     d->part->gridData().paintGrid(painter, d->zoomHandler, updateRect);
     d->part->guidesData().paintGuides(painter, d->zoomHandler, updateRect);
 
