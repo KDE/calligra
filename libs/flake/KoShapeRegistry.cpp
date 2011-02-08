@@ -195,11 +195,28 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                 // If none of the registered shapes could handle the frame
                 // contents, create an UnavailShape.  This should never fail.
                 kDebug(30006) << "No shape found; Creating an unavail shape";
-                shape = new KoUnavailShape();
-                shape->setShapeId(KoUnavailShape_SHAPEID);
+                KoUnavailShape * uShape = new KoUnavailShape();
+                uShape->setShapeId(KoUnavailShape_SHAPEID);
                 //FIXME: Add creating/setting the collection here
 
-                shape->loadOdf(e, context);
+                uShape->loadOdf(e, context);
+
+                // Check whether we can load a shape to fit the current object.
+                KoXmlElement child;
+                KoShape * childShape = 0;
+                forEachElement(child, e) {
+                    kDebug(30006) << "------------------------------------------------------------------------";
+                    kDebug(30006) << "Attempting to check if we can fall back ability to the item " << child.nodeName();
+                    childShape = d->createShapeInternal(e, context, child);
+                    if(childShape) {
+                        kDebug(30006) << "Shape was found! Adding as child of unavail shape and stopping search";
+                        uShape->addShape(childShape);
+                        break;
+                    }
+                }
+                if(!childShape)
+                    kDebug(30006) << "Failed to find fallback for the unavail shape named " << e.tagName();
+                shape = uShape;
             }
         }
     }
