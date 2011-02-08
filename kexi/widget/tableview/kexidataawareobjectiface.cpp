@@ -160,7 +160,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
         if (m_data)
             m_verticalHeader->addLabels(m_data->count());
     }
-    if (m_data && m_data->count() == 0)
+    if (m_data && m_data->count() == 0 && m_navPanel)
         m_navPanel->setCurrentRecordNumber(0 + 1);
 
     if (m_data && !theSameData) {
@@ -206,7 +206,8 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
     }
 
     //update gui mode
-    m_navPanel->setInsertingEnabled(m_data && isInsertingEnabled());
+    if (m_navPanel)
+        m_navPanel->setInsertingEnabled(m_data && isInsertingEnabled());
     if (m_verticalHeader)
         m_verticalHeader->showInsertRow(m_data && isInsertingEnabled());
 
@@ -223,7 +224,8 @@ void KexiDataAwareObjectInterface::initDataContents()
 // QSize s(tableSize());
 // resizeContents(s.width(),s.height());
 
-    m_navPanel->setRecordCount(rows());
+    if (m_navPanel)
+        m_navPanel->setRecordCount(rows());
 
     if (m_data && !m_cursorPositionSetExplicityBeforeShow) {
         //set current row:
@@ -421,7 +423,8 @@ void KexiDataAwareObjectInterface::setInsertingEnabled(bool set)
     if (isInsertingEnabled() == set || (m_data && !m_data->isInsertingEnabled() && set))
         return; //not allowed!
     m_insertingEnabled = (set ? 1 : 0);
-    m_navPanel->setInsertingEnabled(set);
+    if (m_navPanel)
+        m_navPanel->setInsertingEnabled(set);
     if (m_verticalHeader)
         m_verticalHeader->showInsertRow(set);
     if (set)
@@ -496,7 +499,8 @@ void KexiDataAwareObjectInterface::clearSelection()
     m_curCol = -1;
     m_currentItem = 0;
     updateRow(oldRow);
-    m_navPanel->setCurrentRecordNumber(0);
+    if (m_navPanel)
+        m_navPanel->setCurrentRecordNumber(0);
 // setNavRowNumber(-1);
 }
 
@@ -556,7 +560,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             m_errorMessagePopup->close();
         }
 
-        if (m_curRow != newrow || forceSet)  {//update current row info
+        if ((m_curRow != newrow || forceSet) && m_navPanel)  {//update current row info
             m_navPanel->setCurrentRecordNumber(newrow + 1);
 //   setNavRowNumber(newrow);
 //   d->navBtnPrev->setEnabled(newrow>0);
@@ -576,7 +580,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             //update row number, because number of rows changed
             newrow = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
-            m_navPanel->setCurrentRecordNumber(newrow + 1); //refresh
+            if (m_navPanel)
+                m_navPanel->setCurrentRecordNumber(newrow + 1); //refresh
         }
 
         //change position
@@ -782,7 +787,8 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         if (inserting) {
 //   emit rowInserted(d->pCurrentItem);
             //update navigator's data
-            m_navPanel->setRecordCount(rows());
+            if (m_navPanel)
+                m_navPanel->setRecordCount(rows());
         } else {
 //   emit rowUpdated(d->pCurrentItem);
         }
@@ -1292,7 +1298,8 @@ void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData * /*record
             m_verticalHeaderAlreadyAdded = false;
 
         //update navigator's data
-        m_navPanel->setRecordCount(rows());
+        if (m_navPanel)
+            m_navPanel->setRecordCount(rows());
 
         if (m_curRow >= (int)pos) {
             //update
@@ -1497,7 +1504,8 @@ void KexiDataAwareObjectInterface::slotRowDeleted()
         updateAllVisibleRowsBelow(m_curRow); //needed for KexiTableView
 
         //update navigator's data
-        m_navPanel->setRecordCount(rows());
+        if (m_navPanel)
+            m_navPanel->setRecordCount(rows());
 
         m_rowWillBeDeleted = -1;
     }
