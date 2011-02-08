@@ -72,13 +72,8 @@ void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect 
     m_context->m_rootLayout->layoutAtom(m_context);    
     // Write the content.
     m_context->m_rootLayout->writeAtom(m_context, xmlWriter, m_styles);    
-    qDebug() << m_context->m_rootLayout->childrenLayouts().count();
-    qDebug() << m_context->m_rootLayout->children().count();
     QList<QExplicitlySharedDataPointer<Diagram::LayoutNodeAtom> > list = m_context->m_rootLayout->childrenLayouts();
     QVector<QExplicitlySharedDataPointer<Diagram::AbstractAtom> > list2 = m_context->m_rootLayout->children();
-    Q_FOREACH( QExplicitlySharedDataPointer<Diagram::LayoutNodeAtom> val, list )
-        qDebug() << val->m_name;
-        //Q_ASSERT( false );
     
 }
 
