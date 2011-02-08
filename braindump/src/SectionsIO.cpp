@@ -157,8 +157,8 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   }
 
   // Save embedded objects
-  KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver, embeddedFileSaver);
-  if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+  KoOdfDocument::SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
+  if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
       kDebug() << "save embedded documents failed";
       return false;
   }
