@@ -1276,7 +1276,7 @@ QVariant ResourceAppointmentsRowModel::Private::externalData( int column, int ro
 
 ResourceAppointmentsRowModel::Private *ResourceAppointmentsRowModel::Private::intervalAt( int row ) const
 {
-    Q_ASSERT( type == OT_Appointment );
+    Q_ASSERT( type == OT_Appointment || type == OT_External );
     Private *p = intervals.value( row );
     if ( p  ) {
         return p;
@@ -1689,7 +1689,7 @@ QModelIndex ResourceAppointmentsRowModel::createIntervalIndex( int row, int colu
 
     QModelIndex idx = createIndex( row, column, p );
     Q_ASSERT( idx.isValid() );
-    return createIndex( row, column, p );
+    return idx;
 }
 
 void ResourceAppointmentsRowModel::slotResourceToBeInserted( const ResourceGroup *group, int row )
@@ -1865,7 +1865,7 @@ Resource *ResourceAppointmentsRowModel::parentResource( const QModelIndex &index
         return 0;
     }
     Private *ch = static_cast<Private*>( index.internalPointer() );
-    if ( ch && ch->type == OT_Appointment || ch->type == OT_External ) {
+    if ( ch && ( ch->type == OT_Appointment || ch->type == OT_External ) ) {
         return static_cast<Resource*>( ch->parent->ptr );
     }
     return 0;
@@ -1902,7 +1902,7 @@ Appointment *ResourceAppointmentsRowModel::appointment( const QModelIndex &index
         return 0;
     }
     Private *p = static_cast<Private*>( index.internalPointer() );
-    if ( p && p->type == OT_Appointment || p->type == OT_External ) {
+    if ( p && ( p->type == OT_Appointment || p->type == OT_External ) ) {
         return static_cast<Appointment*>( p->ptr );
     }
     return 0;

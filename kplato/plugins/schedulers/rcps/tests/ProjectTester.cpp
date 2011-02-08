@@ -405,6 +405,8 @@ void ProjectTester::team()
 {
     Project project;
     project.setName( "P1" );
+    project.setId( project.uniqueNodeId() );
+    project.registerNodeId( &project );
     DateTime targetstart = DateTime( QDate( 2010, 5, 1 ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 7 ) );
     project.setConstraintStartTime( targetstart );
