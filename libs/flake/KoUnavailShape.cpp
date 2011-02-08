@@ -45,6 +45,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include "KoShapeContainerDefaultModel.h"
+#include "KoShapeRegistry.h"
 
 
 class KoUnavailShape::Private
@@ -81,6 +83,7 @@ KoUnavailShape::Private::~Private()
 
 KoUnavailShape::KoUnavailShape()
     : KoFrameShape( "", "" )
+    , KoShapeContainer(new KoShapeContainerDefaultModel())
     , d(new Private())
 {
     setShapeId(KoUnavailShape_SHAPEID);
@@ -110,6 +113,12 @@ void KoUnavailShape::paintDecorations(QPainter &painter, const KoViewConverter &
     painter.setRenderHint(QPainter::Antialiasing);
 
     draw(painter);
+}
+
+void KoUnavailShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
 }
 
 void KoUnavailShape::draw(QPainter &painter) const
@@ -239,6 +248,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         if (objectName.isEmpty())
             continue;
 
+        kDebug(30006) << "Retrieving object named:" << objectName;
         // Try to find out if the entry is a directory.
 
         // Remove the prefix ./ (as in ./Object1) from object names
