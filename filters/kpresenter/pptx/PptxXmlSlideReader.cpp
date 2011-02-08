@@ -136,6 +136,50 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
 {
 }
 
+void PptxXmlSlideReaderContext::initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
+        const QVector<KoGenStyle>& _defaultTextStyles, const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
+        const QVector<QString>& defaultBulletColors, const QVector<QString>& defaultTextColors, const QVector<QString>& defaultLatinFonts)
+{
+    // Only now, we can fully prepare default text styles, as we know the theme we are using
+    // And we have the mapping available
+    defaultTextStyles = _defaultTextStyles;
+    defaultParagraphStyles = _defaultParagraphStyles;
+    defaultListStyles = _defaultListStyles;
+    int defaultIndex = 0;
+
+    while (defaultIndex < defaultTextStyles.size()) {
+        if (!defaultTextColors.at(defaultIndex).isEmpty()) {
+            QString valTransformed = colorMap.value(defaultTextColors.at(defaultIndex));
+            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = theme.colorScheme.value(valTransformed);
+            QColor col = Qt::black;
+            if (colorItem) {
+                col = colorItem->value();
+            }
+            defaultTextStyles[defaultIndex].addProperty("fo:color", col.name());
+        }
+        if (!defaultLatinFonts.at(defaultIndex).isEmpty()) {
+            QString face = defaultLatinFonts.at(defaultIndex);
+            if (face.startsWith("+mj")) {
+                face = theme.fontScheme.majorFonts.latinTypeface;
+            }
+            else if (face.startsWith("+mn")) {
+                face = theme.fontScheme.minorFonts.latinTypeface;
+            }
+            defaultTextStyles[defaultIndex].addProperty("fo:font-family", face);
+        }
+        if (!defaultBulletColors.at(defaultIndex).isEmpty()) {
+            QString valTransformed = colorMap.value(defaultBulletColors.at(defaultIndex));
+            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = theme.colorScheme.value(valTransformed);
+            QColor col = Qt::black;
+            if (colorItem) {
+                col = colorItem->value();
+            }
+            defaultListStyles[defaultIndex].setBulletColor(col.name());
+        }
+        ++defaultIndex;
+    }
+}
+
 class PptxXmlSlideReader::Private
 {
 public:
@@ -195,6 +239,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
     case SlideMaster:
         d->qualifiedNameOfMainElement = "p:sldMaster";
         break;
+    case NotesMaster:
+        d->qualifiedNameOfMainElement = "p:notesMaster";
+        break;
+    case Notes:
+        d->qualifiedNameOfMainElement = "p:notes";
+        break;
     }
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
@@ -205,13 +255,18 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
 KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 {
     kDebug() << "=============================";
-    QBuffer slideMasterBuffer;
+    QBuffer masterBuffer;
     if (m_context->type == SlideMaster) {
         //! Clear body pointer for SlideMaster mode: avoid writting to body by mistake in this mode
         d->body = body;
         // We do not want to write to the main body in slidemaster, so we use secondary body,
         // the old body is
-        body = new KoXmlWriter(&slideMasterBuffer);
+        body = new KoXmlWriter(&masterBuffer);
+    }
+    else if (m_context->type == NotesMaster) {
+        // For now, we read placeholders etc. from notesmaster but don't output anything
+        d->body = body;
+        body = new KoXmlWriter(&masterBuffer);
     }
 
     readNext();
@@ -257,13 +312,23 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     case SlideMaster:
         TRY_READ(sldMaster)
         break;
+    case NotesMaster:
+        TRY_READ(notesMaster)
+        break;
+    case Notes:
+        TRY_READ(notes)
+        break;
     }
 
      if (m_context->type == SlideMaster) {
-        QString elementContents = QString::fromUtf8( slideMasterBuffer.buffer(), slideMasterBuffer.buffer().size() );
+        QString elementContents = QString::fromUtf8(masterBuffer.buffer(), masterBuffer.buffer().size());
         m_context->pageFrames.push_back(elementContents);
 
         // write the contents here to pageFrames
+        delete body;
+        body = d->body;
+    }
+    else if (m_context->type == NotesMaster) {
         delete body;
         body = d->body;
     }
@@ -427,6 +492,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                     skipCurrentElement();
                 }
             }
+            else if (m_context->type == NotesMaster && QUALIFIED_NAME_IS(notesStyles)) {
+                if (m_context->firstReadingRound) {
+                    TRY_READ(notesStyle)
+                }
+                else {
+                   skipCurrentElement();
+                }
+            }
             else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(txStyles)) {
                 if (m_context->firstReadingRound) {
                     TRY_READ(txStyles)
@@ -435,7 +508,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                     skipCurrentElement();
                 }
             }
-            else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(clrMap)) {
+            else if ((m_context->type == NotesMaster || m_context->type == SlideMaster) && QUALIFIED_NAME_IS(clrMap)) {
                 if (m_context->firstReadingRound) {
                     TRY_READ(clrMap)
                 }
@@ -473,14 +546,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
         //! @todo presentation:use-date-time-name //optional; CASE #P304
 
-/*
-<style:style style:family="drawing-page" style:name="a393">
-    <style:drawing-page-properties draw:fill="bitmap" draw:fill-image-name="a392" style:repeat="readerh".
-    presentation:visibility="visible" draw:background-size="border" presentation:background-objects-visible="true".
-    presentation:background-visible="true" presentation:display-header="false" presentation:display-footer="false" presentation:display-page-number="false".
-    presentation:display-date-time="false"/>
-</style:style>
-*/
         // First check if we have properties from the slide, then from layout, then from master
         if (m_currentDrawStyle->isEmpty()) {
             MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->m_drawingPageProperties,
@@ -509,6 +574,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 
         (void)drawPageBuf.releaseWriter();
 
+        // Read notes
+        body->startElement("presentation:notes");
+        // TODO read notes
+        body->endElement(); // presentation:notes
+        // Read comments
         {
             PptxXmlCommentsReader commentsReader(this);
             const QString filepath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::comments);
@@ -890,7 +960,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
  Parent elements:
     - [done] presentation (§19.2.1.26)
     - handoutMaster (§19.3.1.24)
-    - notes (§19.3.1.26)
+    - [done] notes (§19.3.1.26)
     - [done] notesMaster (§19.3.1.27)
     - [done] sld (§19.3.1.38)
     - [done] sldLayout (§19.3.1.39)
@@ -961,7 +1031,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMap()
 /*
  Parent elements:
  - [done] sldLayout (§19.3.1.27)
- - sld (§19.3.1.42)
+ - [done] sld (§19.3.1.42)
+
  Child elements:
  - extLst (Extension List) §20.1.2.2.15
 
@@ -1013,7 +1084,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
     }
 
     if (!m_currentDrawStyle->isEmpty()) {
-        if (m_context->type == SlideMaster) {
+        if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
             MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
                                                 m_context->slideMasterProperties->m_drawingPageProperties,
                                                 KoGenStyle::DrawingPageType);
@@ -1276,8 +1347,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
  Parent elements:
  - [done] nvPr (§19.3.1.33)
+
  Child elements:
  - extLst (Extension List with Modification Flag) §19.3.1.20
+
  Attributes:
  - hasCustomPrompt (Placeholder has custom prompt)
  - [done] idx (Placeholder Index)
@@ -1320,7 +1393,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
         d->phType = "body";
     }
 
-    readNext();
+   while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            // TRY_READ_IF(extLst)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
     READ_EPILOGUE
 }
 
@@ -1331,6 +1412,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
  This element specifies the existence of text to be contained within the corresponding shape.
  Parent elements:
  - [done] sp (§19.3.1.43)
+
  Child elements:
  - [done] bodyPr (Body Properties) §21.1.2.1.1
  - [done] lstStyle (Text List Styles) §21.1.2.4.12
@@ -1363,7 +1445,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
             else if (qualifiedName() == QLatin1String("a:p")) {
                 TRY_READ(DrawingML_p);
             }
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1405,12 +1487,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
   by an external source and needs a container in which to be displayed on the slide surface.
 
   Parent Elements:
-    - grpSp (§4.4.1.19); spTree (§4.4.1.42)
+    - [done] grpSp (§4.4.1.19); spTree (§4.4.1.42)
+
   Child Elements:
     - extLst (Extension List with Modification Flag) (§4.2.4)
-    - graphic (Graphic Object) (§5.1.2.1.16)
+    - [done] graphic (Graphic Object) (§5.1.2.1.16)
     - [done] nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
-    - xfrm (2D Transform for Graphic Frame)
+    - [done] xfrm (2D Transform for Graphic Frame)
 */
 KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 {
@@ -1442,7 +1525,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
     body->startElement("draw:frame");
 
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
     body->addAttribute("draw:style-name", styleName);
@@ -1509,6 +1592,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
     - nvGrpSpPr (§19.3.1.31)
     - [done] nvPicPr (§19.3.1.32)
     - [done] nvSpPr (§19.3.1.34)
+
  Child elements:
     - audioCd (Audio from CD) §20.1.3.1
     - audioFile (Audio from File) §20.1.3.2
@@ -1590,7 +1674,7 @@ void PptxXmlSlideReader::saveCurrentListStyles()
         return;
     }
 
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideMasterProperties->listStyles[d->phIdx] = m_currentCombinedBulletProperties;
         }
@@ -1620,7 +1704,7 @@ void PptxXmlSlideReader::saveCurrentStyles()
     {
         return;
     }
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideMasterProperties->textStyles[d->phIdx] = m_currentCombinedTextStyles;
             m_context->slideMasterProperties->styles[d->phIdx] = m_currentCombinedParagraphStyles;
@@ -1652,7 +1736,7 @@ void PptxXmlSlideReader::saveCurrentStyles()
 void PptxXmlSlideReader::saveBodyProperties()
 {
     // Todo: extend this in the future to save other peroperties too
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideMasterProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
             m_context->slideMasterProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
@@ -1700,7 +1784,7 @@ void PptxXmlSlideReader::saveCurrentGraphicStyles()
             m_context->slideLayoutProperties->graphicStyles[d->phIdx] = *m_currentDrawStyle;
         }
     }
-    else if (m_context->type == SlideMaster) {
+    else if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         if (!d->phType.isEmpty()) {
             m_context->slideMasterProperties->graphicStyles[d->phType] = *m_currentDrawStyle;
         }
@@ -1722,7 +1806,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
         return;
     }
 
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         return; // Nothing needed for slidemaster
     }
 
@@ -2231,7 +2315,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
             m_context->slideLayoutProperties->contentEquations[d->phIdx] = m_customEquations;
         }
     }
-    else if (m_context->type == SlideMaster) {
+    else if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         if (m_xfrm_read) { // If element was present, then we can use values from the actual slidemaster
             m_currentShapeProperties->x = m_svgX;
             m_currentShapeProperties->y = m_svgY;

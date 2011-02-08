@@ -319,6 +319,10 @@ public:
     // to fully understand cSld element
     bool firstReadingRound;
 
+    void initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
+        const QVector<KoGenStyle>& _defaultTextStyles, const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
+        const QVector<QString>& defaultBulletColors, const QVector<QString>& defaultTextColors, const QVector<QString>& defaultLatinFonts);
+
     // These have to be in context, because each slide/layout/master may define their own colormap
     // therefore the way default text is interpreted cannot be static
     QVector<KoGenStyle> defaultTextStyles;

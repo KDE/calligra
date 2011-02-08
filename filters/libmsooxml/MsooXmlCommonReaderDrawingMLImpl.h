@@ -242,7 +242,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
@@ -518,7 +518,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
@@ -710,7 +710,7 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     if (m_context->type == Slide) {
         m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
     }
-    else if (m_context->type == SlideMaster) {
+    else if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
     }
     else if (m_context->type == SlideLayout) {
@@ -766,7 +766,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 
@@ -789,7 +789,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     //body->addAttribute("draw:style-name", );
     if (!m_currentPresentationStyle.isEmpty()) {
         presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
-        if (m_context->type == SlideMaster) {
+        if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
             mainStyles->markStyleForStylesXml(presentationStyleName);
         }
     }
@@ -1753,7 +1753,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                  body->startElement("text:list");
                  if (listDepth == 0) {
                      QString listStyleName = mainStyles->insert(m_currentListStyle);
-                     if (m_context->type == SlideMaster) {
+                     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
                          mainStyles->markStyleForStylesXml(listStyleName);
                      }
                      Q_ASSERT(!listStyleName.isEmpty());
@@ -1788,7 +1788,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
      body->startElement("text:p", false);
 #ifdef PPTXXMLSLIDEREADER_CPP
-     if (m_context->type == SlideMaster) {
+     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
          m_moveToStylesXml = true;
      }
 #endif
@@ -1906,7 +1906,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
     }
 #endif
@@ -3161,7 +3161,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
-    if (m_context->type == SlideMaster || m_context->type == SlideLayout) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster || m_context->type == SlideLayout) {
         inheritAllTextAndParagraphStyles();
     }
 #endif
@@ -5067,7 +5067,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
     }
 #endif

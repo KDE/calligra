@@ -81,8 +81,6 @@ protected:
     KoOdfWriters *m_writers;
     PptxXmlDocumentReaderContext* m_context;
 
-    void initializeContext(PptxXmlSlideReaderContext& context, const MSOOXML::DrawingMLTheme& theme);
-
     // Default pptx styles
     QVector<KoGenStyle> defaultParagraphStyles;
     QVector<KoGenStyle> defaultTextStyles;

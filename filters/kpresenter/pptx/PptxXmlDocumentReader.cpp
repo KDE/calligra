@@ -219,7 +219,8 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
         return 0;
     }
 
-    initializeContext(context, d->slideMasterPageProperties[slideMasterPathAndFile].theme);
+    context.initializeContext(d->slideMasterPageProperties[slideMasterPathAndFile].theme, defaultParagraphStyles,
+        defaultTextStyles, defaultListStyles, defaultBulletColors, defaultTextColors, defaultLatinFonts);
 
     context.firstReadingRound = false;
     status = m_context->import->loadAndParseDocument(
@@ -319,7 +320,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         return status;
     }
 
-    initializeContext(context, d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme);
+    context.initializeContext(d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme, defaultParagraphStyles,
+        defaultTextStyles, defaultListStyles, defaultBulletColors, defaultTextColors, defaultLatinFonts);
 
     // In this round we read rest
     context.firstReadingRound = false;
@@ -334,48 +336,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
 
     SKIP_EVERYTHING
     READ_EPILOGUE
-}
-
-void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context, const MSOOXML::DrawingMLTheme& theme)
-{
-    // Only now, we can fully prepare default text styles, as we know the theme we are using
-    // And we have the mapping available
-    context.defaultTextStyles = defaultTextStyles;
-    context.defaultParagraphStyles = defaultParagraphStyles;
-    context.defaultListStyles = defaultListStyles;
-    int defaultIndex = 0;
-
-    while (defaultIndex < defaultTextStyles.size()) {
-        if (!defaultTextColors.at(defaultIndex).isEmpty()) {
-            QString valTransformed = context.colorMap.value(defaultTextColors.at(defaultIndex));
-            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = theme.colorScheme.value(valTransformed);
-            QColor col = Qt::black;
-            if (colorItem) {
-                col = colorItem->value();
-            }
-            context.defaultTextStyles[defaultIndex].addProperty("fo:color", col.name());
-        }
-        if (!defaultLatinFonts.at(defaultIndex).isEmpty()) {
-            QString face = defaultLatinFonts.at(defaultIndex);
-            if (face.startsWith("+mj")) {
-                face = theme.fontScheme.majorFonts.latinTypeface;
-            }
-            else if (face.startsWith("+mn")) {
-                face = theme.fontScheme.minorFonts.latinTypeface;
-            }
-            context.defaultTextStyles[defaultIndex].addProperty("fo:font-family", face);
-        }
-        if (!defaultBulletColors.at(defaultIndex).isEmpty()) {
-            QString valTransformed = context.colorMap.value(defaultBulletColors.at(defaultIndex));
-            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = theme.colorScheme.value(valTransformed);
-            QColor col = Qt::black;
-            if (colorItem) {
-                col = colorItem->value();
-            }
-            context.defaultListStyles[defaultIndex].setBulletColor(col.name());
-        }
-        ++defaultIndex;
-    }
 }
 
 #undef CURRENT_EL
@@ -393,6 +353,73 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITH_NS(r, id)
+
+    const QString notesMasterPathAndFile(m_context->relationships->target(m_context->path, m_context->file, r_id));
+    kDebug() << "notesMasterPathAndFile:" << notesMasterPathAndFile;
+
+    QString notesMasterPath, notesMasterFile;
+    MSOOXML::Utils::splitPathAndFile(notesMasterPathAndFile, &notesMasterPath, &notesMasterFile);
+
+    // Reading the notesmaster theme
+    PptxSlideProperties notesPageProperties;
+
+    const QString notesThemePathAndFile(m_context->relationships->targetForType(
+        notesMasterPath, notesMasterFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
+    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
+    kDebug() << "notesThemePathAndFile:" << notesThemePathAndFile;
+
+    QString notesThemePath, notesThemeFile;
+    MSOOXML::Utils::splitPathAndFile(notesThemePathAndFile, &notesThemePath, &notesThemeFile);
+
+    MSOOXML::MsooXmlThemesReader themesReader(m_writers);
+    MSOOXML::MsooXmlThemesReaderContext themecontext(notesPageProperties.theme, m_context->relationships, m_context->import,
+        notesThemePath, notesThemeFile);
+
+    QString errorMessage;
+
+    KoFilter::ConversionStatus status
+        = m_context->import->loadAndParseDocument(&themesReader, notesThemePathAndFile, errorMessage, &themecontext);
+
+    //empty map used here as slideMaster is the place where the map is created
+    QMap<QString, QString> dummyMap;
+    QMap<QString, QString> dummyOles;
+
+    PptxXmlSlideReaderContext context(
+        *m_context->import,
+        notesMasterPath, notesMasterFile,
+        0, &notesPageProperties.theme,
+        PptxXmlSlideReader::NotesMaster,
+        0,
+        &notesPageProperties,
+        *m_context->relationships,
+        d->commentAuthors,
+        dummyMap,
+        dummyOles,
+        QString()
+    );
+
+    PptxXmlSlideReader notesMasterReader(this);
+    context.firstReadingRound = true;
+    status = m_context->import->loadAndParseDocument(
+        &notesMasterReader, notesMasterPath + "/" + notesMasterFile, &context);
+    if (status != KoFilter::OK) {
+        kDebug() << notesMasterReader.errorString();
+        return status;
+    }
+
+    context.initializeContext(notesPageProperties.theme, defaultParagraphStyles,
+        defaultTextStyles, defaultListStyles, defaultBulletColors, defaultTextColors, defaultLatinFonts);
+
+    // In this context we already have the real colorMap
+    context.firstReadingRound = false;
+
+    status = m_context->import->loadAndParseDocument(
+        &notesMasterReader, notesMasterPath + "/" + notesMasterFile, &context);
+    if (status != KoFilter::OK) {
+        kDebug() << notesMasterReader.errorString();
+        return status;
+    }
 
     SKIP_EVERYTHING
     READ_EPILOGUE
@@ -473,7 +500,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         return status;
     }
 
-    initializeContext(context, masterPageProperties.theme);
+    context.initializeContext(masterPageProperties.theme, defaultParagraphStyles,
+        defaultTextStyles, defaultListStyles, defaultBulletColors, defaultTextColors, defaultLatinFonts);
 
     // In this context we already have the real colorMap
     context.firstReadingRound = false;
