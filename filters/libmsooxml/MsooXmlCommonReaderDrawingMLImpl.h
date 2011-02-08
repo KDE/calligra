@@ -747,7 +747,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->startElement("draw:custom-shape");
     }
     else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
-        body->startElement("draw:frame"); // CASE #P475
+#ifdef PPTXXMLSLIDEREADER_CPP
+        if (d->phType == "sldImg") {
+            body->startElement("draw:page-thumbnail"); // Special feature for presentation notes
+        } else {
+            body->startElement("draw:frame");
+        }
+#else
+        body->startElement("draw:frame");
+#endif
     }
     else { // For predefined shapes
         body->startElement("draw:custom-shape");
@@ -1787,11 +1795,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 
      body->startElement("text:p", false);
-#ifdef PPTXXMLSLIDEREADER_CPP
-     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-         m_moveToStylesXml = true;
-     }
-#endif
 
      QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
      if (spcBef.contains("%")) {
@@ -1807,9 +1810,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 
      QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
-     if (m_moveToStylesXml) {
+#ifdef PPTXXMLSLIDEREADER_CPP
+     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
          mainStyles->markStyleForStylesXml(currentParagraphStyleName);
      }
+#endif
      body->addAttribute("text:style-name", currentParagraphStyleName);
 
      (void)textPBuf.releaseWriter();

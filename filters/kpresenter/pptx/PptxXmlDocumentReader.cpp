@@ -77,6 +77,8 @@ public:
     QVector<QString> masterPageFrames;
 
     QMap<QString, PptxSlideProperties> slideMasterPageProperties;
+    QMap<QString, PptxSlideProperties> notesMasterPageProperties;
+
     QMap<int, QString> commentAuthors;
 private:
 };
@@ -203,6 +205,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
         PptxXmlSlideReader::SlideLayout,
         result,
         &d->slideMasterPageProperties[slideMasterPathAndFile], //PptxSlideMasterPageProperties
+        0,
         *m_context->relationships,
         d->commentAuthors,
         d->slideMasterPageProperties[slideMasterPathAndFile].colorMap,
@@ -294,6 +297,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     // Delay the reding of a tableStyle until we find a table as we need the clrMap from the master slide
     const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
 
+    PptxSlideProperties *notes = 0;
+    const QString notesTarget(m_context->relationships->targetForType(m_context->path, m_context->file,
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesMaster"));
+    if (!notesTarget.isEmpty()) {
+        notes = &d->notesMasterPageProperties[notesTarget];
+    }
+
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slidePath, slideFile,
@@ -302,6 +312,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         PptxXmlSlideReader::Slide,
         slideLayoutProperties,
         &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName],
+        notes,
         *m_context->relationships,
         d->commentAuthors,
         d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap,
@@ -391,6 +402,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
         0, &notesPageProperties.theme,
         PptxXmlSlideReader::NotesMaster,
         0,
+        0,
         &notesPageProperties,
         *m_context->relationships,
         d->commentAuthors,
@@ -420,6 +432,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
         kDebug() << notesMasterReader.errorString();
         return status;
     }
+
+    d->notesMasterPageProperties.insert(notesMasterPathAndFile, notesPageProperties);
 
     SKIP_EVERYTHING
     READ_EPILOGUE
@@ -484,6 +498,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         PptxXmlSlideReader::SlideMaster,
         0,
         &masterPageProperties,
+        0,
         *m_context->relationships,
         d->commentAuthors,
         dummyMap,
@@ -815,9 +830,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"
-
-// in PPTX we do not have pPr, so p@text:style-name should be added earlier
-#define SETUP_PARA_STYLE_IN_READ_P
 
 #include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
 
