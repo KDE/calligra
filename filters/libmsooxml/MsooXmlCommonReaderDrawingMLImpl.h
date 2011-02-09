@@ -2133,7 +2133,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
         BREAK_IF_END_OF(CURRENT_EL)
     }
 
-#if defined(PPTXXMLSLIDEREADER_CPP) or defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
+#if defined(PPTXXMLSLIDEREADER_CPP) || defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
     // Where there is a hyperlink, hlink value should be used by default
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     QString valTransformed = m_context->colorMap.value("hlink");
@@ -3839,7 +3839,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
 
-#if defined(PPTXXMLSLIDEREADER_CPP) or defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
+#if defined(PPTXXMLSLIDEREADER_CPP) || defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
 
     QString valTransformed = m_context->colorMap.value(val);
 
