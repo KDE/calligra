@@ -337,6 +337,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
 void TaskEditor::updateReadWrite( bool rw )
 {
     m_view->setReadWrite( rw );
+    ViewBase::updateReadWrite( rw );
 }
 
 void TaskEditor::draw( Project &project )
@@ -460,12 +461,12 @@ void TaskEditor::setScheduleManager( ScheduleManager *sm )
 
 void TaskEditor::slotEnableActions()
 {
-    updateActionsEnabled( true );
+    updateActionsEnabled( isReadWrite() );
 }
 
 void TaskEditor::updateActionsEnabled( bool on )
 {
-    if ( ! on /*|| ! isReadWrite()*/ ) { //FIXME: read-write is not set properly
+    if ( ! on ) {
         menuAddTask->setEnabled( false );
         actionAddTask->setEnabled( false );
         actionAddMilestone->setEnabled( false );
@@ -923,6 +924,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
 void TaskView::updateReadWrite( bool rw )
 {
     m_view->setReadWrite( rw );
+    ViewBase::updateReadWrite( rw );
 }
 
 void TaskView::draw( Project &project )
@@ -1232,6 +1234,7 @@ NodeSortFilterProxyModel *TaskWorkPackageView::proxyModel() const
 void TaskWorkPackageView::updateReadWrite( bool rw )
 {
     m_view->setReadWrite( rw );
+    ViewBase::updateReadWrite( rw );
 }
 
 void TaskWorkPackageView::setGuiActive( bool activate )
