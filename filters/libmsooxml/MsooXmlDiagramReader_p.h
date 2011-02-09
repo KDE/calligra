@@ -419,9 +419,10 @@ class LayoutNodeAtom : public AbstractAtom
         QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
 
         qreal distanceTo(LayoutNodeAtom* otherAtom) const;
+        QVector< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraintsToBuild;
 
     private:
-        QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;
+        QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;        
         QList<AbstractNode*> m_axis;
         QMap<QString, QString> m_variables;
         bool m_firstLayout;
@@ -460,7 +461,7 @@ class ConstraintAtom : public AbstractAtom
         explicit ConstraintAtom() : AbstractAtom("dgm:constr"), m_referencedLayout( 0 ) {}
         virtual ~ConstraintAtom() { Q_ASSERT( false ); }
         virtual ConstraintAtom* clone();
-        virtual void dump(Context*, int level);
+        virtual void dump(Context*, int level);        
         virtual void readAll(Context*, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
         void applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom );
