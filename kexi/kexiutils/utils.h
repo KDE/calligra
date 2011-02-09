@@ -75,6 +75,19 @@ inline bool parentIs(QObject* o, const char* className = 0)
     return false;
 }
 
+//! \return parent object of \a o that is of type \a type or 0 if no such parent
+template<class type>
+inline type findParentByType(QObject* o)
+{
+    if (!o)
+        return 0;
+    while ((o = o->parent())) {
+        if (dynamic_cast< type >(o))
+            return dynamic_cast< type >(o);
+    }
+    return 0;
+}
+
 /* //! Const version of findParent()
   template<class type>
   inline const type findParentConst(const QObject* o, const char* className = 0)
