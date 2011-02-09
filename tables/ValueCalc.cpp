@@ -489,83 +489,83 @@ bool ValueCalc::lower(const Value &a, const Value &b)
     return greater(b, a);
 }
 
-bool ValueCalc::strEqual(const Value &a, const Value &b, bool CS)
+bool ValueCalc::strEqual(const Value &a, const Value &b, bool CalcS)
 {
     QString aa = converter->asString(a).asString();
     QString bb = converter->asString(b).asString();
-    if (!CS) {
+    if (!CalcS) {
         aa = aa.toLower();
         bb = bb.toLower();
     }
     return (aa == bb);
 }
 
-bool ValueCalc::strGreater(const Value &a, const Value &b, bool CS)
+bool ValueCalc::strGreater(const Value &a, const Value &b, bool CalcS)
 {
     QString aa = converter->asString(a).asString();
     QString bb = converter->asString(b).asString();
-    if (!CS) {
+    if (!CalcS) {
         aa = aa.toLower();
         bb = bb.toLower();
     }
     return (aa > bb);
 }
 
-bool ValueCalc::strGequal(const Value &a, const Value &b, bool CS)
+bool ValueCalc::strGequal(const Value &a, const Value &b, bool CalcS)
 {
     QString aa = converter->asString(a).asString();
     QString bb = converter->asString(b).asString();
-    if (!CS) {
+    if (!CalcS) {
         aa = aa.toLower();
         bb = bb.toLower();
     }
     return (aa >= bb);
 }
 
-bool ValueCalc::strLower(const Value &a, const Value &b, bool CS)
+bool ValueCalc::strLower(const Value &a, const Value &b, bool CalcS)
 {
-    return strGreater(b, a, CS);
+    return strGreater(b, a, CalcS);
 }
 
-bool ValueCalc::naturalEqual(const Value &a, const Value &b, bool CS)
+bool ValueCalc::naturalEqual(const Value &a, const Value &b, bool CalcS)
 {
     Value aa = a;
     Value bb = b;
-    if (!CS) {
+    if (!CalcS) {
         // not case sensitive -> convert strings to lowercase
         if (aa.isString()) aa = Value(aa.asString().toLower());
         if (bb.isString()) bb = Value(bb.asString().toLower());
     }
     if (aa.allowComparison(bb)) return aa.equal(bb);
-    return strEqual(aa, bb, CS);
+    return strEqual(aa, bb, CalcS);
 }
 
-bool ValueCalc::naturalGreater(const Value &a, const Value &b, bool CS)
+bool ValueCalc::naturalGreater(const Value &a, const Value &b, bool CalcS)
 {
     Value aa = a;
     Value bb = b;
-    if (!CS) {
+    if (!CalcS) {
         // not case sensitive -> convert strings to lowercase
         if (aa.isString()) aa = Value(aa.asString().toLower());
         if (bb.isString()) bb = Value(bb.asString().toLower());
     }
     if (aa.allowComparison(bb)) return aa.greater(bb);
-    return strEqual(aa, bb, CS);
+    return strEqual(aa, bb, CalcS);
 }
 
-bool ValueCalc::naturalGequal(const Value &a, const Value &b, bool CS)
+bool ValueCalc::naturalGequal(const Value &a, const Value &b, bool CalcS)
 {
-    return (naturalGreater(a, b, CS) || naturalEqual(a, b, CS));
+    return (naturalGreater(a, b, CalcS) || naturalEqual(a, b, CalcS));
 }
 
-bool ValueCalc::naturalLower(const Value &a, const Value &b, bool CS)
+bool ValueCalc::naturalLower(const Value &a, const Value &b, bool CalcS)
 {
-    return naturalGreater(b, a, CS);
+    return naturalGreater(b, a, CalcS);
 }
 
-bool ValueCalc::naturalLequal(const Value &a, const Value &b, bool CS)
+bool ValueCalc::naturalLequal(const Value &a, const Value &b, bool CalcS)
 {
-    return (naturalLower(a, b, CS) || naturalEqual(a, b, CS));
+    return (naturalLower(a, b, CalcS) || naturalEqual(a, b, CalcS));
 }
 
 Value ValueCalc::roundDown(const Value &a,

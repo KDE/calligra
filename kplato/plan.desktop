@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Plan
+Name[et]=Plan
 Name[it]=Plan
 Name[nl]=Plan
 Name[pt]=Plan
@@ -65,7 +66,7 @@ GenericName[zh_TW]=專案管理
 Exec=calligraplan %u
 MimeType=application/x-vnd.kde.plan;
 Type=Application
-Icon=plan
+Icon=calligraplan
 X-KDE-ServiceTypes=Calligra/Application
 X-Calligra-DefaultMimeTypes=application/x-vnd.kde.plan
 X-KDE-NativeMimeType=application/x-vnd.kde.plan

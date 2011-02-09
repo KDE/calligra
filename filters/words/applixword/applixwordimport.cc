@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000 Enno Bartels <ebartels@nwn.de>
+   Copyright (C) 2011 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
 #include <QTextStream>
 #include <QByteArray>
 #include <QColor>
+#include <QBuffer>
 #include <applixwordimport.h>
 #include <applixwordimport.moc>
 #include <kdebug.h>
@@ -35,17 +37,6 @@
 K_PLUGIN_FACTORY(APPLIXWORDImportFactory, registerPlugin<APPLIXWORDImport>();)
 K_EXPORT_PLUGIN(APPLIXWORDImportFactory("calligrafilters"))
 
-
-struct t_mycolor {
-    int c;
-    int m;
-    int y;
-    int k;
-
-    int r;
-    int g;
-    int b;
-};
 
 /******************************************************************************
  *  class: APPLIXWORDImport        function: APPLIXWORDImport                 *
@@ -90,7 +81,66 @@ APPLIXWORDImport::nextLine(QTextStream & stream)
     return s;
 }
 
+// Look for the next '"', skipping any escaped '"'.
+// Usually called with startPos being at the character just after the opening '"'.
+static int nextDoubleQuote(const QString& mystr, int startPos)
+{
+    int y = startPos;
+    do {
+        const int pos = mystr.indexOf('"', y);
+        //kDebug(30517) << "POS:" << pos << " length:" << mystr.length() << " y:" << y;
+        //kDebug(30517) << "<" << mystr << " >";
+        if ((pos > 0) && (mystr[pos-1] == '\\')) {
+            //kDebug(30517) << " escape character, keep going";
+            y = pos + 1;
+        } else {
+            //kDebug(30517) << " String end //";
+            return pos;
+        }
+    } while (true);
+    return -1; // NOTREACHED
+}
 
+bool APPLIXWORDImport::parseFontProperty(const QString& type, KoGenStyle& style) const
+{
+    if (type == "bold") {
+        style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
+        return true;
+    } else if (type == "no-bold") {
+        style.addProperty("fo:font-weight", "normal", KoGenStyle::TextType);
+        return true;
+    } else if (type == "italic") {
+        style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
+        return true;
+    } else if (type == "no-italic") {
+        style.addProperty("fo:font-style", "normal", KoGenStyle::TextType);
+        return true;
+    } else if (type == "underline") {
+        style.addProperty("style:text-underline-type", "single", KoGenStyle::TextType);
+        style.addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
+        return true;
+    } else if (type == "no-underline") {
+        style.addProperty("style:text-underline-type", "none", KoGenStyle::TextType);
+        style.addProperty("style:text-underline-style", "none", KoGenStyle::TextType);
+        return true;
+    } else if (type.startsWith("size:")) {
+        style.addPropertyPt("fo:font-size", type.mid(5).toInt(), KoGenStyle::TextType);
+        return true;
+    } else if (type.startsWith("face:")) { // e.g. face:"Symbol"
+        const QString fontname = type.mid(6, type.length() - 6 - 1);
+        style.addProperty("fo:font-family", fontname, KoGenStyle::TextType);
+        return true;
+    } else if (type.startsWith("color:")) { // e.g. color:"Black"
+        QString colname = type.mid(7, type.length() - 7 - 1);
+        QMap<QString, QColor>::const_iterator it = m_colorMap.find(colname);
+        if (it != m_colorMap.end()) {
+            kDebug(30517) << "  Color:" << colname << (*it).name();
+            style.addProperty("style:fo-color", (*it).name(), KoGenStyle::TextType);
+        }
+        return true;
+    }
+    return false;
+}
 
 /******************************************************************************
  *  class: APPLIXWORDImport        function: filter                           *
@@ -146,11 +196,14 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     int  rueck;
     int  pos;
     bool ok;
-    char stylename[100];
     QString           mystr, textstr;
-    QList<t_mycolor*>  mcol;
-    QStringList       mcoltxt;
-    bool inParagraph = false;
+    bool inTable = false;
+    bool inTableRow = false;
+
+    // We'll get the paragraph style only at the end of the paragraph,
+    // so bufferize the paragraph contents
+    QBuffer paragraphBuffer;
+    KoXmlWriter* paragraphWriter = 0;
 
     /**************************************************************************
      * Read header                                                            *
@@ -170,9 +223,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
          **********************************************************************/
         if (mystr == "<start_styles>") {
             printf("Start styles\n");
-            t_mycolor *col = new t_mycolor; // delete is in place
             QString    coltxt ;
-            int zaehler = 0; // Note: "zaehler" means "counter" in English
             do {
                 mystr = readTagLine(stream);
                 if (mystr == "<end_styles>") {
@@ -184,29 +235,18 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                         pos = mystr.indexOf("\"");
                         coltxt = mystr.left(pos);
                         mystr.remove(0, pos + 1);
+                        int c, m, y, k;
                         rueck = sscanf((const char *) mystr.toLatin1() ,
                                        ":%d:%d:%d:%d>",
-                                       &col->c, &col->m, &col->y, &col->k);
-                        kDebug(30517) << "  Color" <<  zaehler << "  :" << col->c << "" << col->m << "" << col->y << "" << col->k << "" << coltxt << "";
-                        zaehler ++;
+                                       &c, &m, &y, &k);
+                        kDebug(30517) << " Color :" << c << "" << m << "" << y << "" << k << "" << coltxt << "";
 
-                        // Color transformation cmyk -> rgb
-                        col->r = 255 - (col->c + col->k);
-                        if (col->r < 0) col->r = 0;
-
-                        col->g = 255 - (col->m + col->k);
-                        if (col->g < 0) col->g = 0;
-
-                        col->b = 255 - (col->y + col->k);
-                        if (col->b < 0) col->b = 0;
-
-                        mcol.append(col);
-                        mcoltxt.append(coltxt);
+                        m_colorMap.insert(coltxt, QColor::fromCmyk(c, m, y, k));
                     } //end if ...<col...
                 } //end else
             } // end while
             while (ok == true);
-            delete col;
+
         } // end if ...<start_styles>...
         /***********************************************************************
          * jump over embedded Applix docs                                      *
@@ -238,156 +278,129 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             kDebug(30517) << "\nHeader/Footer ends";
         }
         /**********************************************************************
-         * found a paragraph string                                           *
+         * found an "end of paragraph" marker, with the parag style
          **********************************************************************/
         else if (mystr.startsWith("<P ")) {
-            sscanf((const char *) mystr.toLatin1(), "<P \"%99s\"", stylename);
-            mystr.remove(0, 5 + strlen(stylename));
+
+            // Extract quoted text
+            pos = nextDoubleQuote(mystr, 4);
+            const QString stylename = mystr.mid(4, pos - 4);
+            mystr.remove(0, pos + 1);
+            mystr.chop(1); // Remove ending >
+
             kDebug(30517) << " Para  Name:" << stylename;
             kDebug(30517) << "       Rest:" << mystr;
 
-            if (inParagraph)
-                bodyWriter->endElement(); // text:p
+            // TODO use paragraph style name 'stylename'
+
+            // parse paragraph properties, e.g. <P "Normal" justifyFull  size:14 >
+            KoGenStyle paragStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+
+            const QStringList typeList = mystr.split(' ', QString::SkipEmptyParts);
+            Q_FOREACH(const QString& type, typeList) {
+                if (type == "justifyFull") {
+                    paragStyle.addAttribute("fo:text-align", "justify");
+                } else if (type == "justifyCenter") {
+                    paragStyle.addAttribute("fo:text-align", "center");
+                } else if (type == "justifyLeft") {
+                    paragStyle.addAttribute("fo:text-align", "left");
+                } else if (type == "justifyRight") {
+                    paragStyle.addAttribute("fo:text-align", "right");
+                } else if (!parseFontProperty(type, paragStyle)) {
+                    kDebug() << "Unsupported paragraph formatting attribute" << type;
+                }
+            }
+
+            const QString autoStyleName = mainStyles.insert(paragStyle);
+
+            delete paragraphWriter;
+            paragraphWriter = 0;
+            paragraphBuffer.close();
 
             bodyWriter->startElement("text:p");
-            inParagraph = true;
+            bodyWriter->addAttribute("text:style-name", autoStyleName);
+            bodyWriter->addCompleteElement(&paragraphBuffer);
+            bodyWriter->endElement(); // text:p
+
+            paragraphBuffer.setData(QByteArray());
+        }
+        /**********************************************************************
+         * row start                                                          *
+         **********************************************************************/
+        else if (mystr.startsWith("<RS")) {
+#if 0 // TODO
+            if (!inTable) {
+                writer.startElement( "table:table" );
+                // TODO - but we have no idea about the number of columns...
+#if 0
+                for ( uint colNr = 0; colNr < getColumns(); ++colNr )
+                {
+                    writer.startElement( "table:table-column" );
+                    KoGenStyle columnStyle( KWDocument::STYLE_TABLE_COLUMN, "table-column" );
+                    columnStyle.addPropertyPt( "style:column-width", m_colPositions[colNr+1] - m_colPositions[colNr] );
+                    const QString colStyleName = context.mainStyles().lookup( columnStyle, "col" );
+                    writer.addAttribute( "table:style-name", colStyleName );
+                    writer.endElement(); // table:table-column
+                }
+
+#endif
+            }
+            if (inTableRow)
+                writer.endElement(); // table:table-row
+            writer.startElement( "table:table-row" );
+            inTableRow = true;
+            writer.startElement( "table:table-cell" );
+            inTableCell = true;
+#endif
         }
         /**********************************************************************
          * found a textstring                                                 *
          **********************************************************************/
         else if (mystr.startsWith("<T ")) {
-            QString colname;
+
+            if (!paragraphWriter) {
+                paragraphBuffer.open(QIODevice::WriteOnly);
+                paragraphWriter = new KoXmlWriter(&paragraphBuffer, bodyWriter->indentLevel() + 1);
+            }
 
             // Remove starting tab info
             mystr.remove(0, 4);
 
             // Remove ending >
-            mystr.remove(mystr.length() - 1, 1);
+            mystr.chop(1);
 
-            // Separate textstring "
-            ok = true;
-            int y = 0;
-            do {
-                pos = mystr.indexOf("\"", y);
-                kDebug(30517) << "POS:" << pos << " length:" << mystr.length() << " y:" << y;
-
-                kDebug(30517) << "<" << mystr << " >";
-                if ((pos - 1 > -1) && (mystr[pos-1] == '\\')) {
-                    kDebug(30517) << " No string end - but Gänsefüsschen";
-                    y = pos + 1;
-                } else {
-                    kDebug(30517) << " String end //";
-                    ok = false;
-                }
-            } while (ok == true);
+            // Extract quoted text
+            pos = nextDoubleQuote(mystr, 0);
 
             textstr = mystr.left(pos);
             mystr.remove(0, pos + 1);
             mystr = mystr.trimmed();
             kDebug(30517) << "Text:<" << textstr << " >" << pos << "  Rest:<" << mystr << ">";
 
+            KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
+            //style.addAttribute("style:display-name", styleName);
+
             // split format
             const QStringList typeList = mystr.split(' ', QString::SkipEmptyParts);
-
-            int fontsize = 12, bold = 0, italic = 0, underline = 0, colpos = -1;
-            QString fontname;
-            int nn = 0;
             Q_FOREACH(const QString& type, typeList) {
-                kDebug(30517) << "   No:" << nn << "   >" << type << "< =";
-
-                // Looking for bold
-                if (type == "bold") {
-                    bold = 1;
-                    kDebug(30517) << "bold";
-                } else if (type == "no-bold") {
-                    bold = 0;
-                    kDebug(30517) << "no bold";
-                } else if (type == "italic") {
-                    italic = 1;
-                    kDebug(30517) << "italic";
-                } else if (type == "no-italic") {
-                    italic = 0;
-                    kDebug(30517) << "no italic";
-                } else if (type == "underline") {
-                    underline = 1;
-                    kDebug(30517) << "underline";
-                } else if (type == "no-underline") {
-                    underline = 0;
-                    kDebug(30517) << "no underline";
-                } else if (type.startsWith("size")) { // e.g. size:14
-                    //type.remove(0, 5);
-                    fontsize = type.mid(5).toInt();
-                    kDebug(30517) << "fontsize:" << fontsize;
-                } else if (type.startsWith("face")) { // e.g. face:"Symbol"
-                    //type.remove(0, 6);
-                    //type.remove(type.length() - 1, 1);
-                    fontname = type.mid(6, type.length() - 6 - 1);
-                    kDebug(30517) << "fontname:" << fontname;
-                } else if (type.startsWith("color:")) { // e.g. color:"Black"
-                    //type.remove(0, 7);
-                    //type.remove(type.length() - 1, 1);
-                    colname = type.mid(7, type.length() - 7 - 1);
-                    colpos = mcoltxt.indexOf(colname);
-                    kDebug(30517) << "  Color:" << colname << "" << colpos << "";
-                } else {
-                    kDebug(30517) << "" << type;
+                //kDebug(30517) << "Text formatting:" << type;
+                if (!parseFontProperty(type, style)) {
+                    kDebug(30517) << "Unhandled text format:" << type;
                 }
-
-
             }
-            kDebug(30517) << "";
 
             // Replaces Part for & <>, applixware special characters and quotes
             replaceSpecial(textstr);
 
-            KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
-            //style.addAttribute("style:display-name", styleName);
-
-            //if (bold == 1 || underline == 1 || italic == 1 || fontsize != 12 ||
-            //        colpos != -1 || !fontname.isEmpty()) {
-                if (!fontname.isEmpty()) {
-                    style.addProperty("fo:font-family", fontname, KoGenStyle::TextType);
-                }
-
-                if (fontsize != 1) {
-                    style.addPropertyPt("fo:font-size", fontsize, KoGenStyle::TextType);
-                }
-
-                if (italic == 1) {
-                    style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
-                }
-
-                if (bold == 1) {
-                    style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
-                }
-
-                if (underline == 1) {
-                   style.addProperty("style:text-underline-type", "single", KoGenStyle::TextType);
-                   style.addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
-                }
-
-                if (colpos != -1) {
-                    t_mycolor *mc = mcol.at(colpos);
-                    QColor color(mc->r, mc->g, mc->b);
-                    style.addProperty("style:fo-color", color.name(), KoGenStyle::TextType);
-                }
-            //}
-
-            if (!inParagraph) {
-                bodyWriter->startElement("text:p");
-                inParagraph = true;
-            }
-
-            QString styleName = mainStyles.insert(style);
-            bodyWriter->startElement("text:span");
-            bodyWriter->addAttribute("text:style-name", styleName);
-            bodyWriter->addTextSpan(textstr);
-            bodyWriter->endElement(); // span
+            const QString styleName = mainStyles.insert(style);
+            paragraphWriter->startElement("text:span");
+            paragraphWriter->addAttribute("text:style-name", styleName);
+            paragraphWriter->addTextSpan(textstr);
+            paragraphWriter->endElement(); // span
+        } else {
+            kDebug() << "Unhandled tag:" << mystr;
         }
-
     }
-    if (inParagraph)
-        bodyWriter->endElement(); // text:p
 
     emit sigProgress(100);
 

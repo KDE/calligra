@@ -1022,7 +1022,9 @@ DateTime Resource::WorkInfoCache::firstAvailableAfter( const DateTime &time, con
 
 DateTime Resource::WorkInfoCache::firstAvailableBefore( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const
 {
-    Q_ASSERT( time >= limit );
+    if ( time <= limit ) {
+        return DateTime();
+    }
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constBegin();
     if ( time.isValid() && limit.isValid() && end.isValid() && end >= time && ! intervals.isEmpty() ) {
         // possibly usefull cache

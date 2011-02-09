@@ -242,7 +242,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
@@ -518,7 +518,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
@@ -710,7 +710,7 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     if (m_context->type == Slide) {
         m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
     }
-    else if (m_context->type == SlideMaster) {
+    else if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
     }
     else if (m_context->type == SlideLayout) {
@@ -747,7 +747,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->startElement("draw:custom-shape");
     }
     else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
-        body->startElement("draw:frame"); // CASE #P475
+#ifdef PPTXXMLSLIDEREADER_CPP
+        if (d->phType == "sldImg") {
+            body->startElement("draw:page-thumbnail"); // Special feature for presentation notes
+        } else {
+            body->startElement("draw:frame");
+        }
+#else
+        body->startElement("draw:frame");
+#endif
     }
     else { // For predefined shapes
         body->startElement("draw:custom-shape");
@@ -766,7 +774,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 
@@ -789,7 +797,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     //body->addAttribute("draw:style-name", );
     if (!m_currentPresentationStyle.isEmpty()) {
         presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
-        if (m_context->type == SlideMaster) {
+        if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
             mainStyles->markStyleForStylesXml(presentationStyleName);
         }
     }
@@ -1753,7 +1761,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                  body->startElement("text:list");
                  if (listDepth == 0) {
                      QString listStyleName = mainStyles->insert(m_currentListStyle);
-                     if (m_context->type == SlideMaster) {
+                     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
                          mainStyles->markStyleForStylesXml(listStyleName);
                      }
                      Q_ASSERT(!listStyleName.isEmpty());
@@ -1787,11 +1795,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 
      body->startElement("text:p", false);
-#ifdef PPTXXMLSLIDEREADER_CPP
-     if (m_context->type == SlideMaster) {
-         m_moveToStylesXml = true;
-     }
-#endif
 
      QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
      if (spcBef.contains("%")) {
@@ -1807,9 +1810,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 
      QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
-     if (m_moveToStylesXml) {
+#ifdef PPTXXMLSLIDEREADER_CPP
+     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
          mainStyles->markStyleForStylesXml(currentParagraphStyleName);
      }
+#endif
      body->addAttribute("text:style-name", currentParagraphStyleName);
 
      (void)textPBuf.releaseWriter();
@@ -1906,7 +1911,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
     }
 #endif
@@ -3161,7 +3166,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
-    if (m_context->type == SlideMaster || m_context->type == SlideLayout) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster || m_context->type == SlideLayout) {
         inheritAllTextAndParagraphStyles();
     }
 #endif
@@ -5067,7 +5072,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
     }
 #endif

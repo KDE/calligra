@@ -27,6 +27,7 @@
 #include "kptitemviewsettup.h"
 #include "kptworkpackagesenddialog.h"
 #include "kptworkpackagesendpanel.h"
+#include "kptdatetime.h"
 
 #include <KoDocument.h>
 
@@ -158,7 +159,12 @@ bool TaskEditorItemModel::setType( Node *node, const QVariant &value, int role )
             int v = value.toInt();
             switch ( v ) {
                 case 0: { // Milestone
-                    ModifyEstimateCmd *cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18n( "Set type to Milestone" ) );
+                    NamedCommand *cmd = 0;
+                    if ( node->constraint() == Node::FixedInterval ) {
+                        cmd = new NodeModifyConstraintEndTimeCmd( *node, node->constraintStartTime(), i18n( "Set type to Milestone" ) );
+                    } else {
+                        cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18n( "Set type to Milestone" ) );
+                    }
                     emit executeCommand( cmd );
                     return true;
                 }
@@ -167,8 +173,12 @@ bool TaskEditorItemModel::setType( Node *node, const QVariant &value, int role )
                     MacroCommand *m = new MacroCommand( i18n( "Set type to %1", Estimate::typeToString( (Estimate::Type)v, true ) ) );
                     m->addCommand( new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v ) );
                     if ( node->type() == Node::Type_Milestone ) {
-                        m->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), Duration::Unit_d ) );
-                        m->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 1.0 ) );
+                        if ( node->constraint() == Node::FixedInterval ) {
+                            m->addCommand( new NodeModifyConstraintEndTimeCmd( *node, node->constraintStartTime().addDays( 1 ) ) );
+                        } else {
+                            m->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), Duration::Unit_d ) );
+                            m->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 1.0 ) );
+                        }
                     }
                     emit executeCommand( m );
                     return true;
