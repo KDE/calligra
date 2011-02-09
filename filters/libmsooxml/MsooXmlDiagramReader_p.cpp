@@ -1187,6 +1187,9 @@ void ConstraintAtom::build(Context* context)
         context->m_parentLayout->addConstraint( ptr );
         constraintedWasApplied = true;
     }
+    else
+        Q_ASSERT_X(false, __FUNCTION__, QString("TODO, m_for=%1").arg(m_for).toUtf8());
+
     typedef QList <QExplicitlySharedDataPointer <MSOOXML::Diagram::LayoutNodeAtom > >  LayoutNodeList;
     LayoutNodeList childList = context->m_parentLayout->childrenLayouts();
     foreach( ConstraintAtom* constraint, addedConstraints )
