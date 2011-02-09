@@ -2063,19 +2063,71 @@ void DependencyEditor::slotEnableActions()
 
 void DependencyEditor::updateActionsEnabled( bool on )
 {
+    if ( ! on || ! isReadWrite() ) { //FIXME: read-write is not set properly
+        menuAddTask->setEnabled( false );
+        actionAddTask->setEnabled( false );
+        actionAddMilestone->setEnabled( false );
+        menuAddSubTask->setEnabled( false );
+        actionAddSubtask->setEnabled( false );
+        actionAddSubMilestone->setEnabled( false );
+        actionDeleteTask->setEnabled( false );
+        return;
+    }
+    int selCount = selectedNodeCount();
+        
+    if ( selCount == 0 ) {
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( false );
+        actionAddSubtask->setEnabled( false );
+        actionAddSubMilestone->setEnabled( false );
+        actionDeleteTask->setEnabled( false );
+        return;
+    }
+    Node *n = selectedNode();
+    if ( n && n->type() != Node::Type_Task && n->type() != Node::Type_Milestone && n->type() != Node::Type_Summarytask ) {
+        n = 0;
+    }
+    if ( selCount == 1 && n == 0 ) {
+        // only project selected
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( true );
+        actionAddSubtask->setEnabled( true );
+        actionAddSubMilestone->setEnabled( true );
+        actionDeleteTask->setEnabled( false );
+        return;
+    }
+    bool baselined = false;
     Project *p = m_view->project();
-
-    bool o = ( on && p && selectedNodeCount() <= 1 );
-    menuAddTask->setEnabled( o );
-    actionAddTask->setEnabled( o );
-    actionAddMilestone->setEnabled( o );
-
-    actionDeleteTask->setEnabled( on && p && selectedNodeCount() > 0 );
-
-    o = ( on && p && selectedNodeCount() == 1 );
-
-    menuAddSubTask->setEnabled( o );
-    actionAddSubtask->setEnabled( o );
+    if ( p && p->isBaselined() ) {
+        foreach ( Node *n, selectedNodes() ) {
+            if ( n->isBaselined() ) {
+                baselined = true;
+                break;
+            }
+        }
+    }
+    if ( selCount == 1 ) {
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionAddSubtask->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionAddSubMilestone->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionDeleteTask->setEnabled( ! baselined );
+        return;
+    }
+    // selCount > 1
+    menuAddTask->setEnabled( false );
+    actionAddTask->setEnabled( false );
+    actionAddMilestone->setEnabled( false );
+    menuAddSubTask->setEnabled( false );
+    actionAddSubtask->setEnabled( false );
+    actionAddSubMilestone->setEnabled( false );
+    actionDeleteTask->setEnabled( ! baselined );
 }
 
 void DependencyEditor::setupGui()
