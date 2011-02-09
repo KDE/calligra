@@ -632,7 +632,8 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
 
     setFlags( QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable );
 
-    m_symbol = new DependencyNodeSymbolItem( this );
+    // do not attach this item to the scene as it gives continoues paint events when a node item is selected
+    m_symbol = new DependencyNodeSymbolItem();
     m_symbol->setZValue( zValue() + 10.0 );
     setSymbol();
 }
@@ -642,6 +643,8 @@ DependencyNodeItem::~DependencyNodeItem()
     qDeleteAll( m_childrelations );
     qDeleteAll( m_parentrelations );
     //qDeleteAll( m_children );
+
+    delete m_symbol;
 }
 
 void DependencyNodeItem::setText()
@@ -831,6 +834,7 @@ void DependencyNodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * )
 {
+    //kDebug();
     QLinearGradient g( 0.0, rect().top(), 0.0, rect().bottom() );
     g.setColorAt( 0.0, option->palette.color( QPalette::Midlight ) );
     g.setColorAt( 1.0, option->palette.color( QPalette::Dark ) );
@@ -845,6 +849,9 @@ void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsIte
         opt.state |= QStyle::State_HasFocus;
     }
     kplato_paintFocusSelectedItem( painter, &opt );
+
+    // paint the symbol
+    m_symbol->paint( itemScene()->project(), painter, &opt );
 }
 
 DependencyConnectorItem *DependencyNodeItem::connectorItem( ConnectorType ctype ) const
@@ -921,33 +928,30 @@ void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
     setPath( p );
 }
 
-void DependencyNodeSymbolItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *w )
+void DependencyNodeSymbolItem::paint( Project *p, QPainter *painter, const QStyleOptionGraphicsItem *option )
 {
-    Project *p = itemScene()->project();
     if ( p ) {
         switch ( m_nodetype ) {
             case Node::Type_Summarytask:
-                setBrush( p->config().summaryTaskDefaultColor() );
+                painter->setBrush( p->config().summaryTaskDefaultColor() );
                 break;
             case Node::Type_Task:
-                setBrush( p->config().taskNormalColor() );
+                painter->setBrush( p->config().taskNormalColor() );
                 break;
             case Node::Type_Milestone:
-                setBrush( p->config().milestoneNormalColor() );
+                painter->setBrush( p->config().milestoneNormalColor() );
                 break;
             default:
-                setBrush( m_delegate.defaultBrush( m_itemtype ) );
+                painter->setBrush( m_delegate.defaultBrush( m_itemtype ) );
                 break;
         }
     } else {
-        setBrush( m_delegate.defaultBrush( m_itemtype ) );
+        painter->setBrush( m_delegate.defaultBrush( m_itemtype ) );
     }
-    QGraphicsPathItem::paint( painter, option, w );
-}
+    painter->setPen( Qt::NoPen );
+    painter->translate( option->exposedRect.x() + 2.0, option->exposedRect.y() + 2.0 );
+    painter->drawPath( path() );
 
-DependencyScene *DependencyNodeSymbolItem::itemScene() const
-{
-    return static_cast<DependencyScene*>( scene() );
 }
 
 //--------------------

@@ -262,10 +262,9 @@ public:
     bool isEditable() const { return m_editable; }
     void setEditable( bool on ) { m_editable = on; }
 
-    DependencyScene *itemScene() const;
-
-protected:
-    void paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget );
+    using QGraphicsPathItem::paint;
+    /// Special paint method as the default cannot be used
+    void paint( Project *p, QPainter *painter, const QStyleOptionGraphicsItem *option );
 
 private:
     GanttItemDelegate m_delegate;
