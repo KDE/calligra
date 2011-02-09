@@ -94,7 +94,8 @@ KoAbstractApplicationOpenDocumentArguments::KoAbstractApplicationOpenDocumentArg
 }
 
 KoAbstractApplicationController::KoAbstractApplicationController(QObject *application)
-    : m_firstChar(true),
+    : m_application(application),
+      m_firstChar(true),
       m_searchTextIndex(0),
       m_searchWholeWords(false),
       m_centralWidget(0),
@@ -113,20 +114,15 @@ KoAbstractApplicationController::KoAbstractApplicationController(QObject *applic
       m_splash(0),
       m_onlyDisplayDocumentNameInTitle(false)
 {
-    Q_ASSERT(application, "KoAbstractApplicationController",
+    Q_ASSERT_X(m_application, "KoAbstractApplicationController",
              "Application object must be provided to the controller");
-    application->installEventFilter(this);
+    m_application->installEventFilter(this);
 }
 
 KoAbstractApplicationController::~KoAbstractApplicationController()
 {
     closeDocument();
     delete m_splash;
-}
-
-KoCanvasControllerWidget* KoAbstractApplicationController::controllerWidget() const
-{
-    return dynamic_cast<KoCanvasControllerWidget*>(m_canvasController);
 }
 
 QStringList KoAbstractApplicationController::supportedExtensions() const
@@ -313,7 +309,7 @@ bool KoAbstractApplicationController::openDocuments(
         m_type = TextDocument;
         // We need to get the page count again after layout rounds.
         QObject::connect(m_doc, SIGNAL(pageSetupChanged()),
-                         thisObject(), SLOT(handleDocumentPageSetupChanged()));
+                         this, SLOT(handleDocumentPageSetupChanged()));
     }
 
     if (m_type == SpreadsheetDocument) {
@@ -331,35 +327,35 @@ bool KoAbstractApplicationController::openDocuments(
     else if(m_type == TextDocument && isTextDocumentExtension(ext)) {
         m_editor = qobject_cast<KoTextEditor *>(wordsView()->canvasBase()->toolProxy()->selection());
 
-        if (controllerWidget()) {
-            setCentralWidget(controllerWidget());
+        if (canvasControllerWidget()) {
+            setCentralWidget(canvasControllerWidget());
         }
     }
     else if (m_type == PresentationDocument) {
-        if (controllerWidget()) {
-            setCentralWidget(controllerWidget());
+        if (canvasControllerWidget()) {
+            setCentralWidget(canvasControllerWidget());
         }
     } else {
         //condition required for plain text document that is opened.
-        if (controllerWidget()) {
-            setCentralWidget(controllerWidget());
+        if (canvasControllerWidget()) {
+            setCentralWidget(canvasControllerWidget());
         }
     }
 
     updateWindowTitle(fname);
 
-    if (controllerWidget())
-        controllerWidget()->setProperty("FingerScrollable", true);
+    if (canvasControllerWidget())
+        canvasControllerWidget()->setProperty("FingerScrollable", true);
 
-    QTimer::singleShot(250, thisObject(), SLOT(handleDocumentPageSetupChanged()));
+    QTimer::singleShot(250, this, SLOT(handleDocumentPageSetupChanged()));
 
     KoCanvasBase *canvas = m_canvasController->canvas();
     QObject::connect(
         canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
-        thisObject(), SLOT(resourceChanged(int, const QVariant &)));
+        this, SLOT(resourceChanged(int, const QVariant &)));
     QObject::connect(
         KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
-        thisObject(), SLOT(activeToolChanged(KoCanvasController*, int)));
+        this, SLOT(activeToolChanged(KoCanvasController*, int)));
 
     setProgressIndicatorVisible(false);
     m_isLoading = false;
@@ -368,8 +364,8 @@ bool KoAbstractApplicationController::openDocuments(
     if (thisWidget) {
         if (m_splash && !thisWidget->isActiveWindow()) {
             thisWidget->show();
-            if (controllerWidget())
-                m_splash->finish(controllerWidget());
+            if (canvasControllerWidget())
+                m_splash->finish(canvasControllerWidget());
             m_splash = 0;
         }
    }
@@ -381,7 +377,7 @@ bool KoAbstractApplicationController::openDocuments(
    if (isNewDocument) {
        //This timer is required, otherwise a new spread sheet will
        //have an unwanted widget in the view.
-       QTimer::singleShot(1, thisObject(), SLOT(showEditingMode()));
+       QTimer::singleShot(1, this, SLOT(showEditingMode()));
        if (m_type == TextDocument) {
             if (m_centralWidget)
                 m_centralWidget->setInputMethodHints(Qt::ImhNoAutoUppercase);
@@ -822,11 +818,11 @@ bool KoAbstractApplicationController::eventFilter(QObject *watched, QEvent *even
 {
     Q_UNUSED(watched);
     switch (event->type()) {
-    case QEvent::CloseEvent:
+    case QEvent::Close:
         if (handleCloseEvent(static_cast<QCloseEvent*>(event)))
             return true;
         break;
-    default;
+    default:;
     }
     return false;
 }
@@ -909,8 +905,10 @@ KoCellTool* KoAbstractApplicationController::cellTool() const
     return m_cellTool;
 }
 
-void KoAbstractApplicationController::activeToolChanged(KoCanvasController* canvas, int uniqueToolId)
+void KoAbstractApplicationController::activeToolChanged(KoCanvasController* canvas,
+                                                        int uniqueToolId)
 {
+   Q_UNUSED(uniqueToolId);
    QObject *canvasObject = dynamic_cast<QObject*>(canvas);
    QString newTool = KoToolManager::instance()->activeToolId();
    kDebug() << "-------------------------------" << newTool;
@@ -945,8 +943,8 @@ void KoAbstractApplicationController::setOnlyDisplayDocumentNameInTitle(bool set
 
 void KoAbstractApplicationController::setHorizontalScrollBarVisible(bool set)
 {
-    if (controllerWidget())
-        controllerWidget()->setHorizontalScrollBarPolicy(set ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
+    if (canvasControllerWidget())
+        canvasControllerWidget()->setHorizontalScrollBarPolicy(set ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
     Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(view());
     if (tablesView) {
 //! @todo not enough
@@ -956,8 +954,8 @@ void KoAbstractApplicationController::setHorizontalScrollBarVisible(bool set)
 
 void KoAbstractApplicationController::setVerticalScrollBarVisible(bool set)
 {
-    if (controllerWidget())
-        controllerWidget()->setVerticalScrollBarPolicy(set ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
+    if (canvasControllerWidget())
+        canvasControllerWidget()->setVerticalScrollBarPolicy(set ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
     Calligra::Tables::View *tablesView = qobject_cast<Calligra::Tables::View*>(view());
     if (tablesView) {
 //! @todo not enough

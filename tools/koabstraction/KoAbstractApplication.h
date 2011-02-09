@@ -22,12 +22,14 @@
 #ifndef KOABSTRACTAPPLICATION_H
 #define KOABSTRACTAPPLICATION_H
 
+#include "koabstraction_export.h"
+
 class KoAbstractApplicationController;
 
 //! Class for gluing KoAbstractApplicationController with the custom application implementation.
 //! It should be inherited, Do not inherit it, instead define KoAbstractApplicationBase typedef,
 //! e.g. as QMainWindow and include KoAbstractApplication.h header.
-class KoAbstractApplication
+class KOABSTRACTION_EXPORT KoAbstractApplication
 {
 public:
     /*!
@@ -39,7 +41,6 @@ public:
 
     virtual ~KoAbstractApplication();
 
-protected:
     /*!
      * @return controller the application's controller implementing fundamental features.
      */

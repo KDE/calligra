@@ -26,6 +26,7 @@
 #include <KoPAPageBase.h>
 #include <KoShape.h>
 #include <KoDocument.h>
+#include <KoCanvasControllerWidget.h>
 
 #include "koabstraction_export.h"
 
@@ -40,7 +41,6 @@ class KoView;
 class KWView;
 class KoTextEditor;
 class KoCanvasController;
-class KoCanvasControllerWidget;
 class KoCellToolFactory;
 class KoCellTool;
 class KoExternalEditorInterface;
@@ -261,7 +261,9 @@ public:
     /*!
      * @return canvas controller widget or 0 if the controller is not based on QWidget.
      */
-    KoCanvasControllerWidget* canvasControllerWidget() const;
+    KoCanvasControllerWidget* canvasControllerWidget() const {
+        return dynamic_cast<KoCanvasControllerWidget*>(m_canvasController);
+    }
 
     /*!
      * @return text editor object.
@@ -326,6 +328,36 @@ public:
      */
     void updateWindowTitle(const QString& fileName);
 
+    /*!
+     * Shows document save dialog.
+     */
+    QString getSaveFileName();
+
+    /*!
+     * Name of the opened document file.
+     */
+    inline QString documentFileName() const { return m_fileName; }
+
+    /*!
+     * Document type.
+     */
+    enum DocumentType { NoDocument, TextDocument, PresentationDocument, SpreadsheetDocument };
+
+    /*!
+     * @return type of loaded document or NoDocument if no document is loaded.
+     */
+    inline DocumentType documentType() const { return m_type; }
+
+    /*!
+     * @return number of pages in loaded document or 0 if document is not loaded.
+     */
+    int pageCount() const;
+
+    /*!
+     * @return current page number.
+     */
+    int currentPage() const { return m_currentPage; }
+
 public slots:
     /*!
      * Convenience method: opens one document pointed by @a fileName for viewing.
@@ -356,16 +388,6 @@ public slots:
     virtual bool openDocument();
 
     /*!
-     * Shows document save dialog.
-     */
-    QString getSaveFileName();
-
-    /*!
-     * Name of the opened document file.
-     */
-    inline QString documentFileName() const { return m_fileName; }
-
-    /*!
      * Saves document. Calls saveDocumentAs() if needed.
      * @return true if document has been saved.
      */
@@ -376,26 +398,6 @@ public slots:
      * @return true if document has been saved.
      */
     virtual bool saveDocumentAs();
-
-    /*!
-     * Document type.
-     */
-    enum DocumentType { NoDocument, TextDocument, PresentationDocument, SpreadsheetDocument };
-
-    /*!
-     * @return type of loaded document or NoDocument if no document is loaded.
-     */
-    inline DocumentType documentType() const { return m_type; }
-
-    /*!
-     * @return number of pages in loaded document or 0 if document is not loaded.
-     */
-    int pageCount() const;
-
-    /*!
-     * @return current page number.
-     */
-    int currentPage() const { return m_currentPage; }
 
     /*!
      * Goes to particular page @a page.
@@ -538,7 +540,12 @@ protected:
     /*!
      * Filtering of the application's events.
      */
-    bool eventFilter(QObject *watched, QEvent *event)
+    virtual bool eventFilter(QObject *watched, QEvent *event);
+
+    /*!
+     * Application object.
+     */
+    QObject *m_application;
 
 //! @todo make private
     bool m_firstChar;

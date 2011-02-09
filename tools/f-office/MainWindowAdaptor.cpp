@@ -24,20 +24,20 @@
 
 #include "MainWindowAdaptor.h"
 
-#include "MainWindow.h"
+#include "ApplicationController.h"
 
 #include <QTextDocument>
 #include <QColor>
 #include <QDBusAbstractAdaptor>
 
-MainWindowAdaptor::MainWindowAdaptor( MainWindow * window )
-: QDBusAbstractAdaptor(window),
-m_window( window )
+MainWindowAdaptor::MainWindowAdaptor(ApplicationController *controller)
+: QDBusAbstractAdaptor(controller),
+  m_controller(controller)
 {
-    connect( m_window, SIGNAL( presentationStarted( ) ), this, SIGNAL( presentationStarted( ) ) );
-    connect( m_window, SIGNAL( presentationStopped() ), this, SIGNAL( presentationStopped() ) );
-    connect( m_window, SIGNAL( nextSlide() ), this, SIGNAL( nextSlide() ) );
-    connect( m_window, SIGNAL( previousSlide() ), this, SIGNAL( previousSlide() ) );
+    connect(m_controller, SIGNAL(presentationStarted()), this, SIGNAL(presentationStarted()));
+    connect(m_controller, SIGNAL(presentationStopped()), this, SIGNAL(presentationStopped()));
+    connect(m_controller, SIGNAL(nextSlide()), this, SIGNAL(nextSlide()));
+    connect(m_controller, SIGNAL(previousSlide()), this, SIGNAL(previousSlide()));
 }
 
 MainWindowAdaptor::~MainWindowAdaptor()

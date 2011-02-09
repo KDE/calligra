@@ -30,7 +30,7 @@
 #include <QtDBus>
 #include <QDBusAbstractAdaptor>
 
-class MainWindow;
+class ApplicationController;
 
 class MainWindowAdaptor : public QDBusAbstractAdaptor
 {
@@ -38,7 +38,7 @@ class MainWindowAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "com.nokia.FreOffice.presentation.view")
 
 public:
-    MainWindowAdaptor( MainWindow *window);
+    MainWindowAdaptor(ApplicationController *controller);
     ~MainWindowAdaptor();
 
 signals:
@@ -60,7 +60,7 @@ signals:
     void previousSlide();
 
 private:
-    MainWindow *m_window;
+    ApplicationController *m_controller;
 };
 
 #endif

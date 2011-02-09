@@ -35,6 +35,8 @@
 #include "MainWindow.h"
 #include <KoTextEditor.h>
 #include <QFile>
+#include <QDialog>
+#include <QLabel>
 #include <QDir>
 #include <QFileInfo>
 #include <QTextStream>

@@ -22,6 +22,7 @@
 #include "KoAbstractApplication.h"
 
 KoAbstractApplication::KoAbstractApplication(KoAbstractApplicationController *controller)
+    : m_ctr(controller)
 {
 }
 

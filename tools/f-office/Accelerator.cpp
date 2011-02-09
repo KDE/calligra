@@ -27,7 +27,7 @@
 #include "Common.h"
 #include <QtDBus/QDBusMessage>
 #include <QDBusReply>
-
+#include <QDialog>
 
 enum  scrollingAttributes  { stateFix,scrollUp,scrollDown,scrollLeft,scrollRight,toggleScrollTransition };
 enum  slidingAttributes  { nextEnabled,previousEnabled,toggleSlideTransition,crossedRange,vibrationIsSet };
