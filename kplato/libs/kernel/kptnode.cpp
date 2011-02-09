@@ -723,7 +723,7 @@ void Node::propagateEarliestStart(DateTime &time) {
             case MustFinishOn:
                 if ( m_constraintEndTime < time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                     m_currentSchedule->logDebug( QString( "%1: end constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
 #endif
                 }
@@ -732,7 +732,7 @@ void Node::propagateEarliestStart(DateTime &time) {
             case FixedInterval:
                 if ( m_constraintStartTime < time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                     m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
 #endif
                 }
