@@ -46,6 +46,8 @@ void PerformanceTester::cleanup()
 void PerformanceTester::init()
 {
     p1 = new Project();
+    p1->setId( p1->uniqueNodeId() );
+    p1->registerNodeId( p1 );
     p1->setName( "PerformanceTester" );
     p1->setConstraintStartTime( DateTime::fromString( "2010-11-19T08:00:00Z" ) );
     p1->setConstraintEndTime( DateTime::fromString( "2010-11-29T16:00:00Z" ) );

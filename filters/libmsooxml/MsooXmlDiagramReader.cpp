@@ -65,13 +65,16 @@ void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect 
     m_context->m_rootLayout->m_values["h"] = rect.height();
     //m_context->m_rootLayout->m_values["r"] = rect.right();
     //m_context->m_rootLayout->m_values["w"] = m_context->m_rootLayout->m_values["h"] = qMin(rect.width(),rect.height()); // square (not needed cause will be done by the "ar"-dgm:param)
-    m_context->m_rootLayout->m_values["ctrX"] = 0.0;
-    m_context->m_rootLayout->m_values["ctrY"] = 0.0;
+    //m_context->m_rootLayout->m_values["ctrX"] = 0.0;
+    //m_context->m_rootLayout->m_values["ctrY"] = 0.0;
 
     // Do the (re-)layout.
-    m_context->m_rootLayout->layoutAtom(m_context);
+    m_context->m_rootLayout->layoutAtom(m_context);    
     // Write the content.
-    m_context->m_rootLayout->writeAtom(m_context, xmlWriter, m_styles);
+    m_context->m_rootLayout->writeAtom(m_context, xmlWriter, m_styles);    
+    QList<QExplicitlySharedDataPointer<Diagram::LayoutNodeAtom> > list = m_context->m_rootLayout->childrenLayouts();
+    QVector<QExplicitlySharedDataPointer<Diagram::AbstractAtom> > list2 = m_context->m_rootLayout->children();
+    
 }
 
 MsooXmlDiagramReader::MsooXmlDiagramReader(KoOdfWriters *writers)

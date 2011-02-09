@@ -4,7 +4,7 @@ if ! kde4-config ; then
   exit 1
 fi
 
-instance=kword
+instance=words
 applnks=`kde4-config --path apps`:`kde4-config --path xdgdata-apps`
 services=`kde4-config --path services`
 found=0

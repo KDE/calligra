@@ -70,6 +70,8 @@ void ResourceModelTester::initTestCase()
 {
     m_project = new Project();
     m_project->setName( "P1" );
+    m_project->setId( m_project->uniqueNodeId() );
+    m_project->registerNodeId( m_project );
     DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 3 ) );
     m_project->setConstraintStartTime( targetstart );

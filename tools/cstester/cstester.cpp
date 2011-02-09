@@ -110,7 +110,7 @@ bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &dir, bool 
     bool success = true;
     int i = 0;
     for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
-        QString thumbFilename = QString("%1/thumb_%2.png").arg(dir).arg(++i);
+        QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
 
         QByteArray ba;
         QBuffer buffer(&ba);

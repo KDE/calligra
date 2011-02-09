@@ -207,8 +207,12 @@ QPixmap KPrNotes::generateThumbnail( const QSize& )
 void KPrNotes::updatePageThumbnail()
 {
     // set image at least to 150 dpi we might need more when printing
-    KoImageData *imageData = m_imageCollection->createImageData(m_doc->pageThumbnail(m_page, (m_thumbnailShape->size() * 150 / 72.).toSize()).toImage());
-    m_thumbnailShape->setUserData( imageData );
+    QSizeF thumbnameSize(m_thumbnailShape->size());
+
+    if (!thumbnameSize.isNull()) {
+        KoImageData *imageData = m_imageCollection->createImageData(m_doc->pageThumbnail(m_page, (m_thumbnailShape->size() * 150 / 72.).toSize()).toImage());
+        m_thumbnailShape->setUserData( imageData );
+    }
 }
 
 void KPrNotes::paintPage( QPainter & painter, KoZoomHandler & /*zoomHandler*/ )
