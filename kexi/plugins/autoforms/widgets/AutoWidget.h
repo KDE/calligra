@@ -23,6 +23,7 @@
 
 #include <QtGui/QWidget>
 #include <QVariant>
+#include <kexiformdataiteminterface.h>
 
 class QLabel;
 class QHBoxLayout;
@@ -31,24 +32,20 @@ class Field;
 }
 
 
-class AutoWidget : public QWidget
+class AutoWidget : public QWidget, public KexiFormDataItemInterface
 {
-    Q_OBJECT
 public:
     virtual ~AutoWidget();
-    virtual QVariant value() = 0;
-    virtual void setValue(QVariant val);
     
 protected:
-    explicit AutoWidget(KexiDB::Field *fld, QWidget* parent = 0);
+    explicit AutoWidget(QWidget* parent = 0);
     
-    KexiDB::Field *m_field;
-    
-    QVariant m_OriginalValue;
-    QHBoxLayout *m_layout;
-    
+    void setLabel(const QString& label);
+    void setWidget(QWidget* widget);
 private:
     QLabel *m_fieldLabel;
+    QHBoxLayout *m_layout;
+    QWidget *m_widget;
 };
 
 #endif // AUTOWIDGETBASE_H

@@ -12,7 +12,9 @@ set(kexihandler_autoform_SRCS
     KexiAutoForms.cpp
     KexiAutoFormPart.cpp
     KexiAutoFormView.cpp
+    widgets/AutoForm.cpp 
     widgets/AutoWidget.cpp
+    widgets/AutoLineEdit.cpp
     KexiAutoFormDesignView.cpp
     designer/KexiAutoFormDesigner.cpp 
 )

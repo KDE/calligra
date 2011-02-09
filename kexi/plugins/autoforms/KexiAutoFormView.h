@@ -25,25 +25,38 @@
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/tableview/kexidataawareobjectiface.h>
 #include <widget/kexidataprovider.h>
+#include "KexiAutoFormPart.h"
 
-class KexiAutoFormView : public KexiView, 
-                        public KexiRecordNavigatorHandler,
-                        public KexiDataAwareObjectInterface,
-                        public KexiFormDataProvider
+class AutoForm;
+class QScrollArea;
+
+class KexiAutoFormView : public KexiView, public KexiRecordNavigatorHandler
 {
 Q_OBJECT
-KEXI_DATAAWAREOBJECTINTERFACE
-
-protected:
-    virtual void resizeEvent(QResizeEvent* );
 
 public:
+    KexiAutoFormView(QWidget* parent);
+    virtual ~KexiAutoFormView();
+
+    virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool& dontStore);
+    
+    virtual void resizeEvent(QResizeEvent* );
+    
     virtual void addNewRecordRequested();
     virtual void moveToFirstRecordRequested();
+    virtual void moveToLastRecordRequested();
     virtual void moveToNextRecordRequested();
     virtual void moveToPreviousRecordRequested();
-    virtual void moveToLastRecordRequested();
     virtual void moveToRecordRequested(uint r);
+    virtual long int currentRecord();
+    virtual long int recordCount();
+    
+private:
+    QScrollArea *m_scrollArea;
+    AutoForm *m_autoForm;
+    
+    KexiAutoFormPart::TempData* tempData() const;
 };
 
 #endif // KEXIAUTOFORMVIEW_H

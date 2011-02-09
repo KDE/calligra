@@ -52,7 +52,7 @@ KexiView* KexiAutoFormPart::createView(QWidget* parent, KexiWindow* window, Kexi
     KexiView* view = 0;
     kDebug();
     if (viewMode == Kexi::DataViewMode) {
-        //view = new KexiAutoFormView(parent);
+        view = new KexiAutoFormView(parent);
         
     } else if (viewMode == Kexi::DesignViewMode) {
         view = new KexiAutoFormDesignView(parent);

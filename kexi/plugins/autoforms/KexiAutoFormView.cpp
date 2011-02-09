@@ -19,11 +19,60 @@
 
 
 #include "KexiAutoFormView.h"
+#include <QScrollArea>
+#include <QLayout>
+#include <KexiWindow.h>
+#include "widgets/AutoForm.h"
+
+#include <kexidb/cursor.h>
+#include <KexiMainWindowIface.h>
+
+KexiAutoFormView::KexiAutoFormView(QWidget* parent): KexiView(parent), m_autoForm(0)
+{
+    kDebug();
+    setObjectName("KexiAutoForm_DataView");
+    m_scrollArea = new QScrollArea(this);
+    m_scrollArea->setBackgroundRole(QPalette::Dark);
+    m_scrollArea->viewport()->setAutoFillBackground(true);
+    
+    layout()->addWidget(m_scrollArea);
+}
+
+KexiAutoFormView::~KexiAutoFormView()
+{
+
+}
 
 void KexiAutoFormView::resizeEvent(QResizeEvent* event)
 {
     //Handle screen rotation
     QWidget::resizeEvent(event);
+}
+
+tristate KexiAutoFormView::afterSwitchFrom(Kexi::ViewMode mode)
+{
+    kDebug();
+    kDebug() << tempData()->name;
+    
+    QDomElement e = tempData()->autoformDefinition;
+    
+    //if (tempData()->schemaChangedInPreviousView) {
+        if (m_autoForm) {
+            m_scrollArea->takeWidget();
+            delete m_autoForm;
+        }
+        m_autoForm = new AutoForm(this);
+        
+        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+        KexiDB::Cursor *cursor = conn->executeQuery(*(conn->tableSchema("actor")));
+        
+        if (cursor) {
+            KexiTableViewData *data = new KexiTableViewData(cursor);
+            m_autoForm->setData(data);
+        }
+        m_scrollArea->setWidget(m_autoForm);
+    //}
+    return true;
 }
 
 void KexiAutoFormView::addNewRecordRequested()
@@ -56,3 +105,25 @@ void KexiAutoFormView::moveToRecordRequested(uint r)
 
 }
 
+long int KexiAutoFormView::currentRecord()
+{
+    return KexiRecordNavigatorHandler::currentRecord();
+}
+
+long int KexiAutoFormView::recordCount()
+{
+    return KexiRecordNavigatorHandler::recordCount();
+}
+
+tristate KexiAutoFormView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
+{
+    Q_UNUSED(mode);
+    Q_UNUSED(dontStore);
+    
+    return true;
+}
+
+KexiAutoFormPart::TempData* KexiAutoFormView::tempData() const
+{
+    return static_cast<KexiAutoFormPart::TempData*>(window()->data());
+}

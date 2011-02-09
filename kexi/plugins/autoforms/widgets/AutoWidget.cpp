@@ -23,10 +23,9 @@
 #include <kexidb/field.h>
 #include <QHBoxLayout>
 
-AutoWidget::AutoWidget(KexiDB::Field* fld, QWidget* parent): QWidget(parent)
+AutoWidget::AutoWidget(QWidget* parent): QWidget(parent), m_widget(0)
 {
-    m_field = fld;
-    m_fieldLabel = new QLabel(m_field->captionOrName(), this);
+    m_fieldLabel = new QLabel(this);
     
     m_layout = new QHBoxLayout(this);
     m_layout->addWidget(m_fieldLabel);
@@ -39,9 +38,19 @@ AutoWidget::~AutoWidget()
 
 }
 
-void AutoWidget::setValue(QVariant val)
+void AutoWidget::setLabel(const QString& label)
 {
-m_OriginalValue = val;
+    m_fieldLabel->setText(label);
 }
+
+void AutoWidget::setWidget(QWidget* widget)
+{
+    if (!m_widget) {
+        m_widget = widget;
+        m_layout->addWidget(widget);
+    }
+}
+
+
 
 
