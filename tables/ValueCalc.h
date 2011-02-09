@@ -112,23 +112,23 @@ public:
     /** numerical comparison */
     bool lower(const Value &a, const Value &b);
     /** string comparison */
-    bool strEqual(const Value &a, const Value &b, bool CS = true);
+    bool strEqual(const Value &a, const Value &b, bool CalcS = true);
     /** string comparison */
-    bool strGreater(const Value &a, const Value &b, bool CS = true);
+    bool strGreater(const Value &a, const Value &b, bool CalcS = true);
     /** string comparison - greater or equal */
-    bool strGequal(const Value &a, const Value &b, bool CS = true);
+    bool strGequal(const Value &a, const Value &b, bool CalcS = true);
     /** string comparison */
-    bool strLower(const Value &a, const Value &b, bool CS = true);
+    bool strLower(const Value &a, const Value &b, bool CalcS = true);
     /** string or numerical comparison */
-    bool naturalEqual(const Value &a, const Value &b, bool CS = true);
+    bool naturalEqual(const Value &a, const Value &b, bool CalcS = true);
     /** string or numerical comparison */
-    bool naturalGreater(const Value &a, const Value &b, bool CS = true);
+    bool naturalGreater(const Value &a, const Value &b, bool CalcS = true);
     /** string or numerical comparison - greater or equal */
-    bool naturalGequal(const Value &a, const Value &b, bool CS = true);
+    bool naturalGequal(const Value &a, const Value &b, bool CalcS = true);
     /** string or numerical comparison */
-    bool naturalLower(const Value &a, const Value &b, bool CS = true);
+    bool naturalLower(const Value &a, const Value &b, bool CalcS = true);
     /** string or numerical comparison - lower or equal */
-    bool naturalLequal(const Value &a, const Value &b, bool CS = true);
+    bool naturalLequal(const Value &a, const Value &b, bool CalcS = true);
 
     int sign(const Value &a);
 
