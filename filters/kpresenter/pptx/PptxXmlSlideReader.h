@@ -264,6 +264,9 @@ protected:
     void inheritShapeGeometry();
 
 private:
+
+    void inheritBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);
+
     void init();
     class Private;
     Private* const d;
@@ -285,7 +288,8 @@ public:
         MSOOXML::DrawingMLTheme* _themes,
         PptxXmlSlideReader::Type _type,
         PptxSlideProperties* _slideLayoutProperties,
-        PptxSlideProperties* _slideMasterPageProperties,
+        PptxSlideProperties* _slideMasterProperties,
+        PptxSlideProperties* _notesMasterProperties,
         MSOOXML::MsooXmlRelationships& _relationships,
         QMap<int, QString> _commentAuthors,
         QMap<QString, QString> masterColorMap,
@@ -300,7 +304,9 @@ public:
     PptxXmlSlideReader::Type type;
     PptxSlideProperties* slideLayoutProperties;
     PptxSlideProperties* slideMasterProperties;
+    PptxSlideProperties* notesMasterProperties;
     PptxActualSlideProperties currentSlideStyles;
+    PptxActualSlideProperties currentNotesStyles;
 
     // There could potentially be multiple of these...todo
     QString pageDrawStyleName; //!< written in read_sldInternal()
@@ -319,11 +325,18 @@ public:
     // to fully understand cSld element
     bool firstReadingRound;
 
+    void initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
+        const QVector<KoGenStyle>& _defaultTextStyles, const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
+        const QVector<QString>& _defaultBulletColors, const QVector<QString>& _defaultTextColors, const QVector<QString>& _defaultLatinFonts);
+
     // These have to be in context, because each slide/layout/master may define their own colormap
     // therefore the way default text is interpreted cannot be static
     QVector<KoGenStyle> defaultTextStyles;
     QVector<KoGenStyle> defaultParagraphStyles;
     QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
+    QVector<QString> defaultBulletColors;
+    QVector<QString> defaultTextColors;
+    QVector<QString> defaultLatinFonts;
 
     // We need to know where to find the table styles when needed
     QString tableStylesFilePath;

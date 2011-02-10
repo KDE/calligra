@@ -27,6 +27,7 @@
 
 // needed for RANDBINOM and so
 #include <math.h>
+#include <qmath.h>
 
 #include <kdebug.h>
 #include <KLocale>
@@ -961,10 +962,10 @@ Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *)
     Q_UNUSED(calc)
     Number result = args[0].asFloat();
     if (args.count() == 2)
-        result = result * ::pow(10, (int)args[1].asInteger());
+        result = result * ::qPow(10, (int)args[1].asInteger());
     result = (args[0].asFloat() < 0) ? -(qint64)(-result) : (qint64)result;
     if (args.count() == 2)
-        result = result * ::pow(10, -(int)args[1].asInteger());
+        result = result * ::qPow(10, -(int)args[1].asInteger());
     return Value(result);
 }
 

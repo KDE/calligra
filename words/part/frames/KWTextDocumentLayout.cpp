@@ -214,6 +214,8 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
             // if there is no anchor strategy set send the textAnchor into the layout to create anchor strategy and position it
             if (!anchor->anchorStrategy()) {
+                //place anchored object outside the page view, and let the layout position it right. It is better than make it invisible.
+                anchor->shape()->setPosition(QPointF(0,100000000));
                 m_state->insertInlineObject(anchor);
             }
         }

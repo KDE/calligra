@@ -57,7 +57,6 @@ AppointmentInterval::AppointmentInterval( const DateTime &start, const DateTime 
     setStartTime( start );
     setEndTime( end );
     setLoad( load );
-    assert( isValid() );
 }
 
 AppointmentInterval::~AppointmentInterval() {

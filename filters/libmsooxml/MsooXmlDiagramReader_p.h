@@ -90,6 +90,8 @@ class Context
         QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_layoutMap;
         /// A PointNode=>LayoutNodeAtom map used to know which datapoint maps to which layoutnode.
         QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_pointLayoutMap;
+        /// A LayoutNodeAtom=>PointNode map used to know which layoutnode maps to which datapoint.
+        QMap< LayoutNodeAtom*, AbstractNode* > m_layoutPointMap;
 
         explicit Context();
         ~Context();
@@ -103,7 +105,7 @@ class Context
 class ValueCache
 {
 public:
-    ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ){}
+    ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), unmodified( true ), negativeWidth( false ){}
     class ResultWrapper
     {
         public:
@@ -125,6 +127,10 @@ public:
             const QString m_name;
       
     };
+    bool hasNegativeWidth() const
+    {
+        return negativeWidth;
+    }
     qreal value( const QString& name, bool& valid ) const
     {
         valid = true;
@@ -174,6 +180,8 @@ public:
         result[ "b" ] = rect.bottom();
         result[ "w" ] = rect.width();
         result[ "h" ] = rect.height();
+        result[ "ctrX" ] = rect.center().rx();
+        result[ "ctrY" ] = rect.center().ry();
         return result;
     }
 private:
@@ -191,6 +199,10 @@ private:
             return true;
         else if ( name == "b" )
             return true;
+        else if ( name == "ctrX" )
+            return true;
+        else if ( name == "ctrY" )
+            return true;
         else
             return false;
     }
@@ -198,6 +210,8 @@ private:
     void setRectValue( const QString& name, qreal value );
     QMap< QString, qreal > mapping;
     QRectF rect;
+    bool unmodified;
+    bool negativeWidth;
 };
 
 /****************************************************************************************************
@@ -238,6 +252,7 @@ class PointNode : public AbstractNode
         QString m_type;
         QString m_cxnId;
         QString m_text;
+        QMap< QString, QString > prSet;
         explicit PointNode() : AbstractNode("dgm:pt") {}
         virtual ~PointNode() {}
         virtual void dump(Context* context, int level);
@@ -314,6 +329,8 @@ class AbstractAtom : public QSharedData
         QVector< QExplicitlySharedDataPointer<AbstractAtom> > children() const;
         void addChild(AbstractAtom* node);
         void addChild(QExplicitlySharedDataPointer<AbstractAtom> node);
+        void insertChild(int index, AbstractAtom* node);
+        void insertChild(int index, QExplicitlySharedDataPointer<AbstractAtom> node);
         void removeChild(QExplicitlySharedDataPointer<AbstractAtom> node);
     protected:
         QExplicitlySharedDataPointer<AbstractAtom> m_parent;
@@ -402,9 +419,10 @@ class LayoutNodeAtom : public AbstractAtom
         QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
 
         qreal distanceTo(LayoutNodeAtom* otherAtom) const;
+        QVector< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraintsToBuild;
 
     private:
-        QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;
+        QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;        
         QList<AbstractNode*> m_axis;
         QMap<QString, QString> m_variables;
         bool m_firstLayout;
@@ -437,12 +455,16 @@ class ConstraintAtom : public AbstractAtom
         QString m_type;
         /// Specifies an absolute value instead of reference another constraint.
         QString m_value;
-        explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
-        virtual ~ConstraintAtom() {}
+        /// the actual node the constraint references
+        QExplicitlySharedDataPointer<LayoutNodeAtom> m_referencedLayout;
+        
+        explicit ConstraintAtom() : AbstractAtom("dgm:constr"), m_referencedLayout( 0 ) {}
+        virtual ~ConstraintAtom() { Q_ASSERT( false ); }
         virtual ConstraintAtom* clone();
-        virtual void dump(Context*, int level);
+        virtual void dump(Context*, int level);        
         virtual void readAll(Context*, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
+        void applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom );
 };
 
 /// Rules indicate the ranges of values that a layout algorithm can use to modify the constraint values if it cannot lay out the graphic by using the constraints.
@@ -602,8 +624,10 @@ class AbstractAlgorithm {
         virtual void virtualDoInit();
         virtual void virtualDoLayout();
         virtual void virtualDoLayoutChildren();
+        void applyConstraints();
+        QList<Context*> doubleLayoutContext;
     private:
-        Context* m_context;
+        Context* m_context;        
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_layout;
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_parentLayout;
         AbstractNode* m_oldCurrentNode;

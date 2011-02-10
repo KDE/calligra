@@ -23,6 +23,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <KoPluginLoader.h>
 
 #include "FlowDocument.h"
 #include "FlowAboutData.h"
@@ -63,6 +64,9 @@ const KComponentData &FlowFactory::componentData()
 {
   if (!s_instance) {
     s_instance = new KComponentData(aboutData());
+
+    // Load Flow specific dockers
+    KoPluginLoader::instance()->load(QString::fromLatin1("Flow/Dock"));
 
     s_instance->dirs()->addResourceType("flow_template", "data", "flow/templates/");
     s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");

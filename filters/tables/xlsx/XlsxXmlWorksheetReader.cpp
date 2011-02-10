@@ -51,6 +51,7 @@
 #include <QBrush>
 #include <QRegExp>
 #include <QString>
+#include <QList>
 
 #include "NumberFormatParser.h"
 
@@ -108,6 +109,54 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
 XlsxXmlWorksheetReaderContext::~XlsxXmlWorksheetReaderContext()
 {
     delete sheet;
+}
+
+static void splitToRowAndColumn(const QString source, QString& row, QString& column)
+{
+    bool ok = false;
+
+    // Checking whether the 2nd char is a number
+    QString(source.at(1)).toInt(&ok);
+    if (ok) {
+        row = source.at(0);
+        column = source.mid(1);
+    }
+    else {
+        row = source.left(2);
+        column = source.mid(2);
+    }
+}
+
+QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleForPosition(const QString& position)
+{
+    QMapIterator<QString, QMap<QString, QString> > i(conditionalStyles);
+
+    QString startLetter, startNumber, endLetter, endNumber, positionStart, positionNumber;
+
+    splitToRowAndColumn(position, positionStart, positionNumber);
+
+    QList<QMap<QString, QString> > returnMaps;
+
+    while (i.hasNext()) {
+        i.next();
+        QString range = i.key();
+        int index = range.indexOf(':');
+        if (index < 0) {
+            splitToRowAndColumn(range, startLetter, startNumber);
+            endLetter = QString();
+        }
+        else {
+            splitToRowAndColumn(range.left(index), startLetter, startNumber);
+            splitToRowAndColumn(range.mid(index + 1), endLetter, endNumber);
+        }
+
+        if ((positionStart == startLetter && positionNumber == startNumber && endLetter.isEmpty()) ||
+            (positionStart >= startLetter && positionNumber.toInt() >= startNumber.toInt() &&
+             positionStart <= endLetter && positionNumber.toInt() <= endNumber.toInt())) {
+            returnMaps.push_back(i.value());
+        }
+    }
+    return returnMaps;
 }
 
 const char* XlsxXmlWorksheetReader::officeValue = "office:value";
@@ -252,7 +301,7 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
  - cellWatches (Cell Watch Items) §18.3.1.9
  - colBreaks (Vertical Page Breaks) §18.3.1.14
  - cols (Column Information) §18.3.1.17
- - conditionalFormatting (Conditional Formatting) §18.3.1.18
+ - [done] conditionalFormatting (Conditional Formatting) §18.3.1.18
  - controls (Embedded Controls) §18.3.1.21
  - customProperties (Custom Properties) §18.3.1.23
  - customSheetViews (Custom Sheet Views) §18.3.1.27
@@ -292,7 +341,15 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 {
     READ_PROLOGUE
 
-    body->startElement("table:table"); // CASE #S232
+    // In the first round we do not wish to output anything
+    QBuffer fakeBuffer;
+    KoXmlWriter fakeBody(&fakeBuffer);
+    KoXmlWriter *oldBody = body;
+    if (m_context->firstRoundOfReading) {
+        body = &fakeBody;
+    }
+
+    body->startElement("table:table");
 
 //! @todo implement CASE #S202 for fixing the name
     body->addAttribute("table:name", m_context->worksheetName);
@@ -300,7 +357,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     m_tableStyle = KoGenStyle(KoGenStyle::TableAutoStyle, "table");
 //! @todo hardcoded master page name
     m_tableStyle.addAttribute("style:master-page-name",
-                              QString("PageStyle_5f_Test_20_sheet_20__5f_%1").arg(m_context->worksheetNumber));
+                                  QString("PageStyle_5f_Test_20_sheet_20__5f_%1").arg(m_context->worksheetNumber));
 
     m_tableStyle.addProperty("table:display", m_context->sheet->visible());
 
@@ -315,7 +372,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
+        if (isStartElement() && !m_context->firstRoundOfReading) {
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
             ELSE_TRY_READ_IF(sheetData) // does fill the m_context->sheet
@@ -324,6 +381,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             ELSE_TRY_READ_IF(hyperlinks)
             ELSE_TRY_READ_IF(picture)
             ELSE_TRY_READ_IF(oleObjects)
+            SKIP_UNKNOWN
+        }
+        else if (isStartElement() && m_context->firstRoundOfReading) {
+            TRY_READ_IF(conditionalFormatting)
+            SKIP_UNKNOWN
         }
     }
 
@@ -477,6 +539,122 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     }
 
     body->endElement(); // table:table
+
+    if (m_context->firstRoundOfReading) {
+        body = oldBody;
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL conditionalFormatting
+/*
+ Parent elements:
+ - [done] worksheet (§18.3.1.99)
+
+ Child elements:
+ - [done] cfRule (Conditional Formatting Rule) §18.3.1.10
+ - extLst (Future Feature Data Storage Area) §18.2.10
+
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_conditionalFormatting()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(sqref)
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(cfRule)
+            SKIP_UNKNOWN
+        }
+    }
+
+    // Making sure the maps are correct priority order
+    qSort(m_conditionalIndices);
+
+
+    int index = 0;
+    while (index < m_conditionalIndices.size()) {
+        m_context->conditionalStyles.insertMulti(sqref, m_conditionalStyles.at(m_conditionalIndices.at(index).second));
+        ++index;
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL cfRule
+/*
+ Parent elements:
+ - [done] conditionalFormatting (§18.3.1.18)
+
+ Child elements:
+ - colorScale (Color Scale) §18.3.1.16
+ - dataBar (Data Bar) §18.3.1.28
+ - extLst (Future Feature Data Storage Area) §18.2.10
+ - [done] formula (Formula) §18.3.1.43
+ - iconSet (Icon Set) §18.3.1.49
+
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS(dxfId)
+    TRY_READ_ATTR_WITHOUT_NS(priority)
+    QString op = attrs.value("operator").toString();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(formula)
+            SKIP_UNKNOWN
+        }
+    }
+
+    QMap<QString, QString> odf;
+    // TODO, use attributes to really interpret this
+    // The default one here is valid for type="cellIs" operator="equal"
+    odf["style:condition"] = QString("cell-content()=%1").arg(m_formula);
+    odf["style:apply-style-name"] = QString("ConditionalStyle%1").arg(dxfId.toInt() + 1);
+
+    m_conditionalIndices.push_back(QPair<QString, int>(priority, m_conditionalIndices.size()));
+    m_conditionalStyles.push_back(odf);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL formula
+/*
+ Parent elements:
+ - [done]cfRule (§18.3.1.10)
+ - rdn (§18.11.1.13)
+
+ Child elements:
+ - none
+
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_formula()
+{
+    READ_PROLOGUE
+
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isCharacters()) {
+            m_formula = text().toString();
+        }
+        BREAK_IF_END_OF(CURRENT_EL)
+    }
     READ_EPILOGUE
 }
 
@@ -971,6 +1149,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
         if (!formattedStyle.isEmpty()) {
             cellStyle.addAttribute( "style:data-style-name", formattedStyle );
+        }
+
+        QList<QMap<QString, QString> > maps = m_context->conditionalStyleForPosition(r);
+        int index = maps.size();
+
+        // Adding the lists in reversed priority order, as KoGenStyle when creating the style
+        // adds last added first
+        while (index > 0) {
+            cellStyle.addStyleMap(maps.at(index - 1));
+            --index;
         }
 
         const QString cellStyleName = mainStyles->insert( cellStyle, "ce" );

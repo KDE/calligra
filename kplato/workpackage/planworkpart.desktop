@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calligra Project Management Component
+Name[et]=Calligra projektihalduse komponent
 Name[it]=Componente per la gestione dei progetti di Calligra
 Name[nl]=Calligra Projectbeheercomponent
 Name[pt]=Componente de Gestão de Projectos do Calligra
@@ -12,7 +13,7 @@ MimeType=application/x-vnd.kde.plan.work;application/x-vnd.kde.kplato.work;
 Type=Service
 X-KDE-ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-vnd.kde.plan.work
-X-KDE-ExtraNativeMimeTypes=application/x-vnd.kde.plan.work,application/x-vnd.kde.kplato.work
+X-KDE-ExtraNativeMimeTypes=application/x-vnd.kde.kplato.work
 GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù

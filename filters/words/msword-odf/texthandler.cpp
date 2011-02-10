@@ -1391,14 +1391,14 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                     styleNames.append("Normal");
                 }
             } else {
-                rx = QRegExp("\\D+(\\d)");
+                rx = QRegExp("\\S+(\\d+)$");
                 if (rx.indexIn(styleNames.first()) >= 0) {
                     bool ok = false;
                     uint n = rx.cap(1).toUInt(&ok, 10);
                     if (!ok) {
                         kDebug(30513) << "Conversion of QString to uint failed!";
                     } else {
-                        for (uint i = 0; i < n; i++) {
+                        for (uint i = 1; i < n; i++) {
                             styleNames.prepend("Normal");
                         }
                     }
@@ -1438,6 +1438,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
             }
 
             //Represents the chapter number where an index entry is located.
+            //FIXME: we need some logic here!
             cwriter->startElement("text:index-entry-chapter");
             cwriter->endElement(); //text:index-entry-chapter
 

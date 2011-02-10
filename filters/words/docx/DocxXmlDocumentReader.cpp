@@ -4010,24 +4010,41 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(color)
+    // The specs say that the background will not be shown in the default view but only in the fullscreen-view except the
+    // displayBackgroundShape is defined. Since we cannot (and don't want to) make such assumptions about the available
+    // views we only take over whatever is displayed in that default view. That's inline with what OO.org does too.
+    bool displayBackgroundShape = m_context->import->documentSettings().contains("displayBackgroundShape");
+    if (displayBackgroundShape) {
+        QString val = m_context->import->documentSetting("displayBackgroundShape").toString();
+        displayBackgroundShape = (val != "off" && val != "0" && val != "false");
+    }
 
-    QColor tmpColor(MSOOXML::Utils::ST_HexColorRGB_to_QColor(color));
-    if (tmpColor.isValid())
-        m_backgroundColor = tmpColor;
+    if (displayBackgroundShape) {
+        const QXmlStreamAttributes attrs(attributes());
+        TRY_READ_ATTR(color)
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            if (qualifiedName() == "v:background") {
-                TRY_READ(VML_background)
+        QColor tmpColor(MSOOXML::Utils::ST_HexColorRGB_to_QColor(color));
+        if (tmpColor.isValid())
+            m_backgroundColor = tmpColor;
+
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL);
+            if (isStartElement()) {
+                if (qualifiedName() == "v:background") {
+                    TRY_READ(VML_background)
+                }
+                ELSE_TRY_READ_IF(drawing)
+                SKIP_UNKNOWN
             }
-            ELSE_TRY_READ_IF(drawing)
-            SKIP_UNKNOWN
+        }
+    } else {
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL)
         }
     }
+
     READ_EPILOGUE
 }
 

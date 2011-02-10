@@ -282,11 +282,19 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
                                           *m_context->relationships, m_context->import,
                                           vmlreader.content(),
                                           vmlreader.frames());
-    const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
-                &worksheetReader, filepath, &context);
-    if (result != KoFilter::OK) {
+    // Due to some information being available only in the later part of the document, we have to read twice
+    // In the first round we get the later information and in 2nd round we read the rest and use the information
+    context.firstRoundOfReading = true;
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&worksheetReader, filepath, &context);
+    if (status != KoFilter::OK) {
         raiseError(worksheetReader.errorString());
-        return result;
+        return status;
+    }
+    context.firstRoundOfReading = false;
+    status = m_context->import->loadAndParseDocument(&worksheetReader, filepath, &context);
+    if (status != KoFilter::OK) {
+        raiseError(worksheetReader.errorString());
+        return status;
     }
 
     readNext();
