@@ -4014,6 +4014,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
     // displayBackgroundShape is defined. Since we cannot (and don't want to) make such assumptions about the available
     // views we only take over whatever is displayed in that default view. That's inline with what OO.org does too.
     bool displayBackgroundShape = m_context->import->documentSettings().contains("displayBackgroundShape");
+    if (displayBackgroundShape) {
+        QString val = m_context->import->documentSetting("displayBackgroundShape").toString();
+        displayBackgroundShape = (val != "off" && val != "0" && val != "false");
+    }
 
     if (displayBackgroundShape) {
         const QXmlStreamAttributes attrs(attributes());
