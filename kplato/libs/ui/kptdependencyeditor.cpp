@@ -636,6 +636,9 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
     m_symbol = new DependencyNodeSymbolItem();
     m_symbol->setZValue( zValue() + 10.0 );
     setSymbol();
+
+    m_treeIndicator = new QGraphicsPathItem( this );
+    m_treeIndicator->setPen( QPen( Qt::gray ) );
 }
 
 DependencyNodeItem::~DependencyNodeItem()
@@ -743,6 +746,10 @@ void DependencyNodeItem::moveToY( qreal y )
     foreach ( DependencyLinkItem *i, m_childrelations ) {
         i->createPath();
     }
+    setTreeIndicator( true );
+    foreach ( DependencyNodeItem *ch, m_children ) {
+        ch->setTreeIndicator( true );
+    }
 }
 
 void DependencyNodeItem::setRow( int row )
@@ -766,6 +773,10 @@ void DependencyNodeItem::moveToX( qreal x )
     }
     foreach ( DependencyLinkItem *i, m_childrelations ) {
         i->createPath();
+    }
+    setTreeIndicator( true );
+    foreach ( DependencyNodeItem *ch, m_children ) {
+        ch->setTreeIndicator( true );
     }
 }
 
@@ -890,6 +901,49 @@ QList<DependencyLinkItem*> DependencyNodeItem::successorItems( ConnectorType cty
         }
     }
     return lst;
+}
+
+qreal DependencyNodeItem::treeIndicatorX() const
+{
+    return rect().x() + 18.0;
+}
+
+void DependencyNodeItem::setTreeIndicator( bool on )
+{
+    if ( ! on ) {
+        m_treeIndicator->hide();
+        return;
+    }
+    QPainterPath p;
+    qreal y1 = itemScene()->gridY( row() );
+    qreal y2 = itemScene()->gridY( row() + 1 );
+    for ( DependencyNodeItem *par = m_parent; par; par = par->parentItem() ) {
+        qreal x = par->treeIndicatorX();
+        p.moveTo( x, y1 );
+        p.lineTo( x, (y1 + y2) / 2.0 );
+        if ( par == m_parent ) {
+            p.lineTo( x + 6, (y1 + y2) / 2.0 );
+            if ( m_node->siblingAfter() ) {
+                p.moveTo( x, (y1 + y2) / 2.0 );
+                p.lineTo( x, y2 );
+            }
+        } else {
+            p.lineTo( x, y2 );
+        }
+    }
+    if ( ! m_children.isEmpty() ) {
+        qreal x = treeIndicatorX();
+        qreal y = rect().bottom();
+        p.moveTo( x, y );
+        p.lineTo( x, itemScene()->gridY( row() + 1 ) );
+    }
+    if ( p.isEmpty() ) {
+        m_treeIndicator->hide();
+    } else {
+        m_treeIndicator->setPath( p );
+        m_treeIndicator->show();
+    }
+    //kDebug()<<text()<<rect()<<p;
 }
 
 //--------------------
