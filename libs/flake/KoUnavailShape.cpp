@@ -30,6 +30,7 @@
 #include <QDataStream>
 #include <QPixmap>
 #include <QStringList>
+#include <QSvgRenderer>
 
 // KDE
 #include <kstandarddirs.h>
@@ -58,6 +59,7 @@ public:
     void saveXml(const KoXmlElement & element);
     void saveXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer);
     void saveFile(const QString &filename, KoShapeLoadingContext &context);
+    QByteArray loadFile(const QString &filename, KoShapeLoadingContext &context);
 
     // Objects inside the frame.  We store:
     //  - The XML code for each object
@@ -66,14 +68,23 @@ public:
     QStringList                        objectNames;   // A list of objects names in the files
     QList<QPair<QString, QByteArray> > embeddedFiles; // List of <objectNames,contents> of embedded files.
     KoOdfManifestEntry                *manifestEntry; // The manifest entry for this embedded object
+
+    QPixmap questionMark;
+    QPixmap pixmapPreview;
+    QSvgRenderer * scalablePreview;
 };
 
 KoUnavailShape::Private::Private()
+    : scalablePreview(new QSvgRenderer())
 {
+    // Get the question mark "icon".
+    questionMark.load(KStandardDirs::locate("data", "koffice/icons/questionmark.png"));
 }
 
 KoUnavailShape::Private::~Private()
 {
+    // it's a QObject, but we've not parented it
+    delete(scalablePreview);
 }
 
 
@@ -127,26 +138,38 @@ void KoUnavailShape::draw(QPainter &painter) const
     // Draw a frame and a cross.
     drawNull(painter);
 #else
-    // Draw a nice question mark.
 
-    // Get the question mark "icon".
-    QPixmap questionMark;
-    questionMark.load(KStandardDirs::locate("data", "koffice/icons/questionmark.png"));
+    // Run through the previews in order of preference. Only draw the placeholder questionmark
+    // if neither of the two previews are available for rendering.
+    if(d->scalablePreview->isValid()) {
+        QRect bounds(0, 0, boundingRect().width(), boundingRect().height());
+        d->scalablePreview->render(&painter, bounds);
+    }
+    else if(!d->pixmapPreview.isNull()) {
+        qreal  width = size().width();
+        qreal  height = size().height();
+        qreal  picWidth = CM_TO_POINT(d->pixmapPreview.widthMM() * 10);
+        qreal  picHeight = CM_TO_POINT(d->pixmapPreview.heightMM() * 10);
 
-    // The size of the image is:
-    //  - the size of the shape if  shapesize < 2cm
-    //  - 2 cm                  if  2cm <= shapesize <= 8cm
-    //  - shapesize / 4         if  shapesize > 8cm
-    qreal  width = size().width();
-    qreal  height = size().height();
-    qreal  picSize = CM_TO_POINT(2); // Default size is 2 cm.
-    if (width < CM_TO_POINT(2) || height < CM_TO_POINT(2))
-        picSize = qMin(width, height);
-    else if (width > CM_TO_POINT(8) && height > CM_TO_POINT(8))
-        picSize = qMin(width, height) / qreal(4.0);
+        painter.drawPixmap((width - picWidth) / qreal(2.0), (height - picWidth) / qreal(2.0),
+                        picWidth, picHeight, d->pixmapPreview);
+    }
+    else {
+        // The size of the image is:
+        //  - the size of the shape if  shapesize < 2cm
+        //  - 2 cm                  if  2cm <= shapesize <= 8cm
+        //  - shapesize / 4         if  shapesize > 8cm
+        qreal  width = size().width();
+        qreal  height = size().height();
+        qreal  picSize = CM_TO_POINT(2); // Default size is 2 cm.
+        if (width < CM_TO_POINT(2) || height < CM_TO_POINT(2))
+            picSize = qMin(width, height);
+        else if (width > CM_TO_POINT(8) && height > CM_TO_POINT(8))
+            picSize = qMin(width, height) / qreal(4.0);
 
-    painter.drawPixmap((width - picSize) / qreal(2.0), (height - picSize) / qreal(2.0),
-                       picSize, picSize, questionMark);
+        painter.drawPixmap((width - picSize) / qreal(2.0), (height - picSize) / qreal(2.0),
+                        picSize, picSize, d->questionMark);
+    }
 #endif
 }
 
@@ -242,6 +265,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
     // all the files associated with them.  Some of the objects are
     // files, and some are directories.  The directories are searched
     // and the files within are saved as well.
+    bool foundPreview = false;
     for (int i = 0; i < d->objectNames.size(); ++i) {
         QString objectName = d->objectNames.value(i);
 
@@ -271,6 +295,26 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         else {
             // A file: save it.
             d->saveFile(objectName, context);
+        }
+
+        // If we have not already found a preview...
+        if(!foundPreview) {
+            kDebug(30006) << "Attempting to load preview from " << objectName;
+            QByteArray previewData = d->loadFile(objectName, context);
+            // Check to see if we know the mimetype for this entry. Specifically:
+            // - Check to see if the item is a loadable SVG file
+            d->scalablePreview->load(previewData);
+            if(d->scalablePreview->isValid()) {
+                kDebug(30006) << "Found scalable preview image!";
+                foundPreview = true;
+                continue;
+            }
+            // - Otherwise check to see if it's a loadable pixmap file
+            d->pixmapPreview.loadFromData(previewData);
+            if(!d->pixmapPreview.isNull()) {
+                kDebug(30006) << "Found pixel based preview image!";
+                foundPreview = true;
+            }
         }
     }
 
@@ -372,18 +416,31 @@ void KoUnavailShape::Private::saveFile(const QString &fileName, KoShapeLoadingCo
     if (fileName.endsWith('/'))
         return;
 
+    QByteArray fileContent = loadFile(fileName, context);
+    if(fileContent.isNull())
+        return;
+
+    kDebug(30006) << "File content: " << fileContent;
+    embeddedFiles.append(QPair<QString, QByteArray>(fileName, fileContent));
+}
+
+QByteArray KoUnavailShape::Private::loadFile(const QString &fileName, KoShapeLoadingContext &context)
+{
+    // Can't load a file which is a directory, return an invalid QByteArray
+    if (fileName.endsWith('/'))
+        return QByteArray();
+
     KoStore *store = context.odfLoadingContext().store();
     QByteArray fileContent;
 
     if (!store->open(fileName)) {
         store->close();
-        return;
+        return QByteArray();
     }
 
     int fileSize = store->size();
     fileContent = store->read(fileSize);
     store->close();
 
-    kDebug(30006) << "File content: " << fileContent;
-    embeddedFiles.append(QPair<QString, QByteArray>(fileName, fileContent));
+    return fileContent;
 }
