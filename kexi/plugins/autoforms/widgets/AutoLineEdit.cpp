@@ -19,6 +19,7 @@
 
 
 #include "AutoLineEdit.h"
+#include <KDebug>
 #include <kexidb/queryschema.h>
 
 AutoLineEdit::AutoLineEdit(QWidget* parent): AutoWidget(parent)
@@ -44,6 +45,7 @@ void AutoLineEdit::setInvalidState(const QString& displayText)
 
 void AutoLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
+    kDebug() << add;
     m_lineEdit->setText(add.toString());
 }
 
@@ -74,6 +76,7 @@ bool AutoLineEdit::valueIsNull()
 
 QVariant AutoLineEdit::value()
 {
+    kDebug();
     return m_lineEdit->text();
 }
 
@@ -81,6 +84,7 @@ void AutoLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     setLabel(cinfo->captionOrAliasOrName());
+    setObjectName("AutoLineEdit_" + cinfo->field->name());
 }
 
 

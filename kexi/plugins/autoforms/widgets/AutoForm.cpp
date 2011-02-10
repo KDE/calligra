@@ -21,13 +21,17 @@
 #include "AutoForm.h"
 #include <QGridLayout>
 #include "AutoLineEdit.h"
+#include <kexidb/cursor.h>
 
-AutoForm::AutoForm(QWidget* parent): QWidget(parent)
+AutoForm::AutoForm(QWidget* parent, KexiRecordNavigator *nav): QWidget(parent)
 {
+    setBackgroundRole(QPalette::Window);
     m_layout = new QGridLayout(this);
     setLayout(m_layout);
     m_title = new QLabel("Title", this);
     m_layout->addWidget(m_title, 0, 0, 1, 1);
+    
+    m_navPanel = nav;
 }
 
 AutoForm::~AutoForm()
@@ -92,7 +96,6 @@ void AutoForm::dataRefreshed()
 
 void AutoForm::dataSet(KexiTableViewData* data)
 {
-
 }
 
 KexiDataItemInterface* AutoForm::editor(int col, bool ignoreMissingEditor)
@@ -133,11 +136,15 @@ void AutoForm::itemSelected(KexiDB::RecordData* )
 void AutoForm::initDataContents()
 {
     kDebug();
-    KexiDataAwareObjectInterface::initDataContents();
 
     m_title->setText(KexiDataAwareObjectInterface::data()->dbTableName());
     buildForm();
     layoutForm();
+    
+    KexiDataAwareObjectInterface::initDataContents();
+    
+    fillDataItems(*m_currentItem, cursorAtNewRow());
+    
 }
 
 int AutoForm::lastVisibleRow() const
@@ -231,14 +238,17 @@ void AutoForm::buildForm()
         widget->setColumnInfo(col->columnInfo());
         m_widgets << widget;
     }
+    setMainDataSourceWidget(this);
     
+    QSet<QString> invalidSources;
+    invalidateDataSources(invalidSources, KexiDataAwareObjectInterface::data()->cursor()->query());
 }
 
 void AutoForm::layoutForm()
 {
     int row = 1;
     foreach(AutoWidget *widget, m_widgets) {
-        m_layout->addWidget(widget, row, 1, 1, 1);
+        m_layout->addWidget(widget, row, 0, 1, 1);
         ++row;
     }
     resize(sizeHint());

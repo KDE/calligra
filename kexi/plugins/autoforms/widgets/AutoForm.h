@@ -36,8 +36,10 @@ class AutoForm : public QWidget,
     KEXI_DATAAWAREOBJECTINTERFACE
     
 public:
-    AutoForm(QWidget* parent);
+    AutoForm(QWidget* parent, KexiRecordNavigator *nav);
     virtual ~AutoForm();
+    
+    void initDataSource();
     
 protected:
     virtual void resizeEvent(QResizeEvent* );

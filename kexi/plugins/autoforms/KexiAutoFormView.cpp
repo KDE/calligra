@@ -34,8 +34,17 @@ KexiAutoFormView::KexiAutoFormView(QWidget* parent): KexiView(parent), m_autoFor
     m_scrollArea = new QScrollArea(this);
     m_scrollArea->setBackgroundRole(QPalette::Dark);
     m_scrollArea->viewport()->setAutoFillBackground(true);
-    
     layout()->addWidget(m_scrollArea);
+    
+    #ifndef KEXI_MOBILE
+    m_pageSelector = new KexiRecordNavigator(this, 0);
+    layout()->addWidget(m_pageSelector);
+    m_pageSelector->setRecordCount(0);
+    m_pageSelector->setInsertingButtonVisible(true);
+    m_pageSelector->setLabelText(i18n("Record"));
+    m_pageSelector->setRecordHandler(this);
+    #endif
+    
 }
 
 KexiAutoFormView::~KexiAutoFormView()
@@ -61,7 +70,7 @@ tristate KexiAutoFormView::afterSwitchFrom(Kexi::ViewMode mode)
             m_scrollArea->takeWidget();
             delete m_autoForm;
         }
-        m_autoForm = new AutoForm(this);
+        m_autoForm = new AutoForm(this, m_pageSelector);
         
         KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
         KexiDB::Cursor *cursor = conn->executeQuery(*(conn->tableSchema("actor")));
@@ -69,6 +78,7 @@ tristate KexiAutoFormView::afterSwitchFrom(Kexi::ViewMode mode)
         if (cursor) {
             KexiTableViewData *data = new KexiTableViewData(cursor);
             m_autoForm->setData(data);
+            
         }
         m_scrollArea->setWidget(m_autoForm);
     //}

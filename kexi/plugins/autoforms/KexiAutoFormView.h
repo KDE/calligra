@@ -54,6 +54,7 @@ public:
     
 private:
     QScrollArea *m_scrollArea;
+    KexiRecordNavigator *m_pageSelector;
     AutoForm *m_autoForm;
     
     KexiAutoFormPart::TempData* tempData() const;

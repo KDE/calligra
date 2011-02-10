@@ -28,7 +28,7 @@ AutoWidget::AutoWidget(QWidget* parent): QWidget(parent), m_widget(0)
     m_fieldLabel = new QLabel(this);
     
     m_layout = new QHBoxLayout(this);
-    m_layout->addWidget(m_fieldLabel);
+    m_layout->addWidget(m_fieldLabel, 1);
     
     setLayout(m_layout);
 }
@@ -47,7 +47,7 @@ void AutoWidget::setWidget(QWidget* widget)
 {
     if (!m_widget) {
         m_widget = widget;
-        m_layout->addWidget(widget);
+        m_layout->addWidget(widget, 1);
     }
 }
 
