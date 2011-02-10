@@ -136,6 +136,22 @@ bool DocxImport::acceptsDestinationMimeType(const QByteArray& mime) const
     return mime == "application/vnd.oasis.opendocument.text";
 }
 
+static QVariant readSettings(const KoXmlElement &element)
+{
+    QVariant result;
+    QVariantMap m;
+    KoXmlElement e;
+    forEachElement(e, element) {
+        QVariant v = readSettings(e);
+        if (!v.isValid())
+            v = e.attribute("val");
+        m[e.tagName()] = v;
+    }
+    if (!m.isEmpty())
+        result.setValue(m);
+    return result;
+}
+
 KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
         QString& errorMessage)
 {
@@ -144,7 +160,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     if (partNameList.count() == 1) {
         KoXmlDocument settingsXML;
         if (loadAndParse(partNameList.first(), settingsXML, errorMessage) == KoFilter::OK) {
-            RETURN_IF_ERROR( MSOOXML::Utils::loadDocumentProperties(settingsXML, d->documentSettings) )
+            d->documentSettings = readSettings(settingsXML.documentElement()).value<QVariantMap>();
         }
     }
 
