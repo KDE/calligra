@@ -187,6 +187,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_workbook()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(sheets)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
