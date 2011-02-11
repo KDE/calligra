@@ -1151,7 +1151,7 @@ void ConstraintAtom::build(Context* context) {
                 curChild->addConstraint( clonedPtr );       
                 constraintedWasApplied = true;
             }
-        }        
+        }
     } else if ( m_for == "self" || m_for.isEmpty() ) {
         //addedConstraints.append( ptr.data() );
         context->m_parentLayout->addConstraint( ptr );
@@ -1211,11 +1211,13 @@ void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAto
             if ( value < 0.0 ) {
                 AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
                 Q_ASSERT( r );
-                value = r->defaultValue( m_refType, values );      
+                value = r->defaultValue( m_refType, values );
                 Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg( m_type ).arg( m_refType ).toLocal8Bit());
             }
-            atom->m_values[ m_type ] = value;
-            atom->setNeedsRelayout( true );
+            if ( value >= 0.0 ) {
+                atom->m_values[ m_type ] = value;
+                atom->setNeedsRelayout( true );
+            }
         } else {
             if ( value >= 0.0 ) {
                 atom->m_values[ m_type ] = value;
@@ -1223,12 +1225,11 @@ void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAto
             } else {
                 AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
                 Q_ASSERT( r );
-                value = r->defaultValue( m_refType, values );
-                if  ( value >= 0.0 ) {
+                value = r->defaultValue( m_type, values );
+                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg( m_type ).arg( m_refType ).toLocal8Bit());
+                if ( value >= 0.0 ) {
                     atom->m_values[ m_type ] = value;
                     atom->setNeedsRelayout( true );
-                } else {
-                    ;//Q_ASSERT( false );
                 }
             }
         }
@@ -1849,9 +1850,11 @@ void ChooseAtom::build(Context* context) {
     typedef QVector< QExplicitlySharedDataPointer< AbstractAtom > > AtomPList;
     foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult ) {
         AtomPList listResult = atom->children();
+        // move the constraints to the parent's m_constraintsToBuild
         AtomPList::iterator it = std::stable_partition( listResult.begin(), listResult.end(), ConstraintPredicate() );    
         std::copy( it, listResult.end(), std::back_inserter( context->m_parentLayout->m_constraintsToBuild ) );
         listResult.erase( it, listResult.end() );
+        // and move the remaining atom's to the parent
         foreach( QExplicitlySharedDataPointer<AbstractAtom> a, listResult ) {
             atom->removeChild( a );
             m_parent->insertChild( ++index, a );
