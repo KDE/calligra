@@ -224,10 +224,10 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     const QRect visibleCells = paintCellRange();
     const Sheet * s = sheet();
     const QPointF bottomRight(s->columnPosition(visibleCells.right() + 1), s->rowPosition(visibleCells.bottom() + 1));
-    tiles.setLeft(topLeft.x() / TILESIZE);
-    tiles.setTop(topLeft.y() / TILESIZE);
-    tiles.setRight((bottomRight.x() + TILESIZE-1) / TILESIZE);
-    tiles.setBottom((bottomRight.y() + TILESIZE-1) / TILESIZE);
+    tiles.setLeft(topLeft.x() * sx / TILESIZE);
+    tiles.setTop(topLeft.y() * sy / TILESIZE);
+    tiles.setRight((bottomRight.x() * sx + TILESIZE-1) / TILESIZE);
+    tiles.setBottom((bottomRight.y() * sy + TILESIZE-1) / TILESIZE);
 
     for (int x = qMax(0, tiles.left()); x < tiles.right(); x++) {
         for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
