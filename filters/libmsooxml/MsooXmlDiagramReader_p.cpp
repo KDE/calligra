@@ -65,8 +65,9 @@ Context::Context()
     , m_parentLayout(m_rootLayout)
     , m_currentNode(0) {
 }
-//TODO make sure this is no memoryleak
+
 Context::~Context() {
+    //TODO make sure this is no memoryleak
     //delete m_rootPoint;
     //delete m_connections;
 }
@@ -74,73 +75,117 @@ Context::~Context() {
 AbstractNode* Context::currentNode() const { return m_currentNode; }
 void Context::setCurrentNode(AbstractNode* node) { m_currentNode = node; }
 
-qreal ValueCache::rectValue( const QString& name ) const
-{
+ValueCache::ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), unmodified( true ), negativeWidth( false ){}
+
+bool ValueCache::hasNegativeWidth() const {
+    return negativeWidth;
+}
+
+qreal ValueCache::value( const QString& name, bool *valid ) const {
+    if ( valid )
+        *valid = true;
+    if ( isRectValue( name ) )
+        return rectValue( name );
+    if ( valid && ! mapping.contains( name ) )
+        *valid = false;
+    return mapping[ name ];
+}
+
+bool ValueCache::valueExists( const QString& name ) {
+    return isRectValue( name ) || mapping.contains( name );
+}
+
+void ValueCache::setValue( const QString& name, qreal value ) {
+    if ( isRectValue( name ) )
+        setRectValue( name, value );
+    else
+        mapping[ name ] = value;
+}
+
+qreal ValueCache::operator[]( const QString& name ) const  {
+    return value( name );
+}
+
+ValueCache::ResultWrapper ValueCache::operator[]( const char* name ) {
+    return ResultWrapper( this, QString::fromLatin1( name ) );
+}
+
+ValueCache::ResultWrapper ValueCache::operator[]( const QString& name ) {
+    return ResultWrapper( this, name );
+}
+
+ValueCache::operator QMap< QString, qreal >() const {
+    QMap < QString, qreal > result = mapping;
+    result[ "l" ] = rect.left();
+    result[ "r" ] = rect.right();
+    result[ "t" ] = rect.top();
+    result[ "b" ] = rect.bottom();
+    result[ "w" ] = rect.width();
+    result[ "h" ] = rect.height();
+    result[ "ctrX" ] = rect.center().rx();
+    result[ "ctrY" ] = rect.center().ry();
+    return result;
+}
+
+bool ValueCache::isRectValue( const QString& name ) const {
+    return name == "l" || name == "r" || name == "w" || name == "h" || name == "t" || name == "b" || name == "ctrX" || name == "ctrY";
+}
+
+qreal ValueCache::rectValue( const QString& name ) const {
     Q_ASSERT( rect.isValid() );
     if ( name == "l")
         return rect.left();
-    else if ( name == "r" )
+    if ( name == "r" )
         return rect.right();
-    else if ( name == "w" )
+    if ( name == "w" )
         return rect.width();
-    else if ( name == "h" )
+    if ( name == "h" )
         return rect.height();
-    else if ( name == "t" )
+    if ( name == "t" )
         return rect.top();
-    else if ( name == "b" )
+    if ( name == "b" )
         return rect.bottom();
-    else if ( name == "ctrX" )
+    if ( name == "ctrX" )
         return rect.center().rx();
-    else if ( name == "ctrY" )
+    if ( name == "ctrY" )
         return rect.center().ry();
-    else
-        return -1;
+    return 0.0;
 }
-void ValueCache::setRectValue( const QString& name, qreal value )
-{
+
+void ValueCache::setRectValue( const QString& name, qreal value ) {
     Q_ASSERT( rect.isValid() );
-    if ( name == "l")
-    {
+    if ( name == "l") {
         rect.moveLeft( value );
-    }
-    else if ( name == "r" )
+    } else if ( name == "r" ) {
         rect.setRight( value );
-    else if ( name == "w" )
-    {
-        //Q_ASSERT( value > 0 );
-        if ( value <  0 )
-        {
+    } else if ( name == "w" ) {
+        if ( value <  0 ) {
             rect.setLeft( rect.right() + value );
             negativeWidth = true;
-        }
-        else
-        {
+        } else {
             rect.setWidth( value );
             Q_ASSERT( negativeWidth == false );
             negativeWidth = false;
         }
-    }
-    else if ( name == "h" )
-    {
+    } else if ( name == "h" ) {
         Q_ASSERT( value > 0 );
         rect.setHeight(value );
-    }
-    else if ( name == "t" )
+    } else if ( name == "t" ) {
         rect.moveTop( value );
-    else if ( name == "b" )
+    } else if ( name == "b" ) {
         rect.setBottom( value );
-    else if ( name == "ctrX" )
+    } else if ( name == "ctrX" ) {
         rect.moveCenter( QPointF( rect.center().x() + value, rect.center().y() ) );
-    else if ( name == "ctrY" )
+    } else if ( name == "ctrY" ) {
         rect.moveCenter( QPointF( rect.center().x(), rect.center().y() + value ) );
-    else
-        Q_ASSERT( false );
+    } else {
+        Q_ASSERT_X( false, __FUNCTION__, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
+    }
     Q_ASSERT( rect.isValid() );
     Q_ASSERT( rect.left() >= 0 );
     Q_ASSERT( rect.top() >= 0 );
     unmodified = false;
 }
-//void setValue( const QString& name, qreal value );
 
 /****************************************************************************************************/
 
@@ -153,10 +198,8 @@ void AbstractNode::dump(Context* context, int level) {
 }
 
 void AbstractNode::dump( QTextStream& device ) {
-  foreach(AbstractNode* node, children())
-  {
-    node->dump( device );
-  }
+    foreach(AbstractNode* node, children())
+        node->dump( device );
 }
 
 void AbstractNode::readElement(Context*, MsooXmlDiagramReader*) {
@@ -171,7 +214,9 @@ void AbstractNode::readAll(Context* context, MsooXmlDiagramReader* reader) {
     }
 }
 
-AbstractNode* AbstractNode::parent() const { return m_parent; } 
+AbstractNode* AbstractNode::parent() const {
+    return m_parent;
+}
 
 QList<AbstractNode*> AbstractNode::children() const {
     if(m_cachedChildren.isEmpty()) {
@@ -188,8 +233,6 @@ QList<AbstractNode*> AbstractNode::children() const {
     return m_cachedChildren;
 }
 
-static int addedChildsCounter2 = 0;
-
 void AbstractNode::insertChild(int index, AbstractNode* node) {
     //Q_ASSERT(!m_orderedChildren.contains(index));
     Q_ASSERT(!m_orderedChildrenReverse.contains(node));
@@ -202,12 +245,7 @@ void AbstractNode::insertChild(int index, AbstractNode* node) {
         m_orderedChildren[index] = QList<AbstractNode*>() << node;
     m_orderedChildrenReverse[node] = index;
     m_cachedChildren.clear();
-    LayoutNodeAtom* layNode = dynamic_cast< LayoutNodeAtom* >( node );
-    if ( layNode && layNode->m_name == "Name0" )
-    {
-        ++addedChildsCounter2;
-        Q_ASSERT( layNode->m_name != "compositeNode" );
-    }
+    //LayoutNodeAtom* layNode = dynamic_cast< LayoutNodeAtom* >( node );
 }
 
 void AbstractNode::addChild(AbstractNode* node) {
@@ -216,12 +254,7 @@ void AbstractNode::addChild(AbstractNode* node) {
     node->m_parent = this;
     m_appendedChildren.append(node);
     m_cachedChildren.clear();
-    LayoutNodeAtom* layNode = dynamic_cast< LayoutNodeAtom* >( this );
-    if ( layNode && layNode->m_name == "Name0" )
-    {
-        ++addedChildsCounter2;
-        Q_ASSERT( layNode->m_name != "compositeNode" );
-    }
+    //LayoutNodeAtom* layNode = dynamic_cast< LayoutNodeAtom* >( this );
 }
 
 void AbstractNode::removeChild(AbstractNode* node) {
@@ -274,10 +307,8 @@ void PointNode::readElement(Context* context, MsooXmlDiagramReader* reader) {
     }
 }
 
-void MSOOXML::Diagram::ConnectionNode::dump(QTextStream& device)
-{
-    foreach(AbstractNode* node, peers() )
-    {
+void MSOOXML::Diagram::ConnectionNode::dump(QTextStream& device) {
+    foreach(AbstractNode* node, peers() ) {
         ConnectionNode* connNode = dynamic_cast< ConnectionNode* > ( node );
         PointNode* pointNode = dynamic_cast< PointNode* > ( node );
         if ( connNode )
@@ -285,8 +316,7 @@ void MSOOXML::Diagram::ConnectionNode::dump(QTextStream& device)
         else if ( pointNode )
             device << "\"" << m_tagName << m_modelId << "\" -> \"" << pointNode->m_tagName << pointNode->m_modelId << "\"\n";
     }
-    foreach(AbstractNode* node, children())
-    {
+    foreach(AbstractNode* node, children()) {
         ConnectionNode* connNode = dynamic_cast< ConnectionNode* > ( node );
         PointNode* pointNode = dynamic_cast< PointNode* > ( node );
         if ( connNode )
@@ -296,7 +326,6 @@ void MSOOXML::Diagram::ConnectionNode::dump(QTextStream& device)
     }
     MSOOXML::Diagram::AbstractNode::dump(device);
 }
-
 
 void PointNode::readAll(Context* context, MsooXmlDiagramReader* reader) {
     const QXmlStreamAttributes attrs(reader->attributes());
@@ -347,8 +376,7 @@ void PointListNode::dump(Context* context, int level) {
     AbstractNode::dump(context, level);
 }
 
-void PointListNode::dump( QTextStream& device )
-{
+void PointListNode::dump( QTextStream& device ) {
     AbstractNode::dump( device );
 }
 
@@ -369,10 +397,8 @@ void ConnectionNode::dump(Context*, int level) {
     //AbstractNode::dump(context, level);
 }
 
-void MSOOXML::Diagram::PointNode::dump(QTextStream& device)
-{
-    foreach(AbstractNode* node, peers() )
-    {
+void MSOOXML::Diagram::PointNode::dump(QTextStream& device) {
+    foreach(AbstractNode* node, peers() ) {
         ConnectionNode* connNode = dynamic_cast< ConnectionNode* > ( node );
         PointNode* pointNode = dynamic_cast< PointNode* > ( node );
         if ( connNode )
@@ -380,8 +406,7 @@ void MSOOXML::Diagram::PointNode::dump(QTextStream& device)
         else if ( pointNode )
             device << "\"" << m_tagName << m_modelId << "\" -> \"" << pointNode->m_tagName << pointNode->m_modelId << "\"[label=\"" << /*m_tagName << m_modelId << " " <<*/ m_text << "\"]\n";
     }
-    foreach(AbstractNode* node, children())
-    {
+    foreach(AbstractNode* node, children()) {
         ConnectionNode* connNode = dynamic_cast< ConnectionNode* > ( node );
         PointNode* pointNode = dynamic_cast< PointNode* > ( node );
         if ( connNode )
@@ -391,7 +416,6 @@ void MSOOXML::Diagram::PointNode::dump(QTextStream& device)
     }
     MSOOXML::Diagram::AbstractNode::dump(device);
 }
-
 
 void ConnectionNode::readElement(Context* context, MsooXmlDiagramReader* reader) {
     if (reader->isStartElement()) {
@@ -453,8 +477,7 @@ void AbstractAtom::dump(Context* context, int level) {
     }
 }
 
-void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
-{
+void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
     if (reader->isStartElement()) {
         AbstractAtom *node = 0;
 
@@ -510,18 +533,15 @@ void AbstractAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
 
 void AbstractAtom::build(Context* context) {
     //typedef QList< QExplicitlySharedDataPointer< AbstractAtom > > SharedAtomList;
-//     for( int i = 0; i < m_children.count(); ++i )
-//         m_children[ i ]->build( context );
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
-    {
-      atom->build(context);
+    //for( int i = 0; i < m_children.count(); ++i ) m_children[ i ]->build( context );
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
+        atom->build(context);
     }
 }
 
 void AbstractAtom::layoutAtom(Context* context) {
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
-    {
-      if ( LayoutNodeAtom* layAtom = dynamic_cast< LayoutNodeAtom* >( atom.data() ) )
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
+        if (LayoutNodeAtom* layAtom = dynamic_cast< LayoutNodeAtom* >( atom.data() ))
             layAtom->setNeedsRelayout( true );
         atom->layoutAtom(context);
     }
@@ -535,20 +555,19 @@ void AbstractAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyl
 QExplicitlySharedDataPointer<AbstractAtom> AbstractAtom::parent() const { return m_parent; } 
 QVector< QExplicitlySharedDataPointer<AbstractAtom> > AbstractAtom::children() const { return m_children; }
 
+int AbstractAtom::indexOfChild(AbstractAtom* node) const {
+    for ( int i = 0; i < m_children.count(); ++i )
+        if ( m_children[ i ].data() == node )
+            return i;
+    return -1;
+}
+
 void AbstractAtom::addChild(AbstractAtom* node) {
     addChild(QExplicitlySharedDataPointer<AbstractAtom>(node));
 }
 
-static int addedChildsCounter = 0;
-
 void AbstractAtom::addChild(QExplicitlySharedDataPointer<AbstractAtom> node) {
     node->m_parent = this;
-    LayoutNodeAtom* layNode = dynamic_cast< LayoutNodeAtom* >( this );
-    if ( layNode && layNode->m_name == "Name0" )
-    {
-        ++addedChildsCounter;
-        Q_ASSERT( layNode->m_name != "compositeNode" );
-    }
     m_children.append(node);
 }
 
@@ -557,12 +576,6 @@ void AbstractAtom::insertChild(int index, AbstractAtom* node) {
 }
 
 void AbstractAtom::insertChild(int index, QExplicitlySharedDataPointer<AbstractAtom> node) {
-    LayoutNodeAtom* layNode = dynamic_cast< LayoutNodeAtom* >( this );
-    if ( layNode && layNode->m_name == "Name0" )
-    {
-        ++addedChildsCounter;
-        Q_ASSERT( layNode->m_name != "compositeNode" );
-    }
     node->m_parent = this;
     if ( index < m_children.count() )
       m_children.insert(index, node);
@@ -572,22 +585,6 @@ void AbstractAtom::insertChild(int index, QExplicitlySharedDataPointer<AbstractA
 
 void AbstractAtom::removeChild(QExplicitlySharedDataPointer<AbstractAtom> node) {
     const int index = m_children.indexOf(node);
-    LayoutNodeAtom* layNode = dynamic_cast< LayoutNodeAtom* >( this );
-    if ( layNode && layNode->m_name == "Name0" )
-        --addedChildsCounter;
-    /*
-    
-    int i = 0;
-    const int count = m_children.count();
-    Q_ASSERT( node != m_children[ 0 ] );
-    */
-//     bool found = false;
-//     Q_FOREACH( QExplicitlySharedDataPointer<AbstractAtom> mnode, m_children )
-//     {        
-//         if ( mnode == node )
-//             found = true;
-//     }
-//     int i = m_children.count();
     Q_ASSERT(index >= 0);
     m_children.remove(index);
     node->m_parent = QExplicitlySharedDataPointer<AbstractAtom>();
@@ -794,18 +791,16 @@ void LayoutNodeAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
 
 class ConstraintPredicate
 {
-public:
-    bool operator()( const QExplicitlySharedDataPointer<MSOOXML::Diagram::AbstractAtom> &value )
-    {
-        ListAtom *atom = dynamic_cast< ListAtom* >( value.data() );
-        if ( !atom )
+    public:
+        bool operator()( const QExplicitlySharedDataPointer<MSOOXML::Diagram::AbstractAtom> &value ) {
+            ListAtom *atom = dynamic_cast< ListAtom* >( value.data() );
+            if ( !atom )
+                return true;
+            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, atom->children() )
+                if ( dynamic_cast< ConstraintAtom* >( val.data() ) )
+                    return false;
             return true;
-        foreach( QExplicitlySharedDataPointer<AbstractAtom> val, atom->children() )
-            if ( dynamic_cast< ConstraintAtom* >( val.data() ) )
-                return false;
-        
-        return true;
-    }
+        }
 };
 
 void LayoutNodeAtom::build(Context* context) {
@@ -815,15 +810,11 @@ void LayoutNodeAtom::build(Context* context) {
     context->m_layoutPointMap[ this ] = context->currentNode();
     typedef QVector< QExplicitlySharedDataPointer<AbstractAtom> > AtomPList;
     AtomPList::iterator it = std::stable_partition( m_children.begin(), m_children.end(), ConstraintPredicate() );
-    //Q_ASSERT( it == m_children.end() );
-    //AtomPList constraintList;
     std::copy( it, m_children.end(), std::back_inserter( m_constraintsToBuild ) );
     m_children.erase( it, m_children.end() );
     AbstractAtom::build(context);
     foreach( QExplicitlySharedDataPointer<AbstractAtom> constr, m_constraintsToBuild )
-    {
         constr->build( context );
-    }
     m_constraintsToBuild.clear();
     context->m_parentLayout = oldLayout;
 }
@@ -868,7 +859,6 @@ void LayoutNodeAtom::layoutAtom(Context* context) {
             m_algorithmImpl->doLayoutChildren();
         }
     }
-    
 }
 
 void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
@@ -923,8 +913,7 @@ void LayoutNodeAtom::setNeedsReinit(bool needsReinit) {
     m_needsReinit = needsReinit;
     if(m_needsReinit) // if we need to be re-initialized then our children need to be too
         foreach(QExplicitlySharedDataPointer<AbstractAtom> child, children())
-            if(LayoutNodeAtom* childLayoutAtom = dynamic_cast<LayoutNodeAtom*>(child.data()))
-            {
+            if(LayoutNodeAtom* childLayoutAtom = dynamic_cast<LayoutNodeAtom*>(child.data())) {
                 childLayoutAtom->setNeedsReinit(true);
             }
 }
@@ -970,8 +959,7 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     //TODO cache
     ValueCache result = m_values;
     //QMap<QString, qreal> result = m_values;
-    for( QMap< QString, qreal>::const_iterator it = m_factors.constBegin(); it != m_factors.constEnd(); ++it )
-    {
+    for( QMap< QString, qreal>::const_iterator it = m_factors.constBegin(); it != m_factors.constEnd(); ++it ) {
         result[ it.key() ] = result[ it.key() ] * it.value() / qreal ( m_countFactors[ it.key() ] );        
     }
 //     for(QMap<QString, qreal>::iterator it = result.begin(); it != result.end(); ++it) {
@@ -980,8 +968,8 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
 //         }
 //     }
     QMap< QString, qreal > res = result;
-    if ( result.hasNegativeWidth() )
-            res[ "w" ] = -res[ "w" ];
+    if (result.hasNegativeWidth())
+        res[ "w" ] = -res[ "w" ];
     return res;
 }
 
@@ -1009,8 +997,7 @@ QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > LayoutNodeAtom::descendant
     return result;
 }
         
-QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const
-{
+QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const {
     QExplicitlySharedDataPointer<LayoutNodeAtom> parentlayout = parentLayout();
     Q_ASSERT(parentlayout);
     QList<LayoutNodeAtom*> siblingLayouts;
@@ -1032,7 +1019,7 @@ QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const
     if(srcIndex < 0) {
         if(parentlayout->algorithmType() != AlgorithmAtom::CycleAlg)
             return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(0,0);
-        srcIndex = siblingLayouts.count()-1;
+        srcIndex = siblingLayouts.count() - 1;
     }
     if(dstIndex < siblingLayouts.count()) {
         --myindex;
@@ -1041,14 +1028,13 @@ QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const
             return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(0,0);
         dstIndex = 0;
     }
-    
+
     LayoutNodeAtom* srcAtom = siblingLayouts[srcIndex];
     LayoutNodeAtom* dstAtom = siblingLayouts[dstIndex];
     return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(srcAtom,dstAtom);
 }
 
-qreal LayoutNodeAtom::distanceTo(LayoutNodeAtom* otherAtom) const
-{
+qreal LayoutNodeAtom::distanceTo(LayoutNodeAtom* otherAtom) const {
     //TODO specs are missing details from which exact point to calc the distance from...
 #if 0
     QMap<QString, qreal> srcValues = this->m_values;
@@ -1128,24 +1114,16 @@ void ConstraintAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
     //AbstractAtom::readAll(context, reader);
 }
 
-void ConstraintAtom::build(Context* context)
-{
-//     context->m_parentLayout->addConstraint( QExplicitlySharedDataPointer<ConstraintAtom>( this ) );    
+void ConstraintAtom::build(Context* context) {
+    //context->m_parentLayout->addConstraint( QExplicitlySharedDataPointer<ConstraintAtom>( this ) );    
     QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
     QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > affectedLayouts;
     QVector< AbstractNode* > childDataPoints;
     QVector< AbstractNode* > refChildDataPoints;
     QVector< ConstraintAtom* > addedConstraints;
     bool constraintedWasApplied = false;
-    if ( !m_for.isEmpty() && m_for != "ch" && m_for != "self" )
-    {
-        kWarning() << "constraint for " << m_for << " is not supported";
-        return;
-    }
-    if ( m_for == "ch" )
-    {
-        foreach( AbstractNode* atom, context->currentNode()->children() )
-        {
+    if ( m_for == "ch" ) {
+        foreach( AbstractNode* atom, context->currentNode()->children() ) {
             PointNode *ptNode = dynamic_cast< PointNode* >( atom );
             if ( !ptNode )
                 continue;
@@ -1160,18 +1138,12 @@ void ConstraintAtom::build(Context* context)
             refChildDataPoints.append( context->currentNode() );
         Q_ASSERT( !childDataPoints.isEmpty() );
         //Q_ASSERT( childDataPoints.count() == refChildDataPoints.count() );
-        
-        //QVector< AbstractNode* >::iterator it = childDataPoints.constBegin();
+
         Q_ASSERT( context->m_parentLayout->childrenLayouts().count() > 0 );
-        foreach( QExplicitlySharedDataPointer<LayoutNodeAtom> curChild, context->m_parentLayout->childrenLayouts() )
-        {
-            if ( curChild )
-            {
-                if ( !m_forName.isEmpty() )
-                {
-                    if ( curChild->m_name != m_forName )
-                        continue;
-                }
+        foreach( QExplicitlySharedDataPointer<LayoutNodeAtom> curChild, context->m_parentLayout->childrenLayouts() ) {
+            if ( curChild ) {
+                if ( !m_forName.isEmpty() && curChild->m_name != m_forName )
+                    continue;
                 if ( !childDataPoints.contains( context->m_layoutPointMap[ curChild.data() ] ) )
                     continue;
                 QExplicitlySharedDataPointer<ConstraintAtom> clonedPtr( ptr->clone() );
@@ -1180,36 +1152,30 @@ void ConstraintAtom::build(Context* context)
                 constraintedWasApplied = true;
             }
         }        
-    }
-    else if ( m_for == "self" || m_for.isEmpty() )
-    {
+    } else if ( m_for == "self" || m_for.isEmpty() ) {
         //addedConstraints.append( ptr.data() );
         context->m_parentLayout->addConstraint( ptr );
         constraintedWasApplied = true;
+    } else {
+        kWarning() << "TODO constraint with for=" << m_for;
+        return;
     }
-    else
-        Q_ASSERT_X(false, __FUNCTION__, QString("TODO, m_for=%1").arg(m_for).toUtf8());
 
     typedef QList <QExplicitlySharedDataPointer <MSOOXML::Diagram::LayoutNodeAtom > >  LayoutNodeList;
     LayoutNodeList childList = context->m_parentLayout->childrenLayouts();
-    foreach( ConstraintAtom* constraint, addedConstraints )
-    {
-      //foreach( QExplicitlySharedDataPointer<LayoutNodeAtom> curChild, context->m_parentLayout->childrenLayouts() )
-        for( LayoutNodeList::iterator it = childList.begin(); it != childList.end(); ++it )        
-        {
+    foreach( ConstraintAtom* constraint, addedConstraints ) {
+        for( LayoutNodeList::iterator it = childList.begin(); it != childList.end(); ++it ) {
             QExplicitlySharedDataPointer<LayoutNodeAtom> curChild = *it;
             if ( !constraint->m_refForName.isEmpty() )
-            {
                 if ( curChild->m_name != constraint->m_refForName )
                     continue;
-            }
             if ( !refChildDataPoints.contains( context->m_layoutPointMap[ curChild.data() ] ) )
                 continue;
             constraint->m_referencedLayout = curChild.data();
             childList.erase( it );
         }
     }
-    
+
 //     QExplicitlySharedDataPointer<LayoutNodeAtom> layout = m_forName.isEmpty() ? context->m_parentLayout : context->m_layoutMap.value(m_forName);
 //     if(layout) {
 //         QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
@@ -1220,90 +1186,66 @@ void ConstraintAtom::build(Context* context)
     AbstractAtom::build(context);
 }
 
-void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom )
-{
+void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom ) {
     Q_ASSERT( atom );
     qreal value = -1.0;
-    if( !m_value.isEmpty() )
-    {
+    if( !m_value.isEmpty() ) {
         bool ok;
         qreal v = m_value.toDouble( &ok );
-        if ( ok )
-        {
+        if ( ok ) {
             value = v;
             atom->m_values[ m_type ] = value;
             atom->setNeedsRelayout( true );
-        }
-        else
+        } else
             kWarning() << "Layout with name=" << atom->m_name << "defines none-double value=" << m_value;
-    }
-    else if ( m_fact.isEmpty() )
-    {
+    } else if ( m_fact.isEmpty() ) {
         QMap<QString, qreal> values;
-        if ( m_referencedLayout )
-        {
-              values = m_referencedLayout->finalValues();
-        } 
-        else
-        {
+        if ( m_referencedLayout ) {
+            values = m_referencedLayout->finalValues();
+        } else {
             values = atom->finalValues();
         }
-        if( !m_refType.isEmpty() )
-        {
+        if( !m_refType.isEmpty() ) {
             if( values.contains( m_refType ) )
                 value = values[ m_refType ];
-            if ( value < 0.0 )
-            {
+            if ( value < 0.0 ) {
                 AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
                 Q_ASSERT( r );
-                
                 value = r->defaultValue( m_refType, values );      
                 Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg( m_type ).arg( m_refType ).toLocal8Bit());
             }
             atom->m_values[ m_type ] = value;
             atom->setNeedsRelayout( true );
         } else {
-            if ( value >= 0.0 )
-            {
+            if ( value >= 0.0 ) {
                 atom->m_values[ m_type ] = value;
                 atom->setNeedsRelayout( true );
-            }
-            else
-            {
+            } else {
                 AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
                 Q_ASSERT( r );
-                
                 value = r->defaultValue( m_refType, values );
-                if  ( value >= 0.0 )
-                {
+                if  ( value >= 0.0 ) {
                     atom->m_values[ m_type ] = value;
                     atom->setNeedsRelayout( true );
-                }
-                else
-                {
+                } else {
                     ;//Q_ASSERT( false );
                 }
             }
         }
-    }
-    else
-    {
+    } else {
         bool ok;
         qreal v = m_fact.toDouble( &ok );
-        if ( ok )
-        {
+        if ( ok ) {
             atom->m_factors[ m_type ] += v;
             atom->m_countFactors[ m_type ] += 1;
             atom->setNeedsRelayout( true );
-            
         }
     }
 }
 
 /****************************************************************************************************/
 
-RuleAtom* RuleAtom::clone()
-{
+RuleAtom* RuleAtom::clone() {
     RuleAtom* atom = new RuleAtom;
     atom->m_fact = m_fact;
     atom->m_for = m_for;
@@ -1315,8 +1257,7 @@ RuleAtom* RuleAtom::clone()
     return atom;
 }
 
-void RuleAtom::dump(Context*, int level)
-{
+void RuleAtom::dump(Context*, int level) {
     QString s;
     if(!m_fact.isEmpty()) s += QString("fact=%1 ").arg(m_fact);
     if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
@@ -1328,8 +1269,7 @@ void RuleAtom::dump(Context*, int level)
     DEBUG_DUMP << s;
 }
 
-void RuleAtom::readElement(Context*, MsooXmlDiagramReader* reader)
-{
+void RuleAtom::readElement(Context*, MsooXmlDiagramReader* reader) {
     const QXmlStreamAttributes attrs(reader->attributes());
     TRY_READ_ATTR_WITHOUT_NS_INTO(fact, m_fact)
     TRY_READ_ATTR_WITHOUT_NS_INTO(for, m_for)
@@ -1342,21 +1282,18 @@ void RuleAtom::readElement(Context*, MsooXmlDiagramReader* reader)
 
 /****************************************************************************************************/
 
-AdjustAtom* AdjustAtom::clone()
-{
+AdjustAtom* AdjustAtom::clone() {
     AdjustAtom* atom = new AdjustAtom;
     atom->m_index = m_index;
     atom->m_value = m_value;
     return atom;
 }
 
-void AdjustAtom::dump(Context*, int level)
-{
+void AdjustAtom::dump(Context*, int level) {
     DEBUG_DUMP << "index=" << m_index << "value=" << m_value;
 }
 
-void AdjustAtom::readElement(Context*, MsooXmlDiagramReader* reader)
-{
+void AdjustAtom::readElement(Context*, MsooXmlDiagramReader* reader) {
     const QXmlStreamAttributes attrs(reader->attributes());
     TRY_READ_ATTR_WITHOUT_NS(idx)
     m_index = idx.toInt();
@@ -1387,7 +1324,7 @@ void ListAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
         } else if (reader->qualifiedName() == QLatin1String("dgm:adj")) {
             node = QExplicitlySharedDataPointer<AbstractAtom>(new AdjustAtom);
         }
-        if(node) {
+        if (node) {
             addChild(node);
             node->readAll(context, reader);
         }
@@ -1432,18 +1369,14 @@ void ShapeAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
 void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
     Q_ASSERT(context->m_parentLayout);
     if(m_type.isEmpty() || m_hideGeom) return;
-
     QMap<QString,QString> params = context->m_parentLayout->algorithmParams();
-
     QMap<QString, qreal> values = context->m_parentLayout->finalValues();
     //Q_ASSERT(values.contains("l"));
     //Q_ASSERT(values.contains("t"));
-
     //if(!values.contains("w")) values["w"]=100;
     //if(!values.contains("h")) values["h"]=100;
     Q_ASSERT(values.contains("w"));
     Q_ASSERT(values.contains("h"));
-    
     //Q_ASSERT(values.contains("ctrX"));
     //Q_ASSERT(values.contains("ctrY"));
     qreal x  = values.value("l");
@@ -1452,7 +1385,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     qreal h  = values.value("h");
     qreal cx = values.value("ctrX");
     qreal cy = values.value("ctrY");
-    {
+    /*
     QFile shapeListFile( "shapeList.txt" );
     QString cxt = QString::number( cx );
     QString cyt = QString::number( cy );
@@ -1461,9 +1394,6 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     QString lbrack = "(";
     QString rbrack = ")\n";
     QString space = " ";
-//     qDebug() << context->m_rootLayout->finalValues();
-//     Q_ASSERT( false );
-    
     shapeListFile.open( QFile::WriteOnly | QFile::Append );
     shapeListFile.write( lbrack.toLatin1() );
     shapeListFile.write( cxt.toLatin1() );
@@ -1475,7 +1405,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     shapeListFile.write( ht.toLatin1() );
     shapeListFile.write( rbrack.toLatin1() );
     shapeListFile.close();
-    }
+    */
 
 #if 0
     //TODO can spacing between the siblings applied by shriking the shapes or is it needed to apply them along the used algorithm?
@@ -1575,7 +1505,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
                 textlist.append(pn);                
     }
         
-    if(!textlist.isEmpty()) {
+    if (!textlist.isEmpty()) {
         xmlWriter->startElement("text:p");
         foreach(PointNode* pn, textlist) {
             xmlWriter->startElement("text:span");
@@ -1840,7 +1770,6 @@ bool IfAtom::testAtom(Context* context) {
                 // such "details" anyways so it seems. So, if you run into this then it's up to you to fix it :)
                 kWarning()<<"TODO figure out how non-integer comparision is expected to work";
             }
-
             if(m_operator == QLatin1String("gt")) {
                 istrue = isInt ? funcValueInt > valueInt : funcValue > m_value;
             } else if(m_operator == QLatin1String("gte")) {
@@ -1856,7 +1785,6 @@ bool IfAtom::testAtom(Context* context) {
             }
         }
     }
-
     //kDebug()<<"name="<<m_name<<"value1="<<funcValue<<"value2="<<m_value<<"operator="<<m_operator<<"istrue="<<istrue;
     return istrue;
 }
@@ -1897,6 +1825,7 @@ void ChooseAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
 }
 
 void ChooseAtom::build(Context* context) {
+    // build up list of IfAtom's that match the defined condition
     QVector< QExplicitlySharedDataPointer<AbstractAtom> > ifResult;
     QVector< QExplicitlySharedDataPointer<AbstractAtom> > elseResult;
     while(!m_children.isEmpty()) {
@@ -1912,33 +1841,25 @@ void ChooseAtom::build(Context* context) {
         }
     }
 
-    int index = m_parent->children().count();
-    QVector < QExplicitlySharedDataPointer<AbstractAtom> > childs = m_parent->children();
-    for ( int i = 0; i < childs.count(); ++i )
-        if ( childs[ i ].data() == this )
-            index = i + 1;
+    // move the children of the selected IfAtom's to our parent
+    int index = m_parent->indexOfChild(this);
+    if (index < 0)
+        index = m_parent->children().count() - 1;
+
     typedef QVector< QExplicitlySharedDataPointer< AbstractAtom > > AtomPList;
-    //AtomPList constraintList;    
-    Q_FOREACH( QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult )
-    {
+    foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult ) {
         AtomPList listResult = atom->children();
         AtomPList::iterator it = std::stable_partition( listResult.begin(), listResult.end(), ConstraintPredicate() );    
         std::copy( it, listResult.end(), std::back_inserter( context->m_parentLayout->m_constraintsToBuild ) );
         listResult.erase( it, listResult.end() );
-        Q_FOREACH( QExplicitlySharedDataPointer<AbstractAtom> a, listResult/*atom->children()*/ )
-        {
+        foreach( QExplicitlySharedDataPointer<AbstractAtom> a, listResult ) {
             atom->removeChild( a );
-            m_parent->insertChild( index, a );
-            ++index;
+            m_parent->insertChild( ++index, a );
             a->build( context );
         }
     }
-//     foreach( QExplicitlySharedDataPointer<AbstractAtom> constr, constraintList )
-//     {
-//         constr->build( context );
-//     }
 
-    // once everything is done we can detach ourself from our parent
+    // and finally detach ourself from our parent since we are done now
     QExplicitlySharedDataPointer<AbstractAtom> ptr(this);
     m_parent->removeChild(ptr);
 }
@@ -1988,8 +1909,7 @@ void ForEachAtom::build(Context* context) {
         QList<QExplicitlySharedDataPointer<AbstractAtom> > list;
         foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
             LayoutNodeAtom* layNodeAtom = dynamic_cast< LayoutNodeAtom* >( atom.data() );
-            if ( layNodeAtom )
-            {
+            if ( layNodeAtom ) {
                 QList< AbstractNode* >  currentAxis;
                 currentAxis << node;
                 context->m_layoutPointMap[ layNodeAtom ] = node;
@@ -2032,14 +1952,11 @@ Context* AbstractAlgorithm::context() const { return m_context; }
 LayoutNodeAtom* AbstractAlgorithm::layout() const { return m_layout.data(); }
 LayoutNodeAtom* AbstractAlgorithm::parentLayout() const { return m_parentLayout.data(); }
 
-QList<LayoutNodeAtom*> AbstractAlgorithm::childLayouts() const
-{
+QList<LayoutNodeAtom*> AbstractAlgorithm::childLayouts() const {
     QList<LayoutNodeAtom*> result;
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_layout->children()) {
-        if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_layout->children())
+        if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data()))
             result.append(l);
-        }
-    }
     return result;
 }
 
@@ -2151,26 +2068,17 @@ void AbstractAlgorithm::virtualDoLayout() {
     // algorithm uses a width value of 15 to calculate the composite node’s child constraints. However, the algorithm does not propagate this
     // value to other nodes.
     qreal aspectRatio = layout()->algorithmParam("ar", "0").toDouble();
-    if(aspectRatio != 0.0) {
+    if (aspectRatio != 0.0)
         layout()->m_values["w"] = layout()->finalValues()["h"] * aspectRatio;
-    }
     QList< QExplicitlySharedDataPointer< LayoutNodeAtom > > allChilds = layout()->childrenLayouts();
-    if ( context()->m_parentLayout->m_name == "circ1" )
-        Q_FOREACH( QExplicitlySharedDataPointer< ConstraintAtom > atom, layout()->constraints() )
-            atom->dump( context(), 2 );
-    Q_FOREACH( QExplicitlySharedDataPointer< ConstraintAtom > atom, layout()->constraints() )
+    foreach( QExplicitlySharedDataPointer< ConstraintAtom > atom, layout()->constraints() )
         atom->applyConstraint( QExplicitlySharedDataPointer< LayoutNodeAtom > ( layout() ) );
-    Q_FOREACH( QExplicitlySharedDataPointer< LayoutNodeAtom > curChild, allChilds )
-    {
+    foreach( QExplicitlySharedDataPointer< LayoutNodeAtom > curChild, allChilds )
         setNodePosition( curChild.data(), layout()->finalValues()[ "l" ], layout()->finalValues()[ "t" ], layout()->finalValues()[ "w" ], layout()->finalValues()[ "h" ] );        
-    }    
 #if 0
-    return;
-
     // evaluate the constraints responsible for positioning and sizing.
     foreach(QExplicitlySharedDataPointer<ConstraintAtom> c, layout()->constraints()) {
         c->dump(context(), 2);
-
         qreal value = -1.0;
         if(!c->m_value.isEmpty()) {
             bool ok;
@@ -2299,8 +2207,7 @@ void AbstractAlgorithm::virtualDoLayout() {
 #endif
 }
 
-void AbstractAlgorithm::applyConstraints()
-{
+void AbstractAlgorithm::applyConstraints() {
     foreach(QExplicitlySharedDataPointer<ConstraintAtom> c, layout()->constraints()) {
         c->dump(context(), 2);
         
@@ -2349,16 +2256,13 @@ void AbstractAlgorithm::applyConstraints()
                 layout()->m_values[c->m_type] = value;
                 layout()->setNeedsRelayout( true );
             } else {
+                Q_ASSERT( context()->m_layoutMap.contains( c->m_forName ) );
                 QExplicitlySharedDataPointer<LayoutNodeAtom> forLayout = context()->m_layoutMap[ c->m_forName ];
                 Q_ASSERT( forLayout->m_name != "space" || c->m_type != "w" );
                 forLayout->m_factors.remove(c->m_type);
                 forLayout->m_countFactors.remove(c->m_type);
-                if ( forLayout ) {
-                    forLayout->m_values[c->m_type] = value;
-                    forLayout->setNeedsRelayout( true );
-                } else {
-                    Q_ASSERT( false );
-                }
+                forLayout->m_values[c->m_type] = value;
+                forLayout->setNeedsRelayout( true );
             }
         }
         if (!c->m_fact.isEmpty()) {
@@ -2370,21 +2274,17 @@ void AbstractAlgorithm::applyConstraints()
                     layout()->m_countFactors[c->m_type] += 1;
                     layout()->setNeedsRelayout( true );
                 } else {
+                    Q_ASSERT( context()->m_layoutMap.contains( c->m_forName ) );
                     QExplicitlySharedDataPointer<LayoutNodeAtom> forLayout = context()->m_layoutMap[ c->m_forName ];
                     Q_ASSERT( forLayout->m_name == c->m_forName );
-                    if ( forLayout ) {
-                        forLayout->m_factors[c->m_type] += v;
-                        forLayout->m_countFactors[c->m_type] += 1;
-                        forLayout->setNeedsRelayout( true );
-                    } else {
-                        Q_ASSERT( false );
-                    }
+                    forLayout->m_factors[c->m_type] += v;
+                    forLayout->m_countFactors[c->m_type] += 1;
+                    forLayout->setNeedsRelayout( true );
                 }
             }
-        };
+        }
     }    
 }
-
 
 void AbstractAlgorithm::virtualDoLayoutChildren() {
     foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children()) {
@@ -2412,8 +2312,7 @@ qreal CompositeAlgorithm::virtualGetDefaultValue(const QString& type, const QMap
 
 /****************************************************************************************************/
 
-qreal ConnectorAlgorithm::connectorDistance() const
-{
+qreal ConnectorAlgorithm::connectorDistance() const {
     QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors = layout()->neighbors();
     LayoutNodeAtom* srcAtom = neighbors.first;
     LayoutNodeAtom* dstAtom = neighbors.second;
@@ -2462,7 +2361,7 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
         }
         return;
     }
-    
+
     // Beginning and end points defines different connection sites available on a node. This can be one of the following values;
     // * auto       Specifies that the algorithm will determine the best connection site to use.
     // * bCtr       Specifies that the bottom, center connection site is to be used.
@@ -2504,7 +2403,7 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     qreal dstCX = dstX + dstW/2.0;
     qreal dstCY = dstY + dstH/2.0;
     layout()->m_rotateAngle = atan2(dstCY - srcCY, dstCX - srcCX) * 180 / M_PI;
-    
+
     AbstractAlgorithm::virtualDoLayoutChildren();
 }
 
@@ -2512,12 +2411,12 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
 
 qreal CycleAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>&) {
     qreal value = -1.0;
-      if (type == "w" || type == "h") {
+    if (type == "w" || type == "h") {
         value = 100;
     } else if (type == "diam") {
         value = 0;
     } else if (type == "sibSp") {
-          value = 0;
+        value = 0;
     } else if (type == "sp") {
         value = 0;
     }
@@ -2556,7 +2455,7 @@ void CycleAlgorithm::virtualDoLayout() {
     qreal spacing = 0.0;//layout()-> "sibSp"] * childsCount;
     qreal dw = ( (2.0 * M_PI * rx - spacing) / childsCount );
     qreal dh = ( (2.0 * M_PI * ry - spacing) / childsCount );
-    
+
     if(nodeInCenter) {
         setNodePosition(nodeInCenter, rx, ry, -1, -1); //dw, dh);
     }
@@ -2573,10 +2472,8 @@ void CycleAlgorithm::virtualDoLayout() {
 
 /****************************************************************************************************/
 
-
-void LinearAlgorithm::virtualDoLayout()
-{
-    Q_FOREACH( QExplicitlySharedDataPointer< ConstraintAtom > atom, layout()->constraints() )
+void LinearAlgorithm::virtualDoLayout() {
+    foreach( QExplicitlySharedDataPointer< ConstraintAtom > atom, layout()->constraints() )
         atom->applyConstraint( QExplicitlySharedDataPointer< LayoutNodeAtom > ( layout() ) );
     QString direction = layout()->algorithmParam("linDir", "fromL");
     const qreal lMarg = layout()->finalValues()[ "lMarg" ];
@@ -2586,9 +2483,9 @@ void LinearAlgorithm::virtualDoLayout()
     const qreal w = layout()->finalValues()["w"] - lMarg - rMarg;
     const qreal h = layout()->finalValues()["h"] - bMarg - tMarg;
     Q_ASSERT( lMarg == 0 );
-    
+
     QList<LayoutNodeAtom*> childs = childLayouts();
-     
+
     Q_ASSERT(!childs.isEmpty());
     const qreal childsCount = qMax(1, childs.count());
     // first passthrough
@@ -2606,7 +2503,7 @@ void LinearAlgorithm::virtualDoLayout()
         y = h;
         my = -(h / childsCount);
     }
-    
+
     const int constX = x;
     const int constY = y;
 
@@ -2620,14 +2517,13 @@ void LinearAlgorithm::virtualDoLayout()
     Context* childContext = new Context( *context() );
     doubleLayoutContext.append( childContext );
     childContext->m_parentLayout = this->layout();
-    foreach ( LayoutNodeAtom* layNode, childs )
-    {                
+    foreach( LayoutNodeAtom* layNode, childs ) {
         childContext->m_parentLayout = this->layout();
         layNode->layoutAtom( childContext );
     }
     //applyConstraints();
     //second passthrough
-        
+
     // calculate weights
     qreal summedWidth = 0;
     qreal summedHeight = 0;
@@ -2635,19 +2531,14 @@ void LinearAlgorithm::virtualDoLayout()
     qreal totalSumHeight = 0;
     //int numOfRelevantChildren = 0;
     // TODO if spaceAlg is posititive or creates any spaces it has to count, will be a horror to calculate it
-    foreach ( LayoutNodeAtom* layNode, childs )
-    {        
+    foreach ( LayoutNodeAtom* layNode, childs ) {        
         QMap< QString, qreal > vals = layNode->finalValues();
-        //Q_ASSERT( layNode->m_name != "space" );
-        if ( layNode->algorithmType() != AlgorithmAtom::SpaceAlg )
-        {
+        if ( layNode->algorithmType() != AlgorithmAtom::SpaceAlg ) {
             summedHeight += vals[ "h" ];
             summedWidth += vals[ "w" ];
         }
         totalSumWidth += vals[ "w" ];
         totalSumHeight += vals[ "h" ];
-        
-        
     }
     qreal currentX = constX;
     qreal currentY = constY;
@@ -2657,19 +2548,16 @@ void LinearAlgorithm::virtualDoLayout()
     const int yFactor = my >= 0 ? 1 : -1;
     foreach(LayoutNodeAtom* l, childs) {
         QMap< QString, qreal > values = l->finalValues();
-        if ( l->algorithmType() != AlgorithmAtom::SpaceAlg )
-        {
+        if ( l->algorithmType() != AlgorithmAtom::SpaceAlg ) {
             currentWidth = l->finalValues()[ "w" ] / summedWidth * w;
             currentHeight = l->finalValues()[ "h" ] / summedHeight * h;
             setNodePosition(l, currentX, currentY, currentWidth, currentHeight);
-            
+
             if ( direction == "fromR" || direction == "fromL" )
                 currentX = currentX + xFactor * l->finalValues()[ "w" ];
             else
                 currentY = currentY + yFactor * l->finalValues()[ "h" ];
-        }
-        else
-        {
+        } else {
             currentWidth = l->finalValues()[ "w" ] / totalSumWidth * w;
             if ( l->m_values.hasNegativeWidth() )
                 currentWidth = -currentWidth;
@@ -2717,7 +2605,7 @@ void SnakeAlgorithm::virtualDoLayout() {
 
     bool inRows = flowDirection != "column";
     bool inSameDirection = continueDirection != "revDir";
-    
+
     enum { TopLeft, TopRight, BottomLeft, BottomRight } direction = TopLeft;
     if(growDirection == "tR") {
         direction = TopRight;
