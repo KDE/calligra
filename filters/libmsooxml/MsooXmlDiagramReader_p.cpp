@@ -1182,7 +1182,7 @@ void ConstraintAtom::build(Context* context) {
 //         m_parent->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(this));
 //         layout->addConstraint(ptr);
 //     }
-    Q_ASSERT( constraintedWasApplied );
+//     Q_ASSERT( constraintedWasApplied );
     AbstractAtom::build(context);
 }
 
@@ -1226,7 +1226,6 @@ void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAto
                 AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
                 Q_ASSERT( r );
                 value = r->defaultValue( m_type, values );
-                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg( m_type ).arg( m_refType ).toLocal8Bit());
                 if ( value >= 0.0 ) {
                     atom->m_values[ m_type ] = value;
                     atom->setNeedsRelayout( true );
