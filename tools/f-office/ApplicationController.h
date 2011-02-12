@@ -690,7 +690,7 @@ private:
      */
     int m_ycoordinate;
     /*!
-     * Font related information for each Character in NewDocuments 
+     * Font related information for each Character in NewDocuments
      */
     int m_fontsize;
     /*!

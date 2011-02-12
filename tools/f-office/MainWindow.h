@@ -56,15 +56,6 @@ public:
      */
     bool eventFilter(QObject *watched, QEvent *event);
 
-//presentation editing
-//private:
-//unused    QTextDocument *document;
-//global not needed:    KoShape *m_textShape;
-//global not needed:    KoShape *m_currentShapeSelected;
-//global not needed:    KoTextShapeData *currentSelectedTextShapeData;
-//global not needed:    QTextDocument *documentForCurrentShape;
-
-//        void deleteSelection();
 private:
         ApplicationController *m_controller;
 };
