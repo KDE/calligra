@@ -256,6 +256,7 @@ void MainWindow::init()
 #endif
 
     QMenuBar* menu = menuBar();
+#ifdef Q_WS_MAEMO_5
     menu->addAction(m_ui->actionOpen);
     menu->addAction(m_ui->actionNew);
     menu->addAction(m_ui->actionSave);
@@ -263,6 +264,16 @@ void MainWindow::init()
     menu->addAction(m_ui->actionPresentation);
     menu->addAction(m_ui->actionClose);
     menu->addAction(m_ui->actionAbout);
+#else
+    QMenu *m = menuBar()->addMenu("Calligra Mobile");
+    m->addAction(m_ui->actionOpen);
+    m->addAction(m_ui->actionNew);
+    m->addAction(m_ui->actionSave);
+    m->addAction(m_ui->actionSaveAs);
+    m->addAction(m_ui->actionPresentation);
+    m->addAction(m_ui->actionClose);
+    m->addAction(m_ui->actionAbout);
+#endif
    // menu->addAction(m_ui->actionCollaborate);
     // false here means that they are not plugins
     m_ui->actionOpen->setData(QVariant(false));
