@@ -211,6 +211,8 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
 
     const qreal sx = sqrt(cos_sx*cos_sx + sin_sx*sin_sx);
     const qreal sy = sqrt(cos_sy*cos_sy + msin_sy*msin_sy);
+    //const qreal cost = (sx > 1e-10 ? cos_sx / sx : cos_sy / sy);
+    //const qreal ang = acos(cost);
 
     QPointF scale = QPointF(sx, sy);
     if (scale != d->lastScale) {
@@ -218,17 +220,15 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     }
     d->lastScale = scale;
 
-    QPointF o = canvas->offset();
-    QRectF pixelRect = t.mapRect(paintRect.translated(o));
-
     QRect tiles;
-    tiles.setLeft(pixelRect.left() / TILESIZE);
-    tiles.setRight((pixelRect.right() + TILESIZE-1) / TILESIZE);
-    tiles.setTop(pixelRect.top() / TILESIZE);
-    tiles.setBottom((pixelRect.bottom() + TILESIZE - 1) / TILESIZE);
-    kDebug() << paintRect << pixelRect << tiles << topLeft << scale << o;
+    const QRect visibleCells = paintCellRange();
+    const Sheet * s = sheet();
+    const QPointF bottomRight(s->columnPosition(visibleCells.right() + 1), s->rowPosition(visibleCells.bottom() + 1));
+    tiles.setLeft(topLeft.x() * sx / TILESIZE);
+    tiles.setTop(topLeft.y() * sy / TILESIZE);
+    tiles.setRight((bottomRight.x() * sx + TILESIZE-1) / TILESIZE);
+    tiles.setBottom((bottomRight.y() * sy + TILESIZE-1) / TILESIZE);
 
-    const Sheet* s = sheet();
     for (int x = qMax(0, tiles.left()); x < tiles.right(); x++) {
         for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
             QPixmap *p = d->getTile(s, x, y, canvas);

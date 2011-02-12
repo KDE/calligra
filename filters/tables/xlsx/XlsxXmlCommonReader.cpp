@@ -211,6 +211,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
             ELSE_TRY_READ_IF(i)
             ELSE_TRY_READ_IF(b)
             ELSE_TRY_READ_IF(strike)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

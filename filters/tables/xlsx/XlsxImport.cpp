@@ -548,6 +548,13 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    <!-- /COPIED -->"
     );
 
+    // Todo, find out whether these are defaults for xlsx or whether they can be read somewhere
+    writers->body->startElement("table:calculation-settings");
+    writers->body->addAttribute("table:case-sensitive", "false");
+    writers->body->addAttribute("table:automatic-find-labels", "false");
+    writers->body->addAttribute("table:use-regular-expressions", "false");
+    writers->body->endElement(); // table:calculation-settings
+
     // 1. parse themes
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
 
@@ -621,8 +628,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     {
         XlsxXmlDocumentReaderContext context(*this, &themes, sharedStrings, comments, styles, *relationships);
         XlsxXmlDocumentReader documentReader(writers);
-        RETURN_IF_ERROR(loadAndParseDocument(
-            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
+        RETURN_IF_ERROR(loadAndParseDocument(d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context))
     }
     // more here...
     return KoFilter::OK;

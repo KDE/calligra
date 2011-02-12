@@ -123,6 +123,7 @@ Q_SIGNALS:
 protected:
     virtual CellView* createDefaultCellView();
     virtual CellView* createCellView(int col, int row);
+    QRect paintCellRange() const;
 private:
     /**
      * Helper method for invalidateRegion().

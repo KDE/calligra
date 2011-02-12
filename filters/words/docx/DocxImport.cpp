@@ -83,6 +83,7 @@ public:
 
     DocxDocumentType type;
     bool macrosEnabled;
+    QMap<QString, QVariant> documentSettings;
 };
 
 DocxImport::DocxImport(QObject* parent, const QVariantList &)
@@ -93,6 +94,16 @@ DocxImport::DocxImport(QObject* parent, const QVariantList &)
 DocxImport::~DocxImport()
 {
     delete d;
+}
+
+QMap<QString, QVariant> DocxImport::documentSettings() const
+{
+    return d->documentSettings;
+}
+
+QVariant DocxImport::documentSetting(const QString& name) const
+{
+    return d->documentSettings.value(name);
 }
 
 bool DocxImport::acceptsSourceMimeType(const QByteArray& mime) const
@@ -125,9 +136,34 @@ bool DocxImport::acceptsDestinationMimeType(const QByteArray& mime) const
     return mime == "application/vnd.oasis.opendocument.text";
 }
 
+static QVariant readSettings(const KoXmlElement &element)
+{
+    QVariant result;
+    QVariantMap m;
+    KoXmlElement e;
+    forEachElement(e, element) {
+        QVariant v = readSettings(e);
+        if (!v.isValid())
+            v = e.attribute("val");
+        m[e.tagName()] = v;
+    }
+    if (!m.isEmpty())
+        result.setValue(m);
+    return result;
+}
+
 KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
         QString& errorMessage)
 {
+    // 0. parse settings.xml
+    QList<QByteArray> partNameList = this->partNames(MSOOXML::ContentTypes::wordSettings);
+    if (partNameList.count() == 1) {
+        KoXmlDocument settingsXML;
+        if (loadAndParse(partNameList.first(), settingsXML, errorMessage) == KoFilter::OK) {
+            d->documentSettings = readSettings(settingsXML.documentElement()).value<QVariantMap>();
+        }
+    }
+
     // 1. parse font table
     {
         DocxXmlFontTableReaderContext context(*writers->mainStyles);
@@ -153,6 +189,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
     kDebug() << "ThemePathAndFile:" << docThemePathAndFile;
 
+    // prepare the themes-reader
     QString docThemePath, docThemeFile;
     MSOOXML::Utils::splitPathAndFile(docThemePathAndFile, &docThemePath, &docThemeFile);
 
