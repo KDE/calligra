@@ -218,6 +218,11 @@ void SheetView::setPaintCellRange(const QRect& rect)
     d->cache.setMaxCost(2 * rect.width() * rect.height());
 }
 
+QRect SheetView::paintCellRange() const
+{
+    return d->visibleRect;
+}
+
 void SheetView::invalidateRegion(const Region& region)
 {
     QRegion qregion;

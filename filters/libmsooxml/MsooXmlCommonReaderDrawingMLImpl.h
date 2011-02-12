@@ -51,6 +51,7 @@
 
 #include <MsooXmlReader.h>
 #include <MsooXmlCommonReader.h>
+#include <MsooXmlDiagramReader.h>
 #include <QScopedPointer>
 
 // ================================================================
@@ -1256,11 +1257,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     READ_EPILOGUE
 }
 
+#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
+
 // ================================================================
 //                             NameSpace "c"
 // ================================================================
-#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
 
@@ -1326,7 +1327,69 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
     READ_EPILOGUE
 }
 
+// ================================================================
+//                             NameSpace "dgm"
+// ================================================================
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "dgm"
+
+#undef CURRENT_EL
+#define CURRENT_EL relIds
+//! DrawingML diagram handler
+/*!
+@todo documentation
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITH_NS(r, cs) // colors
+    TRY_READ_ATTR_WITH_NS(r, dm) // data
+    TRY_READ_ATTR_WITH_NS(r, lo) // layout
+    TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(spPr)
+            ELSE_TRY_READ_IF(style)
+        }
+    }
+
+    //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
+    const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
+    const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
+    //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
+    QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
+
+    // first read the data-model
+    MSOOXML::MsooXmlDiagramReader dataReader(this);
+    const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
+    if (dataReaderResult != KoFilter::OK) {
+       raiseError(dataReader.errorString());
+       return dataReaderResult;
+    }
+
+    // then read the layout definition
+    MSOOXML::MsooXmlDiagramReader layoutReader(this);
+    const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
+    if (layoutReaderResult != KoFilter::OK) {
+       raiseError(layoutReader.errorString());
+       return layoutReaderResult;
+    }
+
+    // and finally start the process that will produce the ODF
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    m_currentDrawingObject->setDiagram(context.take());
+#else
+    context->saveIndex(body, QRect(EMU_TO_CM(m_svgX), EMU_TO_CM(m_svgY), m_svgHeight > 0 ? EMU_TO_CM(m_svgWidth) : 100, m_svgHeight > 0 ? EMU_TO_CM(m_svgHeight) : 100));
 #endif
+
+    READ_EPILOGUE
+}
+
+#endif // MSOOXMLDRAWINGTABLESTYLEREADER_CPP
 
 // ================================================================
 //                             NameSpace "a"
@@ -2919,7 +2982,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-            ELSE_TRY_READ_IF_NS(c, chart)
+            ELSE_TRY_READ_IF_NS(c, chart) // Charting diagram
+            ELSE_TRY_READ_IF_NS(dgm, relIds) // DrawingML diagram
 #endif
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF_NS(p, oleObj)

@@ -32,6 +32,7 @@ void initDrawingML();
 
 // All the readers
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
+KoFilter::ConversionStatus read_relIds();
 KoFilter::ConversionStatus read_chart();
 #endif
 KoFilter::ConversionStatus read_pic();

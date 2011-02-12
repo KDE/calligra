@@ -56,6 +56,9 @@ protected:
     KoFilter::ConversionStatus read_cols();
     KoFilter::ConversionStatus read_col();
     KoFilter::ConversionStatus read_sheetData();
+    KoFilter::ConversionStatus read_conditionalFormatting();
+    KoFilter::ConversionStatus read_cfRule();
+    KoFilter::ConversionStatus read_formula();
     KoFilter::ConversionStatus read_row();
     KoFilter::ConversionStatus read_c();
     KoFilter::ConversionStatus read_f();
@@ -99,6 +102,10 @@ private:
     //! Saves annotation element (comments) for cell specified by @a col and @a row it there is any annotation defined.
     void saveAnnotation(int col, int row);
 
+    QList<QPair<QString, int> > m_conditionalIndices;
+    QList<QMap<QString, QString> > m_conditionalStyles;
+    QString m_formula;
+
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 
@@ -141,6 +148,12 @@ public:
 
     QMap<QString, QString> oleReplacements;
     QMap<QString, QString> oleFrameBegins;
+
+    bool firstRoundOfReading;
+
+    QList<QMap<QString, QString> > conditionalStyleForPosition(const QString& position);
+
+    QMap<QString, QMap<QString, QString> > conditionalStyles;
 };
 
 #endif
