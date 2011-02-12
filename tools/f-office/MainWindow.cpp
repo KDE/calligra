@@ -310,6 +310,8 @@ void MainWindow::init()
     m_ui->actionMathOp->setCheckable(true);
 #ifdef Q_WS_MAEMO_5
     connect(m_ui->actionClose,SIGNAL(triggered()),this,SLOT(closeAcceleratorSettings()));
+#else
+    connect(m_ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
 #endif
 
     connect(m_ui->actionMathOp,SIGNAL(toggled(bool)),this,SLOT(startMathMode(bool)));
@@ -1316,6 +1318,9 @@ void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
 
 QString MainWindow::showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
 {
+    Q_UNUSED(caption);
+    Q_UNUSED(dir);
+    Q_UNUSED(filter);
     FileChooserDialog fileDialog(this);
     fileDialog.exec();
     return fileDialog.getFilePath();
@@ -1896,7 +1901,8 @@ void MainWindow::closeDocument()
         }
         break;
     case SpreadsheetDocument:
-        m_spreadEditToolBar->hide();
+        if (m_spreadEditToolBar)
+            m_spreadEditToolBar->hide();
         resetSpreadEditorToolBar();
         if (m_sheetInfoFrame && m_sheetInfoFrame->isVisible()) {
             spreadSheetInfo();
@@ -1923,6 +1929,8 @@ void MainWindow::closeDocument()
 
     delete m_slidingmotiondialog;
     m_slidingmotiondialog = 0;
+
+    //close();
 
     m_viewNumber++;
 }
@@ -2479,6 +2487,9 @@ void MainWindow::updateActions()
 void MainWindow::setCentralWidget(QWidget *widget)
 {
     QMainWindow::setCentralWidget(widget);
+
+    if (!widget) return;
+
     switch (documentType()) {
     case TextDocument:
         break;
@@ -2804,6 +2815,13 @@ void MainWindow::setUpSpreadEditorToolBar()
 {
     if (documentType() != SpreadsheetDocument)
         return;
+
+    if (!m_ui)
+        return;
+
+    if (!cellTool() || !cellTool()->externalEditor() || cellTool()->externalEditor()->thisWidget())
+        return;
+
     delete m_spreadEditToolBar;
     m_spreadEditToolBar=0;
     m_spreadEditToolBar = new QToolBar();
@@ -2907,7 +2925,8 @@ void MainWindow::resetSpreadEditorToolBar()
     disconnect(m_percentageAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
     disconnect(m_equalsAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
 
-    removeToolBar(m_spreadEditToolBar);
+    if (m_spreadEditToolBar)
+        removeToolBar(m_spreadEditToolBar);
 
     delete m_addAction;
     m_addAction=0;
