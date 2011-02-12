@@ -19,13 +19,37 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoAbstractApplication.h"
+#ifndef KOABSTRACTAPPLICATION_H
+#define KOABSTRACTAPPLICATION_H
 
-KoAbstractApplication::KoAbstractApplication(KoAbstractApplicationController *controller)
-    : m_ctr(controller)
-{
-}
+#include "koabstraction_export.h"
 
-KoAbstractApplication::~KoAbstractApplication()
+class KoAbstractApplicationController;
+
+//! Class for gluing KoAbstractApplicationController with the custom application main window.
+/*!
+ * It should be inherited by the application main window class.
+ */
+class KOABSTRACTION_EXPORT KoAbstractApplicationWindow
 {
-}
+public:
+    /*!
+     * Constructor, takes mandatory controller object implementation @a controller 
+     * which is then owned by the abstract application and available through
+     * @ref controller().
+     */
+    KoAbstractApplicationWindow(KoAbstractApplicationController *controller);
+
+    virtual ~KoAbstractApplicationWindow();
+
+    /*!
+     * @return controller the application's controller implementing fundamental features.
+     */
+    KoAbstractApplicationController* controller() const;
+
+private:
+    class Private;
+    Private * const d;
+};
+
+#endif

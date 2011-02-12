@@ -94,7 +94,7 @@ public:
     ~ApplicationController();
 
     /*!
-     * Reimplemented for KoAbstractApplication.
+     * Reimplemented for KoAbstractApplicationController.
      */
     virtual bool openDocuments(const KoAbstractApplicationOpenDocumentArguments& args);
 

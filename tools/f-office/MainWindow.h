@@ -28,7 +28,7 @@
 #define MAINWINDOW_H
 
 #include <QtGui/QMainWindow>
-#include <KoAbstractApplication.h>
+#include <KoAbstractApplicationWindow.h>
 
 class ApplicationController;
 class Splash;
@@ -37,7 +37,7 @@ class Splash;
  * \brief Main window of the application. KoCanvasControllerWidget is set as
  * the central widget. It displays the loaded documents.
  */
-class MainWindow : public QMainWindow, public KoAbstractApplication
+class MainWindow : public QMainWindow, public KoAbstractApplicationWindow
 {
     Q_OBJECT
 

@@ -6,7 +6,7 @@ include_directories( ${KOABSTRACTION_INCLUDES})
 
 set(koabstraction_LIB_SRCS
     KoAbstractApplicationController.cpp
-    KoAbstractApplication.cpp
+    KoAbstractApplicationWindow.cpp
     RemoveSheetCommand.cpp
     KoCellToolFactory.cpp
     KoCellTool.cpp
@@ -45,8 +45,8 @@ install(TARGETS koabstraction ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
     koabstraction_export.h
-    KoAbstractApplication.h
     KoAbstractApplicationController.h
+    KoAbstractApplicationWindow.h
     KoCellTool.h
     FoCellEditor.h
     KoExternalEditorInterface.h

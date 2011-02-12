@@ -126,7 +126,7 @@
 
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),
-          KoAbstractApplication((m_controller = new ApplicationController(aSplash, this)))
+          KoAbstractApplicationWindow((m_controller = new ApplicationController(aSplash, this)))
 {
 }
 
