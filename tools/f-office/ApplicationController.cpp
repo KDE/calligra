@@ -1873,7 +1873,7 @@ bool ApplicationController::openDocuments(const KoAbstractApplicationOpenDocumen
         //code related to the button previews
         delete m_storeButtonPreview;
         m_storeButtonPreview = new StoreButtonPreview(document(), view());
-        QObject::connect(m_storeButtonPreview, SIGNAL(goToPage(int)), this, SLOT(goToPage(int)));
+        connect(m_storeButtonPreview, SIGNAL(goToPage(int)), this, SLOT(goToPage(int)));
     }
     return result;
 }
@@ -2493,6 +2493,11 @@ void ApplicationController::setCentralWidget(QWidget *widget)
     default:
         break;
     };
+}
+
+QWidget* ApplicationController::mainWindow() const
+{
+    return m_mainWindow;
 }
 
 bool ApplicationController::handleMainWindowEventFilter(QObject *watched, QEvent *event)

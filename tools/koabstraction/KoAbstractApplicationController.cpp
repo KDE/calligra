@@ -308,8 +308,8 @@ bool KoAbstractApplicationController::openDocuments(
     else {
         m_type = TextDocument;
         // We need to get the page count again after layout rounds.
-        QObject::connect(m_doc, SIGNAL(pageSetupChanged()),
-                         this, SLOT(handleDocumentPageSetupChanged()));
+        connect(m_doc, SIGNAL(pageSetupChanged()),
+                this, SLOT(handleDocumentPageSetupChanged()));
     }
 
     if (m_type == SpreadsheetDocument) {
@@ -350,20 +350,19 @@ bool KoAbstractApplicationController::openDocuments(
     QTimer::singleShot(250, this, SLOT(handleDocumentPageSetupChanged()));
 
     KoCanvasBase *canvas = m_canvasController->canvas();
-    QObject::connect(
+    connect(
         canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
         this, SLOT(resourceChanged(int, const QVariant &)));
-    QObject::connect(
+    connect(
         KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
         this, SLOT(activeToolChanged(KoCanvasController*, int)));
 
     setProgressIndicatorVisible(false);
     m_isLoading = false;
 
-    QWidget *thisWidget = dynamic_cast<QWidget*>(this);
-    if (thisWidget) {
-        if (m_splash && !thisWidget->isActiveWindow()) {
-            thisWidget->show();
+    if (mainWindow()) {
+        if (m_splash && !mainWindow()->isActiveWindow()) {
+            mainWindow()->show();
             if (canvasControllerWidget())
                 m_splash->finish(canvasControllerWidget());
             m_splash = 0;
@@ -492,10 +491,10 @@ bool KoAbstractApplicationController::openDocument()
     if (m_isLoading)
         return false;
 
-    QWidget *thisWidget = dynamic_cast<QWidget*>(this);
-    if (m_splash && !thisWidget->isActiveWindow()) {
-        thisWidget->show();
-        m_splash->finish(thisWidget);
+    kDebug() << mainWindow();
+    if (m_splash && !mainWindow()->isActiveWindow()) {
+        mainWindow()->show();
+        m_splash->finish(mainWindow());
         m_splash = 0;
     }
 
@@ -516,7 +515,7 @@ bool KoAbstractApplicationController::openDocument()
         return false;
     }*/
     m_fileNameToOpen = file;
-    QTimer::singleShot(100, thisWidget, SLOT(openScheduledDocument()));
+    QTimer::singleShot(100, this, SLOT(openScheduledDocument()));
     return true;
 }
 

@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     QObject::connect(&a, SIGNAL(openDocument(const QString &)),
                      w.controller(), SLOT(openDocument(const QString &)));
     QObject::connect(&a, SIGNAL(showApplicationMenu()),
-                     &w, SLOT(showApplicationMenu()));
+                     w.controller(), SLOT(showApplicationMenu()));
 
     if (arguments.size() > 1) {
         KoAbstractApplicationOpenDocumentArguments openArgs;
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
         }
         w.controller()->openDocuments(openArgs);
     } else {
-        QTimer::singleShot(5, &w, SLOT(checkDBusActivation()));
+        QTimer::singleShot(5, w.controller(), SLOT(checkDBusActivation()));
     }
     if (loadScrollAndQuit) {
         QTimer::singleShot(10, w.controller(), SLOT(loadScrollAndQuit()));

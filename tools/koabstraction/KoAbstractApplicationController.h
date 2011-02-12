@@ -193,6 +193,11 @@ public:
     virtual void setCentralWidget(QWidget *widget) = 0;
 
     /*!
+     * @return pointer to the main window.
+     */
+    virtual QWidget* mainWindow() const = 0;
+
+    /*!
      * Update the enabled/disabled state of actions depending on if a document 
      * is currently loaded.
      */
@@ -219,22 +224,6 @@ public:
      * @return true if editing mode is on.
      */
     bool editingMode() const;
-
-    // -- for possible reimplementation --
-
-    /*!
-     * Called whenever page setup for document changes. Can be reimplemented.
-     * Default implementation just calls updateActions().
-     * @see document(), KWDocument::pageSetupChanged()
-     */
-    virtual void handleDocumentPageSetupChanged();
-
-    /*!
-     * Current page number has changed. Reaction on this should be implemented here.
-     * @a previousPage points to previously selected page. Use currentPage() to get
-     * number of the current page.
-     */
-    virtual void handleCurrentPageChanged(int previousPage) = 0;
 
     // -- utilities --
 
@@ -313,11 +302,7 @@ public:
      */
     KoCellTool* cellTool() const;
 
-    /*!
-     * Invoked when the currently active tool changes.
-     */
-    virtual void activeToolChanged(KoCanvasController* canvas, int uniqueToolId);
-
+   
     /*!
      * @return pointer to the splash widget or 0.
      */
@@ -359,6 +344,27 @@ public:
     int currentPage() const { return m_currentPage; }
 
 public slots:
+    // -- for possible reimplementation --
+
+    /*!
+     * Called whenever page setup for document changes. Can be reimplemented.
+     * Default implementation just calls updateActions().
+     * @see document(), KWDocument::pageSetupChanged()
+     */
+    virtual void handleDocumentPageSetupChanged();
+
+    /*!
+     * Current page number has changed. Reaction on this should be implemented here.
+     * @a previousPage points to previously selected page. Use currentPage() to get
+     * number of the current page.
+     */
+    virtual void handleCurrentPageChanged(int previousPage) = 0;
+
+    /*!
+     * Invoked when the currently active tool changes.
+     */
+    virtual void activeToolChanged(KoCanvasController* canvas, int uniqueToolId);
+
     /*!
      * Convenience method: opens one document pointed by @a fileName for viewing.
      */

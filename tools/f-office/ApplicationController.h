@@ -124,6 +124,9 @@ public:
     virtual void setCentralWidget(QWidget *widget);
 
     //! Implemented for KoAbstractApplicationController
+    virtual QWidget* mainWindow() const;
+
+    //! Implemented for KoAbstractApplicationController
     virtual void updateActions();
 
     //! Implemented for KoAbstractApplicationController
