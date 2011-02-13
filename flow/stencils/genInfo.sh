@@ -4,9 +4,10 @@ collectionInfo0='[Desktop Entry]\nName='
 collectionInfo1='\nX-KDE-DirType=odg-collection'
 stencilInfo='[Desktop Entry]\nName='
 
-for j in `find ./ -type d`
+for j in `find ./ -type d -name '[A-Z]*'`
 do
     name=${j##*/}
+    name=${name//_/ }
     infoFile=$j'/collection.desktop'
     if [ ! -f $infoFile ]; then
         echo -e 'Generating info for collection '$name
