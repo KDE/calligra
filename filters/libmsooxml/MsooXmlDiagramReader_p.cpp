@@ -26,6 +26,7 @@
 #include "MsooXmlDiagramReader_p.h"
 
 #include <typeinfo>
+#include <iterator>
 #include <QDebug>
 #include <QXmlStreamReader>
 #include <KoXmlWriter.h>
