@@ -162,7 +162,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
       kDebug() << "save embedded documents failed";
       return false;
   }
-  if (not embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
+  if (!embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
       kDebug() << "save embedded files failed";
       return false;
   }
