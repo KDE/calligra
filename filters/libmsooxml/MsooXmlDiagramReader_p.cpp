@@ -76,10 +76,14 @@ Context::~Context() {
 AbstractNode* Context::currentNode() const { return m_currentNode; }
 void Context::setCurrentNode(AbstractNode* node) { m_currentNode = node; }
 
-ValueCache::ValueCache() : m_rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), m_unmodified( true ), m_negativeWidth( false ){}
+ValueCache::ValueCache() : m_rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), m_unmodified( true ), m_negativeWidth( false ), m_negativeHeight( false ) {}
 
 bool ValueCache::hasNegativeWidth() const {
     return m_negativeWidth;
+}
+
+bool ValueCache::hasNegativeHeight() const {
+    return m_negativeHeight;
 }
 
 qreal ValueCache::value( const QString& name, bool *valid ) const {
@@ -154,7 +158,6 @@ qreal ValueCache::rectValue( const QString& name ) const {
 }
 
 void ValueCache::setRectValue( const QString& name, qreal value ) {
-    Q_ASSERT( m_rect.isValid() );
     if ( name == "l") {
         m_rect.moveLeft( value );
     } else if ( name == "r" ) {
@@ -168,8 +171,13 @@ void ValueCache::setRectValue( const QString& name, qreal value ) {
             m_negativeWidth = false;
         }
     } else if ( name == "h" ) {
-        Q_ASSERT( value > 0 );
-        m_rect.setHeight(value );
+        if ( value < 0 ) {
+            m_rect.setTop( m_rect.bottom() + value );
+            m_negativeHeight = true;
+        } else {
+            m_rect.setHeight( value );
+            m_negativeHeight = false;
+        }
     } else if ( name == "t" ) {
         m_rect.moveTop( value );
     } else if ( name == "b" ) {
@@ -181,8 +189,7 @@ void ValueCache::setRectValue( const QString& name, qreal value ) {
     } else {
         Q_ASSERT_X( false, __FUNCTION__, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
     }
-
-    Q_ASSERT( m_rect.isValid() );
+kDebug()<<m_rect;
     m_unmodified = false;
 }
 
@@ -969,6 +976,8 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     QMap< QString, qreal > res = result;
     if (result.hasNegativeWidth())
         res[ "w" ] = -res[ "w" ];
+    if (result.hasNegativeHeight())
+        res[ "h" ] = -res[ "h" ];
     return res;
 }
 
@@ -1429,8 +1438,8 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
 
     DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h;
     //Q_ASSERT(x >= 0.0); Q_ASSERT(y >= 0.0); Q_ASSERT(cx >= 0.0); Q_ASSERT(cy >= 0.0); // they can be negative
-    Q_ASSERT(w > 0.0);
-    Q_ASSERT(h > 0.0);
+    if (w < 0.0) w = -w;
+    if (h < 0.0) h = -h;
 
     xmlWriter->startElement("draw:custom-shape");
     //xmlWriter->addAttribute("draw:layer", "layout");
@@ -1916,8 +1925,8 @@ void ForEachAtom::build(Context* context) {
                 layNodeAtom->setAxis( context, currentAxis );
             }
 
-            ListAtom* listAtom = dynamic_cast< ListAtom* >( atom.data() );
-            /*if ( listAtom && listAtom->m_tagName == QLatin1String("dgm:constrLst") ) {
+            /*ListAtom* listAtom = dynamic_cast< ListAtom* >( atom.data() );
+            if ( listAtom && listAtom->m_tagName == QLatin1String("dgm:constrLst") ) {
                 foreach( QExplicitlySharedDataPointer<AbstractAtom> a, m_children )
                     if ( dynamic_cast< ConstraintAtom* >( a.data() ) )
                         context->m_parentLayout->m_constraintsToBuild.append(a);
@@ -2567,10 +2576,17 @@ void LinearAlgorithm::virtualDoLayout() {
                 currentY = currentY + yFactor * l->finalValues()[ "h" ];
         } else {
             currentWidth = l->finalValues()[ "w" ] / totalSumWidth * w;
-            if ( l->m_values.hasNegativeWidth() )
+            if ( l->m_values.hasNegativeWidth() ) {
                 currentWidth = -currentWidth;
-            //Q_ASSERT( l->m_factors["w"] > 0 );
+                Q_ASSERT(currentWidth >= 0.0);
+            }
+
             currentHeight = l->finalValues()[ "h" ] / totalSumHeight * h;
+            if ( l->m_values.hasNegativeHeight() ) {
+                currentHeight = -currentHeight;
+                Q_ASSERT(currentHeight >= 0.0);
+            }
+
             if ( direction == "fromR" || direction == "fromL" )
                 currentX += currentWidth;
             else

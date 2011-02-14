@@ -118,6 +118,7 @@ class ValueCache
         };
         ValueCache();
         bool hasNegativeWidth() const;
+        bool hasNegativeHeight() const;
         qreal value( const QString& name, bool *valid = 0 ) const;
         bool valueExists( const QString& name );
         void setValue( const QString& name, qreal value );
@@ -132,7 +133,7 @@ class ValueCache
         QMap< QString, qreal > m_mapping;
         QRectF m_rect;
         bool m_unmodified;
-        bool m_negativeWidth;
+        bool m_negativeWidth, m_negativeHeight;
 };
 
 /****************************************************************************************************
