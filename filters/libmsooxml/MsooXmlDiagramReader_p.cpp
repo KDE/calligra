@@ -165,7 +165,6 @@ void ValueCache::setRectValue( const QString& name, qreal value ) {
             m_negativeWidth = true;
         } else {
             m_rect.setWidth( value );
-            Q_ASSERT( m_negativeWidth == false );
             m_negativeWidth = false;
         }
     } else if ( name == "h" ) {
@@ -182,9 +181,8 @@ void ValueCache::setRectValue( const QString& name, qreal value ) {
     } else {
         Q_ASSERT_X( false, __FUNCTION__, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
     }
+
     Q_ASSERT( m_rect.isValid() );
-    Q_ASSERT( m_rect.left() >= 0 );
-    Q_ASSERT( m_rect.top() >= 0 );
     m_unmodified = false;
 }
 
@@ -1183,7 +1181,9 @@ void ConstraintAtom::build(Context* context) {
 //         m_parent->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(this));
 //         layout->addConstraint(ptr);
 //     }
-//     Q_ASSERT( constraintedWasApplied );
+
+    if (!constraintedWasApplied) dump(0,2);
+    //Q_ASSERT( constraintedWasApplied );
     AbstractAtom::build(context);
 }
 
@@ -1200,6 +1200,7 @@ void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAto
         } else
             kWarning() << "Layout with name=" << atom->m_name << "defines none-double value=" << m_value;
     } else if ( m_fact.isEmpty() ) {
+dump(0,2);
         QMap<QString, qreal> values;
         if ( m_referencedLayout ) {
             values = m_referencedLayout->finalValues();
@@ -1427,12 +1428,9 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
 #endif
 
     DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h;
-    Q_ASSERT(x >= 0.0);
-    Q_ASSERT(y >= 0.0);
+    //Q_ASSERT(x >= 0.0); Q_ASSERT(y >= 0.0); Q_ASSERT(cx >= 0.0); Q_ASSERT(cy >= 0.0); // they can be negative
     Q_ASSERT(w > 0.0);
     Q_ASSERT(h > 0.0);
-    Q_ASSERT(cx >= 0.0);
-    Q_ASSERT(cy >= 0.0);
 
     xmlWriter->startElement("draw:custom-shape");
     //xmlWriter->addAttribute("draw:layer", "layout");
@@ -1886,8 +1884,8 @@ ForEachAtom* ForEachAtom::clone() {
 
 void ForEachAtom::dump(Context* context, int level) {
     DEBUG_DUMP << "axis=" << m_axis << "count=" << m_count << "hideLastTrans=" << m_hideLastTrans << "name=" << m_name << "ptType=" << m_ptType << "reference=" << m_reference << "start=" << m_start << "step=" << m_step;
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
-        atom->dump(context, level + 1);
+    //foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
+    //    atom->dump(context, level + 1);
 }
 
 void ForEachAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -1906,7 +1904,6 @@ void ForEachAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
 void ForEachAtom::build(Context* context) {
     typedef QPair<AbstractNode*, QList<QExplicitlySharedDataPointer<AbstractAtom> > > NodePair;
     QList<NodePair> newChildren;
-
     QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
     foreach(AbstractNode* node, axis) {
         QList<QExplicitlySharedDataPointer<AbstractAtom> > list;
@@ -1918,8 +1915,16 @@ void ForEachAtom::build(Context* context) {
                 context->m_layoutPointMap[ layNodeAtom ] = node;
                 layNodeAtom->setAxis( context, currentAxis );
             }
-            QExplicitlySharedDataPointer<AbstractAtom> atomCopy(atom->clone());
-            list.append(atomCopy);
+
+            ListAtom* listAtom = dynamic_cast< ListAtom* >( atom.data() );
+            /*if ( listAtom && listAtom->m_tagName == QLatin1String("dgm:constrLst") ) {
+                foreach( QExplicitlySharedDataPointer<AbstractAtom> a, m_children )
+                    if ( dynamic_cast< ConstraintAtom* >( a.data() ) )
+                        context->m_parentLayout->m_constraintsToBuild.append(a);
+            } else*/ {
+                QExplicitlySharedDataPointer<AbstractAtom> atomCopy(atom->clone());
+                list.append(atomCopy);
+            }
         }
         newChildren.append(NodePair(node, list));
     }
