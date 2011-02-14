@@ -1851,8 +1851,7 @@ void ChooseAtom::build(Context* context) {
 
     // move the children of the selected IfAtom's to our parent
     int index = m_parent->indexOfChild(this);
-    if (index < 0)
-        index = m_parent->children().count() - 1;
+    Q_ASSERT(index >= 0);
 
     typedef QVector< QExplicitlySharedDataPointer< AbstractAtom > > AtomPList;
     foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult ) {
@@ -1938,11 +1937,14 @@ void ForEachAtom::build(Context* context) {
         newChildren.append(NodePair(node, list));
     }
 
+    int index = m_parent->indexOfChild(this);
+    Q_ASSERT(index >= 0);
+
     AbstractNode* oldCurrentNode = context->currentNode();
     foreach(NodePair p, newChildren) {
         context->setCurrentNode(p.first); // move on to the next node        
         foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, p.second) {
-            m_parent->addChild(atom);
+            m_parent->insertChild(++index, atom);
             atom->build(context);
         }
     }
