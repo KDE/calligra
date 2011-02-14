@@ -28,6 +28,7 @@
 #include "XlsxXmlDocumentReader.h"
 #include "XlsxXmlDrawingReader.h"
 #include "XlsxXmlChartReader.h"
+#include "XlsxXmlTableReader.h"
 #include "XlsxImport.h"
 #include "Charting.h"
 #include "ChartExport.h"
@@ -127,13 +128,11 @@ static void splitToRowAndColumn(const QString source, QString& row, QString& col
     }
 }
 
-QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleForPosition(const QString& position)
+QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleForPosition(const QString& positionLetter, const QString& positionNumber)
 {
     QMapIterator<QString, QMap<QString, QString> > i(conditionalStyles);
 
-    QString startLetter, startNumber, endLetter, endNumber, positionStart, positionNumber;
-
-    splitToRowAndColumn(position, positionStart, positionNumber);
+    QString startLetter, startNumber, endLetter, endNumber;
 
     QList<QMap<QString, QString> > returnMaps;
 
@@ -150,9 +149,9 @@ QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleFo
             splitToRowAndColumn(range.mid(index + 1), endLetter, endNumber);
         }
 
-        if ((positionStart == startLetter && positionNumber == startNumber && endLetter.isEmpty()) ||
-            (positionStart >= startLetter && positionNumber.toInt() >= startNumber.toInt() &&
-             positionStart <= endLetter && positionNumber.toInt() <= endNumber.toInt())) {
+        if ((positionLetter == startLetter && positionNumber == startNumber && endLetter.isEmpty()) ||
+            (positionLetter >= startLetter && positionNumber.toInt() >= startNumber.toInt() &&
+             positionLetter <= endLetter && positionNumber.toInt() <= endNumber.toInt())) {
             returnMaps.push_back(i.value());
         }
     }
@@ -300,7 +299,7 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
  - autoFilter (AutoFilter Settings) §18.3.1.2
  - cellWatches (Cell Watch Items) §18.3.1.9
  - colBreaks (Vertical Page Breaks) §18.3.1.14
- - cols (Column Information) §18.3.1.17
+ - [done] cols (Column Information) §18.3.1.17
  - [done] conditionalFormatting (Conditional Formatting) §18.3.1.18
  - controls (Embedded Controls) §18.3.1.21
  - customProperties (Custom Properties) §18.3.1.23
@@ -312,10 +311,10 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
  - drawingHF (Drawing Reference in Header Footer) §18.3.1.37
  - extLst (Future Feature Data Storage Area) §18.2.10
  - headerFooter (Header Footer Settings) §18.3.1.46
- - hyperlinks (Hyperlinks) §18.3.1.48
+ - [done] hyperlinks (Hyperlinks) §18.3.1.48
  - ignoredErrors (Ignored Errors) §18.3.1.51
- - mergeCells (Merge Cells) §18.3.1.55
- - oleObjects (Embedded Objects) §18.3.1.60
+ - [done] mergeCells (Merge Cells) §18.3.1.55
+ - [done] oleObjects (Embedded Objects) §18.3.1.60
  - pageMargins (Page Margins) §18.3.1.62
  - pageSetup (Page Setup Settings) §18.3.1.63
  - phoneticPr (Phonetic Properties) §18.4.3
@@ -332,7 +331,7 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
  - sheetViews (Sheet Views) §18.3.1.88
  - smartTags (Smart Tags) §18.3.1.90
  - sortState (Sort State) §18.3.1.92
- - tableParts (Table Parts) §18.3.1.95
+ - [done] tableParts (Table Parts) §18.3.1.95
  - webPublishItems (Web Publishing Items) §18.3.1.98
 
  @todo support all child elements
@@ -385,6 +384,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
         }
         else if (isStartElement() && m_context->firstRoundOfReading) {
             TRY_READ_IF(conditionalFormatting)
+            ELSE_TRY_READ_IF(tableParts)
             SKIP_UNKNOWN
         }
     }
@@ -1150,7 +1150,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             cellStyle.addAttribute( "style:data-style-name", formattedStyle );
         }
 
-        QList<QMap<QString, QString> > maps = m_context->conditionalStyleForPosition(r);
+        QString positionLetter, positionNumber;
+        splitToRowAndColumn(r, positionLetter, positionNumber);
+        QList<QMap<QString, QString> > maps = m_context->conditionalStyleForPosition(positionLetter, positionNumber);
         int index = maps.size();
 
         // Adding the lists in reversed priority order, as KoGenStyle when creating the style
@@ -1423,12 +1425,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         QString drawingPath, drawingFile;
         MSOOXML::Utils::splitPathAndFile(drawingPathAndFile, &drawingPath, &drawingFile);
 
-        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, m_context->sheet, drawingPath, drawingFile);
+        XlsxXmlDrawingReaderContext context(m_context, m_context->sheet, drawingPath, drawingFile);
         XlsxXmlDrawingReader reader(this);
-        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, drawingPathAndFile, context);
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, drawingPathAndFile, &context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
-            delete context;
             return result;
         }
 
@@ -1530,6 +1531,59 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
     addManifestEntryForFile(destinationName);
 
     m_context->sheet->setPictureBackgroundPath(destinationName);
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tableParts
+/*
+ Parent elements:
+ - [done] worksheet (§18.3.1.99)
+
+ Child elements:
+ - [done] tablePart (Table Part) §18.3.1.94
+
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_tableParts()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if( isStartElement() ) {
+            TRY_READ_IF(tablePart)
+            ELSE_WRONG_FORMAT
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tablePart
+/*
+ Parent elements:
+ - [done] tableParts (§18.3.1.95)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_tablePart()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR_WITH_NS(r, id)
+    QString tablePathAndFile = m_context->relationships->target(m_context->path, m_context->file, r_id);
+
+    XlsxXmlTableReaderContext context;
+    XlsxXmlTableReader reader(this);
+    const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, tablePathAndFile, &context);
+    if (result != KoFilter::OK) {
+        raiseError(reader.errorString());
+        return result;
+    }
 
     readNext();
     READ_EPILOGUE

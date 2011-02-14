@@ -55,18 +55,10 @@ MsooXmlDiagramReaderContext::~MsooXmlDiagramReaderContext()
 void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect &rect)
 {
     // The root layout node always inherits the canvas dimensions by default.
-    Q_ASSERT(rect.x() >= 0);
-    Q_ASSERT(rect.y() >= 0);
-    Q_ASSERT(rect.width() >= 0);
-    Q_ASSERT(rect.height() >= 0);
     m_context->m_rootLayout->m_values["l"] = rect.x();
     m_context->m_rootLayout->m_values["t"] = rect.y();
     m_context->m_rootLayout->m_values["w"] = rect.width();
     m_context->m_rootLayout->m_values["h"] = rect.height();
-    //m_context->m_rootLayout->m_values["r"] = rect.right();
-    //m_context->m_rootLayout->m_values["w"] = m_context->m_rootLayout->m_values["h"] = qMin(rect.width(),rect.height()); // square (not needed cause will be done by the "ar"-dgm:param)
-    //m_context->m_rootLayout->m_values["ctrX"] = 0.0;
-    //m_context->m_rootLayout->m_values["ctrY"] = 0.0;
 
     // Do the (re-)layout.
     m_context->m_rootLayout->layoutAtom(m_context);    
