@@ -76,10 +76,10 @@ Context::~Context() {
 AbstractNode* Context::currentNode() const { return m_currentNode; }
 void Context::setCurrentNode(AbstractNode* node) { m_currentNode = node; }
 
-ValueCache::ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), unmodified( true ), negativeWidth( false ){}
+ValueCache::ValueCache() : m_rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), m_unmodified( true ), m_negativeWidth( false ){}
 
 bool ValueCache::hasNegativeWidth() const {
-    return negativeWidth;
+    return m_negativeWidth;
 }
 
 qreal ValueCache::value( const QString& name, bool *valid ) const {
@@ -87,20 +87,20 @@ qreal ValueCache::value( const QString& name, bool *valid ) const {
         *valid = true;
     if ( isRectValue( name ) )
         return rectValue( name );
-    if ( valid && ! mapping.contains( name ) )
+    if ( valid && ! m_mapping.contains( name ) )
         *valid = false;
-    return mapping[ name ];
+    return m_mapping[ name ];
 }
 
 bool ValueCache::valueExists( const QString& name ) {
-    return isRectValue( name ) || mapping.contains( name );
+    return isRectValue( name ) || m_mapping.contains( name );
 }
 
 void ValueCache::setValue( const QString& name, qreal value ) {
     if ( isRectValue( name ) )
         setRectValue( name, value );
     else
-        mapping[ name ] = value;
+        m_mapping[ name ] = value;
 }
 
 qreal ValueCache::operator[]( const QString& name ) const  {
@@ -116,15 +116,15 @@ ValueCache::ResultWrapper ValueCache::operator[]( const QString& name ) {
 }
 
 ValueCache::operator QMap< QString, qreal >() const {
-    QMap < QString, qreal > result = mapping;
-    result[ "l" ] = rect.left();
-    result[ "r" ] = rect.right();
-    result[ "t" ] = rect.top();
-    result[ "b" ] = rect.bottom();
-    result[ "w" ] = rect.width();
-    result[ "h" ] = rect.height();
-    result[ "ctrX" ] = rect.center().rx();
-    result[ "ctrY" ] = rect.center().ry();
+    QMap < QString, qreal > result = m_mapping;
+    result[ "l" ] = m_rect.left();
+    result[ "r" ] = m_rect.right();
+    result[ "t" ] = m_rect.top();
+    result[ "b" ] = m_rect.bottom();
+    result[ "w" ] = m_rect.width();
+    result[ "h" ] = m_rect.height();
+    result[ "ctrX" ] = m_rect.center().rx();
+    result[ "ctrY" ] = m_rect.center().ry();
     return result;
 }
 
@@ -133,59 +133,59 @@ bool ValueCache::isRectValue( const QString& name ) const {
 }
 
 qreal ValueCache::rectValue( const QString& name ) const {
-    Q_ASSERT( rect.isValid() );
+    Q_ASSERT( m_rect.isValid() );
     if ( name == "l")
-        return rect.left();
+        return m_rect.left();
     if ( name == "r" )
-        return rect.right();
+        return m_rect.right();
     if ( name == "w" )
-        return rect.width();
+        return m_rect.width();
     if ( name == "h" )
-        return rect.height();
+        return m_rect.height();
     if ( name == "t" )
-        return rect.top();
+        return m_rect.top();
     if ( name == "b" )
-        return rect.bottom();
+        return m_rect.bottom();
     if ( name == "ctrX" )
-        return rect.center().rx();
+        return m_rect.center().rx();
     if ( name == "ctrY" )
-        return rect.center().ry();
+        return m_rect.center().ry();
     return 0.0;
 }
 
 void ValueCache::setRectValue( const QString& name, qreal value ) {
-    Q_ASSERT( rect.isValid() );
+    Q_ASSERT( m_rect.isValid() );
     if ( name == "l") {
-        rect.moveLeft( value );
+        m_rect.moveLeft( value );
     } else if ( name == "r" ) {
-        rect.setRight( value );
+        m_rect.setRight( value );
     } else if ( name == "w" ) {
         if ( value <  0 ) {
-            rect.setLeft( rect.right() + value );
-            negativeWidth = true;
+            m_rect.setLeft( m_rect.right() + value );
+            m_negativeWidth = true;
         } else {
-            rect.setWidth( value );
-            Q_ASSERT( negativeWidth == false );
-            negativeWidth = false;
+            m_rect.setWidth( value );
+            Q_ASSERT( m_negativeWidth == false );
+            m_negativeWidth = false;
         }
     } else if ( name == "h" ) {
         Q_ASSERT( value > 0 );
-        rect.setHeight(value );
+        m_rect.setHeight(value );
     } else if ( name == "t" ) {
-        rect.moveTop( value );
+        m_rect.moveTop( value );
     } else if ( name == "b" ) {
-        rect.setBottom( value );
+        m_rect.setBottom( value );
     } else if ( name == "ctrX" ) {
-        rect.moveCenter( QPointF( rect.center().x() + value, rect.center().y() ) );
+        m_rect.moveCenter( QPointF( m_rect.center().x() + value, m_rect.center().y() ) );
     } else if ( name == "ctrY" ) {
-        rect.moveCenter( QPointF( rect.center().x(), rect.center().y() + value ) );
+        m_rect.moveCenter( QPointF( m_rect.center().x(), m_rect.center().y() + value ) );
     } else {
         Q_ASSERT_X( false, __FUNCTION__, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
     }
-    Q_ASSERT( rect.isValid() );
-    Q_ASSERT( rect.left() >= 0 );
-    Q_ASSERT( rect.top() >= 0 );
-    unmodified = false;
+    Q_ASSERT( m_rect.isValid() );
+    Q_ASSERT( m_rect.left() >= 0 );
+    Q_ASSERT( m_rect.top() >= 0 );
+    m_unmodified = false;
 }
 
 /****************************************************************************************************/
@@ -1165,15 +1165,15 @@ void ConstraintAtom::build(Context* context) {
     typedef QList <QExplicitlySharedDataPointer <MSOOXML::Diagram::LayoutNodeAtom > >  LayoutNodeList;
     LayoutNodeList childList = context->m_parentLayout->childrenLayouts();
     foreach( ConstraintAtom* constraint, addedConstraints ) {
-        for( LayoutNodeList::iterator it = childList.begin(); it != childList.end(); ++it ) {
+        LayoutNodeList::iterator it = childList.begin();
+        while(it != childList.end()) {
             QExplicitlySharedDataPointer<LayoutNodeAtom> curChild = *it;
-            if ( !constraint->m_refForName.isEmpty() )
-                if ( curChild->m_name != constraint->m_refForName )
-                    continue;
-            if ( !refChildDataPoints.contains( context->m_layoutPointMap[ curChild.data() ] ) )
+            if ( (!constraint->m_refForName.isEmpty() && curChild->m_name != constraint->m_refForName) || refChildDataPoints.contains( context->m_layoutPointMap[ curChild.data() ] ) ) {
+                ++it;
                 continue;
+            }
             constraint->m_referencedLayout = curChild.data();
-            childList.erase( it );
+            it = childList.erase( it );
         }
     }
 

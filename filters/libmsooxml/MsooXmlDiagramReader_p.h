@@ -129,10 +129,10 @@ class ValueCache
         bool isRectValue( const QString& name ) const;
         qreal rectValue( const QString& name ) const;
         void setRectValue( const QString& name, qreal value );
-        QMap< QString, qreal > mapping;
-        QRectF rect;
-        bool unmodified;
-        bool negativeWidth;
+        QMap< QString, qreal > m_mapping;
+        QRectF m_rect;
+        bool m_unmodified;
+        bool m_negativeWidth;
 };
 
 /****************************************************************************************************
