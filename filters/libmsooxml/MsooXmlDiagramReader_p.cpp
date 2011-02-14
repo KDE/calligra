@@ -1195,18 +1195,15 @@ void ConstraintAtom::build(Context* context) {
 
 void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom ) {
     Q_ASSERT( atom );
-    qreal value = -1.0;
     if( !m_value.isEmpty() ) {
         bool ok;
-        qreal v = m_value.toDouble( &ok );
+        qreal value = m_value.toDouble( &ok );
         if ( ok ) {
-            value = v;
             atom->m_values[ m_type ] = value;
             atom->setNeedsRelayout( true );
         } else
             kWarning() << "Layout with name=" << atom->m_name << "defines none-double value=" << m_value;
     } else if ( m_fact.isEmpty() ) {
-dump(0,2);
         QMap<QString, qreal> values;
         if ( m_referencedLayout ) {
             values = m_referencedLayout->finalValues();
@@ -1214,9 +1211,10 @@ dump(0,2);
             values = atom->finalValues();
         }
         if( !m_refType.isEmpty() ) {
-            if( values.contains( m_refType ) )
+            qreal value = -1.0;
+            if( values.contains( m_refType ) ) {
                 value = values[ m_refType ];
-            if ( value < 0.0 ) {
+            } else {
                 AbstractAlgorithm* r = m_referencedLayout /* && m_referencedLayout->algorithmImpl() */ ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
                 Q_ASSERT( r );
                 value = r->defaultValue( m_refType, values );
@@ -1227,17 +1225,12 @@ dump(0,2);
                 atom->setNeedsRelayout( true );
             }
         } else {
+            AbstractAlgorithm* r = m_referencedLayout /* && m_referencedLayout->algorithmImpl() */ ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
+            Q_ASSERT( r );
+            qreal value = r->defaultValue( m_type, values );
             if ( value >= 0.0 ) {
                 atom->m_values[ m_type ] = value;
                 atom->setNeedsRelayout( true );
-            } else {
-                AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
-                Q_ASSERT( r );
-                value = r->defaultValue( m_type, values );
-                if ( value >= 0.0 ) {
-                    atom->m_values[ m_type ] = value;
-                    atom->setNeedsRelayout( true );
-                }
             }
         }
     } else {
