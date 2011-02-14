@@ -388,6 +388,8 @@ class ConstraintAtom : public AbstractAtom
         virtual void readAll(Context*, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
         void applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom );
+    private:
+        QString dump() const;
 };
 
 /// Rules indicate the ranges of values that a layout algorithm can use to modify the constraint values if it cannot lay out the graphic by using the constraints.

@@ -1090,7 +1090,7 @@ ConstraintAtom* ConstraintAtom::clone() {
     return atom;
 }
 
-void ConstraintAtom::dump(Context*, int level) {
+QString ConstraintAtom::dump() const {
     QString s;
     if(!m_fact.isEmpty()) s += QString("fact=%1 ").arg(m_fact);
     if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
@@ -1103,7 +1103,11 @@ void ConstraintAtom::dump(Context*, int level) {
     if(!m_refForName.isEmpty()) s += QString("refForName=%1 ").arg(m_refForName);
     if(!m_type.isEmpty()) s += QString("type=%1 ").arg(m_type);
     if(!m_value.isEmpty()) s += QString("val=%1 ").arg(m_value);
-    DEBUG_DUMP << s;
+    return s.trimmed();
+}
+
+void ConstraintAtom::dump(Context*, int level) {
+    DEBUG_DUMP << dump();
 }
 
 void ConstraintAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
@@ -1123,7 +1127,6 @@ void ConstraintAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
 }
 
 void ConstraintAtom::build(Context* context) {
-    //context->m_parentLayout->addConstraint( QExplicitlySharedDataPointer<ConstraintAtom>( this ) );    
     QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
     QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > affectedLayouts;
     QVector< AbstractNode* > childDataPoints;
@@ -1156,7 +1159,7 @@ void ConstraintAtom::build(Context* context) {
                     continue;
                 QExplicitlySharedDataPointer<ConstraintAtom> clonedPtr( ptr->clone() );
                 addedConstraints.append( clonedPtr.data() );
-                curChild->addConstraint( clonedPtr );       
+                curChild->addConstraint( clonedPtr );
                 constraintedWasApplied = true;
             }
         }
@@ -1176,20 +1179,14 @@ void ConstraintAtom::build(Context* context) {
         while(it != childList.end()) {
             QExplicitlySharedDataPointer<LayoutNodeAtom> curChild = *it;
             if ( (!constraint->m_refForName.isEmpty() && curChild->m_name != constraint->m_refForName) || refChildDataPoints.contains( context->m_layoutPointMap[ curChild.data() ] ) ) {
+                constraint->m_referencedLayout = context->m_parentLayout;
                 ++it;
-                continue;
+            } else {
+                constraint->m_referencedLayout = curChild.data();
+                it = childList.erase( it );
             }
-            constraint->m_referencedLayout = curChild.data();
-            it = childList.erase( it );
         }
     }
-
-//     QExplicitlySharedDataPointer<LayoutNodeAtom> layout = m_forName.isEmpty() ? context->m_parentLayout : context->m_layoutMap.value(m_forName);
-//     if(layout) {
-//         QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
-//         m_parent->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(this));
-//         layout->addConstraint(ptr);
-//     }
 
     if (!constraintedWasApplied) dump(0,2);
     //Q_ASSERT( constraintedWasApplied );
@@ -1220,10 +1217,10 @@ dump(0,2);
             if( values.contains( m_refType ) )
                 value = values[ m_refType ];
             if ( value < 0.0 ) {
-                AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
+                AbstractAlgorithm* r = m_referencedLayout /* && m_referencedLayout->algorithmImpl() */ ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
                 Q_ASSERT( r );
                 value = r->defaultValue( m_refType, values );
-                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg( m_type ).arg( m_refType ).toLocal8Bit());
+                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("algorithm=%1 value=%2 %3").arg( r->name() ).arg( value ).arg( dump() ).toLocal8Bit());
             }
             if ( value >= 0.0 ) {
                 atom->m_values[ m_type ] = value;
@@ -2090,6 +2087,7 @@ void AbstractAlgorithm::virtualDoLayout() {
     if (aspectRatio != 0.0)
         layout()->m_values["w"] = layout()->finalValues()["h"] * aspectRatio;
     QList< QExplicitlySharedDataPointer< LayoutNodeAtom > > allChilds = layout()->childrenLayouts();
+    
     foreach( QExplicitlySharedDataPointer< ConstraintAtom > atom, layout()->constraints() )
         atom->applyConstraint( QExplicitlySharedDataPointer< LayoutNodeAtom > ( layout() ) );
     foreach( QExplicitlySharedDataPointer< LayoutNodeAtom > curChild, allChilds )
@@ -2349,9 +2347,6 @@ qreal ConnectorAlgorithm::virtualGetDefaultValue(const QString& type, const QMap
     } else if (type == "begMarg" || type == "endMarg") {
         value = 3.175;
     } else if (type == "begPad") {
-        //Q_ASSERT(values.contains("connDist")); // can happen
-        //value = values.value("connDist") * 0.22;
-        //value = (values.contains("connDist") ? values.value("connDist") : connectorDistance()) * 0.22;
         value = connectorDistance() * 0.22;
     } else if (type == "endPad") {
         value = connectorDistance() * 0.25;
