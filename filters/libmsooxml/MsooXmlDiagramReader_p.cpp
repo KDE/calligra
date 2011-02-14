@@ -2578,16 +2578,12 @@ void LinearAlgorithm::virtualDoLayout() {
                 currentY = currentY + yFactor * l->finalValues()[ "h" ];
         } else {
             currentWidth = l->finalValues()[ "w" ] / totalSumWidth * w;
-            if ( l->m_values.hasNegativeWidth() ) {
-                currentWidth = -currentWidth;
-                Q_ASSERT(currentWidth >= 0.0);
-            }
+            Q_ASSERT(currentWidth >= 0.0);
+            //if ( l->m_values.hasNegativeWidth() ) currentWidth = -currentWidth;
 
             currentHeight = l->finalValues()[ "h" ] / totalSumHeight * h;
-            if ( l->m_values.hasNegativeHeight() ) {
-                currentHeight = -currentHeight;
-                Q_ASSERT(currentHeight >= 0.0);
-            }
+            //if ( l->m_values.hasNegativeHeight() ) currentHeight = -currentHeight;
+            Q_ASSERT(currentHeight >= 0.0);
 
             if ( direction == "fromR" || direction == "fromL" )
                 currentX += currentWidth;
