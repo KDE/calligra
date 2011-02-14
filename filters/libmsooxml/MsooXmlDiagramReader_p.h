@@ -47,7 +47,7 @@ namespace MSOOXML { namespace Diagram {
 
 /****************************************************************************************************
  * The following classes where designed after the way the dmg-namespace is described in the
- * MSOOXML-specs and how it was done in oo.org.
+ * MSOOXML-specs.
  *
  * Note that we cannot just translate the drawing1.xml cause there are cases where those file doesn't
  * contain the content or all of the content. A typical example where it's needed to eval the whole
@@ -102,116 +102,37 @@ class Context
         AbstractNode* m_currentNode;
 };
 
+/// The variable-values that can be attached to a LayoutNodeAtom.
 class ValueCache
 {
-public:
-    ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), unmodified( true ), negativeWidth( false ){}
-    class ResultWrapper
-    {
-        public:
-            ResultWrapper( ValueCache* parent, const QString& name ): m_parent( parent ), m_name( name ){}
-            ResultWrapper& operator= ( qreal value )
-            {
-                Q_ASSERT( m_parent );
-                m_parent->setValue( m_name, value );
-                return *this;
-            }
-            operator qreal() const
-            {
-                Q_ASSERT( m_parent );
-                bool valid = false;
-                return m_parent->value( m_name, valid );
-            }
-        private:
-            ValueCache* m_parent;
-            const QString m_name;
-      
-    };
-    bool hasNegativeWidth() const
-    {
-        return negativeWidth;
-    }
-    qreal value( const QString& name, bool& valid ) const
-    {
-        valid = true;
-        if ( isRectValue( name ) )
+    public:
+        class ResultWrapper
         {
-            return rectValue( name );
-        }
-        else
-        {
-            if ( ! mapping.contains( name ) )
-                valid = false;
-            return mapping[ name ];
-        }
-    }
-    bool valueExists( const QString& name )
-    {
-        return isRectValue( name ) || mapping.contains( name );
-    }
-    void setValue( const QString& name, qreal value )
-    {
-        if ( isRectValue( name ) )
-            setRectValue( name, value );
-        else
-            mapping[ name ] = value;
-    }
-    qreal operator[]( const QString& name ) const 
-    {
-        bool ok = false;
-        return value( name, ok );
-    }
-    
-    ResultWrapper operator[]( const char* name )
-    {
-        return ResultWrapper( this, QString::fromLatin1( name ) );
-    }
-
-    ResultWrapper operator[]( const QString& name )
-    {
-        return ResultWrapper( this, name );
-    }
-    operator QMap< QString, qreal >() const
-    {
-        QMap < QString, qreal > result = mapping;
-        result[ "l" ] = rect.left();
-        result[ "r" ] = rect.right();
-        result[ "t" ] = rect.top();
-        result[ "b" ] = rect.bottom();
-        result[ "w" ] = rect.width();
-        result[ "h" ] = rect.height();
-        result[ "ctrX" ] = rect.center().rx();
-        result[ "ctrY" ] = rect.center().ry();
-        return result;
-    }
-private:
-    bool isRectValue( const QString& name ) const
-    {
-        if ( name == "l")
-            return true;
-        else if ( name == "r" )
-            return true;
-        else if ( name == "w" )
-            return true;
-        else if ( name == "h" )
-            return true;
-        else if ( name == "t" )
-            return true;
-        else if ( name == "b" )
-            return true;
-        else if ( name == "ctrX" )
-            return true;
-        else if ( name == "ctrY" )
-            return true;
-        else
-            return false;
-    }
-    qreal rectValue( const QString& name ) const;
-    void setRectValue( const QString& name, qreal value );
-    QMap< QString, qreal > mapping;
-    QRectF rect;
-    bool unmodified;
-    bool negativeWidth;
+            public:
+                ResultWrapper( ValueCache* parent, const QString& name ): m_parent( parent ), m_name( name ) {}
+                ResultWrapper& operator= ( qreal value ) { m_parent->setValue( m_name, value ); return *this; }
+                operator qreal() const { return m_parent->value( m_name ); }
+            private:
+                ValueCache* m_parent;
+                const QString m_name;
+        };
+        ValueCache();
+        bool hasNegativeWidth() const;
+        qreal value( const QString& name, bool *valid = 0 ) const;
+        bool valueExists( const QString& name );
+        void setValue( const QString& name, qreal value );
+        qreal operator[]( const QString& name ) const ;    
+        ResultWrapper operator[]( const char* name );
+        ResultWrapper operator[]( const QString& name );
+        operator QMap< QString, qreal >() const;
+    private:
+        bool isRectValue( const QString& name ) const;
+        qreal rectValue( const QString& name ) const;
+        void setRectValue( const QString& name, qreal value );
+        QMap< QString, qreal > m_mapping;
+        QRectF m_rect;
+        bool m_unmodified;
+        bool m_negativeWidth;
 };
 
 /****************************************************************************************************
@@ -327,6 +248,7 @@ class AbstractAtom : public QSharedData
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
         QExplicitlySharedDataPointer<AbstractAtom> parent() const;
         QVector< QExplicitlySharedDataPointer<AbstractAtom> > children() const;
+        int indexOfChild(AbstractAtom* node) const;
         void addChild(AbstractAtom* node);
         void addChild(QExplicitlySharedDataPointer<AbstractAtom> node);
         void insertChild(int index, AbstractAtom* node);

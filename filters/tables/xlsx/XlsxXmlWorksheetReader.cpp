@@ -731,11 +731,11 @@ void XlsxXmlWorksheetReader::saveColumnStyle(const QString& widthString)
         body->addAttribute("table:style-name", currentTableColumnStyleName);
         d->savedStyles[widthString] = currentTableColumnStyleName;
     }
-    else 
+    else
     {
         const QString currentTableColumnStyleName(d->savedStyles[widthString]);
         body->addAttribute("table:style-name", currentTableColumnStyleName);
-    }    
+    }
 }
 
 //! @return value @a cm with cm suffix
@@ -833,8 +833,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
         column->hidden = hidden.toInt() > 0;
     }
 
-    SKIP_EVERYTHING
-
 //moved    body->endElement(); // table:table-column
     appendTableColumns(maxCol - minCol + 1, realWidthString);
 
@@ -844,6 +842,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
         showWarningAboutWorksheetSize();
     }
 
+    readNext();
     READ_EPILOGUE
 }
 
@@ -955,7 +954,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(c) // modifies m_currentColumn
-            ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -1018,7 +1017,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         if (isStartElement()) {
             TRY_READ_IF(f)
             ELSE_TRY_READ_IF(v)
-            ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -1289,11 +1288,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
     readNext();
     m_value = text().toString();
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
+    readNext();
     READ_EPILOGUE
 }
 
@@ -1310,7 +1305,13 @@ QString XlsxXmlWorksheetReader::Private::processValueFormat(const QString& value
 
 #undef CURRENT_EL
 #define CURRENT_EL mergeCell
+/*
+ Parent elements:
+ - [done] mergeCells (§18.3.1.55)
 
+ Child elements:
+ - none
+*/
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
 {
     READ_PROLOGUE
@@ -1367,16 +1368,20 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
             }
         }
     }
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+
+    readNext();
     READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL mergeCells
+/*
+ Parent elements:
+ - [done] worksheet (§18.3.1.99)
 
+ Child elements:
+ - mergeCell (Merged Cell) §18.3.1.54
+*/
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCells()
 {
     READ_PROLOGUE
@@ -1446,7 +1451,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
 
 #undef CURRENT_EL
 #define CURRENT_EL hyperlink
+/*
+ Parent elements:
+ - [done] hyperlinks (§18.3.1.48)
 
+ Child elements:
+ - none
+*/
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
 {
     READ_PROLOGUE
@@ -1470,16 +1481,20 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
             cell->setHyperLink( link );
         }
     }
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+
+    readNext();
     READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL hyperlinks
+/*
+ Parent elements:
+ - [done] worksheet (§18.3.1.99)
 
+ Child elements:
+ - [done] hyperlink (Hyperlink) §18.3.1.47
+*/
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
 {
     READ_PROLOGUE
@@ -1496,7 +1511,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
 
 #undef CURRENT_EL
 #define CURRENT_EL picture
+/*
+ Parent elements:
+ - chartsheet (§18.3.1.12)
+ - [done] worksheet (§18.3.1.99)
 
+ Child elements:
+ - none
+*/
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
 {
     READ_PROLOGUE
@@ -1509,16 +1531,20 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
 
     m_context->sheet->setPictureBackgroundPath(destinationName);
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL oleObjects
+/*
+ Parent elements:
+ - dialogsheet (§18.3.1.34)
+ - [done] worksheet (§18.3.1.99)
 
+ Child elements:
+ - [done] oleObject (Embedded Object) §18.3.1.59
+*/
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
 {
     READ_PROLOGUE
@@ -1527,6 +1553,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
         BREAK_IF_END_OF(CURRENT_EL);
         if( isStartElement() ) {
             TRY_READ_IF(oleObject)
+            ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -1534,7 +1561,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
 
 #undef CURRENT_EL
 #define CURRENT_EL oleObject
+/*
+ Parent elements:
+ - [done] oleObjects (§18.3.1.60)
 
+ Child elements:
+ - objectPr (Embedded Object Properties) §18.3.1.56
+
+*/
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 {
     READ_PROLOGUE

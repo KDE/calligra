@@ -52,12 +52,14 @@ KoShape *KPrPlaceholderPictureStrategy::createShape(KoResourceManager *rm)
         QString tmpFile;
         if (KIO::NetAccess::download(url, tmpFile, 0)) {
             QImage image(tmpFile);
-            //setSuffix(url.prettyUrl());
-            KoImageData *data = collection->createImageData(image);
-            if (data->isValid()) {
-                shape->setUserData( data );
-                // TODO the pic should be fit into the space provided
-                shape->setSize( data->imageSize() );
+            if (!image.isNull()) {
+                //setSuffix(url.prettyUrl());
+                KoImageData *data = collection->createImageData(image);
+                if (data->isValid()) {
+                    shape->setUserData( data );
+                    // TODO the pic should be fit into the space provided
+                    shape->setSize( data->imageSize() );
+                }
             }
         } else {
             kWarning() << "open image " << url.prettyUrl() << "failed";

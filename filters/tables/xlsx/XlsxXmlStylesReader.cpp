@@ -1152,18 +1152,16 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(alignment)
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_WRONG_FORMAT
         }
     }
-
-    READ_EPILOGUE_WITHOUT_RETURN
 
     currentCellFormatSetter.release();
     m_context->styles->setCellFormat(m_currentCellFormat, m_cellFormatIndex);
     m_currentCellFormat = 0;
     m_cellFormatIndex++;
 
-    return KoFilter::OK;
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -1198,10 +1196,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_alignment()
 
 //! @todo more attributes
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 

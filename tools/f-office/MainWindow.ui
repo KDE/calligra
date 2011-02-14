@@ -189,7 +189,7 @@
   <action name="actionFullScreen">
    <property name="icon">
     <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_fullsize.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_fullsize.png</iconset>
+     <normaloff>images/48x48/general_fullsize.png</normaloff>images/48x48/general_fullsize.png</iconset>
    </property>
   </action>
   <action name="actionPageNumber">
