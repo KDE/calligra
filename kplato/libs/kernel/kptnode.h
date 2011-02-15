@@ -632,7 +632,6 @@ protected:
     Duration m_durationForward;
     Duration m_durationBackward;
     DateTime m_earlyStart;
-    DateTime m_lateStart;
     DateTime m_earlyFinish;
     DateTime m_lateFinish;
     

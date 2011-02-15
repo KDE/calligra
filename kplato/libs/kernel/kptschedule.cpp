@@ -63,8 +63,11 @@ Schedule::Schedule()
         m_deleted( false ),
         m_parent( 0 ),
         m_obstate( OBS_Parent ),
-        m_calculationMode( Schedule::Scheduling )
-{}
+        m_calculationMode( Schedule::Scheduling ),
+        notScheduled( true )
+{
+    initiateCalculation();
+}
 
 Schedule::Schedule( Schedule *parent )
         : m_type( Expected ),
@@ -72,7 +75,8 @@ Schedule::Schedule( Schedule *parent )
         m_deleted( false ),
         m_parent( parent ),
         m_obstate( OBS_Parent ),
-        m_calculationMode( Schedule::Scheduling )
+        m_calculationMode( Schedule::Scheduling ),
+        notScheduled( true )
 {
 
     if ( parent ) {
@@ -80,6 +84,7 @@ Schedule::Schedule( Schedule *parent )
         m_type = parent->type();
         m_id = parent->id();
     }
+    initiateCalculation();
     //kDebug()<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id;
 }
 
@@ -90,10 +95,11 @@ Schedule::Schedule( const QString& name, Type type, long id )
         m_deleted( false ),
         m_parent( 0 ),
         m_obstate( OBS_Parent ),
-        m_calculationMode( Schedule::Scheduling )
+        m_calculationMode( Schedule::Scheduling ),
+        notScheduled( true )
 {
-
     //kDebug()<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id;
+    initiateCalculation();
 }
 
 Schedule::~Schedule()
@@ -164,6 +170,8 @@ QStringList Schedule::state() const
         lst << SchedulingState::resourceNotAvailable();
     if ( resourceOverbooked )
         lst << SchedulingState::resourceOverbooked();
+    if ( effortNotMet )
+        lst << SchedulingState::effortNotMet();
     if ( lst.isEmpty() )
         lst << SchedulingState::scheduled();
     return lst;
@@ -231,10 +239,14 @@ void Schedule::initiateCalculation()
 {
     resourceError = false;
     resourceOverbooked = false;
+    resourceNotAvailable = false;
     schedulingError = false;
     inCriticalPath = false;
+    effortNotMet = false;
     workStartTime = DateTime();
     workEndTime = DateTime();
+
+
 }
 
 void Schedule::calcResourceOverbooked()

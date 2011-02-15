@@ -762,14 +762,18 @@ void Node::propagateLatestFinish(DateTime &time) {
             case MustStartOn:
                 if ( m_constraintStartTime > time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
+#ifndef PLAN_NLOGDEBUG
                     m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+#endif
                 }
                 break;
             case MustFinishOn:
             case FixedInterval:
                 if ( m_constraintEndTime > time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
+#ifndef PLAN_NLOGDEBUG
                     m_currentSchedule->logDebug( QString( "%1: end constraint %2 > %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+#endif
                 }
                 break;
             default:
@@ -813,7 +817,6 @@ void Node::initiateCalculation(MainSchedule &sch) {
     m_durationForward = Duration::zeroDuration;
     m_durationBackward = Duration::zeroDuration;
     m_earlyStart = DateTime();
-    m_lateStart = DateTime();
     m_earlyFinish = DateTime();
     m_lateFinish = DateTime();
 

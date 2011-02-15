@@ -317,6 +317,8 @@ protected:
     bool schedulingError;
     /// Set if the node has not been scheduled
     bool notScheduled;
+    /// Set if the assigned resource cannot deliver the requered estimated effort
+    bool effortNotMet;
 
     DateTime workStartTime;
     DateTime workEndTime;
