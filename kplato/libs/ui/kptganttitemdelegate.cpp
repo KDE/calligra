@@ -47,11 +47,11 @@ GanttItemDelegate::GanttItemDelegate( QObject *parent )
     showTaskLinks( true ),
     showProgress( false ),
     showPositiveFloat( false ),
-    showNegativeFloat( true ), // NOTE: atm for test, activate when the ui can be changed
+    showNegativeFloat( false ),
     showCriticalPath( false ),
     showCriticalTasks( false ),
     showAppointments( false ),
-    showTimeConstraint( true ), // NOTE: atm for test, activate when the ui can be changed
+    showTimeConstraint( false ),
     showSchedulingError( false )
 {
     QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
