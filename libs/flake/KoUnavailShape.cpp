@@ -128,8 +128,8 @@ void KoUnavailShape::paintDecorations(QPainter &painter, const KoViewConverter &
 
 void KoUnavailShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED(painter);
     Q_UNUSED(converter);
+    draw(painter);
 }
 
 void KoUnavailShape::draw(QPainter &painter) const
@@ -146,13 +146,8 @@ void KoUnavailShape::draw(QPainter &painter) const
         d->scalablePreview->render(&painter, bounds);
     }
     else if(!d->pixmapPreview.isNull()) {
-        qreal  width = size().width();
-        qreal  height = size().height();
-        qreal  picWidth = CM_TO_POINT(d->pixmapPreview.widthMM() * 10);
-        qreal  picHeight = CM_TO_POINT(d->pixmapPreview.heightMM() * 10);
-
-        painter.drawPixmap((width - picWidth) / qreal(2.0), (height - picWidth) / qreal(2.0),
-                        picWidth, picHeight, d->pixmapPreview);
+        QRect bounds(0, 0, boundingRect().width(), boundingRect().height());
+        painter.drawPixmap(bounds, d->pixmapPreview);
     }
     else {
         // The size of the image is:
@@ -180,8 +175,6 @@ void KoUnavailShape::drawNull(QPainter &painter) const
     painter.save();
 
     // Draw a simple cross in a rectangle just to indicate that there is something here.
-    painter.setPen(QPen(QColor(172, 196, 206)));
-    painter.drawRect(rect);
     painter.drawLine(rect.topLeft(), rect.bottomRight());
     painter.drawLine(rect.bottomLeft(), rect.topRight());
 
@@ -303,9 +296,11 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
             QByteArray previewData = d->loadFile(objectName, context);
             // Check to see if we know the mimetype for this entry. Specifically:
             // - Check to see if the item is a loadable SVG file
-            d->scalablePreview->load(previewData);
+            //d->scalablePreview->load(previewData);
+            d->scalablePreview->load(QString("/home/leinir/musicshapetest.svg"));
             if(d->scalablePreview->isValid()) {
                 kDebug(30006) << "Found scalable preview image!";
+                d->scalablePreview->setViewBox(d->scalablePreview->boundsOnElement("svg"));
                 foundPreview = true;
                 continue;
             }
