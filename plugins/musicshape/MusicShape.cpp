@@ -43,6 +43,8 @@
 #include "MusicStyle.h"
 #include "Engraver.h"
 #include "Renderer.h"
+#include <QSvgGenerator>
+#include <QTemporaryFile>
 
 using namespace MusicCore;
 
@@ -130,15 +132,42 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     MusicXmlWriter().writeSheet(writer, m_sheet, false);
     writer.endElement(); // music:shape
 
-    // Save a preview image
     const qreal previewZoom = 150 / 72.; // 150 DPI
     QSizeF imgSize = size(); // in points
     imgSize *= previewZoom;
+    KoViewConverter converter;
+    
+    // TODO: Save a preview svg
+    QTemporaryFile svgTmp;
+    if (svgTmp.open()) {
+        QSvgGenerator svg;
+        svg.setFileName(svgTmp.fileName());
+        svg.setSize(imgSize.toSize());
+        svg.setViewBox(QRect(0, 0, boundingRect().width(), boundingRect().height()));
+        
+        QPainter svgPainter;
+        svgPainter.begin(&svg);
+        svgPainter.setRenderHint(QPainter::Antialiasing);
+        svgPainter.setRenderHint(QPainter::TextAntialiasing);
+        constPaint(svgPainter, converter);
+        svgPainter.end();
+        
+        writer.startElement("draw:image");
+        // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
+        QString name("/home/leinir/musicshapetest.svg");// = context.imageHref(svg);
+        QFile::copy(svg.fileName(),name);
+        writer.addAttribute("xlink:type", "simple" );
+        writer.addAttribute("xlink:show", "embed" );
+        writer.addAttribute("xlink:actuate", "onLoad");
+        writer.addAttribute("xlink:href", name);
+        writer.endElement(); // draw:image
+    }
+
+    // Save a preview image
     QImage img(imgSize.toSize(), QImage::Format_ARGB32);
     QPainter painter(&img);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::TextAntialiasing);
-    KoViewConverter converter;
     converter.setZoom(previewZoom);
     constPaint(painter, converter);
     writer.startElement("draw:image");
@@ -149,8 +178,6 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
     writer.endElement(); // draw:image
-
-    // TODO: Save a preview svg
 
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
