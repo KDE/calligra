@@ -2854,7 +2854,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
     TRY_READ_ATTR_WITHOUT_NS(r)
     TRY_READ_ATTR_WITHOUT_NS(t)
 
-    if (!b.isEmpty()) {
+    if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
         qreal bReal = b.toDouble() / 100000;
         qreal tReal = t.toDouble() / 100000;
         qreal lReal = l.toDouble() / 100000;
@@ -2870,6 +2870,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
         QImage image;
         m_context->import->imageFromFile(m_recentDestName, image);
         image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+
+        if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
+            // Todo, here we should delete the generated black area(s)
+        }
+
         RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
         addManifestEntryForFile(destinationName);
         m_xlinkHref = destinationName;
@@ -3101,23 +3106,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
     }
     return KoFilter::OK;
 }
-
-//! @todo KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
-/*
- No child elements.
-
- Attributes:
-    - b (Bottom Offset)
-    - l (Left Offset)
-    - r (Right Offset)
-    - t (Top Offset)
-
- Complex type: CT_RelativeRect, p. 4545
-
- const QXmlStreamAttributes attrs( attributes() );
- use qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)....
-*/
-
 
 #if 0 //todo
 #undef CURRENT_EL
@@ -5718,9 +5706,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
                 m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:prstTxWarp")) {
-                // The handling here is not correct but better than nothing
-                // Also normAutofit = true seems to be correct for value 'textNoShape'
-                m_normAutofit = MSOOXML::Utils::autoFitOn;
+                // This element describes text transformation, todo:
             }
             SKIP_UNKNOWN
         }
