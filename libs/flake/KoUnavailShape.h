@@ -24,8 +24,8 @@
 
 
 // KOffice
+#include <KoShape.h>
 #include <KoFrameShape.h>
-#include <KoShapeContainer.h>
 
 
 class QPainter;
@@ -49,7 +49,7 @@ class QPainter;
  * The KoUnavailShape always has to be present, and is the only shape
  * that is not implemented as a plugin.
  */
-class KoUnavailShape : public KoFrameShape, public KoShapeContainer {
+class KoUnavailShape : public KoShape, public KoFrameShape {
 public:
     KoUnavailShape();
     virtual ~KoUnavailShape();
@@ -60,8 +60,6 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
-    /// reimplemented from KoShapeContainer
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented

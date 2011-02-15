@@ -93,8 +93,8 @@ KoUnavailShape::Private::~Private()
 
 
 KoUnavailShape::KoUnavailShape()
-    : KoFrameShape( "", "" )
-    , KoShapeContainer(new KoShapeContainerDefaultModel())
+    : KoShape()
+    , KoFrameShape( "", "" )
     , d(new Private())
 {
     setShapeId(KoUnavailShape_SHAPEID);
@@ -123,12 +123,6 @@ void KoUnavailShape::paintDecorations(QPainter &painter, const KoViewConverter &
     applyConversion(painter, converter);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    draw(painter);
-}
-
-void KoUnavailShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
-{
-    Q_UNUSED(converter);
     draw(painter);
 }
 
