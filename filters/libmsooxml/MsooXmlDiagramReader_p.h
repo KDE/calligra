@@ -118,6 +118,7 @@ class ValueCache
         };
         ValueCache();
         bool hasNegativeWidth() const;
+        bool hasNegativeHeight() const;
         qreal value( const QString& name, bool *valid = 0 ) const;
         bool valueExists( const QString& name );
         void setValue( const QString& name, qreal value );
@@ -129,10 +130,10 @@ class ValueCache
         bool isRectValue( const QString& name ) const;
         qreal rectValue( const QString& name ) const;
         void setRectValue( const QString& name, qreal value );
-        QMap< QString, qreal > mapping;
-        QRectF rect;
-        bool unmodified;
-        bool negativeWidth;
+        QMap< QString, qreal > m_mapping;
+        QRectF m_rect;
+        bool m_unmodified;
+        bool m_negativeWidth, m_negativeHeight;
 };
 
 /****************************************************************************************************
@@ -387,6 +388,8 @@ class ConstraintAtom : public AbstractAtom
         virtual void readAll(Context*, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
         void applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom );
+    private:
+        QString dump() const;
 };
 
 /// Rules indicate the ranges of values that a layout algorithm can use to modify the constraint values if it cannot lay out the graphic by using the constraints.

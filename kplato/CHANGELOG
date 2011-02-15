@@ -1,6 +1,8 @@
 
 Calligra Plan current:
 
+* Gantt chart: Fix wrong positioning of time constraint indication
+
 * Lock down baselined project.
 
 * Schedules editor: Add 'detach' schedule for cases where you reschedule frequently

@@ -197,7 +197,7 @@ void ChartItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( resourceRemoved( Resource* ) ), this, SLOT( slotResourceRemoved( Resource* ) ) );
+        disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
     }
     m_project = project;
@@ -205,7 +205,7 @@ void ChartItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( resourceRemoved( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
+        connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
     }
     reset();
