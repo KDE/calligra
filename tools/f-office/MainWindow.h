@@ -107,7 +107,7 @@ public:
 
 private:
     Ui::MainWindow *m_ui;
-    
+
 ///////////////////////////
 // Collaborative editing //
 ///////////////////////////
@@ -148,14 +148,8 @@ private slots:
 
 //presentation editing
 private:
-//unused    QTextDocument *document;
     QPointer<KoTextEditor> m_pEditor;
-//global not needed:    KoShape *m_textShape;
-//global not needed:    KoShape *m_currentShapeSelected;
-//global not needed:    KoTextShapeData *currentSelectedTextShapeData;
-//global not needed:    QTextDocument *documentForCurrentShape;
 
-//        void deleteSelection();
 
 /////virtualkeyboard
     QShortcut *m_shortcutForVirtualKeyBoard;
@@ -242,7 +236,7 @@ private:
     int m_xcordinate ;
     int m_ycordinate ;
     /*!
-     * Font related information for each Character in NewDocuments 
+     * Font related information for each Character in NewDocuments
      */
     int m_fontsize;
     /*!
