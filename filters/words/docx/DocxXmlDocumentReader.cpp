@@ -341,6 +341,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     m_footers.clear();
     m_headers.clear();
 
+    m_pageMargins.clear();
+    m_pageBorderStyles.clear();
+    m_pageBorderPaddings.clear();
+    m_pageBorderOffsetFrom = "text";
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -358,6 +363,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             SKIP_UNKNOWN
         }
     }
+
+    appyPageBorders(m_currentPageStyle, m_pageMargins, m_pageBorderStyles, m_pageBorderPaddings, m_pageBorderOffsetFrom);
 
     // Currently if there are 3 header/footer styles, the one with 'first' is ignored
     if (!m_headers.isEmpty()) {
@@ -496,30 +503,30 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
+
     TRY_READ_ATTR(top)
     if (!top.isEmpty()) {
-        const QString s(MSOOXML::Utils::TWIP_to_ODF(top));
-        if (!s.isEmpty())
-            m_currentPageStyle.addProperty("fo:margin-top", s);
+        int topNum = 0;
+        STRING_TO_INT(top, topNum, QString("w:top"));
+        m_pageMargins.insert(MarginTop,TWIP_TO_POINT(topNum));
     }
     TRY_READ_ATTR(right)
     if (!right.isEmpty()) {
-        const QString s(MSOOXML::Utils::TWIP_to_ODF(right));
-        if (!s.isEmpty())
-            m_currentPageStyle.addProperty("fo:margin-right", s);
+        int rightNum = 0;
+        STRING_TO_INT(right, rightNum, QString("w:right"));
+        m_pageMargins.insert(MarginRight,TWIP_TO_POINT(rightNum));
     }
     TRY_READ_ATTR(bottom)
     if (!bottom.isEmpty()) {
-        const QString s(MSOOXML::Utils::TWIP_to_ODF(bottom));
-        if (!s.isEmpty())
-            m_currentPageStyle.addProperty("fo:margin-bottom", s);
+        int bottomNum = 0;
+        STRING_TO_INT(bottom, bottomNum, QString("w:bottom"));
+        m_pageMargins.insert(MarginBottom,TWIP_TO_POINT(bottomNum));
     }
     TRY_READ_ATTR(left)
     if (!left.isEmpty()) {
-        const QString s(MSOOXML::Utils::TWIP_to_ODF(left));
-        if (!s.isEmpty()) {
-            m_currentPageStyle.addProperty("fo:margin-left", s);
-        }
+        int leftNum = 0;
+        STRING_TO_INT(left, leftNum, QString("w:left"));
+        m_pageMargins.insert(MarginLeft,TWIP_TO_POINT(leftNum));
     }
     readNext();
     READ_EPILOGUE
@@ -967,70 +974,182 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgBorders()
 {
     READ_PROLOGUE
-    m_borderStyles.clear();
-    m_borderPaddings.clear();
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(offsetFrom)
+    m_pageBorderOffsetFrom = offsetFrom;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
+                RETURN_IF_ERROR(readBorderElement(TopBorder, "top", m_pageBorderStyles, m_pageBorderPaddings));
             }
             else if (QUALIFIED_NAME_IS(left)) {
-                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
+                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left", m_pageBorderStyles, m_pageBorderPaddings));
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
+                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom", m_pageBorderStyles, m_pageBorderPaddings));
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
+                RETURN_IF_ERROR(readBorderElement(RightBorder, "right", m_pageBorderStyles, m_pageBorderPaddings));
             }
             ELSE_WRONG_FORMAT
         }
     }
-    applyBorders(&m_currentPageStyle, m_borderStyles, m_borderPaddings);
     READ_EPILOGUE
 }
 
-void DocxXmlDocumentReader::applyBorders(KoGenStyle *style, QMap<QString, BorderSide> sourceBorder, QMap<QString, BorderSide> sourcePadding)
+void DocxXmlDocumentReader::applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding)
 {
-    if (sourceBorder.count(sourceBorder.key(TopBorder)) == 4) {
-        style->addProperty("fo:border", sourceBorder.key(TopBorder)); // all sides the same
+    const QString topBorder = sourceBorder.value(TopBorder,QString());
+    const QString leftBorder = sourceBorder.value(LeftBorder,QString());
+    const QString bottomBorder = sourceBorder.value(BottomBorder,QString());
+    const QString rightBorder = sourceBorder.value(RightBorder,QString());
+    if (!topBorder.isEmpty() && leftBorder == topBorder && bottomBorder == topBorder && rightBorder == topBorder) {
+        style->addProperty("fo:border", topBorder); // all sides the same
     }
     else {
-        if (!sourceBorder.key(TopBorder).isEmpty()) {
-            style->addProperty("fo:border-top", sourceBorder.key(TopBorder));
+        if (!topBorder.isEmpty()) {
+            style->addProperty("fo:border-top", topBorder);
         }
-        if (!sourceBorder.key(LeftBorder).isEmpty()) {
-            style->addProperty("fo:border-left", sourceBorder.key(LeftBorder));
+        if (!leftBorder.isEmpty()) {
+            style->addProperty("fo:border-left", leftBorder);
         }
-        if (!sourceBorder.key(BottomBorder).isEmpty()) {
-            style->addProperty("fo:border-bottom", sourceBorder.key(BottomBorder));
+        if (!bottomBorder.isEmpty()) {
+            style->addProperty("fo:border-bottom", bottomBorder);
         }
-        if (!sourceBorder.key(RightBorder).isEmpty()) {
-            style->addProperty("fo:border-right", sourceBorder.key(RightBorder));
+        if (!rightBorder.isEmpty()) {
+            style->addProperty("fo:border-right", rightBorder);
         }
     }
     sourceBorder.clear();
 
-    if (sourcePadding.count(sourcePadding.key(TopBorder)) == 4) {
-        style->addProperty("fo:padding", sourcePadding.key(TopBorder)); // all sides the same
+    const qreal topPadding = sourcePadding.value(TopBorder);
+    const qreal leftPadding = sourcePadding.value(LeftBorder);
+    const qreal bottomPadding = sourcePadding.value(BottomBorder);
+    const qreal rightPadding = sourcePadding.value(RightBorder);
+    if (sourcePadding.contains(TopBorder) && leftPadding == topPadding && bottomPadding == topPadding && rightPadding == topPadding) {
+        style->addProperty("fo:padding", QString::number(topPadding) + "pt"); // all sides the same
     }
     else {
-        if (!sourcePadding.key(TopBorder).isEmpty()) {
-            style->addProperty("fo:padding-top", sourcePadding.key(TopBorder));
+        if (sourcePadding.contains(TopBorder)) {
+            style->addProperty("fo:padding-top", QString::number(topPadding) + "pt");
         }
-        if (!sourcePadding.key(LeftBorder).isEmpty()) {
-            style->addProperty("fo:padding-left", sourcePadding.key(LeftBorder));
+        if (sourcePadding.contains(LeftBorder)) {
+            style->addProperty("fo:padding-left", QString::number(leftPadding) + "pt");
         }
-        if (!sourcePadding.key(BottomBorder).isEmpty()) {
-            style->addProperty("fo:padding-bottom", sourcePadding.key(BottomBorder));
+        if (sourcePadding.contains(BottomBorder)) {
+            style->addProperty("fo:padding-bottom", QString::number(bottomPadding) + "pt");
         }
-        if (!sourcePadding.key(RightBorder).isEmpty()) {
-            style->addProperty("fo:padding-right", sourcePadding.key(RightBorder));
+        if (sourcePadding.contains(RightBorder)) {
+            style->addProperty("fo:padding-right", QString::number(rightPadding) + "pt");
         }
     }
     sourcePadding.clear();
+}
+
+void DocxXmlDocumentReader::appyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins,
+        QMap<BorderSide,QString> &pageBorder, QMap<BorderSide, qreal> &pagePadding, QString & offsetFrom)
+{
+    if (pageMargins.contains(MarginTop)) {
+        if (pagePadding.contains(TopBorder)) {
+            qreal margin = pageMargins.value(MarginTop);
+            qreal padding = pagePadding.value(TopBorder);
+            if(offsetFrom == "page") {
+                style.addProperty("fo:margin-top", QString::number(padding) + "pt");
+                style.addProperty("fo:padding-top", QString::number(margin - padding) + "pt");
+            }
+            else {
+                style.addProperty("fo:margin-top", QString::number(margin - padding) + "pt");
+                style.addProperty("fo:padding-top", QString::number(padding) + "pt");
+            }
+        }
+        else {
+            style.addProperty("fo:margin-top", QString::number(pageMargins.value(MarginTop)) + "pt");
+        }
+    }
+
+    if (pageMargins.contains(MarginBottom)) {
+        if (pagePadding.contains(BottomBorder)) {
+            qreal margin = pageMargins.value(MarginBottom);
+            qreal padding = pagePadding.value(BottomBorder);
+            if(offsetFrom == "page") {
+                style.addProperty("fo:margin-bottom", QString::number(padding) + "pt");
+                style.addProperty("fo:padding-bottom", QString::number(margin - padding) + "pt");
+            }
+            else {
+                style.addProperty("fo:margin-bottom", QString::number(margin - padding) + "pt");
+                style.addProperty("fo:padding-bottom", QString::number(padding) + "pt");
+            }
+        }
+        else {
+            style.addProperty("fo:margin-bottom", QString::number(pageMargins.value(MarginBottom)) + "pt");
+        }
+    }
+
+    if (pageMargins.contains(MarginLeft)) {
+        if (pagePadding.contains(LeftBorder)) {
+            qreal margin = pageMargins.value(MarginLeft);
+            qreal padding = pagePadding.value(LeftBorder);
+            if(offsetFrom == "page") {
+                style.addProperty("fo:margin-left", QString::number(padding) + "pt");
+                style.addProperty("fo:padding-left", QString::number(margin - padding) + "pt");
+            }
+            else {
+                style.addProperty("fo:margin-left", QString::number(margin - padding) + "pt");
+                style.addProperty("fo:padding-left", QString::number(padding) + "pt");
+            }
+        }
+        else {
+            style.addProperty("fo:margin-left", QString::number(pageMargins.value(MarginLeft)) + "pt");
+        }
+    }
+
+    if (pageMargins.contains(MarginRight)) {
+        if (pagePadding.contains(RightBorder)) {
+            qreal margin = pageMargins.value(MarginRight);
+            qreal padding = pagePadding.value(RightBorder);
+            if(offsetFrom == "page") {
+                style.addProperty("fo:margin-right", QString::number(padding) + "pt");
+                style.addProperty("fo:padding-right", QString::number(margin - padding) + "pt");
+            }
+            else {
+                style.addProperty("fo:margin-right", QString::number(margin - padding) + "pt");
+                style.addProperty("fo:padding-right", QString::number(padding) + "pt");
+            }
+        }
+        else {
+            style.addProperty("fo:margin-right", QString::number(pageMargins.value(MarginRight)) + "pt");
+        }
+    }
+
+    pageMargins.clear();
+    pagePadding.clear();
+
+    const QString topBorder = pageBorder.value(TopBorder,QString());
+    const QString leftBorder = pageBorder.value(LeftBorder,QString());
+    const QString bottomBorder = pageBorder.value(BottomBorder,QString());
+    const QString rightBorder = pageBorder.value(RightBorder,QString());
+    if (!topBorder.isEmpty() && leftBorder == topBorder && bottomBorder == topBorder && rightBorder == topBorder) {
+        style.addProperty("fo:border", topBorder); // all sides the same
+    }
+    else {
+        if (!topBorder.isEmpty()) {
+            style.addProperty("fo:border-top", topBorder);
+        }
+        if (!leftBorder.isEmpty()) {
+            style.addProperty("fo:border-left", leftBorder);
+        }
+        if (!bottomBorder.isEmpty()) {
+            style.addProperty("fo:border-bottom", bottomBorder);
+        }
+        if (!rightBorder.isEmpty()) {
+            style.addProperty("fo:border-right", rightBorder);
+        }
+    }
+    pageBorder.clear();
 }
 
 //! Converts 17.18.2 ST_Border (Border Styles, p. 1462, 4357) value to W3C CSS2 border-style value
@@ -1049,26 +1168,26 @@ static QString ST_Border_to_ODF(const QString& s)
     return QLatin1String("solid");
 }
 
-KoFilter::ConversionStatus DocxXmlDocumentReader::readBorderElement(
-    BorderSide borderSide, const char *borderSideName)
+KoFilter::ConversionStatus DocxXmlDocumentReader::readBorderElement(BorderSide borderSide,
+        const char *borderSideName, QMap<BorderSide, QString> &sourceBorder, QMap<BorderSide, qreal> &sourcePadding)
 {
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(val)
     TRY_READ_ATTR(sz)
     TRY_READ_ATTR(color)
-    createBorderStyle(sz, color, val, borderSide);
+    createBorderStyle(sz, color, val, borderSide, sourceBorder);
     TRY_READ_ATTR(space)
     if (!space.isEmpty()) {
         int sp;
         STRING_TO_INT(space, sp, QString("w:%1@space").arg(borderSideName));
-        m_borderPaddings.insertMulti(QString::number(sp) + "pt", borderSide);
+        sourcePadding.insertMulti(borderSide, sp);
     }
     readNext();
     return KoFilter::OK;
 }
 
 void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString& color,
-    const QString& lineStyle, BorderSide borderSide)
+    const QString& lineStyle, BorderSide borderSide, QMap<BorderSide, QString> &sourceBorder)
 {
     const QString odfLineStyle(ST_Border_to_ODF(lineStyle));
     if (odfLineStyle.isEmpty())
@@ -1100,7 +1219,7 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
         border.append(QLatin1String("#000000"));
     }
 
-    m_borderStyles.insertMulti(border, borderSide);
+    sourceBorder.insertMulti(borderSide,border);
 }
 
 #undef CURRENT_EL
@@ -3637,16 +3756,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
+                RETURN_IF_ERROR(readBorderElement(TopBorder, "top", m_borderStyles, m_borderPaddings));
             }
             else if (QUALIFIED_NAME_IS(left)) {
-                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
+                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left", m_borderStyles, m_borderPaddings));
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
+                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom", m_borderStyles, m_borderPaddings));
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
+                RETURN_IF_ERROR(readBorderElement(RightBorder, "right", m_borderStyles, m_borderPaddings));
             }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -3684,29 +3803,27 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bdr()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_borderStyles.clear();
+    m_textBorderStyles.clear();
     m_textBorderPaddings.clear();
 
     READ_ATTR(val)
     TRY_READ_ATTR(sz)
     TRY_READ_ATTR(color)
-    createBorderStyle(sz, color, val, TopBorder);
-    createBorderStyle(sz, color, val, LeftBorder);
-    createBorderStyle(sz, color, val, BottomBorder);
-    createBorderStyle(sz, color, val, RightBorder);
+    createBorderStyle(sz, color, val, TopBorder, m_textBorderStyles);
+    createBorderStyle(sz, color, val, LeftBorder, m_textBorderStyles);
+    createBorderStyle(sz, color, val, BottomBorder, m_textBorderStyles);
+    createBorderStyle(sz, color, val, RightBorder, m_textBorderStyles);
     TRY_READ_ATTR(space)
     if (!space.isEmpty()) {
         bool ok = false;
         const qreal sp = qreal(TWIP_TO_POINT(space.toDouble(&ok)));
         if (ok) {
-            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", TopBorder);
-            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", LeftBorder);
-            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", RightBorder);
-            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", BottomBorder);
+            m_textBorderPaddings.insertMulti(TopBorder, sp);
+            m_textBorderPaddings.insertMulti(LeftBorder, sp);
+            m_textBorderPaddings.insertMulti(RightBorder, sp);
+            m_textBorderPaddings.insertMulti(BottomBorder, sp);
         }
     }
-
-    m_textBorderStyles = m_borderStyles;
 
     // Note that styles are not applied to anything, odf does not support
     // border around normal text run, but ooxml uses this element also to determine
