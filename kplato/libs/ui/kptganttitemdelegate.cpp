@@ -304,7 +304,7 @@ QRectF GanttItemDelegate::itemEndConstraintRect( const KDGantt::StyleOptionGantt
         return r;
     }
     qreal delta = opt.itemRect.height() / 2.0;
-    r.setX( opt.grid->mapToChart( dt ) - opt.grid->mapToChart( et ) );
+    r.setX( opt.itemRect.right() + ( opt.grid->mapToChart( dt ) - opt.grid->mapToChart( et ) ) );
     r.setY( opt.itemRect.y() + ( delta / 2.0 ) );
     r.setWidth( delta );
     r.setHeight( delta );
