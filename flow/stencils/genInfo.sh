@@ -19,9 +19,9 @@ for i in `find ./ -type f -a -name '*.odg'`
 do
     tmp=${i%.odg*}
     infoFile=$tmp.desktop
-    name=${tmp##*/}
-    name=${name//_/ }
-    name=`echo $name | sed 's/\<./\u&/g'`
+    name=`unzip -p $i meta.xml`
+    name=${name##*<dc:title>}
+    name=${name%%</dc:title>*}
     if [ ! -f $infoFile ]; then
         echo -e 'Generating info for stencil '$name 
         echo -e $stencilInfo$name > $infoFile
