@@ -43,191 +43,27 @@
 
 //----------------------------------------------------------
 
-//! @return tinted value for @a color
-//! Alpha value is left unchanged.
-/*! @param color to be converted
-    @param tint color tint: from -1.0 .. 1.0, where -1.0 means 100% darken
-           and 1.0 means 100% lighten; 0.0 means no change
-*/
-static QColor tintedColor(const QColor& color, qreal tint)
-{
-    const int HLSMAX = 255; // Used for computing tint
-//kDebug() << "rgb:" << color.name() << "tint:" << tint;
-    if (tint == 0.0 || !color.isValid()) {
-        return color;
-    }
-    int h, l, s;
-    color.getHsl(&h, &l, &s);
-//kDebug() << "hls before:" << h << l << s;
-    if (tint < 0.0) {
-        l = floor( l * (1.0 + tint) );
-    }
-    else {
-        l = floor( l * (1.0 - tint) + (HLSMAX - HLSMAX * (1.0 - tint)) );
-    }
-//kDebug() << "hls after:" << h << l << s;
-    int r, g, b;
-    color.getRgb(&r, &g, &b);
-//kDebug() << "rgb:" << r << g << b << QColor(r, g, b, color.alpha()).name();
-    return QColor(r, g, b, color.alpha());
-}
-
-/*! @return color decoded from a "rgb" attribute of the current element
-            or invalid QColor when reading was not possible.
-Used by:
-- color@rgb (§18.3.1.15)
-- fgColor@rgb (§18.8.19)
-- bgColor@rgb (§18.8.20) */
-static QColor readRgbAttribute(const QXmlStreamAttributes& attrs)
-{
-    TRY_READ_ATTR_WITHOUT_NS(rgb)
-//kDebug() << rgb;
-    return ST_UnsignedIntHex_to_QColor(rgb);
-}
-
-/*! @return tint value (-1.0..1.0) decoded from a "tint" attribute of the current element
-            or 0.0 when reading was not possible.
-Used by:
-- color@rgb (§18.3.1.15)
-- fgColor@rgb (§18.8.19)
-- bgColor@rgb (§18.8.20) */
-static qreal readTintAttribute(const QXmlStreamAttributes& attrs, const char* debugElement)
-{
-    TRY_READ_ATTR_WITHOUT_NS(tint)
-    qreal tintValue = 0.0;
-    STRING_TO_QREAL(tint, tintValue, QLatin1String(debugElement) + "@tint")
-kDebug() << tint << tintValue;
-    return tintValue;
-}
-
-//----------------------------------------------------------
-
-XlsxColorStyle::XlsxColorStyle()
-{
-    clear();
-}
-
-void XlsxColorStyle::clear()
-{
-    automatic = false;
-    indexed = -1;
-    tint = 0.0;
-    theme = -1;
-}
-
-bool XlsxColorStyle::isValid(const MSOOXML::DrawingMLTheme *themes) const
-{
-kDebug() << "indexed:" << indexed << "rgb:" << rgb.name() << "tint:" << tint << "theme:" << theme;
-    if (theme >= 0) {
-kDebug() << themeColor(themes).isValid();
-        return themeColor(themes).isValid();
-    }
-    return rgb.isValid();
-}
-
-QColor XlsxColorStyle::themeColor(const MSOOXML::DrawingMLTheme *themes) const
-{
-    Q_ASSERT(themes);
-    const MSOOXML::DrawingMLTheme *themeObject = themes;
-kDebug() << themeObject;
-    if (themeObject) {
-        MSOOXML::DrawingMLColorSchemeItemBase *colorItemBase = themeObject->colorScheme.value(theme);
-kDebug() << colorItemBase;
-//        MSOOXML::DrawingMLColorSchemeItem* colorItem = colorItemBase ? colorItemBase->toColorItem() : 0;
-//kDebug() << colorItem;
-//        if (colorItem)
-        if (colorItemBase)
-            return colorItemBase->value();
-    }
-    return QColor();
-}
-
-QColor XlsxColorStyle::value(const MSOOXML::DrawingMLTheme *themes) const
-{
-    QColor realColor;
-kDebug() << "theme:" << theme;
-    if (theme >= 0) {
-        realColor = themeColor(themes);
-kDebug() << "in theme found:" << realColor.name();
-    }
-    else {
-        realColor = rgb;
-kDebug() << "rgb found:" << realColor.name();
-    }
-
-    return tintedColor(realColor, tint);
-}
-
-KoFilter::ConversionStatus XlsxColorStyle::readAttributes(
-    const QXmlStreamAttributes& attrs, const QVector<QString>& colors, const char* debugElement)
-{
-    automatic = MSOOXML::Utils::convertBooleanAttr(attrs.value("auto").toString());
-    QString indexedStr;
-    TRY_READ_ATTR_WITHOUT_NS_INTO(indexed, indexedStr)
-    STRING_TO_INT(indexedStr, indexed, QLatin1String(debugElement) + "@indexed")
-    if (indexed >= 0 && indexed < 64) {
-        rgb = QString("#%1").arg(colors.at(indexed));
-    }
-    else {
-        rgb = readRgbAttribute(attrs);
-    }
-    tint = readTintAttribute(attrs, debugElement);
-    if (rgb.isValid()) {
-        rgb = tintedColor(rgb, tint).name();
-    }
-    QString themeStr;
-    TRY_READ_ATTR_WITHOUT_NS_INTO(theme, themeStr)
-    STRING_TO_INT(themeStr, theme, QLatin1String(debugElement) + "@theme")
-kDebug() << "indexed:" << indexed << "rgb:" << rgb.name() << "tint:" << tint << "theme:" << theme;
-    return KoFilter::OK;
-}
-
-//----------------------------------------------------------
-
-XlsxBorderStyle::XlsxBorderStyle()
-{
-}
-
-QString XlsxBorderStyle::setupCellStyle(const MSOOXML::DrawingMLTheme *themes) const
-{
-    QString styleString = this->style;
-
-    QColor c;
-    if (color.isValid(themes)) {
-        c = color.value(themes);
-    }
-    else if (!this->style.isEmpty()) {
-        c = Qt::black;
-    }
-    if (c.isValid()) {
-        if (!styleString.isEmpty())
-            styleString.append(' ');
-        styleString.append(c.name());
-    }
-    return styleString;
-}
-
 //! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-style
 //! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-width
-KoFilter::ConversionStatus XlsxBorderStyle::readAttributes(
-    const QXmlStreamAttributes& attrs)
+KoFilter::ConversionStatus XlsxBorderStyles::readAttributes(const QXmlStreamAttributes& attrs, QString& borderStyle)
 {
     QString s;
 //! @todo more styles
     TRY_READ_ATTR_WITHOUT_NS_INTO(style, s)
     if (s == QLatin1String("dashed") || s == QLatin1String("dotted") || s == QLatin1String("double")) {
-        style = s;
+        borderStyle = s;
     }
-    else if (s == QLatin1String("medium") || s == QLatin1String("thick")
-             || s == QLatin1String("thin"))
+    else if (s == QLatin1String("medium") || s == QLatin1String("thick") || s == QLatin1String("thin"))
     {
-        style = s + " solid";
+        borderStyle = s + " solid";
     }
-    else if (s == QLatin1String("none"))
-        style = QLatin1String("hidden");
-    else if (!s.isEmpty())
-        style = QLatin1String("solid"); // fallback
-    kDebug() << "style:" << s << "set to:" << style;
+    else if (s == QLatin1String("none")) {
+        borderStyle = QLatin1String("hidden");
+    }
+    else if (!s.isEmpty()) {
+        borderStyle = QLatin1String("solid"); // fallback
+    }
+    kDebug() << "style:" << s << "set to:" << borderStyle;
     return KoFilter::OK;
 }
 
@@ -235,29 +71,27 @@ XlsxBorderStyles::XlsxBorderStyles()
 {
 }
 
-void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const MSOOXML::DrawingMLTheme *themes) const
+void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle) const
 {
 //! @todo simplify if 2 or 4 sides are the same
-    QString s;
-    s = top.setupCellStyle(themes);
-    if (!s.isEmpty())
-        cellStyle->addProperty("fo:border-top", s);
-    s = right.setupCellStyle(themes);
-    if (!s.isEmpty())
-        cellStyle->addProperty("fo:border-right", s);
-    s = bottom.setupCellStyle(themes);
-    if (!s.isEmpty())
-        cellStyle->addProperty("fo:border-bottom", s);
-    s = left.setupCellStyle(themes);
-    if (!s.isEmpty())
-        cellStyle->addProperty("fo:border-left", s);
+    if (!top.isEmpty()) {
+        cellStyle->addProperty("fo:border-top", top);
+    }
+    if (!right.isEmpty()) {
+        cellStyle->addProperty("fo:border-right", right);
+    }
+    if (!bottom.isEmpty()) {
+        cellStyle->addProperty("fo:border-bottom", bottom);
+    }
+    if (!left.isEmpty()) {
+        cellStyle->addProperty("fo:border-left", left);
+    }
     if (diagonalDirections) {
-        s = diagonal.setupCellStyle(themes);
         if (diagonalDirections & DiagonalUp) {
-            cellStyle->addProperty("style:diagonal-bl-tr", s);
+            cellStyle->addProperty("style:diagonal-bl-tr", diagonal);
         }
         if (diagonalDirections & DiagonalDown) {
-            cellStyle->addProperty("style:diagonal-tl-br", s);
+            cellStyle->addProperty("style:diagonal-tl-br", diagonal);
         }
     }
 }
@@ -471,7 +305,6 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
 //! See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
 bool XlsxCellFormat::setupCellStyle(
     const XlsxStyles *styles,
-    const MSOOXML::DrawingMLTheme *themes,
     KoGenStyle* cellStyle) const
 {
     kDebug() << "fontId:" << fontId << "fillId:" << fillId << "borderId:" << borderId;
@@ -497,7 +330,7 @@ bool XlsxCellFormat::setupCellStyle(
     if (applyBorder && borderId >= 0) {
         XlsxBorderStyles *borderStyles = styles->borderStyle(borderId);
         if (borderStyles) {
-            borderStyles->setupCellStyle(cellStyle, themes);
+            borderStyles->setupCellStyle(cellStyle);
         }
     }
     return true;
@@ -603,7 +436,6 @@ void XlsxXmlStylesReader::init()
     m_defaultNamespace = "";
     m_cellFormatIndex = 0;
     m_borderStyleIndex = 0;
-    m_currentColorStyle = 0;
     m_currentFontStyle = 0;
     m_currentFillStyle = 0;
     m_currentCellFormat = 0;
@@ -910,47 +742,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_name()
     if (!val.isEmpty()) {
         m_currentFontStyle->addProperty("fo:font-family", val);
     }
-
-    readNext();
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL color
-//! color handler (Data Bar Color)
-/*! ECMA-376, 18.3.1.15, p. 1780.
- One of the colors associated with the data bar or color scale.
- The auto attribute shall not be used in the context of data bars.
-
- Parent elements:
- - [done] bottom (§18.8.6)
- - colorScale (§18.3.1.16)
- - dataBar (§18.3.1.28)
- - [done] diagonal (§18.8.13)
- - end (§18.8.16)
- - [done] font (§18.8.22)
- - horizontal (§18.8.25)
- - mruColors (§18.8.28)
- - [done] rPr (§18.4.7)
- - start (§18.8.37)
- - stop (§18.8.38)
- - [done] top (§18.8.43)
- - vertical (§18.8.44)
- - [done] left
- - [done] right
-
- Child elements:
- - none
-
- @todo support all elements
-*/
-KoFilter::ConversionStatus XlsxXmlStylesReader::read_color2()
-{
-    Q_ASSERT(m_currentColorStyle);
-
-    READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentColorStyle->readAttributes(attrs, m_context->colorIndices, "color") )
 
     readNext();
     READ_EPILOGUE
@@ -1637,20 +1428,24 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bottom()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentBorderStyle->bottom.readAttributes(attrs) )
+
+    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->bottom))
+
+    m_currentColor = QColor();
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(color)) {
-                m_currentColorStyle = &m_currentBorderStyle->bottom.color;
-                TRY_READ(color2)
-                m_currentColorStyle = 0;
-            }
+            TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
         }
     }
+
+    if (m_currentColor.isValid()) {
+        m_currentBorderStyle->bottom += " " + m_currentColor.name();
+    }
+
     READ_EPILOGUE
 }
 
@@ -1662,20 +1457,23 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_top()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentBorderStyle->top.readAttributes(attrs) )
+    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->top))
+
+    m_currentColor = QColor();
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(color)) {
-                m_currentColorStyle = &m_currentBorderStyle->top.color;
-                TRY_READ(color2)
-                m_currentColorStyle = 0;
-            }
+            TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
         }
     }
+
+    if (m_currentColor.isValid()) {
+        m_currentBorderStyle->top += " " + m_currentColor.name();
+    }
+
     READ_EPILOGUE
 }
 
@@ -1686,20 +1484,24 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_left()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentBorderStyle->left.readAttributes(attrs) )
+
+    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->left))
+
+    m_currentColor = QColor();
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(color)) {
-                m_currentColorStyle = &m_currentBorderStyle->left.color;
-                TRY_READ(color2)
-                m_currentColorStyle = 0;
-            }
+            TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
         }
     }
+
+    if (m_currentColor.isValid()) {
+        m_currentBorderStyle->left += " " + m_currentColor.name();
+    }
+
     READ_EPILOGUE
 }
 
@@ -1710,20 +1512,24 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_right()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentBorderStyle->right.readAttributes(attrs) )
+
+    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->right))
+
+    m_currentColor = QColor();
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(color)) {
-                m_currentColorStyle = &m_currentBorderStyle->right.color;
-                TRY_READ(color2)
-                m_currentColorStyle = 0;
-            }
+            TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
         }
     }
+
+    if (m_currentColor.isValid()) {
+        m_currentBorderStyle->right += " " + m_currentColor.name();
+    }
+
     READ_EPILOGUE
 }
 
@@ -1734,20 +1540,24 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR( m_currentBorderStyle->diagonal.readAttributes(attrs) )
+
+    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->diagonal))
+
+    m_currentColor = QColor();
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(color)) {
-                m_currentColorStyle = &m_currentBorderStyle->diagonal.color;
-                TRY_READ(color2)
-                m_currentColorStyle = 0;
-            }
+            TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
         }
     }
+
+    if (m_currentColor.isValid()) {
+        m_currentBorderStyle->diagonal += " " + m_currentColor.name();
+    }
+
     READ_EPILOGUE
 }
 

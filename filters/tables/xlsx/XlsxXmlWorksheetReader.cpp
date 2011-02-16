@@ -1142,7 +1142,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                 MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
             }
         }
-        if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
+        if (!cellFormat->setupCellStyle(m_context->styles, &cellStyle)) {
             return KoFilter::WrongFormat;
         }
 

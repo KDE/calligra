@@ -37,66 +37,6 @@ class XlsxStyles;
 class XlsxCellFormat;
 class XlsxXmlStylesReader;
 
-//! Color information. Used by background and foregound color for XlsxFillStyle, by color of XlsxFontStyle
-//! See MSOOXML's CT_Color content model
-class XlsxColorStyle
-{
-public:
-    XlsxColorStyle();
-
-    //! Clears the style to default values.
-    void clear();
-
-    //! @return true if this color style is valid
-    bool isValid(const MSOOXML::DrawingMLTheme *themes) const;
-
-    //! @return value of this color style; for computing rgb, indexed, tint and theme attributes are used
-    QColor value(const MSOOXML::DrawingMLTheme *themes) const;
-
-    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, const QVector<QString>& colors, const char* debugElement);
-
-    bool automatic; //!< default: false
-    int indexed; //!< default: -1
-    QColor rgb;
-    qreal tint; //!< tint value applied to the color, default is -1
-    int theme; //!< default: -1
-
-    QColor themeColor(const MSOOXML::DrawingMLTheme *themes) const;
-};
-
-//! @return QColor value for  ST_UnsignedIntHex (ARGB) (e.g. for 18.8.19 fgColor (Foreground Color) - SpreadsheetML only)
-//!         or invalid color if @a color is not in the expected format.
-//! @par val color value in AARRGGBB hexadecimal format
-inline QColor ST_UnsignedIntHex_to_QColor(const QString& color)
-{
-    if (color.length() != 8)
-        return QColor();
-    bool ok;
-    const uint rgb = color.toUInt(&ok, 16);
-    if (!ok)
-        return QColor();
-    QColor c;
-    c.setRgba(QRgb(rgb));
-//kDebug() << color << c;
-    return c;
-}
-
-//! Single XLSX border style definition
-/*! @see XlsxXmlStylesReader::read_borders() */
-class XlsxBorderStyle
-{
-public:
-    XlsxBorderStyle();
-
-    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs);
-
-    QString setupCellStyle(const MSOOXML::DrawingMLTheme *themes) const;
-
-    XlsxColorStyle color;
-private:
-    QString style;
-};
-
 //! Four XLSX border styles definition
 /*! @see XlsxXmlStylesReader::read_borders() */
 class XlsxBorderStyles
@@ -104,12 +44,15 @@ class XlsxBorderStyles
 public:
     XlsxBorderStyles();
 
-    void setupCellStyle(KoGenStyle* cellStyle, const MSOOXML::DrawingMLTheme *themes) const;
+    void setupCellStyle(KoGenStyle* cellStyle) const;
 
-    XlsxBorderStyle top;
-    XlsxBorderStyle right;
-    XlsxBorderStyle bottom;
-    XlsxBorderStyle left;
+    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, QString& borderStyle);
+
+    QString top;
+    QString right;
+    QString bottom;
+    QString left;
+
     enum DiagonalDirection {
         DiagonalUp = 1,
         DiagonalDown = 2
@@ -117,7 +60,7 @@ public:
     Q_DECLARE_FLAGS(DiagonalDirections, DiagonalDirection)
     DiagonalDirections diagonalDirections;
 
-    XlsxBorderStyle diagonal;
+    QString diagonal;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(XlsxBorderStyles::DiagonalDirections)
@@ -230,10 +173,7 @@ public:
 
     //! Sets up @a cellStyle to match this cell style.
     //! @todo implement more styling
-    bool setupCellStyle(
-        const XlsxStyles *styles,
-        const MSOOXML::DrawingMLTheme *themes,
-        KoGenStyle* cellStyle) const;
+    bool setupCellStyle(const XlsxStyles *styles, KoGenStyle* cellStyle) const;
 
 private:
     //! Used by setupCellStyle()
@@ -323,7 +263,6 @@ protected:
     KoFilter::ConversionStatus read_fonts();
     KoFilter::ConversionStatus read_font();
     KoFilter::ConversionStatus read_name();
-    KoFilter::ConversionStatus read_color2();
     KoFilter::ConversionStatus read_cellXfs();
     KoFilter::ConversionStatus read_dxfs();
     KoFilter::ConversionStatus read_dxf();
@@ -357,7 +296,6 @@ protected:
     QColor m_currentFgColor;
     QColor m_currentBgColor;
 
-    XlsxColorStyle *m_currentColorStyle; //!< set by read_color()
     KoGenStyle *m_currentFontStyle;
     KoGenStyle *m_currentFillStyle;
     XlsxCellFormat *m_currentCellFormat;
