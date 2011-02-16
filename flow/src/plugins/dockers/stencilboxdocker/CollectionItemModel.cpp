@@ -62,7 +62,7 @@ int CollectionItemModel::rowCount(const QModelIndex& parent) const
     return m_shapeTemplateList.count();
 }
 
-void CollectionItemModel::setShapeTemplateList(const QList<KoCollectionItem>& newlist)
+void CollectionItemModel::setShapeTemplateList(QList<KoCollectionItem>& newlist)
 {
     m_shapeTemplateList = newlist;
     reset();
