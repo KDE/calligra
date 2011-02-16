@@ -661,6 +661,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 
     m_currentTextStyleProperties = new KoCharacterStyle;
 
+    m_currentColor = QColor();
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -678,6 +680,10 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
+    }
+
+    if (m_currentColor.isValid()) {
+        m_currentTextStyleProperties->setForeground(QBrush(m_currentColor));
     }
 
     m_currentTextStyleProperties->saveOdf(*m_currentFontStyle);
@@ -782,7 +788,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
             SKIP_UNKNOWN
         }
     }
-
     MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFontStyle, cellStyle, KoGenStyle::TextType);
     MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFillStyle, cellStyle, KoGenStyle::TableCellType);
     MSOOXML::Utils::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
