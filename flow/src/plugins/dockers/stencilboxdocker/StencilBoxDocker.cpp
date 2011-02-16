@@ -33,7 +33,6 @@
 #include <KoShapeGroup.h>
 #include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
-#include <KoProperties.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -285,37 +284,40 @@ bool StencilBoxDocker::addCollection(const QString& path)
     QString type = dg.readEntry("X-KDE-DirType");
     //kDebug() << family << type;
 
-    if(type != "odg-collection")
-        return false;
-    if(!m_modelMap.contains(family)) {
+    if(type == "odg-collection") {
+        if(m_modelMap.contains(family))
+            return true;
+
         CollectionItemModel* model = new CollectionItemModel(this);
         m_modelMap.insert(family, model);
+
+        OdfCollectionLoader* loader = new OdfCollectionLoader(path + QDir::separator(), family, this);
+        connect(loader, SIGNAL(loadingFailed(const QString&)),
+                this, SLOT(onLoadingFailed(const QString&)));
+        connect(loader, SIGNAL(loadingFinished()),
+                this, SLOT(onLoadingFinished()));
+
+        loader->load();
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+void StencilBoxDocker::onLoadingFailed(const QString& reason)
+{
+    OdfCollectionLoader* loader = qobject_cast<OdfCollectionLoader*>(sender());
+
+    if(loader)
+    {
+        removeCollection(loader->collectionPath());
+        QList<KoShape*> shapeList = loader->shapeList();
+        qDeleteAll(shapeList);
+        loader->deleteLater();
     }
 
-    CollectionItemModel* model = m_modelMap[family];
-    QList<KoCollectionItem>* templateList = model->shapeTemplateList();
-    QStringList stencils = dir.entryList(QStringList("*.desktop"));
-    foreach(const QString & stencil, stencils) {
-        if(stencil == "collection.desktop")
-            continue;
-        KDesktopFile entry(stencil);
-        KConfigGroup content = entry.desktopGroup();
-        QString name = content.readEntry("Name");
-        QString source = stencil.chop(6) + "odg";
-        QString icon = stencil.chop(6) + "png";
-        QString keepAspectRatio = content.readEntry("CS-KeepAspectRatio", "0");
-        KoProperties props = new KoProperties();
-        props->setProperty("keepAspectRatio", keepAspectRatio.toInt());
-        KoCollectionItem temp;
-        temp.id = source;
-        temp.name = name;
-        temp.toolTip = name;
-        temp.icon = icon;
-        temp.properties = props;
-        templateList.append(temp);
-        CollectionShapeFactory* factory = new CollectionShapeFactory(source, props);
-        KoShapeRegistry::instance()->add(source, factory);
-    }
+    KMessageBox::error (this, reason, i18n("Collection Error"));
 }
 
 void StencilBoxDocker::onLoadingFinished()
