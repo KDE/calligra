@@ -39,6 +39,7 @@ public:
 public slots:
     QString Name() const;
     QString Manager() const;
+    QString Plan() const;
     QVariant BCWS() const;
     QVariant BCWP() const;
     QVariant ACWP() const;
