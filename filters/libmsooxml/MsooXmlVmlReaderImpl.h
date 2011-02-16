@@ -192,6 +192,20 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             body->addAttribute("text:anchor-type", "char");
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
             m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+
+            if (m_vmlStyle.contains("z-index")) {
+                m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                if (m_vmlStyle.value("z-index").toInt() > 0) {
+                    m_currentDrawStyle->addProperty("style:run-through", "foreground");
+                }
+                else {
+                    m_currentDrawStyle->addProperty("style:run-through", "background");
+                }
+            }
+            else {
+                m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                m_currentDrawStyle->addProperty("style:run-through", "foreground");
+            }
         }
     }
     else {
@@ -203,6 +217,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
     }
 #endif
+
 
     if (!hor_pos.isEmpty()) {
         m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
@@ -1542,7 +1557,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     TRY_READ_ATTR_WITHOUT_NS(side)
 
     if (type.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:wrap", "none");
+        if (m_vmlStyle.contains("z-index")) {
+            m_currentDrawStyle->addProperty("style:wrap", "run-through");
+            if (m_vmlStyle.value("z-index").toInt() > 0) {
+                m_currentDrawStyle->addProperty("style:run-through", "foreground");
+            }
+            else {
+                m_currentDrawStyle->addProperty("style:run-through", "background");
+            }
+        }
+        else {
+            m_currentDrawStyle->addProperty("style:wrap", "run-through");
+            m_currentDrawStyle->addProperty("style:run-through", "foreground");
+        }
     }
     else if (type == "through") {
         m_currentDrawStyle->addProperty("style:wrap", "run-through");
