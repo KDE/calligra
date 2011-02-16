@@ -596,9 +596,6 @@ XlsxXmlStylesReader::XlsxXmlStylesReader(KoOdfWriters *writers)
 XlsxXmlStylesReader::~XlsxXmlStylesReader()
 {
     delete d;
-    delete m_currentFontStyle;
-    delete m_currentFillStyle;
-    delete m_currentCellFormat;
 }
 
 void XlsxXmlStylesReader::init()
@@ -701,6 +698,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
                 ELSE_TRY_READ_IF(cellXfs)
                 ELSE_TRY_READ_IF(borders)
                 ELSE_TRY_READ_IF(dxfs)
+                SKIP_UNKNOWN
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1081,12 +1079,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
 /*! ECMA-376, 18.8.45, p. 1999.
  A single xf element describes all of the formatting for a cell.
 
- Child elements:
- - [done] alignment (Alignment) §18.8.1
  Parent elements:
  - cellStyleXfs (§18.8.9)
  - [done] cellXfs (§18.8.10)
  - extLst (Future Feature Data Storage Area) §18.2.10
+
+ Child elements:
+ - [done] alignment (Alignment) §18.8.1
  - protection (Protection Properties) §18.8.33
 
  Attributes:
@@ -1152,7 +1151,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(alignment)
-            ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -1267,8 +1266,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fill()
 {
     READ_PROLOGUE
 
-    MSOOXML::Utils::AutoPtrSetter<KoGenStyle> currentFillStyleSetter(m_currentFillStyle);
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1278,8 +1275,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fill()
             ELSE_WRONG_FORMAT
         }
     }
-
-    currentFillStyleSetter.release();
 
     READ_EPILOGUE
 }
