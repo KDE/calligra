@@ -22,8 +22,6 @@ do
     name=`unzip -p $i meta.xml`
     name=${name##*<dc:title>}
     name=${name%%</dc:title>*}
-    name=${name#* - }
-    name=${name//_/ }
     if [ ! -f $infoFile ]; then
         echo -e 'Generating info for stencil '$name 
         echo -e $stencilInfo$name > $infoFile
