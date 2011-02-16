@@ -32,6 +32,7 @@
 #include <KoXmlWriter.h>
 
 #include <QtCore/QBuffer>
+#include <QtCore/qmath.h>
 
 //#define DEBUG_PPTTOODP
 //#define USE_OFFICEARTDGG_CONTAINER
@@ -114,22 +115,20 @@ getRect(const PptOfficeArtClientAnchor &a)
 }
 
 QString
-getText(const TextContainer& tc)
+getText(const TextContainer* tc)
 {
-    if (tc.text.is<TextCharsAtom>()) {
-        const QVector<quint16> textChars(tc.text.get<TextCharsAtom>()->textChars);
-        return QString::fromUtf16(textChars.data(), textChars.size());
-    } else if (tc.text.is<TextBytesAtom>()) {
-        // each item represents the low byte of a UTF-16 Unicode character whose high byte is 0x00
-        const QByteArray& textChars(tc.text.get<TextBytesAtom>()->textChars);
-        return QString::fromAscii(textChars, textChars.size());
-    }
-    return QString();
-}
+    if (!tc) return QString();
 
-QString getText(const TextContainer& tc, int start, int count)
-{
-    return getText(tc).mid(start,count);
+    QString ret;
+    if (tc->text.is<TextCharsAtom>()) {
+        const QVector<quint16> textChars(tc->text.get<TextCharsAtom>()->textChars);
+        ret = QString::fromUtf16(textChars.data(), textChars.size());
+    } else if (tc->text.is<TextBytesAtom>()) {
+        // each item represents the low byte of a UTF-16 Unicode character whose high byte is 0x00
+        const QByteArray& textChars(tc->text.get<TextBytesAtom>()->textChars);
+        ret = QString::fromAscii(textChars, textChars.size());
+    }
+    return ret;
 }
 
 /* The placementId is mapped to one of
@@ -309,7 +308,7 @@ void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* 
             pa->position < dc_data->slideTexts->atoms.size())
         {
             textContainer = &dc_data->slideTexts->atoms[pa->position];
-            ppttoodp->processTextForBody(&o, *textContainer, textRuler, out);
+            ppttoodp->processTextForBody(out, &o, textContainer, textRuler);
         }
     }
 }
@@ -328,7 +327,7 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
                 textRuler = &tc.anon.get<TextRulerAtom>()->textRuler;
 	    }
         }
-        ppttoodp->processTextForBody(cd, *textContainer, textRuler, out);
+        ppttoodp->processTextForBody(out, cd, textContainer, textRuler);
     }
 }
 QString getMasterStyle(const QMap<int, QString>& map, int texttype) {
@@ -442,16 +441,17 @@ void PptToOdp::DrawClient::addTextStyles(
         tb = clientTextbox->anon.get<PptOfficeArtClientTextBox>();
     }
     if (out.stylesxml) {
+        //TODO: construct proper masters hierarchy
+        QList<const MSO::MasterOrSlideContainer*> mh;
+        mh.append(dc_data->masterSlide);
         const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
+
         PptTextPFRun pf(ppttoodp->p->documentContainer,
-                        dc_data->slideTexts,
-                        dc_data->masterSlide,
+                        mh, dc_data->slideTexts,
                         cd, tc);
         ppttoodp->defineParagraphProperties(style, pf, 0);
 
-        QList<const MasterOrSlideContainer*> mh;
-        mh.append(dc_data->masterSlide);
-        PptTextCFRun cf(ppttoodp->p->documentContainer, mh, &tc, 0);
+        PptTextCFRun cf(ppttoodp->p->documentContainer, mh, tc, 0);
         ppttoodp->defineTextProperties(style, &cf, 0, 0, 0);
     }
     bool isPlaceholder = cd && cd->placeholderAtom;
@@ -859,7 +859,8 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
             pf9 = &pp9->textDefaultsAtom->pf9;
         }
     }
-    PptTextPFRun pf(p->documentContainer);
+    QList<const MSO::MasterOrSlideContainer*> mh;
+    PptTextPFRun pf(p->documentContainer, mh);
     defineParagraphProperties(style, pf, 0);
 }
 
@@ -988,7 +989,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
 }
 
 void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& pf,
-                                         quint16 fs)
+                                         const quint16 fs)
 {
     const KoGenStyle::PropertyType para = KoGenStyle::ParagraphType;
     // fo:background-color
@@ -1008,7 +1009,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     // fo:margin
     // fo:margin-bottom
     style.addProperty("fo:margin-bottom", processParaSpacing(pf.spaceAfter(), fs, false), para);
-    // fo:margin-left - pf.leftMargin() is relevant only for a list
+    // fo:margin-left - pf.leftMargin() is relevant only for a list (at the moment at least)
     style.addProperty("fo:margin-left", "0cm", para);
     // fo:margin-right
     // fo:margin-top
@@ -2018,26 +2019,40 @@ int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
     return end;
 }
 
-int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
+int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextContainer* tc,
                               const QString& text, const int start, int end, quint16* p_fs)
 {
     int count = cf->addCurrentCFRun(tc, start);
     *p_fs = cf->fontSize();
 
+#ifdef DEBUG_PPTTOODP
+    qDebug() << "font size:" << *p_fs;
+    qDebug() << "# of characters:" << count;
+#endif
+
+    if (!tc) {
+        qDebug() << "processTextSpan: returning!";
+        return -1;
+    }
+
     //TODO: there's no TextCFRun in case we rely on TextCFExceptionAtom or
     //TextMasterStyleLevel, handle this case. (uzak)
-    
+
     //NOTE: At the moment, TextSIException data are not processed in the
     //defineTextProperties function, so keep it simple! (uzak)
-
     const TextSIException* si = 0;
     int i = 0;
 
 #ifdef SI_EXCEPTION
     // get the right special info run
     const QList<TextSIRun>* tsi = 0;
-    if (tc.specialinfo) tsi = &tc.specialinfo->rgSIRun;
-    if (tc.specialinfo2) tsi = &tc.specialinfo2->rgSIRun;
+    if (tc->specialinfo) {
+        tsi = &tc->specialinfo->rgSIRun;
+    }
+    if (tc->specialinfo2) {
+        tsi = &tc->specialinfo2->rgSIRun;
+    }
+
     int siend = 0;
     if (tsi) {
         while (i < tsi->size()) {
@@ -2055,8 +2070,8 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextCont
 #endif
     // find a meta character
     const TextContainerMeta* meta = 0;
-    for (i = 0; i<tc.meta.size(); ++i) {
-        const TextContainerMeta& m = tc.meta[i];
+    for (i = 0; i < tc->meta.size(); ++i) {
+        const TextContainerMeta& m = tc->meta[i];
         end = getMeta<SlideNumberMCAtom>(m, meta, start, end);
         end = getMeta<DateTimeMCAtom>(m, meta, start, end);
         end = getMeta<GenericDateMCAtom>(m, meta, start, end);
@@ -2067,17 +2082,17 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextCont
 
     // find the right bookmark
     const TextBookmarkAtom* bookmark = 0;
-    for (i = 0; i<tc.bookmark.size(); ++i) {
-        if (tc.bookmark[i].begin < start && tc.bookmark[i].end >= start) {
-            bookmark = &tc.bookmark[i];
+    for (i = 0; i < tc->bookmark.size(); ++i) {
+        if (tc->bookmark[i].begin < start && tc->bookmark[i].end >= start) {
+            bookmark = &tc->bookmark[i];
         }
     }
 
     // find the interactive atom
     const MouseClickTextInfo* mouseclick = 0;
     const MouseOverTextInfo* mouseover = 0;
-    for (i = 0; i<tc.interactive.size(); ++i) {
-        const TextContainerInteractiveInfo& ti = tc.interactive[i];
+    for (i = 0; i < tc->interactive.size(); ++i) {
+        const TextContainerInteractiveInfo& ti = tc->interactive[i];
         const MouseClickTextInfo* a =
                 ti.interactive.get<MouseClickTextInfo>();
         const MouseOverTextInfo* b =
@@ -2163,7 +2178,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextCont
     return end;
 }
 
-int PptToOdp::processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
+int PptToOdp::processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextContainer* tc,
 			       const QString& text, int start, int end, quint16* p_fs)
 {
     quint16 font_size = 0;
@@ -2199,13 +2214,14 @@ QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf)
 
 void
 PptToOdp::processParagraph(Writer& out,
+                           QStack<QString>& levels,
                            const MSO::OfficeArtClientData* clientData,
-                           const MSO::TextContainer& tc,
+                           const MSO::TextContainer* tc,
                            const MSO::TextRuler* tr,
+                           const bool ph,
                            const QString& text,
                            int start,
-                           int end,
-                           QStack<QString>& levels)
+                           int end)
 {
     //TODO: support for notes master slide required!
 
@@ -2225,7 +2241,7 @@ PptToOdp::processParagraph(Writer& out,
     QList<const MasterOrSlideContainer*> mh;
 
     //prepare the masters hierarchy
-    if (m_currentMaster) {
+    if (m_currentMaster && ph) {
         const MasterOrSlideContainer* m = m_currentMaster;
         while (m) {
             mh.append(m);
@@ -2238,10 +2254,8 @@ PptToOdp::processParagraph(Writer& out,
             }
         }
     }
-    //TODO: masters hierarchy?
-    PptTextPFRun pf(p->documentContainer, m_currentSlideTexts, m_currentMaster,
-                    pcd, &tc, tr, start);
 
+    PptTextPFRun pf(p->documentContainer, mh, m_currentSlideTexts, pcd, tc, tr, start);
     PptTextCFRun cf(p->documentContainer, mh, tc, pf.level());
 
     //spans have to be processed first to prepare the correct ParagraphStyle
@@ -2253,6 +2267,7 @@ PptToOdp::processParagraph(Writer& out,
     quint16 min_fontsize = FONTSIZE_MAX;
     processTextSpans(o, &cf, tc, text, start, end, &min_fontsize);
 
+    //FIXME: check comments to the isList function
     m_isList = ( pf.isList() && (start < end) );
 
     if (m_isList) {
@@ -2283,9 +2298,8 @@ PptToOdp::processParagraph(Writer& out,
     out.xml.endElement(); //text:p
 }
 
-void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
-                                  const MSO::TextContainer& tc, const MSO::TextRuler* tr,
-                                  Writer& out)
+int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* clientData,
+                                 const MSO::TextContainer* tc, const MSO::TextRuler* tr)
 {
     /* Text in a textcontainer is divided into sections.
        The sections occur on different levels:
@@ -2304,25 +2318,31 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
        TextCFRuns correspond to text:span elements as do
     */
 
-    //NOTE: If slideFlags/fMasterScheme == true, master's color scheme MUST be
-    //used whether it's a placeholder shape or not. (uzak)
-//     const PlaceholderAtom* p = 0;
-//     if (clientData) {
-//         const PptOfficeArtClientData* pcd
-//                     = clientData->anon.get<PptOfficeArtClientData>();
-//         if (pcd) {
-//             p = pcd->placeholderAtom.data();
-//         }
-//     }
+    if (!tc) {
+        qDebug() << "MISSING TextContainer, big mess-up!";
+        return -1;
+    }
 
-//     const MSO::MasterOrSlideContainer* tmpMaster = m_currentMaster;
-//     // if this is not a presentation frame, set master to 0, to avoid the
-//     // text style from inheriting from the master style
-//     if (p == 0) {
-//         m_currentMaster = 0;
-//     }
+    // If this is not a placeholder shape, then do not inherit text style from
+    // master styles.
+    //
+    // NOTE: If slideFlags/fMasterScheme == true, master's color scheme MUST be
+    // used.  Common shapes should not refer to a color scheme.
+    bool ph = false;
+    const PlaceholderAtom* p = 0;
+    if (clientData) {
+        const PptOfficeArtClientData* pcd
+                    = clientData->anon.get<PptOfficeArtClientData>();
+        if (pcd) {
+            p = pcd->placeholderAtom.data();
+            if (p) {
+                ph = true;
+            }
+        }
+    }
 
 #ifdef DEBUG_PPTTOODP
+    quint32 txt_type = tc->textHeaderAtom.textType;
     QString txt = getText(tc);
     int len = txt.length();
     txt.replace('\v', "<vt>");
@@ -2330,7 +2350,8 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
     txt.replace('\n', "<newline>");
     txt.replace('\t', "<tab>");
     txt.replace('\f', "<ff>");
-    qDebug() << "\n> current text:" << txt << "| length:" << len;
+    qDebug() << "\n> textType:" << txt_type;
+    qDebug() << "> current text:" << txt << "| length:" << len;
 #endif
 
     // Let's assume text stored in paragraphs.
@@ -2367,7 +2388,7 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
             end = text.size();
             missed_line = false;
         }
-        processParagraph(out, clientData, tc, tr, text, pos, end, levels);
+        processParagraph(out, levels, clientData, tc, tr, ph, text, pos, end);
         pos = end + 1;
     }
 
@@ -2376,12 +2397,12 @@ void PptToOdp::processTextForBody(const MSO::OfficeArtClientData* clientData,
         if (!text.isEmpty()) {
             pos--;
         }
-        processParagraph(out, clientData, tc, tr, QString(QString::null), pos, pos, levels);
+        processParagraph(out, levels, clientData, tc, tr, ph, QString(QString::null), pos, pos);
     }
 
     // close all open text:list elements
     writeTextObjectDeIndent(out.xml, 0, levels);
-//     m_currentMaster = tmpMaster;
+    return 0;
 }
 
 void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
@@ -2402,7 +2423,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     if (nameStr.isEmpty()) {
         foreach(const TextContainer& tc, p->documentContainer->slideList->rgChildRec[slideNo].atoms) {
             if (tc.textHeaderAtom.textType == Text::Title) {
-                nameStr = getText(tc);
+                nameStr = getText(&tc);
                 break;
             }
         }
@@ -2496,7 +2517,9 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     out.xml.endElement(); // draw:page
 }
 
-QString PptToOdp::processParaSpacing(int value, quint16 fs, bool percentage) const
+QString PptToOdp::processParaSpacing(const int value,
+                                     const quint16 fs,
+                                     const bool percentage) const
 {
     // ParaSpacing specifies text paragraph spacing.
     //
@@ -2509,13 +2532,18 @@ QString PptToOdp::processParaSpacing(int value, quint16 fs, bool percentage) con
         return pptMasterUnitToCm(temp);
     }
 
-    //NOTE: MS PowerPoint specific: lineHeight = fontSize + (1/4 * fontSize);
-    //IF a number of font sizes are used in a paragraph, then use the minimum.
+    // NOTE: MS PowerPoint specific: font-independent-line-spacing is used,
+    // which means that line height is calculated only from the font height as
+    // specified by the font size properties.  If a number of font sizes are
+    // used in a paragraph, then use the minimum.
+    //
+    // lineHeight = fontSize + (1/4 * fontSize);
+
     if (percentage) {
         return percent(value);
     } else {
-        double lineHeight = fs + (0.25 * fs);
-        return pt(value * lineHeight / 100);
+        double height = fs + (0.25 * fs);
+        return pt(qFloor(value * height / 100));
     }
 }
 
