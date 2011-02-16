@@ -45,8 +45,11 @@ void AutoLineEdit::setInvalidState(const QString& displayText)
 
 void AutoLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-    kDebug() << add;
-    m_lineEdit->setText(add.toString());
+    if(removeOld) {
+        m_lineEdit->setText(add.toString());
+    } else {
+        m_lineEdit->setText(m_origValue.toString() + add.toString());
+    }
 }
 
 void AutoLineEdit::clear()

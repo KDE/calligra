@@ -76,7 +76,9 @@ tristate KexiAutoFormView::afterSwitchFrom(Kexi::ViewMode mode)
         KexiDB::Cursor *cursor = conn->executeQuery(*(conn->tableSchema("actor")));
         
         if (cursor) {
+            kDebug() << "Opened Cursor";
             KexiTableViewData *data = new KexiTableViewData(cursor);
+            data->preloadAllRows();
             m_autoForm->setData(data);
             
         }
