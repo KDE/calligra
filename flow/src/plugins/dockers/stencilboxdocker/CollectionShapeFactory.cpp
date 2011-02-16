@@ -48,12 +48,6 @@ CollectionShapeFactory::~CollectionShapeFactory()
 
 KoShape *CollectionShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
-    QList<KoShape*> shapes;
-
-    shapes << m_shape;
-
-    //kDebug() << m_shape->shapeId();
-
     KoDrag drag;
     KoShapeOdfSaveHelper saveHelper(shapes);
     drag.setOdf(KoOdf::mimeType(KoOdf::Graphics), saveHelper);
