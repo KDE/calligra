@@ -1632,6 +1632,15 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->startTime = cs->endTime - cs->duration;
             //kDebug()<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish;
             makeAppointments();
+            if ( cs->plannedEffort() == 0 && cs->lateFinish < cs->earlyFinish ) {
+                // the backward pass failed to calulate sane values, try to handle it
+                //TODO add an error indication
+                cs->logWarning( i18n( "%1: Scheduling failed using late finish, trying early finish instead.", constraintToString() ) );
+                cs->endTime = workTimeBefore( cs->earlyFinish, cs );
+                cs->duration = duration(cs->endTime, use, true);
+                cs->startTime = cs->endTime - cs->duration;
+                makeAppointments();
+            }
             if ( cs->lateFinish > cs->endTime ) {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             } else {
