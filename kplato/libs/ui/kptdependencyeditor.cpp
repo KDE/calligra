@@ -632,9 +632,13 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
 
     setFlags( QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable );
 
-    m_symbol = new DependencyNodeSymbolItem( this );
+    // do not attach this item to the scene as it gives continoues paint events when a node item is selected
+    m_symbol = new DependencyNodeSymbolItem();
     m_symbol->setZValue( zValue() + 10.0 );
     setSymbol();
+
+    m_treeIndicator = new QGraphicsPathItem( this );
+    m_treeIndicator->setPen( QPen( Qt::gray ) );
 }
 
 DependencyNodeItem::~DependencyNodeItem()
@@ -642,6 +646,8 @@ DependencyNodeItem::~DependencyNodeItem()
     qDeleteAll( m_childrelations );
     qDeleteAll( m_parentrelations );
     //qDeleteAll( m_children );
+
+    delete m_symbol;
 }
 
 void DependencyNodeItem::setText()
@@ -740,6 +746,10 @@ void DependencyNodeItem::moveToY( qreal y )
     foreach ( DependencyLinkItem *i, m_childrelations ) {
         i->createPath();
     }
+    setTreeIndicator( true );
+    foreach ( DependencyNodeItem *ch, m_children ) {
+        ch->setTreeIndicator( true );
+    }
 }
 
 void DependencyNodeItem::setRow( int row )
@@ -763,6 +773,10 @@ void DependencyNodeItem::moveToX( qreal x )
     }
     foreach ( DependencyLinkItem *i, m_childrelations ) {
         i->createPath();
+    }
+    setTreeIndicator( true );
+    foreach ( DependencyNodeItem *ch, m_children ) {
+        ch->setTreeIndicator( true );
     }
 }
 
@@ -831,6 +845,7 @@ void DependencyNodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * )
 {
+    //kDebug();
     QLinearGradient g( 0.0, rect().top(), 0.0, rect().bottom() );
     g.setColorAt( 0.0, option->palette.color( QPalette::Midlight ) );
     g.setColorAt( 1.0, option->palette.color( QPalette::Dark ) );
@@ -845,6 +860,9 @@ void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsIte
         opt.state |= QStyle::State_HasFocus;
     }
     kplato_paintFocusSelectedItem( painter, &opt );
+
+    // paint the symbol
+    m_symbol->paint( itemScene()->project(), painter, &opt );
 }
 
 DependencyConnectorItem *DependencyNodeItem::connectorItem( ConnectorType ctype ) const
@@ -885,6 +903,49 @@ QList<DependencyLinkItem*> DependencyNodeItem::successorItems( ConnectorType cty
     return lst;
 }
 
+qreal DependencyNodeItem::treeIndicatorX() const
+{
+    return rect().x() + 18.0;
+}
+
+void DependencyNodeItem::setTreeIndicator( bool on )
+{
+    if ( ! on ) {
+        m_treeIndicator->hide();
+        return;
+    }
+    QPainterPath p;
+    qreal y1 = itemScene()->gridY( row() );
+    qreal y2 = itemScene()->gridY( row() + 1 );
+    for ( DependencyNodeItem *par = m_parent; par; par = par->parentItem() ) {
+        qreal x = par->treeIndicatorX();
+        p.moveTo( x, y1 );
+        p.lineTo( x, (y1 + y2) / 2.0 );
+        if ( par == m_parent ) {
+            p.lineTo( x + 6, (y1 + y2) / 2.0 );
+            if ( m_node->siblingAfter() ) {
+                p.moveTo( x, (y1 + y2) / 2.0 );
+                p.lineTo( x, y2 );
+            }
+        } else {
+            p.lineTo( x, y2 );
+        }
+    }
+    if ( ! m_children.isEmpty() ) {
+        qreal x = treeIndicatorX();
+        qreal y = rect().bottom();
+        p.moveTo( x, y );
+        p.lineTo( x, itemScene()->gridY( row() + 1 ) );
+    }
+    if ( p.isEmpty() ) {
+        m_treeIndicator->hide();
+    } else {
+        m_treeIndicator->setPath( p );
+        m_treeIndicator->show();
+    }
+    //kDebug()<<text()<<rect()<<p;
+}
+
 //--------------------
 void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
 {
@@ -921,33 +982,30 @@ void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
     setPath( p );
 }
 
-void DependencyNodeSymbolItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *w )
+void DependencyNodeSymbolItem::paint( Project *p, QPainter *painter, const QStyleOptionGraphicsItem *option )
 {
-    Project *p = itemScene()->project();
     if ( p ) {
         switch ( m_nodetype ) {
             case Node::Type_Summarytask:
-                setBrush( p->config().summaryTaskDefaultColor() );
+                painter->setBrush( p->config().summaryTaskDefaultColor() );
                 break;
             case Node::Type_Task:
-                setBrush( p->config().taskNormalColor() );
+                painter->setBrush( p->config().taskNormalColor() );
                 break;
             case Node::Type_Milestone:
-                setBrush( p->config().milestoneNormalColor() );
+                painter->setBrush( p->config().milestoneNormalColor() );
                 break;
             default:
-                setBrush( m_delegate.defaultBrush( m_itemtype ) );
+                painter->setBrush( m_delegate.defaultBrush( m_itemtype ) );
                 break;
         }
     } else {
-        setBrush( m_delegate.defaultBrush( m_itemtype ) );
+        painter->setBrush( m_delegate.defaultBrush( m_itemtype ) );
     }
-    QGraphicsPathItem::paint( painter, option, w );
-}
+    painter->setPen( Qt::NoPen );
+    painter->translate( option->exposedRect.x() + 2.0, option->exposedRect.y() + 2.0 );
+    painter->drawPath( path() );
 
-DependencyScene *DependencyNodeSymbolItem::itemScene() const
-{
-    return static_cast<DependencyScene*>( scene() );
 }
 
 //--------------------
@@ -2063,19 +2121,71 @@ void DependencyEditor::slotEnableActions()
 
 void DependencyEditor::updateActionsEnabled( bool on )
 {
+    if ( ! on || ! isReadWrite() ) { //FIXME: read-write is not set properly
+        menuAddTask->setEnabled( false );
+        actionAddTask->setEnabled( false );
+        actionAddMilestone->setEnabled( false );
+        menuAddSubTask->setEnabled( false );
+        actionAddSubtask->setEnabled( false );
+        actionAddSubMilestone->setEnabled( false );
+        actionDeleteTask->setEnabled( false );
+        return;
+    }
+    int selCount = selectedNodeCount();
+        
+    if ( selCount == 0 ) {
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( false );
+        actionAddSubtask->setEnabled( false );
+        actionAddSubMilestone->setEnabled( false );
+        actionDeleteTask->setEnabled( false );
+        return;
+    }
+    Node *n = selectedNode();
+    if ( n && n->type() != Node::Type_Task && n->type() != Node::Type_Milestone && n->type() != Node::Type_Summarytask ) {
+        n = 0;
+    }
+    if ( selCount == 1 && n == 0 ) {
+        // only project selected
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( true );
+        actionAddSubtask->setEnabled( true );
+        actionAddSubMilestone->setEnabled( true );
+        actionDeleteTask->setEnabled( false );
+        return;
+    }
+    bool baselined = false;
     Project *p = m_view->project();
-
-    bool o = ( on && p && selectedNodeCount() <= 1 );
-    menuAddTask->setEnabled( o );
-    actionAddTask->setEnabled( o );
-    actionAddMilestone->setEnabled( o );
-
-    actionDeleteTask->setEnabled( on && p && selectedNodeCount() > 0 );
-
-    o = ( on && p && selectedNodeCount() == 1 );
-
-    menuAddSubTask->setEnabled( o );
-    actionAddSubtask->setEnabled( o );
+    if ( p && p->isBaselined() ) {
+        foreach ( Node *n, selectedNodes() ) {
+            if ( n->isBaselined() ) {
+                baselined = true;
+                break;
+            }
+        }
+    }
+    if ( selCount == 1 ) {
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionAddSubtask->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionAddSubMilestone->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionDeleteTask->setEnabled( ! baselined );
+        return;
+    }
+    // selCount > 1
+    menuAddTask->setEnabled( false );
+    actionAddTask->setEnabled( false );
+    actionAddMilestone->setEnabled( false );
+    menuAddSubTask->setEnabled( false );
+    actionAddSubtask->setEnabled( false );
+    actionAddSubMilestone->setEnabled( false );
+    actionDeleteTask->setEnabled( ! baselined );
 }
 
 void DependencyEditor::setupGui()

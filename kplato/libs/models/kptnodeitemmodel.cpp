@@ -1657,7 +1657,7 @@ QVariant NodeModel::effortNotMet( const Node *node, int role ) const
         case Qt::EditRole:
             return node->effortMetError( id() );
         case Qt::ToolTipRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->effortMetError( id() ) ) {
                 return i18nc( "@info:tooltip", "The assigned resources cannot deliver the required estimated effort" );
             }
             break;

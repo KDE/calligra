@@ -76,10 +76,14 @@ Context::~Context() {
 AbstractNode* Context::currentNode() const { return m_currentNode; }
 void Context::setCurrentNode(AbstractNode* node) { m_currentNode = node; }
 
-ValueCache::ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), unmodified( true ), negativeWidth( false ){}
+ValueCache::ValueCache() : m_rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), m_unmodified( true ), m_negativeWidth( false ), m_negativeHeight( false ) {}
 
 bool ValueCache::hasNegativeWidth() const {
-    return negativeWidth;
+    return m_negativeWidth;
+}
+
+bool ValueCache::hasNegativeHeight() const {
+    return m_negativeHeight;
 }
 
 qreal ValueCache::value( const QString& name, bool *valid ) const {
@@ -87,20 +91,20 @@ qreal ValueCache::value( const QString& name, bool *valid ) const {
         *valid = true;
     if ( isRectValue( name ) )
         return rectValue( name );
-    if ( valid && ! mapping.contains( name ) )
+    if ( valid && ! m_mapping.contains( name ) )
         *valid = false;
-    return mapping[ name ];
+    return m_mapping[ name ];
 }
 
 bool ValueCache::valueExists( const QString& name ) {
-    return isRectValue( name ) || mapping.contains( name );
+    return isRectValue( name ) || m_mapping.contains( name );
 }
 
 void ValueCache::setValue( const QString& name, qreal value ) {
     if ( isRectValue( name ) )
         setRectValue( name, value );
     else
-        mapping[ name ] = value;
+        m_mapping[ name ] = value;
 }
 
 qreal ValueCache::operator[]( const QString& name ) const  {
@@ -116,15 +120,15 @@ ValueCache::ResultWrapper ValueCache::operator[]( const QString& name ) {
 }
 
 ValueCache::operator QMap< QString, qreal >() const {
-    QMap < QString, qreal > result = mapping;
-    result[ "l" ] = rect.left();
-    result[ "r" ] = rect.right();
-    result[ "t" ] = rect.top();
-    result[ "b" ] = rect.bottom();
-    result[ "w" ] = rect.width();
-    result[ "h" ] = rect.height();
-    result[ "ctrX" ] = rect.center().rx();
-    result[ "ctrY" ] = rect.center().ry();
+    QMap < QString, qreal > result = m_mapping;
+    result[ "l" ] = m_rect.left();
+    result[ "r" ] = m_rect.right();
+    result[ "t" ] = m_rect.top();
+    result[ "b" ] = m_rect.bottom();
+    result[ "w" ] = m_rect.width();
+    result[ "h" ] = m_rect.height();
+    result[ "ctrX" ] = m_rect.center().rx();
+    result[ "ctrY" ] = m_rect.center().ry();
     return result;
 }
 
@@ -133,59 +137,58 @@ bool ValueCache::isRectValue( const QString& name ) const {
 }
 
 qreal ValueCache::rectValue( const QString& name ) const {
-    Q_ASSERT( rect.isValid() );
     if ( name == "l")
-        return rect.left();
+        return m_rect.left();
     if ( name == "r" )
-        return rect.right();
+        return m_rect.right();
     if ( name == "w" )
-        return rect.width();
+        return m_rect.width();
     if ( name == "h" )
-        return rect.height();
+        return m_rect.height();
     if ( name == "t" )
-        return rect.top();
+        return m_rect.top();
     if ( name == "b" )
-        return rect.bottom();
+        return m_rect.bottom();
     if ( name == "ctrX" )
-        return rect.center().rx();
+        return m_rect.center().rx();
     if ( name == "ctrY" )
-        return rect.center().ry();
+        return m_rect.center().ry();
     return 0.0;
 }
 
 void ValueCache::setRectValue( const QString& name, qreal value ) {
-    Q_ASSERT( rect.isValid() );
     if ( name == "l") {
-        rect.moveLeft( value );
+        m_rect.moveLeft( value );
     } else if ( name == "r" ) {
-        rect.setRight( value );
+        m_rect.setRight( value );
     } else if ( name == "w" ) {
         if ( value <  0 ) {
-            rect.setLeft( rect.right() + value );
-            negativeWidth = true;
+            m_rect.setLeft( m_rect.right() + value );
+            m_negativeWidth = true;
         } else {
-            rect.setWidth( value );
-            Q_ASSERT( negativeWidth == false );
-            negativeWidth = false;
+            m_rect.setWidth( value );
+            m_negativeWidth = false;
         }
     } else if ( name == "h" ) {
-        Q_ASSERT( value > 0 );
-        rect.setHeight(value );
+        if ( value < 0 ) {
+            m_rect.setTop( m_rect.bottom() + value );
+            m_negativeHeight = true;
+        } else {
+            m_rect.setHeight( value );
+            m_negativeHeight = false;
+        }
     } else if ( name == "t" ) {
-        rect.moveTop( value );
+        m_rect.moveTop( value );
     } else if ( name == "b" ) {
-        rect.setBottom( value );
+        m_rect.setBottom( value );
     } else if ( name == "ctrX" ) {
-        rect.moveCenter( QPointF( rect.center().x() + value, rect.center().y() ) );
+        m_rect.moveCenter( QPointF( m_rect.center().x() + value, m_rect.center().y() ) );
     } else if ( name == "ctrY" ) {
-        rect.moveCenter( QPointF( rect.center().x(), rect.center().y() + value ) );
+        m_rect.moveCenter( QPointF( m_rect.center().x(), m_rect.center().y() + value ) );
     } else {
         Q_ASSERT_X( false, __FUNCTION__, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
     }
-    Q_ASSERT( rect.isValid() );
-    Q_ASSERT( rect.left() >= 0 );
-    Q_ASSERT( rect.top() >= 0 );
-    unmodified = false;
+    m_unmodified = false;
 }
 
 /****************************************************************************************************/
@@ -971,6 +974,8 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     QMap< QString, qreal > res = result;
     if (result.hasNegativeWidth())
         res[ "w" ] = -res[ "w" ];
+    if (result.hasNegativeHeight())
+        res[ "h" ] = -res[ "h" ];
     return res;
 }
 
@@ -1083,7 +1088,7 @@ ConstraintAtom* ConstraintAtom::clone() {
     return atom;
 }
 
-void ConstraintAtom::dump(Context*, int level) {
+QString ConstraintAtom::dump() const {
     QString s;
     if(!m_fact.isEmpty()) s += QString("fact=%1 ").arg(m_fact);
     if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
@@ -1096,7 +1101,11 @@ void ConstraintAtom::dump(Context*, int level) {
     if(!m_refForName.isEmpty()) s += QString("refForName=%1 ").arg(m_refForName);
     if(!m_type.isEmpty()) s += QString("type=%1 ").arg(m_type);
     if(!m_value.isEmpty()) s += QString("val=%1 ").arg(m_value);
-    DEBUG_DUMP << s;
+    return s.trimmed();
+}
+
+void ConstraintAtom::dump(Context*, int level) {
+    DEBUG_DUMP << dump();
 }
 
 void ConstraintAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
@@ -1116,7 +1125,6 @@ void ConstraintAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
 }
 
 void ConstraintAtom::build(Context* context) {
-    //context->m_parentLayout->addConstraint( QExplicitlySharedDataPointer<ConstraintAtom>( this ) );    
     QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
     QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > affectedLayouts;
     QVector< AbstractNode* > childDataPoints;
@@ -1149,7 +1157,7 @@ void ConstraintAtom::build(Context* context) {
                     continue;
                 QExplicitlySharedDataPointer<ConstraintAtom> clonedPtr( ptr->clone() );
                 addedConstraints.append( clonedPtr.data() );
-                curChild->addConstraint( clonedPtr );       
+                curChild->addConstraint( clonedPtr );
                 constraintedWasApplied = true;
             }
         }
@@ -1165,41 +1173,42 @@ void ConstraintAtom::build(Context* context) {
     typedef QList <QExplicitlySharedDataPointer <MSOOXML::Diagram::LayoutNodeAtom > >  LayoutNodeList;
     LayoutNodeList childList = context->m_parentLayout->childrenLayouts();
     foreach( ConstraintAtom* constraint, addedConstraints ) {
-        for( LayoutNodeList::iterator it = childList.begin(); it != childList.end(); ++it ) {
+        LayoutNodeList::iterator it = childList.begin();
+        while(it != childList.end()) {
             QExplicitlySharedDataPointer<LayoutNodeAtom> curChild = *it;
-            if ( !constraint->m_refForName.isEmpty() )
-                if ( curChild->m_name != constraint->m_refForName )
-                    continue;
-            if ( !refChildDataPoints.contains( context->m_layoutPointMap[ curChild.data() ] ) )
-                continue;
-            constraint->m_referencedLayout = curChild.data();
-            childList.erase( it );
+#if 0
+            if ( refChildDataPoints.contains( context->m_layoutPointMap[ curChild.data() ] ) ) {
+                ++it;
+            } else if ( !constraint->m_refForName.isEmpty() && curChild->m_name != constraint->m_refForName ) {
+                constraint->m_referencedLayout = context->m_parentLayout;
+                ++it;
+#else
+            if ( (!constraint->m_refForName.isEmpty() && curChild->m_name != constraint->m_refForName) || refChildDataPoints.contains( context->m_layoutPointMap[ curChild.data() ] ) ) {
+                ++it;
+#endif
+            } else {
+                constraint->m_referencedLayout = curChild.data();
+                it = childList.erase( it );
+            }
         }
     }
 
-//     QExplicitlySharedDataPointer<LayoutNodeAtom> layout = m_forName.isEmpty() ? context->m_parentLayout : context->m_layoutMap.value(m_forName);
-//     if(layout) {
-//         QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
-//         m_parent->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(this));
-//         layout->addConstraint(ptr);
-//     }
-//     Q_ASSERT( constraintedWasApplied );
+    if (!constraintedWasApplied) dump(0,2);
+    //Q_ASSERT( constraintedWasApplied );
     AbstractAtom::build(context);
 }
 
 void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom ) {
     Q_ASSERT( atom );
-    qreal value = -1.0;
     if( !m_value.isEmpty() ) {
         bool ok;
-        qreal v = m_value.toDouble( &ok );
+        qreal value = m_value.toDouble( &ok );
         if ( ok ) {
-            value = v;
             atom->m_values[ m_type ] = value;
             atom->setNeedsRelayout( true );
         } else
             kWarning() << "Layout with name=" << atom->m_name << "defines none-double value=" << m_value;
-    } else if ( m_fact.isEmpty() ) {
+    } else {
         QMap<QString, qreal> values;
         if ( m_referencedLayout ) {
             values = m_referencedLayout->finalValues();
@@ -1207,33 +1216,30 @@ void ConstraintAtom::applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAto
             values = atom->finalValues();
         }
         if( !m_refType.isEmpty() ) {
-            if( values.contains( m_refType ) )
+            qreal value = -1.0;
+            if( values.contains( m_refType ) ) {
                 value = values[ m_refType ];
-            if ( value < 0.0 ) {
-                AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
+            } else {
+                AbstractAlgorithm* r = m_referencedLayout /* && m_referencedLayout->algorithmImpl() */ ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
                 Q_ASSERT( r );
                 value = r->defaultValue( m_refType, values );
-                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg( m_type ).arg( m_refType ).toLocal8Bit());
+                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("algorithm=%1 value=%2 %3").arg( r->name() ).arg( value ).arg( dump() ).toLocal8Bit());
             }
             if ( value >= 0.0 ) {
                 atom->m_values[ m_type ] = value;
                 atom->setNeedsRelayout( true );
             }
         } else {
+            AbstractAlgorithm* r = m_referencedLayout /* && m_referencedLayout->algorithmImpl() */ ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
+            Q_ASSERT( r );
+            qreal value = r->defaultValue( m_type, values );
             if ( value >= 0.0 ) {
                 atom->m_values[ m_type ] = value;
                 atom->setNeedsRelayout( true );
-            } else {
-                AbstractAlgorithm* r = m_referencedLayout && m_referencedLayout->algorithmImpl() ? m_referencedLayout->algorithmImpl() : atom->algorithmImpl();
-                Q_ASSERT( r );
-                value = r->defaultValue( m_type, values );
-                if ( value >= 0.0 ) {
-                    atom->m_values[ m_type ] = value;
-                    atom->setNeedsRelayout( true );
-                }
             }
         }
-    } else {
+    }
+    if ( !m_fact.isEmpty() ) {
         bool ok;
         qreal v = m_fact.toDouble( &ok );
         if ( ok ) {
@@ -1427,12 +1433,9 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
 #endif
 
     DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h;
-    Q_ASSERT(x >= 0.0);
-    Q_ASSERT(y >= 0.0);
-    Q_ASSERT(w > 0.0);
-    Q_ASSERT(h > 0.0);
-    Q_ASSERT(cx >= 0.0);
-    Q_ASSERT(cy >= 0.0);
+    //Q_ASSERT(x >= 0.0); Q_ASSERT(y >= 0.0); Q_ASSERT(cx >= 0.0); Q_ASSERT(cy >= 0.0); // they can be negative
+    if (w < 0.0) w = -w;
+    if (h < 0.0) h = -h;
 
     xmlWriter->startElement("draw:custom-shape");
     //xmlWriter->addAttribute("draw:layer", "layout");
@@ -1844,8 +1847,7 @@ void ChooseAtom::build(Context* context) {
 
     // move the children of the selected IfAtom's to our parent
     int index = m_parent->indexOfChild(this);
-    if (index < 0)
-        index = m_parent->children().count() - 1;
+    Q_ASSERT(index >= 0);
 
     typedef QVector< QExplicitlySharedDataPointer< AbstractAtom > > AtomPList;
     foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult ) {
@@ -1886,8 +1888,8 @@ ForEachAtom* ForEachAtom::clone() {
 
 void ForEachAtom::dump(Context* context, int level) {
     DEBUG_DUMP << "axis=" << m_axis << "count=" << m_count << "hideLastTrans=" << m_hideLastTrans << "name=" << m_name << "ptType=" << m_ptType << "reference=" << m_reference << "start=" << m_start << "step=" << m_step;
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
-        atom->dump(context, level + 1);
+    //foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
+    //    atom->dump(context, level + 1);
 }
 
 void ForEachAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -1906,7 +1908,6 @@ void ForEachAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
 void ForEachAtom::build(Context* context) {
     typedef QPair<AbstractNode*, QList<QExplicitlySharedDataPointer<AbstractAtom> > > NodePair;
     QList<NodePair> newChildren;
-
     QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
     foreach(AbstractNode* node, axis) {
         QList<QExplicitlySharedDataPointer<AbstractAtom> > list;
@@ -1918,17 +1919,28 @@ void ForEachAtom::build(Context* context) {
                 context->m_layoutPointMap[ layNodeAtom ] = node;
                 layNodeAtom->setAxis( context, currentAxis );
             }
-            QExplicitlySharedDataPointer<AbstractAtom> atomCopy(atom->clone());
-            list.append(atomCopy);
+
+            /*ListAtom* listAtom = dynamic_cast< ListAtom* >( atom.data() );
+            if ( listAtom && listAtom->m_tagName == QLatin1String("dgm:constrLst") ) {
+                foreach( QExplicitlySharedDataPointer<AbstractAtom> a, m_children )
+                    if ( dynamic_cast< ConstraintAtom* >( a.data() ) )
+                        context->m_parentLayout->m_constraintsToBuild.append(a);
+            } else*/ {
+                QExplicitlySharedDataPointer<AbstractAtom> atomCopy(atom->clone());
+                list.append(atomCopy);
+            }
         }
         newChildren.append(NodePair(node, list));
     }
+
+    int index = m_parent->indexOfChild(this);
+    Q_ASSERT(index >= 0);
 
     AbstractNode* oldCurrentNode = context->currentNode();
     foreach(NodePair p, newChildren) {
         context->setCurrentNode(p.first); // move on to the next node        
         foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, p.second) {
-            m_parent->addChild(atom);
+            m_parent->insertChild(++index, atom);
             atom->build(context);
         }
     }
@@ -2074,140 +2086,11 @@ void AbstractAlgorithm::virtualDoLayout() {
     if (aspectRatio != 0.0)
         layout()->m_values["w"] = layout()->finalValues()["h"] * aspectRatio;
     QList< QExplicitlySharedDataPointer< LayoutNodeAtom > > allChilds = layout()->childrenLayouts();
+    
     foreach( QExplicitlySharedDataPointer< ConstraintAtom > atom, layout()->constraints() )
         atom->applyConstraint( QExplicitlySharedDataPointer< LayoutNodeAtom > ( layout() ) );
     foreach( QExplicitlySharedDataPointer< LayoutNodeAtom > curChild, allChilds )
         setNodePosition( curChild.data(), layout()->finalValues()[ "l" ], layout()->finalValues()[ "t" ], layout()->finalValues()[ "w" ], layout()->finalValues()[ "h" ] );        
-#if 0
-    // evaluate the constraints responsible for positioning and sizing.
-    foreach(QExplicitlySharedDataPointer<ConstraintAtom> c, layout()->constraints()) {
-        c->dump(context(), 2);
-        qreal value = -1.0;
-        if(!c->m_value.isEmpty()) {
-            bool ok;
-            qreal v = c->m_value.toDouble(&ok);
-            if(ok) value = v; else kWarning() << "Layout with name=" << layout()->m_name << "defines none-double value=" << c->m_value;
-        } else {
-#if 0
-#if 0
-            QExplicitlySharedDataPointer<LayoutNodeAtom> ref = c->m_refForName.isEmpty() ? m_layout : context()->m_layoutMap.value(c->m_refForName);
-            if(ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
-                ref->layoutAtom(context());
-                Q_ASSERT(!ref->m_needsReinit);
-                Q_ASSERT(!ref->m_needsRelayout);
-                Q_ASSERT(!ref->m_childNeedsRelayout);
-                if(ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)
-                    continue;
-            }
-
-            QMap<QString, qreal> values = ref->finalValues();
-            QString type = c->m_refType.isEmpty() ? c->m_type : c->m_refType;
-            if(values.contains(type)) {
-                value = values[type];
-            } else {
-                // if the layout doesn't know about such a type then look if one of his parent-layouts does.
-                for(QExplicitlySharedDataPointer<LayoutNodeAtom> a = ref->parentLayout(); a; a = a->parentLayout()) {
-                    values = a->finalValues();
-                    if(values.contains(type)) {
-                        value = values[type];
-                        break;
-                    }
-                }
-                if (value < 0.0) {
-                    // if the type is still unknown then look if the layout-algorithm defines a default value for it.
-                    value = defaultValue(type, values);
-                }
-                kDebug()<<typeid(this).name()<<c->m_type<<value;
-                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("No known value for the referenced type=%1.").arg(type).toUtf8());
-            }
-#else
-            QMap<QString, qreal> values;
-            if (!c->m_refForName.isEmpty()) {
-                QExplicitlySharedDataPointer<LayoutNodeAtom> ref = context()->m_layoutMap.value(c->m_refForName);
-                Q_ASSERT(ref);
-                Q_ASSERT(ref != m_layout);
-                if (ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
-                    ref->layoutAtom(context());
-                    Q_ASSERT(!ref->m_needsReinit);
-                    Q_ASSERT(!ref->m_needsRelayout);
-                    Q_ASSERT(!ref->m_childNeedsRelayout);
-                }
-                values = ref->finalValues();
-            } else {
-                values = m_layout->finalValues();
-            }
-            if(!c->m_refType.isEmpty()) {
-                if(values.contains(c->m_refType)) {
-                    value = values[c->m_refType];
-                    //kDebug()<<"1-AAAAAAAAAAAAAAA name="<<m_layout->m_name<<"refForName="<<c->m_refForName<<"type="<<c->m_type<<"refType="<<c->m_refType<<"value="<<value;
-                    //Probably  don't use addConstraint with forName cause we need the sender for the references?
-                }
-                if (value < 0.0) {
-                    value = defaultValue(c->m_refType, values); //TODO maybe ref->defaultValue(...) ?
-                }
-            } else {
-                //value = defaultValue(c->m_type, values);
-            }
-#endif
-        }
-//TODO 1) "op" isn't supported
-        if (value >= 0.0) {
-            layout()->m_values[c->m_type] = value;
-            //kDebug()<<"2-AAAAAAAAAAAAAAA name="<<m_layout->m_name<<"refForName="<<c->m_refForName<<"type="<<c->m_type<<"refType="<<c->m_refType<<"value="<<value<<"finalValues="<<layout()->finalValues()[c->m_type];
-        }
-        if (!c->m_fact.isEmpty()) {
-            bool ok;
-            qreal v = c->m_fact.toDouble(&ok);
-            if (ok) {
-                layout()->m_factors[c->m_type] += v;
-                layout()->m_countFactors[c->m_type] += 1;
-            }
-        }
-    }
-#else
-            QMap<QString, qreal> values;
-            QExplicitlySharedDataPointer<LayoutNodeAtom> ref;
-            if (!c->m_refForName.isEmpty()) {
-                ref = context()->m_layoutMap.value(c->m_refForName);
-                Q_ASSERT(ref);
-//                Q_ASSERT(ref != m_layout);
-                if (ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
-                    ref->layoutAtom(context());
-                    Q_ASSERT(!ref->m_needsReinit);
-                    Q_ASSERT(!ref->m_needsRelayout);
-                    Q_ASSERT(!ref->m_childNeedsRelayout);
-                }
-                values = ref->finalValues();
-            } else {
-                values = m_layout->finalValues();
-            }
-            if(!c->m_refType.isEmpty()) {
-                if(values.contains(c->m_refType))
-                    value = values[c->m_refType];
-                if (value < 0.0) {
-                    //Q_ASSERT( ! (ref && ref->algorithmImpl()) );
-                    AbstractAlgorithm* r = this;
-                    value = r->defaultValue(c->m_refType, values);
-                    Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg(c->m_type).arg(c->m_refType).toLocal8Bit());
-                }
-            } else {
-                //if (value < 0.0) { value = defaultValue(c->m_type, values); Q_ASSERT(value >= 0.0); }
-            }
-        }
-        if (value >= 0.0) {
-            layout()->m_values[c->m_type] = value;
-        }
-        if (!c->m_fact.isEmpty()) {
-            bool ok;
-            qreal v = c->m_fact.toDouble(&ok);
-            if (ok) {
-                layout()->m_factors[c->m_type] += v;
-                layout()->m_countFactors[c->m_type] += 1;
-            }
-        }
-    }
-#endif
-#endif
 }
 
 void AbstractAlgorithm::applyConstraints() {
@@ -2219,7 +2102,7 @@ void AbstractAlgorithm::applyConstraints() {
             bool ok;
             qreal v = c->m_value.toDouble(&ok);
             if(ok) value = v; else kWarning() << "Layout with name=" << layout()->m_name << "defines none-double value=" << c->m_value;
-        } else if ( c->m_fact.isEmpty() ) {
+        } else {
           QMap<QString, qreal> values;
             QExplicitlySharedDataPointer<LayoutNodeAtom> ref;
             if (!c->m_refForName.isEmpty()) {
@@ -2333,9 +2216,6 @@ qreal ConnectorAlgorithm::virtualGetDefaultValue(const QString& type, const QMap
     } else if (type == "begMarg" || type == "endMarg") {
         value = 3.175;
     } else if (type == "begPad") {
-        //Q_ASSERT(values.contains("connDist")); // can happen
-        //value = values.value("connDist") * 0.22;
-        //value = (values.contains("connDist") ? values.value("connDist") : connectorDistance()) * 0.22;
         value = connectorDistance() * 0.22;
     } else if (type == "endPad") {
         value = connectorDistance() * 0.25;
@@ -2562,9 +2442,6 @@ void LinearAlgorithm::virtualDoLayout() {
                 currentY = currentY + yFactor * l->finalValues()[ "h" ];
         } else {
             currentWidth = l->finalValues()[ "w" ] / totalSumWidth * w;
-            if ( l->m_values.hasNegativeWidth() )
-                currentWidth = -currentWidth;
-            //Q_ASSERT( l->m_factors["w"] > 0 );
             currentHeight = l->finalValues()[ "h" ] / totalSumHeight * h;
             if ( direction == "fromR" || direction == "fromL" )
                 currentX += currentWidth;

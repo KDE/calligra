@@ -96,6 +96,7 @@ struct KPLATOKERNEL_EXPORT SchedulingState
     static QString resourceNotAvailable( bool trans = true );
     static QString resourceNotAllocated( bool trans = true );
     static QString constraintsNotMet( bool trans = true );
+    static QString effortNotMet( bool trans = true );
 
 }; //namespace WhatsThis
 

@@ -81,6 +81,7 @@ KoFilter::ConversionStatus read_alpha();
 KoFilter::ConversionStatus read_satMod();
 KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_srcRect();
+
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
 KoFilter::ConversionStatus read_graphicData();
