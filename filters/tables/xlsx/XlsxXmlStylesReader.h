@@ -37,34 +37,6 @@ class XlsxStyles;
 class XlsxCellFormat;
 class XlsxXmlStylesReader;
 
-//! Four XLSX border styles definition
-/*! @see XlsxXmlStylesReader::read_borders() */
-class XlsxBorderStyles
-{
-public:
-    XlsxBorderStyles();
-
-    void setupCellStyle(KoGenStyle* cellStyle) const;
-
-    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, QString& borderStyle);
-
-    QString top;
-    QString right;
-    QString bottom;
-    QString left;
-
-    enum DiagonalDirection {
-        DiagonalUp = 1,
-        DiagonalDown = 2
-    };
-    Q_DECLARE_FLAGS(DiagonalDirections, DiagonalDirection)
-    DiagonalDirections diagonalDirections;
-
-    QString diagonal;
-};
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(XlsxBorderStyles::DiagonalDirections)
-
 //! Single XLSX cell format definition as specified in ECMA-376, 18.8.10 (Cell Formats), p. 1956.
 /*! @see XlsxXmlStylesReader::read_cellXfs() */
 class XlsxCellFormat
@@ -175,8 +147,7 @@ public:
     //! @todo implement more styling
     bool setupCellStyle(const XlsxStyles *styles, KoGenStyle* cellStyle) const;
 
-private:
-    //! Used by setupCellStyle()
+    //! Used by setupCellStyle() & read_dxf
     void setupCellStyleAlignment(KoGenStyle* cellStyle) const;
 };
 
@@ -201,7 +172,7 @@ public:
     }
 
     //! @return border style for id @a id (counted from 0)
-    XlsxBorderStyles* borderStyle(int id) const {
+    KoGenStyle* borderStyle(int id) const {
         if (id < 0 || id >= borderStyles.size())
             return 0;
         return borderStyles[id];
@@ -225,7 +196,7 @@ protected:
 
     QVector<KoGenStyle*> fontStyles;
     QVector<KoGenStyle*> fillStyles;
-    QVector<XlsxBorderStyles*> borderStyles;
+    QVector<KoGenStyle*> borderStyles;
     QVector<XlsxCellFormat*> cellFormats;
     QMap< int, QString > numberFormatStrings;
 
@@ -254,6 +225,13 @@ public:
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+
+    enum DiagonalDirection {
+        DiagonalUp = 1,
+        DiagonalDown = 2
+    };
+    Q_DECLARE_FLAGS(DiagonalDirections, DiagonalDirection)
+    DiagonalDirections diagonalDirections;
 
 protected:
     KoFilter::ConversionStatus readInternal();
@@ -289,7 +267,6 @@ protected:
     KoFilter::ConversionStatus read_rgbColor();
 
     uint m_cellFormatIndex;
-    uint m_borderStyleIndex;
 
     XlsxXmlStylesReaderContext* m_context;
 
@@ -299,17 +276,19 @@ protected:
     KoGenStyle *m_currentFontStyle;
     KoGenStyle *m_currentFillStyle;
     XlsxCellFormat *m_currentCellFormat;
-    XlsxBorderStyles *m_currentBorderStyle;
+    KoGenStyle *m_currentBorderStyle;
 
     int m_colorIndex;
+
+    KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, QString& borderStyle);
 
 private:
     void init();
 
-//! @todo readTintAttribute(const QXmlStreamAttributes& attrs) const;
-
     class Private;
     Private* const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(XlsxXmlStylesReader::DiagonalDirections)
 
 #endif //XLSXXMLSTYLESREADER_H

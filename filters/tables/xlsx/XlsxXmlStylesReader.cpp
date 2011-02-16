@@ -45,7 +45,7 @@
 
 //! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-style
 //! @see http://www.w3.org/TR/CSS2/box.html#value-def-border-width
-KoFilter::ConversionStatus XlsxBorderStyles::readAttributes(const QXmlStreamAttributes& attrs, QString& borderStyle)
+KoFilter::ConversionStatus XlsxXmlStylesReader::readAttributes(const QXmlStreamAttributes& attrs, QString& borderStyle)
 {
     QString s;
 //! @todo more styles
@@ -65,35 +65,6 @@ KoFilter::ConversionStatus XlsxBorderStyles::readAttributes(const QXmlStreamAttr
     }
     kDebug() << "style:" << s << "set to:" << borderStyle;
     return KoFilter::OK;
-}
-
-XlsxBorderStyles::XlsxBorderStyles()
-{
-}
-
-void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle) const
-{
-//! @todo simplify if 2 or 4 sides are the same
-    if (!top.isEmpty()) {
-        cellStyle->addProperty("fo:border-top", top);
-    }
-    if (!right.isEmpty()) {
-        cellStyle->addProperty("fo:border-right", right);
-    }
-    if (!bottom.isEmpty()) {
-        cellStyle->addProperty("fo:border-bottom", bottom);
-    }
-    if (!left.isEmpty()) {
-        cellStyle->addProperty("fo:border-left", left);
-    }
-    if (diagonalDirections) {
-        if (diagonalDirections & DiagonalUp) {
-            cellStyle->addProperty("style:diagonal-bl-tr", diagonal);
-        }
-        if (diagonalDirections & DiagonalDown) {
-            cellStyle->addProperty("style:diagonal-tl-br", diagonal);
-        }
-    }
 }
 
 static QColor applyPatternDensity(const QColor& bg, const QColor& fg, qreal percent)
@@ -328,9 +299,9 @@ bool XlsxCellFormat::setupCellStyle(
         MSOOXML::Utils::copyPropertiesFromStyle(*fillStyle, *cellStyle, KoGenStyle::TableCellType);
     }
     if (applyBorder && borderId >= 0) {
-        XlsxBorderStyles *borderStyles = styles->borderStyle(borderId);
-        if (borderStyles) {
-            borderStyles->setupCellStyle(cellStyle);
+        KoGenStyle *borderStyle = styles->borderStyle(borderId);
+        if (borderStyle) {
+            MSOOXML::Utils::copyPropertiesFromStyle(*borderStyle, *cellStyle, KoGenStyle::TableCellType);
         }
     }
     return true;
@@ -435,7 +406,6 @@ void XlsxXmlStylesReader::init()
 {
     m_defaultNamespace = "";
     m_cellFormatIndex = 0;
-    m_borderStyleIndex = 0;
     m_currentFontStyle = 0;
     m_currentFillStyle = 0;
     m_currentCellFormat = 0;
@@ -781,8 +751,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxfs()
  - rfmt (§18.11.1.17)
 
  Child elements:
- - alignment (Alignment) §18.8.1
- - border (Border) §18.8.4
+ - [done] alignment (Alignment) §18.8.1
+ - [done] border (Border) §18.8.4
  - extLst (Future Feature Data Storage Area) §18.2.10
  - [done] fill (Fill) §18.8.20
  - [done] font (Font) §18.8.22
@@ -798,6 +768,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
 
     m_currentFontStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     m_currentFillStyle = new KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    m_currentBorderStyle = new KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    m_currentCellFormat = new XlsxCellFormat;
 
     while (!atEnd()) {
         readNext();
@@ -805,12 +777,16 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
         if (isStartElement()) {
             TRY_READ_IF(font)
             ELSE_TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(border)
+            ELSE_TRY_READ_IF(alignment)
             SKIP_UNKNOWN
         }
     }
 
     MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFontStyle, cellStyle, KoGenStyle::TextType);
     MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFillStyle, cellStyle, KoGenStyle::TableCellType);
+    MSOOXML::Utils::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
+    m_currentCellFormat->setupCellStyleAlignment(&cellStyle);
 
     mainStyles->insert(cellStyle, "ConditionalStyle", KoGenStyles::AllowDuplicates);
 
@@ -818,6 +794,10 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
     m_currentFontStyle = 0;
     delete m_currentFillStyle;
     m_currentFillStyle = 0;
+    delete m_currentBorderStyle;
+    m_currentBorderStyle = 0;
+    delete m_currentCellFormat;
+    m_currentCellFormat = 0;
 
     READ_EPILOGUE
 }
@@ -1359,13 +1339,23 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
     uint countNumber = 0;
     STRING_TO_INT(count, countNumber, "styleSheet/borders@count")
     m_context->styles->borderStyles.resize(countNumber);
-    m_borderStyleIndex = 0;
+    uint borderStyleIndex = 0;
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(border)
+            if (QUALIFIED_NAME_IS(border)) {
+                m_currentBorderStyle = new KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+                if (borderStyleIndex >= (uint)m_context->styles->borderStyles.size()) {
+                    raiseError(i18n("Declared number of fill styles too small (%1)", m_context->styles->borderStyles.size()));
+                    return KoFilter::WrongFormat;
+                }
+                TRY_READ(border)
+                m_context->styles->borderStyles[borderStyleIndex] = m_currentBorderStyle;
+                m_currentBorderStyle = 0;
+                borderStyleIndex++;
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -1379,20 +1369,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
 KoFilter::ConversionStatus XlsxXmlStylesReader::read_border()
 {
     READ_PROLOGUE
-    if (m_borderStyleIndex >= (uint)m_context->styles->borderStyles.size()) {
-        raiseError(i18n("Declared number of border styles too small (%1)", m_context->styles->borderStyles.size()));
-        return KoFilter::WrongFormat;
-    }
-
-    kDebug() << "border #" << m_borderStyleIndex;
-    m_currentBorderStyle = new XlsxBorderStyles;
-    MSOOXML::Utils::AutoPtrSetter<XlsxBorderStyles> currentBorderStyleSetter(m_currentBorderStyle);
+    diagonalDirections = 0;
 
     if (readBooleanAttr("diagonalUp")) {
-        m_currentBorderStyle->diagonalDirections |= XlsxBorderStyles::DiagonalUp;
+        diagonalDirections |= XlsxXmlStylesReader::DiagonalUp;
     }
     if (readBooleanAttr("diagonalDown")) {
-        m_currentBorderStyle->diagonalDirections |= XlsxBorderStyles::DiagonalDown;
+        diagonalDirections |= XlsxXmlStylesReader::DiagonalDown;
     }
 
     while (!atEnd()) {
@@ -1407,15 +1390,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_border()
 //! @todo            ELSE_TRY_READ_IF(start)
             ELSE_TRY_READ_IF(right)
             ELSE_TRY_READ_IF(top)
+            SKIP_UNKNOWN
 //! @todo (dxf only)            ELSE_TRY_READ_IF(vertical)
 //todo            ELSE_WRONG_FORMAT
         }
     }
-
-    currentBorderStyleSetter.release();
-    m_context->styles->borderStyles[m_borderStyleIndex] = m_currentBorderStyle;
-    m_currentBorderStyle = 0;
-    m_borderStyleIndex++;
 
     READ_EPILOGUE
 }
@@ -1429,7 +1408,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bottom()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->bottom))
+    QString borderString;
+    RETURN_IF_ERROR(readAttributes(attrs, borderString))
 
     m_currentColor = QColor();
 
@@ -1443,7 +1423,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bottom()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentBorderStyle->bottom += " " + m_currentColor.name();
+        borderString += " " + m_currentColor.name();
+    }
+
+    if (!borderString.isEmpty()) {
+        m_currentBorderStyle->addProperty("fo:border-bottom", borderString);
     }
 
     READ_EPILOGUE
@@ -1457,7 +1441,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_top()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->top))
+
+    QString borderString;
+    RETURN_IF_ERROR(readAttributes(attrs, borderString))
 
     m_currentColor = QColor();
 
@@ -1471,7 +1457,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_top()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentBorderStyle->top += " " + m_currentColor.name();
+        borderString += " " + m_currentColor.name();
+    }
+
+    if (!borderString.isEmpty()) {
+        m_currentBorderStyle->addProperty("fo:border-top", borderString);
     }
 
     READ_EPILOGUE
@@ -1485,7 +1475,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_left()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->left))
+    QString borderString;
+    RETURN_IF_ERROR(readAttributes(attrs, borderString))
 
     m_currentColor = QColor();
 
@@ -1499,7 +1490,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_left()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentBorderStyle->left += " " + m_currentColor.name();
+        borderString += " " + m_currentColor.name();
+    }
+
+    if (!borderString.isEmpty()) {
+        m_currentBorderStyle->addProperty("fo:border-left", borderString);
     }
 
     READ_EPILOGUE
@@ -1513,7 +1508,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_right()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->right))
+    QString borderString;
+    RETURN_IF_ERROR(readAttributes(attrs, borderString))
 
     m_currentColor = QColor();
 
@@ -1527,7 +1523,11 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_right()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentBorderStyle->right += " " + m_currentColor.name();
+        borderString += " " + m_currentColor.name();
+    }
+
+    if (!borderString.isEmpty()) {
+        m_currentBorderStyle->addProperty("fo:border-right", borderString);
     }
 
     READ_EPILOGUE
@@ -1541,7 +1541,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    RETURN_IF_ERROR(m_currentBorderStyle->readAttributes(attrs, m_currentBorderStyle->diagonal))
+    QString borderString;
+    RETURN_IF_ERROR(readAttributes(attrs, borderString))
 
     m_currentColor = QColor();
 
@@ -1555,7 +1556,16 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentBorderStyle->diagonal += " " + m_currentColor.name();
+        borderString += " " + m_currentColor.name();
+    }
+
+    if (!borderString.isEmpty()) {
+       if (diagonalDirections & DiagonalUp) {
+            m_currentBorderStyle->addProperty("style:diagonal-bl-tr", borderString);
+        }
+        if (diagonalDirections & DiagonalDown) {
+            m_currentBorderStyle->addProperty("style:diagonal-tl-br", borderString);
+        }
     }
 
     READ_EPILOGUE
