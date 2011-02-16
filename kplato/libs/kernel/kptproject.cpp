@@ -305,7 +305,7 @@ void Project::calculate()
             cs->duration = cs->endTime - cs->startTime;
             cs->logInfo( i18n( "Scheduled finish: %1", locale->formatDateTime( cs->endTime ) ), 3 );
             if ( cs->endTime > m_constraintEndTime ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->logError( i18n( "Could not finish project in time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
             } else if ( cs->endTime == m_constraintEndTime ) {
                 cs->logWarning( i18n( "Finished project exactly on time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
@@ -341,13 +341,13 @@ void Project::calculate()
                 }
             }
             if ( cs->endTime > m_constraintEndTime ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->logError( i18n( "Failed to finish project within target time" ), 3 );
             }
             cs->duration = cs->endTime - cs->startTime;
             cs->logInfo( i18n( "Scheduled start: %1, target time: %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( m_constraintStartTime) ), 3 );
             if ( cs->startTime < m_constraintStartTime ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->logError( i18n( "Must start project early in order to finish in time: %1", locale->formatDateTime( m_constraintStartTime) ), 3 );
             } else if ( cs->startTime == m_constraintStartTime ) {
                 cs->logWarning( i18n( "Start project exactly on time: %1", locale->formatDateTime( m_constraintStartTime ) ), 3 );

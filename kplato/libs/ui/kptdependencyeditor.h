@@ -221,12 +221,15 @@ public:
     bool isEditable() const { return m_editable; }
     void setEditable( bool on ) { m_editable = on; }
 
+    qreal treeIndicatorX() const;
+    void setTreeIndicator( bool on );
+
 protected:
     void moveToY( qreal y );
     void moveToX( qreal x );
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget );
-    
+
 private:
     Node *m_node;
     DependencyConnectorItem *m_start;
@@ -245,6 +248,8 @@ private:
     QList<DependencyLinkItem*> m_childrelations;
 
     bool m_editable;
+
+    QGraphicsPathItem *m_treeIndicator;
 };
 
 //-----------------------
@@ -262,10 +267,9 @@ public:
     bool isEditable() const { return m_editable; }
     void setEditable( bool on ) { m_editable = on; }
 
-    DependencyScene *itemScene() const;
-
-protected:
-    void paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget );
+    using QGraphicsPathItem::paint;
+    /// Special paint method as the default cannot be used
+    void paint( Project *p, QPainter *painter, const QStyleOptionGraphicsItem *option );
 
 private:
     GanttItemDelegate m_delegate;

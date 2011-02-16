@@ -1584,14 +1584,14 @@ QVariant NodeModel::schedulingConstraintsError( const Node *node, int role ) con
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->constraintError( id() ) ) {
                 return i18n( "Error" );
             }
             break;
         case Qt::EditRole:
-            return node->schedulingError( id() );
+            return node->constraintError( id() );
         case Qt::ToolTipRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->constraintError( id() ) ) {
                 return i18nc( "@info:tooltip", "Failed to comply with a timing constraint" );
             }
             break;
@@ -1624,7 +1624,7 @@ QVariant NodeModel::nodeIsNotScheduled( const Node *node, int role ) const
         case Qt::EditRole:
             return node->notScheduled( id() );
         case Qt::ToolTipRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->notScheduled( id() ) ) {
                 return i18nc( "@info:tooltip", "This task has not been scheduled" );
             }
             break;
@@ -1657,8 +1657,41 @@ QVariant NodeModel::effortNotMet( const Node *node, int role ) const
         case Qt::EditRole:
             return node->effortMetError( id() );
         case Qt::ToolTipRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->effortMetError( id() ) ) {
                 return i18nc( "@info:tooltip", "The assigned resources cannot deliver the required estimated effort" );
+            }
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::schedulingError( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            if ( node->schedulingError( id() ) ) {
+                return i18n( "Error" );
+            }
+            break;
+        case Qt::EditRole:
+            return node->schedulingError( id() );
+        case Qt::ToolTipRole:
+            if ( node->schedulingError( id() ) ) {
+                return i18nc( "@info:tooltip", "Scheduling error" );
             }
             break;
         case Qt::StatusTipRole:
@@ -1983,6 +2016,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeResourceUnavailable: result = resourceIsNotAvailable( n, role ); break;
         case NodeConstraintsError: result = schedulingConstraintsError( n, role ); break;
         case NodeEffortNotMet: result = effortNotMet( n, role ); break;
+        case NodeSchedulingError: result = schedulingError( n, role ); break;
 
         case NodeWBSCode: result = wbsCode( n, role ); break;
         case NodeLevel: result = nodeLevel( n, role ); break;
@@ -2093,6 +2127,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeResourceUnavailable: return i18nc( "@title:column", "Resource Unavailable" );
             case NodeConstraintsError: return i18nc( "@title:column", "Constraints Error" );
             case NodeEffortNotMet: return i18nc( "@title:column", "Effort Not Met" );
+            case NodeSchedulingError: return i18nc( "@title:column", "Scheduling Error" );
 
             case NodeWBSCode: return i18nc( "@title:column", "WBS Code" );
             case NodeLevel: return i18nc( "@title:column Node level", "Level" );
@@ -2183,6 +2218,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeResourceUnavailable: return ToolTip::nodeResourceUnavailable();
             case NodeConstraintsError: return ToolTip::nodeConstraintsError();
             case NodeEffortNotMet: return ToolTip::nodeEffortNotMet();
+            case NodeSchedulingError: return ToolTip::nodeSchedulingError();
 
             case NodeWBSCode: return ToolTip::nodeWBS();
             case NodeLevel: return ToolTip::nodeLevel();

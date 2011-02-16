@@ -100,6 +100,7 @@ namespace KPlato
     QString ToolTip::nodeResourceUnavailable() { return i18nc( "@info:tooltip", "A resource assigned to this task is not available" ); }
     QString ToolTip::nodeConstraintsError() { return i18nc( "@info:tooltip", "A timing constraint could not be met" ); }
     QString ToolTip::nodeEffortNotMet() { return i18nc( "@info:tooltip", "The assigned resource could not meet the estimated effort" ); }
+    QString ToolTip::nodeSchedulingError() { return i18nc( "@info:tooltip", "A scheduling error occured" ); }
 
     QString ToolTip::nodeBCWS() { return i18nc( "@info:tooltip", "Budgeted Cost of Work Scheduled" ); }
     QString ToolTip::nodeBCWP() { return i18nc( "@info:tooltip", "Budgeted Cost of Work Performed" ); }

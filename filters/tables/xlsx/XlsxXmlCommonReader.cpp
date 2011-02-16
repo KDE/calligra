@@ -199,6 +199,8 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
     READ_PROLOGUE
     m_currentTextStyleProperties = new KoCharacterStyle;
 
+    m_currentColor = QColor();
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -214,6 +216,10 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
+    }
+
+    if (m_currentColor.isValid()) {
+        m_currentTextStyleProperties->setForeground(QBrush(m_currentColor));
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
@@ -461,16 +467,14 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_color()
     TRY_READ_ATTR_WITHOUT_NS(theme)
     TRY_READ_ATTR_WITHOUT_NS(tint)
 
-    QColor currentColor;
-
     if (!indexed.isEmpty()) {
         int index = indexed.toInt();
         if (index >= 0 && index < 64) {
-            currentColor = QString("#%1").arg(m_colorIndices.at(index));
+            m_currentColor = QString("#%1").arg(m_colorIndices.at(index));
         }
     }
     if (!rgb.isEmpty()) {
-        currentColor = QString("#" + rgb.right(rgb.length()-2));
+        m_currentColor = QString("#" + rgb.right(rgb.length()-2));
     }
     if (!theme.isEmpty()) {
         // Xlsx seems to switch these indices
@@ -488,15 +492,11 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_color()
         }
         MSOOXML::DrawingMLColorSchemeItemBase *colorItemBase = m_themes->colorScheme.value(theme);
         if (colorItemBase) {
-            currentColor = colorItemBase->value();
+            m_currentColor = colorItemBase->value();
         }
     }
     if (!tint.isEmpty()) {
-        currentColor = tintedColor(currentColor, tint.toDouble());
-    }
-
-    if (currentColor.isValid()) {
-        m_currentTextStyleProperties->setForeground(QBrush(currentColor));
+        m_currentColor = tintedColor(m_currentColor, tint.toDouble());
     }
 
     readNext();
