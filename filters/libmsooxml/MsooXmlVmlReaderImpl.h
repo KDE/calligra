@@ -77,8 +77,8 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString position(m_vmlStyle.value("position"));
     const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
     const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
+    QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
+    QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
     const QString ver_align(m_vmlStyle.value("v-text-anchor"));
 
     qreal x_position = 0;
@@ -180,6 +180,42 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:textarea-vertical-align", ver_align);
     }
 
+    if (!hor_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (!ver_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
+    if (!hor_pos_rel.isEmpty()) {
+        if (hor_pos_rel == "outer-margin-area" || hor_pos_rel == "left-margin-area") {
+            hor_pos_rel = "page-start-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        else if (hor_pos_rel == "margin") {
+            hor_pos_rel = "paragraph-start-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        else if (hor_pos_rel == "inner-margin-area" || hor_pos_rel == "right-margin-area") {
+            hor_pos_rel = "page-end-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+    }
+    if (!ver_pos_rel.isEmpty()) {
+        if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
+            ver_pos_rel = "page-content";
+        }
+        else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" || ver_pos_rel == "outer-margin-area") {
+            ver_pos_rel = "page";
+        }
+        else if (ver_pos_rel == "bottom-margin-area") {
+            ver_pos_rel = "page";
+            // This effectively emulates the bottom-margin-area
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        }
+        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+    }
+
 #ifdef DOCXXMLDOCREADER_H
     bool asChar = false;
     if (!m_wrapRead) {
@@ -217,20 +253,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
     }
 #endif
-
-
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
-    }
 
     m_currentPen.setWidthF(m_strokeWidth);
     m_currentPen.setColor(QColor(m_strokeColor));
@@ -441,6 +463,51 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
 #undef CURRENT_EL
 #define CURRENT_EL group
 //! Vml group handler
+/*
+ Parent elements:
+ - background (Part 1, §17.2.1);
+ - group (§14.1.2.7);
+ - object (Part 1, §17.3.3.19);
+ - [done] pict (§9.2.2.2);
+ - [done] pict (§9.5.1)
+
+ Child elements:
+ - anchorlock (Anchor Location Is Locked) §14.3.2.1
+ - arc (Arc Segment) §14.1.2.1
+ - borderbottom (Bottom Border) §14.3.2.2
+ - borderleft (Left Border) §14.3.2.3
+ - borderright (Right Border) §14.3.2.4
+ - bordertop (Top Border) §14.3.2.5
+ - callout (Callout) §14.2.2.2
+ - ClientData (Attached Object Data) §14.4.2.12
+ - clippath (Shape Clipping Path) §14.2.2.3
+ - curve (Bezier Curve) §14.1.2.3
+ - diagram (VML Diagram) §14.2.2.8
+ - extrusion (3D Extrusion) §14.2.2.11
+ - fill (Shape Fill Properties) §14.1.2.5
+ - formulas (Set of Formulas) §14.1.2.6
+ - group (Shape Group) §14.1.2.7
+ - handles (Set of Handles) §14.1.2.9
+ - image (Image File) §14.1.2.10
+ - imagedata (Image Data) §14.1.2.11
+ - line (Line) §14.1.2.12
+ - lock (Shape Protections) §14.2.2.18
+ - oval (Oval) §14.1.2.13
+ - path (Shape Path) §14.1.2.14
+ - polyline (Multiple Path Line) §14.1.2.15
+ - [done] rect (Rectangle) §14.1.2.16
+ - [done] roundrect (Rounded Rectangle) §14.1.2.17
+ - shadow (Shadow Effect) §14.1.2.18
+ - [done] shape (Shape Definition) §14.1.2.19
+ - [done] shapetype (Shape Template) §14.1.2.20
+ - signatureline (Digital Signature Line) §14.2.2.30
+ - skew (Skew Transform) §14.2.2.31
+ - stroke (Line Stroke Settings) §14.1.2.21
+ - textbox (Text Box) §14.1.2.22
+ - textdata (VML Diagram Text) §14.5.2.2
+ - textpath (Text Layout Path) §14.1.2.23
+ - wrap (Text Wrapping) §14.3.2.6
+*/
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 {
     READ_PROLOGUE
@@ -1649,7 +1716,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     }
     else { // margin
         m_anchorType = "paragraph";
-        m_currentDrawStyle->addProperty("text:anchor-type", "paragraph");
         m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
     }
 
