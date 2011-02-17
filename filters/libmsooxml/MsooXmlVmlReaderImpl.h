@@ -232,6 +232,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
     }
 
+    m_currentPen.setWidthF(m_strokeWidth);
+    m_currentPen.setColor(QColor(m_strokeColor));
+    m_currentPen.setJoinStyle(Qt::MiterJoin);
+
+    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
         if (m_moveToStylesXml) {
@@ -332,13 +338,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
 
     m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
 
     if (!strokeweight.isEmpty()) {
         m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
     }
-
-    m_shapeColor.clear();
-    m_strokeColor.clear();
 
     if (!fillcolor.isEmpty()) {
         m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
@@ -404,8 +411,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentPen = QPen();
-
     TRY_READ_ATTR_WITHOUT_NS(endcap)
     Qt::PenCapStyle penCap = m_currentPen.capStyle();
     if (endcap.isEmpty() || endcap == "sq") {
@@ -418,10 +423,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
         penCap = Qt::FlatCap;
     }
     m_currentPen.setCapStyle(penCap);
-    m_currentPen.setWidthF(m_strokeWidth);
-    m_currentPen.setColor(QColor(m_strokeColor));
 
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    TRY_READ_ATTR_WITHOUT_NS(dashstyle)
+    if (!dashstyle.isEmpty()) {
+        if (dashstyle == "1 1") {
+            m_currentPen.setStyle(Qt::DashLine);
+        }
+        else if (dashstyle == "dashDot") {
+            m_currentPen.setStyle(Qt::DashDotLine);
+        }
+    }
 
     readNext();
     READ_EPILOGUE
@@ -532,6 +543,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     RETURN_IF_ERROR(parseCSS(style))
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+
+    m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
+    }
+
+    if (!fillcolor.isEmpty()) {
+        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    if (!strokecolor.isEmpty()) {
+        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+    }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -1365,19 +1398,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
+    TRY_READ_ATTR_WITHOUT_NS(type)
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-    TRY_READ_ATTR_WITHOUT_NS(type)
 
     m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
 
     if (!strokeweight.isEmpty()) {
         m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
     }
-
-    m_shapeColor.clear();
-    m_strokeColor.clear();
 
     if (!fillcolor.isEmpty()) {
         m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
