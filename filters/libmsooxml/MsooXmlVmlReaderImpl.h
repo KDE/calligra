@@ -75,8 +75,8 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString leftPos(m_vmlStyle.value("left"));
     QString topPos(m_vmlStyle.value("top"));
     QString position(m_vmlStyle.value("position"));
-    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
+    QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
+    QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
     QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
     QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
     const QString ver_align(m_vmlStyle.value("v-text-anchor"));
@@ -181,9 +181,15 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 
     if (!hor_pos.isEmpty()) {
+        if (hor_pos == "absolute") {
+            hor_pos = "from-left";
+        }
         m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
     }
     if (!ver_pos.isEmpty()) {
+        if (ver_pos == "absolute") {
+            ver_pos = "from-top";
+        }
         m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
     }
     if (!hor_pos_rel.isEmpty()) {
@@ -226,8 +232,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
         else {
             body->addAttribute("text:anchor-type", "char");
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+            if (m_currentDrawStyle->property("style:vertical-rel").isEmpty()) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            }
+            if (m_currentDrawStyle->property("style:horizontal-rel").isEmpty()) {
+                m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+            }
 
             if (m_vmlStyle.contains("z-index")) {
                 m_currentDrawStyle->addProperty("style:wrap", "run-through");
@@ -249,8 +259,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     if (!asChar) {
         // These seem to be decent defaults
-        m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
-        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+        if (m_currentDrawStyle->property("style:horizontal-pos").isEmpty()) {
+            m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        }
+        if (m_currentDrawStyle->property("style:vertical-pos").isEmpty()) {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+        }
     }
 #endif
 
