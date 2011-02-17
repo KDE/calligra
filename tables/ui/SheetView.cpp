@@ -26,12 +26,16 @@
 #ifdef CALLIGRA_TABLES_MT
 #include <QMutex>
 #include <QMutexLocker>
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
 #endif
 
 #include <KoViewConverter.h>
 
 #include "CellView.h"
 #include "calligra_tables_limits.h"
+#include "RectStorage.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
@@ -70,6 +74,10 @@ public:
     CellView* defaultCellView;
     // The maximum accessed cell range used for the scrollbar ranges.
     QSize accessedCellRange;
+    FusionStorage* obscuredInfo;
+#ifdef CALLIGRA_TABLES_MT
+    QReadWriteLock obscuredLock;
+#endif
 
 public:
     Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells, const QRect& visRect);
@@ -119,19 +127,20 @@ const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coord
 {
     const int col = cell.column();
     const int row = cell.row();
+    const QPoint cellPos = cell.cellPosition();
 #ifdef CALLIGRA_TABLES_MT
     CellView cellView = sheetView->cellView(col, row);
 #else
     const CellView& cellView = sheetView->cellView(col, row);
 #endif
-    if (cellView.isObscured()) {
+    if (sheetView->isObscured(cellPos)) {
         // if the rect of visible cells contains the obscuring cell, it was already painted
-        if (visRect.contains(cellView.obscuringCell())) {
+        if (visRect.contains(sheetView->obscuringCell(cellPos))) {
             coordinate.setY(coordinate.y() + sheet->rowFormats()->rowHeight(row));
             cell = Cell();
             return cellView; // next row
         }
-        cell = Cell(sheet, cellView.obscuringCell());
+        cell = Cell(sheet, sheetView->obscuringCell(cellPos));
         if (processedObscuredCells.contains(cell)) {
             coordinate.setY(coordinate.y() + sheet->rowFormats()->rowHeight(row));
             cell = Cell();
@@ -160,11 +169,13 @@ SheetView::SheetView(const Sheet* sheet)
     d->cache.setMaxCost(10000);
     d->defaultCellView = createDefaultCellView();
     d->accessedCellRange =  sheet->usedArea().size().expandedTo(QSize(256, 256));
+    d->obscuredInfo = new FusionStorage(sheet->map());
 }
 
 SheetView::~SheetView()
 {
     delete d->defaultCellView;
+    delete d->obscuredInfo;
     delete d;
 }
 
@@ -442,43 +453,115 @@ void SheetView::invalidateRange(const QRect& range)
 #ifdef CALLIGRA_TABLES_MT
     QMutexLocker ml(&d->cacheMutex);
 #endif
+    QRegion obscuredRegion;
     const int right  = range.right();
     for (int col = range.left(); col <= right; ++col) {
         const int bottom = range.bottom();
         for (int row = range.top(); row <= bottom; ++row) {
-            if (!d->cache.contains(QPoint(col, row)))
+            const QPoint p(col, row);
+            if (!d->cache.contains(p))
                 continue;
-            const CellView& cellView = this->cellView(col, row);
-            if (cellView.obscuresCells()) {
-                // First, delete the obscuring CellView; otherwise: recursion.
-                d->cache.remove(QPoint(col, row));
-                // Remove the obscured range.
-                invalidateRange(QRect(range.topLeft(), cellView.obscuredRange() + QSize(1, 1)));
-                continue; // already removed from cache
-            } else if (cellView.isObscured())
-                if (!range.contains(cellView.obscuringCell()))
-                    invalidateRange(QRect(cellView.obscuringCell(), QSize(1, 1)));
-            d->cache.remove(QPoint(col, row));
+            if (obscuresCells(p) || isObscured(p)) {
+                obscuredRegion += obscuredArea(p);
+                obscureCells(p, 0, 0);
+            }
+            d->cache.remove(p);
         }
     }
     d->cachedArea -= range;
+    obscuredRegion &= d->cachedArea;
+    foreach (const QRect& rect, obscuredRegion.rects()) {
+        invalidateRange(rect);
+    }
 }
 
-void SheetView::obscureCells(const QRect& range, const QPoint& position)
+void SheetView::obscureCells(const QPoint &position, int numXCells, int numYCells)
 {
 #ifdef CALLIGRA_TABLES_MT
-    QMutexLocker ml(&d->cacheMutex);
+    QWriteLocker(&d->obscuredLock);
 #endif
-    const int right = range.right();
-    const int bottom = range.bottom();
-    for (int col = range.left(); col <= right; ++col) {
-        for (int row = range.top(); row <= bottom; ++row) {
-            // create the CellView, but do not use the returned CellView. It is shared!
-            cellView(col, row);
-            // alter the CellView directly instead
-            d->cache.object(QPoint(col, row))->obscure(position.x(), position.y());
-        }
-    }
+    // Start by un-obscuring cells that we might be obscuring right now
+    const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(position);
+    if (!pair.first.isNull())
+        d->obscuredInfo->insert(Region(pair.first.toRect()), false);
+    // Obscure the cells
+    if (numXCells != 0 || numYCells != 0)
+        d->obscuredInfo->insert(Region(position.x(), position.y(), numXCells + 1, numYCells + 1), true);
+}
+
+QPoint SheetView::obscuringCell(const QPoint &obscuredCell) const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->obscuredLock);
+#endif
+    const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(obscuredCell);
+    if (pair.first.isNull())
+        return obscuredCell;
+    if (pair.second == false)
+        return obscuredCell;
+    return pair.first.toRect().topLeft();
+}
+
+QSize SheetView::obscuredRange(const QPoint &obscuringCell) const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->obscuredLock);
+#endif
+    const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(obscuringCell);
+    if (pair.first.isNull())
+        return QSize(0, 0);
+    if (pair.second == false)
+        return QSize(0, 0);
+    // Not the master cell?
+    if (pair.first.toRect().topLeft() != obscuringCell)
+        return QSize(0, 0);
+    return pair.first.toRect().size() - QSize(1, 1);
+}
+
+QRect SheetView::obscuredArea(const QPoint &cell) const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->obscuredLock);
+#endif
+    const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(cell);
+    if (pair.first.isNull())
+        return QRect(cell, QSize(1, 1));
+    if (pair.second == false)
+        return QRect(cell, QSize(1, 1));
+    // Not the master cell?
+    return pair.first.toRect();
+}
+
+bool SheetView::isObscured(const QPoint &cell) const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->obscuredLock);
+#endif
+    const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(cell);
+    if (pair.first.isNull())
+        return false;
+    if (pair.second == false)
+        return false;
+    // master cell?
+    if (pair.first.toRect().topLeft() == cell)
+        return false;
+    return true;
+}
+
+bool SheetView::obscuresCells(const QPoint &cell) const
+{
+#ifdef CALLIGRA_TABLES_MT
+    QReadLocker(&d->obscuredLock);
+#endif
+    const QPair<QRectF, bool> pair = d->obscuredInfo->containedPair(cell);
+    if (pair.first.isNull())
+        return false;
+    if (pair.second == false)
+        return false;
+    // master cell?
+    if (pair.first.toRect().topLeft() != cell)
+        return false;
+    return true;
 }
 
 #ifdef CALLIGRA_TABLES_MT

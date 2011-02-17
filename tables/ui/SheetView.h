@@ -104,7 +104,7 @@ public:
     /**
      * Invalidates all cached CellViews in \p region .
      */
-    virtual void invalidateRegion(const Region& region);
+    void invalidateRegion(const Region& region);
 
     /**
      * Invalidates all CellViews, the cached and the default.
@@ -116,6 +116,12 @@ public:
      */
     virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas = 0, const QRect& visibleRect = QRect());
 
+    QPoint obscuringCell(const QPoint& obscuredCell) const;
+    QSize obscuredRange(const QPoint& obscuringCell) const;
+    QRect obscuredArea(const QPoint& cell) const;
+    bool isObscured(const QPoint& cell) const;
+    bool obscuresCells(const QPoint& cell) const;
+
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
 
@@ -126,19 +132,19 @@ protected:
     virtual CellView* createDefaultCellView();
     virtual CellView* createCellView(int col, int row);
     QRect paintCellRange() const;
-private:
+protected:
     /**
      * Helper method for invalidateRegion().
      * Invalidates all cached CellViews in \p range .
      * \internal
      */
-    void invalidateRange(const QRect& range);
+    virtual void invalidateRange(const QRect& range);
 
     /**
      * Marks other CellViews in \p range as obscured by the CellView at \p position .
      * Used by CellView.
      */
-    void obscureCells(const QRect& range, const QPoint& position);
+    void obscureCells(const QPoint& position, int numXCells, int numYCells);
 
     /**
      * Returns the default CellView.
@@ -150,6 +156,7 @@ private:
     const CellView& defaultCellView() const;
 #endif
 
+private:
     Q_DISABLE_COPY(SheetView)
 
     class Private;

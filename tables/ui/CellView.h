@@ -151,17 +151,6 @@ public:
 
     bool hitTestFilterButton(const Cell& cell, const QRect& cellRect, const QPoint& position) const;
 
-    /**
-     * \return the size of the obscured cell range
-     * \note Used by SheetView to destroy the obscured CellViews.
-     */
-    QSize obscuredRange() const;
-
-    QPoint obscuringCell() const;
-
-    bool isObscured() const;
-    bool obscuresCells() const;
-
     qreal cellHeight() const;
     qreal cellWidth() const;
 
@@ -306,15 +295,6 @@ protected:
      */
     void paintFilterButton(QPainter& painter, const QPointF& coordinate,
                            const Cell& cell, SheetView* sheetView) const;
-
-    /**
-     * Tells this view that the Cell at \p col , \p row obscures this one.
-     * If this view is destructed, the SheetView deletes the obscuring CellView.
-     * If the obscuring CellView is destructed, the SheetView deletes this view.
-     * \note obscuring is not the same as merging
-     * \internal
-     */
-    void obscure(int col, int row);
 
     void drawText(QPainter& painter, const QPointF& location, const QStringList& textLines,
                   const Cell& cell, qreal lineSpacing = 0) const;
