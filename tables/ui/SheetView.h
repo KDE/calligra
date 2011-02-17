@@ -89,8 +89,10 @@ public:
      */
 #ifdef CALLIGRA_TABLES_MT
     CellView cellView(int col, int row);
+    CellView cellView(const QPoint& pos);
 #else
     const CellView& cellView(int col, int row);
+    const CellView& cellView(const QPoint& pos);
 #endif
 
     /**

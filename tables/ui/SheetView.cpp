@@ -186,6 +186,15 @@ const KoViewConverter* SheetView::viewConverter() const
 }
 
 #ifdef CALLIGRA_TABLES_MT
+CellView SheetView::cellView(const QPoint& pos)
+#else
+const CellView& SheetView::cellView(const QPoint& pos)
+#endif
+{
+    return cellView(pos.x(), pos.y());
+}
+
+#ifdef CALLIGRA_TABLES_MT
 CellView SheetView::cellView(int col, int row)
 #else
 const CellView& SheetView::cellView(int col, int row)
@@ -353,6 +362,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
     // 3. Paint the default borders
     coordinate = startCoordinate;
+    processedMergedCells.clear();
     for (int col = visRect.left(); col <= visRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
@@ -366,6 +376,17 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             }
             // For borders even cells, that are merged in, need to be traversed.
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
+            // but: also the master cell of a merged cell always needs to be processed
+            const QPointF savedCoordinate = coordinate;
+            Cell cell = d->cellToProcess(col, row, coordinate, processedMergedCells, visRect);
+            if (!!cell && (cell.column() != col || cell.row() != row)) {
+                const CellView cellView = this->cellView(cell.cellPosition());
+                cellView.paintDefaultBorders(painter, clipRect, paintRect, coordinate,
+                                             CellView::LeftBorder | CellView::RightBorder |
+                                             CellView::TopBorder | CellView::BottomBorder,
+                                             visRect, cell, this);
+            }
+            coordinate = savedCoordinate;
             const CellView cellView = this->cellView(col, row);
             cellView.paintDefaultBorders(painter, clipRect, paintRect, coordinate,
                                          CellView::LeftBorder | CellView::RightBorder |
@@ -380,6 +401,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
     // 4. Paint the custom borders, diagonal lines and page borders
     coordinate = startCoordinate;
+    processedMergedCells.clear();
     for (int col = visRect.left(); col <= visRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
@@ -393,6 +415,16 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             }
             // For borders even cells, that are merged in, need to be traversed.
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
+            // but: also the master cell of a merged cell always needs to be processed
+            const QPointF savedCoordinate = coordinate;
+            Cell cell = d->cellToProcess(col, row, coordinate, processedMergedCells, visRect);
+            if (!!cell && (cell.column() != col || cell.row() != row)) {
+                const CellView cellView = this->cellView(cell.cellPosition());
+                cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
+                                          visRect,
+                                          cell, this);
+            }
+            coordinate = savedCoordinate;
             const CellView cellView = this->cellView(col, row);
             cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
                                       visRect,
