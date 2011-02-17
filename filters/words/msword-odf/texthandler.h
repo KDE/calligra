@@ -245,7 +245,7 @@ private:
         //IF = 0x07,
         //INDEX = 0x08,
         //STYLEREF = 0x0a,
-        //SEQ = 0x0c,
+        SEQ = 0x0c,
         TOC = 0x0d,
         //INFO = 0x0e,
         TITLE = 0x0f,
