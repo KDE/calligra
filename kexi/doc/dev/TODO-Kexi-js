@@ -9,9 +9,6 @@
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
-TODO: rename KexiBrowser to KexiProjectListView
-TODO: rename KexiBrowserItem to KexiProjectListViewItem
-
 TODO: Kexi can use database as only medium for storing _all_ project's data
 	and then can treat .kexi files as:
 	 -just export/import format for Kexi projects
@@ -19,9 +16,6 @@ TODO: Kexi can use database as only medium for storing _all_ project's data
 	 -simply: shortcut to project stored in database
 
 HINT: DO NOT USE signals/slots for lowlevel data manipulation (e.g. loading data for tableviews)!
-
-TODO: add kexiinclude_HEADERS and kexiincludedir to Makefile.ams to install headers, see:
-http://developer.kde.org/documentation/other/makefile_am_howto.html
 
 TODO: after kexi main window is activated again (from minimized state), 
      always 1st opened subwindow is activated
@@ -162,7 +156,7 @@ MOST RECENT TODO:
 - saveas== saving another shortcut to a project if it is server-based [difficulty: 2]
 
 TODO: improve security for password information in .kexis files
-TODO: for .kexis files' conenction data - if password attr. is not present - ask for password
+TODO: for .kexis files' connection data - if password attr. is not present - ask for password
 IDEA: integrate password information in .kexis files with KWallet
 
 
@@ -172,13 +166,6 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - ODBC driver (hello mattr!)
 - Access -> Kexi migration tool (done)
 - scripting
-
-=== Kexi Parts TODO ===
-- kexipart.h: add KexiPart::AboutData : public KAboutData
-  and 
-  #define KEXIPART_EXPORT_COMPONENT_FACTORY( libname, partClass, aboutData ) \
-K_EXPORT_PLUGIN(KGenericFactory<partClass>(aboutData)
-- add gui for viewing full part information
 
 === General TODO ===
 - avoid using veryvery long names for objects
@@ -236,7 +223,7 @@ I am using update_kexi_po to recreate kexi.po file. THis will run cd koffice/ &&
 - (forms combo) repaint (remove focus rectangle) when other widget is focused using a mouse click
 
 === Table View TODO ====
-- do not accept when enterind "-" for unsigned numeric types
+- do not accept when entering "-" for unsigned numeric types
 - add a functions for moving/cutting/copying/pasting rows
 - extended support for enums (combo boxes)
 - add top-left button that allow select all rows
