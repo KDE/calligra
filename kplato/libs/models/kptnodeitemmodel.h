@@ -222,7 +222,7 @@ public:
     QVariant schedulingConstraintsError( const Node *node, int role ) const;
     /// Resources could not fullfil estimate
     QVariant effortNotMet( const Node *node, int role ) const;
-    /// Other scheduling error occured
+    /// Other scheduling error occurred
     QVariant schedulingError( const Node *node, int role ) const;
 
     QVariant wbsCode( const Node *node, int role ) const;

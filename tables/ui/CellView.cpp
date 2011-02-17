@@ -99,7 +99,6 @@ public:
             , shrinkToFitFontSize(0.0)
             , hidden(false)
             , merged(false)
-            , obscured(false)
             , fittingHeight(true)
             , fittingWidth(true)
             , filterButton(false)
@@ -129,20 +128,13 @@ public:
 
     bool hidden         : 1;
     bool merged         : 1;
-    bool obscured       : 1;
     bool fittingHeight  : 1;
     bool fittingWidth   : 1;
     bool filterButton   : 1;
     // NOTE Stefan: A cell is either obscured by an other one or obscures others itself.
     //              But never both at the same time, so we can share the memory for this.
-    union {
-        int obscuringCellX : 16; // KS_colMax
-        int obscuredCellsX : 16; // KS_colMax
-    };
-    union {
-        int obscuringCellY : 16; // KS_rowMax
-        int obscuredCellsY : 16; // KS_rowMax
-    };
+    int obscuredCellsX : 16; // KS_colMax
+    int obscuredCellsY : 24; // KS_rowMax
 
     // This is the text we want to display. Not necessarily the same
     // as the user input, e.g. Cell::userInput()="1" and displayText="1.00".
@@ -333,9 +325,10 @@ QRectF CellView::textRect() const
 
 QString CellView::testAnchor(SheetView* sheetView, const Cell& cell, qreal x, qreal y) const
 {
-    if (isObscured()) {
+    if (sheetView->isObscured(cell.cellPosition())) {
+        QPoint obscuringCell = sheetView->obscuringCell(cell.cellPosition());
         Sheet* sheet = cell.sheet();
-        Cell otherCell = Cell(sheet, d->obscuringCellX, d->obscuringCellY);
+        Cell otherCell = Cell(sheet, obscuringCell.x(), obscuringCell.y());
         const CellView& otherView = sheetView->cellView(otherCell.column(), otherCell.row());
         if (cell.column() != otherCell.column()) x += sheet->columnPosition(cell.column()) - sheet->columnPosition(otherCell.column());
         if (cell.row() != otherCell.row()) y += sheet->rowPosition(cell.row()) - sheet->rowPosition(otherCell.row());
@@ -387,7 +380,7 @@ void CellView::paintCellContents(const QRectF& /*paintRect*/, QPainter& painter,
         return;
     if (d->merged)
         return;
-    if (d->obscured)
+    if (sheetView->isObscured(cell.cellPosition()))
         return;
 
     // ----------------  Start the actual painting.  ----------------
@@ -674,11 +667,11 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
     }
 
     // Check obscuring...
-    if (isObscured()) {
+    if (sheetView->isObscured(cell.cellPosition())) {
         // by default: none ...
         paintBorder = NoBorder;
         // left and top, only if it's the left or top of the obscuring cell
-        const QPoint obscuringCell = this->obscuringCell();
+        const QPoint obscuringCell = sheetView->obscuringCell(cell.cellPosition());
         if (cell.column() == obscuringCell.x())
             paintBorder |= LeftBorder;
         else if (cell.row() == obscuringCell.y())
@@ -1884,7 +1877,7 @@ void CellView::obscureHorizontalCells(SheetView* sheetView, const Cell& masterCe
                 d->width += extraWidth;
 
                 const QRect obscuredRange(effectiveCol + 1, masterCell.row(), d->obscuredCellsX, 1);
-                sheetView->obscureCells(obscuredRange, masterCell.cellPosition());
+                sheetView->obscureCells(masterCell.cellPosition(), d->obscuredCellsX, d->obscuredCellsY);
 
                 // Not enough space
                 if (status == NotEnoughSpace)
@@ -1946,7 +1939,7 @@ void CellView::obscureVerticalCells(SheetView* sheetView, const Cell& masterCell
             d->height += extraHeight;
 
             const QRect obscuredRange(masterCell.column(), effectiveRow + 1, 1, d->obscuredCellsY);
-            sheetView->obscureCells(obscuredRange, masterCell.cellPosition());
+            sheetView->obscureCells(masterCell.cellPosition(), d->obscuredCellsX, d->obscuredCellsY);
 
             // Not enough space
             if (status == NotEnoughSpace)
@@ -2003,33 +1996,6 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
         textLayout.draw(&painter, QPointF(location.x(), (location.y() + offset)));
         offset += height;
     }
-}
-
-void CellView::obscure(int col, int row)
-{
-    d->obscured = true;
-    d->obscuringCellX = col;
-    d->obscuringCellY = row;
-}
-
-QSize CellView::obscuredRange() const
-{
-    return d->obscured ? QSize() : QSize(d->obscuredCellsX, d->obscuredCellsY);
-}
-
-QPoint CellView::obscuringCell() const
-{
-    return d->obscured ? QPoint(d->obscuringCellX, d->obscuringCellY) : QPoint();
-}
-
-bool CellView::isObscured() const
-{
-    return d->obscured && (d->obscuringCellX != 0 && d->obscuringCellY != 0);
-}
-
-bool CellView::obscuresCells() const
-{
-    return !d->obscured && (d->obscuredCellsX != 0 || d->obscuredCellsY != 0);
 }
 
 qreal CellView::cellHeight() const

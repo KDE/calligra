@@ -43,9 +43,10 @@ public:
      */
     ~PixmapCachingSheetView();
 
-    virtual void invalidateRegion(const Region& region);
     virtual void invalidate();
     virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect);
+protected:
+    virtual void invalidateRange(const QRect &range);
 private slots:
     void jobDone(ThreadWeaver::Job* job);
 private:
