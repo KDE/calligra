@@ -174,7 +174,8 @@ getPresentationClass(const PlaceholderAtom* p)
     }
 }
 
-QString getPresentationClass(const MSO::TextContainer* tc)
+QString
+getPresentationClass(const MSO::TextContainer* tc)
 {
     if (!tc) return QString();
     for (int i = 0; i<tc->meta.size(); ++i) {
@@ -188,7 +189,28 @@ QString getPresentationClass(const MSO::TextContainer* tc)
     return QString();
 }
 
-}//namespace
+QString
+getMasterStyle(const QMap<int, QString>& map, int texttype) {
+    if (map.contains(texttype)) {
+        return map[texttype];
+    }
+    // fallback for titles
+    if (texttype == 0 || texttype == 6) {
+        if (map.contains(0)) return map[0]; // Tx_TYPE_TITLE
+        if (map.contains(6)) return map[6]; // Tx_TYPE_CENTERTITLE
+        return QString();
+    } else { // fallback for body
+        if (map.contains(1)) return map[1]; // Tx_TYPE_BODY
+        if (map.contains(5)) return map[5]; // Tx_TYPE_CENTERBODY
+        if (map.contains(7)) return map[7]; // Tx_TYPE_HALFBODY
+        if (map.contains(8)) return map[8]; // Tx_TYPE_QUARTERBODY
+        if (map.contains(4)) return map[4]; // Tx_TYPE_OTHER
+        return QString();
+    }
+    return QString();
+}
+
+} //namespace (anonymous)
 
 
 /*
@@ -330,39 +352,6 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
         ppttoodp->processTextForBody(out, cd, textContainer, textRuler);
     }
 }
-QString getMasterStyle(const QMap<int, QString>& map, int texttype) {
-    if (map.contains(texttype)) {
-        return map[texttype];
-    }
-    // fallback for titles
-    if (texttype == 0 || texttype == 6) {
-        if (map.contains(0)) return map[0]; // Tx_TYPE_TITLE
-        if (map.contains(6)) return map[6]; // Tx_TYPE_CENTERTITLE
-        return QString();
-    } else { // fallback for body
-        if (map.contains(1)) return map[1]; // Tx_TYPE_BODY
-        if (map.contains(5)) return map[5]; // Tx_TYPE_CENTERBODY
-        if (map.contains(7)) return map[7]; // Tx_TYPE_HALFBODY
-        if (map.contains(8)) return map[8]; // Tx_TYPE_QUARTERBODY
-        if (map.contains(4)) return map[4]; // Tx_TYPE_OTHER
-        return QString();
-    }
-    return QString();
-}
-const TextMasterStyleAtom*
-getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
-{
-    if (!m) return 0;
-    const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
-    if (!mm) return 0;
-    const TextMasterStyleAtom* textstyle = 0;
-    foreach (const TextMasterStyleAtom&ma, mm->rgTextMasterStyle) {
-        if (ma.rh.recInstance == texttype) {
-            textstyle = &ma;
-        }
-    }
-    return textstyle;
-}
 
 KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
         const MSO::OfficeArtClientTextBox* clientTextbox,
@@ -388,9 +377,9 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
         }
         bool isAutomatic = !canBeParentStyle;
 
-        // if this object has a placeholder type, it defines a presentation style,
-        // otherwise, it defines a graphic style
-        // A graphic style is always automatic
+        // If this object has a placeholder type, it defines a presentation
+        // style, otherwise, it defines a graphic style.  A graphic style is
+        // always automatic.
         KoGenStyle::Type type = KoGenStyle::PresentationStyle;
         if (isAutomatic) {
             type = KoGenStyle::PresentationAutoStyle;
@@ -413,15 +402,15 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
         style.setAutoStyleInStylesDotXml(out.stylesxml);
     }
 
-    const TextMasterStyleAtom* listStyle = 0;
     if (out.stylesxml) {
-        listStyle = getTextMasterStyleAtom(dc_data->masterSlide, textType);
-    }
-    QString listStyleName;
-    if (listStyle) {
-        KoGenStyle list(KoGenStyle::ListStyle);
-        ppttoodp->defineListStyle(list, *listStyle);
-        listStyleName = out.styles.insert(list);
+        const MasterOrSlideContainer* m = dc_data->masterSlide;
+        const TextMasterStyleAtom* msa = getTextMasterStyleAtom(m, textType);
+        if (msa) {
+            KoGenStyle list(KoGenStyle::ListStyle);
+            ppttoodp->defineListStyle(list, textType, *msa);
+            QString listStyleName;
+            listStyleName = out.styles.insert(list);
+        }
     }
 
     return style;
@@ -452,7 +441,7 @@ void PptToOdp::DrawClient::addTextStyles(
         ppttoodp->defineParagraphProperties(style, pf, 0);
 
         PptTextCFRun cf(ppttoodp->p->documentContainer, mh, tc, 0);
-        ppttoodp->defineTextProperties(style, &cf, 0, 0, 0);
+        ppttoodp->defineTextProperties(style, cf, 0, 0, 0);
     }
     bool isPlaceholder = cd && cd->placeholderAtom;
     if (isPlaceholder) {
@@ -847,7 +836,7 @@ void PptToOdp::defineDefaultTextProperties(KoGenStyle& style) {
         }
         si = &p->documentContainer->documentTextInfo.textSIDefaultsAtom.textSIException;
     }
-    defineTextProperties(style, &cf, cf9, cf10, si);
+    defineTextProperties(style, cf, cf9, cf10, si);
 }
 
 void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
@@ -859,8 +848,7 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
             pf9 = &pp9->textDefaultsAtom->pf9;
         }
     }
-    QList<const MSO::MasterOrSlideContainer*> mh;
-    PptTextPFRun pf(p->documentContainer, mh);
+    PptTextPFRun pf(p->documentContainer);
     defineParagraphProperties(style, pf, 0);
 }
 
@@ -887,10 +875,10 @@ QString PptToOdp::getPicturePath(int pib) const
 }
 
 void PptToOdp::defineTextProperties(KoGenStyle& style,
-                                    const PptTextCFRun* cf,
+                                    const PptTextCFRun& cf,
                                     const TextCFException9* /*cf9*/,
                                     const TextCFException10* /*cf10*/,
-                                    const TextSIException* si)
+                                    const TextSIException* /*si*/)
 {
     //getting information for all the possible attributes in
     //style:text-properties for clarity in alphabetical order
@@ -899,36 +887,36 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
 
     // fo:background-color
     // fo:color
-    ColorIndexStruct cis = cf->color();
+    ColorIndexStruct cis = cf.color();
     QColor color = toQColor(cis);
     if (color.isValid()) {
         style.addProperty("fo:color", color.name(), text);
     }
     // fo:country
     // fo:font-family
-    const FontEntityAtom* font = getFont(cf->fontRef());
+    const FontEntityAtom* font = getFont(cf.fontRef());
     if (font) {
         const QString name = QString::fromUtf16(font->lfFaceName.data(),
                                                 font->lfFaceName.size());
         style.addProperty("fo:font-family", name, text);
     }
     // fo:font-size
-    style.addProperty("fo:font-size", pt(cf->fontSize()), text);
+    style.addProperty("fo:font-size", pt(cf.fontSize()), text);
     // fo:font-style: "italic", "normal" or "oblique
-    style.addProperty("fo:font-style", cf->italic() ?"italic" :"normal", text);
+    style.addProperty("fo:font-style", cf.italic() ?"italic" :"normal", text);
     // fo:font-variant: "normal" or "small-caps"
     // fo:font-weight: "100", "200", "300", "400", "500", "600", "700", "800", "900", "bold" or "normal"
-    style.addProperty("fo:font-weight", cf->bold() ?"bold" :"normal", text);
+    style.addProperty("fo:font-weight", cf.bold() ?"bold" :"normal", text);
     // fo:hyphenate
     // fo:hyphenation-push-char
     // fo:hyphenation-remain-char-count
     // fo:language
-    if (si && si->lang) {
+//     if (si && si->lang) {
         // TODO: get mapping from lid to language code
-    }
+//     }
     // fo:letter-spacing
     // fo:text-shadow
-    style.addProperty("fo:text-shadow", cf->shadow() ?"1pt 1pt" :"none", text);
+    style.addProperty("fo:text-shadow", cf.shadow() ?"1pt 1pt" :"none", text);
     // fo:text-transform: "capitalize", "lowercase", "none" or "uppercase"
     // style:country-asian
     // style:country-complex
@@ -945,7 +933,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:font-pitch-asian
     // style:font-pitch-complex
     // style:font-relief: "embossed", "engraved" or "none"
-    style.addProperty("style:font-relief", cf->emboss() ?"embossed" :"none", text);
+    style.addProperty("style:font-relief", cf.emboss() ?"embossed" :"none", text);
     // style:font-size-asian
     // style:font-size-complex
     // style:font-size-rel
@@ -983,7 +971,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:text-underline-mode
     // style:text-underline-style
     // style:text-underline-type: "double", "none" or "single"
-    style.addProperty("style:text-underline-type", cf->underline() ?"single" :"none", text);
+    style.addProperty("style:text-underline-type", cf.underline() ?"single" :"none", text);
     // style:text-underline-width
     // style:use-window-font-color
 }
@@ -1162,56 +1150,62 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
 }
 
 void PptToOdp::defineListStyle(KoGenStyle& style,
+                               const quint32 textType,
                                const TextMasterStyleAtom& levels,
                                const TextMasterStyle9Atom* levels9,
                                const TextMasterStyle10Atom* levels10)
 {
-    ListStyleInput input;
     if (levels.lstLvl1) {
-        defineListStyle(style, 1, input, levels.lstLvl1.data(),
+        defineListStyle(style, 0, textType,
+                        levels.lstLvl1.data(),
                         ((levels9) ?levels9->lstLvl1.data() :0),
                         ((levels10) ?levels10->lstLvl1.data() :0));
     }
     if (levels.lstLvl2) {
-        defineListStyle(style, 2, input, levels.lstLvl2.data(),
+        defineListStyle(style, 1, textType,
+                        levels.lstLvl2.data(),
                         ((levels9) ?levels9->lstLvl2.data() :0),
                         ((levels10) ?levels10->lstLvl2.data() :0));
     }
     if (levels.lstLvl3) {
-        defineListStyle(style, 3, input, levels.lstLvl3.data(),
+        defineListStyle(style, 2, textType,
+                        levels.lstLvl3.data(),
                         ((levels9) ?levels9->lstLvl3.data() :0),
                         ((levels10) ?levels10->lstLvl3.data() :0));
     }
     if (levels.lstLvl4) {
-        defineListStyle(style, 4, input, levels.lstLvl4.data(),
+        defineListStyle(style, 3, textType,
+                        levels.lstLvl4.data(),
                         ((levels9) ?levels9->lstLvl4.data() :0),
                         ((levels10) ?levels10->lstLvl4.data() :0));
     }
     if (levels.lstLvl5) {
-        defineListStyle(style, 5, input, levels.lstLvl5.data(),
+        defineListStyle(style, 4, textType,
+                        levels.lstLvl5.data(),
                         ((levels9) ?levels9->lstLvl5.data() :0),
                         ((levels10) ?levels10->lstLvl5.data() :0));
     }
 }
 
-void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
-                               ListStyleInput info,
+void PptToOdp::defineListStyle(KoGenStyle& style,
+                               const quint32 textType,
+                               const quint16 indentLevel,
                                const TextMasterStyleLevel* level,
                                const TextMasterStyle9Level* level9,
                                const TextMasterStyle10Level* level10)
 {
-    ListStyleInput parent;
-    parent.cf = (level) ?&level->cf :0;
-    parent.cf9 = (level9) ?&level9->cf9 :0;
-    parent.cf10 = (level10) ?&level10->cf10 :0;
-    if (info.cf == 0) info.cf = parent.cf;
-    if (info.cf9 == 0) info.cf9 = parent.cf9;
-    if (info.cf10 == 0) info.cf10 = parent.cf10;
-    defineListStyle(style, depth, info, parent);
+    PptTextPFRun pf(p->documentContainer, level, level9, textType, indentLevel);
+    PptTextCFRun cf(p->documentContainer, level, level9, indentLevel);
+    ListStyleInput info(pf, cf);
+
+    info.cf9 = (level9) ?&level9->cf9 :0;
+    info.cf10 = (level10) ?&level10->cf10 :0;
+    defineListStyle(style, indentLevel, info);
 }
 
 QChar
 getBulletChar(const PptTextPFRun& pf) {
+
     quint16 v = (quint16) pf.bulletChar();
     if ((v == 0xf06c) || (v == 0x006c)) { // 0xF06C from windings is similar to ●
         return QChar(0x25cf); //  "●"
@@ -1234,46 +1228,41 @@ getBulletChar(const PptTextPFRun& pf) {
     return QChar(v);
     return QChar(0x25cf); //  "●"
 }
+
+//FIXME: wrong approach, check the calculation of bullet-relative-size!
 QString
 bulletSizeToSizeString(const PptTextPFRun& pf)
 {
-    if (pf.fBulletHasSize()) {
-        qint16 size = pf.bulletSize();
-        if (size >= 25 && size <= 400) {
-            return percent(size);
-        } else if (size >= -4000 && size <= -1) {
-            return pt(size);
-        }
+    QString ret;
+    qint16 size = pf.bulletSize();
+    if (size >= 25 && size <= 400) {
+        ret = percent(size);
+    } else if (size >= -4000 && size <= -1) {
+        ret = pt(size);
     }
-    return QString();
+    return ret;
 }
-void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
-                               const ListStyleInput& i,
-                               const ListStyleInput& p)
+void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
+                               const ListStyleInput& i)
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter out(&buffer);
 
+    //FIXME: wrong approach
     QString bulletSize = bulletSizeToSizeString(i.pf);
-    if (bulletSize.isNull()) {
-        bulletSize = bulletSizeToSizeString(p.pf);
-    }
 
     QString elementName;
-    bool imageBullet = i.pf.bulletBlipRef() != 65535;
+    bool imageBullet = false;
+    imageBullet = i.pf.bulletBlipRef() != 65535;
 
     if (imageBullet) {
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
-        out.addAttribute("xlink:href",
-                         bulletPictureNames.value(i.pf.bulletBlipRef()));
+        out.addAttribute("xlink:href", bulletPictureNames.value(i.pf.bulletBlipRef()));
+
         if (bulletSize.isNull() || bulletSize.endsWith('%')) {
-            if (i.cf && i.cf->masks.size) {
-                bulletSize = pt(i.cf->fontSize);
-            } else if (p.cf && p.cf->masks.size) {
-                bulletSize = pt(p.cf->fontSize);
-            }
+            bulletSize = pt(i.cf.fontSize());
         }
         if (bulletSize.isNull() || bulletSize.endsWith('%')) {
             bulletSize = "20pt"; // fallback value
@@ -1313,8 +1302,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
                     out.addAttribute("text:bullet-relative-size", percent(size));
                 }
                 //The absolute value specifies the bullet font size in points.
-                else if ((size >= -4000 && size <= -1)  && i.cf) {
-                    qreal relSize = 100.0 * qAbs(size) / (qreal) i.cf->fontSize;
+                else if ((size >= -4000 && size <= -1)) {
+                    qreal relSize = (qAbs(size) / (qreal) i.cf.fontSize()) * 100;
                     out.addAttribute("text:bullet-relative-size", percent(relSize));
                 }
             }
@@ -1323,15 +1312,13 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
             }
         }
     }
-    //no bullet exists (i.pf.fHasBullet() == false) 
+    //no bullet exists (i.pf.fHasBullet() == false)
     else {
         elementName = "text:list-level-style-number";
         out.startElement("text:list-level-style-number");
         out.addAttribute("style:num-format", "");
     }
-    out.addAttribute("text:level", depth ? depth : 1);
-
-    bool hasIndent = i.pf.level();
+    out.addAttribute("text:level", depth + 1);
     out.startElement("style:list-level-properties");
     // fo:height
     if (imageBullet && !bulletSize.isNull()) {
@@ -1362,38 +1349,35 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
     out.endElement(); // style:list-level-properties
 
     if (!imageBullet) {
-        KoGenStyle ls(KoGenStyle::TextStyle);
+        KoGenStyle ts(KoGenStyle::TextStyle);
+        const KoGenStyle::PropertyType text = KoGenStyle::TextType;
 
-        //FIXME: PptTextCFRun required!!!!!
-//         defineTextProperties(ls, p.cf, p.cf9, p.cf10, p.si);
-//         defineTextProperties(ls, i.cf, i.cf9, i.cf10, i.si);
+        defineTextProperties(ts, i.cf, i.cf9, i.cf10, i.si);
 
-        // override some properties with information from the paragraph
-        if (hasIndent) {
+        // override some properties with information from PptTextPFRun
+        // TODO: why is this condition here?
+        if (i.pf.level()) {
             const MSO::FontEntityAtom* font = getFont(i.pf.bulletFontRef());
             if (font) {
-                ls.addProperty("fo:font-family",
-                           QString::fromUtf16(font->lfFaceName.data(),
-                                              font->lfFaceName.size()),
-                           KoGenStyle::TextType);
+                QString family = QString::fromUtf16(font->lfFaceName.data(),
+                                                    font->lfFaceName.size());
+                ts.addProperty("fo:font-family", family, text);
             }
         }
         // a bullet exists and the bullet has a color
         if (i.pf.fHasBullet() && i.pf.fBulletHasColor()) {
             const QColor color = toQColor(i.pf.bulletColor());
             if (color.isValid()) {
-                ls.addProperty("fo:color", color.name(), KoGenStyle::TextType);
+                ts.addProperty("fo:color", color.name(), text);
             }
         }
-        // maybe fo:font-size should be set from pf.bulletSize
-
-        ls.writeStyleProperties(&out, KoGenStyle::TextType);
+        // TODO: maybe fo:font-size should be set from pf.bulletSize
+        ts.writeStyleProperties(&out, text);
     }
     out.endElement();  // text:list-level-style-*
     // serialize the text:list-style element into the properties
-    QString elementContents = QString::fromUtf8(buffer.buffer(),
-                                                buffer.buffer().size() );
-    style.addChildElement(elementName, elementContents);
+    QString contents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement(elementName, contents);
 }
 
 template<class O>
@@ -1719,10 +1703,11 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
      */
     if (p->documentContainer) {
         KoGenStyle list(KoGenStyle::ListStyle);
-        defineListStyle(list,
-                p->documentContainer->documentTextInfo.textMasterStyleAtom);
-        styles.insert(list, "standardListStyle",
-                KoGenStyles::DontAddNumberToName);
+        PptTextPFRun pf(p->documentContainer);
+        PptTextCFRun cf(p->documentContainer);
+        ListStyleInput info(pf, cf);
+        defineListStyle(list, 0, info);
+        styles.insert(list, "standardListStyle", KoGenStyles::DontAddNumberToName);
     }
 
     /*
@@ -2019,11 +2004,11 @@ int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
     return end;
 }
 
-int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextContainer* tc,
+int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
                               const QString& text, const int start, int end, quint16* p_fs)
 {
-    int count = cf->addCurrentCFRun(tc, start);
-    *p_fs = cf->fontSize();
+    int count = cf.addCurrentCFRun(tc, start);
+    *p_fs = cf.fontSize();
 
 #ifdef DEBUG_PPTTOODP
     qDebug() << "font size:" << *p_fs;
@@ -2178,7 +2163,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextCont
     return end;
 }
 
-int PptToOdp::processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextContainer* tc,
+int PptToOdp::processTextSpans(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
 			       const QString& text, int start, int end, quint16* p_fs)
 {
     quint16 font_size = 0;
@@ -2201,14 +2186,12 @@ int PptToOdp::processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextCon
     return (pos == end) ?0 :-pos;
 }
 
-QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf)
+QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf, const PptTextCFRun& cf)
 {
     KoGenStyle list(KoGenStyle::ListAutoStyle);
     list.setAutoStyleInStylesDotXml(out.stylesxml);
-    ListStyleInput info;
-    info.pf = pf;
-    ListStyleInput parent;
-    defineListStyle(list, pf.level() + 1, info, parent);
+    ListStyleInput info(pf, cf);
+    defineListStyle(list, pf.level(), info);
     return out.styles.insert(list);
 }
 
@@ -2265,14 +2248,15 @@ PptToOdp::processParagraph(Writer& out,
     Writer o(writer, out.styles, out.stylesxml);
 
     quint16 min_fontsize = FONTSIZE_MAX;
-    processTextSpans(o, &cf, tc, text, start, end, &min_fontsize);
+    processTextSpans(o, cf, tc, text, start, end, &min_fontsize);
 
     //FIXME: check comments to the isList function
     m_isList = ( pf.isList() && (start < end) );
 
     if (m_isList) {
         int depth = pf.level() + 1;
-        QString listStyle = defineAutoListStyle(out, pf);
+	//TODO: provide PptTextCFRun with CFException for the first run of text
+        QString listStyle = defineAutoListStyle(out, pf, cf);
 
 	//check if we have the corresponding style for this level, if not then
 	//close the list and create a new one (K.I.S.S.)
@@ -2328,16 +2312,12 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     //
     // NOTE: If slideFlags/fMasterScheme == true, master's color scheme MUST be
     // used.  Common shapes should not refer to a color scheme.
-    bool ph = false;
-    const PlaceholderAtom* p = 0;
+    bool isPlaceholder = false;
     if (clientData) {
-        const PptOfficeArtClientData* pcd
+        const PptOfficeArtClientData* cd
                     = clientData->anon.get<PptOfficeArtClientData>();
-        if (pcd) {
-            p = pcd->placeholderAtom.data();
-            if (p) {
-                ph = true;
-            }
+        if (cd && cd->placeholderAtom) {
+            isPlaceholder = true;
         }
     }
 
@@ -2388,7 +2368,8 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
             end = text.size();
             missed_line = false;
         }
-        processParagraph(out, levels, clientData, tc, tr, ph, text, pos, end);
+        processParagraph(out, levels, clientData, tc, tr, isPlaceholder,
+                         text, pos, end);
         pos = end + 1;
     }
 
@@ -2397,7 +2378,8 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
         if (!text.isEmpty()) {
             pos--;
         }
-        processParagraph(out, levels, clientData, tc, tr, ph, QString(QString::null), pos, pos);
+        processParagraph(out, levels, clientData, tc, tr, isPlaceholder,
+                         QString(QString::null), pos, pos);
     }
 
     // close all open text:list elements
@@ -2903,7 +2885,7 @@ const TextContainer* PptToOdp::getTextContainer(
 }
 
 quint32 PptToOdp::getTextType(const PptOfficeArtClientTextBox* clientTextbox,
-            const PptOfficeArtClientData* clientData) const
+                              const PptOfficeArtClientData* clientData) const
 {
     const TextContainer* tc = getTextContainer(clientTextbox, clientData);
     if (tc) return tc->textHeaderAtom.textType;

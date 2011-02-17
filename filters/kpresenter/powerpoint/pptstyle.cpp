@@ -20,6 +20,7 @@
 
 #include "pptstyle.h"
 #include <QDebug>
+
 using namespace MSO;
 
 // NOTE: Deprecated !!!
@@ -32,6 +33,21 @@ void addStyle(const Style** list, const Style* style)
         *list++;
         *list = 0;
     }
+}
+
+const TextMasterStyleAtom*
+getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
+{
+    if (!m) return 0;
+    const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
+    if (!mm) return 0;
+    const TextMasterStyleAtom* textstyle = 0;
+    foreach (const TextMasterStyleAtom& ma, mm->rgTextMasterStyle) {
+        if (ma.rh.recInstance == texttype) {
+            textstyle = &ma;
+        }
+    }
+    return textstyle;
 }
 
 namespace {
@@ -95,20 +111,6 @@ getTextCFException(const MSO::TextContainer* tc, const int start)
 //  Master Style - Level (PF/CF)
 // ************************************************
 
-const TextMasterStyleAtom*
-getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
-{
-    if (!m) return 0;
-    const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
-    if (!mm) return 0;
-    const TextMasterStyleAtom* textstyle = 0;
-    foreach (const TextMasterStyleAtom&ma, mm->rgTextMasterStyle) {
-        if (ma.rh.recInstance == texttype) {
-            textstyle = &ma;
-        }
-    }
-    return textstyle;
-}
 const TextMasterStyleLevel *
 getTextMasterStyleLevel(const TextMasterStyleAtom* ms, quint16 level)
 {
@@ -137,17 +139,16 @@ getTextMasterStyleLevel(const TextMasterStyleAtom* ms, quint16 level)
     }
     return l;
 }
-const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
-                                  quint32 textType, quint16 level)
-{
-    const TextMasterStyleAtom* ms = getTextMasterStyleAtom(m, textType);
-    const TextMasterStyleLevel* ml = getTextMasterStyleLevel(ms, level);
-    return (ml) ?&ml->pf :0;
-}
+
+
 const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
                                   const TextContainer* tc, quint16 level)
 {
-    return (tc) ?getLevelPF(m, tc->textHeaderAtom.textType, level) :0;
+    if (!tc) return 0;
+    quint32 textType = tc->textHeaderAtom.textType;
+    const TextMasterStyleAtom* ms = getTextMasterStyleAtom(m, textType);
+    const TextMasterStyleLevel* ml = getTextMasterStyleLevel(ms, level);
+    return (ml) ?&ml->pf :0;
 }
 const TextCFException* getLevelCF(const MasterOrSlideContainer* m,
                                   const TextContainer* tc, quint16 level)
@@ -372,10 +373,10 @@ getStyleTextProp9(const PptOfficeArtClientData* pcd, quint8 pp9rt)
     return 0;
 }
 const TextPFException9* getPF9(const MSO::DocumentContainer* d,
-                                    const MSO::SlideListWithTextSubContainerOrAtom* texts,
-                                    const PptOfficeArtClientData* pcd,
-                                    const MSO::TextContainer* tc,
-                                    const int start)
+                               const MSO::SlideListWithTextSubContainerOrAtom* texts,
+                               const PptOfficeArtClientData* pcd,
+                               const MSO::TextContainer* tc,
+                               const int start)
 {
     // to find the pf9, the cf has to be obtained which contains a pp9rt
     quint8 pp9rt = 0;
@@ -420,7 +421,7 @@ const TextPFException9* getLevelPF9(const MasterOrSlideContainer* m,
     return (ml) ?&ml->pf9 :0;
 }
 const TextPFException9* getLevelPF9(const MasterOrSlideContainer* m,
-                                    const MSO::TextContainer* tc,
+                                    const TextContainer* tc,
                                     quint16 level)
 {
     return (tc) ?getLevelPF9(m, tc->textHeaderAtom.textType, level) :0;
@@ -517,67 +518,66 @@ qint16 getDefaultIndent(const MSO::DocumentContainer* d, quint16 level)
 
 } //namespace (anonymous)
 
-PptTextPFRun::PptTextPFRun()
+PptTextPFRun::PptTextPFRun(const DocumentContainer* d)
     : m_level(0)
-    , m_count(-1)
-    , m_fHasBullet(0)
-{}
+    , m_textType(Tx_TYPE_TITLE)
+    , m_fHasBullet(false)
+{
+    //check DocumentContainer/DocumentTextInfoContainer/textPFDefaultsAtom
+    pfs.append(getDefaultPF(d));
+    bzero(pf9s, 6 * sizeof(TextPFException9*));
+}
 
 PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
-                           QList<const MSO::MasterOrSlideContainer*> &mh,
+                           const TextMasterStyleLevel* level,
+                           const TextMasterStyle9Level* level9,
+                           const quint32 textType,
+                           const quint16 indentLevel)
+    : m_level(indentLevel)
+    , m_textType(textType)
+    , m_fHasBullet(false)
+{
+    //TODO: TextRuler required!
+
+    if (level) {
+        pfs.append(&level->pf);
+    }
+
+    bzero(pf9s, 6 * sizeof(TextPFException9*));
+    if (level9) {
+        addStyle(pf9s, &level9->pf9);
+    }
+    processPFDefaults(d);
+}
+
+PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
+                           QList<const MasterOrSlideContainer*> &mh,
                            const SlideListWithTextSubContainerOrAtom* texts,
                            const PptOfficeArtClientData* pcd,
                            const TextContainer* tc,
                            const TextRuler* tr,
                            quint32 start)
+    : m_level(0)
+    , m_textType(Tx_TYPE_TITLE)
+    , m_fHasBullet(false)
 {
     const TextPFRun* pfrun = getPFRun(tc, start);
-    quint16 level = 0;
-    if (pfrun) {
-        m_count = pfrun->count;
-        level = pfrun->indentLevel;
-        // [MS-PPT].pdf says there are only 5 levels
-        if (level > 4) {
-            level = 4;
-        }
-    } else {
-        //FIXME: looks like masters have this info stored somewhere else, we
-        //use the default values at the moment
-        m_count = -1;
-        level = 0;
-#if 0
-        qDebug() << "==> TextPFRun missing!";
-        if (tc) {
-            qDebug() << "==> TextContainer present, what's going on?";
-        } else {
-            qDebug() << "==> TextContainer missing";
-        }
-#endif
-    }
-    //Processing either OfficeArtClientTextbox or a SlideListWithTextContainer.
-    //The TextRulerAtom is provided only in case of OfficeArtClientTextbox.
-    m_leftMargin.append(getLeftMargin(tr, level));
-    m_indent.append(getIndent(tr, level));
-    //check DocumentContainer/DocumentTextInfoContainer/DefaultRulerAtom
-    m_leftMargin.append(getDefaultLeftMargin(d, level));
-    m_indent.append(getDefaultIndent(d, level));
 
     if (pfrun) {
         pfs.append(&pfrun->pf);
+        m_level = pfrun->indentLevel;
+        if (m_level > 4) {
+            m_level = 4;
+        }
     } else {
-	qDebug() << "=> TextPFRun MISSING!!!!";
+        qDebug() << "TextPFRun MISSING!";
     }
 
     //check the main master/title master slide's TextMasterStyleAtom
     for (int i = 0; i < mh.size(); i++) {
-        pfs.append(getLevelPF(mh[i], tc, level));
-        pfs.append(getBaseLevelsPF(mh[i], tc, level));
+        pfs.append(getLevelPF(mh[i], tc, m_level));
+        pfs.append(getBaseLevelsPF(mh[i], tc, m_level));
     }
-    //check DocumentContainer/DocumentTextInfoContainer/textMasterStyleAtom
-    pfs.append(getDefaultLevelPF(d, level));
-    pfs.append(getDefaultBaseLevelsPF(d, level));
-    //check DocumentContainer/DocumentTextInfoContainer/textPFDefaultsAtom
-    pfs.append(getDefaultPF(d));
 
     //TODO: test documents required to construct correct pf9s based on the full
     //masters hierarchy.
@@ -587,10 +587,10 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
         m = mh[0];
     }
 
-    *pf9s = 0;
+    bzero(pf9s, 6 * sizeof(TextPFException9*));
     addStyle(pf9s, getPF9(d, texts, pcd, tc, start));
-    addStyle(pf9s, getLevelPF9(m, tc, level));
-    addStyle(pf9s, getDefaultLevelPF9(d, tc, level));
+    addStyle(pf9s, getLevelPF9(m, tc, m_level));
+    addStyle(pf9s, getDefaultLevelPF9(d, tc, m_level));
     addStyle(pf9s, getDefaultPF9(d));
 
     // the level reported by PptPFRun is 0 when not bullets, i.e. no list is
@@ -601,61 +601,94 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     //(indentLevel > 0 && fHasBullet == false).  At the moment such run of text
     //is interpreted as content of a paragraph with corresponding indentLevel,
     //but it looks like we should store it as a text:list-item.
-    m_level = level;
-
-    //TODO: fine tuning on test documents required
 
     //set the default values of bullet properties
     if (tc) {
-        switch (tc->textHeaderAtom.textType) {
-        case Tx_TYPE_TITLE:
-        case Tx_TYPE_CENTERTITLE:
-            m_fHasBullet = false;
-            break;
-        case Tx_TYPE_BODY:
-            m_fHasBullet = true;
-            break;
-        default:
-            m_fHasBullet = false;
-            break;
-        }
-    } else {
+        m_textType = tc->textHeaderAtom.textType;
+    }
+
+    //Processing either OfficeArtClientTextbox or a SlideListWithTextContainer.
+    //The TextRulerAtom is provided only in case of OfficeArtClientTextbox.
+    m_leftMargin.append(getLeftMargin(tr, m_level));
+    m_indent.append(getIndent(tr, m_level));
+
+    processPFDefaults(d);
+}
+
+void PptTextPFRun::processPFDefaults(const DocumentContainer* d)
+{
+    //check DocumentContainer/DocumentTextInfoContainer/textMasterStyleAtom
+    pfs.append(getDefaultLevelPF(d, m_level));
+    pfs.append(getDefaultBaseLevelsPF(d, m_level));
+    //check DocumentContainer/DocumentTextInfoContainer/textPFDefaultsAtom
+    pfs.append(getDefaultPF(d));
+
+    //check DocumentContainer/DocumentTextInfoContainer/DefaultRulerAtom
+    m_leftMargin.append(getDefaultLeftMargin(d, m_level));
+    m_indent.append(getDefaultIndent(d, m_level));
+
+    //TODO: Fine tuning on test documents required for default values.
+    switch (m_textType) {
+    case Tx_TYPE_TITLE:
+    case Tx_TYPE_CENTERTITLE:
         m_fHasBullet = false;
+        break;
+    case Tx_TYPE_BODY:
+        m_fHasBullet = true;
+        break;
+    default:
+        m_fHasBullet = false;
+        break;
     }
 }
 
-PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
-                           QList<const MSO::MasterOrSlideContainer*> &mh,
-                           const MSO::TextContainer* tc,
-                           quint16 level)
+
+PptTextCFRun::PptTextCFRun(const DocumentContainer* d)
+    : m_level(99)
+    , m_cfrun_rm(false)
+{
+    //check DocumentContainer/DocumentTextInfoContainer/textCFDefaultsAtom
+    cfs.append(getDefaultCF(d));
+}
+
+PptTextCFRun::PptTextCFRun(const DocumentContainer* d,
+                           const TextMasterStyleLevel* level,
+                           const TextMasterStyle9Level* /*level9*/,
+                           const quint16 indentLevel)
+    : m_level(indentLevel)
+    , m_cfrun_rm(false)
+{
+    if (level) {
+        cfs.append(&level->cf);
+    }
+    processCFDefaults(d);
+}
+
+PptTextCFRun::PptTextCFRun(const DocumentContainer* d,
+                           QList<const MasterOrSlideContainer*> &mh,
+                           const TextContainer* tc,
+                           quint16 indentLevel)
+    : m_level(indentLevel)
+    , m_cfrun_rm(false)
 {
     //check the main master/title master slide's TextMasterStyleAtom
     for (int i = 0; i < mh.size(); i++) {
-        cfs.append(getLevelCF(mh[i], tc, level));
-        cfs.append(getBaseLevelsCF(mh[i], tc, level));
+        cfs.append(getLevelCF(mh[i], tc, m_level));
+        cfs.append(getBaseLevelsCF(mh[i], tc, m_level));
     }
-
-    //check DocumentContainer/DocumentTextInfoContainer/textMasterStyleAtom
-    cfs.append(getDefaultLevelCF(d, level));
-    cfs.append(getDefaultBaseLevelsCF(d, level));
-    //check DocumentContainer/DocumentTextInfoContainer/textCFDefaultsAtom
-    cfs.append(getDefaultCF(d));
-
-    m_level = level;
-    m_cfrun_rm = false;
+    processCFDefaults(d);
 }
 
-PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d)
+void PptTextCFRun::processCFDefaults(const DocumentContainer* d)
 {
+    //check DocumentContainer/DocumentTextInfoContainer/textMasterStyleAtom
+    cfs.append(getDefaultLevelCF(d, m_level));
+    cfs.append(getDefaultBaseLevelsCF(d, m_level));
     //check DocumentContainer/DocumentTextInfoContainer/textCFDefaultsAtom
     cfs.append(getDefaultCF(d));
-    m_cfrun_rm = false;
-
-    //It MUST be less than or equal to 0x0005 (not required here)
-    m_level = 99;
 }
 
-int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer* tc, quint32 start)
+int PptTextCFRun::addCurrentCFRun(const TextContainer* tc, quint32 start)
 {
     int n = -1;
 

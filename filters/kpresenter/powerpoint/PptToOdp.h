@@ -131,21 +131,21 @@ private:
     };
 
     /**
-     * Structure that influences all information that affects the style of a
-     * text:style.  This is a convenience container for passing this
+     * Structure that influences all information that affects the style of type
+     * TextStyle.  This is a convenience container for passing this
      * information.
      **/
-    class ListStyleInput {
+    struct ListStyleInput {
     public:
-        //FIXME: this doesn't make sense any more!!!!!
-        PptTextPFRun pf;
-
-        const MSO::TextCFException* cf;
+        const PptTextPFRun& pf;
+        const PptTextCFRun& cf;
+        const MSO::TextCFException* cf_; //deprecated
         const MSO::TextCFException9* cf9;
         const MSO::TextCFException10* cf10;
         const MSO::TextSIException* si;
 
-        ListStyleInput() :cf(0), cf9(0), cf10(0), si(0) {}
+        ListStyleInput(const PptTextPFRun& pf, const PptTextCFRun& cf)
+            :pf(pf), cf(cf), cf_(0), cf9(0), cf10(0), si(0) {}
     };
 
     /**
@@ -277,21 +277,21 @@ private:
 
     /**
      * Extract data from TextCFException into the style
-     * @param KoGenStyle of type TextStyle
+     * @param KoGenStyle of type TextAutoStyle/TextStyle
      * @param PptTextCFRun address
      * @param TextCFException9 address
      * @param TextCFException10 address
      * @param TextSIException address
      */
     void defineTextProperties(KoGenStyle& style,
-                              const PptTextCFRun* cf,
+                              const PptTextCFRun& cf,
                               const MSO::TextCFException9* cf9,
                               const MSO::TextCFException10* cf10,
                               const MSO::TextSIException* si);
 
     /**
      * Extract data from TextPFException into the style
-     * @param style KoGenStyle of type ParagraphStyle
+     * @param style KoGenStyle of type ParagraphAutoStyle/ParagraphStyle
      * @param pf PptTextPFRun
      * @param fs minimal size of the font used in the paragraph
      */
@@ -313,31 +313,41 @@ private:
                                 const MSO::HeadersFootersAtom* hf,
                                 const MSO::SlideFlags* sf = NULL);
 
-    /* Extract data into the style element style:list */
+    /* Extract data into the style of type ListAutoStyle/ListStyle */
     void defineListStyle(KoGenStyle& style,
+                         const quint32 textType,
                          const MSO::TextMasterStyleAtom& levels,
                          const MSO::TextMasterStyle9Atom* levels9 = 0,
                          const MSO::TextMasterStyle10Atom* levels10 = 0);
-    void defineListStyle(KoGenStyle& style, quint8 depth,
-                         ListStyleInput input,
+
+    void defineListStyle(KoGenStyle& style,
+                         const quint32 textType,
+                         const quint16 indentLevel,
                          const MSO::TextMasterStyleLevel* level = 0,
                          const MSO::TextMasterStyle9Level* level9 = 0,
                          const MSO::TextMasterStyle10Level* level10 = 0);
 
-    void defineListStyle(KoGenStyle& style, quint8 depth,
-                         const ListStyleInput& info,
-                         const ListStyleInput& parent);
+    void defineListStyle(KoGenStyle& style,
+                         const quint16 indentLevel,
+                         const ListStyleInput& info);
 
-    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf);
+    /**
+     * TODO:
+     * @param
+     * @param
+     * @param
+     * @return name of the created style as stored in the styles collection
+     */
+    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf, const PptTextCFRun& cf);
 
     const MSO::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
-                                                quint32 textType, quint8 pp9rt);
+                                                 quint32 textType, quint8 pp9rt);
 
-    const MSO::TextContainer* getTextContainer(
-            const MSO::PptOfficeArtClientTextBox* clientTextbox,
-            const MSO::PptOfficeArtClientData* clientData) const;
-    quint32 getTextType(const MSO::PptOfficeArtClientTextBox* clientTextbox,
-                        const MSO::PptOfficeArtClientData* clientData) const;
+    const MSO::TextContainer* getTextContainer(const MSO::PptOfficeArtClientTextBox* ctb,
+                                               const MSO::PptOfficeArtClientData* cd) const;
+    quint32 getTextType(const MSO::PptOfficeArtClientTextBox* ctb,
+                        const MSO::PptOfficeArtClientData* cd) const;
+
     void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
 
     QByteArray createContent(KoGenStyles& styles);
@@ -369,7 +379,7 @@ private:
      * @return x > 0 (num. of processed characters), -1 (Error)
      */
     int processTextSpan(Writer& out,
-                        PptTextCFRun* cf,
+                        PptTextCFRun& cf,
                         const MSO::TextContainer* tc,
                         const QString& text,
                         const int start, int end,
@@ -382,7 +392,7 @@ private:
      * @return 0 (OK), x < 0 (Error)
      */
     int processTextSpans(Writer& out,
-                         PptTextCFRun* cf,
+                         PptTextCFRun& cf,
                          const MSO::TextContainer* tc,
 			 const QString& text,
                          int start, int end,
@@ -396,7 +406,7 @@ private:
      * @param cd provides access to additional text formatting in StyleTextProp9Atom
      * @param tc provides access to text formatting in MasterTextPropAtom and TextType
      * @param tr specifies tabbing, horizontal margins, and indentation for text
-     * @param ph specifies whether it's a placeholder shape
+     * @param ph specifies if the shape is a placeholder
      * @param text contains the text of the slide
      * @param start specifies begging of the paragraph in text
      * @param end specifies end of the paragraph in text
