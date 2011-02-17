@@ -47,11 +47,11 @@ GanttItemDelegate::GanttItemDelegate( QObject *parent )
     showTaskLinks( true ),
     showProgress( false ),
     showPositiveFloat( false ),
-    showNegativeFloat( true ), // NOTE: atm for test, activate when the ui can be changed
+    showNegativeFloat( false ),
     showCriticalPath( false ),
     showCriticalTasks( false ),
     showAppointments( false ),
-    showTimeConstraint( true ), // NOTE: atm for test, activate when the ui can be changed
+    showTimeConstraint( false ),
     showSchedulingError( false )
 {
     QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
@@ -326,8 +326,6 @@ KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGan
         tw = opt.fontMetrics.width( txt );
         tw += static_cast<int>( itemRect.height()/1.5 );
     }
-
-    int dw = 0;
     if ( showPositiveFloat ) {
         QRectF fr = itemPositiveFloatRect( opt, idx );
         if ( fr.isValid() ) {
@@ -444,7 +442,8 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     << NodeModel::NodeResourceOverbooked
                     << NodeModel::NodeResourceUnavailable
                     << NodeModel::NodeConstraintsError
-                    << NodeModel::NodeEffortNotMet;
+                    << NodeModel::NodeEffortNotMet
+                    << NodeModel::NodeSchedulingError;
                 foreach ( int i, lst ) {
                     QVariant v = data( idx, i, Qt::EditRole );
                     //kDebug()<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
@@ -587,7 +586,8 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     << NodeModel::NodeResourceOverbooked
                     << NodeModel::NodeResourceUnavailable
                     << NodeModel::NodeConstraintsError
-                    << NodeModel::NodeEffortNotMet;
+                    << NodeModel::NodeEffortNotMet
+                    << NodeModel::NodeSchedulingError;
                 foreach ( int i, lst ) {
                     QVariant v = data( idx, i, Qt::EditRole );
                     //kDebug()<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;

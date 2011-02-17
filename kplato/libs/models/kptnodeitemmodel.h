@@ -115,6 +115,7 @@ public:
         NodeResourceUnavailable,
         NodeConstraintsError,
         NodeEffortNotMet,
+        NodeSchedulingError,
 
         NodeWBSCode,
         NodeLevel,
@@ -221,6 +222,8 @@ public:
     QVariant schedulingConstraintsError( const Node *node, int role ) const;
     /// Resources could not fullfil estimate
     QVariant effortNotMet( const Node *node, int role ) const;
+    /// Other scheduling error occured
+    QVariant schedulingError( const Node *node, int role ) const;
 
     QVariant wbsCode( const Node *node, int role ) const;
     QVariant nodeLevel( const Node *node, int role ) const;

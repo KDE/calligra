@@ -22,25 +22,78 @@
 #include <QDebug>
 using namespace MSO;
 
-//prototypes of local functions
-const TextCFRun*
-getCFRun(const TextContainer* tc, const quint32 start);
-
-const TextCFException*
-getTextCFException(const TextContainer* tc, const int start);
+// NOTE: Deprecated !!!
+template <class Style>
+void addStyle(const Style** list, const Style* style)
+{
+    if (style) {
+        while (*list) ++list;
+        *list = style;
+        *list++;
+        *list = 0;
+    }
+}
 
 namespace {
 
-    enum TextTypeEnum {
-        Tx_TYPE_TITLE = 0,
-        Tx_TYPE_BODY,
-        Tx_TYPE_NOTES,
-        Tx_TYPE_OTHER = 4,
-        Tx_TYPE_CENTERBODY,
-        Tx_TYPE_CENTERTITLE,
-        Tx_TYPE_HALFBODY,
-        Tx_TYPE_QUARTERBODY
-    };
+// ************************************************
+//  TextPFRun/TextCFRun
+// ************************************************
+template <class Run>
+const Run* getRun(const QList<Run> &runs, quint32 start)
+{
+    int i = 0;
+    quint32 end = 0;
+    const Run* run = 0;
+    while (i < runs.size()) {
+        end += runs[i].count;
+        if (end > start) {
+            run = &runs[i];
+            break;
+        }
+        i++;
+    }
+    return run;
+}
+
+const TextPFRun*
+getPFRun(const TextContainer* tc, quint32 start)
+{
+    if (tc && tc->style) {
+        return getRun<TextPFRun>(tc->style->rgTextPFRun, start);
+    }
+    return 0;
+}
+const TextCFRun*
+getCFRun(const TextContainer* tc, const quint32 start)
+{
+    if (tc && tc->style) {
+        return getRun<TextCFRun>(tc->style->rgTextCFRun, start);
+    }
+    return 0;
+}
+const TextCFException*
+getTextCFException(const MSO::TextContainer* tc, const int start)
+{
+    if (!tc || !tc->style) return 0;
+    const QList<TextCFRun> &cfs = tc->style->rgTextCFRun;
+    int i = 0;
+    int cfend = 0;
+    while (i < cfs.size()) {
+        cfend += cfs[i].count;
+        if (cfend > start) {
+            break;
+        }
+        i++;
+    }
+    if (i >= cfs.size()) {
+        return 0;
+    }
+    return &cfs[i].cf;
+}
+// ************************************************
+//  Master Style - Level (PF/CF)
+// ************************************************
 
 const TextMasterStyleAtom*
 getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
@@ -50,30 +103,6 @@ getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
     if (!mm) return 0;
     const TextMasterStyleAtom* textstyle = 0;
     foreach (const TextMasterStyleAtom&ma, mm->rgTextMasterStyle) {
-        if (ma.rh.recInstance == texttype) {
-            textstyle = &ma;
-        }
-    }
-    return textstyle;
-}
-const TextMasterStyle9Atom*
-getTextMasterStyle9Atom(const PP9SlideBinaryTagExtension* m, quint16 texttype)
-{
-    if (!m) return 0;
-    const TextMasterStyle9Atom* textstyle = 0;
-    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyleAtom) {
-        if (ma.rh.recInstance == texttype) {
-            textstyle = &ma;
-        }
-    }
-    return textstyle;
-}
-const TextMasterStyle9Atom*
-getTextMasterStyle9Atom(const PP9DocBinaryTagExtension* m, quint16 texttype)
-{
-    if (!m) return 0;
-    const TextMasterStyle9Atom* textstyle = 0;
-    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyle9) {
         if (ma.rh.recInstance == texttype) {
             textstyle = &ma;
         }
@@ -108,30 +137,6 @@ getTextMasterStyleLevel(const TextMasterStyleAtom* ms, quint16 level)
     }
     return l;
 }
-
-template <class Run>
-const Run* getRun(const QList<Run> &runs, quint32 start)
-{
-    int i = 0;
-    quint32 end = 0;
-    const Run* run = 0;
-    while (i < runs.size()) {
-        end += runs[i].count;
-        if (end > start) {
-            run = &runs[i];
-            break;
-        }
-        i++;
-    }
-    return run;
-}
-const TextPFRun* getPFRun(const TextContainer* tc, quint32 start)
-{
-    if (tc && tc->style) {
-        return getRun<TextPFRun>(tc->style->rgTextPFRun, start);
-    }
-    return 0;
-}
 const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
                                   quint32 textType, quint16 level)
 {
@@ -145,65 +150,124 @@ const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
     return (tc) ?getLevelPF(m, tc->textHeaderAtom.textType, level) :0;
 }
 const TextCFException* getLevelCF(const MasterOrSlideContainer* m,
-                                  const TextContainer& tc, quint16 level)
+                                  const TextContainer* tc, quint16 level)
 {
-    quint32 textType = tc.textHeaderAtom.textType;
+    if (!tc) return 0;
+    quint32 textType = tc->textHeaderAtom.textType;
     const TextMasterStyleAtom* ms = getTextMasterStyleAtom(m, textType);
     const TextMasterStyleLevel* ml = getTextMasterStyleLevel(ms, level);
     return (ml) ?&ml->cf :0;
 }
-const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
-                                         quint32 textType, quint16 level)
+// ************************************************
+//  Master Style - Base Levels (PF/CF)
+// ************************************************
+
+QList<const TextMasterStyleLevel*>
+getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, quint16 level)
 {
+    QList<const TextMasterStyleLevel*> lst;
+    if (!tc) return lst;
+
+    quint32 textType = tc->textHeaderAtom.textType;
     const TextMasterStyleAtom* ms = 0;
-    const TextMasterStyleLevel* ml = 0;
 
-    //NOTE: following rules were discussed at the Office File Formats Forum,
-    //fine tuning is still required
+    //NOTE: some of the following rules were discussed at the Office File
+    //Formats Forum, fine tuning is still required!  Tx_TYPE_OTHER does not
+    //inherit, it uses the default values from DocumentContainer.
 
-    if (textType == Tx_TYPE_CENTERTITLE) {
+    switch (textType) {
+    case Tx_TYPE_CENTERTITLE:
         ms = getTextMasterStyleAtom(m, Tx_TYPE_TITLE);
-        ml = getTextMasterStyleLevel(ms, level);
-    }
-    //TODO: fine tuning on test documents required
-    else if (textType == Tx_TYPE_BODY ||
-             textType == Tx_TYPE_CENTERBODY ||
-             textType == Tx_TYPE_HALFBODY ||
-             textType == Tx_TYPE_QUARTERBODY)
-    {
+        lst.append(getTextMasterStyleLevel(ms, level));
+        break;
+    case Tx_TYPE_BODY:
         ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);
-        ml = getTextMasterStyleLevel(ms, 0);
+        while (level > 0) {
+            lst.append(getTextMasterStyleLevel(ms, --level));
+        }
+        break;
+    case Tx_TYPE_CENTERBODY:
+    case Tx_TYPE_HALFBODY:
+    case Tx_TYPE_QUARTERBODY:
+        ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);
+        lst.append(getTextMasterStyleLevel(ms, 0));
+        break;
+    default:
+        break;
     }
-    else if (textType == Tx_TYPE_OTHER) {
-        //MS Office 2007 specific at the moment
-        if (level) {
-            ms = getTextMasterStyleAtom(m, Tx_TYPE_OTHER);
-            ml = getTextMasterStyleLevel(ms, 0);
+    //TODO: Tx_TYPE_NOTES do not inherit at the moment
+
+    return lst;
+}
+QList<const TextPFException*>
+getBaseLevelsPF(const MasterOrSlideContainer* m, const TextContainer* tc, quint16 level)
+{
+    QList<const TextMasterStyleLevel*> mls = getBaseLevels(m, tc, level);
+    QList<const TextPFException*> pfs;
+    for (int i = 0; i < mls.size(); i++) {
+        if (mls[i]) {
+            pfs.append(&mls[i]->pf);
         }
     }
-    //NOTE: Tx_TYPE_NOTES do not inherit at the moment
+    return pfs;
+}
+QList<const TextCFException*>
+getBaseLevelsCF(const MasterOrSlideContainer* m, const TextContainer* tc, quint16 level)
+{
+    QList<const TextMasterStyleLevel*> mls = getBaseLevels(m, tc, level);
+    QList<const TextCFException*> cfs;
+    for (int i = 0; i < mls.size(); i++) {
+        if (mls[i]) {
+            cfs.append(&mls[i]->cf);
+        }
+    }
+    return cfs;
+}
+// ************************************************
+//  Default - Base Levels (PF/CF)
+// ************************************************
 
-    return ml;
-}
-const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
-                                  const TextContainer* tc, quint16 level)
+QList<const TextMasterStyleLevel*>
+getDefaultBaseLevels(const MSO::DocumentContainer* d, quint16 level)
 {
-    return (tc) ?getBaseLevel(m, tc->textHeaderAtom.textType, level) :0;
+    QList<const TextMasterStyleLevel*> mls;
+    if (!d) return mls;
+    while (level > 0) {
+        mls.append(getTextMasterStyleLevel(
+                      &d->documentTextInfo.textMasterStyleAtom, --level));
+    }
+    return mls;
 }
-const TextPFException* getBaseLevelPF(const MasterOrSlideContainer* m,
-                                  const TextContainer* tc, quint16 level)
+QList<const TextPFException*>
+getDefaultBaseLevelsPF(const MSO::DocumentContainer* d, quint16 level)
 {
-    const TextMasterStyleLevel* ml = getBaseLevel(m, tc, level);
-    return (ml) ?&ml->pf :0;
+    QList<const TextMasterStyleLevel*> mls = getDefaultBaseLevels(d, level);
+    QList<const TextPFException*> pfs;
+    for (int i = 0; i < mls.size(); i++) {
+        if (mls[i]) {
+            pfs.append(&mls[i]->pf);
+        }
+    }
+    return pfs;
 }
-const TextCFException* getBaseLevelCF(const MasterOrSlideContainer* m,
-                                  const TextContainer* tc, quint16 level)
+QList<const TextCFException*>
+getDefaultBaseLevelsCF(const MSO::DocumentContainer* d, quint16 level)
 {
-    const TextMasterStyleLevel* ml = getBaseLevel(m, tc, level);
-    return (ml) ?&ml->cf :0;
+    QList<const TextMasterStyleLevel*> mls = getDefaultBaseLevels(d, level);
+    QList<const TextCFException*> cfs;
+    for (int i = 0; i < mls.size(); i++) {
+        if (mls[i]) {
+            cfs.append(&mls[i]->cf);
+        }
+    }
+    return cfs;
 }
-const TextMasterStyleLevel* getDefaultLevel(const MSO::DocumentContainer* d,
-                                            quint16 level)
+// ************************************************
+//  Default - Level (PF/CF)
+// ************************************************
+
+const TextMasterStyleLevel*
+getDefaultLevel(const MSO::DocumentContainer* d, quint16 level)
 {
     if (!d) return 0;
     const TextMasterStyleLevel* ml = getTextMasterStyleLevel(
@@ -214,32 +278,68 @@ const TextMasterStyleLevel* getDefaultLevel(const MSO::DocumentContainer* d,
     }
     return ml;
 }
-const TextPFException* getDefaultLevelPF(const MSO::DocumentContainer* d,
-                                         quint16 level)
+const TextPFException*
+getDefaultLevelPF(const MSO::DocumentContainer* d, quint16 level)
 {
     const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
     return (ml) ?&ml->pf :0;
 }
-const TextCFException* getDefaultLevelCF(const MSO::DocumentContainer* d,
-                                         quint16 level)
+const TextCFException*
+getDefaultLevelCF(const MSO::DocumentContainer* d, quint16 level)
 {
     const TextMasterStyleLevel* ml = getDefaultLevel(d, level);
     return (ml) ?&ml->cf :0;
 }
-const TextPFException* getDefaultPF(const MSO::DocumentContainer* d)
+
+// ************************************************
+//  Default (PF/CF)
+// ************************************************
+
+const TextPFException*
+getDefaultPF(const MSO::DocumentContainer* d)
 {
     if (d && d->documentTextInfo.textPFDefaultsAtom) {
         return &d->documentTextInfo.textPFDefaultsAtom->pf;
     }
     return 0;
 }
-const TextCFException* getDefaultCF(const MSO::DocumentContainer* d)
+const TextCFException*
+getDefaultCF(const MSO::DocumentContainer* d)
 {
     if (d && d->documentTextInfo.textCFDefaultsAtom) {
         return &d->documentTextInfo.textCFDefaultsAtom->cf;
     }
     return 0;
 }
+
+// ************************************************
+//  Master Style 9
+// ************************************************
+const TextMasterStyle9Atom*
+getTextMasterStyle9Atom(const PP9SlideBinaryTagExtension* m, quint16 texttype)
+{
+    if (!m) return 0;
+    const TextMasterStyle9Atom* textstyle = 0;
+    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyleAtom) {
+        if (ma.rh.recInstance == texttype) {
+            textstyle = &ma;
+        }
+    }
+    return textstyle;
+}
+const TextMasterStyle9Atom*
+getTextMasterStyle9Atom(const PP9DocBinaryTagExtension* m, quint16 texttype)
+{
+    if (!m) return 0;
+    const TextMasterStyle9Atom* textstyle = 0;
+    foreach (const TextMasterStyle9Atom&ma, m->rgTextMasterStyle9) {
+        if (ma.rh.recInstance == texttype) {
+            textstyle = &ma;
+        }
+    }
+    return textstyle;
+}
+
 const MSO::StyleTextProp9*
 getStyleTextProp9(const MSO::DocumentContainer* d, quint32 slideIdRef,
                   quint32 textType, quint8 pp9rt)
@@ -361,16 +461,9 @@ const TextPFException9* getDefaultPF9(const MSO::DocumentContainer* d)
     const PP9DocBinaryTagExtension* pp9 = getPP<PP9DocBinaryTagExtension>(d);
     return (pp9 && pp9->textDefaultsAtom) ?&pp9->textDefaultsAtom->pf9 :0;
 }
-template <class Style>
-void addStyle(const Style** list, const Style* style)
-{
-    if (style) {
-        while (*list) ++list;
-        *list = style;
-        *list++;
-        *list = 0;
-    }
-}
+// ************************************************
+//  LeftMargin + Indent
+// ************************************************
 
 qint16 getLeftMargin(const TextRuler* tr, quint16 level)
 {
@@ -422,40 +515,17 @@ qint16 getDefaultIndent(const MSO::DocumentContainer* d, quint16 level)
     return -1;
 }
 
-} //namespace
+} //namespace (anonymous)
 
-const TextCFRun*
-getCFRun(const TextContainer* tc, const quint32 start)
-{
-    if (tc && tc->style) {
-        return getRun<TextCFRun>(tc->style->rgTextCFRun, start);
-    }
-    return 0;
-}
-
-const TextCFException*
-getTextCFException(const MSO::TextContainer* tc, const int start)
-{
-    if (!tc || !tc->style) return 0;
-    const QList<TextCFRun> &cfs = tc->style->rgTextCFRun;
-    int i = 0;
-    int cfend = 0;
-    while (i < cfs.size()) {
-        cfend += cfs[i].count;
-        if (cfend > start) {
-            break;
-        }
-        i++;
-    }
-    if (i >= cfs.size()) {
-        return 0;
-    }
-    return &cfs[i].cf;
-}
+PptTextPFRun::PptTextPFRun()
+    : m_level(0)
+    , m_count(-1)
+    , m_fHasBullet(0)
+{}
 
 PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
+                           QList<const MSO::MasterOrSlideContainer*> &mh,
                            const SlideListWithTextSubContainerOrAtom* texts,
-                           const MasterOrSlideContainer* m,
                            const PptOfficeArtClientData* pcd,
                            const TextContainer* tc,
                            const TextRuler* tr,
@@ -475,7 +545,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
         //use the default values at the moment
         m_count = -1;
         level = 0;
-#if 0 
+#if 0
         qDebug() << "==> TextPFRun missing!";
         if (tc) {
             qDebug() << "==> TextContainer present, what's going on?";
@@ -492,15 +562,30 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     m_leftMargin.append(getDefaultLeftMargin(d, level));
     m_indent.append(getDefaultIndent(d, level));
 
-    *pfs = 0;
-    addStyle(pfs, (pfrun) ?&pfrun->pf :0);
+    if (pfrun) {
+        pfs.append(&pfrun->pf);
+    } else {
+	qDebug() << "=> TextPFRun MISSING!!!!";
+    }
+
     //check the main master/title master slide's TextMasterStyleAtom
-    addStyle(pfs, getLevelPF(m, tc, level));
-    addStyle(pfs, getBaseLevelPF(m, tc, level));
+    for (int i = 0; i < mh.size(); i++) {
+        pfs.append(getLevelPF(mh[i], tc, level));
+        pfs.append(getBaseLevelsPF(mh[i], tc, level));
+    }
     //check DocumentContainer/DocumentTextInfoContainer/textMasterStyleAtom
-    addStyle(pfs, getDefaultLevelPF(d, level));
+    pfs.append(getDefaultLevelPF(d, level));
+    pfs.append(getDefaultBaseLevelsPF(d, level));
     //check DocumentContainer/DocumentTextInfoContainer/textPFDefaultsAtom
-    addStyle(pfs, getDefaultPF(d));
+    pfs.append(getDefaultPF(d));
+
+    //TODO: test documents required to construct correct pf9s based on the full
+    //masters hierarchy.
+
+    const MSO::MasterOrSlideContainer* m = 0;
+    if (mh.size() > 0) {
+        m = mh[0];
+    }
 
     *pf9s = 0;
     addStyle(pf9s, getPF9(d, texts, pcd, tc, start));
@@ -512,13 +597,13 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     // active, 1 is lowest list level, 5 is the highest list level
 //     m_level = (level || fHasBullet()) ?level + 1 :0;
 
-    //NOTE: The previous assumption is not true, there are cases when
-    //(indentLevel == 1 && fHasBullet == false).  We should interpret this text
-    //as content of a paragraph with corresponding indentLevel, thus avoid
-    //placing it into a text:list element.
+    //FIXME: The previous assumption is not true, there are cases when
+    //(indentLevel > 0 && fHasBullet == false).  At the moment such run of text
+    //is interpreted as content of a paragraph with corresponding indentLevel,
+    //but it looks like we should store it as a text:list-item.
     m_level = level;
 
-    //NOTE: fine tuning on test documents required
+    //TODO: fine tuning on test documents required
 
     //set the default values of bullet properties
     if (tc) {
@@ -541,17 +626,18 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
 
 PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
                            QList<const MSO::MasterOrSlideContainer*> &mh,
-                           const MSO::TextContainer& tc,
+                           const MSO::TextContainer* tc,
                            quint16 level)
 {
     //check the main master/title master slide's TextMasterStyleAtom
     for (int i = 0; i < mh.size(); i++) {
         cfs.append(getLevelCF(mh[i], tc, level));
-        cfs.append(getBaseLevelCF(mh[i], &tc, level));
+        cfs.append(getBaseLevelsCF(mh[i], tc, level));
     }
 
     //check DocumentContainer/DocumentTextInfoContainer/textMasterStyleAtom
     cfs.append(getDefaultLevelCF(d, level));
+    cfs.append(getDefaultBaseLevelsCF(d, level));
     //check DocumentContainer/DocumentTextInfoContainer/textCFDefaultsAtom
     cfs.append(getDefaultCF(d));
 
@@ -569,9 +655,9 @@ PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d)
     m_level = 99;
 }
 
-int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer& tc, quint32 start)
+int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer* tc, quint32 start)
 {
-    int n = 0;
+    int n = -1;
 
     //remove pointer to TextCFException structure of the previous run of text
     if (m_cfrun_rm) {
@@ -579,7 +665,7 @@ int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer& tc, quint32 start)
         m_cfrun_rm = false;
     }
 
-    const TextCFRun* cfrun = getCFRun(&tc, start);
+    const TextCFRun* cfrun = getCFRun(tc, start);
     if (cfrun) {
         cfs.prepend(&cfrun->cf);
         n = cfrun->count;
@@ -591,12 +677,12 @@ int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer& tc, quint32 start)
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \
-    const MSO::TextPFException* const * p = pfs; \
-    while (*p) { \
-        if ((*p)->masks.TEST) { \
-            return PRE (*p)->PARENT NAME; \
+    for (int i = 0; i < pfs.size(); i++) { \
+        if (pfs[i]) { \
+            if ((pfs[i])->masks.TEST) {	\
+                return PRE (pfs[i])->PARENT NAME; \
+            } \
         } \
-        ++p; \
     } \
     return DEFAULT; \
 }
@@ -619,7 +705,7 @@ GETTER(bool,     wrapFlags->,  ,  overflow,        overflow,       false)
 GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
 #undef GETTER
 
-#define GETTER(TYPE, TR_VAL, NAME, TEST, DEFAULT)	\
+#define GETTER(TYPE, TR_VAL, NAME, TEST, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \
     for (int i = 0; i < TR_VAL.size(); i++) { \
@@ -627,12 +713,12 @@ TYPE PptTextPFRun::NAME() const \
             return TR_VAL[i]; \
         } \
     } \
-    const MSO::TextPFException* const * p = pfs; \
-    while (*p) { \
-        if ((*p)->masks.TEST) { \
-            return (*p)->NAME; \
+    for (int i = 0; i < pfs.size(); i++) { \
+        if (pfs[i]) { \
+            if ((pfs[i])->masks.TEST) { \
+                return (pfs[i])->NAME; \
+            } \
         } \
-        ++p; \
     } \
     return DEFAULT; \
 }
@@ -645,14 +731,14 @@ GETTER(quint16,  m_indent,         indent,          indent,         0)
 #define GETTER(TYPE, PRE, NAME, TEST, VALID, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \
-    const MSO::TextPFException* const * p = pfs; \
-    while (*p) { \
-        if ((*p)->masks.TEST) { \
-            if (VALID()) { \
-                return PRE (*p)->NAME; \
+    for (int i = 0; i < pfs.size(); i++) { \
+        if (pfs[i]) { \
+            if ((pfs[i])->masks.TEST) {	\
+                if (VALID()) { \
+                    return PRE (pfs[i])->NAME; \
+                } \
             } \
         } \
-        ++p; \
     } \
     return DEFAULT; \
 }
@@ -706,15 +792,20 @@ qint16 PptTextPFRun::startNum() const {
     return 1;
 }
 
+
+//FIXME: Looks like only Tx_TYPE_OTHER is not stored in lists.  Test files are
+//required to prove this!
+
 //NOTE: Logic exploited from test documents saved in MS PowerPoint 2003/2007
 bool PptTextPFRun::isList() const {
     bool ret = false;
-    if (fHasBullet() ||
-        fBulletHasAutoNumber() ||
-        (bulletBlipRef() != 65535)
+    if ( fHasBullet() ||
+         fBulletHasAutoNumber() ||
+         (bulletBlipRef() != 65535)
 //         (bulletChar() > 0) ||
 //         fBulletHasFont() ||
-       ) {
+       )
+    {
         ret = true;
     }
     return ret;

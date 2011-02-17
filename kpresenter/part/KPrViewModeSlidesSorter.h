@@ -51,7 +51,6 @@ public:
 
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
-
     void updateActivePage( KoPAPageBase *page );
 
     void addShape( KoShape *shape );
@@ -128,6 +127,8 @@ protected:
      */
     void setLastItemNumber(int number);
 
+    void activateNormalViewMode();
+
     /**
      * This class manage the QListWidget itself.
      * Use all the getters and setters of the KPrViewModeSlidesSorter.
@@ -152,6 +153,8 @@ protected:
             }
 
             virtual void paintEvent ( QPaintEvent * ev);
+
+            virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
             virtual void startDrag ( Qt::DropActions supportedActions );
 
@@ -178,6 +181,9 @@ private:
     const int m_pageCount;
     bool m_dragingFlag;
     int m_lastItemNumber;
+
+private slots:
+    void updateDocumentDock();
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

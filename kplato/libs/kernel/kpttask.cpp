@@ -1632,6 +1632,15 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->startTime = cs->endTime - cs->duration;
             //kDebug()<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish;
             makeAppointments();
+            if ( cs->plannedEffort() == 0 && cs->lateFinish < cs->earlyFinish ) {
+                // the backward pass failed to calulate sane values, try to handle it
+                //TODO add an error indication
+                cs->logWarning( i18n( "%1: Scheduling failed using late finish, trying early finish instead.", constraintToString() ) );
+                cs->endTime = workTimeBefore( cs->earlyFinish, cs );
+                cs->duration = duration(cs->endTime, use, true);
+                cs->startTime = cs->endTime - cs->duration;
+                makeAppointments();
+            }
             if ( cs->lateFinish > cs->endTime ) {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             } else {
@@ -1659,7 +1668,7 @@ DateTime Task::scheduleFromStartTime(int use) {
                 cs->positiveFloat = Duration::zeroDuration;
             }
             if (cs->startTime < m_constraintStartTime) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = cs->startTime - m_constraintStartTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -1683,7 +1692,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             }
             if (cs->endTime > m_constraintEndTime) {
                 //kWarning()<<"cs->endTime > m_constraintEndTime";
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = cs->endTime - m_constraintEndTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -1709,7 +1718,7 @@ DateTime Task::scheduleFromStartTime(int use) {
                 cs->positiveFloat = Duration::zeroDuration;
             }
             if (m_constraintStartTime < cs->startTime ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = cs->startTime - m_constraintStartTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -1733,7 +1742,7 @@ DateTime Task::scheduleFromStartTime(int use) {
                 cs->positiveFloat = Duration::zeroDuration;
             }
             if ( cs->endTime != m_constraintEndTime  ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = cs->endTime - m_constraintEndTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -1748,10 +1757,10 @@ DateTime Task::scheduleFromStartTime(int use) {
             } else {
                 cs->startTime = cs->earlyStart;
                 cs->endTime = cs->startTime + cs->duration;
-                cs->schedulingError = true;
+                cs->constraintError = true;
             }
             if ( m_constraintStartTime < cs->startTime ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = cs->startTime - m_constraintStartTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -1790,7 +1799,7 @@ DateTime Task::scheduleFromStartTime(int use) {
         }
         case Node::ALAP: {
             cs->startTime = qMax( cs->lateFinish, cs->earlyFinish );
-            cs->endTime = cs->endTime;
+            cs->endTime = cs->startTime;
             cs->positiveFloat = Duration::zeroDuration;
             break;
         }
@@ -1809,7 +1818,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             }
             cs->negativeFloat = cs->startTime > contime ? cs->startTime - contime :  contime - cs->startTime;
             if ( cs->negativeFloat != 0 ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
             cs->endTime = cs->startTime;
@@ -1825,7 +1834,7 @@ DateTime Task::scheduleFromStartTime(int use) {
                 }
             }
             if ( cs->startTime < m_constraintStartTime ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = m_constraintStartTime - cs->startTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -1837,7 +1846,7 @@ DateTime Task::scheduleFromStartTime(int use) {
         case Node::FinishNotLater:
             //kDebug()<<m_constraintEndTime<<cs->startTime;
             if (cs->startTime > m_constraintEndTime) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = cs->startTime - m_constraintEndTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -1959,10 +1968,9 @@ DateTime Task::scheduleFromEndTime(int use) {
             DateTime e = cs->startTime + cs->duration;
             if ( e > cs->lateFinish ) {
                 cs->schedulingError = true;
-                cs->negativeFloat = e - cs->lateFinish;
-                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule within late finish. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule within late finish.", constraintToString() ) );
 #ifndef PLAN_NLOGDEBUG
-                cs->logDebug( "ASAP: late finish=" + cs->lateFinish.toString() + " end time=" + e.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
+                cs->logDebug( "ASAP: late finish=" + cs->lateFinish.toString() + " end time=" + e.toString() );
 #endif
             } else if ( e > cs->endTime ) {
                 cs->schedulingError = true;
@@ -1993,10 +2001,9 @@ DateTime Task::scheduleFromEndTime(int use) {
             cs->startTime = cs->endTime - cs->duration;
             if ( cs->startTime < cs->earlyStart ) {
                 cs->schedulingError = true;
-                cs->negativeFloat = cs->earlyStart - cs->startTime;
-                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start.", constraintToString() ) );
 #ifndef PLAN_NLOGDEBUG
-                cs->logDebug( "ALAP: earlyStart=" + cs->earlyStart.toString() + " cs->startTime=" + cs->startTime.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
+                cs->logDebug( "ALAP: earlyStart=" + cs->earlyStart.toString() + " cs->startTime=" + cs->startTime.toString() );
 #endif
             } else if ( cs->lateFinish > cs->endTime ) {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
@@ -2016,7 +2023,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             cs->startTime = cs->endTime - cs->duration;
             if ( cs->startTime < m_constraintStartTime ) {
                 //kWarning()<<"m_constraintStartTime > cs->lateStart";
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = m_constraintStartTime - cs->startTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -2036,7 +2043,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             cs->startTime = cs->endTime - cs->duration;
             if ( cs->endTime > m_constraintEndTime ) {
                 cs->negativeFloat = cs->endTime - m_constraintEndTime;
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
             makeAppointments();
@@ -2057,7 +2064,7 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->startTime = cs->endTime - cs->duration;
             }
             if (m_constraintStartTime != cs->startTime) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = m_constraintStartTime - cs->startTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -2074,7 +2081,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             cs->startTime = cs->endTime - cs->duration;
             if (m_constraintEndTime != cs->endTime ) {
                 cs->negativeFloat = m_constraintEndTime - cs->endTime;
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 //kWarning()<<"m_constraintEndTime > cs->endTime";
             }
@@ -2093,7 +2100,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             cs->startTime = cs->endTime - cs->duration;
             if (m_constraintEndTime != cs->endTime) {
                 cs->negativeFloat = m_constraintEndTime - cs->endTime;
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
             cs->workStartTime = workTimeAfter( cs->startTime );
@@ -2118,8 +2125,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         case Node::ASAP:
             if ( cs->endTime < cs->earlyStart ) {
                 cs->schedulingError = true;
-                cs->negativeFloat = cs->earlyStart - cs->endTime;
-                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start.", constraintToString() ) );
                 cs->endTime = cs->earlyStart;
             } else {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
@@ -2144,7 +2150,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             }
             cs->negativeFloat = cs->endTime > contime ? cs->endTime - contime : contime - cs->endTime;
             if ( cs->negativeFloat != 0 ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
             cs->startTime = cs->endTime;
@@ -2156,7 +2162,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         case Node::StartNotEarlier:
             cs->startTime = cs->endTime;
             if ( m_constraintStartTime > cs->startTime) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = m_constraintStartTime - cs->startTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
@@ -2173,7 +2179,7 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->endTime = m_constraintEndTime;
             }
             if ( m_constraintEndTime > cs->endTime ) {
-                cs->schedulingError = true;
+                cs->constraintError = true;
                 cs->negativeFloat = cs->endTime - m_constraintEndTime;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }

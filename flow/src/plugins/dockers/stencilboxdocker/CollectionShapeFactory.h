@@ -20,18 +20,16 @@
 #define KOCOLLECTIONSHAPEFACTORY_H
 
 #include <KoShapeFactoryBase.h>
-#include <KoResourceManager.h>
-#include <KoProperties.h>
 
 class KoShapeControllerBase;
 
 class CollectionShapeFactory : public KoShapeFactoryBase
 {
     public:
-        CollectionShapeFactory(const QString &id, KoProperties* props);
+        CollectionShapeFactory(const QString &id, KoShape* shape);
         ~CollectionShapeFactory();
 
-        virtual KoShape *createDefaultShape(KoResourceManager *documentResources = new KoResourceManager()) const;
+        virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
         virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
     private:

@@ -23,40 +23,38 @@
 
 #include "generated/simpleParser.h"
 
+enum TextTypeEnum {
+    Tx_TYPE_TITLE = 0,
+    Tx_TYPE_BODY,
+    Tx_TYPE_NOTES,
+    Tx_TYPE_OTHER = 4,
+    Tx_TYPE_CENTERBODY,
+    Tx_TYPE_CENTERTITLE,
+    Tx_TYPE_HALFBODY,
+    Tx_TYPE_QUARTERBODY
+};
+
 class PptTextPFRun {
-private:
-    //the indentation level of the paragraph
-    quint16 m_level;
-
-    //number of characters of the corresponding text to which this paragraph
-    //formatting applies
-    quint32 m_count;
-
-    //default values of bullet properties (text type specific)
-    bool m_fHasBullet;
-
-    //ident/margin for text with indentLevel == m_level (provided by TextRuler)
-    QList<qint16> m_indent;
-    QList<qint16> m_leftMargin;
-
-    const MSO::TextPFException* pfs[6];
-    const MSO::TextPFException9* pf9s[6];
 public:
+
+    // NOTE: Deprecated !!!
+    //
+    // FIXME: required by ListStyleInput but it doesn't make much sense.
+    explicit PptTextPFRun();
 
     /**
      * Construct TextPFException and TextPFException9 hierarchy.
-     *
-     * @param DocumentContainer address
+     * @param d DocumentContainer address
+     * @param mh MasterOrSlideContainer hierarchy
      * @param texts together with @param pcd provides access to StyleTextProp9Atom
-     * @param m address of the MainMasterSlide/TitleMasterSlide
      * @param pcd provides access to additional text formatting in StyleTextProp9Atom
      * @param tc provides access to text formatting in MasterTextPropAtom
      * @param tr specifies tabbing, margins, and indentation for text
      * @param start specifies begging of the paragraph in the slide text
      */
-    explicit PptTextPFRun(const MSO::DocumentContainer* d = 0,
+    explicit PptTextPFRun(const MSO::DocumentContainer* d,
+                          QList<const MSO::MasterOrSlideContainer*> &mh,
                           const MSO::SlideListWithTextSubContainerOrAtom* texts = 0,
-                          const MSO::MasterOrSlideContainer* m = 0,
                           const MSO::PptOfficeArtClientData* pcd = 0,
                           const MSO::TextContainer* tc = 0,
                           const MSO::TextRuler* tr = 0,
@@ -106,31 +104,41 @@ public:
      * TextAutoNumberScheme is not provided.
      */
     quint16 scheme() const;
+
+private:
+    //the indentation level of the paragraph
+    quint16 m_level;
+
+    //number of characters of the corresponding text to which this paragraph
+    //formatting applies
+    quint32 m_count;
+
+    //default values of bullet properties (text type specific)
+    bool m_fHasBullet;
+
+    //ident/margin for text with indentLevel == m_level (provided by TextRuler)
+    QList<qint16> m_indent;
+    QList<qint16> m_leftMargin;
+
+    QList<const MSO::TextPFException*> pfs;
+    const MSO::TextPFException9* pf9s[6];
 };
 
 class PptTextCFRun {
-private:
-    QList<const MSO::TextCFException*> cfs;
-
-    //the indentation level of the corresponding paragraph
-    quint16 m_level;
-
-    //each run of text has a separate character-level formatting provided by
-    //TextCFRun which is added/replaced on top of the cfs list
-    bool m_cfrun_rm;
 public:
     /**
      * Construct TextCFException hierarchy.
-     * @param DocumentContainer
-     * @param MasterOrSlideContainer hierarchy
-     * @param TextContainer
+     * @param d DocumentContainer
+     * @param mh MasterOrSlideContainer hierarchy
+     * @param tc TextContainer
      * @param level specifies the indentation level of the paragraph
      */
     PptTextCFRun(const MSO::DocumentContainer* d,
                  QList<const MSO::MasterOrSlideContainer*> &mh,
-                 const MSO::TextContainer& tc,
+                 const MSO::TextContainer* tc,
                  quint16 level);
 
+    // NOTE: Deprecated !!!
     /**
      * Only default TextCFExceptions are required.
      * @param DocumentContainer
@@ -145,7 +153,7 @@ public:
      * @return the number of characters of the corresponding text to which this
      * character formatting applies
      */
-    int addCurrentCFRun(const MSO::TextContainer& tc, quint32 start);
+    int addCurrentCFRun(const MSO::TextContainer* tc, quint32 start);
 
     bool bold() const;
     bool italic() const;
@@ -162,6 +170,16 @@ public:
     quint16 fontSize() const;
     MSO::ColorIndexStruct color() const;
     qint16 position() const;
+
+private:
+    QList<const MSO::TextCFException*> cfs;
+
+    //the indentation level of the corresponding paragraph
+    quint16 m_level;
+
+    //each run of text has a separate character-level formatting provided by
+    //TextCFRun which is added/replaced on top of the cfs list
+    bool m_cfrun_rm;
 };
 
 
@@ -258,4 +276,4 @@ getPP(const MSO::MasterOrSlideContainer* m) {
     return getPP<T>(m->anon.get<MSO::SlideContainer>());
 }
 
-#endif
+#endif //PPTSTYLE_H
