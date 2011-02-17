@@ -40,6 +40,7 @@
 #include <KoPAPageBase.h>
 #include <KoPAMasterPage.h>
 #include <KoPAView.h>
+#include <KPrView.h>
 
 #include <KoPAPageMoveCommand.h>
 
@@ -99,6 +100,14 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::paintEvent( QPaintEvent* event )
     }
 
 }
+
+void KPrViewModeSlidesSorter::KPrSlidesSorter::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    event->accept();
+    QListWidget::mouseDoubleClickEvent(event);
+    m_viewModeSlidesSorter->activateNormalViewMode();
+}
+
 
 void KPrViewModeSlidesSorter::paintEvent( KoPACanvas * canvas, QPaintEvent* event )
 {
@@ -163,6 +172,8 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     }
     m_slidesSorter->show();
     m_slidesSorter->setFocus(Qt::ActiveWindowFocusReason);
+    m_slidesSorter->setCurrentRow(m_view->kopaDocument()->pageIndex(m_view->activePage()));
+    connect(m_slidesSorter, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(updateDocumentDock()));
 }
 
 void KPrViewModeSlidesSorter::deactivate()
@@ -177,11 +188,20 @@ void KPrViewModeSlidesSorter::deactivate()
     if (view) {
         view->show();
     }
+    m_view->setActivePage(m_view->kopaDocument()->pageByIndex(m_slidesSorter->row(m_slidesSorter->currentItem()), false));
 }
 
 void KPrViewModeSlidesSorter::updateActivePage( KoPAPageBase *page )
 {
-    Q_UNUSED(page);
+    if (m_view->activePage() != page) {
+        m_view->setActivePage(page);
+    }
+    m_slidesSorter->setCurrentRow(m_view->kopaDocument()->pageIndex(page));
+}
+
+void KPrViewModeSlidesSorter::updateDocumentDock()
+{
+    m_view->setActivePage(m_view->kopaDocument()->pageByIndex(m_slidesSorter->currentRow(), false));
 }
 
 void KPrViewModeSlidesSorter::addShape( KoShape *shape )
@@ -241,6 +261,8 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
         // This selection helps the user
         clearSelection();
         item(newIndex)->setSelected(true);
+        setCurrentRow(newIndex);
+        m_viewModeSlidesSorter->updateDocumentDock();
     }
 
     m_movingPageNumber = -1;
@@ -283,7 +305,6 @@ void KPrViewModeSlidesSorter::populate()
 {
     int currentPage = 0;
     m_slidesSorter->clear();
-
     QListWidgetItem * item = 0;
 
     //Load the available slides
@@ -356,4 +377,11 @@ void KPrViewModeSlidesSorter::setLastItemNumber(int number)
 {
     m_lastItemNumber = number;
 }
+
+void KPrViewModeSlidesSorter::activateNormalViewMode()
+{
+    KPrView *view = static_cast<KPrView *>(m_view);
+    view->showNormal();
+}
+
 
