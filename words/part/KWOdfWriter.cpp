@@ -50,7 +50,6 @@
 #include <ktemporaryfile.h>
 
 QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedDocSaver,
-                                              KoEmbeddedFileSaver &embeddedFileSaver,
                                               KoGenStyles &mainStyles, KoGenChanges  &changes,
                                               KWTextFrameSet *fs)
 {
@@ -68,7 +67,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedD
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buffer);
 
-    KoShapeSavingContext context(writer, mainStyles, embeddedDocSaver, embeddedFileSaver);
+    KoShapeSavingContext context(writer, mainStyles, embeddedDocSaver);
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);
@@ -87,7 +86,6 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedD
 
 // rename to save pages ?
 void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedDocSaver,
-                                   KoEmbeddedFileSaver &embeddedFileSaver,
                                    KoGenStyles &mainStyles, KoGenChanges &changes)
 {
     //kDebug(32001)<< "START saveHeaderFooter ############################################";
@@ -143,8 +141,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedDocSaver,
             if (fs->frameCount() == 0) // don't save empty framesets
                 continue;
 
-            QByteArray content = serializeHeaderFooter(embeddedDocSaver, embeddedFileSaver,
-                                                       mainStyles, changes, fs);
+            QByteArray content = serializeHeaderFooter(embeddedDocSaver, mainStyles, changes, fs);
 
             if (content.isNull())
                 continue;
@@ -177,8 +174,7 @@ KWOdfWriter::~KWOdfWriter()
 
 // 1.6: KWDocument::saveOasisHelper()
 bool KWOdfWriter::save(KoOdfWriteStore &odfStore,
-                       KoEmbeddedDocumentSaver &embeddedDocSaver,
-                       KoEmbeddedFileSaver &embeddedFileSaver)
+                       KoEmbeddedDocumentSaver &embeddedDocSaver)
 {
     //kDebug(32001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
@@ -226,13 +222,13 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore,
     // Header and footers save their content into master-styles/master-page, and their
     // styles into the page-layout automatic-style.
 
-    saveHeaderFooter(embeddedDocSaver, embeddedFileSaver, mainStyles, changes);
+    saveHeaderFooter(embeddedDocSaver, mainStyles, changes);
 
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
 
-    KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedDocSaver, embeddedFileSaver);
+    KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedDocSaver);
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);

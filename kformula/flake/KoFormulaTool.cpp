@@ -49,7 +49,6 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoEmbeddedFileSaver.h>
 #include "FormulaRenderer.h"
 #include <qclipboard.h>
 
@@ -399,8 +398,7 @@ void KoFormulaTool::saveFormula()
     KoXmlWriter writer( &file );
     KoGenStyles styles;
     KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoEmbeddedFileSaver     embeddedFileSaver;
-    KoShapeSavingContext shapeSavingContext( writer, styles, embeddedDocSaver, embeddedFileSaver );
+    KoShapeSavingContext shapeSavingContext( writer, styles, embeddedDocSaver );
 
     m_formulaShape->formulaData()->saveMathML( shapeSavingContext );
 }

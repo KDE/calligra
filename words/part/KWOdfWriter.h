@@ -32,7 +32,6 @@
 class KWDocument;
 class KoOdfWriteStore;
 class KoEmbeddedDocumentSaver;
-class KoEmbeddedFileSaver;
 class KoGenStyles;
 class KWTextFrameSet;
 class KWPage;
@@ -62,15 +61,12 @@ public:
      *  @brief Writes an OASIS OpenDocument to a store.
      *  This implements the KoDocument::saveOdf method.
      */
-    bool save(KoOdfWriteStore &odfStore,
-              KoEmbeddedDocumentSaver &embeddedDocSaver, KoEmbeddedFileSaver &embeddedFileSaver);
+    bool save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedDocSaver);
 
 private:
     QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedDocSaver,
-                                     KoEmbeddedFileSaver &embeddedFileSaver,
                                      KoGenStyles &mainStyles, KoGenChanges &changes, KWTextFrameSet* fs);
     void saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedDocSaver,
-                          KoEmbeddedFileSaver &embeddedFileSaver,
                           KoGenStyles &mainStyles, KoGenChanges &changes);
 
     void calculateZindexOffsets();

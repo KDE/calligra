@@ -36,7 +36,6 @@
 #include <kio/netaccess.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoEmbeddedFileSaver.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
@@ -111,7 +110,6 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
 
   KoOdfWriteStore odfStore(store);
   KoEmbeddedDocumentSaver embeddedDocSaver;
-  KoEmbeddedFileSaver     embeddedFileSaver;
   
   KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
   KoXmlWriter* contentWriter = odfStore.contentWriter();
@@ -123,7 +121,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
     
   KoGenStyles mainStyles;
   KoShapeSavingContext * context = new KoShapeSavingContext(*bodyWriter, mainStyles,
-                                                            embeddedDocSaver, embeddedFileSaver);
+                                                            embeddedDocSaver);
   context->addOption(KoShapeSavingContext::DrawId);
 
   bodyWriter->startElement("office:body");
@@ -160,10 +158,6 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
   if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
       kDebug() << "save embedded documents failed";
-      return false;
-  }
-  if (!embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
-      kDebug() << "save embedded files failed";
       return false;
   }
 
