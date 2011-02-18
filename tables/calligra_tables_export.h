@@ -60,13 +60,27 @@
 // now for tests
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KSPREADCOMMON_LIB)
-#       define CALLIGRA_TABLES_TEST_EXPORT KDE_EXPORT
+# if defined(MAKE_CALLIGRATABLESCOMMON_LIB)
+#       define CALLIGRA_TABLES_COMMON_TEST_EXPORT KDE_EXPORT
 #   else
-#       define CALLIGRA_TABLES_TEST_EXPORT KDE_IMPORT
+#       define CALLIGRA_TABLES_COMMON_TEST_EXPORT KDE_IMPORT
 #   endif
 # else /* not windows */
 #   define CALLIGRA_TABLES_TEST_EXPORT KDE_EXPORT
+# endif
+#else /* not compiling tests */
+#   define CALLIGRA_TABLES_COMMON_TEST_EXPORT
+#endif
+
+#ifdef COMPILING_TESTS
+#if defined _WIN32 || defined _WIN64
+# if defined(MAKE_CALLIGRATABLESODF_LIB)
+#       define CALLIGRA_TABLES_ODF_TEST_EXPORT KDE_EXPORT
+#   else
+#       define CALLIGRA_TABLES_ODF_TEST_EXPORT KDE_IMPORT
+#   endif
+# else /* not windows */
+#   define CALLIGRA_TABLES_ODF_TEST_EXPORT KDE_EXPORT
 # endif
 #else /* not compiling tests */
 #   define CALLIGRA_TABLES_TEST_EXPORT
