@@ -525,7 +525,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d)
 {
     //check DocumentContainer/DocumentTextInfoContainer/textPFDefaultsAtom
     pfs.append(getDefaultPF(d));
-    bzero(pf9s, 6 * sizeof(TextPFException9*));
+    memset(pf9s, 0, 6 * sizeof(TextPFException9*));
 }
 
 PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
@@ -542,8 +542,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     if (level) {
         pfs.append(&level->pf);
     }
-
-    bzero(pf9s, 6 * sizeof(TextPFException9*));
+    memset(pf9s, 0, 6 * sizeof(TextPFException9*));
     if (level9) {
         addStyle(pf9s, &level9->pf9);
     }
@@ -587,7 +586,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
         m = mh[0];
     }
 
-    bzero(pf9s, 6 * sizeof(TextPFException9*));
+    memset(pf9s, 0, 6 * sizeof(TextPFException9*));
     addStyle(pf9s, getPF9(d, texts, pcd, tc, start));
     addStyle(pf9s, getLevelPF9(m, tc, m_level));
     addStyle(pf9s, getDefaultLevelPF9(d, tc, m_level));
