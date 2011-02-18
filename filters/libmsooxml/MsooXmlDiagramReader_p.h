@@ -86,13 +86,10 @@ class Context
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_rootLayout;
         /// The current parent layout node. This will change during walking through the layout nodes.
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_parentLayout;
-        /// A identifier=>LayoutNodeAtom map used to access the layouts by there unique identifiers.
-        QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_layoutMap;
-        /// A PointNode=>LayoutNodeAtom map used to know which datapoint maps to which layoutnode.
-        QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_pointLayoutMap;
-        /// A LayoutNodeAtom=>PointNode map used to know which layoutnode maps to which datapoint.
-        QMap< LayoutNodeAtom*, AbstractNode* > m_layoutPointMap;
-
+        /// A LayoutNodeAtom=>AbstractNode map used to know which layoutnode maps to which datapoint.
+        QMultiMap<const LayoutNodeAtom*, AbstractNode*> m_layoutPointMap;
+        /// A AbstractNode=>LayoutNodeAtom map used to know which datapoint maps to which layoutnode.
+        QMultiMap<AbstractNode*, LayoutNodeAtom*> m_pointLayoutMap;
         explicit Context();
         ~Context();
         AbstractNode* currentNode() const;
@@ -240,11 +237,12 @@ class AbstractAtom : public QSharedData
         const QString m_tagName;
         explicit AbstractAtom(const QString &tagName);
         virtual ~AbstractAtom();
-        virtual AbstractAtom* clone() = 0;
+        virtual AbstractAtom* clone(Context* context) = 0;
         virtual void dump(Context* context, int level);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
+        virtual void build(Context* context); // handles ForEachAtom, ChooseAtom, etc.
+        virtual void finishBuild(Context* context); // moves constraints around and does other things that can only be done once build() completed.
         virtual void layoutAtom(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
         QExplicitlySharedDataPointer<AbstractAtom> parent() const;
@@ -286,7 +284,7 @@ class AlgorithmAtom : public AbstractAtom
         QMap<QString, QString> m_params; // list of type=value parameters that modify the default behavior of the algorithm.
         explicit AlgorithmAtom() : AbstractAtom("dgm:alg"), m_type(UnknownAlg) {}
         virtual ~AlgorithmAtom() {}
-        virtual AlgorithmAtom* clone();
+        virtual AlgorithmAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void readElement(Context*, MsooXmlDiagramReader* reader);
@@ -307,20 +305,21 @@ class LayoutNodeAtom : public AbstractAtom
         bool m_needsReinit, m_needsRelayout, m_childNeedsRelayout;
         explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_rotateAngle(0), m_needsReinit(true), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true), m_algorithmImpl(0) {}
         virtual ~LayoutNodeAtom() {}
-        virtual LayoutNodeAtom* clone();
+        virtual LayoutNodeAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
+        virtual void finishBuild(Context* context);
         virtual void layoutAtom(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
 
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > constraints() const;
-        void addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint);
+        //void addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint);
 
         QExplicitlySharedDataPointer<AlgorithmAtom> algorithm() const;
         void setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm);
 
-        QList<AbstractNode*> axis() const;
+        QList<AbstractNode*> axis(Context* context) const;
         void setAxis(Context* context, const QList<AbstractNode*> &axis);
 
         void setNeedsReinit(bool needsReinit);
@@ -342,11 +341,10 @@ class LayoutNodeAtom : public AbstractAtom
         QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
 
         qreal distanceTo(LayoutNodeAtom* otherAtom) const;
-        QVector< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraintsToBuild;
+        //QVector< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraintsToBuild;
 
     private:
-        QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;        
-        QList<AbstractNode*> m_axis;
+        //QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;        
         QMap<QString, QString> m_variables;
         bool m_firstLayout;
         AbstractAlgorithm* m_algorithmImpl;
@@ -378,16 +376,17 @@ class ConstraintAtom : public AbstractAtom
         QString m_type;
         /// Specifies an absolute value instead of reference another constraint.
         QString m_value;
-        /// the actual node the constraint references
-        QExplicitlySharedDataPointer<LayoutNodeAtom> m_referencedLayout;
+        /// The referenced layout-nodes where we should fetch the values from.
+        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > m_referencedLayouts;
         
-        explicit ConstraintAtom() : AbstractAtom("dgm:constr"), m_referencedLayout( 0 ) {}
-        virtual ~ConstraintAtom() { Q_ASSERT( false ); }
-        virtual ConstraintAtom* clone();
+        explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
+        virtual ~ConstraintAtom() {}
+        virtual ConstraintAtom* clone(Context* context);
         virtual void dump(Context*, int level);        
         virtual void readAll(Context*, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
-        void applyConstraint( QExplicitlySharedDataPointer<LayoutNodeAtom> atom );
+        virtual void finishBuild(Context* context);
+        void applyConstraint(Context* context, LayoutNodeAtom* atom);
     private:
         QString dump() const;
 };
@@ -405,7 +404,7 @@ class RuleAtom : public AbstractAtom
         QString m_value;
         explicit RuleAtom() : AbstractAtom("dgm:rule") {}
         virtual ~RuleAtom() {}
-        virtual RuleAtom* clone();
+        virtual RuleAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
@@ -418,7 +417,7 @@ class AdjustAtom : public AbstractAtom
         qreal m_value;
         explicit AdjustAtom() : AbstractAtom("dgm:adj"), m_index(-1) {}
         virtual ~AdjustAtom() {}
-        virtual AdjustAtom* clone();
+        virtual AdjustAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
@@ -430,7 +429,7 @@ class ListAtom : public AbstractAtom
         explicit ListAtom(const QString &tagName) : AbstractAtom(tagName) {}
         explicit ListAtom(const QStringRef &tagName) : AbstractAtom(tagName.toString()) {}
         virtual ~ListAtom() {}
-        virtual ListAtom* clone();
+        virtual ListAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
@@ -444,7 +443,7 @@ class ShapeAtom : public AbstractAtom
         bool m_hideGeom;
         explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false) {}
         virtual ~ShapeAtom() {}
-        virtual ShapeAtom* clone();
+        virtual ShapeAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
@@ -463,7 +462,7 @@ class PresentationOfAtom : public AbstractAtom
         QString m_step;
         explicit PresentationOfAtom() : AbstractAtom("dgm:presOf") {}
         virtual ~PresentationOfAtom() {}
-        virtual PresentationOfAtom* clone();
+        virtual PresentationOfAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
@@ -486,7 +485,7 @@ class IfAtom : public AbstractAtom
         QString m_value;
         explicit IfAtom(bool isTrue) : AbstractAtom(isTrue ? "dgm:if" : "dgm:else"), m_isTrue(isTrue) {}
         virtual ~IfAtom() {}
-        virtual IfAtom* clone();
+        virtual IfAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         bool isTrue() const;
@@ -502,7 +501,7 @@ class ChooseAtom : public AbstractAtom
         QString m_name;
         explicit ChooseAtom() : AbstractAtom("dgm:choose") {}
         virtual ~ChooseAtom() {}
-        virtual ChooseAtom* clone();
+        virtual ChooseAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
@@ -523,10 +522,12 @@ class ForEachAtom : public AbstractAtom
         QString m_count;
         explicit ForEachAtom() : AbstractAtom("dgm:forEach") {}
         virtual ~ForEachAtom() {}
-        virtual ForEachAtom* clone();
+        virtual ForEachAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
+    private:
+        QString dump() const;
 };
 
 /// The base class for layout-algorithms.
@@ -549,7 +550,6 @@ class AbstractAlgorithm {
         virtual void virtualDoInit();
         virtual void virtualDoLayout();
         virtual void virtualDoLayoutChildren();
-        void applyConstraints();
         QList<Context*> doubleLayoutContext;
     private:
         Context* m_context;        
