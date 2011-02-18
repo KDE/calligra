@@ -34,7 +34,7 @@
 #include <QtCore/QBuffer>
 #include <QtCore/qmath.h>
 
-#define DEBUG_PPTTOODP
+//#define DEBUG_PPTTOODP
 //#define USE_OFFICEARTDGG_CONTAINER
 
 #define FONTSIZE_MAX 4000 //according to MS-PPT
