@@ -88,7 +88,6 @@
 #include <KoTextDocument.h>
 #include <KoTextWriter.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoEmbeddedFileSaver.h>
 #include <KoParagraphStyle.h>
 
 #include <kdebug.h>
@@ -1218,9 +1217,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
 
             KoEmbeddedDocumentSaver embeddedDocSaver;
-            KoEmbeddedFileSaver     embeddedFileSaver;
-            KoShapeSavingContext shapeContext(xmlwriter, mainStyles,
-                                              embeddedDocSaver, embeddedFileSaver);
+            KoShapeSavingContext shapeContext(xmlwriter, mainStyles, embeddedDocSaver);
             KoTextWriter writer(shapeContext);
 
             writer.write(doc.data(), 0);

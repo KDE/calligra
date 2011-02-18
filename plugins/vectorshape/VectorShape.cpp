@@ -40,10 +40,10 @@
 #include "KoStore.h"
 #include "KoXmlNS.h"
 #include "KoXmlReader.h"
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoEmbeddedFileSaver.h>
 #include "kowmfpaint.h"
 
 // Vector shape
@@ -199,8 +199,8 @@ void VectorShape::drawEmf(QPainter &painter) const
 
 void VectorShape::saveOdf(KoShapeSavingContext & context) const
 {
-    KoEmbeddedFileSaver &fileSaver = context.embeddedFileSaver();
-    KoXmlWriter         &xmlWriter = context.xmlWriter();
+    KoEmbeddedDocumentSaver &fileSaver = context.embeddedDocumentSaver();
+    KoXmlWriter             &xmlWriter = context.xmlWriter();
 
     QString fileName = fileSaver.getFilename("VectorImages/Image");
     char *mimeType;

@@ -40,7 +40,6 @@
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
 #include "KoEmbeddedDocumentSaver.h"
-#include "KoEmbeddedFileSaver.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 #include "KoApplication.h"
@@ -887,8 +886,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     KoOdfWriteStore odfStore(store);
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoEmbeddedFileSaver     embeddedFileSaver;
-    SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
+    SavingContext documentContext(odfStore, embeddedDocSaver);
 
     if (!saveOdf(documentContext)) {
         kDebug(30003) << "saveOdf failed";
@@ -899,11 +897,6 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     // Save embedded objects and files
     if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30003) << "save embedded documents failed";
-        delete store;
-        return false;
-    }
-    if (!embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
-        kDebug(30003) << "save embedded files failed";
         delete store;
         return false;
     }
@@ -1847,8 +1840,7 @@ bool KoDocument::addVersion(const QString& comment)
     Q_UNUSED(manifestWriter); // XXX why?
 
     KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoEmbeddedFileSaver     embeddedFileSaver;
-    SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
+    SavingContext documentContext(odfStore, embeddedDocSaver);
 
     if (!saveOdf(documentContext)) {
         kDebug(30003) << "saveOdf failed";
@@ -1859,11 +1851,6 @@ bool KoDocument::addVersion(const QString& comment)
     // Save embedded objects and files
     if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30003) << "save embedded documents failed";
-        delete store;
-        return false;
-    }
-    if (!embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
-        kDebug(30003) << "save embedded files failed";
         delete store;
         return false;
     }
