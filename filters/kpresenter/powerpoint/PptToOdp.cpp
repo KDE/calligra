@@ -34,7 +34,7 @@
 #include <QtCore/QBuffer>
 #include <QtCore/qmath.h>
 
-//#define DEBUG_PPTTOODP
+#define DEBUG_PPTTOODP
 //#define USE_OFFICEARTDGG_CONTAINER
 
 #define FONTSIZE_MAX 4000 //according to MS-PPT
@@ -1229,16 +1229,31 @@ getBulletChar(const PptTextPFRun& pf) {
     return QChar(0x25cf); //  "●"
 }
 
-//FIXME: wrong approach, check the calculation of bullet-relative-size!
+/**
+ * Convert bulletSize value.
+ *
+ * BulletSize is a 2-byte signed integer that specifies the bullet font size.
+ * It must be a value from the following intervals:
+ *
+ * x = value, x in <25, 400>, specifies bullet font size as a percentage of the
+ * font size of the first text run in the paragraph.
+ *
+ * x in <-4000, -1>, The absolute value specifies the bullet font size in pt.
+ *
+ * @param value to convert
+ * @param fs fonts size of the first text run
+ * @return processed value in pt
+ */
 QString
-bulletSizeToSizeString(const PptTextPFRun& pf)
+bulletSizeToSizeString(qint16 value, qint16 fs)
 {
     QString ret;
-    qint16 size = pf.bulletSize();
-    if (size >= 25 && size <= 400) {
-        ret = percent(size);
-    } else if (size >= -4000 && size <= -1) {
-        ret = pt(size);
+    if (value >= 25 && value <= 400) {
+        ret = pt(qFloor((value * fs) / (qreal) 100));
+    } else if ((value >= -4000) && (value <= -1)) {
+        ret = pt(value);
+    } else {
+        ret = pt(fs);
     }
     return ret;
 }
@@ -1249,9 +1264,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter out(&buffer);
 
-    //FIXME: wrong approach
-    QString bulletSize = bulletSizeToSizeString(i.pf);
-
+    QString bulletSize = bulletSizeToSizeString(i.pf.bulletSize(), i.cf.fontSize());
     QString elementName;
     bool imageBullet = false;
     imageBullet = i.pf.bulletBlipRef() != 65535;
@@ -1260,27 +1273,21 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href", bulletPictureNames.value(i.pf.bulletBlipRef()));
-
-        if (bulletSize.isNull() || bulletSize.endsWith('%')) {
-            bulletSize = pt(i.cf.fontSize());
-        }
-        if (bulletSize.isNull() || bulletSize.endsWith('%')) {
-            bulletSize = "20pt"; // fallback value
-        }
-    } else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
+    }
+    else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
 
         QString numFormat("1"), numSuffix, numPrefix;
         processTextAutoNumberScheme(i.pf.scheme(), numFormat, numSuffix, numPrefix);
 
         // If there is no bulletChar or the bullet has autonumbering explicitly
-        // we assume the list is autonumbering
+        // we assume it's a numbered list
         if (i.pf.fBulletHasAutoNumber() || i.pf.bulletChar() == 0) {
             elementName = "text:list-level-style-number";
             out.startElement("text:list-level-style-number");
             if (!numFormat.isNull()) {
                 out.addAttribute("style:num-format", numFormat);
             }
-            //out.addAttribute("style:display-levels", "TODO");
+            // style:display-levels
             out.addAttribute("text:start-value", i.pf.startNum());
 
             if (!numPrefix.isNull()) {
@@ -1293,23 +1300,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
             out.addAttribute("text:bullet-char", getBulletChar(i.pf));
-
-            if (i.pf.fBulletHasSize()) {
-                qint16 size = i.pf.bulletSize();
-                //The value specifies bullet font size as a percentage of the
-                //font size of the first text run in the paragraph.
-                if (size >= 25 && size <= 400) {
-                    out.addAttribute("text:bullet-relative-size", percent(size));
-                }
-                //The absolute value specifies the bullet font size in points.
-                else if ((size >= -4000 && size <= -1)) {
-                    qreal relSize = (qAbs(size) / (qreal) i.cf.fontSize()) * 100;
-                    out.addAttribute("text:bullet-relative-size", percent(relSize));
-                }
-            }
-            else {
-                out.addAttribute("text:bullet-relative-size", percent(100));
-            }
+            // text:bullet-relative-size
         }
     }
     //no bullet exists (i.pf.fHasBullet() == false)
@@ -1320,26 +1311,21 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     }
     out.addAttribute("text:level", depth + 1);
     out.startElement("style:list-level-properties");
-    // fo:height
-    if (imageBullet && !bulletSize.isNull()) {
-        out.addAttribute("fo:height", bulletSize);
-    }
-    // fo:text-align
-    // fo:width
-    if (imageBullet && !bulletSize.isNull()) {
-        out.addAttribute("fo:width", bulletSize);
-    }
-    // style:font-name
-    // style:vertical-pos
-    if (imageBullet) {
-        out.addAttribute("style:vertical-pos", "middle");
-    }
-    // style:vertical-rel
-    if (imageBullet) {
-        out.addAttribute("style:vertical-rel", "line");
-    }
-    // svg:y
 
+    if (imageBullet) {
+        // fo:text-align
+        // fo:height
+        out.addAttribute("fo:height", bulletSize);
+        // fo:width
+        out.addAttribute("fo:width", bulletSize);
+        // style:font-name
+        // style:vertical-pos
+        out.addAttribute("style:vertical-pos", "middle");
+        // style:vertical-rel
+        out.addAttribute("style:vertical-rel", "line");
+        // svg:x
+        // svg:y
+    }
     quint16 indent = i.pf.indent();
     // text:min-label-distance
     // text:min-label-width
@@ -1348,30 +1334,43 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     out.addAttribute("text:space-before", pptMasterUnitToCm(indent));
     out.endElement(); // style:list-level-properties
 
+    //text-properties - In order to ease the layout, the font-family is also
+    //saved for a numbered list and font-size is always in points.
     if (!imageBullet) {
         KoGenStyle ts(KoGenStyle::TextStyle);
         const KoGenStyle::PropertyType text = KoGenStyle::TextType;
 
-        defineTextProperties(ts, i.cf, i.cf9, i.cf10, i.si);
-
-        // override some properties with information from PptTextPFRun
-        // TODO: why is this condition here?
-        if (i.pf.level()) {
-            const MSO::FontEntityAtom* font = getFont(i.pf.bulletFontRef());
-            if (font) {
-                QString family = QString::fromUtf16(font->lfFaceName.data(),
-                                                    font->lfFaceName.size());
-                ts.addProperty("fo:font-family", family, text);
-            }
+        //default value doesn't make sense
+        QColor color;
+        if (i.pf.fBulletHasColor()) {
+            color = toQColor(i.pf.bulletColor());
+        } else {
+#ifdef DEBUG_PPTTOODP
+            qDebug() << "> Reusing color of the first text run!";
+#endif
+            color = toQColor(i.cf.color());
         }
-        // a bullet exists and the bullet has a color
-        if (i.pf.fHasBullet() && i.pf.fBulletHasColor()) {
-            const QColor color = toQColor(i.pf.bulletColor());
-            if (color.isValid()) {
-                ts.addProperty("fo:color", color.name(), text);
-            }
+        if (color.isValid()) {
+            ts.addProperty("fo:color", color.name(), text);
         }
-        // TODO: maybe fo:font-size should be set from pf.bulletSize
+        //default value doesn't make sense
+        quint16 fontRef;
+        if (i.pf.fBulletHasFont()) {
+            fontRef = i.pf.bulletFontRef();
+        } else {
+#ifdef DEBUG_PPTTOODP
+            qDebug() << "> Reusing font of the first text run!";
+#endif
+            fontRef = i.cf.fontRef();
+        }
+        const MSO::FontEntityAtom* font = getFont(fontRef);
+        if (font) {
+            QString family = QString::fromUtf16(font->lfFaceName.data(),
+                                                font->lfFaceName.size());
+            ts.addProperty("fo:font-family", family, text);
+        }
+        //bulletSize already processed
+        ts.addProperty("fo:font-size", bulletSize, text);
         ts.writeStyleProperties(&out, text);
     }
     out.endElement();  // text:list-level-style-*
@@ -2255,9 +2254,9 @@ PptToOdp::processParagraph(Writer& out,
 
     if (m_isList) {
         int depth = pf.level() + 1;
-	//TODO: provide PptTextCFRun with CFException for the first run of text
+        //CFException for the first run of text required for the list style
+        cf.addCurrentCFRun(tc, 0);
         QString listStyle = defineAutoListStyle(out, pf, cf);
-
 	//check if we have the corresponding style for this level, if not then
 	//close the list and create a new one (K.I.S.S.)
 	if (!levels.isEmpty() && (levels.first() != listStyle)) {
