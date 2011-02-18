@@ -362,7 +362,7 @@ bool KarbonDocument::saveOdf(KoDocument::SavingContext &documentContext, const K
     KoGenStyles mainStyles;
     KoXmlWriter * bodyWriter = documentContext.odfStore.bodyWriter();
 
-    KoShapeSavingContext shapeContext(*bodyWriter, mainStyles, documentContext.embeddedDocSaver);
+    KoShapeSavingContext shapeContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
 
     // save text styles
     saveOdfStyles(shapeContext);

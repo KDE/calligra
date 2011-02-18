@@ -199,7 +199,7 @@ void VectorShape::drawEmf(QPainter &painter) const
 
 void VectorShape::saveOdf(KoShapeSavingContext & context) const
 {
-    KoEmbeddedDocumentSaver &fileSaver = context.embeddedDocumentSaver();
+    KoEmbeddedDocumentSaver &fileSaver = context.embeddedSaver();
     KoXmlWriter             &xmlWriter = context.xmlWriter();
 
     QString fileName = fileSaver.getFilename("VectorImages/Image");

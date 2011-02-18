@@ -145,7 +145,7 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
 
     KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
-    KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedDocSaver);
+    KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
 
     //todo fixme just add a element for testing saving content.xml
     bodyWriter->startElement("office:body");

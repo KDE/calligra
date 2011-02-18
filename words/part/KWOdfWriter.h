@@ -4,7 +4,6 @@
  * Copyright (C) 2007-2008 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007-2008 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2011      Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -61,13 +60,11 @@ public:
      *  @brief Writes an OASIS OpenDocument to a store.
      *  This implements the KoDocument::saveOdf method.
      */
-    bool save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedDocSaver);
+    bool save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver);
 
 private:
-    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedDocSaver,
-                                     KoGenStyles &mainStyles, KoGenChanges &changes, KWTextFrameSet* fs);
-    void saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedDocSaver,
-                          KoGenStyles &mainStyles, KoGenChanges &changes);
+    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges &changes, KWTextFrameSet* fs);
+    void saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges &changes);
 
     void calculateZindexOffsets();
     void addShapeToTree(KoShape *shape);
