@@ -179,7 +179,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         m_context->m_context->setCurrentNode(m_context->m_context->m_rootPoint);
 
         //for(QMap<QString, Diagram::PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) (*it)->dump(m_context->m_context, 0);
-#if 1
+#if 0
         QFile visGraphFile( "graphDump" );
         visGraphFile.open( QFile::WriteOnly | QFile::Truncate );
         QTextStream visGraph( &visGraphFile );

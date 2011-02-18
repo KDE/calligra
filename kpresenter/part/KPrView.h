@@ -82,13 +82,14 @@ public slots:
      */
     void stopPresentation();
 
+    void showNormal();
+
 protected:
     void initGUI();
     void initActions();
 
 protected slots:
     void createAnimation();
-    void showNormal();
     void showNotes();
     void showSlidesSorter();
     void dialogCustomSlideShows();

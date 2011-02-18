@@ -959,6 +959,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case EDITTIME:
     case FILENAME:
     case MERGEFIELD:
+    case SEQ:
     case SHAPE:
         kWarning(30513) << "Warning: field instructions not supported!";
         kWarning(30513) << "Warning: processing field result!";
@@ -1565,6 +1566,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case EDITTIME:
             case FILENAME:
             case MERGEFIELD:
+            case SEQ:
             case SHAPE:
             case TOC:
                 //NOTE: Ignoring bookmarks in the field result!

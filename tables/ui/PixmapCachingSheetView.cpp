@@ -239,12 +239,12 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     }
 }
 
-void PixmapCachingSheetView::invalidateRegion(const Region &region)
+void PixmapCachingSheetView::invalidateRange(const QRect &rect)
 {
     // TODO: figure out which tiles to invalidate
     d->tileCache.clear();
 
-    SheetView::invalidateRegion(region);
+    SheetView::invalidateRange(rect);
 }
 
 void PixmapCachingSheetView::invalidate()
