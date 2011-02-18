@@ -1,6 +1,5 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -109,7 +108,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   Finally finaly(store);
 
   KoOdfWriteStore odfStore(store);
-  KoEmbeddedDocumentSaver embeddedDocSaver;
+  KoEmbeddedDocumentSaver embeddedSaver;
   
   KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
   KoXmlWriter* contentWriter = odfStore.contentWriter();
@@ -120,8 +119,7 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO )
   }
     
   KoGenStyles mainStyles;
-  KoShapeSavingContext * context = new KoShapeSavingContext(*bodyWriter, mainStyles,
-                                                            embeddedDocSaver);
+  KoShapeSavingContext * context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
   context->addOption(KoShapeSavingContext::DrawId);
 
   bodyWriter->startElement("office:body");

@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
                  2009 Jeremias Epperlein <jeeree@web.de>
-   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -397,8 +396,8 @@ void KoFormulaTool::saveFormula()
     QFile file( url.path() );
     KoXmlWriter writer( &file );
     KoGenStyles styles;
-    KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoShapeSavingContext shapeSavingContext( writer, styles, embeddedDocSaver );
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext shapeSavingContext( writer, styles, embeddedSaver );
 
     m_formulaShape->formulaData()->saveMathML( shapeSavingContext );
 }
