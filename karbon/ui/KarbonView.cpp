@@ -83,6 +83,7 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoParameterToPathCommand.h>
 #include <KoShapeClipCommand.h>
+#include <KoShapeUnclipCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
@@ -174,6 +175,7 @@ public:
     KAction * configureAction;
     KAction * deleteSelectionAction;
     KAction * clipObjects;
+    KAction * unclipObjects;
 
     KToggleAction * viewAction;
     KToggleAction * showRulerAction;
@@ -629,6 +631,27 @@ void KarbonView::clipObjects()
     d->canvas->addCommand( cmd );
 }
 
+void KarbonView::unclipObjects()
+{
+    KoSelection* selection = d->canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    if( ! selectedShapes.count() )
+        return;
+
+    QList<KoShape*> shapesToUnclip;
+    foreach(KoShape *shape, selectedShapes) {
+        if (shape->clipPath())
+            shapesToUnclip.append(shape);
+    }
+    if (!shapesToUnclip.count())
+        return;
+    
+    d->canvas->addCommand(new KoShapeUnclipCommand(d->part, shapesToUnclip));
+}
+
 void KarbonView::closePath()
 {
     // TODO add the new close path command here
@@ -938,6 +961,10 @@ void KarbonView::initActions()
     d->clipObjects  = new KAction(KIcon("clip"), i18n("&Clip Objects"), this);
     actionCollection()->addAction("object_clip", d->clipObjects );
     connect(d->clipObjects, SIGNAL(triggered()), this, SLOT(clipObjects()));
+
+    d->unclipObjects  = new KAction(KIcon("unclip"), i18n("&Unclip Objects"), this);
+    actionCollection()->addAction("object_unclip", d->unclipObjects );
+    connect(d->unclipObjects, SIGNAL(triggered()), this, SLOT(unclipObjects()));
 
     // object <-----
 

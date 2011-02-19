@@ -108,6 +108,7 @@ public slots:
     void fileImportGraphic();
 
     void clipObjects();
+    void unclipObjects();
 
     void closePath();
     void combinePath();
