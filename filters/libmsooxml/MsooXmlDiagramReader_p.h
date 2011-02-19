@@ -70,6 +70,7 @@ class PointListNode;
 class ConnectionListNode;
 class AbstractAtom;
 class LayoutNodeAtom;
+class PresentationOfAtom;
 class ConstraintAtom;
 class AlgorithmAtom;
 class AbstractAlgorithm;
@@ -321,6 +322,7 @@ class LayoutNodeAtom : public AbstractAtom
 
         QList<AbstractNode*> axis(Context* context) const;
         void setAxis(Context* context, const QList<AbstractNode*> &axis);
+        void setAxis(Context* context, PresentationOfAtom* atom);
 
         void setNeedsReinit(bool needsReinit);
         void setNeedsRelayout(bool needsRelayout);
@@ -465,7 +467,6 @@ class PresentationOfAtom : public AbstractAtom
         virtual PresentationOfAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
 };
 
 /// The if element represents a condition that applies to all it's children.
