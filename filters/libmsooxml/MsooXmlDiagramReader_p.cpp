@@ -503,6 +503,8 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
             node = new ListAtom(reader->qualifiedName());
         } else if (reader->qualifiedName() == QLatin1String("dgm:ruleLst")) {
             node = new ListAtom(reader->qualifiedName());
+        } else if (reader->qualifiedName() == QLatin1String("dgm:adj")) {
+            node = new AdjustAtom;
         } else if (reader->qualifiedName() == QLatin1String("dgm:adjLst")) {
             node = new ListAtom(reader->qualifiedName());
         } else if (reader->qualifiedName() == QLatin1String("dgm:varLst")) {
@@ -564,8 +566,20 @@ void AbstractAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyl
         atom->writeAtom(context, xmlWriter, styles);
 }
 
-QExplicitlySharedDataPointer<AbstractAtom> AbstractAtom::parent() const { return m_parent; } 
-QVector< QExplicitlySharedDataPointer<AbstractAtom> > AbstractAtom::children() const { return m_children; }
+QExplicitlySharedDataPointer<LayoutNodeAtom> AbstractAtom::parentLayout() const {
+    LayoutNodeAtom* p = 0;
+    for(QExplicitlySharedDataPointer<AbstractAtom> a = parent(); a && !p; a = a->parent())
+        p = dynamic_cast<LayoutNodeAtom*>(a.data());
+    return QExplicitlySharedDataPointer<LayoutNodeAtom>(p);
+}
+
+QExplicitlySharedDataPointer<AbstractAtom> AbstractAtom::parent() const {
+    return m_parent;
+} 
+
+QVector< QExplicitlySharedDataPointer<AbstractAtom> > AbstractAtom::children() const {
+    return m_children;
+}
 
 int AbstractAtom::indexOfChild(AbstractAtom* node) const {
     for ( int i = 0; i < m_children.count(); ++i )
@@ -929,6 +943,19 @@ QList< QExplicitlySharedDataPointer<ConstraintAtom> > LayoutNodeAtom::constraint
     return result;
 }
 
+QList< QExplicitlySharedDataPointer<ShapeAtom> > LayoutNodeAtom::shapes() const {
+    QList< QExplicitlySharedDataPointer<ShapeAtom> > result;
+    foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, m_children )
+        if ( dynamic_cast< ShapeAtom* >( atom.data() ) ) {
+            result.append(atom);
+        } else if (ListAtom *list = dynamic_cast< ListAtom* >( atom.data() ) ) {
+            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, list->children() )
+                if ( dynamic_cast< ShapeAtom* >( val.data() ) )
+                    result.append(val);
+        }
+    return result;
+}
+
 AbstractAlgorithm* LayoutNodeAtom::algorithmImpl() const {
     return m_algorithmImpl;
 }
@@ -1030,13 +1057,6 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     if (result.hasNegativeHeight())
         res[ "h" ] = -res[ "h" ];
     return res;
-}
-
-QExplicitlySharedDataPointer<LayoutNodeAtom> LayoutNodeAtom::parentLayout() const {
-    LayoutNodeAtom* p = 0;
-    for(QExplicitlySharedDataPointer<AbstractAtom> a = parent(); a && !p; a = a->parent())
-        p = dynamic_cast<LayoutNodeAtom*>(a.data());
-    return QExplicitlySharedDataPointer<LayoutNodeAtom>(p);
 }
 
 QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > LayoutNodeAtom::childrenLayouts() const {
@@ -1542,6 +1562,36 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
 
 /****************************************************************************************************/
 
+AdjustAtom* AdjustAtom::clone(Context*) {
+    AdjustAtom* atom = new AdjustAtom;
+    atom->m_index = m_index;
+    atom->m_value = m_value;
+    return atom;
+}
+
+void AdjustAtom::dump(Context*, int level) {
+    DEBUG_DUMP << "index=" << m_index << "value=" << m_value;
+}
+
+void AdjustAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
+    const QXmlStreamAttributes attrs(reader->attributes());
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+    m_index = idx.toInt();
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    m_value = val.toDouble();
+}
+
+// http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/74f86b76-37be-4087-b5b0-cf2fc68d5595/
+void AdjustAtom::applyAdjustment(Context* context, LayoutNodeAtom* atom) {
+    Q_ASSERT_X(m_index >= 0 && m_index < context->m_shapeList.count(), __FUNCTION__, QString("Index is out of bounds, index=%1 min=0 max=%2").arg(m_index).arg(context->m_shapeList.count()-1).toLocal8Bit());
+    ShapeAtom *shape = context->m_shapeList.at(m_index);
+    //TODO
+    //if (m_value > 90) m_value = 360 - (m_value - 90);
+    //shape->parentLayout()->m_rotateAngle = m_value;
+}
+
+/****************************************************************************************************/
+
 RuleAtom* RuleAtom::clone(Context*) {
     RuleAtom* atom = new RuleAtom;
     atom->m_fact = m_fact;
@@ -1566,7 +1616,7 @@ void RuleAtom::dump(Context*, int level) {
     DEBUG_DUMP << s;
 }
 
-void RuleAtom::readElement(Context*, MsooXmlDiagramReader* reader) {
+void RuleAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
     const QXmlStreamAttributes attrs(reader->attributes());
     TRY_READ_ATTR_WITHOUT_NS_INTO(fact, m_fact)
     TRY_READ_ATTR_WITHOUT_NS_INTO(for, m_for)
@@ -1575,27 +1625,6 @@ void RuleAtom::readElement(Context*, MsooXmlDiagramReader* reader) {
     TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_ptType)
     TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
     TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_value)
-}
-
-/****************************************************************************************************/
-
-AdjustAtom* AdjustAtom::clone(Context*) {
-    AdjustAtom* atom = new AdjustAtom;
-    atom->m_index = m_index;
-    atom->m_value = m_value;
-    return atom;
-}
-
-void AdjustAtom::dump(Context*, int level) {
-    DEBUG_DUMP << "index=" << m_index << "value=" << m_value;
-}
-
-void AdjustAtom::readElement(Context*, MsooXmlDiagramReader* reader) {
-    const QXmlStreamAttributes attrs(reader->attributes());
-    TRY_READ_ATTR_WITHOUT_NS(idx)
-    m_index = idx.toInt();
-    TRY_READ_ATTR_WITHOUT_NS(val)
-    m_value = val.toDouble();
 }
 
 /****************************************************************************************************/
@@ -1617,10 +1646,10 @@ void ListAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
         QExplicitlySharedDataPointer<AbstractAtom> node;
         if (reader->qualifiedName() == QLatin1String("dgm:constr")) {
             node = QExplicitlySharedDataPointer<AbstractAtom>(new ConstraintAtom);
-        } else if (reader->qualifiedName() == QLatin1String("dgm:rule")) {
-            node = QExplicitlySharedDataPointer<AbstractAtom>(new RuleAtom);
         } else if (reader->qualifiedName() == QLatin1String("dgm:adj")) {
             node = QExplicitlySharedDataPointer<AbstractAtom>(new AdjustAtom);
+        } else if (reader->qualifiedName() == QLatin1String("dgm:rule")) {
+            node = QExplicitlySharedDataPointer<AbstractAtom>(new RuleAtom);
         }
         if (node) {
             addChild(node);
@@ -1641,6 +1670,19 @@ ShapeAtom* ShapeAtom::clone(Context* context) {
     return atom;
 }
 
+QList< QExplicitlySharedDataPointer<AdjustAtom> > ShapeAtom::adjustments() const {
+    QList< QExplicitlySharedDataPointer<AdjustAtom> > result;
+    foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, m_children )
+        if ( dynamic_cast< AdjustAtom* >( atom.data() ) ) {
+            result.append(atom);
+        } else if (ListAtom *list = dynamic_cast< ListAtom* >( atom.data() ) ) {
+            foreach( QExplicitlySharedDataPointer<AbstractAtom> val, list->children() )
+                if ( dynamic_cast< AdjustAtom* >( val.data() ) )
+                    result.append(val);
+        }
+    return result;
+}
+
 void ShapeAtom::dump(Context* context, int level) {
     DEBUG_DUMP << "type=" << m_type << "hideGeom=" << m_hideGeom << "blip=" << m_blip;
     AbstractAtom::dump(context, level);
@@ -1654,6 +1696,12 @@ void ShapeAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
     TRY_READ_ATTR_WITHOUT_NS(hideGeom)
     m_hideGeom = hideGeom.toInt();
     AbstractAtom::readAll(context, reader);
+}
+
+void ShapeAtom::build(Context* context) {
+    Q_ASSERT(!context->m_shapeList.contains(this));
+    context->m_shapeList.append(this);
+    AbstractAtom::build(context);
 }
 
 //TODO use filters/libmso/ODrawToOdf.h
@@ -2416,10 +2464,18 @@ void AbstractAlgorithm::virtualDoLayout() {
     if (aspectRatio != 0.0)
         layout()->m_values["w"] = layout()->finalValues()["h"] * aspectRatio;
     QList< QExplicitlySharedDataPointer< LayoutNodeAtom > > allChilds = layout()->childrenLayouts();
+
 /*    foreach( QExplicitlySharedDataPointer< LayoutNodeAtom > curChild, allChilds )
         setNodePosition( curChild.data(), layout()->finalValues()[ "l" ], layout()->finalValues()[ "t" ], layout()->finalValues()[ "w" ], layout()->finalValues()[ "h" ] );        */
-    foreach( QExplicitlySharedDataPointer< ConstraintAtom > atom, layout()->constraints() )
-        atom->applyConstraint( context(), layout() );
+
+    foreach( QExplicitlySharedDataPointer< ConstraintAtom > constr, layout()->constraints() )
+        constr->applyConstraint( context(), layout() );
+
+    foreach( QExplicitlySharedDataPointer< ShapeAtom > shape, layout()->shapes() ) 
+        foreach( QExplicitlySharedDataPointer< AdjustAtom > adj, shape->adjustments() ){
+            adj->applyAdjustment( context(), layout() );
+    }
+
 /*    foreach( QExplicitlySharedDataPointer< LayoutNodeAtom > curChild, allChilds )
         setNodePosition( curChild.data(), layout()->finalValues()[ "l" ], layout()->finalValues()[ "t" ], layout()->finalValues()[ "w" ], layout()->finalValues()[ "h" ] );        */
 }

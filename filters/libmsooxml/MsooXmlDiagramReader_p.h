@@ -72,8 +72,10 @@ class AbstractAtom;
 class LayoutNodeAtom;
 class PresentationOfAtom;
 class ConstraintAtom;
+class AdjustAtom;
 class AlgorithmAtom;
 class AbstractAlgorithm;
+class ShapeAtom;
 
 /// The evaluation context that is passed around and contains all kind of state-informations.
 class Context
@@ -91,6 +93,9 @@ class Context
         QMultiMap<const LayoutNodeAtom*, AbstractNode*> m_layoutPointMap;
         /// A AbstractNode=>LayoutNodeAtom map used to know which datapoint maps to which layoutnode.
         QMultiMap<AbstractNode*, LayoutNodeAtom*> m_pointLayoutMap;
+        /// A list of all visible shapes ordered in there appearance.
+        QList<ShapeAtom*> m_shapeList;
+
         explicit Context();
         ~Context();
         AbstractNode* currentNode() const;
@@ -246,6 +251,7 @@ class AbstractAtom : public QSharedData
         virtual void finishBuild(Context* context); // moves constraints around and does other things that can only be done once build() completed.
         virtual void layoutAtom(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
+        QExplicitlySharedDataPointer<LayoutNodeAtom> parentLayout() const;
         QExplicitlySharedDataPointer<AbstractAtom> parent() const;
         QVector< QExplicitlySharedDataPointer<AbstractAtom> > children() const;
         int indexOfChild(AbstractAtom* node) const;
@@ -315,7 +321,7 @@ class LayoutNodeAtom : public AbstractAtom
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
 
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > constraints() const;
-        //void addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint);
+        QList< QExplicitlySharedDataPointer<AdjustAtom> > adjustments() const;
 
         QExplicitlySharedDataPointer<AlgorithmAtom> algorithm() const;
         void setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm);
@@ -327,6 +333,7 @@ class LayoutNodeAtom : public AbstractAtom
         void setNeedsReinit(bool needsReinit);
         void setNeedsRelayout(bool needsRelayout);
 
+        QList< QExplicitlySharedDataPointer<ShapeAtom> > shapes() const;
         AbstractAlgorithm* algorithmImpl() const;
         AlgorithmAtom::Algorithm algorithmType() const;
         QMap<QString,QString> algorithmParams() const;
@@ -337,7 +344,6 @@ class LayoutNodeAtom : public AbstractAtom
         void setVariable(const QString &name, const QString &value);
         QMap<QString, qreal> finalValues() const;
         
-        QExplicitlySharedDataPointer<LayoutNodeAtom> parentLayout() const;
         QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > childrenLayouts() const;
         QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > descendantLayouts() const;
         QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
@@ -393,6 +399,20 @@ class ConstraintAtom : public AbstractAtom
         QString dump() const;
 };
 
+/// Shape adjust value. These can be used to modify the adjust handles supported on various auto shapes. It is only possible to set the initial value, not to modify it using constraints and rules.
+class AdjustAtom : public AbstractAtom
+{
+    public:
+        int m_index;
+        qreal m_value;
+        explicit AdjustAtom() : AbstractAtom("dgm:adj"), m_index(-1) {}
+        virtual ~AdjustAtom() {}
+        virtual AdjustAtom* clone(Context* context);
+        virtual void dump(Context* context, int level);
+        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        void applyAdjustment(Context* context, LayoutNodeAtom* atom);
+};
+
 /// Rules indicate the ranges of values that a layout algorithm can use to modify the constraint values if it cannot lay out the graphic by using the constraints.
 class RuleAtom : public AbstractAtom
 {
@@ -408,20 +428,7 @@ class RuleAtom : public AbstractAtom
         virtual ~RuleAtom() {}
         virtual RuleAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
-};
-
-/// Shape adjust value. These can be used to modify the adjust handles supported on various auto shapes. It is only possible to set the initial value, not to modify it using constraints and rules.
-class AdjustAtom : public AbstractAtom
-{
-    public:
-        int m_index;
-        qreal m_value;
-        explicit AdjustAtom() : AbstractAtom("dgm:adj"), m_index(-1) {}
-        virtual ~AdjustAtom() {}
-        virtual AdjustAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
+        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
 };
 
 /// List of atoms.
@@ -445,9 +452,11 @@ class ShapeAtom : public AbstractAtom
         bool m_hideGeom;
         explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false) {}
         virtual ~ShapeAtom() {}
+        QList< QExplicitlySharedDataPointer<AdjustAtom> > adjustments() const;
         virtual ShapeAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        virtual void build(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
         //virtual void build(Context* context);
 };
