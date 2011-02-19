@@ -34,7 +34,7 @@ int main( int argc, char **argv )
   KAboutData* about = newBrainDumpAboutData();
   KCmdLineArgs::init( argc, argv, about );
 
-  KApplication* app = new KUniqueApplication;
+  KApplication app;
 
   KIconLoader::global()->addAppDir("koffice");
   KoGlobal::initialize();
@@ -46,11 +46,11 @@ int main( int argc, char **argv )
   MainWindow* window = new MainWindow(doc, *m_documentData);
   window->setVisible(true);
   
-  app->exec();
+  app.exec();
 
   // Ensure the root section is saved
   doc->sectionsIO()->save();
   
   delete doc;
-  app->exit(0);
+  app.exit(0);
 }
