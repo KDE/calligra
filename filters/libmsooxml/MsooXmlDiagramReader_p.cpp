@@ -1029,8 +1029,6 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
         res[ "w" ] = -res[ "w" ];
     if (result.hasNegativeHeight())
         res[ "h" ] = -res[ "h" ];
-    //Q_ASSERT(res[ "w" ] > 0);
-    //Q_ASSERT(res[ "h" ] > 0);
     return res;
 }
 
@@ -2609,6 +2607,16 @@ void CycleAlgorithm::virtualDoLayout() {
 
 /****************************************************************************************************/
 
+qreal LinearAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
+    Q_UNUSED(values);
+    qreal value = -1.0;
+    if (type == "w" || type == "h") {
+        value = 100;
+    }
+    return value;
+}
+
+// http://msdn.microsoft.com/en-us/library/dd439457%28v=office.12%29.aspx
 void LinearAlgorithm::virtualDoLayout() {
     AbstractAlgorithm::virtualDoLayout();
 

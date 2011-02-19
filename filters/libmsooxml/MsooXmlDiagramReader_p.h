@@ -600,6 +600,7 @@ class LinearAlgorithm : public AbstractAlgorithm {
         virtual ~LinearAlgorithm() {}
         virtual QString name() const { return "Linear"; }
     protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
 };
 
