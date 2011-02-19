@@ -66,7 +66,7 @@
 #       define CALLIGRA_TABLES_COMMON_TEST_EXPORT KDE_IMPORT
 #   endif
 # else /* not windows */
-#   define CALLIGRA_TABLES_TEST_EXPORT KDE_EXPORT
+#   define CALLIGRA_TABLES_COMMON_TEST_EXPORT KDE_EXPORT
 # endif
 #else /* not compiling tests */
 #   define CALLIGRA_TABLES_COMMON_TEST_EXPORT
@@ -83,7 +83,7 @@
 #   define CALLIGRA_TABLES_ODF_TEST_EXPORT KDE_EXPORT
 # endif
 #else /* not compiling tests */
-#   define CALLIGRA_TABLES_TEST_EXPORT
+#   define CALLIGRA_TABLES_ODF_TEST_EXPORT
 #endif
 
 #endif
