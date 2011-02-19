@@ -66,7 +66,7 @@ void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
 {
     Q_Q(KoPathShape);
     // apply viewbox transformation
-    QRectF viewBox = q->loadOdfViewbox(element);
+    QRectF viewBox = KoPathShape::loadOdfViewbox(element);
     if (! viewBox.isEmpty()) {
         // load the desired size
         QSizeF size;
@@ -204,7 +204,7 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
     }
 }
 
-QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element) const
+QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element)
 {
     QRectF viewbox;
 

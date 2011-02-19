@@ -433,6 +433,9 @@ public:
     /// Creates path shape from given QPainterPath
     static KoPathShape *createShapeFromPainterPath(const QPainterPath &path);
 
+    /// Returns the viewbox from the given xml element.
+    static QRectF loadOdfViewbox(const KoXmlElement &element);
+
 protected:
     /// constructor \internal
     KoPathShape(KoPathShapePrivate &);
@@ -457,9 +460,6 @@ protected:
      * @return number of points created by the curve
      */
     int arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAngle, const QPointF &offset, QPointF *curvePoints) const;
-
-    /// Returns the viewbox from the given xml element.
-    QRectF loadOdfViewbox(const KoXmlElement &element) const;
 
     /**
      * Get the resize matrix
