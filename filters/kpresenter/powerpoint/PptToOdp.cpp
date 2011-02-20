@@ -2562,6 +2562,7 @@ QString PptToOdp::textAlignmentToString(unsigned int value) const
         Tx_ALIGNJustify         0x0003 For horizontal text, flush left and right.
                                    For vertical text, flush top and bottom.
         */
+    case 3:
         return "justify";
 
         //TODO these were missing from ODF specification v1.1, but are
