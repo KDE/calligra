@@ -429,21 +429,22 @@ void PptToOdp::DrawClient::addTextStyles(
     if (clientTextbox) {
         tb = clientTextbox->anon.get<PptOfficeArtClientTextBox>();
     }
+    bool isPlaceholder = cd && cd->placeholderAtom;
     if (out.stylesxml) {
-        //TODO: construct proper masters hierarchy
-        QList<const MSO::MasterOrSlideContainer*> mh;
-        mh.append(dc_data->masterSlide);
         const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
-
-        PptTextPFRun pf(ppttoodp->p->documentContainer,
-                        mh, dc_data->slideTexts,
-                        cd, tc);
+        //get the main master slide's MasterOrSlideContainer
+        const MasterOrSlideContainer* m = 0;
+        if (dc_data->masterSlide && isPlaceholder) {
+            m = dc_data->masterSlide;
+            while (m->anon.is<SlideContainer>()) {
+                m = ppttoodp->p->getMaster(m->anon.get<SlideContainer>());
+            }
+        }
+        PptTextPFRun pf(ppttoodp->p->documentContainer, m, dc_data->slideTexts, cd, tc);
         ppttoodp->defineParagraphProperties(style, pf, 0);
-
-        PptTextCFRun cf(ppttoodp->p->documentContainer, mh, tc, 0);
+        PptTextCFRun cf(ppttoodp->p->documentContainer, m, tc, 0);
         ppttoodp->defineTextProperties(style, cf, 0, 0, 0);
     }
-    bool isPlaceholder = cd && cd->placeholderAtom;
     if (isPlaceholder) {
         // small workaround to avoid presenation frames from having borders,
         // even though the ppt file seems to specify that they should have one
@@ -2200,7 +2201,7 @@ PptToOdp::processParagraph(Writer& out,
                            const MSO::OfficeArtClientData* clientData,
                            const MSO::TextContainer* tc,
                            const MSO::TextRuler* tr,
-                           const bool ph,
+                           const bool isPlaceHolder,
                            const QString& text,
                            int start,
                            int end)
@@ -2218,27 +2219,24 @@ PptToOdp::processParagraph(Writer& out,
         pcd = clientData->anon.get<PptOfficeArtClientData>();
     }
 
-    //The current TextCFException located in the TextContainer will be
-    //prepended to the list in the processTextSpan function.
-    QList<const MasterOrSlideContainer*> mh;
-
-    //prepare the masters hierarchy
-    if (m_currentMaster && ph) {
-        const MasterOrSlideContainer* m = m_currentMaster;
-        while (m) {
-            mh.append(m);
-            //masterIdRef MUST be 0x00000000 if the record that contains this
-            //SlideAtom record is a MainMasterContainer record (MS-PPT 2.5.10)
-            if (m->anon.is<SlideContainer>()) {
-                m = p->getMaster(m->anon.get<SlideContainer>());
-            } else {
-                m = NULL;
-            }
+    //Get the main master slide's MasterOrSlideContainer, common shapes like
+    //textbox do not inherit from master's TextMasterStyleAtom.
+    const MasterOrSlideContainer* m = 0;
+    if (m_currentMaster && isPlaceHolder) {
+        m  = m_currentMaster;
+        while (m->anon.is<SlideContainer>()) {
+            m = p->getMaster(m->anon.get<SlideContainer>());
         }
+#ifdef DEBUG_PPTTOODP
+        const MainMasterContainer* mc = m->anon.get<MainMasterContainer>();
+        Q_ASSERT(mc->slideAtom.masterIdRef == 0);
+#endif
     }
 
-    PptTextPFRun pf(p->documentContainer, mh, m_currentSlideTexts, pcd, tc, tr, start);
-    PptTextCFRun cf(p->documentContainer, mh, tc, pf.level());
+    //The current TextCFException located in the TextContainer will be
+    //prepended to the list in the processTextSpan function.
+    PptTextPFRun pf(p->documentContainer, m, m_currentSlideTexts, pcd, tc, tr, start);
+    PptTextCFRun cf(p->documentContainer, m, tc, pf.level());
 
     //spans have to be processed first to prepare the correct ParagraphStyle
     QBuffer spans_buf;

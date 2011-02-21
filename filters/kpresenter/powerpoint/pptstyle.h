@@ -46,9 +46,9 @@ public:
     /**
      * Special purpose constructor for default list styles of masters.
      * @param d DocumentContainer
-     * @param
-     * @param
-     * @param
+     * @param level specifies character-level and paragraph-level formatting
+     * @param level9 additional character-level and paragraph-level formatting
+     * @param textType specifies the type of the text body
      * @param indentLevel specifies the indentation level of the paragraph
      */
     PptTextPFRun(const MSO::DocumentContainer* d,
@@ -59,16 +59,16 @@ public:
 
     /**
      * Construct TextPFException and TextPFException9 hierarchy.
-     * @param d DocumentContainer address
-     * @param mh MasterOrSlideContainer hierarchy
-     * @param texts together with @param pcd provides access to StyleTextProp9Atom
+     * @param d DocumentContainer
+     * @param m MainMasterContainer
+     * @param texts provides access to StyleTextProp9Atom
      * @param pcd provides access to additional text formatting in StyleTextProp9Atom
-     * @param tc provides access to text formatting in MasterTextPropAtom
+     * @param tc provides the type of the text
      * @param tr specifies tabbing, margins, and indentation for text
-     * @param start specifies begging of the paragraph in the slide text
+     * @param start specifies beginning of the paragraph in the slide text
      */
     PptTextPFRun(const MSO::DocumentContainer* d,
-                 QList<const MSO::MasterOrSlideContainer*> &mh,
+                 const MSO::MasterOrSlideContainer* m,
                  const MSO::SlideListWithTextSubContainerOrAtom* texts = 0,
                  const MSO::PptOfficeArtClientData* pcd = 0,
                  const MSO::TextContainer* tc = 0,
@@ -159,8 +159,8 @@ public:
     /**
      * Special purpose constructor for default list styles of masters.
      * @param d DocumentContainer
-     * @param
-     * @param
+     * @param level specifies character-level and paragraph-level formatting
+     * @param level9 additional character-level and paragraph-level formatting
      * @param indentLevel specifies the indentation level of the paragraph
      */
     PptTextCFRun(const MSO::DocumentContainer* d,
@@ -171,12 +171,12 @@ public:
     /**
      * Construct TextCFException hierarchy.
      * @param d DocumentContainer
-     * @param mh MasterOrSlideContainer hierarchy
+     * @param m MainMasterContainer
      * @param tc TextContainer
      * @param indentLevel specifies the indentation level of the paragraph
      */
     PptTextCFRun(const MSO::DocumentContainer* d,
-                 QList<const MSO::MasterOrSlideContainer*> &mh,
+                 const MSO::MasterOrSlideContainer* m,
                  const MSO::TextContainer* tc,
                  quint16 indentLevel);
 
@@ -228,13 +228,15 @@ private:
 };
 
 /**
- * TODO:
- * @param
- * @param
- * @return
+ * Provide the character-level and paragraph-level formatting of a main master
+ * slide for a given type of text.
+ *
+ * @param m MainMasterContainer
+ * @param textType specifies the type of the text body
+ * @return TextMasterStyleAtom address
  */
 const MSO::TextMasterStyleAtom*
-getTextMasterStyleAtom(const MSO::MasterOrSlideContainer* m, quint16 texttype);
+getTextMasterStyleAtom(const MSO::MasterOrSlideContainer* m, quint16 textType);
 
 
 template<class T>

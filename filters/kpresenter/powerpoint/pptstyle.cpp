@@ -36,14 +36,14 @@ void addStyle(const Style** list, const Style* style)
 }
 
 const TextMasterStyleAtom*
-getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
+getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 textType)
 {
     if (!m) return 0;
     const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
     if (!mm) return 0;
     const TextMasterStyleAtom* textstyle = 0;
     foreach (const TextMasterStyleAtom& ma, mm->rgTextMasterStyle) {
-        if (ma.rh.recInstance == texttype) {
+        if (ma.rh.recInstance == textType) {
             textstyle = &ma;
         }
     }
@@ -550,7 +550,7 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
 }
 
 PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
-                           QList<const MasterOrSlideContainer*> &mh,
+                           const MasterOrSlideContainer* m,
                            const SlideListWithTextSubContainerOrAtom* texts,
                            const PptOfficeArtClientData* pcd,
                            const TextContainer* tc,
@@ -573,18 +573,11 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     }
 
     //check the main master/title master slide's TextMasterStyleAtom
-    for (int i = 0; i < mh.size(); i++) {
-        pfs.append(getLevelPF(mh[i], tc, m_level));
-        pfs.append(getBaseLevelsPF(mh[i], tc, m_level));
-    }
+    pfs.append(getLevelPF(m, tc, m_level));
+    pfs.append(getBaseLevelsPF(m, tc, m_level));
 
     //TODO: test documents required to construct correct pf9s based on the full
     //masters hierarchy.
-
-    const MSO::MasterOrSlideContainer* m = 0;
-    if (mh.size() > 0) {
-        m = mh[0];
-    }
 
     memset(pf9s, 0, 6 * sizeof(TextPFException9*));
     addStyle(pf9s, getPF9(d, texts, pcd, tc, start));
@@ -664,17 +657,15 @@ PptTextCFRun::PptTextCFRun(const DocumentContainer* d,
 }
 
 PptTextCFRun::PptTextCFRun(const DocumentContainer* d,
-                           QList<const MasterOrSlideContainer*> &mh,
+                           const MasterOrSlideContainer* m,
                            const TextContainer* tc,
                            quint16 indentLevel)
     : m_level(indentLevel)
     , m_cfrun_rm(false)
 {
-    //check the main master/title master slide's TextMasterStyleAtom
-    for (int i = 0; i < mh.size(); i++) {
-        cfs.append(getLevelCF(mh[i], tc, m_level));
-        cfs.append(getBaseLevelsCF(mh[i], tc, m_level));
-    }
+    //check the main main master slide's TextMasterStyleAtom
+    cfs.append(getLevelCF(m, tc, m_level));
+    cfs.append(getBaseLevelsCF(m, tc, m_level));
     processCFDefaults(d);
 }
 
