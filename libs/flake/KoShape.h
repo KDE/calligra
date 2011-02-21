@@ -3,6 +3,7 @@
    Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -52,6 +53,7 @@ class KoShapeUserData;
 class KoViewConverter;
 class KoShapeApplicationData;
 class KoShapeSavingContext;
+class KoShapePaintingContext;
 class KoCanvasBase;
 class KoShapeLoadingContext;
 class KoGenStyle;
@@ -172,7 +174,8 @@ public:
      * something transparent on top.
      * This can be done with a method like:
      * <code>
-       painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());</code>
+     *   painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());
+     * </code>
      * Or equavalent for non-square objects.
      * Do note that a shape's top-left is always at coordinate 0,0. Even if the shape itself is rotated
      * or translated.
@@ -192,6 +195,32 @@ public:
      *      like selection and get a reference to the KoResourceManager.
      */
     virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+
+    /**
+     * @brief Paint the shape
+     *
+     * The class extending this one is responsible for painting
+     * itself.  This method should paint the shape using the provided
+     * QPainter. All transformations are already done to set up the
+     * painter so that the paint method can just paint from (0, 0) to
+     * size().
+     *
+     * Since we do not assume the shape is square, the painting must also
+     * clear its background if it will draw something transparent on top.
+     *
+     * This can be done with a method like:
+     * <code>
+     *   painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());
+     * </code>
+     * or equivalent for non-square objects.
+     *
+     * Note that a shape's top-left is always at coordinate 0,0
+     * even if the shape itself is rotated or translated.
+     *
+     * @param painter used for painting the shape
+     * @param context parameters to the painting process, among them a view converter.
+     */
+    virtual void paint(QPainter &painter, const KoShapePaintingContext &context);
 
     /**
      * Load a shape from odf

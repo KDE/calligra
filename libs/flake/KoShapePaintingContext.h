@@ -58,7 +58,7 @@ public:
      * @brief Constructor
      * @param converter The ViewConverter used to set the transformation in the painter
      */
-    KoShapePaintingContext(KoViewConverter &converter);
+    explicit KoShapePaintingContext(KoViewConverter &converter);
     virtual ~KoShapePaintingContext();
 
     /**

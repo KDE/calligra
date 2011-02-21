@@ -175,6 +175,8 @@ public:
 
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    /// reimplemented
+    virtual void paint(QPainter &painter, const KoShapePaintingContext &context);
 
     /**
      * @brief Paint the component
