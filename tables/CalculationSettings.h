@@ -151,6 +151,15 @@ public:
      */
     bool isAutoCalculationEnabled() const;
 
+    /**
+     * Sets the comparisons on this document to be case sensitive or not.
+     */
+    void setCaseSensitiveComparisons(Qt::CaseSensitivity caseSensitive);
+
+    /**
+     * Returns wether comparisons in this document are case sensitive.
+     */
+    Qt::CaseSensitivity caseSensitiveComparisons() const;
 private:
     class Private;
     Private * const d;
