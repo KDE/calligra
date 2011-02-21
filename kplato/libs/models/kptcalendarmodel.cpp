@@ -41,6 +41,7 @@
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
+#include <kdeversion.h>
 
 #include <kdebug.h>
 
@@ -866,17 +867,21 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
         }
         case Qt::ToolTipRole: {
             if ( d->state() == CalendarDay::Undefined ) {
-                return i18n( "Undefined" );
+                return i18nc( "@info:tooltip", "Undefined" );
             }
             if ( d->state() == CalendarDay::NonWorking ) {
-                return i18n( "Non-working" );
+                return i18nc( "@info:tooltip", "Non-working" );
             }
+#if KDE_IS_VERSION( 4, 3, 80 )
             KLocale *l = KGlobal::locale();
             QStringList tip;
             foreach ( TimeInterval *i, d->timeIntervals() ) {
                 tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", l->formatLocaleTime( i->startTime(), KLocale::TimeWithoutSeconds ), l->formatDuration( i->second ) );
             }
             return tip.join( "\n" );
+#else
+            return i18nc( "@info:tooltip", "Working" );
+#endif
         }
         case Qt::FontRole: {
             if ( d->state() != CalendarDay::Undefined ) {
@@ -1027,17 +1032,21 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         }
         CalendarDay *day = m_calendar->findDay( date );
         if ( day == 0 || day->state() == CalendarDay::Undefined ) {
-            return i18n( "Undefined" );
+            return i18nc( "@info:tooltip", "Undefined" );
         }
         if ( day->state() == CalendarDay::NonWorking ) {
-            return i18n( "Non-working" );
+            return i18nc( "@info:tooltip", "Non-working" );
         }
+#if KDE_IS_VERSION( 4, 3, 80 )
         KLocale *l = KGlobal::locale();
         QStringList tip;
         foreach ( TimeInterval *i, day->timeIntervals() ) {
             tip <<  i18nc( "@info:tooltip 1=time 2=The work duration (non integer)", "%1, %2", l->formatLocaleTime( i->startTime(), KLocale::TimeWithoutSeconds ), l->formatDuration( i->second ) );
         }
         return tip.join( "\n" );
+#else
+        return i18nc( "@info:tooltip", "Working" );
+#endif
     }
 
     switch ( dataType ) {
