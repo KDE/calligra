@@ -1034,7 +1034,9 @@ void ProjectTester::scheduleWithExternalAppointments()
     sm->createSchedules();
     project.calculate( *sm );
 
-//     Debug::printSchedulingLog( *sm );
+    Debug::print( &project, s, true );
+    Debug::print( r, "", true );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), targetend - Duration( 1, 8, 0 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
