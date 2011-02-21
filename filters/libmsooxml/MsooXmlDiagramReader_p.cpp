@@ -2573,18 +2573,16 @@ void CycleAlgorithm::virtualDoLayout() {
     LayoutNodeAtom* nodeInCenter = firstNodeInCenter ? childs.takeFirst() : 0;
     const qreal childsCount = qMax(1, childs.count());
 
-    //const qreal w = layout()->finalValues()["w"];
-    //const qreal h = layout()->finalValues()["h"];
-    const qreal w = layout()->finalValues()["w"];
-    const qreal h = layout()->finalValues()["h"];
-
+    QMap<QString, qreal> values = layout()->finalValues();
+    const qreal w = values["w"];
+    const qreal h = values["h"];
     const qreal rx = w / 2.0;
     const qreal ry = h / 2.0;
     qreal num = 360.0 / childsCount;
     const bool inverse = startAngel > spanAngel;
     if(inverse) num = -num;
 
-    qreal spacing = 0.0;//layout()-> "sibSp"] * childsCount;
+    qreal spacing = values.value("sibSp");
     qreal dw = ( (2.0 * M_PI * rx - spacing) / childsCount );
     qreal dh = ( (2.0 * M_PI * ry - spacing) / childsCount );
 
