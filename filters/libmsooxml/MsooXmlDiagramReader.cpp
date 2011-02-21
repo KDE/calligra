@@ -63,10 +63,7 @@ void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect 
     // Do the (re-)layout.
     m_context->m_rootLayout->layoutAtom(m_context);    
     // Write the content.
-    m_context->m_rootLayout->writeAtom(m_context, xmlWriter, m_styles);    
-    QList<QExplicitlySharedDataPointer<Diagram::LayoutNodeAtom> > list = m_context->m_rootLayout->childrenLayouts();
-    QVector<QExplicitlySharedDataPointer<Diagram::AbstractAtom> > list2 = m_context->m_rootLayout->children();
-    
+    m_context->m_rootLayout->writeAtom(m_context, xmlWriter, m_styles);  
 }
 
 MsooXmlDiagramReader::MsooXmlDiagramReader(KoOdfWriters *writers)
@@ -212,7 +209,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
 
         // build the layout-tree. This solves ForEachAtom, ChooseAtom and other things that need to be executed.
         m_context->m_context->m_rootLayout->build(m_context->m_context);
-        // once done we start a second build-process that does things like moving the constraints to the proper layoutNotes.
+        // once done we start a second build-process that does additional things once the layout-tree is fully available.
         m_context->m_context->m_rootLayout->finishBuild(m_context->m_context);
 
         //m_context->m_context->m_rootLayout->dump(m_context->m_context,0);

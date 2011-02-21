@@ -254,6 +254,7 @@ class AbstractAtom : public QSharedData
         QExplicitlySharedDataPointer<LayoutNodeAtom> parentLayout() const;
         QExplicitlySharedDataPointer<AbstractAtom> parent() const;
         QVector< QExplicitlySharedDataPointer<AbstractAtom> > children() const;
+        
         int indexOfChild(AbstractAtom* node) const;
         void addChild(AbstractAtom* node);
         void addChild(QExplicitlySharedDataPointer<AbstractAtom> node);
@@ -344,8 +345,9 @@ class LayoutNodeAtom : public AbstractAtom
         void setVariable(const QString &name, const QString &value);
         QMap<QString, qreal> finalValues() const;
         
-        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > childrenLayouts() const;
-        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > descendantLayouts() const;
+        QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > fetchLayouts(Context* context, const QString &forAxis, const QString &forName, const QString &ptType) const;
+        QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > childrenLayouts() const;
+        QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > descendantLayouts() const;
         QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
 
         qreal distanceTo(LayoutNodeAtom* otherAtom) const;
@@ -476,6 +478,10 @@ class PresentationOfAtom : public AbstractAtom
         virtual PresentationOfAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        virtual void build(Context* context);
+    private:
+        QString dump() const;
+        bool isEmpty() const;
 };
 
 /// The if element represents a condition that applies to all it's children.
