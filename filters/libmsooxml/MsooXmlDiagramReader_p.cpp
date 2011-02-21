@@ -2520,12 +2520,8 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     QString endPts = layout()->algorithmParam("endPts");
     //if (!begPts.isEmpty() && !endPts.isEmpty()) kDebug()<<"begPts="<<begPts<<"endPts="<<endPts;
 
-    ValueCache srcValues = srcAtom->m_values;
-    QMap<QString, qreal> dstValues = dstAtom->m_values;
-    QMap<QString, qreal> srcFactors = srcAtom->m_factors;
-    QMap<QString, qreal> dstFactors = dstAtom->m_factors;
-    QMap<QString, int> srcCountFactors = srcAtom->m_countFactors;
-    QMap<QString, int> dstCountFactors = dstAtom->m_countFactors;
+    QMap<QString, qreal> srcValues = srcAtom->finalValues();
+    QMap<QString, qreal> dstValues = dstAtom->finalValues();
     qreal srcX = srcValues["l"];//+srcValues["ctrX"];
     qreal srcY = srcValues["t"];//+srcValues["ctrY"];
     qreal srcW = srcValues["w"];
@@ -2534,12 +2530,6 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     qreal dstY = dstValues["t"];//+dstValues["ctrY"];
     qreal dstW = dstValues["w"];
     qreal dstH = dstValues["h"];
-#if 0
-    Q_ASSERT(srcX > 0.0);
-    Q_ASSERT(srcY > 0.0);
-    Q_ASSERT(dstX > 0.0);
-    Q_ASSERT(dstY > 0.0);
-#endif
     qreal srcCX = srcX + srcW/2.0;
     qreal srcCY = srcY + srcH/2.0;
     qreal dstCX = dstX + dstW/2.0;
