@@ -2305,24 +2305,24 @@ QList<LayoutNodeAtom*> AbstractAlgorithm::childLayouts() const {
 }
 
 void AbstractAlgorithm::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h) {
-    QStringList removeList;
+//     QStringList removeList;
     l->m_values["l"] = parentLayout()->finalValues()["l"] + x;
     l->m_values["t"] = parentLayout()->finalValues()["t"] + y;
-    removeList << "l" << "t";
+//     removeList << "l" << "t";
     if (w >= 0.0) {
         l->m_values["w"] = w;
-        removeList << "w";
+//         removeList << "w";
     }
     if (h >= 0.0) {
         l->m_values["h"] = h;
-        removeList << "h";
+//         removeList << "h";
     }
     //l->m_values["ctrX"] = 0.0;
     //l->m_values["ctrY"] = 0.0;
     //l->m_values["r"] = l->m_values["l"] + l->m_values["w"];
     //l->m_values.remove("ctrX");
     //l->m_values.remove("ctrY");
-    removeList << "ctrX" << "ctrY";
+//     removeList << "ctrX" << "ctrY";
 //     foreach(const QString &s, removeList) {
 //         //l->m_factors[s] = 1.0;
 //         //l->m_countFactors[s] = 1;
@@ -2587,7 +2587,8 @@ void CycleAlgorithm::virtualDoLayout() {
     qreal dh = ( (2.0 * M_PI * ry - spacing) / childsCount );
 
     if(nodeInCenter) {
-        setNodePosition(nodeInCenter, rx, ry, -1, -1); //dw, dh);
+        //setNodePosition(nodeInCenter, rx, ry, -1, -1); //dw, dh);
+        setNodePosition(nodeInCenter, rx, ry, dw, dh);
     }
 
     //for(qreal degree = startAngel; (!childs.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
@@ -2596,6 +2597,7 @@ void CycleAlgorithm::virtualDoLayout() {
         const qreal x = rx + cos(radian) * rx;
         const qreal y = ry + sin(radian) * ry;
         LayoutNodeAtom* l = childs.takeFirst();
+        //setNodePosition(l, x, y, -1, -1);
         setNodePosition(l, x, y, dw, dh);
     }
 }
