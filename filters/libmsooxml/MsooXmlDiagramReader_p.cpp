@@ -1363,6 +1363,8 @@ void ConstraintAtom::finishBuild(Context* context) {
         }
         Q_ASSERT_X(referenceWasApplied, __FUNCTION__, QString("Reference of constraint could not be applied %1").arg( dump() ).toLocal8Bit());
     }
+#else
+    Q_UNUSED(context);
 #endif
 }
 
@@ -1517,8 +1519,8 @@ void AdjustAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
 // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/74f86b76-37be-4087-b5b0-cf2fc68d5595/
 void AdjustAtom::applyAdjustment(Context* context, LayoutNodeAtom* /* atom */) {
     Q_ASSERT_X(m_index >= 0 && m_index < context->m_shapeList.count(), __FUNCTION__, QString("Index is out of bounds, index=%1 min=0 max=%2").arg(m_index).arg(context->m_shapeList.count()-1).toLocal8Bit());
-    ShapeAtom *shape = context->m_shapeList.at(m_index);
     //TODO
+    //ShapeAtom *shape = context->m_shapeList.at(m_index);
     //if (m_value > 90) m_value = 360 - (m_value - 90);
     //shape->parentLayout()->m_rotateAngle = m_value;
 }
@@ -2605,6 +2607,7 @@ void CycleAlgorithm::virtualDoLayout() {
 /****************************************************************************************************/
 
 qreal LinearAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
+    Q_UNUSED(type);
     Q_UNUSED(values);
     qreal value = -1.0;
     /*
@@ -2626,13 +2629,12 @@ void LinearAlgorithm::virtualDoLayout() {
     const qreal bMarg = layout()->finalValues()[ "bMarg" ];
     const qreal w = layout()->finalValues()["w"] - lMarg - rMarg;
     const qreal h = layout()->finalValues()["h"] - bMarg - tMarg;
-    Q_ASSERT( lMarg == 0 );
 
     QList<LayoutNodeAtom*> childs = childLayouts();
 
     Q_ASSERT(!childs.isEmpty());
     const qreal childsCount = qMax(1, childs.count());
-    // first passthrough
+
     int x, y, mx, my;
     x = y = mx = my = 0;
     if(direction == "fromL") {
@@ -2648,33 +2650,11 @@ void LinearAlgorithm::virtualDoLayout() {
         my = -(h / childsCount);
     }
 
-    const int constX = x;
-    const int constY = y;
-
-    qreal dw = w / childsCount;
-    qreal dh = h / childsCount;
-    foreach(LayoutNodeAtom* l, childs) {
-        setNodePosition(l, x, y, dw, dh);
-        x += mx;
-        y += my;
-    }
-
-    /*
-    Context* childContext = new Context( *context() );
-    doubleLayoutContext.append( childContext );
-    childContext->m_parentLayout = this->layout();
-    foreach( LayoutNodeAtom* layNode, childs ) {
-        childContext->m_parentLayout = this->layout();
-        layNode->layoutAtom( childContext );
-    }
-    */
-
     // calculate weights
     qreal summedWidth = 0;
     qreal summedHeight = 0;
     qreal totalSumWidth = 0;
     qreal totalSumHeight = 0;
-    //int numOfRelevantChildren = 0;
     // TODO if spaceAlg is posititive or creates any spaces it has to count, will be a horror to calculate it
     foreach ( LayoutNodeAtom* layNode, childs ) {        
         QMap< QString, qreal > vals = layNode->finalValues();
@@ -2685,11 +2665,11 @@ void LinearAlgorithm::virtualDoLayout() {
         totalSumWidth += vals[ "w" ];
         totalSumHeight += vals[ "h" ];
     }
-    qreal currentX = constX;
-    qreal currentY = constY;
+    qreal currentX = x;
+    qreal currentY = y;
     qreal currentWidth = 0;
     qreal currentHeight = 0;
-    const int xFactor = mx >=  0 ? 1 : -1;
+    const int xFactor = mx >= 0 ? 1 : -1;
     const int yFactor = my >= 0 ? 1 : -1;
     foreach(LayoutNodeAtom* l, childs) {
         QMap< QString, qreal > values = l->finalValues();
@@ -2711,7 +2691,6 @@ void LinearAlgorithm::virtualDoLayout() {
                 currentY += currentHeight;
         }
     }
-    
 }
 
 /****************************************************************************************************/
@@ -2733,38 +2712,47 @@ void SnakeAlgorithm::virtualDoLayout() {
     const QString growDirection = layout()->algorithmParam("grDir", "tL");
     // Specifies whether nodes are arranged in rows or columns.
     const QString flowDirection = layout()->algorithmParam("flowDir");
-    // Specifies the direction of the subsequent row or column. For example, if the algorithm initially places the nodes from left to right, revDir places the nodes in the next row from right to left. However if the algorithm uses contDir, the nodes on the next row are arranged from left to right.
-    const QString continueDirection = layout()->algorithmParam("contDir");
+    // Specifies the direction of the subsequent row or column. For example, if the algorithm initially places the nodes from left to right,
+    // revDir places the nodes in the next row from right to left. However if the algorithm uses contDir, the nodes on the next row are
+    // arranged from left to right.
+    const bool inSameDirection = layout()->algorithmParam("contDir") != "revDir";
     // Specifies the offset.
-    const QString offset = layout()->algorithmParam("off");
+    //const QString offset = layout()->algorithmParam("off");
+
+    // Specifies the point at which the diagram starts to snake. The value bal specifies that snaking begin at an even number of rows and
+    // columns. The value fixed specifies that snaking begin at a fixed point, for example, in a row that contains three nodes. The value
+    // endCnv specifies that snaking begin when there is no more room for a shape in the row.
+    //const QString breakpoint = layout()->algorithmParam("bkpt", "endCnv");
+    // Specifies where the snake should break, if bkpt=fixed.
+    //const int breakpointFixedValue = layout()->algorithmParam("bkPtFixedVal", "2").toInt();
 
     QList<LayoutNodeAtom*> childs = childLayouts();
     Q_ASSERT(!childs.isEmpty());
-    //const qreal childsCount = qMax(1, childs.count());
-
-    const qreal w = layout()->finalValues()["w"];
-    const qreal h = layout()->finalValues()["h"];
 
     bool inRows = flowDirection != "column";
-    bool inSameDirection = continueDirection != "revDir";
-
+    const qreal w = layout()->finalValues()["w"];
+    const qreal h = layout()->finalValues()["h"];
+    qreal x = 0;
+    qreal y = 0;
     enum { TopLeft, TopRight, BottomLeft, BottomRight } direction = TopLeft;
-    if(growDirection == "tR") {
+
+    if (growDirection == "tR") {
         direction = TopRight;
-    } else if(growDirection == "bL") {
+        x = w - childs.first()->finalValues()["w"];
+    } else if (growDirection == "bL") {
         direction = BottomLeft;
-    } else if(growDirection == "bR") {
+        y = h - childs.first()->finalValues()["h"];
+    } else if (growDirection == "bR") {
         direction = BottomRight;
+        x = w - childs.first()->finalValues()["w"];
+        y = h - childs.first()->finalValues()["h"];
     }
 
     //TODO is hardcoding correct here? The specs say default is 100...
-    qreal dw = 100;
-    qreal dh = 100;
-    qreal x = 0;
-    qreal y = 0;
     qreal mx = 110;
     qreal my = 110;
-
+    qreal dw = 100;
+    qreal dh = 100;
     //TODO use direction
     foreach(LayoutNodeAtom* l, childs) {
         if(l->algorithmType() == AlgorithmAtom::SpaceAlg) continue; // specs says 'or does nothing' but not under which conditions :-/
