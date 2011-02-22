@@ -191,11 +191,11 @@ install( FILES
         KPrShapeAnimations.h
         KPrView.h
         KPrViewModePresentation.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/part)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part)
 
 install( FILES 
          animations/KPrAnimationData.h
          animations/KPrAnimationStep.h
          animations/KPrShapeAnimation.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/animations)
+         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/animations)
 
