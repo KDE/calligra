@@ -229,6 +229,7 @@ protected:
     void moveToX( qreal x );
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget );
+    void paintTreeIndicator( bool on );
 
 private:
     Node *m_node;
