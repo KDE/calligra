@@ -83,6 +83,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
     QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
     const QString ver_align(m_vmlStyle.value("v-text-anchor"));
+    const QString rotation(m_vmlStyle.value("rotation"));
 
     qreal x_position = 0;
     QString x_pos_string, y_pos_string, widthString, heightString;
@@ -1485,7 +1486,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
  - equationxml (Storage for Alternate Math Content) §14.2.2.10
  - extrusion (3D Extrusion) §14.2.2.11
  - fill (Shape Fill Properties) §14.1.2.5
- - formulas (Set of Formulas) §14.1.2.6
+ - [done] formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
  - [done] imagedata (Image Data) §14.1.2.11
  - ink (Ink) §14.2.2.15
@@ -1530,6 +1531,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
     TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS(path)
+    TRY_READ_ATTR_WITHOUT_NS(adj)
+    TRY_READ_ATTR_WITHOUT_NS(coordsize)
+    if (!path.isEmpty()) {
+        m_shapeTypeString = "<draw:enhanced-geometry ";
+
+        if (!adj.isEmpty()) {
+            QString tempModifiers = adj;
+            tempModifiers.replace(',', " ");
+            m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
+        }
+        if (!coordsize.isEmpty()) {
+            QString tempViewBox = "0 0 " + coordsize;
+            tempViewBox.replace(',', " ");
+            m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
+        }
+        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(convertToEnhancedPath(path));
+        m_shapeTypeString += ">";
+    }
+
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
@@ -1577,8 +1598,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 m_wrapRead = true;
                 TRY_READ(wrap)
             }
+            ELSE_TRY_READ_IF(formulas)
             SKIP_UNKNOWN
         }
+    }
+
+    // Case of a custom shape which is not defined in a shapetype
+    if (!path.isEmpty()) {
+        m_shapeTypeString += "</draw:enhanced-geometry>";
     }
 
     body = frameBuf.originalWriter();
@@ -1601,8 +1628,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     if (m_outputFrames) {
         if (isCustomShape) {
-            type = type.mid(1); // removes extra # from the start
-            body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+            if (!type.isEmpty()) {
+                type = type.mid(1); // removes extra # from the start
+                body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+            }
+            else {
+                body->addCompleteElement(m_shapeTypeString.toUtf8());
+            }
         }
         createFrameEnd();
     }
