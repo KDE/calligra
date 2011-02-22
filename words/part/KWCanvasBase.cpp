@@ -307,12 +307,12 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 #endif
             painter.fillRect(vm.clipRect, QBrush(color));
 
-            // Paint the page decorations: border, shadow, etc.
-            paintPageDecorations(painter, vm);
-
             // Paint the contents of the page.
             painter.setRenderHint(QPainter::Antialiasing);
             m_shapeManager->paint(painter, *(viewConverter()), false);
+
+            // Paint the page decorations: border, shadow, etc.
+            paintPageDecorations(painter, vm);
 
             // Paint the grid
             painter.save();
