@@ -165,9 +165,9 @@ KWApplicationConfig.h
 KWViewMode.h
 KWView.h
 KWViewModeNormal.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/part COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/words/part COMPONENT Devel)
 
 install( FILES
 frames/KWFrameLayout.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/frames COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 
