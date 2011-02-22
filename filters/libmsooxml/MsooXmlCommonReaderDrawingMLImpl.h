@@ -2405,16 +2405,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
+        qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
+        // value added to left marginal
+        if (!indent.isEmpty()) {
+            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
+    } else if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
     }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
-    }
-    if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
     if (!defTabSz.isEmpty()) {
         const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
@@ -4771,17 +4775,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
+    if (!marL.isEmpty()) {
+        qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
+        // value added to left marginal
+        if (!indent.isEmpty()) {
+            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
+    } else if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
+    }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
-    }
-    if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
-    }
-    if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
     if (!defTabSz.isEmpty()) {
         const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
