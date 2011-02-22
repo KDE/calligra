@@ -234,6 +234,48 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 3, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
 
+    s = "Calculate forward, Task: ASAP, Resource 200% available, Request 50% load ---------";
+    qDebug()<<endl<<"Testing:"<<s;
+    r->setUnits( 200 );
+    rr->setUnits( 50 );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    sm->createSchedules();
+    m_project->calculate( *sm );
+
+    Debug::print( m_project, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
+
+    s = "Calculate forward, Task: ASAP, Resource 200% available, Request 100% load ---------";
+    qDebug()<<endl<<"Testing:"<<s;
+    r->setUnits( 200 );
+    rr->setUnits( 100 );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    sm->createSchedules();
+    m_project->calculate( *sm );
+
+    Debug::print( m_project, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 4, 0 ) );
+    QVERIFY( t->schedulingError() == false );
+
     s = "Calculate forward, Task: ASAP, Resource available tomorrow --------";
     qDebug()<<endl<<"Testing:"<<s;
     r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );
@@ -1034,7 +1076,9 @@ void ProjectTester::scheduleWithExternalAppointments()
     sm->createSchedules();
     project.calculate( *sm );
 
-//     Debug::printSchedulingLog( *sm );
+    Debug::print( &project, s, true );
+    Debug::print( r, "", true );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), targetend - Duration( 1, 8, 0 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );

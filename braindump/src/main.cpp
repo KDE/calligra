@@ -34,17 +34,7 @@ int main( int argc, char **argv )
   KAboutData* about = newBrainDumpAboutData();
   KCmdLineArgs::init( argc, argv, about );
 
-  KCmdLineOptions options;
-  options.add("no-unique", ki18n("Use this option when debugging so that Braindump is not launched as a KUniqueApplication"));
-  KCmdLineArgs::addCmdLineOptions( options );
-
-  KApplication* app = 0;
-  
-  if(KCmdLineArgs::parsedArgs()->isSet("-unique")) {
-    app = new KUniqueApplication;
-  } else {
-    app = new KApplication;
-  }
+  KApplication app;
 
   KIconLoader::global()->addAppDir("koffice");
   KoGlobal::initialize();
@@ -56,11 +46,11 @@ int main( int argc, char **argv )
   MainWindow* window = new MainWindow(doc, *m_documentData);
   window->setVisible(true);
   
-  app->exec();
+  app.exec();
 
   // Ensure the root section is saved
   doc->sectionsIO()->save();
   
   delete doc;
-  app->exit(0);
+  app.exit(0);
 }

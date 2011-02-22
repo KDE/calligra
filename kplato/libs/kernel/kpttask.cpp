@@ -1963,9 +1963,20 @@ DateTime Task::scheduleFromEndTime(int use) {
             // cs->endTime calculated above
             //kDebug()<<m_name<<": end="<<cs->endTime<<"  early="<<cs->earlyStart;
             //TODO: try to keep within projects constraint times
+            cs->endTime = workTimeBefore( cs->endTime, cs );
             cs->startTime = workTimeAfter( cs->earlyStart, cs );
-            cs->duration = duration(cs->startTime, use, false);
-            DateTime e = cs->startTime + cs->duration;
+            DateTime e;
+            if ( cs->startTime < cs->endTime ) {
+                cs->duration = duration( cs->startTime, use, false );
+                e = cs->startTime + cs->duration;
+            } else {
+#ifndef PLAN_NLOGDEBUG
+                cs->logDebug( QString( "%1: Latest allowed end time earlier than early start").arg( constraintToString() ) );
+#endif
+                cs->duration = duration( cs->endTime, use, true );
+                e = cs->endTime;
+                cs->startTime = e - cs->duration;
+            }
             if ( e > cs->lateFinish ) {
                 cs->schedulingError = true;
                 cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule within late finish.", constraintToString() ) );
