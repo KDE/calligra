@@ -1141,6 +1141,30 @@ QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const {
     return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(srcAtom,dstAtom);
 }
 
+QSizeF LayoutNodeAtom::childrenUsedSize() const {
+    qreal w = 0;
+    qreal h = 0;
+    foreach( const QExplicitlySharedDataPointer<LayoutNodeAtom> &l, childrenLayouts() ) {
+        QMap< QString, qreal > vals = l->finalValues();
+        if ( l->algorithmType() != AlgorithmAtom::SpaceAlg ) {
+            h += vals[ "h" ];
+            w += vals[ "w" ];
+        }
+    }
+    return QSizeF(w, h);
+}
+
+QSizeF LayoutNodeAtom::childrenTotalSize() const {
+    qreal w = 0;
+    qreal h = 0;
+    foreach( const QExplicitlySharedDataPointer<LayoutNodeAtom> &l, childrenLayouts() ) {
+        QMap< QString, qreal > vals = l->finalValues();
+        h += vals[ "h" ];
+        w += vals[ "w" ];
+    }
+    return QSizeF(w, h);
+}
+
 qreal LayoutNodeAtom::distanceTo(LayoutNodeAtom* otherAtom) const {
     //TODO specs are missing details from which exact point to calc the distance from...
 #if 0
@@ -2654,6 +2678,8 @@ void LinearAlgorithm::virtualDoLayout() {
     QList<LayoutNodeAtom*> childs = childLayouts();
     Q_ASSERT(!childs.isEmpty());
     const qreal childsCount = qMax(1, childs.count());
+    const QSizeF usedSize = layout()->childrenUsedSize();
+    const QSizeF totalSize = layout()->childrenTotalSize();
 
     int x, y, mx, my;
     x = y = mx = my = 0;
@@ -2671,19 +2697,6 @@ void LinearAlgorithm::virtualDoLayout() {
     }
 
     // calculate weights
-    qreal summedWidth = 0;
-    qreal summedHeight = 0;
-    qreal totalSumWidth = 0;
-    qreal totalSumHeight = 0;
-    foreach ( LayoutNodeAtom* l, childs ) {
-        QMap< QString, qreal > vals = l->finalValues();
-        if ( l->algorithmType() != AlgorithmAtom::SpaceAlg ) {
-            summedHeight += vals[ "h" ];
-            summedWidth += vals[ "w" ];
-        }
-        totalSumWidth += vals[ "w" ];
-        totalSumHeight += vals[ "h" ];
-    }
     qreal currentX = x;
     qreal currentY = y;
     qreal currentWidth = 0;
@@ -2693,16 +2706,16 @@ void LinearAlgorithm::virtualDoLayout() {
     foreach(LayoutNodeAtom* l, childs) {
         QMap< QString, qreal > values = l->finalValues();
         if ( l->algorithmType() != AlgorithmAtom::SpaceAlg ) {
-            currentWidth = l->finalValues()[ "w" ] / summedWidth * w;
-            currentHeight = l->finalValues()[ "h" ] / summedHeight * h;
+            currentWidth = l->finalValues()[ "w" ] / usedSize.width() * w;
+            currentHeight = l->finalValues()[ "h" ] / usedSize.height() * h;
             setNodePosition(l, currentX, currentY, currentWidth, currentHeight);
             if ( direction == "fromR" || direction == "fromL" )
                 currentX = currentX + xFactor * l->finalValues()[ "w" ];
             else
                 currentY = currentY + yFactor * l->finalValues()[ "h" ];
         } else {
-            currentWidth = l->finalValues()[ "w" ] / totalSumWidth * w;
-            currentHeight = l->finalValues()[ "h" ] / totalSumHeight * h;
+            currentWidth = l->finalValues()[ "w" ] / totalSize.width() * w;
+            currentHeight = l->finalValues()[ "h" ] / totalSize.height() * h;
             if ( direction == "fromR" || direction == "fromL" )
                 currentX += currentWidth;
             else
