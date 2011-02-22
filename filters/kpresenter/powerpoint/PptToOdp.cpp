@@ -2117,7 +2117,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         * equal to II_JumpAction (0x3), II_HyperlinkAction (0x4), or
         * II_CustomShowAction (0x7).
         */
-        out.xml.startElement("text:a");
+        out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
                 mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
@@ -2126,7 +2126,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
             out.xml.addAttribute("xlink:href", link.first);
         }
     } else if (mouseover) {
-        out.xml.startElement("text:a");
+        out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
                 mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
@@ -2135,7 +2135,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
             out.xml.addAttribute("xlink:href", link.first);
         }
     } else {
-        out.xml.startElement("text:span");
+        out.xml.startElement("text:span", false);
 
         //count specifies the number of characters of the corresponding text to
         //which this character formatting applies
@@ -2157,7 +2157,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     } else {
         int len = end - start;
         const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
-        out.xml.addTextNode(txt);
+        out.xml.addTextSpan(txt);
     }
 
     out.xml.endElement();
