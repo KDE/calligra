@@ -1773,17 +1773,38 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     foreach(AbstractNode* n, context->m_parentLayout->axis( context )) {
         if(PointNode* pn = dynamic_cast<PointNode*>(n))
             if(!pn->m_text.isEmpty())
-                textlist.append(pn);                
+                textlist.prepend(pn);
     }
-        
+
     if (!textlist.isEmpty()) {
-        xmlWriter->startElement("text:p");
         foreach(PointNode* pn, textlist) {
-            xmlWriter->startElement("text:span");
+            bool bulletEnabled = QVariant(context->m_parentLayout->variable("bulletEnabled", false)).toBool();
+            if (bulletEnabled) {
+                int level = 0;
+                for(AbstractNode* n = pn->parent(); n; n = n->parent(), ++level);
+                if(level < 2) // seems only level2 has bullets while level1 has not even if bulletEnabled=1 (see me07_horizontal_bullet_list.xlsx).
+                    bulletEnabled = false;
+            }
+            if (bulletEnabled) {
+                xmlWriter->startElement("text:list");
+                KoListStyle listStyle;
+                KoListLevelProperties llp;
+                llp.setLevel(1);
+                llp.setBulletCharacter(QChar(0x2022));
+                listStyle.setLevelProperties(llp);
+                KoGenStyle style(KoGenStyle::ListAutoStyle);
+                listStyle.saveOdf(style);
+                xmlWriter->addAttribute("text:style-name", styles->insert(style));
+                xmlWriter->startElement("text:list-item");
+            }
+            xmlWriter->startElement("text:p");
             xmlWriter->addTextNode(pn->m_text);
             xmlWriter->endElement();
+            if (bulletEnabled) {
+                xmlWriter->endElement();
+                xmlWriter->endElement();
+            }
         }
-        xmlWriter->endElement();
     }
 
     if (m_type == QLatin1String("ellipse")) {
@@ -2631,7 +2652,6 @@ void LinearAlgorithm::virtualDoLayout() {
     const qreal h = layout()->finalValues()["h"] - bMarg - tMarg;
 
     QList<LayoutNodeAtom*> childs = childLayouts();
-
     Q_ASSERT(!childs.isEmpty());
     const qreal childsCount = qMax(1, childs.count());
 
@@ -2655,10 +2675,9 @@ void LinearAlgorithm::virtualDoLayout() {
     qreal summedHeight = 0;
     qreal totalSumWidth = 0;
     qreal totalSumHeight = 0;
-    // TODO if spaceAlg is posititive or creates any spaces it has to count, will be a horror to calculate it
-    foreach ( LayoutNodeAtom* layNode, childs ) {        
-        QMap< QString, qreal > vals = layNode->finalValues();
-        if ( layNode->algorithmType() != AlgorithmAtom::SpaceAlg ) {
+    foreach ( LayoutNodeAtom* l, childs ) {
+        QMap< QString, qreal > vals = l->finalValues();
+        if ( l->algorithmType() != AlgorithmAtom::SpaceAlg ) {
             summedHeight += vals[ "h" ];
             summedWidth += vals[ "w" ];
         }
@@ -2677,7 +2696,6 @@ void LinearAlgorithm::virtualDoLayout() {
             currentWidth = l->finalValues()[ "w" ] / summedWidth * w;
             currentHeight = l->finalValues()[ "h" ] / summedHeight * h;
             setNodePosition(l, currentX, currentY, currentWidth, currentHeight);
-
             if ( direction == "fromR" || direction == "fromL" )
                 currentX = currentX + xFactor * l->finalValues()[ "w" ];
             else
