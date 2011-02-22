@@ -47,11 +47,11 @@
 
 namespace MSOOXML { namespace Diagram {
 
-#define DEBUG_DUMP \
-    qDebug() << QString("%1%2").arg(QString(' ').repeated(level*2)).arg(m_tagName)
-    //qDebug() << QString("%1Dgm::%2::%3").arg(QString(' ').repeated(level)).arg(typeid(this).name()).arg(__FUNCTION__) << this << "atom=" << m_tagName
-#define DEBUG_WRITE \
-    qDebug() << QString("Dgm::%1::%2").arg(typeid(this).name()).arg(__FUNCTION__) << "atom=" << m_tagName
+//#define ASSERT_X(condition, errormessage) Q_ASSERT_X(condition, __FUNCTION__, errormessage)
+#define ASSERT_X(condition, errormessage) 
+#define DEBUG_DUMP qDebug() << QString("%1%2").arg(QString(' ').repeated(level*2)).arg(m_tagName)
+//#define DEBUG_DUMP qDebug() << QString("%1Dgm::%2::%3").arg(QString(' ').repeated(level)).arg(typeid(this).name()).arg(__FUNCTION__) << this << "atom=" << m_tagName
+#define DEBUG_WRITE qDebug() << QString("Dgm::%1::%2").arg(typeid(this).name()).arg(__FUNCTION__) << "atom=" << m_tagName
 
 }}
 
@@ -80,11 +80,6 @@ AbstractNode* Context::currentNode() const {
 
 void Context::setCurrentNode(AbstractNode* node) {
     m_currentNode = node;
-    
-    PointNode* ptNode = dynamic_cast<PointNode*>(node);
-    Q_ASSERT(ptNode);
-    kDebug()<<QString("modelId=%2 type=%3").arg(ptNode->m_modelId).arg(ptNode->m_type);
-    kDebug();
 }
 
 ValueCache::ValueCache() : m_rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ), m_unmodified( true ), m_negativeWidth( false ), m_negativeHeight( false ) {}
@@ -197,7 +192,7 @@ void ValueCache::setRectValue( const QString& name, qreal value ) {
     } else if ( name == "ctrY" ) {
         m_rect.moveCenter( QPointF( m_rect.center().x(), m_rect.center().y() + value ) );
     } else {
-        Q_ASSERT_X( false, __FUNCTION__, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
+        ASSERT_X( false, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
     }
     m_unmodified = false;
 }
@@ -1057,7 +1052,7 @@ QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > LayoutNodeAtom::fetchLay
         } else if ( forAxis == "des" ) { // Descendant
             list = descendantLayouts();
         } else {
-            Q_ASSERT_X(false, __FUNCTION__, QString("Unsupported forAxis '%1'").arg( forAxis ).toLocal8Bit());
+            ASSERT_X(false, QString("Unsupported forAxis '%1'").arg( forAxis ).toLocal8Bit());
         }
     }
     QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > result;
@@ -1316,28 +1311,6 @@ void ConstraintAtom::finishBuild(Context* context) {
         Q_ASSERT( context->m_parentLayout->constraints().contains(ptr) );
         parent()->removeChild(ptr);
     }
-
-#if 0
-    typedef QList <QExplicitlySharedDataPointer <MSOOXML::Diagram::LayoutNodeAtom > >  LayoutNodeList;
-    LayoutNodeList childList = context->m_parentLayout->childrenLayouts();
-    foreach( ConstraintAtom* constraint, addedConstraints ) {
-        for( LayoutNodeList::iterator it = childList.begin(); it != childList.end(); ) {
-            if ( !constraint->m_refForName.isEmpty() && (*it)->m_name != constraint->m_refForName ) {
-                ++it;
-            } else if ( !refChildDataPoints.contains( context->m_layoutPointMap[ (*it).data() ] ) ) {
-                ++it;
-            } else {
-                if((*it)->algorithmImpl())
-                    constraint->m_referencedLayout = (*it).data();
-                it = childList.erase( it );
-            }
-        }
-    }
-    foreach( ConstraintAtom* constraint, addedConstraints )
-        if ( !constraint->m_refForName.isEmpty() )
-            Q_ASSERT_X(constraint->m_referencedLayout, __FUNCTION__, QString("Failed to handle refForName in constraint %1").arg( constraint->dump() ).toLocal8Bit());
-#endif
-
     // and now evaluated the referenced layout definitions
     if ( m_refFor == "self" || m_refFor.isEmpty() ) {
         /*
@@ -1472,25 +1445,27 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
     QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > applyLayouts = atom->fetchLayouts(context, m_for, m_forName, m_ptType);
     QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > referencedLayouts = atom->fetchLayouts(context, m_refFor, m_refForName, m_refPtType);
 
-    Q_ASSERT_X(!applyLayouts.isEmpty(), __FUNCTION__, QString("Failed to determinate the layouts for the constraint %1").arg( dump() ).toLocal8Bit());
-    Q_ASSERT_X(!referencedLayouts.isEmpty(), __FUNCTION__, QString("Failed to determinate the referenced layouts for the constraint %1").arg( dump() ).toLocal8Bit());
+    ASSERT_X(!applyLayouts.isEmpty(), QString("Failed to determinate the layouts for the constraint %1").arg( dump() ).toLocal8Bit());
+    ASSERT_X(!referencedLayouts.isEmpty(), QString("Failed to determinate the referenced layouts for the constraint %1").arg( dump() ).toLocal8Bit());
 
     foreach(const QExplicitlySharedDataPointer<LayoutNodeAtom> &applyLayout, applyLayouts) {
         if( !m_value.isEmpty() ) {
             bool ok;
             qreal value = m_value.toDouble( &ok );
-            Q_ASSERT_X(ok, __FUNCTION__, QString("Layout with name=%1 defines none-double value=%2").arg( atom->m_name ).arg( m_value ).toLocal8Bit());
-            //applyLayout->m_factors.clear();
-            //applyLayout->m_countFactors.clear();
-            applyLayout->m_values[ m_type ] = value;
-            applyLayout->setNeedsRelayout( true );
+            ASSERT_X(ok, QString("Layout with name=%1 defines none-double value=%2").arg( atom->m_name ).arg( m_value ).toLocal8Bit());
+            if (ok) {
+                //applyLayout->m_factors.clear();
+                //applyLayout->m_countFactors.clear();
+                applyLayout->m_values[ m_type ] = value;
+                applyLayout->setNeedsRelayout( true );
+            }
         } else {
             //TODO proper handle the case where more then one layouts are referenced (means proper eval the constraints operator)
             LayoutNodeAtom* referencedLayout = referencedLayouts.isEmpty() ? atom : referencedLayouts.first().data();
             Q_ASSERT(referencedLayout);
 
             AbstractAlgorithm* r = referencedLayout->algorithmImpl();
-            Q_ASSERT_X(r, __FUNCTION__, QString("No algorithm in referenced layout=%1 for constraint='%2'").arg( referencedLayout->m_name ).arg( dump() ).toLocal8Bit());
+            ASSERT_X(r, QString("No algorithm in referenced layout=%1 for constraint='%2'").arg( referencedLayout->m_name ).arg( dump() ).toLocal8Bit());
 
             const QMap<QString, qreal> values = referencedLayout->finalValues();
             const QString type = m_refType.isEmpty() ? m_type : m_refType;
@@ -1500,7 +1475,8 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
                 value = values[ type ];
             } else {
                 value = r ? r->defaultValue( type, values ) : -1.0;
-                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("algorithm=%1 value=%2 constraint='%3'").arg( r->name() ).arg( value ).arg( dump() ).toLocal8Bit());
+                ASSERT_X(value >= 0.0, QString("algorithm=%1 value=%2 constraint='%3'").arg( r ? r->name() : "NULL" ).arg( value ).arg( dump() ).toLocal8Bit());
+                if (value < 0.0) continue;
             }
             applyLayout->m_values[ m_type ] = value;
             applyLayout->setNeedsRelayout( true );
@@ -1510,10 +1486,12 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
         if ( !m_fact.isEmpty() ) {
             bool ok;
             qreal v = m_fact.toDouble( &ok );
-            Q_ASSERT_X(ok, __FUNCTION__, QString("Layout with name=%1 defines none-double factor=%2").arg( atom->m_name ).arg( m_fact ).toLocal8Bit());
-            applyLayout->m_factors[ m_type ] += v;
-            applyLayout->m_countFactors[ m_type ] += 1;
-            applyLayout->setNeedsRelayout( true );
+            ASSERT_X(ok, QString("Layout with name=%1 defines none-double factor=%2").arg( atom->m_name ).arg( m_fact ).toLocal8Bit());
+            if (ok) {
+                applyLayout->m_factors[ m_type ] += v;
+                applyLayout->m_countFactors[ m_type ] += 1;
+                applyLayout->setNeedsRelayout( true );
+            }
         }
     }
 #endif
@@ -1541,8 +1519,8 @@ void AdjustAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
 }
 
 // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/74f86b76-37be-4087-b5b0-cf2fc68d5595/
-void AdjustAtom::applyAdjustment(Context* context, LayoutNodeAtom* /* atom */) {
-    Q_ASSERT_X(m_index >= 0 && m_index < context->m_shapeList.count(), __FUNCTION__, QString("Index is out of bounds, index=%1 min=0 max=%2").arg(m_index).arg(context->m_shapeList.count()-1).toLocal8Bit());
+void AdjustAtom::applyAdjustment(Context* /* context */, LayoutNodeAtom* /* atom */) {
+    ASSERT_X(m_index >= 0 && m_index < context->m_shapeList.count(), QString("Index is out of bounds, index=%1 min=0 max=%2").arg(m_index).arg(context->m_shapeList.count()-1).toLocal8Bit());
     //TODO
     //ShapeAtom *shape = context->m_shapeList.at(m_index);
     //if (m_value > 90) m_value = 360 - (m_value - 90);
@@ -1937,8 +1915,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
             xmlWriter->endElement();
         }
     } else {
-        kWarning() << "TODO shape type=" << m_type;
-        //Q_ASSERT_X(false, __FUNCTION__, QString("Handle shape of type=%1").arg(m_type).toUtf8());
+        ASSERT_X(false, QString("TODO Handle shape of type=%1").arg(m_type).toUtf8());
     }
     
     xmlWriter->endElement(); // draw:custom-shape
@@ -1991,7 +1968,7 @@ void PresentationOfAtom::readAll(Context* context, MsooXmlDiagramReader* reader)
 }
 
 void PresentationOfAtom::build(Context* context) {
-    // first set the axis according if our layout
+    // first set the axis according to our layout
     Q_ASSERT(context->m_parentLayout->axis( context ).isEmpty());
     context->m_parentLayout->setAxis( context, this );
 
@@ -2003,9 +1980,9 @@ void PresentationOfAtom::build(Context* context) {
         Q_ASSERT(ppp);
         kDebug()<<QString("modelId=%2 type=%3").arg(ppp->m_modelId).arg(ppp->m_type);
         */
-        Q_ASSERT_X(isEmpty(), __FUNCTION__, QString("Failed to proper apply the non-empty presOf %1").arg(dump()).toLocal8Bit());
+        ASSERT_X(isEmpty(), QString("Failed to proper apply the non-empty presOf %1").arg(dump()).toLocal8Bit());
     } else {
-        //Q_ASSERT_X(nodes.count() == 1, __FUNCTION__, "Oha. The axis contains more then one note. It's not clear what to do in such cases...");
+        //ASSERT_X(nodes.count() == 1, "Oha. The axis contains more then one note. It's not clear what to do in such cases...");
         if (nodes.count() >= 2) kWarning() << "TODO The axis contains more then one note. It's not clear what to do in such cases...";
         context->setCurrentNode( nodes.first() );
     }
@@ -2333,7 +2310,6 @@ AbstractAlgorithm::AbstractAlgorithm() : m_context(0), m_oldCurrentNode(0) {}
 AbstractAlgorithm::~AbstractAlgorithm() {
     if(m_context) {
         m_context->m_parentLayout = m_parentLayout;
-        Q_ASSERT(m_oldCurrentNode);
         m_context->setCurrentNode(m_oldCurrentNode);
     }
     qDeleteAll( doubleLayoutContext );
@@ -2452,7 +2428,7 @@ void AbstractAlgorithm::virtualDoLayout() {
     Q_ASSERT( !name().isEmpty() );
     const QString __name = name();
     kDebug() << "layout=" << layout()->m_name << "algorithm=" << __name;//name();
-    
+
     // Specifies the aspect ratio (width to height) of the composite node to use when determining child constraints. A value of 0 specifies to
     // leave the width and height constraints unaltered. The algorithm may temporarily shrink one dimension to achieve the specified ratio.
     // For example, if a composite node has a width constraint of 20 and height constraint of 10, and if the value of ar is 1.5, the composite
@@ -2607,7 +2583,8 @@ void CycleAlgorithm::virtualDoLayout() {
     AbstractAlgorithm::virtualDoLayout();
 
     QList<LayoutNodeAtom*> childs = childLayouts();
-    Q_ASSERT(!childs.isEmpty());
+    ASSERT_X(!childs.isEmpty(), QString("Layout %1 does not have child-layouts").arg(layout()->m_name));
+    if (childs.isEmpty()) return;
 
     // Specifies the angle at which the first shape is placed. Angles are in degrees, measured clockwise from a line pointing straight upward from the center of the cycle.
     int startAngel = layout()->algorithmParam("stAng", "0").toInt();
@@ -2618,7 +2595,7 @@ void CycleAlgorithm::virtualDoLayout() {
     bool firstNodeInCenter = layout()->algorithmParam("ctrShpMap", "none") == "fNode";
 
     LayoutNodeAtom* nodeInCenter = firstNodeInCenter ? childs.takeFirst() : 0;
-    const qreal childsCount = qMax(1, childs.count());
+    const qreal childsCount = childs.count();
 
     QMap<QString, qreal> values = layout()->finalValues();
     const qreal w = values["w"];
@@ -2676,8 +2653,10 @@ void LinearAlgorithm::virtualDoLayout() {
     const qreal h = layout()->finalValues()["h"] - bMarg - tMarg;
 
     QList<LayoutNodeAtom*> childs = childLayouts();
-    Q_ASSERT(!childs.isEmpty());
-    const qreal childsCount = qMax(1, childs.count());
+    ASSERT_X(!childs.isEmpty(), QString("Layout %1 does not have child-layouts").arg(layout()->m_name));
+    if (childs.isEmpty()) return;
+
+    const qreal childsCount = childs.count();
     const QSizeF usedSize = layout()->childrenUsedSize();
     const QSizeF totalSize = layout()->childrenTotalSize();
 
@@ -2758,7 +2737,8 @@ void SnakeAlgorithm::virtualDoLayout() {
     //const int breakpointFixedValue = layout()->algorithmParam("bkPtFixedVal", "2").toInt();
 
     QList<LayoutNodeAtom*> childs = childLayouts();
-    Q_ASSERT(!childs.isEmpty());
+    ASSERT_X(!childs.isEmpty(), QString("Layout %1 does not have child-layouts").arg(layout()->m_name));
+    if (childs.isEmpty()) return;
 
     bool inRows = flowDirection != "column";
     const qreal w = layout()->finalValues()["w"];
