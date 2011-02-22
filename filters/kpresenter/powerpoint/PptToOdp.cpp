@@ -2011,8 +2011,9 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     *p_fs = cf.fontSize();
 
 #ifdef DEBUG_PPTTOODP
+    qDebug() << "(CFRun) # of characters:" << count;
+    qDebug() << "start:" << start << "| end:" << end;
     qDebug() << "font size:" << *p_fs;
-    qDebug() << "# of characters:" << count;
 #endif
 
     if (!tc) {
@@ -2210,7 +2211,6 @@ PptToOdp::processParagraph(Writer& out,
 
 #ifdef DEBUG_PPTTOODP
     QString txt = text.mid(start, (end - start));
-    qDebug() << "\n> start:" << start << "| end:" << end;
     qDebug() << "> current paragraph:" << txt;
 #endif
 
@@ -2247,7 +2247,8 @@ PptToOdp::processParagraph(Writer& out,
     quint16 min_fontsize = FONTSIZE_MAX;
     processTextSpans(o, cf, tc, text, start, end, &min_fontsize);
 
-    //FIXME: check comments to the isList function
+    //NOTE: Process empty list items as paragraphs to prevent kpresenter
+    //displaying those.
     m_isList = ( pf.isList() && (start < end) );
 
     if (m_isList) {
@@ -2353,14 +2354,13 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     const QString text = getText(tc);
     bool missed_line = true;
 
-    // loop over all the '\r' delimited lines
-    // Paragraph formatting that applies to substring
     QStack<QString> levels;
     levels.reserve(5);
     qint32 pos = 0;
 
+    // loop over all the '\r' delimited lines
     while (pos < text.length()) {
-        int end = text.indexOf(lineend, pos);
+        qint32 end = text.indexOf(lineend, pos);
         if (end == -1) {
             end = text.size();
             missed_line = false;
@@ -2370,11 +2370,10 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
         pos = end + 1;
     }
 
-    // catch the <cr> following text3 in example above or an empty text string
+    //In addition, the text body contains a single terminating paragraph break
+    //character (0x000D) that is not included in the TextCharsAtom record or
+    //TextBytesAtom record.  Have to catch this one if the paragraph is empty.
     if (missed_line) {
-        if (!text.isEmpty()) {
-            pos--;
-        }
         processParagraph(out, levels, clientData, tc, tr, isPlaceholder,
                          QString(QString::null), pos, pos);
     }
