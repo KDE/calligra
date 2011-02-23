@@ -36,6 +36,7 @@
 
 //#define DEBUG_PPTTOODP
 //#define USE_OFFICEARTDGG_CONTAINER
+//#define DISABLE_PLACEHOLDER_BORDER
 
 #define FONTSIZE_MAX 4000 //according to MS-PPT
 
@@ -445,12 +446,12 @@ void PptToOdp::DrawClient::addTextStyles(
         PptTextCFRun cf(ppttoodp->p->documentContainer, m, tc, 0);
         ppttoodp->defineTextProperties(style, cf, 0, 0, 0);
     }
+#ifdef DISABLE_PLACEHOLDER_BORDER
     if (isPlaceholder) {
-        // small workaround to avoid presenation frames from having borders,
-        // even though the ppt file seems to specify that they should have one
         style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
         //style.addProperty("draw:stroke-width", "none", KoGenStyle::GraphicType);
     }
+#endif
     const QString styleName = out.styles.insert(style);
     if (isPlaceholder) {
         out.xml.addAttribute("presentation:style-name", styleName);
@@ -2353,6 +2354,7 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     // In addition, the text body contains a single terminating paragraph break
     // character (0x000D) that is not included in the TextCharsAtom record or
     // TextBytesAtom record.
+    //
     const QString text = getText(tc).append('\r');
     static const QRegExp lineend("[\v\r]");
     qint32 pos = 0, end = 0;
