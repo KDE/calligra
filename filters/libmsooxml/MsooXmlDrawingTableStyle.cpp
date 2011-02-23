@@ -84,33 +84,69 @@ KoCellStyle::Ptr DrawingTableStyleConverter::style(int row, int column)
 
     TableStyleConverter::applyStyle(m_properties.localDefaultCellStyle(), cellStyle, row, column);
 
-    if(role & DrawingTableStyleConverterProperties::ColumnBanded) {
-        //Is the column in the even band?
-        if( (column % (m_properties.columnBandSize() * 2)) < m_properties.columnBandSize()) {
-            applyStyle(DrawingTableStyle::Band1Vertical, cellStyle, row, column);
-        }
-        else {
-            applyStyle(DrawingTableStyle::Band2Vertical, cellStyle, row, column);
+    if (role & DrawingTableStyleConverterProperties::ColumnBanded) {
+        // If last column is activated and it's last column, banding is not applied
+        if (!(role & DrawingTableStyleConverterProperties::LastCol && column == lastColumn)) {
+            // First column active means that the banding is shifted by one
+            if (role & DrawingTableStyleConverterProperties::FirstCol) {
+                // Banding not applied if it's the first column
+                if (column != 0) {
+                    // Banding reversed
+                    if ((column % (m_properties.columnBandSize() * 2)) < m_properties.columnBandSize()) {
+                        applyStyle(DrawingTableStyle::Band2Vertical, cellStyle, row, column);
+                    }
+                    else {
+                        applyStyle(DrawingTableStyle::Band1Vertical, cellStyle, row, column);
+                    }
+                }
+            }
+            else {
+                //Is the column in the even band?
+                if ((column % (m_properties.columnBandSize() * 2)) < m_properties.columnBandSize()) {
+                    applyStyle(DrawingTableStyle::Band1Vertical, cellStyle, row, column);
+                }
+                else {
+                    applyStyle(DrawingTableStyle::Band2Vertical, cellStyle, row, column);
+                }
+            }
         }
     }
 
-    if(role & DrawingTableStyleConverterProperties::RowBanded) {
-        //Is the row in the even band?
-        if( (row % (m_properties.rowBandSize() * 2)) < m_properties.columnBandSize()) {
-            applyStyle(DrawingTableStyle::Band1Horizontal, cellStyle, row, column);
-        }
-        else {
-            applyStyle(DrawingTableStyle::Band2Horizontal, cellStyle, row, column);
+    if (role & DrawingTableStyleConverterProperties::RowBanded) {
+        // If last row is activated and it's last row, banding is not applied
+        if (!(role & DrawingTableStyleConverterProperties::LastRow && row == lastRow)) {
+            // First row active means that the banding is shifted by one
+            if (role & DrawingTableStyleConverterProperties::FirstRow) {
+                // Banding not applied if it's the first row
+                if (row != 0) {
+                    // In case the first row is activated, the banding applying is reversed
+                    if( (row % (m_properties.rowBandSize() * 2)) < m_properties.rowBandSize()) {
+                        applyStyle(DrawingTableStyle::Band2Horizontal, cellStyle, row, column);
+                    }
+                    else {
+                        applyStyle(DrawingTableStyle::Band1Horizontal, cellStyle, row, column);
+                    }
+                }
+            }
+            else {
+                //Is the row in the even band?
+                if( (row % (m_properties.rowBandSize() * 2)) < m_properties.rowBandSize()) {
+                    applyStyle(DrawingTableStyle::Band1Horizontal, cellStyle, row, column);
+                }
+                else {
+                    applyStyle(DrawingTableStyle::Band2Horizontal, cellStyle, row, column);
+                }
+            }
         }
     }
 
-    if(role & DrawingTableStyleConverterProperties::FirstRow) {
+    if (role & DrawingTableStyleConverterProperties::FirstRow) {
         if(row == 0) {
             applyStyle(DrawingTableStyle::FirstRow, cellStyle, row, column);
         }
     }
 
-    if(role & DrawingTableStyleConverterProperties::LastRow) {
+    if (role & DrawingTableStyleConverterProperties::LastRow) {
         if(row == lastRow) {
             applyStyle(DrawingTableStyle::FirstRow, cellStyle, row, column);
         }
