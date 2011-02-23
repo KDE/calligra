@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Google Spreadsheets Import Filter for KSpread
+Name[en_GB]=Google Spreadsheets Import Filter for KSpread
+X-KDE-Export=application/x-kspread
+X-KDE-Import=application/atom+xml
+X-KDE-Weight=50
+X-KDE-Library=gspreadimport
+X-KDE-ServiceTypes=KOfficeFilter

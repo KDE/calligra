@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kspread_plugin_googlespreadsheets" version="2">
+<MenuBar>
+    <Menu name="file"><text>&amp;File</text>
+    <Separator/>
+    <Action name="google_spreadsheets"/>
+    <Action name="show_doclist"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

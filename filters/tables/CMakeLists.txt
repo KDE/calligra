@@ -9,6 +9,7 @@ if(NOT TINY)
     add_subdirectory( gnumeric )
     add_subdirectory( opencalc )
     add_subdirectory( qpro )
+    add_subdirectory( googlespreadsheets )
 
     if(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
         add_subdirectory( html )
