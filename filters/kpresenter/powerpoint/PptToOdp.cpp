@@ -2349,33 +2349,23 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     // <text:p><text:span>text1</text:span></text:p>
     // <text:p><text:span>text2</text:span></text:p>
     // <text:p><text:span>text3</text:span></text:p>
-
+    //
+    // In addition, the text body contains a single terminating paragraph break
+    // character (0x000D) that is not included in the TextCharsAtom record or
+    // TextBytesAtom record.
+    const QString text = getText(tc).append('\r');
     static const QRegExp lineend("[\v\r]");
-    const QString text = getText(tc);
-    bool missed_line = true;
+    qint32 pos = 0, end = 0;
 
     QStack<QString> levels;
     levels.reserve(5);
-    qint32 pos = 0;
 
     // loop over all the '\r' delimited lines
     while (pos < text.length()) {
-        qint32 end = text.indexOf(lineend, pos);
-        if (end == -1) {
-            end = text.size();
-            missed_line = false;
-        }
+        end = text.indexOf(lineend, pos);
         processParagraph(out, levels, clientData, tc, tr, isPlaceholder,
                          text, pos, end);
         pos = end + 1;
-    }
-
-    //In addition, the text body contains a single terminating paragraph break
-    //character (0x000D) that is not included in the TextCharsAtom record or
-    //TextBytesAtom record.  Have to catch this one if the paragraph is empty.
-    if (missed_line) {
-        processParagraph(out, levels, clientData, tc, tr, isPlaceholder,
-                         QString(QString::null), pos, pos);
     }
 
     // close all open text:list elements
