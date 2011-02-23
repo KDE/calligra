@@ -1,4 +1,5 @@
 [Desktop Entry]
-Name=transition temporisee
-Name[pt]=temporizado transição
-Name[x-test]=xxtransition temporiseexx
+Name=timed transition
+Name[pt]=transição temporizada
+Name[uk]=Відкладена передача
+Name[x-test]=xxtimed transitionxx

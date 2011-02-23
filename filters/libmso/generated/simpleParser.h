@@ -5364,6 +5364,7 @@ public:
     QSharedPointer<OfficeArtClientTextBox> clientTextbox;
     QSharedPointer<OfficeArtSecondaryFOPT> shapeSecondaryOptions2;
     QSharedPointer<OfficeArtTertiaryFOPT> shapeTertiaryOptions2;
+    QSharedPointer<UnknownTextContainerChild> unknown;
     OfficeArtSpContainer(void* /*dummy*/ = 0) {}
 };
 class OfficeArtInlineSpContainer : public StreamOffset {

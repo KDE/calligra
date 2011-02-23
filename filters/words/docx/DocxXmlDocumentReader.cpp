@@ -4670,8 +4670,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 m_currentLocalTableStyles = currentLocalStyles;
                 m_currentTableStyle = currentTableStyle;
             }
-            else if(QUALIFIED_NAME_IS(tblPr)) {
-                TRY_READ(tblPr)
+            else if(QUALIFIED_NAME_IS(tcPr)) {
+                TRY_READ(tcPr)
                 m_currentLocalTableStyles->setLocalStyle(m_currentStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
                 m_currentStyleProperties = 0;
             }
@@ -4722,12 +4722,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 {
     READ_PROLOGUE
+
+    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridSpan)
-//             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
+            ELSE_TRY_READ_IF_IN_CONTEXT(shd)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

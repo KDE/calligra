@@ -467,22 +467,22 @@ public:
      * Returns -1, 0, 1, depends whether this value is less than, equal to, or
      * greater than v.
      */
-    int compare(const Value& v) const;
+    int compare(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is equal to v.
      */
-    bool equal(const Value& v) const;
+    bool equal(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is less than v.
      */
-    bool less(const Value& v) const;
+    bool less(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is greater than v.
      */
-    bool greater(const Value& v) const;
+    bool greater(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     // comparison operator - returns true only if strictly identical, unlike equal()/compare()
     bool operator==(const Value& v) const;

@@ -34,8 +34,9 @@
 #include <QtCore/QBuffer>
 #include <QtCore/qmath.h>
 
-#define DEBUG_PPTTOODP
+//#define DEBUG_PPTTOODP
 //#define USE_OFFICEARTDGG_CONTAINER
+//#define DISABLE_PLACEHOLDER_BORDER
 
 #define FONTSIZE_MAX 4000 //according to MS-PPT
 
@@ -429,27 +430,28 @@ void PptToOdp::DrawClient::addTextStyles(
     if (clientTextbox) {
         tb = clientTextbox->anon.get<PptOfficeArtClientTextBox>();
     }
+    bool isPlaceholder = cd && cd->placeholderAtom;
     if (out.stylesxml) {
-        //TODO: construct proper masters hierarchy
-        QList<const MSO::MasterOrSlideContainer*> mh;
-        mh.append(dc_data->masterSlide);
         const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
-
-        PptTextPFRun pf(ppttoodp->p->documentContainer,
-                        mh, dc_data->slideTexts,
-                        cd, tc);
+        //get the main master slide's MasterOrSlideContainer
+        const MasterOrSlideContainer* m = 0;
+        if (dc_data->masterSlide && isPlaceholder) {
+            m = dc_data->masterSlide;
+            while (m->anon.is<SlideContainer>()) {
+                m = ppttoodp->p->getMaster(m->anon.get<SlideContainer>());
+            }
+        }
+        PptTextPFRun pf(ppttoodp->p->documentContainer, m, dc_data->slideTexts, cd, tc);
         ppttoodp->defineParagraphProperties(style, pf, 0);
-
-        PptTextCFRun cf(ppttoodp->p->documentContainer, mh, tc, 0);
+        PptTextCFRun cf(ppttoodp->p->documentContainer, m, tc, 0);
         ppttoodp->defineTextProperties(style, cf, 0, 0, 0);
     }
-    bool isPlaceholder = cd && cd->placeholderAtom;
+#ifdef DISABLE_PLACEHOLDER_BORDER
     if (isPlaceholder) {
-        // small workaround to avoid presenation frames from having borders,
-        // even though the ppt file seems to specify that they should have one
         style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
         //style.addProperty("draw:stroke-width", "none", KoGenStyle::GraphicType);
     }
+#endif
     const QString styleName = out.styles.insert(style);
     if (isPlaceholder) {
         out.xml.addAttribute("presentation:style-name", styleName);
@@ -998,7 +1000,11 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     // fo:margin-bottom
     style.addProperty("fo:margin-bottom", processParaSpacing(pf.spaceAfter(), fs, false), para);
     // fo:margin-left - pf.leftMargin() is relevant only for a list (at the moment at least)
-    style.addProperty("fo:margin-left", "0cm", para);
+    if (m_isList) {
+        style.addProperty("fo:margin-left", "0cm", para);
+    } else {
+        style.addProperty("fo:margin-left", pptMasterUnitToCm(pf.leftMargin()), para);
+    }
     // fo:margin-right
     // fo:margin-top
     style.addProperty("fo:margin-top", processParaSpacing(pf.spaceBefore(), fs, false), para);
@@ -1015,7 +1021,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     }
     // fo:text-align-last
     // fo:text-indent
-    if (m_isList) {
+    if (m_isList || pf.leftMargin()) {
         //text:space-before already set in style:list-level-properties
         style.addProperty("fo:text-indent", "0cm", para);
     } else {
@@ -2010,8 +2016,9 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     *p_fs = cf.fontSize();
 
 #ifdef DEBUG_PPTTOODP
+    qDebug() << "(CFRun) # of characters:" << count;
+    qDebug() << "start:" << start << "| end:" << end;
     qDebug() << "font size:" << *p_fs;
-    qDebug() << "# of characters:" << count;
 #endif
 
     if (!tc) {
@@ -2115,7 +2122,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         * equal to II_JumpAction (0x3), II_HyperlinkAction (0x4), or
         * II_CustomShowAction (0x7).
         */
-        out.xml.startElement("text:a");
+        out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
                 mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
@@ -2124,7 +2131,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
             out.xml.addAttribute("xlink:href", link.first);
         }
     } else if (mouseover) {
-        out.xml.startElement("text:a");
+        out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
                 mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
@@ -2133,7 +2140,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
             out.xml.addAttribute("xlink:href", link.first);
         }
     } else {
-        out.xml.startElement("text:span");
+        out.xml.startElement("text:span", false);
 
         //count specifies the number of characters of the corresponding text to
         //which this character formatting applies
@@ -2155,7 +2162,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     } else {
         int len = end - start;
         const QString txt = text.mid(start, len).replace('\r', '\n').replace('\v', '\n');
-        out.xml.addTextNode(txt);
+        out.xml.addTextSpan(txt);
     }
 
     out.xml.endElement();
@@ -2200,7 +2207,7 @@ PptToOdp::processParagraph(Writer& out,
                            const MSO::OfficeArtClientData* clientData,
                            const MSO::TextContainer* tc,
                            const MSO::TextRuler* tr,
-                           const bool ph,
+                           const bool isPlaceHolder,
                            const QString& text,
                            int start,
                            int end)
@@ -2209,7 +2216,6 @@ PptToOdp::processParagraph(Writer& out,
 
 #ifdef DEBUG_PPTTOODP
     QString txt = text.mid(start, (end - start));
-    qDebug() << "\n> start:" << start << "| end:" << end;
     qDebug() << "> current paragraph:" << txt;
 #endif
 
@@ -2218,27 +2224,24 @@ PptToOdp::processParagraph(Writer& out,
         pcd = clientData->anon.get<PptOfficeArtClientData>();
     }
 
-    //The current TextCFException located in the TextContainer will be
-    //prepended to the list in the processTextSpan function.
-    QList<const MasterOrSlideContainer*> mh;
-
-    //prepare the masters hierarchy
-    if (m_currentMaster && ph) {
-        const MasterOrSlideContainer* m = m_currentMaster;
-        while (m) {
-            mh.append(m);
-            //masterIdRef MUST be 0x00000000 if the record that contains this
-            //SlideAtom record is a MainMasterContainer record (MS-PPT 2.5.10)
-            if (m->anon.is<SlideContainer>()) {
-                m = p->getMaster(m->anon.get<SlideContainer>());
-            } else {
-                m = NULL;
-            }
+    //Get the main master slide's MasterOrSlideContainer, common shapes like
+    //textbox do not inherit from master's TextMasterStyleAtom.
+    const MasterOrSlideContainer* m = 0;
+    if (m_currentMaster && isPlaceHolder) {
+        m  = m_currentMaster;
+        while (m->anon.is<SlideContainer>()) {
+            m = p->getMaster(m->anon.get<SlideContainer>());
         }
+#ifdef DEBUG_PPTTOODP
+        const MainMasterContainer* mc = m->anon.get<MainMasterContainer>();
+        Q_ASSERT(mc->slideAtom.masterIdRef == 0);
+#endif
     }
 
-    PptTextPFRun pf(p->documentContainer, mh, m_currentSlideTexts, pcd, tc, tr, start);
-    PptTextCFRun cf(p->documentContainer, mh, tc, pf.level());
+    //The current TextCFException located in the TextContainer will be
+    //prepended to the list in the processTextSpan function.
+    PptTextPFRun pf(p->documentContainer, m, m_currentSlideTexts, pcd, tc, tr, start);
+    PptTextCFRun cf(p->documentContainer, m, tc, pf.level());
 
     //spans have to be processed first to prepare the correct ParagraphStyle
     QBuffer spans_buf;
@@ -2249,7 +2252,8 @@ PptToOdp::processParagraph(Writer& out,
     quint16 min_fontsize = FONTSIZE_MAX;
     processTextSpans(o, cf, tc, text, start, end, &min_fontsize);
 
-    //FIXME: check comments to the isList function
+    //NOTE: Process empty list items as paragraphs to prevent kpresenter
+    //displaying those.
     m_isList = ( pf.isList() && (start < end) );
 
     if (m_isList) {
@@ -2350,35 +2354,24 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     // <text:p><text:span>text1</text:span></text:p>
     // <text:p><text:span>text2</text:span></text:p>
     // <text:p><text:span>text3</text:span></text:p>
-
+    //
+    // In addition, the text body contains a single terminating paragraph break
+    // character (0x000D) that is not included in the TextCharsAtom record or
+    // TextBytesAtom record.
+    //
+    const QString text = getText(tc).append('\r');
     static const QRegExp lineend("[\v\r]");
-    const QString text = getText(tc);
-    bool missed_line = true;
+    qint32 pos = 0, end = 0;
 
-    // loop over all the '\r' delimited lines
-    // Paragraph formatting that applies to substring
     QStack<QString> levels;
     levels.reserve(5);
-    qint32 pos = 0;
 
+    // loop over all the '\r' delimited lines
     while (pos < text.length()) {
-        int end = text.indexOf(lineend, pos);
-        if (end == -1) {
-            end = text.size();
-            missed_line = false;
-        }
+        end = text.indexOf(lineend, pos);
         processParagraph(out, levels, clientData, tc, tr, isPlaceholder,
                          text, pos, end);
         pos = end + 1;
-    }
-
-    // catch the <cr> following text3 in example above or an empty text string
-    if (missed_line) {
-        if (!text.isEmpty()) {
-            pos--;
-        }
-        processParagraph(out, levels, clientData, tc, tr, isPlaceholder,
-                         QString(QString::null), pos, pos);
     }
 
     // close all open text:list elements
@@ -2562,6 +2555,7 @@ QString PptToOdp::textAlignmentToString(unsigned int value) const
         Tx_ALIGNJustify         0x0003 For horizontal text, flush left and right.
                                    For vertical text, flush top and bottom.
         */
+    case 3:
         return "justify";
 
         //TODO these were missing from ODF specification v1.1, but are

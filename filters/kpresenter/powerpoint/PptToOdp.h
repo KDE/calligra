@@ -406,7 +406,7 @@ private:
      * @param cd provides access to additional text formatting in StyleTextProp9Atom
      * @param tc provides access to text formatting in MasterTextPropAtom and TextType
      * @param tr specifies tabbing, horizontal margins, and indentation for text
-     * @param ph specifies if the shape is a placeholder
+     * @param isPlaceHolder specifies if the shape is a placeholder
      * @param text contains the text of the slide
      * @param start specifies begging of the paragraph in text
      * @param end specifies end of the paragraph in text
@@ -416,7 +416,7 @@ private:
                           const MSO::OfficeArtClientData* cd,
                           const MSO::TextContainer* tc,
                           const MSO::TextRuler* tr,
-                          const bool ph,
+                          const bool isPlaceHolder,
                           const QString& text,
                           int start,
                           int end);
