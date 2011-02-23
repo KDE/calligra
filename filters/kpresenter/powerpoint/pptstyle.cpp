@@ -188,6 +188,11 @@ getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, quint16 
         }
         break;
     case Tx_TYPE_CENTERBODY:
+        ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);
+        for (int i = level; i >= 0; i--) {
+            lst.append(getTextMasterStyleLevel(ms, i));
+        }
+        break;
     case Tx_TYPE_HALFBODY:
     case Tx_TYPE_QUARTERBODY:
         ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);

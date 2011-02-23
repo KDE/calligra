@@ -1000,7 +1000,11 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     // fo:margin-bottom
     style.addProperty("fo:margin-bottom", processParaSpacing(pf.spaceAfter(), fs, false), para);
     // fo:margin-left - pf.leftMargin() is relevant only for a list (at the moment at least)
-    style.addProperty("fo:margin-left", "0cm", para);
+    if (m_isList) {
+        style.addProperty("fo:margin-left", "0cm", para);
+    } else {
+        style.addProperty("fo:margin-left", pptMasterUnitToCm(pf.leftMargin()), para);
+    }
     // fo:margin-right
     // fo:margin-top
     style.addProperty("fo:margin-top", processParaSpacing(pf.spaceBefore(), fs, false), para);
@@ -1017,7 +1021,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     }
     // fo:text-align-last
     // fo:text-indent
-    if (m_isList) {
+    if (m_isList || pf.leftMargin()) {
         //text:space-before already set in style:list-level-properties
         style.addProperty("fo:text-indent", "0cm", para);
     } else {
