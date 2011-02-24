@@ -382,17 +382,15 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     //start the body of the footnote
     m_footnoteWriter->startElement("text:note-body");
 
-    //save the state of tables & paragraphs because we'll get new ones in the footnote
+    //save the state of tables/paragraphs/lists
     saveState();
     //signal Document to parse the footnote
     emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), type);
 
-    //TODO: we should really improve processing of lists
+    //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {
         closeList();
     }
-
-    //and now restore state
     restoreState();
 
     //end the elements
@@ -638,8 +636,15 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    //signal that we have a picture, provide the bodyWriter to GraphicsHandler
+    //save the state of tables/paragraphs/lists (text-box)
+    saveState();
     emit inlineObjectFound(data, m_drawingWriter);
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
+    restoreState();
 
     if (m_fld->m_hyperLinkActive) {
         writer->endElement();
@@ -684,8 +689,14 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
+    //save the state of tables/paragraphs/lists (text-box)
     saveState();
     emit floatingObjectFound(globalCP, m_drawingWriter);
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
     restoreState();
 
     if (m_fld->m_hyperLinkActive) {
