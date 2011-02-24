@@ -82,10 +82,35 @@ protected:
 //   virtual bool drv_getTablesList( QStringList &list );
 //TODO: move this somewhere to low level class (MIGRATION?)
 //   virtual bool drv_containsTable( const QString &tableName );
+    
+    //Extended API
+    //! Position the source dataset at the start of a table
+    virtual bool drv_readFromTable(const QString & tableName);
+    
+    //! Move to the next row
+    virtual bool drv_moveNext();
+    
+    //! Move to the previous row
+    virtual bool drv_movePrevious();
+    
+    //! Move to the next row
+    virtual bool drv_moveFirst();
+    
+    //! Move to the previous row
+    virtual bool drv_moveLast();
+    
+    //! Read the data at the given row/field
+    virtual QVariant drv_value(uint i);
 
 private:
     MySqlConnectionInternal * const d;
     MYSQL_RES *m_mysqlres;
+    
+    long m_rows;
+    long m_row;
+    MYSQL_ROW m_dataRow;
+    
+    void getRow();
 };
 }
 

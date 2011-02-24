@@ -515,6 +515,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
     if (image == NULL || image->isNull()) {
         kDebug(30516) << "Null image";
         delete imgStr;
+        delete[] buffer;
         delete image;
         return;
     }
@@ -536,7 +537,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
     }
 
     delete image;
-    delete buffer;
+    delete[] buffer;
     delete imgStr;
 }
 

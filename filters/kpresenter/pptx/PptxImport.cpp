@@ -58,7 +58,7 @@
 #include <memory>
 
 K_PLUGIN_FACTORY(PptxImportFactory, registerPlugin<PptxImport>();)
-K_EXPORT_PLUGIN(PptxImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(PptxImportFactory("calligrafilters"))
 
 enum PptxDocumentType {
     PptxDocumentPresentation,

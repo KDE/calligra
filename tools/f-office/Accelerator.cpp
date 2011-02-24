@@ -467,10 +467,10 @@ void AcceleratorScrollSlide::beginScrolling()
         }
         if (yCordinate>YCORDINATELIMITLEVEL2) {
             if(scrollingAttributes.at(scrollUp)) {
-                verticalScrollValue+=10;
+                verticalScrollValue+=6;
             }                                                        //level2
             if(scrollingAttributes.at(scrollDown)) {
-                verticalScrollValue-=10;
+                verticalScrollValue-=6;
             }
 
         }

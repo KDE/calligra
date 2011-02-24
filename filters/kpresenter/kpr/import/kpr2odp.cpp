@@ -24,7 +24,7 @@
 #include <kpr2odp.h>
 
 K_PLUGIN_FACTORY(Kpr2OdpFactory, registerPlugin<Kpr2Odp>();)
-K_EXPORT_PLUGIN(Kpr2OdpFactory("kofficefilters"))
+K_EXPORT_PLUGIN(Kpr2OdpFactory("calligrafilters"))
 
 Kpr2Odp::Kpr2Odp(QObject *parent, const QStringList&) :
         KoFilter(parent)

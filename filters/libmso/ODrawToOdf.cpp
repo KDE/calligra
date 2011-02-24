@@ -247,7 +247,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // draw:fill-image-width
         // draw:opacity
         style.addProperty("draw:opacity",
-                          percent(100.0 * toQReal(ds.fillOpacity()) / 0x10000), gt);
+                          percent(100.0 * toQReal(ds.fillOpacity())), gt);
         // draw:opacity-name
     } else {
         style.addProperty("draw:fill", "none", gt);

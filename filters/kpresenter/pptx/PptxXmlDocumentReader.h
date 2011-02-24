@@ -29,7 +29,6 @@
 
 class PptxImport;
 class PptxSlideProperties;
-class PptxSlideLayoutProperties;
 
 namespace MSOOXML
 {
@@ -68,18 +67,19 @@ protected:
     KoFilter::ConversionStatus read_presentation();
     KoFilter::ConversionStatus read_sldMasterIdLst();
     KoFilter::ConversionStatus read_sldMasterId();
+    KoFilter::ConversionStatus read_notesMasterIdLst();
+    KoFilter::ConversionStatus read_notesMasterId();
     KoFilter::ConversionStatus read_sldIdLst();
     KoFilter::ConversionStatus read_sldId();
     KoFilter::ConversionStatus read_sldSz();
+    KoFilter::ConversionStatus read_notesSz();
     KoFilter::ConversionStatus read_defaultTextStyle();
 
     // Locates slide layout informaitons for given slide. Caches the result.
-    PptxSlideLayoutProperties* slideLayoutProperties(const QString& slidePath, const QString& slideFile);
+    PptxSlideProperties* slideLayoutProperties(const QString& slidePath, const QString& slideFile);
 
     KoOdfWriters *m_writers;
     PptxXmlDocumentReaderContext* m_context;
-
-    void initializeContext(PptxXmlSlideReaderContext& context, const MSOOXML::DrawingMLTheme& theme);
 
     // Default pptx styles
     QVector<KoGenStyle> defaultParagraphStyles;

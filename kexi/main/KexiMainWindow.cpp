@@ -3040,7 +3040,11 @@ KexiMainWindow::slotProjectNew()
 //todo:   pass new_data->caption()
     //start new instance
 //! @todo use KProcess?
+#ifdef __GNUC__
 #warning untested
+#else
+#pragma WARNING( untested )
+#endif
     QProcess proc(this);
 //    proc.setCommunication((Q3Process::Communication)0);
 //  proc.setWorkingDirectory( QFileInfo(new_data->connectionData()->fileName()).dir(true) );
@@ -3258,7 +3262,11 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
     }
 //! @todo use KRun
 //Can arguments be supplied to KRun like is used here? AP
+#ifdef __GNUC__
 #warning untested
+#else
+#pragma WARNING( untested )
+#endif
     args << fileName;
     QProcess proc(this);
     proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir().absolutePath());

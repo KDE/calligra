@@ -218,7 +218,7 @@ bool KexiSharedActionHost::acceptsSharedActions(QObject *)
 }
 #endif
 
-QWidget* KexiSharedActionHost::findWindow(QWidget *w)
+QWidget* KexiSharedActionHost::findWindow(QWidget */*w*/)
 {
     return 0;
 }

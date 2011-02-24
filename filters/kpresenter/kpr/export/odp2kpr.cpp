@@ -31,7 +31,7 @@
 #include <KoOdfReadStore.h>
 
 K_PLUGIN_FACTORY(Odp2KprFactory, registerPlugin<Odp2Kpr>();)
-K_EXPORT_PLUGIN(Odp2KprFactory("kofficefilters"))
+K_EXPORT_PLUGIN(Odp2KprFactory("calligrafilters"))
 
 Odp2Kpr::Odp2Kpr(QObject *parent, const QStringList&) :
         KoFilter(parent)

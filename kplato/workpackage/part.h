@@ -146,6 +146,7 @@ public:
     int docType( const Document *doc ) const;
     
     bool loadWorkPackages();
+    bool loadKPlatoWorkPackages();
     virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
     
@@ -226,6 +227,8 @@ signals:
     void captionChanged( const QString&, bool );
 
 protected:
+    /// Load the old kplato format
+    bool loadKPlatoXML( const KoXmlDocument &document, KoStore *store );
     /// Adds work packe @p wp to the list of workpackages.
     /// If it already exists, the user is asked if it shall be merged with the existing one.
     bool setWorkPackage( WorkPackage *wp );

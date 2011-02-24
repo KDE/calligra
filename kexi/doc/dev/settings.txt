@@ -134,25 +134,25 @@ Group: ImportExport
 Group: Recent Dirs
 # A list of recently displayed directories in file dialogs related to CSV 
   import/export.
--CSVImportExport [string list]
+-CSVImportExport [URL list]
 
 # A list of recently displayed directories in "Source database" file dialog 
   of Project Migration
--ProjectMigrationSourceDir [string list]
+-ProjectMigrationSourceDir [URL list]
 
 # A list of recently displayed directories in "Destination database" file 
   dialog of Project Migration
--ProjectMigrationDestinationDir [string list]
+-ProjectMigrationDestinationDir [URL list]
 
 # A list of recently displayed directories in "Open existing project" 
   and "Create new project" file dialog of Startup Dialog
--OpenExistingOrCreateNewProject [string list]
+-OpenExistingOrCreateNewProject [URL list]
 
 # A list of recently displayed directories in file dialogs related to images 
   (e.g. images within forms).
--LastVisitedImagePath [string list]
+-LastVisitedImagePath [URL list]
 
 # A list of recent displayed directories in a file dialogs used for dowloading 
   example databases (Get Hot New Stuff)
--DownloadExampleDatabases [string list]
+-DownloadExampleDatabases [URL list]
 

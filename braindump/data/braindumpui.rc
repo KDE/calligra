@@ -1,0 +1,15 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="braindump" version="0">
+    <MenuBar>
+        <Menu name="edit" >
+            <Text>&amp;Edit</Text>
+        </Menu>
+        <Menu name="Shapes" >
+            <Text>Shapes</Text>
+        </Menu>
+        <Menu name="view" >
+            <Text>&amp;View</Text>
+        </Menu>
+    </MenuBar>
+</kpartgui>

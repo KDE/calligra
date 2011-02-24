@@ -79,7 +79,7 @@ ScheduleItemModel::~ScheduleItemModel()
 
 void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *parent, int row )
 {
-    kDebug()<<parent;
+    //kDebug()<<parent<<row;
     if ( m_flat ) {
         return; // handle in *Inserted();
     }
@@ -90,6 +90,7 @@ void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *
 
 void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *manager )
 {
+    //kDebug()<<manager->name();
     if ( m_flat ) {
         int row = m_project->allScheduleManagers().indexOf( const_cast<ScheduleManager*>( manager ) );
         Q_ASSERT( row >= 0 );
@@ -107,7 +108,7 @@ void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *mana
 
 void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *manager )
 {
-    kDebug()<<manager->name();
+    //kDebug()<<manager->name();
     if ( m_flat ) {
         int row = m_managerlist.indexOf( const_cast<ScheduleManager*>( manager ) );
         beginRemoveRows( QModelIndex(), row, row );
@@ -124,7 +125,7 @@ void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *m
 
 void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manager )
 {
-    kDebug()<<manager->name();
+    //kDebug()<<manager->name();
     if ( m_flat ) {
         endRemoveRows();
         return;
@@ -132,6 +133,20 @@ void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manag
     Q_ASSERT( manager == m_manager );
     endRemoveRows();
     m_manager = 0;
+}
+
+void ScheduleItemModel::slotScheduleManagerToBeMoved( const ScheduleManager *manager )
+{
+    //kDebug()<<this<<manager->name()<<"from"<<(manager->parentManager()?manager->parentManager()->name():"project");
+    slotScheduleManagerToBeRemoved( manager );
+}
+
+void ScheduleItemModel::slotScheduleManagerMoved( const ScheduleManager *manager, int index )
+{
+    //kDebug()<<this<<manager->name()<<"to"<<manager->parentManager()<<index;
+    slotScheduleManagerRemoved( manager );
+    slotScheduleManagerToBeInserted( manager->parentManager(), index );
+    slotScheduleManagerInserted( manager );
 }
 
 void ScheduleItemModel::slotScheduleToBeInserted( const ScheduleManager *, int /*row*/ )
@@ -163,6 +178,10 @@ void ScheduleItemModel::setProject( Project *project )
 
         disconnect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerRemoved( const ScheduleManager* ) ) );
 
+        disconnect( m_project, SIGNAL( scheduleManagerToBeMoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeMoved( const ScheduleManager* ) ) );
+
+        disconnect( m_project, SIGNAL( scheduleManagerMoved( const ScheduleManager*, int ) ), this, SLOT( slotScheduleManagerMoved( const ScheduleManager*, int ) ) );
+
         disconnect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
 
         disconnect( m_project, SIGNAL( scheduleToBeAdded( const ScheduleManager*, int ) ), this, SLOT( slotScheduleToBeInserted( const ScheduleManager*, int ) ) );
@@ -184,6 +203,10 @@ void ScheduleItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( scheduleManagerAdded( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerInserted( const ScheduleManager* ) ) );
 
         connect( m_project, SIGNAL( scheduleManagerRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerRemoved( const ScheduleManager* ) ) );
+
+        connect( m_project, SIGNAL( scheduleManagerToBeMoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeMoved( const ScheduleManager* ) ) );
+
+        connect( m_project, SIGNAL( scheduleManagerMoved( const ScheduleManager*, int ) ), this, SLOT( slotScheduleManagerMoved( const ScheduleManager*, int ) ) );
 
         connect( m_project, SIGNAL( scheduleChanged( MainSchedule* ) ), this, SLOT( slotScheduleChanged( MainSchedule* ) ) );
 
@@ -535,7 +558,7 @@ QVariant ScheduleItemModel::projectStart( const QModelIndex &index, int role ) c
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( sm->expected() ) {
-                return sm->expected()->start().dateTime();
+                return sm->expected()->start();
             }
             break;
         case Qt::TextAlignmentRole:
@@ -558,7 +581,7 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( sm->expected() ) {
-                return sm->expected()->end().dateTime();
+                return sm->expected()->end();
             }
             break;
         case Qt::TextAlignmentRole:
@@ -945,14 +968,46 @@ void ScheduleLogItemModel::setManager( ScheduleManager *manager )
 {
     kDebug()<<m_manager<<"->"<<manager;
     if ( manager != m_manager ) {
+        if ( m_manager ) {
+            disconnect( m_manager, SIGNAL(logInserted(MainSchedule*, int, int)), this, SLOT(slotLogInserted(MainSchedule*, int, int)));
+        }
         m_manager = manager;
         m_schedule = 0;
         clear();
         if ( m_manager ) {
             m_schedule = m_manager->expected();
             refresh();
+            connect( m_manager, SIGNAL(logInserted(MainSchedule*, int, int)), this, SLOT(slotLogInserted(MainSchedule*, int, int)));
         }
     }
+}
+
+void ScheduleLogItemModel::slotLogInserted( MainSchedule *s, int firstrow, int lastrow )
+{
+    for ( int i = firstrow; i <= lastrow; ++i ) {
+        addLogEntry( s->logs().value( i ), i + 1 );
+    }
+}
+
+//FIXME: This only add logs (insert is not used atm)
+void ScheduleLogItemModel::addLogEntry( const Schedule::Log &log, int /*row*/ )
+{
+//     kDebug()<<log;
+    QList<QStandardItem*> lst;
+    if ( log.resource ) {
+        lst.append( new QStandardItem( log.resource->name() ) );
+    } else if ( log.node ) {
+        lst.append( new QStandardItem( log.node->name() ) );
+    } else {
+        lst.append(  new QStandardItem( "" ) );
+    }
+    lst.append( new QStandardItem( m_schedule->logPhase( log.phase ) ) );
+    QStandardItem *item = new QStandardItem( m_schedule->logSeverity( log.severity ) );
+    item->setData( log.severity );
+    lst.append( item );
+    lst.append( new QStandardItem( log.message ) );
+    appendRow( lst );
+//     kDebug()<<"added:"<<row<<rowCount()<<columnCount();
 }
 
 void ScheduleLogItemModel::refresh()
@@ -966,26 +1021,10 @@ void ScheduleLogItemModel::refresh()
         kDebug()<<"No main schedule";
         return;
     }
-    kDebug()<<m_schedule<<m_schedule->logs().count();
-    QStandardItem *parentItem = invisibleRootItem();
-    QListIterator<Schedule::Log> it( m_schedule->logs() );
-    while ( it.hasNext() ) {
-        Schedule::Log log = it.next();
-        QList<QStandardItem*> lst;
-        if ( log.resource ) {
-            lst.append( new QStandardItem( log.resource->name() ) );
-        } else if ( log.node ) {
-            lst.append( new QStandardItem( log.node->name() ) );
-        } else {
-            lst.append(  new QStandardItem( "" ) );
-        }
-        lst.append( new QStandardItem( m_schedule->logPhase( log.phase ) ) );
-        QStandardItem *item = new QStandardItem( m_schedule->logSeverity( log.severity ) );
-        item->setData( log.severity );
-        lst.append( item );
-        lst.append( new QStandardItem( log.message ) );
-        parentItem->appendRow( lst );
-        //kDebug()<<rowCount()<<columnCount()<<parentItem<<lst;
+//     kDebug()<<m_schedule<<m_schedule->logs().count();
+    int i = 1;
+    foreach ( const Schedule::Log &l, m_schedule->logs() ) {
+        addLogEntry( l, i++ );
     }
 }
 
@@ -994,7 +1033,7 @@ void ScheduleLogItemModel::slotManagerChanged( ScheduleManager *manager )
     kDebug()<<m_manager<<manager;
     if ( m_manager == manager ) {
         //TODO
-        refresh();
+//        refresh();
     }
 }
 

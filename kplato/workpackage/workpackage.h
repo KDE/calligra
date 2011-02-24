@@ -86,7 +86,10 @@ public:
 
     QString nodeId() const;
 
+    /// Load the Plan work package document
     bool loadXML( const KoXmlElement &element, XMLLoaderObject &status );
+    /// Load the old KPlato work package file format
+    bool loadKPlatoXML( const KoXmlElement &element, XMLLoaderObject &status );
 
     QDomDocument saveXML();
     bool saveNativeFormat( Part *part, const QString &path );

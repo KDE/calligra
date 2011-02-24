@@ -136,7 +136,7 @@ void KFormulaCanvas::updateCanvas( const QRectF& rc )
     update( viewConverter()->documentToView( rc ).toRect() );
 }
 
-const KoViewConverter* KFormulaCanvas::viewConverter() const
+KoViewConverter* KFormulaCanvas::viewConverter() const
 {
     return m_view->viewConverter();
 }

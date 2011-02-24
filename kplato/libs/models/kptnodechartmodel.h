@@ -112,6 +112,7 @@ public:
 
 public slots:
     void setScheduleManager( ScheduleManager *sm );
+    void slotNodeRemoved( Node *node );
     void slotNodeChanged( Node *node );
     void slotResourceChanged( Resource *resource );
 

@@ -12,7 +12,7 @@ kde4_add_plugin(kpresentersvgexport ${kpresentersvgexport_PART_SRCS})
 
 
 
-target_link_libraries(kpresentersvgexport  ${KDE4_KDECORE_LIBS} kpresenterprivate )
+target_link_libraries(kpresentersvgexport  ${KDE4_KDECORE_LIBS} calligrastageprivate )
 
 install(TARGETS kpresentersvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

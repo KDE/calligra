@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=State Shape
+Name[en_GB]=State Shape
+Name[et]=Olekukujund
+Name[it]=Forma di stato
+Name[nb]=Statisk form
+Name[nl]=Statusvorm
+Name[pt]=Forma de Estados
+Name[pt_BR]=Forma de estados
+Name[sv]=Tillståndsform
+Name[uk]=Форма стану
+Name[x-test]=xxState Shapexx
+Name[zh_TW]=狀態元件
+X-KDE-ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=stateshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

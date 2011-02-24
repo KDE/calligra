@@ -621,7 +621,13 @@ bool Node::resourceNotAvailable( long id ) const
     Schedule *s = schedule( id );
     return s ? s->resourceNotAvailable : false;
 }
-    
+
+bool Node::constraintError( long id ) const
+{
+    Schedule *s = schedule( id );
+    return s ? s->constraintError : false;
+}
+
 bool Node::schedulingError( long id ) const
 {
     Schedule *s = schedule( id );
@@ -723,7 +729,7 @@ void Node::propagateEarliestStart(DateTime &time) {
             case MustFinishOn:
                 if ( m_constraintEndTime < time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                     m_currentSchedule->logDebug( QString( "%1: end constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
 #endif
                 }
@@ -732,7 +738,7 @@ void Node::propagateEarliestStart(DateTime &time) {
             case FixedInterval:
                 if ( m_constraintStartTime < time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                     m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
 #endif
                 }
@@ -762,14 +768,18 @@ void Node::propagateLatestFinish(DateTime &time) {
             case MustStartOn:
                 if ( m_constraintStartTime > time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
+#ifndef PLAN_NLOGDEBUG
                     m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+#endif
                 }
                 break;
             case MustFinishOn:
             case FixedInterval:
                 if ( m_constraintEndTime > time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
+#ifndef PLAN_NLOGDEBUG
                     m_currentSchedule->logDebug( QString( "%1: end constraint %2 > %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+#endif
                 }
                 break;
             default:
@@ -813,7 +823,6 @@ void Node::initiateCalculation(MainSchedule &sch) {
     m_durationForward = Duration::zeroDuration;
     m_durationBackward = Duration::zeroDuration;
     m_earlyStart = DateTime();
-    m_lateStart = DateTime();
     m_earlyFinish = DateTime();
     m_lateFinish = DateTime();
 
@@ -986,6 +995,12 @@ void Node::addAppointment(ResourceSchedule *resource, DateTime &start, DateTime 
     }
     node->setCalculationMode( resource->calculationMode() );
     node->addAppointment(resource, start, end, load);
+}
+
+bool Node::isBaselined( long id ) const
+{
+    Schedule *s = schedule( id );
+    return s ? s->isBaselined() : false;
 }
 
 void Node::takeSchedule(const Schedule *schedule) {
@@ -1212,29 +1227,29 @@ EffortCost Node::plannedCost( long id, EffortCostCalculationType type ) const
     return ec;
 }
 
-EffortCostMap Node::bcwsPrDay( long id ) const
+EffortCostMap Node::bcwsPrDay( long int id, KPlato::EffortCostCalculationType type ) const
 {
     EffortCostMap ec;
     foreach ( Node *n, m_nodes ) {
-        ec += n->bcwsPrDay( id );
+        ec += n->bcwsPrDay( id, type );
     }
     return ec;
 }
 
-EffortCostMap Node::bcwpPrDay( long id ) const
+EffortCostMap Node::bcwpPrDay( long int id, KPlato::EffortCostCalculationType type ) const
 {
     EffortCostMap ec;
     foreach ( Node *n, m_nodes ) {
-        ec += n->bcwpPrDay( id );
+        ec += n->bcwpPrDay( id, type );
     }
     return ec;
 }
 
-EffortCostMap Node::acwp( long id ) const
+EffortCostMap Node::acwp( long id, EffortCostCalculationType type ) const
 {
     EffortCostMap ec;
     foreach ( Node *n, m_nodes ) {
-        ec += n->acwp( id );
+        ec += n->acwp( id, type );
     }
     return ec;
 }

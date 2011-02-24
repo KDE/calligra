@@ -383,6 +383,10 @@ void KoWmfPaint::setWindowOrg(int left, int top)
     kDebug(31000) << left << " " << top;
 #endif
 
+    // Only set WindowOrg if it changes.  See the Unanswered Question in libemf.
+    if (mWindowOrg == QPoint(left, top))
+        return;
+
     mWindowOrg = QPoint(left, top);
 
     recalculateWorldTransform();
@@ -420,6 +424,10 @@ void KoWmfPaint::setWindowExt(int width, int height)
     kDebug(31000) << width << " " << height;
 #endif
 
+    // Only set WindowExt if it changes.  See the Unanswered Question in libemf.
+    if (mWindowExt == QSize(width, height))
+        return;
+
     mWindowExt = QSize(width, height);
     mWindowExtIsSet = true;
 
@@ -455,6 +463,10 @@ void KoWmfPaint::setViewportOrg( int left, int top )
     kDebug(31000) << left << top;
 #endif
 
+    // Only set ViewportOrg if it changes.  See the Unanswered Question in libemf.
+    if (mViewportOrg == QPoint(left, top))
+        return;
+
     mViewportOrg = QPoint(left, top);
 
     recalculateWorldTransform();
@@ -465,6 +477,10 @@ void KoWmfPaint::setViewportExt( int width, int height )
 #if DEBUG_WMFPAINT
     kDebug(31000) << width << height;
 #endif
+
+    // Only set ViewportOrg if it changes.  See the Unanswered Question in libemf.
+    if (mViewportExt == QSize(width, height))
+        return;
 
     mViewportExt = QSize(width, height);
     mViewportExtIsSet = true;

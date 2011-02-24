@@ -44,4 +44,3 @@ KoToolBase * KarbonPencilToolFactory::createTool(KoCanvasBase *canvas)
     return new KarbonPencilTool(canvas);
 }
 
-#include "KarbonPencilToolFactory.moc"

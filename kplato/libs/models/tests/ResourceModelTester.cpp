@@ -46,13 +46,13 @@ void ResourceModelTester::printDebug( long id ) const {
     qDebug()<<"Resource end  :"<<r->endTime( id ).toString();
     qDebug()<<"Appointments:"<<r->numAppointments( id )<<"(internal)";
     foreach ( Appointment *a, r->appointments( id ) ) {
-        foreach ( const AppointmentInterval &i, a->intervals() ) {
+        foreach ( const AppointmentInterval &i, a->intervals().map() ) {
             qDebug()<<"  "<<i.startTime().toString()<<"-"<<i.endTime().toString()<<";"<<i.load();
         }
     }
     qDebug()<<"Appointments:"<<r->numExternalAppointments()<<"(external)";
     foreach ( Appointment *a, r->externalAppointmentList() ) {
-        foreach ( const AppointmentInterval &i, a->intervals() ) {
+        foreach ( const AppointmentInterval &i, a->intervals().map() ) {
             qDebug()<<"  "<<i.startTime().toString()<<"-"<<i.endTime().toString()<<";"<<i.load();
         }
     }
@@ -70,6 +70,8 @@ void ResourceModelTester::initTestCase()
 {
     m_project = new Project();
     m_project->setName( "P1" );
+    m_project->setId( m_project->uniqueNodeId() );
+    m_project->registerNodeId( m_project );
     DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 3 ) );
     m_project->setConstraintStartTime( targetstart );

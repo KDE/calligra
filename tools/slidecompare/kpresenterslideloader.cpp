@@ -34,9 +34,7 @@ KPresenterSlideLoader::~KPresenterSlideLoader() {
     close();
 }
 void KPresenterSlideLoader::close() {
-    if (m_doc) {
-        delete m_doc;
-    }
+    delete m_doc;
     m_doc = 0;
     version++;
     emit slidesChanged();
@@ -49,9 +47,9 @@ KPresenterSlideLoader::open(const QString& path)
 
     KComponentData cd("KPresenterSlideLoader", QByteArray(),
                       KComponentData::SkipMainComponentRegistration);
-    KPluginFactory *factory = KPluginLoader("kpresenterpart", cd).factory();
+    KPluginFactory *factory = KPluginLoader("calligrastagepart", cd).factory();
     if (!factory) {
-        qDebug() << "could not load kpresenterpart";
+        qDebug() << "could not load calligrastagepart";
         close();
         return;
     }

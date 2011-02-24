@@ -591,7 +591,7 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
     Q_UNUSED(cy);
     if (!record)
         return;
-    
+
     //kDebug() << "r" << r << "rowp" << rowp << "cx" << cx << "cy" << cy
     //    << "colfirst" << colfirst << "collast" << collast << "maxwc" << maxwc;
 
@@ -745,8 +745,8 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 
     p->fillRect(cx, cy, cw, ch, d->appearance.baseColor);
 
-    int rowp;
-    int r;
+    int rowp = 0;
+    int r = 0;
     if (paintOnlyInsertRow) {
         r = rows();
         rowp = rowPos(r); // 'insert' row's position
@@ -1026,7 +1026,7 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
 // reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,m_navPanel->isVisible() ? m_navPanel->height() : 0) ) );
     const int scrollBarHeight = horizontalScrollBar()->isVisible()
         ? horizontalScrollBar()->sizeHint().height() : 0;
-    
+
     reg = reg.subtract(QRect(QPoint(0, 0), ts
                              - QSize(0, qMax(((m_navPanel && m_navPanel->isVisible()) ? m_navPanel->height() : 0), scrollBarHeight)
                                      /*- (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height() / 2 : 0)

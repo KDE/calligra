@@ -20,7 +20,7 @@
 #ifndef KPRPREVIEWWIDGET_H
 #define KPRPREVIEWWIDGET_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <QWidget>
 #include <KoShape.h>
@@ -33,7 +33,7 @@ class KPrPageEffectRunner;
 /**
  * A widget for page effect preview. It shows a transition from a black page to the current page
  */
-class KPRESENTER_EXPORT KPrPreviewWidget : public QWidget
+class STAGE_EXPORT KPrPreviewWidget : public QWidget
 {
     Q_OBJECT
 public:

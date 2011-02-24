@@ -203,7 +203,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));
 
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(this);
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(actionCollection(), this);
     d->canvasController = canvasController;
     canvasController->setMinimumSize(QSize(viewMargin + 50, viewMargin + 50));
     d->canvasController->setCanvas(d->canvas);
@@ -288,11 +288,12 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         //Create Dockers
         createLayersTabDock();
 
-        KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
+        // set one whitespace as title to allow a one column toolbox
+        KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -1160,8 +1161,7 @@ void KarbonView::createLayersTabDock()
 
 void KarbonView::updateReadWrite(bool readwrite)
 {
-    canvasWidget()->setReadWrite(readwrite);
-    KoToolManager::instance()->updateReadWrite(d->canvasController, readwrite);
+    Q_UNUSED(readwrite);
 }
 
 void KarbonView::updateUnit(const KoUnit &unit)

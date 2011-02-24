@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
+ * Copyright (C) 2010-2011 Carlos Licea <carlos@kdab.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,8 +29,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 {
     READ_PROLOGUE
 
+    m_tableStyle = 0;
+
     if(!d->tableStyleList) {
-        d->tableStyleList = new MSOOXML::TableStyleList;
+        d->tableStyleList = new QMap<QString, MSOOXML::DrawingTableStyle*>;
 
         QString tableStylesFile;
         QString tableStylesPath;
@@ -38,7 +40,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
         MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                        tableStylesFile, &m_context->slideMasterPageProperties->theme,
+                                                                        tableStylesFile, &m_context->slideMasterProperties->theme,
                                                                         d->tableStyleList, m_context->colorMap);
         m_context->import->loadAndParseDocument(&tableStyleReader, m_context->tableStylesFilePath, &tableStyleReaderContext);
     }
@@ -51,11 +53,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tblPr)
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -76,15 +79,16 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     const int rowCount = m_table->rowCount();
     const int columnCount = m_table->columnCount();
 
-    MSOOXML::TableStyleInstanceProperties styleProperties(rowCount, columnCount);
-    styleProperties.roles(m_activeRoles)
-                   .localStyles(m_localTableStyles);
+    MSOOXML::DrawingTableStyleConverterProperties converterProperties;
+    converterProperties.setRowCount(rowCount);
+    converterProperties.setColumnCount(columnCount);
+    converterProperties.setRoles(m_activeRoles);
+    converterProperties.setLocalStyles(m_localTableStyles);
 
-    MSOOXML::TableStyleInstance styleInstance(&m_tableStyle, styleProperties);
-
+    MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, m_tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
-            KoCellStyle::Ptr style = styleInstance.style(row, column);
+            KoCellStyle::Ptr style = styleConverter.style(row, column);
             m_table->cellAt(row, column)->setStyle(style);
         }
     }
@@ -100,33 +104,33 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(bandCol)
     if(MSOOXML::Utils::convertBooleanAttr(bandCol)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::ColumnBanded;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::ColumnBanded;
     }
     TRY_READ_ATTR_WITHOUT_NS(bandRow)
     if(MSOOXML::Utils::convertBooleanAttr(bandRow)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::RowBanded;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::RowBanded;
     }
     TRY_READ_ATTR_WITHOUT_NS(firstCol)
     if(MSOOXML::Utils::convertBooleanAttr(firstCol)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstCol;
     }
     TRY_READ_ATTR_WITHOUT_NS(firstRow)
     if(MSOOXML::Utils::convertBooleanAttr(firstRow)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstRow;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstRow;
     }
     TRY_READ_ATTR_WITHOUT_NS(lastCol)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstCol;
     }
     TRY_READ_ATTR_WITHOUT_NS(lastRow)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
-        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::LastCol;
+        m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::LastCol;
     }
 //     TRY_READ_ATTR_WITHOUT_NS(rtl)
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //             TRY_READ_IF(blipFill)
 //             ELSE_TRY_READ_IF(effectDrag)
@@ -140,6 +144,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 //             ELSE_TRY_READ_IF(tableStyle)
             /*ELSE_*/TRY_READ_IF(tableStyleId)
 //             ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -154,7 +159,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblGrid()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gridCol)
             ELSE_WRONG_FORMAT
@@ -182,7 +187,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gridCol()
 
     while(!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
 //         if(isStartElement()) {
 //             TRY_READ_IF(extLst)
 //         }
@@ -210,11 +215,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tc)
 //             ELSE_TRY_READ_IF(extLst)
 //             ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -245,22 +251,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if(qualifiedName() == "a:txBody") {
-                QBuffer* buffer = new QBuffer;
+                QBuffer buffer;
+
                 KoXmlWriter* oldBody = body;
-                body = new KoXmlWriter(buffer, oldBody->indentLevel()+1);
+                KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
+                body = &newBody;
 
                 TRY_READ(DrawingML_txBody);
 
-                KoRawCellChild* textChild = new KoRawCellChild(buffer);
+                KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
                 cell->appendChild(textChild);
-                delete body;
+
                 body = oldBody;
             }
 //             ELSE_TRY_READ_IF(extLst)
             ELSE_TRY_READ_IF(tcPr)
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -278,9 +287,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     READ_PROLOGUE
 
     readNext();
-    m_tableStyle = d->tableStyleList->tableStyle(text().toString());
+    m_tableStyle = d->tableStyleList->value(text().toString());
     readNext();
- 
+
     READ_EPILOGUE
 }
 
@@ -297,7 +306,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //             TRY_READ_IF(blipFill)
 //             ELSE_TRY_READ_IF(cell3D)
@@ -315,6 +324,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
                 m_currentLocalStyleProperties->backgroundColor = m_currentColor;
                 m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
             }
+            SKIP_UNKNOWN // Added to make sure that solidfill eg inside 'lnT' does not mess with the color
         }
     }
 
@@ -322,5 +332,3 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 
     READ_EPILOGUE
 }
-
-

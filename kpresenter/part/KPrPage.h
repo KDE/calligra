@@ -25,7 +25,7 @@
 #include "KPrPageData.h"
 #include "KPrDeclarations.h"
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 class KoPADocument;
 class KPrDocument;
@@ -34,7 +34,7 @@ class KPrNotes;
 class KPrPageLayout;
 class KPrDeclarations;
 
-class KPRESENTER_EXPORT KPrPage : public KoPAPage, public KPrPageData
+class STAGE_EXPORT KPrPage : public KoPAPage, public KPrPageData
 {
 public:
     KPrPage( KoPAMasterPage * masterPage, KPrDocument * document );

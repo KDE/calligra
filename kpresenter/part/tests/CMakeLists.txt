@@ -5,15 +5,15 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter/part ${KOMAIN_INCLUDES} )
 
 #set(TestShapeAnimations_test_SRCS TestShapeAnimations.cpp )
 
-#kde4_add_unit_test(TestShapeAnimations TESTNAME kpresenter-part-TestShapeAnimations  ${TestShapeAnimations_test_SRCS})
+#kde4_add_unit_test(TestShapeAnimations TESTNAME stage-part-TestShapeAnimations  ${TestShapeAnimations_test_SRCS})
 
-#target_link_libraries(TestShapeAnimations kpresenterprivate ${QT_QTTEST_LIBRARY})
+#target_link_libraries(TestShapeAnimations calligrastageprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestCustomSlideShows_test_SRCS TestCustomSlideShows.cpp )
 
-kde4_add_unit_test(TestCustomSlideShows TESTNAME kpresenter-part-TestCustomSlideShows  ${TestCustomSlideShows_test_SRCS})
+kde4_add_unit_test(TestCustomSlideShows TESTNAME stage-part-TestCustomSlideShows  ${TestCustomSlideShows_test_SRCS})
 
-target_link_libraries(TestCustomSlideShows kpresenterprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestCustomSlideShows calligrastageprivate ${QT_QTTEST_LIBRARY})
 

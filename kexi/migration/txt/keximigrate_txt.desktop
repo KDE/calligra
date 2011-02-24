@@ -62,3 +62,4 @@ InitialPreference=8
 X-Kexi-MigrationDriverName=Text
 X-Kexi-MigrationDriverType=File
 X-Kexi-KexiMigrationVersion=1.1
+X-Kexi-FileDBDriverMime=text/tab-separated-values

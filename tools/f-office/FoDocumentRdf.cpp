@@ -383,8 +383,7 @@ void FoDocumentRdf::addStatements(Soprano::Model *model, const QString &xmlid)
                 break;
         }
         if(noDataFlag==false){
-            if(rdfInfoDialog)
-                delete rdfInfoDialog;
+            delete rdfInfoDialog;
             rdfInfoDialog=new RdfInfoDialog();
             rdfInfoDialog->setData(personDetails);
             rdfInfoDialog->show();

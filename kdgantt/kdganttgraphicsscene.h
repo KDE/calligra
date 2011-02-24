@@ -99,7 +99,7 @@ namespace KDGantt {
 
         /* Printing */
         void print( QPainter* painter, const QRectF& target = QRectF(), const QRectF& source = QRectF(), bool drawRowLabels=true, GraphicsView *view=0 );
-        QRectF printRect(bool drawRowLabels=true );
+        QRectF printRect(bool drawRowLabels, GraphicsView *view );
         
     Q_SIGNALS:
         void gridChanged();

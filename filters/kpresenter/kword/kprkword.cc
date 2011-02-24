@@ -28,7 +28,7 @@
 #include <QColor>
 
 K_PLUGIN_FACTORY(KprKwordFactory, registerPlugin<KprKword>();)
-K_EXPORT_PLUGIN(KprKwordFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KprKwordFactory("calligrafilters"))
 
 KprKword::KprKword(QObject *parent, const QStringList&) :
         KoFilter(parent),

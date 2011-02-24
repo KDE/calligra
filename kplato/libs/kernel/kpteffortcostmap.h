@@ -107,6 +107,8 @@ public:
             ec = it.value();
         return ec;
     }
+    void insert(const QDate &date, const EffortCost &ec );
+
     void insert(const QDate &date, const Duration &effort, const double cost) {
         if (!date.isValid()) {
             //kError()<<"Date not valid";
@@ -141,21 +143,7 @@ public:
     const EffortCostDayMap &days() const { return m_days; }
     
     EffortCostMap &operator=(const EffortCostMap &ec);
-    EffortCostMap &operator+=(const EffortCostMap &ec) {
-        //kDebug()<<"me="<<m_days.count()<<" ec="<<ec.days().count();
-        if (ec.isEmpty()) {
-            return *this;
-        }
-        if (isEmpty()) {
-            m_days = ec.days();
-            return *this;
-        }
-        EffortCostDayMap::const_iterator it;
-        for(it = ec.days().constBegin(); it != ec.days().constEnd(); ++it) {
-            add(it.key(), it.value());
-        }
-        return *this;
-    }
+    EffortCostMap &operator+=(const EffortCostMap &ec);
     EffortCost &effortCostOnDate(const QDate &date) {
         return m_days[date];
     }
@@ -270,13 +258,9 @@ public:
         return eff;
     }
     /// Return the BCWP cost to @p date. (BSWP is cumulative)
-    double bcwpCost( const QDate &date ) const {
-        return m_days.value( date ).bcwpCost();
-    }
+    double bcwpCost( const QDate &date ) const;
     /// Return the BCWP effort to @p date. (BSWP is cumulative)
-    double bcwpEffort( const QDate &date ) const {
-        return m_days.value( date ).bcwpEffort();
-    }
+    double bcwpEffort( const QDate &date ) const;
     /// Return the BCWP total cost. Since BCWP is cumulative this is the last entry.
     double bcwpTotalCost() const {
         double cost = 0.0;
@@ -316,9 +300,9 @@ Q_DECLARE_METATYPE( KPlato::EffortCost )
 Q_DECLARE_METATYPE( KPlato::EffortCostMap )
 
 #ifndef QT_NO_DEBUG_STREAM
-QDebug &operator<<( QDebug &dbg, const KPlato::EffortCost &ec );
-QDebug &operator<<( QDebug &dbg, const KPlato::EffortCost *ec );
-QDebug operator<<( QDebug dbg, const KPlato::EffortCostMap &i );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::EffortCost &ec );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::EffortCost *ec );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::EffortCostMap &i );
 #endif
 
 #endif

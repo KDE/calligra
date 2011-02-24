@@ -21,7 +21,7 @@
 #ifndef KPRVIEWMODEPREVIEWPAGEEFFECT_H
 #define KPRVIEWMODEPREVIEWPAGEEFFECT_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <KoPAViewMode.h>
 #include "KPrAnimationDirector.h"
@@ -32,7 +32,7 @@ class KPrPage;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 
-class KPRESENTER_EXPORT KPrViewModePreviewPageEffect : public KoPAViewMode
+class STAGE_EXPORT KPrViewModePreviewPageEffect : public KoPAViewMode
 {
 
     Q_OBJECT

@@ -31,7 +31,7 @@
 
 
 K_PLUGIN_FACTORY(XSLTImportFactory, registerPlugin<XSLTImport>();)
-K_EXPORT_PLUGIN(XSLTImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(XSLTImportFactory("calligrafilters"))
 
 
 XSLTImport::XSLTImport(QObject* parent, const QVariantList&) :

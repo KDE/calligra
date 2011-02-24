@@ -21,7 +21,7 @@
 #ifndef KPRVIEW_H
 #define KPRVIEW_H
 
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 #include <QObject>
 
@@ -36,7 +36,7 @@ class KPrViewModePresenterView;
 class KActionMenu;
 class KoPAPageBase;
 
-class KPRESENTER_EXPORT KPrView : public KoPAView
+class STAGE_EXPORT KPrView : public KoPAView
 {
     Q_OBJECT
 public:
@@ -82,13 +82,14 @@ public slots:
      */
     void stopPresentation();
 
+    void showNormal();
+
 protected:
     void initGUI();
     void initActions();
 
 protected slots:
     void createAnimation();
-    void showNormal();
     void showNotes();
     void showSlidesSorter();
     void dialogCustomSlideShows();
@@ -99,6 +100,7 @@ protected slots:
     void drawOnPresentation();
     void highlightPresentation();
     void blackPresentation();
+    void showStatusBar(bool toggled);
 
 private:
     KActionMenu *m_actionStartPresentation;

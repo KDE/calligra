@@ -27,6 +27,7 @@
 #include "kptitemviewsettup.h"
 #include "kptworkpackagesenddialog.h"
 #include "kptworkpackagesendpanel.h"
+#include "kptdatetime.h"
 
 #include <KoDocument.h>
 
@@ -65,7 +66,8 @@ Qt::ItemFlags TaskEditorItemModel::flags( const QModelIndex &index ) const
             return QAbstractItemModel::flags( index );
         }
         Node *n = node( index );
-        if ( n && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+        bool baselined = n ? n->isBaselined() : false;
+        if ( n && ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
             return QAbstractItemModel::flags( index ) | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
         }
         return QAbstractItemModel::flags( index ) | Qt::ItemIsDropEnabled;
@@ -157,7 +159,12 @@ bool TaskEditorItemModel::setType( Node *node, const QVariant &value, int role )
             int v = value.toInt();
             switch ( v ) {
                 case 0: { // Milestone
-                    ModifyEstimateCmd *cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18n( "Set type to Milestone" ) );
+                    NamedCommand *cmd = 0;
+                    if ( node->constraint() == Node::FixedInterval ) {
+                        cmd = new NodeModifyConstraintEndTimeCmd( *node, node->constraintStartTime(), i18n( "Set type to Milestone" ) );
+                    } else {
+                        cmd =  new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 0.0, i18n( "Set type to Milestone" ) );
+                    }
                     emit executeCommand( cmd );
                     return true;
                 }
@@ -166,8 +173,12 @@ bool TaskEditorItemModel::setType( Node *node, const QVariant &value, int role )
                     MacroCommand *m = new MacroCommand( i18n( "Set type to %1", Estimate::typeToString( (Estimate::Type)v, true ) ) );
                     m->addCommand( new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v ) );
                     if ( node->type() == Node::Type_Milestone ) {
-                        m->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), Duration::Unit_d ) );
-                        m->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 1.0 ) );
+                        if ( node->constraint() == Node::FixedInterval ) {
+                            m->addCommand( new NodeModifyConstraintEndTimeCmd( *node, node->constraintStartTime().addDays( 1 ) ) );
+                        } else {
+                            m->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), Duration::Unit_d ) );
+                            m->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), 1.0 ) );
+                        }
                     }
                     emit executeCommand( m );
                     return true;
@@ -326,6 +337,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
 void TaskEditor::updateReadWrite( bool rw )
 {
     m_view->setReadWrite( rw );
+    ViewBase::updateReadWrite( rw );
 }
 
 void TaskEditor::draw( Project &project )
@@ -449,31 +461,95 @@ void TaskEditor::setScheduleManager( ScheduleManager *sm )
 
 void TaskEditor::slotEnableActions()
 {
-    updateActionsEnabled( true );
+    updateActionsEnabled( isReadWrite() );
 }
 
 void TaskEditor::updateActionsEnabled( bool on )
 {
-    Project *p = m_view->project();
+    if ( ! on ) {
+        menuAddTask->setEnabled( false );
+        actionAddTask->setEnabled( false );
+        actionAddMilestone->setEnabled( false );
+        menuAddSubTask->setEnabled( false );
+        actionAddSubtask->setEnabled( false );
+        actionAddSubMilestone->setEnabled( false );
+        actionDeleteTask->setEnabled( false );
+        actionMoveTaskUp->setEnabled( false );
+        actionMoveTaskDown->setEnabled( false );
+        actionIndentTask->setEnabled( false );
+        actionUnindentTask->setEnabled( false );
+        return;
+    }
+        
     int selCount = selectedRowCount();
-    Node *n = selectedNode(); // 0 if not task or milestone
-    bool o = ( on && p && selCount <= 1 );
-    menuAddTask->setEnabled( o && n != p );
-    actionAddTask->setEnabled( o && n != p );
-    actionAddMilestone->setEnabled( o && n != p );
-
-    int projSelected = selCount == 1 && n == 0;
-    actionDeleteTask->setEnabled( on && p && ! projSelected && selCount > 0 );
-
-    o = ( on && p && selCount == 1 );
-
-    menuAddSubTask->setEnabled( o );
-    actionAddSubtask->setEnabled( o );
-    actionAddSubMilestone->setEnabled( o );
-    actionMoveTaskUp->setEnabled( o && p->canMoveTaskUp( n ) );
-    actionMoveTaskDown->setEnabled( o && p->canMoveTaskDown( n ) );
-    actionIndentTask->setEnabled( o && p->canIndentTask( n ) );
-    actionUnindentTask->setEnabled( o && p->canUnindentTask( n ) );
+    if ( selCount == 0 ) {
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( false );
+        actionAddSubtask->setEnabled( false );
+        actionAddSubMilestone->setEnabled( false );
+        actionDeleteTask->setEnabled( false );
+        actionMoveTaskUp->setEnabled( false );
+        actionMoveTaskDown->setEnabled( false );
+        actionIndentTask->setEnabled( false );
+        actionUnindentTask->setEnabled( false );
+        return;
+    }
+    Node *n = selectedNode(); // 0 if not a single task, summarytask or milestone
+    if ( selCount == 1 && n == 0 ) {
+        // only project selected
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( true );
+        actionAddSubtask->setEnabled( true );
+        actionAddSubMilestone->setEnabled( true );
+        actionDeleteTask->setEnabled( false );
+        actionMoveTaskUp->setEnabled( false );
+        actionMoveTaskDown->setEnabled( false );
+        actionIndentTask->setEnabled( false );
+        actionUnindentTask->setEnabled( false );
+        return;
+    }
+    bool baselined = false;
+    Project *p = m_view->project();
+    if ( p && p->isBaselined() ) {
+        foreach ( Node *n, selectedNodes() ) {
+            if ( n->isBaselined() ) {
+                baselined = true;
+                break;
+            }
+        }
+    }
+    if ( selCount == 1 ) {
+        menuAddTask->setEnabled( true );
+        actionAddTask->setEnabled( true );
+        actionAddMilestone->setEnabled( true );
+        menuAddSubTask->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionAddSubtask->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionAddSubMilestone->setEnabled( ! baselined || n->type() == Node::Type_Summarytask );
+        actionDeleteTask->setEnabled( ! baselined );
+        Node *s = n->siblingBefore();
+        actionMoveTaskUp->setEnabled( s );
+        actionMoveTaskDown->setEnabled( n->siblingAfter() );
+        s = n->siblingBefore();
+        actionIndentTask->setEnabled( ! baselined && s && ! s->isBaselined() );
+        actionUnindentTask->setEnabled( ! baselined && n->level() > 1 );
+        return;
+    }
+    // selCount > 1
+    menuAddTask->setEnabled( false );
+    actionAddTask->setEnabled( false );
+    actionAddMilestone->setEnabled( false );
+    menuAddSubTask->setEnabled( false );
+    actionAddSubtask->setEnabled( false );
+    actionAddSubMilestone->setEnabled( false );
+    actionDeleteTask->setEnabled( ! baselined );
+    actionMoveTaskUp->setEnabled( false );
+    actionMoveTaskDown->setEnabled( false );
+    actionIndentTask->setEnabled( false );
+    actionUnindentTask->setEnabled( false );
 }
 
 void TaskEditor::setupGui()
@@ -848,6 +924,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
 void TaskView::updateReadWrite( bool rw )
 {
     m_view->setReadWrite( rw );
+    ViewBase::updateReadWrite( rw );
 }
 
 void TaskView::draw( Project &project )
@@ -1157,6 +1234,7 @@ NodeSortFilterProxyModel *TaskWorkPackageView::proxyModel() const
 void TaskWorkPackageView::updateReadWrite( bool rw )
 {
     m_view->setReadWrite( rw );
+    ViewBase::updateReadWrite( rw );
 }
 
 void TaskWorkPackageView::setGuiActive( bool activate )
@@ -1308,7 +1386,7 @@ void TaskWorkPackageView::slotWorkPackageSent( QList<Node*> &nodes, Resource *re
         WorkPackage *wp = new WorkPackage( static_cast<Task*>( n )->workPackage() );
         wp->setOwnerName( resource->name() );
         wp->setOwnerId( resource->id() );
-        wp->setTransmitionTime( DateTime::currentLocalDateTime() );
+        wp->setTransmitionTime( DateTime::currentDateTime() );
         wp->setTransmitionStatus( WorkPackage::TS_Send );
         m_cmd->addCommand( new WorkPackageAddCmd( static_cast<Project*>( n->projectNode() ), n, wp ) );
     }

@@ -32,6 +32,7 @@ void initDrawingML();
 
 // All the readers
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
+KoFilter::ConversionStatus read_relIds();
 KoFilter::ConversionStatus read_chart();
 #endif
 KoFilter::ConversionStatus read_pic();
@@ -46,10 +47,14 @@ KoFilter::ConversionStatus read_cNvPicPr();
 KoFilter::ConversionStatus read_nvSpPr();
 KoFilter::ConversionStatus read_style();
 KoFilter::ConversionStatus read_fillRef();
+KoGenStyle m_referredFont;
+KoFilter::ConversionStatus read_fontRef();
 KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_cNvSpPr();
 KoFilter::ConversionStatus read_nvCxnSpPr();
 KoFilter::ConversionStatus read_grpSp();
+
+bool unsupportedPredefinedShape();
 
 KoFilter::ConversionStatus read_extLst();
 
@@ -75,6 +80,8 @@ KoFilter::ConversionStatus read_alpha();
 
 KoFilter::ConversionStatus read_satMod();
 KoFilter::ConversionStatus read_tile();
+KoFilter::ConversionStatus read_srcRect();
+
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
 KoFilter::ConversionStatus read_graphicData();
@@ -83,13 +90,16 @@ enum blipFillCaller {
     blipFill_pic = 'p', //dml in pptx; for dml in docx use 'pic'
     blipFill_rPr = 'p', //dml
     blipFill_bgPr = 'a', // pptx
+    blipFill_grpSpPr = 'a'
 };
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
+qreal m_largestParaFont; // Largest font used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
 KoFilter::ConversionStatus read_DrawingML_rPr();
+KoFilter::ConversionStatus read_endParaRPr();
 
 KoFilter::ConversionStatus read_hlinkClick();
 
@@ -103,10 +113,15 @@ KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 int m_gradPosition;
 KoFilter::ConversionStatus read_gradFill();
-bool m_gradRotation; //whethere there should be angle with gradient
+QString m_gradAngle;
+KoFilter::ConversionStatus read_lin();
 KoFilter::ConversionStatus read_gsLst();
 KoFilter::ConversionStatus read_gs();
 KoFilter::ConversionStatus read_prstGeom();
+KoFilter::ConversionStatus read_gd();
+bool m_contentAvLstExists; // whether avLst exists
+QMap<QString, QString> m_avModifiers;
+KoFilter::ConversionStatus read_avLst();
 enum noFillCaller {
         noFill_rPr
 };
@@ -118,8 +133,14 @@ KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();
 KoFilter::ConversionStatus read_shade();
 KoFilter::ConversionStatus read_ln();
+KoFilter::ConversionStatus read_effectLst();
+KoFilter::ConversionStatus read_outerShdw();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
+
+QString m_customPath;
+QString m_customEquations;
+KoFilter::ConversionStatus read_custGeom();
 
 qreal m_currentShadeLevel;
 qreal m_currentTint; // value of current tint
@@ -135,7 +156,7 @@ enum spacingType {
 };
 spacingType m_currentSpacingType; // determines how spcPct and spcPts should behave
 
-MSOOXML::Utils::autoFitStatus m_normAutoFit; // Whether text should be fitted to fit the shape
+MSOOXML::Utils::autoFitStatus m_normAutofit; // Whether text should be fitted to fit the shape
 
 KoFilter::ConversionStatus read_lnSpc();
 KoFilter::ConversionStatus read_spcPct();
@@ -153,6 +174,7 @@ bool m_listStylePropertiesAltered;
 bool m_previousListWasAltered;
 
 KoFilter::ConversionStatus read_buClr();
+KoFilter::ConversionStatus read_buClrTx();
 KoFilter::ConversionStatus read_buSzPct();
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();
@@ -171,6 +193,7 @@ KoFilter::ConversionStatus read_lvl8pPr();
 KoFilter::ConversionStatus read_lvl9pPr();
 KoFilter::ConversionStatus read_defRPr();
 KoFilter::ConversionStatus read_bodyPr();
+KoFilter::ConversionStatus read_normAutofit();
 KoFilter::ConversionStatus read_spAutoFit();
 
 KoFilter::ConversionStatus read_overrideClrMapping();
@@ -183,16 +206,8 @@ void algnToODF(const char * odfEl, const QString& emuValue);
 //! Sets fo:margin-* attribute of style:style/style:graphic-properties element. Used in read_anchor()
 void distToODF(const char * odfEl, const QString& emuValue);
 
-//! ODF 1.1., 15.14.9 Fill Image Rendering Style
-//! Set by read_stretch()
-bool m_fillImageRenderingStyleStretch;
-
 //! Used by read_wrap*()
 void readWrap();
-
-//! Copies file to destination directory. @a destinationName is set.
-KoFilter::ConversionStatus copyFile(
-    const QString& sourceName, const QString& destinationDir, QString& destinationName, bool oleType=false);
 
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
@@ -227,9 +242,6 @@ bool m_flipH; //! set by read_xfrm()
 bool m_flipV; //! set by read_xfrm()
 int m_rot; //! set by read_xfrm()
 
-//! true if no fill should be applied for element; used e.g. by pic:spPr/a:noFill elem.
-bool m_noFill;
-
 QString m_xlinkHref; //!< set by read_blip()
 QString m_cNvPrId; //!< set by read_cNvPr()
 QString m_cNvPrName; //!< set by read_cNvPr()
@@ -252,4 +264,6 @@ qreal* m_currentDoubleValue;
 
 bool    m_hyperLink;
 QString m_hyperLinkTarget;
+
+QString m_recentDestName; // recent image
 

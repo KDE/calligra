@@ -49,7 +49,7 @@ SchedulerPlugin::SchedulerPlugin(QObject *parent)
     m_synctimer.setInterval( 500 );
     connect(&m_synctimer, SIGNAL(timeout()), SLOT(slotSyncData()));
 }
- 
+
 SchedulerPlugin::~SchedulerPlugin()
 {
     foreach ( SchedulerThread *s, m_jobs ) {
@@ -145,16 +145,25 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
     ScheduleManager *sm = j->mainManager();
     Project *p = j->mainProject();
     Q_ASSERT( p == &(sm->project()) );
+#ifdef NDEBUG
+    Q_UNUSED(p)
+#endif
+
+    if ( j->manager() ) {
+        sm->setPhaseNames( j->phaseNames() );
+    }
+
     QList<Schedule::Log> logs;
-    //qDebug()<<"SchedulerPlugin::updateLog:"<<j<<logs.count();
     foreach ( const Schedule::Log log, j->log() ) {
         // map log from temporary project to real project
         Schedule::Log l = log;
         if ( l.resource ) {
             const Resource *r = l.resource;
             l.resource = sm->project().findResource( l.resource->id() );
-//            qDebug()<<"SchedulerPlugin::updateLog: mapped"<<r<<l.resource;
             Q_ASSERT( r != l.resource );
+#ifdef NDEBUG
+            Q_UNUSED(r)
+#endif
             Q_ASSERT( l.resource->project() == p );
         }
         if ( l.node ) {
@@ -164,13 +173,17 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
             } else {
                 l.node = sm->project().findNode( l.node->id() );
             }
-//            qDebug()<<"SchedulerPlugin::updateLog: mapped"<<n<<l.node;
             Q_ASSERT( n != l.node );
+#ifdef NDEBUG
+            Q_UNUSED(n)
+#endif
             Q_ASSERT( l.node->projectNode() == p );
         }
         logs << l;
     }
-    sm->slotAddLog( logs );
+    if ( ! logs.isEmpty() ) {
+        sm->slotAddLog( logs );
+    }
 }
 
 void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm ) const
@@ -185,7 +198,7 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
     Q_ASSERT( sid == sm->scheduleId() );
 
     XMLLoaderObject status;
-    status.setVersion( KPLATO_FILE_SYNTAX_VERSION );
+    status.setVersion( PLAN_FILE_SYNTAX_VERSION );
     status.setProject( mp );
     status.setProjectSpec( mp->timeSpec() );
 
@@ -194,6 +207,13 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
         Q_ASSERT( mn );
         if ( mn ) {
             updateNode( tn, mn, sid, status );
+        }
+    }
+    foreach ( const Resource *tr, tp->resourceList() ) {
+        Resource *r = mp->findResource( tr->id() );
+        Q_ASSERT( r );
+        if ( r ) {
+            updateResource( tr, r, status );
         }
     }
     // update main schedule and appointments
@@ -229,6 +249,29 @@ void SchedulerPlugin::updateNode( const Node *tn, Node *mn, long sid, XMLLoaderO
     mn->addSchedule( s );
 }
 
+void SchedulerPlugin::updateResource( const Resource *tr, Resource *r, XMLLoaderObject &status ) const
+{
+    QDomDocument doc( "tmp" );
+    QDomElement e = doc.createElement( "cache" );
+    doc.appendChild( e );
+    tr->saveCalendarIntervalsCache( e );
+
+    KoXmlDocument xd;
+    QString err;
+    xd.setContent( doc.toString(), &err );
+    KoXmlElement se = xd.documentElement();
+    Q_ASSERT( ! se.isNull() );
+    r->loadCalendarIntervalsCache( se, status );
+
+    Calendar *cr = tr->calendar();
+    Calendar *c = r->calendar();
+    if ( cr == 0 || c == 0 ) {
+        return;
+    }
+    kDebug()<<"cr:"<<cr->cacheVersion()<<"c"<<c->cacheVersion();
+    c->setCacheVersion( cr->cacheVersion() );
+}
+
 void SchedulerPlugin::updateAppointments( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm, XMLLoaderObject &status ) const
 {
     MainSchedule *sch = tm->expected();
@@ -249,6 +292,9 @@ void SchedulerPlugin::updateAppointments( const Project *tp, const ScheduleManag
 
     bool ret = sm->loadMainSchedule( sm->expected(), se, status ); // also loads appointments
     Q_ASSERT( ret );
+#ifdef NDEBUG
+    Q_UNUSED(ret)
+#endif
     mp->setCurrentSchedule( sch->id() );
     sm->expected()->setPhaseNames( sch->phaseNames() );
     mp->changed( sm );
@@ -275,7 +321,7 @@ SchedulerThread::SchedulerThread( Project *project, ScheduleManager *manager, QO
 
     m_pdoc.setContent( document.toString() );
 
-    
+
     connect( this, SIGNAL(started()), this, SLOT(slotStarted()));
     connect( this, SIGNAL(finished()), this, SLOT(slotFinished()));
 }
@@ -318,7 +364,7 @@ int SchedulerThread::progress() const
 
 void SchedulerThread::slotAddLog( KPlato::Schedule::Log log )
 {
-    //qDebug()<<"SchedulerThread::slotAddLog:"<<log;
+//     kDebug()<<log;
     QMutexLocker m( &m_logMutex );
     m_logs << log;
 }
@@ -329,6 +375,12 @@ QList<Schedule::Log> SchedulerThread::log()
     QList<KPlato::Schedule::Log> l = m_logs;
     m_logs.clear();
     return l;
+}
+
+QMap<int, QString> SchedulerThread::phaseNames() const
+{
+    QMutexLocker m( &m_managerMutex );
+    return m_manager->phaseNames();
 }
 
 
@@ -383,9 +435,9 @@ void SchedulerThread::saveProject( Project *project, QDomDocument &document )
     document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement doc = document.createElement( "kplato" );
-    doc.setAttribute( "editor", "KPlato" );
-    doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
-    doc.setAttribute( "version", KPLATO_FILE_SYNTAX_VERSION );
+    doc.setAttribute( "editor", "Plan" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
+    doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
     project->save( doc );
 }
@@ -398,7 +450,7 @@ bool SchedulerThread::loadProject( Project *project, const KoXmlDocument &doc )
         return false;
     }
     XMLLoaderObject status;
-    status.setVersion( KPLATO_FILE_SYNTAX_VERSION );
+    status.setVersion( PLAN_FILE_SYNTAX_VERSION );
     status.setProject( project );
     return project->load( pel, status );
 }

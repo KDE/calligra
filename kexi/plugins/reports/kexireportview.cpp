@@ -67,27 +67,44 @@ KexiReportView::KexiReportView(QWidget *parent)
     // -- setup local actions
     QList<QAction*> viewActions;
     QAction* a;
+
+#ifndef KEXI_MOBILE
     viewActions << (a = new KAction(KIcon("printer"), i18n("Print"), this));
     a->setObjectName("print_report");
     a->setToolTip(i18n("Print Report"));
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
-
+#endif
+    
+#ifdef KEXI_MOBILE
+    viewActions << (a = new KAction(i18n("Export: "), this));
+    a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
+    viewActions << (a = new KAction(KIcon("kword"), QString(), this));
+#else
     viewActions << (a = new KAction(KIcon("kword"), i18n("Save to KWord"), this));
+#endif
     a->setObjectName("save_to_kword");
     a->setToolTip(i18n("Save the report to a KWord document"));
     a->setWhatsThis(i18n("Save the report to a KWord document"));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderODT()));
 
+#ifdef KEXI_MOBILE
+    viewActions << (a = new KAction(KIcon("kspread"), QString(), this));
+#else
     viewActions << (a = new KAction(KIcon("kspread"), i18n("Save to KSpread"), this));
+#endif
     a->setObjectName("save_to_kspread");
     a->setToolTip(i18n("Save the report to a KSpread document"));
     a->setWhatsThis(i18n("Saves the current report to a KSpread document."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKSpread()));
 
+#ifdef KEXI_MOBILE
+    viewActions << (a = new KAction(KIcon("text-html"), QString(), this));
+#else
     viewActions << (a = new KAction(KIcon("text-html"), i18n("Export as Web Page"), this));
+#endif
     a->setObjectName("export_as_web_page");
     a->setToolTip(i18n("Export the report as web page"));
     a->setWhatsThis(i18n("Exports the report to a web page file."));

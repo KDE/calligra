@@ -152,6 +152,8 @@ public:
     
     //!Return the list of field names, used for legends in a chart
     virtual QStringList fieldNames() const;
+
+    bool cbs;
 };
 
 } //namespace KPlato

@@ -1,9 +1,14 @@
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30529)
 
+if(QCA2_FOUND)
+    add_definitions( -DHAVE_QCA2 )
+    include_directories(${QCA2_INCLUDE_DIR})
+endif(QCA2_FOUND)
+
 include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIRECTORY}
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx # for Charting
 )
 
 ########### next target ###############
@@ -20,18 +25,25 @@ set(msooxml_LIB_SRCS
     MsooXmlDocPropertiesReader.cpp
     MsooXmlDiagramReader.cpp
     MsooXmlDiagramReader_p.cpp
-    pole.cpp
+    ooxml_pole.cpp
     MsooXmlDrawingTableStyleReader.cpp
     MsooXmlDrawingTableStyle.cpp
+    MsooXmlTableStyle.cpp
     VmlDrawingReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
+    PredefinedShapeHelper.cpp
+    ComplexShapeHandler.cpp
+    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
+    MsooXmlDocumentTableStyle.cpp
 )
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
 
 target_link_libraries(msooxml koodf komain)
+if(QCA2_FOUND)
+   target_link_libraries(msooxml ${QCA2_LIBRARIES})
+endif(QCA2_FOUND)
 
 set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS msooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -64,6 +76,8 @@ install( FILES
     MsooXmlDrawingTableStyleReader.h
     MsooXmlDrawingTableStyle.h
     VmlDrawingReader.h
+    ComplexShapeHandler.h
+    PredefinedShapeHelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )
 endif (FALSE)

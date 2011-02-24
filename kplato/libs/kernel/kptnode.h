@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +39,7 @@
 
 class QDomElement;
 
+
 /// The main namespace.
 namespace KPlato
 {
@@ -54,6 +55,7 @@ class WBSDefinition;
 class EffortCostMap;
 class EffortCost;
 class Calendar;
+class KPlatoXmlLoaderBase;
 
 /**
  * This class represents any node in the project, a node can be a project or
@@ -275,6 +277,8 @@ public:
     /// The requested resource is not available
     bool resourceNotAvailable( long id = CURRENTSCHEDULE ) const;
     /// The task cannot be scheduled to fullfil all the constraints
+    virtual bool constraintError( long id = CURRENTSCHEDULE ) const;
+    /// The task cannot be scheduled correctly
     virtual bool schedulingError( long id = CURRENTSCHEDULE ) const;
     /// The node has not been scheduled
     bool notScheduled( long id = CURRENTSCHEDULE ) const;
@@ -332,19 +336,19 @@ public:
     virtual double budgetedCostPerformed( const QDate &, long = CURRENTSCHEDULE ) const { return 0.0; };
 
     /// Return map of Budgeted Cost of Work Scheduled pr day
-    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Budgeted Cost of Work Scheduled
     virtual double bcws( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
 
     /// Return map of Budgeted Cost of Work Scheduled pr day (also includes bcws pr day)
-    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
     
     /// Return a map of Actual effort and Cost of Work Performed
-    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Return Actual effort and Cost of Work Performed upto @date
     virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
     
@@ -456,6 +460,7 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc);
 
+    bool isBaselined( long int id = BASELINESCHEDULE ) const;
     /**
      * Return schedule with @p id
      * If @p id == CURRENTSCHEDULE, return m_currentSchedule
@@ -584,6 +589,7 @@ public slots:
     void slotStandardWorktimeChanged( StandardWorktime* );
 
 protected:
+    friend class KPlatoXmlLoaderBase;
     /**
      * Calculates and returns the duration of the node.
      * Reimplement.
@@ -628,7 +634,6 @@ protected:
     Duration m_durationForward;
     Duration m_durationBackward;
     DateTime m_earlyStart;
-    DateTime m_lateStart;
     DateTime m_earlyFinish;
     DateTime m_lateFinish;
     

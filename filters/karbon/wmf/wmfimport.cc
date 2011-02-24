@@ -32,7 +32,7 @@ DESCRIPTION
 #include <KPluginFactory>
 
 K_PLUGIN_FACTORY(WMFImportFactory, registerPlugin<WMFImport>();)
-K_EXPORT_PLUGIN(WMFImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(WMFImportFactory("calligrafilters"))
 
 
 WMFImport::WMFImport(QObject *parent, const QVariantList&) :

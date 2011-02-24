@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 20011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,6 +49,12 @@ TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const c
     }
     m_accountList << i18n("None");
     m_accountList += accounts.costElements();
+
+    if ( task.isBaselined( BASELINESCHEDULE ) ) {
+        runningGroup->setEnabled( false );
+        startupGroup->setEnabled( false );
+        shutdownGroup->setEnabled( false );
+    }
     setStartValues(task);
 }
 

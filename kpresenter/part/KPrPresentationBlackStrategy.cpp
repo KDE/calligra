@@ -33,17 +33,6 @@ KPrPresentationBlackStrategy::KPrPresentationBlackStrategy( KPrPresentationTool 
 {
     m_widget = new KPrPresentationBlackWidget( canvas() );
     // TODO
-    QString str("kpresenter");
-    KIconLoader kicon(str);
-    str.clear();
-    str.append("black.png");
-    QPixmap pix(kicon.loadIcon(str, kicon.Small));
-    float factor = 1.0;
-    pix = pix.scaledToHeight(pix.height()*factor);
-    pix = pix.scaledToWidth(pix.width()*factor);
-    QCursor cur = QCursor(pix);
-    QApplication::setOverrideCursor(cur);
-
     setToolWidgetParent( m_widget );
     m_widget->show();
     m_widget->installEventFilter( m_tool );
@@ -52,7 +41,6 @@ KPrPresentationBlackStrategy::KPrPresentationBlackStrategy( KPrPresentationTool 
 KPrPresentationBlackStrategy::~KPrPresentationBlackStrategy()
 {
     setToolWidgetParent( canvas()->canvasWidget() );
-    QApplication::restoreOverrideCursor();
 }
 
 bool KPrPresentationBlackStrategy::keyPressEvent( QKeyEvent * event )

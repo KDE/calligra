@@ -59,7 +59,7 @@ class Relation;
 class ScheduleManager;
 class MyKDGanttView;
 class GanttPrintingOptions;
-
+class GanttViewBase;
 
 //---------------------------------------
 class GanttChartDisplayOptionsPanel : public QWidget, public Ui::GanttChartDisplayOptions
@@ -90,11 +90,23 @@ public:
 };
 
 //--------------------
-class KPLATOUI_EXPORT GanttPrintingOptions : public QWidget, public Ui::GanttPrintingOptionsWidget
+class GanttPrintingOptions
+{
+public:
+    GanttPrintingOptions();
+
+    bool loadContext( const KoXmlElement &settings );
+    void saveContext( QDomElement &settings ) const;
+
+    bool printRowLabels;
+    bool singlePage;
+};
+
+class KPLATOUI_EXPORT GanttPrintingOptionsWidget : public QWidget, public Ui::GanttPrintingOptionsWidget
 {
     Q_OBJECT
 public:
-    explicit GanttPrintingOptions( QWidget *parent = 0 );
+    explicit GanttPrintingOptionsWidget( QWidget *parent = 0 );
 
     void setPrintRowLabels( bool value ) { ui_printRowLabels->setChecked( value ); }
     bool printRowLabels() const { return ui_printRowLabels->isChecked(); }
@@ -108,7 +120,7 @@ class GanttPrintingDialog : public PrintingDialog
 {
     Q_OBJECT
 public:
-    GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt );
+    GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt );
     
     void startPrinting( RemovePolicy removePolicy );
     QList<QWidget*> createOptionWidgets() const;
@@ -116,15 +128,17 @@ public:
     
     int documentLastPage() const;
     
+protected slots:
+    void slotPrintRowLabelsToogled( bool on );
+    void slotSinglePageToogled( bool on );
+
 protected:
-    KDGantt::View *m_gantt;
+    GanttViewBase *m_gantt;
     QRectF m_sceneRect;
     int m_horPages;
     int m_vertPages;
     double m_headerHeight;
-    GanttPrintingOptions *m_options;
-    bool m_singlePage;
-    bool m_printRowLabels;
+    GanttPrintingOptionsWidget *m_options;
 };
 
 class GanttTreeView : public TreeViewBase
@@ -158,6 +172,8 @@ protected:
     Project *m_project;
     GanttItemDelegate *m_ganttdelegate;
     NodeItemModel m_defaultModel;
+    friend class GanttPrintingDialog;
+    GanttPrintingOptions m_printOptions;
 };
 
 class KPLATOUI_EXPORT MyKDGanttView : public GanttViewBase
@@ -238,14 +254,14 @@ protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );
     virtual void slotOptions();
     virtual void slotOptionsFinished( int result );
-    
+
 private:
     bool m_readWrite;
     int m_defaultFontSize;
     QSplitter *m_splitter;
     MyKDGanttView *m_gantt;
     Project *m_project;
-    
+
     KAction *actionShowProject;
 };
 

@@ -35,8 +35,11 @@
 #include <KoOdfExporter.h>
 #include <KoXmlReader.h>
 
+#include "PredefinedShapeHelper.h"
+
 class QSize;
 class KZip;
+class KTemporaryFile;
 class KoOdfWriteStore;
 class KoStore;
 
@@ -71,13 +74,20 @@ public:
             MsooXmlReaderContext* context = 0);
 
     /*! Copies file @a sourceName from the input archive to the output document
-     under @a destinationName name. @return KoFilter::OK on success.
-     On failure @a errorMessage is set.
-     KoFilter::UsageError is returned if this method is called outside
-     of the importing process, i.e. not from within parseParts(). */
+    under @a destinationName name. @return KoFilter::OK on success.
+    On failure @a errorMessage is set.
+    KoFilter::UsageError is returned if this method is called outside
+    of the importing process, i.e. not from within parseParts(). */
     KoFilter::ConversionStatus copyFile(const QString& sourceName,
                                         const QString& destinationName,
                                         bool oleFile);
+
+    /* Creates an image to the resulting odf with the given name */
+    KoFilter::ConversionStatus createImage(const QImage& source,
+                                           const QString& destinationName);
+
+    /*! @return image from the file for modifications */
+    KoFilter::ConversionStatus imageFromFile(const QString& sourceName, QImage& image);
 
     /*! @return size of image file @a sourceName read from zip archive @a zip.
     Size of the image is returned in @a size.
@@ -85,11 +95,15 @@ public:
     On failure @a errorMessage is set. */
     KoFilter::ConversionStatus imageSize(const QString& sourceName, QSize& size);
 
+    //! Helper class to get information about predefined ooxml shapes
+    PredefinedShapeHelper m_shapeHelper;
+
 protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
                                                       KoOdfWriters *writers);
 
     bool isPasswordProtectedFile(QString &filename);
+    KTemporaryFile* tryDecryptFile(QString &filename);
 
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
             MsooXmlRelationships *relationships, QString& errorMessage) = 0;
@@ -125,13 +139,15 @@ protected:
 
     QMap<QString, QVariant> documentProperties() const { return m_documentProperties; }
     QVariant documentProperty(const QString& propertyName) const { return m_documentProperties.value(propertyName); }
+
+protected:
+    KoFilter::ConversionStatus loadAndParse(const QString& filename,
+                                            KoXmlDocument& doc, QString& errorMessage);
+
 private:
     //! Opens file for converting and performs convertions.
     //! @return status of convertion.
     KoFilter::ConversionStatus openFile(KoOdfWriters *writers, QString& errorMessage);
-
-    KoFilter::ConversionStatus loadAndParse(const QString& filename,
-                                            KoXmlDocument& doc, QString& errorMessage);
 
     KoFilter::ConversionStatus loadAndParseDocumentInternal(
         const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,

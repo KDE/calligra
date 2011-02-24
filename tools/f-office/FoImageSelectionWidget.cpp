@@ -36,10 +36,6 @@
 #include <QDesktopServices>
 #include <QFile>
 
-FoImageSelectionWidget::FoImageSelectionWidget(QWidget *parent)
-{
-}
-
 KoShape *FoImageSelectionWidget::selectImageShape(KoResourceManager *documentResources, QWidget *parent)
 {
     QString imageFilename = QFileDialog::getOpenFileName(parent,i18n("Select Image"), QDesktopServices::storageLocation(QDesktopServices::PicturesLocation), "Images (*.jpeg *.jpg *.png *.gif)");

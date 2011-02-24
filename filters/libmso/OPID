@@ -1,0 +1,92 @@
+Description of properties from OfficeArtFOPT, OfficeArtSecondaryFOPT, and
+OfficeArtTertiaryFOPT
+
+opid | name | description  
+-------------------------
+
+4  - rotation -  specifies the rotation on a shape
+7f - Protection Boolean Properties
+80 - lTxid - specifies an identifier for the text
+81 - dxTextLeft - specifies the size of the margin to the left of the text
+82 - dyTextTop
+83 - dxTextRight
+84 - dyTextBottom -  specifies the size of the margin below the text
+85 - WrapText - specifies the type of wrapping that is applied to the text
+86 - unused134, MUST be ignored
+87 - anchorText -  specifies the type of anchor that is applied to the text
+88 - txflTextFlow - specifies the type of flow that is applied to the text
+bf - Text Boolean Properties
+
+104 - pib - specifies which BLIP in the OfficeArtBStoreContainer record to display in the picture shape.
+105 - pibName - specifies the comment, file name, or URL, as specified by the pibFlags property, for this BLIP.
+10f - pibPrint
+13f - Blip Boolean Properties
+
+142 - geoRight
+143 - geoBottom - 
+144 - shapePath - specifies the way that lines in this shape are to be drawn.
+145 - pVertices - specifies the set of points that make up this shape 
+146 - pSegmentInfo - specifies how the vertices that are specified by pVertices_complex are connected
+151 - pConnectionSites -
+152 - pConnectionSitesDir - 
+155 - pAdjustHandles -  an array of adjust handles that allow a user to manipulate the geometry of this shape
+156 - pGuides - a set of formulas that are used to calculate values for defining the geometry of this shape
+157 - pInscribe -  an array of rectangles that specify how text is inscribed within this shape
+17f - Geometry Boolean Properties
+
+180 - fillType
+181 - fillColor
+182 - fillOpacity - specifies the foreground opacity level of the fill
+183 - fillBackColor
+186 - fillBlip - specifies the BLIP that is used for pattern, texture, or picture fills
+18a - fillHeight - specifies the height of the fill
+18b - fillAngle - the angle of the shaded fill that rotates the gradient vector in a counterclockwise direction
+18c - fillFocus -  specifies the relative position of the last color in the shaded fill
+18d - fillToLeft - the relative position of the left boundary of the center rectangle in a concentric shaded fill
+18e - fillToTop - the relative position of the top boundary of the center rectangle in a concentric shaded fill 
+18f - fillToRight - 
+190 - fillToBottom -
+197 - fillShadeColors - specifies the colors and their relative positions along the shade of the fill
+193 - fillRectRight - the right boundary, in EMUs, of the bounding rectangle of the shaded fill
+194 - fillRectBottom - bottom boundary, in EMUs, of the bounding rectangle of the shaded fill
+197 - fillShadeColors - the colors and their relative positions along the shade of the fill
+19c - fillShadeType - specifies how the shaded fill is computed
+19e - fillColorExt - specifies the extended foreground color
+19f - reserved415 
+1a0 -
+1a1 -
+1a2 -
+1a3 -
+1a4 -
+1a5 -
+1a6 -
+1a7 -
+1bf - Fill Style Boolean Properties
+
+1c0 - lineColor
+1c5 - lineFillBlip - specifies the BLIP that is used to fill this line
+1cb - lineWidth - specifies the width of the line
+1d6 - lineJoinStyle - specifies the style of the line joins
+1ff - Line Style Boolean Properties
+
+201 - shadowColor
+23f - Shadow Style Boolean Properties
+2bf - 3D-Object Boolean Properties
+
+301 - hspMaster - specifies the master shape for a shape
+304 - bWMode - specifies how a shape will render in black-and-white display mode
+33f - Shape Boolean Properties
+380 - wzName - specifies the name of a shape
+381 - wzDescription - specifies a textual description for a shape
+388 - lidRegroup -  property specifies the regroup identifier for this shape
+39b - borderTopColor
+39c - borderLeftColor
+39d - borderBottomColor
+39e - borderRightColor
+3bf - Group Shape Boolean Properties
+
+Vacabulary:
+-----------
+
+master shape: A shape definition that specifies the default properties for all
+instances of that shape within a document.

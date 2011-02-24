@@ -496,6 +496,13 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     m_manager( 0 )
 {
     setupUi( this );
+    dateEdit->hide();
+#ifdef KPLATODEBUG
+    labelDate->hide();
+    dateEdit->show();
+    dateEdit->setDate( QDate::currentDate() );
+    connect(dateEdit, SIGNAL(dateChanged(const QDate &)), SLOT(slotUpdate()));
+#endif
 
     labelBCWS->setToolTip( ToolTip::nodeBCWS() );
     labelBCWP->setToolTip( ToolTip::nodeBCWP() );
@@ -856,38 +863,41 @@ void PerformanceStatusBase::drawValues()
     }
     KLocale *locale = m_project->locale();
     QDate date = QDate::currentDate();
+#ifdef KPLATODEBUG
+    date = dateEdit->date();
+#endif
 
     const EffortCostMap &budget = m_chartmodel.bcwp();
     const EffortCostMap &actual = m_chartmodel.acwp();
 
     double bc = budget.costTo( date );
     bcwsCost->setText( locale->formatMoney( bc ) );
-    bcwpCost->setText( locale->formatMoney( budget.bcwpTotalCost() ) );
-    acwpCost->setText( locale->formatMoney( actual.totalCost() ) );
+    bcwpCost->setText( locale->formatMoney( budget.bcwpCost( date ) ) );
+    acwpCost->setText( locale->formatMoney( actual.costTo( date ) ) );
 
     double spi_ = 0.0;
     if ( bc > 0.0 ) {
-        spi_ = budget.bcwpTotalCost() / bc;
+        spi_ = budget.bcwpCost( date ) / bc;
     }
     double cpi_ = 0.0;
-    if ( actual.totalCost() > 0.0 ) {
-        cpi_ = budget.bcwpTotalCost() / actual.totalCost();
+    if ( actual.costTo( date ) > 0.0 ) {
+        cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
     }
     spiCost->setText( locale->formatNumber( spi_ ) );
     cpiCost->setText( locale->formatNumber( cpi_ ) );
 
     double bh = budget.hoursTo( date );
     bcwsEffort->setText( locale->formatNumber( bh ) );
-    bcwpEffort->setText( locale->formatNumber( budget.bcwpTotalEffort() ) );
-    acwpEffort->setText( locale->formatNumber( actual.totalEffort().toDouble( Duration::Unit_h) ) );
+    bcwpEffort->setText( locale->formatNumber( budget.bcwpEffort( date ) ) );
+    acwpEffort->setText( locale->formatNumber( actual.hoursTo( date ) ) );
 
     spi_ = 0.0;
     if ( bh > 0.0 ) {
-        spi_ = budget.bcwpTotalEffort() / bh;
+        spi_ = budget.bcwpEffort( date ) / bh;
     }
     cpi_ = 0.0;
-    if ( actual.totalCost() > 0.0 ) {
-        cpi_ = budget.bcwpTotalCost() / actual.totalCost();
+    if ( actual.costTo( date ) > 0.0 ) {
+        cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
     }
     spiEffort->setText( locale->formatNumber( spi_ ) );
     cpiEffort->setText( locale->formatNumber( cpi_ ) );

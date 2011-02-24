@@ -63,7 +63,7 @@ static char l1_gsave  = 'S';
 static char l1_grestore  = 'R';
 
 K_PLUGIN_FACTORY(EpsExportFactory, registerPlugin<EpsExport>();)
-K_EXPORT_PLUGIN(EpsExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(EpsExportFactory("calligrafilters"))
 
 
 EpsExport::EpsExport(QObject* parent, const QVariantList&)

@@ -44,6 +44,7 @@
 #include <klocale.h>
 #include <ktimezone.h>
 
+
 /// The main namespace.
 namespace KPlato
 {
@@ -54,6 +55,7 @@ class ScheduleManager;
 class XMLLoaderObject;
 class Task;
 class SchedulerPlugin;
+class KPlatoXmlLoaderBase;
 
 /**
  * Project is the main node in a project, it contains child nodes and
@@ -429,6 +431,7 @@ public:
     bool isScheduleManager( void* ptr ) const;
     void addScheduleManager( ScheduleManager *sm, ScheduleManager *parent = 0, int index = -1 );
     int takeScheduleManager( ScheduleManager *sm );
+    void moveScheduleManager( ScheduleManager *sm, ScheduleManager *newparent = 0, int newindex = -1 );
     ScheduleManager *findScheduleManagerByName( const QString &name ) const;
     /// Returns a list of all schedule managers
     QList<ScheduleManager*> allScheduleManagers() const;
@@ -577,7 +580,9 @@ signals:
     void scheduleManagerToBeAdded( const ScheduleManager *sch, int row );
     void scheduleManagerRemoved( const ScheduleManager *sch );
     void scheduleManagerToBeRemoved( const ScheduleManager *sch );
-    
+    void scheduleManagerMoved( const ScheduleManager *sch, int row );
+    void scheduleManagerToBeMoved( const ScheduleManager *sch );
+
     void scheduleChanged( MainSchedule *sch );
     void scheduleToBeAdded( const ScheduleManager *manager, int row );
     void scheduleAdded( const MainSchedule *sch );
@@ -636,6 +641,8 @@ protected:
     void tasksBackward();
 
 protected:
+    friend class KPlatoXmlLoaderBase;
+
     virtual void changed(Node *node);
     
     Accounts m_accounts;
@@ -658,7 +665,7 @@ protected:
 
 private:
     void init();
-    
+
     QHash<QString, ResourceGroup*> resourceGroupIdDict;
     QHash<QString, Resource*> resourceIdDict;
     QHash<QString, Node*> nodeIdDict;

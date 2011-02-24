@@ -1,11 +1,12 @@
 /* This file is part of the KDE project
   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
   version 2 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -610,7 +611,7 @@ NodeDeleteCmd::NodeDeleteCmd( Node *node, const QString& name )
 
     m_parent = node->parentNode();
     m_mine = false;
-    
+
     m_project = static_cast<Project*>( node->projectNode() );
     if ( m_project ) {
         foreach ( Schedule * s, m_project->schedules() ) {
@@ -668,7 +669,7 @@ void NodeDeleteCmd::execute()
         m_project->takeTask( m_node );
         m_mine = true;
         setSchScheduled( false );
-    
+
     }
 }
 void NodeDeleteCmd::unexecute()
@@ -684,7 +685,7 @@ void NodeDeleteCmd::unexecute()
         }*/
         m_mine = false;
         setSchScheduled();
-    
+
     }
 }
 
@@ -751,11 +752,24 @@ SubtaskAddCmd::SubtaskAddCmd( Project *project, Node *node, Node *parent, const 
     node->setLateFinish( node->endTime() );
     node->setWorkStartTime( node->startTime() );
     node->setWorkEndTime( node->endTime() );
-    
+
     // Summarytasks can't have resources, so remove resource requests from the new parent
     foreach ( ResourceGroupRequest *r, parent->requests().requests() ) {
         if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
         m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
+    }
+    // Also remove accounts
+    if ( parent->runningAccount() ) {
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        m_cmd->addCommand( new NodeModifyRunningAccountCmd( *parent, parent->runningAccount(), 0 ) );
+    }
+    if ( parent->startupAccount() ) {
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        m_cmd->addCommand( new NodeModifyStartupAccountCmd( *parent, parent->startupAccount(), 0 ) );
+    }
+    if ( parent->shutdownAccount() ) {
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        m_cmd->addCommand( new NodeModifyShutdownAccountCmd( *parent, parent->shutdownAccount(), 0 ) );
     }
 }
 SubtaskAddCmd::~SubtaskAddCmd()
@@ -1001,13 +1015,24 @@ void NodeIndentCmd::execute()
                 if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
                 m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
             }
-        }
+            // Also remove accounts
+            if ( m_newparent->runningAccount() ) {
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                m_cmd->addCommand( new NodeModifyRunningAccountCmd( *m_newparent, m_newparent->runningAccount(), 0 ) );
+            }
+            if ( m_newparent->startupAccount() ) {
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                m_cmd->addCommand( new NodeModifyStartupAccountCmd( *m_newparent, m_newparent->startupAccount(), 0 ) );
+            }
+            if ( m_newparent->shutdownAccount() ) {
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                m_cmd->addCommand( new NodeModifyShutdownAccountCmd( *m_newparent, m_newparent->shutdownAccount(), 0 ) );
+            }
+       }
         if ( m_cmd ) {
             m_cmd->execute();
         }
     }
-
-
 }
 void NodeIndentCmd::unexecute()
 {
@@ -1211,7 +1236,7 @@ void ModifyRelationTypeCmd::execute()
     if ( m_project ) {
         m_project->setRelationType( m_rel, m_newtype );
 //        setSchScheduled( false );
-    
+
     }
 }
 void ModifyRelationTypeCmd::unexecute()
@@ -1219,7 +1244,7 @@ void ModifyRelationTypeCmd::unexecute()
     if ( m_project ) {
         m_project->setRelationType( m_rel, m_oldtype );
 //        setSchScheduled();
-    
+
     }
 }
 
@@ -1242,7 +1267,7 @@ void ModifyRelationLagCmd::execute()
     if ( m_project ) {
         m_project->setRelationLag( m_rel, m_newlag );
 //        setSchScheduled( false );
-    
+
     }
 }
 void ModifyRelationLagCmd::unexecute()
@@ -1250,7 +1275,7 @@ void ModifyRelationLagCmd::unexecute()
     if ( m_project ) {
         m_project->setRelationLag( m_rel, m_oldlag );
 //        setSchScheduled();
-    
+
     }
 }
 
@@ -2899,6 +2924,26 @@ void DeleteScheduleManagerCmd::unexecute()
     cmd.unexecute();
 }
 
+MoveScheduleManagerCmd::MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm ),
+    m_oldparent( sm->parentManager() ),
+    m_newparent( newparent ),
+    m_newindex( newindex )
+{
+    m_oldindex = sm->parentManager() ? sm->parentManager()->indexOf( sm ) : sm->project().indexOf( sm );
+}
+
+void MoveScheduleManagerCmd::execute()
+{
+    m_sm->project().moveScheduleManager( m_sm, m_newparent, m_newindex );
+}
+
+void MoveScheduleManagerCmd::unexecute()
+{
+    m_sm->project().moveScheduleManager( m_sm, m_oldparent, m_oldindex );
+}
+
 ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name )
     : NamedCommand( name ),
     m_sm( sm ),
@@ -3352,6 +3397,9 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             gr->group()->unregisterRequest( gr );
             int i = n->requests().takeRequest( gr );
             Q_ASSERT( i >= 0 );
+#ifdef NDEBUG
+            Q_UNUSED(i);
+#endif
         }
     }
     QMap<ResourceGroup*, ResourceGroup*> existingGroups;

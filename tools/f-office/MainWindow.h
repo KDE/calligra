@@ -43,14 +43,7 @@ typedef QMainWindow KoAbstractApplicationBase;
 #include "CollabClient.h"
 #include "CollabDialog.h"
 #include "CollabServer.h"
-#include "FoCellTool.h"
 #include "DigitalSignatureDialog.h"
-
-#ifdef Q_WS_MAEMO_5
-#include "FoDocumentRdf.h"
-#include "Accelerator.h"
-#endif
-
 
 class QPushButton;
 class QIcon;
@@ -81,7 +74,6 @@ class KUndoStack;
 class KoTextEditor;
 class PresentationTool;
 class MainWindowAdaptor;
-class KoCanvasController;
 class KoCanvasControllerWidget;
 class KoShape;
 class KoPAPageBase;
@@ -93,7 +85,7 @@ class MainWindow;
 
 
 /*!
- * \brief Main window of the application. KoCanvasController is set as
+ * \brief Main window of the application. KoCanvasControllerWidget is set as
  * the central widget. It displays the loaded documents.
  */
 class MainWindow : public KoAbstractApplication
@@ -103,10 +95,6 @@ class MainWindow : public KoAbstractApplication
 public:
     MainWindow(Splash *aSplash, QWidget *parent = 0);
     ~MainWindow();
-    /*!
-     * Opened file
-     */
-    QString m_fileName;
     //void tabletEvent ( QTabletEvent * event );
     void mousePressEvent ( QMouseEvent * event );
     void mouseMoveEvent ( QMouseEvent * event );
@@ -119,7 +107,7 @@ public:
 
 private:
     Ui::MainWindow *m_ui;
-    
+
 ///////////////////////////
 // Collaborative editing //
 ///////////////////////////
@@ -160,15 +148,8 @@ private slots:
 
 //presentation editing
 private:
-//unused    QTextDocument *document;
     QPointer<KoTextEditor> m_pEditor;
-//global not needed:    KoShape *m_textShape;
-//global not needed:    KoShape *m_currentShapeSelected;
-//global not needed:    KoTextShapeData *currentSelectedTextShapeData;
-//global not needed:    QTextDocument *documentForCurrentShape;
 
-    KoPAView *m_kopaview;
-//        void deleteSelection();
 
 /////virtualkeyboard
     QShortcut *m_shortcutForVirtualKeyBoard;
@@ -255,7 +236,7 @@ private:
     int m_xcordinate ;
     int m_ycordinate ;
     /*!
-     * Font related information for each Character in NewDocuments 
+     * Font related information for each Character in NewDocuments
      */
     int m_fontsize;
     /*!
@@ -499,7 +480,7 @@ private:
     virtual QMessageBox::StandardButton askQuestion(QuestionType type, const QString& messageText = QString());
 
     //! Implemented for KoAbstractApplication
-    virtual void startNewInstance(const QString& fileName, bool isNewDocument);
+    virtual bool startNewInstance(const KoAbstractApplicationOpenDocumentArguments& args);
 
     //! Implemented for KoAbstractApplication
     virtual void setProgressIndicatorVisible(bool visible);
@@ -523,9 +504,6 @@ private:
     virtual void setCentralWidget(QWidget *widget);
 
     //! Implemented for KoAbstractApplication
-    virtual QWidget* centralWidget() const;
-
-    //! Implemented for KoAbstractApplication
     virtual QString applicationName() const;
 
     //! Implemented for KoAbstractApplication
@@ -534,20 +512,19 @@ private:
     //! Implemented for KoAbstractApplication
     virtual void currentPageChanged();
 
+    //! Implemented for KoAbstractApplication
+    KoExternalEditorInterface* createExternalCellEditor(KoCellTool* cellTool) const;
+
     //! Reimplemented for KoAbstractApplication
     virtual bool setEditingMode(bool set);
 
     //! Reimplemented for KoAbstractApplication
     virtual void closeDocument();
 
-    //! Reimplemented for KoAbstractApplication
-    virtual bool openDocument();
-
 private slots:
     //! Implemented for KoAbstractApplication
     virtual void setVirtualKeyboardVisible(bool set);
 
-private slots:
     void menuClicked(QAction* action);
     void pluginOpen(bool newWindow, const QString& path);
     void showFontSizeDialog();
@@ -715,13 +692,9 @@ private slots:
      * Slot that shows a hildonized application menu
      */
     void showApplicationMenu();
-//! @todo move to abstraction
     /*!
-     * Slot that is invoked when the currently active tool changes.
-     */
-    void activeToolChanged(KoCanvasController *canvas, int uniqueToolId);
-    /*!
-     * function for opening existing document.
+     * Function for opening existing document.
+     * Reimplemented for KoAbstractApplication.
      */
     virtual bool doOpenDocument();
     /*!
@@ -787,9 +760,12 @@ public slots:
     void glPresenterSet(int,int);
 #endif
     /*!
-     * Opens document @a fileName.
+     * Opens documents as specified by @a args.
+     * See documentation of @a KoAbstractApplicationOpenDocumentArgumentsfor explanation
+     * of arguments @a args.
+     * Reimplemented for KoAbstractApplication.
      */
-    bool openDocument(const QString &fileName, bool isNewDocument);
+    virtual bool openDocuments(const KoAbstractApplicationOpenDocumentArguments& args);
 
 protected slots:
     //! Reimplemented for KoAbstractApplication
@@ -849,6 +825,14 @@ private:
      */
     const QIcon m_slideNotesIcon;
     /*!
+     * Pointer to presentation drawing tools
+     */
+    PresentationTool *m_presentationTool;
+    /*!
+     * pointer to preview button store
+     */
+    StoreButtonPreview *m_storeButtonPreview;
+    /*!
      * Pointer to notes dialog
      */
     NotesDialog *m_notesDialog;
@@ -863,12 +847,6 @@ private:
     QToolBar *m_spreadEditToolBar;
 
     DigitalSignatureDialog *m_digitalSignatureDialog;
-
-#ifdef Q_WS_MAEMO_5
-    FoDocumentRdf *m_foDocumentRdf;
-
-    QShortcut *m_rdfShortcut;
-#endif
 
 public slots:
     /*!

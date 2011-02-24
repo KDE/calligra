@@ -25,5 +25,4 @@
 
 #include <QMainWindow>
 typedef QMainWindow KoAbstractApplicationBase;
-#include "KoAbstractApplicationImpl.h"
-#include "KoAbstractApplication.moc"
+#include <KoAbstractApplicationImpl.h>

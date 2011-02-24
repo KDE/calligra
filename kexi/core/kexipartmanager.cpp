@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KLibLoader>
+//#include <KLibLoader>
 #include <KServiceTypeTrader>
 #include <KDebug>
 #include <KConfig>

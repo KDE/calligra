@@ -25,7 +25,7 @@
 #include <QTimeLine>
 
 #include <KoXmlReaderForward.h>
-#include "kpresenter_export.h"
+#include "stage_export.h"
 
 class QPainter;
 class QGraphicsScene;
@@ -40,7 +40,7 @@ class KPrPageEffectStrategy;
  * It uses an internaly a QTimeLine for calulating the position. The timeline is
  * feed by the time of an external timeline.
  */
-class KPRESENTER_EXPORT KPrPageEffect
+class STAGE_EXPORT KPrPageEffect
 {
 public:
     /**

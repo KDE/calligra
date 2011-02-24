@@ -83,7 +83,7 @@ public:
             , columnsOrderExpanded(0)
             , pkeyFieldsOrder(0)
             , pkeyFieldsCount(0)
-            , tablesBoundToColumns(64, -1)
+            , tablesBoundToColumns(64, -1) // will be resized if needed
             , whereExpr(0)
             , ownedVisibleColumns(0)
             , regenerateExprAliases(false) {
@@ -129,7 +129,11 @@ public:
         }
     }
     ~QuerySchemaPrivate() {
+        if (fieldsExpanded)
+            qDeleteAll(*fieldsExpanded);
         delete fieldsExpanded;
+        if (internalFields)
+            qDeleteAll(*internalFields);
         delete internalFields;
         delete fieldsExpandedWithInternalAndRowID;
         delete fieldsExpandedWithInternal;
@@ -155,7 +159,7 @@ public:
         delete pkeyFieldsOrder;
         pkeyFieldsOrder = 0;
         visibility.fill(false);
-        tablesBoundToColumns = QVector<int>(64, -1);
+        tablesBoundToColumns = QVector<int>(64, -1); // will be resized if needed
         tablePositionsForAliases.clear();
         columnPositionsForAliases.clear();
     }
@@ -163,8 +167,10 @@ public:
     void clearCachedData() {
         orderByColumnList.clear();
         if (fieldsExpanded) {
+            qDeleteAll(*fieldsExpanded);
             delete fieldsExpanded;
             fieldsExpanded = 0;
+            qDeleteAll(*internalFields);
             delete internalFields;
             internalFields = 0;
             delete columnsOrder;
@@ -342,7 +348,7 @@ public:
     Relationship::List relations;
 
     /*! Information about columns bound to tables.
-     Used a table is used in FROM section more than once
+     Used if table is used in FROM section more than once
      (using table aliases).
 
      This list is updated by insertField(uint position, Field *field,
@@ -1389,9 +1395,7 @@ void QuerySchema::computeFieldsExpanded()
 //Qt 4  d->fieldsExpanded->setAutoDelete(true);
         d->columnsOrderExpanded = new QHash<QueryColumnInfo*, int>();
     } else {//for future:
-        foreach(QueryColumnInfo* ci, *d->fieldsExpanded) {
-            delete ci;
-        }
+        qDeleteAll(*d->fieldsExpanded);
         d->fieldsExpanded->clear();
         d->fieldsExpanded->resize(list.count());
         d->columnsOrderExpanded->clear();
@@ -1465,9 +1469,7 @@ void QuerySchema::computeFieldsExpanded()
 
     //create internal expanded list with lookup fields
     if (d->internalFields) {
-        foreach(QueryColumnInfo* ci, *d->internalFields) {
-            delete ci;
-        }
+        qDeleteAll(*d->internalFields);
         d->internalFields->clear();
         d->internalFields->resize(lookup_list.count());
     }

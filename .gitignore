@@ -1,0 +1,7 @@
+*.kdev4
+*~
+.kateconfig
+CMakeLists.txt.user
+.directory
+*.rej
+*.orig

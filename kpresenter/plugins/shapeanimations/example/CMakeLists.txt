@@ -6,7 +6,7 @@ kde4_add_plugin(kpr_shapeanimation_example ${kpr_shapeanimation_example_PART_SRC
 
 target_link_libraries(
     kpr_shapeanimation_example 
-    kpresenterprivate
+    calligrastageprivate
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
     )

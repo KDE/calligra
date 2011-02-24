@@ -20,6 +20,17 @@
 #include "kptglobal.h"
 
 #include <klocale.h>
+#include <kdeversion.h>
+#include <KDebug>
+
+int planDebugArea() {
+#if KDE_IS_VERSION( 4, 3, 80 )
+    static int s_area = KDebug::registerArea( "plan" );
+#else
+    static int s_area = 0;
+#endif
+    return s_area;
+}
 
 namespace KPlato
 {
@@ -40,6 +51,10 @@ namespace KPlato
         { return trans ? i18n( "No resource allocated" ) : QString( "No resource allocated" ); }
     QString SchedulingState::constraintsNotMet( bool trans )
         { return trans ? i18n( "Cannot fulfill constraints" ) : QString( "Cannot fulfill constraints" ); }
+    QString SchedulingState::effortNotMet( bool trans )
+        { return trans ? i18n( "Effort not met" ) : QString( "Effort not met" ); }
+    QString SchedulingState::schedulingError( bool trans )
+        { return trans ? i18n( "Scheduling error" ) : QString( "Scheduling error" ); }
 
 //} namespace SchedulingState
 

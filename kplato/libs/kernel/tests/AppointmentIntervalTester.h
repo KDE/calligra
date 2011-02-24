@@ -29,6 +29,7 @@ class AppointmentIntervalTester : public QObject
 {
     Q_OBJECT
 private slots:
+    void interval();
     void addInterval();
     void addAppointment();
     void addTangentIntervals();

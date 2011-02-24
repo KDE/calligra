@@ -25,11 +25,10 @@
 KPrPlaceholderToolFactory::KPrPlaceholderToolFactory()
     : KoToolFactoryBase("Layout Tool")
 {
-    setToolTip( i18n( "Layout Tool" ) );
+    setToolTip(i18n("Layout Tool"));
     setToolType(dynamicToolType());
     setPriority(0);
-    //setIcon("animation-kpresenter");
-    setActivationShapeId( KPrPlaceholderShapeId );
+    setActivationShapeId(KPrPlaceholderShapeId);
 }
 
 KPrPlaceholderToolFactory::~KPrPlaceholderToolFactory()

@@ -70,10 +70,6 @@
 
 //////////////////////////////////////////////
 
-#define PanTool_ID "PanTool"
-#define TextTool_ID "TextToolFactory_ID"
-#define CellTool_ID "FreOfficeCellToolId"
-
 /*!
 * Size of full screen button
 */
@@ -122,23 +118,6 @@ const QString NEW_PRESENTER ("/usr/share/freoffice-templates/.presentationtempla
 * Path New Spreadsheet Template
 */
 const QString NEW_SPREADSHEET("/usr/share/freoffice-templates/.templates/NewSpread.ods");
-
-/*!
-* extensions
-*/
-const QString EXT_PPS("pps");
-const QString EXT_PPSX("ppsx");
-const QString EXT_PPT("ppt");
-const QString EXT_PPTX("pptx");
-const QString EXT_ODP("odp");
-const QString EXT_DOC("doc");
-const QString EXT_DOCX("docx");
-const QString EXT_ODT("odt");
-const QString EXT_TXT("txt");
-const QString EXT_RTF("rtf");
-const QString EXT_ODS("ods");
-const QString EXT_XLS("xls");
-const QString EXT_XLSX("xlsx");
 
 /*!
 * Style for full screen button

@@ -39,7 +39,7 @@ KAboutData * newKarbonAboutData()
         ki18n("(c) 2001-2009, The Karbon Developers"),
         ki18n("You are invited to participate in any way."),
 
-        "http://www.koffice.org/karbon/");
+        "http://www.calligra-suite.org/karbon/");
     aboutData->addAuthor(
         ki18n("Rob Buis"),
         KLocalizedString(),

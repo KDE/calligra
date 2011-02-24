@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen kplato@kde.org>
+  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -86,6 +87,13 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Qt::DecorationRole:
+            if ( res->isBaselined() ) {
+                return KIcon( "view-time-schedule-baselined" );
+             }
+             break;
+        default:
+            break;
     }
     return QVariant();
 }
@@ -260,7 +268,7 @@ QVariant ResourceModel::availableFrom( const Resource *res, int role ) const
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( res->availableFrom() );
         case Qt::EditRole:
-            return res->availableFrom().dateTime();
+            return res->availableFrom();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
@@ -282,7 +290,7 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( res->availableUntil() );
         case Qt::EditRole:
-            return res->availableUntil().dateTime();
+            return res->availableUntil();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole: {
@@ -484,6 +492,9 @@ void ResourceItemModel::slotResourceInserted( const Resource *resource )
 {
     //kDebug()<<resource->name();
     Q_ASSERT( resource->parentGroup() == m_group );
+#ifdef NDEBUG
+    Q_UNUSED(resource)
+#endif
     endInsertRows();
     m_group = 0;
     emit layoutChanged(); //HACK to make the right view react! Bug in qt?
@@ -493,6 +504,9 @@ void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
 {
     //kDebug()<<resource->name();
     Q_ASSERT( m_resource == 0 );
+#ifdef NDEBUG
+    Q_UNUSED(resource)
+#endif
     m_resource = const_cast<Resource*>(resource);
     int row = index( resource ).row();
     beginRemoveRows( index( resource->parentGroup() ), row, row );
@@ -502,6 +516,9 @@ void ResourceItemModel::slotResourceRemoved( const Resource *resource )
 {
     //kDebug()<<resource->name();
     Q_ASSERT( resource == m_resource );
+#ifdef NDEBUG
+    Q_UNUSED(resource)
+#endif
     endRemoveRows();
     m_resource = 0;
 }
@@ -518,6 +535,9 @@ void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 {
     //kDebug()<<group->name();
     Q_ASSERT( group == m_group );
+#ifdef NDEBUG
+    Q_UNUSED(group)
+#endif
     endInsertRows();
     m_group = 0;
 }
@@ -535,6 +555,10 @@ void ResourceItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
 {
     //kDebug()<<group->name();
     Q_ASSERT( group == m_group );
+#ifdef NDEBUG
+    Q_UNUSED(group)
+#endif
+
     endRemoveRows();
     m_group = 0;
 }
@@ -611,8 +635,34 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
     }
     Resource *r = qobject_cast<Resource*>( object ( index ) );
     if ( r != 0 ) {
-        flags |= Qt::ItemIsEditable;
         flags |= Qt::ItemIsDragEnabled;
+        switch ( index.column() ) {
+            case ResourceModel::ResourceName:
+                flags |= Qt::ItemIsEditable;
+                break;
+            case ResourceModel::ResourceType:
+                if ( ! r->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            case ResourceModel::ResourceAccount:
+                if ( ! r->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            case ResourceModel::ResourceNormalRate:
+                if ( ! r->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            case ResourceModel::ResourceOvertimeRate:
+                if ( ! r->isBaselined() ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            default:
+                flags |= Qt::ItemIsEditable;
+        }
         //kDebug()<<"resource"<<flags;
     } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
         flags |= Qt::ItemIsDropEnabled;
@@ -869,7 +919,7 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toDateTime() == res->availableFrom().dateTime() ) {
+            if ( value.toDateTime() == res->availableFrom() ) {
                 return false;
             }
             emit executeCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), "Modify resource available from" ) );
@@ -882,7 +932,7 @@ bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value,
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toDateTime() == res->availableUntil().dateTime() ) {
+            if ( value.toDateTime() == res->availableUntil() ) {
                 return false;
             }
             emit executeCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), "Modify resource available until" ) );

@@ -42,6 +42,7 @@
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 #include <KoShapeLayer.h>
+#include <KoShapeGroup.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 #include <KoColorBackground.h>
@@ -77,7 +78,7 @@ static void printIndentation(QTextStream *stream, unsigned int indent)
 }
 
 K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
-K_EXPORT_PLUGIN(SvgExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(SvgExportFactory("calligrafilters"))
 
 SvgExport::SvgExport(QObject*parent, const QVariantList&)
         : KoFilter(parent), m_indent(0), m_indent2(0)
@@ -168,9 +169,9 @@ void SvgExport::saveLayer(KoShapeLayer * layer)
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape * shape, sortedShapes) {
-        KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
-        if (container)
-            saveGroup(container);
+        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
+        if (group)
+            saveGroup(group);
         else
             saveShape(shape);
     }
@@ -179,7 +180,7 @@ void SvgExport::saveLayer(KoShapeLayer * layer)
     *m_body << "</g>" << endl;
 }
 
-void SvgExport::saveGroup(KoShapeContainer * group)
+void SvgExport::saveGroup(KoShapeGroup * group)
 {
     printIndentation(m_body, m_indent++);
     *m_body << "<g" << getID(group);
@@ -191,9 +192,9 @@ void SvgExport::saveGroup(KoShapeContainer * group)
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape * shape, sortedShapes) {
-        KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
-        if (container)
-            saveGroup(container);
+        KoShapeGroup * childGroup = dynamic_cast<KoShapeGroup*>(shape);
+        if (childGroup)
+            saveGroup(childGroup);
         else
             saveShape(shape);
     }

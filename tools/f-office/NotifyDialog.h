@@ -35,15 +35,14 @@ namespace Ui
 class NotifyDialog;
 }
 /*!
- * \brief Dialog is to notify user that selected document is not
- * supported by Office
+ * \brief Dialog is to notify user that selected document is not supported by Office
  */
 class NotifyDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    NotifyDialog(QWidget *parent = 0);
+    NotifyDialog(const QString& messageText, QWidget *parent = 0);
     ~NotifyDialog();
 
 private:

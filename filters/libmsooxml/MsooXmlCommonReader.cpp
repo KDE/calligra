@@ -89,6 +89,7 @@ class MediaTypeMap : public QMap<QByteArray, QByteArray>
 {
 public:
     MediaTypeMap() {
+        insert("bmp", "image/x-bmp");
         insert("gif", "image/gif");
         insert("jpg", "image/jpeg");
         insert("jpeg", "image/jpeg");

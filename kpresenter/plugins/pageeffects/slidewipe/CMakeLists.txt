@@ -17,7 +17,7 @@ kde4_add_plugin(kpr_pageeffect_slidewipe ${kpr_pageeffect_slidewipe_PART_SRCS})
 
 target_link_libraries(
     kpr_pageeffect_slidewipe
-    kpresenterprivate
+    calligrastageprivate
     flake
     
     ${KDE4_KDECORE_LIBS}

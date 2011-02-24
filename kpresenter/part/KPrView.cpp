@@ -27,6 +27,7 @@
 #include <kactionmenu.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <kstatusbar.h>
 
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -159,6 +160,11 @@ void KPrView::blackPresentation()
     }
 }
 
+void KPrView::showStatusBar(bool toggled)
+{
+    statusBar()->setVisible(toggled);
+}
+
 void KPrView::initGUI()
 {
     // add page effect docker to the main window
@@ -179,9 +185,9 @@ void KPrView::initGUI()
 void KPrView::initActions()
 {
     if ( !kopaDocument()->isReadWrite() )
-       setXMLFile( "kpresenter_readonly.rc" );
+       setXMLFile( "stage_readonly.rc" );
     else
-       setXMLFile( "kpresenter.rc" );
+       setXMLFile( "stage.rc" );
 
     // do special kpresenter stuff here
     m_actionExportHtml = new KAction(i18n("Export as HTML..."), this);
@@ -191,19 +197,25 @@ void KPrView::initActions()
     m_actionViewModeNormal = new KAction(i18n("Normal"), this);
     m_actionViewModeNormal->setCheckable(true);
     m_actionViewModeNormal->setChecked(true);
+    m_actionViewModeNormal->setShortcut(QKeySequence("CTRL+F5"));
     actionCollection()->addAction("view_normal", m_actionViewModeNormal);
     connect(m_actionViewModeNormal, SIGNAL(triggered()), this, SLOT(showNormal()));
 
     m_actionViewModeNotes = new KAction(i18n("Notes"), this);
     m_actionViewModeNotes->setCheckable(true);
+    m_actionViewModeNotes->setShortcut(QKeySequence("CTRL+F6"));
     actionCollection()->addAction("view_notes", m_actionViewModeNotes);
     connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
 
     m_actionViewModeSlidesSorter = new KAction(i18n("Slides Sorter"), this);
     m_actionViewModeSlidesSorter->setCheckable(true);
+    m_actionViewModeSlidesSorter->setShortcut(QKeySequence("CTRL+F7"));
     actionCollection()->addAction("view_slides_sorter", m_actionViewModeSlidesSorter);
     connect(m_actionViewModeSlidesSorter, SIGNAL(triggered()), this, SLOT(showSlidesSorter()));
 
+    if ( QAction *action = actionCollection()->action("view_masterpages") )
+        action->setShortcut(QKeySequence("CTRL+F8"));
+    
     m_actionInsertPictures = new KAction(i18n("Insert Pictures..."), this);
     actionCollection()->addAction("insert_pictures", m_actionInsertPictures);
     connect(m_actionInsertPictures, SIGNAL(activated()), this, SLOT(insertPictures()));
@@ -224,8 +236,7 @@ void KPrView::initActions()
     m_actionStartPresentation = new KActionMenu( KIcon("view-presentation"), i18n( "Start Presentation" ), this );
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
-    KAction* action = new KAction( i18n( "From Current Slide" ),
-this );
+    KAction* action = new KAction( i18n( "From Current Slide" ), this );
     action->setShortcut(QKeySequence("Shift+F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
@@ -233,6 +244,17 @@ this );
     action->setShortcut(QKeySequence("F5"));
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
+
+    KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
+    showStatusbarAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
+    showStatusbarAction->setToolTip(i18n("Shows or hides the status bar"));
+    actionCollection()->addAction("showStatusBar", showStatusbarAction);
+    connect(showStatusbarAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+
+    //Update state of status bar action
+    if (showStatusbarAction && statusBar()){
+        showStatusbarAction->setChecked(! statusBar()->isHidden());
+    }
 
     action = new KAction( i18n( "Configure Slide Show..." ), this );
     actionCollection()->addAction( "slideshow_configure", action );
@@ -312,6 +334,10 @@ void KPrView::createAnimation()
 void KPrView::showNormal()
 {
     setViewMode(m_normalMode);
+    KAction *action = (KAction*) actionCollection()->action("view_normal");
+    if (action){
+        action-> setChecked(true);
+    }
 }
 
 void KPrView::showNotes()

@@ -371,6 +371,13 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         } \
     }
 
+//! Skips elements, which cannot be interpreted at this time in order to avoid them
+// being read somewhere else
+#define SKIP_UNKNOWN \
+    else { \
+        skipCurrentElement(); \
+    }
+
 #define SKIP_EVERYTHING_AND_RETURN \
     SKIP_EVERYTHING \
     return KoFilter::OK;

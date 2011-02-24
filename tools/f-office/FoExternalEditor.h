@@ -24,35 +24,47 @@
 
 #ifndef FOEXTERNAL_EDITOR
 #define FOEXTERNAL_EDITOR
+
 #include <QTextEdit>
 
-#include "ui/CellToolBase.h"
+#include <KoExternalEditorInterface.h>
 
-namespace KSpread
+namespace Calligra { namespace Tables
 {
     class CellToolBase;
     class CellEditorBase;
-}
-using KSpread::CellEditorBase;
-using KSpread::CellToolBase;
+} }
 
-class FoExternalEditor : public QTextEdit
+class FoExternalEditor : public QTextEdit, public KoExternalEditorInterface
 {
     Q_OBJECT
 public:
-    FoExternalEditor(QWidget* parent = 0);
+    FoExternalEditor(Calligra::Tables::CellToolBase* cellToolBase, QWidget* parent = 0);
     ~FoExternalEditor();
 
-    void setCellTool(KSpread::CellToolBase* cellTool);
+    void setCellTool(Calligra::Tables::CellToolBase* cellTool);
     void insertOperator(QString opreatorCharacter);
+
+    //! Implements KoExternalEditorInterface
+    virtual void insertOperator(const QString& operatorCharacter);
 
 Q_SIGNALS:
     void textChanged(const QString &text);
 
 public Q_SLOTS:
+    virtual void clear() { QTextEdit::clear(); }
+
+    //! Implements KoExternalEditorInterface
+    virtual void setPlainText(const QString& text) { QTextEdit::setPlainText(text); }
+
+    //! Implements KoExternalEditorInterface
+    virtual QString toPlainText() const { return QTextEdit::toPlainText(); }
+
     void applyChanges();
     void discardChanges();
+    //! Implements KoExternalEditorInterface
     void setText(const QString &text);
+    //! Implements KoExternalEditorInterface
     void setCursorPosition(int position);
 
 protected:
@@ -65,7 +77,7 @@ private slots:
     void slotCursorPositionChanged();
 
 private:
-    KSpread::CellToolBase* cellTool;
+    Calligra::Tables::CellToolBase* cellTool;
     bool isArray;
 };
 

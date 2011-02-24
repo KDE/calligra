@@ -142,6 +142,16 @@ bool Account::isChildOf( const Account *account) const
     return  m_parent->isChildOf( account );
 }
 
+bool Account::isBaselined( long id ) const
+{
+    foreach ( CostPlace *p, m_costPlaces ) {
+        if ( p->isBaselined( id ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Account::load(KoXmlElement &element, Project &project) {
     m_name = element.attribute("name");
     m_description = element.attribute("description");
@@ -541,6 +551,47 @@ Account::CostPlace::~CostPlace() {
     }
 }
 
+bool Account::CostPlace::isBaselined( long id ) const
+{
+    if ( m_node ) {
+        if ( m_running ) {
+            if ( m_node->isBaselined( id ) ) {
+                return true;
+            }
+        }
+        if ( m_startup ) {
+            if ( m_node->isBaselined( id ) ) {
+                return true;
+            }
+        }
+        if ( m_shutdown ) {
+            if ( m_node->isBaselined( id ) ) {
+                return true;
+            }
+        }
+    }
+    if ( m_resource ) {
+        if ( m_running ) {
+            if ( m_resource->isBaselined( id ) ) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void Account::CostPlace::setNode(Node* node)
+{
+    Q_ASSERT( ! m_node );
+    m_node = node;
+}
+
+void Account::CostPlace::setResource(Resource* resource)
+{
+    Q_ASSERT( ! m_resource );
+    m_resource = resource;
+}
+
 void Account::CostPlace::setRunning(bool on ) { 
     m_running = on;
     if (m_node) {
@@ -600,6 +651,16 @@ void Account::CostPlace::save(QDomElement &element) const {
     me.setAttribute("startup-cost", m_startup);
     me.setAttribute("shutdown-cost", m_shutdown);
     
+}
+
+void Account::CostPlace::setObjectId( const QString& id )
+{
+    m_objectId = id;
+}
+
+QString Account::CostPlace::objectId() const
+{
+    return m_objectId;
 }
 
 //---------------------------------

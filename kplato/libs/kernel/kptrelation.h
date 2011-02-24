@@ -85,10 +85,12 @@ public:
      * @return The parent dependent node.
      */
     Node *parent() const { return m_parent; }
+    void setParent( Node *node );
     /**
      * @return The child dependent node.
      */
     Node *child() const { return m_child; }
+    void setChild( Node *node );
 
     bool load(KoXmlElement &element, Project &project);
     void save(QDomElement &element) const;

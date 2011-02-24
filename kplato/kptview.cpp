@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -110,6 +110,7 @@
 #include "kptpertresult.h"
 #include "kpttaskdefaultpanel.h"
 #include "kptworkpackageconfigpanel.h"
+#include "kptcolorsconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
 #include "reports/reportview.h"
@@ -145,9 +146,9 @@ View::View( Part* part, QWidget* parent )
 
     setComponentData( Factory::global() );
     if ( !part->isReadWrite() )
-        setXMLFile( "kplato_readonly.rc" );
+        setXMLFile( "plan_readonly.rc" );
     else
-        setXMLFile( "kplato.rc" );
+        setXMLFile( "plan.rc" );
 
     m_dbus = new ViewAdaptor( this );
     QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
@@ -245,7 +246,7 @@ View::View( Part* part, QWidget* parent )
     connect( actionInsertFile, SIGNAL( triggered( bool ) ), SLOT( slotInsertFile() ) );
 
     // ------ Settings
-    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlato..."), this);
+    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure Plan..."), this);
     actionCollection()->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
@@ -262,7 +263,7 @@ View::View( Part* part, QWidget* parent )
     connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
     // ------ Help
-    actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("KPlato Introduction"), this);
+    actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("Introduction to Plan"), this);
     actionCollection()->addAction("kplato_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
@@ -839,6 +840,7 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
 
     connect( handler->scheduleEditor(), SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
     connect( handler->scheduleEditor(), SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+    connect( handler->scheduleEditor(), SIGNAL( moveScheduleManager(ScheduleManager*, ScheduleManager*, int)), SLOT(slotMoveScheduleManager(ScheduleManager*, ScheduleManager*, int)));
 
     connect( handler->scheduleEditor(), SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
@@ -1244,7 +1246,7 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    emit currentScheduleManagerChanged( currentScheduleManager() );
+    v->setScheduleManager( currentScheduleManager() );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     connect( v, SIGNAL( editReportDesign( ReportView* ) ), SLOT( slotEditReportDesign( ReportView* ) ) );
@@ -1546,9 +1548,6 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    if ( sm == currentScheduleManager() ) {
-        connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
-    }
 //    m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
 //    addStatusBarItem( m_text, 0, true );
     m_progress = new QProgressBar();
@@ -1666,6 +1665,15 @@ void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
         return;
     }
     DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( *project, sm, i18n( "Delete schedule %1", sm->name() ) );
+    getPart() ->addCommand( cmd );
+}
+
+void View::slotMoveScheduleManager( ScheduleManager *sm, ScheduleManager *parent, int index )
+{
+    if ( sm == 0 ) {
+        return;
+    }
+    MoveScheduleManagerCmd *cmd =  new MoveScheduleManagerCmd( sm, parent, index, i18n( "Move schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
 }
 
@@ -1802,6 +1810,7 @@ void View::slotConfigure()
     }
     KConfigDialog *dialog = new KConfigDialog( this, "KPlato Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "view-task" );
+    dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), "fill-color" );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "kplatowork" );
 /*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
     connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/

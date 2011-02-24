@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koconverter.h"
-
 #include <kaboutdata.h>
 #include <kimageio.h>
 #include <kcmdlineargs.h>
@@ -38,32 +36,21 @@ bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uO
 {
     KoFilterManager* manager = new KoFilterManager( uIn.path() );
 
-    ProgressObject progressObj;
-    QObject::connect(manager, SIGNAL(sigProgress(int)), &progressObj, SLOT(slotProgress(int)));
-
     manager->setBatchMode( batch );
 
     QByteArray mime( outputFormat.toLatin1() );
     KoFilter::ConversionStatus status = manager->exportDocument( uOut.path(), mime );
-    progressObj.slotProgress(-1);
 
     delete manager;
     return status == KoFilter::OK;
 }
 
-void ProgressObject::slotProgress(int /* progress */ )
-{
-    // Well, we could have a nifty "=====> " progress bar, but with all the
-    // debug output, it would be badly messed up :)
-    // kDebug() <<"ProgressObject::slotProgress" << progress;
-}
-
 int main( int argc, char **argv )
 {
     KAboutData aboutData( "koconverter", 0, ki18n("KOConverter"), KOFFICE_VERSION_STRING,
-                          ki18n("KOffice Document Converter"),
+                          ki18n("Calligra Document Converter"),
                           KAboutData::License_GPL,
-                          ki18n("(c) 2001-2004 KOffice developers") );
+                          ki18n("(c) 2001-2011 Calligra developers") );
     aboutData.addAuthor(ki18n("David Faure"),KLocalizedString(), "faure@kde.org");
     aboutData.addAuthor(ki18n("Nicolas Goutte"),KLocalizedString(), "goutte@kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData);
@@ -80,9 +67,7 @@ int main( int argc, char **argv )
     KApplication app;
 
     // Install the libkoffice* translations
-    KGlobal::locale()->insertCatalog("koffice");
-
-
+    KGlobal::locale()->insertCatalog("calligra");
 
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
@@ -155,5 +140,3 @@ int main( int argc, char **argv )
     KCmdLineArgs::usageError(i18n("Two arguments required"));
     return 3;
 }
-
-#include "koconverter.moc"

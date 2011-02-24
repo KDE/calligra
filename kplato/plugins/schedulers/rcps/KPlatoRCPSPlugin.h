@@ -38,7 +38,7 @@ namespace KPlato
 
 using namespace KPlato;
 
-class KPLATORCPS_TEST_EXPORT KPlatoRCPSPlugin : public SchedulerPlugin 
+class KPlatoRCPSPlugin : public SchedulerPlugin
 {
     Q_OBJECT
 
@@ -60,10 +60,6 @@ public slots:
 protected slots:
     void slotStarted( SchedulerThread *job );
     void slotFinished( SchedulerThread *job );
-
-protected:
-    QStringList missingFunctions( Project &project, ScheduleManager *sm ) const;
-
 };
 
 
