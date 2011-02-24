@@ -2259,7 +2259,7 @@ PptToOdp::processParagraph(Writer& out,
     if (m_isList) {
         int depth = pf.level() + 1;
         //CFException for the first run of text required for the list style
-        cf.addCurrentCFRun(tc, 0);
+        cf.addCurrentCFRun(tc, start);
         QString listStyle = defineAutoListStyle(out, pf, cf);
 	//check if we have the corresponding style for this level, if not then
 	//close the list and create a new one (K.I.S.S.)
