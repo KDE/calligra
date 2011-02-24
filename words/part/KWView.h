@@ -27,7 +27,6 @@
 #include <KoView.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
-#include <KoShapeReorderCommand.h>
 
 #include <QWidget>
 
@@ -138,21 +137,13 @@ private slots:
     /// snap to grid
     void toggleSnapToGrid();
     /** Move the selected frame above maximum 1 frame that is in front of it. */
-    void raiseFrame() {
-        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::RaiseShape);
-    }
+    void raiseFrame();
     /** Move the selected frame behind maximum 1 frame that is behind it */
-    void lowerFrame() {
-        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::LowerShape);
-    }
+    void lowerFrame();
     /** Move the selected frame(s) to be in the front most position. */
-    void bringToFront() {
-        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::BringToFront);
-    }
+    void bringToFront();
     /** Move the selected frame(s) to be behind all other frames */
-    void sendToBack() {
-        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::SendToBack);
-    }
+    void sendToBack();
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
@@ -203,8 +194,6 @@ private slots:
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
 
 private:
-    /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
-    void adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction);
 
     /// loops over the selected shapes and returns the frames that go with them.
     QList<KWFrame*> selectedFrames() const;

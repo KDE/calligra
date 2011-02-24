@@ -306,7 +306,6 @@ class LayoutNodeAtom : public AbstractAtom
     public:
         QString m_name;
         ValueCache m_values;
-        //QMap<QString, qreal> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
         QMap<QString, qreal> m_factors;
         QMap<QString, int> m_countFactors;
         int m_rotateAngle;
@@ -350,11 +349,11 @@ class LayoutNodeAtom : public AbstractAtom
         QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > descendantLayouts() const;
         QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
 
+        QSizeF childrenUsedSize() const;
+        QSizeF childrenTotalSize() const;
         qreal distanceTo(LayoutNodeAtom* otherAtom) const;
-        //QVector< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraintsToBuild;
 
     private:
-        //QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;        
         QMap<QString, QString> m_variables;
         bool m_firstLayout;
         AbstractAlgorithm* m_algorithmImpl;

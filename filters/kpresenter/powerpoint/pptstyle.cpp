@@ -164,7 +164,7 @@ const TextCFException* getLevelCF(const MasterOrSlideContainer* m,
 // ************************************************
 
 QList<const TextMasterStyleLevel*>
-getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, quint16 level)
+getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, const quint16 level)
 {
     QList<const TextMasterStyleLevel*> lst;
     if (!tc) return lst;
@@ -183,20 +183,22 @@ getBaseLevels(const MasterOrSlideContainer* m, const TextContainer* tc, quint16 
         break;
     case Tx_TYPE_BODY:
         ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);
-        while (level > 0) {
-            lst.append(getTextMasterStyleLevel(ms, --level));
+        for (int i = level - 1; i >= 0; i--) {
+            lst.append(getTextMasterStyleLevel(ms, i));
         }
         break;
     case Tx_TYPE_CENTERBODY:
     case Tx_TYPE_HALFBODY:
     case Tx_TYPE_QUARTERBODY:
         ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);
-        lst.append(getTextMasterStyleLevel(ms, 0));
+        for (int i = level; i >= 0; i--) {
+            lst.append(getTextMasterStyleLevel(ms, i));
+        }
         break;
+    //TODO: Tx_TYPE_NOTES do not inherit at the moment
     default:
         break;
     }
-    //TODO: Tx_TYPE_NOTES do not inherit at the moment
 
     return lst;
 }

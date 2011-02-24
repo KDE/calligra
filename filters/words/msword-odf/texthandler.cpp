@@ -309,8 +309,12 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     m_footnoteWriter->addAttribute("text:note-class", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
     //autonumber or character
     m_footnoteWriter->startElement("text:note-citation");
-    if (characters[0].unicode() == 2) {//autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
-        //NOTE: besides converting the number to text here the format is specified in section-properties -> notes-configuration too
+
+    //autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
+
+    //NOTE: besides converting the number to text here the format is specified
+    //in section-properties -> notes-configuration too
+    if (characters[0].unicode() == 2) {
 
         int noteNumber = (type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
         QString noteNumberString;
@@ -373,15 +377,20 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
         }
         m_footnoteWriter->addTextNode(customNote);
     }
-    m_footnoteWriter->endElement();//text:note-citation
+    //text:note-citation
+    m_footnoteWriter->endElement();
     //start the body of the footnote
     m_footnoteWriter->startElement("text:note-body");
 
-    //save the state of tables & paragraphs because we'll get new ones in the footnote
+    //save the state of tables/paragraphs/lists
     saveState();
     //signal Document to parse the footnote
     emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), type);
-    //and now restore state
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
     restoreState();
 
     //end the elements
@@ -627,8 +636,15 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    //signal that we have a picture, provide the bodyWriter to GraphicsHandler
+    //save the state of tables/paragraphs/lists (text-box)
+    saveState();
     emit inlineObjectFound(data, m_drawingWriter);
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
+    restoreState();
 
     if (m_fld->m_hyperLinkActive) {
         writer->endElement();
@@ -673,8 +689,14 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
+    //save the state of tables/paragraphs/lists (text-box)
     saveState();
     emit floatingObjectFound(globalCP, m_drawingWriter);
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
     restoreState();
 
     if (m_fld->m_hyperLinkActive) {
@@ -742,6 +764,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     // list to which the paragraph belongs.
     if (!paragraphProperties) {
         // TODO: What to do here?
+        kDebug(30513) << "PAP Missing (Big mess-up!)";
     } else if ( (paragraphProperties->pap().ilfo == 0)) {
 
         // Not in a list at all in the word document, so check if we need to
@@ -2023,11 +2046,10 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName)
 void KWordTextHandler::closeList()
 {
     kDebug(30513);
-    // Set the correct XML writer.
-    //
-    KoXmlWriter *writer = m_usedListWriters.pop();		// get the last used writer from stack
+    // Set the correct XML writer, get the last used writer from stack
+    KoXmlWriter *writer = m_usedListWriters.pop();
 
-    //TODO should probably test this more, to make sure it does work this way
+    //TODO: should probably test this more, to make sure it does work this way
     //for level 0, we need to close the last item and the list
     //for level 1, we need to close the last item and the list, and the last item and the list
     //for level 2, we need to close the last item and the list, and the last item adn the list, and again

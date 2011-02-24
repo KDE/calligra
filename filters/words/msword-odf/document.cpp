@@ -148,6 +148,9 @@ Document::~Document()
     delete m_tableHandler;
     delete m_replacementHandler;
     delete m_graphicsHandler;
+    //expecting the background-color of the document on top of the stack
+    Q_ASSERT(m_bgColors.size() == 1);
+    m_bgColors.clear();
 }
 
 //set whether or not document has header or footer

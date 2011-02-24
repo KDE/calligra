@@ -1733,6 +1733,11 @@ void ProjectTester::team()
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
+    gr->takeResourceRequest(tr);
+    task1->takeRequest(gr);
+    project.takeResource( g, team);
+    team->removeTeamMember(r2);
+
 }
 
 void ProjectTester::inWBSOrder()
@@ -1832,7 +1837,6 @@ void ProjectTester::inWBSOrder()
     QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 1, 8, 0 ) );
     QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 2, 8, 0 ) );
     QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 3, 8, 0 ) );
-
 }
 
 void ProjectTester::resourceConflictALAP()
@@ -2007,7 +2011,6 @@ void ProjectTester::resourceConflictALAP()
     QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
     QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 0, 8, 0 ) );
     QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
-
 }
 
 void ProjectTester::resourceConflictMustStartOn()
@@ -2491,7 +2494,6 @@ void ProjectTester::fixedInterval()
 
     QCOMPARE( task1->startTime(), task1->constraintStartTime() );
     QCOMPARE( task1->endTime(), task1->constraintEndTime() );
-
 }
 
 void ProjectTester::estimateDuration()
