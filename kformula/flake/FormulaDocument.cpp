@@ -89,7 +89,7 @@ bool FormulaDocument::loadOdf( KoOdfReadStore &odfStore )
 
     kDebug(31000) << bodyElement.nodeName();
 
-    if (bodyElement.nodeName() != "math:math") {
+    if (bodyElement.localName() != "math" || bodyElement.namespaceURI() != KoXmlNS::math) {
         kError(35001) << "No <math:math> element found.";
         return false;
     }
