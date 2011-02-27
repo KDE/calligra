@@ -676,7 +676,7 @@ void KPlatoRCPSScheduler::kplatoFromRCPSBackward()
     m_project->setEndTime( end );
     cs->logInfo( i18n( "Project scheduled to start at %1 and finish at %2", locale()->formatDateTime( projectstart ), locale()->formatDateTime( end ) ), 1 );
     if ( projectstart < m_project->constraintStartTime() ) {
-        cs->setSchedulingError( true );
+        cs->setConstraintError( true );
         cs->logError( i18n( "Must start project early in order to finish in time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 1 );
     }
     adjustSummaryTasks( m_schedule->summaryTasks() );
@@ -743,7 +743,7 @@ void KPlatoRCPSScheduler::calculatePertValues( const QMap<Node*, QList<ResourceR
                 break;
         }
         if ( t->negativeFloat() != 0 ) {
-            n->schedule()->setSchedulingError( true );
+            n->schedule()->setConstraintError( true );
             n->schedule()->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", n->constraintToString( true ), t->negativeFloat().toString( Duration::Format_i18nHour ) ) );
         }
 

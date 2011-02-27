@@ -1,3 +1,5 @@
 [Desktop Entry]
-Name=Inout
-Name[x-test]=xxInoutxx
+Name=InOut
+Name[pt]=EntradaSaída
+Name[uk]=Вхід-вихід
+Name[x-test]=xxInOutxx

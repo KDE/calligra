@@ -456,7 +456,7 @@ private:
  * \ingroup Style
  * A single style attribute.
  */
-class CALLIGRA_TABLES_TEST_EXPORT SubStyle : public QSharedData
+class CALLIGRA_TABLES_ODF_TEST_EXPORT SubStyle : public QSharedData
 {
 public:
     SubStyle() {}

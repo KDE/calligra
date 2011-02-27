@@ -1637,7 +1637,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 /*!
  Parent elements:
  - rich (§21.2.2.156)
- - t (§21.4.3.8)
  - txBody (§21.3.2.26)
  - txBody (§20.1.2.2.40)
  - txBody (§20.5.2.34)
@@ -1646,7 +1645,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 
  Child elements:
  - [done] br (Text Line Break) §21.1.2.2.1
- - endParaRPr (End Paragraph Run Properties) §21.1.2.2.3
+ - [done] endParaRPr (End Paragraph Run Properties) §21.1.2.2.3
  - [done] fld (Text Field) §21.1.2.2.4
  - [done] pPr (Text Paragraph Properties) §21.1.2.2.7
  - [done] r (Text Run) §21.1.2.3.8
@@ -1706,6 +1705,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             else if (QUALIFIED_NAME_IS(br)) {
                 body->startElement("text:line-break");
                 body->endElement(); // text:line-break
+                skipCurrentElement(); // Skipping rest of br element
             }
 // CASE #400.2
 //! @todo add more conditions testing the parent
@@ -1726,8 +1726,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 rRead = true;
                 TRY_READ(fld)
             }
-            SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            else if (QUALIFIED_NAME_IS(endParaRPr)) {
+#ifdef PPTXXMLSLIDEREADER_CPP
+                inheritDefaultTextStyle(m_currentParagraphStyle);
+                inheritTextStyle(m_currentParagraphStyle);
+#endif
+                m_currentTextStyleProperties = new KoCharacterStyle();
+                m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+                TRY_READ(endParaRPr)
+                m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+                delete m_currentTextStyleProperties;
+                m_currentTextStyleProperties = 0;
+                MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+                fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
+                if (!fontSize.isEmpty()) {
+                    fontSize.remove("pt");
+                    qreal realSize = fontSize.toDouble();
+                    if (realSize > m_largestParaFont) {
+                        m_largestParaFont = realSize;
+                    }
+                }
+            }
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1738,22 +1758,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
 #endif
-    if (!rRead) {
-#ifdef PPTXXMLSLIDEREADER_CPP
-        // We are inheriting to paragraph's text-properties because there is no text
-        // and thus m_currentTextStyle is not used
-        inheritDefaultTextStyle(m_currentParagraphStyle);
-        inheritTextStyle(m_currentParagraphStyle);
-        fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
-        if (!fontSize.isEmpty()) {
-            fontSize.remove("pt");
-            qreal realSize = fontSize.toDouble();
-            if (realSize > m_largestParaFont) {
-                m_largestParaFont = realSize;
-            }
-        }
-#endif
-    }
 
     body = textPBuf.originalWriter();
     if (m_listStylePropertiesAltered || m_previousListWasAltered) {
@@ -1996,14 +2000,137 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL endParaRPr
+//! endParaRPr handler (End Paragraph Run Properties)
+/*
+ Parent elements:
+ - [done] p (§21.1.2.2.6)
+
+ Child elements:
+ - blipFill (Picture Fill) §20.1.8.14
+ - cs (Complex Script Font) §21.1.2.3.1
+ - ea (East Asian Font) §21.1.2.3.3
+ - effectDag (Effect Container) §20.1.8.25
+ - effectLst (Effect Container) §20.1.8.26
+ - extLst (Extension List) §20.1.2.2.15
+ - gradFill (Gradient Fill) §20.1.8.33
+ - grpFill (Group Fill) §20.1.8.35
+ - [done] highlight (Highlight Color) §21.1.2.3.4
+ - [done] hlinkClick (Click Hyperlink) §21.1.2.3.5
+ - hlinkMouseOver (Mouse-Over Hyperlink) §21.1.2.3.6
+ - [done] latin (Latin Font) §21.1.2.3.7
+ - ln (Outline) §20.1.2.2.24
+ - noFill (No Fill) §20.1.8.44
+ - pattFill (Pattern Fill) §20.1.8.47
+ - rtl (Right to Left Run) §21.1.2.2.8
+ - [done] solidFill (Solid Fill) §20.1.8.54
+ - sym (Symbol Font) §21.1.2.3.10
+ - uFill (Underline Fill) §21.1.2.3.12
+ - uFillTx (Underline Fill Properties Follow Text) §21.1.2.3.13
+ - uLn (Underline Stroke) §21.1.2.3.14
+ - uLnTx (Underline Follows Text) §21.1.2.3.15
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
+{
+    READ_PROLOGUE
+
+    m_hyperLink = false;
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentColor = QColor();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(latin)
+            ELSE_TRY_READ_IF(solidFill)
+            else if (QUALIFIED_NAME_IS(highlight)) {
+                TRY_READ(DrawingML_highlight)
+            }
+            ELSE_TRY_READ_IF(hlinkClick)
+            SKIP_UNKNOWN
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    if (m_currentColor.isValid()) {
+        m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
+        m_currentColor = QColor();
+    }
+    if (attrs.hasAttribute("b")) {
+        m_currentTextStyleProperties->setFontWeight(
+            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
+    }
+    if (attrs.hasAttribute("i")) {
+        m_currentTextStyleProperties->setFontItalic(
+            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(cap);
+    if (!cap.isEmpty()) {
+        if (cap == QLatin1String("small")) {
+            m_currentTextStyle.addProperty("fo:font-variant", "small-caps");
+        }
+        else if (cap == QLatin1String("all")) {
+            m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
+        }
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(spc)
+    if (!spc.isEmpty()) {
+        int spcInt;
+        STRING_TO_INT(spc, spcInt, "rPr@spc")
+        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(sz)
+    if (!sz.isEmpty()) {
+        int szInt;
+        STRING_TO_INT(sz, szInt, "rPr@sz")
+        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
+    }
+    TRY_READ_ATTR_WITHOUT_NS(strike)
+    if (strike == QLatin1String("sngStrike")) {
+        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
+        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    } else if (strike == QLatin1String("dblStrike")) {
+        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
+        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    } else {
+        // empty or "noStrike"
+    }
+    // from
+    TRY_READ_ATTR_WITHOUT_NS(baseline)
+    if (!baseline.isEmpty()) {
+        int baselineInt;
+        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
+        if (baselineInt > 0)
+            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
+        else if (baselineInt < 0)
+            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(u)
+    if (!u.isEmpty()) {
+        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL rPr
 //! rPr handler (Text Run Properties) DrawingML ECMA-376, 21.1.2.3.9, p.3624.
 //! This element contains all run level text properties for the text runs within a containing paragraph.
 /*!
  Parent elements:
  - br (§21.1.2.2.1)
- - fld (§21.1.2.2.4)
+ - [done] fld (§21.1.2.2.4)
  - [done] r (§21.1.2.3.8)
+
  Attributes:
  - altLang (Alternative Language)
  - b (Bold)
@@ -2024,6 +2151,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
  - strike (Strikethrough)
  - sz (Font Size)
  - u (Underline)
+
  Child elements:
  - [done] blipFill (Picture Fill) §20.1.8.14
  - cs (Complex Script Font) §21.1.2.3.1
@@ -2065,7 +2193,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(latin)
-            ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
+            //ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
             // As odf does not support gradFill for text, it's better to not use it at all, as relying on the first color
             // can create bad results.
@@ -2114,10 +2242,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         STRING_TO_INT(spc, spcInt, "rPr@spc")
         m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
     }
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    kDebug() << "d->phType ____" << d->phType;
-#endif
 
     TRY_READ_ATTR_WITHOUT_NS(sz)
     if (!sz.isEmpty()) {
@@ -2281,16 +2405,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
+        qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
+        // value added to left marginal
+        if (!indent.isEmpty()) {
+            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
+    } else if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
     }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
-    }
-    if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
     if (!defTabSz.isEmpty()) {
         const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
@@ -3656,7 +3784,7 @@ Parents:
     - spPr (§21.4.3.7)
     - spPr (§20.1.2.2.35)
     - spPr (§20.2.2.6)
-    - spPr (§20(§19.3.1.44) 
+    - spPr (§20(§19.3.1.44)
     - tblPr (§21.1.3.15)
     - tcPr (§21.1.3.17)
     - uFill (§21.1.2.3.12)
@@ -4647,17 +4775,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
+    if (!marL.isEmpty()) {
+        qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
+        // value added to left marginal
+        if (!indent.isEmpty()) {
+            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
+    } else if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
+    }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
-    }
-    if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
-    }
-    if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
     if (!defTabSz.isEmpty()) {
         const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));

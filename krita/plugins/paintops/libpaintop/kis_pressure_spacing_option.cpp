@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (c) 2011 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,25 +16,31 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOCOLLECTIONSHAPEFACTORY_H
-#define KOCOLLECTIONSHAPEFACTORY_H
 
-#include <KoShapeFactoryBase.h>
-#include <KoResourceManager.h>
+#include "kis_pressure_spacing_option.h"
 
-class KoShapeControllerBase;
+#include <klocale.h>
 
-class CollectionShapeFactory : public KoShapeFactoryBase
+KisPressureSpacingOption::KisPressureSpacingOption()
+        : KisCurveOption(i18n("Spacing"), "Spacing", KisPaintOpOption::brushCategory(), true )
 {
-    public:
-        CollectionShapeFactory(const QString &id, KoShape* shape);
-        ~CollectionShapeFactory();
+    setMinimumLabel(i18n("0%"));
+    setMaximumLabel(i18n("100%"));
+}
 
-        virtual KoShape *createDefaultShape(KoResourceManager *documentResources = new KoResourceManager()) const;
-        virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
-    private:
-        KoShape* m_shape;
-};
+double KisPressureSpacingOption::apply(const KisPaintInformation & info) const
+{
+    if (!isChecked()) return 1.0;
+    return computeValue(info);
+}
 
-#endif //KOCOLLECTIONSHAPEFACTORY_H
+void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    if(setting->hasProperty("Pressure" + m_name))
+    {
+        KisCurveOption::readOptionSetting(setting);
+    } else {
+        readNamedOptionSetting("Size", setting);
+    }
+}

@@ -1,6 +1,9 @@
 
 Calligra Plan current:
 
+* Reports: Add access to schedule name (=project.Plan())
+* Add error indication when required estimated effort cannot be delivered.
+
 * Gantt chart: Fix wrong positioning of time constraint indication
 
 * Lock down baselined project.

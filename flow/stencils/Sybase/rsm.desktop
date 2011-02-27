@@ -1,3 +1,7 @@
 [Desktop Entry]
-Name=Rsm
-Name[x-test]=xxRsmxx
+Name=Replication Server Manager
+Name[es]=Gestor de servidor de replicación
+Name[et]=Replikatsiooniserveri haldur
+Name[pt]=Gestor Servidor Replicação
+Name[uk]=Менеджер сервера реплікації
+Name[x-test]=xxReplication Server Managerxx

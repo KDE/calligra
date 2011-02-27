@@ -1,6 +1,10 @@
 [Desktop Entry]
-Name=Arrow-Right
+Name=Right Arrow
+Name[es]=Flecha derecha
+Name[et]=Nool paremale
 Name[nl]=Pijl rechts
+Name[pt]=Seta Direita
+Name[pt_BR]=Seta para a direita
 Name[uk]=Стрілка праворуч
-Name[x-test]=xxArrow-Rightxx
-Name[zh_TW]=箭頭─右
+Name[x-test]=xxRight Arrowxx
+Name[zh_TW]=右箭頭

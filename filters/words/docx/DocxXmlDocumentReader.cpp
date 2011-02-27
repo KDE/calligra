@@ -2718,6 +2718,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     m_hyperLink = false;
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
+    m_rot = 0;
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
@@ -2841,8 +2842,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         body->addAttribute("draw:name", m_docPrName);
     }
     body->addAttribute("draw:layer", "layout");
-    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-    body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+
+    if (m_rot == 0) {
+        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+    }
+    else {
+        // m_rot is in 1/60,000th of a degree
+        qreal angle, xDiff, yDiff;
+        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+        QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                            .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+        body->addAttribute("draw:transform", rotString);
+    }
+
     body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
     body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
 
@@ -4657,8 +4670,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 m_currentLocalTableStyles = currentLocalStyles;
                 m_currentTableStyle = currentTableStyle;
             }
-            else if(QUALIFIED_NAME_IS(tblPr)) {
-                TRY_READ(tblPr)
+            else if(QUALIFIED_NAME_IS(tcPr)) {
+                TRY_READ(tcPr)
                 m_currentLocalTableStyles->setLocalStyle(m_currentStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
                 m_currentStyleProperties = 0;
             }
@@ -4709,12 +4722,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 {
     READ_PROLOGUE
+
+    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridSpan)
-//             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
+            ELSE_TRY_READ_IF_IN_CONTEXT(shd)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

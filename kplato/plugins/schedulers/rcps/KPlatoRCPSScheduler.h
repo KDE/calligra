@@ -49,7 +49,7 @@ namespace KPlato
 }
 using namespace KPlato;
 
-class KPLATORCPS_TEST_EXPORT KPlatoRCPSScheduler : public KPlato::SchedulerThread
+class KPlatoRCPSScheduler : public KPlato::SchedulerThread
 {
     Q_OBJECT
 

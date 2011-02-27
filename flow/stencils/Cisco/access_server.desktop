@@ -1,5 +1,7 @@
 [Desktop Entry]
-Name=Access Server
+Name=Access server
+Name[nl]=Access-server
+Name[pt]=Servidor de acesso
 Name[pt_BR]=Servidor de acesso
 Name[uk]=Сервер доступу
-Name[x-test]=xxAccess Serverxx
+Name[x-test]=xxAccess serverxx

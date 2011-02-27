@@ -621,7 +621,13 @@ bool Node::resourceNotAvailable( long id ) const
     Schedule *s = schedule( id );
     return s ? s->resourceNotAvailable : false;
 }
-    
+
+bool Node::constraintError( long id ) const
+{
+    Schedule *s = schedule( id );
+    return s ? s->constraintError : false;
+}
+
 bool Node::schedulingError( long id ) const
 {
     Schedule *s = schedule( id );

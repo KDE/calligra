@@ -60,6 +60,7 @@ class ScheduleManager;
 class MyKDGanttView;
 class GanttPrintingOptions;
 class GanttViewBase;
+class NodeGanttViewBase;
 
 //---------------------------------------
 class GanttChartDisplayOptionsPanel : public QWidget, public Ui::GanttChartDisplayOptions
@@ -154,6 +155,17 @@ class GanttViewBase : public KDGantt::View
     Q_OBJECT
 public:
     GanttViewBase( QWidget *parent );
+
+protected:
+    friend class GanttPrintingDialog;
+    GanttPrintingOptions m_printOptions;
+};
+
+class NodeGanttViewBase : public GanttViewBase 
+{
+    Q_OBJECT
+public:
+    NodeGanttViewBase( QWidget *parent );
     
     NodeSortFilterProxyModel *sfModel() const;
     void setItemModel( ItemModelBase *model );
@@ -176,7 +188,7 @@ protected:
     GanttPrintingOptions m_printOptions;
 };
 
-class KPLATOUI_EXPORT MyKDGanttView : public GanttViewBase
+class KPLATOUI_EXPORT MyKDGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
 public:
@@ -265,7 +277,7 @@ private:
     KAction *actionShowProject;
 };
 
-class KPLATOUI_EXPORT MilestoneKDGanttView : public GanttViewBase
+class KPLATOUI_EXPORT MilestoneKDGanttView : public NodeGanttViewBase
 {
     Q_OBJECT
 public:
@@ -375,7 +387,7 @@ protected slots:
     virtual void slotOptions();
 
 private:
-    KDGantt::View *m_gantt;
+    GanttViewBase *m_gantt;
     Project *m_project;
     ResourceAppointmentsGanttModel *m_model;
 

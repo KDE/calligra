@@ -162,7 +162,7 @@ QStringList Schedule::state() const
         lst << SchedulingState::deleted();
     if ( notScheduled )
         lst << SchedulingState::notScheduled();
-    if ( schedulingError )
+    if ( constraintError )
         lst << SchedulingState::constraintsNotMet();
     if ( resourceError )
         lst << SchedulingState::resourceNotAllocated();
@@ -172,6 +172,8 @@ QStringList Schedule::state() const
         lst << SchedulingState::resourceOverbooked();
     if ( effortNotMet )
         lst << SchedulingState::effortNotMet();
+    if ( schedulingError )
+        lst << SchedulingState::schedulingError();
     if ( lst.isEmpty() )
         lst << SchedulingState::scheduled();
     return lst;
@@ -240,6 +242,7 @@ void Schedule::initiateCalculation()
     resourceError = false;
     resourceOverbooked = false;
     resourceNotAvailable = false;
+    constraintError = false;
     schedulingError = false;
     inCriticalPath = false;
     effortNotMet = false;
@@ -701,6 +704,7 @@ void NodeSchedule::init()
     resourceError = false;
     resourceOverbooked = false;
     resourceNotAvailable = false;
+    constraintError = false;
     schedulingError = false;
     notScheduled = true;
     inCriticalPath = false;
@@ -769,7 +773,8 @@ bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
     resourceError = sch.attribute( "resource-error", "0" ).toInt();
     resourceOverbooked = sch.attribute( "resource-overbooked", "0" ).toInt();
     resourceNotAvailable = sch.attribute( "resource-not-available", "0" ).toInt();
-    schedulingError = sch.attribute( "scheduling-conflict", "0" ).toInt();
+    constraintError = sch.attribute( "scheduling-conflict", "0" ).toInt();
+    schedulingError = sch.attribute( "scheduling-error", "0" ).toInt();
     notScheduled = sch.attribute( "not-scheduled", "1" ).toInt();
 
     positiveFloat = Duration::fromString( sch.attribute( "positive-float" ) );
@@ -813,7 +818,8 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     sch.setAttribute( "resource-error", resourceError );
     sch.setAttribute( "resource-overbooked", resourceOverbooked );
     sch.setAttribute( "resource-not-available", resourceNotAvailable );
-    sch.setAttribute( "scheduling-conflict", schedulingError );
+    sch.setAttribute( "scheduling-conflict", constraintError );
+    sch.setAttribute( "scheduling-error", schedulingError );
     sch.setAttribute( "not-scheduled", notScheduled );
 
     sch.setAttribute( "positive-float", positiveFloat.toString() );
@@ -1196,7 +1202,8 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
         endTime = DateTime::fromString( s, status.projectSpec() );
 
     duration = Duration::fromString( sch.attribute( "duration" ) );
-    schedulingError = sch.attribute( "scheduling-conflict", "0" ).toInt();
+    constraintError = sch.attribute( "scheduling-conflict", "0" ).toInt();
+    schedulingError = sch.attribute( "scheduling-error", "0" ).toInt();
 
     KoXmlNode n = sch.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1255,7 +1262,8 @@ void MainSchedule::saveXML( QDomElement &element ) const
     element.setAttribute( "start", startTime.toString( Qt::ISODate ) );
     element.setAttribute( "end", endTime.toString( Qt::ISODate ) );
     element.setAttribute( "duration", duration.toString() );
-    element.setAttribute( "scheduling-conflict", schedulingError );
+    element.setAttribute( "scheduling-conflict", constraintError );
+    element.setAttribute( "scheduling-error", schedulingError );
 
     if ( ! m_pathlists.isEmpty() ) {
         QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );
@@ -1813,17 +1821,17 @@ QStringList ScheduleManager::state() const
         return lst << i18n( "Not scheduled" );
     }
     if ( Schedule *s = m_pessimistic ) {
-        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
             return lst << i18n( "Error" );
         }
     }
     if ( Schedule *s = m_optimistic ) {
-        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
             return lst << i18n( "Error" );
         }
     }
     if ( Schedule *s = m_expected ) {
-        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
             return lst << i18n( "Error" );
         }
         return s->state();

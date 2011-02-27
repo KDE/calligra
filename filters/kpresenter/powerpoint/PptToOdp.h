@@ -84,6 +84,12 @@ public:
      */
     KoFilter::ConversionStatus convert(POLE::Storage& input,
                                        KoStore* output);
+
+    /**
+     * Get path to an already stored picture based on its identifier.
+     * @param pib specifies which BLIP to display in the picture shape.
+     * @return path
+     */
     QString getPicturePath(int pib) const;
 private:
 
@@ -125,19 +131,21 @@ private:
     };
 
     /**
-     * Structure that influences all information that affects the style of a
-     * text:style.  This is a convenience container for passing this
+     * Structure that influences all information that affects the style of type
+     * TextStyle.  This is a convenience container for passing this
      * information.
      **/
-    class ListStyleInput {
+    struct ListStyleInput {
     public:
-        PptTextPFRun pf;
-        const MSO::TextCFException* cf;
+        const PptTextPFRun& pf;
+        const PptTextCFRun& cf;
+        const MSO::TextCFException* cf_; //deprecated
         const MSO::TextCFException9* cf9;
         const MSO::TextCFException10* cf10;
         const MSO::TextSIException* si;
 
-        ListStyleInput() :cf(0), cf9(0), cf10(0), si(0) {}
+        ListStyleInput(const PptTextPFRun& pf, const PptTextCFRun& cf)
+            :pf(pf), cf(cf), cf_(0), cf9(0), cf10(0), si(0) {}
     };
 
     /**
@@ -195,22 +203,22 @@ private:
     * numbering.
     */
     enum {
-        ANM_AlphaLcPeriod,      //0x0000  Example: a., b., c., ...Lowercase Latin character followed by a period.
-        ANM_AlphaUcPeriod ,     //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
-        ANM_ArabicParenRight,   //0x0002  Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
-        ANM_ArabicPeriod,       //0x0003  Example: 1., 2., 3., ...Arabic numeral followed by a period.
-        ANM_RomanLcParenBoth,   //0x0004  Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
-        ANM_RomanLcParenRight,  //0x0005  Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
-        ANM_RomanLcPeriod,      //0x0006  Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
-        ANM_RomanUcPeriod ,     //0x0007  Example: I., II., III., ...Uppercase Roman numeral followed by a period.
-        ANM_AlphaLcParenBoth,   //0x0008  Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
-        ANM_AlphaLcParenRight,  //0x0009  Example: a), b), c), ...Lowercase alphabetic character followed by a closing
-        ANM_AlphaUcParenBoth,   //0x000A  Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
-        ANM_AlphaUcParenRight,  //0x000B  Example: A), B), C), ...Uppercase alphabetic character followed by a closing
-        ANM_ArabicParenBoth,    //0x000C  Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
-        ANM_ArabicPlain,        //0x000D  Example: 1, 2, 3, ...Arabic numeral.
-        ANM_RomanUcParenBoth,   //0x000E  Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
-        ANM_RomanUcParenRight,  //0x000F  Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
+        ANM_AlphaLcPeriod,     //0x0000  Example: a., b., c., ...Lowercase Latin character followed by a period.
+        ANM_AlphaUcPeriod ,    //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
+        ANM_ArabicParenRight,  //0x0002  Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
+        ANM_ArabicPeriod,      //0x0003  Example: 1., 2., 3., ...Arabic numeral followed by a period.
+        ANM_RomanLcParenBoth,  //0x0004  Example: (i), (ii), (iii), ...Lowercase Roman numeral in parentheses.
+        ANM_RomanLcParenRight, //0x0005  Example: i), ii), iii), ...Lowercase Roman numeral and a closing parenthesis.
+        ANM_RomanLcPeriod,     //0x0006  Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
+        ANM_RomanUcPeriod ,    //0x0007  Example: I., II., III., ...Uppercase Roman numeral followed by a period.
+        ANM_AlphaLcParenBoth,  //0x0008  Example: (a), (b), (c), ...Lowercase alphabetic character in parentheses.
+        ANM_AlphaLcParenRight, //0x0009  Example: a), b), c), ...Lowercase alphabetic character followed by a closing
+        ANM_AlphaUcParenBoth,  //0x000A  Example: (A), (B), (C), ...Uppercase alphabetic character in parentheses.
+        ANM_AlphaUcParenRight, //0x000B  Example: A), B), C), ...Uppercase alphabetic character followed by a closing
+        ANM_ArabicParenBoth,   //0x000C  Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
+        ANM_ArabicPlain,       //0x000D  Example: 1, 2, 3, ...Arabic numeral.
+        ANM_RomanUcParenBoth,  //0x000E  Example: (I), (II), (III), ...Uppercase Roman numeral in parentheses.
+        ANM_RomanUcParenRight, //0x000F  Example: I), II), III), ...Uppercase Roman numeral and a closing parenthesis.
         //Future
     } TextAutoNumberSchemeEnum;
 
@@ -269,27 +277,27 @@ private:
 
     /**
      * Extract data from TextCFException into the style
-     * @param KoGenStyle of type TextStyle
+     * @param KoGenStyle of type TextAutoStyle/TextStyle
      * @param PptTextCFRun address
      * @param TextCFException9 address
      * @param TextCFException10 address
      * @param TextSIException address
      */
     void defineTextProperties(KoGenStyle& style,
-                              const PptTextCFRun* cf,
+                              const PptTextCFRun& cf,
                               const MSO::TextCFException9* cf9,
                               const MSO::TextCFException10* cf10,
                               const MSO::TextSIException* si);
 
     /**
      * Extract data from TextPFException into the style
-     * @param KoGenStyle of type ParagraphStyle
-     * @param PptTextPFRun
-     * @param minimal size of the font used in the paragraph
+     * @param style KoGenStyle of type ParagraphAutoStyle/ParagraphStyle
+     * @param pf PptTextPFRun
+     * @param fs minimal size of the font used in the paragraph
      */
     void defineParagraphProperties(KoGenStyle& style,
                                    const PptTextPFRun& pf,
-                                   quint16 fs);
+                                   const quint16 fs);
 
     /**
      * Extract data into the drawing-page style
@@ -305,63 +313,113 @@ private:
                                 const MSO::HeadersFootersAtom* hf,
                                 const MSO::SlideFlags* sf = NULL);
 
-    /* Extract data into the style element style:list */
+    /* Extract data into the style of type ListAutoStyle/ListStyle */
     void defineListStyle(KoGenStyle& style,
+                         const quint32 textType,
                          const MSO::TextMasterStyleAtom& levels,
                          const MSO::TextMasterStyle9Atom* levels9 = 0,
                          const MSO::TextMasterStyle10Atom* levels10 = 0);
-    void defineListStyle(KoGenStyle& style, quint8 depth,
-                         ListStyleInput input,
+
+    void defineListStyle(KoGenStyle& style,
+                         const quint32 textType,
+                         const quint16 indentLevel,
                          const MSO::TextMasterStyleLevel* level = 0,
                          const MSO::TextMasterStyle9Level* level9 = 0,
                          const MSO::TextMasterStyle10Level* level10 = 0);
 
-    void defineListStyle(KoGenStyle& style, quint8 depth,
-                         const ListStyleInput& info,
-                         const ListStyleInput& parent);
+    void defineListStyle(KoGenStyle& style,
+                         const quint16 indentLevel,
+                         const ListStyleInput& info);
 
-    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf);
+    /**
+     * TODO:
+     * @param
+     * @param
+     * @param
+     * @return name of the created style as stored in the styles collection
+     */
+    QString defineAutoListStyle(Writer& out, const PptTextPFRun& pf, const PptTextCFRun& cf);
 
     const MSO::StyleTextProp9* getStyleTextProp9(quint32 slideIdRef,
-                                                quint32 textType, quint8 pp9rt);
+                                                 quint32 textType, quint8 pp9rt);
 
-    const MSO::TextContainer* getTextContainer(
-            const MSO::PptOfficeArtClientTextBox* clientTextbox,
-            const MSO::PptOfficeArtClientData* clientData) const;
-    quint32 getTextType(const MSO::PptOfficeArtClientTextBox* clientTextbox,
-                        const MSO::PptOfficeArtClientData* clientData) const;
+    const MSO::TextContainer* getTextContainer(const MSO::PptOfficeArtClientTextBox* ctb,
+                                               const MSO::PptOfficeArtClientData* cd) const;
+    quint32 getTextType(const MSO::PptOfficeArtClientTextBox* ctb,
+                        const MSO::PptOfficeArtClientData* cd) const;
+
     void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
 
     QByteArray createContent(KoGenStyles& styles);
     void processSlideForBody(unsigned slideNo, Writer& out);
-    void processTextForBody(const MSO::OfficeArtClientData* o,
-                            const MSO::TextContainer& tc, const MSO::TextRuler* tr, Writer& out);
-
-    int processTextSpan(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
-                        const QString& text, const int start, int end, quint16* p_fs);
-    int processTextSpans(Writer& out, PptTextCFRun* cf, const MSO::TextContainer& tc,
-			 const QString& text, int start, int end, quint16* p_fs);
 
     /**
-     * Process the content of a paragraph and write it into output file.
+     * Process the content of a TextContainer.
+     *
+     * Each shape type allowed to contain text should have a TextContainer in
+     * its OfficeArtSpContainer.  TextContainer stores the text, its formatting
+     * properties and everything else related to the text like bokkmarks, etc.
+     * TextContainer is our own convenience structure to group all the smaller
+     * containers providing text related data.
      *
      * @param out Writer
      * @param cd provides access to additional text formatting in StyleTextProp9Atom
-     * @param tc provides access to text formatting in MasterTextPropAtom
-     * @param tr specifies tabbing, margins, and indentation for text
+     * @param tc provides access to text formatting in MasterTextPropAtom and TextType
+     * @param tr specifies tabbing, horizontal margins, and indentation for text
+     * @return 0 (OK), -1 (TextContainer missing)
+     */
+    int processTextForBody(Writer& out,
+                           const MSO::OfficeArtClientData* cd,
+                           const MSO::TextContainer* tc,
+                           const MSO::TextRuler* tr);
+
+    /**
+     * Process a span or the smallest run of text having it's own formatting.
+     *
+     * @return x > 0 (num. of processed characters), -1 (Error)
+     */
+    int processTextSpan(Writer& out,
+                        PptTextCFRun& cf,
+                        const MSO::TextContainer* tc,
+                        const QString& text,
+                        const int start, int end,
+                        quint16* p_fs);
+
+    /**
+     * Process all spans or parts of the run of text representing a paragraph
+     * with different formatting.
+     *
+     * @return 0 (OK), x < 0 (Error)
+     */
+    int processTextSpans(Writer& out,
+                         PptTextCFRun& cf,
+                         const MSO::TextContainer* tc,
+			 const QString& text,
+                         int start, int end,
+                         quint16* p_fs);
+
+    /**
+     * Process the run of text which represents the content of a paragraph.
+     *
+     * @param out Writer
+     * @param levels provides info about each level of indentation
+     * @param cd provides access to additional text formatting in StyleTextProp9Atom
+     * @param tc provides access to text formatting in MasterTextPropAtom and TextType
+     * @param tr specifies tabbing, horizontal margins, and indentation for text
+     * @param isPlaceHolder specifies if the shape is a placeholder
      * @param text contains the text of the slide
      * @param start specifies begging of the paragraph in text
      * @param end specifies end of the paragraph in text
-     * @param levels provides info about each level of indentation
      */
     void processParagraph(Writer& out,
+                          QStack<QString>& levels,
                           const MSO::OfficeArtClientData* cd,
-                          const MSO::TextContainer& tc,
+                          const MSO::TextContainer* tc,
                           const MSO::TextRuler* tr,
+                          const bool isPlaceHolder,
                           const QString& text,
                           int start,
-                          int end,
-                          QStack<QString>& levels);
+                          int end);
 
     /**
      * @brief Write declaration in the content body presentation
@@ -388,22 +446,24 @@ private:
     QPair<QString, QString> findHyperlink(const quint32 id);
 
     /**
-    * @brief Convert paraspacing value
-    *
-    * ParaSpacing is a 2-byte signed integer that specifies text paragraph
-    * spacing.  It MUST be a value from the following intervals:
-    *
-    * x = value; x in <0, 13200>, specifies spacing as a percentage of the text
-    * line height.  x < 0, the absolute value specifies spacing in master units.
-    *
-    * master unit: A unit of linear measurement that is equal to 1/576 inch.
-    *
-    * @param value to convert
-    * @param size of the font
-    * @param percentage is preferred in case x in <0, 13200>
-    * @return processed value
-    */
-    QString processParaSpacing(int value, quint16 fs, bool percentage = false) const;
+     * @brief Convert paraspacing value
+     *
+     * ParaSpacing is a 2-byte signed integer that specifies text paragraph
+     * spacing.  It MUST be a value from the following intervals:
+     *
+     * x = value; x in <0, 13200>, specifies spacing as a percentage of the text
+     * line height.  x < 0, the absolute value specifies spacing in master units.
+     *
+     * master unit: A unit of linear measurement that is equal to 1/576 inch.
+     *
+     * @param value to convert
+     * @param size of the font
+     * @param percentage is preferred in case x in <0, 13200>
+     * @return processed value
+     */
+    QString processParaSpacing(const int value,
+                               const quint16 fs,
+                               const bool percentage = false) const;
 
     /**
     * @brief Convert TextAlignmentEnum value to a string from ODF specification
@@ -445,17 +505,17 @@ private:
     QString pptMasterUnitToCm(unsigned int value) const;
 
     /**
-    * @brief Converts ColorIndexStruct to QColor
-    *
-    * ColorIndexStruct can either contain rgb values or an index into
-    * SlideSchemeColorSchemeAtom.  The main master/title master slide or notes
-    * master slide will be checked to choose the correct color scheme.  The
-    * presentation slide or notes slide will be checked if applicable.  This
-    * method returns the rgb values the specified struct refers to.
-    *
-    * @param color Color to convert
-    * @return QColor value, may be undefined
-    */
+     * @brief Converts ColorIndexStruct to QColor
+     *
+     * ColorIndexStruct can either contain rgb values or an index into
+     * SlideSchemeColorSchemeAtom.  The main master/title master slide or notes
+     * master slide will be checked to choose the correct color scheme.  The
+     * presentation slide or notes slide will be checked if applicable.  This
+     * method returns the rgb values the specified struct refers to.
+     *
+     * @param color Color to convert
+     * @return QColor value, may be undefined
+     */
     QColor toQColor(const MSO::ColorIndexStruct &color);
 
     /**

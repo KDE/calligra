@@ -210,8 +210,9 @@ public:
     void setResourceError( bool on ) { resourceError = on; }
     void setResourceOverbooked( bool on ) { resourceOverbooked = on; }
     void setResourceNotAvailable( bool on ) { resourceNotAvailable = on; }
-    void setSchedulingError( bool on ) { schedulingError = on; }
+    void setConstraintError( bool on ) { constraintError = on; }
     void setNotScheduled( bool on ) { notScheduled = on; }
+    void setSchedulingError( bool on ) { schedulingError = on; }
 
     void setPositiveFloat( const Duration &f ) { positiveFloat = f; }
     void setNegativeFloat( const Duration &f ) { negativeFloat = f; }
@@ -314,11 +315,13 @@ protected:
     /// Set if the requested resource is not available
     bool resourceNotAvailable;
     /// Set if the task cannot be scheduled to fullfil all the constraints
-    bool schedulingError;
+    bool constraintError;
     /// Set if the node has not been scheduled
     bool notScheduled;
     /// Set if the assigned resource cannot deliver the requered estimated effort
     bool effortNotMet;
+    /// Set if some other scheduling error occurs
+    bool schedulingError;
 
     DateTime workStartTime;
     DateTime workEndTime;

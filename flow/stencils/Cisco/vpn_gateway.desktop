@@ -1,4 +1,6 @@
 [Desktop Entry]
-Name=Vpn Gateway
+Name=VPN Gateway
+Name[et]=VPN lüüs
+Name[pt]='Gateway' VPN
 Name[uk]=Шлюз VPN
-Name[x-test]=xxVpn Gatewayxx
+Name[x-test]=xxVPN Gatewayxx

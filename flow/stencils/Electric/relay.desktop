@@ -1,6 +1,5 @@
 [Desktop Entry]
-Name=Relay
-Name[nl]=Doorgifte
-Name[pt_BR]=Reencaminhar
-Name[uk]=Реле
-Name[x-test]=xxRelayxx
+Name=relay
+Name[pt]=relé
+Name[uk]=реле
+Name[x-test]=xxrelayxx

@@ -277,6 +277,8 @@ public:
     /// The requested resource is not available
     bool resourceNotAvailable( long id = CURRENTSCHEDULE ) const;
     /// The task cannot be scheduled to fullfil all the constraints
+    virtual bool constraintError( long id = CURRENTSCHEDULE ) const;
+    /// The task cannot be scheduled correctly
     virtual bool schedulingError( long id = CURRENTSCHEDULE ) const;
     /// The node has not been scheduled
     bool notScheduled( long id = CURRENTSCHEDULE ) const;

@@ -21,7 +21,7 @@
 #include "StencilBoxDocker.h"
 
 #include "OdfCollectionLoader.h"
-#include "CollectionShapeFactory.h"
+#include "StencilShapeFactory.h"
 #include "StencilBoxView.h"
 
 #include <KoShapeFactoryBase.h>
@@ -33,6 +33,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
+#include <KoProperties.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -57,6 +58,8 @@
 #include <QDir>
 #include <QMenu>
 #include <QPainter>
+
+#define StencilShapeId "StencilShape"
 
 //
 // StencilBoxDockerFactory
@@ -284,42 +287,45 @@ bool StencilBoxDocker::addCollection(const QString& path)
     QString type = dg.readEntry("X-KDE-DirType");
     //kDebug() << family << type;
 
-    if(type == "odg-collection") {
-        if(m_modelMap.contains(family))
-            return true;
-
+    if(type != "odg-collection")
+        return false;
+    if(!m_modelMap.contains(family)) {
         CollectionItemModel* model = new CollectionItemModel(this);
         m_modelMap.insert(family, model);
-
-        OdfCollectionLoader* loader = new OdfCollectionLoader(path + QDir::separator(), family, this);
-        connect(loader, SIGNAL(loadingFailed(const QString&)),
-                this, SLOT(onLoadingFailed(const QString&)));
-        connect(loader, SIGNAL(loadingFinished()),
-                this, SLOT(onLoadingFinished()));
-
-        loader->load();
-        return true;
     }
-    else {
-        return false;
+
+    CollectionItemModel* model = m_modelMap[family];
+    QList<KoCollectionItem> templateList = model->shapeTemplateList();
+    QStringList stencils = dir.entryList(QStringList("*.desktop"));
+    foreach(const QString & stencil, stencils) {
+        if(stencil == "collection.desktop")
+            continue;
+        KDesktopFile entry(dir.absoluteFilePath(stencil));
+        KConfigGroup content = entry.desktopGroup();
+        QString name = content.readEntry("Name");
+        QString noExt = dir.absoluteFilePath(stencil);
+        noExt.chop(7);
+        QString source = noExt + "odg";
+        QString icon = noExt + "png";
+        kDebug() << name << source << icon;
+        QString keepAspectRatio = content.readEntry("CS-KeepAspectRatio", "0");
+        KoProperties* props = new KoProperties();
+        //props->setProperty("source", source);
+        props->setProperty("keepAspectRatio", keepAspectRatio.toInt());
+        KoCollectionItem temp;
+        temp.id = source;
+        temp.name = name;
+        temp.toolTip = name;
+        temp.icon = QIcon(icon);
+        temp.properties = props;
+        templateList.append(temp);
+        StencilShapeFactory* factory = new StencilShapeFactory(source, name, source, props);
+        KoShapeRegistry::instance()->add(source, factory);
     }
+    model->setShapeTemplateList(templateList);
+    return true;
 }
-
-void StencilBoxDocker::onLoadingFailed(const QString& reason)
-{
-    OdfCollectionLoader* loader = qobject_cast<OdfCollectionLoader*>(sender());
-
-    if(loader)
-    {
-        removeCollection(loader->collectionPath());
-        QList<KoShape*> shapeList = loader->shapeList();
-        qDeleteAll(shapeList);
-        loader->deleteLater();
-    }
-
-    KMessageBox::error (this, reason, i18n("Collection Error"));
-}
-
+/*
 void StencilBoxDocker::onLoadingFinished()
 {
     OdfCollectionLoader* loader = qobject_cast<OdfCollectionLoader*>(sender());
@@ -341,8 +347,8 @@ void StencilBoxDocker::onLoadingFinished()
         temp.toolTip = shape->name();
         temp.icon = generateShapeIcon(shape);
         templateList.append(temp);
-        CollectionShapeFactory* factory =
-                new CollectionShapeFactory(loader->collectionPath() + shape->name(), shape);
+        StencilShapeFactory* factory =
+                new StencilShapeFactory(loader->collectionPath() + shape->name(), shape);
         KoShapeRegistry::instance()->add(loader->collectionPath() + shape->name(), factory);
     }
 
@@ -431,3 +437,4 @@ QIcon StencilBoxDocker::generateShapeIcon(KoShape* shape)
 
     return QIcon(pixmap);
 }
+*/

@@ -1,4 +1,6 @@
 [Desktop Entry]
-Name=Client
-Name[uk]=Клієнт
-Name[x-test]=xxClientxx
+Name=Client Application
+Name[et]=Klientrakendus
+Name[pt]=Aplicação-Cliente
+Name[uk]=Програма-клієнт
+Name[x-test]=xxClient Applicationxx

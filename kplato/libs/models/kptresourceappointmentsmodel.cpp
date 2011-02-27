@@ -1248,6 +1248,14 @@ QVariant ResourceAppointmentsRowModel::Private::appointmentData( int column, int
             case ResourceAppointmentsRowModel::EndTime: return KGlobal::locale()->formatDateTime( a->endTime() );
             case ResourceAppointmentsRowModel::Load: return " ";
         }
+    } else if ( role == Qt::ToolTipRole ) {
+        Node *n = a->node()->node();
+        return i18nc( "@info:tooltip", "%1: %2<nl/>%3: %4",
+                                n->wbsCode(),
+                                n->name(),
+                                KGlobal::locale()->formatDateTime( a->startTime() ),
+                                KGlobal::locale()->formatDuration( ( a->endTime() - a->startTime() ).milliseconds() )
+                            );
     } else if ( role == Role::Maximum ) {
         return a->resource()->resource()->units(); //TODO: Maximum Load
     }
@@ -1300,6 +1308,17 @@ QVariant ResourceAppointmentsRowModel::Private::intervalData( int column, int ro
             case ResourceAppointmentsRowModel::EndTime: return KGlobal::locale()->formatDateTime( interval.endTime() );
             case ResourceAppointmentsRowModel::Load: return interval.load();
         }
+    } else if ( role == Qt::ToolTipRole ) {
+        Appointment *a = static_cast<Appointment*>( parent->ptr );
+        Node *n = a->node()->node();
+        return i18nc( "@info:tooltip", "%1: %2<nl/>%3: %4<nl/>Assigned: %5<nl/>Available: %6",
+                                n->wbsCode(),
+                                n->name(),
+                                KGlobal::locale()->formatDateTime( a->startTime() ),
+                                KGlobal::locale()->formatDuration( ( a->endTime() - a->startTime() ).milliseconds() ),
+                                interval.load(),
+                                a->resource()->resource()->units()
+                            );
     } else if ( role == Role::Maximum ) {
         return parent->appointmentData( column, role );
     }

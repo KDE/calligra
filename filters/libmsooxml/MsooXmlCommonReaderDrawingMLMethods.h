@@ -99,6 +99,7 @@ KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
 KoFilter::ConversionStatus read_DrawingML_rPr();
+KoFilter::ConversionStatus read_endParaRPr();
 
 KoFilter::ConversionStatus read_hlinkClick();
 

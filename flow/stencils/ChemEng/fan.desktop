@@ -1,6 +1,7 @@
 [Desktop Entry]
-Name=Fan
-Name[nl]=Ventilator
-Name[pt_BR]=Ventilador
-Name[uk]=Вентилятор
-Name[x-test]=xxFanxx
+Name=fan
+Name[nl]=ventilator
+Name[pt]=ventoinha
+Name[pt_BR]=ventilador
+Name[uk]=Вентилятор або розмішувач
+Name[x-test]=xxfanxx

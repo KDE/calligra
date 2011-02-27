@@ -1,5 +1,6 @@
 [Desktop Entry]
-Name=Content Router
-Name[pt_BR]=Roteador de conteúdo
-Name[uk]=Маршрутизатор вмісту
-Name[x-test]=xxContent Routerxx
+Name=Content Service Router
+Name[et]=Content Service marsruuter
+Name[pt]=Encaminhador Serviços Conteúdos
+Name[uk]=Маршрутизатор служби даних
+Name[x-test]=xxContent Service Routerxx

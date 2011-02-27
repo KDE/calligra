@@ -1,3 +1,7 @@
 [Desktop Entry]
-Name=Distributor Subsystem
-Name[x-test]=xxDistributor Subsystemxx
+Name=Distributor
+Name[es]=Distribuidor
+Name[nl]=Verdeler
+Name[pt]=Distribuidor
+Name[uk]=Розповсюджувач
+Name[x-test]=xxDistributorxx

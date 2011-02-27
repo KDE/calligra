@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Temp Humi Sensor
-Name[x-test]=xxTemp Humi Sensorxx
+Name=Temperature and Humidity Sensor
+Name[et]=Temperatuuri ja niiskuse mõõdik
+Name[pt]=Sensor Temperatura/Humidade
+Name[uk]=Детектор температури і вологості
+Name[x-test]=xxTemperature and Humidity Sensorxx
