@@ -300,13 +300,14 @@ bool StencilBoxDocker::addCollection(const QString& path)
     foreach(const QString & stencil, stencils) {
         if(stencil == "collection.desktop")
             continue;
-        KDesktopFile entry(stencil);
+        KDesktopFile entry(dir.absoluteFilePath(stencil));
         KConfigGroup content = entry.desktopGroup();
         QString name = content.readEntry("Name");
-        QString noExt = stencil;
+        QString noExt = dir.absoluteFilePath(stencil);
         noExt.chop(7);
         QString source = noExt + "odg";
         QString icon = noExt + "png";
+        kDebug() << name << source << icon;
         QString keepAspectRatio = content.readEntry("CS-KeepAspectRatio", "0");
         KoProperties* props = new KoProperties();
         //props->setProperty("source", source);
@@ -315,7 +316,7 @@ bool StencilBoxDocker::addCollection(const QString& path)
         temp.id = source;
         temp.name = name;
         temp.toolTip = name;
-        temp.icon = KIcon(icon);
+        temp.icon = QIcon(icon);
         temp.properties = props;
         templateList.append(temp);
         StencilShapeFactory* factory = new StencilShapeFactory(source, name, source, props);

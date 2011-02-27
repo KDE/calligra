@@ -61,48 +61,79 @@ KoShape *StencilShapeFactory::createDefaultShape(KoResourceManager *documentReso
     //if ( !arr.isEmpty() ) {
         //QBuffer buffer( &arr );
         KoStore * store = KoStore::createStore( m_path, KoStore::Read );
-        KoOdfReadStore odfStore( store ); // Note: KoDfReadstore will not delete the KoStore *store;
+        if(store->bad())
+        {
+            //emit loadingFailed(i18n("Not a valid KOffice file: %1", m_path));
+            delete store;
+            return shape;
+        }
 
+        KoOdfReadStore odfStore( store ); // Note: KoDfReadstore will not delete the KoStore *store;
         QString errorMessage;
         if ( ! odfStore.loadAndParse( errorMessage ) ) {
             kError() << "loading and parsing failed:" << errorMessage << endl;
             delete store;
-            return 0;
+            return shape;
         }
 
         KoXmlElement content = odfStore.contentDoc().documentElement();
         KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
-
         if ( realBody.isNull() ) {
             kError() << "No body tag found!" << endl;
             delete store;
-            return 0;
+            return shape;
         }
 
-        KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( KoOdf::Text, false ) );
-
-        if ( body.isNull() ) {
-            kError() << "No" << KoOdf::bodyContentElement(KoOdf::Text, true ) << "tag found!" << endl;
+        KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "drawing");
+        if (body.isNull()) {
+            kError() << "No office:drawing tag found!" << endl;
+            //emit loadingFailed(i18n("No office:drawing tag found in file: %1", m_path));
             delete store;
-            return 0;
+            return shape;
+        }
+
+        KoXmlElement page = KoXml::namedItemNS(body, KoXmlNS::draw, "page");
+        if (page.isNull()) {
+            kError() << "No page found!" << endl;
+            //emit loadingFailed(i18n("No page found in file: %1", m_path));
+            delete store;
+            return shape;
+        }
+
+        KoXmlNode child = page.firstChild();
+        KoXmlElement n_shape;
+        while (!child.isNull()) {
+            n_shape = child.toElement();
+            if (!n_shape.isNull()) {
+                break;
+            }
+            child = child.nextSibling();
+        }
+        if (n_shape.isNull()) {
+            kError() << "No shapes found!" << endl;
+            //emit loadingFailed(i18n("No shapes found in file: %1", m_path));
+            delete store;
+            return shape;
         }
 
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
         KoShapeLoadingContext context(loadingContext, documentResources);
 
-        KoXmlElement element;
+        KoShapeRegistry *registry = KoShapeRegistry::instance();
+        foreach (const QString &id, registry->keys()) {
+            KoShapeFactoryBase *shapeFactory = registry->value(id);
+            shapeFactory->newDocumentResourceManager(documentResources);
+        }
 
-        forEachElement(element, body)
-        {
-            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( element, context );
+        shape = KoShapeRegistry::instance()->createShapeFromOdf( n_shape, context );
             if ( shape ) {
                 delete store;
                 if(m_params->intProperty("keepAspectRatio")==1)
                     shape->setKeepAspectRatio(true);
                 return shape;
             }
-        }
-        delete store;
+
+    delete store;
     return shape;
 }
 
