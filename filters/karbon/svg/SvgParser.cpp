@@ -1495,7 +1495,7 @@ void SvgParser::applyClipping(KoShape *shape)
         if (!boundingBoxUnits)
             transformToShape = shape->absoluteTransformation(0).inverted();
         KoClipData *clipData = new KoClipData(pathShapes);
-        KoClipPath *clipPath = new KoClipPath(clipData, shapeMatrix.inverted());
+        KoClipPath *clipPath = new KoClipPath(shape, clipData);
         clipPath->setClipRule(gc->clipRule);
         shape->setClipPath(clipPath);
     }
