@@ -60,6 +60,7 @@ class ScheduleManager;
 class TaskStatusItemModel;
 class NodeItemModel;
 class PerformanceStatusViewSettingsPanel;
+class PerformanceStatusBase;
 
 typedef QList<Node*> NodeList;
 
@@ -216,6 +217,24 @@ struct PerformanceChartInfo
 };
 
 //----------------------------------
+class KPLATOUI_EXPORT PerformanceStatusPrintingDialog : public PrintingDialog
+{
+    Q_OBJECT
+public:
+    PerformanceStatusPrintingDialog( ViewBase *view, PerformanceStatusBase *chart, Project *project = 0 );
+    ~PerformanceStatusPrintingDialog() {}
+
+    virtual int documentLastPage() const;
+    virtual QList<QWidget*> createOptionWidgets() const;
+
+protected:
+    virtual void printPage( int pageNumber, QPainter &painter );
+
+private:
+    PerformanceStatusBase *m_chart;
+    Project *m_project;
+};
+
 class PerformanceStatusBase : public QWidget, public Ui::PerformanceStatus
 {
     Q_OBJECT
@@ -235,7 +254,10 @@ public:
     virtual bool loadContext( const KoXmlElement &context );
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &context ) const;
-    
+
+    /// Create a print job dialog
+    KoPrintJob *createPrintJob( ViewBase *parent );
+
 public slots:
     void refreshChart();
 
@@ -295,6 +317,8 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
+    KoPrintJob *createPrintJob();
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -332,6 +356,8 @@ public:
     TreeViewBase *treeView() const { return m_tree; }
     PerformanceStatusBase *chartView() const { return m_chart; }
     
+    KoPrintJob *createPrintJob( ViewBase *view );
+
 protected slots:
     void slotSelectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
     
@@ -358,7 +384,9 @@ public:
     virtual void saveContext( QDomElement &context ) const;
 
     Node *currentNode() const;
-    
+
+    KoPrintJob *createPrintJob();
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );

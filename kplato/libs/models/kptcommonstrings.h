@@ -96,6 +96,7 @@ struct KPLATOMODELS_EXPORT ToolTip
     static QString nodeResourceUnavailable();
     static QString nodeConstraintsError();
     static QString nodeEffortNotMet();
+    static QString nodeSchedulingError();
 
     static QString nodeBCWS();
     static QString nodeBCWP();

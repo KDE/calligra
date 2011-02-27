@@ -68,6 +68,12 @@ extern int qt_defaultDpiY();
 
 #define DropCapsAdditionalFormattingId 25602902
 
+InlineObjectPosition::InlineObjectPosition(qreal ascent, qreal descent)
+        : m_ascent(ascent),
+        m_descent(descent)
+{
+}
+
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
         : m_styleManager(0),
@@ -118,9 +124,11 @@ bool Layout::start()
     m_reset = false;
 
     bool ok = !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+#if 0
     if (!ok) {
         kDebug() << "Starting layouting failed, shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
     }
+#endif
     return ok;
 }
 
@@ -266,7 +274,8 @@ bool Layout::addLine()
     }
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    qreal objectHeight = 0.0;
+    qreal objectAscent = 0.0;
+    qreal objectDescent = 0.0;
     bool useFixedLineHeight = height != 0.0;
     QTextBlock::Iterator preLineFragmentIterator(m_fragmentIterator);
     if (useFixedLineHeight) {
@@ -292,14 +301,17 @@ bool Layout::addLine()
             else {
                 // read max font height
                 height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+
+                InlineObjectPosition pos = inlineCharHeight(m_fragmentIterator.fragment());
+                objectAscent = qMax(objectAscent, pos.m_ascent);
+                objectDescent = qMax(objectDescent, pos.m_descent);
+
                 while (!(m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                              m_block.position() + line.textStart() + line.textLength() - 1))) {
                     m_fragmentIterator++;
-//sebsauer this cannot work, see bug first document attached to bug #239143
-//                     if (!m_fragmentIterator.atEnd()) {
-//                         break;
-//                     }
+                    if (m_fragmentIterator.atEnd()) {
+                     break;
+                    }
                     if (!m_changeTracker
                         || !m_changeTracker->displayChanges()
                         || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())
@@ -307,7 +319,10 @@ bool Layout::addLine()
                         || (m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                         || m_changeTracker->displayChanges()) {
                         height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                        objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+
+                        InlineObjectPosition pos = inlineCharHeight(m_fragmentIterator.fragment());
+                        objectAscent = qMax(objectAscent, pos.m_ascent);
+                        objectDescent = qMax(objectDescent, pos.m_descent);
                     }
                 }
             }
@@ -359,7 +374,8 @@ bool Layout::addLine()
             m_block.layout()->clearLayout();
             m_block.layout()->beginLayout();
             foreach(const LineKeeper &lk, lineKeeps) {
-                line = m_block.layout()->createLine();
+                Q_ASSERT(this->layout == m_block.layout());
+                line = createLine();
                 if (!line.isValid())
                     break;
                 line.setLineWidth(lk.lineWidth);
@@ -376,8 +392,12 @@ bool Layout::addLine()
         if (m_textShape) // kword uses a dummy shape which is not a text shape
             m_textShape->markLayoutDone();
         nextShape();
-        if (m_data && line.isValid())
+        if (m_data && line.isValid()) {
             m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart() + line.textLength()));
+            m_data->setEndPosition(-1);
+        }
+
+
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if (m_demoText)
@@ -395,7 +415,7 @@ bool Layout::addLine()
             else if (linespacing == 0.0)
                 linespacing = height * 0.2; // default
         }
-        height = qMax(height, objectHeight) + linespacing;
+        height = qMax(height, objectAscent) + objectDescent + linespacing;
     }
     qreal minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
     if (minimum > 0.0)
@@ -430,10 +450,7 @@ bool Layout::addLine()
     }
 
     // position inline objects
-    bool possibleRelayoutNeeded = positionInlineObjects();
-
-    if (possibleRelayoutNeeded) {
-
+    while (positionInlineObjects()) {
         if (m_textAnchors[m_textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
 
             if (moveLayoutPosition(m_textAnchors[m_textAnchorIndex - 1]) == true) {
@@ -1346,6 +1363,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             m_tableLayout.setTable(table);
             m_tableLayout.drawBackground(painter, context);
             drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
+            m_tableLayout.setTable(table); // in case there was a sub table
             QVector<QLineF> accuBlankBorders;
             m_tableLayout.drawBorders(painter, &accuBlankBorders);
             painter->setPen(QPen(QColor(0,0,0,96)));
@@ -1420,9 +1438,10 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                 }
             }
 
-           QRectF clipRect;                 // create an empty clipping rectangle
+            QRectF clipRect;                 // create an empty clipping rectangle
 
             if (wholeTable) {               // if we're in the table drawing
+                m_tableLayout.setTable(wholeTable);
                 QTextTableCell currentCell = wholeTable->cellAt(block.position());  // get the currently drawn cell
 
                 if (currentCell.isValid()) {                                        // and if the cell is valid
@@ -1910,8 +1929,8 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                         int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
-                        qreal xx2 = line.naturalTextWidth() + line.cursorToX(line.textStart());
-                        x2 = qMin(x2, xx2);
+                        // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
+                        //x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
                         drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
@@ -2185,14 +2204,15 @@ bool Layout::previousParag()
 
 void Layout::registerInlineObject(const QTextInlineObject &inlineObject)
 {
-    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), inlineObject.height());
+    InlineObjectPosition pos(inlineObject.ascent(),inlineObject.descent());
+    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), pos);
 }
 
-qreal Layout::inlineCharHeight(const QTextFragment &fragment)
+InlineObjectPosition Layout::inlineCharHeight(const QTextFragment &fragment)
 {
     if (m_inlineObjectHeights.contains(fragment.position()))
         return m_inlineObjectHeights[fragment.position()];
-    return 0.0;
+    return InlineObjectPosition();
 }
 
 qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
@@ -2369,36 +2389,35 @@ void Layout::insertInlineObject(KoTextAnchor * textAnchor)
 
 void Layout::resetInlineObject(int resetPosition)
 {
-    bool resetAllOthers = false;
-    for (int index = 0; index < m_textAnchors.size(); index++) {
+    QList<KoTextAnchor *>::iterator iterBeginErase = m_textAnchors.end();
+    QList<KoTextAnchor *>::iterator iter;
+    for (iter = m_textAnchors.begin(); iter != m_textAnchors.end(); iter++) {
 
-        if (resetAllOthers == false) {
-            if (m_textAnchors[index]->positionInDocument() >= resetPosition) {
-
-                if (m_textAnchors[index]->anchorStrategy()->isPositioned()) {
-                    m_textAnchorIndex = index;
-                    resetAllOthers = true;
-                }
-                else {
-                    break;
-                }
-            }
-        }
-
-        if (resetAllOthers == true) {
-
-            KoTextAnchor * textAnchorToReset = m_textAnchors[index];
-            textAnchorToReset->anchorStrategy()->reset();
+        // if the position of anchor is bigger than resetPosition than remove the anchor from layout
+        if ((*iter)->positionInDocument() >= resetPosition) {
+            (*iter)->anchorStrategy()->reset();
 
             // delete outline
-            if (m_outlines.contains(textAnchorToReset->shape())) {
-                Outline *outline = m_outlines.value(textAnchorToReset->shape());
-                m_outlines.remove(textAnchorToReset->shape());
+            if (m_outlines.contains((*iter)->shape())) {
+                Outline *outline = m_outlines.value((*iter)->shape());
+                m_outlines.remove((*iter)->shape());
                 m_textLine.updateOutline(outline);
                 refreshCurrentPageOutlines();
                 delete outline;
             }
+            (*iter)->setAnchorStrategy(0);
+
+            if (iterBeginErase == m_textAnchors.end()) {
+                iterBeginErase = iter;
+            }
         }
+    }
+
+    m_textAnchors.erase(iterBeginErase,m_textAnchors.end());
+
+    // update m_textAnchorIndex if necesary
+    if (m_textAnchorIndex > m_textAnchors.size()) {
+        m_textAnchorIndex = m_textAnchors.size();
     }
 }
 

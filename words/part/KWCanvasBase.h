@@ -70,7 +70,7 @@ public: // KoCanvasBase interface methods.
     virtual KoGuidesData *guidesData();
 
     /// reimplemented method from superclass
-    virtual const KoViewConverter *viewConverter() const;
+    virtual KoViewConverter *viewConverter() const;
 
     /// return the document that this canvas works on
     KWDocument *document() const;

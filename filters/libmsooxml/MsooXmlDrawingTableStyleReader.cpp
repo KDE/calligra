@@ -86,6 +86,14 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read(MsooXmlReaderCon
 
 #undef CURRENT_EL
 #define CURRENT_EL tblStyleLst
+/*
+ Parent elements:
+ - [done] root
+
+ Child elements:
+ - [done] tblStyle (Table Style) §20.1.4.2.26
+
+*/
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
 {
     READ_PROLOGUE
@@ -95,6 +103,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
         BREAK_IF_END_OF(CURRENT_EL)
         if(isStartElement()) {
             TRY_READ_IF(tblStyle)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -103,6 +112,27 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
 
 #undef CURRENT_EL
 #define CURRENT_EL tblStyle
+/*
+ Parent elements:
+ - [done] tblStyleLst (§20.1.4.2.27)
+
+ Child elements:
+ - [done] band1H (Band 1 Horizontal) §20.1.4.2.1
+ - [done] band1V (Band 1 Vertical) §20.1.4.2.2
+ - [done] band2H (Band 2 Horizontal) §20.1.4.2.3
+ - [done] band2V (Band 2 Vertical) §20.1.4.2.4
+ - extLst (Extension List) §20.1.2.2.15
+ - [done] firstCol (First Column) §20.1.4.2.11
+ - [done] firstRow (First Row) §20.1.4.2.12
+ - [done] lastCol (Last Column) §20.1.4.2.16
+ - [done] lastRow (Last Row) §20.1.4.2.17
+ - [done] neCell (Northeast Cell) §20.1.4.2.20
+ - [done] nwCell (Northwest Cell) §20.1.4.2.21
+ - [done] seCell (Southeast Cell) §20.1.4.2.23
+ - [done] swCell (Southwest Cell) §20.1.4.2.24
+ - tblBg (Table Background) §20.1.4.2.25
+ - [done] wholeTbl (Whole Table) §20.1.4.2.34
+*/
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
 {
     READ_PROLOGUE
@@ -131,6 +161,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
             ELSE_TRY_READ_IF(swCell)
 //             ELSE_TRY_READ_IF(tblBg)
             ELSE_TRY_READ_IF(wholeTbl)
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -451,9 +482,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
         BREAK_IF_END_OF(CURRENT_EL)
         if(isStartElement()) {
 //             TRY_READ_IF(cell3D)
-            /*ELSE_*/TRY_READ_IF(fill)
+            TRY_READ_IF(fill)
 //             ELSE_TRY_READ_IF(fillRef)
             ELSE_TRY_READ_IF(tcBdr)
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -494,6 +526,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBdr()
             ELSE_TRY_READ_IF(tl2br)
             ELSE_TRY_READ_IF(top)
             ELSE_TRY_READ_IF(tr2bl)
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -747,6 +780,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
                     m_currentBorder.style = KoBorder::BorderDotted;
                 }
             }
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -756,6 +790,20 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
 
 #undef CURRENT_EL
 #define CURRENT_EL fill
+/*
+ Parent elements:
+ - tblBg (§20.1.4.2.25);
+ - [done] tcStyle (§20.1.4.2.29)
+
+ Child elements:
+ - blipFill (Picture Fill) §20.1.8.14
+ - gradFill (Gradient Fill) §20.1.8.33
+ - grpFill (Group Fill) §20.1.8.35
+ - [done] noFill (No Fill) §20.1.8.44
+ - pattFill (Pattern Fill) §20.1.8.47
+ - [done] solidFill (Solid Fill) §20.1.8.54
+
+*/
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
 {
     READ_PROLOGUE
@@ -766,7 +814,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
 //             TRY_READ_IF(blipFill)
 //             ELSE_TRY_READ_IF(grandFill)
 //             ELSE_TRY_READ_IF(grpFill)
-            /*else */if(QUALIFIED_NAME_IS(noFill)) {
+            if (QUALIFIED_NAME_IS(noFill)) {
                 SKIP_EVERYTHING_AND_RETURN
             }
 //             ELSE_TRY_READ_IF(pattFill)
@@ -775,6 +823,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
                 m_currentTableStyleProperties->backgroundColor = m_currentColor;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::BackgroundColor;
             }
+            SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }

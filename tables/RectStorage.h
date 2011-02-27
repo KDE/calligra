@@ -629,7 +629,7 @@ protected Q_SLOTS:
 
 
 
-class FusionStorage : public QObject, public RectStorage<bool>
+class CALLIGRA_TABLES_ODF_EXPORT FusionStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:

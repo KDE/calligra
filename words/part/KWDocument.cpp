@@ -64,6 +64,7 @@
 #include <KoListStyle.h>
 #include <KoListLevelProperties.h>
 #include <KoTextShapeData.h>
+#include <KoSelection.h>
 
 #include <rdf/KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF

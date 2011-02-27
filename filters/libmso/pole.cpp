@@ -996,7 +996,7 @@ StreamIO* StorageIO::streamIO(const std::string& name)
 unsigned long StorageIO::loadBigBlocks(const std::vector<unsigned long>& blocks,
                                        unsigned char* data, unsigned long maxlen)
 {
-    return loadBigBlocks(blocks.data(), blocks.size(), data, maxlen);
+    return loadBigBlocks(&blocks[0], blocks.size(), data, maxlen);
 }
 
 unsigned long StorageIO::loadBigBlocks(const unsigned long *blocks, unsigned blockCount,

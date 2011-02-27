@@ -38,7 +38,7 @@ namespace KPlato
 
 using namespace KPlato;
 
-class KPLATORCPS_TEST_EXPORT KPlatoRCPSPlugin : public SchedulerPlugin 
+class KPlatoRCPSPlugin : public SchedulerPlugin
 {
     Q_OBJECT
 

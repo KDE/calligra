@@ -47,7 +47,7 @@ namespace MSOOXML { namespace Diagram {
 
 /****************************************************************************************************
  * The following classes where designed after the way the dmg-namespace is described in the
- * MSOOXML-specs and how it was done in oo.org.
+ * MSOOXML-specs.
  *
  * Note that we cannot just translate the drawing1.xml cause there are cases where those file doesn't
  * contain the content or all of the content. A typical example where it's needed to eval the whole
@@ -70,9 +70,12 @@ class PointListNode;
 class ConnectionListNode;
 class AbstractAtom;
 class LayoutNodeAtom;
+class PresentationOfAtom;
 class ConstraintAtom;
+class AdjustAtom;
 class AlgorithmAtom;
 class AbstractAlgorithm;
+class ShapeAtom;
 
 /// The evaluation context that is passed around and contains all kind of state-informations.
 class Context
@@ -86,10 +89,12 @@ class Context
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_rootLayout;
         /// The current parent layout node. This will change during walking through the layout nodes.
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_parentLayout;
-        /// A identifier=>LayoutNodeAtom map used to access the layouts by there unique identifiers.
-        QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_layoutMap;
-        /// A PointNode=>LayoutNodeAtom map used to know which datapoint maps to which layoutnode.
-        QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_pointLayoutMap;
+        /// A LayoutNodeAtom=>AbstractNode map used to know which layoutnode maps to which datapoint.
+        QMultiMap<const LayoutNodeAtom*, AbstractNode*> m_layoutPointMap;
+        /// A AbstractNode=>LayoutNodeAtom map used to know which datapoint maps to which layoutnode.
+        QMultiMap<AbstractNode*, LayoutNodeAtom*> m_pointLayoutMap;
+        /// A list of all visible shapes ordered in there appearance.
+        QList<ShapeAtom*> m_shapeList;
 
         explicit Context();
         ~Context();
@@ -100,104 +105,38 @@ class Context
         AbstractNode* m_currentNode;
 };
 
+/// The variable-values that can be attached to a LayoutNodeAtom.
 class ValueCache
 {
-public:
-    ValueCache() : rect( QRectF( 0.0f, 0.0f, 100.0f, 100.0f ) ){}
-    class ResultWrapper
-    {
-        public:
-            ResultWrapper( ValueCache* parent, const QString& name ): m_parent( parent ), m_name( name ){}
-            ResultWrapper& operator= ( qreal value )
-            {
-                Q_ASSERT( m_parent );
-                m_parent->setValue( m_name, value );
-                return *this;
-            }
-            operator qreal() const
-            {
-                Q_ASSERT( m_parent );
-                bool valid = false;
-                return m_parent->value( m_name, valid );
-            }
-        private:
-            ValueCache* m_parent;
-            const QString m_name;
-      
-    };
-    qreal value( const QString& name, bool& valid ) const
-    {
-        valid = true;
-        if ( isRectValue( name ) )
+    public:
+        class ResultWrapper
         {
-            return rectValue( name );
-        }
-        else
-        {
-            if ( ! mapping.contains( name ) )
-                valid = false;
-            return mapping[ name ];
-        }
-    }
-    bool valueExists( const QString& name )
-    {
-        return isRectValue( name ) || mapping.contains( name );
-    }
-    void setValue( const QString& name, qreal value )
-    {
-        if ( isRectValue( name ) )
-            setRectValue( name, value );
-        else
-            mapping[ name ] = value;
-    }
-    qreal operator[]( const QString& name ) const 
-    {
-        bool ok = false;
-        return value( name, ok );
-    }
-    
-    ResultWrapper operator[]( const char* name )
-    {
-        return ResultWrapper( this, QString::fromLatin1( name ) );
-    }
-
-    ResultWrapper operator[]( const QString& name )
-    {
-        return ResultWrapper( this, name );
-    }
-    operator QMap< QString, qreal >() const
-    {
-        QMap < QString, qreal > result = mapping;
-        result[ "l" ] = rect.left();
-        result[ "r" ] = rect.right();
-        result[ "t" ] = rect.top();
-        result[ "b" ] = rect.bottom();
-        result[ "w" ] = rect.width();
-        result[ "h" ] = rect.height();
-        return result;
-    }
-private:
-    bool isRectValue( const QString& name ) const
-    {
-        if ( name == "l")
-            return true;
-        else if ( name == "r" )
-            return true;
-        else if ( name == "w" )
-            return true;
-        else if ( name == "h" )
-            return true;
-        else if ( name == "t" )
-            return true;
-        else if ( name == "b" )
-            return true;
-        else
-            return false;
-    }
-    qreal rectValue( const QString& name ) const;
-    void setRectValue( const QString& name, qreal value );
-    QMap< QString, qreal > mapping;
-    QRectF rect;
+            public:
+                ResultWrapper( ValueCache* parent, const QString& name ): m_parent( parent ), m_name( name ) {}
+                ResultWrapper& operator= ( qreal value ) { m_parent->setValue( m_name, value ); return *this; }
+                operator qreal() const { return m_parent->value( m_name ); }
+            private:
+                ValueCache* m_parent;
+                const QString m_name;
+        };
+        ValueCache();
+        bool hasNegativeWidth() const;
+        bool hasNegativeHeight() const;
+        qreal value( const QString& name, bool *valid = 0 ) const;
+        bool valueExists( const QString& name );
+        void setValue( const QString& name, qreal value );
+        qreal operator[]( const QString& name ) const ;    
+        ResultWrapper operator[]( const char* name );
+        ResultWrapper operator[]( const QString& name );
+        operator QMap< QString, qreal >() const;
+    private:
+        bool isRectValue( const QString& name ) const;
+        qreal rectValue( const QString& name ) const;
+        void setRectValue( const QString& name, qreal value );
+        QMap< QString, qreal > m_mapping;
+        QRectF m_rect;
+        bool m_unmodified;
+        bool m_negativeWidth, m_negativeHeight;
 };
 
 /****************************************************************************************************
@@ -238,6 +177,7 @@ class PointNode : public AbstractNode
         QString m_type;
         QString m_cxnId;
         QString m_text;
+        QMap< QString, QString > prSet;
         explicit PointNode() : AbstractNode("dgm:pt") {}
         virtual ~PointNode() {}
         virtual void dump(Context* context, int level);
@@ -303,17 +243,23 @@ class AbstractAtom : public QSharedData
         const QString m_tagName;
         explicit AbstractAtom(const QString &tagName);
         virtual ~AbstractAtom();
-        virtual AbstractAtom* clone() = 0;
+        virtual AbstractAtom* clone(Context* context) = 0;
         virtual void dump(Context* context, int level);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
+        virtual void build(Context* context); // handles ForEachAtom, ChooseAtom, etc.
+        virtual void finishBuild(Context* context); // moves constraints around and does other things that can only be done once build() completed.
         virtual void layoutAtom(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
+        QExplicitlySharedDataPointer<LayoutNodeAtom> parentLayout() const;
         QExplicitlySharedDataPointer<AbstractAtom> parent() const;
         QVector< QExplicitlySharedDataPointer<AbstractAtom> > children() const;
+        
+        int indexOfChild(AbstractAtom* node) const;
         void addChild(AbstractAtom* node);
         void addChild(QExplicitlySharedDataPointer<AbstractAtom> node);
+        void insertChild(int index, AbstractAtom* node);
+        void insertChild(int index, QExplicitlySharedDataPointer<AbstractAtom> node);
         void removeChild(QExplicitlySharedDataPointer<AbstractAtom> node);
     protected:
         QExplicitlySharedDataPointer<AbstractAtom> m_parent;
@@ -346,7 +292,7 @@ class AlgorithmAtom : public AbstractAtom
         QMap<QString, QString> m_params; // list of type=value parameters that modify the default behavior of the algorithm.
         explicit AlgorithmAtom() : AbstractAtom("dgm:alg"), m_type(UnknownAlg) {}
         virtual ~AlgorithmAtom() {}
-        virtual AlgorithmAtom* clone();
+        virtual AlgorithmAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void readElement(Context*, MsooXmlDiagramReader* reader);
@@ -360,32 +306,34 @@ class LayoutNodeAtom : public AbstractAtom
     public:
         QString m_name;
         ValueCache m_values;
-        //QMap<QString, qreal> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
         QMap<QString, qreal> m_factors;
         QMap<QString, int> m_countFactors;
         int m_rotateAngle;
         bool m_needsReinit, m_needsRelayout, m_childNeedsRelayout;
         explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_rotateAngle(0), m_needsReinit(true), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true), m_algorithmImpl(0) {}
         virtual ~LayoutNodeAtom() {}
-        virtual LayoutNodeAtom* clone();
+        virtual LayoutNodeAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
+        virtual void finishBuild(Context* context);
         virtual void layoutAtom(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
 
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > constraints() const;
-        void addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint);
+        QList< QExplicitlySharedDataPointer<AdjustAtom> > adjustments() const;
 
         QExplicitlySharedDataPointer<AlgorithmAtom> algorithm() const;
         void setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm);
 
-        QList<AbstractNode*> axis() const;
+        QList<AbstractNode*> axis(Context* context) const;
         void setAxis(Context* context, const QList<AbstractNode*> &axis);
+        void setAxis(Context* context, PresentationOfAtom* atom);
 
         void setNeedsReinit(bool needsReinit);
         void setNeedsRelayout(bool needsRelayout);
 
+        QList< QExplicitlySharedDataPointer<ShapeAtom> > shapes() const;
         AbstractAlgorithm* algorithmImpl() const;
         AlgorithmAtom::Algorithm algorithmType() const;
         QMap<QString,QString> algorithmParams() const;
@@ -396,16 +344,16 @@ class LayoutNodeAtom : public AbstractAtom
         void setVariable(const QString &name, const QString &value);
         QMap<QString, qreal> finalValues() const;
         
-        QExplicitlySharedDataPointer<LayoutNodeAtom> parentLayout() const;
-        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > childrenLayouts() const;
-        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > descendantLayouts() const;
+        QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > fetchLayouts(Context* context, const QString &forAxis, const QString &forName, const QString &ptType) const;
+        QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > childrenLayouts() const;
+        QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > descendantLayouts() const;
         QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
 
+        QSizeF childrenUsedSize() const;
+        QSizeF childrenTotalSize() const;
         qreal distanceTo(LayoutNodeAtom* otherAtom) const;
 
     private:
-        QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;
-        QList<AbstractNode*> m_axis;
         QMap<QString, QString> m_variables;
         bool m_firstLayout;
         AbstractAlgorithm* m_algorithmImpl;
@@ -437,12 +385,33 @@ class ConstraintAtom : public AbstractAtom
         QString m_type;
         /// Specifies an absolute value instead of reference another constraint.
         QString m_value;
+        /// The referenced layout-nodes where we should fetch the values from.
+        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > m_referencedLayouts;
+        
         explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
         virtual ~ConstraintAtom() {}
-        virtual ConstraintAtom* clone();
-        virtual void dump(Context*, int level);
+        virtual ConstraintAtom* clone(Context* context);
+        virtual void dump(Context*, int level);        
         virtual void readAll(Context*, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
+        virtual void finishBuild(Context* context);
+        void applyConstraint(Context* context, LayoutNodeAtom* atom);
+    private:
+        QString dump() const;
+};
+
+/// Shape adjust value. These can be used to modify the adjust handles supported on various auto shapes. It is only possible to set the initial value, not to modify it using constraints and rules.
+class AdjustAtom : public AbstractAtom
+{
+    public:
+        int m_index;
+        qreal m_value;
+        explicit AdjustAtom() : AbstractAtom("dgm:adj"), m_index(-1) {}
+        virtual ~AdjustAtom() {}
+        virtual AdjustAtom* clone(Context* context);
+        virtual void dump(Context* context, int level);
+        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        void applyAdjustment(Context* context, LayoutNodeAtom* atom);
 };
 
 /// Rules indicate the ranges of values that a layout algorithm can use to modify the constraint values if it cannot lay out the graphic by using the constraints.
@@ -458,22 +427,9 @@ class RuleAtom : public AbstractAtom
         QString m_value;
         explicit RuleAtom() : AbstractAtom("dgm:rule") {}
         virtual ~RuleAtom() {}
-        virtual RuleAtom* clone();
+        virtual RuleAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
-};
-
-/// Shape adjust value. These can be used to modify the adjust handles supported on various auto shapes. It is only possible to set the initial value, not to modify it using constraints and rules.
-class AdjustAtom : public AbstractAtom
-{
-    public:
-        int m_index;
-        qreal m_value;
-        explicit AdjustAtom() : AbstractAtom("dgm:adj"), m_index(-1) {}
-        virtual ~AdjustAtom() {}
-        virtual AdjustAtom* clone();
-        virtual void dump(Context* context, int level);
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
+        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
 };
 
 /// List of atoms.
@@ -483,7 +439,7 @@ class ListAtom : public AbstractAtom
         explicit ListAtom(const QString &tagName) : AbstractAtom(tagName) {}
         explicit ListAtom(const QStringRef &tagName) : AbstractAtom(tagName.toString()) {}
         virtual ~ListAtom() {}
-        virtual ListAtom* clone();
+        virtual ListAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
@@ -497,9 +453,11 @@ class ShapeAtom : public AbstractAtom
         bool m_hideGeom;
         explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false) {}
         virtual ~ShapeAtom() {}
-        virtual ShapeAtom* clone();
+        QList< QExplicitlySharedDataPointer<AdjustAtom> > adjustments() const;
+        virtual ShapeAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        virtual void build(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
         //virtual void build(Context* context);
 };
@@ -516,10 +474,13 @@ class PresentationOfAtom : public AbstractAtom
         QString m_step;
         explicit PresentationOfAtom() : AbstractAtom("dgm:presOf") {}
         virtual ~PresentationOfAtom() {}
-        virtual PresentationOfAtom* clone();
+        virtual PresentationOfAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
+    private:
+        QString dump() const;
+        bool isEmpty() const;
 };
 
 /// The if element represents a condition that applies to all it's children.
@@ -539,7 +500,7 @@ class IfAtom : public AbstractAtom
         QString m_value;
         explicit IfAtom(bool isTrue) : AbstractAtom(isTrue ? "dgm:if" : "dgm:else"), m_isTrue(isTrue) {}
         virtual ~IfAtom() {}
-        virtual IfAtom* clone();
+        virtual IfAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         bool isTrue() const;
@@ -555,7 +516,7 @@ class ChooseAtom : public AbstractAtom
         QString m_name;
         explicit ChooseAtom() : AbstractAtom("dgm:choose") {}
         virtual ~ChooseAtom() {}
-        virtual ChooseAtom* clone();
+        virtual ChooseAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
@@ -576,10 +537,12 @@ class ForEachAtom : public AbstractAtom
         QString m_count;
         explicit ForEachAtom() : AbstractAtom("dgm:forEach") {}
         virtual ~ForEachAtom() {}
-        virtual ForEachAtom* clone();
+        virtual ForEachAtom* clone(Context* context);
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void build(Context* context);
+    private:
+        QString dump() const;
 };
 
 /// The base class for layout-algorithms.
@@ -602,8 +565,9 @@ class AbstractAlgorithm {
         virtual void virtualDoInit();
         virtual void virtualDoLayout();
         virtual void virtualDoLayoutChildren();
+        QList<Context*> doubleLayoutContext;
     private:
-        Context* m_context;
+        Context* m_context;        
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_layout;
         QExplicitlySharedDataPointer<LayoutNodeAtom> m_parentLayout;
         AbstractNode* m_oldCurrentNode;
@@ -650,6 +614,7 @@ class LinearAlgorithm : public AbstractAlgorithm {
         virtual ~LinearAlgorithm() {}
         virtual QString name() const { return "Linear"; }
     protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
 };
 

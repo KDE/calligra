@@ -307,6 +307,8 @@ ParsedPresentation::parse(POLE::Storage& storage)
 const MSO::MasterOrSlideContainer*
 ParsedPresentation::getMaster(const SlideContainer* slide) const
 {
+    //masterIdRef MUST be 0x00000000 if the record that contains this SlideAtom
+    //record is a MainMasterContainer record (MS-PPT 2.5.10)
     if (!slide) return 0;
     foreach(const MasterPersistAtom& m, documentContainer->masterList.rgMasterPersistAtom) {
         if (m.masterId == slide->slideAtom.masterIdRef) {

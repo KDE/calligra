@@ -143,6 +143,9 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     KoGenStyles mainStyles;//for compile
 
     KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
+    if (!contentWriter) {
+        return false;
+    }
 
     KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
     KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
