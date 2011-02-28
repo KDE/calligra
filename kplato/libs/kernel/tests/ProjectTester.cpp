@@ -191,6 +191,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource 50% available -----------------";
@@ -211,6 +212,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 1, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource 50% available, Request 50% load ---------";
@@ -232,6 +234,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 3, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource 200% available, Request 50% load ---------";
@@ -253,6 +256,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource 200% available, Request 100% load ---------";
@@ -274,6 +278,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 4, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource available tomorrow --------";

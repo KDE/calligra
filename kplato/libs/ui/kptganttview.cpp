@@ -193,11 +193,13 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
 void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
     QList<int> pages;
-    pages << printer().fromPage();
-    if ( ! m_gantt->m_printOptions.singlePage ) {
-        int last = printer().toPage();
-        for ( int i = pages.first() + 1; i <= last; ++i ) {
-            pages << i;
+    if ( printer().fromPage() > 0 ) {
+        pages << printer().fromPage();
+        if ( ! m_gantt->m_printOptions.singlePage ) {
+            int last = printer().toPage();
+            for ( int i = pages.first() + 1; i <= last; ++i ) {
+                pages << i;
+            }
         }
     }
     setPageRange( pages );
@@ -237,6 +239,7 @@ int GanttPrintingDialog::documentLastPage() const
 
 void GanttPrintingDialog::printPage( int page, QPainter &painter )
 {
+    kDebug()<<"page:"<<page<<"first"<<documentFirstPage()<<"last:"<<documentLastPage();
     QRectF sourceRect = m_sceneRect;
     int p = page - documentFirstPage();
     QRectF pageRect = printer().pageRect();
@@ -280,11 +283,17 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 
 //-------------------------------------------
 GanttViewBase::GanttViewBase( QWidget *parent )
-    : KDGantt::View( parent ),
+    : KDGantt::View( parent )
+{
+}
+
+//-------------------------------------------
+NodeGanttViewBase::NodeGanttViewBase( QWidget *parent )
+    : GanttViewBase( parent ),
     m_project( 0 ),
     m_ganttdelegate( new GanttItemDelegate( this ) )
 {
-    kDebug()<<"------------------- create GanttViewBase -----------------------";
+    kDebug()<<"------------------- create NodeGanttViewBase -----------------------";
     graphicsView()->setItemDelegate( m_ganttdelegate );
     GanttTreeView *tv = new GanttTreeView( this );
     tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -298,34 +307,34 @@ GanttViewBase::GanttViewBase( QWidget *parent )
     KDGantt::View::setModel( m );
 }
 
-NodeSortFilterProxyModel *GanttViewBase::sfModel() const
+NodeSortFilterProxyModel *NodeGanttViewBase::sfModel() const
 {
     return static_cast<NodeSortFilterProxyModel*>( KDGantt::View::model() );
 }
 
-void GanttViewBase::setItemModel( ItemModelBase *model )
+void NodeGanttViewBase::setItemModel( ItemModelBase *model )
 {
     sfModel()->setSourceModel( model );
 }
 
-ItemModelBase *GanttViewBase::model() const
+ItemModelBase *NodeGanttViewBase::model() const
 {
     return sfModel()->itemModel();
 }
 
-GanttTreeView *GanttViewBase::treeView() const
+GanttTreeView *NodeGanttViewBase::treeView() const
 {
     QAbstractItemView *v = const_cast<QAbstractItemView*>( leftView() );
     return static_cast<GanttTreeView*>( v );
 }
 
-void GanttViewBase::setProject( Project *project )
+void NodeGanttViewBase::setProject( Project *project )
 {
     model()->setProject( project );
     m_project = project;
 }
 
-bool GanttViewBase::loadContext( const KoXmlElement &settings )
+bool NodeGanttViewBase::loadContext( const KoXmlElement &settings )
 {
     treeView()->loadContext( model()->columnMap(), settings );
 
@@ -345,7 +354,7 @@ bool GanttViewBase::loadContext( const KoXmlElement &settings )
     return true;
 }
 
-void GanttViewBase::saveContext( QDomElement &settings ) const
+void NodeGanttViewBase::saveContext( QDomElement &settings ) const
 {
     kDebug();
     treeView()->saveContext( model()->columnMap(), settings );
@@ -366,7 +375,7 @@ void GanttViewBase::saveContext( QDomElement &settings ) const
 
 //-------------------------------------------
 MyKDGanttView::MyKDGanttView( QWidget *parent )
-    : GanttViewBase( parent ),
+    : NodeGanttViewBase( parent ),
     m_manager( 0 )
 {
     kDebug()<<"------------------- create MyKDGanttView -----------------------";
@@ -405,19 +414,23 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
 
 GanttItemModel *MyKDGanttView::model() const
 {
-    return static_cast<GanttItemModel*>( GanttViewBase::model() );
+    return static_cast<GanttItemModel*>( NodeGanttViewBase::model() );
 }
 
 void MyKDGanttView::setProject( Project *proj )
 {
     clearDependencies();
     if ( project() ) {
+        disconnect( project(), SIGNAL( relationToBeModified(Relation*)), this, SLOT( removeDependency(Relation*)));
+        disconnect( project(), SIGNAL( relationModified(Relation*)), this, SLOT( addDependency(Relation*)));
         disconnect( project(), SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
         disconnect( project(), SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
         disconnect( project(), SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    GanttViewBase::setProject( proj );
+    NodeGanttViewBase::setProject( proj );
     if ( proj ) {
+        connect( project(), SIGNAL( relationToBeModified(Relation*)), this, SLOT( removeDependency(Relation*)));
+        connect( project(), SIGNAL( relationModified(Relation*)), this, SLOT( addDependency(Relation*)));
         connect( proj, SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
         connect( proj, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
         connect( proj, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
@@ -703,7 +716,7 @@ void GanttView::updateReadWrite( bool on )
 
 //------------------------
 MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
-    : GanttViewBase( parent ),
+    : NodeGanttViewBase( parent ),
     m_manager( 0 )
 {
     kDebug()<<"------------------- create MilestoneKDGanttView -----------------------";
@@ -743,7 +756,7 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
 
 MilestoneItemModel *MilestoneKDGanttView::model() const
 {
-    return static_cast<MilestoneItemModel*>( GanttViewBase::model() );
+    return static_cast<MilestoneItemModel*>( NodeGanttViewBase::model() );
 }
 
 void MilestoneKDGanttView::setProject( Project *proj )
@@ -751,7 +764,7 @@ void MilestoneKDGanttView::setProject( Project *proj )
     if ( project() ) {
         disconnect( project(), SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    GanttViewBase::setProject( proj );
+    NodeGanttViewBase::setProject( proj );
     if ( proj ) {
         connect( proj, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
@@ -942,7 +955,7 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView( KoDocument *part, 
 {
     kDebug() <<" ---------------- KPlato: Creating ResourceAppointmentsGanttView ----------------";
 
-    m_gantt = new KDGantt::View( this );
+    m_gantt = new GanttViewBase( this );
     m_gantt->graphicsView()->setItemDelegate( new ResourceGanttItemDelegate( m_gantt ) );
 
     GanttTreeView *tv = new GanttTreeView( m_gantt );
@@ -1053,7 +1066,7 @@ void ResourceAppointmentsGanttView::updateReadWrite( bool on )
 
 KoPrintJob *ResourceAppointmentsGanttView::createPrintJob()
 {
-    return 0;
+    return new GanttPrintingDialog( this, m_gantt );
 }
 
 }  //KPlato namespace

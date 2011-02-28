@@ -182,7 +182,6 @@ QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int
     kDebug() << cellRect;
 
     q->SheetView::paintCells(pixmapPainter, docRect, QPointF(loffset, toffset), 0, cellRect);
-    pm->save(QString("/tmp/tile%1.png").arg(idx));
     tileCache.insert(idx, pm);
     return pm;
 #endif
