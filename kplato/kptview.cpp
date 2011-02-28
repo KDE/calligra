@@ -373,7 +373,7 @@ void View::slotCreateTemplate()
     QPixmap pix = getPart()->generatePreview(QSize(width, height));
 
     KTemporaryFile tempFile;
-    tempFile.setSuffix( ".kplatot" );
+    tempFile.setSuffix( ".plant" );
     //Check that creation of temp file was successful
     if ( ! tempFile.open() ) {
         kWarning()<<"Creation of temprary file to store template failed.";
@@ -381,7 +381,7 @@ void View::slotCreateTemplate()
     }
     kDebug()<<"Created temporaray file:"<<tempFile.fileName();
     getPart()->saveNativeFormat( tempFile.fileName() );
-    KoTemplateCreateDia::createTemplate( "kplato_template", Factory::global(), tempFile.fileName(), pix, this );
+    KoTemplateCreateDia::createTemplate( "plan_template", Factory::global(), tempFile.fileName(), pix, this );
 }
 
 void View::createViews()

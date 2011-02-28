@@ -425,7 +425,7 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
 
     double yPos;
     // Get the top row and the current y-position
-    int y = sheet->topRow(paintRect.y() + m_pCanvas->yOffset(), yPos);
+    int y = sheet->topRow(qMax<qreal>(0, paintRect.y() + m_pCanvas->yOffset()), yPos);
     // Align to the offset
     yPos = yPos - m_pCanvas->yOffset();
 

@@ -421,12 +421,16 @@ void MyKDGanttView::setProject( Project *proj )
 {
     clearDependencies();
     if ( project() ) {
+        disconnect( project(), SIGNAL( relationToBeModified(Relation*)), this, SLOT( removeDependency(Relation*)));
+        disconnect( project(), SIGNAL( relationModified(Relation*)), this, SLOT( addDependency(Relation*)));
         disconnect( project(), SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
         disconnect( project(), SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
         disconnect( project(), SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
     NodeGanttViewBase::setProject( proj );
     if ( proj ) {
+        connect( project(), SIGNAL( relationToBeModified(Relation*)), this, SLOT( removeDependency(Relation*)));
+        connect( project(), SIGNAL( relationModified(Relation*)), this, SLOT( addDependency(Relation*)));
         connect( proj, SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
         connect( proj, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
         connect( proj, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );

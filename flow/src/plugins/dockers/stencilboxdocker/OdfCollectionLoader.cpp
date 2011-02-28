@@ -28,6 +28,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
 #include <KoFilterManager.h>
+#include <KoResourceManager.h>
 #include <KoOdf.h>
 
 #include <klocale.h>
@@ -53,6 +54,13 @@ OdfCollectionLoader::OdfCollectionLoader(const QString& path, const QString& fam
     m_loadingTimer->setInterval(0);
     connect(m_loadingTimer, SIGNAL(timeout()),
             this, SLOT(loadShape()));
+
+    m_resourceManager = new KoResourceManager();
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
+    foreach (const QString &id, registry->keys()) {
+        KoShapeFactoryBase *shapeFactory = registry->value(id);
+        shapeFactory->newDocumentResourceManager(m_resourceManager);
+    }
 }
 
 OdfCollectionLoader::~OdfCollectionLoader()
@@ -61,8 +69,10 @@ OdfCollectionLoader::~OdfCollectionLoader()
     m_filterManager = 0;
     delete m_shapeLoadingContext;
     delete m_loadingContext;
+    delete m_resourceManager;
     m_shapeLoadingContext = 0;
     m_loadingContext = 0;
+    m_resourceManager = 0;
 
     if(m_odfStore)
     {
@@ -75,7 +85,7 @@ OdfCollectionLoader::~OdfCollectionLoader()
 void OdfCollectionLoader::load()
 {
     QDir dir(m_path);
-    m_fileList = dir.entryList(QStringList() << "*.odg" << "*.svg", QDir::Files);
+    m_fileList = dir.entryList(QStringList() << "*.odg", QDir::Files);
 
     if(m_fileList.isEmpty())
     {
@@ -94,8 +104,10 @@ void OdfCollectionLoader::loadShape()
 
     if (shape) {
         if(!shape->parent()) {
-            //QString temp = shape->name().section(KGlobal::locale()->language(), 1, 1);
-            //shape->setName(temp.section(":", 0, 0));
+            const QString localName = m_shape.attribute("koffice:i18n-name-[" + KGlobal::locale()->language() +"]",
+                                                        shape->name());
+            shape->setName(localName);
+
             m_shapeList.append(shape);
         }
     }
@@ -262,9 +274,8 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
     }
 
     KoOdfLoadingContext* m_loadingContext = new KoOdfLoadingContext(m_odfStore->styles(), m_odfStore->store());
-    // it ok here to pass an empty resourceManager as we don't have a document
-    // tz: not sure if that is 100% correct what if an image is loaded in the collection it needs a image collection
-    m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, 0);
+
+    m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, m_resourceManager);
 
     KoXmlElement content = m_odfStore->contentDoc().documentElement();
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
@@ -300,6 +311,8 @@ void OdfCollectionLoader::loadNativeFile(const QString& path)
         }
         child = child.nextSibling();
     }
+
+    //m_shape = KoXml::namedItemNS(m_body, KoXmlNS::draw, "g");
 
     if (m_shape.isNull()) {
         kError() << "No shapes found!" << endl;

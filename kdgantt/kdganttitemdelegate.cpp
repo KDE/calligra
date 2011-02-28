@@ -361,18 +361,31 @@ static const qreal PW = 1.5;
 QRectF ItemDelegate::constraintBoundingRect( const QPointF& start, const QPointF& end, const Constraint &constraint ) const
 {
     QPolygonF poly;
+    QPointF e = end;
     switch ( constraint.relationType() ) {
         case Constraint::FinishStart:
-            poly = finishStartLine( start, end ) + finishStartArrow( start, end );
+            if ( constraint.endIndex().data( KDGantt::ItemTypeRole ).toInt() == KDGantt::TypeEvent ) {
+                e.setX( e.x() - TURN );
+            }
+            poly = finishStartLine( start, e ) + finishStartArrow( start, e );
             break;
         case Constraint::FinishFinish:
-            poly = finishFinishLine( start, end ) + finishFinishArrow( start, end );
+            if ( constraint.endIndex().data( KDGantt::ItemTypeRole ).toInt() == KDGantt::TypeEvent ) {
+                e.setX( e.x() + TURN );
+            }
+            poly = finishFinishLine( start, e ) + finishFinishArrow( start, e );
             break;
         case Constraint::StartStart:
-            poly = startStartLine( start, end ) + startStartArrow( start, end );
+            if ( constraint.endIndex().data( KDGantt::ItemTypeRole ).toInt() == KDGantt::TypeEvent ) {
+                e.setX( e.x() - TURN );
+            }
+            poly = startStartLine( start, e ) + startStartArrow( start, e );
             break;
         case Constraint::StartFinish:
-            poly = startFinishLine( start, end ) + startFinishArrow( start, end );
+            if ( constraint.endIndex().data( KDGantt::ItemTypeRole ).toInt() == KDGantt::TypeEvent ) {
+                e.setX( e.x() + TURN );
+            }
+            poly = startFinishLine( start, e ) + startFinishArrow( start, e );
             break;
         default:
             break;
@@ -431,8 +444,12 @@ void ItemDelegate::paintFinishStartConstraint( QPainter* painter, const QStyleOp
     painter->setPen( pen );
     painter->setBrush( pen.color() );
 
-    painter->drawPolyline( finishStartLine( start, end ) );
-    painter->drawPolygon( finishStartArrow( start, end ) );
+    QPointF e = end;
+    if ( constraint.endIndex().data( KDGantt::ItemTypeRole ).toInt() == KDGantt::TypeEvent ) {
+        e.setX( e.x() - TURN );
+    }
+    painter->drawPolyline( finishStartLine( start, e ) );
+    painter->drawPolygon( finishStartArrow( start, e ) );
 }
 
 QPolygonF ItemDelegate::finishStartLine( const QPointF& start, const QPointF& end ) const
@@ -489,8 +506,12 @@ void ItemDelegate::paintFinishFinishConstraint( QPainter* painter, const QStyleO
     painter->setPen( pen );
     painter->setBrush( pen.color() );
 
-    painter->drawPolyline( finishFinishLine( start, end ) );
-    painter->drawPolygon( finishFinishArrow( start, end ) );
+    QPointF e = end;
+    if ( constraint.endIndex().data( KDGantt::ItemTypeRole ).toInt() == KDGantt::TypeEvent ) {
+        e.setX( e.x() + TURN );
+    }
+    painter->drawPolyline( finishFinishLine( start, e ) );
+    painter->drawPolygon( finishFinishArrow( start, e ) );
 }
 
 QPolygonF ItemDelegate::finishFinishLine( const QPointF& start, const QPointF& end ) const
@@ -547,8 +568,12 @@ void ItemDelegate::paintStartStartConstraint( QPainter* painter, const QStyleOpt
     painter->setPen( pen );
     painter->setBrush( pen.color() );
 
-    painter->drawPolyline( startStartLine( start, end ) );
-    painter->drawPolygon( startStartArrow( start, end ) );
+    QPointF e = end;
+    if ( constraint.endIndex().data( KDGantt::ItemTypeRole ).toInt() == KDGantt::TypeEvent ) {
+        e.setX( e.x() - TURN );
+    }
+    painter->drawPolyline( startStartLine( start, e ) );
+    painter->drawPolygon( startStartArrow( start, e ) );
 
 }
 
@@ -605,8 +630,12 @@ void ItemDelegate::paintStartFinishConstraint( QPainter* painter, const QStyleOp
     painter->setPen( pen );
     painter->setBrush( pen.color() );
 
-    painter->drawPolyline( startFinishLine( start, end ) );
-    painter->drawPolygon( startFinishArrow( start, end ) );
+    QPointF e = end;
+    if ( constraint.endIndex().data( KDGantt::ItemTypeRole ).toInt() == KDGantt::TypeEvent ) {
+        e.setX( e.x() + TURN );
+    }
+    painter->drawPolyline( startFinishLine( start, e ) );
+    painter->drawPolygon( startFinishArrow( start, e ) );
 }
 
 QPolygonF ItemDelegate::startFinishLine( const QPointF& start, const QPointF& end ) const

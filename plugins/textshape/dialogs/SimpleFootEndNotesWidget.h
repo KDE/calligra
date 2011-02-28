@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +16,37 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOCOLLECTIONSHAPEFACTORY_H
-#define KOCOLLECTIONSHAPEFACTORY_H
+#ifndef SIMPLEFOOTENDNOTESWIDGET_H
+#define SIMPLEFOOTENDNOTESWIDGET_H
 
-#include <KoShapeFactoryBase.h>
+#include <ui_SimpleFootEndNotesWidget.h>
+#include <KoListStyle.h>
 
-class KoShapeControllerBase;
+#include <QWidget>
+#include <QTextBlock>
 
-class CollectionShapeFactory : public KoShapeFactoryBase
+class TextTool;
+class KoStyleManager;
+
+class SimpleFootEndNotesWidget : public QWidget
 {
-    public:
-        CollectionShapeFactory(const QString &id, KoShape* shape);
-        ~CollectionShapeFactory();
+    Q_OBJECT
+public:
+    explicit SimpleFootEndNotesWidget(QWidget *parent = 0);
 
-        virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-        virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+public slots:
+    void setStyleManager(KoStyleManager *sm);
 
-    private:
-        KoShape* m_shape;
+signals:
+    void doneWithFocus();
+    
+private:
+    Ui::SimpleFootEndNotesWidget widget;
+    KoStyleManager *m_styleManager;
+    bool m_blockSignals;
+    bool m_comboboxHasBidiItems;
+    QTextBlock m_currentBlock;
+    TextTool *m_tool;
 };
 
-#endif //KOCOLLECTIONSHAPEFACTORY_H
+#endif
