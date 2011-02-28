@@ -149,7 +149,9 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
         svgPainter.begin(&svg);
         svgPainter.setRenderHint(QPainter::Antialiasing);
         svgPainter.setRenderHint(QPainter::TextAntialiasing);
+        m_style->setTextAsPath(true);
         constPaint(svgPainter, converter);
+        m_style->setTextAsPath(false);
         svgPainter.end();
         
         writer.startElement("draw:image");
