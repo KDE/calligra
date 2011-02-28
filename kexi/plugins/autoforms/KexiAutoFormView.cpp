@@ -94,22 +94,22 @@ void KexiAutoFormView::addNewRecordRequested()
 
 void KexiAutoFormView::moveToFirstRecordRequested()
 {
-
+    m_autoForm->selectFirstRow();
 }
 
 void KexiAutoFormView::moveToNextRecordRequested()
 {
-
+    m_autoForm->selectNextRow();
 }
 
 void KexiAutoFormView::moveToPreviousRecordRequested()
 {
-
+    m_autoForm->selectPrevRow();
 }
 
 void KexiAutoFormView::moveToLastRecordRequested()
 {
-
+    m_autoForm->selectLastRow();
 }
 
 void KexiAutoFormView::moveToRecordRequested(uint r)

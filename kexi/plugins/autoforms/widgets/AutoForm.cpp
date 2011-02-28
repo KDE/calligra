@@ -22,8 +22,9 @@
 #include <QGridLayout>
 #include "AutoLineEdit.h"
 #include <kexidb/cursor.h>
+#include <kexidb/RecordData.h>
 
-AutoForm::AutoForm(QWidget* parent, KexiRecordNavigator *nav): QWidget(parent)
+AutoForm::AutoForm(QWidget* parent, KexiRecordNavigator *nav): QWidget(parent), m_previousRecord(0)
 {
     setBackgroundRole(QPalette::Window);
     m_layout = new QGridLayout(this);
@@ -180,6 +181,36 @@ int AutoForm::rowsPerPage() const
 void AutoForm::setLocalSortingOrder(int col, int order)
 {
 
+}
+
+void AutoForm::selectCellInternal()
+{
+    //m_currentItem is already set by KexiDataAwareObjectInterface::setCursorPosition()
+    if (m_currentItem) {
+        if (m_currentItem != m_previousRecord) {
+            fillDataItems(*m_currentItem, cursorAtNewRow());
+            m_previousRecord = m_currentItem;
+
+//!@todo needed?            
+#if 0
+            QWidget *w = 0;
+            if (m_curCol >= 0 && m_curCol < dbFormWidget()->orderedDataAwareWidgets()->count()) {
+                w = dbFormWidget()->orderedDataAwareWidgets()->at(m_curCol);
+            }
+            if (w) {
+                w->setFocus(); // re-focus, as we could have lost focus, e.g. when navigator button was clicked
+                // select all
+                KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(w);
+                //! @todo add option for not selecting the field
+                if (iface) {
+                    iface->selectAllOnFocusIfNeeded();
+                }
+            }
+#endif
+        }
+    } else {
+        m_previousRecord = 0;
+    }
 }
 
 void AutoForm::sortedColumnChanged(int col)

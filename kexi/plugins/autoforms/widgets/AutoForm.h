@@ -28,6 +28,10 @@
 
 class QGridLayout;
 
+namespace KexiDB {
+        class RecordDate;
+}
+
 class AutoForm : public QWidget, 
                  public KexiDataAwareObjectInterface,
                  public KexiFormDataProvider
@@ -38,8 +42,6 @@ class AutoForm : public QWidget,
 public:
     AutoForm(QWidget* parent, KexiRecordNavigator *nav);
     virtual ~AutoForm();
-    
-    void initDataSource();
     
 protected:
     virtual void resizeEvent(QResizeEvent* );
@@ -71,6 +73,7 @@ protected:
     virtual void rowEditTerminated(int row);
     virtual int rowsPerPage() const;
     virtual void setLocalSortingOrder(int col, int order);
+    virtual void selectCellInternal();
     virtual void sortedColumnChanged(int col);
     virtual void updateCell(int row, int col);
     virtual void updateCurrentCell();
@@ -85,6 +88,8 @@ private:
     QLabel *m_title;
     QGridLayout *m_layout;
     QList<AutoWidget*> m_widgets;
+    
+    KexiDB::RecordData *m_previousRecord;
     
     void buildForm();
     void layoutForm();
