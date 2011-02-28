@@ -52,7 +52,7 @@ protected:
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
-    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart};
+    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart, GroupStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
     KoFilter::ConversionStatus createFrameEnd();
@@ -88,12 +88,13 @@ protected:
     bool m_insideGroup;
 
     // Relative group widths
-    int m_groupWidth;
-    int m_groupHeight;
+    int m_groupWidth, m_groupHeight;
 
     // Relative group original
-    int m_groupX;
-    int m_groupY;
+    int m_groupX, m_groupY;
+
+    // Offset caused by the group parent
+    qreal m_groupXOffset, m_groupYOffset;
 
     QString m_groupWidthUnit; // pt, cm etc.
     QString m_groupHeightUnit;

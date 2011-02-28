@@ -53,9 +53,6 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
     if(m_original == 0)
         return;
 
-    painter.setClipRect(QRectF(QPointF(0, 0), converter.documentToView(size()))
-                        .adjusted(-2, -2, 2, 2), // adjust for anti aliassing.
-                        Qt::IntersectClip);
     if (m_pageManager) {
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_original->userData());
         if (data) {

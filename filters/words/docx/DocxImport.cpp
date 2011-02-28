@@ -83,6 +83,7 @@ public:
 
     DocxDocumentType type;
     bool macrosEnabled;
+    QMap<QString, QVariant> documentSettings;
 };
 
 DocxImport::DocxImport(QObject* parent, const QVariantList &)
@@ -93,6 +94,16 @@ DocxImport::DocxImport(QObject* parent, const QVariantList &)
 DocxImport::~DocxImport()
 {
     delete d;
+}
+
+QMap<QString, QVariant> DocxImport::documentSettings() const
+{
+    return d->documentSettings;
+}
+
+QVariant DocxImport::documentSetting(const QString& name) const
+{
+    return d->documentSettings.value(name);
 }
 
 bool DocxImport::acceptsSourceMimeType(const QByteArray& mime) const
@@ -125,9 +136,34 @@ bool DocxImport::acceptsDestinationMimeType(const QByteArray& mime) const
     return mime == "application/vnd.oasis.opendocument.text";
 }
 
+static QVariant readSettings(const KoXmlElement &element)
+{
+    QVariant result;
+    QVariantMap m;
+    KoXmlElement e;
+    forEachElement(e, element) {
+        QVariant v = readSettings(e);
+        if (!v.isValid())
+            v = e.attribute("val");
+        m[e.tagName()] = v;
+    }
+    if (!m.isEmpty())
+        result.setValue(m);
+    return result;
+}
+
 KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
         QString& errorMessage)
 {
+    // 0. parse settings.xml
+    QList<QByteArray> partNameList = this->partNames(MSOOXML::ContentTypes::wordSettings);
+    if (partNameList.count() == 1) {
+        KoXmlDocument settingsXML;
+        if (loadAndParse(partNameList.first(), settingsXML, errorMessage) == KoFilter::OK) {
+            d->documentSettings = readSettings(settingsXML.documentElement()).value<QVariantMap>();
+        }
+    }
+
     // 1. parse font table
     {
         DocxXmlFontTableReaderContext context(*writers->mainStyles);
@@ -145,23 +181,27 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     QString documentPath, documentFile;
     MSOOXML::Utils::splitPathAndFile(documentPathAndFile, &documentPath, &documentFile);
 
-    // 2. parse theme for the document
+    // 2. parse theme for the document if a theme exists
     MSOOXML::DrawingMLTheme themes;
     const QString docThemePathAndFile(relationships->targetForType(
         documentPath, documentFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
-    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
-    kDebug() << "ThemePathAndFile:" << docThemePathAndFile;
+    if (!docThemePathAndFile.isEmpty()) {
+        kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
 
-    QString docThemePath, docThemeFile;
-    MSOOXML::Utils::splitPathAndFile(docThemePathAndFile, &docThemePath, &docThemeFile);
+        // prepare the themes-reader
+        QString docThemePath, docThemeFile;
+        MSOOXML::Utils::splitPathAndFile(docThemePathAndFile, &docThemePath, &docThemeFile);
 
-    MSOOXML::MsooXmlThemesReader themesReader(writers);
-    MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport*)this,
-        docThemePath, docThemeFile);
+        MSOOXML::MsooXmlThemesReader themesReader(writers);
+        MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport*)this,
+            docThemePath, docThemeFile);
 
-    KoFilter::ConversionStatus status
-        = loadAndParseDocument(&themesReader, docThemePathAndFile, errorMessage, &themecontext);
+        KoFilter::ConversionStatus status
+            = loadAndParseDocument(&themesReader, docThemePathAndFile, errorMessage, &themecontext);
+
+        kDebug() << "Reading ThemePathAndFile:" << docThemePathAndFile << "status=" << status;
+    }
 
     // Main document context, to which we collect footnotes, endnotes, comments
     DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
@@ -253,7 +293,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
-    return status;
+    return KoFilter::OK;
 }
 
 #include "DocxImport.moc"

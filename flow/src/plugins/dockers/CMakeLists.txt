@@ -11,7 +11,7 @@ set(flowdockers_SRCS
     stencilboxdocker/StencilBoxDocker.cpp
     stencilboxdocker/StencilBoxView.cpp
     stencilboxdocker/CollectionItemModel.cpp
-    stencilboxdocker/CollectionShapeFactory.cpp
+    stencilboxdocker/StencilShapeFactory.cpp
     stencilboxdocker/OdfCollectionLoader.cpp
 )
 

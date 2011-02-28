@@ -946,7 +946,7 @@ bool KPlatoXmlLoaderBase::loadMainSchedule( MainSchedule *ms, const KoXmlElement
         ms->endTime = DateTime::fromString( s, status.projectSpec() );
     }
     ms->duration = Duration::fromString( element.attribute( "duration" ) );
-    ms->schedulingError = element.attribute( "scheduling-conflict", "0" ).toInt();
+    ms->constraintError = element.attribute( "scheduling-conflict", "0" ).toInt();
 
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1043,7 +1043,7 @@ bool KPlatoXmlLoaderBase::loadNodeSchedule(NodeSchedule* schedule, const KoXmlEl
     schedule->resourceError = element.attribute( "resource-error", "0" ).toInt();
     schedule->resourceOverbooked = element.attribute( "resource-overbooked", "0" ).toInt();
     schedule->resourceNotAvailable = element.attribute( "resource-not-available", "0" ).toInt();
-    schedule->schedulingError = element.attribute( "scheduling-conflict", "0" ).toInt();
+    schedule->constraintError = element.attribute( "scheduling-conflict", "0" ).toInt();
     schedule->notScheduled = element.attribute( "not-scheduled", "1" ).toInt();
 
     schedule->positiveFloat = Duration::fromString( element.attribute( "positive-float" ) );

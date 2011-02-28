@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Plan WorkPackage Handler
+Name[et]=Plani töösuundade käitleja
 Name[it]=Gestore dei pacchetti di lavoro di Plan
 Name[nl]=Plan werkpakketbeheerder
 Name[pt]=Tratamento de Pacotes de Trabalho do Plan
@@ -7,6 +8,7 @@ Name[pt_BR]=Tratamento de pacotes de trabalho do Plan
 Name[sv]=Hantering av arbetspaket i Plan
 Name[uk]=Програма опрацювання робочих пакунків Plan
 Name[x-test]=xxPlan WorkPackage Handlerxx
+Name[zh_TW]=Plan 工作套件處理器
 GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù

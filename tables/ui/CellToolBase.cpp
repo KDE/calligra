@@ -3420,11 +3420,11 @@ void CellToolBase::listChoosePopupMenu()
     if (itemList.isEmpty()) {
         return;
     }
-    double tx = selection()->activeSheet()->columnPosition(selection()->marker().x());
-    double ty = selection()->activeSheet()->rowPosition(selection()->marker().y());
+    double tx = sheet->columnPosition(selection()->marker().x());
+    double ty = sheet->rowPosition(selection()->marker().y());
     double h = cursorCell.height();
-    const CellView& cellView = sheetView(selection()->activeSheet())->cellView(selection()->marker().x(), selection()->marker().y());
-    if (cellView.obscuresCells()) {
+    if (sheetView(sheet)->obscuresCells(selection()->marker())) {
+        const CellView& cellView = sheetView(sheet)->cellView(selection()->marker().x(), selection()->marker().y());
         h = cellView.cellHeight();
     }
     ty += h;

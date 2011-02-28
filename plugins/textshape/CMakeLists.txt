@@ -27,11 +27,14 @@ SET ( textshape_SRCS
     TextLine.cpp
 
     ChangeTracker.cpp
-    ChangeTrackingTool.cpp
-    ChangeTrackingToolFactory.cpp
+    ReviewTool.cpp
+    ReviewToolFactory.cpp
     TextChanges.cpp
     TextChange.cpp
     FontSizeAction.cpp
+
+    ReferencesTool.cpp
+    ReferencesToolFactory.cpp
 
     TableLayout.cpp
     TableLayoutData.cpp
@@ -44,6 +47,10 @@ SET ( textshape_SRCS
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleStylesWidget.cpp
     dialogs/SimpleTableWidget.cpp
+    dialogs/SimpleTableOfContentsWidget.cpp
+    dialogs/SimpleCitationWidget.cpp
+    dialogs/SimpleFootEndNotesWidget.cpp
+    dialogs/SimpleCaptionsWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp
     dialogs/ParagraphDecorations.cpp
@@ -91,6 +98,10 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
+    dialogs/SimpleTableOfContentsWidget.ui
+    dialogs/SimpleCitationWidget.ui
+    dialogs/SimpleFootEndNotesWidget.ui
+    dialogs/SimpleCaptionsWidget.ui
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui

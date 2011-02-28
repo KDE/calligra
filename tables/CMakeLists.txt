@@ -13,6 +13,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${CMAKE_SOURCE_DIR}/kchart
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
+                    ${Boost_INCLUDE_DIR}
                     ${EIGEN2_INCLUDE_DIR} )
 
 ########### next target ###############

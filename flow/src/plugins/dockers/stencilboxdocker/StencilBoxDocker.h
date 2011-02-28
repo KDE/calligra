@@ -72,17 +72,17 @@ class StencilBoxDocker : public QDockWidget
 
         bool addCollection(const QString& path);
 
-        void removeCollection(const QString& family);
+        //void removeCollection(const QString& family);
 
         /// Generate an icon from @p group
-        QIcon generateShapeIcon(KoShape* shape);
+        //QIcon generateShapeIcon(KoShape* shape);
 
     protected slots:
         /// Called when an error occurred while loading a collection
-        void onLoadingFailed(const QString& reason);
+        //void onLoadingFailed(const QString& reason);
 
         /// Called when loading of a collection is finished
-        void onLoadingFinished();
+        //void onLoadingFinished();
 
         /// Called when the docker changes area
         void locationChanged(Qt::DockWidgetArea area);

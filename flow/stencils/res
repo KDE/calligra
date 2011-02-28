@@ -1,3 +1,6 @@
+The stencils listed below are converted from Dia and Dia Shape Library using openoffice-diafilter.
+Distributed under GPL v2.
+
 ./CMOS/vdd_v.odg
 ./CMOS/pmos_v.odg
 ./CMOS/pmos_h.odg
