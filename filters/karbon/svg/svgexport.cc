@@ -649,7 +649,8 @@ void SvgExport::getClipping(KoShape *shape, QTextStream *stream)
     if (!clipPath)
         return;
 
-    KoPathShape *path = KoPathShape::createShapeFromPainterPath(clipPath->path());
+    const QSizeF shapeSize = shape->outlineRect().size();
+    KoPathShape *path = KoPathShape::createShapeFromPainterPath(clipPath->pathForSize(shapeSize));
     if (!path)
         return;
 
