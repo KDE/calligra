@@ -92,6 +92,13 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+2011-03-01
+KoProperty
+*disable moving of the columns
+Forms
+*add some missing translations to property names
+*hide the pixmapId property of the picture box
+
 2011-02-04
 KexiDB
 *Fix Solaris build of kexidb 
