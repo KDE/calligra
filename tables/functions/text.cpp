@@ -32,6 +32,7 @@
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+#include "ValueFormatter.h"
 
 #include <KLocale>
 
@@ -658,8 +659,11 @@ Value func_t (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: TEXT
 Value func_text(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    //Second parameter is format_text. It is currently ignored.
-    return calc->conv()->asString(args[0]);
+    ValueFormatter fmt(calc->conv());
+
+    return Value(fmt.formatText(args[0], Format::Generic, -1, Style::OnlyNegSigned,
+                            QString(), QString(), QString(),
+                            calc->conv()->asString(args[1]).asString()));
 }
 
 // Function: TOGGLE
