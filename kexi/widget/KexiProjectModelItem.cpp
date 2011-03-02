@@ -56,7 +56,7 @@ void KexiProjectModelItem::appendChild(KexiProjectModelItem* c)
     m_childItems.append(c);
 }
 
-void KexiProjectModelItem::debugPrint()
+void KexiProjectModelItem::debugPrint() const
 {
     if (m_item) {
         kDebug() << m_item->captionOrName();
@@ -123,12 +123,12 @@ int KexiProjectModelItem::row()
      return 0;
 }
 
-QIcon KexiProjectModelItem::icon()
+QIcon KexiProjectModelItem::icon() const
 {
     return m_icon;
 }
 
-Qt::ItemFlags KexiProjectModelItem::flags()
+Qt::ItemFlags KexiProjectModelItem::flags() const
 {
     if (m_item) {
         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
@@ -206,7 +206,7 @@ bool itemLessThan(const KexiProjectModelItem *a, const KexiProjectModelItem *b)
     return a->data(0).toString() < b->data(0).toString();
 }
 
-void KexiProjectModelItem::setDirty(bool d)
+void KexiProjectModelItem::setDirty(bool set)
 {
-    m_dirty = d;
+    m_dirty = set;
 }
