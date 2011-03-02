@@ -108,13 +108,18 @@ kDebug() << m_actionName << m_objectName;
         else if (m_actionOption == "print") {
             if (part->info()->isPrintingSupported())
                 KexiMainWindowIface::global()->printItem(item);
-        } else if (m_actionOption == "printPreview") {
+        }
+#ifndef KEXI_NO_QUICK_PRINTING
+        else if (m_actionOption == "printPreview") {
             if (part->info()->isPrintingSupported())
                 KexiMainWindowIface::global()->printPreviewForItem(item);
-        } else if (m_actionOption == "pageSetup") {
+        }
+        else if (m_actionOption == "pageSetup") {
             if (part->info()->isPrintingSupported())
                 KexiMainWindowIface::global()->showPageSetupForItem(item);
-        } else if (m_actionOption == "exportToCSV"
+        }
+#endif
+        else if (m_actionOption == "exportToCSV"
                    || m_actionOption == "copyToClipboardAsCSV") {
             if (part->info()->isDataExportSupported())
                 KexiMainWindowIface::global()->executeCustomActionForObject(item, m_actionOption);

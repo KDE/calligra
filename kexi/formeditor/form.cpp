@@ -435,7 +435,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["styleSheet"] = i18n("Style Sheet");
     propCaption["toolTip"] = i18nc("Widget's Tooltip", "Tooltip");
     propCaption["whatsThis"] = i18nc("Widget's Whats This", "What's This");
-    propCaption["layoutDirection"] = i18n("Layout direction");
+    propCaption["layoutDirection"] = i18n("Layout Direction");
     propCaption["iconSize"] = i18n("Icon Size");
     
     //any QFrame
