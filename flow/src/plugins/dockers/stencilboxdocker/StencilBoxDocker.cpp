@@ -161,15 +161,11 @@ void StencilBoxDocker::getHotNewStuff()
 void StencilBoxDocker::installStencil()
 {
     KUrl dir;
-    QString path;
-    path = KFileDialog::getOpenFileName(dir,
+    QString path = KFileDialog::getOpenFileName(dir,
            "*.cstencil.tar *.cstencil.tar.bz2 *.cstencil.tar.gz|"
            + i18n("Calligra Stencil Packages (*.cstencil.tar, *.cstencil.tar.bz2, *.cstencil.tar.gz)")
            , this);
-    if(path.isNull()) {
-        KMessageBox::sorry(0, i18n("File does not exist!"));
-        return;
-    }
+    if(path.isNull()) return;
     
     KTar archive(path);
     if(!archive.open(QIODevice::ReadOnly)) {
@@ -177,11 +173,12 @@ void StencilBoxDocker::installStencil()
         return;
     }
     
-    QString destination = KStandardDirs::locate("data", "flow/stencils");
+    QString destination = KStandardDirs::locateLocal("data", "flow/stencils", true);
     const KArchiveDirectory* const archiveDir = archive.directory();
 
     // Prevent installing a stencil collection that's already installed
-    const QString collectionFolder = destination + archiveDir->entries().first();
+    const QString collectionFolder = destination + QDir::separator() + archiveDir->entries().first();
+    kDebug() << destination << archiveDir << collectionFolder;
     if(QFile::exists(collectionFolder)) {
         KMessageBox::error(0, i18n("A collection of stencils in family '%1' is already installed. "
                                    "Please uninstall it first.", archiveDir->entries().first()));
