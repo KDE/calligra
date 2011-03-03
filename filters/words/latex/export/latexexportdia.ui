@@ -182,7 +182,7 @@
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>TextLabel1_2</cstring>
+                        <cstring comment="KDE::DoNotExtract">TextLabel1_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -198,7 +198,7 @@
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>TextLabel2</cstring>
+                        <cstring comment="KDE::DoNotExtract">TextLabel2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -309,7 +309,7 @@
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>TextLabel1</cstring>
+                        <cstring comment="KDE::DoNotExtract">TextLabel1</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
