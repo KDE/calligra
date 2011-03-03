@@ -132,7 +132,10 @@ private:
     void processCloudCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processIrregularSeal1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processSeal16(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRibbon(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processRibbon2(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processHorizontalScroll(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDoubleWave(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartTerminator(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartProcess(const MSO::OfficeArtSpContainer& o, Writer& out);
