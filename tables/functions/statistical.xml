@@ -944,6 +944,25 @@
     </Function>
 
     <Function>
+      <Name>PERMUTATIONA</Name>
+      <Type>Int</Type>
+      <Parameter>
+        <Comment>Total number of elements</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Number of elements to choose</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The PERMUTATIONA() function returns the number of ordered permutations when allowing repetition. The first parameter is the number of elements, and the second parameter is the number of elements to choose. Both parameters must be positive.</Text>
+        <Syntax>PERMUTATIONA(total;chosen)</Syntax>
+        <Example>PERMUTATIONA(2,3) returns 8</Example>
+        <Example>PERMUTATIONA(0,0) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>PERCENTILE</Name>
       <Type>Float</Type>
       <Parameter>

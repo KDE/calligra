@@ -103,6 +103,7 @@ private slots:
     void testPEARSON();
     void testPERCENTILE();
     void testPERMUT();
+    void testPERMUTATIONA();
     void testPHI();
     void testPOISSON();
 //     void testPROB();     // ???
