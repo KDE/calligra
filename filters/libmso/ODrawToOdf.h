@@ -140,7 +140,9 @@ private:
     void processFlowChartTerminator(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartProcess(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDecision(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartManualOperation(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartMagneticTape(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
