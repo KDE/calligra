@@ -100,8 +100,8 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
 
     //menu is currently unfinished
     m_menu = new QMenu();
-    QAction* ghnsAction = m_menu->addAction(i18n("Get more stencils"));
-    QAction* installAction = m_menu->addAction(i18n("Install stencil"));
+    QAction* ghnsAction = m_menu->addAction(KIcon("get-hot-new-stuff"), i18n("Get more stencils"));
+    QAction* installAction = m_menu->addAction(KIcon("document-open-folder"), i18n("Install stencil"));
     //QAction* createNewAction = m_menu->addAction(i18n("Create a stencil collection"));
     connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
     connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
