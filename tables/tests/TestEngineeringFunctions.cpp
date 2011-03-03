@@ -105,7 +105,7 @@ void TestEngineeringFunctions::testCOMPLEX()
 {
     CHECK_EVAL("=IMREAL(COMPLEX(1;-3))", 1.0);
     CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2))", -2.0);
-//     CHECK_EVAL( "=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0 );
+    CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0 );
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOMPLEX(1;-3))", 1.0);
 }
 

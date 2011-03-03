@@ -137,7 +137,7 @@ EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("COMPLEX",     func_complex);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOMPLEX");
-    f->setParamCount(2);
+    f->setParamCount(2, 3);
     add(f);
     f = new Function("CONVERT",     func_convert);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCONVERT");
