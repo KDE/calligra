@@ -92,6 +92,13 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+2011-03-03
+Tables
+*fix inserting row when field has "required" atribute set
+**BUG:267311
+**backported to 2.3.x
+**backported to 2.2.x
+
 2011-03-02
 General
 *define KEXI_NO_QUICK_PRINTING and disable no longer available simple printing features
