@@ -275,6 +275,61 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>CSC</Name>
+      <Type>Float</Type>
+      <Parameter>
+    <Comment>Angle (radians)</Comment>
+    <Type>Float</Type>
+      </Parameter>
+      <Help>
+    <Text>The CSC() function returns the cosecant of x, where x is given in radians.</Text>
+    <Syntax>CSC(Float)</Syntax>
+    <Example>CSC(PI()/2) equals 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CSCH</Name>
+      <Type>Float</Type>
+      <Parameter>
+    <Comment>Angle (radians)</Comment>
+    <Type>Float</Type>
+      </Parameter>
+      <Help>
+    <Text>The CSCH() function returns the hyperbolic cosecant of x, where x is given in radians.</Text>
+    <Syntax>CSCH(Float)</Syntax>
+    <Example>CSCH(PI()/2) equals 0.434537208...</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SEC</Name>
+      <Type>Float</Type>
+      <Parameter>
+    <Comment>Angle (radians)</Comment>
+    <Type>Float</Type>
+      </Parameter>
+      <Help>
+    <Text>The SEC() function returns the secant of x, where x is given in radians.</Text>
+    <Syntax>SEC(Float)</Syntax>
+    <Example>SEC(0) equals 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SECH</Name>
+      <Type>Float</Type>
+      <Parameter>
+    <Comment>Angle (radians)</Comment>
+    <Type>Float</Type>
+      </Parameter>
+      <Help>
+    <Text>The SECH() function returns the hyperbolic secant of x, where x is given in radians.</Text>
+    <Syntax>SECH(Float)</Syntax>
+    <Example>SECH(0) equals 1</Example>
+      </Help>
+    </Function>
   </Group>
 
 </KSpreadFunctions>
