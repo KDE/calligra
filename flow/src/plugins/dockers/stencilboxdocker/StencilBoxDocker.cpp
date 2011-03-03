@@ -20,7 +20,6 @@
 
 #include "StencilBoxDocker.h"
 
-#include "OdfCollectionLoader.h"
 #include "StencilShapeFactory.h"
 #include "StencilBoxView.h"
 
