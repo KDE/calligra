@@ -73,6 +73,9 @@ Value func_imargument(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imconjugate(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imcos(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imcosh(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imcot(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imcsc(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imcsch(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imdiv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imexp(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imln(valVector args, ValueCalc *calc, FuncExtra *);
@@ -80,6 +83,8 @@ Value func_imlog2(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imlog10(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_impower(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_improduct(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imsec(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imsech(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imsin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imsinh(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imsqrt(valVector args, ValueCalc *calc, FuncExtra *);
@@ -197,6 +202,12 @@ EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("IMCOSH",      func_imcosh);
     add(f);
+    f = new Function("IMCOT",       func_imcot);
+    add(f);
+    f = new Function("IMCSC",       func_imcsc);
+    add(f);
+    f = new Function("IMCSCH",       func_imcsch);
+    add(f);
     f = new Function("IMDIV",       func_imdiv);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMDIV");
     f->setParamCount(2);
@@ -225,6 +236,10 @@ EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("IMREAL",      func_complex_real);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMREAL");
+    add(f);
+    f = new Function("IMSEC",       func_imsec);
+    add(f);
+    f = new Function("IMSECH",       func_imsech);
     add(f);
     f = new Function("IMSIN",       func_imsin);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMSIN");
@@ -1306,6 +1321,34 @@ Value func_imcos(valVector args, ValueCalc *calc, FuncExtra *)
 
 
 //
+// Function: IMCOT
+//
+Value func_imcot(valVector args, ValueCalc *calc, FuncExtra*)
+{
+    return Value(std::cos(calc->conv()->asComplex(args[0]).asComplex())
+                 /std::sin(calc->conv()->asComplex(args[0]).asComplex()));
+}
+
+
+//
+// Function: IMCSC
+//
+Value func_imcsc(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    return Value(complex<Number>(1)/std::sin(calc->conv()->asComplex(args[0]).asComplex()));
+}
+
+
+//
+// Function: IMSEC
+//
+Value func_imsec(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    return Value(complex<Number>(1)/std::cos(calc->conv()->asComplex(args[0]).asComplex()));
+}
+
+
+//
 // Function: IMSIN
 //
 Value func_imsin(valVector args, ValueCalc *calc, FuncExtra *)
@@ -1329,6 +1372,24 @@ Value func_imtan(valVector args, ValueCalc *calc, FuncExtra*)
 Value func_imcosh(valVector args, ValueCalc *calc, FuncExtra*)
 {
     return Value(std::cosh(calc->conv()->asComplex(args[0]).asComplex()));
+}
+
+
+//
+// Function: IMCSCH
+//
+Value func_imcsch(valVector args, ValueCalc *calc, FuncExtra*)
+{
+    return Value(complex<Number>(1)/std::sinh(calc->conv()->asComplex(args[0]).asComplex()));
+}
+
+
+//
+// Function: IMSECH
+//
+Value func_imsech(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    return Value(complex<Number>(1)/std::cosh(calc->conv()->asComplex(args[0]).asComplex()));
 }
 
 

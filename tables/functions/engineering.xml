@@ -472,6 +472,76 @@
     </Function>
 
     <Function>
+      <Name>IMCOT</Name>
+      <Type>String</Type>
+      <Parameter>
+    <Comment>Complex number</Comment>
+    <Type>String</Type>
+      </Parameter>
+      <Help>
+    <Text>The IMCOT(string) returns the cotangent of a complex number.</Text>
+    <Syntax>IMCOT(string)</Syntax>
+    <Example>IMCOT("1+i") returns "0.21762-0.86801i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMCSC</Name>
+      <Type>String</Type>
+      <Parameter>
+    <Comment>Complex number</Comment>
+    <Type>String</Type>
+      </Parameter>
+      <Help>
+    <Text>The IMCSC(string) returns the cosecant of a complex number.</Text>
+    <Syntax>IMCSC(string)</Syntax>
+    <Example>IMCSC("1+i") returns "0.62151-0.30393i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMCSCH</Name>
+      <Type>String</Type>
+      <Parameter>
+    <Comment>Complex number</Comment>
+    <Type>String</Type>
+      </Parameter>
+      <Help>
+    <Text>The IMCSCH(string) returns the hyperbolic cosecant of a complex number.</Text>
+    <Syntax>IMCSCH(string)</Syntax>
+    <Example>IMCSCH("1+i") returns "0.30393-i0.62151"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSEC</Name>
+      <Type>String</Type>
+      <Parameter>
+    <Comment>Complex number</Comment>
+    <Type>String</Type>
+      </Parameter>
+      <Help>
+    <Text>The IMSEC(string) returns the secant of a complex number.</Text>
+    <Syntax>IMSEC(string)</Syntax>
+    <Example>IMSEC("1+i") returns "0.49833+i0.59108"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMSECH</Name>
+      <Type>String</Type>
+      <Parameter>
+    <Comment>Complex number</Comment>
+    <Type>String</Type>
+      </Parameter>
+      <Help>
+    <Text>The IMSECH(string) returns the hyperbolic secant of a complex number.</Text>
+    <Syntax>IMSECH(string)</Syntax>
+    <Example>IMSECH("1+i") returns "0.49833-i0.59108"</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>IMSIN</Name>
       <Type>String</Type>
       <Parameter>
