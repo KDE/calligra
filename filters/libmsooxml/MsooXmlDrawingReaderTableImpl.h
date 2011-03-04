@@ -29,6 +29,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 {
     READ_PROLOGUE
 
+    bool tableSetByMe = false;
+    if (!m_insideTable) {
+        // Handling nested tables
+        tableSetByMe = true;
+        m_insideTable = true;
+    }
+
     m_tableStyle = 0;
 
     if(!d->tableStyleList) {
@@ -70,6 +77,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
     delete m_table;
 
     m_currentTableNumber++;
+
+    if (tableSetByMe) {
+        m_insideTable = false;
+    }
 
     READ_EPILOGUE
 }

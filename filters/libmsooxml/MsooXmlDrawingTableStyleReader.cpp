@@ -495,14 +495,64 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
 
 #undef CURRENT_EL
 #define CURRENT_EL tcTxStyle
+/*
+ Parent elements:
+ - [done] band1H (§20.1.4.2.1);
+ - [done] band1V (§20.1.4.2.2);
+ - [done] band2H (§20.1.4.2.3);
+ - [done] band2V (§20.1.4.2.4);
+ - [done] firstCol (§20.1.4.2.11);
+ - [done] firstRow (§20.1.4.2.12);
+ - [done] lastCol (§20.1.4.2.16);
+ - [done] lastRow (§20.1.4.2.17);
+ - [done] neCell (§20.1.4.2.20);
+ - [done] nwCell (§20.1.4.2.21);
+ - [done] seCell (§20.1.4.2.23);
+ - [done] swCell (§20.1.4.2.24);
+ - [done] wholeTbl (§20.1.4.2.34)
+
+ Child elements:
+ - extLst (Extension List) §20.1.2.2.15
+ - font (Font) §20.1.4.2.13
+ - [done] fontRef (Font Reference) §20.1.4.1.17
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
+
+*/
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
 {
     READ_PROLOGUE
 
+    m_currentColor = QColor();
+    m_referredFontName = QString();
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            //TODO hslClr hue, saturation, luminecence color
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(prstClr)
+            ELSE_TRY_READ_IF(fontRef)
+            SKIP_UNKNOWN
+        }
     }
+
+/*
+    if (m_currentColor.isValid()) {
+        m_currentTableStyleProperties->font["fo:color"] = m_currentColor.name();
+    }
+    if (!m_referredFontName.isEmpty()) {
+        m_currentTableStyleProperties->font["fo:font-family"] = m_referredFontName;
+    }
+*/
 
     READ_EPILOGUE
 }

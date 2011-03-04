@@ -63,6 +63,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_hyperLink = false;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
+    m_insideTable = false;
 }
 
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
@@ -1128,7 +1129,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
         if (isStartElement()) {
             TRY_READ_IF_NS(a, fillRef)
             ELSE_TRY_READ_IF_NS(a, lnRef)
-            ELSE_TRY_READ_IF_NS(a, fontRef)
+            else if (qualifiedName() == "a:fontRef") {
+                m_currentColor = QColor();
+                m_referredFontName = QString();
+                TRY_READ(fontRef)
+                if (m_currentColor.isValid()) {
+                    m_referredFont.addProperty("fo:color", m_currentColor.name());
+                    m_currentColor = QColor();
+                }
+                if (!m_referredFontName.isEmpty()) {
+                    m_referredFont.addProperty("fo:font-family", m_referredFontName);
+                }
+            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1468,7 +1480,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
  - [done] style (§20.1.2.2.37);
  - [done] style (§20.5.2.31);
  - [done] style (§19.3.1.46);
- - tcTxStyle (§20.1.4.2.30)
+ - [done] tcTxStyle (§20.1.4.2.30)
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
@@ -1487,14 +1499,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fontRef()
     TRY_READ_ATTR_WITHOUT_NS(idx)
 
     if (!idx.isEmpty()) {
-        QString font;
         if (idx.startsWith("major")) {
-            font = m_context->themes->fontScheme.majorFonts.latinTypeface;
+            m_referredFontName = m_context->themes->fontScheme.majorFonts.latinTypeface;
         }
         else if (idx.startsWith("minor")) {
-           font = m_context->themes->fontScheme.minorFonts.latinTypeface;
+            m_referredFontName = m_context->themes->fontScheme.minorFonts.latinTypeface;
         }
-        m_referredFont.addProperty("fo:font-family", font);
     }
 
     while (!atEnd()) {
@@ -1509,10 +1519,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fontRef()
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
-    }
-    if (m_currentColor.isValid()) {
-        m_referredFont.addProperty("fo:color", m_currentColor.name());
-        m_currentColor = QColor();
     }
 
     READ_EPILOGUE
@@ -1728,8 +1734,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             }
             else if (QUALIFIED_NAME_IS(endParaRPr)) {
 #ifdef PPTXXMLSLIDEREADER_CPP
-                inheritDefaultTextStyle(m_currentParagraphStyle);
-                inheritTextStyle(m_currentParagraphStyle);
+                if (!m_insideTable) {
+                    inheritDefaultTextStyle(m_currentParagraphStyle);
+                    inheritTextStyle(m_currentParagraphStyle);
+                }
 #endif
                 m_currentTextStyleProperties = new KoCharacterStyle();
                 m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
@@ -1937,8 +1945,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    inheritDefaultTextStyle(m_currentTextStyle);
-    inheritTextStyle(m_currentTextStyle);
+    if (!m_insideTable) {
+        inheritDefaultTextStyle(m_currentTextStyle);
+        inheritTextStyle(m_currentTextStyle);
+    }
 #endif
 
     MSOOXML::Utils::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
