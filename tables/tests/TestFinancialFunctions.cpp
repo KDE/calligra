@@ -34,6 +34,7 @@ void TestFinancialFunctions::initTestCase()
 
 #define CHECK_EVAL(x,y) QCOMPARE(TestDouble(x,y,6),y)
 #define CHECK_EVAL_SHORT(x,y) QCOMPARE(TestDouble(x,y,11),y)
+#define CHECK_EVAL_EQUAL(x,y) QCOMPARE(TestSimple(x),y)
 
 static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
 {
@@ -56,6 +57,16 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
         return v2;
     else
         return result;
+}
+
+static Value TestSimple(const QString& formula)
+{
+    Formula f;
+    QString expr = formula;
+    if (expr[0] != '=')
+        expr.prepend('=');
+    f.setExpression(expr);
+    return f.eval();
 }
 
 // ACCRINT
@@ -144,6 +155,74 @@ void TestFinancialFunctions::testCONTINUOUS()
     CHECK_EVAL_SHORT("CONTINUOUS(1000;0.1;1)", Value(1105.17091808));
 }
 
+// COUPDAYBS
+void TestFinancialFunctions::testCOUPDAYBS()
+{
+    // ODF
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(1997;11;9); DATE(1999;11;15); 2 )", Value(174));
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(1997;11;9); DATE(1999;11;15); 2; 1 )", Value(178));
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 0 )", Value(60)); // US (NASD) 30/360
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 1 )", Value(60)); // actual/actual
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 2 )", Value(60)); // actual/360
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 3 )", Value(60)); // actual/365
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 4 )", Value(60)); // European 30/360
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 1 )", Value(60)); // annual
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 2 )", Value(60)); // semiannual
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYBS( DATE(1997;11;9); DATE(1999;11;15); 2 )", Value(174));
+}
+
+// COUPDAYS
+void TestFinancialFunctions::testCOUPDAYS()
+{
+    // ODF
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(1997;11;9); DATE(1999;11;15); 2 )", Value(180));
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(1997;11;9); DATE(1999;11;15); 2; 1 )", Value(184));
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 0 )", Value(90)); // US (NASD) 30/360
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 1 )", Value(91)); // actual/actual
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 2 )", Value(90)); // actual/360
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 3 )", Value(91.25)); // actual/365
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 4 )", Value(90)); // European 30/360
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 1 )", Value(360)); // annual
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 2 )", Value(180)); // semiannual
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYS( DATE(1997;11;9); DATE(1999;11;15); 2 )", Value(180));
+}
+
+// COUPDAYSNC
+void TestFinancialFunctions::testCOUPDAYSNC()
+{
+    // ODF
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(1997;5;19); DATE(1999;11;15); 2 )", Value(176));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(1997;5;19); DATE(1999;11;15); 2; 1 )", Value(180));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 0 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 1 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 2 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 3 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 4 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 1 )", Value(330)); // annual
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 2 )", Value(150)); // semiannual
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYSNC( DATE(1997;5;19); DATE(1999;11;15); 2 )", Value(176));
+}
+
+// COUPNCD
+void TestFinancialFunctions::testCOUPNCD()
+{
+    // ODF
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2007-01-01\"; 1; 1 )=DATE(2005;01;01)", Value(true)); // Annual
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2007-01-01\"; 2; 1 )=DATE(2004;07;01)", Value(true)); // Semiannual
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2007-01-01\"; 4; 1 )=DATE(2004;04;01)", Value(true)); // Quarterly
+    CHECK_EVAL_EQUAL("COUPNCD( \"2007-01-01\"; \"2007-01-01\"; 1; 1 )", Value::errorVALUE()); // settlement < maturity
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 0 )=DATE(2004;04;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 1 )=DATE(2004;04;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 2 )=DATE(2004;04;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 3 )=DATE(2004;04;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 4 )=DATE(2004;04;01)", Value(true));
+    // alternate function name
+    CHECK_EVAL_EQUAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNCD( \"2004-01-01\"; \"2007-01-01\"; 1; 1 )=DATE(2005;01;01)", Value(true));
+}
+
 // COUPNUM
 void TestFinancialFunctions::testCOUPNUM()
 {
@@ -158,6 +237,23 @@ void TestFinancialFunctions::testCOUPNUM()
     CHECK_EVAL_SHORT("COUPNUM( \"2004-02-01\"; \"2009-01-01\"; 4; 4 )", Value(20));     //
     // alternate function name
     CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNUM(\"2004-01-01\";\"2007-01-01\";1;1)", Value(3));
+}
+
+// COUPPCD
+void TestFinancialFunctions::testCOUPPCD()
+{
+    // ODF
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-12-31\"; \"2007-01-01\"; 1; 1 )=DATE(2004;1;1)", Value(true)); // Annual
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-12-31\"; \"2007-01-01\"; 2; 1 )=DATE(2004;7;1)", Value(true)); // Semiannual
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-12-31\"; \"2007-01-01\"; 4; 1 )=DATE(2004;10;1)", Value(true)); // Quarterly
+    CHECK_EVAL_EQUAL("COUPPCD( \"2007-01-01\"; \"2004-01-01\"; 1; 1 )", Value::errorVALUE()); // settlement < maturity
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 0 )=DATE(2004;01;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 1 )=DATE(2004;01;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 2 )=DATE(2004;01;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 3 )=DATE(2004;01;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 4 )=DATE(2004;01;01)", Value(true));
+    // alternate function name
+    CHECK_EVAL_EQUAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPPCD( \"2004-12-31\"; \"2007-01-01\"; 1; 1 )=DATE(2004;1;1)", Value(true));
 }
 
 // CUMIPMT

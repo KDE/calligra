@@ -50,12 +50,12 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_amorlinc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_compound(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_continuous(valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_coupdaybs (valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_coupdays (valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_coupdaysnc (valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_coupncd (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coupdaybs (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coupdays (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coupdaysnc (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coupncd (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_couppcd (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_couppcd (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cumipmt(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cumprinc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_db(valVector args, ValueCalc *calc, FuncExtra *);
@@ -111,7 +111,6 @@ Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *);
 
 CALLIGRA_TABLES_EXPORT_FUNCTION_MODULE("financial", FinancialModule)
 
-
 FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
         : FunctionModule(parent)
 {
@@ -139,30 +138,30 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("CONTINUOUS", func_continuous);
     f->setParamCount(3);
     add(f);
-//   f = new Function ("COUPDAYBS", func_coupdaybs);
-//   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYBS");
-//   f->setParamCount (3, 4);
-//   add(f);
-//   f = new Function ("COUPDAYS", func_coupdays);
-//   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYS");
-//   f->setParamCount (3, 4);
-//   add(f);
-//   f = new Function ("COUPDAYSNC", func_coupdaysnc);
-//   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYSNC");
-//   f->setParamCount (3, 4);
-//   add(f);
-//   f = new Function ("COUPNCD", func_coupncd);
-//   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNCD");
-//   f->setParamCount (3, 4);
-//   add(f);
+    f = new Function ("COUPDAYBS", func_coupdaybs);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYBS");
+    f->setParamCount (3, 4);
+    add(f);
+    f = new Function ("COUPDAYS", func_coupdays);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYS");
+    f->setParamCount (3, 4);
+    add(f);
+    f = new Function ("COUPDAYSNC", func_coupdaysnc);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYSNC");
+    f->setParamCount (3, 4);
+    add(f);
+    f = new Function ("COUPNCD", func_coupncd);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNCD");
+    f->setParamCount (3, 4);
+    add(f);
     f = new Function("COUPNUM", func_coupnum);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNUM");
     f->setParamCount(3, 5);
     add(f);
-//   f = new Function ("COUPPCD", func_couppcd);
-//   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPPCD");
-//   f->setParamCount (3, 4);
-//   add(f);
+    f = new Function ("COUPPCD", func_couppcd);
+    f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPPCD");
+    f->setParamCount (3, 4);
+    add(f);
     f = new Function("CUMIPMT", func_cumipmt);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCUMIPMT");
     f->setParamCount(6);
@@ -828,6 +827,239 @@ Value func_continuous(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 
+enum CoupBasis {
+    BASIS_MSRB_30_360     = 0,
+    BASIS_ACT_ACT         = 1,
+    BASIS_ACT_360         = 2,
+    BASIS_ACT_365         = 3,
+    BASIS_30E_360         = 4,
+    BASIS_30Ep_360        = 5
+};
+
+struct CoupSettings {
+    int frequency; // times-per-year
+    CoupBasis basis;
+    bool eom; // not sure what this is...
+};
+
+static Value coup_checkparams(valVector args, ValueCalc *calc, QDate& settlement, QDate& maturity, CoupSettings& conf)
+{
+    settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
+    maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
+    conf.frequency = calc->conv()->asInteger(args[2]).asInteger();
+
+    conf.basis = BASIS_MSRB_30_360;
+    conf.eom = true;
+
+    if (args.count() > 3)
+        conf.basis = static_cast<CoupBasis>(calc->conv()->asInteger(args[3]).asInteger());
+    if (args.count() > 4)
+        conf.eom = calc->conv()->asBoolean(args[4]).asBoolean();
+
+    if (conf.basis < 0 || conf.basis > 5 || (conf.frequency == 0) || (12 % conf.frequency != 0)
+            || settlement.daysTo(maturity) <= 0)
+        return Value::errorVALUE();
+
+    return Value();
+}
+
+
+static QDate coup_cd(const QDate& settlement, const QDate& maturity, int freq, bool eom, bool next)
+{
+    bool is_eom_special = eom && maturity.day() == maturity.daysInMonth();
+
+    int months = 12 / freq;
+    int periods = maturity.year() - settlement.year();
+    if (periods > 0)
+        periods = (periods - 1) * freq;
+
+    QDate result;
+    do {
+        periods++;
+        result = maturity.addMonths(-periods * months);
+        if (is_eom_special) {
+            result.setDate(result.year(), result.month(), result.daysInMonth());
+        }
+    } while (settlement < result);
+
+    if (next) {
+        periods--;
+        result = maturity.addMonths(-periods * months);
+        if (is_eom_special) {
+            result.setDate(result.year(), result.month(), result.daysInMonth());
+        }
+    }
+
+    return result;
+}
+
+static int daysBetween_30E_360(const QDate& from, const QDate& to)
+{
+    int y1 = from.year();
+    int m1 = from.month();
+    int d1 = from.day();
+    int y2 = to.year();
+    int m2 = to.month();
+    int d2 = to.day();
+
+    if (d1 == 31)
+            d1 = 30;
+    if (d2 == 31)
+            d2 = 30;
+
+    return (y2 - y1) * 360 + (m2 - m1) * 30 + (d2 - d1);
+}
+
+static int daysBetween_30Ep_360(const QDate& from, const QDate& to)
+{
+    int y1 = from.year();
+    int m1 = from.month();
+    int d1 = from.day();
+    int y2 = to.year();
+    int m2 = to.month();
+    int d2 = to.day();
+
+    if (d1 == 31)
+            d1 = 30;
+    if (d2 == 31) {
+            d2 = 1;
+            m2++;
+            /* No need to check for m2 == 13 since 12*30 == 360 */
+    }
+
+    return (y2 - y1) * 360 + (m2 - m1) * 30 + (d2 - d1);
+}
+
+static int daysBetween_MSRB_30_360(const QDate& from, const QDate& to)
+{
+    int y1 = from.year();
+    int m1 = from.month();
+    int d1 = from.day();
+    int y2 = to.year();
+    int m2 = to.month();
+    int d2 = to.day();
+
+    if (m1 == 2 && d1 == from.daysInMonth())
+            d1 = 30;
+    if (m2 == 2 && d2 == to.daysInMonth())
+            d2 = 30;
+    if (d2 == 31 && d1 >= 30)
+            d2 = 30;
+    if (d1 == 31)
+            d1 = 30;
+
+    return (y2 - y1) * 360 + (m2 - m1) * 30 + (d2 - d1);
+}
+
+static int daysBetweenBasis(const QDate& from, const QDate& to, CoupBasis basis)
+{
+    const int sign = from < to ? 1 : -1;
+    const QDate f = qMin(from, to);
+    const QDate t = qMax(from, to);
+
+    switch (basis) {
+    case BASIS_ACT_ACT:
+    case BASIS_ACT_360:
+    case BASIS_ACT_365:
+        return sign * f.daysTo(t);
+    case BASIS_30E_360:
+        return sign * daysBetween_30E_360(f, t);
+    case BASIS_30Ep_360:
+        return sign * daysBetween_30Ep_360(f, t);
+    case BASIS_MSRB_30_360:
+    default:
+        return sign * daysBetween_MSRB_30_360(f, t);
+    }
+}
+
+
+//
+// Function: COUPDAYBS
+//
+Value func_coupdaybs(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QDate settlement, maturity;
+    CoupSettings conf;
+
+    Value res = coup_checkparams(args, calc, settlement, maturity, conf);
+    if (res.isError()) {
+        return res;
+    }
+
+    QDate d = coup_cd(settlement, maturity, conf.frequency, conf.eom, false);
+
+    return Value(daysBetweenBasis(d, settlement, conf.basis));
+}
+
+
+//
+// Function: COUPDAYS
+//
+Value func_coupdays(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QDate settlement, maturity;
+    CoupSettings conf;
+
+    Value res = coup_checkparams(args, calc, settlement, maturity, conf);
+    if (res.isError()) {
+        return res;
+    }
+
+    switch (conf.basis) {
+    case BASIS_MSRB_30_360:
+    case BASIS_ACT_360:
+    case BASIS_30E_360:
+    case BASIS_30Ep_360:
+        return Value(360.0 / conf.frequency);
+    case BASIS_ACT_365:
+        return Value(365.0 / conf.frequency);
+    case BASIS_ACT_ACT:
+    default:
+            QDate next = coup_cd(settlement, maturity, conf.frequency, conf.eom, true);
+            QDate prev = coup_cd(settlement, maturity, conf.frequency, conf.eom, false);
+            return Value(daysBetweenBasis(prev, next, BASIS_ACT_ACT));
+    }
+
+    return Value::errorNA();
+}
+
+
+//
+// Function: COUPDAYSNC
+//
+Value func_coupdaysnc(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QDate settlement, maturity;
+    CoupSettings conf;
+
+    Value res = coup_checkparams(args, calc, settlement, maturity, conf);
+    if (res.isError()) {
+        return res;
+    }
+
+    QDate d = coup_cd(settlement, maturity, conf.frequency, conf.eom, true);
+
+    return Value(daysBetweenBasis(settlement, d, conf.basis));
+}
+
+
+//
+// Function: COUPNCD
+//
+Value func_coupncd(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QDate settlement, maturity;
+    CoupSettings conf;
+
+    Value res = coup_checkparams(args, calc, settlement, maturity, conf);
+    if (res.isError()) {
+        return res;
+    }
+
+    return Value(coup_cd(settlement, maturity, conf.frequency, conf.eom, true), calc->settings());
+}
+
+
 //
 // Function: COUPNUM - taken from GNUMERIC
 //
@@ -873,6 +1105,23 @@ Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *)
     result = (1 + months / (12 / frequency));
 
     return Value(result);
+}
+
+
+//
+// Function: COUPPCD
+//
+Value func_couppcd(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    QDate settlement, maturity;
+    CoupSettings conf;
+
+    Value res = coup_checkparams(args, calc, settlement, maturity, conf);
+    if (res.isError()) {
+        return res;
+    }
+
+    return Value(coup_cd(settlement, maturity, conf.frequency, conf.eom, false), calc->settings());
 }
 
 
