@@ -1851,18 +1851,38 @@ Value func_npv(valVector args, ValueCalc* calc, FuncExtra*)
     return result.element(0, 0);
 }
 
+static double date_ratio(const QDate& d1, const QDate& d2, const QDate& d3, const CoupSettings& conv)
+{
+    QDate next = coup_cd(d1, d3, conv.frequency, conv.eom, true);
+    QDate prev = coup_cd(d1, d3, conv.frequency, conv.eom, false);
+
+    if (next >= d2) {
+        return daysBetweenBasis(d1, d2, conv.basis) /
+                coupdays(prev, next, conv);
+    }
+
+    double res = daysBetweenBasis(d1, next, conv.basis) /
+            coupdays(prev, next, conv);
+
+    while (true) {
+        prev = next;
+        next = next.addMonths(12 / conv.frequency);
+        //if (!next.isValid())
+            //
+        if (next >= d2) {
+            res += daysBetweenBasis(prev, d2, conv.basis) /
+                        coupdays(prev, next, conv);
+            return res;
+        }
+        res += 1;
+    }
+}
+
 //
 // ODDLPRICE
 //
 Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    // this implementation is not correct. disabling the function.
-    // specifically, we cannot use yearfrac here
-    // refer to gnumeric sources or something like
-    // http://www.advsystems.com/products/TOOLKIT/finlibdocs/FinLib-05.htm
-    // for correct formulas
-    return Value::errorVALUE();
-
     QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
     QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
     QDate last = calc->conv()->asDate(args[2]).asDate(calc->settings());
@@ -1876,6 +1896,11 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 7)
         basis = calc->conv()->asInteger(args[7]).asInteger();
 
+    CoupSettings conv;
+    conv.basis = static_cast<CoupBasis>(basis);
+    conv.frequency = freq;
+    conv.eom = true;
+
 //   kDebug(36002)<<"ODDLPRICE";
 //   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
 
@@ -1883,17 +1908,18 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
     if (yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last)
         return Value::errorVALUE();
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
+    QDate d = last;
+    do {
+        d = d.addMonths(12 / conv.frequency);
+    } while (d.isValid() && d < maturity);
 
-    double dci  = yearFrac(date0, last, maturity, basis) * freq;
-    double dsci = yearFrac(date0, settlement, maturity, basis) * freq;
-    double ai = yearFrac(date0, last, settlement, basis) * freq;
+    double x1 = date_ratio(last, settlement, d, conv);
+    double x2 = date_ratio(last, maturity, d, conv);
+    double x3 = date_ratio(settlement, maturity, d, conv);
 
-    double res = redemp + dci * 100.0 * rate / freq;
-    res /= dsci * yield / freq + 1.0;
-    res -= ai * 100.0 * rate / freq;
-
-    return Value(res);
+    return Value((redemp * conv.frequency +
+              100 * rate * (x2 - x1 * (1 + yield * x3 / conv.frequency))) /
+              (yield * x3 + conv.frequency));
 }
 
 
@@ -1902,13 +1928,6 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    // this implementation is not correct. disabling the function.
-    // specifically, we cannot use yearfrac here
-    // refer to gnumeric sources or something like
-    // http://www.advsystems.com/products/TOOLKIT/finlibdocs/FinLib-05.htm
-    // for correct formulas
-    return Value::errorVALUE();
-
     QDate settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
     QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
     QDate last = calc->conv()->asDate(args[2]).asDate(calc->settings());
@@ -1922,6 +1941,11 @@ Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 7)
         basis = calc->conv()->asInteger(args[7]).asInteger();
 
+    CoupSettings conv;
+    conv.basis = static_cast<CoupBasis>(basis);
+    conv.frequency = freq;
+    conv.eom = true;
+
 //   kDebug(36002)<<"ODDLYIELD";
 //   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" price="<<price<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
 
@@ -1929,18 +1953,19 @@ Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
     if (rate < 0.0 || price <= 0.0 || maturity <= settlement || settlement <= last)
         return Value::errorVALUE();
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
 
-    double dci  = yearFrac(date0, last, maturity, basis) * freq;
-    double dsci = yearFrac(date0, settlement, maturity, basis) * freq;
-    double ai = yearFrac(date0, last, settlement, basis) * freq;
+    QDate d = last;
+    do {
+        d = d.addMonths(12 / conv.frequency);
+    } while (d.isValid() && d < maturity);
 
-    double res = redemp + dci * 100.0 * rate / freq;
-    res /= price + ai * 100.0 * rate / freq;
-    res --;
-    res *= freq / dsci;
+    double x1 = date_ratio(last, settlement, d, conv);
+    double x2 = date_ratio(last, maturity, d, conv);
+    double x3 = date_ratio(settlement, maturity, d, conv);
 
-    return Value(res);
+
+    return Value((conv.frequency * (redemp - price) + 100 * rate * (x2 - x1)) /
+            (x3 * price + 100 * rate * x1 * x3 / conv.frequency));
 }
 
 
