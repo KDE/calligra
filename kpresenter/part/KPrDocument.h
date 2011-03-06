@@ -29,7 +29,7 @@ class KPrDeclarations;
 class KPrShapeAnimation;
 class KPrShapeAnimations;
 
-class KPrDocument : public KoPADocument
+class STAGE_EXPORT KPrDocument : public KoPADocument
 {
     Q_OBJECT
 public:

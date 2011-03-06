@@ -93,4 +93,4 @@ set(PerformanceTester_SRCS PerformanceTester.cpp )
  
 kde4_add_unit_test(PerformanceTester TESTNAME KPlato-PerformanceTester  ${PerformanceTester_SRCS})
  
-target_link_libraries(PerformanceTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTTEST_LIBRARY})
+target_link_libraries(PerformanceTester  ${KDE4_KDECORE_LIBS} planprivate kplatokernel ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})

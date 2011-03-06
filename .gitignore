@@ -3,4 +3,5 @@
 .kateconfig
 CMakeLists.txt.user
 .directory
-
+*.rej
+*.orig

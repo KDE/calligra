@@ -251,6 +251,11 @@ void KPrView::initActions()
     actionCollection()->addAction("showStatusBar", showStatusbarAction);
     connect(showStatusbarAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    //Update state of status bar action
+    if (showStatusbarAction && statusBar()){
+        showStatusbarAction->setChecked(! statusBar()->isHidden());
+    }
+
     action = new KAction( i18n( "Configure Slide Show..." ), this );
     actionCollection()->addAction( "slideshow_configure", action );
     connect( action, SIGNAL( activated() ), this, SLOT( configureSlideShow() ) );
@@ -329,6 +334,10 @@ void KPrView::createAnimation()
 void KPrView::showNormal()
 {
     setViewMode(m_normalMode);
+    KAction *action = (KAction*) actionCollection()->action("view_normal");
+    if (action){
+        action-> setChecked(true);
+    }
 }
 
 void KPrView::showNotes()

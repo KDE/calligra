@@ -1575,7 +1575,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1) == 0)
+            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) == 0)
                 val1 = Value(true);
             else
                 val1 = Value(false);
@@ -1592,7 +1592,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1) < 0)
+            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) < 0)
                 val1 = Value(true);
             else
                 val1 = Value(false);
@@ -1609,7 +1609,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1) > 0)
+            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) > 0)
                 val1 = Value(true);
             else
                 val1 = Value(false);

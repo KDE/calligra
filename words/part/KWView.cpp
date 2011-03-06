@@ -51,6 +51,7 @@
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
+#include <KoShapeReorderCommand.h>
 
 // koffice libs includes
 #include <kofficeversion.h>
@@ -343,7 +344,7 @@ void KWView::setupActions()
     action->setToolTip(i18n("Insert a footnote referencing the selected text"));
     actionCollection()->addAction("insert_footendnote", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertFootEndNote()));
-    
+
     action = new KAction(i18n("Frame Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
@@ -1095,14 +1096,6 @@ void KWView::toggleSnapToGrid()
     m_document->gridData().setSnapToGrid(m_snapToGrid); // for persistency
 }
 
-void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction)
-{
-    // TODO we should not allow any shapes to fall behind the main text frame.
-    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(canvasBase()->shapeManager()->selection()->selectedShapes(),
-                        canvasBase()->shapeManager(), direction);
-    if (cmd)
-        m_document->addCommand(cmd);
-}
 
 void KWView::toggleViewFrameBorders(bool on)
 {
@@ -1509,4 +1502,30 @@ void KWView::variableChanged(){
     m_actionMenu->menu()->clear();
     foreach (QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(canvasBase()))
         m_actionMenu->addAction(action);
+}
+
+void adjustZOrderOfSelectedFrames(KoCanvasBase *canvasBase, KWDocument *document, KoShapeReorderCommand::MoveShapeType direction)
+{
+    // TODO we should not allow any shapes to fall behind the main text frame.
+    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
+                        canvasBase->shapeManager(), direction);
+    if (cmd)
+        document->addCommand(cmd);
+}
+
+
+void KWView::raiseFrame() {
+    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::RaiseShape);
+}
+
+void KWView::lowerFrame() {
+    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::LowerShape);
+}
+
+void KWView::bringToFront() {
+    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::BringToFront);
+}
+
+void KWView::sendToBack() {
+    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::SendToBack);
 }

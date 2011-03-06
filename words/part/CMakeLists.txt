@@ -162,8 +162,12 @@ KWCanvas.h
 KWCanvasItem.h
 KWDocument.h
 KWApplicationConfig.h
-frames/KWFrameLayout.h
 KWViewMode.h
 KWView.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+KWViewModeNormal.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/words/part COMPONENT Devel)
+
+install( FILES
+frames/KWFrameLayout.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 

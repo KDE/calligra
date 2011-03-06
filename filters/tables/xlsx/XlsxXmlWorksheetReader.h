@@ -71,6 +71,8 @@ protected:
     KoFilter::ConversionStatus read_picture();
     KoFilter::ConversionStatus read_oleObjects();
     KoFilter::ConversionStatus read_oleObject();
+    KoFilter::ConversionStatus read_tableParts();
+    KoFilter::ConversionStatus read_tablePart();
 
     XlsxXmlWorksheetReaderContext* m_context;
 
@@ -151,7 +153,7 @@ public:
 
     bool firstRoundOfReading;
 
-    QList<QMap<QString, QString> > conditionalStyleForPosition(const QString& position);
+    QList<QMap<QString, QString> > conditionalStyleForPosition(const QString& positionLetter, const QString& positionNumber);
 
     QMap<QString, QMap<QString, QString> > conditionalStyles;
 };

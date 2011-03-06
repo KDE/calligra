@@ -71,7 +71,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         m_viewlistModified( false )
 {
     setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
-    setTemplateType( "kplato_template" );
+    setTemplateType( "plan_template" );
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     // Add library translation files
     KLocale *locale = KGlobal::locale();

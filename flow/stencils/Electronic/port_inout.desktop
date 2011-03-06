@@ -1,2 +1,6 @@
 [Desktop Entry]
-Name=Port Inout
+Name=port inout
+Name[pt]=porta entrada-saída
+Name[sv]=port in-ut
+Name[uk]=Вхідний/Вихідний порт
+Name[x-test]=xxport inoutxx

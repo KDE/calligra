@@ -615,6 +615,8 @@ signals:
     void relationToBeRemoved( Relation *rel );
     /// Emitted when the relation @p rel has been removed.
     void relationRemoved( Relation *rel );
+    /// Emitted when the relation @p rel shall be modified.
+    void relationToBeModified( Relation *rel );
     /// Emitted when the relation @p rel has been modified.
     void relationModified( Relation *rel );
 
