@@ -3,6 +3,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/tables/ui
     ${KOMAIN_INCLUDES}
 	${KOTEXT_INCLUDES}
+    ${TEXTLAYOUT_INCLUDES}
 	)
 
 ########### Flake Plugin library ###############
