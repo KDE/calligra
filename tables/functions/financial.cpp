@@ -992,6 +992,24 @@ Value func_coupdaybs(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 
+static double coupdays(const QDate& settlement, const QDate& maturity, const CoupSettings& conf)
+{
+    switch (conf.basis) {
+    case BASIS_MSRB_30_360:
+    case BASIS_ACT_360:
+    case BASIS_30E_360:
+    case BASIS_30Ep_360:
+        return 360.0 / conf.frequency;
+    case BASIS_ACT_365:
+        return 365.0 / conf.frequency;
+    case BASIS_ACT_ACT:
+    default:
+            QDate next = coup_cd(settlement, maturity, conf.frequency, conf.eom, true);
+            QDate prev = coup_cd(settlement, maturity, conf.frequency, conf.eom, false);
+            return daysBetweenBasis(prev, next, BASIS_ACT_ACT);
+    }
+}
+
 //
 // Function: COUPDAYS
 //
@@ -1005,22 +1023,8 @@ Value func_coupdays(valVector args, ValueCalc *calc, FuncExtra *)
         return res;
     }
 
-    switch (conf.basis) {
-    case BASIS_MSRB_30_360:
-    case BASIS_ACT_360:
-    case BASIS_30E_360:
-    case BASIS_30Ep_360:
-        return Value(360.0 / conf.frequency);
-    case BASIS_ACT_365:
-        return Value(365.0 / conf.frequency);
-    case BASIS_ACT_ACT:
-    default:
-            QDate next = coup_cd(settlement, maturity, conf.frequency, conf.eom, true);
-            QDate prev = coup_cd(settlement, maturity, conf.frequency, conf.eom, false);
-            return Value(daysBetweenBasis(prev, next, BASIS_ACT_ACT));
-    }
 
-    return Value::errorNA();
+    return Value(coupdays(settlement, maturity, conf));
 }
 
 
