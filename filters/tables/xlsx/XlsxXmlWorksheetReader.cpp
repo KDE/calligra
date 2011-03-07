@@ -1288,6 +1288,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
 {
     READ_PROLOGUE
     readNext();
+
+    // It is possible to have empty <v/> element
+    if (name() == "v" && isEndElement()) {
+        READ_EPILOGUE
+    }
+
     m_value = text().toString();
 
     readNext();

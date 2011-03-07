@@ -271,15 +271,10 @@ void OutputDebugStrategy::selectObject( const quint32 ihObject )
     kDebug(33100) << "EMR_SELECTOBJECT" << ihObject;
 }
 
-void OutputDebugStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
+void OutputDebugStrategy::extTextOut( const QRect &bounds, const EmrTextObject &textObject )
 {
-    kDebug(33100) << "EMR_EXTTEXTOUTA:" << extTextOutA.referencePoint()
-             << extTextOutA.textString();
-}
-
-void OutputDebugStrategy::extTextOutW( const EmrTextObject &textObject )
-{
-    kDebug(33100) << "EMR_EXTTEXTOUTW:" << textObject.referencePoint()
+    kDebug(33100) << "EMR_EXTTEXTOUTW:" << bounds
+                  << textObject.referencePoint()
                   << textObject.textString();
 }
 

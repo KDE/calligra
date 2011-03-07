@@ -600,7 +600,7 @@ KoFilter::ConversionStatus PptToOdp::convert(const QString& inputFile,
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
         qDebug() << "Cannot open " << inputFile;
-        return KoFilter::StupidError;
+        return KoFilter::InvalidFormat;
     }
     if (!parse(storage)) {
         qDebug() << "Parsing and setup failed.";

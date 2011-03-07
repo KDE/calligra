@@ -854,6 +854,12 @@ void StorageIO::load()
     bbat->blockSize = 1 << header->b_shift;
     sbat->blockSize = 1 << header->s_shift;
 
+    // additional heuristics to check the header
+    unsigned max_block = (filesize - 512) / bbat->blockSize;
+    if (header->num_bat > max_block) {
+        return;
+    }
+
     // find blocks allocated to store big bat
     // the first 109 blocks are in header, the rest in meta bat
     blocks.clear();
