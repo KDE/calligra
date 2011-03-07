@@ -1063,41 +1063,76 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
         //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
         return DateTimeInterval( interval.first, interval.second );
     }
-    if ( interval.first >= a.endTime() || interval.second <= a.startTime() ) {
-        // free
-        return DateTimeInterval( interval.first, interval.second );
-    }
+    //kDebug()<<"available:"<<interval<<endl<<a.intervals();
+    DateTimeInterval res;
     DateTimeInterval ci = interval;
+    int units = m_resource ? m_resource->units() : 100;
     foreach ( const AppointmentInterval &i, a.intervals().map() ) {
         //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available check interval=%1 - %2" ).arg(i.startTime().toString()).arg(i.endTime().toString()) );
         if ( i.startTime() < ci.second && i.endTime() > ci.first ) {
+            // interval intersects appointment
             if ( ci.first >= i.startTime() && ci.second <= i.endTime() ) {
-                //busy
-                return DateTimeInterval( DateTime(), DateTime() );
+                // interval within appointment
+                if ( i.load() < units ) {
+                    if ( ! res.first.isValid() ) {
+                        res.first = qMax( ci.first, i.startTime() );
+                    }
+                    res.second = qMin( ci.second, i.endTime() );
+                } else {
+                    // fully booked
+                    if ( res.first.isValid() ) {
+                        res.second = i.startTime();
+                        if ( res.first >= res.second ) {
+                            res = DateTimeInterval();
+                        }
+                    }
+                }
+                //kDebug()<<"available within:"<<interval<<i<<":"<<ci<<res;
+                break;
             }
             DateTime t = i.startTime();
-            if ( t > ci.first ) {
-                //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<t<<" PART";
+            if ( ci.first < t ) {
+                // Interval starts before appointment, so free from interval start
+                //kDebug()<<"available before:"<<interval<<i<<":"<<ci<<res;
                 //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available t>first: returns interval=%1 - %2" ).arg(ci.first.toString()).arg(t.toString()) );
-                return DateTimeInterval( ci.first, t );
+                if ( ! res.first.isValid() ) {
+                    res.first = ci.first;
+                }
+                res.second = t;
+                if ( i.load() < units ) {
+                    res.second = qMin( ci.second, i.endTime() );
+                    if ( ci.second > i.endTime() ) {
+                        ci.first = i.endTime();
+                        //kDebug()<<"available next 1:"<<interval<<i<<":"<<ci<<res;
+                        continue; // check next appointment
+                    }
+                }
+                //kDebug()<<"available:"<<interval<<i<<":"<<ci<<res;
+                break;
             }
+            // interval start >= appointment start
             t = i.endTime();
             if ( t < ci.second ) {
-                ci.first = t;
+                // check if rest of appointment is free
+                if ( units <= i.load() ) {
+                    ci.first = t; // fully booked, so move forvard to appointment end
+                }
+                if ( ! res.first.isValid() ) {
+                    res.first = ci.first;
+                }
+                res.second = ci.second;
+                //kDebug()<<"available next 2:"<<interval<<i<<":"<<ci<<res;
                 continue;
             }
-            if ( i.startTime() <= ci.first && i.endTime() >= ci.second ) {
-                //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" BUSY";
-                return DateTimeInterval( DateTime(), DateTime() );
-            }
-            ci.first = qMax( ci.first, i.endTime() );
-            if ( ci.first >= ci.second ) {
-                return DateTimeInterval( DateTime(), DateTime() ); //busy
-            }
+            //kDebug()<<"available:"<<interval<<i<<":"<<ci<<res;
+            Q_ASSERT( false );
+        } else if ( i.startTime() >= interval.second ) {
+            // no more overlaps
+            break;
         }
     }
-    //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
-    return DateTimeInterval( ci.first, ci.second );
+    //kDebug()<<"available: result="<<interval<<":"<<res;
+    return res;
 }
 
 void ResourceSchedule::logError( const QString &msg, int phase )
