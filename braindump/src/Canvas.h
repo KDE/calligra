@@ -51,7 +51,7 @@ class Canvas : public QWidget, public KoCanvasBase
     virtual void updateInputMethodInfo();
 
     KoToolProxy * toolProxy() const { return m_toolProxy; }
-    const KoViewConverter *viewConverter() const;
+    KoViewConverter *viewConverter() const;
     QWidget* canvasWidget() { return this; }
     const QWidget* canvasWidget() const { return this; }
     KoUnit unit() const;

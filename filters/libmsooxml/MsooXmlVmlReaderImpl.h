@@ -61,6 +61,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     else if (startType == StraightConnectorStart) {
         body->startElement("draw:line");
     }
+    else if (startType == GroupStart) {
+        body->startElement("draw:g");
+    }
     else if (startType == CustomStart) {
         body->startElement("draw:custom-shape");
     }
@@ -80,6 +83,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
     QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
     const QString ver_align(m_vmlStyle.value("v-text-anchor"));
+    const QString rotation(m_vmlStyle.value("rotation"));
 
     qreal x_position = 0;
     QString x_pos_string, y_pos_string, widthString, heightString;
@@ -89,7 +93,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
     if (!x_mar.isEmpty()) {
         if (m_insideGroup) {
-            x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
+            x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth + m_groupXOffset;
             x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
         } else {
             x_position = x_mar.left(x_mar.length() - 2).toDouble(); // removing the unit
@@ -98,16 +102,21 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else if (!leftPos.isEmpty()) {
         if (m_insideGroup) {
-            x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
+            x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth + m_groupXOffset;
             x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
         } else {
             x_position = leftPos.left(leftPos.length() - 2).toDouble();
             x_pos_string = leftPos;
         }
     }
+    else {
+        if (m_insideGroup) {
+            x_pos_string = QString("%1%2").arg(m_groupXOffset).arg(m_groupWidthUnit);
+        }
+    }
     if (!y_mar.isEmpty()) {
         if (m_insideGroup) {
-            y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
+            y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight + m_groupYOffset;
             y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
         } else {
             y_position = y_mar.left(y_mar.length() -2).toDouble();
@@ -116,11 +125,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else if (!topPos.isEmpty()) {
         if (m_insideGroup) {
-            y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
+            y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight + m_groupYOffset;
             y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
         } else {
             y_position = topPos.left(topPos.length() - 2).toDouble();
             y_pos_string = topPos;
+        }
+    }
+    else {
+        if (m_insideGroup) {
+            y_pos_string = QString("%1%2").arg(m_groupYOffset).arg(m_groupHeightUnit);
         }
     }
     if (!width.isEmpty()) {
@@ -165,10 +179,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         body->addAttribute("svg:y2", y2);
     }
     else {
-        body->addAttribute("svg:x", x_pos_string);
-        body->addAttribute("svg:y", y_pos_string);
-        body->addAttribute("svg:width", widthString);
-        body->addAttribute("svg:height", heightString);
+        if (startType != GroupStart) {
+            if (!x_pos_string.isEmpty()) {
+                body->addAttribute("svg:x", x_pos_string);
+            }
+            if (!y_pos_string.isEmpty()) {
+                body->addAttribute("svg:y", y_pos_string);
+            }
+            body->addAttribute("svg:width", widthString);
+            body->addAttribute("svg:height", heightString);
+        }
     }
 
     if (!m_shapeColor.isEmpty()) {
@@ -498,7 +518,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
  - curve (Bezier Curve) §14.1.2.3
  - diagram (VML Diagram) §14.2.2.8
  - extrusion (3D Extrusion) §14.2.2.11
- - fill (Shape Fill Properties) §14.1.2.5
+ - [done] fill (Shape Fill Properties) §14.1.2.5
  - formulas (Set of Formulas) §14.1.2.6
  - group (Shape Group) §14.1.2.7
  - handles (Set of Handles) §14.1.2.9
@@ -516,11 +536,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
  - [done] shapetype (Shape Template) §14.1.2.20
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
- - stroke (Line Stroke Settings) §14.1.2.21
+ - [done] stroke (Line Stroke Settings) §14.1.2.21
  - textbox (Text Box) §14.1.2.22
  - textdata (VML Diagram Text) §14.5.2.2
  - textpath (Text Layout Path) §14.1.2.23
- - wrap (Text Wrapping) §14.3.2.6
+ - [done] wrap (Text Wrapping) §14.3.2.6
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 {
@@ -529,64 +549,62 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
-    body->startElement("draw:g");
-
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
-    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
 
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
-    }
+    // To handle nested groups
+    bool groupStartsFromMe = false;
 
-    if (!m_currentDrawStyle->isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
-        if (m_moveToStylesXml) {
-            mainStyles->markStyleForStylesXml(drawStyleName);
+    if (!m_insideGroup) {
+
+        const QString width(m_vmlStyle.value("width"));
+        const QString height(m_vmlStyle.value("height"));
+
+        // These potentially cause an offset to all shapes in the group
+        // Unhandled case: theoretically x_mar could be in different units
+        // than width, in this case they should be added somehow intelligently
+        const QString x_mar(m_vmlStyle.value("margin-left"));
+        const QString y_mar(m_vmlStyle.value("margin-top"));
+
+        m_insideGroup = true;
+        groupStartsFromMe = true;
+
+        m_groupWidthUnit = width.right(2); // pt, cm etc.
+        m_groupHeightUnit = height.right(2);
+        m_real_groupWidth = width.left(width.length() - 2).toDouble();
+        m_real_groupHeight = height.left(height.length() - 2).toDouble();
+
+        m_groupX = 0;
+        m_groupY = 0;
+        m_groupWidth = 0;
+        m_groupHeight = 0;
+        m_groupXOffset = 0;
+        m_groupYOffset = 0;
+        // Assuming that two last chars are unit (cm, pt)
+        m_groupXOffset = x_mar.left(x_mar.length() - 2).toDouble();
+        m_groupYOffset = y_mar.left(y_mar.length() - 2).toDouble();
+
+        TRY_READ_ATTR_WITHOUT_NS(coordsize)
+
+        if (!coordsize.isEmpty()) {
+            m_groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
+            m_groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
         }
 
-        body->addAttribute("draw:style-name", drawStyleName);
+        TRY_READ_ATTR_WITHOUT_NS(coordorigin)
+        if (!coordorigin.isEmpty()) {
+            m_groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
+            m_groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
+        }
     }
 
-    const QString width(m_vmlStyle.value("width"));
-    const QString height(m_vmlStyle.value("height"));
+    MSOOXML::Utils::XmlWriteBuffer frameBuf;
+    body = frameBuf.setWriter(body);
 
-    m_groupWidthUnit = width.right(2); // pt, cm etc.
-    m_groupHeightUnit = height.right(2);
-    m_real_groupWidth = width.left(width.length() - 2).toDouble();
-    m_real_groupHeight = height.left(height.length() - 2).toDouble();
-
-    m_groupX = 0;
-    m_groupY = 0;
-    m_groupWidth = 0;
-    m_groupHeight = 0;
-
-    TRY_READ_ATTR_WITHOUT_NS(coordsize)
-
-    if (!coordsize.isEmpty()) {
-        m_groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
-        m_groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(coordorigin)
-    if (!coordorigin.isEmpty()) {
-        m_groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
-        m_groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
-    }
-
-    m_insideGroup = true;
+    m_wrapRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -596,14 +614,47 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
             ELSE_TRY_READ_IF(shapetype)
             ELSE_TRY_READ_IF(roundrect)
             ELSE_TRY_READ_IF(shape)
+            ELSE_TRY_READ_IF(group)
+            ELSE_TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(stroke)
+            else if (qualifiedName() == "w10:wrap") {
+                m_wrapRead = true;
+                TRY_READ(wrap)
+            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    body->endElement(); // draw:g
+    if (groupStartsFromMe) {
+        m_insideGroup = false;
+    }
 
-    m_insideGroup = false;
+    body = frameBuf.originalWriter();
+
+    m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
+    }
+
+    if (!fillcolor.isEmpty()) {
+        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    if (!strokecolor.isEmpty()) {
+        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+    }
+
+    createFrameStart(GroupStart);
+
+    (void)frameBuf.releaseWriter();
+
+    body->endElement(); // draw:g
 
     popCurrentDrawStyle();
 
@@ -1435,7 +1486,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
  - equationxml (Storage for Alternate Math Content) §14.2.2.10
  - extrusion (3D Extrusion) §14.2.2.11
  - fill (Shape Fill Properties) §14.1.2.5
- - formulas (Set of Formulas) §14.1.2.6
+ - [done] formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
  - [done] imagedata (Image Data) §14.1.2.11
  - ink (Ink) §14.2.2.15
@@ -1480,6 +1531,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
     TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS(path)
+    TRY_READ_ATTR_WITHOUT_NS(adj)
+    TRY_READ_ATTR_WITHOUT_NS(coordsize)
+    if (!path.isEmpty()) {
+        m_shapeTypeString = "<draw:enhanced-geometry ";
+
+        if (!adj.isEmpty()) {
+            QString tempModifiers = adj;
+            tempModifiers.replace(',', " ");
+            m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
+        }
+        if (!coordsize.isEmpty()) {
+            QString tempViewBox = "0 0 " + coordsize;
+            tempViewBox.replace(',', " ");
+            m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
+        }
+        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(convertToEnhancedPath(path));
+        m_shapeTypeString += ">";
+    }
+
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
@@ -1527,8 +1598,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 m_wrapRead = true;
                 TRY_READ(wrap)
             }
+            ELSE_TRY_READ_IF(formulas)
             SKIP_UNKNOWN
         }
+    }
+
+    // Case of a custom shape which is not defined in a shapetype
+    if (!path.isEmpty()) {
+        m_shapeTypeString += "</draw:enhanced-geometry>";
     }
 
     body = frameBuf.originalWriter();
@@ -1551,8 +1628,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     if (m_outputFrames) {
         if (isCustomShape) {
-            type = type.mid(1); // removes extra # from the start
-            body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+            if (!type.isEmpty()) {
+                type = type.mid(1); // removes extra # from the start
+                body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+            }
+            else {
+                body->addCompleteElement(m_shapeTypeString.toUtf8());
+            }
         }
         createFrameEnd();
     }

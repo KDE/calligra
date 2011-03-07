@@ -21,9 +21,9 @@
 #ifndef KWFRAMELAYOUT_H
 #define KWFRAMELAYOUT_H
 
-#include "KWord.h"
+#include "../KWord.h"
 
-#include "kword_export.h"
+#include "../kword_export.h"
 
 #include <QList>
 #include <QObject>

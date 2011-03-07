@@ -173,8 +173,11 @@ protected:
     // *m_newObjectToolbarAction,
         *m_openAction, *m_designAction, *m_editTextAction,
         *m_executeAction,
-        *m_dataExportToClipboardAction, *m_dataExportToFileAction, *m_printAction, *m_pageSetupAction;
+        *m_dataExportToClipboardAction, *m_dataExportToFileAction;
     KActionMenu* m_exportActionMenu;
+#ifndef KEXI_NO_QUICK_PRINTING
+    KAction *m_printAction, *m_pageSetupAction;
+#endif
 //  KMenu* m_newObjectMenu;
     QAction *m_itemMenuTitle, *m_partMenuTitle,
     *m_exportActionMenu_sep, *m_pageSetupAction_sep;

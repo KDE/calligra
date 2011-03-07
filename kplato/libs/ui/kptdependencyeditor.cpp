@@ -746,10 +746,11 @@ void DependencyNodeItem::moveToY( qreal y )
     foreach ( DependencyLinkItem *i, m_childrelations ) {
         i->createPath();
     }
-    setTreeIndicator( true );
-    foreach ( DependencyNodeItem *ch, m_children ) {
-        ch->setTreeIndicator( true );
+    DependencyNodeItem *par = this;
+    while ( par->parentItem() ) {
+        par = par->parentItem();
     }
+    par->setTreeIndicator( true );
 }
 
 void DependencyNodeItem::setRow( int row )
@@ -774,10 +775,11 @@ void DependencyNodeItem::moveToX( qreal x )
     foreach ( DependencyLinkItem *i, m_childrelations ) {
         i->createPath();
     }
-    setTreeIndicator( true );
-    foreach ( DependencyNodeItem *ch, m_children ) {
-        ch->setTreeIndicator( true );
+    DependencyNodeItem *par = this;
+    while ( par->parentItem() ) {
+        par = par->parentItem();
     }
+    par->setTreeIndicator( true );
 }
 
 void DependencyNodeItem::setColumn()
@@ -910,6 +912,14 @@ qreal DependencyNodeItem::treeIndicatorX() const
 
 void DependencyNodeItem::setTreeIndicator( bool on )
 {
+    paintTreeIndicator( on );
+    foreach ( DependencyNodeItem *i, m_children ) {
+        i->setTreeIndicator( on );
+    }
+}
+
+void DependencyNodeItem::paintTreeIndicator( bool on )
+{
     if ( ! on ) {
         m_treeIndicator->hide();
         return;
@@ -920,14 +930,15 @@ void DependencyNodeItem::setTreeIndicator( bool on )
     for ( DependencyNodeItem *par = m_parent; par; par = par->parentItem() ) {
         qreal x = par->treeIndicatorX();
         p.moveTo( x, y1 );
-        p.lineTo( x, (y1 + y2) / 2.0 );
         if ( par == m_parent ) {
+            p.lineTo( x, (y1 + y2) / 2.0 );
             p.lineTo( x + 6, (y1 + y2) / 2.0 );
             if ( m_node->siblingAfter() ) {
                 p.moveTo( x, (y1 + y2) / 2.0 );
                 p.lineTo( x, y2 );
             }
-        } else {
+        } else if ( par->children().last()->rect().y() > rect().y() ) {
+            p.lineTo( x, (y1 + y2) / 2.0 );
             p.lineTo( x, y2 );
         }
     }

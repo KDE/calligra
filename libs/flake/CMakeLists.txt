@@ -315,6 +315,7 @@ install(
     commands/KoShapeUngroupCommand.h
     commands/KoSubpathRemoveCommand.h
     tools/KoInteractionTool.h
+    tools/KoPanTool.h
     KoViewConverter.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

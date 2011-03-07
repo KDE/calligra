@@ -112,7 +112,7 @@ void Canvas::updateCanvas( const QRectF& rc )
   emit canvasUpdated();
 }
 
-const KoViewConverter * Canvas::viewConverter() const
+KoViewConverter * Canvas::viewConverter() const
 {
   return m_view->zoomHandler();
 }

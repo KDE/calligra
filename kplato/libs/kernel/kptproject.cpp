@@ -2685,6 +2685,7 @@ void Project::takeRelation( Relation *rel )
 
 void Project::setRelationType( Relation *rel, Relation::Type type )
 {
+    emit relationToBeModified( rel );
     rel->setType( type );
     emit relationModified( rel );
     emit changed();
@@ -2692,6 +2693,7 @@ void Project::setRelationType( Relation *rel, Relation::Type type )
 
 void Project::setRelationLag( Relation *rel, const Duration &lag )
 {
+    emit relationToBeModified( rel );
     rel->setLag( lag );
     emit relationModified( rel );
     emit changed();

@@ -123,6 +123,7 @@ static KCmdLineOptions kexi_options()
              "Use \"\" chars to specify names containing spaces."))
     .add("new <object_type>", ki18n(
              "Start new object design of type 'object_type'."))
+#ifndef KEXI_NO_QUICK_PRINTING
     .add("print [<object_type>:]<object_name>", ki18n(
              "\nOpen the Print dialog window for an object of type\n"
              "'object_type' and name 'object_name' in the specified\n"
@@ -135,6 +136,7 @@ static KCmdLineOptions kexi_options()
              "of type 'object_type' and name 'object_name'\n"
              "from specified project on application start.\n"
              "See --print for more details."))
+#endif
     .add(":", ki18n("Options related to database servers:"))
     .add("u")
     .add("user <name>", ki18n(
