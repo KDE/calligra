@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -163,6 +164,7 @@ GETTER(qint32,                 DxTextRight,          dxTextRight,          0)
 GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)
 GETTER(quint32,                Pib,                  pib,                  0)
 GETTER(quint32,                HspMaster,            hspMaster,            0) // 2.3.2.1
+GETTER(quint32,                Cxstyle,              cxstyle,              0x00000003) // 2.3.2.2
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \
