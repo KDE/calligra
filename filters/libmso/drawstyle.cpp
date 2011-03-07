@@ -165,6 +165,14 @@ GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)
 GETTER(quint32,                Pib,                  pib,                  0)
 GETTER(quint32,                HspMaster,            hspMaster,            0) // 2.3.2.1
 GETTER(quint32,                Cxstyle,              cxstyle,              0x00000003) // 2.3.2.2
+GETTER(qint32,                 AdjustValue,          adjustvalue,          0) // 2.3.6.10
+GETTER(qint32,                 Adjust2Value,         adjust2value,         0) // 2.3.6.11
+GETTER(qint32,                 Adjust3Value,         adjust3value,         0) // 2.3.6.12
+GETTER(qint32,                 Adjust4Value,         adjust4value,         0) // 2.3.6.13
+GETTER(qint32,                 Adjust5Value,         adjust5value,         0) // 2.3.6.14
+GETTER(qint32,                 Adjust6Value,         adjust6value,         0) // 2.3.6.15
+GETTER(qint32,                 Adjust7Value,         adjust7value,         0) // 2.3.6.16
+GETTER(qint32,                 Adjust8Value,         adjust8value,         0) // 2.3.6.17
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \

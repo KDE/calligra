@@ -102,6 +102,14 @@ public:
     // Geometry property set
     IMsoArray pVertices_complex() const;
     IMsoArray pSegmentInfo_complex() const;
+    qint32 adjustvalue() const;
+    qint32 adjust2value() const;
+    qint32 adjust3value() const;
+    qint32 adjust4value() const;
+    qint32 adjust5value() const;
+    qint32 adjust6value() const;
+    qint32 adjust7value() const;
+    qint32 adjust8value() const;
     // Geometry Boolean Properties
 
     // Fill Style Property Set
