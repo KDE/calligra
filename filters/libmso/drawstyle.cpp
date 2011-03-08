@@ -90,8 +90,8 @@ const MSO::FixedPoint zero()
         if (!p && mastersp) { \
             p = get<MSO::FOPT>(*mastersp); \
         } \
-        if (!p) { \
-            p = get<MSO::FOPT>(d); \
+        if (!p && d) { \
+            p = get<MSO::FOPT>(*d); \
         } \
         if (p) { \
             return p->NAME; \
@@ -191,9 +191,11 @@ GETTER(qint32,                 Adjust8Value,         adjust8value,         0) //
                 return p->NAME; \
             } \
         } \
-        p = get<MSO::FOPT>(d); \
-        if (p && p->TEST) { \
-            return p->NAME; \
+        if (d) { \
+            p = get<MSO::FOPT>(d); \
+            if (p && p->TEST) { \
+                return p->NAME; \
+            } \
         } \
         return DEFAULT; \
     }

@@ -36,11 +36,11 @@ public:
 class DrawStyle
 {
 private:
-    const MSO::OfficeArtDggContainer& d;
+    const MSO::OfficeArtDggContainer* d;
     const MSO::OfficeArtSpContainer* mastersp;
     const MSO::OfficeArtSpContainer* sp;
 public:
-    explicit DrawStyle(const MSO::OfficeArtDggContainer& d_,
+    explicit DrawStyle(const MSO::OfficeArtDggContainer* d_ = 0,
                        const MSO::OfficeArtSpContainer* mastersp_ = 0,
                        const MSO::OfficeArtSpContainer* sp_ = 0)
             : d(d_), mastersp(mastersp_), sp(sp_) {}

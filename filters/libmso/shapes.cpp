@@ -1698,7 +1698,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
 {
     const OfficeArtDggContainer* drawingGroup = 0;
     const OfficeArtSpContainer* master = 0;
-    const DrawStyle ds(*drawingGroup, master, &o);
+    const DrawStyle ds(drawingGroup, master, &o);
 
     IMsoArray _v = ds.pVertices_complex();
     IMsoArray _c = ds.pSegmentInfo_complex();
