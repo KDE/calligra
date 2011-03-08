@@ -125,7 +125,7 @@
        <Help>
            <Text>The SEARCHB() function finds one text string (find_text) within another text string (within_text) and returns the number of the starting point of find_text, from the leftmost character of within_text using byte positions.</Text>
            <Text>You can use wildcard characters, question mark (?) and asterisk (*). A question mark matches any single character, an asterisk matches any sequences of characters.</Text>
-           <Text>Parameter BytePosition specifies the character at which to start the search. The first character is character number 2. If BytePosition is omitted, it is assumed to be 2. SEARCH does not distinguish between uppercase and lowercase letters.</Text>
+           <Text>Parameter BytePosition specifies the character at which to start the search. The first character is character number 2. If BytePosition is omitted, it is assumed to be 2. SEARCHB does not distinguish between uppercase and lowercase letters.</Text>
            <Syntax>SEARCHB(find_text;within_text;BytePosition Start)</Syntax>
            <Related>FINDB</Related>
            <Related>FIND</Related>
