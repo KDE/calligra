@@ -173,6 +173,7 @@ GETTER(qint32,                 Adjust5Value,         adjust5value,         0) //
 GETTER(qint32,                 Adjust6Value,         adjust6value,         0) // 2.3.6.15
 GETTER(qint32,                 Adjust7Value,         adjust7value,         0) // 2.3.6.16
 GETTER(qint32,                 Adjust8Value,         adjust8value,         0) // 2.3.6.17
+GETTER(MSO::FixedPoint,        Rotation,             rotation,             0) // 2.3.18.5
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \

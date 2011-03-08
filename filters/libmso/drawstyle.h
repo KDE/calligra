@@ -112,6 +112,9 @@ public:
     qint32 adjust8value() const;
     // Geometry Boolean Properties
 
+    // Transformation property set
+    MSO::FixedPoint rotation() const;
+
     // Fill Style Property Set
     quint32 fillType() const;
     MSO::OfficeArtCOLORREF fillColor() const;
