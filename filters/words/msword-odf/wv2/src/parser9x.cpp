@@ -232,15 +232,18 @@ void Parser9x::parseFootnote( const FootnoteData& data )
 #ifdef WV2_DEBUG_FOOTNOTES
     wvlog << "Parser9x::parseFootnote() #####################" << endl;
 #endif
-    if ( data.limCP - data.startCP == 0 ) // shouldn't happen, but well...
+    // shouldn't happen, but well...
+    if ( data.limCP - data.startCP == 0 ) {
         return;
+    }
 
     saveState( data.limCP - data.startCP, data.type == FootnoteData::Footnote ? Footnote : Endnote );
     m_subDocumentHandler->footnoteStart();
 
     U32 offset = m_fib.ccpText + data.startCP;
-    if ( data.type == FootnoteData::Endnote )
+    if ( data.type == FootnoteData::Endnote ) {
         offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpMcr + m_fib.ccpAtn;
+    }
     parseHelper( Position( offset, m_plcfpcd ) );
 
     m_subDocumentHandler->footnoteEnd();
@@ -255,13 +258,15 @@ void Parser9x::parseAnnotation( const AnnotationData& data )
 #ifdef WV2_DEBUG_ANNOTATIONS
     wvlog << "Parser9x::parseAnnotation() #####################" << endl;
 #endif
-    if ( data.limCP - data.startCP == 0 ) // shouldn't happen, but well...
+    // shouldn't happen, but well...
+    if ( data.limCP - data.startCP == 0 ) {
         return;
+    }
 
     saveState( data.limCP - data.startCP, Annotation );
     m_subDocumentHandler->annotationStart();
 
-    U32 offset = m_fib.ccpText + data.startCP;
+    U32 offset = m_fib.ccpText + m_fib.ccpFtn + m_fib.ccpHdd + data.startCP;
     parseHelper( Position( offset, m_plcfpcd ) );
 
     m_subDocumentHandler->annotationEnd();
@@ -966,7 +971,10 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
         }
     case TextHandler::AnnotationRef:
         {
-            emitAnnotation(UString(character), globalCP, chp);
+            //comment reference characters are only in the Main Document
+            if (m_subDocument == Main) {
+                emitAnnotation( UString(character), globalCP, chp );
+            }
         }
     case TextHandler::FieldEscapeChar:
             wvlog << "Found an escape character ++++++++++++++++++++?" << endl;
@@ -1020,10 +1028,6 @@ void Parser9x::emitBookmark( U32 globalCP )
 
 void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
 {
-    for (int i = 0; i < characters.length(); ++i) {
-        wvlog << characters[i].unicode();
-    }
-    wvlog << endl;
     if ( !m_annotations ) {
         wvlog << "Bug: Found an annotation, but m_annotations == 0!" << endl;
         return;
@@ -1031,8 +1035,10 @@ void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const
 
     bool ok;
     AnnotationData data( m_annotations->annotation( globalCP, ok ) );
-    if ( ok )
-        m_textHandler->annotationFound(characters, chp, make_functor( *this, &Parser9x::parseAnnotation, data ));
+    if ( ok ) {
+        m_textHandler->annotationFound(characters, chp,
+                                       make_functor( *this, &Parser9x::parseAnnotation, data ));
+    }
 }
 
 void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )

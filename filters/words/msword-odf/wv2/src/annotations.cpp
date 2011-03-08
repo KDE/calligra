@@ -1,5 +1,6 @@
 /* This file is part of the wvWare 2 project
    Copyright (C) 2002-2003 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,8 +30,7 @@ Annotations::Annotations( OLEStreamReader* tableStream, const Word97::FIB& fib )
         m_annotationRef( 0 ), m_annotationRefIt( 0 )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::Annotations "<< endl
-          << "footnotes" << endl
+    wvlog << endl << "footnotes" << endl
           << "   fcPlcffndRef=" << fib.fcPlcffndRef << " lcbPlcffndRef=" << fib.lcbPlcffndRef << endl
           << "   fcPlcffndTxt=" << fib.fcPlcffndTxt << " lcbPlcffndTxt=" << fib.lcbPlcffndTxt << endl
           << "annotations" << endl
@@ -39,7 +39,7 @@ Annotations::Annotations( OLEStreamReader* tableStream, const Word97::FIB& fib )
 #endif
     tableStream->push();
     // Annotations
-    init( fib.fcPlcfandRef, fib.lcbPlcfandRef, fib.fcPlcfandTxt, fib.fcPlcfandTxt,
+    init( fib.fcPlcfandRef, fib.lcbPlcfandRef, fib.fcPlcfandTxt, fib.lcbPlcfandTxt,
           tableStream, &m_annotationRef, &m_annotationRefIt, m_annotationTxt, m_annotationTxtIt );
     tableStream->pop();
 }
@@ -53,22 +53,32 @@ Annotations::~Annotations()
 AnnotationData Annotations::annotation( U32 globalCP, bool& ok )
 {
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::annotation(): globalCP=" << globalCP << endl;
+    wvlog << " globalCP=" << globalCP << endl;
 #endif
-    ok = true; // let's assume we will find it
-    if (    m_annotationRefIt && m_annotationRefIt->currentStart() == globalCP
-            && m_annotationTxtIt != m_annotationTxt.end() ) {
 
-        ++( *m_annotationRefIt ); // yay, but it is hard to make that more elegant
+    if ( m_annotationRefIt &&
+         m_annotationRefIt->currentStart() == globalCP &&
+         m_annotationTxtIt != m_annotationTxt.end() )
+    {
+        ok = true;
+
+        // yay, but it is hard to make that more elegant
+        ++( *m_annotationRefIt );
 
         U32 start = *m_annotationTxtIt;
         ++m_annotationTxtIt;
-        return AnnotationData( start, *m_annotationTxtIt );
-    }
+        U32 lim = *m_annotationTxtIt;
 
-    wvlog << "Bug: There is no annotation with the CP " << globalCP << endl;
-    ok = false;
-    return AnnotationData( 0, 0 );
+#ifdef WV2_DEBUG_ANNOTATIONS
+        wvlog << "start:" << start << endl;
+        wvlog << "lim:" << lim << endl;
+#endif
+        return AnnotationData( start, lim );
+    } else {
+        ok = false;
+        wvlog << "Bug: There is no annotation with the CP " << globalCP << endl;
+        return AnnotationData( 0, 0 );
+    }
 }
 
 U32 Annotations::nextAnnotation() const
@@ -81,34 +91,41 @@ void Annotations::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
                         PLCF<Word97::FRD>** ref, PLCFIterator<Word97::FRD>** refIt,
                         std::vector<U32>& txt, std::vector<U32>::const_iterator& txtIt )
 {
-    if ( lcbRef == 0 )
+    if ( lcbRef == 0 ) {
         return;
+    }
 
     tableStream->seek( fcRef, G_SEEK_SET );
     *ref = new PLCF<Word97::FRD>( lcbRef, tableStream );
     *refIt = new PLCFIterator<Word97::FRD>( **ref );
 
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::init()" << endl;
+    wvlog << "[ PlcfandRef ]" << endl;
     ( *ref )->dumpCPs();
 #endif
 
-    if ( lcbTxt == 0 )
+    if ( lcbTxt == 0 ) {
         wvlog << "Bug: lcbTxt == 0 but lcbRef != 0" << endl;
-    else {
+    } else {
         if ( static_cast<U32>( tableStream->tell() ) != fcTxt ) {
             wvlog << "Warning: Found a hole in the table stream" << endl;
             tableStream->seek( fcTxt, G_SEEK_SET );
         }
+#ifdef WV2_DEBUG_ANNOTATIONS
+        wvlog << "[ PlcfandTxt ]" << endl;
+#endif
         for ( U32 i = 0; i < lcbTxt; i += sizeof( U32 ) ) {
             txt.push_back( tableStream->readU32() );
 #ifdef WV2_DEBUG_ANNOTATIONS
-            wvlog << "read: " << txt.back() << endl;
+            wvlog << "CP: " << txt.back() << endl;
 #endif
         }
         txtIt = txt.begin();
     }
+
+    //TODO: ATRDPost10, ATRDPre10, XSTs at position fcGrpXstAtnOwners
+
 #ifdef WV2_DEBUG_ANNOTATIONS
-    wvlog << "Annotations::init() done" << endl;
+    wvlog << "Annotation init done" << endl;
 #endif
 }
