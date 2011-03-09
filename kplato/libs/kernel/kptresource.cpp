@@ -1073,7 +1073,7 @@ bool Resource::WorkInfoCache::load( const KoXmlElement &element, XMLLoaderObject
     if ( ! e.isNull() ) {
         intervals.loadXML( e, status );
     }
-    kDebug()<<*this;
+    //kDebug()<<*this;
     return true;
 }
 
