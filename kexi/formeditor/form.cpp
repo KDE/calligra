@@ -241,7 +241,28 @@ public:
     }
 
     KoProperty::Property::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
-
+    
+    //! Sets color of selected widget(s) to value of @a p. 
+    //! @a roleMethod can be backgroundColor or foregroundColor.
+    void setColorProperty(KoProperty::Property& p,
+                          QPalette::ColorRole (QWidget::*roleMethod)() const)
+    {
+        foreach(QWidget* widget, selected) {
+            ObjectTreeItem *titem = q->objectTree()->lookup(widget->objectName());
+            if (titem && p.isModified())
+                titem->addModifiedProperty(p.name(), p.value());
+            QPalette widgetPalette(widget->palette());
+            QColor oldColor(widgetPalette.color((widget->*roleMethod)()));
+            widgetPalette.setColor((widget->*roleMethod)(), p.value().value<QColor>());
+            widget->setPalette(widgetPalette);
+            if (!isRedoing) {
+                q->addPropertyCommand(widget->objectName().toLatin1(),
+                    oldColor, p.value(), p.name(), Form::DontExecuteCommand);
+            }
+            //handleWidgetPropertyChanged(widget, p.name(), value);
+        }
+    }
+        
     Form::Mode mode;
     Form::State state;
     Form::Features features;
@@ -1837,6 +1858,14 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         // return;
         // special types of properties handled separately
     }
+    else if (property == "paletteBackgroundColor") {
+        d->setColorProperty(p, &QWidget::backgroundRole);
+        return;
+    }
+    else if (property == "paletteForegroundColor") {
+        d->setColorProperty(p, &QWidget::foregroundRole);
+        return;
+    }
     else if (property == "hAlign" || property == "vAlign" || property == "wordbreak") {
         saveAlignProperty(property);
         return;
@@ -2218,6 +2247,13 @@ void Form::createPropertiesForWidget(QWidget *w)
         // update the Property.oldValue() and isModified() using the value stored in the ObjectTreeItem
         updatePropertyValue(tree, propertyName, meta);
     }
+    
+    newProp = new KoProperty::Property("paletteBackgroundColor",
+                                       w->palette().color(w->backgroundRole()));
+    d->propertySet.addProperty(newProp);
+    newProp = new KoProperty::Property("paletteForegroundColor",
+                                       w->palette().color(w->foregroundRole()));
+    d->propertySet.addProperty(newProp);
 
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter
 //! @todo fix enabled property here
@@ -3365,8 +3401,11 @@ void Form::changeFont()
     if (1 == widgetsWithFontProperty.count()) {
         //single widget's settings
 //?        QWidget *widget = widgetsWithFontProperty.first();
-        if (QDialog::Accepted != KFontDialog::getFont(font, false, widget()))
+        if (QDialog::Accepted != KFontDialog::getFont(
+                font, KFontChooser::NoDisplayFlags, widget()))
+        {
             return;
+        }
         d->propertySet.changeProperty("font", font);
         return;
     }
