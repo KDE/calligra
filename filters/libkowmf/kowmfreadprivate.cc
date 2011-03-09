@@ -530,7 +530,9 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
         case 65: // dibStretchBlt
         case 67: // stretchDib
         case 72: // extFloodFill
+#if DEBUG_RECORDS
             kDebug(31000) << "drawing record: " << (numFunction & 0xff);
+#endif
             doRecalculateBBox = true;
             break;
 
@@ -540,7 +542,9 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
 
         // Recalculate the BBox if it was indicated above that it should be.
         if (doRecalculateBBox && !bboxRecalculated) {
+#if DEBUG_RECORDS
             kDebug(31000) << "Recalculating BBox";
+#endif
             // If we have a viewport, always use that one.
             if (viewportExtIsSet) {
                 orgX = viewportOrgX;
@@ -567,7 +571,9 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
             }
 
             // At this point, the ext is always >= 0, i.e. org <= org+ext
+#if DEBUG_RECORDS
             kDebug(31000) << orgX << orgY << extX << extY;
+#endif
             if (orgX < mBBoxLeft)          mBBoxLeft = orgX;
             if (orgY < mBBoxTop)           mBBoxTop  = orgY;
             if (orgX + extX > mBBoxRight)  mBBoxRight  = orgX + extX;
