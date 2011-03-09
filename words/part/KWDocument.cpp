@@ -36,6 +36,7 @@
 #include "KWDLoader.h"
 #include "KWOdfWriter.h"
 #include "frames/KWFrameSet.h"
+#include "frames/KWTextFrame.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
 #include "frames/KWFrameLayout.h"
