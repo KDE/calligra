@@ -170,7 +170,11 @@ void ValueCache::setRectValue( const QString& name, qreal value ) {
     } else if ( name == "w" ) {
 		m_rect.setWidth( value );
     } else if ( name == "h" ) {
-		m_rect.setHeight( value );
+        //TODO this is a hack, as its not really described how to handle infinite values during layouting
+        if ( value != std::numeric_limits<qreal>::infinity() )
+            m_rect.setHeight( value );
+        else
+            m_rect.setHeight( m_rect.width() );
     } else if ( name == "t" ) {
         m_rect.moveTop( value );
     } else if ( name == "b" ) {
@@ -182,7 +186,6 @@ void ValueCache::setRectValue( const QString& name, qreal value ) {
     } else {
         ASSERT_X( false, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
     }
-    Q_ASSERT( m_rect.height() != std::numeric_limits<qreal>::infinity() );
     m_unmodified = false;
 }
 
@@ -2645,7 +2648,8 @@ qreal LinearAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QS
 // http://msdn.microsoft.com/en-us/library/dd439457%28v=office.12%29.aspx
 void LinearAlgorithm::virtualDoLayout() {
     AbstractAlgorithm::virtualDoLayout();
-
+    // TODO handle infinite values somehow sensible
+#if 1
     QMap< QString, qreal > values = layout()->finalValues();
     QString direction = layout()->algorithmParam( "linDir", "fromL" );
     qreal x = 0;
@@ -2737,6 +2741,7 @@ void LinearAlgorithm::virtualDoLayout() {
         }
 
     }
+#endif
 #if 0
     QString direction = layout()->algorithmParam("linDir", "fromL");
     const qreal lMarg = layout()->finalValues()[ "lMarg" ];
