@@ -59,6 +59,7 @@ void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect 
     m_context->m_rootLayout->m_values["t"] = rect.y();
     m_context->m_rootLayout->m_values["w"] = rect.width();
     m_context->m_rootLayout->m_values["h"] = rect.height();
+	kDebug() << "drawingRect" << rect;
 
     // Do the (re-)layout.
     m_context->m_rootLayout->layoutAtom(m_context);    
