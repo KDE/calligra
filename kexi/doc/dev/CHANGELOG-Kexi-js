@@ -97,11 +97,7 @@ Forms
 
 2011-03-03
 Tables
-<<<<<<< HEAD
 *fix inserting row when field has "required" attribute set
-=======
-*fix inserting row when field has "required" atribute set
->>>>>>> master
 BUG:267311
 **backported to 2.3.x
 **backported to 2.2.x
