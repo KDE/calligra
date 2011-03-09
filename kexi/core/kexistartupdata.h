@@ -78,6 +78,9 @@ public:
     /*! \return true if the Project Navigator should be visible even if User Mode is on. */
     bool isProjectNavigatorVisible() const;
 
+    /*! \return true if the main menu (usually displayed as the tabbed toolbar) should be visible. */
+    bool isMainMenuVisible() const;
+    
 protected:
     KexiProjectData *m_projectData;
     Action m_action;
@@ -85,6 +88,7 @@ protected:
     bool m_forcedUserMode;
     bool m_forcedDesignMode;
     bool m_isProjectNavigatorVisible;
+    bool m_isMainMenuVisible;
     bool m_createDB;
     bool m_dropDB;
     bool m_alsoOpenDB;

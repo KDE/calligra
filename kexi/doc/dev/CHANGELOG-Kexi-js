@@ -84,6 +84,11 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+Forms
+*added --hide-menu command line option: Hides the main menu (the tabbed toolbar) completely.
+ A number of commands from the main menu is always visible. This option is useful in User Mode.
+BUG:268001
+
 2011-03-08
 Forms
 *re-add foreground and background color properties for widgets; undo/redo works too
