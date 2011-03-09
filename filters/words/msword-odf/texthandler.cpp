@@ -106,8 +106,8 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
         kWarning() << "No mainStyles!";
     }
 
-    //[MS-DOC] — v20090708 - 2.7.2 DopBase pg.163
-    if ((0x00D9 >= m_parser->fib().nFib) && (m_parser->dop().nfcFtnRef2 == 0)) {
+    //[MS-DOC] — v20101219 - 2.7.2 DopBase
+    if ((m_parser->fib().nFib <= 0x00D9) && (m_parser->dop().nfcFtnRef2 == 0)) {
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
 }
@@ -131,7 +131,7 @@ KoXmlWriter* KWordTextHandler::currentWriter() const
     else {
         writer = m_bodyWriter;
     }
-    return writer; 
+    return writer;
 }
 
 //increment m_sectionNumber
@@ -290,7 +290,8 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
 void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
-                                     wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                                     wvWare::UString characters,
+                                     wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                      const wvWare::FootnoteFunctor& parseFootnote)
 {
     Q_UNUSED(chp);
@@ -377,8 +378,8 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
         }
         m_footnoteWriter->addTextNode(customNote);
     }
-    //text:note-citation
-    m_footnoteWriter->endElement();
+
+    m_footnoteWriter->endElement(); //text:note-citation
     //start the body of the footnote
     m_footnoteWriter->startElement("text:note-body");
 

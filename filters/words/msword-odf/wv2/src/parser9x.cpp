@@ -90,6 +90,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
         m_data = 0;
     }
 
+    //validate FIB, keep going even if it's not perfect
+    m_fib.valid();
+
 #ifdef WV2_DUMP_FIB
     wvlog << "Dumping some parts of the FIB: " << endl;
     wvlog << "   wIdent=" << m_fib.wIdent << endl;
@@ -117,9 +120,16 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
     wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << endl;
     wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << endl;
     wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << endl;
-
+    wvlog << "   cswNew=" << m_fib.cswNew << endl;
 #endif
-
+#ifdef WV2_DEBUG_DOP
+    wvlog << "Debug DOP:" << endl;
+    if (m_fib.cswNew) {
+        wvlog << "A document > Word 8, not much support for this DOP.";
+    } else {
+        wvlog << "Dop97: A document <= Word 8";
+    }
+#endif
     // Initialize all the cached data structures like stylesheets, fonts,
     // textconverter,...
     init();
