@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -89,8 +90,8 @@ const MSO::FixedPoint zero()
         if (!p && mastersp) { \
             p = get<MSO::FOPT>(*mastersp); \
         } \
-        if (!p) { \
-            p = get<MSO::FOPT>(d); \
+        if (!p && d) { \
+            p = get<MSO::FOPT>(*d); \
         } \
         if (p) { \
             return p->NAME; \
@@ -163,6 +164,16 @@ GETTER(qint32,                 DxTextRight,          dxTextRight,          0)
 GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)
 GETTER(quint32,                Pib,                  pib,                  0)
 GETTER(quint32,                HspMaster,            hspMaster,            0) // 2.3.2.1
+GETTER(quint32,                Cxstyle,              cxstyle,              0x00000003) // 2.3.2.2
+GETTER(qint32,                 AdjustValue,          adjustvalue,          0) // 2.3.6.10
+GETTER(qint32,                 Adjust2Value,         adjust2value,         0) // 2.3.6.11
+GETTER(qint32,                 Adjust3Value,         adjust3value,         0) // 2.3.6.12
+GETTER(qint32,                 Adjust4Value,         adjust4value,         0) // 2.3.6.13
+GETTER(qint32,                 Adjust5Value,         adjust5value,         0) // 2.3.6.14
+GETTER(qint32,                 Adjust6Value,         adjust6value,         0) // 2.3.6.15
+GETTER(qint32,                 Adjust7Value,         adjust7value,         0) // 2.3.6.16
+GETTER(qint32,                 Adjust8Value,         adjust8value,         0) // 2.3.6.17
+GETTER(MSO::FixedPoint,        Rotation,             rotation,             0) // 2.3.18.5
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \
@@ -181,9 +192,11 @@ GETTER(quint32,                HspMaster,            hspMaster,            0) //
                 return p->NAME; \
             } \
         } \
-        p = get<MSO::FOPT>(d); \
-        if (p && p->TEST) { \
-            return p->NAME; \
+        if (d) { \
+            p = get<MSO::FOPT>(d); \
+            if (p && p->TEST) { \
+                return p->NAME; \
+            } \
         } \
         return DEFAULT; \
     }

@@ -516,11 +516,9 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     m_annotationWriter = new KoXmlWriter(m_annotationBuffer);
 
     m_annotationWriter->startElement("office:annotation");
-
     m_annotationWriter->startElement("dc:creator");
     // XXX: get the creator from the .doc
     m_annotationWriter->endElement();
-
     m_annotationWriter->startElement("dc:date");
     // XXX: get the date from the .doc
     m_annotationWriter->endElement();

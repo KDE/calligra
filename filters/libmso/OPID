@@ -27,6 +27,8 @@ bf - Text Boolean Properties
 144 - shapePath - specifies the way that lines in this shape are to be drawn.
 145 - pVertices - specifies the set of points that make up this shape 
 146 - pSegmentInfo - specifies how the vertices that are specified by pVertices_complex are connected
+148 - adjust2Value - specifies a value that a user can change to adjust the geometry of the shape.
+149 - adjust3Value - specifies a value that a user can change to adjust the geometry of the shape.
 151 - pConnectionSites -
 152 - pConnectionSitesDir - 
 155 - pAdjustHandles -  an array of adjust handles that allow a user to manipulate the geometry of this shape
@@ -66,6 +68,8 @@ bf - Text Boolean Properties
 1c0 - lineColor
 1c5 - lineFillBlip - specifies the BLIP that is used to fill this line
 1cb - lineWidth - specifies the width of the line
+1d0 - lineStartArrowhead -  specifies the line end decoration used at the start of the line.
+1d1 - lineEndArrowhead -  specifies the line end decoration used at the end of the line.
 1d6 - lineJoinStyle - specifies the style of the line joins
 1ff - Line Style Boolean Properties
 
@@ -74,6 +78,7 @@ bf - Text Boolean Properties
 2bf - 3D-Object Boolean Properties
 
 301 - hspMaster - specifies the master shape for a shape
+303 - cxstyle -  specifies the connector style for this shape
 304 - bWMode - specifies how a shape will render in black-and-white display mode
 33f - Shape Boolean Properties
 380 - wzName - specifies the name of a shape

@@ -20,7 +20,6 @@
 
 #include "StencilBoxDocker.h"
 
-#include "OdfCollectionLoader.h"
 #include "StencilShapeFactory.h"
 #include "StencilBoxView.h"
 
@@ -46,6 +45,13 @@
 #include <kicon.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
+#include <knewstuff3/downloaddialog.h>
+#include <KFileDialog>
+#include <KIO/NetAccess>
+#include <KStandardDirs>
+#include <KTar>
 
 #include <QVBoxLayout>
 #include <QListView>
@@ -94,12 +100,12 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
 
     //menu is currently unfinished
     m_menu = new QMenu();
-    QAction* getOnlineAction = m_menu->addAction(i18n("Download shape collections online"));
-    QAction* installLocalAction = m_menu->addAction(i18n("Install local collection file"));
-    QAction* createNewAction = m_menu->addAction(i18n("Create a new collection"));
-    connect(getOnlineAction, SIGNAL(triggered()), this, SLOT(getCollectionOnline()));
-    connect(installLocalAction, SIGNAL(triggered()), this, SLOT(installLocalCollection()));
-    connect(createNewAction, SIGNAL(triggered()), this, SLOT(createNewCollection()));
+    QAction* ghnsAction = m_menu->addAction(KIcon("get-hot-new-stuff"), i18n("Get more stencils"));
+    QAction* installAction = m_menu->addAction(KIcon("document-open-folder"), i18n("Install stencil"));
+    //QAction* createNewAction = m_menu->addAction(i18n("Create a stencil collection"));
+    connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
+    connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
+    //connect(createNewAction, SIGNAL(triggered()), this, SLOT(createNewCollection()));
 
     m_button = new QToolButton;
     m_button->setIcon(SmallIcon("list-add"));
@@ -139,20 +145,53 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
 }
 
-void StencilBoxDocker::getCollectionOnline()
+void StencilBoxDocker::getHotNewStuff()
 {
-    ;//FIXME
+    KNS3::DownloadDialog dialog("flow_stencils.knsrc", this);
+    dialog.exec();
+    if(!dialog.installedEntries().isEmpty()) {
+        KMessageBox::information(0, i18n("Stencils successfully installed."));
+    }
+    else if(!dialog.changedEntries().isEmpty()) {
+        KMessageBox::information(0, i18n("Stencils successfully uninstalled."));
+    }
 }
 
-void StencilBoxDocker::installLocalCollection()
+void StencilBoxDocker::installStencil()
 {
-    ;//FIXME
+    KUrl dir;
+    QString path = KFileDialog::getOpenFileName(dir,
+           "*.cstencil.tar *.cstencil.tar.bz2 *.cstencil.tar.gz|"
+           + i18n("Calligra Stencil Packages (*.cstencil.tar, *.cstencil.tar.bz2, *.cstencil.tar.gz)")
+           , this);
+    if(path.isNull()) return;
+    
+    KTar archive(path);
+    if(!archive.open(QIODevice::ReadOnly)) {
+        KMessageBox::sorry(0, i18n("Could not read this package."));
+        return;
+    }
+    
+    QString destination = KStandardDirs::locateLocal("data", "flow/stencils", true);
+    const KArchiveDirectory* const archiveDir = archive.directory();
+
+    // Prevent installing a stencil collection that's already installed
+    const QString collectionFolder = destination + QDir::separator() + archiveDir->entries().first();
+    kDebug() << destination << archiveDir << collectionFolder;
+    if(QFile::exists(collectionFolder)) {
+        KMessageBox::error(0, i18n("A collection of stencils in family '%1' is already installed. "
+                                   "Please uninstall it first.", archiveDir->entries().first()));
+        return;
+    }
+    
+    archiveDir->copyTo(destination);
+    KMessageBox::information(0, i18n("Stencils successfully installed."));
 }
 
+/*
 void StencilBoxDocker::createNewCollection()
 {
-    ;//FIXME
-}
+}*/
 
 void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 {

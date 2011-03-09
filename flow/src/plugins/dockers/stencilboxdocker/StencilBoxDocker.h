@@ -100,9 +100,9 @@ class StencilBoxDocker : public QDockWidget
 
     private slots:
         void reapplyFilter();
-        void getCollectionOnline();
-        void installLocalCollection();
-        void createNewCollection();
+        void getHotNewStuff();
+        void installStencil();
+        //void createNewCollection();
         void regenerateProxyMap();
 };
 

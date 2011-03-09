@@ -5,6 +5,7 @@
 #include <pthread.h>
 #endif
 
+#include "librcps.h"
 #include "slist.h"
 
 // XXX perhaps we need an index in most sstructs so that resources[i]->index==i
@@ -22,8 +23,16 @@ struct rcps_problem {
 	int *alternatives_max;
 	/* fitness calulation mode */
 	int fitness_mode;
-    /* weight callback */
-    int (*weight_callback)(int starttime, int duration, int nominal_weight, void *arg);
+	/* weight callback */
+	int (*weight_callback)(int starttime, int duration, struct rcps_fitness *nominal_weight, void *arg, void *fitness_arg);
+	/* fitness callback, set up a user defined fitness structure and return a pointer to it */
+	void *(*fitness_callback_init)(void *fitness_init_arg);
+    /* the argument returned by fitness_callback_init */
+    void *fitness_init_arg;
+    /* fitness callback
+     * fill in the result of the fitness calculation into fitness.
+     * arg is the argument returned by fitness_callback_init  */
+    int (*fitness_callback_result)(struct rcps_fitness *fitness, void *arg);
 };
 
 struct rcps_resource {
@@ -98,7 +107,7 @@ struct rcps_phenotype {
 };
 
 struct rcps_individual {
-    int fitness;
+    struct rcps_fitness fitness;
 	struct rcps_genome genome;
 };
 
@@ -124,7 +133,7 @@ struct rcps_solver {
 	// the actual population;
 	struct rcps_population *population;
 	// progress callback and data
-	int (*progress_callback)(int generations, int fitness, void *arg);
+	int (*progress_callback)(int generations, struct rcps_fitness fitness, void *arg);
 	void *cb_arg;
 	int cb_steps;
 	// duration callback

@@ -66,6 +66,7 @@
 
 // KSpread
 #include "ApplicationSettings.h"
+#include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Condition.h"
 #include "Map.h"
@@ -1464,6 +1465,11 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
         // Not enough space but align to left
         qreal  len = 0.0;
 
+        // If it fits in the width, chopping won't do anything
+        if (d->fittingWidth) {
+            return d->displayText;
+        }
+
         len = d->width;
 #if 0
         for (int i = cell.column(); i <= cell.column() + d->obscuredCellsX; i++) {
@@ -1477,9 +1483,14 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
         if (!cell.isEmpty())
             tmpIndent = style().indentation();
 
+        KLocale* locale = cell.sheet()->map()->calculationSettings()->locale();
+
         // Estimate worst case length to reduce the number of iterations.
         int start = qRound((len - 4.0 - 1.0 - tmpIndent) / fm.width('.'));
         start = qMin(d->displayText.length(), start);
+        int idxOfDecimal = d->displayText.indexOf(locale->decimalSymbol());
+        if (idxOfDecimal < 0) idxOfDecimal = d->displayText.length();
+
         // Start out with the whole text, cut one character at a time, and
         // when the text finally fits, return it.
         for (int i = start; i >= 0; i--) {
@@ -1499,8 +1510,17 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
                 //out of space to fit even the integer part of the number then display #########
                 //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
 
-                if (!tmp.contains('.'))
-                    d->displayText = QString().fill('#', 20);
+                if (i < idxOfDecimal) {
+                    //first try removing thousands seperators before replacing text with ######
+                    QString tmp2 = d->displayText;
+                    tmp2.remove(locale->thousandsSeparator());
+                    int sepCount = d->displayText.length() - tmp2.length();
+                    if (i < idxOfDecimal - sepCount) {
+                        tmp = QString().fill('#', i);
+                    } else {
+                        tmp = tmp2.left(i);
+                    }
+                }
             }
 
             // 4 equal length of red triangle +1 point.

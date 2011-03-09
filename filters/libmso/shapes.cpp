@@ -889,6 +889,97 @@ void ODrawToOdf::processIrregularSeal1(const MSO::OfficeArtSpContainer &o, Write
     out.xml.endElement(); // draw:custom-shape
 }
 
+
+void ODrawToOdf::processSeal16(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "mso-spt59");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
+    out.xml.addAttribute("draw:modifiers", "2500");
+    out.xml.addAttribute("draw:enhanced-path", "M ?f5 ?f6 L ?f7 ?f8 ?f9 ?f10 ?f11 ?f12 ?f13 ?f14 ?f15 ?f16 ?f17 ?f18 ?f19 ?f20 ?f21 ?f22 ?f23 ?f24 ?f25 ?f26 ?f27 ?f28 ?f29 ?f30 ?f31 ?f32 ?f33 ?f34 ?f35 ?f36 ?f37 ?f38 ?f39 ?f40 ?f41 ?f42 ?f43 ?f44 ?f45 ?f46 ?f47 ?f48 ?f49 ?f50 ?f51 ?f52 ?f53 ?f54 ?f55 ?f56 ?f57 ?f58 ?f59 ?f60 ?f61 ?f62 ?f63 ?f64 ?f65 ?f66 ?f67 ?f68 ?f5 ?f6 Z N");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f2", "-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f3", "(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f4", "-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f5", "(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f6", "-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f7", "(cos(11*(pi/180))*(?f0 -10800)+sin(11*(pi/180))*(10800-10800))+10800");
+    equation(out, "f8", "-(sin(11*(pi/180))*(?f0 -10800)-cos(11*(pi/180))*(10800-10800))+10800");
+    equation(out, "f9", "(cos(22*(pi/180))*(0-10800)+sin(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f10", "-(sin(22*(pi/180))*(0-10800)-cos(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f11", "(cos(33*(pi/180))*(?f0 -10800)+sin(33*(pi/180))*(10800-10800))+10800");
+    equation(out, "f12", "-(sin(33*(pi/180))*(?f0 -10800)-cos(33*(pi/180))*(10800-10800))+10800");
+    equation(out, "f13", "(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f14", "-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f15", "(cos(56*(pi/180))*(?f0 -10800)+sin(56*(pi/180))*(10800-10800))+10800");
+    equation(out, "f16", "-(sin(56*(pi/180))*(?f0 -10800)-cos(56*(pi/180))*(10800-10800))+10800");
+    equation(out, "f17", "(cos(67*(pi/180))*(0-10800)+sin(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f18", "-(sin(67*(pi/180))*(0-10800)-cos(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f19", "(cos(78*(pi/180))*(?f0 -10800)+sin(78*(pi/180))*(10800-10800))+10800");
+    equation(out, "f20", "-(sin(78*(pi/180))*(?f0 -10800)-cos(78*(pi/180))*(10800-10800))+10800");
+    equation(out, "f21", "(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f22", "-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f23", "(cos(101*(pi/180))*(?f0 -10800)+sin(101*(pi/180))*(10800-10800))+10800");
+    equation(out, "f24", "-(sin(101*(pi/180))*(?f0 -10800)-cos(101*(pi/180))*(10800-10800))+10800");
+    equation(out, "f25", "(cos(112*(pi/180))*(0-10800)+sin(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f26", "-(sin(112*(pi/180))*(0-10800)-cos(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f27", "(cos(123*(pi/180))*(?f0 -10800)+sin(123*(pi/180))*(10800-10800))+10800");
+    equation(out, "f28", "-(sin(123*(pi/180))*(?f0 -10800)-cos(123*(pi/180))*(10800-10800))+10800");
+    equation(out, "f29", "(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f30", "-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f31", "(cos(146*(pi/180))*(?f0 -10800)+sin(146*(pi/180))*(10800-10800))+10800");
+    equation(out, "f32", "-(sin(146*(pi/180))*(?f0 -10800)-cos(146*(pi/180))*(10800-10800))+10800");
+    equation(out, "f33", "(cos(157*(pi/180))*(0-10800)+sin(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f34", "-(sin(157*(pi/180))*(0-10800)-cos(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f35", "(cos(168*(pi/180))*(?f0 -10800)+sin(168*(pi/180))*(10800-10800))+10800");
+    equation(out, "f36", "-(sin(168*(pi/180))*(?f0 -10800)-cos(168*(pi/180))*(10800-10800))+10800");
+    equation(out, "f37", "(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f38", "-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f39", "(cos(191*(pi/180))*(?f0 -10800)+sin(191*(pi/180))*(10800-10800))+10800");
+    equation(out, "f40", "-(sin(191*(pi/180))*(?f0 -10800)-cos(191*(pi/180))*(10800-10800))+10800");
+    equation(out, "f41", "(cos(202*(pi/180))*(0-10800)+sin(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f42", "-(sin(202*(pi/180))*(0-10800)-cos(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f43", "(cos(213*(pi/180))*(?f0 -10800)+sin(213*(pi/180))*(10800-10800))+10800");
+    equation(out, "f44", "-(sin(213*(pi/180))*(?f0 -10800)-cos(213*(pi/180))*(10800-10800))+10800");
+    equation(out, "f45", "(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f46", "-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f47", "(cos(236*(pi/180))*(?f0 -10800)+sin(236*(pi/180))*(10800-10800))+10800");
+    equation(out, "f48", "-(sin(236*(pi/180))*(?f0 -10800)-cos(236*(pi/180))*(10800-10800))+10800");
+    equation(out, "f49", "(cos(247*(pi/180))*(0-10800)+sin(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f50", "-(sin(247*(pi/180))*(0-10800)-cos(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f51", "(cos(258*(pi/180))*(?f0 -10800)+sin(258*(pi/180))*(10800-10800))+10800");
+    equation(out, "f52", "-(sin(258*(pi/180))*(?f0 -10800)-cos(258*(pi/180))*(10800-10800))+10800");
+    equation(out, "f53", "(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f54", "-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f55", "(cos(281*(pi/180))*(?f0 -10800)+sin(281*(pi/180))*(10800-10800))+10800");
+    equation(out, "f56", "-(sin(281*(pi/180))*(?f0 -10800)-cos(281*(pi/180))*(10800-10800))+10800");
+    equation(out, "f57", "(cos(292*(pi/180))*(0-10800)+sin(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f58", "-(sin(292*(pi/180))*(0-10800)-cos(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f59", "(cos(303*(pi/180))*(?f0 -10800)+sin(303*(pi/180))*(10800-10800))+10800");
+    equation(out, "f60", "-(sin(303*(pi/180))*(?f0 -10800)-cos(303*(pi/180))*(10800-10800))+10800");
+    equation(out, "f61", "(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f62", "-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f63", "(cos(326*(pi/180))*(?f0 -10800)+sin(326*(pi/180))*(10800-10800))+10800");
+    equation(out, "f64", "-(sin(326*(pi/180))*(?f0 -10800)-cos(326*(pi/180))*(10800-10800))+10800");
+    equation(out, "f65", "(cos(337*(pi/180))*(0-10800)+sin(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f66", "-(sin(337*(pi/180))*(0-10800)-cos(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f67", "(cos(348*(pi/180))*(?f0 -10800)+sin(348*(pi/180))*(10800-10800))+10800");
+    equation(out, "f68", "-(sin(348*(pi/180))*(?f0 -10800)-cos(348*(pi/180))*(10800-10800))+10800");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 10800");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "0");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
+    out.xml.endElement(); // draw:handle
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+
+}
+
 void ODrawToOdf::processSeal24(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
     out.xml.startElement("draw:custom-shape");
@@ -1056,6 +1147,94 @@ void ODrawToOdf::processRibbon(const MSO::OfficeArtSpContainer &o, Writer &out)
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processRibbon2(const MSO::OfficeArtSpContainer &o, Writer &out) {
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "mso-spt54");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas", "?f0 0 ?f19 ?f1");
+    out.xml.addAttribute("draw:modifiers", "5400 18900");
+    out.xml.addAttribute("draw:enhanced-path", "M ?f12 ?f1 L ?f12 ?f13 C ?f12 ?f14 ?f15 21600 ?f16 21600 L 0 21600 2750 ?f7 0 ?f2 ?f0 ?f2 ?f0 ?f4 C ?f0 ?f5 ?f10 0 ?f11 0 L ?f17 0 C ?f18 0 ?f19 ?f5 ?f19 ?f4 L ?f19 ?f2 21600 ?f2 18850 ?f7 21600 21600 ?f20 21600 C ?f21 21600 ?f22 ?f14 ?f22 ?f13 L ?f22 ?f1 Z N M ?f12 ?f1 L ?f12 ?f13 C ?f12 ?f23 ?f15 ?f24 ?f16 ?f24 L ?f11 ?f24 C ?f10 ?f24 ?f0 ?f26 ?f0 ?f25 ?f0 ?f27 ?f10 ?f1 ?f11 ?f1 Z N M ?f22 ?f1 L ?f22 ?f13 C ?f22 ?f23 ?f21 ?f24 ?f20 ?f24 L ?f17 ?f24 C ?f18 ?f24 ?f19 ?f26 ?f19 ?f25 ?f19 ?f27 ?f18 ?f1 ?f17 ?f1 Z N M ?f0 ?f25 L ?f0 ?f2 N M ?f19 ?f25 L ?f19 ?f2 N");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "21600-?f1 ");
+    equation(out, "f3", "?f2 /2");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "?f4 /2");
+    equation(out, "f6", "?f1 /2");
+    equation(out, "f7", "21600-?f6 ");
+    equation(out, "f8", "420");
+    equation(out, "f9", "?f8 *2");
+    equation(out, "f10", "?f0 +?f8 ");
+    equation(out, "f11", "?f0 +?f9 ");
+    equation(out, "f12", "?f0 +2700");
+    equation(out, "f13", "21600-?f4 ");
+    equation(out, "f14", "21600-?f5 ");
+    equation(out, "f15", "?f12 -?f8 ");
+    equation(out, "f16", "?f12 -?f9 ");
+    equation(out, "f17", "21600-?f11 ");
+    equation(out, "f18", "21600-?f10 ");
+    equation(out, "f19", "21600-?f0 ");
+    equation(out, "f20", "21600-?f16 ");
+    equation(out, "f21", "21600-?f15 ");
+    equation(out, "f22", "21600-?f12 ");
+    equation(out, "f23", "?f13 -?f5 ");
+    equation(out, "f24", "?f1 +?f3 ");
+    equation(out, "f25", "?f1 +?f4 ");
+    equation(out, "f26", "?f25 +?f5 ");
+    equation(out, "f27", "?f25 -?f5 ");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "2700");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "8100");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "10800 $1");
+    out.xml.addAttribute("draw:handle-range-y-minimum", "14400");
+    out.xml.addAttribute("draw:handle-range-y-maximum", "21600");
+    out.xml.endElement();
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
+void ODrawToOdf::processHorizontalScroll(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:path-stretchpoint-x", "10800");
+    out.xml.addAttribute("draw:path-stretchpoint-y", "11000");
+    out.xml.addAttribute("draw:text-areas", "?f0 ?f0 ?f3 ?f12");
+    out.xml.addAttribute("draw:type", "horizontal-scroll"); // "mso-spt98"
+    out.xml.addAttribute("draw:modifiers", "2700");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 ?f4 Y ?f1 ?f0 L ?f3 ?f0 ?f3 ?f1 Y ?f2 0 21600 ?f1 L 21600 ?f13 Y ?f2 ?f12 L ?f0 ?f12 ?f0 ?f11 Y ?f1 21600 0 ?f11 Z N M ?f1 ?f4 Y ?f9 ?f8 ?f0 ?f4 ?f1 ?f6 Z N M ?f2 ?f1 Y ?f3 ?f9 ?f3 ?f1 ?f2 0 X 21600 ?f1 ?f2 ?f0 Z N M ?f1 ?f6 X 0 ?f4 N M ?f2 ?f0 L ?f3 ?f0 N M ?f0 ?f4 L ?f0 ?f11 N");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "?f0 /2");
+    equation(out, "f2", "right-?f1 ");
+    equation(out, "f3", "right-?f0 ");
+    equation(out, "f4", "?f0 +?f1 ");
+    equation(out, "f5", "right-?f4 ");
+    equation(out, "f6", "?f0 *2");
+    equation(out, "f7", "?f1 /2");
+    equation(out, "f8", "?f0 +?f7 ");
+    equation(out, "f9", "?f1 +?f7 ");
+    equation(out, "f10", "bottom-?f9 ");
+    equation(out, "f11", "bottom-?f1 ");
+    equation(out, "f12", "bottom-?f0 ");
+    equation(out, "f13", "bottom-?f4 ");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "0");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
+    out.xml.endElement();
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processDoubleWave(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
     out.xml.startElement("draw:custom-shape");
@@ -1160,6 +1339,22 @@ void ODrawToOdf::processFlowChartDecision(const MSO::OfficeArtSpContainer &o, Wr
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processFlowChartManualOperation(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 2160 10800 10800 21600 19440 10800");
+    out.xml.addAttribute("draw:text-areas", "4350 0 17250 21600");
+    out.xml.addAttribute("draw:type", "flowchart-manual-operation");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 17250 21600 4350 21600 0 0 Z N");
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
+
 void ODrawToOdf::processFlowChartConnector(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
     out.xml.startElement("draw:custom-shape");
@@ -1175,6 +1370,22 @@ void ODrawToOdf::processFlowChartConnector(const MSO::OfficeArtSpContainer &o, W
     out.xml.endElement(); // draw:enhanced-geometry
     out.xml.endElement(); // draw:custom-shape
 }
+
+void ODrawToOdf::processFlowChartMagneticTape(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800");
+    out.xml.addAttribute("draw:text-areas", "3100 3100 18500 18500");
+    out.xml.addAttribute("draw:type", "flowchart-sequential-access");
+    out.xml.addAttribute("draw:enhanced-path", "M 20980 18150 L 20980 21600 10670 21600 C 4770 21540 0 16720 0 10800 0 4840 4840 0 10800 0 16740 0 21600 4840 21600 10800 21600 13520 20550 16160 18670 18170 Z N");
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 
 void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
@@ -1350,10 +1561,16 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processCloudCallout(o, out);
     } else if (shapeType == msosptIrregularSeal1) {
         processIrregularSeal1(o, out);
+    } else if (shapeType == msosptSeal16) {
+        processSeal16(o, out);
     } else if (shapeType == msosptSeal24) {
         processSeal24(o, out);
     } else if (shapeType == msosptRibbon) {
         processRibbon(o, out);
+    } else if (shapeType == msosptRibbon2) {
+        processRibbon2(o, out);
+    } else if (shapeType == msosptHorizontalScroll) {
+        processHorizontalScroll(o, out);
     } else if (shapeType == msosptDoubleWave) {
         processDoubleWave(o, out);
     } else if (shapeType == msosptFlowChartTerminator) {
@@ -1362,8 +1579,12 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processFlowChartProcess(o, out);
     } else if (shapeType == msosptFlowChartDecision) {
         processFlowChartDecision(o, out);
+    } else if (shapeType == msosptFlowChartManualOperation) {
+        processFlowChartManualOperation(o, out);
     } else if (shapeType == msosptFlowChartConnector) {
         processFlowChartConnector(o, out);
+    } else if (shapeType == msosptFlowChartMagneticTape) {
+        processFlowChartMagneticTape(o, out);
     } else if (shapeType == msosptCallout2) {
         processCallout2(o, out);
     } else if (shapeType == msosptDonut) {
@@ -1477,7 +1698,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
 {
     const OfficeArtDggContainer* drawingGroup = 0;
     const OfficeArtSpContainer* master = 0;
-    const DrawStyle ds(*drawingGroup, master, &o);
+    const DrawStyle ds(drawingGroup, master, &o);
 
     IMsoArray _v = ds.pVertices_complex();
     IMsoArray _c = ds.pSegmentInfo_complex();
