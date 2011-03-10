@@ -31,6 +31,8 @@ void SheetTest::init()
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     m_sheet = m_doc->map()->sheet(0);
+    m_sheet->map()->setDefaultRowHeight(10.0);
+    m_sheet->map()->setDefaultColumnWidth(10.0);
 }
 
 void SheetTest::cleanup()
@@ -110,6 +112,27 @@ void SheetTest::testRemoveColumns()
     m_sheet->removeColumns(columnToRemove, 1);
 
     QCOMPARE(cell.userInput(), result);
+}
+
+
+void SheetTest::testDocumentToCellCoordinates_data()
+{
+    QTest::addColumn<QRectF>("area");
+    QTest::addColumn<QRect>("result");
+
+    QTest::newRow("simple") << QRectF(5, 5, 10, 10) << QRect(1, 1, 2, 2);
+    QTest::newRow("bigger") << QRectF(5, 5, 200, 100) << QRect(1, 1, 21, 11);
+    QTest::newRow("wide") << QRectF(5, 5, 300000, 10) << QRect(1, 1, 30001, 2);
+    QTest::newRow("tall") << QRectF(5, 5, 10, 300000) << QRect(1, 1, 2, 30001);
+    QTest::newRow("very tall") << QRectF(5, 5, 10, 10000000) << QRect(1, 1, 2, 1000001);
+}
+
+void SheetTest::testDocumentToCellCoordinates()
+{
+    QFETCH(QRectF, area);
+    QFETCH(QRect, result);
+
+    QCOMPARE(m_sheet->documentToCellCoordinates(area), result);
 }
 
 QTEST_KDEMAIN(SheetTest, GUI)
