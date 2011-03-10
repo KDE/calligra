@@ -99,7 +99,12 @@ public:
     bool fUsefIsBullet() const;
     bool fUsefLayoutInCell() const;
 
-    // Geometry property set
+    // Geometry Property Set
+    qint32 geoLeft() const;
+    qint32 geoTop() const;
+    qint32 geoRight() const;
+    qint32 geoBottom() const;
+    quint32 shapePath() const;
     IMsoArray pVertices_complex() const;
     IMsoArray pSegmentInfo_complex() const;
     qint32 adjustvalue() const;
@@ -111,9 +116,12 @@ public:
     qint32 adjust7value() const;
     qint32 adjust8value() const;
     // Geometry Boolean Properties
-
-    // Transformation property set
-    MSO::FixedPoint rotation() const;
+    bool fFillOk() const;
+    bool fFillShadeShapeOK() const;
+    bool fGtextOK() const;
+    bool fLineOK() const;
+    bool f3DOK() const;
+    bool fShadowOK() const;
 
     // Fill Style Property Set
     quint32 fillType() const;
@@ -185,6 +193,9 @@ public:
     // Shadow Style Boolean Properties
     bool fShadowObscured() const;
     bool fShadow() const;
+
+    // Transformation Property set
+    MSO::FixedPoint rotation() const;
 
     // Text Property Set
     qint32 txflTextFlow() const;
