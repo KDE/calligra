@@ -4554,7 +4554,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
     KoRow* row = m_table->rowAt(m_currentTableRowNumber);
     KoRowStyle::Ptr style = KoRowStyle::create();
 
-    style->setHeight(EMU_TO_POINT(val.toFloat()));
+    style->setHeight(TWIP_TO_POINT(val.toFloat()));
 
     if (hRule == QLatin1String("exact")) {
         style->setHeightType(KoRowStyle::ExactHeight);
