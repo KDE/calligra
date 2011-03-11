@@ -20,6 +20,8 @@
 #ifndef KOMARKER_H
 #define KOMARKER_H
 
+#include <QMetaType>
+
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
@@ -42,5 +44,7 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_METATYPE(KoMarker*)
 
 #endif /* KOMARKER_H */
