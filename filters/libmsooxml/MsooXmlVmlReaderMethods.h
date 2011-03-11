@@ -36,6 +36,9 @@
 protected:
 
     // v namespace:
+    KoFilter::ConversionStatus genericReader();
+    QString m_currentEl;
+    KoFilter::ConversionStatus read_oval();
     KoFilter::ConversionStatus read_roundrect();
     KoFilter::ConversionStatus read_rect();
     KoFilter::ConversionStatus read_fill();
