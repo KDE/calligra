@@ -52,10 +52,10 @@
 #include <pathshapes/rectangle/RectangleShape.h>
 #include <pathshapes/ellipse/EllipseShape.h>
 #include <KoImageData.h>
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoXmlWriter.h"
-#include "KoClipPath.h"
+#include <KoFilterEffect.h>
+#include <KoFilterEffectStack.h>
+#include <KoXmlWriter.h>
+#include <KoClipPath.h>
 #include <KPluginFactory>
 #include <KMimeType>
 #include <KTemporaryFile>
