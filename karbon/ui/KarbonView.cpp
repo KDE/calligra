@@ -958,7 +958,7 @@ void KarbonView::initActions()
         action->setShortcut(QKeySequence("Ctrl+Shift+G"));
     }
 
-    d->clipObjects  = new KAction(KIcon("clip"), i18n("&Clip Objects"), this);
+    d->clipObjects  = new KAction(KIcon("clip"), i18n("&Clip Object"), this);
     actionCollection()->addAction("object_clip", d->clipObjects );
     connect(d->clipObjects, SIGNAL(triggered()), this, SLOT(clipObjects()));
 
