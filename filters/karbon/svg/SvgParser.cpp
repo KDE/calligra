@@ -1469,7 +1469,7 @@ void SvgParser::applyClipping(KoShape *shape)
 
     QList<KoShape*> clipShapes = parseContainer(clipPath->content());
     QList<KoPathShape*> pathShapes;
-    while(!clipShapes.isEmpty()) {
+    while (!clipShapes.isEmpty()) {
         KoShape *clipShape = clipShapes.first();
         clipShapes.removeFirst();
         // remove clip shape from list of all parsed shapes
@@ -1491,7 +1491,7 @@ void SvgParser::applyClipping(KoShape *shape)
             }
             delete clipShape;
         }
-        if(path) {
+        if (path) {
             kDebug(30514) << "using shape" << path->name() << "as clip path";
             pathShapes.append(path);
             if (boundingBoxUnits)
