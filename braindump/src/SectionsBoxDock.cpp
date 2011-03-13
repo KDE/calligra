@@ -37,7 +37,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
   setWindowTitle(i18n("Whiteboards"));
 
   m_wdgSectionsBox.setupUi(mainWidget);
-  
+
   // Setup list sections
   connect(m_wdgSectionsBox.listSections, SIGNAL(clicked(const QModelIndex&)), SLOT(slotSectionActivated(const QModelIndex&)));
   m_wdgSectionsBox.listSections->setModel(m_proxy);
@@ -59,18 +59,18 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
       actions[i]->setActionGroup(group);
   }
   actions[1]->trigger(); //TODO save/load previous state
-  
+
   m_wdgSectionsBox.bnViewMode->setMenu(m_viewModeMenu);
   m_wdgSectionsBox.bnViewMode->setPopupMode(QToolButton::InstantPopup);
   m_wdgSectionsBox.bnViewMode->setIcon(KIcon("view-choose"));
   m_wdgSectionsBox.bnViewMode->setText(i18n("View mode"));
-  
+
   // Setup the search box
   connect(m_wdgSectionsBox.searchLine, SIGNAL(textChanged(QString)), m_proxy, SLOT(setFilterWildcard(QString)));
-  
+
   // Setup the add button
   m_wdgSectionsBox.bnAdd->setIcon(SmallIcon("list-add"));
-    
+
   KMenu* newSectionMenu = new KMenu(this);
   m_wdgSectionsBox.bnAdd->setMenu(newSectionMenu);
   m_wdgSectionsBox.bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
@@ -78,7 +78,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
   newSectionMenu->addAction(i18n("Add new whiteboard below current."), this, SLOT(slotNewSectionBellowCurrent()));
   newSectionMenu->addAction(i18n("Add new whiteboard above current."), this, SLOT(slotNewSectionAboveCurrent()));
   m_newSectionAsChild = newSectionMenu->addAction(i18n("Add new whiteboard as child of current."), this, SLOT(slotNewSectionAsChildOfCurrent()));
-      
+
   // Setup the delete button
   m_wdgSectionsBox.bnDelete->setIcon(SmallIcon("list-remove"));
   connect(m_wdgSectionsBox.bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));
@@ -116,10 +116,10 @@ void SectionsBoxDock::setup(RootSection* document, View* view)
   m_proxy->setSourceModel(model);
   delete m_model;
   m_model = model;
-  
+
   connect(m_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(insertedSection(QModelIndex,int)));
   connect(m_model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(removedSection()));
-  
+
   updateGUI();
 }
 
@@ -162,10 +162,12 @@ void SectionsBoxDock::slotLowerClicked()
 
 void SectionsBoxDock::slotDuplicateClicked()
 {
-  Section* section = new Section(*m_view->activeSection());
-  m_view->rootSection()->addCommand( section,
-          new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, m_view->activeSection()->sectionParent(), m_model,
-                          m_view->activeSection()->sectionParent()->nextSection(m_view->activeSection())) );
+    if (m_view->activeSection()) {
+        Section* section = new Section(*m_view->activeSection());
+        m_view->rootSection()->addCommand( section,
+                                          new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, m_view->activeSection()->sectionParent(), m_model,
+                                                                   m_view->activeSection()->sectionParent()->nextSection(m_view->activeSection())) );
+    }
 }
 
 void SectionsBoxDock::slotNewSectionAsChildOfCurrent()

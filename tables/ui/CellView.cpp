@@ -1467,7 +1467,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
 
         // If it fits in the width, chopping won't do anything
         if (d->fittingWidth) {
-            return d->displayText;;
+            return d->displayText;
         }
 
         len = d->width;

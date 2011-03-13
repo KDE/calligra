@@ -30,6 +30,7 @@
 
 #include <KoView.h>
 
+#include "ApplicationController.h"
 #include "PresentationTool.h"
 
 PresentationTool::PresentationTool(MainWindow * window, KoCanvasControllerWidget * controller )
@@ -96,11 +97,13 @@ void PresentationTool::togglePenTool()
         QPixmap pix = QPixmap::grabWidget( m_controller );
         image = new QImage( pix.toImage() );
         m_controller->hide();
-        m_window->disableFullScreenPresentationNavigation();
+        static_cast<ApplicationController*>(m_window->controller())
+                ->setFullScreenPresentationNavigationEnabled(false);
     }
     else {
         emit normalPresentation();
-        m_window->enableFullScreenPresentationNavigation();
+        static_cast<ApplicationController*>(m_window->controller())
+                ->setFullScreenPresentationNavigationEnabled(true);
         m_penToolActivated = false;
         m_controller->show();
     }
@@ -115,11 +118,13 @@ void PresentationTool::toggleHighlightTool()
         image = new QImage( pix.toImage() );
         image1= new QImage( *image );
         m_controller->hide();
-        m_window->disableFullScreenPresentationNavigation();
+        static_cast<ApplicationController*>(m_window->controller())
+                ->setFullScreenPresentationNavigationEnabled(false);
     }
     else {
         emit normalPresentation();
-        m_window->enableFullScreenPresentationNavigation();
+        static_cast<ApplicationController*>(m_window->controller())
+                ->setFullScreenPresentationNavigationEnabled(true);
         m_highlightToolActivated = false;
         m_controller->show();
     }

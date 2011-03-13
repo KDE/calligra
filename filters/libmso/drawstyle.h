@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,20 +36,23 @@ public:
 class DrawStyle
 {
 private:
-    const MSO::OfficeArtDggContainer& d;
+    const MSO::OfficeArtDggContainer* d;
     const MSO::OfficeArtSpContainer* mastersp;
     const MSO::OfficeArtSpContainer* sp;
 public:
-    explicit DrawStyle(const MSO::OfficeArtDggContainer& d_,
+    explicit DrawStyle(const MSO::OfficeArtDggContainer* d_ = 0,
                        const MSO::OfficeArtSpContainer* mastersp_ = 0,
                        const MSO::OfficeArtSpContainer* sp_ = 0)
             : d(d_), mastersp(mastersp_), sp(sp_) {}
 
-    // Shape property set
+    // Shape Property Set
     quint32 hspMaster() const;
-    // ShapeBooleanProperties
-    // Group Shape property set
+    quint32 cxstyle() const;
+    // Shape Boolean Properties
+
+    // Group Shape Property Set
     quint32 pWrapPolygonVertices() const;
+    IMsoArray pWrapPolygonVertices_complex() const;
     qint32 dxWrapDistLeft() const;
     qint32 dyWrapDistTop() const;
     qint32 dxWrapDistRight() const;
@@ -61,7 +65,7 @@ public:
     quint32 alignHR() const;
     qint32 dxHeightHR() const;
     qint32 dxWidthHR() const;
-    // GroupShapeBooleanProperties
+    // Group Shape Boolean Properties
     bool fPrint() const;
     bool fHidden() const;
     bool fOneD() const;
@@ -94,7 +98,32 @@ public:
     bool fUsefStandardHR() const;
     bool fUsefIsBullet() const;
     bool fUsefLayoutInCell() const;
-    // Fill Style property set
+
+    // Geometry Property Set
+    qint32 geoLeft() const;
+    qint32 geoTop() const;
+    qint32 geoRight() const;
+    qint32 geoBottom() const;
+    quint32 shapePath() const;
+    IMsoArray pVertices_complex() const;
+    IMsoArray pSegmentInfo_complex() const;
+    qint32 adjustvalue() const;
+    qint32 adjust2value() const;
+    qint32 adjust3value() const;
+    qint32 adjust4value() const;
+    qint32 adjust5value() const;
+    qint32 adjust6value() const;
+    qint32 adjust7value() const;
+    qint32 adjust8value() const;
+    // Geometry Boolean Properties
+    bool fFillOk() const;
+    bool fFillShadeShapeOK() const;
+    bool fGtextOK() const;
+    bool fLineOK() const;
+    bool f3DOK() const;
+    bool fShadowOK() const;
+
+    // Fill Style Property Set
     quint32 fillType() const;
     MSO::OfficeArtCOLORREF fillColor() const;
     MSO::FixedPoint        fillOpacity() const;
@@ -119,6 +148,7 @@ public:
     qint32 fillDztype() const;
     qint32 fillShadePreset() const;
     quint32 fillShadeColors() const;
+    IMsoArray fillShadeColors_complex() const;
     MSO::FixedPoint fillOriginX() const;
     MSO::FixedPoint fillOriginY() const;
     MSO::FixedPoint fillShapeOriginX() const;
@@ -126,7 +156,7 @@ public:
     /*     MSO::MSOSHADETYPE fillShadeType() const; */
     MSO::OfficeArtCOLORREF fillColorExt() const;
     MSO::OfficeArtCOLORREF fillBackColorExt() const;
-    // FillStyleBooleanProperties
+    // Fill Style Boolean Properties
     bool fNoFillHitTest() const;
     bool fillUseRect() const;
     bool fillShape() const;
@@ -134,6 +164,7 @@ public:
     bool fFilled() const;
     bool fUseShapeAnchor() const;
     bool fRecolorFillAsPicture() const;
+
     // Line Style property set
     MSO::OfficeArtCOLORREF lineColor() const;
     qint32 lineOpacity() const;
@@ -143,7 +174,7 @@ public:
     quint32 lineEndArrowhead() const;
     quint32 lineStartArrowWidth() const;
     quint32 lineEndArrowWidth() const;
-    // LineStyleBooleanProperties
+    // Line Style Boolean Properties
     bool fNoLineDrawDash() const;
     bool fLineFillShape() const;
     bool fHitTestLine() const;
@@ -152,28 +183,29 @@ public:
     bool fInsetPenOK() const;
     bool fInsetPen() const;
     bool fLineOpaqueBackColor() const;
-    // Shadow Style property set
+
+    // Shadow Style Property Set
     quint32 shadowType() const;
     MSO::OfficeArtCOLORREF shadowColor() const;
     MSO::FixedPoint shadowOpacity() const;
     qint32 shadowOffsetX() const;
     qint32 shadowOffsetY() const;
-    // ShadowStyleBooleanProperties
+    // Shadow Style Boolean Properties
     bool fShadowObscured() const;
     bool fShadow() const;
-    // Text property set
+
+    // Transformation Property set
+    MSO::FixedPoint rotation() const;
+
+    // Text Property Set
     qint32 txflTextFlow() const;
     qint32 dxTextLeft() const;
     qint32 dyTextTop() const;
     qint32 dxTextRight() const;
     qint32 dyTextBottom() const;
-    // Blip property set
-    quint32 pib() const;
 
-    IMsoArray fillShadeColors_complex() const;
-    IMsoArray pVertices_complex() const;
-    IMsoArray pSegmentInfo_complex() const;
-    IMsoArray pWrapPolygonVertices_complex() const;
+    // Blip Property Set
+    quint32 pib() const;
 };
 
 /**

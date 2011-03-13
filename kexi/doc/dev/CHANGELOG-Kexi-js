@@ -77,14 +77,6 @@ select ob.o_id, o_sub_id, o_type, o_name, substr(o_data, 0, 40) from kexi__objec
 Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 
 TODO: fix https://bugs.kde.org/show_bug.cgi?id=241144
-TODO: this causes crash:
---- kexidb/queryschema.cpp      (revision 1135206)
-+++ kexidb/queryschema.cpp      (working copy)
-@@ -76,6 +76,7 @@
-             , internalFields(0)
-             , fieldsExpandedWithInternalAndRowID(0)
-             , fieldsExpandedWithInternal(0)
-+            //, orderByColumnList(copy->orderByColumnList)
 
 TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
@@ -92,10 +84,26 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+Forms
+*added --hide-menu command line option: Hides the main menu (the tabbed toolbar) completely.
+ A number of commands from the main menu is always visible. This option is useful in User Mode.
+BUG:268001
+
+2011-03-08
+Forms
+*re-add foreground and background color properties for widgets; undo/redo works too
+BUG:267671
+**backported to 2.3.x
+**backported to 2.2.x
+
+2011-03-05
+Forms
+*"Show Form UI Code" dialog is now not cached, what fixes issues with memory ownership
+
 2011-03-03
 Tables
-*fix inserting row when field has "required" atribute set
-**BUG:267311
+*fix inserting row when field has "required" attribute set
+BUG:267311
 **backported to 2.3.x
 **backported to 2.2.x
 
