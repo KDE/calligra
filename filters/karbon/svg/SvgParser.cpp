@@ -39,6 +39,7 @@
 #include <KoResourceManager.h>
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
+#include <commands/KoShapeUngroupCommand.h>
 #include <KoUnit.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
@@ -1468,19 +1469,34 @@ void SvgParser::applyClipping(KoShape *shape)
 
     QList<KoShape*> clipShapes = parseContainer(clipPath->content());
     QList<KoPathShape*> pathShapes;
-    foreach(KoShape *clipShape, clipShapes) {
+    while(!clipShapes.isEmpty()) {
+        KoShape *clipShape = clipShapes.first();
+        clipShapes.removeFirst();
+        // remove clip shape from list of all parsed shapes
+        m_shapes.removeOne(clipShape);
+        // check if we have a path shape
         KoPathShape *path = dynamic_cast<KoPathShape*>(clipShape);
         if (!path) {
-            ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(clipShape);
-            if (text) {
-                QPainterPath outline = text->absoluteTransformation(0).map(text->outline());
+            // if shape is a group, ungroup and add children to lits of clip shapes
+            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(clipShape);
+            if (group) {
+                QList<KoShape*> groupedShapes = group->shapes();
+                KoShapeUngroupCommand cmd(group, groupedShapes);
+                cmd.redo();
+                clipShapes.append(groupedShapes);
+            } else {
+                // shape is not a group shape, use its outline as clip path
+                QPainterPath outline = clipShape->absoluteTransformation(0).map(clipShape->outline());
                 path = KoPathShape::createShapeFromPainterPath(outline);
             }
             delete clipShape;
         }
-        pathShapes.append(path);
-        if (boundingBoxUnits)
-            path->applyAbsoluteTransformation(shapeMatrix);
+        if(path) {
+            kDebug(30514) << "using shape" << path->name() << "as clip path";
+            pathShapes.append(path);
+            if (boundingBoxUnits)
+                path->applyAbsoluteTransformation(shapeMatrix);
+        }
     }
 
     removeGraphicContext();
