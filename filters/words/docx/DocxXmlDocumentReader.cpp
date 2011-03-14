@@ -3327,7 +3327,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 /*!
  Parent elements:
  - [done] tblPr (§17.4.60)
- - [done] tblPr (§17.4.59) 
+ - [done] tblPr (§17.4.59)
  - [done] tblPr (§17.7.6.4)
  - [done] tblPr (§17.7.6.3)
 
@@ -4191,7 +4191,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
  - comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2);footnote (§17.11.10)
+ - endnote (§17.11.2);
+ - footnote (§17.11.10)
  - ftr (§17.10.3)
  - hdr (§17.10.4)
  - sdtContent (§17.5.2.34)
@@ -4247,6 +4248,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     m_currentTableStyle.clear();
 
+    bool sectionAdded = false;
+    if (m_createSectionStyle) {
+        m_createSectionStyle = false;
+        sectionAdded = true;
+        KoTblStyle::Ptr style = KoTblStyle::create();
+        style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
+        m_table->setTableStyle(style);
+    }
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -4270,6 +4280,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     defineTableStyles();
 
     m_table->saveOdf(*body, *mainStyles);
+
+
+    if (sectionAdded) {
+        m_currentSectionStyleName = m_table->tableStyle()->name();
+    }
 
     delete m_currentLocalTableStyles;
 
