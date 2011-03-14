@@ -3322,6 +3322,53 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL tcMar
+//! tcMar (cell margin)
+/*!
+ Parent elements:
+ - ....
+
+ Child elements:
+ - ...
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcMar()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            const QXmlStreamAttributes attrs(attributes());
+            if (QUALIFIED_NAME_IS(top)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
+            }
+            else if (QUALIFIED_NAME_IS(right)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL tblCellMar
 //! tblCellMar (cell margin defaults)
 /*!
@@ -4725,9 +4772,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - hMerge (Horizontally Merged Cell) §17.4.22
  - noWrap (Don't Wrap Cell Content) §17.4.30
  - [done] shd (Table Cell Shading) §17.4.33
- - tcBorders (Table Cell Borders) §17.4.67
+ - [done] tcBorders (Table Cell Borders) §17.4.67
  - tcFitText (Fit Text Within Cell) §17.4.68
- - tcMar (Single Table Cell Margins) §17.4.69
+ - [done] tcMar (Single Table Cell Margins) §17.4.69
  - tcPrChange (Revision Information for Table Cell Properties) §17.13.5.36
  - tcW (Preferred Table Cell Width) §17.4.72
  - textDirection (Table Cell Text Flow Direction) §17.4.73
@@ -4747,9 +4794,61 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
         if (isStartElement()) {
             TRY_READ_IF(gridSpan)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
+            ELSE_TRY_READ_IF(tcBorders)
+            ELSE_TRY_READ_IF(tcMar)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tcBorders
+//! tcBorders handlers (table cell borders)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - [done] bottom (Table Cell Bottom Border) §17.4.3
+ - end (Table Cell Trailing Edge Border) §17.4.12
+ - [done] insideH (Table Cell Inside Horizontal Edges Border) §17.4.24
+ - [done] insideV (Table Cell Inside Vertical Edges Border) §17.4.26
+ - start (Table Cell Leading Edge Border) §17.4.34
+ - tl2br (Table Cell Top Left to Bottom Right Diagonal Border) §17.4.74
+ - [done] top (Table Cell Top Border) §17.4.75
+ - tr2bl (Table Cell Top Right to Bottom Left Diagonal Border) §17.4.80
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(top)) {
+                m_currentStyleProperties->top = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                m_currentStyleProperties->bottom = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
+            }
+            else if (QUALIFIED_NAME_IS(insideV)) {
+                m_currentStyleProperties->insideV = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
+            }
+            else if (QUALIFIED_NAME_IS(insideH)) {
+                m_currentStyleProperties->insideH = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
+            }
+        }
+    }
+
     READ_EPILOGUE
 }
 
