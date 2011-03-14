@@ -246,10 +246,11 @@ struct rcps_phenotype *decode(struct rcps_solver *solver,
 		s = cjob->earliest_start;
 		for (j = 0; j < cjob->predeccessor_count; j++) {
 			int rel_type = 0;
+			int result = 0;
 			pjob = cjob->predeccessors[j];
 						rel_type = cjob->predeccessor_types[j];
 			// get the start time of the pjob, use genome_position here
-			int result = pheno->job_start[pjob->index];
+			result = pheno->job_start[pjob->index];
 			assert(result != UNSCHEDULED);
 			if (rel_type == SUCCESSOR_FINISH_START) {
 				cmi = pjob->genome_position != -1
