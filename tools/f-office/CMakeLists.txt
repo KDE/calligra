@@ -33,7 +33,8 @@ QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
 find_library( QT_QMAEMO5_LIBRARY QtMaemo5 HINTS ${QT_LIBRARIES} )
 
 set(FreOfficeMocSrc_SRCS
-    MainWindow.h 
+    ApplicationController.h
+    MainWindow.h
     Accelerator.h 
     VirtualKeyBoard.h 
     VirtualKeyBoardLanguageDownloader.h
@@ -66,7 +67,6 @@ set(FreOfficeMocSrc_SRCS
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellToolFactory.h
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellTool.h
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/FoCellEditor.h
-    ${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplication.h
 )
 
 if(QT_QTOPENGL_FOUND)
@@ -79,7 +79,7 @@ QT4_WRAP_CPP(FreOfficeMocSrc ${FreOfficeMocSrc_SRCS})
 
 set(FreOffice_SRCS
     Main.cpp
-    KoAbstractApplicationImpl.cpp
+    ApplicationController.cpp
     ConfirmationDialog.cpp
     MainWindow.cpp 
     Accelerator.cpp 

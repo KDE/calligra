@@ -338,11 +338,11 @@ DrawStyle KWordGraphicsHandler::getDrawingStyle()
     if (m_pOfficeArtBodyDgContainer != NULL) {
         if (m_pOfficeArtBodyDgContainer->shape.isNull() == false) {
             if ((*m_pOfficeArtBodyDgContainer->shape).shapePrimaryOptions.isNull() == false) {
-                return DrawStyle(m_OfficeArtDggContainer, NULL, m_pOfficeArtBodyDgContainer->shape.data());
+                return DrawStyle(&m_OfficeArtDggContainer, NULL, m_pOfficeArtBodyDgContainer->shape.data());
             }
         }
     }
-    return DrawStyle(m_OfficeArtDggContainer);
+    return DrawStyle(&m_OfficeArtDggContainer);
 }
 
 void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr, DrawingWriter& out, 
@@ -425,7 +425,7 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
 {
     kDebug(30513);
 
-    DrawStyle ds(NULL, &o);
+    DrawStyle ds(0, &o);
 
     // check the shape type and process it
     kDebug(30513) << "shapeType: " << hex << o.shapeProp.rh.recInstance;
@@ -601,7 +601,7 @@ void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
 {
     // write style <style:default-style style:family="graphic">
     KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
-    DrawStyle ds(m_OfficeArtDggContainer);
+    DrawStyle ds(&m_OfficeArtDggContainer);
     style.setDefaultStyle(true);
     defineGraphicProperties(style, ds);
     styles->insert(style);
@@ -999,8 +999,8 @@ void KWordGraphicsHandler::SetZIndexAttribute(DrawingWriter& out)
 void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     QString styleName;
-    DrawStyle ds(m_OfficeArtDggContainer,&o);
-    DrawStyle drawStyle(m_OfficeArtDggContainer,NULL,&o);
+    DrawStyle ds(&m_OfficeArtDggContainer,&o);
+    DrawStyle drawStyle(&m_OfficeArtDggContainer,NULL,&o);
     wvWare::Word97::FSPA* spa = out.m_pSpa;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
@@ -1050,7 +1050,7 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
 void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,DrawingWriter& out)
 {
     QString styleName;
-    DrawStyle ds(m_OfficeArtDggContainer,&o);
+    DrawStyle ds(&m_OfficeArtDggContainer,&o);
     wvWare::Word97::FSPA* spa = out.m_pSpa;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
@@ -1082,7 +1082,7 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     kDebug(30513) ;
 
     QString styleName;
-    DrawStyle ds(NULL, &o);
+    DrawStyle ds(0, &o);
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
     //in case a header or footer is processed, save the style into styles.xml
@@ -1132,7 +1132,7 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     kDebug(30513) ;
 
     QString styleName;
-    DrawStyle ds(m_OfficeArtDggContainer, &o);
+    DrawStyle ds(&m_OfficeArtDggContainer, &o);
     wvWare::Word97::FSPA* spa = out.m_pSpa;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
@@ -1216,7 +1216,7 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     kDebug(30513) ;
 
     QString styleName;
-    DrawStyle ds(NULL, &o);
+    DrawStyle ds(0, &o);
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
     //in case a header or footer is processed, save the style into styles.xml

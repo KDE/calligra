@@ -26,6 +26,7 @@
 #include "Splash.h"
 #include "DBusAdaptor.h"
 #include "HildonApplication.h"
+#include <KoAbstractApplicationController.h>
 
 int main(int argc, char *argv[])
 {
@@ -69,9 +70,9 @@ int main(int argc, char *argv[])
 
     DBusAdaptor adaptor(&a);
     QObject::connect(&a, SIGNAL(openDocument(const QString &)),
-                     &w, SLOT(openDocument(const QString &)));
+                     w.controller(), SLOT(openDocument(const QString &)));
     QObject::connect(&a, SIGNAL(showApplicationMenu()),
-                     &w, SLOT(showApplicationMenu()));
+                     w.controller(), SLOT(showApplicationMenu()));
 
     if (arguments.size() > 1) {
         KoAbstractApplicationOpenDocumentArguments openArgs;
@@ -79,12 +80,12 @@ int main(int argc, char *argv[])
         if (arguments.size() > 2) {
             openArgs.openAsTemplates = arguments[2].compare("false", Qt::CaseInsensitive);
         }
-        w.openDocuments(openArgs);
+        w.controller()->openDocuments(openArgs);
     } else {
-        QTimer::singleShot(5, &w, SLOT(checkDBusActivation()));
+        QTimer::singleShot(5, w.controller(), SLOT(checkDBusActivation()));
     }
     if (loadScrollAndQuit) {
-        QTimer::singleShot(10, &w, SLOT(loadScrollAndQuit()));
+        QTimer::singleShot(10, w.controller(), SLOT(loadScrollAndQuit()));
     }
     return a.exec();
 }

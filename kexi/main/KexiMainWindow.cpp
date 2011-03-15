@@ -1464,7 +1464,7 @@ void KexiMainWindow::invalidateProjectWideActions()
     /*replaced by d->tabbedToolBar
       if (d->createMenu)
         d->createMenu->setEnabled(d->prj);*/
-    if (d->tabbedToolBar->createWidgetToolBar())
+    if (d->tabbedToolBar && d->tabbedToolBar->createWidgetToolBar())
         d->tabbedToolBar->createWidgetToolBar()->setEnabled(d->prj);
 
     // DATA MENU
@@ -1979,15 +1979,21 @@ void KexiMainWindow::setupMainWidget()
     vlyr->setContentsMargins(0, 0, 0, 0);
     vlyr->setSpacing(0);
 
-    QWidget *tabbedToolBarContainer = new QWidget(this);
-    vlyr->addWidget(tabbedToolBarContainer);
-    QVBoxLayout *tabbedToolBarContainerLyr = new QVBoxLayout(tabbedToolBarContainer);
-    tabbedToolBarContainerLyr->setSpacing(0);
-    tabbedToolBarContainerLyr->setContentsMargins(
-        KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2);
+    if (d->isMainMenuVisible) {
+        QWidget *tabbedToolBarContainer = new QWidget(this);
+        vlyr->addWidget(tabbedToolBarContainer);
+        QVBoxLayout *tabbedToolBarContainerLyr = new QVBoxLayout(tabbedToolBarContainer);
+        tabbedToolBarContainerLyr->setSpacing(0);
+        tabbedToolBarContainerLyr->setContentsMargins(
+            KDialog::marginHint() / 2, KDialog::marginHint() / 2,
+            KDialog::marginHint() / 2, KDialog::marginHint() / 2);
 
-    d->tabbedToolBar = new KexiTabbedToolBar(tabbedToolBarContainer);
-    tabbedToolBarContainerLyr->addWidget(d->tabbedToolBar);
+        d->tabbedToolBar = new KexiTabbedToolBar(tabbedToolBarContainer);
+        tabbedToolBarContainerLyr->addWidget(d->tabbedToolBar);
+    }
+    else {
+        d->tabbedToolBar = 0;
+    }
 
     QWidget *mainWidgetContainer = new QWidget();
     vlyr->addWidget(mainWidgetContainer, 1);
@@ -5343,22 +5349,25 @@ void KexiMainWindow::slotPartItemSelectedInNavigator(KexiPart::Item* item)
 
 KToolBar *KexiMainWindow::toolBar(const QString& name) const
 {
-    return d->tabbedToolBar->toolBar(name);
+    return d->tabbedToolBar ? d->tabbedToolBar->toolBar(name) : 0;
 }
 
 void KexiMainWindow::appendWidgetToToolbar(const QString& name, QWidget* widget)
 {
-    d->tabbedToolBar->appendWidgetToToolbar(name, widget);
+    if (d->tabbedToolBar)
+        d->tabbedToolBar->appendWidgetToToolbar(name, widget);
 }
 
 void KexiMainWindow::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
 {
-    d->tabbedToolBar->setWidgetVisibleInToolbar(widget, visible);
+    if (d->tabbedToolBar)
+        d->tabbedToolBar->setWidgetVisibleInToolbar(widget, visible);
 }
 
 void KexiMainWindow::addToolBarAction(const QString& toolBarName, QAction *action)
 {
-    d->tabbedToolBar->addAction(toolBarName, action);
+    if (d->tabbedToolBar)
+        d->tabbedToolBar->addAction(toolBarName, action);
 }
 
 void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet)

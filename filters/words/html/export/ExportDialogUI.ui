@@ -76,7 +76,7 @@
                 </spacer>
             </hbox>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="Q3ButtonGroup">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
             </property>
@@ -126,7 +126,7 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="Q3ButtonGroup">
             <property name="name">
                 <cstring>buttonGroupMode</cstring>
             </property>

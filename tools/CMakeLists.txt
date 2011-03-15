@@ -35,9 +35,3 @@ if(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
         macro_optional_add_subdirectory(f-office)
     endif(Q_WS_X11 AND SHOULD_BUILD_F_OFFICE)
 endif(X11_FOUND AND LIBXML2_FOUND AND OPENSSL_FOUND)
-
-# strigi ships with the odfsaxanalyzer which does already fetch the meta-data of
-# odf files. Also the current implementations of the analyzers are deactivated
-# anyway. So, what would be needed is to connect somehow with KoStore or hook
-# in the koffice-filters another way somehow.
-#add_subdirectory( strigi-analyzer )

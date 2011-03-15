@@ -281,6 +281,40 @@ void ProjectTester::schedule()
     QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
+    s = "Calculate forward, 2 tasks: Resource 200% available, Request 50% load each ---------";
+    qDebug()<<endl<<"Testing:"<<s;
+    r->setUnits( 200 );
+    rr->setUnits( 50 );
+
+    Task *task2 = m_project->createTask( *t, m_project );
+    task2->setName( "T2" );
+    m_project->addTask( task2, t );
+
+    ResourceGroupRequest *gr2 = new ResourceGroupRequest( g );
+    task2->addRequest( gr2 );
+    ResourceRequest *rr2 = new ResourceRequest( r, 50 );
+    gr2->addResourceRequest( rr2 );
+
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    sm->createSchedules();
+    m_project->calculate( *sm );
+
+    Debug::print( m_project, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
+
+    QCOMPARE( task2->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( task2->endTime(), task2->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( task2->plannedEffort().toHours(), 8.0 );
+    QVERIFY( task2->schedulingError() == false );
+
+    m_project->takeTask( task2 );
+    delete task2;
+
     s = "Calculate forward, Task: ASAP, Resource available tomorrow --------";
     qDebug()<<endl<<"Testing:"<<s;
     r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );

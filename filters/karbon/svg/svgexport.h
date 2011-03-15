@@ -75,6 +75,7 @@ private:
     void getFill(KoShape * shape, QTextStream *stream);
     void getStroke(KoShape * shape, QTextStream *stream);
     void getEffects(KoShape *shape, QTextStream *stream);
+    void getClipping(KoShape *shape, QTextStream *stream);
     void getColorStops(const QGradientStops & colorStops);
     void getGradient(const QGradient * gradient, const QTransform &gradientTransform);
     void getPattern(KoPatternBackground * pattern, KoShape * shape);

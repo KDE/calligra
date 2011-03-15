@@ -5,7 +5,7 @@
 
 /* calculate the fitness of the current solution, some of the 
  * data is stored in problem! */
-int fitness(struct rcps_problem *problem, struct rcps_genome *genome,
+struct rcps_fitness fitness(struct rcps_problem *problem, struct rcps_genome *genome,
 	struct rcps_phenotype *pheno);
 
 #endif /* FITNESS_H */

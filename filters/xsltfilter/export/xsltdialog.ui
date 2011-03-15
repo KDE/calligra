@@ -45,7 +45,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QListBox">
+                <widget class="Q3ListBox">
                     <property name="name">
                         <cstring>xsltList</cstring>
                     </property>

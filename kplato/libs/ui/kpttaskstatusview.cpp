@@ -613,6 +613,7 @@ void PerformanceStatusBase::refreshChart()
 
 void PerformanceStatusBase::createBarChart()
 {
+    m_barchart.inuse = false;
     m_barchart.effortplane = new CartesianCoordinatePlane( ui_chart );
     m_barchart.effortplane->setObjectName( "Bar chart, Effort" );
     m_barchart.costplane = new CartesianCoordinatePlane( ui_chart );
@@ -659,6 +660,7 @@ void PerformanceStatusBase::createBarChart()
 
 void PerformanceStatusBase::createLineChart()
 {
+    m_linechart.inuse = false;
     m_linechart.effortplane = new CartesianCoordinatePlane( ui_chart );
     m_linechart.effortplane->setObjectName( "Line chart, Effort" );
     m_linechart.effortplane->setRubberBandZoomingEnabled( true );
@@ -712,12 +714,14 @@ void PerformanceStatusBase::setupChart()
     while ( ! ui_chart->coordinatePlanes().isEmpty() ) {
         ui_chart->takeCoordinatePlane( ui_chart->coordinatePlanes().last() );
     }
+    m_barchart.inuse = false;
+    m_linechart.inuse = false;
     if ( m_chartinfo.showBarChart ) {
         setupChart( m_barchart );
-    } else if ( m_chartinfo.showLineChart ) {
+        m_barchart.inuse = true;
+    } else /*if ( m_chartinfo.showLineChart )*/ {
         setupChart( m_linechart );
-    } else {
-        setupChart( m_linechart );
+        m_linechart.inuse = true;
     }
     kDebug()<<"Planes:"<<ui_chart->coordinatePlanes();
     foreach ( AbstractCoordinatePlane *pl, ui_chart->coordinatePlanes() ) {
