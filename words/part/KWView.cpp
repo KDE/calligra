@@ -98,6 +98,9 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <KoFindText.h>
+#include <KoFindDialog.h>
+#include <KoFindToolbar.h>
 
 static KWFrame *frameForShape(KoShape *shape)
 {
@@ -130,7 +133,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
@@ -143,7 +146,17 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
-    new KoFind(this, m_canvas->resourceManager(), actionCollection());
+    //new KoFind(this, m_canvas->resourceManager(), actionCollection());
+
+    m_find = new KoFindText(m_canvas->resourceManager(), this);
+    //KoFindDialog *dialog = new KoFindDialog(m_find, actionCollection(), this);
+    KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
+    toolbar->setVisible(false);
+    connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
+    //connect(m_find, SIGNAL(noMatchFound()), this, SLOT(findNoMatchFound()));
+    //connect(m_find, SIGNAL(highlight()), this, SLOT(findHighlight()));
+
+    layout->addWidget(toolbar);
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
 
@@ -1528,4 +1541,20 @@ void KWView::bringToFront() {
 
 void KWView::sendToBack() {
     adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::SendToBack);
+}
+
+void KWView::findMatchFound(KoFindMatch match)
+{
+    if(!match.isValid() || !match.location().canConvert<QTextCursor>() || !match.container().canConvert<QTextDocument*>()) {
+        return;
+    }
+
+    QTextCursor cursor = match.location().value<QTextCursor>();
+
+    m_canvas->resourceManager()->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+    m_canvas->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
+
+    m_find->highlightMatch(match);
+
+    m_canvas->updateCanvas(QRectF(QPoint(0,0), m_canvas->size()));
 }
