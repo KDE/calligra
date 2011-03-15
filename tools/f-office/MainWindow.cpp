@@ -1877,7 +1877,7 @@ bool MainWindow::openDocuments(const KoAbstractApplicationOpenDocumentArguments&
     return result;
 }
 
-// Reimplemented
+// Reimpl mented
 void MainWindow::closeDocument()
 {
     KoAbstractApplication::closeDocument();
