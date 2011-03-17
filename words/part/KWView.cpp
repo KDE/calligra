@@ -149,12 +149,9 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     //new KoFind(this, m_canvas->resourceManager(), actionCollection());
 
     m_find = new KoFindText(m_canvas->resourceManager(), this);
-    //KoFindDialog *dialog = new KoFindDialog(m_find, actionCollection(), this);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
-    //connect(m_find, SIGNAL(noMatchFound()), this, SLOT(findNoMatchFound()));
-    //connect(m_find, SIGNAL(highlight()), this, SLOT(findHighlight()));
 
     layout->addWidget(toolbar);
 
@@ -1556,5 +1553,6 @@ void KWView::findMatchFound(KoFindMatch match)
 
     m_find->highlightMatch(match);
 
-    m_canvas->updateCanvas(QRectF(QPoint(0,0), m_canvas->size()));
+    QTextDocument* doc = match.container().value<QTextDocument*>();
+    m_canvas->updateCanvas(QRectF(QPoint(0,0), doc->size()));
 }
