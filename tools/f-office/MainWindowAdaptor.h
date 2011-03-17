@@ -35,7 +35,7 @@ class ApplicationController;
 class MainWindowAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.nokia.FreOffice.presentation.view")
+    Q_CLASSINFO("D-Bus Interface", "com.nokia.CalligraMobile.presentation.view")
 
 public:
     MainWindowAdaptor(ApplicationController *controller);

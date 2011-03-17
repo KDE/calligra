@@ -36,7 +36,7 @@ class PresentationTool;
 class PresentationToolAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.nokia.FreOffice.presentation.tool")
+    Q_CLASSINFO("D-Bus Interface", "com.nokia.CalligraMobile.presentation.tool")
 
 public:
     PresentationToolAdaptor(PresentationTool *tool);

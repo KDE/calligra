@@ -39,9 +39,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     </style></head><body style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:400; \
     font-style:normal;\">\n <p>" +
 
-    i18n("FreOffice is a mobile office suite powered by Calligra Suite. FreOffice is in beta release.<br/>"
+    i18n("Calligra Mobile is a mobile office suite powered by Calligra Suite. Calligra Mobile is in beta release.<br/>"
      "Users can view documents(Microsoft formats and ODF), carry basic editing and create new documents.<br>"
-     "FreOffice code can be found in the Calligra Open Source project. <br/>")+
+     "Calligra Mobile code can be found in the Calligra Open Source project. <br/>")+
     "</p></body></html>";
 
     m_ui->setupUi(this);

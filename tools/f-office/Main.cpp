@@ -30,7 +30,7 @@
 
 int main(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(FreOffice);
+    Q_INIT_RESOURCE(CalligraMobile);
 
     // parse and set the value for graphicssystem
     int graphicsSystemIndex = -1;

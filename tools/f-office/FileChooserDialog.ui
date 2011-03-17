@@ -72,7 +72,7 @@
    </widget>
    <widget class="QWidget" name="documentTab">
     <attribute name="icon">
-     <iconset resource="FreOffice.qrc">
+     <iconset resource="CalligraMobile.qrc">
       <normaloff>:/images/48x48/Document.png</normaloff>:/images/48x48/Document.png</iconset>
     </attribute>
     <attribute name="title">
@@ -103,7 +103,7 @@
      </sizepolicy>
     </property>
     <attribute name="icon">
-     <iconset resource="FreOffice.qrc">
+     <iconset resource="CalligraMobile.qrc">
       <normaloff>:/images/48x48/Presenter.png</normaloff>:/images/48x48/Presenter.png</iconset>
     </attribute>
     <attribute name="title">
@@ -128,7 +128,7 @@
      </sizepolicy>
     </property>
     <attribute name="icon">
-     <iconset resource="FreOffice.qrc">
+     <iconset resource="CalligraMobile.qrc">
       <normaloff>:/images/48x48/SpreadSheet.png</normaloff>:/images/48x48/SpreadSheet.png</iconset>
     </attribute>
     <attribute name="title">
@@ -183,7 +183,7 @@
        <string/>
       </property>
       <property name="icon">
-       <iconset resource="FreOffice.qrc">
+       <iconset resource="CalligraMobile.qrc">
         <normaloff>:/images/64x64/VirtualKeyBoard/change.png</normaloff>:/images/64x64/VirtualKeyBoard/change.png</iconset>
       </property>
       <property name="iconSize">
@@ -223,7 +223,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="FreOffice.qrc"/>
+  <include location="CalligraMobile.qrc"/>
  </resources>
  <connections/>
 </ui>

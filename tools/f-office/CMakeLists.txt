@@ -27,12 +27,12 @@ include_directories(
     ${KDE4_INCLUDES}
 )
 
-SET(FreOffice_RCCS FreOffice.qrc)
-QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
+SET(CalligraMobile_RCCS CalligraMobile.qrc)
+QT4_ADD_RESOURCES(CalligraMobile_RCC_SRCS ${CalligraMobile_RCCS})
 
 find_library( QT_QMAEMO5_LIBRARY QtMaemo5 HINTS ${QT_LIBRARIES} )
 
-set(FreOfficeMocSrc_SRCS
+set(CalligraMobileMocSrc_SRCS
     ApplicationController.h
     MainWindow.h
     Accelerator.h 
@@ -70,14 +70,14 @@ set(FreOfficeMocSrc_SRCS
 )
 
 if(QT_QTOPENGL_FOUND)
-  list(APPEND FreOfficeMocSrc_SRCS GlWidget.h GlPresenter.h)
+  list(APPEND CalligraMobileMocSrc_SRCS GlWidget.h GlPresenter.h)
 endif(QT_QTOPENGL_FOUND)
 
-kde4_add_ui_files(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui FileChooserDialog.ui AboutDialog.ui CollabDialog.ui)
+kde4_add_ui_files(CalligraMobileUiSrc MainWindow.ui ZoomDialog.ui FileChooserDialog.ui AboutDialog.ui CollabDialog.ui)
 
-QT4_WRAP_CPP(FreOfficeMocSrc ${FreOfficeMocSrc_SRCS})
+QT4_WRAP_CPP(CalligraMobileMocSrc ${CalligraMobileMocSrc_SRCS})
 
-set(FreOffice_SRCS
+set(CalligraMobile_SRCS
     Main.cpp
     ApplicationController.cpp
     ConfirmationDialog.cpp
@@ -109,9 +109,9 @@ set(FreOffice_SRCS
     DigitalSignatureDialog.cpp
     FoImageSelectionWidget.cpp
     FileChooserDialog.cpp
-    ${FreOfficeUiSrc} 
-    ${FreOfficeMocSrc} 
-    ${FreOffice_RCC_SRCS}
+    ${CalligraMobileUiSrc}
+    ${CalligraMobileMocSrc}
+    ${CalligraMobile_RCC_SRCS}
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoAbstractApplicationController.cpp
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/RemoveSheetCommand.cpp
     #${CMAKE_SOURCE_DIR}/tools/koabstraction/KoCellToolFactory.cpp
@@ -120,15 +120,15 @@ set(FreOffice_SRCS
 )
 
 if(QT_QTOPENGL_FOUND)
-    list(APPEND FreOffice_SRCS
+    list(APPEND CalligraMobile_SRCS
         GlWidget.cpp
         GlPresenter.cpp
     )
 endif(QT_QTOPENGL_FOUND)
 
-add_executable(FreOffice ${FreOffice_SRCS})
+add_executable(CalligraMobile ${CalligraMobile_SRCS})
 
-target_link_libraries(FreOffice
+target_link_libraries(CalligraMobile
     ${LIBXML2_LIBRARIES}
     ${OPENSSL_LIBRARIES}
     ${X11_X11_LIB}
@@ -143,34 +143,34 @@ target_link_libraries(FreOffice
 )
 
 if (QT_QTOPENGL_FOUND)
-    target_link_libraries(FreOffice
+    target_link_libraries(CalligraMobile
         ${QT_QTOPENGL_LIBRARY}
         ${OPENGL_LIBRARIES}
     )
 endif (QT_QTOPENGL_FOUND)
 
 if(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice
+    target_link_libraries(CalligraMobile
         ${QT_QMAEMO5_LIBRARY}
         ${SOPRANO_LIBRARIES}
     )
 endif(QT_QMAEMO5_LIBRARY)
 
-install(TARGETS FreOffice RUNTIME DESTINATION bin)
-install(FILES freoffice.desktop DESTINATION share/applications/hildon)
-install(FILES images/178x200/freoffice.png DESTINATION share/icons/hicolor/178x200/apps)
-install(FILES images/64x64/freoffice.png DESTINATION share/icons/hicolor/64x64/apps)
-install(FILES com.nokia.FreOffice.service DESTINATION share/dbus-1/services)
+install(TARGETS CalligraMobile RUNTIME DESTINATION bin)
+install(FILES calligramobile.desktop DESTINATION share/applications/hildon)
+install(FILES images/178x200/calligramobile.png DESTINATION share/icons/hicolor/178x200/apps)
+install(FILES images/64x64/calligramobile.png DESTINATION share/icons/hicolor/64x64/apps)
+install(FILES com.nokia.CalligraMobile.service DESTINATION share/dbus-1/services)
 install(FILES images/48x48/Document.png DESTINATION share/icons/hicolor/48x48/hildon)
 install(FILES images/48x48/Presenter.png DESTINATION share/icons/hicolor/48x48/hildon)
 install(FILES images/48x48/SpreadSheet.png DESTINATION share/icons/hicolor/48x48/hildon)
-install(FILES templates/NewDocument.odt DESTINATION share/freoffice-templates/.templates)
-install(FILES templates/Text_Only.odp DESTINATION share/freoffice-templates/.presentationtemplates)
-install(FILES templates/Text_With_Chart.odp DESTINATION share/freoffice-templates/.presentationtemplates)
-install(FILES templates/Text_With_Header.odp DESTINATION share/freoffice-templates/.presentationtemplates)
-install(FILES templates/Text_With_Image.odp DESTINATION share/freoffice-templates/.presentationtemplates)
-install(FILES templates/Text_With_Outline.odp DESTINATION share/freoffice-templates/.presentationtemplates)
-install(FILES templates/NewSpread.ods DESTINATION share/freoffice-templates/.templates)
+install(FILES templates/NewDocument.odt DESTINATION share/calligramobile-templates/.templates)
+install(FILES templates/Text_Only.odp DESTINATION share/calligramobile-templates/.presentationtemplates)
+install(FILES templates/Text_With_Chart.odp DESTINATION share/calligramobile-templates/.presentationtemplates)
+install(FILES templates/Text_With_Header.odp DESTINATION share/calligramobile-templates/.presentationtemplates)
+install(FILES templates/Text_With_Image.odp DESTINATION share/calligramobile-templates/.presentationtemplates)
+install(FILES templates/Text_With_Outline.odp DESTINATION share/calligramobile-templates/.presentationtemplates)
+install(FILES templates/NewSpread.ods DESTINATION share/calligramobile-templates/.templates)
 if(QT_QMAEMO5_LIBRARY)
     install(FILES Acceleration/mce.ini DESTINATION /etc/mce)
 endif(QT_QMAEMO5_LIBRARY)

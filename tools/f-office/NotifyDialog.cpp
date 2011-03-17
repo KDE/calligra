@@ -40,7 +40,7 @@ NotifyDialog::NotifyDialog(const QString& messageText, QWidget *parent)
     m_layout = new QVBoxLayout(this);
     m_layout->addWidget(m_label);
     this->setLayout(m_layout);
-    this->setWindowTitle(i18n("FreOffice"));
+    this->setWindowTitle(i18n("Calligra Mobile"));
     m_label->setAlignment(Qt::AlignCenter);
 }
 

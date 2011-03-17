@@ -283,7 +283,7 @@ ApplicationController::ApplicationController(Splash *aSplash, MainWindow *mainWi
     m_ui->actionSaveAs->setData(QVariant(false));
     m_ui->actionClose->setData(QVariant(false));
     m_ui->actionPresentation->setData(QVariant(false));
-    const QDir pluginDir("/usr/lib/freoffice/");
+    const QDir pluginDir("/usr/lib/calligramobile");
     const QStringList plugins = pluginDir.entryList(QDir::Files);
 
     for (int i = 0; i < plugins.size(); ++i) {
@@ -3398,7 +3398,7 @@ void ApplicationController::showUiBeforeDocumentOpening(bool isNewDocument)
 
 QString ApplicationController::applicationName() const
 {
-    return i18n("FreOffice");
+    return i18n("Calligra Mobile");
 }
 
 QMessageBox::StandardButton ApplicationController::askQuestion(QuestionType type,

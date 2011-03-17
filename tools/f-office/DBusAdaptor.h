@@ -36,7 +36,7 @@
 class DBusAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.nokia.FreOffice")
+    Q_CLASSINFO("D-Bus Interface", "com.nokia.CalligraMobile")
 
 public:
 

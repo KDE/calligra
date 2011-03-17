@@ -93,11 +93,11 @@ const QString FS_PPT_FORWARD_BUTTON_PATH("/usr/share/icons/hicolor/48x48/hildon/
 /*!
 * Path for splash screen KOffice logo
 */
-const QString SPLASH_LOGO_KOFFICE_PATH(":/images/178x200/freoffice.png");
+const QString SPLASH_LOGO_KOFFICE_PATH(":/images/178x200/calligramobile.png");
 /*!
  * * KOffice pixmap in about dialog
  */
-const QString ABOUT_DIALOG_KOFFICE_PIXMAP("/usr/share/icons/hicolor/64x64/apps/freoffice.png");
+const QString ABOUT_DIALOG_KOFFICE_PIXMAP("/usr/share/icons/hicolor/64x64/apps/calligramobile.png");
 /*!
  * * Nokia pixmap in about dialog
  * */
@@ -109,15 +109,15 @@ const QString VIEW_NOTES_PIXMAP(":/images/64x64/PresentationDrawTool/viewnotes.p
 /*!
 * Path New Document Template
 */
-const QString NEW_WORDDOC("/usr/share/freoffice-templates/.templates/NewDocument.odt");
+const QString NEW_WORDDOC("/usr/share/calligramobile-templates/.templates/NewDocument.odt");
 /*!
 * Path New Presentation Template
 */
-const QString NEW_PRESENTER ("/usr/share/freoffice-templates/.presentationtemplates/");
+const QString NEW_PRESENTER ("/usr/share/calligramobile-templates/.presentationtemplates/");
 /*!
 * Path New Spreadsheet Template
 */
-const QString NEW_SPREADSHEET("/usr/share/freoffice-templates/.templates/NewSpread.ods");
+const QString NEW_SPREADSHEET("/usr/share/calligramobile-templates/.templates/NewSpread.ods");
 
 /*!
 * Style for full screen button
@@ -128,12 +128,12 @@ const QString FS_BUTTON_STYLE_SHEET("background-color: black; \
 /*!
  * DBus FreOffice Path
  */
-const QString FREOFFICE_PATH("/com/nokia/FreOffice");
+const QString FREOFFICE_PATH("/com/nokia/CalligraMobile");
 
 /*!
  * DBus FreOffice ServiceName
  */
-const QString FREOFFICE_SERVICE_NAME("com.nokia.FreOffice");
+const QString FREOFFICE_SERVICE_NAME("com.nokia.CalligraMobile");
 
-const QString FREOFFICE_APPLICATION_PATH("/usr/bin/FreOffice");
+const QString FREOFFICE_APPLICATION_PATH("/usr/bin/CalligraMobile");
 #endif // COMMON_H

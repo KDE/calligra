@@ -57,6 +57,6 @@ public:
     virtual QStringList pluginSupportTypes() = 0;
 };
 
-Q_DECLARE_INTERFACE(OfficeInterface, "com.office.Freoffice.OfficeInterface/1.0")
+Q_DECLARE_INTERFACE(OfficeInterface, "com.office.CalligraMobile.OfficeInterface/1.0")
 
 #endif
