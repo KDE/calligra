@@ -80,6 +80,8 @@ TODO: fix https://bugs.kde.org/show_bug.cgi?id=241144
 
 TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
+TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cpp/fid005249EAAF7BE50E0DF5B02243622557BCE5A466.aspx) and use for any recursion guard
+
 ===================== Kexi 2.4  =====================
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
