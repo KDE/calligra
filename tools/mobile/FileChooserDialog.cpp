@@ -33,20 +33,22 @@ void FileChooserDialog::initUi()
     connect(fileChooser->fileChooser, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     connect(fileChooser->levelUp, SIGNAL(clicked()), this, SLOT(moveLevelUp()));
 
-    fileChooser->filePath->setText("/home/meego");
+    QString startDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+
+    fileChooser->filePath->setText(startDir);
     fileModel = new QFileSystemModel();
     fileModel->setRootPath("");
 
     fileChooser->documentView->setModel(fileModel);
-    fileChooser->documentView->setRootIndex(fileModel->index("/home/meego"));
+    fileChooser->documentView->setRootIndex(fileModel->index(startDir));
     connect(fileChooser->documentView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeRootIndex(QModelIndex)));
 
     fileChooser->presentationView->setModel(fileModel);
-    fileChooser->presentationView->setRootIndex(fileModel->index("/home/meego"));
+    fileChooser->presentationView->setRootIndex(fileModel->index(startDir));
     connect(fileChooser->presentationView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeRootIndex(QModelIndex)));
 
     fileChooser->spreadsheetView->setModel(fileModel);
-    fileChooser->spreadsheetView->setRootIndex(fileModel->index("/home/meego"));
+    fileChooser->spreadsheetView->setRootIndex(fileModel->index(startDir));
     connect(fileChooser->spreadsheetView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeRootIndex(QModelIndex)));
     fileModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::AllDirs);
     fileModel->setNameFilterDisables(true);
