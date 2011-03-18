@@ -20,91 +20,22 @@
  */
 
 #include "MainWindow.h"
+#include "CanvasController.h"
 
-#include <KoExternalEditorInterface.h>
-#include <KoCellTool.h>
+#include <QDeclarativeView>
+#include "calligra_mobile_global.h"
 
-MainWindow::MainWindow(QWidget *parent) : KoAbstractApplication(parent)
+MainWindow::MainWindow(QWidget *parent)
 {
+    qmlRegisterType<CanvasController>("CalligraMobile", 1, 0, "CanvasController");
+    m_view = new QDeclarativeView(this);
+    m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
+                        + "/share/calligra-mobile/qml/Doc.qml"));
+    setCentralWidget(m_view);
 }
 
 MainWindow::~MainWindow()
 {
-}
-
-void MainWindow::currentPageChanged()
-{
-
-}
-
-KoExternalEditorInterface* MainWindow::createExternalCellEditor(KoCellTool* cellTool) const
-{
-    return 0;
-}
-
-bool MainWindow::isVirtualKeyboardVisible() const
-{
-    return true;
-}
-
-void MainWindow::setVirtualKeyboardVisible(bool set)
-{
-
-}
-
-QString MainWindow::applicationName() const
-{
-    return QString("bleh");
-}
-
-void MainWindow::updateActions()
-{
-
-}
-
-void MainWindow::setWindowTitle(const QString& title)
-{
-
-}
-
-void MainWindow::setCentralWidget(QWidget* widget)
-{
-
-}
-
-QString MainWindow::showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
-{
-    return QString("/dev/null");
-}
-
-QString MainWindow::showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter)
-{
-    return QString("/dev/null");
-}
-
-void MainWindow::showUiBeforeDocumentOpening(bool isNewDocument)
-{
-
-}
-
-void MainWindow::setProgressIndicatorVisible(bool visible)
-{
-
-}
-
-bool MainWindow::startNewInstance(const KoAbstractApplicationOpenDocumentArguments& args)
-{
-    return true;
-}
-
-QMessageBox::StandardButton MainWindow::askQuestion(KoAbstractApplicationController::QuestionType type, const QString& messageText)
-{
-    return QMessageBox::Ok;
-}
-
-void MainWindow::showMessage(KoAbstractApplicationController::MessageType type, const QString& messageText)
-{
-
 }
 
 #include "MainWindow.moc"

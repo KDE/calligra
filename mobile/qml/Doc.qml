@@ -20,6 +20,7 @@
  */
 
 import QtQuick 1.0 as QML
+import CalligraMobile 1.0
 
 QML.Rectangle {
     id: rootRect
@@ -30,26 +31,9 @@ QML.Rectangle {
          QML.GradientStop { position: 1.0; color: "#303030" }
     }
 
-    DocumentTypeSelector {
-        id: docTypeSelector
-        
-        buttonWidth: 100; buttonHeight: 100;
-        x:0;y:0
-    }
+    CanvasController {
+        id: canvas
 
-    PresentationTemplatesView {
-        id: presentationTemplatesView
-        height: 400; width: 800;
-        
-        anchors.centerIn: parent
-        visible: false
+        anchors.fill: parent
     }
-
-    states: [
-        QML.State {
-            name: "presentation"
-            QML.PropertyChanges { target: docTypeSelector; x: -(parent.width * 1.5) }
-            QML.PropertyChanges { target: presentationTemplatesView; visible: true }
-        }
-    ]
 }

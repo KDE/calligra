@@ -23,33 +23,17 @@
 #define MAINWINDOW_H
 
 #include <QtGui/QMainWindow>
-typedef QMainWindow KoAbstractApplicationBase;
 
-#include <KoAbstractApplication.h>
+class QDeclarativeView;
 
-class MainWindow : public KoAbstractApplication
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
-protected:
-    virtual void currentPageChanged();
-    virtual KoExternalEditorInterface* createExternalCellEditor(KoCellTool* cellTool) const;
-    virtual bool isVirtualKeyboardVisible() const;
-    virtual void setVirtualKeyboardVisible(bool set);
-    virtual QString applicationName() const;
-    virtual void updateActions();
-    virtual void setWindowTitle(const QString& title);
-    virtual void setCentralWidget(QWidget* widget);
-    virtual QString showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter);
-    virtual QString showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter);
-    virtual void showUiBeforeDocumentOpening(bool isNewDocument);
-    virtual void setProgressIndicatorVisible(bool visible);
-    virtual bool startNewInstance(const KoAbstractApplicationOpenDocumentArguments& args);
-    virtual QMessageBox::StandardButton askQuestion(KoAbstractApplicationController::QuestionType type, const QString& messageText = QString());
-    virtual void showMessage(KoAbstractApplicationController::MessageType type, const QString& messageText = QString());
-
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+private:
+    QDeclarativeView *m_view;
 };
 
 #endif // MAINWINDOW_H

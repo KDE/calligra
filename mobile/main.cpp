@@ -20,16 +20,14 @@
  */
 
 #include <QApplication>
-#include <QDeclarativeView>
-#include "calligra_mobile_global.h"
+#include "src/MainWindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    QDeclarativeView view;
-    view.setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix() + "/share/calligra-mobile/src/HomeScreen.qml"));
-    view.show();
+    MainWindow window;
+    window.show();
 
     return app.exec();
 }
