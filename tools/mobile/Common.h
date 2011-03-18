@@ -78,7 +78,7 @@
 /*!
 * Path for full screen icon
 */
-const QString FS_BUTTON_PATH("/usr/share/icons/hicolor/48x48/hildon/general_fullsize.png");
+const QString FS_BUTTON_PATH(":/images/48x48/general_fullsize.png");
 
 /*!
 * Path for presentation back icon in full screen mode

@@ -58,5 +58,8 @@
         <file>images/48x48/Edittoolbaricons/CCP.png</file>
         <file>images/48x48/Edittoolbaricons/InsertTable.png</file>
         <file>images/48x48/Edittoolbaricons/TextInsert.png</file>
+        <file>images/48x48/general_back.png</file>
+        <file>images/48x48/general_forward.png</file>
+        <file>images/48x48/general_fullsize.png</file>
     </qresource>
 </RCC>
