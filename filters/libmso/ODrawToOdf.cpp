@@ -51,8 +51,21 @@ void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer&
     //system.  This record’s container MUST be a group shape.
     if (sp && sp->shapeProp.fGroup) {
         QRectF oldCoords;
-        if (sp->clientAnchor && sp->shapeGroup) {
-            oldCoords = client->getRect(*sp->clientAnchor);
+        if (!sp->shapeProp.fPatriarch) {
+            out.xml.startElement("draw:g");
+
+            //TODO: there might be nested group shapes each with different
+            //rotation and flipping
+            const DrawStyle ds(0, 0, sp);
+            qreal rotation = toQReal(ds.rotation());
+            out.g_rotation += rotation;
+            out.g_flipH = sp->shapeProp.fFlipH;
+            out.g_flipV = sp->shapeProp.fFlipV;
+
+            if (sp->clientAnchor && sp->shapeGroup) {
+                oldCoords = client->getRect(*sp->clientAnchor);
+                oldCoords = processRect(0, rotation, oldCoords);
+            }
         }
         if (oldCoords.isValid()) {
             Writer out_trans = out.transform(oldCoords, getRect(*sp->shapeGroup));
@@ -64,42 +77,20 @@ void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer&
                 processDrawing(o.rgfb[i], out);
             }
         }
+        if (!sp->shapeProp.fPatriarch) {
+            out.xml.endElement(); //draw:g
+        }
     }
 }
+
 void ODrawToOdf::processDrawing(const OfficeArtSpgrContainerFileBlock& of,
                                 Writer& out)
 {
     if (of.anon.is<OfficeArtSpgrContainer>()) {
-        processGroup(*of.anon.get<OfficeArtSpgrContainer>(), out);
-    } else { // OfficeArtSpContainer
+        processGroupShape(*of.anon.get<OfficeArtSpgrContainer>(), out);
+    } else {
         processDrawingObject(*of.anon.get<OfficeArtSpContainer>(), out);
     }
-}
-void ODrawToOdf::processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out)
-{
-    if (o.rgfb.size() < 2) return;
-    out.xml.startElement("draw:g");
-    /* if the first OfficeArtSpContainer has a clientAnchor,
-       a new coordinate system is introduced.
-       */
-    const OfficeArtSpContainer* first
-    = o.rgfb[0].anon.get<OfficeArtSpContainer>();
-    QRectF oldCoords;
-    if (first && first->shapeGroup && first->clientAnchor) {
-        oldCoords = client->getRect(*first->clientAnchor);
-    }
-    if (oldCoords.isValid()) {
-        QRectF newCoords = getRect(*first->shapeGroup);
-        Writer transformedOut = out.transform(oldCoords, newCoords);
-        for (int i = 1; i < o.rgfb.size(); ++i) {
-            processDrawing(o.rgfb[i], transformedOut);
-        }
-    } else {
-        for (int i = 1; i < o.rgfb.size(); ++i) {
-            processDrawing(o.rgfb[i], out);
-        }
-    }
-    out.xml.endElement(); // draw:g
 }
 void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
         const OfficeArtSpContainer& o)

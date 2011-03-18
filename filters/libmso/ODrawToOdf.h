@@ -107,6 +107,8 @@ private:
     Client* const client;
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
+    QRectF processRect(const quint16 shapeType, const qreal rotation, QRectF &rect);
+    qint16 normalizeRotation(qreal rotation);
     void processEllipse(const MSO::OfficeArtSpContainer& fsp, Writer& out);
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -147,7 +149,6 @@ private:
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
 
-    void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processText(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStyleAndText(const MSO::OfficeArtSpContainer& o, Writer& out);
