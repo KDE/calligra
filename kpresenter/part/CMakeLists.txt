@@ -67,6 +67,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrHtmlExportUiDelegate.cpp
      KPrPicturesImport.cpp
      KPrPdfPrintJob.cpp
+     KPrSlidesSorterDocumentModel.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
@@ -180,3 +181,22 @@ install( PROGRAMS kpresenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
 
 install( FILES kpresenterrc DESTINATION ${CONFIG_INSTALL_DIR} )
+
+### Include files ###
+install( FILES 
+        stage_export.h
+        KPrAnimationDirector.h
+        KPrCustomSlideShows.h
+        KPrDocument.h  
+        KPrPresentationTool.h
+        KPrShapeAnimations.h
+        KPrView.h
+        KPrViewModePresentation.h
+        DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part)
+
+install( FILES 
+         animations/KPrAnimationData.h
+         animations/KPrAnimationStep.h
+         animations/KPrShapeAnimation.h
+         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/animations)
+

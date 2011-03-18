@@ -36,6 +36,8 @@ class ProgressInfo;
 
 class KLocale;
 
+struct rcps_fitness;
+
 namespace KPlato
 {
     class Project;
@@ -49,7 +51,7 @@ namespace KPlato
 }
 using namespace KPlato;
 
-class KPLATORCPS_TEST_EXPORT KPlatoRCPSScheduler : public KPlato::SchedulerThread
+class KPlatoRCPSScheduler : public KPlato::SchedulerThread
 {
     Q_OBJECT
 
@@ -75,6 +77,13 @@ private:
         int finish;
     };
 
+    struct fitness_info
+    {
+        KPlatoRCPSScheduler *self;
+        QMultiMap<int, QPair<int, Task*> > map;
+        QList<Task*> jobs;
+    };
+
 public:
     KPlatoRCPSScheduler( Project *project, ScheduleManager *sm, QObject *parent = 0 );
     ~KPlatoRCPSScheduler();
@@ -83,13 +92,16 @@ public:
 
     int result;
 
-    static int progress_callback( int generations, int fitness, void* arg );
+    static int progress_callback( int generations, struct rcps_fitness fitness, void* arg );
     static int duration_callback( int direction, int time, int nominal_duration, void *arg );
-    static int weight_callback( int time, int duration, int nominal_weight, void *arg );
+    static int weight_callback( int time, int duration, struct rcps_fitness *nominal_weight, void* weight_arg, void* fitness_arg );
+    static void *fitness_callback_init( void *arg );
+    static int fitness_callback_result( struct rcps_fitness *fitness, void *arg );
 
-    int progress( int generations, int fitness );
+    int progress( int generations, struct rcps_fitness fitness );
     int duration( int direction, int time, int nominal_duration, duration_info *info );
-    int weight( int time, int duration, int nominal_weight, KPlatoRCPSScheduler::weight_info* info );
+    int weight( int time, int duration, struct rcps_fitness *nominal_weight, KPlatoRCPSScheduler::weight_info* info, KPlatoRCPSScheduler::fitness_info *finfo );
+    int fitness( struct rcps_fitness *fit, KPlatoRCPSScheduler::fitness_info *info );
 
     /// Fill project data into RCPS structure
     int kplatoToRCPS();
@@ -156,6 +168,7 @@ private:
     QMap<struct rcps_job*, struct weight_info*> m_weight_info_list;
 
     ProgressInfo *m_progressinfo;
+    struct fitness_info fitness_init_arg;
 };
 
 #endif // KPLATORCPSPSCHEDULER_H

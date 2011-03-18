@@ -149,6 +149,8 @@ protected:
     KoFilter::ConversionStatus read_tr();
     KoFilter::ConversionStatus read_tc();
     KoFilter::ConversionStatus read_tcPr();
+    KoFilter::ConversionStatus read_tcBorders();
+    KoFilter::ConversionStatus read_tcMar();
     KoFilter::ConversionStatus read_gridSpan();
     int m_gridSpan;
 
@@ -196,6 +198,14 @@ protected:
 
     KoOdfWriters *m_writers; // Needed to create new relationship for header/footer
 
+    enum PageMargin {
+        MarginTop, MarginBottom, MarginLeft, MarginRight
+    };
+
+    //! Used for setting up properties for page margins.
+    QMap<PageMargin, qreal> m_pageMargins;
+    QString m_pageBorderOffsetFrom;
+
     enum BorderSide {
         TopBorder, BottomBorder, LeftBorder, RightBorder, InsideH, InsideV
     };
@@ -203,19 +213,23 @@ protected:
     //! Whether the picture when run-through wrap is active should be in fore or background
     bool m_behindDoc;
 
-    //! Used for setting up properties for pages and paragraphs.
-    //! It is reversed map, so detecting duplicates is easy in applyBorders().
-    QMap<QString, BorderSide> m_borderStyles;
+    //! Used for setting up properties for pages
+    QMap<BorderSide, QString> m_pageBorderStyles;
 
-    //! Same as above but for r element
-    QMap<QString, BorderSide> m_textBorderStyles;
+    //! Used for setting up properties for paragraphs.
+    QMap<BorderSide, QString> m_borderStyles;
 
-    //! Used for setting up properties for pages and paragraphs.
-    //! It is reversed map, so detecting duplicates is easy in applyBorders().
-    QMap<QString, BorderSide> m_borderPaddings;
+    //! Used for setting up properties r element
+    QMap<BorderSide, QString> m_textBorderStyles;
 
-    // ! Same as above but for border padding
-    QMap<QString, BorderSide> m_textBorderPaddings;
+    //! Used for setting up properties for pages
+    QMap<BorderSide, qreal> m_pageBorderPaddings;
+
+    //! Used for setting up properties for paragraphs
+    QMap<BorderSide, qreal> m_borderPaddings;
+
+    // ! Used for setting up properties for border padding
+    QMap<BorderSide, qreal> m_textBorderPaddings;
 
     KoTable* m_table;
     QString m_currentTableStyle;
@@ -232,7 +246,8 @@ private:
     QColor m_backgroundColor; //Documet background color
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
-    KoFilter::ConversionStatus readBorderElement(BorderSide borderSide, const char *borderSideName);
+    KoFilter::ConversionStatus readBorderElement(BorderSide borderSide, const char *borderSideName,
+                                         QMap<BorderSide, QString> &sourceBorder, QMap<BorderSide, qreal> &sourcePadding);
 
     ///reads the border in a table style
     KoBorder::BorderData getBorderData();
@@ -240,7 +255,7 @@ private:
     //! Creates border style for readBorderElement().
     //! Result is added to m_borderStyles and m_borderPaddings
     void createBorderStyle(const QString& size, const QString& color,
-                           const QString& lineStyle, BorderSide borderSide);
+                           const QString& lineStyle, BorderSide borderSide, QMap<BorderSide, QString> &sourceBorder);
 
     //! Used by read_strike() and read_dstrike()
     void readStrikeElement(KoCharacterStyle::LineType type);
@@ -249,7 +264,11 @@ private:
 
     //! Applies border styles and paddings obtained in readBorderElement()
     //! to style @a style (paragraph or page...)
-    void applyBorders(KoGenStyle *style, QMap<QString, BorderSide> sourceBorder, QMap<QString, BorderSide> sourcePadding);
+    void applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding);
+
+    //! Applies border styles and paddings for page
+    void appyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide,QString> &pageBorder,
+                         QMap<BorderSide, qreal> &pagePadding, QString & offsetFrom);
     void defineTableStyles();
 
     enum ComplexFieldCharType {

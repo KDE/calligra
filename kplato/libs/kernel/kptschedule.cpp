@@ -63,8 +63,11 @@ Schedule::Schedule()
         m_deleted( false ),
         m_parent( 0 ),
         m_obstate( OBS_Parent ),
-        m_calculationMode( Schedule::Scheduling )
-{}
+        m_calculationMode( Schedule::Scheduling ),
+        notScheduled( true )
+{
+    initiateCalculation();
+}
 
 Schedule::Schedule( Schedule *parent )
         : m_type( Expected ),
@@ -72,7 +75,8 @@ Schedule::Schedule( Schedule *parent )
         m_deleted( false ),
         m_parent( parent ),
         m_obstate( OBS_Parent ),
-        m_calculationMode( Schedule::Scheduling )
+        m_calculationMode( Schedule::Scheduling ),
+        notScheduled( true )
 {
 
     if ( parent ) {
@@ -80,6 +84,7 @@ Schedule::Schedule( Schedule *parent )
         m_type = parent->type();
         m_id = parent->id();
     }
+    initiateCalculation();
     //kDebug()<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id;
 }
 
@@ -90,10 +95,11 @@ Schedule::Schedule( const QString& name, Type type, long id )
         m_deleted( false ),
         m_parent( 0 ),
         m_obstate( OBS_Parent ),
-        m_calculationMode( Schedule::Scheduling )
+        m_calculationMode( Schedule::Scheduling ),
+        notScheduled( true )
 {
-
     //kDebug()<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id;
+    initiateCalculation();
 }
 
 Schedule::~Schedule()
@@ -156,7 +162,7 @@ QStringList Schedule::state() const
         lst << SchedulingState::deleted();
     if ( notScheduled )
         lst << SchedulingState::notScheduled();
-    if ( schedulingError )
+    if ( constraintError )
         lst << SchedulingState::constraintsNotMet();
     if ( resourceError )
         lst << SchedulingState::resourceNotAllocated();
@@ -164,6 +170,10 @@ QStringList Schedule::state() const
         lst << SchedulingState::resourceNotAvailable();
     if ( resourceOverbooked )
         lst << SchedulingState::resourceOverbooked();
+    if ( effortNotMet )
+        lst << SchedulingState::effortNotMet();
+    if ( schedulingError )
+        lst << SchedulingState::schedulingError();
     if ( lst.isEmpty() )
         lst << SchedulingState::scheduled();
     return lst;
@@ -231,10 +241,15 @@ void Schedule::initiateCalculation()
 {
     resourceError = false;
     resourceOverbooked = false;
+    resourceNotAvailable = false;
+    constraintError = false;
     schedulingError = false;
     inCriticalPath = false;
+    effortNotMet = false;
     workStartTime = DateTime();
     workEndTime = DateTime();
+
+
 }
 
 void Schedule::calcResourceOverbooked()
@@ -689,6 +704,7 @@ void NodeSchedule::init()
     resourceError = false;
     resourceOverbooked = false;
     resourceNotAvailable = false;
+    constraintError = false;
     schedulingError = false;
     notScheduled = true;
     inCriticalPath = false;
@@ -757,7 +773,8 @@ bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
     resourceError = sch.attribute( "resource-error", "0" ).toInt();
     resourceOverbooked = sch.attribute( "resource-overbooked", "0" ).toInt();
     resourceNotAvailable = sch.attribute( "resource-not-available", "0" ).toInt();
-    schedulingError = sch.attribute( "scheduling-conflict", "0" ).toInt();
+    constraintError = sch.attribute( "scheduling-conflict", "0" ).toInt();
+    schedulingError = sch.attribute( "scheduling-error", "0" ).toInt();
     notScheduled = sch.attribute( "not-scheduled", "1" ).toInt();
 
     positiveFloat = Duration::fromString( sch.attribute( "positive-float" ) );
@@ -801,7 +818,8 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     sch.setAttribute( "resource-error", resourceError );
     sch.setAttribute( "resource-overbooked", resourceOverbooked );
     sch.setAttribute( "resource-not-available", resourceNotAvailable );
-    sch.setAttribute( "scheduling-conflict", schedulingError );
+    sch.setAttribute( "scheduling-conflict", constraintError );
+    sch.setAttribute( "scheduling-error", schedulingError );
     sch.setAttribute( "not-scheduled", notScheduled );
 
     sch.setAttribute( "positive-float", positiveFloat.toString() );
@@ -1045,41 +1063,76 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
         //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
         return DateTimeInterval( interval.first, interval.second );
     }
-    if ( interval.first >= a.endTime() || interval.second <= a.startTime() ) {
-        // free
-        return DateTimeInterval( interval.first, interval.second );
-    }
+    //kDebug()<<"available:"<<interval<<endl<<a.intervals();
+    DateTimeInterval res;
     DateTimeInterval ci = interval;
+    int units = m_resource ? m_resource->units() : 100;
     foreach ( const AppointmentInterval &i, a.intervals().map() ) {
         //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available check interval=%1 - %2" ).arg(i.startTime().toString()).arg(i.endTime().toString()) );
         if ( i.startTime() < ci.second && i.endTime() > ci.first ) {
+            // interval intersects appointment
             if ( ci.first >= i.startTime() && ci.second <= i.endTime() ) {
-                //busy
-                return DateTimeInterval( DateTime(), DateTime() );
+                // interval within appointment
+                if ( i.load() < units ) {
+                    if ( ! res.first.isValid() ) {
+                        res.first = qMax( ci.first, i.startTime() );
+                    }
+                    res.second = qMin( ci.second, i.endTime() );
+                } else {
+                    // fully booked
+                    if ( res.first.isValid() ) {
+                        res.second = i.startTime();
+                        if ( res.first >= res.second ) {
+                            res = DateTimeInterval();
+                        }
+                    }
+                }
+                //kDebug()<<"available within:"<<interval<<i<<":"<<ci<<res;
+                break;
             }
             DateTime t = i.startTime();
-            if ( t > ci.first ) {
-                //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<t<<" PART";
+            if ( ci.first < t ) {
+                // Interval starts before appointment, so free from interval start
+                //kDebug()<<"available before:"<<interval<<i<<":"<<ci<<res;
                 //const_cast<ResourceSchedule*>(this)->logDebug( QString( "Schedule available t>first: returns interval=%1 - %2" ).arg(ci.first.toString()).arg(t.toString()) );
-                return DateTimeInterval( ci.first, t );
+                if ( ! res.first.isValid() ) {
+                    res.first = ci.first;
+                }
+                res.second = t;
+                if ( i.load() < units ) {
+                    res.second = qMin( ci.second, i.endTime() );
+                    if ( ci.second > i.endTime() ) {
+                        ci.first = i.endTime();
+                        //kDebug()<<"available next 1:"<<interval<<i<<":"<<ci<<res;
+                        continue; // check next appointment
+                    }
+                }
+                //kDebug()<<"available:"<<interval<<i<<":"<<ci<<res;
+                break;
             }
+            // interval start >= appointment start
             t = i.endTime();
             if ( t < ci.second ) {
-                ci.first = t;
+                // check if rest of appointment is free
+                if ( units <= i.load() ) {
+                    ci.first = t; // fully booked, so move forvard to appointment end
+                }
+                if ( ! res.first.isValid() ) {
+                    res.first = ci.first;
+                }
+                res.second = ci.second;
+                //kDebug()<<"available next 2:"<<interval<<i<<":"<<ci<<res;
                 continue;
             }
-            if ( i.startTime() <= ci.first && i.endTime() >= ci.second ) {
-                //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" BUSY";
-                return DateTimeInterval( DateTime(), DateTime() );
-            }
-            ci.first = qMax( ci.first, i.endTime() );
-            if ( ci.first >= ci.second ) {
-                return DateTimeInterval( DateTime(), DateTime() ); //busy
-            }
+            //kDebug()<<"available:"<<interval<<i<<":"<<ci<<res;
+            Q_ASSERT( false );
+        } else if ( i.startTime() >= interval.second ) {
+            // no more overlaps
+            break;
         }
     }
-    //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
-    return DateTimeInterval( ci.first, ci.second );
+    //kDebug()<<"available: result="<<interval<<":"<<res;
+    return res;
 }
 
 void ResourceSchedule::logError( const QString &msg, int phase )
@@ -1184,7 +1237,8 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
         endTime = DateTime::fromString( s, status.projectSpec() );
 
     duration = Duration::fromString( sch.attribute( "duration" ) );
-    schedulingError = sch.attribute( "scheduling-conflict", "0" ).toInt();
+    constraintError = sch.attribute( "scheduling-conflict", "0" ).toInt();
+    schedulingError = sch.attribute( "scheduling-error", "0" ).toInt();
 
     KoXmlNode n = sch.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1243,7 +1297,8 @@ void MainSchedule::saveXML( QDomElement &element ) const
     element.setAttribute( "start", startTime.toString( Qt::ISODate ) );
     element.setAttribute( "end", endTime.toString( Qt::ISODate ) );
     element.setAttribute( "duration", duration.toString() );
-    element.setAttribute( "scheduling-conflict", schedulingError );
+    element.setAttribute( "scheduling-conflict", constraintError );
+    element.setAttribute( "scheduling-error", schedulingError );
 
     if ( ! m_pathlists.isEmpty() ) {
         QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );
@@ -1801,17 +1856,17 @@ QStringList ScheduleManager::state() const
         return lst << i18n( "Not scheduled" );
     }
     if ( Schedule *s = m_pessimistic ) {
-        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
             return lst << i18n( "Error" );
         }
     }
     if ( Schedule *s = m_optimistic ) {
-        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
             return lst << i18n( "Error" );
         }
     }
     if ( Schedule *s = m_expected ) {
-        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->constraintError || s->schedulingError ) {
             return lst << i18n( "Error" );
         }
         return s->state();

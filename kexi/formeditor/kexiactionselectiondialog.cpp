@@ -267,6 +267,7 @@ public:
             item = new ActionSelectorDialogListItem("execute", this, i18n("Execute"));
             item->setPixmap(0, SmallIcon("media-playback-start"));
         }
+#ifndef KEXI_NO_QUICK_PRINTING
         if (part->info()->isPrintingSupported()) {
             ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
                 "print", this, i18n("Print"));
@@ -282,6 +283,7 @@ public:
             setOpen(printItem, true);
             printItem->setExpandable(false);
         }
+#endif
         if (part->info()->isDataExportSupported()) {
             ActionSelectorDialogListItem *exportItem = new ActionSelectorDialogListItem(
                 "exportToCSV", this,

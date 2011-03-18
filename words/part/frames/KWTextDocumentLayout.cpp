@@ -283,7 +283,7 @@ void KWTextDocumentLayout::layout()
         }
 #endif
 
-        if (m_state->shape != currentShape) { // next shape
+        if (m_state->shape != currentShape && m_frameSet && m_frameSet->pageManager()) { // next shape
             currentShape = m_state->shape;
 
             //todo do the logic how shapes from different frame sets interact with text

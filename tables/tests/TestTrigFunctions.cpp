@@ -638,6 +638,26 @@ void TestTrigFunctions::testTAN()
     CHECK_EVAL("TAN( 127*2*PI()/128 )", -0.0491268497694673);
 }
 
+void TestTrigFunctions::testCSC()
+{
+    CHECK_EVAL("CSC(1)", 1.1883951057781212);
+}
+
+void TestTrigFunctions::testCSCH()
+{
+    CHECK_EVAL("CSCH(1)", 0.8509181282393215);
+}
+
+void TestTrigFunctions::testSEC()
+{
+    CHECK_EVAL("SEC(1)", 1.850815717680925617);
+}
+
+void TestTrigFunctions::testSECH()
+{
+    CHECK_EVAL("SECH(1)", 0.6480542736638853996);
+}
+
 QTEST_KDEMAIN(TestTrigFunctions, GUI)
 
 

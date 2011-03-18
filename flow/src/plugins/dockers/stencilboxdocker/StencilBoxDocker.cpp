@@ -20,8 +20,7 @@
 
 #include "StencilBoxDocker.h"
 
-#include "OdfCollectionLoader.h"
-#include "CollectionShapeFactory.h"
+#include "StencilShapeFactory.h"
 #include "StencilBoxView.h"
 
 #include <KoShapeFactoryBase.h>
@@ -33,6 +32,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
+#include <KoProperties.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -45,6 +45,13 @@
 #include <kicon.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
+#include <knewstuff3/downloaddialog.h>
+#include <KFileDialog>
+#include <KIO/NetAccess>
+#include <KStandardDirs>
+#include <KTar>
 
 #include <QVBoxLayout>
 #include <QListView>
@@ -57,6 +64,8 @@
 #include <QDir>
 #include <QMenu>
 #include <QPainter>
+
+#define StencilShapeId "StencilShape"
 
 //
 // StencilBoxDockerFactory
@@ -91,12 +100,12 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
 
     //menu is currently unfinished
     m_menu = new QMenu();
-    QAction* getOnlineAction = m_menu->addAction(i18n("Download shape collections online"));
-    QAction* installLocalAction = m_menu->addAction(i18n("Install local collection file"));
-    QAction* createNewAction = m_menu->addAction(i18n("Create a new collection"));
-    connect(getOnlineAction, SIGNAL(triggered()), this, SLOT(getCollectionOnline()));
-    connect(installLocalAction, SIGNAL(triggered()), this, SLOT(installLocalCollection()));
-    connect(createNewAction, SIGNAL(triggered()), this, SLOT(createNewCollection()));
+    QAction* ghnsAction = m_menu->addAction(KIcon("get-hot-new-stuff"), i18n("Get more stencils"));
+    QAction* installAction = m_menu->addAction(KIcon("document-open-folder"), i18n("Install stencil"));
+    //QAction* createNewAction = m_menu->addAction(i18n("Create a stencil collection"));
+    connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
+    connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
+    //connect(createNewAction, SIGNAL(triggered()), this, SLOT(createNewCollection()));
 
     m_button = new QToolButton;
     m_button->setIcon(SmallIcon("list-add"));
@@ -136,20 +145,53 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
 }
 
-void StencilBoxDocker::getCollectionOnline()
+void StencilBoxDocker::getHotNewStuff()
 {
-    ;//FIXME
+    KNS3::DownloadDialog dialog("flow_stencils.knsrc", this);
+    dialog.exec();
+    if(!dialog.installedEntries().isEmpty()) {
+        KMessageBox::information(0, i18n("Stencils successfully installed."));
+    }
+    else if(!dialog.changedEntries().isEmpty()) {
+        KMessageBox::information(0, i18n("Stencils successfully uninstalled."));
+    }
 }
 
-void StencilBoxDocker::installLocalCollection()
+void StencilBoxDocker::installStencil()
 {
-    ;//FIXME
+    KUrl dir;
+    QString path = KFileDialog::getOpenFileName(dir,
+           "*.cstencil.tar *.cstencil.tar.bz2 *.cstencil.tar.gz|"
+           + i18n("Calligra Stencil Packages (*.cstencil.tar, *.cstencil.tar.bz2, *.cstencil.tar.gz)")
+           , this);
+    if(path.isNull()) return;
+    
+    KTar archive(path);
+    if(!archive.open(QIODevice::ReadOnly)) {
+        KMessageBox::sorry(0, i18n("Could not read this package."));
+        return;
+    }
+    
+    QString destination = KStandardDirs::locateLocal("data", "flow/stencils", true);
+    const KArchiveDirectory* const archiveDir = archive.directory();
+
+    // Prevent installing a stencil collection that's already installed
+    const QString collectionFolder = destination + QDir::separator() + archiveDir->entries().first();
+    kDebug() << destination << archiveDir << collectionFolder;
+    if(QFile::exists(collectionFolder)) {
+        KMessageBox::error(0, i18n("A collection of stencils in family '%1' is already installed. "
+                                   "Please uninstall it first.", archiveDir->entries().first()));
+        return;
+    }
+    
+    archiveDir->copyTo(destination);
+    KMessageBox::information(0, i18n("Stencils successfully installed."));
 }
 
+/*
 void StencilBoxDocker::createNewCollection()
 {
-    ;//FIXME
-}
+}*/
 
 void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 {
@@ -284,42 +326,45 @@ bool StencilBoxDocker::addCollection(const QString& path)
     QString type = dg.readEntry("X-KDE-DirType");
     //kDebug() << family << type;
 
-    if(type == "odg-collection") {
-        if(m_modelMap.contains(family))
-            return true;
-
+    if(type != "odg-collection")
+        return false;
+    if(!m_modelMap.contains(family)) {
         CollectionItemModel* model = new CollectionItemModel(this);
         m_modelMap.insert(family, model);
-
-        OdfCollectionLoader* loader = new OdfCollectionLoader(path + QDir::separator(), family, this);
-        connect(loader, SIGNAL(loadingFailed(const QString&)),
-                this, SLOT(onLoadingFailed(const QString&)));
-        connect(loader, SIGNAL(loadingFinished()),
-                this, SLOT(onLoadingFinished()));
-
-        loader->load();
-        return true;
     }
-    else {
-        return false;
+
+    CollectionItemModel* model = m_modelMap[family];
+    QList<KoCollectionItem> templateList = model->shapeTemplateList();
+    QStringList stencils = dir.entryList(QStringList("*.desktop"));
+    foreach(const QString & stencil, stencils) {
+        if(stencil == "collection.desktop")
+            continue;
+        KDesktopFile entry(dir.absoluteFilePath(stencil));
+        KConfigGroup content = entry.desktopGroup();
+        QString name = content.readEntry("Name");
+        QString noExt = dir.absoluteFilePath(stencil);
+        noExt.chop(7);
+        QString source = noExt + "odg";
+        QString icon = noExt + "png";
+        kDebug() << name << source << icon;
+        QString keepAspectRatio = content.readEntry("CS-KeepAspectRatio", "0");
+        KoProperties* props = new KoProperties();
+        //props->setProperty("source", source);
+        props->setProperty("keepAspectRatio", keepAspectRatio.toInt());
+        KoCollectionItem temp;
+        temp.id = source;
+        temp.name = name;
+        temp.toolTip = name;
+        temp.icon = QIcon(icon);
+        temp.properties = props;
+        templateList.append(temp);
+        StencilShapeFactory* factory = new StencilShapeFactory(source, name, source, props);
+        KoShapeRegistry::instance()->add(source, factory);
     }
+    model->setShapeTemplateList(templateList);
+    return true;
 }
-
-void StencilBoxDocker::onLoadingFailed(const QString& reason)
-{
-    OdfCollectionLoader* loader = qobject_cast<OdfCollectionLoader*>(sender());
-
-    if(loader)
-    {
-        removeCollection(loader->collectionPath());
-        QList<KoShape*> shapeList = loader->shapeList();
-        qDeleteAll(shapeList);
-        loader->deleteLater();
-    }
-
-    KMessageBox::error (this, reason, i18n("Collection Error"));
-}
-
+/*
 void StencilBoxDocker::onLoadingFinished()
 {
     OdfCollectionLoader* loader = qobject_cast<OdfCollectionLoader*>(sender());
@@ -341,8 +386,8 @@ void StencilBoxDocker::onLoadingFinished()
         temp.toolTip = shape->name();
         temp.icon = generateShapeIcon(shape);
         templateList.append(temp);
-        CollectionShapeFactory* factory =
-                new CollectionShapeFactory(loader->collectionPath() + shape->name(), shape);
+        StencilShapeFactory* factory =
+                new StencilShapeFactory(loader->collectionPath() + shape->name(), shape);
         KoShapeRegistry::instance()->add(loader->collectionPath() + shape->name(), factory);
     }
 
@@ -431,3 +476,4 @@ QIcon StencilBoxDocker::generateShapeIcon(KoShape* shape)
 
     return QIcon(pixmap);
 }
+*/

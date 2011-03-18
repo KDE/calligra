@@ -171,7 +171,7 @@ public:
     virtual void updateMicroFocus() = 0;
 
     virtual KoZoomHandler* zoomHandler() const = 0;
-    virtual const KoViewConverter* viewConverter() const;
+    virtual KoViewConverter* viewConverter() const;
     virtual bool isViewLoading() const = 0; // not sure if is needed
     virtual SheetView* sheetView(const Sheet* sheet) const = 0;
     virtual void enableAutoScroll() = 0;

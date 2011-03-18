@@ -43,12 +43,12 @@ private slots:
     void testAMORLINC();
     void testCOMPOUND();   // no ODF tests available
     void testCONTINUOUS(); // no ODF tests available
-//   void testCOUPDAYBS();  // to be implemented
-//   void testCOUPDAYS();   // to be implemented
-//   void testCOUPDAYSNC(); // to be implemented
-//   void testCOUPNCD();    // to be implemented
+    void testCOUPDAYBS();
+    void testCOUPDAYS();
+    void testCOUPDAYSNC();
+    void testCOUPNCD();
     void testCOUPNUM();
-//   void testCOUPPCD();    // to be implemented
+    void testCOUPPCD();
     void testCUMIPMT();
     void testCUMPRINC();
     void testDB();

@@ -1448,10 +1448,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
         d->phType = "title";
     }
 
-    // There seems to be some buggy ooxml software which creates documents with shapes with this ID
-    // It seems to be faulty and points to "body"
-    if (d->phIdx == "4294967295" && d->phType.isEmpty()) {
-        d->phIdx.clear();
+    // According to forums, if there is idx, but no type, then type should be default to be body
+    if (!d->phIdx.isEmpty() && d->phType.isEmpty() && (m_context->type == Slide || m_context->type == Notes)) {
         d->phType = "body";
     }
 
@@ -1826,61 +1824,41 @@ void PptxXmlSlideReader::saveCurrentStyles()
     }
 }
 
+void PptxXmlSlideReader::saveBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties)
+{
+    slideProperties->textShapePositions[id] = m_shapeTextPosition;
+    slideProperties->textLeftBorders[id] = m_shapeTextLeftOff;
+    slideProperties->textRightBorders[id] = m_shapeTextRightOff;
+    slideProperties->textTopBorders[id] = m_shapeTextTopOff;
+    slideProperties->textBottomBorders[id] = m_shapeTextBottomOff;
+    slideProperties->m_textAutoFit[id] = m_normAutofit;
+}
+
 void PptxXmlSlideReader::saveBodyProperties()
 {
     // Todo: extend this in the future to save other peroperties too
     if (m_context->type == SlideMaster) {
         if (!d->phIdx.isEmpty()) {
-            m_context->slideMasterProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
-            m_context->slideMasterProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
-            m_context->slideMasterProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
-            m_context->slideMasterProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
-            m_context->slideMasterProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideMasterProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
+            saveBodyPropertiesHelper(d->phIdx, m_context->slideMasterProperties);
         }
         if (!d->phType.isEmpty()) {
-            m_context->slideMasterProperties->textShapePositions[d->phType] = m_shapeTextPosition;
-            m_context->slideMasterProperties->textLeftBorders[d->phType] = m_shapeTextLeftOff;
-            m_context->slideMasterProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
-            m_context->slideMasterProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
-            m_context->slideMasterProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideMasterProperties->m_textAutoFit[d->phType] = m_normAutofit;
+            saveBodyPropertiesHelper(d->phType, m_context->slideMasterProperties);
         }
     }
     else if (m_context->type == NotesMaster) {
         if (!d->phIdx.isEmpty()) {
-            m_context->notesMasterProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
-            m_context->notesMasterProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
-            m_context->notesMasterProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
-            m_context->notesMasterProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
-            m_context->notesMasterProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->notesMasterProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
+            saveBodyPropertiesHelper(d->phIdx, m_context->notesMasterProperties);
         }
         if (!d->phType.isEmpty()) {
-            m_context->notesMasterProperties->textShapePositions[d->phType] = m_shapeTextPosition;
-            m_context->notesMasterProperties->textLeftBorders[d->phType] = m_shapeTextLeftOff;
-            m_context->notesMasterProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
-            m_context->notesMasterProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
-            m_context->notesMasterProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->notesMasterProperties->m_textAutoFit[d->phType] = m_normAutofit;
+            saveBodyPropertiesHelper(d->phType, m_context->notesMasterProperties);
         }
     }
     else if (m_context->type == SlideLayout) {
         if (!d->phIdx.isEmpty()) {
-            m_context->slideLayoutProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
-            m_context->slideLayoutProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
-            m_context->slideLayoutProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
-            m_context->slideLayoutProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
-            m_context->slideLayoutProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
-            m_context->slideLayoutProperties->m_textAutoFit[d->phIdx] = m_normAutofit;
+            saveBodyPropertiesHelper(d->phIdx, m_context->slideLayoutProperties);
         }
         if (!d->phType.isEmpty()) {
-            m_context->slideLayoutProperties->textShapePositions[d->phType] = m_shapeTextPosition;
-            m_context->slideLayoutProperties->textLeftBorders[d->phType] = m_shapeTextLeftOff;
-            m_context->slideLayoutProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
-            m_context->slideLayoutProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
-            m_context->slideLayoutProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
-            m_context->slideLayoutProperties->m_textAutoFit[d->phType] = m_normAutofit;
+            saveBodyPropertiesHelper(d->phType, m_context->slideLayoutProperties);
         }
     }
 }
@@ -2489,6 +2467,28 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
             m_context->slideLayoutProperties->contentPath[d->phIdx] = m_customPath;
             m_context->slideLayoutProperties->contentEquations[d->phIdx] = m_customEquations;
         }
+        // presentation:placeholder
+        Q_ASSERT(m_placeholderElWriter);
+        QString presentationObject = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType);
+
+        m_placeholderElWriter->startElement("presentation:placeholder");
+        m_placeholderElWriter->addAttribute("presentation:object", presentationObject);
+        if (m_rot == 0) {
+            m_placeholderElWriter->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+            m_placeholderElWriter->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+        }
+        m_placeholderElWriter->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+        m_placeholderElWriter->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+        if (m_rot != 0) {
+            qreal angle, xDiff, yDiff;
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+            QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                                .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+            m_placeholderElWriter->addAttribute("draw:transform", rotString);
+
+        }
+
+        m_placeholderElWriter->endElement();
     }
     else if (m_context->type == SlideMaster) {
         if (m_xfrm_read) { // If element was present, then we can use values from the actual slidemaster
@@ -2533,30 +2533,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
             m_context->notesMasterProperties->contentPath[d->phIdx] = m_customPath;
             m_context->notesMasterProperties->contentEquations[d->phIdx] = m_customEquations;
         }
-    }
-    if (m_context->type == SlideLayout) {
-        // presentation:placeholder
-        Q_ASSERT(m_placeholderElWriter);
-        QString presentationObject = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType);
-
-        m_placeholderElWriter->startElement("presentation:placeholder");
-        m_placeholderElWriter->addAttribute("presentation:object", presentationObject);
-        if (m_rot == 0) {
-            m_placeholderElWriter->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-            m_placeholderElWriter->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
-        }
-        m_placeholderElWriter->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-        m_placeholderElWriter->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-        if (m_rot != 0) {
-            qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
-            QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                                .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
-            m_placeholderElWriter->addAttribute("draw:transform", rotString);
-
-        }
-
-        m_placeholderElWriter->endElement();
     }
 
     m_currentShapeProperties = 0; // Making sure that nothing uses them.

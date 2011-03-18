@@ -148,6 +148,9 @@ Document::~Document()
     delete m_tableHandler;
     delete m_replacementHandler;
     delete m_graphicsHandler;
+    //expecting the background-color of the document on top of the stack
+    Q_ASSERT(m_bgColors.size() == 1);
+    m_bgColors.clear();
 }
 
 //set whether or not document has header or footer
@@ -195,7 +198,8 @@ void Document::finishDocument()
                                "text:footnotes-position=\"page\" "
                                "text:start-numbering-at=\"%3\" "
                                "/>");
-
+        //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
+        //use the infos from SEP (sprmSFpc, sprmSRncFtn, sprmSNFtn, sprmSNfcFtnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
                                                        .arg(m_initialFootnoteNumber)
@@ -213,7 +217,8 @@ void Document::finishDocument()
                               "text:start-value=\"%2\" "
                               //"text:start-numbering-at=\"%3\" "
                               "/>");
-
+        //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
+        //use the infos from SEP (sprmSFEndnote, sprmSRncEdn, sprmSNEdn, sprmSNfcEdnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
                                                       .arg(m_initialEndnoteNumber)

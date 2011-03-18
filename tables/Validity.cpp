@@ -34,6 +34,7 @@
 #include "OdfLoadingContext.h"
 #include "Sheet.h"
 #include "Value.h"
+#include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "ValueParser.h"
 
@@ -600,6 +601,9 @@ bool Validity::testValidity(const Cell* cell) const
         if (d->allowEmptyCell && cell->userInput().isEmpty())
             return true;
 
+        ValueCalc *const calc = cell->sheet()->map()->calc();
+        const Qt::CaseSensitivity cs = calc->settings()->caseSensitiveComparisons();
+
         if ((cell->value().isNumber() &&
                 (d->restriction == Number ||
                  (d->restriction == Integer &&
@@ -608,30 +612,30 @@ bool Validity::testValidity(const Cell* cell) const
             || (d->restriction == Date && cell->isDate())) {
             switch (d->cond) {
             case Conditional::Equal:
-                valid = cell->value().equal(d->minValue);
+                valid = cell->value().equal(d->minValue, cs);
                 break;
             case Conditional::DifferentTo:
-                valid = !cell->value().equal(d->minValue);
+                valid = !cell->value().equal(d->minValue, cs);
                 break;
             case Conditional::Superior:
-                valid = cell->value().greater(d->minValue);
+                valid = cell->value().greater(d->minValue, cs);
                 break;
             case Conditional::Inferior:
-                valid = cell->value().less(d->minValue);
+                valid = cell->value().less(d->minValue, cs);
                 break;
             case Conditional::SuperiorEqual:
-                valid = (cell->value().compare(d->minValue)) >= 0;
+                valid = (cell->value().compare(d->minValue, cs)) >= 0;
                 break;
             case Conditional::InferiorEqual:
-                valid = (cell->value().compare(d->minValue)) <= 0;
+                valid = (cell->value().compare(d->minValue, cs)) <= 0;
                 break;
             case Conditional::Between:
-                valid = (cell->value().compare(d->minValue) >= 0 &&
-                         cell->value().compare(d->maxValue) <= 0);
+                valid = (cell->value().compare(d->minValue, cs) >= 0 &&
+                         cell->value().compare(d->maxValue, cs) <= 0);
                 break;
             case Conditional::Different:
-                valid = (cell->value().compare(d->minValue) < 0 ||
-                         cell->value().compare(d->maxValue) > 0);
+                valid = (cell->value().compare(d->minValue, cs) < 0 ||
+                         cell->value().compare(d->maxValue, cs) > 0);
                 break;
             default :
                 break;

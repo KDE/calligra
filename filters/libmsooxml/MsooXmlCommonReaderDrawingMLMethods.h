@@ -32,6 +32,7 @@ void initDrawingML();
 
 // All the readers
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
+KoFilter::ConversionStatus read_relIds();
 KoFilter::ConversionStatus read_chart();
 #endif
 KoFilter::ConversionStatus read_pic();
@@ -47,6 +48,7 @@ KoFilter::ConversionStatus read_nvSpPr();
 KoFilter::ConversionStatus read_style();
 KoFilter::ConversionStatus read_fillRef();
 KoGenStyle m_referredFont;
+QString m_referredFontName;
 KoFilter::ConversionStatus read_fontRef();
 KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_cNvSpPr();
@@ -80,6 +82,7 @@ KoFilter::ConversionStatus read_alpha();
 KoFilter::ConversionStatus read_satMod();
 KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_srcRect();
+
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
 KoFilter::ConversionStatus read_graphicData();
@@ -92,11 +95,13 @@ enum blipFillCaller {
 };
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
+bool m_insideTable;
 qreal m_largestParaFont; // Largest font used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;
 
 KoFilter::ConversionStatus read_DrawingML_rPr();
+KoFilter::ConversionStatus read_endParaRPr();
 
 KoFilter::ConversionStatus read_hlinkClick();
 

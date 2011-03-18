@@ -4,8 +4,10 @@ X-KDE-ServiceType=Calligra/Application
 Comment=Calligra Application
 Comment[cs]=Aplikace Calligra
 Comment[en_GB]=Calligra Application
+Comment[es]=Aplicación de Calligra
 Comment[et]=Calligra rakendus
 Comment[it]=Applicazione di Calligra
+Comment[nb]=Calligraprogrammet
 Comment[nds]=Calligra-Programm
 Comment[nl]=Calligra-toepassing
 Comment[pt]=Aplicação do Calligra
@@ -13,6 +15,7 @@ Comment[pt_BR]=Aplicativo do Calligra
 Comment[sv]=Calligra-program
 Comment[uk]=Програма Calligra
 Comment[x-test]=xxCalligra Applicationxx
+Comment[zh_TW]=Calligra 應用程式
 
 [PropertyDef::X-Calligra-DefaultMimeTypes]
 Type=QStringList

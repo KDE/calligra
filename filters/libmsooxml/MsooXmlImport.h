@@ -140,13 +140,14 @@ protected:
     QMap<QString, QVariant> documentProperties() const { return m_documentProperties; }
     QVariant documentProperty(const QString& propertyName) const { return m_documentProperties.value(propertyName); }
 
+protected:
+    KoFilter::ConversionStatus loadAndParse(const QString& filename,
+                                            KoXmlDocument& doc, QString& errorMessage);
+
 private:
     //! Opens file for converting and performs convertions.
     //! @return status of convertion.
     KoFilter::ConversionStatus openFile(KoOdfWriters *writers, QString& errorMessage);
-
-    KoFilter::ConversionStatus loadAndParse(const QString& filename,
-                                            KoXmlDocument& doc, QString& errorMessage);
 
     KoFilter::ConversionStatus loadAndParseDocumentInternal(
         const QByteArray& contentType, MsooXmlReader *reader, KoOdfWriters *writers,

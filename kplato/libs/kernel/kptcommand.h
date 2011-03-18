@@ -69,12 +69,12 @@ public:
     virtual void unexecute() = 0;
 
 protected:
-    void setSchDeleted();
-    void setSchDeleted( bool state );
+    /// Set all scheduled in the m_schedules map to their original scheduled state
     void setSchScheduled();
+    /// Set all schedules in the m_schedules map to scheduled state @p state
     void setSchScheduled( bool state );
+    /// Add a schedule to the m_schedules map along with its current scheduled state 
     void addSchScheduled( Schedule *sch );
-    void addSchDeleted( Schedule *sch );
 
     QMap<Schedule*, bool> m_schedules;
 

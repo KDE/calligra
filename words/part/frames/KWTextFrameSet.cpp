@@ -89,24 +89,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
     }
     m_document->setUseDesignMetrics(true);
-    switch (m_textFrameSetType) {
-    case KWord::OddPagesHeaderTextFrameSet:
-        setName(i18n("Odd Pages Header"));
-        break;
-    case KWord::EvenPagesHeaderTextFrameSet:
-        setName(i18n("Even Pages Header"));
-        break;
-    case KWord::OddPagesFooterTextFrameSet:
-        setName(i18n("Odd Pages Footer"));
-        break;
-    case KWord::EvenPagesFooterTextFrameSet:
-        setName(i18n("Even Pages Footer"));
-        break;
-    case KWord::MainTextFrameSet:
-        setName(i18n("Main text"));
-        break;
-    default: ;
-    }
+    setName(KWord::frameSetTypeName(m_textFrameSetType));
 }
 
 KWTextFrameSet::~KWTextFrameSet()

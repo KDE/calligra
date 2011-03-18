@@ -37,6 +37,10 @@ public:
     DocxImport(QObject * parent, const QVariantList &);
     virtual ~DocxImport();
 
+    /// Access the content defined within the words/settings.xml configuration-file.
+    QMap<QString, QVariant> documentSettings() const;
+    QVariant documentSetting(const QString& name) const;
+
 protected:
     virtual bool acceptsSourceMimeType(const QByteArray& mime) const;
 

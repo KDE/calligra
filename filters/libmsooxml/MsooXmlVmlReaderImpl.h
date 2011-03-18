@@ -61,6 +61,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     else if (startType == StraightConnectorStart) {
         body->startElement("draw:line");
     }
+    else if (startType == GroupStart) {
+        body->startElement("draw:g");
+    }
     else if (startType == CustomStart) {
         body->startElement("draw:custom-shape");
     }
@@ -75,11 +78,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString leftPos(m_vmlStyle.value("left"));
     QString topPos(m_vmlStyle.value("top"));
     QString position(m_vmlStyle.value("position"));
-    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
+    QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
+    QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
+    QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
+    QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
     const QString ver_align(m_vmlStyle.value("v-text-anchor"));
+    const QString rotation(m_vmlStyle.value("rotation"));
 
     qreal x_position = 0;
     QString x_pos_string, y_pos_string, widthString, heightString;
@@ -89,7 +93,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
     if (!x_mar.isEmpty()) {
         if (m_insideGroup) {
-            x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
+            x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth + m_groupXOffset;
             x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
         } else {
             x_position = x_mar.left(x_mar.length() - 2).toDouble(); // removing the unit
@@ -98,16 +102,21 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else if (!leftPos.isEmpty()) {
         if (m_insideGroup) {
-            x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
+            x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth + m_groupXOffset;
             x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
         } else {
             x_position = leftPos.left(leftPos.length() - 2).toDouble();
             x_pos_string = leftPos;
         }
     }
+    else {
+        if (m_insideGroup) {
+            x_pos_string = QString("%1%2").arg(m_groupXOffset).arg(m_groupWidthUnit);
+        }
+    }
     if (!y_mar.isEmpty()) {
         if (m_insideGroup) {
-            y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
+            y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight + m_groupYOffset;
             y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
         } else {
             y_position = y_mar.left(y_mar.length() -2).toDouble();
@@ -116,11 +125,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else if (!topPos.isEmpty()) {
         if (m_insideGroup) {
-            y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
+            y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight + m_groupYOffset;
             y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
         } else {
             y_position = topPos.left(topPos.length() - 2).toDouble();
             y_pos_string = topPos;
+        }
+    }
+    else {
+        if (m_insideGroup) {
+            y_pos_string = QString("%1%2").arg(m_groupYOffset).arg(m_groupHeightUnit);
         }
     }
     if (!width.isEmpty()) {
@@ -165,10 +179,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         body->addAttribute("svg:y2", y2);
     }
     else {
-        body->addAttribute("svg:x", x_pos_string);
-        body->addAttribute("svg:y", y_pos_string);
-        body->addAttribute("svg:width", widthString);
-        body->addAttribute("svg:height", heightString);
+        if (startType != GroupStart) {
+            if (!x_pos_string.isEmpty()) {
+                body->addAttribute("svg:x", x_pos_string);
+            }
+            if (!y_pos_string.isEmpty()) {
+                body->addAttribute("svg:y", y_pos_string);
+            }
+            body->addAttribute("svg:width", widthString);
+            body->addAttribute("svg:height", heightString);
+        }
     }
 
     if (!m_shapeColor.isEmpty()) {
@@ -178,6 +198,48 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
     if (!ver_align.isEmpty()) {
         m_currentDrawStyle->addProperty("draw:textarea-vertical-align", ver_align);
+    }
+
+    if (!hor_pos.isEmpty()) {
+        if (hor_pos == "absolute") {
+            hor_pos = "from-left";
+        }
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (!ver_pos.isEmpty()) {
+        if (ver_pos == "absolute") {
+            ver_pos = "from-top";
+        }
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
+    if (!hor_pos_rel.isEmpty()) {
+        if (hor_pos_rel == "outer-margin-area" || hor_pos_rel == "left-margin-area") {
+            hor_pos_rel = "page-start-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        else if (hor_pos_rel == "margin") {
+            hor_pos_rel = "paragraph-start-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        else if (hor_pos_rel == "inner-margin-area" || hor_pos_rel == "right-margin-area") {
+            hor_pos_rel = "page-end-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+    }
+    if (!ver_pos_rel.isEmpty()) {
+        if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
+            ver_pos_rel = "page-content";
+        }
+        else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" || ver_pos_rel == "outer-margin-area") {
+            ver_pos_rel = "page";
+        }
+        else if (ver_pos_rel == "bottom-margin-area") {
+            ver_pos_rel = "page";
+            // This effectively emulates the bottom-margin-area
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        }
+        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
     }
 
 #ifdef DOCXXMLDOCREADER_H
@@ -190,8 +252,26 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
         else {
             body->addAttribute("text:anchor-type", "char");
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+            if (m_currentDrawStyle->property("style:vertical-rel").isEmpty()) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            }
+            if (m_currentDrawStyle->property("style:horizontal-rel").isEmpty()) {
+                m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+            }
+
+            if (m_vmlStyle.contains("z-index")) {
+                m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                if (m_vmlStyle.value("z-index").toInt() > 0) {
+                    m_currentDrawStyle->addProperty("style:run-through", "foreground");
+                }
+                else {
+                    m_currentDrawStyle->addProperty("style:run-through", "background");
+                }
+            }
+            else {
+                m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                m_currentDrawStyle->addProperty("style:run-through", "foreground");
+            }
         }
     }
     else {
@@ -199,23 +279,20 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     if (!asChar) {
         // These seem to be decent defaults
-        m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
-        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+        if (m_currentDrawStyle->property("style:horizontal-pos").isEmpty()) {
+            m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        }
+        if (m_currentDrawStyle->property("style:vertical-pos").isEmpty()) {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+        }
     }
 #endif
 
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
-    }
+    m_currentPen.setWidthF(m_strokeWidth);
+    m_currentPen.setColor(QColor(m_strokeColor));
+    m_currentPen.setJoinStyle(Qt::MiterJoin);
+
+    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
@@ -317,20 +394,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
 
     m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
 
     if (!strokeweight.isEmpty()) {
         m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
     }
 
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-
     if (!fillcolor.isEmpty()) {
-        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        TRY_READ_ATTR_WITHOUT_NS(filled)
+        if (filled != "f" && filled != "false") {
+            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        }
     }
 
     if (!strokecolor.isEmpty()) {
-        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        TRY_READ_ATTR_WITHOUT_NS(stroked)
+        if (stroked != "f" && stroked != "false") {
+            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        }
     }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
@@ -389,8 +473,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentPen = QPen();
-
     TRY_READ_ATTR_WITHOUT_NS(endcap)
     Qt::PenCapStyle penCap = m_currentPen.capStyle();
     if (endcap.isEmpty() || endcap == "sq") {
@@ -403,10 +485,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
         penCap = Qt::FlatCap;
     }
     m_currentPen.setCapStyle(penCap);
-    m_currentPen.setWidthF(m_strokeWidth);
-    m_currentPen.setColor(QColor(m_strokeColor));
 
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    TRY_READ_ATTR_WITHOUT_NS(dashstyle)
+    if (!dashstyle.isEmpty()) {
+        if (dashstyle == "1 1") {
+            m_currentPen.setStyle(Qt::DashLine);
+        }
+        else if (dashstyle == "dashDot") {
+            m_currentPen.setStyle(Qt::DashDotLine);
+        }
+    }
 
     readNext();
     READ_EPILOGUE
@@ -415,6 +503,51 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
 #undef CURRENT_EL
 #define CURRENT_EL group
 //! Vml group handler
+/*
+ Parent elements:
+ - background (Part 1, §17.2.1);
+ - group (§14.1.2.7);
+ - object (Part 1, §17.3.3.19);
+ - [done] pict (§9.2.2.2);
+ - [done] pict (§9.5.1)
+
+ Child elements:
+ - anchorlock (Anchor Location Is Locked) §14.3.2.1
+ - arc (Arc Segment) §14.1.2.1
+ - borderbottom (Bottom Border) §14.3.2.2
+ - borderleft (Left Border) §14.3.2.3
+ - borderright (Right Border) §14.3.2.4
+ - bordertop (Top Border) §14.3.2.5
+ - callout (Callout) §14.2.2.2
+ - ClientData (Attached Object Data) §14.4.2.12
+ - clippath (Shape Clipping Path) §14.2.2.3
+ - curve (Bezier Curve) §14.1.2.3
+ - diagram (VML Diagram) §14.2.2.8
+ - extrusion (3D Extrusion) §14.2.2.11
+ - [done] fill (Shape Fill Properties) §14.1.2.5
+ - formulas (Set of Formulas) §14.1.2.6
+ - [done] group (Shape Group) §14.1.2.7
+ - handles (Set of Handles) §14.1.2.9
+ - image (Image File) §14.1.2.10
+ - imagedata (Image Data) §14.1.2.11
+ - line (Line) §14.1.2.12
+ - lock (Shape Protections) §14.2.2.18
+ - [done] oval (Oval) §14.1.2.13
+ - path (Shape Path) §14.1.2.14
+ - polyline (Multiple Path Line) §14.1.2.15
+ - [done] rect (Rectangle) §14.1.2.16
+ - [done] roundrect (Rounded Rectangle) §14.1.2.17
+ - shadow (Shadow Effect) §14.1.2.18
+ - [done] shape (Shape Definition) §14.1.2.19
+ - [done] shapetype (Shape Template) §14.1.2.20
+ - signatureline (Digital Signature Line) §14.2.2.30
+ - skew (Skew Transform) §14.2.2.31
+ - [done] stroke (Line Stroke Settings) §14.1.2.21
+ - textbox (Text Box) §14.1.2.22
+ - textdata (VML Diagram Text) §14.5.2.2
+ - textpath (Text Layout Path) §14.1.2.23
+ - [done] wrap (Text Wrapping) §14.3.2.6
+*/
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 {
     READ_PROLOGUE
@@ -422,64 +555,62 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
-    body->startElement("draw:g");
-
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
-    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
 
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
-    }
+    // To handle nested groups
+    bool groupStartsFromMe = false;
 
-    if (!m_currentDrawStyle->isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
-        if (m_moveToStylesXml) {
-            mainStyles->markStyleForStylesXml(drawStyleName);
+    if (!m_insideGroup) {
+
+        const QString width(m_vmlStyle.value("width"));
+        const QString height(m_vmlStyle.value("height"));
+
+        // These potentially cause an offset to all shapes in the group
+        // Unhandled case: theoretically x_mar could be in different units
+        // than width, in this case they should be added somehow intelligently
+        const QString x_mar(m_vmlStyle.value("margin-left"));
+        const QString y_mar(m_vmlStyle.value("margin-top"));
+
+        m_insideGroup = true;
+        groupStartsFromMe = true;
+
+        m_groupWidthUnit = width.right(2); // pt, cm etc.
+        m_groupHeightUnit = height.right(2);
+        m_real_groupWidth = width.left(width.length() - 2).toDouble();
+        m_real_groupHeight = height.left(height.length() - 2).toDouble();
+
+        m_groupX = 0;
+        m_groupY = 0;
+        m_groupWidth = 0;
+        m_groupHeight = 0;
+        m_groupXOffset = 0;
+        m_groupYOffset = 0;
+        // Assuming that two last chars are unit (cm, pt)
+        m_groupXOffset = x_mar.left(x_mar.length() - 2).toDouble();
+        m_groupYOffset = y_mar.left(y_mar.length() - 2).toDouble();
+
+        TRY_READ_ATTR_WITHOUT_NS(coordsize)
+
+        if (!coordsize.isEmpty()) {
+            m_groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
+            m_groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
         }
 
-        body->addAttribute("draw:style-name", drawStyleName);
+        TRY_READ_ATTR_WITHOUT_NS(coordorigin)
+        if (!coordorigin.isEmpty()) {
+            m_groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
+            m_groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
+        }
     }
 
-    const QString width(m_vmlStyle.value("width"));
-    const QString height(m_vmlStyle.value("height"));
+    MSOOXML::Utils::XmlWriteBuffer frameBuf;
+    body = frameBuf.setWriter(body);
 
-    m_groupWidthUnit = width.right(2); // pt, cm etc.
-    m_groupHeightUnit = height.right(2);
-    m_real_groupWidth = width.left(width.length() - 2).toDouble();
-    m_real_groupHeight = height.left(height.length() - 2).toDouble();
-
-    m_groupX = 0;
-    m_groupY = 0;
-    m_groupWidth = 0;
-    m_groupHeight = 0;
-
-    TRY_READ_ATTR_WITHOUT_NS(coordsize)
-
-    if (!coordsize.isEmpty()) {
-        m_groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
-        m_groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(coordorigin)
-    if (!coordorigin.isEmpty()) {
-        m_groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
-        m_groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
-    }
-
-    m_insideGroup = true;
+    m_wrapRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -488,35 +619,99 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
             TRY_READ_IF(rect)
             ELSE_TRY_READ_IF(shapetype)
             ELSE_TRY_READ_IF(roundrect)
+            ELSE_TRY_READ_IF(oval)
             ELSE_TRY_READ_IF(shape)
+            ELSE_TRY_READ_IF(group)
+            ELSE_TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(stroke)
+            else if (qualifiedName() == "w10:wrap") {
+                m_wrapRead = true;
+                TRY_READ(wrap)
+            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    body->endElement(); // draw:g
+    if (groupStartsFromMe) {
+        m_insideGroup = false;
+    }
 
-    m_insideGroup = false;
+    body = frameBuf.originalWriter();
+
+    m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
+    }
+
+    if (!fillcolor.isEmpty()) {
+        TRY_READ_ATTR_WITHOUT_NS(filled)
+        if (filled != "f" && filled != "false") {
+            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        }
+    }
+
+    if (!strokecolor.isEmpty()) {
+        TRY_READ_ATTR_WITHOUT_NS(stroked)
+        if (stroked != "f" && stroked != "false") {
+            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        }
+    }
+
+    createFrameStart(GroupStart);
+
+    (void)frameBuf.releaseWriter();
+
+    body->endElement(); // draw:g
 
     popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL roundrect
-//! roundrect handler (Rouned rectangle)
-// For parents, children, look from rect
-// Note: this is atm. simplified, should in reality make a round rectangle
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
+// Generic helper which approximates all figures to be rectangles
+// use until better implementation is done
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 {
-    READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 //! @todo support more attrs
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+
+    m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
+    }
+
+    if (!fillcolor.isEmpty()) {
+        TRY_READ_ATTR_WITHOUT_NS(filled)
+        if (filled != "f" && filled != "false") {
+            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        }
+    }
+
+    if (!strokecolor.isEmpty()) {
+        TRY_READ_ATTR_WITHOUT_NS(stroked)
+        if (stroked != "f" && stroked != "false") {
+            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        }
+    }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -526,8 +721,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
+        if (isEndElement() && qualifiedName() == m_currentEl) {
+            break;
+        }
+        else if (isStartElement()) {
             TRY_READ_IF(fill)
             else if (qualifiedName() == "v:textbox") {
                 TRY_READ(textbox)
@@ -558,6 +755,42 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     createFrameEnd();
 
     popCurrentDrawStyle();
+
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL oval
+//! oval handler (Oval)
+// For parents, children, look from rect
+// Note: this is atm. simplified, should in reality make an oval
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_oval()
+{
+    READ_PROLOGUE
+
+    m_currentEl = "v:oval";
+    KoFilter::ConversionStatus status = genericReader();
+    if (status != KoFilter::OK) {
+        return status;
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL roundrect
+//! roundrect handler (Rouned rectangle)
+// For parents, children, look from rect
+// Note: this is atm. simplified, should in reality make a round rectangle
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
+{
+    READ_PROLOGUE
+
+    m_currentEl = "v:roundrect";
+    KoFilter::ConversionStatus status = genericReader();
+    if (status != KoFilter::OK) {
+        return status;
+    }
 
     READ_EPILOGUE
 }
@@ -1306,7 +1539,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
  - equationxml (Storage for Alternate Math Content) §14.2.2.10
  - extrusion (3D Extrusion) §14.2.2.11
  - fill (Shape Fill Properties) §14.1.2.5
- - formulas (Set of Formulas) §14.1.2.6
+ - [done] formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
  - [done] imagedata (Image Data) §14.1.2.11
  - ink (Ink) §14.2.2.15
@@ -1350,26 +1583,53 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS(path)
+    TRY_READ_ATTR_WITHOUT_NS(adj)
+    TRY_READ_ATTR_WITHOUT_NS(coordsize)
+    if (!path.isEmpty()) {
+        m_shapeTypeString = "<draw:enhanced-geometry ";
+
+        if (!adj.isEmpty()) {
+            QString tempModifiers = adj;
+            tempModifiers.replace(',', " ");
+            m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
+        }
+        if (!coordsize.isEmpty()) {
+            QString tempViewBox = "0 0 " + coordsize;
+            tempViewBox.replace(',', " ");
+            m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
+        }
+        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(convertToEnhancedPath(path));
+        m_shapeTypeString += ">";
+    }
+
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-    TRY_READ_ATTR_WITHOUT_NS(type)
 
     m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
 
     if (!strokeweight.isEmpty()) {
         m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
     }
 
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-
     if (!fillcolor.isEmpty()) {
-        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        TRY_READ_ATTR_WITHOUT_NS(filled)
+        if (filled != "f" && filled != "false") {
+            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        }
     }
 
     if (!strokecolor.isEmpty()) {
-        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        TRY_READ_ATTR_WITHOUT_NS(stroked)
+        if (stroked != "f" && stroked != "false") {
+            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        }
     }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
@@ -1397,8 +1657,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 m_wrapRead = true;
                 TRY_READ(wrap)
             }
+            ELSE_TRY_READ_IF(formulas)
             SKIP_UNKNOWN
         }
+    }
+
+    // Case of a custom shape which is not defined in a shapetype
+    if (!path.isEmpty()) {
+        m_shapeTypeString += "</draw:enhanced-geometry>";
     }
 
     body = frameBuf.originalWriter();
@@ -1421,8 +1687,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     if (m_outputFrames) {
         if (isCustomShape) {
-            type = type.mid(1); // removes extra # from the start
-            body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+            if (!type.isEmpty()) {
+                type = type.mid(1); // removes extra # from the start
+                body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+            }
+            else {
+                body->addCompleteElement(m_shapeTypeString.toUtf8());
+            }
         }
         createFrameEnd();
     }
@@ -1542,7 +1813,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     TRY_READ_ATTR_WITHOUT_NS(side)
 
     if (type.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:wrap", "none");
+        if (m_vmlStyle.contains("z-index")) {
+            m_currentDrawStyle->addProperty("style:wrap", "run-through");
+            if (m_vmlStyle.value("z-index").toInt() > 0) {
+                m_currentDrawStyle->addProperty("style:run-through", "foreground");
+            }
+            else {
+                m_currentDrawStyle->addProperty("style:run-through", "background");
+            }
+        }
+        else {
+            m_currentDrawStyle->addProperty("style:wrap", "run-through");
+            m_currentDrawStyle->addProperty("style:run-through", "foreground");
+        }
     }
     else if (type == "through") {
         m_currentDrawStyle->addProperty("style:wrap", "run-through");
@@ -1588,7 +1871,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     }
     else { // margin
         m_anchorType = "paragraph";
-        m_currentDrawStyle->addProperty("text:anchor-type", "paragraph");
         m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
     }
 

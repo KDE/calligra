@@ -44,7 +44,7 @@ void TestLogicFunctions::initTestCase()
 }
 
 // because we may need to promote expected value from integer to float
-#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
+#define CHECK_EVAL(x,y) { Value z = (y); QCOMPARE(evaluate(x,z),(z)); }
 
 Value TestLogicFunctions::evaluate(const QString& formula, Value& ex)
 {
