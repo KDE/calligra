@@ -87,6 +87,7 @@ Value func_normdist(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_norminv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_normsinv(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_percentile(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_permutationa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rank(valVector args, ValueCalc *calc, FuncExtra *);
@@ -302,6 +303,9 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     f->setAcceptArray();
     add(f);
     f = new Function("PERMUT", func_arrang);
+    f->setParamCount(2);
+    add(f);
+    f = new Function("PERMUTATIONA", func_permutationa);
     f->setParamCount(2);
     add(f);
     f = new Function("PHI", func_phi);
@@ -2164,6 +2168,18 @@ Value func_percentile(valVector args, ValueCalc *calc, FuncExtra*)
     }
 }
 
+//
+// Function: permutationa
+//
+// returns the number of ordered permutations (with repetition)
+Value func_permutationa(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    int n = calc->conv()->toInteger(args[0]);
+    int k = calc->conv()->toInteger(args[1]);
+    if (n < 0 || k < 0)
+        return Value::errorVALUE();
+    return calc->pow(Value(n), k);
+}
 
 //
 // Function: phi

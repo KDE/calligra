@@ -107,11 +107,13 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
         Q_ASSERT(m_sheet);
 
         std::vector<unsigned long>& charts = worksheetHandler->charts();
-        Q_ASSERT(!charts.empty());
+        if (charts.empty()) {
+            std::cerr << "Got a chart substream without having charts in the worksheet";
+            return;
+        }
         const unsigned long id = charts.back();
 
         std::map<unsigned long, Object*>::iterator it = worksheetHandler->sharedObjects().find(id);
-        //Q_ASSERT(it != worksheetHandler->sharedObjects().end());
         if (it == worksheetHandler->sharedObjects().end()) {
             std::cerr << "Got a chart substream without having a chart in the worksheet";
             return;

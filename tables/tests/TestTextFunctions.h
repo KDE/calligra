@@ -62,7 +62,7 @@ private slots:
     void testUPPER();
     void testROT13();
     void testBAHTTEXT();
-
+    void testTEXT();
 private:
     Value evaluate(const QString&, Value& ex);
 };

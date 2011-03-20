@@ -40,6 +40,21 @@ public:
     qreal scaleY;
 
     /**
+     * Rotation of the group shape.
+     */
+    qreal g_rotation;
+
+    /**
+     * Flip the group shape horizontally.
+     */
+    bool g_flipH;
+
+    /**
+     * Flip the group shape vertically.
+     */
+    bool g_flipV;
+
+    /**
      * Xml writer that writes into content.xml.
      */
     KoXmlWriter& xml;
@@ -63,18 +78,18 @@ public:
      * Create a new writer with a new coordinate system.
      *
      * In different contexts in drawings in PPT files, different coordinate
-     * systems are used. These are defined by specifying a rectangle in the
-     * old coordinate system and the equivalent in the new coordinate
-     * system.
+     * systems are used.  These are defined by specifying a rectangle in the
+     * old coordinate system and the equivalent in the new coordinate system.
      */
     Writer transform(const QRectF& oldCoords, const QRectF &newCoords) const;
     /**
-     * Convert local length to global length string.
+     * Convert local length to global length.
      *
-     * A length without unit in the local coordinate system is converted
-     * to a global length with a unit.
+     * A length without unit in the local coordinate system is converted to a
+     * global length without a unit.
+     *
      * @param length a local length.
-     * @return string of the global length with "mm" appended.
+     * @return the global length.
      */
     qreal vLength(qreal length);
     /**

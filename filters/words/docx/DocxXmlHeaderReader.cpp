@@ -138,13 +138,13 @@ KoFilter::ConversionStatus DocxXmlHeaderReader::read(MSOOXML::MsooXmlReaderConte
  - moveTo (Move Destination Run Content)                                         §17.13.5.25
  - moveToRangeEnd (Move Destination Location Container - End)                    §17.13.5.27
  - moveToRangeStart (Move Destination Location Container - Start)                §17.13.5.28
- - oMath (Office Math)                                                           §22.1.2.77
+ - [done] oMath (Office Math)                                                           §22.1.2.77
  - oMathPara (Office Math Paragraph)                                             §22.1.2.78
  - [done] p (Paragraph)                                                          §17.3.1.22
  - permEnd (Range Permission End)                                                §17.13.7.1
  - permStart (Range Permission Start)                                            §17.13.7.2
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
- - sdt (Block-Level Structured Document Tag)                                     §17.5.2.29
+ - [done] sdt (Block-Level Structured Document Tag)                                     §17.5.2.29
  - [done] tbl (Table)                                                                   §17.4.38
 //! @todo: Handle all children
 */
@@ -165,6 +165,8 @@ KoFilter::ConversionStatus DocxXmlHeaderReader::read_hdr()
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(sdt)
+            ELSE_TRY_READ_IF_NS(m, oMath)
             SKIP_UNKNOWN
         }
     }

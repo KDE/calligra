@@ -44,6 +44,9 @@ Writer::Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
         yOffset(0),
         scaleX(1),
         scaleY(1),
+        g_rotation(0),
+        g_flipH(0),
+        g_flipV(0),
         xml(xmlWriter),
         styles(kostyles),
         stylesxml(stylesxml_)
@@ -59,6 +62,9 @@ Writer Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
     w.scaleY = scaleY * oldCoords.height() / newCoords.height();
     w.xOffset -= w.scaleX * newCoords.x();
     w.yOffset -= w.scaleY * newCoords.y();
+    w.g_rotation = g_rotation;
+    w.g_flipH = g_flipH;
+    w.g_flipV = g_flipV;
     return w;
 }
 

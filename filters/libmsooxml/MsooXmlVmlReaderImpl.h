@@ -404,11 +404,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     }
 
     if (!fillcolor.isEmpty()) {
-        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        TRY_READ_ATTR_WITHOUT_NS(filled)
+        if (filled != "f" && filled != "false") {
+            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        }
     }
 
     if (!strokecolor.isEmpty()) {
-        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        TRY_READ_ATTR_WITHOUT_NS(stroked)
+        if (stroked != "f" && stroked != "false") {
+            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        }
     }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
@@ -520,13 +526,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
  - extrusion (3D Extrusion) §14.2.2.11
  - [done] fill (Shape Fill Properties) §14.1.2.5
  - formulas (Set of Formulas) §14.1.2.6
- - group (Shape Group) §14.1.2.7
+ - [done] group (Shape Group) §14.1.2.7
  - handles (Set of Handles) §14.1.2.9
  - image (Image File) §14.1.2.10
  - imagedata (Image Data) §14.1.2.11
  - line (Line) §14.1.2.12
  - lock (Shape Protections) §14.2.2.18
- - oval (Oval) §14.1.2.13
+ - [done] oval (Oval) §14.1.2.13
  - path (Shape Path) §14.1.2.14
  - polyline (Multiple Path Line) §14.1.2.15
  - [done] rect (Rectangle) §14.1.2.16
@@ -613,6 +619,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
             TRY_READ_IF(rect)
             ELSE_TRY_READ_IF(shapetype)
             ELSE_TRY_READ_IF(roundrect)
+            ELSE_TRY_READ_IF(oval)
             ELSE_TRY_READ_IF(shape)
             ELSE_TRY_READ_IF(group)
             ELSE_TRY_READ_IF(fill)
@@ -643,11 +650,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     }
 
     if (!fillcolor.isEmpty()) {
-        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        TRY_READ_ATTR_WITHOUT_NS(filled)
+        if (filled != "f" && filled != "false") {
+            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        }
     }
 
     if (!strokecolor.isEmpty()) {
-        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        TRY_READ_ATTR_WITHOUT_NS(stroked)
+        if (stroked != "f" && stroked != "false") {
+            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        }
     }
 
     createFrameStart(GroupStart);
@@ -661,14 +674,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     READ_EPILOGUE
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL roundrect
-//! roundrect handler (Rouned rectangle)
-// For parents, children, look from rect
-// Note: this is atm. simplified, should in reality make a round rectangle
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
+// Generic helper which approximates all figures to be rectangles
+// use until better implementation is done
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 {
-    READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 //! @todo support more attrs
     TRY_READ_ATTR_WITHOUT_NS(style)
@@ -691,11 +700,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     }
 
     if (!fillcolor.isEmpty()) {
-        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        TRY_READ_ATTR_WITHOUT_NS(filled)
+        if (filled != "f" && filled != "false") {
+            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        }
     }
 
     if (!strokecolor.isEmpty()) {
-        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        TRY_READ_ATTR_WITHOUT_NS(stroked)
+        if (stroked != "f" && stroked != "false") {
+            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        }
     }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
@@ -706,8 +721,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
+        if (isEndElement() && qualifiedName() == m_currentEl) {
+            break;
+        }
+        else if (isStartElement()) {
             TRY_READ_IF(fill)
             else if (qualifiedName() == "v:textbox") {
                 TRY_READ(textbox)
@@ -738,6 +755,42 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     createFrameEnd();
 
     popCurrentDrawStyle();
+
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL oval
+//! oval handler (Oval)
+// For parents, children, look from rect
+// Note: this is atm. simplified, should in reality make an oval
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_oval()
+{
+    READ_PROLOGUE
+
+    m_currentEl = "v:oval";
+    KoFilter::ConversionStatus status = genericReader();
+    if (status != KoFilter::OK) {
+        return status;
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL roundrect
+//! roundrect handler (Rouned rectangle)
+// For parents, children, look from rect
+// Note: this is atm. simplified, should in reality make a round rectangle
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
+{
+    READ_PROLOGUE
+
+    m_currentEl = "v:roundrect";
+    KoFilter::ConversionStatus status = genericReader();
+    if (status != KoFilter::OK) {
+        return status;
+    }
 
     READ_EPILOGUE
 }
@@ -1566,11 +1619,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     }
 
     if (!fillcolor.isEmpty()) {
-        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        TRY_READ_ATTR_WITHOUT_NS(filled)
+        if (filled != "f" && filled != "false") {
+            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        }
     }
 
     if (!strokecolor.isEmpty()) {
-        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        TRY_READ_ATTR_WITHOUT_NS(stroked)
+        if (stroked != "f" && stroked != "false") {
+            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        }
     }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;

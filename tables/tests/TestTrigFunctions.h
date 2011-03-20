@@ -42,6 +42,10 @@ private slots:
     void testSIN();
     void testSINH();
     void testTAN();
+    void testCSC();
+    void testCSCH();
+    void testSEC();
+    void testSECH();
 
 private:
     Value evaluate(const QString&);

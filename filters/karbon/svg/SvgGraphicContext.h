@@ -45,6 +45,8 @@ public:
         forcePercentage = false;
 
         display = true;
+        
+        clipRule = Qt::WindingFill;
     }
 
     StyleType    fillType;  ///< the current fill type
@@ -57,6 +59,8 @@ public:
     KoLineBorder stroke;    ///< the current stroke
 
     QString filterId;       ///< the current filter id
+    QString clipPathId;     ///< the current clip path id
+    Qt::FillRule clipRule;  ///< the current clip rule
     qreal opacity;          ///< the shapes opacity
 
     QTransform matrix;      ///< the current transformation matrix
