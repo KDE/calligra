@@ -26,6 +26,7 @@
 
 class KoPAView;
 class KoPACanvas;
+class KPrOutlineEditor;
 
 class KPrViewModeOutline : public KoPAViewMode
 {
@@ -42,6 +43,11 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
     void wheelEvent(QWheelEvent * event, const QPointF &point);
 
+    void activate(KoPAViewMode *previousViewMode);
+    void deactivate();
+
+private:
+    KPrOutlineEditor *m_outlineEditor;
 };
 
 #endif // KPRVIEWMODEOUTLINE_H

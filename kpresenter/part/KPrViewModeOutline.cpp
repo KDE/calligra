@@ -23,9 +23,13 @@
 #include "KoPAView.h"
 #include "KoPACanvas.h"
 
+#include "KPrOutlineEditor.h"
+
 KPrViewModeOutline::KPrViewModeOutline(KoPAView *view, KoPACanvas *canvas)
     : KoPAViewMode( view, canvas )
+    , m_outlineEditor(new KPrOutlineEditor(this, view->parentWidget()))
 {
+    m_outlineEditor->hide();
 }
 
 void KPrViewModeOutline::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
@@ -79,4 +83,28 @@ void KPrViewModeOutline::wheelEvent(QWheelEvent *event, const QPointF &point)
 {
     Q_UNUSED(event);
     Q_UNUSED(point);
+}
+
+void KPrViewModeOutline::activate(KoPAViewMode *previousViewMode)
+{
+    Q_UNUSED(previousViewMode);
+    KoPAView *view = dynamic_cast<KoPAView *>(m_view);
+    if (view) {
+        view->hide();
+    }
+    m_outlineEditor->show();
+    m_outlineEditor->setFocus(Qt::ActiveWindowFocusReason);
+}
+
+
+void KPrViewModeOutline::deactivate()
+{
+    m_outlineEditor->hide();
+     // Active the view as a basic but active one
+    m_view->setActionEnabled(KoPAView::AllActions, true);
+    m_view->doUpdateActivePage(m_view->activePage());
+    KoPAView *view = dynamic_cast<KoPAView *>(m_view);
+    if (view) {
+        view->show();
+    }
 }
