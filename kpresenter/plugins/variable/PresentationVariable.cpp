@@ -62,11 +62,12 @@ void PresentationVariable::setProperties(const KoProperties *props)
     }
 }
 
-void PresentationVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument)
+void PresentationVariable::variableMoved(const QTextDocument *document, int posInDocument)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
-
+//FIXME
+/*
     if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
         if (KoPATextPage *textPage = dynamic_cast<KoPATextPage*>(shapeData->page())) {
             if (KPrPage *page = dynamic_cast<KPrPage*>(textPage->page())) {
@@ -74,6 +75,7 @@ void PresentationVariable::variableMoved(const KoShape *shape, const QTextDocume
             }
         }
     }
+    */
 }
 
 void PresentationVariable::saveOdf(KoShapeSavingContext & context)

@@ -45,7 +45,7 @@ public:
 
     void setProperties(const KoProperties *props);
 
-    void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
+    void variableMoved(const QTextDocument *document, int posInDocument);
 
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);
