@@ -21,6 +21,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
      KPrViewModeSlidesSorter.cpp
+     KPrViewModeOutline.cpp
      KPrViewModePreviewPageEffect.cpp
      KPrPresentationTool.cpp
      KPrAnimationDirector.cpp

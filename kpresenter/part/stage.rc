@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="kpresenter" version="124">
+<kpartgui name="kpresenter" version="125">
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />
@@ -33,6 +33,7 @@
             <Action name="view_normal"/>
             <Action name="view_notes"/>
             <Action name="view_slides_sorter"/>
+            <Action name="view_outline"/>
             <Separator/>
             <Action name="view_masterpages"/>
             <Separator/>

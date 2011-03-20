@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2009-2010 Benjamin Port <port.benjamin@gmail.com>
+   Copyright (C) 2009-2011 Benjamin Port <port.benjamin@gmail.com>
+   Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +32,7 @@ class KPrDocument;
 class KPrViewAdaptor;
 class KPrViewModeNotes;
 class KPrViewModeSlidesSorter;
+class KPrViewModeOutline;
 class KPrViewModePresentation;
 class KPrViewModePresenterView;
 class KActionMenu;
@@ -92,6 +94,7 @@ protected slots:
     void createAnimation();
     void showNotes();
     void showSlidesSorter();
+    void showOutline();
     void dialogCustomSlideShows();
     void configureSlideShow();
     void configurePresenterView();
@@ -108,6 +111,7 @@ private:
     KAction *m_actionViewModeNormal;
     KAction *m_actionViewModeNotes;
     KAction *m_actionViewModeSlidesSorter;
+    KAction *m_actionViewModeOutline;
     KAction *m_actionCreateCustomSlideShowsDialog;
     KAction *m_actionExportHtml;
     KAction *m_actionInsertPictures;
@@ -119,6 +123,7 @@ private:
     KoPAViewMode *m_normalMode;
     KPrViewModeNotes *m_notesMode;
     KPrViewModeSlidesSorter *m_slidesSorterMode;
+    KPrViewModeOutline *m_outlineMode;
 
     KPrViewAdaptor *m_dbus;
 

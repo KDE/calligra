@@ -1,8 +1,9 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.org>
-   Copyright (C) 2009-2010 Benjamin Port <port.benjamin@gmail.com>
    Copyright (C) 2009 Yannick Motta <yannick.motta@gmail.com>
+   Copyright (C) 2009-2011 Benjamin Port <port.benjamin@gmail.com>
+   Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,6 +48,7 @@
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "KPrViewModeSlidesSorter.h"
+#include "KPrViewModeOutline.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
 #include "KPrPicturesImport.h"
@@ -69,7 +71,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
   , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
-//   , m_slidesSorterMode( new KPrViewModeSlidesSorter( this, kopaCanvas() ))
+  //   , m_slidesSorterMode( new KPrViewModeSlidesSorter( this, kopaCanvas() ))
   , m_dbus( new KPrViewAdaptor( this ) )
 {
     initGUI();
@@ -100,6 +102,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     KoPACanvas * canvas = dynamic_cast<KoPACanvas*>(kopaCanvas());
     if (canvas) {
         m_slidesSorterMode = new KPrViewModeSlidesSorter(this, canvas);
+        m_outlineMode = new KPrViewModeOutline(this, canvas);
     }
 }
 
@@ -108,6 +111,7 @@ KPrView::~KPrView()
     delete m_presentationMode;
     delete m_notesMode;
     delete m_slidesSorterMode;
+    delete m_outlineMode;
 }
 
 KoViewConverter * KPrView::viewConverter( KoPACanvasBase * canvas )
@@ -213,6 +217,12 @@ void KPrView::initActions()
     actionCollection()->addAction("view_slides_sorter", m_actionViewModeSlidesSorter);
     connect(m_actionViewModeSlidesSorter, SIGNAL(triggered()), this, SLOT(showSlidesSorter()));
 
+    m_actionViewModeOutline = new KAction(i18n("Outline"), this);
+    m_actionViewModeOutline->setCheckable(true);
+    m_actionViewModeOutline->setShortcut(QKeySequence("CTRL+F9"));
+    actionCollection()->addAction("view_outline", m_actionViewModeOutline);
+    connect(m_actionViewModeOutline, SIGNAL(triggered()), this, SLOT(showOutline()));
+
     if ( QAction *action = actionCollection()->action("view_masterpages") )
         action->setShortcut(QKeySequence("CTRL+F8"));
     
@@ -224,6 +234,7 @@ void KPrView::initActions()
     viewModesGroup->addAction(m_actionViewModeNormal);
     viewModesGroup->addAction(m_actionViewModeNotes);
     viewModesGroup->addAction(m_actionViewModeSlidesSorter);
+    viewModesGroup->addAction(m_actionViewModeOutline);
 
     m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
@@ -360,6 +371,17 @@ void KPrView::showSlidesSorter()
         setMasterMode( false );
     }
     setViewMode(m_slidesSorterMode);
+}
+
+void KPrView::showOutline()
+{
+    // Make sure that we are not in master mode
+    // Sort master does not make sense
+    if ( viewMode()->masterMode() ) {
+        actionCollection()->action( "view_masterpages" )->setChecked( false );
+        setMasterMode( false );
+    }
+    setViewMode(m_outlineMode);
 }
 
 void KPrView::dialogCustomSlideShows()
