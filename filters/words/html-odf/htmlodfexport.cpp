@@ -43,7 +43,9 @@
 #include <exportdialog.h>
 #include <QtXmlPatterns>
 #include <convert.h>
+#include <KoDocument.h>
 
+#include <iostream>
 
 K_PLUGIN_FACTORY(HTMLOdfExportFactory, registerPlugin<HTMLOdfExport>();)
 K_EXPORT_PLUGIN(HTMLOdfExportFactory("calligrafilters"))
@@ -67,28 +69,23 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
             || from != "application/vnd.oasis.opendocument.text")
         return KoFilter::NotImplemented;
 
-
     kDebug(30513) << "######################## HTMLOdfExport::convert ########################";
-
+    
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
 
     if (m_dialog->exec() == QDialog::Rejected)
         return KoFilter::UserCancelled;
 
-
     // Create output files
-
     QFile out(outputFile);
         if (!out.open(QIODevice::WriteOnly)) {
             kError(30501) << "Unable to open output file!" << endl;
             out.close();
             return KoFilter::FileNotFound;
         }
-
         Conversion c1;
-        c1.convert(&out);
-
+        c1.convert(inputFile, &out);
         QFileInfo base(outputFile);
         QString filenamewithoutext = outputFile.left(outputFile.lastIndexOf('.'));
         QString directory=base.absolutePath();
@@ -101,7 +98,6 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
             css.close();
             return KoFilter::FileNotFound;
         }
-
 
        out.close();
        css.close();
