@@ -274,25 +274,18 @@ install(TARGETS calligratablesodf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 kde4_add_library(calligratablescommon SHARED ${calligratablescommon_LIB_SRCS})
 
-if(KDE4_KCMUTILS_LIBS)
 target_link_libraries(calligratablescommon
     komain
     calligratablesodf
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_THREADWEAVER_LIBS}
-)
-else()
-target_link_libraries(calligratablescommon
-    komain
-    calligratablesodf
-    ${QT_QTSQL_LIBARY}
-    ${KDE4_KNOTIFYCONFIG_LIBS}
-    ${KDE4_KUTILS_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
+if(KDE4_KCMUTILS_LIBS)
+    target_link_libraries(calligratablescommon ${KDE4_KCMUTILS_LIBS} )
+else()
+    target_link_libraries(calligratablescommon ${KDE4_KUTILS_LIBS} )
 endif()
 
 target_link_libraries(calligratablescommon LINK_INTERFACE_LIBRARIES komain calligratablesodf )
