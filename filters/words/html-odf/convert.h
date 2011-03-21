@@ -27,7 +27,7 @@
 class Conversion
 {
 public:
-    void convert(QFile *);
+    void convert(const QString &inputFileName, QFile *outputFile);
 };
 
 

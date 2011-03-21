@@ -78,17 +78,17 @@
 /*!
 * Path for full screen icon
 */
-const QString FS_BUTTON_PATH("/usr/share/icons/hicolor/48x48/hildon/general_fullsize.png");
+const QString FS_BUTTON_PATH(":/images/48x48/general_fullsize.png");
 
 /*!
 * Path for presentation back icon in full screen mode
 */
-const QString FS_PPT_BACK_BUTTON_PATH("/usr/share/icons/hicolor/48x48/hildon/general_back.png");
+const QString FS_PPT_BACK_BUTTON_PATH(":/images/48x48/general_back.png");
 
 /*!
 * Path for presentation forward icon in full screen mode
 */
-const QString FS_PPT_FORWARD_BUTTON_PATH("/usr/share/icons/hicolor/48x48/hildon/general_forward.png");
+const QString FS_PPT_FORWARD_BUTTON_PATH(":/images/48x48/general_forward.png");
 
 /*!
 * Path for splash screen KOffice logo

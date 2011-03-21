@@ -250,8 +250,12 @@ private:
         const MSO::SlideContainer* presSlide;
         const MSO::NotesContainer* notesMasterSlide;
         const MSO::NotesContainer* notesSlide;
-        const MSO::OfficeArtSpContainer* defaultShape;
         const MSO::SlideListWithTextSubContainerOrAtom* slideTexts;
+
+        //OfficeArtDgContainer/shape - for MS Office 2003 outputs, this one
+        //seems to contain missing boolean properties for the content of
+        //OfficeArtDgContainer/groupShape
+        const MSO::OfficeArtSpContainer* defaultShape;
 
         DrawClientData(): masterSlide(0), presSlide(0), notesMasterSlide(0),
                           notesSlide(0), defaultShape(0), slideTexts(0) {};
@@ -1774,9 +1778,14 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoXmlWriter writer(&buffer);
         Writer out(writer, styles, true);
 
+        //NOTE: The shape seems to provide boolean properties which are missing
+        //for shapes contained in spgr (MS Office 2003 specific).  There were
+        //problems with shadows on MS Office 2007 outputs, so it's disabled at
+        //the moment and all regressions have to be fixed.
         if (drawing->OfficeArtDg.groupShape) {
             const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
-            const OfficeArtSpContainer* shape = (drawing->OfficeArtDg.shape).data();
+            const OfficeArtSpContainer* shape = 0;
+//             const OfficeArtSpContainer* shape = (drawing->OfficeArtDg.shape).data();
             drawclient.setDrawClientData(m, 0, 0, 0, shape);
             odrawtoodf.processGroupShape(spgr, out);
         }
@@ -2448,6 +2457,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
+    //NOTE: The shape seems to provide boolean properties which are missing for
+    //shapes contained in spgr (MS Office 2003 specific).
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();

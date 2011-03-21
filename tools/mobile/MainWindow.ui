@@ -188,8 +188,8 @@
   </action>
   <action name="actionFullScreen">
    <property name="icon">
-    <iconset>
-     <normaloff>images/48x48/general_fullsize.png</normaloff>images/48x48/general_fullsize.png</iconset>
+    <iconset resource="CalligraMobile.qrc">
+     <normaloff>:/images/48x48/general_fullsize.png</normaloff>:/images/48x48/general_fullsize.png</iconset>
    </property>
   </action>
   <action name="actionPageNumber">
@@ -323,8 +323,8 @@
   </action>
   <action name="actionPrevWord">
    <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_back.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_back.png</iconset>
+    <iconset resource="CalligraMobile.qrc">
+     <normaloff>:/images/48x48/general_back.png</normaloff>:/images/48x48/general_back.png</iconset>
    </property>
    <property name="text">
     <string/>
@@ -335,8 +335,8 @@
   </action>
   <action name="actionNextWord">
    <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_forward.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_forward.png</iconset>
+    <iconset resource="CalligraMobile.qrc">
+     <normaloff>:/images/48x48/general_forward.png</normaloff>:/images/48x48/general_forward.png</iconset>
    </property>
    <property name="text">
     <string/>
