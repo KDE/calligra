@@ -69,8 +69,8 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
             || from != "application/vnd.oasis.opendocument.text")
         return KoFilter::NotImplemented;
 
-    kDebug(30513) << "######################## HTMLOdfExport::convert ########################";
-    
+    kDebug(30503) << "######################## HTMLOdfExport::convert ########################";
+
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
 
@@ -80,7 +80,7 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     // Create output files
     QFile out(outputFile);
         if (!out.open(QIODevice::WriteOnly)) {
-            kError(30501) << "Unable to open output file!" << endl;
+            kError(30501) << "Unable to open output file!";
             out.close();
             return KoFilter::FileNotFound;
         }
@@ -94,7 +94,7 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         QString stylesheet=filenamewithoutext+"/style.css";
         QFile css(stylesheet);
         if (!css.open(QIODevice::WriteOnly)){
-            kError(30501) << "Unable to open stylesheet!" << endl;
+            kError(30501) << "Unable to open stylesheet!";
             css.close();
             return KoFilter::FileNotFound;
         }
@@ -119,7 +119,7 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     };
 
 
-    kDebug(30513) << "######################## HTMLOdfExport::convert done ####################";
+    kDebug(30503) << "######################## HTMLOdfExport::convert done ####################";
     return KoFilter::OK;
 }
 
