@@ -1,8 +1,11 @@
 /*
  * This file is part of the KDE project
  *
+ * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
  * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -21,14 +24,28 @@
 
 
 #include "CanvasController.h"
+
+#include <KoDocument.h>
+#include <KMimeType>
+#include <KMimeTypeTrader>
+#include <KoView.h>
+
 #include <QPoint>
 #include <QSize>
-
 
 CanvasController::CanvasController(KActionCollection* actionCollection)
     : KoCanvasController(actionCollection), QDeclarativeItem()
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
+}
+
+void CanvasController::openDocument(const QString& path)
+{
+    QString error;
+    QString mimetype = KMimeType::findByPath(path)->name();
+    KoDocument *doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
+                                                                               QVariantList(), &error);
+    //setCanvas(doc->canvasItem());
 }
 
 void CanvasController::setVastScrolling(qreal factor)

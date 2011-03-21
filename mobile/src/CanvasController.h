@@ -30,6 +30,7 @@ class CanvasController : public QDeclarativeItem, KoCanvasController
 {
     Q_OBJECT
 public:
+    explicit CanvasController(KActionCollection* actionCollection = 0);
     virtual void setVastScrolling(qreal factor);
     virtual void setZoomWithWheel(bool zoom);
     virtual void updateDocumentSize(const QSize& sz, bool recalculateCenter);
@@ -55,7 +56,9 @@ public:
     virtual QSize viewportSize() const;
     virtual void scrollContentsBy(int dx, int dy);
 
-    explicit CanvasController(KActionCollection* actionCollection = 0);
+
+public slots:
+    void openDocument(const QString &path);
 };
 
 #endif // CANVASCONTROLLER_H
