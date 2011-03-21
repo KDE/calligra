@@ -152,10 +152,10 @@ GETTER(qint32,                 FillRectBottom,       fillRectBottom,       0)   
 GETTER(qint32,                 FillDztype,           fillDztype,           0)              // 2.3.7.24
 GETTER(qint32,                 FillShadePreset,      fillShadePreset,      0)              // 2.3.7.25
 GETTER(quint32,                FillShadeColors,      fillShadeColors,      0)              // 2.3.7.26
-GETTER(MSO::FixedPoint,        FillOriginX,          fillOriginX,          0)              // 2.3.7.28
-GETTER(MSO::FixedPoint,        FillOriginY,          fillOriginY,          0)              // 2.3.7.29
-GETTER(MSO::FixedPoint,        FillShapeOriginX,     fillShapeOriginX,     0)              // 2.3.7.30
-GETTER(MSO::FixedPoint,        FillShapeOriginY,     fillShapeOriginY,     0)              // 2.3.7.31
+GETTER(MSO::FixedPoint,        FillOriginX,          fillOriginX,          zero())         // 2.3.7.28
+GETTER(MSO::FixedPoint,        FillOriginY,          fillOriginY,          zero())         // 2.3.7.29
+GETTER(MSO::FixedPoint,        FillShapeOriginX,     fillShapeOriginX,     zero())         // 2.3.7.30
+GETTER(MSO::FixedPoint,        FillShapeOriginY,     fillShapeOriginY,     zero())         // 2.3.7.31
 // GETTER(MSO::MSOSHADETYPE,      FillShadeType,        fillShadeType,        msoshadeDefault()) // 2.3.7.32
 GETTER(MSO::OfficeArtCOLORREF, FillColorExt,         fillColorExt,         white())        // 2.3.7.33
 GETTER(MSO::OfficeArtCOLORREF, FillBackColorExt,     fillBackColorExt,     white())        // 2.3.7.37
@@ -172,7 +172,7 @@ GETTER(MSO::OfficeArtCOLORREF, ShadowColor,          shadowColor,          gray(
 GETTER(MSO::FixedPoint,        ShadowOpacity,        shadowOpacity,        one())          // 2.3.13.5
 GETTER(qint32,                 ShadowOffsetX,        shadowOffsetX,        0x6338)         // 2.3.13.6
 GETTER(qint32,                 ShadowOffsetY,        shadowOffsetY,        0x6338)         // 2.3.13.7
-GETTER(MSO::FixedPoint,        Rotation,             rotation,             0)              // 2.3.18.5
+GETTER(MSO::FixedPoint,        Rotation,             rotation,             zero())         // 2.3.18.5
 GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0)              // 2.3.21.2
 GETTER(qint32,                 DyTextTop,            dyTextTop,            0)              // 2.3.21.3
 GETTER(qint32,                 DxTextRight,          dxTextRight,          0)              // 2.3.21.4

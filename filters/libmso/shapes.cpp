@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include <qbuffer.h>
 
 #include <cmath>
+
 
 using namespace MSO;
 
@@ -250,6 +252,18 @@ void equation(Writer& out, const char* name, const char* formula)
 }
 }
 
+qint16
+ODrawToOdf::normalizeRotation(qreal rotation)
+{
+    qint16 angle = ((qint16)rotation) % 360;
+
+    //MSOffice 2003/2007 save different values for the rotation property
+    if (angle < 0) {
+        angle = angle + 360;
+    }
+    return angle;
+}
+
 /**
  * Return the bounding rectangle for this object.
  **/
@@ -263,6 +277,36 @@ ODrawToOdf::getRect(const OfficeArtSpContainer &o)
         return client->getRect(*o.clientAnchor);
     }
     return QRect(0, 0, 1, 1);
+}
+
+QRectF
+ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &rect)
+{
+    // OfficeArtClientAnchorData structure might contain a 90 degrees rotated
+    // rectangle.  It depends on the value of the rotation property, but the
+    // intervals differ for each shape type.
+    bool transform_anchor = false;
+    qint16 nrotation = normalizeRotation(rotation);
+
+    //TODO: Add other shapes here!
+
+    switch (shapeType) {
+    case msosptNotPrimitive:
+    default:
+        if ( ((nrotation >= 45) && (nrotation < 135)) ||
+             ((nrotation >= 225) && (nrotation < 315)))
+        {
+            transform_anchor = true;
+        }
+        break;
+    }
+    if (transform_anchor) {
+        QPointF center = rect.center();
+        QTransform transform;
+        transform.rotate(90);
+        rect = transform.mapRect(rect.translated(-center)).translated(center);
+    }
+    return rect;
 }
 
 void ODrawToOdf::processEllipse(const OfficeArtSpContainer& o, Writer& out)
@@ -553,6 +597,118 @@ void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
 
     out.xml.endElement();
 }
+
+void ODrawToOdf::processStraightConnector1(const OfficeArtSpContainer& o, Writer& out)
+{
+    const QRectF rect = getRect(o);
+    qreal x1 = rect.x();
+    qreal y1 = rect.y();
+    qreal x2 = rect.x() + rect.width();
+    qreal y2 = rect.y() + rect.height();
+
+    if (o.shapeProp.fFlipV) {
+        qSwap(y1, y2);
+    }
+    if (o.shapeProp.fFlipH) {
+        qSwap(x1, x2);
+    }
+
+    out.xml.startElement("draw:connector");
+    out.xml.addAttribute("svg:x1", client->formatPos(out.hOffset(x1)));
+    out.xml.addAttribute("svg:y1", client->formatPos(out.vOffset(y1)));
+    out.xml.addAttribute("svg:x2", client->formatPos(out.hOffset(x2)));
+    out.xml.addAttribute("svg:y2", client->formatPos(out.vOffset(y2)));
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    out.xml.addAttribute("draw:type", "line");
+    processText(o, out);
+    out.xml.endElement();
+
+}
+
+void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& out)
+{
+    const OfficeArtDggContainer * drawingGroup = 0;
+    if (client) {
+        drawingGroup = client->getOfficeArtDggContainer();
+    }
+
+    const OfficeArtSpContainer* master = 0;
+    const DrawStyle ds(drawingGroup, master, &o);
+    qreal rotation = toQReal( ds.rotation() );
+
+    const QRectF rect = getRect(o);
+    qreal x1 = rect.x();
+    qreal y1 = rect.y();
+    qreal x2 = rect.x() + rect.width();
+    qreal y2 = rect.y() + rect.height();
+
+    QRectF shapeRect = rect;
+
+    qreal sx1 = x1;
+    qreal sy1 = y1;
+    qreal sx2 = x2;
+    qreal sy2 = y2;
+
+    if (rotation != 0.0) {
+        QTransform m;
+        m.rotate( -rotation );
+        shapeRect = m.mapRect(rect.translated(-rect.center())).translated(rect.center());
+
+        sx1 = shapeRect.topLeft().x();
+        sy1 = shapeRect.topLeft().y();
+        sx2 = shapeRect.bottomRight().x();
+        sy2 = shapeRect.bottomRight().y();
+    }
+
+    // compute path
+    QPainterPath shapePath;
+    shapePath.moveTo(sx1,sy1);
+    shapePath.lineTo((sx1 + sx2)/2.0, sy1);
+    shapePath.lineTo((sx1 + sx2)/2.0, sy2);
+    shapePath.lineTo(sx2,sy2);
+
+    // transform the path according the shape properties like flip and rotation
+    QTransform m;
+    m.reset();
+    m.translate( -shapeRect.center().x(), -shapeRect.center().y() );
+
+    if (o.shapeProp.fFlipH){
+        m.scale(-1,1);
+    }
+
+    if (o.shapeProp.fFlipV){
+        m.scale(1,-1);
+    }
+
+    if (rotation != 0) {
+        m.rotate(rotation);
+    }
+
+    m.translate( shapeRect.center().x(), shapeRect.center().y() );
+    shapePath = m.map(shapePath);
+
+    // translate the QPainterPath into svg:d attribute
+    QString path = path2svg(shapePath);
+
+    out.xml.startElement("draw:connector");
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    out.xml.addAttribute("svg:x1", client->formatPos(out.hOffset(x1)));
+    out.xml.addAttribute("svg:y1", client->formatPos(out.vOffset(y1)));
+    out.xml.addAttribute("svg:x2", client->formatPos(out.hOffset(x2)));
+    out.xml.addAttribute("svg:y2", client->formatPos(out.vOffset(y2)));
+    if (!path.isEmpty()) {
+        out.xml.addAttribute("svg:d", path);
+    }
+
+    processText(o, out);
+    out.xml.endElement();
+
+}
+
+
+
 
 void ODrawToOdf::processSmiley(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -1543,6 +1699,10 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processArrow(o, out);
     } else if (shapeType == msosptLine) {
         processLine(o, out);
+    } else if (shapeType == msosptStraightConnector1) {
+        processStraightConnector1(o, out);
+    } else if (shapeType == msosptBentConnector3) {
+        processBentConnector3(o, out);
     } else if (shapeType == msosptWedgeRectCallout) {
         processWedgeRectCallout(o, out);
     } else if (shapeType == msosptWedgeEllipseCallout) {
@@ -1667,31 +1827,69 @@ void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &ou
     out.xml.addAttribute("draw:modifiers", modifiers);
 }
 
+// Position the shape into the slide or into a group shape
 void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRectF rect = getRect(o);
+    // TODO: the group shape might be also rotated and flipped
 
-    out.xml.addAttribute("svg:width", client->formatPos(out.hLength(rect.width())));
-    out.xml.addAttribute("svg:height", client->formatPos(out.vLength(rect.height())));
+    const OfficeArtDggContainer* dgg = 0;
+    const OfficeArtSpContainer* master = 0;
+    const DrawStyle ds(dgg, master, &o);
 
-    const Rotation* rotation = get<Rotation>(o);
-    if (rotation) {
+    QRectF rect = getRect(o);
+    qreal rotation = toQReal(ds.rotation());
+    quint16 nrotation = normalizeRotation(rotation);
+
+    //draw:caption-id
+    //draw:class-names
+    //draw:data
+    //draw:engine
+    //draw:id
+    //draw:layer
+    //draw:name
+    //draw:style-name
+    //draw:text-style-name
+    //draw:transform
+    if (!o.shapeProp.fChild && nrotation) {
+
+        const quint16 shapeType = o.shapeProp.rh.recInstance;
+        rect = processRect(shapeType, rotation, rect);
+
+        //translate requires the top right coordinate of the rotated rectangle
         static const QString transformString("rotate(%1) translate(%2 %3)");
+        const qreal height = out.vLength(rect.height());
+        const qreal width = out.hLength(rect.width());
+        const qreal xPos = out.hOffset(rect.x());
+        const qreal yPos = out.vOffset(rect.y());
+        const qreal angle = (nrotation / (qreal)180) * M_PI;
 
-        qreal xPos = out.hOffset(rect.x());
-        qreal yPos = out.vOffset(rect.y());
-        qreal angle = -(toQReal(rotation->rotation) / 180 * M_PI);;
-        qreal width = out.hLength(rect.width());
-        qreal height = out.hLength(rect.height());
+        //counter-clockwise rotation, coord. system origin in top left corner
+        qreal newX = xPos + width/2 - (cos(angle)*width/2 - sin(angle)*height/2);
+        qreal newY = yPos + height/2 - (sin(angle)*width/2 + cos(angle)*height/2);
 
-        qreal newX = xPos + width/2 - cos(-angle)*width/2 + sin(-angle)*height/2;
-        qreal newY = yPos + height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
-
-        out.xml.addAttribute("draw:transform", transformString.arg(angle).arg(client->formatPos(newX)).arg(client->formatPos(newY)));
-    } else {
+        out.xml.addAttribute("draw:transform",
+                             transformString.arg(angle).arg(client->formatPos(newX)).arg(client->formatPos(newY)));
+    }
+    //svg:x
+    //svg:y
+    else {
         out.xml.addAttribute("svg:x", client->formatPos(out.hOffset(rect.x())));
         out.xml.addAttribute("svg:y", client->formatPos(out.vOffset(rect.y())));
     }
+    //draw:z-index
+    //presentation:class-names
+    //presentation:style-name
+    //svg:height
+    out.xml.addAttribute("svg:height", client->formatPos(out.vLength(rect.height())));
+    //svg:width
+    out.xml.addAttribute("svg:width", client->formatPos(out.hLength(rect.width())));
+    //table:end-cell-address
+    //table:end-x
+    //table:end-y
+    //table:table-background
+    //text:anchor-page-number
+    //text:anchor-type
+    //xml:id
 }
 
 void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out)
@@ -1708,23 +1906,23 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         QVector<QPoint> verticesPoints;
 
         //_v.data is an array of POINTs, MS-ODRAW, page 89
-        QByteArray xArray(sizeof(int),0), yArray(sizeof(int),0);
+        QByteArray xArray(sizeof(int), 0), yArray(sizeof(int), 0);
         int step = _v.cbElem;
         if (step == 0xfff0) {
             step = 4;
         }
 
-        int maxX=0,minX=INT_MAX,maxY=0,minY=INT_MAX;
+        int maxX = 0, minX = INT_MAX, maxY = 0, minY = INT_MAX;
         int x,y;
         //get vertice points
         for (int i = 0, offset = 0; i < _v.nElems; i++, offset += step) {
             // x coordinate of this point
-            xArray.replace(0,step/2,_v.data.mid(offset, step/2));
-            x = *(int*)xArray.data();
+            xArray.replace(0, step/2, _v.data.mid(offset, step/2));
+            x = *(int*) xArray.data();
 
             // y coordinate of this point
-            yArray.replace(0,step/2,_v.data.mid(offset + step/2, step/2));
-            y = *(int*)yArray.data();
+            yArray.replace(0, step/2, _v.data.mid(offset + step/2, step/2));
+            y = *(int*) yArray.data();
 
             verticesPoints.append(QPoint(x, y));
 
@@ -1751,7 +1949,8 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         QString enhancedPath;
         for (int i = 0; i < _c.nElems; i++) {
 
-            switch ((((*(ushort *)(_c.data.data()+i*2)) >> 13) & 0x7)) { //MSOPATHINFO.type
+            //MSOPATHINFO.type
+            switch ((((*(ushort *)(_c.data.data()+i*2)) >> 13) & 0x7)) {
             case 0: { //msopathLineTo
                 enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[verticesIndex].x()) + ' '
                                + QString::number(verticesPoints[verticesIndex].y()) + ' ';
@@ -1790,10 +1989,86 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
             }
         }
-        out.xml.addAttribute("svg:viewBox", viewBox);
-        out.xml.addAttribute("draw:type", "non-primitive");
+        //dr3d:projection
+        //dr3d:shade-mode
+        //draw:concentric-gradient-fill-allowed
+        //draw:enhanced-path
         out.xml.addAttribute("draw:enhanced-path", enhancedPath);
+        //draw:extrusion
+        //draw:extrusion-allowed
+        //draw:extrusion-brightness
+        //draw:extrusion-color
+        //draw:extrusion-depth
+        //draw:extrusion-diffusion
+        //draw:extrusion-first-light-direction
+        //draw:extrusion-first-light-harsh
+        //draw:extrusion-first-light-level
+        //draw:extrusion-light-face
+        //draw:extrusion-metal
+        //draw:extrusion-number-of-line-segments
+        //draw:extrusion-origin
+        //draw:extrusion-rotation-angle
+        //draw:extrusion-rotation-center
+        //draw:extrusion-second-light-direction
+        //draw:extrusion-second-light-harsh
+        //draw:extrusion-second-light-level
+        //draw:extrusion-shininess
+        //draw:extrusion-skew
+        //draw:extrusion-specularity
+        //draw:extrusion-viewpoint
+        //draw:glue-point-leaving-directions
+        //draw:glue-points
+        //draw:glue-point-type
+        //draw:mirror-horizontal
+        if (o.shapeProp.fFlipH) {
+            out.xml.addAttribute("draw:mirror-horizontal", "true");
+        } else {
+            out.xml.addAttribute("draw:mirror-horizontal", "false");
+        }
+        //draw:mirror-vertical
+        if (o.shapeProp.fFlipV) {
+            out.xml.addAttribute("draw:mirror-vertical", "true");
+        } else {
+            out.xml.addAttribute("draw:mirror-vertical", "false");
+        }
+        //draw:modifiers
+        //draw:path-stretchpoint-x
+        //draw:path-stretchpoint-y
+        //draw:text-areas
+        //draw:text-path
+        //draw:text-path-allowed
+        //draw:text-path-mode
+        //draw:text-path-same-letter-heights
+        //draw:text-path-scale
+        //draw:text-rotate-angle
+        //draw:type
+        out.xml.addAttribute("draw:type", "non-primitive");
+        //svg:viewBox
+        out.xml.addAttribute("svg:viewBox", viewBox);
     }
-
 }
 
+QString ODrawToOdf::path2svg(const QPainterPath &path) {
+    QString d;
+
+    int count = path.elementCount();
+    for (int i = 0; i < count; i++) {
+
+        QPainterPath::Element e = path.elementAt(i);
+        switch(e.type){
+            case QPainterPath::MoveToElement:{
+                d.append(QString("M %1 %2").arg(e.x).arg(e.y));
+                break;
+            }
+            case QPainterPath::LineToElement:{
+                d.append(QString("L %1 %2").arg(e.x).arg(e.y));
+                break;
+            }
+            default:{
+                //TODO CurveToElement, CurveToElementDataElement
+                qDebug() << "This element unhandled";
+            }
+        }
+    }
+    return d;
+}

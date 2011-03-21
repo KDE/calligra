@@ -22,6 +22,7 @@
 #define KWVIEWMODEPREVIEW_H
 
 #include "KWViewMode.h"
+#include "kword_export.h"
 
 #include <QString>
 
@@ -29,8 +30,9 @@
  * A mode for previewing the overall document
  * Pages are organized in a grid (mostly useful with low zoom levels)
  */
-class KWViewModePreview : public KWViewMode
+class KWORD_EXPORT KWViewModePreview : public KWViewMode
 {
+    Q_OBJECT
 public:
     /// constructor
     explicit KWViewModePreview();

@@ -663,11 +663,11 @@ struct rcps_population *new_population(struct rcps_solver *s,
 	struct rcps_population *pop;
 	struct rcps_individual *ind;
 	int i;
+	int lcount = 0;
 	struct rcps_fitness best_fitness;
 	best_fitness.group = FITNESS_MAX_GROUP;
 	best_fitness.weight = 0;
 
-	int lcount = 0;
 	pop = (struct rcps_population*)malloc(sizeof(struct rcps_population));
 	pop->individuals = slist_new(individual_cmp);
 	pop->size = s->pop_size;
