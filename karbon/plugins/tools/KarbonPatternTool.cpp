@@ -135,12 +135,13 @@ void KarbonPatternTool::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
     case Qt::Key_I: {
-        uint handleRadius = canvas()->resourceManager()->handleRadius();
+        KoResourceManager *rm = canvas()->shapeController()->resourceManager();
+        uint handleRadius = rm->handleRadius();
         if (event->modifiers() & Qt::ControlModifier)
             handleRadius--;
         else
             handleRadius++;
-        canvas()->resourceManager()->setHandleRadius(handleRadius);
+        rm->setHandleRadius(handleRadius);
     }
     break;
     default:
@@ -220,8 +221,8 @@ void KarbonPatternTool::activate(ToolActivation toolActivation, const QSet<KoSha
 
     initialize();
 
-    KarbonPatternEditStrategyBase::setHandleRadius(canvas()->resourceManager()->handleRadius());
-    KarbonPatternEditStrategyBase::setGrabSensitivity(canvas()->resourceManager()->grabSensitivity());
+    KarbonPatternEditStrategyBase::setHandleRadius(handleRadius());
+    KarbonPatternEditStrategyBase::setGrabSensitivity(grabSensitivity());
 
     useCursor(Qt::ArrowCursor);
 
@@ -249,16 +250,16 @@ void KarbonPatternTool::deactivate()
 void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
 {
     switch (key) {
-    case KoCanvasResource::HandleRadius:
+    case KoDocumentResource::HandleRadius:
         foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
-        strategy->repaint();
+            strategy->repaint();
 
         KarbonPatternEditStrategyBase::setHandleRadius(res.toUInt());
 
         foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
-        strategy->repaint();
+            strategy->repaint();
         break;
-    case KoCanvasResource::GrabSensitivity:
+    case KoDocumentResource::GrabSensitivity:
         KarbonPatternEditStrategyBase::setGrabSensitivity(res.toUInt());
         break;
     default:

@@ -435,8 +435,8 @@ void KarbonGradientTool::initialize()
 
     delete m_gradient;
     GradientStrategy * strategy = m_currentStrategy ? m_currentStrategy : m_strategies.values().first();
-    GradientStrategy::setHandleRadius(canvas()->resourceManager()->handleRadius());
-    GradientStrategy::setGrabSensitivity(canvas()->resourceManager()->grabSensitivity());
+    GradientStrategy::setHandleRadius(handleRadius());
+    GradientStrategy::setGrabSensitivity(grabSensitivity());
     m_gradient = KoFlake::cloneGradient(strategy->gradient());
     if (m_gradientWidget) {
         m_gradientWidget->setGradient(*m_gradient);
@@ -468,14 +468,14 @@ void KarbonGradientTool::deactivate()
 void KarbonGradientTool::resourceChanged(int key, const QVariant & res)
 {
     switch (key) {
-    case KoCanvasResource::HandleRadius:
+    case KoDocumentResource::HandleRadius:
         foreach(GradientStrategy *strategy, m_strategies)
-        strategy->repaint(*canvas()->viewConverter());
+            strategy->repaint(*canvas()->viewConverter());
         GradientStrategy::setHandleRadius(res.toUInt());
         foreach(GradientStrategy *strategy, m_strategies)
-        strategy->repaint(*canvas()->viewConverter());
+            strategy->repaint(*canvas()->viewConverter());
         break;
-    case KoCanvasResource::GrabSensitivity:
+    case KoDocumentResource::GrabSensitivity:
         GradientStrategy::setGrabSensitivity(res.toUInt());
         break;
     default:
