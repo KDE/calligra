@@ -56,7 +56,8 @@ namespace Word97 {
 class BRC;
 }
 }
-class KoFilterChain;
+class MSWordOdfImport;
+/* class KoFilterChain; */
 class KWordReplacementHandler;
 class KWordTableHandler;
 class KWordPictureHandler;
@@ -67,11 +68,16 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
+    Document(const std::string& fileName,
+             MSWordOdfImport* filter,
+/*              KoFilterChain* chain, */
+             KoXmlWriter* bodyWriter,
              KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, POLE::Storage* storage,
              LEInputStream* data, LEInputStream* table, LEInputStream* wdoc);
     virtual ~Document();
+
+    virtual void setProgress(int percent);
 
     virtual void bodyStart();
     virtual void bodyEnd();
@@ -156,6 +162,7 @@ public:
 
     // get the style name used for line numbers
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
+
 public slots:
     // Connected to the KWordTextHandler only when parsing the body
     void slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
@@ -199,7 +206,9 @@ private:
     KWordReplacementHandler* m_replacementHandler;
     KWordGraphicsHandler*    m_graphicsHandler;
 
-    KoFilterChain* m_chain;
+    MSWordOdfImport* m_filter;
+/*     KoFilterChain* m_chain; */
+
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
     std::queue<KWord::Table> m_tableQueue;

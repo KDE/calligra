@@ -295,13 +295,11 @@ namespace wvWare
         int m_remainingCells;           // The number of remaining cells for the processed row
 
         // Table skimming is a phase in which we try to locate the last
-        // paragraph of a table.  Then we parse the table content with
-        // parseHelper.
+        // paragraph of a table.  Using parseHelper to parse the table content.
         bool m_table_skimming;
 
         Paragraph* m_currentParagraph;
 
-        //
         U32 m_remainingChars;
 
         // The num. of the section being processed.
