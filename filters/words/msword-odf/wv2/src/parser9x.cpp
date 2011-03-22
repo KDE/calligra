@@ -139,8 +139,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
 Parser9x::~Parser9x()
 {
     // Sanity check
-    if ( !oldParsingStates.empty() || m_subDocument != None )
+    if ( !oldParsingStates.empty() || m_subDocument != None ) {
         wvlog << "Bug: Someone messed up the save/restore stack!" << endl;
+    }
 
     delete m_currentParagraph;
     delete m_tableRowStart;
@@ -567,7 +568,9 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
             if ( !m_currentParagraph->empty() || start != index ) {
                 // No "index - start + 1" here, as we don't want to copy the section mark!
                 UString ustring( processPieceStringHelper( string, start, index ) );
-                m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+                m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                                      fc + start * sizeof( String ),
+                                                      sizeof( String ) == sizeof( XCHAR ) ) );
 
                 processParagraph( fc + index * sizeof( String ) );
             }
@@ -603,10 +606,20 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
             // No "index - start + 1" here, as we don't want to copy the
             // paragraph mark!
             UString ustring( processPieceStringHelper( string, start, index ) );
-            m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+            m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                                  fc + start * sizeof( String ),
+                                                  sizeof( String ) == sizeof( XCHAR ) ) );
             processParagraph( fc + index * sizeof( String ) );
             m_cellMarkFound = false;
             start = ++index;
+
+            //signal progress
+            if (m_subDocument == Main && m_parsingMode == Default) {
+                int value = m_fib.ccpText - m_remainingChars + index;
+                int percentage = (int)((value / (float) m_fib.ccpText) * 100);
+                m_subDocumentHandler->setProgress( percentage );
+            }
+
             break;
         }
         // "Special" characters
@@ -643,7 +656,8 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
         // Finally we have to add the remaining text to the current paragraph
         // (if there is any)
         UString ustring( processPieceStringHelper( string, start, limit ) );
-        m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+        m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                              fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
     }
     delete [] string;
 }
@@ -754,8 +768,9 @@ void Parser9x::processParagraph( U32 fc )
             while ( index < limit ) {
                 Word97::CHP* chp = new Word97::CHP( style->chp() );
                 U32 length = m_properties->fullSavedChp( ( *it ).m_startFC + index * ( ( *it ).m_isUnicode ? 2 : 1 ), chp, style );
-                if ( ( *it ).m_isUnicode )
+                if ( ( *it ).m_isUnicode ) {
                     length >>= 1;
+                }
                 length = length > limit - index ? limit - index : length;
 
                 m_properties->applyClxGrpprl( pcdIt.current(), m_fib.fcClx, chp, style );

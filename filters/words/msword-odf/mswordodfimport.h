@@ -38,6 +38,8 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
+    void setProgress(const int percent);
+
 private:
     // checks from FIB if document is encrypted
     bool isEncrypted(const QString &inputfile);
