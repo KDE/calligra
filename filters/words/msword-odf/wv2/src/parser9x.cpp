@@ -70,8 +70,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
         m_properties( 0 ), m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ),
         m_footnotes( 0 ), m_annotations( 0 ), m_fonts( 0 ), m_drawings( 0 ), m_bookmarks(0),
         m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ), m_cellMarkFound( false ),
-        m_remainingCells( 0 ), m_currentParagraph( new Paragraph ), m_remainingChars( 0 ),
-        m_sectionNumber( 0 ), m_table_skimming( 0 ), m_subDocument( None ), m_parsingMode( Default )
+        m_remainingCells( 0 ), m_table_skimming( 0 ),
+        m_currentParagraph( new Paragraph ), m_remainingChars( 0 ),
+        m_sectionNumber( 0 ), m_subDocument( None ), m_parsingMode( Default )
 {
     if ( !isOk() )
         return;
@@ -293,8 +294,9 @@ void Parser9x::parseTableRow( const TableRowData& data )
              " startOffset=" << data.startOffset << " length=" << data.length << endl;
 #endif
 
-    if ( data.length == 0 ) // idiot safe ;-)
+    if ( data.length == 0 ) {
         return;
+    }
 
     saveState( data.length, static_cast<SubDocument>( data.subDocument ), Table );
     m_remainingCells = data.tap->itcMac;
@@ -1202,18 +1204,24 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 void Parser9x::saveState( U32 newRemainingChars, SubDocument newSubDocument, ParsingMode newParsingMode )
 {
     oldParsingStates.push( ParsingState( m_tableRowStart, m_tableRowLength, m_cellMarkFound, m_remainingCells,
-                                         m_currentParagraph, m_remainingChars, m_sectionNumber, m_subDocument,
-                                         m_parsingMode ) );
+                                         m_table_skimming, m_currentParagraph, m_remainingChars, m_sectionNumber,
+                                         m_subDocument, m_parsingMode ) );
     m_tableRowStart = 0;
     m_cellMarkFound = false;
+    m_table_skimming = false;
     m_currentParagraph = new Paragraph;
     m_remainingChars = newRemainingChars;
     m_subDocument = newSubDocument;
     m_parsingMode = newParsingMode;
 
+    // save current positions in OLEStreams
     m_wordDocument->push();
-    if ( m_data )
+    if ( m_data ) {
         m_data->push();
+    }
+    if ( m_table ) {
+        m_table->push();
+    }
 }
 
 void Parser9x::restoreState()
@@ -1223,28 +1231,39 @@ void Parser9x::restoreState()
         return;
     }
 
-    if ( m_data )
-        m_data->pop();
+    // restore positions in OLEStreams
     m_wordDocument->pop();
+    if ( m_data ) {
+        m_data->pop();
+    }
+    if ( m_table ) {
+        m_table->pop();
+    }
 
     ParsingState ps( oldParsingStates.top() );
     oldParsingStates.pop();
 
-    if ( m_tableRowStart )
+    if ( m_tableRowStart ) {
         wvlog << "Bug: We still have to process the table row." << endl;
-    delete m_tableRowStart;   // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
+    }
+    // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
+    delete m_tableRowStart;
+
     m_tableRowStart = ps.tableRowStart;
     m_tableRowLength = ps.tableRowLength;
     m_cellMarkFound = ps.cellMarkFound;
     m_remainingCells = ps.remainingCells;
+    m_table_skimming = ps.tableSkimming;
 
-    if ( !m_currentParagraph->empty() )
+    if ( !m_currentParagraph->empty() ) {
         wvlog << "Bug: The current paragraph isn't empty." << endl;
+    }
     delete m_currentParagraph;
     m_currentParagraph = ps.paragraph;
 
-    if ( m_remainingChars != 0 )
+    if ( m_remainingChars != 0 ) {
         wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << endl;
+    }
     m_remainingChars = ps.remainingChars;
     m_sectionNumber = ps.sectionNumber;
 
