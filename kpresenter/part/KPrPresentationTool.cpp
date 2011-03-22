@@ -300,7 +300,7 @@ bool KPrPresentationTool::checkHyperlink(KoPointerEvent *event, KoShape *shape, 
 
         int caretPos = textShapeData->document()->documentLayout()->hitTest(p, Qt::ExactHit);
 
-        if (textShapeData->endPosition() != -1 && caretPos != -1) {
+        if (!textShapeData->isDirty() && caretPos != -1) {
             QTextCursor mouseOver(textShapeData->document());
             mouseOver.setPosition(caretPos);
 
