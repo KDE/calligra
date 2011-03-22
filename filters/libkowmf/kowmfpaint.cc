@@ -688,10 +688,11 @@ void KoWmfPaint::patBlt(int x, int y, int width, int height, quint32 rasterOpera
 }
 
 
-void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QString& text, double)
+void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QString& text,
+                          double textRotation)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text;
+    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text << textRotation;
 #endif
 
     // The TA_UPDATECP flag tells us to use the current position
