@@ -539,6 +539,7 @@ public:
                    /* project has 'user mode' set as default and not 'design mode' override is found: */
                    || (pdata && pdata->userMode() && !Kexi::startupHandler().forcedDesignMode());
         isProjectNavigatorVisible = Kexi::startupHandler().isProjectNavigatorVisible();
+        isMainMenuVisible = Kexi::startupHandler().isMainMenuVisible();
         navigator = 0;
 //2.0: unused    navToolWindow=0;
         prj = 0;
@@ -1103,6 +1104,9 @@ public:
 
     //! Indicates if project navigator should be visible
     bool isProjectNavigatorVisible;
+    
+    //! Indicates if the main menu should be visible
+    bool isMainMenuVisible;
 
     //! Used on opening 1st child window
     bool maximizeFirstOpenedChildFrm;

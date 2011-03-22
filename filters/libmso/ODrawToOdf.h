@@ -25,6 +25,7 @@
 
 class DrawStyle;
 class QColor;
+class QPainterPath;
 
 class ODrawToOdf
 {
@@ -107,6 +108,8 @@ private:
     Client* const client;
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
+    QRectF processRect(const quint16 shapeType, const qreal rotation, QRectF &rect);
+    qint16 normalizeRotation(qreal rotation);
     void processEllipse(const MSO::OfficeArtSpContainer& fsp, Writer& out);
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -118,6 +121,8 @@ private:
     void processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processBentConnector3(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSmiley(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHeart(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processQuadArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -147,7 +152,6 @@ private:
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
 
-    void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processText(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStyleAndText(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -158,7 +162,7 @@ private:
     */
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
-
+    QString path2svg(const QPainterPath &path);
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
@@ -177,6 +181,8 @@ public:
      * @return final color
      */
     QColor processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds);
+
+
 };
 
 /**
@@ -189,5 +195,7 @@ inline qreal toQReal(const MSO::FixedPoint& f)
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);
+
+
 
 #endif

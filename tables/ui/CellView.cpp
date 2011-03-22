@@ -1117,7 +1117,7 @@ void CellView::paintText(QPainter& painter,
     // set a clipping region for non-rotated text
     painter.save();
     if (tmpAngle == 0) {
-        painter.setClipRegion(painter.clipRegion().intersected(QRect(coordinate.x(), coordinate.y(), d->width, d->height)));
+        painter.setClipRect(QRectF(coordinate.x(), coordinate.y(), d->width, d->height), Qt::IntersectClip);
     }
 
 
@@ -1467,7 +1467,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
 
         // If it fits in the width, chopping won't do anything
         if (d->fittingWidth) {
-            return d->displayText;;
+            return d->displayText;
         }
 
         len = d->width;

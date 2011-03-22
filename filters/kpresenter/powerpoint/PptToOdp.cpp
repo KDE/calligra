@@ -250,20 +250,17 @@ private:
         const MSO::SlideContainer* presSlide;
         const MSO::NotesContainer* notesMasterSlide;
         const MSO::NotesContainer* notesSlide;
-        const MSO::OfficeArtSpContainer* defaultShape;
         const MSO::SlideListWithTextSubContainerOrAtom* slideTexts;
+
+        //OfficeArtDgContainer/shape - for MS Office 2003 outputs, this one
+        //seems to contain missing boolean properties for the content of
+        //OfficeArtDgContainer/groupShape
+        const MSO::OfficeArtSpContainer* defaultShape;
 
         DrawClientData(): masterSlide(0), presSlide(0), notesMasterSlide(0),
                           notesSlide(0), defaultShape(0), slideTexts(0) {};
     };
     DrawClientData dc_data[1];
-
-    //An empty container passed to libmso in case we prefer default values of
-    //properties instead of drawingPrimaryOptions of the drawingGroup.  Looks
-    //like in case of PPT the drawingGroup container has to be ignored
-#ifndef USE_OFFICEARTDGG_CONTAINER
-    const OfficeArtDggContainer m_drawingGroup_empty;
-#endif
 
 public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
@@ -484,7 +481,7 @@ PptToOdp::DrawClient::getOfficeArtDggContainer()
 #ifdef USE_OFFICEARTDGG_CONTAINER
     return &ppttoodp->p->documentContainer->drawingGroup.OfficeArtDgg;
 #else
-    return &m_drawingGroup_empty;
+    return 0;
 #endif
 }
 
@@ -799,8 +796,8 @@ void PptToOdp::defineDefaultDrawingPageStyle(KoGenStyles& styles)
     style.addProperty("draw:fill", "none", dpt);
     style.setDefaultStyle(true);
     const MSO::SlideHeadersFootersContainer* hf = getSlideHF();
-    const OfficeArtDggContainer& drawingGroup
-            = p->documentContainer->drawingGroup.OfficeArtDgg;
+    const OfficeArtDggContainer* drawingGroup
+        = &p->documentContainer->drawingGroup.OfficeArtDgg;
     DrawStyle ds(drawingGroup);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
@@ -861,8 +858,8 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& st
     style.addProperty("draw:auto-grow-height", false, gt);
     style.addProperty("draw:stroke", "solid", gt);
     style.addProperty("draw:fill-color", "#ffffff", gt);
-    const OfficeArtDggContainer& drawingGroup
-        = p->documentContainer->drawingGroup.OfficeArtDgg;
+    const OfficeArtDggContainer* drawingGroup
+        = &p->documentContainer->drawingGroup.OfficeArtDgg;
     const DrawStyle ds(drawingGroup);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
@@ -1505,7 +1502,6 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 {
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
-    const OfficeArtDggContainer drawingGroup_empty;
 
     // define for master for use in <master-page style:name="...">
     foreach (const MSO::MasterOrSlideContainer* m, p->masters) {
@@ -1524,11 +1520,9 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
                 hf = &mm->perSlideHeadersFootersContainer->hfAtom;
             }
         }
-        //NOTE: use default values of properties, looks like in case of PPT the
-        //drawingGroup container has to be ignored
-//         const OfficeArtDggContainer& drawingGroup
-//                 = p->documentContainer->drawingGroup.OfficeArtDgg;
-        DrawStyle ds(drawingGroup_empty, scp);
+        //NOTE: Use default values of properties, looks like in case of PPT the
+        //OfficeArtDggContainer has to be ignored
+        DrawStyle ds(0, scp);
         drawclient.setDrawClientData(m, 0, 0, 0);
         defineDrawingPageStyle(dp, ds, styles, odrawtoodf, hf);
         drawingPageStyles[m] = styles.insert(dp, "Mdp");
@@ -1543,8 +1537,8 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         }
         KoGenStyle dp(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
         dp.setAutoStyleInStylesDotXml(true);
-        const OfficeArtDggContainer& drawingGroup
-                = p->documentContainer->drawingGroup.OfficeArtDgg;
+        const OfficeArtDggContainer* drawingGroup
+                = &p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup,
                      p->notesMaster->drawing.OfficeArtDg.shape.data());
         drawclient.setDrawClientData(0, 0, p->notesMaster, 0);
@@ -1589,13 +1583,13 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
                 hf.formatId = -1;
             }
 	}
-//         const OfficeArtDggContainer& drawingGroup
-//                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         const OfficeArtSpContainer* masterSlideShape
                 = getMasterShape(m);
         const OfficeArtSpContainer* slideShape
                 = sc->drawing.OfficeArtDg.shape.data();
-        DrawStyle ds(drawingGroup_empty, masterSlideShape, slideShape);
+        //NOTE: Use default values of properties, looks like in case of PPT the
+        //OfficeArtDggContainer has to be ignored
+        DrawStyle ds(0, masterSlideShape, slideShape);
         drawclient.setDrawClientData(m, sc, 0, 0);
         defineDrawingPageStyle(dp, ds, styles, odrawtoodf, &hf, &sc->slideAtom.slideFlags);
         drawingPageStyles[sc] = styles.insert(dp, "dp");
@@ -1613,8 +1607,8 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         // TODO: derive from notes master slide style
         KoGenStyle dp(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
         dp.setAutoStyleInStylesDotXml(false);
-        const OfficeArtDggContainer& drawingGroup
-                = p->documentContainer->drawingGroup.OfficeArtDgg;
+        const OfficeArtDggContainer* drawingGroup
+                = &p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup, nc->drawing.OfficeArtDg.shape.data());
         drawclient.setDrawClientData(0, 0, p->notesMaster, nc);
         defineDrawingPageStyle(dp, ds, styles, odrawtoodf, hf, &nc->notesAtom.slideFlags);
@@ -1784,9 +1778,14 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoXmlWriter writer(&buffer);
         Writer out(writer, styles, true);
 
+        //NOTE: The shape seems to provide boolean properties which are missing
+        //for shapes contained in spgr (MS Office 2003 specific).  There were
+        //problems with shadows on MS Office 2007 outputs, so it's disabled at
+        //the moment and all regressions have to be fixed.
         if (drawing->OfficeArtDg.groupShape) {
             const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
-            const OfficeArtSpContainer* shape = (drawing->OfficeArtDg.shape).data();
+            const OfficeArtSpContainer* shape = 0;
+//             const OfficeArtSpContainer* shape = (drawing->OfficeArtDg.shape).data();
             drawclient.setDrawClientData(m, 0, 0, 0, shape);
             odrawtoodf.processGroupShape(spgr, out);
         }
@@ -2458,6 +2457,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
+    //NOTE: The shape seems to provide boolean properties which are missing for
+    //shapes contained in spgr (MS Office 2003 specific).
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();

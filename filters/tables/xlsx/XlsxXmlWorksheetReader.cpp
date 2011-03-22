@@ -1295,6 +1295,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
     }
 
     m_value = text().toString();
+    m_value.replace('&', "&amp;");
+    m_value.replace('<', "&lt;");
+    m_value.replace('>', "&gt;");
+    m_value.replace('\\', "&apos;");
+    m_value.replace('"', "&quot;");
 
     readNext();
     READ_EPILOGUE

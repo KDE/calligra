@@ -59,6 +59,9 @@ private slots:
     void testIMCONJUGATE();
     void testIMCOS();
     void testIMCOSH();
+    void testIMCOT();
+    void testIMCSC();
+    void testIMCSCH();
     void testIMDIV();
     void testIMEXP();
     void testIMLN();
@@ -67,6 +70,8 @@ private slots:
     void testIMPOWER();
     void testIMPRODUCT();
     void testIMREAL();
+    void testIMSEC();
+    void testIMSECH();
     void testIMSIN();
     void testIMSINH();
     void testIMSQRT();

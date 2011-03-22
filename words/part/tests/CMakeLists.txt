@@ -47,12 +47,6 @@ target_link_libraries(TestFrameLayout wordsprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
-kde4_add_unit_test(TestDocumentLayout TESTNAME words-part-frame-TestDocumentLayout  ${TestDocumentLayout_test_SRCS})
-target_link_libraries(TestDocumentLayout wordsprivate ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(TestTextFrameSorting_test_SRCS TestTextFrameSorting.cpp)
 kde4_add_unit_test(TestTextFrameSorting TESTNAME words-part-frame-TestTextFrameSorting  ${TestTextFrameSorting_test_SRCS})
 target_link_libraries(TestTextFrameSorting wordsprivate ${QT_QTTEST_LIBRARY})

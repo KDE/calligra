@@ -925,6 +925,18 @@ void TestStatisticalFunctions::testPERMUT()
     CHECK_EVAL("PERMUT(4;-2)",    Value::errorNUM());  //
 }
 
+void TestStatisticalFunctions::testPERMUTATIONA()
+{
+    // ODF-tests
+    CHECK_EVAL("PERMUTATIONA(64;2)",    Value(4096));   //
+    CHECK_EVAL("PERMUTATIONA(6;3)",     Value(216));    //
+
+    // my tests
+    CHECK_EVAL("PERMUTATIONA(0;0)",     Value(1));           //
+    CHECK_EVAL("PERMUTATIONA(-4;2)",    Value::errorNUM());  //
+    CHECK_EVAL("PERMUTATIONA(4;-2)",    Value::errorNUM());  //
+}
+
 void TestStatisticalFunctions::testPHI()
 {
     //  Cell | Value

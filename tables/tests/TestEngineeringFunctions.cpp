@@ -105,7 +105,7 @@ void TestEngineeringFunctions::testCOMPLEX()
 {
     CHECK_EVAL("=IMREAL(COMPLEX(1;-3))", 1.0);
     CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2))", -2.0);
-//     CHECK_EVAL( "=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0 );
+    CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0 );
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOMPLEX(1;-3))", 1.0);
 }
 
@@ -237,6 +237,24 @@ void TestEngineeringFunctions::testIMCOSH()
     CHECK_EVAL("=IMAGINARY( IMCOSH(COMPLEX(1;1)) )", 0.988897705762865);
 }
 
+void TestEngineeringFunctions::testIMCOT()
+{
+    CHECK_EVAL("=IMREAL   ( IMCOT(COMPLEX(1;1)) )",  0.2176215618544027);
+    CHECK_EVAL("=IMAGINARY( IMCOT(COMPLEX(1;1)) )", -0.8680141428959249);
+}
+
+void TestEngineeringFunctions::testIMCSC()
+{
+    CHECK_EVAL("=IMREAL   ( IMCSC(COMPLEX(1;1)) )",  0.6215180171704284);
+    CHECK_EVAL("=IMAGINARY( IMCSC(COMPLEX(1;1)) )", -0.3039310016284264);
+}
+
+void TestEngineeringFunctions::testIMCSCH()
+{
+    CHECK_EVAL("=IMREAL   ( IMCSCH(COMPLEX(1;1)) )",  0.3039310016284264);
+    CHECK_EVAL("=IMAGINARY( IMCSCH(COMPLEX(1;1)) )", -0.6215180171704284);
+}
+
 void TestEngineeringFunctions::testIMDIV()
 {
     CHECK_EVAL("=IMREAL( IMDIV(COMPLEX(5;3); COMPLEX(1;-1)) )", 1.0);
@@ -290,6 +308,18 @@ void TestEngineeringFunctions::testIMREAL()
 {
     CHECK_EVAL("=IMREAL(COMPLEX(4;-3))", 4.0);
     CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETIMREAL(COMPLEX(4;-3))", 4.0);
+}
+
+void TestEngineeringFunctions::testIMSEC()
+{
+    CHECK_EVAL("=IMREAL   ( IMSEC(COMPLEX(1;1)) )",  0.4983370305551868);
+    CHECK_EVAL("=IMAGINARY( IMSEC(COMPLEX(1;1)) )",  0.5910838417210450);
+}
+
+void TestEngineeringFunctions::testIMSECH()
+{
+    CHECK_EVAL("=IMREAL   ( IMSECH(COMPLEX(1;1)) )",  0.4983370305551868);
+    CHECK_EVAL("=IMAGINARY( IMSECH(COMPLEX(1;1)) )", -0.5910838417210450);
 }
 
 void TestEngineeringFunctions::testIMSIN()

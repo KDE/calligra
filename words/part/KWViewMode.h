@@ -51,7 +51,7 @@ class KoCanvasBase;
  * This class provides a layer on top of the KoViewConverter and KWord should not use that
  * interface directly.
  */
-class KWORD_TEST_EXPORT KWViewMode : public QObject
+class KWORD_EXPORT KWViewMode : public QObject
 {
     Q_OBJECT
 public:
