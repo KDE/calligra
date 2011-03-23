@@ -4779,7 +4779,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - tcW (Preferred Table Cell Width) §17.4.72
  - textDirection (Table Cell Text Flow Direction) §17.4.73
  - vAlign (Table Cell Vertical Alignment) §17.4.84
- - vMerge (Vertically Merged Cell) §17.4.85
+ - [done] vMerge (Vertically Merged Cell) §17.4.85
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
@@ -4796,9 +4796,68 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(tcBorders)
             ELSE_TRY_READ_IF(tcMar)
+            ELSE_TRY_READ_IF(vMerge)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    // Setting cell covers in case of cell span in horizontal
+    KoCell* const cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+    int columnSpan = cell->columnSpan();
+    if (columnSpan > 1) {
+        int columnIndex = 1;
+        while (columnIndex < columnSpan) {
+            ++m_currentTableColumnNumber;
+            KoCell* coveredCell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+            coveredCell->setCovered(true);
+            ++columnIndex;
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL vMerge
+//! vMerge Handler (vertically merged cell)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_vMerge()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) { // Not empty value marks the start of the vertical merging
+        KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setRowSpan(1);
+    } else {
+        // In this case, it should continue from which ever cell above was the starter
+        KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setCovered(true);
+        int previousRow = m_currentTableRowNumber - 1;
+        while (previousRow > -1) {
+            KoCell* previousRowCell = m_table->cellAt(previousRow, m_currentTableColumnNumber);
+            if (!previousRowCell->isCovered()) {
+                previousRowCell->setRowSpan(previousRowCell->rowSpan() + 1);
+                // This current cell should be replaced with <table:covered-table-cell>
+                cell->setCovered(true);
+                break;
+            }
+            --previousRow;
+        }
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 
