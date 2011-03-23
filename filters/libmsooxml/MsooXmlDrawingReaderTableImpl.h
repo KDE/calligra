@@ -260,6 +260,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
         cell->setRowSpan(rowSpan.toInt());
     }
 
+    TRY_READ_ATTR_WITHOUT_NS(vMerge)
+    TRY_READ_ATTR_WITHOUT_NS(hMerge)
+
+    if (vMerge == "1" || hMerge == "1") {
+        cell->setCovered(true);
+    }
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
