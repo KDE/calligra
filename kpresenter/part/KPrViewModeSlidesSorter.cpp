@@ -45,6 +45,9 @@
 #include <KoPAView.h>
 #include <KPrView.h>
 #include <KoPAPageMoveCommand.h>
+#include <KoPAPageDeleteCommand.h>
+#include <KoPAOdfPageSaveHelper.h>
+#include <KoDrag.h>
 
 #include <klocale.h>
 #include <KDebug>
@@ -146,14 +149,6 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::keyPressEvent(QKeyEvent *event)
                 event->ignore();
                 return;
         }
-    }
-}
-
-void KPrViewModeSlidesSorter::deleteSlide()
-{
-    KoPAView *view = dynamic_cast<KoPAView *>(m_view);
-    if (view) {
-        view->deletePage();
     }
 }
 
@@ -310,8 +305,23 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
     ev->accept();
 
     int newIndex;
-    QByteArray ssData = ev->mimeData()->data("application/x-koffice-sliderssorter");
-    int oldIndex = ssData.toInt();
+    QByteArray encoded = ev->mimeData()->data("application/x-koffice-sliderssorter");
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QList<KoPAPageBase *> slides;
+
+    // decode the data
+    while (! stream.atEnd()) {
+        QVariant v;
+        stream >> v;
+        KoPAPageBase *page = m_viewModeSlidesSorter->m_view->kopaDocument()->pageByIndex(v.toInt (),false);
+        if (page) {
+            slides.append(page);
+        }
+    }
+
+    if (slides.empty ()) {
+        return;
+    }
 
     QModelIndex itemNew = indexAt(ev->pos());
     if (itemNew.row() >= 0)
@@ -320,22 +330,16 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
         newIndex = itemNew.row();
     } else {
         // In case you point the end (no slides under the pointer)
-        newIndex = m_viewModeSlidesSorter->pageCount() - 1;
-        itemNew = currentIndex().model()->index(newIndex,0);
+        newIndex = m_viewModeSlidesSorter->pageCount();
     }
 
-    if (oldIndex != newIndex) {
-        if (oldIndex > newIndex) {
-            m_viewModeSlidesSorter->movePage(oldIndex, newIndex - 1);
-        } else {
-            m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
-        }
+     m_viewModeSlidesSorter->movePages(slides, newIndex - 1);
 
-        // This selection helps the user
-        clearSelection();
-        setCurrentIndex(itemNew);
-        m_viewModeSlidesSorter->updateDocumentDock();
-    }
+    // This selection helps the user
+    itemNew = currentIndex().model()->index(m_viewModeSlidesSorter->m_view->kopaDocument()->pageIndex (slides.first()), 0);
+    clearSelection();
+    setCurrentIndex(itemNew);
+    m_viewModeSlidesSorter->updateDocumentDock();
 }
 
 int KPrViewModeSlidesSorter::KPrSlidesSorter::pageBefore(QPoint point)
@@ -357,27 +361,25 @@ void KPrViewModeSlidesSorter::populate()
 {
     m_documentModel->setDocument(m_view->kopaDocument());
     m_slidesSorter->setModel(m_documentModel);
+
     m_slidesSorter->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_slidesSorter->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_slidesSorter->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
     m_slidesSorter->setDragDropMode(QAbstractItemView::InternalMove);
     QModelIndex item = m_documentModel->index(0,0);
     setItemSize(m_slidesSorter->visualRect(item));
 }
 
-void KPrViewModeSlidesSorter::movePage(int pageNumber, int pageAfterNumber)
+void KPrViewModeSlidesSorter::movePages(const QList<KoPAPageBase *> &slides, int pageAfterNumber)
 {
-    KoPAPageBase * page = 0;
     KoPAPageBase * pageAfter = 0;
 
-    if (pageNumber >= 0) {
-        page = m_view->kopaDocument()->pageByIndex(pageNumber,false);
-    }
     if (pageAfterNumber >= 0) {
         pageAfter = m_view->kopaDocument()->pageByIndex(pageAfterNumber,false);
     }
 
-    if (page) {
-        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_view->kopaDocument(), page, pageAfter);
+    if (!slides.empty ()) {
+        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_view->kopaDocument(), slides, pageAfter);
         m_view->kopaDocument()->addCommand(command);
     }
 }
@@ -443,8 +445,42 @@ void KPrViewModeSlidesSorter::itemClicked(const QModelIndex index)
 
 void KPrViewModeSlidesSorter::KPrSlidesSorter::dragEnterEvent(QDragEnterEvent *event)
 {
-    event->setDropAction(Qt::MoveAction);
-    event->accept();
+    if (event->mimeData()->hasFormat("application/x-koffice-sliderssorter")) {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+}
+
+QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
+{
+    QList<KoPAPageBase *> slides;
+
+    QModelIndexList selectedItems = m_slidesSorter->selectionModel()->selectedIndexes();
+    if (selectedItems.count() == 0) {
+        return slides;
+    }
+
+    foreach (const QModelIndex & index, selectedItems) {
+        KoPAPageBase * page = m_view->kopaDocument()->pageByIndex(index.row (), false);
+        if (page) {
+            slides.append(page);
+        }
+    }
+
+    return slides;
+}
+
+void KPrViewModeSlidesSorter::deleteSlide()
+{
+    // create a list with all selected slides
+    QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();
+
+    if (!selectedSlides.empty() && m_view->kopaDocument()->pages().count() > selectedSlides.count()) {
+         QUndoCommand *cmd = new KoPAPageDeleteCommand(m_view->kopaDocument(), selectedSlides);
+        if (cmd) {
+            m_view->kopaDocument()->addCommand(cmd);
+        }
+    }
 }
 
 void KPrViewModeSlidesSorter::addSlide()
@@ -468,9 +504,15 @@ void KPrViewModeSlidesSorter::editCut()
 
 void KPrViewModeSlidesSorter::editCopy()
 {
-    KoPAView *view = dynamic_cast<KoPAView *>(m_view);
-    if (view) {
-        view->copyPage();
+    // separate selected layers and selected shapes
+    QList<KoPAPageBase*> slides = extractSelectedSlides();;
+
+    if (!slides.empty()) {
+        // Copy Pages
+        KoPAOdfPageSaveHelper saveHelper(m_view->kopaDocument (), slides);
+        KoDrag drag;
+        drag.setOdf(KoOdf::mimeType(m_view->kopaDocument()->documentType()), saveHelper);
+        drag.addToClipboard();
     }
 }
 

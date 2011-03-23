@@ -94,11 +94,30 @@ QStringList KPrSlidesSorterDocumentModel::mimeTypes() const
 
 QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexes) const
 {
-    QModelIndex page = indexes.first();
-    QByteArray ssData = QVariant(page.row()).toByteArray();
-    QMimeData *mimeData = new QMimeData;
-    mimeData->setData("application/x-koffice-sliderssorter", ssData);
-    return mimeData;
+    // check if there is data to encode
+    if (! indexes.count()) {
+        return 0;
+    }
+
+    // check if we support a format
+    QStringList types = mimeTypes();
+    if (types.isEmpty()) {
+        return 0;
+    }
+
+    QMimeData *data = new QMimeData();
+    QString format = types[0];
+    QByteArray encoded;
+    QDataStream stream(&encoded, QIODevice::WriteOnly);
+
+    // encode the data
+    QModelIndexList::ConstIterator it = indexes.begin();
+    for (; it != indexes.end(); ++it) {
+        stream << QVariant::fromValue((*it).row());
+    }
+
+    data->setData(format, encoded);
+    return data;
 }
 
 Qt::DropActions KPrSlidesSorterDocumentModel::supportedDropActions() const
