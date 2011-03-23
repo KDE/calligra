@@ -45,6 +45,7 @@ public:
 
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
+    void populate();
 
 private:
     KPrOutlineEditor *m_outlineEditor;
