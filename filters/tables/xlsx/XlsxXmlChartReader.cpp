@@ -2008,7 +2008,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart_Ser()
         }
     }
 
-    // set data ranges and write data to internal table
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempBubbleSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempBubbleSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
+    // set data ranges and write data to internal table    
     m_currentSeries->m_labelCell = tempBubbleSeriesData->m_tx.writeRefToInternalTable(this);
 
     m_currentSeries->m_countYValues = tempBubbleSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;
@@ -2093,6 +2097,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
         }
     }
 
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempScatterSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempScatterSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
     // set data ranges and write data to internal table
     m_currentSeries->m_labelCell = tempScatterSeriesData->m_tx.writeRefToInternalTable(this);
 
@@ -2170,6 +2178,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempBarSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempBarSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempBarSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
@@ -2237,6 +2249,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempAreaSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempAreaSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempAreaSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
@@ -2301,6 +2317,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_radarChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempRadarSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempRadarSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempRadarSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
@@ -2392,6 +2412,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
 //             }
         }
     }
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempLineSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempLineSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempLineSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
