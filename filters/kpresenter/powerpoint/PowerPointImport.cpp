@@ -45,8 +45,13 @@ KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, con
     if (to != KoOdf::mimeType(KoOdf::Presentation))
         return KoFilter::NotImplemented;
 
-    PptToOdp ppttoodp;
+    PptToOdp ppttoodp(this, &PowerPointImport::setProgress);
     return ppttoodp.convert(m_chain->inputFile(), m_chain->outputFile(),
                             KoStore::Zip);
+}
+
+void PowerPointImport::setProgress(const int percent)
+{
+    emit sigProgress(percent);
 }
 #include "PowerPointImport.moc"
