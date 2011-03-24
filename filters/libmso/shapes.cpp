@@ -256,8 +256,6 @@ qint16
 ODrawToOdf::normalizeRotation(qreal rotation)
 {
     qint16 angle = ((qint16)rotation) % 360;
-
-    //MSOffice 2003/2007 save different values for the rotation property
     if (angle < 0) {
         angle = angle + 360;
     }
@@ -282,9 +280,6 @@ ODrawToOdf::getRect(const OfficeArtSpContainer &o)
 QRectF
 ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &rect)
 {
-    // OfficeArtClientAnchorData structure might contain a 90 degrees rotated
-    // rectangle.  It depends on the value of the rotation property, but the
-    // intervals differ for each shape type.
     bool transform_anchor = false;
     qint16 nrotation = normalizeRotation(rotation);
 
@@ -1830,15 +1825,15 @@ void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &ou
 // Position the shape into the slide or into a group shape
 void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 {
-    // TODO: the group shape might be also rotated and flipped
-
     const OfficeArtDggContainer* dgg = 0;
     const OfficeArtSpContainer* master = 0;
     const DrawStyle ds(dgg, master, &o);
+    const qreal rotation = toQReal(ds.rotation());
 
+    //transform the rectangle into the coordinate system of the group shape
     QRectF rect = getRect(o);
-    qreal rotation = toQReal(ds.rotation());
-    quint16 nrotation = normalizeRotation(rotation);
+    QRectF trect (out.hOffset(rect.x()), out.vOffset(rect.y()),
+                  out.hLength(rect.width()), out.vLength(rect.height()));
 
     //draw:caption-id
     //draw:class-names
@@ -1850,22 +1845,25 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //draw:style-name
     //draw:text-style-name
     //draw:transform
-    if (!o.shapeProp.fChild && nrotation) {
+    if (rotation) {
 
         const quint16 shapeType = o.shapeProp.rh.recInstance;
-        rect = processRect(shapeType, rotation, rect);
+        const quint16 nrotation = normalizeRotation(rotation);
+        const qreal angle = (nrotation / (qreal)180) * M_PI;
+
+        trect = processRect(shapeType, rotation, trect);
 
         //translate requires the top right coordinate of the rotated rectangle
         static const QString transformString("rotate(%1) translate(%2 %3)");
-        const qreal height = out.vLength(rect.height());
-        const qreal width = out.hLength(rect.width());
-        const qreal xPos = out.hOffset(rect.x());
-        const qreal yPos = out.vOffset(rect.y());
-        const qreal angle = (nrotation / (qreal)180) * M_PI;
 
-        //counter-clockwise rotation, coord. system origin in top left corner
-        qreal newX = xPos + width/2 - (cos(angle)*width/2 - sin(angle)*height/2);
-        qreal newY = yPos + height/2 - (sin(angle)*width/2 + cos(angle)*height/2);
+        const qreal height = trect.height();
+        const qreal width = trect.width();
+        const qreal x = trect.x();
+        const qreal y = trect.y();
+
+        //clockwise rotation
+        qreal newX = x + width/2 - (cos(angle)*width/2 + sin(angle)*height/2);
+        qreal newY = y + height/2 - (-sin(angle)*width/2 + cos(angle)*height/2);
 
         out.xml.addAttribute("draw:transform",
                              transformString.arg(angle).arg(client->formatPos(newX)).arg(client->formatPos(newY)));
@@ -1873,16 +1871,16 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //svg:x
     //svg:y
     else {
-        out.xml.addAttribute("svg:x", client->formatPos(out.hOffset(rect.x())));
-        out.xml.addAttribute("svg:y", client->formatPos(out.vOffset(rect.y())));
+        out.xml.addAttribute("svg:x", client->formatPos(trect.x()));
+        out.xml.addAttribute("svg:y", client->formatPos(trect.y()));
     }
     //draw:z-index
     //presentation:class-names
     //presentation:style-name
     //svg:height
-    out.xml.addAttribute("svg:height", client->formatPos(out.vLength(rect.height())));
+    out.xml.addAttribute("svg:height", client->formatPos(trect.height()));
     //svg:width
-    out.xml.addAttribute("svg:width", client->formatPos(out.hLength(rect.width())));
+    out.xml.addAttribute("svg:width", client->formatPos(trect.width()));
     //table:end-cell-address
     //table:end-x
     //table:end-y

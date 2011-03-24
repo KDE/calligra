@@ -106,10 +106,30 @@ public:
     };
 private:
     Client* const client;
+
+    /**
+     * Both OfficeArtClientAnchorData and OfficeArtChildAnchor might contain a
+     * 90 degrees rotated rectangle.  It depends on the value of the rotation
+     * property and the intervals differ for each shape type.
+     *
+     * @param shapeType
+     * @param rotation [degrees] - normalization will be applied
+     * @param rect the group, client or child rectangle
+     * @return copy of the rectangle free of any transformations
+     */
+    QRectF processRect(const quint16 shapeType, const qreal rotation, QRectF &rect);
+
+    /**
+     * MSOffice 2003/2007 use different values for the rotation property so we
+     * have to normalize before processing.
+     *
+     * @param rotation [degrees]
+     * @return rotation in <0, 360>
+     */
+    qint16 normalizeRotation(qreal rotation);
+
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
-    QRectF processRect(const quint16 shapeType, const qreal rotation, QRectF &rect);
-    qint16 normalizeRotation(qreal rotation);
     void processEllipse(const MSO::OfficeArtSpContainer& fsp, Writer& out);
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -158,8 +178,9 @@ private:
 
     void processModifiers(const MSO::OfficeArtSpContainer& o, Writer& out, const QList<int>& defaults = QList<int>());
     /**
-    * @brief set the width, height rotation and starting point for the given container
-    */
+     * @brief set the width, height rotation and starting point for the given
+     * container
+     */
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     QString path2svg(const QPainterPath &path);
@@ -181,8 +202,6 @@ public:
      * @return final color
      */
     QColor processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds);
-
-
 };
 
 /**
