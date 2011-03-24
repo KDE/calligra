@@ -266,6 +266,7 @@ KoDocumentSectionModel::PropertyList KarbonLayerModel::properties(KoShape* shape
     l << Property(i18nc("Lock state of the shape", "Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     l << Property(i18nc("The z-index of the shape", "zIndex"), QString("%1").arg(shape->zIndex()));
     l << Property(i18nc("The opacity of the shape", "Opacity"), QString("%1").arg(1.0 - shape->transparency()));
+    l << Property(i18nc("Clipped state of the shape", "Clipped"), shape->clipPath() ? i18n("yes") : i18n("no"));
     return l;
 }
 

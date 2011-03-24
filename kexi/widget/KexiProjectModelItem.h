@@ -74,18 +74,18 @@ public:
     KexiProjectModelItem *parent();
     void removeChild(const KexiPart::Item &item);
 
-    QIcon icon();
+    QIcon icon() const;
 
-    //!Return the flags for the item, ie, add Editable for items, but not groups
-    Qt::ItemFlags flags();
+    //! @return the flags for the item, ie, add Editable for items, but not groups
+    Qt::ItemFlags flags() const;
     
-    void debugPrint();
+    void debugPrint() const;
 
     KexiProjectModelItem* modelItemFromItem(const KexiPart::Item &item) const;
     KexiProjectModelItem* modelItemFromName(const QString& name) const;
 
     void sortChildren();
-    void setDirty(bool);
+    void setDirty(bool set);
 
  private:
     QList<KexiProjectModelItem*> m_childItems;

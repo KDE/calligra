@@ -938,7 +938,6 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     if (!item)
         return;
     kDebug() << item->className() << item->widget()->objectName();
-    bool savedAlignment = false;
 #ifndef KEXI_NO_FORM_SPRING_ELEMENT
     // we let Spring class handle saving itself
     if (item->className() == "Spring") {
@@ -984,7 +983,11 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     else // Normal widgets
         tclass.setAttribute("class", lib->savingName(item->widget()->metaObject()->className()));
 
+    // We save every property in the modifProp list of the ObjectTreeItem
+    QHash<QString, QVariant> hash(*(item->modifiedProperties()));
+    QStringList names(hash.keys());
     savePropertyValue(tclass, domDoc, "objectName", item->widget()->objectName(), item->widget());
+    names.removeOne("objectName");
 
     // Important: save dataSource property FIRST before properties like "alignment"
     // - needed when subproperties are defined after subwidget creation, and subwidget is created after setting "dataSource"
@@ -1004,27 +1007,47 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     else if (parent.tagName() == "widget" || parent.tagName() == "UI")
         savePropertyValue(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
 
-    // Save the buddy widget for a label
-    if (item->widget()->inherits("QLabel") && ((QLabel*)item->widget())->buddy())
-        savePropertyElement(
-            tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->objectName());
+    names.removeOne("geometry");
+    names.removeOne("layout");
 
-    // We save every property in the modifProp list of the ObjectTreeItem
-    QHash<QString, QVariant> hash(*(item->modifiedProperties()));
-    foreach (const QString& name, hash.keys()) {
-        if (name == "hAlign" || name == "vAlign" || name == "wordbreak" || name == "alignment") {
-            if (!savedAlignment) { // not to save it twice
-                savePropertyValue(
-                    tclass, domDoc, "alignment", 
-                    item->widget()->property("alignment"), item->widget());
-                savedAlignment = true;
-            }
-        } else if (name == "objectName" || name == "geometry" || name == "layout") {
-            // these have already been saved
-        } else {
-            savePropertyValue(tclass, domDoc, name.toLatin1(), item->widget()->property(name.toLatin1()),
-                              item->widget(), lib);
+    // Save the buddy widget for a label
+    if (   dynamic_cast<QLabel*>(item->widget())
+        && dynamic_cast<QLabel*>(item->widget())->buddy())
+    {
+        savePropertyElement(
+            tclass, domDoc, "property", "buddy",
+            dynamic_cast<QLabel*>(item->widget())->buddy()->objectName());
+    }
+    
+    if (names.contains("paletteBackgroundColor")) {
+        savePropertyElement(
+            tclass, domDoc, "property", "paletteBackgroundColor",
+            item->widget()->palette().color(item->widget()->backgroundRole()));
+        names.removeOne("paletteBackgroundColor");
+    }
+    if (names.contains("paletteForegroundColor")) {
+        savePropertyElement(
+            tclass, domDoc, "property", "paletteForegroundColor",
+            item->widget()->palette().color(item->widget()->foregroundRole()));
+        names.removeOne("paletteForegroundColor");
+    }
+
+    QStringList alignProperties;
+    alignProperties << "hAlign" << "vAlign" << "wordbreak" << "alignment";
+    foreach (const QString& name, alignProperties) {
+        if (names.contains(name)) {
+            names.removeOne(name);
+            savePropertyValue(
+                tclass, domDoc, "alignment", 
+                item->widget()->property("alignment"), item->widget());
+            break;
         }
+    }
+
+    foreach (const QString& name, names) {
+        savePropertyValue(tclass, domDoc, name.toLatin1(),
+                          item->widget()->property(name.toLatin1()),
+                          item->widget(), lib);
     }
     hash.clear();
 
@@ -1394,8 +1417,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
             }
 
             // We cannot assign the buddy now as the buddy widget may not be created yet
-            if (name == "buddy")
+            if (name == "buddy") {
                 m_buddies->insert(readPropertyValue(node.firstChild(), w, name).toString(), (QLabel*)w);
+            }
             else if (    (eltag == "grid" || eltag == "hbox" || eltag == "vbox")
                       && item->container()
                       && item->container()->layout() )
@@ -1426,8 +1450,19 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 #endif
                 }
             }
-            // If the object doesn't have this property, we let the Factory handle it (maybe a special property)
-            else if (!isQt3NameProperty && -1 == subwidget->metaObject()->indexOfProperty(name.toLatin1())) {
+            else if (name == "paletteBackgroundColor" || name == "paletteForegroundColor") {
+                QPalette widgetPalette(w->palette());
+                QVariant val(readPropertyValue(node.firstChild(), w, name));
+                if (!val.isNull())
+                    widgetPalette.setColor(
+                        name == "paletteBackgroundColor" ? w->backgroundRole() : w->foregroundRole(),
+                        val.value<QColor>());
+                w->setPalette(widgetPalette);
+                item->addModifiedProperty(name.toLatin1(), val);
+            }
+            else if (!isQt3NameProperty && -1 == subwidget->metaObject()->indexOfProperty(name.toLatin1()))
+            {
+                // If the object doesn't have this property, we let the Factory handle it (maybe a special property)
                 if (w->metaObject()->className() == QString::fromLatin1("CustomWidget"))
                     item->storeUnknownProperty(node);
                 else {

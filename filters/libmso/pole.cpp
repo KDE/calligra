@@ -37,7 +37,9 @@
 #include <string.h>
 
 // enable to activate debugging output
-// #define POLE_DEBUG
+//#define POLE_DEBUG
+
+#define OLE_HEADER_SIZE 0x200
 
 namespace POLE
 {
@@ -58,7 +60,7 @@ public:
     unsigned long bb_blocks[109];
 
     Header();
-    bool valid();
+    bool valid(const unsigned max_block) const;
     void load(const unsigned char* buffer);
     void save(unsigned char* buffer);
     void debug();
@@ -73,6 +75,7 @@ public:
     static const unsigned MetaBat;
     unsigned blockSize;
     AllocTable();
+    bool valid(const unsigned long filesize, const unsigned shift, const bool isFat = true) const;
     void clear();
     unsigned long count();
     void resize(unsigned long newsize);
@@ -263,7 +266,7 @@ Header::Header()
         bb_blocks[i] = AllocTable::Avail;
 }
 
-bool Header::valid()
+bool Header::valid(const unsigned max_block) const
 {
     if (threshold != 4096) return false;
     if (num_bat == 0) return false;
@@ -272,6 +275,20 @@ bool Header::valid()
     if (s_shift > b_shift) return false;
     if (b_shift <= 6) return false;
     if (b_shift > 12) return false;
+
+    // additional heuristics to check the header
+    if (num_bat > max_block) return false;
+    if (num_sbat > max_block) return false;
+
+    const unsigned ENDOFCHAIN = 0xfffffffe;
+    const unsigned FREESECT = 0xffffffff;
+
+    if (num_sbat == 0 &&
+        sbat_start != ENDOFCHAIN &&
+        sbat_start != FREESECT)
+    {
+        std::cerr << "There aren't any minifat sectors, but there are links to some!";
+    }
 
     return true;
 }
@@ -283,8 +300,8 @@ void Header::load(const unsigned char* buffer)
     num_bat      = readU32(buffer + 0x2c); // number of fat sectors
     dirent_start = readU32(buffer + 0x30); // first directory sector location
     threshold    = readU32(buffer + 0x38); // transaction signature number
-    sbat_start   = readU32(buffer + 0x3c); // mini stream cutoff size
-    num_sbat     = readU32(buffer + 0x40); // first mini fat sector location
+    sbat_start   = readU32(buffer + 0x3c); // first mini fat sector location
+    num_sbat     = readU32(buffer + 0x40); // mini stream cutoff size
     mbat_start   = readU32(buffer + 0x44); // first mini difat sector location
     num_mbat     = readU32(buffer + 0x48); // number of difat sectors
 
@@ -324,18 +341,18 @@ void Header::debug()
     std::cout << "b_shift " << b_shift << std::endl;
     std::cout << "s_shift " << s_shift << std::endl;
     std::cout << "num_bat " << num_bat << std::endl;
-    std::cout << "dirent_start " << dirent_start << std::endl;
-    std::cout << "threshold " << threshold << std::endl;
-    std::cout << "sbat_start " << sbat_start << std::endl;
-    std::cout << "num_sbat " << num_sbat << std::endl;
-    std::cout << "mbat_start " << mbat_start << std::endl;
-    std::cout << "num_mbat " << num_mbat << std::endl;
+    std::cout << "dirent_start " << std::hex << dirent_start << std::endl;
+    std::cout << "threshold " << std::dec << threshold << std::endl;
+    std::cout << "sbat_start " << std::hex << sbat_start << std::endl;
+    std::cout << "num_sbat " << std::dec << num_sbat << std::endl;
+    std::cout << "mbat_start " << std::hex << mbat_start << std::endl;
+    std::cout << "num_mbat " << std::dec << num_mbat << std::endl;
 
     unsigned s = (num_bat <= 109) ? num_bat : 109;
     std::cout << "bat blocks: ";
     for (unsigned i = 0; i < s; i++)
-        std::cout << bb_blocks[i] << " ";
-    std::cout << std::endl;
+        std::cout << std::hex << bb_blocks[i] << " ";
+    std::cout << std::dec << std::endl;
 }
 
 // =========== AllocTable ==========
@@ -350,6 +367,33 @@ AllocTable::AllocTable()
     blockSize = 4096;
     // initial size
     resize(128);
+}
+
+bool AllocTable::valid(const unsigned long filesize, const unsigned shift, const bool isFat) const
+{
+    unsigned long offset = 0;
+    for (unsigned long i = 0; i < data.size(); i++) {
+        switch (data[i]) {
+        case AllocTable::Avail:
+        case AllocTable::Eof:
+        case AllocTable::Bat:
+        case AllocTable::MetaBat:
+            break;
+        default:
+            offset = data[i] << shift;
+            if (isFat) {
+                offset += OLE_HEADER_SIZE;
+            }
+            if (offset > filesize) {
+#ifdef POLE_DEBUG
+                std::cout << "Invalid location of sector in the stream!" << std::endl;
+                std::cout << "offset:" << offset << " | filesize:" << filesize << std::endl;
+#endif
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 unsigned long AllocTable::count()
@@ -829,9 +873,9 @@ void StorageIO::load()
     filesize = file.tellg();
 
     // load header
-    buffer = new unsigned char[512];
+    buffer = new unsigned char[OLE_HEADER_SIZE];
     file.seekg(0);
-    file.read((char*)buffer, 512);
+    file.read((char*)buffer, OLE_HEADER_SIZE);
     if (!file.good()) {
         delete[] buffer;
         return;
@@ -845,14 +889,14 @@ void StorageIO::load()
         if (header->id[i] != pole_magic[i])
             return;
 
-    // sanity checks
-    result = Storage::BadOLE;
-    if (!header->valid()) return;
-    if (header->threshold != 4096) return;
-
     // important block size
     bbat->blockSize = 1 << header->b_shift;
     sbat->blockSize = 1 << header->s_shift;
+    unsigned max_block = (filesize - OLE_HEADER_SIZE) / bbat->blockSize;
+
+    // sanity checks
+    result = Storage::BadOLE;
+    if (!header->valid(max_block)) return;
 
     // find blocks allocated to store big bat
     // the first 109 blocks are in header, the rest in meta bat
@@ -891,6 +935,8 @@ void StorageIO::load()
         }
         bbat->load(buffer, buflen);
         delete[] buffer;
+
+        if (!bbat->valid(filesize, header->b_shift, true)) return;
     }
 
     // load small bat
@@ -906,6 +952,8 @@ void StorageIO::load()
         }
         sbat->load(buffer, buflen);
         delete[] buffer;
+
+        if (!sbat->valid(filesize, header->s_shift, false)) return;
     }
 
     // load directory tree

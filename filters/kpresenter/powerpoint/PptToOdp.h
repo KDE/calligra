@@ -41,6 +41,7 @@
 #include <QtGui/QColor>
 #include <QtCore/QDebug>
 
+class PowerPointImport;
 class ODrawToOdf;
 
 /**
@@ -58,8 +59,11 @@ private:
 public:
     /**
      * Constructs a converter.
+     *
+     * @param address of the filter instance
+     * @param address of the setProgress member f. of the filter instance
      */
-    PptToOdp();
+    PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgress)(const int));
     /**
      * Destroy the converter.
      */
@@ -637,6 +641,26 @@ private:
     }
 
     /**
+     * Pointer to the parser
+     */
+    const ParsedPresentation* p;
+
+    /**
+     * Pointer to the filter (KoFilter child)
+     */
+    PowerPointImport* m_filter;
+
+    /**
+     * Pointer to the progress indication f. defined in PowerPointImport.cpp
+     */
+    void (PowerPointImport::*m_setProgress)(const int);
+
+    /**
+     * Whether to propagate progress updates to the filter
+     */
+    bool m_progress_update;
+
+    /**
      * name for to use in the style:page-layout-name attribute for master
      * slides (style:master-page)
      */
@@ -646,8 +670,6 @@ private:
      * and handout slides (presentation:notes and style:handout-master)
      */
     QString notesPageLayoutName;
-
-    const ParsedPresentation* p;
 
     //Pointers to ppt specific information, try to avoid using those.
     const MSO::SlideListWithTextSubContainerOrAtom* m_currentSlideTexts;

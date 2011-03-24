@@ -365,9 +365,9 @@ void ProjectTester::oneTask()
         rcps.calculate( *m_project, sm, true/*nothread*/ );
     }
 
-    Debug::print( t, s );
+    Debug::print( m_project, s, true );
 
-    QCOMPARE( t->endTime(), t->constraintEndTime() );
+    QVERIFY( t->endTime() <= t->constraintEndTime() );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
 
     s = "Calculate forward, Task: FixedInterval --------------------------------------";

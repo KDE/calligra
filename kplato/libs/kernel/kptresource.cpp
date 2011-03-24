@@ -827,13 +827,12 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
 #ifndef PLAN_NLOGDEBUG
     if ( m_currentSchedule ) {
         QStringList lst; foreach ( Resource *r, required ) { lst << r->name(); }
-        m_currentSchedule->logDebug( QString( "Make appointments from %1 to %2, required: %3" ).arg( from.toString() ).arg( end.toString() ).arg( lst.join(",") ) );
+        m_currentSchedule->logDebug( QString( "Make appointments from %1 to %2 load=%4, required: %3" ).arg( from.toString() ).arg( end.toString() ).arg( lst.join(",") ).arg( load ) );
     }
 #endif
-    double l = load * .01;
     AppointmentIntervalList lst = workIntervals( from, end );
     foreach ( const AppointmentInterval &i, lst.map() ) {
-        m_currentSchedule->addAppointment( node, i.startTime(), i.endTime(), i.load() * l );
+        m_currentSchedule->addAppointment( node, i.startTime(), i.endTime(), load );
         foreach ( Resource *r, required ) {
             r->addAppointment( node, i.startTime(), i.endTime(), r->units() ); //FIXME: units may not be correct
         }
@@ -911,6 +910,11 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
     makeAppointment(node, time, end, load, required);
 }
 
+AppointmentIntervalList Resource::workIntervals( const DateTime &from, const DateTime &until ) const
+{
+    return workIntervals( from, until, 0 );
+}
+
 AppointmentIntervalList Resource::workIntervals( const DateTime &from, const DateTime &until, Schedule *sch ) const
 {
     Calendar *cal = calendar();
@@ -920,9 +924,8 @@ AppointmentIntervalList Resource::workIntervals( const DateTime &from, const Dat
     // update cache
     calendarIntervals( from, until );
     AppointmentIntervalList work = m_workinfocache.intervals.extractIntervals( from, until );
-    Schedule *s = sch ? sch : m_currentSchedule;
-    if ( s && ! s->allowOverbooking() ) {
-        foreach ( const Appointment *a, s->appointments( s->calculationMode() ) ) {
+    if ( sch && ! sch->allowOverbooking() ) {
+        foreach ( const Appointment *a, sch->appointments( sch->calculationMode() ) ) {
             work -= a->intervals();
         }
         foreach ( const Appointment *a, m_externalAppointments ) {
@@ -1070,7 +1073,7 @@ bool Resource::WorkInfoCache::load( const KoXmlElement &element, XMLLoaderObject
     if ( ! e.isNull() ) {
         intervals.loadXML( e, status );
     }
-    kDebug()<<*this;
+    //kDebug()<<*this;
     return true;
 }
 
@@ -1086,20 +1089,20 @@ void Resource::WorkInfoCache::save( QDomElement &element ) const
     intervals.saveXML( me );
 }
 
-Duration Resource::effort( const DateTime &start, const Duration &duration, bool backward, const QList<Resource*> &required ) const
+Duration Resource::effort( const DateTime& start, const Duration& duration, int units, bool backward, const QList< Resource* >& required ) const
 {
-    return effort( m_currentSchedule, start, duration, backward, required );
+    return effort( m_currentSchedule, start, duration, units, backward, required );
 }
 
 // the amount of effort we can do within the duration
-Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward, const QList<Resource*> &required ) const
+Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration &duration, int units, bool backward, const QList<Resource*> &required ) const
 {
     //kDebug()<<m_name<<": ("<<(backward?"B )":"F )")<<start<<" for duration"<<duration.toString(Duration::Format_Day);
 #if 0
     if ( sch ) sch->logDebug( QString( "Check effort in interval %1: %2, %3").arg(backward?"backward":"forward").arg( start.toString() ).arg( (backward?start-duration:start+duration).toString() ) );
 #endif
     Duration e;
-    if ( duration == 0 || m_units == 0 ) {
+    if ( duration == 0 || m_units == 0 || units == 0 ) {
         kWarning()<<"zero duration or zero units";
         return e;
     }
@@ -1141,7 +1144,13 @@ Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration 
 #ifndef PLAN_NLOGDEBUG
         if ( sch && until < from ) sch->logDebug( " until < from: until=" + until.toString() + " from=" + from.toString() );
 #endif
-        e = workIntervals( from, until, sch ).effort( from, until );
+        e = workIntervals( from, until ).effort( from, until ) * units / 100;
+        if ( sch && ( ! sch->allowOverbooking() || sch->allowOverbookingState() == Schedule::OBS_Deny ) ) {
+            Duration avail = workIntervals( from, until, sch ).effort( from, until );
+            if ( avail < e ) {
+                e = avail;
+            }
+        }
 //        e = ( cal->effort( from, until, sch ) ) * m_units / 100;
     }
     //kDebug()<<m_name<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
@@ -1662,9 +1671,9 @@ DateTime ResourceRequest::availableBefore(const DateTime &time, Schedule *ns) {
 Duration ResourceRequest::effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward )
 {
     setCurrentSchedulePtr( ns );
-    Duration e = m_resource->effort( time, duration, backward, m_required );
+    Duration e = m_resource->effort( time, duration, m_units, backward, m_required );
     //kDebug()<<m_resource->name()<<time<<duration.toString()<<"delivers:"<<e.toString()<<"request:"<<(m_units/100)<<"parts";
-    return e * m_units / 100;
+    return e;
 }
 
 void ResourceRequest::makeAppointment( Schedule *ns )

@@ -564,6 +564,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             ELSE_TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(v, group)
+            ELSE_TRY_READ_IF_NS(v, oval)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -3321,12 +3322,59 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL tcMar
+//! tcMar (cell margin)
+/*!
+ Parent elements:
+ - ....
+
+ Child elements:
+ - ...
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcMar()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            const QXmlStreamAttributes attrs(attributes());
+            if (QUALIFIED_NAME_IS(top)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
+            }
+            else if (QUALIFIED_NAME_IS(right)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL tblCellMar
 //! tblCellMar (cell margin defaults)
 /*!
  Parent elements:
  - [done] tblPr (§17.4.60)
- - [done] tblPr (§17.4.59) 
+ - [done] tblPr (§17.4.59)
  - [done] tblPr (§17.7.6.4)
  - [done] tblPr (§17.7.6.3)
 
@@ -4190,7 +4238,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
  - comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2);footnote (§17.11.10)
+ - endnote (§17.11.2);
+ - footnote (§17.11.10)
  - ftr (§17.10.3)
  - hdr (§17.10.4)
  - sdtContent (§17.5.2.34)
@@ -4246,6 +4295,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     m_currentTableStyle.clear();
 
+    bool sectionAdded = false;
+    if (m_createSectionStyle) {
+        m_createSectionStyle = false;
+        sectionAdded = true;
+        KoTblStyle::Ptr style = KoTblStyle::create();
+        style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
+        m_table->setTableStyle(style);
+    }
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -4269,6 +4327,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     defineTableStyles();
 
     m_table->saveOdf(*body, *mainStyles);
+
+
+    if (sectionAdded) {
+        m_currentSectionStyleName = m_table->tableStyle()->name();
+    }
 
     delete m_currentLocalTableStyles;
 
@@ -4553,7 +4616,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
     KoRow* row = m_table->rowAt(m_currentTableRowNumber);
     KoRowStyle::Ptr style = KoRowStyle::create();
 
-    style->setHeight(EMU_TO_POINT(val.toFloat()));
+    style->setHeight(TWIP_TO_POINT(val.toFloat()));
 
     if (hRule == QLatin1String("exact")) {
         style->setHeightType(KoRowStyle::ExactHeight);
@@ -4709,14 +4772,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - hMerge (Horizontally Merged Cell) §17.4.22
  - noWrap (Don't Wrap Cell Content) §17.4.30
  - [done] shd (Table Cell Shading) §17.4.33
- - tcBorders (Table Cell Borders) §17.4.67
+ - [done] tcBorders (Table Cell Borders) §17.4.67
  - tcFitText (Fit Text Within Cell) §17.4.68
- - tcMar (Single Table Cell Margins) §17.4.69
+ - [done] tcMar (Single Table Cell Margins) §17.4.69
  - tcPrChange (Revision Information for Table Cell Properties) §17.13.5.36
  - tcW (Preferred Table Cell Width) §17.4.72
  - textDirection (Table Cell Text Flow Direction) §17.4.73
  - vAlign (Table Cell Vertical Alignment) §17.4.84
- - vMerge (Vertically Merged Cell) §17.4.85
+ - [done] vMerge (Vertically Merged Cell) §17.4.85
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
@@ -4731,9 +4794,120 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
         if (isStartElement()) {
             TRY_READ_IF(gridSpan)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
+            ELSE_TRY_READ_IF(tcBorders)
+            ELSE_TRY_READ_IF(tcMar)
+            ELSE_TRY_READ_IF(vMerge)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    // Setting cell covers in case of cell span in horizontal
+    KoCell* const cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+    int columnSpan = cell->columnSpan();
+    if (columnSpan > 1) {
+        int columnIndex = 1;
+        while (columnIndex < columnSpan) {
+            ++m_currentTableColumnNumber;
+            KoCell* coveredCell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+            coveredCell->setCovered(true);
+            ++columnIndex;
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL vMerge
+//! vMerge Handler (vertically merged cell)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_vMerge()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) { // Not empty value marks the start of the vertical merging
+        KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setRowSpan(1);
+    } else {
+        // In this case, it should continue from which ever cell above was the starter
+        KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setCovered(true);
+        int previousRow = m_currentTableRowNumber - 1;
+        while (previousRow > -1) {
+            KoCell* previousRowCell = m_table->cellAt(previousRow, m_currentTableColumnNumber);
+            if (!previousRowCell->isCovered()) {
+                previousRowCell->setRowSpan(previousRowCell->rowSpan() + 1);
+                // This current cell should be replaced with <table:covered-table-cell>
+                cell->setCovered(true);
+                break;
+            }
+            --previousRow;
+        }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tcBorders
+//! tcBorders handlers (table cell borders)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - [done] bottom (Table Cell Bottom Border) §17.4.3
+ - end (Table Cell Trailing Edge Border) §17.4.12
+ - [done] insideH (Table Cell Inside Horizontal Edges Border) §17.4.24
+ - [done] insideV (Table Cell Inside Vertical Edges Border) §17.4.26
+ - start (Table Cell Leading Edge Border) §17.4.34
+ - tl2br (Table Cell Top Left to Bottom Right Diagonal Border) §17.4.74
+ - [done] top (Table Cell Top Border) §17.4.75
+ - tr2bl (Table Cell Top Right to Bottom Left Diagonal Border) §17.4.80
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(top)) {
+                m_currentStyleProperties->top = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                m_currentStyleProperties->bottom = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
+            }
+            else if (QUALIFIED_NAME_IS(insideV)) {
+                m_currentStyleProperties->insideV = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
+            }
+            else if (QUALIFIED_NAME_IS(insideH)) {
+                m_currentStyleProperties->insideH = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
+            }
+        }
+    }
+
     READ_EPILOGUE
 }
 

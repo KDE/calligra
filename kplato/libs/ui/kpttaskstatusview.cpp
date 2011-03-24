@@ -489,6 +489,58 @@ void ProjectStatusView::saveContext( QDomElement &context ) const
     m_view->saveContext( context );
 }
 
+KoPrintJob *ProjectStatusView::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
+
+//----------------------
+PerformanceStatusPrintingDialog::PerformanceStatusPrintingDialog( ViewBase *view, PerformanceStatusBase *chart, Project *project )
+    : PrintingDialog( view ),
+    m_chart( chart ),
+    m_project( project )
+{
+}
+
+int PerformanceStatusPrintingDialog::documentLastPage() const
+{
+    return documentFirstPage();
+}
+
+QList<QWidget*> PerformanceStatusPrintingDialog::createOptionWidgets() const
+{
+    QList<QWidget*> lst;
+    lst << createPageLayoutWidget();
+    lst += PrintingDialog::createOptionWidgets();
+    return  lst;
+}
+
+void PerformanceStatusPrintingDialog::printPage( int page, QPainter &painter )
+{
+    //kDebug()<<page<<printer().pageRect()<<printer().paperRect()<<printer().margins()<<printer().fullPage();
+    painter.save();
+    QRect rect = printer().pageRect();
+    rect.moveTo( 0, 0 ); // the printer already has margins set
+    QRect header = headerRect();
+    QRect footer = footerRect();
+    paintHeaderFooter( painter, printingOptions(), page, *m_project );
+    int gap = 8;
+    if ( header.isValid() ) {
+        rect.setTop( header.height() + gap );
+    }
+    if ( footer.isValid() ) {
+        rect.setBottom( rect.bottom() - footer.height() - gap );
+    }
+    QSize s = m_chart->ui_chart->geometry().size();
+    qreal r = (qreal)s.width() / (qreal)s.height();
+    if ( rect.height() > rect.width() && r > 0.0 ) {
+        rect.setHeight( rect.width() / r );
+    }
+    kDebug()<<s<<rect;
+    m_chart->ui_chart->paint( &painter, rect );
+    painter.restore();
+}
+
 //-----------------------------------
 PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     : QWidget( parent ),
@@ -561,6 +613,7 @@ void PerformanceStatusBase::refreshChart()
 
 void PerformanceStatusBase::createBarChart()
 {
+    m_barchart.inuse = false;
     m_barchart.effortplane = new CartesianCoordinatePlane( ui_chart );
     m_barchart.effortplane->setObjectName( "Bar chart, Effort" );
     m_barchart.costplane = new CartesianCoordinatePlane( ui_chart );
@@ -607,6 +660,7 @@ void PerformanceStatusBase::createBarChart()
 
 void PerformanceStatusBase::createLineChart()
 {
+    m_linechart.inuse = false;
     m_linechart.effortplane = new CartesianCoordinatePlane( ui_chart );
     m_linechart.effortplane->setObjectName( "Line chart, Effort" );
     m_linechart.effortplane->setRubberBandZoomingEnabled( true );
@@ -660,12 +714,14 @@ void PerformanceStatusBase::setupChart()
     while ( ! ui_chart->coordinatePlanes().isEmpty() ) {
         ui_chart->takeCoordinatePlane( ui_chart->coordinatePlanes().last() );
     }
+    m_barchart.inuse = false;
+    m_linechart.inuse = false;
     if ( m_chartinfo.showBarChart ) {
         setupChart( m_barchart );
-    } else if ( m_chartinfo.showLineChart ) {
+        m_barchart.inuse = true;
+    } else /*if ( m_chartinfo.showLineChart )*/ {
         setupChart( m_linechart );
-    } else {
-        setupChart( m_linechart );
+        m_linechart.inuse = true;
     }
     kDebug()<<"Planes:"<<ui_chart->coordinatePlanes();
     foreach ( AbstractCoordinatePlane *pl, ui_chart->coordinatePlanes() ) {
@@ -938,6 +994,13 @@ void PerformanceStatusBase::saveContext( QDomElement &context ) const
     context.setAttribute( "show-acwp-effort", m_chartinfo.showACWPEffort );
 }
 
+KoPrintJob *PerformanceStatusBase::createPrintJob( ViewBase *parent )
+{
+    PerformanceStatusPrintingDialog *dia = new PerformanceStatusPrintingDialog( parent, this, parent->project() );
+    dia->printer().setCreator("Plan");
+    return dia;
+}
+
 //-----------------------------------
 PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     : QSplitter( parent )
@@ -1011,6 +1074,11 @@ void PerformanceStatusTreeView::saveContext( QDomElement &context ) const
     QDomElement t = context.ownerDocument().createElement( "tree" );
     context.appendChild( t );
     m_tree->saveContext( nodeModel()->columnMap(), t );
+}
+
+KoPrintJob *PerformanceStatusTreeView::createPrintJob( ViewBase *view )
+{
+    return m_chart->createPrintJob( view );
 }
 
 //-----------------------------------
@@ -1120,6 +1188,11 @@ bool PerformanceStatusView::loadContext( const KoXmlElement &context )
 void PerformanceStatusView::saveContext( QDomElement &context ) const
 {
     m_view->saveContext( context );
+}
+
+KoPrintJob *PerformanceStatusView::createPrintJob()
+{
+    return m_view->createPrintJob( this );
 }
 
 //------------------------------------------------

@@ -30,6 +30,7 @@
 #include "versionmagic.h"
 #include "drawstyle.h"
 #include "msodraw.h"
+#include "mswordodfimport.h"
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -45,7 +46,6 @@
 
 #include <klocale.h>
 #include <KoStore.h>
-#include <KoFilterChain.h>
 #include <KoFontFace.h>
 
 #include <QBuffer>
@@ -60,7 +60,10 @@ enum PgbOffsetFrom {
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
-Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
+Document::Document(const std::string& fileName,
+                   MSWordOdfImport* filter,
+//                    KoFilterChain* chain,
+                   KoXmlWriter* bodyWriter,
                    KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, POLE::Storage* storage,
                    LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
@@ -68,7 +71,8 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
         , m_graphicsHandler(0)
-        , m_chain(chain)
+        , m_filter(filter)
+//         , m_chain(chain)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
         , m_bodyFound(false)
         , m_footNoteNumber(0)
@@ -148,6 +152,9 @@ Document::~Document()
     delete m_tableHandler;
     delete m_replacementHandler;
     delete m_graphicsHandler;
+    //expecting the background-color of the document on top of the stack
+    Q_ASSERT(m_bgColors.size() == 1);
+    m_bgColors.clear();
 }
 
 //set whether or not document has header or footer
@@ -195,7 +202,8 @@ void Document::finishDocument()
                                "text:footnotes-position=\"page\" "
                                "text:start-numbering-at=\"%3\" "
                                "/>");
-
+        //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
+        //use the infos from SEP (sprmSFpc, sprmSRncFtn, sprmSNFtn, sprmSNfcFtnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
                                                        .arg(m_initialFootnoteNumber)
@@ -213,7 +221,8 @@ void Document::finishDocument()
                               "text:start-value=\"%2\" "
                               //"text:start-numbering-at=\"%3\" "
                               "/>");
-
+        //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
+        //use the infos from SEP (sprmSFEndnote, sprmSRncEdn, sprmSNEdn, sprmSNfcEdnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
                                                       .arg(m_initialEndnoteNumber)
@@ -394,6 +403,11 @@ bool Document::parse()
     if (m_parser)
         return m_parser->parse();
     return false;
+}
+
+void Document::setProgress(const int percent)
+{
+    m_filter->setProgress(percent);
 }
 
 //connects firstSectionFound signal & slot together; sets flag to true

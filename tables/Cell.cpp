@@ -1216,8 +1216,8 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             QTextCharFormat format = style().asCharFormat();
             sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
 
-            KoEmbeddedDocumentSaver saver;
-            KoShapeSavingContext shapeContext(xmlwriter, mainStyles, saver);
+            KoEmbeddedDocumentSaver embeddedSaver;
+            KoShapeSavingContext shapeContext(xmlwriter, mainStyles, embeddedSaver);
             KoTextWriter writer(shapeContext);
 
             writer.write(doc.data(), 0);

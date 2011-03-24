@@ -108,8 +108,8 @@
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
-#include "printing/kexisimpleprintingpart.h"
-#include "printing/kexisimpleprintingpagesetup.h"
+//2.x #include "printing/kexisimpleprintingpart.h"
+//2.x #include "printing/kexisimpleprintingpagesetup.h"
 
 //Extreme verbose debug
 //#if defined(Q_WS_WIN)
@@ -800,6 +800,7 @@ void KexiMainWindow::setupActions()
 //TODO new KAction(i18n("From Server..."), "network-server-database", 0,
 //TODO  this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
 
+#ifndef KEXI_NO_QUICK_PRINTING
     ac->addAction("project_print",
                   d->action_project_print = KStandardAction::print(this, SLOT(slotProjectPrint()), this));
     d->action_project_print->setToolTip(i18n("Print data from the active table or query"));
@@ -823,6 +824,7 @@ void KexiMainWindow::setupActions()
         i18n("Shows page setup for printing the active table or query."));
     connect(d->action_project_print_setup, SIGNAL(triggered()),
             this, SLOT(slotProjectPageSetup()));
+#endif
 
     //EDIT MENU
     d->action_edit_cut = createSharedAction(KStandardAction::Cut, "edit_cut");
@@ -1284,6 +1286,7 @@ void KexiMainWindow::setupActions()
 
     acat->addAction("project_open", Kexi::GlobalActionCategory);
 
+#ifndef KEXI_NO_QUICK_PRINTING
     //! @todo support this in FormObjectType, ReportObjectType as well as others
     acat->addAction("project_print", Kexi::WindowActionCategory,
                     KexiPart::TableObjectType, KexiPart::QueryObjectType);
@@ -1295,6 +1298,7 @@ void KexiMainWindow::setupActions()
     //! @todo support this in FormObjectType, ReportObjectType as well as others
     acat->addAction("project_print_setup", Kexi::WindowActionCategory,
                     KexiPart::TableObjectType, KexiPart::QueryObjectType);
+#endif
 
     acat->addAction("quit", Kexi::GlobalActionCategory);
 
@@ -1404,12 +1408,14 @@ void KexiMainWindow::invalidateProjectWideActions()
         currentWindow() && currentWindow()->part()->info()->isDataExportSupported()
         && !currentWindow()->neverSaved());
 
+#ifndef KEXI_NO_QUICK_PRINTING
     const bool printingActionsEnabled =
         currentWindow() && currentWindow()->part()->info()->isPrintingSupported()
         && !currentWindow()->neverSaved();
     d->action_project_print->setEnabled(printingActionsEnabled);
     d->action_project_print_preview->setEnabled(printingActionsEnabled);
     d->action_project_print_setup->setEnabled(printingActionsEnabled);
+#endif
 
     //EDIT MENU
     if (d->action_edit_paste_special_data_table)
@@ -1458,7 +1464,7 @@ void KexiMainWindow::invalidateProjectWideActions()
     /*replaced by d->tabbedToolBar
       if (d->createMenu)
         d->createMenu->setEnabled(d->prj);*/
-    if (d->tabbedToolBar->createWidgetToolBar())
+    if (d->tabbedToolBar && d->tabbedToolBar->createWidgetToolBar())
         d->tabbedToolBar->createWidgetToolBar()->setEnabled(d->prj);
 
     // DATA MENU
@@ -1732,12 +1738,14 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 
             if (!item) {
                 QString taskName;
-                if (info->value("action") == "print-preview")
+                if (info->value("action") == "execute")
+                    taskName = i18nc("\"executing object\" action", "executing");
+#ifndef KEXI_NO_QUICK_PRINTING
+                else if (info->value("action") == "print-preview")
                     taskName = i18n("making print preview for");
                 else if (info->value("action") == "print")
                     taskName = i18n("printing");
-                else if (info->value("action") == "execute")
-                    taskName = i18nc("\"executing object\" action", "executing");
+#endif
                 else
                     taskName = i18n("opening");
 
@@ -1763,14 +1771,17 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                                       internalReason(d->prj) + "<br></li>");
                 }
                 continue;
-            } else if (info->value("action") == "print") {
+            }
+#ifndef KEXI_NO_QUICK_PRINTING
+            else if (info->value("action") == "print") {
                 tristate res = printItem(item);
                 if (false == res) {
                     not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + i18n("cannot print object") +
                                       internalReason(d->prj) + "<br></li>");
                 }
                 continue;
-            } else if (info->value("action") == "print-preview") {
+            }
+            else if (info->value("action") == "print-preview") {
                 tristate res = printPreviewForItem(item);
                 if (false == res) {
                     not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + i18n("cannot make print preview of object") +
@@ -1778,6 +1789,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                 }
                 continue;
             }
+#endif
 
             Kexi::ViewMode viewMode;
             if (info->value("action") == "open")
@@ -1967,15 +1979,21 @@ void KexiMainWindow::setupMainWidget()
     vlyr->setContentsMargins(0, 0, 0, 0);
     vlyr->setSpacing(0);
 
-    QWidget *tabbedToolBarContainer = new QWidget(this);
-    vlyr->addWidget(tabbedToolBarContainer);
-    QVBoxLayout *tabbedToolBarContainerLyr = new QVBoxLayout(tabbedToolBarContainer);
-    tabbedToolBarContainerLyr->setSpacing(0);
-    tabbedToolBarContainerLyr->setContentsMargins(
-        KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2);
+    if (d->isMainMenuVisible) {
+        QWidget *tabbedToolBarContainer = new QWidget(this);
+        vlyr->addWidget(tabbedToolBarContainer);
+        QVBoxLayout *tabbedToolBarContainerLyr = new QVBoxLayout(tabbedToolBarContainer);
+        tabbedToolBarContainerLyr->setSpacing(0);
+        tabbedToolBarContainerLyr->setContentsMargins(
+            KDialog::marginHint() / 2, KDialog::marginHint() / 2,
+            KDialog::marginHint() / 2, KDialog::marginHint() / 2);
 
-    d->tabbedToolBar = new KexiTabbedToolBar(tabbedToolBarContainer);
-    tabbedToolBarContainerLyr->addWidget(d->tabbedToolBar);
+        d->tabbedToolBar = new KexiTabbedToolBar(tabbedToolBarContainer);
+        tabbedToolBarContainerLyr->addWidget(d->tabbedToolBar);
+    }
+    else {
+        d->tabbedToolBar = 0;
+    }
 
     QWidget *mainWidgetContainer = new QWidget();
     vlyr->addWidget(mainWidgetContainer, 1);
@@ -2158,10 +2176,12 @@ void KexiMainWindow::setupProjectNavigator()
                 this, SLOT(copyItemToClipboardAsDataTable(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(exportItemToFileAsDataTable(KexiPart::Item*)),
                 this, SLOT(exportItemAsDataTable(KexiPart::Item*)));
+#ifndef KEXI_NO_QUICK_PRINTING
         connect(d->navigator, SIGNAL(printItem(KexiPart::Item*)),
                 this, SLOT(printItem(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(pageSetupForItem(KexiPart::Item*)),
                 this, SLOT(showPageSetupForItem(KexiPart::Item*)));
+#endif
         connect(d->navigator, SIGNAL(selectionChanged(KexiPart::Item*)),
                 this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
         if (d->prj) {//connect to the project
@@ -3371,22 +3391,28 @@ KexiMainWindow::slotProjectSaveAs()
 void
 KexiMainWindow::slotProjectPrint()
 {
+#ifndef KEXI_NO_QUICK_PRINTING
     if (currentWindow() && currentWindow()->partItem())
         printItem(currentWindow()->partItem());
+#endif
 }
 
 void
 KexiMainWindow::slotProjectPrintPreview()
 {
+#ifndef KEXI_NO_QUICK_PRINTING
     if (currentWindow() && currentWindow()->partItem())
         printPreviewForItem(currentWindow()->partItem());
+#endif
 }
 
 void
 KexiMainWindow::slotProjectPageSetup()
 {
+#ifndef KEXI_NO_QUICK_PRINTING
     if (currentWindow() && currentWindow()->partItem())
         showPageSetupForItem(currentWindow()->partItem());
+#endif
 }
 
 void KexiMainWindow::slotProjectExportDataTable()
@@ -3852,11 +3878,13 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     d->mainWidget->tabWidget()->removeTab(
         d->mainWidget->tabWidget()->indexOf(windowContainer));
 
+#ifndef KEXI_NO_QUICK_PRINTING
     //also remove from 'print setup dialogs' cache, if needed
     int printedObjectID = 0;
     if (d->pageSetupWindowItemID2dataItemID_map.contains(window_id))
         printedObjectID = d->pageSetupWindowItemID2dataItemID_map[ window_id ];
     d->pageSetupWindows.remove(printedObjectID);
+#endif
 
     KXMLGUIClient *client = window->commonGUIClient();
     KXMLGUIClient *viewClient = window->guiClient();
@@ -4415,8 +4443,9 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
         }
     }
 
-    //also close 'print setup' dialog for this item, if any
     tristate res = true;
+#ifndef KEXI_NO_QUICK_PRINTING
+    //also close 'print setup' dialog for this item, if any
 // int printedObjectID = 0;
 // if (d->pageSetupWindowItemID2dataItemID_map.contains(item->identifier()))
 //  printedObjectID = d->pageSetupWindowItemID2dataItemID_map[ item->identifier() ];
@@ -4431,6 +4460,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
     if (!res || ~res) {
         return res;
     }
+#endif
 
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
@@ -4453,10 +4483,12 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
         }
     }
 
+#ifndef KEXI_NO_QUICK_PRINTING
     //in case the dialog is a 'print setup' dialog, also update d->pageSetupWindows
     int dataItemID = d->pageSetupWindowItemID2dataItemID_map[item->identifier()];
     d->pageSetupWindowItemID2dataItemID_map.remove(item->identifier());
     d->pageSetupWindows.remove(dataItemID);
+#endif
 
     if (!d->prj->removeObject(*item)) {
         //TODO(js) better msg
@@ -5317,22 +5349,25 @@ void KexiMainWindow::slotPartItemSelectedInNavigator(KexiPart::Item* item)
 
 KToolBar *KexiMainWindow::toolBar(const QString& name) const
 {
-    return d->tabbedToolBar->toolBar(name);
+    return d->tabbedToolBar ? d->tabbedToolBar->toolBar(name) : 0;
 }
 
 void KexiMainWindow::appendWidgetToToolbar(const QString& name, QWidget* widget)
 {
-    d->tabbedToolBar->appendWidgetToToolbar(name, widget);
+    if (d->tabbedToolBar)
+        d->tabbedToolBar->appendWidgetToToolbar(name, widget);
 }
 
 void KexiMainWindow::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
 {
-    d->tabbedToolBar->setWidgetVisibleInToolbar(widget, visible);
+    if (d->tabbedToolBar)
+        d->tabbedToolBar->setWidgetVisibleInToolbar(widget, visible);
 }
 
 void KexiMainWindow::addToolBarAction(const QString& toolBarName, QAction *action)
 {
-    d->tabbedToolBar->addAction(toolBarName, action);
+    if (d->tabbedToolBar)
+        d->tabbedToolBar->addAction(toolBarName, action);
 }
 
 void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet)
