@@ -37,6 +37,7 @@
 #include <MsooXmlUtils.h>
 
 #include <QFontMetricsF>
+#include <QDateTime>
 
 class SpPr {
 public:
@@ -47,6 +48,7 @@ class NumCache {
 public:
     int m_ptCount;
     QVector< QString > m_cache;
+    QString formatCode;
     NumCache() : m_ptCount(0) {}
 };
 
@@ -109,8 +111,9 @@ public:
 
 QString Cat::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
 {
+    const bool dateFormat = !m_numRef.m_numCache.formatCode.isEmpty() && m_numRef.m_numCache.formatCode != "General";
     if (m_numRef.m_numCache.m_ptCount != 0) {
-        chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,"float");
+        chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache, dateFormat ? "date-format" : "float", m_numRef.m_numCache.formatCode );
         return m_numRef.m_f;
     }
 
@@ -913,8 +916,32 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_numCache()
         if (isStartElement()) {
             TRY_READ_IF(ptCount)
             ELSE_TRY_READ_IF(pt)
+            ELSE_TRY_READ_IF(formatCode)
         }
     }
+    READ_EPILOGUE
+}
+
+
+#undef CURRENT_EL
+#define CURRENT_EL formatCode
+//! formatCode (Format Code)
+/*! ECMA-376, 21.2.2.71, p.3802.
+
+ Parent elements:
+ - numCache (§21.2.2.120)
+
+*/
+KoFilter::ConversionStatus XlsxXmlChartReader::read_formatCode()
+{
+    READ_PROLOGUE
+    const QString val = readElementText();
+    d->m_currentNumCache->formatCode = val;
+//     while (!atEnd()) {
+//         readNext();
+//         BREAK_IF_END_OF(CURRENT_EL);
+//         
+//     }
     READ_EPILOGUE
 }
 
@@ -3068,7 +3095,22 @@ QString XlsxXmlChartReader::AlocateAndWriteIntoInternalTable(QVector< QString > 
     return range;
 }
 
-void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString > &buffer, QString format)
+QString convertToFormat( const QString& format, const QString& value )
+{
+    QString res = value;
+    if ( !format.isEmpty() && format != QString::fromLatin1( "General" ) )
+    {
+        int ivalue = value.toInt();
+        QString newFormat = format;
+        newFormat.replace( QRegExp( "[m{1}]" ), "M" );
+        QDateTime time( QDate( 1899, 12, 30 ) );
+        time = time.addDays( ivalue );
+        res = time.toString( newFormat );
+    }
+    return res;
+}
+
+void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString > &buffer, const QString& format, const QString& formatString)
 {
     if(range.isEmpty()) {
         return;
@@ -3111,7 +3153,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
             for(int i = startColumn; i <=endColumn; i++,bufferIndex++) {
                 Charting::Cell *cell = internalTable->cell(i,startRow,true);
                 cell->m_valueType = format;
-                cell->m_value = buffer[bufferIndex];
+                cell->m_value = convertToFormat( formatString, buffer[bufferIndex] );
 //                kDebug()<<"m_value " << format;
 //                kDebug()<<"buffer[bufferIndex] " << buffer[bufferIndex];
 //                kDebug()<<"cell row" << startRow;
@@ -3125,7 +3167,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
             for(int i = startRow; i <=endRow; i++,bufferIndex++) {
                 Charting::Cell *cell = internalTable->cell(startColumn,i,true);
                 cell->m_valueType = format;
-                cell->m_value = buffer[bufferIndex];
+                cell->m_value = convertToFormat( formatString, buffer[bufferIndex] );
 //                kDebug()<<"m_value " << format;
 //                kDebug()<<"buffer[bufferIndex] " << buffer[bufferIndex];
 //                kDebug()<<"cell row" << i;
@@ -3136,7 +3178,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
         if (buffer.size() != 0) {
             Charting::Cell *cell = internalTable->cell(startColumn,startRow,true);
             cell->m_valueType = format;
-            cell->m_value = buffer[0];
+            cell->m_value = convertToFormat( formatString, buffer[ 0 ] );
 //            kDebug()<<"m_value " << format;
 //            kDebug()<<"buffer[bufferIndex] " << buffer[0];
 //            kDebug()<<"cell row" << startRow;
