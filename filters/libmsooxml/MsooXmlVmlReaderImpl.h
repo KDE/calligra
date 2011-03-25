@@ -296,10 +296,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
-        if (m_moveToStylesXml) {
-            mainStyles->markStyleForStylesXml(drawStyleName);
-        }
-
         body->addAttribute("draw:style-name", drawStyleName);
     }
 }
@@ -421,6 +417,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     body = frameBuf.setWriter(body);
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
 
     // Note that image fill is not yet supported in fill parameter, but this should be used
     // when it's done
@@ -556,6 +555,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     RETURN_IF_ERROR(parseCSS(style))
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
@@ -684,6 +686,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
     RETURN_IF_ERROR(parseCSS(style))
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
@@ -1636,6 +1641,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     body = frameBuf.setWriter(body);
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+
     m_wrapRead = false;
 
     bool isCustomShape = true;
