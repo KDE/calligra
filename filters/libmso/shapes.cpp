@@ -287,12 +287,13 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
 
     switch (shapeType) {
     case msosptNotPrimitive:
-    default:
         if ( ((nrotation >= 45) && (nrotation < 135)) ||
              ((nrotation >= 225) && (nrotation < 315)))
         {
             transform_anchor = true;
         }
+        break;
+    default:
         break;
     }
     if (transform_anchor) {
@@ -1924,20 +1925,13 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 
         trect = processRect(shapeType, rotation, trect);
 
-        //translate requires the top right coordinate of the rotated rectangle
-        static const QString transformString("rotate(%1) translate(%2 %3)");
-
+        static const QString transform_str("translate(%1 %2) rotate(%3) translate(%4 %5)");
+        const QPointF center = trect.center();
         const qreal height = trect.height();
         const qreal width = trect.width();
-        const qreal x = trect.x();
-        const qreal y = trect.y();
-
-        //clockwise rotation
-        qreal newX = x + width/2 - (cos(angle)*width/2 + sin(angle)*height/2);
-        qreal newY = y + height/2 - (-sin(angle)*width/2 + cos(angle)*height/2);
 
         out.xml.addAttribute("draw:transform",
-                             transformString.arg(angle).arg(client->formatPos(newX)).arg(client->formatPos(newY)));
+                             transform_str.arg(client->formatPos(-width/2)).arg(client->formatPos(-height/2)).arg(-angle).arg(client->formatPos(center.x())).arg(client->formatPos(center.y())));
     }
     //svg:x
     //svg:y
