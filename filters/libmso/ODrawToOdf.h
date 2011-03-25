@@ -171,6 +171,7 @@ private:
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processActionButtonInformation(const MSO::OfficeArtSpContainer& o, Writer& out);
 
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processText(const MSO::OfficeArtSpContainer& o, Writer& out);

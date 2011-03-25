@@ -1665,6 +1665,75 @@ void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); //draw:custom-shape
 }
 
+void ODrawToOdf::processActionButtonInformation(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:path-stretchpoint-x","10800");
+    out.xml.addAttribute("draw:path-stretchpoint-y","10800");
+    out.xml.addAttribute("draw:text-areas","?f1 ?f2 ?f3 ?f4");
+    out.xml.addAttribute("draw:type","mso-spt192");
+    processModifiers(o, out);
+    out.xml.addAttribute("draw:enhanced-path","M 0 0 L 21600 0 21600 21600 0 21600 Z N M 0 0 L 21600 0 ?f3 ?f2 ?f1 ?f2 Z N M 21600 0 L 21600 21600 ?f3 ?f4 ?f3 ?f2 Z N M 21600 21600 L 0 21600 ?f1 ?f4 ?f3 ?f4 Z N M 0 21600 L 0 0 ?f1 ?f2 ?f1 ?f4 Z N M ?f7 ?f12 X ?f10 ?f8 ?f7 ?f16 ?f14 ?f8 ?f7 ?f12 Z N M ?f7 ?f20 X ?f18 ?f42 ?f7 ?f24 ?f22 ?f42 ?f7 ?f20 Z N M ?f26 ?f28 L ?f30 ?f28 ?f30 ?f32 ?f34 ?f32 ?f34 ?f36 ?f26 ?f36 ?f26 ?f32 ?f38 ?f32 ?f38 ?f40 ?f26 ?f40 Z N");
+
+    equation(out, "f0" ,"$0 ");
+    equation(out, "f1" ,"left+$0 ");
+    equation(out, "f2" ,"top+$0 ");
+    equation(out, "f3" ,"right-$0 ");
+    equation(out, "f4" ,"bottom-$0 ");
+    equation(out, "f5" ,"10800-$0 ");
+    equation(out, "f6" ,"?f5 /10800");
+    equation(out, "f7" ,"right/2");
+    equation(out, "f8" ,"bottom/2");
+    equation(out, "f9" ,"-8050*?f6 ");
+    equation(out, "f10" ,"?f9 +?f7 ");
+    equation(out, "f11" ,"-8050*?f6 ");
+    equation(out, "f12" ,"?f11 +?f8 ");
+    equation(out, "f13" ,"8050*?f6 ");
+    equation(out, "f14" ,"?f13 +?f7 ");
+    equation(out, "f15" ,"8050*?f6 ");
+    equation(out, "f16" ,"?f15 +?f8 ");
+    equation(out, "f17" ,"-2060*?f6 ");
+    equation(out, "f18" ,"?f17 +?f7 ");
+    equation(out, "f19" ,"-7620*?f6 ");
+    equation(out, "f20" ,"?f19 +?f8 ");
+    equation(out, "f21" ,"2060*?f6 ");
+    equation(out, "f22" ,"?f21 +?f7 ");
+    equation(out, "f23" ,"-3500*?f6 ");
+    equation(out, "f24" ,"?f23 +?f8 ");
+    equation(out, "f25" ,"-2960*?f6 ");
+    equation(out, "f26" ,"?f25 +?f7 ");
+    equation(out, "f27" ,"-2960*?f6 ");
+    equation(out, "f28" ,"?f27 +?f8 ");
+    equation(out, "f29" ,"1480*?f6 ");
+    equation(out, "f30" ,"?f29 +?f7 ");
+    equation(out, "f31" ,"5080*?f6 ");
+    equation(out, "f32" ,"?f31 +?f8 ");
+    equation(out, "f33" ,"2960*?f6 ");
+    equation(out, "f34" ,"?f33 +?f7 ");
+    equation(out, "f35" ,"6140*?f6 ");
+    equation(out, "f36" ,"?f35 +?f8 ");
+    equation(out, "f37" ,"-1480*?f6 ");
+    equation(out, "f38" ,"?f37 +?f7 ");
+    equation(out, "f39" ,"-1920*?f6 ");
+    equation(out, "f40" ,"?f39 +?f8 ");
+    equation(out, "f41" ,"-5560*?f6 ");
+    equation(out, "f42" ,"?f41 +?f8 ");
+
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position","$0 top");
+    out.xml.addAttribute("draw:handle-switched","true");
+    out.xml.addAttribute("draw:handle-range-x-minimum","0");
+    out.xml.addAttribute("draw:handle-range-x-maximum","5400");
+
+    out.xml.endElement(); // draw:handle
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
     quint16 shapeType = o.shapeProp.rh.recInstance;
@@ -1755,6 +1824,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processNotchedCircularArrow(o, out);
     } else if (shapeType == msosptFlowChartDelay) {
         processFlowChartDelay(o, out);
+    } else if (shapeType == msosptActionButtonInformation) {
+        processActionButtonInformation(o, out);
     } else {
         qDebug() << "cannot handle object of type " << shapeType;
     }
