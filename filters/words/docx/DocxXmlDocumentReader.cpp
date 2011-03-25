@@ -4303,6 +4303,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         m_createSectionStyle = false;
         sectionAdded = true;
         KoTblStyle::Ptr style = KoTblStyle::create();
+        if (m_moveToStylesXml) {
+            style->setAutoStyleInStylesDotXml(true);
+        }
         style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
         m_table->setTableStyle(style);
     }
@@ -4359,6 +4362,9 @@ void DocxXmlDocumentReader::defineTableStyles()
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
             KoCellStyle::Ptr style = styleConverter.style(row, column);
+            if (m_moveToStylesXml) {
+                style->setAutoStyleInStylesDotXml(true);
+            }
             m_table->cellAt(row, column)->setStyle(style);
         }
     }
@@ -4481,6 +4487,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
 
     KoColumn* column = m_table->columnAt(m_currentTableColumnNumber++);
     KoColumnStyle::Ptr style = KoColumnStyle::create();
+    if (m_moveToStylesXml) {
+        style->setAutoStyleInStylesDotXml(true);
+    }
     style->setWidth(columnWidth);
     column->setStyle(style);
 
@@ -4618,6 +4627,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
 
     KoRow* row = m_table->rowAt(m_currentTableRowNumber);
     KoRowStyle::Ptr style = KoRowStyle::create();
+    if (m_moveToStylesXml) {
+        style->setAutoStyleInStylesDotXml(true);
+    }
 
     style->setHeight(TWIP_TO_POINT(val.toFloat()));
 
