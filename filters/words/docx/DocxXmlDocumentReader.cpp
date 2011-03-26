@@ -1844,6 +1844,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     } else {
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+        if (m_moveToStylesXml) {
+            m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
+        }
 
         // MS2007 has a different way of marking drop cap, it divides them to two paragraphs
         // here we apply the status to current paragraph if previous one had dropCap
@@ -1934,9 +1937,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                     }
                     else {
                         currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
-                    }
-                    if (m_moveToStylesXml) {
-                        mainStyles->markStyleForStylesXml(currentParagraphStyleName);
                     }
                     body->addAttribute("text:style-name", currentParagraphStyleName);
                 }
@@ -2042,6 +2042,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 
     m_currentRunStyleName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    if (m_moveToStylesXml) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
 
     KoXmlWriter* oldWriter = body;
 
@@ -2107,9 +2110,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
         else {
             currentTextStyleName = mainStyles->insert(m_currentTextStyle);
-            if (m_moveToStylesXml) {
-                mainStyles->markStyleForStylesXml(currentTextStyleName);
-            }
         }
         if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
             if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
@@ -2268,6 +2268,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
 
     if (!m_currentTextStylePredefined) {
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+        if (m_moveToStylesXml) {
+            m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+        }
     }
 
     while (!atEnd()) {
@@ -2722,6 +2725,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     m_rot = 0;
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
 
     applyBorders(m_currentDrawStyle, m_textBorderStyles, m_textBorderPaddings);
 
@@ -2824,9 +2830,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     }
 
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-    if (m_moveToStylesXml) {
-        mainStyles->markStyleForStylesXml(styleName);
-    }
     body->addAttribute("draw:style-name", styleName);
 
 //! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
@@ -4300,6 +4303,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         m_createSectionStyle = false;
         sectionAdded = true;
         KoTblStyle::Ptr style = KoTblStyle::create();
+        if (m_moveToStylesXml) {
+            style->setAutoStyleInStylesDotXml(true);
+        }
         style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
         m_table->setTableStyle(style);
     }
@@ -4356,6 +4362,9 @@ void DocxXmlDocumentReader::defineTableStyles()
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
             KoCellStyle::Ptr style = styleConverter.style(row, column);
+            if (m_moveToStylesXml) {
+                style->setAutoStyleInStylesDotXml(true);
+            }
             m_table->cellAt(row, column)->setStyle(style);
         }
     }
@@ -4478,6 +4487,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
 
     KoColumn* column = m_table->columnAt(m_currentTableColumnNumber++);
     KoColumnStyle::Ptr style = KoColumnStyle::create();
+    if (m_moveToStylesXml) {
+        style->setAutoStyleInStylesDotXml(true);
+    }
     style->setWidth(columnWidth);
     column->setStyle(style);
 
@@ -4615,6 +4627,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
 
     KoRow* row = m_table->rowAt(m_currentTableRowNumber);
     KoRowStyle::Ptr style = KoRowStyle::create();
+    if (m_moveToStylesXml) {
+        style->setAutoStyleInStylesDotXml(true);
+    }
 
     style->setHeight(TWIP_TO_POINT(val.toFloat()));
 
@@ -4695,7 +4710,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 KoXmlWriter* oldBody = body;
                 KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
                 body = &newBody;
-
                 TRY_READ(p)
 
                 KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
@@ -4744,6 +4758,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
         }
     }
 
+    // Setting cell covers in case of cell span in horizontal
+    KoCell* const cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+    int columnSpan = cell->columnSpan();
+    if (columnSpan > 1) {
+        int columnIndex = 1;
+        while (columnIndex < columnSpan) {
+            ++m_currentTableColumnNumber;
+            KoCell* coveredCell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+            coveredCell->setCovered(true);
+            ++columnIndex;
+        }
+    }
+
     m_currentTableColumnNumber++;
 
     return KoFilter::OK;
@@ -4779,7 +4806,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - tcW (Preferred Table Cell Width) §17.4.72
  - textDirection (Table Cell Text Flow Direction) §17.4.73
  - vAlign (Table Cell Vertical Alignment) §17.4.84
- - vMerge (Vertically Merged Cell) §17.4.85
+ - [done] vMerge (Vertically Merged Cell) §17.4.85
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
@@ -4796,9 +4823,55 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(tcBorders)
             ELSE_TRY_READ_IF(tcMar)
+            ELSE_TRY_READ_IF(vMerge)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL vMerge
+//! vMerge Handler (vertically merged cell)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_vMerge()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) { // Not empty value marks the start of the vertical merging
+        KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setRowSpan(1);
+    } else {
+        // In this case, it should continue from which ever cell above was the starter
+        KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setCovered(true);
+        int previousRow = m_currentTableRowNumber - 1;
+        while (previousRow > -1) {
+            KoCell* previousRowCell = m_table->cellAt(previousRow, m_currentTableColumnNumber);
+            if (!previousRowCell->isCovered()) {
+                previousRowCell->setRowSpan(previousRowCell->rowSpan() + 1);
+                // This current cell should be replaced with <table:covered-table-cell>
+                cell->setCovered(true);
+                break;
+            }
+            --previousRow;
+        }
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -5570,6 +5643,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
     READ_PROLOGUE
 
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    if (m_moveToStylesXml) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
 
     MSOOXML::Utils::XmlWriteBuffer buffer;
     body = buffer.setWriter(body);
@@ -5588,9 +5664,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
     body = buffer.originalWriter();
 
     QString currentTextStyleName = mainStyles->insert(m_currentTextStyle);
-    if (m_moveToStylesXml) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
-    }
 
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);

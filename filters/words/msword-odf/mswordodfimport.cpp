@@ -181,8 +181,10 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     finalizer.m_contentWriter = contentWriter;
     KoXmlWriter *bodyWriter = new KoXmlWriter(&bodyBuf);
     finalizer.m_bodyWriter = bodyWriter;
-    if (!bodyWriter || !contentWriter)
-        return KoFilter::CreationError; //not sure if this is the right error to return
+    if (!bodyWriter || !contentWriter) {
+        //not sure if this is the right error to return
+        return KoFilter::CreationError;
+    }
 
     kDebug(30513) << "created temp contentWriter and bodyWriter.";
 
@@ -191,23 +193,25 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    Document *document = new Document(QFile::encodeName(inputFile).data(), m_chain, bodyWriter,
+    Document *document = new Document(QFile::encodeName(inputFile).data(), this, bodyWriter,
                                       mainStyles, &metaWriter, &manifestWriter,
                                       storeout, &storage, &data_stream, NULL, &wdocument_stream);
     finalizer.m_document = document;
 
     //check that we can parse the document?
-    if (!document->hasParser())
+    if (!document->hasParser()) {
         return KoFilter::WrongFormat;
-
+    }
     //actual parsing & action
-    if (!document->parse()) //parse file into the queues?
+    if (!document->parse()) {
         return KoFilter::CreationError;
+    }
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
-    if (!document->bodyFound())
-        return KoFilter::WrongFormat;
 
+    if (!document->bodyFound()) {
+        return KoFilter::WrongFormat;
+    }
     kDebug(30513) << "finished parsing.";
 
     //save the office:automatic-styles & and fonts in content.xml
@@ -273,8 +277,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     kDebug(30513) << "created manifest and styles.xml";
 
     //create meta.xml
-    if (!storeout->open("meta.xml"))
+    if (!storeout->open("meta.xml")) {
         return KoFilter::CreationError;
+    }
 
     KoStoreDevice metaDev(storeout);
     KoXmlWriter *meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
@@ -284,14 +289,21 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     meta->endElement(); //office:document-meta
     meta->endDocument();
     delete meta;
-    if (!storeout->close())
+    if (!storeout->close()) {
         return KoFilter::CreationError;
+    }
 
     realManifestWriter->addManifestEntry("meta.xml", "text/xml");
     oasisStore.closeManifestWriter();
 
     kDebug(30513) << "######################## MSWordOdfImport::convert done ####################";
     return KoFilter::OK;
+}
+
+void
+MSWordOdfImport::setProgress(const int percent)
+{
+    emit sigProgress(percent);
 }
 
 /*

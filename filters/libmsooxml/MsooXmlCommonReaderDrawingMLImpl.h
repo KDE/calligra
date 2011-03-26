@@ -241,13 +241,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_currentDrawStyle->addProperty("style:mirror", mirror);
     }
 
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 #endif
 
@@ -517,13 +516,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     body = drawFrameBuf.originalWriter();
     body->startElement("draw:g");
 
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 
     (void)drawFrameBuf.releaseWriter();
@@ -772,14 +770,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
     m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
 
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+#endif
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
-    }
-
     const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
 
     if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -798,10 +797,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     QString presentationStyleName;
     //body->addAttribute("draw:style-name", );
     if (!m_currentPresentationStyle.isEmpty()) {
-        presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-            mainStyles->markStyleForStylesXml(presentationStyleName);
+            m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
         }
+        presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
     }
     if (!presentationStyleName.isEmpty()) {
         body->addAttribute("presentation:style-name", presentationStyleName);
@@ -1835,10 +1834,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
              for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                  body->startElement("text:list");
                  if (listDepth == 0) {
-                     QString listStyleName = mainStyles->insert(m_currentListStyle);
                      if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-                         mainStyles->markStyleForStylesXml(listStyleName);
+                         m_currentListStyle.setAutoStyleInStylesDotXml(true);
                      }
+                     QString listStyleName = mainStyles->insert(m_currentListStyle);
                      Q_ASSERT(!listStyleName.isEmpty());
                      body->addAttribute("text:style-name", listStyleName);
                      m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
@@ -1884,12 +1883,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", percentage * m_largestParaFont);
      }
 
-     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
 #ifdef PPTXXMLSLIDEREADER_CPP
      if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-         mainStyles->markStyleForStylesXml(currentParagraphStyleName);
+         m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
      }
 #endif
+     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
      body->addAttribute("text:style-name", currentParagraphStyleName);
 
      (void)textPBuf.releaseWriter();
@@ -1943,6 +1942,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
     m_currentTextStyleProperties = new KoCharacterStyle();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#endif
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (!m_insideTable) {
@@ -1986,12 +1990,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
             m_largestParaFont = realSize;
         }
     }
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
-    }
-#endif
 
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
@@ -5264,12 +5262,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
     body = fldBuf.originalWriter();
 

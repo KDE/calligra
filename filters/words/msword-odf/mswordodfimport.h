@@ -24,7 +24,6 @@
 #define MSWORDODFIMPORT_H
 
 #include <KoFilter.h>
-#include <KoXmlWriter.h>
 //Added by qt3to4:
 #include <QByteArray>
 #include <QVariantList>
@@ -37,6 +36,8 @@ public:
     virtual ~MSWordOdfImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+
+    void setProgress(const int percent);
 
 private:
     // checks from FIB if document is encrypted
