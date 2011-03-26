@@ -30,6 +30,7 @@
 #include "KPrOutlineEditor.h"
 
 #include <KDebug>
+#include <QtGui/qtextformat.h>
 
 KPrViewModeOutline::KPrViewModeOutline(KoPAView *view, KoPACanvas *canvas)
     : KoPAViewMode( view, canvas )
@@ -123,16 +124,59 @@ void KPrViewModeOutline::populate()
     int recordPosition = m_outlineEditor->textCursor().position();
     m_outlineEditor->clear();
     QTextCursor currentCursor = m_outlineEditor->textCursor();
-
+    int cpt = 0;
+    
     // For each slides
     foreach (KoPAPageBase * pageBase, m_view->kopaDocument()->pages()) {
         if (KPrPage * page = dynamic_cast<KPrPage *>(pageBase)) {
+            cpt++;
             
             // Copy relevant content of the title of the page in the frame
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
-                currentCursor.insertBlock();
-                currentCursor.insertText(pair.second->document()->toPlainText());
-                kDebug() << pair.second->document()->toPlainText();
+                if (pair.first == Title) {
+                    
+                    QTextBlockFormat blockFormat;
+                    blockFormat.setBackground((cpt%2)?QBrush(Qt::white):QBrush(Qt::gray));
+                    // set the page property
+                    blockFormat.setProperty(0, cpt);
+                    // set the type property
+                    blockFormat.setProperty(1, Title);
+                    
+                    currentCursor.insertBlock(blockFormat, pair.second->document()->firstBlock().charFormat());
+                    currentCursor.insertText(pair.second->document()->toPlainText());
+                }
+            }
+
+            // Copy relevant content of the outline of the page in the frame
+            foreach (OutlinePair pair, page->placeholders().outlineData()) {
+                if (pair.first == Subtitle) {
+
+                    QTextBlockFormat blockFormat;
+                    blockFormat.setBackground((cpt%2)?QBrush(Qt::white):QBrush(Qt::gray));
+                    // set the page property
+                    blockFormat.setProperty(0, cpt);
+                    // set the type property
+                    blockFormat.setProperty(1, Subtitle);
+                    
+                    currentCursor.insertBlock(blockFormat, pair.second->document()->firstBlock().charFormat());
+                    currentCursor.insertText(pair.second->document()->toPlainText());
+                }
+            }
+            
+            // Copy relevant content of the outline of the page in the frame
+            foreach (OutlinePair pair, page->placeholders().outlineData()) {
+                if (pair.first == Outline) {
+
+                    QTextBlockFormat blockFormat;
+                    blockFormat.setBackground((cpt%2)?QBrush(Qt::white):QBrush(Qt::gray));
+                    // set the page property
+                    blockFormat.setProperty(0, cpt);
+                    // set the type property
+                    blockFormat.setProperty(1, Outline);
+                    
+                    currentCursor.insertBlock(blockFormat, pair.second->document()->firstBlock().charFormat());
+                    currentCursor.insertText(pair.second->document()->toPlainText());
+                }
             }
         }
     }
