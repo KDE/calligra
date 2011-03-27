@@ -86,6 +86,11 @@ TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cp
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+2011-03-28
+KexiDB
+*fix possible crash when handling queries with lookup columns
+**backported to 2.3.x
+
 Forms
 *added --hide-menu command line option: Hides the main menu (the tabbed toolbar) completely.
  A number of commands from the main menu is always visible. This option is useful in User Mode.
