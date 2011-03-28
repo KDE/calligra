@@ -32,6 +32,7 @@
 #include <KColorScheme>
 #include <KColorUtils>
 #include <KGlobalSettings>
+#include <KIconLoader>
 
 #include "qdebug.h"
 #include "qcache.h"
@@ -459,7 +460,9 @@ void KexiMenuWidgetPrivate::updateActionRects() const
     opt.init(q);
     const int hmargin = style->pixelMetric(QStyle::PM_MenuHMargin, &opt, q),
               vmargin = style->pixelMetric(QStyle::PM_MenuVMargin, &opt, q),
-              icone = style->pixelMetric(QStyle::PM_SmallIconSize, &opt, q);
+              icone = KIconLoader::SizeMedium;
+#warning todo adjust this size for smaller displays
+              //style->pixelMetric(QStyle::PM_SmallIconSize, &opt, q);
     const int fw = style->pixelMetric(QStyle::PM_MenuPanelWidth, &opt, q);
     const int deskFw = frameWidth(&opt);
     //const int tearoffHeight = tearoff ? style->pixelMetric(QStyle::PM_MenuTearoffHeight, &opt, q) : 0;
@@ -524,11 +527,11 @@ void KexiMenuWidgetPrivate::updateActionRects() const
                 sz.setHeight(qMax(fm.height(), qfm.height()));
 
                 QIcon is = action->icon();
-                if (!is.isNull()) {
+                //(not need because iconless items have to be of the same size as icon ones): if (!is.isNull()) {
                     QSize is_sz = QSize(icone, icone);
                     if (is_sz.height() > sz.height())
                         sz.setHeight(is_sz.height());
-                }
+                //}
             }
             sz = style->sizeFromContents(QStyle::CT_MenuItem, &opt, sz, q);
         }
@@ -2049,9 +2052,9 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         opt.rect = adjustedActionRect;
         // Depending on style Button or Background brush may be used
         // to fill background of deselected items. Make it transparent.
-        if (!(opt.state & QStyle::State_Selected)) {
-            opt.palette.setBrush(QPalette::Button, QBrush(Qt::transparent));
-            opt.palette.setBrush(QPalette::Background, QBrush(Qt::transparent));
+        if (!action->isSeparator() && !(opt.state & QStyle::State_Selected)) {
+             opt.palette.setBrush(QPalette::Button, QBrush(Qt::transparent));
+             opt.palette.setBrush(QPalette::Background, QBrush(Qt::transparent));
         }
         style()->drawControl(QStyle::CE_MenuItem, &opt, &p, this);
     }
