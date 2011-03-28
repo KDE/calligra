@@ -528,6 +528,32 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
         STRING_TO_INT(left, leftNum, QString("w:left"));
         m_pageMargins.insert(MarginLeft,TWIP_TO_POINT(leftNum));
     }
+
+    TRY_READ_ATTR(footer)
+    TRY_READ_ATTR(header)
+
+    QBuffer headerBuffer;
+    headerBuffer.open( QIODevice::WriteOnly );
+    KoXmlWriter headerWriter(&headerBuffer, 3);
+    headerWriter.startElement("style:header-style");
+    headerWriter.startElement("style:header-footer-properties");
+    headerWriter.addAttribute("style:dynamic-spacing", "true");
+    headerWriter.endElement(); // style:header-footer-properties
+    headerWriter.endElement(); // style:header-style
+    QString headerContents = QString::fromUtf8(headerBuffer.buffer(), headerBuffer.buffer().size() );
+    m_currentPageStyle.addStyleChildElement("header-style", headerContents);
+
+    QBuffer footerBuffer;
+    footerBuffer.open( QIODevice::WriteOnly );
+    KoXmlWriter footerWriter(&footerBuffer, 3);
+    footerWriter.startElement("style:footer-style");
+    footerWriter.startElement("style:header-footer-properties");
+    footerWriter.addAttribute("style:dynamic-spacing", "true");
+    footerWriter.endElement(); // style:header-footer-properties
+    footerWriter.endElement(); // style:footer-style
+    QString footerContents = QString::fromUtf8(footerBuffer.buffer(), footerBuffer.buffer().size() );
+    m_currentPageStyle.addStyleChildElement("footer-style", footerContents);
+
     readNext();
     READ_EPILOGUE
 }
