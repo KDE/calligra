@@ -11,6 +11,8 @@ ADD_DEFINITIONS(
 
 ########### next target ###############
 
+find_package(QImageBlitz REQUIRED)
+
 set(keximain_LIB_SRCS 
 KexiMainWindow.cpp 
 kexifinddialog.cpp
@@ -35,6 +37,9 @@ startup/KexiStartupDialogTemplatesPage.cpp
 
 )
 
+if(KEXI_MODERN_STARTUP)
+    LIST(APPEND keximain_LIB_SRCS KexiMenuWidget.cpp)
+endif(KEXI_MODERN_STARTUP)
 
 kde4_add_ui_files(keximain_LIB_SRCS
   kexifinddialog.ui
@@ -61,7 +66,8 @@ target_link_libraries(
     ${KDE4_KFILE_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
-    )
+    ${QIMAGEBLITZ_LIBRARIES}
+)
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS keximain  ${INSTALL_TARGETS_DEFAULT_ARGS})
