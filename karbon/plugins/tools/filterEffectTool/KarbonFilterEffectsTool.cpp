@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (c) 2009-2010 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2009-2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -157,8 +157,8 @@ public:
             // get the transformation from document to shape coordinates
             QTransform transform = currentShape->absoluteTransformation(0).inverted();
             // adjust filter rectangle by grab sensitivity
-            int grabSensitivity = tool->canvas()->resourceManager()->grabSensitivity();
-            QPointF border = tool->canvas()->viewConverter()->viewToDocument(QPointF(grabSensitivity, grabSensitivity));
+            const int grabDistance = tool->grabSensitivity();
+            QPointF border = tool->canvas()->viewConverter()->viewToDocument(QPointF(grabDistance, grabDistance));
             filterRect.adjust(-border.x(), -border.y(), border.x(), border.y());
             // map event point from document to shape coordinates
             QPointF shapePoint = transform.map(mousePosition);
@@ -245,7 +245,7 @@ void KarbonFilterEffectsTool::repaintDecorations()
 {
     if (d->currentShape && d->currentShape->filterEffectStack()) {
         QRectF bb = d->currentShape->boundingRect();
-        int radius = canvas()->resourceManager()->handleRadius();
+        const int radius = handleRadius();
         canvas()->updateCanvas(bb.adjusted(-radius, -radius, radius, radius));
     }
 }

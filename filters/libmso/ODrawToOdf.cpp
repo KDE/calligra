@@ -54,8 +54,7 @@ void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer&
         if (!sp->shapeProp.fPatriarch) {
             out.xml.startElement("draw:g");
 
-            //TODO: there might be nested group shapes each with different
-            //rotation and flipping
+            //TODO: rotation and flipping of group shapes
             const DrawStyle ds(0, 0, sp);
             qreal rotation = toQReal(ds.rotation());
             out.g_rotation += rotation;
@@ -64,7 +63,6 @@ void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer&
 
             if (sp->clientAnchor && sp->shapeGroup) {
                 oldCoords = client->getRect(*sp->clientAnchor);
-                oldCoords = processRect(0, rotation, oldCoords);
             }
         }
         if (oldCoords.isValid()) {

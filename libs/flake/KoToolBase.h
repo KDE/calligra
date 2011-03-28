@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -399,6 +400,12 @@ protected:
      * @see popupActionList
      */
     void setPopupActionList(const QList<QAction*> &list);
+
+    /// Convenience function to get the current handle radius
+    uint handleRadius() const;
+
+    /// Convencience function to get the current grab sensitivity
+    uint grabSensitivity() const;
 
     /**
     * Returns a handle grab rect at the given position.

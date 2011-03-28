@@ -317,7 +317,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyDateCmd : public NamedCommand
 {
 public:
-    CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, QDate &value, const QString& name = QString() );
+    CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, const QDate &value, const QString& name = QString() );
     void execute();
     void unexecute();
 

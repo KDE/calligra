@@ -132,9 +132,10 @@ public:
         if (fieldsExpanded)
             qDeleteAll(*fieldsExpanded);
         delete fieldsExpanded;
-        if (internalFields)
+        if (internalFields) {
             qDeleteAll(*internalFields);
-        delete internalFields;
+            delete internalFields;
+        }
         delete fieldsExpandedWithInternalAndRowID;
         delete fieldsExpandedWithInternal;
         delete autoincFields;
@@ -170,9 +171,11 @@ public:
             qDeleteAll(*fieldsExpanded);
             delete fieldsExpanded;
             fieldsExpanded = 0;
-            qDeleteAll(*internalFields);
-            delete internalFields;
-            internalFields = 0;
+            if (internalFields) {
+                qDeleteAll(*internalFields);
+                delete internalFields;
+                internalFields = 0;
+            }
             delete columnsOrder;
             columnsOrder = 0;
             delete columnsOrderWithoutAsterisks;
