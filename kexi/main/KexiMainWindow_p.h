@@ -250,10 +250,14 @@ protected:
             menu->addAction(ac->action("project_saveas"));
             menu->addAction(ac->action("project_close"));
             menu->addSeparator();
-            // todo: "Import, Export or Send..." instead of "tools_import_project"
-            menu->addAction(ac->action("tools_import_project"));
+            QAction *sep = new QAction(menu);
+            sep->setSeparator(true);
+            menu->addAction(sep);
+            //menu->addAction(ac->action("tools_import_project"));
+            menu->addAction(ac->action("project_import_export_send"));
+            menu->addAction(ac->action("project_properties"));
             // todo: project information
-            menu->addAction(ac->action("preferences"));
+            menu->addAction(ac->action("options_configure"));
             menu->addAction(ac->action("quit"));
             //menu->setFixedWidth(300);
             hlyr->addWidget(menu);
@@ -490,6 +494,14 @@ public:
             return;
         }
         KexiUtils::StyleProxy::drawPrimitive(element, option, painter, widget);
+    }
+
+    virtual int pixelMetric(PixelMetric metric, const QStyleOption* option = 0,
+                            const QWidget* widget = 0) const
+    {
+        if (metric == QStyle::PM_SmallIconSize)
+            return KIconLoader::SizeMedium;
+        return KexiUtils::StyleProxy::pixelMetric(metric, option, widget);
     }
 
     QPixmap kexiBlackPixmap;
@@ -1553,8 +1565,9 @@ public:
     KActionMenu *dummy_action;
 #endif
 
-    //! project menu
-    KAction *action_save, *action_save_as, *action_close,
+    //! Kexi menu
+    KAction *action_save, *action_save_as, 
+    *action_project_import_export_send, *action_close,
     *action_project_properties, *action_open_recent_more,
     *action_project_relations, *action_project_import_data_table,
     *action_project_export_data_table;
@@ -1567,6 +1580,7 @@ public:
 //  int action_open_recent_more_id;
     int action_open_recent_projects_title_id,
     action_open_recent_connections_title_id;
+    KAction *action_options_configure;
 
     //! edit menu
     KAction *action_edit_delete, *action_edit_delete_row,
@@ -1604,9 +1618,6 @@ public:
 
     //! window menu
     KAction *action_window_next, *action_window_previous;
-
-    //! settings menu
-    KAction *action_configure;
 
     //! for dock windows
 //2.0: unused  KMdiToolViewAccessor* navToolWindow;

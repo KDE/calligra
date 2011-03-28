@@ -675,7 +675,9 @@ void KexiMainWindow::setupActions()
     {
         KAction *tmp = KStandardAction::openRecent(0, 0, 0);
         ac->addAction("project_open_recent",
-                  action = new KAction(KIcon(tmp->icon()), tmp->text(), this));
+                  action = new KAction(KIcon(tmp->icon()),
+                                       i18nc("Action name with three dots...", "%1...", tmp->text()),
+                                       this));
         delete tmp;
         connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecentAboutToShow()));
         action->setToolTip(i18n("Open recent project"));
@@ -720,6 +722,19 @@ void KexiMainWindow::setupActions()
     d->action_project_properties = d->dummy_action;
 #endif
 
+#ifndef KEXI_NO_UNFINISHED
+    ac->addAction("project_import_export_send",
+                  d->action_project_import_export_send = new KAction(
+        KIcon(), i18n("&Import, Export or Send..."), this));
+    d->action_project_import_export_send->setToolTip(i18n("Import, export or send entire database"));
+    d->action_project_import_export_send->setWhatsThis(
+        i18n("Imports, exports or sends entire database."));
+    connect(d->action_project_import_export_send, SIGNAL(triggered()),
+            this, SLOT(slotProjectImportExportOrSend()));
+#else
+    d->action_project_import_export_send = d->dummy_action;
+#endif
+
     ac->addAction("project_close",
                   d->action_close = new KAction(KIcon("window-close"), i18n("&Close Project"), this));
     d->action_close->setToolTip(i18n("Close the current project"));
@@ -752,7 +767,6 @@ void KexiMainWindow::setupActions()
         i18n("Imports entire database as a Kexi project."));
     connect(d->action_tools_data_migration, SIGNAL(triggered()),
             this, SLOT(slotToolsProjectMigration()));
-
 
     d->action_tools_data_import = new KAction(KIcon("document-import"), i18n("Import Tables"), this);
     d->action_tools_data_import->setToolTip(i18n("Import data from an external source into this database"));
@@ -1154,8 +1168,9 @@ void KexiMainWindow::setupActions()
 
 //#ifdef KEXI_SHOW_UNIMPLEMENTED
 //! @todo 2.0 - implement settings window in a specific way
-    d->action_configure = KStandardAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
-    d->action_configure->setWhatsThis(i18n("Lets you configure Kexi."));
+    d->action_options_configure = KStandardAction::preferences(this, SLOT(slotShowSettings()), ac);
+    d->action_options_configure->setToolTip(i18n("Configure Kexi"));
+    d->action_options_configure->setWhatsThis(i18n("Lets you configure Kexi."));
 //#endif
 
     //HELP MENU
@@ -3003,7 +3018,7 @@ KexiMainWindow::childClosed(KMdiChildView *v)
 void
 KexiMainWindow::slotShowSettings()
 {
-    KEXI_UNFINISHED(d->action_configure->text());
+    KEXI_UNFINISHED(d->action_options_configure->text());
 //TODO KexiSettings s(this);
 // s.exec();
 }
