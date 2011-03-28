@@ -4804,8 +4804,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - [done] tcMar (Single Table Cell Margins) §17.4.69
  - tcPrChange (Revision Information for Table Cell Properties) §17.13.5.36
  - tcW (Preferred Table Cell Width) §17.4.72
- - textDirection (Table Cell Text Flow Direction) §17.4.73
- - vAlign (Table Cell Vertical Alignment) §17.4.84
+ - [done] textDirection (Table Cell Text Flow Direction) §17.4.73
+ - [done] vAlign (Table Cell Vertical Alignment) §17.4.84
  - [done] vMerge (Vertically Merged Cell) §17.4.85
 */
 //! @todo support all child elements
@@ -4824,10 +4824,72 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
             ELSE_TRY_READ_IF(tcBorders)
             ELSE_TRY_READ_IF(tcMar)
             ELSE_TRY_READ_IF(vMerge)
+            ELSE_TRY_READ_IF(vAlign)
+            else if (name() == "textDirection") {
+                TRY_READ(textDirectionTc)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL vAlign
+//! vAlign Handler (Table Cell Vertical Alignement)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_vAlign()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        m_currentStyleProperties->verticalAlign = val;
+        m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::VerticalAlign;
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL textDirection
+//! textDirection Handler (Table Cell Text Flow Direction)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_textDirectionTc()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        m_currentStyleProperties->glyphOrientation = false;
+        m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::GlyphOrientation;
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 

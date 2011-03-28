@@ -115,6 +115,14 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
 
     applyBordersStyle(styleProperties, style, row, column);
     applyBackground(styleProperties, style, row, column);
+
+    if(styleProperties->setProperties & TableStyleProperties::VerticalAlign) {
+        style->setVerticalAlign(styleProperties->verticalAlign);
+    }
+
+    if(styleProperties->setProperties & TableStyleProperties::GlyphOrientation) {
+        style->setGlyphOrientation(styleProperties->glyphOrientation);
+    }
 }
 
 void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
