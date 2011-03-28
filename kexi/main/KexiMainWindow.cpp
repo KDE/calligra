@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,6 +45,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaction.h>
+#include <KRecentFilesAction>
 #include <KActionCollection>
 #include <kactionmenu.h>
 #include <ktoggleaction.h>
@@ -670,23 +671,24 @@ void KexiMainWindow::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(slotGetNewStuff()));
 #endif
 
-// d->action_open_recent = KStandardAction::openRecent( this, SLOT(slotProjectOpenRecent(const KUrl&)), actionCollection(), "project_open_recent" );
-
-//#ifdef KEXI_SHOW_UNIMPLEMENTED
 #ifndef KEXI_NO_UNFINISHED
-    ac->addAction("project_open_recent",
-                  d->action_open_recent = new KActionMenu(i18n("Open Recent"), this));
+    {
+        KAction *tmp = KStandardAction::openRecent(0, 0, 0);
+        ac->addAction("project_open_recent",
+                  action = new KAction(KIcon(tmp->icon()), tmp->text(), this));
+        delete tmp;
+        connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecentAboutToShow()));
+        action->setToolTip(i18n("Open recent project"));
+        action->setWhatsThis(
+            i18n("Opens one of the recently opened project. Currently opened project is not affected."));
+        d->action_open_recent = action;
+    }
+# if 0
     connect(d->action_open_recent->popupMenu(), SIGNAL(activated(int)),
             this, SLOT(slotProjectOpenRecent(int)));
     connect(d->action_open_recent->popupMenu(), SIGNAL(aboutToShow()),
             this, SLOT(slotProjectOpenRecentAboutToShow()));
-//moved down  d->action_open_recent_projects_title_id =
-//  d->action_open_recent->popupMenu()->insertTitle(i18n("Recently Opened Databases"));
-//moved down d->action_open_recent_connections_title_id =
-//  d->action_open_recent->popupMenu()->insertTitle(i18n("Recently Connected Database Servers"));
-// d->action_open_recent->popupMenu()->insertSeparator();
-// d->action_open_recent_more_id = d->action_open_recent->popupMenu()
-//  ->insertItem(i18n("&More Projects..."), this, SLOT(slotProjectOpenRecentMore()), 0, 1000);
+# endif
 #else
     d->action_open_recent = d->dummy_action;
 #endif
@@ -3323,7 +3325,7 @@ KexiMainWindow::slotProjectOpenRecentAboutToShow()
     */
 
     //show recent databases
-    KMenu *popup = d->action_open_recent->menu();
+    QMenu *popup = d->action_open_recent->menu();
     popup->clear();
 #if 0
     d->action_open_recent_projects_title_id = popup->insertTitle(i18n("Recently Opened Databases"));
