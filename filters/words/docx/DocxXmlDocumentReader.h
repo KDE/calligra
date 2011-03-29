@@ -75,6 +75,8 @@ protected:
     KoFilter::ConversionStatus read_numId();
     KoFilter::ConversionStatus read_ilvl();
     KoFilter::ConversionStatus read_sectPr();
+    bool m_footerActive;
+    bool m_headerActive;
     KoFilter::ConversionStatus read_footerReference();
     KoFilter::ConversionStatus read_headerReference();
     KoFilter::ConversionStatus read_cols();
@@ -273,7 +275,7 @@ private:
     void applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding);
 
     //! Applies border styles and paddings for page
-    void appyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide,QString> &pageBorder,
+    void applyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide,QString> &pageBorder,
                          QMap<BorderSide, qreal> &pagePadding, QString & offsetFrom);
     void defineTableStyles();
 
