@@ -27,7 +27,7 @@
 
 #include <wv2/src/handlers.h>
 #include "wv2/src/graphics.h"
-#include "versionmagic.h"
+//#include "versionmagic.h"
 #include "document.h"
 
 #include "generated/simpleParser.h"

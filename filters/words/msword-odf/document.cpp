@@ -27,7 +27,7 @@
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
-#include "versionmagic.h"
+//#include "versionmagic.h"
 #include "drawstyle.h"
 #include "msodraw.h"
 #include "mswordodfimport.h"
