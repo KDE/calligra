@@ -323,6 +323,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 {
     READ_PROLOGUE
 
+    m_footerActive = false;
+    m_headerActive = false;
+
     m_currentPageStyle = KoGenStyle(KoGenStyle::PageLayoutStyle);
     m_currentPageStyle.setAutoStyleInStylesDotXml(true);
     m_currentPageStyle.addProperty("style:writing-mode", "lr-tb");
@@ -364,7 +367,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
         }
     }
 
-    appyPageBorders(m_currentPageStyle, m_pageMargins, m_pageBorderStyles, m_pageBorderPaddings, m_pageBorderOffsetFrom);
+    applyPageBorders(m_currentPageStyle, m_pageMargins, m_pageBorderStyles, m_pageBorderPaddings, m_pageBorderOffsetFrom);
 
     // Currently if there are 3 header/footer styles, the one with 'first' is ignored
     if (!m_headers.isEmpty()) {
@@ -504,23 +507,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    TRY_READ_ATTR(top)
-    if (!top.isEmpty()) {
-        int topNum = 0;
-        STRING_TO_INT(top, topNum, QString("w:top"));
-        m_pageMargins.insert(MarginTop,TWIP_TO_POINT(topNum));
-    }
     TRY_READ_ATTR(right)
     if (!right.isEmpty()) {
         int rightNum = 0;
         STRING_TO_INT(right, rightNum, QString("w:right"));
         m_pageMargins.insert(MarginRight,TWIP_TO_POINT(rightNum));
-    }
-    TRY_READ_ATTR(bottom)
-    if (!bottom.isEmpty()) {
-        int bottomNum = 0;
-        STRING_TO_INT(bottom, bottomNum, QString("w:bottom"));
-        m_pageMargins.insert(MarginBottom,TWIP_TO_POINT(bottomNum));
     }
     TRY_READ_ATTR(left)
     if (!left.isEmpty()) {
@@ -531,6 +522,28 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
 
     TRY_READ_ATTR(footer)
     TRY_READ_ATTR(header)
+    TRY_READ_ATTR(top)
+    TRY_READ_ATTR(bottom)
+    int topNum = 0;
+    int bottomNum = 0;
+    int headerNum = 0;
+    int footerNum = 0;
+    topNum = top.toInt();
+    bottomNum = bottom.toInt();
+    headerNum = header.toInt();
+    footerNum = footer.toInt();
+    if (!m_headerActive) {
+        m_pageMargins.insert(MarginTop, TWIP_TO_POINT(topNum));
+    }
+    else {
+        m_pageMargins.insert(MarginTop, TWIP_TO_POINT(headerNum));
+    }
+    if (!m_footerActive) {
+        m_pageMargins.insert(MarginBottom, TWIP_TO_POINT(bottomNum));
+    }
+    else {
+        m_pageMargins.insert(MarginBottom, TWIP_TO_POINT(footerNum));
+    }
 
     QBuffer headerBuffer;
     headerBuffer.open( QIODevice::WriteOnly );
@@ -538,6 +551,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     headerWriter.startElement("style:header-style");
     headerWriter.startElement("style:header-footer-properties");
     headerWriter.addAttribute("style:dynamic-spacing", "true");
+    if (m_headerActive) {
+        if (topNum > headerNum) {
+            headerWriter.addAttributePt("fo:min-height", TWIP_TO_POINT(topNum - headerNum));
+        }
+    }
     headerWriter.endElement(); // style:header-footer-properties
     headerWriter.endElement(); // style:header-style
     QString headerContents = QString::fromUtf8(headerBuffer.buffer(), headerBuffer.buffer().size() );
@@ -549,6 +567,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     footerWriter.startElement("style:footer-style");
     footerWriter.startElement("style:header-footer-properties");
     footerWriter.addAttribute("style:dynamic-spacing", "true");
+    if (m_footerActive) {
+        if (bottomNum > footerNum) {
+            footerWriter.addAttributePt("fo:min-height", TWIP_TO_POINT(bottomNum - footerNum));
+        }
+    }
     footerWriter.endElement(); // style:header-footer-properties
     footerWriter.endElement(); // style:footer-style
     QString footerContents = QString::fromUtf8(footerBuffer.buffer(), footerBuffer.buffer().size() );
@@ -615,6 +638,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 {
     READ_PROLOGUE
+
+    m_footerActive = true;
+
     const QXmlStreamAttributes attrs(attributes());
 
     QString link_target;
@@ -688,6 +714,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
 {
     READ_PROLOGUE
+
+    m_headerActive = true;
+
     const QXmlStreamAttributes attrs(attributes());
 
     QString link_target;
@@ -1077,7 +1106,7 @@ void DocxXmlDocumentReader::applyBorders(KoGenStyle *style, QMap<BorderSide, QSt
     sourcePadding.clear();
 }
 
-void DocxXmlDocumentReader::appyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins,
+void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins,
         QMap<BorderSide,QString> &pageBorder, QMap<BorderSide, qreal> &pagePadding, QString & offsetFrom)
 {
     if (pageMargins.contains(MarginTop)) {
