@@ -508,7 +508,7 @@ void CalendarModifyWeekdayCmd::unexecute()
     m_cal->setWeekday( m_weekday, m_orig );
 }
 
-CalendarModifyDateCmd::CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, QDate &value, const QString& name )
+CalendarModifyDateCmd::CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, const QDate &value, const QString& name )
     : NamedCommand( name ),
     m_cal( cal ),
     m_day( day ),

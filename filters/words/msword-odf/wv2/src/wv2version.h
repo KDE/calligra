@@ -20,6 +20,8 @@
 #ifndef WV2_VERSION_H
 #define WV2_VERSION_H
 
+// NOTE: Obsolete
+
 #define WV2_VERSION_STRING "0.4.2"
 #define WV2_VERSION_MAJOR 0
 #define WV2_VERSION_MINOR 4

@@ -149,6 +149,11 @@ protected:
     KoFilter::ConversionStatus read_tr();
     KoFilter::ConversionStatus read_tc();
     KoFilter::ConversionStatus read_tcPr();
+<<<<<<< HEAD
+=======
+    KoFilter::ConversionStatus read_vAlign();
+    KoFilter::ConversionStatus read_textDirectionTc();
+>>>>>>> master
     KoFilter::ConversionStatus read_vMerge();
     KoFilter::ConversionStatus read_tcBorders();
     KoFilter::ConversionStatus read_tcMar();
