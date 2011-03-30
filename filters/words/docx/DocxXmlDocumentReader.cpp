@@ -5008,9 +5008,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_vMerge()
  - [done] insideH (Table Cell Inside Horizontal Edges Border) §17.4.24
  - [done] insideV (Table Cell Inside Vertical Edges Border) §17.4.26
  - start (Table Cell Leading Edge Border) §17.4.34
- - tl2br (Table Cell Top Left to Bottom Right Diagonal Border) §17.4.74
+ - [done] tl2br (Table Cell Top Left to Bottom Right Diagonal Border) §17.4.74
  - [done] top (Table Cell Top Border) §17.4.75
- - tr2bl (Table Cell Top Right to Bottom Left Diagonal Border) §17.4.80
+ - [done] tr2bl (Table Cell Top Right to Bottom Left Diagonal Border) §17.4.80
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
 {
@@ -5035,6 +5035,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
             else if (QUALIFIED_NAME_IS(insideH)) {
                 m_currentStyleProperties->insideH = getBorderData();
                 m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
+            }
+            else if (QUALIFIED_NAME_IS(tl2br)) {
+                m_currentStyleProperties->tl2br = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tl2brBorder;
+            }
+            else if (QUALIFIED_NAME_IS(tr2bl)) {
+                m_currentStyleProperties->tr2bl = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tr2blBorder;
             }
         }
     }
