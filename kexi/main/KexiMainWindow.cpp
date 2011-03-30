@@ -3176,6 +3176,13 @@ KexiMainWindow::createBlankProject()
 void
 KexiMainWindow::slotProjectOpen()
 {
+    d->tabbedToolBar->showMainMenu();
+    KexiStartupDialog *openWindow = new KexiStartupDialog(
+        KexiStartupDialog::OpenExisting, 0, Kexi::connset(),
+        Kexi::recentProjects(), 0);
+    d->tabbedToolBar->setMainMenuContent(openWindow);
+
+#if 0 // before MODERN
     KexiStartupDialog dlg(
         KexiStartupDialog::OpenExisting, 0, Kexi::connset(), Kexi::recentProjects(),
         this);
@@ -3184,6 +3191,7 @@ KexiMainWindow::slotProjectOpen()
         return;
 
     openProject(dlg.selectedFileName(), dlg.selectedExistingConnection());
+#endif
 }
 
 tristate KexiMainWindow::openProject(const QString& aFileName,

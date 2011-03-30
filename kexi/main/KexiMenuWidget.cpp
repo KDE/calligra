@@ -864,11 +864,10 @@ bool KexiMenuWidgetPrivate::actionPersistentlySelected(const QAction* action) co
 void KexiMenuWidgetPrivate::setActionPersistentlySelected(QAction* action, bool set)
 {
     KexiMenuWidgetAction* kaction = qobject_cast<KexiMenuWidgetAction*>(action);
-    if (!kaction)
-        return;
     if (previousPersistentlySelectedAction)
         previousPersistentlySelectedAction->setPersistentlySelected(false);
-    kaction->setPersistentlySelected(set);
+    if (kaction)
+        kaction->setPersistentlySelected(set);
     previousPersistentlySelectedAction = kaction;
 }
 
@@ -2064,6 +2063,8 @@ void KexiMenuWidget::hideEvent(QHideEvent *)
     d->causedPopup.action = 0;
     if (d->scroll)
         d->scroll->scrollTimer.stop(); //make sure the timer stops
+    // this unmarks the previous persistent action
+    d->setActionPersistentlySelected(0, false);
 }
 
 /*!
