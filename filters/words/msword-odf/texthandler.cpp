@@ -90,18 +90,15 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_fldChp(0)
 //     , m_index(0)
 {
-#ifdef IMAGE_IMPORT
-    kDebug(30513) << "we have image support";
-#else
-    kDebug(30513) << "no image support";
-#endif
+    //set the pointer to bodyWriter for writing to content.xml in office:text
     if (bodyWriter) {
-        m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing to content.xml in office:text
+        m_bodyWriter = bodyWriter;
     } else {
         kWarning() << "No bodyWriter!";
     }
+    //for collecting most of the styles
     if (mainStyles) {
-        m_mainStyles = mainStyles; //for collecting most of the styles
+        m_mainStyles = mainStyles;
     } else {
         kWarning() << "No mainStyles!";
     }
@@ -603,8 +600,6 @@ void KWordTextHandler::tableEndFound()
     emit tableFound(table);
 }
 
-#ifdef IMAGE_IMPORT
-
 //TODO: merge inlineObjectFound with floatingObjectFound, both of them are
 //stable actually
 
@@ -713,10 +708,8 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     delete m_drawingWriter;
     m_drawingWriter = 0;
 }
-#endif // IMAGE_IMPORT
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
-
 void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
 {
     kDebug(30513) << "**********************************************";

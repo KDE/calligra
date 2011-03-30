@@ -48,7 +48,8 @@ const CalculationSettings* ValueFormatter::settings() const
 
 Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int precision,
                                  Style::FloatFormat floatFormat, const QString &prefix,
-                                 const QString &postfix, const QString &currencySymbol, const QString &formatString)
+                                 const QString &postfix, const QString &currencySymbol,
+                                 const QString &formatString, bool thousandsSep)
 {
     if (value.isError())
         return Value(value.errorMessage());
@@ -72,6 +73,9 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         if (!str.isEmpty() && str[0] == '\'')
             str = str.mid(1);
         result = Value(str);
+        if (value.isBoolean()) {
+            result.setFormat(Value::fmt_Boolean);
+        }
         ok = true;
     }
 
@@ -117,7 +121,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         if (value.isComplex()) {
             Value complexValue = m_converter->asComplex(value, &ok);
             if (ok) {
-                result = Value(complexFormat(complexValue, precision, fmtType, floatFormat, currencySymbol));
+                result = Value(complexFormat(complexValue, precision, fmtType, floatFormat, currencySymbol, thousandsSep));
                 result.setFormat(Value::fmt_Number);
             }
         }
@@ -126,7 +130,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         else {
             Number number = m_converter->asFloat(value, &ok).asFloat();
             if (ok) {
-                result = Value(createNumberFormat(number, precision, fmtType, floatFormat, currencySymbol, formatString));
+                result = Value(createNumberFormat(number, precision, fmtType, floatFormat, currencySymbol, formatString, thousandsSep));
                 result.setFormat(Value::fmt_Number);
             }
         }
@@ -245,7 +249,8 @@ QString ValueFormatter::removeTrailingZeros(const QString& str, const QString& d
 }
 
 QString ValueFormatter::createNumberFormat(Number value, int precision,
-        Format::Type fmt, Style::FloatFormat floatFormat, const QString& currencySymbol, const QString& _formatString)
+        Format::Type fmt, Style::FloatFormat floatFormat, const QString& currencySymbol,
+        const QString& _formatString, bool thousandsSep)
 {
     QString prefix, postfix;
     QString formatString(_formatString);
@@ -348,6 +353,14 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             decimalSymbol = '.';
 
         localizedNumber = removeTrailingZeros(localizedNumber, decimalSymbol);
+    }
+
+    // Remove thousands seperators if necessary
+    if (!thousandsSep) {
+        QString seperator = m_converter->settings()->locale()->thousandsSeparator();
+        if (!seperator.isNull()) {
+            localizedNumber.remove(seperator);
+        }
     }
 
     // remove negative sign if prefix already ends with '-'
@@ -716,14 +729,15 @@ QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, cons
 QString ValueFormatter::complexFormat(const Value& value, int precision,
                                       Format::Type formatType,
                                       Style::FloatFormat floatFormat,
-                                      const QString& currencySymbol)
+                                      const QString& currencySymbol,
+                                      bool thousandsSep)
 {
     // FIXME Stefan: percentage, currency and scientific formats!
     QString str;
     const Number real = value.asComplex().real();
     const Number imag = value.asComplex().imag();
-    str = createNumberFormat(real, precision, formatType, floatFormat, QString(), QString());
-    str += createNumberFormat(imag, precision, formatType, Style::AlwaysSigned, currencySymbol, QString());
+    str = createNumberFormat(real, precision, formatType, floatFormat, QString(), QString(), thousandsSep);
+    str += createNumberFormat(imag, precision, formatType, Style::AlwaysSigned, currencySymbol, QString(), thousandsSep);
     str += 'i';
     return str;
 }

@@ -34,7 +34,8 @@ using namespace MSO;
 
 namespace
 {
-enum {
+enum MSOSPT
+{
     msosptMin = 0,
     msosptNotPrimitive = msosptMin,
     msosptRectangle = 1,
@@ -241,6 +242,17 @@ enum {
     msosptTextBox = 202,
     msosptMax,
     msosptNil = 0x0FFF
+};
+
+enum MSOPATHTYPE
+{
+    msopathLineTo = 0,
+    msopathCurveTo,
+    msopathMoveTo,
+    msopathClose,
+    msopathEnd,
+    msopathEscape,
+    msopathClientEscape
 };
 
 void equation(Writer& out, const char* name, const char* formula)
@@ -1977,6 +1989,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
 
         int maxX = 0, minX = INT_MAX, maxY = 0, minY = INT_MAX;
         int x,y;
+
         //get vertice points
         for (int i = 0, offset = 0; i < _v.nElems; i++, offset += step) {
             // x coordinate of this point
@@ -2004,52 +2017,69 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
         }
 
-        QString viewBox = QString::number(minX) + ' ' + QString::number(minY) + ' '
-                          + QString::number(maxX) + ' ' + QString::number(maxY);
+	//TODO: geoLeft, geoTop, geoRight, geoBottom
+        QString viewBox = QString::number(minX) + ' ' + QString::number(minY) + ' ' +
+                          QString::number(maxX) + ' ' + QString::number(maxY);
 
         // combine segmentationInfoData and verticePoints into enhanced-path string
-        int verticesIndex = 0;
         QString enhancedPath;
-        for (int i = 0; i < _c.nElems; i++) {
+        ushort msopathtype;
+        bool nOffRange = false;
 
-            //MSOPATHINFO.type
-            switch ((((*(ushort *)(_c.data.data()+i*2)) >> 13) & 0x7)) {
-            case 0: { //msopathLineTo
-                enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex].y()) + ' ';
-                verticesIndex++;
+        for (int i = 0, n = 0; ((i < _c.nElems) && !nOffRange); i++) {
+
+            msopathtype = (((*(ushort *)(_c.data.data() + i * 2)) >> 13) & 0x7);
+
+            switch (msopathtype) {
+            case msopathLineTo:
+            {
+                if (n >= verticesPoints.size()) {
+                    qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
+                    nOffRange = true;
+                    break;
+                }
+                enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[n].x()) + ' ' +
+                               QString::number(verticesPoints[n].y()) + ' ';
+                n++;
                 break;
             }
-            case 1: { // msopathCurveTo
-                enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex].y()) + ' '
-                               + QString::number(verticesPoints[verticesIndex+1].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex+1].y()) + ' '
-                               + QString::number(verticesPoints[verticesIndex+2].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex+2].y()) + ' ';
-                verticesIndex = verticesIndex + 3;
+            case msopathCurveTo:
+            {
+                if (n >= verticesPoints.size()) {
+                    qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
+                    nOffRange = true;
+                    break;
+                }
+                enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[n].x()) + ' ' +
+                               QString::number(verticesPoints[n].y()) + ' ' +
+                               QString::number(verticesPoints[n + 1].x()) + ' ' +
+                               QString::number(verticesPoints[n + 1].y()) + ' ' +
+                               QString::number(verticesPoints[n + 2].x()) + ' ' +
+                               QString::number(verticesPoints[n + 2].y()) + ' ';
+                n = n + 3;
                 break;
             }
-            case 2: { // msopathMoveTo
-                enhancedPath = enhancedPath + "M " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex].y()) + ' ';
-                verticesIndex++;
+            case msopathMoveTo:
+            {
+                if (n >= verticesPoints.size()) {
+                    qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
+                    nOffRange = true;
+                    break;
+                }
+                enhancedPath = enhancedPath + "M " + QString::number(verticesPoints[n].x()) + ' ' +
+                               QString::number(verticesPoints[n].y()) + ' ';
+                n++;
                 break;
             }
-            case 3: { // msopathClose
+            case msopathClose:
                 enhancedPath = enhancedPath + "Z ";
                 break;
-            }
-            case 4: { // msopathEnd
+            case msopathEnd:
                 enhancedPath = enhancedPath + "N ";
                 break;
-            }
-            case 5: { // msopathEscape
-                break;
-            }
-            case 6: { // msopathClientEscape
-                break;
-            }
+            case msopathEscape:
+            case msopathClientEscape:
+                 break;
             }
         }
         //dr3d:projection
