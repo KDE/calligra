@@ -48,7 +48,9 @@ struct MSOOXML_EXPORT TableStyleProperties
         TopMargin = 512,
         RightMargin = 1024,
         BottomMargin = 2048,
-        LeftMargin = 4096
+        LeftMargin = 4096,
+        VerticalAlign = 8192,
+        GlyphOrientation = 16384
     };
     Q_DECLARE_FLAGS(Properties, Property)
     Properties setProperties;
@@ -68,6 +70,9 @@ struct MSOOXML_EXPORT TableStyleProperties
     qreal rightMargin;
     qreal bottomMargin;
     qreal leftMargin;
+
+    QString verticalAlign;
+    bool glyphOrientation;
 };
 
 class MSOOXML_EXPORT TableStyle

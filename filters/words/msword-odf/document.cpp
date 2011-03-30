@@ -27,7 +27,7 @@
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
-#include "versionmagic.h"
+//#include "versionmagic.h"
 #include "drawstyle.h"
 #include "msodraw.h"
 #include "mswordodfimport.h"
@@ -66,7 +66,7 @@ Document::Document(const std::string& fileName,
                    KoXmlWriter* bodyWriter,
                    KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, POLE::Storage* storage,
-                   LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
+                   LEInputStream* data, LEInputStream* table, LEInputStream* wordDocument)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
@@ -92,7 +92,7 @@ Document::Document(const std::string& fileName,
         , m_useLastMasterPage(false)
         , m_data_stream(data)
         , m_table_stream(table)
-        , m_wdocument_stream(wdocument)
+        , m_wdocument_stream(wordDocument)
 {
     kDebug(30513);
     addBgColor("#ffffff"); //initialize the background-colors stack

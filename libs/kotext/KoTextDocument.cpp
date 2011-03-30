@@ -37,6 +37,7 @@
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
 #include "KoOdfNotesConfiguration.h"
+#include "changetracker/KoChangeTracker.h"
 
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection);
 

@@ -23,7 +23,9 @@
 #ifndef VERSIONMAGIC_H
 #define VERSIONMAGIC_H
 
-#include <wv2/src/global.h>  // ###### FIXME: #include wv2version.h here
+// NOTE: Obsolete
+
+#include <wv2/src/wv2version.h>
 
 #if defined(WV2_IS_VERSION)
 #  if WV2_IS_VERSION( 0, 2, 5 )
