@@ -59,6 +59,7 @@
 #include "qwidgetaction.h"
 #include "qtoolbutton.h"
 #include "qpushbutton.h"
+#include <QScopedPointer>
 //#include <private/qpushbutton_p.h>
 //#include <private/qaction_p.h>
 //#include <private/qsoftkeymanager_p.h>
@@ -358,6 +359,59 @@ void OxygenHelper::renderMenuBackground( QPainter* p, const QRect& clipRect,
 
 // </oxygen>
 
+class KexiMenuWidgetActionPrivate
+{
+public:
+    KexiMenuWidgetActionPrivate()
+     : persistentlySelected(false)
+    {
+    }
+    bool persistentlySelected;
+};
+
+KexiMenuWidgetAction::KexiMenuWidgetAction(QObject *parent)
+ : KAction(parent)
+ , d(new KexiMenuWidgetActionPrivate)
+{
+}
+
+KexiMenuWidgetAction::KexiMenuWidgetAction(const QString &text, QObject *parent)
+ : KAction(text, parent)
+ , d(new KexiMenuWidgetActionPrivate)
+{
+}
+
+KexiMenuWidgetAction::KexiMenuWidgetAction(const KIcon &icon, const QString &text,
+                                           QObject *parent)
+ : KAction(icon, text, parent)
+ , d(new KexiMenuWidgetActionPrivate)
+{
+}
+
+KexiMenuWidgetAction::KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent)
+ : KAction(parent)
+ , d(new KexiMenuWidgetActionPrivate)
+{
+    QScopedPointer<KAction> tmp(KStandardAction::create(id, 0, 0, 0));
+    setIcon(tmp->icon());
+    setText(tmp->text());
+    setShortcut(tmp->shortcut(DefaultShortcut), DefaultShortcut);
+    setShortcut(tmp->shortcut(ActiveShortcut), ActiveShortcut);
+}
+
+
+void KexiMenuWidgetAction::setPersistentlySelected(bool set)
+{
+    if (set == d->persistentlySelected)
+        return;
+    d->persistentlySelected = set;
+}
+
+bool KexiMenuWidgetAction::persistentlySelected() const
+{
+    return d->persistentlySelected;
+}
+
 // from qobject_p.h
 class QBoolBlocker
 {
@@ -396,6 +450,7 @@ void KexiMenuWidgetPrivate::init()
     q->addAction(selectAction);
     q->addAction(cancelAction);
 #endif
+    q->setFocusPolicy(Qt::StrongFocus);
 }
 
 int KexiMenuWidgetPrivate::scrollerHeight() const
@@ -800,6 +855,30 @@ void KexiMenuWidgetPrivate::updateLayoutDirection()
     }
 }
 
+bool KexiMenuWidgetPrivate::actionPersistentlySelected(const QAction* action) const
+{
+    const KexiMenuWidgetAction* kaction = qobject_cast<const KexiMenuWidgetAction*>(action);
+    return kaction ? kaction->persistentlySelected() : false;
+}
+
+void KexiMenuWidgetPrivate::setActionPersistentlySelected(QAction* action, bool set)
+{
+    KexiMenuWidgetAction* kaction = qobject_cast<KexiMenuWidgetAction*>(action);
+    if (!kaction)
+        return;
+    if (previousPersistentlySelectedAction)
+        previousPersistentlySelectedAction->setPersistentlySelected(false);
+    kaction->setPersistentlySelected(set);
+    previousPersistentlySelectedAction = kaction;
+}
+
+void KexiMenuWidgetPrivate::toggleActionPersistentlySelected(QAction* action)
+{
+    KexiMenuWidgetAction* kaction = qobject_cast<KexiMenuWidgetAction*>(action);
+    if (!kaction)
+        return;
+    setActionPersistentlySelected(kaction, !kaction->persistentlySelected());
+}
 
 /*!
     Returns the action associated with this menu.
@@ -1358,7 +1437,6 @@ KexiMenuWidget::KexiMenuWidget(QWidget *parent)
     : QWidget(parent), d(new KexiMenuWidgetPrivate(this))
 {
     d->init();
-    //setAutoFillBackground(true);
 }
 
 /*!
@@ -2050,12 +2128,32 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         QStyleOptionMenuItem opt;
         initStyleOption(&opt, action);
         opt.rect = adjustedActionRect;
+        if (d->actionPersistentlySelected(action)) {
+            opt.state |= QStyle::State_Selected;
+            opt.palette.setBrush(QPalette::Window, opt.palette.brush(QPalette::Highlight));
+            opt.palette.setBrush(QPalette::WindowText, opt.palette.brush(QPalette::HighlightedText));
+        }
+        else if (!action->isSeparator() && (opt.state & QStyle::State_Selected)) {
+            // lighten the highlight to make it different from
+            // the persistently selected item
+            opt.palette.setColor(QPalette::Highlight,
+                                 KColorUtils::mix(
+                                    opt.palette.color(QPalette::Highlight),
+                                    opt.palette.color(QPalette::Window)));
+            opt.palette.setColor(QPalette::HighlightedText, opt.palette.color(QPalette::Text));
+        }
+        
         // Depending on style Button or Background brush may be used
         // to fill background of deselected items. Make it transparent.
-        if (!action->isSeparator() && !(opt.state & QStyle::State_Selected)) {
-             opt.palette.setBrush(QPalette::Button, QBrush(Qt::transparent));
-             opt.palette.setBrush(QPalette::Background, QBrush(Qt::transparent));
+        bool transparentBackground = !(opt.state & QStyle::State_Selected);
+        if (d->oxygenHelper && action->isSeparator()) {
+            transparentBackground = false;
         }
+        if (transparentBackground) {
+            opt.palette.setBrush(QPalette::Button, QBrush(Qt::transparent));
+            opt.palette.setBrush(QPalette::Background, QBrush(Qt::transparent));
+        }
+
         style()->drawControl(QStyle::CE_MenuItem, &opt, &p, this);
     }
 
@@ -2155,6 +2253,7 @@ void KexiMenuWidget::mousePressEvent(QMouseEvent *e)
 
     QAction *action = d->actionAt(e->pos());
     d->setCurrentAction(action, 20);
+    d->toggleActionPersistentlySelected(action);
     update();
 }
 

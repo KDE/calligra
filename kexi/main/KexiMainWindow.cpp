@@ -650,7 +650,7 @@ void KexiMainWindow::setupActions()
     // PROJECT MENU
     KAction *action;
     ac->addAction("project_new",
-                  action = new KAction(KIcon("document-new"), i18n("&New..."), this));
+        action = new KexiMenuWidgetAction(KStandardAction::New, this));
     action->setShortcut(KStandardShortcut::openNew());
     action->setToolTip(i18n("Create a new project"));
     action->setWhatsThis(
@@ -658,10 +658,11 @@ void KexiMainWindow::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectNew()));
 
     ac->addAction("project_open",
-                  action = KStandardAction::open(this, SLOT(slotProjectOpen()), this));
+            action = new KexiMenuWidgetAction(KStandardAction::Open, this));
     action->setToolTip(i18n("Open an existing project"));
     action->setWhatsThis(
         i18n("Opens an existing project. Currently opened project is not affected."));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpen()));
 
 #ifdef HAVE_KNEWSTUFF
     ac->addAction("project_download_examples",

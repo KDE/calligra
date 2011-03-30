@@ -24,15 +24,34 @@
 #define KEXIMENUWIDGET_H
 
 #include <kexi_export.h>
+#include <KStandardAction>
+#include <KAction>
 #include <QtGui/qwidget.h>
 #include <QtCore/qstring.h>
 #include <QtGui/qicon.h>
-#include <QtGui/qaction.h>
 
 class KexiMenuWidgetPrivate;
+class KexiMenuWidgetActionPrivate;
 class QStyleOptionMenuItem;
 class QEventLoop;
 struct KexiMenuWidgetCaused;
+
+class KexiMenuWidgetAction : public KAction
+{
+    Q_OBJECT
+public:
+    KexiMenuWidgetAction(QObject *parent);
+    KexiMenuWidgetAction(const QString &text, QObject *parent);
+    KexiMenuWidgetAction(const KIcon &icon, const QString &text, QObject *parent);
+    KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent);
+
+protected:
+    void setPersistentlySelected(bool set);
+    bool persistentlySelected() const;
+    friend class KexiMenuWidgetPrivate;
+
+    KexiMenuWidgetActionPrivate * const d;
+};
 
 class KEXIMAIN_EXPORT KexiMenuWidget : public QWidget
 {
@@ -75,6 +94,14 @@ public:
 
     //! Sets frame visibility.
     void setFrame(bool set);
+
+    //! @return true if persistent selections are enabled. False by default.
+    //! @see setPersistentSelectionsEnabled()
+//    bool persistentSelectionsEnabled() const;
+
+    //! Sets flag of for persistent selections in action items.
+    //! In KexiMenuWidget, persistent selection flag is used in place of submenus.
+//    void setPersistentSelectionsEnabled(bool set);
 
     bool isEmpty() const;
     void clear();
@@ -152,8 +179,6 @@ private Q_SLOTS:
     void overrideMenuActionDestroyed();
 
 protected:
-    //KexiMenuWidget(KexiMenuWidgetPrivate &dd, QWidget* parent = 0);
-
     const KexiMenuWidgetCaused& causedPopup() const;
     enum SelectionReason {
         SelectedFromKeyboard,
@@ -167,12 +192,6 @@ private:
     Q_DISABLE_COPY(KexiMenuWidget)
 
     KexiMenuWidgetPrivate * const d;
-//    friend class QMenuBar;
-//    friend class QMenuBarPrivate;
-//    friend class QTornOffMenu;
-//    friend class QComboBox;
-//    friend class QAction;
-//    friend class QToolButtonPrivate;
     friend class KexiMenuWidgetPrivate;
 };
 
