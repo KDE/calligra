@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -50,8 +50,8 @@ public:
 
     KoPrintJob *createPrintJob();
 
-    KHTMLPart &htmlPart() { return m_htmlPart; }
-    const KHTMLPart &htmlPart() const { return m_htmlPart; }
+    KHTMLPart &htmlPart() { return *m_htmlPart; }
+    const KHTMLPart &htmlPart() const { return *m_htmlPart; }
 
 signals:
     void openUrlRequest( HtmlView*, const KUrl& );
@@ -71,7 +71,7 @@ private slots:
     void slotEnableActions( bool on );
 
 private:
-    KHTMLPart m_htmlPart;
+    KHTMLPart *m_htmlPart;
 
 };
 
