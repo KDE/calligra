@@ -234,6 +234,12 @@ public:
 
     int frameWidth(const QStyleOption* opt = 0) const;
 
+    bool actionPersistentlySelected(const QAction* action) const;
+
+    void setActionPersistentlySelected(QAction* action, bool set);
+
+    void toggleActionPersistentlySelected(QAction* action);
+
     //menu fading/scrolling effects
     //bool doChildEffects;
 
@@ -241,7 +247,12 @@ public:
     QPointer<QWidget> noReplayFor;
     //! Frame visibility
     bool hasFrame;
+
+    QPointer<KexiMenuWidgetAction> previousPersistentlySelectedAction;
     
+    //! True if persistent selections are enabled. False by default.
+    //bool persistentSelectionsEnabled;
+
     OxygenHelper *oxygenHelper;
 };
 

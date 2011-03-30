@@ -82,9 +82,17 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cpp/fid005249EAAF7BE50E0DF5B02243622557BCE5A466.aspx) and use for any recursion guard
 
+TODO: remove color utils from KexiUtils, use KColorUtils directly
+TODO: remove contrasting-color creation code from KexiUtils, and use KColorScheme::shade() instead
+
 ===================== Kexi 2.4  =====================
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
+
+2011-03-29
+Main Window
+*Initial implementation of the Modern Menu
+TODO: fix keyboard-support
 
 2011-03-28
 KexiDB
