@@ -67,6 +67,12 @@ public:
     
     QRect tabRect(int index) const { return tabBar()->tabRect(index); }
 
+public slots:
+    void setMainMenuContent(QWidget *w);
+    void showMainMenu();
+    void hideMainMenu();
+    void toggleMainMenu();
+
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void leaveEvent(QEvent* event);
@@ -229,7 +235,22 @@ public:
         //setAutoFillBackground(true); // to cover the lower layer
     }
     ~KexiMainMenu() {
+        delete (QWidget*)m_contentWidget;
     }
+    virtual bool eventFilter(QObject * watched, QEvent * event) {
+        if (watched == m_content && event->type() == QEvent::MouseButtonPress) {
+            emit contentAreaPressed();
+        }
+        return QWidget::eventFilter(watched, event);
+    }
+
+    void setContent(QWidget *contentWidget) {
+        delete (QWidget*)m_contentWidget;
+        m_contentWidget = contentWidget;
+        m_contentWidget->setAutoFillBackground(true);
+        m_contentLayout->addWidget(m_contentWidget);
+    }
+    
 signals:
     void contentAreaPressed();
 protected:
@@ -273,6 +294,12 @@ protected:
             m_content->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
             //m_content->setAutoFillBackground(true);
             m_content->installEventFilter(this);
+            m_contentLayout = new QVBoxLayout(m_content);
+            m_contentLayout->setContentsMargins(0, 0, 0, 0);
+            //QLabel *l;
+            //test setContent(l = new QLabel("aaaaaaaaaaaa..........a.aa.a.a....."));
+            //l->setAutoFillBackground(true);
+
             //QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(m_content);
             //effect->setOpacity(0.0);
             //m_content->setGraphicsEffect(effect);
@@ -295,18 +322,14 @@ protected:
         }
         QWidget::showEvent(event);
     }
-    virtual bool eventFilter(QObject * watched, QEvent * event) {
-        if (watched == m_content && event->type() == QEvent::MouseButtonPress) {
-            emit contentAreaPressed();
-        }
-        return QWidget::eventFilter(watched, event);
-    }
 
 private:
     const int m_topLineHeight;
     KexiTabbedToolBar* m_toolBar;
     bool m_initialized;
     QWidget *m_content;
+    QVBoxLayout *m_contentLayout;
+    QPointer<QWidget> m_contentWidget;
     TopLineKexiMainMenuWidget *m_topLine;
     QPointer<QPropertyAnimation> m_contentOpacityAnimation;
 };
@@ -609,6 +632,7 @@ void KexiTabbedToolBar::Private::hideMainMenu()
     mainMenu->hide();
     mainMenu->deleteLater();
 }
+
 #endif // KEXI_MODERN_STARTUP
 
 KToolBar *KexiTabbedToolBar::Private::createToolBar(const char *name, const QString& caption)
@@ -1011,6 +1035,26 @@ void KexiTabbedToolBar::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
         return;
     }
     action->setVisible(visible);
+}
+
+void KexiTabbedToolBar::showMainMenu()
+{
+    d->showMainMenu();
+}
+
+void KexiTabbedToolBar::hideMainMenu()
+{
+    d->hideMainMenu();
+}
+
+void KexiTabbedToolBar::toggleMainMenu()
+{
+    d->toggleMainMenu();
+}
+
+void KexiTabbedToolBar::setMainMenuContent(QWidget *w)
+{
+    d->mainMenu->setContent(w);
 }
 
 /*
