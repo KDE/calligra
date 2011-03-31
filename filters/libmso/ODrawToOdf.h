@@ -140,6 +140,7 @@ private:
     void processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processLeftRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processBentConnector3(const MSO::OfficeArtSpContainer& o, Writer& out);

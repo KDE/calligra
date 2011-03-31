@@ -155,6 +155,8 @@ protected:
     KoFilter::ConversionStatus read_textDirectionTc();
     KoFilter::ConversionStatus read_vMerge();
     KoFilter::ConversionStatus read_tcBorders();
+    KoFilter::ConversionStatus read_tl2br();
+    KoFilter::ConversionStatus read_tr2bl();
     KoFilter::ConversionStatus read_tcMar();
     KoFilter::ConversionStatus read_gridSpan();
     int m_gridSpan;
