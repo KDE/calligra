@@ -516,7 +516,7 @@ void DocumentItemModel::slotDocumentChanged( Document *doc )
     if ( row == -1 ) {
         return;
     }
-    emit dataChanged( createIndex( row, 0 ), createIndex( row, columnCount() ) );
+    emit dataChanged( createIndex( row, 0 ), createIndex( row, columnCount() - 1 ) );
 }
 
 QModelIndex DocumentItemModel::insertDocument( Document *doc, Document *after )
