@@ -22,7 +22,10 @@
 #ifndef KPRVIEWMODEOUTLINE_H
 #define KPRVIEWMODEOUTLINE_H
 
+#include <QTextBlockUserData>
+
 #include "KoPAViewMode.h"
+#include "pagelayout/KPrPlaceholders.h"
 
 class KoPAView;
 class KoPACanvas;
@@ -46,6 +49,24 @@ public:
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
     void populate();
+protected:
+    /**
+      * Class to manage block data
+      */
+    class SlideUserBlockData : public QTextBlockUserData
+    {
+    public:
+        SlideUserBlockData(int pageNumber, OutlinePair outlinePair)
+            : m_pageNumber(pageNumber), m_outlinePair(outlinePair)
+        {}
+
+        ~SlideUserBlockData() {}
+        int pageNumber() { return m_pageNumber; }
+        OutlinePair outlinePair() { return m_outlinePair; }
+    private:
+        int m_pageNumber;
+        OutlinePair m_outlinePair;
+    };
 
 private:
     KPrOutlineEditor *m_outlineEditor;

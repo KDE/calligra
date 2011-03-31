@@ -258,7 +258,7 @@ OutlineData KPrPlaceholders::outlineData() const
     OutlineData outline;
     for (Placeholders::iterator it( m_placeholders.begin() ) ; it != m_placeholders.end(); ++it ) {
         KoTextShapeData * data = ( dynamic_cast<KPrPlaceholderShape *>( it->shape ) ) ?
-        0 : qobject_cast<KoTextShapeData*>( it->shape->userData() );
+                                 0 : qobject_cast<KoTextShapeData*>( it->shape->userData() );
         if (it->presentationClass == "title") {
             outline.append(QPair<PlaceholderType, KoTextShapeData*>(Title, data));
         } else if (it->presentationClass == "subtitle") {

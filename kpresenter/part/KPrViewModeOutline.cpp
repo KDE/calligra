@@ -128,18 +128,30 @@ void KPrViewModeOutline::populate()
     foreach (KoPAPageBase * pageBase, m_view->kopaDocument()->pages()) {
         if (KPrPage * page = dynamic_cast<KPrPage *>(pageBase)) {
             int pageNumber = m_view->kopaDocument()->pages().indexOf(pageBase);
-            
-            // Copy relevant content of the title of the page in the frame
+            QTextBlockFormat blockFormat;
+            blockFormat.setBackground((pageNumber%2)?QBrush(Qt::gray):QBrush(Qt::white));
+            // Copy relevant content of the "view" block of the page in the "outline" block
+            // Do three iterations in order to kept the correct order i.e. Title, Subtitle, Outline
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
-                QTextBlockFormat blockFormat;
-                blockFormat.setBackground((pageNumber%2)?QBrush(Qt::gray):QBrush(Qt::white));
-                // set the page property
-                blockFormat.setProperty(0, pageNumber);
-                // set the type property
-                blockFormat.setProperty(1, pair.first);
-                    
-                currentCursor.insertBlock(blockFormat);
-                currentCursor.insertText(pair.second->document()->toPlainText());
+                if (pair.first == Title) {
+                    currentCursor.insertBlock(blockFormat);
+                    currentCursor.block().setUserData(new SlideUserBlockData(pageNumber, pair));
+                    currentCursor.insertText(pair.second->document()->toPlainText());
+                }
+            }
+            foreach (OutlinePair pair, page->placeholders().outlineData()) {
+                if (pair.first == Subtitle) {
+                    currentCursor.insertBlock(blockFormat);
+                    currentCursor.block().setUserData(new SlideUserBlockData(pageNumber, pair));
+                    currentCursor.insertText(pair.second->document()->toPlainText());
+                }
+            }
+            foreach (OutlinePair pair, page->placeholders().outlineData()) {
+                if (pair.first == Outline) {
+                    currentCursor.insertBlock(blockFormat);
+                    currentCursor.block().setUserData(new SlideUserBlockData(pageNumber, pair));
+                    currentCursor.insertText(pair.second->document()->toPlainText());
+                }
             }
         }
     }
