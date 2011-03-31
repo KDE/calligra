@@ -130,6 +130,8 @@ int fldToFieldType(const wvWare::FLD* fld);
 
 bool isHeader(unsigned char type);
 
+qreal twipsToMM(int twips);
+
 qreal twipsToInch(int twips);
 
 qreal twipsToPt(int twips);
