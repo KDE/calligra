@@ -887,7 +887,9 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& st
 QString PptToOdp::getPicturePath(int pib) const
 {
     int picturePosition = pib - 1;
-    QByteArray rgbUid = getRgbUid(picturePosition);
+    const OfficeArtDggContainer* dgg
+        = &p->documentContainer->drawingGroup.OfficeArtDgg;
+    QByteArray rgbUid = getRgbUid(dgg, picturePosition);
     return rgbUid.length() ? "Pictures/" + pictureNames[rgbUid] : "";
 }
 
