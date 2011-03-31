@@ -2501,6 +2501,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
+	//FIXME: Found problems with the approach of using the shape to access
+	//any missing properties.  Disabling of this approach would cause regressions.
         drawclient.setDrawClientData(master, slide, 0, 0, shape, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
