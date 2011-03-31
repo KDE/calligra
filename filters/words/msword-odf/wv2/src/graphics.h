@@ -43,10 +43,10 @@ namespace wvWare
         Drawings( OLEStreamReader* table, const Word97::FIB &fib );
         ~Drawings();
 
-        PLCF<Word97::FSPA>* getSpaMom(){return m_plcfspaMom;};
-        PLCF<Word97::FSPA>* getSpaHdr(){return m_plcfspaHdr;};
-        PLCF<Word97::FTXBXS>* getTxbxTxt(){return m_plcftxbxTxt;};
-        PLCF<Word97::FTXBXS>* getHdrTxbxTxt(){return m_plcfHdrtxbxTxt;};
+        const PLCF<Word97::FSPA>* getSpaMom() const { return m_plcfspaMom; };
+        const PLCF<Word97::FSPA>* getSpaHdr() const { return m_plcfspaHdr; };
+        const PLCF<Word97::FTXBXS>* getTxbxTxt() const { return m_plcftxbxTxt; };
+        const PLCF<Word97::FTXBXS>* getHdrTxbxTxt() const { return m_plcfHdrtxbxTxt; };
     private:
         Drawings( const Drawings& rhs );
         Drawings& operator=( const Drawings& rhs );
