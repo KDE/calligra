@@ -123,7 +123,6 @@ void KPrViewModeOutline::populate()
 {
     m_outlineEditor->clear();
     QTextCursor currentCursor = m_outlineEditor->textCursor();
-    
     // For each slides
     foreach (KoPAPageBase * pageBase, m_view->kopaDocument()->pages()) {
         if (KPrPage * page = dynamic_cast<KPrPage *>(pageBase)) {
@@ -155,6 +154,9 @@ void KPrViewModeOutline::populate()
             }
         }
     }
+    // Delete the first empty line
     currentCursor.setPosition(0);
+    currentCursor.deleteChar();
+
     m_outlineEditor->setTextCursor(currentCursor);
 }
