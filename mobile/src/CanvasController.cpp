@@ -64,7 +64,7 @@ void CanvasController::openDocument(const QString& path)
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
         connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        //connect(canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
+        connect(canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
         canvas->updateSize();
 
         setCanvas(static_cast<KoCanvasBase*>(canvas));
