@@ -1,6 +1,8 @@
 
 Calligra Plan current:
 
+* Add odt export to reports
+
 * Fix bug 269652: Crash on save/exit.
 
 * Fix bug 268095: Crash in some models when emitting dataChanged.
