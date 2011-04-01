@@ -15,6 +15,8 @@ set(mswordodf_import_PART_SRCS
    paragraph.cpp
    tablehandler.cpp
    graphicshandler.cpp
+   fibbase.cpp
+   drawclient.cpp
    ../../tables/xlsx/NumberFormatParser.cpp
 )
 

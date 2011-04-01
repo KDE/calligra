@@ -236,7 +236,8 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         value = sheet->map()->formatter()->formatText(cell.value(), d->style.formatType(),
                 d->style.precision(), d->style.floatFormat(),
                 d->style.prefix(), d->style.postfix(),
-                d->style.currency().symbol(), d->style.customFormat());
+                d->style.currency().symbol(), d->style.customFormat(),
+                d->style.thousandsSep());
         d->displayText = value.asString();
 
         QSharedPointer<QTextDocument> doc = cell.richText();
@@ -260,6 +261,9 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         // if the format is text, align it according to the text direction
         else if (d->style.formatType() == Format::Text || value.format() == Value::fmt_String)
             d->style.setHAlign(d->displayText.isRightToLeft() ? Style::Right : Style::Left);
+        // if the value is a boolean, center-align
+        else if (cell.value().type() == Value::Boolean)
+            d->style.setHAlign(Style::Center);
         // if the style does not define a specific format, align it according to the sheet layout
         else
             d->style.setHAlign(cell.sheet()->layoutDirection() == Qt::RightToLeft ? Style::Left : Style::Right);
@@ -1117,7 +1121,7 @@ void CellView::paintText(QPainter& painter,
     // set a clipping region for non-rotated text
     painter.save();
     if (tmpAngle == 0) {
-        painter.setClipRegion(painter.clipRegion().intersected(QRect(coordinate.x(), coordinate.y(), d->width, d->height)));
+        painter.setClipRect(QRectF(coordinate.x(), coordinate.y(), d->width, d->height), Qt::IntersectClip);
     }
 
 

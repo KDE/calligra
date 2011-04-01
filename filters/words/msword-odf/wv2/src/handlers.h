@@ -77,6 +77,12 @@ namespace wvWare {
         virtual ~SubDocumentHandler();
 
         /**
+	 * Set the progress of WordDocument Stream processing.  All other
+	 * streams (Table, Data) are refered from this one.
+	 */
+        virtual void setProgress(const int percent);
+
+        /**
          * This method is called as soon as you call @ref Parser::parse. It indicates
          * the start of the body text (the main document text-flow).
          */

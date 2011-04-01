@@ -24,7 +24,7 @@
    Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -316,7 +316,7 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
 
     // flake
     // Change the active shape controller and its shapes.
-    shapeController()->setShapeControllerBase(d->activeSheet);
+    shapeController()->setShapeControllerBase(d->activeSheet, this);
     shapeManager()->setShapes(d->activeSheet->shapes());
     // Tell the Canvas about the new visible sheet size.
     sheetView(d->activeSheet)->updateAccessedCellRange();

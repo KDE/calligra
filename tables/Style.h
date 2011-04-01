@@ -137,6 +137,7 @@ public:
         Prefix,
         Postfix,
         Precision,
+        ThousandsSep,
         FormatTypeKey,
         FloatFormatKey,
         FloatColorKey,
@@ -228,6 +229,7 @@ public:
     uint   fontFlags()    const;
     int    fontSize()     const;
     int    precision()    const;
+    bool   thousandsSep() const;
     int    angle()        const;
     double indentation()  const;
     bool   shrinkToFit()  const;
@@ -280,6 +282,7 @@ public:
     void setFormatType(Format::Type format);
     void setCustomFormat(QString const & strFormat);
     void setPrecision(int precision);
+    void setThousandsSep(bool thousandsSep);
     void setPrefix(QString const & prefix);
     void setPostfix(QString const & postfix);
     void setCurrency(Currency const & currency);
@@ -308,7 +311,8 @@ public:
      * boolean, text)
      */
     static QString saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles, Format::Type _style,
-                                       const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol);
+                                       const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol,
+                                       bool thousandsSep);
     static QString saveOdfStyleNumericDate(KoGenStyles &mainStyles, Format::Type _style,
                                            const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericFraction(KoGenStyles &mainStyles, Format::Type _style,
@@ -318,7 +322,7 @@ public:
     static QString saveOdfStyleNumericCustom(KoGenStyles&mainStyles, Format::Type _style,
             const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericScientific(KoGenStyles&mainStyles, Format::Type _style,
-            const QString &_prefix, const QString &_suffix, int _precision);
+            const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep);
     static QString saveOdfStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type _style, int _precision,
             const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericMoney(KoGenStyles&mainStyles, Format::Type _style,
@@ -327,7 +331,7 @@ public:
     static QString saveOdfStyleNumericText(KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                            const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericNumber(KoGenStyles&mainStyles, Format::Type _style, int _precision,
-            const QString &_prefix, const QString &_suffix);
+            const QString &_prefix, const QString &_suffix, bool thousandsSep);
     static QString saveOdfBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush);
 
     /**

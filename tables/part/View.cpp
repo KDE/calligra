@@ -10,7 +10,7 @@
    Copyright 1999-2001 Simon Hausmann <hausmann@kde.org>
    Copyright 1998-2000 Torben Weis <weis@kde.org>
    Copyright 2010 Boudewijn Rempt <boud@kogmbh.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -1178,7 +1178,7 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 
     // flake
     // Change the active shape controller and its shapes.
-    d->canvas->shapeController()->setShapeControllerBase(d->activeSheet);
+    d->canvas->shapeController()->setShapeControllerBase(d->activeSheet, d->canvas);
     d->canvas->shapeManager()->setShapes(d->activeSheet->shapes());
     // Tell the Canvas about the new visible sheet size.
     sheetView(d->activeSheet)->updateAccessedCellRange();

@@ -22,12 +22,17 @@
 #ifndef KWCANVASBASE_H
 #define KWCANVASBASE_H
 
+#include <QCache>
+
 #include "KWDocument.h"
 #include "kword_export.h"
 #include "KWViewMode.h"
+#include "KWPage.h"
 
 #include <KoCanvasBase.h>
+
 #include <QRectF>
+#include <QImage>
 
 class QRect;
 class QPainter;
@@ -81,6 +86,18 @@ public: // KoCanvasBase interface methods.
     /// reimplemented method from superclass
     virtual void ensureVisible(const QRectF &rect);
 
+    /**
+     * Enable or disable the page cache. The cache stores the rendered pages. It is
+     * emptied when the zoomlevel changes.
+     *
+     * @param enabled: if true, we cache the contents of the document for this canvas,
+     *  for the current zoomlevel
+     * @param cachesize: the the maximum size for the cache. The cache will throw away
+     *  pages once this size is reached. Depending on Qt's implementation of QCache, the
+     *  unit is pages.
+     */
+    virtual void setCacheEnabled(bool enabled, int cacheSize = 50);
+
 protected:
 
     void paint(QPainter &painter, const QRectF &paintRect);
@@ -102,6 +119,10 @@ protected:
 
     virtual void updateCanvasInternal(const QRectF &clip) = 0;
 
+private:
+
+    void clearCache();
+
 protected:
 
     KWDocument *m_document;
@@ -110,6 +131,27 @@ protected:
     KWViewMode *m_viewMode;
     QPoint m_documentOffset;
     KoViewConverter *m_viewConverter;
+
+    bool m_cacheEnabled;
+    qreal m_currentZoom;
+
+    struct PageCache {
+        PageCache(int w, int h)
+            : allExposed(true)
+        {
+            cache = QImage(w, h, QImage::Format_ARGB32);
+        }
+
+        QImage cache;
+        // List of logical exposed rects in view coordinates
+        // These are the rects that are queued for updating, not
+        // the rects that have already been painted.
+        QVector<QRect> exposed;
+        // true if the whole page should be repainted
+        bool allExposed;
+    };
+
+    QCache<KWPage, PageCache> m_cache;
 };
 
 #endif // KWCANVASBASE_H

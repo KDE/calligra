@@ -57,6 +57,7 @@ public:
 
     void addShape( KoShape *shape );
     void removeShape( KoShape *shape );
+    QList<KoPAPageBase*> extractSelectedSlides();
 
     /**
      * The icon size
@@ -75,10 +76,10 @@ protected:
     /**
      * Moves a page from pageNumber to pageAfterNumber
      *
-     * @param pageNumber the number of the page to move
+     * @param slides a list with pages to move
      * @param pageAfterNumber the number of the place the page should move to
      */
-    void movePage( int pageNumber, int pageAfterNumber );
+    void movePages( const QList<KoPAPageBase *> &slides, int pageAfterNumber );
 
     /**
      * The count of the page

@@ -51,7 +51,7 @@ public:
     XlsxXmlChartReader(KoOdfWriters *writers);
     virtual ~XlsxXmlChartReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
-    void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, QString format);
+    void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, const QString& format, const QString& formatString = QString());
     QString AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, QString format);
 protected:
     KoFilter::ConversionStatus read_plotArea();
@@ -97,6 +97,7 @@ protected:
     KoFilter::ConversionStatus read_seriesText_Tx();
     KoFilter::ConversionStatus read_chartText_Tx();
     KoFilter::ConversionStatus read_numCache();
+    KoFilter::ConversionStatus read_formatCode();
     KoFilter::ConversionStatus read_firstSliceAng();
     KoFilter::ConversionStatus read_holeSize();
     KoFilter::ConversionStatus read_bubbleSize();

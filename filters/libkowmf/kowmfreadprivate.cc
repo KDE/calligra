@@ -1016,26 +1016,37 @@ void KoWmfReadPrivate::textOut(quint32, QDataStream& stream)
 
 void KoWmfReadPrivate::extTextOut(quint32 , QDataStream& stream)
 {
+#if 0
     qint16 parm[8];
     for (int i = 0; i < 4; ++i)
         stream >> parm[i];
+    quint16 stringLength = parm[ 2 ];
+    quint16 fwOpts = parm [ 3 ];
+#else
+    qint16 y, x;
+    qint16 stringLength;
+    quint16 fwOpts;
+    qint16 top, left, right, bottom; // optional cliprect
 
-    quint16 textLength = parm[ 2 ];
+    stream >> y;
+    stream >> x;
+    stream >> stringLength;
+    stream >> fwOpts;
+#endif
 
     QByteArray text;
-    text.resize(textLength);
+    text.resize(stringLength);
 
-    if (parm[ 3 ] != 0) {       // ETO_CLIPPED flag add 4 parameters
-        for (int i = 0; i < 4; ++i)
-            stream >> parm[4+i];
-        stream.readRawData(text.data(), textLength);
-    } else {
-        stream.readRawData(text.data(), textLength);
+    // ETO_CLIPPED flag adds 4 parameters
+    if (fwOpts & (ETO_CLIPPED | ETO_OPAQUE)) {
+        // read the optional clip rect
+        stream >> bottom >> right >> top >> left;
     }
+    stream.readRawData(text.data(), stringLength);
 
     // FIXME: If we ever want to support vertical text (e.g. japanese),
     //        we need to send the vertical text align as well.
-    mReadWmf->drawText(parm[ 1 ], parm[ 0 ], -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
+    mReadWmf->drawText(x, y, -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
 }
 
 

@@ -1295,6 +1295,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
     }
 
     m_value = text().toString();
+    m_value.replace('&', "&amp;");
+    m_value.replace('<', "&lt;");
+    m_value.replace('>', "&gt;");
+    m_value.replace('\\', "&apos;");
+    m_value.replace('"', "&quot;");
 
     readNext();
     READ_EPILOGUE
@@ -1533,7 +1538,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString destinationName = QLatin1String("Pictures/") + link.mid(link.lastIndexOf('/') + 1);
-    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, true ) )
+    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, false ) )
     addManifestEntryForFile(destinationName);
 
     m_context->sheet->setPictureBackgroundPath(destinationName);
@@ -1644,7 +1649,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString destinationName = QLatin1String("") + link.mid(link.lastIndexOf('/') + 1);
-    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, true ) )
+    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, false ) )
     addManifestEntryForFile(destinationName);
 
     //TODO find out which cell to pick
