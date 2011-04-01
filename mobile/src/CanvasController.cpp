@@ -5,7 +5,7 @@
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
  * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of
@@ -30,6 +30,7 @@
 #include <KMimeTypeTrader>
 #include <KoView.h>
 #include <KoCanvasBase.h>
+#include <KWCanvasItem.h>
 #include <KDebug>
 
 #include <QPoint>
@@ -45,14 +46,22 @@ CanvasController::CanvasController(KActionCollection* actionCollection)
 void CanvasController::openDocument(const QString& path)
 {
     QString error;
-    bool create = true;
     QString mimetype = KMimeType::findByPath(path)->name();
     KoDocument *doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
                                                                                QVariantList(), &error);
     doc->openUrl(KUrl(path));
-    setCanvas(dynamic_cast<KoCanvasBase*>(doc->canvasItem(create)));
-    kDebug() << "Error " << error;
-    kDebug() << "Create " << create;
+
+    // get the one canvas item for this document
+    KWCanvasItem *canvas = dynamic_cast<KWCanvasItem*>(doc->canvasItem());
+    if (canvas) {
+        // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
+        connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
+        // whenever the size of the document viewed in the canvas changes, inform the zoom controller
+        connect(canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
+        canvas->updateSize();
+
+        setCanvas(static_cast<KoCanvasBase*>(canvas));
+    }
 }
 
 void CanvasController::setVastScrolling(qreal factor)
