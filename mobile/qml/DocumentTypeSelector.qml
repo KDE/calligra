@@ -23,11 +23,11 @@ import QtQuick 1.0 as QML
 
 QML.Rectangle {
     id: container
-    
+
     property int buttonWidth
     property int buttonHeight
     property bool hidden : false
-    
+
     width: parent.width; height: parent.height;
 
     QML.Row {
@@ -37,7 +37,7 @@ QML.Rectangle {
 
         Button {
             id: button1
-            
+
             imageSource: "qrc:///images/words.png"
             text: "Document"
             width: buttonWidth; height: buttonHeight
@@ -51,7 +51,7 @@ QML.Rectangle {
         }
         Button {
             id: button3
-            
+
             imageSource: "qrc:///images/stage.png"
             text: "Presentation"
             width: buttonWidth; height: buttonHeight

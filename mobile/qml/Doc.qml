@@ -35,11 +35,7 @@ QML.Rectangle {
             id: canvas
 
             anchors.fill: parent
-
-            QML.MouseArea {
-                anchors.fill: parent
-
-                onClicked: canvas.openDocument("/media/Data/Other/all/Documents/Resume.odt");
-            }
         }
+
+        QML.Component.onCompleted: canvas.openDocument("/media/Data/Other/all/Documents/Resume.odt");
 }

@@ -32,15 +32,21 @@
 #include <KoCanvasBase.h>
 #include <KWCanvasItem.h>
 #include <KDebug>
+#include <KoZoomController.h>
+#include <KoZoomHandler.h>
+#include <KActionCollection>
 
 #include <QPoint>
 #include <QSize>
 #include <QGraphicsWidget>
 
-CanvasController::CanvasController(KActionCollection* actionCollection)
-    : KoCanvasController(actionCollection), QDeclarativeItem()
+CanvasController::CanvasController(QDeclarativeItem* parent)
+    : KoCanvasController(0), QDeclarativeItem(parent)
 {
+    KActionCollection *actionCollection = new KActionCollection(this);
     setFlag(QGraphicsItem::ItemHasNoContents, false);
+    m_zoomHandler = new KoZoomHandler();
+    m_zoomController = new KoZoomController(this, m_zoomHandler, actionCollection);
 }
 
 void CanvasController::openDocument(const QString& path)
@@ -52,12 +58,13 @@ void CanvasController::openDocument(const QString& path)
     doc->openUrl(KUrl(path));
 
     // get the one canvas item for this document
-    KWCanvasItem *canvas = dynamic_cast<KWCanvasItem*>(doc->canvasItem());
+    KWCanvasItem *canvas = qgraphicsitem_cast<KWCanvasItem*>(doc->canvasItem());
+
     if (canvas) {
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
         connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect(canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
+        //connect(canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
         canvas->updateSize();
 
         setCanvas(static_cast<KoCanvasBase*>(canvas));

@@ -26,11 +26,14 @@
 #include "KoCanvasController.h"
 #include <QDeclarativeItem>
 
+class KoZoomController;
+class KoZoomHandler;
+
 class CanvasController : public QDeclarativeItem, KoCanvasController
 {
     Q_OBJECT
 public:
-    explicit CanvasController(KActionCollection* actionCollection = 0);
+    explicit CanvasController(QDeclarativeItem *parent = 0);
     virtual void setVastScrolling(qreal factor);
     virtual void setZoomWithWheel(bool zoom);
     virtual void updateDocumentSize(const QSize& sz, bool recalculateCenter);
@@ -59,6 +62,10 @@ public:
 
 public slots:
     void openDocument(const QString &path);
+
+private:
+    KoZoomController *m_zoomController;
+    KoZoomHandler *m_zoomHandler;
 };
 
 #endif // CANVASCONTROLLER_H
