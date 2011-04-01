@@ -33,7 +33,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "svgexport.h"
+#include "SvgExport.h"
 #include "SvgWriter.h"
 
 #include <KarbonDocument.h>
@@ -75,4 +75,4 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
-#include "svgexport.moc"
+#include "SvgExport.moc"

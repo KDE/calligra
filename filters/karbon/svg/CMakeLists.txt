@@ -5,7 +5,7 @@ ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes  ${KDE4_I
 ########### next target ###############
 
 set(karbonsvgexport_PART_SRCS 
-    svgexport.cc
+    SvgExport.cpp
     SvgUtil.cpp
     SvgWriter.cpp
     ${SHAPES_SOURCES} 
@@ -20,7 +20,7 @@ install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 set(karbonsvgimport_PART_SRCS 
-    svgimport.cc
+    SvgImport.cpp
     SvgUtil.cpp
     SvgParser.cpp
     SvgGradientHelper.cpp
