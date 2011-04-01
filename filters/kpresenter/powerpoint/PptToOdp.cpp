@@ -258,7 +258,7 @@ private:
         const MSO::OfficeArtSpContainer* defaultShape;
 
         DrawClientData(): masterSlide(0), presSlide(0), notesMasterSlide(0),
-                          notesSlide(0), defaultShape(0), slideTexts(0) {};
+                          notesSlide(0), slideTexts(0), defaultShape(0) {};
     };
     DrawClientData dc_data[1];
 
@@ -474,7 +474,8 @@ void PptToOdp::DrawClient::addTextStyles(
     if (canBeParentStyle) {
         ppttoodp->masterPresentationStyles[dc_data->masterSlide][textType] = styleName;
     }
-}
+} //end addTextStyle()
+
 const MSO::OfficeArtDggContainer*
 PptToOdp::DrawClient::getOfficeArtDggContainer()
 {
@@ -530,8 +531,11 @@ QString PptToOdp::DrawClient::formatPos(qreal v)
  * PptToOdp
  * ************************************************
  */  
-PptToOdp::PptToOdp()
+PptToOdp::PptToOdp(PowerPointImport* filter, void (PowerPointImport::*setProgress)(const int))
 : p(0),
+  m_filter(filter),
+  m_setProgress(setProgress),
+  m_progress_update(filter && setProgress),
   m_currentSlideTexts(0),
   m_currentMaster(0),
   m_currentSlide(0),
@@ -589,19 +593,28 @@ PptToOdp::parse(POLE::Storage& storage)
     p = pp;
     return true;
 }
-KoFilter::ConversionStatus PptToOdp::convert(const QString& inputFile,
-        const QString& to,
-        KoStore::Backend storeType)
+KoFilter::ConversionStatus
+PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend storeType)
 {
+    if (m_progress_update) {
+        (m_filter->*m_setProgress)(0);
+    }
+
     // open inputFile
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
         qDebug() << "Cannot open " << inputFile;
         return KoFilter::InvalidFormat;
     }
+
     if (!parse(storage)) {
         qDebug() << "Parsing and setup failed.";
         return KoFilter::InvalidFormat;
+    }
+
+    // using an average here, parsing might take longer than conversion
+    if (m_progress_update) {
+        (m_filter->*m_setProgress)(40);
     }
 
     // create output store
@@ -613,12 +626,17 @@ KoFilter::ConversionStatus PptToOdp::convert(const QString& inputFile,
     }
 
     KoFilter::ConversionStatus status = doConversion(storage, storeout);
+
+    if (m_progress_update) {
+        (m_filter->*m_setProgress)(100);
+    }
+
     delete storeout;
     return status;
 }
 
-KoFilter::ConversionStatus PptToOdp::convert(POLE::Storage& storage,
-        KoStore* storeout)
+KoFilter::ConversionStatus
+PptToOdp::convert(POLE::Storage& storage, KoStore* storeout)
 {
     if (!parse(storage)) {
         qDebug() << "Parsing and setup failed.";
@@ -627,8 +645,8 @@ KoFilter::ConversionStatus PptToOdp::convert(POLE::Storage& storage,
     return doConversion(storage, storeout);
 }
 
-KoFilter::ConversionStatus PptToOdp::doConversion(POLE::Storage& storage,
-        KoStore* storeout)
+KoFilter::ConversionStatus
+PptToOdp::doConversion(POLE::Storage& storage, KoStore* storeout)
 {
     KoOdfWriteStore odfWriter(storeout);
     KoXmlWriter* manifest = odfWriter.manifestWriter(
@@ -973,7 +991,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     style.addProperty("style:text-underline-type", cf.underline() ?"single" :"none", text);
     // style:text-underline-width
     // style:use-window-font-color
-}
+} //end defineTextProperties()
 
 void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& pf,
                                          const quint16 fs)
@@ -1051,7 +1069,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style, const PptTextPFRun& 
     // style:writing-mode-automatic
     // text:line-number
     // text:number-lines
-}
+} //end defineParagraphProperties()
 
 void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles,
                                       ODrawToOdf& odrawtoodf, const MSO::HeadersFootersAtom* hf,
@@ -1149,8 +1167,7 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
     // smil:fadeColor
     // smil:subtype
     // smil:type
-
-}
+} //end defineDrawingPageStyle()
 
 void PptToOdp::defineListStyle(KoGenStyle& style,
                                const quint32 textType,
@@ -1380,7 +1397,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
     // serialize the text:list-style element into the properties
     QString contents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     style.addChildElement(elementName, contents);
-}
+} //end defineListStyle()
 
 template<class O>
 void handleOfficeArtContainer(O& handler, const OfficeArtSpgrContainerFileBlock& c) {
@@ -1614,7 +1631,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         defineDrawingPageStyle(dp, ds, styles, odrawtoodf, hf, &nc->notesAtom.slideFlags);
         drawingPageStyles[nc] = styles.insert(dp, "dp");
     }
-}
+} //end defineAutomaticDrawingPageStyles()
 
 /**
  * Define the standard arrows used in PPT files.
@@ -1636,11 +1653,12 @@ void defineArrow(KoGenStyles& styles)
 
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
-    /* This function is follows the flow of the styles.xml file.
+    /* This function follows the flow of the styles.xml file.
+
        -> style:styles
-       first, the global objects are looked up and defined. This includes the
-       style:presentation-page-layout elements. Next, the
-       default styles for the 12 style families are defined.
+       first, the global objects are looked up and defined.  This includes the
+       style:presentation-page-layout elements.  Next, the default styles for
+       the 12 style families are defined.
 
        -> style:automatic-styles
        After that, style:page-layout and automatic styles are defined
@@ -1689,6 +1707,10 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     defineDefaultPresentationStyle(styles);
     defineDefaultChartStyle(styles);
 
+    if (m_progress_update) {
+        (m_filter->*m_setProgress)(55);
+    }
+
     // NOTE: kpresenter specific: default graphic style and drawing-page style
     // have higher precedence than those defined by the corresponding
     // <master-page> element.  This is the case when the presentation slide
@@ -1723,6 +1745,10 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     m_currentSlideTexts = 0;
     defineMasterStyles(styles);
     defineAutomaticDrawingPageStyles(styles);
+
+    if (m_progress_update) {
+        (m_filter->*m_setProgress)(60);
+    }
 
     /*
       Define the draw:layer-set.
@@ -1808,7 +1834,11 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         dateTime = DateTimeFormat(dateTimeFomatId);
         dateTime.addDateTimeAutoStyles(styles, hasTodayDate, hasUserDate);
     }
-}
+
+    if (m_progress_update) {
+        (m_filter->*m_setProgress)(70);
+    }
+} //end createMainStyles()
 
 QByteArray PptToOdp::createContent(KoGenStyles& styles)
 {
@@ -1821,6 +1851,13 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     Writer out(presentationWriter, styles);
     for (int c = 0; c < p->slides.size(); c++) {
         processSlideForBody(c, out);
+
+        if (m_progress_update) {
+            //consider progress interval (70, 100)
+            qreal percentage = ((c + 1) / (float)p->slides.size()) * 100;
+            int progress = 70 + (int)((percentage * 28) / 100);
+            (m_filter->*m_setProgress)(progress);
+        }
     }
 
     QByteArray contentData;
@@ -2166,7 +2203,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 
     out.xml.endElement();
     return end;
-}
+} //end processTextSpan()
 
 int PptToOdp::processTextSpans(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
 			       const QString& text, int start, int end, quint16* p_fs)
@@ -2282,7 +2319,7 @@ PptToOdp::processParagraph(Writer& out,
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
     out.xml.addCompleteElement(&spans_buf);
     out.xml.endElement(); //text:p
-}
+} //end processParagraph()
 
 int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* clientData,
                                  const MSO::TextContainer* tc, const MSO::TextRuler* tr)
@@ -2376,7 +2413,7 @@ int PptToOdp::processTextForBody(Writer& out, const MSO::OfficeArtClientData* cl
     // close all open text:list elements
     writeTextObjectDeIndent(out.xml, 0, levels);
     return 0;
-}
+} //end processTextForBody()
 
 void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
 {
@@ -2490,7 +2527,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     }
 
     out.xml.endElement(); // draw:page
-}
+} //end processSlideForBody()
 
 QString PptToOdp::processParaSpacing(const int value,
                                      const quint16 fs,
@@ -2661,7 +2698,8 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
     }
 
     return ret;
-}
+} //end toQColor(const ColorIndexStruct)
+
 QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
                           const MSO::StreamOffset* master, const MSO::StreamOffset* common)
 {
@@ -2735,7 +2773,7 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
         ret = QColor(c.red, c.green, c.blue);
     }
     return ret;
-}
+} //end toQColor()
 
 void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString& numSuffix, QString& numPrefix)
 {
@@ -2854,7 +2892,7 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
         numSuffix = '.';
         break;
     }
-}
+} //end processTextAutoNumberScheme()
 
 const TextContainer* PptToOdp::getTextContainer(
             const PptOfficeArtClientTextBox* clientTextbox,
@@ -2993,7 +3031,7 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
             }
         }
     }
-}
+} //end processDeclaration()
 
 QString PptToOdp::findDeclaration(DeclarationType type, const QString &text) const
 {

@@ -27,9 +27,10 @@
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
-#include "versionmagic.h"
+//#include "versionmagic.h"
 #include "drawstyle.h"
 #include "msodraw.h"
+#include "mswordodfimport.h"
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -45,7 +46,6 @@
 
 #include <klocale.h>
 #include <KoStore.h>
-#include <KoFilterChain.h>
 #include <KoFontFace.h>
 
 #include <QBuffer>
@@ -60,15 +60,19 @@ enum PgbOffsetFrom {
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
-Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
+Document::Document(const std::string& fileName,
+                   MSWordOdfImport* filter,
+//                    KoFilterChain* chain,
+                   KoXmlWriter* bodyWriter,
                    KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, POLE::Storage* storage,
-                   LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
+                   LEInputStream* data, LEInputStream* table, LEInputStream* wordDocument)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
         , m_graphicsHandler(0)
-        , m_chain(chain)
+        , m_filter(filter)
+//         , m_chain(chain)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
         , m_bodyFound(false)
         , m_footNoteNumber(0)
@@ -88,7 +92,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_useLastMasterPage(false)
         , m_data_stream(data)
         , m_table_stream(table)
-        , m_wdocument_stream(wdocument)
+        , m_wdocument_stream(wordDocument)
 {
     kDebug(30513);
     addBgColor("#ffffff"); //initialize the background-colors stack
@@ -399,6 +403,11 @@ bool Document::parse()
     if (m_parser)
         return m_parser->parse();
     return false;
+}
+
+void Document::setProgress(const int percent)
+{
+    m_filter->setProgress(percent);
 }
 
 //connects firstSectionFound signal & slot together; sets flag to true

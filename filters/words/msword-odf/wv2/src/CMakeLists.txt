@@ -50,7 +50,7 @@ SET( wv2_SOURCES
 	utilities.cpp
 	crc32.c
 	graphics.cpp
-	wv2version.cpp
+#	wv2version.cpp
 	zcodec.cxx
     )
 
@@ -76,7 +76,7 @@ SET( wv2_HEADERS
 	associatedstrings.h
 	fields.h
 	wvlog.h
-	wv2version.h
+#	wv2version.h
 	zcodec.hxx
     )
 
