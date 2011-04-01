@@ -674,12 +674,9 @@ void KexiMainWindow::setupActions()
 
 #ifndef KEXI_NO_UNFINISHED
     {
-        KAction *tmp = KStandardAction::openRecent(0, 0, 0);
         ac->addAction("project_open_recent",
-                  action = new KAction(KIcon(tmp->icon()),
-                                       i18nc("Action name with three dots...", "%1...", tmp->text()),
-                                       this));
-        delete tmp;
+            action = new KexiMenuWidgetAction(KStandardAction::OpenRecent, this));
+            action->setText(i18nc("Action name with three dots...", "%1...", action->text()));
         connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecentAboutToShow()));
         action->setToolTip(i18n("Open recent project"));
         action->setWhatsThis(
