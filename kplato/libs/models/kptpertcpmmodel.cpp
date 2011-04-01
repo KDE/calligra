@@ -299,7 +299,7 @@ void CriticalPathItemModel::slotNodeChanged( Node *node )
         return;
     }
     int row = m_path.indexOf( node );
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount() - 1, node ) );
 }
 
 
@@ -869,7 +869,7 @@ void PertResultItemModel::slotNodeChanged( Node *)
         return;
     }
     int row = node->getParent()->findChildNode( node );
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );*/
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount() - 1, node ) );*/
 }
 
 

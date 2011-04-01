@@ -108,7 +108,7 @@ namespace wvWare
 
         virtual const StyleSheet& styleSheet() const;
 
-        virtual Drawings * getDrawings();
+        virtual const Drawings* getDrawings() const;
 
         virtual OLEStreamReader* getTable();
 
