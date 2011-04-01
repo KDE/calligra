@@ -33,14 +33,18 @@ namespace
         // Check if it's a Word 3, 4, or 5 file
         if ( buffer[0] == 0x31 && buffer[1] == 0xbe &&
              buffer[2] == 0x00 && buffer[3] == 0x00 )
+        {
             std::cerr << "This is a Word 3, 4, or 5 file. Right now we don't handle these versions.\n"
                       << "Please send us the file, maybe we will implement it later on." << std::endl;
+        }
         else if ( buffer[0] == 0xdb && buffer[1] == 0xa5 &&
                   buffer[2] == 0x2d && buffer[3] == 0x00 )
+        {
             std::cerr << "This is a Word 2 document. Right now we don't handle this version." << std::endl
                       << "Please send us the file, maybe we will implement it later on." << std::endl;
-        else
+        } else {
             std::cerr << "That doesn't seem to be a Word document." << std::endl;
+        }
     }
 
     SharedPtr<Parser> setupParser( OLEStorage* storage )

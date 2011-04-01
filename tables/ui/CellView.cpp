@@ -261,6 +261,9 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         // if the format is text, align it according to the text direction
         else if (d->style.formatType() == Format::Text || value.format() == Value::fmt_String)
             d->style.setHAlign(d->displayText.isRightToLeft() ? Style::Right : Style::Left);
+        // if the value is a boolean, center-align
+        else if (cell.value().type() == Value::Boolean)
+            d->style.setHAlign(Style::Center);
         // if the style does not define a specific format, align it according to the sheet layout
         else
             d->style.setHAlign(cell.sheet()->layoutDirection() == Qt::RightToLeft ? Style::Left : Style::Right);

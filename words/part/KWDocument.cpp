@@ -45,6 +45,7 @@
 #include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
 #include "commands/KWPageRemoveCommand.h"
+#include "changetracker/KoChangeTracker.h"
 
 // koffice libs includes
 #include <KoShapeManager.h>

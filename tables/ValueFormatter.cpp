@@ -73,6 +73,9 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         if (!str.isEmpty() && str[0] == '\'')
             str = str.mid(1);
         result = Value(str);
+        if (value.isBoolean()) {
+            result.setFormat(Value::fmt_Boolean);
+        }
         ok = true;
     }
 
