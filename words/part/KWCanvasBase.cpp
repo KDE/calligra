@@ -43,7 +43,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#define DEBUG_REPAINT
+//#define DEBUG_REPAINT
 
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
     : KoCanvasBase(document),

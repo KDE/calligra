@@ -637,7 +637,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
  - family (Font Family) §18.8.18
  - [done] i (Italic) §18.8.26
  - [done] name (Font Name) §18.8.29
- - outline (Outline) §18.4.2
+ - [done] outline (Outline) §18.4.2
  - [done] scheme (Scheme) §18.8.35
  - shadow (Shadow) §18.8.36
  - [done] strike (Strike Through) §18.4.10
@@ -672,11 +672,12 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
             ELSE_TRY_READ_IF(name)
             ELSE_TRY_READ_IF(b)
             ELSE_TRY_READ_IF(i)
+            ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(strike)
             ELSE_TRY_READ_IF(u)
-            ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(scheme)
+            ELSE_TRY_READ_IF(outline)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
