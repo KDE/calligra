@@ -138,7 +138,7 @@ void SvgExport::saveDocument(KarbonDocument& document)
 
     // add some PR.  one line is more than enough.
     *m_defs <<
-    "<!-- Created using Karbon14, part of koffice: http://www.koffice.org/karbon -->" << endl;
+    "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
 
     *m_defs <<
     "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"" <<
