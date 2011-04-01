@@ -2,6 +2,7 @@
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -70,45 +71,49 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
      *  POLE storage, POLE and LEInput streams
      * ************************************************
      */
+    //TODO: POLE:Stream or LEInputStream ?
+
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
         kDebug(30513) << "Cannot open " << inputFile;
         return KoFilter::InvalidFormat;
     }
+    //WordDocument Stream
     QBuffer buff1;
     if (!readStream(storage, "/WordDocument", buff1)) {
         return KoFilter::InvalidFormat;
     }
-    LEInputStream wordDocument_stream(&buff1);
-    FibBase fb(wordDocument_stream);
+    LEInputStream wdstm(&buff1);
 
-    //document is encrypted or obfuscated
-    if (fb.fEncrypted) {
-        return KoFilter::PasswordProtected;
-    }
+    FibBase fb(wdstm);
 
-    //NOTE: WordDocument and Table stream are required by the graphicsHandler.
-    //The plan is to provide pointers to all LEInputStreams to the WV2 parser.
-#if 0
+    //1Table Stream or 0Table Stream
+    const char* tblstm_name = fb.fWhichTblStm ? "1Table" : "0Table";
     QBuffer buff2;
-    const char* tblStm = fb.fWhichTblStm ? "1Table" : "0Table";
-    if (!readStream(storage, tblStm, buff2)) {
+    if (!readStream(storage, tblstm_name, buff2)) {
         return KoFilter::InvalidFormat;
     }
-    LEInputStream table_stream(&buff2);
-#endif
+    LEInputStream tblstm(&buff2);
 
+    //Provided to the Document at the moment
+    POLE::Stream tblstm_pole(&storage, tblstm_name);
+
+    //Data Stream
     QBuffer buff3;
     if (!readStream(storage, "/Data", buff3)) {
         return KoFilter::InvalidFormat;
     }
-    LEInputStream data_stream(&buff3);
+    LEInputStream datastm(&buff3);
 
     /*
      * ************************************************
      *  Processing file
      * ************************************************
      */
+    //document is encrypted or obfuscated
+    if (fb.fEncrypted) {
+        return KoFilter::PasswordProtected;
+    }
 
     // Create output files
     KoStore *storeout;
@@ -174,10 +179,10 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    Document *document = new Document(QFile::encodeName(inputFile).data(), this, bodyWriter,
-                                      mainStyles, &metaWriter, &manifestWriter,
-                                      storeout, &storage,
-                                      &data_stream, 0, &wordDocument_stream);
+    Document *document = new Document(QFile::encodeName(inputFile).data(), this,
+                                      bodyWriter, &metaWriter, &manifestWriter,
+                                      storeout, mainStyles,
+                                      &wdstm, tblstm_pole, &datastm);
     finalizer.m_document = document;
 
     //check that we can parse the document?

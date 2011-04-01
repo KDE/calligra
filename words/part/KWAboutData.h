@@ -34,7 +34,7 @@ static const char* KWORD_VERSION = KOFFICE_VERSION_STRING;
 
 KAboutData * newKWordAboutData()
 {
-    KAboutData * aboutData = new KAboutData("words", 0, ki18n("Words"),
+    KAboutData * aboutData = new KAboutData("words", 0, ki18nc("Words", "application name"),
                                             KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
                                             ki18n("(c) 1998-2010, The Words Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/words/");

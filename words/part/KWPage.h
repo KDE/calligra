@@ -30,6 +30,7 @@
 class KoInlineObject;
 class KoZoomHandler;
 class KWPageManagerPrivate;
+class KoShapeManager;
 
 /**
  * This class represents a printed page of the document.  Each page is either left, right or
@@ -154,9 +155,20 @@ public:
 
     bool isValid() const;
 
+    /**
+     * Create a thumbnail image for this page.
+     * Note: if the page has not been laid out yet, the result may be empty!
+     *
+     * @param size: the size in pixels of the thumbnail
+     * @param shapeManager the shape manager containing the page's shapes
+     * @returns the thumbnail
+     */
+    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager);
+
     bool operator==(const KWPage &other) const;
     inline bool operator!=(const KWPage &other) const { return ! operator==(other); }
-
+    inline bool operator<(const KWPage &other) const { return n < other.n; }
+    inline bool operator>(const KWPage &other) const { return n > other.n; }
     uint hash() const;
 
 private:

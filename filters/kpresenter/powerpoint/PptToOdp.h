@@ -611,25 +611,6 @@ private:
         return hf;
     }
 
-    /**
-     * Look in blipStore for the id mapping to this object
-     **/
-    QByteArray getRgbUid(quint16 pib) const
-    {
-        // return 16 byte rgbuid for this given blip id
-        if (p->documentContainer->drawingGroup.OfficeArtDgg.blipStore) {
-            const MSO::OfficeArtBStoreContainer* b
-            = p->documentContainer->drawingGroup.OfficeArtDgg.blipStore.data();
-            if (pib < b->rgfb.size()
-                    && b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>()) {
-                return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
-            }
-        }
-        if (pib != 0xFFFF && pib != 0) {
-            qDebug() << "Could not find image for pib " << pib;
-        }
-        return QByteArray();
-    }
     const MSO::FontEntityAtom* getFont(quint16 fontRef)
     {
         const MSO::FontCollectionContainer* f =

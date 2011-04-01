@@ -60,9 +60,9 @@ public:
 
     /// a two value return type for clipRectToDocument()
     struct ViewMap {
-        QRect clipRect;   ///< the rectangle in the document-space showing (part of) the clip
-        QPointF distance; ///< the displacement between the document and the view.
-        KWPage page; ///< The page that this section represents.
+        QRect clipRect;   ///< the rectangle in the view coordinates showing (part of) the clip
+        QPointF distance; ///< the displacement between the document and the view in view coordinates.
+        KWPage page;      ///< The page that this section represents.
     };
 
     /** Document coord -> view coord */

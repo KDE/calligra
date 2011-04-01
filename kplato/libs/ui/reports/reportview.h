@@ -1,7 +1,7 @@
 /*
  * KPlato Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * Copyright (C) 2010 by Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2010, 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -147,6 +147,7 @@ private slots:
 private:
     ReportData *createReportData( const QDomElement &connection );
     ReportData *createReportData( const QString &type );
+    void exportToOdt( KoReportRendererContext &context );
     void exportToOds( KoReportRendererContext &context );
     void exportToHtml( KoReportRendererContext &context );
     void exportToXHtml( KoReportRendererContext &context );

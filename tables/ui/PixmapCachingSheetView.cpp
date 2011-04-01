@@ -140,6 +140,8 @@ void PixmapCachingSheetView::jobDone(ThreadWeaver::Job *tjob)
         job->m_canvas->update();
     }
     job->deleteLater();
+#else
+    Q_UNUSED(tjob);
 #endif
 }
 
