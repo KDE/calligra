@@ -24,7 +24,7 @@ import QtQuick 1.0 as QML
 QML.Rectangle {
     property alias text: buttonText.text
     property alias imageSource: buttonImage.source
-    
+
     gradient: QML.Gradient {
          QML.GradientStop { position: 0.0; color: "#DCDCDC" }
          QML.GradientStop { position: 1.0; color: "#ABABAB" }
@@ -53,6 +53,4 @@ QML.Rectangle {
             verticalAlignment: QML.Text.AlignVCenter
         }
     }
-    
-    
 }

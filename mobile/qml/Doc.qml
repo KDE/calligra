@@ -31,9 +31,15 @@ QML.Rectangle {
          QML.GradientStop { position: 1.0; color: "#303030" }
     }
 
-    CanvasController {
-        id: canvas
+        CanvasController {
+            id: canvas
 
-        anchors.fill: parent
-    }
+            anchors.fill: parent
+
+            QML.MouseArea {
+                anchors.fill: parent
+
+                onClicked: canvas.openDocument("/media/Data/Other/all/Documents/Resume.odt");
+            }
+        }
 }

@@ -29,9 +29,12 @@
 #include <KMimeType>
 #include <KMimeTypeTrader>
 #include <KoView.h>
+#include <KoCanvasBase.h>
+#include <KDebug>
 
 #include <QPoint>
 #include <QSize>
+#include <QGraphicsWidget>
 
 CanvasController::CanvasController(KActionCollection* actionCollection)
     : KoCanvasController(actionCollection), QDeclarativeItem()
@@ -42,30 +45,34 @@ CanvasController::CanvasController(KActionCollection* actionCollection)
 void CanvasController::openDocument(const QString& path)
 {
     QString error;
+    bool create = true;
     QString mimetype = KMimeType::findByPath(path)->name();
     KoDocument *doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
                                                                                QVariantList(), &error);
-    //setCanvas(doc->canvasItem());
+    doc->openUrl(KUrl(path));
+    setCanvas(dynamic_cast<KoCanvasBase*>(doc->canvasItem(create)));
+    kDebug() << "Error " << error;
+    kDebug() << "Create " << create;
 }
 
 void CanvasController::setVastScrolling(qreal factor)
 {
-
+    kDebug() << factor;
 }
 
 void CanvasController::setZoomWithWheel(bool zoom)
 {
-
+    kDebug() << zoom;
 }
 
 void CanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
-
+    kDebug() << sz << recalculateCenter;
 }
 
 void CanvasController::setScrollBarValue(const QPoint& value)
 {
-
+    kDebug() << value;
 }
 
 QPoint CanvasController::scrollBarValue() const
@@ -75,7 +82,7 @@ QPoint CanvasController::scrollBarValue() const
 
 void CanvasController::pan(const QPoint& distance)
 {
-
+    kDebug() << distance;
 }
 
 QPoint CanvasController::preferredCenter() const
@@ -85,46 +92,47 @@ QPoint CanvasController::preferredCenter() const
 
 void CanvasController::setPreferredCenter(const QPoint& viewPoint)
 {
-
+    kDebug() << viewPoint;
 }
 
 void CanvasController::recenterPreferred()
 {
-
+    kDebug() << "BLEH";
 }
 
 void CanvasController::zoomTo(const QRect& rect)
 {
-
+    kDebug() << rect;
 }
 
 void CanvasController::zoomBy(const QPoint& center, qreal zoom)
 {
-
+    kDebug() << center << zoom;
 }
 
 void CanvasController::zoomOut(const QPoint& center)
 {
-
+    kDebug() << center;
 }
 
 void CanvasController::zoomIn(const QPoint& center)
 {
-
+    kDebug() << center;
 }
 
 void CanvasController::ensureVisible(KoShape* shape)
 {
-
+    kDebug() << shape;
 }
 
 void CanvasController::ensureVisible(const QRectF& rect, bool smooth)
 {
-
+    kDebug() << rect << smooth;
 }
 
 int CanvasController::canvasOffsetY() const
 {
+    kDebug() << "ASKING";
     return 0;
 }
 
@@ -135,37 +143,45 @@ int CanvasController::canvasOffsetX() const
 
 int CanvasController::visibleWidth() const
 {
+    kDebug() << "ASKING";
     return 0;
 }
 
 int CanvasController::visibleHeight() const
 {
+    kDebug() << "ASKING";
     return 0;
 }
 
 KoCanvasBase* CanvasController::canvas() const
 {
+    kDebug() << "ASKING";
     return 0;
 }
 
 void CanvasController::setCanvas(KoCanvasBase* canvas)
 {
-
+    QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(canvas);
+    widget->setParentItem(this);
+    widget->setVisible(true);
+    widget->setGeometry(0,0,width(),height());
 }
 
 void CanvasController::setDrawShadow(bool drawShadow)
 {
-
+    kDebug() << "ASKING";
+    kDebug() << drawShadow;
 }
 
 QSize CanvasController::viewportSize() const
 {
+    kDebug() << "ASKING";
     return QSize();
 }
 
 void CanvasController::scrollContentsBy(int dx, int dy)
 {
-
+    kDebug() << dx << dy;
 }
 
 #include "CanvasController.moc"
