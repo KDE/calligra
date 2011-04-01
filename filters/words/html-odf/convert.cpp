@@ -29,10 +29,10 @@
 #include <KoStoreDevice.h>
 #include <KStandardDirs>
 #include <QtXmlPatterns>
-#include <convert.h>
+#include "convert.h"
 #include <QFile>
 
-void Conversion::convert(QFile *cont1)
+void Conversion::convert(const QString& inputFileName, QFile* outputFile)
 {
 
     QByteArray contall("<?xml version='1.0' encoding='UTF-8'?>");
@@ -42,10 +42,7 @@ void Conversion::convert(QFile *cont1)
     QByteArray sty;
     QByteArray met;
 
-    /*The following line of code contains a parameter "path_of_the_file", which needs to be fixed.
-    Here, the url of the file that is opened or the path of the temp file should be substituted.*/
-
-    KoStore* storecont=KoStore::createStore("path_of_the_file",KoStore::Read);
+    KoStore* storecont = KoStore::createStore(inputFileName, KoStore::Read);
     storecont->extractFile("meta.xml",met);
     met.remove(0,38);
     contall.append(met);
@@ -67,7 +64,7 @@ void Conversion::convert(QFile *cont1)
     QXmlQuery myQuery(QXmlQuery::XSLT20);
     myQuery.setFocus(contall);
     myQuery.setQuery(temp1.readAll());
-    myQuery.evaluateTo(cont1);
+    myQuery.evaluateTo(outputFile);
 
     temp1.close();
     contall.clear();

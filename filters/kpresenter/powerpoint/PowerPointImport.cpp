@@ -17,22 +17,11 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 #include <PowerPointImport.h>
+#include <KoFilterChain.h>
+#include <KoOdf.h>
 
 #include "PptToOdp.h"
-
-#include <QBuffer>
-#include <QColor>
-#include <QString>
-#include <QMatrix>
-#include <QPair>
-
-#include <kdebug.h>
-#include <KoFilterChain.h>
-#include <kpluginfactory.h>
-#include <KoXmlNS.h>
-#include <KoOdf.h>
 
 K_PLUGIN_FACTORY(PowerPointImportFactory, registerPlugin<PowerPointImport>();)
 K_EXPORT_PLUGIN(PowerPointImportFactory("calligrafilters"))
@@ -45,8 +34,13 @@ KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, con
     if (to != KoOdf::mimeType(KoOdf::Presentation))
         return KoFilter::NotImplemented;
 
-    PptToOdp ppttoodp;
+    PptToOdp ppttoodp(this, &PowerPointImport::setProgress);
     return ppttoodp.convert(m_chain->inputFile(), m_chain->outputFile(),
                             KoStore::Zip);
+}
+
+void PowerPointImport::setProgress(const int percent)
+{
+    emit sigProgress(percent);
 }
 #include "PowerPointImport.moc"

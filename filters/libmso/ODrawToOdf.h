@@ -25,6 +25,7 @@
 
 class DrawStyle;
 class QColor;
+class QPainterPath;
 
 class ODrawToOdf
 {
@@ -105,6 +106,28 @@ public:
     };
 private:
     Client* const client;
+
+    /**
+     * Both OfficeArtClientAnchorData and OfficeArtChildAnchor might contain a
+     * 90 degrees rotated rectangle.  It depends on the value of the rotation
+     * property and the intervals differ for each shape type.
+     *
+     * @param shapeType
+     * @param rotation [degrees] - normalization will be applied
+     * @param rect the group, client or child rectangle
+     * @return copy of the rectangle free of any transformations
+     */
+    QRectF processRect(const quint16 shapeType, const qreal rotation, QRectF &rect);
+
+    /**
+     * MSOffice 2003/2007 use different values for the rotation property so we
+     * have to normalize before processing.
+     *
+     * @param rotation [degrees]
+     * @return rotation in <0, 360>
+     */
+    qint16 normalizeRotation(qreal rotation);
+
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
     void processEllipse(const MSO::OfficeArtSpContainer& fsp, Writer& out);
@@ -117,7 +140,10 @@ private:
     void processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processLeftRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processBentConnector3(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSmiley(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHeart(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processQuadArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -146,19 +172,20 @@ private:
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processActionButtonInformation(const MSO::OfficeArtSpContainer& o, Writer& out);
 
-    void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processText(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStyleAndText(const MSO::OfficeArtSpContainer& o, Writer& out);
 
     void processModifiers(const MSO::OfficeArtSpContainer& o, Writer& out, const QList<int>& defaults = QList<int>());
     /**
-    * @brief set the width, height rotation and starting point for the given container
-    */
+     * @brief set the width, height rotation and starting point for the given
+     * container
+     */
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
-
+    QString path2svg(const QPainterPath &path);
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
@@ -189,5 +216,7 @@ inline qreal toQReal(const MSO::FixedPoint& f)
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);
+
+
 
 #endif

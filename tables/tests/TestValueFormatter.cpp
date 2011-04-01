@@ -199,15 +199,23 @@ void TestValueFormatter::testCreateNumberFormat_data()
     QTest::addColumn<Style::FloatFormat>("floatFormat");
     QTest::addColumn<QString>("currencySymbol");
     QTest::addColumn<QString>("formatString");
+    QTest::addColumn<bool>("thousandsSep");
     QTest::addColumn<QString>("result");
 
     QTest::newRow("negative sign in format string") <<
-            -5.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "(-.)" << "(-5)";
+            -5.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "(-.)" << false << "(-5)";
 
     QTest::newRow("unspecified precision 1") <<
-            1.0 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << "1";
+            1.0 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << false << "1";
     QTest::newRow("unspecified precision 0.5") <<
-            0.5 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << "0.5";}
+            0.5 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << false << "0.5";
+
+    QTest::newRow("no thousands seperators") <<
+            3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << false << "3000";
+    QTest::newRow("with thousands seperators") <<
+            3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "3,000";
+
+}
 
 void TestValueFormatter::testCreateNumberFormat()
 {
@@ -217,11 +225,12 @@ void TestValueFormatter::testCreateNumberFormat()
     QFETCH(Style::FloatFormat, floatFormat);
     QFETCH(QString, currencySymbol);
     QFETCH(QString, formatString);
+    QFETCH(bool, thousandsSep);
     QFETCH(QString, result);
 
     Number num(value);
     PublicValueFormatter fmt(m_converter);
-    QCOMPARE(fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString), result);
+    QCOMPARE(fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString, thousandsSep), result);
 }
 
 

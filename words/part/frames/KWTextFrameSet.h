@@ -25,7 +25,6 @@
 #include "../kword_export.h"
 
 class QTextDocument;
-class KWTextFrame;
 class KWPageManager;
 class KWDocument;
 

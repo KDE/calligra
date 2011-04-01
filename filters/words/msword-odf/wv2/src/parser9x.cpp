@@ -70,8 +70,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
         m_properties( 0 ), m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ),
         m_footnotes( 0 ), m_annotations( 0 ), m_fonts( 0 ), m_drawings( 0 ), m_bookmarks(0),
         m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ), m_cellMarkFound( false ),
-        m_remainingCells( 0 ), m_currentParagraph( new Paragraph ), m_remainingChars( 0 ),
-        m_sectionNumber( 0 ), m_table_skimming( 0 ), m_subDocument( None ), m_parsingMode( Default )
+        m_remainingCells( 0 ), m_table_skimming( 0 ),
+        m_currentParagraph( new Paragraph ), m_remainingChars( 0 ),
+        m_sectionNumber( 0 ), m_subDocument( None ), m_parsingMode( Default )
 {
     if ( !isOk() )
         return;
@@ -89,6 +90,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
         delete m_data;
         m_data = 0;
     }
+
+    //validate FIB, keep going even if it's not perfect
+    m_fib.valid();
 
 #ifdef WV2_DUMP_FIB
     wvlog << "Dumping some parts of the FIB: " << endl;
@@ -117,9 +121,16 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
     wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << endl;
     wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << endl;
     wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << endl;
-
+    wvlog << "   cswNew=" << m_fib.cswNew << endl;
 #endif
-
+#ifdef WV2_DEBUG_DOP
+    wvlog << "Debug DOP:" << endl;
+    if (m_fib.cswNew) {
+        wvlog << "A document > Word 8, not much support for this DOP.";
+    } else {
+        wvlog << "Dop97: A document <= Word 8";
+    }
+#endif
     // Initialize all the cached data structures like stylesheets, fonts,
     // textconverter,...
     init();
@@ -128,8 +139,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
 Parser9x::~Parser9x()
 {
     // Sanity check
-    if ( !oldParsingStates.empty() || m_subDocument != None )
+    if ( !oldParsingStates.empty() || m_subDocument != None ) {
         wvlog << "Bug: Someone messed up the save/restore stack!" << endl;
+    }
 
     delete m_currentParagraph;
     delete m_tableRowStart;
@@ -204,7 +216,7 @@ const StyleSheet& Parser9x::styleSheet() const
     return m_properties->styleSheet();
 }
 
-Drawings * Parser9x::getDrawings()
+const Drawings* Parser9x::getDrawings() const
 {
     return m_drawings;
 }
@@ -283,8 +295,9 @@ void Parser9x::parseTableRow( const TableRowData& data )
              " startOffset=" << data.startOffset << " length=" << data.length << endl;
 #endif
 
-    if ( data.length == 0 ) // idiot safe ;-)
+    if ( data.length == 0 ) {
         return;
+    }
 
     saveState( data.length, static_cast<SubDocument>( data.subDocument ), Table );
     m_remainingCells = data.tap->itcMac;
@@ -305,14 +318,14 @@ void Parser9x::parseTextBox( uint lid, bool bodyDrawing)
 {
     wvlog << "Parser9x::parseTextBox" << endl;
 
-    PLCF<Word97::FTXBXS> * plcftxbxTxt =  NULL;
+    const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
     if (bodyDrawing) {
         plcftxbxTxt =  m_drawings->getTxbxTxt();
     } else {
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
     }
 
-    if (plcftxbxTxt == NULL) {
+    if (!plcftxbxTxt) {
         return;
     }
     //NOTE: text ranges for each FTXBXS structure are separated by 0x0D
@@ -555,7 +568,9 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
             if ( !m_currentParagraph->empty() || start != index ) {
                 // No "index - start + 1" here, as we don't want to copy the section mark!
                 UString ustring( processPieceStringHelper( string, start, index ) );
-                m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+                m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                                      fc + start * sizeof( String ),
+                                                      sizeof( String ) == sizeof( XCHAR ) ) );
 
                 processParagraph( fc + index * sizeof( String ) );
             }
@@ -591,10 +606,20 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
             // No "index - start + 1" here, as we don't want to copy the
             // paragraph mark!
             UString ustring( processPieceStringHelper( string, start, index ) );
-            m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+            m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                                  fc + start * sizeof( String ),
+                                                  sizeof( String ) == sizeof( XCHAR ) ) );
             processParagraph( fc + index * sizeof( String ) );
             m_cellMarkFound = false;
             start = ++index;
+
+            //signal progress
+            if (m_subDocument == Main && m_parsingMode == Default) {
+                int value = m_fib.ccpText - m_remainingChars + index;
+                int percentage = (int)((value / (float) m_fib.ccpText) * 100);
+                m_subDocumentHandler->setProgress( percentage );
+            }
+
             break;
         }
         // "Special" characters
@@ -631,7 +656,8 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
         // Finally we have to add the remaining text to the current paragraph
         // (if there is any)
         UString ustring( processPieceStringHelper( string, start, limit ) );
-        m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+        m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                              fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
     }
     delete [] string;
 }
@@ -742,8 +768,9 @@ void Parser9x::processParagraph( U32 fc )
             while ( index < limit ) {
                 Word97::CHP* chp = new Word97::CHP( style->chp() );
                 U32 length = m_properties->fullSavedChp( ( *it ).m_startFC + index * ( ( *it ).m_isUnicode ? 2 : 1 ), chp, style );
-                if ( ( *it ).m_isUnicode )
+                if ( ( *it ).m_isUnicode ) {
                     length >>= 1;
+                }
                 length = length > limit - index ? limit - index : length;
 
                 m_properties->applyClxGrpprl( pcdIt.current(), m_fib.fcClx, chp, style );
@@ -1092,10 +1119,11 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     stream->seek( chp->fcPic_fcObj_lTagObj, G_SEEK_SET );
 
     Word97::PICF* picf( 0 );
-    if ( m_fib.nFib < Word8nFib )
+    if ( m_fib.nFib < Word8nFib ) {
         picf = new Word97::PICF( Word95::toWord97( Word95::PICF( stream, false ) ) );
-    else
+    } else {
         picf = new Word97::PICF( stream, false );
+    }
     stream->pop();
 
     if ( picf->cbHeader < 58 ) {
@@ -1113,10 +1141,9 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     picf->dump();
 #endif
 
-    //offset into the data stream for the GraphicsHandler
-    int offset = 0;
-    //update the offset information
-    offset += chp->fcPic_fcObj_lTagObj + picf->cbHeader;
+    //offset into the Data stream for the GraphicsHandler, position of the
+    //OfficeArtInlineSpContainer to parse with libmso
+    int offset = chp->fcPic_fcObj_lTagObj + picf->cbHeader;
 
     //read cchPicName and stPicName in case of a shape file, MS-DOC p.422/609
     if ( picf->mfp.mm == 0x0066 )
@@ -1131,7 +1158,6 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
         wvlog << "cchPicName: " << cchPicName << endl;
         wvlog << "stPicName: " << stPicName << endl;
 #endif
-	//update the offset
 	offset += cchPicName + 1;
 	delete [] stPicName;
     }
@@ -1192,18 +1218,24 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 void Parser9x::saveState( U32 newRemainingChars, SubDocument newSubDocument, ParsingMode newParsingMode )
 {
     oldParsingStates.push( ParsingState( m_tableRowStart, m_tableRowLength, m_cellMarkFound, m_remainingCells,
-                                         m_currentParagraph, m_remainingChars, m_sectionNumber, m_subDocument,
-                                         m_parsingMode ) );
+                                         m_table_skimming, m_currentParagraph, m_remainingChars, m_sectionNumber,
+                                         m_subDocument, m_parsingMode ) );
     m_tableRowStart = 0;
     m_cellMarkFound = false;
+    m_table_skimming = false;
     m_currentParagraph = new Paragraph;
     m_remainingChars = newRemainingChars;
     m_subDocument = newSubDocument;
     m_parsingMode = newParsingMode;
 
+    // save current positions in OLEStreams
     m_wordDocument->push();
-    if ( m_data )
+    if ( m_data ) {
         m_data->push();
+    }
+    if ( m_table ) {
+        m_table->push();
+    }
 }
 
 void Parser9x::restoreState()
@@ -1213,28 +1245,39 @@ void Parser9x::restoreState()
         return;
     }
 
-    if ( m_data )
-        m_data->pop();
+    // restore positions in OLEStreams
     m_wordDocument->pop();
+    if ( m_data ) {
+        m_data->pop();
+    }
+    if ( m_table ) {
+        m_table->pop();
+    }
 
     ParsingState ps( oldParsingStates.top() );
     oldParsingStates.pop();
 
-    if ( m_tableRowStart )
+    if ( m_tableRowStart ) {
         wvlog << "Bug: We still have to process the table row." << endl;
-    delete m_tableRowStart;   // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
+    }
+    // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
+    delete m_tableRowStart;
+
     m_tableRowStart = ps.tableRowStart;
     m_tableRowLength = ps.tableRowLength;
     m_cellMarkFound = ps.cellMarkFound;
     m_remainingCells = ps.remainingCells;
+    m_table_skimming = ps.tableSkimming;
 
-    if ( !m_currentParagraph->empty() )
+    if ( !m_currentParagraph->empty() ) {
         wvlog << "Bug: The current paragraph isn't empty." << endl;
+    }
     delete m_currentParagraph;
     m_currentParagraph = ps.paragraph;
 
-    if ( m_remainingChars != 0 )
+    if ( m_remainingChars != 0 ) {
         wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << endl;
+    }
     m_remainingChars = ps.remainingChars;
     m_sectionNumber = ps.sectionNumber;
 

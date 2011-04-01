@@ -1452,6 +1452,10 @@ FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const u
 {
     FormulaTokens tokens;
     const unsigned formula_len = readU16(data + pos);
+    if (formula_len + pos + 2 > size) {
+        std::cerr << "formula is longer than available data" << std::endl;
+        return tokens;
+    }
     for (unsigned j = pos + 2; j < size;) {
         unsigned ptg = data[j++];
         ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;

@@ -66,7 +66,7 @@
                         <number>1000</number>
                     </property>
                 </widget>
-                <widget class="QButtonGroup">
+                <widget class="Q3ButtonGroup">
                     <property name="name">
                         <cstring>styleGroup</cstring>
                     </property>
@@ -117,7 +117,7 @@
                         </property>
                     </widget>
                 </widget>
-                <widget class="QButtonGroup">
+                <widget class="Q3ButtonGroup">
                     <property name="name">
                         <cstring>typeGroup</cstring>
                     </property>
@@ -328,7 +328,7 @@
                 <attribute name="title">
                     <string>Language</string>
                 </attribute>
-                <widget class="QButtonGroup">
+                <widget class="Q3ButtonGroup">
                     <property name="name">
                         <cstring>ButtonGroup3</cstring>
                     </property>
@@ -483,7 +483,7 @@
                         <string>Add a table of content</string>
                     </property>
                 </widget>
-                <widget class="QButtonGroup">
+                <widget class="Q3ButtonGroup">
                     <property name="name">
                         <cstring>note</cstring>
                     </property>

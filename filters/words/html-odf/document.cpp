@@ -65,7 +65,7 @@ Document::~Document()
 
 void Document::finishDocument()
 {
-    kDebug(30513);
+    kDebug(30503);
 
     Q_ASSERT(m_mainStyles);
     if (m_mainStyles) {
@@ -117,19 +117,19 @@ void Document::bodyEnd()
 
 void Document::headersMask(QList<bool> mask)
 {
-    kDebug(30513) ;
+    kDebug(30503) ;
     m_headersMask = mask;
 }
 
 
 void Document::footnoteStart()
 {
-    kDebug(30513);
+    kDebug(30503);
 }
 
 void Document::footnoteEnd()
 {
-    kDebug(30513);
+    kDebug(30503);
 }
 
 
