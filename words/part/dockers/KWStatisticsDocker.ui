@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>275</width>
-    <height>94</height>
+    <width>319</width>
+    <height>106</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -18,7 +18,7 @@
      </property>
      <item>
       <property name="text">
-       <string>Words</string>
+       <string comment="not application name">Words</string>
       </property>
      </item>
      <item>

@@ -887,7 +887,9 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& st
 QString PptToOdp::getPicturePath(int pib) const
 {
     int picturePosition = pib - 1;
-    QByteArray rgbUid = getRgbUid(picturePosition);
+    const OfficeArtDggContainer* dgg
+        = &p->documentContainer->drawingGroup.OfficeArtDgg;
+    QByteArray rgbUid = getRgbUid(dgg, picturePosition);
     return rgbUid.length() ? "Pictures/" + pictureNames[rgbUid] : "";
 }
 
@@ -2499,6 +2501,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
+	//FIXME: Found problems with the approach of using the shape to access
+	//any missing properties.  Disabling of this approach would cause regressions.
         drawclient.setDrawClientData(master, slide, 0, 0, shape, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }

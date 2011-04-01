@@ -712,7 +712,7 @@ void TaskStatusItemModel::slotNodeChanged( Node *node )
         row = m_upcoming.keys().indexOf( wbs );
     }
     if ( row >= 0 ) {
-        emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+        emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount() -1, node ) );
     }
 }
 

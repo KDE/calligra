@@ -7893,8 +7893,16 @@ struct PICF : public Shared {
      * Rect for window origin and extents when metafile is stored -- ignored
      * if 0 (8 bytes).
      */
+    /*
+     * innerHeader (14 bytes): A PICF_Shape structure that specifies additional
+     * header information.  According to [MS-DOC] — v20101219
+     */
     U8 bm_rcWinMF[14];
 
+    /*
+     * BEGIN picmid (38 bytes): A PICMID structure that specifies the size and
+     * border information of the picture.  According to [MS-DOC] — v20101219
+     */
     /**
      * horizontal measurement in twips of the rectangle the picture should
      * be imaged within. when scaling bitmaps, dxaGoal and dyaGoal may be ignored
@@ -8010,8 +8018,10 @@ struct PICF : public Shared {
      */
     S16 dyaOrigin;
 
+    // END picmid
+
     /**
-     * unused
+     * This value MUST be 0 and MUST be ignored.
      */
     S16 cProps;
 
