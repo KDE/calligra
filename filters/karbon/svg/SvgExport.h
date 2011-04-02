@@ -31,23 +31,8 @@
 
 #include <KoFilter.h>
 #include <QVariantList>
-#include <QtGui/QGradient>
 
 class KarbonDocument;
-class KoShapeLayer;
-class KoShapeGroup;
-class KoShape;
-class KoPathShape;
-class KoShapeBorderModel;
-class ArtisticTextShape;
-class EllipseShape;
-class RectangleShape;
-class KoPatternBackground;
-class QTextStream;
-class QPixmap;
-class QImage;
-class QColor;
-class QBrush;
 
 class SvgExport : public KoFilter
 {
@@ -61,44 +46,6 @@ public:
 
 private:
     void saveDocument(KarbonDocument& document);
-    void saveLayer(KoShapeLayer * layer);
-    void saveGroup(KoShapeGroup * group);
-    void saveShape(KoShape * shape);
-    void savePath(KoPathShape * path);
-    void saveEllipse(EllipseShape * ellipse);
-    void saveRectangle(RectangleShape * rectangle);
-
-    void saveImage(KoShape *picture);
-    void saveText(ArtisticTextShape * text);
-
-    void getStyle(KoShape * shape, QTextStream * stream);
-    void getFill(KoShape * shape, QTextStream *stream);
-    void getStroke(KoShape * shape, QTextStream *stream);
-    void getEffects(KoShape *shape, QTextStream *stream);
-    void getClipping(KoShape *shape, QTextStream *stream);
-    void getColorStops(const QGradientStops & colorStops);
-    void getGradient(const QGradient * gradient, const QTransform &gradientTransform);
-    void getPattern(KoPatternBackground * pattern, KoShape * shape);
-    QString getTransform(const QTransform &matrix, const QString &attributeName);
-
-    QString getID(const KoShape *obj);
-    QString createID(const KoShape * obj);
-
-    /// Checks if the matrix only has translation set
-    bool isTranslation(const QTransform &);
-
-    QTextStream* m_stream;
-    QTextStream* m_defs;
-    QTextStream* m_body;
-
-    unsigned int m_indent;
-    unsigned int m_indent2;
-
-    QMap<const KoShape*, QString> m_shapeIds;
-
-    QTransform m_userSpaceMatrix;
-
 };
 
 #endif
-
