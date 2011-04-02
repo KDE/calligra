@@ -35,6 +35,7 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 #include <KActionCollection>
+#include <KoToolManager.h>
 
 #include <QPoint>
 #include <QSize>
@@ -56,9 +57,11 @@ void CanvasController::openDocument(const QString& path)
     KoDocument *doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
                                                                                QVariantList(), &error);
     doc->openUrl(KUrl(path));
+    doc->setReadWrite(true);
 
     // get the one canvas item for this document
-    KWCanvasItem *canvas = qgraphicsitem_cast<KWCanvasItem*>(doc->canvasItem());
+    m_canvas = dynamic_cast<KoCanvasBase*>(doc->canvasItem());
+    KWCanvasItem *canvas = dynamic_cast<KWCanvasItem*>(m_canvas);
 
     if (canvas) {
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
@@ -172,7 +175,7 @@ int CanvasController::visibleHeight() const
 KoCanvasBase* CanvasController::canvas() const
 {
     kDebug() << "ASKING";
-    return 0;
+    return m_canvas;
 }
 
 void CanvasController::setCanvas(KoCanvasBase* canvas)
@@ -197,7 +200,7 @@ QSize CanvasController::viewportSize() const
 
 void CanvasController::scrollContentsBy(int dx, int dy)
 {
-    kDebug() << dx << dy;
+    
 }
 
 #include "CanvasController.moc"

@@ -26,6 +26,7 @@
 #include "KoCanvasController.h"
 #include <QDeclarativeItem>
 
+class KoCanvasBase;
 class KoZoomController;
 class KoZoomHandler;
 
@@ -66,6 +67,7 @@ public slots:
 private:
     KoZoomController *m_zoomController;
     KoZoomHandler *m_zoomHandler;
+    KoCanvasBase *m_canvas;
 };
 
 #endif // CANVASCONTROLLER_H
