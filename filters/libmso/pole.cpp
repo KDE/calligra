@@ -227,7 +227,7 @@ static inline unsigned long readU16(const unsigned char* ptr)
 
 static inline unsigned long readU32(const unsigned char* ptr)
 {
-    return ptr[0] + (ptr[1] << 8) + (ptr[2] << 16) + (ptr[3] << 24);
+    return unsigned(ptr[0]) + (unsigned(ptr[1]) << 8 ) + (unsigned(ptr[2]) << 16) + (unsigned(ptr[3]) << 24);
 }
 
 static inline void writeU16(unsigned char* ptr, unsigned long data)
