@@ -269,9 +269,6 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
 
 void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 {
-    static int iteration = 0;
-    iteration++;
-
     painter.translate(-m_documentOffset);
 
     if (m_viewMode->hasPages()) {
