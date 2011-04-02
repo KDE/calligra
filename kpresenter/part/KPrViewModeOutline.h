@@ -50,6 +50,9 @@ public:
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
     void populate();
+    void activateSynchronize();
+    void disactivateSynchronize();
+    
 public slots:
     virtual void updateActivePage( KoPAPageBase * page );
 protected:
@@ -79,6 +82,7 @@ protected slots:
     void slotSelectionChanged();
 private:
     KPrOutlineEditor *m_outlineEditor;
+    bool m_synchronizeActivated;
 };
 
 #endif // KPRVIEWMODEOUTLINE_H

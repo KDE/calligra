@@ -100,8 +100,7 @@ void KPrViewModeOutline::activate(KoPAViewMode *previousViewMode)
     
     populate();
     
-    // Enable synchronization
-    connect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
+    activateSynchronize();
     KoPAView *view = dynamic_cast<KoPAView *>(m_view);
     if (view) {
         view->hide();
@@ -113,7 +112,7 @@ void KPrViewModeOutline::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeOutline::deactivate()
 {
-    disconnect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
+    disactivateSynchronize();
     m_outlineEditor->hide();
      // Active the view as a basic but active one
     m_view->setActionEnabled(KoPAView::AllActions, true);
@@ -126,7 +125,7 @@ void KPrViewModeOutline::deactivate()
 
 void KPrViewModeOutline::populate()
 {
-    disconnect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
+    disactivateSynchronize();
     
     m_outlineEditor->clear();
     QTextCursor currentCursor = m_outlineEditor->textCursor();
@@ -176,7 +175,7 @@ void KPrViewModeOutline::populate()
 
     m_outlineEditor->setTextCursor(currentCursor);
 
-    connect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
+    activateSynchronize();
 }
 
 void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAdded)
@@ -197,8 +196,7 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
 
     // If we have found a good block, we then add and remove things to it
     if (userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() )) {
-        KoTextShapeData *viewData =  userData->outlinePair().second;
-        QTextCursor viewCursor = QTextCursor(viewData->document());
+        QTextCursor viewCursor =  QTextCursor(userData->outlinePair().second->document());
         
         // Remove stuff to be removed
         if (charsRemoved > 0) {
@@ -206,6 +204,7 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
             viewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsRemoved);
             viewCursor.deleteChar();
         }
+
         // Add the stuff to be added
         if (charsAdded > 0) {
             cursor.setPosition(position);
@@ -213,6 +212,7 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
 
             viewCursor.setPosition(position - blockBegin);
             viewCursor.insertText(cursor.selectedText());
+            qDebug() << cursor.selectedText();
         }
     } else {
         kDebug(33001) << "No user data anymore in the outline::synchronize";
@@ -255,4 +255,20 @@ void KPrViewModeOutline::setCursorTo(int slide)
     QTextCursor cursor = m_outlineEditor->textCursor();
     cursor.setPosition(position);
     m_outlineEditor->setTextCursor(cursor);
+}
+
+void KPrViewModeOutline::activateSynchronize()
+{
+    if (!(m_synchronizeActivated)) {
+        // Enable synchronization
+        connect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
+    }
+    m_synchronizeActivated = true;
+}
+
+void KPrViewModeOutline::disactivateSynchronize()
+{
+    // Disable synchronization
+    disconnect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
+    m_synchronizeActivated = false;
 }
