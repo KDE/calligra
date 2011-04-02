@@ -587,9 +587,7 @@ protected slots:
 
     void slotProjectNew();
     void slotProjectOpen();
-    void slotProjectOpenRecentAboutToShow();
-    void slotProjectOpenRecent(int id);
-    void slotProjectOpenRecentMore();
+    void slotProjectOpenRecent();
     void slotProjectSave();
     void slotProjectSaveAs();
     void slotProjectPrint();

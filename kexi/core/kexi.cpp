@@ -336,7 +336,7 @@ QLabel *KEXI_UNFINISHED_LABEL(const QString& feature_name, const QString& extra_
 {
     QString line1, line2;
     KEXI_UNFINISHED_INTERNAL(feature_name, extra_text, &line1, &line2);
-    QLabel *label = new QLabel(QLatin1String("<h2>") + line1 + QLatin1String("</h2><br>")
+    QLabel *label = new QLabel(QLatin1String("<b>") + line1 + QLatin1String("</b><br>")
         + line2);
     label->setAlignment(Qt::AlignCenter);
     label->setAutoFillBackground(true);

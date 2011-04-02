@@ -677,18 +677,12 @@ void KexiMainWindow::setupActions()
         ac->addAction("project_open_recent",
             action = new KexiMenuWidgetAction(KStandardAction::OpenRecent, this));
             action->setText(i18nc("Action name with three dots...", "%1...", action->text()));
-        connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecentAboutToShow()));
+        connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecent()));
         action->setToolTip(i18n("Open recent project"));
         action->setWhatsThis(
             i18n("Opens one of the recently opened project. Currently opened project is not affected."));
         d->action_open_recent = action;
     }
-# if 0
-    connect(d->action_open_recent->popupMenu(), SIGNAL(activated(int)),
-            this, SLOT(slotProjectOpenRecent(int)));
-    connect(d->action_open_recent->popupMenu(), SIGNAL(aboutToShow()),
-            this, SLOT(slotProjectOpenRecentAboutToShow()));
-# endif
 #else
     d->action_open_recent = d->dummy_action;
 #endif
@@ -3322,8 +3316,12 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
 }
 
 void
-KexiMainWindow::slotProjectOpenRecentAboutToShow()
+KexiMainWindow::slotProjectOpenRecent()
 {
+    d->tabbedToolBar->showMainMenu();
+    // dummy
+    QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_open_recent")->text());
+    d->tabbedToolBar->setMainMenuContent(dummy);
     /*
     //setup
     KMenu *popup = d->action_open_recent->popupMenu();
@@ -3381,20 +3379,6 @@ KexiMainWindow::slotProjectOpenRecentAboutToShow()
     popup->insertItem(KIcon("socket"), "My connection 3");
     popup->insertItem(KIcon("socket"), "My connection 4");
 #endif
-}
-
-void
-KexiMainWindow::slotProjectOpenRecent(int id)
-{
-    if (id < 0) // || id==d->action_open_recent_more_id)
-        return;
-    kDebug() << "KexiMainWindow::slotProjectOpenRecent(" << id << ")";
-}
-
-void
-KexiMainWindow::slotProjectOpenRecentMore()
-{
-    KEXI_UNFINISHED(i18n("Open Recent"));
 }
 
 void
