@@ -33,6 +33,7 @@ class KPrOutlineEditor;
 
 class KPrViewModeOutline : public KoPAViewMode
 {
+    Q_OBJECT
 public:
     KPrViewModeOutline(KoPAView *view, KoPACanvas *canvas);
 
@@ -49,6 +50,7 @@ public:
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
     void populate();
+
 protected:
     /**
       * Class to manage block data
@@ -67,6 +69,9 @@ protected:
         int m_pageNumber;
         OutlinePair m_outlinePair;
     };
+
+protected slots:
+    void synchronize(int position, int charsRemoved, int charsAdded);
 
 private:
     KPrOutlineEditor *m_outlineEditor;

@@ -98,6 +98,8 @@ void KPrViewModeOutline::activate(KoPAViewMode *previousViewMode)
     
     populate();
     
+    // Enable synchronization
+    connect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
     KoPAView *view = dynamic_cast<KoPAView *>(m_view);
     if (view) {
         view->hide();
@@ -109,6 +111,7 @@ void KPrViewModeOutline::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeOutline::deactivate()
 {
+    disconnect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
     m_outlineEditor->hide();
      // Active the view as a basic but active one
     m_view->setActionEnabled(KoPAView::AllActions, true);
@@ -148,8 +151,11 @@ void KPrViewModeOutline::populate()
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
                 if (pair.first == Outline) {
                     currentCursor.insertBlock(blockFormat);
-                    currentCursor.block().setUserData(new SlideUserBlockData(pageNumber, pair));
+                    int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
+                    for(start; start <= currentCursor.blockNumber(); start++){
+                        m_outlineEditor->document()->findBlockByNumber(start).setUserData(new SlideUserBlockData(pageNumber, pair));
+                    }
                 }
             }
         }
@@ -159,4 +165,11 @@ void KPrViewModeOutline::populate()
     currentCursor.deleteChar();
 
     m_outlineEditor->setTextCursor(currentCursor);
+}
+
+void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAdded)
+{
+    Q_UNUSED(position);
+    Q_UNUSED(charsRemoved);
+    Q_UNUSED(charsAdded);
 }
