@@ -864,8 +864,10 @@ bool KexiMenuWidgetPrivate::actionPersistentlySelected(const QAction* action) co
 void KexiMenuWidgetPrivate::setActionPersistentlySelected(QAction* action, bool set)
 {
     KexiMenuWidgetAction* kaction = qobject_cast<KexiMenuWidgetAction*>(action);
-    if (previousPersistentlySelectedAction)
+    if (previousPersistentlySelectedAction) {
         previousPersistentlySelectedAction->setPersistentlySelected(false);
+        q->update(actionRect(previousPersistentlySelectedAction));
+    }
     if (kaction)
         kaction->setPersistentlySelected(set);
     previousPersistentlySelectedAction = kaction;
@@ -2254,8 +2256,9 @@ void KexiMenuWidget::mousePressEvent(QMouseEvent *e)
 
     QAction *action = d->actionAt(e->pos());
     d->setCurrentAction(action, 20);
-    d->toggleActionPersistentlySelected(action);
-    update();
+    if (!d->actionPersistentlySelected(action)) {
+        d->toggleActionPersistentlySelected(action);
+    }
 }
 
 /*!
