@@ -107,7 +107,7 @@ void KPrViewModeOutline::activate(KoPAViewMode *previousViewMode)
         view->hide();
     }
     m_outlineEditor->show();
-    m_outlineEditor->setFocus(Qt::ActiveWindowFocusReason);
+    updateActivePage( m_view->activePage() );
 }
 
 
