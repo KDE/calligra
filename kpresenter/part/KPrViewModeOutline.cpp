@@ -37,6 +37,7 @@ KPrViewModeOutline::KPrViewModeOutline(KoPAView *view, KoPACanvas *canvas)
     , m_outlineEditor(new KPrOutlineEditor(this, view->parentWidget()))
 {
     m_outlineEditor->hide();
+    connect(m_outlineEditor, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
 }
 
 void KPrViewModeOutline::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
@@ -172,4 +173,16 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
     Q_UNUSED(position);
     Q_UNUSED(charsRemoved);
     Q_UNUSED(charsAdded);
+}
+
+void KPrViewModeOutline::slotSelectionChanged()
+{
+    QTextCursor cursor = m_outlineEditor->textCursor();
+    SlideUserBlockData *userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() );
+    if(userData){
+        KoPAPageBase * page = m_view->kopaDocument()->pageByIndex(userData->pageNumber(), false);
+        if ( m_view->activePage() != page ) {
+            m_view->setActivePage(page);
+        }
+    }
 }

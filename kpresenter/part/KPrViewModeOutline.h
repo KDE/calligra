@@ -72,7 +72,7 @@ protected:
 
 protected slots:
     void synchronize(int position, int charsRemoved, int charsAdded);
-
+    void slotSelectionChanged();
 private:
     KPrOutlineEditor *m_outlineEditor;
 };
