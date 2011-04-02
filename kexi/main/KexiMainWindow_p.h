@@ -276,12 +276,9 @@ protected:
             menu->addAction(ac->action("project_open_recent"));
             menu->addSeparator();
             //menu->addAction(ac->action("project_save"));
-            menu->addAction(ac->action("project_saveas"));
+            //menu->addAction(ac->action("project_saveas"));
             menu->addAction(ac->action("project_close"));
             menu->addSeparator();
-            QAction *sep = new QAction(menu);
-            sep->setSeparator(true);
-            menu->addAction(sep);
             //menu->addAction(ac->action("tools_import_project"));
             menu->addAction(ac->action("project_import_export_send"));
             menu->addAction(ac->action("project_properties"));
