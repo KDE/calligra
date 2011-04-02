@@ -31,6 +31,7 @@
 
 #include <KDebug>
 #include <QtGui/qtextformat.h>
+#include <../libs/kotext/KoTextShapeData.h>
 
 KPrViewModeOutline::KPrViewModeOutline(KoPAView *view, KoPACanvas *canvas)
     : KoPAViewMode( view, canvas )
@@ -125,6 +126,8 @@ void KPrViewModeOutline::deactivate()
 
 void KPrViewModeOutline::populate()
 {
+    disconnect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
+    
     m_outlineEditor->clear();
     QTextCursor currentCursor = m_outlineEditor->textCursor();
     // For each slides
@@ -138,15 +141,21 @@ void KPrViewModeOutline::populate()
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
                 if (pair.first == Title) {
                     currentCursor.insertBlock(blockFormat);
-                    currentCursor.block().setUserData(new SlideUserBlockData(pageNumber, pair));
+                    int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
+                    for(start; start <= currentCursor.blockNumber(); start++){
+                        m_outlineEditor->document()->findBlockByNumber(start).setUserData(new SlideUserBlockData(pageNumber, pair));
+                    }
                 }
             }
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
                 if (pair.first == Subtitle) {
                     currentCursor.insertBlock(blockFormat);
-                    currentCursor.block().setUserData(new SlideUserBlockData(pageNumber, pair));
+                    int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
+                    for(start; start <= currentCursor.blockNumber(); start++){
+                        m_outlineEditor->document()->findBlockByNumber(start).setUserData(new SlideUserBlockData(pageNumber, pair));
+                    }
                 }
             }
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
@@ -166,13 +175,46 @@ void KPrViewModeOutline::populate()
     currentCursor.deleteChar();
 
     m_outlineEditor->setTextCursor(currentCursor);
+
+    connect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));
 }
 
 void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAdded)
 {
-    Q_UNUSED(position);
-    Q_UNUSED(charsRemoved);
-    Q_UNUSED(charsAdded);
+
+    QTextCursor cursor = m_outlineEditor->textCursor();
+    cursor.setPosition(position);
+    int blockBegin = cursor.block().position();
+
+    // Trying to find in which block we are (after the last user data)
+    SlideUserBlockData *userData;
+    while (!(userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() )))
+    {
+        if (cursor.blockNumber() > 0) {
+            cursor.movePosition(QTextCursor::PreviousBlock);
+        }
+    }
+    
+    if (userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() )) {
+        KoTextShapeData *viewData =  userData->outlinePair().second;
+        QTextCursor viewCursor = QTextCursor(viewData->document());
+        
+        // synchronize real target
+        if (charsRemoved > 0) {
+            viewCursor.setPosition(position - blockBegin);
+            viewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsRemoved);
+            viewCursor.deleteChar();
+        }
+        if (charsAdded > 0) {
+            cursor.setPosition(position);
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsAdded);
+
+            viewCursor.setPosition(position - blockBegin);
+            viewCursor.insertText(cursor.selectedText());
+        }
+    } else {
+        kDebug(33001) << "No user data anymore in the outline::synchronize";
+    }
 }
 
 void KPrViewModeOutline::slotSelectionChanged()
