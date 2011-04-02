@@ -22,8 +22,8 @@
 #define AUTOFORM_H
 
 #include <QWidget>
-#include <tableview/kexidataawareobjectiface.h>
-#include <kexidataprovider.h>
+#include <dataviewcommon/kexidataawareobjectiface.h>
+#include <dataviewcommon/kexidataprovider.h>
 #include "AutoWidget.h"
 
 class QGridLayout;
@@ -40,7 +40,7 @@ class AutoForm : public QWidget,
     KEXI_DATAAWAREOBJECTINTERFACE
     
 public:
-    AutoForm(QWidget* parent, KexiRecordNavigator *nav);
+    AutoForm(QWidget* parent, KexiRecordNavigatorIFace *nav);
     virtual ~AutoForm();
     
 protected:

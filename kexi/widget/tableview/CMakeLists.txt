@@ -6,22 +6,17 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CM
 ########### next target ###############
 
 set(kexidatatable_LIB_SRCS 
-   kexidataawareobjectiface.cpp 
    kexitableview.cpp 
    kexitableview_p.cpp 
    kexidatatableview.cpp 
    kexicelleditorfactory.cpp 
    kexitableedit.cpp 
-   kexitableviewheader.cpp 
-   KexiTableViewColumn.cpp
-   kexitableviewdata.cpp 
    kexiinputtableedit.cpp 
    kexiblobtableedit.cpp 
    kexibooltableedit.cpp 
    kexicomboboxbase.cpp 
    kexicomboboxtableedit.cpp 
    kexicomboboxpopup.cpp 
-   kexidataawarepropertyset.cpp
    kexidatetableedit.cpp 
    kexitimetableedit.cpp 
    kexidatetimetableedit.cpp 

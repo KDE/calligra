@@ -27,7 +27,7 @@
 #include "kexicomboboxbase.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
 #include "kexicomboboxpopup.h"
-#include "kexitableview.h"
+//#include "kexitableview.h"
 #include "kexi.h"
 
 #include <klineedit.h>

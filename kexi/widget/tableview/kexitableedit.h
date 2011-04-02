@@ -24,12 +24,14 @@
 #include <core/kexidataiteminterface.h>
 
 #include <qvariant.h>
+#ifndef KEXI_MOBILE
 #include <q3scrollview.h>
+#endif
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 
-#include "kexitableviewdata.h"
+#include <widget/dataviewcommon/kexitableviewdata.h>
 
 namespace KexiDB
 {
@@ -221,7 +223,9 @@ protected:
     KexiTableViewColumn *m_column;
     int m_leftMargin;
     int m_rightMargin, m_rightMarginWhenFocused;
+#ifndef KEXI_MOBILE
     Q3ScrollView* m_scrollView; //!< may be 0 if the parent is not a scrollview
+#endif
     bool m_usesSelectedTextColor; //!< set in ctor, @see usesSelectedTextColor()
 
 private:

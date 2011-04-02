@@ -268,7 +268,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     // Create headers
     m_horizontalHeader = new KexiTableViewHeader(this);
     m_horizontalHeader->setObjectName("m_horizontalHeader");
-    m_horizontalHeader->setSelectionBackgroundColor(palette().active().highlight());
+    m_horizontalHeader->setSelectionBackgroundColor(palette().brush(QPalette::Highlight).color());
     m_horizontalHeader->setOrientation(Qt::Horizontal);
     m_horizontalHeader->setTracking(false);
     m_horizontalHeader->setMovingEnabled(false);

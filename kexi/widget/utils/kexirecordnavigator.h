@@ -54,6 +54,28 @@ public:
     virtual long currentRecord() { return 0; }
 };
 
+class KEXIGUIUTILS_EXPORT KexiRecordNavigatorIFace
+{
+public:
+    /*! Sets current record number for this navigator,
+     i .e. a value that will be displ*ayed in the 'record number' text box.
+     This can also affect button's enabling and disabling.
+     If @p r is 0, 'record number' text box's content is cleared. */
+    virtual void setCurrentRecordNumber(uint r) = 0;
+    
+    /*! Sets record count for this navigator.
+     T his can also affect button's e*nabling and disabling.
+     By default count is 0. */
+    virtual void setRecordCount(uint count) = 0;
+    
+    /*! Sets insertingEnabled flag. If true, "+" button will be enabled. */
+     virtual void setInsertingEnabled(bool set) = 0;
+    
+    /*! Sets visibility of "inserting" button. */
+    virtual void setInsertingButtonVisible(bool set) = 0;
+    
+};
+
 #ifndef KEXI_MOBILE
 
 //! @short KexiRecordNavigator class provides a record navigator.
@@ -70,7 +92,7 @@ public:
     Note that using this method 2), you can create more than one navigator widget
     connected with your data-aware object (does not matter if this is useful).
  */
-class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QWidget
+class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QWidget, public KexiRecordNavigatorIFace
 {
     Q_OBJECT
 
@@ -155,12 +177,12 @@ public slots:
      i.e. a value that will be displayed in the 'record number' text box.
      This can also affect button's enabling and disabling.
      If @p r is 0, 'record number' text box's content is cleared. */
-    void setCurrentRecordNumber(uint r);
+    virtual void setCurrentRecordNumber(uint r);
 
     /*! Sets record count for this navigator.
      This can also affect button's enabling and disabling.
      By default count is 0. */
-    void setRecordCount(uint count);
+    virtual void setRecordCount(uint count);
 
     void updateGeometry(int leftMargin);
 

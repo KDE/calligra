@@ -29,7 +29,7 @@ target_link_libraries(kexihandler_autoform
     kexicore
     kexiextendedwidgets
     kexiguiutils
-    kexidatatable
+    kexidataviewcommon
 )
 
 install(TARGETS kexihandler_autoform DESTINATION ${PLUGIN_INSTALL_DIR})

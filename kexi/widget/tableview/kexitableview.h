@@ -42,12 +42,12 @@
 
 #include <kdebug.h>
 
-#include "kexitableviewdata.h"
+#include <widget/dataviewcommon/kexitableviewdata.h>
 #include "kexitableedit.h"
 #include <kexiutils/tristate.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
-#include "kexidataawareobjectiface.h"
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
 
 class QPrinter;
 class QPrintDialog;

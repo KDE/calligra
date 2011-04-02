@@ -23,8 +23,8 @@
 
 #include <core/KexiView.h>
 #include <widget/utils/kexirecordnavigator.h>
-#include <widget/tableview/kexidataawareobjectiface.h>
-#include <widget/kexidataprovider.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <widget/dataviewcommon/kexidataprovider.h>
 #include "KexiAutoFormPart.h"
 
 class AutoForm;
@@ -54,7 +54,7 @@ public:
     
 private:
     QScrollArea *m_scrollArea;
-    KexiRecordNavigator *m_pageSelector;
+    KexiRecordNavigatorIFace *m_pageSelector;
     AutoForm *m_autoForm;
     
     KexiAutoFormPart::TempData* tempData() const;

@@ -24,13 +24,13 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <widget/tableview/kexitableviewdata.h>
-#include <widget/tableview/kexicomboboxbase.h>
+#include "kexitableviewdata.h"
+#ifndef KEXI_MOBILE
+#include "kexicomboboxbase.h"
+#endif
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
-
-//#include "widgets/kexidbform.h"
 
 KexiFormDataProvider::KexiFormDataProvider()
         : KexiDataItemChangesListener()
@@ -293,6 +293,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
                 KexiDB::QueryColumnInfo *visibleColumnInfo = fieldsExpanded[ indexForVisibleLookupValue ];
                 if (visibleColumnInfo) {
                     item->setVisibleColumnInfo(visibleColumnInfo);
+#ifndef KEXI_MOBILE
                     if (dynamic_cast<KexiComboBoxBase*>(item) && m_mainWidget
                             && dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()) {
                         // m_mainWidget (dbform) should filter the (just created using setVisibleColumnInfo())
@@ -300,6 +301,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
                         dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()
                         ->installEventFilter(m_mainWidget);
                     }
+#endif
                     kDebug() << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString()
                         << "\n at position " << indexForVisibleLookupValue;
                 }

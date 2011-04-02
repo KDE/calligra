@@ -27,7 +27,7 @@
 #include <kexidb/cursor.h>
 #include <KexiMainWindowIface.h>
 
-KexiAutoFormView::KexiAutoFormView(QWidget* parent): KexiView(parent), m_autoForm(0)
+KexiAutoFormView::KexiAutoFormView(QWidget* parent): KexiView(parent), m_autoForm(0), m_pageSelector(0)
 {
     kDebug();
     setObjectName("KexiAutoForm_DataView");
@@ -119,12 +119,12 @@ void KexiAutoFormView::moveToRecordRequested(uint r)
 
 long int KexiAutoFormView::currentRecord()
 {
-    return KexiRecordNavigatorHandler::currentRecord();
+    return m_autoForm->currentRow() + 1;
 }
 
 long int KexiAutoFormView::recordCount()
 {
-    return KexiRecordNavigatorHandler::recordCount();
+    return m_autoForm->rows();
 }
 
 tristate KexiAutoFormView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)

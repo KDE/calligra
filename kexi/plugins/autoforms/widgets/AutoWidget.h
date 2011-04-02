@@ -23,7 +23,7 @@
 
 #include <QtGui/QWidget>
 #include <QVariant>
-#include <kexiformdataiteminterface.h>
+#include <dataviewcommon/kexiformdataiteminterface.h>
 
 class QLabel;
 class QHBoxLayout;
