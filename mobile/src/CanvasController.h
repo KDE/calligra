@@ -63,11 +63,13 @@ public:
 
 public slots:
     void openDocument(const QString &path);
+    void scrollDown();
 
 private:
     KoZoomController *m_zoomController;
     KoZoomHandler *m_zoomHandler;
     KoCanvasBase *m_canvas;
+    QPoint m_currentPoint;
 };
 
 #endif // CANVASCONTROLLER_H

@@ -25,17 +25,29 @@ import CalligraMobile 1.0
 QML.Rectangle {
     id: rootRect
 
-    width: 800; height: 600;
+    width: 800; height: 1600;
     gradient: QML.Gradient {
          QML.GradientStop { position: 0.0; color: "#808080" }
          QML.GradientStop { position: 1.0; color: "#303030" }
     }
 
+    QML.Row {
+        anchors.fill: parent
+
         CanvasController {
             id: canvas
 
-            anchors.fill: parent
+            height: parent.height
+            width: parent.width*0.9
         }
 
-        QML.Component.onCompleted: canvas.openDocument("/media/Data/Other/all/Documents/Resume.odt");
+        WordsToolbar {
+            id: toolbar
+
+            height: parent.height
+            width: parent.width*0.1
+        }
+    }
+
+    QML.Component.onCompleted: canvas.openDocument("/media/Data/Other/all/Documents/Resume.odt");
 }

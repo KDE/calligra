@@ -3,7 +3,10 @@ project(calligra-mobile)
 
 find_package(Qt4 4.7.0 REQUIRED)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-include_directories(${QT_INCLUDES} ${KDE4_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${QT_INCLUDES}
+                    ${KDE4_INCLUDES}
+                    ${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR})
 
 include_directories(
     ${KOMAIN_INCLUDES}

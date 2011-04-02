@@ -56,10 +56,7 @@ QML.Rectangle {
             text: "Presentation"
             width: buttonWidth; height: buttonHeight
 
-            QML.MouseArea {
-                anchors.fill: parent
-                onPressed: rootRect.state = "presentation"
-            }
+            onClicked: rootRect.state = "presentation"
         }
     }
 }
