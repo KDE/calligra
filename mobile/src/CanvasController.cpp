@@ -184,6 +184,7 @@ void CanvasController::setCanvas(KoCanvasBase* canvas)
     widget->setParentItem(this);
     widget->setVisible(true);
     widget->setGeometry(0,0,width(),height());
+    KoToolManager::instance()->addController(this);
 }
 
 void CanvasController::setDrawShadow(bool drawShadow)
