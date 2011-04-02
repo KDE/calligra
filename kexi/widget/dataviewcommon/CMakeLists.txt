@@ -12,7 +12,6 @@ set(kexidataviewcommon_LIB_SRCS
    kexidataprovider.cpp
    kexitableviewdata.cpp
    KexiTableViewColumn.cpp
-   kexitableviewheader.cpp
    kexiformdataiteminterface.cpp
 )
 

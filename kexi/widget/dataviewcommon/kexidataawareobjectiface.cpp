@@ -41,7 +41,7 @@
 #include <widget/utils/kexirecordmarker.h>
 #include <kexidb/roweditbuffer.h>
 
-#include "kexitableviewheader.h"
+//#include "kexitableviewheader.h"
 
 #include <limits.h>
 
@@ -65,7 +65,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_initDataContentsOnShow = false;
     m_cursorPositionSetExplicityBeforeShow = false;
     m_verticalHeader = 0;
-    m_horizontalHeader = 0;
+//    m_horizontalHeader = 0;
     m_insertItem = 0;
 // m_rowEditBuffer = 0;
     m_spreadSheetMode = false;
@@ -325,8 +325,9 @@ bool KexiDataAwareObjectInterface::sort()
     editorShowFocus(m_curRow, m_curCol);
     if (m_verticalHeader)
         m_verticalHeader->setCurrentRow(m_curRow);
-    if (m_horizontalHeader)
-        m_horizontalHeader->setSelectedSection(m_curCol);
+//!TEMP HACK
+//    if (m_horizontalHeader)
+//        m_horizontalHeader->setSelectedSection(m_curCol);
     if (m_navPanel)
         m_navPanel->setCurrentRecordNumber(m_curRow + 1);
     return true;
@@ -512,8 +513,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
     if (rows() <= 0) {
         if (m_verticalHeader)
             m_verticalHeader->setCurrentRow(-1);
-        if (m_horizontalHeader)
-            m_horizontalHeader->setSelectedSection(-1);
+//!TEMP HACK
+//        if (m_horizontalHeader)
+//           m_horizontalHeader->setSelectedSection(-1);
         if (isInsertingEnabled()) {
             m_currentItem = m_insertItem;
             newrow = 0;
@@ -686,8 +688,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
         //quite clever: ensure the cell is visible:
         ensureCellVisible(m_curRow, m_curCol);
 
-        if (m_horizontalHeader && (oldCol != m_curCol || forceSet))
-            m_horizontalHeader->setSelectedSection(m_curCol);
+        //!TEMP HACK
+//        if (m_horizontalHeader && (oldCol != m_curCol || forceSet))
+//            m_horizontalHeader->setSelectedSection(m_curCol);
 
         /*emit*/ itemSelected(m_currentItem);
         /*emit*/ cellSelected(m_curCol, m_curRow);

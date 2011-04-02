@@ -21,6 +21,8 @@ set(kexidatatable_LIB_SRCS
    kexitimetableedit.cpp 
    kexidatetimetableedit.cpp 
    kexitextformatter.cpp
+   kexitableviewheader.cpp
+   
 )
 
 
