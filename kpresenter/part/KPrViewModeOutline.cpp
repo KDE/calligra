@@ -181,12 +181,12 @@ void KPrViewModeOutline::populate()
 
 void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAdded)
 {
-
+    // We take the good cursor and move it to the good position, recording the position
     QTextCursor cursor = m_outlineEditor->textCursor();
     cursor.setPosition(position);
     int blockBegin = cursor.block().position();
 
-    // Trying to find in which block we are (after the last user data)
+    // Trying to find which "record" block we are the nearer
     SlideUserBlockData *userData;
     while (!(userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() )))
     {
@@ -194,17 +194,19 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
             cursor.movePosition(QTextCursor::PreviousBlock);
         }
     }
-    
+
+    // If we have found a good block, we then add and remove things to it
     if (userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() )) {
         KoTextShapeData *viewData =  userData->outlinePair().second;
         QTextCursor viewCursor = QTextCursor(viewData->document());
         
-        // synchronize real target
+        // Remove stuff to be removed
         if (charsRemoved > 0) {
             viewCursor.setPosition(position - blockBegin);
             viewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsRemoved);
             viewCursor.deleteChar();
         }
+        // Add the stuff to be added
         if (charsAdded > 0) {
             cursor.setPosition(position);
             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsAdded);
