@@ -186,3 +186,29 @@ void KPrViewModeOutline::slotSelectionChanged()
         }
     }
 }
+
+void KPrViewModeOutline::updateActivePage( KoPAPageBase * page )
+{
+    if ( m_view->activePage() != page ) {
+        m_view->setActivePage( page );
+    }
+    KoPAView *view = dynamic_cast<KoPAView *>(m_view);
+    setCursorTo(view->kopaDocument()->pageIndex(page));
+    m_outlineEditor->setFocus(Qt::ActiveWindowFocusReason);
+}
+
+void KPrViewModeOutline::setCursorTo(int slide)
+{
+    int position = 0;
+    for(int i=0; i < m_outlineEditor->document()->blockCount(); i++){
+        QTextBlock block = m_outlineEditor->document()->findBlockByNumber(i);
+        SlideUserBlockData *userData = dynamic_cast<SlideUserBlockData*>( block.userData() );
+        if (userData && userData->pageNumber() == slide) {
+            position = block.position();
+            break;
+        }
+    }
+    QTextCursor cursor = m_outlineEditor->textCursor();
+    cursor.setPosition(position);
+    m_outlineEditor->setTextCursor(cursor);
+}

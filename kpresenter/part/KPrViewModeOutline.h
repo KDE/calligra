@@ -50,7 +50,8 @@ public:
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
     void populate();
-
+public slots:
+    virtual void updateActivePage( KoPAPageBase * page );
 protected:
     /**
       * Class to manage block data
@@ -69,6 +70,9 @@ protected:
         int m_pageNumber;
         OutlinePair m_outlinePair;
     };
+
+
+    void setCursorTo(int slide);
 
 protected slots:
     void synchronize(int position, int charsRemoved, int charsAdded);
