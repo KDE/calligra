@@ -52,3 +52,14 @@ void KoConfigurationDialogPage::setIcon(const KIcon& icon)
 {
     m_icon = icon;
 }
+
+KoView* KoConfigurationDialogPage::view() const
+{
+    return m_view;
+}
+
+void KoConfigurationDialogPage::setView(KoView* view)
+{
+    m_view = view;
+}
+

@@ -38,6 +38,9 @@ public:
     explicit KoConfigurationDialog(KoView *view);
     virtual ~KoConfigurationDialog();
     void addCustomPage(KoConfigurationDialogPage *page);
+
+private:
+    KoView *m_view;
 };
 
 #endif // KOCONFIGURATIONDIALOG_H

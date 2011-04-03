@@ -26,9 +26,11 @@
 #include <KIcon>
 #include <QWidget>
 
+class KoView;
+
 class KOMAIN_EXPORT KoConfigurationDialogPage : public QWidget
 {
-
+Q_OBJECT
 public:
     explicit KoConfigurationDialogPage(QWidget* parent = 0);
     virtual ~KoConfigurationDialogPage();
@@ -39,11 +41,19 @@ public:
     KIcon icon() const;
     void setIcon(const KIcon &icon);
 
+    KoView *view() const;
+    void setView(KoView *view);
+
     virtual QWidget *pageWidget() = 0;
+
+public slots:
+    virtual void saveSettings() = 0;
+    virtual void loadSettings() = 0;
 
 private:
     QString m_title;
     KIcon m_icon;
+    KoView *m_view;
 };
 
 #endif // KOCONFIGURATIONDIALOGPAGE_H

@@ -23,13 +23,24 @@
 
 #include <KoConfigurationDialogPage.h>
 
+namespace Ui {
+    class KoOpenSaveConfigurationWidget;
+}
+
 class KoOpenSaveConfigurationDialogPage : public KoConfigurationDialogPage
 {
-
+Q_OBJECT
 public:
     explicit KoOpenSaveConfigurationDialogPage(QWidget* parent = 0);
     virtual ~KoOpenSaveConfigurationDialogPage();
     virtual QWidget* pageWidget();
+
+public slots:
+    virtual void saveSettings();
+    virtual void loadSettings();
+
+private:
+    Ui::KoOpenSaveConfigurationWidget *m_configurationWidget;
 };
 
 #endif // KOOPENSAVECONFIGURATIONDIALOGPAGE_H

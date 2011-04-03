@@ -23,7 +23,7 @@
 #include "ui_KoOpenSaveConfigurationWidget.h"
 #include "../KoConfigurationDialogPage.h"
 
-KoConfigurationDialog::KoConfigurationDialog(KoView* view) : KPageDialog(view)
+KoConfigurationDialog::KoConfigurationDialog(KoView* view) : KPageDialog(view), m_view(view)
 {
     setFaceType(List);
 }
@@ -34,8 +34,10 @@ KoConfigurationDialog::~KoConfigurationDialog()
 
 void KoConfigurationDialog::addCustomPage(KoConfigurationDialogPage* page)
 {
+    connect(this, SIGNAL(okClicked()), page, SLOT(saveSettings()));
     KPageWidgetItem *item = addPage(page->pageWidget(), page->title());
     item->setIcon(page->icon());
+    page->setView(m_view);
 }
 
 #include "KoConfigurationDialog.moc"
