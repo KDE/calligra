@@ -36,7 +36,6 @@ set(flake_SRCS
     KoShapeContainerDefaultModel.cpp
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
-    KoShapeManagerCachedPaintingStrategy.cpp
     KoShapeManager.cpp
     KoShapePainter.cpp
     KoFrameShape.cpp
@@ -267,7 +266,6 @@ install(
     KoShapeConfigWidgetBase.h
     KoShapeManager.h
     KoShapeManagerPaintingStrategy.h
-    KoShapeManagerCachedPaintingStrategy.h
     KoShapeRegistry.h
     KoShapeSavingContext.h
     KoShapeUserData.h
