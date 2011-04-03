@@ -168,13 +168,14 @@ void KPrViewModeOutline::populate()
 void KPrViewModeOutline::createBlock(QTextCursor cursor, int pageNumber, OutlinePair pair, bool firstBlock)
 {
     QTextBlockFormat blockFormat;
+    QTextCharFormat charFormat;
     blockFormat.setBackground((pageNumber%2)?QBrush(Qt::gray):QBrush(Qt::white));
 
     if (firstBlock) {
         blockFormat.setTopMargin(5);
         firstBlock = false;
     }
-    cursor.insertBlock(blockFormat);
+    cursor.insertBlock(blockFormat, charFormat);
     int start = cursor.blockNumber();
     cursor.insertText(pair.second->document()->toPlainText());
     for(; start <= cursor.blockNumber(); start++){
