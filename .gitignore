@@ -7,3 +7,4 @@ CMakeLists.txt.user
 *.orig
 *.patch
 .gdb_history
+.kdev_include_paths
