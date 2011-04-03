@@ -5,3 +5,4 @@ CMakeLists.txt.user
 .directory
 *.rej
 *.orig
+.kdev_include_paths
