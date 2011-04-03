@@ -677,6 +677,8 @@ protected:
 // //! Called to repaint contents after a row is deleted.
 // void repaintAfterDelete();
 
+    QWidget* navPanelWidget() const;
+    
     KexiTableViewPrivate * const d;
 
     class WhatsThis;

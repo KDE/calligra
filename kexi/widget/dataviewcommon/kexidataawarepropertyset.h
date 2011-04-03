@@ -53,7 +53,7 @@ class KexiDataAwareObjectInterface;
  - signalling via KexiView::propertySetSwitched() that current property
    set has changed (e.g. on moving to other row)
 */
-class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
+class KEXIDATAVIEWCOMMON_EXPORT KexiDataAwarePropertySet : public QObject
 {
     Q_OBJECT
 

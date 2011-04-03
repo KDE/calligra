@@ -42,7 +42,7 @@ class KexiTableViewData;
 
 
 /*! Single column definition. */
-class KEXIDATATABLE_EXPORT KexiTableViewColumn
+class KEXIDATAVIEWCOMMON_EXPORT KexiTableViewColumn
 {
 public:
     typedef QList<KexiTableViewColumn*> List;

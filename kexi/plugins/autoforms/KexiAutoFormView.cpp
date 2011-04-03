@@ -38,7 +38,7 @@ KexiAutoFormView::KexiAutoFormView(QWidget* parent): KexiView(parent), m_autoFor
     
     #ifndef KEXI_MOBILE
     m_pageSelector = new KexiRecordNavigator(this, 0);
-    layout()->addWidget(m_pageSelector);
+    layout()->addWidget(dynamic_cast<QWidget*>(m_pageSelector));
     m_pageSelector->setRecordCount(0);
     m_pageSelector->setInsertingButtonVisible(true);
     m_pageSelector->setLabelText(i18n("Record"));

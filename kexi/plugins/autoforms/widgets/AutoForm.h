@@ -40,7 +40,7 @@ class AutoForm : public QWidget,
     KEXI_DATAAWAREOBJECTINTERFACE
     
 public:
-    AutoForm(QWidget* parent, KexiRecordNavigatorIFace *nav);
+    AutoForm(QWidget* parent, KexiRecordNavigatorIface *nav);
     virtual ~AutoForm();
     
 protected:

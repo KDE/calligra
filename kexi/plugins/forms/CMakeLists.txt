@@ -39,6 +39,7 @@ target_link_libraries(
     kexidb
     kexicore
     kexiguiutils
+    kexidataviewcommon
 	kexidatatable
 	kexiextendedwidgets
     ${KDE4_KDECORE_LIBS}
@@ -92,6 +93,7 @@ target_link_libraries(
     kformdesigner
     kexidb
     kexiutils
+    kexidataviewcommon
     kexidatatable
     kexiguiutils
     ${KOPROPERTY_LIBS}

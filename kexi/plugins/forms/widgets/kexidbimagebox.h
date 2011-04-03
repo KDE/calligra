@@ -21,7 +21,7 @@
 #ifndef KexiDBImageBox_H
 #define KexiDBImageBox_H
 
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexiframe.h"
 #include "kexidbutils.h"
 #include <QContextMenuEvent>

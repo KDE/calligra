@@ -54,7 +54,7 @@ public:
     virtual long currentRecord() { return 0; }
 };
 
-class KEXIGUIUTILS_EXPORT KexiRecordNavigatorIFace
+class KEXIGUIUTILS_EXPORT KexiRecordNavigatorIface
 {
 public:
     /*! Sets current record number for this navigator,
@@ -74,6 +74,25 @@ public:
     /*! Sets visibility of "inserting" button. */
     virtual void setInsertingButtonVisible(bool set) = 0;
     
+    /*! Sets record navigator handler. This allows to react
+     o n actions performed within navigator and vice versa. */
+    virtual void setRecordHandler(KexiRecordNavigatorHandler *handler) = 0;
+  
+    /*! Shows or hides "editing" indicator. */
+    virtual void showEditingIndicator(bool show) = 0;
+    
+    /*! Sets horizontal bar's \a hbar (at the bottom) geometry so this record navigator
+     i s properly positioned together with horizontal scroll bar. This me*thod is used
+     in QScrollView::setHBarGeometry() implementations:
+     see KexiTableView::setHBarGeometry() and KexiFormScrollView::setHBarGeometry()
+    for usage examples. */
+    virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h) = 0;
+    
+    virtual void updateGeometry(int leftMargin) = 0;
+    
+    /*! Sets label text at the left of the for record navigator's button.
+     By default this label contains transla*ted "Row:" text. */
+    virtual void setLabelText(const QString& text) = 0;
 };
 
 #ifndef KEXI_MOBILE
@@ -92,7 +111,7 @@ public:
     Note that using this method 2), you can create more than one navigator widget
     connected with your data-aware object (does not matter if this is useful).
  */
-class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QWidget, public KexiRecordNavigatorIFace
+class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QWidget, public KexiRecordNavigatorIface
 {
     Q_OBJECT
 
@@ -129,7 +148,7 @@ public:
      in QScrollView::setHBarGeometry() implementations:
      see KexiTableView::setHBarGeometry() and KexiFormScrollView::setHBarGeometry()
      for usage examples. */
-    void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
+    virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
 
     /*! @internal used for keyboard handling. */
     virtual bool eventFilter(QObject *o, QEvent *e);
@@ -169,7 +188,7 @@ public slots:
     void setEditingIndicatorEnabled(bool set);
 
     /*! Shows or hides "editing" indicator. */
-    void showEditingIndicator(bool show);
+    virtual void showEditingIndicator(bool show);
 
     virtual void setEnabled(bool set);
 
@@ -184,11 +203,11 @@ public slots:
      By default count is 0. */
     virtual void setRecordCount(uint count);
 
-    void updateGeometry(int leftMargin);
+    virtual void updateGeometry(int leftMargin);
 
     /*! Sets label text at the left of the for record navigator's button.
      By default this label contains translated "Row:" text. */
-    void setLabelText(const QString& text);
+    virtual void setLabelText(const QString& text);
 
     void setButtonToolTipText(KexiRecordNavigator::Button, const QString&);
 signals:

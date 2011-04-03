@@ -21,7 +21,7 @@
 #ifndef KexiDBCheckBox_H
 #define KexiDBCheckBox_H
 
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/FormWidgetInterface.h>
 #include <qcheckbox.h>
 

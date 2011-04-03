@@ -19,7 +19,7 @@
  */
 
 #include "kexitableedit.h"
-#include "kexidataawareobjectiface.h"
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 

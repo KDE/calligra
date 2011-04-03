@@ -25,7 +25,7 @@
 
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
-#include "kexitableviewdata.h"
+#include <widget/dataviewcommon/kexitableviewdata.h>
 #ifdef __GNUC__
 #warning TODO reenable #include "kexidatetableedit.h"
 #else

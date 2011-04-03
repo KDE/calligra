@@ -22,7 +22,7 @@ set(kexidatatable_LIB_SRCS
    kexidatetimetableedit.cpp 
    kexitextformatter.cpp
    kexitableviewheader.cpp
-   
+   kexidatatable.cpp  
 )
 
 
@@ -30,6 +30,7 @@ kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 
 target_link_libraries(
     kexidatatable
+    kexidataviewcommon
     kexicore
     kexiutils
     kexiguiutils

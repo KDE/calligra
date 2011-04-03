@@ -20,6 +20,7 @@ target_link_libraries(
     kexicore
     kexidb
     kexiextendedwidgets
+    kexidataviewcommon
     kexidatatable
     kexirelationsview
     ${KOPROPERTY_LIBS}

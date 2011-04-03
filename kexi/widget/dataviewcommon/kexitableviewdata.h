@@ -44,7 +44,7 @@ typedef KexiUtils::AutodeletedList<KexiDB::RecordData*> KexiTableViewDataBase;
   Original author: Till Busch.
   Reimplemented by Jarosław Staniek.
 */
-class KEXIDATATABLE_EXPORT KexiTableViewData : public QObject, protected KexiTableViewDataBase
+class KEXIDATAVIEWCOMMON_EXPORT KexiTableViewData : public QObject, protected KexiTableViewDataBase
 {
     Q_OBJECT
 

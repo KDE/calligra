@@ -35,7 +35,7 @@ class KexiTableViewColumn;
 
 /*! @short Drop-down cell editor.
 */
-class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
+class KexiComboBoxTableEdit : public KexiInputTableEdit, virtual public KexiComboBoxBase
 {
     Q_OBJECT
 

@@ -48,7 +48,7 @@
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
 #include <kexidb/preparedstatement.h>
-#include <tableview/kexitableviewdata.h>
+#include <dataviewcommon/kexitableviewdata.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>

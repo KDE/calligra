@@ -24,7 +24,7 @@
 #include <kexidb/cursor.h>
 #include <kexidb/RecordData.h>
 
-AutoForm::AutoForm(QWidget* parent, KexiRecordNavigatorIFace *nav): QWidget(parent), m_previousRecord(0)
+AutoForm::AutoForm(QWidget* parent, KexiRecordNavigatorIface *nav): QWidget(parent), m_previousRecord(0)
 {
     setBackgroundRole(QPalette::Window);
     m_layout = new QGridLayout(this);

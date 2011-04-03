@@ -22,7 +22,7 @@
 #define _KEXICOMBOBOXBASE_H_
 
 #include "kexidb/field.h"
-//#include "kexiinputtableedit.h"
+#include "kexiinputtableedit.h"
 #include <kexidb/lookupfieldschema.h>
 #include <kexiutils/tristate.h>
 

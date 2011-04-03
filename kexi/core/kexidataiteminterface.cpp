@@ -141,3 +141,13 @@ bool KexiDataItemInterface::cursorAtNewRow()
 {
     return listener() ? listener()->cursorAtNewRow() : false;
 }
+
+bool KexiDataItemInterface::isComboBox() const
+{
+    return false;
+}
+
+QWidget* KexiDataItemInterface::internalEditor() const
+{
+    return 0;
+}

@@ -224,6 +224,10 @@ public:
         Q_UNUSED(actionName);
     }
 
+    virtual bool isComboBox() const;
+    
+    virtual QWidget* internalEditor() const;
+    
 protected:
     /*! Initializes this editor with \a add value, which should be somewhat added to the current
      value (already storted in m_origValue).

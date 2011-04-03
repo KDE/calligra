@@ -65,7 +65,7 @@
 #include "kexidataawarewidgetinfo.h"
 
 #include "kexidbfactory.h"
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
 
 //////////////////////////////////////////

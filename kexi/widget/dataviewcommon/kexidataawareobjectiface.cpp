@@ -155,14 +155,16 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
             }
         }
     }
+    
     if (m_verticalHeader) {
         m_verticalHeader->clear();
         if (m_data)
             m_verticalHeader->addLabels(m_data->count());
     }
+//!Change the following:
     if (m_data && m_data->count() == 0 && m_navPanel)
         m_navPanel->setCurrentRecordNumber(0 + 1);
-
+    
     if (m_data && !theSameData) {
 //! @todo: store sorting settings?
         setSorting(-1);

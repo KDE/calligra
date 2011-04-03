@@ -108,8 +108,8 @@
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
-#include "printing/kexisimpleprintingpart.h"
-#include "printing/kexisimpleprintingpagesetup.h"
+//#include "printing/kexisimpleprintingpart.h"
+//#include "printing/kexisimpleprintingpagesetup.h"
 
 //Extreme verbose debug
 //#if defined(Q_WS_WIN)

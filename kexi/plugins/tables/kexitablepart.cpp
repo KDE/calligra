@@ -30,7 +30,7 @@
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"
 #include "kexipartinfo.h"
-#include "widget/kexidatatable.h"
+#include "widget/tableview/kexidatatable.h"
 #include "widget/tableview/kexidatatableview.h"
 #include "kexitabledesignerview.h"
 #include "kexitabledesigner_dataview.h"

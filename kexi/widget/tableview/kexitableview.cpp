@@ -118,7 +118,7 @@ public:
         //const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
         if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
             return i18n("Contains a pointer to the currently selected row");
-        } else if (KexiUtils::hasParent(m_tv->m_navPanel, m_tv->childAt(pos))) {
+        } else if (KexiUtils::hasParent(dynamic_cast<QObject*>(m_tv->m_navPanel), m_tv->childAt(pos))) {
             return i18n("Row navigator");
 //    return QWhatsThis::textFor(m_tv->m_navPanel, QPoint( pos.x(), pos.y() - m_tv->height() + bottomMargin ));
         }
@@ -371,9 +371,9 @@ void KexiTableView::setupNavigator()
     updateScrollBars();
 
     m_navPanel = new KexiRecordNavigator(this, this, leftMargin());
-    m_navPanel->setObjectName("navPanel");
+    navPanelWidget()->setObjectName("navPanel");
     m_navPanel->setRecordHandler(this);
-    m_navPanel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    navPanelWidget()->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 }
 
 void KexiTableView::initDataContents()
@@ -539,7 +539,7 @@ QSize KexiTableView::sizeHint() const
 {
     const QSize &ts = tableSize();
     int w = qMax(ts.width() + leftMargin() + verticalScrollBar()->sizeHint().width() + 2 * 2,
-                 (m_navPanel->isVisible() ? m_navPanel->width() : 0));
+                 (navPanelWidget()->isVisible() ? navPanelWidget()->width() : 0));
     int h = qMax(ts.height() + topMargin() + horizontalScrollBar()->sizeHint().height(),
                  minimumSizeHint().height());
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
@@ -561,7 +561,7 @@ QSize KexiTableView::minimumSizeHint() const
 {
     return QSize(
                leftMargin() + ((columns() > 0) ? columnWidth(0) : KEXI_DEFAULT_DATA_COLUMN_WIDTH) + 2*2,
-               d->rowHeight*5 / 2 + topMargin() + (m_navPanel && m_navPanel->isVisible() ? m_navPanel->height() : 0)
+                 d->rowHeight*5 / 2 + topMargin() + (m_navPanel && navPanelWidget()->isVisible() ? navPanelWidget()->height() : 0)
            );
 }
 
@@ -1028,7 +1028,7 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
         ? horizontalScrollBar()->sizeHint().height() : 0;
 
     reg = reg.subtract(QRect(QPoint(0, 0), ts
-                             - QSize(0, qMax(((m_navPanel && m_navPanel->isVisible()) ? m_navPanel->height() : 0), scrollBarHeight)
+    - QSize(0, qMax(((m_navPanel && navPanelWidget()->isVisible()) ? navPanelWidget()->height() : 0), scrollBarHeight)
                                      /*- (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height() / 2 : 0)
                                      + (horizontalScrollBar()->isVisible() ? 0 :
                                         d->internal_bottomMargin
@@ -2053,9 +2053,9 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
         }
       }*/
 
-    if (m_navPanel && m_navPanel->isVisible() && horizontalScrollBar()->isHidden()) {
+    if (m_navPanel && navPanelWidget()->isVisible() && horizontalScrollBar()->isHidden()) {
         //a hack: for visible navigator: increase height of the visible rect 'r'
-        r.setBottom(r.bottom() + m_navPanel->height());
+        r.setBottom(r.bottom() + navPanelWidget()->height());
     }
 
     QPoint pcenter = r.center();
@@ -2606,7 +2606,7 @@ void KexiTableView::setAppearance(const Appearance& a)
     if (a.rowHighlightingEnabled)
         m_updateEntireRowWhenMovingToOtherRow = true;
 
-    m_navPanel->setVisible(a.navigatorEnabled);
+    navPanelWidget()->setVisible(a.navigatorEnabled);
     d->highlightedRow = -1;
 //! @todo is setMouseTracking useful for other purposes?
     viewport()->setMouseTracking(a.rowMouseOverHighlightingEnabled);
@@ -2665,5 +2665,10 @@ void KexiTableView::slotContentsMoving(int x, int y)
     Q_UNUSED(y);
     updateContents(); // (js) needed in Qt 4, no idea why, this fix consumed me hours
 }*/
+
+QWidget* KexiTableView::navPanelWidget() const
+{
+    return dynamic_cast<QWidget*>(m_navPanel);
+}
 
 #include "kexitableview.moc"

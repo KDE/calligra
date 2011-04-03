@@ -42,7 +42,7 @@ class KMenu;
 class KexiTableViewData;
 class KexiRecordMarker;
 class KexiTableViewHeader;
-class KexiRecordNavigatorIFace;
+class KexiRecordNavigatorIface;
 #include <core/kexidataiteminterface.h>
 
 namespace KexiDB
@@ -68,7 +68,7 @@ class RecordData;
  This is not performed in KexiDataAwareObjectInterface because you may need
  to access m_data in your desctructor.
 */
-class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
+class KEXIDATAVIEWCOMMON_EXPORT KexiDataAwareObjectInterface
 {
 public:
     KexiDataAwareObjectInterface();
@@ -869,12 +869,8 @@ protected:
     KexiDataItemInterface *m_editor;
 //  KexiTableEdit *m_editor;
 
-#ifdef KEXI_MOBILE
     /*! Navigation panel, used if navigationPanelEnabled is true. */
-    KexiRecordNavigatorIFace *m_navPanel; //!< main navigation widget
-#else
-    KexiRecordNavigatore *m_navPanel; //!< main navigation widget
-#endif
+    KexiRecordNavigatorIface *m_navPanel; //!< main navigation widget
 
     bool m_navPanelEnabled;
 

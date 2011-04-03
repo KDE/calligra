@@ -42,8 +42,6 @@ IF (KEXI_MOBILE)
 
 ELSE (KEXI_MOBILE)
   LIST(APPEND kexiextendedwidgets_LIB_SRCS
-    kexidataawareview.cpp 
-    kexidatatable.cpp 
     kexiscrollview.cpp 
     kexidbconnectionwidget.cpp 
   #   pixmapcollection.cpp 
