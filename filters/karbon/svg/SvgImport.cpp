@@ -23,7 +23,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "svgimport.h"
+#include "SvgImport.h"
 #include "SvgParser.h"
 
 #include <KarbonPart.h>
@@ -194,4 +194,4 @@ void SvgImport::buildDocument(const QList<KoShape*> &toplevelShapes, const QList
     }
 }
 
-#include <svgimport.moc>
+#include "SvgImport.moc"
