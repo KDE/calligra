@@ -114,11 +114,9 @@ XlsxXmlWorksheetReaderContext::~XlsxXmlWorksheetReaderContext()
 
 static void splitToRowAndColumn(const QString source, QString& row, QString& column)
 {
-    bool ok = false;
-
     // Checking whether the 2nd char is a number
-    QString(source.at(1)).toInt(&ok);
-    if (ok) {
+    char second = source.at(1).toAscii();
+    if (second < 65) {
         row = source.at(0);
         column = source.mid(1);
     }
@@ -577,9 +575,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_conditionalFormatting()
     // Making sure the maps are correct priority order
     qSort(m_conditionalIndices);
 
-
     int index = 0;
     while (index < m_conditionalIndices.size()) {
+        QString conditionalArea;
+        while (sqref.indexOf(' ') > 0) {
+            conditionalArea = sqref.left(sqref.indexOf(' '));
+            sqref = sqref.mid(conditionalArea.length());
+            m_context->conditionalStyles.insertMulti(conditionalArea, m_conditionalStyles.at(m_conditionalIndices.at(index).second));
+        }
         m_context->conditionalStyles.insertMulti(sqref, m_conditionalStyles.at(m_conditionalIndices.at(index).second));
         ++index;
     }
@@ -611,11 +614,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
     TRY_READ_ATTR_WITHOUT_NS(priority)
     QString op = attrs.value("operator").toString();
 
+    QList<QString> formulas;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(formula)
+            if (name() == "formula") {
+                TRY_READ(formula)
+                formulas.push_back(m_formula);
+            }
             SKIP_UNKNOWN
         }
     }
@@ -623,7 +631,18 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
     QMap<QString, QString> odf;
     // TODO, use attributes to really interpret this
     // The default one here is valid for type="cellIs" operator="equal"
-    odf["style:condition"] = QString("cell-content()=%1").arg(m_formula);
+    if (op == "equal") {
+        odf["style:condition"] = QString("cell-content()=%1").arg(m_formula);
+    }
+    else if (op == "lessThan") {
+        odf["style:condition"] = QString("cell-content()<%1").arg(m_formula);
+    }
+    else if (op == "greaterThan") {
+        odf["style:condition"] = QString("cell-content()>%1").arg(m_formula);
+    }
+    else if (op == "between") {
+        odf["style:condition"] = QString("cell-content-is-between(%1, %2)").arg(formulas.at(0)).arg(formulas.at(1));
+    }
     odf["style:apply-style-name"] = m_context->styles->conditionalStyle(dxfId.toInt() + 1);
 
     m_conditionalIndices.push_back(QPair<QString, int>(priority, m_conditionalIndices.size()));
