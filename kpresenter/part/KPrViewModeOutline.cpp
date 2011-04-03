@@ -112,7 +112,7 @@ void KPrViewModeOutline::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeOutline::deactivate()
 {
-    disactivateSynchronize();
+    deactivateSynchronize();
     m_outlineEditor->hide();
      // Active the view as a basic but active one
     m_view->setActionEnabled(KoPAView::AllActions, true);
@@ -125,7 +125,7 @@ void KPrViewModeOutline::deactivate()
 
 void KPrViewModeOutline::populate()
 {
-    disactivateSynchronize();
+    deactivateSynchronize();
     
     m_outlineEditor->clear();
     QTextCursor currentCursor = m_outlineEditor->textCursor();
@@ -266,7 +266,7 @@ void KPrViewModeOutline::activateSynchronize()
     m_synchronizeActivated = true;
 }
 
-void KPrViewModeOutline::disactivateSynchronize()
+void KPrViewModeOutline::deactivateSynchronize()
 {
     // Disable synchronization
     disconnect(m_outlineEditor->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(synchronize(int, int, int)));

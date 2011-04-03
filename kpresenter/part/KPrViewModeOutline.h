@@ -51,7 +51,7 @@ public:
     void deactivate();
     void populate();
     void activateSynchronize();
-    void disactivateSynchronize();
+    void deactivateSynchronize();
     
 public slots:
     virtual void updateActivePage( KoPAPageBase * page );
