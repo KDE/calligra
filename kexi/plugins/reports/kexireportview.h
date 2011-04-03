@@ -36,7 +36,7 @@ class KRScriptFunctions;
 class KexiRecordNavigator;
 #endif
 
-#include <widget/utils/kexirecordnavigator.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>

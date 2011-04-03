@@ -21,9 +21,7 @@
 #include <QLabel>
 #include <QIntValidator>
 
-#ifndef KEXI_MOBILE
 #include <Q3ScrollView>
-#endif
 
 #include <QPixmap>
 #include <QFocusEvent>
@@ -43,8 +41,7 @@
 #include "kexirecordmarker.h"
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/utils.h>
-
-#ifndef KEXI_MOBILE
+#include <core/KexiRecordNavigatorHandler.h>
 
 //! @internal
 class KexiRecordNavigator::Private
@@ -80,21 +77,7 @@ public:
     bool isInsertingEnabled;
 };
 
-#endif
-
 //--------------------------------------------------
-
-KexiRecordNavigatorHandler::KexiRecordNavigatorHandler()
-{
-}
-
-KexiRecordNavigatorHandler::~KexiRecordNavigatorHandler()
-{
-}
-
-//--------------------------------------------------
-
-#ifndef KEXI_MOBILE
 
 KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentView, int leftMargin)
         : QWidget(parent)
@@ -566,6 +549,5 @@ const KGuiItem& KexiRecordNavigator::Actions::moveToNewRecord()
 {
     return KexiRecordNavigatorActions_internal->moveToNewRecord;
 }
-#endif
 
 #include "kexirecordnavigator.moc"

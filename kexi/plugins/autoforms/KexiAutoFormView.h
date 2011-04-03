@@ -22,7 +22,7 @@
 #define KEXIAUTOFORMVIEW_H
 
 #include <core/KexiView.h>
-#include <widget/utils/kexirecordnavigator.h>
+#include <core/KexiRecordNavigatorHandler.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
 #include <widget/dataviewcommon/kexidataprovider.h>
 #include "KexiAutoFormPart.h"

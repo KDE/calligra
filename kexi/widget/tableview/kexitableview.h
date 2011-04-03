@@ -48,6 +48,7 @@
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 class QPrinter;
 class QPrintDialog;

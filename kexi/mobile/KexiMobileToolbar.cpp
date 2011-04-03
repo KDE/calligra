@@ -25,7 +25,7 @@
 #include <QAction>
 #include <kdebug.h>
 #include <QPushButton>
-#include <utils/kexirecordnavigator.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
 				m_recordHandler(0)

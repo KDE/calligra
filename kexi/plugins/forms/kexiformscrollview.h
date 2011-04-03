@@ -39,6 +39,9 @@
 
     @see KexiTableView
 */
+
+#include <core/KexiRecordNavigatorHandler.h>
+
 class KEXIFORMUTILS_EXPORT KexiFormScrollView :
             public KexiScrollView,
             public KexiRecordNavigatorHandler,

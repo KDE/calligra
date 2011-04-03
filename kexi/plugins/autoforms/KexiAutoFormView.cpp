@@ -27,6 +27,10 @@
 #include <kexidb/cursor.h>
 #include <KexiMainWindowIface.h>
 
+#ifndef KEXI_MOBILE
+#include <widget/utils/kexirecordnavigator.h>
+#endif
+
 KexiAutoFormView::KexiAutoFormView(QWidget* parent): KexiView(parent), m_autoForm(0), m_pageSelector(0)
 {
     kDebug();

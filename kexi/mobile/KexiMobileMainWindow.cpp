@@ -17,7 +17,7 @@
 #include <kexipartinfo.h>
 #include <KexiWindow.h>
 #include <KexiView.h>
-#include <widget/utils/kexirecordnavigator.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 KexiMobileMainWindow::KexiMobileMainWindow()
 {
