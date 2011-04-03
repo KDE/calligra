@@ -1,4 +1,4 @@
-/**  This file is part of KexiMobile
+/**  This file is part of the KDE project
  * 
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
