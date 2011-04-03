@@ -5,6 +5,14 @@ add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
 ########### next target ###############
 
+find_package(Marble)
+
+#if(${MARBLE_FOUND})
+  add_subdirectory(mapbrowser)
+#endif(MARBLE_FOUND)
+
+########### next target ###############
+
 set(kformdesigner_containers_PART_SRCS containerfactory.cpp )
 
 
@@ -53,3 +61,4 @@ install(TARGETS kformdesigner_stdwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kformdesigner_containers.desktop kformdesigner_stdwidgets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kformdesigner)
+
