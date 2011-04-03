@@ -76,10 +76,12 @@ protected:
 
 
     void setCursorTo(int slide);
+    void createBlock(QTextCursor cursor, int pageNumber, OutlinePair pair, bool firstBlock);
 
 protected slots:
     void synchronize(int position, int charsRemoved, int charsAdded);
     void slotCursorPositionChanged();
+
 private:
     KPrOutlineEditor *m_outlineEditor;
     bool m_synchronizeActivated;
