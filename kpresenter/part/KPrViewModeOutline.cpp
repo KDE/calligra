@@ -169,7 +169,7 @@ void KPrViewModeOutline::createBlock(QTextCursor cursor, int pageNumber, Outline
 {
     QTextBlockFormat blockFormat;
     QTextCharFormat charFormat;
-    blockFormat.setBackground((pageNumber%2)?QBrush(Qt::gray):QBrush(Qt::white));
+    blockFormat.setBackground((pageNumber%2)?QBrush(QColor(230,230,230)):QBrush(Qt::white));
 
     if (firstBlock) {
         blockFormat.setTopMargin(5);
