@@ -175,6 +175,10 @@ void KPrViewModeOutline::createBlock(QTextCursor cursor, int pageNumber, Outline
         blockFormat.setTopMargin(5);
         firstBlock = false;
     }
+    if(pair.first == Title){
+        charFormat.setFontPointSize(charFormat.fontPointSize()*1.4);
+        charFormat.setFontWeight(QFont::Bold);
+    }
     cursor.insertBlock(blockFormat, charFormat);
     int start = cursor.blockNumber();
     cursor.insertText(pair.second->document()->toPlainText());
