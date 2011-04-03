@@ -794,7 +794,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
     MSOOXML::Utils::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
     m_currentCellFormat->setupCellStyleAlignment(&cellStyle);
 
-    mainStyles->insert(cellStyle, "ConditionalStyle", KoGenStyles::AllowDuplicates);
+    m_context->styles->conditionalStyles.insert(m_context->styles->conditionalStyles.size() + 1,
+       mainStyles->insert(cellStyle, "ConditionalStyle"));
 
     delete m_currentFontStyle;
     m_currentFontStyle = 0;

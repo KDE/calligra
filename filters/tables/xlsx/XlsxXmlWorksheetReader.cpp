@@ -624,7 +624,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
     // TODO, use attributes to really interpret this
     // The default one here is valid for type="cellIs" operator="equal"
     odf["style:condition"] = QString("cell-content()=%1").arg(m_formula);
-    odf["style:apply-style-name"] = QString("ConditionalStyle%1").arg(dxfId.toInt() + 1);
+    odf["style:apply-style-name"] = m_context->styles->conditionalStyle(dxfId.toInt() + 1);
 
     m_conditionalIndices.push_back(QPair<QString, int>(priority, m_conditionalIndices.size()));
     m_conditionalStyles.push_back(odf);
@@ -927,7 +927,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     TRY_READ_ATTR_WITHOUT_NS(r)
     //TRY_READ_ATTR_WITHOUT_NS(spans) // spans are only an optional help
     TRY_READ_ATTR_WITHOUT_NS(ht)
-    TRY_READ_ATTR_WITHOUT_NS(customHeight)
+    //TRY_READ_ATTR_WITHOUT_NS(customHeight) not used atm
     TRY_READ_ATTR_WITHOUT_NS(hidden)
 
     if (!r.isEmpty()) {
@@ -942,7 +942,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
 
     m_currentColumn = 0;
     Row* row = m_context->sheet->row(m_currentRow, true);
-    row->styleName = processRowStyle(ht);
+    if (!ht.isEmpty()) {
+        row->styleName = processRowStyle(ht);
+    }
 
     if (!hidden.isEmpty()) {
         row->hidden = hidden.toInt() > 0;
@@ -1124,10 +1126,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     // cell style
     if (!s.isEmpty()) {
-        bool ok;
-        const uint styleId = s.toUInt(&ok);
-        kDebug() << "styleId:" << styleId;
-        const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
         if (!ok || !cellFormat) {
             raiseUnexpectedAttributeValueError(s, "c@s");
             return KoFilter::WrongFormat;
@@ -1150,16 +1148,18 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             cellStyle.addAttribute( "style:data-style-name", formattedStyle );
         }
 
-        QString positionLetter, positionNumber;
-        splitToRowAndColumn(r, positionLetter, positionNumber);
-        QList<QMap<QString, QString> > maps = m_context->conditionalStyleForPosition(positionLetter, positionNumber);
-        int index = maps.size();
+        if (!m_conditionalStyles.isEmpty()) {
+            QString positionLetter, positionNumber;
+            splitToRowAndColumn(r, positionLetter, positionNumber);
+            QList<QMap<QString, QString> > maps = m_context->conditionalStyleForPosition(positionLetter, positionNumber);
+            int index = maps.size();
 
-        // Adding the lists in reversed priority order, as KoGenStyle when creating the style
-        // adds last added first
-        while (index > 0) {
-            cellStyle.addStyleMap(maps.at(index - 1));
-            --index;
+            // Adding the lists in reversed priority order, as KoGenStyle when creating the style
+            // adds last added first
+            while (index > 0) {
+                cellStyle.addStyleMap(maps.at(index - 1));
+                --index;
+            }
         }
 
         const QString cellStyleName = mainStyles->insert( cellStyle, "ce" );
