@@ -97,9 +97,9 @@ void KPrViewModeOutline::wheelEvent(QWheelEvent *event, const QPointF &point)
 void KPrViewModeOutline::activate(KoPAViewMode *previousViewMode)
 {
     Q_UNUSED(previousViewMode);
-    
+
     populate();
-    
+
     activateSynchronize();
     KoPAView *view = dynamic_cast<KoPAView *>(m_view);
     if (view) {
@@ -126,7 +126,7 @@ void KPrViewModeOutline::deactivate()
 void KPrViewModeOutline::populate()
 {
     deactivateSynchronize();
-    
+
     m_outlineEditor->clear();
     QTextCursor currentCursor = m_outlineEditor->textCursor();
     // For each slides
@@ -176,7 +176,6 @@ void KPrViewModeOutline::createBlock(QTextCursor cursor, int pageNumber, Outline
         firstBlock = false;
     }
     if(pair.first == Title){
-        charFormat.setFontPointSize(charFormat.fontPointSize()*1.4);
         charFormat.setFontWeight(QFont::Bold);
     }
     cursor.insertBlock(blockFormat, charFormat);
@@ -214,7 +213,7 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
             }
         }
         QTextCursor viewCursor =  QTextCursor(userData->outlinePair().second->document());
-        
+
         // Remove stuff to be removed
         if (charsRemoved > 0) {
             // Take position in a shape context
