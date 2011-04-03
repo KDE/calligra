@@ -142,7 +142,7 @@ void KPrViewModeOutline::populate()
                     currentCursor.insertBlock(blockFormat);
                     int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
-                    for(start; start <= currentCursor.blockNumber(); start++){
+                    for(; start <= currentCursor.blockNumber(); start++){
                         m_outlineEditor->document()->findBlockByNumber(start).setUserData(new SlideUserBlockData(pageNumber, pair));
                     }
                 }
@@ -152,7 +152,7 @@ void KPrViewModeOutline::populate()
                     currentCursor.insertBlock(blockFormat);
                     int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
-                    for(start; start <= currentCursor.blockNumber(); start++){
+                    for(; start <= currentCursor.blockNumber(); start++){
                         m_outlineEditor->document()->findBlockByNumber(start).setUserData(new SlideUserBlockData(pageNumber, pair));
                     }
                 }
@@ -162,7 +162,7 @@ void KPrViewModeOutline::populate()
                     currentCursor.insertBlock(blockFormat);
                     int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
-                    for(start; start <= currentCursor.blockNumber(); start++){
+                    for(; start <= currentCursor.blockNumber(); start++){
                         m_outlineEditor->document()->findBlockByNumber(start).setUserData(new SlideUserBlockData(pageNumber, pair));
                     }
                 }
