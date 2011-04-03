@@ -188,8 +188,7 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
     // We take the good cursor and move it to the good position, recording the position
     QTextCursor cursor = m_outlineEditor->textCursor();
     cursor.setPosition(position);
-    int blockBegin = cursor.block().position();
-
+    QTextBlock firstShapeBlock;
     // Trying to find which "record" block we are the nearer
     SlideUserBlockData *userData;
     while (!(userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() )))
@@ -201,11 +200,20 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
 
     // If we have found a good block, we then add and remove things to it
     if (userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() )) {
+        // Look for the first shape block
+        for(int i=0; i < m_outlineEditor->document()->blockCount();i++) {
+            firstShapeBlock = m_outlineEditor->document()->findBlockByNumber(i);
+            SlideUserBlockData *u = dynamic_cast<SlideUserBlockData*>(firstShapeBlock.userData());
+            if(u && u->pageNumber() == userData->pageNumber() && u->outlinePair() == userData->outlinePair()){
+                break;
+            }
+        }
         QTextCursor viewCursor =  QTextCursor(userData->outlinePair().second->document());
         
         // Remove stuff to be removed
         if (charsRemoved > 0) {
-            viewCursor.setPosition(position - blockBegin);
+            // Take position in a shape context
+            viewCursor.setPosition(position - firstShapeBlock.position());
             viewCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsRemoved);
             viewCursor.deleteChar();
         }
@@ -214,13 +222,18 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
         if (charsAdded > 0) {
             cursor.setPosition(position);
             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsAdded);
-
-            viewCursor.setPosition(position - blockBegin);
+            // Take position in a shape context
+            viewCursor.setPosition(position - firstShapeBlock.position());
             viewCursor.insertText(cursor.selectedText());
         }
     } else {
         kDebug(33001) << "No user data anymore in the outline::synchronize";
     }
+    populate();
+
+    // Put the cursor at the good position
+    cursor.setPosition(position + charsAdded - charsRemoved);
+    m_outlineEditor->setTextCursor(cursor);
 }
 
 void KPrViewModeOutline::slotCursorPositionChanged()
