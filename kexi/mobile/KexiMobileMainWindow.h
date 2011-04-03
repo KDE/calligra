@@ -8,7 +8,7 @@ class KexiMobileToolbar;
 class QHBoxLayout;
 class KexiMobileWidget;
 
-class KexiMobileMainWindow : public QWidget, public KexiMainWindowIface
+class KexiMobileMainWindow : public QMainWindow, public KexiMainWindowIface
 {
 Q_OBJECT
 public:
@@ -63,8 +63,11 @@ public slots:
 private:
     KexiMobileWidget *m_mobile;
     KexiMobileToolbar *m_toolbar;
+    QAction *m_openFileAction;
     KexiProject *m_project;
     QHBoxLayout *m_layout;
+    
+    void setupToolbar();
     
     KexiProject* openProject(const KUrl &url);
     bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage);

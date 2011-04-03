@@ -32,7 +32,6 @@ KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
 {
     setOrientation(Qt::Vertical);
 
-    m_openFileAction = new QAction(KIcon("document-open"), "Open", this);
     m_gotoNavigatorAction = new QAction(KIcon("application-vnd.oasis.opendocument.database"), "Project", this);
     
     
@@ -42,7 +41,6 @@ KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
 
     setIconSize(QSize(48,48));
     
-    addAction(m_openFileAction);
     addAction(m_gotoNavigatorAction);
     
     QWidget* spacer = new QWidget();
@@ -54,7 +52,6 @@ KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
     addAction(m_nextRecord);
 
     connect(m_gotoNavigatorAction, SIGNAL(triggered(bool)), this, SLOT(gotoNavigatorClicked()));
-    connect(m_openFileAction, SIGNAL(triggered(bool)), this, SLOT(openFileClicked()));
     
     connect(m_nextRecord, SIGNAL(triggered(bool)), this, SLOT(recordNext()));
     connect(m_previousRecord, SIGNAL(triggered(bool)), this, SLOT(recordPrevious()));

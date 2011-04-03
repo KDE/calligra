@@ -18,21 +18,33 @@
 #include <KexiWindow.h>
 #include <KexiView.h>
 #include <core/KexiRecordNavigatorHandler.h>
+#include <KToolBar>
 
 KexiMobileMainWindow::KexiMobileMainWindow()
 {
     m_mobile = new KexiMobileWidget(0);
     m_toolbar = new KexiMobileToolbar(this);
     m_layout = new QHBoxLayout(this);
-
-    m_layout->addWidget(m_toolbar);
+    
+    m_openFileAction = new QAction(KIcon("document-open"), "Open", this);
+    connect(m_openFileAction, SIGNAL(triggered(bool)), this, SLOT(slotOpenDatabase()));
+    menuBar()->addAction(m_openFileAction);
+    
     m_layout->addWidget(m_mobile);
     m_layout->setSpacing(2);
     setFixedSize(800,480);
-
-    connect(m_toolbar, SIGNAL(pageOpenFile()), this, SLOT(slotOpenDatabase()));
+    
+    setCentralWidget(m_mobile);
+   
+    addToolBar(Qt::BottomToolBarArea, m_toolbar);
+    
     connect(m_toolbar, SIGNAL(pageNavigator()), m_mobile, SLOT(showNavigator()));
     connect(m_mobile->navigator(), SIGNAL(openItem(KexiPart::Item *)), this, SLOT(openObject(KexiPart::Item*)));
+}
+
+void KexiMobileMainWindow::setupToolbar()
+{
+
 }
 
 KexiMobileMainWindow::~KexiMobileMainWindow()

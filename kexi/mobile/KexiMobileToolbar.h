@@ -37,8 +37,6 @@ public:
     void setRecordHandler(KexiRecordNavigatorHandler *handler);
     
 private:
-
-    QAction *m_openFileAction;
     QAction *m_gotoNavigatorAction;
     
     QAction *m_previousRecord;
