@@ -38,7 +38,7 @@ KPrViewModeOutline::KPrViewModeOutline(KoPAView *view, KoPACanvas *canvas)
     , m_outlineEditor(new KPrOutlineEditor(this, view->parentWidget()))
 {
     m_outlineEditor->hide();
-    connect(m_outlineEditor, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
+    connect(m_outlineEditor, SIGNAL(cursorPositionChanged()), SLOT(slotCursorPositionChanged()));
 }
 
 void KPrViewModeOutline::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
@@ -212,14 +212,13 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
 
             viewCursor.setPosition(position - blockBegin);
             viewCursor.insertText(cursor.selectedText());
-            qDebug() << cursor.selectedText();
         }
     } else {
         kDebug(33001) << "No user data anymore in the outline::synchronize";
     }
 }
 
-void KPrViewModeOutline::slotSelectionChanged()
+void KPrViewModeOutline::slotCursorPositionChanged()
 {
     QTextCursor cursor = m_outlineEditor->textCursor();
     SlideUserBlockData *userData = dynamic_cast<SlideUserBlockData*>( cursor.block().userData() );
