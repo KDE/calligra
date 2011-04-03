@@ -12,6 +12,7 @@ set(kofficedockers_SRCS
     strokedocker/StrokeDockerFactory.cpp
     strokedocker/KoMarkerModel.cpp
     strokedocker/KoMarkerItemDelegate.cpp
+    strokedocker/KoMarkerSelector.cpp
 
     shapeproperties/ShapePropertiesDocker.cpp
     shapeproperties/ShapePropertiesDockerFactory.cpp

@@ -22,13 +22,15 @@
 
 #include <QMetaType>
 
+#include "flake_export.h"
+
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class QString;
 class QPainterPath;
 
-class KoMarker
+class  FLAKE_EXPORT KoMarker
 {
 public:
     KoMarker();

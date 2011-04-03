@@ -22,8 +22,9 @@
 #include <QSize>
 #include <KoMarker.h>
 
-KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers)
-: m_markers(markers)
+KoMarkerModel::KoMarkerModel(const QList<KoMarker*> markers, QObject *parent)
+: QAbstractListModel(parent)
+, m_markers(markers)
 {
 }
 
@@ -54,4 +55,9 @@ QVariant KoMarkerModel::data(const QModelIndex &index, int role) const
     default:
         return QVariant();
     }
+}
+
+int KoMarkerModel::markerIndex(KoMarker *marker) const
+{
+    return m_markers.indexOf(marker);
 }

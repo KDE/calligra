@@ -17,26 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOMARKERMODEL_H
-#define KOMARKERMODEL_H
+#ifndef KOMARKERSELECTOR_H
+#define KOMARKERSELECTOR_H
 
-#include <QAbstractListModel>
+#include <QComboBox>
 
 class KoMarker;
 
-class KoMarkerModel : public QAbstractListModel
+class KoMarkerSelector : public QComboBox
 {
+    Q_OBJECT
 public:
-    KoMarkerModel(const QList<KoMarker*> markers, QObject *parent = 0);
-    virtual ~KoMarkerModel();
+    KoMarkerSelector(QWidget *parent = 0);
+    virtual ~KoMarkerSelector();
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    // set the current marker style
+    void setMarker(KoMarker *marker);
+    // return the current marker style
+    KoMarker *marker() const;
 
-    int markerIndex(KoMarker *marker) const;
+    /**
+     * Set the available markers in the document.
+     */
+    void updateMarkers(const QList<KoMarker*> markers);
 
 private:
-    QList<KoMarker*> m_markers;
+    class Private;
+    Private * const d;
 };
 
-#endif /* KOMARKERMODEL_H */
+#endif /* KOMARKERSELECTOR_H */

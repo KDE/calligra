@@ -41,6 +41,7 @@
 #include <KoShapeBorderModel.h>
 #include <KoSelection.h>
 #include <KoLineBorder.h>
+#include "KoMarkerSelector.h"
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -50,6 +51,13 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QButtonGroup>
+
+#include <KoOdfStylesReader.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
+#include <QBuffer>
+#include <KoMarker.h>
 
 class StrokeDocker::Private
 {
@@ -61,6 +69,7 @@ public:
     KoUnitDoubleSpinBox * miterLimit;
     KoLineStyleSelector * lineStyle;
     KoLineBorder border;
+    KoMarkerSelector *markerSelector;
     QSpacerItem *spacer;
     QGridLayout *layout;
 };
@@ -162,8 +171,44 @@ StrokeDocker::StrokeDocker()
     mainLayout->addWidget( d->miterLimit, 4, 1, 1, 3 );
     connect( d->miterLimit, SIGNAL( valueChangedPt( qreal ) ), this, SLOT( miterLimitChanged() ) );
 
+    QLabel* markerLabel = new QLabel(i18n("Marker:" ), mainWidget);
+    mainLayout->addWidget(markerLabel, 5, 0 );
+    // set min/max/step and value in points, then set actual unit
+    d->markerSelector = new KoMarkerSelector(mainWidget);
+    // TODO d->setLineWidth->setToolTip(i18n( "Set line width of actual selection" ) );
+    mainLayout->addWidget(d->markerSelector, 5, 1, 1, 3);
+
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+
+
+    QBuffer xmldevice;
+    xmldevice.open( QIODevice::WriteOnly );
+    QTextStream xmlstream( &xmldevice );
+
+    xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    xmlstream << "<office:document-content xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:presentation=\"urn:oasis:names:tc:opendocument:xmlns:presentation:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:koffice=\"http://www.koffice.org/2005/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
+    xmlstream << "<draw:marker draw:name=\"Arrow\" svg:viewBox=\"0 0 20 30\" svg:d=\"m10 0-10 30h20z\"/>";
+    xmlstream << "</office:document-content>";
+    xmldevice.close();
+    doc.setContent(&xmldevice, true, &errorMsg, &errorLine, &errorColumn);
+    qDebug() << __PRETTY_FUNCTION__ << errorMsg << errorLine << errorColumn;
+    KoXmlElement content = doc.documentElement();
+    KoXmlElement element(KoXml::namedItemNS(content, KoXmlNS::draw, "marker"));
+    KoOdfStylesReader stylesReader;
+    KoOdfLoadingContext odfContext(stylesReader, 0);
+    KoShapeLoadingContext shapeContext(odfContext, 0);
+
+    KoMarker *marker = new KoMarker();
+    marker->loadOdf(element, shapeContext);
+    QList<KoMarker*> markers;
+    markers << marker;
+    d->markerSelector->updateMarkers(markers);
+
     d->spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-    mainLayout->addItem(d->spacer, 5, 4);
+    mainLayout->addItem(d->spacer, 6, 4);
 
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->layout = mainLayout;
