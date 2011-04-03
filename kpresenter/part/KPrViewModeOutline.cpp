@@ -133,12 +133,18 @@ void KPrViewModeOutline::populate()
     foreach (KoPAPageBase * pageBase, m_view->kopaDocument()->pages()) {
         if (KPrPage * page = dynamic_cast<KPrPage *>(pageBase)) {
             int pageNumber = m_view->kopaDocument()->pages().indexOf(pageBase);
+            bool firstBlock = true;
             QTextBlockFormat blockFormat;
             blockFormat.setBackground((pageNumber%2)?QBrush(Qt::gray):QBrush(Qt::white));
             // Copy relevant content of the "view" block of the page in the "outline" block
             // Do three iterations in order to kept the correct order i.e. Title, Subtitle, Outline
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
                 if (pair.first == Title) {
+                    blockFormat.clearProperty(QTextFormat::BlockTopMargin);
+                    if (firstBlock) {
+                        blockFormat.setTopMargin(5);
+                        firstBlock = false;
+                    }
                     currentCursor.insertBlock(blockFormat);
                     int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
@@ -149,6 +155,11 @@ void KPrViewModeOutline::populate()
             }
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
                 if (pair.first == Subtitle) {
+                    blockFormat.clearProperty(QTextFormat::BlockTopMargin);
+                    if (firstBlock) {
+                        blockFormat.setTopMargin(5);
+                        firstBlock = false;
+                    }
                     currentCursor.insertBlock(blockFormat);
                     int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
@@ -158,7 +169,12 @@ void KPrViewModeOutline::populate()
                 }
             }
             foreach (OutlinePair pair, page->placeholders().outlineData()) {
+                blockFormat.clearProperty(QTextFormat::BlockTopMargin);
                 if (pair.first == Outline) {
+                    if (firstBlock) {
+                        blockFormat.setTopMargin(5);
+                        firstBlock = false;
+                    }
                     currentCursor.insertBlock(blockFormat);
                     int start = currentCursor.blockNumber();
                     currentCursor.insertText(pair.second->document()->toPlainText());
