@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Calligra Deferred Loading Plugin
+Type=ServiceType
+X-KDE-ServiceType=Calligra/Deferred
