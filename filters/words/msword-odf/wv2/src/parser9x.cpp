@@ -847,11 +847,11 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 
             U32 nextBkf = m_bookmarks->nextBookmarkStart();
             U32 nextBkl = m_bookmarks->nextBookmarkEnd();
-            bkmk_length = nextBkl - nextBkf;
 
-            //it shouldn't be possible that (nextBkf < nextBkl)
-            Q_ASSERT (nextBkf <= nextBkl);
+            bkmk_length = nextBkl - nextBkf;
             disruption = nextBkf;
+
+            Q_ASSERT (nextBkf <= nextBkl);
 
 #ifdef WV2_DEBUG_BOOKMARK
             wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << 
@@ -891,6 +891,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 //TODO: A bookmark can denote text comrised of segments
                 //belonging into different chunks.
 
+                //NOTE: Not checking the ok value, invalid bookmarks were
+                //already reported.  So it's obsolete at the moment.
 		bool ok;
 		BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
 
