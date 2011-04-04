@@ -24,6 +24,7 @@
 
 #include "wvlog.h"
 #include "kdebug.h"
+#include <QList>
 
 using namespace wvWare;
 
@@ -40,7 +41,6 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     tableStream->push();
 
     /// Init the bookmark
-
 
     if (fib.lcbPlcfbkf != 0)
     {
@@ -74,6 +74,12 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
         m_nameIt = m_name.begin();
     }
 
+    //The BKL is no longer stored in the plcfbkl or plcfatnbkl, and is instead
+    //reconstructed from the plcfbkf or plcfatnbkf when the file is opened.
+    //Microsoft Word 97 (aka Version 8)
+
+    //TODO: Reconstruct BKL!
+
     if (fib.lcbPlcfbkl != 0)
     {
         int count = 0;
@@ -84,34 +90,37 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
             m_end = new PLCF<Word97::BKL>(fib.lcbPlcfbkl, tableStream);
             m_endIt = new PLCFIterator<Word97::BKL>(*m_end);
             count = m_end->count();
-        }
-        //The BKL is no longer stored in the plcfbkl or plcfatnbkl, and is
-        //instead reconstructed from the plcfbkf or plcfatnbkf when the file is
-        //opened.  Microsoft Word 97 (aka Version 8)
-        else {
+        } else {
             count = (fib.lcbPlcfbkl - 4) / 4;
             for ( int i = 0; i < count + 1; i++ ) {
                 m_endCP.push_back( tableStream->readU32() );
             }
-            m_endCP_It = m_endCP.begin();
         }
 
 #ifdef WV2_DEBUG_BOOKMARK
         wvlog << "Num. of bookmarks to end: " << count << endl;
         wvlog << "m_end/m_endCP init done" << endl;
 
-        for ( int i = 0; i < count + 1; i++ ) {
-            wvlog << "dumpCPs:   " << m_endCP[i] << endl;
+        if ( fib.nFib < Word8nFib ) {
+            m_end->dumpCPs();
+        } else {
+            for ( int i = 0; i < m_endCP.size(); i++ ) {
+                wvlog << "dumpCPs:   " << m_endCP[i] << endl;
+            }
         }
 #endif
     }
-
 
 #ifdef WV2_DEBUG_BOOKMARK
     wvlog << "Bookmark init done" << endl;
 #endif
 
     tableStream->pop();
+
+    U16 num = 0;
+    if (!valid(num)) {
+        wvlog << "Num. of invalid bookmarks:" << num;
+    }
 }
 
 Bookmarks::~Bookmarks()
@@ -129,21 +138,27 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 #ifdef WV2_DEBUG_BOOKMARK
     wvlog << " globalCP=" << globalCP << endl;
 #endif
-    ok = true;
 
-    if ( m_startIt &&
+    if ( m_startIt->current() &&
          (m_startIt->currentStart() == globalCP) &&
          (m_nameIt != m_name.end()) )
     {
-        U32 start = m_startIt->currentStart(); 
+        if (m_validCP.value(m_startIt->currentStart())) {
+            ok = true;
+        } else {
+            ok = false;
+            return BookmarkData( 0, 0, wvWare::UString("") );
+        }
+
+        U32 start = m_startIt->currentStart();
         U32 end = start;
 
         if (m_nFib < Word8nFib) {
             end = m_endIt->currentStart();
             ++( *m_endIt );
         } else {
-            end = *m_endCP_It;
-            ++m_endCP_It;
+            U16 ibkl = m_startIt->current()->ibkl;
+            end = m_endCP[ibkl];
         }
 
         // yay, but it is hard to make that more elegant
@@ -156,6 +171,7 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
         wvlog << "start = " << start << endl;
         wvlog << "end = " << end << endl;
         wvlog << "name = " << name.ascii() << endl;
+        wvlog << "valid = " << ok << endl;
 #endif
         return BookmarkData( start, end, name );
     }
@@ -166,20 +182,39 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 
 U32 Bookmarks::nextBookmarkStart() const
 {
-    return m_startIt && m_startIt->current() ? m_startIt->currentStart() : 0xffffffff;
+    U32 ret = 0xffffffff;
+
+    if (m_startIt->current()) {
+        if (m_validCP.value(m_startIt->currentStart())) {
+            ret = m_startIt->currentStart();
+        } else {
+            ++( *m_startIt );
+        }
+    }
+    return ret;
 }
 
 U32 Bookmarks::nextBookmarkEnd() const
 {
     U32 ret = 0xffffffff;
+
+    if (m_startIt->current()) {
+        if (!m_validCP.value(m_startIt->currentStart())) {
+            if (m_nFib < Word8nFib) {
+                ++( *m_endIt );
+            }
+            return ret;
+        }
+    }
+
     if (m_nFib < Word8nFib) {
         if (m_endIt && m_endIt->current()) {
             ret = m_endIt->currentStart();
         }
     } else {
         if (m_startIt->current()) {
-            S16 n = (m_startIt->current())->ibkl;
-            ret = m_endCP[n];
+            U16 ibkl = (m_startIt->current())->ibkl;
+            ret = m_endCP[ibkl];
         }
     }
     return ret;
@@ -187,11 +222,10 @@ U32 Bookmarks::nextBookmarkEnd() const
 
 void Bookmarks::check( U32 globalCP )
 {
-    while (nextBookmarkStart() < globalCP) {
+    while (nextBookmarkStart() < globalCP)
+    {
         if (m_nFib < Word8nFib) {
             ++( *m_endIt );
-        } else {
-            ++m_endCP_It;
         }
         ++( *m_startIt );
         ++m_nameIt;
@@ -199,4 +233,71 @@ void Bookmarks::check( U32 globalCP )
         wvlog << "Bookmark skipped!";
 #endif
     }
+}
+
+bool Bookmarks::valid(U16 &num)
+{
+    PLCFIterator<Word97::BKF> startIt(*m_start);
+    QList<U16> ibkls;
+    bool ret = true;
+    num = 0;
+
+#ifdef WV2_DEBUG_BOOKMARK
+    U16 n = 1;
+#endif
+
+    if (m_nFib < Word8nFib) {
+        PLCFIterator<Word97::BKL> endIt(*m_end);
+        while (startIt.current() && endIt.current()) {
+            if (startIt.currentStart() > endIt.currentStart()) {
+                m_validCP.insert(startIt.currentStart(), false);
+                ret = false;
+                num++;
+#ifdef WV2_DEBUG_BOOKMARK
+                wvlog << "bkmk" << n << ": startCP > endCP";
+#endif
+            }
+#ifdef WV2_DEBUG_BOOKMARK
+            n++;
+#endif
+            ++startIt;
+            ++endIt;
+        }
+    } else {
+        U16 ibkl;
+        while (startIt.current()) {
+            ibkl = (startIt.current())->ibkl;
+
+            //MUST be unique for all FBKFs inside a given PlcfBkf
+            if (ibkls.contains(ibkl) || (ibkl > m_endCP.size())) {
+                m_validCP.insert(startIt.currentStart(), false);
+                ret = false;
+                num++;
+#ifdef WV2_DEBUG_BOOKMARK
+                wvlog << "bkmk" << n << ": ibkl invalid!";
+                n++;
+#endif
+                ++startIt;
+                continue;
+            } else {
+                ibkls.append(ibkl);
+            }
+
+            if (startIt.currentStart() > m_endCP[ibkl]) {
+                m_validCP.insert(startIt.currentStart(), false);
+                ret = false;
+                num++;
+#ifdef WV2_DEBUG_BOOKMARK
+		wvlog << "bkmk" << n << ": startCP > endCP";
+#endif
+            }
+#ifdef WV2_DEBUG_BOOKMARK
+            n++;
+#endif
+            //bookmark valid!
+            m_validCP.insert(startIt.currentStart(), true);
+            ++startIt;
+        }
+    }
+    return ret;
 }
