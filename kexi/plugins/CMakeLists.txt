@@ -3,7 +3,8 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44021)
 add_subdirectory( reports )
 
 if (KEXI_MOBILE)
-
+  add_subdirectory(autoforms)
+    
 else (KEXI_MOBILE)
   add_subdirectory( tables )
   add_subdirectory( queries )
@@ -19,5 +20,3 @@ endif (KEXI_MOBILE)
 
 #TODO add_subdirectory( relations )
 #TODO add_subdirectory(macros)
-
-add_subdirectory(autoforms)
