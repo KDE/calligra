@@ -16,6 +16,7 @@ ADD_DEFINITIONS(
   -DDB_TEMPLATES
   -DKEXI_NO_UNFINISHED
   -DKEXI_SCRIPTS_SUPPORT
+  -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
 # temporary for 2.2:
   -DKEXI_NO_AUTOFIELD_WIDGET
   -DKEXI_NO_FORM_LAYOUTS

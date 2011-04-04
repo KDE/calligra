@@ -23,7 +23,7 @@
 
 #include "ui_KPrHtmlExport.h"
 
-#include <QWebPage>
+#include <QtWebKit/QWebPage>
 
 #include <KoPAPageBase.h>
 

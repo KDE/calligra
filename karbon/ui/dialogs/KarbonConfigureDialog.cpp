@@ -60,7 +60,7 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setHeader(i18n("Interface"));
     item->setIcon(KIcon(BarIcon("preferences-desktop-theme", KIconLoader::SizeMedium)));
 
-    m_miscPage = new KoConfigMiscPage(parent->part());
+    m_miscPage = new KoConfigMiscPage(parent->part(), parent->part()->resourceManager());
     item = addPage(m_miscPage, i18n("Misc"));
     item->setHeader(i18n("Misc"));
     item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));

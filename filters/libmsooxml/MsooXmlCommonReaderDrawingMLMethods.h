@@ -48,6 +48,7 @@ KoFilter::ConversionStatus read_nvSpPr();
 KoFilter::ConversionStatus read_style();
 KoFilter::ConversionStatus read_fillRef();
 KoGenStyle m_referredFont;
+QString m_referredFontName;
 KoFilter::ConversionStatus read_fontRef();
 KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_cNvSpPr();
@@ -94,6 +95,7 @@ enum blipFillCaller {
 };
 KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 
+bool m_insideTable;
 qreal m_largestParaFont; // Largest font used in the paragraph
 KoFilter::ConversionStatus read_DrawingML_p();
 read_p_args m_read_DrawingML_p_args;

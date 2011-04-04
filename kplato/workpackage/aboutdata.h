@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998 - 2001 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2007 - 2009 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007 - 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,12 +36,14 @@ KAboutData * newAboutData()
     KAboutData * aboutData=new KAboutData( "planwork", 0, ki18n("Plan WorkPackage Handler"),
                                            KPLATOWORK_VERSION, ki18n(KPLATOWORK_DESCRIPTION),
                                            KAboutData::License_GPL,
-                                           ki18n("(c) 2007-2010, The Plan Team"),
+                                           ki18n("(c) 2007-2011, The Plan Team"),
                                            KLocalizedString(),
                                            "http://www.calligra-suite.org/plan/" );
     
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
-    
+
+    aboutData->setProductName( "calligra-plan/work" );
+
     return aboutData;
 }
 

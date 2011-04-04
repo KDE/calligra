@@ -348,6 +348,8 @@ bool NodeGanttViewBase::loadContext( const KoXmlElement &settings )
         m_ganttdelegate->showCriticalTasks = (bool)( e.attribute( "show-criticaltasks", "0" ).toInt() );
         m_ganttdelegate->showPositiveFloat = (bool)( e.attribute( "show-positivefloat", "0" ).toInt() );
         m_ganttdelegate->showSchedulingError = (bool)( e.attribute( "show-schedulingerror", "0" ).toInt() );
+        m_ganttdelegate->showTimeConstraint = (bool)( e.attribute( "show-timeconstraint", "0" ).toInt() );
+        m_ganttdelegate->showNegativeFloat = (bool)( e.attribute( "show-negativefloat", "0" ).toInt() );
 
         m_printOptions.loadContext( e );
     }
@@ -369,6 +371,8 @@ void NodeGanttViewBase::saveContext( QDomElement &settings ) const
     e.setAttribute( "show-criticaltasks", m_ganttdelegate->showCriticalTasks );
     e.setAttribute( "show-positivefloat", m_ganttdelegate->showPositiveFloat );
     e.setAttribute( "show-schedulingerror", m_ganttdelegate->showSchedulingError );
+    e.setAttribute( "show-timeconstraint", m_ganttdelegate->showTimeConstraint );
+    e.setAttribute( "show-negativefloat", m_ganttdelegate->showNegativeFloat );
 
     m_printOptions.saveContext( e );
 }

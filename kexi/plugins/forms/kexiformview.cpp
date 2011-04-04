@@ -1454,7 +1454,9 @@ void KexiFormView::updateActionsInternal()
     }
 #ifdef KEXI_DEBUG_GUI
     QAction *show_form_ui_action = KexiFormManager::self()->action("show_form_ui");
-    show_form_ui_action->setEnabled(viewMode()==Kexi::DesignViewMode);
+    if (show_form_ui_action) {
+        show_form_ui_action->setEnabled(viewMode()==Kexi::DesignViewMode);
+    }
 #endif
 }
 

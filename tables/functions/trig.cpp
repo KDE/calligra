@@ -43,8 +43,12 @@ Value func_cos(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cosh(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cot(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_coth(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_csc(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_csch(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_degrees(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_radians(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sec(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sech(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sinh(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tan(valVector args, ValueCalc *calc, FuncExtra *);
@@ -87,9 +91,17 @@ TrigonometryModule::TrigonometryModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("COTH",   func_coth);
     add(f);
+    f = new Function("CSC",    func_csc);
+    add(f);
+    f = new Function("CSCH",    func_csch);
+    add(f);
     f = new Function("DEGREES", func_degrees);
     add(f);
     f = new Function("RADIANS", func_radians);
+    add(f);
+    f = new Function("SEC",    func_sec);
+    add(f);
+    f = new Function("SECH",    func_sech);
     add(f);
     f = new Function("SIN",    func_sin);
     add(f);
@@ -210,6 +222,30 @@ Value func_coth(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorNUM();
 
     return calc->div(1, calc->tgh(args[0]));
+}
+
+// Function: csc
+Value func_csc(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    return calc->div(1, calc->sin(args[0]));
+}
+
+// Function: csch
+Value func_csch(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    return calc->div(1, calc->sinh(args[0]));
+}
+
+// Function: sec
+Value func_sec(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    return calc->div(1, calc->cos(args[0]));
+}
+
+// Function: sech
+Value func_sech(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    return calc->div(1, calc->cosh(args[0]));
 }
 
 // Function: DEGREES

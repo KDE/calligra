@@ -1,7 +1,20 @@
 
 Calligra Plan current:
 
+* Add odt export to reports
+
+* Fix bug 269652: Crash on save/exit.
+
+* Fix bug 268095: Crash in some models when emitting dataChanged.
+
+* Fix bug in load vs available units calculation
+
+* Printing: Improve gantt chart printing
+
+* Printing: Add printing of performance charts
+
 * Reports: Add access to schedule name (=project.Plan())
+
 * Add error indication when required estimated effort cannot be delivered.
 
 * Gantt chart: Fix wrong positioning of time constraint indication

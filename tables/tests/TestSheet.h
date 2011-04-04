@@ -40,6 +40,9 @@ private Q_SLOTS:
     void testRemoveRows();
     void testRemoveColumns_data();
     void testRemoveColumns();
+
+    void testDocumentToCellCoordinates_data();
+    void testDocumentToCellCoordinates();
 private:
     Sheet* m_sheet;
     Doc* m_doc;

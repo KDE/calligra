@@ -348,6 +348,8 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         }
         else if (type == "paragraph") {
             m_currentParagraphStyle = *m_defaultStyles.value(odfType.toLatin1());
+            // Both types must be copied as it can contain both
+            MSOOXML::Utils::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::ParagraphType);
             MSOOXML::Utils::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             // Fixme: this value should be in fact read from settings.xml, in practise it most often it seems to be 720
             // which equals to 36 pt

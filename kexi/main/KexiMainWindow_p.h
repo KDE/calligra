@@ -539,6 +539,7 @@ public:
                    /* project has 'user mode' set as default and not 'design mode' override is found: */
                    || (pdata && pdata->userMode() && !Kexi::startupHandler().forcedDesignMode());
         isProjectNavigatorVisible = Kexi::startupHandler().isProjectNavigatorVisible();
+        isMainMenuVisible = Kexi::startupHandler().isMainMenuVisible();
         navigator = 0;
 //2.0: unused    navToolWindow=0;
         prj = 0;
@@ -985,9 +986,11 @@ public:
     KAction *action_save, *action_save_as, *action_close,
     *action_project_properties, *action_open_recent_more,
     *action_project_relations, *action_project_import_data_table,
-    *action_project_export_data_table,
-    *action_project_print, *action_project_print_preview,
-    *action_project_print_setup;
+    *action_project_export_data_table;
+#ifndef KEXI_NO_QUICK_PRINTING
+    KAction *action_project_print, *action_project_print_preview,
+        *action_project_print_setup;
+#endif
 //  KRecentFilesAction *action_open_recent;
     KActionMenu *action_open_recent, *action_show_other;
 //  int action_open_recent_more_id;
@@ -1079,6 +1082,7 @@ public:
     //! Used for delayed windows closing for 'close all'
     QList<KexiWindow*> windowsToClose;
 
+#ifndef KEXI_NO_QUICK_PRINTING
     //! Opened page setup dialogs, used by printOrPrintPreviewForItem().
     QHash<int, KexiWindow*> pageSetupWindows;
 
@@ -1086,6 +1090,7 @@ public:
      used by closeWindow() to find an ID of the data item, so the entry
      can be removed from pageSetupWindows dictionary. */
     QMap<int, int> pageSetupWindowItemID2dataItemID_map;
+#endif
 
     //! Used in several places to show info dialog at startup (only once per session)
     //! before displaying other stuff
@@ -1099,6 +1104,9 @@ public:
 
     //! Indicates if project navigator should be visible
     bool isProjectNavigatorVisible;
+    
+    //! Indicates if the main menu should be visible
+    bool isMainMenuVisible;
 
     //! Used on opening 1st child window
     bool maximizeFirstOpenedChildFrm;

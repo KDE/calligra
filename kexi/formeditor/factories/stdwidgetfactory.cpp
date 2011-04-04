@@ -971,8 +971,12 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
     }
 #endif
     else if (classname == "KexiPictureLabel") {
-        if ((property == "text") || (property == "indent") || (property == "textFormat") || (property == "font") || (property == "alignment"))
+        if (   property == "text" || property == "indent"
+            || property == "textFormat" || property == "font"
+            || property == "alignment")
+        {
             return false;
+        }
     } else if (classname == "QLabel") {
         if (property == "pixmap")
             return false;

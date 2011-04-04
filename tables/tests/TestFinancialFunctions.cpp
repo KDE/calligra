@@ -34,6 +34,7 @@ void TestFinancialFunctions::initTestCase()
 
 #define CHECK_EVAL(x,y) QCOMPARE(TestDouble(x,y,6),y)
 #define CHECK_EVAL_SHORT(x,y) QCOMPARE(TestDouble(x,y,11),y)
+#define CHECK_EVAL_EQUAL(x,y) QCOMPARE(TestSimple(x),y)
 
 static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
 {
@@ -56,6 +57,16 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
         return v2;
     else
         return result;
+}
+
+static Value TestSimple(const QString& formula)
+{
+    Formula f;
+    QString expr = formula;
+    if (expr[0] != '=')
+        expr.prepend('=');
+    f.setExpression(expr);
+    return f.eval();
 }
 
 // ACCRINT
@@ -144,6 +155,74 @@ void TestFinancialFunctions::testCONTINUOUS()
     CHECK_EVAL_SHORT("CONTINUOUS(1000;0.1;1)", Value(1105.17091808));
 }
 
+// COUPDAYBS
+void TestFinancialFunctions::testCOUPDAYBS()
+{
+    // ODF
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(1997;11;9); DATE(1999;11;15); 2 )", Value(174));
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(1997;11;9); DATE(1999;11;15); 2; 1 )", Value(178));
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 0 )", Value(60)); // US (NASD) 30/360
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 1 )", Value(60)); // actual/actual
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 2 )", Value(60)); // actual/360
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 3 )", Value(60)); // actual/365
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 4; 4 )", Value(60)); // European 30/360
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 1 )", Value(60)); // annual
+    CHECK_EVAL_SHORT("COUPDAYBS( DATE(2004;3;1); DATE(2009;1;1); 2 )", Value(60)); // semiannual
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYBS( DATE(1997;11;9); DATE(1999;11;15); 2 )", Value(174));
+}
+
+// COUPDAYS
+void TestFinancialFunctions::testCOUPDAYS()
+{
+    // ODF
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(1997;11;9); DATE(1999;11;15); 2 )", Value(180));
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(1997;11;9); DATE(1999;11;15); 2; 1 )", Value(184));
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 0 )", Value(90)); // US (NASD) 30/360
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 1 )", Value(91)); // actual/actual
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 2 )", Value(90)); // actual/360
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 3 )", Value(91.25)); // actual/365
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 4; 4 )", Value(90)); // European 30/360
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 1 )", Value(360)); // annual
+    CHECK_EVAL_SHORT("COUPDAYS( DATE(2004;2;1); DATE(2009;1;1); 2 )", Value(180)); // semiannual
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYS( DATE(1997;11;9); DATE(1999;11;15); 2 )", Value(180));
+}
+
+// COUPDAYSNC
+void TestFinancialFunctions::testCOUPDAYSNC()
+{
+    // ODF
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(1997;5;19); DATE(1999;11;15); 2 )", Value(176));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(1997;5;19); DATE(1999;11;15); 2; 1 )", Value(180));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 0 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 1 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 2 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 3 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 4; 4 )", Value(60));
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 1 )", Value(330)); // annual
+    CHECK_EVAL_SHORT("COUPDAYSNC( DATE(2004;2;1); DATE(2009;1;1); 2 )", Value(150)); // semiannual
+    // alternate function name
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYSNC( DATE(1997;5;19); DATE(1999;11;15); 2 )", Value(176));
+}
+
+// COUPNCD
+void TestFinancialFunctions::testCOUPNCD()
+{
+    // ODF
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2007-01-01\"; 1; 1 )=DATE(2005;01;01)", Value(true)); // Annual
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2007-01-01\"; 2; 1 )=DATE(2004;07;01)", Value(true)); // Semiannual
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2007-01-01\"; 4; 1 )=DATE(2004;04;01)", Value(true)); // Quarterly
+    CHECK_EVAL_EQUAL("COUPNCD( \"2007-01-01\"; \"2007-01-01\"; 1; 1 )", Value::errorVALUE()); // settlement < maturity
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 0 )=DATE(2004;04;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 1 )=DATE(2004;04;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 2 )=DATE(2004;04;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 3 )=DATE(2004;04;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPNCD( \"2004-01-01\"; \"2009-01-01\"; 4; 4 )=DATE(2004;04;01)", Value(true));
+    // alternate function name
+    CHECK_EVAL_EQUAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNCD( \"2004-01-01\"; \"2007-01-01\"; 1; 1 )=DATE(2005;01;01)", Value(true));
+}
+
 // COUPNUM
 void TestFinancialFunctions::testCOUPNUM()
 {
@@ -158,6 +237,23 @@ void TestFinancialFunctions::testCOUPNUM()
     CHECK_EVAL_SHORT("COUPNUM( \"2004-02-01\"; \"2009-01-01\"; 4; 4 )", Value(20));     //
     // alternate function name
     CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNUM(\"2004-01-01\";\"2007-01-01\";1;1)", Value(3));
+}
+
+// COUPPCD
+void TestFinancialFunctions::testCOUPPCD()
+{
+    // ODF
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-12-31\"; \"2007-01-01\"; 1; 1 )=DATE(2004;1;1)", Value(true)); // Annual
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-12-31\"; \"2007-01-01\"; 2; 1 )=DATE(2004;7;1)", Value(true)); // Semiannual
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-12-31\"; \"2007-01-01\"; 4; 1 )=DATE(2004;10;1)", Value(true)); // Quarterly
+    CHECK_EVAL_EQUAL("COUPPCD( \"2007-01-01\"; \"2004-01-01\"; 1; 1 )", Value::errorVALUE()); // settlement < maturity
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 0 )=DATE(2004;01;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 1 )=DATE(2004;01;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 2 )=DATE(2004;01;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 3 )=DATE(2004;01;01)", Value(true));
+    CHECK_EVAL_EQUAL("COUPPCD( \"2004-02-29\"; \"2009-01-01\"; 4; 4 )=DATE(2004;01;01)", Value(true));
+    // alternate function name
+    CHECK_EVAL_EQUAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPPCD( \"2004-12-31\"; \"2007-01-01\"; 1; 1 )=DATE(2004;1;1)", Value(true));
 }
 
 // CUMIPMT
@@ -764,24 +860,28 @@ void TestFinancialFunctions::testNPV()
 // ODDLPRICE
 void TestFinancialFunctions::testODDLPRICE()
 {
-    // ODF tests. All results are taken from OOo-2.2.1 instead of results from ODF-specs
-    // TODO it seems that frequency are not considered
-    // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2)",      Value( 90.9975570033  ) ); //
-    // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;1;0)",    Value( 90.9975570033  ) ); // f=1, b=0
-    // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2;0)",    Value( 90.9975570033  ) ); // f=2, b=0
-    // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;4;0)",    Value( 90.9975570033  ) ); // f=4, b=0
-    // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;1)",  Value( 102.5120875338 ) ); // f=1, b=1
-    // CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;1)",  Value( 102.5120875338 ) ); // f=2, b=1
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;1)",  Value( 102.5120875338 ) ); // f=4, b=1
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;2)",  Value( 102.5444975699 ) ); // f=1, b=2 specs 102.512087534
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;2)",  Value( 102.5444975699 ) ); // f=2, b=2
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;2)",  Value( 102.5444975699 ) ); // f=4, b=2
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;1;3)",   Value( 794.4972058550 ) ); // f=1, b=3 specs 794.575995564
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;2;3)",   Value( 794.4972058550 ) ); // f=2, b=3 specs 794.671729071
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;4;3)",   Value( 794.4972058550 ) ); // f=4, b=3 specs 794.684531308
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;1;4)", Value( 932.992137337  ) ); // f=1, b=4
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;2;4)", Value( 932.992137337  ) ); // f=2, b=4
-    //CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;4;4)", Value( 932.992137337  ) ); // f=4, b=4
+    // ODF tests. Not all tests pass, but I'm not sure if the spec or the implementation is wrong
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2)",      Value( 90.9975570033  ) ); //
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;1;0)",    Value( 90.9975570033  ) ); // f=1, b=0
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2;0)",    Value( 90.9975570033  ) ); // f=2, b=0
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;4;0)",    Value( 90.9975570033  ) ); // f=4, b=0
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;1)",  Value( 102.5120875338 ) ); // f=1, b=1
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;1)",  Value( 102.510143853 ) ); // f=2, b=1
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;1)",  Value( 102.509884509 ) ); // f=4, b=1
+    QEXPECT_FAIL("", "Wrong?", Continue);
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;2)",  Value( 102.512087534 ) ); // f=1, b=2
+    QEXPECT_FAIL("", "Wrong?", Continue);
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;2)",  Value( 102.510143853 ) ); // f=2, b=2
+    QEXPECT_FAIL("", "Wrong?", Continue);
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;2)",  Value( 102.509884509 ) ); // f=4, b=2
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;1;3)",   Value( 794.575995564 ) ); // f=1, b=3
+    QEXPECT_FAIL("", "Wrong?", Continue);
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;2;3)",   Value( 794.671729071 ) ); // f=2, b=3
+    QEXPECT_FAIL("", "Wrong?", Continue);
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;4;3)",   Value( 794.684531308 ) ); // f=4, b=3
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;1;4)", Value( 932.992137337  ) ); // f=1, b=4
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;2;4)", Value( 932.992137337  ) ); // f=2, b=4
+    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;4;4)", Value( 932.992137337  ) ); // f=4, b=4
 }
 
 // ODDLYIELD
@@ -790,30 +890,31 @@ void TestFinancialFunctions::testODDLYIELD()
     // ODF tests
 
     // Basis 0
-//   CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2  )", Value( 4.997775351/100.0 ) ); // Without Basis parameter
-//   CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;1;0)", Value( 4.997775351/100.0 ) ); // With Frequency=1 and Basis=0
-//   CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2;0)", Value( 4.997775351/100.0 ) ); // With Frequency=2 and Basis=0
-//   CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;4;0)", Value( 4.997775351/100.0 ) ); // With Frequency=4 and Basis=0
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2  )", Value( 4.997775351/100.0 ) ); // Without Basis parameter
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;1;0)", Value( 4.997775351/100.0 ) ); // With Frequency=1 and Basis=0
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2;0)", Value( 4.997775351/100.0 ) ); // With Frequency=2 and Basis=0
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;4;0)", Value( 4.997775351/100.0 ) ); // With Frequency=4 and Basis=0
 
     // Basis 1
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;1;1)", Value( 1.408788601/100.0 ) ); // With Frequency=1 and Basis=1
-//   CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;1)", Value( 1.408379719/100.0 ) ); // With Frequency=2 and Basis=1
-//   CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;1)", Value( 1.408325114/100.0 ) ); // With Frequency=4 and Basis=1
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;1;1)", Value( 1.408788601/100.0 ) ); // With Frequency=1 and Basis=1
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;1)", Value( 1.408379719/100.0 ) ); // With Frequency=2 and Basis=1
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;1)", Value( 1.408325114/100.0 ) ); // With Frequency=4 and Basis=1
 
     // Basis 2
-//   CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100;1;2)", Value( 1.408788601/100.0 ) ); // With Frequency=1 and Basis=2
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;2)", Value( 1.408379719/100.0 ) ); // With Frequency=2 and Basis=2
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;2)", Value( 1.408325114/100.0 ) ); // With Frequency=4 and Basis=2
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100;1;2)", Value( 1.408788601/100.0 ) ); // With Frequency=1 and Basis=2
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;2)", Value( 1.408379719/100.0 ) ); // With Frequency=2 and Basis=2
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;2)", Value( 1.408325114/100.0 ) ); // With Frequency=4 and Basis=2
 
     // Basis 3
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;1;3)", Value( 4.987800402/100.0 ) ); // With Frequency=1 and Basis=3
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;2;3)", Value( 4.990550494/100.0 ) ); // With Frequency=2 and Basis=3
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;4;3)", Value( 4.990918451/100.0 ) ); // With Frequency=4 and Basis=3
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;1;3)", Value( 4.987800402/100.0 ) ); // With Frequency=1 and Basis=3
+    QEXPECT_FAIL("", "Wrong?", Continue);
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;2;3)", Value( 4.990550494/100.0 ) ); // With Frequency=2 and Basis=3
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;4;3)", Value( 4.990918451/100.0 ) ); // With Frequency=4 and Basis=3
 
     // Basis 4
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;1;4)", Value( 1.499836493/100.0 ) ); // With Frequency=1 and Basis=4
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;2;4)", Value( 1.499836493/100.0 ) ); // With Frequency=2 and Basis=4
-    // CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;4;4)", Value( 1.499836493/100.0 ) ); // With Frequency=4 and Basis=4
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;1;4)", Value( 1.499836493/100.0 ) ); // With Frequency=1 and Basis=4
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;2;4)", Value( 1.499836493/100.0 ) ); // With Frequency=2 and Basis=4
+    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;4;4)", Value( 1.499836493/100.0 ) ); // With Frequency=4 and Basis=4
 }
 
 // PDURATION
