@@ -26,6 +26,7 @@
 #include "KWGui.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
+#include "KWPageCacheManager.h"
 
 // koffice libs includes
 #include <KoShapeManager.h>
@@ -54,7 +55,8 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
       m_viewMode(0),
       m_viewConverter(0),
       m_cacheEnabled(false),
-      m_currentZoom(0.0)
+      m_currentZoom(0.0),
+      m_pageCacheManager(0)
 {
     m_shapeManager = new KoShapeManager(this);
     m_toolProxy = new KoToolProxy(this, parent);
@@ -62,12 +64,9 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
 
 KWCanvasBase::~KWCanvasBase()
 {
-    m_cache.clear();
     delete m_shapeManager;
-    m_shapeManager = 0;
     delete m_viewMode;
-    m_viewMode = 0;
-    m_toolProxy = 0;
+    delete m_pageCacheManager;
 }
 
 void KWCanvasBase::gridSize(qreal *horizontal, qreal *vertical) const
@@ -272,8 +271,8 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 {
     painter.translate(-m_documentOffset);
 
-//    static int iteration = 0;
-//    iteration++;
+    //    static int iteration = 0;
+    //    iteration++;
 
     if (m_viewMode->hasPages()) {
         int pageContentArea = 0;
@@ -304,22 +303,24 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
             // Paint the contents of the page.
             painter.setRenderHint(QPainter::Antialiasing);
 
-            if (m_cacheEnabled) {
+            if (m_cacheEnabled && m_pageCacheManager) {
 
                 // clear the cache if the zoom changed
                 if (m_currentZoom != viewConverter()->zoom()) {
-                    m_cache.clear();
+                    m_pageCacheManager->clear();
                     m_currentZoom = viewConverter()->zoom();
                 }
 
                 // we take the cache object from the cache, grabbing ownership because
                 // QCache can decide to delete stuff from the cache at any moment.
-                PageCache *pageCache = m_cache.take(vm.page);
+                KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
 
                 if (!pageCache) {
-                    pageCache = new PageCache(viewConverter()->documentToViewX(vm.page.width()),
-                                              viewConverter()->documentToViewY(vm.page.height()));
+                    pageCache = m_pageCacheManager->cache(QSize(viewConverter()->documentToViewX(vm.page.width()),
+                                                                viewConverter()->documentToViewY(vm.page.height())));
                 }
+
+                Q_ASSERT(pageCache->cache);
 
                 QSizeF pageSizeDocument(vm.page.width(), vm.page.height());
                 QSizeF pageSizeView = viewConverter()->documentToView(pageSizeDocument);
@@ -375,7 +376,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 
                         if (rc.intersects(clipRectOnPage)) {
                             paintRegion += rc;
-                            QPainter gc(&pageCache->cache);
+                            QPainter gc(pageCache->cache);
                             gc.eraseRect(rc);
                             gc.end();
                         }
@@ -387,15 +388,15 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     pageCache->exposed = remainingUnExposed.rects();
 
                     // paint the exposed regions of the page
-                    QPainter gc(&pageCache->cache);
+                    QPainter gc(pageCache->cache);
                     gc.translate(0, -pageTopView);
                     gc.setClipRegion(paintRegion.translated(0, pageTopView));
 
                     shapeManager()->paint(gc, *viewConverter(), false);
 
-//                    pageCache->cache.save(QString("page_%1_iteration_%2.png")
-//                                           .arg(vm.page.pageNumber())
-//                                           .arg(iteration));
+                    //                    pageCache->cache.save(QString("page_%1_iteration_%2.png")
+                    //                                           .arg(vm.page.pageNumber())
+                    //                                           .arg(iteration));
 
                 }
 #else // use the thumbnailer to render the whole page in one go
@@ -410,10 +411,10 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                   pageRectView.y() + clipRectOnPage.y(),
                                   clipRectOnPage.width(),
                                   clipRectOnPage.height());
-                painter.drawImage(dst, pageCache->cache, clipRectOnPage);
+                painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
 
                 // put the cache back
-                m_cache.insert(vm.page, pageCache);
+                m_pageCacheManager->insert(vm.page, pageCache, 100 * viewConverter()->zoom());
 
             }
             else {
@@ -457,30 +458,36 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                         vm.clipRect.width(), vm.clipRect.height());
 
         if (m_cacheEnabled) {
-            // clear the cache if the zoom changed
-            if (m_currentZoom != viewConverter()->zoom()) {
-                m_cache.clear();
-                m_currentZoom = viewConverter()->zoom();
+            QRectF pageRectDocument = vm.page.rect(vm.page.pageNumber());
+            QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
+
+            if (!m_pageCacheManager) {
+                // no pageCacheManager, so create one for the current view. This happens only once!
+                // so on zoom change, we don't re-pre-generate weight/zoom images.
+                m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize, viewConverter()->zoom());
             }
-            PageCache *pageCache = m_cache.take(vm.page);
+
+            if (!m_currentZoom == viewConverter()->zoom()) {
+                m_currentZoom = viewConverter()->zoom();
+                m_pageCacheManager->clear();
+            }
+
+            KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
             if (pageCache) {
                 if (rc.isNull()) {
-                   pageCache->allExposed = true;
-                   pageCache->exposed.clear();
+                    pageCache->allExposed = true;
+                    pageCache->exposed.clear();
                 }
                 else {
                     qreal  pageTopDocument = vm.page.offsetInDocument();
                     qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
-
-                    QRectF pageRectDocument = vm.page.rect(vm.page.pageNumber());
-                    QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
 
                     // translated from the page topleft to 0,0 for our cache image
                     QRect clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
 
                     pageCache->exposed.append(clipRectOnPage);
                 }
-                m_cache.insert(vm.page, pageCache);
+                m_pageCacheManager->insert(vm.page, pageCache, viewConverter()->zoom());
             }
         }
         updateCanvasInternal(finalClip);
@@ -496,5 +503,7 @@ KoViewConverter *KWCanvasBase::viewConverter() const
 void KWCanvasBase::setCacheEnabled(bool enabled, int cacheSize)
 {
     m_cacheEnabled = enabled;
-    m_cache.setMaxCost(cacheSize);
+    // we scale the maxcost by 100 to be able to use the qreal zoomfactor to
+    // use the totalcost to relate to the zoom factor.
+    m_cacheSize = cacheSize;
 }
