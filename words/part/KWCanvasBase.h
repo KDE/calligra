@@ -125,6 +125,8 @@ private:
 
 protected:
 
+    class BackgroundPageRenderer;
+
     KWDocument *m_document;
     KoShapeManager *m_shapeManager;
     KoToolProxy *m_toolProxy;
@@ -152,6 +154,7 @@ protected:
     };
 
     QCache<KWPage, PageCache> m_cache;
+
 };
 
 #endif // KWCANVASBASE_H

@@ -42,6 +42,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
+#include <QThread>
 
 //#define DEBUG_REPAINT
 
@@ -55,6 +56,7 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
       m_cacheEnabled(false),
       m_currentZoom(0.0)
 {
+    setCacheEnabled(true);
     m_shapeManager = new KoShapeManager(this);
     m_toolProxy = new KoToolProxy(this, parent);
 }
@@ -271,6 +273,9 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 {
     painter.translate(-m_documentOffset);
 
+//    static int iteration = 0;
+//    iteration++;
+
     if (m_viewMode->hasPages()) {
         int pageContentArea = 0;
         // Create a list of clipRects in the document space from the
@@ -401,7 +406,12 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 }
 #endif
                 // paint from the cached page image on the original painter
-                painter.drawImage(pageRectView.topLeft(), pageCache->cache);
+
+                QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
+                                  pageRectView.y() + clipRectOnPage.y(),
+                                  clipRectOnPage.width(),
+                                  clipRectOnPage.height());
+                painter.drawImage(dst, pageCache->cache, clipRectOnPage);
 
                 // put the cache back
                 m_cache.insert(vm.page, pageCache);
