@@ -49,7 +49,7 @@
 
 #include <KLocale>
 #include <QDebug>
-#include <KGlobal>
+#include <slp/KGlobal>
 
 /** @WARNING (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed.
  * Please keep in mind that we must provide implemention of such a class by ourselves. 

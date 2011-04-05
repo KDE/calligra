@@ -25,7 +25,7 @@
 #include <QColor>
 #include <QPainter>
 
-#include <KGlobal>
+#include <slp/KGlobal>
 #include <KColorCombo>
 #include <KColorCollection>
 

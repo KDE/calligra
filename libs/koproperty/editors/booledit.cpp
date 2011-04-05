@@ -38,7 +38,8 @@
 #include <KComboBox>
 #include <QDebug>
 #include <KColorScheme>
-#include <KGlobal>
+
+#include <slp/KGlobal>
 
 #include <QApplication>
 #include <QPainter>

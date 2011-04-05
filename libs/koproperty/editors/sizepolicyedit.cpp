@@ -21,7 +21,7 @@
 
 #include <QtGui/QSizePolicy>
 #include <KLocale>
-#include <KGlobal>
+#include <slp/KGlobal>
 
 using namespace KoProperty;
 
