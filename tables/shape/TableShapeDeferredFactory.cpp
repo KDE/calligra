@@ -50,6 +50,8 @@ TableDeferredShapeFactory::TableDeferredShapeFactory(QObject *parent, const QVar
     qDebug() << ">>>>>>>>>>>>>>> creating tableshape deferred plugin";
     // only create the tool when this plugin gets loaded.
     KoToolRegistry::instance()->add(new TableToolFactory());
+
+    m_stubFactory = qobject_cast<KoShapeFactoryBase*>(parent);
 }
 
 TableDeferredShapeFactory::~TableDeferredShapeFactory()
@@ -58,17 +60,19 @@ TableDeferredShapeFactory::~TableDeferredShapeFactory()
 
 KoShape *TableDeferredShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
 {
-    if (!documentResources->hasResource(MapResourceId)) {
-        // One spreadsheet map for all inserted tables to allow referencing cells among them.
-        QVariant variant;
-        Map* map = new Map();
-        // Make the KoResourceManager manage this Map, since we cannot delete it ourselves
-        map->setParent(documentResources);
-        QObject::connect(documentResources, SIGNAL(destroyed()), map, SLOT(deleteLater()));
-        variant.setValue<void*>(map);
-        documentResources->setResource(MapResourceId, variant);
+    QList<KoResourceManager *>resourceManagers = m_stubFactory->documentResourceManagers();
+    foreach(KoResourceManager *documentResources, resourceManagers) {
+        if (!documentResources->hasResource(MapResourceId)) {
+            // One spreadsheet map for all inserted tables to allow referencing cells among them.
+            QVariant variant;
+            Map* map = new Map();
+            // Make the KoResourceManager manage this Map, since we cannot delete it ourselves
+            map->setParent(documentResources);
+            QObject::connect(documentResources, SIGNAL(destroyed()), map, SLOT(deleteLater()));
+            variant.setValue<void*>(map);
+            documentResources->setResource(MapResourceId, variant);
+        }
     }
-
 
     TableShape *shape = new TableShape();
     shape->setShapeId(TableShapeId);
