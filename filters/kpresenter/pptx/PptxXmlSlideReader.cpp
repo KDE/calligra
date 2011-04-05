@@ -262,7 +262,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
     kDebug() << "=============================";
     QBuffer masterBuffer;
     if (m_context->type == SlideMaster) {
-        //! Clear body pointer for SlideMaster mode: avoid writting to body by mistake in this mode
+        //! Clear body pointer for SlideMaster mode: avoid writing to body by mistake in this mode
         d->body = body;
         // We do not want to write to the main body in slidemaster, so we use secondary body,
         // the old body is
@@ -1371,7 +1371,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
             }
             if (m_context->type == SlideLayout) {
                 // Checking, whether we are in layout, if so, we may have to forward some shapes to slides
-                // An alternative approach is to put these to masterslides, but it could in practise mean that there are
+                // An alternative approach is to put these to masterslides, but it could in practice mean that there are
                 // slidemaster * slideLayout masterslides, ie ~40, and it's bit trickier
                 if (potentiallyAddToLayoutFrames) {
                     potentiallyAddToLayoutFrames = false;
