@@ -21,7 +21,19 @@
 #define KPROPERTY_COLOREDIT_H
 
 #include "koproperty/Factory.h"
-#include <KColorCombo>
+
+/** @WARNING (DK) KColorCombo has been changed by QComboBox ! 
+ * Since KColorCombo extends QComboBox it is very likely that some funcionality has been lost!. 
+ */
+
+/** @TODO (DK) Provide class that extends QComboBox and provide completion feature into widgets and use it instead of QComboBox.
+ */
+#include <QComboBox>
+
+#warning (DK) KColorCombo has been changed by QComboBox !!
+#ifdef __KDE4_LIBS__
+  #include <KColorCombo>
+#endif
 
 namespace KoProperty
 {
@@ -30,7 +42,8 @@ namespace KoProperty
 //! @todo enable transparency selection
 //! @todo add transparency option
 //! @todo reimplement view using KColorCells
-class KOPROPERTY_EXPORT ColorCombo : public KColorCombo
+#warning (DK) KColorCombo has been changed by QComboBox !!
+class KOPROPERTY_EXPORT ColorCombo : public QComboBox /** @WARNING (DK) KColorCombo has been changed by QComboBox ! */
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
