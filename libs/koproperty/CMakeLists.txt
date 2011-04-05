@@ -58,13 +58,15 @@ set(koproperty_LIB_SRCS
 )
 
 
-kde4_add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
+# DK DEL kde4_add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
+add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
 
-set(KOPROPERTY_LINK_LIBS ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+# DK DEL set(KOPROPERTY_LINK_LIBS ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+
 if(KOPROPERTY_USE_KOLIBS)
 	list(APPEND KOPROPERTY_LINK_LIBS kowidgets)
 endif(KOPROPERTY_USE_KOLIBS)
-target_link_libraries(${KOPROPERTY_TARGETNAME} ${KOPROPERTY_LINK_LIBS})
+# DK DEL target_link_libraries(${KOPROPERTY_TARGETNAME} ${KOPROPERTY_LINK_LIBS})
 
 target_link_libraries(${KOPROPERTY_TARGETNAME} LINK_INTERFACE_LIBRARIES ${KOPROPERTY_LINK_LIBS})
 
@@ -76,7 +78,7 @@ install(TARGETS ${KOPROPERTY_TARGETNAME} ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_definitions(-DKOPROPERTY_APP_DIR="\\"${KOPROPERTY_TARGETNAME}\\"") # for KIconLoader::global()->addAppDir();
                                                                        # TODO remove when we move to independent place
-kde4_install_icons( ${DATA_INSTALL_DIR}/${KOPROPERTY_TARGETNAME}/icons )
+# DK DEL kde4_install_icons( ${DATA_INSTALL_DIR}/${KOPROPERTY_TARGETNAME}/icons )
 
 if(FALSE) # TODO: install when we move to independent place
   install( FILES
