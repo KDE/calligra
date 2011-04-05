@@ -5,6 +5,10 @@
 
 add_subdirectory( test )
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../")
+
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
 
 set(libkopropertyeditors_SRCS
