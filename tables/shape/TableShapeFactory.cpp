@@ -41,7 +41,6 @@ K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))
 
 TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
 {
-    qDebug() << ">>>>>>>>>>>>>>> creating tableshape plugin";
     Q_UNUSED(parent);
     KoShapeRegistry::instance()->add(new TableShapeFactory());
 }
