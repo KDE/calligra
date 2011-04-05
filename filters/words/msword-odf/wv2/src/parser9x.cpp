@@ -980,22 +980,34 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
     case TextHandler::FieldBegin:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldStart( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldStart( &dummy, chp );
+            }
             break;
         }
     case TextHandler::FieldSeparator:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldSeparator( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldSeparator( &dummy, chp );
+            }
             break;
         }
     case TextHandler::FieldEnd:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldEnd( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldEnd( &dummy, chp );
+            }
             break;
         }
     case TextHandler::AnnotationRef:
