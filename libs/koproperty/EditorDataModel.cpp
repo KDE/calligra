@@ -25,7 +25,7 @@
 #include <QtCore/QHash>
 
 #include <KLocale>
-#include <kdebug.h>
+#include <QDebug>
 
 using namespace KoProperty;
 
@@ -85,7 +85,7 @@ void EditorDataModel::collectIndices() const
     }
     d->indicesForNames.clear();
     for (int row = 0; it.current(); row++, ++it) {
-        // kDebug() << it.current()->name() << "->" << row;
+        // qDebug() << Q_FUNC_INFO << it.current()->name() << "->" << row;
         d->indicesForNames.insert( it.current()->name(), QPersistentModelIndex( createIndex(row, 0, it.current()) ) );
     }
 }

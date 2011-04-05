@@ -25,7 +25,7 @@
 #include <KFontChooser>
 #include <KFontDialog>
 #include <KLocale>
-#include <KDebug>
+#include <QDebug>
 #include <KPushButton>
 #include <KDialog>
 
@@ -76,7 +76,7 @@ public:
 public slots:
     void setValue(const QFont& value)
     {
-        //kDebug() << QFontDatabase().families();
+        //qDebug() << Q_FUNC_INFO << QFontDatabase().families();
         m_font = value;
     }
 

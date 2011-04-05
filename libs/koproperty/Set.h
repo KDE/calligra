@@ -313,7 +313,7 @@ protected:
     friend class Buffer;
 };
 
-//! kDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
+//! qDebug() << Q_FUNC_INFO stream operator. Writes this set to the debug output in a nicely formatted way.
 KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Set &set);
 
 /*! \brief

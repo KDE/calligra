@@ -29,7 +29,7 @@
 
 #include <KGlobal>
 #include <KLocale>
-#include <KDebug>
+#include <QDebug>
 
 #include <QVariant>
 #include <QPainter>
@@ -70,7 +70,7 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
         : KIntNumInput(parent)
         , m_unsigned( prop->type() == UInt )
 {
-//    kDebug() << "itemHeight:" << itemHeight;
+//    qDebug() << Q_FUNC_INFO << "itemHeight:" << itemHeight;
     QLineEdit* le = spinBox()->findChild<QLineEdit*>();
     spinBox()->setContentsMargins(0,0,0,0);
     if (le) {
@@ -78,7 +78,7 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
     }
-//    kDebug() << parent->font().pointSize();
+//    qDebug() << Q_FUNC_INFO << parent->font().pointSize();
     spinBox()->setFrame(true);
     QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
     Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent, css);
@@ -109,7 +109,7 @@ void IntSpinBox::setValue(const QVariant& value)
 {
     int v( value.toInt() );
     if (m_unsigned && v<0) {
-        kWarning() << "could not assign negative value" << v << "- assigning 0";
+        qWarning() << Q_FUNC_INFO << "could not assign negative value" << v << "- assigning 0";
         v = 0;
     }
     KIntNumInput::setValue(v);

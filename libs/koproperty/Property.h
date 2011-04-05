@@ -448,7 +448,7 @@ protected:
     friend KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
 };
 
-//! kDebug() stream operator. Writes property @a p to the debug output in a nicely formatted way.
+//! qDebug() << Q_FUNC_INFO stream operator. Writes property @a p to the debug output in a nicely formatted way.
 KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
 
 }

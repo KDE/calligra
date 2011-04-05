@@ -25,7 +25,7 @@
 #include "koproperty/Property.h"
 
 #include <KColorScheme>
-#include <KDebug>
+#include <QDebug>
 
 using namespace KoProperty;
 
@@ -81,7 +81,7 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
     setFrame(false);
 /*    QList<QWidget*> children( findChildren<QWidget*>() );
     foreach (QWidget* w, children) {
-        kDebug() << w->objectName() << w->metaObject()->className();
+        qDebug() << Q_FUNC_INFO << w->objectName() << w->metaObject()->className();
         w->setStyleSheet(QString());
     }*/
     //QComboBoxPrivateContainer
@@ -107,7 +107,7 @@ ComboBox::~ComboBox()
 bool ComboBox::listDataKeysAvailable() const
 {
     if (m_listData.keys.isEmpty()) {
-        kWarning() << "property listData not available!";
+        qWarning() << Q_FUNC_INFO << "property listData not available!";
         return false;
     }
     return true;
@@ -145,13 +145,13 @@ void ComboBox::setValue(const QVariant &value)
                 setCurrentIndex(-1);
                 setEditText(value.toString());
             }
-            kWarning() << "NO SUCH KEY:" << value.toString()
+            qWarning() << Q_FUNC_INFO << "NO SUCH KEY:" << value.toString()
                 << "property=" << objectName();
         } else {
             QStringList list;
             for (int i = 0; i < count(); i++)
                 list += itemText(i);
-            kWarning() << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
+            qWarning() << Q_FUNC_INFO << "NO SUCH INDEX WITHIN COMBOBOX:" << idx
                 << "count=" << count() << "value=" << value.toString()
                 << "property=" << objectName() << "\nActual combobox contents"
                 << list;
@@ -283,9 +283,9 @@ QString ComboBoxDelegate::displayTextForProperty( const Property* property ) con
         return property->value().toString();
     if (property->value().isNull())
         return QString();
-    //kDebug() << "property->value()==" << property->value();
+    //qDebug() << Q_FUNC_INFO << "property->value()==" << property->value();
     const int idx = listData->keys.indexOf( property->value() );
-    //kDebug() << "idx==" << idx;
+    //qDebug() << Q_FUNC_INFO << "idx==" << idx;
     if (idx == -1) {
       if (!property->option("extraValueAllowed").toBool())
         return QString();

@@ -38,7 +38,7 @@
 
 #else /* UNIX */
 
-#define KOPROPERTY_EXPORT KDE_EXPORT
+#define KOPROPERTY_EXPORT OMG_EXPORT_MACRO
 
 #endif
 

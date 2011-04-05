@@ -25,7 +25,7 @@
 #include <KIconLoader>
 #include <KLocale>
 #include <KComboBox>
-#include <KDebug>
+#include <QDebug>
 #include <KColorScheme>
 #include <KGlobal>
 
@@ -183,7 +183,7 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
             //draw text state for Three-State editor
             if (value.isNull() || !value.isValid())
                 text = overrideText;*/
-//        kDebug() << r2;
+//        qDebug() << Q_FUNC_INFO << r2;
         p->drawPixmap(
             r.left() + 3,
             r2.top() + (r2.height() - KIconLoader::SizeSmall) / 2,

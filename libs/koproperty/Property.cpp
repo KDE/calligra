@@ -25,7 +25,7 @@
 #include "Set.h"
 #include "Factory.h"
 
-#include <kdebug.h>
+#include <QDebug>
 
 #include <QPointer>
 #include <QByteArray>
@@ -366,12 +366,12 @@ static bool compatibleTypes(const QVariant& currentValue, const QVariant &value)
 void Property::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
 {
     if (d->name.isEmpty()) {
-        kWarning() << "COULD NOT SET value to a null property";
+        qWarning() << Q_FUNC_INFO << "COULD NOT SET value to a null property";
         return;
     }
     QVariant currentValue = this->value();
     if (!compatibleTypes(currentValue, value)) {
-        kWarning() << "INCOMPATIBLE TYPES! old=" << currentValue << "new=" << value;
+        qWarning() << Q_FUNC_INFO << "INCOMPATIBLE TYPES! old=" << currentValue << "new=" << value;
     }
 
     //1. Check if the value should be changed
@@ -394,7 +394,7 @@ void Property::setValue(const QVariant &value, bool rememberOldValue, bool useCo
     }
     else if (t == QVariant::Double) {
         const double factor = 1.0 / option("step", KOPROPERTY_DEFAULT_DOUBLE_VALUE_STEP).toDouble();
-        kDebug()
+        qDebug() << Q_FUNC_INFO
             << "double compared:" << currentValue.toDouble() << value.toDouble() 
             << ":" << static_cast<qlonglong>(currentValue.toDouble() * factor) << static_cast<qlonglong>(value.toDouble() * factor);
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
@@ -699,7 +699,7 @@ Property::addChild(Property *prop)
 //        prop->setSortingKey(d->children->count());
         prop->d->parent = this;
     } else {
-        kWarning() << "property" << name()
+        qWarning() << Q_FUNC_INFO << "property" << name()
                 << ": child property" << prop->name() << "already added";
         return;
     }
@@ -815,7 +815,8 @@ const QMap<QByteArray, QVariant>& Property::options() const
 
 void Property::debug() const
 {
-    kDebug(30007) << *this;
+    //kDebug(30007) << *this;
+    qDebug() << Q_FUNC_INFO << *this;
 }
 
 KOPROPERTY_EXPORT QDebug KoProperty::operator<<(QDebug dbg, const Property &p)

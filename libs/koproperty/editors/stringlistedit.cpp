@@ -33,7 +33,7 @@
 #include <kdialog.h>
 #include <KStandardGuiItem>
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 
 #include "Property.h"
 

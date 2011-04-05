@@ -24,7 +24,7 @@
 #include "EditorView.h"
 
 #include <KLocale>
-#include <KDebug>
+#include <QDebug>
 #include <KCmdLineArgs>
 #include <KIconLoader>
 
@@ -174,7 +174,7 @@ TestWindow::TestWindow()
 //crashes.. why?: editorView->expandAll();
     resize(400, qApp->desktop()->height() - 200);
     editorView->setFocus();
-    kDebug() << m_set;
+    qDebug() << Q_FUNC_INFO << m_set;
 }
 
 TestWindow::~TestWindow()

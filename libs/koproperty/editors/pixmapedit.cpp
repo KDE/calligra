@@ -42,7 +42,7 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-#include <KDebug>
+#include <QDebug>
 #include <KImageIO>
 #include <KPushButton>
 #include <KFileDialog>

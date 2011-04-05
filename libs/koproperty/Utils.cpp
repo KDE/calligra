@@ -33,7 +33,7 @@
 #include <QLayout>
 #include <QMouseEvent>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <kiconloader.h>
 #include <kstyle.h>
 

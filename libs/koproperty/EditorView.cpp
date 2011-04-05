@@ -36,7 +36,7 @@
 #include <KLocale>
 #include <KIconLoader>
 #include <KIconEffect>
-#include <KDebug>
+#include <QDebug>
 
 using namespace KoProperty;
 
@@ -195,7 +195,7 @@ void ItemDelegate::paint(QPainter *painter,
     pen.setWidth(1);
     painter->setPen(pen);
     painter->drawRect(r);
-    //kDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
+    //qDebug() << Q_FUNC_INFO<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
     painter->restore();
 }
 
@@ -257,7 +257,7 @@ bool ItemDelegate::editorEvent( QEvent * event, QAbstractItemModel * model,
     const QStyleOptionViewItem & option, const QModelIndex & index )
 {
     if (index.column() == 0 && event->type() == QEvent::MouseButtonPress) {
-        kDebug() << "!!!";
+        qDebug() << Q_FUNC_INFO << "!!!";
     }
     return QStyledItemDelegate::editorEvent( event, model, option, index );
 }*/
@@ -361,7 +361,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
             Property *property = d->model->propertyForItem(index);
             //TODO This crashes when changing the interpreter type in the script plugin
             //if (property->isNull())
-            //    kDebug() << "WTF? a NULL property?";
+            //    qDebug() << Q_FUNC_INFO << "WTF? a NULL property?";
             //else        
                 //d->set->setPreviousSelection(property->name());
 #endif
@@ -488,10 +488,10 @@ QRect EditorView::revertButtonArea( const QModelIndex& index ) const
     int x2 = columnWidth(0);
     int x1 = x2 - iconSize - 2;
     QRect r(visualRect(index));
-//    kDebug() << r;
+//    qDebug() << Q_FUNC_INFO << r;
     r.setLeft(x1);
     r.setRight(x2);
-//    kDebug() << r;
+//    qDebug() << Q_FUNC_INFO << r;
     return r;
 }
 

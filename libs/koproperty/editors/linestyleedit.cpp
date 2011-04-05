@@ -24,7 +24,7 @@
 #include <QPen>
 
 #include <KColorScheme>
-#include <KDebug>
+#include <QDebug>
 
 using namespace KoProperty;
 

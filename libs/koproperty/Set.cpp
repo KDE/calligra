@@ -26,7 +26,7 @@
 #include <qapplication.h>
 #include <QByteArray>
 
-#include <kdebug.h>
+#include <QDebug>
 #include <klocale.h>
 
 typedef QMap<QByteArray, QList<QByteArray> > ByteArrayListMap;
@@ -59,18 +59,18 @@ public:
         if (p)
             return *p;
         nonConstNull.setName(0); //to ensure returned property is null
-        kWarning() << "PROPERTY" << name << "NOT FOUND";
+        qWarning() << Q_FUNC_INFO << "PROPERTY" << name << "NOT FOUND";
         return nonConstNull;
     }
 
     void addProperty(Property *property, QByteArray group/*, bool updateSortingKey*/)
     {
         if (!property) {
-            kWarning() << "property == 0";
+            qWarning() << Q_FUNC_INFO << "property == 0";
             return;
         }
         if (property->isNull()) {
-            kWarning() << "COULD NOT ADD NULL PROPERTY";
+            qWarning() << Q_FUNC_INFO << "COULD NOT ADD NULL PROPERTY";
             return;
         }
         if (group.isEmpty())
@@ -102,7 +102,7 @@ public:
             return;
 
         if (!list.removeOne(property)) {
-            kDebug() << "Set does not contain property" << property;
+            qDebug() << Q_FUNC_INFO << "Set does not contain property" << property;
             return;
         }
         Property *p = hash.take(property->name());
@@ -271,12 +271,12 @@ void Set::Iterator::skipNotAcceptable()
 {
     if (!m_selector)
         return;
-    //kDebug() << "FROM:" << *current();
+    //qDebug() << Q_FUNC_INFO << "FROM:" << *current();
     if (current() && !(*m_selector)( *current() )) {
         // skip first items that not are acceptable by the selector
         ++(*this);
     }
-    //kDebug() << "TO:" << *current();
+    //qDebug() << Q_FUNC_INFO << "TO:" << *current();
 }
 
 void Set::Iterator::setOrder(Set::Order order)
@@ -425,7 +425,7 @@ Set::addToGroup(const QByteArray &group, Property *property)
     //do not add the same property to the group twice
     const QByteArray groupLower(group.toLower());
     if (d->groupForProperty(property) == groupLower) {
-        kWarning() << "Group" << group << "already contains property" << property->name();
+        qWarning() << Q_FUNC_INFO << "Group" << group << "already contains property" << property->name();
         return;
     }
     QList<QByteArray>& propertiesOfGroup = d->propertiesOfGroup[ groupLower ];

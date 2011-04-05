@@ -48,7 +48,7 @@
 #include <QBitmap>
 
 #include <KLocale>
-#include <KDebug>
+#include <QDebug>
 #include <KGlobal>
 #include <KIconLoader>
 

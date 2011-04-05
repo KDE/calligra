@@ -45,7 +45,7 @@
 #include "timeedit.h"
 #include "urledit.h"
 */
-#include <KDebug>
+#include <QDebug>
 #include <KIconLoader>
 
 namespace KoProperty
@@ -351,7 +351,7 @@ QWidget * FactoryManager::createEditor(
                 QString::fromLatin1("%1 { border-top: 1px solid %2; } ")
                 .arg(QString::fromLatin1(w->metaObject()->className()).replace("KoProperty::", QString()))
                 .arg(gridLineColor.name());
-//            kDebug() << css;
+//            qDebug() << Q_FUNC_INFO << css;
             w->setStyleSheet(css);
         }
     }
