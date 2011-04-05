@@ -59,7 +59,7 @@ set(koproperty_LIB_SRCS
 
 
 # DK DEL kde4_add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
-add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
+automoc4_add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
 
 # DK DEL set(KOPROPERTY_LINK_LIBS ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 
