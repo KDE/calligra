@@ -48,7 +48,7 @@ TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
 
 
 TableShapeFactory::TableShapeFactory()
-        : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"))
+    : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"), "Spreadsheet Shape")
 {
     setToolTip(i18n("Spreadsheet Shape"));
     setIcon("spreadsheetshape");
@@ -64,4 +64,3 @@ bool TableShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
     Q_UNUSED(context);
     return (element.namespaceURI() == KoXmlNS::table && element.localName() == "table");
 }
-
