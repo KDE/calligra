@@ -25,12 +25,19 @@
 #include "koproperty/Factory.h"
 
 #include <QtCore/QVariant>
-#include <KLineEdit>
+
+/* WARNING (DK) KLineEdit has been changed by QLineEdit ! 
+ * Since KLineEdit extends QLineEdit and KCompletionBase it is very likely that some funcionality has been lost!. 
+ */
+
+/* TODO (DK) Provide class that extends QLineEdit and provide completion feature into widgets and use it instead of QLineEdit.
+ */
+#include <QLineEdit>
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT StringEdit : public KLineEdit
+class KOPROPERTY_EXPORT StringEdit : public QLineEdit // WARNING (DK) KLineEdit has been changed by QLineEdit! Some funcionality has been lost!
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)

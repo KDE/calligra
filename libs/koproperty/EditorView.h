@@ -26,7 +26,7 @@
 #include <QtGui/QTreeView>
 #include <QtGui/QLabel>
 
-#include <KLineEdit>
+// (DK) DEL #include <KLineEdit>
 
 namespace KoProperty
 {

@@ -24,7 +24,7 @@
 using namespace KoProperty;
 
 StringEdit::StringEdit(QWidget *parent)
- : KLineEdit(parent)
+ : QLineEdit(parent)  // WARNING (DK) KLineEdit has been changed by QLineEdit! Some funcionality has been lost!
  , m_slotTextChangedEnabled(true)
 {
     setFrame(false);

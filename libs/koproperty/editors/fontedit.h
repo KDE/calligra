@@ -25,7 +25,7 @@
 #include "koproperty/Factory.h"
 
 #include <QtCore/QVariant>
-#include <KLineEdit>
+// (DK) DEL #include <KLineEdit>
 
 namespace KoProperty
 {
