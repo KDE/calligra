@@ -23,9 +23,10 @@
 
 #include "global.h"
 #include "functordata.h"
+#include "wv2_export.h"
 
 #include <vector>
-#include "wv2_export.h"
+#include <QMap>
 
 namespace wvWare
 {
@@ -79,6 +80,12 @@ namespace wvWare
             Bookmarks( const Bookmarks& rhs );
             Bookmarks& operator=( const Bookmarks& rhs );
 
+            /**
+             * Validate bookmarks.
+             * @param num. of invalid bookmarks detected
+             */
+            bool valid(U16 &num);
+
             PLCF<Word97::BKF>* m_start;
             PLCFIterator<Word97::BKF>* m_startIt;
 
@@ -92,11 +99,13 @@ namespace wvWare
             //Used instead of m_end for MS Word 97 (aka Version 8)
             //documents.
             std::vector<U32> m_endCP;
-            std::vector<U32>::const_iterator m_endCP_It;
 
             //A copy of fib.nFib to identify the document type durig
             //processing of bookmarks.
             U16 m_nFib;
+
+            //A map providing the info which bookmarks are valid <startCP, valid>.
+            QMap<U32, bool> m_validCP;
     };
 
 } // namespace wvWare

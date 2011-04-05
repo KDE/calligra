@@ -33,14 +33,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "svgexport.h"
+#include "SvgWriter.h"
 #include "SvgUtil.h"
 
-#include <KarbonDocument.h>
-#include <KarbonPart.h>
-
-#include <KoDocument.h>
-#include <KoFilterChain.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
 #include <KoPathShape.h>
@@ -56,7 +51,6 @@
 #include <KoFilterEffectStack.h>
 #include <KoXmlWriter.h>
 #include <KoClipPath.h>
-#include <KPluginFactory>
 #include <KMimeType>
 #include <KTemporaryFile>
 #include <KIO/NetAccess>
@@ -77,57 +71,56 @@ static void printIndentation(QTextStream *stream, unsigned int indent)
         *stream << INDENT;
 }
 
-K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
-K_EXPORT_PLUGIN(SvgExportFactory("calligrafilters"))
-
-SvgExport::SvgExport(QObject*parent, const QVariantList&)
-        : KoFilter(parent), m_indent(0), m_indent2(0)
+SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
+    : m_indent(0), m_indent2(0), m_pageSize(pageSize)
+    , m_writeInlineImages(true)
 {
-    double scaleToUserSpace = SvgUtil::toUserSpace(1.0);
+    const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
+    m_userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
+
+    foreach(KoShapeLayer *layer, layers)
+        m_toplevelShapes.append(layer);
+}
+
+SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize)
+    : m_indent(0), m_indent2(0), m_toplevelShapes(toplevelShapes), m_pageSize(pageSize)
+    , m_writeInlineImages(true)
+{
+    const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
     m_userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
 }
 
-KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByteArray& to)
+SvgWriter::~SvgWriter()
 {
-    if (to != "image/svg+xml" || from != "application/vnd.oasis.opendocument.graphics")
-        return KoFilter::NotImplemented;
 
-    KoDocument * document = m_chain->inputDocument();
-    if (! document)
-        return KoFilter::ParsingError;
+}
 
-    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>(document);
-    if (! karbonPart)
-        return KoFilter::WrongFormat;
-
-    QFile fileOut(m_chain->outputFile());
+bool SvgWriter::save(const QString &filename, bool writeInlineImages)
+{
+    QFile fileOut(filename);
     if (!fileOut.open(QIODevice::WriteOnly))
-        return KoFilter::StupidError;
+        return false;
 
-    m_stream = new QTextStream(&fileOut);
+    m_filename = filename;
+    m_writeInlineImages = writeInlineImages;
+
+    const bool success = save(fileOut);
+
+    m_writeInlineImages = true;
+    m_filename.clear();
+
+    fileOut.close();
+
+    return success;
+}
+
+bool SvgWriter::save(QIODevice &outputDevice)
+{
+    m_stream = new QTextStream(&outputDevice);
     QString body;
     m_body = new QTextStream(&body, QIODevice::ReadWrite);
     QString defs;
     m_defs = new QTextStream(&defs, QIODevice::ReadWrite);
-
-    saveDocument(karbonPart->document());
-
-    *m_stream << defs;
-    *m_stream << body;
-
-    fileOut.close();
-
-    delete m_stream;
-    delete m_defs;
-    delete m_body;
-
-    return KoFilter::OK;
-}
-
-void SvgExport::saveDocument(KarbonDocument& document)
-{
-    // get the bounding box of the page
-    QSizeF pageSize = document.pageSize();
 
     // standard header:
     *m_defs <<
@@ -138,29 +131,47 @@ void SvgExport::saveDocument(KarbonDocument& document)
 
     // add some PR.  one line is more than enough.
     *m_defs <<
-    "<!-- Created using Karbon14, part of koffice: http://www.koffice.org/karbon -->" << endl;
+    "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
 
     *m_defs <<
     "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"" <<
-    pageSize.width() << "pt\" height=\"" << pageSize.height() << "pt\">" << endl;
+    m_pageSize.width() << "pt\" height=\"" << m_pageSize.height() << "pt\">" << endl;
     printIndentation(m_defs, ++m_indent2);
     *m_defs << "<defs>" << endl;
 
     m_indent++;
     m_indent2++;
 
-    // export layers:
-    foreach(KoShapeLayer * layer, document.layers()) {
-        saveLayer(layer);
+    // top level shapes
+    foreach(KoShape *shape, m_toplevelShapes) {
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+        if(layer) {
+            saveLayer(layer);
+        } else {
+            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+            if (group)
+                saveGroup(group);
+            else
+                saveShape(shape);
+        }
     }
 
     // end tag:
     printIndentation(m_defs, --m_indent2);
     *m_defs << "</defs>" << endl;
     *m_body << "</svg>" << endl;
+
+    *m_stream << defs;
+    *m_stream << body;
+
+    delete m_stream;
+    delete m_defs;
+    delete m_body;
+
+    return true;
 }
 
-void SvgExport::saveLayer(KoShapeLayer * layer)
+void SvgWriter::saveLayer(KoShapeLayer * layer)
 {
     printIndentation(m_body, m_indent++);
     *m_body << "<g" << getID(layer) << ">" << endl;
@@ -180,7 +191,7 @@ void SvgExport::saveLayer(KoShapeLayer * layer)
     *m_body << "</g>" << endl;
 }
 
-void SvgExport::saveGroup(KoShapeGroup * group)
+void SvgWriter::saveGroup(KoShapeGroup * group)
 {
     printIndentation(m_body, m_indent++);
     *m_body << "<g" << getID(group);
@@ -203,7 +214,7 @@ void SvgExport::saveGroup(KoShapeGroup * group)
     *m_body << "</g>" << endl;
 }
 
-void SvgExport::saveShape(KoShape * shape)
+void SvgWriter::saveShape(KoShape * shape)
 {
     KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
     if (path) {
@@ -225,7 +236,7 @@ void SvgExport::saveShape(KoShape * shape)
     }
 }
 
-void SvgExport::savePath(KoPathShape * path)
+void SvgWriter::savePath(KoPathShape * path)
 {
     printIndentation(m_body, m_indent);
     *m_body << "<path" << getID(path);
@@ -238,7 +249,7 @@ void SvgExport::savePath(KoPathShape * path)
     *m_body << " />" << endl;
 }
 
-void SvgExport::saveEllipse(EllipseShape * ellipse)
+void SvgWriter::saveEllipse(EllipseShape * ellipse)
 {
     if (ellipse->type() == EllipseShape::Arc && ellipse->startAngle() == ellipse->endAngle()) {
         printIndentation(m_body, m_indent);
@@ -261,7 +272,7 @@ void SvgExport::saveEllipse(EllipseShape * ellipse)
     }
 }
 
-void SvgExport::saveRectangle(RectangleShape * rectangle)
+void SvgWriter::saveRectangle(RectangleShape * rectangle)
 {
     printIndentation(m_body, m_indent);
     *m_body << "<rect" << getID(rectangle);
@@ -290,7 +301,7 @@ static QString createUID()
     return "defitem" + QString().setNum(nr++);
 }
 
-QString SvgExport::createID(const KoShape * obj)
+QString SvgWriter::createID(const KoShape * obj)
 {
     QString id;
     if (! m_shapeIds.contains(obj)) {
@@ -302,12 +313,12 @@ QString SvgExport::createID(const KoShape * obj)
     return id;
 }
 
-QString SvgExport::getID(const KoShape *obj)
+QString SvgWriter::getID(const KoShape *obj)
 {
     return QString(" id=\"%1\"").arg(createID(obj));
 }
 
-QString SvgExport::getTransform(const QTransform &matrix, const QString &attributeName)
+QString SvgWriter::getTransform(const QTransform &matrix, const QString &attributeName)
 {
     if (matrix.isIdentity())
         return "";
@@ -328,12 +339,12 @@ QString SvgExport::getTransform(const QTransform &matrix, const QString &attribu
     return transform + "\"";
 }
 
-bool SvgExport::isTranslation(const QTransform &m)
+bool SvgWriter::isTranslation(const QTransform &m)
 {
     return (m.m11() == 1.0 && m.m12() == 0.0 && m.m21() == 0.0 && m.m22() == 1.0);
 }
 
-void SvgExport::getColorStops(const QGradientStops & colorStops)
+void SvgWriter::getColorStops(const QGradientStops & colorStops)
 {
     m_indent2++;
     foreach(const QGradientStop &stop, colorStops) {
@@ -345,7 +356,7 @@ void SvgExport::getColorStops(const QGradientStops & colorStops)
     m_indent2--;
 }
 
-void SvgExport::getGradient(const QGradient * gradient, const QTransform &gradientTransform)
+void SvgWriter::getGradient(const QGradient * gradient, const QTransform &gradientTransform)
 {
     if (! gradient)
         return;
@@ -428,7 +439,7 @@ void SvgExport::getGradient(const QGradient * gradient, const QTransform &gradie
 }
 
 // better than nothing
-void SvgExport::getPattern(KoPatternBackground * pattern, KoShape * shape)
+void SvgWriter::getPattern(KoPatternBackground * pattern, KoShape * shape)
 {
     QString uid = createUID();
 
@@ -517,7 +528,7 @@ void SvgExport::getPattern(KoPatternBackground * pattern, KoShape * shape)
     *m_body << "url(#" << uid << ")";
 }
 
-void SvgExport::getStyle(KoShape * shape, QTextStream * stream)
+void SvgWriter::getStyle(KoShape * shape, QTextStream * stream)
 {
     getFill(shape, stream);
     getStroke(shape, stream);
@@ -529,7 +540,7 @@ void SvgExport::getStyle(KoShape * shape, QTextStream * stream)
         *stream << " opacity=\"" << 1.0 - shape->transparency() << "\"";
 }
 
-void SvgExport::getFill(KoShape * shape, QTextStream *stream)
+void SvgWriter::getFill(KoShape * shape, QTextStream *stream)
 {
     if (! shape->background()) {
         *stream << " fill=\"none\"";
@@ -563,7 +574,7 @@ void SvgExport::getFill(KoShape * shape, QTextStream *stream)
     }
 }
 
-void SvgExport::getStroke(KoShape *shape, QTextStream *stream)
+void SvgWriter::getStroke(KoShape *shape, QTextStream *stream)
 {
     const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(shape->border());
     if (! line)
@@ -616,7 +627,7 @@ void SvgExport::getStroke(KoShape *shape, QTextStream *stream)
     }
 }
 
-void SvgExport::getEffects(KoShape *shape, QTextStream *stream)
+void SvgWriter::getEffects(KoShape *shape, QTextStream *stream)
 {
     KoFilterEffectStack * filterStack = shape->filterEffectStack();
     if (!filterStack)
@@ -643,7 +654,7 @@ void SvgExport::getEffects(KoShape *shape, QTextStream *stream)
     *stream << " filter=\"url(#" << uid << ")\"";
 }
 
-void SvgExport::getClipping(KoShape *shape, QTextStream *stream)
+void SvgWriter::getClipping(KoShape *shape, QTextStream *stream)
 {
     KoClipPath *clipPath = shape->clipPath();
     if (!clipPath)
@@ -661,23 +672,23 @@ void SvgExport::getClipping(KoShape *shape, QTextStream *stream)
     printIndentation(m_defs, m_indent2);
 
     *m_defs << "<clipPath id=\"" << uid << "\" clipPathUnits=\"userSpaceOnUse\">" << endl;
-    
+
     printIndentation(m_defs, ++m_indent2);
 
     *m_defs << "<path";
     *m_defs << " d=\"" << path->toString(path->absoluteTransformation(0)*m_userSpaceMatrix) << "\"";
     *m_defs << "/>" << endl;
-    
+
     printIndentation(m_defs, --m_indent2);
 
     *m_defs << "</clipPath>" << endl;
-    
+
     *stream << " clip-path=\"url(#" << uid << ")\"";
     if (clipPath->clipRule() != Qt::WindingFill)
         *stream << " clip-rule=\"evenodd\"";
 }
 
-void SvgExport::saveText(ArtisticTextShape * text)
+void SvgWriter::saveText(ArtisticTextShape * text)
 {
     printIndentation(m_body, m_indent++);
     *m_body << "<text" << getID(text);
@@ -746,7 +757,7 @@ void SvgExport::saveText(ArtisticTextShape * text)
     *m_body << "</text>" << endl;
 }
 
-void SvgExport::saveImage(KoShape *picture)
+void SvgWriter::saveImage(KoShape *picture)
 {
     KoImageData *imageData = qobject_cast<KoImageData*>(picture->userData());
     if (! imageData) {
@@ -769,9 +780,7 @@ void SvgExport::saveImage(KoShape *picture)
     *m_body << " width=\"" << picture->size().width() << "pt\"";
     *m_body << " height=\"" << picture->size().height() << "pt\"";
 
-    const bool saveInline = true;
-
-    if (saveInline) {
+    if (m_writeInlineImages) {
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
@@ -787,7 +796,7 @@ void SvgExport::saveImage(KoShape *picture)
             // get the mime type from the temp file content
             KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
             // get url of destination directory
-            KUrl url(m_chain->outputFile());
+            KUrl url(m_filename);
             QString dstBaseFilename = QFileInfo(url.fileName()).baseName();
             url.setDirectory(url.directory());
             // create a filename for the image file at the destination directory
@@ -813,6 +822,3 @@ void SvgExport::saveImage(KoShape *picture)
     }
     *m_body << " />" << endl;
 }
-
-#include "svgexport.moc"
-

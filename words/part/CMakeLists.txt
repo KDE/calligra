@@ -17,6 +17,7 @@ set(wordsprivate_LIB_SRCS
     KWGui.cpp
     KWView.cpp
     KWPage.cpp
+    KWPageCacheManager.cpp
     KWPageManager.cpp
     KWPageStyle.cpp
     KWPageTextInfo.cpp
