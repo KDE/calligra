@@ -32,24 +32,24 @@ static const char version[] = "0.2";
 
 int main(int argc, char **argv)
 {
-    KAboutData about("propertytest2", 0, ki18n("KoProperty Test"), version, ki18n(description),
-                     KAboutData::License_GPL, ki18n("(C) 2005 Cedric Pasteur"), KLocalizedString(), 0, "cedric.pasteur@free.fr");
-    about.addAuthor(ki18n("Cedric Pasteur"), KLocalizedString(), "cedric.pasteur@free.fr");
+    KAboutData about("propertytest2", 0, ktr("KoProperty Test"), version, ktr(description),
+                     KAboutData::License_GPL, ktr("(C) 2005 Cedric Pasteur"), KLocalizedString(), 0, "cedric.pasteur@free.fr");
+    about.addAuthor(ktr("Cedric Pasteur"), KLocalizedString(), "cedric.pasteur@free.fr");
     KCmdLineArgs::init(argc, argv, &about);
 
     KCmdLineOptions options;
     options.add("flat",
-        ki18n("Flat display: do not display groups\n"
+        ktr("Flat display: do not display groups\n"
               "(useful for testing)"));
     options.add("font-size <size>",
-        ki18n("Set font size to <size> (in points)\n"
+        ktr("Set font size to <size> (in points)\n"
               "(useful for testing whether editors keep the font settings)"));
     options.add("property <name>",
-        ki18n("Display only specified property\n"
+        ktr("Display only specified property\n"
               "(useful when we want to focus on testing a single\n"
               "property editor)"));
     options.add("ro",
-        ki18n("Set all properties as read-only:\n"
+        ktr("Set all properties as read-only:\n"
               "(useful for testing read-only mode)"));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;

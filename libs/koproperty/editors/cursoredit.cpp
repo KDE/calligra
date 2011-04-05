@@ -122,25 +122,25 @@ private:
 
     static QStringList stringsInternal() {
         QStringList strings;
-        strings << i18nc("Mouse Cursor Shape", "No cursor") //0
-        << i18nc("Mouse Cursor Shape", "Arrow") //1
-        << i18nc("Mouse Cursor Shape", "Up arrow") //2
-        << i18nc("Mouse Cursor Shape", "Cross") //3
-        << i18nc("Mouse Cursor Shape", "Waiting") //4
-        << i18nc("Mouse Cursor Shape", "Text cursor") //5
-        << i18nc("Mouse Cursor Shape", "Size vertical") //6
-        << i18nc("Mouse Cursor Shape", "Size horizontal") //7
-        << i18nc("Mouse Cursor Shape", "Size slash") //8
-        << i18nc("Mouse Cursor Shape", "Size backslash") //9
-        << i18nc("Mouse Cursor Shape", "Size all") //10
-        << i18nc("Mouse Cursor Shape", "Split vertical") //11
-        << i18nc("Mouse Cursor Shape", "Split horizontal") //12
-        << i18nc("Mouse Cursor Shape", "Pointing hand") //13
-        << i18nc("Mouse Cursor Shape", "Forbidden") //14
-        << i18nc("Mouse Cursor Shape", "What's this?") //15
-        << i18nc("Mouse Cursor Shape", "Busy") //16
-        << i18nc("Mouse Cursor Shape", "Open hand") //17
-        << i18nc("Mouse Cursor Shape", "Closed hand"); //18
+        strings << tr("No cursor", "Mouse Cursor Shape") //0
+        << tr("Arrow", "Mouse Cursor Shape") //1
+        << tr("Up arrow", "Mouse Cursor Shape") //2
+        << tr("Cross", "Mouse Cursor Shape") //3
+        << tr("Waiting", "Mouse Cursor Shape") //4
+        << tr("Text cursor", "Mouse Cursor Shape") //5
+        << tr("Size vertical", "Mouse Cursor Shape") //6
+        << tr("Size horizontal", "Mouse Cursor Shape") //7
+        << tr("Size slash", "Mouse Cursor Shape") //8
+        << tr("Size backslash", "Mouse Cursor Shape") //9
+        << tr("Size all", "Mouse Cursor Shape") //10
+        << tr("Split vertical", "Mouse Cursor Shape") //11
+        << tr("Split horizontal", "Mouse Cursor Shape") //12
+        << tr("Pointing hand", "Mouse Cursor Shape") //13
+        << tr("Forbidden", "Mouse Cursor Shape") //14
+        << tr("What's this?", "Mouse Cursor Shape") //15
+        << tr("Busy", "Mouse Cursor Shape") //16
+        << tr("Open hand", "Mouse Cursor Shape") //17
+        << tr("Closed hand", "Mouse Cursor Shape"); //18
         return strings;
     }
     static const char ** m_xpms[];

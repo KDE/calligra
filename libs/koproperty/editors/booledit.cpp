@@ -45,17 +45,17 @@ static QString stateName(int index, const Property* prop)
     if (index == 0) {
         stateNameString = prop->option("yesName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("Yes");
+            return tr("Yes");
     }
     else if (index == 1) {
         stateNameString = prop->option("noName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("No");
+            return tr("No");
     }
     else {
         stateNameString = prop->option("3rdStateName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("None");
+            return tr("None");
     }
     return stateNameString;
 }
@@ -215,10 +215,10 @@ void BoolEdit::setState(bool state)
 {
     if (state) {
         setIcon(KIcon("dialog-ok")); //QIcon(g_boolEdit->yesIcon));
-        setText(i18n("Yes"));
+        setText(tr("Yes"));
     } else {
         setIcon(KIcon("button_no")); //QIcon(g_boolEdit->noIcon));
-        setText(i18n("No"));
+        setText(tr("No"));
     }
 }
 */
@@ -281,7 +281,7 @@ ThreeStateBoolEdit::ThreeStateBoolEdit(
 {
 //    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
 //    nullIcon.fill(Qt::transparent);
-//    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString());
+//    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? tr("None") : thirdState.toString());
     setCurrentIndex(2);
 }
 

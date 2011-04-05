@@ -550,7 +550,7 @@ bool EditorView::viewportEvent( QEvent * event )
         const QModelIndex index = indexAt(hevent->pos());
         if (index.column() == 0 && withinRevertButtonArea( hevent->x(), index )) {
             QRect r(revertButtonArea( index ));
-            QToolTip::showText(hevent->globalPos(), i18n("Undo changes"), this, r);
+            QToolTip::showText(hevent->globalPos(), tr("Undo changes"), this, r);
         }
         else {
             QToolTip::hideText();

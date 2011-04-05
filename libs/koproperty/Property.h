@@ -155,7 +155,7 @@ enum PropertyType {
   QStringList keys, strings;
   keys << "one" << "two" << "three"; // possible values of the property
   // Strings (possibly i18n-ed) shown in the editor instead of the values
-  strings << i18n("One") << i18n("Two") << i18n("Three");
+  strings << tr("One") << tr("Two") << tr("Three");
   property = Property(name, keys, strings, "two", caption);
 
   // To create a valueFromList property (matching strings with QVariant)

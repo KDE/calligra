@@ -68,7 +68,7 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
     m_edit = new QLabel(this);
     lyr->addWidget(m_edit);
     m_edit->setContentsMargins(0, 1, 0, 0);
-    m_edit->setToolTip(i18n("Click to show image preview"));
+    m_edit->setToolTip(tr("Click to show image preview"));
     m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 //    m_edit->setMinimumHeight(5);
     m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -76,10 +76,10 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
     m_edit->setMouseTracking(true);
     m_edit->installEventFilter(this);
 
-    m_button = new KPushButton(i18nc("Three dots for 'Insert image from file' button", "..."), this);
+    m_button = new KPushButton(tr("...","Three dots for 'Insert image from file' button"), this);
     lyr->addWidget(m_button);
-    Utils::setupDotDotDotButton(m_button, i18n("Insert image from file"),
-        i18n("Inserts image from file"));
+    Utils::setupDotDotDotButton(m_button, tr("Insert image from file"),
+        tr("Inserts image from file"));
 
     m_popup = new QLabel(0, Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     m_popup->setBackgroundRole(QPalette::Base);
@@ -158,7 +158,7 @@ QString PixmapEdit::selectPixmapFileName()
         emit valueChanged(this);
       }
     #endif*/
-    const QString caption(i18n("Insert Image From File (for \"%1\" property)", m_property->caption()));
+    const QString caption(tr("Insert Image From File (for \"%1\" property)", m_property->caption()));
     /*KDE4:
     #ifdef Q_WS_WIN
       QString recentDir;

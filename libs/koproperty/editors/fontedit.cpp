@@ -61,8 +61,8 @@ public:
         m_button = new KPushButton(this);
         setFocusProxy(m_button);
         Utils::setupDotDotDotButton(m_button,
-            i18n("Click to select a font"),
-            i18n("Selects font"));
+            tr("Click to select a font"),
+            tr("Selects font"));
         connect( m_button, SIGNAL( clicked() ), SLOT( slotSelectFontClicked() ) );
         lyr->addWidget(m_button);
         setValue(qApp->font());
@@ -132,14 +132,14 @@ void FontDelegate::paint( QPainter * painter,
     painter->setFont( f );
     QRect rect( option.rect );
     rect.setLeft( rect.left() + 1 );
-    const QString txt( i18nc("Font sample for property editor item, typically \"Abc\"", "Abc") );
+    const QString txt( tr("Abc", "Font sample for property editor item, typically \"Abc\"") );
     painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
-        i18nc("Font sample for property editor item, typically \"Abc\"", "Abc") );
+        tr("Abc", "Font sample for property editor item, typically \"Abc\"") );
 
     rect.setLeft(rect.left() + 5 + painter->fontMetrics().width( txt ));
     painter->setFont(origFont);
     painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
-        i18nc("Font family and size, e.g. Arial, 2pt", "%1, %2pt", f.family(), size) );
+        tr("%1, %2pt", "Font family and size, e.g. Arial, 2pt").arg(f.family()).arg(size) );
     painter->restore();
 }
 

@@ -175,9 +175,9 @@ QVariant EditorDataModel::headerData(int section, Qt::Orientation orientation,
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         if (section == 0) {
-            return i18nc("Property name", "Name");
+            return tr("Name", "Property name");
         } else {
-            return i18nc("Property value", "Value");
+            return tr("Value", "Property value");
         }
     }
     return QVariant();

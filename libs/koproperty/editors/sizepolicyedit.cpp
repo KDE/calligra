@@ -55,13 +55,13 @@ private:
     static QStringList stringsInternal() {
         QStringList strings;
         strings
-         << i18nc("Size Policy", "Fixed")
-         << i18nc("Size Policy", "Minimum")
-         << i18nc("Size Policy", "Maximum")
-         << i18nc("Size Policy", "Preferred")
-         << i18nc("Size Policy", "Expanding")
-         << i18nc("Size Policy", "Minimum Expanding")
-         << i18nc("Size Policy", "Ignored");
+         << tr("Fixed","Size Policy")
+         << tr("Minimum","Size Policy")
+         << tr("Maximum","Size Policy")
+         << tr("Preferred","Size Policy")
+         << tr("Expanding","Size Policy")
+         << tr("Minimum Expanding","Size Policy")
+         << tr("Ignored","Size Policy");
         return strings;
     }
 };
@@ -95,13 +95,13 @@ SizePolicyComposedProperty::SizePolicyComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("hor_policy", new SizePolicyListData(),
-        QVariant(), i18n("Hor. Policy"), i18n("Horizontal Policy"), ValueFromList, property);
+        QVariant(), tr("Hor. Policy"), tr("Horizontal Policy"), ValueFromList, property);
     (void)new Property("vert_policy", new SizePolicyListData(),
-        QVariant(), i18n("Vert. Policy"), i18n("Vertical Policy"), ValueFromList, property);
+        QVariant(), tr("Vert. Policy"), tr("Vertical Policy"), ValueFromList, property);
     (void)new Property("hor_stretch", QVariant(),
-        i18n("Hor. Stretch"), i18n("Horizontal Stretch"), UInt, property);
+        tr("Hor. Stretch"), tr("Horizontal Stretch"), UInt, property);
     (void)new Property("vert_stretch", QVariant(),
-        i18n("Vert. Stretch"), i18n("Vertical Stretch"), UInt, property);
+        tr("Vert. Stretch"), tr("Vertical Stretch"), UInt, property);
 }
 
 void SizePolicyComposedProperty::setValue(Property *property,

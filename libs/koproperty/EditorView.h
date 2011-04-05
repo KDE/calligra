@@ -51,11 +51,11 @@ class Set;
     <li> 3State: boolean value used for boolean types; if true, the editor becomes a combobox 
          (instead of checkable button) and accepta the third "null" state.</li>
     <li> yesName: i18n'd QString used for boolean types (both 2- and 3-state)
-         to display the "true" value. If not present, i18n("Yes") is used.</li>
+         to display the "true" value. If not present, tr("Yes") is used.</li>
     <li> noName: i18n'd QString used for boolean types (both 2- and 3-state)
-         to display the "false" value. If not present, i18n("No") is used.</li>
+         to display the "false" value. If not present, tr("No") is used.</li>
     <li> 3rdStateName: i18n'd QString used for boolean types (both 2- and 3-state)
-         to display the 3rd state "null" value. If not present, i18n("N") is used.</li>
+         to display the 3rd state "null" value. If not present, tr("N") is used.</li>
     <li> nullName: i18n'd QString used for boolean types to display the "null" value if
          and only if the property accepts two states (i.e. when "3State" option is not true).
          If this option is not present, null values are displayed as false.</li>

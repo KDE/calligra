@@ -40,9 +40,9 @@ SizeFComposedProperty::SizeFComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("width",
-        QVariant(), i18n("Width"), i18n("Width"), Double, property);
+        QVariant(), tr("Width"), tr("Width"), Double, property);
     (void)new Property("height",
-        QVariant(), i18n("Height"), i18n("Height"), Double, property);
+        QVariant(), tr("Height"), tr("Height"), Double, property);
 }
 
 void SizeFComposedProperty::setValue(Property *property,

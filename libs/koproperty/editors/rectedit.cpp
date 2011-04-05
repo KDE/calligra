@@ -42,13 +42,13 @@ RectComposedProperty::RectComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("x",
-        QVariant(), i18n("X"), i18n("X"), Int, property);
+        QVariant(), tr("X"), tr("X"), Int, property);
     (void)new Property("y",
-        QVariant(), i18n("Y"), i18n("Y"), Int, property);
+        QVariant(), tr("Y"), tr("Y"), Int, property);
     (void)new Property("width",
-        QVariant(), i18n("Width"), i18n("Width"), UInt, property);
+        QVariant(), tr("Width"), tr("Width"), UInt, property);
     (void)new Property("height",
-        QVariant(), i18n("Height"), i18n("Height"), UInt, property);
+        QVariant(), tr("Height"), tr("Height"), UInt, property);
 }
 
 void RectComposedProperty::setValue(Property *property,

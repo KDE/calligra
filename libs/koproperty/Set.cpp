@@ -346,7 +346,7 @@ Set::Set(QObject *parent, const QString &typeName)
     setObjectName(typeName.toLower().toLatin1());
 
     d->ownProperty = true;
-    d->groupDescriptions.insert("common", i18nc("General properties", "General"));
+    d->groupDescriptions.insert("common", tr("General", "General properties"));
     d->typeName = typeName.toLower();
 }
 
@@ -364,7 +364,7 @@ Set::Set(bool propertyOwner)
         , d(new SetPrivate(this))
 {
     d->ownProperty = propertyOwner;
-    d->groupDescriptions.insert("common", i18nc("General properties", "General"));
+    d->groupDescriptions.insert("common", tr("General", "General properties"));
 }
 
 Set::~Set()
@@ -587,7 +587,8 @@ Set::changeProperty(const QByteArray &property, const QVariant &value)
 
 void Set::debug() const
 {
-    kDebug(30007) << *this;
+    //kDebug(30007) << *this;
+    qDebug() << Q_FUNC_INFO<< *this;
 }
 
 QDebug KoProperty::operator<<(QDebug dbg, const Set &set)

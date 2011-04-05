@@ -92,13 +92,13 @@ void
 StringListEdit::showEditor()
 {
     KDialog dialog(this->topLevelWidget());
-    dialog.setWindowTitle(i18n("Edit List of Items"));
+    dialog.setWindowTitle(tr("Edit List of Items"));
     dialog.setObjectName("stringlist_dialog");
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
     dialog.setDefaultButton(KDialog::Ok);
     dialog.setModal(false);
     dialog.showButtonSeparator(true);
-    KEditListBox *edit = new KEditListBox(i18n("Contents of %1", property()->caption()), &dialog, "editlist");
+    KEditListBox *edit = new KEditListBox(tr("Contents of %1", property()->caption()), &dialog, "editlist");
     dialog.setMainWidget(edit);
     edit->insertStringList(m_list);
 
