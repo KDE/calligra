@@ -31,6 +31,8 @@ public:
     ~TableDeferredShapeFactory();
 
     KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+private:
+    KoShapeFactoryBase *m_stubFactory;
 };
 
 #endif // CALLIGRA_TABLES_TABLE_SHAPE_DEFERRED_FACTORY
