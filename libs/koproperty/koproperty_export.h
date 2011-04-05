@@ -20,8 +20,8 @@
 #ifndef KOPROPERTY_EXPORT_H
 #define KOPROPERTY_EXPORT_H
 
-/* needed for KDE_EXPORT and KDE_IMPORT macros */
-#include <kdemacros.h>
+/* needed for OMG_EXPORT_MACRO and OMG_IMPORT_MACRO macros */
+#include <common/omg_macros.h>
 
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
@@ -29,10 +29,10 @@
 #ifndef KOPROPERTY_EXPORT
 # if defined(MAKE_KOPROPERTY_LIB)
 /* We are building this library */
-#  define KOPROPERTY_EXPORT KDE_EXPORT
+#  define KOPROPERTY_EXPORT OMG_EXPORT_MACRO
 # else
 /* We are using this library */
-#  define KOPROPERTY_EXPORT KDE_IMPORT
+#  define KOPROPERTY_EXPORT OMG_IMPORT_MACRO
 # endif
 #endif
 
