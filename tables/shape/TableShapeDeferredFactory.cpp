@@ -47,7 +47,6 @@ K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))
 TableDeferredShapeFactory::TableDeferredShapeFactory(QObject *parent, const QVariantList&)
         : KoDeferredShapeFactoryBase(parent)
 {
-    qDebug() << ">>>>>>>>>>>>>>> creating tableshape deferred plugin";
     // only create the tool when this plugin gets loaded.
     KoToolRegistry::instance()->add(new TableToolFactory());
 
