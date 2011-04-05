@@ -29,7 +29,7 @@
 #include <QDateTime>
 #include <QHBoxLayout>
 
-#include <klocale.h>
+#include <QLocale>
 #include <kglobal.h>
 
 using namespace KoProperty;

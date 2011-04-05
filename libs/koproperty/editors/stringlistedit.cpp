@@ -32,7 +32,7 @@
 #include <keditlistbox.h>
 #include <kdialog.h>
 #include <KStandardGuiItem>
-#include <klocale.h>
+#include <QLocale>
 #include <QDebug>
 
 #include "Property.h"

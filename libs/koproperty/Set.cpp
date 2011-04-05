@@ -27,7 +27,7 @@
 #include <QByteArray>
 
 #include <QDebug>
-#include <klocale.h>
+#include <QLocale>
 
 typedef QMap<QByteArray, QList<QByteArray> > ByteArrayListMap;
 

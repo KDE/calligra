@@ -26,7 +26,7 @@
 #include <QHBoxLayout>
 
 #include <kcharselect.h>
-#include <klocale.h>
+#include <QLocale>
 #include <kdialog.h>
 
 #include "symbolcombo.h"
