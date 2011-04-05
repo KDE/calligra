@@ -130,7 +130,7 @@ private:
     PreviewWindow *m_previewWindow;
 
     /*!
-     * falg to check whether preview dialog is open
+     * flag to check whether preview dialog is open
      */
     bool m_isPreviewDialogActive;
 

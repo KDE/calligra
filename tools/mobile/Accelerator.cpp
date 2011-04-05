@@ -195,7 +195,7 @@ void AcceleratorScrollSlide::beginSliding()
                         qDebug() << replyForVibratorController.errorMessage();
                     }
                 }
-                qDebug()<<"signal next is emited ";
+                qDebug()<<"signal next is emitted ";
                 emit next();
 
             }
@@ -208,7 +208,7 @@ void AcceleratorScrollSlide::beginSliding()
                         qDebug() << replyForVibratorController.errorMessage();
                     }
                 }
-                qDebug()<<"signal previous is emited ";
+                qDebug()<<"signal previous is emitted ";
                 emit previous();
 
             }
