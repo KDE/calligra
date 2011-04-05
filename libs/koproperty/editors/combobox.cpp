@@ -47,8 +47,9 @@ ComboBox::Options::~Options()
     delete iconProvider;
 }
 
+#warning (DK) KComboBox has been changed by QComboBox !
 ComboBox::ComboBox(const Property::ListData& listData, const Options& options, QWidget *parent)
-        : KComboBox(parent)
+        : QComboBox(parent) /** @WARNING (DK) KComboBox has been changed by QComboBox ! */
         , m_setValueEnabled(true)
         , m_options(options)
 {
@@ -239,7 +240,8 @@ void ComboBox::slotValueChanged(int)
 
 void ComboBox::paintEvent( QPaintEvent * event )
 {
-    KComboBox::paintEvent(event);
+#warning (DK) ComboBox has been changed by QComboBox !!
+    QComboBox::paintEvent(event);
     Factory::paintTopGridLine(this);
 }
 

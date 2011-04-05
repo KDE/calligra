@@ -35,7 +35,20 @@
  */
 
 #include <KLocale>
-#include <KComboBox>
+
+/** @WARNING (DK) KComboBox has been changed by QComboBox ! 
+ * Since KComboBox extends QComboBox and implements KCompletionBase it is very likely that some funcionality has been lost!. 
+ */
+
+/** @TODO (DK) Provide class that extends QComboBox and provide completion feature into widgets and use it instead of QComboBox.
+ */
+#include <QComboBox>
+
+#warning ComboBox has been changed by QComboBox !
+#ifdef __KDE4_LIBS__
+  #include <KComboBox>
+#endif
+
 #include <QDebug>
 #include <KColorScheme>
 

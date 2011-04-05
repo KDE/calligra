@@ -39,15 +39,26 @@
  * Please keep in mind that we must provide implemention of such a class by ourselves. 
  */
 
+/** @TODO (DK) Provide class that provides KIconLoader funcionality .
+ */
+
 #warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
 #ifdef __KDE4_LIBS__
   #include <KIconLoader>
 #endif
 
-/** @TODO (DK) Provide class that provides KIconLoader funcionality .
+
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KIconeFFECT has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+/** @TODO (DK) Provide class that provides KIconeEffect funcionality .
  */
 
-#include <KIconEffect>
+#warning (DK) Due to lack of direct Qt based equivalent, KIconeEffect has been TEMPORARILY removed! Provide class that implements KIconeEffect funcionality!
+#ifdef __KDE4_LIBS__
+  #include <KIconEffect>
+#endif
+
 #include <QDebug>
 
 using namespace KoProperty;
@@ -189,16 +200,22 @@ void ItemDelegate::paint(QPainter *painter,
         QBrush gradBrush(grad);
         painter->fillRect(x2 - iconSize * 2, y1, 
             iconSize * 2, y2 - y1 + 1, gradBrush);
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
+#ifdef __KDE4_LIBS__	
         QPixmap revertIcon( DesktopIcon("edit-undo", iconSize) );
 //        QPixmap alphaChannel(revertIcon.size());
 //        alphaChannel.fill(QColor(127, 127, 127));
 //        revertIcon.setAlphaChannel(alphaChannel);
+#warning (DK) Due to lack of direct Qt based equivalent, KIconeEffect has been TEMPORARILY removed! Provide class that implements KIconeEffect funcionality!
+#ifdef __KDE4_LIBS__	
         revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0, 
             alteredOption.palette.color(
                 (alteredOption.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text ), false);
+#endif	
         painter->drawPixmap( x2 - iconSize - 2, 
             y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
     }
+#endif
 
     QColor gridLineColor( dynamic_cast<EditorView*>(painter->device()) ? 
         dynamic_cast<EditorView*>(painter->device())->gridLineColor()

@@ -24,12 +24,24 @@
 
 #include "koproperty/Factory.h"
 
-#include <KComboBox>
+
+/** @WARNING (DK) KComboBox has been changed by QComboBox ! 
+ * Since KComboBox extends QComboBox and implements KCompletionBase it is very likely that some funcionality has been lost!. 
+ */
+
+/** @TODO (DK) Provide class that extends QComboBox and provide completion feature into widgets and use it instead of QComboBox.
+ */
+#include <QComboBox>
+
+#warning (DK) ComboBox has been changed by QComboBox !!
+#ifdef __KDE4_LIBS__
+  #include <KComboBox>
+#endif
 
 namespace KoProperty
 {
-
-class KOPROPERTY_EXPORT ComboBox : public KComboBox
+#warning (DK) ComboBox has been changed by QComboBox !
+class KOPROPERTY_EXPORT ComboBox : public QComboBox  /** @WARNING (DK) KComboBox has been changed by QComboBox ! */
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
