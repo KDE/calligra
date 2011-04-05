@@ -931,7 +931,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     //instructions and the content between fieldSeparator and fieldEnd
     //represents the field RESULT [optional].  In most cases the field RESULT
     //stores the complete information (instruction are applied by msword).
-    kDebug(30513) << "fld->flt:" << fld->flt << "(" << hex << fld->flt << ")";
+    kDebug(30513) << "fld->flt:" << fld->flt << "( 0x" << hex << fld->flt << ")";
 
     //nested field
     if (m_fld->m_insideField) {
@@ -979,6 +979,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kWarning(30513) << "Warning: field instructions not supported!";
         kWarning(30513) << "Warning: processing field result!";
         break;
+    case UNSUPPORTED:
+        kWarning(30513) << "Warning: Fld data missing, ignoring!";
     default:
         kWarning(30513) << "Warning: unrecognized field type" << m_fld->m_type << ", ignoring!";
         m_fld->m_type = UNSUPPORTED;
