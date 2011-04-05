@@ -26,7 +26,18 @@
 #include <KLocale>
 #include <QDebug>
 #include <KCmdLineArgs>
-#include <KIconLoader>
+
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
+#ifdef __KDE4_LIBS__
+  #include <KIconLoader>
+#endif
+
+/** @TODO (DK) Provide class that provides KIconLoader funcionality .
+ */
 
 #include <QDate>
 #include <QDateTime>

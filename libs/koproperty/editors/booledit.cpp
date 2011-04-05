@@ -22,7 +22,18 @@
 #include "koproperty/Property.h"
 #include "koproperty/EditorDataModel.h"
 
-#include <KIconLoader>
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
+#ifdef __KDE4_LIBS__
+  #include <KIconLoader>
+#endif
+
+/** @TODO (DK) Provide class that provides KIconLoader funcionality .
+ */
+
 #include <KLocale>
 #include <KComboBox>
 #include <QDebug>
@@ -78,6 +89,9 @@ static int valueToIndex(const QVariant& value)
 
 //-------------------------
 
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality! 
+#ifdef __KDE4_LIBS__
+  
 class BoolEditGlobal
 {
 public:
@@ -92,6 +106,9 @@ public:
     QPixmap noIcon;
     QPixmap noneIcon;
 };
+
+#endif
+
 
 K_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
 
@@ -159,13 +176,19 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
 {
 //    p->eraseRect(r);
     QRect r2(r);
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
+#ifdef __KDE4_LIBS__
     r2.setLeft(r2.left() + KIconLoader::SizeSmall + 6);
 //    r2.setTop(r2.top() + 1);
+#endif    
 
     if (!threeState && value.isNull()) {
         // 2 states but null value
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, text);
     } else {
+      
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
+#ifdef __KDE4_LIBS__
         QPixmap icon;
 //        QString text;
 
@@ -188,7 +211,8 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
             r.left() + 3,
             r2.top() + (r2.height() - KIconLoader::SizeSmall) / 2,
             icon);
-        p->drawText(
+#endif
+	p->drawText(
             r2,
             Qt::AlignVCenter | Qt::AlignLeft,
             text);

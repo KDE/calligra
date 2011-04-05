@@ -46,7 +46,18 @@
 #include "urledit.h"
 */
 #include <QDebug>
-#include <KIconLoader>
+
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
+#ifdef __KDE4_LIBS__
+  #include <KIconLoader>
+#endif
+
+/** @TODO (DK) Provide class that provides KIconLoader funcionality .
+ */
 
 namespace KoProperty
 {
@@ -131,7 +142,10 @@ using namespace KoProperty;
 Factory::Factory()
     : d( new Private )
 {
-    KIconLoader::global()->addAppDir(KOPROPERTY_APP_DIR);
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality! 
+#ifdef __KDE4_LIBS__
+  KIconLoader::global()->addAppDir(KOPROPERTY_APP_DIR);
+#endif
 }
 
 Factory::~Factory()
