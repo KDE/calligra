@@ -34,8 +34,22 @@
 #include <QMouseEvent>
 
 #include <QDebug>
-#include <kiconloader.h>
-#include <kstyle.h>
+
+/** @WARNING (DK) KStyle has been changed by QCommonStyle ! 
+ * Since KStyle extends QCommonStyle it is very likely that some funcionality has been lost!. 
+ */
+
+/** @TODO (DK) Provide class that extends QCommonStyle and provide missing functionality.
+ */
+#include <QComboBox>
+
+#warning (DK)  KStyle has been changed by QCommonStyle !!
+#ifdef __KDE4_LIBS__
+  #include <kstyle.h>
+#endif
+
+#include <QCommonStyle>
+#include <QPointer>
 
 #define BRANCHBOX_SIZE 9
 
