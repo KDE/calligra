@@ -28,23 +28,39 @@
 #include <slp/KGlobal>
 
 /** @WARNING (DK) KColorCombo has been changed by QComboBox ! 
- * Since KColorCombo extends QComboBox it is very likely that some funcionality has been lost!. 
+ * Since KColorCombo extends QComboBox it is very likely that some funcionality has been lost ( setColors() ... )!. 
  */
 
-/** @TODO (DK) Provide class that extends QComboBox and provide completion feature into widgets and use it instead of QComboBox.
+/** @TODO (DK) Provide QComboBox based class that implements Combobox for colors.
  */
-#include <QComboBox>
 
 #warning (DK) KColorCombo has been changed by QComboBox !!
 #ifdef __KDE4_LIBS__
   #include <KColorCombo>
 #endif
 
-#include <KColorCollection>
+#include <QComboBox>
+
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KColorCollection has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+/** @TODO (DK) Provide class that provides KColorCollection funcionality .
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KColorCollection has been TEMPORARILY removed! Provide class that implements KColorCollection funcionality!
+#ifdef __KDE4_LIBS__
+  #include <KColorCollection>
+#endif
 
 using namespace KoProperty;
 
+#warning (DK) Due to lack of direct Qt based equivalent, KColorCollection has been TEMPORARILY removed! Provide class that implements KColorCollection funcionality!
+#ifdef __KDE4_LIBS__
+
 K_GLOBAL_STATIC_WITH_ARGS(KColorCollection, g_oxygenColors, ("Oxygen.colors"))
+
+#endif
 
 #warning (DK) KColorCombo has been changed by QComboBox !!
 ColorCombo::ColorCombo(QWidget *parent)
@@ -52,12 +68,22 @@ ColorCombo::ColorCombo(QWidget *parent)
 {
     connect(this, SIGNAL(activated(QColor)), this, SLOT(slotValueChanged(QColor)));
 
+#warning (DK) Due to lack of direct Qt based equivalent, KColorCollection has been TEMPORARILY removed! Provide class that implements KColorCollection funcionality!
+#ifdef __KDE4_LIBS__
+    
     QList< QColor > colors;
     const int oxygenColorsCount = g_oxygenColors->count();
     for (int i = 0; i < oxygenColorsCount; i++) {
         colors += g_oxygenColors->color(i);
     }
+#endif
+
+/** @TODO (DK) Provide QComboBox based class that implements Combobox for colors.
+ */
+#warning (DK) KColorCombo has been changed by QComboBox !!! KColorCombo::setColors() method no mor available !!!
+#ifdef __KDE4_LIBS__
     setColors(colors);
+#endif    
 }
 
 ColorCombo::~ColorCombo()
@@ -66,12 +92,25 @@ ColorCombo::~ColorCombo()
 
 QVariant ColorCombo::value() const
 {
+/** @TODO (DK) Provide QComboBox based class that implements Combobox for colors.
+ */
+#warning (DK) KColorCombo has been changed by QComboBox !!! KColorCombo::setColors() method no mor available !!!
+#ifdef __KDE4_LIBS__  
     return color();
+#else
+    return Qt::red;
+#endif
 }
 
 void ColorCombo::setValue(const QVariant &value)
 {
+  
+/** @TODO (DK) Provide QComboBox based class that implements Combobox for colors.
+ */ 
+#warning (DK) KColorCombo has been changed by QComboBox !!! KColorCombo::setColor() method no mor available !!!
+#ifdef __KDE4_LIBS__  
     setColor(value.value<QColor>());
+#endif
 }
 
 void ColorCombo::slotValueChanged(const QColor&)
