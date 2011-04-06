@@ -24,6 +24,7 @@
 
 #include <QAbstractItemModel>
 #include <QList>
+#include <QListView>
 #include <QString>
 #include <QIcon>
 
@@ -62,11 +63,14 @@ class CollectionItemModel : public QAbstractListModel
         void setShapeTemplateList(const QList<KoCollectionItem>& newlist);
         QList<KoCollectionItem> shapeTemplateList () { return m_shapeTemplateList; }
 
+        void setViewMode(QListView::ViewMode vm);
+        QListView::ViewMode viewMode();
         KoProperties* properties(const QModelIndex& index) const;
 
     private:
         QList<KoCollectionItem> m_shapeTemplateList;
         QString m_family;
+        QListView::ViewMode m_viewMode;
 };
 
 #endif //FLOWSHAPETEMPLATEMODEL_H
