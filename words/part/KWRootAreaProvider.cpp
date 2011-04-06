@@ -24,6 +24,8 @@
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 
+#include <kdebug.h>
+
 KWRootAreaProvider::KWRootAreaProvider(KoShape *shape, KoTextShapeData *data)
     : KoTextLayoutRootAreaProvider()
     , m_shape(shape)
@@ -34,6 +36,7 @@ KWRootAreaProvider::KWRootAreaProvider(KoShape *shape, KoTextShapeData *data)
 
 KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
 {
+    kDebug();
     if(m_area)
         return 0;
 
@@ -46,10 +49,14 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 
 void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
+    kDebug();
 }
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
 {
+    kDebug();
+    m_area->setBottom(m_area->top() + m_area->associatedShape()->size().height());
+    m_area->associatedShape()->update();
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
