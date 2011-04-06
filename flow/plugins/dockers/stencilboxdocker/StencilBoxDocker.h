@@ -60,30 +60,16 @@ class StencilBoxDocker : public QDockWidget
         explicit StencilBoxDocker(QWidget* parent = 0);
 
     protected:
-        /**
-         * Load the default koffice shapes
-         */
+        /// Load the default koffice shapes
         void loadDefaultShapes();
 
-        /**
-         * Load odf shape collections
-         */
+        /// Load odf shape collections
         void loadShapeCollections();
 
         bool addCollection(const QString& path);
-
-        //void removeCollection(const QString& family);
-
-        /// Generate an icon from @p group
-        //QIcon generateShapeIcon(KoShape* shape);
+        void removeCollection(const QString& family);
 
     protected slots:
-        /// Called when an error occurred while loading a collection
-        //void onLoadingFailed(const QString& reason);
-
-        /// Called when loading of a collection is finished
-        //void onLoadingFinished();
-
         /// Called when the docker changes area
         void locationChanged(Qt::DockWidgetArea area);
 	
@@ -102,7 +88,6 @@ class StencilBoxDocker : public QDockWidget
         void reapplyFilter();
         void getHotNewStuff();
         void installStencil();
-        //void createNewCollection();
         void regenerateProxyMap();
 };
 

@@ -7,6 +7,9 @@ set(flowprivate_LIB_SRCS
   FlowFactory.cpp
   FlowDocument.cpp
   FlowView.cpp
+  #FlowCanvas.cpp
+  #FlowPage.cpp
+  #FlowLayout.cpp
 )
 
 kde4_add_library(flowprivate SHARED ${flowprivate_LIB_SRCS})
