@@ -1017,7 +1017,7 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
-
+#if 0
     KoBookmark *bookmark = manager->retrieveBookmark(name);
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
@@ -1035,10 +1035,16 @@ void KWView::selectBookmark()
         rm->clearResource(KoText::SelectedTextAnchor);
     } else
         rm->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
+#else
+#ifdef __GNUC__
+    #warning FIXME: port to textlayout-rework
+#endif
+#endif
 }
 
 void KWView::deleteBookmark(const QString &name)
 {
+#if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
     KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
     if (!bookmark || !bookmark->shape())
@@ -1054,6 +1060,11 @@ void KWView::deleteBookmark(const QString &name)
     }
     cursor.setPosition(bookmark->position());
     manager->removeInlineObject(cursor);
+#else
+#ifdef __GNUC__
+    #warning FIXME: port to textlayout-rework
+#endif
+#endif
 }
 
 void KWView::editDeleteFrame()

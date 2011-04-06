@@ -688,7 +688,13 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
                             note->setLabel(footnote.attribute("value"));
                             note->setAutoNumbering(footnote.attribute("numberingtype", "auto") == "auto");
+#if 0
                             note->setText(i18n("Unable to locate footnote text"));
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
@@ -708,7 +714,13 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             KoInlineNote *note = new KoInlineNote(type);
                             note->setLabel(footEndNote.attribute("value"));
                             note->setAutoNumbering(footEndNote.attribute("numberingtype", "auto") == "auto");
+#if 0
                             note->setText(i18n("Unable to locate note-text"));
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
@@ -1206,7 +1218,13 @@ void KWDLoader::insertNotes()
         }
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs && tfs->document()) {
+#if 0
             note.note->setText(tfs->document()->toPlainText());
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
 //kDebug(32001) << "setting the text to" << note.note->text();
         }
         m_document->removeFrameSet(fs);

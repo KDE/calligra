@@ -21,18 +21,19 @@
  */
 
 #include "KWTextFrameSet.h"
-#include "KWTextDocumentLayout.h"
 #include "KWFrame.h"
 #include "KWTextFrame.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include "KWDocument.h"
+#include "KWRootAreaProvider.h"
 
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
+#include <KoTextDocumentLayout.h>
 
 #include <changetracker/KoChangeTracker.h>
 
@@ -41,54 +42,17 @@
 #include <QTextDocument>
 #include <QTextBlock>
 
-KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
-        : KWFrameSet(KWord::TextFrameSet),
-        m_document(new QTextDocument()),
-        m_layoutTriggered(false),
-        m_allowLayoutRequests(true),
-        m_frameOrderDirty(true),
-        m_textFrameSetType(KWord::OtherTextFrameSet),
-        m_pageManager(0),
-        m_kwordDocument(doc),
-        m_requestedUpdateTextLayout(false)
-{
-    m_document->setDocumentLayout(new KWTextDocumentLayout(this));
-    if (m_kwordDocument) {
-        KoTextDocument doc(m_document);
-        doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-        KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-        Q_ASSERT(styleManager);
-        doc.setStyleManager(styleManager);
-        KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
-        Q_ASSERT(changeTracker);
-        doc.setChangeTracker(changeTracker);
-        doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
-    }
-    m_document->setUseDesignMetrics(true);
-}
-
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType type)
-        : KWFrameSet(KWord::TextFrameSet),
-        m_document(new QTextDocument()),
-        m_layoutTriggered(false),
-        m_allowLayoutRequests(true),
-        m_frameOrderDirty(true),
-        m_textFrameSetType(type),
-        m_pageManager(0),
-        m_kwordDocument(doc),
-        m_requestedUpdateTextLayout(false)
+    : KWFrameSet(KWord::TextFrameSet)
+    , m_document(0)
+    , m_layoutTriggered(false)
+    , m_allowLayoutRequests(true)
+    , m_frameOrderDirty(true)
+    , m_textFrameSetType(type)
+    , m_pageManager(0)
+    , m_kwordDocument(doc)
+    , m_requestedUpdateTextLayout(false)
 {
-    m_document->setDocumentLayout(new KWTextDocumentLayout(this));
-    if (m_kwordDocument) {
-        KoTextDocument doc(m_document);
-        doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-        KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-        doc.setStyleManager(styleManager);
-        KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
-        doc.setChangeTracker(changeTracker);
-        doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
-    }
-    m_document->setUseDesignMetrics(true);
     setName(KWord::frameSetTypeName(m_textFrameSetType));
 }
 
@@ -116,9 +80,54 @@ KWTextFrameSet::~KWTextFrameSet()
 
 void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
+    kDebug() << "frame=" << frame;
+
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
+    Q_ASSERT(data);
+
+    const bool isInitialFrame = !m_document;
+    if(isInitialFrame) {
+        m_document = data->document();
+    }
+
+    // All TextShape's within this TextFrameSet are using the same QTextDocument. We are
+    // also taking over the ownership of the QTextDocument.
+    data->setDocument(m_document, false);
+
+    if(isInitialFrame) {
+        KWRootAreaProvider *provider = new KWRootAreaProvider(frame->shape(), data);
+        //TODO KoTextDocument(m_document).setInlineTextObjectManager(inlineTextObjectManager);
+        KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, provider);
+        m_document->setDocumentLayout(lay);
+        
+        if (m_kwordDocument) {
+            KoTextDocument doc(m_document);
+            doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
+            KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+            doc.setStyleManager(styleManager);
+            KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+            doc.setChangeTracker(changeTracker);
+            doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
+        }
+        m_document->setUseDesignMetrics(true);
+    }
+
+    Q_ASSERT(m_document == data->document());
+    Q_ASSERT(dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout()));
+    Q_ASSERT(dynamic_cast<KWRootAreaProvider*>(dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout())->provider()));
+
+    /*
+    QTextCursor cursor(m_document);
+    cursor.insertText("Hello new Text layout engine f f fd fs sdf dsf sdf fd fds gfd gfd sgfds gfds sfd fd fds sfd sdf");
+    cursor.insertTable(3,3);
+    cursor.insertText("Cell 1 Line one");
+    cursor.insertTable(3,3);
+    */
+
     if (m_textFrameSetType != KWord::OtherTextFrameSet)
         frame->shape()->setGeometryProtected(true);
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
+
+#if 0
     if (data == 0) {// probably a copy frame.
         Q_ASSERT(frameCount() > 1);
         return;
@@ -151,6 +160,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         }
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
+#endif
 }
 
 void KWTextFrameSet::updateTextLayout()
@@ -159,13 +169,19 @@ void KWTextFrameSet::updateTextLayout()
         m_requestedUpdateTextLayout = true;
         return;
     }
+#if 0
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
     if (lay) {
         // Don't schedule the layout what would wait with the layout till the eventloop kicks
         // in what sucks performance-wise. So, start the layouting right away.
         lay->scheduleLayout();
-//         lay->relayout();
+        //lay->relayout();
     }
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
 }
 
 void KWTextFrameSet::requestMoreFrames(qreal textHeight)
@@ -281,9 +297,15 @@ void KWTextFrameSet::setAllowLayout(bool allow)
     m_allowLayoutRequests = allow;
     if (m_allowLayoutRequests && m_requestedUpdateTextLayout) {
         m_requestedUpdateTextLayout = false;
+#if 0
         KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
         if (lay)
             lay->scheduleLayout();
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
     }
 }
 
@@ -317,8 +339,14 @@ void KWTextFrameSet::sortFrames()
         qSort(m_frames.begin(), m_frames.end(), sortTextFrames);
         if (m_frames[0] != first) { // that means it needs to be re-layouted
             KoTextShapeData *tsd = qobject_cast<KoTextShapeData*>(m_frames[0]->shape()->userData());
+#if 0
             if (tsd)
                 tsd->foul();
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
         }
     }
     m_frameOrderDirty = false;
@@ -411,8 +439,8 @@ void KWTextFrameSet::printDebug(KWFrame *frame)
     KWFrameSet::printDebug(frame);
     KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
     if (textShapeData == 0) return;
-    kDebug(32001) << " Text position:" << textShapeData->position() << ", end:" << textShapeData->endPosition();
-    kDebug(32001) << " Offset in text-document;" << textShapeData->documentOffset();
+    //kDebug(32001) << " Text position:" << textShapeData->position() << ", end:" << textShapeData->endPosition();
+    //kDebug(32001) << " Offset in text-document;" << textShapeData->documentOffset();
 }
 
 void KWTextFrameSet::printDebug()

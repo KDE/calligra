@@ -51,6 +51,8 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
 
 void KWFrameLayout::createNewFramesForPage(int pageNumber)
 {
+    kDebug() << "pageNumber=" << pageNumber;
+
     m_setup = false; // force reindexing of types
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
@@ -238,7 +240,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
 
 void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 {
-//kDebug() <<"KWFrameLayout::layoutFramesOnPage";
+    kDebug() <<"pageNumber=" << pageNumber;
     /* assumes all frames are there and will do layouting of all the frames
         - headers/footers/main FS are positioned
         - normal frames are clipped to page */
@@ -586,6 +588,7 @@ void KWFrameLayout::setup()
 
 KoShape *KWFrameLayout::createTextShape(const KWPage &page)
 {
+    kDebug();
     Q_ASSERT(page.isValid());
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
@@ -689,6 +692,7 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
 
 void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 {
+    kDebug();
     if (fs->frameCount() == 0)
         return;
     if (pageNumber == m_pageManager->begin().pageNumber())
@@ -736,6 +740,7 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 
 KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 {
+    kDebug();
     Q_ASSERT(page.isValid());
     if (fs->frameCount() == 0) { // special case for the headers. Just return a new textframe.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -743,7 +748,6 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
         KoShape *shape = createTextShape(page);
         shape->setSize(QSize(20, 10));
         KWTextFrame *frame = new KWTextFrame(shape, tfs);
-
         return frame;
     }
 
@@ -802,4 +806,3 @@ void KWFrameLayout::mainframeRemoved(KWFrame *frame)
         delete frame->shape();
     }
 }
-

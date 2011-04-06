@@ -35,14 +35,12 @@ class KWORD_EXPORT KWTextFrameSet : public KWFrameSet
 {
     Q_OBJECT
 public:
-    /// normal constructor, for user text
-    explicit KWTextFrameSet(const KWDocument *document);
     /**
      * Constructor with a type of text specified
      * @param document the document this frameset belongs to.
      * @param type the type of frameSet; this can indicate headers, footers etc.
      */
-    KWTextFrameSet(const KWDocument *document, KWord::TextFrameSetType type);
+    explicit KWTextFrameSet(const KWDocument *document, KWord::TextFrameSetType type = KWord::OtherTextFrameSet);
     ~KWTextFrameSet();
 
     /// return the type of frameSet this is
@@ -110,7 +108,6 @@ signals:
     void layoutDone();
 
 protected:
-    friend class KWTextDocumentLayout;
     friend class TestTextFrameSorting;
     friend class TestTextFrameManagement;
 

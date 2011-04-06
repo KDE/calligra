@@ -1,8 +1,9 @@
 project(wordspart)
 
-add_subdirectory( tests )
+#TODO port to textlayout-rework
+#add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES}  ${KDE4_INCLUDE_DIR}/threadweaver/ )
+include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/ )
 
 ########### KWordPrivate library ###############
 
@@ -29,8 +30,8 @@ set(wordsprivate_LIB_SRCS
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
     KWDLoader.cpp
+    KWRootAreaProvider.cpp
 
-    frames/KWTextDocumentLayout.cpp
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
@@ -99,7 +100,7 @@ endif( Soprano_FOUND )
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(wordsprivate komain)
+target_link_libraries(wordsprivate komain textlayout)
 if( Soprano_FOUND )
     target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )

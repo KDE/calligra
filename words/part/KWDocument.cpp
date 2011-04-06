@@ -189,10 +189,11 @@ KWDocument::~KWDocument()
 
 void KWDocument::addShape(KoShape *shape)
 {
+    kDebug();
+
     // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
     // will call addFrameSet.  Which will itself call addFrame()
     // any call coming in here is due to the undo/redo framework, pasting or for nested frames
-
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     if (frame == 0) {
         KWFrameSet *fs;
@@ -218,6 +219,7 @@ void KWDocument::addShape(KoShape *shape)
 
 void KWDocument::removeShape(KoShape *shape)
 {
+    kDebug();
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
@@ -240,7 +242,6 @@ void KWDocument::paintContent(QPainter&, const QRect &rect)
 #ifdef __GNUC__
     #warning TODO: implement KWDocument::paintContent
 #endif
-
 }
 
 KoView *KWDocument::createViewInstance(QWidget *parent)
@@ -294,6 +295,7 @@ QGraphicsItem *KWDocument::createCanvasItem()
 
 KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
 {
+    kDebug() << "afterPageNum=" << afterPageNum << "masterPageName=" << masterPageName;
     KWPageInsertCommand *cmd = new KWPageInsertCommand(this, afterPageNum, masterPageName);
     addCommand(cmd);
     Q_ASSERT(cmd->page().isValid());
@@ -324,6 +326,7 @@ void KWDocument::removePage(int pageNumber)
 
 void KWDocument::firePageSetupChanged()
 {
+    kDebug();
     if (inlineTextObjectManager())
         inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
     emit pageSetupChanged();
@@ -343,6 +346,8 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
 
 void KWDocument::relayout()
 {
+    kDebug() << m_frameSets.count();
+
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
@@ -404,6 +409,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
 void KWDocument::addFrame(KWFrame *frame)
 {
+    kDebug();
     foreach (KoView *view, views()) {
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->shapeManager()->addShape(frame->shape());
@@ -620,6 +626,8 @@ bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 
 void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
+    kDebug();
+
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
         updater = progressUpdater()->startSubtask(1, "KWDocument::endOfLoading");
@@ -739,8 +747,8 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>(m_lstFrameSet.getFirst());
     if (frameset)
         frameset->renumberFootNotes(false /*no repaint*/);
-
 #endif
+
     // remove header/footer frames that are not visible.
     m_frameLayout.cleanupHeadersFooters();
 
@@ -792,7 +800,9 @@ QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) 
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
 {
-    // kDebug(32002) << fs;
+    kDebug(32002) << fs;
+Q_ASSERT(false);
+
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
@@ -805,10 +815,16 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
         if (shape) {
             KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
             if (data) {
+#if 0
                 QTextBlock block = fs->document()->findBlock(data->endPosition() + 1);
                 if (block.isValid()) {
                     masterPageName = block.blockFormat().stringProperty(KoParagraphStyle::MasterPageName);
                 }
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
             }
         }
     }
@@ -1004,6 +1020,7 @@ void PageProcessingQueue::addPage(KWPage page)
 
 void PageProcessingQueue::process()
 {
+    kDebug();
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
     QList<int> pages = m_pages;
