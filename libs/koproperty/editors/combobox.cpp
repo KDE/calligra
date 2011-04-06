@@ -24,14 +24,7 @@
 #include "koproperty/EditorView.h"
 #include "koproperty/Property.h"
 
-/** @WARNING (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed.
- * Please keep in mind that we must provide implemention of such a class by ourselves. 
- */
 
-/** @TODO (DK) Provide class that provides KColorScheme funcionality .
- */
-
-#warning (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed! Provide class that implements KColorScheme funcionality!
 #ifdef __KDE4_LIBS__
   #include <KColorScheme>
 #endif
@@ -111,7 +104,6 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
     QString styleSheet;
     KColorScheme cs(QPalette::Active);
     QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-#endif
     
     styleSheet = QString("QComboBox { \
     border: 1px solid %1; \
@@ -119,6 +111,18 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
     padding: 0px 18px; }").arg(focus.name());
    
     setStyleSheet(styleSheet);
+#else
+    QString styleSheet;
+    QColor focus = Qt::black;
+    
+    styleSheet = QString("QComboBox { \
+    border: 1px solid %1; \
+    border-radius: 0px; \
+    padding: 0px 18px; }").arg(focus.name());
+   
+    setStyleSheet(styleSheet);
+#endif
+  
 }
 
 ComboBox::~ComboBox()
@@ -226,9 +230,21 @@ void ComboBox::fillValues()
         }
         index++;
     }
+
+/** @WARNING (DK) KComboBox has been changed by QComboBox ! 
+ * Since KComboBox extends QComboBox and implements KCompletionBase it is very likely that some funcionality has been lost! 
+ */
+
+/** @TODO (DK) Provide class that extends QComboBox and provide completion feature into widgets and use it instead of QComboBox.
+ */
+
+#warning KComboBox has been changed by QComboBox !!! 
+#warning Since KComboBox extends QComboBox and implements KCompletionBase some funcionality has been lost!
+#ifdef __KDE4_LIBS__    
     KCompletion *comp = completionObject();
     comp->insertItems(m_listData.names);
     comp->setCompletionMode(KGlobalSettings::CompletionShell);
+#endif
 }
 
 /*

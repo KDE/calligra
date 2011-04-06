@@ -49,6 +49,8 @@
 
 #include <QLocale>
 #include <QDebug>
+#include <QPointer>
+
 #include <slp/KGlobal>
 
 /** @WARNING (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed.
@@ -133,25 +135,25 @@ private:
 
     static QStringList stringsInternal() {
         QStringList strings;
-        strings << tr("No cursor", "Mouse Cursor Shape") //0
-        << tr("Arrow", "Mouse Cursor Shape") //1
-        << tr("Up arrow", "Mouse Cursor Shape") //2
-        << tr("Cross", "Mouse Cursor Shape") //3
-        << tr("Waiting", "Mouse Cursor Shape") //4
-        << tr("Text cursor", "Mouse Cursor Shape") //5
-        << tr("Size vertical", "Mouse Cursor Shape") //6
-        << tr("Size horizontal", "Mouse Cursor Shape") //7
-        << tr("Size slash", "Mouse Cursor Shape") //8
-        << tr("Size backslash", "Mouse Cursor Shape") //9
-        << tr("Size all", "Mouse Cursor Shape") //10
-        << tr("Split vertical", "Mouse Cursor Shape") //11
-        << tr("Split horizontal", "Mouse Cursor Shape") //12
-        << tr("Pointing hand", "Mouse Cursor Shape") //13
-        << tr("Forbidden", "Mouse Cursor Shape") //14
-        << tr("What's this?", "Mouse Cursor Shape") //15
-        << tr("Busy", "Mouse Cursor Shape") //16
-        << tr("Open hand", "Mouse Cursor Shape") //17
-        << tr("Closed hand", "Mouse Cursor Shape"); //18
+        strings << QObject::tr("No cursor", "Mouse Cursor Shape") //0
+        << QObject::tr("Arrow", "Mouse Cursor Shape") //1
+        << QObject::tr("Up arrow", "Mouse Cursor Shape") //2
+        << QObject::tr("Cross", "Mouse Cursor Shape") //3
+        << QObject::tr("Waiting", "Mouse Cursor Shape") //4
+        << QObject::tr("Text cursor", "Mouse Cursor Shape") //5
+        << QObject::tr("Size vertical", "Mouse Cursor Shape") //6
+        << QObject::tr("Size horizontal", "Mouse Cursor Shape") //7
+        << QObject::tr("Size slash", "Mouse Cursor Shape") //8
+        << QObject::tr("Size backslash", "Mouse Cursor Shape") //9
+        << QObject::tr("Size all", "Mouse Cursor Shape") //10
+        << QObject::tr("Split vertical", "Mouse Cursor Shape") //11
+        << QObject::tr("Split horizontal", "Mouse Cursor Shape") //12
+        << QObject::tr("Pointing hand", "Mouse Cursor Shape") //13
+        << QObject::tr("Forbidden", "Mouse Cursor Shape") //14
+        << QObject::tr("What's this?", "Mouse Cursor Shape") //15
+        << QObject::tr("Busy", "Mouse Cursor Shape") //16
+        << QObject::tr("Open hand", "Mouse Cursor Shape") //17
+        << QObject::tr("Closed hand", "Mouse Cursor Shape"); //18
         return strings;
     }
     static const char ** m_xpms[];
