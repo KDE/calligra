@@ -76,7 +76,6 @@ public:
     int position, endPosition;
     KoText::Direction direction;
     KoTextPage *textpage;
-    QVector<QAbstractTextDocumentLayout::Selection> selections;
 };
 
 
