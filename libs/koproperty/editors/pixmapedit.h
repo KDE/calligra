@@ -28,7 +28,7 @@
 #include <QtCore/QVariant>
 
 class QLabel;
-class KPushButton;
+class QPushButton;
 
 namespace KoProperty
 {
@@ -70,7 +70,7 @@ protected slots:
 protected:
     QLabel *m_edit;
     QLabel *m_popup;
-    KPushButton *m_button;
+    QPushButton *m_button;
     Property *m_property;
 //todo    QVariant m_recentlyPainted;
     QPixmap m_pixmap, /* todo? m_scaledPixmap,*/ m_previewPixmap;

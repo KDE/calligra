@@ -91,11 +91,11 @@ SymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, cons
 void
 SymbolCombo::selectChar()
 {
-    KDialog dialog(this->topLevelWidget());
+    QDialog dialog(this->topLevelWidget());
     dialog.setWindowTitle(tr("Select Char"));
     dialog.setObjectName("charselect_dialog");
-    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
-    dialog.setDefaultButton(KDialog::Ok);
+    dialog.setButtons(QDialog::Ok | QDialog::Cancel);
+    dialog.setDefaultButton(QDialog::Ok);
     dialog.setModal(false);
     dialog.showButtonSeparator(true);
 

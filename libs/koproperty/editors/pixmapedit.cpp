@@ -44,7 +44,7 @@
 
 #include <QDebug>
 #include <KImageIO>
-#include <KPushButton>
+#include <QPushButton>
 #include <KFileDialog>
 #include <QLocale>
 
@@ -76,7 +76,7 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
     m_edit->setMouseTracking(true);
     m_edit->installEventFilter(this);
 
-    m_button = new KPushButton(tr("...","Three dots for 'Insert image from file' button"), this);
+    m_button = new QPushButton(tr("...","Three dots for 'Insert image from file' button"), this);
     lyr->addWidget(m_button);
     Utils::setupDotDotDotButton(m_button, tr("Insert image from file"),
         tr("Inserts image from file"));

@@ -91,11 +91,11 @@ StringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, c
 void
 StringListEdit::showEditor()
 {
-    KDialog dialog(this->topLevelWidget());
+    QDialog dialog(this->topLevelWidget());
     dialog.setWindowTitle(tr("Edit List of Items"));
     dialog.setObjectName("stringlist_dialog");
-    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
-    dialog.setDefaultButton(KDialog::Ok);
+    dialog.setButtons(QDialog::Ok | QDialog::Cancel);
+    dialog.setDefaultButton(QDialog::Ok);
     dialog.setModal(false);
     dialog.showButtonSeparator(true);
     KEditListBox *edit = new KEditListBox(tr("Contents of %1", property()->caption()), &dialog, "editlist");

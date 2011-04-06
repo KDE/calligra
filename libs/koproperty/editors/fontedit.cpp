@@ -22,12 +22,25 @@
 #include "fontedit.h"
 #include "utils.h"
 
+/** @WARNING (DK) KFontChooser has been removed ! It seems that it's no more needed ! 
+ */
+
+#warning KFontChooser has been removed ! It seems that it's no more needed ! 
+#ifdef __KDE4_LIBS__
 #include <KFontChooser>
-#include <KFontDialog>
+#endif
+
+#warning (DK) QFontDialog replaced by QFontDialog
+#include <QFontDialog>
+
 #include <QLocale>
 #include <QDebug>
-#include <KPushButton>
-#include <KDialog>
+
+#warning (DK) KPushButton replaced by QPushButton
+#include <QPushButton>
+
+#warning (DK) QDialog replaced by QDialog
+#include <QDialog>
 
 #include <QLabel>
 #include <QPushButton>
@@ -58,7 +71,7 @@ public:
         lyr->setContentsMargins(0,0,0,0);
         lyr->setSpacing( 1 );
         lyr->addStretch(1);
-        m_button = new KPushButton(this);
+        m_button = new QPushButton(this);
         setFocusProxy(m_button);
         Utils::setupDotDotDotButton(m_button,
             tr("Click to select a font"),
@@ -86,20 +99,34 @@ signals:
 protected slots:
     void slotSelectFontClicked()
     {
+#warning KFontChooser has been removed ! It seems that it's no more needed ! 
+#ifdef __KDE4_LIBS__      
         KFontChooser::DisplayFlags flags = KFontChooser::NoDisplayFlags;
         if (KDialog::Accepted == KFontDialog::getFont( m_font, flags, this )) {
             setValue(m_font);
             emit commitData(this);
         }
+#else
+	bool ok;
+        m_font = QFontDialog::getFont( &ok, m_font,this );
+	if(ok) {
+	    // the user clicked OK and font is set to the font the user selected
+            setValue(m_font);
+            emit commitData(this);
+        } else {
+	    // the user canceled the dialog; font is set to the initial
+	    // value, in this case Helvetica [Cronyx],
+	}
+#endif
     }
-
+    
 protected:
     virtual bool event( QEvent * event )
     {
         return QWidget::event(event);
     }
 
-    KPushButton *m_button;
+    QPushButton *m_button;
     QFont m_font;
     bool m_paletteChangedEnabled;
 };
@@ -132,14 +159,14 @@ void FontDelegate::paint( QPainter * painter,
     painter->setFont( f );
     QRect rect( option.rect );
     rect.setLeft( rect.left() + 1 );
-    const QString txt( tr("Abc", "Font sample for property editor item, typically \"Abc\"") );
+    const QString txt( QObject::tr("Abc", "Font sample for property editor item, typically \"Abc\"") );
     painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
-        tr("Abc", "Font sample for property editor item, typically \"Abc\"") );
+        QObject::tr("Abc", "Font sample for property editor item, typically \"Abc\"") );
 
     rect.setLeft(rect.left() + 5 + painter->fontMetrics().width( txt ));
     painter->setFont(origFont);
     painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter,
-        tr("%1, %2pt", "Font family and size, e.g. Arial, 2pt").arg(f.family()).arg(size) );
+        QObject::tr("%1, %2pt", "Font family and size, e.g. Arial, 2pt").arg(f.family()).arg(size) );
     painter->restore();
 }
 
