@@ -24,7 +24,25 @@
 
 #include "koproperty/Factory.h"
 
-#include <KNumInput>
+/** @WARNING (DK) KIntNumInput has been replaced by QSpinBox ! It is very 
+ * likely that some funcionality has been lost! 
+ * KIntNumInput is an input widget for integer numbers, consisting of a spinbox
+ * and a slider. It combines a QSpinBox and optionally a QSlider with a 
+ * label to make an easy to use control for setting some integer parameter.
+ */
+
+/** @TODO (DK) Provide class that combines a QSpinBox and optionally a QSlider with a 
+ * label and use it instead of QSpinBox.
+ */
+
+#warning (DK) KIntNumInput has been replaced by QSpinBox !
+
+#ifdef __KDE4_LIBS__
+  #include <KNumInput>
+#endif
+
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 namespace KoProperty {
 
@@ -32,7 +50,10 @@ namespace KoProperty {
 /*! Note that due to KIntNumInput limitations, for UInt the maximum value 
     is INT_MAX, not UINT_MAX.
 */
-class KOPROPERTY_EXPORT IntSpinBox : public KIntNumInput
+#warning (DK) KIntNumInput has been replaced by QSpinBox ! Provide class that \
+combines a QSpinBox and optionally a QSlider with a label!
+
+class KOPROPERTY_EXPORT IntSpinBox : public QSpinBox 
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -89,7 +110,20 @@ private:
 
 // Double editor
 
-class KOPROPERTY_EXPORT DoubleSpinBox : public KDoubleNumInput
+/** @WARNING (DK) KDoubleNumInput has been replaced by QDoubleSpinBox ! It is very 
+ * likely that some funcionality has been lost! 
+ * KDoubleNumInput is an input widget for integer numbers, consisting of a spinbox
+ * and a slider. It combines a QSpinBox and optionally a QSlider with a 
+ * label to make an easy to use control for setting some float parameter.
+ */
+
+/** @TODO (DK) Provide class that combines a QDoubleSpinBox and optionally a QSlider with a 
+ * label and use it instead of QDoubleSpinBox.
+ */
+
+#warning (DK) KDoubleNumInput has been replaced by QDoubleSpinBox !
+
+class KOPROPERTY_EXPORT DoubleSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
     Q_PROPERTY(double value READ value WRITE setValue USER true)

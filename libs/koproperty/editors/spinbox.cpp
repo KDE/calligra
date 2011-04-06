@@ -66,8 +66,13 @@ static QString cssForSpinBox(const char *_class, const QFont& font, int itemHeig
         .arg(_class);
 }
 
+#warning (DK) KIntNumInput has been replaced by QSpinBox ! 
+
+/** @todo (DK) Provide class that combines a QSpinBox and optionally a QSlider with a label! 
+ */ 
+
 IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
-        : KIntNumInput(parent)
+        : QSpinBox(parent)
         , m_unsigned( prop->type() == UInt )
 {
 //    qDebug() << Q_FUNC_INFO << "itemHeight:" << itemHeight;
@@ -101,8 +106,13 @@ IntSpinBox::~IntSpinBox()
 QVariant IntSpinBox::value() const
 {
     if (m_unsigned)
-        return uint( KIntNumInput::value() );
-    return KIntNumInput::value();
+        return uint( QSpinBox::value() );
+
+    /** @todo (DK) Provide class that combines a QSpinBox and optionally a QSlider with a label! 
+     */ 
+
+    #warning (DK) KIntNumInput has been replaced by QSpinBox ! 
+    return QSpinBox::value();
 }
 
 void IntSpinBox::setValue(const QVariant& value)
@@ -112,7 +122,11 @@ void IntSpinBox::setValue(const QVariant& value)
         qWarning() << Q_FUNC_INFO << "could not assign negative value" << v << "- assigning 0";
         v = 0;
     }
-    KIntNumInput::setValue(v);
+    /** @todo (DK) Provide class that combines a QSpinBox and optionally a QSlider with a label! 
+     */ 
+
+    #warning (DK) KIntNumInput has been replaced by QSpinBox ! 
+    QSpinBox::setValue(v);
 }
 
 void IntSpinBox::slotValueChanged(int value)
@@ -255,9 +269,14 @@ IntEdit::setReadOnlyInternal(bool readOnly)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** @TODO (DK) Provide class that combines a QDoubleSpinBox and optionally a QSlider with a 
+* label and use it instead of QDoubleSpinBox.
+*/
 
+#warning (DK) KDoubleNumInput has been replaced by QDoubleSpinBox !
+	
 DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeight)
-        : KDoubleNumInput(parent)
+        : QDoubleSpinBox(parent)
 {
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     QLineEdit* le = 0;
@@ -312,7 +331,13 @@ void DoubleSpinBox::resizeEvent( QResizeEvent * event )
 {
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     sb->setFixedHeight(height()+1);
-    KDoubleNumInput::resizeEvent(event);
+    
+    /** @TODO (DK) Provide class that combines a QDoubleSpinBox and optionally a QSlider with a 
+    * label and use it instead of QDoubleSpinBox.
+    */
+
+    #warning (DK) KDoubleNumInput has been replaced by QDoubleSpinBox !    
+    QDoubleSpinBox::resizeEvent(event);
 }
 
 void DoubleSpinBox::setValue(double v)
@@ -323,17 +348,33 @@ void DoubleSpinBox::setValue(double v)
         return;
     }
 #endif
-    KDoubleNumInput::setValue(v);
+    /** @TODO (DK) Provide class that combines a QDoubleSpinBox and optionally a QSlider with a 
+    * label and use it instead of QDoubleSpinBox.
+    */
+
+    #warning (DK) KDoubleNumInput has been replaced by QDoubleSpinBox !
+    QDoubleSpinBox::setValue(v);
 }
 
 double DoubleSpinBox::value() const
 {
 #ifdef KOPROPERTY_USE_KOLIBS
     if (!m_unit.isEmpty()) {
-        return KoUnit::unit(m_unit).fromUserValue(KDoubleNumInput::value());
+	
+	/** @TODO (DK) Provide class that combines a QDoubleSpinBox and optionally a QSlider with a 
+	* label and use it instead of QDoubleSpinBox.
+	*/
+
+	#warning (DK) KDoubleNumInput has been replaced by QDoubleSpinBox !
+        return KoUnit::unit(m_unit).fromUserValue(KDoubleSpinBox::value());
     }
 #endif
-    return KDoubleNumInput::value();
+    /** @TODO (DK) Provide class that combines a QDoubleSpinBox and optionally a QSlider with a 
+    * label and use it instead of QDoubleSpinBox.
+    */
+
+    #warning (DK) KDoubleNumInput has been replaced by QDoubleSpinBox !
+    return QDoubleSpinBox::value();
 }
 
 void DoubleSpinBox::slotValueChanged(double value)
