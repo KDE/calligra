@@ -1022,7 +1022,7 @@ void KarbonView::initActions()
     actionCollection()->addAction("object_unclip", d->unclipObjects );
     connect(d->unclipObjects, SIGNAL(triggered()), this, SLOT(unclipObjects()));
 
-    d->flipVertical = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertcially"), this);
+    d->flipVertical = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     actionCollection()->addAction("object_flip_vertical", d->flipVertical);
     connect(d->flipVertical, SIGNAL(triggered()), this, SLOT(flipVertical()));
 
