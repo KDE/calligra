@@ -98,14 +98,12 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
 
-    //menu is currently unfinished
     m_menu = new QMenu();
     QAction* ghnsAction = m_menu->addAction(KIcon("get-hot-new-stuff"), i18n("Get more stencils"));
     QAction* installAction = m_menu->addAction(KIcon("document-open-folder"), i18n("Install stencil"));
-    //QAction* createNewAction = m_menu->addAction(i18n("Create a stencil collection"));
+
     connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
     connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
-    //connect(createNewAction, SIGNAL(triggered()), this, SLOT(createNewCollection()));
 
     m_button = new QToolButton;
     m_button->setIcon(SmallIcon("list-add"));
@@ -131,15 +129,15 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_layout->addLayout(m_panelLayout);
     m_layout->addWidget(m_treeWidget);
     
+    loadDefaultShapes();
     if(! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").isEmpty())
     {
         loadShapeCollections();
     }
-    
-    loadDefaultShapes();
+
     regenerateProxyMap();
     m_treeWidget->setFamilyMap(m_proxyMap);
-
+    
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
     connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
@@ -177,7 +175,7 @@ void StencilBoxDocker::installStencil()
 
     // Prevent installing a stencil collection that's already installed
     const QString collectionFolder = destination + QDir::separator() + archiveDir->entries().first();
-    kDebug() << destination << archiveDir << collectionFolder;
+    //kDebug() << destination << archiveDir << collectionFolder;
     if(QFile::exists(collectionFolder)) {
         KMessageBox::error(0, i18n("A collection of stencils in family '%1' is already installed. "
                                    "Please uninstall it first.", archiveDir->entries().first()));
@@ -187,11 +185,6 @@ void StencilBoxDocker::installStencil()
     archiveDir->copyTo(destination);
     KMessageBox::information(0, i18n("Stencils successfully installed."));
 }
-
-/*
-void StencilBoxDocker::createNewCollection()
-{
-}*/
 
 void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 {
@@ -240,7 +233,7 @@ void StencilBoxDocker::loadDefaultShapes()
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
         // don't show hidden factories
         if ( factory->hidden() )
-	{
+        {
             continue;
         }
         bool oneAdded = false;
@@ -346,10 +339,9 @@ bool StencilBoxDocker::addCollection(const QString& path)
         noExt.chop(7);
         QString source = noExt + "odg";
         QString icon = noExt + "png";
-        kDebug() << name << source << icon;
+        //kDebug() << name << source << icon;
         QString keepAspectRatio = content.readEntry("CS-KeepAspectRatio", "0");
         KoProperties* props = new KoProperties();
-        //props->setProperty("source", source);
         props->setProperty("keepAspectRatio", keepAspectRatio.toInt());
         KoCollectionItem temp;
         temp.id = source;
@@ -363,38 +355,6 @@ bool StencilBoxDocker::addCollection(const QString& path)
     }
     model->setShapeTemplateList(templateList);
     return true;
-}
-/*
-void StencilBoxDocker::onLoadingFinished()
-{
-    OdfCollectionLoader* loader = qobject_cast<OdfCollectionLoader*>(sender());
-
-    if(!loader)
-    {
-        kWarning(31000) << "Not called by a OdfCollectionLoader!";
-        return;
-    }
-
-    QList<KoCollectionItem> templateList;
-    QList<KoShape*> shapeList = loader->shapeList();
-
-    foreach(KoShape* shape, shapeList)
-    {
-        KoCollectionItem temp;
-        temp.id = loader->collectionPath() + shape->name();
-        temp.name = shape->name();
-        temp.toolTip = shape->name();
-        temp.icon = generateShapeIcon(shape);
-        templateList.append(temp);
-        StencilShapeFactory* factory =
-                new StencilShapeFactory(loader->collectionPath() + shape->name(), shape);
-        KoShapeRegistry::instance()->add(loader->collectionPath() + shape->name(), factory);
-    }
-
-    CollectionItemModel* model = m_modelMap[loader->collectionFamily()];
-    model->setShapeTemplateList(templateList);
-
-    loader->deleteLater();
 }
 
 void StencilBoxDocker::removeCollection(const QString& family)
@@ -412,68 +372,6 @@ void StencilBoxDocker::removeCollection(const QString& family)
 
         m_modelMap.remove(family);
         delete model;
+        regenerateProxyMap();
     }
 }
-
-QIcon StencilBoxDocker::generateShapeIcon(KoShape* shape)
-{
-    KoZoomHandler converter;
-    bool isGroup = (shape->size()==QSizeF(0,0)) ? true : false;
-
-    QRectF bound;
-    KoShapeGroup* group;
-    QList<KoShape*> sortedObjects;
-
-    if (isGroup == true) {
-        bool boundInitialized = false;
-        group = static_cast<KoShapeGroup*>(shape);
-        sortedObjects = group->shapes();
-        qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
-        foreach(KoShape * subShape, sortedObjects) {
-            if (! boundInitialized) {
-                bound = subShape->boundingRect();
-                boundInitialized = true;
-            } else
-                bound = bound.united(subShape->boundingRect());
-        }
-    } else {
-        bound = shape->boundingRect();
-    }
-
-    qreal diffx = 30 / converter.documentToViewX(bound.width());
-    qreal diffy = 30 / converter.documentToViewY(bound.height());
-    converter.setZoom(qMin(diffx, diffy));
-
-    QPixmap pixmap(qRound(converter.documentToViewX(bound.width())) + 2, qRound(converter.documentToViewY(bound.height())) + 2);
-    pixmap.fill(Qt::white);
-    QPainter painter(&pixmap);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-
-    QTransform baseMatrix = shape->absoluteTransformation(&converter).inverted() * painter.transform();
-    painter.translate(1, 1);
-
-    if (isGroup == true) {
-        foreach(KoShape * subShape, sortedObjects) {
-            //kDebug(30006) <<"KoShapeContainer::painting shape:" << subShape->shapeId() <<"," << subShape->boundingRect();
-            if (!subShape->isVisible())
-                continue;
-            painter.save();
-            painter.setTransform(subShape->absoluteTransformation(&converter) * baseMatrix);
-            subShape->paint(painter, converter);
-            painter.restore();
-            if (subShape->border()) {
-                painter.save();
-                painter.setTransform(subShape->absoluteTransformation(&converter) * baseMatrix);
-                subShape->border()->paint(subShape, painter, converter);
-                painter.restore();
-            }
-        }
-    } else {
-        shape->paint(painter, converter);
-    }
-
-    painter.end();
-
-    return QIcon(pixmap);
-}
-*/
