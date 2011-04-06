@@ -42,7 +42,7 @@
 #include <QTextDocument>
 #include <QTextBlock>
 
-KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType type)
+KWTextFrameSet::KWTextFrameSet(KWDocument *doc, KWord::TextFrameSetType type)
     : KWFrameSet(KWord::TextFrameSet)
     , m_document(0)
     , m_layoutTriggered(false)
@@ -53,6 +53,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
     , m_kwordDocument(doc)
     , m_requestedUpdateTextLayout(false)
 {
+    setPageManager(doc->pageManager());
     setName(KWord::frameSetTypeName(m_textFrameSetType));
 }
 
@@ -95,8 +96,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     data->setDocument(m_document, false);
 
     if (isInitialFrame) {
-        KWRootAreaProvider *provider = new KWRootAreaProvider(frame->shape(), data);
-        //TODO KoTextDocument(m_document).setInlineTextObjectManager(inlineTextObjectManager);
+        KWRootAreaProvider *provider = new KWRootAreaProvider(this, frame->shape(), data);
         KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, provider);
         m_document->setDocumentLayout(lay);
         QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(layout()), Qt::QueuedConnection);
@@ -194,7 +194,7 @@ void KWTextFrameSet::updateTextLayout()
 
 void KWTextFrameSet::requestMoreFrames(qreal textHeight)
 {
-    kDebug();
+#if 0
     if (frameCount() == 0)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
@@ -230,6 +230,9 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
         
         //kDebug(32001)<<"AutoExtendFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"size="<<size<<"orig="<<orig<<"textHeight="<<textHeight;;
     }
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 void KWTextFrameSet::spaceLeft(qreal excessHeight)

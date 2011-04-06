@@ -100,6 +100,12 @@ public:
     Q_SCRIPTABLE KWPageManager *pageManager() {
         return &m_pageManager;
     }
+    /**
+     * Return the frameLayout used in this document.
+     */
+    Q_SCRIPTABLE KWFrameLayout *frameLayout() {
+        return &m_frameLayout;
+    }
 
     /**
      * Insert a new page after another,

@@ -568,7 +568,7 @@ void KWFrameLayout::setup()
                 frameSets.evenFooters = tfs;
                 break;
             case KWord::MainTextFrameSet:
-                Q_ASSERT(m_maintext == 0); // there can be only one!
+//                 Q_ASSERT(m_maintext == 0); // there can be only one!
                 if (tfs != oldMainText) {
                     oldMainText = 0;
                     disconnect(tfs, SIGNAL(frameRemoved(KWFrame*)),
@@ -693,6 +693,7 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
 void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 {
     kDebug();
+#if 0
     if (fs->frameCount() == 0)
         return;
     if (pageNumber == m_pageManager->begin().pageNumber())
@@ -703,7 +704,6 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
         prevPage2 = m_pageManager->topOfPage(pageNumber - 2);
     else
         prevPage2 = -1;
-
 
     QList<KWTextFrame*> framesToDuplicate;
     QList<KWFrame*> frames = fs->frames();
@@ -736,6 +736,9 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
         frame->shape()->setPosition(QPointF(frame->shape()->position().x(),
                                             offsetInDocument + offsetFromPage));
     }
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)

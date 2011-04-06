@@ -25,11 +25,12 @@
 
 class KoShape;
 class KoTextShapeData;
+class KWTextFrameSet;
 
 class KWRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
 public:
-    KWRootAreaProvider(KoShape *shape, KoTextShapeData *data);
+    KWRootAreaProvider(KWTextFrameSet *textFrameSet, KoShape *shape, KoTextShapeData *data);
 
     /// reimplemented
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
@@ -37,6 +38,7 @@ public:
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea);
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
 
+    KWTextFrameSet *m_textFrameSet;
     KoShape *m_shape;
     KoTextShapeData *m_data;
     KoTextLayoutRootArea *m_area;

@@ -362,6 +362,7 @@ bool KWDLoader::load(KoXmlElement &root)
     loadEmbeddedObjects(root);
 #endif
     if (m_firstPageStyle.isValid()) {
+        Q_ASSERT(m_pageManager->pageCount()==0);
         m_pageManager->appendPage(m_firstPageStyle);
         m_pageManager->appendPage(m_pageStyle);
     }

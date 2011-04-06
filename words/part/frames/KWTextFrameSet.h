@@ -40,7 +40,7 @@ public:
      * @param document the document this frameset belongs to.
      * @param type the type of frameSet; this can indicate headers, footers etc.
      */
-    explicit KWTextFrameSet(const KWDocument *document, KWord::TextFrameSetType type = KWord::OtherTextFrameSet);
+    explicit KWTextFrameSet(KWDocument *document, KWord::TextFrameSetType type = KWord::OtherTextFrameSet);
     ~KWTextFrameSet();
 
     /// return the type of frameSet this is
@@ -75,15 +75,15 @@ public:
      * Set the page manager used by this frameset.
      * If we can't get rid of the dependency on KWDocument, we should remove this variable.
      */
-    void setPageManager(const KWPageManager *pageMager) {
+    void setPageManager(KWPageManager *pageMager) {
         m_pageManager = pageMager;
     }
     /// return the pageManager for this frameSet
-    const KWPageManager* pageManager() const {
+    KWPageManager* pageManager() {
         return m_pageManager;
     }
     /// return the document for this frameset
-    const KWDocument *kwordDocument() const {
+    KWDocument *kwordDocument() {
         return m_kwordDocument;
     }
 
@@ -118,6 +118,7 @@ protected:
      * @param textHeight the height of the text we could not fit.
      */
     void requestMoreFrames(qreal textHeight);
+
     /// called by the KWTextDocumentLayout to mark that the frame is bigger then the text in it.
     void spaceLeft(qreal excessHeight);
     /// called by the KWTextDocumentLayout to mark that there are frames not in use because the text is too short.
@@ -138,8 +139,8 @@ private:
     QTextDocument *m_document;
     bool m_layoutTriggered, m_allowLayoutRequests, m_frameOrderDirty;
     KWord::TextFrameSetType m_textFrameSetType;
-    const KWPageManager *m_pageManager;
-    const KWDocument *m_kwordDocument;
+    KWPageManager *m_pageManager;
+    KWDocument *m_kwordDocument;
     KWPageStyle m_pageStyle; // the page Style this frameset is associated with.
     bool m_requestedUpdateTextLayout;
 
