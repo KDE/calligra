@@ -86,7 +86,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     Q_ASSERT(data);
 
     const bool isInitialFrame = !m_document;
-    if(isInitialFrame) {
+    if (isInitialFrame) {
         m_document = data->document();
     }
 
@@ -94,12 +94,13 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     // also taking over the ownership of the QTextDocument.
     data->setDocument(m_document, false);
 
-    if(isInitialFrame) {
+    if (isInitialFrame) {
         KWRootAreaProvider *provider = new KWRootAreaProvider(frame->shape(), data);
         //TODO KoTextDocument(m_document).setInlineTextObjectManager(inlineTextObjectManager);
         KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, provider);
         m_document->setDocumentLayout(lay);
-        
+        QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(layout()), Qt::QueuedConnection);
+
         if (m_kwordDocument) {
             KoTextDocument doc(m_document);
             doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
@@ -112,9 +113,10 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         m_document->setUseDesignMetrics(true);
     }
 
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
     Q_ASSERT(m_document == data->document());
-    Q_ASSERT(dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout()));
-    Q_ASSERT(dynamic_cast<KWRootAreaProvider*>(dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout())->provider()));
+    Q_ASSERT(lay);
+    Q_ASSERT(dynamic_cast<KWRootAreaProvider*>(lay->provider()));
 
     /*
     QTextCursor cursor(m_document);
@@ -124,8 +126,13 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     cursor.insertTable(3,3);
     */
 
-    if (m_textFrameSetType != KWord::OtherTextFrameSet)
+    if (m_textFrameSetType != KWord::OtherTextFrameSet) {
         frame->shape()->setGeometryProtected(true);
+    }
+
+    if (isInitialFrame) {
+        lay->layout();
+    }
 
 #if 0
     if (data == 0) {// probably a copy frame.
@@ -165,6 +172,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 
 void KWTextFrameSet::updateTextLayout()
 {
+    kDebug();
     if (! m_allowLayoutRequests) {
         m_requestedUpdateTextLayout = true;
         return;
@@ -186,6 +194,7 @@ void KWTextFrameSet::updateTextLayout()
 
 void KWTextFrameSet::requestMoreFrames(qreal textHeight)
 {
+    kDebug();
     if (frameCount() == 0)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
@@ -292,6 +301,7 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
 
 void KWTextFrameSet::setAllowLayout(bool allow)
 {
+    kDebug();
     if (allow == m_allowLayoutRequests)
         return;
     m_allowLayoutRequests = allow;
