@@ -64,7 +64,7 @@ class CollectionItemModel : public QAbstractListModel
         QList<KoCollectionItem> shapeTemplateList () { return m_shapeTemplateList; }
 
         void setViewMode(QListView::ViewMode vm);
-        QListView::ViewMode viewMode();
+        QListView::ViewMode viewMode() const;
         KoProperties* properties(const QModelIndex& index) const;
 
     private:
