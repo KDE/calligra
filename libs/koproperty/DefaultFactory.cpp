@@ -47,7 +47,7 @@
 #include "urledit.h"
 */
 #include <QDebug>
-#include <kglobal.h>
+#include <slp/KGlobal>
 
 using namespace KoProperty;
 

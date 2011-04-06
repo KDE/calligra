@@ -23,7 +23,7 @@
 #include "Property.h"
 #include "EditorView.h"
 
-#include <KLocale>
+#include <QLocale>
 #include <QDebug>
 #include <KCmdLineArgs>
 

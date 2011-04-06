@@ -20,7 +20,7 @@
 #include "sizepolicyedit.h"
 
 #include <QtGui/QSizePolicy>
-#include <KLocale>
+#include <QLocale>
 #include <slp/KGlobal>
 
 using namespace KoProperty;

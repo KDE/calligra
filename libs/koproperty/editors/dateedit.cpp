@@ -29,7 +29,7 @@
 #include <QHBoxLayout>
 
 #include <QLocale>
-#include <kglobal.h>
+#include <slp/KGlobal>
 
 using namespace KoProperty;
 
@@ -74,8 +74,8 @@ void
 DateEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
     p->eraseRect(r);
-    Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
+    Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDate(value.toDate(), QLocale::ShortDate));
+// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, KGlobal::locale()->formatDate(value.toDate(), QLocale::ShortDate));
 }
 
 void

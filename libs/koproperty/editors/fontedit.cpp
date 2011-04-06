@@ -24,7 +24,7 @@
 
 #include <KFontChooser>
 #include <KFontDialog>
-#include <KLocale>
+#include <QLocale>
 #include <QDebug>
 #include <KPushButton>
 #include <KDialog>

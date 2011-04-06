@@ -47,7 +47,7 @@
 #include <QCursor>
 #include <QBitmap>
 
-#include <KLocale>
+#include <QLocale>
 #include <QDebug>
 #include <slp/KGlobal>
 

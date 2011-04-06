@@ -33,7 +33,9 @@
 #include <QtGui/QApplication>
 #include <QtGui/QHeaderView>
 
-#include <KLocale>
+#include <QLineEdit>
+
+#include <QLocale>
 
 /** @WARNING (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed.
  * Please keep in mind that we must provide implemention of such a class by ourselves. 
@@ -60,6 +62,7 @@
 #endif
 
 #include <QDebug>
+
 
 using namespace KoProperty;
 
@@ -214,8 +217,8 @@ void ItemDelegate::paint(QPainter *painter,
 #endif	
         painter->drawPixmap( x2 - iconSize - 2, 
             y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
-    }
 #endif
+    }
 
     QColor gridLineColor( dynamic_cast<EditorView*>(painter->device()) ? 
         dynamic_cast<EditorView*>(painter->device())->gridLineColor()

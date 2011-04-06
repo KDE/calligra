@@ -19,7 +19,7 @@
 
 #include "sizeedit.h"
 
-#include <KLocale>
+#include <QLocale>
 #include <QtCore/QSize>
 
 using namespace KoProperty;

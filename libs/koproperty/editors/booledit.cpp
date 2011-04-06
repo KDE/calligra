@@ -34,7 +34,7 @@
 /** @TODO (DK) Provide class that provides KIconLoader funcionality .
  */
 
-#include <KLocale>
+#include <QLocale>
 
 /** @WARNING (DK) KComboBox has been changed by QComboBox ! 
  * Since KComboBox extends QComboBox and implements KCompletionBase it is very likely that some funcionality has been lost!. 

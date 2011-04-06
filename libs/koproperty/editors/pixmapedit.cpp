@@ -46,7 +46,7 @@
 #include <KImageIO>
 #include <KPushButton>
 #include <KFileDialog>
-#include <KLocale>
+#include <QLocale>
 
 /* KDE4:
 #ifdef Q_WS_WIN

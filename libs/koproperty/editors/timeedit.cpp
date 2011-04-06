@@ -30,7 +30,7 @@
 #include <QHBoxLayout>
 
 #include <QLocale>
-#include <kglobal.h>
+#include <slp/KGlobal>
 
 using namespace KoProperty;
 

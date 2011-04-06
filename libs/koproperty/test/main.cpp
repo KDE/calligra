@@ -22,7 +22,7 @@
 #include <KApplication>
 #include <KAboutData>
 #include <KCmdLineArgs>
-#include <KLocale>
+#include <QLocale>
 
 #include "test.h"
 

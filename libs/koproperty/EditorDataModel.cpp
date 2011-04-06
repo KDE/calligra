@@ -24,7 +24,7 @@
 
 #include <QtCore/QHash>
 
-#include <KLocale>
+#include <QLocale>
 #include <QDebug>
 
 using namespace KoProperty;

@@ -28,7 +28,7 @@
 #include <climits>
 
 #include <KGlobal>
-#include <KLocale>
+#include <QLocale>
 #include <QDebug>
 
 #include <QVariant>
@@ -582,7 +582,7 @@ QString DoubleSpinBoxDelegate::displayTextForProperty( const Property* prop ) co
         }
     }
 //! @todo precision?
-//! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
+//! @todo rounding using QLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
     QString display;
 #ifdef KOPROPERTY_USE_KOLIBS
     if (!unit.isEmpty()) {

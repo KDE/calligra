@@ -19,7 +19,7 @@
 
 #include "utils.h"
 
-#include <KLocale>
+#include <QLocale>
 
 #include <QtGui/QPushButton>
 #include <QtGui/QFontMetrics>
