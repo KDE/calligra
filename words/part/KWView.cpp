@@ -146,8 +146,6 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
-    //new KoFind(this, m_canvas->resourceManager(), actionCollection());
-
     m_find = new KoFindText(m_canvas->resourceManager(), this);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
