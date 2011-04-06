@@ -59,7 +59,13 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         if (data) {
             KWPage currentPage = m_pageManager->page(this);
             KWPageTextInfo info(currentPage);
+#if 0
             data->relayoutFor(info);
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
         }
     }
 
