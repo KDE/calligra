@@ -1,5 +1,5 @@
 [Desktop Entry]
-X-KDE-ServiceTypes=KonqPopupMenu/Plugin,application/x-kivio
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin,application/x-flow
 Type=Service
 Actions=Print;
 
@@ -65,5 +65,5 @@ Name[wa]=Imprimer...
 Name[x-test]=xxPrint...xx
 Name[zh_CN]=打印...
 Name[zh_TW]=列印...
-Exec=kivio --print %U
+Exec=flow --print %U
 Icon=filequickprint

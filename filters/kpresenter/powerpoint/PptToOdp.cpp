@@ -983,6 +983,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:text-line-through-width
     // style:text-outline
     // style:text-position
+    style.addProperty("style:text-position", percent(cf.position()), text);
     // style:text-rotation-angle
     // style:text-rotation-scale
     // style:text-scale

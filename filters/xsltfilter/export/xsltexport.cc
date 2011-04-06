@@ -48,7 +48,7 @@ KoFilter::ConversionStatus XSLTExport::convert(const QByteArray& from, const QBy
 {
     if (from != "application/x-kword" &&
             from != "application/x-kontour" && from != "application/x-kspread" &&
-            from != "application/x-kivio" && from != "application/x-kchart" &&
+            from != "application/x-flow" && from != "application/x-kchart" &&
             from != "application/x-kpresenter")
         return KoFilter::NotImplemented;
     kDebug() << "In the xslt filter";
