@@ -803,8 +803,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
             d->masterPageStyles.push_back(KoGenStyle(KoGenStyle::MasterPageStyle));
             if (d->sldSzRead) {
                 KoGenStyle pageLayoutStyle(d->pageLayout.saveOdf());
+                pageLayoutStyle.setAutoStyleInStylesDotXml(true);
                 const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
-                mainStyles->markStyleForStylesXml(pageLayoutStyleName);
                 kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
 
                 d->masterPageStyles[index].addAttribute("style:page-layout-name", pageLayoutStyleName);

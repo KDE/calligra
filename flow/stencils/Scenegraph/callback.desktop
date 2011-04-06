@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Callback
-Name[x-test]=xxCallbackxx
+Name=callback
+Name[pt]=retorno
+Name[pt_BR]=retorno
+Name[uk]=Повернення
+Name[x-test]=xxcallbackxx

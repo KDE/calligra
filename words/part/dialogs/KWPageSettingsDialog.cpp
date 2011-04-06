@@ -96,6 +96,9 @@ void KWPageSettingsDialog::accept()
 {
     QUndoCommand *cmd = new QUndoCommand(i18n("Change Page Properties"));;
     KWPageStyle styleToUpdate = m_page.pageStyle();
+
+//     //sebsauer; that logic is wrong and buggy. The correct way would be to allow to define a stylename and to allow to either edit current or duplicate / add new pagestyle
+#if 0
     // TODO rename 'applyToDocument' to 'onlyThisPage'
     if (!applyToDocument()) {
         // detach to create a style specifically for this page.
@@ -107,7 +110,9 @@ void KWPageSettingsDialog::accept()
         // otherwise we change it and the command below then assigns it.
         styleToUpdate.detach(styleToUpdate.name());
     }
-
+#else
+    styleToUpdate.detach(styleToUpdate.name());
+#endif
     styleToUpdate.setDirection(textDirection());
     KoPageLayout lay = pageLayout();
     if (lay.pageEdge >= 0 || lay.bindingSide >= 0) {

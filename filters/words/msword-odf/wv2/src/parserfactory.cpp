@@ -33,14 +33,18 @@ namespace
         // Check if it's a Word 3, 4, or 5 file
         if ( buffer[0] == 0x31 && buffer[1] == 0xbe &&
              buffer[2] == 0x00 && buffer[3] == 0x00 )
+        {
             std::cerr << "This is a Word 3, 4, or 5 file. Right now we don't handle these versions.\n"
                       << "Please send us the file, maybe we will implement it later on." << std::endl;
+        }
         else if ( buffer[0] == 0xdb && buffer[1] == 0xa5 &&
                   buffer[2] == 0x2d && buffer[3] == 0x00 )
+        {
             std::cerr << "This is a Word 2 document. Right now we don't handle this version." << std::endl
                       << "Please send us the file, maybe we will implement it later on." << std::endl;
-        else
+        } else {
             std::cerr << "That doesn't seem to be a Word document." << std::endl;
+        }
     }
 
     SharedPtr<Parser> setupParser( OLEStorage* storage )
@@ -68,34 +72,41 @@ namespace
             delete storage;
             return 0;
         }
+        // (0x0065)
         else if ( nFib == 101 ) {
             wvlog << "Word 6 document found" << endl;
             return new Parser95( storage, wordDocument );
         }
+        // (0x0067, 0x0068)
         else if ( nFib == 103 || nFib == 104 ) {
             wvlog << "Word 7 (aka Word 95) document found" << endl;
             return new Parser95( storage, wordDocument );
         }
-        else if ( nFib == Word8nFib ) {  // Word8nFib == 193
+        // (0x00c1)
+        else if ( nFib == Word8nFib ) {
             wvlog << "Word 8 (aka Word 97) document found" << endl;
             return new Parser97( storage, wordDocument );
         }
         else {
+            // (0x00d9)
             if ( nFib == 217 ) {
                 wvlog << "Looks like document was created with Word 9/Office 2000"
                     << ", trying with the Word 8 parser." << endl;
             }
+            // (0x0101)
             else if ( nFib == 257 ) {
                 wvlog << "Looks like document was created with Word 10/Office XP"
                     << ", trying with the Word 8 parser." << endl;
             }
+            // (0x010c)
             else if ( nFib == 268 ) {
                 wvlog << "Looks like document was created with Word 11/Office 2003"
                     << ", trying with the Word 8 parser." << endl;
             }
+	    // (0x0112), ...
             else {
                 wvlog << "A document newer than Word 8 found"
-                    << ", trying with the Word 8 parser" << endl;
+                    << ", trying with the Word 8 parser." << endl;
             }
             return new Parser97( storage, wordDocument );
         }

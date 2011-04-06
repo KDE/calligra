@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Vcommand
-Name[x-test]=xxVcommandxx
+Name=vcommand
+Name[pt]=comando-v
+Name[pt_BR]=comando-v
+Name[uk]=Керівний механізм реле (вертикально)
+Name[x-test]=xxvcommandxx

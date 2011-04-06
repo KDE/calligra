@@ -136,7 +136,7 @@ public:
     /**
      * This Drawings holds all the information about drawings the Word file
      */
-    virtual Drawings * getDrawings() = 0;
+    virtual const Drawings* getDrawings() const = 0;
 
     /**
      * This table holds actuald MS-Doc stream

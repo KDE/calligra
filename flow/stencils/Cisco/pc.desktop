@@ -1,4 +1,10 @@
 [Desktop Entry]
-Name=Pc
+Name=PC
+Name[et]=PC
+Name[nl]=PC
+Name[pt]=PC
+Name[pt_BR]=PC
+Name[sv]=Persondator
 Name[uk]=ПК
-Name[x-test]=xxPcxx
+Name[x-test]=xxPCxx
+Name[zh_CN]=PC

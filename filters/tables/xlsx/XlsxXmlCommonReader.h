@@ -50,10 +50,14 @@ protected:
     KoFilter::ConversionStatus read_vertAlign();
     KoFilter::ConversionStatus read_sz();
     KoFilter::ConversionStatus read_rFont();
+
+    QColor m_currentColor;
     KoFilter::ConversionStatus read_color();
+
     KoFilter::ConversionStatus read_u();
     KoFilter::ConversionStatus read_strike();
     KoFilter::ConversionStatus read_b();
+    KoFilter::ConversionStatus read_outline();
     KoFilter::ConversionStatus read_scheme();
     KoFilter::ConversionStatus read_i();
 

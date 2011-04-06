@@ -27,11 +27,12 @@
 
 #include <wv2/src/handlers.h>
 #include "wv2/src/graphics.h"
-#include "versionmagic.h"
+//#include "versionmagic.h"
 #include "document.h"
 
 #include "generated/simpleParser.h"
 #include "writer.h"
+#include "ODrawToOdf.h"
 
 #include <QObject>
 #include <QMap>
@@ -56,6 +57,10 @@ public:
     int xRight;
     int yTop;
     int yBottom;
+
+    //TODO: It seems that both inline and floating objects have placement and
+    //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
+    //the index into plcfSpa.
 
     //structure that specifies placement of a floating object
     wvWare::Word97::FSPA* m_pSpa;
@@ -89,9 +94,47 @@ public:
 class KWordGraphicsHandler : public QObject, public wvWare::GraphicsHandler
 {
     Q_OBJECT
+private:
+    /*
+     * ************************************************
+     * DrawClient
+     * ************************************************
+     */
+    class DrawClient : public ODrawToOdf::Client
+    {
+    private:
+        virtual QRectF getRect(const MSO::OfficeArtClientAnchor&);
+        virtual QString getPicturePath(int pib);
+        virtual bool onlyClientData(const MSO::OfficeArtClientData& o);
+        virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
+                                       const MSO::OfficeArtClientData& o,
+                                       Writer& out);
+        virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
+                                          const MSO::OfficeArtClientData* cd,
+                                          Writer& out);
+        virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
+                                              const MSO::OfficeArtClientData* cd,
+                                              Writer& out);
+        virtual void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
+                               const MSO::OfficeArtClientData* clientData,
+                               Writer& out,
+                               KoGenStyle& style);
+
+        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
+        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+        virtual const MSO::OfficeArtSpContainer* defaultShapeContainer();
+        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
+        virtual QString formatPos(qreal v);
+
+        const KWordGraphicsHandler* gh;
+    public:
+        DrawClient(KWordGraphicsHandler* p) :gh(p) {}
+};
 public:
     KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
-                         KoStore* store, KoGenStyles* mainStyles);
+                         KoStore* store, KoGenStyles* mainStyles,
+                         const wvWare::Drawings* p_drawings,
+                         const wvWare::Word97::FIB& fib);
     ~KWordGraphicsHandler();
 
     /**
@@ -107,27 +150,18 @@ public:
     virtual void handleInlineObject(const wvWare::PictureData& data);
 
     /**
-     * Initialize the drawing handler.  Optional containers from Table stream
-     * and containers storing inline picture data from WordDocument stream are
-     * parsed.
-     *
-     * @param pointer to the wv2 Drawing structure providing pointers to PLCs
-     * storing textbox data and shape properties
-     *
-     * @param pointer to the FIB structure provided by wv2
-     */
-    void init(wvWare::Drawings* pDrawings, const wvWare::Word97::FIB &fib);
-
-    /**
      * Set the appropriate writer for object properties and content.
      * @param writer KoXmlWriter provided by the Document class
      */
     void setBodyWriter(KoXmlWriter* writer);
 
     /**
-     * Gets drawing style for whole document.
+     * Get the DrawStyle to access document backgroud properties and defaults.
+     *
+     * DrawStyle ds(m_OfficeArtDggContainer, 0, m_pOfficeArtBodyDgContainer.shape)
+     * @return ds
      */
-    DrawStyle getDrawingStyle();
+    DrawStyle getBgDrawStyle(void);
 
     /**
      * Get the path in the ODT document that corresponds to the picture
@@ -142,9 +176,21 @@ signals:
 
 private:
     /**
+     * Initialize the drawing handler.  Optional containers from Table stream
+     * and containers storing inline picture data from WordDocument stream are
+     * parsed.
+     *
+     * @param pointer to the wv2 Drawing structure providing pointers to PLCs
+     * storing textbox data and shape properties
+     *
+     * @param pointer to the FIB structure provided by wv2
+     */
+    void init(void);
+
+    /**
      * Parse the OfficeArtDggContainer data from the Table stream.
      */
-    void parseOfficeArtContainer(POLE::Storage* storage, const wvWare::Word97::FIB &fib);
+    void parseOfficeArtContainer(void);
 
     /**
      * Parse floating pictures data from the WordDocument stream.
@@ -193,7 +239,8 @@ private:
     /**
      * TODO:
      */
-    void locateDrawing(const MSO::OfficeArtSpgrContainer* o, DrawingWriter& out, wvWare::Word97::FSPA* spa, uint spid);
+    void locateDrawing(const MSO::OfficeArtSpgrContainer* o, DrawingWriter& out,
+                       wvWare::Word97::FSPA* spa, uint spid);
     /**
      * Check object types in a container of groups of shapes.
      * @param o container of groups of shapes
@@ -239,10 +286,10 @@ private:
     KoXmlWriter* m_manifestWriter;
     KoGenStyles* m_mainStyles;
 
-    wvWare::Drawings * m_drawings;
-    wvWare::Word97::FIB * m_fib;
+    const wvWare::Drawings* m_drawings;
+    const wvWare::Word97::FIB& m_fib;
 
-    MSO::OfficeArtDggContainer m_OfficeArtDggContainer;
+    MSO::OfficeArtDggContainer m_officeArtDggContainer;
     MSO::OfficeArtDgContainer * m_pOfficeArtHeaderDgContainer;
     MSO::OfficeArtDgContainer * m_pOfficeArtBodyDgContainer;
 

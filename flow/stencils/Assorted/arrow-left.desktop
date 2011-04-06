@@ -1,5 +1,12 @@
 [Desktop Entry]
-Name=Arrow-Left
+Name=Left Arrow
+Name[es]=Flecha izquierda
+Name[et]=Nool vasakule
+Name[it]=Freccia a sinistra
+Name[nl]=Pijl links
+Name[pt]=Seta-Esquerda
+Name[pt_BR]=Seta para a esquerda
+Name[sv]=Vänsterpil
 Name[uk]=Стрілка ліворуч
-Name[x-test]=xxArrow-Leftxx
-Name[zh_TW]=箭頭─左
+Name[x-test]=xxLeft Arrowxx
+Name[zh_TW]=左箭頭

@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Regvalv
-Name[x-test]=xxRegvalvxx
+Name=regvalv
+Name[pt]=valor-reg-v
+Name[pt_BR]=valor-reg-v
+Name[uk]=Регульований клапан, вертикальний
+Name[x-test]=xxregvalvxx

@@ -114,11 +114,9 @@ XlsxXmlWorksheetReaderContext::~XlsxXmlWorksheetReaderContext()
 
 static void splitToRowAndColumn(const QString source, QString& row, QString& column)
 {
-    bool ok = false;
-
     // Checking whether the 2nd char is a number
-    QString(source.at(1)).toInt(&ok);
-    if (ok) {
+    char second = source.at(1).toAscii();
+    if (second < 65) {
         row = source.at(0);
         column = source.mid(1);
     }
@@ -577,9 +575,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_conditionalFormatting()
     // Making sure the maps are correct priority order
     qSort(m_conditionalIndices);
 
-
     int index = 0;
     while (index < m_conditionalIndices.size()) {
+        QString conditionalArea;
+        while (sqref.indexOf(' ') > 0) {
+            conditionalArea = sqref.left(sqref.indexOf(' '));
+            sqref = sqref.mid(conditionalArea.length());
+            m_context->conditionalStyles.insertMulti(conditionalArea, m_conditionalStyles.at(m_conditionalIndices.at(index).second));
+        }
         m_context->conditionalStyles.insertMulti(sqref, m_conditionalStyles.at(m_conditionalIndices.at(index).second));
         ++index;
     }
@@ -611,11 +614,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
     TRY_READ_ATTR_WITHOUT_NS(priority)
     QString op = attrs.value("operator").toString();
 
+    QList<QString> formulas;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(formula)
+            if (name() == "formula") {
+                TRY_READ(formula)
+                formulas.push_back(m_formula);
+            }
             SKIP_UNKNOWN
         }
     }
@@ -623,8 +631,19 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
     QMap<QString, QString> odf;
     // TODO, use attributes to really interpret this
     // The default one here is valid for type="cellIs" operator="equal"
-    odf["style:condition"] = QString("cell-content()=%1").arg(m_formula);
-    odf["style:apply-style-name"] = QString("ConditionalStyle%1").arg(dxfId.toInt() + 1);
+    if (op == "equal") {
+        odf["style:condition"] = QString("cell-content()=%1").arg(m_formula);
+    }
+    else if (op == "lessThan") {
+        odf["style:condition"] = QString("cell-content()<%1").arg(m_formula);
+    }
+    else if (op == "greaterThan") {
+        odf["style:condition"] = QString("cell-content()>%1").arg(m_formula);
+    }
+    else if (op == "between") {
+        odf["style:condition"] = QString("cell-content-is-between(%1, %2)").arg(formulas.at(0)).arg(formulas.at(1));
+    }
+    odf["style:apply-style-name"] = m_context->styles->conditionalStyle(dxfId.toInt() + 1);
 
     m_conditionalIndices.push_back(QPair<QString, int>(priority, m_conditionalIndices.size()));
     m_conditionalStyles.push_back(odf);
@@ -927,7 +946,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     TRY_READ_ATTR_WITHOUT_NS(r)
     //TRY_READ_ATTR_WITHOUT_NS(spans) // spans are only an optional help
     TRY_READ_ATTR_WITHOUT_NS(ht)
-    TRY_READ_ATTR_WITHOUT_NS(customHeight)
+    //TRY_READ_ATTR_WITHOUT_NS(customHeight) not used atm
     TRY_READ_ATTR_WITHOUT_NS(hidden)
 
     if (!r.isEmpty()) {
@@ -942,7 +961,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
 
     m_currentColumn = 0;
     Row* row = m_context->sheet->row(m_currentRow, true);
-    row->styleName = processRowStyle(ht);
+    if (!ht.isEmpty()) {
+        row->styleName = processRowStyle(ht);
+    }
 
     if (!hidden.isEmpty()) {
         row->hidden = hidden.toInt() > 0;
@@ -1124,10 +1145,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     // cell style
     if (!s.isEmpty()) {
-        bool ok;
-        const uint styleId = s.toUInt(&ok);
-        kDebug() << "styleId:" << styleId;
-        const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
         if (!ok || !cellFormat) {
             raiseUnexpectedAttributeValueError(s, "c@s");
             return KoFilter::WrongFormat;
@@ -1142,7 +1159,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
                 MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
             }
         }
-        if (!cellFormat->setupCellStyle(m_context->styles, m_context->themes, &cellStyle)) {
+        if (!cellFormat->setupCellStyle(m_context->styles, &cellStyle)) {
             return KoFilter::WrongFormat;
         }
 
@@ -1150,16 +1167,18 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             cellStyle.addAttribute( "style:data-style-name", formattedStyle );
         }
 
-        QString positionLetter, positionNumber;
-        splitToRowAndColumn(r, positionLetter, positionNumber);
-        QList<QMap<QString, QString> > maps = m_context->conditionalStyleForPosition(positionLetter, positionNumber);
-        int index = maps.size();
+        if (!m_conditionalStyles.isEmpty()) {
+            QString positionLetter, positionNumber;
+            splitToRowAndColumn(r, positionLetter, positionNumber);
+            QList<QMap<QString, QString> > maps = m_context->conditionalStyleForPosition(positionLetter, positionNumber);
+            int index = maps.size();
 
-        // Adding the lists in reversed priority order, as KoGenStyle when creating the style
-        // adds last added first
-        while (index > 0) {
-            cellStyle.addStyleMap(maps.at(index - 1));
-            --index;
+            // Adding the lists in reversed priority order, as KoGenStyle when creating the style
+            // adds last added first
+            while (index > 0) {
+                cellStyle.addStyleMap(maps.at(index - 1));
+                --index;
+            }
         }
 
         const QString cellStyleName = mainStyles->insert( cellStyle, "ce" );
@@ -1288,7 +1307,18 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
 {
     READ_PROLOGUE
     readNext();
+
+    // It is possible to have empty <v/> element
+    if (name() == "v" && isEndElement()) {
+        READ_EPILOGUE
+    }
+
     m_value = text().toString();
+    m_value.replace('&', "&amp;");
+    m_value.replace('<', "&lt;");
+    m_value.replace('>', "&gt;");
+    m_value.replace('\\', "&apos;");
+    m_value.replace('"', "&quot;");
 
     readNext();
     READ_EPILOGUE
@@ -1527,7 +1557,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString destinationName = QLatin1String("Pictures/") + link.mid(link.lastIndexOf('/') + 1);
-    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, true ) )
+    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, false ) )
     addManifestEntryForFile(destinationName);
 
     m_context->sheet->setPictureBackgroundPath(destinationName);
@@ -1638,7 +1668,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString destinationName = QLatin1String("") + link.mid(link.lastIndexOf('/') + 1);
-    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, true ) )
+    RETURN_IF_ERROR( m_context->import->copyFile(link, destinationName, false ) )
     addManifestEntryForFile(destinationName);
 
     //TODO find out which cell to pick

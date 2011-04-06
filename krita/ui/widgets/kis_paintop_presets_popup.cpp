@@ -29,6 +29,7 @@
 #include <QFont>
 #include <QMenu>
 #include <QAction>
+#include <QShowEvent>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
@@ -110,13 +111,17 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
-            
+
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
-    
+
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             this, SIGNAL(presetNameLineEditChanged(QString)));
-            
+
+    connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(const QString&)),
+            this, SIGNAL(paintopActivated(QString)));
+
+
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
 
@@ -167,7 +172,8 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     if (widget) {
         widget->setFont(m_d->smallFont);
 
-        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+        widget->setMinimumSize(QSize(750, 450));
+        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
         m_d->layout->addWidget(widget);
 
         m_d->layout->update();
@@ -178,7 +184,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
 {
     QPalette palette;
-    
+
     if (change) {
         palette.setColor(QPalette::Base, QColor(255,200,200));
         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
@@ -260,8 +266,30 @@ void KisPaintOpPresetsPopup::showScratchPad()
 
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
-	m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }
 
+void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
+{
+   m_d->uiWdgPaintOpPresetSettings.paintopList->setPaintOpList(list);
+}
+
+void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
+{
+    m_d->uiWdgPaintOpPresetSettings.paintopList->setCurrent(paintOpId);
+}
+
+QString KisPaintOpPresetsPopup::currentPaintOp()
+{
+    return m_d->uiWdgPaintOpPresetSettings.paintopList->currentItem();
+}
+
+void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
+{
+    if (m_d->detached) {
+        switchDetached();
+    }
+    QWidget::hideEvent(event);
+}
 
 #include "kis_paintop_presets_popup.moc"

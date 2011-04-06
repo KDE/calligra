@@ -3,4 +3,7 @@
 .kateconfig
 CMakeLists.txt.user
 .directory
-
+*.rej
+*.orig
+*.patch
+.gdb_history

@@ -31,6 +31,7 @@
 #include "KoDockFactoryBase.h"
 #include "dialogs/KoConfigurationDialog.h"
 #include "dialogs/KoOpenSaveConfigurationDialogPage.h"
+#include "KoUndoStackAction.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -448,6 +449,8 @@ void KoView::setupGlobalActions()
 
     actionCollection()->addAction(KStandardAction::Preferences,
                                   "configure", this, SLOT(showConfigurationDialog()));
+    actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
+    actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 }
 
 void KoView::newView()

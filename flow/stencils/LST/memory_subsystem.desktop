@@ -1,3 +1,10 @@
 [Desktop Entry]
-Name=Memory Subsystem
-Name[x-test]=xxMemory Subsystemxx
+Name=Memory
+Name[es]=Memoria
+Name[nl]=Geheugen
+Name[pt]=Memória
+Name[pt_BR]=Memória
+Name[sv]=Minne
+Name[uk]=Пам'ять
+Name[x-test]=xxMemoryxx
+Name[zh_CN]=内存

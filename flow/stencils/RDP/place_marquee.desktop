@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Place Marquee
-Name[x-test]=xxPlace Marqueexx
+Name=place marquee
+Name[pt]=marcador local
+Name[pt_BR]=marcador de local
+Name[uk]=Область
+Name[x-test]=xxplace marqueexx

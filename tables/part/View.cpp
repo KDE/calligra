@@ -1180,7 +1180,7 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 
     // flake
     // Change the active shape controller and its shapes.
-    d->canvas->shapeController()->setShapeControllerBase(d->activeSheet);
+    d->canvas->shapeController()->setShapeControllerBase(d->activeSheet, d->canvas);
     d->canvas->shapeManager()->setShapes(d->activeSheet->shapes());
     // Tell the Canvas about the new visible sheet size.
     sheetView(d->activeSheet)->updateAccessedCellRange();

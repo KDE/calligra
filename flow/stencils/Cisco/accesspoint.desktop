@@ -1,4 +1,10 @@
 [Desktop Entry]
-Name=Accesspoint
+Name=AccessPoint
+Name[et]=Tugijaam
+Name[nl]=AccessPoint
+Name[pt]=Ponto Acesso
+Name[pt_BR]=Ponto de acesso
+Name[sv]=Anslutningspunkt
 Name[uk]=Точка доступу
-Name[x-test]=xxAccesspointxx
+Name[x-test]=xxAccessPointxx
+Name[zh_CN]=入口点

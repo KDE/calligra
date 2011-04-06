@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Alt-Entity
-Name[x-test]=xxAlt-Entityxx
+Name=Alternative External Entity
+Name[pt]=Entidade Externa Alternativa
+Name[pt_BR]=Entidade externa alternativa
+Name[uk]=Інший зовнішній об’єкт
+Name[x-test]=xxAlternative External Entityxx

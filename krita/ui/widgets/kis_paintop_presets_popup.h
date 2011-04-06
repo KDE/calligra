@@ -22,8 +22,10 @@
 #define KIS_PAINTOP_PRESETS_POPUP_H
 
 #include <QWidget>
+#include <QList>
 #include <KoID.h>
 #include <kis_types.h>
+#include <kis_paintop_factory.h>
 
 class QString;
 class KisPaintOpPreset;
@@ -46,7 +48,7 @@ public:
     ~KisPaintOpPresetsPopup();
 
     void setPaintOpSettingsWidget(QWidget * widget);
-    
+
     /**
      * changes the "save to preset" button text to "override preset"
      * and highlites the preset name lineedit
@@ -61,31 +63,38 @@ public:
     ///Set preset for the scratchpad
     ///@param preset that will be used in the scratchpad
     void setPreset(KisPaintOpPresetSP preset);
-    
+
     ///Image for preset preview
     ///@return image cut out from the scratchpad
     QImage cutOutOverlay();
 
+    void setPaintOpList(const QList<KisPaintOpFactory*>& list);
+
+    void setCurrentPaintOp(const QString & paintOpId);
+    QString currentPaintOp();
+
 protected:
     void contextMenuEvent(QContextMenuEvent *);
+    void hideEvent(QHideEvent *);
 
 public slots:
     void switchDetached();
     void hideScratchPad();
     void showScratchPad();
-	void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResource* resource);
 
 signals:
     void savePresetClicked();
     void defaultPresetClicked();
     void presetNameLineEditChanged(const QString& presetName);
+    void paintopActivated(const QString& presetName);
 
 private slots:
     void fillScratchPadGradient();
     void fillScratchPadSolid();
     void fillScratchPadLayer();
     void slotCheckPresetValidity();
-    
+
 
 private:
 

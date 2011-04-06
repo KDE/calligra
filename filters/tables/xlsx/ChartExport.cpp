@@ -266,13 +266,31 @@ QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoG
             }            
             break;
             default:
-              style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+            {
+                if ( paletteSet )
+                {
+                    style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#C0C0C0", KoGenStyle::GraphicType );
+                }
+                else
+                {
+                    style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+                }
+            }
         }
     }
     else
     {        
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
-        style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+        if ( paletteSet )
+        {
+            style.addProperty( "draw:fill-color", "#C0C0C0", KoGenStyle::GraphicType );
+            Q_ASSERT( style.property( "draw:fill-color", KoGenStyle::GraphicType ) == "#C0C0C0" );
+        }
+        else
+        {
+            style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+        }
+        //style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
     }
     return styles.insert( style, "ch" );
 }
@@ -324,7 +342,7 @@ void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoG
 
 QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
-    KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart");
+    KoGenStyle style(KoGenStyle::ChartAutoStyle/*, "chart"*/);
     return genPlotAreaStyle( styleID, style, styles, mainStyles );
 }
 

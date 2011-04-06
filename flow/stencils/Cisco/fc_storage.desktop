@@ -1,3 +1,9 @@
 [Desktop Entry]
-Name=Fc Storage
-Name[x-test]=xxFc Storagexx
+Name=FC Storage
+Name[et]=FC salvesti
+Name[nl]=FC-storage
+Name[pt]=Armazenamento FC
+Name[pt_BR]=Armazenamento FC
+Name[sv]=Fiberkanallagring
+Name[uk]=Сховище FC
+Name[x-test]=xxFC Storagexx

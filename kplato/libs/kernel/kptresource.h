@@ -352,8 +352,11 @@ public:
     { return m_requests; }
 
     /// Returns a list of work intervals in the interval @p from, @p until.
-    /// Appointments are subtracted if @p schedule is not 0.
-    AppointmentIntervalList workIntervals( const DateTime &from, const DateTime &until, Schedule *schedule = 0 ) const;
+    /// Appointments are subtracted if @p schedule is not 0 and overbooking is not allowed.
+    AppointmentIntervalList workIntervals( const DateTime &from, const DateTime &until, Schedule *schedule ) const;
+
+    /// Returns a list of work intervals in the interval @p from, @p until.
+    AppointmentIntervalList workIntervals( const DateTime &from, const DateTime &until ) const;
 
     /// Updates work interval cache a list of work intervals extracted from the resource calendar
     /// with @p load in the interval @p from, @p until.
@@ -368,13 +371,13 @@ public:
     /// Returns the effort that can be done starting at @p start within @p duration.
     /// The current schedule is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
-    Duration effort( const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>() ) const;
+    Duration effort( const DateTime &start, const Duration &duration, int units = 100, bool backward = false, const QList<Resource*> &required = QList<Resource*>() ) const;
 
     /// Returns the effort that can be done starting at @p start within @p duration.
     /// The schedule @p sch is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
     /// Status is returned in @p ok
-    Duration effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>() ) const;
+    Duration effort( KPlato::Schedule* sch, const DateTime &start, const Duration& duration, int units = 100, bool backward = false, const QList< Resource* >& required = QList<Resource*>() ) const;
 
 
     /**

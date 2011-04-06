@@ -22,12 +22,19 @@
 #ifndef KWCANVASBASE_H
 #define KWCANVASBASE_H
 
+#include <QCache>
+#include <QDebug>
+
 #include "KWDocument.h"
 #include "kword_export.h"
 #include "KWViewMode.h"
+#include "KWPage.h"
 
 #include <KoCanvasBase.h>
+
 #include <QRectF>
+#include <QImage>
+#include <QQueue>
 
 class QRect;
 class QPainter;
@@ -36,6 +43,7 @@ class KWGui;
 class KoToolProxy;
 class KoShape;
 class KoViewConverter;
+class KWPageCacheManager;
 
 class KWORD_EXPORT KWCanvasBase : public KoCanvasBase
 {
@@ -70,7 +78,7 @@ public: // KoCanvasBase interface methods.
     virtual KoGuidesData *guidesData();
 
     /// reimplemented method from superclass
-    virtual const KoViewConverter *viewConverter() const;
+    virtual KoViewConverter *viewConverter() const;
 
     /// return the document that this canvas works on
     KWDocument *document() const;
@@ -80,6 +88,18 @@ public: // KoCanvasBase interface methods.
 
     /// reimplemented method from superclass
     virtual void ensureVisible(const QRectF &rect);
+
+    /**
+     * Enable or disable the page cache. The cache stores the rendered pages. It is
+     * emptied when the zoomlevel changes.
+     *
+     * @param enabled: if true, we cache the contents of the document for this canvas,
+     *  for the current zoomlevel
+     * @param cachesize: the the maximum size for the cache. The cache will throw away
+     *  pages once this size is reached. Depending on Qt's implementation of QCache, the
+     *  unit is pages.
+     */
+    virtual void setCacheEnabled(bool enabled, int cacheSize = 50);
 
 protected:
 
@@ -110,6 +130,11 @@ protected:
     KWViewMode *m_viewMode;
     QPoint m_documentOffset;
     KoViewConverter *m_viewConverter;
+
+    bool m_cacheEnabled;
+    qreal m_currentZoom;
+    KWPageCacheManager *m_pageCacheManager;
+    int m_cacheSize;
 };
 
 #endif // KWCANVASBASE_H

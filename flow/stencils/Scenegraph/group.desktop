@@ -1,6 +1,9 @@
 [Desktop Entry]
-Name=Group
-Name[pt]=Grupo
+Name=group
+Name[es]=grupo
+Name[pt]=grupo
+Name[pt_BR]=grupo
+Name[sv]=grupp
 Name[uk]=Група
-Name[x-test]=xxGroupxx
-Name[zh_TW]=群組
+Name[x-test]=xxgroupxx
+Name[zh_CN]=组

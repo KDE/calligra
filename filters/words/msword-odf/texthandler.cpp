@@ -90,24 +90,21 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_fldChp(0)
 //     , m_index(0)
 {
-#ifdef IMAGE_IMPORT
-    kDebug(30513) << "we have image support";
-#else
-    kDebug(30513) << "no image support";
-#endif
+    //set the pointer to bodyWriter for writing to content.xml in office:text
     if (bodyWriter) {
-        m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing to content.xml in office:text
+        m_bodyWriter = bodyWriter;
     } else {
         kWarning() << "No bodyWriter!";
     }
+    //for collecting most of the styles
     if (mainStyles) {
-        m_mainStyles = mainStyles; //for collecting most of the styles
+        m_mainStyles = mainStyles;
     } else {
         kWarning() << "No mainStyles!";
     }
 
-    //[MS-DOC] — v20090708 - 2.7.2 DopBase pg.163
-    if ((0x00D9 >= m_parser->fib().nFib) && (m_parser->dop().nfcFtnRef2 == 0)) {
+    //[MS-DOC] — v20101219 - 2.7.2 DopBase
+    if ((m_parser->fib().nFib <= 0x00D9) && (m_parser->dop().nfcFtnRef2 == 0)) {
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
 }
@@ -131,7 +128,7 @@ KoXmlWriter* KWordTextHandler::currentWriter() const
     else {
         writer = m_bodyWriter;
     }
-    return writer; 
+    return writer;
 }
 
 //increment m_sectionNumber
@@ -290,7 +287,8 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
 void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
-                                     wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                                     wvWare::UString characters,
+                                     wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                      const wvWare::FootnoteFunctor& parseFootnote)
 {
     Q_UNUSED(chp);
@@ -309,8 +307,12 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     m_footnoteWriter->addAttribute("text:note-class", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
     //autonumber or character
     m_footnoteWriter->startElement("text:note-citation");
-    if (characters[0].unicode() == 2) {//autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
-        //NOTE: besides converting the number to text here the format is specified in section-properties -> notes-configuration too
+
+    //autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
+
+    //NOTE: besides converting the number to text here the format is specified
+    //in section-properties -> notes-configuration too
+    if (characters[0].unicode() == 2) {
 
         int noteNumber = (type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
         QString noteNumberString;
@@ -373,15 +375,20 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
         }
         m_footnoteWriter->addTextNode(customNote);
     }
-    m_footnoteWriter->endElement();//text:note-citation
+
+    m_footnoteWriter->endElement(); //text:note-citation
     //start the body of the footnote
     m_footnoteWriter->startElement("text:note-body");
 
-    //save the state of tables & paragraphs because we'll get new ones in the footnote
+    //save the state of tables/paragraphs/lists
     saveState();
     //signal Document to parse the footnote
     emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), type);
-    //and now restore state
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
     restoreState();
 
     //end the elements
@@ -507,11 +514,9 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     m_annotationWriter = new KoXmlWriter(m_annotationBuffer);
 
     m_annotationWriter->startElement("office:annotation");
-
     m_annotationWriter->startElement("dc:creator");
     // XXX: get the creator from the .doc
     m_annotationWriter->endElement();
-
     m_annotationWriter->startElement("dc:date");
     // XXX: get the date from the .doc
     m_annotationWriter->endElement();
@@ -595,8 +600,6 @@ void KWordTextHandler::tableEndFound()
     emit tableFound(table);
 }
 
-#ifdef IMAGE_IMPORT
-
 //TODO: merge inlineObjectFound with floatingObjectFound, both of them are
 //stable actually
 
@@ -627,8 +630,15 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    //signal that we have a picture, provide the bodyWriter to GraphicsHandler
+    //save the state of tables/paragraphs/lists (text-box)
+    saveState();
     emit inlineObjectFound(data, m_drawingWriter);
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
+    restoreState();
 
     if (m_fld->m_hyperLinkActive) {
         writer->endElement();
@@ -673,8 +683,14 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
+    //save the state of tables/paragraphs/lists (text-box)
     saveState();
     emit floatingObjectFound(globalCP, m_drawingWriter);
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
     restoreState();
 
     if (m_fld->m_hyperLinkActive) {
@@ -692,10 +708,8 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     delete m_drawingWriter;
     m_drawingWriter = 0;
 }
-#endif // IMAGE_IMPORT
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
-
 void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
 {
     kDebug(30513) << "**********************************************";
@@ -742,6 +756,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     // list to which the paragraph belongs.
     if (!paragraphProperties) {
         // TODO: What to do here?
+        kDebug(30513) << "PAP Missing (Big mess-up!)";
     } else if ( (paragraphProperties->pap().ilfo == 0)) {
 
         // Not in a list at all in the word document, so check if we need to
@@ -916,7 +931,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     //instructions and the content between fieldSeparator and fieldEnd
     //represents the field RESULT [optional].  In most cases the field RESULT
     //stores the complete information (instruction are applied by msword).
-    kDebug(30513) << "fld->flt:" << fld->flt << "(" << hex << fld->flt << ")";
+    kDebug(30513) << "fld->flt:" << fld->flt << "( 0x" << hex << fld->flt << ")";
 
     //nested field
     if (m_fld->m_insideField) {
@@ -959,10 +974,13 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case EDITTIME:
     case FILENAME:
     case MERGEFIELD:
+    case SEQ:
     case SHAPE:
         kWarning(30513) << "Warning: field instructions not supported!";
         kWarning(30513) << "Warning: processing field result!";
         break;
+    case UNSUPPORTED:
+        kWarning(30513) << "Warning: Fld data missing, ignoring!";
     default:
         kWarning(30513) << "Warning: unrecognized field type" << m_fld->m_type << ", ignoring!";
         m_fld->m_type = UNSUPPORTED;
@@ -1565,6 +1583,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case EDITTIME:
             case FILENAME:
             case MERGEFIELD:
+            case SEQ:
             case SHAPE:
             case TOC:
                 //NOTE: Ignoring bookmarks in the field result!
@@ -2021,11 +2040,10 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName)
 void KWordTextHandler::closeList()
 {
     kDebug(30513);
-    // Set the correct XML writer.
-    //
-    KoXmlWriter *writer = m_usedListWriters.pop();		// get the last used writer from stack
+    // Set the correct XML writer, get the last used writer from stack
+    KoXmlWriter *writer = m_usedListWriters.pop();
 
-    //TODO should probably test this more, to make sure it does work this way
+    //TODO: should probably test this more, to make sure it does work this way
     //for level 0, we need to close the last item and the list
     //for level 1, we need to close the last item and the list, and the last item and the list
     //for level 2, we need to close the last item and the list, and the last item adn the list, and again

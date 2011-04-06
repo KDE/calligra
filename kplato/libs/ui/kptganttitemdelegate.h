@@ -55,13 +55,13 @@ public:
 
     QVariant data( const QModelIndex& idx, int column, int role = Qt::DisplayRole ) const;
     QString itemText( const QModelIndex& idx, int type ) const;
-    int itemFloatWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
-    int itemNegativeFloatWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
+    QRectF itemPositiveFloatRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
+    QRectF itemNegativeFloatRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
 
     bool hasStartConstraint( const QModelIndex& idx ) const;
     bool hasEndConstraint( const QModelIndex& idx ) const;
-    int itemStartConstraintWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
-    int itemEndConstraintWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
+    QRectF itemStartConstraintRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
+    QRectF itemEndConstraintRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
 
     bool showResources;
     bool showTaskName;

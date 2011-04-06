@@ -13,7 +13,7 @@
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
    Copyright (C) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (C) 2005-2009 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2009,2011 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
@@ -82,6 +82,8 @@
 #include <KoShapeBorderCommand.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoParameterToPathCommand.h>
+#include <KoShapeClipCommand.h>
+#include <KoShapeUnclipCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
@@ -91,6 +93,7 @@
 #include <KoPathSeparateCommand.h>
 #include <KoPathReverseCommand.h>
 #include <KoPathPointMoveCommand.h>
+#include <KoShapeTransformCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
@@ -149,7 +152,8 @@ public:
             , closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
             , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
-            , deleteSelectionAction(0), viewAction(0), showRulerAction(0)
+            , deleteSelectionAction(0), clipObjects(0), unclipObjects(0)
+            , flipVertical(0), flipHorizontal(0), viewAction(0), showRulerAction(0)
             , snapGridAction(0), showPageMargins(0), showGuidesAction(0)
             , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
@@ -172,6 +176,10 @@ public:
     KAction * pathSnapToGrid;
     KAction * configureAction;
     KAction * deleteSelectionAction;
+    KAction * clipObjects;
+    KAction * unclipObjects;
+    KAction * flipVertical;
+    KAction * flipHorizontal;
 
     KToggleAction * viewAction;
     KToggleAction * showRulerAction;
@@ -599,6 +607,107 @@ void KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distri
     d->canvas->addCommand(cmd);
 }
 
+void KarbonView::clipObjects()
+{
+    KoSelection* selection = d->canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    if( ! selectedShapes.count() )
+        return;
+
+    KoShape * shapeToClip = selectedShapes.first();
+    selectedShapes.removeOne( shapeToClip );
+
+    QList<KoPathShape*> clipPaths;
+    foreach( KoShape * shape, selectedShapes )
+    {
+        KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+        if( path )
+            clipPaths.append( path );
+    }
+
+    if( ! clipPaths.count() )
+        return;
+
+    QUndoCommand * cmd = new KoShapeClipCommand( d->part, shapeToClip, clipPaths );
+    d->canvas->addCommand( cmd );
+}
+
+void KarbonView::unclipObjects()
+{
+    KoSelection* selection = d->canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    if( ! selectedShapes.count() )
+        return;
+
+    QList<KoShape*> shapesToUnclip;
+    foreach(KoShape *shape, selectedShapes) {
+        if (shape->clipPath())
+            shapesToUnclip.append(shape);
+    }
+    if (!shapesToUnclip.count())
+        return;
+    
+    d->canvas->addCommand(new KoShapeUnclipCommand(d->part, shapesToUnclip));
+}
+
+void KarbonView::flipVertical()
+{
+    selectionFlip(false, true);
+}
+
+void KarbonView::flipHorizontal()
+{
+    selectionFlip(true, false);
+}
+
+void KarbonView::selectionFlip(bool horizontally, bool vertically)
+{
+    if (!horizontally && !vertically)
+        return;
+
+    KoSelection* selection = d->canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
+    if( ! selectedShapes.count() )
+        return;
+
+    // mirror about center point
+    QPointF mirrorCenter = selection->absolutePosition(KoFlake::CenteredPosition);
+
+    QTransform mirrorMatrix;
+    mirrorMatrix.translate(mirrorCenter.x(), mirrorCenter.y());
+    mirrorMatrix.scale( horizontally ? -1.0 : 1.0, vertically ? -1.0 : 1.0);
+    mirrorMatrix.translate(-mirrorCenter.x(), -mirrorCenter.y());
+
+    QList<QTransform> oldState;
+    QList<QTransform> newState;
+    foreach( KoShape* shape, selectedShapes ) {
+        shape->update();
+        oldState << shape->transformation();
+        // apply the mirror transformation
+        shape->applyAbsoluteTransformation(mirrorMatrix);
+        newState << shape->transformation();
+    }
+    selection->applyAbsoluteTransformation(mirrorMatrix);
+
+    QUndoCommand *cmd = new KoShapeTransformCommand(selectedShapes, oldState, newState);
+    if (horizontally && !vertically)
+        cmd->setText(i18n("Mirror Horizontally"));
+    else if (!horizontally && vertically)
+        cmd->setText(i18n("Mirror Vertically"));
+    else
+        cmd->setText(i18n("Mirror Horizontally and Vertically"));
+    d->canvas->addCommand(cmd);
+}
+
 void KarbonView::closePath()
 {
     // TODO add the new close path command here
@@ -905,6 +1014,22 @@ void KarbonView::initActions()
         action->setShortcut(QKeySequence("Ctrl+Shift+G"));
     }
 
+    d->clipObjects  = new KAction(KIcon("clip"), i18n("&Clip Object"), this);
+    actionCollection()->addAction("object_clip", d->clipObjects );
+    connect(d->clipObjects, SIGNAL(triggered()), this, SLOT(clipObjects()));
+
+    d->unclipObjects  = new KAction(KIcon("unclip"), i18n("&Unclip Objects"), this);
+    actionCollection()->addAction("object_unclip", d->unclipObjects );
+    connect(d->unclipObjects, SIGNAL(triggered()), this, SLOT(unclipObjects()));
+
+    d->flipVertical = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    actionCollection()->addAction("object_flip_vertical", d->flipVertical);
+    connect(d->flipVertical, SIGNAL(triggered()), this, SLOT(flipVertical()));
+
+    d->flipHorizontal = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    actionCollection()->addAction("object_flip_horizontal", d->flipHorizontal);
+    connect(d->flipHorizontal, SIGNAL(triggered()), this, SLOT(flipHorizontal()));
+
     // object <-----
 
     // path ------->
@@ -1085,7 +1210,8 @@ void KarbonView::selectionChanged()
     if (!shell())
         return;
     KoSelection *selection = d->canvas->shapeManager()->selection();
-    int count = selection->selectedShapes(KoFlake::FullSelection).count();
+    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::FullSelection);
+    const int count = selectedShapes.count();
 
     d->closePath->setEnabled(false);
     d->combinePath->setEnabled(false);
@@ -1094,6 +1220,10 @@ void KarbonView::selectionChanged()
     d->subtractPath->setEnabled(false);
     d->unitePath->setEnabled(false);
     d->pathSnapToGrid->setEnabled(false);
+    d->clipObjects->setEnabled(false);
+    d->unclipObjects->setEnabled(false);
+    d->flipHorizontal->setEnabled(count > 0);
+    d->flipVertical->setEnabled(count > 0);
 
     kDebug(38000) << count << " shapes selected";
 
@@ -1101,7 +1231,7 @@ void KarbonView::selectionChanged()
         uint selectedPaths = 0;
         uint selectedParametrics = 0;
         // check for different shape types for enabling specific actions
-        foreach(KoShape* shape, selection->selectedShapes(KoFlake::FullSelection)) {
+        foreach(KoShape* shape, selectedShapes) {
             if (dynamic_cast<KoPathShape*>(shape)) {
                 KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
                 if (ps && ps->isParametricShape())
@@ -1122,6 +1252,8 @@ void KarbonView::selectionChanged()
         d->subtractPath->setEnabled(selectedPaths + selectedParametrics == 2);
         d->unitePath->setEnabled(selectedPaths + selectedParametrics == 2);
         d->pathSnapToGrid->setEnabled(selectedPaths > 0);
+        d->clipObjects->setEnabled(selectedPaths > 0 && count > 1);
+        d->unclipObjects->setEnabled(selectedShapes.first()->clipPath() != 0);
         // if only one shape selected, set its parent layer as the active layer
         if (count == 1) {
             KoShapeContainer * parent = selection->selectedShapes().first()->parent();

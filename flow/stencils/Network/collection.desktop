@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=Network
+Name[es]=Red
+Name[et]=Võrk
+Name[nl]=Netwerk
 Name[pt]=Rede
+Name[pt_BR]=Rede
+Name[sv]=Nätverk
 Name[uk]=Мережа
 Name[x-test]=xxNetworkxx
+Name[zh_CN]=网络
 X-KDE-DirType=odg-collection

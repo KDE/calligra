@@ -1,3 +1,7 @@
 [Desktop Entry]
-Name=C Relay
-Name[x-test]=xxC Relayxx
+Name=relay
+Name[pt]=relé
+Name[pt_BR]=relé
+Name[sv]=relä
+Name[uk]=реле
+Name[x-test]=xxrelayxx

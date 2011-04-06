@@ -1,4 +1,6 @@
 [Desktop Entry]
-Name=Transaction
-Name[uk]=Операція
-Name[x-test]=xxTransactionxx
+Name=Transaction File
+Name[pt]=Ficheiro Transacção
+Name[pt_BR]=Arquivo de transação
+Name[uk]=Файл передачі
+Name[x-test]=xxTransaction Filexx

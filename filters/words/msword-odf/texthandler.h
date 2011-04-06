@@ -26,7 +26,7 @@
 #define TEXTHANDLER_H
 
 #include "tablehandler.h"
-#include "versionmagic.h"
+//#include "versionmagic.h"
 #include "paragraph.h"
 
 #include <wv2/src/handlers.h>
@@ -99,10 +99,8 @@ public:
     virtual void bookmarkStart( const wvWare::BookmarkData& data );
     virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
-#ifdef IMAGE_IMPORT
     virtual void inlineObjectFound(const wvWare::PictureData& data);
     virtual void floatingObjectFound(unsigned int globalCP );
-#endif // IMAGE_IMPORT
 
     ///////// Our own interface
 
@@ -245,7 +243,7 @@ private:
         //IF = 0x07,
         //INDEX = 0x08,
         //STYLEREF = 0x0a,
-        //SEQ = 0x0c,
+        SEQ = 0x0c,
         TOC = 0x0d,
         //INFO = 0x0e,
         TITLE = 0x0f,

@@ -51,7 +51,7 @@ class KoCanvasBase;
  * This class provides a layer on top of the KoViewConverter and KWord should not use that
  * interface directly.
  */
-class KWORD_TEST_EXPORT KWViewMode : public QObject
+class KWORD_EXPORT KWViewMode : public QObject
 {
     Q_OBJECT
 public:
@@ -60,9 +60,9 @@ public:
 
     /// a two value return type for clipRectToDocument()
     struct ViewMap {
-        QRect clipRect;   ///< the rectangle in the document-space showing (part of) the clip
-        QPointF distance; ///< the displacement between the document and the view.
-        KWPage page; ///< The page that this section represents.
+        QRect clipRect;   ///< the rectangle in the view coordinates showing (part of) the clip
+        QPointF distance; ///< the displacement between the document and the view in view coordinates.
+        KWPage page;      ///< The page that this section represents.
     };
 
     /** Document coord -> view coord */

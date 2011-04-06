@@ -1,3 +1,7 @@
 [Desktop Entry]
-Name=L Out
-Name[x-test]=xxL Outxx
+Name=out
+Name[pt]=saída
+Name[pt_BR]=saída
+Name[sv]=ut
+Name[uk]=out
+Name[x-test]=xxoutxx

@@ -1,3 +1,8 @@
 [Desktop Entry]
-Name=Furnace
-Name[x-test]=xxFurnacexx
+Name=furnace
+Name[nl]=oven
+Name[pt]=fornalha
+Name[pt_BR]=fornalha
+Name[sv]=ugn
+Name[uk]=Піч
+Name[x-test]=xxfurnacexx

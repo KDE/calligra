@@ -28,6 +28,7 @@
 #include "KWCopyShape.h"
 #include "KWDocument.h"
 #include "KWPageBackground.h"
+#include "KWord.h"
 
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
@@ -35,7 +36,6 @@
 #include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>
-#include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>
 
@@ -51,7 +51,6 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
 
 void KWFrameLayout::createNewFramesForPage(int pageNumber)
 {
-//kDebug() <<"createNewFramesForPage" << pageNumber;
     m_setup = false; // force reindexing of types
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
@@ -70,15 +69,20 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        if (!frameOn(fs, pageNumber))
+        if (!frameOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
+        }
     }
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
         if (!frameOn(fs, pageNumber))
+        {
             createCopyFrame(fs, page);
+        }
     }
+
+    //kDebug() <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
 
     if (page.pageStyle().background()) {
         // create page background
@@ -316,19 +320,17 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::OddPagesHeaderTextFrameSet:
         case KWord::EvenPagesHeaderTextFrameSet: {
             header = static_cast<KWTextFrame *>(frame);
-            minimumHeight[1] = qMax((qreal)10, page.pageStyle().headerMinimumHeight());
-            requestedHeight[1] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
-            if (minimumHeight[1] < page.pageStyle().headerDistance())
-                minimumHeight[2] = page.pageStyle().headerDistance() - minimumHeight[1];
+            minimumHeight[1] = qMax((qreal)10, pageStyle.headerMinimumHeight());
+            minimumHeight[2] = pageStyle.headerDistance();
+            requestedHeight[1] = qMax(pageStyle.headerMinimumHeight(), static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight());
             break;
         }
         case KWord::OddPagesFooterTextFrameSet:
         case KWord::EvenPagesFooterTextFrameSet: {
             footer = static_cast<KWTextFrame *>(frame);
-            minimumHeight[7] = qMax((qreal)10, page.pageStyle().footerMinimumHeight());
-            requestedHeight[7] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
-            if(minimumHeight[7] < page.pageStyle().footerDistance())
-                minimumHeight[6] = page.pageStyle().footerDistance() - minimumHeight[7];
+            minimumHeight[7] = qMax((qreal)10, pageStyle.footerMinimumHeight());
+            minimumHeight[6] = pageStyle.footerDistance();
+            requestedHeight[7] = qMax(pageStyle.footerMinimumHeight(), static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight());
             break;
         }
         case KWord::MainTextFrameSet: {
@@ -343,7 +345,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             if (layout && layout->lineCount() > 0) {
                 minimumHeight[3] = qMax((qreal) 10, layout->lineAt(0).height());
             }
-
             requestedHeight[3] = -1; // rest
             break;
         }
@@ -355,14 +356,19 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     pageBackground = frameOn(m_backgroundFrameSet, pageNumber);
 
     --minZIndex;
-    if (endnote)
+    if (endnote) {
         endnote->shape()->setZIndex(minZIndex--);
-    for (int i = 0; i < columns; ++i)
+    }
+    for (int i = 0; i < columns; ++i) {
         main[i]->shape()->setZIndex(minZIndex);
-    if (footer)
+    }
+    if (footer) {
         footer->shape()->setZIndex(--minZIndex);
-    if (header)
+    }
+    if (header) {
         header->shape()->setZIndex(--minZIndex);
+    }
+
     if (pageBackground) {
         KoShape *bs = pageBackground->shape();
         bs->setZIndex(--minZIndex);

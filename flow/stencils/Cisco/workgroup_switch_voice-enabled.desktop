@@ -1,4 +1,8 @@
 [Desktop Entry]
-Name=Workgroup Switch Voice-Enabled
-Name[uk]=Комутатор робочої групи з підтримкою голосу
-Name[x-test]=xxWorkgroup Switch Voice-Enabledxx
+Name=Voice switch
+Name[et]=Häälekommutaator
+Name[pt]=Comutador voz
+Name[pt_BR]=Comutador de voz
+Name[sv]=Röstväxel
+Name[uk]=Голосовий комутатор
+Name[x-test]=xxVoice switchxx

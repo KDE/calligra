@@ -1,3 +1,7 @@
 [Desktop Entry]
-Name=Gasholder
-Name[x-test]=xxGasholderxx
+Name=gasholder
+Name[nl]=gashouder
+Name[pt]=cisterna
+Name[pt_BR]=cisterna
+Name[uk]=Газосховище
+Name[x-test]=xxgasholderxx

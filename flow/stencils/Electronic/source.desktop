@@ -1,4 +1,7 @@
 [Desktop Entry]
-Name=Source
-Name[uk]=Джерело
-Name[x-test]=xxSourcexx
+Name=source
+Name[pt]=fonte
+Name[pt_BR]=fonte
+Name[sv]=källa
+Name[uk]=Джерело струму або його вимірювач
+Name[x-test]=xxsourcexx

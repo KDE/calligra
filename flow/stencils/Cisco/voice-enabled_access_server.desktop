@@ -1,4 +1,7 @@
 [Desktop Entry]
-Name=Voice-Enabled Access Server
-Name[uk]=Голосовий сервер доступу
-Name[x-test]=xxVoice-Enabled Access Serverxx
+Name=Voice commserver
+Name[et]=Häälsuhtluse server
+Name[pt]=Servidor com. voz
+Name[pt_BR]=Servidor de comunicações de voz
+Name[uk]=Сервер голосового зв'язку
+Name[x-test]=xxVoice commserverxx

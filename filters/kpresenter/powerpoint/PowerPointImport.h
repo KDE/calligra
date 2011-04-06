@@ -30,8 +30,9 @@ class PowerPointImport : public KoFilter
 public:
     PowerPointImport(QObject *parent, const QVariantList&) : KoFilter(parent) {}
     virtual ~PowerPointImport() {}
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from,
-            const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+
+    void setProgress(const int percent);
 };
 
 #endif // POWERPOINTIMPORT_H

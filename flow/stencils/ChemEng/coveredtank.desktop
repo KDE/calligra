@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Coveredtank
-Name[x-test]=xxCoveredtankxx
+Name=coveredtank
+Name[pt]=tanque-coberto
+Name[pt_BR]=tanque coberto
+Name[uk]=Резервуар з кришкою
+Name[x-test]=xxcoveredtankxx

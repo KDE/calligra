@@ -209,3 +209,13 @@ bool CalculationSettings::isAutoCalculationEnabled() const
 {
     return d->automaticCalculation;
 }
+
+void CalculationSettings::setCaseSensitiveComparisons(Qt::CaseSensitivity caseSensitive)
+{
+    d->caseSensitiveComparisons = caseSensitive == Qt::CaseSensitive;
+}
+
+Qt::CaseSensitivity CalculationSettings::caseSensitiveComparisons() const
+{
+    return d->caseSensitiveComparisons ? Qt::CaseSensitive : Qt::CaseInsensitive;
+}

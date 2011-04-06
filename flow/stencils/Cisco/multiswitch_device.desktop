@@ -1,3 +1,8 @@
 [Desktop Entry]
-Name=Multiswitch Device
-Name[x-test]=xxMultiswitch Devicexx
+Name=MultiSwitch Device
+Name[et]=MultiSwitch seade
+Name[pt]=Dispositivo MultiSwitch
+Name[pt_BR]=Dispositivo multi-comutador
+Name[sv]=Flerväxelenhet
+Name[uk]=Пристрій мультикомутації
+Name[x-test]=xxMultiSwitch Devicexx

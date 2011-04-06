@@ -64,6 +64,10 @@ SubDocumentHandler::~SubDocumentHandler()
 {
 }
 
+void SubDocumentHandler::setProgress( const int /*value*/ )
+{
+}
+
 void SubDocumentHandler::bodyStart()
 {
 }

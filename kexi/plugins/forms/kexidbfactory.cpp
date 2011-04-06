@@ -343,7 +343,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     m_propValDesc["NoLabel"] = i18nc("Label Position", "No Label");
 
     m_propDesc["sizeInternal"] = i18n("Size");
-// m_propDesc["pixmap"] = i18n("Image");
     m_propDesc["pixmapId"] = i18n("Image");
     m_propDesc["scaledContents"] = i18n("Scaled Contents");
     m_propDesc["smoothTransformation"] = i18nc("Smoothing when contents are scaled", "Smoothing");
@@ -702,9 +701,11 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
                 || property == "widgetType")
             return false;
         ok = property != "text"; /* "text" is not needed as "caption" is used instead */
-    } else if (classname == "KexiDBImageBox") {
-        ok = property != "font" && property != "wordbreak";
-    } else if (classname == "KexiDBCheckBox") {
+    }
+    else if (classname == "KexiDBImageBox") {
+        ok = property != "font" && property != "wordbreak" && property != "pixmapId";
+    }
+    else if (classname == "KexiDBCheckBox") {
         //hide text property if the widget is a child of an autofield beause there's already "caption" for this purpose
         if (property == "text" && w && dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w->parentWidget()))
             return false;

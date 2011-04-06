@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Sigmoid
-Name[x-test]=xxSigmoidxx
+Name=sigmoid
+Name[pt]=sigmóide
+Name[pt_BR]=sigmóide
+Name[uk]=Сігмоїд-характеристика
+Name[x-test]=xxsigmoidxx

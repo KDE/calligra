@@ -1,4 +1,8 @@
 [Desktop Entry]
-Name=Computer
-Name[uk]=Комп'ютер
-Name[x-test]=xxComputerxx
+Name=General Computer (Tower)
+Name[et]=Tavaline arvuti (tower)
+Name[pt]=Computador Geral (Torre)
+Name[pt_BR]=Computador genérico (Torre)
+Name[sv]=Allmän dator (torn)
+Name[uk]=Типовий комп’ютер (корпус «башта»)
+Name[x-test]=xxGeneral Computer (Tower)xx

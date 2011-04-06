@@ -1,3 +1,6 @@
 [Desktop Entry]
-Name=Flowfan
-Name[x-test]=xxFlowfanxx
+Name=flowfan
+Name[pt]=ventoinha-fluxo
+Name[pt_BR]=ventoinha de fluxo
+Name[uk]=Вентилятор, що створює осесиметричний потік
+Name[x-test]=xxflowfanxx

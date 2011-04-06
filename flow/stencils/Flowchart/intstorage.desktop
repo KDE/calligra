@@ -1,3 +1,10 @@
 [Desktop Entry]
-Name=Intstorage
-Name[x-test]=xxIntstoragexx
+Name=Internal Storage
+Name[et]=Sisemine salvesti
+Name[nl]=Interne opslag
+Name[pt]=Armazenamento Interno
+Name[pt_BR]=Armazenamento interno
+Name[sv]=Intern lagring
+Name[uk]=Внутрішня пам'ять
+Name[x-test]=xxInternal Storagexx
+Name[zh_CN]=内部存储

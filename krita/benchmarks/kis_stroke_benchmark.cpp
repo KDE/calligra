@@ -18,6 +18,14 @@
 
 #include <stdlib.h>
 
+#if defined(_WIN32) || defined(_WIN64)
+#define srand48 srand
+inline double drand48()
+{
+    return double(rand()) / RAND_MAX;
+}
+#endif
+
 #include <qtest_kde.h>
 
 #include "kis_stroke_benchmark.h"
@@ -308,6 +316,19 @@ void KisStrokeBenchmark::experimentalCircle()
     benchmarkCircle(presetFileName);
 }
 
+void KisStrokeBenchmark::colorsmudge()
+{
+    QString presetFileName = "colorsmudge.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+void KisStrokeBenchmark::colorsmudgeRL()
+{
+    QString presetFileName = "colorsmudge.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+
 
 /*
 void KisStrokeBenchmark::predefinedBrush()
@@ -420,12 +441,17 @@ for (int k = 0; k < rounds; k++){
 
 
 
-inline void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
+void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 {
-    qDebug() << "preset : " << presetFileName;
-
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    preset->load();
+    bool loadedOk = preset->load();
+    if (!loadedOk){
+        qDebug() << "The preset was not loaded correctly. Done.";
+        return;
+    }else{
+        qDebug() << "preset : " << presetFileName;
+    }
+
     preset->settings()->setNode(m_layer);
     m_painter->setPaintOpPreset(preset, m_image);
 
@@ -444,13 +470,13 @@ inline void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 
 void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
 {
-    qDebug() << "preset : " << presetFileName;
-
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     bool loadedOk = preset->load();
     if (!loadedOk){
         qDebug() << "The preset was not loaded correctly. Done.";
         return;
+    } else {
+        qDebug() << "preset : " << presetFileName;
     }
 
     preset->settings()->setNode(m_layer);

@@ -1,3 +1,8 @@
 [Desktop Entry]
-Name=System Controller
-Name[x-test]=xxSystem Controllerxx
+Name=System controller
+Name[et]=Süsteemikontroller
+Name[pt]=Controlador sistema
+Name[pt_BR]=Controlador de sistema
+Name[sv]=Systemstyrenhet
+Name[uk]=Системний контролер
+Name[x-test]=xxSystem controllerxx

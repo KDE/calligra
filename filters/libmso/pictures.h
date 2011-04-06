@@ -43,4 +43,9 @@ PictureReference savePicture(POLE::Stream& stream, KoStore* store);
 PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a,
                              KoStore* store);
 
+/**
+ * Look in blipStore for the id mapping to this object
+ **/
+QByteArray getRgbUid(const MSO::OfficeArtDggContainer* d, quint16 pib);
+
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen kplato@kde.org>
+  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -47,22 +47,22 @@ namespace KPlato
 HtmlView::HtmlView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-    m_htmlPart.view()->setFrameStyle( QFrame::StyledPanel );
-    m_htmlPart.view()->setFrameShadow( QFrame::Sunken );
+    m_htmlPart = new KHTMLPart( this );
+    m_htmlPart->view()->setFrameStyle( QFrame::StyledPanel );
+    m_htmlPart->view()->setFrameShadow( QFrame::Sunken );
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    l->addWidget( m_htmlPart.view() );
-    m_htmlPart.show();
+    l->addWidget( m_htmlPart->view() );
+    m_htmlPart->show();
 
     setupGui();
 
-    KParts::BrowserExtension *ext = m_htmlPart.browserExtension();
+    KParts::BrowserExtension *ext = m_htmlPart->browserExtension();
     if ( ext ) {
         connect( ext, SIGNAL( openUrlRequest (const KUrl &, const KParts::OpenUrlArguments&, const KParts::BrowserArguments& ) ), SLOT( slotOpenUrlRequest(const KUrl &, const KParts::OpenUrlArguments&, const KParts::BrowserArguments& ) ) );
     }
 }
-
 
 void HtmlView::slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &/*arguments*/, const KParts::BrowserArguments &/*browserArguments*/)
 {
@@ -71,7 +71,7 @@ void HtmlView::slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArgument
 
 bool HtmlView::openHtml( const KUrl &url )
 {
-    return m_htmlPart.openUrl( url );
+    return m_htmlPart->openUrl( url );
 }
 
 void HtmlView::updateReadWrite( bool /*readwrite */)

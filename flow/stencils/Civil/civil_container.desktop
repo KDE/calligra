@@ -1,4 +1,10 @@
 [Desktop Entry]
-Name=Civil Container
+Name=Container
+Name[es]=Contenedor
+Name[et]=Konteiner
+Name[pt]=Contentor
+Name[pt_BR]=Contentor
+Name[sv]=Behållare
 Name[uk]=Контейнер
-Name[x-test]=xxCivil Containerxx
+Name[x-test]=xxContainerxx
+Name[zh_CN]=容器

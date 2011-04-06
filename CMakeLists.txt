@@ -31,7 +31,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 option(GHNS "support Get Hot New Stuff" ON)
 
-option(TINY "compile a tiny KOffice" OFF)
+option(TINY "compile a tiny Calligra" OFF)
+option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
@@ -47,12 +48,33 @@ IF (TINY)
     set(SHOULD_BUILD_KDGANTT FALSE)
     set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_F_OFFICE TRUE)
+    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
-ELSE(TINY)
+    set(SHOULD_BUILD_KOABSTRACTION TRUE)
+ELSEIF (CREATIVEONLY)
+    set(SHOULD_BUILD_WORDS FALSE)
+    set(SHOULD_BUILD_KPRESENTER FALSE)
+    set(SHOULD_BUILD_TABLES FALSE)
+    set(SHOULD_BUILD_KARBON TRUE)
+    set(SHOULD_BUILD_KRITA TRUE)
+    set(SHOULD_BUILD_KEXI FALSE)
+    set(SHOULD_BUILD_FLOW FALSE)
+    set(SHOULD_BUILD_KPLATO FALSE)
+    set(SHOULD_BUILD_KFORMULA FALSE)
+    set(SHOULD_BUILD_KCHART FALSE)
+    set(SHOULD_BUILD_KDGANTT FALSE)
+    set(SHOULD_BUILD_KOUNAVAIL FALSE)
+    set(SHOULD_BUILD_SCRIPTING TRUE)
+    set(SHOULD_BUILD_MOBILE FALSE)
+    set(SHOULD_BUILD_KOREPORT FALSE)
+    set(SHOULD_BUILD_BRAINDUMP FALSE)
+    set(SHOULD_BUILD_CALLIGRA FALSE)
+    set(SHOULD_BUILD_CSTESTER FALSE)
+    set(SHOULD_BUILD_KOABSTRACTION FALSE)
+ELSE()
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
     set(SHOULD_BUILD_TABLES TRUE)
@@ -66,13 +88,13 @@ ELSE(TINY)
     set(SHOULD_BUILD_KDGANTT TRUE)
     set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_F_OFFICE TRUE)
+    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
     set(SHOULD_BUILD_CALLIGRA TRUE)
     set(SHOULD_BUILD_CSTESTER TRUE)
-ENDIF(TINY)
-set(SHOULD_BUILD_KOABSTRACTION FALSE) # the default
+    set(SHOULD_BUILD_KOABSTRACTION TRUE)
+ENDIF()
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something
@@ -250,6 +272,26 @@ if(WIN32)
 else(WIN32)
     set (KDE4_ICON_DIR  ${CMAKE_INSTALL_PREFIX}/share/icons)
 endif(WIN32)
+
+##
+## Test for Fontconfig
+##
+macro_optional_find_package(Fontconfig)
+macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+
+##
+## Test for Freetype
+##
+macro_optional_find_package(Freetype)
+macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+
+if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
+    set(FONTCONFIG_INCLUDE_DIR "")
+    set(FREETYPE_INCLUDE_DIRS "")
+else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
+endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+  
 
 ##
 ## Test endianess
@@ -454,15 +496,11 @@ if(SHOULD_BUILD_BRAINDUMP)
   macro_optional_add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
 
-if(SHOULD_BUILD_TABLES AND BUILD_tables
-   AND SHOULD_BUILD_WORDS AND BUILD_words
-   AND SHOULD_BUILD_KPRESENTER AND BUILD_kpresenter)
-    set(SHOULD_BUILD_KOABSTRACTION TRUE)
-endif(SHOULD_BUILD_TABLES AND BUILD_tables
-   AND SHOULD_BUILD_WORDS AND BUILD_words
-   AND SHOULD_BUILD_KPRESENTER AND BUILD_kpresenter)
+if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_KPRESENTER)
+    set(SHOULD_BUILD_KOABSTRACTION FALSE)
+endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_KPRESENTER)
 
-if(SHOULD_BUILD_KOABSTRACTION AND BUILD_koabstraction)
+if(SHOULD_BUILD_KOABSTRACTION)
     # koabstraction depends on kotext & flake
     set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
                         ${KOTEXT_INCLUDES}
@@ -470,18 +508,15 @@ if(SHOULD_BUILD_KOABSTRACTION AND BUILD_koabstraction)
                         ${KOPAGEAPP_INCLUDES}
                         ${KOMAIN_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/tools/koabstraction)
-else(SHOULD_BUILD_KOABSTRACTION AND BUILD_koabstraction)
-    set(SHOULD_BUILD_F_OFFICE FALSE)
-endif(SHOULD_BUILD_KOABSTRACTION AND BUILD_koabstraction)
+else(SHOULD_BUILD_KOABSTRACTION)
+    set(SHOULD_BUILD_MOBILE FALSE)
+endif(SHOULD_BUILD_KOABSTRACTION)
 
-if(SHOULD_BUILD_TABLES AND BUILD_tables
-   AND SHOULD_BUILD_WORDS AND BUILD_words)
+if(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
     # build cstester
-else(SHOULD_BUILD_TABLES AND BUILD_tables
-   AND SHOULD_BUILD_WORDS AND BUILD_words)
+else(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
     set(SHOULD_BUILD_CSTESTER FALSE)
-endif(SHOULD_BUILD_TABLES AND BUILD_tables
-   AND SHOULD_BUILD_WORDS AND BUILD_words)
+endif(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
 
 macro_optional_add_subdirectory(doc)
 
@@ -517,7 +552,7 @@ macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
 macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
 macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
-macro_display_application_enabled(f-office ${SHOULD_BUILD_F_OFFICE})
+macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
 

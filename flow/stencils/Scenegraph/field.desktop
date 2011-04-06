@@ -1,5 +1,8 @@
 [Desktop Entry]
-Name=Field
-Name[pt]=Campo
+Name=field
+Name[pt]=campo
+Name[pt_BR]=campo
+Name[sv]=fält
 Name[uk]=Поле
-Name[x-test]=xxFieldxx
+Name[x-test]=xxfieldxx
+Name[zh_CN]=字段

@@ -32,7 +32,7 @@
 
 class QPaintEvent;
 class KexiProjectData;
-class KexiSimplePrintingSettings;
+//2.x class KexiSimplePrintingSettings;
 
 namespace KexiDB
 {

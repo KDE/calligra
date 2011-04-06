@@ -164,6 +164,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         }
     }
 
+    emit sigProgress(15);
+
     // 1. parse font table
     {
         DocxXmlFontTableReaderContext context(*writers->mainStyles);
@@ -181,24 +183,29 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     QString documentPath, documentFile;
     MSOOXML::Utils::splitPathAndFile(documentPathAndFile, &documentPath, &documentFile);
 
-    // 2. parse theme for the document
+    // 2. parse theme for the document if a theme exists
     MSOOXML::DrawingMLTheme themes;
     const QString docThemePathAndFile(relationships->targetForType(
         documentPath, documentFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
-    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
-    kDebug() << "ThemePathAndFile:" << docThemePathAndFile;
+    if (!docThemePathAndFile.isEmpty()) {
+        kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
 
-    // prepare the themes-reader
-    QString docThemePath, docThemeFile;
-    MSOOXML::Utils::splitPathAndFile(docThemePathAndFile, &docThemePath, &docThemeFile);
+        // prepare the themes-reader
+        QString docThemePath, docThemeFile;
+        MSOOXML::Utils::splitPathAndFile(docThemePathAndFile, &docThemePath, &docThemeFile);
 
-    MSOOXML::MsooXmlThemesReader themesReader(writers);
-    MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport*)this,
-        docThemePath, docThemeFile);
+        MSOOXML::MsooXmlThemesReader themesReader(writers);
+        MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport*)this,
+            docThemePath, docThemeFile);
 
-    KoFilter::ConversionStatus status
-        = loadAndParseDocument(&themesReader, docThemePathAndFile, errorMessage, &themecontext);
+        KoFilter::ConversionStatus status
+            = loadAndParseDocument(&themesReader, docThemePathAndFile, errorMessage, &themecontext);
+
+        kDebug() << "Reading ThemePathAndFile:" << docThemePathAndFile << "status=" << status;
+    }
+
+    emit sigProgress(25);
 
     // Main document context, to which we collect footnotes, endnotes, comments
     DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
@@ -226,6 +233,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         }
     }
 
+    emit sigProgress(40);
+
     // 4. parse numbering
     {
         const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
@@ -240,6 +249,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 numberingPathAndFile, &numberingReader, writers, errorMessage, &context) )
         }
     }
+
+    emit sigProgress(50);
 
     // 5. parse footnotes
     {
@@ -257,6 +268,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_footnotes = context.m_footnotes;
         }
 
+    emit sigProgress(60);
+
     // 6. parse comments
         const QString commentPathAndFile(relationships->targetForType(documentPath, documentFile,
            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/comments"));
@@ -270,6 +283,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 commentPathAndFile, &commentReader, writers, errorMessage, &context) )
             mainContext.m_comments = context.m_comments;
         }
+
+    emit sigProgress(70);
 
     // 7. parse endnotes
         const QString endnotePathAndFile(relationships->targetForType(documentPath, documentFile,
@@ -285,12 +300,17 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_endnotes = context.m_endnotes;
         }
 
+    emit sigProgress(80);
+
     // 8. parse document
         DocxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
-    return status;
+
+    emit sigProgress(100);
+
+    return KoFilter::OK;
 }
 
 #include "DocxImport.moc"

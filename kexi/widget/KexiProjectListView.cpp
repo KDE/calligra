@@ -214,6 +214,7 @@ KexiProjectListView::KexiProjectListView(QWidget* parent, Features features)
                                    SLOT(slotExportToFileAsDataTable()));
     m_exportActionMenu->addAction(m_dataExportToFileAction);
 
+#ifndef KEXI_NO_QUICK_PRINTING
     m_printAction = addAction("print_object", KIcon("document-print"), i18n("&Print..."),
                               i18n("Print data"),
                               i18n("Prints data from the currently selected table or query."),
@@ -223,6 +224,7 @@ KexiProjectListView::KexiProjectListView(QWidget* parent, Features features)
                                   i18n("Page setup for data"),
                                   i18n("Shows page setup for printing the active table or query."),
                                   SLOT(slotPageSetupForObject()));
+#endif
 
     if (KexiMainWindowIface::global()->userMode()) {
 //! @todo some of these actions can be supported once we deliver ACLs...
@@ -773,20 +775,24 @@ bool KexiProjectListView::actionEnabled(const QString& actionName) const
 
 void KexiProjectListView::slotPrintObject()
 {
+#ifndef KEXI_NO_QUICK_PRINTING
     if (!m_printAction)
         return;
     KexiPart::Item* item = selectedPartItem();
     if (item)
         emit printItem(item);
+#endif
 }
 
 void KexiProjectListView::slotPageSetupForObject()
 {
+#ifndef KEXI_NO_QUICK_PRINTING
     if (!m_pageSetupAction)
         return;
     KexiPart::Item* item = selectedPartItem();
     if (item)
         emit pageSetupForItem(item);
+#endif
 }
 
 

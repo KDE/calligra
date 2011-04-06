@@ -1,3 +1,8 @@
 [Desktop Entry]
-Name=Netflow Router
-Name[x-test]=xxNetflow Routerxx
+Name=NetFlow router
+Name[et]=NetFlow marsruuter
+Name[pt]=Comutador NetFlow
+Name[pt_BR]=Roteador NetFlow
+Name[sv]=Nätflödesrouter
+Name[uk]=Маршрутизатор NetFlow
+Name[x-test]=xxNetFlow routerxx

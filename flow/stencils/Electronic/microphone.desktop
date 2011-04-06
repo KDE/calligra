@@ -1,4 +1,9 @@
 [Desktop Entry]
-Name=Microphone
+Name=microphone
+Name[es]=micrófono
+Name[et]=mikrofon
+Name[pt]=microfone
+Name[pt_BR]=microfone
+Name[sv]=mikrofon
 Name[uk]=Мікрофон
-Name[x-test]=xxMicrophonexx
+Name[x-test]=xxmicrophonexx

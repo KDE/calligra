@@ -1,4 +1,9 @@
 [Desktop Entry]
-Name=Mixer
+Name=mixer
+Name[nl]=mixer
+Name[pt]=misturador
+Name[pt_BR]=misturador
+Name[sv]=mixer
 Name[uk]=Змішувач
-Name[x-test]=xxMixerxx
+Name[x-test]=xxmixerxx
+Name[zh_CN]=混音器

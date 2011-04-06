@@ -279,10 +279,14 @@ target_link_libraries(calligratablescommon
     calligratablesodf
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
-    ${KDE4_KUTILS_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
+if(KDE4_KCMUTILS_LIBS)
+    target_link_libraries(calligratablescommon ${KDE4_KCMUTILS_LIBS} )
+else()
+    target_link_libraries(calligratablescommon ${KDE4_KUTILS_LIBS} )
+endif()
 
 target_link_libraries(calligratablescommon LINK_INTERFACE_LIBRARIES komain calligratablesodf )
 

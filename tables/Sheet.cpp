@@ -629,14 +629,8 @@ QRect Sheet::documentToCellCoordinates(const QRectF &area) const
     int right = left;
     while (width < area.right())
         width += columnFormat(++right)->visibleWidth();
-    int top = 0;
-    // TODO: better implementation
-    double height = 0.0;
-    while (height <= area.top())
-        height += rowFormats()->visibleHeight(++top);
-    int bottom = top;
-    while (height < area.bottom())
-        height += rowFormats()->visibleHeight(++bottom);
+    int top = rowFormats()->rowForPosition(area.top());
+    int bottom = rowFormats()->rowForPosition(area.bottom());
     return QRect(left, top, right - left + 1, bottom - top + 1);
 }
 
