@@ -47,3 +47,12 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
 }
+
+void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
+{
+}
+
+QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
+{
+    return m_shape->size();
+}

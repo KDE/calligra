@@ -34,6 +34,8 @@ public:
     /// reimplemented
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
+    virtual void doPostLayout(KoTextLayoutRootArea *rootArea);
+    virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
 
     KoShape *m_shape;
     KoTextShapeData *m_data;
