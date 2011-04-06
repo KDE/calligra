@@ -18,6 +18,11 @@
  */
 
 #include "KWRootAreaProvider.h"
+#include "KWPageManager.h"
+#include "KWDocument.h"
+#include "KWPage.h"
+#include "frames/KWTextFrameSet.h"
+#include "frames/KWFrameLayout.h"
 
 #include <KoTextLayoutRootArea.h>
 #include <KoShape.h>
@@ -26,8 +31,9 @@
 
 #include <kdebug.h>
 
-KWRootAreaProvider::KWRootAreaProvider(KoShape *shape, KoTextShapeData *data)
+KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet, KoShape *shape, KoTextShapeData *data)
     : KoTextLayoutRootAreaProvider()
+    , m_textFrameSet(textFrameSet)
     , m_shape(shape)
     , m_data(data)
     , m_area(0)
@@ -36,13 +42,26 @@ KWRootAreaProvider::KWRootAreaProvider(KoShape *shape, KoTextShapeData *data)
 
 KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
 {
-    kDebug();
-    if(m_area)
-        return 0;
+    Q_ASSERT(m_textFrameSet->pageManager());
+    if (m_textFrameSet->pageManager()->pageCount() > 0) { //FIXME remove this workaround
+
+        const KWPageStyle pageStyle;
+        KWPage page = m_textFrameSet->pageManager()->appendPage(pageStyle);
+
+        kDebug() << "pageNumber=" << page.pageNumber();
+        Q_ASSERT(page.isValid());
+
+        KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
+        KWFrameLayout *frlay = kwdoc->frameLayout();
+        frlay->createNewFramesForPage(page.pageNumber());
+    }
+
+    //KWPage page = m_pageManager->page(pageNumber);
+    //if(m_area) return 0;
 
     m_area = new KoTextLayoutRootArea(documentLayout);
     m_area->setAssociatedShape(m_shape);
-    m_area->setReferenceRect(0, m_shape->size().width(), 0, m_shape->size().height());
+    //m_area->setReferenceRect(0, m_shape->size().width(), 0, m_shape->size().height());
     m_data->setRootArea(m_area);
     return m_area;
 }
@@ -55,8 +74,12 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
 {
     kDebug();
-    m_area->setBottom(m_area->top() + m_area->associatedShape()->size().height());
-    m_area->associatedShape()->update();
+
+    //rootArea->setTop(rootArea->top() + rootArea->associatedShape()->size().height());
+    //rootArea->setBottom(rootArea->top() + rootArea->associatedShape()->size().height());
+    //rootArea->setReferenceRect(0, rootArea->associatedShape()->size().width(), 0, rootArea->associatedShape()->size().height());
+
+    rootArea->associatedShape()->update();
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)

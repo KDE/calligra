@@ -122,6 +122,7 @@ private:
     };
 
     KoShape *createTextShape(const KWPage &page);
+
     /**
      * Get or create a text frameset of the specified \a type on the specified \a page.
      * A page follows a KWPageStyle and we have individual framesets for each style.
@@ -133,12 +134,12 @@ private:
      */
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
     QList<KWFrame *> framesInPage(const QRectF &page) const;
+
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
     KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
     void cleanFrameSet(KWTextFrameSet *fs);
     KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
-
 
     const KWPageManager *m_pageManager;
     const QList<KWFrameSet *> &m_frameSets;
@@ -146,8 +147,7 @@ private:
 
     KWTextFrameSet *m_maintext;
     KWFrameSet *m_backgroundFrameSet;
-
-    const KWDocument *m_document;
+    KWDocument *m_document;
 
     bool m_setup;
 };
