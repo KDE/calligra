@@ -248,6 +248,7 @@ public:
         delete (QWidget*)m_contentWidget;
         m_contentWidget = contentWidget;
         m_contentWidget->setAutoFillBackground(true);
+        m_contentWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
         m_contentLayout->addWidget(m_contentWidget);
     }
     
@@ -362,6 +363,7 @@ public slots:
     void showMainMenu();
     void hideMainMenu();
     void toggleMainMenu();
+    void updateMainMenuGeometry();
 
 public:
     KexiTabbedToolBarTabBar *customTabBar;
@@ -600,12 +602,20 @@ void KexiTabbedToolBar::Private::showMainMenu()
         mainMenu = new KexiMainMenu(q, mainWindow);
         connect(mainMenu, SIGNAL(contentAreaPressed()), this, SLOT(hideMainMenu()));
     }
+    updateMainMenuGeometry();
+    mainMenu->show();
+}
+
+void KexiTabbedToolBar::Private::updateMainMenuGeometry()
+{
+    if (!mainMenu)
+        return;
+    QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
     KexiTabbedToolBarTabBar *tabBar = static_cast<KexiTabbedToolBarTabBar*>(q->tabBar());
     QPoint pos = q->mapToGlobal(QPoint(0, tabBar->originalTabSizeHint(0).height() - 1));
     kDebug() << "1." << pos;
     pos = mainWindow->mapFromGlobal(pos);
     kDebug() << "2." << pos;
-    //kDebug() << "3." << q->tabRect(0);
     kDebug() << "3." << q->pos();
 
     QStyleOptionTab ot;
@@ -616,8 +626,6 @@ void KexiTabbedToolBar::Private::showMainMenu()
     mainMenu->setGeometry(0, pos.y() - overlap /*- q->y()*/,\
                           mainWindow->width(),
                           mainWindow->height() - pos.y() + overlap /*+ q->y()*/);
-    mainMenu->show();
-//    QTimer::singleShot(10, mainMenu, SLOT(init()));
 }
 
 void KexiTabbedToolBar::Private::hideMainMenu()
@@ -869,8 +877,10 @@ void KexiTabbedToolBar::leaveEvent(QEvent* event)
     KTabWidget::leaveEvent(event);
 }
 
-bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event) {
-    if (event->type() == QEvent::MouseButtonPress) {
+bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
+{
+    switch (event->type()) {
+    case QEvent::MouseButtonPress:
         if (watched == tabBar()) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);
             QPoint p = me->pos();
@@ -888,6 +898,13 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event) {
         else if (watched == KexiMainWindowIface::global()->thisWidget()) {
             d->hideMainMenu();
         }
+        break;
+    case QEvent::Resize:
+        if (watched == KexiMainWindowIface::global()->thisWidget()) {
+            d->updateMainMenuGeometry();
+        }
+        break;
+    default:;
     }
     return KTabWidget::eventFilter(watched, event);
 }

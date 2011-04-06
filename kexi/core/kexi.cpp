@@ -339,6 +339,8 @@ QLabel *KEXI_UNFINISHED_LABEL(const QString& feature_name, const QString& extra_
     QLabel *label = new QLabel(QLatin1String("<b>") + line1 + QLatin1String("</b><br>")
         + line2);
     label->setAlignment(Qt::AlignCenter);
+    label->setWordWrap(true);
     label->setAutoFillBackground(true);
+    label->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     return label;
 }
