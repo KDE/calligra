@@ -23,7 +23,18 @@
 #include <QPainter>
 #include <QPen>
 
-#include <KColorScheme>
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+/** @TODO (DK) Provide class that provides KColorScheme funcionality .
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed! Provide class that implements KColorScheme funcionality!
+#ifdef __KDE4_LIBS__
+  #include <KColorScheme>
+#endif
+
 #include <QDebug>
 
 using namespace KoProperty;
@@ -35,9 +46,22 @@ LineStyleCombo::LineStyleCombo(QWidget *parent)
     connect(this, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 
     QString styleSheet;
+    
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+/** @TODO (DK) Provide class that provides KColorScheme funcionality .
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed! Provide class that implements KColorScheme funcionality!
+#ifdef __KDE4_LIBS__
+    
     KColorScheme cs(QPalette::Active);
     QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-
+    
+#endif
+    
     styleSheet = QString("KoLineStyleSelector { \
     border: 1px solid %1; \
     border-radius: 0px; \

@@ -50,7 +50,19 @@
 #endif
 
 #include <QDebug>
-#include <KColorScheme>
+
+
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+/** @TODO (DK) Provide class that provides KColorScheme funcionality .
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed! Provide class that implements KColorScheme funcionality!
+#ifdef __KDE4_LIBS__
+  #include <KColorScheme>
+#endif
 
 #include <slp/KGlobal>
 
@@ -70,17 +82,17 @@ static QString stateName(int index, const Property* prop)
     if (index == 0) {
         stateNameString = prop->option("yesName", QString()).toString();
         if (stateNameString.isEmpty())
-            return tr("Yes");
+            return QObject::tr("Yes");
     }
     else if (index == 1) {
         stateNameString = prop->option("noName", QString()).toString();
         if (stateNameString.isEmpty())
-            return tr("No");
+            return QObject::tr("No");
     }
     else {
         stateNameString = prop->option("3rdStateName", QString()).toString();
         if (stateNameString.isEmpty())
-            return tr("None");
+            return QObject::tr("None");
     }
     return stateNameString;
 }
@@ -103,26 +115,33 @@ static int valueToIndex(const QVariant& value)
 
 //-------------------------
 
-#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality! 
-#ifdef __KDE4_LIBS__
-  
 class BoolEditGlobal
 {
 public:
     BoolEditGlobal()
-        : yesIcon(SmallIcon("dialog-ok"))
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality! 
+#ifdef __KDE4_LIBS__
+	: yesIcon(SmallIcon("dialog-ok"))
         , noIcon(SmallIcon("button_no"))
         , noneIcon(IconSize(KIconLoader::Small), IconSize(KIconLoader::Small))
     {
+	noneIcon.fill(Qt::transparent);
+    }
+ #else
+	: yesIcon(16,16)
+        , noIcon(16,16)
+        , noneIcon(16,16)
+    {
+	noIcon.fill(Qt::red);
+	yesIcon.fill(Qt::green);
         noneIcon.fill(Qt::transparent);
     }
+#endif
+
     QPixmap yesIcon;
     QPixmap noIcon;
     QPixmap noneIcon;
 };
-
-#endif
-
 
 K_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
 
@@ -194,6 +213,8 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
 #ifdef __KDE4_LIBS__
     r2.setLeft(r2.left() + KIconLoader::SizeSmall + 6);
 //    r2.setTop(r2.top() + 1);
+#else    
+    r2.setLeft(r2.left() + 16 + 6);
 #endif    
 
     if (!threeState && value.isNull()) {
@@ -201,8 +222,6 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, text);
     } else {
       
-#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
-#ifdef __KDE4_LIBS__
         QPixmap icon;
 //        QString text;
 
@@ -221,9 +240,16 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
             if (value.isNull() || !value.isValid())
                 text = overrideText;*/
 //        qDebug() << Q_FUNC_INFO << r2;
-        p->drawPixmap(
+#warning (DK) Due to lack of direct Qt based equivalent, KIconLoader has been TEMPORARILY removed! Provide class that implements KIconLoader funcionality!
+#ifdef __KDE4_LIBS__
+	p->drawPixmap(
             r.left() + 3,
             r2.top() + (r2.height() - KIconLoader::SizeSmall) / 2,
+            icon);
+#else	
+	p->drawPixmap(
+            r.left() + 3,
+            r2.top() + (r2.height() - 16) / 2,
             icon);
 #endif
 	p->drawText(

@@ -26,7 +26,7 @@
 
 KOPROPERTY_EXPORT void KoProperty::Utils::setupDotDotDotButton(QPushButton *button, const QString& toolTip, const QString& whatsThis)
 {
-    button->setText(tr("...", "Three dots for 'Insert image from file' button"));
+    button->setText(QObject::tr("...", "Three dots for 'Insert image from file' button"));
     if (!toolTip.isEmpty())
         button->setToolTip(toolTip);
     if (!whatsThis.isEmpty())

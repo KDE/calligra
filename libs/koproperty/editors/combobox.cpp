@@ -24,7 +24,18 @@
 #include "koproperty/EditorView.h"
 #include "koproperty/Property.h"
 
-#include <KColorScheme>
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+/** @TODO (DK) Provide class that provides KColorScheme funcionality .
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed! Provide class that implements KColorScheme funcionality!
+#ifdef __KDE4_LIBS__
+  #include <KColorScheme>
+#endif
+
 #include <QDebug>
 
 using namespace KoProperty;
@@ -87,12 +98,21 @@ ComboBox::ComboBox(const Property::ListData& listData, const Options& options, Q
     }*/
     //QComboBoxPrivateContainer
     
-    
+/** @WARNING (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed.
+ * Please keep in mind that we must provide implemention of such a class by ourselves. 
+ */
+
+/** @TODO (DK) Provide class that provides KColorScheme funcionality .
+ */
+
+#warning (DK) Due to lack of direct Qt based equivalent, KColorScheme has been TEMPORARILY removed! Provide class that implements KColorScheme funcionality!
+#ifdef __KDE4_LIBS__
     //Set the stylesheet to a plain style
     QString styleSheet;
     KColorScheme cs(QPalette::Active);
     QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-
+#endif
+    
     styleSheet = QString("QComboBox { \
     border: 1px solid %1; \
     border-radius: 0px; \
