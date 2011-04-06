@@ -48,7 +48,7 @@ TableDeferredShapeFactory::TableDeferredShapeFactory(QObject *parent, const QVar
         : KoDeferredShapeFactoryBase(parent)
 {
     // only create the tool when this plugin gets loaded.
-    KoToolRegistry::instance()->add(new TableToolFactory());
+    KoToolRegistry::instance()->addDeferred(new TableToolFactory());
 
     m_stubFactory = qobject_cast<KoShapeFactoryBase*>(parent);
 }
