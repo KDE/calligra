@@ -43,9 +43,9 @@ PointFComposedProperty::PointFComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("x",
-        QVariant(), tr("X"), tr("X"), Double, property);
+        QVariant(), QObject::tr("X"), QObject::tr("X"), Double, property);
     (void)new Property("y",
-        QVariant(), tr("Y"), tr("Y"), Double, property);
+        QVariant(), QObject::tr("Y"), QObject::tr("Y"), Double, property);
 }
 
 void PointFComposedProperty::setValue(Property *property,

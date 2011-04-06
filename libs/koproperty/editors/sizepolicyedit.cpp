@@ -55,13 +55,13 @@ private:
     static QStringList stringsInternal() {
         QStringList strings;
         strings
-         << tr("Fixed","Size Policy")
-         << tr("Minimum","Size Policy")
-         << tr("Maximum","Size Policy")
-         << tr("Preferred","Size Policy")
-         << tr("Expanding","Size Policy")
-         << tr("Minimum Expanding","Size Policy")
-         << tr("Ignored","Size Policy");
+         << QObject::tr("Fixed","Size Policy")
+         << QObject::tr("Minimum","Size Policy")
+         << QObject::tr("Maximum","Size Policy")
+         << QObject::tr("Preferred","Size Policy")
+         << QObject::tr("Expanding","Size Policy")
+         << QObject::tr("Minimum Expanding","Size Policy")
+         << QObject::tr("Ignored","Size Policy");
         return strings;
     }
 };
@@ -95,13 +95,13 @@ SizePolicyComposedProperty::SizePolicyComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("hor_policy", new SizePolicyListData(),
-        QVariant(), tr("Hor. Policy"), tr("Horizontal Policy"), ValueFromList, property);
+        QVariant(), QObject::tr("Hor. Policy"), QObject::tr("Horizontal Policy"), ValueFromList, property);
     (void)new Property("vert_policy", new SizePolicyListData(),
-        QVariant(), tr("Vert. Policy"), tr("Vertical Policy"), ValueFromList, property);
-    (void)new Property("hor_stretch", QVariant(),
-        tr("Hor. Stretch"), tr("Horizontal Stretch"), UInt, property);
-    (void)new Property("vert_stretch", QVariant(),
-        tr("Vert. Stretch"), tr("Vertical Stretch"), UInt, property);
+        QVariant(), QObject::tr("Vert. Policy"), QObject::tr("Vertical Policy"), ValueFromList, property);
+    (void)new Property("hor_sQObject::tretch", QVariant(),
+        QObject::tr("Hor. SQObject::tretch"), QObject::tr("Horizontal SQObject::tretch"), UInt, property);
+    (void)new Property("vert_sQObject::tretch", QVariant(),
+        QObject::tr("Vert. SQObject::tretch"), QObject::tr("Vertical SQObject::tretch"), UInt, property);
 }
 
 void SizePolicyComposedProperty::setValue(Property *property,

@@ -27,7 +27,7 @@
 
 #include <climits>
 
-#include <KGlobal>
+#include <slp/KGlobal>
 #include <QLocale>
 #include <QDebug>
 

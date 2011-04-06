@@ -43,9 +43,16 @@
 #include <QMouseEvent>
 
 #include <QDebug>
-#include <KImageIO>
+
+#warning (DK) It seems that KImageIO is no more needed
+// DEL (DK) #include <KImageIO>
+
 #include <QPushButton>
-#include <KFileDialog>
+
+#warning KFileDialog replaced by QFileDialog
+#include <QFileDialog>
+#include <QUrl>
+
 #include <QLocale>
 
 /* KDE4:
@@ -158,7 +165,7 @@ QString PixmapEdit::selectPixmapFileName()
         emit valueChanged(this);
       }
     #endif*/
-    const QString caption(tr("Insert Image From File (for \"%1\" property)", m_property->caption()));
+    const QString caption(tr("Insert Image From File (for \"%1\" property)").arg(m_property->caption()));
     /*KDE4:
     #ifdef Q_WS_WIN
       QString recentDir;
@@ -167,9 +174,19 @@ QString PixmapEdit::selectPixmapFileName()
         convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)),
         this, 0, caption);
     #else*/
+    
+#warning (DK) KFileDialog changed by QFileDialog
+#warning (DK) QFileDialog doesn't have getImageOpenUrl() member !!!
+#ifdef KDE4_LIBS
     const KUrl url(KFileDialog::getImageOpenUrl(
                  KUrl(":lastVisitedImagePath"), this, caption));
+    
     QString fileName = url.isLocalFile() ? url.toLocalFile() : url.prettyUrl();
+#else
+    QString fileName = QFileDialog::getOpenFileName( this, caption, QUrl(":lastVisitedImagePath").toLocalFile(),tr("Images (*png *.xpm *.jpg)"));
+#endif
+    
+    
 
     //! @todo download the file if remote, then set fileName properly
 //#endif

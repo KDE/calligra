@@ -40,9 +40,9 @@ SizeComposedProperty::SizeComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
     (void)new Property("width",
-        QVariant(), tr("Width"), tr("Width"), UInt, property);
+        QVariant(), QObject::tr("Width"), QObject::tr("Width"), UInt, property);
     (void)new Property("height",
-        QVariant(), tr("Height"), tr("Height"), UInt, property);
+        QVariant(), QObject::tr("Height"), QObject::tr("Height"), UInt, property);
 }
 
 void SizeComposedProperty::setValue(Property *property,
