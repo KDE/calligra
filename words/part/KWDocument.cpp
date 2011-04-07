@@ -757,10 +757,10 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     // remove header/footer frames that are not visible.
     m_frameLayout.cleanupHeadersFooters();
 #if 0
-    foreach (const KWPage &page, m_pageManager.pages())
+    foreach (const KWPage &page, m_pageManager.pages()) {
         m_frameLayout.createNewFramesForPage(page.pageNumber());
+    }
 #endif
-
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
@@ -1036,6 +1036,7 @@ void PageProcessingQueue::addPage(KWPage page)
 void PageProcessingQueue::process()
 {
     kDebug();
+#if 0
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
     QList<int> pages = m_pages;
@@ -1057,4 +1058,5 @@ void PageProcessingQueue::process()
     if (m_deleteLater)
         deleteLater();
     emit m_document->pageSetupChanged();
+#endif
 }

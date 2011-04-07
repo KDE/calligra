@@ -362,12 +362,13 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         endnote->shape()->setZIndex(minZIndex--);
     }
     for (int i = 0; i < columns; ++i) {
-        main[i]->shape()->setZIndex(minZIndex);
+        if (main[i] && main[i]->shape())
+            main[i]->shape()->setZIndex(minZIndex);
     }
-    if (footer) {
+    if (footer && footer->shape()) {
         footer->shape()->setZIndex(--minZIndex);
     }
-    if (header) {
+    if (header && header->shape()) {
         header->shape()->setZIndex(--minZIndex);
     }
 
@@ -588,8 +589,7 @@ void KWFrameLayout::setup()
 
 KoShape *KWFrameLayout::createTextShape(const KWPage &page)
 {
-    kDebug();
-#if 0
+    kDebug() << page.pageNumber();
     Q_ASSERT(page.isValid());
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
@@ -597,11 +597,9 @@ KoShape *KWFrameLayout::createTextShape(const KWPage &page)
     if (m_document)
         rm = m_document->resourceManager();
     KoShape *shape = factory->createDefaultShape(rm);
+    Q_ASSERT(shape);
+//     Q_ASSERT(false);
     return shape;
-#else
-    Q_ASSERT(false);
-    return 0;
-#endif
 }
 
 KWFrame *KWFrameLayout::frameOn(KWFrameSet *fs, int pageNumber) const
