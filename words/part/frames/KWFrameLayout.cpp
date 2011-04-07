@@ -589,6 +589,7 @@ void KWFrameLayout::setup()
 KoShape *KWFrameLayout::createTextShape(const KWPage &page)
 {
     kDebug();
+#if 0
     Q_ASSERT(page.isValid());
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
@@ -596,8 +597,11 @@ KoShape *KWFrameLayout::createTextShape(const KWPage &page)
     if (m_document)
         rm = m_document->resourceManager();
     KoShape *shape = factory->createDefaultShape(rm);
-    shape->setPosition(QPointF(0, page.offsetInDocument()));
     return shape;
+#else
+    Q_ASSERT(false);
+    return 0;
+#endif
 }
 
 KWFrame *KWFrameLayout::frameOn(KWFrameSet *fs, int pageNumber) const

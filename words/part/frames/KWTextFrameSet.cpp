@@ -25,8 +25,9 @@
 #include "KWTextFrame.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
-#include "KWDocument.h"
 #include "KWRootAreaProvider.h"
+#include "KWDocument.h"
+#include "KWDocument_p.h"
 
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
@@ -34,6 +35,8 @@
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
 
 #include <changetracker/KoChangeTracker.h>
 
@@ -42,23 +45,40 @@
 #include <QTextDocument>
 #include <QTextBlock>
 
-KWTextFrameSet::KWTextFrameSet(KWDocument *doc, KWord::TextFrameSetType type)
+KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetType type)
     : KWFrameSet(KWord::TextFrameSet)
-    , m_document(0)
+    , m_document(new QTextDocument())
     , m_layoutTriggered(false)
     , m_allowLayoutRequests(true)
     , m_frameOrderDirty(true)
     , m_textFrameSetType(type)
-    , m_pageManager(0)
-    , m_kwordDocument(doc)
+    , m_pageManager(kwordDocument->pageManager())
+    , m_kwordDocument(kwordDocument)
     , m_requestedUpdateTextLayout(false)
+    , m_rootAreaProvider(new KWRootAreaProvider(this))
 {
-    setPageManager(doc->pageManager());
+    Q_ASSERT(m_kwordDocument);
     setName(KWord::frameSetTypeName(m_textFrameSetType));
+
+    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
+    m_document->setDocumentLayout(lay);
+    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(layout()), Qt::QueuedConnection);
+
+    KoTextDocument doc(m_document);
+    doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
+    KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    doc.setStyleManager(styleManager);
+    KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    doc.setChangeTracker(changeTracker);
+    doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
+
+    m_document->setUseDesignMetrics(true);
 }
 
 KWTextFrameSet::~KWTextFrameSet()
 {
+    delete m_rootAreaProvider;
+
     // first remove the doc from all our frames so they won't try to use it after we delete it.
     if (!m_frames.isEmpty()) {
         // we transfer ownership of the doc to our last shape so it will keep being alive until nobody references it anymore.
@@ -81,26 +101,47 @@ KWTextFrameSet::~KWTextFrameSet()
 
 void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
-    kDebug() << "frame=" << frame;
-
+    Q_ASSERT(frame->shape());
+    Q_ASSERT(frame->shape()->userData());
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
     Q_ASSERT(data);
 
+    Q_ASSERT(m_pageManager);
+    const KWPageStyle pageStyle(m_pageManager->pageCount() > 0 ? m_pageManager->page(m_pageManager->pageCount() - 1).pageStyle() : m_pageManager->defaultPageStyle());
+    KWPage page = m_pageManager->appendPage(pageStyle);
+    Q_ASSERT(page.isValid());
+
+    kDebug() << "frame=" << frame << "pageNumber=" << page.pageNumber();
+
+    // the QTexDocument is shared between the shapes
+    data->setDocument(m_document, false);
+
+    if (m_textFrameSetType != KWord::OtherTextFrameSet) {
+        frame->shape()->setGeometryProtected(true);
+    }
+
+#if 0
+    PageProcessingQueue *ppq = m_kwordDocument->pageQueue();
+    ppq->addPage(page);
+#else
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+    Q_ASSERT(lay);
+    lay->layout();
+#endif
+
+#if 0
     const bool isInitialFrame = !m_document;
     if (isInitialFrame) {
         m_document = data->document();
     }
-
     // All TextShape's within this TextFrameSet are using the same QTextDocument. We are
     // also taking over the ownership of the QTextDocument.
     data->setDocument(m_document, false);
-
     if (isInitialFrame) {
         KWRootAreaProvider *provider = new KWRootAreaProvider(this, frame->shape(), data);
         KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, provider);
         m_document->setDocumentLayout(lay);
         QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(layout()), Qt::QueuedConnection);
-
         if (m_kwordDocument) {
             KoTextDocument doc(m_document);
             doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
@@ -112,12 +153,6 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         }
         m_document->setUseDesignMetrics(true);
     }
-
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
-    Q_ASSERT(m_document == data->document());
-    Q_ASSERT(lay);
-    Q_ASSERT(dynamic_cast<KWRootAreaProvider*>(lay->provider()));
-
     /*
     QTextCursor cursor(m_document);
     cursor.insertText("Hello new Text layout engine f f fd fs sdf dsf sdf fd fds gfd gfd sgfds gfds sfd fd fds sfd sdf");
@@ -125,15 +160,12 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     cursor.insertText("Cell 1 Line one");
     cursor.insertTable(3,3);
     */
-
     if (m_textFrameSetType != KWord::OtherTextFrameSet) {
         frame->shape()->setGeometryProtected(true);
     }
-
     if (isInitialFrame) {
         lay->layout();
     }
-
 #if 0
     if (data == 0) {// probably a copy frame.
         Q_ASSERT(frameCount() > 1);
@@ -167,6 +199,15 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         }
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
+#endif
+#else
+    /*
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
+    Q_ASSERT(m_document == data->document());
+    Q_ASSERT(lay);
+    Q_ASSERT(dynamic_cast<KWRootAreaProvider*>(lay->provider()));
+    lay->layout();
+    */
 #endif
 }
 
@@ -237,6 +278,7 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
 
 void KWTextFrameSet::spaceLeft(qreal excessHeight)
 {
+#if 0
     Q_ASSERT(excessHeight >= 0);
     if (m_frames.count() == 0)
         return;
@@ -260,6 +302,9 @@ void KWTextFrameSet::spaceLeft(qreal excessHeight)
         }
         --iter;
     } while (iter != m_frames.begin());
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 void KWTextFrameSet::framesEmpty(int emptyFrames)
