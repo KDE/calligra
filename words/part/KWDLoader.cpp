@@ -51,7 +51,7 @@
 KWDLoader::KWDLoader(KWDocument *parent, KoStore *store)
         : m_document(parent),
         m_store(store),
-        m_pageManager(&parent->m_pageManager),
+        m_pageManager(parent->pageManager()),
         m_pageStyle(m_pageManager->defaultPageStyle()),
         m_foundMainFS(false)
 {
@@ -559,7 +559,6 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
             KoShape *shape = factory->createDefaultShape(m_document->resourceManager());
             KWTextFrame *frame = new KWTextFrame(shape, fs);
             fill(frame, frameElem);
-
             //m_doc->progressItemLoaded();
         }
     }

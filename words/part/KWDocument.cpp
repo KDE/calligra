@@ -67,6 +67,7 @@
 #include <KoListLevelProperties.h>
 #include <KoTextShapeData.h>
 #include <KoSelection.h>
+#include <KoTextDocumentLayout.h>
 
 #include <rdf/KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
@@ -386,6 +387,9 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
     foreach (KWFrame *frame, fs->frames())
         addFrame(frame);
 
+    if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs))
+        Q_ASSERT(tfs->pageManager() == pageManager());
+#if 0
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if (tfs) {
         tfs->setPageManager(pageManager());
@@ -403,9 +407,9 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
                     this, SLOT(updateHeaderFooter(KWTextFrameSet*)));
         }
     }
-
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
+#endif
 }
 
 void KWDocument::addFrame(KWFrame *frame)
@@ -752,9 +756,10 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     // remove header/footer frames that are not visible.
     m_frameLayout.cleanupHeadersFooters();
-
+#if 0
     foreach (const KWPage &page, m_pageManager.pages())
         m_frameLayout.createNewFramesForPage(page.pageNumber());
+#endif
 
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -774,6 +779,15 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             }
         }
         tfs->setAllowLayout(true);
+    }
+
+    foreach (KWFrameSet *fs, m_frameSets) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (!tfs)
+            continue;
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+        Q_ASSERT(lay);
+        lay->layout();
     }
 
     if (updater) updater->setProgress(100);

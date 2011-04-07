@@ -27,6 +27,8 @@
 class QTextDocument;
 class KWPageManager;
 class KWDocument;
+class KWRootAreaProvider;
+class KWTextFrame;
 
 /**
  * A frameset with a TextDocument backing it.
@@ -37,10 +39,10 @@ class KWORD_EXPORT KWTextFrameSet : public KWFrameSet
 public:
     /**
      * Constructor with a type of text specified
-     * @param document the document this frameset belongs to.
+     * @param kwordDocument the document this frameset belongs to.
      * @param type the type of frameSet; this can indicate headers, footers etc.
      */
-    explicit KWTextFrameSet(KWDocument *document, KWord::TextFrameSetType type = KWord::OtherTextFrameSet);
+    explicit KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetType type = KWord::OtherTextFrameSet);
     ~KWTextFrameSet();
 
     /// return the type of frameSet this is
@@ -71,13 +73,6 @@ public:
      */
     bool allowLayout() const;
 
-    /**
-     * Set the page manager used by this frameset.
-     * If we can't get rid of the dependency on KWDocument, we should remove this variable.
-     */
-    void setPageManager(KWPageManager *pageMager) {
-        m_pageManager = pageMager;
-    }
     /// return the pageManager for this frameSet
     KWPageManager* pageManager() {
         return m_pageManager;
@@ -96,6 +91,7 @@ public:
 #endif
 
 signals:
+#if 0
     /**
      * Emitted when the frameset finished layout and found that there is more
      * text than will fit in the frameset.
@@ -106,6 +102,7 @@ signals:
     void decorationFrameResize(KWTextFrameSet *fs);
     /// emitted when all the text is fully layouted
     void layoutDone();
+#endif
 
 protected:
     friend class TestTextFrameSorting;
@@ -143,6 +140,7 @@ private:
     KWDocument *m_kwordDocument;
     KWPageStyle m_pageStyle; // the page Style this frameset is associated with.
     bool m_requestedUpdateTextLayout;
+    KWRootAreaProvider *m_rootAreaProvider;
 
     // return true if frame1 is sorted before frame2
     static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);

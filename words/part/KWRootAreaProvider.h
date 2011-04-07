@@ -23,6 +23,8 @@
 
 #include <KoTextLayoutRootAreaProvider.h>
 
+#include <QMap>
+
 class KoShape;
 class KoTextShapeData;
 class KWTextFrameSet;
@@ -30,18 +32,17 @@ class KWTextFrameSet;
 class KWRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
 public:
-    KWRootAreaProvider(KWTextFrameSet *textFrameSet, KoShape *shape, KoTextShapeData *data);
+    //KWRootAreaProvider(KWTextFrameSet *textFrameSet, KoShape *shape, KoTextShapeData *data);
+    explicit KWRootAreaProvider(KWTextFrameSet *textFrameSet);
 
     /// reimplemented
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea);
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
-
+private:
     KWTextFrameSet *m_textFrameSet;
-    KoShape *m_shape;
-    KoTextShapeData *m_data;
-    KoTextLayoutRootArea *m_area;
+    QMap<int, KoTextLayoutRootArea *> m_rootAreas;
 };
 
 #endif
