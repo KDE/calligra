@@ -55,22 +55,22 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         KWPage page = pageManager->appendPage(pageStyle);
         Q_ASSERT(page.isValid());
         kDebug() << "Appended new page with pageNumber=" << page.pageNumber();
-
+#if 0
         // Then create the TextShape for the new KWPage
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
         Q_ASSERT(factory);
         KoResourceManager *rm = m_textFrameSet->kwordDocument()->resourceManager();
         KoShape *shape = factory->createDefaultShape(rm);
         Q_ASSERT(shape);
-        
+#endif
         // And finally create the KWTextFrame's for the new KWPage
         KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
         KWFrameLayout *frlay = kwdoc->frameLayout();
         frlay->createNewFramesForPage(page.pageNumber());
     }
 
-    Q_ASSERT(rootAreas.count() < m_textFrameSet->frames().count());
-    KWFrame *frame = m_textFrameSet->frames()[ rootAreas.count() ];
+//     Q_ASSERT(rootAreas.count() < m_textFrameSet->frames().count());
+    KWFrame *frame = m_textFrameSet->frames()[ qMax(0,rootAreas.count()-1) ];
     KoShape *shape = frame->shape();
     Q_ASSERT(shape);
 
