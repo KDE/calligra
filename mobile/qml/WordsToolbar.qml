@@ -20,34 +20,37 @@
  */
 
 import QtQuick 1.0 as QML
-import CalligraMobile 1.0
 
 QML.Rectangle {
-    id: rootRect
+    id: container
 
-    width: 800; height: 600
     gradient: QML.Gradient {
-         QML.GradientStop { position: 0.0; color: "#808080" }
-         QML.GradientStop { position: 1.0; color: "#303030" }
+         QML.GradientStop { position: 0.0; color: "#0000FF" }
+         QML.GradientStop { position: 1.0; color: "#000011" }
     }
 
-    QML.Row {
+    QML.Column {
         anchors.fill: parent
+        spacing: 10
 
-        CanvasController {
-            id: canvas
+        Button {
+            id: scrollUp
+            text: "Up"
+            imageSource: "qrc:///images/arrow-up.png"
+            height: parent.width
+            width: parent.width
 
-            height: parent.height
-            width: parent.width*0.95
+            onClicked: canvas.scrollDown()
         }
 
-        WordsToolbar {
-            id: toolbar
+        Button {
+            id: scrollDown
+            text: "Down"
+            imageSource: "qrc:///images/arrow-down.png"
+            height: parent.width
+            width: parent.width
 
-            height: parent.height
-            width: parent.width*0.05
+            onClicked: canvas.scrollDown()
         }
     }
-
-    QML.Component.onCompleted: canvas.openDocument("/media/Data/Other/all/Documents/Resume.odt");
 }

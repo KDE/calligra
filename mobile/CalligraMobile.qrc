@@ -3,5 +3,7 @@
         <file>images/words.png</file>
         <file>images/tables.png</file>
         <file>images/stage.png</file>
+        <file>images/arrow-down.png</file>
+        <file>images/arrow-up.png</file>
     </qresource>
 </RCC>

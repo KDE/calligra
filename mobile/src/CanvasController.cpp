@@ -184,7 +184,7 @@ void CanvasController::setCanvas(KoCanvasBase* canvas)
     QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(canvas);
     widget->setParentItem(this);
     widget->setVisible(true);
-    widget->setGeometry(0,0,width(),height()*2);
+    widget->setGeometry(0,0,width(),height());
     KoToolManager::instance()->addController(this);
 }
 
@@ -207,11 +207,18 @@ void CanvasController::scrollContentsBy(int dx, int dy)
 
 void CanvasController::scrollDown()
 {
-    kDebug() << m_currentPoint;
     m_currentPoint.ry()+=50;
-    QPoint point(200, 200);
     proxyObject->emitMoveDocumentOffset(m_currentPoint);
     dynamic_cast<KWCanvasItem*>(m_canvas)->update();
 }
+
+void CanvasController::scrollUp()
+{
+    m_currentPoint.ry()-=50;
+    proxyObject->emitMoveDocumentOffset(m_currentPoint);
+    dynamic_cast<KWCanvasItem*>(m_canvas)->update();
+
+}
+
 
 #include "CanvasController.moc"

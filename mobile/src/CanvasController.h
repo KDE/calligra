@@ -64,6 +64,7 @@ public:
 public slots:
     void openDocument(const QString &path);
     void scrollDown();
+    void scrollUp();
 
 private:
     KoZoomController *m_zoomController;
