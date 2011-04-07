@@ -72,7 +72,7 @@ public:
     KWPage page(int pageNumber) const;
 
     /**
-     * return the KWPage instance where the rect is on. Returns 0 if page does not exist.
+     * return the KWPage instance where the shape is on. Returns 0 if page does not exist.
      */
     KWPage page(const KoShape *shape) const;
 

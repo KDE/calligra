@@ -32,6 +32,7 @@ KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent, int pageNumber)
         m_minimumFrameHeight(m_lastHeight),
         m_canGrow(true)
 {
+    Q_ASSERT(shape);
 }
 
 KWTextFrame::~KWTextFrame()

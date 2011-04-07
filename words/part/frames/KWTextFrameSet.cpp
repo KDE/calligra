@@ -124,9 +124,11 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     PageProcessingQueue *ppq = m_kwordDocument->pageQueue();
     ppq->addPage(page);
 #else
+    /*
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
     Q_ASSERT(lay);
     lay->layout();
+    */
 #endif
 
 #if 0
