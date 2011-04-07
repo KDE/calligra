@@ -40,7 +40,7 @@ QML.Rectangle {
             height: parent.width
             width: parent.width
 
-            onClicked: canvas.scrollDown()
+            onClicked: canvas.scrollUp()
         }
 
         Button {

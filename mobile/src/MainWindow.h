@@ -32,6 +32,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    void openFile(const QString &path);
 private:
     QDeclarativeView *m_view;
 };

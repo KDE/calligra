@@ -49,5 +49,5 @@ QML.Rectangle {
         }
     }
 
-    QML.Component.onCompleted: canvas.openDocument("/media/Data/Other/all/Documents/Resume.odt");
+    QML.Component.onCompleted: canvas.openDocument(fileName);
 }

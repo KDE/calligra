@@ -21,14 +21,20 @@
 
 #include "MainWindow.h"
 #include "CanvasController.h"
+#include "calligra_mobile_global.h"
 
 #include <QDeclarativeView>
-#include "calligra_mobile_global.h"
+#include <QDeclarativeContext>
 
 MainWindow::MainWindow(QWidget *parent)
 {
     qmlRegisterType<CanvasController>("CalligraMobile", 1, 0, "CanvasController");
+}
+
+void MainWindow::openFile(const QString &path)
+{
     m_view = new QDeclarativeView(this);
+    m_view->rootContext()->setContextProperty("fileName", path);
     m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
                         + "/share/calligra-mobile/qml/Doc.qml"));
     setCentralWidget(m_view);
