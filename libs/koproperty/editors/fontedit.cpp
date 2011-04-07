@@ -53,85 +53,52 @@
 #include <QHBoxLayout>
 #include <QApplication>
 
+#include "fontedit_p.h"
+
 using namespace KoProperty;
 
-//! @internal
-//! reimplemented to better button and label's positioning
-class FontEditRequester : public QWidget
-{
-    Q_OBJECT
-    Q_PROPERTY(QFont value READ value WRITE setValue USER true)
-public:
-    FontEditRequester(QWidget* parent)
+FontEditRequester::FontEditRequester(QWidget* parent)
             : QWidget(parent)
             , m_paletteChangedEnabled(true)
-    {
-        setBackgroundRole(QPalette::Base);
-        QHBoxLayout *lyr = new QHBoxLayout(this);
-        lyr->setContentsMargins(0,0,0,0);
-        lyr->setSpacing( 1 );
-        lyr->addStretch(1);
-        m_button = new QPushButton(this);
-        setFocusProxy(m_button);
-        Utils::setupDotDotDotButton(m_button,
-            tr("Click to select a font"),
-            tr("Selects font"));
-        connect( m_button, SIGNAL( clicked() ), SLOT( slotSelectFontClicked() ) );
-        lyr->addWidget(m_button);
-        setValue(qApp->font());
-    }
+{
+    setBackgroundRole(QPalette::Base);
+    QHBoxLayout *lyr = new QHBoxLayout(this);
+    lyr->setContentsMargins(0,0,0,0);
+    lyr->setSpacing( 1 );
+    lyr->addStretch(1);
+    m_button = new QPushButton(this);
+    setFocusProxy(m_button);
+    Utils::setupDotDotDotButton(m_button,
+	tr("Click to select a font"),
+	tr("Selects font"));
+    connect( m_button, SIGNAL( clicked() ), SLOT( slotSelectFontClicked() ) );
+    lyr->addWidget(m_button);
+    setValue(qApp->font());
+}
 
-    QFont value() const
-    {
-        return m_font;
-    }
-
-public slots:
-    void setValue(const QFont& value)
-    {
-        //qDebug() << Q_FUNC_INFO << QFontDatabase().families();
-        m_font = value;
-    }
-
-signals:
-    void commitData( QWidget * editor );
-
-protected slots:
-    void slotSelectFontClicked()
-    {
+void FontEditRequester::slotSelectFontClicked()
+{
 #warning KFontChooser has been removed ! It seems that it's no more needed ! 
 #ifdef __KDE4_LIBS__      
-        KFontChooser::DisplayFlags flags = KFontChooser::NoDisplayFlags;
-        if (KDialog::Accepted == KFontDialog::getFont( m_font, flags, this )) {
-            setValue(m_font);
-            emit commitData(this);
-        }
+    KFontChooser::DisplayFlags flags = KFontChooser::NoDisplayFlags;
+    if (KDialog::Accepted == KFontDialog::getFont( m_font, flags, this )) {
+	setValue(m_font);
+	emit commitData(this);
+    }
 #else
-	bool ok;
-        m_font = QFontDialog::getFont( &ok, m_font,this );
-	if(ok) {
-	    // the user clicked OK and font is set to the font the user selected
-            setValue(m_font);
-            emit commitData(this);
-        } else {
-	    // the user canceled the dialog; font is set to the initial
-	    // value, in this case Helvetica [Cronyx],
-	}
+    bool ok;
+    m_font = QFontDialog::getFont( &ok, m_font,this );
+    if(ok) {
+	// the user clicked OK and font is set to the font the user selected
+	setValue(m_font);
+	emit commitData(this);
+    } else {
+	// the user canceled the dialog; font is set to the initial
+	// value, in this case Helvetica [Cronyx],
+    }
 #endif
-    }
-    
-protected:
-    virtual bool event( QEvent * event )
-    {
-        return QWidget::event(event);
-    }
-
-    QPushButton *m_button;
-    QFont m_font;
-    bool m_paletteChangedEnabled;
-};
-
-// -----------
+}
+   
 
 QWidget * FontDelegate::createEditor( int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
@@ -170,4 +137,4 @@ void FontDelegate::paint( QPainter * painter,
     painter->restore();
 }
 
-#include "fontedit.moc"
+#include "fontedit_p.moc"
