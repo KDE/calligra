@@ -39,6 +39,7 @@
 #include <KoEventAction.h>
 #include <KoPACanvas.h>
 #include <KoTextShapeData.h>
+#include <KoTextLayoutRootArea.h>
 
 #include "KPrViewModePresentation.h"
 #include "KPrPresentationStrategy.h"
@@ -298,7 +299,7 @@ bool KPrPresentationTool::checkHyperlink(KoPointerEvent *event, KoShape *shape, 
         QPointF p = shape->absoluteTransformation(0).inverted().map(event->point);
         p = p + QPointF(0.0, textShapeData->documentOffset());
 
-        int caretPos = textShapeData->document()->documentLayout()->hitTest(p, Qt::ExactHit);
+        int caretPos = textShapeData->rootArea()->hitTest(p, Qt::ExactHit);
 
         if (!textShapeData->isDirty() && caretPos != -1) {
             QTextCursor mouseOver(textShapeData->document());
