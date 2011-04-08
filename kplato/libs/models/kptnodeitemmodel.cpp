@@ -3441,7 +3441,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
         return;
     }
     int row = node->parentNode()->findChildNode( node );
-    kDebug()<<node->name()<<row;
+    Q_ASSERT( row >= 0 );
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount()-1, node ) );
 }
 

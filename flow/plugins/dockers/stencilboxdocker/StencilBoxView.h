@@ -102,7 +102,7 @@ class CollectionTreeWidget : public QTreeWidget
     private slots:
 	void handleMousePress(QTreeWidgetItem *item);
 	void slotListMode();
-        void slotIconMode();
+    void slotIconMode();
 };
 
 #endif // STENCILBOXVIEW_H

@@ -385,10 +385,10 @@ QModelIndex FlatProxyModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
     QPersistentModelIndex idx = sourceIndex;
     if ( idx.column() != 0 ) {
-        // we only map indeces with colun 0
+        // we only map indeces with column 0
         idx = sourceModel()->index( idx.row(), 0, idx.parent() );
     }
-    QModelIndex proxy_index = index( m_sourceIndexList.indexOf( QPersistentModelIndex( sourceIndex ) ), idx.column() );
+    QModelIndex proxy_index = index( m_sourceIndexList.indexOf( idx ), sourceIndex.column() );
     //kDebug()<<sourceIndex<<"->"<<proxy_index;
     return proxy_index;
 }

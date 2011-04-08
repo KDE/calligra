@@ -90,7 +90,6 @@ void SheetDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
 QSize SheetDelegate::sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const
 {
-    QStyleOptionViewItem option = opt;
     QSize sz = QItemDelegate::sizeHint(opt, index) + QSize(2, 2);
     return sz;
 }
@@ -101,11 +100,13 @@ ShapeListView::ShapeListView(QWidget* parent) :
     setFocusPolicy(Qt::NoFocus);
     setFrameShape(QFrame::NoFrame);
     setIconSize(QSize(22, 22));
+    setMovement(QListView::Static);
     setSpacing(1);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setResizeMode(QListView::Adjust);
     setUniformItemSizes(true);
+    
     //setSelectionMode(QAbstractItemView::NoSelection);
     setDragDropMode(QAbstractItemView::DragDrop);
     setDropIndicatorShown(true);
@@ -263,6 +264,8 @@ void CollectionTreeWidget::updateViewMode()
             if (viewMode != categoryView->viewMode())
             {
                 categoryView->setViewMode(viewMode);
+                categoryView->setMovement(QListView::Static);
+                categoryView->setDragDropMode(QAbstractItemView::DragDrop);
                 adjustSubListSize(topLevelItem(i));
             }
         }
