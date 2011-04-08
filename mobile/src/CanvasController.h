@@ -71,6 +71,10 @@ private:
     KoZoomHandler *m_zoomHandler;
     KoCanvasBase *m_canvas;
     QPoint m_currentPoint;
+
+protected:
+    bool isPresentationDocumentExtension(const QString& extension) const;
+    bool isSpreadsheetDocumentExtension(const QString& extension) const;
 };
 
 #endif // CANVASCONTROLLER_H

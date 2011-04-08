@@ -11,6 +11,7 @@ include_directories(${QT_INCLUDES}
 include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
+    ${CMAKE_SOURCE_DIR}/tables
 )
 
 set (calligra-mobile_RCCS CalligraMobile.qrc)
@@ -34,6 +35,8 @@ target_link_libraries(calligra-mobile
     ${QT_LIBRARIES}
     komain
     wordsprivate
+    calligratablescommon
+    kopageapp
 )
 
 install(TARGETS calligra-mobile RUNTIME DESTINATION bin)

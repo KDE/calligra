@@ -36,10 +36,29 @@
 #include <KoZoomHandler.h>
 #include <KActionCollection>
 #include <KoToolManager.h>
+#include <tables/part/CanvasItem.h>
+#include <libs/kopageapp/KoPACanvasItem.h>
 
 #include <QPoint>
 #include <QSize>
 #include <QGraphicsWidget>
+
+/*!
+* extensions
+*/
+const QString EXT_PPS("pps");
+const QString EXT_PPSX("ppsx");
+const QString EXT_PPT("ppt");
+const QString EXT_PPTX("pptx");
+const QString EXT_ODP("odp");
+const QString EXT_DOC("doc");
+const QString EXT_DOCX("docx");
+const QString EXT_ODT("odt");
+const QString EXT_TXT("txt");
+const QString EXT_RTF("rtf");
+const QString EXT_ODS("ods");
+const QString EXT_XLS("xls");
+const QString EXT_XLSX("xlsx");
 
 CanvasController::CanvasController(QDeclarativeItem* parent)
     : KoCanvasController(0), QDeclarativeItem(parent)
@@ -57,21 +76,47 @@ void CanvasController::openDocument(const QString& path)
     KoDocument *doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
                                                                                QVariantList(), &error);
     doc->openUrl(KUrl(path));
-    doc->setReadWrite(true);
-
     // get the one canvas item for this document
     m_canvas = dynamic_cast<KoCanvasBase*>(doc->canvasItem());
-    KWCanvasItem *canvas = dynamic_cast<KWCanvasItem*>(m_canvas);
+    KoToolManager::instance()->addController(this);
 
-    if (canvas) {
-        // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-        connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
-        // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect(canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
-        canvas->updateSize();
-
-        setCanvas(static_cast<KoCanvasBase*>(canvas));
+    QString fname(path);
+    QString ext = KMimeType::extractKnownExtension(fname);
+    if (!ext.isEmpty()) {
+        fname.chop(ext.length() + 1);
     }
+
+    if (isPresentationDocumentExtension(ext)) {
+        //FIXME: Doesn't work, crashes
+        KoPACanvasItem *canvas = dynamic_cast<KoPACanvasItem*>(m_canvas);
+
+        if (canvas) {
+            // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
+            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(slotSetDocumentOffset(QPoint)));
+            canvas->update();
+        }
+    } else if (isSpreadsheetDocumentExtension(ext)) {
+        //TODO: Sheet tabs
+        Calligra::Tables::CanvasItem *canvas = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
+
+        if (canvas) {
+            // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
+            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
+            canvas->update();
+        }
+    } else {
+        KWCanvasItem *canvas = dynamic_cast<KWCanvasItem*>(m_canvas);
+
+        if (canvas) {
+            // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
+            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
+            // whenever the size of the document viewed in the canvas changes, inform the zoom controller
+            connect(canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
+            canvas->updateSize();
+        }
+    }
+
+    setCanvas(m_canvas);
 }
 
 void CanvasController::setVastScrolling(qreal factor)
@@ -185,7 +230,6 @@ void CanvasController::setCanvas(KoCanvasBase* canvas)
     widget->setParentItem(this);
     widget->setVisible(true);
     widget->setGeometry(0,0,width(),height());
-    KoToolManager::instance()->addController(this);
 }
 
 void CanvasController::setDrawShadow(bool drawShadow)
@@ -220,5 +264,20 @@ void CanvasController::scrollUp()
 
 }
 
+bool CanvasController::isPresentationDocumentExtension(const QString& extension) const
+{
+    return 0 == QString::compare(extension, EXT_ODP, Qt::CaseInsensitive)
+       ||  0 == QString::compare(extension, EXT_PPS, Qt::CaseInsensitive)
+       ||  0 == QString::compare(extension, EXT_PPSX, Qt::CaseInsensitive)
+       ||  0 == QString::compare(extension, EXT_PPT, Qt::CaseInsensitive)
+       ||  0 == QString::compare(extension, EXT_PPTX, Qt::CaseInsensitive);
+}
+
+bool CanvasController::isSpreadsheetDocumentExtension(const QString& extension) const
+{
+    return 0 == QString::compare(extension, EXT_ODS, Qt::CaseInsensitive)
+       ||  0 == QString::compare(extension, EXT_XLS, Qt::CaseInsensitive)
+       ||  0 == QString::compare(extension, EXT_XLSX, Qt::CaseInsensitive);
+}
 
 #include "CanvasController.moc"
