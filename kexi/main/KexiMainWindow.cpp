@@ -41,6 +41,7 @@
 #include <QHash>
 #include <QDockWidget>
 #include <QMenuBar>
+#include <QShortcut>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -633,6 +634,14 @@ KexiWindow* KexiMainWindow::currentWindow() const
     return windowContainer->window;
 }
 
+void KexiMainWindow::setupMainMenuActionShortcut(KAction* action, const char* slot)
+{
+    if (!action->shortcut().isEmpty()) {
+        (void)new QShortcut(action->shortcut().primary(), this, slot);
+        (void)new QShortcut(action->shortcut().alternate(), this, slot);
+    }
+}
+
 void KexiMainWindow::setupActions()
 {
     //kde4
@@ -649,6 +658,7 @@ void KexiMainWindow::setupActions()
 
     // PROJECT MENU
     KAction *action;
+    
     ac->addAction("project_new",
         action = new KexiMenuWidgetAction(KStandardAction::New, this));
     action->setShortcut(KStandardShortcut::openNew());
@@ -656,6 +666,7 @@ void KexiMainWindow::setupActions()
     action->setWhatsThis(
         i18n("Creates a new project. Currently opened project is not affected."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectNew()));
+    setupMainMenuActionShortcut(action, SLOT(slotProjectNew()));
 
     ac->addAction("project_open",
             action = new KexiMenuWidgetAction(KStandardAction::Open, this));
@@ -663,6 +674,7 @@ void KexiMainWindow::setupActions()
     action->setWhatsThis(
         i18n("Opens an existing project. Currently opened project is not affected."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpen()));
+    setupMainMenuActionShortcut(action, SLOT(slotProjectOpen()));
 
 #ifdef HAVE_KNEWSTUFF
     ac->addAction("project_download_examples",
@@ -675,13 +687,13 @@ void KexiMainWindow::setupActions()
 #ifndef KEXI_NO_UNFINISHED
     {
         ac->addAction("project_open_recent",
-            action = new KexiMenuWidgetAction(KStandardAction::OpenRecent, this));
+            action = d->action_open_recent = new KexiMenuWidgetAction(KStandardAction::OpenRecent, this));
             action->setText(i18nc("Action name with three dots...", "%1...", action->text()));
         connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecent()));
+        setupMainMenuActionShortcut(action, SLOT(slotProjectOpenRecent()));
         action->setToolTip(i18n("Open recent project"));
         action->setWhatsThis(
             i18n("Opens one of the recently opened project. Currently opened project is not affected."));
-        d->action_open_recent = action;
     }
 #else
     d->action_open_recent = d->dummy_action;
@@ -705,10 +717,10 @@ void KexiMainWindow::setupActions()
     connect(d->action_save_as, SIGNAL(triggered()), this, SLOT(slotProjectSaveAs()));
 
     ac->addAction("project_properties",
-                  d->action_project_properties = new KAction(
+                  action = d->action_project_properties = new KAction(
         KIcon("document-properties"), i18n("Project Properties"), this));
-    connect(d->action_project_properties, SIGNAL(triggered()),
-            this, SLOT(slotProjectProperties()));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotProjectProperties()));
+    setupMainMenuActionShortcut(action, SLOT(slotProjectQuit()));
 #else
     d->action_save_as = d->dummy_action;
     d->action_project_properties = d->dummy_action;
@@ -716,27 +728,28 @@ void KexiMainWindow::setupActions()
 
 #ifndef KEXI_NO_UNFINISHED
     ac->addAction("project_import_export_send",
-                  d->action_project_import_export_send = new KAction(
+                  action = d->action_project_import_export_send = new KAction(
         KIcon(), i18n("&Import, Export or Send..."), this));
-    d->action_project_import_export_send->setToolTip(i18n("Import, export or send entire database"));
-    d->action_project_import_export_send->setWhatsThis(
+    action->setToolTip(i18n("Import, export or send entire database"));
+    action->setWhatsThis(
         i18n("Imports, exports or sends entire database."));
-    connect(d->action_project_import_export_send, SIGNAL(triggered()),
-            this, SLOT(slotProjectImportExportOrSend()));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotProjectImportExportOrSend()));
+    setupMainMenuActionShortcut(action, SLOT(slotProjectImportExportOrSend()));
 #else
     d->action_project_import_export_send = d->dummy_action;
 #endif
 
     ac->addAction("project_close",
-                  d->action_close = new KAction(KIcon("window-close"), i18n("&Close Project"), this));
-    d->action_close->setToolTip(i18n("Close the current project"));
-    d->action_close->setWhatsThis(i18n("Closes the current project."));
-    connect(d->action_close, SIGNAL(triggered()),
-            this, SLOT(slotProjectClose()));
+                  action = d->action_close = new KAction(KIcon("window-close"), i18n("&Close Project"), this));
+    action->setToolTip(i18n("Close the current project"));
+    action->setWhatsThis(i18n("Closes the current project."));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotProjectClose()));
+    setupMainMenuActionShortcut(action, SLOT(slotProjectClose()));
 
     ac->addAction("quit",
                   action = KStandardAction::quit(this, SLOT(slotProjectQuit()), this));
     action->setWhatsThis(i18n("Quits Kexi application. Kexi prompts you to save changes."));
+    setupMainMenuActionShortcut(action, SLOT(slotProjectQuit()));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     ac->addAction("project_relations",
@@ -3155,7 +3168,7 @@ KexiMainWindow::createBlankProject()
         d->prj = 0;
         return res;
     }
-    kDebug() << "KexiMainWindow::slotProjectNew(): new project created --- ";
+    kDebug() << "new project created ---";
     setupProjectNavigator();
     Kexi::recentProjects().addProjectData(new_data);
 
@@ -3167,6 +3180,7 @@ KexiMainWindow::createBlankProject()
 void
 KexiMainWindow::slotProjectOpen()
 {
+    d->tabbedToolBar->selectMainMenuItem("project_open");
     d->tabbedToolBar->showMainMenu();
     KexiStartupDialog *openWindow = new KexiStartupDialog(
         KexiStartupDialog::OpenExisting, 0, Kexi::connset(),

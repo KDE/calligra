@@ -1486,6 +1486,11 @@ KexiMenuWidget::~KexiMenuWidget()
     delete d;
 }
 
+KexiMenuWidgetAction* KexiMenuWidget::persistentlySelectedAction() const
+{
+    return d->previousPersistentlySelectedAction;
+}
+
 const KexiMenuWidgetCaused& KexiMenuWidget::causedPopup() const
 {
     return d->causedPopup;
@@ -2256,9 +2261,7 @@ void KexiMenuWidget::mousePressEvent(QMouseEvent *e)
 
     QAction *action = d->actionAt(e->pos());
     d->setCurrentAction(action, 20);
-    if (!d->actionPersistentlySelected(action)) {
-        d->toggleActionPersistentlySelected(action);
-    }
+    update();
 }
 
 /*!
@@ -2276,14 +2279,20 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
     d->mouseDown = 0;
     d->setSyncAction();
     QAction *action = d->actionAt(e->pos());
-
+qDebug() << "action:" << action << "d->currentAction:" << d->currentAction; // << action->menu();
     if (action && action == d->currentAction) {
         if (!action->menu()){
 #if defined(Q_WS_WIN)
             //On Windows only context menus can be activated with the right button
             if (e->button() == Qt::LeftButton || d->topCausedWidget() == 0)
 #endif
-                d->activateAction(action, QAction::Trigger);
+            {
+                if (!d->actionPersistentlySelected(action)) {
+                    d->toggleActionPersistentlySelected(action);
+                    update();
+                    d->activateAction(action, QAction::Trigger);
+                }
+            }
         }
     } else if (d->hasMouseMoved(e->globalPos())) {
         d->hideUpToMenuBar();

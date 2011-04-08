@@ -89,6 +89,16 @@ TODO: remove contrasting-color creation code from KexiUtils, and use KColorSchem
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+2011-04-08..09
+Main Window
+*Modern Menu
+**display lighter gradient, make clicking on persistent items possible only once per item
+**improve gradient, make empty menu mostly transparent
+**make shortcuts work - menu is displayed and contents appear
+**added fades when switching between contents
+**proper selecting/deselecting persistent items
+TODO: still conflicts when menu is visible
+
 2011-03-29
 Main Window
 *Initial implementation of the Modern Menu

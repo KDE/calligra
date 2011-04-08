@@ -35,6 +35,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QPainter>
+#include <QDesktopWidget>
 
 #include <kexiutils/SmallToolButton.h>
 class KexiProjectNavigator;
@@ -69,6 +70,7 @@ public:
 
 public slots:
     void setMainMenuContent(QWidget *w);
+    void selectMainMenuItem(const char *actionName);
     void showMainMenu();
     void hideMainMenu();
     void toggleMainMenu();
@@ -117,9 +119,11 @@ private:
 
 #ifdef KEXI_MODERN_STARTUP
 #include <qimageblitz/qimageblitz.h>
+#include <KFadeWidgetEffect>
 #include <QStyleOptionMenuItem>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
+#include <QStackedLayout>
 #include "KexiMenuWidget.h"
 
 class EmptyMenuContentWidget : public QWidget
@@ -127,14 +131,21 @@ class EmptyMenuContentWidget : public QWidget
 public:
     EmptyMenuContentWidget(QWidget* parent = 0)
      : QWidget(parent)
+     , m_gradientVisible(true)
     {
         m_resizeEvent = true;
         setAttribute(Qt::WA_OpaquePaintEvent, true);
         setAttribute(Qt::WA_StaticContents, true);
     }
+    void setGradientVisible(bool set) {
+        if (m_gradientVisible != set) {
+            m_gradientVisible = set;
+            update();
+        }
+    }
 protected:
     void paintEvent(QPaintEvent*) {
-        if (!m_buffer.isNull()) {
+        if (m_gradientVisible && !m_buffer.isNull()) {
             QPainter p(this);
             p.drawPixmap(0, 0, m_buffer);
         }
@@ -155,27 +166,30 @@ protected:
             //mainWindow->mapFromGlobal(mapToGlobal(pos())),
             //mainWindow->mapFromGlobal(mapToGlobal(rect().bottomRight()))
         );
-        QImage img(event->size(), QImage::Format_RGB32);
-        mainWindow->render(&img, QPoint(0, 0), QRegion(r));
-        //img = img.scaled(img.size() / 2);
-        QColor fillColor(palette().color(QPalette::Mid /*Window*/));
-        //fillColor.setAlpha(0.5);
-        Blitz::fade(img, 0.8, fillColor);
-        img = Blitz::blur(img, 3);
-        //img = img.scaled(size());
+        //QImage img(event->size(), QImage::Format_ARGB32);
+        //img.fill(QColor(Qt::transparent).rgb());
+        m_buffer = QPixmap(event->size());
+        m_buffer.fill(Qt::transparent);
+        //mainWindow->render(&img, QPoint(0, 0), QRegion(r));
+        //QColor fillColor(palette().color(QPalette::Mid /*Window*/));
+        //Blitz::fade(img, 0.8, fillColor);
+        //img = Blitz::blur(img, 3);
         
-        QRadialGradient rgrad(0, img.height() / 2, img.height() / 2 + 100);
+        int gwidth = m_buffer.height();
+        int xoffset = gwidth / 2;
+        QRadialGradient rgrad(-xoffset, m_buffer.height() / 2, gwidth);
         rgrad.setColorAt(0.0, palette().color(QPalette::Dark));
         rgrad.setColorAt(1.0, Qt::transparent);
-        QPainter p(&img);
-        p.fillRect(QRect(QPoint(0, 0), img.size()), QBrush(rgrad));
+        QPainter p(&m_buffer);
+        p.fillRect(QRect(0, 0, gwidth - xoffset, m_buffer.height()), QBrush(rgrad));
         
-        m_buffer = QPixmap::fromImage(img);
+        //m_buffer = QPixmap::fromImage(img);
         m_resizeEvent = true;
     }
 private:
     QPixmap m_buffer;
     bool m_resizeEvent;
+    bool m_gradientVisible;
 };
 
 class TopLineKexiMainMenuWidget : public QWidget
@@ -186,6 +200,7 @@ public:
     {
         //setAutoFillBackground(true);
         setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        setContentsMargins(0, 0, 0, 0);
     }
 protected:
     void paintEvent(QPaintEvent*) {
@@ -224,6 +239,21 @@ private:
     QPixmap m_buffer;
 };
 
+class KexiFadeWidgetEffect : public KFadeWidgetEffect
+{
+    Q_OBJECT
+public:
+    KexiFadeWidgetEffect(QWidget *destWidget, int duration = 250)
+    : KFadeWidgetEffect(destWidget)
+    , m_duration(duration)
+    {
+    }
+public slots:
+    void start() { KFadeWidgetEffect::start(m_duration); }
+private:
+    int m_duration;
+};
+
 //! Main menu
 class KexiMainMenu : public QWidget
 {
@@ -233,6 +263,9 @@ public:
         m_topLineHeight(5), m_toolBar(toolBar), m_initialized(false)
     {
         //setAutoFillBackground(true); // to cover the lower layer
+        m_content = 0;
+        m_topLineSpacer = 0;
+        m_topLine = 0;
     }
     ~KexiMainMenu() {
         delete (QWidget*)m_contentWidget;
@@ -245,11 +278,49 @@ public:
     }
 
     void setContent(QWidget *contentWidget) {
+        KexiFadeWidgetEffect *fadeEffect = 0;
+        m_contentOpacityAnimation->stop();
+        m_effect->setOpacity(1.0);
+
+        if (m_contentWidget && contentWidget) {
+            fadeEffect = new KexiFadeWidgetEffect(m_content);
+        }
         delete (QWidget*)m_contentWidget;
         m_contentWidget = contentWidget;
-        m_contentWidget->setAutoFillBackground(true);
-        m_contentWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        m_contentLayout->addWidget(m_contentWidget);
+        if (m_content) {
+            m_content->setGradientVisible(!m_contentWidget);
+        }
+        if (m_contentWidget) {
+            m_topLineSpacer->show();
+            m_contentWidget->setAutoFillBackground(true);
+            m_contentWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+            m_contentWidget->setContentsMargins(0, 0, 0, 0);
+            m_contentLayout->addWidget(m_contentWidget);
+            m_contentLayout->setCurrentWidget(m_contentWidget);
+        }
+        else {
+            if (m_topLineSpacer) {
+                m_topLineSpacer->hide();
+            }
+            if (m_menuWidget->persistentlySelectedAction())
+                m_menuWidget->persistentlySelectedAction()->setPersistentlySelected(false);
+        }
+        if (m_topLine)
+            m_topLine->raise();
+        if (fadeEffect) {
+            if (m_contentWidget)
+                m_contentLayout->update();
+            
+            QTimer::singleShot(10, fadeEffect, SLOT(start()));
+        }
+    }
+
+    void updateTopLineGeometry()
+    {
+        int tab0width = style()->objectName() == "oxygen"
+            ? m_toolBar->tabRect(0).width() : 0;
+        m_topLine->setGeometry(
+            tab0width, 0, width() - 1 - tab0width, m_topLineHeight);
     }
     
 signals:
@@ -257,79 +328,94 @@ signals:
 protected:
     virtual void showEvent(QShowEvent * event) {
         if (!m_initialized) {
+            m_initialized = true;
             KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
             QHBoxLayout *hlyr = new QHBoxLayout(this);
             hlyr->setSpacing(0);
             hlyr->setMargin(0);
-            KexiMenuWidget *menu = new KexiMenuWidget;
-            menu->setFrame(false);
-            menu->setAutoFillBackground(true);
+            m_menuWidget = new KexiMenuWidget;
+            m_menuWidget->setFrame(false);
+            m_menuWidget->setAutoFillBackground(true);
             int leftmargin, topmargin, rightmargin, bottommargin;
-            menu->getContentsMargins(&leftmargin, &topmargin, &rightmargin, &bottommargin);
+            m_menuWidget->getContentsMargins(&leftmargin, &topmargin, &rightmargin, &bottommargin);
             topmargin += m_topLineHeight;
-            menu->setContentsMargins(leftmargin, topmargin, rightmargin, bottommargin);
+            m_menuWidget->setContentsMargins(leftmargin, topmargin, rightmargin, bottommargin);
 
-            menu->addAction(ac->action("project_new"));
-            menu->addAction(ac->action("project_open"));
+            m_menuWidget->addAction(ac->action("project_new"));
+            m_menuWidget->addAction(ac->action("project_open"));
             //menu->addAction(new KexiMenuWidgetAction(KStandardAction::New, this));
             //menu->addAction(new KexiMenuWidgetAction(KStandardAction::Open, this));
             //menu->setActiveAction(ac->action("project_open"));
-            menu->addAction(ac->action("project_open_recent"));
-            menu->addSeparator();
+            m_menuWidget->addAction(ac->action("project_open_recent"));
+            m_menuWidget->addSeparator();
             //menu->addAction(ac->action("project_save"));
             //menu->addAction(ac->action("project_saveas"));
-            menu->addAction(ac->action("project_close"));
-            menu->addSeparator();
+            m_menuWidget->addAction(ac->action("project_close"));
+            m_menuWidget->addSeparator();
             //menu->addAction(ac->action("tools_import_project"));
-            menu->addAction(ac->action("project_import_export_send"));
-            menu->addAction(ac->action("project_properties"));
+            m_menuWidget->addAction(ac->action("project_import_export_send"));
+            m_menuWidget->addAction(ac->action("project_properties"));
             // todo: project information
-            menu->addAction(ac->action("options_configure"));
-            menu->addAction(ac->action("quit"));
+            m_menuWidget->addAction(ac->action("options_configure"));
+            m_menuWidget->addAction(ac->action("quit"));
             //menu->setFixedWidth(300);
-            hlyr->addWidget(menu);
+            hlyr->addWidget(m_menuWidget);
             m_content = new EmptyMenuContentWidget;
             m_content->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
             //m_content->setAutoFillBackground(true);
             m_content->installEventFilter(this);
-            m_contentLayout = new QVBoxLayout(m_content);
+            m_mainContentLayout = new QVBoxLayout;
+            hlyr->addLayout(m_mainContentLayout);
+            m_topLineSpacer = new QWidget;
+            m_topLineSpacer->setFixedHeight(m_topLineHeight);
+            m_mainContentLayout->addWidget(m_topLineSpacer); // offset to avoid blinking top line
+            m_topLineSpacer->hide();
+            m_contentLayout = new QStackedLayout(m_content);
+            m_contentLayout->setStackingMode(QStackedLayout::StackAll);
             m_contentLayout->setContentsMargins(0, 0, 0, 0);
             //QLabel *l;
             //test setContent(l = new QLabel("aaaaaaaaaaaa..........a.aa.a.a....."));
             //l->setAutoFillBackground(true);
 
-            //QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(m_content);
-            //effect->setOpacity(0.0);
-            //m_content->setGraphicsEffect(effect);
-            hlyr->addWidget(m_content);
-            hlyr->setStretchFactor(m_content, 1);
-            
-            /*m_contentOpacityAnimation = new QPropertyAnimation(effect, "opacity", effect);
-            m_contentOpacityAnimation->setDuration(500);
-            m_contentOpacityAnimation->setStartValue(effect->opacity());
-            m_contentOpacityAnimation->setEndValue(0.8);
-            m_contentOpacityAnimation->start();*/
+            m_effect = new QGraphicsOpacityEffect(m_content);
+            m_effect->setOpacity(0.4);
+            m_content->setGraphicsEffect(m_effect);
+            m_mainContentLayout->addWidget(m_content);
+            hlyr->setStretchFactor(m_mainContentLayout, 1);
+
+            m_contentOpacityAnimation = new QPropertyAnimation(m_effect, "opacity", m_effect);
+            m_contentOpacityAnimation->setDuration(200);
+            m_contentOpacityAnimation->setStartValue(m_effect->opacity());
+            m_contentOpacityAnimation->setEndValue(1.0);
 
             m_topLine = new TopLineKexiMainMenuWidget(this);
-            int tab0width = style()->objectName() == "oxygen"
-                ? m_toolBar->tabRect(0).width() : 0;
-            m_topLine->setGeometry(
-                tab0width, 0, width() - 1 - tab0width, m_topLineHeight);
+            updateTopLineGeometry();
             m_topLine->show();
             m_topLine->raise();
         }
+        m_contentOpacityAnimation->start();
         QWidget::showEvent(event);
     }
 
+    virtual void hideEvent(QHideEvent * event) {
+        if (m_menuWidget->persistentlySelectedAction())
+            m_menuWidget->persistentlySelectedAction()->setPersistentlySelected(false);
+        QWidget::hideEvent(event);
+    }
+
 private:
+    KexiMenuWidget *m_menuWidget;
     const int m_topLineHeight;
     KexiTabbedToolBar* m_toolBar;
     bool m_initialized;
-    QWidget *m_content;
-    QVBoxLayout *m_contentLayout;
+    EmptyMenuContentWidget *m_content;
+    QStackedLayout *m_contentLayout;
     QPointer<QWidget> m_contentWidget;
     TopLineKexiMainMenuWidget *m_topLine;
+    QWidget* m_topLineSpacer;
+    QPointer<QGraphicsOpacityEffect> m_effect;
     QPointer<QPropertyAnimation> m_contentOpacityAnimation;
+    QVBoxLayout* m_mainContentLayout;
 };
 
 class KexiTabbedToolBarTabBar;
@@ -586,7 +672,7 @@ QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
 
 void KexiTabbedToolBar::Private::toggleMainMenu()
 {
-    if (mainMenu)
+    if (q->mainMenuVisible())
         hideMainMenu();
     else
         showMainMenu();
@@ -603,6 +689,7 @@ void KexiTabbedToolBar::Private::showMainMenu()
         connect(mainMenu, SIGNAL(contentAreaPressed()), this, SLOT(hideMainMenu()));
     }
     updateMainMenuGeometry();
+    //mainMenu->setContent(0);
     mainMenu->show();
 }
 
@@ -622,10 +709,19 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
     ot.initFrom(tabBar);
     int overlap = tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &ot, tabBar) - 2;
     kDebug() << "4. overlap=" << overlap;
-    
-    mainMenu->setGeometry(0, pos.y() - overlap /*- q->y()*/,\
+
+    mainMenu->setGeometry(0, pos.y() - overlap /*- q->y()*/,
                           mainWindow->width(),
                           mainWindow->height() - pos.y() + overlap /*+ q->y()*/);
+    
+/*    QRect scr(QApplication::desktop()->screenGeometry(q));
+    if (mainMenu->width() < mainWindow->width()) {
+        if (scr.width() < mainWindow->width()) {
+            scr.setWidth(mainWindow->width() * 3 / 2);
+        }
+        mainMenu->setGeometry(0, pos.y() - overlap, qMax(scr.width(), mainWindow->width()), 
+                            mainWindow->height() - pos.y() + overlap);
+    }*/
 }
 
 void KexiTabbedToolBar::Private::hideMainMenu()
@@ -635,7 +731,8 @@ void KexiTabbedToolBar::Private::hideMainMenu()
     q->tabBar()->update(q->tabRect(q->tabBar()->currentIndex()));
     q->tabBar()->update(q->tabRect(0));
     mainMenu->hide();
-    mainMenu->deleteLater();
+    //mainMenu->deleteLater();
+    mainMenu->setContent(0);
 }
 
 #endif // KEXI_MODERN_STARTUP
@@ -836,7 +933,7 @@ KexiTabbedToolBar::~KexiTabbedToolBar()
 
 bool KexiTabbedToolBar::mainMenuVisible() const
 {
-    return d->mainMenu;
+    return d->mainMenu && d->mainMenu->isVisible();
 }
 
 void KexiTabbedToolBar::slotSettingsChanged(int category)
@@ -902,6 +999,8 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
     case QEvent::Resize:
         if (watched == KexiMainWindowIface::global()->thisWidget()) {
             d->updateMainMenuGeometry();
+            if (d->mainMenu)
+                d->mainMenu->updateTopLineGeometry();
         }
         break;
     default:;
@@ -1069,6 +1168,15 @@ void KexiTabbedToolBar::toggleMainMenu()
 void KexiTabbedToolBar::setMainMenuContent(QWidget *w)
 {
     d->mainMenu->setContent(w);
+}
+
+void KexiTabbedToolBar::selectMainMenuItem(const char *actionName)
+{
+    if (actionName) {
+        KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
+        KexiMenuWidgetAction *a = qobject_cast<KexiMenuWidgetAction*>(ac->action(actionName));
+        a->setPersistentlySelected(true);
+    }
 }
 
 /*

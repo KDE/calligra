@@ -45,11 +45,10 @@ public:
     KexiMenuWidgetAction(const KIcon &icon, const QString &text, QObject *parent);
     KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent);
 
-protected:
     void setPersistentlySelected(bool set);
     bool persistentlySelected() const;
-    friend class KexiMenuWidgetPrivate;
 
+protected:
     KexiMenuWidgetActionPrivate * const d;
 };
 
@@ -68,6 +67,8 @@ public:
     explicit KexiMenuWidget(QWidget *parent = 0);
     explicit KexiMenuWidget(const QString &title, QWidget *parent = 0);
     ~KexiMenuWidget();
+
+    KexiMenuWidgetAction* persistentlySelectedAction() const;
 
 #ifdef Q_NO_USING_KEYWORD
     inline void addAction(QAction *action) { QWidget::addAction(action); }

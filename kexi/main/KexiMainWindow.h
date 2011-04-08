@@ -384,6 +384,8 @@ protected:
 
     void setupPropertyEditor();
 
+    void setupMainMenuActionShortcut(KAction* action, const char* slot);
+
     /*! Creates standard actions like new, open, save ... */
     void setupActions();
 
