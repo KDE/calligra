@@ -180,7 +180,11 @@ void KPrViewModeOutline::createBlock(QTextCursor cursor, int pageNumber, Outline
     }
     cursor.insertBlock(blockFormat, charFormat);
     int start = cursor.blockNumber();
-    cursor.insertText(pair.second->document()->toPlainText());
+
+    if (pair.second) {
+        cursor.insertText(pair.second->document()->toPlainText());
+    }
+
     for(; start <= cursor.blockNumber(); start++){
         m_outlineEditor->document()->findBlockByNumber(start).setUserData(new SlideUserBlockData(pageNumber, pair));
     }
