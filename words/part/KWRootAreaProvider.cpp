@@ -63,12 +63,11 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 #endif
 
     // Create missing KWPage's and KWTextFrame's
+    KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
+    Q_ASSERT(kwdoc);
     int framesCountBefore = m_textFrameSet->frameCount();
     QList<int> pagesCreated;
     for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
-        KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
-        Q_ASSERT(kwdoc);
-
         KWPage page = kwdoc->appendPage();
         Q_ASSERT(page.isValid());
 
@@ -105,6 +104,12 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
     //rootArea->setBottom(rootArea->top() + rootArea->associatedShape()->size().height());
     //rootArea->setReferenceRect(0, rootArea->associatedShape()->size().width(), 0, rootArea->associatedShape()->size().height());
 
+    // emits KWDocument::pageSetupChanged which calls KWViewMode::updatePageCache
+    KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
+    Q_ASSERT(kwdoc);
+    kwdoc->firePageSetupChanged();
+
+    // force repaint
     rootArea->associatedShape()->update();
 }
 
