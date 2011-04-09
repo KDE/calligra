@@ -68,14 +68,10 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
 
     int emptyPages = 0;
     while (page.isValid()) {
-#ifndef NDEBUG
-        if (page.pageNumber() - pageOffset >= m_pageTops.count()) {
-            kWarning(32003) << "ERROR; pagemanager has more pages than viewmode ("
-                << m_pageManager->pageCount() << ">" << m_pageTops.count()
-                << "). Make sure you add pages via the document!";
-            break;
-        }
-#endif
+        Q_ASSERT_X(page.pageNumber()-pageOffset < m_pageTops.count(), __FUNCTION__,
+                   QString("Pagemanager has more pages than viewmode (%1>%2 with pageOffset=%3 and pageNumber=%4 and pageCount=%5). Make sure you add pages via the document!")
+                   .arg(page.pageNumber()-pageOffset).arg(m_pageTops.count()).arg(pageOffset).arg(page.pageNumber()).arg(m_pageManager->pageCount()).toLocal8Bit());
+
         const QRectF pageRect = page.rect();
         const QRectF zoomedPage = m_viewConverter->documentToView(pageRect);
         ViewMap vm;

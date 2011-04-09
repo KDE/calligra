@@ -106,10 +106,12 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
     Q_ASSERT(data);
 
-    Q_ASSERT(m_pageManager);
-    const KWPageStyle pageStyle(m_pageManager->pageCount() > 0 ? m_pageManager->page(m_pageManager->pageCount() - 1).pageStyle() : m_pageManager->defaultPageStyle());
-    KWPage page = m_pageManager->appendPage(pageStyle);
-    Q_ASSERT(page.isValid());
+    // Create a new KWPage for the KWFrame if there is no page already
+    KWPage page = m_pageManager->page(frame->shape());
+    if (!page.isValid()) {
+        page = kwordDocument()->appendPage();
+        Q_ASSERT(page.isValid());
+    }
 
     kDebug() << "frame=" << frame << "pageNumber=" << page.pageNumber();
 

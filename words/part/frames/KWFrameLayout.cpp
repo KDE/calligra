@@ -65,7 +65,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     allHFTypes.append(KWord::EvenPagesHeaderTextFrameSet);
     allHFTypes.append(KWord::OddPagesFooterTextFrameSet);
     allHFTypes.append(KWord::EvenPagesFooterTextFrameSet);
-
+#if 0
     // create headers & footers
     KWord::TextFrameSetType origin;
     if (shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
@@ -83,7 +83,11 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             createCopyFrame(fs, page);
         }
     }
-
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
     //kDebug() <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
 
     if (page.pageStyle().background()) {
@@ -125,9 +129,11 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     // create main text frame. All columns of them.
     if (page.pageStyle().hasMainTextFrame()) {
         int columns = page.pageStyle().columns().columns;
+        Q_ASSERT(columns >= 1);
         KWTextFrameSet *fs = getOrCreate(KWord::MainTextFrameSet, page);
         QRectF rect(QPointF(0, page.offsetInDocument()),
                     QSizeF(page.width(), page.height()));
+#if 0
         if (page.pageSide() == KWPage::PageSpread)
             rect.setWidth(rect.width() / 2);
         foreach (KWFrame *frame, framesInPage(rect)) {
@@ -139,9 +145,13 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
                 }
             }
         }
-        while (columns > 0) {
-            new KWTextFrame(createTextShape(page), fs);
-            columns--;
+#endif
+        for (; columns > 0; --columns) {
+            KoShape * shape = createTextShape(page);
+            new KWTextFrame(shape, fs);
+
+            shape->setPosition(QPoint(0, page.offsetInDocument()));
+            shape->setSize(QSizeF(page.pageStyle().pageLayout().width, page.pageStyle().pageLayout().height));
         }
     }
 
@@ -155,16 +165,20 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             }
             void create(const KWPage &page, KWTextFrameSet *fs) {
                 KWFrame *frame;
-                if (fs->textFrameSetType() == KWord::MainTextFrameSet)
-                    frame = new KWTextFrame(m_parent->createTextShape(page), fs);
-                else
+                if (fs->textFrameSetType() == KWord::MainTextFrameSet) {
+                    KoShape * shape = m_parent->createTextShape(page);
+                    frame = new KWTextFrame(shape, fs);
+                } else {
                     frame = m_parent->createCopyFrame(fs, page);
+                }
                 KoShape *shape = frame->shape();
                 shape->setPosition(QPointF(page.width() / 2 + 1, shape->position().y()));
+                shape->setSize(QSizeF(page.pageStyle().pageLayout().width, page.pageStyle().pageLayout().height));
             }
             KWFrameLayout *m_parent;
         };
         PageSpreadShapeFactory factory(this);
+#if 0
         if (shouldHaveHeaderOrFooter(pageNumber + 1, true, &origin)) {
             KWTextFrameSet *fs = getOrCreate(origin, m_pageManager->page(pageNumber + 1));
             if (!frameOn(fs, pageNumber + 1))
@@ -175,6 +189,11 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             if (!frameOn(fs, pageNumber + 1))
                 factory.create(page, fs);
         }
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
         if (page.pageStyle().hasMainTextFrame()) {
             int columns = page.pageStyle().columns().columns;
             KWTextFrameSet *fs = getOrCreate(KWord::MainTextFrameSet, page);
@@ -318,6 +337,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             continue;
         }
         Q_ASSERT(textFrameSet);
+        kDebug() << "textFrameSetType=" << KWord::frameSetTypeName(textFrameSet->textFrameSetType());
         switch (textFrameSet->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
         case KWord::EvenPagesHeaderTextFrameSet: {
@@ -362,6 +382,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         endnote->shape()->setZIndex(minZIndex--);
     }
     for (int i = 0; i < columns; ++i) {
+        Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWTextFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
+        Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWTextFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
         if (main[i] && main[i]->shape())
             main[i]->shape()->setZIndex(minZIndex);
     }
@@ -589,16 +611,16 @@ void KWFrameLayout::setup()
 
 KoShape *KWFrameLayout::createTextShape(const KWPage &page)
 {
-    kDebug() << page.pageNumber();
+    kDebug() << "pageNumber=" << page.pageNumber();
     Q_ASSERT(page.isValid());
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
-    Q_ASSERT(factory);
+    if (!factory)
+        return 0;
     KoResourceManager *rm = 0;
     if (m_document)
         rm = m_document->resourceManager();
     KoShape *shape = factory->createDefaultShape(rm);
-    Q_ASSERT(shape);
-//     Q_ASSERT(false);
+    //Q_ASSERT(shape);
     return shape;
 }
 
