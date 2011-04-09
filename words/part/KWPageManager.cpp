@@ -39,8 +39,9 @@ KWPageManagerPrivate::KWPageManagerPrivate()
     pageStyles.insert(defaultPageStyle.name(), defaultPageStyle);
 }
 
-qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
+qreal KWPageManagerPrivate::pageOffset(int pageNum/*, bool bottom*/) const
 {
+#if 0
     Q_ASSERT(pageNum >= 0);
     qreal offset = 0.0;
     const qreal totalPadding = padding.top + padding.bottom;
@@ -58,6 +59,17 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
         offset += page.style.priv()->pageLayout.height + totalPadding;
     }
     return offset;
+#else
+    //Q_ASSERT(pageOffsets.contains(pageNum));
+    qreal offset = pageOffsets.value(pageNum);
+    //kDebug() << "pageNum=" << pageNum << "offset=" << offset;
+    return offset;
+#endif
+}
+
+void KWPageManagerPrivate::setPageOffset(int pageNum, qreal offset)
+{
+    pageOffsets[pageNum] = offset;
 }
 
 void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
@@ -111,6 +123,8 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
 
 void KWPageManagerPrivate::insertPage(const Page &newPage)
 {
+    kDebug() << "pageNumber=" << newPage.pageNumber;
+
     // increase the pagenumbers of pages following the pageNumber
     if (!pageNumbers.isEmpty()) {
         QMap<int, int> numbers = pageNumbers;
@@ -220,6 +234,8 @@ KWPage KWPageManager::page(qreal y) const
 
 KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
 {
+    kDebug() << "pageNumber=" << pageNumber;
+
     if (pageNumber <= 0 || d->pages.isEmpty() || pageNumber > last().pageNumber())
         return appendPage(pageStyle);
 
@@ -271,6 +287,8 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
         page.pageNumber = 1;
     }
 
+    kDebug() << "pageNumber=" << page.pageNumber;
+
     if (pageStyle.isValid()) {
         page.style = pageStyle;
     } else {
@@ -309,12 +327,14 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
 
 qreal KWPageManager::topOfPage(int pageNum) const
 {
-    return d->pageOffset(pageNum, false);
+    return d->pageOffset(pageNum);
 }
 
 qreal KWPageManager::bottomOfPage(int pageNum) const
 {
-    return d->pageOffset(pageNum, true);
+    KWPage p = page(pageNum);
+    Q_ASSERT(p.isValid());
+    return d->pageOffset(pageNum) + p.height();
 }
 
 void KWPageManager::removePage(int pageNumber)

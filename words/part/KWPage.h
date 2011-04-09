@@ -100,6 +100,10 @@ public:
      * add the height of all the pages that come before this one.
      */
     qreal offsetInDocument() const;
+    /**
+     * Set the offset of the page.
+     */
+    void setOffsetInDocument(qreal offset);
 
     /// Return the pageSide of this page, see the PageSide
     PageSide pageSide() const;

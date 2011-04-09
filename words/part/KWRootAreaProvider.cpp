@@ -46,31 +46,61 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     Q_ASSERT(pageManager);
     QList<KoTextLayoutRootArea *> rootAreas = documentLayout->rootAreas();
 
-    kDebug() << rootAreas.count() << m_textFrameSet->frameCount() << pageManager->pageCount();
-
-    // add missing pages
-    for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
-        // First add a new KWPage
-        const KWPageStyle pageStyle(pageManager->pageCount() > 0 ? pageManager->page(pageManager->pageCount() - 1).pageStyle() : pageManager->defaultPageStyle());
-        KWPage page = pageManager->appendPage(pageStyle);
-        Q_ASSERT(page.isValid());
-        kDebug() << "Appended new page with pageNumber=" << page.pageNumber();
+    // The page is created in KWTextFrameSet::setupFrame and the TextShape in KWFrameLayout::createTextShape
 #if 0
-        // Then create the TextShape for the new KWPage
-        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
-        Q_ASSERT(factory);
-        KoResourceManager *rm = m_textFrameSet->kwordDocument()->resourceManager();
-        KoShape *shape = factory->createDefaultShape(rm);
-        Q_ASSERT(shape);
+    const KWPageStyle pageStyle(pageManager->pageCount() > 0 ? pageManager->page(pageManager->pageCount() - 1).pageStyle() : pageManager->defaultPageStyle());
+    KWPage page = pageManager->appendPage(pageStyle);
+    Q_ASSERT(page.isValid());
+
+    KWPage page = m_textFrameSet->kwordDocument()->appendPage();
+    Q_ASSERT(page.isValid());
+
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
+    Q_ASSERT(factory);
+    KoResourceManager *rm = m_textFrameSet->kwordDocument()->resourceManager();
+    KoShape *shape = factory->createDefaultShape(rm);
+    Q_ASSERT(shape);
 #endif
-        // And finally create the KWTextFrame's for the new KWPage
+
+    int framesCountBefore = m_textFrameSet->frameCount();
+    QList<int> pagesCreated;
+    for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
         KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
+        Q_ASSERT(kwdoc);
+
+        // Create a new KWPage
+        KWPage page = kwdoc->appendPage();
+        Q_ASSERT(page.isValid());
+        Q_ASSERT(page.pageNumber() >= 1 && page.pageNumber() <= pageManager->pageCount());
+
+        // Set the y-offset of the new page.
+        qreal prevOffset = 0.0;
+        qreal prevHeight = 0.0;
+        KWPage prevPage = page.previous();
+        if (prevPage.isValid()) {
+            prevOffset = prevPage.offsetInDocument();
+            prevHeight = prevPage.height();
+        } else {
+            prevHeight = pageManager->defaultPageStyle().pageLayout().height;
+        }
+
+        page.setOffsetInDocument(prevOffset + prevHeight);
+        //page.setHeight(prevHeight);
+
+        // Create the KWTextFrame's for the new KWPage
         KWFrameLayout *frlay = kwdoc->frameLayout();
+        const int frameCountBefore = m_textFrameSet->frameCount();
         frlay->createNewFramesForPage(page.pageNumber());
+        Q_ASSERT_X(frameCountBefore < m_textFrameSet->frameCount(), __FUNCTION__, QString("Failed to create new frames for page=%1").arg(page.pageNumber()).toLocal8Bit());
+
+        pagesCreated << page.pageNumber();
     }
 
-//     Q_ASSERT(rootAreas.count() < m_textFrameSet->frames().count());
-    KWFrame *frame = m_textFrameSet->frames()[ qMax(0,rootAreas.count()-1) ];
+    kDebug() << "rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "frameCountBefore=" << framesCountBefore << "pageCount=" << pageManager->pageCount() << "pagesCreated=" << pagesCreated;
+
+    //FIXME don't use m_textFrameSet->frames() cause it can contain other frames too
+    Q_ASSERT(rootAreas.count() < m_textFrameSet->frames().count());
+    KWFrame *frame = m_textFrameSet->frames()[ rootAreas.count() ];
     KoShape *shape = frame->shape();
     Q_ASSERT(shape);
 

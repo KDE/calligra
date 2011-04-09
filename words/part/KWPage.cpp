@@ -208,7 +208,12 @@ qreal KWPage::marginClosestBinding() const
 qreal KWPage::offsetInDocument() const
 {
     // the y coordinate
-    return isValid() ? priv->pageOffset(priv->pages[n].pageNumber, false) : 0.;
+    return isValid() ? priv->pageOffset(priv->pages[n].pageNumber) : 0.;
+}
+
+void KWPage::setOffsetInDocument(qreal offset)
+{
+    priv->setPageOffset(priv->pages[n].pageNumber, offset);
 }
 
 QRectF KWPage::rect(int pageNumber) const
