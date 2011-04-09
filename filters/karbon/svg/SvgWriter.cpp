@@ -729,7 +729,7 @@ void SvgWriter::saveText(ArtisticTextShape * text)
             *m_body << getTransform(text->transformation(), " transform");
         }
         *m_body << ">" << endl;
-        *m_body << text->text();
+        *m_body << text->plainText();
     } else {
         KoPathShape * baseline = KoPathShape::createShapeFromPainterPath(text->baseline());
 
@@ -747,7 +747,7 @@ void SvgWriter::saveText(ArtisticTextShape * text)
         if (text->startOffset() > 0.0)
             *m_body << " startOffset=\"" << text->startOffset() * 100.0 << "%\"";
         *m_body << ">";
-        *m_body << text->text();
+        *m_body << text->plainText();
         *m_body << "</textPath>" << endl;
 
         delete baseline;
