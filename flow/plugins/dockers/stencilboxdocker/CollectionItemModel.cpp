@@ -25,7 +25,8 @@
 #include <QMimeData>
 
 CollectionItemModel::CollectionItemModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent),
+      m_viewMode(QListView::IconMode)
 {
     setSupportedDragActions(Qt::CopyAction);
 }
@@ -47,7 +48,7 @@ QVariant CollectionItemModel::data(const QModelIndex& index, int role) const
             return m_shapeTemplateList[index.row()].id;
 
         case Qt::DisplayRole:
-            return m_shapeTemplateList[index.row()].name;
+            return m_viewMode == QListView::ListMode ? m_shapeTemplateList[index.row()].name : QString();
 
         default:
             return QVariant();
@@ -66,6 +67,18 @@ void CollectionItemModel::setShapeTemplateList(const QList<KoCollectionItem>& ne
 {
     m_shapeTemplateList = newlist;
     reset();
+}
+
+QListView::ViewMode CollectionItemModel::viewMode() const
+{
+    return m_viewMode;
+}
+
+void CollectionItemModel::setViewMode(QListView::ViewMode vm)
+{
+    if(m_viewMode == vm)
+        return;
+    m_viewMode = vm;
 }
 
 QMimeData* CollectionItemModel::mimeData(const QModelIndexList& indexes) const
