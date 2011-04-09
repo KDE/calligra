@@ -62,36 +62,15 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     Q_ASSERT(shape);
 #endif
 
+    // Create missing KWPage's and KWTextFrame's
     int framesCountBefore = m_textFrameSet->frameCount();
     QList<int> pagesCreated;
     for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
         KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
         Q_ASSERT(kwdoc);
 
-        // Create a new KWPage
         KWPage page = kwdoc->appendPage();
         Q_ASSERT(page.isValid());
-        Q_ASSERT(page.pageNumber() >= 1 && page.pageNumber() <= pageManager->pageCount());
-
-        // Set the y-offset of the new page.
-        qreal prevOffset = 0.0;
-        qreal prevHeight = 0.0;
-        KWPage prevPage = page.previous();
-        if (prevPage.isValid()) {
-            prevOffset = prevPage.offsetInDocument();
-            prevHeight = prevPage.height();
-        } else {
-            prevHeight = pageManager->defaultPageStyle().pageLayout().height;
-        }
-
-        page.setOffsetInDocument(prevOffset + prevHeight);
-        //page.setHeight(prevHeight);
-
-        // Create the KWTextFrame's for the new KWPage
-        KWFrameLayout *frlay = kwdoc->frameLayout();
-        const int frameCountBefore = m_textFrameSet->frameCount();
-        frlay->createNewFramesForPage(page.pageNumber());
-        Q_ASSERT_X(frameCountBefore < m_textFrameSet->frameCount(), __FUNCTION__, QString("Failed to create new frames for page=%1").arg(page.pageNumber()).toLocal8Bit());
 
         pagesCreated << page.pageNumber();
     }
@@ -99,8 +78,8 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     kDebug() << "rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "frameCountBefore=" << framesCountBefore << "pageCount=" << pageManager->pageCount() << "pagesCreated=" << pagesCreated;
 
     //FIXME don't use m_textFrameSet->frames() cause it can contain other frames too
-    Q_ASSERT(rootAreas.count() < m_textFrameSet->frames().count());
-    KWFrame *frame = m_textFrameSet->frames()[ rootAreas.count() ];
+    Q_ASSERT(m_textFrameSet->frameCount() >= 1);
+    KWFrame *frame = m_textFrameSet->frames()[ m_textFrameSet->frameCount() - 1 ];
     KoShape *shape = frame->shape();
     Q_ASSERT(shape);
 
