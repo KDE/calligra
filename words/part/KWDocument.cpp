@@ -655,6 +655,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         foreach (KWFrame *frame, fs->frames())
         maxBottom = qMax(maxBottom, frame->shape()->boundingRect().bottom());
     }
+#if 0
     // The Document we loaded could have specified
     //  1) a number of pages
     //  2) a number of frames
@@ -668,21 +669,26 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         foreach (KWPage page, m_pageManager.pages())
             m_magicCurtain->revealFramesForPage(page.pageNumber(), page.offsetInDocument());
     }
-
+    PageProcessingQueue *ppq = pageQueue();
+#endif
     // Here we look at point 'b'. We add pages so at least all frames have a page.
     // btw. the observent reader might notice that cases b and c are not mutually exclusive ;)
-    PageProcessingQueue *ppq = pageQueue();
     while (docHeight <= maxBottom) {
         kDebug(32001) << "KWDocument::endOfLoading appends a page";
-        if (m_pageManager.pageCount() == 0) // apply the firstPageMasterName only on the first page
-            lastpage = m_pageManager.appendPage(m_pageManager.pageStyle(firstPageMasterName));
-        else // normally this shouldn't happen cause that loop is only run once...
-            lastpage = m_pageManager.appendPage();
-        ppq->addPage(lastpage);
+        if (m_pageManager.pageCount() == 0) { // apply the firstPageMasterName only on the first page
+            //lastpage = m_pageManager.appendPage(m_pageManager.pageStyle(firstPageMasterName));
+            lastpage = appendPage(firstPageMasterName);
+        } else { // normally this shouldn't happen cause that loop is only run once...
+            //lastpage = m_pageManager.appendPage();
+            lastpage = appendPage();
+        }
         docHeight += lastpage.height();
+#if 0
+        ppq->addPage(lastpage);
         if (m_magicCurtain) {
             m_magicCurtain->revealFramesForPage(lastpage.pageNumber(), lastpage.offsetInDocument());
         }
+#endif
     }
 
     if (updater) updater->setProgress(50);
