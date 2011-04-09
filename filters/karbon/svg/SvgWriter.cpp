@@ -695,7 +695,7 @@ void SvgWriter::saveText(ArtisticTextShape * text)
 
     getStyle(text, m_body);
 
-    QFont font = text->font();
+    QFont font = text->fontAt(0);
 
     *m_body << " font-family=\"" << font.family() << "\"";
     *m_body << " font-size=\"" << font.pointSize() << "pt\"";
