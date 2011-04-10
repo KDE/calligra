@@ -285,10 +285,6 @@ public:
         /*if (m_menuWidget->persistentlySelectedAction())
             kDebug() << "****" << m_menuWidget->persistentlySelectedAction()->objectName();*/
         KexiFadeWidgetEffect *fadeEffect = 0;
-        if (m_contentOpacityAnimation) {
-            m_contentOpacityAnimation->stop();
-            m_effect->setOpacity(1.0);
-        }
         
         if (m_contentWidget && contentWidget) {
             fadeEffect = new KexiFadeWidgetEffect(m_content);
@@ -297,6 +293,10 @@ public:
         m_contentWidget = contentWidget;
         if (m_content) {
             m_content->setGradientVisible(!m_contentWidget);
+            if (m_contentOpacityAnimation) {
+                m_contentOpacityAnimation->stop();
+                m_effect->setOpacity(1.0);
+            }
         }
         if (m_contentWidget) {
             m_topLineSpacer->show();
@@ -706,7 +706,7 @@ void KexiTabbedToolBar::Private::showMainMenu(const char* actionName)
     updateMainMenuGeometry();
     if (actionName)
         q->selectMainMenuItem(actionName);
-    mainMenu->setContent(0);
+    //mainMenu->setContent(0);
     mainMenu->show();
 }
 
