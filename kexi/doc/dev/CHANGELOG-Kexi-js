@@ -93,6 +93,7 @@ TODO: remove contrasting-color creation code from KexiUtils, and use KColorSchem
 Main Window
 *Modern Menu
 **All actions in main menu have at least a placeholder
+**Only hide menu if clicked outside
 
 2011-04-08..09
 Main Window

@@ -271,7 +271,8 @@ public:
         delete (QWidget*)m_contentWidget;
     }
     virtual bool eventFilter(QObject * watched, QEvent * event) {
-        if (watched == m_content && event->type() == QEvent::MouseButtonPress) {
+        kDebug() << m_contentWidget;
+        if (watched == m_content && !m_contentWidget && event->type() == QEvent::MouseButtonPress) {
             emit contentAreaPressed();
         }
         return QWidget::eventFilter(watched, event);
@@ -743,7 +744,7 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
 
 void KexiTabbedToolBar::Private::hideMainMenu()
 {
-    if (!mainMenu)
+    if (!mainMenu || !mainMenu->isVisible())
         return;
     q->tabBar()->update(q->tabRect(q->tabBar()->currentIndex()));
     q->tabBar()->update(q->tabRect(0));
@@ -994,7 +995,8 @@ void KexiTabbedToolBar::leaveEvent(QEvent* event)
 bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
 {
     switch (event->type()) {
-    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonPress: {
+        QWidget *mainWin = KexiMainWindowIface::global()->thisWidget();
         if (watched == tabBar()) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);
             QPoint p = me->pos();
@@ -1009,8 +1011,15 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
                 return true;
             }
         }
-        else if (watched == KexiMainWindowIface::global()->thisWidget()) {
-            d->hideMainMenu();
+        else if (watched == mainWin) {
+            QMouseEvent* me = static_cast<QMouseEvent*>(event);
+            if (!QRect(d->mainMenu->mapToGlobal(QPoint(0,0)), d->mainMenu->size())
+                    .contains(mainWin->mapToGlobal(me->pos())))
+            {
+                // hide if clicked outside of the menu
+                d->hideMainMenu();
+            }
+        }
         }
         break;
     case QEvent::Resize:
