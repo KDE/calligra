@@ -50,8 +50,9 @@ KWCopyShape::~KWCopyShape()
 
 void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if(m_original == 0)
+    if(m_original == 0) {
         return;
+    }
 
     if (m_pageManager) {
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_original->userData());
@@ -64,11 +65,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 
     //paint all child shapes
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
-    if (container) {
-        if (!container->shapeCount()) {
-            return;
-        }
-
+    if (container && container->shapeCount()) {
         QList<KoShape*> sortedObjects = container->shapes();
         sortedObjects.append(m_original);
         qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
@@ -102,7 +99,6 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
             m_original->border()->paint(m_original, painter, converter);
         }
     }
-
 }
 
 void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)

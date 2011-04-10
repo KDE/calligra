@@ -983,6 +983,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:text-line-through-width
     // style:text-outline
     // style:text-position
+    style.addProperty("style:text-position", percent(cf.position()), text);
     // style:text-rotation-angle
     // style:text-rotation-scale
     // style:text-scale
@@ -1910,10 +1911,10 @@ QPair<QString, QString> PptToOdp::findHyperlink(const quint32 id)
     if( !p->documentContainer->exObjList )
         return qMakePair(friendly, target);
 
-    foreach(ExObjListSubContainer container,
+    foreach(const ExObjListSubContainer &container,
             p->documentContainer->exObjList->rgChildRec) {
         // Search all ExHyperlinkContainers for specified id
-        ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
+        const ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
         if (hyperlink && hyperlink->exHyperlinkAtom.exHyperLinkId == id) {
             if (hyperlink->friendlyNameAtom) {
                 friendly = utf16ToString(hyperlink->friendlyNameAtom->friendlyName);

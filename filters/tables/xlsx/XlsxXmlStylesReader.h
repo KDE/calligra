@@ -191,6 +191,12 @@ public:
         return numberFormatStrings[ id ];
     }
 
+    //! @return conditional style name for the given index
+    QString conditionalStyle( int index ) const
+    {
+        return conditionalStyles[ index ];
+    }
+
 protected:
     void setCellFormat(XlsxCellFormat *format, int cellFormatIndex);
 
@@ -199,6 +205,7 @@ protected:
     QVector<KoGenStyle*> borderStyles;
     QVector<XlsxCellFormat*> cellFormats;
     QMap< int, QString > numberFormatStrings;
+    QMap< int, QString > conditionalStyles;
 
     friend class XlsxXmlStylesReader;
 };

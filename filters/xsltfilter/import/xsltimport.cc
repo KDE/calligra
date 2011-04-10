@@ -45,7 +45,7 @@ KoFilter::ConversionStatus XSLTImport::convert(const QByteArray&, const QByteArr
 
     if (to != "application/x-kword" &&
             to != "application/x-kontour" && to != "application/x-kspread" &&
-            to != "application/x-kivio" && to != "application/x-kchart" &&
+            to != "application/x-flow" && to != "application/x-kchart" &&
             to != "application/x-kpresenter")
         return KoFilter::NotImplemented;
 

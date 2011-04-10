@@ -75,7 +75,7 @@ public:
                        float, float, float, float, float, float, float, float,
                        float, float, float, float, float, float, float, float);
     /*
-     * fuctions to get the values such as size,position,and rotation.
+     * functions to get the values such as size,position,and rotation.
      * Slide shape could be useful in future when each cordinate value is to be verified
      */
     QList<float> getSlideSize();

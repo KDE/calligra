@@ -127,7 +127,7 @@ public:
     
     /**
      * Add the node @p task to the project, after node @p position
-     * If @p postition is zero, it will be added to this project.
+     * If @p postition is zero or the project node, it will be added to this project.
      */
     bool addTask( Node* task, Node* position );
     /**
@@ -155,15 +155,15 @@ public:
     bool canMoveTaskDown( Node* node );
     bool moveTaskDown( Node* node );
     /**
-     * Create a task with a unique id with its parent set to @p parent.
-     * The task is not added to the parent. Do this with addSubTask().
+     * Create a task with a unique id.
+     * The task is not added to the project. Do this with addSubTask().
      */
-    Task *createTask( Node* parent );
+    Task *createTask();
     /**
-     * Create a copy of @p def with a unique id with its parent set to @p parent.
-     * The task is not added to the parent. Do this with addSubTask().
+     * Create a copy of @p def with a unique id.
+     * The task is not added to the project. Do this with addSubTask().
      */
-    Task *createTask( const Task &def, Node* parent );
+    Task *createTask( const Task &def );
 
     int resourceGroupCount() const { return m_resourceGroups.count(); }
     QList<ResourceGroup*> &resourceGroups();
