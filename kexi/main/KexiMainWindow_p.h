@@ -370,7 +370,7 @@ protected:
             m_menuWidget->addAction(ac->action("project_import_export_send"));
             m_menuWidget->addAction(ac->action("project_properties"));
             // todo: project information
-            m_menuWidget->addAction(ac->action("options_configure"));
+            m_menuWidget->addAction(ac->action("settings"));
             m_menuWidget->addAction(ac->action("quit"));
             //menu->setFixedWidth(300);
             hlyr->addWidget(m_menuWidget);
@@ -1796,7 +1796,7 @@ public:
 //  int action_open_recent_more_id;
     int action_open_recent_projects_title_id,
     action_open_recent_connections_title_id;
-    KAction *action_options_configure;
+    KAction *action_settings;
 
     //! edit menu
     KAction *action_edit_delete, *action_edit_delete_row,

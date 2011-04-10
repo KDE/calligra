@@ -596,6 +596,7 @@ protected slots:
     void slotProjectPrintPreview();
     void slotProjectPageSetup();
     void slotProjectProperties();
+    void slotProjectImportExportOrSend();
     void slotProjectClose();
     void slotProjectRelations();
     void slotProjectImportDataTable();
@@ -617,7 +618,7 @@ protected slots:
     void slotViewDataMode();
     void slotViewDesignMode();
     void slotViewTextMode(); //!< sometimes called "SQL View"
-    void slotShowSettings();
+    void slotSettings();
     void slotConfigureKeys();
     void slotConfigureToolbars();
     void slotToolsProjectMigration();

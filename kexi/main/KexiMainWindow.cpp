@@ -642,6 +642,11 @@ void KexiMainWindow::setupMainMenuActionShortcut(KAction* action, const char* sl
     }
 }
 
+static void addThreeDotsToActionText(QAction* action)
+{
+    action->setText(i18nc("Action name with three dots...", "%1...", action->text()));
+}
+
 void KexiMainWindow::setupActions()
 {
     //kde4
@@ -661,6 +666,7 @@ void KexiMainWindow::setupActions()
     
     ac->addAction("project_new",
         action = new KexiMenuWidgetAction(KStandardAction::New, this));
+    addThreeDotsToActionText(action);
     action->setShortcut(KStandardShortcut::openNew());
     action->setToolTip(i18n("Create a new project"));
     action->setWhatsThis(
@@ -688,7 +694,7 @@ void KexiMainWindow::setupActions()
     {
         ac->addAction("project_open_recent",
             action = d->action_open_recent = new KexiMenuWidgetAction(KStandardAction::OpenRecent, this));
-            action->setText(i18nc("Action name with three dots...", "%1...", action->text()));
+            addThreeDotsToActionText(action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpenRecent()));
         setupMainMenuActionShortcut(action, SLOT(slotProjectOpenRecent()));
         action->setToolTip(i18n("Open recent project"));
@@ -717,22 +723,23 @@ void KexiMainWindow::setupActions()
     connect(d->action_save_as, SIGNAL(triggered()), this, SLOT(slotProjectSaveAs()));
 
     ac->addAction("project_properties",
-                  action = d->action_project_properties = new KAction(
-        KIcon("document-properties"), i18n("Project Properties"), this));
+        action = d->action_project_properties = new KexiMenuWidgetAction(
+            KIcon("document-properties"), i18n("Project Properties"), this));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectProperties()));
-    setupMainMenuActionShortcut(action, SLOT(slotProjectQuit()));
+    setupMainMenuActionShortcut(action, SLOT(slotProjectProperties()));
 #else
     d->action_save_as = d->dummy_action;
     d->action_project_properties = d->dummy_action;
 #endif
 
 #ifndef KEXI_NO_UNFINISHED
+#warning replace document-import icon with something other
     ac->addAction("project_import_export_send",
-                  action = d->action_project_import_export_send = new KAction(
-        KIcon(), i18n("&Import, Export or Send..."), this));
-    action->setToolTip(i18n("Import, export or send entire database"));
+        action = d->action_project_import_export_send = new KexiMenuWidgetAction(
+            KIcon("document-import"), i18n("&Import, Export or Send..."), this));
+    action->setToolTip(i18n("Import, export or send project"));
     action->setWhatsThis(
-        i18n("Imports, exports or sends entire database."));
+        i18n("Imports, exports or sends project."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectImportExportOrSend()));
     setupMainMenuActionShortcut(action, SLOT(slotProjectImportExportOrSend()));
 #else
@@ -740,15 +747,17 @@ void KexiMainWindow::setupActions()
 #endif
 
     ac->addAction("project_close",
-                  action = d->action_close = new KAction(KIcon("window-close"), i18n("&Close Project"), this));
+        action = d->action_close = new KexiMenuWidgetAction(
+            KIcon("window-close"), i18n("&Close Project..."), this));
     action->setToolTip(i18n("Close the current project"));
     action->setWhatsThis(i18n("Closes the current project."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectClose()));
     setupMainMenuActionShortcut(action, SLOT(slotProjectClose()));
 
     ac->addAction("quit",
-                  action = KStandardAction::quit(this, SLOT(slotProjectQuit()), this));
-    action->setWhatsThis(i18n("Quits Kexi application. Kexi prompts you to save changes."));
+                  action = new KexiMenuWidgetAction(KStandardAction::Quit, this));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotProjectQuit()));
+    action->setWhatsThis(i18n("Quits Kexi application."));
     setupMainMenuActionShortcut(action, SLOT(slotProjectQuit()));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
@@ -1136,9 +1145,12 @@ void KexiMainWindow::setupActions()
 #pragma WARNING( setStandardToolBarMenuEnabled( true ); )
 #endif
 
+#warning put 'configure keys' into settings view
+#if 0 // moved to settings
     action = KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), this);
     ac->addAction(action->objectName(), action);
     action->setWhatsThis(i18n("Lets you configure shortcut keys."));
+#endif
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     /*! @todo 2.0 - toolbars configuration will be handled in a special way
@@ -1171,12 +1183,16 @@ void KexiMainWindow::setupActions()
     Kexi::tempShowScripts() = false;
 #endif
 
-//#ifdef KEXI_SHOW_UNIMPLEMENTED
 //! @todo 2.0 - implement settings window in a specific way
-    d->action_options_configure = KStandardAction::preferences(this, SLOT(slotShowSettings()), ac);
-    d->action_options_configure->setToolTip(i18n("Configure Kexi"));
-    d->action_options_configure->setWhatsThis(i18n("Lets you configure Kexi."));
-//#endif
+    ac->addAction("settings",
+                  action = d->action_settings = new KexiMenuWidgetAction(
+                    KStandardAction::Preferences, this));
+    action->setObjectName("settings");
+    action->setText(i18n("Settings..."));
+    action->setToolTip(i18n("Kexi settings"));
+    action->setWhatsThis(i18n("Lets you to view and change Kexi settings."));
+    connect(action, SIGNAL(triggered()), this, SLOT(slotSettings()));
+    setupMainMenuActionShortcut(action, SLOT(slotSettings()));
 
     //HELP MENU
     // add help menu actions... (KexiTabbedToolBar depends on them)
@@ -1216,7 +1232,7 @@ void KexiMainWindow::setupActions()
 // KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 //  actionCollection(), "kexi_settings");
 // actionSettings->setWhatsThis(i18n("Lets you configure Kexi."));
-// connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
+// connect(actionSettings, SIGNAL(activated()), this, SLOT(slotSettings()));
 
     // ----- declare action categories, so form's "assign action to button"
     //       (and macros in the future) will be able to recognize category
@@ -3021,11 +3037,12 @@ KexiMainWindow::childClosed(KMdiChildView *v)
 #endif
 
 void
-KexiMainWindow::slotShowSettings()
+KexiMainWindow::slotSettings()
 {
-    KEXI_UNFINISHED(d->action_options_configure->text());
-//TODO KexiSettings s(this);
-// s.exec();
+    d->tabbedToolBar->showMainMenu("settings");
+    // dummy
+    QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("settings")->text());
+    d->tabbedToolBar->setMainMenuContent(dummy);
 }
 
 void
@@ -3113,25 +3130,28 @@ KexiMainWindow::createKexiProject(KexiProjectData* new_data)
     
 }
 
-KexiProjectData*
-KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
+KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
                                        QString* shortcutFileName)
 {
+    d->tabbedToolBar->showMainMenu("project_new");
+    KexiNewProjectWizard *wiz = new KexiNewProjectWizard(Kexi::connset(), 0);
+    wiz->setConfirmOverwrites(confirmOverwrites);
+    d->tabbedToolBar->setMainMenuContent(wiz);
+
+#warning todo
     cancelled = false;
-    KexiNewProjectWizard wiz(Kexi::connset(), 0);
-    wiz.setConfirmOverwrites(confirmOverwrites);
+    KexiProjectData *new_data = 0;
+#if 0 // before MODERN
     if (wiz.exec() != QDialog::Accepted) {
         cancelled = true;
         return 0;
     }
 
-    KexiProjectData *new_data;
-
     if (shortcutFileName)
         shortcutFileName->clear();
     if (wiz.projectConnectionData()) {
         //server-based project
-        KexiDB::ConnectionData *cdata = wiz.projectConnectionData();
+        KexiDB::ConnectionData *cdata = wiz->projectConnectionData();
         kDebug() << "DBNAME: " << wiz.projectDBName() << " SERVER: " << cdata->serverInfoString();
         new_data = new KexiProjectData(*cdata, wiz.projectDBName(), wiz.projectCaption());
         if (shortcutFileName)
@@ -3147,6 +3167,7 @@ KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
         cancelled = true;
         return 0;
     }
+#endif
     return new_data;
 }
 
@@ -3443,12 +3464,23 @@ void KexiMainWindow::slotProjectExportDataTable()
         exportItemAsDataTable(currentWindow()->partItem());
 }
 
-void
-KexiMainWindow::slotProjectProperties()
+void KexiMainWindow::slotProjectProperties()
 {
+    d->tabbedToolBar->showMainMenu("project_properties");
+    // dummy
+    QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_properties")->text());
+    d->tabbedToolBar->setMainMenuContent(dummy);
     //TODO: load the implementation not the ui :)
 // ProjectSettingsUI u(this);
 // u.exec();
+}
+
+void KexiMainWindow::slotProjectImportExportOrSend()
+{
+    d->tabbedToolBar->showMainMenu("project_import_export_send");
+    // dummy
+    QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_import_export_send")->text());
+    d->tabbedToolBar->setMainMenuContent(dummy);
 }
 
 void
