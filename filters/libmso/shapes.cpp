@@ -34,7 +34,8 @@ using namespace MSO;
 
 namespace
 {
-enum {
+enum MSOSPT
+{
     msosptMin = 0,
     msosptNotPrimitive = msosptMin,
     msosptRectangle = 1,
@@ -243,6 +244,17 @@ enum {
     msosptNil = 0x0FFF
 };
 
+enum MSOPATHTYPE
+{
+    msopathLineTo = 0,
+    msopathCurveTo,
+    msopathMoveTo,
+    msopathClose,
+    msopathEnd,
+    msopathEscape,
+    msopathClientEscape
+};
+
 void equation(Writer& out, const char* name, const char* formula)
 {
     out.xml.startElement("draw:equation");
@@ -256,8 +268,6 @@ qint16
 ODrawToOdf::normalizeRotation(qreal rotation)
 {
     qint16 angle = ((qint16)rotation) % 360;
-
-    //MSOffice 2003/2007 save different values for the rotation property
     if (angle < 0) {
         angle = angle + 360;
     }
@@ -282,9 +292,6 @@ ODrawToOdf::getRect(const OfficeArtSpContainer &o)
 QRectF
 ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &rect)
 {
-    // OfficeArtClientAnchorData structure might contain a 90 degrees rotated
-    // rectangle.  It depends on the value of the rotation property, but the
-    // intervals differ for each shape type.
     bool transform_anchor = false;
     qint16 nrotation = normalizeRotation(rotation);
 
@@ -292,12 +299,13 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
 
     switch (shapeType) {
     case msosptNotPrimitive:
-    default:
         if ( ((nrotation >= 45) && (nrotation < 135)) ||
              ((nrotation >= 225) && (nrotation < 315)))
         {
             transform_anchor = true;
         }
+        break;
+    default:
         break;
     }
     if (transform_anchor) {
@@ -481,12 +489,27 @@ void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out
 
 void ODrawToOdf::processHexagon(const OfficeArtSpContainer& o, Writer& out)
 {
+    const OfficeArtDggContainer * drawingGroup = 0;
+    if (client) {
+        drawingGroup = client->getOfficeArtDggContainer();
+    }
+    const OfficeArtSpContainer* master = 0;
+    const DrawStyle ds(drawingGroup, master, &o);
+
+    // draw:modifier by default is 5400 for this shape
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "hexagon");
+    out.xml.addAttribute("draw:text-areas", "?f3 ?f3 ?f4 ?f4");
+    processModifiers(o, out, defaultModifierValue);
+    out.xml.addAttribute("svg:viewBox","0 0 21600 21600");
     out.xml.addAttribute("draw:glue-points", "5 0 0 5 5 10 10 5");
+    out.xml.addAttribute("draw:enhanced-path","M ?f0 0 L ?f1 0 21600 10800 ?f1 21600 ?f0 21600 0 10800 Z N");
     equation(out, "f0", "$0");
     equation(out, "f1", "21600-$0");
     equation(out, "f2", "$0 *100/234");
@@ -529,6 +552,10 @@ void ODrawToOdf::processOctagon(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processArrow(const OfficeArtSpContainer& o, Writer& out)
 {
+    // defaults for this shape
+    QList<int> arrowModifierDefaults;
+    arrowModifierDefaults << 5400 << 5400;
+
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -544,6 +571,13 @@ void ODrawToOdf::processArrow(const OfficeArtSpContainer& o, Writer& out)
     } else if (o.shapeProp.rh.recInstance == msosptDownArrow) {
         out.xml.addAttribute("draw:type", "down-arrow");
     }
+
+
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas","?f7 ?f0 21600 ?f2");
+    processModifiers(o, out, arrowModifierDefaults);
+    out.xml.addAttribute("draw:enhanced-path","M 21600 ?f0 L ?f1 ?f0 ?f1 0 0 10800 ?f1 21600 ?f1 ?f2 21600 ?f2 Z N");
+
     equation(out, "f0", "$1");
     equation(out, "f1", "$0");
     equation(out, "f2", "21600-$1");
@@ -552,8 +586,9 @@ void ODrawToOdf::processArrow(const OfficeArtSpContainer& o, Writer& out)
     equation(out, "f5", "?f1 +?f4");
     equation(out, "f6", "?f1 *?f0 /10800");
     equation(out, "f7", "?f1 -?f6");
+
     out.xml.startElement("draw:handle");
-    if (o.shapeProp.rh.recInstance == msosptLeftRightArrow || o.shapeProp.rh.recInstance == msosptLeftArrow) {
+    if (o.shapeProp.rh.recInstance == msosptLeftArrow) {
         out.xml.addAttribute("draw:handle-range-x-maximum", 21600);
         out.xml.addAttribute("draw:handle-range-x-minimum", 0);
         out.xml.addAttribute("draw:handle-position", "$0 $1");
@@ -570,6 +605,48 @@ void ODrawToOdf::processArrow(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // draw:enhanced-geometry
     out.xml.endElement(); // draw:custom-shape
 }
+
+
+void ODrawToOdf::processLeftRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    QList<int> arrowModifierDefaults;
+    arrowModifierDefaults << 5400 << 5400;
+
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "left-right-arrow");
+    processModifiers(o, out, arrowModifierDefaults);
+    out.xml.addAttribute("svg:viewBox","0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas","?f5 ?f1 ?f6 ?f3");
+    out.xml.addAttribute("draw:enhanced-path","M 0 10800 L ?f0 0 ?f0 ?f1 ?f2 ?f1 ?f2 0 21600 10800 ?f2 21600 ?f2 ?f3 ?f0 ?f3 ?f0 21600 Z N");
+
+    equation(out, "f0" ,"$0 ");
+    equation(out, "f1" ,"$1 ");
+    equation(out, "f2" ,"21600-$0 ");
+    equation(out, "f3" ,"21600-$1 ");
+    equation(out, "f4" ,"10800-$1 ");
+    equation(out, "f5" ,"$0 *?f4 /10800");
+    equation(out, "f6" ,"21600-?f5 ");
+    equation(out, "f7" ,"10800-$0 ");
+    equation(out, "f8" ,"$1 *?f7 /10800");
+    equation(out, "f9" ,"21600-?f8 ");
+
+    out.xml.startElement("draw:handle");
+
+    out.xml.addAttribute("draw:handle-position","$0 $1");
+    out.xml.addAttribute("draw:handle-range-x-minimum","0");
+    out.xml.addAttribute("draw:handle-range-x-maximum","10800");
+    out.xml.addAttribute("draw:handle-range-y-minimum","0");
+    out.xml.addAttribute("draw:handle-range-y-maximum","10800");
+
+    out.xml.endElement(); // draw:handle
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
+
 
 void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -1670,6 +1747,75 @@ void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); //draw:custom-shape
 }
 
+void ODrawToOdf::processActionButtonInformation(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:path-stretchpoint-x","10800");
+    out.xml.addAttribute("draw:path-stretchpoint-y","10800");
+    out.xml.addAttribute("draw:text-areas","?f1 ?f2 ?f3 ?f4");
+    out.xml.addAttribute("draw:type","mso-spt192");
+    processModifiers(o, out);
+    out.xml.addAttribute("draw:enhanced-path","M 0 0 L 21600 0 21600 21600 0 21600 Z N M 0 0 L 21600 0 ?f3 ?f2 ?f1 ?f2 Z N M 21600 0 L 21600 21600 ?f3 ?f4 ?f3 ?f2 Z N M 21600 21600 L 0 21600 ?f1 ?f4 ?f3 ?f4 Z N M 0 21600 L 0 0 ?f1 ?f2 ?f1 ?f4 Z N M ?f7 ?f12 X ?f10 ?f8 ?f7 ?f16 ?f14 ?f8 ?f7 ?f12 Z N M ?f7 ?f20 X ?f18 ?f42 ?f7 ?f24 ?f22 ?f42 ?f7 ?f20 Z N M ?f26 ?f28 L ?f30 ?f28 ?f30 ?f32 ?f34 ?f32 ?f34 ?f36 ?f26 ?f36 ?f26 ?f32 ?f38 ?f32 ?f38 ?f40 ?f26 ?f40 Z N");
+
+    equation(out, "f0" ,"$0 ");
+    equation(out, "f1" ,"left+$0 ");
+    equation(out, "f2" ,"top+$0 ");
+    equation(out, "f3" ,"right-$0 ");
+    equation(out, "f4" ,"bottom-$0 ");
+    equation(out, "f5" ,"10800-$0 ");
+    equation(out, "f6" ,"?f5 /10800");
+    equation(out, "f7" ,"right/2");
+    equation(out, "f8" ,"bottom/2");
+    equation(out, "f9" ,"-8050*?f6 ");
+    equation(out, "f10" ,"?f9 +?f7 ");
+    equation(out, "f11" ,"-8050*?f6 ");
+    equation(out, "f12" ,"?f11 +?f8 ");
+    equation(out, "f13" ,"8050*?f6 ");
+    equation(out, "f14" ,"?f13 +?f7 ");
+    equation(out, "f15" ,"8050*?f6 ");
+    equation(out, "f16" ,"?f15 +?f8 ");
+    equation(out, "f17" ,"-2060*?f6 ");
+    equation(out, "f18" ,"?f17 +?f7 ");
+    equation(out, "f19" ,"-7620*?f6 ");
+    equation(out, "f20" ,"?f19 +?f8 ");
+    equation(out, "f21" ,"2060*?f6 ");
+    equation(out, "f22" ,"?f21 +?f7 ");
+    equation(out, "f23" ,"-3500*?f6 ");
+    equation(out, "f24" ,"?f23 +?f8 ");
+    equation(out, "f25" ,"-2960*?f6 ");
+    equation(out, "f26" ,"?f25 +?f7 ");
+    equation(out, "f27" ,"-2960*?f6 ");
+    equation(out, "f28" ,"?f27 +?f8 ");
+    equation(out, "f29" ,"1480*?f6 ");
+    equation(out, "f30" ,"?f29 +?f7 ");
+    equation(out, "f31" ,"5080*?f6 ");
+    equation(out, "f32" ,"?f31 +?f8 ");
+    equation(out, "f33" ,"2960*?f6 ");
+    equation(out, "f34" ,"?f33 +?f7 ");
+    equation(out, "f35" ,"6140*?f6 ");
+    equation(out, "f36" ,"?f35 +?f8 ");
+    equation(out, "f37" ,"-1480*?f6 ");
+    equation(out, "f38" ,"?f37 +?f7 ");
+    equation(out, "f39" ,"-1920*?f6 ");
+    equation(out, "f40" ,"?f39 +?f8 ");
+    equation(out, "f41" ,"-5560*?f6 ");
+    equation(out, "f42" ,"?f41 +?f8 ");
+
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position","$0 top");
+    out.xml.addAttribute("draw:handle-switched","true");
+    out.xml.addAttribute("draw:handle-range-x-minimum","0");
+    out.xml.addAttribute("draw:handle-range-x-maximum","5400");
+
+    out.xml.endElement(); // draw:handle
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
     quint16 shapeType = o.shapeProp.rh.recInstance;
@@ -1697,6 +1843,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
                shapeType == msosptUpArrow ||
                shapeType == msosptDownArrow) {
         processArrow(o, out);
+    } else if (shapeType == msosptLeftRightArrow) {
+        processLeftRightArrow(o, out);
     } else if (shapeType == msosptLine) {
         processLine(o, out);
     } else if (shapeType == msosptStraightConnector1) {
@@ -1760,6 +1908,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processNotchedCircularArrow(o, out);
     } else if (shapeType == msosptFlowChartDelay) {
         processFlowChartDelay(o, out);
+    } else if (shapeType == msosptActionButtonInformation) {
+        processActionButtonInformation(o, out);
     } else {
         qDebug() << "cannot handle object of type " << shapeType;
     }
@@ -1830,15 +1980,15 @@ void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &ou
 // Position the shape into the slide or into a group shape
 void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 {
-    // TODO: the group shape might be also rotated and flipped
-
     const OfficeArtDggContainer* dgg = 0;
     const OfficeArtSpContainer* master = 0;
     const DrawStyle ds(dgg, master, &o);
+    const qreal rotation = toQReal(ds.rotation());
 
+    //transform the rectangle into the coordinate system of the group shape
     QRectF rect = getRect(o);
-    qreal rotation = toQReal(ds.rotation());
-    quint16 nrotation = normalizeRotation(rotation);
+    QRectF trect (out.hOffset(rect.x()), out.vOffset(rect.y()),
+                  out.hLength(rect.width()), out.vLength(rect.height()));
 
     //draw:caption-id
     //draw:class-names
@@ -1850,39 +2000,35 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //draw:style-name
     //draw:text-style-name
     //draw:transform
-    if (!o.shapeProp.fChild && nrotation) {
+    if (rotation) {
 
         const quint16 shapeType = o.shapeProp.rh.recInstance;
-        rect = processRect(shapeType, rotation, rect);
-
-        //translate requires the top right coordinate of the rotated rectangle
-        static const QString transformString("rotate(%1) translate(%2 %3)");
-        const qreal height = out.vLength(rect.height());
-        const qreal width = out.hLength(rect.width());
-        const qreal xPos = out.hOffset(rect.x());
-        const qreal yPos = out.vOffset(rect.y());
+        const quint16 nrotation = normalizeRotation(rotation);
         const qreal angle = (nrotation / (qreal)180) * M_PI;
 
-        //counter-clockwise rotation, coord. system origin in top left corner
-        qreal newX = xPos + width/2 - (cos(angle)*width/2 - sin(angle)*height/2);
-        qreal newY = yPos + height/2 - (sin(angle)*width/2 + cos(angle)*height/2);
+        trect = processRect(shapeType, rotation, trect);
+
+        static const QString transform_str("translate(%1 %2) rotate(%3) translate(%4 %5)");
+        const QPointF center = trect.center();
+        const qreal height = trect.height();
+        const qreal width = trect.width();
 
         out.xml.addAttribute("draw:transform",
-                             transformString.arg(angle).arg(client->formatPos(newX)).arg(client->formatPos(newY)));
+                             transform_str.arg(client->formatPos(-width/2)).arg(client->formatPos(-height/2)).arg(-angle).arg(client->formatPos(center.x())).arg(client->formatPos(center.y())));
     }
     //svg:x
     //svg:y
     else {
-        out.xml.addAttribute("svg:x", client->formatPos(out.hOffset(rect.x())));
-        out.xml.addAttribute("svg:y", client->formatPos(out.vOffset(rect.y())));
+        out.xml.addAttribute("svg:x", client->formatPos(trect.x()));
+        out.xml.addAttribute("svg:y", client->formatPos(trect.y()));
     }
     //draw:z-index
     //presentation:class-names
     //presentation:style-name
     //svg:height
-    out.xml.addAttribute("svg:height", client->formatPos(out.vLength(rect.height())));
+    out.xml.addAttribute("svg:height", client->formatPos(trect.height()));
     //svg:width
-    out.xml.addAttribute("svg:width", client->formatPos(out.hLength(rect.width())));
+    out.xml.addAttribute("svg:width", client->formatPos(trect.width()));
     //table:end-cell-address
     //table:end-x
     //table:end-y
@@ -1914,6 +2060,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
 
         int maxX = 0, minX = INT_MAX, maxY = 0, minY = INT_MAX;
         int x,y;
+
         //get vertice points
         for (int i = 0, offset = 0; i < _v.nElems; i++, offset += step) {
             // x coordinate of this point
@@ -1941,52 +2088,69 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
         }
 
-        QString viewBox = QString::number(minX) + ' ' + QString::number(minY) + ' '
-                          + QString::number(maxX) + ' ' + QString::number(maxY);
+	//TODO: geoLeft, geoTop, geoRight, geoBottom
+        QString viewBox = QString::number(minX) + ' ' + QString::number(minY) + ' ' +
+                          QString::number(maxX) + ' ' + QString::number(maxY);
 
         // combine segmentationInfoData and verticePoints into enhanced-path string
-        int verticesIndex = 0;
         QString enhancedPath;
-        for (int i = 0; i < _c.nElems; i++) {
+        ushort msopathtype;
+        bool nOffRange = false;
 
-            //MSOPATHINFO.type
-            switch ((((*(ushort *)(_c.data.data()+i*2)) >> 13) & 0x7)) {
-            case 0: { //msopathLineTo
-                enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex].y()) + ' ';
-                verticesIndex++;
+        for (int i = 0, n = 0; ((i < _c.nElems) && !nOffRange); i++) {
+
+            msopathtype = (((*(ushort *)(_c.data.data() + i * 2)) >> 13) & 0x7);
+
+            switch (msopathtype) {
+            case msopathLineTo:
+            {
+                if (n >= verticesPoints.size()) {
+                    qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
+                    nOffRange = true;
+                    break;
+                }
+                enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[n].x()) + ' ' +
+                               QString::number(verticesPoints[n].y()) + ' ';
+                n++;
                 break;
             }
-            case 1: { // msopathCurveTo
-                enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex].y()) + ' '
-                               + QString::number(verticesPoints[verticesIndex+1].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex+1].y()) + ' '
-                               + QString::number(verticesPoints[verticesIndex+2].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex+2].y()) + ' ';
-                verticesIndex = verticesIndex + 3;
+            case msopathCurveTo:
+            {
+                if (n >= verticesPoints.size()) {
+                    qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
+                    nOffRange = true;
+                    break;
+                }
+                enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[n].x()) + ' ' +
+                               QString::number(verticesPoints[n].y()) + ' ' +
+                               QString::number(verticesPoints[n + 1].x()) + ' ' +
+                               QString::number(verticesPoints[n + 1].y()) + ' ' +
+                               QString::number(verticesPoints[n + 2].x()) + ' ' +
+                               QString::number(verticesPoints[n + 2].y()) + ' ';
+                n = n + 3;
                 break;
             }
-            case 2: { // msopathMoveTo
-                enhancedPath = enhancedPath + "M " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                               + QString::number(verticesPoints[verticesIndex].y()) + ' ';
-                verticesIndex++;
+            case msopathMoveTo:
+            {
+                if (n >= verticesPoints.size()) {
+                    qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
+                    nOffRange = true;
+                    break;
+                }
+                enhancedPath = enhancedPath + "M " + QString::number(verticesPoints[n].x()) + ' ' +
+                               QString::number(verticesPoints[n].y()) + ' ';
+                n++;
                 break;
             }
-            case 3: { // msopathClose
+            case msopathClose:
                 enhancedPath = enhancedPath + "Z ";
                 break;
-            }
-            case 4: { // msopathEnd
+            case msopathEnd:
                 enhancedPath = enhancedPath + "N ";
                 break;
-            }
-            case 5: { // msopathEscape
-                break;
-            }
-            case 6: { // msopathClientEscape
-                break;
-            }
+            case msopathEscape:
+            case msopathClientEscape:
+                 break;
             }
         }
         //dr3d:projection

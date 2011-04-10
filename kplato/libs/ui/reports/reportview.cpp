@@ -1,7 +1,7 @@
 /*
  * KPlato Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * Copyright (C) 2010 by Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2010, 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -333,6 +333,7 @@ void ReportView::slotExportFinished( int result )
             KMessageBox::error(this, i18nc( "@info", "Cannot export report. Invalid url:<br>file:<br><filename>%1</filename>", context.destinationUrl.url() ), i18n( "Not Saved" ) );
         } else {
             switch ( p->selectedFormat() ) {
+                case Reports::EF_Odt: exportToOdt( context ); break;
                 case Reports::EF_Ods: exportToOds( context ); break;
                 case Reports::EF_Html: exportToHtml( context ); break;
                 case Reports::EF_XHtml: exportToXHtml( context ); break;
@@ -343,6 +344,20 @@ void ReportView::slotExportFinished( int result )
         }
     }
     dia->deleteLater();
+}
+
+void ReportView::exportToOdt( KoReportRendererContext &context )
+{
+    kDebug()<<"Export to odt:"<<context.destinationUrl;
+    KoReportRendererBase *renderer;
+    renderer = m_factory.createInstance("odt");
+    if ( renderer == 0 ) {
+        kError()<<"Cannot create odt renderer";
+        return;
+    }
+    if (!renderer->render(context, m_reportDocument)) {
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to text document failed"));
+    }
 }
 
 void ReportView::exportToOds( KoReportRendererContext &context )

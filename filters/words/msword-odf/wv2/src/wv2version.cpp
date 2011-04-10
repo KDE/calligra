@@ -19,6 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+// NOTE: Obsolete
+
 #include "wv2version.h"
 
 unsigned int wvWare::version()

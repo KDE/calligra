@@ -195,7 +195,8 @@ savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
     savePicture(ref, a.anon.get<MSO::OfficeArtBlipTIFF>(), store);
     return ref;
 }
-}
+} //namespace
+
 PictureReference
 savePicture(POLE::Stream& stream, KoStore* out)
 {
@@ -278,4 +279,22 @@ savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
         return savePicture(*fbse->embeddedBlip, store);
     }
     return PictureReference();
+}
+
+QByteArray
+getRgbUid(const MSO::OfficeArtDggContainer* d, quint16 pib)
+{
+    // return 16 byte rgbuid for this given blip id
+    if (d && d->blipStore) {
+        const MSO::OfficeArtBStoreContainer* b = d->blipStore.data();
+        if (pib < b->rgfb.size() &&
+            b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>())
+        {
+            return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
+        }
+    }
+    if (pib != 0xFFFF && pib != 0) {
+        qDebug() << "Could not find image for pib " << pib;
+    }
+    return QByteArray();
 }

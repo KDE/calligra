@@ -216,7 +216,7 @@ const StyleSheet& Parser9x::styleSheet() const
     return m_properties->styleSheet();
 }
 
-Drawings * Parser9x::getDrawings()
+const Drawings* Parser9x::getDrawings() const
 {
     return m_drawings;
 }
@@ -318,14 +318,14 @@ void Parser9x::parseTextBox( uint lid, bool bodyDrawing)
 {
     wvlog << "Parser9x::parseTextBox" << endl;
 
-    PLCF<Word97::FTXBXS> * plcftxbxTxt =  NULL;
+    const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
     if (bodyDrawing) {
         plcftxbxTxt =  m_drawings->getTxbxTxt();
     } else {
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
     }
 
-    if (plcftxbxTxt == NULL) {
+    if (!plcftxbxTxt) {
         return;
     }
     //NOTE: text ranges for each FTXBXS structure are separated by 0x0D
@@ -847,11 +847,11 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 
             U32 nextBkf = m_bookmarks->nextBookmarkStart();
             U32 nextBkl = m_bookmarks->nextBookmarkEnd();
-            bkmk_length = nextBkl - nextBkf;
 
-            //it shouldn't be possible that (nextBkf < nextBkl)
-            Q_ASSERT (nextBkf <= nextBkl);
+            bkmk_length = nextBkl - nextBkf;
             disruption = nextBkf;
+
+            Q_ASSERT (nextBkf <= nextBkl);
 
 #ifdef WV2_DEBUG_BOOKMARK
             wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << 
@@ -891,6 +891,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 //TODO: A bookmark can denote text comrised of segments
                 //belonging into different chunks.
 
+                //NOTE: Not checking the ok value, invalid bookmarks were
+                //already reported.  So it's obsolete at the moment.
 		bool ok;
 		BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
 
@@ -978,22 +980,34 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
     case TextHandler::FieldBegin:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldStart( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldStart( &dummy, chp );
+            }
             break;
         }
     case TextHandler::FieldSeparator:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldSeparator( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldSeparator( &dummy, chp );
+            }
             break;
         }
     case TextHandler::FieldEnd:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldEnd( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldEnd( &dummy, chp );
+            }
             break;
         }
     case TextHandler::AnnotationRef:
@@ -1119,10 +1133,11 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     stream->seek( chp->fcPic_fcObj_lTagObj, G_SEEK_SET );
 
     Word97::PICF* picf( 0 );
-    if ( m_fib.nFib < Word8nFib )
+    if ( m_fib.nFib < Word8nFib ) {
         picf = new Word97::PICF( Word95::toWord97( Word95::PICF( stream, false ) ) );
-    else
+    } else {
         picf = new Word97::PICF( stream, false );
+    }
     stream->pop();
 
     if ( picf->cbHeader < 58 ) {
@@ -1140,10 +1155,9 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     picf->dump();
 #endif
 
-    //offset into the data stream for the GraphicsHandler
-    int offset = 0;
-    //update the offset information
-    offset += chp->fcPic_fcObj_lTagObj + picf->cbHeader;
+    //offset into the Data stream for the GraphicsHandler, position of the
+    //OfficeArtInlineSpContainer to parse with libmso
+    int offset = chp->fcPic_fcObj_lTagObj + picf->cbHeader;
 
     //read cchPicName and stPicName in case of a shape file, MS-DOC p.422/609
     if ( picf->mfp.mm == 0x0066 )
@@ -1158,7 +1172,6 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
         wvlog << "cchPicName: " << cchPicName << endl;
         wvlog << "stPicName: " << stPicName << endl;
 #endif
-	//update the offset
 	offset += cchPicName + 1;
 	delete [] stPicName;
     }

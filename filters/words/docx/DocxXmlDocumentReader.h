@@ -75,6 +75,8 @@ protected:
     KoFilter::ConversionStatus read_numId();
     KoFilter::ConversionStatus read_ilvl();
     KoFilter::ConversionStatus read_sectPr();
+    bool m_footerActive;
+    bool m_headerActive;
     KoFilter::ConversionStatus read_footerReference();
     KoFilter::ConversionStatus read_headerReference();
     KoFilter::ConversionStatus read_cols();
@@ -149,8 +151,12 @@ protected:
     KoFilter::ConversionStatus read_tr();
     KoFilter::ConversionStatus read_tc();
     KoFilter::ConversionStatus read_tcPr();
+    KoFilter::ConversionStatus read_vAlign();
+    KoFilter::ConversionStatus read_textDirectionTc();
     KoFilter::ConversionStatus read_vMerge();
     KoFilter::ConversionStatus read_tcBorders();
+    KoFilter::ConversionStatus read_tl2br();
+    KoFilter::ConversionStatus read_tr2bl();
     KoFilter::ConversionStatus read_tcMar();
     KoFilter::ConversionStatus read_gridSpan();
     int m_gridSpan;
@@ -268,7 +274,7 @@ private:
     void applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding);
 
     //! Applies border styles and paddings for page
-    void appyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide,QString> &pageBorder,
+    void applyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide,QString> &pageBorder,
                          QMap<BorderSide, qreal> &pagePadding, QString & offsetFrom);
     void defineTableStyles();
 

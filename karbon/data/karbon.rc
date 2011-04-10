@@ -105,6 +105,8 @@
             <Action name="object_ungroup"/>
             <Action name="object_clip"/>
             <Action name="object_unclip"/>
+            <Action name="object_flip_vertical"/>
+            <Action name="object_flip_horizontal"/>
         </Menu>
         <Menu name="path">
             <text>&amp;Path</text>

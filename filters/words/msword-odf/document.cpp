@@ -23,12 +23,13 @@
    Boston, MA 02110-1301, USA.
 */
 #include "generated/leinputstream.h"
+#include "drawstyle.h"
+
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
-#include "versionmagic.h"
-#include "drawstyle.h"
+//#include "versionmagic.h"
 #include "msodraw.h"
 #include "mswordodfimport.h"
 
@@ -63,10 +64,9 @@ enum PgbOffsetFrom {
 Document::Document(const std::string& fileName,
                    MSWordOdfImport* filter,
 //                    KoFilterChain* chain,
-                   KoXmlWriter* bodyWriter,
-                   KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
-                   KoStore* store, POLE::Storage* storage,
-                   LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
+                   KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
+                   KoStore* store, KoGenStyles* mainStyles,
+                   LEInputStream* wordDocument, POLE::Stream& table, LEInputStream* data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
@@ -90,9 +90,10 @@ Document::Document(const std::string& fileName,
         , m_writeMasterPageName(false)
         , m_omittMasterPage(false)
         , m_useLastMasterPage(false)
-        , m_data_stream(data)
-        , m_table_stream(table)
-        , m_wdocument_stream(wdocument)
+        , m_wdstm(wordDocument)
+        , m_tblstm(0)
+        , m_datastm(data)
+        , m_tblstm_pole(table)
 {
     kDebug(30513);
     addBgColor("#ffffff"); //initialize the background-colors stack
@@ -105,13 +106,13 @@ Document::Document(const std::string& fileName,
         m_buffer = 0; //set pointers to 0
         m_bufferEven = 0;
         m_headerWriter = 0;
-        m_storage = storage;
 
         m_textHandler  = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
         m_textHandler->setDocument(this);
         m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
         m_tableHandler->setDocument(this);
-        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles);
+        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles,
+                                                     m_parser->getDrawings(), m_parser->fib());
 
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
@@ -133,16 +134,21 @@ Document::Document(const std::string& fileName,
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);
         m_parser->setTableHandler(m_tableHandler);
-        m_graphicsHandler->init(m_parser->getDrawings(), m_parser->fib());
         m_parser->setGraphicsHandler(m_graphicsHandler);
         m_parser->setInlineReplacementHandler(m_replacementHandler);
 
         processStyles();
         processAssociatedStrings();
-        //connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
-        //         this, SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
-        //connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
-        //         this, SLOT( slotTableCellEnd() ) );
+
+//         connect( m_tableHandler,
+//                  SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&,
+//                          const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&,
+//                          const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
+//                  this,
+//                  SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&,
+//                        const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&,
+//                        const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
+//         connect( m_tableHandler, SIGNAL( sigTableCellEnd() ), this, SLOT( slotTableCellEnd() ) );
     }
 }
 
@@ -763,8 +769,9 @@ void Document::annotationEnd()
 {
 }
 
-//disable this for now - we should be able to do everything in TableHandler
-//create frame for the table cell?
+//NOTE: disable this for now - we should be able to do everything in
+//TableHandler create frame for the table cell?
+
 //void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 //{
 //kDebug(30513) ;
@@ -993,7 +1000,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addProperty("style:print-orientation", landscape ? "landscape" : "portrait");
     pageLayoutStyle->addProperty("style:num-format", "1");
 
-    DrawStyle ds = m_graphicsHandler->getDrawingStyle();
+    DrawStyle ds = m_graphicsHandler->getBgDrawStyle();
     switch (ds.fillType()) {
     case msofillSolid:
     {

@@ -1597,17 +1597,17 @@ bool Project::moveTaskDown( Node* node )
     return false;
 }
 
-Task *Project::createTask( Node* parent )
+Task *Project::createTask()
 {
-    Task * node = new Task( parent );
+    Task * node = new Task();
     node->setId( uniqueNodeId() );
     reserveId( node->id(), node );
     return node;
 }
 
-Task *Project::createTask( const Task &def, Node* parent )
+Task *Project::createTask( const Task &def )
 {
-    Task * node = new Task( def, parent );
+    Task * node = new Task( def );
     node->setId( uniqueNodeId() );
     reserveId( node->id(), node );
     return node;

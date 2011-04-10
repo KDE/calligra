@@ -26,7 +26,7 @@
 #include "KWDocument.h"
 #include "kword_export.h"
 
-#include <KWCanvasBase.h>
+#include "KWCanvasBase.h"
 
 #include "KWViewMode.h"
 

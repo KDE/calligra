@@ -1,4 +1,4 @@
 #! /bin/sh
 $EXTRACTRC `find . -name \*.ui -o -name \*.rc` >> rc.cpp || exit 11
-$XGETTEXT `find . -name \*.cpp -not -name \*.moc.\*` src/part/FlowAboutData.h -o $podir/flow.pot
+$XGETTEXT `find . -name \*.cpp -not -name \*.moc.\*` part/FlowAboutData.h -o $podir/flow.pot
 
