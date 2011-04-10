@@ -404,6 +404,7 @@ void KexiMenuWidgetAction::setPersistentlySelected(bool set)
 {
     if (set == d->persistentlySelected)
         return;
+    qDebug() << "^^^^" << objectName() << set;
     d->persistentlySelected = set;
 }
 
@@ -1488,7 +1489,17 @@ KexiMenuWidget::~KexiMenuWidget()
 
 KexiMenuWidgetAction* KexiMenuWidget::persistentlySelectedAction() const
 {
-    return d->previousPersistentlySelectedAction;
+    if (d->previousPersistentlySelectedAction
+        && d->previousPersistentlySelectedAction->persistentlySelected())
+    {
+        return d->previousPersistentlySelectedAction;
+    }
+    return 0;
+}
+
+void KexiMenuWidget::setPersistentlySelectedAction(KexiMenuWidgetAction* action, bool set)
+{
+    d->setActionPersistentlySelected(action, set);
 }
 
 const KexiMenuWidgetCaused& KexiMenuWidget::causedPopup() const

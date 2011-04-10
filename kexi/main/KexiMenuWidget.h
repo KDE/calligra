@@ -69,6 +69,7 @@ public:
     ~KexiMenuWidget();
 
     KexiMenuWidgetAction* persistentlySelectedAction() const;
+    void setPersistentlySelectedAction(KexiMenuWidgetAction* action, bool set);
 
 #ifdef Q_NO_USING_KEYWORD
     inline void addAction(QAction *action) { QWidget::addAction(action); }

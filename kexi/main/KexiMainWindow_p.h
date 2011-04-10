@@ -71,7 +71,7 @@ public:
 public slots:
     void setMainMenuContent(QWidget *w);
     void selectMainMenuItem(const char *actionName);
-    void showMainMenu();
+    void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
     void toggleMainMenu();
 
@@ -278,10 +278,18 @@ public:
     }
 
     void setContent(QWidget *contentWidget) {
+        if (m_menuWidget && m_persistentlySelectedAction) {
+            m_menuWidget->setPersistentlySelectedAction(m_persistentlySelectedAction, 
+                                                        m_persistentlySelectedAction->persistentlySelected());
+        }
+        /*if (m_menuWidget->persistentlySelectedAction())
+            kDebug() << "****" << m_menuWidget->persistentlySelectedAction()->objectName();*/
         KexiFadeWidgetEffect *fadeEffect = 0;
-        m_contentOpacityAnimation->stop();
-        m_effect->setOpacity(1.0);
-
+        if (m_contentOpacityAnimation) {
+            m_contentOpacityAnimation->stop();
+            m_effect->setOpacity(1.0);
+        }
+        
         if (m_contentWidget && contentWidget) {
             fadeEffect = new KexiFadeWidgetEffect(m_content);
         }
@@ -302,8 +310,8 @@ public:
             if (m_topLineSpacer) {
                 m_topLineSpacer->hide();
             }
-            if (m_menuWidget->persistentlySelectedAction())
-                m_menuWidget->persistentlySelectedAction()->setPersistentlySelected(false);
+//            if (m_menuWidget->persistentlySelectedAction())
+//                 m_menuWidget->persistentlySelectedAction()->setPersistentlySelected(false);
         }
         if (m_topLine)
             m_topLine->raise();
@@ -322,7 +330,13 @@ public:
         m_topLine->setGeometry(
             tab0width, 0, width() - 1 - tab0width, m_topLineHeight);
     }
-    
+
+    void setPersistentlySelectedAction(KexiMenuWidgetAction* action, bool set)
+    {
+        m_persistentlySelectedAction = action;
+        m_persistentlySelectedAction->setPersistentlySelected(set);
+    }
+
 signals:
     void contentAreaPressed();
 protected:
@@ -397,14 +411,14 @@ protected:
         QWidget::showEvent(event);
     }
 
-    virtual void hideEvent(QHideEvent * event) {
-        if (m_menuWidget->persistentlySelectedAction())
-            m_menuWidget->persistentlySelectedAction()->setPersistentlySelected(false);
-        QWidget::hideEvent(event);
-    }
+//     virtual void hideEvent(QHideEvent * event) {
+//         if (m_menuWidget->persistentlySelectedAction())
+//             m_menuWidget->persistentlySelectedAction()->setPersistentlySelected(false);
+//         QWidget::hideEvent(event);
+//     }
 
 private:
-    KexiMenuWidget *m_menuWidget;
+    QPointer<KexiMenuWidget> m_menuWidget;
     const int m_topLineHeight;
     KexiTabbedToolBar* m_toolBar;
     bool m_initialized;
@@ -416,6 +430,7 @@ private:
     QPointer<QGraphicsOpacityEffect> m_effect;
     QPointer<QPropertyAnimation> m_contentOpacityAnimation;
     QVBoxLayout* m_mainContentLayout;
+    QPointer<KexiMenuWidgetAction> m_persistentlySelectedAction;
 };
 
 class KexiTabbedToolBarTabBar;
@@ -446,7 +461,7 @@ public:
 
 #ifdef KEXI_MODERN_STARTUP
 public slots:
-    void showMainMenu();
+    void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
     void toggleMainMenu();
     void updateMainMenuGeometry();
@@ -678,7 +693,7 @@ void KexiTabbedToolBar::Private::toggleMainMenu()
         showMainMenu();
 }
 
-void KexiTabbedToolBar::Private::showMainMenu()
+void KexiTabbedToolBar::Private::showMainMenu(const char* actionName)
 {
     q->tabBar()->update(q->tabRect(q->tabBar()->currentIndex()));
     q->tabBar()->update(q->tabRect(0));
@@ -689,7 +704,9 @@ void KexiTabbedToolBar::Private::showMainMenu()
         connect(mainMenu, SIGNAL(contentAreaPressed()), this, SLOT(hideMainMenu()));
     }
     updateMainMenuGeometry();
-    //mainMenu->setContent(0);
+    if (actionName)
+        q->selectMainMenuItem(actionName);
+    mainMenu->setContent(0);
     mainMenu->show();
 }
 
@@ -1150,9 +1167,9 @@ void KexiTabbedToolBar::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
     action->setVisible(visible);
 }
 
-void KexiTabbedToolBar::showMainMenu()
+void KexiTabbedToolBar::showMainMenu(const char* actionName)
 {
-    d->showMainMenu();
+    d->showMainMenu(actionName);
 }
 
 void KexiTabbedToolBar::hideMainMenu()
@@ -1175,7 +1192,8 @@ void KexiTabbedToolBar::selectMainMenuItem(const char *actionName)
     if (actionName) {
         KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
         KexiMenuWidgetAction *a = qobject_cast<KexiMenuWidgetAction*>(ac->action(actionName));
-        a->setPersistentlySelected(true);
+        d->mainMenu->setPersistentlySelectedAction(a, true);
+//        a->setPersistentlySelected(true);
     }
 }
 

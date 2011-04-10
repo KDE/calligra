@@ -3180,8 +3180,7 @@ KexiMainWindow::createBlankProject()
 void
 KexiMainWindow::slotProjectOpen()
 {
-    d->tabbedToolBar->selectMainMenuItem("project_open");
-    d->tabbedToolBar->showMainMenu();
+    d->tabbedToolBar->showMainMenu("project_open");
     KexiStartupDialog *openWindow = new KexiStartupDialog(
         KexiStartupDialog::OpenExisting, 0, Kexi::connset(),
         Kexi::recentProjects(), 0);
@@ -3332,7 +3331,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
 void
 KexiMainWindow::slotProjectOpenRecent()
 {
-    d->tabbedToolBar->showMainMenu();
+    d->tabbedToolBar->showMainMenu("project_open_recent");
     // dummy
     QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_open_recent")->text());
     d->tabbedToolBar->setMainMenuContent(dummy);
