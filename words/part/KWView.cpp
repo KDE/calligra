@@ -844,11 +844,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionEditCustomVars = new KAction(i18n("Edit Variable..."), 0,
                 this, SLOT(editCustomVariable()),
                 actionCollection(), "edit_customvars");
-        m_actionApplyAutoFormat= new KAction(i18n("Apply Autocorrection"), 0,
-                this, SLOT(applyAutoFormat()),
-                actionCollection(), "apply_autoformat");
-        m_actionApplyAutoFormat->setToolTip(i18n("Manually force Words to scan the entire document and apply autocorrection"));
-        m_actionApplyAutoFormat->setWhatsThis(i18n("Manually force Words to scan the entire document and apply autocorrection."));
 
         m_actionCreateStyleFromSelection = new KAction(i18n("Create Style From Selection..."), 0,
                 this, SLOT(createStyleFromSelection()),
