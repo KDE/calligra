@@ -18,8 +18,11 @@
  */
 
 #include "SvgUtil.h"
+#include "SvgGraphicContext.h"
 
 #include <KarbonGlobal.h>
+
+#include <KoUnit.h>
 
 #include <QtCore/QString>
 #include <QtCore/QRectF>
@@ -147,4 +150,143 @@ QTransform SvgUtil::parseTransform(const QString &transform)
     }
     
     return result;
+}
+
+qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz, bool vert, const QRectF &bbox)
+{
+    if (unit.isEmpty())
+        return 0.0;
+    QByteArray unitLatin1 = unit.toLatin1();
+    // TODO : percentage?
+    const char *start = unitLatin1.data();
+    if (!start) {
+        return 0.0;
+    }
+    double value = 0.0;
+    const char *end = parseNumber(start, value);
+
+    if (int(end - start) < unit.length()) {
+        if (unit.right(2) == "px")
+            value = SvgUtil::fromUserSpace(value);
+        else if (unit.right(2) == "cm")
+            value = CM_TO_POINT(value);
+        else if (unit.right(2) == "pc")
+            value = PI_TO_POINT(value);
+        else if (unit.right(2) == "mm")
+            value = MM_TO_POINT(value);
+        else if (unit.right(2) == "in")
+            value = INCH_TO_POINT(value);
+        else if (unit.right(2) == "em")
+            value = value * gc->font.pointSize();
+        else if (unit.right(2) == "ex") {
+            QFontMetrics metrics(gc->font);
+            value = value * metrics.xHeight();
+        } else if (unit.right(1) == "%") {
+            if (horiz && vert)
+                value = (value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
+            else if (horiz)
+                value = (value / 100.0) * bbox.width();
+            else if (vert)
+                value = (value / 100.0) * bbox.height();
+        }
+    } else {
+        value = SvgUtil::fromUserSpace(value);
+    }
+    /*else
+    {
+        if( m_gc.top() )
+        {
+            if( horiz && vert )
+                value *= sqrt( pow( m_gc.top()->matrix.m11(), 2 ) + pow( m_gc.top()->matrix.m22(), 2 ) ) / sqrt( 2.0 );
+            else if( horiz )
+                value /= m_gc.top()->matrix.m11();
+            else if( vert )
+                value /= m_gc.top()->matrix.m22();
+        }
+    }*/
+    //value *= 90.0 / DPI;
+
+    return value;
+}
+
+qreal SvgUtil::parseUnitX(SvgGraphicsContext *gc, const QString &unit)
+{
+    if (gc->forcePercentage) {
+        return SvgUtil::fromPercentage(unit) * gc->currentBoundbox.width();
+    } else {
+        return SvgUtil::parseUnit(gc, unit, true, false, gc->currentBoundbox);
+    }
+}
+
+qreal SvgUtil::parseUnitY(SvgGraphicsContext *gc, const QString &unit)
+{
+    if (gc->forcePercentage) {
+        return SvgUtil::fromPercentage(unit) * gc->currentBoundbox.height();
+    } else {
+        return SvgUtil::parseUnit(gc, unit, false, true, gc->currentBoundbox);
+    }
+}
+
+qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const QString &unit)
+{
+    if (gc->forcePercentage) {
+        const qreal value = SvgUtil::fromPercentage(unit);
+        return value * sqrt(pow(gc->currentBoundbox.width(), 2) + pow(gc->currentBoundbox.height(), 2)) / sqrt(2.0);
+    } else {
+        return SvgUtil::parseUnit(gc, unit, true, true, gc->currentBoundbox);
+    }
+}
+
+const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
+{
+    int integer, exponent;
+    qreal decimal, frac;
+    int sign, expsign;
+
+    exponent = 0;
+    integer = 0;
+    frac = 1.0;
+    decimal = 0;
+    sign = 1;
+    expsign = 1;
+
+    // read the sign
+    if (*ptr == '+') {
+        ptr++;
+    } else if (*ptr == '-') {
+        ptr++;
+        sign = -1;
+    }
+
+    // read the integer part
+    while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+        integer = (integer * 10) + *(ptr++) - '0';
+    if (*ptr == '.') { // read the decimals
+        ptr++;
+        while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+            decimal += (*(ptr++) - '0') * (frac *= 0.1);
+    }
+
+    if (*ptr == 'e' || *ptr == 'E') { // read the exponent part
+        ptr++;
+
+        // read the sign of the exponent
+        if (*ptr == '+') {
+            ptr++;
+        } else if (*ptr == '-') {
+            ptr++;
+            expsign = -1;
+        }
+
+        exponent = 0;
+        while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9') {
+            exponent *= 10;
+            exponent += *ptr - '0';
+            ptr++;
+        }
+    }
+    number = integer + decimal;
+    number *= sign * pow((double)10, double(expsign * exponent));
+
+    return ptr;
 }
