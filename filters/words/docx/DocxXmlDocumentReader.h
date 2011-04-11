@@ -31,6 +31,8 @@
 #include <MsooXmlThemesReader.h>
 #include "DocxXmlNotesReader.h"
 
+#include <MsooXmlDrawingTableStyle.h>
+
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
@@ -43,7 +45,6 @@ class DocxXmlDocumentReaderContext;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
-class DocumentTableStyle;
 class TableStyleProperties;
 class LocalTableStyles;
 }
@@ -113,6 +114,7 @@ protected:
     KoFilter::ConversionStatus read_jc();
     KoFilter::ConversionStatus read_spacing();
     KoFilter::ConversionStatus read_trPr();
+    KoFilter::ConversionStatus read_cnfStyle();
     KoFilter::ConversionStatus read_trHeight();
     enum shdCaller {
         shd_rPr,
@@ -315,6 +317,8 @@ private:
     KoGenStyle m_currentTableRowStyle;
     QString m_currentTableName;
     qreal m_currentTableWidth; //!< in cm
+    MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
+
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
 
     bool m_closeHyperlink; // should read_r close hyperlink
@@ -354,8 +358,7 @@ public:
     QMap<QString, QString> m_comments;
 
     QMap<QString, QString> m_endnotes;
-
-    QMap<QString, MSOOXML::DocumentTableStyle*> m_tableStyles;
+    QMap<QString, MSOOXML::DrawingTableStyle*> m_tableStyles;
 
 private:
 };

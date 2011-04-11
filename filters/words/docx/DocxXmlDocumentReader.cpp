@@ -38,7 +38,6 @@
 #include <ChartExport.h>
 #include <XlsxXmlChartReader.h>
 
-#include <MsooXmlDocumentTableStyle.h>
 #include <MsooXmlTableStyle.h>
 
 #define MSOOXML_CURRENT_NS "w"
@@ -4364,6 +4363,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
         m_table->setTableStyle(style);
     }
+    // Fix me, for tables inside tables this might not work
+    m_activeRoles = 0;
 
     while (!atEnd()) {
         readNext();
@@ -4404,16 +4405,14 @@ void DocxXmlDocumentReader::defineTableStyles()
     const int rowCount = m_table->rowCount();
     const int columnCount = m_table->columnCount();
 
-    MSOOXML::DocumentTableStyleConverterProperties converterProperties;
+    MSOOXML::DrawingTableStyleConverterProperties converterProperties;
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
-    converterProperties.setStyleList(m_context->m_tableStyles);
-    converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
+    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
+    converterProperties.setRoles(m_activeRoles);
     converterProperties.setLocalStyles(*m_currentLocalTableStyles);
 
-    MSOOXML::DocumentTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
-
-    MSOOXML::DocumentTableStyleConverter styleConverter(converterProperties, tableStyle);
+    MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
             KoCellStyle::Ptr style = styleConverter.style(row, column);
@@ -4423,6 +4422,8 @@ void DocxXmlDocumentReader::defineTableStyles()
             m_table->cellAt(row, column)->setStyle(style);
         }
     }
+
+    //converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
 }
 
 #undef CURRENT_EL
@@ -4635,7 +4636,7 @@ Parent elements:
 
 child elements:
  - cantSplit (Table Row Cannot Break Across Pages) §17.4.6
- - cnfStyle (Table Row Conditional Formatting) §17.4.7
+ - [done] cnfStyle (Table Row Conditional Formatting) §17.4.7
  - del (Deleted Table Row)§17.13.5.12
  - divId (Associated HTML div ID)§17.4.9
  - gridAfter (Grid Columns After Last Cell)§17.4.14
@@ -4647,7 +4648,7 @@ child elements:
  - tblHeader (Repeat Table Row on Every New Page) §17.4.50
  - [done]trHeight (Table Row Height) §17.4.81
  - trPrChange (Revision Information for Table Row Properties) §17.13.5.37
- - wAfter (Preferred Width After Table Row) §17.4.86 
+ - wAfter (Preferred Width After Table Row) §17.4.86
  - wBefore (Preferred Width Before Table Row) §17.4.87
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_trPr()
@@ -4658,8 +4659,73 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(trHeight)
+            ELSE_TRY_READ_IF(cnfStyle)
         }
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL cnfStyle
+/*
+Parent elements:
+ - many, eg. tr, tc, ppr
+
+child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_cnfStyle()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    // Note this parameter does not follow ooxml spec at all at least in office2007 but
+    // produces values from office 2003 ie. val with binary
+    // FirstRow, LastRow, FirstColumn, LastColumn, Band1Vertical, Band2Vertical,
+    // Band1Horizontal, Band2Horizontal, NE Cell, NW Cell, SE Cell, SW Cell.
+
+    TRY_READ_ATTR(val)
+
+    if (val.length() == 12) {
+        if (val.at(0) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstRow;
+        }
+        if (val.at(1) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::LastRow;
+        }
+        if (val.at(2) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstCol;
+        }
+        if (val.at(3) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::LastCol;
+        }
+        if (val.at(4) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::ColumnBanded;
+        }
+        if (val.at(5) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::ColumnBanded;
+        }
+        if (val.at(6) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::RowBanded;
+        }
+        if (val.at(7) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::RowBanded;
+        }
+        if (val.at(8) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::NeCell;
+        }
+        if (val.at(9) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::NwCell;
+        }
+        if (val.at(10) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::SeCell;
+        }
+        if (val.at(11) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::SwCell;
+        }
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -4847,7 +4913,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - cellDel (Table Cell Deletion) §17.13.5.1
  - cellIns (Table Cell Insertion) §17.13.5.2
  - cellMerge (Vertically Merged/Split Table Cells) §17.13.5.3
- - cnfStyle (Table Cell Conditional Formatting) §17.4.8
+ - [done] cnfStyle (Table Cell Conditional Formatting) §17.4.8
  - [done] gridSpan (Grid Columns Spanned by Current Table Cell) §17.4.17
  - headers (Header Cells Associated With Table Cell) §17.4.19
  - hideMark (Ignore End Of Cell Marker In Row Height Calculation) §17.4.21
@@ -4875,6 +4941,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridSpan)
+            ELSE_TRY_READ_IF(cnfStyle)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(tcBorders)
             ELSE_TRY_READ_IF(tcMar)
