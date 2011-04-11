@@ -36,7 +36,8 @@
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QDesktopWidget>
-
+#include <QKeyEvent>
+ 
 #include <kexiutils/SmallToolButton.h>
 class KexiProjectNavigator;
 
@@ -270,10 +271,16 @@ public:
     ~KexiMainMenu() {
         delete (QWidget*)m_contentWidget;
     }
-    virtual bool eventFilter(QObject * watched, QEvent * event) {
+    virtual bool eventFilter(QObject * watched, QEvent* event) {
         kDebug() << m_contentWidget;
-        if (watched == m_content && !m_contentWidget && event->type() == QEvent::MouseButtonPress) {
+        if (event->type() == QEvent::MouseButtonPress && watched == m_content && !m_contentWidget) {
             emit contentAreaPressed();
+        }
+        else if (event->type() == QEvent::KeyPress) {
+            QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+            if ((ke->key() & Qt::Key_Escape) && ke->modifiers() == Qt::NoModifier) {
+                emit contentAreaPressed();
+            }
         }
         return QWidget::eventFilter(watched, event);
     }
@@ -306,6 +313,7 @@ public:
             m_contentWidget->setContentsMargins(0, 0, 0, 0);
             m_contentLayout->addWidget(m_contentWidget);
             m_contentLayout->setCurrentWidget(m_contentWidget);
+            m_contentWidget->setFocus();
         }
         else {
             if (m_topLineSpacer) {
@@ -832,7 +840,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     // needed e.g. for Windows style to remove the toolbar's frame
     QWidget *dummyWidgetForMainMenu = new QWidget(this);
     dummyWidgetForMainMenu->setObjectName("kexi");
-    addTab(dummyWidgetForMainMenu, "Kexi");
+    addTab(dummyWidgetForMainMenu, i18nc("File menu", "&File"));
     addTab(new QWidget(this), QString());
 #else
     tbar = d->createToolBar("kexi", i18nc("Application name as menu entry", "Kexi"));
@@ -1011,7 +1019,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
                 return true;
             }
         }
-        else if (watched == mainWin) {
+        else if (watched == mainWin && d->mainMenu) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);
             if (!QRect(d->mainMenu->mapToGlobal(QPoint(0,0)), d->mainMenu->size())
                     .contains(mainWin->mapToGlobal(me->pos())))
@@ -1022,6 +1030,14 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         }
         }
         break;
+    case QEvent::KeyPress: {
+        QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+        if ((ke->key() & Qt::Key_Escape) && ke->modifiers() == Qt::NoModifier) {
+            d->hideMainMenu();
+            return true;
+        }
+        break;
+    }
     case QEvent::Resize:
         if (watched == KexiMainWindowIface::global()->thisWidget()) {
             d->updateMainMenuGeometry();
@@ -1029,6 +1045,15 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
                 d->mainMenu->updateTopLineGeometry();
         }
         break;
+    case QEvent::Shortcut: {
+        QShortcutEvent *se = static_cast<QShortcutEvent*>(event);
+        if (watched == tabBar() && QKeySequence::mnemonic(tabText(0)) == se->key()) {
+            kDebug() << "eat the &File accel";
+            d->showMainMenu();
+            return true;
+        }
+        break;
+    }
     default:;
     }
     return KTabWidget::eventFilter(watched, event);
