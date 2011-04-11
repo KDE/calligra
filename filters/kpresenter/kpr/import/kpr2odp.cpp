@@ -17,11 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// Own
+#include <kpr2odp.h>
+
+// KDE
 #include <kpluginfactory.h>
+
+// Calligra
 #include <KoStoreDevice.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
-#include <kpr2odp.h>
+
 
 K_PLUGIN_FACTORY(Kpr2OdpFactory, registerPlugin<Kpr2Odp>();)
 K_EXPORT_PLUGIN(Kpr2OdpFactory("calligrafilters"))
