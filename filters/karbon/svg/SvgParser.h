@@ -80,14 +80,14 @@ protected:
     bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
     /// Parses a clip path element
     bool parseClipPath(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
-    /// Parses a length attribute
-    double parseUnit(const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF());
+    /// parses a length attribute
+    qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
     /// parses a length attribute in x-direction
-    double parseUnitX(const QString &unit);
+    qreal parseUnitX(const QString &unit);
     /// parses a length attribute in y-direction
-    double parseUnitY(const QString &unit);
+    qreal parseUnitY(const QString &unit);
     /// parses a length attribute in xy-direction
-    double parseUnitXY(const QString &unit);
+    qreal parseUnitXY(const QString &unit);
     /// Parses a color attribute
     bool parseColor(QColor &, const QString &);
     /// Parse a image
