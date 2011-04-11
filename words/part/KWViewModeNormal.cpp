@@ -35,6 +35,7 @@ KWViewModeNormal::KWViewModeNormal()
 QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const
 {
     QList<ViewMap> answer;
+#if 0
     if (m_pageTops.isEmpty())
         return answer;
     KWPage page  = m_pageManager->begin();
@@ -67,7 +68,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     }
 
     int emptyPages = 0;
-    while (page.isValid()) {
+    for(; page.isValid(); page = page.next()) {
         Q_ASSERT_X(page.pageNumber()-pageOffset < m_pageTops.count(), __FUNCTION__,
                    QString("Pagemanager has more pages than viewmode (%1>%2 with pageOffset=%3 and pageNumber=%4 and pageCount=%5). Make sure you add pages via the document!")
                    .arg(page.pageNumber()-pageOffset).arg(m_pageTops.count()).arg(pageOffset).arg(page.pageNumber()).arg(m_pageManager->pageCount()).toLocal8Bit());
@@ -99,9 +100,35 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
             else
                 offsetX = 0.0;
         }
-        page = page.next();
     }
+#else
+    KWPage page  = m_pageManager->begin();
+    Q_ASSERT(page.isValid());
+    qreal offsetX = 0.0;
+    const int pageOffset = page.pageNumber();
+    for(; page.isValid(); page = page.next()) {
+        const QRectF pageRect = page.rect();
+        const QRectF zoomedPage = m_viewConverter->documentToView(pageRect);
+        ViewMap vm;
+        vm.page = page;
 
+        const qreal offsetY = m_pageTops[page.pageNumber() - pageOffset] - pageRect.top();
+        vm.distance = m_viewConverter->documentToView(QPointF(offsetX, offsetY));
+#if 0
+        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(), zoomedPage.width() , zoomedPage.height());
+        QRectF intersection = targetPage.intersect(viewRect);
+        if (! intersection.isEmpty()) {
+            intersection.moveTopLeft(intersection.topLeft() - vm.distance);
+            vm.clipRect = intersection.toRect();
+            answer.append(vm);
+        }
+#else
+        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(), zoomedPage.width() , zoomedPage.height());
+        vm.clipRect = targetPage.toRect();
+        answer.append(vm);
+#endif
+    }
+#endif
     return answer;
 }
 

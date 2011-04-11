@@ -73,8 +73,8 @@ public:
     /// A layout option.  Asks the frame to shrink to a maximum of requestedHeight because there is no more text.
     void autoShrink(qreal requestedHeight);
 
-    void setMinimumFrameHeight(qreal minimumFrameHeight) { m_minimumFrameHeight = minimumFrameHeight; }
-    qreal minimumFrameHeight() const { return m_minimumFrameHeight; }
+    void setMinimumFrameHeight(qreal minimumFrameHeight);
+    qreal minimumFrameHeight() const;
 
 private:
     /* TODO

@@ -191,7 +191,7 @@ KWDocument::~KWDocument()
 void KWDocument::addShape(KoShape *shape)
 {
     kDebug();
-
+#if 0
     // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
     // will call addFrameSet.  Which will itself call addFrame()
     // any call coming in here is due to the undo/redo framework, pasting or for nested frames
@@ -216,11 +216,15 @@ void KWDocument::addShape(KoShape *shape)
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->shapeManager()->addShape(shape);
     }
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 void KWDocument::removeShape(KoShape *shape)
 {
     kDebug();
+#if 0
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
@@ -235,6 +239,9 @@ void KWDocument::removeShape(KoShape *shape)
             canvas->shapeManager()->remove(shape);
         }
     }
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 void KWDocument::paintContent(QPainter&, const QRect &rect)
