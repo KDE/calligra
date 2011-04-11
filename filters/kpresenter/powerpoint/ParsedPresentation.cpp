@@ -31,10 +31,16 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
         path = "PP97_DUALSTORAGE" + path;
     }
     POLE::Stream stream(&storage, path);
+    if (stream.fail() && (stream.size() > 0)) {
+        qDebug() << "Error: Detected INVALID " << streampath << "stream";
+        return false;
+    }
+
     QByteArray array;
     array.resize(stream.size());
     unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
     if (r != stream.size()) {
+        qDebug() << "Error while reading from " << streampath << "stream";
         return false;
     }
     buffer.setData(array);

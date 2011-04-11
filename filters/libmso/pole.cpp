@@ -83,7 +83,7 @@ public:
     void set(unsigned long index, unsigned long val);
     unsigned unused();
     void setChain(std::vector<unsigned long>);
-    std::vector<unsigned long> follow(unsigned long start);
+    std::vector<unsigned long> follow(unsigned long start, bool& fail);
     unsigned long operator[](unsigned long index);
     void load(const unsigned char* buffer, unsigned len);
     void save(unsigned char* buffer);
@@ -441,7 +441,7 @@ void AllocTable::setChain(std::vector<unsigned long> chain)
 }
 
 // follow
-std::vector<unsigned long> AllocTable::follow(unsigned long start)
+std::vector<unsigned long> AllocTable::follow(unsigned long start, bool& fail)
 {
     std::vector<unsigned long> chain;
 
@@ -449,13 +449,43 @@ std::vector<unsigned long> AllocTable::follow(unsigned long start)
 
     unsigned long p = start;
     while (p < count()) {
-        if (p == (unsigned long)Eof) break;
-        if (p == (unsigned long)Bat) break;
-        if (p == (unsigned long)MetaBat) break;
+        if (p == (unsigned long)Eof) {
+#ifdef POLE_DEBUG
+            std::cout << "Eof detected during chain construction!" << std::endl;
+#endif
+            break;
+        }
+        if (p == (unsigned long)Bat) {
+#ifdef POLE_DEBUG
+            std::cout << "Bat detected during chain construction!" << std::endl;
+#endif
+            break;
+        }
+        if (p == (unsigned long)MetaBat) {
+#ifdef POLE_DEBUG
+            std::cout << "MetaBat detected during chain construction!" << std::endl;
+#endif
+            break;
+        }
+        if (p >= count()) {
+            std::cerr << "Error: Invalid index detected during chain construction!" << std::endl;
+            fail = true;
+            break;
+        }
         chain.push_back(p);
-        if (chain.size() > count()) break; // break if the chain is longer than the total sector count
-        if (data[p] >= count()) break;
+
+        // break if the chain is longer than the total sector count
+        if (chain.size() > count()) {
+            std::cerr << "Error: Probably a loop detected during chain construction!" << std::endl;
+            fail = true;
+            break;
+        }
         p = data[ p ];
+    }
+    if (p != (unsigned long)AllocTable::Eof) {
+        std::cerr << "Error: Last chain entry MUST be 0x" << std::hex << AllocTable::Eof <<
+                     ", received: 0x" << std::hex << p << std::endl;
+        fail = true;
     }
 
     return chain;
@@ -902,9 +932,10 @@ void StorageIO::load()
     // the first 109 blocks are in header, the rest in meta bat
     blocks.clear();
     blocks.resize(header->num_bat);
-    for (unsigned i = 0; i < 109; i++)
+    for (unsigned i = 0; i < 109; i++) {
         if (i >= header->num_bat) break;
         else blocks[i] = header->bb_blocks[i];
+    }
     if ((header->num_bat > 109) && (header->num_mbat > 0)) {
         unsigned char* buffer2 = new unsigned char[ bbat->blockSize ];
         unsigned k = 109;
@@ -938,10 +969,12 @@ void StorageIO::load()
 
         if (!bbat->valid(filesize, header->b_shift, true)) return;
     }
+    //TODO: make fail affect the result value
+    bool fail = false;
 
     // load small bat
     blocks.clear();
-    blocks = bbat->follow(header->sbat_start);
+    blocks = bbat->follow(header->sbat_start, fail);
     buflen = blocks.size() * bbat->blockSize;
     if (buflen > 0) {
         buffer = new unsigned char[ buflen ];
@@ -958,7 +991,7 @@ void StorageIO::load()
 
     // load directory tree
     blocks.clear();
-    blocks = bbat->follow(header->dirent_start);
+    blocks = bbat->follow(header->dirent_start, fail);
     buflen = blocks.size() * bbat->blockSize;
     buffer = new unsigned char[ buflen ];
     unsigned long r = loadBigBlocks(blocks, buffer, buflen);
@@ -971,7 +1004,7 @@ void StorageIO::load()
     delete[] buffer;
 
     // fetch block chain as data for small-files
-    sb_blocks = bbat->follow(sb_start);   // small files
+    sb_blocks = bbat->follow(sb_start, fail);
 
     // for troubleshooting, just enable this block
 #ifdef POLE_DEBUG
@@ -1025,6 +1058,9 @@ void StorageIO::close()
 
 StreamIO* StorageIO::streamIO(const std::string& name)
 {
+#ifdef POLE_DEBUG
+    std::cout << "preparing stream: " << name << std::endl;
+#endif
     // sanity check
     if (!name.length()) return (StreamIO*)0;
 
@@ -1153,10 +1189,11 @@ StreamIO::StreamIO(StorageIO* s, DirEntry* e)
 
     m_pos = 0;
 
-    if (entry->size >= io->header->threshold)
-        blocks = io->bbat->follow(entry->start);
-    else
-        blocks = io->sbat->follow(entry->start);
+    if (entry->size >= io->header->threshold) {
+        blocks = io->bbat->follow(entry->start, fail);
+    } else {
+        blocks = io->sbat->follow(entry->start, fail);
+    }
 
     // prepare cache
     cache_pos = 0;
