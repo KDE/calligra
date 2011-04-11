@@ -99,7 +99,6 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <KoFindText.h>
-#include <KoFindDialog.h>
 #include <KoFindToolbar.h>
 
 static KWFrame *frameForShape(KoShape *shape)
