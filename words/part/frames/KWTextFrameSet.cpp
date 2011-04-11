@@ -78,7 +78,7 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
 KWTextFrameSet::~KWTextFrameSet()
 {
     delete m_rootAreaProvider;
-
+#if 0
     // first remove the doc from all our frames so they won't try to use it after we delete it.
     if (!m_frames.isEmpty()) {
         // we transfer ownership of the doc to our last shape so it will keep being alive until nobody references it anymore.
@@ -96,6 +96,13 @@ KWTextFrameSet::~KWTextFrameSet()
         } while (iter != m_frames.begin());
         // if no frames have a KoTextShapeData, its save to delete m_document.
     }
+#else
+    while(!m_frames.isEmpty()) {
+        KWFrame* f = m_frames.takeLast();
+        delete f->shape();
+        delete f;
+    }
+#endif
     delete m_document;
 }
 
@@ -119,55 +126,20 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     data->setDocument(m_document, false);
 
     if (m_textFrameSetType != KWord::OtherTextFrameSet) {
-        frame->shape()->setGeometryProtected(true);
+//         frame->shape()->setGeometryProtected(true);
     }
 
 #if 0
     PageProcessingQueue *ppq = m_kwordDocument->pageQueue();
     ppq->addPage(page);
 #else
+    /* following would recursivly call KWRootAreaProvider::provide again...
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
     Q_ASSERT(lay);
     lay->layout();
+    */
 #endif
 
-#if 0
-    const bool isInitialFrame = !m_document;
-    if (isInitialFrame) {
-        m_document = data->document();
-    }
-    // All TextShape's within this TextFrameSet are using the same QTextDocument. We are
-    // also taking over the ownership of the QTextDocument.
-    data->setDocument(m_document, false);
-    if (isInitialFrame) {
-        KWRootAreaProvider *provider = new KWRootAreaProvider(this, frame->shape(), data);
-        KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, provider);
-        m_document->setDocumentLayout(lay);
-        QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(layout()), Qt::QueuedConnection);
-        if (m_kwordDocument) {
-            KoTextDocument doc(m_document);
-            doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-            KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-            doc.setStyleManager(styleManager);
-            KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
-            doc.setChangeTracker(changeTracker);
-            doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
-        }
-        m_document->setUseDesignMetrics(true);
-    }
-    /*
-    QTextCursor cursor(m_document);
-    cursor.insertText("Hello new Text layout engine f f fd fs sdf dsf sdf fd fds gfd gfd sgfds gfds sfd fd fds sfd sdf");
-    cursor.insertTable(3,3);
-    cursor.insertText("Cell 1 Line one");
-    cursor.insertTable(3,3);
-    */
-    if (m_textFrameSetType != KWord::OtherTextFrameSet) {
-        frame->shape()->setGeometryProtected(true);
-    }
-    if (isInitialFrame) {
-        lay->layout();
-    }
 #if 0
     if (data == 0) {// probably a copy frame.
         Q_ASSERT(frameCount() > 1);
@@ -202,25 +174,16 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
 #endif
-#else
-    /*
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
-    Q_ASSERT(m_document == data->document());
-    Q_ASSERT(lay);
-    Q_ASSERT(dynamic_cast<KWRootAreaProvider*>(lay->provider()));
-    lay->layout();
-    */
-#endif
 }
 
 void KWTextFrameSet::updateTextLayout()
 {
     kDebug();
+#if 0
     if (! m_allowLayoutRequests) {
         m_requestedUpdateTextLayout = true;
         return;
     }
-#if 0
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
     if (lay) {
         // Don't schedule the layout what would wait with the layout till the eventloop kicks
@@ -229,9 +192,7 @@ void KWTextFrameSet::updateTextLayout()
         //lay->relayout();
     }
 #else
-    #ifdef __GNUC__
-        #warning FIXME: port to textlayout-rework
-    #endif
+    Q_ASSERT(false);
 #endif
 }
 
@@ -311,6 +272,7 @@ void KWTextFrameSet::spaceLeft(qreal excessHeight)
 
 void KWTextFrameSet::framesEmpty(int emptyFrames)
 {
+#if 0
     //kDebug(32001) <<"KWTextFrameSet::framesEmpty" << emptyFrames;
     if (m_pageManager == 0) // be lazy; just refuse to delete frames if we don't know which are on which page
         return;
@@ -347,6 +309,9 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
         removeFrame(*iter);
         delete(*iter)->shape();
     } while (iter-- != deleteFrom);
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 void KWTextFrameSet::setAllowLayout(bool allow)
@@ -393,28 +358,27 @@ KWPageStyle KWTextFrameSet::pageStyle() const
 
 void KWTextFrameSet::sortFrames()
 {
+#if 0
      // optimize to not sort more than needed
     if (!m_frames.isEmpty() && (m_frameOrderDirty || m_textFrameSetType == KWord::OtherTextFrameSet)) {
         KWFrame *first = m_frames.first();
         qSort(m_frames.begin(), m_frames.end(), sortTextFrames);
         if (m_frames[0] != first) { // that means it needs to be re-layouted
             KoTextShapeData *tsd = qobject_cast<KoTextShapeData*>(m_frames[0]->shape()->userData());
-#if 0
             if (tsd)
                 tsd->foul();
-#else
-    #ifdef __GNUC__
-        #warning FIXME: port to textlayout-rework
-    #endif
-#endif
         }
     }
     m_frameOrderDirty = false;
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 // static   returns true if frame1 comes before frame2
 bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2)
 {
+#if 0
     const KWTextFrame *f1 = dynamic_cast<const KWTextFrame*>(frame1);
     const KWTextFrame *f2 = dynamic_cast<const KWTextFrame*>(frame2);
 
@@ -489,6 +453,9 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
     // my center lies inside frame2. Lets check the topleft pos.
     if (frame1->shape()->boundingRect().top() > boundsF2.top())
         return false;
+#endif
+#else
+    Q_ASSERT(false);
 #endif
     return true;
 }
