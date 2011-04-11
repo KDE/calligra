@@ -21,6 +21,7 @@
 #include "KWPageManager.h"
 #include "KWDocument.h"
 #include "KWPage.h"
+#include "KWView.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
 #include "frames/KWFrameLayout.h"
@@ -31,6 +32,9 @@
 #include <KoShapeRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
+#include <KoSelection.h>
+#include <KoCanvasBase.h>
+#include <KoShapeManager.h>
 
 #include <kdebug.h>
 
@@ -74,11 +78,12 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         pagesCreated << page.pageNumber();
     }
 
-    kDebug() << "rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "frameCountBefore=" << framesCountBefore << "pageCount=" << pageManager->pageCount() << "pagesCreated=" << pagesCreated;
+    kDebug() << "rootAreasCount=" << rootAreas.count()+1 << "frameCount=" << m_textFrameSet->frameCount() << "frameCountBefore=" << framesCountBefore << "pageCount=" << pageManager->pageCount() << "pagesCreated=" << pagesCreated;
 
     //FIXME don't use m_textFrameSet->frames() cause it can contain other frames too
     Q_ASSERT(m_textFrameSet->frameCount() >= 1);
     KWFrame *frame = m_textFrameSet->frames()[ m_textFrameSet->frameCount() - 1 ];
+    Q_ASSERT(!m_rootAreas.contains(frame));
     KoShape *shape = frame->shape();
     Q_ASSERT(shape);
 
@@ -88,6 +93,8 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     KoTextLayoutRootArea *area = new KoTextLayoutRootArea(documentLayout);
     area->setAssociatedShape(shape);
     data->setRootArea(area);
+
+    m_rootAreas[frame] = area;
     return area;
 }
 
@@ -111,6 +118,16 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
 
     // force repaint
     rootArea->associatedShape()->update();
+
+#if 0
+    // select the new shape
+    foreach (KoView *view, m_textFrameSet->kwordDocument()->views()) {
+        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
+        KoSelection *selection = canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(rootArea->associatedShape());
+    }
+#endif
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)

@@ -28,6 +28,7 @@
 class KoShape;
 class KoTextShapeData;
 class KWTextFrameSet;
+class KWFrame;
 
 class KWRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
@@ -42,7 +43,7 @@ public:
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
 private:
     KWTextFrameSet *m_textFrameSet;
-    QMap<int, KoTextLayoutRootArea *> m_rootAreas;
+    QMap<KWFrame*, KoTextLayoutRootArea *> m_rootAreas;
 };
 
 #endif
