@@ -2088,7 +2088,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
         }
 
-	//TODO: geoLeft, geoTop, geoRight, geoBottom
+        //TODO: geoLeft, geoTop, geoRight, geoBottom
         QString viewBox = QString::number(minX) + ' ' + QString::number(minY) + ' ' +
                           QString::number(maxX) + ' ' + QString::number(maxY);
 
@@ -2116,17 +2116,22 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
             case msopathCurveTo:
             {
-                if (n >= verticesPoints.size()) {
+                if (n + 2 > verticesPoints.size()) {
                     qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
                     nOffRange = true;
                     break;
                 }
-                enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[n].x()) + ' ' +
-                               QString::number(verticesPoints[n].y()) + ' ' +
-                               QString::number(verticesPoints[n + 1].x()) + ' ' +
-                               QString::number(verticesPoints[n + 1].y()) + ' ' +
-                               QString::number(verticesPoints[n + 2].x()) + ' ' +
-                               QString::number(verticesPoints[n + 2].y()) + ' ';
+                QPoint pt1 = verticesPoints.at(n);
+                QPoint pt2 = verticesPoints.at(n + 1);
+                QPoint pt3 = verticesPoints.at(n + 2);
+
+                enhancedPath = enhancedPath + "C " +
+                        QString::number(pt1.x()) + ' ' +
+                        QString::number(pt1.y()) + ' ' +
+                        QString::number(pt2.x()) + ' ' +
+                        QString::number(pt2.y()) + ' ' +
+                        QString::number(pt3.x()) + ' ' +
+                        QString::number(pt3.y()) + ' ';
                 n = n + 3;
                 break;
             }
