@@ -20,6 +20,7 @@
 #define GLOBALOBJECTCOLLECTORS_H
 
 #include "PptToOdp.h"
+#include "ODrawToOdf.h"
 
 /**
  * Report global objects belonging to global options to the collector.
@@ -190,71 +191,8 @@ public:
         const LineRightDashing* ld5 = t.anon.get<LineRightDashing>();
         if (ld5) lineDashing = ld5->lineDashing;
         */
-        if (lineDashing <= 0 || lineDashing > 10) return QString();
-
         //const LineDashingStyle* lds = t.anon.get<LineDashingStyle>();
-        KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
-        switch (lineDashing) {
-        case 0: // msolineSolid, not a real stroke dash
-            break;
-        case 1: // msolineDashSys
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "300%");
-            strokeDash.addAttribute("draw:distance", "100%");
-            break;
-        case 2: // msolineDotSys
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "200%");
-            break;
-        case 3: // msolineDashDotSys
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "300%");
-            strokeDash.addAttribute("draw:dots2", "1");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        case 4: // msolineDashDotDotSys
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "300%");
-            strokeDash.addAttribute("draw:dots2", "1");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        case 5: // msolineDotGEL
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "100%");
-            break;
-        case 6: // msolineDashGEL
-            strokeDash.addAttribute("draw:dots1", "4");
-            strokeDash.addAttribute("draw:dots1-length", "100%");
-            break;
-        case 7: // msolineLongDashGEL
-            strokeDash.addAttribute("draw:dots1", "8");
-            strokeDash.addAttribute("draw:dots1-length", "100%");
-            break;
-        case 8: // msolineDashDotGEL
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "300%");
-            strokeDash.addAttribute("draw:dots2", "1");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        case 9: // msolineLongDashDotGEL
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "800%");
-            strokeDash.addAttribute("draw:dots2", "1");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        case 10: // msolineLongDashDotDotGEL
-            strokeDash.addAttribute("draw:dots1", "1");
-            strokeDash.addAttribute("draw:dots1-length", "800%");
-            strokeDash.addAttribute("draw:dots2", "2");
-            strokeDash.addAttribute("draw:dots2-length", "100%");
-            break;
-        };
-        if (lineDashing < 5) {
-            strokeDash.addAttribute("draw:distance", "100%");
-        } else {
-            strokeDash.addAttribute("draw:distance", "300%");
-        }
-        return styles.insert(strokeDash, "strokeDash");
+        return dashStyle(lineDashing, styles);
     }
 };
 

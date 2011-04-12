@@ -217,6 +217,6 @@ const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);
 
-
+QString dashStyle(quint32 lineDashing, KoGenStyles& styles);
 
 #endif
