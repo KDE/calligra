@@ -107,7 +107,7 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     kDebug();
 }
 
-void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
+void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
 {
     kDebug();
 
