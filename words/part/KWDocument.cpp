@@ -97,6 +97,7 @@
 class MagicCurtain : public KoShapeContainer
 {
 public:
+    MagicCurtain(KWDocument *document) : m_document(document) {}
     // reimplemented pure virtual calls
     bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return false; }
     void saveOdf(KoShapeSavingContext&) const { }
@@ -110,21 +111,32 @@ public:
     void revealFramesForPage(int pageNumber, qreal moveFrames);
 
 private:
+    KWDocument *m_document;
     QHash<int, QList<KWFrame*> > m_data;
 };
 
 void MagicCurtain::addFrame(KWFrame *frame)
 {
+#if 0
     Q_ASSERT(frame->loadingPageNumber() > 0);
     QList<KWFrame*> frames = m_data.value(frame->loadingPageNumber());
     frames << frame;
     m_data.insert(frame->loadingPageNumber(), frames);
     frame->shape()->setParent(this);
+#else
+    KWPage p = frame->shape() ? m_document->pageManager()->page(frame->shape()) : KWPage();
+    Q_ASSERT_X(false, __FUNCTION__, QString().arg(p.isValid() ? p.pageNumber() : -1).toLocal8Bit());
+#endif
 }
 
 void MagicCurtain::addShape(KoShape *shape)
 {
+#if 0
     shape->setParent(this);
+#else
+    KWPage p = m_document->pageManager()->page(shape);
+    Q_ASSERT_X(false, __FUNCTION__, QString().arg(p.isValid() ? p.pageNumber() : -1).toLocal8Bit());
+#endif
 }
 
 void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
@@ -436,7 +448,7 @@ void KWDocument::addFrame(KWFrame *frame)
     }
     if (frame->loadingPageNumber() > 0) {
         if (m_magicCurtain == 0) {
-            m_magicCurtain = new MagicCurtain();
+            m_magicCurtain = new MagicCurtain(this);
             m_magicCurtain->setVisible(false);
             foreach (KoView *view, views()) {
                 static_cast<KWView*>(view)->canvasBase()->shapeManager()->addShape(m_magicCurtain);
@@ -783,7 +795,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObject);
             if (anchor) {
                 if (m_magicCurtain == 0) {
-                    m_magicCurtain = new MagicCurtain();
+                    m_magicCurtain = new MagicCurtain(this);
                     m_magicCurtain->setVisible(false);
                     foreach (KoView *view, views())
                         static_cast<KWView*>(view)->canvasBase()->shapeManager()->addShape(m_magicCurtain);
