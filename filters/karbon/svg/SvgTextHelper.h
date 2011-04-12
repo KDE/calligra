@@ -25,7 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QPointF>
 
-typedef QList<qreal> CharOffsets;
+typedef QList<qreal> CharTransforms;
 
 class KoXmlElement;
 class SvgGraphicsContext;
@@ -43,14 +43,14 @@ public:
 
     static QString simplifyText(const QString &text, bool preserveWhiteSpace = false);
 
-    /// Pareses character offsets and pushes them to the stack
-    void pushOffsets(const KoXmlElement &element, SvgGraphicsContext *gc);
+    /// Parses character transforms (x,y,dx,dy,rotate) and pushes them to the stack
+    void pushCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc);
 
-    /// Pops current offsets from the stack
-    void popOffsets();
+    /// Pops current character trasnforms from the stack
+    void popCharacterTransforms();
 
-    /// Strips specified number of offsets
-    void stripOffsets(int count);
+    /// Strips specified number of character transformations
+    void stripCharacterTransforms(int count);
 
     /// Checks current x-offset type
     OffsetType xOffsetType() const;
@@ -59,27 +59,38 @@ public:
     OffsetType yOffsetType() const;
 
     /// Returns x-offsets from stack
-    CharOffsets xOffsets(int count) const;
+    CharTransforms xOffsets(int count) const;
 
     /// Returns y-offsets from stack
-    CharOffsets yOffsets(int count) const;
+    CharTransforms yOffsets(int count) const;
+
+    /// Returns rotations from stack
+    CharTransforms rotations(int count) const;
 
     /// Returns the text position
     QPointF textPosition() const;
 
 private:
-    typedef QList<CharOffsets> CharOffsetStack;
+    typedef QList<CharTransforms> CharTransformStack;
+
+    enum ValueType {
+        Number,
+        XLength,
+        YLength
+    };
 
     /// Parses offset values from the given string
-    void parseList(const QString &listString, CharOffsetStack &stack, SvgGraphicsContext *gc, bool horizontal);
+    void parseList(const QString &listString, CharTransformStack &stack, SvgGraphicsContext *gc, ValueType type);
 
-    /// Collects number of specified offset values from the stack
-    CharOffsets collectValues(int count, const CharOffsetStack &stack) const;
+    /// Collects number of specified transforms values from the stack
+    CharTransforms collectValues(int count, const CharTransformStack &stack) const;
 
-    CharOffsetStack m_absolutePosX; ///< stack of absolute character x-positions
-    CharOffsetStack m_absolutePosY; ///< stack of absolute character y-positions
-    CharOffsetStack m_relativePosX; ///< stack of relative character x-positions
-    CharOffsetStack m_relativePosY; ///< stack of relative character y-positions
+    CharTransformStack m_absolutePosX; ///< stack of absolute character x-positions
+    CharTransformStack m_absolutePosY; ///< stack of absolute character y-positions
+    CharTransformStack m_relativePosX; ///< stack of relative character x-positions
+    CharTransformStack m_relativePosY; ///< stack of relative character y-positions
+    CharTransformStack m_rotations;    ///< stack of character rotations
+
     QPointF m_textPosition;
 };
 

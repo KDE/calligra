@@ -1694,12 +1694,14 @@ QRectF SvgParser::parseViewBox(QString viewbox)
 ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, SvgGraphicsContext *gc)
 {
     ArtisticTextRange range(context.simplifyText(text, gc->preserveWhitespace), gc->font);
+
+    const int textLength = range.text().length();
     switch(context.xOffsetType()) {
     case SvgTextHelper::Absolute:
-        range.setXOffsets(context.xOffsets(range.text().length()), ArtisticTextRange::AbsoluteOffset);
+        range.setXOffsets(context.xOffsets(textLength), ArtisticTextRange::AbsoluteOffset);
         break;
     case SvgTextHelper::Relative:
-        range.setXOffsets(context.xOffsets(range.text().length()), ArtisticTextRange::RelativeOffset);
+        range.setXOffsets(context.xOffsets(textLength), ArtisticTextRange::RelativeOffset);
         break;
     default:
         // no x-offsets
@@ -1707,15 +1709,17 @@ ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, S
     }
     switch(context.yOffsetType()) {
     case SvgTextHelper::Absolute:
-        range.setYOffsets(context.yOffsets(range.text().length()), ArtisticTextRange::AbsoluteOffset);
+        range.setYOffsets(context.yOffsets(textLength), ArtisticTextRange::AbsoluteOffset);
         break;
     case SvgTextHelper::Relative:
-        range.setYOffsets(context.yOffsets(range.text().length()), ArtisticTextRange::RelativeOffset);
+        range.setYOffsets(context.yOffsets(textLength), ArtisticTextRange::RelativeOffset);
         break;
     default:
         // no y-offsets
         break;
     }
+
+    range.setRotations(context.rotations(textLength));
 
     range.printDebug();
 
@@ -1741,7 +1745,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
     KoXmlElement styleElement = textElement;
 
     SvgTextHelper context;
-    context.pushOffsets(textElement, m_gc.top());
+    context.pushCharacterTransforms(textElement, m_gc.top());
 
     if (textElement.hasChildNodes()) {
         text = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
@@ -1757,7 +1761,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
             if (e.isNull()) {
                 ArtisticTextRange range = createTextRange(n.toText().data(), context, m_gc.top());
                 text->appendText(range);
-                context.stripOffsets(range.text().length());
+                context.stripCharacterTransforms(range.text().length());
             } else if (e.tagName() == "textPath") {
                 if (e.attribute("xlink:href").isEmpty())
                     continue;
@@ -1765,7 +1769,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                 addGraphicContext();
                 updateContext(e);
                 parseFont(collectStyles(e));
-                context.pushOffsets(e, m_gc.top());
+                context.pushCharacterTransforms(e, m_gc.top());
 
                 QString key = e.attribute("xlink:href").mid(1);
                 if (! m_defs.contains(key)) {
@@ -1791,16 +1795,16 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                         if (span.isNull()) {
                             ArtisticTextRange range = createTextRange(node.toText().data(), context, m_gc.top());
                             text->appendText(range);
-                            context.stripOffsets(range.text().length());
+                            context.stripCharacterTransforms(range.text().length());
                         } else if (span.tagName() == "tspan") {
                             addGraphicContext();
                             updateContext(span);
                             parseFont(collectStyles(span));
-                            context.pushOffsets(span, m_gc.top());
+                            context.pushCharacterTransforms(span, m_gc.top());
 
                             text->appendText(createTextRange(span.text(), context, m_gc.top()));
 
-                            context.popOffsets();;
+                            context.popCharacterTransforms();;
                             removeGraphicContext();
                         }
                     }
@@ -1818,17 +1822,17 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                             offset = start.toDouble() / pathLength;
                     }
                 }
-                context.popOffsets();;
+                context.popCharacterTransforms();;
                 removeGraphicContext();
             } else if (e.tagName() == "tspan") {
                 addGraphicContext();
                 updateContext(e);
                 parseFont(collectStyles(e));
-                context.pushOffsets(e, m_gc.top());
+                context.pushCharacterTransforms(e, m_gc.top());
 
                 text->appendText(createTextRange(e.text(), context, m_gc.top()));
 
-                context.popOffsets();;
+                context.popCharacterTransforms();;
                 removeGraphicContext();
             } else if (e.tagName() == "tref") {
                 if (e.attribute("xlink:href").isEmpty())

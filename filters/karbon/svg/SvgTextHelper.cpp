@@ -61,12 +61,12 @@ SvgTextHelper::OffsetType SvgTextHelper::yOffsetType() const
         return None;
 }
 
-CharOffsets SvgTextHelper::xOffsets(int count) const
+CharTransforms SvgTextHelper::xOffsets(int count) const
 {
     switch(xOffsetType()) {
     case Absolute: {
         const QPointF origin = textPosition();
-        CharOffsets offsets = collectValues(count, m_absolutePosX);
+        CharTransforms offsets = collectValues(count, m_absolutePosX);
         const int offsetCount = offsets.count();
         for (int i = 0; i < offsetCount; ++i) {
             offsets[i] -= origin.x();
@@ -76,16 +76,16 @@ CharOffsets SvgTextHelper::xOffsets(int count) const
     case Relative:
         return collectValues(count, m_relativePosX);
     default:
-        return CharOffsets();
+        return CharTransforms();
     }
 }
 
-CharOffsets SvgTextHelper::yOffsets(int count) const
+CharTransforms SvgTextHelper::yOffsets(int count) const
 {
     switch(yOffsetType()) {
     case Absolute: {
         const QPointF origin = textPosition();
-        CharOffsets offsets = collectValues(count, m_absolutePosY);
+        CharTransforms offsets = collectValues(count, m_absolutePosY);
         const int offsetCount = offsets.count();
         for (int i = 0; i < offsetCount; ++i) {
             offsets[i] -= origin.y();
@@ -95,8 +95,13 @@ CharOffsets SvgTextHelper::yOffsets(int count) const
     case Relative:
         return collectValues(count, m_relativePosY);
     default:
-        return CharOffsets();
+        return CharTransforms();
     }
+}
+
+CharTransforms SvgTextHelper::rotations(int count) const
+{
+    return collectValues(count, m_rotations);
 }
 
 QPointF SvgTextHelper::textPosition() const
@@ -110,12 +115,13 @@ QPointF SvgTextHelper::textPosition() const
     return QPointF(x, y);
 }
 
-void SvgTextHelper::pushOffsets(const KoXmlElement &element, SvgGraphicsContext *gc)
+void SvgTextHelper::pushCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc)
 {
-    parseList(element.attribute("x"), m_absolutePosX, gc, true);
-    parseList(element.attribute("y"), m_absolutePosY, gc, false);
-    parseList(element.attribute("dx"), m_relativePosX, gc, true);
-    parseList(element.attribute("dy"), m_relativePosY, gc, false);
+    parseList(element.attribute("x"), m_absolutePosX, gc, XLength);
+    parseList(element.attribute("y"), m_absolutePosY, gc, YLength);
+    parseList(element.attribute("dx"), m_relativePosX, gc, XLength);
+    parseList(element.attribute("dy"), m_relativePosY, gc, YLength);
+    parseList(element.attribute("rotate"), m_rotations, gc, Number);
 
     if (m_textPosition.x() == HUGE_VAL && m_absolutePosX.last().count()) {
         m_textPosition.setX(m_absolutePosX.last().first());
@@ -125,50 +131,61 @@ void SvgTextHelper::pushOffsets(const KoXmlElement &element, SvgGraphicsContext 
     }
 }
 
-void SvgTextHelper::popOffsets()
+void SvgTextHelper::popCharacterTransforms()
 {
     m_absolutePosX.pop_back();
     m_absolutePosY.pop_back();
     m_relativePosX.pop_back();
     m_relativePosY.pop_back();
+    m_rotations.pop_back();
 }
 
-void SvgTextHelper::stripOffsets(int count)
+void SvgTextHelper::stripCharacterTransforms(int count)
 {
-    m_absolutePosX.last() = m_absolutePosX.last().count() > count ? m_absolutePosX.last().mid(count) : CharOffsets();
-    m_absolutePosY.last() = m_absolutePosY.last().count() > count ? m_absolutePosY.last().mid(count) : CharOffsets();
-    m_relativePosX.last() = m_relativePosX.last().count() > count ? m_relativePosX.last().mid(count) : CharOffsets();
-    m_relativePosY.last() = m_relativePosY.last().count() > count ? m_relativePosY.last().mid(count) : CharOffsets();
+    m_absolutePosX.last() = m_absolutePosX.last().count() > count ? m_absolutePosX.last().mid(count) : CharTransforms();
+    m_absolutePosY.last() = m_absolutePosY.last().count() > count ? m_absolutePosY.last().mid(count) : CharTransforms();
+    m_relativePosX.last() = m_relativePosX.last().count() > count ? m_relativePosX.last().mid(count) : CharTransforms();
+    m_relativePosY.last() = m_relativePosY.last().count() > count ? m_relativePosY.last().mid(count) : CharTransforms();
+    m_rotations.last() = m_rotations.last().count() > count ? m_rotations.last().mid(count) : CharTransforms();
 }
 
-void SvgTextHelper::parseList(const QString &listString, CharOffsetStack &stack, SvgGraphicsContext *gc, bool horizontal)
+void SvgTextHelper::parseList(const QString &listString, CharTransformStack &stack, SvgGraphicsContext *gc, ValueType type)
 {
     if (listString.isEmpty()) {
-        stack.append(CharOffsets());
+        stack.append(CharTransforms());
     } else {
-        CharOffsets values;
+        CharTransforms values;
         QStringList offsets = QString(listString).replace(',', ' ').simplified().split(' ');
         values.reserve(offsets.count());
         foreach(const QString &offset, offsets) {
-            const qreal v = horizontal ? SvgUtil::parseUnitX(gc, offset) : SvgUtil::parseUnitY(gc, offset);
-            values.append(v);
+            switch(type) {
+            case Number:
+                values.append(offset.toDouble());
+                break;
+            case XLength:
+                values.append(SvgUtil::parseUnitX(gc, offset));
+                break;
+            case YLength:
+                values.append(SvgUtil::parseUnitY(gc, offset));
+                break;
+            }
         }
         stack.append(values);
     }
 }
 
-CharOffsets SvgTextHelper::collectValues(int count, const CharOffsetStack &stack) const
+CharTransforms SvgTextHelper::collectValues(int count, const CharTransformStack &stack) const
 {
     // do we have enough values ?
     if (stack.last().count() >= count) {
         return stack.last().mid(0, count);
     } else {
         // collect values from ancestors
-        CharOffsets collected = stack.last();
-        QListIterator<CharOffsets> it(stack);
+        CharTransforms collected = stack.last();
+        QListIterator<CharTransforms> it(stack);
         it.toBack();
         while(it.hasPrevious()) {
-            const CharOffsets &prev = it.previous();
+            const CharTransforms &prev = it.previous();
             if (prev.count() > collected.count()) {
                 int count = qMin(count, prev.count());
                 for(int i = collected.count(); i < count; ++i) {
