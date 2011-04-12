@@ -70,24 +70,49 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     Q_ASSERT(shape);
 #endif
 
-    // Create missing KWPage's and KWTextFrame's
-    KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
-    Q_ASSERT(kwdoc);
-    int framesCountBefore = m_textFrameSet->frameCount();
-    QList<int> pagesCreated;
-    for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
-        KWPage page = kwdoc->appendPage();
-        Q_ASSERT(page.isValid());
+    switch(m_textFrameSet->textFrameSetType()) {
+        case KWord::OddPagesHeaderTextFrameSet:
+        case KWord::EvenPagesHeaderTextFrameSet:
+        case KWord::OddPagesFooterTextFrameSet:
+        case KWord::EvenPagesFooterTextFrameSet:
+            kDebug() << m_textFrameSet << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "pageCount=" << pageManager->pageCount();
+            break;
+        case KWord::MainTextFrameSet: {
+            // Create missing KWPage's (they will also create a KWTextFrame and TextShape per page)
+            KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
+            Q_ASSERT(kwdoc);
+            int framesCountBefore = m_textFrameSet->frameCount();
+            QList<int> pagesCreated;
+            for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
+                KWPage page = kwdoc->appendPage();
+                Q_ASSERT(page.isValid());
 
-        pagesCreated << page.pageNumber();
+                pagesCreated << page.pageNumber();
+            }
+            kDebug() << m_textFrameSet << "(MainTextFrameSet) rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "frameCountBefore=" << framesCountBefore << "pageCount=" << pageManager->pageCount() << "pagesCreated=" << pagesCreated;
+        } break;
+        default: break;
     }
 
-    kDebug() << "rootAreasCount=" << rootAreas.count()+1 << "frameCount=" << m_textFrameSet->frameCount() << "frameCountBefore=" << framesCountBefore << "pageCount=" << pageManager->pageCount() << "pagesCreated=" << pagesCreated;
+    /*
+    // Create missing frames for each KWPage
+    for(int i = m_textFrameSet->frameCount() + 1; i <= pageManager->pageCount(); ++i) {
+        // Create the KWTextFrame's for the new KWPage
+        KWFrameLayout *framelayout = kwdoc->frameLayout();
+        int fc = m_textFrameSet->frameCount();
+        framelayout->createNewFramesForPage(i);
+        kDebug() << "createFrame " << i << fc << m_textFrameSet->frameCount();
+    }
+    */
 
     //FIXME don't use m_textFrameSet->frames() cause it can contain other frames too
     Q_ASSERT(m_textFrameSet->frameCount() >= 1);
     KWFrame *frame = m_textFrameSet->frames()[ m_textFrameSet->frameCount() - 1 ];
-    Q_ASSERT(!m_rootAreas.contains(frame));
+
+//Q_ASSERT(!m_rootAreas.contains(frame));
+//if (m_rootAreas.contains(frame)) return m_rootAreas[frame];
+if (m_rootAreas.contains(frame)) return 0;
+
     KoShape *shape = frame->shape();
     Q_ASSERT(shape);
 
@@ -123,6 +148,20 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     kwdoc->firePageSetupChanged();
     */
 
+    switch(m_textFrameSet->textFrameSetType()) {
+        case KWord::OddPagesHeaderTextFrameSet:
+        case KWord::EvenPagesHeaderTextFrameSet:
+        case KWord::OddPagesFooterTextFrameSet:
+        case KWord::EvenPagesFooterTextFrameSet: {
+            Q_ASSERT(m_textFrameSet->frameCount() > 0);
+            KWTextFrame *frame = static_cast<KWTextFrame*>(m_textFrameSet->frames().first());
+            frame->setMinimumFrameHeight(rootArea->associatedShape()->size().height());
+        } break;
+        default: break;
+    }
+
+    
+    
     // force repaint
     rootArea->associatedShape()->update();
 

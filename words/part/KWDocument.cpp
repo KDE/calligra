@@ -135,12 +135,13 @@ void MagicCurtain::addShape(KoShape *shape)
     shape->setParent(this);
 #else
     KWPage p = m_document->pageManager()->page(shape);
-    Q_ASSERT_X(false, __FUNCTION__, QString().arg(p.isValid() ? p.pageNumber() : -1).toLocal8Bit());
+    Q_ASSERT_X(false, __FUNCTION__, QString("pageNumber=%1").arg(p.isValid() ? p.pageNumber() : -1).toLocal8Bit());
 #endif
 }
 
 void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
 {
+#if 0
     QPointF offset(0, moveFrames);
     foreach (KWFrame *frame, m_data.value(pageNumber)) {
         frame->shape()->setPosition(frame->shape()->position() + offset);
@@ -148,8 +149,10 @@ void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
         frame->clearLoadingData();
     }
     m_data.remove(pageNumber);
+#else
+    Q_ASSERT_X(false, __FUNCTION__, QString("pageNumber=%1 moveFrames=%2").arg(pageNumber).arg(moveFrames).toLocal8Bit());
+#endif
 }
-
 
 // KWDocument
 KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
@@ -401,7 +404,8 @@ void KWDocument::relayout()
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
 {
-    kDebug();
+    kDebug() << "frameSet=" << fs;
+
     Q_ASSERT(!m_frameSets.contains(fs));
     setModified(true);
     m_frameSets.append(fs);
@@ -435,17 +439,19 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
 void KWDocument::addFrame(KWFrame *frame)
 {
-    kDebug();
-    firePageSetupChanged();
+    kDebug() << "frame=" << frame << "frameSet=" << frame->frameSet();
+
+    //firePageSetupChanged();
+
     foreach (KoView *view, views()) {
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->shapeManager()->addShape(frame->shape());
+        canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
         canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
     if (viewCount() == 0) {
         KoCanvasBase *canvas = dynamic_cast<KoCanvasBase *>(canvasItem(false));
         if (canvas) {
-            canvas->shapeManager()->addShape(frame->shape());
+            canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
             canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
         }
     }
@@ -826,9 +832,10 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     if (updater) updater->setProgress(100);
 
     kDebug(32001) << "KWDocument::endOfLoading done";
-
+#if 0
     // Note that more stuff will happen in completeLoading
     firePageSetupChanged();
+#endif
     setModified(false);
 }
 
@@ -849,8 +856,7 @@ QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
 {
     kDebug(32002) << fs;
-Q_ASSERT(false);
-
+#if 0
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
@@ -903,6 +909,9 @@ Q_ASSERT(false);
         if (m_magicCurtain)
             m_magicCurtain->revealFramesForPage(newPage.pageNumber(), newPage.offsetInDocument());
     }
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)

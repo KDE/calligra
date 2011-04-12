@@ -456,7 +456,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
         QRect finalClip((int)(vm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
                         (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
                         vm.clipRect.width(), vm.clipRect.height());
-#if 0
+
         if (m_cacheEnabled) {
             QRectF pageRectDocument = vm.page.rect(vm.page.pageNumber());
             QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
@@ -490,7 +490,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                 m_pageCacheManager->insert(vm.page, pageCache, viewConverter()->zoom());
             }
         }
-#endif
+
         updateCanvasInternal(finalClip);
     }
 }

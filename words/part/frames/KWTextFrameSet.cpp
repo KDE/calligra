@@ -312,7 +312,7 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
 
 void KWTextFrameSet::setAllowLayout(bool allow)
 {
-    kDebug();
+    kDebug() << "allow=" << allow << "m_allowLayoutRequests=" << m_allowLayoutRequests;
     if (allow == m_allowLayoutRequests)
         return;
     m_allowLayoutRequests = allow;

@@ -33,6 +33,11 @@ KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent, int pageNumber)
         m_canGrow(true)
 {
     Q_ASSERT(shape);
+    if (KWord::isHeaderFooter(parent)) {
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+        Q_ASSERT(data);
+        data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
+    }
 }
 
 KWTextFrame::~KWTextFrame()
@@ -85,13 +90,11 @@ void KWTextFrame::autoShrink(qreal requestedHeight)
 
 void KWTextFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
 {
-    Q_ASSERT(false);
     m_minimumFrameHeight = minimumFrameHeight;
 }
 
 qreal KWTextFrame::minimumFrameHeight() const
 {
-    Q_ASSERT(false);
     return m_minimumFrameHeight;
 }
     

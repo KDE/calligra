@@ -101,6 +101,8 @@ void KWPageInsertCommand::redo()
             //d->page.setHeight(pageManager->defaultPageStyle().pageLayout().height);
         }
 
+        kDebug() << "pageNumber=" << d->page.pageNumber();
+
         // Create the KWTextFrame's for the new KWPage
         KWFrameLayout *framelayout = d->document->frameLayout();
         framelayout->createNewFramesForPage(d->page.pageNumber());
@@ -142,7 +144,10 @@ void KWPageInsertCommand::redo()
     if (d->shapeMoveCommand)
         d->shapeMoveCommand->redo();
     Q_ASSERT(d->page.isValid());
+
+#if 0
     d->document->pageQueue()->addPage(d->page);
+#endif
 }
 
 void KWPageInsertCommand::undo()

@@ -65,7 +65,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     allHFTypes.append(KWord::EvenPagesHeaderTextFrameSet);
     allHFTypes.append(KWord::OddPagesFooterTextFrameSet);
     allHFTypes.append(KWord::EvenPagesFooterTextFrameSet);
-#if 0
+
     // create headers & footers
     KWord::TextFrameSetType origin;
     if (shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
@@ -78,16 +78,11 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        if (!frameOn(fs, pageNumber))
-        {
+        if (!frameOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
         }
     }
-#else
-    #ifdef __GNUC__
-        #warning FIXME: port to textlayout-rework
-    #endif
-#endif
+
     //kDebug() <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
 
     if (page.pageStyle().background()) {
@@ -146,6 +141,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             }
         }
 #endif
+        kDebug() << fs << "pageRect=" << rect << "columns=" << columns;
         qreal colwidth = page.pageStyle().pageLayout().width / columns;
         qreal colheight = page.pageStyle().pageLayout().height;
         for (--columns; columns >= 0; --columns) {
@@ -329,7 +325,10 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     if (columns > 0)
         main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
-    foreach (KWFrame *frame, framesInPage(pageRect)) {
+    QList<KWFrame *> frames = framesInPage(pageRect);
+
+    kDebug() << "hasMainTextFrame=" << pageStyle.hasMainTextFrame() << "columns=" << pageStyle.columns().columns << "frames=" << frames;
+    foreach (KWFrame *frame, frames) {
         KWTextFrameSet *textFrameSet = 0;
         switch (frame->frameSet()->type()) {
         case KWord::BackgroundFrameSet:
@@ -377,7 +376,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         }
         case KWord::MainTextFrameSet: {
             if (columnsCount < 1) {
-                kWarning(32001) << "Too many columns present on page, ignoring 1";
+                kWarning(32001) << "Too many columns present on page, ignoring 1, columnsCount=" << columnsCount;
                 break;
             }
             main[--columnsCount] = static_cast<KWTextFrame *>(frame);
