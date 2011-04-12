@@ -35,6 +35,7 @@ class KWRootAreaProvider : public KoTextLayoutRootAreaProvider
 public:
     //KWRootAreaProvider(KWTextFrameSet *textFrameSet, KoShape *shape, KoTextShapeData *data);
     explicit KWRootAreaProvider(KWTextFrameSet *textFrameSet);
+    virtual ~KWRootAreaProvider();
 
     /// reimplemented
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, QString mastePageName);

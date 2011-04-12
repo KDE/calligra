@@ -53,9 +53,11 @@ KWFrame::~KWFrame()
         m_frameSet->removeFrame(this, ourShape); // first remove me so we won't get double
                                                  // deleted. ourShape is needed to mark any
                                                  // copyShapes as retired
+#if 0
         if (justMe)
             delete m_frameSet;
         m_frameSet = 0;
+#endif
     }
 }
 

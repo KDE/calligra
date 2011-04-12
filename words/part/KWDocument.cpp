@@ -388,7 +388,7 @@ void KWDocument::relayout()
 void KWDocument::addFrameSet(KWFrameSet *fs)
 {
     kDebug();
-    if (m_frameSets.contains(fs)) return;
+    Q_ASSERT(!m_frameSets.contains(fs));
     setModified(true);
     m_frameSets.append(fs);
     foreach (KWFrame *frame, fs->frames())

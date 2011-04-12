@@ -44,6 +44,10 @@ KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet)
 {
 }
 
+KWRootAreaProvider::~KWRootAreaProvider()
+{
+}
+
 KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, QString mastePageName)
 {
     KWPageManager *pageManager = m_textFrameSet->kwordDocument()->pageManager();
@@ -92,7 +96,6 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 
     KoTextLayoutRootArea *area = new KoTextLayoutRootArea(documentLayout);
     area->setAssociatedShape(shape);
-    area->setAcceptsPageBreak(true);
     data->setRootArea(area);
 
     m_rootAreas[frame] = area;
@@ -104,7 +107,7 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     kDebug();
 }
 
-void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
+void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
 {
     kDebug();
 

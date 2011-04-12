@@ -32,8 +32,16 @@ KWFrameSet::KWFrameSet(KWord::FrameSetType type)
 
 KWFrameSet::~KWFrameSet()
 {
+#if 1
     foreach (KWFrame *frame, frames())
         delete frame->shape();
+#else
+    while(!m_frames.isEmpty()) {
+        KWFrame* f = m_frames.takeLast();
+        delete f->shape();
+        delete f;
+    }
+#endif
 }
 
 void KWFrameSet::addFrame(KWFrame *frame)

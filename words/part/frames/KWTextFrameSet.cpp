@@ -96,12 +96,6 @@ KWTextFrameSet::~KWTextFrameSet()
         } while (iter != m_frames.begin());
         // if no frames have a KoTextShapeData, its save to delete m_document.
     }
-#else
-    while(!m_frames.isEmpty()) {
-        KWFrame* f = m_frames.takeLast();
-        delete f->shape();
-        delete f;
-    }
 #endif
     delete m_document;
 }
@@ -110,6 +104,8 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
     Q_ASSERT(frame->shape());
     Q_ASSERT(frame->shape()->userData());
+    Q_ASSERT(frame->frameSet() == this);
+    Q_ASSERT(frames().contains(frame));
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
     Q_ASSERT(data);
 
