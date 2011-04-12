@@ -32,13 +32,21 @@ SvgTextHelper::SvgTextHelper()
 
 }
 
-QString SvgTextHelper::simplifyText(const QString &text, bool preserveWhiteSpace)
+QString SvgTextHelper::simplifyText(const QString &text, bool preserveWhiteSpace, bool hasSibling)
 {
     // simplifies text according ot the svg specification
     QString simple = text;
     simple.remove('\n');
     simple.replace('\t', ' ');
-    return preserveWhiteSpace ? simple : simple.simplified();
+    if (preserveWhiteSpace)
+        return simple;
+
+    QString stripped = simple.simplified();
+    // preserve last whitespace character if we have a next sibling text range
+    if (hasSibling && simple.endsWith(' '))
+        stripped += QChar(' ');
+
+    return stripped;
 }
 
 SvgTextHelper::OffsetType SvgTextHelper::xOffsetType() const

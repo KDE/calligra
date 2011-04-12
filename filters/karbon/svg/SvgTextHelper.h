@@ -41,7 +41,7 @@ public:
 
     SvgTextHelper();
 
-    static QString simplifyText(const QString &text, bool preserveWhiteSpace = false);
+    static QString simplifyText(const QString &text, bool preserveWhiteSpace = false, bool hasSibling = false);
 
     /// Parses character transforms (x,y,dx,dy,rotate) and pushes them to the stack
     void pushCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc);

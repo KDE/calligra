@@ -1691,9 +1691,9 @@ QRectF SvgParser::parseViewBox(QString viewbox)
 // Creating functions
 // ---------------------------------------------------------------------------------------
 
-ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, SvgGraphicsContext *gc)
+ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, SvgGraphicsContext *gc, bool hasSibling = false)
 {
-    ArtisticTextRange range(context.simplifyText(text, gc->preserveWhitespace), gc->font);
+    ArtisticTextRange range(context.simplifyText(text, gc->preserveWhitespace, hasSibling), gc->font);
 
     const int textLength = range.text().length();
     switch(context.xOffsetType()) {
@@ -1758,8 +1758,9 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
 
         for (KoXmlNode n = textElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
             KoXmlElement e = n.toElement();
+            const bool hasNextSibling = !n.nextSibling().isNull();
             if (e.isNull()) {
-                ArtisticTextRange range = createTextRange(n.toText().data(), context, m_gc.top());
+                ArtisticTextRange range = createTextRange(n.toText().data(), context, m_gc.top(), hasNextSibling);
                 text->appendText(range);
                 context.stripCharacterTransforms(range.text().length());
             } else if (e.tagName() == "textPath") {
@@ -1792,8 +1793,9 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                 if(e.hasChildNodes()) {
                     for (KoXmlNode node = e.firstChild(); !node.isNull(); node = node.nextSibling()) {
                         KoXmlElement span = node.toElement();
+                        const bool hasNextSibling = !node.nextSibling().isNull();
                         if (span.isNull()) {
-                            ArtisticTextRange range = createTextRange(node.toText().data(), context, m_gc.top());
+                            ArtisticTextRange range = createTextRange(node.toText().data(), context, m_gc.top(), hasNextSibling);
                             text->appendText(range);
                             context.stripCharacterTransforms(range.text().length());
                         } else if (span.tagName() == "tspan") {
@@ -1802,7 +1804,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                             parseFont(collectStyles(span));
                             context.pushCharacterTransforms(span, m_gc.top());
 
-                            text->appendText(createTextRange(span.text(), context, m_gc.top()));
+                            text->appendText(createTextRange(span.text(), context, m_gc.top(), hasNextSibling));
 
                             context.popCharacterTransforms();;
                             removeGraphicContext();
@@ -1830,7 +1832,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                 parseFont(collectStyles(e));
                 context.pushCharacterTransforms(e, m_gc.top());
 
-                text->appendText(createTextRange(e.text(), context, m_gc.top()));
+                text->appendText(createTextRange(e.text(), context, m_gc.top(), hasNextSibling));
 
                 context.popCharacterTransforms();;
                 removeGraphicContext();
@@ -1855,7 +1857,8 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                     }
                 } else {
                     KoXmlElement p = m_defs[key];
-                    text->appendText(ArtisticTextRange(context.simplifyText(p.text()), m_gc.top()->font));
+                    SvgGraphicsContext *gc = m_gc.top();
+                    text->appendText(ArtisticTextRange(context.simplifyText(p.text(), gc->preserveWhitespace, hasNextSibling), gc->font));
                 }
             } else {
                 continue;
