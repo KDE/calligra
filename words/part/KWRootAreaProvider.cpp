@@ -115,10 +115,13 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     //rootArea->setBottom(rootArea->top() + rootArea->associatedShape()->size().height());
     //rootArea->setReferenceRect(0, rootArea->associatedShape()->size().width(), 0, rootArea->associatedShape()->size().height());
 
+    /* already done in KWDocument::addFrame on shapeManager()->addShape
+
     // emits KWDocument::pageSetupChanged which calls KWViewMode::updatePageCache
     KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
     Q_ASSERT(kwdoc);
     kwdoc->firePageSetupChanged();
+    */
 
     // force repaint
     rootArea->associatedShape()->update();

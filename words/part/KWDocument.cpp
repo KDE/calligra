@@ -362,6 +362,8 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
+    disconnect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
+    disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
 
 void KWDocument::relayout()
@@ -426,14 +428,15 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
                     this, SLOT(updateHeaderFooter(KWTextFrameSet*)));
         }
     }
+#endif
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
-#endif
 }
 
 void KWDocument::addFrame(KWFrame *frame)
 {
     kDebug();
+    firePageSetupChanged();
     foreach (KoView *view, views()) {
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->shapeManager()->addShape(frame->shape());
@@ -446,6 +449,7 @@ void KWDocument::addFrame(KWFrame *frame)
             canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
         }
     }
+#if 0
     if (frame->loadingPageNumber() > 0) {
         if (m_magicCurtain == 0) {
             m_magicCurtain = new MagicCurtain(this);
@@ -465,6 +469,10 @@ void KWDocument::addFrame(KWFrame *frame)
     }
     else
         frame->shape()->update();
+#else
+    Q_ASSERT(frame->loadingPageNumber() <= 0);
+    //frame->shape()->update();
+#endif
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
