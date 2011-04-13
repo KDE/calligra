@@ -38,7 +38,7 @@
 #include <QList>
 
 // enable to activate debugging output
-#define POLE_DEBUG
+//#define POLE_DEBUG
 
 #define OLE_HEADER_SIZE 0x200
 
