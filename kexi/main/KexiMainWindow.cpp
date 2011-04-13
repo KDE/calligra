@@ -1893,6 +1893,9 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 
 tristate KexiMainWindow::closeProject()
 {
+    if (d->tabbedToolBar)
+        d->tabbedToolBar->hideMainMenu();
+
 #ifndef KEXI_NO_PENDING_DIALOGS
     if (d->pendingWindowsExist()) {
         kDebug() << "KexiMainWindow::closeProject() pendingWindowsExist...";
@@ -3039,10 +3042,12 @@ KexiMainWindow::childClosed(KMdiChildView *v)
 void
 KexiMainWindow::slotSettings()
 {
-    d->tabbedToolBar->showMainMenu("settings");
-    // dummy
-    QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("settings")->text());
-    d->tabbedToolBar->setMainMenuContent(dummy);
+    if (d->tabbedToolBar) {
+        d->tabbedToolBar->showMainMenu("settings");
+        // dummy
+        QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("settings")->text());
+        d->tabbedToolBar->setMainMenuContent(dummy);
+    }
 }
 
 void
@@ -3133,6 +3138,8 @@ KexiMainWindow::createKexiProject(KexiProjectData* new_data)
 KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
                                        QString* shortcutFileName)
 {
+    if (!d->tabbedToolBar)
+        return 0;
     d->tabbedToolBar->showMainMenu("project_new");
     KexiNewProjectWizard *wiz = new KexiNewProjectWizard(Kexi::connset(), 0);
     wiz->setConfirmOverwrites(confirmOverwrites);
@@ -3198,9 +3205,10 @@ KexiMainWindow::createBlankProject()
     return true;
 }
 
-void
-KexiMainWindow::slotProjectOpen()
+void KexiMainWindow::slotProjectOpen()
 {
+    if (!d->tabbedToolBar)
+        return;
     d->tabbedToolBar->showMainMenu("project_open");
     KexiStartupDialog *openWindow = new KexiStartupDialog(
         KexiStartupDialog::OpenExisting, 0, Kexi::connset(),
@@ -3349,9 +3357,10 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
     return ok;
 }
 
-void
-KexiMainWindow::slotProjectOpenRecent()
+void KexiMainWindow::slotProjectOpenRecent()
 {
+    if (!d->tabbedToolBar)
+        return;
     d->tabbedToolBar->showMainMenu("project_open_recent");
     // dummy
     QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_open_recent")->text());
@@ -3466,6 +3475,8 @@ void KexiMainWindow::slotProjectExportDataTable()
 
 void KexiMainWindow::slotProjectProperties()
 {
+    if (!d->tabbedToolBar)
+        return;
     d->tabbedToolBar->showMainMenu("project_properties");
     // dummy
     QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_properties")->text());
@@ -3477,6 +3488,8 @@ void KexiMainWindow::slotProjectProperties()
 
 void KexiMainWindow::slotProjectImportExportOrSend()
 {
+    if (!d->tabbedToolBar)
+        return;
     d->tabbedToolBar->showMainMenu("project_import_export_send");
     // dummy
     QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_import_export_send")->text());
