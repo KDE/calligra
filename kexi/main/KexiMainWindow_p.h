@@ -310,6 +310,12 @@ public:
         }
         if (m_contentWidget) {
             m_topLineSpacer->show();
+
+            QPalette contentWidgetPalette(m_contentWidget->palette());
+            contentWidgetPalette.setBrush(QPalette::Window, contentWidgetPalette.brush(QPalette::Base));
+            contentWidgetPalette.setBrush(QPalette::WindowText, contentWidgetPalette.brush(QPalette::Text));
+            m_contentWidget->setPalette(contentWidgetPalette);
+
             m_contentWidget->setAutoFillBackground(true);
             m_contentWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
             m_contentWidget->setContentsMargins(0, 0, 0, 0);
