@@ -130,7 +130,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     if (partManagerErrorMessages && !partManagerErrorMessages->isEmpty())
         partManagerErrorMessages->append("</ul></p>");
 
-   d-> rootItem->debugPrint();
+   //d->rootItem->debugPrint();
 }
 
 KexiProjectModel::~KexiProjectModel()
