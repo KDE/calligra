@@ -121,7 +121,6 @@ private:
     QVBoxLayout *lyr;
 };
 
-#ifdef KEXI_MODERN_STARTUP
 #include <qimageblitz/qimageblitz.h>
 #include <KFadeWidgetEffect>
 #include <QStyleOptionMenuItem>
@@ -483,7 +482,6 @@ private:
 };
 
 class KexiTabbedToolBarTabBar;
-#endif // KEXI_MODERN_STARTUP
 
 //! @internal
 class KexiTabbedToolBar::Private : public QObject
@@ -508,7 +506,6 @@ public:
 
     KToolBar *createToolBar(const char *name, const QString& caption);
 
-#ifdef KEXI_MODERN_STARTUP
 public slots:
     void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
@@ -519,7 +516,6 @@ public slots:
 public:
     KexiTabbedToolBarTabBar *customTabBar;
     QPointer<KexiMainMenu> mainMenu;
-#endif
 
     KexiTabbedToolBar *q;
     KActionCollection *ac;
@@ -541,7 +537,6 @@ public:
     KHelpMenu *helpMenu;
 };
 
-#ifdef KEXI_MODERN_STARTUP
 #include <kexiutils/styleproxy.h>
 #include <KTabBar>
 #include <QTabBar>
@@ -821,15 +816,11 @@ void KexiTabbedToolBar::Private::hideContentsOrMainMenu()
     }
 }
 
-#endif // KEXI_MODERN_STARTUP
-
 KToolBar *KexiTabbedToolBar::Private::createToolBar(const char *name, const QString& caption)
 {
     KToolBar *tbar = new KToolBar(q);
-#ifdef KEXI_MODERN_STARTUP
     // needed e.g. for Windows style to remove the toolbar's frame
     tbar->setStyle(customTabBar->customStyle);
-#endif
     toolbarsForName.insert(name, tbar);
     tbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     tbar->setObjectName(name);
@@ -841,11 +832,10 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
         : KTabWidget(parent)
         , d(new Private(this))
 {
-#ifdef KEXI_MODERN_STARTUP
     d->customTabBar = new KexiTabbedToolBarTabBar(this);
     setTabBar(d->customTabBar);
     setStyle(d->customTabBar->customStyle);
-#endif
+
     // from ktabwidget.cpp
     //! @todo KTabWidget::setTabBar() should be added with this code
     connect(tabBar(), SIGNAL(contextMenu( int, const QPoint & )), SLOT(contextMenu( int, const QPoint & )));
@@ -932,37 +922,11 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     searchLineEdit->setClearButtonShown(true);
     helpLyr->addWidget(searchLineEdit);
 
-#ifdef KEXI_MODERN_STARTUP
     // needed e.g. for Windows style to remove the toolbar's frame
     QWidget *dummyWidgetForMainMenu = new QWidget(this);
     dummyWidgetForMainMenu->setObjectName("kexi");
     addTab(dummyWidgetForMainMenu, i18nc("File menu", "&File"));
     addTab(new QWidget(this), QString()); // dummy for spacer
-#else
-    tbar = d->createToolBar("kexi", i18nc("Application name as menu entry", "Kexi"));
-    addAction(tbar, "options_configure");
-    addAction(tbar, "options_configure_keybinding");
-    addSeparatorAndAction(tbar, "help_about_app");
-    addAction(tbar, "help_about_kde");
-# ifdef KEXI_NO_REPORTBUG_COMMAND
-    //remove "bug report" action to avoid confusion for with commercial technical support
-    addSeparatorAndAction(tbar, "help_report_bug");
-# endif
-    addSeparatorAndAction(tbar, "quit");
-#endif // KEXI_MODERN_STARTUP
-
-#ifndef KEXI_MODERN_STARTUP
-    tbar = d->createToolBar("project", i18n("Project"));
-    addAction(tbar, "project_new");
-    addAction(tbar, "project_open");
-//! @todo re-add    addAction(tbar, "project_print");
-//! @todo re-add    addAction(tbar, "project_print_preview");
-//! @todo re-add    addAction(tbar, "project_print_setup");
-    //no "project_save" here...
-//! @todo re-add    addSeparatorAndAction(tbar, "project_saveas");
-//! @todo re-add    addSeparatorAndAction(tbar, "project_properties");
-    addSeparatorAndAction(tbar, "project_close");
-#endif
 
     if (!userMode) {
         d->createWidgetToolBar = d->createToolBar("create", i18n("Create"));
@@ -1191,14 +1155,12 @@ void KexiTabbedToolBar::slotCurrentChanged(int index)
     if (d->rolledUp) { // switching the tab rolls down
         slotTabDoubleClicked(index);
     }
-#ifdef KEXI_MODERN_STARTUP
     if (index == 0) { // main menu
         d->showMainMenu();
     }
     else {
         d->hideMainMenu();
     }
-#endif
 }
 
 void KexiTabbedToolBar::slotTabDoubleClicked(int index)

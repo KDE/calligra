@@ -3369,29 +3369,6 @@ void KexiMainWindow::slotProjectOpenRecent()
     cur_id = popup->insertItem("My example project 2", ++cur_id, cur_idx++);
     cur_id = popup->insertItem("My example project 3", ++cur_id, cur_idx++);
     */
-
-#ifndef KEXI_MODERN_STARTUP
-    //show recent databases
-    QMenu *popup = d->action_open_recent->menu();
-    popup->clear();
-#if 0
-    d->action_open_recent_projects_title_id = popup->insertTitle(i18n("Recently Opened Databases"));
-#endif
-// int action_open_recent_projects_title_index = popup->indexOf(d->action_open_recent_projects_title_id);
-// int count = popup->count();
-// int action_open_recent_connections_title_index = popup->indexOf(d->action_open_recent_connections_title_id);
-// for (int i=action_open_recent_projects_title_index+1;
-//  i<action_open_recent_connections_title_index; i++)
-// {
-//  popup->removeItemAt(action_open_recent_projects_title_index+1);
-// }
-
-// int cur_idx = action_open_recent_projects_title_index+1;
-    popup->addAction(KIcon("kexiproject_sqlite"), "My project 1");
-    popup->addAction(KIcon("kexiproject_sqlite"), "My project 2");
-    popup->addAction(KIcon("kexiproject_sqlite"), "My project 3");
-#endif
-
 #if 0
     //show recent connections
     d->action_open_recent_connections_title_id =

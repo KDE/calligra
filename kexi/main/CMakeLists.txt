@@ -15,6 +15,7 @@ find_package(QImageBlitz REQUIRED)
 
 set(keximain_LIB_SRCS 
 KexiMainWindow.cpp 
+KexiMenuWidget.cpp
 kexifinddialog.cpp
 kexistatusbar.cpp 
 kexinamewidget.cpp 
@@ -36,10 +37,6 @@ startup/KexiStartupDialogTemplatesPage.cpp
 #todo printing/kexisimpleprintpreviewwindow.cpp
 
 )
-
-if(KEXI_MODERN_STARTUP)
-    LIST(APPEND keximain_LIB_SRCS KexiMenuWidget.cpp)
-endif(KEXI_MODERN_STARTUP)
 
 kde4_add_ui_files(keximain_LIB_SRCS
   kexifinddialog.ui
