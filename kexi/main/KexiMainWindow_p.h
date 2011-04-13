@@ -158,9 +158,9 @@ protected:
         QWidget::resizeEvent(event);
         //return;
         QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
-        kDebug() << pos();
-        kDebug() << mainWindow->mapFromGlobal(pos());
-        kDebug() << mapTo(mainWindow, QPoint(0,0));
+//         kDebug() << pos();
+//         kDebug() << mainWindow->mapFromGlobal(pos());
+//         kDebug() << mapTo(mainWindow, QPoint(0,0));
         QRect r(
             mapTo(mainWindow, QPoint(0,0)),
             size()
@@ -267,19 +267,21 @@ public:
         m_content = 0;
         m_topLineSpacer = 0;
         m_topLine = 0;
+        m_selectFirstItem = false;
     }
     ~KexiMainMenu() {
         delete (QWidget*)m_contentWidget;
     }
     virtual bool eventFilter(QObject * watched, QEvent* event) {
-        kDebug() << m_contentWidget;
+        // kDebug() << m_contentWidget;
         if (event->type() == QEvent::MouseButtonPress && watched == m_content && !m_contentWidget) {
             emit contentAreaPressed();
         }
         else if (event->type() == QEvent::KeyPress) {
             QKeyEvent* ke = static_cast<QKeyEvent*>(event);
-            if ((ke->key() & Qt::Key_Escape) && ke->modifiers() == Qt::NoModifier) {
-                emit contentAreaPressed();
+            if ((ke->key() == Qt::Key_Escape) && ke->modifiers() == Qt::NoModifier) {
+                emit hideContentsRequested();
+                return true;
             }
         }
         return QWidget::eventFilter(watched, event);
@@ -314,6 +316,7 @@ public:
             m_contentLayout->addWidget(m_contentWidget);
             m_contentLayout->setCurrentWidget(m_contentWidget);
             m_contentWidget->setFocus();
+            m_contentWidget->installEventFilter(this);
         }
         else {
             if (m_topLineSpacer) {
@@ -332,6 +335,10 @@ public:
         }
     }
 
+    const QWidget *contentWidget() const {
+        return m_contentWidget;
+    }
+
     void updateTopLineGeometry()
     {
         int tab0width = style()->objectName() == "oxygen"
@@ -346,8 +353,23 @@ public:
         m_persistentlySelectedAction->setPersistentlySelected(set);
     }
 
+/*    void setActiveAction(QAction* action = 0) {
+        if (!action && !m_menuWidget->actions().isEmpty()) {
+            action = actions().first();
+        }
+        if (action) {
+            m_menuWidget->setActiveAction(action);
+        }
+    }*/
+
+    void selectFirstItem() {
+        m_selectFirstItem = true;
+    }
+
 signals:
     void contentAreaPressed();
+    void hideContentsRequested();
+
 protected:
     virtual void showEvent(QShowEvent * event) {
         if (!m_initialized) {
@@ -357,6 +379,9 @@ protected:
             hlyr->setSpacing(0);
             hlyr->setMargin(0);
             m_menuWidget = new KexiMenuWidget;
+            m_menuWidget->installEventFilter(this);
+            m_menuWidget->setFocusPolicy(Qt::StrongFocus);
+            setFocusProxy(m_menuWidget);
             m_menuWidget->setFrame(false);
             m_menuWidget->setAutoFillBackground(true);
             int leftmargin, topmargin, rightmargin, bottommargin;
@@ -418,6 +443,11 @@ protected:
         }
         m_contentOpacityAnimation->start();
         QWidget::showEvent(event);
+        if (m_selectFirstItem && !m_menuWidget->actions().isEmpty()) {
+            QAction* action = m_menuWidget->actions().first();
+            m_menuWidget->setActiveAction(action);
+            m_selectFirstItem = false;
+        }
     }
 
 //     virtual void hideEvent(QHideEvent * event) {
@@ -440,6 +470,7 @@ private:
     QPointer<QPropertyAnimation> m_contentOpacityAnimation;
     QVBoxLayout* m_mainContentLayout;
     QPointer<KexiMenuWidgetAction> m_persistentlySelectedAction;
+    bool m_selectFirstItem;
 };
 
 class KexiTabbedToolBarTabBar;
@@ -472,6 +503,7 @@ public:
 public slots:
     void showMainMenu(const char* actionName = 0);
     void hideMainMenu();
+    void hideContentsOrMainMenu();
     void toggleMainMenu();
     void updateMainMenuGeometry();
 
@@ -711,12 +743,18 @@ void KexiTabbedToolBar::Private::showMainMenu(const char* actionName)
     if (!mainMenu) {
         mainMenu = new KexiMainMenu(q, mainWindow);
         connect(mainMenu, SIGNAL(contentAreaPressed()), this, SLOT(hideMainMenu()));
+        connect(mainMenu, SIGNAL(hideContentsRequested()), this, SLOT(hideContentsOrMainMenu()));
     }
     updateMainMenuGeometry();
-    if (actionName)
+    if (actionName) {
         q->selectMainMenuItem(actionName);
+    }
+    else {
+        mainMenu->selectFirstItem();
+    }
     //mainMenu->setContent(0);
     mainMenu->show();
+    mainMenu->setFocus();
 }
 
 void KexiTabbedToolBar::Private::updateMainMenuGeometry()
@@ -726,15 +764,15 @@ void KexiTabbedToolBar::Private::updateMainMenuGeometry()
     QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
     KexiTabbedToolBarTabBar *tabBar = static_cast<KexiTabbedToolBarTabBar*>(q->tabBar());
     QPoint pos = q->mapToGlobal(QPoint(0, tabBar->originalTabSizeHint(0).height() - 1));
-    kDebug() << "1." << pos;
+//     kDebug() << "1." << pos;
     pos = mainWindow->mapFromGlobal(pos);
-    kDebug() << "2." << pos;
-    kDebug() << "3." << q->pos();
+//     kDebug() << "2." << pos;
+//     kDebug() << "3." << q->pos();
 
     QStyleOptionTab ot;
     ot.initFrom(tabBar);
     int overlap = tabBar->style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &ot, tabBar) - 2;
-    kDebug() << "4. overlap=" << overlap;
+//     kDebug() << "4. overlap=" << overlap;
 
     mainMenu->setGeometry(0, pos.y() - overlap /*- q->y()*/,
                           mainWindow->width(),
@@ -759,6 +797,18 @@ void KexiTabbedToolBar::Private::hideMainMenu()
     mainMenu->hide();
     //mainMenu->deleteLater();
     mainMenu->setContent(0);
+}
+
+void KexiTabbedToolBar::Private::hideContentsOrMainMenu()
+{
+    if (!mainMenu || !mainMenu->isVisible())
+        return;
+    if (mainMenu->contentWidget()) {
+        mainMenu->setContent(0);
+    }
+    else {
+        hideMainMenu();
+    }
 }
 
 #endif // KEXI_MODERN_STARTUP
@@ -950,6 +1000,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
       setPalette( pal );*/
 
     setCurrentWidget(widget(KEXITABBEDTOOLBAR_SPACER_TAB_INDEX + 1)); // the default
+    setFocusPolicy(Qt::NoFocus);
 }
 
 KexiTabbedToolBar::~KexiTabbedToolBar()
@@ -1032,8 +1083,21 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         break;
     case QEvent::KeyPress: {
         QKeyEvent* ke = static_cast<QKeyEvent*>(event);
-        if ((ke->key() & Qt::Key_Escape) && ke->modifiers() == Qt::NoModifier) {
-            d->hideMainMenu();
+//         kDebug() << "**********" << QString::number(ke->key(), 16)
+//                  << QKeySequence::mnemonic(tabText(0))[0];
+        if (QKeySequence::mnemonic(tabText(0)) == QKeySequence(ke->key())) {
+//             kDebug() << "eat the &File accel";
+            if (!d->mainMenu || !d->mainMenu->isVisible()) {
+                d->showMainMenu();
+            }
+            /*this could be unexpected:
+            else if (d->mainMenu && d->mainMenu->isVisible()) {
+                d->hideMainMenu();
+            }*/
+            return true;
+        }
+        if (d->mainMenu && d->mainMenu->isVisible() && (ke->key() == Qt::Key_Escape) && ke->modifiers() == Qt::NoModifier) {
+            d->hideContentsOrMainMenu();
             return true;
         }
         break;
@@ -1048,9 +1112,16 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
     case QEvent::Shortcut: {
         QShortcutEvent *se = static_cast<QShortcutEvent*>(event);
         if (watched == tabBar() && QKeySequence::mnemonic(tabText(0)) == se->key()) {
-            kDebug() << "eat the &File accel";
-            d->showMainMenu();
-            return true;
+//             kDebug() << "eat the &File accel";
+            if (!d->mainMenu || !d->mainMenu->isVisible()) {
+                d->showMainMenu();
+                return true;
+            }
+            /*this could be unexpected:
+            else if (d->mainMenu && d->mainMenu->isVisible()) {
+                d->hideMainMenu();
+                return true;
+            }*/
         }
         break;
     }

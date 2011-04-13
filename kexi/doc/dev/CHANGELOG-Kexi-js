@@ -89,11 +89,12 @@ TODO: remove contrasting-color creation code from KexiUtils, and use KColorSchem
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
-2011-04-11
+2011-04-11..12
 Main Window
 *Modern Menu
-**Escape key closes the main menu
+**Escape key closes the contents area, then second press closes the main menu
 **enable Alt+F as accelerator for the main menu
+**menu is focused after opening and first menu item is highlighted
 
 2011-04-10
 Main Window
