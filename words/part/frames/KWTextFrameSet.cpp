@@ -63,7 +63,7 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
 
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     m_document->setDocumentLayout(lay);
-    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(layout()), Qt::QueuedConnection);
+    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 
     KoTextDocument doc(m_document);
     doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
