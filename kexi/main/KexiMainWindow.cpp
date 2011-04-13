@@ -1194,23 +1194,6 @@ void KexiMainWindow::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(slotSettings()));
     setupMainMenuActionShortcut(action, SLOT(slotSettings()));
 
-    //HELP MENU
-    // add help menu actions... (KexiTabbedToolBar depends on them)
-    d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(),
-                                true/*showWhatsThis*/, ac);
-    QAction* help_report_bug_action = ac->action("help_report_bug");
-    help_report_bug_action->setIcon(KIcon("tools-report-bug")); // good icon for toolbar
-    help_report_bug_action->setWhatsThis(i18n("Shows bug reporting tool for Kexi application."));
-    QAction* help_whats_this_action =  ac->action("help_whats_this");
-    help_whats_this_action->setWhatsThis(i18n("Shows \"What's This\" tool."));
-    QAction* help_contents_action = ac->action("help_contents");
-    help_contents_action->setText(i18n("Help"));
-    help_contents_action->setWhatsThis(i18n("Shows Kexi Handbook."));
-    QAction* help_about_app_action = ac->action("help_about_app");
-    help_about_app_action->setWhatsThis(i18n("Shows information about Kexi application."));
-    QAction* help_about_kde_action = ac->action("help_about_kde");
-    help_about_kde_action->setWhatsThis(i18n("Shows information about K Desktop Environment."));
-
 #if 0//js: todo reenable later
     KStandardAction::tipOfDay(this, SLOT(slotTipOfTheDayAction()), actionCollection())
     ->setWhatsThis(i18n("This shows useful tips on the use of this application."));
@@ -3138,6 +3121,7 @@ KexiMainWindow::createKexiProject(KexiProjectData* new_data)
 KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
                                        QString* shortcutFileName)
 {
+    Q_UNUSED(shortcutFileName);
     if (!d->tabbedToolBar)
         return 0;
     d->tabbedToolBar->showMainMenu("project_new");

@@ -32,6 +32,7 @@
 
 #include <KToolBar>
 #include <KColorUtils>
+#include <KHelpMenu>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QPainter>
@@ -68,6 +69,8 @@ public:
     bool mainMenuVisible() const;
     
     QRect tabRect(int index) const { return tabBar()->tabRect(index); }
+
+    KHelpMenu *helpMenu() const;
 
 public slots:
     void setMainMenuContent(QWidget *w);
@@ -535,6 +538,7 @@ public:
     QPropertyAnimation tabBarAnimation;
     QGraphicsOpacityEffect tabBarOpacityEffect;
     int rolledUpIndex;
+    KHelpMenu *helpMenu;
 };
 
 #ifdef KEXI_MODERN_STARTUP
@@ -864,7 +868,6 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     d->ac = KexiMainWindowIface::global()->actionCollection();
     const bool userMode = KexiMainWindowIface::global()->userMode();
     KToolBar *tbar;
-    QAction* a;
 
     KexiUtils::smallFont(this/*init*/);
     slotSettingsChanged(KGlobalSettings::FontChanged);
@@ -881,23 +884,60 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
       helpToolBar->addAction(a);
       setCornerWidget(helpToolBar, Qt::TopRightCorner);*/
 
+    // help area
     QWidget *helpWidget = new QWidget(this);
     helpWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     QHBoxLayout *helpLyr = new QHBoxLayout(helpWidget);
-    helpLyr->setContentsMargins(0, 0, 0, 2);
-    helpLyr->setSpacing(2);
-    a = d->ac->action("help_whats_this");
-    helpLyr->addWidget(new KexiSmallToolButton(a, helpWidget));
-    a = d->ac->action("help_contents");
-    helpLyr->addWidget(new KexiSmallToolButton(a, helpWidget));
+    helpLyr->setContentsMargins(0, 0, 0, 0);
+
+    // * HELP MENU
+    // add help menu actions... (KexiTabbedToolBar depends on them)
+    d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(),
+                                true/*showWhatsThis*/, d->ac);
+    QAction* help_report_bug_action = d->ac->action("help_report_bug");
+    help_report_bug_action->setIcon(KIcon("tools-report-bug")); // good icon for toolbar
+    help_report_bug_action->setWhatsThis(i18n("Shows bug reporting tool for Kexi application."));
+    QAction* help_whats_this_action =  d->ac->action("help_whats_this");
+    help_whats_this_action->setWhatsThis(i18n("Activates \"What's This\" tool."));
+    QAction* help_contents_action = d->ac->action("help_contents");
+    help_contents_action->setText(i18n("Help"));
+    help_contents_action->setWhatsThis(i18n("Shows Kexi Handbook."));
+    QAction* help_about_app_action = d->ac->action("help_about_app");
+    help_about_app_action->setWhatsThis(i18n("Shows information about Kexi application."));
+    QAction* help_about_kde_action = d->ac->action("help_about_kde");
+    help_about_kde_action->setWhatsThis(i18n("Shows information about K Desktop Environment."));
+
+    KexiSmallToolButton *btn = new KexiSmallToolButton(KIcon(help_contents_action->icon()), QString(), helpWidget);
+    btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    btn->setPopupMode(QToolButton::InstantPopup);
+    btn->setToolTip(i18n("Show Help menu"));
+    btn->setWhatsThis(i18n("Shows Help menu"));
+    btn->setFocusPolicy(Qt::NoFocus);
+    QStyleOptionToolButton opt;
+    opt.initFrom(btn);
+    int w = btn->sizeHint().width();
+    int wAdd = btn->style()->pixelMetric(QStyle::PM_MenuButtonIndicator, &opt, btn);
+    //kDebug() << "++++" << w << wAdd;
+    if (w <= (2 * (wAdd + 1))) {
+        w += wAdd + 2;
+    }
+    btn->setMinimumWidth(w);
+    QShortcut *helpShortcut = new QShortcut(QKeySequence(i18nc("Help shortcut", "Alt+H")), this);
+    connect(helpShortcut, SIGNAL(activated()), btn, SLOT(showMenu()));
+    helpLyr->addWidget(btn);
+    btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
+    KLineEdit *searchLineEdit = new KLineEdit;
+    searchLineEdit->setPlaceholderText(tr("Search"));
+    searchLineEdit->setClearButtonShown(true);
+    helpLyr->addWidget(searchLineEdit);
 
 #ifdef KEXI_MODERN_STARTUP
     // needed e.g. for Windows style to remove the toolbar's frame
     QWidget *dummyWidgetForMainMenu = new QWidget(this);
     dummyWidgetForMainMenu->setObjectName("kexi");
     addTab(dummyWidgetForMainMenu, i18nc("File menu", "&File"));
-    addTab(new QWidget(this), QString());
+    addTab(new QWidget(this), QString()); // dummy for spacer
 #else
     tbar = d->createToolBar("kexi", i18nc("Application name as menu entry", "Kexi"));
     addAction(tbar, "options_configure");
@@ -1017,6 +1057,11 @@ KexiTabbedToolBar::~KexiTabbedToolBar()
 bool KexiTabbedToolBar::mainMenuVisible() const
 {
     return d->mainMenu && d->mainMenu->isVisible();
+}
+
+KHelpMenu* KexiTabbedToolBar::helpMenu() const
+{
+    return d->helpMenu;
 }
 
 void KexiTabbedToolBar::slotSettingsChanged(int category)
