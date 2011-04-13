@@ -122,7 +122,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     data->setDocument(m_document, false);
 
     if (m_textFrameSetType != KWord::OtherTextFrameSet) {
-//         frame->shape()->setGeometryProtected(true);
+        frame->shape()->setGeometryProtected(true);
     }
 
 #if 0
