@@ -89,12 +89,21 @@ TODO: remove contrasting-color creation code from KexiUtils, and use KColorSchem
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
-2011-04-11..12
+Tabbed toolbar TODOS:
+*add tab hiding to the API
+**can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
+*should we remove the accelerators from the tabs?
+
+2011-04-11..13
 Main Window
 *Modern Menu
 **Escape key closes the contents area, then second press closes the main menu
 **enable Alt+F as accelerator for the main menu
 **menu is focused after opening and first menu item is highlighted
+**set contents area Window brush to Base and WindowText brush to Text
+***this web-like style harmonizes the with some white pages like 'open recent' (http://community.kde.org/File:Calligra_startup_words_simplified_menu_mockup_jstaniek.png)
+*Tabbed toolbar
+**focusing removed to fix usability with the main menu (arrows)
 
 2011-04-10
 Main Window
