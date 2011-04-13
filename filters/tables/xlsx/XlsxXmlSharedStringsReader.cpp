@@ -166,6 +166,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_sst()
  - [done] r (Rich Text Run) §18.4.4
  - rPh (Phonetic Run) §18.4.6
  - [done] t (Text) §18.4.12
+
  Parent elements:
  - [done] sst (§18.4.9)
 
