@@ -28,6 +28,7 @@
 #include "KWRootAreaProvider.h"
 #include "KWDocument.h"
 #include "KWDocument_p.h"
+#include "KWCopyShape.h"
 
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
@@ -103,11 +104,15 @@ KWTextFrameSet::~KWTextFrameSet()
 void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
     Q_ASSERT(frame->shape());
-    Q_ASSERT(frame->shape()->userData());
     Q_ASSERT(frame->frameSet() == this);
     Q_ASSERT(frames().contains(frame));
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
-    Q_ASSERT(data);
+    if (!data) {
+        // copy-frames don't need to be setup cause they only point to the referenced KWFrame which
+        // contains everything needed and which was or will be proper setup.
+        Q_ASSERT(dynamic_cast<KWCopyShape*>(frame->shape()));
+        return;
+    }
 
     // Create a new KWPage for the KWFrame if there is no page already
     KWPage page = m_pageManager->page(frame->shape());
