@@ -194,6 +194,7 @@ public:
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
+    QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);
 
     /**
      * Apply the logic defined in MS-ODRAW subsection 2.2.2 to the provided
@@ -216,7 +217,5 @@ inline qreal toQReal(const MSO::FixedPoint& f)
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);
-
-QString dashStyle(quint32 lineDashing, KoGenStyles& styles);
 
 #endif

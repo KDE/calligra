@@ -156,45 +156,48 @@ public:
                              KoGenStyles::DontAddNumberToName);
     }
 };
-/**
-  * Collector that retrieves all dash styles used in the document.
-  * TODO: handle LineDashStyle and top, left, rigth and bottom line dashes
-  **/
-class StrokeDashCollector {
-public:
-    KoGenStyles& styles;
-    const PptToOdp& pto;
-    QMap<const MSO::DrawingGroupContainer*, QString> globalStrokeDashNames;
-    QMap<const MSO::OfficeArtSpContainer*, QString> strokeDashNames;
 
-    StrokeDashCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {}
+// NOTE: OBSOLETE
 
-    void add(const MSO::DrawingGroupContainer& o, const MSO::OfficeArtFOPTEChoice& t) {
-        const QString name = add(t);
-        if (!name.isEmpty()) globalStrokeDashNames[&o] = name;
-    }
-    void add(const MSO::OfficeArtSpContainer& o, const MSO::OfficeArtFOPTEChoice& t) {
-        const QString name = add(t);
-        if (!name.isEmpty()) strokeDashNames[&o] = name;
-    }
-    QString add(const MSO::OfficeArtFOPTEChoice& t) {
-        quint32 lineDashing = 0;
-        const MSO::LineDashing* ld1 = t.anon.get<MSO::LineDashing>();
-        if (ld1) lineDashing = ld1->lineDashing;
-        /* TODO
-        const LineBottomDashing* ld2 = t.anon.get<LineBottomDashing>();
-        if (ld2) lineDashing = ld2->lineDashing;
-        const LineTopDashing* ld3 = t.anon.get<LineTopDashing>();
-        if (ld3) lineDashing = ld3->lineDashing;
-        const LineLeftDashing* ld4 = t.anon.get<LineLeftDashing>();
-        if (ld4) lineDashing = ld4->lineDashing;
-        const LineRightDashing* ld5 = t.anon.get<LineRightDashing>();
-        if (ld5) lineDashing = ld5->lineDashing;
-        */
-        //const LineDashingStyle* lds = t.anon.get<LineDashingStyle>();
-        return dashStyle(lineDashing, styles);
-    }
-};
+/* /\** */
+/*  * Collector that retrieves all dash styles used in the document. */
+/*  * TODO: handle LineDashStyle and top, left, rigth and bottom line dashes */
+/*  *\/ */
+/* class StrokeDashCollector { */
+/* public: */
+/*     KoGenStyles& styles; */
+/*     const PptToOdp& pto; */
+/*     QMap<const MSO::DrawingGroupContainer*, QString> globalStrokeDashNames; */
+/*     QMap<const MSO::OfficeArtSpContainer*, QString> strokeDashNames; */
+
+/*     StrokeDashCollector(KoGenStyles& s, const PptToOdp& p) :styles(s), pto(p) {} */
+
+/*     void add(const MSO::DrawingGroupContainer& o, const MSO::OfficeArtFOPTEChoice& t) { */
+/*         const QString name = add(t); */
+/*         if (!name.isEmpty()) globalStrokeDashNames[&o] = name; */
+/*     } */
+/*     void add(const MSO::OfficeArtSpContainer& o, const MSO::OfficeArtFOPTEChoice& t) { */
+/*         const QString name = add(t); */
+/*         if (!name.isEmpty()) strokeDashNames[&o] = name; */
+/*     } */
+/*     QString add(const MSO::OfficeArtFOPTEChoice& t) { */
+/*         quint32 lineDashing = 0; */
+/*         const MSO::LineDashing* ld1 = t.anon.get<MSO::LineDashing>(); */
+/*         if (ld1) lineDashing = ld1->lineDashing; */
+/*         /\* TODO */
+/*         const LineBottomDashing* ld2 = t.anon.get<LineBottomDashing>(); */
+/*         if (ld2) lineDashing = ld2->lineDashing; */
+/*         const LineTopDashing* ld3 = t.anon.get<LineTopDashing>(); */
+/*         if (ld3) lineDashing = ld3->lineDashing; */
+/*         const LineLeftDashing* ld4 = t.anon.get<LineLeftDashing>(); */
+/*         if (ld4) lineDashing = ld4->lineDashing; */
+/*         const LineRightDashing* ld5 = t.anon.get<LineRightDashing>(); */
+/*         if (ld5) lineDashing = ld5->lineDashing; */
+/*         *\/ */
+/*         //const LineDashingStyle* lds = t.anon.get<LineDashingStyle>(); */
+/*         return dashStyle(lineDashing, styles); */
+/*     } */
+/* }; */
 
 
 #endif
