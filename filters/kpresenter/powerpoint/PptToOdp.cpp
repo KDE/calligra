@@ -2498,13 +2498,12 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     ODrawToOdf odrawtoodf(drawclient);
 
     //NOTE: The shape seems to provide boolean properties which are missing for
-    //shapes contained in spgr (MS Office 2003 specific).
+    //shapes contained in spgr (MS Office 2003 specific).  However problems
+    //were detected on both 2003/2007 files, so this approach got disabled.
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
-        const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
-	//FIXME: Found problems with the approach of using the shape to access
-	//any missing properties.  Disabling of this approach would cause regressions.
-        drawclient.setDrawClientData(master, slide, 0, 0, shape, m_currentSlideTexts);
+//         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
+        drawclient.setDrawClientData(master, slide, 0, 0, 0, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
 

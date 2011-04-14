@@ -427,47 +427,36 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     kDebug(30513) << "Selected properties: ";
     kDebug(30513) << "pib: " << ds.pib();
 
-    // textbox can be msosptTextBox or msosptRectangle or ...
-    if (!o.clientTextbox.isNull()) {
-        kDebug(30513)<< "processing text box";
-        parseTextBox(o, out);
-        return;
-    }
-
-    switch (o.shapeProp.rh.recInstance)
-    {
-        case msosptRectangle: {
-            //TODO: this looks suspicious, tests REQUIRED !
-
-            kDebug(30513)<< "processing rectangle";
-            //check group shape boolean properties for details
-            if (ds.fHorizRule()) {
-                kDebug(30513)<< "processing a line shape";
-                processLineShape(o, out);
-            } else {
-                processRectangle(o, out);
-            }
-            break;
+    switch (o.shapeProp.rh.recInstance) {
+    case msosptTextBox:
+        kDebug(30513)<< "processing TextBox";
+        processTextBox(o, out);
+        break;
+    case msosptRectangle:
+        kDebug(30513)<< "processing Rectangle";
+        //check group shape boolean properties for details
+        if (ds.fHorizRule()) {
+            kDebug(30513)<< "processing a LineShape";
+            processLineShape(o, out);
+        } else {
+            processRectangle(o, out);
         }
-        case msosptEllipse:
-            kDebug(30513)<< "processing ellipse";
-            break;
-        case msosptPictureFrame:
-            kDebug(30513)<< "processing a frame shape";
-            if (out.m_inline) {
-                processInlinePictureFrame(o, out);
-	    }
-            else {
-                processFloatingPictureFrame(o, out);
-            }
-            break;
-        case msosptHostControl:
-            kDebug(30513)<< "processing host control";
-            parseTextBox(o, out);
-            break;
-        default:
-            odrawtoodf.processDrawingObject(o, out);
-            break;
+        break;
+    case msosptPictureFrame:
+        kDebug(30513)<< "processing a FrameShape";
+        if (out.m_inline) {
+            processInlinePictureFrame(o, out);
+        } else {
+            processFloatingPictureFrame(o, out);
+        }
+        break;
+    case msosptHostControl:
+        kDebug(30513)<< "processing Host Control";
+        processTextBox(o, out);
+        break;
+    default:
+        odrawtoodf.processDrawingObject(o, out);
+        break;
     }
 }
 
@@ -993,7 +982,7 @@ void KWordGraphicsHandler::SetZIndexAttribute(DrawingWriter& out)
     out.xml.addAttribute("draw:z-index",m_zIndex);
 }
 
-void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
+void KWordGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     QString styleName;
     DrawStyle ds(&m_officeArtDggContainer, &o);
