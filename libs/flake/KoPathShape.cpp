@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoOdfWorkaround.h"
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
 #include "KoPathPoint.h"
@@ -198,10 +199,15 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
 
     if (styleStack.hasProperty(KoXmlNS::svg, "fill-rule")) {
         QString rule = styleStack.property(KoXmlNS::svg, "fill-rule");
-        d->fillRule = rule == "nonzero" ?  Qt::WindingFill : Qt::OddEvenFill;
+        d->fillRule = (rule == "nonzero") ?  Qt::WindingFill : Qt::OddEvenFill;
     } else {
         d->fillRule = Qt::WindingFill;
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixMissingFillRule(d->fillRule, context);
+#endif
     }
+
+
 }
 
 QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element) const
@@ -718,7 +724,6 @@ KoPathPoint * KoPathShape::pointByIndex(const KoPathPointIndex &pointIndex) cons
     if (subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size())
         return 0;
 
-qDebug() << "subpath is correctly returned by KoPathShape::pointByIndex()";
     return subpath->at(pointIndex.second);
 }
 

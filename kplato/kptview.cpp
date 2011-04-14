@@ -1679,7 +1679,7 @@ void View::slotMoveScheduleManager( ScheduleManager *sm, ScheduleManager *parent
 
 void View::slotAddSubTask()
 {
-    Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
+    Task * node = getProject().createTask( getPart() ->config().taskDefaults() );
     SubTaskAddDialog *dia = new SubTaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotAddSubTaskFinished(int)));
     dia->show();
@@ -1702,7 +1702,7 @@ void View::slotAddSubTaskFinished( int result )
 
 void View::slotAddTask()
 {
-    Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
+    Task * node = getProject().createTask( getPart() ->config().taskDefaults() );
     TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotAddTaskFinished(int)));
     dia->show();
@@ -1725,7 +1725,7 @@ void View::slotAddTaskFinished( int result )
 
 void View::slotAddMilestone()
 {
-    Task * node = getProject().createTask( currentTask() );
+    Task * node = getProject().createTask();
     node->estimate() ->clear();
 
     TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
@@ -1751,7 +1751,7 @@ void View::slotAddMilestoneFinished( int result )
 
 void View::slotAddSubMilestone()
 {
-    Task * node = getProject().createTask( currentTask() );
+    Task * node = getProject().createTask();
     node->estimate() ->clear();
 
     SubTaskAddDialog *dia = new SubTaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );

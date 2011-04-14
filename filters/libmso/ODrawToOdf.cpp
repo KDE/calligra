@@ -123,14 +123,12 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
 
 namespace
 {
-const char* dashses[11] = {
-    "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
-    "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
-};
 const char* arrowHeads[6] = {
     "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
     "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
 };
+
+
 QString format(double v)
 {
     static const QString f("%1");
@@ -138,11 +136,14 @@ QString format(double v)
     static const QRegExp r("\\.?0+$");
     return f.arg(v, 0, 'f').replace(r, e);
 }
+
+
 QString pt(double v)
 {
     static const QString pt("pt");
     return format(v) + pt;
 }
+
 QString percent(double v)
 {
     return format(v) + '%';
@@ -313,7 +314,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         } else if (lineDashing > 0 && lineDashing < 11) {
             style.addProperty("draw:stroke", "dash", gt);
             // draw:stroke-dash from 2.3.8.17 lineDashing
-            style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
+            style.addProperty("draw:stroke-dash", defineDashStyle(lineDashing, styles), gt);
         } else {
             style.addProperty("draw:stroke", "solid", gt);
         }
@@ -640,7 +641,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
             }
             break;
 	}
-        //TODO: 
+        //TODO:
         case 0x03:
         case 0x04:
         case 0x05:
@@ -718,4 +719,76 @@ const char* getGradientRendering(quint32 fillType)
     default:
         return "axial";
     }
+}
+
+QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
+{
+    if (lineDashing <= 0 || lineDashing > 10) {
+        return QString();
+    }
+
+    KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
+    switch (lineDashing) {
+    case 0: // msolineSolid, not a real stroke dash
+        break;
+    case 1: // msolineDashSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:distance", "100%");
+        break;
+    case 2: // msolineDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "200%");
+        break;
+    case 3: // msolineDashDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 4: // msolineDashDotDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 5: // msolineDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 6: // msolineDashGEL
+        strokeDash.addAttribute("draw:dots1", "4");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 7: // msolineLongDashGEL
+        strokeDash.addAttribute("draw:dots1", "8");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 8: // msolineDashDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 9: // msolineLongDashDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "800%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 10: // msolineLongDashDotDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "800%");
+        strokeDash.addAttribute("draw:dots2", "2");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    };
+
+    if (lineDashing < 5) {
+        strokeDash.addAttribute("draw:distance", "100%");
+    } else {
+        strokeDash.addAttribute("draw:distance", "300%");
+    }
+    return styles.insert(strokeDash, QString("Dash_20_%1").arg(lineDashing),
+                         KoGenStyles::DontAddNumberToName);
 }

@@ -24,6 +24,7 @@
 
 #include <KoCellStyle.h>
 #include <KoBorder.h>
+#include <KoGenStyle.h>
 
 #include <QColor>
 #include <QFlags>

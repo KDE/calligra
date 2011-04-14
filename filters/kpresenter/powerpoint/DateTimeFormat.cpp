@@ -22,13 +22,19 @@
 *
 */
 
-#include <qdatetime.h>
-#include <KoXmlWriter.h>
-#include <QBuffer>
-#include <QString>
-#include <iostream>
+// Own
 #include "DateTimeFormat.h"
 
+// C++
+#include <iostream>
+
+// Qt
+#include <qdatetime.h>
+#include <QBuffer>
+#include <QString>
+
+// Calligra
+#include <KoXmlWriter.h>
 
 
 DateTimeFormat::DateTimeFormat(int dateTimeFormatId)

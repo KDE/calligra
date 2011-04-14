@@ -101,7 +101,7 @@ void ResourceModelTester::initTestCase()
     m_resource->setCalendar( m_calendar );
     m_project->addResource( g, m_resource );
 
-    m_task = m_project->createTask( m_project );
+    m_task = m_project->createTask();
     m_task->setName( "T1" );
     m_project->addTask( m_task, m_project );
     m_task->estimate()->setUnit( Duration::Unit_h );
