@@ -180,7 +180,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     */
 
     // force repaint
-//     rootArea->associatedShape()->update();
+    rootArea->associatedShape()->update();
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
