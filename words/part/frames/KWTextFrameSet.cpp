@@ -61,11 +61,6 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
     Q_ASSERT(m_kwordDocument);
     setName(KWord::frameSetTypeName(m_textFrameSetType));
 
-    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
-    m_document->setDocumentLayout(lay);
-    lay->setLayoutStrategy(m_textFrameSetType == KWord::MainTextFrameSet ? KoTextDocumentLayout::ScheduleLayouts : KoTextDocumentLayout::LayoutDirect);
-    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
-
     KoTextDocument doc(m_document);
     doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
     KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
@@ -73,6 +68,14 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
     KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
     doc.setChangeTracker(changeTracker);
     doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
+
+    // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
+    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
+    m_document->setDocumentLayout(lay);
+    lay->setLayoutStrategy(m_textFrameSetType == KWord::MainTextFrameSet ? KoTextDocumentLayout::ScheduleLayouts : KoTextDocumentLayout::LayoutDirect);
+    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
+
+    kDebug()<<">>"<<m_kwordDocument->inlineTextObjectManager();
 
     m_document->setUseDesignMetrics(true);
 }
@@ -175,6 +178,14 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         }
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
+#else
+    KoTextDocument doc(m_document);
+    KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    Q_ASSERT(doc.styleManager() == styleManager);
+    KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    Q_ASSERT(doc.changeTracker() == changeTracker);
+    Q_ASSERT(doc.inlineTextObjectManager() == m_kwordDocument->inlineTextObjectManager());
+    Q_ASSERT(doc.undoStack() == m_kwordDocument->resourceManager()->undoStack());
 #endif
 }
 
