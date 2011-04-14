@@ -115,6 +115,7 @@ public slots:
     void slotNodeRemoved( Node *node );
     void slotNodeChanged( Node *node );
     void slotResourceChanged( Resource *resource );
+    void slotResourceChanged( const Resource *resource );
 
 protected:
     double bcwsEffort( int day ) const;
