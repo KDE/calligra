@@ -31,8 +31,8 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
         path = "PP97_DUALSTORAGE" + path;
     }
     POLE::Stream stream(&storage, path);
-    if (stream.fail() && (stream.size() > 0)) {
-        qDebug() << "Error: Detected INVALID " << streampath << "stream";
+    if (stream.fail()) {
+        qDebug() << "Unable to construct " << streampath << "stream";
         return false;
     }
 
@@ -102,7 +102,8 @@ parsePictures(POLE::Storage& storage, PicturesStream& pps)
 {
     QBuffer buffer;
     if (!readStream(storage, "/Pictures", buffer)) {
-        return false;
+        qDebug() << "Failed to open /Pictures stream, no big deal (OPTIONAL).";
+        return true;
     }
     LEInputStream stream(&buffer);
     try {

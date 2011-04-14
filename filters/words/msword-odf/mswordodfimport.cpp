@@ -101,7 +101,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     //Data Stream
     QBuffer buff3;
     if (!readStream(storage, "/Data", buff3)) {
-        return KoFilter::InvalidFormat;
+        kDebug(30513) << "Failed to open /Data stream, no big deal (OPTIONAL).";
     }
     LEInputStream datastm(&buff3);
 
@@ -304,8 +304,8 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
 {
     std::string path(streampath);
     POLE::Stream stream(&storage, path);
-    if (stream.fail() && (stream.size() > 0)) {
-        kError(30513) << "Error: Detected INVALID " << streampath << "stream";
+    if (stream.fail()) {
+        kError(30513) << "Unable to construct " << streampath << "stream";
         return false;
     }
 

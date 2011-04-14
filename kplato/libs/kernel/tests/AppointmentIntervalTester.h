@@ -34,6 +34,7 @@ private slots:
     void addAppointment();
     void addTangentIntervals();
     void subtractList();
+    void subtractListMidnight();
 
 };
 

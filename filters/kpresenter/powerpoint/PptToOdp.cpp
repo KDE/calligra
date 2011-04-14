@@ -1683,8 +1683,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // draw:marker
     defineArrow(styles);
     // draw:stroke-dash
-    StrokeDashCollector strokeDashCollector(styles, *this);
-    collectGlobalObjects(strokeDashCollector, *p);
+//     StrokeDashCollector strokeDashCollector(styles, *this);
+//     collectGlobalObjects(strokeDashCollector, *p);
     // TODO: draw:opacity
 
     /*

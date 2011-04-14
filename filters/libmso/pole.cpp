@@ -35,6 +35,7 @@
 #include <vector>
 
 #include <string.h>
+#include <QList>
 
 // enable to activate debugging output
 //#define POLE_DEBUG
@@ -113,6 +114,7 @@ class DirTree
 public:
     static const unsigned End;
     DirTree();
+    bool valid(void) const;
     void clear();
     unsigned entryCount();
     DirEntry* entry(unsigned index);
@@ -445,30 +447,34 @@ std::vector<unsigned long> AllocTable::follow(unsigned long start, bool& fail)
 {
     std::vector<unsigned long> chain;
 
-    if (start >= count()) return chain;
+    if (start >= count()) {
+        std::cerr << "AllocTable::follow start >= count()!" << std::endl;
+        fail = true;
+        return chain;
+    }
 
     unsigned long p = start;
     while (p < count()) {
         if (p == (unsigned long)Eof) {
 #ifdef POLE_DEBUG
-            std::cout << "Eof detected during chain construction!" << std::endl;
+            std::cout << "AllocTable::follow Eof detected!" << std::endl;
 #endif
             break;
         }
         if (p == (unsigned long)Bat) {
 #ifdef POLE_DEBUG
-            std::cout << "Bat detected during chain construction!" << std::endl;
+            std::cout << "AllocTable::follow Bat detected!" << std::endl;
 #endif
             break;
         }
         if (p == (unsigned long)MetaBat) {
 #ifdef POLE_DEBUG
-            std::cout << "MetaBat detected during chain construction!" << std::endl;
+            std::cout << "AllocTable::follow MetaBat detected!" << std::endl;
 #endif
             break;
         }
         if (p >= count()) {
-            std::cerr << "Error: Invalid index detected during chain construction!" << std::endl;
+            std::cerr << "AllocTable::follow Invalid index detected!" << std::endl;
             fail = true;
             break;
         }
@@ -476,15 +482,15 @@ std::vector<unsigned long> AllocTable::follow(unsigned long start, bool& fail)
 
         // break if the chain is longer than the total sector count
         if (chain.size() > count()) {
-            std::cerr << "Error: Probably a loop detected during chain construction!" << std::endl;
+            std::cerr << "AllocTable::follow Probably a loop detected!" << std::endl;
             fail = true;
             break;
         }
         p = data[ p ];
     }
     if (p != (unsigned long)AllocTable::Eof) {
-        std::cerr << "Error: Last chain entry MUST be 0x" << std::hex << AllocTable::Eof <<
-                     ", received: 0x" << std::hex << p << std::endl;
+        std::cerr << "AllocTable::follow Last chain entry MUST be 0x" << std::hex <<
+                      AllocTable::Eof << ", detected: 0x" << std::hex << p << std::endl;
         fail = true;
     }
 
@@ -540,6 +546,99 @@ void AllocTable::debug()
 // =========== DirTree ==========
 
 const unsigned DirTree::End = 0xffffffff;
+
+/*
+ * Compare DirEntry names according to the spec.
+ */
+int ename_cmp(std::string str1, std::string str2)
+{
+    if (str1.length() < str2.length()) return -1;
+    else if (str1.length() > str2.length()) return 1;
+    else return str1.compare(str2);
+}
+
+/*
+ * Check if DirEntry elements at this level have unique names.
+ */
+bool valid_enames(DirTree* dirtree, unsigned index)
+{
+    std::vector<unsigned> chi = dirtree->children(index);
+    QList<std::string> names;
+    DirEntry* e = 0;
+
+#ifdef POLE_DEBUG
+    e = dirtree->entry(index);
+    printf("DirEntry: name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+           e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
+
+    std::cout << "[KIDS]" << std::endl;
+    for (unsigned i = 0; i < chi.size(); i++) {
+        e = dirtree->entry(chi[i]);
+        printf("DirEntry: name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+               e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
+    }
+    std::cout << "---------------------" << std::endl;
+#endif
+
+    for (unsigned i = 0; i < chi.size(); i++) {
+        e = dirtree->entry(chi[i]);
+        if (names.contains(e->name)) {
+            return false;
+        } else {
+            names.append(e->name);
+        }
+    }
+    return true;
+}
+
+bool DirTree::valid() const
+{
+    const DirEntry* e;
+    for (unsigned i = 0; i < entries.size(); i++) {
+        e = &entries[i];
+
+        //Looking for invalid user streams.
+        if (!e->valid && e->size) {
+            std::cerr << "DirTree::valid() Invalid user stream detected!" << std::endl;
+            return false;
+        }
+        if ( (i > 0) &&
+             (e->valid && !e->dir) &&
+             ((e->size == 0) || ((int)e->child != -1)) )
+        {
+            std::cerr << "DirTree::valid() Invalid user stream detected!" << std::endl;
+            return false;
+        }
+        //Looking for invalid user storages. The ((int)e->child == -1)
+        //condition results in false positives.
+        if ( (i > 0) &&
+             (e->valid && e->dir) &&
+             ((e->size != 0) || (e->start != 0)) )
+        {
+            std::cerr << "DirTree::valid() Invalid user storage detected!" << std::endl;
+            return false;
+        }
+        //Looking for duplicate names of DirEntries at this level.
+        if (!valid_enames(const_cast<DirTree*>(this), i)) {
+            std::cerr << "DirTree::valid() Invalid DirEntry detected!" << std::endl;
+            return false;
+        }
+        //Check the name of the left/right DirEntry.
+        if ((int)e->prev != -1) {
+            if (ename_cmp(e->name, (entries[e->prev]).name) < 0) {
+		std::cerr << "DirTree::valid() [name, position] mismatch detected!" << std::endl;
+                return false;
+            }
+        }
+        if ((int)e->next != -1) {
+            if (ename_cmp(e->name, (entries[e->next]).name) > 0) {
+		std::cerr << "DirTree::valid() [name, position] mismatch detected!" << std::endl;
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 DirTree::DirTree()
 {
@@ -718,28 +817,35 @@ std::vector<unsigned> DirTree::children(unsigned index)
     std::vector<unsigned> result;
 
     DirEntry* e = entry(index);
-    if (e) if (e->valid && e->child < entryCount())
+    if (e) {
+        if (e->valid && (e->child < entryCount())) {
             dirtree_find_siblings(this, result, e->child);
-
+        }
+    }
     return result;
 }
 
 void DirTree::load(unsigned char* buffer, unsigned size)
 {
     entries.clear();
+    int n = (size / 128); //num. of directory entries
 
-    for (unsigned i = 0; i < size / 128; i++) {
+    for (unsigned i = 0; i < (size / 128); i++) {
         unsigned p = i * 128;
 
         // would be < 32 if first char in the name isn't printable
         unsigned prefix = 32;
 
         // parse name of this entry, which stored as Unicode 16-bit
-        std::string name;
         int name_len = readU16(buffer + 0x40 + p);
-        if (name_len > 64) name_len = 64;
-        for (int j = 0; (buffer[j+p]) && (j < name_len); j += 2)
+        if (name_len > 64) {
+            std::cout << "DirTree::load  Warning: Invalid name length!" << std::endl;
+            name_len = 64;
+        }
+        std::string name;
+        for (int j = 0; (buffer[j+p]) && (j < name_len); j += 2) {
             name.append(1, buffer[j+p]);
+        }
 
         // first char isn't printable ? remove it...
         if (buffer[p] < 32) {
@@ -763,6 +869,14 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         // sanity checks
         if ((type != 2) && (type != 1) && (type != 5)) e.valid = false;
         if (name_len < 1) e.valid = false;
+
+        // additional checks
+        if ( (((int)e.prev > n) || ((int)e.prev < -1)) ||
+             (((int)e.next > n) || ((int)e.next < -1)) ||
+             (((int)e.child > n) || ((int)e.child < -1)) )
+        {
+            e.valid = false;
+        }
 
         // CLSID, contains a object class GUI if this entry is a storage or root
         // storage or all zero if not.
@@ -961,13 +1075,16 @@ void StorageIO::load()
         buffer = new unsigned char[ buflen ];
         unsigned long r = loadBigBlocks(blocks, buffer, buflen);
         if (r != buflen) {
+            std::cerr << "StorageIO:load SAT construction failed!" << std::endl;
             delete[] buffer;
             return;
         }
         bbat->load(buffer, buflen);
         delete[] buffer;
 
-        if (!bbat->valid(filesize, header->b_shift, true)) return;
+        if (!bbat->valid(filesize, header->b_shift, true)) {
+            return;
+        }
     }
     //TODO: make fail affect the result value
     bool fail = false;
@@ -980,13 +1097,16 @@ void StorageIO::load()
         buffer = new unsigned char[ buflen ];
         unsigned long r = loadBigBlocks(blocks, buffer, buflen);
         if (r != buflen) {
+            std::cerr << "StorageIO::load SSAT construction failed!" << std::endl;
             delete[] buffer;
             return;
         }
         sbat->load(buffer, buflen);
         delete[] buffer;
 
-        if (!sbat->valid(filesize, header->s_shift, false)) return;
+        if (!sbat->valid(filesize, header->s_shift, false)) {
+            return;
+        }
     }
 
     // load directory tree
@@ -996,12 +1116,16 @@ void StorageIO::load()
     buffer = new unsigned char[ buflen ];
     unsigned long r = loadBigBlocks(blocks, buffer, buflen);
     if (r != buflen) {
+        std::cerr << "StorageIO::load DirTree construction failed!" << std::endl;
         delete[] buffer;
         return;
     }
     dirtree->load(buffer, buflen);
     unsigned sb_start = readU32(buffer + 0x74);
     delete[] buffer;
+    if (!dirtree->valid()) {
+        return;
+    }
 
     // fetch block chain as data for small-files
     sb_blocks = bbat->follow(sb_start, fail);
@@ -1025,7 +1149,7 @@ void StorageIO::create()
 
     file.open(filename.c_str(), std::ios::out | std::ios::binary);
     if (!file.good()) {
-        std::cerr << "Can't create " << filename << std::endl;
+        std::cerr << "StorageIO::create Can't create " << filename << std::endl;
         result = Storage::OpenFailed;
         return;
     }
