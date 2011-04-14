@@ -256,9 +256,9 @@ private:
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
 
     /**
-     * Process the properties of a text box, use wv2 to parse the content.
+     * Process the properties of a TextBox, use wv2 to parse the content.
      */
-    void parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
+    void processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
 
     /**
      * Process a rectangle shape.
