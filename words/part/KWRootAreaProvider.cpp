@@ -141,9 +141,11 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     Q_ASSERT(shape);
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
+    KWPage page = pageManager->page(shape);
+    Q_ASSERT(page.isValid());
     bool isHeaderFooter = KWord::isHeaderFooter(m_textFrameSet);
 
-    kDebug() << "pageNumber=" << pageManager->page(shape).pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea;
+    kDebug() << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea;
 
     if (isHeaderFooter || data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
         // adjust the size of the shape
@@ -156,11 +158,8 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
             KWTextFrame *frame = static_cast<KWTextFrame*>(m_textFrameSet->frames().first());
             if (frame->minimumFrameHeight() != h) {
                 frame->setMinimumFrameHeight(h);
-
-                //TODO
-
-                // Layout headers and footers direct rather then waiting for the scheduledLayout to be executed.
-                //rootArea->documentLayout()->layout();
+                // cause the header/footer's height changed we have to relayout the whole page
+                m_textFrameSet->kwordDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
             }
         }
     } else {
