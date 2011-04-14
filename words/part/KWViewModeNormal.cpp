@@ -35,7 +35,7 @@ KWViewModeNormal::KWViewModeNormal()
 QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const
 {
     QList<ViewMap> answer;
-#if 0
+#if 1
     if (m_pageTops.isEmpty())
         return answer;
     KWPage page  = m_pageManager->begin();
