@@ -121,6 +121,7 @@ if (m_rootAreas.contains(frame)) return 0;
 
     KoTextLayoutRootArea *area = new KoTextLayoutRootArea(documentLayout);
     area->setAssociatedShape(shape);
+    area->setAcceptsPageBreak(true);
     data->setRootArea(area);
 
     m_rootAreas[frame] = area;
