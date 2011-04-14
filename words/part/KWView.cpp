@@ -1227,7 +1227,7 @@ void KWView::createLinkedFrame()
 
 void KWView::showStatusBar(bool toggled)
 {
-    if (statusBar() statusBar()->setVisible(toggled);
+    if (statusBar()) statusBar()->setVisible(toggled);
 }
 
 void KWView::deletePage()
