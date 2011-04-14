@@ -159,11 +159,7 @@ public:
         return m_config;
     }
 
-#ifndef NDEBUG
-    /// Use a log of kDebug calls to print out the internal state of the document and its members
-    void printDebug();
-#endif
-
+    /// This emits the pageSetupChanged signal which will call KWViewMode::updatePageCache.
     void firePageSetupChanged();
 
     // reimplemented slot from KoDocument

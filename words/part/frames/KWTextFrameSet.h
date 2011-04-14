@@ -85,11 +85,6 @@ public:
     void setPageStyle(const KWPageStyle &style);
     KWPageStyle pageStyle() const;
 
-#ifndef NDEBUG
-    void printDebug();
-    void printDebug(KWFrame *frame);
-#endif
-
 signals:
 #if 0
     /**

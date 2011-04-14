@@ -127,6 +127,7 @@ if (m_rootAreas.contains(frame)) return 0;
     return area;
 }
 
+// afterThis==0 means delete everything
 void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
     kDebug();
@@ -134,11 +135,38 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
 {
-    kDebug();
+    KWPageManager *pageManager = m_textFrameSet->kwordDocument()->pageManager();
+    Q_ASSERT(pageManager);
+    KoShape *shape = rootArea->associatedShape();
+    Q_ASSERT(shape);
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+    Q_ASSERT(data);
+    bool isHeaderFooter = KWord::isHeaderFooter(m_textFrameSet);
 
-    //rootArea->setTop(rootArea->top() + rootArea->associatedShape()->size().height());
-    //rootArea->setBottom(rootArea->top() + rootArea->associatedShape()->size().height());
-    //rootArea->setReferenceRect(0, rootArea->associatedShape()->size().width(), 0, rootArea->associatedShape()->size().height());
+    kDebug() << "pageNumber=" << pageManager->page(shape).pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea;
+
+    if (isHeaderFooter || data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+        // adjust the size of the shape
+        rootArea->associatedShape()->setSize(QSize(rootArea->associatedShape()->size().width(), qMax(rootArea->associatedShape()->size().height(), rootArea->bottom() - rootArea->top())));
+
+        if (isHeaderFooter) {
+            // adjust the minimum frame height for headers and footer
+            const qreal h = rootArea->associatedShape()->size().height();
+            Q_ASSERT(m_textFrameSet->frameCount() > 0);
+            KWTextFrame *frame = static_cast<KWTextFrame*>(m_textFrameSet->frames().first());
+            if (frame->minimumFrameHeight() != h) {
+                frame->setMinimumFrameHeight(h);
+
+                //TODO
+            }
+        }
+    } else {
+        // header and footer should always have AutoGrowHeight see the KWTextFrame ctor
+        Q_ASSERT(!isHeaderFooter);
+
+        // adjust the rootArea to the new shape size
+        rootArea->setBottom(rootArea->top() + rootArea->associatedShape()->size().height());
+    }
 
     /* already done in KWDocument::addFrame on shapeManager()->addShape
 
@@ -148,35 +176,22 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     kwdoc->firePageSetupChanged();
     */
 
-    switch(m_textFrameSet->textFrameSetType()) {
-        case KWord::OddPagesHeaderTextFrameSet:
-        case KWord::EvenPagesHeaderTextFrameSet:
-        case KWord::OddPagesFooterTextFrameSet:
-        case KWord::EvenPagesFooterTextFrameSet: {
-            Q_ASSERT(m_textFrameSet->frameCount() > 0);
-            KWTextFrame *frame = static_cast<KWTextFrame*>(m_textFrameSet->frames().first());
-            frame->setMinimumFrameHeight(rootArea->associatedShape()->size().height());
-        } break;
-        default: break;
-    }
-
-    
-    
     // force repaint
     rootArea->associatedShape()->update();
-
-#if 0
-    // select the new shape
-    foreach (KoView *view, m_textFrameSet->kwordDocument()->views()) {
-        KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        KoSelection *selection = canvas->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select(rootArea->associatedShape());
-    }
-#endif
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
-    return rootArea->associatedShape()->size();
+    KoShape *shape = rootArea->associatedShape();
+    Q_ASSERT(shape);
+    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+    Q_ASSERT(data);
+
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+        QSizeF size = shape->size();
+        size.setHeight(1E6);
+        return size;
+    } else {
+        return shape->size();
+    }
 }

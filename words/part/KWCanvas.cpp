@@ -131,22 +131,6 @@ QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 
 void KWCanvas::keyReleaseEvent(QKeyEvent *e)
 {
-#ifndef NDEBUG
-    // Debug keys
-    if ((e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier))) {
-        if (e->key() == Qt::Key_F) {
-            document()->printDebug();
-            e->accept();
-            return;
-        }
-        if (e->key() == Qt::Key_M) {
-            const QDateTime dtMark(QDateTime::currentDateTime());
-            kDebug(32001) << "Developer mark:" << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz");
-            e->accept();
-            return;
-        }
-    }
-#endif
     m_toolProxy->keyReleaseEvent(e);
 }
 

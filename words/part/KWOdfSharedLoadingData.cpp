@@ -155,7 +155,5 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
     else
         frame->setNewFrameBehavior(KWord::NoFollowupFrame);
 
-    frame->setFrameOnBothSheets(properties.attributeNS(KoXmlNS::koffice,
-                "frame-copy-to-facing-pages default").compare("true", Qt::CaseInsensitive));
     return true;
 }

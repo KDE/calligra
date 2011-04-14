@@ -91,9 +91,11 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
             if (frame->frameSet()->frames().indexOf(frame) > 0)
                 copyFrame.addState(frame->isCopy() ? GuiHelper::On : GuiHelper::Off);
         }
-
+#if 0
         evenOdd.addState(frame->frameOnBothSheets() ? GuiHelper::On : GuiHelper::Off);
-
+#else
+        evenOdd.addState(GuiHelper::Off);
+#endif
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *>(frame->frameSet());
         if (textFs == 0)
             keepAspect.addState(frame->shape()->keepAspectRatio() ? GuiHelper::On : GuiHelper::Off);
@@ -145,8 +147,10 @@ void KWGeneralFrameProperties::save()
             KWord::NewFrameBehavior nfb = static_cast<KWord::NewFrameBehavior>(m_newPageGroup->checkedId());
             frame->setNewFrameBehavior(nfb);
         }
+#if 0
         if (widget.evenOdd->checkState() != Qt::PartiallyChecked)
             frame->setFrameOnBothSheets(widget.evenOdd->checkState() != Qt::Checked);
+#endif
         if (frame->frameSet()) {
             if (widget.protectContent->checkState() != Qt::PartiallyChecked)
                 frame->shape()->setContentProtected(widget.protectContent->checkState() == Qt::Checked);
