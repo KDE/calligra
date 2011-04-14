@@ -64,7 +64,7 @@
 
 
 SvgParser::SvgParser(KoResourceManager *documentResourceManager)
-        : m_documentResourceManager(documentResourceManager)
+    : m_documentResourceManager(documentResourceManager)
 {
     m_fontAttributes << "font-family" << "font-size" << "font-weight" << "text-decoration";
     // the order of the style attributes is important, don't change without reason !!!
@@ -77,10 +77,6 @@ SvgParser::SvgParser(KoResourceManager *documentResourceManager)
 
 SvgParser::~SvgParser()
 {
-    if (! m_gc.isEmpty())
-        kWarning() << "the context stack is not empty (current count" << m_gc.size() << ", expected 0)";
-    qDeleteAll(m_gc);
-    m_gc.clear();
 }
 
 void SvgParser::setXmlBaseDir(const QString &baseDir)
@@ -95,46 +91,6 @@ QList<KoShape*> SvgParser::shapes() const
 
 // Helper functions
 // ---------------------------------------------------------------------------------------
-
-
-void SvgParser::addGraphicContext()
-{
-    SvgGraphicsContext *gc = new SvgGraphicsContext;
-    // set as default
-    if (! m_gc.isEmpty())
-        *gc = *(m_gc.top());
-
-    gc->filterId.clear(); // filters are not inherited
-    gc->clipPathId.clear(); // clip paths are not inherited
-    gc->display = true; // display is not inherited
-    gc->opacity = 1.0; // opacity is not inherited
-
-    m_gc.push(gc);
-}
-
-void SvgParser::removeGraphicContext()
-{
-    delete(m_gc.pop());
-}
-
-void SvgParser::updateContext(const KoXmlElement &e)
-{
-    SvgGraphicsContext *gc = m_gc.top();
-    if (e.hasAttribute("xml:base"))
-        gc->xmlBaseDir = e.attribute("xml:base");
-    if (e.hasAttribute("xml:space"))
-        gc->preserveWhitespace = e.attribute("xml:space") == "preserve";
-}
-
-void SvgParser::setupTransform(const KoXmlElement &e)
-{
-    SvgGraphicsContext *gc = m_gc.top();
-
-    if (e.hasAttribute("transform")) {
-        QTransform mat = SvgUtil::parseTransform(e.attribute("transform"));
-        gc->matrix = mat * gc->matrix;
-    }
-}
 
 KoShape * SvgParser::findObject(const QString &name, const QList<KoShape*> & shapes)
 {
@@ -336,22 +292,22 @@ SvgParser::SvgStyles SvgParser::mergeStyles(const SvgStyles &referencedBy, const
 
 qreal SvgParser::parseUnit(const QString &unit, bool horiz, bool vert, const QRectF &bbox)
 {
-    return SvgUtil::parseUnit(m_gc.top(), unit, horiz, vert, bbox);
+    return SvgUtil::parseUnit(m_context.currentGC(), unit, horiz, vert, bbox);
 }
 
 qreal SvgParser::parseUnitX(const QString &unit)
 {
-    return SvgUtil::parseUnitX(m_gc.top(), unit);
+    return SvgUtil::parseUnitX(m_context.currentGC(), unit);
 }
 
 qreal SvgParser::parseUnitY(const QString &unit)
 {
-    return SvgUtil::parseUnitY(m_gc.top(), unit);
+    return SvgUtil::parseUnitY(m_context.currentGC(), unit);
 }
 
 qreal SvgParser::parseUnitXY(const QString &unit)
 {
-    return SvgUtil::parseUnitXY(m_gc.top(), unit);
+    return SvgUtil::parseUnitXY(m_context.currentGC(), unit);
 }
 
 bool SvgParser::parseColor(QColor &color, const QString &s)
@@ -383,8 +339,7 @@ bool SvgParser::parseColor(QColor &color, const QString &s)
 
         color = QColor(r.toInt(), g.toInt(), b.toInt());
     } else if (s == "currentColor") {
-        SvgGraphicsContext *gc = m_gc.top();
-        color = gc->currentColor;
+        color = m_context.currentGC()->currentColor;
     } else {
         // QColor understands #RRGGBB and svg color names
         color.setNamedColor(s.trimmed());
@@ -453,7 +408,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
     // - Gradients with no color stops have no fill or stroke.
     // - Gradients with one color stop have a solid color.
 
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext *gc = m_context.currentGC();
     if (!gc)
         return false;
 
@@ -492,7 +447,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
         gradhelper.setGradientUnits(SvgGradientHelper::UserSpaceOnUse);
 
     // parse color prop
-    QColor c = m_gc.top()->currentColor;
+    QColor c = gc->currentColor;
 
     if (!b.attribute("color").isEmpty()) {
         parseColor(c, b.attribute("color"));
@@ -508,7 +463,7 @@ bool SvgParser::parseGradient(const KoXmlElement &e, const KoXmlElement &referen
                 parseColor(c, params);
         }
     }
-    m_gc.top()->currentColor = c;
+    gc->currentColor = c;
 
     if (b.tagName() == "linearGradient") {
         QLinearGradient *g = new QLinearGradient();
@@ -705,7 +660,7 @@ bool SvgParser::parseImage(const QString &attribute, QImage &image)
         int start = attribute.indexOf("base64,");
         if (start > 0 && image.loadFromData(QByteArray::fromBase64(attribute.mid(start + 7).toLatin1())))
             return true;
-    } else if (image.load(absoluteFilePath(attribute, m_gc.top()->xmlBaseDir))) {
+    } else if (image.load(absoluteFilePath(attribute, m_context.currentGC()->xmlBaseDir))) {
         return true;
     }
 
@@ -996,7 +951,7 @@ void SvgParser::parseStyle(KoShape *obj, const KoXmlElement &e)
 
 void SvgParser::parseStyle(KoShape *obj, const SvgStyles &styles)
 {
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext *gc = m_context.currentGC();
     if (!gc)
         return;
 
@@ -1025,7 +980,7 @@ void SvgParser::parseStyle(KoShape *obj, const SvgStyles &styles)
 
 void SvgParser::applyFillStyle(KoShape *shape)
 {
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext *gc = m_context.currentGC();
     if (! gc)
         return;
 
@@ -1061,21 +1016,20 @@ void SvgParser::applyFillStyle(KoShape *shape)
 
             // properties from the object are not inherited
             // so we are creating a new context without copying
-            m_gc.push(new SvgGraphicsContext());
+            SvgGraphicsContext *gc = m_context.pushGraphicsContext(pattern->content(), false);
 
             // the pattern establishes a new coordinate system with its
             // origin at the patterns x and y attributes
-            m_gc.top()->matrix = QTransform();
+            gc->matrix = QTransform();
             // object bounding box units are relative to the object the pattern is applied
             if (pattern->patternContentUnits() == SvgPatternHelper::ObjectBoundingBox) {
-                m_gc.top()->currentBoundbox = objectBound;
-                m_gc.top()->forcePercentage = true;
+                gc->currentBoundbox = objectBound;
+                gc->forcePercentage = true;
             } else {
                 // inherit the current bounding box
-                m_gc.top()->currentBoundbox = currentBoundbox;
+                gc->currentBoundbox = currentBoundbox;
             }
 
-            updateContext(pattern->content());
             parseStyle(0, pattern->content());
 
             // parse the pattern content elements
@@ -1084,7 +1038,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
             // generate the pattern image from the shapes and the object bounding rect
             QImage image = pattern->generateImage(objectBound, patternContent);
 
-            removeGraphicContext();
+            m_context.popGraphicsContext();
 
             // delete the shapes created from the pattern content
             qDeleteAll(patternContent);
@@ -1140,7 +1094,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
 
 void SvgParser::applyStrokeStyle(KoShape *shape)
 {
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext *gc = m_context.currentGC();
     if (! gc)
         return;
 
@@ -1194,7 +1148,7 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
 
 void SvgParser::applyFilter(KoShape *shape)
 {
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext *gc = m_context.currentGC();
     if (! gc)
         return;
 
@@ -1314,7 +1268,7 @@ void SvgParser::applyFilter(KoShape *shape)
 
 void SvgParser::applyClipping(KoShape *shape)
 {
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext *gc = m_context.currentGC();
     if (! gc)
         return;
 
@@ -1336,10 +1290,10 @@ void SvgParser::applyClipping(KoShape *shape)
     // -> clip-path = intersection of children with referenced clip-path
     // any of its children can have a clip-path property
     // -> child element is clipped and the ORed with other children
-    addGraphicContext();
+    m_context.pushGraphicsContext();
 
     if (boundingBoxUnits) {
-        SvgGraphicsContext *gc = m_gc.top();
+        SvgGraphicsContext *gc = m_context.currentGC();
         gc->matrix.reset();
         gc->viewboxTransform.reset();
         gc->currentBoundbox = shape->boundingRect();
@@ -1378,7 +1332,7 @@ void SvgParser::applyClipping(KoShape *shape)
         }
     }
 
-    removeGraphicContext();
+    m_context.popGraphicsContext();
 
     if (pathShapes.count()) {
         QTransform transformToShape;
@@ -1393,7 +1347,7 @@ void SvgParser::applyClipping(KoShape *shape)
 
 void SvgParser::parseFont(const SvgStyles &styles)
 {
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext *gc = m_context.currentGC();
     if (!gc)
         return;
 
@@ -1413,16 +1367,14 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
     QString id = e.attribute("xlink:href");
     //
     if (!id.isEmpty()) {
-        addGraphicContext();
-        setupTransform(e);
-        updateContext(e);
+        SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
 
         QString key = id.mid(1);
 
         if (e.hasAttribute("x"))
-            m_gc.top()->matrix.translate(parseUnitX(e.attribute("x")), 0.0);
+            gc->matrix.translate(parseUnitX(e.attribute("x")), 0.0);
         if (e.hasAttribute("y"))
-            m_gc.top()->matrix.translate(0.0, parseUnitX(e.attribute("y")));
+            gc->matrix.translate(0.0, parseUnitX(e.attribute("y")));
 
         // TODO: use width and height attributes too
 
@@ -1430,9 +1382,7 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
             const KoXmlElement &a = m_defs[key];
             SvgStyles styles = mergeStyles(collectStyles(e), collectStyles(a));
             if (a.tagName() == "g" || a.tagName() == "a" || a.tagName() == "symbol") {
-                addGraphicContext();
-                setupTransform(a);
-                updateContext(a);
+                m_context.pushGraphicsContext(a);
 
                 KoShapeGroup *group = new KoShapeGroup();
                 group->setZIndex(nextZIndex());
@@ -1451,7 +1401,7 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
 
                 shapes.append(group);
 
-                removeGraphicContext();
+                m_context.popGraphicsContext();
             } else {
                 // Create the object with the merged styles.
                 // The object inherits all style attributes from the use tag, but keeps it's own attributes.
@@ -1463,7 +1413,7 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
         } else {
             // TODO: any named object can be referenced too
         }
-        removeGraphicContext();
+        m_context.popGraphicsContext();
     }
 
     return shapes;
@@ -1483,11 +1433,9 @@ void SvgParser::addToGroup(QList<KoShape*> shapes, KoShapeGroup *group)
 QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 {
     // check if we are the root svg element
-    bool isRootSvg = m_gc.isEmpty();
+    const bool isRootSvg = !m_context.currentGC();
 
-    addGraphicContext();
-
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext *gc = m_context.pushGraphicsContext();
 
     parseStyle(0, e);
 
@@ -1534,7 +1482,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 
     QList<KoShape*> shapes = parseContainer(e);
 
-    removeGraphicContext();
+    m_context.popGraphicsContext();
 
     return shapes;
 }
@@ -1573,9 +1521,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             shapes += parseSvg(b);
         } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
             // treat svg link <a> as group so we don't miss its child elements
-            addGraphicContext();
-            setupTransform(b);
-            updateContext(b);
+            m_context.pushGraphicsContext(b);
 
             KoShapeGroup *group = new KoShapeGroup();
             group->setZIndex(nextZIndex());
@@ -1602,14 +1548,11 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 
             shapes.append(group);
 
-            removeGraphicContext();
+            m_context.popGraphicsContext();
         } else if (b.tagName() == "switch") {
-            addGraphicContext();
-            setupTransform(b);
-
+            m_context.pushGraphicsContext(b);
             shapes += parseContainer(b);
-
-            removeGraphicContext();
+            m_context.popGraphicsContext();
         } else if (b.tagName() == "defs") {
             parseDefs(b);
         } else if (b.tagName() == "linearGradient" || b.tagName() == "radialGradient") {
@@ -1733,9 +1676,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
 
     ArtisticTextShape *text = 0;
 
-    addGraphicContext();
-    setupTransform(textElement);
-    updateContext(textElement);
+    m_context.pushGraphicsContext(textElement);
 
     if (! textElement.attribute("text-anchor").isEmpty())
         anchor = textElement.attribute("text-anchor");
@@ -1745,7 +1686,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
     KoXmlElement styleElement = textElement;
 
     SvgTextHelper context;
-    context.pushCharacterTransforms(textElement, m_gc.top());
+    context.pushCharacterTransforms(textElement, m_context.currentGC());
 
     if (textElement.hasChildNodes()) {
         text = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
@@ -1760,17 +1701,16 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
             KoXmlElement e = n.toElement();
             const bool hasNextSibling = !n.nextSibling().isNull();
             if (e.isNull()) {
-                ArtisticTextRange range = createTextRange(n.toText().data(), context, m_gc.top(), hasNextSibling);
+                ArtisticTextRange range = createTextRange(n.toText().data(), context, m_context.currentGC(), hasNextSibling);
                 text->appendText(range);
                 context.stripCharacterTransforms(range.text().length());
             } else if (e.tagName() == "textPath") {
                 if (e.attribute("xlink:href").isEmpty())
                     continue;
 
-                addGraphicContext();
-                updateContext(e);
+                m_context.pushGraphicsContext(e);
                 parseFont(collectStyles(e));
-                context.pushCharacterTransforms(e, m_gc.top());
+                context.pushCharacterTransforms(e, m_context.currentGC());
 
                 QString key = e.attribute("xlink:href").mid(1);
                 if (! m_defs.contains(key)) {
@@ -1787,7 +1727,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                     KoXmlElement p = m_defs[key];
                     path = dynamic_cast<KoPathShape*>(createObject(p));
                     pathInDocument = false;
-                    path->applyAbsoluteTransformation(m_gc.top()->matrix.inverted());
+                    path->applyAbsoluteTransformation(m_context.currentGC()->matrix.inverted());
                 }
 
                 if(e.hasChildNodes()) {
@@ -1795,23 +1735,22 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                         KoXmlElement span = node.toElement();
                         const bool hasNextSibling = !node.nextSibling().isNull();
                         if (span.isNull()) {
-                            ArtisticTextRange range = createTextRange(node.toText().data(), context, m_gc.top(), hasNextSibling);
+                            ArtisticTextRange range = createTextRange(node.toText().data(), context, m_context.currentGC(), hasNextSibling);
                             text->appendText(range);
                             context.stripCharacterTransforms(range.text().length());
                         } else if (span.tagName() == "tspan") {
-                            addGraphicContext();
-                            updateContext(span);
+                            SvgGraphicsContext *gc = m_context.pushGraphicsContext(span);
                             parseFont(collectStyles(span));
-                            context.pushCharacterTransforms(span, m_gc.top());
+                            context.pushCharacterTransforms(span, gc);
 
-                            text->appendText(createTextRange(span.text(), context, m_gc.top(), hasNextSibling));
+                            text->appendText(createTextRange(span.text(), context, gc, hasNextSibling));
 
-                            context.popCharacterTransforms();;
-                            removeGraphicContext();
+                            context.popCharacterTransforms();
+                            m_context.popGraphicsContext();
                         }
                     }
                 } else {
-                    text->appendText(createTextRange(e.text(), context, m_gc.top()));
+                    text->appendText(createTextRange(e.text(), context, m_context.currentGC()));
                 }
 
                 if (! e.attribute("startOffset").isEmpty()) {
@@ -1824,18 +1763,17 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                             offset = start.toDouble() / pathLength;
                     }
                 }
-                context.popCharacterTransforms();;
-                removeGraphicContext();
+                context.popCharacterTransforms();
+                m_context.popGraphicsContext();
             } else if (e.tagName() == "tspan") {
-                addGraphicContext();
-                updateContext(e);
+                SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
                 parseFont(collectStyles(e));
-                context.pushCharacterTransforms(e, m_gc.top());
+                context.pushCharacterTransforms(e, gc);
 
-                text->appendText(createTextRange(e.text(), context, m_gc.top(), hasNextSibling));
+                text->appendText(createTextRange(e.text(), context, gc, hasNextSibling));
 
-                context.popCharacterTransforms();;
-                removeGraphicContext();
+                context.popCharacterTransforms();
+                m_context.popGraphicsContext();
             } else if (e.tagName() == "tref") {
                 if (e.attribute("xlink:href").isEmpty())
                     continue;
@@ -1857,7 +1795,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
                     }
                 } else {
                     KoXmlElement p = m_defs[key];
-                    SvgGraphicsContext *gc = m_gc.top();
+                    SvgGraphicsContext *gc = m_context.currentGC();
                     text->appendText(ArtisticTextRange(context.simplifyText(p.text(), gc->preserveWhitespace, hasNextSibling), gc->font));
                 }
             } else {
@@ -1885,12 +1823,12 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
         if (! text)
             return 0;
 
-        text->appendText(createTextRange(textElement.text(), context, m_gc.top()));
+        text->appendText(createTextRange(textElement.text(), context, m_context.currentGC()));
         text->setPosition(context.textPosition());
     }
 
     if (! text) {
-        removeGraphicContext();
+        m_context.popGraphicsContext();
         return 0;
     }
 
@@ -1906,13 +1844,13 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
     if (!textElement.attribute("id").isEmpty())
         text->setName(textElement.attribute("id"));
 
-    text->applyAbsoluteTransformation(m_gc.top()->matrix);
+    text->applyAbsoluteTransformation(m_context.currentGC()->matrix);
     text->setZIndex(nextZIndex());
 
     // apply the style merged from the text element and the last tspan element
     parseStyle(text, mergeStyles(collectStyles(styleElement), elementStyles));
 
-    removeGraphicContext();
+    m_context.popGraphicsContext();
 
     return text;
 }
@@ -1921,9 +1859,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
 {
     KoShape *obj = 0;
 
-    addGraphicContext();
-    setupTransform(b);
-    updateContext(b);
+    m_context.pushGraphicsContext(b);
 
     if (b.tagName() == "rect") {
         double x = parseUnitX(b.attribute("x"));
@@ -2067,11 +2003,11 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     }
 
     if (! obj) {
-        removeGraphicContext();
+        m_context.popGraphicsContext();
         return 0;
     }
 
-    obj->applyAbsoluteTransformation(m_gc.top()->matrix);
+    obj->applyAbsoluteTransformation(m_context.currentGC()->matrix);
 
     if (!style.isEmpty())
         parseStyle(obj, style);
@@ -2082,7 +2018,7 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
     if (!b.attribute("id").isEmpty())
         obj->setName(b.attribute("id"));
 
-    removeGraphicContext();
+    m_context.popGraphicsContext();
 
     obj->setZIndex(nextZIndex());
 

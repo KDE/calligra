@@ -28,12 +28,12 @@
 #include "SvgGraphicContext.h"
 #include "SvgCssHelper.h"
 #include "SvgClipPathHelper.h"
+#include "SvgLoadingContext.h"
 
 #include <KoXmlReader.h>
 
 #include <QtGui/QGradient>
 #include <QtCore/QMap>
-#include <QtCore/QStack>
 
 class KoShape;
 class KoShapeContainer;
@@ -95,11 +95,6 @@ protected:
     /// Parses a viewbox attribute into an rectangle
     QRectF parseViewBox(QString viewbox);
 
-    void setupTransform(const KoXmlElement &);
-    void updateContext(const KoXmlElement &);
-    void addGraphicContext();
-    void removeGraphicContext();
-
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
     /// Create text object from the given xml element
@@ -158,7 +153,7 @@ protected:
 
 private:
     QSizeF m_documentSize;
-    QStack<SvgGraphicsContext*> m_gc;
+    SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
