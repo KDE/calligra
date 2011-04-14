@@ -22,11 +22,12 @@
 
 #include "KWFrame.h"
 #include "KWFrameSet.h"
+#include "KWTextFrameSet.h"
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
 #include "KoTextAnchor.h"
 #include "KWPage.h"
-
+#include <KoTextShapeData.h>
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
@@ -45,6 +46,10 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
     shape->setApplicationData(this);
     if (parent)
         parent->addFrame(this);
+
+    if (KWord::isHeaderFooter(dynamic_cast<KWTextFrameSet*>(parent)))
+        if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData()))
+            data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
 }
 
 KWFrame::~KWFrame()
