@@ -27,13 +27,13 @@
 #include "KWPage.h"
 
 #include <KoXmlWriter.h>
+#include <kdebug.h>
 
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
 // Initialize member vars here. This ensures they are all initialized, since it's
 // easier to compare this list with the member vars list (compiler ensures order).
         : m_shape(shape),
         m_frameBehavior(KWord::AutoExtendFrameBehavior),
-        m_copyToEverySheet(true),
         m_newFrameBehavior(KWord::NoFollowupFrame),
         m_anchoredPageNumber(pageNumber),
         m_frameSet(parent)
@@ -57,6 +57,10 @@ KWFrame::~KWFrame()
         if (justMe)
             delete m_frameSet;
         m_frameSet = 0;
+#else
+        if (justMe) {
+            kDebug() << "Last KWFrame removed from frameSet=" << m_frameSet;
+        }
 #endif
     }
 }
@@ -76,7 +80,6 @@ void KWFrame::copySettings(const KWFrame *frame)
 {
     setFrameBehavior(frame->frameBehavior());
     setNewFrameBehavior(frame->newFrameBehavior());
-    setFrameOnBothSheets(frame->frameOnBothSheets());
     shape()->copySettings(frame->shape());
 }
 
@@ -108,8 +111,6 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     }
     if (!value.isEmpty()) {
         m_shape->setAdditionalStyleAttribute("koffice:frame-behavior-on-new-page", value);
-        if (!frameOnBothSheets())
-            m_shape->setAdditionalAttribute("koffice:frame-copy-to-facing-pages", "true");
     }
 
     // shape properties
@@ -124,7 +125,6 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     context.removeShapeOffset(m_shape);
     m_shape->removeAdditionalAttribute("draw:z-index");
     m_shape->removeAdditionalAttribute("fo:min-height");
-    m_shape->removeAdditionalAttribute("koffice:frame-copy-to-facing-pages");
     m_shape->removeAdditionalAttribute("text:anchor-page-number");
     m_shape->removeAdditionalAttribute("text:anchor-page-number");
     m_shape->removeAdditionalAttribute("text:anchor-type");

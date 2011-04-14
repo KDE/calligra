@@ -26,11 +26,9 @@
 #include <kdebug.h>
 
 KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent, int pageNumber)
-        : KWFrame(shape, parent, pageNumber),
-        m_sortingId(-1),
-        m_lastHeight(shape->size().height()),
-        m_minimumFrameHeight(m_lastHeight),
-        m_canGrow(true)
+    : KWFrame(shape, parent, pageNumber)
+    , m_sortingId(-1)
+    , m_minimumFrameHeight(shape->size().height())
 {
     Q_ASSERT(shape);
     if (KWord::isHeaderFooter(parent)) {
@@ -44,50 +42,6 @@ KWTextFrame::~KWTextFrame()
 {
 }
 
-bool KWTextFrame::canAutoGrow()
-{
-#if 0
-    if (!m_canGrow)
-        return false;
-    if (shape()->size().height() - m_lastHeight < -0.2) { // shape shrunk!
-        m_canGrow = false;
-        m_minimumFrameHeight = shape()->size().height();
-    }
-    return m_canGrow;
-#else
-    Q_ASSERT(false);
-    return false;
-#endif
-}
-
-void KWTextFrame::allowToGrow()
-{
-#if 0
-    m_canGrow = true;
-    m_lastHeight = shape()->size().height();
-#else
-    Q_ASSERT(false);
-#endif
-}
-
-void KWTextFrame::autoShrink(qreal requestedHeight)
-{
-#if 0
-//kDebug() <<"autoShrink requested:" << requestedHeight <<", min:" << m_minimumFrameHeight <<", last:" << m_lastHeight;
-    QSizeF size = shape()->size();
-    if (qAbs(m_lastHeight - size.height()) > 1E-6) {  // if not equal
-        m_minimumFrameHeight = size.height();
-        m_lastHeight = size.height();
-        return;
-    }
-    // TODO make the following work for rotated / skewed frames as well.  The position should be updated.
-    shape()->setSize(QSizeF(size.width(), qMax(requestedHeight, m_minimumFrameHeight)));
-    m_lastHeight = size.height();
-#else
-    Q_ASSERT(false);
-#endif
-}
-
 void KWTextFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
 {
     m_minimumFrameHeight = minimumFrameHeight;
@@ -97,4 +51,3 @@ qreal KWTextFrame::minimumFrameHeight() const
 {
     return m_minimumFrameHeight;
 }
-    

@@ -127,6 +127,7 @@ if (m_rootAreas.contains(frame)) return 0;
     return area;
 }
 
+// afterThis==0 means delete everything
 void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
     kDebug();
@@ -134,32 +135,34 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
 {
-    kDebug();
-
+    KWPageManager *pageManager = m_textFrameSet->kwordDocument()->pageManager();
+    Q_ASSERT(pageManager);
     KoShape *shape = rootArea->associatedShape();
     Q_ASSERT(shape);
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
+    bool isHeaderFooter = KWord::isHeaderFooter(m_textFrameSet);
 
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+    kDebug() << "pageNumber=" << pageManager->page(shape).pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea;
+
+    if (isHeaderFooter || data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
         // adjust the size of the shape
         rootArea->associatedShape()->setSize(QSize(rootArea->associatedShape()->size().width(), qMax(rootArea->associatedShape()->size().height(), rootArea->bottom() - rootArea->top())));
 
-        if (KWord::isHeaderFooter(m_textFrameSet)) {
-            // adjust the minimum frame height
+        if (isHeaderFooter) {
+            // adjust the minimum frame height for headers and footer
             const qreal h = rootArea->associatedShape()->size().height();
             Q_ASSERT(m_textFrameSet->frameCount() > 0);
             KWTextFrame *frame = static_cast<KWTextFrame*>(m_textFrameSet->frames().first());
             if (frame->minimumFrameHeight() != h) {
                 frame->setMinimumFrameHeight(h);
+
+                //TODO
             }
         }
     } else {
         // header and footer should always have AutoGrowHeight see the KWTextFrame ctor
-        Q_ASSERT(m_textFrameSet->textFrameSetType() != KWord::OddPagesHeaderTextFrameSet &&
-                 m_textFrameSet->textFrameSetType() != KWord::EvenPagesHeaderTextFrameSet &&
-                 m_textFrameSet->textFrameSetType() != KWord::OddPagesFooterTextFrameSet &&
-                 m_textFrameSet->textFrameSetType() != KWord::EvenPagesFooterTextFrameSet);
+        Q_ASSERT(!isHeaderFooter);
 
         // adjust the rootArea to the new shape size
         rootArea->setBottom(rootArea->top() + rootArea->associatedShape()->size().height());

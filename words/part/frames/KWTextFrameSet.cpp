@@ -460,25 +460,3 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
 #endif
     return true;
 }
-
-#ifndef NDEBUG
-void KWTextFrameSet::printDebug(KWFrame *frame)
-{
-    KWFrameSet::printDebug(frame);
-    KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
-    if (textShapeData == 0) return;
-    //kDebug(32001) << " Text position:" << textShapeData->position() << ", end:" << textShapeData->endPosition();
-    //kDebug(32001) << " Offset in text-document;" << textShapeData->documentOffset();
-}
-
-void KWTextFrameSet::printDebug()
-{
-    static const char * type[] = { "OddPagesHeader", "EvenPagesHeader", "OddPagesFooter", "EvenPagesFooter", "Main", "Other", "ERROR" };
-    kDebug(32001) << " | Is a KWTextFrameSet";
-    kDebug(32001) << " | FS Type:" << type[m_textFrameSetType];
-    if (m_pageStyle.isValid())
-        kDebug(32001) << " | belongs to page style:" << m_pageStyle.name();
-    KWFrameSet::printDebug();
-}
-#endif
-
