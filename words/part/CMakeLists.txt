@@ -170,6 +170,7 @@ KWViewModeNormal.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/words/part COMPONENT Devel)
 
 install( FILES
+frames/KWFrame.h
 frames/KWFrameLayout.h
 frames/KWFrameSet.h
 frames/KWTextFrameSet.h

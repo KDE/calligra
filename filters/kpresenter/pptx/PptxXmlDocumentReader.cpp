@@ -55,6 +55,7 @@ PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
           path(_path), file(_file), relationships(&_relationships)
 {
     firstReadRound = true;
+    numberOfItems = 0;
 }
 
 class PptxXmlDocumentReader::Private
@@ -553,7 +554,17 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(sldId)
+            if (name() == "sldId") {
+                if (!m_context->firstReadRound) {
+                    TRY_READ(sldId)
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+                else {
+                    m_context->numberOfItems = m_context->numberOfItems + 1;
+                    skipCurrentElement();
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -578,7 +589,17 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterIdLst()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(notesMasterId)
+            if (name() == "notesMasterId") {
+                if (!m_context->firstReadRound) {
+                    TRY_READ(notesMasterId)
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+                else {
+                    m_context->numberOfItems = m_context->numberOfItems + 1;
+                    skipCurrentElement();
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -606,7 +627,17 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(sldMasterId)
+            if (name() == "sldMasterId") {
+                if (!m_context->firstReadRound) {
+                    TRY_READ(sldMasterId)
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+                else {
+                    m_context->numberOfItems = m_context->numberOfItems + 1;
+                    skipCurrentElement();
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -789,6 +820,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(defaultTextStyle)
+                ELSE_TRY_READ_IF(sldMasterIdLst)
+                ELSE_TRY_READ_IF(sldIdLst)
+                ELSE_TRY_READ_IF(notesMasterIdLst)
                 SKIP_UNKNOWN
             }
         }

@@ -591,6 +591,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     KoFilter::ConversionStatus status
         = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
 
+    reportProgress(5);
+
     // 2. parse styles
     XlsxStyles styles;
     XlsxXmlStylesReaderContext colorContext(styles, true, &themes);
@@ -605,6 +607,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
                             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context2))
     }
 
+    reportProgress(30);
+
     // 3. parse shared strings
     QVector<QString> sharedStrings;
     {
@@ -613,6 +617,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context))
     }
+
+    reportProgress(35);
 
     // 4. parse comments
     XlsxComments comments;
@@ -624,12 +630,17 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
             "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
     }
 
+    reportProgress(40);
+
     // 5. parse document
     {
         XlsxXmlDocumentReaderContext context(*this, &themes, sharedStrings, comments, styles, *relationships);
         XlsxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR(loadAndParseDocument(d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context))
     }
+
+    reportProgress(100);
+
     // more here...
     return KoFilter::OK;
 }
