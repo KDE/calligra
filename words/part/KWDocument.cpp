@@ -440,7 +440,23 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
     Q_ASSERT(!m_frameSets.contains(fs));
     setModified(true);
-    m_frameSets.append(fs);
+
+    // Be sure we add headers and footers to the beginning of the m_frameSets QList and every other KWFrameTextType
+    // after them so future operations iterating over that QList always handle headers and footers first.
+    int insertAt = m_frameSets.count();
+    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+    if (tfs && KWord::isHeaderFooter(tfs)) {
+        insertAt = 0;
+        for(int i = 0; i < m_frameSets.count(); ++i) {
+            KWTextFrameSet *_tfs = dynamic_cast<KWTextFrameSet*>(m_frameSets[i]);
+            if (_tfs && !KWord::isHeaderFooter(_tfs)) {
+                insertAt = i;
+                break;
+            }
+        }
+    }
+    m_frameSets.insert(insertAt, fs);
+
     foreach (KWFrame *frame, fs->frames())
         addFrame(frame);
 

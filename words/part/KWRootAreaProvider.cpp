@@ -158,6 +158,9 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
                 frame->setMinimumFrameHeight(h);
 
                 //TODO
+
+                // Layout headers and footers direct rather then waiting for the scheduledLayout to be executed.
+                //rootArea->documentLayout()->layout();
             }
         }
     } else {
@@ -177,7 +180,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     */
 
     // force repaint
-    rootArea->associatedShape()->update();
+//     rootArea->associatedShape()->update();
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)

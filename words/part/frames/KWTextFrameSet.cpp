@@ -63,6 +63,7 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
 
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     m_document->setDocumentLayout(lay);
+    lay->setLayoutStrategy(m_textFrameSetType == KWord::MainTextFrameSet ? KoTextDocumentLayout::ScheduleLayouts : KoTextDocumentLayout::LayoutDirect);
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 
     KoTextDocument doc(m_document);
@@ -344,7 +345,7 @@ void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
     m_pageStyle = style;
     if (style.isValid()) {
-        foreach(KWFrame* frame, m_frames) {
+        foreach(KWFrame* frame, frames()) {
             if (frame->shape()) {
                 frame->shape()->setBackground(style.background());
             }
