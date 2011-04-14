@@ -254,7 +254,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:image-opacity
     // draw:line-distance
     // draw:luminance
-    qreal lineWidthPt = 0;
+    qreal lineWidthPt = ds.lineWidth() / 12700.;
     if (ds.fLine()) {
         // draw:marker-end
         quint32 lineEndArrowhead = ds.lineEndArrowhead();
@@ -283,28 +283,36 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:placing
     // draw:red
     // draw:secondary-fill-color
-
-    // NOTE: fShadow property specifies whether the shape has a shadow.
     if (ds.fShadow()) {
         // draw:shadow
         style.addProperty("draw:shadow", "visible", gt);
         // draw:shadow-color
-        OfficeArtCOLORREF clr = ds.shadowColor();
-        style.addProperty("draw:fill-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
-        // draw:shadow-offset-x
-        style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
-        // draw:shadow-offset-y
-        style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+        if (client) {
+            QColor clr = processOfficeArtCOLORREF(ds.shadowColor(), ds);
+            style.addProperty("draw:shadow-color", clr.name(), gt);
+        }
+        // NOTE: shadowOffset* properties MUST exist if shadowType property
+        // equals msoshadowOffset or msoshadowDouble, otherwise MUST be
+        // ignored, MS-ODRAW 2.3.13.6
+        quint32 type = ds.shadowType();
+        if ((type == 0) || (type == 1)) {
+            // draw:shadow-offset-x
+            style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
+            // draw:shadow-offset-y
+            style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+        }
         // draw:shadow-opacity
         float shadowOpacity = toQReal(ds.shadowOpacity());
         style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    } else {
+        style.addProperty("draw:shadow", "hidden", gt);
     }
     // draw:show-unit
     // draw:start-guide
     // draw:start-line-spacing-horizontal
     // draw:start-line-spacing-vertical
-
     // draw:stroke ('dash', 'none' or 'solid')
+
     // NOTE: OOo interprets solid line with width 0 as hairline, so if width ==
     // 0, stroke *must* be none to avoid OOo from displaying a line
     if (ds.fLine() || ds.fNoLineDrawDash()) {
@@ -318,7 +326,6 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         } else {
             style.addProperty("draw:stroke", "solid", gt);
         }
-
     } else {
         style.addProperty("draw:stroke", "none", gt);
     }
@@ -385,9 +392,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // svg:height
     if (ds.fLine() || ds.fNoLineDrawDash()) {
         if (client) {
-            QColor tmp = processOfficeArtCOLORREF(ds.lineColor(), ds);
             // svg:stroke-color from 2.3.8.1 lineColor
-            style.addProperty("svg:stroke-color", tmp.name(), gt);
+            QColor clr = processOfficeArtCOLORREF(ds.lineColor(), ds);
+            style.addProperty("svg:stroke-color", clr.name(), gt);
         }
         // svg:stroke-opacity from 2.3.8.2 lineOpacity
         style.addProperty("svg:stroke-opacity",
