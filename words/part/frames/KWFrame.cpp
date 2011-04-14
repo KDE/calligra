@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2000-2006 David Faure <faure@kde.org>
- * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +21,6 @@
  */
 
 #include "KWFrame.h"
-#include "KWTextFrame.h"
 #include "KWFrameSet.h"
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
@@ -36,7 +37,9 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         m_frameBehavior(KWord::AutoExtendFrameBehavior),
         m_newFrameBehavior(KWord::NoFollowupFrame),
         m_anchoredPageNumber(pageNumber),
-        m_frameSet(parent)
+        m_frameSet(parent),
+        m_minimumFrameHeight(shape->size().height())
+
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -96,9 +99,8 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     case KWord::AutoExtendFrameBehavior:
         // the third case, AutoExtendFrame is handled by min-height
         value.clear();
-        const KWTextFrame *tf = dynamic_cast<const KWTextFrame*>(this);
-        if (tf && tf->minimumFrameHeight() > 1)
-            m_shape->setAdditionalAttribute("fo:min-height", QString::number(tf->minimumFrameHeight()) + "pt");
+        if (minimumFrameHeight() > 1)
+            m_shape->setAdditionalAttribute("fo:min-height", QString::number(minimumFrameHeight()) + "pt");
         break;
     }
     if (!value.isEmpty())

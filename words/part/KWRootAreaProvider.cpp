@@ -23,7 +23,6 @@
 #include "KWPage.h"
 #include "KWView.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 #include "frames/KWFrameLayout.h"
 
 #include <KoTextLayoutRootArea.h>
@@ -78,7 +77,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             kDebug() << m_textFrameSet << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "pageCount=" << pageManager->pageCount();
             break;
         case KWord::MainTextFrameSet: {
-            // Create missing KWPage's (they will also create a KWTextFrame and TextShape per page)
+            // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
             KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
             Q_ASSERT(kwdoc);
             int framesCountBefore = m_textFrameSet->frameCount();
@@ -156,7 +155,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
             // adjust the minimum frame height for headers and footer
             const qreal h = rootArea->associatedShape()->size().height();
             Q_ASSERT(m_textFrameSet->frameCount() > 0);
-            KWTextFrame *frame = static_cast<KWTextFrame*>(m_textFrameSet->frames().first());
+            KWFrame *frame = static_cast<KWFrame*>(m_textFrameSet->frames().first());
             if (frame->minimumFrameHeight() != h) {
                 frame->setMinimumFrameHeight(h);
                 // cause the header/footer's height changed we have to relayout the whole page
@@ -164,7 +163,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
             }
         }
     } else {
-        // header and footer should always have AutoGrowHeight see the KWTextFrame ctor
+        // header and footer should always have AutoGrowHeight see the KWFrame ctor
         Q_ASSERT(!isHeaderFooter);
 
         // adjust the rootArea to the new shape size

@@ -36,7 +36,6 @@
 #include "KWDLoader.h"
 #include "KWOdfWriter.h"
 #include "frames/KWFrameSet.h"
-#include "frames/KWTextFrame.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
 #include "frames/KWFrameLayout.h"
@@ -217,7 +216,7 @@ void KWDocument::addShape(KoShape *shape)
             KWTextFrameSet *tfs = new KWTextFrameSet(this);
             fs = tfs;
             fs->setName("Text");
-            frame = new KWTextFrame(shape, tfs);
+            frame = new KWFrame(shape, tfs);
         } else {
             fs = new KWFrameSet();
             fs->setName(shape->shapeId());

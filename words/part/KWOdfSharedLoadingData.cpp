@@ -25,7 +25,6 @@
 #include "KWOdfLoader.h"
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 #include "frames/KWCopyShape.h"
 
 #include <KoTextShapeData.h>
@@ -83,7 +82,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
             m_loader->document()->addFrameSet(fs);
         }
 
-        KWTextFrame *frame = new KWTextFrame(shape, fs, pageNumber);
+        KWFrame *frame = new KWFrame(shape, fs, pageNumber);
         if (style) {
             if (! fillFrameProperties(frame, *style))
                 return; // done

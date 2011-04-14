@@ -27,7 +27,6 @@
 #include "KWPage.h"
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoOdfStylesReader.h>

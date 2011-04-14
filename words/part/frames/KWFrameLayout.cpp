@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
- * Copyright (C) 2008,2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,7 +23,6 @@
 #include "KWFrameLayout.h"
 #include "KWPageManager.h"
 #include "KWTextFrameSet.h"
-#include "KWTextFrame.h"
 #include "KWPageStyle.h"
 #include "KWPage.h"
 #include "KWCopyShape.h"
@@ -154,7 +154,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             KoShape * shape = createTextShape(page);
             shape->setPosition(QPoint(columns * colwidth, page.offsetInDocument()));
             shape->setSize(QSizeF(colwidth, colheight));
-            new KWTextFrame(shape, fs);
+            new KWFrame(shape, fs);
         }
     }
 #if 0
@@ -324,10 +324,10 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     KWPageStyle pageStyle = page.pageStyle();
     const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns : 0;
     int columnsCount = columns;
-    KWTextFrame **main;
-    KWTextFrame *footer = 0, *endnote = 0, *header = 0;
+    KWFrame **main;
+    KWFrame *footer = 0, *endnote = 0, *header = 0;
     KWFrame *pageBackground = 0;
-    main = new KWTextFrame*[columnsCount];
+    main = new KWFrame*[columnsCount];
     if (columns > 0)
         main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
@@ -366,18 +366,18 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         switch (textFrameSet->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
         case KWord::EvenPagesHeaderTextFrameSet: {
-            header = static_cast<KWTextFrame *>(frame);
+            header = frame;
             minimumHeight[1] = qMax((qreal)10, pageStyle.headerMinimumHeight());
             minimumHeight[2] = pageStyle.headerDistance();
-            requestedHeight[1] = qMax(pageStyle.headerMinimumHeight(), static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight());
+            requestedHeight[1] = qMax(pageStyle.headerMinimumHeight(), textFrameSet->frames().first()->minimumFrameHeight());
             break;
         }
         case KWord::OddPagesFooterTextFrameSet:
         case KWord::EvenPagesFooterTextFrameSet: {
-            footer = static_cast<KWTextFrame *>(frame);
+            footer = frame;
             minimumHeight[7] = qMax((qreal)10, pageStyle.footerMinimumHeight());
             minimumHeight[6] = pageStyle.footerDistance();
-            requestedHeight[7] = qMax(pageStyle.footerMinimumHeight(), static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight());
+            requestedHeight[7] = qMax(pageStyle.footerMinimumHeight(), textFrameSet->frames().first()->minimumFrameHeight());
             break;
         }
         case KWord::MainTextFrameSet: {
@@ -385,7 +385,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
                 kWarning(32001) << "Too many columns present on page, ignoring 1, columnsCount=" << columnsCount;
                 break;
             }
-            main[--columnsCount] = static_cast<KWTextFrame *>(frame);
+            main[--columnsCount] = frame;
             minimumHeight[3] = 10;
             // make at least one line fit lest we add endless pages.
             QTextLayout *layout = textFrameSet->document()->begin().layout();
@@ -407,8 +407,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         endnote->shape()->setZIndex(minZIndex--);
     }
     for (int i = 0; i < columns; ++i) {
-        Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWTextFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
-        Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWTextFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
+        Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
+        Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
         if (main[i] && main[i]->shape())
             main[i]->shape()->setZIndex(minZIndex);
     }
@@ -758,12 +758,12 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
     else
         prevPage2 = -1;
 
-    QList<KWTextFrame*> framesToDuplicate;
+    QList<KWFrame*> framesToDuplicate;
     QList<KWFrame*> frames = fs->frames();
     QList<KWFrame*>::Iterator iter = frames.end();
     while (iter != frames.begin()) {
         iter--;
-        KWTextFrame *frame = static_cast<KWTextFrame*>(*iter);
+        KWFrame *frame = static_cast<KWFrame*>(*iter);
         qreal y = frame->shape()->position().y();
         if (y > prevPage) {
             if (frame->frameOnBothSheets())
@@ -779,8 +779,8 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
     Q_ASSERT(page.isValid());
     const qreal offsetInDocument = page.offsetInDocument();
     // now add them in the proper order.
-    foreach (KWTextFrame *f, framesToDuplicate) {
-        KWTextFrame *frame = new KWTextFrame(createTextShape(page), fs);
+    foreach (KWFrame *f, framesToDuplicate) {
+        KWFrame *frame = new KWFrame(createTextShape(page), fs);
         const qreal y = f->shape()->position().y();
         qreal offsetFromPage = y - prevPage2;
         if (y > prevPage)
@@ -803,7 +803,7 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
         Q_ASSERT(tfs); // an empty, non-text frameset asking for a copy? Thats a bug.
         KoShape *shape = createTextShape(page);
         shape->setSize(QSize(20, 10));
-        KWTextFrame *frame = new KWTextFrame(shape, tfs);
+        KWFrame *frame = new KWFrame(shape, tfs);
         return frame;
     }
 

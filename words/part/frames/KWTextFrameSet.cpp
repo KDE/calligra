@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2006-2011 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,7 +22,6 @@
 
 #include "KWTextFrameSet.h"
 #include "KWFrame.h"
-#include "KWTextFrame.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
@@ -214,13 +213,10 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
 #if 0
     if (frameCount() == 0)
         return; // there is no way we can get more frames anyway.
-    KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
-    Q_ASSERT(lastFrame);
-    if (!lastFrame)
-        return;
+    KWFrame *lastFrame = frames()[frameCount()-1];
 
     if (KWord::isHeaderFooter(this)) {
-        KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
+        KWFrame *frame = frames().first();
         frame->setMinimumFrameHeight(frame->minimumFrameHeight() + textHeight + 1E-6);
         //kDebug(32001)<<"Header/Footer frameSet="<<this<<"lastFrame="<<lastFrame<<"allowLayout="<<allowLayout()<<"textHeight="<<textHeight;
         if (allowLayout())
@@ -259,7 +255,7 @@ void KWTextFrameSet::spaceLeft(qreal excessHeight)
     if (m_frames.count() == 0)
         return;
     if (KWord::isHeaderFooter(this)) {
-        KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
+        KWFrame *frame = frames().first();
         kDebug(32001) <<"KWTextFrameSet::spaceLeft" << frame->minimumFrameHeight() << excessHeight;
         frame->setMinimumFrameHeight(frame->minimumFrameHeight() - excessHeight);
         emit  decorationFrameResize(this);
@@ -268,7 +264,7 @@ void KWTextFrameSet::spaceLeft(qreal excessHeight)
     //kDebug(32001) <<"KWTextFrameSet::spaceLeft" << excessHeight;
     QList<KWFrame*>::Iterator iter = --m_frames.end();
     do {
-        KWTextFrame *tf = dynamic_cast<KWTextFrame*>(*(iter));
+        KWFrame *tf = *iter;
         if (tf) {
             if (tf && tf->frameBehavior() == KWord::AutoExtendFrameBehavior) {
                 tf->autoShrink(tf->shape()->size().height() - excessHeight);
@@ -389,22 +385,16 @@ void KWTextFrameSet::sortFrames()
 }
 
 // static   returns true if frame1 comes before frame2
-bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2)
+bool KWTextFrameSet::sortTextFrames(const KWFrame *f1, const KWFrame *f2)
 {
 #if 0
-    const KWTextFrame *f1 = dynamic_cast<const KWTextFrame*>(frame1);
-    const KWTextFrame *f2 = dynamic_cast<const KWTextFrame*>(frame2);
-
     if (!f1 && f2) // copy always come after textframe
         return false;
-
     if (f1 && !f2) // copy always come after textframe
         return true;
-
     if (f1 && f2 && f1->sortingId() >= 0 && f2->sortingId() >= 0) { // copy frames don't have a sortingId
         return f1->sortingId() < f2->sortingId();
     }
-
 #if 1
     // use a more performant way of sorting the frames
     QPointF tl1 = frame1->shape()->absolutePosition(KoFlake::TopLeftCorner);

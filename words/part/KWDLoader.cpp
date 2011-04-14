@@ -22,7 +22,6 @@
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoShapeRegistry.h>
@@ -557,7 +556,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
             KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
             Q_ASSERT(factory);
             KoShape *shape = factory->createDefaultShape(m_document->resourceManager());
-            KWTextFrame *frame = new KWTextFrame(shape, fs);
+            KWFrame *frame = new KWFrame(shape, fs);
             fill(frame, frameElem);
             //m_doc->progressItemLoaded();
         }
@@ -1091,7 +1090,7 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem)
 
     int zIndex = frameElem.attribute("z-index", "0").toInt();
 
-    KWTextFrame *tf = dynamic_cast<KWTextFrame*>(frame);
+    KWFrame *tf = dynamic_cast<KWFrame*>(frame);
     if (tf) {
         if (zIndex <= 0 && static_cast<KWTextFrameSet*>(tf->frameSet())->textFrameSetType() == KWord::OtherTextFrameSet)
             zIndex = 1; // OtherTextFrameSet types always live on top of the main frames.

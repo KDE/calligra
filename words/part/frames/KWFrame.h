@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -82,6 +85,13 @@ public:
         m_newFrameBehavior = nf;
     }
 
+    void setMinimumFrameHeight(qreal minimumFrameHeight) {
+        m_minimumFrameHeight = minimumFrameHeight;
+    }
+    qreal minimumFrameHeight() const {
+        return m_minimumFrameHeight;
+    }
+
     /**
      * Each frame will be rendered by a shape which also holds the position etc.
      * @return the shape that represents this frame.
@@ -143,6 +153,7 @@ private:
     int m_anchoredPageNumber;
 
     KWFrameSet *m_frameSet;
+    qreal m_minimumFrameHeight;
 };
 
 #endif
