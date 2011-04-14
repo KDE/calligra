@@ -112,6 +112,7 @@ signals:
 
 protected:
     friend class KWFrame;
+
     /**
      * Called from addFrame.
      * Overwrite in inheriting classes to do something with the frame on add.
@@ -121,11 +122,12 @@ protected:
         Q_UNUSED(frame);
     }
 
+private:
     /// The list of frames that this frameset owns.
     QList<KWFrame*> m_frames;
+    /// The type of the frameset.
     KWord::FrameSetType m_type;
-
-private:
+    /// The name of the frameset.
     QString m_name;
 };
 
