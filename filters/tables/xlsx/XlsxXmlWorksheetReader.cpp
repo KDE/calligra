@@ -137,11 +137,17 @@ QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleFo
     // purpose is to optimize this code part for a large set of conditions
     QList<QString> cachedHits, cachedMisses;
 
+    // We do not wish to add the same condition twice
+    QList<QString> addedConditions;
+
     int index = 0;
     while (index < conditionalStyles.size()) {
         QString range = conditionalStyles.at(index).first;
         if (cachedHits.contains(range)) {
-            returnMaps.push_back(conditionalStyles.at(index).second);
+            if (!addedConditions.contains(conditionalStyles.at(index).second.value("style:condition"))) {
+                returnMaps.push_back(conditionalStyles.at(index).second);
+                addedConditions.push_back(conditionalStyles.at(index).second.value("style:condition"));
+            }
             ++index;
             continue;
         }
@@ -162,7 +168,10 @@ QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleFo
         if ((positionLetter == startLetter && positionNumber == startNumber && endLetter.isEmpty()) ||
             (positionLetter >= startLetter && positionNumber >= startNumber &&
              positionLetter <= endLetter && positionNumber <= endNumber)) {
-            returnMaps.push_back(conditionalStyles.at(index).second);
+            if (!addedConditions.contains(conditionalStyles.at(index).second.value("style:condition"))) {
+                returnMaps.push_back(conditionalStyles.at(index).second);
+                addedConditions.push_back(conditionalStyles.at(index).second.value("style:condition"));
+            }
             cachedHits.push_back(range);
             ++index;
             continue;
@@ -174,6 +183,7 @@ QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleFo
         }
         ++index;
     }
+
     return returnMaps;
 }
 
