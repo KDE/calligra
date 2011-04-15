@@ -48,6 +48,9 @@ public:
     /// Constructs an absolute file path from the given href and current xml base directory
     QString absoluteFilePath(const QString &href);
 
+    /// Returns the next z-index
+    int nextZIndex();
+
 private:
     class Private;
     Private * const d;

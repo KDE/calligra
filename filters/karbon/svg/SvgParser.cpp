@@ -1382,7 +1382,7 @@ QList<KoShape*> SvgParser::parseUse(const KoXmlElement &e)
                 m_context.pushGraphicsContext(a);
 
                 KoShapeGroup *group = new KoShapeGroup();
-                group->setZIndex(nextZIndex());
+                group->setZIndex(m_context.nextZIndex());
 
                 parseStyle(0, styles);
                 parseFont(styles);
@@ -1521,7 +1521,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             m_context.pushGraphicsContext(b);
 
             KoShapeGroup *group = new KoShapeGroup();
-            group->setZIndex(nextZIndex());
+            group->setZIndex(m_context.nextZIndex());
 
             SvgStyles styles = collectStyles(b);
             parseStyle(0, styles);   // parse style for inheritance
@@ -1827,7 +1827,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
         text->setName(textElement.attribute("id"));
 
     text->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-    text->setZIndex(nextZIndex());
+    text->setZIndex(m_context.nextZIndex());
 
     // apply the style merged from the text element and the last tspan element
     parseStyle(text, mergeStyles(collectStyles(styleElement), elementStyles));
@@ -2002,16 +2002,9 @@ KoShape * SvgParser::createObject(const KoXmlElement &b, const SvgStyles &style)
 
     m_context.popGraphicsContext();
 
-    obj->setZIndex(nextZIndex());
+    obj->setZIndex(m_context.nextZIndex());
 
     return obj;
-}
-
-int SvgParser::nextZIndex()
-{
-    static int zIndex = 0;
-
-    return zIndex++;
 }
 
 KoShape * SvgParser::createShape(const QString &shapeID)

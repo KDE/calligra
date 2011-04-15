@@ -122,9 +122,6 @@ protected:
     /// Adds list of shapes to the given group shape
     void addToGroup(QList<KoShape*> shapes, KoShapeGroup * group);
 
-    /// Returns the next z-index
-    int nextZIndex();
-
     /// creates a shape from the given shape id
     KoShape * createShape(const QString &shapeID);
 

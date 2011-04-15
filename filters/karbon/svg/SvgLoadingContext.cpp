@@ -31,6 +31,7 @@ class SvgLoadingContext::Private
 {
 public:
     Private()
+        : zIndex(0)
     {
 
     }
@@ -44,6 +45,7 @@ public:
     }
     QStack<SvgGraphicsContext*> gcStack;
     QString initialXmlBaseDir;
+    int zIndex;
 };
 
 SvgLoadingContext::SvgLoadingContext()
@@ -136,3 +138,9 @@ QString SvgLoadingContext::absoluteFilePath(const QString &href)
 
     return absFile;
 }
+
+int SvgLoadingContext::nextZIndex()
+{
+    return d->zIndex++;
+}
+
