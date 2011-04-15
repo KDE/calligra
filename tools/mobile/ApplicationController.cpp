@@ -378,6 +378,7 @@ ApplicationController::ApplicationController(Splash *aSplash, MainWindow *mainWi
     m_fsButton->setIcon(m_fsIcon);
     m_fsButton->hide();
     connect(m_fsButton, SIGNAL(clicked()), SLOT(fsButtonClicked()));
+    qApp->installEventFilter(m_mainWindow);
 
     updateActions();
 
