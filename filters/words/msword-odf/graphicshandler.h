@@ -42,6 +42,8 @@
 
 class DrawStyle;
 
+enum ObjectType { Inline, Floating };
+
 /*
  * ************************************************
  * Drawing Writer
@@ -50,7 +52,7 @@ class DrawStyle;
 class DrawingWriter : public Writer
 {
 public:
-    DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_, bool inlineObj);
+    DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_, ObjectType type);
 
     //position
     int xLeft;
@@ -73,17 +75,17 @@ public:
 
     //true - drawing is in body; false - drawing is in header/footer
     bool m_bodyDrawing;
-    //true - inline object; false - floating object
-    bool m_inline;
+
+    ObjectType m_objectType;
 
     qreal vLength();
     qreal hLength();
     qreal vOffset();
     qreal hOffset();
 
-    void SetRectangle(wvWare::Word97::FSPA& spa);
-    void SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
-    void SetClientRectangle(MSO::OfficeArtChildAnchor& anchor);
+    void setRectangle(wvWare::Word97::FSPA& spa);
+    void setGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
+    void setClientRectangle(MSO::OfficeArtChildAnchor& anchor);
 };
 
 /*
@@ -209,32 +211,29 @@ private:
     void defineDefaultGraphicStyle(KoGenStyles* mainStyles);
 
     /**
-     * Process general properties of a shape.
+     * Process text wrapping related properties of a shape.  Add corresponding
+     * attributes to graphic-properties of the graphic style.
      */
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, const QString& listStyle=QString());
+    void defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa);
 
     /**
-     * Process anchor related properties of a shape.
+     * Process position related properties of a shape.  Add corresponding
+     * attributes to graphic-properties of the graphic style.
      */
-    void defineAnchorProperties(KoGenStyle& style, const DrawStyle& ds);
-
-    /**
-     * Process text wrapping related properties of a shape.
-     */
-    void defineWrappingProperties(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa);
+    void definePositionAttributes(KoGenStyle& style, const DrawStyle& ds, DrawingWriter out);
 
     /**
      * Check if the object is inline or floating and set the anchor type to
      * char or as-char.
      */
-    void SetAnchorTypeAttribute(DrawingWriter& out);
+    void setAnchorTypeAttribute(DrawingWriter& out);
 
     /**
-     * Set the Z-Index attribute. Z-Index is the position of the shape on z
-     * axis. Z-Index depends on the order in which shapes are stored inside
+     * Set the Z-Index attribute.  Z-Index is the position of the shape on z
+     * axis.  Z-Index depends on the order in which shapes are stored inside
      * OfficeArtDgContainer
      */
-    void SetZIndexAttribute(DrawingWriter& out);
+    void setZIndexAttribute(DrawingWriter& out);
 
     /**
      * TODO:

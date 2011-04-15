@@ -48,14 +48,6 @@ using Conversion::twipsToPt;
 
 namespace
 {
-const char* dashses[11] = {
-    "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
-    "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
-};
-const char* arrowHeads[6] = {
-    "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
-    "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
-};
 QString format(double v) {
     static const QString f("%1");
     static const QString e("");
@@ -80,9 +72,9 @@ QString mm(double v) {
  * Drawing Writer
  * ************************************************
  */
-DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
-                             bool stylesxml_, bool inlineObj)
-        : Writer(xmlWriter, kostyles, stylesxml_),
+DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& styles,
+                             bool stylesxml_, ObjectType type)
+        : Writer(xmlWriter, styles, stylesxml_),
           xLeft(0),
           xRight(0),
           yTop(0),
@@ -91,7 +83,7 @@ DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
           m_picf(0),
           m_rgbUid(0),
           m_bodyDrawing(true),
-          m_inline(inlineObj)
+          m_objectType(type)
 {
     scaleX = 25.4 / 1440;
     scaleY = 25.4 / 1440;
@@ -117,7 +109,7 @@ qreal DrawingWriter::hOffset()
     return Writer::hOffset(xLeft);
 }
 
-void DrawingWriter::SetRectangle(wvWare::Word97::FSPA& spa)
+void DrawingWriter::setRectangle(wvWare::Word97::FSPA& spa)
 {
     xLeft = spa.xaLeft;
     xRight = spa.xaRight;
@@ -128,7 +120,7 @@ void DrawingWriter::SetRectangle(wvWare::Word97::FSPA& spa)
 //FIXME: It doesn't make sense with current initialization, because when first
 //time called, scaleX and scaleY are both set to zero!  Both xOffset and
 //yOffset doesn't change!
-void DrawingWriter::SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
+void DrawingWriter::setGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
 {
     if (fspgr.xRight == fspgr.xLeft) {
         return;
@@ -147,7 +139,7 @@ void DrawingWriter::SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
     yOffset = yOffset - fspgr.yTop * scaleY;
 }
 
-void DrawingWriter::SetClientRectangle(MSO::OfficeArtChildAnchor& anchor)
+void DrawingWriter::setClientRectangle(MSO::OfficeArtChildAnchor& anchor)
 {
     xLeft = anchor.xLeft;
     xRight = anchor.xRight;
@@ -281,7 +273,7 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     }
     m_store->leaveDirectory();
 
-    DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, true);
+    DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, Inline);
     out.m_picf = data.picf;
     out.m_rgbUid = ref.uid;
 
@@ -307,7 +299,7 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
             kDebug(30513) << "FSPA spid:" << it.current()->spid;
 
             if (it.currentStart() == globalCP) {
-                DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, false);
+                DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, Floating);
                 out.m_pSpa = it.current();
                 out.m_bodyDrawing = true;
                 locateDrawing((m_pOfficeArtBodyDgContainer->groupShape).data(), out,
@@ -326,7 +318,7 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
             kDebug(30513) << "FSPA spid:" << itHeader.current()->spid;
 
             if ((itHeader.currentStart() + m_fib.ccpText + m_fib.ccpFtn)  == globalCP) {
-                DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, false);
+                DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, Floating);
                 out.m_pSpa = itHeader.current();
                 out.m_bodyDrawing = false;
                 locateDrawing((m_pOfficeArtHeaderDgContainer->groupShape).data(), out,
@@ -360,7 +352,7 @@ void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
             const OfficeArtSpContainer* first = 
                 (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
             if (first && first->shapeProp.spid == spid) {
-                out.SetRectangle(*spa);
+                out.setRectangle(*spa);
                 processGroup(*co.anon.get<OfficeArtSpgrContainer>(), out);
                 break;
             } else {
@@ -370,13 +362,13 @@ void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
             const OfficeArtSpContainer &sp = *co.anon.get<OfficeArtSpContainer>();
             if (sp.shapeProp.fGroup) {
 		if (sp.shapeGroup) {
-                    out.SetGroupRectangle(*sp.shapeGroup);
+                    out.setGroupRectangle(*sp.shapeGroup);
                 }
                 if (sp.shapeProp.spid == spid) {
                     kDebug(30513) << "An unprocessed shape storing information for the group is referred from text!";
                 }
             } else if (sp.shapeProp.spid == spid) {
-                out.SetRectangle(*spa);
+                out.setRectangle(*spa);
                 processDrawingObject(sp, out);
                 break;
             }
@@ -396,14 +388,14 @@ void KWordGraphicsHandler::processGroup(const MSO::OfficeArtSpgrContainer& o, Dr
 
     if (first && first->shapeGroup) {
         //process shape information for the group
-        out.SetGroupRectangle(*first->shapeGroup);
+        out.setGroupRectangle(*first->shapeGroup);
     }
 
     for (int i = 1; i < o.rgfb.size(); ++i) {
         if (o.rgfb[i].anon.is<OfficeArtSpContainer>()) {
             OfficeArtSpContainer sp = *o.rgfb[i].anon.get<OfficeArtSpContainer>();
             if (sp.childAnchor) {
-                out.SetClientRectangle(*sp.childAnchor); //set child rectangle
+                out.setClientRectangle(*sp.childAnchor); //set child rectangle
             }
             processDrawingObject(sp, out); //draw objects
         } 
@@ -444,7 +436,7 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
         break;
     case msosptPictureFrame:
         kDebug(30513)<< "processing a FrameShape";
-        if (out.m_inline) {
+        if (out.m_objectType == Inline) {
             processInlinePictureFrame(o, out);
         } else {
             processFloatingPictureFrame(o, out);
@@ -587,315 +579,22 @@ void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
 {
     // write style <style:default-style style:family="graphic">
     KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
-    DrawStyle ds(&m_officeArtDggContainer);
     style.setDefaultStyle(true);
-    defineGraphicProperties(style, ds);
+    DrawStyle ds(&m_officeArtDggContainer);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, *styles);
     styles->insert(style);
 }
 
-void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
-                                                  const QString& listStyle)
+void KWordGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds,
+                                                    const wvWare::Word97::FSPA* spa)
 {
-    MSO::OfficeArtCOLORREF clr;
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
-    // dr3d:ambient-color
-    // dr3d:back-scale
-    // dr3d:backface-culling
-    // dr3d:close-back
-    // dr3d:close-front
-    // dr3d:depth
-    // dr3d:diffuse-color
-    // dr3d:edge-rounding
-    // dr3d:edge-rounding-mode
-    // dr3d:emissive-color
-    // dr3d:end-angle
-    // dr3d:horizontal-segments
-    // dr3d:lighting-mode
-    // dr3d:normals-direction
-    // dr3d:normals-kind
-    // dr3d:shadow
-    // dr3d:shininess
-    // dr3d:specular-color
-    // dr3d:texture-filter
-    // dr3d:texture-generation-mode-x
-    // dr3d:texture-generation-mode-y
-    // dr3d:texture-kind
-    // dr3d:texture-mode
-    // dr3d:vertical-segments
-    // draw:auto-grow-height
-    // draw:auto-grow-width
-    // draw:blue
-    // draw:caption-angle
-    // draw:caption-angle-type
-    // draw:caption-escape
-    // draw:caption-escape-direction
-    // draw:caption-fit-line-length
-    // draw:caption-gap
-    // draw:caption-line-length
-    // draw:caption-type
-    // draw:color-inversion
-    // draw:color-mode
-    // draw:contrast
-    // draw:decimal-places
-    // draw:end-guide
-    // draw:end-line-spacing-horizontal
-    // draw:end-line-spacing-vertical
-
-    // NOTE: fFilled specifies whether fill of the shape is render based on the
-    // properties of the "fill style" property set.
-    if (ds.fFilled()) {
-        qint32 fillType = ds.fillType();
-        // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
-        style.addProperty("draw:fill", getFillType(fillType), gt);
-        // NOTE: only set the color if the fill type is 'solid' because OOo
-        // ignores fill='none' if the color is set
-        if (fillType == 0) {
-            clr = ds.fillColor();
-            style.addProperty("draw:fill-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
-        }
-    } else {
-        style.addProperty("draw:fill", "none", gt);
-    }
-    // draw:fill-gradient-name
-    // draw:fill-hatch-name
-    // draw:fill-hatch-solid
-    // draw:fill-image-name
-    // draw:fill-image-ref-point
-    // draw:fill-image-ref-point-x
-    // draw:fill-image-ref-point-y
-    // draw:fill-image-height
-    // draw:fill-image-width
-    // draw:fit-to-contour
-    // draw:fit-to-size
-    // draw:frame-display-border
-    // draw:frame-display-scrollbar
-    // draw:frame-margin-horizontal
-    // draw:frame-margin-vertical
-    // draw:gamma
-    // draw:gradient-step-count
-    // draw:green
-    // draw:guide-distance
-    // draw:guide-overhang
-    // draw:image-opacity
-    // draw:line-distance
-    // draw:luminance
-    // draw:marker-end
-    quint32 lineEndArrowhead = ds.lineEndArrowhead();
-    if (lineEndArrowhead > 0 && lineEndArrowhead < 6) {
-        style.addProperty("draw:marker-end", arrowHeads[lineEndArrowhead], gt);
-    }
-    // draw:marker-end-center
-    // draw:marker-end-width
-    qreal lineWidthPt = ds.lineWidth() / 12700.;
-    style.addProperty("draw:marker-end-width",
-                      pt(lineWidthPt*4*(1+ds.lineEndArrowWidth())), gt);
-    // draw:marker-start
-    quint32 lineStartArrowhead = ds.lineStartArrowhead();
-    if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
-        style.addProperty("draw:marker-start", arrowHeads[lineStartArrowhead],
-                          gt);
-    }
-    // draw:marker-start-center
-    // draw:marker-start-width
-    style.addProperty("draw:marker-start-width",
-                      pt(lineWidthPt*4*(1+ds.lineStartArrowWidth())), gt);
-    // draw:measure-align
-    // draw:measure-vertical-align
-    // draw:ole-draw-aspect
-    // draw:opacity
-    // draw:opacity-name
-    // draw:parallel
-    // draw:placing
-    // draw:red
-    // draw:secondary-fill-color
-
-    // NOTE: fShadow property specifies whether the shape has a shadow.
-    if (ds.fShadow()) {
-        // draw:shadow
-        style.addProperty("draw:shadow", "visible", gt);
-        // draw:shadow-color
-        clr = ds.shadowColor();
-        style.addProperty("draw:shadow-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
-        //shadowOffset* properties MUST exist if shadowType property equals
-        //msoshadowOffset or msoshadowDouble, otherwise MUST be ignored,
-        //MS-ODRAW 2.3.13.6
-        quint32 type = ds.shadowType();
-        if ((type == 0) || (type == 1)) {
-            // draw:shadow-offset-x
-            style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.), gt);
-            // draw:shadow-offset-y
-            style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.), gt);
-        }
-        // draw:shadow-opacity
-        float shadowOpacity = toQReal(ds.shadowOpacity());
-        style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
-    } else {
-        style.addProperty("draw:shadow", "hidden");
-    }
-    // draw:show-unit
-    // draw:start-guide
-    // draw:start-line-spacing-horizontal
-    // draw:start-line-spacing-vertical
-    // draw:stroke ('dash', 'none' or 'solid')
-    quint32 lineDashing = ds.lineDashing();
-    // OOo interprets solid line with with 0 as hairline, so if
-    // width == 0, stroke *must* be none to avoid OOo from
-    // displaying a line
-    if (lineWidthPt == 0) {
-        style.addProperty("draw:stroke", "none", gt);
-    } else if (ds.fLine() || ds.fNoLineDrawDash()) {
-        if (lineDashing > 0 && lineDashing < 11) {
-            style.addProperty("draw:stroke", "dash", gt);
-        } else {
-            style.addProperty("draw:stroke", "solid", gt);
-        }
-    } else {
-        style.addProperty("draw:stroke", "none", gt);
-    }
-    // draw:stroke-dash from 2.3.8.17 lineDashing
-    if (lineDashing > 0 && lineDashing < 11) {
-        style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
-    }
-    // draw:stroke-dash-names
-    // draw:stroke-linejoin
-    // draw:symbol-color
-    // draw:textarea-horizontal-align
-    // draw:textarea-vertical-align
-    // draw:tile-repeat-offset
-    // draw:unit
-    // draw:visible-area-height
-    // draw:visible-area-left
-    // draw:visible-area-top
-    // draw:visible-area-width
-    // draw:wrap-influence-on-position
-    // fo:background-color
-    // fo:border
-    // fo:border-bottom
-    // fo:border-left
-    // fo:border-right
-    // fo:border-top
-    // fo:clip
-    // fo:max-height
-    // fo:max-width
-    // fo:min-height
-    // fo:min-width
-    // fo:padding
-    // fo:padding-left
-    // fo:padding-top
-    // fo:padding-right
-    // fo:padding-bottom
-    // fo:wrap-option
-    // style:border-line-width
-    // style:border-line-width-bottom
-    // style:border-line-width-left
-    // style:border-line-width-right
-    // style:border-line-width-top
-    // style:editable
-    // style:flow-with-text
-    // style:mirror
-    // style:overflow-behavior
-    // style:print-content
-    // style:protect
-    // style:rel-height
-    // style:rel-width
-    // style:repeat
-    // svg:fill-rule
-    // svg:height
-    // svg:stroke-color from 2.3.8.1 lineColor
-    clr = ds.lineColor();
-    QColor lineColor(clr.red,clr.green,clr.blue);
-    style.addProperty("svg:stroke-color", lineColor.name(), gt);
-    // svg:stroke-opacity from 2.3.8.2 lineOpacity
-    style.addProperty("svg:stroke-opacity",
-                      percent(100.0 * ds.lineOpacity() / 0x10000), gt);
-    // svg:stroke-width from 2.3.8.14 lineWidth
-    style.addProperty("svg:stroke-width", pt(lineWidthPt), gt);
-    // svg:width
-    // svg:x
-    // svg:y
-    // text:anchor-page-number
-    // text:anchor-type
-    // text:animation
-    // text:animation-delay
-    // text:animation-direction
-    // text:animation-repeat
-    // text:animation-start-inside
-    // text:animation-steps
-    // text:animation-stop-inside
-
-    /* associate with a text:list-style element */
-    if (!listStyle.isNull()) {
-        style.addAttribute("style:list-style-name", listStyle);
-    }
-}
-
-void KWordGraphicsHandler::defineAnchorProperties(KoGenStyle& style, const DrawStyle& ds)
-{
-    // style:horizontal-pos MS-ODRAW - 2.3.4.19
-    quint32 posH = ds.posH();
-    if (posH == 0) {  // msophAbs
-        style.addProperty("style:horizontal-pos","from-left");
-    } else if (posH == 1) { // msophLeft
-        style.addProperty("style:horizontal-pos","left");
-    } else if (posH == 2) { // msophCenter
-        style.addProperty("style:horizontal-pos","center");
-    } else if (posH == 3) { // msophRight
-        style.addProperty("style:horizontal-pos","right");
-    } else if (posH == 4) { // msophInside
-        style.addProperty("style:horizontal-pos","inside");
-    } else if (posH == 5) { // msophOutside
-        style.addProperty("style:horizontal-pos","outside");
-    }
-
-    // style:horizontal-rel MS-ODRAW 2.3.4.20
-    quint32 posRelH = ds.posRelH();
-
-    if (posRelH == 0) {//msoprhMargin
-        style.addProperty("style:horizontal-rel","page-content");
-    } else if (posRelH == 1) {//msoprhPage
-        style.addProperty("style:horizontal-rel","page");
-    } else if (posRelH == 2) {//msoprhText
-        style.addProperty("style:horizontal-rel","paragraph");
-    } else if (posRelH == 3) {//msoprhChar
-        style.addProperty("style:horizontal-rel","char");
-    } else {
-        style.addProperty("style:horizontal-rel","page-content");
-    }
-
-    // style:vertical-pos MS-ODRAW - 2.3.4.21
-    quint32 posV = ds.posV();
-    if (posV == 0) {  // msophAbs
-        style.addProperty("style:vertical-pos","from-top");
-    } else if (posV == 1) { // msophTop
-        style.addProperty("style:vertical-pos","top");
-    } else if (posV == 2) { // msophCenter
-        style.addProperty("style:vertical-pos","middle");
-    } else if (posV == 3) { // msophBottom
-        style.addProperty("style:vertical-pos","bottom");
-    } else if (posV == 4) { // msophInside - not possible to write it into odf
-        style.addProperty("style:vertical-pos","top");
-    } else if (posV == 5) { // msophOutside - not possible to write it into odf
-        style.addProperty("style:vertical-pos","bottom");
-    }
-
-    // style:vertical-rel MS-ODRAW 2.3.4.22
-    quint32 posRelV = ds.posRelV();
-    if (posRelV == 0) {//msoprvMargin
-        style.addProperty("style:vertical-rel","page-content");
-    } else if (posRelV == 1) {//msoprvPage
-        style.addProperty("style:vertical-rel","page");
-    } else if (posRelV == 2) {//msoprvText
-        style.addProperty("style:vertical-rel","paragraph");
-    } else if (posRelV == 3) { //msoprvLine
-        style.addProperty("style:vertical-rel","line");
-    } else {
-        style.addProperty("style:vertical-rel","page-content");
-    }
-}
-
-void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa)
-{
-    //process the wrapping style, (MS-DOC, page 464)
+    // style:wrap
+    // style:wrap-contour
+    // style:wrap-contour-mode
+    // style:wrap-dynamic-threshold
     if (spa != 0) {
         bool check_wrk = false;
         if (spa->wr == 0) {
@@ -904,7 +603,7 @@ void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const Dra
         }
         else if (spa->wr == 1) {
             //top and bottom wrapping
-            style.addProperty("style:wrap", "none");
+            style.addProperty("style:wrap", "none", gt);
         }
         else if (spa->wr == 2) {
             //square wrapping
@@ -912,98 +611,121 @@ void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const Dra
         }
         else if (spa->wr == 3) {
             //in front or behind the text
-            style.addProperty("style:wrap", "run-through");
+            style.addProperty("style:wrap", "run-through", gt);
 	    //check if shape is behind the text
             if ((spa->fBelowText == 1) || (ds.fBehindDocument())) {
-                style.addProperty("style:run-through", "background");
+                style.addProperty("style:run-through", "background", gt);
             } else {
-                style.addProperty("style:run-through", "foreground");
+                style.addProperty("style:run-through", "foreground", gt);
             }
         }
         else if (spa->wr == 4) {
             //tight wrapping
             check_wrk = true;
-            style.addProperty("style:wrap-contour", "true");
-            style.addProperty("style:wrap-contour-mode", "outside");
+            style.addProperty("style:wrap-contour", "true", gt);
+            style.addProperty("style:wrap-contour-mode", "outside", gt);
         }
         else if (spa->wr == 5) {
             //through wrapping
             check_wrk = true;
-            style.addProperty("style:wrap-contour", "true");
-            style.addProperty("style:wrap-contour-mode", "full");
+            style.addProperty("style:wrap-contour", "true", gt);
+            style.addProperty("style:wrap-contour-mode", "full", gt);
         }
         //check details of the text wrapping around this shape
         if (check_wrk) {
             if (spa->wrk == 0) {
-                style.addProperty("style:wrap", "parallel");
+                style.addProperty("style:wrap", "parallel", gt);
             }
             else if (spa->wrk == 1) {
-                style.addProperty("style:wrap", "left");
+                style.addProperty("style:wrap", "left", gt);
             }
             else if (spa->wrk == 2) {
-                style.addProperty("style:wrap", "right");
+                style.addProperty("style:wrap", "right", gt);
             }
             else if (spa->wrk == 3) {
-                style.addProperty("style:wrap", "biggest");
+                style.addProperty("style:wrap", "biggest", gt);
             }
         }
-    }
-    //no information from plcfSpa available 
-    else {
-        style.addProperty("style:wrap", "run-through");
+    } else {
+        style.addProperty("style:wrap", "run-through", gt);
         if (ds.fBehindDocument()) {
-            style.addProperty("style:run-through", "background");
+            style.addProperty("style:run-through", "background", gt);
         } else {
-            style.addProperty("style:run-through", "foreground");
+            style.addProperty("style:run-through", "foreground", gt);
         }
     }
-
-    //margins are related to text wrapping, 
-    style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700.);
-    style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700.);
-    style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700.);
-    style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700.);
-
-    // style:number-wrapped-paragraphs
-    // style:wrap-dynamic-treshold
+    // margins are related to text wrapping
+    // fo:margin-bottom
+    // fo:margin-left
+    // fo:margin-right
+    // fo:margin-top
+    style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700., gt);
+    style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700., gt);
+    style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700., gt);
+    style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700., gt);
 }
 
-void KWordGraphicsHandler::SetAnchorTypeAttribute(DrawingWriter& out)
+void KWordGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds, DrawingWriter out)
 {
-    if (out.m_inline) {
-        out.xml.addAttribute("text:anchor-type","as-char");
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+
+    if (out.m_objectType == Inline) {
+        style.addProperty("style:vertical-rel", "baseline", gt);
+        style.addProperty("style:vertical-pos", "top", gt);
     } else {
-        out.xml.addAttribute("text:anchor-type","char");
+        style.addProperty("style:horizontal-pos", getHorizontalPos(ds.posH()), gt);
+        style.addProperty("style:horizontal-rel", getHorizontalRel(ds.posRelH()), gt);
+        style.addProperty("style:vertical-pos", getVerticalPos(ds.posV()), gt);
+        style.addProperty("style:vertical-rel", getVerticalRel(ds.posRelV()), gt);
     }
 }
 
-void KWordGraphicsHandler::SetZIndexAttribute(DrawingWriter& out)
+void KWordGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
 {
-    out.xml.addAttribute("draw:z-index",m_zIndex);
+    // text:anchor-type
+    if (out.m_objectType == Inline) {
+        out.xml.addAttribute("text:anchor-type", "as-char");
+    } else {
+        out.xml.addAttribute("text:anchor-type", "char");
+    }
+}
+
+void KWordGraphicsHandler::setZIndexAttribute(DrawingWriter& out)
+{
+    // draw:z-index
+    if (out.m_objectType == Floating) {
+        out.xml.addAttribute("draw:z-index", m_zIndex);
+    }
 }
 
 void KWordGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     QString styleName;
-    DrawStyle ds(&m_officeArtDggContainer, &o);
-    DrawStyle drawStyle(&m_officeArtDggContainer, 0, &o);
     wvWare::Word97::FSPA* spa = out.m_pSpa;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
     if (!out.m_bodyDrawing) {
         style.setAutoStyleInStylesDotXml(true);
     }
-    defineGraphicProperties(style, ds);
-    defineWrappingProperties(style, ds, spa);
-    defineAnchorProperties(style, ds);
+
+    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+
+    definePositionAttributes(style, ds, out);
+    if (out.m_objectType == Floating) {
+        defineWrappingAttributes(style, ds, spa);
+    }
     styleName = out.styles.insert(style);
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAttribute(out);
-    SetZIndexAttribute(out);
 
-    switch(drawStyle.txflTextFlow()) {
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+
+    switch(ds.txflTextFlow()) {
     case 1: //msotxflTtoBA up-down
     case 3: //msotxflTtoBN up-down
     case 5: //msotxflVertN up-down
@@ -1033,25 +755,33 @@ void KWordGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     out.xml.endElement(); //draw:frame
 }
 
-void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,DrawingWriter& out)
+void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
 {
     QString styleName;
-    DrawStyle ds(&m_officeArtDggContainer,&o);
     wvWare::Word97::FSPA* spa = out.m_pSpa;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
     if (!out.m_bodyDrawing) {
         style.setAutoStyleInStylesDotXml(true);
     }
-    defineGraphicProperties(style, ds);
-    defineWrappingProperties(style, ds, spa);
-    defineAnchorProperties(style, ds);
+
+    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+
+    definePositionAttributes(style, ds, out);
+    if (out.m_objectType == Floating) {
+        defineWrappingAttributes(style, ds, spa);
+    }
     styleName = out.styles.insert(style);
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAttribute(out);
-    SetZIndexAttribute(out);
+
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.addAttribute("svg:width", mm(out.hLength()));
     out.xml.addAttribute("svg:height", mm(out.vLength()));
@@ -1068,16 +798,20 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     kDebug(30513) ;
 
     QString styleName;
-    DrawStyle ds(0, &o);
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
     //in case a header or footer is processed, save the style into styles.xml
     if (m_document->writingHeader()) {
         style.setAutoStyleInStylesDotXml(true);
     }
-    defineGraphicProperties(style, ds);
-    style.addProperty("style:vertical-rel","baseline");
-    style.addProperty("style:vertical-pos","top");
+
+    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+
+    //NOTE: no need for wrapping related attributes
+    definePositionAttributes(style, ds, out);
     styleName = out.styles.insert(style);
 
     QString url;
@@ -1093,7 +827,8 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
         return;
     }
     out.xml.addAttribute("draw:style-name", styleName);
-    out.xml.addAttribute("text:anchor-type","as-char");
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
 
     double hscale = out.m_picf->mx / 1000.0;
     double vscale = out.m_picf->my / 1000.0;
@@ -1118,7 +853,6 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     kDebug(30513) ;
 
     QString styleName;
-    DrawStyle ds(&m_officeArtDggContainer, &o);
     wvWare::Word97::FSPA* spa = out.m_pSpa;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
@@ -1126,9 +860,14 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     if (m_document->writingHeader()) {
         style.setAutoStyleInStylesDotXml(true);
     }
-    defineGraphicProperties(style, ds);
-    defineWrappingProperties(style, ds, spa);
-    defineAnchorProperties(style, ds);
+
+    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+
+    definePositionAttributes(style, ds, out);
+    defineWrappingAttributes(style, ds, spa);
 
     //ODF-1.2: specifies the number of paragraphs that can wrap around a frame
     //if wrap mode is in {left, right, parallel, dynamic} and anchor type is in
@@ -1151,8 +890,9 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
         return;
     }
     out.xml.addAttribute("draw:style-name", styleName);
-    out.xml.addAttribute("text:anchor-type","char");
-    SetZIndexAttribute(out);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+
     out.xml.addAttribute("svg:width", mm(out.hLength()));
     out.xml.addAttribute("svg:height", mm(out.vLength()));
     out.xml.addAttribute("svg:x", mm(out.hOffset()));
@@ -1202,14 +942,20 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     kDebug(30513) ;
 
     QString styleName;
-    DrawStyle ds(0, &o);
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
 
     //in case a header or footer is processed, save the style into styles.xml
     if (m_document->writingHeader()) {
         style.setAutoStyleInStylesDotXml(true);
     }
-    defineGraphicProperties(style, ds);
+
+    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+
+    definePositionAttributes(style, ds, out);
+    //TODO: maybe wrapping related attributes have to be set
 
     //NOTE: also the dxWidthHR propertie may store the width information
     float width = ds.pctHR() / 10.0;
@@ -1246,8 +992,9 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     //create a custom shape
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAttribute(out);
-    SetZIndexAttribute(out);
+
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
 
     QString height = QString::number(ds.dxHeightHR() / 1440.0f).append("in");
     out.xml.addAttribute("svg:height", height);

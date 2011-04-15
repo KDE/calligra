@@ -137,7 +137,6 @@ QString format(double v)
     return f.arg(v, 0, 'f').replace(r, e);
 }
 
-
 QString pt(double v)
 {
     static const QString pt("pt");
@@ -370,8 +369,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:border-line-width-top
     // style:editable
     // style:flow-with-text
-    // style:horizontal-pos
-    // style:horizontal-rel
+    // style:horizontal-pos (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:horizontal-pos", getHorizontalPos(ds.posH()), gt);
+    // style:horizontal-rel (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:horizontal-rel", getHorizontalRel(ds.posRelH()), gt);
     // style:mirror
     // style:number-wrapped-paragraphs
     // style:overflow-behavior
@@ -382,8 +383,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:repeat
     // style:run-through
     // style:shadow
-    // style:vertical-pos
-    // style:vertical-rel
+    // style:vertical-pos (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:vertical-pos", getVerticalPos(ds.posV()), gt);
+    // style:vertical-rel (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:vertical-rel", getVerticalRel(ds.posRelV()), gt);
     // style:wrap
     // style:wrap-contour
     // style:wrap-contour-mode
@@ -549,6 +552,78 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
     QString elementContents = QString::fromUtf8(writerBuffer.buffer(), writerBuffer.buffer().size());
     style.addChildElement("svg:stop", elementContents);
+}
+
+QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
+{
+    if (lineDashing <= 0 || lineDashing > 10) {
+        return QString();
+    }
+
+    KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
+    switch (lineDashing) {
+    case 0: // msolineSolid, not a real stroke dash
+        break;
+    case 1: // msolineDashSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:distance", "100%");
+        break;
+    case 2: // msolineDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "200%");
+        break;
+    case 3: // msolineDashDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 4: // msolineDashDotDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 5: // msolineDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 6: // msolineDashGEL
+        strokeDash.addAttribute("draw:dots1", "4");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 7: // msolineLongDashGEL
+        strokeDash.addAttribute("draw:dots1", "8");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 8: // msolineDashDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 9: // msolineLongDashDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "800%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 10: // msolineLongDashDotDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "800%");
+        strokeDash.addAttribute("draw:dots2", "2");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    };
+
+    if (lineDashing < 5) {
+        strokeDash.addAttribute("draw:distance", "100%");
+    } else {
+        strokeDash.addAttribute("draw:distance", "300%");
+    }
+    return styles.insert(strokeDash, QString("Dash_20_%1").arg(lineDashing),
+                         KoGenStyles::DontAddNumberToName);
 }
 
 QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
@@ -728,74 +803,74 @@ const char* getGradientRendering(quint32 fillType)
     }
 }
 
-QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
+const char* getHorizontalPos(quint32 posH)
 {
-    if (lineDashing <= 0 || lineDashing > 10) {
-        return QString();
+    switch (posH) {
+    case 0: // msophAbs
+        return "from-left";
+    case 1: // msophLeft
+        return "left";
+    case 2: // msophCenter
+        return "center";
+    case 3: // msophRight
+        return "right";
+    case 4: // msophInside
+        return "inside";
+    case 5: // msophOutside
+        return "outside";
+    default:
+        return "from-left";
     }
+}
 
-    KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
-    switch (lineDashing) {
-    case 0: // msolineSolid, not a real stroke dash
-        break;
-    case 1: // msolineDashSys
-        strokeDash.addAttribute("draw:dots1", "1");
-        strokeDash.addAttribute("draw:dots1-length", "300%");
-        strokeDash.addAttribute("draw:distance", "100%");
-        break;
-    case 2: // msolineDotSys
-        strokeDash.addAttribute("draw:dots1", "1");
-        strokeDash.addAttribute("draw:dots1-length", "200%");
-        break;
-    case 3: // msolineDashDotSys
-        strokeDash.addAttribute("draw:dots1", "1");
-        strokeDash.addAttribute("draw:dots1-length", "300%");
-        strokeDash.addAttribute("draw:dots2", "1");
-        strokeDash.addAttribute("draw:dots2-length", "100%");
-        break;
-    case 4: // msolineDashDotDotSys
-        strokeDash.addAttribute("draw:dots1", "1");
-        strokeDash.addAttribute("draw:dots1-length", "300%");
-        strokeDash.addAttribute("draw:dots2", "1");
-        strokeDash.addAttribute("draw:dots2-length", "100%");
-        break;
-    case 5: // msolineDotGEL
-        strokeDash.addAttribute("draw:dots1", "1");
-        strokeDash.addAttribute("draw:dots1-length", "100%");
-        break;
-    case 6: // msolineDashGEL
-        strokeDash.addAttribute("draw:dots1", "4");
-        strokeDash.addAttribute("draw:dots1-length", "100%");
-        break;
-    case 7: // msolineLongDashGEL
-        strokeDash.addAttribute("draw:dots1", "8");
-        strokeDash.addAttribute("draw:dots1-length", "100%");
-        break;
-    case 8: // msolineDashDotGEL
-        strokeDash.addAttribute("draw:dots1", "1");
-        strokeDash.addAttribute("draw:dots1-length", "300%");
-        strokeDash.addAttribute("draw:dots2", "1");
-        strokeDash.addAttribute("draw:dots2-length", "100%");
-        break;
-    case 9: // msolineLongDashDotGEL
-        strokeDash.addAttribute("draw:dots1", "1");
-        strokeDash.addAttribute("draw:dots1-length", "800%");
-        strokeDash.addAttribute("draw:dots2", "1");
-        strokeDash.addAttribute("draw:dots2-length", "100%");
-        break;
-    case 10: // msolineLongDashDotDotGEL
-        strokeDash.addAttribute("draw:dots1", "1");
-        strokeDash.addAttribute("draw:dots1-length", "800%");
-        strokeDash.addAttribute("draw:dots2", "2");
-        strokeDash.addAttribute("draw:dots2-length", "100%");
-        break;
-    };
-
-    if (lineDashing < 5) {
-        strokeDash.addAttribute("draw:distance", "100%");
-    } else {
-        strokeDash.addAttribute("draw:distance", "300%");
+const char* getHorizontalRel(quint32 posRelH)
+{
+    switch (posRelH) {
+    case 0: //msoprhMargin
+        return "page-content";
+    case 1: //msoprhPage
+        return "page";
+    case 2: //msoprhText
+        return "paragraph";
+    case 3: //msoprhChar
+        return "char";
+    default:
+        return "page-content";
     }
-    return styles.insert(strokeDash, QString("Dash_20_%1").arg(lineDashing),
-                         KoGenStyles::DontAddNumberToName);
+}
+
+const char* getVerticalPos(quint32 posV)
+{
+    switch (posV) {
+    case 0: // msophAbs
+        return "from-top";
+    case 1: // msophTop
+        return "top";
+    case 2: // msophCenter
+        return "middle";
+    case 3: // msophBottom
+        return "bottom";
+    case 4: // msophInside - not compatible with ODF
+        return "top";
+    case 5: // msophOutside - not compatible with ODF
+        return "bottom";
+    default:
+        return "from-top";
+    }
+}
+
+const char* getVerticalRel(quint32 posRelV)
+{
+    switch (posRelV) {
+    case 0: //msoprvMargin
+        return "page-content";
+    case 1: //msoprvPage
+        return "page";
+    case 2: //msoprvText
+        return "paragraph";
+    case 3: //msoprvLine
+        return "line";
+    default:
+        return "page-content";
+    }
 }

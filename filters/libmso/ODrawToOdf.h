@@ -217,8 +217,13 @@ inline qreal toQReal(const MSO::FixedPoint& f)
 {
     return f.integral + f.fractional / 65536.0;
 }
+
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);
+const char* getHorizontalPos(quint32 posH);
+const char* getHorizontalRel(quint32 posRelH);
+const char* getVerticalPos(quint32 posV);
+const char* getVerticalRel(quint32 posRelV);
 
 #endif
