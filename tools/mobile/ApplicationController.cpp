@@ -2081,8 +2081,6 @@ void ApplicationController::fullScreen()
 {
     if (!m_ui)
         return;
-    int vScrlbarWidth = 0;
-    int hScrlbarHeight = 0;
     m_ui->viewToolBar->hide();
     m_ui->SearchToolBar->hide();
     m_ui->EditToolBar->hide();
@@ -2092,6 +2090,8 @@ void ApplicationController::fullScreen()
     m_mainWindow->showFullScreen();
     QSize size(m_mainWindow->frameSize());
 
+    int vScrlbarWidth = 0;
+    int hScrlbarHeight = 0;
     if (canvasControllerWidget()) {
         if (canvasControllerWidget()->verticalScrollBar()->isVisible()) {
             QSize vScrlbar = canvasControllerWidget()->verticalScrollBar()->size();
@@ -2115,6 +2115,53 @@ void ApplicationController::fullScreen()
             connect(m_fsButton, SIGNAL(clicked()), m_presentationTool, SLOT(deactivateTool()));
         }
         showFullScreenPresentationIcons();
+    }
+}
+
+void ApplicationController::handleMainWindowResizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    QSize size(m_mainWindow->frameSize());
+
+    int vScrlbarWidth = 0;
+    int hScrlbarHeight = 0;
+    if (canvasControllerWidget()) {
+        if (canvasControllerWidget()->verticalScrollBar()->isVisible()) {
+            QSize vScrlbar = canvasControllerWidget()->verticalScrollBar()->size();
+            vScrlbarWidth = vScrlbar.width();
+        }
+        if (canvasControllerWidget()->horizontalScrollBar()->isVisible()) {
+            QSize hScrlbar = canvasControllerWidget()->horizontalScrollBar()->size();
+            hScrlbarHeight = hScrlbar.height();
+        }
+    }
+
+    m_fsButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                     size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+
+    if (m_fsPPTBackButton) {
+        m_fsPPTBackButton->move(size.width() - FS_BUTTON_SIZE*3 - vScrlbarWidth,
+                                size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+    }
+
+    if (m_fsPPTForwardButton) {
+        m_fsPPTForwardButton->move(size.width() - FS_BUTTON_SIZE*2 - vScrlbarWidth,
+                                   size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+    }
+
+    if (m_fsPPTDrawPenButton) {
+        m_fsPPTDrawPenButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                   size.height() - FS_BUTTON_SIZE*3 - hScrlbarHeight);
+    }
+
+    if (m_fsPPTDrawHighlightButton) {
+        m_fsPPTDrawHighlightButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                         size.height() - FS_BUTTON_SIZE*2 - hScrlbarHeight);
+    }
+
+    if (m_slideNotesButton) {
+        m_slideNotesButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                 size.height() - FS_BUTTON_SIZE*4 - hScrlbarHeight);
     }
 }
 
