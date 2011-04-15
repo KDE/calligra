@@ -58,9 +58,6 @@
 #include <KDebug>
 
 #include <QtGui/QColor>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
 
 
 SvgParser::SvgParser(KoResourceManager *documentResourceManager)
@@ -81,7 +78,7 @@ SvgParser::~SvgParser()
 
 void SvgParser::setXmlBaseDir(const QString &baseDir)
 {
-    m_xmlBaseDir = baseDir;
+    m_context.setInitialXmlBaseDir(baseDir);
 }
 
 QList<KoShape*> SvgParser::shapes() const
@@ -660,7 +657,7 @@ bool SvgParser::parseImage(const QString &attribute, QImage &image)
         int start = attribute.indexOf("base64,");
         if (start > 0 && image.loadFromData(QByteArray::fromBase64(attribute.mid(start + 7).toLatin1())))
             return true;
-    } else if (image.load(absoluteFilePath(attribute, m_context.currentGC()->xmlBaseDir))) {
+    } else if (image.load(m_context.absoluteFilePath(attribute))) {
         return true;
     }
 
@@ -1174,7 +1171,7 @@ void SvgParser::applyFilter(KoShape *shape)
     objectFilterRegion.setTopLeft(SvgUtil::userSpaceToObject(filterRegion.topLeft(), bound));
     objectFilterRegion.setSize(SvgUtil::userSpaceToObject(filterRegion.size(), bound));
 
-    KoFilterEffectLoadingContext context(gc->xmlBaseDir.isEmpty() ? m_xmlBaseDir : gc->xmlBaseDir);
+    KoFilterEffectLoadingContext context(m_context.xmlBaseDir());
     context.setShapeBoundingBox(bound);
     // enable units conversion
     context.enableFilterUnitsConversion(filter->filterUnits() == SvgFilterHelper::UserSpaceOnUse);
@@ -2030,29 +2027,6 @@ int SvgParser::nextZIndex()
     static int zIndex = 0;
 
     return zIndex++;
-}
-
-QString SvgParser::absoluteFilePath(const QString &href, const QString &xmlBase)
-{
-    QFileInfo info(href);
-    if (! info.isRelative())
-        return href;
-
-    QString baseDir = m_xmlBaseDir;
-    if (! xmlBase.isEmpty())
-        baseDir = absoluteFilePath(xmlBase, QString());
-
-    QFileInfo pathInfo(QFileInfo(baseDir).filePath());
-
-    QString relFile = href;
-    while (relFile.startsWith(QLatin1String("../"))) {
-        relFile = relFile.mid(3);
-        pathInfo.setFile(pathInfo.dir(), QString());
-    }
-
-    QString absFile = pathInfo.absolutePath() + '/' + relFile;
-
-    return absFile;
 }
 
 KoShape * SvgParser::createShape(const QString &shapeID)

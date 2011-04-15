@@ -24,6 +24,8 @@
 #include <KDebug>
 
 #include <QtCore/QStack>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 
 class SvgLoadingContext::Private
 {
@@ -41,6 +43,7 @@ public:
         gcStack.clear();
     }
     QStack<SvgGraphicsContext*> gcStack;
+    QString initialXmlBaseDir;
 };
 
 SvgLoadingContext::SvgLoadingContext()
@@ -94,4 +97,42 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const KoXmlElement &e
 void SvgLoadingContext::popGraphicsContext()
 {
     delete(d->gcStack.pop());
+}
+
+void SvgLoadingContext::setInitialXmlBaseDir(const QString &baseDir)
+{
+    d->initialXmlBaseDir = baseDir;
+}
+
+QString SvgLoadingContext::xmlBaseDir()
+{
+    SvgGraphicsContext *gc = currentGC();
+    return (gc && !gc->xmlBaseDir.isEmpty()) ? gc->xmlBaseDir : d->initialXmlBaseDir;
+}
+
+QString SvgLoadingContext::absoluteFilePath(const QString &href)
+{
+    QFileInfo info(href);
+    if (! info.isRelative())
+        return href;
+
+    SvgGraphicsContext *gc = currentGC();
+    if (!gc)
+        return d->initialXmlBaseDir;
+
+    QString baseDir = d->initialXmlBaseDir;
+    if (! gc->xmlBaseDir.isEmpty())
+        baseDir = absoluteFilePath(gc->xmlBaseDir);
+
+    QFileInfo pathInfo(QFileInfo(baseDir).filePath());
+
+    QString relFile = href;
+    while (relFile.startsWith(QLatin1String("../"))) {
+        relFile = relFile.mid(3);
+        pathInfo.setFile(pathInfo.dir(), QString());
+    }
+
+    QString absFile = pathInfo.absolutePath() + '/' + relFile;
+
+    return absFile;
 }

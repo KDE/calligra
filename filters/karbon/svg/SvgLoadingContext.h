@@ -39,6 +39,15 @@ public:
     /// Pops the current graphics context from the stack
     void popGraphicsContext();
 
+    /// Sets the initial xml base dir, i.e. the directory the svg file is read from
+    void setInitialXmlBaseDir(const QString &baseDir);
+
+    /// Returns the current xml base dir
+    QString xmlBaseDir();
+
+    /// Constructs an absolute file path from the given href and current xml base directory
+    QString absoluteFilePath(const QString &href);
+
 private:
     class Private;
     Private * const d;

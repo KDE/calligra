@@ -127,9 +127,6 @@ protected:
     /// Returns the next z-index
     int nextZIndex();
 
-    /// Constructs an absolute file path from the fiven href and base directory
-    QString absoluteFilePath(const QString &href, const QString &xmlBase);
-
     /// creates a shape from the given shape id
     KoShape * createShape(const QString &shapeID);
 
@@ -164,7 +161,6 @@ private:
     KoResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
-    QString m_xmlBaseDir;
     SvgCssHelper m_cssStyles;
 };
 
