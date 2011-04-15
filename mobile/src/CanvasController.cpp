@@ -42,6 +42,8 @@
 #include <QPoint>
 #include <QSize>
 #include <QGraphicsWidget>
+#include <tables/Sheet.h>
+#include <tables/Map.h>
 
 /*!
 * extensions
@@ -61,12 +63,12 @@ const QString EXT_XLS("xls");
 const QString EXT_XLSX("xlsx");
 
 CanvasController::CanvasController(QDeclarativeItem* parent)
-    : KoCanvasController(0), QDeclarativeItem(parent)
+    : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(Undefined),
+    m_zoomHandler(new KoZoomHandler()),
+    m_zoomController(new KoZoomController(this, m_zoomHandler, new KActionCollection(this))),
+    m_canvas(0), m_currentPoint(QPoint(0,0)), m_documentViewSize(QSizeF(0,0))
 {
-    KActionCollection *actionCollection = new KActionCollection(this);
     setFlag(QGraphicsItem::ItemHasNoContents, false);
-    m_zoomHandler = new KoZoomHandler();
-    m_zoomController = new KoZoomController(this, m_zoomHandler, actionCollection);
 }
 
 void CanvasController::openDocument(const QString& path)
@@ -87,6 +89,8 @@ void CanvasController::openDocument(const QString& path)
     }
 
     if (isPresentationDocumentExtension(ext)) {
+        m_documentType = Presentation;
+
         //FIXME: Doesn't work, crashes
         KoPACanvasItem *canvas = dynamic_cast<KoPACanvasItem*>(m_canvas);
 
@@ -96,16 +100,23 @@ void CanvasController::openDocument(const QString& path)
             canvas->update();
         }
     } else if (isSpreadsheetDocumentExtension(ext)) {
+        m_documentType = Spreadsheet;
+
         //TODO: Sheet tabs
         Calligra::Tables::CanvasItem *canvas = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
 
         if (canvas) {
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
             connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
+            // whenever the size of the document viewed in the canvas changes, inform the zoom controller
+            connect(canvas, SIGNAL(documentSizeChanged(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
             canvas->update();
         }
     } else {
+        m_documentType = TextDocument;
+
         KWCanvasItem *canvas = dynamic_cast<KWCanvasItem*>(m_canvas);
+        connect(canvas, SIGNAL(documentSize(QSizeF)), SLOT(documentViewSizeChanged(QSizeF)));
 
         if (canvas) {
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
@@ -117,6 +128,7 @@ void CanvasController::openDocument(const QString& path)
     }
 
     setCanvas(m_canvas);
+    emit sheetCountChanged();
 }
 
 void CanvasController::setVastScrolling(qreal factor)
@@ -131,6 +143,10 @@ void CanvasController::setZoomWithWheel(bool zoom)
 
 void CanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
 {
+    m_documentViewSize = sz;
+    emit docHeightChanged();
+    emit docWidthChanged();
+
     kDebug() << sz << recalculateCenter;
 }
 
@@ -278,6 +294,72 @@ bool CanvasController::isSpreadsheetDocumentExtension(const QString& extension) 
     return 0 == QString::compare(extension, EXT_ODS, Qt::CaseInsensitive)
        ||  0 == QString::compare(extension, EXT_XLS, Qt::CaseInsensitive)
        ||  0 == QString::compare(extension, EXT_XLSX, Qt::CaseInsensitive);
+}
+
+int CanvasController::sheetCount() const
+{
+    if (m_canvas) {
+        Calligra::Tables::CanvasItem *canvas = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
+        return canvas->activeSheet()->map()->count();
+    } else {
+        return 0;
+    }
+}
+
+void CanvasController::tellZoomControllerToSetDocumentSize(QSize size)
+{
+    m_zoomController->setDocumentSize(size);
+}
+
+CanvasController::DocumentType CanvasController::documentType() const
+{
+    return m_documentType;
+}
+
+qreal CanvasController::docHeight() const
+{
+    return m_documentViewSize.height();
+}
+
+qreal CanvasController::docWidth() const
+{
+    return m_documentViewSize.width();
+}
+
+int CanvasController::cameraX() const
+{
+    return m_currentPoint.x();
+}
+
+int CanvasController::cameraY() const
+{
+    return m_currentPoint.y();
+}
+
+void CanvasController::setCameraX(int cameraX)
+{
+    m_currentPoint.setX(cameraX);
+    emit cameraXChanged();
+    centerToCamera();
+}
+
+void CanvasController::setCameraY(int cameraY)
+{
+    m_currentPoint.setY(cameraY);
+    emit cameraYChanged();
+    centerToCamera();
+}
+
+void CanvasController::centerToCamera()
+{
+    kDebug() << "Moving to " << m_currentPoint;
+
+    if (proxyObject) {
+        proxyObject->emitMoveDocumentOffset(m_currentPoint);
+    }
+    if (m_canvas) {
+        dynamic_cast<KWCanvasItem*>(m_canvas)->update();
+    }
 }
 
 #include "CanvasController.moc"

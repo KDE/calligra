@@ -33,7 +33,17 @@ class KoZoomHandler;
 class CanvasController : public QDeclarativeItem, KoCanvasController
 {
     Q_OBJECT
+
+    Q_PROPERTY(int sheetCount READ sheetCount NOTIFY sheetCountChanged)
+    Q_PROPERTY(qreal docHeight READ docHeight NOTIFY docHeightChanged)
+    Q_PROPERTY(qreal docWidth READ docWidth NOTIFY docWidthChanged)
+    Q_PROPERTY(int cameraX READ cameraX WRITE setCameraX NOTIFY cameraXChanged)
+    Q_PROPERTY(int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
+    Q_ENUMS(DocumentType)
+
 public:
+    enum DocumentType { Undefined, TextDocument, Spreadsheet, Presentation };
+
     explicit CanvasController(QDeclarativeItem *parent = 0);
     virtual void setVastScrolling(qreal factor);
     virtual void setZoomWithWheel(bool zoom);
@@ -60,21 +70,40 @@ public:
     virtual QSize viewportSize() const;
     virtual void scrollContentsBy(int dx, int dy);
 
+    int sheetCount() const;
+    DocumentType documentType() const;
+    qreal docWidth() const;
+    qreal docHeight() const;
+    int cameraX() const;
+    int cameraY() const;
+    void setCameraX(int cameraX);
+    void setCameraY(int cameraY);
 
 public slots:
     void openDocument(const QString &path);
     void scrollDown();
     void scrollUp();
+    void tellZoomControllerToSetDocumentSize(QSize size);
+    void centerToCamera();
 
 private:
-    KoZoomController *m_zoomController;
     KoZoomHandler *m_zoomHandler;
+    KoZoomController *m_zoomController;
     KoCanvasBase *m_canvas;
     QPoint m_currentPoint;
+    DocumentType m_documentType;
+    QSizeF m_documentViewSize;
 
 protected:
     bool isPresentationDocumentExtension(const QString& extension) const;
     bool isSpreadsheetDocumentExtension(const QString& extension) const;
+
+signals:
+    void sheetCountChanged();
+    void docHeightChanged();
+    void docWidthChanged();
+    void cameraXChanged();
+    void cameraYChanged();
 };
 
 #endif // CANVASCONTROLLER_H

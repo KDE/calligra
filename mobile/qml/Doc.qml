@@ -39,13 +39,23 @@ QML.Rectangle {
 
             height: parent.height
             width: parent.width*0.95
+
+            cameraX: docFlickable.contentX
+            cameraY: docFlickable.contentY
         }
+    }
 
-        WordsToolbar {
-            id: toolbar
+    QML.Flickable {
+        id: docFlickable
+        x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
 
-            height: parent.height
-            width: parent.width*0.05
+        contentWidth: proxyItem.width; contentHeight: proxyItem.height;
+        clip: true
+
+        QML.Rectangle {
+            id: proxyItem
+            height: canvas.docHeight
+            width: canvas.docWidth
         }
     }
 

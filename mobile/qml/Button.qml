@@ -38,6 +38,7 @@ QML.Item {
         radius: 10
 
         QML.Column {
+            id: column
             anchors.fill: parent
             anchors.margins: 10
 
@@ -57,12 +58,12 @@ QML.Item {
                 horizontalAlignment: QML.Text.AlignHCenter
                 verticalAlignment: QML.Text.AlignVCenter
             }
+        }
 
-            QML.MouseArea {
-                anchors.fill: parent
+        QML.MouseArea {
+                anchors.fill: column
 
                 onClicked: container.clicked()
-            }
         }
     }
 }
