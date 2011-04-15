@@ -391,12 +391,7 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10 10 10 7.5 5");
 
-    if (o.shapeProp.fFlipV) {
-        out.xml.addAttribute("draw:mirror-vertical", "true");
-    }
-    if (o.shapeProp.fFlipH) {
-        out.xml.addAttribute("draw:mirror-horizontal", "true");
-    }
+    writeShapeMirroring(o, out);
     if (o.shapeProp.rh.recInstance == msosptRightTriangle) {
         out.xml.addAttribute("draw:type", "right-triangle");
     } else if (o.shapeProp.rh.recInstance == msosptIsoscelesTriangle) {
@@ -458,12 +453,7 @@ void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "parallelogram");
     out.xml.addAttribute("draw:glue-points", "6.25 0 4.5 0 8.75 5 3.75 10 5 10 1.25 5");
-    if (o.shapeProp.fFlipV) {
-        out.xml.addAttribute("draw:mirror-vertical", "true");
-    }
-    if (o.shapeProp.fFlipH) {
-        out.xml.addAttribute("draw:mirror-horizontal", "true");
-    }
+    writeShapeMirroring(o, out);
     equation(out, "f0", "$0");
     equation(out, "f1", "21600-$0");
     equation(out, "f2", "$0 *10/24");
@@ -1122,6 +1112,20 @@ void ODrawToOdf::processIrregularSeal1(const MSO::OfficeArtSpContainer &o, Write
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processLightningBolt(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points","8458 0 0 3923 4993 9720 9987 14934 21600 21600 16558 12016 12831 6120");
+    out.xml.addAttribute("draw:text-areas","8680 7410 13970 14190");
+    out.xml.addAttribute("draw:type","lightning");
+    out.xml.addAttribute("draw:enhanced-path","M 8458 0 L 0 3923 7564 8416 4993 9720 12197 13904 9987 14934 21600 21600 14768 12911 16558 12016 11030 6840 12831 6120 8458 0 Z N");
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
 
 void ODrawToOdf::processSeal16(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
@@ -1619,6 +1623,23 @@ void ODrawToOdf::processFlowChartMagneticTape(const MSO::OfficeArtSpContainer &o
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox","0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points","10800 6800 10800 0 0 10800 10800 21600 21600 10800");
+    out.xml.addAttribute("draw:text-areas","0 6800 21600 18200");
+    writeShapeMirroring(o, out);
+    out.xml.addAttribute("draw:type","flowchart-magnetic-disk");
+    out.xml.addAttribute("draw:enhanced-path","M 0 3400 Y 10800 0 21600 3400 L 21600 18200 Y 10800 21600 0 18200 Z N M 0 3400 Y 10800 6800 21600 3400 N");
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
+
 
 void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
@@ -1869,6 +1890,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processCloudCallout(o, out);
     } else if (shapeType == msosptIrregularSeal1) {
         processIrregularSeal1(o, out);
+    } else if (shapeType == msosptLightningBolt) {
+        processLightningBolt(o, out);
     } else if (shapeType == msosptSeal16) {
         processSeal16(o, out);
     } else if (shapeType == msosptSeal24) {
@@ -1893,6 +1916,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processFlowChartConnector(o, out);
     } else if (shapeType == msosptFlowChartMagneticTape) {
         processFlowChartMagneticTape(o, out);
+    } else if (shapeType == msosptFlowChartMagneticDisk) {
+        processFlowChartMagneticDisk(o, out);
     } else if (shapeType == msosptCallout2) {
         processCallout2(o, out);
     } else if (shapeType == msosptDonut) {
@@ -2240,4 +2265,13 @@ QString ODrawToOdf::path2svg(const QPainterPath &path) {
         }
     }
     return d;
+}
+
+void ODrawToOdf::writeShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out){
+    if (o.shapeProp.fFlipV) {
+        out.xml.addAttribute("draw:mirror-vertical", "true");
+    }
+    if (o.shapeProp.fFlipH) {
+        out.xml.addAttribute("draw:mirror-horizontal", "true");
+    }
 }

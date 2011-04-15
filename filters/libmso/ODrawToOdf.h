@@ -159,6 +159,7 @@ private:
     void processIrregularSeal1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSeal16(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processLightningBolt(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRibbon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRibbon2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHorizontalScroll(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -169,6 +170,7 @@ private:
     void processFlowChartManualOperation(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartMagneticTape(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -186,6 +188,7 @@ private:
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     QString path2svg(const QPainterPath &path);
+    void writeShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out);
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
