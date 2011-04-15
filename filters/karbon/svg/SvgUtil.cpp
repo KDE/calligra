@@ -152,6 +152,21 @@ QTransform SvgUtil::parseTransform(const QString &transform)
     return result;
 }
 
+QRectF SvgUtil::parseViewBox(QString viewbox)
+{
+    QRectF viewboxRect;
+
+    QStringList points = viewbox.replace(',', ' ').simplified().split(' ');
+    if (points.count() == 4) {
+        viewboxRect.setX(SvgUtil::fromUserSpace(points[0].toFloat()));
+        viewboxRect.setY(SvgUtil::fromUserSpace(points[1].toFloat()));
+        viewboxRect.setWidth(SvgUtil::fromUserSpace(points[2].toFloat()));
+        viewboxRect.setHeight(SvgUtil::fromUserSpace(points[3].toFloat()));
+    }
+
+    return viewboxRect;
+}
+
 qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz, bool vert, const QRectF &bbox)
 {
     if (unit.isEmpty())

@@ -82,6 +82,9 @@ public:
      */
     static QTransform parseTransform(const QString &transform);
 
+    /// Parses a viewbox attribute into an rectangle
+    static QRectF parseViewBox(QString viewbox);
+
     /// Parses a length attribute
     static qreal parseUnit(SvgGraphicsContext *gc, const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
 

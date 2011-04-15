@@ -536,7 +536,7 @@ void SvgParser::parsePattern(SvgPatternHelper &pattern, const KoXmlElement &e)
             pattern.setPatternContentUnits(SvgPatternHelper::ObjectBoundingBox);
     }
     if (e.hasAttribute("viewBox"))
-        pattern.setPatternContentViewbox(parseViewBox(e.attribute("viewBox")));
+        pattern.setPatternContentViewbox(SvgUtil::parseViewBox(e.attribute("viewBox")));
     if (e.hasAttribute("patternTransform"))
         pattern.setTransform(SvgUtil::parseTransform(e.attribute("patternTransform")));
 
@@ -1440,7 +1440,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
     QRectF viewBox;
 
     if (hasViewBox) {
-        viewBox = parseViewBox(e.attribute("viewBox"));
+        viewBox = SvgUtil::parseViewBox(e.attribute("viewBox"));
     }
 
     double width = 550.0;
@@ -1535,7 +1535,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 
             addToGroup(childShapes, group);
             if (b.hasAttribute("viewBox")) {
-                QRectF viewBox = parseViewBox(b.attribute("viewBox"));
+                QRectF viewBox = SvgUtil::parseViewBox(b.attribute("viewBox"));
                 QTransform viewTransform;
                 viewTransform.translate(viewBox.x(), viewBox.y());
                 viewTransform.scale(group->size().width() / viewBox.width() , group->size().height() / viewBox.height());
@@ -1611,21 +1611,6 @@ void SvgParser::parseDefs(const KoXmlElement &e)
             }
         }
     }
-}
-
-QRectF SvgParser::parseViewBox(QString viewbox)
-{
-    QRectF viewboxRect;
-
-    QStringList points = viewbox.replace(',', ' ').simplified().split(' ');
-    if (points.count() == 4) {
-        viewboxRect.setX(SvgUtil::fromUserSpace(points[0].toFloat()));
-        viewboxRect.setY(SvgUtil::fromUserSpace(points[1].toFloat()));
-        viewboxRect.setWidth(SvgUtil::fromUserSpace(points[2].toFloat()));
-        viewboxRect.setHeight(SvgUtil::fromUserSpace(points[3].toFloat()));
-    }
-
-    return viewboxRect;
 }
 
 // Creating functions

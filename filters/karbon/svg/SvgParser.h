@@ -92,8 +92,6 @@ protected:
     bool parseColor(QColor &, const QString &);
     /// Parse a image
     bool parseImage(const QString &imageAttribute, QImage &image);
-    /// Parses a viewbox attribute into an rectangle
-    QRectF parseViewBox(QString viewbox);
 
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
