@@ -601,6 +601,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         XlsxXmlStylesReader stylesReader(writers);
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &colorContext))
+        reportProgress(15);
         XlsxXmlStylesReaderContext context2(styles, false, &themes);
         context2.colorIndices = colorContext.colorIndices; // Overriding default colors potentially
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(

@@ -73,6 +73,20 @@ MsooXmlRelationships::~MsooXmlRelationships()
     delete d;
 }
 
+unsigned MsooXmlRelationships::targetCountWithWord(const QString& searchTerm)
+{
+    unsigned count = 0;
+    QMapIterator<QString, QString> i(d->rels);
+    while (i.hasNext()) {
+        i.next();
+        if (i.value().contains(searchTerm)) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+
 QString MsooXmlRelationships::target(const QString& path, const QString& file, const QString& id)
 {
     const QString key(MsooXmlRelationshipsReader::relKey(path, file, id));
