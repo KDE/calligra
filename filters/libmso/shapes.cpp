@@ -1950,7 +1950,6 @@ void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
                               Writer& out)
 {
     addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 }
 
@@ -2021,6 +2020,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //draw:engine
     //draw:id
     //draw:layer
+    out.xml.addAttribute("draw:layer", "layout");
     //draw:name
     //draw:style-name
     //draw:text-style-name
