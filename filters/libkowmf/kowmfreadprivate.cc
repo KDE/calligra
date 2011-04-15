@@ -93,11 +93,13 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     QDataStream st(mBuffer);
     st.setByteOrder(QDataStream::LittleEndian);
     mStackOverflow = false;
-    mWinding = false;
     mLayout = LAYOUT_LTR;
     mTextAlign = 0;
     mTextRotation = 0;
     mTextColor = Qt::black;
+    mWinding = false;
+    mMapMode = MM_ANISOTROPIC;
+
     mValid = false;
     mStandard = false;
     mPlaceable = false;
@@ -982,6 +984,7 @@ void KoWmfReadPrivate::setTextColor(quint32, QDataStream& stream)
 void KoWmfReadPrivate::setTextAlign(quint32, QDataStream& stream)
 {
     stream >> mTextAlign;
+    //kDebug(31000) << "new textalign: " << mTextAlign;
 }
 
 
@@ -1422,11 +1425,10 @@ void KoWmfReadPrivate::setRelAbs(quint32, QDataStream&)
     }
 }
 
-void KoWmfReadPrivate::setMapMode(quint32, QDataStream&)
+void KoWmfReadPrivate::setMapMode(quint32, QDataStream& stream)
 {
-    if (mNbrFunc) {
-        kDebug(31000) << "setMapMode : unimplemented";
-    }
+    stream >> mMapMode;
+    //kDebug(31000) << "New mapmode: " << mMapMode;
 }
 
 void KoWmfReadPrivate::extFloodFill(quint32, QDataStream&)

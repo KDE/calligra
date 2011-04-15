@@ -123,14 +123,12 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
 
 namespace
 {
-const char* dashses[11] = {
-    "", "Dash_20_2", "Dash_20_3", "Dash_20_2", "Dash_20_2", "Dash_20_2",
-    "Dash_20_4", "Dash_20_6", "Dash_20_5", "Dash_20_7", "Dash_20_8"
-};
 const char* arrowHeads[6] = {
     "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
     "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
 };
+
+
 QString format(double v)
 {
     static const QString f("%1");
@@ -138,11 +136,13 @@ QString format(double v)
     static const QRegExp r("\\.?0+$");
     return f.arg(v, 0, 'f').replace(r, e);
 }
+
 QString pt(double v)
 {
     static const QString pt("pt");
     return format(v) + pt;
 }
+
 QString percent(double v)
 {
     return format(v) + '%';
@@ -253,7 +253,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:image-opacity
     // draw:line-distance
     // draw:luminance
-    qreal lineWidthPt = 0;
+    qreal lineWidthPt = ds.lineWidth() / 12700.;
     if (ds.fLine()) {
         // draw:marker-end
         quint32 lineEndArrowhead = ds.lineEndArrowhead();
@@ -282,28 +282,36 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:placing
     // draw:red
     // draw:secondary-fill-color
-
-    // NOTE: fShadow property specifies whether the shape has a shadow.
     if (ds.fShadow()) {
         // draw:shadow
         style.addProperty("draw:shadow", "visible", gt);
         // draw:shadow-color
-        OfficeArtCOLORREF clr = ds.shadowColor();
-        style.addProperty("draw:fill-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
-        // draw:shadow-offset-x
-        style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
-        // draw:shadow-offset-y
-        style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+        if (client) {
+            QColor clr = processOfficeArtCOLORREF(ds.shadowColor(), ds);
+            style.addProperty("draw:shadow-color", clr.name(), gt);
+        }
+        // NOTE: shadowOffset* properties MUST exist if shadowType property
+        // equals msoshadowOffset or msoshadowDouble, otherwise MUST be
+        // ignored, MS-ODRAW 2.3.13.6
+        quint32 type = ds.shadowType();
+        if ((type == 0) || (type == 1)) {
+            // draw:shadow-offset-x
+            style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
+            // draw:shadow-offset-y
+            style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+        }
         // draw:shadow-opacity
         float shadowOpacity = toQReal(ds.shadowOpacity());
         style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    } else {
+        style.addProperty("draw:shadow", "hidden", gt);
     }
     // draw:show-unit
     // draw:start-guide
     // draw:start-line-spacing-horizontal
     // draw:start-line-spacing-vertical
-
     // draw:stroke ('dash', 'none' or 'solid')
+
     // NOTE: OOo interprets solid line with width 0 as hairline, so if width ==
     // 0, stroke *must* be none to avoid OOo from displaying a line
     if (ds.fLine() || ds.fNoLineDrawDash()) {
@@ -313,11 +321,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         } else if (lineDashing > 0 && lineDashing < 11) {
             style.addProperty("draw:stroke", "dash", gt);
             // draw:stroke-dash from 2.3.8.17 lineDashing
-            style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
+            style.addProperty("draw:stroke-dash", defineDashStyle(lineDashing, styles), gt);
         } else {
             style.addProperty("draw:stroke", "solid", gt);
         }
-
     } else {
         style.addProperty("draw:stroke", "none", gt);
     }
@@ -362,8 +369,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:border-line-width-top
     // style:editable
     // style:flow-with-text
-    // style:horizontal-pos
-    // style:horizontal-rel
+    // style:horizontal-pos (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:horizontal-pos", getHorizontalPos(ds.posH()), gt);
+    // style:horizontal-rel (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:horizontal-rel", getHorizontalRel(ds.posRelH()), gt);
     // style:mirror
     // style:number-wrapped-paragraphs
     // style:overflow-behavior
@@ -374,8 +383,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:repeat
     // style:run-through
     // style:shadow
-    // style:vertical-pos
-    // style:vertical-rel
+    // style:vertical-pos (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:vertical-pos", getVerticalPos(ds.posV()), gt);
+    // style:vertical-rel (NOTE: tests on PPT, XLS required)
+//     style.addProperty("style:vertical-rel", getVerticalRel(ds.posRelV()), gt);
     // style:wrap
     // style:wrap-contour
     // style:wrap-contour-mode
@@ -384,9 +395,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // svg:height
     if (ds.fLine() || ds.fNoLineDrawDash()) {
         if (client) {
-            QColor tmp = processOfficeArtCOLORREF(ds.lineColor(), ds);
             // svg:stroke-color from 2.3.8.1 lineColor
-            style.addProperty("svg:stroke-color", tmp.name(), gt);
+            QColor clr = processOfficeArtCOLORREF(ds.lineColor(), ds);
+            style.addProperty("svg:stroke-color", clr.name(), gt);
         }
         // svg:stroke-opacity from 2.3.8.2 lineOpacity
         style.addProperty("svg:stroke-opacity",
@@ -543,6 +554,78 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     style.addChildElement("svg:stop", elementContents);
 }
 
+QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
+{
+    if (lineDashing <= 0 || lineDashing > 10) {
+        return QString();
+    }
+
+    KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
+    switch (lineDashing) {
+    case 0: // msolineSolid, not a real stroke dash
+        break;
+    case 1: // msolineDashSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:distance", "100%");
+        break;
+    case 2: // msolineDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "200%");
+        break;
+    case 3: // msolineDashDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 4: // msolineDashDotDotSys
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 5: // msolineDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 6: // msolineDashGEL
+        strokeDash.addAttribute("draw:dots1", "4");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 7: // msolineLongDashGEL
+        strokeDash.addAttribute("draw:dots1", "8");
+        strokeDash.addAttribute("draw:dots1-length", "100%");
+        break;
+    case 8: // msolineDashDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "300%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 9: // msolineLongDashDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "800%");
+        strokeDash.addAttribute("draw:dots2", "1");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    case 10: // msolineLongDashDotDotGEL
+        strokeDash.addAttribute("draw:dots1", "1");
+        strokeDash.addAttribute("draw:dots1-length", "800%");
+        strokeDash.addAttribute("draw:dots2", "2");
+        strokeDash.addAttribute("draw:dots2-length", "100%");
+        break;
+    };
+
+    if (lineDashing < 5) {
+        strokeDash.addAttribute("draw:distance", "100%");
+    } else {
+        strokeDash.addAttribute("draw:distance", "300%");
+    }
+    return styles.insert(strokeDash, QString("Dash_20_%1").arg(lineDashing),
+                         KoGenStyles::DontAddNumberToName);
+}
+
 QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
 {
     //TODO: implement all cases!!!
@@ -640,7 +723,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
             }
             break;
 	}
-        //TODO: 
+        //TODO:
         case 0x03:
         case 0x04:
         case 0x05:
@@ -717,5 +800,77 @@ const char* getGradientRendering(quint32 fillType)
     case 9: //msofillBackground
     default:
         return "axial";
+    }
+}
+
+const char* getHorizontalPos(quint32 posH)
+{
+    switch (posH) {
+    case 0: // msophAbs
+        return "from-left";
+    case 1: // msophLeft
+        return "left";
+    case 2: // msophCenter
+        return "center";
+    case 3: // msophRight
+        return "right";
+    case 4: // msophInside
+        return "inside";
+    case 5: // msophOutside
+        return "outside";
+    default:
+        return "from-left";
+    }
+}
+
+const char* getHorizontalRel(quint32 posRelH)
+{
+    switch (posRelH) {
+    case 0: //msoprhMargin
+        return "page-content";
+    case 1: //msoprhPage
+        return "page";
+    case 2: //msoprhText
+        return "paragraph";
+    case 3: //msoprhChar
+        return "char";
+    default:
+        return "page-content";
+    }
+}
+
+const char* getVerticalPos(quint32 posV)
+{
+    switch (posV) {
+    case 0: // msophAbs
+        return "from-top";
+    case 1: // msophTop
+        return "top";
+    case 2: // msophCenter
+        return "middle";
+    case 3: // msophBottom
+        return "bottom";
+    case 4: // msophInside - not compatible with ODF
+        return "top";
+    case 5: // msophOutside - not compatible with ODF
+        return "bottom";
+    default:
+        return "from-top";
+    }
+}
+
+const char* getVerticalRel(quint32 posRelV)
+{
+    switch (posRelV) {
+    case 0: //msoprvMargin
+        return "page-content";
+    case 1: //msoprvPage
+        return "page";
+    case 2: //msoprvText
+        return "paragraph";
+    case 3: //msoprvLine
+        return "line";
+    default:
+        return "page-content";
     }
 }

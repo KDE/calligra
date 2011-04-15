@@ -1683,8 +1683,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // draw:marker
     defineArrow(styles);
     // draw:stroke-dash
-    StrokeDashCollector strokeDashCollector(styles, *this);
-    collectGlobalObjects(strokeDashCollector, *p);
+//     StrokeDashCollector strokeDashCollector(styles, *this);
+//     collectGlobalObjects(strokeDashCollector, *p);
     // TODO: draw:opacity
 
     /*
@@ -1911,10 +1911,10 @@ QPair<QString, QString> PptToOdp::findHyperlink(const quint32 id)
     if( !p->documentContainer->exObjList )
         return qMakePair(friendly, target);
 
-    foreach(ExObjListSubContainer container,
+    foreach(const ExObjListSubContainer &container,
             p->documentContainer->exObjList->rgChildRec) {
         // Search all ExHyperlinkContainers for specified id
-        ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
+        const ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
         if (hyperlink && hyperlink->exHyperlinkAtom.exHyperLinkId == id) {
             if (hyperlink->friendlyNameAtom) {
                 friendly = utf16ToString(hyperlink->friendlyNameAtom->friendlyName);
@@ -2498,13 +2498,12 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     ODrawToOdf odrawtoodf(drawclient);
 
     //NOTE: The shape seems to provide boolean properties which are missing for
-    //shapes contained in spgr (MS Office 2003 specific).
+    //shapes contained in spgr (MS Office 2003 specific).  However problems
+    //were detected on both 2003/2007 files, so this approach got disabled.
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
-        const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
-	//FIXME: Found problems with the approach of using the shape to access
-	//any missing properties.  Disabling of this approach would cause regressions.
-        drawclient.setDrawClientData(master, slide, 0, 0, shape, m_currentSlideTexts);
+//         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
+        drawclient.setDrawClientData(master, slide, 0, 0, 0, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
 
