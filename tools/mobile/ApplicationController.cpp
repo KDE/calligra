@@ -432,6 +432,8 @@ ApplicationController::ApplicationController(Splash *aSplash, MainWindow *mainWi
     m_ui->actionInsertTable->setVisible(false);
     showCCP();
     insertButtonClicked();
+
+    m_mainWindow->showNormal();
 }
 
 ApplicationController::~ApplicationController()
