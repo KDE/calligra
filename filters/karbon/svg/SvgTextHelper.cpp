@@ -29,10 +29,9 @@
 SvgTextHelper::SvgTextHelper()
     : m_textPosition(HUGE_VAL, HUGE_VAL)
 {
-
 }
 
-QString SvgTextHelper::simplifyText(const QString &text, bool preserveWhiteSpace, bool hasSibling)
+QString SvgTextHelper::simplifyText(const QString &text, bool preserveWhiteSpace)
 {
     // simplifies text according ot the svg specification
     QString simple = text;
@@ -42,8 +41,8 @@ QString SvgTextHelper::simplifyText(const QString &text, bool preserveWhiteSpace
         return simple;
 
     QString stripped = simple.simplified();
-    // preserve last whitespace character if we have a next sibling text range
-    if (hasSibling && simple.endsWith(' '))
+    // preserve last whitespace character
+    if (simple.endsWith(' '))
         stripped += QChar(' ');
 
     return stripped;
@@ -51,30 +50,40 @@ QString SvgTextHelper::simplifyText(const QString &text, bool preserveWhiteSpace
 
 SvgTextHelper::OffsetType SvgTextHelper::xOffsetType() const
 {
-    if(m_absolutePosX.last().count())
+    if(m_currentAbsolutePosX.data.count())
         return Absolute;
-    else if(m_relativePosX.last().count())
+    else if(m_currentRelativePosY.data.count())
         return Relative;
-    else
-        return None;
+    else {
+        if (m_absolutePosX.count() &&  m_absolutePosX.last().data.count())
+            return Absolute;
+        else if(m_relativePosX.count() && m_relativePosX.last().data.count())
+            return Relative;
+    }
+    return None;
 }
 
 SvgTextHelper::OffsetType SvgTextHelper::yOffsetType() const
 {
-    if(m_absolutePosY.last().count())
+    if(m_currentAbsolutePosY.data.count())
         return Absolute;
-    else if(m_relativePosY.last().count())
+    else if(m_currentRelativePosY.data.count())
         return Relative;
-    else
-        return None;
+    else {
+        if (m_absolutePosY.count() &&  m_absolutePosY.last().data.count())
+            return Absolute;
+        else if(m_relativePosY.count() && m_relativePosY.last().data.count())
+            return Relative;
+    }
+    return None;
 }
 
-CharTransforms SvgTextHelper::xOffsets(int count) const
+CharTransforms SvgTextHelper::xOffsets(int count)
 {
     switch(xOffsetType()) {
     case Absolute: {
         const QPointF origin = textPosition();
-        CharTransforms offsets = collectValues(count, m_absolutePosX);
+        CharTransforms offsets = collectValues(count, m_currentAbsolutePosX, m_absolutePosX);
         const int offsetCount = offsets.count();
         for (int i = 0; i < offsetCount; ++i) {
             offsets[i] -= origin.x();
@@ -82,18 +91,18 @@ CharTransforms SvgTextHelper::xOffsets(int count) const
         return offsets;
     }
     case Relative:
-        return collectValues(count, m_relativePosX);
+        return collectValues(count, m_currentRelativePosX, m_relativePosX);
     default:
         return CharTransforms();
     }
 }
 
-CharTransforms SvgTextHelper::yOffsets(int count) const
+CharTransforms SvgTextHelper::yOffsets(int count)
 {
     switch(yOffsetType()) {
     case Absolute: {
         const QPointF origin = textPosition();
-        CharTransforms offsets = collectValues(count, m_absolutePosY);
+        CharTransforms offsets = collectValues(count, m_currentAbsolutePosY, m_absolutePosY);
         const int offsetCount = offsets.count();
         for (int i = 0; i < offsetCount; ++i) {
             offsets[i] -= origin.y();
@@ -101,15 +110,15 @@ CharTransforms SvgTextHelper::yOffsets(int count) const
         return offsets;
     }
     case Relative:
-        return collectValues(count, m_relativePosY);
+        return collectValues(count, m_currentRelativePosY, m_relativePosY);
     default:
         return CharTransforms();
     }
 }
 
-CharTransforms SvgTextHelper::rotations(int count) const
+CharTransforms SvgTextHelper::rotations(int count)
 {
-    return collectValues(count, m_rotations);
+    return collectValues(count, m_currentRotations, m_rotations);
 }
 
 QPointF SvgTextHelper::textPosition() const
@@ -123,44 +132,55 @@ QPointF SvgTextHelper::textPosition() const
     return QPointF(x, y);
 }
 
-void SvgTextHelper::pushCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc)
+/// Parses current character transforms (x,y,dx,dy,rotate)
+void SvgTextHelper::parseCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc)
 {
-    parseList(element.attribute("x"), m_absolutePosX, gc, XLength);
-    parseList(element.attribute("y"), m_absolutePosY, gc, YLength);
-    parseList(element.attribute("dx"), m_relativePosX, gc, XLength);
-    parseList(element.attribute("dy"), m_relativePosY, gc, YLength);
-    parseList(element.attribute("rotate"), m_rotations, gc, Number);
+    m_currentAbsolutePosX = parseList(element.attribute("x"), gc, XLength);
+    m_currentAbsolutePosY = parseList(element.attribute("y"), gc, YLength);
+    m_currentRelativePosX = parseList(element.attribute("dx"), gc, XLength);
+    m_currentRelativePosY = parseList(element.attribute("dy"), gc, YLength);
+    m_currentRotations = parseList(element.attribute("rotate"), gc, Number);
 
-    if (m_textPosition.x() == HUGE_VAL && m_absolutePosX.last().count()) {
-        m_textPosition.setX(m_absolutePosX.last().first());
+    if (m_textPosition.x() == HUGE_VAL && m_currentAbsolutePosX.data.count()) {
+        m_textPosition.setX(m_currentAbsolutePosX.data.first());
     }
-    if (m_textPosition.y() == HUGE_VAL && m_absolutePosY.last().count()) {
-        m_textPosition.setY(m_absolutePosY.last().first());
+    if (m_textPosition.y() == HUGE_VAL && m_currentAbsolutePosY.data.count()) {
+        m_textPosition.setY(m_currentAbsolutePosY.data.first());
     }
+}
+
+void SvgTextHelper::pushCharacterTransforms()
+{
+    m_absolutePosX.append(m_currentAbsolutePosX);
+    m_currentAbsolutePosX = CharTransformState();
+    m_absolutePosY.append(m_currentAbsolutePosY);
+    m_currentAbsolutePosY = CharTransformState();
+    m_relativePosX.append(m_currentRelativePosX);
+    m_currentRelativePosX = CharTransformState();
+    m_relativePosY.append(m_currentRelativePosY);
+    m_currentRelativePosY = CharTransformState();
+    m_rotations.append(m_currentRotations);
+    m_currentRotations = CharTransformState();
 }
 
 void SvgTextHelper::popCharacterTransforms()
 {
+    m_currentAbsolutePosX = m_absolutePosX.last();
     m_absolutePosX.pop_back();
+    m_currentAbsolutePosY = m_absolutePosY.last();
     m_absolutePosY.pop_back();
+    m_currentRelativePosX = m_relativePosX.last();
     m_relativePosX.pop_back();
+    m_currentRelativePosY = m_relativePosY.last();
     m_relativePosY.pop_back();
+    m_currentRotations = m_rotations.last();
     m_rotations.pop_back();
 }
 
-void SvgTextHelper::stripCharacterTransforms(int count)
-{
-    m_absolutePosX.last() = m_absolutePosX.last().count() > count ? m_absolutePosX.last().mid(count) : CharTransforms();
-    m_absolutePosY.last() = m_absolutePosY.last().count() > count ? m_absolutePosY.last().mid(count) : CharTransforms();
-    m_relativePosX.last() = m_relativePosX.last().count() > count ? m_relativePosX.last().mid(count) : CharTransforms();
-    m_relativePosY.last() = m_relativePosY.last().count() > count ? m_relativePosY.last().mid(count) : CharTransforms();
-    m_rotations.last() = m_rotations.last().count() > count ? m_rotations.last().mid(count) : CharTransforms();
-}
-
-void SvgTextHelper::parseList(const QString &listString, CharTransformStack &stack, SvgGraphicsContext *gc, ValueType type)
+CharTransforms SvgTextHelper::parseList(const QString &listString, SvgGraphicsContext *gc, ValueType type)
 {
     if (listString.isEmpty()) {
-        stack.append(CharTransforms());
+        return CharTransforms();
     } else {
         CharTransforms values;
         QStringList offsets = QString(listString).replace(',', ' ').simplified().split(' ');
@@ -178,31 +198,66 @@ void SvgTextHelper::parseList(const QString &listString, CharTransformStack &sta
                 break;
             }
         }
-        stack.append(values);
+        return values;
     }
 }
 
-CharTransforms SvgTextHelper::collectValues(int count, const CharTransformStack &stack) const
+CharTransforms SvgTextHelper::collectValues(int count, CharTransformState &current, CharTransformStack &stack)
 {
-    // do we have enough values ?
-    if (stack.last().count() >= count) {
-        return stack.last().mid(0, count);
+    CharTransforms collected;
+
+    if (current.hasData) {
+        // use value from current data if that has initial values
+        collected = current.extract(count);
     } else {
+        collected = current.extract(count);
         // collect values from ancestors
-        CharTransforms collected = stack.last();
-        QListIterator<CharTransforms> it(stack);
-        it.toBack();
-        while(it.hasPrevious()) {
-            const CharTransforms &prev = it.previous();
-            if (prev.count() > collected.count()) {
-                int count = qMin(count, prev.count());
-                for(int i = collected.count(); i < count; ++i) {
-                    collected.append(prev[i]);
-                }
-            } else {
+        const int stackCount = stack.count();
+        for(int i = stackCount-1; i >= 0; --i) {
+            CharTransformState &state = stack[i];
+            // determine the number of values we need / can get from this ancestor
+            const int copyCount = qMin(count - collected.count(), state.data.count());
+            // extract values so they are not consumed more than once
+            collected.append(state.extract(copyCount));
+            // ok this ancestor had initial data, so we stop collecting values here
+            if(state.hasData) {
+                if(collected.isEmpty())
+                    collected.append(state.lastTransform);
                 break;
             }
+            if(copyCount == 0)
+                break;
         }
-        return collected;
     }
+    return collected;
+}
+
+void SvgTextHelper::printDebug()
+{
+    QString indent;
+    foreach(const CharTransformState &state, CharTransformStack(m_absolutePosX) << m_currentAbsolutePosX) {
+        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        indent.append("  ");
+    }
+    indent.clear();
+    foreach(const CharTransformState &state, CharTransformStack(m_absolutePosY) << m_currentAbsolutePosY) {
+        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        indent.append("  ");
+    }
+    indent.clear();
+    foreach(const CharTransformState &state, CharTransformStack(m_relativePosX) << m_currentRelativePosX) {
+        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        indent.append("  ");
+    }
+    indent.clear();
+    foreach(const CharTransformState &state, CharTransformStack(m_relativePosY) << m_currentRelativePosY) {
+        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        indent.append("  ");
+    }
+    indent.clear();
+    foreach(const CharTransformState &state, CharTransformStack(m_rotations) << m_currentRotations) {
+        kDebug() << indent << state.data << state.hasData << state.lastTransform;
+        indent.append("  ");
+    }
+    indent.clear();
 }

@@ -41,16 +41,16 @@ public:
 
     SvgTextHelper();
 
-    static QString simplifyText(const QString &text, bool preserveWhiteSpace = false, bool hasSibling = false);
+    static QString simplifyText(const QString &text, bool preserveWhiteSpace = false);
 
-    /// Parses character transforms (x,y,dx,dy,rotate) and pushes them to the stack
-    void pushCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc);
+    /// Parses current character transforms (x,y,dx,dy,rotate)
+    void parseCharacterTransforms(const KoXmlElement &element, SvgGraphicsContext *gc);
 
-    /// Pops current character trasnforms from the stack
+    /// Pushes the current character transforms to the stack
+    void pushCharacterTransforms();
+
+    /// Pops last character transforms from the stack
     void popCharacterTransforms();
-
-    /// Strips specified number of character transformations
-    void stripCharacterTransforms(int count);
 
     /// Checks current x-offset type
     OffsetType xOffsetType() const;
@@ -59,19 +59,46 @@ public:
     OffsetType yOffsetType() const;
 
     /// Returns x-offsets from stack
-    CharTransforms xOffsets(int count) const;
+    CharTransforms xOffsets(int count);
 
     /// Returns y-offsets from stack
-    CharTransforms yOffsets(int count) const;
+    CharTransforms yOffsets(int count);
 
     /// Returns rotations from stack
-    CharTransforms rotations(int count) const;
+    CharTransforms rotations(int count);
 
     /// Returns the text position
     QPointF textPosition() const;
 
 private:
-    typedef QList<CharTransforms> CharTransformStack;
+    void printDebug();
+
+    struct CharTransformState {
+        CharTransformState()
+            : hasData(false), lastTransform(0.0)
+        {
+        }
+
+        CharTransformState(const CharTransforms &initialData)
+            : data(initialData), hasData(!initialData.isEmpty())
+            , lastTransform(initialData.isEmpty() ? 0.0 : initialData.last())
+        {
+        }
+
+        CharTransforms extract(int count)
+        {
+            const int copyCount = qMin(data.count(), count);
+            CharTransforms extracted = data.mid(0, copyCount);
+            data = data.mid(copyCount);
+            return extracted;
+        }
+
+        CharTransforms data;
+        bool hasData;
+        qreal lastTransform;
+    };
+
+    typedef QList<CharTransformState> CharTransformStack;
 
     enum ValueType {
         Number,
@@ -80,11 +107,16 @@ private:
     };
 
     /// Parses offset values from the given string
-    void parseList(const QString &listString, CharTransformStack &stack, SvgGraphicsContext *gc, ValueType type);
+    CharTransforms parseList(const QString &listString, SvgGraphicsContext *gc, ValueType type);
 
     /// Collects number of specified transforms values from the stack
-    CharTransforms collectValues(int count, const CharTransformStack &stack) const;
+    CharTransforms collectValues(int count, CharTransformState &current, CharTransformStack &stack);
 
+    CharTransformState m_currentAbsolutePosX; ///< current absolute character x-positions
+    CharTransformState m_currentAbsolutePosY; ///< current absolute character y-positions
+    CharTransformState m_currentRelativePosX; ///< current relative character x-positions
+    CharTransformState m_currentRelativePosY; ///< current relative character y-positions
+    CharTransformState m_currentRotations;    ///< current character rotations
     CharTransformStack m_absolutePosX; ///< stack of absolute character x-positions
     CharTransformStack m_absolutePosY; ///< stack of absolute character y-positions
     CharTransformStack m_relativePosX; ///< stack of relative character x-positions

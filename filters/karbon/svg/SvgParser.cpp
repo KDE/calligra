@@ -1616,9 +1616,9 @@ void SvgParser::parseDefs(const KoXmlElement &e)
 // Creating functions
 // ---------------------------------------------------------------------------------------
 
-ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, SvgGraphicsContext *gc, bool hasSibling = false)
+ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, SvgGraphicsContext *gc)
 {
-    ArtisticTextRange range(context.simplifyText(text, gc->preserveWhitespace, hasSibling), gc->font);
+    ArtisticTextRange range(context.simplifyText(text, gc->preserveWhitespace), gc->font);
 
     const int textLength = range.text().length();
     switch(context.xOffsetType()) {
@@ -1646,7 +1646,7 @@ ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, S
 
     range.setRotations(context.rotations(textLength));
 
-    range.printDebug();
+    //range.printDebug();
 
     return range;
 }
@@ -1659,25 +1659,16 @@ void SvgParser::parseTextRanges(const KoXmlElement &element, SvgTextHelper &text
 
     for (KoXmlNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
         KoXmlElement e = n.toElement();
-        const bool hasNextSibling = !n.nextSibling().isNull();
         if (e.isNull()) {
-            ArtisticTextRange range = createTextRange(n.toText().data(), textContext, m_context.currentGC(), hasNextSibling);
+            ArtisticTextRange range = createTextRange(n.toText().data(), textContext, m_context.currentGC());
             text->appendText(range);
-            textContext.stripCharacterTransforms(range.text().length());
         }
         else if (e.tagName() == "tspan") {
             SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
             parseFont(collectStyles(e));
-            textContext.pushCharacterTransforms(e, gc);
-
-            const int childNodes = n.childNodesCount();
-            // exactly one non element child node, i.e. just text data
-            if(childNodes == 1 && !n.firstChild().isElement()) {
-                text->appendText(createTextRange(e.text(), textContext, gc, hasNextSibling));
-            }
-            else {
-                parseTextRanges(e, textContext, text, shapes);
-            }
+            textContext.pushCharacterTransforms();
+            textContext.parseCharacterTransforms(e, gc);
+            parseTextRanges(e, textContext, text, shapes);
             textContext.popCharacterTransforms();
             m_context.popGraphicsContext();
         }
@@ -1704,7 +1695,7 @@ void SvgParser::parseTextRanges(const KoXmlElement &element, SvgTextHelper &text
             else {
                 KoXmlElement p = m_defs[key];
                 SvgGraphicsContext *gc = m_context.currentGC();
-                text->appendText(ArtisticTextRange(textContext.simplifyText(p.text(), gc->preserveWhitespace, hasNextSibling), gc->font));
+                text->appendText(ArtisticTextRange(textContext.simplifyText(p.text(), gc->preserveWhitespace), gc->font));
             }
         }
         else {
@@ -1732,7 +1723,7 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
     KoXmlElement styleElement = textElement;
 
     SvgTextHelper context;
-    context.pushCharacterTransforms(textElement, m_context.currentGC());
+    context.parseCharacterTransforms(textElement, m_context.currentGC());
 
     KoXmlElement parentElement = textElement;
     // first check if we have a "textPath" child element
@@ -1753,7 +1744,8 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
         // create the referenced path shape
         m_context.pushGraphicsContext(parentElement);
         parseFont(collectStyles(parentElement));
-        context.pushCharacterTransforms(parentElement, m_context.currentGC());
+        context.pushCharacterTransforms();
+        context.parseCharacterTransforms(parentElement, m_context.currentGC());
 
         QString key = parentElement.attribute("xlink:href").mid(1);
         if (! m_defs.contains(key)) {
