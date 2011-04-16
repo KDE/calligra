@@ -27,6 +27,7 @@
 
 #include <kdebug.h>
 #include <kpluginfactory.h>
+#include <kencodingprober.h>
 
 #include <kofficeversion.h>
 #include <KoFilterChain.h>
@@ -59,29 +60,40 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         return KoFilter::NotImplemented;
     }
 
-    AsciiImportDialog* dialog = 0;
+    QFile in(m_chain->inputFile());
+    if (!in.open(QIODevice::ReadOnly)) {
+        kError(30502) << "Unable to open input file!" << endl;
+        in.close();
+        return KoFilter::FileNotFound;
+    }
+
+    QByteArray data = in.read(1024);
+    KEncodingProber prober(KEncodingProber::Universal);
+    prober.feed(data);
+    kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
+    in.seek(0);
+    QString encoding = prober.encoding();
+
+    QTextCodec* codec = 0;
+    int paragraphStrategy = 0;
+
     if (!m_chain->manager()->getBatchMode()) {
-        dialog = new AsciiImportDialog(QApplication::activeWindow());
+        QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(encoding, QApplication::activeWindow());
         if (!dialog) {
             kError(30502) << "Dialog has not been created! Aborting!" << endl;
+            in.close();
             return KoFilter::StupidError;
         }
         if (!dialog->exec()) {
             kDebug(30502) << "Dialog was aborted! Aborting filter!"; // this isn't an error!
+            in.close();
             return KoFilter::UserCancelled;
         }
-    }
-
-    QTextCodec* codec;
-
-    int paragraphStrategy = 0;
-    if (dialog) {
         codec = dialog->getCodec();
         paragraphStrategy = dialog->getParagraphStrategy();
-        delete dialog;
     }
     else {
-        codec = QTextCodec::codecForName("UTF-8");
+        codec = QTextCodec::codecForName(prober.encoding());
     }
 
     if (!codec) {
@@ -91,15 +103,18 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     kDebug(30502) << "Charset used:" << codec->name();
 
+    QTextStream stream(&in);
+    stream.setCodec(codec);
+
     //create output files
     KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
     if (!store || store->bad()) {
-        kWarning(30003) << "Unable to open output file!";
+        kWarning(30502) << "Unable to open output file!";
         delete store;
         return KoFilter::FileNotFound;
     }
     store->disallowNameExpansion();
-    kDebug(30003) << "created store.";
+    kDebug(30502) << "created store.";
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
 
@@ -114,16 +129,6 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
-
-    QFile in(m_chain->inputFile());
-    if (!in.open(QIODevice::ReadOnly)) {
-        kError(30502) << "Unable to open input file!" << endl;
-        in.close();
-        return KoFilter::FileNotFound;
-    }
-
-    QTextStream stream(&in);
-    stream.setCodec(codec);
 
     QString styleName("Preformated Text");
     KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
