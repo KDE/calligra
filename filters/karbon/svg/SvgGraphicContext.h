@@ -48,6 +48,9 @@ public:
         
         clipRule = Qt::WindingFill;
         preserveWhitespace = false;
+
+        letterSpacing = 0.0;
+        wordSpacing = 0.0;
     }
 
     StyleType    fillType;  ///< the current fill type
@@ -73,6 +76,9 @@ public:
     QRectF currentBoundbox; ///< the current bound box used for bounding box units
     bool   forcePercentage; ///< force parsing coordinates/length as percentages of currentBoundbox
     QTransform viewboxTransform; ///< view box transformation
+
+    qreal letterSpacing;    ///< additional spacing between characters of text elements
+    qreal wordSpacing;      ///< additional spacing between words of text elements
 
     bool display;           ///< controls display of shape
 };

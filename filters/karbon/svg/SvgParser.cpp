@@ -63,7 +63,9 @@
 SvgParser::SvgParser(KoResourceManager *documentResourceManager)
     : m_documentResourceManager(documentResourceManager)
 {
-    m_fontAttributes << "font-family" << "font-size" << "font-weight" << "text-decoration";
+    // the order of the font attributes is important, don't change without reason !!!
+    m_fontAttributes << "font-family" << "font-size" << "font-weight";
+    m_fontAttributes << "text-decoration" << "letter-spacing" << "word-spacing";
     // the order of the style attributes is important, don't change without reason !!!
     m_styleAttributes << "color" << "display";
     m_styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -865,6 +867,10 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
             gc->font.setStrikeOut(true);
         else if (params == "underline")
             gc->font.setUnderline(true);
+    } else if (command == "letter-spacing") {
+        gc->letterSpacing = parseUnitX(params);
+    } else if (command == "word-spacing") {
+        gc->wordSpacing = parseUnitX(params);
     } else if (command == "color") {
         QColor color;
         parseColor(color, params);
@@ -1645,6 +1651,8 @@ ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, S
     }
 
     range.setRotations(context.rotations(textLength));
+    range.setLetterSpacing(gc->letterSpacing);
+    range.setWordSpacing(gc->wordSpacing);
 
     //range.printDebug();
 
