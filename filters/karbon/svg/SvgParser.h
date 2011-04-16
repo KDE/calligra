@@ -39,6 +39,7 @@ class KoShape;
 class KoShapeContainer;
 class KoShapeGroup;
 class KoResourceManager;
+class SvgTextHelper;
 
 class SvgParser
 {
@@ -99,6 +100,8 @@ protected:
     KoShape * createText(const KoXmlElement &, const QList<KoShape*> & shapes);
     /// Parses font attributes
     void parseFont(const SvgStyles &styles);
+    /// Parse nested text ranges
+    void parseTextRanges(const KoXmlElement &element, SvgTextHelper &textContext, KoShape *textShape, const QList<KoShape*> & shapes);
     /// find object with given id in document
     KoShape * findObject(const QString &name);
     /// find object with given id in given group

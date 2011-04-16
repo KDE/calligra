@@ -1651,12 +1651,76 @@ ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, S
     return range;
 }
 
+void SvgParser::parseTextRanges(const KoXmlElement &element, SvgTextHelper &textContext, KoShape *textShape, const QList<KoShape*> & shapes)
+{
+    ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(textShape);
+    if (!text)
+        return;
+
+    for (KoXmlNode n = element.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        KoXmlElement e = n.toElement();
+        const bool hasNextSibling = !n.nextSibling().isNull();
+        if (e.isNull()) {
+            ArtisticTextRange range = createTextRange(n.toText().data(), textContext, m_context.currentGC(), hasNextSibling);
+            text->appendText(range);
+            textContext.stripCharacterTransforms(range.text().length());
+        }
+        else if (e.tagName() == "tspan") {
+            SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
+            parseFont(collectStyles(e));
+            textContext.pushCharacterTransforms(e, gc);
+
+            const int childNodes = n.childNodesCount();
+            // exactly one non element child node, i.e. just text data
+            if(childNodes == 1 && !n.firstChild().isElement()) {
+                text->appendText(createTextRange(e.text(), textContext, gc, hasNextSibling));
+            }
+            else {
+                parseTextRanges(e, textContext, text, shapes);
+            }
+            textContext.popCharacterTransforms();
+            m_context.popGraphicsContext();
+        }
+        else if (e.tagName() == "tref") {
+            if (e.attribute("xlink:href").isEmpty())
+                continue;
+
+            QString key = e.attribute("xlink:href").mid(1);
+            if (! m_defs.contains(key)) {
+                // try to find referenced object in document
+                KoShape *obj = findObject(key);
+                // try to find referenced object in actual group, which is not yet part of document
+                if (! obj)
+                    obj = findObject(key, shapes);
+                if (obj) {
+                    ArtisticTextShape *refText = dynamic_cast<ArtisticTextShape*>(obj);
+                    if (refText) {
+                        foreach (const ArtisticTextRange &range, refText->text()) {
+                            text->appendText(range);
+                        }
+                    }
+                }
+            }
+            else {
+                KoXmlElement p = m_defs[key];
+                SvgGraphicsContext *gc = m_context.currentGC();
+                text->appendText(ArtisticTextRange(textContext.simplifyText(p.text(), gc->preserveWhitespace, hasNextSibling), gc->font));
+            }
+        }
+        else {
+            continue;
+        }
+    }
+}
+
 KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoShape*> & shapes)
 {
     QString anchor;
-    double offset = 0.0;
 
-    ArtisticTextShape *text = 0;
+    ArtisticTextShape *text = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
+    if (! text)
+        return 0;
+    text->clear();
 
     m_context.pushGraphicsContext(textElement);
 
@@ -1670,126 +1734,68 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
     SvgTextHelper context;
     context.pushCharacterTransforms(textElement, m_context.currentGC());
 
-    if (textElement.hasChildNodes()) {
-        text = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
-        if (! text)
-            return 0;
-        text->clear();
-
-        KoPathShape *path = 0;
-        bool pathInDocument = false;
-
-        for (KoXmlNode n = textElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
-            KoXmlElement e = n.toElement();
-            const bool hasNextSibling = !n.nextSibling().isNull();
-            if (e.isNull()) {
-                ArtisticTextRange range = createTextRange(n.toText().data(), context, m_context.currentGC(), hasNextSibling);
-                text->appendText(range);
-                context.stripCharacterTransforms(range.text().length());
-            } else if (e.tagName() == "textPath") {
-                if (e.attribute("xlink:href").isEmpty())
-                    continue;
-
-                m_context.pushGraphicsContext(e);
-                parseFont(collectStyles(e));
-                context.pushCharacterTransforms(e, m_context.currentGC());
-
-                QString key = e.attribute("xlink:href").mid(1);
-                if (! m_defs.contains(key)) {
-                    // try to find referenced object in document
-                    KoShape *obj = findObject(key);
-                    // try to find referenced object in actual group, which is not yet part of document
-                    if (! obj)
-                        obj = findObject(key, shapes);
-                    if (obj)
-                        path = dynamic_cast<KoPathShape*>(obj);
-                    if (path)
-                        pathInDocument = true;
-                } else {
-                    KoXmlElement p = m_defs[key];
-                    path = dynamic_cast<KoPathShape*>(createObject(p));
-                    pathInDocument = false;
-                    path->applyAbsoluteTransformation(m_context.currentGC()->matrix.inverted());
-                }
-
-                if(e.hasChildNodes()) {
-                    for (KoXmlNode node = e.firstChild(); !node.isNull(); node = node.nextSibling()) {
-                        KoXmlElement span = node.toElement();
-                        const bool hasNextSibling = !node.nextSibling().isNull();
-                        if (span.isNull()) {
-                            ArtisticTextRange range = createTextRange(node.toText().data(), context, m_context.currentGC(), hasNextSibling);
-                            text->appendText(range);
-                            context.stripCharacterTransforms(range.text().length());
-                        } else if (span.tagName() == "tspan") {
-                            SvgGraphicsContext *gc = m_context.pushGraphicsContext(span);
-                            parseFont(collectStyles(span));
-                            context.pushCharacterTransforms(span, gc);
-
-                            text->appendText(createTextRange(span.text(), context, gc, hasNextSibling));
-
-                            context.popCharacterTransforms();
-                            m_context.popGraphicsContext();
-                        }
-                    }
-                } else {
-                    text->appendText(createTextRange(e.text(), context, m_context.currentGC()));
-                }
-
-                if (! e.attribute("startOffset").isEmpty()) {
-                    QString start = e.attribute("startOffset");
-                    if (start.endsWith('%'))
-                        offset = 0.01 * start.remove('%').toDouble();
-                    else {
-                        float pathLength = path->outline().length();
-                        if (pathLength > 0.0)
-                            offset = start.toDouble() / pathLength;
-                    }
-                }
-                context.popCharacterTransforms();
-                m_context.popGraphicsContext();
-            } else if (e.tagName() == "tspan") {
-                SvgGraphicsContext *gc = m_context.pushGraphicsContext(e);
-                parseFont(collectStyles(e));
-                context.pushCharacterTransforms(e, gc);
-
-                text->appendText(createTextRange(e.text(), context, gc, hasNextSibling));
-
-                context.popCharacterTransforms();
-                m_context.popGraphicsContext();
-            } else if (e.tagName() == "tref") {
-                if (e.attribute("xlink:href").isEmpty())
-                    continue;
-
-                QString key = e.attribute("xlink:href").mid(1);
-                if (! m_defs.contains(key)) {
-                    // try to find referenced object in document
-                    KoShape *obj = findObject(key);
-                    // try to find referenced object in actual group, which is not yet part of document
-                    if (! obj)
-                        obj = findObject(key, shapes);
-                    if (obj) {
-                        ArtisticTextShape *refText = dynamic_cast<ArtisticTextShape*>(obj);
-                        if (refText) {
-                            foreach (const ArtisticTextRange &range, refText->text()) {
-                                text->appendText(range);
-                            }
-                        }
-                    }
-                } else {
-                    KoXmlElement p = m_defs[key];
-                    SvgGraphicsContext *gc = m_context.currentGC();
-                    text->appendText(ArtisticTextRange(context.simplifyText(p.text(), gc->preserveWhitespace, hasNextSibling), gc->font));
-                }
-            } else {
-                continue;
-            }
-
-            if (! e.attribute("text-anchor").isEmpty())
-                anchor = e.attribute("text-anchor");
+    KoXmlElement parentElement = textElement;
+    // first check if we have a "textPath" child element
+    for (KoXmlNode n = textElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "textPath") {
+            parentElement = e;
+            break;
         }
+    }
 
+    KoPathShape *path = 0;
+    bool pathInDocument = false;
+    double offset = 0.0;
+
+    const bool hasTextPathElement = parentElement != textElement && parentElement.hasAttribute("xlink:href");
+    if (hasTextPathElement) {
+        // create the referenced path shape
+        m_context.pushGraphicsContext(parentElement);
+        parseFont(collectStyles(parentElement));
+        context.pushCharacterTransforms(parentElement, m_context.currentGC());
+
+        QString key = parentElement.attribute("xlink:href").mid(1);
+        if (! m_defs.contains(key)) {
+            // try to find referenced object in document
+            KoShape *obj = findObject(key);
+            // try to find referenced object in actual group, which is not yet part of document
+            if (! obj)
+                obj = findObject(key, shapes);
+            if (obj)
+                path = dynamic_cast<KoPathShape*>(obj);
+            if (path)
+                pathInDocument = true;
+        } else {
+            KoXmlElement p = m_defs[key];
+            path = dynamic_cast<KoPathShape*>(createObject(p));
+            pathInDocument = false;
+            path->applyAbsoluteTransformation(m_context.currentGC()->matrix.inverted());
+        }
+        // parse the start offset
+        if (! parentElement.attribute("startOffset").isEmpty()) {
+            QString start = parentElement.attribute("startOffset");
+            if (start.endsWith('%'))
+                offset = 0.01 * start.remove('%').toDouble();
+            else {
+                const float pathLength = path ? path->outline().length() : 0.0;
+                if (pathLength > 0.0)
+                    offset = start.toDouble() / pathLength;
+            }
+        }
+    }
+
+    if (parentElement.hasChildNodes()) {
+        // parse child elements
+        parseTextRanges(parentElement, context, text, shapes);
         text->setPosition(context.textPosition());
+    } else {
+        // a single text range
+        text->appendText(createTextRange(textElement.text(), context, m_context.currentGC()));
+        text->setPosition(context.textPosition());
+    }
 
+    if (hasTextPathElement) {
         if (path) {
             if (pathInDocument)
                 text->putOnPath(path);
@@ -1799,19 +1805,9 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
             if (offset > 0.0)
                 text->setStartOffset(offset);
         }
-    } else {
-        // a single text line
-        text = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
-        if (! text)
-            return 0;
 
-        text->appendText(createTextRange(textElement.text(), context, m_context.currentGC()));
-        text->setPosition(context.textPosition());
-    }
-
-    if (! text) {
+        context.popCharacterTransforms();
         m_context.popGraphicsContext();
-        return 0;
     }
 
     // adjust position by baseline offset
