@@ -51,7 +51,7 @@ void FileChooserDialog::initUi()
     fileChooser->spreadsheetView->setRootIndex(fileModel->index(startDir));
     connect(fileChooser->spreadsheetView, SIGNAL(clicked(QModelIndex)), this, SLOT(changeRootIndex(QModelIndex)));
     fileModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::AllDirs);
-    fileModel->setNameFilterDisables(true);
+    fileModel->setNameFilterDisables(false);
 }
 
 void FileChooserDialog::updateRecentDocumentModel()
