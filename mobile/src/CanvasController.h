@@ -39,6 +39,7 @@ class CanvasController : public QDeclarativeItem, KoCanvasController
     Q_PROPERTY(qreal docWidth READ docWidth NOTIFY docWidthChanged)
     Q_PROPERTY(int cameraX READ cameraX WRITE setCameraX NOTIFY cameraXChanged)
     Q_PROPERTY(int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
+    Q_PROPERTY(DocumentType documentType READ documentType NOTIFY documentTypeChanged)
     Q_ENUMS(DocumentType)
 
 public:
@@ -104,6 +105,7 @@ signals:
     void docWidthChanged();
     void cameraXChanged();
     void cameraYChanged();
+    void documentTypeChanged();
 };
 
 #endif // CANVASCONTROLLER_H

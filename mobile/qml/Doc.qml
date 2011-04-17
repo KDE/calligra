@@ -34,6 +34,21 @@ QML.Rectangle {
     QML.Row {
         anchors.fill: parent
 
+        QML.Loader {
+            id: toolbarLoader
+
+            height: parent.height
+            width: parent.width*0.05
+
+            QML.Component.onCompleted : {
+                if (canvas.documentType == CanvasController.Spreadsheet) {
+                    toolbarLoader.source = "SpreadsheetToolbar.qml"
+                } else if (canvas.documentType == CanvasController.TextDocument) {
+                    toolbarLoader.source = "WordsToolbar.qml"
+                }
+            }
+        }
+
         CanvasController {
             id: canvas
 
@@ -52,7 +67,7 @@ QML.Rectangle {
         contentWidth: proxyItem.width; contentHeight: proxyItem.height;
         clip: true
 
-        QML.Rectangle {
+        QML.Item {
             id: proxyItem
             height: canvas.docHeight
             width: canvas.docWidth
