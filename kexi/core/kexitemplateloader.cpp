@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,7 +32,17 @@
 
 #include <qdir.h>
 
+KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
+  : enabled(true)
+{
+}
+
+KexiTemplateCategoryInfo::~KexiTemplateCategoryInfo()
+{
+}
+
 KexiTemplateInfo::KexiTemplateInfo()
+  : enabled(true)
 {
 }
 
@@ -41,10 +51,17 @@ KexiTemplateInfo::~KexiTemplateInfo()
     qDeleteAll(autoopenObjects);
 }
 
-//static
-KexiTemplateInfo::List KexiTemplateLoader::loadListInfo()
+void KexiTemplateCategoryInfo::addTemplate(const KexiTemplateInfo& t)
 {
-    KexiTemplateInfo::List list;
+    KexiTemplateInfo _t = t;
+    _t.category = name;
+    m_templates.append(_t);
+}
+
+//static
+KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
+{
+    KexiTemplateInfoList list;
 // const QString subdir = QString(kapp->instanceName()) + "/templates";
 #ifdef __GNUC
 #ifdef __GNUC__
@@ -114,9 +131,9 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     info.description = cg.readEntry("Description");
     const QString iconFileName(cg.readEntry("Icon"));
     if (!iconFileName.isEmpty())
-        info.icon = QPixmap(directory + '/' + iconFileName);
+        info.icon = KIcon(QPixmap(directory + '/' + iconFileName));
     if (info.icon.isNull())
-        info.icon = DesktopIcon(KexiDB::defaultFileBasedDriverIcon());
+        info.icon = KIcon(DesktopIcon(KexiDB::defaultFileBasedDriverIcon()));
     QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
     foreach(QString autoopenObjectString, autoopenObjectsString) {
         KexiProjectData::ObjectInfo* autoopenObject = new KexiProjectData::ObjectInfo();

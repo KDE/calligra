@@ -30,6 +30,7 @@ startup/KexiStartupDialog.cpp
 startup/KexiStartup.cpp
 startup/KexiDBTitlePage.cpp
 startup/KexiStartupDialogTemplatesPage.cpp
+startup/KexiTemplatesModel.cpp
 
 #todo printing/kexisimpleprintingengine.cpp
 #todo printing/kexisimpleprintingpagesetup.cpp

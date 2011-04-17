@@ -918,6 +918,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
     KLineEdit *searchLineEdit = new KLineEdit;
+    searchLineEdit->setFocusPolicy(Qt::NoFocus);
     searchLineEdit->setPlaceholderText(tr("Search"));
     searchLineEdit->setClearButtonShown(true);
     helpLyr->addWidget(searchLineEdit);

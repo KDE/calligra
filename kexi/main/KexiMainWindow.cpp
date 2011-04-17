@@ -175,7 +175,11 @@ private:
 //-------------------------------------------------
 
 #include "KexiMainWindow_p.h"
-#include "KexiMainWindow_p.moc"
+
+#include <KCategorizedView>
+#include <KTitleWidget>
+#include <KCategoryDrawer>
+#include "startup/KexiTemplatesModel.h"
 
 //-------------------------------------------------
 
@@ -3118,6 +3122,56 @@ KexiMainWindow::createKexiProject(KexiProjectData* new_data)
     
 }
 
+#if KDE_IS_VERSION(4,5,0)
+class KexiTemplatesCategoryDrawer : public KCategoryDrawerV3
+#else
+class KexiTemplatesCategoryDrawer : public KCategoryDrawerV2
+#endif
+{
+public:
+    KexiTemplatesCategoryDrawer() {}
+protected:
+#if KDE_IS_VERSION(4,5,0)
+    void mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event) {
+        event->accept();
+    }
+    void mouseButtonReleased(const QModelIndex&, const QRect&, QMouseEvent *event) {
+        event->accept();
+    }
+#endif
+};
+
+class KexiTemplatesSelectionModel : public QItemSelectionModel
+{
+public:
+    KexiTemplatesSelectionModel(QAbstractItemModel* model)
+        : QItemSelectionModel(model)
+    {
+    }
+
+    //! Reimplemented to disable full category selections.
+    //! Shouldn't be needed in KDElibs >= 4.5,
+    //! where KexiTemplatesCategoryDrawer::mouseButtonPressed() works.
+    void select(const QItemSelection& selection,
+                QItemSelectionModel::SelectionFlags command)
+    {
+        // kDebug() << selection.indexes().count() << command;
+        if ((command & QItemSelectionModel::Select) && 
+            !(command & QItemSelectionModel::Clear) &&
+            (selection.indexes().count() > 1 || !this->selection().indexes().isEmpty()))
+        {
+            return;
+        }
+        QItemSelectionModel::select(selection, command);
+    }
+    void select(const QModelIndex& index,
+                QItemSelectionModel::SelectionFlags command)
+    {
+        QItemSelectionModel::select(index, command);
+    }
+    
+};
+
 KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
                                        QString* shortcutFileName)
 {
@@ -3125,8 +3179,86 @@ KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool co
     if (!d->tabbedToolBar)
         return 0;
     d->tabbedToolBar->showMainMenu("project_new");
-    KexiNewProjectWizard *wiz = new KexiNewProjectWizard(Kexi::connset(), 0);
-    wiz->setConfirmOverwrites(confirmOverwrites);
+    
+    QWidget* wiz = new QWidget;
+    QVBoxLayout* mainLyr = new QVBoxLayout(wiz);
+    int margin = wiz->style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
+        + KDialog::marginHint();
+    mainLyr->setContentsMargins(margin, margin, margin, margin);
+    QLabel* title = new QLabel(i18n("New Project"));
+    title->setStyleSheet(
+        QString("QLabel { font-weight: bold; color: %1; font-size: %2pt; }")
+            .arg(title->palette().color(QPalette::WindowText).name())
+            .arg(title->font().pointSize() + 1));
+    mainLyr->addWidget(title);
+    QLabel* description = new QLabel(
+        i18n("Kexi will create a new database project. Select blank database or template."));
+    mainLyr->addWidget(description);
+
+    //titleWidget->setAutoFillBackground(false);
+    KCategorizedView* templatesList = new KCategorizedView;
+    templatesList->setWordWrap(true);
+    templatesList->setFrameShape(QFrame::NoFrame);
+    templatesList->setContentsMargins(0, 0, 0, 0);
+    templatesList->setCategorySpacing(5 + margin);
+    templatesList->setSpacing(margin);
+    templatesList->setSelectionMode(QAbstractItemView::SingleSelection);
+    templatesList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    templatesList->setMouseTracking(true);
+
+    KexiTemplatesCategoryDrawer* templatesCategoryDrawer = new KexiTemplatesCategoryDrawer;
+    templatesList->setCategoryDrawer(templatesCategoryDrawer);
+    templatesList->setViewMode(QListView::IconMode);
+    KexiTemplatesProxyModel* proxyModel = new KexiTemplatesProxyModel(templatesList);
+
+    KexiTemplateCategoryInfoList templateCategories;
+    KexiTemplateCategoryInfo templateCategory;
+    templateCategory.name = "blank";
+    templateCategory.caption = i18n("Blank Projects");
+    
+    KexiTemplateInfo info;
+    info.name = "blank";
+    info.caption = i18n("Blank database");
+    info.description = i18n("Database project without any objects");
+    info.icon = KIcon(KexiDB::defaultFileBasedDriverIcon()); //"x-office-document");
+    templateCategory.addTemplate(info);
+    templateCategories.append(templateCategory);
+    
+    templateCategory = KexiTemplateCategoryInfo();
+    templateCategory.name = "office";
+    templateCategory.caption = i18n("Office Templates");
+    //templateCategory.enabled = false;
+    
+    info = KexiTemplateInfo();
+    info.name = "contacts";
+    info.caption = i18n("Contacts");
+    info.description = i18n("Database for collecting and managing contacts");
+    info.icon = KIcon("view-pim-contacts");
+    //info.enabled = false;
+    templateCategory.addTemplate(info);
+    
+    info = KexiTemplateInfo();
+    info.name = "movie";
+    info.caption = i18n("Movie catalog");
+    info.description = i18n("Database for collecting movies");
+    info.icon = KIcon("video-x-genenric");
+    //info.enabled = false;
+    templateCategory.addTemplate(info);
+    templateCategories.append(templateCategory);
+    
+//     QStringList names;
+//     names << "A" << "B" << "C";
+    KexiTemplatesModel* model = new KexiTemplatesModel(templateCategories);
+    proxyModel->setSourceModel(model);
+    templatesList->setModel(proxyModel);
+    templatesList->setSelectionModel(new KexiTemplatesSelectionModel(proxyModel));
+
+    kDebug() << "templatesCategoryDrawer:" << templatesList->categoryDrawer() << (KCategoryDrawer*)templatesCategoryDrawer;
+
+    mainLyr->addWidget(templatesList, 1);
+    
+    //KexiNewProjectWizard *wiz = new KexiNewProjectWizard(Kexi::connset(), 0);
+    //wiz->setConfirmOverwrites(confirmOverwrites);
     d->tabbedToolBar->setMainMenuContent(wiz);
 
 #warning todo
@@ -3195,7 +3327,7 @@ void KexiMainWindow::slotProjectOpen()
         return;
     d->tabbedToolBar->showMainMenu("project_open");
     KexiStartupDialog *openWindow = new KexiStartupDialog(
-        KexiStartupDialog::OpenExisting, 0, Kexi::connset(),
+        KexiStartupDialog::Templates/*KexiStartupDialog::OpenExisting*/, 0, Kexi::connset(),
         Kexi::recentProjects(), 0);
     d->tabbedToolBar->setMainMenuContent(openWindow);
 
@@ -5404,3 +5536,4 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
 }
 
 #include "KexiMainWindow.moc"
+#include "KexiMainWindow_p.moc"
