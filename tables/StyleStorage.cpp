@@ -448,7 +448,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertRows(int position, in
         d->usedArea += rects[i].adjusted(0, 1, 0, number + 1);
     // update the used rows
     QMap<int, bool> map;
-    QMap<int, bool>::iterator begin = d->usedRows.upperBound(position);
+    QMap<int, bool>::iterator begin = d->usedRows.lowerBound(position);
     QMap<int, bool>::iterator end = d->usedRows.end();
     for (QMap<int, bool>::iterator it = begin; it != end; ++it) {
         if (it.key() + number <= KS_rowMax)

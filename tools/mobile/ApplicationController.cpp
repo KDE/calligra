@@ -373,11 +373,16 @@ ApplicationController::ApplicationController(Splash *aSplash, MainWindow *mainWi
 
     m_fsButton = new QPushButton(m_mainWindow);
     Q_CHECK_PTR(m_fsButton);
+#ifdef Q_WS_MAEMO_5
     m_fsButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+#endif
+
     m_fsButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
     m_fsButton->setIcon(m_fsIcon);
+    m_fsButton->setIconSize(QSize(48, 48));
     m_fsButton->hide();
     connect(m_fsButton, SIGNAL(clicked()), SLOT(fsButtonClicked()));
+    qApp->installEventFilter(m_mainWindow);
 
     updateActions();
 
@@ -427,6 +432,8 @@ ApplicationController::ApplicationController(Splash *aSplash, MainWindow *mainWi
     m_ui->actionInsertTable->setVisible(false);
     showCCP();
     insertButtonClicked();
+
+    m_mainWindow->showNormal();
 }
 
 ApplicationController::~ApplicationController()
@@ -1670,9 +1677,12 @@ void ApplicationController::showFullScreenPresentationIcons()
 
     if (!m_fsPPTBackButton && m_presentationTool && !m_presentationTool->toolsActivated()) {
         m_fsPPTBackButton = new QPushButton(m_mainWindow);
+#ifdef Q_WS_MAEMO_5
         m_fsPPTBackButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+#endif
         m_fsPPTBackButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
         m_fsPPTBackButton->setIcon(QIcon(FS_PPT_BACK_BUTTON_PATH));
+        m_fsPPTBackButton->setIconSize(QSize(48, 48));
         connect(m_fsPPTBackButton, SIGNAL(clicked()), this, SLOT(goToPreviousPage()));
         m_fsPPTBackButton->move(size.width() - FS_BUTTON_SIZE*3 - vScrlbarWidth,
                                 size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
@@ -1680,9 +1690,12 @@ void ApplicationController::showFullScreenPresentationIcons()
 
     if (!m_fsPPTForwardButton && m_presentationTool && !m_presentationTool->toolsActivated()) {
         m_fsPPTForwardButton = new QPushButton(m_mainWindow);
+#ifdef Q_WS_MAEMO_5
         m_fsPPTForwardButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+#endif
         m_fsPPTForwardButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
         m_fsPPTForwardButton->setIcon(QIcon(FS_PPT_FORWARD_BUTTON_PATH));
+        m_fsPPTForwardButton->setIconSize(QSize(48, 48));
         connect(m_fsPPTForwardButton, SIGNAL(clicked()), this, SLOT(goToNextPage()));
         m_fsPPTForwardButton->move(size.width() - FS_BUTTON_SIZE*2 - vScrlbarWidth,
                                    size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
@@ -1690,9 +1703,12 @@ void ApplicationController::showFullScreenPresentationIcons()
 
     if (!m_fsPPTDrawPenButton && m_presentationTool) {
         m_fsPPTDrawPenButton = new QPushButton(m_mainWindow);
+#ifdef Q_WS_MAEMO_5
         m_fsPPTDrawPenButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+#endif
         m_fsPPTDrawPenButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
         m_fsPPTDrawPenButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/pen.png"));
+        m_fsPPTDrawPenButton->setIconSize(QSize(48, 48));
         m_fsPPTDrawPenButton->move(736 ,284);
         connect(m_fsPPTDrawPenButton,SIGNAL(clicked()),m_presentationTool,SLOT(togglePenTool()));
     }
@@ -1702,9 +1718,12 @@ void ApplicationController::showFullScreenPresentationIcons()
 
     if (!m_fsPPTDrawHighlightButton && m_presentationTool) {
         m_fsPPTDrawHighlightButton = new QPushButton(m_mainWindow);
+#ifdef Q_WS_MAEMO_5
         m_fsPPTDrawHighlightButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+#endif
         m_fsPPTDrawHighlightButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
         m_fsPPTDrawHighlightButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/highlight.png"));
+        m_fsPPTDrawHighlightButton->setIconSize(QSize(48, 48));
         m_fsPPTDrawHighlightButton->move(736,350);
         connect(m_fsPPTDrawHighlightButton,SIGNAL(clicked()),m_presentationTool,SLOT(toggleHighlightTool()));
     }
@@ -1730,9 +1749,12 @@ void ApplicationController::showFullScreenPresentationIcons()
         if (!m_slideNotesButton) {
             m_slideNotesButton = new QPushButton(m_mainWindow);
             Q_CHECK_PTR(m_slideNotesButton);
+#ifdef Q_WS_MAEMO_5
             m_slideNotesButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+#endif
             m_slideNotesButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
             m_slideNotesButton->setIcon(m_slideNotesIcon);
+            m_slideNotesButton->setIconSize(QSize(48, 48));
             connect(m_slideNotesButton, SIGNAL(clicked()), SLOT(slideNotesButtonClicked()));
             m_slideNotesButton->move(736,222);
         }
@@ -2061,8 +2083,6 @@ void ApplicationController::fullScreen()
 {
     if (!m_ui)
         return;
-    int vScrlbarWidth = 0;
-    int hScrlbarHeight = 0;
     m_ui->viewToolBar->hide();
     m_ui->SearchToolBar->hide();
     m_ui->EditToolBar->hide();
@@ -2072,6 +2092,8 @@ void ApplicationController::fullScreen()
     m_mainWindow->showFullScreen();
     QSize size(m_mainWindow->frameSize());
 
+    int vScrlbarWidth = 0;
+    int hScrlbarHeight = 0;
     if (canvasControllerWidget()) {
         if (canvasControllerWidget()->verticalScrollBar()->isVisible()) {
             QSize vScrlbar = canvasControllerWidget()->verticalScrollBar()->size();
@@ -2095,6 +2117,53 @@ void ApplicationController::fullScreen()
             connect(m_fsButton, SIGNAL(clicked()), m_presentationTool, SLOT(deactivateTool()));
         }
         showFullScreenPresentationIcons();
+    }
+}
+
+void ApplicationController::handleMainWindowResizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    QSize size(m_mainWindow->frameSize());
+
+    int vScrlbarWidth = 0;
+    int hScrlbarHeight = 0;
+    if (canvasControllerWidget()) {
+        if (canvasControllerWidget()->verticalScrollBar()->isVisible()) {
+            QSize vScrlbar = canvasControllerWidget()->verticalScrollBar()->size();
+            vScrlbarWidth = vScrlbar.width();
+        }
+        if (canvasControllerWidget()->horizontalScrollBar()->isVisible()) {
+            QSize hScrlbar = canvasControllerWidget()->horizontalScrollBar()->size();
+            hScrlbarHeight = hScrlbar.height();
+        }
+    }
+
+    m_fsButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                     size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+
+    if (m_fsPPTBackButton) {
+        m_fsPPTBackButton->move(size.width() - FS_BUTTON_SIZE*3 - vScrlbarWidth,
+                                size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+    }
+
+    if (m_fsPPTForwardButton) {
+        m_fsPPTForwardButton->move(size.width() - FS_BUTTON_SIZE*2 - vScrlbarWidth,
+                                   size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+    }
+
+    if (m_fsPPTDrawPenButton) {
+        m_fsPPTDrawPenButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                   size.height() - FS_BUTTON_SIZE*3 - hScrlbarHeight);
+    }
+
+    if (m_fsPPTDrawHighlightButton) {
+        m_fsPPTDrawHighlightButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                         size.height() - FS_BUTTON_SIZE*2 - hScrlbarHeight);
+    }
+
+    if (m_slideNotesButton) {
+        m_slideNotesButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                 size.height() - FS_BUTTON_SIZE*4 - hScrlbarHeight);
     }
 }
 

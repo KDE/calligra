@@ -108,11 +108,13 @@ KWordGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBo
 {
     Q_UNUSED(clientTextbox);
     Q_UNUSED(clientData);
-    Q_UNUSED(out);
-    Q_UNUSED(style);
-    kDebug(30513) << "Not implemented YET!";
-   //TODO: implementation required
 
+    //TODO: Additional graphic-properties
+
+    //TODO: Add paragraph-properties and text-properties if required!
+
+    const QString styleName = out.styles.insert(style);
+    out.xml.addAttribute("draw:style-name", styleName);
 }
 
 const MSO::OfficeArtDggContainer*

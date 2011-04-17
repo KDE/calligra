@@ -575,6 +575,88 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
     return;
 }
 
+void KWordGraphicsHandler::parseFloatingPictures(void)
+{
+    kDebug(30513);
+
+    // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
+    LEInputStream* in = m_document->wdocumentStream();
+
+    const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
+    if (blipStore) {
+        for (int i = 0; i < blipStore->rgfb.size(); i++) {
+            OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
+
+	    //we are looking for the missing content of OfficeArtFBSE
+            if (block.anon.is<OfficeArtFBSE>()) {
+                OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
+                if (!fbse->embeddedBlip) {
+
+                    //NOTE: An foDelay value of 0xffffffff specifies that the
+                    //file is not in the delay stream and cRef must be zero.
+
+                    //NOTE: A cRef value of 0x00000000 specifies an empty slot
+                    //in the OfficeArtBStoreContainer.
+
+                    if (fbse->foDelay != 0xffffffff) {
+                        if (!fbse->cRef) {
+                            kDebug(30513) << "Strange, no references to this BLIP, skipping";
+                            continue;
+                        }
+                        LEInputStream::Mark _zero;
+                        _zero = in->setMark();
+                        in->skip(fbse->foDelay);
+
+                        //let's check the record header if there's a BLIP stored
+                        LEInputStream::Mark _m;
+                        _m = in->setMark();
+                        OfficeArtRecordHeader rh;
+                        parseOfficeArtRecordHeader(*in, rh);
+                        in->rewind(_m);
+                        if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
+                            continue;
+                        }
+                        fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
+                        parseOfficeArtBlip(*in, *(fbse->embeddedBlip.data()));
+                        in->rewind(_zero);
+                    }
+                }
+            } //else there's an OfficeArtBlip inside
+        }
+    }
+    return;
+}
+
+QMap<QByteArray, QString>
+KWordGraphicsHandler::createFloatingPictures(KoStore* store, KoXmlWriter* manifest)
+{
+    PictureReference ref;
+    QMap<QByteArray, QString> fileNames;
+
+    const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
+    if (blipStore) {
+        store->enterDirectory("Pictures");
+        foreach (const OfficeArtBStoreContainerFileBlock& block, blipStore->rgfb) {
+            ref = savePicture(block, store);
+            if (ref.name.length() == 0) {
+                kDebug(30513) << "Note: Empty picture reference, probably an empty slot";
+                continue;
+	    }
+            manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
+            fileNames[ref.uid] = ref.name;
+        }
+        store->leaveDirectory();
+    }
+    return fileNames;
+}
+
+QString KWordGraphicsHandler::getPicturePath(int pib) const
+{
+    int picturePosition = pib - 1;
+    QByteArray rgbUid = getRgbUid(&m_officeArtDggContainer, picturePosition);
+    return rgbUid.length() ? "Pictures/" + m_picNames[rgbUid] : "";
+}
+
 void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
 {
     // write style <style:default-style style:family="graphic">
@@ -1011,88 +1093,5 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     out.xml.endElement(); //enhanced-geometry
     out.xml.endElement(); //custom-shape
 }
-
-void KWordGraphicsHandler::parseFloatingPictures(void)
-{
-    kDebug(30513);
-
-    // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
-    LEInputStream* in = m_document->wdocumentStream();
-
-    const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (blipStore) {
-        for (int i = 0; i < blipStore->rgfb.size(); i++) {
-            OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
-
-	    //we are looking for the missing content of OfficeArtFBSE
-            if (block.anon.is<OfficeArtFBSE>()) {
-                OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
-                if (!fbse->embeddedBlip) {
-
-                    //NOTE: An foDelay value of 0xffffffff specifies that the
-                    //file is not in the delay stream and cRef must be zero.
-
-                    //NOTE: A cRef value of 0x00000000 specifies an empty slot
-                    //in the OfficeArtBStoreContainer.
-
-                    if (fbse->foDelay != 0xffffffff) {
-                        if (!fbse->cRef) {
-                            kDebug(30513) << "Strange, no references to this BLIP, skipping";
-                            continue;
-                        }
-                        LEInputStream::Mark _zero;
-                        _zero = in->setMark();
-                        in->skip(fbse->foDelay);
-
-                        //let's check the record header if there's a BLIP stored
-                        LEInputStream::Mark _m;
-                        _m = in->setMark();
-                        OfficeArtRecordHeader rh;
-                        parseOfficeArtRecordHeader(*in, rh);
-                        in->rewind(_m);
-                        if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
-                            continue;
-                        }
-                        fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
-                        parseOfficeArtBlip(*in, *(fbse->embeddedBlip.data()));
-                        in->rewind(_zero);
-                    }
-                }
-            } //else there's an OfficeArtBlip inside
-        }
-    }
-    return;
-}
-
-QMap<QByteArray, QString>
-KWordGraphicsHandler::createFloatingPictures(KoStore* store, KoXmlWriter* manifest)
-{
-    PictureReference ref;
-    QMap<QByteArray, QString> fileNames;
-
-    const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (blipStore) {
-        store->enterDirectory("Pictures");
-        foreach (const OfficeArtBStoreContainerFileBlock& block, blipStore->rgfb) {
-            ref = savePicture(block, store);
-            if (ref.name.length() == 0) {
-                kDebug(30513) << "Note: Empty picture reference, probably an empty slot";
-                continue;
-	    }
-            manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
-            fileNames[ref.uid] = ref.name;
-        }
-        store->leaveDirectory();
-    }
-    return fileNames;
-}
-
-QString KWordGraphicsHandler::getPicturePath(int pib) const
-{
-    int picturePosition = pib - 1;
-    QByteArray rgbUid = getRgbUid(&m_officeArtDggContainer, picturePosition);
-    return rgbUid.length() ? "Pictures/" + m_picNames[rgbUid] : "";
-}
-
 
 #include "graphicshandler.moc"
