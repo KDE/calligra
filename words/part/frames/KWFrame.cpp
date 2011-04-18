@@ -48,10 +48,14 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
     if (KWord::isHeaderFooter(dynamic_cast<KWTextFrameSet*>(parent)))
         if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData()))
             data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
+        
+    kDebug() << "frame=" << this << "frameSet=" << frameSet();
 }
 
 KWFrame::~KWFrame()
 {
+    kDebug() << "frame=" << this << "frameSet=" << frameSet();
+
     KoShape *ourShape = m_shape;
     m_shape = 0; // no delete is needed as the shape deletes us.
     if (m_frameSet) {
@@ -71,6 +75,16 @@ KWFrame::~KWFrame()
     }
 }
 
+qreal KWFrame::minimumFrameHeight() const
+{
+    return m_minimumFrameHeight;
+}
+
+void KWFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
+{
+    m_minimumFrameHeight = minimumFrameHeight;
+}
+    
 void KWFrame::setFrameSet(KWFrameSet *fs)
 {
     if (fs == m_frameSet)

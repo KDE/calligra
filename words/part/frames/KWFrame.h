@@ -85,12 +85,16 @@ public:
         m_newFrameBehavior = nf;
     }
 
-    void setMinimumFrameHeight(qreal minimumFrameHeight) {
-        m_minimumFrameHeight = minimumFrameHeight;
-    }
-    qreal minimumFrameHeight() const {
-        return m_minimumFrameHeight;
-    }
+    /**
+     * Set the minimum height of the frame.
+     * @param minimumFrameHeight the minimum height of the frame.
+     */
+    void setMinimumFrameHeight(qreal minimumFrameHeight);
+    /**
+     * Return the minimum height of the frame.
+     * @return the minimum height of the frame. Default is 0.0.
+     */
+    qreal minimumFrameHeight() const;
 
     /**
      * Each frame will be rendered by a shape which also holds the position etc.

@@ -75,10 +75,13 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
     m_document->setDocumentLayout(lay);
     lay->setLayoutStrategy(m_textFrameSetType == KWord::MainTextFrameSet ? KoTextDocumentLayout::ScheduleLayouts : KoTextDocumentLayout::LayoutDirect);
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
+
+    kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType());
 }
 
 KWTextFrameSet::~KWTextFrameSet()
 {
+    kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType());
     delete m_rootAreaProvider;
 #if 0
     // first remove the doc from all our frames so they won't try to use it after we delete it.
@@ -118,11 +121,11 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     // Create a new KWPage for the KWFrame if there is no page already
     KWPage page = m_pageManager->page(frame->shape());
     if (!page.isValid()) {
-        page = kwordDocument()->appendPage();
+//         page = kwordDocument()->appendPage();
         Q_ASSERT(page.isValid());
     }
 
-   kDebug() << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
+    kDebug() << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
 
     // the QTexDocument is shared between the shapes
     data->setDocument(m_document, false);

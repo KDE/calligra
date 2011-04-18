@@ -88,7 +88,9 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             int framesCountBefore = m_textFrameSet->frameCount();
             QList<int> pagesCreated;
             for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
-                KWPage page = kwdoc->appendPage();
+                KWPageStyle pagestyle = pageManager-> pageStyle(mastePageName);
+                Q_ASSERT(pagestyle.isValid());
+                KWPage page = kwdoc->appendPage(mastePageName);
                 Q_ASSERT(page.isValid());
 
                 pagesCreated << page.pageNumber();
@@ -176,6 +178,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
             // adjust the minimum frame height for headers and footer
             const qreal h = rootArea->associatedShape()->size().height();
             Q_ASSERT(m_textFrameSet->frameCount() > 0);
+            
             KWFrame *frame = static_cast<KWFrame*>(m_textFrameSet->frames().first());
             if (frame->minimumFrameHeight() != h) {
                 frame->setMinimumFrameHeight(h);
