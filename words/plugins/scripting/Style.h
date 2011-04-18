@@ -229,7 +229,8 @@ public:
     enum ListStyle {
         None = KoListStyle::None,
         SquareItem = KoListStyle::SquareItem,
-        DiscItem = KoListStyle::DiscItem,
+        DiscItem = KoListStyle::Bullet,
+        Bullet = KoListStyle::Bullet,
         CircleItem = KoListStyle::CircleItem,
         DecimalItem = KoListStyle::DecimalItem,
         AlphaLowerItem = KoListStyle::AlphaLowerItem,

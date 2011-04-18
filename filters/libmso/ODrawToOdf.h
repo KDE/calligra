@@ -188,7 +188,7 @@ private:
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     QString path2svg(const QPainterPath &path);
-    void setShapeMirroringAttrs(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out);
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);

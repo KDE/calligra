@@ -1313,7 +1313,7 @@ void ApplicationController::doBulletList()
 
 bool ApplicationController::setBulletList(KoTextEditor *editor) {
     if (editor) {
-        doStyle(KoListStyle::DiscItem, editor);
+        doStyle(KoListStyle::Bullet, editor);
         return true;
     }
     return false;
