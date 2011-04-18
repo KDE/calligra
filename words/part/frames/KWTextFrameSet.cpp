@@ -60,6 +60,8 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
     Q_ASSERT(m_kwordDocument);
     setName(KWord::frameSetTypeName(m_textFrameSetType));
 
+    m_document->setUseDesignMetrics(true);
+
     KoTextDocument doc(m_document);
     doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
     KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
@@ -73,10 +75,6 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
     m_document->setDocumentLayout(lay);
     lay->setLayoutStrategy(m_textFrameSetType == KWord::MainTextFrameSet ? KoTextDocumentLayout::ScheduleLayouts : KoTextDocumentLayout::LayoutDirect);
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
-
-    kDebug()<<">>"<<m_kwordDocument->inlineTextObjectManager();
-
-    m_document->setUseDesignMetrics(true);
 }
 
 KWTextFrameSet::~KWTextFrameSet()
@@ -124,7 +122,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         Q_ASSERT(page.isValid());
     }
 
-    kDebug() << "frame=" << frame << "pageNumber=" << page.pageNumber();
+   kDebug() << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
 
     // the QTexDocument is shared between the shapes
     data->setDocument(m_document, false);
@@ -350,6 +348,7 @@ bool KWTextFrameSet::allowLayout() const
 
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
+    kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
     m_pageStyle = style;
     if (style.isValid()) {
         foreach(KWFrame* frame, frames()) {
