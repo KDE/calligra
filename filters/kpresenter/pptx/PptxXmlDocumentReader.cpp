@@ -555,15 +555,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (name() == "sldId") {
-                if (!m_context->firstReadRound) {
-                    TRY_READ(sldId)
-                    m_context->import->reportProgress(100 / m_context->numberOfItems);
-                    m_context->numberOfItems = m_context->numberOfItems - 1;
-                }
-                else {
-                    m_context->numberOfItems = m_context->numberOfItems + 1;
-                    skipCurrentElement();
-                }
+                TRY_READ(sldId)
+                m_context->import->reportProgress(100 / m_context->numberOfItems);
+                m_context->numberOfItems = m_context->numberOfItems - 1;
             }
             ELSE_WRONG_FORMAT
         }
@@ -590,15 +584,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterIdLst()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (name() == "notesMasterId") {
-                if (!m_context->firstReadRound) {
-                    TRY_READ(notesMasterId)
-                    m_context->import->reportProgress(100 / m_context->numberOfItems);
-                    m_context->numberOfItems = m_context->numberOfItems - 1;
-                }
-                else {
-                    m_context->numberOfItems = m_context->numberOfItems + 1;
-                    skipCurrentElement();
-                }
+                TRY_READ(notesMasterId)
+                m_context->import->reportProgress(100 / m_context->numberOfItems);
+                m_context->numberOfItems = m_context->numberOfItems - 1;
             }
             ELSE_WRONG_FORMAT
         }
@@ -628,15 +616,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (name() == "sldMasterId") {
-                if (!m_context->firstReadRound) {
-                    TRY_READ(sldMasterId)
-                    m_context->import->reportProgress(100 / m_context->numberOfItems);
-                    m_context->numberOfItems = m_context->numberOfItems - 1;
-                }
-                else {
-                    m_context->numberOfItems = m_context->numberOfItems + 1;
-                    skipCurrentElement();
-                }
+                TRY_READ(sldMasterId)
+                m_context->import->reportProgress(100 / m_context->numberOfItems);
+                m_context->numberOfItems = m_context->numberOfItems - 1;
             }
             ELSE_WRONG_FORMAT
         }
@@ -820,9 +802,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
             BREAK_IF_END_OF(CURRENT_EL)
             if (isStartElement()) {
                 TRY_READ_IF(defaultTextStyle)
-                ELSE_TRY_READ_IF(sldMasterIdLst)
-                ELSE_TRY_READ_IF(sldIdLst)
-                ELSE_TRY_READ_IF(notesMasterIdLst)
                 SKIP_UNKNOWN
             }
         }
@@ -851,6 +830,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                 mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
             ++index;
         }
+    } else {
+        m_context->numberOfItems = m_context->relationships->targetCountWithWord("slideMasters") +
+            m_context->relationships->targetCountWithWord("notesMasters") +
+            m_context->relationships->targetCountWithWord("slides");
     }
 
     READ_EPILOGUE

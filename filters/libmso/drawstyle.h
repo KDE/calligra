@@ -57,10 +57,10 @@ public:
     qint32 dyWrapDistTop() const;
     qint32 dxWrapDistRight() const;
     qint32 dyWrapDistBottom() const;
-    qint32 posH() const;
-    qint32 posRelH() const;
-    qint32 posV() const;
-    qint32 posRelV() const;
+    quint32 posH() const;
+    quint32 posRelH() const;
+    quint32 posV() const;
+    quint32 posRelV() const;
     quint32 pctHR() const;
     quint32 alignHR() const;
     qint32 dxHeightHR() const;
