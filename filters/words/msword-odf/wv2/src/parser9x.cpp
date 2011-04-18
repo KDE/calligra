@@ -314,15 +314,15 @@ void Parser9x::parseTableRow( const TableRowData& data )
 #endif
 }
 
-void Parser9x::parseTextBox( uint lid, bool bodyDrawing)
+void Parser9x::parseTextBox( uint lid, bool stylesXml)
 {
     wvlog << "Parser9x::parseTextBox" << endl;
 
     const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
-    if (bodyDrawing) {
-        plcftxbxTxt =  m_drawings->getTxbxTxt();
-    } else {
+    if (stylesXml) {
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
+    } else {
+        plcftxbxTxt =  m_drawings->getTxbxTxt();
     }
 
     if (!plcftxbxTxt) {

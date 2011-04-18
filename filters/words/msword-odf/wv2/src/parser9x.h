@@ -126,8 +126,9 @@ namespace wvWare
         void parseAnnotation( const AnnotationData& data );
         void parseTableRow( const TableRowData& data );
         void parsePicture( const PictureData& data );
+
         //I can't create Functor for textbox in advance because i don't know lid
-        virtual void parseTextBox( uint lid, bool bodyDrawing);
+        virtual void parseTextBox( uint lid, bool stylesXml);
 
     protected:
         // First all variables which don't change their state during

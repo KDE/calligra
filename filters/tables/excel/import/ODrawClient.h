@@ -36,8 +36,8 @@ public:
     virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
     virtual void processClientData(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData &o, Writer &out);
     virtual void processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out);
-    virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, Writer &out);
-    virtual void addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, Writer &out, KoGenStyle &style);
+    virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, const DrawStyle& ds, Writer &out);
+    virtual void addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
     virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
     virtual const MSO::OfficeArtSpContainer* defaultShapeContainer();
