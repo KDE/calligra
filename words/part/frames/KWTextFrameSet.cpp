@@ -121,7 +121,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     // Create a new KWPage for the KWFrame if there is no page already
     KWPage page = m_pageManager->page(frame->shape());
     if (!page.isValid()) {
-//         page = kwordDocument()->appendPage();
+        page = kwordDocument()->appendPage();
         Q_ASSERT(page.isValid());
     }
 
