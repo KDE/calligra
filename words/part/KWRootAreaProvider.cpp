@@ -83,6 +83,8 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
                 //kwdoc->frameLayout()->createNewFramesForPage(1);
             }
             break;
+        case KWord::OtherTextFrameSet: {
+        } break;
         case KWord::MainTextFrameSet: {
             // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
             int framesCountBefore = m_textFrameSet->frameCount();
@@ -97,7 +99,6 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             }
             kDebug() << m_textFrameSet << "(MainTextFrameSet) rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "frameCountBefore=" << framesCountBefore << "pageCount=" << pageManager->pageCount() << "pagesCreated=" << pagesCreated;
         } break;
-        default: break;
     }
 
     /*
@@ -111,8 +112,10 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     }
     */
 
-    KWTextFrameSet* tfs = kwdoc->frameLayout()->getFrameSet(m_textFrameSet->textFrameSetType(), m_textFrameSet->pageStyle());
-    Q_ASSERT_X(tfs == m_textFrameSet, __FUNCTION__, QString("frameLayout vs rootAreaProvider error, frameSetType=%1 rootAreasCount=%2 frameCount=%3 pageCount=%4").arg(KWord::frameSetTypeName(m_textFrameSet->textFrameSetType())).arg(rootAreas.count()).arg(m_textFrameSet->frameCount()).arg(pageManager->pageCount()).toLocal8Bit());
+    if (m_textFrameSet->textFrameSetType() != KWord::OtherTextFrameSet) {
+        KWTextFrameSet* tfs = kwdoc->frameLayout()->getFrameSet(m_textFrameSet->textFrameSetType(), m_textFrameSet->pageStyle());
+        Q_ASSERT_X(tfs == m_textFrameSet, __FUNCTION__, QString("frameLayout vs rootAreaProvider error, frameSetType=%1 rootAreasCount=%2 frameCount=%3 pageCount=%4").arg(KWord::frameSetTypeName(m_textFrameSet->textFrameSetType())).arg(rootAreas.count()).arg(m_textFrameSet->frameCount()).arg(pageManager->pageCount()).toLocal8Bit());
+    }
 
     //FIXME don't use m_textFrameSet->frames() cause it can contain other frames too
     Q_ASSERT_X(m_textFrameSet->frameCount() >= 1, __FUNCTION__, QString("No frames in frameSetType=%1").arg(KWord::frameSetTypeName(m_textFrameSet->textFrameSetType())).toLocal8Bit());
@@ -168,7 +171,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     Q_ASSERT(page.isValid());
     bool isHeaderFooter = KWord::isHeaderFooter(m_textFrameSet);
 
-    kDebug() << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea;
+    kDebug() << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea;
 
     if (isHeaderFooter || data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
         // adjust the size of the shape
