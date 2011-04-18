@@ -26,6 +26,7 @@
 #include "KoCanvasController.h"
 #include <QDeclarativeItem>
 
+class KoDocument;
 class KoCanvasBase;
 class KoZoomController;
 class KoZoomHandler;
@@ -86,6 +87,8 @@ public slots:
     void scrollUp();
     void tellZoomControllerToSetDocumentSize(QSize size);
     void centerToCamera();
+    void nextSheet();
+    void previousSheet();
 
 private:
     KoZoomHandler *m_zoomHandler;
@@ -94,6 +97,7 @@ private:
     QPoint m_currentPoint;
     DocumentType m_documentType;
     QSizeF m_documentViewSize;
+    KoDocument *m_doc;
 
 protected:
     bool isPresentationDocumentExtension(const QString& extension) const;

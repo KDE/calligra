@@ -5,6 +5,8 @@
         <file>images/stage.png</file>
         <file>images/arrow-down.png</file>
         <file>images/arrow-up.png</file>
+        <file>images/arrow-left.png</file>
+        <file>images/arrow-right.png</file>
         <file>images/tab-detach.png</file>
     </qresource>
 </RCC>

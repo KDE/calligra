@@ -38,12 +38,15 @@
 #include <KoToolManager.h>
 #include <tables/part/CanvasItem.h>
 #include <libs/kopageapp/KoPACanvasItem.h>
+#include <libs/kopageapp/KoPAView.h>
+#include <libs/kopageapp/KoPADocument.h>
 
 #include <QPoint>
 #include <QSize>
 #include <QGraphicsWidget>
 #include <tables/Sheet.h>
 #include <tables/Map.h>
+#include <tables/DocBase.h>
 
 /*!
 * extensions
@@ -66,7 +69,7 @@ CanvasController::CanvasController(QDeclarativeItem* parent)
     : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(Undefined),
     m_zoomHandler(new KoZoomHandler()),
     m_zoomController(new KoZoomController(this, m_zoomHandler, new KActionCollection(this))),
-    m_canvas(0), m_currentPoint(QPoint(0,0)), m_documentViewSize(QSizeF(0,0))
+    m_canvas(0), m_currentPoint(QPoint(0,0)), m_documentViewSize(QSizeF(0,0)), m_doc(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
@@ -75,11 +78,11 @@ void CanvasController::openDocument(const QString& path)
 {
     QString error;
     QString mimetype = KMimeType::findByPath(path)->name();
-    KoDocument *doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
+    m_doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
                                                                                QVariantList(), &error);
-    doc->openUrl(KUrl(path));
+    m_doc->openUrl(KUrl(path));
     // get the one canvas item for this document
-    m_canvas = dynamic_cast<KoCanvasBase*>(doc->canvasItem());
+    m_canvas = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
     KoToolManager::instance()->addController(this);
 
     QString fname(path);
@@ -92,7 +95,8 @@ void CanvasController::openDocument(const QString& path)
         m_documentType = Presentation;
         emit documentTypeChanged();
 
-        //FIXME: Doesn't work, crashes
+        //FIXME: Doesn't work, crashes because it tries to access its view,
+        //      which is non existent
         KoPACanvasItem *canvas = dynamic_cast<KoPACanvasItem*>(m_canvas);
 
         if (canvas) {
@@ -374,6 +378,41 @@ void CanvasController::centerToCamera()
                 break;
         }
     }
+}
+
+
+void CanvasController::nextSheet()
+{
+    Calligra::Tables::CanvasItem *canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
+    if (!canvasItem)
+        return;
+    Calligra::Tables::Sheet *sheet = canvasItem->activeSheet();
+    if (!sheet)
+        return;
+    Calligra::Tables::DocBase *kspreadDoc = qobject_cast<Calligra::Tables::DocBase*>(m_doc);
+    if (!kspreadDoc)
+        return;
+    sheet = kspreadDoc->map()->nextSheet(sheet);
+    if (!sheet)
+        return;
+    canvasItem->setActiveSheet(sheet);
+}
+
+void CanvasController::previousSheet()
+{
+    Calligra::Tables::CanvasItem *canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
+    if (!canvasItem)
+        return;
+    Calligra::Tables::Sheet *sheet = canvasItem->activeSheet();
+    if (!sheet)
+        return;
+    Calligra::Tables::DocBase *kspreadDoc = dynamic_cast<Calligra::Tables::DocBase*>(m_doc);
+    if (!kspreadDoc)
+        return;
+    sheet = kspreadDoc->map()->previousSheet(sheet);
+    if (!sheet)
+        return;
+    canvasItem->setActiveSheet(sheet);
 }
 
 #include "CanvasController.moc"
