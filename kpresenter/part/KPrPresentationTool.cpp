@@ -296,6 +296,9 @@ bool KPrPresentationTool::checkHyperlink(KoPointerEvent *event, KoShape *shape, 
 
     KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
     if (textShapeData) {
+        if (!textShapeData->rootArea()) {
+            return false ; // not layouted yet
+        }
         QPointF p = shape->absoluteTransformation(0).inverted().map(event->point);
         p = p + QPointF(0.0, textShapeData->documentOffset());
 
