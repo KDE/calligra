@@ -115,6 +115,14 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
 
     applyBordersStyle(styleProperties, style, row, column);
     applyBackground(styleProperties, style, row, column);
+
+    if(styleProperties->setProperties & TableStyleProperties::VerticalAlign) {
+        style->setVerticalAlign(styleProperties->verticalAlign);
+    }
+
+    if(styleProperties->setProperties & TableStyleProperties::GlyphOrientation) {
+        style->setGlyphOrientation(styleProperties->glyphOrientation);
+    }
 }
 
 void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
@@ -132,14 +140,14 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
     const int lastRow = m_row - 1;
     const int lastColumn = m_column - 1;
 
-    //Borders, are a bit tricky too; we have to take into account whether the cell 
+    //Borders, are a bit tricky too; we have to take into account whether the cell
     //has borders facing other cells or facing the border of the table.
 
     TableStyleProperties::Properties setProperties = styleProperties->setProperties;
 
     if(setProperties & TableStyleProperties::TopBorder) {
         KoBorder::BorderData* topData;
-        if(row == 0) {
+        if (row == 0) {
             topData = &styleProperties->top;
         }
         else {
@@ -153,7 +161,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     if(setProperties & TableStyleProperties::BottomBorder) {
         KoBorder::BorderData* bottomData;
-        if(row == lastRow) {
+        if (row == lastRow) {
             bottomData = &styleProperties->bottom;
         }
         else {
@@ -167,7 +175,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     if(setProperties & TableStyleProperties::LeftBorder) {
         KoBorder::BorderData* leftData;
-        if(column == 0) {
+        if (column == 0) {
             leftData = &styleProperties->left;
         }
         else {
@@ -181,7 +189,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     if(setProperties & TableStyleProperties::RightBorder) {
         KoBorder::BorderData* rightData;
-        if(column == lastColumn) {
+        if (column == lastColumn) {
             rightData = &styleProperties->right;
         }
         else {
@@ -191,6 +199,21 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
         style->borders()->setRightBorderSpacing(rightData->spacing);
         style->borders()->setRightBorderStyle(rightData->style);
         style->borders()->setRightBorderWidth(rightData->width);
+    }
+
+    if(setProperties & TableStyleProperties::Tl2brBorder) {
+        KoBorder::BorderData* tl2brData = &styleProperties->tl2br;
+        style->borders()->setTlbrBorderColor(tl2brData->color);
+        style->borders()->setTlbrBorderSpacing(tl2brData->spacing);
+        style->borders()->setTlbrBorderStyle(tl2brData->style);
+        style->borders()->setTlbrBorderWidth(tl2brData->width);
+    }
+    if(setProperties & TableStyleProperties::Tr2blBorder) {
+        KoBorder::BorderData* tr2blData = &styleProperties->tr2bl;
+        style->borders()->setTrblBorderColor(tr2blData->color);
+        style->borders()->setTrblBorderSpacing(tr2blData->spacing);
+        style->borders()->setTrblBorderStyle(tr2blData->style);
+        style->borders()->setTrblBorderWidth(tr2blData->width);
     }
 }
 

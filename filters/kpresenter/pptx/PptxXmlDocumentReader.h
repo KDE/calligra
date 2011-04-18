@@ -48,6 +48,7 @@ public:
     MSOOXML::MsooXmlRelationships* relationships;
     bool firstReadRound;
     MSOOXML::DrawingMLTheme* themes;
+    unsigned numberOfItems;
 };
 
 //! A class reading MSOOXML PPTX markup - presentation.xml part.

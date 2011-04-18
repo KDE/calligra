@@ -93,11 +93,13 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     QDataStream st(mBuffer);
     st.setByteOrder(QDataStream::LittleEndian);
     mStackOverflow = false;
-    mWinding = false;
     mLayout = LAYOUT_LTR;
     mTextAlign = 0;
     mTextRotation = 0;
     mTextColor = Qt::black;
+    mWinding = false;
+    mMapMode = MM_ANISOTROPIC;
+
     mValid = false;
     mStandard = false;
     mPlaceable = false;
@@ -530,7 +532,9 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
         case 65: // dibStretchBlt
         case 67: // stretchDib
         case 72: // extFloodFill
+#if DEBUG_RECORDS
             kDebug(31000) << "drawing record: " << (numFunction & 0xff);
+#endif
             doRecalculateBBox = true;
             break;
 
@@ -540,7 +544,9 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
 
         // Recalculate the BBox if it was indicated above that it should be.
         if (doRecalculateBBox && !bboxRecalculated) {
+#if DEBUG_RECORDS
             kDebug(31000) << "Recalculating BBox";
+#endif
             // If we have a viewport, always use that one.
             if (viewportExtIsSet) {
                 orgX = viewportOrgX;
@@ -567,7 +573,9 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
             }
 
             // At this point, the ext is always >= 0, i.e. org <= org+ext
+#if DEBUG_RECORDS
             kDebug(31000) << orgX << orgY << extX << extY;
+#endif
             if (orgX < mBBoxLeft)          mBBoxLeft = orgX;
             if (orgY < mBBoxTop)           mBBoxTop  = orgY;
             if (orgX + extX > mBBoxRight)  mBBoxRight  = orgX + extX;
@@ -976,6 +984,7 @@ void KoWmfReadPrivate::setTextColor(quint32, QDataStream& stream)
 void KoWmfReadPrivate::setTextAlign(quint32, QDataStream& stream)
 {
     stream >> mTextAlign;
+    //kDebug(31000) << "new textalign: " << mTextAlign;
 }
 
 
@@ -1010,26 +1019,37 @@ void KoWmfReadPrivate::textOut(quint32, QDataStream& stream)
 
 void KoWmfReadPrivate::extTextOut(quint32 , QDataStream& stream)
 {
+#if 0
     qint16 parm[8];
     for (int i = 0; i < 4; ++i)
         stream >> parm[i];
+    quint16 stringLength = parm[ 2 ];
+    quint16 fwOpts = parm [ 3 ];
+#else
+    qint16 y, x;
+    qint16 stringLength;
+    quint16 fwOpts;
+    qint16 top, left, right, bottom; // optional cliprect
 
-    quint16 textLength = parm[ 2 ];
+    stream >> y;
+    stream >> x;
+    stream >> stringLength;
+    stream >> fwOpts;
+#endif
 
     QByteArray text;
-    text.resize(textLength);
+    text.resize(stringLength);
 
-    if (parm[ 3 ] != 0) {       // ETO_CLIPPED flag add 4 parameters
-        for (int i = 0; i < 4; ++i)
-            stream >> parm[4+i];
-        stream.readRawData(text.data(), textLength);
-    } else {
-        stream.readRawData(text.data(), textLength);
+    // ETO_CLIPPED flag adds 4 parameters
+    if (fwOpts & (ETO_CLIPPED | ETO_OPAQUE)) {
+        // read the optional clip rect
+        stream >> bottom >> right >> top >> left;
     }
+    stream.readRawData(text.data(), stringLength);
 
     // FIXME: If we ever want to support vertical text (e.g. japanese),
     //        we need to send the vertical text align as well.
-    mReadWmf->drawText(parm[ 1 ], parm[ 0 ], -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
+    mReadWmf->drawText(x, y, -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
 }
 
 
@@ -1405,11 +1425,10 @@ void KoWmfReadPrivate::setRelAbs(quint32, QDataStream&)
     }
 }
 
-void KoWmfReadPrivate::setMapMode(quint32, QDataStream&)
+void KoWmfReadPrivate::setMapMode(quint32, QDataStream& stream)
 {
-    if (mNbrFunc) {
-        kDebug(31000) << "setMapMode : unimplemented";
-    }
+    stream >> mMapMode;
+    //kDebug(31000) << "New mapmode: " << mMapMode;
 }
 
 void KoWmfReadPrivate::extFloodFill(quint32, QDataStream&)

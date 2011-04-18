@@ -98,6 +98,9 @@ public:
     //! Helper class to get information about predefined ooxml shapes
     PredefinedShapeHelper m_shapeHelper;
 
+    /*! report progress of the filter */
+    void reportProgress(unsigned progress);
+
 protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
                                                       KoOdfWriters *writers);

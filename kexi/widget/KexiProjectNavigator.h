@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -203,7 +204,10 @@ protected:
     // *m_newObjectToolbarAction,
         *m_openAction, *m_designAction, *m_editTextAction,
         *m_executeAction,
-        *m_dataExportToClipboardAction, *m_dataExportToFileAction, *m_printAction, *m_pageSetupAction;
+        *m_dataExportToClipboardAction, *m_dataExportToFileAction;
+#ifndef KEXI_NO_QUICK_PRINTING
+    KAction *m_printAction, *m_pageSetupAction;
+#endif
 
     KActionMenu* m_exportActionMenu;
 //  KMenu* m_newObjectMenu;

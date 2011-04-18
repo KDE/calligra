@@ -38,8 +38,9 @@
  * the pages side by side.
  * @see KWViewMode
  */
-class KWORD_TEST_EXPORT KWViewModeNormal : public KWViewMode
+class KWORD_EXPORT KWViewModeNormal : public KWViewMode
 {
+    Q_OBJECT
 public:
     /**
      * Constructor; please use KWViewMode::create()

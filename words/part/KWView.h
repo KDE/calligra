@@ -27,6 +27,7 @@
 #include <KoView.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
+#include <KoFindMatch.h>
 
 #include <QWidget>
 
@@ -37,6 +38,7 @@ class KWGui;
 
 class KoCanvasBase;
 class KoZoomController;
+class KoFindText;
 class KoRdfSemanticItem;
 class KActionMenu;
 
@@ -192,6 +194,8 @@ private slots:
     void goToNextPage();
     /// A semantic item was updated and should have it's text refreshed.
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
+    /// A match was found when searching.
+    void findMatchFound(KoFindMatch match);
 
 private:
 
@@ -205,6 +209,7 @@ private:
     KoZoomHandler m_zoomHandler;
     KoZoomController *m_zoomController;
     KWPage m_currentPage;
+    KoFindText *m_find;
 
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;

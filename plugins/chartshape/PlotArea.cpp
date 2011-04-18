@@ -76,7 +76,7 @@
 #include "ThreeDScene.h"
 #include "ChartProxyModel.h"
 #include "ScreenConversions.h"
-#include "Layout.h"
+#include "ChartLayout.h"
 
 using namespace KChart;
 
@@ -603,6 +603,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
          plotAreaElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
         parent()->layout()->setPosition( this, FloatingPosition );
 
+    context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
 
     // First step is to load the axis. Datasets are attached to an

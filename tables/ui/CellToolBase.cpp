@@ -940,7 +940,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
     const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
-    if (col > maxCol() || row > maxRow()) {
+    if (col < 1 || row < 1 || col > maxCol() || row > maxRow()) {
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else {
         const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();

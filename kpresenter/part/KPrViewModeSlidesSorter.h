@@ -21,15 +21,14 @@
 #ifndef KPRVIEWMODESLIDESSORTER_H
 #define KPRVIEWMODESLIDESSORTER_H
 
-#include <QListWidget>
-#include <QSize>
-
-#include <KoPageApp.h>
+#include <QListView>
 #include <KoPAViewMode.h>
+#include <KoZoomMode.h>
 
 class KoPAView;
 class KoPACanvas;
 class KoPAPageBase;
+class KPrSlidesSorterDocumentModel;
 
 class KPrViewModeSlidesSorter : public KoPAViewMode
 {
@@ -39,7 +38,7 @@ public:
     ~KPrViewModeSlidesSorter();
 
     void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
-    void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
+    void paintEvent(KoPACanvas * canvas, QPaintEvent* event);
     void tabletEvent(QTabletEvent *event, const QPointF &point);
     void mousePressEvent(QMouseEvent *event, const QPointF &point);
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
@@ -52,9 +51,20 @@ public:
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
     void updateActivePage( KoPAPageBase *page );
+    void updateDocumentModel();
+    void activateNormalViewMode();
+    void updateToActivePageIndex();
 
     void addShape( KoShape *shape );
     void removeShape( KoShape *shape );
+    QList<KoPAPageBase*> extractSelectedSlides();
+
+    /**
+     * The icon size
+     *
+     * @return the icon size defined before
+     */
+    QSize iconSize() const;
 
 protected:
 
@@ -66,10 +76,10 @@ protected:
     /**
      * Moves a page from pageNumber to pageAfterNumber
      *
-     * @param pageNumber the number of the page to move
+     * @param slides a list with pages to move
      * @param pageAfterNumber the number of the place the page should move to
      */
-    void movePage( int pageNumber, int pageAfterNumber );
+    void movePages( const QList<KoPAPageBase *> &slides, int pageAfterNumber );
 
     /**
      * The count of the page
@@ -77,13 +87,6 @@ protected:
      * @return the count of the page
      */
     int pageCount() const;
-
-    /**
-     * The icon size
-     *
-     * @return the icon size defined before
-     */
-    QSize iconSize() const;
 
     /**
      * The rect of an items, essentialy used to have the size of the full icon
@@ -127,34 +130,42 @@ protected:
      */
     void setLastItemNumber(int number);
 
-    void activateNormalViewMode();
+    /**
+     * Setter of the icon size
+     *
+     * @param size which is a QSize
+     */
+    void setIconSize(QSize size);
 
     /**
      * This class manage the QListWidget itself.
      * Use all the getters and setters of the KPrViewModeSlidesSorter.
      * Most of the functions are Qt overrides to have the wished comportment.
      */
-    class KPrSlidesSorter : public QListWidget {
+    class KPrSlidesSorter : public QListView {
         public:
-            KPrSlidesSorter ( KPrViewModeSlidesSorter * viewModeSlidesSorter, QWidget * parent = 0 )
-                : QListWidget(parent)
+            KPrSlidesSorter (KPrViewModeSlidesSorter * viewModeSlidesSorter, QWidget * parent = 0)
+                : QListView(parent)
                 , m_viewModeSlidesSorter(viewModeSlidesSorter)
-                , m_movingPageNumber(-1)
             {
                 setViewMode(QListView::IconMode);
+                setFlow(QListView::LeftToRight);
+                setWrapping(TRUE);
                 setResizeMode(QListView::Adjust);
-                setDragDropMode(QAbstractItemView::DragDrop);
+                setDragEnabled(true);
+                setAcceptDrops(true);
+                setDropIndicatorShown(true);
             };
-            ~KPrSlidesSorter(){};
 
-            virtual Qt::DropActions supportedDropActions() const
-            {
-                return Qt::MoveAction;
-            }
+            ~KPrSlidesSorter();
 
             virtual void paintEvent ( QPaintEvent * ev);
 
             virtual void mouseDoubleClickEvent(QMouseEvent *event);
+
+            virtual void contextMenuEvent(QContextMenuEvent *event);
+
+            virtual void keyPressEvent(QKeyEvent *event);
 
             virtual void startDrag ( Qt::DropActions supportedActions );
 
@@ -162,19 +173,17 @@ protected:
 
             virtual void dragMoveEvent(QDragMoveEvent* ev);
 
-            virtual QStringList mimeTypes() const;
-
-            virtual QMimeData* mimeData(const QList<QListWidgetItem*> items) const;
+            virtual void dragEnterEvent(QDragEnterEvent *event);
 
             int pageBefore(QPoint point);
 
         private:
             KPrViewModeSlidesSorter * m_viewModeSlidesSorter;
-            int m_movingPageNumber;
     };
 
 private:
     KPrSlidesSorter * m_slidesSorter;
+    KPrSlidesSorterDocumentModel * m_documentModel;
     QSize m_iconSize;
     QRect m_itemSize;
     bool m_sortNeeded;
@@ -184,6 +193,18 @@ private:
 
 private slots:
     void updateDocumentDock();
+    void updateModel();
+    void updatePageAdded();
+    void itemClicked(const QModelIndex);
+    void deleteSlide();
+    void addSlide();
+    void editCut();
+    void editCopy();
+    void editPaste();
+    void updateZoom(KoZoomMode::Mode mode, qreal zoom);
+
+signals:
+    void pageChanged(KoPAPageBase *page);
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

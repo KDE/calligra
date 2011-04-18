@@ -16,11 +16,12 @@ SET ( VectorShape_SRCS
     VectorShapeFactory.cpp
     #VectorCollection.cpp
     #VectorData.cpp
-    # No tool yet.
-    #VectorTool.cpp
-    #VectorToolFactory.cpp
+    VectorTool.cpp
+    VectorToolFactory.cpp
+    ChangeVectorDataCommand.cpp
 
     libemf/EmfRecords.cpp
+    libemf/EmfObjects.cpp
     libemf/EmfHeader.cpp
     libemf/BitmapHeader.cpp
     libemf/Bitmap.cpp

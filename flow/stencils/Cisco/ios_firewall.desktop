@@ -2,5 +2,7 @@
 Name=IOS Firewall
 Name[et]=IOS tulemüür
 Name[pt]='Firewall' IOS
+Name[pt_BR]=Firewall IOS
+Name[sv]=IOS-brandvägg
 Name[uk]=Брандмауер IOS
 Name[x-test]=xxIOS Firewallxx

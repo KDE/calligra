@@ -211,12 +211,18 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 {
     READ_PROLOGUE
 
+    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(sheet)
+            if (name() == "sheet") {
+                TRY_READ(sheet)
+                m_context->import->reportProgress(45 + 55/numberOfWorkSheets);
+                --numberOfWorkSheets;
+            }
             ELSE_WRONG_FORMAT
         }
     }

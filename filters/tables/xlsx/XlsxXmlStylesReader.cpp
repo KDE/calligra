@@ -516,6 +516,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
 
  Child elements:
  - [done] font (Font) §18.8.22
+
  Parent elements:
  - [done] styleSheet (§18.8.39)
 */
@@ -637,7 +638,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmt()
  - family (Font Family) §18.8.18
  - [done] i (Italic) §18.8.26
  - [done] name (Font Name) §18.8.29
- - outline (Outline) §18.4.2
+ - [done] outline (Outline) §18.4.2
  - [done] scheme (Scheme) §18.8.35
  - shadow (Shadow) §18.8.36
  - [done] strike (Strike Through) §18.4.10
@@ -661,29 +662,30 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 
     m_currentTextStyleProperties = new KoCharacterStyle;
 
-    m_currentColor = QColor();
-
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(sz)
             ELSE_TRY_READ_IF(name)
             ELSE_TRY_READ_IF(b)
             ELSE_TRY_READ_IF(i)
+            else if (name() == "color") {
+                m_currentColor = QColor();
+                TRY_READ(color)
+                if (m_currentColor.isValid()) {
+                    m_currentTextStyleProperties->setForeground(QBrush(m_currentColor));
+                }
+            }
+            ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(strike)
             ELSE_TRY_READ_IF(u)
-            ELSE_TRY_READ_IF(color)
             ELSE_TRY_READ_IF(vertAlign)
             ELSE_TRY_READ_IF(scheme)
+            ELSE_TRY_READ_IF(outline)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
-    }
-
-    if (m_currentColor.isValid()) {
-        m_currentTextStyleProperties->setForeground(QBrush(m_currentColor));
     }
 
     m_currentTextStyleProperties->saveOdf(*m_currentFontStyle);
@@ -793,7 +795,8 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
     MSOOXML::Utils::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
     m_currentCellFormat->setupCellStyleAlignment(&cellStyle);
 
-    mainStyles->insert(cellStyle, "ConditionalStyle", KoGenStyles::AllowDuplicates);
+    m_context->styles->conditionalStyles.insert(m_context->styles->conditionalStyles.size() + 1,
+       mainStyles->insert(cellStyle, "ConditionalStyle"));
 
     delete m_currentFontStyle;
     m_currentFontStyle = 0;
@@ -816,6 +819,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
 
  Child elements:
  - [done] xf (Format) §18.8.45
+
  Parent elements:
  - [done] styleSheet (§18.8.39)
 
@@ -946,6 +950,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
  Formatting information pertaining to text alignment in cells.
 
  No child elements.
+
  Parent elements:
  - dxf (§18.8.14)
  - ndxf (§18.11.1.4)
@@ -1016,7 +1021,6 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
                 m_currentFillStyle = 0;
                 fillStyleIndex++;
             }
-
             ELSE_WRONG_FORMAT
         }
     }
@@ -1030,8 +1034,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
  This element specifies fill formatting.
 
  Child elements:
- - gradientFill (Gradient) §18.8.24
+ - [done] gradientFill (Gradient) §18.8.24
  - [done] patternFill (Pattern) §18.8.32
+
  Parent elements:
  - dxf (§18.8.14)
  - [done] fills (§18.8.21)
@@ -1237,6 +1242,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bgColor()
  a background color and a foreground color. These combine together to make a patterned cell fill.
 
  No child elements.
+
  Parent elements:
  - [done] patternFill (§18.8.20)
 

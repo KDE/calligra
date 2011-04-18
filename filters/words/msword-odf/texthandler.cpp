@@ -90,24 +90,21 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_fldChp(0)
 //     , m_index(0)
 {
-#ifdef IMAGE_IMPORT
-    kDebug(30513) << "we have image support";
-#else
-    kDebug(30513) << "no image support";
-#endif
+    //set the pointer to bodyWriter for writing to content.xml in office:text
     if (bodyWriter) {
-        m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing to content.xml in office:text
+        m_bodyWriter = bodyWriter;
     } else {
         kWarning() << "No bodyWriter!";
     }
+    //for collecting most of the styles
     if (mainStyles) {
-        m_mainStyles = mainStyles; //for collecting most of the styles
+        m_mainStyles = mainStyles;
     } else {
         kWarning() << "No mainStyles!";
     }
 
-    //[MS-DOC] — v20090708 - 2.7.2 DopBase pg.163
-    if ((0x00D9 >= m_parser->fib().nFib) && (m_parser->dop().nfcFtnRef2 == 0)) {
+    //[MS-DOC] — v20101219 - 2.7.2 DopBase
+    if ((m_parser->fib().nFib <= 0x00D9) && (m_parser->dop().nfcFtnRef2 == 0)) {
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
 }
@@ -131,7 +128,7 @@ KoXmlWriter* KWordTextHandler::currentWriter() const
     else {
         writer = m_bodyWriter;
     }
-    return writer; 
+    return writer;
 }
 
 //increment m_sectionNumber
@@ -290,7 +287,8 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
 void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
-                                     wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                                     wvWare::UString characters,
+                                     wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                      const wvWare::FootnoteFunctor& parseFootnote)
 {
     Q_UNUSED(chp);
@@ -377,8 +375,8 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
         }
         m_footnoteWriter->addTextNode(customNote);
     }
-    //text:note-citation
-    m_footnoteWriter->endElement();
+
+    m_footnoteWriter->endElement(); //text:note-citation
     //start the body of the footnote
     m_footnoteWriter->startElement("text:note-body");
 
@@ -516,11 +514,9 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     m_annotationWriter = new KoXmlWriter(m_annotationBuffer);
 
     m_annotationWriter->startElement("office:annotation");
-
     m_annotationWriter->startElement("dc:creator");
     // XXX: get the creator from the .doc
     m_annotationWriter->endElement();
-
     m_annotationWriter->startElement("dc:date");
     // XXX: get the date from the .doc
     m_annotationWriter->endElement();
@@ -603,8 +599,6 @@ void KWordTextHandler::tableEndFound()
 
     emit tableFound(table);
 }
-
-#ifdef IMAGE_IMPORT
 
 //TODO: merge inlineObjectFound with floatingObjectFound, both of them are
 //stable actually
@@ -714,10 +708,8 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     delete m_drawingWriter;
     m_drawingWriter = 0;
 }
-#endif // IMAGE_IMPORT
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
-
 void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
 {
     kDebug(30513) << "**********************************************";
@@ -939,7 +931,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     //instructions and the content between fieldSeparator and fieldEnd
     //represents the field RESULT [optional].  In most cases the field RESULT
     //stores the complete information (instruction are applied by msword).
-    kDebug(30513) << "fld->flt:" << fld->flt << "(" << hex << fld->flt << ")";
+    kDebug(30513) << "fld->flt:" << fld->flt << "( 0x" << hex << fld->flt << ")";
 
     //nested field
     if (m_fld->m_insideField) {
@@ -987,6 +979,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kWarning(30513) << "Warning: field instructions not supported!";
         kWarning(30513) << "Warning: processing field result!";
         break;
+    case UNSUPPORTED:
+        kWarning(30513) << "Warning: Fld data missing, ignoring!";
     default:
         kWarning(30513) << "Warning: unrecognized field type" << m_fld->m_type << ", ignoring!";
         m_fld->m_type = UNSUPPORTED;

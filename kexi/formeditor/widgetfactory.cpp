@@ -218,7 +218,7 @@ WidgetFactory::isPropertyVisibleInternal(const QByteArray &, QWidget *w,
     if (property == "cursor")
         return false;
 #endif
-    if (property == "acceptDrops")
+    if (property == "acceptDrops" || property == "inputMethodHints")
         return false;
 
     if (!isTopLevel

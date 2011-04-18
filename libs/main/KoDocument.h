@@ -54,6 +54,7 @@ class KoOpenPane;
 class KUndoStack;
 class KoTextEditor;
 class KoProgressUpdater;
+class KoProgressProxy;
 
 class KoVersionInfo
 {
@@ -78,6 +79,7 @@ class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocum
     Q_OBJECT
 //     Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
+    Q_PROPERTY(int pageCount READ pageCount)
 
 public:
 
@@ -581,6 +583,12 @@ public:
      * accurate. If no active progress reporter is present, 0 is returned.
      **/
     KoProgressUpdater *progressUpdater() const;
+
+    /**
+     * Set a custom progress proxy to use to report loading
+     * progress to.
+     */
+    void setProgressProxy(KoProgressProxy *progressProxy);
 
     /**
      * Appends the shell to the list of shells which show this

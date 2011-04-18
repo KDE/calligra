@@ -128,8 +128,8 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
             // TODO Stefan: conditions
             insertStyle(style);
             // insert it into the the map sorted the OpenDocument name
-            m_oasisStyles[oasisName] = name;
-            kDebug(36003) << "Style" << name << ":" << style;
+            m_oasisStyles[oasisName] = style->name();
+            kDebug(36003) << "Style" << style->name() << ":" << style;
         }
     }
 
@@ -392,8 +392,6 @@ Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
 
             if (element->hasAttributeNS(KoXmlNS::style, "parent-style-name")) {
                 const QString parentOdfName = element->attributeNS(KoXmlNS::style, "parent-style-name", QString());
-                if (parentOdfName == "Default")
-                    continue;
                 const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOdfName));
                 if (!parentStyle) {
                     kWarning(36003) << parentOdfName << " not found.";

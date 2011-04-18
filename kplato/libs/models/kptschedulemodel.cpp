@@ -226,13 +226,13 @@ void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
 {
     if ( m_flat ) {
         int row = m_managerlist.indexOf( sch );
-        emit dataChanged( createIndex( row, 0, sch ), createIndex( row, columnCount(), sch ) );
+        emit dataChanged( createIndex( row, 0, sch ), createIndex( row, columnCount() - 1, sch ) );
         return;
     }
 
     int r = sch->parentManager() ? sch->parentManager()->indexOf( sch ) : m_project->indexOf( sch );
     //kDebug()<<sch<<":"<<r;
-    emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );
+    emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount() - 1, sch ) );
 }
 
 

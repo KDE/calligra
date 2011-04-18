@@ -161,36 +161,28 @@ qreal ValueCache::rectValue( const QString& name ) const {
         return m_rect.center().ry();
     return 0.0;
 }
-
+#include <limits>
 void ValueCache::setRectValue( const QString& name, qreal value ) {
     if ( name == "l") {
         m_rect.moveLeft( value );
     } else if ( name == "r" ) {
-        m_rect.setRight( value );
+        m_rect.moveRight( value );
     } else if ( name == "w" ) {
-        if ( value <  0 ) {
-            m_rect.setLeft( m_rect.right() + value );
-            m_negativeWidth = true;
-        } else {
-            m_rect.setWidth( value );
-            m_negativeWidth = false;
-        }
+		m_rect.setWidth( value );
     } else if ( name == "h" ) {
-        if ( value < 0 ) {
-            m_rect.setTop( m_rect.bottom() + value );
-            m_negativeHeight = true;
-        } else {
+        //TODO this is a hack, as its not really described how to handle infinite values during layouting
+        if ( value != std::numeric_limits<qreal>::infinity() )
             m_rect.setHeight( value );
-            m_negativeHeight = false;
-        }
+        else
+            m_rect.setHeight( m_rect.width() );
     } else if ( name == "t" ) {
         m_rect.moveTop( value );
     } else if ( name == "b" ) {
-        m_rect.setBottom( value );
+        m_rect.moveBottom( value );
     } else if ( name == "ctrX" ) {
-        m_rect.moveCenter( QPointF( m_rect.center().x() + value, m_rect.center().y() ) );
+        m_rect.moveCenter( QPointF( value, m_rect.center().y() ) );
     } else if ( name == "ctrY" ) {
-        m_rect.moveCenter( QPointF( m_rect.center().x(), m_rect.center().y() + value ) );
+        m_rect.moveCenter( QPointF( m_rect.center().x(), value ) );
     } else {
         ASSERT_X( false, QString("TODO unhandled name=%1 value=%2").arg(name).arg(value).toLocal8Bit() );
     }
@@ -1025,21 +1017,17 @@ void LayoutNodeAtom::setVariable(const QString &name, const QString &value) { m_
 
 QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     //TODO cache
+    //kDebug() << m_name;
     ValueCache result = m_values;
+	//QMap< QString, qreal > print = m_values;
+	//kDebug() << "prefinal: " << print;
+	//kDebug() << "final values";
     for( QMap< QString, qreal>::const_iterator it = m_factors.constBegin(); it != m_factors.constEnd(); ++it ) {
         result[ it.key() ] = result[ it.key() ] * it.value() / qreal ( m_countFactors[ it.key() ] );        
+		//kDebug() << "key " << it.key() << " value: " << it.value() << " count: " << m_countFactors[ it.key() ];
     }
-//     for(QMap<QString, qreal>::iterator it = result.begin(); it != result.end(); ++it) {
-//         if(m_factors.contains(it.key())) {
-//             result[it.key()] = it.value() * ((m_factors[it.key()]) / qreal(m_countFactors[it.key()]));
-//         }
-//     }
-    QMap< QString, qreal > res = result;
-    if (result.hasNegativeWidth())
-        res[ "w" ] = -res[ "w" ];
-    if (result.hasNegativeHeight())
-        res[ "h" ] = -res[ "h" ];
-    return res;
+    //kDebug() << "end of final values";
+    return result;
 }
 
 QVector< QExplicitlySharedDataPointer<LayoutNodeAtom> > LayoutNodeAtom::fetchLayouts(Context* context, const QString &forAxis, const QString &forName, const QString &ptType) const {
@@ -1447,12 +1435,15 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
 
     ASSERT_X(!applyLayouts.isEmpty(), QString("Failed to determinate the layouts for the constraint %1").arg( dump() ).toLocal8Bit());
     ASSERT_X(!referencedLayouts.isEmpty(), QString("Failed to determinate the referenced layouts for the constraint %1").arg( dump() ).toLocal8Bit());
+	kDebug() << dump();
 
     foreach(const QExplicitlySharedDataPointer<LayoutNodeAtom> &applyLayout, applyLayouts) {
+		kDebug() << "AppLayout: " << applyLayout->m_name;
         if( !m_value.isEmpty() ) {
             bool ok;
             qreal value = m_value.toDouble( &ok );
             ASSERT_X(ok, QString("Layout with name=%1 defines none-double value=%2").arg( atom->m_name ).arg( m_value ).toLocal8Bit());
+			kDebug() << "applyValue: " << value;
             if (ok) {
                 //applyLayout->m_factors.clear();
                 //applyLayout->m_countFactors.clear();
@@ -1473,10 +1464,12 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
             qreal value = -1.0;
             if( values.contains( type ) ) {
                 value = values[ type ];
+				kDebug() << "finalValue: " << value;
             } else {
                 value = r ? r->defaultValue( type, values ) : -1.0;
                 ASSERT_X(value >= 0.0, QString("algorithm=%1 value=%2 constraint='%3'").arg( r ? r->name() : "NULL" ).arg( value ).arg( dump() ).toLocal8Bit());
                 if (value < 0.0) continue;
+				kDebug() << "default Value: " << value;
             }
             applyLayout->m_values[ m_type ] = value;
             applyLayout->setNeedsRelayout( true );
@@ -1487,9 +1480,11 @@ void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
             bool ok;
             qreal v = m_fact.toDouble( &ok );
             ASSERT_X(ok, QString("Layout with name=%1 defines none-double factor=%2").arg( atom->m_name ).arg( m_fact ).toLocal8Bit());
+			kDebug() << "fact: " << v;
             if (ok) {
                 applyLayout->m_factors[ m_type ] += v;
                 applyLayout->m_countFactors[ m_type ] += 1;
+                //applyLayout->m_values[ m_type ] = applyLayout->m_values[ m_type ] * v;
                 applyLayout->setNeedsRelayout( true );
             }
         }
@@ -1647,6 +1642,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     if(m_type.isEmpty() || m_hideGeom) return;
     QMap<QString,QString> params = context->m_parentLayout->algorithmParams();
     QMap<QString, qreal> values = context->m_parentLayout->finalValues();
+	kDebug() << values;
     //Q_ASSERT(values.contains("l"));
     //Q_ASSERT(values.contains("t"));
     //if(!values.contains("w")) values["w"]=100;
@@ -2035,6 +2031,12 @@ bool IfAtom::isTrue() const { return m_isTrue; } // is true or false?
 bool IfAtom::testAtom(Context* context) {
     QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
     QString funcValue;
+	if ( m_name == "Name21" )
+	{
+		PointNode* node = dynamic_cast<PointNode* >( context->currentNode() );
+		Q_ASSERT( node );
+		kDebug() << "RULE21: " << m_axis.count() << " nodeId: " << node->m_modelId;
+	}
     if(m_function == "cnt") { // Specifies a count.
         funcValue = QString::number(axis.count());
     } else if(m_function == "depth") { // Specifies the depth.
@@ -2190,6 +2192,9 @@ void ChooseAtom::build(Context* context) {
     Q_ASSERT(index >= 0);
     QVector< QExplicitlySharedDataPointer<AbstractAtom> > atoms;
     foreach( QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult ) {
+		IfAtom * ifAtom = dynamic_cast< IfAtom* >( atom.data() );
+		if ( ifAtom )
+			kDebug() << "atomNameChosen" << ifAtom->m_name;
         foreach( QExplicitlySharedDataPointer<AbstractAtom> a, atom->children() ) {
             atom->removeChild( a );
             m_parent->insertChild( ++index, a );
@@ -2643,7 +2648,101 @@ qreal LinearAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QS
 // http://msdn.microsoft.com/en-us/library/dd439457%28v=office.12%29.aspx
 void LinearAlgorithm::virtualDoLayout() {
     AbstractAlgorithm::virtualDoLayout();
+    // TODO handle infinite values somehow sensible
+#if 1
+    QMap< QString, qreal > values = layout()->finalValues();
+    QString direction = layout()->algorithmParam( "linDir", "fromL" );
+    qreal x = 0;
+    qreal y = 0;
+    if ( direction  == "fromR" )
+    {
+        x = values[ "w" ];
+    }
+    if ( direction == "fromB" )
+    {
+        y = values[ "h" ];
+    }
+    QList<LayoutNodeAtom*> childs = childLayouts();
+    LayoutNodeAtom *firstNSpaceNode = NULL;
+    LayoutNodeAtom *lastNSpaceNode = NULL;
+    kDebug() << values;
+    for ( int i = 0; i < childs.count(); ++ i )
+    {
+        if ( direction  == "fromL" )
+        {
+            childs[ i ]->m_values[ "l" ] = x;        
+            kDebug() << "XVAL: " << x;
+            x = childs[ i ]->finalValues()[ "r" ];
+        }
+        else if ( direction == "fromR" )
+        {
+            childs[ i ]->m_values[ "r" ] = x;
+            kDebug() << "XVAL: " << x;
+            x = childs[ i ]->finalValues()[ "l" ];
+        }
+        else if ( direction == "fromT" )
+        {
+            kDebug() << "TVAL: " << childs[ i ]->finalValues()[ "t" ];
+            kDebug() << "BVAL: " << childs[ i ]->finalValues()[ "b" ];
+            childs[ i ]->m_values[ "t" ] = y;
+            kDebug() << "YVAL: " << y;
+            y = childs[ i ]->finalValues()[ "b" ];
+        }
+        else if ( direction == "fromB" )
+        {
+            childs[ i ]->m_values[ "b" ] = y;
+            kDebug() << "YVAL: " << y;
+            y = childs[ i ]->finalValues()[ "t" ];
+        }
+        if ( childs[ i ]->algorithm() != AlgorithmAtom::SpaceAlg )
+        {
+            if ( !firstNSpaceNode )
+                firstNSpaceNode = childs[ i ];
+            lastNSpaceNode = childs[ i ];
+        }
+    }
+    const qreal width = lastNSpaceNode->finalValues()[ "r" ] -  firstNSpaceNode->finalValues()[ "l" ];
+    const qreal height = lastNSpaceNode->finalValues()[ "b" ] -  firstNSpaceNode->finalValues()[ "t" ];
+    const qreal widthStretchFactor = values[ "w" ] / width;
+    const qreal heightStretchFactor = values[ "h" ] / height;
+    const qreal xOffset = firstNSpaceNode->finalValues()[ "l" ]  < 0 ? -firstNSpaceNode->finalValues()[ "l" ] : 0;
+    const qreal yOffset = firstNSpaceNode->finalValues()[ "t" ]  < 0 ? -firstNSpaceNode->finalValues()[ "t" ] : 0;
+    const qreal xOffsetRect = values[ "l" ];
+    const qreal yOffsetRect = values[ "t" ];
+    kDebug() << width;
+    kDebug() << widthStretchFactor;
+    kDebug() << xOffset;
 
+    for ( int i = 0; i < childs.count(); ++i )
+    {
+        if ( direction == "fromL" || direction == "formR" )
+        {
+            const qreal aspectRatio = childs[ i ]->finalValues()[ "h" ] / childs[ i ]->finalValues()[ "w" ];
+            const qreal heightRatio = widthStretchFactor * aspectRatio;
+            qreal oldCenterX = childs[ i ]->finalValues()[ "ctrX" ];
+            childs[ i ]->m_values[ "w" ] = childs[ i ]->finalValues()[ "w" ] * widthStretchFactor;
+            childs[ i ]->m_values[ "h" ] = childs[ i ]->finalValues()[ "h" ] * heightRatio;
+            oldCenterX *= widthStretchFactor;
+            oldCenterX += xOffset * widthStretchFactor + xOffsetRect;
+            childs[ i ]->m_values[ "ctrX" ] = oldCenterX;
+            childs[ i ]->m_values[ "ctrY" ] = childs[ i ]->finalValues()[ "ctrY" ] + yOffsetRect;
+        }
+        else
+        {
+            const qreal aspectRatio = childs[ i ]->finalValues()[ "w" ] / childs[ i ]->finalValues()[ "h" ];
+            const qreal widthRatio = heightStretchFactor * aspectRatio;
+            qreal oldCenterY = childs[ i ]->finalValues()[ "ctrY" ];
+            childs[ i ]->m_values[ "w" ] = childs[ i ]->finalValues()[ "w" ] * widthRatio;
+            childs[ i ]->m_values[ "h" ] = childs[ i ]->finalValues()[ "h" ] * heightStretchFactor;
+            oldCenterY *= heightStretchFactor;
+            oldCenterY += yOffset * heightStretchFactor + yOffsetRect;
+            childs[ i ]->m_values[ "ctrY" ] = oldCenterY;
+            childs[ i ]->m_values[ "ctrX" ] = childs[ i ]->finalValues()[ "ctrX" ] + xOffsetRect;
+        }
+
+    }
+#endif
+#if 0
     QString direction = layout()->algorithmParam("linDir", "fromL");
     const qreal lMarg = layout()->finalValues()[ "lMarg" ];
     const qreal rMarg = layout()->finalValues()[ "rMarg" ];
@@ -2657,6 +2756,7 @@ void LinearAlgorithm::virtualDoLayout() {
     if (childs.isEmpty()) return;
 
     const qreal childsCount = childs.count();
+	qDebug() << "REAL CHILD COUNTERRRRRRRRRRRRRR " << childsCount;
     const QSizeF usedSize = layout()->childrenUsedSize();
     const QSizeF totalSize = layout()->childrenTotalSize();
 
@@ -2682,9 +2782,10 @@ void LinearAlgorithm::virtualDoLayout() {
     qreal currentHeight = 0;
     const int xFactor = mx >= 0 ? 1 : -1;
     const int yFactor = my >= 0 ? 1 : -1;
-    foreach(LayoutNodeAtom* l, childs) {
+    foreach(LayoutNodeAtom* l, childs) {		
         QMap< QString, qreal > values = l->finalValues();
         if ( l->algorithmType() != AlgorithmAtom::SpaceAlg ) {
+			qDebug() << "NODETYPE: SPACE";
             currentWidth = l->finalValues()[ "w" ] / usedSize.width() * w;
             currentHeight = l->finalValues()[ "h" ] / usedSize.height() * h;
             setNodePosition(l, currentX, currentY, currentWidth, currentHeight);
@@ -2693,6 +2794,7 @@ void LinearAlgorithm::virtualDoLayout() {
             else
                 currentY = currentY + yFactor * l->finalValues()[ "h" ];
         } else {
+			qDebug() << "NODETYPE: ELSE";
             currentWidth = l->finalValues()[ "w" ] / totalSize.width() * w;
             currentHeight = l->finalValues()[ "h" ] / totalSize.height() * h;
             if ( direction == "fromR" || direction == "fromL" )
@@ -2701,6 +2803,7 @@ void LinearAlgorithm::virtualDoLayout() {
                 currentY += currentHeight;
         }
     }
+#endif
 }
 
 /****************************************************************************************************/

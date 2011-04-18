@@ -17,15 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// Own
+#include <kprkword.h>
+
+// Qt
+#include <QList>
+#include <QColor>
+
+// KDE
+#include <kdebug.h>
+#include <klocale.h>
 #include <kpluginfactory.h>
+
+// Calligra
 #include <KoStoreDevice.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
-#include <kprkword.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <QList>
-#include <QColor>
+
 
 K_PLUGIN_FACTORY(KprKwordFactory, registerPlugin<KprKword>();)
 K_EXPORT_PLUGIN(KprKwordFactory("calligrafilters"))

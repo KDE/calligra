@@ -44,6 +44,18 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMimeData>
 
+KoShapeContainer *shapeToContainer(KoShape *shape)
+{
+    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+    if (group)
+        return group;
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+    if (layer)
+        return layer;
+
+    return 0;
+}
+
 KarbonLayerModel::KarbonLayerModel(QObject * parent)
         : KoDocumentSectionModel(parent), m_document(0)
 {
@@ -74,7 +86,7 @@ int KarbonLayerModel::rowCount(const QModelIndex &parent) const
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
 
-    KoShapeContainer *parentShape = dynamic_cast<KoShapeContainer*>((KoShape*)parent.internalPointer());
+    KoShapeContainer *parentShape = shapeToContainer((KoShape*)parent.internalPointer());
     if (! parentShape)
         return 0;
 
@@ -105,7 +117,7 @@ QModelIndex KarbonLayerModel::index(int row, int column, const QModelIndex &pare
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
 
-    KoShapeContainer *parentShape = dynamic_cast<KoShapeContainer*>((KoShape*)parent.internalPointer());
+    KoShapeContainer *parentShape = shapeToContainer((KoShape*)parent.internalPointer());
     if (! parentShape)
         return QModelIndex();
 
@@ -266,6 +278,7 @@ KoDocumentSectionModel::PropertyList KarbonLayerModel::properties(KoShape* shape
     l << Property(i18nc("Lock state of the shape", "Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     l << Property(i18nc("The z-index of the shape", "zIndex"), QString("%1").arg(shape->zIndex()));
     l << Property(i18nc("The opacity of the shape", "Opacity"), QString("%1").arg(1.0 - shape->transparency()));
+    l << Property(i18nc("Clipped state of the shape", "Clipped"), shape->clipPath() ? i18n("yes") : i18n("no"));
     return l;
 }
 
@@ -473,46 +486,16 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
             endInsertRows();
 
             emit layoutChanged();
-        } else {
-            kDebug(38000) << "KarbonLayerModel::dropMimeData parent = container";
-            if (toplevelShapes.count()) {
-                emit layoutAboutToBeChanged();
-
-                beginInsertRows(parent, container->shapeCount(), container->shapeCount() + toplevelShapes.count());
-
-                QUndoCommand * cmd = new QUndoCommand();
-                cmd->setText(i18n("Reparent shapes"));
-
-                QList<bool> clipped;
-                QList<bool> inheritsTransform;
-                foreach(KoShape * shape, toplevelShapes) {
-                    if (! shape->parent()) {
-                        clipped.append(false);
-                        inheritsTransform.append(false);
-                        continue;
-                    }
-
-                    clipped.append(shape->parent()->isClipped(shape));
-                    inheritsTransform.append(shape->parent()->inheritsTransform(shape));
-                    new KoShapeUngroupCommand(shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd);
-                }
-
-                // shapes are dropped on a container, so add them to the container
-                new KoShapeGroupCommand(container, toplevelShapes, clipped, inheritsTransform, cmd);
-                KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
-                canvasController->canvas()->addCommand(cmd);
-
-                endInsertRows();
-
-                emit layoutChanged();
-            } else if (layers.count()) {
-                KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>(container);
-                if (! layer)
-                    return false;
-
-                // TODO layers are dropped on a layer, so change layer ordering
+        } else if (layers.count()) {
+            KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>(container);
+            if (! layer)
                 return false;
-            }
+
+            // TODO layers are dropped on a layer, so change layer ordering
+            return false;
+        } else {
+            // every other container we don't want to handle
+            return false;
         }
     } else {
         kDebug(38000) << "KarbonLayerModel::dropMimeData parent = shape";

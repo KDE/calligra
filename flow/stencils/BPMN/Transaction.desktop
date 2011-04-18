@@ -2,9 +2,12 @@
 Name=Transaction
 Name[cs]=Přenos
 Name[es]=Transacción
+Name[et]=Transaktsioon
+Name[it]=Transazione
 Name[nl]=Transactie
 Name[pt]=Transacção
 Name[pt_BR]=Transação
+Name[sv]=Transaktion
 Name[uk]=Операція
 Name[x-test]=xxTransactionxx
 Name[zh_TW]=交易

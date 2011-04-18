@@ -2,6 +2,7 @@
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -20,10 +21,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "mswordodfimport.h"
-
-#include <qdom.h>
-#include <qfontinfo.h>
 #include <QFile>
 #include <QString>
 #include <QBuffer>
@@ -31,17 +28,13 @@
 #include <QByteArray>
 
 #include <kdebug.h>
-#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
-#include <KoStoreDevice.h>
-//#include <KoXmlWriter.h>
 
-#include <document.h>
-#include <wv2/src/word95_generated.h>
-#include <wv2/src/olestorage.h>
-#include <wv2/src/olestream.h>
+#include "mswordodfimport.h"
+#include "document.h"
+#include "fibbase.h"
 #include "pole.h"
 
 //function prototypes of local functions
@@ -60,81 +53,74 @@ MSWordOdfImport::~MSWordOdfImport()
 {
 }
 
-
-bool MSWordOdfImport::isEncrypted(const QString &inputfile)
-{
-    wvWare::OLEStorage storage(std::string(inputfile.toAscii().data()));
-    storage.open(wvWare::OLEStorage::ReadOnly);
-    wvWare::OLEStreamReader *document = storage.createStreamReader("WordDocument");
-
-    if (!document) {
-        return false;
-    }
-
-    if (!document->isValid()) {
-        kDebug(30513) << "document is invalid";
-        delete document;
-        return false;
-    }
-
-    wvWare::Word95::FIB fib(document, true);
-
-    delete document;
-    return fib.fEncrypted;
-}
-
-
 KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
-    if (to != "application/vnd.oasis.opendocument.text"
-            || from != "application/msword")
+    if ((to != "application/vnd.oasis.opendocument.text") ||
+        (from != "application/msword")) {
         return KoFilter::NotImplemented;
+    }
 
     kDebug(30513) << "######################## MSWordOdfImport::convert ########################";
 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
 
-    // check if file is encrypted
-    if (isEncrypted(inputFile))
-        return KoFilter::PasswordProtected;
-
     /*
      * ************************************************
      *  POLE storage, POLE and LEInput streams
      * ************************************************
      */
+    //TODO: POLE:Stream or LEInputStream ?
+
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
         kDebug(30513) << "Cannot open " << inputFile;
-        return KoFilter::StupidError;
+        return KoFilter::InvalidFormat;
     }
+    //WordDocument Stream
     QBuffer buff1;
-    if (!readStream(storage, "/Data", buff1)) {
-        return KoFilter::StupidError;
+    if (!readStream(storage, "/WordDocument", buff1)) {
+        return KoFilter::InvalidFormat;
     }
-    LEInputStream data_stream(&buff1);
+    LEInputStream wdstm(&buff1);
 
-//     //TODO: fib information required to select the correct stream name
-//     QBuffer buff2;
-//     const std::string tmp = fib.fWhichTblStm ? "1Table" : "0Table";
-//     if (!readStream(storage, tmp, buff2)) {
-//         return KoFilter::StupidError;
-//     }
-//     LEInputStream table_stream(&buff2);
+    FibBase fb(wdstm);
 
+    //1Table Stream or 0Table Stream
+    const char* tblstm_name = fb.fWhichTblStm ? "1Table" : "0Table";
+    QBuffer buff2;
+    if (!readStream(storage, tblstm_name, buff2)) {
+        return KoFilter::InvalidFormat;
+    }
+    LEInputStream tblstm(&buff2);
+
+    //Provided to the Document at the moment
+    POLE::Stream tblstm_pole(&storage, tblstm_name);
+
+    //Data Stream
     QBuffer buff3;
-    if (!readStream(storage, "/WordDocument", buff3)) {
-        return KoFilter::StupidError;
+    if (!readStream(storage, "/Data", buff3)) {
+        kDebug(30513) << "Failed to open /Data stream, no big deal (OPTIONAL).";
     }
-    LEInputStream wdocument_stream(&buff3);
+    LEInputStream datastm(&buff3);
+
+    /*
+     * ************************************************
+     *  Processing file
+     * ************************************************
+     */
+    //document is encrypted or obfuscated
+    if (fb.fEncrypted) {
+        return KoFilter::PasswordProtected;
+    }
 
     // Create output files
     KoStore *storeout;
     struct Finalizer {
     public:
-        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0), m_contentWriter(0), m_bodyWriter(0) { }
+        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0),
+                                    m_contentWriter(0), m_bodyWriter(0) { }
         ~Finalizer() {
             delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
         }
@@ -181,8 +167,10 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     finalizer.m_contentWriter = contentWriter;
     KoXmlWriter *bodyWriter = new KoXmlWriter(&bodyBuf);
     finalizer.m_bodyWriter = bodyWriter;
-    if (!bodyWriter || !contentWriter)
-        return KoFilter::CreationError; //not sure if this is the right error to return
+    if (!bodyWriter || !contentWriter) {
+        //not sure if this is the right error to return
+        return KoFilter::CreationError;
+    }
 
     kDebug(30513) << "created temp contentWriter and bodyWriter.";
 
@@ -191,23 +179,26 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    Document *document = new Document(QFile::encodeName(inputFile).data(), m_chain, bodyWriter,
-                                      mainStyles, &metaWriter, &manifestWriter,
-                                      storeout, &storage, &data_stream, NULL, &wdocument_stream);
+    Document *document = new Document(QFile::encodeName(inputFile).data(), this,
+                                      bodyWriter, &metaWriter, &manifestWriter,
+                                      storeout, mainStyles,
+                                      &wdstm, tblstm_pole, &datastm);
     finalizer.m_document = document;
 
     //check that we can parse the document?
-    if (!document->hasParser())
+    if (!document->hasParser()) {
         return KoFilter::WrongFormat;
-
+    }
     //actual parsing & action
-    if (!document->parse()) //parse file into the queues?
+    if (!document->parse()) {
         return KoFilter::CreationError;
+    }
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
-    if (!document->bodyFound())
-        return KoFilter::WrongFormat;
 
+    if (!document->bodyFound()) {
+        return KoFilter::WrongFormat;
+    }
     kDebug(30513) << "finished parsing.";
 
     //save the office:automatic-styles & and fonts in content.xml
@@ -273,8 +264,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     kDebug(30513) << "created manifest and styles.xml";
 
     //create meta.xml
-    if (!storeout->open("meta.xml"))
+    if (!storeout->open("meta.xml")) {
         return KoFilter::CreationError;
+    }
 
     KoStoreDevice metaDev(storeout);
     KoXmlWriter *meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
@@ -284,14 +276,21 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     meta->endElement(); //office:document-meta
     meta->endDocument();
     delete meta;
-    if (!storeout->close())
+    if (!storeout->close()) {
         return KoFilter::CreationError;
+    }
 
     realManifestWriter->addManifestEntry("meta.xml", "text/xml");
     oasisStore.closeManifestWriter();
 
     kDebug(30513) << "######################## MSWordOdfImport::convert done ####################";
     return KoFilter::OK;
+}
+
+void
+MSWordOdfImport::setProgress(const int percent)
+{
+    emit sigProgress(percent);
 }
 
 /*
@@ -305,6 +304,11 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
 {
     std::string path(streampath);
     POLE::Stream stream(&storage, path);
+    if (stream.fail()) {
+        kError(30513) << "Unable to construct " << streampath << "stream";
+        return false;
+    }
+
     QByteArray array;
     array.resize(stream.size());
     unsigned long r = stream.read((unsigned char*)array.data(), stream.size());

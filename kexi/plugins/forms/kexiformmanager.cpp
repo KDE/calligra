@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -62,20 +62,11 @@ public:
         collection = 0;
     }
     ~KexiFormManagerPrivate() {
-#ifdef KEXI_DEBUG_GUI
-        delete static_cast<QObject*>(uiCodeDialog);
-#endif
     }
     KexiFormPart* part;
     KFormDesigner::WidgetLibrary* lib;
     KFormDesigner::ActionGroup* widgetActionGroup;
     KFormDesigner::WidgetTreeWidget *widgetTree;
-#ifdef KEXI_DEBUG_GUI
-    //! For debugging purposes
-    QPointer<KPageDialog> uiCodeDialog;
-    KTextEdit *currentUICodeDialogEditor;
-    KTextEdit *originalUICodeDialogEditor;
-#endif
     KActionCollection  *collection;
     KFormDesigner::Form::Features features;
     KToggleAction *pointerAction;
@@ -481,41 +472,37 @@ void KexiFormManager::showFormUICode()
         return;
     }
 
-    if (!d->uiCodeDialog) {
-        d->uiCodeDialog = new KPageDialog();
-        d->uiCodeDialog->setObjectName("ui_dialog");
-        d->uiCodeDialog->setFaceType(KPageDialog::Tabbed);
-        d->uiCodeDialog->setModal(true);
-        d->uiCodeDialog->setWindowTitle(i18n("Form's UI Code"));
-        d->uiCodeDialog->setButtons(KDialog::Close);
-        d->uiCodeDialog->resize(700, 600);
+    KPageDialog uiCodeDialog;
+    uiCodeDialog.setFaceType(KPageDialog::Tabbed);
+    uiCodeDialog.setModal(true);
+    uiCodeDialog.setWindowTitle(i18n("Form's UI Code"));
+    uiCodeDialog.setButtons(KDialog::Close);
+    uiCodeDialog.resize(700, 600);
+    KTextEdit *currentUICodeDialogEditor = new KTextEdit(&uiCodeDialog);
+    uiCodeDialog.addPage(currentUICodeDialogEditor, i18n("Current"));
+    currentUICodeDialogEditor->setReadOnly(true);
+    QFont f(currentUICodeDialogEditor->font());
+    f.setFamily("courier");
+    currentUICodeDialogEditor->setFont(f);
 
-        d->currentUICodeDialogEditor = new KTextEdit(d->uiCodeDialog);
-        d->uiCodeDialog->addPage(d->currentUICodeDialogEditor, i18n("Current"));
-        d->currentUICodeDialogEditor->setReadOnly(true);
-        QFont f(d->currentUICodeDialogEditor->font());
-        f.setFamily("courier");
-        d->currentUICodeDialogEditor->setFont(f);
-        //Qt3: d->currentUICodeDialogEditor->setTextFormat(Qt::PlainText);
-
-        d->originalUICodeDialogEditor = new KTextEdit(d->uiCodeDialog);
-        d->uiCodeDialog->addPage(d->originalUICodeDialogEditor, i18n("Original"));
-        d->originalUICodeDialogEditor->setReadOnly(true);
-        d->originalUICodeDialogEditor->setFont(f);
-        //Qt3: d->originalUICodeDialogEditor->setTextFormat(Qt::PlainText);
-    }
-    d->currentUICodeDialogEditor->setPlainText(uiCode);
+    KTextEdit *originalUICodeDialogEditor = new KTextEdit(&uiCodeDialog);
+    uiCodeDialog.addPage(originalUICodeDialogEditor, i18n("Original"));
+    originalUICodeDialogEditor->setReadOnly(true);
+    originalUICodeDialogEditor->setFont(f);
+    currentUICodeDialogEditor->setPlainText(uiCode);
     //indent and set our original doc as well:
     QDomDocument doc;
     doc.setContent(formView->form()->m_recentlyLoadedUICode);
-    d->originalUICodeDialogEditor->setPlainText(doc.toString(indent));
-    d->uiCodeDialog->show();
+    originalUICodeDialogEditor->setPlainText(doc.toString(indent));
+    uiCodeDialog.exec();
 #endif
 }
 
 void KexiFormManager::slotAssignAction()
 {
     KexiFormView* formView = activeFormViewWidget();
+    if (!formView)
+        return;
     KFormDesigner::Form *form = formView->form();
     KexiDBForm *dbform = 0;
     if (form->mode() != KFormDesigner::Form::DesignMode

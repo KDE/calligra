@@ -47,6 +47,8 @@ public:
 
     QString targetForType(const QString& path, const QString& file, const QString& relType);
 
+    unsigned targetCountWithWord(const QString& searchTerm);
+
 private:
     class Private;
     Private* const d;

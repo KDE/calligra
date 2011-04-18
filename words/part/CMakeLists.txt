@@ -17,6 +17,7 @@ set(wordsprivate_LIB_SRCS
     KWGui.cpp
     KWView.cpp
     KWPage.cpp
+    KWPageCacheManager.cpp
     KWPageManager.cpp
     KWPageStyle.cpp
     KWPageTextInfo.cpp
@@ -168,6 +169,9 @@ KWViewModeNormal.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/words/part COMPONENT Devel)
 
 install( FILES
+frames/KWFrame.h
 frames/KWFrameLayout.h
+frames/KWFrameSet.h
+frames/KWTextFrameSet.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 

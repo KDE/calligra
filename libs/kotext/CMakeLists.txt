@@ -1,4 +1,6 @@
-include_directories(${KOTEXT_INCLUDES})
+include_directories(${KOTEXT_INCLUDES}
+                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig 
+                    ${FREETYPE_INCLUDE_DIRS})
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
@@ -79,6 +81,11 @@ set(kotext_LIB_SRCS
     changetracker/KoChangeTracker.cpp
     changetracker/KoChangeTrackerElement.cpp
     changetracker/KoDeleteChangeMarker.cpp
+    changetracker/KoFormatChangeInformation.cpp
+    changetracker/KoDeletedRowColumnDataStore.cpp
+    changetracker/KoDeletedRowData.cpp
+    changetracker/KoDeletedColumnData.cpp
+    changetracker/KoDeletedCellData.cpp
     KoTextDrag.cpp
 
     commands/DeleteTableRowCommand.cpp
@@ -100,6 +107,15 @@ if( Soprano_FOUND )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
 target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
+
+if( FONTCONFIG_FOUND )
+    target_link_libraries(kotext ${FONTCONFIG_LIBRARIES})
+endif( FONTCONFIG_FOUND )
+
+if( FREETYPE_FOUND )
+    target_link_libraries(kotext ${FREETYPE_LIBRARIES})
+endif( FREETYPE_FOUND )
+
 
 set_target_properties(kotext PROPERTIES
    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
@@ -127,6 +143,7 @@ install(
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h
+    KoTextDocumentLayout.h
     KoText.h
     KoList.h
     KoTextLocator.h
@@ -155,6 +172,7 @@ install(
     styles/KoTableFormat.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
+    styles/KoTableBorderStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )
@@ -164,6 +182,10 @@ install(
     changetracker/KoChangeTracker.h
     changetracker/KoChangeTrackerElement.h
     changetracker/KoDeleteChangeMarker.h
+    changetracker/KoDeletedRowColumnDataStore.h
+    changetracker/KoDeletedRowData.cpp
+    changetracker/KoDeletedColumnData.cpp
+    changetracker/KoDeletedCellData.cpp
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/changetracker COMPONENT Devel
 )

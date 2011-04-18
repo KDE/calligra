@@ -1,47 +1,65 @@
 Description of properties from OfficeArtFOPT, OfficeArtSecondaryFOPT, and
 OfficeArtTertiaryFOPT
 
-opid | name | description  
--------------------------
+---------------------------
+ opid (hex) | name | desc.
+---------------------------
 
-4  - rotation -  specifies the rotation on a shape
-7f - Protection Boolean Properties
+ 0 - left - specifies the left side of the bounding rectangle that contains an object
+ 1 - top - specifies the top of the bounding rectangle that contains an object
+ 2 - right - specifies the right side of the bounding rectangle that contains an object
+ 3 - bottom - specifies the bottom of the bounding rectangle that contains an object
+ 4 - rotation - specifies the rotation on a shape
+ 5 - gvPage - specifies the page on which an object is located
+3f - [Transform Boolean Properties]
+
+7f - [Protection Boolean Properties]
+
 80 - lTxid - specifies an identifier for the text
 81 - dxTextLeft - specifies the size of the margin to the left of the text
 82 - dyTextTop
 83 - dxTextRight
-84 - dyTextBottom -  specifies the size of the margin below the text
+84 - dyTextBottom - specifies the size of the margin below the text
 85 - WrapText - specifies the type of wrapping that is applied to the text
 86 - unused134, MUST be ignored
-87 - anchorText -  specifies the type of anchor that is applied to the text
+87 - anchorText - specifies the type of anchor that is applied to the text
 88 - txflTextFlow - specifies the type of flow that is applied to the text
-bf - Text Boolean Properties
+bf - [Text Boolean Properties]
+
+ff - [Geometry Text Boolean Properties]
 
 104 - pib - specifies which BLIP in the OfficeArtBStoreContainer record to display in the picture shape.
 105 - pibName - specifies the comment, file name, or URL, as specified by the pibFlags property, for this BLIP.
 10f - pibPrint
-13f - Blip Boolean Properties
+13f - [Blip Boolean Properties]
 
+140 - geoLeft
+141 - geoTop
 142 - geoRight
 143 - geoBottom - 
 144 - shapePath - specifies the way that lines in this shape are to be drawn.
 145 - pVertices - specifies the set of points that make up this shape 
 146 - pSegmentInfo - specifies how the vertices that are specified by pVertices_complex are connected
-151 - pConnectionSites -
-152 - pConnectionSitesDir - 
-155 - pAdjustHandles -  an array of adjust handles that allow a user to manipulate the geometry of this shape
+148 - adjust2Value - specifies a value that a user can change to adjust the geometry of the shape.
+149 - adjust3Value - specifies a value that a user can change to adjust the geometry of the shape.
+151 - pConnectionSites
+152 - pConnectionSitesDir
+155 - pAdjustHandles - an array of adjust handles that allow a user to manipulate the geometry of this shape
 156 - pGuides - a set of formulas that are used to calculate values for defining the geometry of this shape
-157 - pInscribe -  an array of rectangles that specify how text is inscribed within this shape
-17f - Geometry Boolean Properties
+157 - pInscribe - an array of rectangles that specify how text is inscribed within this shape
+158 - cxk - specifies where connection points exist on the shape
+17f - [Geometry Boolean Properties]
 
 180 - fillType
 181 - fillColor
 182 - fillOpacity - specifies the foreground opacity level of the fill
 183 - fillBackColor
+184 - fillBackOpacity
+185 - fillCrMod
 186 - fillBlip - specifies the BLIP that is used for pattern, texture, or picture fills
 18a - fillHeight - specifies the height of the fill
 18b - fillAngle - the angle of the shaded fill that rotates the gradient vector in a counterclockwise direction
-18c - fillFocus -  specifies the relative position of the last color in the shaded fill
+18c - fillFocus - specifies the relative position of the last color in the shaded fill
 18d - fillToLeft - the relative position of the left boundary of the center rectangle in a concentric shaded fill
 18e - fillToTop - the relative position of the top boundary of the center rectangle in a concentric shaded fill 
 18f - fillToRight - 
@@ -52,38 +70,83 @@ bf - Text Boolean Properties
 197 - fillShadeColors - the colors and their relative positions along the shade of the fill
 19c - fillShadeType - specifies how the shaded fill is computed
 19e - fillColorExt - specifies the extended foreground color
-19f - reserved415 
-1a0 -
-1a1 -
-1a2 -
-1a3 -
-1a4 -
-1a5 -
-1a6 -
-1a7 -
-1bf - Fill Style Boolean Properties
+19f - reserved415 - MUST equal 0xFFFFFFFF and MUST be ignored
+1a0 - fillColorExtMod - specifies the color modification of the extended foreground color
+1a1 - reserved417 - MUST be ignored
+1a2 - fillBackColorExt - specifies the extended background color
+1a3 - reserved419 - MUST equal 0xFFFFFFFF and MUST be ignored
+1a4 - fillBackColorExtMod - specifies the color modification of the extended background color
+1a5 - reserved421 - MUST be ignored
+1a6 - reserved422 - MUST equal 0xFFFFFFFF and MUST be ignored
+1a7 - reserved423 - MUST equal 0xFFFFFFFF and MUST be ignored
+1bf - [Fill Style Boolean Properties]
 
-1c0 - lineColor
+1c0 - lineColor - specifies the foreground color of the line
+1c1 - lineOpacity - specifies the opacity level of the foreground color
+1c2 - lineBackColor - specifies the background color of the line
+1c3 - lineCrMod - specifies the foreground color of the line for black-and-white display mode
+1c4 - lineType - specifies the type of line
 1c5 - lineFillBlip - specifies the BLIP that is used to fill this line
+1c6 - lineFillBlipName - specifies a comment about the lineFillBlip property
+1c7 - lineFillBlipFlags - specifies how to interpret the lineFillBlipName_complex property
+1c8 - lineFillWidth - specifies the width of a pattern or texture that is used to fill this line
+1c9 - lineFillHeight - specifies the height of a pattern or texture that is used to fill this line
+1ca - lineFillDztype - specifies how the lineFillWidth and lineFillHeight properties MUST be interpreted
 1cb - lineWidth - specifies the width of the line
+1cc - lineMiterLimit - specifies the maximum allowed ratio of miter length to line width.
+1cd - lineStyle - specifies the style of the line
+1ce - lineDashing - specifies the dash style of the line
+1cf - lineDashStyle - specifies the custom dash style of the line
+1d0 - lineStartArrowhead - specifies the line end decoration used at the start of the line.
+1d1 - lineEndArrowhead - specifies the line end decoration used at the end of the line.
+1d2 - lineStartArrowWidth - specifies the width of the line end decoration that is used at the start of the line.
+1d3 - lineStartArrowLength - specifies the length of the line end decoration that is used at the start of the line.
+1d4 - lineEndArrowWidth - specifies the width of the line end decoration that is used at the end of the line.
+1d5 - lineEndArrowLength - specifies the length of the line end decoration that is used at the end of the line.
 1d6 - lineJoinStyle - specifies the style of the line joins
-1ff - Line Style Boolean Properties
+1d7 - lineEndCapStyle - specifies the style of the line end caps
+1d8 - [ MISSING ]
+1d9 - lineColorExt - specifies the extended foreground color
+1ff - [Line Style Boolean Properties]
 
+200 - shadowType
 201 - shadowColor
-23f - Shadow Style Boolean Properties
-2bf - 3D-Object Boolean Properties
+202 - shadowHighlight
+203 - shadowCrMod
+204 - shadowOpacity
+205 - shadowOffsetX
+206 - shadowOffsetY
+23f - [Shadow Style Boolean Properties]
+
+27f - [Perspective Style Boolean Properties]
+2bf - [3D-Object Boolean Properties]
+2ff - [3D-Style Boolean Properties]
 
 301 - hspMaster - specifies the master shape for a shape
+303 - cxstyle - specifies the connector style for this shape
 304 - bWMode - specifies how a shape will render in black-and-white display mode
-33f - Shape Boolean Properties
+33f - [Shape Boolean Properties]
+
+37f - [Callout Boolean Properties]
+
 380 - wzName - specifies the name of a shape
 381 - wzDescription - specifies a textual description for a shape
-388 - lidRegroup -  property specifies the regroup identifier for this shape
+388 - lidRegroup - property specifies the regroup identifier for this shape
 39b - borderTopColor
 39c - borderLeftColor
 39d - borderBottomColor
 39e - borderRightColor
-3bf - Group Shape Boolean Properties
+3a9 - metroBlob - alternative XML content for a shape that MAY<29> be ignored
+3bf - [Group Shape Boolean Properties]
+
+3ff - [Relative Transform Boolean Properties]
+
+53F - [Diagram Boolean Properties]
+
+57f - [Left Line Style Boolean Properties]
+5bf - [Top Line Style Boolean Properties]
+5ff - [Right Line Style Boolean Properties]
+63f - [Bottom Line Style Boolean Properties]
 
 Vacabulary:
 -----------
