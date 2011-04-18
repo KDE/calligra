@@ -439,7 +439,9 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
     Q_ASSERT(!m_frameSets.contains(fs));
     setModified(true);
-
+#if 0
+    m_frameSets.append(fs);
+#else
     // Be sure we add headers and footers to the beginning of the m_frameSets QList and every other KWFrameTextType
     // after them so future operations iterating over that QList always handle headers and footers first.
     int insertAt = m_frameSets.count();
@@ -455,7 +457,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
         }
     }
     m_frameSets.insert(insertAt, fs);
-
+#endif
     foreach (KWFrame *frame, fs->frames())
         addFrame(frame);
 
@@ -523,7 +525,7 @@ void KWDocument::addFrame(KWFrame *frame)
     else
         frame->shape()->update();
 #else
-    Q_ASSERT(frame->loadingPageNumber() <= 0);
+    //Q_ASSERT(frame->loadingPageNumber() <= 0);
     //frame->shape()->update();
 #endif
 }
@@ -842,8 +844,8 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 #endif
 
     // remove header/footer frames that are not visible.
-    m_frameLayout.cleanupHeadersFooters();
-#if 0
+//     m_frameLayout.cleanupHeadersFooters();
+#if 1
     foreach (const KWPage &page, m_pageManager.pages()) {
         m_frameLayout.createNewFramesForPage(page.pageNumber());
     }

@@ -50,6 +50,7 @@ KWFrameSet::~KWFrameSet()
 void KWFrameSet::addFrame(KWFrame *frame)
 {
     Q_ASSERT(frame);
+    kDebug() << "frame=" << frame << "frameSet=" << frame->frameSet();
     Q_ASSERT(!m_frames.contains(frame));
     m_frames.append(frame); // this one first, so we don't enter the addFrame twice.
     frame->setFrameSet(this);

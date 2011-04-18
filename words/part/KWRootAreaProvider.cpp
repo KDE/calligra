@@ -68,6 +68,8 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     KoShape *shape = factory->createDefaultShape(rm);
     Q_ASSERT(shape);
 #endif
+    KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
+    Q_ASSERT(kwdoc);
 
     switch(m_textFrameSet->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
@@ -75,11 +77,14 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         case KWord::OddPagesFooterTextFrameSet:
         case KWord::EvenPagesFooterTextFrameSet:
             kDebug() << m_textFrameSet << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "pageCount=" << pageManager->pageCount();
+            if (m_textFrameSet->frameCount() == 0) {
+                Q_ASSERT(pageManager->pageCount() >= 1);
+                kwdoc->frameLayout()->createCopyFrame(m_textFrameSet, pageManager->page(1));
+                //kwdoc->frameLayout()->createNewFramesForPage(1);
+            }
             break;
         case KWord::MainTextFrameSet: {
             // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
-            KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
-            Q_ASSERT(kwdoc);
             int framesCountBefore = m_textFrameSet->frameCount();
             QList<int> pagesCreated;
             for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
@@ -104,8 +109,11 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     }
     */
 
+    KWTextFrameSet* tfs = kwdoc->frameLayout()->getFrameSet(m_textFrameSet->textFrameSetType(), m_textFrameSet->pageStyle());
+    Q_ASSERT_X(tfs == m_textFrameSet, __FUNCTION__, QString("frameLayout vs rootAreaProvider error, frameSetType=%1 rootAreasCount=%2 frameCount=%3 pageCount=%4").arg(KWord::frameSetTypeName(m_textFrameSet->textFrameSetType())).arg(rootAreas.count()).arg(m_textFrameSet->frameCount()).arg(pageManager->pageCount()).toLocal8Bit());
+
     //FIXME don't use m_textFrameSet->frames() cause it can contain other frames too
-    Q_ASSERT(m_textFrameSet->frameCount() >= 1);
+    Q_ASSERT_X(m_textFrameSet->frameCount() >= 1, __FUNCTION__, QString("No frames in frameSetType=%1").arg(KWord::frameSetTypeName(m_textFrameSet->textFrameSetType())).toLocal8Bit());
     KWFrame *frame = m_textFrameSet->frames()[ m_textFrameSet->frameCount() - 1 ];
 
 //Q_ASSERT(!m_rootAreas.contains(frame));
@@ -130,7 +138,20 @@ if (m_rootAreas.contains(frame)) return 0;
 // afterThis==0 means delete everything
 void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
-    kDebug();
+    int afterPageNumber = -1;
+    if (afterThis) {
+        KWPageManager *pageManager = m_textFrameSet->kwordDocument()->pageManager();
+        Q_ASSERT(pageManager);
+        KoShape *shape = afterThis->associatedShape();
+        Q_ASSERT(shape);
+        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+        Q_ASSERT(data);
+        KWPage page = pageManager->page(shape);
+        Q_ASSERT(page.isValid());
+        afterPageNumber = page.pageNumber();
+    }
+
+    kDebug() << "afterPageNumber=" << afterPageNumber;
 }
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
