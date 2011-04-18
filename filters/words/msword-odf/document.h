@@ -188,7 +188,7 @@ public slots:
 
     void slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
 
-    void slotTextBoxFound(uint lid, bool bodyDrawing);
+    void slotTextBoxFound(uint lid, bool stylesXml);
 
     // Similar to footnoteStart/footnoteEnd but cells, connected to KWordTableHandler
 /*     void slotTableCellStart(int row, int column, int rowSize, int columnSize, const QRectF& cellRect, */

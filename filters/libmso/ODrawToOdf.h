@@ -66,7 +66,10 @@ public:
          **/
         virtual KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
-            const MSO::OfficeArtClientData* cd, Writer& out) = 0;
+            const MSO::OfficeArtClientData* cd,
+            const DrawStyle& ds,
+            Writer& out) = 0;
+
         /**
          * Add text properties to the style.
          * Host application specific style properties are added. These
@@ -76,7 +79,8 @@ public:
         virtual void addTextStyles(
             const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
-            Writer& out, KoGenStyle& style) = 0;
+            KoGenStyle& style,
+            Writer& out) = 0;
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.

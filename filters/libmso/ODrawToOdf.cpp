@@ -98,26 +98,26 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
     const OfficeArtSpContainer* master = 0;
 
     if (client) {
-        style = client->createGraphicStyle(o.clientTextbox.data(),
-                                           o.clientData.data(), out);
         drawingGroup = client->getOfficeArtDggContainer();
 
         //locate the OfficeArtSpContainer of the master shape
         if (o.shapeProp.fHaveMaster) {
-            const DrawStyle tmp(drawingGroup, &o);
+            const DrawStyle tmp(0, &o);
             quint32 spid = tmp.hspMaster();
             master = client->getMasterShapeContainer(spid);
         } else {
             master = client->defaultShapeContainer();
         }
     }
-
     const DrawStyle ds(drawingGroup, master, &o);
+    if (client) {
+        style = client->createGraphicStyle(o.clientTextbox.data(),
+                                           o.clientData.data(), ds, out);
+    }
     defineGraphicProperties(style, ds, out.styles);
-
     if (client) {
         client->addTextStyles(o.clientTextbox.data(),
-                              o.clientData.data(), out, style);
+                              o.clientData.data(), style, out);
     }
 }
 

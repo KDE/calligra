@@ -944,12 +944,12 @@ void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* write
     }
 }
 
-void Document::slotTextBoxFound( uint spid, bool bodyDrawing)
+void Document::slotTextBoxFound( uint spid, bool stylesXml)
 {
     kDebug(30513) ;
 
     //NOTE: spid == lid in wv2
-    m_parser->parseTextBox(spid, bodyDrawing);
+    m_parser->parseTextBox(spid, stylesXml);
 }
 
 //process through all the subDocs and the tables
