@@ -91,30 +91,37 @@ KWordGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClien
 KoGenStyle
 KWordGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                                      const MSO::OfficeArtClientData* cd,
+                                                     const DrawStyle& ds,
                                                      Writer& out)
 {
     Q_UNUSED(ct);
     Q_UNUSED(cd);
     KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
+
+    // Set specific attributes of graphic-properties.
+    gh->definePositionAttributes(style, ds);
+    gh->defineWrappingAttributes(style, ds);
     return style;
 }
 
 void
 KWordGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                                                 const MSO::OfficeArtClientData* clientData,
-                                                Writer& out,
-                                                KoGenStyle& style)
+                                                KoGenStyle& style,
+                                                Writer& out)
 {
     Q_UNUSED(clientTextbox);
     Q_UNUSED(clientData);
-
-    //TODO: Additional graphic-properties
 
     //TODO: Add paragraph-properties and text-properties if required!
 
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
+
+    // Set additional attributes of the element required for layout.
+    gh->setAnchorTypeAttribute(*static_cast<DrawingWriter*>(&out));
+    gh->setZIndexAttribute(*static_cast<DrawingWriter*>(&out));
 }
 
 const MSO::OfficeArtDggContainer*
