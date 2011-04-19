@@ -234,10 +234,10 @@ private:
                               Writer& out);
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
-            const MSO::OfficeArtClientData* cd, Writer& out);
+            const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
     void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
-            Writer& out, KoGenStyle& style);
+            KoGenStyle& style, Writer& out);
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
     const MSO::OfficeArtSpContainer* defaultShapeContainer() { return dc_data->defaultShape; };
@@ -354,8 +354,10 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
 KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
+        const DrawStyle& ds,
         Writer& out)
 {
+    Q_UNUSED(ds);
     KoGenStyle style;
 
     const PptOfficeArtClientData* cd = 0;
@@ -417,7 +419,7 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
 void PptToOdp::DrawClient::addTextStyles(
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
-        Writer& out, KoGenStyle& style)
+        KoGenStyle& style, Writer& out)
 {
     const PptOfficeArtClientData* cd = 0;
     if (clientData) {
