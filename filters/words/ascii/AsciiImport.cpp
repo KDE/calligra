@@ -2,7 +2,8 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
    Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
-   Copyright (C) 2010, Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010-2011 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org> 
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,6 +45,18 @@
 K_PLUGIN_FACTORY(AsciiImportFactory, registerPlugin<AsciiImport>();)
 K_EXPORT_PLUGIN(AsciiImportFactory("kwordasciiimportng", "calligrafilters"))
 
+bool checkEncoding(QTextCodec *codec, QByteArray &data)
+{
+    QTextCodec::ConverterState state(QTextCodec::ConvertInvalidToNull);
+    QString unicode = codec->toUnicode(data.constData(), data.size(), &state);
+    for (int i = 0; i < unicode.size(); ++i) {
+        if (unicode[i] == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
 AsciiImport::AsciiImport(QObject *parent, const QVariantList &)
 : KoFilter(parent)
 {
@@ -67,18 +80,36 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         return KoFilter::FileNotFound;
     }
 
-    QByteArray data = in.read(1024);
-    KEncodingProber prober(KEncodingProber::Universal);
-    prober.feed(data);
-    kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
+    // try to read 100000 bytes so we can be quite sure the guessed encoding is correct.
+    QByteArray data = in.read(100000);
     in.seek(0);
-    QString encoding = prober.encoding();
 
-    QTextCodec* codec = 0;
+    // this code is inspired by the kate encoding guessing
+    // first try UTF-8
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    if (!checkEncoding(codec, data)) {
+        // then try to guess the encoding from the content
+        KEncodingProber prober(KEncodingProber::Universal);
+        prober.feed(data);
+        kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
+        if (prober.confidence() > 0.5) {
+            codec = QTextCodec::codecForName(prober.encoding());
+        }
+        if (!codec || !checkEncoding(codec, data )) {
+            // then try the fallback ISO 8859-15
+            codec = QTextCodec::codecForName("ISO 8859-15");
+            if (!checkEncoding(codec, data)) {
+                // if all failed use UTF-8
+                codec = QTextCodec::codecForName("UTF-8");
+                kWarning(30502) << "fallback to UTF-8 encoding";
+            }
+        }
+    }
+
     int paragraphStrategy = 0;
 
     if (!m_chain->manager()->getBatchMode()) {
-        QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(encoding, QApplication::activeWindow());
+        QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(codec->name(), QApplication::activeWindow());
         if (!dialog) {
             kError(30502) << "Dialog has not been created! Aborting!" << endl;
             in.close();
@@ -91,9 +122,6 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         }
         codec = dialog->getCodec();
         paragraphStrategy = dialog->getParagraphStrategy();
-    }
-    else {
-        codec = QTextCodec::codecForName(prober.encoding());
     }
 
     if (!codec) {
