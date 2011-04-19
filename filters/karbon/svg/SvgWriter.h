@@ -39,6 +39,7 @@ class KoShape;
 class KoPathShape;
 class KoShapeBorderModel;
 class ArtisticTextShape;
+class ArtisticTextRange;
 class EllipseShape;
 class RectangleShape;
 class KoPatternBackground;
@@ -87,6 +88,8 @@ private:
     void getGradient(const QGradient * gradient, const QTransform &gradientTransform);
     void getPattern(KoPatternBackground * pattern, KoShape * shape);
     QString getTransform(const QTransform &matrix, const QString &attributeName);
+    void saveFont(const QFont &font, QTextStream *stream);
+    void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
 
     QString getID(const KoShape *obj);
     QString createID(const KoShape * obj);
