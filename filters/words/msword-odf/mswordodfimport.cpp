@@ -103,7 +103,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
 
     //Data Stream
-    LEInputStream* datastm;
+    LEInputStream* datastm = 0;
     QBuffer buff3;
     if (!readStream(storage, "/Data", buff3)) {
         kDebug(30513) << "Failed to open /Data stream, no big deal (OPTIONAL).";
@@ -122,7 +122,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
                                       m_contentWriter(0), m_bodyWriter(0), m_datastm(s) { }
         ~Finalizer() {
             delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
-            delete m_datastm;
+            if (m_datastm) {
+                delete m_datastm;
+            }
         }
 
         KoStore *m_store;
