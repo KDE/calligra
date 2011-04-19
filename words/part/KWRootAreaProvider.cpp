@@ -91,7 +91,8 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             QList<int> pagesCreated;
             for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
                 KWPageStyle pagestyle = pageManager-> pageStyle(mastePageName);
-                Q_ASSERT(pagestyle.isValid());
+                if (!pagestyle.isValid())
+                    pagestyle = pageManager->defaultPageStyle();
                 KWPage page = kwdoc->appendPage(mastePageName);
                 Q_ASSERT(page.isValid());
 
