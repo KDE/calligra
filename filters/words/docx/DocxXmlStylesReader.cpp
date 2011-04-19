@@ -386,7 +386,20 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             ELSE_TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(pPr)
             else if (QUALIFIED_NAME_IS(tblPr)) {
+                m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                if (m_currentStyleProperties == 0) {
+                    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                }
                 TRY_READ(tblPr)
+                m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
+                m_currentStyleProperties = 0;
+            }
+            else if (name() == "tcPr") {
+                m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                if (m_currentStyleProperties == 0) {
+                    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                }
+                TRY_READ(tcPr)
                 m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
                 m_currentStyleProperties = 0;
             }
