@@ -2217,14 +2217,10 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         //draw:mirror-horizontal
         if (o.shapeProp.fFlipH) {
             out.xml.addAttribute("draw:mirror-horizontal", "true");
-        } else {
-            out.xml.addAttribute("draw:mirror-horizontal", "false");
         }
         //draw:mirror-vertical
         if (o.shapeProp.fFlipV) {
             out.xml.addAttribute("draw:mirror-vertical", "true");
-        } else {
-            out.xml.addAttribute("draw:mirror-vertical", "false");
         }
         //draw:modifiers
         //draw:path-stretchpoint-x
