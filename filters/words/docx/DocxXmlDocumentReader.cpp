@@ -4371,6 +4371,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if(QUALIFIED_NAME_IS(tblPr)) {
+                m_currentStyleProperties = new MSOOXML::TableStyleProperties;
                 TRY_READ(tblPr)
                 m_currentDefaultCellStyle = m_currentStyleProperties;
                 m_currentStyleProperties = 0;
@@ -4462,8 +4463,6 @@ void DocxXmlDocumentReader::defineTableStyles()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
 {
     READ_PROLOGUE
-
-    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
 
     while (!atEnd()) {
         readNext();
@@ -4869,6 +4868,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 m_currentTableStyle = currentTableStyle;
             }
             else if(QUALIFIED_NAME_IS(tcPr)) {
+                m_currentStyleProperties = new MSOOXML::TableStyleProperties;
                 TRY_READ(tcPr)
                 m_currentLocalTableStyles->setLocalStyle(m_currentStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
                 m_currentStyleProperties = 0;
@@ -4933,8 +4933,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 {
     READ_PROLOGUE
-
-    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
 
     while (!atEnd()) {
         readNext();
