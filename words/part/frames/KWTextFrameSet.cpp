@@ -121,8 +121,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     // Create a new KWPage for the KWFrame if there is no page already
     KWPage page = m_pageManager->page(frame->shape());
     if (!page.isValid()) {
-        page = kwordDocument()->appendPage();
-        Q_ASSERT(page.isValid());
+        Q_ASSERT_X(textFrameSetType() == KWord::OtherTextFrameSet, __FUNCTION__, QString("Only OtherTextFrameSet should not be connect with a KWPage, frameSetType=%1").arg(KWord::frameSetTypeName(textFrameSetType())).toLocal8Bit());
+//         page = kwordDocument()->appendPage();
+//         Q_ASSERT(page.isValid());
     }
 
     kDebug() << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
