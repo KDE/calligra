@@ -206,6 +206,11 @@ void KWordGraphicsHandler::init()
     }
 }
 
+void KWordGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
+{
+    emit textBoxFound(index, stylesxml);
+}
+
 void KWordGraphicsHandler::setBodyWriter(KoXmlWriter* writer)
 {
     m_bodyWriter = writer;
@@ -430,17 +435,15 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
         processTextBox(o, out);
         break;
     case msosptRectangle:
-        kDebug(30513)<< "processing Rectangle";
-        //check group shape boolean properties for details
         if (ds.fHorizRule()) {
-            kDebug(30513)<< "processing a LineShape";
+            kDebug(30513)<< "processing Line";
             processLineShape(o, out);
         } else {
-            processRectangle(o, out);
+            odrawtoodf.processDrawingObject(o, out);
         }
         break;
     case msosptPictureFrame:
-        kDebug(30513)<< "processing a FrameShape";
+        kDebug(30513)<< "processing PictureFrame";
         if (m_objectType == Inline) {
             processInlinePictureFrame(o, out);
         } else {
@@ -837,39 +840,18 @@ void KWordGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
 
     out.xml.startElement("draw:text-box");
 
-    emit textBoxFound(o.shapeProp.spid, out.stylesxml);
+    if (o.clientTextbox) {
+        const DocOfficeArtClientTextBox* tb = o.clientTextbox->anon.get<DocOfficeArtClientTextBox>();
+        if (tb) {
+            uint index = (tb->clientTextBox / 0x10000) - 1;
+            emit textBoxFound(index, out.stylesxml);
+        } else {
+            kDebug(30513) << "DocOfficeArtClientTextBox missing!";
+        }
+    } else {
+        kDebug(30513) << "OfficeArtClientTextBox missing!";
+    }
 
-    out.xml.endElement(); //draw:text-box
-    out.xml.endElement(); //draw:frame
-}
-
-void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
-{
-    QString styleName;
-    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
-    style.setAutoStyleInStylesDotXml(out.stylesxml);
-
-    DrawStyle ds(&m_officeArtDggContainer, &o);
-    DrawClient drawclient(this);
-    ODrawToOdf odrawtoodf(drawclient);
-    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
-    definePositionAttributes(style, ds);
-    defineWrappingAttributes(style, ds);
-    styleName = out.styles.insert(style);
-
-    out.xml.startElement("draw:frame");
-    out.xml.addAttribute("draw:style-name", styleName);
-
-    setAnchorTypeAttribute(out);
-    setZIndexAttribute(out);
-
-    out.xml.addAttribute("draw:layer", "layout");
-    out.xml.addAttribute("svg:width", mm(out.hLength()));
-    out.xml.addAttribute("svg:height", mm(out.vLength()));
-    out.xml.addAttribute("svg:x", mm(out.hOffset()));
-    out.xml.addAttribute("svg:y", mm(out.vOffset()));
-
-    out.xml.startElement("draw:text-box");
     out.xml.endElement(); //draw:text-box
     out.xml.endElement(); //draw:frame
 }

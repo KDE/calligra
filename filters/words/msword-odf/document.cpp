@@ -126,10 +126,10 @@ Document::Document(const std::string& fileName,
                 this, SLOT(slotTableFound(KWord::Table*)));
         connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&,KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
-        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int , KoXmlWriter* )),
-                this, SLOT(slotFloatingObjectFound(unsigned int , KoXmlWriter* )));
-        connect(m_graphicsHandler, SIGNAL(textBoxFound(uint , bool)),
-                this, SLOT(slotTextBoxFound(uint , bool)));
+        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter* )),
+                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter* )));
+        connect(m_graphicsHandler, SIGNAL(textBoxFound(unsigned int, bool)),
+                this, SLOT(slotTextBoxFound(unsigned int, bool)));
 
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);
@@ -944,12 +944,10 @@ void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* write
     }
 }
 
-void Document::slotTextBoxFound( uint spid, bool stylesXml)
+void Document::slotTextBoxFound(unsigned int index, bool stylesxml)
 {
     kDebug(30513) ;
-
-    //NOTE: spid == lid in wv2
-    m_parser->parseTextBox(spid, stylesXml);
+    m_parser->parseTextBox(index, stylesxml);
 }
 
 //process through all the subDocs and the tables

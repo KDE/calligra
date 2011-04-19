@@ -49,6 +49,8 @@ enum ObjectType { Inline, Floating };
  * Drawing Writer
  * ************************************************
  */
+//NOTE: Deprecated!
+
 class DrawingWriter : public Writer
 {
 public:
@@ -156,7 +158,7 @@ public:
 
     // Communication with Document, without having to know about Document
 signals:
-    void textBoxFound( uint lid, bool bodyDrawing);
+    void textBoxFound(unsigned int index, bool stylesxml);
 
 private:
     /**
@@ -242,11 +244,6 @@ private:
     void processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
 
     /**
-     * Process a rectangle shape.
-     */
-    void processRectangle(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
-
-    /**
      * Process a line shape.
      */
     void processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
@@ -260,6 +257,13 @@ private:
      * Process an inline frame shape.
      */
     void processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+
+    /**
+     * Emit the textBoxFound signal.
+     * @param index into plcfTxbxTxt
+     * @param writing into styles.xml
+     */
+    void emitTextBoxFound(unsigned int index, bool stylesxml);
 
     Document* m_document;
     KoStore* m_store;
