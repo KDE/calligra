@@ -18,6 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+const quint16 Word8nFib = 0x00c1;
+
 /**
  * FibBase is the fixed size portion of the Fib structure.  
  *

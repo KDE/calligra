@@ -66,7 +66,7 @@ Document::Document(const std::string& fileName,
 //                    KoFilterChain* chain,
                    KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, KoGenStyles* mainStyles,
-                   LEInputStream* wordDocument, POLE::Stream& table, LEInputStream* data)
+                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)

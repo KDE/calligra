@@ -74,7 +74,7 @@ public:
 /*              KoFilterChain* chain, */
              KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, KoGenStyles* mainStyles,
-             LEInputStream* wordDocument, POLE::Stream& table, LEInputStream* data);
+             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data);
     virtual ~Document();
 
     virtual void setProgress(int percent);
@@ -159,7 +159,7 @@ public:
 
     // Provide access to POLE/LEInput streams to other handlers.
     POLE::Stream& poleTableStream(void) const { return m_tblstm_pole; }
-    LEInputStream* wdocumentStream(void) const { return m_wdstm; }
+    LEInputStream& wdocumentStream(void) const { return m_wdstm; }
     LEInputStream* tableStream(void) const { return m_tblstm; }
     LEInputStream* dataStream(void) const { return m_datastm; }
 
@@ -262,7 +262,7 @@ private:
     QString m_lastMasterPageName;
 
     //pointers to streams
-    LEInputStream* m_wdstm;
+    LEInputStream& m_wdstm;
     LEInputStream* m_tblstm;
     LEInputStream* m_datastm;
     POLE::Stream& m_tblstm_pole;
