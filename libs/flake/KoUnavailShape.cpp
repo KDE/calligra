@@ -365,13 +365,12 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         if (objectName.isEmpty())
             continue;
 
-        kDebug(30006) << "Retrieving object named:" << objectName;
+        //kDebug(30006) << "Retrieving object named:" << objectName;
+
         // Try to find out if the entry is a directory.
-
-        QString dirName = objectName + '/';
-
         // If the object is a directory, then save all the files
         // inside it, otherwise save the file as it is.
+        QString dirName = objectName + '/';
         bool isDir = !context.odfLoadingContext().mimeTypeForPath(dirName).isEmpty();
         if (isDir) {
             // The files can be found in the manifest.
@@ -403,21 +402,24 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         object->manifestEntry = entry;
         object->isDir = isDir;
 
-        // If we have not already found a preview...
+        // If we have not already found a preview in previous times
+        // through the loop, then see if this one may be a preview.
         if (!foundPreview) {
             kDebug(30006) << "Attempting to load preview from " << objectName;
             QByteArray previewData = d->loadFile(objectName, context);
             // Check to see if we know the mimetype for this entry. Specifically:
-            // - Check to see if the item is a loadable SVG file
+            // 1. Check to see if the item is a loadable SVG file
+
+            // FIXME: Check in the manifest first.
             //d->scalablePreview->load(previewData);
-            d->scalablePreview->load(QString("/home/leinir/musicshapetest.svg"));
+            d->scalablePreview->load(QString("/home/leinir/musicshapetest.svg")); // FIXME: This is just test data.
             if (d->scalablePreview->isValid()) {
                 kDebug(30006) << "Found scalable preview image!";
                 d->scalablePreview->setViewBox(d->scalablePreview->boundsOnElement("svg"));
                 foundPreview = true;
                 continue;
             }
-            // - Otherwise check to see if it's a loadable pixmap file
+            // 2. Otherwise check to see if it's a loadable pixmap file
             d->pixmapPreview.loadFromData(previewData);
             if (!d->pixmapPreview.isNull()) {
                 kDebug(30006) << "Found pixel based preview image!";
@@ -543,8 +545,8 @@ QByteArray KoUnavailShape::Private::loadFile(const QString &fileName, KoShapeLoa
     if (fileName.endsWith('/'))
         return QByteArray();
 
-    KoStore    *store = context.odfLoadingContext().store();
-    QByteArray  fileContent;
+    KoStore *store = context.odfLoadingContext().store();
+    QByteArray fileContent;
 
     if (!store->open(fileName)) {
         store->close();
