@@ -29,7 +29,7 @@
 
 #include <KDebug>
 
-//#define DEBUG_PAGES
+#define DEBUG_PAGES
 
 KWPageManagerPrivate::KWPageManagerPrivate()
         : lastId(0),
@@ -123,7 +123,9 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
 
 void KWPageManagerPrivate::insertPage(const Page &newPage)
 {
-    kDebug() << "pageNumber=" << newPage.pageNumber;
+#ifdef DEBUG_PAGES
+    kDebug(32001) << "pageNumber=" << newPage.pageNumber;
+#endif
 
     // increase the pagenumbers of pages following the pageNumber
     if (!pageNumbers.isEmpty()) {
@@ -234,10 +236,12 @@ KWPage KWPageManager::page(qreal y) const
 
 KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
 {
-    kDebug() << "pageNumber=" << pageNumber;
-
     if (pageNumber <= 0 || d->pages.isEmpty() || pageNumber > last().pageNumber())
         return appendPage(pageStyle);
+
+#ifdef DEBUG_PAGES
+    kDebug(32001) << "pageNumber=" << pageNumber << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
+#endif
 
     KWPageManagerPrivate::Page newPage;
     newPage.style = pageStyle;
@@ -264,10 +268,6 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
 
     d->insertPage(newPage);
 
-#ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << pageNumber << "pageCount=" << pageCount();
-#endif
-
     return KWPage(d, d->lastId);
 }
 
@@ -287,7 +287,9 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
         page.pageNumber = 1;
     }
 
-    kDebug() << "pageNumber=" << page.pageNumber;
+#ifdef DEBUG_PAGES
+    kDebug(32001) << "pageNumber=" << page.pageNumber << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
+#endif
 
     if (pageStyle.isValid()) {
         page.style = pageStyle;
@@ -317,6 +319,7 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
     d->pageNumbers.insert(page.pageNumber, d->lastId);
     if (page.pageSide == KWPage::PageSpread)
         d->pageNumbers.insert(page.pageNumber + 1, d->lastId);
+
 #ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount();
     kDebug(32001) << "           " << d->pageNumbers;
@@ -367,6 +370,7 @@ void KWPageManager::removePage(const KWPage &page)
         }
         ++iter;
     }
+
 #ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
     kDebug(32001) << "           " << d->pageNumbers;

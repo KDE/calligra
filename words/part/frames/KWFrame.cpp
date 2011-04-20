@@ -48,8 +48,8 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
     if (KWord::isHeaderFooter(dynamic_cast<KWTextFrameSet*>(parent)))
         if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData()))
             data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
-        
-    kDebug() << "frame=" << this << "frameSet=" << frameSet();
+
+    kDebug() << "frame=" << this << "frameSet=" << frameSet() << "pageNumber=" << pageNumber;
 }
 
 KWFrame::~KWFrame()
