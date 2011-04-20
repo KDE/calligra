@@ -196,12 +196,9 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 
     // 2. Create the xml to embed the svg image and the contents to the file.
     writer.startElement("draw:image");
-#if 1
     name = context.imageHref(img);
-#else
     // FIXME: Find out how to save a picture using the embeddedSaver and saveFile()
-    name = QString("ObjectReplacements/") + objectName + ".png";
-#endif
+    //name = QString("ObjectReplacements/") + objectName + ".png";
     writer.addAttribute("xlink:type", "simple" );
     writer.addAttribute("xlink:show", "embed" );
     writer.addAttribute("xlink:actuate", "onLoad");
