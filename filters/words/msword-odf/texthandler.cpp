@@ -113,19 +113,18 @@ KoXmlWriter* KWordTextHandler::currentWriter() const
 {
     KoXmlWriter* writer = NULL;
 
-    if (document()->writingHeader()) {
+    if (m_insideDrawing) {
+        writer = m_drawingWriter;
+    }
+    else if (document()->writingHeader()) {
         writer = document()->headerWriter();
     }
     else if (m_insideFootnote) {
         writer = m_footnoteWriter;
     }
-    else if (m_insideDrawing) {
-        writer = m_drawingWriter;
-    }
     else if (m_insideAnnotation) {
         writer = m_annotationWriter;
-    }
-    else {
+    } else {
         writer = m_bodyWriter;
     }
     return writer;

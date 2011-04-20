@@ -297,14 +297,14 @@ static QString ST_StyleType_to_ODF(const QString& type)
  - personal (E-Mail Message Text Style) §17.7.4.11
  - personalCompose (E-Mail Message Composition Style) §17.7.4.12
  - personalReply (E-Mail Message Reply Style) §17.7.4.13
- - pPr (Style Paragraph Properties) §17.7.8.2
+ - [done] pPr (Style Paragraph Properties) §17.7.8.2
  - qFormat (Primary Style) §17.7.4.14
- - rPr (Run Properties) §17.7.9.1
+ - [done] rPr (Run Properties) §17.7.9.1
  - rsid (Revision Identifier for Style Definition) §17.7.4.15
  - semiHidden (Hide Style From Main User Interface) §17.7.4.16
  - [done] tblPr (Style Table Properties) §17.7.6.4
  - [done] tblStylePr (Style Conditional Table Formatting Properties) §17.7.6.6
- - tcPr (Style Table Cell Properties) §17.7.6.9
+ - [done] tcPr (Style Table Cell Properties) §17.7.6.9
  - trPr (Style Table Row Properties) §17.7.6.11
  - uiPriority (Optional User Interface Sorting Order) §17.7.4.19
  - unhideWhenUsed (Remove Semi-Hidden Property When Style Is Used) §17.7.4.20
@@ -360,14 +360,12 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         }
     }
     else {
-        if (type == "character") {
-            m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, odfType.toLatin1());
-        }
-        else if (type == "paragraph") {
-            m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, odfType.toLatin1());
-        }
-        else if (type == "table") {
+        if (type == "table") {
             m_currentStyle = new MSOOXML::DrawingTableStyle;
+        }
+        else {
+            m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
+            m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
         }
     }
     MSOOXML::Utils::Setter<bool> currentTextStylePredefinedSetter(&m_currentTextStylePredefined, false);
@@ -383,10 +381,51 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_IF(name)
-            ELSE_TRY_READ_IF(rPr)
-            ELSE_TRY_READ_IF(pPr)
-            else if (QUALIFIED_NAME_IS(tblPr)) {
+            else if (name() == "rPr") {
+                if (type == "table") {
+                    m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
+                    m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                    if (m_currentStyleProperties == 0) {
+                        m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                    }
+                }
+                TRY_READ(rPr)
+                if (type == "table") {
+                    m_currentStyleProperties->textStyle = m_currentTextStyle;
+                    m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
+                    m_currentStyleProperties = 0;
+                }
+            }
+            else if (name() == "pPr") {
+                if (type == "table") {
+                    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
+                    m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                    if (m_currentStyleProperties == 0) {
+                        m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                    }
+                }
+                TRY_READ(pPr)
+                if (type == "table") {
+                    m_currentStyleProperties->paragraphStyle = m_currentParagraphStyle;
+                    m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
+                    m_currentStyleProperties = 0;
+                }
+            }
+            else if (name() == "tblPr") {
+                m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                if (m_currentStyleProperties == 0) {
+                    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                }
                 TRY_READ(tblPr)
+                m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
+                m_currentStyleProperties = 0;
+            }
+            else if (name() == "tcPr") {
+                m_currentStyleProperties = m_currentStyle->properties(MSOOXML::DrawingTableStyle::WholeTbl);
+                if (m_currentStyleProperties == 0) {
+                    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                }
+                TRY_READ(tcPr)
                 m_currentStyle->addProperties(MSOOXML::DrawingTableStyle::WholeTbl, m_currentStyleProperties);
                 m_currentStyleProperties = 0;
             }
@@ -480,23 +519,23 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
     READ_ATTR(type)
 
     m_currentStyleProperties = new MSOOXML::TableStyleProperties;
-    //m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
-    //m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tcPr)
-            //ELSE_TRY_READ_IF(rPr)
-            //ELSE_TRY_READ_IF(pPr)
+            ELSE_TRY_READ_IF(rPr)
+            ELSE_TRY_READ_IF(pPr)
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    //m_currentStyleProperties->textStyle = m_currentTextStyle;
-    //m_currentStyleProperties->paragraphStyle = m_currentParagraphStyle;
+    m_currentStyleProperties->textStyle = m_currentTextStyle;
+    m_currentStyleProperties->paragraphStyle = m_currentParagraphStyle;
 
     if (type == "firstRow") {
         // In docx predefined styles for first row, even though it may define insideV to be 0 and bottom

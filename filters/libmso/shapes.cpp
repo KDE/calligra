@@ -1709,6 +1709,7 @@ void ODrawToOdf::processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Write
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800");
     out.xml.addAttribute("draw:text-areas", "0 3100 18500 18500");
+    setShapeMirroring(o, out);
     out.xml.addAttribute("draw:enhanced-path", "M 10800 0 X 21600 10800 10800 21600 L 0 21600 0 0 Z N");
     out.xml.endElement(); // draw:enhanced-geometry
     out.xml.endElement(); // draw:custom-shape
@@ -2216,14 +2217,10 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         //draw:mirror-horizontal
         if (o.shapeProp.fFlipH) {
             out.xml.addAttribute("draw:mirror-horizontal", "true");
-        } else {
-            out.xml.addAttribute("draw:mirror-horizontal", "false");
         }
         //draw:mirror-vertical
         if (o.shapeProp.fFlipV) {
             out.xml.addAttribute("draw:mirror-vertical", "true");
-        } else {
-            out.xml.addAttribute("draw:mirror-vertical", "false");
         }
         //draw:modifiers
         //draw:path-stretchpoint-x

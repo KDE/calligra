@@ -87,42 +87,44 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     FibBase fb(wdstm);
 
+    //document is encrypted or obfuscated
+    if (fb.fEncrypted) {
+        return KoFilter::PasswordProtected;
+    }
+
     //1Table Stream or 0Table Stream
     const char* tblstm_name = fb.fWhichTblStm ? "1Table" : "0Table";
-    QBuffer buff2;
-    if (!readStream(storage, tblstm_name, buff2)) {
-        return KoFilter::InvalidFormat;
-    }
-    LEInputStream tblstm(&buff2);
-
-    //Provided to the Document at the moment
     POLE::Stream tblstm_pole(&storage, tblstm_name);
+    if (tblstm_pole.fail()) {
+        if (fb.nFib >= Word8nFib) {
+            kDebug(30513) << "Either the 1Table stream or the 0Table stream MUST be present in the file!";
+            return KoFilter::InvalidFormat;
+        }
+    }
 
     //Data Stream
+    LEInputStream* datastm = 0;
     QBuffer buff3;
     if (!readStream(storage, "/Data", buff3)) {
         kDebug(30513) << "Failed to open /Data stream, no big deal (OPTIONAL).";
+    } else {
+        datastm = new LEInputStream(&buff3);
     }
-    LEInputStream datastm(&buff3);
 
     /*
      * ************************************************
      *  Processing file
      * ************************************************
      */
-    //document is encrypted or obfuscated
-    if (fb.fEncrypted) {
-        return KoFilter::PasswordProtected;
-    }
-
-    // Create output files
-    KoStore *storeout;
     struct Finalizer {
     public:
-        Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0),
-                                    m_contentWriter(0), m_bodyWriter(0) { }
+        Finalizer(LEInputStream* s) : m_store(0), m_genStyles(0), m_document(0),
+                                      m_contentWriter(0), m_bodyWriter(0), m_datastm(s) { }
         ~Finalizer() {
             delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
+            if (m_datastm) {
+                delete m_datastm;
+            }
         }
 
         KoStore *m_store;
@@ -130,15 +132,19 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         Document *m_document;
         KoXmlWriter *m_contentWriter;
         KoXmlWriter *m_bodyWriter;
+        LEInputStream* m_datastm;
     };
+    Finalizer finalizer(datastm);
 
+    // Create output files
+    KoStore *storeout;
     storeout = KoStore::createStore(outputFile, KoStore::Write,
                                     "application/vnd.oasis.opendocument.text", KoStore::Zip);
     if (!storeout) {
         kWarning(30513) << "Unable to open output file!";
         return KoFilter::FileNotFound;
     }
-    Finalizer finalizer(storeout);
+    finalizer.m_store = storeout;
     storeout->disallowNameExpansion();
     kDebug(30513) << "created storeout.";
     KoOdfWriteStore oasisStore(storeout);
@@ -182,7 +188,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     Document *document = new Document(QFile::encodeName(inputFile).data(), this,
                                       bodyWriter, &metaWriter, &manifestWriter,
                                       storeout, mainStyles,
-                                      &wdstm, tblstm_pole, &datastm);
+                                      wdstm, tblstm_pole, datastm);
     finalizer.m_document = document;
 
     //check that we can parse the document?

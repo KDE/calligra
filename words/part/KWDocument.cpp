@@ -563,7 +563,7 @@ void KWDocument::initEmpty()
     parag->setName(i18n("Bullet List"));
     KoListStyle *list = new KoListStyle(parag);
     KoListLevelProperties llp = list->levelProperties(0);
-    llp.setStyle(KoListStyle::DiscItem);
+    llp.setStyle(KoListStyle::Bullet);
     list->setLevelProperties(llp);
     parag->setListStyle(list);
     styleManager->add(parag);
