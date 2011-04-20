@@ -74,6 +74,9 @@ struct MSOOXML_EXPORT TableStyleProperties
 
     QString verticalAlign;
     bool glyphOrientation;
+
+    KoGenStyle textStyle;
+    KoGenStyle paragraphStyle;
 };
 
 class MSOOXML_EXPORT TableStyle
