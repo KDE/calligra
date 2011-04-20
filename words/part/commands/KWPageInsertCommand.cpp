@@ -137,10 +137,10 @@ void KWPageInsertCommand::redo()
         d->document->pageManager()->priv()->insertPage(d->pageData);
         d->page = d->document->pageManager()->page(d->pageNumber);
     }
-
+#if 0
     // make sure we have updated the view before we do anything else
     d->document->firePageSetupChanged();
-
+#endif
     if (d->shapeMoveCommand)
         d->shapeMoveCommand->redo();
     Q_ASSERT(d->page.isValid());
