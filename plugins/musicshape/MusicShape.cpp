@@ -17,13 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "MusicShape.h"
+
 #include <limits.h>
+
 #include <QPainter>
+#include <QBuffer>
+#include <QByteArray>
+
 #include <kdebug.h>
+
 #include <KoViewConverter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoEmbeddedDocumentSaver.h>
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -123,6 +130,10 @@ void MusicShape::constPaint( QPainter& painter, const KoViewConverter& converter
 
 void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    // The name of this object in the ODF file.
+    KoEmbeddedDocumentSaver &fileSaver = context.embeddedSaver();
+    QString objectName = fileSaver.getFilename("Object");
+
     KoXmlWriter& writer = context.xmlWriter();
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
@@ -137,44 +148,55 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     imgSize *= previewZoom;
     KoViewConverter converter;
     
-    // TODO: Save a preview svg
-    QTemporaryFile svgTmp;
-    if (svgTmp.open()) {
-        QSvgGenerator svg;
-        svg.setFileName(svgTmp.fileName());
-        svg.setSize(imgSize.toSize());
-        svg.setViewBox(QRect(0, 0, boundingRect().width(), boundingRect().height()));
+    // Save a preview SVG image.
+    // Set up the svg renderer.
+    QByteArray svgContents;           // The contents
+    QBuffer svgBuffer(&svgContents);  // The corresponding QIODevice
+    QSvgGenerator svg;
+    svg.setOutputDevice(&svgBuffer);  // Write to the buffer
+    svg.setSize(imgSize.toSize());
+    svg.setViewBox(QRect(0, 0, boundingRect().width(), boundingRect().height()));
         
-        QPainter svgPainter;
-        svgPainter.begin(&svg);
-        svgPainter.setRenderHint(QPainter::Antialiasing);
-        svgPainter.setRenderHint(QPainter::TextAntialiasing);
-        m_style->setTextAsPath(true);
-        constPaint(svgPainter, converter);
-        m_style->setTextAsPath(false);
-        svgPainter.end();
-        
-        writer.startElement("draw:image");
-        // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-        QString name("/home/leinir/musicshapetest.svg");// = context.imageHref(svg);
-        QFile::copy(svg.fileName(),name);
-        writer.addAttribute("xlink:type", "simple" );
-        writer.addAttribute("xlink:show", "embed" );
-        writer.addAttribute("xlink:actuate", "onLoad");
-        writer.addAttribute("xlink:href", name);
-        writer.endElement(); // draw:image
-    }
+    // Paint the svg preview image.
+    //
+    // We need to create all text as paths, because otherwise it
+    // will be difficult for most people to preview the SVG
+    // image. Not many people have music fonts installed.
+    QPainter svgPainter;
+    svgPainter.begin(&svg);
+    svgPainter.setRenderHint(QPainter::Antialiasing);
+    svgPainter.setRenderHint(QPainter::TextAntialiasing);
+    m_style->setTextAsPath(true);
+    constPaint(svgPainter, converter);
+    m_style->setTextAsPath(false);
+    svgPainter.end();
 
-    // Save a preview image
+    // Create the xml to embed the svg image and the contents to the file.
+    writer.startElement("draw:image");
+    QString name = QString("ObjectReplacements/") + objectName + ".svg";
+    writer.addAttribute("xlink:type", "simple" );
+    writer.addAttribute("xlink:show", "embed" );
+    writer.addAttribute("xlink:actuate", "onLoad");
+    writer.addAttribute("xlink:href", name);
+    writer.endElement(); // draw:image
+    fileSaver.saveFile(name, "image/svg+xml", svgContents);
+
+    // Save a preview bitmap image.
     QImage img(imgSize.toSize(), QImage::Format_ARGB32);
     QPainter painter(&img);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::TextAntialiasing);
     converter.setZoom(previewZoom);
     constPaint(painter, converter);
-    writer.startElement("draw:image");
+
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-    QString name = context.imageHref(img);
+    writer.startElement("draw:image");
+#if 1
+    name = context.imageHref(img);
+#else
+    // FIXME: Find out how to save a picture using the embeddedSaver and saveFile()
+    name = QString("ObjectReplacements/") + objectName + ".png";
+#endif
     writer.addAttribute("xlink:type", "simple" );
     writer.addAttribute("xlink:show", "embed" );
     writer.addAttribute("xlink:actuate", "onLoad");
