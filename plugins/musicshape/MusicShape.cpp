@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
+ * Copyright 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -149,7 +150,9 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     KoViewConverter converter;
     
     // Save a preview SVG image.
-    // Set up the svg renderer.
+    // -------------------------
+
+    // 1. Set up the svg renderer.
     QByteArray svgContents;           // The contents
     QBuffer svgBuffer(&svgContents);  // The corresponding QIODevice
     QSvgGenerator svg;
@@ -157,7 +160,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     svg.setSize(imgSize.toSize());
     svg.setViewBox(QRect(0, 0, boundingRect().width(), boundingRect().height()));
         
-    // Paint the svg preview image.
+    // 2. Paint the svg preview image.
     //
     // We need to create all text as paths, because otherwise it
     // will be difficult for most people to preview the SVG
@@ -171,7 +174,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     m_style->setTextAsPath(false);
     svgPainter.end();
 
-    // Create the xml to embed the svg image and the contents to the file.
+    // 3. Create the xml to embed the svg image and the contents to the file.
     writer.startElement("draw:image");
     QString name = QString("ObjectReplacements/") + objectName + ".svg";
     writer.addAttribute("xlink:type", "simple" );
@@ -182,6 +185,9 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     fileSaver.saveFile(name, "image/svg+xml", svgContents);
 
     // Save a preview bitmap image.
+    // ----------------------------
+
+    // 1. Create the image.
     QImage img(imgSize.toSize(), QImage::Format_ARGB32);
     QPainter painter(&img);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -189,7 +195,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     converter.setZoom(previewZoom);
     constPaint(painter, converter);
 
-    // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
+    // 2. Create the xml to embed the svg image and the contents to the file.
     writer.startElement("draw:image");
 #if 1
     name = context.imageHref(img);
