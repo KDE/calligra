@@ -51,6 +51,9 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 {
     KWPageManager *pageManager = m_textFrameSet->kwordDocument()->pageManager();
     Q_ASSERT(pageManager);
+    if (pageManager->pageCount() == 0) // not ready yet (may happen e.g. on loading a document)
+        return 0;
+
     QList<KoTextLayoutRootArea *> rootAreas = documentLayout->rootAreas();
 
     // The page is created in KWTextFrameSet::setupFrame and the TextShape in KWFrameLayout::createTextShape
@@ -78,7 +81,6 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         case KWord::EvenPagesFooterTextFrameSet:
             kDebug() << m_textFrameSet << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "pageCount=" << pageManager->pageCount();
             if (m_textFrameSet->frameCount() == 0) {
-                Q_ASSERT(pageManager->pageCount() >= 1);
                 kwdoc->frameLayout()->createCopyFrame(m_textFrameSet, pageManager->page(1));
                 //kwdoc->frameLayout()->createNewFramesForPage(1);
             }
