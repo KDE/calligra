@@ -40,6 +40,8 @@
 #include <libs/kopageapp/KoPACanvasItem.h>
 #include <libs/kopageapp/KoPAView.h>
 #include <libs/kopageapp/KoPADocument.h>
+#include <libs/kopageapp/KoPAViewBase.h>
+#include <kpresenter/part/KPrDocument.h>
 
 #include <QPoint>
 #include <QSize>
@@ -47,6 +49,7 @@
 #include <tables/Sheet.h>
 #include <tables/Map.h>
 #include <tables/DocBase.h>
+#include "PAViewBase.h"
 
 /*!
 * extensions
@@ -80,13 +83,10 @@ void CanvasController::openDocument(const QString& path)
     QString mimetype = KMimeType::findByPath(path)->name();
     m_doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
                                                                                QVariantList(), &error);
-    m_doc->openUrl(KUrl(path));
-    // get the one canvas item for this document
-    m_canvas = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
-    KoToolManager::instance()->addController(this);
 
     QString fname(path);
     QString ext = KMimeType::extractKnownExtension(fname);
+
     if (!ext.isEmpty()) {
         fname.chop(ext.length() + 1);
     }
@@ -95,9 +95,15 @@ void CanvasController::openDocument(const QString& path)
         m_documentType = Presentation;
         emit documentTypeChanged();
 
-        //FIXME: Doesn't work, crashes because it tries to access its view,
-        //      which is non existent
+        //FIXME: Doesn't work
+        KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
+        prDocument->openUrl(KUrl(path));
+
+        m_canvas = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
         KoPACanvasItem *canvas = dynamic_cast<KoPACanvasItem*>(m_canvas);
+
+        PAViewBase *view = new PAViewBase(m_canvas, prDocument, m_zoomController, m_zoomHandler);
+        canvas->setView(view);
 
         if (canvas) {
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
@@ -110,6 +116,10 @@ void CanvasController::openDocument(const QString& path)
         m_documentType = Spreadsheet;
         emit documentTypeChanged();
 
+        m_doc->openUrl(KUrl(path));
+        // get the one canvas item for this document
+        m_canvas = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
+        KoToolManager::instance()->addController(this);
         Calligra::Tables::CanvasItem *canvas = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
 
         if (canvas) {
@@ -123,6 +133,10 @@ void CanvasController::openDocument(const QString& path)
         m_documentType = TextDocument;
         emit documentTypeChanged();
 
+        m_doc->openUrl(KUrl(path));
+        // get the one canvas item for this document
+        m_canvas = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
+        KoToolManager::instance()->addController(this);
         KWCanvasItem *canvas = dynamic_cast<KWCanvasItem*>(m_canvas);
 
         if (canvas) {
