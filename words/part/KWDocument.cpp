@@ -871,7 +871,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             continue;
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
         Q_ASSERT(lay);
-        lay->layout();
+        lay->scheduleLayout();
     }
 
     if (updater) updater->setProgress(100);
