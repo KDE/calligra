@@ -90,12 +90,16 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             int framesCountBefore = m_textFrameSet->frameCount();
             QList<int> pagesCreated;
             for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
+                /* Don't use the mastePageName cause Words will handle the KWPageStyle in KWPageManager::appendPage
+
                 KWPageStyle pagestyle = pageManager-> pageStyle(mastePageName);
                 if (!pagestyle.isValid())
                     pagestyle = pageManager->defaultPageStyle();
                 KWPage page = kwdoc->appendPage(mastePageName);
-                Q_ASSERT(page.isValid());
+                */
+                KWPage page = kwdoc->appendPage();
 
+                Q_ASSERT(page.isValid());
                 pagesCreated << page.pageNumber();
             }
             kDebug() << m_textFrameSet << "(MainTextFrameSet) rootAreasCount=" << rootAreas.count() << "frameCount=" << m_textFrameSet->frameCount() << "frameCountBefore=" << framesCountBefore << "pageCount=" << pageManager->pageCount() << "pagesCreated=" << pagesCreated;
