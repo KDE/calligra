@@ -24,6 +24,7 @@
 #include <QPainter>
 #include <QBuffer>
 #include <QByteArray>
+#include <QSvgGenerator>
 
 #include <kdebug.h>
 
@@ -51,8 +52,6 @@
 #include "MusicStyle.h"
 #include "Engraver.h"
 #include "Renderer.h"
-#include <QSvgGenerator>
-#include <QTemporaryFile>
 
 using namespace MusicCore;
 
