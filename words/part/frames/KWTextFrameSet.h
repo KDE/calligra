@@ -86,7 +86,7 @@ public:
     }
 
     void setPageStyle(const KWPageStyle &style);
-    KWPageStyle pageStyle() const;
+    const KWPageStyle& pageStyle() const;
 
 signals:
 #if 0

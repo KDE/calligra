@@ -363,7 +363,7 @@ void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
     }
 }
 
-KWPageStyle KWTextFrameSet::pageStyle() const
+const KWPageStyle& KWTextFrameSet::pageStyle() const
 {
     return m_pageStyle;
 }

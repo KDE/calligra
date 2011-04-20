@@ -287,10 +287,6 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
         page.pageNumber = 1;
     }
 
-#ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << page.pageNumber << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
-#endif
-
     if (pageStyle.isValid()) {
         page.style = pageStyle;
     } else {
@@ -321,8 +317,7 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
         d->pageNumbers.insert(page.pageNumber + 1, d->lastId);
 
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount();
-    kDebug(32001) << "           " << d->pageNumbers;
+    kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount() << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
 #endif
 
     return KWPage(d, d->lastId);

@@ -56,7 +56,6 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     m_setup = false; // force reindexing of types
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    if (!page.isValid()) return; // page already deleted, probably.
 
     // Header footer handling.
     // first make a list of all types.
@@ -116,7 +115,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     foreach (KWFrame *frame, framesInPage(page.rect())) {
         if (frame->frameSet()->type() != KWord::TextFrameSet)
             continue;
-        KWTextFrameSet *tfs = static_cast<KWTextFrameSet*>(frame->frameSet());
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (tfs && (allHFTypes.contains(tfs->textFrameSetType())
                 || (tfs->pageStyle() != page.pageStyle() && KWord::isHeaderFooter(tfs)))) {
             Q_ASSERT(frame->shape());
