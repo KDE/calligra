@@ -48,9 +48,6 @@ kde4_add_plugin(excelexport ${excelexport_SRCS})
 
 
 target_link_libraries(excelexport msooxml komain mso koodf ${ZLIB_LIBRARIES} calligratablescommon)
-if(QCA2_FOUND) # because sidewinder depends on it
-   target_link_libraries(excelexport ${QCA2_LIBRARIES})
-endif(QCA2_FOUND)
 
 set(INSTALL_XLS_EXPORT_FILTER OFF CACHE BOOL "Install the very experimental xls export filter, which might eat your data and provides no guarentees")
 
