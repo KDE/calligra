@@ -19,85 +19,90 @@
  * 02110-1301 USA
  */
 
-#include "PAViewBase.h"
+#include "PAView.h"
 #include <KoZoomController.h>
 #include <libs/kopageapp/KoPADocument.h>
 #include <KoPACanvasBase.h>
 #include <libs/kopageapp/KoPAPageBase.h>
+#include <libs/kopageapp/KoPAViewModeNormal.h>
+#include <kpresenter/part/KPrDocument.h>
 
-PAViewBase::PAViewBase(KoCanvasBase* canvasBase, KPrDocument* prDocument, KoZoomController* zoomController,
-                       KoZoomHandler* zoomHandler) : m_paCanvasBase(), m_prDocument(prDocument),
+
+PAView::PAView(KoPACanvasBase* canvas, KPrDocument* prDocument, KoZoomController* zoomController,
+                       KoZoomHandler* zoomHandler) : m_paCanvas(canvas), m_prDocument(prDocument),
                        m_zoomController(zoomController), m_zoomHandler(zoomHandler)
 {
-
+    KoPAViewModeNormal *mode = new KoPAViewModeNormal(this, m_paCanvas);
+    setViewMode(mode);
+    setActivePage(prDocument->pageByIndex(0, false));
 }
 
-PAViewBase::~PAViewBase()
+PAView::~PAView()
 {
 
 }
 
-void PAViewBase::setShowRulers(bool show)
+void PAView::setShowRulers(bool show)
 {
 
 }
 
-void PAViewBase::editPaste()
+void PAView::editPaste()
 {
 
 }
 
-void PAViewBase::pagePaste()
+void PAView::pagePaste()
 {
 
 }
 
-void PAViewBase::insertPage()
+void PAView::insertPage()
 {
 
 }
 
-void PAViewBase::updatePageNavigationActions()
+void PAView::updatePageNavigationActions()
 {
 
 }
 
-void PAViewBase::setActionEnabled(int actions, bool enable)
+void PAView::setActionEnabled(int actions, bool enable)
 {
 
 }
 
-void PAViewBase::navigatePage(KoPageApp::PageNavigation pageNavigation)
+void PAView::navigatePage(KoPageApp::PageNavigation pageNavigation)
 {
 
 }
 
-KoPAPageBase* PAViewBase::activePage() const
+KoPAPageBase* PAView::activePage() const
 {
     return 0;
 }
 
-void PAViewBase::setActivePage(KoPAPageBase* page)
+void PAView::setActivePage(KoPAPageBase* page)
 {
 
 }
 
-void PAViewBase::doUpdateActivePage(KoPAPageBase* page)
+void PAView::doUpdateActivePage(KoPAPageBase* page)
 {
 
 }
 
-KoZoomController* PAViewBase::zoomController() const
+KoZoomController* PAView::zoomController() const
 {
     return m_zoomController;
 }
 
-KoPADocument* PAViewBase::kopaDocument() const
+KoPADocument* PAView::kopaDocument() const
 {
     return 0;
 }
 
-KoPACanvasBase* PAViewBase::kopaCanvas() const
+KoPACanvasBase* PAView::kopaCanvas() const
 {
-    return m_paCanvasBase;
+    return m_paCanvas;
 }

@@ -19,21 +19,21 @@
  * 02110-1301 USA
  */
 
-#ifndef PAVIEWBASE_H
-#define PAVIEWBASE_H
+#ifndef PAVIEW_H
+#define PAVIEW_H
 
 #include <libs/kopageapp/KoPAViewBase.h>
 
 class KPrDocument;
-class KoCanvasBase;
+class KoPACanvasBase;
 
-class PAViewBase : public KoPAViewBase
+class PAView : public KoPAViewBase
 {
 
 public:
-    PAViewBase(KoCanvasBase *canvasBase, KPrDocument *prDocument, KoZoomController *zoomController,
+    PAView(KoPACanvasBase *canvas, KPrDocument *prDocument, KoZoomController *zoomController,
         KoZoomHandler *zoomHandler);
-    virtual ~PAViewBase();
+    virtual ~PAView();
     virtual void setShowRulers(bool show);
     virtual void editPaste();
     virtual void pagePaste();
@@ -49,10 +49,10 @@ public:
     virtual KoPACanvasBase* kopaCanvas() const;
 
 private:
-    KoPACanvasBase *m_paCanvasBase;
+    KoPACanvasBase *m_paCanvas;
     KPrDocument *m_prDocument;
     KoZoomController *m_zoomController;
     KoZoomHandler *m_zoomHandler;
 };
 
-#endif // PAVIEWBASE_H
+#endif // PAVIEW_H

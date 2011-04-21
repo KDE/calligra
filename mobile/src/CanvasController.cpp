@@ -49,7 +49,7 @@
 #include <tables/Sheet.h>
 #include <tables/Map.h>
 #include <tables/DocBase.h>
-#include "PAViewBase.h"
+#include "PAView.h"
 
 /*!
 * extensions
@@ -100,17 +100,19 @@ void CanvasController::openDocument(const QString& path)
         prDocument->openUrl(KUrl(path));
 
         m_canvas = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
-        KoPACanvasItem *canvas = dynamic_cast<KoPACanvasItem*>(m_canvas);
+        KoToolManager::instance()->addController(this);
+        KoPACanvasItem *paCanvas = dynamic_cast<KoPACanvasItem*>(m_canvas);
 
-        PAViewBase *view = new PAViewBase(m_canvas, prDocument, m_zoomController, m_zoomHandler);
-        canvas->setView(view);
+        PAView *view = new PAView(dynamic_cast<KoPACanvasBase*>(m_canvas), prDocument, m_zoomController,
+                                  m_zoomHandler);
+        paCanvas->setView(view);
 
-        if (canvas) {
+        if (paCanvas) {
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(slotSetDocumentOffset(QPoint)));
+            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), paCanvas, SLOT(slotSetDocumentOffset(QPoint)));
             // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-            connect(canvas, SIGNAL(documentSize(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
-            canvas->update();
+            connect(paCanvas, SIGNAL(documentSize(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
+            paCanvas->update();
         }
     } else if (isSpreadsheetDocumentExtension(ext)) {
         m_documentType = Spreadsheet;
@@ -376,8 +378,6 @@ void CanvasController::setCameraY(int cameraY)
 
 void CanvasController::centerToCamera()
 {
-    kDebug() << "Moving to " << m_currentPoint;
-
     if (proxyObject) {
         proxyObject->emitMoveDocumentOffset(m_currentPoint);
     }
