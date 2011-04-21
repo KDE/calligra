@@ -250,3 +250,10 @@ QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
         return shape->size();
     }
 }
+
+QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese)
+{
+    QList<KoTextLayoutObstruction*> obstructions;
+
+    return obstructions;
+}
