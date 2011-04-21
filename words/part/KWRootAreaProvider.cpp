@@ -233,7 +233,6 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
     updateRect |= rootArea->associatedShape()->outlineRect();
     rootArea->associatedShape()->update(rootArea->associatedShape()->outlineRect());
-#endif
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
