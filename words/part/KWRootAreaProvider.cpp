@@ -163,7 +163,7 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
         afterPageNumber = page.pageNumber();
     }
 
-    kDebug() << "afterPageNumber=" << afterPageNumber;
+    //kDebug() << "afterPageNumber=" << afterPageNumber;
 }
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
@@ -180,28 +180,47 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
     kDebug() << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "size=" << rootArea->associatedShape()->size();
 
-    if (isHeaderFooter || data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
-        // adjust the size of the shape
-        rootArea->associatedShape()->setSize(QSize(rootArea->associatedShape()->size().width(), qMax(rootArea->associatedShape()->size().height(), rootArea->bottom() - rootArea->top())));
+    QRectF updateRect = rootArea->associatedShape()->outlineRect();
+    rootArea->associatedShape()->update(updateRect);
 
+    QSizeF newSize = rootArea->associatedShape()->size();
+    if (isHeaderFooter
+        ||data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+        ||data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+        newSize.setHeight(rootArea->bottom() - rootArea->top());
+    }
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+        ||data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+        newSize.setWidth(rootArea->right() - rootArea->left());
+    }
+    if (newSize != rootArea->associatedShape()->size()) {
+        QPointF centerpos = rootArea->associatedShape()->absolutePosition();
+        rootArea->associatedShape()->setSize(newSize);
+        rootArea->associatedShape()->setAbsolutePosition(centerpos);
+        
         if (isHeaderFooter) {
             // adjust the minimum frame height for headers and footer
-            const qreal h = rootArea->associatedShape()->size().height();
             Q_ASSERT(m_textFrameSet->frameCount() > 0);
-            
             KWFrame *frame = static_cast<KWFrame*>(m_textFrameSet->frames().first());
-            if (frame->minimumFrameHeight() != h) {
-                frame->setMinimumFrameHeight(h);
+            if (frame->minimumFrameHeight() != newSize.height()) {
+                frame->setMinimumFrameHeight(newSize.height());
                 // cause the header/footer's height changed we have to relayout the whole page
                 m_textFrameSet->kwordDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
             }
         }
-    } else {
-        // header and footer should always have AutoGrowHeight see the KWFrame ctor
-        Q_ASSERT(!isHeaderFooter);
+    }
 
-        // adjust the rootArea to the new shape size
-        rootArea->setBottom(rootArea->top() + rootArea->associatedShape()->size().height());
+    qreal newBottom = rootArea->top() + rootArea->associatedShape()->size().height();
+
+    if (data->verticalAlignment() & Qt::AlignBottom) {
+        if (true /*FIXME test no page based shapes interfering*/) {
+            rootArea->setVerticalAlignOffset(newBottom - rootArea->bottom());
+        }
+    }
+    if (data->verticalAlignment() & Qt::AlignVCenter) {
+        if (true /*FIXME test no page based shapes interfering*/) {
+            rootArea->setVerticalAlignOffset((newBottom - rootArea->bottom()) / 2);
+        }
     }
 
     /* already done in KWDocument::addFrame on shapeManager()->addShape
@@ -212,8 +231,9 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     kwdoc->firePageSetupChanged();
     */
 
-    // force repaint
-    rootArea->associatedShape()->update();
+    updateRect |= rootArea->associatedShape()->outlineRect();
+    rootArea->associatedShape()->update(rootArea->associatedShape()->outlineRect());
+#endif
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
