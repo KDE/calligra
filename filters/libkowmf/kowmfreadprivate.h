@@ -254,6 +254,7 @@ private:
     quint16     mTextAlign;
     int         mTextRotation;
     bool        mWinding;
+    quint16     mMapMode;
 
     // Memory allocation for WMF file
     QBuffer*  mBuffer;

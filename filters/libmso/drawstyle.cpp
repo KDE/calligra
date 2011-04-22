@@ -107,10 +107,10 @@ GETTER(qint32,                 DxWrapDistLeft,       dxWrapDistLeft,       0x000
 GETTER(qint32,                 DyWrapDistTop,        dyWrapDistTop,        0)              // 2.3.4.10
 GETTER(qint32,                 DxWrapDistRight,      dxWrapDistRight,      0x0001be7c)     // 2.3.4.11
 GETTER(qint32,                 DyWrapDistBottom,     dyWrapDistBottom,     0)              // 2.3.4.12
-GETTER(qint32,                 PosH,                 posH,                 0)              // 2.3.4.19
-GETTER(qint32,                 PosRelH,              posRelH,              2)              // 2.3.4.20
-GETTER(qint32,                 PosV,                 posV,                 0)              // 2.3.4.21
-GETTER(qint32,                 PosRelV,              posRelV,              2)              // 2.3.4.22
+GETTER(quint32,                PosH,                 posH,                 0)              // 2.3.4.19
+GETTER(quint32,                PosRelH,              posRelH,              2)              // 2.3.4.20
+GETTER(quint32,                PosV,                 posV,                 0)              // 2.3.4.21
+GETTER(quint32,                PosRelV,              posRelV,              2)              // 2.3.4.22
 GETTER(quint32,                PctHR,                pctHR,                0x000003e8)     // 2.3.4.23
 GETTER(quint32,                AlignHR,              alignHR,              0)              // 2.3.4.24
 GETTER(qint32,                 DxHeightHR,           dxHeightHR,           0)              // 2.3.4.25

@@ -42,15 +42,19 @@
 
 class DrawStyle;
 
+enum ObjectType { Inline, Floating };
+
 /*
  * ************************************************
  * Drawing Writer
  * ************************************************
  */
+//NOTE: Deprecated!
+
 class DrawingWriter : public Writer
 {
 public:
-    DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_, bool inlineObj);
+    DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_);
 
     //position
     int xLeft;
@@ -58,32 +62,14 @@ public:
     int yTop;
     int yBottom;
 
-    //TODO: It seems that both inline and floating objects have placement and
-    //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
-    //the index into plcfSpa.
-
-    //structure that specifies placement of a floating object
-    wvWare::Word97::FSPA* m_pSpa;
-
-    //specifies the type, size and border information for an inline picture
-    wvWare::SharedPtr<const wvWare::Word97::PICF> m_picf;
-
-    //unique identifier of a BLIP
-    QByteArray m_rgbUid;
-
-    //true - drawing is in body; false - drawing is in header/footer
-    bool m_bodyDrawing;
-    //true - inline object; false - floating object
-    bool m_inline;
-
     qreal vLength();
     qreal hLength();
     qreal vOffset();
     qreal hOffset();
 
-    void SetRectangle(wvWare::Word97::FSPA& spa);
-    void SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
-    void SetClientRectangle(MSO::OfficeArtChildAnchor& anchor);
+    void setRectangle(wvWare::Word97::FSPA& spa);
+    void setGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
+    void setChildRectangle(MSO::OfficeArtChildAnchor& anchor);
 };
 
 /*
@@ -114,11 +100,11 @@ private:
                                           Writer& out);
         virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                               const MSO::OfficeArtClientData* cd,
+                                              const DrawStyle& ds,
                                               Writer& out);
         virtual void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
-                               const MSO::OfficeArtClientData* clientData,
-                               Writer& out,
-                               KoGenStyle& style);
+                                   const MSO::OfficeArtClientData* clientData,
+                                   KoGenStyle& style, Writer& out);
 
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
@@ -126,7 +112,7 @@ private:
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
         virtual QString formatPos(qreal v);
 
-        const KWordGraphicsHandler* gh;
+        KWordGraphicsHandler* const gh;
     public:
         DrawClient(KWordGraphicsHandler* p) :gh(p) {}
 };
@@ -172,7 +158,7 @@ public:
 
     // Communication with Document, without having to know about Document
 signals:
-    void textBoxFound( uint lid, bool bodyDrawing);
+    void textBoxFound(unsigned int index, bool stylesxml);
 
 private:
     /**
@@ -209,44 +195,41 @@ private:
     void defineDefaultGraphicStyle(KoGenStyles* mainStyles);
 
     /**
-     * Process general properties of a shape.
+     * Process text wrapping related properties of a shape.  Add corresponding
+     * attributes to graphic-properties of the graphic style.
      */
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, const QString& listStyle=QString());
+    void defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds);
 
     /**
-     * Process anchor related properties of a shape.
+     * Process position related properties of a shape.  Add corresponding
+     * attributes to graphic-properties of the graphic style.
      */
-    void defineAnchorProperties(KoGenStyle& style, const DrawStyle& ds);
-
-    /**
-     * Process text wrapping related properties of a shape.
-     */
-    void defineWrappingProperties(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa);
+    void definePositionAttributes(KoGenStyle& style, const DrawStyle& ds);
 
     /**
      * Check if the object is inline or floating and set the anchor type to
      * char or as-char.
      */
-    void SetAnchorTypeAttribute(DrawingWriter& out);
+    void setAnchorTypeAttribute(DrawingWriter& out);
 
     /**
-     * Set the Z-Index attribute. Z-Index is the position of the shape on z
-     * axis. Z-Index depends on the order in which shapes are stored inside
+     * Set the Z-Index attribute.  Z-Index is the position of the shape on z
+     * axis.  Z-Index depends on the order in which shapes are stored inside
      * OfficeArtDgContainer
      */
-    void SetZIndexAttribute(DrawingWriter& out);
+    void setZIndexAttribute(DrawingWriter& out);
 
     /**
      * TODO:
      */
-    void locateDrawing(const MSO::OfficeArtSpgrContainer* o, DrawingWriter& out,
-                       wvWare::Word97::FSPA* spa, uint spid);
+    void locateDrawing(const MSO::OfficeArtSpgrContainer* o,
+                       wvWare::Word97::FSPA* spa, uint spid, DrawingWriter& out);
     /**
      * Check object types in a container of groups of shapes.
      * @param o container of groups of shapes
      * @param out drawing writer
      */
-    void processGroup(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
+    void processGroupShape(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
 
     /**
      * Check object type and call the appropriate method to process it.
@@ -256,14 +239,9 @@ private:
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
 
     /**
-     * Process the properties of a text box, use wv2 to parse the content.
+     * Process the properties of a TextBox, use wv2 to parse the content.
      */
-    void parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
-
-    /**
-     * Process a rectangle shape.
-     */
-    void processRectangle(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+    void processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
 
     /**
      * Process a line shape.
@@ -280,6 +258,13 @@ private:
      */
     void processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
 
+    /**
+     * Emit the textBoxFound signal.
+     * @param index into plcfTxbxTxt
+     * @param writing into styles.xml
+     */
+    void emitTextBoxFound(unsigned int index, bool stylesxml);
+
     Document* m_document;
     KoStore* m_store;
     KoXmlWriter* m_bodyWriter;
@@ -290,11 +275,28 @@ private:
     const wvWare::Word97::FIB& m_fib;
 
     MSO::OfficeArtDggContainer m_officeArtDggContainer;
-    MSO::OfficeArtDgContainer * m_pOfficeArtHeaderDgContainer;
-    MSO::OfficeArtDgContainer * m_pOfficeArtBodyDgContainer;
+    MSO::OfficeArtDgContainer* m_pOfficeArtHeaderDgContainer;
+    MSO::OfficeArtDgContainer* m_pOfficeArtBodyDgContainer;
 
     QMap<QByteArray, QString> m_picNames; //picture names
-    int m_zIndex; //position of current shape on z axis
+
+    /*
+     * Object specific attributes.
+     */
+
+    ObjectType m_objectType; // Type of the object in {Inline, Floating}.
+    QByteArray m_rgbUid;     // Unique identifier of a BLIP.
+    int m_zIndex;            // Position of current shape on z axis.
+
+    // Specifies the type, size and border information for an inline picture.
+    wvWare::SharedPtr<const wvWare::Word97::PICF> m_picf;
+
+    //TODO: It seems that both inline and floating objects have placement and
+    //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
+    //the index into plcfSpa.
+
+    //structure that specifies placement of a floating object
+    wvWare::Word97::FSPA* m_pSpa;
 };
 
 #endif // GRAPHICSHANDLER_H

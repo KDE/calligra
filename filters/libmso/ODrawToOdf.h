@@ -66,7 +66,10 @@ public:
          **/
         virtual KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
-            const MSO::OfficeArtClientData* cd, Writer& out) = 0;
+            const MSO::OfficeArtClientData* cd,
+            const DrawStyle& ds,
+            Writer& out) = 0;
+
         /**
          * Add text properties to the style.
          * Host application specific style properties are added. These
@@ -76,7 +79,8 @@ public:
         virtual void addTextStyles(
             const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
-            Writer& out, KoGenStyle& style) = 0;
+            KoGenStyle& style,
+            Writer& out) = 0;
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.
@@ -159,6 +163,7 @@ private:
     void processIrregularSeal1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSeal16(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processLightningBolt(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRibbon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRibbon2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHorizontalScroll(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -169,6 +174,7 @@ private:
     void processFlowChartManualOperation(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartMagneticTape(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -186,6 +192,7 @@ private:
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     QString path2svg(const QPainterPath &path);
+    void setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out);
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
@@ -194,6 +201,7 @@ public:
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
+    QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);
 
     /**
      * Apply the logic defined in MS-ODRAW subsection 2.2.2 to the provided
@@ -213,10 +221,13 @@ inline qreal toQReal(const MSO::FixedPoint& f)
 {
     return f.integral + f.fractional / 65536.0;
 }
+
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);
-
-
+const char* getHorizontalPos(quint32 posH);
+const char* getHorizontalRel(quint32 posRelH);
+const char* getVerticalPos(quint32 posV);
+const char* getVerticalRel(quint32 posRelV);
 
 #endif

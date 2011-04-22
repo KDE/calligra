@@ -164,7 +164,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         }
     }
 
-    emit sigProgress(15);
+    reportProgress(5);
 
     // 1. parse font table
     {
@@ -205,7 +205,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         kDebug() << "Reading ThemePathAndFile:" << docThemePathAndFile << "status=" << status;
     }
 
-    emit sigProgress(25);
+    reportProgress(15);
 
     // Main document context, to which we collect footnotes, endnotes, comments
     DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
@@ -233,7 +233,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         }
     }
 
-    emit sigProgress(40);
+    reportProgress(25);
 
     // 4. parse numbering
     {
@@ -250,7 +250,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         }
     }
 
-    emit sigProgress(50);
+    reportProgress(30);
 
     // 5. parse footnotes
     {
@@ -268,7 +268,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_footnotes = context.m_footnotes;
         }
 
-    emit sigProgress(60);
+    reportProgress(35);
 
     // 6. parse comments
         const QString commentPathAndFile(relationships->targetForType(documentPath, documentFile,
@@ -284,7 +284,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_comments = context.m_comments;
         }
 
-    emit sigProgress(70);
+    reportProgress(40);
 
     // 7. parse endnotes
         const QString endnotePathAndFile(relationships->targetForType(documentPath, documentFile,
@@ -300,7 +300,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             mainContext.m_endnotes = context.m_endnotes;
         }
 
-    emit sigProgress(80);
+    reportProgress(45);
 
     // 8. parse document
         DocxXmlDocumentReader documentReader(writers);
@@ -308,7 +308,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
 
-    emit sigProgress(100);
+    reportProgress(100);
 
     return KoFilter::OK;
 }

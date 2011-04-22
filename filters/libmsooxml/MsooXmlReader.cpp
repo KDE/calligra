@@ -151,6 +151,7 @@ void MsooXmlReader::raiseError(const QString & message)
     kDebug() << errorString();
 }
 
+/*
 QXmlStreamReader::TokenType MsooXmlReader::readNext()
 {
     if (m_readUndoed) {
@@ -166,6 +167,7 @@ void MsooXmlReader::undoReadNext()
 {
     m_readUndoed = true;
 }
+*/
 
 void MsooXmlReader::raiseElNotFoundError(const char* elementName)
 {

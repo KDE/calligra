@@ -147,7 +147,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     if(setProperties & TableStyleProperties::TopBorder) {
         KoBorder::BorderData* topData;
-        if(row == 0) {
+        if (row == 0) {
             topData = &styleProperties->top;
         }
         else {
@@ -161,7 +161,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     if(setProperties & TableStyleProperties::BottomBorder) {
         KoBorder::BorderData* bottomData;
-        if(row == lastRow) {
+        if (row == lastRow) {
             bottomData = &styleProperties->bottom;
         }
         else {
@@ -175,7 +175,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     if(setProperties & TableStyleProperties::LeftBorder) {
         KoBorder::BorderData* leftData;
-        if(column == 0) {
+        if (column == 0) {
             leftData = &styleProperties->left;
         }
         else {
@@ -189,7 +189,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     if(setProperties & TableStyleProperties::RightBorder) {
         KoBorder::BorderData* rightData;
-        if(column == lastColumn) {
+        if (column == lastColumn) {
             rightData = &styleProperties->right;
         }
         else {

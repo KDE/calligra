@@ -158,3 +158,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
 {
     m_controller->handleMainWindowPaintEvent(event);
 }
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    m_controller->handleMainWindowResizeEvent(event);
+}

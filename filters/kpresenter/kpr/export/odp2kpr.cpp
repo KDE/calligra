@@ -17,18 +17,25 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// Own
+#include <odp2kpr.h>
+
+// Qt
+#include <QXmlInputSource>
+#include <QXmlSimpleReader>
+
+// KDE
 #include <kpluginfactory.h>
+
+// Calligra
 #include <KoStoreDevice.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
-#include <odp2kpr.h>
-#include <KoGlobal.h>
 #include <KoXmlNS.h>
-#include <QXmlInputSource>
-#include <QXmlSimpleReader>
 #include <KoDom.h>
 #include <KoDocumentInfo.h>
 #include <KoOdfReadStore.h>
+
 
 K_PLUGIN_FACTORY(Odp2KprFactory, registerPlugin<Odp2Kpr>();)
 K_EXPORT_PLUGIN(Odp2KprFactory("calligrafilters"))

@@ -125,6 +125,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
     if (KoTextSharedLoadingData *textSharedData = dynamic_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID))) {
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("TextShapeID");
         Q_ASSERT(factory);
+        delete m_textShape;
         m_textShape = factory->createDefaultShape(context.documentResourceManager());
 
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(m_textShape->userData());
@@ -166,6 +167,7 @@ void KPrPlaceholderTextStrategy::init(KoResourceManager *documentResources)
     Q_ASSERT( factory );
     KoProperties props;
     props.setProperty("text", text());
+    delete m_textShape;
     m_textShape = factory->createShape(&props, documentResources);
 }
 

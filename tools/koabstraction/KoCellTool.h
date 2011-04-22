@@ -103,7 +103,7 @@ public:
     void initializeFind();
     /*!
      * Returns the current search statistics as
-     * QPair<position of current focussed cell, total number of matched cells>
+     * QPair<position of current focused cell, total number of matched cells>
      */
     QPair<int,int> currentSearchStatistics();
     /*!
