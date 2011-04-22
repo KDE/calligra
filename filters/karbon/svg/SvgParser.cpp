@@ -1788,6 +1788,11 @@ KoShape * SvgParser::createText(const KoXmlElement &textElement, const QList<KoS
     if (parentElement.hasChildNodes()) {
         // parse child elements
         parseTextRanges(parentElement, context, text, shapes);
+        if (!m_context.currentGC()->preserveWhitespace) {
+            const QString plainText = text->plainText();
+            if (plainText.endsWith(' '))
+                text->removeText(plainText.length()-1, 1);
+        }
         text->setPosition(context.textPosition());
     } else {
         // a single text range
