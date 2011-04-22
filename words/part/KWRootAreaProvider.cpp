@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010-2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2006,2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,10 +29,12 @@
 
 #include <KoTextLayoutRootArea.h>
 #include <KoShape.h>
+#include <KoShapeContainer.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextLayoutObstruction.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
@@ -251,9 +255,62 @@ QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
     }
 }
 
-QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese)
+QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(const QRectF &textRect, const QList<KoTextLayoutObstruction *> &excludingThese)
 {
     QList<KoTextLayoutObstruction*> obstructions;
 
+    KoTextLayoutRootArea *rootArea = 0;
+    foreach (KoTextLayoutRootArea *area, m_rootAreas) {
+        if (area->boundingRect().intersects(textRect)) {
+            rootArea = area;
+            break;
+        }
+    }
+    if (!rootArea) {
+        return obstructions;
+    }
+
+    KoShape *currentShape = rootArea->associatedShape();
+
+    // let's convert into canvas/KWDocument coords
+    QRectF rect = textRect;
+    rect.moveTop(rect.top() - rootArea->top());
+    QTransform transform = currentShape->absoluteTransformation(0);
+    rect = transform.mapRect(rect);
+
+    //TODO would probably be faster if we could use the RTree of the shape manager
+    foreach (KWFrameSet *fs, m_textFrameSet->kwordDocument()->frameSets()) {
+        if (fs  == m_textFrameSet)
+            continue;
+        foreach (KWFrame *frame, fs->frames()) {
+            KoShape *shape = frame->shape();
+            if (shape == currentShape)
+                continue;
+            if (! shape->isVisible(true))
+                continue;
+            if (shape->textRunAroundSide() == KoShape::RunThrough)
+                continue;
+            if (shape->zIndex() <= currentShape->zIndex())
+                continue;
+            if (! rect.intersects(shape->boundingRect()))
+                continue;
+            bool isChild = false;
+            KoShape *parent = shape->parent();
+            while (parent && !isChild) {
+                if (parent == currentShape)
+                    isChild = true;
+                parent = parent->parent();
+            }
+            if (isChild)
+                continue;
+            QTransform matrix = shape->absoluteTransformation(0);
+            matrix = matrix * currentShape->absoluteTransformation(0).inverted();
+            matrix.translate(0, rootArea->top());
+            KoTextLayoutObstruction *obstruction = new KoTextLayoutObstruction(shape, matrix);
+            obstructions.append(obstruction);
+        }
+    }
+
     return obstructions;
 }
+
