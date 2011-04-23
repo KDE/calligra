@@ -155,24 +155,62 @@ public:
 
 #include <QPropertyAnimation>
 #include <QPointer>
-class QStackedLayout;
+#include <QStackedLayout>
 
-//! A tool for animated switching between widgets in stacked layout
-class KexiStackedLayoutSwitch : public QWidget
+//! A tool for animated switching between widgets in a given stacked layout.
+/*! Animation is performed if the graphic effects level is set at least
+ at "simple" level, i.e. when
+ @code
+ KGlobalSettings::self()->graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects
+ @endcode
+ is true. Otherwise */
+class KexiAnimatedLayout : public QStackedLayout
 {
     Q_OBJECT
 public:
-    explicit KexiStackedLayoutSwitch(QStackedLayout* lyr);
+    explicit KexiAnimatedLayout(QWidget* parent = 0);
+
+    ~KexiAnimatedLayout();
+
+public slots:
+    //! Sets the current widget to be the specified widget.
+    /*! Animation is performed while switching the widgets
+        (assuming animations are enabled in KGlobalSettings (see the explanation
+        for @ref KexiAnimatedStackedLayout).
+        The new current widget must already be contained in this stacked layout. 
+        Because of the animation, changing current widget is asynchronous, i.e.
+        after this methods returns, current widget is not changed. 
+        Connect to signal QStackedLayout::currentChanged(int index) to be notified
+        about actual change of the current widget when animation finishes.
+        @note this method is not virtual, so when calling it, make sure
+              the pointer is KexiAnimatedStackedLayout, not parent class QStackedLayout.
+        @see setCurrentIndex() currentWidget() */
+    void setCurrentWidget(QWidget* widget);
+
+    //! Sets the current widget to be the specified index.
+    /*! Animation is performed as for setCurrentWidget(). */
+    void setCurrentIndex(int index);
+    
+private:
+    class Private;
+    Private* const d;
+};
+
+class KexiAnimatedLayout::Private : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit Private(KexiAnimatedLayout* qq);
     void animateTo(QWidget* destination);
 protected:
     void paintEvent(QPaintEvent* event);
 protected slots:
     void animationFinished();
 private:
-    QPixmap m_pixmap;
-    QPropertyAnimation m_anim;
-    QPointer<QWidget> m_destinationWidget;
-    QStackedLayout* const m_lyr;
+    QPointer<KexiAnimatedLayout> q;
+    QPixmap buffer;
+    QPropertyAnimation animation;
+    QPointer<QWidget> destinationWidget;
 };
 
 class KexiNewProjectAssistant : public QWidget

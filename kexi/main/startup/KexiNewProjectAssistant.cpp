@@ -572,25 +572,22 @@ KexiProjectCreationPage::~KexiProjectCreationPage()
 
 // ----
 
-KexiStackedLayoutSwitch::KexiStackedLayoutSwitch(QStackedLayout* lyr)
- : QWidget()
- , m_anim(this, "pos")
- , m_lyr(lyr)
+KexiAnimatedLayout::Private::Private(KexiAnimatedLayout * qq)
+ : QWidget(), q(qq), animation(this, "pos")
 {
-    Q_ASSERT(lyr);
     hide();
     setAttribute(Qt::WA_OpaquePaintEvent, true);
-    m_anim.setEasingCurve(QEasingCurve::InOutQuart);
-    m_anim.setDuration(500);
-    connect(&m_anim, SIGNAL(finished()), this, SLOT(animationFinished()));
+    animation.setEasingCurve(QEasingCurve::InOutQuart);
+    animation.setDuration(500);
+    connect(&animation, SIGNAL(finished()), this, SLOT(animationFinished()));
 }
 
-void KexiStackedLayoutSwitch::animateTo(QWidget* destination)
+void KexiAnimatedLayout::Private::animateTo(QWidget* destination)
 {
-    QWidget *from = m_lyr->currentWidget();
+    QWidget *from = q->currentWidget();
     Q_ASSERT(destination && from);
-    m_destinationWidget = destination;
-    if (from == m_destinationWidget)
+    destinationWidget = destination;
+    if (from == destinationWidget)
         return;
     if (!(KGlobalSettings::self()->graphicEffectsLevel()
           & KGlobalSettings::SimpleAnimationEffects))
@@ -599,43 +596,75 @@ void KexiStackedLayoutSwitch::animateTo(QWidget* destination)
         animationFinished();
         return;
     }
-    bool toRight = m_lyr->currentIndex() < m_lyr->indexOf(m_destinationWidget);
+    bool toRight = q->currentIndex() < q->indexOf(destinationWidget);
     hide();
     setParent(from);
     QSize s(from->parentWidget()->size());
     QPoint startPos(toRight ? QPoint(0, 0) : QPoint(s.width(), 0));
     QPoint endPos(toRight ? QPoint(s.width(), 0) : QPoint(0, 0));
-    m_anim.setStartValue(-startPos);
-    m_anim.setEndValue(-endPos);
-    m_pixmap = QPixmap(s.width() * 2, s.height());
-    m_pixmap.fill(Qt::white);
-    from->render(&m_pixmap, startPos);
-    //kDebug() << s << from->geometry() << m_destinationWidget->geometry();
-    m_destinationWidget->resize(from->size()); // needed because destination could
+    animation.setStartValue(-startPos);
+    animation.setEndValue(-endPos);
+    buffer = QPixmap(s.width() * 2, s.height());
+    buffer.fill(Qt::white);
+    from->render(&buffer, startPos);
+    //kDebug() << s << from->geometry() << destinationWidget->geometry();
+    destinationWidget->resize(from->size()); // needed because destination could
                                                // have been never displayed
-    m_destinationWidget->render(&m_pixmap, endPos);
-    resize(m_pixmap.size());
-    move(m_anim.startValue().toPoint().x(), m_anim.startValue().toPoint().y());
+    destinationWidget->render(&buffer, endPos);
+    resize(buffer.size());
+    move(animation.startValue().toPoint().x(), animation.startValue().toPoint().y());
     show();
-    m_anim.start();
+    animation.start();
 }
 
-void KexiStackedLayoutSwitch::paintEvent(QPaintEvent* event)
+void KexiAnimatedLayout::Private::paintEvent(QPaintEvent* event)
 {
-    if (m_pixmap.isNull())
+    if (buffer.isNull())
         return;
     QPainter p(this);
-    p.drawPixmap(event->rect(), m_pixmap, event->rect());
+    p.drawPixmap(event->rect(), buffer, event->rect());
 }
 
-void KexiStackedLayoutSwitch::animationFinished()
+void KexiAnimatedLayout::Private::animationFinished()
 {
-    if (m_destinationWidget) {
-        m_lyr->setCurrentWidget(m_destinationWidget);
+    if (destinationWidget) {
+        static_cast<QStackedLayout*>(q)->setCurrentWidget(destinationWidget);
     }
     hide();
-    m_destinationWidget = 0;
-    m_pixmap = QPixmap();
+    destinationWidget = 0;
+    buffer = QPixmap();
+}
+
+KexiAnimatedLayout::KexiAnimatedLayout(QWidget* parent)
+ : QStackedLayout(parent)
+ , d(new Private(this))
+{
+}
+
+KexiAnimatedLayout::~KexiAnimatedLayout()
+{
+    delete d;
+}
+
+void KexiAnimatedLayout::setCurrentWidget(QWidget* widget)
+{
+    if (indexOf(widget) < 0) {
+        return;
+    }
+    if (!currentWidget()) {
+        QStackedLayout::setCurrentWidget(widget);
+        return;
+    }
+    d->animateTo(widget);
+}
+
+void KexiAnimatedLayout::setCurrentIndex(int index)
+{
+    QWidget *w = widget(index);
+    if (!w)
+        return;
+    
+    setCurrentWidget(w);
 }
 
 // ----
@@ -650,8 +679,8 @@ public:
     
     ~Private()
     {
-        if (layoutSwitch)
-            delete static_cast<KexiStackedLayoutSwitch*>(layoutSwitch);
+        //if (layoutSwitch)
+        //    delete static_cast<KexiStackedLayoutSwitch*>(layoutSwitch);
     }
     
     KexiTemplateSelectionPage* templateSelectionPage() {
@@ -667,8 +696,8 @@ public:
         return page<KexiProjectCreationPage>(&m_projectCreationPage);
     }
     
-    QStackedLayout *lyr;
-    QPointer<KexiStackedLayoutSwitch> layoutSwitch;
+    KexiAnimatedLayout *lyr;
+    //QPointer<KexiStackedLayoutSwitch> layoutSwitch;
 private:
     void addPage(KexiAssistantPage* page) {
         lyr->addWidget(page);
@@ -699,14 +728,14 @@ KexiNewProjectAssistant::KexiNewProjectAssistant(QWidget* parent)
  , d(new Private(this))
 {
     QVBoxLayout *mainLyr = new QVBoxLayout(this);
-    d->lyr = new QStackedLayout;
+    d->lyr = new KexiAnimatedLayout;
     mainLyr->addLayout(d->lyr);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
         + KDialog::marginHint();
     mainLyr->setContentsMargins(margin, margin, margin, margin);
 
     setCurrentPage(d->templateSelectionPage());
-    d->layoutSwitch = new KexiStackedLayoutSwitch(d->lyr);
+    //d->layoutSwitch = new KexiStackedLayoutSwitch(d->lyr);
 }
 
 KexiNewProjectAssistant::~KexiNewProjectAssistant()
@@ -717,17 +746,17 @@ KexiNewProjectAssistant::~KexiNewProjectAssistant()
 void KexiNewProjectAssistant::previousPageRequested(KexiAssistantPage* sender)
 {
     if (sender == d->projectStorageTypeSelectionPage()) {
-        d->layoutSwitch->animateTo(d->templateSelectionPage());
+        d->lyr->setCurrentWidget(d->templateSelectionPage());
     }
     else if (sender == d->titleSelectionPage()) {
-        d->layoutSwitch->animateTo(d->projectStorageTypeSelectionPage());
+        d->lyr->setCurrentWidget(d->projectStorageTypeSelectionPage());
     }
 }
 
 void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
 {
     if (sender == d->templateSelectionPage()) {
-        d->layoutSwitch->animateTo(d->projectStorageTypeSelectionPage());
+        d->lyr->setCurrentWidget(d->projectStorageTypeSelectionPage());
 /*        d->slideWidget->setParent(d->lyr->currentWidget());
         d->slideWidget->move(100, 0);
         d->slideWidget->setup(page, d->projectStorageTypeSelectionPage());
@@ -736,13 +765,13 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
     }
     else if (sender == d->projectStorageTypeSelectionPage()) {
         d->titleSelectionPage()->contents->le_title->setFocus();
-        d->layoutSwitch->animateTo(d->titleSelectionPage());
+        d->lyr->setCurrentWidget(d->titleSelectionPage());
     }
     else if (sender == d->titleSelectionPage()) {
         if (!d->titleSelectionPage()->isAcceptable()) {
             return;
         }
-        d->layoutSwitch->animateTo(d->projectCreationPage());
+        d->lyr->setCurrentWidget(d->projectCreationPage());
     }
 }
     
