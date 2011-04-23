@@ -1,88 +1,150 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>KexiDBTitlePage</class>
-  <widget class="QWidget" name="KexiDBTitlePage" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>379</width>
-        <height>87</height>
-      </rect>
-    </property>
-    <layout class="QGridLayout" >
-      <property name="margin" >
-        <number>0</number>
-      </property>
-      <item row="0" column="0" >
-        <widget class="QLabel" name="label" >
-          <property name="text" >
-            <string>Project caption: </string>
-          </property>
-          <property name="buddy" stdset="0" >
-            <cstring>le_caption</cstring>
-          </property>
-          <property name="wordWrap" >
-            <bool>false</bool>
-          </property>
-        </widget>
-      </item>
-      <item row="1" column="1" >
-        <spacer name="spacer2" >
-          <property name="sizeHint" >
-            <size>
-              <width>20</width>
-              <height>111</height>
-            </size>
-          </property>
-          <property name="sizeType" >
-            <enum>Expanding</enum>
-          </property>
-          <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-          </property>
-        </spacer>
-      </item>
-      <item row="0" column="2" >
-        <spacer name="spacer1" >
-          <property name="sizeHint" >
-            <size>
-              <width>40</width>
-              <height>20</height>
-            </size>
-          </property>
-          <property name="sizeType" >
-            <enum>Minimum</enum>
-          </property>
-          <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-          </property>
-        </spacer>
-      </item>
-      <item row="0" column="1" >
-        <widget class="KLineEdit" name="le_caption" >
-          <property name="sizePolicy" >
-            <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>2</horstretch>
-              <verstretch>0</verstretch>
-            </sizepolicy>
-          </property>
-          <property name="minimumSize" >
-            <size>
-              <width>100</width>
-              <height>0</height>
-            </size>
-          </property>
-        </widget>
-      </item>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KexiDBTitlePage</class>
+ <widget class="QWidget" name="KexiDBTitlePage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>460</width>
+    <height>154</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0" rowspan="2">
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Project title: </string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>le_title</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="KLineEdit" name="le_title">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="showClearButton" stdset="0">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Project filename:</string>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+       <property name="buddy">
+        <cstring>file_requester</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KUrlRequester" name="file_requester">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="mode">
+        <set>KFile::File|KFile::LocalOnly</set>
+       </property>
+      </widget>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-    <includes>
-    <include location="local" >klineedit.h</include>
-  </includes>
+   </item>
+   <item row="0" column="1">
+    <widget class="QWidget" name="nextButtonPlaceholder" native="true"/>
+   </item>
+   <item row="0" column="2">
+    <spacer name="spacer1_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>30</width>
+       <height>25</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0">
+    <spacer name="spacer2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>111</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <spacer name="spacer1">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Minimum</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local">klineedit.h</include>
+ </includes>
+ <resources/>
+ <connections/>
 </ui>

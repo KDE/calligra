@@ -596,6 +596,32 @@ KEXIUTILS_EXPORT void setMargins(QLayout *layout, int value);
     { QVBoxLayout *lyr = new QVBoxLayout(where); \
         lyr->addWidget(what); }
 
+//! A tool for setting temporary value for boolean variable.
+/*! After desctruction of the instance, the variable is set back
+ to the original value. This class is useful in recursion guards.
+ To use it, declare class atrribute of type bool and block it, e.g.:
+ @code
+ bool m_myNonRecursiveFunctionEnabled;
+ // ... set m_myNonRecursiveFunctionEnabled initially to true
+ void myNonRecursiveFunctionEnabled() {
+    if (!m_myNonRecursiveFunctionEnabled)
+        return;
+    kexiUtils::BoolBlocker guard(m_myNonRecursiveFunctionEnabled, false);
+    // function's body guarded against recursion...
+ }
+ @endcode
+*/
+class KEXIUTILS_EXPORT BoolBlocker
+{
+public:
+    inline BoolBlocker(bool& var, bool tempValue)
+     : v(var), origValue(var) { var = tempValue; }
+    inline ~BoolBlocker() { v = origValue; }
+private:
+    bool& v;
+    bool origValue;
+};
+
 } //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H

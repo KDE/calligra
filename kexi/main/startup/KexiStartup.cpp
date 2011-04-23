@@ -30,7 +30,6 @@
 #include "KexiStartupDialog.h"
 #include "KexiConnSelector.h"
 #include "KexiProjectSelector.h"
-#include "KexiNewProjectWizard.h"
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
 

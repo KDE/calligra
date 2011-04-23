@@ -28,6 +28,11 @@ class KexiTemplatesModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    enum AdditionalRoles {
+        NameRole = 0x9D419D49,
+        CategoryRole = 0xA2BEF158
+    };
+
     KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,
                        QObject *parent = 0);
 

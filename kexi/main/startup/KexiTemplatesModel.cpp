@@ -74,6 +74,10 @@ QVariant KexiTemplatesModel::data(const QModelIndex& index, int role) const
         }
         return QVariant();
     }
+    case NameRole:
+        return info->name;
+    case CategoryRole:
+        return info->category;
     default:
         break;
     }

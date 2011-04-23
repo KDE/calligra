@@ -13,6 +13,7 @@ set(kexiutils_LIB_SRCS
   longlongvalidator.cpp 
   InternalPropertyMap.cpp
   SmallToolButton.cpp 
+  KexiCommandLinkButton.cpp
   FlowLayout.cpp
   transliteration_table.cpp
 )
