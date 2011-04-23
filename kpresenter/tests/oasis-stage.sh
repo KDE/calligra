@@ -12,7 +12,7 @@ input="$1"
 # Set this to 1 in order to validate the saved oasis document using oasislint
 checkoasis="1"
 
-appname=kpresenter
+appname=stage
 oldextension=kpr
 oasisextension=odp
 oasismimetype=application/vnd.oasis.opendocument.presentation

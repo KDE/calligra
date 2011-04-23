@@ -1,19 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Stage
-Name[en_GB]=Stage
-Name[et]=Stage
-Name[it]=Stage
-Name[nb]=Nivå
-Name[nds]=Stage
-Name[nl]=Stap
-Name[pt]=Stage
-Name[pt_BR]=Stage
-Name[sv]=Stage
-Name[uk]=Stage
-Name[x-test]=xxStagexx
-Name[zh_TW]=Stage
-Exec=kpresenter %u
+Name=Calligra Stage
+Name[x-test]=xxCalligra Stagexx
+Exec=calligrastage %u
 GenericName=Presentation
 GenericName[bg]=Екранни презентации
 GenericName[ca]=Presentació
