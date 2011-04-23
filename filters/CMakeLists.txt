@@ -51,9 +51,9 @@ if (SHOULD_BUILD_WORDS)
     macro_optional_add_subdirectory(words)
 endif (SHOULD_BUILD_WORDS)
 
-if(SHOULD_BUILD_KPRESENTER)
+if(SHOULD_BUILD_STAGE)
     macro_optional_add_subdirectory(kpresenter)
-endif(SHOULD_BUILD_KPRESENTER)
+endif(SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_KFORMULA)
     macro_optional_add_subdirectory(kformula)
