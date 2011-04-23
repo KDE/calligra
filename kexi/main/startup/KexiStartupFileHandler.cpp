@@ -74,7 +74,7 @@ public:
 
 KexiStartupFileHandler::KexiStartupFileHandler(
     const KUrl &startDirOrVariable, Mode mode, KFileDialog *dialog)
-    :  QObject(dialog)
+    :  QObject(dialog->parent())
     , d(new Private)
 {
     d->dialog = dialog;
@@ -83,7 +83,7 @@ KexiStartupFileHandler::KexiStartupFileHandler(
 
 KexiStartupFileHandler::KexiStartupFileHandler(
     const KUrl &startDirOrVariable, Mode mode, KUrlRequester *requester)
-    :  QObject(requester)
+    :  QObject(requester->parent())
     , d(new Private)
 {
     d->requester = requester;
@@ -93,8 +93,13 @@ KexiStartupFileHandler::KexiStartupFileHandler(
 
 void KexiStartupFileHandler::init(const KUrl &startDirOrVariable, Mode mode)
 {
+/*    if (d->requester || d->dialog) {
+        QWidget *w = d->requester ? static_cast<QWidget*>(d->requester) : 
+            static_cast<QWidget*>(d->dialog);
+        connect(w, SIGNAL(destroyed()), this, SLOT(saveRecentDir()));
+    }*/
     connect(d->dialog, SIGNAL(accepted()), this, SLOT(slotAccepted()));
-    d->dialog->setStartDir(startDirOrVariable);
+    //d->dialog->setStartDir(startDirOrVariable);
     KUrl url;
     if (startDirOrVariable.protocol() == "kfiledialog") {
         url = KFileDialog::getStartUrl(startDirOrVariable, d->recentDirClass);
@@ -120,22 +125,30 @@ void KexiStartupFileHandler::init(const KUrl &startDirOrVariable, Mode mode)
 
 KexiStartupFileHandler::~KexiStartupFileHandler()
 {
-    kDebug() << d->recentDirClass;
-    
-    KUrl dirUrl;
-    if (d->requester)
-        dirUrl = d->requester->url();
-    else if (d->dialog)
-        dirUrl = d->dialog->selectedUrl();
-    dirUrl.setFileName(QString());
-    if (dirUrl.isValid() && dirUrl.isLocalFile()) {
-        kDebug() << "Added" << dirUrl.url() << "to recent dirs class" << d->recentDirClass;
-        KRecentDirs::add(d->recentDirClass, dirUrl.url());
-    }
+    saveRecentDir();
     delete d;
 //Qt4 #ifdef Q_WS_WIN
 // saveLastVisitedPath(currentFileName());
 //#endif
+}
+
+void KexiStartupFileHandler::saveRecentDir()
+{
+    if (!d->recentDirClass.isEmpty()) {
+        kDebug() << d->recentDirClass;
+        
+        KUrl dirUrl;
+        if (d->requester)
+            dirUrl = d->requester->url();
+        else if (d->dialog)
+            dirUrl = d->dialog->selectedUrl();
+        kDebug() << dirUrl;
+        if (dirUrl.isValid() && dirUrl.isLocalFile()) {
+            dirUrl.setFileName(QString());
+            kDebug() << "Added" << dirUrl.url() << "to recent dirs class" << d->recentDirClass;
+            KRecentDirs::add(d->recentDirClass, dirUrl.url());
+        }
+    }
 }
 
 /*

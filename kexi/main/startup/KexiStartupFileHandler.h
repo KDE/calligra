@@ -31,6 +31,8 @@ class KFileDialog;
 class KUrlRequester;
 
 //! @short Handler for use with file Kexi-specific opening/saving widgets/dialogs
+/*! Make sure the handled file dialog or URL requester is not destroyed before
+    this handler, otherwise recent dirs unformation will not by updated.
 class KEXIMAIN_EXPORT KexiStartupFileHandler : public QObject
 {
     Q_OBJECT
@@ -125,6 +127,7 @@ protected slots:
     void slotAccepted();
     //virtual void reject();
     //void slotExistingFileHighlighted(const QString& fileName);
+    void saveRecentDir();
 
 private:
     void init(const KUrl &startDirOrVariable, Mode mode);

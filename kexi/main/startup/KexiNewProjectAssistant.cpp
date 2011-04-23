@@ -501,6 +501,7 @@ KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
 
 KexiProjectTitleSelectionPage::~KexiProjectTitleSelectionPage()
 {
+    delete fileHandler;
 }
 
 void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)

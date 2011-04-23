@@ -94,12 +94,12 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
-TODO KGlobalSettings::documentPath()
-
-2011-04-14..21
+2011-04-14..24
 Startup
 *Assistant Framework added for the Modern Menu
 *"New blank database" assistant implemented; reused previous code
+*KexiAnimatedLayout introduced, used in the modern assistant
+
 TODO: add operationMode property to KUrlRequester: enum OperationMode { Other = 0, Opening, Saving }
 
 2011-04-11..13
