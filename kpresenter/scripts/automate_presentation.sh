@@ -7,9 +7,9 @@
 # Idea from Christopher Molnar <molnarc@mandrakesoft.com>
 # Implementation by David Faure <faure@kde.org> using Matthias Ettrich dcop shell
 #
-# Open the presentation in kpresenter, then launch this script
+# Open the presentation in stage, then launch this script
 #
-appname=`dcop | grep -m 1 ^kpresenter`
+appname=`dcop | grep -m 1 ^stage`
 #echo $appname
 
 viewname=`dcop $appname | grep ^View`
