@@ -45,7 +45,7 @@ public:
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese);
 private:
     KWTextFrameSet *m_textFrameSet;
-    QMap<KWFrame*, KoTextLayoutRootArea *> m_rootAreas;
+    QList<KoTextLayoutRootArea *> m_pages;
 };
 
 #endif

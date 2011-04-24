@@ -131,10 +131,6 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     // the QTexDocument is shared between the shapes
     data->setDocument(m_document, false);
 
-    if (m_textFrameSetType != KWord::OtherTextFrameSet) {
-        frame->shape()->setGeometryProtected(true);
-    }
-
 #if 0
     PageProcessingQueue *ppq = m_kwordDocument->pageQueue();
     ppq->addPage(page);
