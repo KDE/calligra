@@ -20,7 +20,7 @@
 #ifndef KMESSAGEWIDGET_H
 #define KMESSAGEWIDGET_H
 
-#include <kdeui_export.h>
+#include "kexiutils_export.h"
 
 #include <QFrame>
 
@@ -38,7 +38,7 @@ class KMessageWidgetPrivate;
  * @author Aurélien Gâteau <agateau@kde.org>
  * @since 4.7
  */
-class KDEUI_EXPORT KMessageWidget : public QFrame
+class KEXIUTILS_EXPORT KMessageWidget : public QFrame
 {
     Q_OBJECT
 public:
