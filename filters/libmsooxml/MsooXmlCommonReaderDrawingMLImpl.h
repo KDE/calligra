@@ -1413,8 +1413,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
  - [done] style (§20.1.2.2.37);
  - [done] style (§20.5.2.31);
  - [done] style (§19.3.1.46);
- - tblBg (§20.1.4.2.25);
- - tcStyle (§20.1.4.2.29)
+ - [done] tblBg (§20.1.4.2.25);
+ - [done] tcStyle (§20.1.4.2.29)
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
@@ -4068,10 +4068,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     m_currentColor = col;
 
     MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
-
-#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-    m_currentPen.setColor(m_currentColor);
-#endif
 
     READ_EPILOGUE
 }
