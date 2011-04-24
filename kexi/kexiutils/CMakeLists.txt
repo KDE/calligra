@@ -16,6 +16,7 @@ set(kexiutils_LIB_SRCS
   KexiCommandLinkButton.cpp
   FlowLayout.cpp
   transliteration_table.cpp
+  kmessagewidget.cpp 
 )
 
 IF (KEXI_MOBILE)
