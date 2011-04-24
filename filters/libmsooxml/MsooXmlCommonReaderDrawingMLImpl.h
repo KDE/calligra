@@ -705,12 +705,9 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     //We assume that the textbox is empty by default
     d->textBoxHasContent = false;
 
-    // If called from the pptx converter, handle different contexts
-    // (Slide, SlideMaster, SlideLayout)
-    if (m_context->type == Slide) {
-        m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
-    }
-    else if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+    m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
+
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
     }
     else if (m_context->type == SlideLayout) {
@@ -794,15 +791,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
-    QString presentationStyleName;
-    //body->addAttribute("draw:style-name", );
     if (!m_currentPresentationStyle.isEmpty()) {
         if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
             m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
         }
-        presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
-    }
-    if (!presentationStyleName.isEmpty()) {
+        QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
 
