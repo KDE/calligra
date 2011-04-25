@@ -20,9 +20,12 @@
 #define SVMPARSER_H
 
 
+#include "SvmGraphicsContext.h"
+#include "SvmAbstractBackend.h"
 #include "svm_export.h"
 
 class QByteArray;
+class QDataStream;
 
 
 namespace Libsvm
@@ -34,7 +37,17 @@ class SVM_EXPORT SvmParser
  public:
     SvmParser();
 
+    void setBackend(SvmAbstractBackend *backend);
+
     bool parse(const QByteArray &data);
+
+ private:
+    void parseRect( QDataStream &stream, QRect &rect);
+    void parsePolygon( QDataStream &stream, QPolygon &polygon);
+
+ private:
+    SvmGraphicsContext   mContext;
+    SvmAbstractBackend  *mBackend;
 };
 
 

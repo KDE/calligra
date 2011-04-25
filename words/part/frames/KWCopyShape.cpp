@@ -19,7 +19,6 @@
 
 #include "KWCopyShape.h"
 #include "KWPage.h"
-#include "KWPageTextInfo.h"
 #include "KWPageManager.h"
 
 #include <KoShapeBorderModel.h>
@@ -58,10 +57,11 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_original->userData());
         if (data) {
             KWPage currentPage = m_pageManager->page(this);
-            KWPageTextInfo info(currentPage);
 #if 0
+            KWPageTextInfo info(currentPage);
             data->relayoutFor(info);
 #else
+            //TODO data->relayoutFor(currentPage);
     #ifdef __GNUC__
         #warning FIXME: port to textlayout-rework
     #endif

@@ -98,6 +98,8 @@ public:
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
 
+    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
+
     KWTextFrameSet* getFrameSet(KWord::TextFrameSetType type, const KWPageStyle &pageStyle) const;
 
     KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
@@ -143,7 +145,6 @@ private:
 
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
-    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
     void cleanFrameSet(KWTextFrameSet *fs);
 
     const KWPageManager *m_pageManager;

@@ -1,6 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Stage
+Name[pt]=Calligra Stage
+Name[uk]=Calligra Stage
+Name[x-test]=xxCalligra Stagexx
 Exec=calligrastage %u
 GenericName=Presentation
 GenericName[bg]=Екранни презентации

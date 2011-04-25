@@ -1,5 +1,7 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005, 2008, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005, 2007-2008, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2005, 2007-2008, 2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +30,8 @@
 
 void KWPage::setPageNumber(int pageNumber)
 {
+    Q_ASSERT_X(false, __FUNCTION__, "Changing the page-number afterwards needs to invalidate lots of stuff including whatever is done in the KWRootAreaProvider. The better way would be to make this dynamic.");
+
     if (isValid())
         priv->setPageNumberForId(n, pageNumber);
 }
@@ -327,4 +331,63 @@ QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager)
     gc.end();
 
     return img;
+}
+
+int KWPage::pageNumber(PageSelection select, int adjustment) const
+{
+    KWPage page = *(const_cast<KWPage*>(this));
+    switch (select) {
+    case KoTextPage::CurrentPage: break;
+    case KoTextPage::PreviousPage:
+        page = page.previous();
+        break;
+    case KoTextPage::NextPage:
+        page = page.next();
+        break;
+    }
+
+    if (! page.isValid())
+        return -1;
+
+    if (adjustment != 0) {
+        const int wantedPageNumber = page.pageNumber() + adjustment;
+        Q_ASSERT(page.priv); // it would have been invalid above otherwise
+        if (! page.priv->pageNumbers.contains(wantedPageNumber))
+            return -1; // doesn't exist.
+        return wantedPageNumber;
+    }
+
+    return page.pageNumber();
+}
+
+QString KWPage::masterPageName() const
+{
+    KWPageStyle pagestyle = pageStyle();
+    if (pagestyle.isValid()) {
+        QString name = pagestyle.name();
+        if (!name.isEmpty())
+            return name;
+    }
+    /* That logic is handled in the textlayout-library
+    KWPage prevpage = previous();
+    while (prevpage.isValid()) {
+        KWPageStyle prevpagestyle = prevpage.pageStyle();
+        if (prevpagestyle.isValid()) {
+            if (!prevpagestyle.nextStyleName().isEmpty())
+                return prevpagestyle.nextStyleName();
+            if (!prevpagestyle.name().isEmpty())
+                return prevpagestyle.name();
+        }
+    }
+    */
+    return QString();
+}
+
+QString KWPage::nextMasterPageName() const
+{
+    KWPageStyle pagestyle = pageStyle();
+    if (pagestyle.isValid() && !pagestyle.nextStyleName().isEmpty()) {
+        return pagestyle.nextStyleName();
+    }
+    return QString();
 }

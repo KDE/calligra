@@ -1,5 +1,6 @@
-/* This file is part of the KOffice project
- * Copyright (C) 2008 Thomas Zander <zander@kde.org>
+/* This file is part of the KDE project
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,28 +17,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPAGETEXT_H
-#define KWPAGETEXT_H
 
-#include "KWPage.h"
-#include "kword_export.h"
+#ifndef REMOVETEXTRANGECOMMAND_H
+#define REMOVETEXTRANGECOMMAND_H
 
-#include <KoTextPage.h>
+#include <QtGui/QUndoCommand>
+#include <QtCore/QPointer>
+#include "ArtisticTextTool.h"
 
-class KWORD_TEST_EXPORT KWPageTextInfo : public KoTextPage
+class ArtisticTextShape;
+
+/// Undo command to remove a range of text from an artistic text shape
+class RemoveTextRangeCommand : public QUndoCommand
 {
 public:
-    KWPageTextInfo(const KWPage &page);
+    RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, int from, unsigned int count);
 
-    /// reimplemented
-    virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
-
-    KWPage page() const;
-
-    KWPage &page();
+    virtual void redo();
+    virtual void undo();
 
 private:
-    KWPage m_page;
+    QPointer<ArtisticTextTool> m_tool;
+    ArtisticTextShape *m_shape;
+    int m_from;
+    int m_count;
+    QList<ArtisticTextRange> m_text;
+    int m_cursor;
 };
 
-#endif
+#endif // REMOVETEXTRANGECOMMAND_H
+

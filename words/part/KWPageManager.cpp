@@ -1,7 +1,7 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
- * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2008,2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -368,7 +368,6 @@ void KWPageManager::removePage(const KWPage &page)
 
 #ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
-    kDebug(32001) << "           " << d->pageNumbers;
 #endif
 }
 
@@ -419,8 +418,6 @@ QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
     }
     return answer;
 }
-
-// **** PageList ****
 
 QHash<QString, KWPageStyle> KWPageManager::pageStyles() const
 {

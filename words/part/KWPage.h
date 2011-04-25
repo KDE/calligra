@@ -1,5 +1,7 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2005, 2007-2008, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2005, 2007-2008, 2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +26,7 @@
 #include "kword_export.h"
 
 #include <KoText.h>
+#include <KoTextPage.h>
 #include <QRectF>
 #include <QObject>
 
@@ -39,7 +42,7 @@ class KoShapeManager;
  * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage
+class KWORD_EXPORT KWPage : public KoTextPage
 {
 public:
     inline KWPage() : priv(0), n(0) {}
@@ -174,6 +177,11 @@ public:
     inline bool operator<(const KWPage &other) const { return n < other.n; }
     inline bool operator>(const KWPage &other) const { return n > other.n; }
     uint hash() const;
+
+    /// reimplemented from KoTextPage
+    virtual int pageNumber(PageSelection select, int adjustment = 0) const;
+    virtual QString masterPageName() const;
+    virtual QString nextMasterPageName() const;
 
 private:
     friend class KWPageTextInfo;
