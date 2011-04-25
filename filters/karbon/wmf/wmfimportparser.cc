@@ -488,8 +488,8 @@ void WMFImportParser::drawText(int x, int y, int , int , int flags, const QStrin
     if (! textShape)
         return;
 
-    textShape->setFont(font);
     textShape->setPlainText(text);
+    textShape->setFont(font);
 
     // determine y-offset from given baseline position
     qreal yOffset = 0.0;
