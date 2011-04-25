@@ -97,6 +97,7 @@ void KWFrame::setFrameSet(KWFrameSet *fs)
 {
     if (fs == m_frameSet)
         return;
+    Q_ASSERT_X(!fs, __FUNCTION__, "Changing the FrameSet afterwards needs to invalidate lots of stuff including whatever is done in the KWRootAreaProvider. The better way would be to not allow this.");
     if (m_frameSet)
         m_frameSet->removeFrame(this);
     m_frameSet = fs;

@@ -368,7 +368,6 @@ void KWPageManager::removePage(const KWPage &page)
 
 #ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
-    kDebug(32001) << "           " << d->pageNumbers;
 #endif
 }
 
@@ -419,8 +418,6 @@ QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
     }
     return answer;
 }
-
-// **** PageList ****
 
 QHash<QString, KWPageStyle> KWPageManager::pageStyles() const
 {

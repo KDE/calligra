@@ -30,6 +30,8 @@
 
 void KWPage::setPageNumber(int pageNumber)
 {
+    Q_ASSERT_X(false, __FUNCTION__, "Changing the page-number afterwards needs to invalidate lots of stuff including whatever is done in the KWRootAreaProvider. The better way would be to make this dynamic.");
+
     if (isValid())
         priv->setPageNumberForId(n, pageNumber);
 }
@@ -366,7 +368,7 @@ QString KWPage::masterPageName() const
         if (!name.isEmpty())
             return name;
     }
-    /*
+    /* That logic is handled in the textlayout-library
     KWPage prevpage = previous();
     while (prevpage.isValid()) {
         KWPageStyle prevpagestyle = prevpage.pageStyle();
