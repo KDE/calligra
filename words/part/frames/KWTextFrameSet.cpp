@@ -73,7 +73,6 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
     // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     m_document->setDocumentLayout(lay);
-    lay->setLayoutStrategy(m_textFrameSetType == KWord::MainTextFrameSet ? KoTextDocumentLayout::ScheduleLayouts : KoTextDocumentLayout::LayoutDirect);
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 
     kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType());
