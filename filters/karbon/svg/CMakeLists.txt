@@ -28,6 +28,8 @@ set(karbonsvgimport_PART_SRCS
     SvgFilterHelper.cpp
     SvgCssHelper.cpp
     SvgClipPathHelper.cpp
+    SvgTextHelper.cpp
+    SvgLoadingContext.cpp
     ${SHAPES_SOURCES} 
 )
 

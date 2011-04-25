@@ -28,17 +28,18 @@
 #include "SvgGraphicContext.h"
 #include "SvgCssHelper.h"
 #include "SvgClipPathHelper.h"
+#include "SvgLoadingContext.h"
 
 #include <KoXmlReader.h>
 
 #include <QtGui/QGradient>
 #include <QtCore/QMap>
-#include <QtCore/QStack>
 
 class KoShape;
 class KoShapeContainer;
 class KoShapeGroup;
 class KoResourceManager;
+class SvgTextHelper;
 
 class SvgParser
 {
@@ -80,25 +81,18 @@ protected:
     bool parseFilter(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
     /// Parses a clip path element
     bool parseClipPath(const KoXmlElement &, const KoXmlElement &referencedBy = KoXmlElement());
-    /// Parses a length attribute
-    double parseUnit(const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF());
+    /// parses a length attribute
+    qreal parseUnit(const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
     /// parses a length attribute in x-direction
-    double parseUnitX(const QString &unit);
+    qreal parseUnitX(const QString &unit);
     /// parses a length attribute in y-direction
-    double parseUnitY(const QString &unit);
+    qreal parseUnitY(const QString &unit);
     /// parses a length attribute in xy-direction
-    double parseUnitXY(const QString &unit);
+    qreal parseUnitXY(const QString &unit);
     /// Parses a color attribute
     bool parseColor(QColor &, const QString &);
     /// Parse a image
     bool parseImage(const QString &imageAttribute, QImage &image);
-    /// Parses a viewbox attribute into an rectangle
-    QRectF parseViewBox(QString viewbox);
-
-    void setupTransform(const KoXmlElement &);
-    void updateContext(const KoXmlElement &);
-    void addGraphicContext();
-    void removeGraphicContext();
 
     /// Creates an object from the given xml element
     KoShape * createObject(const KoXmlElement &, const SvgStyles &style = SvgStyles());
@@ -106,6 +100,8 @@ protected:
     KoShape * createText(const KoXmlElement &, const QList<KoShape*> & shapes);
     /// Parses font attributes
     void parseFont(const SvgStyles &styles);
+    /// Parse nested text ranges
+    void parseTextRanges(const KoXmlElement &element, SvgTextHelper &textContext, KoShape *textShape, const QList<KoShape*> & shapes);
     /// find object with given id in document
     KoShape * findObject(const QString &name);
     /// find object with given id in given group
@@ -128,12 +124,6 @@ protected:
 
     /// Adds list of shapes to the given group shape
     void addToGroup(QList<KoShape*> shapes, KoShapeGroup * group);
-
-    /// Returns the next z-index
-    int nextZIndex();
-
-    /// Constructs an absolute file path from the fiven href and base directory
-    QString absoluteFilePath(const QString &href, const QString &xmlBase);
 
     /// creates a shape from the given shape id
     KoShape * createShape(const QString &shapeID);
@@ -158,7 +148,7 @@ protected:
 
 private:
     QSizeF m_documentSize;
-    QStack<SvgGraphicsContext*> m_gc;
+    SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, SvgFilterHelper> m_filters;
@@ -169,7 +159,6 @@ private:
     KoResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
     QList<KoShape*> m_toplevelShapes;
-    QString m_xmlBaseDir;
     SvgCssHelper m_cssStyles;
 };
 

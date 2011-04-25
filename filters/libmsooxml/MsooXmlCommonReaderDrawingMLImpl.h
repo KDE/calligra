@@ -705,12 +705,9 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     //We assume that the textbox is empty by default
     d->textBoxHasContent = false;
 
-    // If called from the pptx converter, handle different contexts
-    // (Slide, SlideMaster, SlideLayout)
-    if (m_context->type == Slide) {
-        m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
-    }
-    else if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+    m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
+
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
     }
     else if (m_context->type == SlideLayout) {
@@ -794,15 +791,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
-    QString presentationStyleName;
-    //body->addAttribute("draw:style-name", );
     if (!m_currentPresentationStyle.isEmpty()) {
         if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
             m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
         }
-        presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
-    }
-    if (!presentationStyleName.isEmpty()) {
+        QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
 
@@ -1420,8 +1413,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
  - [done] style (§20.1.2.2.37);
  - [done] style (§20.5.2.31);
  - [done] style (§19.3.1.46);
- - tblBg (§20.1.4.2.25);
- - tcStyle (§20.1.4.2.29)
+ - [done] tblBg (§20.1.4.2.25);
+ - [done] tcStyle (§20.1.4.2.29)
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
@@ -4075,10 +4068,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     m_currentColor = col;
 
     MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
-
-#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-    m_currentPen.setColor(m_currentColor);
-#endif
 
     READ_EPILOGUE
 }
