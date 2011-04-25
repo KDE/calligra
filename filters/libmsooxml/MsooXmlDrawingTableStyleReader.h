@@ -66,6 +66,7 @@ public:
 protected:
     KoFilter::ConversionStatus read_tblStyleLst();
     KoFilter::ConversionStatus read_tblStyle();
+    KoFilter::ConversionStatus read_tblBg();
     KoFilter::ConversionStatus read_band1H();
     KoFilter::ConversionStatus read_band1V();
     KoFilter::ConversionStatus read_band2H();

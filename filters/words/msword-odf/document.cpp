@@ -280,32 +280,33 @@ void Document::processAssociatedStrings()
     wvWare::AssociatedStrings strings(m_parser->associatedStrings());
     if (!strings.author().isNull()) {
         m_metaWriter->startElement("meta:initial-creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.author()));
+        m_metaWriter->addTextNode(Conversion::string(strings.author()));
         m_metaWriter->endElement();
     }
     if (!strings.title().isNull()) {
         m_metaWriter->startElement("dc:title");
-        m_metaWriter->addTextSpan(Conversion::string(strings.title()));
+        qDebug() << "TITLE: " << Conversion::string(strings.title());
+        m_metaWriter->addTextNode(Conversion::string(strings.title()));
         m_metaWriter->endElement();
     }
     if (!strings.subject().isNull()) {
         m_metaWriter->startElement("dc:subject");
-        m_metaWriter->addTextSpan(Conversion::string(strings.subject()));
+        m_metaWriter->addTextNode(Conversion::string(strings.subject()));
         m_metaWriter->endElement();
     }
     if (!strings.lastRevBy().isNull()) {
         m_metaWriter->startElement("dc:creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()));
+        m_metaWriter->addTextNode(Conversion::string(strings.lastRevBy()));
         m_metaWriter->endElement();
     }
     if (!strings.keywords().isNull()) {
         m_metaWriter->startElement("meta:keyword");
-        m_metaWriter->addTextSpan(Conversion::string(strings.keywords()));
+        m_metaWriter->addTextNode(Conversion::string(strings.keywords()));
         m_metaWriter->endElement();
     }
     if (!strings.comments().isNull()) {
         m_metaWriter->startElement("meta:comments");
-        m_metaWriter->addTextSpan(Conversion::string(strings.comments()));
+        m_metaWriter->addTextNode(Conversion::string(strings.comments()));
         m_metaWriter->endElement();
     }
 }

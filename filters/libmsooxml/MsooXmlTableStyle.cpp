@@ -116,12 +116,20 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
     applyBordersStyle(styleProperties, style, row, column);
     applyBackground(styleProperties, style, row, column);
 
-    if(styleProperties->setProperties & TableStyleProperties::VerticalAlign) {
+    if (styleProperties->setProperties & TableStyleProperties::VerticalAlign) {
         style->setVerticalAlign(styleProperties->verticalAlign);
     }
 
-    if(styleProperties->setProperties & TableStyleProperties::GlyphOrientation) {
+    if (styleProperties->setProperties & TableStyleProperties::GlyphOrientation) {
         style->setGlyphOrientation(styleProperties->glyphOrientation);
+    }
+
+    if (!styleProperties->textStyle.isEmpty()) {
+        style->setTextStyle(styleProperties->textStyle);
+    }
+
+    if (!styleProperties->paragraphStyle.isEmpty()) {
+        style->setParagraphStyle(styleProperties->paragraphStyle);
     }
 }
 
