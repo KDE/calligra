@@ -328,3 +328,62 @@ QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager)
 
     return img;
 }
+
+int KWPage::pageNumber(PageSelection select, int adjustment) const
+{
+    KWPage page = *(const_cast<KWPage*>(this));
+    switch (select) {
+    case KoTextPage::CurrentPage: break;
+    case KoTextPage::PreviousPage:
+        page = page.previous();
+        break;
+    case KoTextPage::NextPage:
+        page = page.next();
+        break;
+    }
+
+    if (! page.isValid())
+        return -1;
+
+    if (adjustment != 0) {
+        const int wantedPageNumber = page.pageNumber() + adjustment;
+        Q_ASSERT(page.priv); // it would have been invalid above otherwise
+        if (! page.priv->pageNumbers.contains(wantedPageNumber))
+            return -1; // doesn't exist.
+        return wantedPageNumber;
+    }
+
+    return page.pageNumber();
+}
+
+QString KWPage::masterPageName() const
+{
+    KWPageStyle pagestyle = pageStyle();
+    if (pagestyle.isValid()) {
+        QString name = pagestyle.name();
+        if (!name.isEmpty())
+            return name;
+    }
+    /*
+    KWPage prevpage = previous();
+    while (prevpage.isValid()) {
+        KWPageStyle prevpagestyle = prevpage.pageStyle();
+        if (prevpagestyle.isValid()) {
+            if (!prevpagestyle.nextStyleName().isEmpty())
+                return prevpagestyle.nextStyleName();
+            if (!prevpagestyle.name().isEmpty())
+                return prevpagestyle.name();
+        }
+    }
+    */
+    return QString();
+}
+
+QString KWPage::nextMasterPageName() const
+{
+    KWPageStyle pagestyle = pageStyle();
+    if (pagestyle.isValid() && !pagestyle.nextStyleName().isEmpty()) {
+        return pagestyle.nextStyleName();
+    }
+    return QString();
+}

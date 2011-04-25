@@ -24,6 +24,7 @@
 #include "kword_export.h"
 
 #include <KoText.h>
+#include <KoTextPage.h>
 #include <QRectF>
 #include <QObject>
 
@@ -39,7 +40,7 @@ class KoShapeManager;
  * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage
+class KWORD_EXPORT KWPage : public KoTextPage
 {
 public:
     inline KWPage() : priv(0), n(0) {}
@@ -174,6 +175,11 @@ public:
     inline bool operator<(const KWPage &other) const { return n < other.n; }
     inline bool operator>(const KWPage &other) const { return n > other.n; }
     uint hash() const;
+
+    /// reimplemented from KoTextPage
+    virtual int pageNumber(PageSelection select, int adjustment = 0) const;
+    virtual QString masterPageName() const;
+    virtual QString nextMasterPageName() const;
 
 private:
     friend class KWPageTextInfo;

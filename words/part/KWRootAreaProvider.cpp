@@ -41,6 +41,14 @@
 
 #include <kdebug.h>
 
+class KWTextLayoutRootArea : public KoTextLayoutRootArea
+{
+    public:
+        KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, const KWPage &page) : KoTextLayoutRootArea(documentLayout), m_page(page) {}
+        virtual ~KWTextLayoutRootArea() {}
+        KWPage m_page; //FIXME hack to prevent the KWPage from going out of scope
+};
+
 KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet)
     : KoTextLayoutRootAreaProvider()
     , m_textFrameSet(textFrameSet)
@@ -81,6 +89,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         int framesCountBefore = m_textFrameSet->frameCount();
         QList<int> pagesCreated;
         for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
+#if 0
             /* Don't use the mastePageName cause Words will handle the KWPageStyle in KWPageManager::appendPage
 
             KWPageStyle pagestyle = pageManager-> pageStyle(mastePageName);
@@ -92,6 +101,14 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 
             Q_ASSERT(page.isValid());
             pagesCreated << page.pageNumber();
+#else
+            KWPageStyle pagestyle = mastePageName.isEmpty() ? pageManager->defaultPageStyle() : pageManager->pageStyle(mastePageName);
+            Q_ASSERT_X(pagestyle.isValid(), __FUNCTION__, QString("No such page-style=%1").arg(mastePageName).toLocal8Bit());
+            if (!pagestyle.isValid()) {
+                pagestyle = pageManager->defaultPageStyle();
+            }
+            KWPage page = kwdoc->appendPage(mastePageName);
+#endif
         }
     }
 
@@ -104,6 +121,9 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         return 0;
     }
 
+    KWPage page = pageManager->page(pageNumber);
+    Q_ASSERT(page.isValid());
+
     KWFrame *frame = kwdoc->frameLayout()->frameOn(m_textFrameSet, pageNumber);
 
     if (m_textFrameSet->textFrameSetType() != KWord::OtherTextFrameSet) {
@@ -111,7 +131,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         Q_ASSERT_X(tfs == m_textFrameSet, __FUNCTION__, QString("frameLayout vs rootAreaProvider error, frameSetType=%1 pageNumber=%2 frameCount=%3 pageCount=%4").arg(KWord::frameSetTypeName(m_textFrameSet->textFrameSetType())).arg(pageNumber).arg(m_textFrameSet->frameCount()).arg(pageManager->pageCount()).toLocal8Bit());
     }
 
-    KoTextLayoutRootArea *area = new KoTextLayoutRootArea(documentLayout);
+    KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, page);
     area->setAcceptsPageBreak(true);
 
     if (frame) {
@@ -123,6 +143,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             area->setAssociatedShape(shape);
             data->setRootArea(area);
         }
+        area->setPage(&area->m_page);
     }
 
     m_pages.append(area);

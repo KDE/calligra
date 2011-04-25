@@ -21,7 +21,6 @@ set(wordsprivate_LIB_SRCS
     KWPageCacheManager.cpp
     KWPageManager.cpp
     KWPageStyle.cpp
-    KWPageTextInfo.cpp
     KWViewMode.cpp
     KWViewModeNormal.cpp
     KWViewModePreview.cpp
