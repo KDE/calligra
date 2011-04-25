@@ -184,7 +184,6 @@ CharTransforms SvgTextHelper::parseList(const QString &listString, SvgGraphicsCo
     } else {
         CharTransforms values;
         QStringList offsets = QString(listString).replace(',', ' ').simplified().split(' ');
-        values.reserve(offsets.count());
         foreach(const QString &offset, offsets) {
             switch(type) {
             case Number:
