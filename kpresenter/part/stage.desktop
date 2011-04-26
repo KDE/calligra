@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Stage
+Name[et]=Calligra Stage
 Name[pt]=Calligra Stage
+Name[pt_BR]=Calligra Stage
 Name[uk]=Calligra Stage
 Name[x-test]=xxCalligra Stagexx
 Exec=calligrastage %u
