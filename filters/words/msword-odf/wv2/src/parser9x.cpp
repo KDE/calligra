@@ -314,35 +314,29 @@ void Parser9x::parseTableRow( const TableRowData& data )
 #endif
 }
 
-void Parser9x::parseTextBox( uint lid, bool bodyDrawing)
+void Parser9x::parseTextBox(uint index, bool stylesxml)
 {
     wvlog << "Parser9x::parseTextBox" << endl;
 
     const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
-    if (bodyDrawing) {
-        plcftxbxTxt =  m_drawings->getTxbxTxt();
-    } else {
+    if (stylesxml) {
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
+    } else {
+        plcftxbxTxt =  m_drawings->getTxbxTxt();
     }
-
     if (!plcftxbxTxt) {
         return;
     }
     //NOTE: text ranges for each FTXBXS structure are separated by 0x0D
     //characters that MUST be the last character in each range.
 
-    PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( 0 ) );
+    PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( index ) );
 
-    for (size_t i = 0; i < plcftxbxTxt->count(); i++, ++it) {
-        if (it.current()->lid == (S32)lid) {
-
-            saveState( it.currentRun() - 1, TextBox );
-            U32 offset = m_fib.ccpText + it.currentStart();
-            offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn + m_fib.ccpEdn;
-            parseHelper( Position( offset, m_plcfpcd ) );
-            restoreState();
-        }
-    }
+    saveState( it.currentRun() - 1, TextBox );
+    U32 offset = m_fib.ccpText + it.currentStart();
+    offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn + m_fib.ccpEdn;
+    parseHelper( Position( offset, m_plcfpcd ) );
+    restoreState();
 }
 
 std::string Parser9x::tableStream() const
@@ -847,11 +841,11 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
 
             U32 nextBkf = m_bookmarks->nextBookmarkStart();
             U32 nextBkl = m_bookmarks->nextBookmarkEnd();
-            bkmk_length = nextBkl - nextBkf;
 
-            //it shouldn't be possible that (nextBkf < nextBkl)
-            Q_ASSERT (nextBkf <= nextBkl);
+            bkmk_length = nextBkl - nextBkf;
             disruption = nextBkf;
+
+            Q_ASSERT (nextBkf <= nextBkl);
 
 #ifdef WV2_DEBUG_BOOKMARK
             wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << 
@@ -891,6 +885,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 //TODO: A bookmark can denote text comrised of segments
                 //belonging into different chunks.
 
+                //NOTE: Not checking the ok value, invalid bookmarks were
+                //already reported.  So it's obsolete at the moment.
 		bool ok;
 		BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
 
@@ -978,22 +974,34 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
     case TextHandler::FieldBegin:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldStart( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldStart( &dummy, chp );
+            }
             break;
         }
     case TextHandler::FieldSeparator:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldSeparator( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldSeparator( &dummy, chp );
+            }
             break;
         }
     case TextHandler::FieldEnd:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldEnd( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldEnd( &dummy, chp );
+            }
             break;
         }
     case TextHandler::AnnotationRef:

@@ -847,7 +847,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout)
         }
         case 8: llp.setStyle(KoListStyle::CircleItem); break;
         case 9: llp.setStyle(KoListStyle::SquareItem); break;
-        case 10: llp.setStyle(KoListStyle::DiscItem); break;
+        case 10: llp.setStyle(KoListStyle::Bullet); break;
         case 11: llp.setStyle(KoListStyle::BoxItem); break;
         case 7: llp.setStyle(KoListStyle::CustomCharItem);
             kWarning(32001) << "According to spec COUNTER with type 7 is not supported, ignoring";

@@ -234,10 +234,10 @@ private:
                               Writer& out);
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
-            const MSO::OfficeArtClientData* cd, Writer& out);
+            const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
     void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
-            Writer& out, KoGenStyle& style);
+            KoGenStyle& style, Writer& out);
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
     const MSO::OfficeArtSpContainer* defaultShapeContainer() { return dc_data->defaultShape; };
@@ -354,8 +354,10 @@ void PptToOdp::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBo
 KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
+        const DrawStyle& ds,
         Writer& out)
 {
+    Q_UNUSED(ds);
     KoGenStyle style;
 
     const PptOfficeArtClientData* cd = 0;
@@ -417,7 +419,7 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
 void PptToOdp::DrawClient::addTextStyles(
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
-        Writer& out, KoGenStyle& style)
+        KoGenStyle& style, Writer& out)
 {
     const PptOfficeArtClientData* cd = 0;
     if (clientData) {
@@ -983,6 +985,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:text-line-through-width
     // style:text-outline
     // style:text-position
+    style.addProperty("style:text-position", percent(cf.position()), text);
     // style:text-rotation-angle
     // style:text-rotation-scale
     // style:text-scale
@@ -1682,8 +1685,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // draw:marker
     defineArrow(styles);
     // draw:stroke-dash
-    StrokeDashCollector strokeDashCollector(styles, *this);
-    collectGlobalObjects(strokeDashCollector, *p);
+//     StrokeDashCollector strokeDashCollector(styles, *this);
+//     collectGlobalObjects(strokeDashCollector, *p);
     // TODO: draw:opacity
 
     /*
@@ -1910,10 +1913,10 @@ QPair<QString, QString> PptToOdp::findHyperlink(const quint32 id)
     if( !p->documentContainer->exObjList )
         return qMakePair(friendly, target);
 
-    foreach(ExObjListSubContainer container,
+    foreach(const ExObjListSubContainer &container,
             p->documentContainer->exObjList->rgChildRec) {
         // Search all ExHyperlinkContainers for specified id
-        ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
+        const ExHyperlinkContainer *hyperlink = container.anon.get<ExHyperlinkContainer>();
         if (hyperlink && hyperlink->exHyperlinkAtom.exHyperLinkId == id) {
             if (hyperlink->friendlyNameAtom) {
                 friendly = utf16ToString(hyperlink->friendlyNameAtom->friendlyName);
@@ -2497,13 +2500,12 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     ODrawToOdf odrawtoodf(drawclient);
 
     //NOTE: The shape seems to provide boolean properties which are missing for
-    //shapes contained in spgr (MS Office 2003 specific).
+    //shapes contained in spgr (MS Office 2003 specific).  However problems
+    //were detected on both 2003/2007 files, so this approach got disabled.
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
-        const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
-	//FIXME: Found problems with the approach of using the shape to access
-	//any missing properties.  Disabling of this approach would cause regressions.
-        drawclient.setDrawClientData(master, slide, 0, 0, shape, m_currentSlideTexts);
+//         const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
+        drawclient.setDrawClientData(master, slide, 0, 0, 0, m_currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
 

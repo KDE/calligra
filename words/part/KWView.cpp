@@ -98,6 +98,8 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <KoFindText.h>
+#include <KoFindToolbar.h>
 
 static KWFrame *frameForShape(KoShape *shape)
 {
@@ -130,7 +132,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
@@ -143,7 +145,13 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
-    new KoFind(this, m_canvas->resourceManager(), actionCollection());
+    m_find = new KoFindText(m_canvas->resourceManager(), this);
+    KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
+    toolbar->setVisible(false);
+    connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
+    connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
+
+    layout->addWidget(toolbar);
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
 
@@ -844,11 +852,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionEditCustomVars = new KAction(i18n("Edit Variable..."), 0,
                 this, SLOT(editCustomVariable()),
                 actionCollection(), "edit_customvars");
-        m_actionApplyAutoFormat= new KAction(i18n("Apply Autocorrection"), 0,
-                this, SLOT(applyAutoFormat()),
-                actionCollection(), "apply_autoformat");
-        m_actionApplyAutoFormat->setToolTip(i18n("Manually force Words to scan the entire document and apply autocorrection"));
-        m_actionApplyAutoFormat->setWhatsThis(i18n("Manually force Words to scan the entire document and apply autocorrection."));
 
         m_actionCreateStyleFromSelection = new KAction(i18n("Create Style From Selection..."), 0,
                 this, SLOT(createStyleFromSelection()),
@@ -1224,7 +1227,7 @@ void KWView::createLinkedFrame()
 
 void KWView::showStatusBar(bool toggled)
 {
-    statusBar()->setVisible(toggled);
+    if (statusBar()) statusBar()->setVisible(toggled);
 }
 
 void KWView::deletePage()
@@ -1528,4 +1531,16 @@ void KWView::bringToFront() {
 
 void KWView::sendToBack() {
     adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::SendToBack);
+}
+
+void KWView::findMatchFound(KoFindMatch match)
+{
+    if(!match.isValid() || !match.location().canConvert<QTextCursor>() || !match.container().canConvert<QTextDocument*>()) {
+        return;
+    }
+
+    QTextCursor cursor = match.location().value<QTextCursor>();
+
+    m_canvas->resourceManager()->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+    m_canvas->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
 }

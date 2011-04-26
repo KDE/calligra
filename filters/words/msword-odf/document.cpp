@@ -66,7 +66,7 @@ Document::Document(const std::string& fileName,
 //                    KoFilterChain* chain,
                    KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, KoGenStyles* mainStyles,
-                   LEInputStream* wordDocument, POLE::Stream& table, LEInputStream* data)
+                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
@@ -126,10 +126,10 @@ Document::Document(const std::string& fileName,
                 this, SLOT(slotTableFound(KWord::Table*)));
         connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&,KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
-        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int , KoXmlWriter* )),
-                this, SLOT(slotFloatingObjectFound(unsigned int , KoXmlWriter* )));
-        connect(m_graphicsHandler, SIGNAL(textBoxFound(uint , bool)),
-                this, SLOT(slotTextBoxFound(uint , bool)));
+        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter* )),
+                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter* )));
+        connect(m_graphicsHandler, SIGNAL(textBoxFound(unsigned int, bool)),
+                this, SLOT(slotTextBoxFound(unsigned int, bool)));
 
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);
@@ -280,32 +280,33 @@ void Document::processAssociatedStrings()
     wvWare::AssociatedStrings strings(m_parser->associatedStrings());
     if (!strings.author().isNull()) {
         m_metaWriter->startElement("meta:initial-creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.author()));
+        m_metaWriter->addTextNode(Conversion::string(strings.author()));
         m_metaWriter->endElement();
     }
     if (!strings.title().isNull()) {
         m_metaWriter->startElement("dc:title");
-        m_metaWriter->addTextSpan(Conversion::string(strings.title()));
+        qDebug() << "TITLE: " << Conversion::string(strings.title());
+        m_metaWriter->addTextNode(Conversion::string(strings.title()));
         m_metaWriter->endElement();
     }
     if (!strings.subject().isNull()) {
         m_metaWriter->startElement("dc:subject");
-        m_metaWriter->addTextSpan(Conversion::string(strings.subject()));
+        m_metaWriter->addTextNode(Conversion::string(strings.subject()));
         m_metaWriter->endElement();
     }
     if (!strings.lastRevBy().isNull()) {
         m_metaWriter->startElement("dc:creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()));
+        m_metaWriter->addTextNode(Conversion::string(strings.lastRevBy()));
         m_metaWriter->endElement();
     }
     if (!strings.keywords().isNull()) {
         m_metaWriter->startElement("meta:keyword");
-        m_metaWriter->addTextSpan(Conversion::string(strings.keywords()));
+        m_metaWriter->addTextNode(Conversion::string(strings.keywords()));
         m_metaWriter->endElement();
     }
     if (!strings.comments().isNull()) {
         m_metaWriter->startElement("meta:comments");
-        m_metaWriter->addTextSpan(Conversion::string(strings.comments()));
+        m_metaWriter->addTextNode(Conversion::string(strings.comments()));
         m_metaWriter->endElement();
     }
 }
@@ -944,12 +945,10 @@ void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* write
     }
 }
 
-void Document::slotTextBoxFound( uint spid, bool bodyDrawing)
+void Document::slotTextBoxFound(unsigned int index, bool stylesxml)
 {
     kDebug(30513) ;
-
-    //NOTE: spid == lid in wv2
-    m_parser->parseTextBox(spid, bodyDrawing);
+    m_parser->parseTextBox(index, stylesxml);
 }
 
 //process through all the subDocs and the tables

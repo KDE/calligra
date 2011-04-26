@@ -2,7 +2,7 @@
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #define KWCANVASBASE_H
 
 #include <QCache>
+#include <QDebug>
 
 #include "KWDocument.h"
 #include "kword_export.h"
@@ -33,6 +34,7 @@
 
 #include <QRectF>
 #include <QImage>
+#include <QQueue>
 
 class QRect;
 class QPainter;
@@ -41,6 +43,7 @@ class KWGui;
 class KoToolProxy;
 class KoShape;
 class KoViewConverter;
+class KWPageCacheManager;
 
 class KWORD_EXPORT KWCanvasBase : public KoCanvasBase
 {
@@ -119,10 +122,6 @@ protected:
 
     virtual void updateCanvasInternal(const QRectF &clip) = 0;
 
-private:
-
-    void clearCache();
-
 protected:
 
     KWDocument *m_document;
@@ -134,24 +133,8 @@ protected:
 
     bool m_cacheEnabled;
     qreal m_currentZoom;
-
-    struct PageCache {
-        PageCache(int w, int h)
-            : allExposed(true)
-        {
-            cache = QImage(w, h, QImage::Format_ARGB32);
-        }
-
-        QImage cache;
-        // List of logical exposed rects in view coordinates
-        // These are the rects that are queued for updating, not
-        // the rects that have already been painted.
-        QVector<QRect> exposed;
-        // true if the whole page should be repainted
-        bool allExposed;
-    };
-
-    QCache<KWPage, PageCache> m_cache;
+    KWPageCacheManager *m_pageCacheManager;
+    int m_cacheSize;
 };
 
 #endif // KWCANVASBASE_H

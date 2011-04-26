@@ -550,7 +550,7 @@ ULONG ZCodec::GetCRC()
 
 // ------------------------------------------------------------------------
 
-/*ULONG ZCodec::UpdateCRC ( ULONG nLatestCRC, ULONG nNumber )
+ULONG ZCodec::UpdateCRC ( ULONG nLatestCRC, ULONG nNumber )
 {
 
 #ifdef OSL_LITENDIAN

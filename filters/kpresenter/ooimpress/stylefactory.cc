@@ -314,32 +314,32 @@ StrokeDashStyle::StrokeDashStyle(int style)
     case 2:
         m_name = "Fine Dashed";
         m_style = "rect";
-        m_dots1 = "1";
+        m_dots1 = '1';
         m_dots1_length = "0.508cm";
-        m_dots2 = "1";
+        m_dots2 = '1';
         m_dots2_length = "0.508cm";
         m_distance = "0.508cm";
         break;
     case 3:
         m_name = "Fine Dotted";
         m_style = "rect";
-        m_dots1 = "1";
+        m_dots1 = '1';
         m_distance = "0.257cm";
         break;
     case 4:
         m_name = "Ultrafine 1 Dot 1 Dash";
         m_style = "rect";
-        m_dots1 = "1";
+        m_dots1 = '1';
         m_dots1_length = "0.051cm";
-        m_dots2 = "1";
+        m_dots2 = '1';
         m_dots2_length = "0.254cm";
         m_distance = "0.127cm";
         break;
     case 5:
         m_name = "2 Dots 1 Dash";
         m_style = "rect";
-        m_dots1 = "2";
-        m_dots2 = "1";
+        m_dots1 = '2';
+        m_dots2 = '1';
         m_dots2_length = "0.203cm";
         m_distance = "0.203cm";
         break;
@@ -424,7 +424,7 @@ GradientStyle::GradientStyle(QDomElement & gradient, int index)
     switch (type) {
     case 1:
         m_style = "linear";
-        m_angle = "0";
+        m_angle = '0';
         break;
     case 2:
         m_style = "linear";
@@ -440,15 +440,15 @@ GradientStyle::GradientStyle(QDomElement & gradient, int index)
         break;
     case 5:
         m_style = "radial";
-        m_angle = "0";
+        m_angle = '0';
         break;
     case 6:
         m_style = "square";
-        m_angle = "0";
+        m_angle = '0';
         break;
     case 7:
         m_style = "axial";
-        m_angle = "0";
+        m_angle = '0';
         break;
     }
 }
@@ -541,7 +541,7 @@ HatchStyle::HatchStyle(int style, QString & color)
         m_name = m_color + " 0 Degrees";
         m_style = "single";
         m_distance = "0.102cm";
-        m_rotation = "0";
+        m_rotation = '0';
         break;
     case 10:
         m_name = m_color + " 90 Degrees";
@@ -1467,28 +1467,28 @@ ListStyle::ListStyle(QDomElement & e, const uint index)
         switch (type) {
         case 1: // arabic numbers
             m_listLevelStyle = LLS_NUMBER;
-            m_num_suffix = ".";
-            m_num_format = "1";
+            m_num_suffix = '.';
+            m_num_format = '1';
             break;
         case 2: // lower alphabetical
             m_listLevelStyle = LLS_NUMBER;
-            m_num_suffix = ".";
-            m_num_format = "a";
+            m_num_suffix = '.';
+            m_num_format = 'a';
             break;
         case 3: // upper alphabetical
             m_listLevelStyle = LLS_NUMBER;
-            m_num_suffix = ".";
-            m_num_format = "A";
+            m_num_suffix = '.';
+            m_num_format = 'A';
             break;
         case 4: // lower roman
             m_listLevelStyle = LLS_NUMBER;
-            m_num_suffix = ".";
-            m_num_format = "i";
+            m_num_suffix = '.';
+            m_num_format = 'i';
             break;
         case 5: // upper roman
             m_listLevelStyle = LLS_NUMBER;
-            m_num_suffix = ".";
-            m_num_format = "I";
+            m_num_suffix = '.';
+            m_num_format = 'I';
             break;
         case 6: // custom
             m_listLevelStyle = LLS_BULLET;

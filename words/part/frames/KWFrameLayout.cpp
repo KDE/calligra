@@ -69,14 +69,17 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        if (!frameOn(fs, pageNumber))
+        if (!frameOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
+        }
     }
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
         if (!frameOn(fs, pageNumber))
+        {
             createCopyFrame(fs, page);
+        }
     }
 
     //kDebug() <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
@@ -353,14 +356,19 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     pageBackground = frameOn(m_backgroundFrameSet, pageNumber);
 
     --minZIndex;
-    if (endnote)
+    if (endnote) {
         endnote->shape()->setZIndex(minZIndex--);
-    for (int i = 0; i < columns; ++i)
+    }
+    for (int i = 0; i < columns; ++i) {
         main[i]->shape()->setZIndex(minZIndex);
-    if (footer)
+    }
+    if (footer) {
         footer->shape()->setZIndex(--minZIndex);
-    if (header)
+    }
+    if (header) {
         header->shape()->setZIndex(--minZIndex);
+    }
+
     if (pageBackground) {
         KoShape *bs = pageBackground->shape();
         bs->setZIndex(--minZIndex);

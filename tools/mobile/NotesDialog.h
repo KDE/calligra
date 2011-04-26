@@ -69,7 +69,7 @@ public:
         QLabel *currentSlideNumber;
 public slots:
         /*!
-          * functions which gets and shows the notes for a perticular page number
+          * functions which gets and shows the notes for a particular page number
           */
         void showNotesDialog(int page);
         /*!

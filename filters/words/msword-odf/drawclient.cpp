@@ -75,44 +75,61 @@ KWordGraphicsHandler::DrawClient::getPicturePath(int pib)
     return gh->getPicturePath(pib);
 }
 
-//TODO: Implementation required, but at the moment textboxes are parsed and processed in
-//the graphicshandler, so no hurry.
 void
 KWordGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                                        const MSO::OfficeArtClientData* cd,
                                                        Writer& out)
 {
-    Q_UNUSED(ct);
     Q_UNUSED(cd);
     Q_UNUSED(out);
-    kDebug(30513) << "Not implemented YET, not that bad actually!";
+    const DocOfficeArtClientTextBox* tb = ct.anon.get<DocOfficeArtClientTextBox>();
+    if (!tb) {
+        kDebug(30513) << "DocOfficeArtClientTextBox missing!";
+        return;
+    }
+    //NOTE: Dividing the high 2 bytes by 0x10000 specifies a 1-based index into
+    //PlcfTxbxTxt of the FTXBXS structure where the text for this textbox is
+    //located.  The low 2 bytes specify the zero-based index in the textbox
+    //chain that the textbox occupies.  [MS-DOC] — v20101219
+
+    uint index = (tb->clientTextBox / 0x10000) - 1;
+    gh->emitTextBoxFound(index, out.stylesxml);
 }
 
 KoGenStyle
 KWordGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                                      const MSO::OfficeArtClientData* cd,
+                                                     const DrawStyle& ds,
                                                      Writer& out)
 {
     Q_UNUSED(ct);
     Q_UNUSED(cd);
     KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
+
+    // Set specific attributes of graphic-properties.
+    gh->definePositionAttributes(style, ds);
+    gh->defineWrappingAttributes(style, ds);
     return style;
 }
 
 void
 KWordGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                                                 const MSO::OfficeArtClientData* clientData,
-                                                Writer& out,
-                                                KoGenStyle& style)
+                                                KoGenStyle& style,
+                                                Writer& out)
 {
     Q_UNUSED(clientTextbox);
     Q_UNUSED(clientData);
-    Q_UNUSED(out);
-    Q_UNUSED(style);
-    kDebug(30513) << "Not implemented YET!";
-   //TODO: implementation required
 
+    //TODO: Add paragraph-properties and text-properties if required!
+
+    const QString styleName = out.styles.insert(style);
+    out.xml.addAttribute("draw:style-name", styleName);
+
+    // Set additional attributes of the element required for layout.
+    gh->setAnchorTypeAttribute(*static_cast<DrawingWriter*>(&out));
+    gh->setZIndexAttribute(*static_cast<DrawingWriter*>(&out));
 }
 
 const MSO::OfficeArtDggContainer*
@@ -158,6 +175,7 @@ KWordGraphicsHandler::DrawClient::formatPos(qreal v)
 
 //NOTE: OfficeArtClientData.clientdata (4 bytes): An integer that SHOULD be
 //ignored.  [MS-DOC] — v20100926
+
 bool
 KWordGraphicsHandler::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
 {

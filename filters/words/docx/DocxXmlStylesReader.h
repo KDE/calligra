@@ -27,6 +27,7 @@
 #include <QtCore/QMap>
 
 #include "DocxXmlDocumentReader.h"
+#include <MsooXmlDrawingTableStyle.h>
 
 #include <KoGenStyles.h>
 #include <KoCharacterStyle.h>
@@ -60,6 +61,8 @@ protected:
     // Styles which are applied to all styles
     KoGenStyle m_defaultTextStyle;
     KoGenStyle m_defaultParagraphStyle;
+
+    MSOOXML::DrawingTableStyle* m_currentStyle;
 
 private:
     void init();
