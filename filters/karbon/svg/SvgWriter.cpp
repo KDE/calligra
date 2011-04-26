@@ -44,6 +44,7 @@
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <plugins/artistictextshape/ArtisticTextShape.h>
+#include <plugins/artistictextshape/ArtisticTextRange.h>
 #include <pathshapes/rectangle/RectangleShape.h>
 #include <pathshapes/ellipse/EllipseShape.h>
 #include <KoImageData.h>
@@ -688,6 +689,59 @@ void SvgWriter::getClipping(KoShape *shape, QTextStream *stream)
         *stream << " clip-rule=\"evenodd\"";
 }
 
+void SvgWriter::saveFont(const QFont &font, QTextStream *stream)
+{
+    *stream << " font-family=\"" << font.family() << "\"";
+    *stream << " font-size=\"" << font.pointSize() << "pt\"";
+
+    if (font.bold())
+        *stream << " font-weight=\"bold\"";
+    if (font.italic())
+        *stream << " font-style=\"italic\"";
+}
+
+void SvgWriter::saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveRangeFont, qreal baselineOffset)
+{
+    *stream << "<tspan";
+    if (range.hasXOffsets()) {
+        *stream << (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? " x=\"" : " dx=\"");
+        int charIndex = 0;
+        while(range.hasXOffset(charIndex)) {
+            if (charIndex)
+                *stream << ",";
+            *stream << QString("%1").arg(SvgUtil::toUserSpace(range.xOffset(charIndex++)));
+        }
+        *stream << "\"";
+    }
+    if (range.hasYOffsets()) {
+        if (range.yOffsetType() != ArtisticTextRange::AbsoluteOffset)
+            baselineOffset = 0;
+        *stream << (range.yOffsetType() == ArtisticTextRange::AbsoluteOffset ? " y=\"" : " dy=\"");
+        int charIndex = 0;
+        while(range.hasYOffset(charIndex)) {
+            if (charIndex)
+                *stream << ",";
+            *stream << QString("%1").arg(SvgUtil::toUserSpace(baselineOffset+range.yOffset(charIndex++)));
+        }
+        *stream << "\"";
+    }
+    if (range.hasRotations()) {
+        *stream << " rotate=\"";
+        int charIndex = 0;
+        while(range.hasRotation(charIndex)) {
+            if (charIndex)
+                *stream << ",";
+            *stream << QString("%1").arg(range.rotation(charIndex++));
+        }
+        *stream << "\"";
+    }
+    if (!saveRangeFont)
+        saveFont(range.font(), stream);
+    *stream << ">";
+    *stream << range.text();
+    *stream << "</tspan>" << endl;
+}
+
 void SvgWriter::saveText(ArtisticTextShape * text)
 {
     printIndentation(m_body, m_indent++);
@@ -695,15 +749,13 @@ void SvgWriter::saveText(ArtisticTextShape * text)
 
     getStyle(text, m_body);
 
-    QFont font = text->font();
+    const QList<ArtisticTextRange> formattedText = text->text();
 
-    *m_body << " font-family=\"" << font.family() << "\"";
-    *m_body << " font-size=\"" << font.pointSize() << "pt\"";
-
-    if (font.bold())
-        *m_body << " font-weight=\"bold\"";
-    if (font.italic())
-        *m_body << " font-style=\"italic\"";
+    // if we have only a single text range, save the font on the text element
+    const bool hasSingleRange = formattedText.size() == 1;
+    if (hasSingleRange) {
+        saveFont(formattedText.first().font(), m_body);
+    }
 
     qreal anchorOffset = 0.0;
     if (text->textAnchor() == ArtisticTextShape::AnchorMiddle) {
@@ -729,7 +781,9 @@ void SvgWriter::saveText(ArtisticTextShape * text)
             *m_body << getTransform(text->transformation(), " transform");
         }
         *m_body << ">" << endl;
-        *m_body << text->text();
+        foreach(const ArtisticTextRange &range, formattedText) {
+            saveTextRange(range, m_body, !hasSingleRange, text->baselineOffset());
+        }
     } else {
         KoPathShape * baseline = KoPathShape::createShapeFromPainterPath(text->baseline());
 
@@ -747,7 +801,9 @@ void SvgWriter::saveText(ArtisticTextShape * text)
         if (text->startOffset() > 0.0)
             *m_body << " startOffset=\"" << text->startOffset() * 100.0 << "%\"";
         *m_body << ">";
-        *m_body << text->text();
+        foreach(const ArtisticTextRange &range, formattedText) {
+            saveTextRange(range, m_body, !hasSingleRange, text->baselineOffset());
+        }
         *m_body << "</textPath>" << endl;
 
         delete baseline;
