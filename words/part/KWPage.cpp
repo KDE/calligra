@@ -368,7 +368,6 @@ QString KWPage::masterPageName() const
         if (!name.isEmpty())
             return name;
     }
-    /* That logic is handled in the textlayout-library
     KWPage prevpage = previous();
     while (prevpage.isValid()) {
         KWPageStyle prevpagestyle = prevpage.pageStyle();
@@ -378,16 +377,6 @@ QString KWPage::masterPageName() const
             if (!prevpagestyle.name().isEmpty())
                 return prevpagestyle.name();
         }
-    }
-    */
-    return QString();
-}
-
-QString KWPage::nextMasterPageName() const
-{
-    KWPageStyle pagestyle = pageStyle();
-    if (pagestyle.isValid() && !pagestyle.nextStyleName().isEmpty()) {
-        return pagestyle.nextStyleName();
     }
     return QString();
 }

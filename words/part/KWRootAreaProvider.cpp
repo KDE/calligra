@@ -59,7 +59,7 @@ KWRootAreaProvider::~KWRootAreaProvider()
 {
 }
 
-KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, QString mastePageName)
+KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
 {
     KWPageManager *pageManager = m_textFrameSet->kwordDocument()->pageManager();
     Q_ASSERT(pageManager);
@@ -85,18 +85,9 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 
     if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
         // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
-        QList<KoTextLayoutRootArea *> rootAreas = documentLayout->rootAreas();
-        int framesCountBefore = m_textFrameSet->frameCount();
-        QList<int> pagesCreated;
-        for(int i = pageManager->pageCount(); i <= rootAreas.count(); ++i) {
-            KWPageStyle pagestyle = mastePageName.isEmpty() ? pageManager->defaultPageStyle() : pageManager->pageStyle(mastePageName);
-            Q_ASSERT_X(pagestyle.isValid(), __FUNCTION__, QString("No such page-style=%1").arg(mastePageName).toLocal8Bit());
-            if (!pagestyle.isValid()) {
-                pagestyle = pageManager->defaultPageStyle();
-            }
-            KWPage page = kwdoc->appendPage(mastePageName);
+        for(int i = pageManager->pageCount(); i <= m_pages.count(); ++i) {
+            KWPage page = kwdoc->appendPage();
             Q_ASSERT(page.isValid());
-            pagesCreated << page.pageNumber();
         }
     }
 
@@ -237,6 +228,22 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
     updateRect |= rootArea->associatedShape()->outlineRect();
     rootArea->associatedShape()->update(updateRect);
+}
+
+bool KWRootAreaProvider::suggestPageBreak(KoTextLayoutRootArea *beforeThis)
+{
+    if (m_textFrameSet->textFrameSetType() != KWord::MainTextFrameSet)
+        return false;
+    int index = m_pages.indexOf(beforeThis);
+    Q_ASSERT(index >= 0);
+    if (index == 0)
+        return false;
+    KoTextLayoutRootArea *areaBefore = m_pages[index - 1];
+    KoTextPage *pageCurrent = beforeThis->page();
+    Q_ASSERT(pageCurrent);
+    KoTextPage *pageBefore = areaBefore->page();
+    Q_ASSERT(pageBefore);
+    return pageCurrent->masterPageName() != pageBefore->masterPageName();
 }
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)

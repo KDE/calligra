@@ -38,9 +38,10 @@ public:
     virtual ~KWRootAreaProvider();
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, QString mastePageName);
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
+    virtual bool suggestPageBreak(KoTextLayoutRootArea *beforeThis);
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese);
 private:

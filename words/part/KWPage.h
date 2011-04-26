@@ -181,7 +181,6 @@ public:
     /// reimplemented from KoTextPage
     virtual int pageNumber(PageSelection select, int adjustment = 0) const;
     virtual QString masterPageName() const;
-    virtual QString nextMasterPageName() const;
 
 private:
     friend class KWPageTextInfo;
