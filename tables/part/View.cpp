@@ -607,6 +607,7 @@ View::View(QWidget *_parent, Doc *_doc)
     connect(&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
 
     d->finder = new KoFindTables(this);
+    connect(d->finder, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
     d->findToolbar = new KoFindToolbar(d->finder, actionCollection(), this);
     d->viewLayout->addWidget(d->findToolbar, 4, 0, 1, 2);
 
@@ -2142,6 +2143,17 @@ KoPrintJob * View::createPrintJob()
     // About to print; close the editor.
     selection()->emitCloseEditor(true); // save changes
     return new PrintJob(this);
+}
+
+void View::findMatchFound(KoFindMatch match)
+{
+    Sheet* sheet = match.container().value<Sheet*>();
+    setActiveSheet(sheet);
+
+    Cell cell = match.location().value<Cell>();
+    d->selection->initialize(cell.cellPosition());
+    QRectF pos = sheet->cellCoordinatesToDocument(QRect(d->selection->anchor(), d->selection->cursor()));
+    d->canvasController->ensureVisible(d->canvas->viewConverter()->documentToView(pos), true);
 }
 
 #include "View.moc"

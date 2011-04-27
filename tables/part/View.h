@@ -48,6 +48,7 @@ class QScrollBar;
 class KoCanvasController;
 class KoDocumentEntry;
 class KoZoomHandler;
+class KoFindMatch;
 
 namespace Calligra
 {
@@ -368,6 +369,8 @@ private Q_SLOTS:
 
     /** Removes \p sheet from the displayed sheets. */
     void removeSheet(Sheet* sheet);
+
+    void findMatchFound(KoFindMatch match);
 
 private:
     Q_DISABLE_COPY(View)
