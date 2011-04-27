@@ -71,6 +71,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
                 Q_ASSERT(lay);
                 m_rootArea = lay->rootAreaForPosition(0);
                 Q_ASSERT(m_rootArea);
+                Q_ASSERT(m_rootArea->associatedShape() == original);
                 m_page = m_pageManager->page(copyshape);
                 Q_ASSERT(m_page.isValid());
                 m_oldPage = m_rootArea->page();
