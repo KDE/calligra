@@ -24,6 +24,7 @@
 #include <tables/Sheet.h>
 #include <CellStorage.h>
 #include <KoFindOption.h>
+#include <ValueStorage.h>
 
 using namespace Calligra::Tables;
 
@@ -48,27 +49,25 @@ void KoFindTables::setCurrentSheet ( Sheet* sheet )
 
 void KoFindTables::replaceImplementation ( const KoFindMatch& match, const QVariant& value )
 {
-
+    
 }
 
 void KoFindTables::findImplementation ( const QString& pattern, KoFindBase::KoFindMatchList& matchList )
 {
     int row = 1;
     int column = 1;
-    
-    Cell cell = d->currentSheet->cellStorage()->firstInRow(row);
+
+    const ValueStorage *values = d->currentSheet->valueStorage();
     Qt::CaseSensitivity sensitivity = options()->option("caseSensitive")->value().toBool() ? Qt::CaseSensitive : Qt::CaseInsensitive;
-    while(!cell.isNull()) {
-        while(!cell.isNull()) {
-            if(cell.userInput().contains(pattern, sensitivity)) {
-                KoFindMatch match;
-                match.setContainer(QVariant::fromValue(d->currentSheet));
-                match.setLocation(QVariant::fromValue(cell));
-                matchList.append(match);
-            }
-            cell = d->currentSheet->cellStorage()->nextInRow(++column, 1);
+    for(int i = 0; i < values->count(); ++i) {
+        Value val = values->data(i);
+        if(val.isString() && val.asString().contains(pattern, sensitivity)) {
+            KoFindMatch match;
+            match.setContainer(QVariant::fromValue(d->currentSheet));
+            Cell cell(d->currentSheet, values->col(i), values->row(i));
+            match.setLocation(QVariant::fromValue(cell));
+            matchList.append(match);
         }
-        cell = d->currentSheet->cellStorage()->firstInRow(++row);
     }
 }
 
