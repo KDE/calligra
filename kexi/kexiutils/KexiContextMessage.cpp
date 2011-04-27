@@ -41,9 +41,12 @@ public:
     QAction* defaultAction;
 };
 
-KexiContextMessage::KexiContextMessage()
+// ----
+
+KexiContextMessage::KexiContextMessage(const QString& text)
  : d(new Private)
 {
+    setText(text);
 }
 
 KexiContextMessage::KexiContextMessage(const KexiContextMessage& other)
@@ -91,7 +94,7 @@ QAction* KexiContextMessage::defaultAction() const
 class KexiContextMessageWidget::Private
 {
 public:
-    Private() {}
+    Private() : hasMessages(false) {}
     ~Private() {}
 
     void setDisabledColorsForPage()
@@ -109,19 +112,44 @@ public:
 
     void setEnabledColorsForPage()
     {
-        if (page)
+        if (page && hasMessages)
             page->setPalette(origPagePalette);
     }
 
     QPointer<QWidget> page;
     QPalette origPagePalette;
+    bool hasMessages;
 };
 
 KexiContextMessageWidget::KexiContextMessageWidget(
-   QWidget *page, QFormLayout* layout,
+    QWidget *page, QFormLayout* layout,
+    QWidget *context, const KexiContextMessage& message)
+ : KMessageWidget()
+ , d(new Private)
+{
+    init(page, layout, context, message);
+}
+
+KexiContextMessageWidget::KexiContextMessageWidget(
+   QFormLayout* layout,
    QWidget *context, const KexiContextMessage& message)
  : KMessageWidget()
  , d(new Private)
+{
+    init(0, layout, context, message);
+}
+
+KexiContextMessageWidget::KexiContextMessageWidget(
+    QFormLayout* layout, QWidget *context, const QString& message)
+ : KMessageWidget()
+ , d(new Private)
+{
+    init(0, layout, context, KexiContextMessage(message));
+}
+
+void KexiContextMessageWidget::init(
+    QWidget *page, QFormLayout* layout,
+    QWidget *context, const KexiContextMessage& message)
 {
     d->page = page;
     hide();
@@ -134,17 +162,21 @@ KexiContextMessageWidget::KexiContextMessageWidget(
     setAutoDelete(true);
     setContentsMargins(3, 0, 3, 0); // to better fit to line edits
     layout->insertRow(row, QString(), this);
-    foreach(QAction* action, message.actions()) {
-        addAction(action);
-        connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
-    }
-    if (message.defaultAction()) {
-        setDefaultAction(message.defaultAction());
-    }
+    d->hasMessages = !message.actions().isEmpty();
+    if (d->hasMessages) {
+        foreach(QAction* action, message.actions()) {
+            addAction(action);
+            connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+        }
+
+        if (message.defaultAction()) {
+            setDefaultAction(message.defaultAction());
+        }
     
-    if (d->page) {
-        d->setDisabledColorsForPage();
-        KexiUtils::installRecursiveEventFilter(d->page, this);
+        if (d->page) {
+            d->setDisabledColorsForPage();
+            KexiUtils::installRecursiveEventFilter(d->page, this);
+        }
     }
     QTimer::singleShot(10, this, SLOT(animatedShow()));
 }

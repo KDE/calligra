@@ -100,6 +100,8 @@ Startup
 **proper painting of context arrow
 **fixed crash in event loop
 **merged with agateau/kmessagewidget
+**KexiContextMessage* API extended
+**two remaining error messages of 'DB Title Page' ported to KexiContextMessage* API
 
 2011-04-14..26
 Startup

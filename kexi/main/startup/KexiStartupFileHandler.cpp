@@ -461,8 +461,8 @@ bool KexiStartupFileHandler::checkSelectedUrl()
             }
         }
     } else if (d->confirmOverwrites) {
-        KexiContextMessage message;
-        message.setText(i18n("This file already exists. Do you want to overwrite it?"));
+        KexiContextMessage message(
+            i18n("This file already exists. Do you want to overwrite it?"));
         QAction* messageWidgetActionYes = new QAction(i18n("Overwrite"), 0);
         connect(messageWidgetActionYes, SIGNAL(triggered()),
                 this, SLOT(messageWidgetActionYesTriggered()));

@@ -548,20 +548,27 @@ void KexiProjectTitleSelectionPage::updateUrl()
 
 bool KexiProjectTitleSelectionPage::isAcceptable()
 {
+    delete messageWidget;
     if (contents->le_title->text().trimmed().isEmpty()) {
-        KMessageBox::information(this, i18n("Enter project title."));
+        messageWidget = new KexiContextMessageWidget(contents->formLayout,
+                                                     contents->le_title,
+                                                     i18n("Enter project title."));
         contents->le_title->setText(QString());
         contents->le_title->setFocus();
         return false;
     }
     KUrl url = contents->file_requester->url();
     if (!url.isValid() || !url.isLocalFile() || url.fileName().isEmpty()) {
-        KMessageBox::information(this, i18n("Enter valid project filename."));
+        messageWidget = new KexiContextMessageWidget(contents->formLayout,
+            contents->file_requester,
+            i18n("Enter valid project filename. The file should be located on this computer."));
         contents->file_requester->setFocus();
         return false;
     }
-    if (!fileHandler->checkSelectedUrl())
+    if (!fileHandler->checkSelectedUrl()) {
+        contents->le_title->setFocus();
         return false;
+    }
     //urlSelected(url); // to save recent dir
     return true;
 }

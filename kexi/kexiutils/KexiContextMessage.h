@@ -26,9 +26,9 @@
 class KEXIUTILS_EXPORT KexiContextMessage
 {
 public:
-    KexiContextMessage();
+    KexiContextMessage(const QString& text = QString());
 
-    KexiContextMessage(const KexiContextMessage& other);
+    explicit KexiContextMessage(const KexiContextMessage& other);
 
     ~KexiContextMessage();
 
@@ -41,9 +41,12 @@ public:
     
     QList<QAction*> actions() const;
 
+    //! Sets default action, i.e. button created with this action 
+    //! will be the default button of the message.
+    //! Does not take ownership.
     void setDefaultAction(QAction* action);
 
-    QAction *defaultAction() const;
+    QAction* defaultAction() const;
 
 private:
     class Private;
@@ -52,18 +55,44 @@ private:
 
 class QFormLayout;
 
+//! Context message widget constructed out of context message argument.
 class KEXIUTILS_EXPORT KexiContextMessageWidget : public KMessageWidget
 {
     Q_OBJECT
 public:
+    //! Creates message widget constructed out of context message @a message.
+    //! Inserts itself into layout @a layout on top of the widget @a context.
+    //! If @page is not 0 and @a message has any actions added,
+    //! all children of @a page widget will be visually disabled to indicate 
+    //! modality of the message.
+    //! The message widget will be automatically destroyed after triggering
+    //! of any associated action.
     KexiContextMessageWidget(QWidget *page,
                              QFormLayout* layout, QWidget *context,
                              const KexiContextMessage& message);
+
+    //! @overload KexiContextMessageWidget(QWidget*, QFormLayout*, QWidget*, const KexiContextMessage&);
+    //! Does not enter into modal state and does not accept actions.
+    KexiContextMessageWidget(QFormLayout* layout, QWidget *context,
+                             const KexiContextMessage& message);
+
+    //! @overload KexiContextMessageWidget(QFormLayout*, QWidget*, const KexiContextMessage&);
+    //! Does not enter into modal state and does not accept actions.
+    KexiContextMessageWidget(QFormLayout* layout, QWidget *context,
+                             const QString& message);
+
     virtual ~KexiContextMessageWidget();
+
+protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
+
 private slots:
     void actionTriggered();
+
 private:
+    void init(QWidget *page, QFormLayout* layout,
+        QWidget *context, const KexiContextMessage& message);
+
     class Private;
     Private * const d;
 };
