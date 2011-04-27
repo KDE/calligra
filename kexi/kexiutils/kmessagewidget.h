@@ -73,6 +73,8 @@ public:
 
     void removeAction(QAction* action);
 
+    void setDefaultAction(QAction* action);
+
 public Q_SLOTS:
     void setText(const QString &);
 

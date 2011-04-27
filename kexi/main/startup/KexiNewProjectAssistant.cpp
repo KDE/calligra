@@ -29,10 +29,11 @@
 #include "KexiTemplatesModel.h"
 #include "KexiStartupFileHandler.h"
 
+#include <kexiguimsghandler.h>
 #include <kexidb/utils.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
-#include <kexiguimsghandler.h>
+#include <kexiutils/KexiContextMessage.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -144,13 +145,19 @@ KexiTitleLabel::KexiTitleLabel(QWidget * parent, Qt::WindowFlags f)
  : QLabel(parent, f)
  , d(new Private)
 {
-    updateFont();
+    init();
 }
 
 KexiTitleLabel::KexiTitleLabel(const QString & text, QWidget * parent, Qt::WindowFlags f)
  : QLabel(text, parent, f)
  , d(new Private)
 {
+    init();
+}
+
+void KexiTitleLabel::init()
+{
+    setWordWrap(true);
     updateFont();
 }
 
@@ -480,6 +487,8 @@ KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
         KUrl("kfiledialog:///OpenExistingOrCreateNewProject"),
         KexiStartupFileHandler::SavingFileBasedDB,
         contents->file_requester);
+    connect(fileHandler, SIGNAL(askForOverwriting(KexiContextMessage)),
+            this, SLOT(askForOverwriting(KexiContextMessage)));
 
     //KUrl url = KFileDialog::getStartUrl(
     //    KUrl("kfiledialog:///OpenExistingOrCreateNewProject"), m_recentDirClass);
@@ -502,6 +511,14 @@ KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
 KexiProjectTitleSelectionPage::~KexiProjectTitleSelectionPage()
 {
     delete fileHandler;
+}
+
+void KexiProjectTitleSelectionPage::askForOverwriting(const KexiContextMessage& message)
+{
+    kDebug() << message.text();
+    messageWidget = new KexiContextMessageWidget(this,
+                                                 contents->formLayout,
+                                                 contents->file_requester, message);
 }
 
 void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
@@ -758,6 +775,10 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
 {
     if (sender == d->templateSelectionPage()) {
         d->lyr->setCurrentWidget(d->projectStorageTypeSelectionPage());
+#if 1
+        d->titleSelectionPage()->contents->le_title->setFocus();
+        d->lyr->setCurrentWidget(d->titleSelectionPage());
+#endif
 /*        d->slideWidget->setParent(d->lyr->currentWidget());
         d->slideWidget->move(100, 0);
         d->slideWidget->setup(page, d->projectStorageTypeSelectionPage());
@@ -770,6 +791,7 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
     }
     else if (sender == d->titleSelectionPage()) {
         if (!d->titleSelectionPage()->isAcceptable()) {
+            //d->titleSelectionPage()->messageWidget->fadeIn();
             return;
         }
         d->lyr->setCurrentWidget(d->projectCreationPage());

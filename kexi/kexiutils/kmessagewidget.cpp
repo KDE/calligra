@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QTimeLine>
 #include <QToolButton>
+#include <QPointer>
 
 //---------------------------------------------------------------------
 // KMessageWidgetPrivate
@@ -54,6 +55,8 @@ public:
     KMessageWidget::Shape shape;
     QList<QToolButton*> buttons;
     QPixmap contentSnapShot;
+    QAction* defaultAction;
+    QPointer<QToolButton> defaultButton;
 
     void createLayout();
 };
@@ -78,12 +81,15 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
 
     textLabel = new QLabel(content);
     textLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    textLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
     KAction* closeAction = KStandardAction::close(q, SLOT(hide()), q);
 
     closeButton = new QToolButton(content);
     closeButton->setAutoRaise(true);
     closeButton->setDefaultAction(closeAction);
+    
+    defaultAction = 0;
 }
 
 void KMessageWidgetPrivate::createLayout()
@@ -95,10 +101,25 @@ void KMessageWidgetPrivate::createLayout()
     qDeleteAll(buttons);
     buttons.clear();
 
+    QList<QToolButton*> buttonsTabOrder;
     Q_FOREACH(QAction* action, q->actions()) {
         QToolButton* button = new QToolButton(content);
         button->setDefaultAction(action);
+        button->setFocusPolicy(Qt::StrongFocus);
         buttons.append(button);
+        if (defaultAction == action) {
+            buttonsTabOrder.prepend(button); // default button is focused first
+            q->setFocusProxy(button);
+            defaultButton = button;
+        }
+        else
+            buttonsTabOrder.append(button);
+    }
+    QToolButton *previousButton = 0;
+    Q_FOREACH(QToolButton* button, buttonsTabOrder) {
+        if (previousButton)
+            QWidget::setTabOrder(previousButton, button);
+        previousButton = button;
     }
 
     if (shape == KMessageWidget::LineShape) {
@@ -113,6 +134,7 @@ void KMessageWidgetPrivate::createLayout()
         layout->addWidget(closeButton);
     } else {
         QGridLayout* layout = new QGridLayout(content);
+        layout->setSpacing(0);
         layout->addWidget(iconLabel, 0, 0);
         layout->addWidget(textLabel, 0, 1);
 
@@ -266,6 +288,12 @@ void KMessageWidget::addAction(QAction* action)
     d->createLayout();
 }
 
+void KMessageWidget::setDefaultAction(QAction* action)
+{
+    d->defaultAction = action;
+    d->createLayout();
+}
+
 void KMessageWidget::removeAction(QAction* action)
 {
     QFrame::removeAction(action);
@@ -301,6 +329,7 @@ void KMessageWidget::slotTimeLineChanged(qreal value)
 void KMessageWidget::slotTimeLineFinished()
 {
     d->content->move(0, 0);
+    d->defaultButton->setFocus();
 }
 
 #include "kmessagewidget.moc"

@@ -29,10 +29,12 @@ class QEvent;
 class KUrl;
 class KFileDialog;
 class KUrlRequester;
+class KexiContextMessage;
 
 //! @short Handler for use with file Kexi-specific opening/saving widgets/dialogs
-/*! Make sure the handled file dialog or URL requester is not destroyed before
-    this handler, otherwise recent dirs unformation will not by updated.
+/*! Make sure this object is destroyed before the handled file dialog
+    or URL requester, otherwise recent dirs information will not be updated.
+    Alternativelly you can call saveRecentDir(). */
 class KEXIMAIN_EXPORT KexiStartupFileHandler : public QObject
 {
     Q_OBJECT
@@ -118,6 +120,7 @@ public slots:
     //virtual void accept();
 
 signals:
+    void askForOverwriting(const KexiContextMessage& message);
     //entered file name is accepted
 //alread avail. in KFileWidget  void accepted();
     //void fileHighlighted();
@@ -128,6 +131,9 @@ protected slots:
     //virtual void reject();
     //void slotExistingFileHighlighted(const QString& fileName);
     void saveRecentDir();
+    
+    void messageWidgetActionYesTriggered();
+    void messageWidgetActionNoTriggered();
 
 private:
     void init(const KUrl &startDirOrVariable, Mode mode);

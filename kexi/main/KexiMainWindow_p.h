@@ -314,8 +314,12 @@ public:
             m_topLineSpacer->show();
 
             QPalette contentWidgetPalette(m_contentWidget->palette());
-            contentWidgetPalette.setBrush(QPalette::Window, contentWidgetPalette.brush(QPalette::Base));
-            contentWidgetPalette.setBrush(QPalette::WindowText, contentWidgetPalette.brush(QPalette::Text));
+            contentWidgetPalette.setBrush(QPalette::Active, QPalette::Window, contentWidgetPalette.brush(QPalette::Active, QPalette::Base));
+            contentWidgetPalette.setBrush(QPalette::Inactive, QPalette::Window, contentWidgetPalette.brush(QPalette::Inactive, QPalette::Base));
+            contentWidgetPalette.setBrush(QPalette::Disabled, QPalette::Window, contentWidgetPalette.brush(QPalette::Disabled, QPalette::Base));
+            contentWidgetPalette.setBrush(QPalette::Active, QPalette::WindowText, contentWidgetPalette.brush(QPalette::Active, QPalette::Text));
+            contentWidgetPalette.setBrush(QPalette::Inactive, QPalette::WindowText, contentWidgetPalette.brush(QPalette::Inactive, QPalette::Text));
+            contentWidgetPalette.setBrush(QPalette::Disabled, QPalette::WindowText, contentWidgetPalette.brush(QPalette::Disabled, QPalette::Text));
             m_contentWidget->setPalette(contentWidgetPalette);
 
             m_contentWidget->setAutoFillBackground(true);

@@ -24,11 +24,14 @@
 #include <kexidb/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
+#include <kexiutils/KexiContextMessage.h>
 
 #include <QKeyEvent>
 #include <QEvent>
 #include <QAction>
 #include <QLineEdit>
+#include <QEventLoop>
+#include <QApplication>
 
 #include <KMessageBox>
 #include <klocale.h>
@@ -57,6 +60,9 @@ public:
             //, filtersUpdated(false)
     {
     }
+    ~Private() {
+        messageWidgetLoop.exit(0);
+    }
 
     QPointer<KFileDialog> dialog;
     QPointer<KUrlRequester> requester;
@@ -68,6 +74,8 @@ public:
     //bool filtersUpdated;
     //KUrl highlightedUrl;
     QString recentDirClass;
+    
+    QEventLoop messageWidgetLoop;
 };
 
 //------------------
@@ -447,13 +455,37 @@ bool KexiStartupFileHandler::checkSelectedUrl()
                 return false;
             }
         }
-    } else if (d->confirmOverwrites
-               && !askForOverwriting(url.toLocalFile(), d->dialog->parentWidget()))
-    {
-        return false;
+    } else if (d->confirmOverwrites) {
+        KexiContextMessage message;
+        message.setText(i18n("This file already exists. Do you want to overwrite it?"));
+        QAction* messageWidgetActionYes = new QAction(i18n("Overwrite"), 0);
+        connect(messageWidgetActionYes, SIGNAL(triggered()),
+                this, SLOT(messageWidgetActionYesTriggered()));
+        message.addAction(messageWidgetActionYes);
+        QAction* messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), 0);
+        connect(messageWidgetActionNo, SIGNAL(triggered()),
+                this, SLOT(messageWidgetActionNoTriggered()));
+        message.addAction(messageWidgetActionNo);
+        message.setDefaultAction(messageWidgetActionNo);
+        emit askForOverwriting(message);
+        connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(messageWidgetActionNoTriggered()));
+        return d->messageWidgetLoop.exec();
+//               && !askForOverwriting(url.toLocalFile(), d->dialog->parentWidget()))
+//    {
+//        return false;
     }
 // }
     return true;
+}
+
+void KexiStartupFileHandler::messageWidgetActionYesTriggered()
+{
+    d->messageWidgetLoop.exit(1);
+}
+
+void KexiStartupFileHandler::messageWidgetActionNoTriggered()
+{
+    d->messageWidgetLoop.exit(0);
 }
 
 //static

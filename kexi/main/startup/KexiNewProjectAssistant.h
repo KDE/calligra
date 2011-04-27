@@ -25,6 +25,7 @@
 #include "ui_KexiServerDBNamePage.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <kexidb/connectiondata.h>
+#include <kexiutils/kmessagewidget.h>
 
 #include <QLabel>
 
@@ -57,6 +58,7 @@ protected:
     void changeEvent(QEvent* event);
 private:
     void updateFont();
+    void init();
     
     class Private;
     Private * const d;
@@ -121,6 +123,9 @@ private:
 
 class KexiDBTitlePage;
 class KexiStartupFileHandler;
+class KMessageWidget;
+class KexiContextMessage;
+class KexiContextMessageWidget;
 
 class KexiProjectTitleSelectionPage : public KexiAssistantPage
 {
@@ -133,9 +138,11 @@ public:
 
     KexiDBTitlePage* contents;
     KexiStartupFileHandler *fileHandler;
+    KexiContextMessageWidget *messageWidget;
 private slots:    
     void titleTextChanged(const QString & text);
     //void urlSelected(const KUrl& url);
+    void askForOverwriting(const KexiContextMessage& message);
 private:
     void updateUrl();
     //QString m_recentDirClass;
