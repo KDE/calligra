@@ -33,7 +33,6 @@
 #include <kexidb/utils.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
-#include <kexiutils/KexiContextMessage.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>

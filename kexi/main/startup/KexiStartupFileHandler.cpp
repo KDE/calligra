@@ -61,7 +61,10 @@ public:
     {
     }
     ~Private() {
-        messageWidgetLoop.exit(0);
+        if (messageWidgetLoop) {
+        //    messageWidgetLoop->exit(0);
+            messageWidgetLoop->deleteLater();
+        }
     }
 
     QPointer<KFileDialog> dialog;
@@ -75,7 +78,7 @@ public:
     //KUrl highlightedUrl;
     QString recentDirClass;
     
-    QEventLoop messageWidgetLoop;
+    QPointer<QEventLoop> messageWidgetLoop;
 };
 
 //------------------
@@ -370,6 +373,8 @@ QString KexiStartupFileDialog::selectedFile() const
 }
 */
 
+#include "KexiMainWindow.h"
+
 bool KexiStartupFileHandler::checkSelectedUrl()
 {
     //accept();
@@ -468,8 +473,10 @@ bool KexiStartupFileHandler::checkSelectedUrl()
         message.addAction(messageWidgetActionNo);
         message.setDefaultAction(messageWidgetActionNo);
         emit askForOverwriting(message);
-        connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(messageWidgetActionNoTriggered()));
-        return d->messageWidgetLoop.exec();
+        if (!d->messageWidgetLoop) {
+            d->messageWidgetLoop = new QEventLoop;
+        }
+        return d->messageWidgetLoop->exec();
 //               && !askForOverwriting(url.toLocalFile(), d->dialog->parentWidget()))
 //    {
 //        return false;
@@ -480,12 +487,12 @@ bool KexiStartupFileHandler::checkSelectedUrl()
 
 void KexiStartupFileHandler::messageWidgetActionYesTriggered()
 {
-    d->messageWidgetLoop.exit(1);
+    d->messageWidgetLoop->exit(1);
 }
 
 void KexiStartupFileHandler::messageWidgetActionNoTriggered()
 {
-    d->messageWidgetLoop.exit(0);
+    d->messageWidgetLoop->exit(0);
 }
 
 //static

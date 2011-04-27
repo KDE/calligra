@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
  *
  * Copyright (c) 2011 Aurélien Gâteau <agateau@kde.org>
+ * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,7 +28,7 @@
 class KMessageWidgetPrivate;
 
 /**
- * @short An action which can alternate between two texts/icons when triggered.
+ * @short A widget to provide feedback or propose opportunistic interactions.
  *
  * KMessageWidget should be used to provide inline positive or negative
  * feedback, or to implement opportunistic interactions.
@@ -75,6 +76,14 @@ public:
 
     void setDefaultAction(QAction* action);
 
+    /**
+     * @brief Sets autodeletion flag to be on or off.
+     * If autodeletion is on, the widget is automatically
+     * deleted after hide() or animatedHide() using QObject::deleteLater().
+     * Autodeletion is false by default.
+     */
+    void setAutoDelete(bool set);
+
 public Q_SLOTS:
     void setText(const QString &);
 
@@ -84,7 +93,9 @@ public Q_SLOTS:
 
     void setMessageType(KMessageWidget::MessageType);
 
-    void fadeIn();
+    void animatedShow();
+
+    void animatedHide();
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -92,6 +103,8 @@ protected:
     bool event(QEvent*);
 
     void resizeEvent(QResizeEvent*);
+
+    void showEvent(QShowEvent*);
 
 private:
     KMessageWidgetPrivate *const d;

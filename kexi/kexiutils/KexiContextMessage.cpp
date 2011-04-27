@@ -109,7 +109,8 @@ public:
 
     void setEnabledColorsForPage()
     {
-        page->setPalette(origPagePalette);
+        if (page)
+            page->setPalette(origPagePalette);
     }
 
     QPointer<QWidget> page;
@@ -130,10 +131,11 @@ KexiContextMessageWidget::KexiContextMessageWidget(
     setMessageType(KMessageWidget::WarningMessageType);
     setShape(KMessageWidget::RectangleShape);
     setShowCloseButton(false);
+    setAutoDelete(true);
+    setContentsMargins(3, 0, 3, 0); // to better fit to line edits
     layout->insertRow(row, QString(), this);
     foreach(QAction* action, message.actions()) {
         addAction(action);
-        kDebug() << "***" << action->associatedWidgets().first();
         connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
     }
     if (message.defaultAction()) {
@@ -144,7 +146,7 @@ KexiContextMessageWidget::KexiContextMessageWidget(
         d->setDisabledColorsForPage();
         KexiUtils::installRecursiveEventFilter(d->page, this);
     }
-    QTimer::singleShot(10, this, SLOT(fadeIn()));
+    QTimer::singleShot(10, this, SLOT(animatedShow()));
 }
 
 KexiContextMessageWidget::~KexiContextMessageWidget()
@@ -158,7 +160,7 @@ void KexiContextMessageWidget::actionTriggered()
     if (d->page) {
         d->page->setEnabled(true);
     }
-    deleteLater();
+    animatedHide();
 }
 
 bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)

@@ -94,6 +94,13 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-04-27
+Startup
+*Assistants:
+**proper painting of context arrow
+**fixed crash in event loop
+**merged with agateau/kmessagewidget
+
 2011-04-14..26
 Startup
 *Assistant Framework added for the Modern Menu
@@ -103,6 +110,7 @@ Startup
 **the message widget is displayed inline within the layout, context sensitive
 **current page is displayed as disabled when the message widget is displayed
 **it's first use in the DB Title Page of "New Project" assistant
+
 
 TODO: add operationMode property to KUrlRequester: enum OperationMode { Other = 0, Opening, Saving }
 

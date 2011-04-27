@@ -25,9 +25,10 @@
 #include "ui_KexiServerDBNamePage.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <kexidb/connectiondata.h>
-#include <kexiutils/kmessagewidget.h>
+#include <kexiutils/KexiContextMessage.h>
 
 #include <QLabel>
+#include <QPointer>
 
 class Q3ListViewItem;
 
@@ -123,9 +124,6 @@ private:
 
 class KexiDBTitlePage;
 class KexiStartupFileHandler;
-class KMessageWidget;
-class KexiContextMessage;
-class KexiContextMessageWidget;
 
 class KexiProjectTitleSelectionPage : public KexiAssistantPage
 {
@@ -138,7 +136,7 @@ public:
 
     KexiDBTitlePage* contents;
     KexiStartupFileHandler *fileHandler;
-    KexiContextMessageWidget *messageWidget;
+    QPointer<KexiContextMessageWidget> messageWidget;
 private slots:    
     void titleTextChanged(const QString & text);
     //void urlSelected(const KUrl& url);

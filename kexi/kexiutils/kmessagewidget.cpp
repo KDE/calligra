@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
  *
  * Copyright (c) 2011 Aurélien Gâteau <agateau@kde.org>
+ * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,6 +26,7 @@
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kstandardaction.h>
+#include <kglobalsettings.h>
 
 #include <QEvent>
 #include <QGridLayout>
@@ -34,6 +36,46 @@
 #include <QTimeLine>
 #include <QToolButton>
 #include <QPointer>
+#include <QPainterPath>
+
+//---------------------------------------------------------------------
+// KMessageWidgetFrame
+//---------------------------------------------------------------------
+class KMessageWidgetFrame : public QFrame
+{
+public:
+    KMessageWidgetFrame(QWidget* parent = 0)
+     : QFrame(parent), radius(5), arr(6.0)
+     {
+     }
+     
+    virtual void paintEvent(QPaintEvent* event) {
+        QFrame::paintEvent(event);
+        QPainter painter(this);
+        const QSizeF s(size());
+        const qreal rad = radius;
+        QPolygonF polyline;
+        polyline << QPointF(rad * 3.0 + 0.5, s.height() - rad * 2)
+                 << QPointF(rad * 3.0 + 0.5 + rad, s.height() - 0.5)
+                 << QPointF(rad * 3.0 + 0.5 + rad * 2.0, s.height() - rad * 2);
+        QPolygonF polygon;
+        polygon << QPointF(polyline[0].x(), polyline[0].y() - 0.5)
+                << polyline[1]
+                << QPointF(polyline[2].x(), polyline[2].y() - 0.5);
+        
+        painter.setPen(QPen(bg.color(), 1.0));
+        painter.setBrush(bg);
+        painter.drawPolygon(polygon);
+        painter.setPen(QPen(fg, 1.0));
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.drawPolyline(polyline);
+    }
+
+    const int radius;
+    const qreal arr;
+    QBrush bg;
+    QBrush fg;
+};
 
 //---------------------------------------------------------------------
 // KMessageWidgetPrivate
@@ -44,7 +86,7 @@ public:
     void init(KMessageWidget*);
 
     KMessageWidget* q;
-    QFrame* content;
+    KMessageWidgetFrame* content;
     QLabel* iconLabel;
     QLabel* textLabel;
     QToolButton* closeButton;
@@ -57,8 +99,14 @@ public:
     QPixmap contentSnapShot;
     QAction* defaultAction;
     QPointer<QToolButton> defaultButton;
+    KColorScheme::ColorSet colorSet;
+    KColorScheme::BackgroundRole bgRole;
+    KColorScheme::ForegroundRole fgRole;
+    bool autoDelete;
 
     void createLayout();
+    void updateSnapShot();
+    void updateStyleSheet();
 };
 
 void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
@@ -71,7 +119,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     QObject::connect(timeLine, SIGNAL(valueChanged(qreal)), q, SLOT(slotTimeLineChanged(qreal)));
     QObject::connect(timeLine, SIGNAL(finished()), q, SLOT(slotTimeLineFinished()));
 
-    content = new QFrame(q);
+    content = new KMessageWidgetFrame(q);
     content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     shape = KMessageWidget::LineShape;
@@ -83,13 +131,14 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     textLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     textLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
-    KAction* closeAction = KStandardAction::close(q, SLOT(hide()), q);
+    KAction* closeAction = KStandardAction::close(q, SLOT(animatedHide()), q);
 
     closeButton = new QToolButton(content);
     closeButton->setAutoRaise(true);
     closeButton->setDefaultAction(closeAction);
     
     defaultAction = 0;
+    autoDelete = false;
 }
 
 void KMessageWidgetPrivate::createLayout()
@@ -153,6 +202,35 @@ void KMessageWidgetPrivate::createLayout()
     q->updateGeometry();
 }
 
+void KMessageWidgetPrivate::updateSnapShot()
+{
+    contentSnapShot = QPixmap(content->size());
+    contentSnapShot.fill(Qt::transparent);
+    content->render(&contentSnapShot, QPoint(), QRegion(), QWidget::DrawChildren);
+}
+
+void KMessageWidgetPrivate::updateStyleSheet()
+{
+    KColorScheme scheme(QPalette::Active, colorSet);
+    content->bg = scheme.background(bgRole);
+    content->fg = scheme.foreground(fgRole);
+    int left, top, right, bottom;
+    q->getContentsMargins(&left, &top, &right, &bottom);
+    content->setStyleSheet(
+        QString(".QFrame {"
+            "background-color: %1;"
+            "border-radius: %2px;"
+            "margin: %3px %4px %5px %6px;"
+            "border: 1px solid %7;"
+            "}"
+            ".QLabel { color: %7; }"
+            )
+        .arg(content->bg.color().name())
+        .arg(content->radius)
+        .arg(top).arg(right).arg(content->radius * 2 + bottom).arg(left)
+        .arg(content->fg.color().name())
+    );
+}
 
 //---------------------------------------------------------------------
 // KMessageWidget
@@ -190,55 +268,45 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
 {
     d->messageType = type;
     KIcon icon;
-    KColorScheme::BackgroundRole bgRole;
-    KColorScheme::ForegroundRole fgRole;
-    KColorScheme::ColorSet colorSet = KColorScheme::Window;
+    d->colorSet = KColorScheme::Window;
     switch (type) {
     case PositiveMessageType:
         icon = KIcon("dialog-ok");
-        bgRole = KColorScheme::PositiveBackground;
-        fgRole = KColorScheme::PositiveText;
+        d->bgRole = KColorScheme::PositiveBackground;
+        d->fgRole = KColorScheme::PositiveText;
         break;
     case InformationMessageType:
         icon = KIcon("dialog-information");
-        bgRole = KColorScheme::NormalBackground;
-        fgRole = KColorScheme::NormalText;
-        colorSet = KColorScheme::View;
+        d->bgRole = KColorScheme::NormalBackground;
+        d->fgRole = KColorScheme::NormalText;
+        d->colorSet = KColorScheme::View;
         break;
     case WarningMessageType:
         icon = KIcon("dialog-warning");
-        bgRole = KColorScheme::NeutralBackground;
-        fgRole = KColorScheme::NeutralText;
+        d->bgRole = KColorScheme::NeutralBackground;
+        d->fgRole = KColorScheme::NeutralText;
         break;
     case ErrorMessageType:
         icon = KIcon("dialog-error");
-        bgRole = KColorScheme::NegativeBackground;
-        fgRole = KColorScheme::NegativeText;
+        d->bgRole = KColorScheme::NegativeBackground;
+        d->fgRole = KColorScheme::NegativeText;
         break;
     }
     const int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
     d->iconLabel->setPixmap(icon.pixmap(size));
 
-    KColorScheme scheme(QPalette::Active, colorSet);
-    QBrush bg = scheme.background(bgRole);
-    QBrush fg = scheme.foreground(fgRole);
-    d->content->setStyleSheet(
-        QString(".QFrame {"
-            "background-color: %1;"
-            "border-radius: 5px;"
-            "border: 1px solid %2;"
-            "}"
-            ".QLabel { color: %2; }"
-            )
-        .arg(bg.color().name())
-        .arg(fg.color().name())
-        );
+    d->updateStyleSheet();
 }
 
 bool KMessageWidget::event(QEvent* event)
 {
     if (event->type() == QEvent::Polish && !layout()) {
         d->createLayout();
+    }
+    else if (event->type() == QEvent::Hide) {
+        if (d->autoDelete) {
+            deleteLater();
+        }
     }
     return QFrame::event(event);
 }
@@ -248,6 +316,7 @@ void KMessageWidget::resizeEvent(QResizeEvent* event)
     QFrame::resizeEvent(event);
     if (d->timeLine->state() == QTimeLine::NotRunning) {
         d->content->resize(size());
+        d->updateStyleSheet(); // needed because margins could be changed
     }
 }
 
@@ -259,6 +328,15 @@ void KMessageWidget::paintEvent(QPaintEvent* event)
         painter.setOpacity(d->timeLine->currentValue() * d->timeLine->currentValue());
         painter.drawPixmap(0, 0, d->contentSnapShot);
     }
+}
+
+void KMessageWidget::showEvent(QShowEvent* event)
+{
+    QFrame::showEvent(event);
+    d->content->adjustSize();
+    int wantedHeight = d->content->height();
+    d->content->resize(width(), wantedHeight);
+    setFixedHeight(wantedHeight);
 }
 
 KMessageWidget::Shape KMessageWidget::shape() const
@@ -300,19 +378,26 @@ void KMessageWidget::removeAction(QAction* action)
     d->createLayout();
 }
 
-void KMessageWidget::fadeIn()
+void KMessageWidget::setAutoDelete(bool set)
 {
-    show();
+    d->autoDelete = set;
+}
 
+void KMessageWidget::animatedShow()
+{
+    if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+        show();
+        return;
+    }
+
+    QFrame::show();
+    setFixedHeight(0);
     d->content->adjustSize();
     int wantedHeight = d->content->height();
     d->content->resize(width(), wantedHeight);
     d->content->move(0, -wantedHeight);
-    d->contentSnapShot = QPixmap(d->content->size());
-    d->contentSnapShot.fill(Qt::transparent);
-    d->content->render(&d->contentSnapShot, QPoint(), QRegion(), DrawChildren);
 
-    setFixedHeight(wantedHeight);
+    d->updateSnapShot();
 
     d->timeLine->setDirection(QTimeLine::Forward);
     if (d->timeLine->state() == QTimeLine::NotRunning) {
@@ -328,8 +413,32 @@ void KMessageWidget::slotTimeLineChanged(qreal value)
 
 void KMessageWidget::slotTimeLineFinished()
 {
-    d->content->move(0, 0);
-    d->defaultButton->setFocus();
+    if (d->timeLine->direction() == QTimeLine::Forward) {
+        // Show
+        d->content->move(0, 0);
+        if (d->defaultButton) {
+            d->defaultButton->setFocus();
+        }
+    } else {
+        // Hide
+        hide();
+    }
+}
+
+void KMessageWidget::animatedHide()
+{
+    if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+        hide();
+        return;
+    }
+
+    d->content->move(0, -d->content->height());
+    d->updateSnapShot();
+
+    d->timeLine->setDirection(QTimeLine::Backward);
+    if (d->timeLine->state() == QTimeLine::NotRunning) {
+        d->timeLine->start();
+    }
 }
 
 #include "kmessagewidget.moc"
