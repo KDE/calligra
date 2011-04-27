@@ -3121,6 +3121,7 @@ KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool co
                                        QString* shortcutFileName)
 {
     Q_UNUSED(shortcutFileName);
+    Q_UNUSED(confirmOverwrites);
     if (!d->tabbedToolBar)
         return 0;
     d->tabbedToolBar->showMainMenu("project_new");
