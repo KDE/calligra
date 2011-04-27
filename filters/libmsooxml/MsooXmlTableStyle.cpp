@@ -138,8 +138,11 @@ void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties,
     Q_UNUSED(row);
     Q_UNUSED(column);
 
-    if(styleProperties->setProperties & TableStyleProperties::BackgroundColor) {
+    if (styleProperties->setProperties & TableStyleProperties::BackgroundColor) {
         style->setBackgroundColor(styleProperties->backgroundColor);
+    }
+    if (styleProperties->setProperties & TableStyleProperties::BackgroundOpacity) {
+        style->setBackgroundOpacity(styleProperties->backgroundOpacity);
     }
 }
 

@@ -976,6 +976,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
                 TRY_READ(solidFill)
                 m_currentTableStyleProperties->backgroundColor = m_currentColor;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::BackgroundColor;
+                if (m_currentAlpha > 0) {
+                    m_currentTableStyleProperties->backgroundOpacity = m_currentAlpha;
+                    m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundOpacity;
+                }
             }
             SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
