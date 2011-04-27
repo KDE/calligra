@@ -230,6 +230,11 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     kDebug(30513) ;
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->dataStream();
+    if (!in) {
+        kDebug(30513) << "Data stream not provided, no access to inline shapes!";
+        return;
+    }
+
     int size = (data.picf->lcb - data.picf->cbHeader);
 
     kDebug(30513) << "\nCurrent stream position: " << in->getPosition()
