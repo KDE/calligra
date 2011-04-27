@@ -47,6 +47,10 @@ public:
 private:
     KWTextFrameSet *m_textFrameSet;
     QList<KoTextLayoutRootArea *> m_pages;
+    QList<KWRootAreaProvider *> m_dependentProviders;
+
+    void addDependentProvider(KWRootAreaProvider *provider);
+    void handleDependentProviders(int pageNumber);
 };
 
 #endif
