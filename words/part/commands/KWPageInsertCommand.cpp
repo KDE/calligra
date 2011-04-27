@@ -95,7 +95,8 @@ void KWPageInsertCommand::redo()
         // Set the y-offset of the new page.
         KWPage prevPage = d->page.previous();
         if (prevPage.isValid()) {
-            d->page.setOffsetInDocument(prevPage.offsetInDocument() + prevPage.height());
+            KoInsets padding = d->document->pageManager()->padding();
+            d->page.setOffsetInDocument(prevPage.offsetInDocument() + prevPage.height() + padding.top + padding.bottom);
         } else {
             d->page.setOffsetInDocument(0.0);
             //d->page.setHeight(pageManager->defaultPageStyle().pageLayout().height);
