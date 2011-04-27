@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2010 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * Copyright (c) 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,17 +53,22 @@ void KoFindTables::replaceImplementation ( const KoFindMatch& match, const QVari
 
 void KoFindTables::findImplementation ( const QString& pattern, KoFindBase::KoFindMatchList& matchList )
 {
-    Cell cell = d->currentSheet->cellStorage()->firstInRow(0);
+    int row = 1;
+    int column = 1;
+    
+    Cell cell = d->currentSheet->cellStorage()->firstInRow(row);
     Qt::CaseSensitivity sensitivity = options()->option("caseSensitive")->value().toBool() ? Qt::CaseSensitive : Qt::CaseInsensitive;
-    int column = 0;
     while(!cell.isNull()) {
-        if(cell.userInput().contains(pattern, sensitivity)) {
-            KoFindMatch match;
-            match.setContainer(QVariant::fromValue(d->currentSheet));
-            match.setLocation(QVariant::fromValue(cell));
-            matchList.append(match);
+        while(!cell.isNull()) {
+            if(cell.userInput().contains(pattern, sensitivity)) {
+                KoFindMatch match;
+                match.setContainer(QVariant::fromValue(d->currentSheet));
+                match.setLocation(QVariant::fromValue(cell));
+                matchList.append(match);
+            }
+            cell = d->currentSheet->cellStorage()->nextInRow(++column, 1);
         }
-        cell = d->currentSheet->cellStorage()->nextInRow(++column, 0);
+        cell = d->currentSheet->cellStorage()->firstInRow(++row);
     }
 }
 

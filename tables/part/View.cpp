@@ -138,6 +138,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "PrintJob.h"
+#include "KoFindTables.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -162,6 +163,7 @@
 // D-Bus
 #include "interfaces/ViewAdaptor.h"
 #include <QtDBus/QtDBus>
+#include <KoFindToolbar.h>
 
 using namespace Calligra::Tables;
 
@@ -197,6 +199,9 @@ public:
 
     // all UI actions
     ViewActions* actions;
+
+    KoFindTables* finder;
+    KoFindToolbar* findToolbar;
 
     // if true, kspread is still loading the document
     // don't try to refresh the view
@@ -600,6 +605,10 @@ View::View(QWidget *_parent, Doc *_doc)
     }
 
     connect(&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
+
+    d->finder = new KoFindTables(this);
+    d->findToolbar = new KoFindToolbar(d->finder, actionCollection(), this);
+    d->viewLayout->addWidget(d->findToolbar, 4, 0, 1, 2);
 
     // Delay the setting of the initial position, because we need to have
     // a sensible widget size, which is not always the case from the beginning
@@ -1175,6 +1184,8 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     if (d->activeSheet == 0) {
         return;
     }
+
+    d->finder->setCurrentSheet(sheet);
 
     // flake
     // Change the active shape controller and its shapes.
