@@ -118,7 +118,9 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
     Q_ASSERT(kwdoc);
 
-    kDebug() << "pageNumber=" << (m_pages.count() + 1) << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
+    int pageNumber = m_pages.count() + 1;
+
+    kDebug() << "pageNumber=" << pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
 
     if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
         // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
@@ -126,9 +128,10 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             KWPage page = kwdoc->appendPage();
             Q_ASSERT(page.isValid());
         }
+    } else {
+        Q_ASSERT_X(!kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider()->m_dependentProviders.contains(this), __FUNCTION__, "Seems we are still attached to the mainFrame but got still asked to layout what should never have happened");
     }
 
-    int pageNumber = m_pages.count() + 1;
     Q_ASSERT(pageNumber <= pageManager->pageCount());
 
     handleDependentProviders(pageNumber);
