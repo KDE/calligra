@@ -47,7 +47,6 @@
 #include <core/kexi.h>
 #include <KexiConnSelector.h>
 #include <KexiProjectSelector.h>
-#include <KexiNewProjectWizard.h>
 #include <KexiDBTitlePage.h>
 #include <kexiutils/utils.h>
 #include <kexidbdrivercombobox.h>
@@ -280,12 +279,12 @@ void ImportWizard::setupDstType()
 //
 void ImportWizard::setupDstTitle()
 {
-    m_dstTitlePageWidget = new KexiDBTitlePage(i18n("Destination project's caption:"), this);
+    m_dstTitlePageWidget = new KexiDBTitlePage(i18n("Destination project's title:"), this);
     m_dstTitlePageWidget->layout()->setMargin(KDialog::marginHint());
     m_dstTitlePageWidget->updateGeometry();
-    m_dstNewDBNameLineEdit = m_dstTitlePageWidget->le_caption;
+    m_dstNewDBNameLineEdit = m_dstTitlePageWidget->le_title;
 
-    m_dstTitlePageItem = new KPageWidgetItem(m_dstTitlePageWidget, i18n("Select Destination Database Project's Caption"));
+    m_dstTitlePageItem = new KPageWidgetItem(m_dstTitlePageWidget, i18n("Select Destination Database Project's Title"));
     addPage(m_dstTitlePageItem);
 }
 
