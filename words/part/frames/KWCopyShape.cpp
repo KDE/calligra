@@ -20,12 +20,17 @@
 #include "KWCopyShape.h"
 #include "KWPage.h"
 #include "KWPageManager.h"
+#include "KWFrame.h"
+#include "KWFrameSet.h"
+#include "KWTextFrameSet.h"
 
 #include <KoShapeBorderModel.h>
 #include <KoShapeLoadingContext.h>
 #include <KoViewConverter.h>
 #include <KoTextShapeData.h>
 #include <KoShapeContainer.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
 
 #include <QPainter>
 #include <QPainterPath>
@@ -53,21 +58,33 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         return;
     }
 
-    if (m_pageManager) {
-        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_original->userData());
-        if (data) {
-            KWPage currentPage = m_pageManager->page(this);
-#if 0
-            KWPageTextInfo info(currentPage);
-            data->relayoutFor(info);
-#else
-            //TODO data->relayoutFor(currentPage);
-    #ifdef __GNUC__
-        #warning FIXME: port to textlayout-rework
-    #endif
-#endif
-        }
-    }
+    // Since the rootArea is shared between the copyShape and the originalShape we need to
+    // temporary switch the used KoTextPage to be sure the proper page-numbers are displayed.
+    class ScopedPageSwitcher {
+        public:
+            ScopedPageSwitcher(const KWPageManager *m_pageManager, KWCopyShape *copyshape, KoShape *original) {
+                KWFrame *frame = dynamic_cast<KWFrame*>(original->applicationData());
+                Q_ASSERT(frame);
+                KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+                Q_ASSERT(frameset);
+                KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(frameset->document()->documentLayout());
+                Q_ASSERT(lay);
+                m_rootArea = lay->rootAreaForPosition(0);
+                Q_ASSERT(m_rootArea);
+                m_page = m_pageManager->page(copyshape);
+                Q_ASSERT(m_page.isValid());
+                m_oldPage = m_rootArea->page();
+                m_rootArea->setPage(&m_page);
+            }
+            ~ScopedPageSwitcher() {
+                m_rootArea->setPage(m_oldPage);
+            }
+        private:
+            KoTextLayoutRootArea *m_rootArea;
+            KWPage m_page;
+            KoTextPage *m_oldPage;
+    };
+    ScopedPageSwitcher scopedswitcher(m_pageManager, this, m_original);
 
     //paint all child shapes
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
