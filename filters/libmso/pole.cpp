@@ -604,8 +604,7 @@ bool DirTree::valid() const
             return false;
         }
         if ( (i > 0) &&
-             (e->valid && !e->dir) &&
-             ((e->size == 0) || ((int)e->child != -1)) )
+             (e->valid && !e->dir) && ((int)e->child != -1))
         {
             std::cerr << "DirTree::valid() Invalid user stream detected!" << std::endl;
             return false;
@@ -882,6 +881,7 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         // CLSID, contains a object class GUI if this entry is a storage or root
         // storage or all zero if not.
 #ifdef POLE_DEBUG
+        if (!e.valid) std::cout << "INVALID ";
         printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%lu size=%lu clsid=%lu.%lu.%lu.%lu\n",
                name.c_str(), type, e.prev, e.next, e.child, e.start, e.size, readU32(buffer + 0x50 + p), readU32(buffer + 0x54 + p), readU32(buffer + 0x58 + p), readU32(buffer + 0x5C + p));
 #endif
