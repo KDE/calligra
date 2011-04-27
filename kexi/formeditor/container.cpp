@@ -64,7 +64,7 @@ EventEater::EventEater(QWidget *widget, QObject *container)
     m_widget = widget;
     m_container = container;
 
-    installRecursiveEventFilter(m_widget, this);
+    KexiUtils::installRecursiveEventFilter(m_widget, this);
 }
 
 bool
@@ -111,7 +111,7 @@ EventEater::eventFilter(QObject *o, QEvent *ev)
 EventEater::~EventEater()
 {
     if (m_widget)
-        removeRecursiveEventFilter(m_widget, this);
+        KexiUtils::removeRecursiveEventFilter(m_widget, this);
 }
 
 // Container itself
@@ -1526,7 +1526,7 @@ void
 DesignTimeDynamicChildWidgetHandler::childWidgetAdded(QWidget* w)
 {
     if (m_item) {
-        installRecursiveEventFilter(w, m_item->eventEater());
+        KexiUtils::installRecursiveEventFilter(w, m_item->eventEater());
     }
 }
 

@@ -725,4 +725,33 @@ QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
     return dest;
 }
 
+//---------------------
+
+void KexiUtils::installRecursiveEventFilter(QObject *object, QObject *filter)
+{
+    if (!object || !filter || !object->isWidgetType())
+        return;
+
+//    kDebug() << "Installing event filter on widget:" << object 
+//        << "directed to" << filter->objectName();
+    object->installEventFilter(filter);
+
+    const QObjectList list(object->children());
+    foreach(QObject *obj, list) {
+        installRecursiveEventFilter(obj, filter);
+    }
+}
+
+void KexiUtils::removeRecursiveEventFilter(QObject *object, QObject *filter)
+{
+    object->removeEventFilter(filter);
+    if (!object->isWidgetType())
+        return;
+
+    const QObjectList list(object->children());
+    foreach(QObject *obj, list) {
+        removeRecursiveEventFilter(obj, filter);
+    }
+}
+
 #include "utils_p.moc"

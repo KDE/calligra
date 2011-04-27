@@ -622,6 +622,14 @@ private:
     bool origValue;
 };
 
+/*! This helper function install an event filter on @a object and all of its
+  children, directed to @a filter. */
+KEXIUTILS_EXPORT void installRecursiveEventFilter(QObject *object, QObject *filter);
+
+/*! This helper function removes an event filter installed before
+  on @a object and all of its children. */
+KEXIUTILS_EXPORT void removeRecursiveEventFilter(QObject *object, QObject *filter);
+
 } //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H
