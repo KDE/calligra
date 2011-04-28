@@ -21,6 +21,7 @@
 #ifndef KOFINDTABLES_H
 #define KOFINDTABLES_H
 
+#include "calligra_tables_export.h"
 #include <KoFindBase.h>
 #include <Cell.h>
 
@@ -30,7 +31,7 @@ namespace Tables
 {
 
 class Sheet;
-class KoFindTables : public KoFindBase
+class CALLIGRA_TABLES_COMMON_EXPORT KoFindTables : public KoFindBase
 {
     Q_OBJECT
 public:

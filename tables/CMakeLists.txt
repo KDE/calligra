@@ -371,6 +371,7 @@ install( FILES
     part/Headers.h
     part/ToolRegistry.h
     part/View.h
+    part/KoFindTables.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables/part COMPONENT Devel)
 install( FILES
     ui/CellToolBase.h
