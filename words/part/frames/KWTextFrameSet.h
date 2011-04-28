@@ -58,6 +58,11 @@ public:
         return m_document;
     }
 
+    /// return the rootAreaProvider that is responsible for providing rootArea's to the KoTextDocumentLayout for this frameset.
+    KWRootAreaProvider *rootAreaProvider() const {
+        return m_rootAreaProvider;
+    }
+
     /**
      * Sets the flag if this frameset is allowed to automaticall do layout of the textdata.
      * A text will do layouting of the text when the content changes, but also when frames
