@@ -34,8 +34,11 @@
 
 #include "mswordodfimport.h"
 #include "document.h"
-#include "fibbase.h"
+
+#include "generated/simpleParser.h"
 #include "pole.h"
+
+const quint16 Word8nFib = 0x00c1;
 
 //function prototypes of local functions
 bool readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer);
@@ -85,7 +88,14 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     LEInputStream wdstm(&buff1);
 
-    FibBase fb(wdstm);
+    MSO::FibBase fb;
+    LEInputStream::Mark m = wdstm.setMark();
+    try {
+        parseFibBase(wdstm, fb);
+    } catch (IOException _e) {
+        kError(30513) << _e.msg;
+    }
+    wdstm.rewind(m);
 
     //document is encrypted or obfuscated
     if (fb.fEncrypted) {

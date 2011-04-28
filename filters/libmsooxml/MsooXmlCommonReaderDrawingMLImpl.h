@@ -1863,6 +1863,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
      body->startElement("text:p", false);
 
+     // OOxml sometimes defines margins as percentages, however percentages in odf mean a bit different
+     // thing, so here we transform them to points
      QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
      if (spcBef.contains("%")) {
          spcBef.remove("%");
