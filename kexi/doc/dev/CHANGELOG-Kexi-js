@@ -94,7 +94,7 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
-2011-04-27
+2011-04-27..28
 Startup
 *Assistants:
 **proper painting of context arrow
@@ -102,6 +102,7 @@ Startup
 **merged with agateau/kmessagewidget
 **KexiContextMessage* API extended
 **two remaining error messages of 'DB Title Page' ported to KexiContextMessage* API
+**Fixed focusing widget after message is closed
 
 2011-04-14..26
 Startup

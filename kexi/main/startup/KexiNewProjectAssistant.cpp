@@ -515,9 +515,11 @@ KexiProjectTitleSelectionPage::~KexiProjectTitleSelectionPage()
 void KexiProjectTitleSelectionPage::askForOverwriting(const KexiContextMessage& message)
 {
     kDebug() << message.text();
+    delete messageWidget;
     messageWidget = new KexiContextMessageWidget(this,
                                                  contents->formLayout,
                                                  contents->file_requester, message);
+    messageWidget->setNextFocusWidget(contents->le_title);
 }
 
 void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
@@ -554,7 +556,6 @@ bool KexiProjectTitleSelectionPage::isAcceptable()
                                                      contents->le_title,
                                                      i18n("Enter project title."));
         contents->le_title->setText(QString());
-        contents->le_title->setFocus();
         return false;
     }
     KUrl url = contents->file_requester->url();
@@ -562,11 +563,9 @@ bool KexiProjectTitleSelectionPage::isAcceptable()
         messageWidget = new KexiContextMessageWidget(contents->formLayout,
             contents->file_requester,
             i18n("Enter valid project filename. The file should be located on this computer."));
-        contents->file_requester->setFocus();
         return false;
     }
     if (!fileHandler->checkSelectedUrl()) {
-        contents->le_title->setFocus();
         return false;
     }
     //urlSelected(url); // to save recent dir

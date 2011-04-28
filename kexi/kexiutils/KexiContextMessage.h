@@ -83,6 +83,11 @@ public:
 
     virtual ~KexiContextMessageWidget();
 
+    //! Sets widget @a widget to be foused after this message closes.
+    //! By default context widget passed to constructor will be focused.
+    //! Useful in modal mode.
+    void setNextFocusWidget(QWidget *widget);
+    
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 

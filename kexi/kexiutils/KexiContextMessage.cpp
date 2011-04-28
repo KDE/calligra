@@ -94,7 +94,7 @@ QAction* KexiContextMessage::defaultAction() const
 class KexiContextMessageWidget::Private
 {
 public:
-    Private() : hasMessages(false) {}
+    Private() : hasActions(false), eventBlocking(true) {}
     ~Private() {}
 
     void setDisabledColorsForPage()
@@ -112,13 +112,16 @@ public:
 
     void setEnabledColorsForPage()
     {
-        if (page && hasMessages)
+        if (page && hasActions)
             page->setPalette(origPagePalette);
     }
 
     QPointer<QWidget> page;
     QPalette origPagePalette;
-    bool hasMessages;
+    QPointer<QWidget> context;
+    QPointer<QWidget> nextFocusWidget;
+    bool hasActions;
+    bool eventBlocking;
 };
 
 KexiContextMessageWidget::KexiContextMessageWidget(
@@ -151,6 +154,7 @@ void KexiContextMessageWidget::init(
     QWidget *page, QFormLayout* layout,
     QWidget *context, const KexiContextMessage& message)
 {
+    d->context = context;
     d->page = page;
     hide();
     int row;
@@ -161,9 +165,16 @@ void KexiContextMessageWidget::init(
     setShowCloseButton(false);
     setAutoDelete(true);
     setContentsMargins(3, 0, 3, 0); // to better fit to line edits
+    d->hasActions = !message.actions().isEmpty();
+    if (d->page && d->hasActions) {
+        d->setDisabledColorsForPage();
+        KexiUtils::installRecursiveEventFilter(d->page, this); // before inserting,
+                                                               // so 'this' is not disabled
+    }
+
     layout->insertRow(row, QString(), this);
-    d->hasMessages = !message.actions().isEmpty();
-    if (d->hasMessages) {
+
+    if (d->hasActions) {
         foreach(QAction* action, message.actions()) {
             addAction(action);
             connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
@@ -172,11 +183,10 @@ void KexiContextMessageWidget::init(
         if (message.defaultAction()) {
             setDefaultAction(message.defaultAction());
         }
-    
-        if (d->page) {
-            d->setDisabledColorsForPage();
-            KexiUtils::installRecursiveEventFilter(d->page, this);
-        }
+    }
+    else {
+        if (d->context)
+            d->context->setFocus();
     }
     QTimer::singleShot(10, this, SLOT(animatedShow()));
 }
@@ -184,6 +194,11 @@ void KexiContextMessageWidget::init(
 KexiContextMessageWidget::~KexiContextMessageWidget()
 {
     d->setEnabledColorsForPage();
+    d->eventBlocking = false;
+    if (d->nextFocusWidget)
+        d->nextFocusWidget->setFocus();
+    else if (d->context)
+        d->context->setFocus();
     delete d;
 }
 
@@ -248,11 +263,16 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
 #ifndef QT_NO_GESTURES
     case QEvent::Gesture:
 #endif
-        return true;
+        if (d->eventBlocking)
+            return true;
     default:;
     }
-//    kDebug() << watched << event->type();
     return KMessageWidget::eventFilter(watched, event);
+}
+
+void KexiContextMessageWidget::setNextFocusWidget(QWidget *widget)
+{
+    d->nextFocusWidget = widget;
 }
 
 #include "KexiContextMessage.moc"
