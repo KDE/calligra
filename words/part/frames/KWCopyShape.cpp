@@ -72,18 +72,19 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
                 m_rootArea = lay->rootAreaForPosition(0);
                 Q_ASSERT(m_rootArea);
                 Q_ASSERT(m_rootArea->associatedShape() == original);
-                m_page = m_pageManager->page(copyshape);
-                Q_ASSERT(m_page.isValid());
-                m_oldPage = m_rootArea->page();
-                m_rootArea->setPage(&m_page);
+                KWPage page = m_pageManager->page(copyshape);
+                Q_ASSERT(page.isValid());
+                m_oldPage = dynamic_cast<KWPage*>(m_rootArea->page());
+                Q_ASSERT(m_oldPage);
+                m_oldPage = new KWPage(*m_oldPage);
+                m_rootArea->setPage(new KWPage(page)); // takes over ownership
             }
             ~ScopedPageSwitcher() {
                 m_rootArea->setPage(m_oldPage);
             }
         private:
             KoTextLayoutRootArea *m_rootArea;
-            KWPage m_page;
-            KoTextPage *m_oldPage;
+            KWPage *m_oldPage;
     };
     ScopedPageSwitcher scopedswitcher(m_pageManager, this, m_original);
 

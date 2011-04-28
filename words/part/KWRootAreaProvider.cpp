@@ -52,7 +52,7 @@ class KWTextLayoutRootArea : public KoTextLayoutRootArea
             return KoTextLayoutRootArea::layout(cursor);
         }
         KWTextFrameSet *m_frameSet;
-        KWPage m_page; //FIXME hack to prevent the KWPage from going out of scope
+        KWPage m_page;
 };
 
 KWRootAreaProvider::KWRootAreaProvider(KWTextFrameSet *textFrameSet)
@@ -159,7 +159,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             area->setAssociatedShape(shape);
             data->setRootArea(area);
         }
-        area->setPage(&area->m_page);
+        area->setPage(new KWPage(page));
     }
 
     m_pages.append(area);
