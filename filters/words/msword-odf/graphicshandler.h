@@ -281,9 +281,13 @@ private:
     QMap<QByteArray, QString> m_picNames; //picture names
 
     /*
+     * Group specific attributes.
+     */
+    bool m_processingGroup;
+
+    /*
      * Object specific attributes.
      */
-
     ObjectType m_objectType; // Type of the object in {Inline, Floating}.
     QByteArray m_rgbUid;     // Unique identifier of a BLIP.
     int m_zIndex;            // Position of current shape on z axis.

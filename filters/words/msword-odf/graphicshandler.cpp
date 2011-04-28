@@ -162,6 +162,7 @@ KWordGraphicsHandler::KWordGraphicsHandler(Document* doc,
 , m_fib(fib)
 , m_pOfficeArtHeaderDgContainer(0)
 , m_pOfficeArtBodyDgContainer(0)
+, m_processingGroup(false)
 , m_objectType(Inline)
 , m_rgbUid(0)
 , m_zIndex(0)
@@ -397,9 +398,26 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     if (o.rgfb.size() < 2) {
         return;
     }
-    //TODO: create corresponding style and apply style properties
-    out.xml.startElement("draw:g");
     const OfficeArtSpContainer *first = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+
+    //create graphic style for the group shape
+    QString styleName;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+
+    DrawStyle ds(&m_officeArtDggContainer, first);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    defineWrappingAttributes(style, ds);
+    styleName = out.styles.insert(style, "gr");
+
+    out.xml.startElement("draw:g");
+    out.xml.addAttribute("draw:style-name", styleName);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+    m_processingGroup = true;
 
     if (first && first->shapeGroup) {
         //process shape information for the group
@@ -413,11 +431,13 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
                 out.setChildRectangle(*sp.childAnchor);
             }
             processDrawingObject(sp, out);
-            m_zIndex++;
-        } 
-	//TODO: Another group shape might be here!
+        } else {
+            kDebug(30513) << "Nested group shapes not supported!";
+            //TODO: nested group shape!
+        }
     }
     out.xml.endElement(); // draw:g
+    m_processingGroup = false;
 }
 
 void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
@@ -428,7 +448,6 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
-    // check the shape type and process it
     kDebug(30513) << "shapeType: " << hex << o.shapeProp.rh.recInstance;
     kDebug(30513) << "grupShape: " << o.shapeProp.fGroup;
     kDebug(30513) << "Selected properties: ";
@@ -686,6 +705,7 @@ void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
 
 void KWordGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds)
 {
+    if (m_processingGroup) return;
     if (m_objectType == Inline) return;
 
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
@@ -772,8 +792,9 @@ void KWordGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const Dra
 
 void KWordGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds)
 {
-    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+    if (m_processingGroup) return;
 
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     if (m_objectType == Inline) {
         style.addProperty("style:vertical-rel", "baseline", gt);
         style.addProperty("style:vertical-pos", "top", gt);
@@ -787,6 +808,8 @@ void KWordGraphicsHandler::definePositionAttributes(KoGenStyle& style, const Dra
 
 void KWordGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
 {
+    if (m_processingGroup) return;
+
     // text:anchor-type
     if (m_objectType == Inline) {
         out.xml.addAttribute("text:anchor-type", "as-char");
@@ -797,6 +820,8 @@ void KWordGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
 
 void KWordGraphicsHandler::setZIndexAttribute(DrawingWriter& out)
 {
+    if (m_processingGroup) return;
+
     // draw:z-index
     if (m_objectType == Floating) {
         out.xml.addAttribute("draw:z-index", m_zIndex);

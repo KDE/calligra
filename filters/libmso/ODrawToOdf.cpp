@@ -177,7 +177,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // dr3d:texture-mode
     // dr3d:vertical-segments
     // draw:auto-grow-height
+    style.addProperty("draw:auto-grow-height", "false");
     // draw:auto-grow-width
+    style.addProperty("draw:auto-grow-width", "false");
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
