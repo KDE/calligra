@@ -114,10 +114,6 @@ DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
-
-    if (lastColor.isValid()) {
-        return lastColor;
-    }
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
     if (   systemColor == QLatin1String("windowText")
         || systemColor == QLatin1String("menuText"))
@@ -150,7 +146,10 @@ QColor DrawingMLColorSchemeSystemItem::value() const
     }
     else if (systemColor == QLatin1String("btnShadow")) {
         return QPalette().color(QPalette::Active, QPalette::Dark);
+    } else if (lastColor.isValid()) {
+        return lastColor;
     }
+
 //! @todo Use more of systemColor
     return QColor(Qt::black); // TODO; better default?
 }
