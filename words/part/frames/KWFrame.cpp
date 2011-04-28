@@ -71,15 +71,11 @@ KWFrame::~KWFrame()
         m_frameSet->removeFrame(this, ourShape); // first remove me so we won't get double
                                                  // deleted. ourShape is needed to mark any
                                                  // copyShapes as retired
-#if 0
-        if (justMe)
-            delete m_frameSet;
-        m_frameSet = 0;
-#else
         if (justMe) {
             kDebug() << "Last KWFrame removed from frameSet=" << m_frameSet;
+            delete m_frameSet;
+            m_frameSet = 0;
         }
-#endif
     }
 }
 
@@ -97,7 +93,7 @@ void KWFrame::setFrameSet(KWFrameSet *fs)
 {
     if (fs == m_frameSet)
         return;
-    Q_ASSERT_X(!fs, __FUNCTION__, "Changing the FrameSet afterwards needs to invalidate lots of stuff including whatever is done in the KWRootAreaProvider. The better way would be to not allow this.");
+    Q_ASSERT_X(!fs || !m_frameSet, __FUNCTION__, "Changing the FrameSet afterwards needs to invalidate lots of stuff including whatever is done in the KWRootAreaProvider. The better way would be to not allow this.");
     if (m_frameSet)
         m_frameSet->removeFrame(this);
     m_frameSet = fs;
