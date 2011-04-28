@@ -104,7 +104,7 @@
 #include <KoPACanvasBase.h>
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
-#include <KoTextShapeData.h>
+#include <KoTextShapeDataBase.h>
 #include <KoPAView.h>
 #include <KoStore.h>
 #include <KoCanvasBase.h>
@@ -1032,7 +1032,7 @@ void ApplicationController::activeFormatOptionCheck()
         if (canvasForChecking->toolProxy()->selection()->hasSelection()) {
             KoPAView *kopaview = qobject_cast<KoPAView *>(view());
             KoShape *currentShapeSelected = kopaview->shapeManager()->selection()->firstSelectedShape(KoFlake::StrippedSelection);
-            KoTextShapeData *currentSelectedTextShapeData = qobject_cast<KoTextShapeData*>(currentShapeSelected->userData());
+            KoTextShapeDataBase *currentSelectedTextShapeData = qobject_cast<KoTextShapeDataBase*>(currentShapeSelected->userData());
             QTextDocument *documentForCurrentShape = currentSelectedTextShapeData->document();
             m_pEditor = new KoTextEditor(documentForCurrentShape);
             KoTextDocument(documentForCurrentShape).setUndoStack(undoStack());
@@ -1108,7 +1108,7 @@ void ApplicationController::activeFontOptionCheck()
         {
           KoPAView *kopaview = qobject_cast<KoPAView *>(view());
           KoShape *currentShapeSelected = kopaview->shapeManager()->selection()->firstSelectedShape(KoFlake::StrippedSelection);
-          KoTextShapeData *currentSelectedTextShapeData = qobject_cast<KoTextShapeData*>(currentShapeSelected->userData());
+          KoTextShapeDataBase *currentSelectedTextShapeData = qobject_cast<KoTextShapeDataBase*>(currentShapeSelected->userData());
           QTextDocument *documentForCurrentShape = currentSelectedTextShapeData->document();
           m_pEditor = new KoTextEditor(documentForCurrentShape);
           KoTextDocument(documentForCurrentShape).setUndoStack(undoStack());
@@ -1276,7 +1276,7 @@ void ApplicationController::doNumberList()
     if (documentType() == PresentationDocument) {
         KoPAView *kopaview = qobject_cast<KoPAView *>(view());
         KoShape *currentShapeSelected = kopaview->shapeManager()->selection()->firstSelectedShape();
-        KoTextShapeData *currentSelectedTextShapeData = qobject_cast<KoTextShapeData*>(currentShapeSelected->userData());
+        KoTextShapeDataBase *currentSelectedTextShapeData = qobject_cast<KoTextShapeDataBase*>(currentShapeSelected->userData());
         QTextDocument *documentForCurrentShape = currentSelectedTextShapeData->document();
         m_pEditor = new KoTextEditor(documentForCurrentShape);
         KoTextDocument(documentForCurrentShape).setTextEditor(m_pEditor.data());
@@ -1303,7 +1303,7 @@ void ApplicationController::doBulletList()
     if (documentType() == PresentationDocument) {
         KoPAView *kopaview = qobject_cast<KoPAView *>(view());
         KoShape *currentShapeSelected = kopaview->shapeManager()->selection()->firstSelectedShape();
-        KoTextShapeData *currentSelectedTextShapeData = qobject_cast<KoTextShapeData*>(currentShapeSelected->userData());
+        KoTextShapeDataBase *currentSelectedTextShapeData = qobject_cast<KoTextShapeDataBase*>(currentShapeSelected->userData());
         QTextDocument *documentForCurrentShape = currentSelectedTextShapeData->document();
         m_pEditor = new KoTextEditor(documentForCurrentShape);
         KoTextDocument(documentForCurrentShape).setTextEditor(m_pEditor.data());
@@ -2315,7 +2315,7 @@ static void findTextShapesRecursive(KoShapeContainer* con, KoPAPageBase* page,
                                     QList<QTextDocument*>& docs)
 {
     foreach(KoShape* shape, con->shapes()) {
-        KoTextShapeData* tsd = qobject_cast<KoTextShapeData*> (shape->userData());
+        KoTextShapeDataBase* tsd = qobject_cast<KoTextShapeDataBase*> (shape->userData());
         if (tsd) {
             shapes.append(qMakePair(page, shape));
             docs.append(tsd->document());
@@ -2404,13 +2404,13 @@ void ApplicationController::startSearch()
 
         int size = shapes.size();
         if (size != 0) {
-            QList<KoTextShapeData*> shapeDatas;
+            QList<KoTextShapeDataBase*> shapeDatas;
             QList<QTextDocument*> textDocs;
             QList<QPair<KoPAPageBase*, KoShape*> > textShapes;
             QSet<QTextDocument*> textDocSet;
 
             for (int i = 0; i < size; i++) {
-                shapeDatas.append(qobject_cast<KoTextShapeData*> \
+                shapeDatas.append(qobject_cast<KoTextShapeDataBase*> \
                                   (shapes.at(i)->userData()));
                 if (shapeDatas.at(i) && !textDocSet.contains(\
                         shapeDatas.at(i)->document())) {
