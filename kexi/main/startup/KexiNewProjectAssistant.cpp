@@ -213,6 +213,7 @@ public:
     QLabel* descriptionLabel;
     QLabel* backButton;
     QLabel* nextButton;
+    QLabel* cancelButton;
 };
 
 void KexiAssistantPage::Private::setButtonVisible(QLabel** button,
@@ -236,14 +237,17 @@ void KexiAssistantPage::Private::setButtonVisible(QLabel** button,
             *button = new QLabel(text);
             (*button)->setFocusPolicy(Qt::StrongFocus);
             int space = (*button)->fontMetrics().height() / 2;
+            Qt::Alignment align;
             if (back) {
                 (*button)->setContentsMargins(0, 0, space, 0);
+                align = Qt::AlignTop | Qt::AlignLeft;
             }
             else {
                 (*button)->setContentsMargins(space, 0, 0, 0);
+                align = Qt::AlignTop | Qt::AlignRight;
             }
             KAcceleratorManager::setNoAccel(*button);
-            mainLyr->addWidget(*button, x, y, Qt::AlignTop);
+            mainLyr->addWidget(*button, x, y, align);
             connect(*button, SIGNAL(linkActivated(QString)),
                     q, SLOT(slotLinkActivated(QString)));
         }
@@ -258,8 +262,8 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
  : QWidget(parent)
  , d(new Private(this))
 {
-/*0         [titleLabel]
-  1  [back] [descriptionLabel] [next]
+/*0         [titleLabel]       [cancel]
+  1  [back] [descriptionLabel]   [next]
   2         [contents]                 */
     d->mainLyr = new QGridLayout(this);
     d->mainLyr->setContentsMargins(0, 0, 0, 0);
@@ -280,6 +284,13 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     m_nextButton->setContentsMargins(space, 0, 0, 0);
     m_mainLyr->addWidget(m_nextButton, 1, 2);*/
     //KAcceleratorManager::manage(this);
+    
+    QString text = QString::fromUtf8("<a href=\"KexiAssistantPage:cancel\">%1</a>  ")
+        .arg(KStandardGuiItem::cancel().text().replace('&', ""));
+    d->cancelButton = new QLabel(text);
+    connect(d->cancelButton, SIGNAL(linkActivated(QString)),
+            this, SLOT(slotLinkActivated(QString)));
+    d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop|Qt::AlignRight);
 }
 
 KexiAssistantPage::~KexiAssistantPage()
@@ -321,6 +332,9 @@ void KexiAssistantPage::slotLinkActivated(const QString& link)
     }
     else if (link == QLatin1String("KexiAssistantPage:next")) {
         emit next(this);
+    }
+    else if (link == QLatin1String("KexiAssistantPage:cancel")) {
+        parentWidget()->deleteLater();
     }
 }
 
@@ -723,6 +737,7 @@ private:
         lyr->addWidget(page);
         connect(page, SIGNAL(back(KexiAssistantPage*)), q, SLOT(previousPageRequested(KexiAssistantPage*)));
         connect(page, SIGNAL(next(KexiAssistantPage*)), q, SLOT(nextPageRequested(KexiAssistantPage*)));
+        connect(page, SIGNAL(cancelled(KexiAssistantPage*)), q, SLOT(nextPageRequested(KexiAssistantPage*)));
     }
 
     template <class C>

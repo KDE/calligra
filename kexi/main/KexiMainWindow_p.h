@@ -291,8 +291,9 @@ public:
 
     void setContent(QWidget *contentWidget) {
         if (m_menuWidget && m_persistentlySelectedAction) {
-            m_menuWidget->setPersistentlySelectedAction(m_persistentlySelectedAction, 
-                                                        m_persistentlySelectedAction->persistentlySelected());
+            m_menuWidget->setPersistentlySelectedAction(
+                m_persistentlySelectedAction, 
+                m_persistentlySelectedAction->persistentlySelected());
         }
         /*if (m_menuWidget->persistentlySelectedAction())
             kDebug() << "****" << m_menuWidget->persistentlySelectedAction()->objectName();*/
@@ -329,6 +330,7 @@ public:
             m_contentLayout->setCurrentWidget(m_contentWidget);
             m_contentWidget->setFocus();
             m_contentWidget->installEventFilter(this);
+            connect(m_contentWidget, SIGNAL(destroyed()), this, SLOT(contentWidgetDestroyed()));
         }
         else {
             if (m_topLineSpacer) {
@@ -377,6 +379,8 @@ public:
     void selectFirstItem() {
         m_selectFirstItem = true;
     }
+
+    void contentWidgetDestroyed();
 
 signals:
     void contentAreaPressed();
@@ -484,6 +488,11 @@ private:
     QPointer<KexiMenuWidgetAction> m_persistentlySelectedAction;
     bool m_selectFirstItem;
 };
+
+void KexiMainMenu::contentWidgetDestroyed()
+{
+    setContent(0);
+}
 
 class KexiTabbedToolBarTabBar;
 
