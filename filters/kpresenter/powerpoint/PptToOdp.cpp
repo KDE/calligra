@@ -2157,6 +2157,12 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         end = mouseover->text.range.end;
     }
 
+    KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+    defineTextProperties(style, cf, 0, 0, si);
+    out.xml.startElement("text:span", false);
+    out.xml.addAttribute("text:style-name", out.styles.insert(style));
+
     if (mouseclick) {
         /**
         * [MS-PPT].PDF states exHyperlinkIdRef must be ignored unless action is
@@ -2181,8 +2187,6 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
             out.xml.addAttribute("xlink:href", link.first);
         }
     } else {
-        out.xml.startElement("text:span", false);
-
         //count specifies the number of characters of the corresponding text to
         //which this character formatting applies
         if (count > 0) {
@@ -2193,10 +2197,6 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
             }
         }
     }
-    KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
-    style.setAutoStyleInStylesDotXml(out.stylesxml);
-    defineTextProperties(style, cf, 0, 0, si);
-    out.xml.addAttribute("text:style-name", out.styles.insert(style));
 
     if (meta) {
         getMeta(*meta, out.xml);
@@ -2206,7 +2206,11 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         out.xml.addTextSpan(txt);
     }
 
-    out.xml.endElement();
+    if (mouseclick || mouseover) {
+        out.xml.endElement(); //text:a
+    }
+
+    out.xml.endElement(); //text:span
     return end;
 } //end processTextSpan()
 
