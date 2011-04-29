@@ -2070,12 +2070,12 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     //TODO: there's no TextCFRun in case we rely on TextCFExceptionAtom or
     //TextMasterStyleLevel, handle this case. (uzak)
 
-    //NOTE: At the moment, TextSIException data are not processed in the
-    //defineTextProperties function, so keep it simple! (uzak)
+    //NOTE: TextSIException data are not processed in the defineTextProperties
+    //function at the moment, so keep it simple! (uzak)
     const TextSIException* si = 0;
-    int i = 0;
 
-#ifdef SI_EXCEPTION
+#ifdef SI_EXCEPTION_SUPPORT
+    int i = 0;
     // get the right special info run
     const QList<TextSIRun>* tsi = 0;
     if (tc->specialinfo) {
@@ -2102,7 +2102,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 #endif
     // find a meta character
     const TextContainerMeta* meta = 0;
-    for (i = 0; i < tc->meta.size(); ++i) {
+    for (int i = 0; i < tc->meta.size(); ++i) {
         const TextContainerMeta& m = tc->meta[i];
         end = getMeta<SlideNumberMCAtom>(m, meta, start, end);
         end = getMeta<DateTimeMCAtom>(m, meta, start, end);
@@ -2112,18 +2112,21 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         end = getMeta<RTFDateTimeMCAtom>(m, meta, start, end);
     }
 
-    // find the right bookmark
+    //TODO: process bookmarks
     const TextBookmarkAtom* bookmark = 0;
-    for (i = 0; i < tc->bookmark.size(); ++i) {
+#ifdef BOOKMARK_SUPPORT
+    // find the right bookmark
+    for (int i = 0; i < tc->bookmark.size(); ++i) {
         if (tc->bookmark[i].begin < start && tc->bookmark[i].end >= start) {
             bookmark = &tc->bookmark[i];
         }
     }
+#endif
 
     // find the interactive atom
     const MouseClickTextInfo* mouseclick = 0;
     const MouseOverTextInfo* mouseover = 0;
-    for (i = 0; i < tc->interactive.size(); ++i) {
+    for (int i = 0; i < tc->interactive.size(); ++i) {
         const TextContainerInteractiveInfo& ti = tc->interactive[i];
         const MouseClickTextInfo* a =
                 ti.interactive.get<MouseClickTextInfo>();
@@ -2137,13 +2140,12 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         }
     }
 
-#ifdef SI_EXCEPTION
     // determine the end of the range
+#ifdef SI_EXCEPTION_SUPPORT
     if (si && siend < end) {
         end = siend;
     }
 #endif
-
     if (meta) {
         end = start + 1; // meta is always one character
     }
@@ -2229,7 +2231,7 @@ int PptToOdp::processTextSpans(Writer& out, PptTextCFRun& cf, const MSO::TextCon
         }
         if (r < pos) {
             // some error
-            qDebug() << "pos: " << pos << " end: " << end << " r: " << r;
+            qDebug() << "pos: " << pos << "| end: " << end << " r: " << r;
             return -2;
         }
         pos = r;
