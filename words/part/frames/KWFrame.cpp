@@ -57,12 +57,12 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         }
     }
 
-    kDebug() << "frame=" << this << "frameSet=" << frameSet() << "pageNumber=" << pageNumber;
+    kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "pageNumber=" << pageNumber;
 }
 
 KWFrame::~KWFrame()
 {
-    kDebug() << "frame=" << this << "frameSet=" << frameSet();
+    kDebug(32001) << "frame=" << this << "frameSet=" << frameSet();
 
     KoShape *ourShape = m_shape;
     m_shape = 0; // no delete is needed as the shape deletes us.
@@ -72,7 +72,7 @@ KWFrame::~KWFrame()
                                                  // deleted. ourShape is needed to mark any
                                                  // copyShapes as retired
         if (justMe) {
-            kDebug() << "Last KWFrame removed from frameSet=" << m_frameSet;
+            kDebug(32001) << "Last KWFrame removed from frameSet=" << m_frameSet;
             delete m_frameSet;
             m_frameSet = 0;
         }

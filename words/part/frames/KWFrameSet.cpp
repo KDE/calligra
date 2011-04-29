@@ -31,12 +31,12 @@ KWFrameSet::KWFrameSet(KWord::FrameSetType type)
     : QObject(),
     m_type(type)
 {
-    kDebug() << "type=" << m_type;
+    kDebug(32001) << "type=" << m_type;
 }
 
 KWFrameSet::~KWFrameSet()
 {
-    kDebug() << "type=" << m_type << "frameCount=" << frames().count();
+    kDebug(32001) << "type=" << m_type << "frameCount=" << frames().count();
     foreach (KWFrame *frame, frames())
         delete frame->shape();
 }
@@ -44,7 +44,7 @@ KWFrameSet::~KWFrameSet()
 void KWFrameSet::addFrame(KWFrame *frame)
 {
     Q_ASSERT(frame);
-    kDebug() << "frame=" << frame << "frameSet=" << frame->frameSet();
+    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     Q_ASSERT(!m_frames.contains(frame));
     m_frames.append(frame); // this one first, so we don't enter the addFrame twice.
     frame->setFrameSet(this);

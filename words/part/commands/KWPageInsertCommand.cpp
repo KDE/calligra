@@ -102,7 +102,7 @@ void KWPageInsertCommand::redo()
             //d->page.setHeight(pageManager->defaultPageStyle().pageLayout().height);
         }
 
-        kDebug() << "pageNumber=" << d->page.pageNumber();
+        kDebug(32001) << "pageNumber=" << d->page.pageNumber();
 
         // Create the KWTextFrame's for the new KWPage
         KWFrameLayout *framelayout = d->document->frameLayout();

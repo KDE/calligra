@@ -51,7 +51,7 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
 
 void KWFrameLayout::createNewFramesForPage(int pageNumber)
 {
-    kDebug() << "pageNumber=" << pageNumber;
+    kDebug(32001) << "pageNumber=" << pageNumber;
 
     m_setup = false; // force reindexing of types
     KWPage page = m_pageManager->page(pageNumber);
@@ -70,7 +70,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        kDebug() << "HeaderTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << page.pageStyle().name();
+        kDebug(32001) << "HeaderTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << page.pageStyle().name();
         if (!frameOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
         }
@@ -78,13 +78,13 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        kDebug() << "FooterTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << page.pageStyle().name();
+        kDebug(32001) << "FooterTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << page.pageStyle().name();
         if (!frameOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
         }
     }
 
-    //kDebug() <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
+    //kDebug(32001) <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
 
     if (page.pageStyle().background()) {
         // create page background
@@ -121,7 +121,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             Q_ASSERT(frame->shape());
             KWPage p = m_pageManager->page(frame->shape());
             Q_ASSERT(p.isValid());
-            kDebug()<<"Delete disabled header/footer frame=" << frame << "pageRect=" << page.rect() << "pageNumber=" << p.pageNumber();
+            kDebug(32001)<<"Delete disabled header/footer frame=" << frame << "pageRect=" << page.rect() << "pageNumber=" << p.pageNumber();
             tfs->removeFrame(frame);
             delete frame->shape();
 Q_ASSERT(false);
@@ -141,7 +141,7 @@ Q_ASSERT(false);
         if (page.pageSide() == KWPage::PageSpread)
             rect.setWidth(rect.width() / 2);
 #endif
-        kDebug() << "MainTextFrame" << fs << "pageRect=" << rect << "columns=" << columns;
+        kDebug(32001) << "MainTextFrame" << fs << "pageRect=" << rect << "columns=" << columns;
         foreach (KWFrame *frame, framesInPage(rect)) {
             if (frame->frameSet() == fs) {
                 columns--;
@@ -275,7 +275,7 @@ Q_ASSERT(false);
 
 void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 {
-    kDebug() <<"pageNumber=" << pageNumber;
+    kDebug(32001) <<"pageNumber=" << pageNumber;
     /* assumes all frames are there and will do layouting of all the frames
         - headers/footers/main FS are positioned
         - normal frames are clipped to page */
@@ -337,7 +337,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     QList<KWFrame *> frames = framesInPage(pageRect);
 
-    kDebug() << "hasMainTextFrame=" << pageStyle.hasMainTextFrame() << "columns=" << pageStyle.columns().columns << "frames=" << frames;
+    kDebug(32001) << "hasMainTextFrame=" << pageStyle.hasMainTextFrame() << "columns=" << pageStyle.columns().columns << "frames=" << frames;
     foreach (KWFrame *frame, frames) {
         KWTextFrameSet *textFrameSet = 0;
         switch (frame->frameSet()->type()) {
@@ -359,7 +359,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
         KWPage page = m_pageManager->page(frame->shape());
         Q_ASSERT(page.isValid());
-        kDebug() << "textFrameSetType=" << KWord::frameSetTypeName(textFrameSet->textFrameSetType())
+        kDebug(32001) << "textFrameSetType=" << KWord::frameSetTypeName(textFrameSet->textFrameSetType())
                  << "page=" << page.pageNumber()
                  << "offset=" << page.offsetInDocument()
                  << "position=" << frame->shape()->position()
@@ -646,7 +646,7 @@ void KWFrameLayout::setup()
 
 KoShape *KWFrameLayout::createTextShape(const KWPage &page)
 {
-    kDebug() << "pageNumber=" << page.pageNumber();
+    kDebug(32001) << "pageNumber=" << page.pageNumber();
     Q_ASSERT(page.isValid());
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     if (!factory)
@@ -672,7 +672,7 @@ KWFrame *KWFrameLayout::frameOn(KWFrameSet *fs, int pageNumber) const
 
 void KWFrameLayout::cleanupHeadersFooters()
 {
-    kDebug();
+    kDebug(32001);
     QHash<KWPageStyle, FrameSets> pageStyles;
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -744,7 +744,7 @@ void KWFrameLayout::cleanupHeadersFooters()
 
 void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
 {
-    kDebug() << "frameSet=" << fs << "frameCount=" << (fs ? fs->frameCount() : 0);
+    kDebug(32001) << "frameSet=" << fs << "frameCount=" << (fs ? fs->frameCount() : 0);
     if (fs == 0)
         return;
     if (fs->frameCount() == 0)
@@ -757,7 +757,7 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
 
 void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 {
-    kDebug();
+    kDebug(32001);
 #if 0
     if (fs->frameCount() == 0)
         return;
@@ -809,7 +809,7 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 {
     Q_ASSERT(page.isValid());
-    kDebug() << "frameSet=" << fs << "pageNumber=" << page.pageNumber();
+    kDebug(32001) << "frameSet=" << fs << "pageNumber=" << page.pageNumber();
     if (fs->frameCount() == 0) { // special case for the headers. Just return a new textframe.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         Q_ASSERT(tfs); // an empty, non-text frameset asking for a copy? Thats a bug.
@@ -869,7 +869,7 @@ void KWFrameLayout::mainframeRemoved(KWFrame *frame)
     if (frame->shape() == 0) return;
     KWPage page = m_pageManager->page(frame->shape());
     if (!page.isValid()) return;
-    kDebug() << "frame=" << frame << "frameSet=" << frame->frameSet() << "pageNumber=" << page.pageNumber();
+    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet() << "pageNumber=" << page.pageNumber();
 
     QList<KWFrame*> framesToDelete;
     foreach (KWFrameSet *fs, m_frameSets) {

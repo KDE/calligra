@@ -48,7 +48,7 @@ class KWTextLayoutRootArea : public KoTextLayoutRootArea
         KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, const KWPage &page) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_page(page) {}
         virtual ~KWTextLayoutRootArea() {}
         virtual bool layout(FrameIterator *cursor) {
-            kDebug() << "pageNumber=" << m_page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
+            kDebug(32001) << "pageNumber=" << m_page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
             return KoTextLayoutRootArea::layout(cursor);
         }
         KWTextFrameSet *m_frameSet;
@@ -120,7 +120,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 
     int pageNumber = m_pages.count() + 1;
 
-    kDebug() << "pageNumber=" << pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
+    kDebug(32001) << "pageNumber=" << pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
 
     if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
         // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
@@ -180,7 +180,7 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
         afterPageNumber = page.pageNumber();
     }
 
-    //kDebug() << "afterPageNumber=" << afterPageNumber;
+    //kDebug(32001) << "afterPageNumber=" << afterPageNumber;
 
     if (afterPageNumber >= 1) {
         for(int i = m_pages.count(); i > afterPageNumber; --i) {
@@ -217,7 +217,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     Q_ASSERT(data);
     bool isHeaderFooter = KWord::isHeaderFooter(m_textFrameSet);
 
-    kDebug() << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "size=" << rootArea->associatedShape()->size();
+    kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "size=" << rootArea->associatedShape()->size();
 
     QRectF updateRect = rootArea->associatedShape()->outlineRect();
     //rootArea->associatedShape()->update(updateRect);

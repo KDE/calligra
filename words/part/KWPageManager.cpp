@@ -62,7 +62,7 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum/*, bool bottom*/) const
 #else
     //Q_ASSERT(pageOffsets.contains(pageNum));
     qreal offset = pageOffsets.value(pageNum);
-    //kDebug() << "pageNum=" << pageNum << "offset=" << offset;
+    //kDebug(32001) << "pageNum=" << pageNum << "offset=" << offset;
     return offset;
 #endif
 }

@@ -125,7 +125,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 //         Q_ASSERT(page.isValid());
     }
 
-    kDebug() << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
+    kDebug(32001) << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
 
     // the QTexDocument is shared between the shapes
     data->setDocument(m_document, false);
@@ -187,7 +187,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 
 void KWTextFrameSet::updateTextLayout()
 {
-    kDebug();
+    kDebug(32001);
 #if 0
     if (! m_allowLayoutRequests) {
         m_requestedUpdateTextLayout = true;
@@ -322,7 +322,7 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
 
 void KWTextFrameSet::setAllowLayout(bool allow)
 {
-    kDebug() << "allow=" << allow << "m_allowLayoutRequests=" << m_allowLayoutRequests;
+    kDebug(32001) << "allow=" << allow << "m_allowLayoutRequests=" << m_allowLayoutRequests;
     if (allow == m_allowLayoutRequests)
         return;
     m_allowLayoutRequests = allow;
