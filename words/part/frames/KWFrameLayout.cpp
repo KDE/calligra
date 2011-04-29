@@ -580,8 +580,10 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(KWord::TextFrameSetType type, const K
         Q_ASSERT(false); // we should never get asked for 'other'
     }
     Q_ASSERT(answer);
-#if 0
-    if (*answer == 0) { // it wasn't created yet, lets do so now.
+
+    // The frameset wasn't created yet what can happen if for example a file is
+    // loaded that does not exist or just does not create the required framesets.
+    if (*answer == 0) {
         KWTextFrameSet *newFS = new KWTextFrameSet(m_document, type);
         *answer = newFS;
         if (type != KWord::MainTextFrameSet) {
@@ -591,9 +593,7 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(KWord::TextFrameSetType type, const K
         emit newFrameSet(newFS);
         Q_ASSERT(m_frameSets.contains(newFS)); // the emit should have made that so :)
     }
-#else
-    Q_ASSERT(*answer != 0);
-#endif
+
     return *answer;
 }
 
