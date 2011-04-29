@@ -33,7 +33,8 @@
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoTextShapeData.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
 #include <KoXmlNS.h>
 #include <KoPATextPage.h>
 #include <KPrPage.h>
@@ -62,20 +63,20 @@ void PresentationVariable::setProperties(const KoProperties *props)
     }
 }
 
-void PresentationVariable::variableMoved(const QTextDocument *document, int posInDocument)
+void PresentationVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
-    Q_UNUSED(document);
-    Q_UNUSED(posInDocument);
-//FIXME
-/*
-    if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
-        if (KoPATextPage *textPage = dynamic_cast<KoPATextPage*>(shapeData->page())) {
-            if (KPrPage *page = dynamic_cast<KPrPage*>(textPage->page())) {
-                setValue(page->declaration(m_type));
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    if (lay) {
+        KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
+        if (rootArea) {
+            if (KoPATextPage *textPage = dynamic_cast<KoPATextPage*>(rootArea->page())) {
+                if (KPrPage *page = dynamic_cast<KPrPage*>(textPage->page())) {
+                    setValue(page->declaration(m_type));
+                }
             }
         }
     }
-    */
+    KoVariable::resize(document, object, posInDocument, format, pd);
 }
 
 void PresentationVariable::saveOdf(KoShapeSavingContext & context)
