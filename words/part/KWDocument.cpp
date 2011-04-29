@@ -232,9 +232,8 @@ void KWDocument::addShape(KoShape *shape)
 
 void KWDocument::removeShape(KoShape *shape)
 {
-    kDebug();
-#if 0
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+    kDebug() << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? KWord::frameSetTypeName(frame->frameSet()) : QString());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
         Q_ASSERT(fs);
@@ -248,9 +247,6 @@ void KWDocument::removeShape(KoShape *shape)
             canvas->shapeManager()->remove(shape);
         }
     }
-#else
-    Q_ASSERT(false);
-#endif
 }
 
 void KWDocument::paintContent(QPainter&, const QRect &rect)

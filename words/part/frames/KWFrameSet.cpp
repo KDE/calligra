@@ -31,20 +31,14 @@ KWFrameSet::KWFrameSet(KWord::FrameSetType type)
     : QObject(),
     m_type(type)
 {
+    kDebug() << "type=" << m_type;
 }
 
 KWFrameSet::~KWFrameSet()
 {
-#if 1
+    kDebug() << "type=" << m_type << "frameCount=" << frames().count();
     foreach (KWFrame *frame, frames())
         delete frame->shape();
-#else
-    while(!m_frames.isEmpty()) {
-        KWFrame* f = m_frames.takeLast();
-        delete f->shape();
-        delete f;
-    }
-#endif
 }
 
 void KWFrameSet::addFrame(KWFrame *frame)
