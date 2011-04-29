@@ -2053,7 +2053,10 @@ int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
 int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextContainer* tc,
                               const QString& text, const int start, int end, quint16* p_fs)
 {
-    int count = cf.addCurrentCFRun(tc, start);
+    //num. of chars already formatted by this TextCFRun
+    quint32 num = 0;
+
+    int count = cf.addCurrentCFRun(tc, start, num);
     *p_fs = cf.fontSize();
 
 #ifdef DEBUG_PPTTOODP
@@ -2063,9 +2066,13 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
 #endif
 
     if (!tc) {
-        qDebug() << "processTextSpan: returning!";
+        qDebug() << "processTextSpan: TextContainer missing!";
         return -1;
     }
+
+#ifdef DEBUG_PPTTOODP
+    qDebug() << "Characters already formatted by this TextCFRun:" << num;
+#endif
 
     //TODO: there's no TextCFRun in case we rely on TextCFExceptionAtom or
     //TextMasterStyleLevel, handle this case. (uzak)
@@ -2192,7 +2199,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
         //count specifies the number of characters of the corresponding text to
         //which this character formatting applies
         if (count > 0) {
-            int tmp = start + count;
+            int tmp = start + (count - num);
             //moved to left by one character in the processTextForBody function
             if (tmp <= end) {
                 end = tmp;
@@ -2305,8 +2312,9 @@ PptToOdp::processParagraph(Writer& out,
 
     if (m_isList) {
         int depth = pf.level() + 1;
+        quint32 num = 0;
         //CFException for the first run of text required for the list style
-        cf.addCurrentCFRun(tc, start);
+        cf.addCurrentCFRun(tc, start, num);
         QString listStyle = defineAutoListStyle(out, pf, cf);
 	//check if we have the corresponding style for this level, if not then
 	//close the list and create a new one (K.I.S.S.)
