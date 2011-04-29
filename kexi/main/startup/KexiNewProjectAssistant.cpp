@@ -702,8 +702,6 @@ public:
     
     ~Private()
     {
-        //if (layoutSwitch)
-        //    delete static_cast<KexiStackedLayoutSwitch*>(layoutSwitch);
     }
     
     KexiTemplateSelectionPage* templateSelectionPage() {
@@ -720,7 +718,6 @@ public:
     }
     
     KexiAnimatedLayout *lyr;
-    //QPointer<KexiStackedLayoutSwitch> layoutSwitch;
 private:
     void addPage(KexiAssistantPage* page) {
         lyr->addWidget(page);
@@ -758,7 +755,6 @@ KexiNewProjectAssistant::KexiNewProjectAssistant(QWidget* parent)
     mainLyr->setContentsMargins(margin, margin, margin, margin);
 
     setCurrentPage(d->templateSelectionPage());
-    //d->layoutSwitch = new KexiStackedLayoutSwitch(d->lyr);
 }
 
 KexiNewProjectAssistant::~KexiNewProjectAssistant()

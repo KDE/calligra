@@ -61,11 +61,13 @@ public:
 
     virtual ~KexiStartupFileHandler();
 
-    /*! Helper. Displays "The file %1 already exists. Do you want to overwrite it?" yes/no message box.
-    \a parent is used as a parent of the KMessageBox.
-    \return true if \a filePath file does not exists or user has agreed on overwriting,
-    false in user do not want to overwrite. */
-    static bool askForOverwriting(const QString& filePath, QWidget *parent = 0);
+    /*! Helper. Displays "This file already exists. Do you want to overwrite it?"
+     message.
+    @return true if @a filePath file does not exists or user has agreed on overwriting,
+    false in user do not want to overwrite. Blocks until user 'answers'
+    by to signal askForOverwriting(const KexiContextMessage&)
+    by triggering 'yes' or 'no' action. */
+    bool askForOverwriting(const QString& filePath);
 
     //! @return mode for the handler.
     Mode mode() const;

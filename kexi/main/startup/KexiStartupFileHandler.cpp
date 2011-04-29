@@ -460,28 +460,11 @@ bool KexiStartupFileHandler::checkSelectedUrl()
                 return false;
             }
         }
-    } else if (d->confirmOverwrites) {
-        KexiContextMessage message(
-            i18n("This file already exists. Do you want to overwrite it?"));
-        QAction* messageWidgetActionYes = new QAction(i18n("Overwrite"), 0);
-        connect(messageWidgetActionYes, SIGNAL(triggered()),
-                this, SLOT(messageWidgetActionYesTriggered()));
-        message.addAction(messageWidgetActionYes);
-        QAction* messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), 0);
-        connect(messageWidgetActionNo, SIGNAL(triggered()),
-                this, SLOT(messageWidgetActionNoTriggered()));
-        message.addAction(messageWidgetActionNo);
-        message.setDefaultAction(messageWidgetActionNo);
-        emit askForOverwriting(message);
-        if (!d->messageWidgetLoop) {
-            d->messageWidgetLoop = new QEventLoop;
-        }
-        return d->messageWidgetLoop->exec();
-//               && !askForOverwriting(url.toLocalFile(), d->dialog->parentWidget()))
-//    {
-//        return false;
     }
-// }
+    else if (d->confirmOverwrites && !askForOverwriting(url.toLocalFile()))
+    {
+        return false;
+    }
     return true;
 }
 
@@ -496,17 +479,27 @@ void KexiStartupFileHandler::messageWidgetActionNoTriggered()
 }
 
 //static
-bool KexiStartupFileHandler::askForOverwriting(const QString& filePath, QWidget *parent)
+bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
 {
     QFileInfo fi(filePath);
     if (!fi.exists())
         return true;
-    const int res = KMessageBox::warningYesNo(parent,
-                        i18n("The file \"%1\" already exists.\n"
-                             "Do you want to overwrite it?",
-                             QDir::convertSeparators(filePath)), QString(),
-                        KGuiItem(i18n("Overwrite")), KStandardGuiItem::no());
-    return res == KMessageBox::Yes;
+    KexiContextMessage message(
+        i18n("This file already exists. Do you want to overwrite it?"));
+    QScopedPointer<QAction> messageWidgetActionYes(new QAction(i18n("Overwrite"), 0));
+    connect(messageWidgetActionYes.data(), SIGNAL(triggered()),
+            this, SLOT(messageWidgetActionYesTriggered()));
+    message.addAction(messageWidgetActionYes.data());
+    QScopedPointer<QAction> messageWidgetActionNo(new QAction(KStandardGuiItem::no().text(), 0));
+    connect(messageWidgetActionNo.data(), SIGNAL(triggered()),
+            this, SLOT(messageWidgetActionNoTriggered()));
+    message.addAction(messageWidgetActionNo.data());
+    message.setDefaultAction(messageWidgetActionNo.data());
+    emit askForOverwriting(message);
+    if (!d->messageWidgetLoop) {
+        d->messageWidgetLoop = new QEventLoop;
+    }
+    return d->messageWidgetLoop->exec();
 }
 
 #if 0
