@@ -423,7 +423,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
 void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 {
-    // TODO another fill types
+    // TODO: another fill types
 
     // convert angle to two points representing crossing of the line with rectangle to use it in svg
     // size of rectangle is 100*100 with the middle in 0,0
@@ -474,9 +474,25 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
         OfficeArtCOLORREF color;
         FixedPoint fixedPoint;
-        for (int i=0; i<a.nElems; i++) {
-            parseOfficeArtCOLORREF(in,color);
-            parseFixedPoint(in,fixedPoint);
+        for (int i = 0; i < a.nElems; i++) {
+            try {
+                parseOfficeArtCOLORREF(in,color);
+            } catch (EOFException _e) {
+                qDebug() << _e.msg;
+                break;
+            } catch (IOException _e) {
+                qDebug() << _e.msg;
+                break;
+            }
+            try {
+                parseFixedPoint(in,fixedPoint);
+            } catch (EOFException _e) {
+                qDebug() << _e.msg;
+                break;
+            } catch (IOException _e) {
+                qDebug() << _e.msg;
+                break;
+            }
 
             elementWriter.startElement("svg:stop");
             elementWriter.addAttribute("svg:offset", QString("%1").arg(toQReal(fixedPoint)));
