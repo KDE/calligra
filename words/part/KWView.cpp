@@ -353,7 +353,7 @@ void KWView::setupActions()
     actionCollection()->addAction("insert_footendnote", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertFootEndNote()));
 
-    action = new KAction(i18n("Frame Borders"), this);
+    action = new KAction(i18n("Page Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
