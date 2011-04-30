@@ -836,11 +836,12 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     // remove header/footer frames that are not visible.
 //     m_frameLayout.cleanupHeadersFooters();
-#if 1
+
     foreach (const KWPage &page, m_pageManager.pages()) {
         m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
-#endif
+
+#if 0
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
@@ -860,6 +861,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         }
         tfs->setAllowLayout(true);
     }
+#endif
 
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
