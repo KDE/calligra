@@ -17,34 +17,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_TABLES_TABLE_SHAPE_FACTORY
-#define CALLIGRA_TABLES_TABLE_SHAPE_FACTORY
+#ifndef CALLIGRA_TABLES_TABLE_SHAPE_DEFERRED_FACTORY
+#define CALLIGRA_TABLES_TABLE_SHAPE_DEFERRED_FACTORY
 
+#include <KoDeferredShapeFactoryBase.h>
 #include <QVariantList>
 
-#include <KoShapeFactoryBase.h>
-
-class KoShape;
-#include "KoXmlReaderForward.h"
-
-#define MapResourceId 65227211
-
-class TableShapePlugin : public QObject
+class TableDeferredShapeFactory : public KoDeferredShapeFactoryBase
 {
     Q_OBJECT
 public:
+    TableDeferredShapeFactory(QObject *parent, const QVariantList&);
+    ~TableDeferredShapeFactory();
 
-    TableShapePlugin(QObject * parent,  const QVariantList &);
-    ~TableShapePlugin() {}
+    KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
+private:
+    KoShapeFactoryBase *m_stubFactory;
 };
 
-class TableShapeFactory : public KoShapeFactoryBase
-{
-public:
-    TableShapeFactory();
-    ~TableShapeFactory();
-
-    virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
-};
-
-#endif // CALLIGRA_TABLES_TABLE_SHAPE_FACTORY
+#endif // CALLIGRA_TABLES_TABLE_SHAPE_DEFERRED_FACTORY
