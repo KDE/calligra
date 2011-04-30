@@ -399,7 +399,7 @@ void KWDocument::relayout()
     KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
 
     // remove header/footer frames that are not visible.
-    m_frameLayout.cleanupHeadersFooters();
+    //m_frameLayout.cleanupHeadersFooters();
 
     // re-layout the pages
     foreach (const KWPage &page, m_pageManager.pages()) {

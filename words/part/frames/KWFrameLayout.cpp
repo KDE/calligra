@@ -112,7 +112,6 @@ else kDebug(32001) << "Nooooo FooterTextFrame";
             delete background->shape();
     }
 
-#if 1
     // delete headers/footer frames that are not needed on this page
     foreach (KWFrame *frame, framesInPage(page.rect())) {
         if (frame->frameSet()->type() != KWord::TextFrameSet)
@@ -126,10 +125,8 @@ else kDebug(32001) << "Nooooo FooterTextFrame";
             kDebug(32001)<<"Delete disabled header/footer frame=" << frame << "pageRect=" << page.rect() << "pageNumber=" << p.pageNumber();
             tfs->removeFrame(frame);
             delete frame->shape();
-Q_ASSERT(false);
         }
     }
-#endif
 
     // create main text frame. All columns of them.
     if (page.pageStyle().hasMainTextFrame()) {
@@ -676,6 +673,7 @@ KWFrame *KWFrameLayout::frameOn(KWFrameSet *fs, int pageNumber) const
 void KWFrameLayout::cleanupHeadersFooters()
 {
     kDebug(32001);
+#if 0
     QHash<KWPageStyle, FrameSets> pageStyles;
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -746,6 +744,9 @@ kDebug()<<"remove evenFooters frameSets";
             break;
         }
     }
+#else
+    Q_ASSERT(false);
+#endif
     m_setup = false;
 }
 

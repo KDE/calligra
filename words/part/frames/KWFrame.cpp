@@ -27,7 +27,10 @@
 #include "KWOutlineShape.h"
 #include "KoTextAnchor.h"
 #include "KWPage.h"
+#include "KWRootAreaProvider.h"
 #include <KoTextShapeData.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
@@ -66,11 +69,13 @@ KWFrame::~KWFrame()
 
     KoShape *ourShape = m_shape;
     m_shape = 0; // no delete is needed as the shape deletes us.
+
     if (m_frameSet) {
         bool justMe = m_frameSet->frameCount() == 1;
         m_frameSet->removeFrame(this, ourShape); // first remove me so we won't get double
                                                  // deleted. ourShape is needed to mark any
                                                  // copyShapes as retired
+        cleanupShape(ourShape);
         if (justMe) {
             kDebug(32001) << "Last KWFrame removed from frameSet=" << m_frameSet;
             delete m_frameSet;
@@ -88,14 +93,36 @@ void KWFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
 {
     m_minimumFrameHeight = minimumFrameHeight;
 }
-    
+
+void KWFrame::cleanupShape(KoShape* shape)
+{
+    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_frameSet);
+    if (tfs) {
+        KWRootAreaProvider *rootAreaProvider = tfs->rootAreaProvider();
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+        Q_ASSERT(lay);
+        QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
+        for(int i = 0; i < layoutRootAreas.count(); ++i) {
+            KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
+            if (rootArea->associatedShape() == shape) {
+                rootAreaProvider->releaseAllAfter(rootArea);
+                lay->removeRootArea(rootArea);
+                rootArea->setAssociatedShape(0);
+            }
+        }
+    }
+}
+
 void KWFrame::setFrameSet(KWFrameSet *fs)
 {
     if (fs == m_frameSet)
         return;
     Q_ASSERT_X(!fs || !m_frameSet, __FUNCTION__, "Changing the FrameSet afterwards needs to invalidate lots of stuff including whatever is done in the KWRootAreaProvider. The better way would be to not allow this.");
-    if (m_frameSet)
+    if (m_frameSet) {
         m_frameSet->removeFrame(this);
+        if (m_shape)
+            cleanupShape(m_shape);
+    }
     m_frameSet = fs;
     if (fs)
         fs->addFrame(this);

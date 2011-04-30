@@ -45,8 +45,12 @@
 class KWTextLayoutRootArea : public KoTextLayoutRootArea
 {
     public:
-        KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, const KWPage &page) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_page(page) {}
-        virtual ~KWTextLayoutRootArea() {}
+        KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, const KWPage &page) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_page(page) {
+            kDebug();
+        }
+        virtual ~KWTextLayoutRootArea() {
+            kDebug();
+        }
         virtual bool layout(FrameIterator *cursor) {
             kDebug(32001) << "pageNumber=" << m_page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
             return KoTextLayoutRootArea::layout(cursor);
