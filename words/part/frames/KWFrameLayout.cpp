@@ -75,6 +75,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             createCopyFrame(fs, page);
         }
     }
+else kDebug(32001) << "Nooooo HeaderTextFrame";
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
@@ -83,6 +84,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             createCopyFrame(fs, page);
         }
     }
+else kDebug(32001) << "Nooooo FooterTextFrame";
 
     //kDebug(32001) <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
 
@@ -601,6 +603,7 @@ void KWFrameLayout::setup()
 {
     if (m_setup)
         return;
+kDebug();
 
     KWTextFrameSet *oldMainText = m_maintext;
     m_maintext = 0;
@@ -682,6 +685,7 @@ void KWFrameLayout::cleanupHeadersFooters()
         switch (tfs->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
             if (frameSets.oddHeaders) {
+kDebug()<<"remove oddHeaders frameSets";
                 emit removedFrameSet(frameSets.oddHeaders);
                 delete frameSets.oddHeaders;
             }
@@ -689,6 +693,7 @@ void KWFrameLayout::cleanupHeadersFooters()
             break;
         case KWord::EvenPagesHeaderTextFrameSet:
             if (frameSets.evenHeaders) {
+kDebug()<<"remove evenHeaders frameSets";
                 emit removedFrameSet(frameSets.evenHeaders);
                 delete frameSets.evenHeaders;
             }
@@ -696,6 +701,7 @@ void KWFrameLayout::cleanupHeadersFooters()
             break;
         case KWord::OddPagesFooterTextFrameSet:
             if (frameSets.oddFooters) {
+kDebug()<<"remove oddFooters frameSets";
                 emit removedFrameSet(frameSets.oddFooters);
                 delete frameSets.oddFooters;
             }
@@ -703,6 +709,7 @@ void KWFrameLayout::cleanupHeadersFooters()
             break;
         case KWord::EvenPagesFooterTextFrameSet:
             if (frameSets.evenFooters) {
+kDebug()<<"remove evenFooters frameSets";
                 emit removedFrameSet(frameSets.evenFooters);
                 delete frameSets.evenFooters;
             }
