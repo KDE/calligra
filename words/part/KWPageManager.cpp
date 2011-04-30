@@ -342,8 +342,9 @@ void KWPageManager::removePage(int pageNumber)
 
 void KWPageManager::removePage(const KWPage &page)
 {
-    if (!page.isValid())
-        return;
+    Q_ASSERT(page.isValid());
+    kDebug() << page.pageNumber();
+
     const int removedPageNumber = page.pageNumber();
     const int offset = page.pageSide() == KWPage::PageSpread ? 2 : 1;
     d->pages.remove(d->pageNumbers[removedPageNumber]);

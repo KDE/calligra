@@ -158,6 +158,8 @@ private:
 
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
+
+    void cleanupShape(KoShape* shape);
 };
 
 #endif

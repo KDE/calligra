@@ -439,7 +439,6 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem)
                 type = KWord::OtherTextFrameSet; break;
             }
             KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
-            fs->setAllowLayout(false);
             fs->setName(fsname);
             fs->setPageStyle(styleForFS);
             fill(fs, framesetElem);

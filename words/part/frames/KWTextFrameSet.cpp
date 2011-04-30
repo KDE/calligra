@@ -48,13 +48,9 @@
 KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetType type)
     : KWFrameSet(KWord::TextFrameSet)
     , m_document(new QTextDocument())
-    , m_layoutTriggered(false)
-    , m_allowLayoutRequests(true)
-    , m_frameOrderDirty(true)
     , m_textFrameSetType(type)
     , m_pageManager(kwordDocument->pageManager())
     , m_kwordDocument(kwordDocument)
-    , m_requestedUpdateTextLayout(false)
     , m_rootAreaProvider(new KWRootAreaProvider(this))
 {
     Q_ASSERT(m_kwordDocument);
@@ -185,166 +181,6 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 #endif
 }
 
-void KWTextFrameSet::updateTextLayout()
-{
-    kDebug(32001);
-#if 0
-    if (! m_allowLayoutRequests) {
-        m_requestedUpdateTextLayout = true;
-        return;
-    }
-    KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
-    if (lay) {
-        // Don't schedule the layout what would wait with the layout till the eventloop kicks
-        // in what sucks performance-wise. So, start the layouting right away.
-        lay->scheduleLayout();
-        //lay->relayout();
-    }
-#else
-    Q_ASSERT(false);
-#endif
-}
-
-void KWTextFrameSet::requestMoreFrames(qreal textHeight)
-{
-#if 0
-    if (frameCount() == 0)
-        return; // there is no way we can get more frames anyway.
-    KWFrame *lastFrame = frames()[frameCount()-1];
-
-    if (KWord::isHeaderFooter(this)) {
-        KWFrame *frame = frames().first();
-        frame->setMinimumFrameHeight(frame->minimumFrameHeight() + textHeight + 1E-6);
-        //kDebug(32001)<<"Header/Footer frameSet="<<this<<"lastFrame="<<lastFrame<<"allowLayout="<<allowLayout()<<"textHeight="<<textHeight;
-        if (allowLayout())
-            emit decorationFrameResize(this);
-    } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) { // textHeight==0 means a new-page-request
-        //kDebug(32001)<<"AutoCreateNewFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"ReconnectNewFrame="<<(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)<<"textHeight="<<textHeight;
-        if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
-            emit moreFramesNeeded(this);
-    } else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior
-            && lastFrame->canAutoGrow() && qAbs(textHeight) > 2) {
-        // enlarge last shape
-        KoShape *shape = lastFrame->shape();
-        if (shape->isGeometryProtected()) { // don't alter a locked shape.
-            requestMoreFrames(0);
-            return;
-        }
-
-        QSizeF size = shape->size();
-        QPointF orig = shape->absolutePosition(KoFlake::TopLeftCorner);
-        shape->setSize(QSizeF(size.width(), size.height() + textHeight + 1E-6));
-        shape->setAbsolutePosition(orig, KoFlake::TopLeftCorner);
-        shape->update(QRectF(0.0, size.height(), size.width(), textHeight + 1E-6));
-        lastFrame->allowToGrow();
-        
-        //kDebug(32001)<<"AutoExtendFrameBehavior frameSet="<<this<<"lastFrame="<<lastFrame<<"size="<<size<<"orig="<<orig<<"textHeight="<<textHeight;;
-    }
-#else
-    Q_ASSERT(false);
-#endif
-}
-
-void KWTextFrameSet::spaceLeft(qreal excessHeight)
-{
-#if 0
-    Q_ASSERT(excessHeight >= 0);
-    if (m_frames.count() == 0)
-        return;
-    if (KWord::isHeaderFooter(this)) {
-        KWFrame *frame = frames().first();
-        kDebug(32001) <<"KWTextFrameSet::spaceLeft" << frame->minimumFrameHeight() << excessHeight;
-        frame->setMinimumFrameHeight(frame->minimumFrameHeight() - excessHeight);
-        emit  decorationFrameResize(this);
-        return;
-    }
-    //kDebug(32001) <<"KWTextFrameSet::spaceLeft" << excessHeight;
-    QList<KWFrame*>::Iterator iter = --m_frames.end();
-    do {
-        KWFrame *tf = *iter;
-        if (tf) {
-            if (tf && tf->frameBehavior() == KWord::AutoExtendFrameBehavior) {
-                tf->autoShrink(tf->shape()->size().height() - excessHeight);
-                tf->allowToGrow();
-            }
-            return;
-        }
-        --iter;
-    } while (iter != m_frames.begin());
-#else
-    Q_ASSERT(false);
-#endif
-}
-
-void KWTextFrameSet::framesEmpty(int emptyFrames)
-{
-#if 0
-    //kDebug(32001) <<"KWTextFrameSet::framesEmpty" << emptyFrames;
-    if (m_pageManager == 0) // be lazy; just refuse to delete frames if we don't know which are on which page
-        return;
-    if (KWord::isHeaderFooter(this)) // then we are deleted by the frameManager
-        return;
-    QList<KWFrame*> myFrames = m_frames; // make a copy so we can do a removeFrame without worries
-    QList<KWFrame*>::Iterator deleteFrom = myFrames.end();
-    QList<KWFrame*>::Iterator iter = --myFrames.end();
-    KWPage page;
-    bool deleteSome = false;
-    do {
-        if ((*iter)->isCopy())
-            continue;
-        KWPage pageForFrame = m_pageManager->page((*iter)->shape());
-        if (!page.isValid()) { // first loop
-            page = pageForFrame;
-        } else if (page != pageForFrame) { // all frames on the page (of this FS) are empty.
-            deleteFrom = iter;
-            ++deleteFrom;
-            page = pageForFrame;
-            deleteSome = true;
-        }
-        if (--emptyFrames < 0)
-            break;
-    } while (iter-- != myFrames.begin());
-
-    if (!deleteSome)
-        return;
-
-    iter = --myFrames.end();
-    do { // remove all frames from end till last empty page
-        if (*iter == *m_frames.begin())
-            break;
-        removeFrame(*iter);
-        delete(*iter)->shape();
-    } while (iter-- != deleteFrom);
-#else
-    Q_ASSERT(false);
-#endif
-}
-
-void KWTextFrameSet::setAllowLayout(bool allow)
-{
-    kDebug(32001) << "allow=" << allow << "m_allowLayoutRequests=" << m_allowLayoutRequests;
-    if (allow == m_allowLayoutRequests)
-        return;
-    m_allowLayoutRequests = allow;
-    if (m_allowLayoutRequests && m_requestedUpdateTextLayout) {
-        m_requestedUpdateTextLayout = false;
-#if 0
-        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
-        if (lay)
-            lay->scheduleLayout();
-#else
-    #ifdef __GNUC__
-        #warning FIXME: port to textlayout-rework
-    #endif
-#endif
-    }
-}
-
-bool KWTextFrameSet::allowLayout() const
-{
-    return m_allowLayoutRequests;
-}
-
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
     kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
@@ -363,29 +199,10 @@ const KWPageStyle& KWTextFrameSet::pageStyle() const
     return m_pageStyle;
 }
 
-void KWTextFrameSet::sortFrames()
-{
 #if 0
-     // optimize to not sort more than needed
-    if (!m_frames.isEmpty() && (m_frameOrderDirty || m_textFrameSetType == KWord::OtherTextFrameSet)) {
-        KWFrame *first = m_frames.first();
-        qSort(m_frames.begin(), m_frames.end(), sortTextFrames);
-        if (m_frames[0] != first) { // that means it needs to be re-layouted
-            KoTextShapeData *tsd = qobject_cast<KoTextShapeData*>(m_frames[0]->shape()->userData());
-            if (tsd)
-                tsd->foul();
-        }
-    }
-    m_frameOrderDirty = false;
-#else
-    Q_ASSERT(false);
-#endif
-}
-
 // static   returns true if frame1 comes before frame2
 bool KWTextFrameSet::sortTextFrames(const KWFrame *f1, const KWFrame *f2)
 {
-#if 0
     if (!f1 && f2) // copy always come after textframe
         return false;
     if (f1 && !f2) // copy always come after textframe
@@ -455,8 +272,6 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *f1, const KWFrame *f2)
     if (frame1->shape()->boundingRect().top() > boundsF2.top())
         return false;
 #endif
-#else
-    Q_ASSERT(false);
-#endif
     return true;
 }
+#endif

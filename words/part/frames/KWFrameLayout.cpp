@@ -75,6 +75,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             createCopyFrame(fs, page);
         }
     }
+else kDebug(32001) << "Nooooo HeaderTextFrame";
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
@@ -83,6 +84,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             createCopyFrame(fs, page);
         }
     }
+else kDebug(32001) << "Nooooo FooterTextFrame";
 
     //kDebug(32001) <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
 
@@ -110,7 +112,6 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             delete background->shape();
     }
 
-#if 1
     // delete headers/footer frames that are not needed on this page
     foreach (KWFrame *frame, framesInPage(page.rect())) {
         if (frame->frameSet()->type() != KWord::TextFrameSet)
@@ -124,10 +125,8 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             kDebug(32001)<<"Delete disabled header/footer frame=" << frame << "pageRect=" << page.rect() << "pageNumber=" << p.pageNumber();
             tfs->removeFrame(frame);
             delete frame->shape();
-Q_ASSERT(false);
         }
     }
-#endif
 
     // create main text frame. All columns of them.
     if (page.pageStyle().hasMainTextFrame()) {
@@ -601,6 +600,7 @@ void KWFrameLayout::setup()
 {
     if (m_setup)
         return;
+kDebug();
 
     KWTextFrameSet *oldMainText = m_maintext;
     m_maintext = 0;
@@ -673,6 +673,7 @@ KWFrame *KWFrameLayout::frameOn(KWFrameSet *fs, int pageNumber) const
 void KWFrameLayout::cleanupHeadersFooters()
 {
     kDebug(32001);
+#if 0
     QHash<KWPageStyle, FrameSets> pageStyles;
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -682,6 +683,7 @@ void KWFrameLayout::cleanupHeadersFooters()
         switch (tfs->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
             if (frameSets.oddHeaders) {
+kDebug()<<"remove oddHeaders frameSets";
                 emit removedFrameSet(frameSets.oddHeaders);
                 delete frameSets.oddHeaders;
             }
@@ -689,6 +691,7 @@ void KWFrameLayout::cleanupHeadersFooters()
             break;
         case KWord::EvenPagesHeaderTextFrameSet:
             if (frameSets.evenHeaders) {
+kDebug()<<"remove evenHeaders frameSets";
                 emit removedFrameSet(frameSets.evenHeaders);
                 delete frameSets.evenHeaders;
             }
@@ -696,6 +699,7 @@ void KWFrameLayout::cleanupHeadersFooters()
             break;
         case KWord::OddPagesFooterTextFrameSet:
             if (frameSets.oddFooters) {
+kDebug()<<"remove oddFooters frameSets";
                 emit removedFrameSet(frameSets.oddFooters);
                 delete frameSets.oddFooters;
             }
@@ -703,6 +707,7 @@ void KWFrameLayout::cleanupHeadersFooters()
             break;
         case KWord::EvenPagesFooterTextFrameSet:
             if (frameSets.evenFooters) {
+kDebug()<<"remove evenFooters frameSets";
                 emit removedFrameSet(frameSets.evenFooters);
                 delete frameSets.evenFooters;
             }
@@ -739,6 +744,9 @@ void KWFrameLayout::cleanupHeadersFooters()
             break;
         }
     }
+#else
+    Q_ASSERT(false);
+#endif
     m_setup = false;
 }
 
