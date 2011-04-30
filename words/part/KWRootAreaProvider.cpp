@@ -161,6 +161,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
     }
 
     m_pages.append(area);
+
     return area;
 }
 
@@ -310,28 +311,14 @@ QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
     return shape->size();
 }
 
-QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(const QRectF &textRect, const QList<KoTextLayoutObstruction *> &excludingThese)
+QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
     QList<KoTextLayoutObstruction*> obstructions;
-
-    KoTextLayoutRootArea *rootArea = 0;
-    foreach (KoTextLayoutRootArea *area, m_pages) {
-        if (area->boundingRect().intersects(textRect)) {
-            rootArea = area;
-            break;
-        }
-    }
-    if (!rootArea) {
-        return obstructions;
-    }
 
     KoShape *currentShape = rootArea->associatedShape();
 
     // let's convert into canvas/KWDocument coords
-    QRectF rect = textRect;
-    rect.moveTop(rect.top() - rootArea->top());
-    QTransform transform = currentShape->absoluteTransformation(0);
-    rect = transform.mapRect(rect);
+    QRectF rect = currentShape->boundingRect();
 
     //TODO would probably be faster if we could use the RTree of the shape manager
     foreach (KWFrameSet *fs, m_textFrameSet->kwordDocument()->frameSets()) {

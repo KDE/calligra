@@ -43,7 +43,7 @@ public:
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
     virtual bool suggestPageBreak(KoTextLayoutRootArea *beforeThis);
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
-    virtual QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese);
+    virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 private:
     KWTextFrameSet *m_textFrameSet;
     QList<KoTextLayoutRootArea *> m_pages;
