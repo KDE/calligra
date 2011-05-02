@@ -317,7 +317,8 @@ void CollectionTreeWidget::setFilter(QRegExp regExp)
     while (j.hasNext())
     {
          j.next();
-         j.value()->setFilterRegExp(regExp);;
+         j.value()->setFilterRegExp(regExp);
+         j.value()->setFilterRole(Qt::UserRole+1);
     }
     const int numTopLevels = topLevelItemCount();
     for (int i = 0; i < numTopLevels; i++)
