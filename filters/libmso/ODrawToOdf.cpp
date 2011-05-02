@@ -177,9 +177,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // dr3d:texture-mode
     // dr3d:vertical-segments
     // draw:auto-grow-height
-    style.addProperty("draw:auto-grow-height", "false");
+    style.addProperty("draw:auto-grow-height", "false", gt);
     // draw:auto-grow-width
-    style.addProperty("draw:auto-grow-width", "false");
+    style.addProperty("draw:auto-grow-width", "false", gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
@@ -191,6 +191,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:caption-type
     // draw:color-inversion
     // draw:color-mode
+    if (ds.fPictureBiLevel()) {
+        style.addProperty("draw:color-mode", "mono", gt);
+    } else if (ds.fPictureGray()) {
+        style.addProperty("draw:color-mode", "greyscale", gt);
+    }
     // draw:contrast
     // draw:decimal-places
     // draw:end-guide

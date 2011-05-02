@@ -26,7 +26,7 @@ OfficeArtTertiaryFOPT
 86 - unused134, MUST be ignored
 87 - anchorText - specifies the type of anchor that is applied to the text
 88 - txflTextFlow - specifies the type of flow that is applied to the text
-89 - cdirFont -  specifies the rotation that is applied to the text (MAY be used)
+89 - cdirFont - specifies the rotation that is applied to the text (MAY be used)
 8a - hspNext - specifies the next shape in a sequence of linked shapes (MAY be used)
 8b - txdir - pecifies the direction of the text (MAY be used)
 bf - [Text Boolean Properties]
@@ -34,9 +34,35 @@ bf - [Text Boolean Properties]
 ff - [Geometry Text Boolean Properties]
 
 [Blip Property Set]
+100 - cropFromTop - specifies the location of the top of the crop rectangle
+101 - cropFromBottom - specifies the location of the bottom of the crop rectangle
+102 - cropFromLeft - specifies the location of the left side of the crop rectangle
+103 - cropFromRight - specifies the location of the right side of the crop rectangle
 104 - pib - specifies which BLIP in the OfficeArtBStoreContainer record to display in the picture shape.
 105 - pibName - specifies the comment, file name, or URL, as specified by the pibFlags property, for this BLIP.
+106 - pibFlags - specifies a set of flags that relate to the usage of the BLIP
+107 - pictureTransparent - specifies the transparent pixel color
+108 - pictureContrast - specifies the contrast modification for the picture
+109 - pictureBrightness - specifies the brightness modification for the picture
+10b - pictureId - specifies the OLE identifier of the picture
+10c - pictureDblCrMod - specifies a shadow color for pictures that have a double shadow in BW display mode
+10d - pictureFillCrMod - specifies the fill color modification that is used in BW display mode
+10e - pictureLineCrMod - specifies the line color modification that is used in BW display mode.
 10f - pibPrint
+110 - pibPrintName
+111 - pibPrintFlags
+112 - movie - specifies movie data (SHOULD be ignored).
+115 - pictureTransparentExt - specifies the transparent pixel extended color
+116 - reserved278 - MUST equal 0xFFFFFFFF and MUST be ignored
+117 - pictureTransparentExtMod - specifies the color modification of the transparent pixel extended color
+118 - reserved280 - MUST be ignored
+119 - reserved281 - MUST equal 0xFFFFFFFF and MUST be ignored
+11a - pictureRecolor - specifies the color that is used to recolor the image
+11b - pictureRecolorExt - specifies the extended color that is used to recolor the image
+11c - reserved284 - MUST equal 0xFFFFFFFF and MUST be ignored
+11d - pictureRecolorExtMod - specifies the color modification of the extended color that is used to recolor the image
+11e - reserved286 - reserved and MUST be ignored
+11f - reserved287 - MUST equal 0xFFFFFFFF and MUST be ignored
 13f - [Blip Boolean Properties]
 
 [Geometry Property Set]
@@ -49,6 +75,11 @@ ff - [Geometry Text Boolean Properties]
 146 - pSegmentInfo - specifies how the vertices that are specified by pVertices_complex are connected
 148 - adjust2Value - specifies a value that a user can change to adjust the geometry of the shape.
 149 - adjust3Value - specifies a value that a user can change to adjust the geometry of the shape.
+14a - adjust4Value
+14b - adjust5Value
+14c - adjust6Value
+14d - adjust7Value
+14e - adjust8Value
 151 - pConnectionSites
 152 - pConnectionSitesDir
 155 - pAdjustHandles - an array of adjust handles that allow a user to manipulate the geometry of this shape
@@ -138,24 +169,30 @@ ff - [Geometry Text Boolean Properties]
 304 - bWMode - specifies how a shape will render in black-and-white display mode
 33f - [Shape Boolean Properties]
 
+[Callout Property Set]
+341 - dxyCalloutGap - specifies the distance from the box of this callout to the first point of this callout
+342 - spcoa - specifies the connection angle of this callout
+343 - spcod - specifies where this callout connects to the callout box
+344 - dxyCalloutDropSpecified - specifies the distance between this callout and the callout box
+345 - dxyCalloutLengthSpecified - specifies the length of this callout
 37f - [Callout Boolean Properties]
 
 [Group Shape Property Set]
 380 - wzName - specifies the name of a shape
 381 - wzDescription - specifies a textual description for a shape
 382 - pihlShape - specifies a hyperlink for a shape
-383 - pWrapPolygonVertices -  specifies a list of points that is used to define a wrap polygon for a shape
+383 - pWrapPolygonVertices - specifies a list of points that is used to define a wrap polygon for a shape
 384 - dxWrapDistLeft - specifies how close other document content can come to the left edge of the shape
 385 - dyWrapDistTop - specifies how close other document content can come to the top edge of the shape
 386 - dxWrapDistRight - specifies how close other document content can come to the right edge of the shape
-387 - dyWrapDistBottom -  specifies how close other document content can come to the bottom edge of the shape
+387 - dyWrapDistBottom - specifies how close other document content can come to the bottom edge of the shape
 388 - lidRegroup - property specifies the regroup identifier for this shape
 38a - unused906 - undefined and MUST be ignored
-38d - wzTooltip -  specifies a ToolTip for a hyperlink on a shape
+38d - wzTooltip - specifies a ToolTip for a hyperlink on a shape
 38e - wzScript - specifies a script that is attached to a shape
-38f - posh -  specifies the type of horizontal positioning to use for a shape
+38f - posh - specifies the type of horizontal positioning to use for a shape
 390 - posrelh - specifies a page element relative to which a shape is horizontally positioned
-391 - posv -  specifies the type of vertical positioning to use for a shape
+391 - posv - specifies the type of vertical positioning to use for a shape
 392 - posrelv - specifies a page element relative to which a shape is vertically positioned
 393 - pctHR - specifies the width of a horizontal rule, as a percentage of the page width (MAY be ignored)
 394 - alignHR - specifies the alignment of a horizontal rule
@@ -173,6 +210,9 @@ ff - [Geometry Text Boolean Properties]
 
 3ff - [Relative Transform Boolean Properties]
 
+[Unknown HTML Property Set]
+403 - wzFillId -  specifies the identifier of the VML fill element (MAY be ignored)
+
 [Diagram Property Set]
 500 - dgmt - specifies the type of the diagram
 53F - [Diagram Boolean Properties]
@@ -187,3 +227,5 @@ Vacabulary:
 
 master shape: A shape definition that specifies the default properties for all
 instances of that shape within a document.
+
+BW: Black and White mode.

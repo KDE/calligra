@@ -48,7 +48,17 @@ public:
     // Shape Property Set
     quint32 hspMaster() const;
     quint32 cxstyle() const;
+    quint32 bWMode() const;
     // Shape Boolean Properties
+    bool fBackground() const;
+    bool fInitiator() const;
+    bool fLockShapeType() const;
+    bool fPreferRelativeResize() const;
+    bool fOleIcon() const;
+    bool fFlipVOverride() const;
+    bool fFlipHOverride() const;
+    bool fPolicyBarcode() const;
+    bool fPolicyLabel() const;
 
     // Group Shape Property Set
     quint32 pWrapPolygonVertices() const;
@@ -57,6 +67,7 @@ public:
     qint32 dyWrapDistTop() const;
     qint32 dxWrapDistRight() const;
     qint32 dyWrapDistBottom() const;
+    quint32 lidRegroup() const;
     quint32 posH() const;
     quint32 posRelH() const;
     quint32 posV() const;
@@ -215,7 +226,20 @@ public:
     bool fSelectText() const;
 
     // Blip Property Set
+    MSO::FixedPoint cropFromTop() const;
+    MSO::FixedPoint cropFromBottom() const;
+    MSO::FixedPoint cropFromLeft() const;
+    MSO::FixedPoint cropFromRight() const;
     quint32 pib() const;
+    quint32 pibName() const;
+    // Blip Boolean Properties
+    bool fPictureActive() const;
+    bool fPictureBiLevel() const;
+    bool fPictureGray() const;
+    bool fNoHitTestPicture() const;
+    bool fLooping() const;
+    bool fRewind() const;
+    bool fPicturePreserveGrays() const;
 };
 
 /**
