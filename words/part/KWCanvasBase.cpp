@@ -324,26 +324,35 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 // QCache can decide to delete stuff from the cache at any moment.
                 KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
 
+                KoViewConverter *localViewConverter = viewConverter();
+
+                // For the cache, if the actual zoom is too high, we cache at 100%. Use a viewconverter
+                // for all cache operations that reflects that. Note that the viewmap's vm structs are
+                // still zoomed at the actualzoom!
+                if (actualZoom > m_maxZoom) {
+                    localViewConverter = new KoViewConverter();
+                    localViewConverter->setZoom(1.0);
+                }
+
                 if (!pageCache) {
-                    pageCache = m_pageCacheManager->cache(QSize(viewConverter()->documentToViewX(vm.page.width()),
-                                                                viewConverter()->documentToViewY(vm.page.height())));
+                    pageCache = m_pageCacheManager->cache(QSize(localViewConverter->documentToViewX(vm.page.width()),
+                                                                localViewConverter->documentToViewY(vm.page.height())));
                 }
 
                 Q_ASSERT(pageCache->cache);
 
+                // vm.page is in points, not view units
                 QSizeF pageSizeDocument(vm.page.width(), vm.page.height());
-                QSizeF pageSizeView = viewConverter()->documentToView(pageSizeDocument);
+                QSizeF pageSizeView = localViewConverter->documentToView(pageSizeDocument);
 
                 qreal  pageTopDocument = vm.page.offsetInDocument();
-                qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
+                qreal  pageTopView = localViewConverter->documentToViewY(pageTopDocument);
 
                 QRectF pageRectDocument = vm.page.rect();
-                QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
+                QRectF pageRectView = localViewConverter->documentToView(pageRectDocument);
 
                 // translated from the page topleft to 0,0 for our cache image
                 QRectF clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
-
-#if 1 // render bit by bit
 
                 // create exposed rects when the page is to be completely repainted.
                 // we cannot wait for the updateCanvas calls to actually tell us which parts
@@ -401,19 +410,14 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     gc.translate(0, -pageTopView);
                     gc.setClipRegion(paintRegion.translated(0, pageTopView));
 
-                    shapeManager()->paint(gc, *viewConverter(), false);
+                    // paint into the cache
+                    shapeManager()->paint(gc, *localViewConverter, false);
 
 //                    pageCache->cache->save(QString("page_%1_iteration_%2.png")
 //                                           .arg(vm.page.pageNumber())
 //                                           .arg(iteration));
 
                 }
-#else // use the thumbnailer to render the whole page in one go
-                if (pageCache->allExposed || !pageCache->exposed.isEmpty()) {
-                    pageCache->cache = vm.page.thumbnail(pageSizeView.toSize(), m_shapeManager);
-
-                }
-#endif
                 // paint from the cached page image on the original painter
 
                 QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
@@ -421,17 +425,20 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                   clipRectOnPage.width(),
                                   clipRectOnPage.height());
 
-                if (viewConverter()->zoom() > m_maxZoom) {
+                if (actualZoom > m_maxZoom) {
                     painter.save();
                     painter.scale(actualZoom, actualZoom);
                     painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
                     painter.restore();
+                    // remove the temp view converter
+                    delete localViewConverter;
                 }
                 else {
                     painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
                 }
                 // put the cache back
-                m_pageCacheManager->insert(vm.page, pageCache, 100 * viewConverter()->zoom());
+                m_pageCacheManager->insert(vm.page, pageCache, 100 * localViewConverter->zoom());
+
 
             }
             else {
@@ -470,6 +477,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
     QList<KWViewMode::ViewMap> map = m_viewMode->mapExposedRects(zoomedRect.toRect(), m_viewConverter);
 
     foreach (KWViewMode::ViewMap vm, map) {
+
         vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
         QRect finalClip((int)(vm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
                         (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
@@ -487,10 +495,27 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
 
             // clear the cache if the zoom changed
             qreal zoom = viewConverter()->zoom();
+            qreal actualZoom = zoom;
             if (zoom > m_maxZoom) {
                 zoom = 1.0; // if the zoomlevel is higher than maxzoom, we scale the cache
                             // from 1.0, instead of filling the cache with huge
             }
+
+            KoViewConverter *localViewConverter = viewConverter();
+            if (actualZoom > m_maxZoom) {
+                localViewConverter = new KoViewConverter();
+                localViewConverter->setZoom(1.0);
+            }
+
+            QRectF pageRectDocument = vm.page.rect(vm.page.pageNumber());
+            QRectF pageRectView = localViewConverter->documentToView(pageRectDocument);
+
+            if (!m_pageCacheManager) {
+                // no pageCacheManager, so create one for the current view. This happens only once!
+                // so on zoom change, we don't re-pre-generate weight/zoom images.
+                m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize, localViewConverter->zoom());
+            }
+
             if (m_currentZoom != zoom) {
                 m_pageCacheManager->clear();
                 m_currentZoom = zoom;
@@ -503,15 +528,18 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                     pageCache->exposed.clear();
                 }
                 else {
-                    qreal  pageTopDocument = vm.page.offsetInDocument();
-                    qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
+                    qreal pageTopDocument = vm.page.offsetInDocument();
+                    qreal pageTopView = localViewConverter->documentToViewY(pageTopDocument);
 
                     // translated from the page topleft to 0,0 for our cache image
                     QRectF clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
 
                     pageCache->exposed.append(clipRectOnPage.toRect());
                 }
-                m_pageCacheManager->insert(vm.page, pageCache, viewConverter()->zoom());
+                m_pageCacheManager->insert(vm.page, pageCache, localViewConverter->zoom());
+            }
+            if (localViewConverter != viewConverter()) {
+                delete localViewConverter;
             }
         }
 
