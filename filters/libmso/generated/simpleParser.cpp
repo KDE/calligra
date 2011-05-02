@@ -7349,20 +7349,6 @@ void MSO::parseRotation(LEInputStream& in, Rotation& _s) {
     }
     parseFixedPoint(in, _s.rotation);
 }
-void MSO::parseITxid(LEInputStream& in, ITxid& _s) {
-    _s.streamOffset = in.getPosition();
-    parseOfficeArtFOPTEOPID(in, _s.opid);
-    if (!(_s.opid.opid == 0x0080)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0080");
-    }
-    if (!(_s.opid.fBid == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
-    }
-    if (!(_s.opid.fComplex == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
-    }
-    _s.iTxid = in.readint32();
-}
 void MSO::parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanProperties& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
@@ -7397,6 +7383,20 @@ void MSO::parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanPropert
     _s.fUsefLockRotation = in.readbit();
     _s.fUsefLockAgainstUngrouping = in.readbit();
     _s.unused2 = in.readuint6();
+}
+void MSO::parseITxid(LEInputStream& in, ITxid& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0080)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0080");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.iTxid = in.readint32();
 }
 void MSO::parseDxTextLeft(LEInputStream& in, DxTextLeft& _s) {
     _s.streamOffset = in.getPosition();
@@ -7488,6 +7488,71 @@ void MSO::parseAnchorText(LEInputStream& in, AnchorText& _s) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.anchorText)<=9");
     }
 }
+void MSO::parseTxflTextFlow(LEInputStream& in, TxflTextFlow& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0088)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0088");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.txflTextFlow = in.readuint32();
+    if (!(((quint32)_s.txflTextFlow)<=5)) {
+        throw IncorrectValueException(in.getPosition(), "((quint32)_s.txflTextFlow)<=5");
+    }
+}
+void MSO::parseCdirFont(LEInputStream& in, CdirFont& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0089)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0089");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.cdirFont = in.readuint32();
+    if (!(((quint32)_s.cdirFont)<=3)) {
+        throw IncorrectValueException(in.getPosition(), "((quint32)_s.cdirFont)<=3");
+    }
+}
+void MSO::parseHspNext(LEInputStream& in, HspNext& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x008A)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x008A");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.hspNext = in.readuint32();
+}
+void MSO::parseTxdir(LEInputStream& in, Txdir& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x008B)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x008B");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.txdir = in.readuint32();
+    if (!(((quint32)_s.txdir)<=2)) {
+        throw IncorrectValueException(in.getPosition(), "((quint32)_s.txdir)<=2");
+    }
+}
 void MSO::parseTextBooleanProperties(LEInputStream& in, TextBooleanProperties& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
@@ -7514,20 +7579,6 @@ void MSO::parseTextBooleanProperties(LEInputStream& in, TextBooleanProperties& _
     _s.fUsefSelectText = in.readbit();
     _s.unused6a = in.readuint3();
     _s.unused6b = in.readuint8();
-}
-void MSO::parseHspNext(LEInputStream& in, HspNext& _s) {
-    _s.streamOffset = in.getPosition();
-    parseOfficeArtFOPTEOPID(in, _s.opid);
-    if (!(_s.opid.opid == 0x008A)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x008A");
-    }
-    if (!(_s.opid.fBid == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
-    }
-    if (!(_s.opid.fComplex == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
-    }
-    _s.hspNext = in.readint32();
 }
 void MSO::parsePib(LEInputStream& in, Pib& _s) {
     _s.streamOffset = in.getPosition();
@@ -8583,20 +8634,6 @@ void MSO::parseBWMode(LEInputStream& in, BWMode& _s) {
     if (!(((quint32)_s.bWMode)<=10)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.bWMode)<=10");
     }
-}
-void MSO::parseTxflTextFlow(LEInputStream& in, TxflTextFlow& _s) {
-    _s.streamOffset = in.getPosition();
-    parseOfficeArtFOPTEOPID(in, _s.opid);
-    if (!(_s.opid.opid == 0x0088)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0088");
-    }
-    if (!(_s.opid.fBid == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
-    }
-    if (!(_s.opid.fComplex == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
-    }
-    _s.txflTextFlow = in.readuint32();
 }
 void MSO::parsePosH(LEInputStream& in, PosH& _s) {
     _s.streamOffset = in.getPosition();

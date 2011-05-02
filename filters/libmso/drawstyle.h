@@ -198,11 +198,21 @@ public:
     MSO::FixedPoint rotation() const;
 
     // Text Property Set
-    qint32 txflTextFlow() const;
+    qint32 iTxid() const;
     qint32 dxTextLeft() const;
     qint32 dyTextTop() const;
     qint32 dxTextRight() const;
     qint32 dyTextBottom() const;
+    quint32 wrapText() const;
+    quint32 anchorText() const;
+    quint32 txflTextFlow() const;
+    quint32 cdirFont() const;
+    quint32 hspNext() const;
+    quint32 txdir() const;
+    // Text Boolean Properties
+    bool fFitShapeToText() const;
+    bool fAutoTextMargin() const;
+    bool fSelectText() const;
 
     // Blip Property Set
     quint32 pib() const;

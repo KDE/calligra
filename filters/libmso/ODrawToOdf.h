@@ -229,5 +229,7 @@ const char* getHorizontalPos(quint32 posH);
 const char* getHorizontalRel(quint32 posRelH);
 const char* getVerticalPos(quint32 posV);
 const char* getVerticalRel(quint32 posRelV);
+const char* getHorizontalAlign(quint32 anchorText);
+const char* getVerticalAlign(quint32 anchorText);
 
 #endif

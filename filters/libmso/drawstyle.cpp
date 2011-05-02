@@ -173,11 +173,17 @@ GETTER(MSO::FixedPoint,        ShadowOpacity,        shadowOpacity,        one()
 GETTER(qint32,                 ShadowOffsetX,        shadowOffsetX,        0x6338)         // 2.3.13.6
 GETTER(qint32,                 ShadowOffsetY,        shadowOffsetY,        0x6338)         // 2.3.13.7
 GETTER(MSO::FixedPoint,        Rotation,             rotation,             zero())         // 2.3.18.5
+GETTER(qint32,                 ITxid,                iTxid,                0)              // 2.3.21.1
 GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0)              // 2.3.21.2
 GETTER(qint32,                 DyTextTop,            dyTextTop,            0)              // 2.3.21.3
 GETTER(qint32,                 DxTextRight,          dxTextRight,          0)              // 2.3.21.4
 GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)              // 2.3.21.5
-GETTER(qint32,                 TxflTextFlow,         txflTextFlow,         0)              // 2.3.21.9
+GETTER(quint32,                WrapText,             wrapText,             0)              // 2.3.21.6
+GETTER(quint32,                AnchorText,           anchorText,           0)              // 2.3.21.8
+GETTER(quint32,                TxflTextFlow,         txflTextFlow,         0)              // 2.3.21.9
+GETTER(quint32,                CdirFont,             cdirFont,             0)              // 2.3.21.10
+GETTER(quint32,                HspNext,              hspNext,              0)              // 2.3.21.11
+GETTER(quint32,                Txdir,                txdir,                0)              // 2.3.21.12
 GETTER(quint32,                Pib,                  pib,                  0)              // 2.3.23.5
 
 #undef GETTER
@@ -255,6 +261,11 @@ GETTER(fLineOpaqueBackColor,  fUsefLineOpaqueBackColor,  false)
 #define FOPT ShadowStyleBooleanProperties
 GETTER(fShadowObscured,       fUsefShadowObscured,       false)
 GETTER(fShadow,               fUsefShadow,               false)
+#undef FOPT
+#define FOPT TextBooleanProperties
+GETTER(fFitShapeToText,       fUsefFitShapeToText,       false)
+GETTER(fAutoTextMargin,       fUsefAutoTextMargin,       false)
+GETTER(fSelectText,           fUsefSelectText,           true)
 #undef FOPT
 
 #define COMPLEX(FOPT, NAME) \

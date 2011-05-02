@@ -604,10 +604,10 @@ class ProtectionBooleanProperties;
 void parseProtectionBooleanProperties(LEInputStream& in, ProtectionBooleanProperties& _s);
 class Rotation;
 void parseRotation(LEInputStream& in, Rotation& _s);
-class ITxid;
-void parseITxid(LEInputStream& in, ITxid& _s);
 class DiagramBooleanProperties;
 void parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanProperties& _s);
+class ITxid;
+void parseITxid(LEInputStream& in, ITxid& _s);
 class DxTextLeft;
 void parseDxTextLeft(LEInputStream& in, DxTextLeft& _s);
 class DyTextTop;
@@ -620,10 +620,16 @@ class WrapText;
 void parseWrapText(LEInputStream& in, WrapText& _s);
 class AnchorText;
 void parseAnchorText(LEInputStream& in, AnchorText& _s);
-class TextBooleanProperties;
-void parseTextBooleanProperties(LEInputStream& in, TextBooleanProperties& _s);
+class TxflTextFlow;
+void parseTxflTextFlow(LEInputStream& in, TxflTextFlow& _s);
+class CdirFont;
+void parseCdirFont(LEInputStream& in, CdirFont& _s);
 class HspNext;
 void parseHspNext(LEInputStream& in, HspNext& _s);
+class Txdir;
+void parseTxdir(LEInputStream& in, Txdir& _s);
+class TextBooleanProperties;
+void parseTextBooleanProperties(LEInputStream& in, TextBooleanProperties& _s);
 class Pib;
 void parsePib(LEInputStream& in, Pib& _s);
 class PibName;
@@ -770,8 +776,6 @@ class Cxstyle;
 void parseCxstyle(LEInputStream& in, Cxstyle& _s);
 class BWMode;
 void parseBWMode(LEInputStream& in, BWMode& _s);
-class TxflTextFlow;
-void parseTxflTextFlow(LEInputStream& in, TxflTextFlow& _s);
 class PosH;
 void parsePosH(LEInputStream& in, PosH& _s);
 class PosRelH;
@@ -3736,12 +3740,6 @@ public:
     FixedPoint rotation;
     Rotation(void* /*dummy*/ = 0) {}
 };
-class ITxid : public StreamOffset {
-public:
-    OfficeArtFOPTEOPID opid;
-    qint32 iTxid;
-    ITxid(void* /*dummy*/ = 0) {}
-};
 class DiagramBooleanProperties : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
@@ -3768,6 +3766,12 @@ public:
     bool fUsefLockAgainstUngrouping;
     quint8 unused2;
     DiagramBooleanProperties(void* /*dummy*/ = 0) {}
+};
+class ITxid : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 iTxid;
+    ITxid(void* /*dummy*/ = 0) {}
 };
 class DxTextLeft : public StreamOffset {
 public:
@@ -3805,6 +3809,30 @@ public:
     quint32 anchorText;
     AnchorText(void* /*dummy*/ = 0) {}
 };
+class TxflTextFlow : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    quint32 txflTextFlow;
+    TxflTextFlow(void* /*dummy*/ = 0) {}
+};
+class CdirFont : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    quint32 cdirFont;
+    CdirFont(void* /*dummy*/ = 0) {}
+};
+class HspNext : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    quint32 hspNext;
+    HspNext(void* /*dummy*/ = 0) {}
+};
+class Txdir : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    quint32 txdir;
+    Txdir(void* /*dummy*/ = 0) {}
+};
 class TextBooleanProperties : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
@@ -3823,12 +3851,6 @@ public:
     quint8 unused6a;
     quint8 unused6b;
     TextBooleanProperties(void* /*dummy*/ = 0) {}
-};
-class HspNext : public StreamOffset {
-public:
-    OfficeArtFOPTEOPID opid;
-    qint32 hspNext;
-    HspNext(void* /*dummy*/ = 0) {}
 };
 class Pib : public StreamOffset {
 public:
@@ -4327,12 +4349,6 @@ public:
     OfficeArtFOPTEOPID opid;
     quint32 bWMode;
     BWMode(void* /*dummy*/ = 0) {}
-};
-class TxflTextFlow : public StreamOffset {
-public:
-    OfficeArtFOPTEOPID opid;
-    quint32 txflTextFlow;
-    TxflTextFlow(void* /*dummy*/ = 0) {}
 };
 class PosH : public StreamOffset {
 public:
