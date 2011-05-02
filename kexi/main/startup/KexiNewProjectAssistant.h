@@ -218,6 +218,8 @@ private:
     QPointer<QWidget> destinationWidget;
 };
 
+class KexiProjectData;
+
 class KexiNewProjectAssistant : public QWidget
 {
     Q_OBJECT
@@ -227,6 +229,9 @@ public:
 public slots:
     virtual void previousPageRequested(KexiAssistantPage* sender);
     virtual void nextPageRequested(KexiAssistantPage* sender);
+    virtual void cancelRequested(KexiAssistantPage* sender);
+signals:
+    void createProject(KexiProjectData* data);
 protected:
     void setCurrentPage(KexiAssistantPage* page);
 private:

@@ -1546,7 +1546,7 @@ tristate KexiMainWindow::startup()
     switch (Kexi::startupHandler().action()) {
     case KexiStartupHandler::CreateBlankProject:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
-        result = createBlankProject();
+#warning todo modern startup:        result = createBlankProject();
         break;
     case KexiStartupHandler::CreateFromTemplate:
         result = createProjectFromTemplate(*Kexi::startupHandler().projectData());
@@ -3050,15 +3050,15 @@ KexiMainWindow::slotConfigureToolbars()
     (void) edit.exec();
 }
 
-void
-KexiMainWindow::slotProjectNew()
+void KexiMainWindow::slotProjectNew()
 {
+    createNewProject();
+#if 0
     if (!d->prj) {
         //create within this instance
         createBlankProject();
         return;
     }
-//TODO use KexiStartupDialog(KexiStartupDialog::Templates...)
 
     bool cancel;
     QString fileName;
@@ -3100,6 +3100,7 @@ KexiMainWindow::slotProjectNew()
         d->showStartProcessMsg(args);
     }
     delete new_data;
+#endif
 }
 
 void
@@ -3117,20 +3118,15 @@ KexiMainWindow::createKexiProject(KexiProjectData* new_data)
     
 }
 
+//unused
 KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
                                        QString* shortcutFileName)
 {
     Q_UNUSED(shortcutFileName);
     Q_UNUSED(confirmOverwrites);
-    if (!d->tabbedToolBar)
-        return 0;
-    d->tabbedToolBar->showMainMenu("project_new");
-    
-    KexiNewProjectAssistant* assistant = new KexiNewProjectAssistant;
 
     //KexiNewProjectWizard *wiz = new KexiNewProjectWizard(Kexi::connset(), 0);
     //wiz->setConfirmOverwrites(confirmOverwrites);
-    d->tabbedToolBar->setMainMenuContent(assistant);
 
 #warning todo
     cancelled = false;
@@ -3165,9 +3161,18 @@ KexiProjectData* KexiMainWindow::createBlankProjectData(bool &cancelled, bool co
     return new_data;
 }
 
-tristate
-KexiMainWindow::createBlankProject()
+void KexiMainWindow::createNewProject()
 {
+    if (!d->tabbedToolBar)
+        return;
+    d->tabbedToolBar->showMainMenu("project_new");
+    KexiNewProjectAssistant* assistant = new KexiNewProjectAssistant;
+    connect(assistant, SIGNAL(createProject(KexiProjectData*)), 
+            this, SLOT(createNewProject(KexiProjectData*)));
+
+    d->tabbedToolBar->setMainMenuContent(assistant);
+#if 0   
+    
     bool cancel;
     KexiProjectData *new_data = createBlankProjectData(cancel);
     if (cancel)
@@ -3186,6 +3191,26 @@ KexiMainWindow::createBlankProject()
     kDebug() << "new project created ---";
     setupProjectNavigator();
     Kexi::recentProjects().addProjectData(new_data);
+
+    invalidateActions();
+    updateAppCaption();
+    return true;
+#endif
+}
+
+tristate KexiMainWindow::createNewProject(KexiProjectData* projectData)
+{
+    createKexiProject(projectData);
+    tristate res = d->prj->create(true /*overwrite*/);
+    if (res != true) {
+        delete d->prj;
+        d->prj = 0;
+        return res;
+    }
+    d->tabbedToolBar->hideMainMenu();
+    kDebug() << "new project created ---";
+    setupProjectNavigator();
+    Kexi::recentProjects().addProjectData(projectData);
 
     invalidateActions();
     updateAppCaption();

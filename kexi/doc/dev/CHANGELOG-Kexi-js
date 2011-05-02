@@ -94,6 +94,11 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-05-02
+Startup
+*Message Widget: merged with kdelibs changes, fixed problem with margins and arrow painting
+*New database properly created using the new assistant
+
 2011-04-29
 Startup
 *Assistants: Cancel button added

@@ -415,13 +415,13 @@ protected:
          (KexiView derived object) within this window.
         void invalidateViewModeActions();*/
 
-    /*! Shows dialog for creating new blank project,
-     and creates one. The dialog is not shown if option for automatic creation
+    /*! Shows dialog for creating new project, and creates one.
+     The dialog is not shown if option for automatic creation
      is checked or Kexi::startupHandler().projectData() was provided from command line.
      \a cancelled is set to true if creation has been cancelled (e.g. user answered
      no when asked for database overwriting, etc.
      \return true if database was created, false on error or when cancel was pressed */
-    tristate createBlankProject();
+    void createNewProject();
 
     /*! Shows dialog for creating new blank project,
      and return a data describing it. If the dialog was cancelled,
@@ -499,6 +499,8 @@ protected:
 
 protected slots:
 
+    tristate createNewProject(KexiProjectData* projectData);
+    
     /*! Called once after timeout (after ctors are executed). */
     void slotAutoOpenObjectsLater();
 

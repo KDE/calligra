@@ -18,6 +18,7 @@
  */
 
 #include "KexiNewProjectAssistant.h"
+#include "kexiprojectdata.h"
 
 #include "ui_KexiOpenExistingFile.h"
 #include "ui_KexiServerDBNamePage.h"
@@ -364,6 +365,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
                   parent)
 {
     m_templatesList = new KCategorizedView;
+    setFocusProxy(m_templatesList);
     m_templatesList->setWordWrap(true);
     m_templatesList->setFrameShape(QFrame::NoFrame);
     m_templatesList->setContentsMargins(0, 0, 0, 0);
@@ -593,14 +595,16 @@ KexiProjectCreationPage::KexiProjectCreationPage(QWidget* parent)
                   i18n("Please wait while the project is created."),
                   parent)
 {
-     QHBoxLayout *lyr = new QHBoxLayout;
-     progressBar = new QProgressBar;
-     lyr->addWidget(progressBar);
+    QVBoxLayout *vlyr = new QVBoxLayout;
+    QHBoxLayout *lyr = new QHBoxLayout;
+    vlyr->addLayout(lyr);
+    progressBar = new QProgressBar;
+    progressBar->setRange(0, 0);
+    lyr->addWidget(progressBar);
+    lyr->addStretch(1);
 //! @todo add cancel
-     QVBoxLayout *vlyr = new QVBoxLayout;
-     vlyr->addLayout(lyr);
-     vlyr->addStretch(1);
-     setContents(vlyr);
+    vlyr->addStretch(1);
+    setContents(vlyr);
 }
 
 KexiProjectCreationPage::~KexiProjectCreationPage()
@@ -737,12 +741,12 @@ private:
         lyr->addWidget(page);
         connect(page, SIGNAL(back(KexiAssistantPage*)), q, SLOT(previousPageRequested(KexiAssistantPage*)));
         connect(page, SIGNAL(next(KexiAssistantPage*)), q, SLOT(nextPageRequested(KexiAssistantPage*)));
-        connect(page, SIGNAL(cancelled(KexiAssistantPage*)), q, SLOT(nextPageRequested(KexiAssistantPage*)));
+        //connect(page, SIGNAL(cancelled(KexiAssistantPage*)), q, SLOT(cancelRequested(KexiAssistantPage*)));
     }
 
     template <class C>
     C* page(QPointer<C>* p) {
-        if (!*p) {
+        if (p->isNull()) {
             *p = new C;
             addPage(*p);
         }
@@ -770,6 +774,7 @@ KexiNewProjectAssistant::KexiNewProjectAssistant(QWidget* parent)
     mainLyr->setContentsMargins(margin, margin, margin, margin);
 
     setCurrentPage(d->templateSelectionPage());
+    setFocusProxy(d->templateSelectionPage());
 }
 
 KexiNewProjectAssistant::~KexiNewProjectAssistant()
@@ -791,7 +796,7 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
 {
     if (sender == d->templateSelectionPage()) {
         d->lyr->setCurrentWidget(d->projectStorageTypeSelectionPage());
-#if 1
+#if 0
         d->titleSelectionPage()->contents->le_title->setFocus();
         d->lyr->setCurrentWidget(d->titleSelectionPage());
 #endif
@@ -810,8 +815,20 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
             //d->titleSelectionPage()->messageWidget->fadeIn();
             return;
         }
+        //file-based project
+        KexiDB::ConnectionData cdata;
+        cdata.caption = d->titleSelectionPage()->contents->le_title->text();
+        cdata.driverName = KexiDB::defaultFileBasedDriverName();
+        cdata.setFileName(d->titleSelectionPage()->contents->file_requester->url().toLocalFile());
+        KexiProjectData *new_data = new KexiProjectData(cdata, cdata.fileName(), cdata.caption);
         d->lyr->setCurrentWidget(d->projectCreationPage());
+        emit createProject(new_data);
     }
+}
+    
+void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* sender)
+{
+    //TODO?
 }
     
 void KexiNewProjectAssistant::setCurrentPage(KexiAssistantPage* page)
