@@ -161,7 +161,7 @@ void KexiContextMessageWidget::init(
     layout->getWidgetPosition(context, &row, 0);
     setText(message.text());
     setMessageType(KMessageWidget::WarningMessageType);
-    setShape(KMessageWidget::RectangleShape);
+    setWordWrap(true);
     setShowCloseButton(false);
     setAutoDelete(true);
     setContentsMargins(3, 0, 3, 0); // to better fit to line edits

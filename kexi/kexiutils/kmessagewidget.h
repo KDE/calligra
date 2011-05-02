@@ -30,11 +30,62 @@ class KMessageWidgetPrivate;
 /**
  * @short A widget to provide feedback or propose opportunistic interactions.
  *
- * KMessageWidget should be used to provide inline positive or negative
+ * KMessageWidget can be used to provide inline positive or negative
  * feedback, or to implement opportunistic interactions.
  *
- * See http://community.kde.org/Sprints/UX2011/KMessageWidget
- * for more information.
+ * As a feedback widget, KMessageWidget provides a less intrusive alternative
+ * to "OK Only" message boxes. If you do not need the modalness of KMessageBox,
+ * consider using KMessageWidget instead.
+ *
+ * <b>Negative feedback</b>
+ *
+ * The KMessageWidget can be used as a secondary indicator of failure: the
+ * first indicator is usually the fact the action the user expected to happen
+ * did not happen.
+ *
+ * Example: User fills a form, clicks "Submit".
+ *
+ * @li Expected feedback: form closes
+ * @li First indicator of failure: form stays there
+ * @li Second indicator of failure: a KMessageWidget appears on top of the
+ * form, explaining the error condition
+ *
+ * When used to provide negative feedback, KMessageWidget should be placed
+ * close to its context. In the case of a form, it should appear on top of the
+ * form entries.
+ *
+ * KMessageWidget should get inserted in the existing layout. Space should not
+ * be reserved for it, otherwise it becomes "dead space", ignored by the user.
+ * KMessageWidget should also not appear as an overlay to prevent blocking
+ * access to elements the user needs to interact with to fix the failure.
+ *
+ * <b>Positive feedback</b>
+ *
+ * KMessageWidget can be used for positive feedback but it shouldn't be
+ * overused. It is often enough to provide feedback by simply showing the
+ * results of an action.
+ *
+ * Examples of acceptable uses:
+ *
+ * @li Confirm success of "critical" transactions
+ * @li Indicate completion of background tasks
+ *
+ * Example of inadapted uses:
+ *
+ * @li Indicate successful saving of a file
+ * @li Indicate a file has been successfully removed
+ *
+ * <b>Opportunistic interaction</b>
+ *
+ * Opportunistic interaction is the situation where the application suggests to
+ * the user an action he could be interested in perform, either based on an
+ * action the user just triggered or an event which the application noticed.
+ *
+ * Example of acceptable uses:
+ *
+ * @li A browser can propose remembering a recently entered password
+ * @li A music collection can propose ripping a CD which just got inserted
+ * @li A chat application may notify the user a "special friend" just connected
  *
  * @author Aurélien Gâteau <agateau@kde.org>
  * @since 4.7
@@ -43,11 +94,6 @@ class KEXIUTILS_EXPORT KMessageWidget : public QFrame
 {
     Q_OBJECT
 public:
-    enum Shape {
-        LineShape,
-        RectangleShape
-    };
-
     enum MessageType {
         PositiveMessageType,
         InformationMessageType,
@@ -64,7 +110,7 @@ public:
 
     QString text() const;
 
-    KMessageWidget::Shape shape() const;
+    bool wordWrap() const;
 
     bool showCloseButton() const;
 
@@ -87,7 +133,7 @@ public:
 public Q_SLOTS:
     void setText(const QString &);
 
-    void setShape(KMessageWidget::Shape);
+    void setWordWrap(bool);
 
     void setShowCloseButton(bool);
 

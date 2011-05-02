@@ -23,16 +23,17 @@
 #include <kaction.h>
 #include <kcolorscheme.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kstandardaction.h>
-#include <kglobalsettings.h>
 
 #include <QEvent>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPainter>
+#include <QShowEvent>
 #include <QTimeLine>
 #include <QToolButton>
 #include <QPointer>
@@ -63,18 +64,18 @@ public:
                 << polyline[1]
                 << QPointF(polyline[2].x(), polyline[2].y() - 0.5);
         
-        painter.setPen(QPen(bg.color(), 1.0));
-        painter.setBrush(bg);
+        painter.setPen(QPen(bgBrush.color(), 1.0));
+        painter.setBrush(bgBrush);
         painter.drawPolygon(polygon);
-        painter.setPen(QPen(fg, 1.0));
+        painter.setPen(QPen(borderBrush, 1.0));
         painter.setRenderHint(QPainter::Antialiasing);
         painter.drawPolyline(polyline);
     }
 
     const int radius;
     const qreal arr;
-    QBrush bg;
-    QBrush fg;
+    QBrush bgBrush;
+    QBrush borderBrush;
 };
 
 //---------------------------------------------------------------------
@@ -94,7 +95,7 @@ public:
 
     QString text;
     KMessageWidget::MessageType messageType;
-    KMessageWidget::Shape shape;
+    bool wordWrap;
     QList<QToolButton*> buttons;
     QPixmap contentSnapShot;
     QAction* defaultAction;
@@ -106,6 +107,7 @@ public:
 
     void createLayout();
     void updateSnapShot();
+    void updateLayout();
     void updateStyleSheet();
 };
 
@@ -122,7 +124,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     content = new KMessageWidgetFrame(q);
     content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    shape = KMessageWidget::LineShape;
+    wordWrap = false;
 
     iconLabel = new QLabel(content);
     iconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -171,17 +173,11 @@ void KMessageWidgetPrivate::createLayout()
         previousButton = button;
     }
 
-    if (shape == KMessageWidget::LineShape) {
-        QHBoxLayout* layout = new QHBoxLayout(content);
-        layout->addWidget(iconLabel);
-        layout->addWidget(textLabel);
+    // Only set autoRaise on if there are no buttons, otherwise the close
+    // button looks weird
+    closeButton->setAutoRaise(buttons.isEmpty());
 
-        Q_FOREACH(QToolButton* button, buttons) {
-            layout->addWidget(button);
-        }
-
-        layout->addWidget(closeButton);
-    } else {
+    if (wordWrap) {
         QGridLayout* layout = new QGridLayout(content);
         layout->setSpacing(0);
         layout->addWidget(iconLabel, 0, 0);
@@ -191,15 +187,35 @@ void KMessageWidgetPrivate::createLayout()
         buttonLayout->addStretch();
         Q_FOREACH(QToolButton* button, buttons) {
             // For some reason, calling show() is necessary here, but not in
-            // LineShape.
+            // wordwrap mode
             button->show();
             buttonLayout->addWidget(button);
         }
         buttonLayout->addWidget(closeButton);
         layout->addItem(buttonLayout, 1, 0, 1, 2);
-    }
+    } else {
+        QHBoxLayout* layout = new QHBoxLayout(content);
+        layout->addWidget(iconLabel);
+        layout->addWidget(textLabel);
 
+        Q_FOREACH(QToolButton* button, buttons) {
+            layout->addWidget(button);
+        }
+
+        layout->addWidget(closeButton);
+    };
+
+    if (q->isVisible()) {
+        q->setFixedHeight(content->sizeHint().height());
+    }
     q->updateGeometry();
+}
+
+void KMessageWidgetPrivate::updateLayout()
+{
+    if (content->layout()) {
+        createLayout();
+    }
 }
 
 void KMessageWidgetPrivate::updateSnapShot()
@@ -212,8 +228,9 @@ void KMessageWidgetPrivate::updateSnapShot()
 void KMessageWidgetPrivate::updateStyleSheet()
 {
     KColorScheme scheme(QPalette::Active, colorSet);
-    content->bg = scheme.background(bgRole);
-    content->fg = scheme.foreground(fgRole);
+    content->bgBrush = scheme.background(bgRole);
+    content->borderBrush = scheme.foreground(fgRole);
+    QBrush fg = scheme.foreground();
     int left, top, right, bottom;
     q->getContentsMargins(&left, &top, &right, &bottom);
     content->setStyleSheet(
@@ -223,12 +240,16 @@ void KMessageWidgetPrivate::updateStyleSheet()
             "margin: %3px %4px %5px %6px;"
             "border: 1px solid %7;"
             "}"
-            ".QLabel { color: %7; }"
+            ".QLabel { color: %8; }"
             )
-        .arg(content->bg.color().name())
+        .arg(content->bgBrush.color().name())
         .arg(content->radius)
-        .arg(top).arg(right).arg(content->radius * 2 + bottom).arg(left)
-        .arg(content->fg.color().name())
+        .arg(top)
+        .arg(right)
+        .arg(content->radius * 2 + bottom)
+        .arg(left)
+        .arg(content->borderBrush.color().name())
+        .arg(fg.color().name())
     );
 }
 
@@ -279,7 +300,7 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
         icon = KIcon("dialog-information");
         d->bgRole = KColorScheme::NormalBackground;
         d->fgRole = KColorScheme::NormalText;
-        d->colorSet = KColorScheme::View;
+        d->colorSet = KColorScheme::Tooltip;
         break;
     case WarningMessageType:
         icon = KIcon("dialog-warning");
@@ -300,7 +321,7 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
 
 bool KMessageWidget::event(QEvent* event)
 {
-    if (event->type() == QEvent::Polish && !layout()) {
+    if (event->type() == QEvent::Polish && !d->content->layout()) {
         d->createLayout();
     }
     else if (event->type() == QEvent::Hide) {
@@ -333,21 +354,23 @@ void KMessageWidget::paintEvent(QPaintEvent* event)
 void KMessageWidget::showEvent(QShowEvent* event)
 {
     QFrame::showEvent(event);
-    d->content->adjustSize();
-    int wantedHeight = d->content->height();
-    d->content->resize(width(), wantedHeight);
-    setFixedHeight(wantedHeight);
+    if (!event->spontaneous()) {
+        int wantedHeight = d->content->sizeHint().height();
+        d->content->setGeometry(0, 0, width(), wantedHeight);
+        setFixedHeight(wantedHeight);
+    }
 }
 
-KMessageWidget::Shape KMessageWidget::shape() const
+bool KMessageWidget::wordWrap() const
 {
-    return d->shape;
+    return d->wordWrap;
 }
 
-void KMessageWidget::setShape(KMessageWidget::Shape shape)
+void KMessageWidget::setWordWrap(bool wordWrap)
 {
-    d->shape = shape;
-    d->createLayout();
+    d->wordWrap = wordWrap;
+    d->textLabel->setWordWrap(wordWrap);
+    d->updateLayout();
 }
 
 bool KMessageWidget::showCloseButton() const
@@ -363,7 +386,7 @@ void KMessageWidget::setShowCloseButton(bool show)
 void KMessageWidget::addAction(QAction* action)
 {
     QFrame::addAction(action);
-    d->createLayout();
+    d->updateLayout();
 }
 
 void KMessageWidget::setDefaultAction(QAction* action)
@@ -375,7 +398,7 @@ void KMessageWidget::setDefaultAction(QAction* action)
 void KMessageWidget::removeAction(QAction* action)
 {
     QFrame::removeAction(action);
-    d->createLayout();
+    d->updateLayout();
 }
 
 void KMessageWidget::setAutoDelete(bool set)
@@ -392,10 +415,8 @@ void KMessageWidget::animatedShow()
 
     QFrame::show();
     setFixedHeight(0);
-    d->content->adjustSize();
-    int wantedHeight = d->content->height();
-    d->content->resize(width(), wantedHeight);
-    d->content->move(0, -wantedHeight);
+    int wantedHeight = d->content->sizeHint().height();
+    d->content->setGeometry(0, -wantedHeight, width(), wantedHeight);
 
     d->updateSnapShot();
 
