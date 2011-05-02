@@ -318,8 +318,12 @@ QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
     QList<KoTextLayoutObstruction*> obstructions;
+    Q_ASSERT(rootArea);
 
     KoShape *currentShape = rootArea->associatedShape();
+
+    if(!currentShape)
+        return obstructions;
 
     // let's convert into canvas/KWDocument coords
     QRectF rect = currentShape->boundingRect();
