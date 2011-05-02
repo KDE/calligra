@@ -102,11 +102,13 @@ const MSO::FixedPoint zero()
 //     TYPE                    FOPT                  NAME                  DEFAULT         ODRAW Ref
 GETTER(quint32,                HspMaster,            hspMaster,            0)              // 2.3.2.1
 GETTER(quint32,                Cxstyle,              cxstyle,              0x00000003)     // 2.3.2.2
+GETTER(quint32,                BWMode,               bWMode,               1)              // 2.3.2.3
 GETTER(quint32,                PWrapPolygonVertices, pWrapPolygonVertices, 0)              // 2.3.4.7
 GETTER(qint32,                 DxWrapDistLeft,       dxWrapDistLeft,       0x0001be7c)     // 2.3.4.9
 GETTER(qint32,                 DyWrapDistTop,        dyWrapDistTop,        0)              // 2.3.4.10
 GETTER(qint32,                 DxWrapDistRight,      dxWrapDistRight,      0x0001be7c)     // 2.3.4.11
 GETTER(qint32,                 DyWrapDistBottom,     dyWrapDistBottom,     0)              // 2.3.4.12
+GETTER(quint32,                LidRegroup,           lidRegroup,           0)              // 2.3.4.13
 GETTER(quint32,                PosH,                 posH,                 0)              // 2.3.4.19
 GETTER(quint32,                PosRelH,              posRelH,              2)              // 2.3.4.20
 GETTER(quint32,                PosV,                 posV,                 0)              // 2.3.4.21
@@ -184,7 +186,12 @@ GETTER(quint32,                TxflTextFlow,         txflTextFlow,         0)   
 GETTER(quint32,                CdirFont,             cdirFont,             0)              // 2.3.21.10
 GETTER(quint32,                HspNext,              hspNext,              0)              // 2.3.21.11
 GETTER(quint32,                Txdir,                txdir,                0)              // 2.3.21.12
+GETTER(MSO::FixedPoint,        CropFromTop,          cropFromTop,          zero())         // 2.3.23.1
+GETTER(MSO::FixedPoint,        CropFromBottom,       cropFromBottom,       zero())         // 2.3.23.2
+GETTER(MSO::FixedPoint,        CropFromLeft,         cropFromLeft,         zero())         // 2.3.23.3
+GETTER(MSO::FixedPoint,        CropFromRight,        cropFromRight,        zero())         // 2.3.23.4
 GETTER(quint32,                Pib,                  pib,                  0)              // 2.3.23.5
+GETTER(quint32,                PibName,              pibName,              0)              // 2.3.23.7
 
 #undef GETTER
 
@@ -213,13 +220,16 @@ GETTER(quint32,                Pib,                  pib,                  0)   
         return DEFAULT; \
     }
 // FOPT        NAME           TEST                       DEFAULT
-#define FOPT GeometryBooleanProperties
-GETTER(fFillOk,                fUsefFillOK,              true)
-GETTER(fFillShadeShapeOK,      fUsefFillShadeShapeOK,    false)
-GETTER(fGtextOK,               fUsefGtextOK,             false)
-GETTER(fLineOK,                fUsefLineOK,              true)
-GETTER(f3DOK,                  fUsef3DOK,                true)
-GETTER(fShadowOK,              fUsefShadowOK,            true)
+#define FOPT ShapeBooleanProperties
+GETTER(fBackground,           fUsefBackground,           false)
+GETTER(fInitiator,            fUsefInitiator,            false)
+GETTER(fLockShapeType,        fUsefLockShapeType,        false)
+GETTER(fPreferRelativeResize, fusePreferrelativeResize,  false)
+GETTER(fOleIcon,              fUsefOleIcon,              false)
+GETTER(fFlipVOverride,        fUsefFlipVOverride,        false)
+GETTER(fFlipHOverride,        fUsefFlipHOverride,        false)
+GETTER(fPolicyBarcode,        fUsefPolicyBarcode,        false)
+GETTER(fPolicyLabel,          fUsefPolicyLabel,          false)
 #undef FOPT
 #define FOPT GroupShapeBooleanProperties
 GETTER(fPrint,                fUsefPrint,                true)
@@ -238,6 +248,14 @@ GETTER(fNoshadeHR,            fUsefNoshadeHR,            false)
 GETTER(fStandardHR,           fUsefStandardHR,           false)
 GETTER(fIsBullet,             fUsefIsBullet,             false)
 GETTER(fLayoutInCell,         fUsefLayoutInCell,         true)
+#undef FOPT
+#define FOPT GeometryBooleanProperties
+GETTER(fFillOk,                fUsefFillOK,              true)
+GETTER(fFillShadeShapeOK,      fUsefFillShadeShapeOK,    false)
+GETTER(fGtextOK,               fUsefGtextOK,             false)
+GETTER(fLineOK,                fUsefLineOK,              true)
+GETTER(f3DOK,                  fUsef3DOK,                true)
+GETTER(fShadowOK,              fUsefShadowOK,            true)
 #undef FOPT
 #define FOPT FillStyleBooleanProperties
 GETTER(fNoFillHitTest,        fUseNoFillHitTest,         false)
@@ -266,6 +284,15 @@ GETTER(fShadow,               fUsefShadow,               false)
 GETTER(fFitShapeToText,       fUsefFitShapeToText,       false)
 GETTER(fAutoTextMargin,       fUsefAutoTextMargin,       false)
 GETTER(fSelectText,           fUsefSelectText,           true)
+#undef FOPT
+#define FOPT BlipBooleanProperties
+GETTER(fPictureActive,        fUsefPictureActive,        false)
+GETTER(fPictureBiLevel,       fUsefPictureBiLevel,       false)
+GETTER(fPictureGray,          fUsefPictureGray,          false)
+GETTER(fNoHitTestPicture,     fUsefNoHitTestPicture,     false)
+GETTER(fLooping,              fUsefLooping,              false)
+GETTER(fRewind,               fUsefRewind,               false)
+GETTER(fPicturePreserveGrays, fUsefPicturePreserveGrays, false)
 #undef FOPT
 
 #define COMPLEX(FOPT, NAME) \
