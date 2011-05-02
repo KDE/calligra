@@ -156,7 +156,20 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     TableStyleProperties::Properties setProperties = styleProperties->setProperties;
 
-    if(setProperties & TableStyleProperties::TopBorder) {
+    if (setProperties & TableStyleProperties::TopMargin) {
+        style->setTopPadding(styleProperties->topMargin);
+    }
+    if (setProperties & TableStyleProperties::BottomMargin) {
+        style->setBottomPadding(styleProperties->bottomMargin);
+    }
+    if (setProperties & TableStyleProperties::LeftMargin) {
+        style->setLeftPadding(styleProperties->leftMargin);
+    }
+    if (setProperties & TableStyleProperties::RightMargin) {
+        style->setRightPadding(styleProperties->rightMargin);
+    }
+
+    if (setProperties & TableStyleProperties::TopBorder) {
         KoBorder::BorderData* topData;
         if (row == 0) {
             topData = &styleProperties->top;
@@ -170,7 +183,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
         style->borders()->setTopBorderWidth(topData->width);
     }
 
-    if(setProperties & TableStyleProperties::BottomBorder) {
+    if (setProperties & TableStyleProperties::BottomBorder) {
         KoBorder::BorderData* bottomData;
         if (row == lastRow) {
             bottomData = &styleProperties->bottom;
@@ -184,7 +197,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
         style->borders()->setBottomBorderWidth(bottomData->width);
     }
 
-    if(setProperties & TableStyleProperties::LeftBorder) {
+    if (setProperties & TableStyleProperties::LeftBorder) {
         KoBorder::BorderData* leftData;
         if (column == 0) {
             leftData = &styleProperties->left;
@@ -198,7 +211,7 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
         style->borders()->setLeftBorderWidth(leftData->width);
     }
 
-    if(setProperties & TableStyleProperties::RightBorder) {
+    if (setProperties & TableStyleProperties::RightBorder) {
         KoBorder::BorderData* rightData;
         if (column == lastColumn) {
             rightData = &styleProperties->right;
@@ -212,14 +225,14 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
         style->borders()->setRightBorderWidth(rightData->width);
     }
 
-    if(setProperties & TableStyleProperties::Tl2brBorder) {
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
         KoBorder::BorderData* tl2brData = &styleProperties->tl2br;
         style->borders()->setTlbrBorderColor(tl2brData->color);
         style->borders()->setTlbrBorderSpacing(tl2brData->spacing);
         style->borders()->setTlbrBorderStyle(tl2brData->style);
         style->borders()->setTlbrBorderWidth(tl2brData->width);
     }
-    if(setProperties & TableStyleProperties::Tr2blBorder) {
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
         KoBorder::BorderData* tr2blData = &styleProperties->tr2bl;
         style->borders()->setTrblBorderColor(tr2blData->color);
         style->borders()->setTrblBorderSpacing(tr2blData->spacing);
