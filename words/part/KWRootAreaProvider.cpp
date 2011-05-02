@@ -94,7 +94,7 @@ void KWRootAreaProvider::handleDependentProviders(int pageNumber)
         Q_ASSERT(lay);
         lay->setContinuousLayout(true); // to not abort the current layout-loop any longer
         lay->setBlockLayout(false); // to allow layouting again
-        lay->layout(); // continue layouting but don't schedule so we are sure it's done instantly
+//         lay->layout(); // continue layouting but don't schedule so we are sure it's done instantly
     }
 }
 
