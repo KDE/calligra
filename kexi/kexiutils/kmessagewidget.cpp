@@ -19,6 +19,7 @@
  * 02110-1301  USA
  */
 #include "kmessagewidget.h"
+#include "kmessagewidget_p.h"
 
 #include <kaction.h>
 #include <kcolorscheme.h>
@@ -42,41 +43,34 @@
 //---------------------------------------------------------------------
 // KMessageWidgetFrame
 //---------------------------------------------------------------------
-class KMessageWidgetFrame : public QFrame
-{
-public:
-    KMessageWidgetFrame(QWidget* parent = 0)
-     : QFrame(parent), radius(5), arr(6.0)
-     {
-     }
-     
-    virtual void paintEvent(QPaintEvent* event) {
-        QFrame::paintEvent(event);
-        QPainter painter(this);
-        const QSizeF s(size());
-        const qreal rad = radius;
-        QPolygonF polyline;
-        polyline << QPointF(rad * 3.0 + 0.5, s.height() - rad * 2)
-                 << QPointF(rad * 3.0 + 0.5 + rad, s.height() - 0.5)
-                 << QPointF(rad * 3.0 + 0.5 + rad * 2.0, s.height() - rad * 2);
-        QPolygonF polygon;
-        polygon << QPointF(polyline[0].x(), polyline[0].y() - 0.5)
-                << polyline[1]
-                << QPointF(polyline[2].x(), polyline[2].y() - 0.5);
-        
-        painter.setPen(QPen(bgBrush.color(), 1.0));
-        painter.setBrush(bgBrush);
-        painter.drawPolygon(polygon);
-        painter.setPen(QPen(borderBrush, 1.0));
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.drawPolyline(polyline);
-    }
 
-    const int radius;
-    const qreal arr;
-    QBrush bgBrush;
-    QBrush borderBrush;
-};
+KMessageWidgetFrame::KMessageWidgetFrame(QWidget* parent)
+ : QFrame(parent), radius(5), arr(6.0)
+{
+}
+     
+void KMessageWidgetFrame::paintEvent(QPaintEvent* event)
+{
+    QFrame::paintEvent(event);
+    QPainter painter(this);
+    const QSizeF s(size());
+    const qreal rad = radius;
+    QPolygonF polyline;
+    polyline << QPointF(rad * 3.0 + 0.5, s.height() - rad * 2)
+                << QPointF(rad * 3.0 + 0.5 + rad, s.height() - 0.5)
+                << QPointF(rad * 3.0 + 0.5 + rad * 2.0, s.height() - rad * 2);
+    QPolygonF polygon;
+    polygon << QPointF(polyline[0].x(), polyline[0].y() - 1)
+            << QPointF(polyline[1].x(), polyline[1].y() - 1)
+            << QPointF(polyline[2].x(), polyline[2].y() - 1);
+    
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(QPen(bgBrush.color(), 1.0));
+    painter.setBrush(bgBrush);
+    painter.drawPolygon(polygon);
+    painter.setPen(QPen(borderBrush, 1.0));
+    painter.drawPolyline(polyline);
+}
 
 //---------------------------------------------------------------------
 // KMessageWidgetPrivate
@@ -131,6 +125,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     textLabel = new QLabel(content);
     textLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     textLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    textLabel->setContentsMargins(0, 0, 0, 0);
 
     KAction* closeAction = KStandardAction::close(q, SLOT(animatedHide()), q);
 
@@ -206,7 +201,9 @@ void KMessageWidgetPrivate::createLayout()
     };
 
     if (q->isVisible()) {
-        q->setFixedHeight(content->sizeHint().height());
+        if (content->sizeHint().height() >= 0) {
+            q->setFixedHeight(content->sizeHint().height());
+        }
     }
     q->updateGeometry();
 }
@@ -232,9 +229,14 @@ void KMessageWidgetPrivate::updateStyleSheet()
     content->borderBrush = scheme.foreground(fgRole);
     QBrush fg = scheme.foreground();
     int left, top, right, bottom;
+    content->getContentsMargins(&left, &top, &right, &bottom);
+    kDebug() << left << top << right << bottom;
     q->getContentsMargins(&left, &top, &right, &bottom);
+    if (!buttons.isEmpty()) {
+        content->setContentsMargins(0, 0, 0, 0);
+    }
     content->setStyleSheet(
-        QString(".QFrame {"
+        QString(".KMessageWidgetFrame {"
             "background-color: %1;"
             "border-radius: %2px;"
             "margin: %3px %4px %5px %6px;"
@@ -284,6 +286,10 @@ QString KMessageWidget::text() const
 void KMessageWidget::setText(const QString& text)
 {
     d->textLabel->setText(text);
+    if (d->content->sizeHint().height() >= 0) {
+        setFixedHeight(d->content->sizeHint().height());
+    }
+    updateGeometry();
 }
 
 KMessageWidget::MessageType KMessageWidget::messageType() const
@@ -323,6 +329,7 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
     d->iconLabel->setPixmap(icon.pixmap(size));
 
     d->updateStyleSheet();
+    d->updateLayout();
 }
 
 bool KMessageWidget::event(QEvent* event)
@@ -363,7 +370,9 @@ void KMessageWidget::showEvent(QShowEvent* event)
     if (!event->spontaneous()) {
         int wantedHeight = d->content->sizeHint().height();
         d->content->setGeometry(0, 0, width(), wantedHeight);
-        setFixedHeight(wantedHeight);
+        if (d->buttons.isEmpty()) {
+            setFixedHeight(wantedHeight);
+        }
     }
 }
 
@@ -469,3 +478,4 @@ void KMessageWidget::animatedHide()
 }
 
 #include "kmessagewidget.moc"
+#include "kmessagewidget_p.moc"
