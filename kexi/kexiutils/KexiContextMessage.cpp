@@ -162,7 +162,7 @@ void KexiContextMessageWidget::init(
     setText(message.text());
     setMessageType(KMessageWidget::WarningMessageType);
     setWordWrap(true);
-    setShowCloseButton(false);
+    setCloseButtonVisible(false);
     setAutoDelete(true);
     setContentsMargins(3, 0, 3, 0); // to better fit to line edits
     d->hasActions = !message.actions().isEmpty();

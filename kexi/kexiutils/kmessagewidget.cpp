@@ -93,7 +93,6 @@ public:
     QToolButton* closeButton;
     QTimeLine* timeLine;
 
-    QString text;
     KMessageWidget::MessageType messageType;
     bool wordWrap;
     QList<QToolButton*> buttons;
@@ -141,6 +140,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     
     defaultAction = 0;
     autoDelete = false;
+    q->setMessageType(KMessageWidget::InformationMessageType);
 }
 
 void KMessageWidgetPrivate::createLayout()
@@ -261,7 +261,14 @@ KMessageWidget::KMessageWidget(QWidget* parent)
 , d(new KMessageWidgetPrivate)
 {
     d->init(this);
-    setMessageType(InformationMessageType);
+}
+
+KMessageWidget::KMessageWidget(const QString& text, QWidget* parent)
+: QFrame(parent)
+, d(new KMessageWidgetPrivate)
+{
+    d->init(this);
+    setText(text);
 }
 
 KMessageWidget::~KMessageWidget()
@@ -271,12 +278,11 @@ KMessageWidget::~KMessageWidget()
 
 QString KMessageWidget::text() const
 {
-    return d->text;
+    return d->textLabel->text();
 }
 
 void KMessageWidget::setText(const QString& text)
 {
-    d->text = text;
     d->textLabel->setText(text);
 }
 
@@ -373,12 +379,12 @@ void KMessageWidget::setWordWrap(bool wordWrap)
     d->updateLayout();
 }
 
-bool KMessageWidget::showCloseButton() const
+bool KMessageWidget::isCloseButtonVisible() const
 {
     return d->closeButton->isVisible();
 }
 
-void KMessageWidget::setShowCloseButton(bool show)
+void KMessageWidget::setCloseButtonVisible(bool show)
 {
     d->closeButton->setVisible(show);
 }

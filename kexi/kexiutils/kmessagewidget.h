@@ -24,6 +24,7 @@
 #include "kexiutils_export.h"
 
 #include <QFrame>
+#include <kmessage.h>
 
 class KMessageWidgetPrivate;
 
@@ -93,6 +94,12 @@ class KMessageWidgetPrivate;
 class KEXIUTILS_EXPORT KMessageWidget : public QFrame
 {
     Q_OBJECT
+    Q_ENUMS(MessageType)
+
+    Q_PROPERTY(QString text READ text WRITE setText)
+    Q_PROPERTY(bool wordWrap READ wordWrap WRITE setWordWrap)
+    Q_PROPERTY(bool closeButtonVisible READ isCloseButtonVisible WRITE setCloseButtonVisible)
+    Q_PROPERTY(MessageType messageType READ messageType WRITE setMessageType)
 public:
     enum MessageType {
         PositiveMessageType,
@@ -106,13 +113,15 @@ public:
      */
     explicit KMessageWidget(QWidget *parent = 0);
 
+    explicit KMessageWidget(const QString &text, QWidget *parent = 0);
+
     ~KMessageWidget();
 
     QString text() const;
 
     bool wordWrap() const;
 
-    bool showCloseButton() const;
+    bool isCloseButtonVisible() const;
 
     MessageType messageType() const;
 
@@ -135,7 +144,7 @@ public Q_SLOTS:
 
     void setWordWrap(bool);
 
-    void setShowCloseButton(bool);
+    void setCloseButtonVisible(bool);
 
     void setMessageType(KMessageWidget::MessageType);
 
