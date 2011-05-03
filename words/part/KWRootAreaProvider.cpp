@@ -191,7 +191,7 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     //kDebug(32001) << "afterPageNumber=" << afterPageNumber;
 
     if (afterPageNumber >= 1) {
-        for(int i = m_pages.count(); i > afterPageNumber; --i) {
+        for(int i = m_pages.count() - 1; i > afterPageNumber; --i) {
             KoTextLayoutRootArea *area = m_pages.takeLast();
             //delete area;
         }
