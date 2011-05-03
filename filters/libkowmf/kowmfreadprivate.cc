@@ -35,6 +35,7 @@
 #include <math.h>
 
 
+#define DEBUG_BBOX 0
 #define DEBUG_RECORDS 0
 
 
@@ -220,6 +221,12 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     if (mStandard && mValid) {
         // Note that this call can change mValid.
         createBoundingBox(st);
+
+#if DEBUG_RECORDS
+        kDebug(31000) << "bounding box created by going through all records: "
+                      << mBBoxLeft << mBBoxTop << mBBoxRight << mBBoxBottom
+                      << "width, height: " << mBBoxRight - mBBoxLeft << mBBoxBottom - mBBoxTop;
+#endif
     }
 
     return mValid;
@@ -399,7 +406,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
             {
                 st >> windowOrgY >> windowOrgX;
                 bboxRecalculated = false;
-#if DEBUG_RECORDS
+#if DEBUG_BBOX
                 kDebug(31000) << "setWindowOrg" << windowOrgX << windowOrgY;
 #endif
                 if (!windowExtIsSet)
@@ -437,7 +444,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 windowExtIsSet = true;
                 bboxRecalculated = false;
 
-#if DEBUG_RECORDS
+#if DEBUG_BBOX
                 kDebug(31000) << "setWindowExt" << windowWidth << windowHeight
                               << "(viewportOrg = " << viewportOrgX << viewportOrgY << ")";
 #endif
@@ -466,7 +473,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 st >> viewportOrgY >> viewportOrgX;
                 bboxRecalculated = false;
 
-#if DEBUG_RECORDS
+#if DEBUG_BBOX
                 kDebug(31000) << "setViewportOrg" << viewportOrgX << viewportOrgY;
 #endif
                 // Can't do anything without the viewport extensions.
@@ -485,7 +492,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 viewportExtIsSet = true;
                 bboxRecalculated = false;
 
-#if DEBUG_RECORDS
+#if DEBUG_BBOX
                 kDebug(31000) << "setViewportExt" << viewportWidth << viewportHeight;
 #endif
                 orgX = viewportOrgX;
@@ -532,7 +539,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
         case 65: // dibStretchBlt
         case 67: // stretchDib
         case 72: // extFloodFill
-#if DEBUG_RECORDS
+#if DEBUG_BBOX
             kDebug(31000) << "drawing record: " << (numFunction & 0xff);
 #endif
             doRecalculateBBox = true;
@@ -544,7 +551,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
 
         // Recalculate the BBox if it was indicated above that it should be.
         if (doRecalculateBBox && !bboxRecalculated) {
-#if DEBUG_RECORDS
+#if DEBUG_BBOX
             kDebug(31000) << "Recalculating BBox";
 #endif
             // If we have a viewport, always use that one.
@@ -573,7 +580,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
             }
 
             // At this point, the ext is always >= 0, i.e. org <= org+ext
-#if DEBUG_RECORDS
+#if DEBUG_BBOX
             kDebug(31000) << orgX << orgY << extX << extY;
 #endif
             if (orgX < mBBoxLeft)          mBBoxLeft = orgX;
@@ -584,7 +591,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
             bboxRecalculated = true;
         }
 
-#if DEBUG_RECORDS
+#if DEBUG_BBOX
         if (isOrgOrExt) {
             kDebug(31000) << "              mBBoxTop = " << mBBoxTop;
             kDebug(31000) << "mBBoxLeft = " << mBBoxLeft << "  mBBoxRight = " << mBBoxRight;
@@ -598,8 +605,8 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
 }
 
 
-//-----------------------------------------------------------------------------
-// Metafile painter methods
+// ----------------------------------------------------------------
+//                         Transform methods
 
 
 void KoWmfReadPrivate::setWindowOrg(quint32, QDataStream& stream)
@@ -1338,9 +1345,13 @@ void KoWmfReadPrivate::createFontIndirect(quint32 size, QDataStream& stream)
         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
 
         // A negative width means to use device units.  This is irrelevant for us here.
+        kDebug(31000) << "Font height:" << height;
         height = qAbs(height);
         // FIXME: For some reason this value needs to be multiplied by
         //        a factor.  0.6 seems to give a good result, but why??
+        // ANSWER(?): The doc says the height is the height of the character cell.
+        //            But normally the font height is only the height above the baseline,
+        //            isn't it?
         handle->font.setPointSize(height * 6 / 10);
         if (weight == 0)
             weight = QFont::Normal;
