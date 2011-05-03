@@ -24,6 +24,7 @@
 #include <KoTextLayoutRootAreaProvider.h>
 
 #include <QMap>
+#include <QPair>
 
 class KoShape;
 class KoTextShapeData;
@@ -47,9 +48,9 @@ public:
 private:
     KWTextFrameSet *m_textFrameSet;
     QList<KoTextLayoutRootArea *> m_pages;
-    QList<KWRootAreaProvider *> m_dependentProviders;
+    QList<QPair<KWRootAreaProvider *, int> > m_dependentProviders;
 
-    void addDependentProvider(KWRootAreaProvider *provider);
+    void addDependentProvider(KWRootAreaProvider *provider, int pageNumber);
     void handleDependentProviders(int pageNumber);
 };
 

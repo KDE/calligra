@@ -45,7 +45,7 @@
 class KWTextLayoutRootArea : public KoTextLayoutRootArea
 {
     public:
-        KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, const KWPage &page) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_page(page) {
+        KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, KWFrame *frame, const KWPage &page) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_frame(frame), m_page(page) {
             kDebug();
         }
         virtual ~KWTextLayoutRootArea() {
@@ -53,9 +53,11 @@ class KWTextLayoutRootArea : public KoTextLayoutRootArea
         }
         virtual bool layout(FrameIterator *cursor) {
             kDebug(32001) << "pageNumber=" << m_page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
-            return KoTextLayoutRootArea::layout(cursor);
+            bool ok = KoTextLayoutRootArea::layout(cursor);
+            return ok;
         }
         KWTextFrameSet *m_frameSet;
+        KWFrame *m_frame;
         KWPage m_page;
 };
 
@@ -69,37 +71,42 @@ KWRootAreaProvider::~KWRootAreaProvider()
 {
 }
 
-void KWRootAreaProvider::addDependentProvider(KWRootAreaProvider *provider)
+void KWRootAreaProvider::addDependentProvider(KWRootAreaProvider *provider, int pageNumber)
 {
-    if (!m_dependentProviders.contains(provider)) {
-        kDebug();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(provider->m_textFrameSet->document()->documentLayout());
-        Q_ASSERT(lay);
-        lay->setContinuousLayout(false); // to abort the current layout-loop
+    kDebug();
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(provider->m_textFrameSet->document()->documentLayout());
+    Q_ASSERT(lay);
+    lay->setContinuousLayout(false); // to abort the current layout-loop
+    lay->setBlockLayout(true); // to prevent a new layout-loop from being started
 
-        // TODO That doesn't work if on the page frames for the MainTextFrameSet already exist and headers/footers
-        // are added afterwards. So we need to find a better way to prevent relayouting to happen to often.
-//         lay->setBlockLayout(true); // to prevent a new layout-loop from being started
-
-        m_dependentProviders.append(provider);
-    }
+    m_dependentProviders.append(QPair<KWRootAreaProvider *, int>(provider, pageNumber));
 }
 
 void KWRootAreaProvider::handleDependentProviders(int pageNumber)
 {
-    kDebug() << "pageNumber=" << pageNumber;
+    QList<KoTextDocumentLayout *> layouts;
     for(int i = m_dependentProviders.count() - 1; i >= 0; --i) {
-        KWRootAreaProvider *provider = m_dependentProviders[i];
-        // only handle providers which would continue layouting at the page we just processed
-        if (provider->m_pages.count() >= pageNumber) {
+        QPair<KWRootAreaProvider *, int> p = m_dependentProviders[i];
+        if (p.second > pageNumber) { // only handle providers which would continue layouting at the page we just processed
             continue;
         }
 
-        m_dependentProviders.removeAt(i);
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(provider->m_textFrameSet->document()->documentLayout());
+        m_dependentProviders.removeAt(i); // this one is handled now
+
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(p.first->m_textFrameSet->document()->documentLayout());
         Q_ASSERT(lay);
+        Q_ASSERT(pageNumber - 1 < lay->rootAreas().count());
+
+        KoTextLayoutRootArea *rootArea = lay->rootAreas()[pageNumber - 1];
+        rootArea->setDirty();
+
+        if (!layouts.contains(lay))
+            layouts.append(lay);
+    }
+
+    foreach(KoTextDocumentLayout *lay, layouts) {
         lay->setContinuousLayout(true); // to not abort the current layout-loop any longer
-//         lay->setBlockLayout(false); // to allow layouting again
+        lay->setBlockLayout(false); // to allow layouting again
         lay->layout(); // continue layouting but don't schedule so we are sure it's done instantly
     }
 }
@@ -138,15 +145,16 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             KWPage page = kwdoc->appendPage();
             Q_ASSERT(page.isValid());
         }
-    } else {
-        Q_ASSERT_X(!kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider()->m_dependentProviders.contains(this), __FUNCTION__, "Seems we are still attached to the mainFrame but got still asked to layout what should never have happened");
+        handleDependentProviders(pageNumber);
+    } else if (pageNumber > pageManager->pageCount()) {
+//         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textFrameSet->document()->documentLayout());
+//         Q_ASSERT(lay);
+// Q_ASSERT(!lay->layoutBlocked());
+//         lay->scheduleLayout();
+        return 0;
     }
 
     Q_ASSERT(pageNumber <= pageManager->pageCount());
-
-    if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
-        handleDependentProviders(pageNumber);
-    }
 
     KWPage page = pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
@@ -158,7 +166,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         Q_ASSERT_X(tfs == m_textFrameSet, __FUNCTION__, QString("frameLayout vs rootAreaProvider error, frameSetType=%1 pageNumber=%2 frameCount=%3 pageCount=%4").arg(KWord::frameSetTypeName(m_textFrameSet->textFrameSetType())).arg(pageNumber).arg(m_textFrameSet->frameCount()).arg(pageManager->pageCount()).toLocal8Bit());
     }
 
-    KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, m_textFrameSet, page);
+    KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, m_textFrameSet, frame, page);
     area->setAcceptsPageBreak(true);
 
     if (frame) {
@@ -179,18 +187,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 // afterThis==NULL means delete everything
 void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
-    int afterPageNumber = -1;
-    if (afterThis) {
-        KWPageManager *pageManager = m_textFrameSet->kwordDocument()->pageManager();
-        Q_ASSERT(pageManager);
-        KoShape *shape = afterThis->associatedShape();
-        Q_ASSERT(shape);
-        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
-        Q_ASSERT(data);
-        KWPage page = pageManager->page(shape);
-        Q_ASSERT(page.isValid());
-        afterPageNumber = page.pageNumber();
-    }
+    int afterPageNumber = afterThis ? m_pages.indexOf(afterThis) : -1;
 
     //kDebug(32001) << "afterPageNumber=" << afterPageNumber;
 
@@ -207,15 +204,14 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
 {
-    KWPageManager *pageManager = m_textFrameSet->kwordDocument()->pageManager();
+    KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
+    KWPageManager *pageManager = kwdoc->pageManager();
     Q_ASSERT(pageManager);
 
     if (m_textFrameSet->textFrameSetType() != KWord::MainTextFrameSet) {
-        if (m_pages.count() >= pageManager->pageCount()) {
+        if (m_pages.count() > pageManager->pageCount()) {
             // we need to wait for the mainFrameSet to finish till we are able to continue
-            KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->kwordDocument());
-            Q_ASSERT(kwdoc);
-            kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider()->addDependentProvider(this);
+            kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider()->addDependentProvider(this, m_pages.count());
         }
     }
 
@@ -230,10 +226,6 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     bool isHeaderFooter = KWord::isHeaderFooter(m_textFrameSet);
 
     kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "size=" << rootArea->associatedShape()->size();
-
-    if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
-        handleDependentProviders(page.pageNumber());
-    }
 
     QRectF updateRect = rootArea->associatedShape()->outlineRect();
     //rootArea->associatedShape()->update(updateRect);
@@ -259,8 +251,9 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
             KWFrame *frame = static_cast<KWFrame*>(m_textFrameSet->frames().first());
             if (frame->minimumFrameHeight() != newSize.height()) {
                 frame->setMinimumFrameHeight(newSize.height());
+
                 // cause the header/footer's height changed we have to relayout the whole page
-                //m_textFrameSet->kwordDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
+                m_textFrameSet->kwordDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
             }
         }
     }
@@ -289,6 +282,70 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
     updateRect |= rootArea->associatedShape()->outlineRect();
     rootArea->associatedShape()->update(updateRect);
+
+    /*
+    if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
+        for(int i = 1; i <= pageManager->pageCount(); ++i) {
+            KWPage page = pageManager->page(i);
+            Q_ASSERT(i == page.pageNumber());
+            KWTextFrameSet *mainFrameSet       = kwdoc->frameLayout()->mainFrameSet();
+            KWTextFrameSet *oddHeaderFrameSet  = kwdoc->frameLayout()->getFrameSet(KWord::OddPagesHeaderTextFrameSet, page.pageStyle());
+            KWTextFrameSet *evenHeaderFrameSet = kwdoc->frameLayout()->getFrameSet(KWord::EvenPagesHeaderTextFrameSet, page.pageStyle());
+            KWTextFrameSet *oddFooterFrameSet  = kwdoc->frameLayout()->getFrameSet(KWord::OddPagesFooterTextFrameSet, page.pageStyle());
+            KWTextFrameSet *evenFooterFrameSet = kwdoc->frameLayout()->getFrameSet(KWord::EvenPagesFooterTextFrameSet, page.pageStyle());
+
+            KWFrame *mainFrame       = kwdoc->frameLayout()->frameOn(mainFrameSet, i);
+            KWFrame *oddHeaderFrame  = kwdoc->frameLayout()->frameOn(oddHeaderFrameSet, i);
+            KWFrame *evenHeaderFrame = kwdoc->frameLayout()->frameOn(evenHeaderFrameSet, i);
+            KWFrame *oddFooterFrame  = kwdoc->frameLayout()->frameOn(oddFooterFrameSet, i);
+            KWFrame *evenFooterFrame = kwdoc->frameLayout()->frameOn(evenFooterFrameSet, i);
+
+            KoTextDocumentLayout* mainLayout       = dynamic_cast<KoTextDocumentLayout*>(mainFrameSet->document()->documentLayout());
+            KoTextDocumentLayout* oddHeaderLayout  = oddHeaderFrameSet ? dynamic_cast<KoTextDocumentLayout*>(oddHeaderFrameSet->document()->documentLayout()) : 0;
+            KoTextDocumentLayout* evenHeaderLayout = evenHeaderFrameSet ? dynamic_cast<KoTextDocumentLayout*>(evenHeaderFrameSet->document()->documentLayout()) : 0;
+            KoTextDocumentLayout* oddFooterLayout  = oddFooterFrameSet ? dynamic_cast<KoTextDocumentLayout*>(oddFooterFrameSet->document()->documentLayout()) : 0;
+            KoTextDocumentLayout* evenFooterLayout = evenFooterFrameSet ? dynamic_cast<KoTextDocumentLayout*>(evenFooterFrameSet->document()->documentLayout()) : 0;
+
+            KWTextLayoutRootArea* mainArea       = dynamic_cast<KWTextLayoutRootArea*>(mainLayout->rootAreas()[i-1]);
+
+            KWTextLayoutRootArea* oddHeaderArea  = oddHeaderLayout && i <= oddHeaderLayout->rootAreas().count() ? dynamic_cast<KWTextLayoutRootArea*>(oddHeaderLayout->rootAreas()[i-1]) : 0;
+            KWTextLayoutRootArea* evenHeaderArea = evenHeaderLayout && i <= evenHeaderLayout->rootAreas().count() ? dynamic_cast<KWTextLayoutRootArea*>(evenHeaderLayout->rootAreas()[i-1]) : 0;
+            KWTextLayoutRootArea* oddFooterArea  = oddFooterLayout && i <= oddFooterLayout->rootAreas().count() ? dynamic_cast<KWTextLayoutRootArea*>(oddFooterLayout->rootAreas()[i-1]) : 0;
+            KWTextLayoutRootArea* evenFooterArea = evenFooterLayout && i <= evenFooterLayout->rootAreas().count() ? dynamic_cast<KWTextLayoutRootArea*>(evenFooterLayout->rootAreas()[i-1]) : 0;
+
+            qDebug() << "pageNumber=" << i
+                     << "main=" << mainFrame << mainArea->associatedShape()
+                     << "oddHeader=" << oddHeaderFrame << (oddHeaderArea ? oddHeaderArea->associatedShape() : 0) << (oddHeaderArea ? oddHeaderArea->isDirty() : true)
+                     << "evenHeader=" << evenHeaderFrame << (evenHeaderArea ? evenHeaderArea->associatedShape() : 0) << (evenHeaderArea ? evenHeaderArea->isDirty() : true)
+                     << "oddFooter=" << oddFooterFrame << (oddFooterArea ? oddFooterArea->associatedShape() : 0) << (oddFooterArea ? oddFooterArea->isDirty() : true)
+                     << "evenFooter=" << evenFooterFrame << (evenFooterArea ? evenFooterArea->associatedShape() : 0) << (evenFooterArea ? evenFooterArea->isDirty() : true);
+
+            Q_ASSERT(mainFrame == mainArea->m_frame);
+            Q_ASSERT(mainFrame->shape() == mainArea->associatedShape());
+            if (oddHeaderArea) {
+                Q_ASSERT(oddHeaderFrame == oddHeaderArea->m_frame);
+                Q_ASSERT(oddHeaderFrame->shape() == oddHeaderArea->associatedShape());
+            }
+            if (evenHeaderArea) {
+                Q_ASSERT(evenHeaderFrame == evenHeaderArea->m_frame);
+                Q_ASSERT(evenHeaderFrame->shape() == evenHeaderArea->associatedShape());
+            }
+            if (oddFooterArea) {
+                Q_ASSERT(oddFooterFrame == oddFooterArea->m_frame);
+                Q_ASSERT(oddFooterFrame->shape() == oddFooterArea->associatedShape());
+            }
+            if (evenFooterArea) {
+                Q_ASSERT(evenFooterFrame == evenFooterArea->m_frame);
+                Q_ASSERT(evenFooterFrame->shape() == evenFooterArea->associatedShape());
+            }
+        }
+    }
+    */
+
+    if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
+        handleDependentProviders(page.pageNumber());
+    }
+
 }
 
 bool KWRootAreaProvider::suggestPageBreak(KoTextLayoutRootArea *beforeThis)
