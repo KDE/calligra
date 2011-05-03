@@ -314,18 +314,18 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
         /*
         qDebug() << "pageNumber=" << i
-                    << "main=" << mainFrame << (mainArea ? mainArea->associatedShape() : 0)
-                    << "oddHeader=" << oddHeaderFrame << (oddHeaderArea ? oddHeaderArea->associatedShape() : 0) << (oddHeaderArea ? oddHeaderArea->isDirty() : true)
-                    << "evenHeader=" << evenHeaderFrame << (evenHeaderArea ? evenHeaderArea->associatedShape() : 0) << (evenHeaderArea ? evenHeaderArea->isDirty() : true)
-                    << "oddFooter=" << oddFooterFrame << (oddFooterArea ? oddFooterArea->associatedShape() : 0) << (oddFooterArea ? oddFooterArea->isDirty() : true)
-                    << "evenFooter=" << evenFooterFrame << (evenFooterArea ? evenFooterArea->associatedShape() : 0) << (evenFooterArea ? evenFooterArea->isDirty() : true);
+                 << "main=" << mainFrame << (mainArea ? mainArea->associatedShape() : 0)
+                 << "oddHeader=" << oddHeaderFrame << (oddHeaderArea ? oddHeaderArea->associatedShape() : 0) << (oddHeaderArea ? oddHeaderArea->isDirty() : true)
+                 << "evenHeader=" << evenHeaderFrame << (evenHeaderArea ? evenHeaderArea->associatedShape() : 0) << (evenHeaderArea ? evenHeaderArea->isDirty() : true)
+                 << "oddFooter=" << oddFooterFrame << (oddFooterArea ? oddFooterArea->associatedShape() : 0) << (oddFooterArea ? oddFooterArea->isDirty() : true)
+                 << "evenFooter=" << evenFooterFrame << (evenFooterArea ? evenFooterArea->associatedShape() : 0) << (evenFooterArea ? evenFooterArea->isDirty() : true);
         */
 
         Q_ASSERT(!mainArea || mainFrame == mainArea->m_frame);
         Q_ASSERT(!mainFrame || !mainArea || mainFrame->shape() == mainArea->associatedShape());
         if (oddHeaderArea) {
             Q_ASSERT(oddHeaderFrame == oddHeaderArea->m_frame);
-            Q_ASSERT(oddHeaderFrame->shape() == oddHeaderArea->associatedShape());
+            Q_ASSERT(!oddHeaderFrame || oddHeaderFrame->shape() == oddHeaderArea->associatedShape());
         }
         if (evenHeaderArea) {
             Q_ASSERT(evenHeaderFrame == evenHeaderArea->m_frame);

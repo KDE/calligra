@@ -819,7 +819,7 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 {
     Q_ASSERT(page.isValid());
-    kDebug(32001) << "frameSet=" << fs << "pageNumber=" << page.pageNumber();
+    kDebug(32001) << "frameSet=" << fs << "pageNumber=" << page.pageNumber() << "frameCount=" << fs->frameCount();
     if (fs->frameCount() == 0) { // special case for the headers. Just return a new textframe.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         Q_ASSERT(tfs); // an empty, non-text frameset asking for a copy? Thats a bug.
