@@ -131,14 +131,15 @@ KexiConnSelectorWidget::KexiConnSelectorWidget(KexiDBConnectionSet& conn_set,
     d->openExistingWidget = new QWidget(this);
     d->openExistingWidget->setObjectName("openExistingWidget");
     QVBoxLayout* openExistingWidgetLyr = new QVBoxLayout(d->openExistingWidget);
-    openExistingWidgetLyr->setMargin(0);
+    openExistingWidgetLyr->setContentsMargins(0, 0, 0, 0);
 // QLabel* lbl = new QLabel(i18n("<b>Select existing Kexi project to open:</b>"), openExistingWidget);
 // openExistingWidgetLyr->addWidget( lbl );
     d->prjTypeSelector = new KexiPrjTypeSelector(d->openExistingWidget);
     connect(d->prjTypeSelector->buttonGroup, SIGNAL(clicked(int)),
             this, SLOT(slotPrjTypeSelected(int)));
     openExistingWidgetLyr->addWidget(d->prjTypeSelector);
-    openExistingWidgetLyr->addSpacing(KDialog::spacingHint());
+    d->prjTypeSelector->setContentsMargins(0, 0, 0, KDialog::spacingHint());
+    //openExistingWidgetLyr->addSpacing(KDialog::spacingHint());
     QFrame* line = new QFrame(d->openExistingWidget);
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
@@ -456,6 +457,12 @@ void KexiConnSelectorWidget::hideConnectonIcon()
 {
     m_remote->lblIcon->setFixedWidth(0);
     m_remote->lblIcon->setPixmap(QPixmap());
+}
+
+void KexiConnSelectorWidget::hideDescription()
+{
+    m_remote->lblIcon->hide();
+    m_remote->label->hide();
 }
 
 #include "KexiConnSelector.moc"

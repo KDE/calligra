@@ -133,6 +133,7 @@ public slots:
     - "Back" button itself */
     void hideHelpers();
     void hideConnectonIcon();
+    void hideDescription();
 
 protected slots:
     void slotConnectionItemExecuted(Q3ListViewItem *item);
