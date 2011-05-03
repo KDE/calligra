@@ -336,7 +336,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 qreal  pageTopDocument = vm.page.offsetInDocument();
                 qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
 
-                QRectF pageRectDocument = vm.page.rect(vm.page.pageNumber());
+                QRectF pageRectDocument = vm.page.rect();
                 QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
 
                 // translated from the page topleft to 0,0 for our cache image
@@ -474,7 +474,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                         vm.clipRect.width(), vm.clipRect.height());
 
         if (m_cacheEnabled) {
-            QRectF pageRectDocument = vm.page.rect(vm.page.pageNumber());
+            QRectF pageRectDocument = vm.page.rect();
             QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
 
             if (!m_pageCacheManager) {
