@@ -258,6 +258,10 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
     KoFilter::ConversionStatus status = KoFilter::OK;
 
     QIODevice* inputDevice = Utils::openDeviceForFile(zip, errorMessage, sourceName, status);
+    if (!inputDevice) {
+        // Source did not exist
+        return KoFilter::CreationError;
+    }
     inputDevice->open(QIODevice::ReadOnly);
 
     OOXML_POLE::Storage storage(inputDevice);
