@@ -397,44 +397,39 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
 
         bool  isOrgOrExt = true;
         bool  doRecalculateBBox = false;
-        qint16  orgX;
-        qint16  orgY;
-        qint16  extX;
-        qint16  extY;
+        qint16  orgX = 0;
+        qint16  orgY = 0;
+        qint16  extX = 0;
+        qint16  extY = 0;
         switch (numFunction &= 0xFF) {
         case 11: // setWindowOrg
             {
                 st >> windowOrgY >> windowOrgX;
-                bboxRecalculated = false;
 #if DEBUG_BBOX
                 kDebug(31000) << "setWindowOrg" << windowOrgX << windowOrgY;
 #endif
                 if (!windowExtIsSet)
                     break;
 
-                // If there is actually a viewport, then the bounding
-                // box doesn't change just because we get a new
-                // window.  Remember we are working in device
-                // (viewport) coordinates when deciding the bounding box.
+                // The bounding box doesn't change just because we get
+                // a new window.  Remember we are working in device
+                // (viewport) coordinates when deciding the bounding
+                // box.
                 if (viewportExtIsSet)
                     break;
 
-                // If there is no viewport, then use the window as a bounding box.
-                //
-                // Note that the windowOrg only will have an effect on
-                // the bounding box the first time it appears,
-                // immediately after the initialization of it.
+                // If there is no viewport, then use the window ext as
+                // size, and (0, 0) as origin.
                 //
                 // FIXME: Handle the case where the window is defined
                 //        first and then the viewport, without any
                 //        drawing in between.  If that happens, I
                 //        don't think that the window definition
                 //        should influence the bounding box.
-                orgX = windowOrgX;
-                orgY = windowOrgY;
+                orgX = 0;
+                orgY = 0;
                 extX = windowWidth;
                 extY = windowHeight;
-                //doRecalculateBBox = true;
             }
             break;
 
@@ -464,7 +459,6 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 orgY = windowOrgY;
                 extX = windowWidth;
                 extY = windowHeight;
-                //doRecalculateBBox = true;
             }
             break;
 
@@ -499,7 +493,6 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 orgY = viewportOrgY;
                 extX = viewportWidth;
                 extY = viewportHeight;
-                //doRecalculateBBox = true;
             }
             break;
 
@@ -563,8 +556,8 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
             }
             else {
                 // If there is no defined viewport, then use the window as the fallback viewport.
-                orgX = windowOrgX;
-                orgY = windowOrgY;
+                orgX = 0; // What should happen if ViewportOrg is set but not ViewportExt?
+                orgY = 0; // 
                 extX = windowWidth;
                 extY = windowHeight;
             }
