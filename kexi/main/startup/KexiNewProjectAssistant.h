@@ -98,11 +98,9 @@ public:
     QPointer<KexiContextMessageWidget> messageWidget;
 private slots:    
     void titleTextChanged(const QString & text);
-    //void urlSelected(const KUrl& url);
     void askForOverwriting(const KexiContextMessage& message);
 private:
     void updateUrl();
-    //QString m_recentDirClass;
 };
 
 class QProgressBar;
@@ -114,7 +112,18 @@ public:
     explicit KexiProjectCreationPage(QWidget* parent = 0);
     virtual ~KexiProjectCreationPage();
     
-    QProgressBar* progressBar;
+    QProgressBar* m_progressBar;
+};
+
+class KexiConnSelectorWidget;
+class KexiProjectConnectionSelectionPage : public KexiAssistantPage
+{
+    Q_OBJECT
+public:
+    explicit KexiProjectConnectionSelectionPage(QWidget* parent = 0);
+    virtual ~KexiProjectConnectionSelectionPage();
+
+    KexiConnSelectorWidget* m_connSelector;
 };
 
 class KexiProjectData;

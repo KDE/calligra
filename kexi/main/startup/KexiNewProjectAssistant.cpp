@@ -374,9 +374,9 @@ KexiProjectCreationPage::KexiProjectCreationPage(QWidget* parent)
     QVBoxLayout *vlyr = new QVBoxLayout;
     QHBoxLayout *lyr = new QHBoxLayout;
     vlyr->addLayout(lyr);
-    progressBar = new QProgressBar;
-    progressBar->setRange(0, 0);
-    lyr->addWidget(progressBar);
+    m_progressBar = new QProgressBar;
+    m_progressBar->setRange(0, 0);
+    lyr->addWidget(m_progressBar);
     lyr->addStretch(1);
 //! @todo add cancel
     vlyr->addStretch(1);
@@ -384,6 +384,36 @@ KexiProjectCreationPage::KexiProjectCreationPage(QWidget* parent)
 }
 
 KexiProjectCreationPage::~KexiProjectCreationPage()
+{
+}
+
+// ----
+
+KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* parent)
+ : KexiAssistantPage(i18n("Database Connection"),
+                  i18n("Select database server's connection you wish to use to "
+                       "create a new Kexi project. "
+                       "<p>Here you may also add, edit or remove connections "
+                       "from the list."),
+                  parent)
+{
+    setBackButtonVisible(true);
+    setNextButtonVisible(true);
+
+    QVBoxLayout *lyr = new QVBoxLayout;
+    m_connSelector = new KexiConnSelectorWidget(
+        Kexi::connset(),
+        "kfiledialog:///OpenExistingOrCreateNewProject",
+        KAbstractFileWidget::Saving);
+    lyr->addWidget(m_connSelector);
+    m_connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+    m_connSelector->hideHelpers();
+    m_connSelector->hideDescription();
+    setContents(lyr);
+    setFocusProxy(m_connSelector->connectionsList());
+}
+
+KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
 {
 }
 
@@ -413,8 +443,10 @@ public:
     KexiProjectCreationPage* projectCreationPage() {
         return page<KexiProjectCreationPage>(&m_projectCreationPage);
     }
+    KexiProjectConnectionSelectionPage* projectConnectionSelectionPage() {
+        return page<KexiProjectConnectionSelectionPage>(&m_projectConnectionSelectionPage);
+    }
     
-private:
     template <class C>
     C* page(QPointer<C>* p) {
         if (p->isNull()) {
@@ -428,6 +460,7 @@ private:
     QPointer<KexiProjectStorageTypeSelectionPage> m_projectStorageTypeSelectionPage;
     QPointer<KexiProjectTitleSelectionPage> m_titleSelectionPage;
     QPointer<KexiProjectCreationPage> m_projectCreationPage;
+    QPointer<KexiProjectConnectionSelectionPage> m_projectConnectionSelectionPage;
     KexiNewProjectAssistant *q;
 };
 
@@ -455,17 +488,17 @@ KexiNewProjectAssistant::~KexiNewProjectAssistant()
        
 void KexiNewProjectAssistant::previousPageRequested(KexiAssistantPage* page)
 {
-    if (page == d->projectStorageTypeSelectionPage()) {
+    if (page == d->m_projectStorageTypeSelectionPage) {
         setCurrentPage(d->templateSelectionPage());
     }
-    else if (page == d->titleSelectionPage()) {
+    else if (page == d->m_titleSelectionPage || page == d->m_projectConnectionSelectionPage) {
         setCurrentPage(d->projectStorageTypeSelectionPage());
     }
 }
 
 void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
 {
-    if (page == d->templateSelectionPage()) {
+    if (page == d->m_templateSelectionPage) {
         setCurrentPage(d->projectStorageTypeSelectionPage());
 #if 0
         d->titleSelectionPage()->contents->le_title->setFocus();
@@ -477,11 +510,16 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
         d->slideWidget->show();*/
         //setCurrentPage(d->projectStorageTypeSelectionPage());
     }
-    else if (page == d->projectStorageTypeSelectionPage()) {
-        d->titleSelectionPage()->contents->le_title->setFocus();
-        setCurrentPage(d->titleSelectionPage());
+    else if (page == d->m_projectStorageTypeSelectionPage) {
+        if (d->projectStorageTypeSelectionPage()->fileTypeSelected()) {
+            d->titleSelectionPage()->contents->le_title->setFocus();
+            setCurrentPage(d->titleSelectionPage());
+        }
+        else {
+            setCurrentPage(d->projectConnectionSelectionPage());
+        }
     }
-    else if (page == d->titleSelectionPage()) {
+    else if (page == d->m_titleSelectionPage) {
         if (!d->titleSelectionPage()->isAcceptable()) {
             //d->titleSelectionPage()->messageWidget->fadeIn();
             return;
