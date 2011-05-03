@@ -449,14 +449,16 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 if (viewportExtIsSet)
                     break;
 
+                bboxRecalculated = false;
+
                 // Collect the maximum width and height.
                 if (abs(windowWidth - windowOrgX) > mMaxWidth)
                     mMaxWidth = abs(windowWidth - windowOrgX);
                 if (abs(windowHeight - windowOrgY) > mMaxHeight)
                     mMaxHeight = abs(windowHeight - windowOrgY);
 
-                orgX = windowOrgX;
-                orgY = windowOrgY;
+                orgX = 0;
+                orgY = 0;
                 extX = windowWidth;
                 extY = windowHeight;
             }
@@ -470,8 +472,19 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
 #if DEBUG_BBOX
                 kDebug(31000) << "setViewportOrg" << viewportOrgX << viewportOrgY;
 #endif
-                // Can't do anything without the viewport extensions.
-                if (!viewportExtIsSet)
+                orgX = viewportOrgX;
+                orgY = viewportOrgY;
+                if (viewportExtIsSet) {
+                    extX = viewportWidth;
+                    extY = viewportHeight;
+                }
+                else {
+                    // If the viewportExt is not set, then either a
+                    // subsequent setViewportExt will set it, or the
+                    // windowExt will be used instead.  
+                    extX = windowWidth;
+                    extY = windowHeight;
+                }
                     break;
 
                 // FIXME: Handle the case where the org changes but
@@ -555,9 +568,11 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 extY = viewportHeight;
             }
             else {
-                // If there is no defined viewport, then use the window as the fallback viewport.
-                orgX = 0; // What should happen if ViewportOrg is set but not ViewportExt?
-                orgY = 0; // 
+                // If there is no defined viewport, then use the
+                // window as the fallback viewport. But only the size,
+                // the origin is always (0, 0).
+                orgX = 0;
+                orgY = 0;
                 extX = windowWidth;
                 extY = windowHeight;
             }
