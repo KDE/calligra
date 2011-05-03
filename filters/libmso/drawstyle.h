@@ -48,7 +48,17 @@ public:
     // Shape Property Set
     quint32 hspMaster() const;
     quint32 cxstyle() const;
+    quint32 bWMode() const;
     // Shape Boolean Properties
+    bool fBackground() const;
+    bool fInitiator() const;
+    bool fLockShapeType() const;
+    bool fPreferRelativeResize() const;
+    bool fOleIcon() const;
+    bool fFlipVOverride() const;
+    bool fFlipHOverride() const;
+    bool fPolicyBarcode() const;
+    bool fPolicyLabel() const;
 
     // Group Shape Property Set
     quint32 pWrapPolygonVertices() const;
@@ -57,6 +67,7 @@ public:
     qint32 dyWrapDistTop() const;
     qint32 dxWrapDistRight() const;
     qint32 dyWrapDistBottom() const;
+    quint32 lidRegroup() const;
     quint32 posH() const;
     quint32 posRelH() const;
     quint32 posV() const;
@@ -198,14 +209,37 @@ public:
     MSO::FixedPoint rotation() const;
 
     // Text Property Set
-    qint32 txflTextFlow() const;
+    qint32 iTxid() const;
     qint32 dxTextLeft() const;
     qint32 dyTextTop() const;
     qint32 dxTextRight() const;
     qint32 dyTextBottom() const;
+    quint32 wrapText() const;
+    quint32 anchorText() const;
+    quint32 txflTextFlow() const;
+    quint32 cdirFont() const;
+    quint32 hspNext() const;
+    quint32 txdir() const;
+    // Text Boolean Properties
+    bool fFitShapeToText() const;
+    bool fAutoTextMargin() const;
+    bool fSelectText() const;
 
     // Blip Property Set
+    MSO::FixedPoint cropFromTop() const;
+    MSO::FixedPoint cropFromBottom() const;
+    MSO::FixedPoint cropFromLeft() const;
+    MSO::FixedPoint cropFromRight() const;
     quint32 pib() const;
+    quint32 pibName() const;
+    // Blip Boolean Properties
+    bool fPictureActive() const;
+    bool fPictureBiLevel() const;
+    bool fPictureGray() const;
+    bool fNoHitTestPicture() const;
+    bool fLooping() const;
+    bool fRewind() const;
+    bool fPicturePreserveGrays() const;
 };
 
 /**

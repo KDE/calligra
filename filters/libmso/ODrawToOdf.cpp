@@ -177,9 +177,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // dr3d:texture-mode
     // dr3d:vertical-segments
     // draw:auto-grow-height
-    style.addProperty("draw:auto-grow-height", "false");
+    style.addProperty("draw:auto-grow-height", "false", gt);
     // draw:auto-grow-width
-    style.addProperty("draw:auto-grow-width", "false");
+    style.addProperty("draw:auto-grow-width", "false", gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
@@ -191,6 +191,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:caption-type
     // draw:color-inversion
     // draw:color-mode
+    if (ds.fPictureBiLevel()) {
+        style.addProperty("draw:color-mode", "mono", gt);
+    } else if (ds.fPictureGray()) {
+        style.addProperty("draw:color-mode", "greyscale", gt);
+    }
     // draw:contrast
     // draw:decimal-places
     // draw:end-guide
@@ -334,7 +339,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:stroke-linejoin
     // draw:symbol-color
     // draw:textarea-horizontal-align
+    style.addProperty("draw:textarea-horizontal-align", getHorizontalAlign(ds.anchorText()), gt);
     // draw:textarea-vertical-align
+    style.addProperty("draw:textarea-vertical-align", getVerticalAlign(ds.anchorText()), gt);
     // draw:tile-repeat-offset
     // draw:unit
     // draw:visible-area-height
@@ -890,5 +897,46 @@ const char* getVerticalRel(quint32 posRelV)
         return "line";
     default:
         return "page-content";
+    }
+}
+
+const char* getHorizontalAlign(quint32 anchorText)
+{
+    switch (anchorText) {
+    case 0: //msoanchorTop
+    case 6: //msoanchorTopBaseline
+    case 1: //msoanchorMiddle
+    case 2: //msoanchorBottom
+    case 7: //msoanchorBottomBaseline
+        return "left";
+    case 3: //msoanchorTopCentered
+    case 8: //msoanchorTopCenteredBaseline
+    case 4: //msoanchorMiddleCentered
+    case 5: //msoanchorBottomCentered
+    case 9: //msoanchorBottomCenteredBaseline
+        return "justify";
+    default:
+        return "left";
+    }
+}
+
+const char* getVerticalAlign(quint32 anchorText)
+{
+    switch (anchorText) {
+    case 0: //msoanchorTop
+    case 3: //msoanchorTopCentered
+    case 6: //msoanchorTopBaseline - not compatible with ODF
+    case 8: //msoanchorTopCenteredBaseline - not compatible with ODF
+        return "top";
+    case 1: //msoanchorMiddle
+    case 4: //msoanchorMiddleCentered
+        return "middle";
+    case 2: //msoanchorBottom
+    case 5: //msoanchorBottomCentered
+    case 7: //msoanchorBottomBaseline - not compatible with ODF
+    case 9: //msoanchorBottomCenteredBaseline - not compatible with ODF
+        return "bottom";
+    default:
+        return "top";
     }
 }

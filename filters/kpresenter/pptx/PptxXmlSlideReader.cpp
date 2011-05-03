@@ -861,38 +861,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         body->addAttribute("xlink:actuate", "onLoad");
         body->addAttribute("xlink:href", m_context->oleReplacements.value(spid));
         body->endElement(); // draw:image
-
-        // These should be one day part of ole shape functionality wise
-        if (progId == "Paint.Picture" || name == "Bitmap Image") {
-            body->startElement("draw:image");
-            QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
-            addManifestEntryForFile(destinationName);
-            addManifestEntryForPicturesDir();
-            body->addAttribute("xlink:href", destinationName);
-            body->addAttribute("xlink:show", "embed");
-            body->addAttribute("xlink:actuate", "onLoad");
-            body->endElement(); //draw:image
-        }
-        else if (progId == "Package") {
-            body->startElement("draw:plugin"); // The mimetype is not told by the ole container, this is best guess
-            QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
-            addManifestEntryForFile(destinationName);
-            body->addAttribute("xlink:href", destinationName);
-            body->endElement(); // draw:plugin
-        }
-        else if (progId.contains("AcroExch")) { // PDF
-            body->startElement("draw:object"); // The mimetype is not told by the ole container, this is best guess
-            QString destinationName = QLatin1String("") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-            RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, true ) )
-            addManifestEntryForFile(destinationName);
-            body->addAttribute("xlink:href", destinationName);
-            body->endElement(); // draw:object
-        }
-        else {
-            kWarning() << "Unhandled oleObj with progId=" << progId;
-        }
     }
 
     READ_EPILOGUE

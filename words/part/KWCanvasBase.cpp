@@ -61,7 +61,7 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
 {
     m_shapeManager = new KoShapeManager(this);
     m_toolProxy = new KoToolProxy(this, parent);
-    setCacheEnabled(true);
+    //setCacheEnabled(true);
 }
 
 KWCanvasBase::~KWCanvasBase()

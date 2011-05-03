@@ -34,7 +34,7 @@
 
 #include <QPainter>
 #include <QPainterPath>
-// #include <KDebug>
+#include <KDebug>
 
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
         : m_original(original),
@@ -46,17 +46,18 @@ KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
     QSet<KoShape*> delegates;
     delegates << m_original;
     setToolDelegates(delegates);
+
+    kDebug(32001) << "originalShape=" << original;
 }
 
 KWCopyShape::~KWCopyShape()
 {
+    kDebug(32001);
 }
 
 void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if(m_original == 0) {
-        return;
-    }
+    Q_ASSERT(m_original);
 
     // Since the rootArea is shared between the copyShape and the originalShape we need to
     // temporary switch the used KoTextPage to be sure the proper page-numbers are displayed.
@@ -128,25 +129,19 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
 {
-    if(m_original == 0)
-        return;
-
+    Q_ASSERT(m_original);
     m_original->paintDecorations(painter, converter, canvas);
 }
 
 QPainterPath KWCopyShape::outline() const
 {
-    if(m_original == 0)
-        return QPainterPath();
-
+    Q_ASSERT(m_original);
     return m_original->outline();
 }
 
 void KWCopyShape::saveOdf(KoShapeSavingContext &context) const
 {
-    if(m_original == 0)
-        return;
-
+    Q_ASSERT(m_original);
     KWCopyShape *me = const_cast<KWCopyShape*>(this);
     me->setAdditionalAttribute("draw:copy-of", m_original->name());
     saveOdfAttributes(context, OdfAllAttributes);
@@ -162,4 +157,9 @@ bool KWCopyShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &co
 #endif
 
     return false; // TODO
+}
+
+KoShape *KWCopyShape::original() const
+{
+    return m_original;
 }
