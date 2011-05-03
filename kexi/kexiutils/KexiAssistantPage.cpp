@@ -163,7 +163,9 @@ void KexiAssistantPage::slotLinkActivated(const QString& link)
         emit next(this);
     }
     else if (link == QLatin1String("KexiAssistantPage:cancel")) {
-        parentWidget()->deleteLater();
+        emit cancelled(this);
+        if (parentWidget())
+            parentWidget()->deleteLater();
     }
 }
 

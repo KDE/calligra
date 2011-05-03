@@ -43,6 +43,7 @@ public slots:
 signals:    
     void back(KexiAssistantPage* page);
     void next(KexiAssistantPage* page);
+    void cancelled(KexiAssistantPage* page);
 protected:
     QLabel* backButton();
     QLabel* nextButton();
