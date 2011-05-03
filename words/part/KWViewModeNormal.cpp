@@ -18,7 +18,6 @@
  */
 
 #include "KWViewModeNormal.h"
-#include "KWCanvas.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include <KoViewConverter.h>

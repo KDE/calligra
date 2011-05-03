@@ -19,7 +19,6 @@
 
 #include "KWViewModePreview.h"
 
-#include "KWCanvas.h"
 // #include "KWView.h"
 // #include "KWDocument.h"
 // #include "KWTextFrameSet.h"

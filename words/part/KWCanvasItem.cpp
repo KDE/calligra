@@ -55,7 +55,7 @@ KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
     setFocusPolicy(Qt::StrongFocus);
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
     m_viewConverter = new KoZoomHandler();
-    m_viewMode = KWViewMode::create(viewMode, document, this);
+    m_viewMode = KWViewMode::create(viewMode, document, m_viewConverter);
 }
 
 KWCanvasItem::~KWCanvasItem()
