@@ -145,6 +145,7 @@ else kDebug(32001) << "Nooooo FooterTextFrame";
             if (frame->frameSet() == fs) {
                 columns--;
                 if (columns < 0) {
+                    kDebug(32001) << "Deleting KWFrame from MainTextFrame";
                     fs->removeFrame(frame);
                     delete frame->shape();
                 }
@@ -154,6 +155,7 @@ else kDebug(32001) << "Nooooo FooterTextFrame";
         qreal colwidth = page.pageStyle().pageLayout().width / columns;
         qreal colheight = page.pageStyle().pageLayout().height;
         for (--columns; columns >= 0; --columns) {
+            kDebug(32001) << "Creating KWFrame for MainTextFrame";
             KoShape * shape = createTextShape(page);
             shape->setPosition(QPoint(columns * colwidth, page.offsetInDocument()));
             shape->setSize(QSizeF(colwidth, colheight));

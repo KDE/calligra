@@ -56,6 +56,7 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
 {
     Q_ASSERT(frame);
     if (!frame->isCopy()) {
+#if 0
         // Loop over all frames to see if there is a copy frame that references the removed
         // frame; if it does, then mark the copy as obsolete
         foreach (KWFrame *f, frames()) {
@@ -65,6 +66,17 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
                 }
             }
         }
+#else
+        // Loop over all frames to see if there is a copy frame that references the removed
+        // frame; if it does, then delete the copy too.
+        for(int i = frames().count() - 1; i >= 0; --i) {
+            if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(frames()[i]->shape())) {
+                if (cs->original() == shape) {
+                    delete cs;
+                }
+            }
+        }
+#endif
     }
 
     if (m_frames.removeAll(frame)) {

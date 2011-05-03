@@ -38,6 +38,8 @@ public:
     explicit KWRootAreaProvider(KWTextFrameSet *textFrameSet);
     virtual ~KWRootAreaProvider();
 
+    QList<KoTextLayoutRootArea *> pages() const { return m_pages; }
+
     /// reimplemented
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
