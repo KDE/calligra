@@ -34,7 +34,6 @@
 #include <kexidb/utils.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
-#include <kexiutils/KexiAnimatedLayout.h>
 #include <kexiutils/KexiAssistantPage.h>
 
 #include <kapplication.h>
@@ -61,7 +60,6 @@
 #include <QStackedLayout>
 #include <QPaintEvent>
 #include <QPainter>
-#include <QPropertyAnimation>
 #include <QDesktopWidget>
 #include <QProgressBar>
  
@@ -395,7 +393,7 @@ class KexiNewProjectAssistant::Private
 {
 public:
     Private(KexiNewProjectAssistant *qq)
-        : q(qq)
+     : q(qq)
     {
     }
     
@@ -416,44 +414,36 @@ public:
         return page<KexiProjectCreationPage>(&m_projectCreationPage);
     }
     
-    KexiAnimatedLayout *lyr;
 private:
-    void addPage(KexiAssistantPage* page) {
-        lyr->addWidget(page);
-        connect(page, SIGNAL(back(KexiAssistantPage*)), q, SLOT(previousPageRequested(KexiAssistantPage*)));
-        connect(page, SIGNAL(next(KexiAssistantPage*)), q, SLOT(nextPageRequested(KexiAssistantPage*)));
-        //connect(page, SIGNAL(cancelled(KexiAssistantPage*)), q, SLOT(cancelRequested(KexiAssistantPage*)));
-    }
-
     template <class C>
     C* page(QPointer<C>* p) {
         if (p->isNull()) {
             *p = new C;
-            addPage(*p);
+            q->addPage(*p);
         }
         return *p;
     }
 
-    KexiNewProjectAssistant* q;
     QPointer<KexiTemplateSelectionPage> m_templateSelectionPage;
     QPointer<KexiProjectStorageTypeSelectionPage> m_projectStorageTypeSelectionPage;
     QPointer<KexiProjectTitleSelectionPage> m_titleSelectionPage;
     QPointer<KexiProjectCreationPage> m_projectCreationPage;
+    KexiNewProjectAssistant *q;
 };
 
 // ----
 
 KexiNewProjectAssistant::KexiNewProjectAssistant(QWidget* parent)
- : QWidget(parent)
+ : KexiAssistantWidget(parent)
  , d(new Private(this))
 {
-    QVBoxLayout *mainLyr = new QVBoxLayout(this);
+/*    QVBoxLayout *mainLyr = new QVBoxLayout(this);
     d->lyr = new KexiAnimatedLayout;
     mainLyr->addLayout(d->lyr);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
         + KDialog::marginHint();
     mainLyr->setContentsMargins(margin, margin, margin, margin);
-
+*/
     setCurrentPage(d->templateSelectionPage());
     setFocusProxy(d->templateSelectionPage());
 }
@@ -463,20 +453,20 @@ KexiNewProjectAssistant::~KexiNewProjectAssistant()
     delete d;
 }
        
-void KexiNewProjectAssistant::previousPageRequested(KexiAssistantPage* sender)
+void KexiNewProjectAssistant::previousPageRequested(KexiAssistantPage* page)
 {
-    if (sender == d->projectStorageTypeSelectionPage()) {
-        d->lyr->setCurrentWidget(d->templateSelectionPage());
+    if (page == d->projectStorageTypeSelectionPage()) {
+        setCurrentPage(d->templateSelectionPage());
     }
-    else if (sender == d->titleSelectionPage()) {
-        d->lyr->setCurrentWidget(d->projectStorageTypeSelectionPage());
+    else if (page == d->titleSelectionPage()) {
+        setCurrentPage(d->projectStorageTypeSelectionPage());
     }
 }
 
-void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
+void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
 {
-    if (sender == d->templateSelectionPage()) {
-        d->lyr->setCurrentWidget(d->projectStorageTypeSelectionPage());
+    if (page == d->templateSelectionPage()) {
+        setCurrentPage(d->projectStorageTypeSelectionPage());
 #if 0
         d->titleSelectionPage()->contents->le_title->setFocus();
         d->lyr->setCurrentWidget(d->titleSelectionPage());
@@ -487,11 +477,11 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
         d->slideWidget->show();*/
         //setCurrentPage(d->projectStorageTypeSelectionPage());
     }
-    else if (sender == d->projectStorageTypeSelectionPage()) {
+    else if (page == d->projectStorageTypeSelectionPage()) {
         d->titleSelectionPage()->contents->le_title->setFocus();
-        d->lyr->setCurrentWidget(d->titleSelectionPage());
+        setCurrentPage(d->titleSelectionPage());
     }
-    else if (sender == d->titleSelectionPage()) {
+    else if (page == d->titleSelectionPage()) {
         if (!d->titleSelectionPage()->isAcceptable()) {
             //d->titleSelectionPage()->messageWidget->fadeIn();
             return;
@@ -502,21 +492,17 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* sender)
         cdata.driverName = KexiDB::defaultFileBasedDriverName();
         cdata.setFileName(d->titleSelectionPage()->contents->file_requester->url().toLocalFile());
         KexiProjectData *new_data = new KexiProjectData(cdata, cdata.fileName(), cdata.caption);
-        d->lyr->setCurrentWidget(d->projectCreationPage());
+        setCurrentPage(d->projectCreationPage());
         emit createProject(new_data);
     }
 }
     
-void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* sender)
+void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 {
+    Q_UNUSED(page);
     //TODO?
 }
     
-void KexiNewProjectAssistant::setCurrentPage(KexiAssistantPage* page)
-{
-    d->lyr->setCurrentWidget(page);
-}
-
 #ifdef OLD_KexiNewProjectWizard
 
 //! @internal

@@ -17,41 +17,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIASSISTANTPAGE_H
-#define KEXIASSISTANTPAGE_H
-
-#include <QtGui/QWidget>
+#ifndef KEXIASSISTANTWIDGET_H
+#define KEXIASSISTANTWIDGET_H
 
 #include "kexiutils_export.h"
 
-class QLabel;
+#include <QtGui/QWidget>
 
-//! A single page for assistant (KexiAssistantWidget).
-class KEXIUTILS_EXPORT KexiAssistantPage : public QWidget
+class KexiAssistantPage;
+
+//! A widget for building assistants.
+class KEXIUTILS_EXPORT KexiAssistantWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KexiAssistantPage(const QString& title, const QString& description,
-                               QWidget* parent = 0);
-    virtual ~KexiAssistantPage();
-    void setContents(QWidget* widget);
-    void setContents(QLayout* layout);
-public slots:
-    void setDescription(const QString& text);
-    void setBackButtonVisible(bool set);
-    void setNextButtonVisible(bool set);
-signals:    
-    void back(KexiAssistantPage* page);
-    void next(KexiAssistantPage* page);
-protected:
-    QLabel* backButton();
-    QLabel* nextButton();
+    explicit KexiAssistantWidget(QWidget* parent = 0);
+    ~KexiAssistantWidget();
 
-private slots:    
-    void slotLinkActivated(const QString& link);
+    void addPage(KexiAssistantPage* page);
+
+    KexiAssistantPage* currentPage() const;
+
+public slots:
+    void setCurrentPage(KexiAssistantPage* page);
+
+    virtual void previousPageRequested(KexiAssistantPage* page);
+
+    virtual void nextPageRequested(KexiAssistantPage* page);
+
+    virtual void cancelRequested(KexiAssistantPage* page);
+
 private:
     class Private;
-    Private * const d;
+    Private* const d;
 };
 
 #endif

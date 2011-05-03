@@ -27,6 +27,7 @@
 #include <kexidb/connectiondata.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
+#include <kexiutils/KexiAssistantWidget.h>
 
 #include <QLabel>
 #include <QPointer>
@@ -118,20 +119,18 @@ public:
 
 class KexiProjectData;
 
-class KexiNewProjectAssistant : public QWidget
+class KexiNewProjectAssistant : public KexiAssistantWidget
 {
     Q_OBJECT
 public:
     explicit KexiNewProjectAssistant(QWidget* parent = 0);
     ~KexiNewProjectAssistant();
 public slots:
-    virtual void previousPageRequested(KexiAssistantPage* sender);
-    virtual void nextPageRequested(KexiAssistantPage* sender);
-    virtual void cancelRequested(KexiAssistantPage* sender);
+    virtual void previousPageRequested(KexiAssistantPage* page);
+    virtual void nextPageRequested(KexiAssistantPage* page);
+    virtual void cancelRequested(KexiAssistantPage* page);
 signals:
     void createProject(KexiProjectData* data);
-protected:
-    void setCurrentPage(KexiAssistantPage* page);
 private:
     class Private;
     Private* const d;
