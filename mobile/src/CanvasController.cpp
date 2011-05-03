@@ -37,10 +37,10 @@
 #include <KActionCollection>
 #include <KoToolManager.h>
 #include <tables/part/CanvasItem.h>
-#include <libs/kopageapp/KoPACanvasItem.h>
-#include <libs/kopageapp/KoPAView.h>
-#include <libs/kopageapp/KoPADocument.h>
-#include <libs/kopageapp/KoPAViewBase.h>
+#include <KoPACanvasItem.h>
+#include <KoPAView.h>
+#include <KoPADocument.h>
+#include <KoPAViewBase.h>
 #include <kpresenter/part/KPrDocument.h>
 
 #include <QPoint>
@@ -84,6 +84,10 @@ void CanvasController::openDocument(const QString& path)
     m_doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument>(mimetype, 0, 0, QString(),
                                                                                QVariantList(), &error);
 
+    if (!m_doc) {
+        kDebug() << "Doc can't be openend" << error;
+    }
+
     QString fname(path);
     QString ext = KMimeType::extractKnownExtension(fname);
 
@@ -106,6 +110,7 @@ void CanvasController::openDocument(const QString& path)
         PAView *view = new PAView(dynamic_cast<KoPACanvasBase*>(m_canvas), prDocument, m_zoomController,
                                   m_zoomHandler);
         paCanvas->setView(view);
+        view->doUpdateActivePage(prDocument->pageByIndex(1, false));
 
         if (paCanvas) {
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
@@ -150,6 +155,7 @@ void CanvasController::openDocument(const QString& path)
         }
     }
 
+    KoToolManager::instance()->requestToolActivation(this);
     setCanvas(m_canvas);
     emit sheetCountChanged();
 }

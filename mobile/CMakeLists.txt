@@ -12,6 +12,7 @@ include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
     ${CMAKE_SOURCE_DIR}/tables
+    ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
 
 set (calligra-mobile_RCCS CalligraMobile.qrc)
