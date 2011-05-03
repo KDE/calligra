@@ -113,9 +113,6 @@
         <property name="focusPolicy" >
          <enum>Qt::StrongFocus</enum>
         </property>
-        <property name="text" >
-         <string comment="KDE::DoNotExtract" >TextLabel</string>
-        </property>
         <property name="alignment" >
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
