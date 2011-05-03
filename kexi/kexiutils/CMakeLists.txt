@@ -18,6 +18,9 @@ set(kexiutils_LIB_SRCS
   transliteration_table.cpp
   kmessagewidget.cpp 
   KexiContextMessage.cpp
+  KexiTitleLabel.cpp
+  KexiAssistantPage.cpp
+  KexiAnimatedLayout.cpp
 )
 
 IF (KEXI_MOBILE)
@@ -50,5 +53,6 @@ if(FALSE) # TODO: install when we move to independent place
     install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h kexiutils_global.h
     styleproxy.h longlongvalidator.h InternalPropertyMap.h 
     SmallToolButton.h FlowLayout.h
+    kmessagewidget.h KexiContextMessage.h KexiTitleLabel.h KexiAssistantPage.h KexiAnimatedLayout.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 endif(FALSE)

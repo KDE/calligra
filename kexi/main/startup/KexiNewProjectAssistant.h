@@ -26,6 +26,7 @@
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <kexidb/connectiondata.h>
 #include <kexiutils/KexiContextMessage.h>
+#include <kexiutils/KexiAssistantPage.h>
 
 #include <QLabel>
 #include <QPointer>
@@ -48,49 +49,6 @@ class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
 class KCategorizedView;
 class KPushButton;
-
-class KexiTitleLabel : public QLabel
-{
-public:
-    explicit KexiTitleLabel(QWidget * parent = 0, Qt::WindowFlags f = 0);
-    explicit KexiTitleLabel(const QString & text, QWidget * parent = 0, Qt::WindowFlags f = 0);
-    ~KexiTitleLabel();
-protected:
-    void changeEvent(QEvent* event);
-private:
-    void updateFont();
-    void init();
-    
-    class Private;
-    Private * const d;
-};
-
-class KexiAssistantPage : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit KexiAssistantPage(const QString& title, const QString& description,
-                               QWidget* parent = 0);
-    virtual ~KexiAssistantPage();
-    void setContents(QWidget* widget);
-    void setContents(QLayout* layout);
-public slots:
-    void setDescription(const QString& text);
-    void setBackButtonVisible(bool set);
-    void setNextButtonVisible(bool set);
-signals:    
-    void back(KexiAssistantPage* page);
-    void next(KexiAssistantPage* page);
-protected:
-    QLabel* backButton();
-    QLabel* nextButton();
-
-private slots:    
-    void slotLinkActivated(const QString& link);
-private:
-    class Private;
-    Private * const d;
-};
 
 class KexiTemplateSelectionPage : public KexiAssistantPage
 {
@@ -156,66 +114,6 @@ public:
     virtual ~KexiProjectCreationPage();
     
     QProgressBar* progressBar;
-};
-
-#include <QPropertyAnimation>
-#include <QPointer>
-#include <QStackedLayout>
-
-//! A tool for animated switching between widgets in a given stacked layout.
-/*! Animation is performed if the graphic effects level is set at least
- at "simple" level, i.e. when
- @code
- KGlobalSettings::self()->graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects
- @endcode
- is true. Otherwise */
-class KexiAnimatedLayout : public QStackedLayout
-{
-    Q_OBJECT
-public:
-    explicit KexiAnimatedLayout(QWidget* parent = 0);
-
-    ~KexiAnimatedLayout();
-
-public slots:
-    //! Sets the current widget to be the specified widget.
-    /*! Animation is performed while switching the widgets
-        (assuming animations are enabled in KGlobalSettings (see the explanation
-        for @ref KexiAnimatedStackedLayout).
-        The new current widget must already be contained in this stacked layout. 
-        Because of the animation, changing current widget is asynchronous, i.e.
-        after this methods returns, current widget is not changed. 
-        Connect to signal QStackedLayout::currentChanged(int index) to be notified
-        about actual change of the current widget when animation finishes.
-        @note this method is not virtual, so when calling it, make sure
-              the pointer is KexiAnimatedStackedLayout, not parent class QStackedLayout.
-        @see setCurrentIndex() currentWidget() */
-    void setCurrentWidget(QWidget* widget);
-
-    //! Sets the current widget to be the specified index.
-    /*! Animation is performed as for setCurrentWidget(). */
-    void setCurrentIndex(int index);
-    
-private:
-    class Private;
-    Private* const d;
-};
-
-class KexiAnimatedLayout::Private : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit Private(KexiAnimatedLayout* qq);
-    void animateTo(QWidget* destination);
-protected:
-    void paintEvent(QPaintEvent* event);
-protected slots:
-    void animationFinished();
-private:
-    QPointer<KexiAnimatedLayout> q;
-    QPixmap buffer;
-    QPropertyAnimation animation;
-    QPointer<QWidget> destinationWidget;
 };
 
 class KexiProjectData;
