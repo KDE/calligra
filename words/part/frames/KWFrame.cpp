@@ -105,9 +105,10 @@ void KWFrame::cleanupShape(KoShape* shape)
         for(int i = 0; i < layoutRootAreas.count(); ++i) {
             KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
             if (rootArea->associatedShape() == shape) {
-                rootAreaProvider->releaseAllAfter(i >= 1 ? layoutRootAreas[i-1] : 0);
+                rootAreaProvider->releaseAllAfter(rootArea);
                 lay->removeRootArea(rootArea);
                 rootArea->setAssociatedShape(0);
+                break;
             }
         }
     }
