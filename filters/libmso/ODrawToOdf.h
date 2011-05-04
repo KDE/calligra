@@ -143,6 +143,7 @@ private:
     void processParallelogram(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processPlus(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLeftRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);

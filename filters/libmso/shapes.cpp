@@ -537,6 +537,41 @@ void ODrawToOdf::processHexagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom-shape
 }
 
+void ODrawToOdf::processPlus(const OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "cross");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800");
+    out.xml.addAttribute("draw:path-stretchpoint-x","10800");
+    out.xml.addAttribute("draw:path-stretchpoint-y","10800");
+    out.xml.addAttribute("draw:text-areas","?f1 ?f1 ?f2 ?f3");
+    setShapeMirroring(o,out);
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
+    out.xml.addAttribute("draw:enhanced-path","M ?f1 0 L ?f2 0 ?f2 ?f1 21600 ?f1 21600 ?f3 ?f2 ?f3 ?f2 21600 ?f1 21600 ?f1 ?f3 0 ?f3 0 ?f1 ?f1 ?f1 ?f1 0 Z N");
+    equation(out, "f0","$0 *10799/10800");
+    equation(out, "f1","?f0 ");
+    equation(out, "f2","right-?f0 ");
+    equation(out, "f3","bottom-?f0 ");
+
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
+    out.xml.addAttribute("draw:handle-range-x-minimum", 0);
+    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-switched","true");
+    out.xml.endElement(); // handle
+    out.xml.endElement(); // enhanced-geometry
+    out.xml.endElement(); // custom-shape
+}
+
+
 void ODrawToOdf::processOctagon(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:custom-shape");
@@ -1889,6 +1924,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processHexagon(o, out);
     } else if (shapeType == msosptOctagon) {
         processOctagon(o, out);
+    } else if (shapeType == msosptPlus) {
+        processPlus(o, out);
     } else if (shapeType == msosptLeftArrow ||
                shapeType == msosptUpArrow ||
                shapeType == msosptDownArrow){
