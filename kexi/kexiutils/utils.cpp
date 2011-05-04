@@ -754,4 +754,29 @@ void KexiUtils::removeRecursiveEventFilter(QObject *object, QObject *filter)
     }
 }
 
+PaintBlocker::PaintBlocker(QWidget* parent)
+ : QObject(parent)
+ , m_enabled(true)
+{
+    parent->installEventFilter(this);
+}
+
+void PaintBlocker::setEnabled(bool set)
+{
+    m_enabled = set;
+}
+
+bool PaintBlocker::enabled() const
+{
+    return m_enabled;
+}
+
+bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
+{
+    if (m_enabled && watched == parent() && event->type() == QEvent::Paint) {
+        return true;
+    }
+    return false;
+}
+
 #include "utils_p.moc"

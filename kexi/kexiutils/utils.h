@@ -630,6 +630,20 @@ KEXIUTILS_EXPORT void installRecursiveEventFilter(QObject *object, QObject *filt
   on @a object and all of its children. */
 KEXIUTILS_EXPORT void removeRecursiveEventFilter(QObject *object, QObject *filter);
 
+//! Blocks paint events on specified widget.
+/*! Works recursively. Useful when widget should be hidden without changing
+    geometry it takes. */
+class KEXIUTILS_EXPORT PaintBlocker : public QObject
+{
+public:
+    PaintBlocker(QWidget* parent);
+    void setEnabled(bool set);
+    bool enabled() const;
+    virtual bool eventFilter(QObject* watched, QEvent* event);
+private:
+    bool m_enabled;
+};
+
 } //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H
