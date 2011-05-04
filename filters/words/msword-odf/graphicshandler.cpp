@@ -957,12 +957,12 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     if (ds.pib()) {
         url = getPicturePath(ds.pib());
     }
-    out.xml.startElement("draw:frame");
+    // Does not make much sense to display an empty frame, following PPT->ODP
+    // filters of both OOo and MS Office 2007.
     if (url.isEmpty()) {
-        //if the image cannot be found, just place an empty frame
-        out.xml.endElement(); //draw:frame
         return;
     }
+    out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
