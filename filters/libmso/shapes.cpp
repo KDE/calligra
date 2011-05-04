@@ -451,9 +451,17 @@ void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:type", "parallelogram");
-    out.xml.addAttribute("draw:glue-points", "6.25 0 4.5 0 8.75 5 3.75 10 5 10 1.25 5");
+    out.xml.addAttribute("draw:glue-points", "?f6 0 10800 ?f8 ?f11 10800 ?f9 21600 10800 ?f10 ?f5 10800");
+    out.xml.addAttribute("draw:text-areas", "?f3 ?f3 ?f4 ?f4");
     setShapeMirroring(o, out);
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
+    out.xml.addAttribute("draw:enhanced-path","M ?f0 0 L 21600 0 ?f1 21600 0 21600 Z N");
     equation(out, "f0", "$0");
     equation(out, "f1", "21600-$0");
     equation(out, "f2", "$0 *10/24");
