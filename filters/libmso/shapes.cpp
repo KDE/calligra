@@ -389,13 +389,25 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10 10 10 7.5 5");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
 
     setShapeMirroring(o, out);
+
     if (o.shapeProp.rh.recInstance == msosptRightTriangle) {
         out.xml.addAttribute("draw:type", "right-triangle");
+        out.xml.addAttribute("draw:glue-points","10800 0 5400 10800 0 21600 10800 21600 21600 21600 16200 10800");
+        out.xml.addAttribute("draw:text-areas","1900 12700 12700 19700");
+        out.xml.addAttribute("draw:enhanced-path","M 0 0 L 21600 21600 0 21600 0 0 Z N");
     } else if (o.shapeProp.rh.recInstance == msosptIsoscelesTriangle) {
         out.xml.addAttribute("draw:type", "isosceles-triangle");
+        out.xml.addAttribute("draw:glue-points", "10800 0 ?f1 10800 0 21600 10800 21600 21600 21600 ?f7 10800");
+        out.xml.addAttribute("draw:text-areas","?f1 10800 ?f2 18000 ?f3 7200 ?f4 21600");
+        out.xml.addAttribute("draw:enhanced-path","M ?f0 0 L 21600 21600 0 21600 Z N");
+
+        QList<int> defaultModifierValue;
+        defaultModifierValue << 10800;
+        processModifiers(o, out, defaultModifierValue);
+
         equation(out, "f0", "$0");
         equation(out, "f1", "$0 /2");
         equation(out, "f2", "?f1 +10800");
@@ -404,13 +416,13 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
         equation(out, "f5", "21600-?f0");
         equation(out, "f6", "?f5 /2");
         equation(out, "f7", "21600-?f6");
+
         out.xml.startElement("draw:handle");
         out.xml.addAttribute("draw:handle-range-x-maximum", 21600);
         out.xml.addAttribute("draw:handle-range-x-minimum", 0);
         out.xml.addAttribute("draw:handle-position", "$0 top");
         out.xml.endElement();
     }
-
     out.xml.endElement();    // enhanced-geometry
     out.xml.endElement(); // custom-shape
 }
