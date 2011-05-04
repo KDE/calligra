@@ -36,10 +36,14 @@ public:
     virtual ~KexiAssistantPage();
     void setContents(QWidget* widget);
     void setContents(QLayout* layout);
+    QWidget* focusWidget() const;
+    void setFocusWidget(QWidget* widget);
 public slots:
     void setDescription(const QString& text);
     void setBackButtonVisible(bool set);
     void setNextButtonVisible(bool set);
+    void back();
+    void next();
 signals:    
     void back(KexiAssistantPage* page);
     void next(KexiAssistantPage* page);

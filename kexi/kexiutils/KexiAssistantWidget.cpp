@@ -22,6 +22,7 @@
 #include "KexiAnimatedLayout.h"
 
 #include <KDialog>
+#include <KDebug>
 
 #include <QStyle>
 
@@ -97,7 +98,8 @@ KexiAssistantPage* KexiAssistantWidget::currentPage() const
 void KexiAssistantWidget::setCurrentPage(KexiAssistantPage* page)
 {
     d->lyr->setCurrentWidget(page);
-    page->setFocus();
+    if (page->focusWidget())
+        page->focusWidget()->setFocus();
 }
 
 #include "KexiAssistantWidget.moc"

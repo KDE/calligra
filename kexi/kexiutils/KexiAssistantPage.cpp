@@ -27,6 +27,7 @@
 
 #include <QLabel>
 #include <QGridLayout>
+#include <QPointer>
 
 class KexiAssistantPage::Private {
 public:    
@@ -41,6 +42,7 @@ public:
     QLabel* backButton;
     QLabel* nextButton;
     QLabel* cancelButton;
+    QPointer<QWidget> focusWidget;
 };
 
 void KexiAssistantPage::Private::setButtonVisible(QLabel** button,
@@ -185,6 +187,26 @@ QLabel* KexiAssistantPage::nextButton()
         d->nextButton->hide();
     }
     return d->nextButton;
+}
+
+void KexiAssistantPage::back()
+{
+    emit back(this);
+}
+
+void KexiAssistantPage::next()
+{
+    emit next(this);
+}
+
+QWidget* KexiAssistantPage::focusWidget() const
+{
+    return d->focusWidget;
+}
+
+void KexiAssistantPage::setFocusWidget(QWidget* widget)
+{
+    d->focusWidget = widget;
 }
 
 #include "KexiAssistantPage.moc"
