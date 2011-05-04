@@ -69,9 +69,9 @@ ff - [Geometry Text Boolean Properties]
 140 - geoLeft
 141 - geoTop
 142 - geoRight
-143 - geoBottom - 
+143 - geoBottom -
 144 - shapePath - specifies the way that lines in this shape are to be drawn.
-145 - pVertices - specifies the set of points that make up this shape 
+145 - pVertices - specifies the set of points that make up this shape
 146 - pSegmentInfo - specifies how the vertices that are specified by pVertices_complex are connected
 148 - adjust2Value - specifies a value that a user can change to adjust the geometry of the shape.
 149 - adjust3Value - specifies a value that a user can change to adjust the geometry of the shape.
@@ -100,9 +100,10 @@ ff - [Geometry Text Boolean Properties]
 18b - fillAngle - the angle of the shaded fill that rotates the gradient vector in a counterclockwise direction
 18c - fillFocus - specifies the relative position of the last color in the shaded fill
 18d - fillToLeft - the relative position of the left boundary of the center rectangle in a concentric shaded fill
-18e - fillToTop - the relative position of the top boundary of the center rectangle in a concentric shaded fill 
-18f - fillToRight - 
+18e - fillToTop - the relative position of the top boundary of the center rectangle in a concentric shaded fill
+18f - fillToRight -
 190 - fillToBottom -
+196 - fillShadePreset - preset colors of the gradient fill
 197 - fillShadeColors - specifies the colors and their relative positions along the shade of the fill
 193 - fillRectRight - the right boundary, in EMUs, of the bounding rectangle of the shaded fill
 194 - fillRectBottom - bottom boundary, in EMUs, of the bounding rectangle of the shaded fill
