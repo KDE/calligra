@@ -72,6 +72,7 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
         for(int i = frames().count() - 1; i >= 0; --i) {
             if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(frames()[i]->shape())) {
                 if (cs->original() == shape) {
+                    removeFrame(frames()[i], cs);
                     delete cs;
                 }
             }
