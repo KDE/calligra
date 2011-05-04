@@ -71,11 +71,12 @@ KWFrame::~KWFrame()
     m_shape = 0; // no delete is needed as the shape deletes us.
 
     if (m_frameSet) {
+        cleanupShape(ourShape);
+
         bool justMe = m_frameSet->frameCount() == 1;
         m_frameSet->removeFrame(this, ourShape); // first remove me so we won't get double
                                                  // deleted. ourShape is needed to mark any
                                                  // copyShapes as retired
-        cleanupShape(ourShape);
         if (justMe) {
             kDebug(32001) << "Last KWFrame removed from frameSet=" << m_frameSet;
             delete m_frameSet;
@@ -96,6 +97,7 @@ void KWFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
 
 void KWFrame::cleanupShape(KoShape* shape)
 {
+    Q_ASSERT(m_frameSet);
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_frameSet);
     if (tfs) {
         KWRootAreaProvider *rootAreaProvider = tfs->rootAreaProvider();
@@ -121,9 +123,9 @@ void KWFrame::setFrameSet(KWFrameSet *fs)
         return;
     Q_ASSERT_X(!fs || !m_frameSet, __FUNCTION__, "Changing the FrameSet afterwards needs to invalidate lots of stuff including whatever is done in the KWRootAreaProvider. The better way would be to not allow this.");
     if (m_frameSet) {
-        m_frameSet->removeFrame(this);
         if (m_shape)
             cleanupShape(m_shape);
+        m_frameSet->removeFrame(this);
     }
     m_frameSet = fs;
     if (fs)

@@ -119,6 +119,8 @@ public:
      */
     virtual void setFrameSet(KWFrameSet *newFrameSet);
 
+    void cleanupShape(KoShape* shape);
+
     void clearLoadingData() {
         m_anchoredPageNumber = -1;
     }
@@ -158,8 +160,6 @@ private:
 
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
-
-    void cleanupShape(KoShape* shape);
 };
 
 #endif
