@@ -163,6 +163,7 @@ void KexiDBConnectionSet::load()
             continue;
         }
         addConnectionDataInternal(data, file);
+        // kDebug() << file << "added.";
     }
 }
 

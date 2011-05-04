@@ -25,6 +25,7 @@
 #include "KexiConnSelector.h"
 
 #include <QPixmap>
+#include <Q3Header>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define KEXI_STARTUP_SHOW_TEMPLATES

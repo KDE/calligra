@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003,2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,14 +39,16 @@ public:
 };
 
 //! helper class
-class ConnectionDataLVItem : public Q3ListViewItem
+class ConnectionDataLVItem : public QTreeWidgetItem
 {
 public:
     ConnectionDataLVItem(KexiDB::ConnectionData *data,
-                         const KexiDB::Driver::Info& info, Q3ListView *list);
+                         const KexiDB::Driver::Info& info, QTreeWidget* list);
     ~ConnectionDataLVItem();
 
     void update(const KexiDB::Driver::Info& info);
+
+    using QTreeWidgetItem::data;
     KexiDB::ConnectionData *data() const {
         return m_data;
     }
@@ -105,7 +107,7 @@ public:
 //  //! Usable when we want to do other things for "back" button
 //  void disconnectShowSimpleConnButton();
 
-    Q3ListView* connectionsList() const;
+    QTreeWidget* connectionsList() const;
 
     KexiConnSelectorBase *m_remote;
 //  KexiOpenExistingFile *m_file;
@@ -116,6 +118,8 @@ public:
     void setConfirmOverwrites(bool set);
 
     bool confirmOverwrites() const;
+
+    virtual bool eventFilter(QObject* watched, QEvent* event);
 
 signals:
     void connectionItemExecuted(ConnectionDataLVItem *item);
@@ -136,7 +140,8 @@ public slots:
     void hideDescription();
 
 protected slots:
-    void slotConnectionItemExecuted(Q3ListViewItem *item);
+    void slotConnectionItemExecuted(QTreeWidgetItem *item);
+    void slotConnectionItemExecuted();
     void slotRemoteAddBtnClicked();
     void slotRemoteEditBtnClicked();
     void slotRemoteRemoveBtnClicked();

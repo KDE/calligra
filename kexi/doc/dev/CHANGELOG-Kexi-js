@@ -94,6 +94,11 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-05-04
+Startup
+*New Project assistant: initial port of server-based project creation pages
+*project selector and connection selector ported to Qt4
+
 2011-05-03
 Startup
 *"Database Connection" page added to the New Project assistant

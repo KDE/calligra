@@ -21,8 +21,7 @@
 #define KEXINEWPROJECTASSISTANT_H
 
 #include "kexidbconnectionset.h"
-#include "ui_KexiOpenExistingFile.h"
-#include "ui_KexiServerDBNamePage.h"
+//#include "ui_KexiOpenExistingFile.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <kexidb/connectiondata.h>
 #include <kexiutils/KexiContextMessage.h>
@@ -33,18 +32,6 @@
 #include <QPointer>
 
 class Q3ListViewItem;
-
-class KexiOpenExistingFile : public QWidget, public Ui::KexiOpenExistingFile
-{
-public:
-    KexiOpenExistingFile(QWidget* parent);
-};
-
-class KexiServerDBNamePage : public QWidget, public Ui::KexiServerDBNamePage
-{
-public:
-    KexiServerDBNamePage(QWidget* parent);
-};
 
 class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
@@ -124,6 +111,33 @@ public:
     virtual ~KexiProjectConnectionSelectionPage();
 
     KexiConnSelectorWidget* m_connSelector;
+};
+
+class KexiServerDBNamePage;
+class KexiGUIMessageHandler;
+class KexiProjectSet;
+class KexiProjectSelectorWidget;
+class KexiProjectDatabaseNameSelectionPage : public KexiAssistantPage
+{
+    Q_OBJECT
+public:
+    explicit KexiProjectDatabaseNameSelectionPage(QWidget* parent = 0);
+    virtual ~KexiProjectDatabaseNameSelectionPage();
+
+    void setConnection(KexiDB::ConnectionData* data);
+
+private slots:
+    void slotTitleChanged(const QString &capt);
+    void slotNameChanged(const QString &);
+private:
+    KexiServerDBNamePage* m_contents;
+    KexiGUIMessageHandler* m_msgHandler;
+    QPointer<KexiDB::ConnectionData> m_conndataToShow;
+    KexiProjectSet *m_projectSetToShow;
+    KexiProjectSelectorWidget* m_projectSelector;
+
+    bool m_dbNameAutofill;
+    bool m_le_dbname_txtchanged_enabled;
 };
 
 class KexiProjectData;
