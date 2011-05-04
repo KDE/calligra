@@ -130,7 +130,7 @@ public:
     /**
      * Assigns \p subStyle to the area \p rect .
      */
-    void insert(const QRect& rect, const SharedSubStyle& subStyle);
+    void insert(const QRect& rect, const SharedSubStyle& subStyle, bool markRegionChanged = true);
 
     /**
      * Assigns the substyles contained in \p style to the area \p region .

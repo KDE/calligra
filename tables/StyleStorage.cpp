@@ -363,7 +363,7 @@ int StyleStorage::nextColumnIndexInRow(int column, int row) const
     return rect.isNull() ? 0 : rect.left();
 }
 
-void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
+void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, bool markRegionChanged)
 {
     d->ensureLoaded();
 //     kDebug(36006) <<"StyleStorage: inserting" << SubStyle::name(subStyle->type()) <<" into" << rect;
@@ -402,14 +402,18 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
         if (Style::compare(subStyle.data(), (*it).data())) {
 //             kDebug(36006) <<"[REUSING EXISTING SUBSTYLE]";
             d->tree.insert(rect, *it);
-            regionChanged(rect);
+            if (markRegionChanged) {
+                regionChanged(rect);
+            }
             return;
         }
     }
     // insert substyle and add to the used substyle list
     d->tree.insert(rect, subStyle);
     d->subStyles[subStyle->type()].append(subStyle);
-    regionChanged(rect);
+    if (markRegionChanged) {
+        regionChanged(rect);
+    }
 }
 
 void StyleStorage::insert(const Region& region, const Style& style)
@@ -421,9 +425,11 @@ void StyleStorage::insert(const Region& region, const Style& style)
         Region::ConstIterator end(region.constEnd());
         for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
             // insert substyle
-            insert((*it)->rect(), subStyle);
-            regionChanged((*it)->rect());
+            insert((*it)->rect(), subStyle, false);
         }
+    }
+    for (Region::ConstIterator it(region.constBegin()), end(region.constEnd()); it != end; ++it) {
+        regionChanged((*it)->rect());
     }
 }
 
