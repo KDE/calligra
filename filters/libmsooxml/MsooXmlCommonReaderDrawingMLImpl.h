@@ -1689,8 +1689,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
+    m_currentParagraphStyle.addProperty("fo:line-height", "100%" );
 #endif
-
     bool pprRead = false;
     bool rRead = false;
 
