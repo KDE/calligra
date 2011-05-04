@@ -433,14 +433,17 @@ void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:type", "trapezoid");
-    out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10");
-    if (o.shapeProp.fFlipV) {
-        out.xml.addAttribute("draw:mirror-vertical", "true");
-    }
-    if (o.shapeProp.fFlipH) {
-        out.xml.addAttribute("draw:mirror-horizontal", "true");
-    }
+    out.xml.addAttribute("draw:glue-points", "?f6 10800 10800 21600 ?f5 10800 10800 0");
+    setShapeMirroring(o, out);
+    out.xml.addAttribute("draw:text-areas","?f3 ?f3 ?f4 ?f4");
+    out.xml.addAttribute("draw:enhanced-path","M 0 0 L 21600 0 ?f0 21600 ?f1 21600 Z N");
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
     equation(out, "f0", "21600-$0");
     equation(out, "f1", "$0");
     equation(out, "f2", "$0 *10/18");
@@ -452,7 +455,7 @@ void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
     out.xml.addAttribute("draw:handle-range-x-minimum", 0);
     out.xml.addAttribute("draw:handle-position", "$0 bottom");
-    out.xml.endElement();
+    out.xml.endElement(); // handle
     out.xml.endElement(); // enhanced-geometry
     out.xml.endElement(); // custom-shape
 }
