@@ -388,6 +388,10 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
     QList<KoTextLayoutObstruction*> obstructions;
     Q_ASSERT(rootArea);
 
+    if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_textFrameSet))
+        if (tfs->textFrameSetType() != KWord::OtherTextFrameSet)
+            return obstructions; // headers, footers and the main-text never collide with anything.
+
     KoShape *currentShape = rootArea->associatedShape();
 
     if(!currentShape)
