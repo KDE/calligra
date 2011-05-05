@@ -487,7 +487,7 @@ KexiProjectDatabaseNameSelectionPage::~KexiProjectDatabaseNameSelectionPage()
 {
 }
 
-void KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData* data)
+bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData* data)
 {
     QString selectorLabel;
     if (m_conndataToShow != data) {
@@ -498,7 +498,7 @@ void KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData*
             if (m_projectSetToShow->error()) {
                 delete m_projectSetToShow;
                 m_projectSetToShow = 0;
-                return;
+                return false;
             }
             m_conndataToShow = data;
             //-refresh projects list
@@ -511,6 +511,7 @@ void KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData*
                 .arg(m_conndataToShow->serverInfoString(true));
         m_projectSelector->label()->setText(selectorLabel);
     }
+    return true;
 }
 
 void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
@@ -661,8 +662,9 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
             = d->projectConnectionSelectionPage()->m_connSelector->selectedConnectionData();
         kDebug() << cdata;
         if (cdata) {
-            d->projectDatabaseNameSelectionPage()->setConnection(cdata);
-            setCurrentPage(d->projectDatabaseNameSelectionPage());
+            if (d->projectDatabaseNameSelectionPage()->setConnection(cdata)) {
+                setCurrentPage(d->projectDatabaseNameSelectionPage());
+            }
         }
     }
 }

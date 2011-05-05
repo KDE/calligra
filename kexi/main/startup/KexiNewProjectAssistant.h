@@ -124,7 +124,7 @@ public:
     explicit KexiProjectDatabaseNameSelectionPage(QWidget* parent = 0);
     virtual ~KexiProjectDatabaseNameSelectionPage();
 
-    void setConnection(KexiDB::ConnectionData* data);
+    bool setConnection(KexiDB::ConnectionData* data);
 
 private slots:
     void slotTitleChanged(const QString &capt);
