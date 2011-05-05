@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOFINDTABLES_H
-#define KOFINDTABLES_H
+#ifndef CALLIGRA_TABLES_FIND_H
+#define CALLIGRA_TABLES_FIND_H
 
 #include "calligra_tables_export.h"
 #include <KoFindBase.h>
@@ -31,7 +31,7 @@ namespace Tables
 {
 
 class Sheet;
-class CALLIGRA_TABLES_COMMON_EXPORT KoFindTables : public KoFindBase
+class CALLIGRA_TABLES_COMMON_EXPORT Find : public KoFindBase
 {
     Q_OBJECT
 public:
@@ -55,4 +55,4 @@ private:
 Q_DECLARE_METATYPE(Calligra::Tables::Cell)
 Q_DECLARE_METATYPE(Calligra::Tables::Sheet*)
 
-#endif // KOFINDTABLES_H
+#endif // CALLIGRA_TABLES_FIND_H

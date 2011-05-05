@@ -18,13 +18,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoFindTables.h"
+#include "Find.h"
 
 #include <KoFindOptionSet.h>
-#include <tables/Sheet.h>
-#include <CellStorage.h>
 #include <KoFindOption.h>
-#include <ValueStorage.h>
+
+#include "Sheet.h"
+#include "CellStorage.h"
+#include "ValueStorage.h"
 
 using namespace Calligra::Tables;
 

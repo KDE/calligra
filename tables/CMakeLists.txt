@@ -138,7 +138,6 @@ SET (part_DIR_SRCS
     part/Headers.cpp
     part/HeaderWidgets.cpp
     part/HeaderItems.cpp
-    part/KoFindTables.cpp
     part/PrintJob.cpp
     part/ToolRegistry.cpp
     part/TabBar.cpp
@@ -189,6 +188,7 @@ SET (calligratablescommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
+    Find.cpp
     tests/inspector.cpp
     ${chart_DIR_SRCS}
     ${commands_DIR_SRCS}
@@ -361,6 +361,7 @@ install( FILES
     Style.h
     Value.h
     ValueConverter.h
+    Find.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES
     part/CanvasBase.h
@@ -371,7 +372,6 @@ install( FILES
     part/Headers.h
     part/ToolRegistry.h
     part/View.h
-    part/KoFindTables.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables/part COMPONENT Devel)
 install( FILES
     ui/CellToolBase.h
