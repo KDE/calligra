@@ -1281,7 +1281,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             if (!fontStyle) {
                 kWarning() << "No font with ID:" << cellFormat->fontId;
             } else {
-                MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
+                KoGenStyle::copyPropertiesFromStyle(*fontStyle, cellStyle, KoGenStyle::TextType);
             }
         }
         if (!cellFormat->setupCellStyle(m_context->styles, &cellStyle)) {

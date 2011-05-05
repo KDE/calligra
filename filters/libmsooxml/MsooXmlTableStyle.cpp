@@ -131,6 +131,21 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
     if (!styleProperties->paragraphStyle.isEmpty()) {
         style->setParagraphStyle(styleProperties->paragraphStyle);
     }
+
+    TableStyleProperties::Properties setProperties = styleProperties->setProperties;
+
+    if (setProperties & TableStyleProperties::TopMargin) {
+        style->setTopPadding(styleProperties->topMargin);
+    }
+    if (setProperties & TableStyleProperties::BottomMargin) {
+        style->setBottomPadding(styleProperties->bottomMargin);
+    }
+    if (setProperties & TableStyleProperties::LeftMargin) {
+        style->setLeftPadding(styleProperties->leftMargin);
+    }
+    if (setProperties & TableStyleProperties::RightMargin) {
+        style->setRightPadding(styleProperties->rightMargin);
+    }
 }
 
 void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
@@ -155,19 +170,6 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
     //has borders facing other cells or facing the border of the table.
 
     TableStyleProperties::Properties setProperties = styleProperties->setProperties;
-
-    if (setProperties & TableStyleProperties::TopMargin) {
-        style->setTopPadding(styleProperties->topMargin);
-    }
-    if (setProperties & TableStyleProperties::BottomMargin) {
-        style->setBottomPadding(styleProperties->bottomMargin);
-    }
-    if (setProperties & TableStyleProperties::LeftMargin) {
-        style->setLeftPadding(styleProperties->leftMargin);
-    }
-    if (setProperties & TableStyleProperties::RightMargin) {
-        style->setRightPadding(styleProperties->rightMargin);
-    }
 
     if (setProperties & TableStyleProperties::TopBorder) {
         KoBorder::BorderData* topData;

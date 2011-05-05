@@ -288,7 +288,7 @@ bool XlsxCellFormat::setupCellStyle(
             kWarning() << "No font with ID:" << fontId;
             return false;
         }
-        MSOOXML::Utils::copyPropertiesFromStyle(*fontStyle, *cellStyle, KoGenStyle::TextType);
+        KoGenStyle::copyPropertiesFromStyle(*fontStyle, *cellStyle, KoGenStyle::TextType);
     }
     if (applyFill && fillId >= 0) {
         KoGenStyle *fillStyle = styles->fillStyle(fillId);
@@ -296,12 +296,12 @@ bool XlsxCellFormat::setupCellStyle(
             kWarning() << "No fill with ID:" << fillId;
             return false;
         }
-        MSOOXML::Utils::copyPropertiesFromStyle(*fillStyle, *cellStyle, KoGenStyle::TableCellType);
+        KoGenStyle::copyPropertiesFromStyle(*fillStyle, *cellStyle, KoGenStyle::TableCellType);
     }
     if (applyBorder && borderId >= 0) {
         KoGenStyle *borderStyle = styles->borderStyle(borderId);
         if (borderStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(*borderStyle, *cellStyle, KoGenStyle::TableCellType);
+            KoGenStyle::copyPropertiesFromStyle(*borderStyle, *cellStyle, KoGenStyle::TableCellType);
         }
     }
     return true;
@@ -790,9 +790,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
             SKIP_UNKNOWN
         }
     }
-    MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFontStyle, cellStyle, KoGenStyle::TextType);
-    MSOOXML::Utils::copyPropertiesFromStyle(*m_currentFillStyle, cellStyle, KoGenStyle::TableCellType);
-    MSOOXML::Utils::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
+    KoGenStyle::copyPropertiesFromStyle(*m_currentFontStyle, cellStyle, KoGenStyle::TextType);
+    KoGenStyle::copyPropertiesFromStyle(*m_currentFillStyle, cellStyle, KoGenStyle::TableCellType);
+    KoGenStyle::copyPropertiesFromStyle(*m_currentBorderStyle, cellStyle, KoGenStyle::TableCellType);
     m_currentCellFormat->setupCellStyleAlignment(&cellStyle);
 
     m_context->styles->conditionalStyles.insert(m_context->styles->conditionalStyles.size() + 1,

@@ -1741,7 +1741,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
-                MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+                KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
                 fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
                 if (!fontSize.isEmpty()) {
                     fontSize.remove("pt");
@@ -1954,7 +1954,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 #endif
 
-    MSOOXML::Utils::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
 
     while (!atEnd()) {
         readNext();
@@ -5240,7 +5240,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     inheritTextStyle(m_currentTextStyle);
 #endif
 
-    MSOOXML::Utils::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
 
     while (!atEnd()) {
         readNext();

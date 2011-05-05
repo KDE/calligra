@@ -200,9 +200,6 @@ private:
     T** m_pptr;
 };
 
-//! Copies properties from one KoGenStyle to another
-MSOOXML_EXPORT void copyPropertiesFromStyle(const KoGenStyle& sourceStyle, KoGenStyle& targetStyle, KoGenStyle::PropertyType type);
-
 //! Decodes boolean attribute @a value. If unspecified returns @a defaultValue.
 //! @return true unless @a value is equal to "false", "off" or "0".
 MSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue = false);
