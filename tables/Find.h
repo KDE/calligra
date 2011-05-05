@@ -22,8 +22,9 @@
 #define CALLIGRA_TABLES_FIND_H
 
 #include "calligra_tables_export.h"
+#include "Cell.h"
+
 #include <KoFindBase.h>
-#include <Cell.h>
 
 namespace Calligra
 {
@@ -35,14 +36,14 @@ class CALLIGRA_TABLES_COMMON_EXPORT Find : public KoFindBase
 {
     Q_OBJECT
 public:
-    explicit KoFindTables ( QObject* parent = 0 );
+    explicit KoFindTables(QObject *parent = 0);
 
 public Q_SLOTS:
-    void setCurrentSheet(Sheet* sheet);
+    void setCurrentSheet(Sheet *sheet);
     
 protected:
-    virtual void replaceImplementation ( const KoFindMatch& match, const QVariant& value );
-    virtual void findImplementation ( const QString& pattern, KoFindBase::KoFindMatchList& matchList );
+    virtual void replaceImplementation(const KoFindMatch &match, const QVariant &value);
+    virtual void findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList);
 
 private:
     class Private;

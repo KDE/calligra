@@ -32,28 +32,28 @@ using namespace Calligra::Tables;
 class KoFindTables::Private
 {
 public:
-    Sheet* currentSheet;
+    Sheet *currentSheet;
 };
 
-KoFindTables::KoFindTables ( QObject* parent )
-    : KoFindBase ( parent ), d(new Private)
+KoFindTables::KoFindTables(QObject *parent)
+    : KoFindBase(parent), d(new Private)
 {
     KoFindOptionSet *options = new KoFindOptionSet();
     options->addOption("caseSensitive", i18n("Case Sensitive"), i18n("Match cases when searching"), QVariant::fromValue<bool>(false));
     setOptions(options);
 }
 
-void KoFindTables::setCurrentSheet ( Sheet* sheet )
+void KoFindTables::setCurrentSheet(Sheet *sheet)
 {
     d->currentSheet = sheet;
 }
 
-void KoFindTables::replaceImplementation ( const KoFindMatch& match, const QVariant& value )
+void KoFindTables::replaceImplementation(const KoFindMatch &match, const QVariant &value)
 {
-    
+    //No implementation yet.
 }
 
-void KoFindTables::findImplementation ( const QString& pattern, KoFindBase::KoFindMatchList& matchList )
+void KoFindTables::findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList)
 {
     int row = 1;
     int column = 1;
