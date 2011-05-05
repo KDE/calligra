@@ -94,6 +94,9 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-05-05
+*New Project assistant: server-based project creation works
+
 2011-05-04
 Startup
 *New Project assistant: initial port of server-based project creation pages

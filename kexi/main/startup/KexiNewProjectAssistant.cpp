@@ -418,19 +418,19 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
     setNextButtonVisible(true);
 
     QVBoxLayout *lyr = new QVBoxLayout;
-    m_connSelector = new KexiConnSelectorWidget(
+    connSelector = new KexiConnSelectorWidget(
         Kexi::connset(),
         "kfiledialog:///OpenExistingOrCreateNewProject",
         KAbstractFileWidget::Saving);
-    lyr->addWidget(m_connSelector);
-    m_connSelector->showAdvancedConn();
-    connect(m_connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+    lyr->addWidget(connSelector);
+    connSelector->showAdvancedConn();
+    connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
             this, SLOT(next()));
-    m_connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    m_connSelector->hideHelpers();
-    m_connSelector->hideDescription();
+    connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+    connSelector->hideHelpers();
+    connSelector->hideDescription();
     setContents(lyr);
-    setFocusWidget(m_connSelector->connectionsList());
+    setFocusWidget(connSelector->connectionsList());
 }
 
 KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
@@ -452,35 +452,35 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(QWidg
     m_projectSetToShow = 0;
     m_dbNameAutofill = true;
     m_le_dbname_txtchanged_enabled = true;
-    m_contents = new KexiServerDBNamePage;
+    contents = new KexiServerDBNamePage;
 //! @todo
     m_msgHandler = new KexiGUIMessageHandler(this);
 
-    connect(m_contents->le_title, SIGNAL(textChanged(QString)),
+    connect(contents->le_title, SIGNAL(textChanged(QString)),
             this, SLOT(slotTitleChanged(QString)));
-    connect(m_contents->le_dbname, SIGNAL(textChanged(QString)),
+    connect(contents->le_dbname, SIGNAL(textChanged(QString)),
             this, SLOT(slotNameChanged(QString)));
-    connect(m_contents->le_title, SIGNAL(returnPressed()),
+    connect(contents->le_title, SIGNAL(returnPressed()),
             this, SLOT(next()));
-    connect(m_contents->le_dbname, SIGNAL(returnPressed()),
+    connect(contents->le_dbname, SIGNAL(returnPressed()),
             this, SLOT(next()));
-    m_contents->le_title->setText(defaultDatabaseName());
-    m_contents->le_title->selectAll();
-    m_contents->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this));
+    contents->le_title->setText(defaultDatabaseName());
+    contents->le_title->selectAll();
+    contents->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this));
     m_projectSelector = new KexiProjectSelectorWidget(
-        m_contents->frm_dblist, 0,
+        contents->frm_dblist, 0,
         true, // showProjectNameColumn
         false // showConnectionColumns
     );
     m_projectSelector->setFocusPolicy(Qt::NoFocus);
     m_projectSelector->setSelectable(false);
     m_projectSelector->list()->setFrameStyle(QFrame::NoFrame);
-    GLUE_WIDGET(m_projectSelector, m_contents->frm_dblist);
-    m_contents->layout()->setContentsMargins(0, 0, 0, 0);
+    GLUE_WIDGET(m_projectSelector, contents->frm_dblist);
+    contents->layout()->setContentsMargins(0, 0, 0, 0);
     m_projectSelector->layout()->setContentsMargins(0, 0, 0, 0);
     
-    setContents(m_contents);
-    setFocusWidget(m_contents->le_title);
+    setContents(contents);
+    setFocusWidget(contents->le_title);
 }
 
 KexiProjectDatabaseNameSelectionPage::~KexiProjectDatabaseNameSelectionPage()
@@ -490,9 +490,9 @@ KexiProjectDatabaseNameSelectionPage::~KexiProjectDatabaseNameSelectionPage()
 bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData* data)
 {
     QString selectorLabel;
-    if (m_conndataToShow != data) {
+    if (conndataToShow != data) {
         m_projectSelector->setProjectSet(0);
-        m_conndataToShow = 0;
+        conndataToShow = 0;
         if (data) {
             m_projectSetToShow = new KexiProjectSet(*data, m_msgHandler);
             if (m_projectSetToShow->error()) {
@@ -500,15 +500,15 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData*
                 m_projectSetToShow = 0;
                 return false;
             }
-            m_conndataToShow = data;
+            conndataToShow = data;
             //-refresh projects list
             m_projectSelector->setProjectSet(m_projectSetToShow);
         }
     }
-    if (m_conndataToShow) {
+    if (conndataToShow) {
         QString selectorLabel = i18n("Existing project databases on <b>%1 (%2)</b> database server:")
-                .arg(m_conndataToShow->caption)
-                .arg(m_conndataToShow->serverInfoString(true));
+                .arg(conndataToShow->caption)
+                .arg(conndataToShow->serverInfoString(true));
         m_projectSelector->label()->setText(selectorLabel);
     }
     return true;
@@ -516,12 +516,12 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData*
 
 void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
 {
-    if (m_contents->le_dbname->text().isEmpty())
+    if (contents->le_dbname->text().isEmpty())
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
         QString captionAsId = KexiUtils::string2Identifier(capt);
-        m_contents->le_dbname->setText(captionAsId);
+        contents->le_dbname->setText(captionAsId);
         m_le_dbname_txtchanged_enabled = true;
     }
 }
@@ -531,6 +531,25 @@ void KexiProjectDatabaseNameSelectionPage::slotNameChanged(const QString &)
     if (!m_le_dbname_txtchanged_enabled)
         return;
     m_dbNameAutofill = false;
+}
+
+bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
+{
+    delete messageWidget;
+    if (contents->le_title->text().trimmed().isEmpty()) {
+        messageWidget = new KexiContextMessageWidget(contents->formLayout,
+                                                     contents->le_title,
+                                                     i18n("Enter project title."));
+        contents->le_title->setText(QString());
+        return false;
+    }
+    if (contents->le_dbname->text().trimmed().isEmpty()) {
+        messageWidget = new KexiContextMessageWidget(contents->formLayout,
+            contents->le_dbname,
+            i18n("Enter database name."));
+        return false;
+    }
+    return true;
 }
 
 // ----
@@ -640,35 +659,49 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
         }
         else {
             setCurrentPage(d->projectConnectionSelectionPage());
-            //d->projectConnectionSelectionPage()->m_connSelector->connectionsList()->setFocus();
+            //d->projectConnectionSelectionPage()->connSelector->connectionsList()->setFocus();
         }
     }
     else if (page == d->m_titleSelectionPage) {
         if (!d->titleSelectionPage()->isAcceptable()) {
-            //d->titleSelectionPage()->messageWidget->fadeIn();
             return;
         }
         //file-based project
         KexiDB::ConnectionData cdata;
-        cdata.caption = d->titleSelectionPage()->contents->le_title->text();
         cdata.driverName = KexiDB::defaultFileBasedDriverName();
         cdata.setFileName(d->titleSelectionPage()->contents->file_requester->url().toLocalFile());
-        KexiProjectData *new_data = new KexiProjectData(cdata, cdata.fileName(), cdata.caption);
-        setCurrentPage(d->projectCreationPage());
-        emit createProject(new_data);
+        createProject(cdata, cdata.fileName(), d->titleSelectionPage()->contents->le_title->text());
     }
     else if (page == d->m_projectConnectionSelectionPage) {
         KexiDB::ConnectionData *cdata
-            = d->projectConnectionSelectionPage()->m_connSelector->selectedConnectionData();
-        kDebug() << cdata;
+            = d->projectConnectionSelectionPage()->connSelector->selectedConnectionData();
         if (cdata) {
             if (d->projectDatabaseNameSelectionPage()->setConnection(cdata)) {
                 setCurrentPage(d->projectDatabaseNameSelectionPage());
             }
         }
     }
+    else if (page == d->m_projectDatabaseNameSelectionPage) {
+        if (!d->m_projectDatabaseNameSelectionPage->conndataToShow
+            || !d->m_projectDatabaseNameSelectionPage->isAcceptable())
+        {
+            return;
+        }
+        createProject(*d->m_projectDatabaseNameSelectionPage->conndataToShow,
+                      d->m_projectDatabaseNameSelectionPage->contents->le_dbname->text().trimmed(),
+                      d->m_projectDatabaseNameSelectionPage->contents->le_title->text().trimmed());
+    }
 }
-    
+
+void KexiNewProjectAssistant::createProject(
+    const KexiDB::ConnectionData& cdata, const QString& databaseName,
+    const QString& caption)
+{
+    KexiProjectData *new_data = new KexiProjectData(cdata, databaseName, caption);
+    setCurrentPage(d->projectCreationPage());
+    emit createProject(new_data);
+}
+
 void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);

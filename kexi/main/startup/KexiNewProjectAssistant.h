@@ -110,7 +110,7 @@ public:
     explicit KexiProjectConnectionSelectionPage(QWidget* parent = 0);
     virtual ~KexiProjectConnectionSelectionPage();
 
-    KexiConnSelectorWidget* m_connSelector;
+    KexiConnSelectorWidget* connSelector;
 };
 
 class KexiServerDBNamePage;
@@ -126,13 +126,15 @@ public:
 
     bool setConnection(KexiDB::ConnectionData* data);
 
+    KexiServerDBNamePage* contents;
+    QPointer<KexiDB::ConnectionData> conndataToShow;
+    QPointer<KexiContextMessageWidget> messageWidget;
+    bool isAcceptable();
 private slots:
     void slotTitleChanged(const QString &capt);
     void slotNameChanged(const QString &);
 private:
-    KexiServerDBNamePage* m_contents;
     KexiGUIMessageHandler* m_msgHandler;
-    QPointer<KexiDB::ConnectionData> m_conndataToShow;
     KexiProjectSet *m_projectSetToShow;
     KexiProjectSelectorWidget* m_projectSelector;
 
@@ -155,6 +157,10 @@ public slots:
 signals:
     void createProject(KexiProjectData* data);
 private:
+    void createProject(
+        const KexiDB::ConnectionData& cdata, const QString& databaseName,
+        const QString& caption);
+
     class Private;
     Private* const d;
 };
