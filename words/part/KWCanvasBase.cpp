@@ -464,7 +464,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
 
                     // put the cache back
-                    m_pageCacheManager->insert(vm.page, pageCache, 100 * viewConverter()->zoom());
+                    m_pageCacheManager->insert(vm.page, pageCache);
                     // Paint the page decorations: border, shadow, etc.
                     paintPageDecorations(painter, vm);
 
@@ -740,7 +740,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                 if (!m_pageCacheManager) {
                     // no pageCacheManager, so create one for the current view. This happens only once!
                     // so on zoom change, we don't re-pre-generate weight/zoom images.
-                    m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize, viewConverter()->zoom());
+                    m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize);
                 }
 
                 if (!m_currentZoom == viewConverter()->zoom()) {
@@ -763,7 +763,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
 
                         pageCache->exposed.append(clipRectOnPage);
                     }
-                    m_pageCacheManager->insert(vm.page, pageCache, viewConverter()->zoom());
+                    m_pageCacheManager->insert(vm.page, pageCache);
                 }
                 updateCanvasInternal(finalClip);
             }
@@ -802,7 +802,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                 if (!m_pageCacheManager) {
                     // no pageCacheManager, so create one for the current view. This happens only once!
                     // so on zoom change, we don't re-pre-generate weight/zoom images.
-                    m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize, 1.0);
+                    m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize);
                 }
 
                 if (m_currentZoom != 1.0) {
@@ -826,7 +826,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                                                                                              &localViewConverter));
                         pageCache->exposed.append(clipRectOnPage.toRect());
                     }
-                    m_pageCacheManager->insert(vm.page, pageCache, 1.0);
+                    m_pageCacheManager->insert(vm.page, pageCache);
                 }
                 updateCanvasInternal(finalClip);
             }
