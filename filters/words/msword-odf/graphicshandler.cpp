@@ -956,10 +956,9 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     QString url;
     if (ds.pib()) {
         url = getPicturePath(ds.pib());
-    }
-    // Does not make much sense to display an empty frame, following PPT->ODP
-    // filters of both OOo and MS Office 2007.
-    if (url.isEmpty()) {
+    } else {
+        // Does not make much sense to display an empty frame, following
+        // PPT->ODP filters of both OOo and MS Office 2007.
         return;
     }
     out.xml.startElement("draw:frame");
@@ -972,6 +971,11 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.addAttribute("svg:x", mm(out.hOffset()));
     out.xml.addAttribute("svg:y", mm(out.vOffset()));
 
+    //if the image cannot be found, just place an empty frame
+    if (url.isEmpty()) {
+        out.xml.endElement(); //draw:frame
+        return;
+    }
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);
     out.xml.addAttribute("xlink:type", "simple");
