@@ -2794,10 +2794,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
  a BLIP is tiled to fill the available area.
 
  Parent elements:
-    - blipFill (§21.3.2.2) - DrawingML, p. 3919
+    - [done]blipFill (§21.3.2.2) - DrawingML, p. 3919
     - [done] blipFill (§20.1.8.14) - DrawingML, p. 3195
-    - blipFill (§20.2.2.1) - DrawingML, p. 3456
-    - blipFill (§20.5.2.2) - DrawingML, p. 3518
+    - [done] blipFill (§20.2.2.1) - DrawingML, p. 3456
+    - [done] blipFill (§20.5.2.2) - DrawingML, p. 3518
     - [done] blipFill (§19.3.1.4) - PresentationML, p. 2818
 
  Child elements:
@@ -3001,7 +3001,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
         int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
 
         QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
-            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);;
+            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
         QImage image;
         m_context->import->imageFromFile(m_recentDestName, image);
         image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
@@ -3044,13 +3044,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 {
     READ_PROLOGUE
 
-//    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs( attributes() );
 //! @todo use ST_Percentage_withMsooxmlFix_to_double for attributes b, l, r, t
-    /*    TRY_READ_ATTR_WITHOUT_NS(r, b)
-        TRY_READ_ATTR_WITHOUT_NS(r, l)
-        TRY_READ_ATTR_WITHOUT_NS(r, r)
-        TRY_READ_ATTR_WITHOUT_NS(r, t)*/
+    TRY_READ_ATTR_WITHOUT_NS(b)
+    TRY_READ_ATTR_WITHOUT_NS(l)
+    TRY_READ_ATTR_WITHOUT_NS(r)
+    TRY_READ_ATTR_WITHOUT_NS(t)
 //MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+
+    if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:repeat", QLatin1String("no-repeat"));
+
+        // TODO: One way to approach this would be to first scale the image to the size of the slide
+        // then, resize it according to the percentages & make sure there are no black areas
+    }
 
     readNext();
     READ_EPILOGUE
