@@ -32,17 +32,39 @@ namespace Tables
 {
 
 class Sheet;
+/**
+ * Searching implementation for searching through spreadsheets.
+ *
+ * This class implements a KoFind-backend for searching in spreadsheets.
+ *
+ * Matches found by this class will use Calligra::Tables::Sheet* as container
+ * and Calligra::Tables::Cell as location.
+ */
 class CALLIGRA_TABLES_COMMON_EXPORT Find : public KoFindBase
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor.
+     */
     explicit Find(QObject *parent = 0);
 
 public Q_SLOTS:
+    /**
+     * Set the current active sheet.
+     *
+     * Currently this class only searches within the active sheet.
+     */
     void setCurrentSheet(Sheet *sheet);
-    
+
 protected:
+    /**
+     * Overridden from KoFindBase
+     */
     virtual void replaceImplementation(const KoFindMatch &match, const QVariant &value);
+    /**
+     * Overridden from KoFindBase
+     */
     virtual void findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList);
 
 private:
