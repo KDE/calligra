@@ -104,6 +104,7 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
+#include <KoFindToolbar.h>
 
 // KSpread includes
 #include "ApplicationSettings.h"
@@ -138,7 +139,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "PrintJob.h"
-#include "KoFindTables.h"
+#include "Find.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -163,7 +164,6 @@
 // D-Bus
 #include "interfaces/ViewAdaptor.h"
 #include <QtDBus/QtDBus>
-#include <KoFindToolbar.h>
 
 using namespace Calligra::Tables;
 
@@ -200,7 +200,7 @@ public:
     // all UI actions
     ViewActions* actions;
 
-    KoFindTables* finder;
+    Find* finder;
     KoFindToolbar* findToolbar;
 
     // if true, kspread is still loading the document
@@ -606,7 +606,7 @@ View::View(QWidget *_parent, Doc *_doc)
 
     connect(&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
 
-    d->finder = new KoFindTables(this);
+    d->finder = new Find(this);
     connect(d->finder, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
     d->findToolbar = new KoFindToolbar(d->finder, actionCollection(), this);
     d->viewLayout->addWidget(d->findToolbar, 4, 0, 1, 2);

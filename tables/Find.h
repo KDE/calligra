@@ -36,7 +36,7 @@ class CALLIGRA_TABLES_COMMON_EXPORT Find : public KoFindBase
 {
     Q_OBJECT
 public:
-    explicit KoFindTables(QObject *parent = 0);
+    explicit Find(QObject *parent = 0);
 
 public Q_SLOTS:
     void setCurrentSheet(Sheet *sheet);

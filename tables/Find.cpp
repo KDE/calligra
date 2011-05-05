@@ -29,13 +29,13 @@
 
 using namespace Calligra::Tables;
 
-class KoFindTables::Private
+class Find::Private
 {
 public:
     Sheet *currentSheet;
 };
 
-KoFindTables::KoFindTables(QObject *parent)
+Find::Find(QObject *parent)
     : KoFindBase(parent), d(new Private)
 {
     KoFindOptionSet *options = new KoFindOptionSet();
@@ -43,17 +43,17 @@ KoFindTables::KoFindTables(QObject *parent)
     setOptions(options);
 }
 
-void KoFindTables::setCurrentSheet(Sheet *sheet)
+void Find::setCurrentSheet(Sheet *sheet)
 {
     d->currentSheet = sheet;
 }
 
-void KoFindTables::replaceImplementation(const KoFindMatch &match, const QVariant &value)
+void Find::replaceImplementation(const KoFindMatch &match, const QVariant &value)
 {
     //No implementation yet.
 }
 
-void KoFindTables::findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList)
+void Find::findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList)
 {
     int row = 1;
     int column = 1;
