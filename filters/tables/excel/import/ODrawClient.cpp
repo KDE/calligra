@@ -103,9 +103,10 @@ QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor
 }
 
 
-QString ODrawClient::getPicturePath(int pib)
+QString ODrawClient::getPicturePath(const quint32 pib)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
+    Q_UNUSED(pib);
     return QString();
 }
 

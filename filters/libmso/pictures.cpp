@@ -22,6 +22,8 @@
 #include <iostream>
 #include <QtCore/QDebug>
 
+#define DEBUG_PICTURE
+
 // Use anonymous namespace to cover following functions
 namespace
 {
@@ -282,14 +284,23 @@ savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
 }
 
 QByteArray
-getRgbUid(const MSO::OfficeArtDggContainer* d, quint16 pib)
+getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib)
 {
     // return 16 byte rgbuid for this given blip id
-    if (d && d->blipStore) {
-        const MSO::OfficeArtBStoreContainer* b = d->blipStore.data();
-        if (pib < b->rgfb.size() &&
+    if (dgg.blipStore) {
+        const MSO::OfficeArtBStoreContainer* b = dgg.blipStore.data();
+        if (pib < (quint32) b->rgfb.size() &&
             b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>())
         {
+            const MSO::OfficeArtFBSE* fbse = b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>();
+#ifdef DEBUG_PICTURES
+            qDebug() << "rgfb.size():" << b->rgfb.size();
+            qDebug() << "OfficeArtFBSE: DEBUG";
+            qDebug() << "tag:" << fbse->tag;
+            qDebug() << "cRef:" << fbse->cRef;
+            qDebug() << "foDelay:" << fbse->foDelay;
+            qDebug() << "embeddeBlip:" << fbse->embeddedBlip;
+#endif
             return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
         }
     }

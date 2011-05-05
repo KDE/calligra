@@ -90,7 +90,7 @@ private:
     {
     private:
         virtual QRectF getRect(const MSO::OfficeArtClientAnchor&);
-        virtual QString getPicturePath(int pib);
+        virtual QString getPicturePath(const quint32 pib);
         virtual bool onlyClientData(const MSO::OfficeArtClientData& o);
         virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
                                        const MSO::OfficeArtClientData& o,
@@ -154,7 +154,7 @@ public:
      * generated from the picture with the given pib. (check
      * libmso/ODrawToOdf.h)
      */
-    QString getPicturePath(int pib) const;
+    QString getPicturePath(quint32 pib) const;
 
     // Communication with Document, without having to know about Document
 signals:

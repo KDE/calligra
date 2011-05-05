@@ -21,6 +21,14 @@
 
 namespace
 {
+const MSO::OfficeArtCOLORREF ignore()
+{
+    MSO::OfficeArtCOLORREF w;
+    w.red = w.green = w.blue = 0xFF;
+    w.fPaletteIndex = w.fPaletteRGB = w.fSystemRGB = w.fSchemeIndex
+                                      = w.fSysIndex = true;
+    return w;
+}
 const MSO::OfficeArtCOLORREF white()
 {
     MSO::OfficeArtCOLORREF w;
@@ -192,7 +200,10 @@ GETTER(MSO::FixedPoint,        CropFromLeft,         cropFromLeft,         zero(
 GETTER(MSO::FixedPoint,        CropFromRight,        cropFromRight,        zero())         // 2.3.23.4
 GETTER(quint32,                Pib,                  pib,                  0)              // 2.3.23.5
 GETTER(quint32,                PibName,              pibName,              0)              // 2.3.23.7
-
+GETTER(quint32,                PibFlags,             pibFlags,             0)              // 2.3.23.9
+GETTER(MSO::OfficeArtCOLORREF, PictureTransparent,   pictureTransparent,   ignore())       // 2.3.23.10
+GETTER(qint32,                 PictureContrast,      pictureContrast,      0x00010000)     // 2.3.23.11
+GETTER(qint32,                 PictureBrightness,    pictureBrightness,    0)              // 2.3.23.12
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \
@@ -309,10 +320,28 @@ GETTER(fPicturePreserveGrays, fUsefPicturePreserveGrays, false)
         } \
         return a;\
     }
-//FOPT                //NAME
+// FOPT                       NAME
 COMPLEX(FillShadeColors,      fillShadeColors_complex)
 COMPLEX(PVertices,            pVertices_complex)
 COMPLEX(PSegmentInfo,         pSegmentInfo_complex)
 COMPLEX(PWrapPolygonVertices, pWrapPolygonVertices_complex)
-
 #undef COMPLEX
+
+#define COMPLEX_NAME(FOPT, NAME) \
+    QString DrawStyle::NAME() const \
+    { \
+        QString a;\
+        if (sp) { \
+            a = getComplexName<MSO::FOPT>(*sp); \
+            if (!a.isNull()) return a; \
+        } \
+        if (mastersp) { \
+            a = getComplexName<MSO::FOPT>(*mastersp); \
+            if (!a.isNull()) return a; \
+        } \
+        return a;\
+    }
+// FOPT                       NAME
+COMPLEX_NAME(PibName,         pibName_complex)
+COMPLEX_NAME(FillBlipName,    fillBlipName_complex)
+#undef COMPLEX_NAME

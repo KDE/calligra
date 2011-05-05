@@ -91,10 +91,11 @@ public:
 
     /**
      * Get path to an already stored picture based on its identifier.
+     *
      * @param pib specifies which BLIP to display in the picture shape.
      * @return path
      */
-    QString getPicturePath(int pib) const;
+    QString getPicturePath(const quint32 pib) const;
 private:
 
     /**

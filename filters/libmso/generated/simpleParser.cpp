@@ -3847,6 +3847,17 @@ void MSO::parseFixedPoint(LEInputStream& in, FixedPoint& _s) {
     _s.fractional = in.readuint16();
     _s.integral = in.readint16();
 }
+void MSO::parsePVertices_complex(LEInputStream& in, PVertices_complex& _s) {
+    _s.streamOffset = in.getPosition();
+    int _c;
+    LEInputStream::Mark _m;
+    _s.nElems = in.readuint16();
+    _s.nElemsAlloc = in.readuint16();
+    _s.cbElem = in.readuint16();
+    _c = (_s.cbElem==0xFFF0)?(4 * _s.nElems):(_s.cbElem * _s.nElems);
+    _s.data.resize(_c);
+    in.readBytes(_s.data);
+}
 void MSO::parsePSegmentInfo_complex(LEInputStream& in, PSegmentInfo_complex& _s) {
     _s.streamOffset = in.getPosition();
     int _c;
@@ -7617,6 +7628,62 @@ void MSO::parsePibName(LEInputStream& in, PibName& _s) {
     }
     _s.pibName = in.readuint32();
 }
+void MSO::parsePibFlags(LEInputStream& in, PibFlags& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0106)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0106");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.pibFlags = in.readuint32();
+}
+void MSO::parsePictureTransparent(LEInputStream& in, PictureTransparent& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0107)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0107");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseOfficeArtCOLORREF(in, _s.pictureTransparent);
+}
+void MSO::parsePictureContrast(LEInputStream& in, PictureContrast& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0108)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0108");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.pictureContrast = in.readint32();
+}
+void MSO::parsePictureBrightness(LEInputStream& in, PictureBrightness& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0109)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0109");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.pictureBrightness = in.readint32();
+}
 void MSO::parseBlipBooleanProperties(LEInputStream& in, BlipBooleanProperties& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
@@ -10893,355 +10960,367 @@ void MSO::parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s)
     parseOfficeArtFOPTEOPID(in, _choice);
     in.rewind(_m);
     if ((_choice.opid == 0x0004)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Rotation(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Rotation(&_s));
         parseRotation(in, *(Rotation*)_s.anon.data());
     } else if ((_choice.opid == 0x007F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ProtectionBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ProtectionBooleanProperties(&_s));
         parseProtectionBooleanProperties(in, *(ProtectionBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0080)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ITxid(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ITxid(&_s));
         parseITxid(in, *(ITxid*)_s.anon.data());
     } else if ((_choice.opid == 0x0081)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxTextLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxTextLeft(&_s));
         parseDxTextLeft(in, *(DxTextLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x0082)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DyTextTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DyTextTop(&_s));
         parseDyTextTop(in, *(DyTextTop*)_s.anon.data());
     } else if ((_choice.opid == 0x0083)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxTextRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxTextRight(&_s));
         parseDxTextRight(in, *(DxTextRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0084)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DyTextBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DyTextBottom(&_s));
         parseDyTextBottom(in, *(DyTextBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0085)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new WrapText(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new WrapText(&_s));
         parseWrapText(in, *(WrapText*)_s.anon.data());
     } else if ((_choice.opid == 0x0087)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new AnchorText(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new AnchorText(&_s));
         parseAnchorText(in, *(AnchorText*)_s.anon.data());
     } else if ((_choice.opid == 0x0088)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new TxflTextFlow(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new TxflTextFlow(&_s));
         parseTxflTextFlow(in, *(TxflTextFlow*)_s.anon.data());
     } else if ((_choice.opid == 0x0089)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new CdirFont(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new CdirFont(&_s));
         parseCdirFont(in, *(CdirFont*)_s.anon.data());
     } else if ((_choice.opid == 0x008A)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new HspNext(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new HspNext(&_s));
         parseHspNext(in, *(HspNext*)_s.anon.data());
     } else if ((_choice.opid == 0x008B)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Txdir(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Txdir(&_s));
         parseTxdir(in, *(Txdir*)_s.anon.data());
     } else if ((_choice.opid == 0x00BF)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new TextBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new TextBooleanProperties(&_s));
         parseTextBooleanProperties(in, *(TextBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0100)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new CropFromTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new CropFromTop(&_s));
         parseCropFromTop(in, *(CropFromTop*)_s.anon.data());
     } else if ((_choice.opid == 0x0101)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new CropFromBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new CropFromBottom(&_s));
         parseCropFromBottom(in, *(CropFromBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0102)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new CropFromLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new CropFromLeft(&_s));
         parseCropFromLeft(in, *(CropFromLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x0103)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new CropFromRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new CropFromRight(&_s));
         parseCropFromRight(in, *(CropFromRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0104)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Pib(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Pib(&_s));
         parsePib(in, *(Pib*)_s.anon.data());
     } else if ((_choice.opid == 0x0105)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PibName(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PibName(&_s));
         parsePibName(in, *(PibName*)_s.anon.data());
+    } else if ((_choice.opid == 0x0106)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PibFlags(&_s));
+        parsePibFlags(in, *(PibFlags*)_s.anon.data());
+    } else if ((_choice.opid == 0x0107)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PictureTransparent(&_s));
+        parsePictureTransparent(in, *(PictureTransparent*)_s.anon.data());
+    } else if ((_choice.opid == 0x0108)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PictureContrast(&_s));
+        parsePictureContrast(in, *(PictureContrast*)_s.anon.data());
+    } else if ((_choice.opid == 0x0109)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PictureBrightness(&_s));
+        parsePictureBrightness(in, *(PictureBrightness*)_s.anon.data());
     } else if ((_choice.opid == 0x013F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new BlipBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new BlipBooleanProperties(&_s));
         parseBlipBooleanProperties(in, *(BlipBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0140)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new GeoLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new GeoLeft(&_s));
         parseGeoLeft(in, *(GeoLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x0141)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new GeoTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new GeoTop(&_s));
         parseGeoTop(in, *(GeoTop*)_s.anon.data());
     } else if ((_choice.opid == 0x0142)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new GeoRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new GeoRight(&_s));
         parseGeoRight(in, *(GeoRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0143)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new GeoBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new GeoBottom(&_s));
         parseGeoBottom(in, *(GeoBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0144)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ShapePath(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ShapePath(&_s));
         parseShapePath(in, *(ShapePath*)_s.anon.data());
     } else if ((_choice.opid == 0x0145)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PVertices(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PVertices(&_s));
         parsePVertices(in, *(PVertices*)_s.anon.data());
     } else if ((_choice.opid == 0x0146)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PSegmentInfo(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PSegmentInfo(&_s));
         parsePSegmentInfo(in, *(PSegmentInfo*)_s.anon.data());
     } else if ((_choice.opid == 0x0147)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new AdjustValue(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new AdjustValue(&_s));
         parseAdjustValue(in, *(AdjustValue*)_s.anon.data());
     } else if ((_choice.opid == 0x0148)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Adjust2Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Adjust2Value(&_s));
         parseAdjust2Value(in, *(Adjust2Value*)_s.anon.data());
     } else if ((_choice.opid == 0x0149)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Adjust3Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Adjust3Value(&_s));
         parseAdjust3Value(in, *(Adjust3Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014A)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Adjust4Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Adjust4Value(&_s));
         parseAdjust4Value(in, *(Adjust4Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014B)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Adjust5Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Adjust5Value(&_s));
         parseAdjust5Value(in, *(Adjust5Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014C)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Adjust6Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Adjust6Value(&_s));
         parseAdjust6Value(in, *(Adjust6Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014D)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Adjust7Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Adjust7Value(&_s));
         parseAdjust7Value(in, *(Adjust7Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014E)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Adjust8Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Adjust8Value(&_s));
         parseAdjust8Value(in, *(Adjust8Value*)_s.anon.data());
     } else if ((_choice.opid == 0x017F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new GeometryBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new GeometryBooleanProperties(&_s));
         parseGeometryBooleanProperties(in, *(GeometryBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0180)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillType(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillType(&_s));
         parseFillType(in, *(FillType*)_s.anon.data());
     } else if ((_choice.opid == 0x0181)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillColor(&_s));
         parseFillColor(in, *(FillColor*)_s.anon.data());
     } else if ((_choice.opid == 0x0182)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillOpacity(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillOpacity(&_s));
         parseFillOpacity(in, *(FillOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x0183)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillBackColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillBackColor(&_s));
         parseFillBackColor(in, *(FillBackColor*)_s.anon.data());
     } else if ((_choice.opid == 0x0184)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillBackOpacity(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillBackOpacity(&_s));
         parseFillBackOpacity(in, *(FillBackOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x0185)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillCrMod(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillCrMod(&_s));
         parseFillCrMod(in, *(FillCrMod*)_s.anon.data());
     } else if ((_choice.opid == 0x0186)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillBlip(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillBlip(&_s));
         parseFillBlip(in, *(FillBlip*)_s.anon.data());
     } else if ((_choice.opid == 0x0187)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillBlipName(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillBlipName(&_s));
         parseFillBlipName(in, *(FillBlipName*)_s.anon.data());
     } else if ((_choice.opid == 0x0188)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillBlipFlags(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillBlipFlags(&_s));
         parseFillBlipFlags(in, *(FillBlipFlags*)_s.anon.data());
     } else if ((_choice.opid == 0x0189)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillWidth(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillWidth(&_s));
         parseFillWidth(in, *(FillWidth*)_s.anon.data());
     } else if ((_choice.opid == 0x018A)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillHeight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillHeight(&_s));
         parseFillHeight(in, *(FillHeight*)_s.anon.data());
     } else if ((_choice.opid == 0x018B)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillAngle(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillAngle(&_s));
         parseFillAngle(in, *(FillAngle*)_s.anon.data());
     } else if ((_choice.opid == 0x018C)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillFocus(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillFocus(&_s));
         parseFillFocus(in, *(FillFocus*)_s.anon.data());
     } else if ((_choice.opid == 0x018D)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillToLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillToLeft(&_s));
         parseFillToLeft(in, *(FillToLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x018E)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillToTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillToTop(&_s));
         parseFillToTop(in, *(FillToTop*)_s.anon.data());
     } else if ((_choice.opid == 0x018F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillToRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillToRight(&_s));
         parseFillToRight(in, *(FillToRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0190)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillToBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillToBottom(&_s));
         parseFillToBottom(in, *(FillToBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0191)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillRectLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillRectLeft(&_s));
         parseFillRectLeft(in, *(FillRectLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x0192)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillRectTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillRectTop(&_s));
         parseFillRectTop(in, *(FillRectTop*)_s.anon.data());
     } else if ((_choice.opid == 0x0193)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillRectRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillRectRight(&_s));
         parseFillRectRight(in, *(FillRectRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0194)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillRectBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillRectBottom(&_s));
         parseFillRectBottom(in, *(FillRectBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0195)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillDztype(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillDztype(&_s));
         parseFillDztype(in, *(FillDztype*)_s.anon.data());
     } else if ((_choice.opid == 0x0196)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillShadePreset(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillShadePreset(&_s));
         parseFillShadePreset(in, *(FillShadePreset*)_s.anon.data());
     } else if ((_choice.opid == 0x0197)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillShadeColors(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillShadeColors(&_s));
         parseFillShadeColors(in, *(FillShadeColors*)_s.anon.data());
     } else if ((_choice.opid == 0x0198)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillOriginX(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillOriginX(&_s));
         parseFillOriginX(in, *(FillOriginX*)_s.anon.data());
     } else if ((_choice.opid == 0x0199)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillOriginY(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillOriginY(&_s));
         parseFillOriginY(in, *(FillOriginY*)_s.anon.data());
     } else if ((_choice.opid == 0x019A)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillShapeOriginX(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillShapeOriginX(&_s));
         parseFillShapeOriginX(in, *(FillShapeOriginX*)_s.anon.data());
     } else if ((_choice.opid == 0x019B)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillShapeOriginY(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillShapeOriginY(&_s));
         parseFillShapeOriginY(in, *(FillShapeOriginY*)_s.anon.data());
     } else if ((_choice.opid == 0x019E)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillColorExt(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillColorExt(&_s));
         parseFillColorExt(in, *(FillColorExt*)_s.anon.data());
     } else if ((_choice.opid == 0x01A2)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillBackColorExt(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillBackColorExt(&_s));
         parseFillBackColorExt(in, *(FillBackColorExt*)_s.anon.data());
     } else if ((_choice.opid == 0x01BF)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new FillStyleBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new FillStyleBooleanProperties(&_s));
         parseFillStyleBooleanProperties(in, *(FillStyleBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x01C0)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineColor(&_s));
         parseLineColor(in, *(LineColor*)_s.anon.data());
     } else if ((_choice.opid == 0x01C1)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineOpacity(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineOpacity(&_s));
         parseLineOpacity(in, *(LineOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x01C2)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineBackColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineBackColor(&_s));
         parseLineBackColor(in, *(LineBackColor*)_s.anon.data());
     } else if ((_choice.opid == 0x01C5)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineFillBlip(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineFillBlip(&_s));
         parseLineFillBlip(in, *(LineFillBlip*)_s.anon.data());
     } else if ((_choice.opid == 0x01CB)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineWidth(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineWidth(&_s));
         parseLineWidth(in, *(LineWidth*)_s.anon.data());
     } else if ((_choice.opid == 0x01CD)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineStyle(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineStyle(&_s));
         parseLineStyle(in, *(LineStyle*)_s.anon.data());
     } else if ((_choice.opid == 0x01CE)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineDashing(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineDashing(&_s));
         parseLineDashing(in, *(LineDashing*)_s.anon.data());
     } else if ((_choice.opid == 0x01D0)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineStartArrowhead(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineStartArrowhead(&_s));
         parseLineStartArrowhead(in, *(LineStartArrowhead*)_s.anon.data());
     } else if ((_choice.opid == 0x01D1)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineEndArrowhead(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineEndArrowhead(&_s));
         parseLineEndArrowhead(in, *(LineEndArrowhead*)_s.anon.data());
     } else if ((_choice.opid == 0x01D2)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineStartArrowWidth(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineStartArrowWidth(&_s));
         parseLineStartArrowWidth(in, *(LineStartArrowWidth*)_s.anon.data());
     } else if ((_choice.opid == 0x01D3)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineStartArrowLength(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineStartArrowLength(&_s));
         parseLineStartArrowLength(in, *(LineStartArrowLength*)_s.anon.data());
     } else if ((_choice.opid == 0x01D4)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineEndArrowWidth(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineEndArrowWidth(&_s));
         parseLineEndArrowWidth(in, *(LineEndArrowWidth*)_s.anon.data());
     } else if ((_choice.opid == 0x01D5)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineEndArrowLength(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineEndArrowLength(&_s));
         parseLineEndArrowLength(in, *(LineEndArrowLength*)_s.anon.data());
     } else if ((_choice.opid == 0x01D6)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineJoinStyle(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineJoinStyle(&_s));
         parseLineJoinStyle(in, *(LineJoinStyle*)_s.anon.data());
     } else if ((_choice.opid == 0x01FF)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LineStyleBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LineStyleBooleanProperties(&_s));
         parseLineStyleBooleanProperties(in, *(LineStyleBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0200)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ShadowType(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ShadowType(&_s));
         parseShadowType(in, *(ShadowType*)_s.anon.data());
     } else if ((_choice.opid == 0x0201)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ShadowColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ShadowColor(&_s));
         parseShadowColor(in, *(ShadowColor*)_s.anon.data());
     } else if ((_choice.opid == 0x0204)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ShadowOpacity(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ShadowOpacity(&_s));
         parseShadowOpacity(in, *(ShadowOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x0205)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ShadowOffsetX(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ShadowOffsetX(&_s));
         parseShadowOffsetX(in, *(ShadowOffsetX*)_s.anon.data());
     } else if ((_choice.opid == 0x0206)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ShadowOffsetY(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ShadowOffsetY(&_s));
         parseShadowOffsetY(in, *(ShadowOffsetY*)_s.anon.data());
     } else if ((_choice.opid == 0x023F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ShadowStyleBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ShadowStyleBooleanProperties(&_s));
         parseShadowStyleBooleanProperties(in, *(ShadowStyleBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0301)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new HspMaster(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new HspMaster(&_s));
         parseHspMaster(in, *(HspMaster*)_s.anon.data());
     } else if ((_choice.opid == 0x0303)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Cxstyle(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Cxstyle(&_s));
         parseCxstyle(in, *(Cxstyle*)_s.anon.data());
     } else if ((_choice.opid == 0x0304)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new BWMode(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new BWMode(&_s));
         parseBWMode(in, *(BWMode*)_s.anon.data());
     } else if ((_choice.opid == 0x033F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new ShapeBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new ShapeBooleanProperties(&_s));
         parseShapeBooleanProperties(in, *(ShapeBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0341)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxyCalloutGap(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxyCalloutGap(&_s));
         parseDxyCalloutGap(in, *(DxyCalloutGap*)_s.anon.data());
     } else if ((_choice.opid == 0x0342)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Spcoa(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Spcoa(&_s));
         parseSpcoa(in, *(Spcoa*)_s.anon.data());
     } else if ((_choice.opid == 0x0343)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new Spcod(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new Spcod(&_s));
         parseSpcod(in, *(Spcod*)_s.anon.data());
     } else if ((_choice.opid == 0x0344)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxyCalloutDropSpecified(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxyCalloutDropSpecified(&_s));
         parseDxyCalloutDropSpecified(in, *(DxyCalloutDropSpecified*)_s.anon.data());
     } else if ((_choice.opid == 0x0345)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxyCalloutLengthSpecified(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxyCalloutLengthSpecified(&_s));
         parseDxyCalloutLengthSpecified(in, *(DxyCalloutLengthSpecified*)_s.anon.data());
     } else if ((_choice.opid == 0x037F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new CalloutBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new CalloutBooleanProperties(&_s));
         parseCalloutBooleanProperties(in, *(CalloutBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0383)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PWrapPolygonVertices(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PWrapPolygonVertices(&_s));
         parsePWrapPolygonVertices(in, *(PWrapPolygonVertices*)_s.anon.data());
     } else if ((_choice.opid == 0x0384)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxWrapDistLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxWrapDistLeft(&_s));
         parseDxWrapDistLeft(in, *(DxWrapDistLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x0385)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DyWrapDistTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DyWrapDistTop(&_s));
         parseDyWrapDistTop(in, *(DyWrapDistTop*)_s.anon.data());
     } else if ((_choice.opid == 0x0386)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxWrapDistRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxWrapDistRight(&_s));
         parseDxWrapDistRight(in, *(DxWrapDistRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0387)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DyWrapDistBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DyWrapDistBottom(&_s));
         parseDyWrapDistBottom(in, *(DyWrapDistBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0388)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new LidRegroup(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new LidRegroup(&_s));
         parseLidRegroup(in, *(LidRegroup*)_s.anon.data());
     } else if ((_choice.opid == 0x038F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PosH(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PosH(&_s));
         parsePosH(in, *(PosH*)_s.anon.data());
     } else if ((_choice.opid == 0x0390)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PosRelH(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PosRelH(&_s));
         parsePosRelH(in, *(PosRelH*)_s.anon.data());
     } else if ((_choice.opid == 0x0391)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PosV(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PosV(&_s));
         parsePosV(in, *(PosV*)_s.anon.data());
     } else if ((_choice.opid == 0x0392)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PosRelV(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PosRelV(&_s));
         parsePosRelV(in, *(PosRelV*)_s.anon.data());
     } else if ((_choice.opid == 0x0393)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new PctHR(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new PctHR(&_s));
         parsePctHR(in, *(PctHR*)_s.anon.data());
     } else if ((_choice.opid == 0x0394)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new AlignHR(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new AlignHR(&_s));
         parseAlignHR(in, *(AlignHR*)_s.anon.data());
     } else if ((_choice.opid == 0x0395)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxHeightHR(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxHeightHR(&_s));
         parseDxHeightHR(in, *(DxHeightHR*)_s.anon.data());
     } else if ((_choice.opid == 0x0396)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DxWidthHR(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DxWidthHR(&_s));
         parseDxWidthHR(in, *(DxWidthHR*)_s.anon.data());
     } else if ((_choice.opid == 0x03bf)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new GroupShapeBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new GroupShapeBooleanProperties(&_s));
         parseGroupShapeBooleanProperties(in, *(GroupShapeBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0403)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new WzFillId(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new WzFillId(&_s));
         parseWzFillId(in, *(WzFillId*)_s.anon.data());
     } else if ((_choice.opid == 0x053F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new DiagramBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new DiagramBooleanProperties(&_s));
         parseDiagramBooleanProperties(in, *(DiagramBooleanProperties*)_s.anon.data());
     } else {
-        _s.anon = OfficeArtFOPTEChoice::choice1338946901(new OfficeArtFOPTE(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice4134198502(new OfficeArtFOPTE(&_s));
         parseOfficeArtFOPTE(in, *(OfficeArtFOPTE*)_s.anon.data());
     }
 }

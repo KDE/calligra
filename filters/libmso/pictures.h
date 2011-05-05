@@ -46,6 +46,6 @@ PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a,
 /**
  * Look in blipStore for the id mapping to this object
  **/
-QByteArray getRgbUid(const MSO::OfficeArtDggContainer* d, quint16 pib);
+QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib);
 
 #endif

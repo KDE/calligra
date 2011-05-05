@@ -43,7 +43,7 @@ public:
          * Get the path in the ODF document that corresponds to the
          * image generated from the image with the given pib.
          **/
-        virtual QString getPicturePath(int pib) = 0;
+        virtual QString getPicturePath(const quint32 pib) = 0;
         /**
          * Check if the clientdata is the main content of a drawing object.
          **/
