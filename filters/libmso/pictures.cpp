@@ -22,7 +22,7 @@
 #include <iostream>
 #include <QtCore/QDebug>
 
-#define DEBUG_PICTURE
+//#define DEBUG_PICTURES
 
 // Use anonymous namespace to cover following functions
 namespace
@@ -284,7 +284,7 @@ savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
 }
 
 QByteArray
-getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib)
+getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32& offset)
 {
     // return 16 byte rgbuid for this given blip id
     if (dgg.blipStore) {
@@ -301,6 +301,7 @@ getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib)
             qDebug() << "foDelay:" << fbse->foDelay;
             qDebug() << "embeddeBlip:" << fbse->embeddedBlip;
 #endif
+            offset = fbse->foDelay;
             return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
         }
     }

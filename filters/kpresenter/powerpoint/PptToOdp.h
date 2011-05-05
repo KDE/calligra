@@ -242,12 +242,10 @@ private:
      * Function that does the actual conversion.
      *
      * It is shared by the two convert() functions.
-     * @param input an open OLE container that contains the ppt data.
      * @param output an open KoStore to write the odp into.
      * @return result code of the conversion.
      */
-    KoFilter::ConversionStatus doConversion(POLE::Storage& input,
-                                            KoStore* output);
+    KoFilter::ConversionStatus doConversion(KoStore* output);
 
     /**
      * TODO:

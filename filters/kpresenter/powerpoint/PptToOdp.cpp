@@ -637,7 +637,7 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
         return KoFilter::FileNotFound;
     }
 
-    KoFilter::ConversionStatus status = doConversion(storage, storeout);
+    KoFilter::ConversionStatus status = doConversion(storeout);
 
     if (m_progress_update) {
         (m_filter->*m_setProgress)(100);
@@ -654,11 +654,11 @@ PptToOdp::convert(POLE::Storage& storage, KoStore* storeout)
         qDebug() << "Parsing and setup failed.";
         return KoFilter::InvalidFormat;
     }
-    return doConversion(storage, storeout);
+    return doConversion(storeout);
 }
 
 KoFilter::ConversionStatus
-PptToOdp::doConversion(POLE::Storage& storage, KoStore* storeout)
+PptToOdp::doConversion(KoStore* storeout)
 {
     KoOdfWriteStore odfWriter(storeout);
     KoXmlWriter* manifest = odfWriter.manifestWriter(
@@ -895,17 +895,55 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& st
     odrawtoodf.defineGraphicProperties(style, ds, styles);
 }
 
+template<class T>
+void
+setRgbUid(const T* a, QByteArray& rgbUid)
+{
+    if (!a) return;
+    rgbUid = a->rgbUid1 + a->rgbUid2;
+}
+
 QString PptToOdp::getPicturePath(const quint32 pib) const
 {
+    bool use_offset = false;
     quint32 n = pib - 1;
+    quint32 offset = 0;
+
     const OfficeArtDggContainer& dgg = p->documentContainer->drawingGroup.OfficeArtDgg;
-    QByteArray rgbUid = getRgbUid(dgg, n);
+    QByteArray rgbUid = getRgbUid(dgg, n, offset);
 
     if (!rgbUid.isEmpty()) {
         if (pictureNames.contains(rgbUid)) {
             return "Pictures/" + pictureNames[rgbUid];
         } else {
             qDebug() << "UNKNOWN picture reference:" << rgbUid.toHex();
+            use_offset = true;
+            rgbUid.clear();
+        }
+    }
+    if (use_offset) {
+        const OfficeArtBStoreDelay& d = p->pictures.anon1;
+        foreach (const OfficeArtBStoreContainerFileBlock& block, d.anon1) {
+            if (block.anon.is<OfficeArtBlip>()) {
+                if (block.anon.get<OfficeArtBlip>()->streamOffset == offset) {
+
+                    const OfficeArtBlip* b = block.anon.get<OfficeArtBlip>();
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipEMF>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipWMF>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipPICT>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipJPEG>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipPNG>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipDIB>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipTIFF>(), rgbUid);
+
+                    if (!rgbUid.isEmpty()) {
+                        if (pictureNames.contains(rgbUid)) {
+                            qDebug() << "Reusing OfficeArtBlip offset:" << offset;
+                            return "Pictures/" + pictureNames[rgbUid];
+                        }
+                    }
+                }
+            }
         }
     }
     return QString();

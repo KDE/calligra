@@ -684,17 +684,18 @@ KWordGraphicsHandler::createFloatingPictures(KoStore* store, KoXmlWriter* manife
 
 QString KWordGraphicsHandler::getPicturePath(quint32 pib) const
 {
-    int picturePosition = pib - 1;
-    QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, picturePosition);
-    QString ret("");
+    quint32 n = pib - 1;
+    quint32 offset = 0;
+    QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, n, offset);
+
     if (rgbUid.length()) {
         if (m_picNames.contains(rgbUid)) {
-            ret = "Pictures/" + m_picNames[rgbUid];
+            return "Pictures/" + m_picNames[rgbUid];
         } else {
             qDebug() << "UNKNOWN picture reference!";
         }
     }
-    return ret;
+    return QString();
 }
 
 void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
