@@ -138,7 +138,6 @@ SET (part_DIR_SRCS
     part/Headers.cpp
     part/HeaderWidgets.cpp
     part/HeaderItems.cpp
-    part/KoFindTables.cpp
     part/PrintJob.cpp
     part/ToolRegistry.cpp
     part/TabBar.cpp
