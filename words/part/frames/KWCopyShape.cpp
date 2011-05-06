@@ -84,7 +84,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
                 KWPage copypage = m_pageManager->page(copyshape);
                 Q_ASSERT(copypage .isValid());
 
-                Q_ASSERT(m_originalpage.pageNumber() <= lay->rootAreas().count());
+                //Q_ASSERT(m_originalpage.pageNumber() <= lay->rootAreas().count());
                 if (m_originalpage.pageNumber() <= lay->rootAreas().count()) {
                     m_rootArea = lay->rootAreas()[m_originalpage.pageNumber() - 1];
                     m_rootArea->setPage(new KWPage(copypage));
