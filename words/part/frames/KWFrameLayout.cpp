@@ -832,10 +832,12 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 
     KoShape *orig = 0;
     //Lets find the last non-copy frame in the frameset
-    foreach (KWFrame *candidate, fs->frames()) {
-        if (candidate->isCopy())
+    for(int i = fs->frames().count() - 1; i >= 0; --i) {
+        KWFrame *candidate = fs->frames()[i];
+        if (!candidate->isCopy()) {
+            orig = candidate->shape();
             break;
-        orig = candidate->shape();
+        }
     }
     Q_ASSERT(orig); // can't have a frameset with only copy frames.
 
