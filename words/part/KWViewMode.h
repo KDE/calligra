@@ -57,7 +57,7 @@ public:
     KWViewMode();
     virtual ~KWViewMode() {}
 
-    /// a two value return type for clipRectToDocument()
+    /// a two value return type for mapExposedRects()
     struct ViewMap {
         QRect clipRect;   ///< the rectangle in the view coordinates showing (part of) the clip
         QPointF distance; ///< the displacement between the document and the view in view coordinates.
@@ -65,16 +65,16 @@ public:
     };
 
     /** Document coord -> view coord */
-    virtual QPointF documentToView(const QPointF &point) const = 0;
+    virtual QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const = 0;
 
     /** Document coord -> view coord */
-    QRectF documentToView(const QRectF &rect) const;
+    QRectF documentToView(const QRectF &rect, KoViewConverter *viewConverter) const;
 
     /** View coord -> Document coord */
-    virtual QPointF viewToDocument(const QPointF &point) const = 0;
+    virtual QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const = 0;
 
     /** View coord -> Document coord */
-    QRectF viewToDocument(const QRectF &rect) const;
+    QRectF viewToDocument(const QRectF &rect, KoViewConverter *viewConverter) const;
 
     /** Size of the contents area, in pixels */
     virtual QSizeF contentsSize() const = 0;
@@ -112,7 +112,7 @@ public:
      * @param document
      * @param viewConverter used to calculate the document->view and vv conversions
      */
-    static KWViewMode *create(const QString& viewModeType, KWDocument *document, KoViewConverter *viewConverter);
+    static KWViewMode *create(const QString& viewModeType, KWDocument *document);
 
     /**
      * This method converts a clip-rect of the view to a set of cliprects as they are
@@ -128,9 +128,10 @@ public:
      * same zoom-level. This means that adding all the output rects should have the same repaint
      * area as the input rect.
      * @param viewRect the clipping-rect as it was on the Canvas.
+     * @param viewConverter An optional viewconverter to override the viewconverter set on the viewmode.
      * @return a list of clipping-rects as it maps to the internal document.
      */
-    virtual QList<ViewMap> clipRectToDocument(const QRect &viewRect) const = 0;
+    virtual QList<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const = 0;
 
 public slots:
     /**
@@ -139,7 +140,6 @@ public slots:
      */
     void pageSetupChanged();
     void setPageManager(KWPageManager *pageManager) { m_pageManager = pageManager; updatePageCache(); }
-    void setViewConverter(const KoViewConverter *viewConverter) { m_viewConverter = viewConverter; }
 
 protected:
     /**
@@ -148,7 +148,6 @@ protected:
     virtual void updatePageCache() = 0;
 
     KWPageManager *m_pageManager;
-    const KoViewConverter *m_viewConverter;
 
 private:
     bool m_drawFrameBorders;

@@ -28,27 +28,26 @@
 #include "KWViewModePreview.h"
 
 KWViewMode::KWViewMode()
-    : m_pageManager(0),
-    m_viewConverter(0),
-    m_drawFrameBorders(false)
+    : m_pageManager(0)
+    , m_drawFrameBorders(false)
 {
 }
 
-QRectF KWViewMode::documentToView(const QRectF &rect) const
+QRectF KWViewMode::documentToView(const QRectF &rect, KoViewConverter *viewConverter) const
 {
     QRectF r;
-    QPointF topLeft(documentToView(rect.topLeft()));
-    QPointF bottomRight(documentToView(rect.bottomRight()));
+    QPointF topLeft(documentToView(rect.topLeft(), viewConverter));
+    QPointF bottomRight(documentToView(rect.bottomRight(), viewConverter));
 
     r.setCoords(topLeft.x(), topLeft.y(), bottomRight.x(), bottomRight.y());
     return r;
 }
 
-QRectF KWViewMode::viewToDocument(const QRectF &rect) const
+QRectF KWViewMode::viewToDocument(const QRectF &rect, KoViewConverter *viewConverter) const
 {
     QRectF r;
-    QPointF topLeft(viewToDocument(rect.topLeft()));
-    QPointF bottomRight(viewToDocument(rect.bottomRight()));
+    QPointF topLeft(viewToDocument(rect.topLeft(), viewConverter));
+    QPointF bottomRight(viewToDocument(rect.bottomRight(), viewConverter));
 
     r.setCoords(topLeft.x(), topLeft.y(), bottomRight.x(), bottomRight.y());
     return r;
@@ -60,7 +59,7 @@ void KWViewMode::pageSetupChanged()
 }
 
 // static
-KWViewMode *KWViewMode::create(const QString &viewModeType, KWDocument *document, KoViewConverter *viewConverter)
+KWViewMode *KWViewMode::create(const QString &viewModeType, KWDocument *document)
 {
     KWViewMode * vm = 0;
     if (viewModeType == KWViewModePreview::viewMode())
@@ -69,7 +68,6 @@ KWViewMode *KWViewMode::create(const QString &viewModeType, KWDocument *document
         vm = new KWViewModeNormal();
 
     vm->setPageManager(document->pageManager());
-    vm->setViewConverter(viewConverter);
     return vm;
 }
 

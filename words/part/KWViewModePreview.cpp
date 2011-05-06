@@ -42,15 +42,17 @@ QSizeF KWViewModePreview::contentsSize() const
     return QSizeF();
 }
 
-QPointF KWViewModePreview::documentToView(const QPointF & point) const
+QPointF KWViewModePreview::documentToView(const QPointF & point, KoViewConverter *viewConverter) const
 {
     Q_UNUSED(point);
+    Q_UNUSED(viewConverter);
     return QPointF();
 }
 
-QPointF KWViewModePreview::viewToDocument(const QPointF & point) const
+QPointF KWViewModePreview::viewToDocument(const QPointF & point, KoViewConverter *viewConverter) const
 {
     Q_UNUSED(point);
+    Q_UNUSED(viewConverter);
     return QPointF();
 }
 
@@ -59,9 +61,10 @@ void KWViewModePreview::updatePageCache()
     // TODO
 }
 
-QList<KWViewMode::ViewMap> KWViewModePreview::clipRectToDocument(const QRect &viewRect) const
+QList<KWViewMode::ViewMap> KWViewModePreview::mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const
 {
     Q_UNUSED(viewRect);
+    Q_UNUSED(viewConverter);
     return QList<KWViewMode::ViewMap>();
 }
 

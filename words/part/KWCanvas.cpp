@@ -51,7 +51,7 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     setFocusPolicy(Qt::StrongFocus);
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
     m_viewConverter = m_view->viewConverter();
-    m_viewMode = KWViewMode::create(viewMode, document, m_viewConverter);
+    m_viewMode = KWViewMode::create(viewMode, document);
 }
 
 KWCanvas::~KWCanvas()
@@ -82,12 +82,12 @@ bool KWCanvas::snapToGrid() const
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::mousePressEvent(QMouseEvent *e)
 {
-    m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     if (!e->isAccepted() && e->button() == Qt::RightButton) {
         m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
         e->setAccepted(true);
@@ -96,12 +96,12 @@ void KWCanvas::mousePressEvent(QMouseEvent *e)
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseReleaseEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseReleaseEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 bool KWCanvas::event(QEvent *e)
@@ -136,12 +136,12 @@ void KWCanvas::keyReleaseEvent(QKeyEvent *e)
 
 void KWCanvas::tabletEvent(QTabletEvent *e)
 {
-    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::wheelEvent(QWheelEvent *e)
 {
-    m_toolProxy->wheelEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->wheelEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::inputMethodEvent(QInputMethodEvent *event)

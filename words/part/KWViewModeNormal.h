@@ -48,8 +48,10 @@ public:
     KWViewModeNormal();
     ~KWViewModeNormal() {}
 
-    virtual QPointF documentToView(const QPointF &point) const;
-    virtual QPointF viewToDocument(const QPointF &point) const;
+    using KWViewMode::documentToView;
+
+    virtual QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const;
+    virtual QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const;
     virtual QSizeF contentsSize() const {
         return m_contents;
     }
@@ -61,7 +63,7 @@ public:
     virtual const QString type() const {
         return KWViewModeNormal::viewMode();
     }
-    virtual QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
+    virtual QList<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const;
 
 protected:
     void updatePageCache();

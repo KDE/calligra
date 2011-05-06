@@ -1451,7 +1451,8 @@ void KWView::goToPage(const KWPage &page)
 {
     KoCanvasController *controller = m_gui->canvasController();
     QPoint origPos = controller->scrollBarValue();
-    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()));
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()),
+                                                       m_canvas->viewConverter());
     origPos.setY((int)pos.y());
     controller->setScrollBarValue(origPos);
 }
