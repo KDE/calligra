@@ -89,6 +89,8 @@ TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cp
 2011-05-06
 Examples
 *updated examples generation scripts to use system sqlite3 instead of old ksqlite command
+Forms
+*fixed possible crash in tab ordering code
 
 2011-03-28
 KexiDB
