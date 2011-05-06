@@ -265,6 +265,11 @@ private:
      */
     void emitTextBoxFound(unsigned int index, bool stylesxml);
 
+    /**
+     * Insert an empty frame.  Use when the picture is an external file.
+     */
+    void insertEmptyInlineFrame(DrawingWriter& out);
+
     Document* m_document;
     KoStore* m_store;
     KoXmlWriter* m_bodyWriter;

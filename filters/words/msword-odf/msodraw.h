@@ -294,6 +294,13 @@ typedef enum
     vAlignBottom = 0x2
 } V_ALIGN;
 
+//specifies the format of the picture data for the PICF structure
+enum
+{
+    MM_SHAPE = 0x0064,
+    MM_SHAPEFILE = 0x0066
+};
+
 #endif
 
 
