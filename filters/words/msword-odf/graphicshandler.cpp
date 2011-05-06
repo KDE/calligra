@@ -43,7 +43,6 @@ using namespace MSO;
 
 using Conversion::twipsToPt;
 
-#define IMG_BUF_SIZE 2048L
 //#define DEBUG_GHANDLER
 
 namespace
@@ -229,14 +228,13 @@ DrawStyle KWordGraphicsHandler::getBgDrawStyle()
 void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
     kDebug(30513) ;
-    int size = (data.picf->lcb - data.picf->cbHeader);
+    quint32 size = (data.picf->lcb - data.picf->cbHeader);
 
 #ifdef DEBUG_GHANDLER
     kDebug(30513) << "\nPICF DEBUG:"
                   << "\nPICF size: 0x" << hex << data.picf->cbHeader
-                  << "\nOfficeArtData size:" << dec << size
-                  << "\nStorage Format: 0x" << hex << data.picf->mfp.mm
-                  << "\nOfficeArtInlineSpContainer offset:" << dec << data.fcPic;
+                  << "\nOfficeArtInlineSpContainer size:" << dec << size
+                  << "\nStorage Format: 0x" << hex << data.picf->mfp.mm;
 #endif
 
     //the picture is store in some external file
@@ -252,6 +250,10 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     LEInputStream* in = m_document->dataStream();
     if (!in) {
         kDebug(30513) << "Data stream not provided, no access to inline shapes!";
+        return;
+    }
+    if (data.fcPic > in->getSize()) {
+        kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
         return;
     }
 
