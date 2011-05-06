@@ -108,7 +108,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 
     KWPage page = m_pageManager->page(frame->shape());
     if (!page.isValid()) {
-        Q_ASSERT_X(textFrameSetType() == KWord::OtherTextFrameSet, __FUNCTION__, QString("Only OtherTextFrameSet should not be connect with a KWPage, frameSetType=%1").arg(KWord::frameSetTypeName(textFrameSetType())).toLocal8Bit());
+        // This can happen if the KWFrame was created by someone else at a time where we didn't start
+        // layouting yet and therefore things are not proper setup yet. That's okay and they will be
+        // proper setup at a later time once we start layouting.
     } else {
         if (page.pageNumber() <= m_rootAreaProvider->pages().count()) {
             // The just added KWFrame needs to invalidate the layouter so the layouter picks up the new
