@@ -37,8 +37,9 @@ KWFrameSet::KWFrameSet(KWord::FrameSetType type)
 KWFrameSet::~KWFrameSet()
 {
     kDebug(32001) << "type=" << m_type << "frameCount=" << frames().count();
-    foreach (KWFrame *frame, frames())
-        delete frame->shape();
+    for(int i = 0; i < frames().count(); ++i) {
+        delete frames()[i]->shape();
+    }
 }
 
 void KWFrameSet::addFrame(KWFrame *frame)
