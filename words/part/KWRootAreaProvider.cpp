@@ -187,12 +187,16 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 // afterThis==NULL means delete everything
 void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
-    int afterPageNumber = afterThis ? m_pages.indexOf(afterThis) : -1;
+    int afterIndex = -1;
+    if (afterThis) {
+        afterIndex = m_pages.indexOf(afterThis);
+        Q_ASSERT(afterIndex >= 0);
+    }
 
-    //kDebug(32001) << "afterPageNumber=" << afterPageNumber;
+    kDebug(32001) << "afterPageNumber=" << afterIndex+1;
 
-    if (afterPageNumber >= 1) {
-        for(int i = m_pages.count() - 1; i > afterPageNumber; --i) {
+    if (afterIndex >= 0) {
+        for(int i = m_pages.count() - 1; i > afterIndex; --i) {
             KoTextLayoutRootArea *area = m_pages.takeLast();
             //delete area;
         }
