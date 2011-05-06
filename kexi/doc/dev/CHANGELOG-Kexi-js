@@ -94,6 +94,12 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-05-06
+Examples
+*updated examples generation scripts to use system sqlite3 instead of old ksqlite command
+Forms
+*fixed possible crash in tab ordering code
+
 2011-05-05
 *New Project assistant: server-based project creation works
 
