@@ -1353,7 +1353,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
     m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
     m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
-    m_indent(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
+    m_indent(UNUSED), m_margin(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize("100")
 {
 }
 
@@ -1375,6 +1375,7 @@ void Utils::ParagraphBulletProperties::clear()
     m_suffix = UNUSED;
     m_align = UNUSED;
     m_indent = UNUSED;
+    m_margin = UNUSED;
     m_picturePath = UNUSED;
     m_bulletSize = QSize();
     m_bulletColor = UNUSED;
@@ -1400,6 +1401,11 @@ void Utils::ParagraphBulletProperties::setBulletChar(const QString& bulletChar)
 void Utils::ParagraphBulletProperties::setStartValue(const QString& value)
 {
     m_startValue = value;
+}
+
+void Utils::ParagraphBulletProperties::setMargin(const qreal margin)
+{
+    m_margin = QString("%1").arg(margin);
 }
 
 void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
@@ -1483,6 +1489,9 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     if (properties.m_indent != UNUSED) {
         m_indent = properties.m_indent;
     }
+    if (properties.m_margin != UNUSED) {
+        m_margin = properties.m_margin;
+    }
     if (properties.m_picturePath != UNUSED) {
         m_picturePath = properties.m_picturePath;
     }
@@ -1536,18 +1545,25 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     }
     returnValue += ">";
 
-    returnValue += "<style:list-level-properties ";
+    returnValue += "<style:list-level-properties>";
 
-    if (m_indent != "UNUSED") {
-        returnValue += QString("text:space-before=\"%1pt\" ").arg(m_indent);
-    }
+    returnValue += QString("text:list-level-position-and-space-mode=\"label-alignment\" ");
 
     if (!m_bulletSize.isEmpty()) {
         returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
             arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
     }
 
-    returnValue += "/>";
+    if (m_margin != "UNUSED") {
+        returnValue += "<style:list-level-label-alignment ";
+        returnValue += QString("fo:margin-left=\"%1pt\" ").arg(m_margin);
+        if (m_indent != "UNUSED") {
+            returnValue += QString("fo:text-indent=\"%1pt\" ").arg(m_indent);
+        }
+        returnValue += "/>";
+    }
+
+    returnValue += "</style:list-level-properties>";
 
     returnValue += "<style:text-properties ";
 

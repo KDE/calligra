@@ -86,6 +86,8 @@ public:
 
     void setNumFormat(const QString& numFormat);
 
+    void setMargin(qreal margin);
+
     void setIndent(qreal indent);
 
     void setPicturePath(const QString& picturePath);
@@ -123,6 +125,7 @@ private:
     QString m_suffix;
     QString m_align;
     QString m_indent;
+    QString m_margin;
     QString m_picturePath;
     QString m_bulletColor;
     QSize m_bulletSize;
