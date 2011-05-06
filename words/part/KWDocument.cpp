@@ -33,7 +33,6 @@
 #include "KWPage.h"
 #include "KWPageStyle.h"
 #include "KWOdfLoader.h"
-#include "KWDLoader.h"
 #include "KWOdfWriter.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
@@ -686,13 +685,7 @@ bool KWDocument::loadOdf(KoOdfReadStore &odfStore)
 
 bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 {
-    clear();
-    KoXmlElement root = doc.documentElement();
-    KWDLoader loader(this, store);
-    bool rc = loader.load(root);
-    if (rc)
-        endOfLoading();
-    return rc;
+    return false;
 }
 
 void KWDocument::endOfLoading() // called by both oasis and oldxml
