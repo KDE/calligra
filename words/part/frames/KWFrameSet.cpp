@@ -37,8 +37,14 @@ KWFrameSet::KWFrameSet(KWord::FrameSetType type)
 KWFrameSet::~KWFrameSet()
 {
     kDebug(32001) << "type=" << m_type << "frameCount=" << frames().count();
-    for(int i = 0; i < frames().count(); ++i) {
-        delete frames()[i]->shape();
+    while (!frames().isEmpty()) { // deleting a shape can result in multiple KWFrame's and shapes being deleted (e.g. copy-shapes)
+        KWFrame *f = frames().last();
+        if (f->shape()) {
+            delete f->shape(); // deletes also the KWFrame and calls KWFrameSet::removeFrame
+            Q_ASSERT(!frames().contains(f));
+        } else {
+            removeFrame(f);
+        }
     }
 }
 
