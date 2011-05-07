@@ -44,10 +44,7 @@ public:
     TableShapeFactory();
     ~TableShapeFactory();
 
-    virtual void newDocumentResourceManager(KoResourceManager *manager);
     virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
-
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
 };
 
 #endif // CALLIGRA_TABLES_TABLE_SHAPE_FACTORY

@@ -224,7 +224,7 @@ private:
     PptToOdp* const ppttoodp;
 
     QRectF getRect(const MSO::OfficeArtClientAnchor&);
-    QString getPicturePath(int pib);
+    QString getPicturePath(const quint32 pib);
     bool onlyClientData(const MSO::OfficeArtClientData& o);
     void processClientData(const MSO::OfficeArtClientTextBox* ct,
                            const MSO::OfficeArtClientData& cd,
@@ -288,7 +288,7 @@ QRectF PptToOdp::DrawClient::getRect(const MSO::OfficeArtClientAnchor& o)
     }
     return QRect(0, 0, 1, 1);
 }
-QString PptToOdp::DrawClient::getPicturePath(int pib)
+QString PptToOdp::DrawClient::getPicturePath(const quint32 pib)
 {
     return ppttoodp->getPicturePath(pib);
 }
@@ -551,20 +551,30 @@ PptToOdp::~PptToOdp()
 }
 
 QMap<QByteArray, QString>
-createPictures(POLE::Storage& storage, KoStore* store, KoXmlWriter* manifest)
+createPictures(KoStore* store, KoXmlWriter* manifest, const OfficeArtBStoreDelay& d)
 {
     QMap<QByteArray, QString> fileNames;
-    POLE::Stream* stream = new POLE::Stream(&storage, "/Pictures");
-    while (!stream->eof() && !stream->fail()
-            && stream->tell() < stream->size()) {
+    PictureReference ref;
 
-        PictureReference ref = savePicture(*stream, store);
-        if (ref.name.length() == 0) break;
+    foreach (const OfficeArtBStoreContainerFileBlock& block, d.anon1) {
+        ref = savePicture(block, store);
+        if (ref.name.length() == 0) {
+            kDebug(30513) << "Note: Empty picture reference, probably an empty slot";
+            continue;
+        }
         manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
         fileNames[ref.uid] = ref.name;
     }
-    storage.close();
-    delete stream;
+
+#ifdef DEBUG_PPTTOODP
+    qDebug() << "fileNames: DEBUG";
+    QMap<QByteArray, QString>::const_iterator i = fileNames.constBegin();
+    while (i != fileNames.constEnd()) {
+        qDebug() << i.key().toHex() << ": " << i.value();
+        ++i;
+    }
+#endif
+
     return fileNames;
 }
 QMap<quint16, QString>
@@ -627,7 +637,7 @@ PptToOdp::convert(const QString& inputFile, const QString& to, KoStore::Backend 
         return KoFilter::FileNotFound;
     }
 
-    KoFilter::ConversionStatus status = doConversion(storage, storeout);
+    KoFilter::ConversionStatus status = doConversion(storeout);
 
     if (m_progress_update) {
         (m_filter->*m_setProgress)(100);
@@ -644,11 +654,11 @@ PptToOdp::convert(POLE::Storage& storage, KoStore* storeout)
         qDebug() << "Parsing and setup failed.";
         return KoFilter::InvalidFormat;
     }
-    return doConversion(storage, storeout);
+    return doConversion(storeout);
 }
 
 KoFilter::ConversionStatus
-PptToOdp::doConversion(POLE::Storage& storage, KoStore* storeout)
+PptToOdp::doConversion(KoStore* storeout)
 {
     KoOdfWriteStore odfWriter(storeout);
     KoXmlWriter* manifest = odfWriter.manifestWriter(
@@ -657,8 +667,7 @@ PptToOdp::doConversion(POLE::Storage& storage, KoStore* storeout)
     // store the images from the 'Pictures' stream
     storeout->disallowNameExpansion();
     storeout->enterDirectory("Pictures");
-    pictureNames = createPictures(storage,
-                                  storeout, manifest);
+    pictureNames = createPictures(storeout, manifest, p->pictures.anon1);
     // read pictures from the PowerPoint Document structures
     bulletPictureNames = createBulletPictures(getPP<PP9DocBinaryTagExtension>(
             p->documentContainer), storeout, manifest);
@@ -886,13 +895,58 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& st
     odrawtoodf.defineGraphicProperties(style, ds, styles);
 }
 
-QString PptToOdp::getPicturePath(int pib) const
+template<class T>
+void
+setRgbUid(const T* a, QByteArray& rgbUid)
 {
-    int picturePosition = pib - 1;
-    const OfficeArtDggContainer* dgg
-        = &p->documentContainer->drawingGroup.OfficeArtDgg;
-    QByteArray rgbUid = getRgbUid(dgg, picturePosition);
-    return rgbUid.length() ? "Pictures/" + pictureNames[rgbUid] : "";
+    if (!a) return;
+    rgbUid = a->rgbUid1 + a->rgbUid2;
+}
+
+QString PptToOdp::getPicturePath(const quint32 pib) const
+{
+    bool use_offset = false;
+    quint32 n = pib - 1;
+    quint32 offset = 0;
+
+    const OfficeArtDggContainer& dgg = p->documentContainer->drawingGroup.OfficeArtDgg;
+    QByteArray rgbUid = getRgbUid(dgg, n, offset);
+
+    if (!rgbUid.isEmpty()) {
+        if (pictureNames.contains(rgbUid)) {
+            return "Pictures/" + pictureNames[rgbUid];
+        } else {
+            qDebug() << "UNKNOWN picture reference:" << rgbUid.toHex();
+            use_offset = true;
+            rgbUid.clear();
+        }
+    }
+    if (use_offset) {
+        const OfficeArtBStoreDelay& d = p->pictures.anon1;
+        foreach (const OfficeArtBStoreContainerFileBlock& block, d.anon1) {
+            if (block.anon.is<OfficeArtBlip>()) {
+                if (block.anon.get<OfficeArtBlip>()->streamOffset == offset) {
+
+                    const OfficeArtBlip* b = block.anon.get<OfficeArtBlip>();
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipEMF>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipWMF>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipPICT>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipJPEG>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipPNG>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipDIB>(), rgbUid);
+                    setRgbUid(b->anon.get<MSO::OfficeArtBlipTIFF>(), rgbUid);
+
+                    if (!rgbUid.isEmpty()) {
+                        if (pictureNames.contains(rgbUid)) {
+                            qDebug() << "Reusing OfficeArtBlip offset:" << offset;
+                            return "Pictures/" + pictureNames[rgbUid];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return QString();
 }
 
 void PptToOdp::defineTextProperties(KoGenStyle& style,
@@ -1679,7 +1733,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     // TODO: svg:linearGradient
     // TODO: svg:radialGradient
     // TODO: draw:hatch
-    // style:fill-image
+    // draw:fill-image
     FillImageCollector fillImageCollector(styles, *this);
     collectGlobalObjects(fillImageCollector, *p);
     // draw:marker

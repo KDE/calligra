@@ -119,6 +119,8 @@ public:
      */
     virtual void setFrameSet(KWFrameSet *newFrameSet);
 
+    void cleanupShape(KoShape* shape);
+
     void clearLoadingData() {
         m_anchoredPageNumber = -1;
     }

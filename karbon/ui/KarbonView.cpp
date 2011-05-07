@@ -490,7 +490,7 @@ void KarbonView::fileImportGraphic()
         // use import filters to load the file
         KoFilterManager man(&importPart);
         KoFilter::ConversionStatus status = KoFilter::OK;
-        QString importedFile = man.importDocument(fname, status);
+        QString importedFile = man.importDocument(fname, QString(), status);
         if (status != KoFilter::OK) {
             importPart.showLoadingErrorDialog();
             success = false;

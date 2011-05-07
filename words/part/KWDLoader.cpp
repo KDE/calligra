@@ -439,7 +439,6 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem)
                 type = KWord::OtherTextFrameSet; break;
             }
             KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
-            fs->setAllowLayout(false);
             fs->setName(fsname);
             fs->setPageStyle(styleForFS);
             fill(fs, framesetElem);
@@ -556,6 +555,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
             KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
             Q_ASSERT(factory);
             KoShape *shape = factory->createDefaultShape(m_document->resourceManager());
+            Q_ASSERT(shape);
             KWFrame *frame = new KWFrame(shape, fs);
             fill(frame, frameElem);
             //m_doc->progressItemLoaded();

@@ -196,6 +196,8 @@ private slots:
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);
+    /// The document has finished loading. This is used to update the text that can be searched.
+    void loadingCompleted();
 
 private:
 

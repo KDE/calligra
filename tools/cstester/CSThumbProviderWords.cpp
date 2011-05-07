@@ -74,7 +74,7 @@ QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
     KoShapePainter shapePainter;
     shapePainter.setShapes(shapes);
     foreach(KWPage page, manager->pages()) {
-        QRectF pRect(page.rect(page.pageNumber()));
+        QRectF pRect(page.rect());
         KoPageLayout layout;
         layout.width = pRect.width();
         layout.height = pRect.height();

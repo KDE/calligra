@@ -389,13 +389,25 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10 10 10 7.5 5");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
 
     setShapeMirroring(o, out);
+
     if (o.shapeProp.rh.recInstance == msosptRightTriangle) {
         out.xml.addAttribute("draw:type", "right-triangle");
+        out.xml.addAttribute("draw:glue-points","10800 0 5400 10800 0 21600 10800 21600 21600 21600 16200 10800");
+        out.xml.addAttribute("draw:text-areas","1900 12700 12700 19700");
+        out.xml.addAttribute("draw:enhanced-path","M 0 0 L 21600 21600 0 21600 0 0 Z N");
     } else if (o.shapeProp.rh.recInstance == msosptIsoscelesTriangle) {
         out.xml.addAttribute("draw:type", "isosceles-triangle");
+        out.xml.addAttribute("draw:glue-points", "10800 0 ?f1 10800 0 21600 10800 21600 21600 21600 ?f7 10800");
+        out.xml.addAttribute("draw:text-areas","?f1 10800 ?f2 18000 ?f3 7200 ?f4 21600");
+        out.xml.addAttribute("draw:enhanced-path","M ?f0 0 L 21600 21600 0 21600 Z N");
+
+        QList<int> defaultModifierValue;
+        defaultModifierValue << 10800;
+        processModifiers(o, out, defaultModifierValue);
+
         equation(out, "f0", "$0");
         equation(out, "f1", "$0 /2");
         equation(out, "f2", "?f1 +10800");
@@ -404,13 +416,13 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
         equation(out, "f5", "21600-?f0");
         equation(out, "f6", "?f5 /2");
         equation(out, "f7", "21600-?f6");
+
         out.xml.startElement("draw:handle");
         out.xml.addAttribute("draw:handle-range-x-maximum", 21600);
         out.xml.addAttribute("draw:handle-range-x-minimum", 0);
         out.xml.addAttribute("draw:handle-position", "$0 top");
         out.xml.endElement();
     }
-
     out.xml.endElement();    // enhanced-geometry
     out.xml.endElement(); // custom-shape
 }
@@ -421,14 +433,17 @@ void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:type", "trapezoid");
-    out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10");
-    if (o.shapeProp.fFlipV) {
-        out.xml.addAttribute("draw:mirror-vertical", "true");
-    }
-    if (o.shapeProp.fFlipH) {
-        out.xml.addAttribute("draw:mirror-horizontal", "true");
-    }
+    out.xml.addAttribute("draw:glue-points", "?f6 10800 10800 21600 ?f5 10800 10800 0");
+    setShapeMirroring(o, out);
+    out.xml.addAttribute("draw:text-areas","?f3 ?f3 ?f4 ?f4");
+    out.xml.addAttribute("draw:enhanced-path","M 0 0 L 21600 0 ?f0 21600 ?f1 21600 Z N");
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
     equation(out, "f0", "21600-$0");
     equation(out, "f1", "$0");
     equation(out, "f2", "$0 *10/18");
@@ -440,7 +455,7 @@ void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
     out.xml.addAttribute("draw:handle-range-x-minimum", 0);
     out.xml.addAttribute("draw:handle-position", "$0 bottom");
-    out.xml.endElement();
+    out.xml.endElement(); // handle
     out.xml.endElement(); // enhanced-geometry
     out.xml.endElement(); // custom-shape
 }
@@ -451,9 +466,17 @@ void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:type", "parallelogram");
-    out.xml.addAttribute("draw:glue-points", "6.25 0 4.5 0 8.75 5 3.75 10 5 10 1.25 5");
+    out.xml.addAttribute("draw:glue-points", "?f6 0 10800 ?f8 ?f11 10800 ?f9 21600 10800 ?f10 ?f5 10800");
+    out.xml.addAttribute("draw:text-areas", "?f3 ?f3 ?f4 ?f4");
     setShapeMirroring(o, out);
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
+    out.xml.addAttribute("draw:enhanced-path","M ?f0 0 L 21600 0 ?f1 21600 0 21600 Z N");
     equation(out, "f0", "$0");
     equation(out, "f1", "21600-$0");
     equation(out, "f2", "$0 *10/24");
@@ -513,6 +536,41 @@ void ODrawToOdf::processHexagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // enhanced-geometry
     out.xml.endElement(); // custom-shape
 }
+
+void ODrawToOdf::processPlus(const OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "cross");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800");
+    out.xml.addAttribute("draw:path-stretchpoint-x","10800");
+    out.xml.addAttribute("draw:path-stretchpoint-y","10800");
+    out.xml.addAttribute("draw:text-areas","?f1 ?f1 ?f2 ?f3");
+    setShapeMirroring(o,out);
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
+    out.xml.addAttribute("draw:enhanced-path","M ?f1 0 L ?f2 0 ?f2 ?f1 21600 ?f1 21600 ?f3 ?f2 ?f3 ?f2 21600 ?f1 21600 ?f1 ?f3 0 ?f3 0 ?f1 ?f1 ?f1 ?f1 0 Z N");
+    equation(out, "f0","$0 *10799/10800");
+    equation(out, "f1","?f0 ");
+    equation(out, "f2","right-?f0 ");
+    equation(out, "f3","bottom-?f0 ");
+
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
+    out.xml.addAttribute("draw:handle-range-x-minimum", 0);
+    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-switched","true");
+    out.xml.endElement(); // handle
+    out.xml.endElement(); // enhanced-geometry
+    out.xml.endElement(); // custom-shape
+}
+
 
 void ODrawToOdf::processOctagon(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -1728,12 +1786,17 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     const Pib* pib = get<Pib>(o);
     if (pib && client) {
         url = client->getPicturePath(pib->pib);
+    } else {
+        // Does not make much sense to display an empty frame, following
+        // PPT->ODP filters of both OOo and MS Office.
+        return;
     }
     out.xml.startElement("draw:frame");
     processStyleAndText(o, out);
+
+    // if the image cannot be found, just place an empty frame
     if (url.isEmpty()) {
-        // if the image cannot be found, just place an empty frame
-        out.xml.endElement(); // frame
+        out.xml.endElement(); //draw:frame
         return;
     }
     out.xml.startElement("draw:image");
@@ -1861,6 +1924,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processHexagon(o, out);
     } else if (shapeType == msosptOctagon) {
         processOctagon(o, out);
+    } else if (shapeType == msosptPlus) {
+        processPlus(o, out);
     } else if (shapeType == msosptLeftArrow ||
                shapeType == msosptUpArrow ||
                shapeType == msosptDownArrow){

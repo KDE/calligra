@@ -8,6 +8,7 @@ install(
         kofficepart.desktop
         kochart.desktop
         kofilterwrapper.desktop
+        calligra_deferred_plugin.desktop
     DESTINATION
         ${SERVICETYPES_INSTALL_DIR}
 )

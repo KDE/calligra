@@ -220,15 +220,10 @@ void KWPage::setOffsetInDocument(qreal offset)
     priv->setPageOffset(priv->pages[n].pageNumber, offset);
 }
 
-QRectF KWPage::rect(int pageNumber) const
+QRectF KWPage::rect() const
 {
     if (! isValid())
         return QRectF();
-    const KWPageManagerPrivate::Page &page = priv->pages[n];
-    if (pageNumber == page.pageNumber && page.pageSide == PageSpread) // left
-        return QRectF(0, offsetInDocument(), width() / 2, height());
-    if (pageNumber == page.pageNumber + 1 && page.pageSide == PageSpread) // right
-        return QRectF(width() / 2, offsetInDocument(), width() / 2, height());
     return QRectF(0, offsetInDocument(), width(), height());
 }
 
@@ -326,7 +321,7 @@ QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager)
     QPainter gc(&img);
     gc.fillRect(0, 0, img.width(), img.height(), QBrush(Qt::white));
     gc.translate(0, -zoomHandler.documentToViewY(offsetInDocument()));
-    gc.setClipRect(zoomHandler.documentToView(rect(pageNumber())));
+    gc.setClipRect(zoomHandler.documentToView(rect()));
     shapeManager->paint(gc, zoomHandler, false);
     gc.end();
 

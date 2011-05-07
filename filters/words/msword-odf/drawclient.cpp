@@ -70,7 +70,7 @@ KWordGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
 }
 
 QString
-KWordGraphicsHandler::DrawClient::getPicturePath(int pib)
+KWordGraphicsHandler::DrawClient::getPicturePath(const quint32 pib)
 {
     return gh->getPicturePath(pib);
 }

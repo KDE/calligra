@@ -43,7 +43,7 @@ public:
          * Get the path in the ODF document that corresponds to the
          * image generated from the image with the given pib.
          **/
-        virtual QString getPicturePath(int pib) = 0;
+        virtual QString getPicturePath(const quint32 pib) = 0;
         /**
          * Check if the clientdata is the main content of a drawing object.
          **/
@@ -143,6 +143,7 @@ private:
     void processParallelogram(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processPlus(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLeftRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -229,5 +230,7 @@ const char* getHorizontalPos(quint32 posH);
 const char* getHorizontalRel(quint32 posRelH);
 const char* getVerticalPos(quint32 posV);
 const char* getVerticalRel(quint32 posRelV);
+const char* getHorizontalAlign(quint32 anchorText);
+const char* getVerticalAlign(quint32 anchorText);
 
 #endif

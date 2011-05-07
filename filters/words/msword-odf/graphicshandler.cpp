@@ -43,8 +43,7 @@ using namespace MSO;
 
 using Conversion::twipsToPt;
 
-#define IMG_BUF_SIZE 2048L
-
+//#define DEBUG_GHANDLER
 
 namespace
 {
@@ -229,48 +228,75 @@ DrawStyle KWordGraphicsHandler::getBgDrawStyle()
 void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
     kDebug(30513) ;
+    quint32 size = (data.picf->lcb - data.picf->cbHeader);
+
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "\nPICF DEBUG:"
+                  << "\nPICF size: 0x" << hex << data.picf->cbHeader
+                  << "\nOfficeArtInlineSpContainer size:" << dec << size
+                  << "\nStorage Format: 0x" << hex << data.picf->mfp.mm;
+#endif
+
+    //the picture is store in some external file
+    if (data.picf->mfp.mm == MM_SHAPEFILE) {
+        DrawingWriter out(*m_bodyWriter, *m_mainStyles, m_document->writingHeader());
+        m_objectType = Inline;
+        m_picf = data.picf;
+        insertEmptyInlineFrame(out);
+        return;
+    }
+
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->dataStream();
     if (!in) {
         kDebug(30513) << "Data stream not provided, no access to inline shapes!";
         return;
     }
+    if (data.fcPic > in->getSize()) {
+        kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
+        return;
+    }
 
-    int size = (data.picf->lcb - data.picf->cbHeader);
-
-    kDebug(30513) << "\nCurrent stream position: " << in->getPosition()
-		  << "\nOfficeArtInlineSpContainer offset: " << data.fcPic
-                  << "\nPICF size: " << data.picf->cbHeader
-                  << "\nOfficeArtData size: " << size;
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "\nCurrent stream position:" << in->getPosition()
+                  << "\nOfficeArtInlineSpContainer offset:" << dec << data.fcPic;
+#endif
 
     // parse the OfficeArtInlineSpContainer and rewind the stream
     LEInputStream::Mark _zero;
     _zero = in->setMark();
     in->skip(data.fcPic);
+
     OfficeArtInlineSpContainer co;
-    parseOfficeArtInlineSpContainer(*in, co);
+    try {
+        parseOfficeArtInlineSpContainer(*in, co);
+    } catch (IncorrectValueException _e) {
+        kDebug(30513) << _e.msg;
+        return;
+    } catch (EOFException _e) {
+        kDebug(30513) << _e.msg;
+        return;
+    }
+    in->rewind(_zero);
 
     int n = (data.fcPic + size) - in->getPosition();
     if (n) {
         kDebug(30513) << n << "bytes left while parsing OfficeArtInlineSpContainer";
     }
-    in->rewind(_zero);
 
-    // store picture data if present and update m_picNames
     PictureReference ref;
+    // store picture data if present and update m_picNames
     m_store->enterDirectory("Pictures");
     foreach (const OfficeArtBStoreContainerFileBlock& block, co.rgfb) {
         const OfficeArtFBSE* fbse = block.anon.get<MSO::OfficeArtFBSE>();
         if (!fbse) {
             kDebug(30513) << "Warning: FBSE container not found, skipping ";
-        }
-        else {
+        } else {
             //check if this BLIP is already in hash table
             if (m_picNames.contains(fbse->rgbUid)) {
                 ref.uid = fbse->rgbUid;
                 continue;
-            }
-            else {
+            } else {
                 ref = savePicture(block, m_store);
                 if (ref.name.length() == 0) {
                     kDebug(30513) << "empty name in picture reference";
@@ -615,50 +641,48 @@ void KWordGraphicsHandler::parseFloatingPictures(void)
 
     // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
     LEInputStream& in = m_document->wdocumentStream();
-
     const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (blipStore) {
-        for (int i = 0; i < blipStore->rgfb.size(); i++) {
-            OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
+    if (!blipStore) return;
 
-	    //we are looking for the missing content of OfficeArtFBSE
-            if (block.anon.is<OfficeArtFBSE>()) {
-                OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
-                if (!fbse->embeddedBlip) {
+    for (int i = 0; i < blipStore->rgfb.size(); i++) {
+        OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
 
-                    //NOTE: An foDelay value of 0xffffffff specifies that the
-                    //file is not in the delay stream and cRef must be zero.
+	//looking for the missing content of OfficeArtFBSE
+        if (block.anon.is<OfficeArtFBSE>()) {
+            OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
+            if (!fbse->embeddedBlip) {
 
-                    //NOTE: A cRef value of 0x00000000 specifies an empty slot
-                    //in the OfficeArtBStoreContainer.
+                //NOTE: An foDelay value of 0xffffffff specifies that the
+                //file is not in the delay stream and cRef must be zero.
 
-                    if (fbse->foDelay != 0xffffffff) {
-                        if (!fbse->cRef) {
-                            kDebug(30513) << "Strange, no references to this BLIP, skipping";
-                            continue;
-                        }
-                        LEInputStream::Mark _zero;
-                        _zero = in.setMark();
-                        in.skip(fbse->foDelay);
+                //NOTE: A cRef value of 0x00000000 specifies an empty slot
+                //in the OfficeArtBStoreContainer.
 
-                        //let's check the record header if there's a BLIP stored
-                        LEInputStream::Mark _m;
-                        _m = in.setMark();
-                        OfficeArtRecordHeader rh;
-                        parseOfficeArtRecordHeader(in, rh);
-                        in.rewind(_m);
-                        if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
-                            continue;
-                        }
-                        fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
-                        parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
-                        in.rewind(_zero);
+                if (fbse->foDelay != 0xffffffff) {
+                    if (!fbse->cRef) {
+                        kDebug(30513) << "Strange, no references to this BLIP, skipping";
+                        continue;
                     }
+                    LEInputStream::Mark _zero;
+                    _zero = in.setMark();
+                    in.skip(fbse->foDelay);
+
+                    //let's check the record header if there's a BLIP stored
+                    LEInputStream::Mark _m;
+                    _m = in.setMark();
+                    OfficeArtRecordHeader rh;
+                    parseOfficeArtRecordHeader(in, rh);
+                    in.rewind(_m);
+                    if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
+                        continue;
+                    }
+                    fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
+                    parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
+                    in.rewind(_zero);
                 }
             } //else there's an OfficeArtBlip inside
         }
     }
-    return;
 }
 
 QMap<QByteArray, QString>
@@ -684,11 +708,20 @@ KWordGraphicsHandler::createFloatingPictures(KoStore* store, KoXmlWriter* manife
     return fileNames;
 }
 
-QString KWordGraphicsHandler::getPicturePath(int pib) const
+QString KWordGraphicsHandler::getPicturePath(quint32 pib) const
 {
-    int picturePosition = pib - 1;
-    QByteArray rgbUid = getRgbUid(&m_officeArtDggContainer, picturePosition);
-    return rgbUid.length() ? "Pictures/" + m_picNames[rgbUid] : "";
+    quint32 n = pib - 1;
+    quint32 offset = 0;
+    QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, n, offset);
+
+    if (rgbUid.length()) {
+        if (m_picNames.contains(rgbUid)) {
+            return "Pictures/" + m_picNames[rgbUid];
+        } else {
+            qDebug() << "UNKNOWN picture reference!";
+        }
+    }
+    return QString();
 }
 
 void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
@@ -903,28 +936,26 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     definePositionAttributes(style, ds);
     styleName = out.styles.insert(style);
 
-    QString url;
-    QString name = m_picNames.value(m_rgbUid);
-    if (!name.isEmpty()) {
-        url.append("Pictures/");
-        url.append(name);
-    }
     out.xml.startElement("draw:frame");
-    if (url.isEmpty()) {
-        // if the image cannot be found, just place an empty frame
-        out.xml.endElement(); //draw:frame
-        return;
-    }
     out.xml.addAttribute("draw:style-name", styleName);
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
 
     double hscale = m_picf->mx / 1000.0;
     double vscale = m_picf->my / 1000.0;
-
     out.xml.addAttributePt("svg:width", twipsToPt(m_picf->dxaGoal) * hscale);
     out.xml.addAttributePt("svg:height", twipsToPt(m_picf->dyaGoal) * vscale);
 
+    QString url;
+    QString name = m_picNames.value(m_rgbUid);
+    if (!name.isEmpty()) {
+        url.append("Pictures/");
+        url.append(name);
+    } else {
+        // if the image cannot be found, just place an empty frame
+        out.xml.endElement(); //draw:frame
+        return;
+    }
     //TODO: process border information (complex properties)
 
     out.xml.startElement("draw:image");
@@ -956,13 +987,12 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     QString url;
     if (ds.pib()) {
         url = getPicturePath(ds.pib());
-    }
-    out.xml.startElement("draw:frame");
-    if (url.isEmpty()) {
-        //if the image cannot be found, just place an empty frame
-        out.xml.endElement(); //draw:frame
+    } else {
+        // Does not make much sense to display an empty frame, following
+        // PPT->ODP filters of both OOo and MS Office 2007.
         return;
     }
+    out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
@@ -972,6 +1002,11 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.addAttribute("svg:x", mm(out.hOffset()));
     out.xml.addAttribute("svg:y", mm(out.vOffset()));
 
+    //if the image cannot be found, just place an empty frame
+    if (url.isEmpty()) {
+        out.xml.endElement(); //draw:frame
+        return;
+    }
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);
     out.xml.addAttribute("xlink:type", "simple");
@@ -1079,6 +1114,33 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N");
     out.xml.endElement(); //enhanced-geometry
     out.xml.endElement(); //custom-shape
+}
+
+void KWordGraphicsHandler::insertEmptyInlineFrame(DrawingWriter& out)
+{
+    if (m_objectType != Inline) return;
+
+    QString styleName;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+
+    DrawStyle ds(0, 0);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    defineWrappingAttributes(style, ds);
+    styleName = out.styles.insert(style);
+
+    out.xml.startElement("draw:frame");
+    out.xml.addAttribute("draw:style-name", styleName);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+    double hscale = m_picf->mx / 1000.0;
+    double vscale = m_picf->my / 1000.0;
+    out.xml.addAttributePt("svg:width", twipsToPt(m_picf->dxaGoal) * hscale);
+    out.xml.addAttributePt("svg:height", twipsToPt(m_picf->dyaGoal) * vscale);
+    out.xml.endElement(); //draw:frame
 }
 
 #include "graphicshandler.moc"

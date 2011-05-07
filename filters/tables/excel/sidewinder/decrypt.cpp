@@ -18,6 +18,8 @@
  */
 #include "decrypt.h"
 
+#include <QtCore/QCryptographicHash>
+
 using namespace Swinder;
 
 RC4Decryption::RC4Decryption(const QByteArray& salt, const QByteArray& encryptedVerifier, const QByteArray& encryptedVerifierHash)
@@ -32,22 +34,11 @@ RC4Decryption::~RC4Decryption()
 
 static QByteArray md5sum(const QByteArray& data)
 {
-#ifdef HAVE_QCA2
-    QCA::Hash md5Hash("md5");
-    md5Hash.update(data);
-    return md5Hash.final().toByteArray();
-#else
-    return QByteArray();
-#endif
+    return QCryptographicHash::hash(data, QCryptographicHash::Md5);
 }
 
 bool RC4Decryption::checkPassword(const QString& password)
 {
-#ifdef HAVE_QCA2
-    if(!QCA::isSupported("md5"))
-#endif
-        return false;
-
     QByteArray unicodePassword(reinterpret_cast<const char*>(password.utf16()), password.length() * 2); // depends on correct host-byte order
 
     QByteArray h0 = md5sum(unicodePassword);

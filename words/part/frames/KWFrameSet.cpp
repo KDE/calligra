@@ -37,8 +37,9 @@ KWFrameSet::KWFrameSet(KWord::FrameSetType type)
 KWFrameSet::~KWFrameSet()
 {
     kDebug(32001) << "type=" << m_type << "frameCount=" << frames().count();
-    foreach (KWFrame *frame, frames())
-        delete frame->shape();
+    for(int i = 0; i < frames().count(); ++i) {
+        delete frames()[i]->shape();
+    }
 }
 
 void KWFrameSet::addFrame(KWFrame *frame)
@@ -56,6 +57,7 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
 {
     Q_ASSERT(frame);
     if (!frame->isCopy()) {
+#if 0
         // Loop over all frames to see if there is a copy frame that references the removed
         // frame; if it does, then mark the copy as obsolete
         foreach (KWFrame *f, frames()) {
@@ -65,6 +67,21 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
                 }
             }
         }
+#else
+        // Loop over all frames to see if there is a copy frame that references the removed
+        // frame; if it does, then delete the copy too.
+        for(int i = frames().count() - 1; i >= 0; --i) {
+            KWFrame *frame = frames()[i];
+            if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(frame->shape())) {
+                if (cs->original() == shape) {
+                    Q_ASSERT(frame->frameSet() == this);
+                    frame->cleanupShape(cs);
+                    removeFrame(frame, cs);
+                    delete cs;
+                }
+            }
+        }
+#endif
     }
 
     if (m_frames.removeAll(frame)) {

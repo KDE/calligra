@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -177,9 +178,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // dr3d:texture-mode
     // dr3d:vertical-segments
     // draw:auto-grow-height
-    style.addProperty("draw:auto-grow-height", "false");
+    style.addProperty("draw:auto-grow-height", "false", gt);
     // draw:auto-grow-width
-    style.addProperty("draw:auto-grow-width", "false");
+    style.addProperty("draw:auto-grow-width", "false", gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
@@ -191,6 +192,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:caption-type
     // draw:color-inversion
     // draw:color-mode
+    if (ds.fPictureBiLevel()) {
+        style.addProperty("draw:color-mode", "mono", gt);
+    } else if (ds.fPictureGray()) {
+        style.addProperty("draw:color-mode", "greyscale", gt);
+    }
     // draw:contrast
     // draw:decimal-places
     // draw:end-guide
@@ -334,7 +340,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:stroke-linejoin
     // draw:symbol-color
     // draw:textarea-horizontal-align
+    style.addProperty("draw:textarea-horizontal-align", getHorizontalAlign(ds.anchorText()), gt);
     // draw:textarea-vertical-align
+    style.addProperty("draw:textarea-vertical-align", getVerticalAlign(ds.anchorText()), gt);
     // draw:tile-repeat-offset
     // draw:unit
     // draw:visible-area-height
@@ -425,15 +433,22 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 {
     // TODO: another fill types
 
-    // convert angle to two points representing crossing of the line with rectangle to use it in svg
+    // convert angle to two points representing crossing of
+    // the line with rectangle to use it in svg
     // size of rectangle is 100*100 with the middle in 0,0
     // line coordinates are x1,y1; 0,0; x2,y2
     int dx=0,dy=0;
-    int angle = ((int)toQReal(ds.fillAngle())-90)%360;
+    int angle = (int)toQReal(ds.fillAngle());
 
+    // from observations of the documents it seems
+    // that angle is stored in -180,180 in MS 2003 documents
     if (angle < 0) {
-        angle = angle + 360;
+        angle = angle + 180;
     }
+
+    // 0 angle means that the angle is actually 90 degrees
+    // From docs: Zero angle represents the vector from bottom to top. [MS-ODRAW:fillAngle], p.198
+    angle = (angle + 90) % 360;
 
     qreal cosA = cos(angle * M_PI / 180);
     qreal sinA = sin(angle * M_PI / 180);
@@ -453,10 +468,44 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     }
 
     style.addAttribute("svg:spreadMethod", "reflect");
-    style.addAttribute("svg:x1", QString("%1\%").arg(50 - dx));
-    style.addAttribute("svg:x2", QString("%1\%").arg(50 + dx));
-    style.addAttribute("svg:y1", QString("%1\%").arg(50 + dy));
-    style.addAttribute("svg:y2", QString("%1\%").arg(50 - dy));
+
+    int x1 = 50 - dx;
+    int y1 = 50 + dy;
+    int x2 = 50 + dx;
+    int y2 = 50 - dy;
+
+    if (ds.fillFocus() == 100) {
+        qSwap(x1,x2);
+        qSwap(y1,y2);
+    } else if (ds.fillFocus() == 50) {
+        int sx = (x2 - x1) * 0.5;
+        int sy = (y2 - y1) * 0.5;
+        x2 = x1 +  sx;
+        y2 = y1 +  sy;
+
+        // in one case don't swap the gradient vector
+        if (angle != 90) {
+            qSwap(x1,x2);
+            qSwap(y1,y2);
+        }
+    } else if (ds.fillFocus() == -50) {
+        int sx = (x2 - x1) * 0.5;
+        int sy = (y2 - y1) * 0.5;
+        x2 = x1 + sx;
+        y2 = y1 + sy;
+        // in this case we have to swap the gradient vector
+        // check some gradient file from MS Office 2003
+        if (angle == 90) {
+            qSwap(x1,x2);
+            qSwap(y1,y2);
+        }
+    }
+
+
+    style.addAttribute("svg:x1", QString("%1\%").arg(x1));
+    style.addAttribute("svg:y1", QString("%1\%").arg(y1));
+    style.addAttribute("svg:x2", QString("%1\%").arg(x2));
+    style.addAttribute("svg:y2", QString("%1\%").arg(y2));
 
     QBuffer writerBuffer;
     writerBuffer.open(QIODevice::WriteOnly);
@@ -890,5 +939,46 @@ const char* getVerticalRel(quint32 posRelV)
         return "line";
     default:
         return "page-content";
+    }
+}
+
+const char* getHorizontalAlign(quint32 anchorText)
+{
+    switch (anchorText) {
+    case 0: //msoanchorTop
+    case 6: //msoanchorTopBaseline
+    case 1: //msoanchorMiddle
+    case 2: //msoanchorBottom
+    case 7: //msoanchorBottomBaseline
+        return "left";
+    case 3: //msoanchorTopCentered
+    case 8: //msoanchorTopCenteredBaseline
+    case 4: //msoanchorMiddleCentered
+    case 5: //msoanchorBottomCentered
+    case 9: //msoanchorBottomCenteredBaseline
+        return "justify";
+    default:
+        return "left";
+    }
+}
+
+const char* getVerticalAlign(quint32 anchorText)
+{
+    switch (anchorText) {
+    case 0: //msoanchorTop
+    case 3: //msoanchorTopCentered
+    case 6: //msoanchorTopBaseline - not compatible with ODF
+    case 8: //msoanchorTopCenteredBaseline - not compatible with ODF
+        return "top";
+    case 1: //msoanchorMiddle
+    case 4: //msoanchorMiddleCentered
+        return "middle";
+    case 2: //msoanchorBottom
+    case 5: //msoanchorBottomCentered
+    case 7: //msoanchorBottomBaseline - not compatible with ODF
+    case 9: //msoanchorBottomCenteredBaseline - not compatible with ODF
+        return "bottom";
+    default:
+        return "top";
     }
 }

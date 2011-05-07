@@ -33,7 +33,6 @@
 #include "KWPage.h"
 #include "KWPageStyle.h"
 #include "KWOdfLoader.h"
-#include "KWDLoader.h"
 #include "KWOdfWriter.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
@@ -370,9 +369,6 @@ void KWDocument::relayout()
         if (tfs == 0) continue;
         if (tfs->textFrameSetType() != KWord::MainTextFrameSet) continue;
 
-        // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
-        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
-
         QSet<KWPage> coveredPages;
         QList<int> coveredPageNumbers;
         foreach (KWFrame *frame, tfs->frames()) {
@@ -396,32 +392,27 @@ void KWDocument::relayout()
 
         kDebug(32001) << "coveredPageNumbers=" << coveredPageNumbers;
     }
-#else
 #endif
 
-#if 0
-    PageProcessingQueue *ppq = pageQueue();
-    foreach (const KWPage &page, pageManager()->pages())
-        ppq->addPage(page);
-#else
+    // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
+    KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+
     // remove header/footer frames that are not visible.
-    m_frameLayout.cleanupHeadersFooters();
+    //m_frameLayout.cleanupHeadersFooters();
+
     // re-layout the pages
-    foreach (const KWPage &page, pageManager()->pages()) {
-        m_frameLayout.layoutFramesOnPage(page.pageNumber());
+    foreach (const KWPage &page, m_pageManager.pages()) {
+        m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
 
-    /*
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
             continue;
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
         Q_ASSERT(lay);
-        lay->layout();
+        lay->scheduleLayout();
     }
-    */
-#endif
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
@@ -694,13 +685,7 @@ bool KWDocument::loadOdf(KoOdfReadStore &odfStore)
 
 bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 {
-    clear();
-    KoXmlElement root = doc.documentElement();
-    KWDLoader loader(this, store);
-    bool rc = loader.load(root);
-    if (rc)
-        endOfLoading();
-    return rc;
+    return false;
 }
 
 void KWDocument::endOfLoading() // called by both oasis and oldxml
@@ -836,11 +821,12 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     // remove header/footer frames that are not visible.
 //     m_frameLayout.cleanupHeadersFooters();
-#if 1
+
     foreach (const KWPage &page, m_pageManager.pages()) {
         m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
-#endif
+
+#if 0
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
@@ -860,6 +846,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         }
         tfs->setAllowLayout(true);
     }
+#endif
 
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -958,12 +945,14 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
 void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
 {
     // find all pages that have the page style set and re-layout them.
+    kDebug(32001);
     Q_ASSERT(tfs->pageStyle().isValid());
     updatePagesForStyle(tfs->pageStyle());
 }
 
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
+    kDebug(32001);
     PageProcessingQueue *ppq = pageQueue();
     foreach (KWPage page, pageManager()->pages()) {
         if (page.pageStyle() == style) {

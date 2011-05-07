@@ -48,7 +48,17 @@ public:
     // Shape Property Set
     quint32 hspMaster() const;
     quint32 cxstyle() const;
+    quint32 bWMode() const;
     // Shape Boolean Properties
+    bool fBackground() const;
+    bool fInitiator() const;
+    bool fLockShapeType() const;
+    bool fPreferRelativeResize() const;
+    bool fOleIcon() const;
+    bool fFlipVOverride() const;
+    bool fFlipHOverride() const;
+    bool fPolicyBarcode() const;
+    bool fPolicyLabel() const;
 
     // Group Shape Property Set
     quint32 pWrapPolygonVertices() const;
@@ -57,6 +67,7 @@ public:
     qint32 dyWrapDistTop() const;
     qint32 dxWrapDistRight() const;
     qint32 dyWrapDistBottom() const;
+    quint32 lidRegroup() const;
     quint32 posH() const;
     quint32 posRelH() const;
     quint32 posV() const;
@@ -132,6 +143,7 @@ public:
     MSO::OfficeArtCOLORREF fillCrMod() const;
     quint32 fillBlip() const;
     quint32 fillBlipName() const;
+    QString fillBlipName_complex() const;
     quint32 fillBlipFlags() const;
     qint32 fillWidth() const;
     qint32 fillHeight() const;
@@ -198,14 +210,42 @@ public:
     MSO::FixedPoint rotation() const;
 
     // Text Property Set
-    qint32 txflTextFlow() const;
+    qint32 iTxid() const;
     qint32 dxTextLeft() const;
     qint32 dyTextTop() const;
     qint32 dxTextRight() const;
     qint32 dyTextBottom() const;
+    quint32 wrapText() const;
+    quint32 anchorText() const;
+    quint32 txflTextFlow() const;
+    quint32 cdirFont() const;
+    quint32 hspNext() const;
+    quint32 txdir() const;
+    // Text Boolean Properties
+    bool fFitShapeToText() const;
+    bool fAutoTextMargin() const;
+    bool fSelectText() const;
 
     // Blip Property Set
+    MSO::FixedPoint cropFromTop() const;
+    MSO::FixedPoint cropFromBottom() const;
+    MSO::FixedPoint cropFromLeft() const;
+    MSO::FixedPoint cropFromRight() const;
     quint32 pib() const;
+    quint32 pibName() const;
+    QString pibName_complex() const;
+    quint32 pibFlags() const;
+    MSO::OfficeArtCOLORREF pictureTransparent() const;
+    qint32 pictureContrast() const;
+    qint32 pictureBrightness() const;
+    // Blip Boolean Properties
+    bool fPictureActive() const;
+    bool fPictureBiLevel() const;
+    bool fPictureGray() const;
+    bool fNoHitTestPicture() const;
+    bool fLooping() const;
+    bool fRewind() const;
+    bool fPicturePreserveGrays() const;
 };
 
 /**
@@ -282,7 +322,7 @@ get(const T* o)
  *
  * @p b must have a member fopt that is an array of type OfficeArtFOPTEChoice.
  * A is the type of the required option.  The option containers in PPT/DOC have
- * only one instance of each option in an osption container.
+ * only one instance of each option in an option container.
  *
  * @param b class that contains options.
  * @return IMsoArray storing complex data
@@ -332,12 +372,12 @@ getComplexData(const B& b)
 }
 
 /**
- * Retrieve the complex data for an option from an OfficeArtSpContainer
+ * Retrieve the complex data, which represent an IMsoArray for an option from
+ * an OfficeArtSpContainer.
  *
  * Look in all option containers in @p o for an option of type A.
  *
- * @param o OfficeArtSpContainer instance which contains options.
-
+ * @param o OfficeArtSpContainer instance which contains options
  * @return IMsoArray storing complex data
  */
 template <typename A>
@@ -350,6 +390,61 @@ getComplexData(const MSO::OfficeArtSpContainer& o)
     if (!a.data.size() && o.shapeSecondaryOptions2) a = getComplexData<A>(*o.shapeSecondaryOptions2);
     if (!a.data.size() && o.shapeTertiaryOptions1) a = getComplexData<A>(*o.shapeTertiaryOptions1);
     if (!a.data.size() && o.shapeTertiaryOptions2) a = getComplexData<A>(*o.shapeTertiaryOptions2);
+    return a;
+}
+
+/**
+ * Retrieve the complex data, which represent a null-terminated unicode string
+ * from an options containing class B.
+ *
+ * @p b must have a member fopt that is an array of type OfficeArtFOPTEChoice.
+ * A is the type of the required option.  The option containers in PPT/DOC have
+ * only one instance of each option in an option container.
+ *
+ * @param b class that contains options.
+ * @return QString storing complex data
+ */
+template <typename A, typename B>
+QString
+getComplexName(const B& b)
+{
+    MSO::OfficeArtFOPTE* p = NULL;
+    uint offset = 0;
+    QString a;
+
+    foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
+        p = (MSO::OfficeArtFOPTE*) _c.anon.data();
+        if (p->opid.fComplex) {
+            if (_c.anon.get<A>()) {
+                a.append(b.complexData.mid(offset, p->op));
+                break;
+            } else {
+                offset += p->op;
+            }
+        }
+    }
+    return a;
+}
+
+/**
+ * Retrieve the complex data, which represent a null-terminated unicode string
+ * for an option from an OfficeArtSpContainer.
+ *
+ * Look in all option containers in @p o for an option of type A.
+ *
+ * @param o OfficeArtSpContainer instance which contains options
+ * @return QString storing complex data
+ */
+template <typename A>
+QString
+getComplexName(const MSO::OfficeArtSpContainer& o)
+{
+    QString a;
+    if (o.shapePrimaryOptions) a = getComplexName<A>(*o.shapePrimaryOptions);
+    if (!a.isEmpty() && o.shapeSecondaryOptions1) a = getComplexName<A>(*o.shapeSecondaryOptions1);
+    if (!a.isEmpty() && o.shapeSecondaryOptions2) a = getComplexName<A>(*o.shapeSecondaryOptions2);
+    if (!a.isEmpty() && o.shapeTertiaryOptions1) a = getComplexName<A>(*o.shapeTertiaryOptions1);
+    if (!a.isEmpty() && o.shapeTertiaryOptions2) a = getComplexName<A>(*o.shapeTertiaryOptions2);
     return a;
 }
 

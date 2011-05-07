@@ -56,10 +56,12 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
       m_viewConverter(0),
       m_cacheEnabled(false),
       m_currentZoom(0.0),
+      m_maxZoom(2.0),
       m_pageCacheManager(0)
 {
     m_shapeManager = new KoShapeManager(this);
     m_toolProxy = new KoToolProxy(this, parent);
+    //setCacheEnabled(true);
 }
 
 KWCanvasBase::~KWCanvasBase()
@@ -306,9 +308,15 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
             if (m_cacheEnabled && m_pageCacheManager) {
 
                 // clear the cache if the zoom changed
-                if (m_currentZoom != viewConverter()->zoom()) {
+                qreal zoom = viewConverter()->zoom();
+                qreal actualZoom = zoom;
+                if (zoom > m_maxZoom) {
+                    zoom = 1.0; // if the zoomlevel is higher than maxzoom, we scale the cache
+                                // from 1.0, instead of filling the cache with huge
+                }
+                if (m_currentZoom != zoom) {
                     m_pageCacheManager->clear();
-                    m_currentZoom = viewConverter()->zoom();
+                    m_currentZoom = zoom;
                 }
 
                 // we take the cache object from the cache, grabbing ownership because
@@ -328,7 +336,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 qreal  pageTopDocument = vm.page.offsetInDocument();
                 qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
 
-                QRectF pageRectDocument = vm.page.rect(vm.page.pageNumber());
+                QRectF pageRectDocument = vm.page.rect();
                 QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
 
                 // translated from the page topleft to 0,0 for our cache image
@@ -411,8 +419,16 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                   pageRectView.y() + clipRectOnPage.y(),
                                   clipRectOnPage.width(),
                                   clipRectOnPage.height());
-                painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
 
+                if (viewConverter()->zoom() > m_maxZoom) {
+                    painter.save();
+                    painter.scale(actualZoom, actualZoom);
+                    painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
+                    painter.restore();
+                }
+                else {
+                    painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
+                }
                 // put the cache back
                 m_pageCacheManager->insert(vm.page, pageCache, 100 * viewConverter()->zoom());
 
@@ -458,7 +474,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                         vm.clipRect.width(), vm.clipRect.height());
 
         if (m_cacheEnabled) {
-            QRectF pageRectDocument = vm.page.rect(vm.page.pageNumber());
+            QRectF pageRectDocument = vm.page.rect();
             QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
 
             if (!m_pageCacheManager) {
@@ -467,9 +483,15 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                 m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize, viewConverter()->zoom());
             }
 
-            if (!m_currentZoom == viewConverter()->zoom()) {
-                m_currentZoom = viewConverter()->zoom();
+            // clear the cache if the zoom changed
+            qreal zoom = viewConverter()->zoom();
+            if (zoom > m_maxZoom) {
+                zoom = 1.0; // if the zoomlevel is higher than maxzoom, we scale the cache
+                            // from 1.0, instead of filling the cache with huge
+            }
+            if (m_currentZoom != zoom) {
                 m_pageCacheManager->clear();
+                m_currentZoom = zoom;
             }
 
             KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
@@ -501,10 +523,9 @@ KoViewConverter *KWCanvasBase::viewConverter() const
     return m_viewConverter;
 }
 
-void KWCanvasBase::setCacheEnabled(bool enabled, int cacheSize)
+void KWCanvasBase::setCacheEnabled(bool enabled, int cacheSize, qreal maxZoom)
 {
     m_cacheEnabled = enabled;
-    // we scale the maxcost by 100 to be able to use the qreal zoomfactor to
-    // use the totalcost to relate to the zoom factor.
     m_cacheSize = cacheSize;
+    m_maxZoom = maxZoom;
 }

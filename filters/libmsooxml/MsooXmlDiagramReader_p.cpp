@@ -2663,6 +2663,8 @@ void LinearAlgorithm::virtualDoLayout() {
         y = values[ "h" ];
     }
     QList<LayoutNodeAtom*> childs = childLayouts();
+    if ( childs.isEmpty() )
+        return;
     LayoutNodeAtom *firstNSpaceNode = NULL;
     LayoutNodeAtom *lastNSpaceNode = NULL;
     kDebug() << values;
