@@ -288,6 +288,10 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     updateRect |= rootArea->associatedShape()->outlineRect();
     rootArea->associatedShape()->update(updateRect);
 
+#if 0 
+    // enabling this makes loading documents > 100 pages much much slower
+    // for documents > 400 it gets so slow that it is barly useable.
+    // only enable if you know what you are doing and never commit it enabled
     // temporary sanity-check
     for(int i = 1; i <= pageManager->pageCount(); ++i) {
         KWPage page = pageManager->page(i);
@@ -345,6 +349,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
             Q_ASSERT(!evenFooterFrame || evenFooterFrame->shape() == evenFooterArea->associatedShape());
         }
     }
+#endif
 
     if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
         handleDependentProviders(page.pageNumber());
