@@ -53,6 +53,7 @@ private:
     KPrDocument *m_prDocument;
     KoZoomController *m_zoomController;
     KoZoomHandler *m_zoomHandler;
+    KoPAPageBase *m_page;
 };
 
 #endif // PAVIEW_H

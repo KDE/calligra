@@ -39,7 +39,7 @@
 
 PAView::PAView(KoPACanvasBase* canvas, KPrDocument* prDocument, KoZoomController* zoomController,
                        KoZoomHandler* zoomHandler) : m_paCanvas(canvas), m_prDocument(prDocument),
-                       m_zoomController(zoomController), m_zoomHandler(zoomHandler)
+                       m_zoomController(zoomController), m_zoomHandler(zoomHandler), m_page(0)
 {
     KoPAViewModeNormal *mode = new KoPAViewModeNormal(this, m_paCanvas);
     setViewMode(mode);
@@ -87,15 +87,15 @@ void PAView::navigatePage(KoPageApp::PageNavigation pageNavigation)
 
 KoPAPageBase* PAView::activePage() const
 {
-    return 0;
+    return m_page;
 }
 
 void PAView::setActivePage(KoPAPageBase* page)
 {
     KoShapeManager *shapeManager = m_paCanvas->shapeManager();
     KoShapeManager *masterShapeManager = m_paCanvas->masterShapeManager();
-    //shapeManager->removeAdditional( d->activePage );
-    //d->activePage = page;
+    shapeManager->removeAdditional( m_page );
+    m_page = page;
     shapeManager->addAdditional( page );
     QList<KoShape*> shapes = page->shapes();
     shapeManager->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
@@ -154,7 +154,7 @@ KoZoomController* PAView::zoomController() const
 
 KoPADocument* PAView::kopaDocument() const
 {
-    return 0;
+    return m_prDocument;
 }
 
 KoPACanvasBase* PAView::kopaCanvas() const
