@@ -176,8 +176,8 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         Q_ASSERT(data);
         area->setAssociatedShape(shape);
         data->setRootArea(area);
-        area->setPage(new KWPage(page));
     }
+    area->setPage(new KWPage(page));
 
     m_pages.append(area);
 
