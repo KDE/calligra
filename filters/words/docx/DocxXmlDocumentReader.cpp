@@ -1618,31 +1618,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("PAGE")) {
-                m_complexCharType = CurrentPageComplexFieldCharType;
+            else {
+                m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("NUMPAGES")) {
-                m_complexCharType = NumberOfPagesComplexFieldCharType;
-            }
-            else if (instruction.startsWith("DATE")) {
-                m_complexCharType = CurrentDateComplexFieldCharType;
-            }
-            else if (instruction.startsWith("CREATEDATE")) {
-                m_complexCharType = CreateDateComplexFieldCharType;
-            }
-            else if (instruction.startsWith("SAVEDATE")) {
-                m_complexCharType = SaveDateComplexFieldCharType;
-            }
-            else if (instruction.startsWith("TIME")) {
-                m_complexCharType = CurrentTimeComplexFieldCharType;
-            }
-            else if (instruction.startsWith("PRINTDATE")) {
-                m_complexCharType = PrintDateComplexFieldCharType;
-            }
-            else if (instruction.startsWith("EDITIME")) {
-                m_complexCharType = EditTimeComplexFieldCharType;
-            }
-            //! @todo: Add rest of the instructions
         }
     }
     READ_EPILOGUE
@@ -1719,21 +1697,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 
     bool closeTag = false;
 
-    if (link_target.isEmpty()) {
-        TRY_READ_ATTR(anchor)
-        if (!anchor.isEmpty())
-        {
-            closeTag = true;
-            body->startElement("text:bookmark-ref");
-            body->addAttribute("text:reference-format", "page");
-            body->addAttribute("text:ref-name", anchor);
-        }
-    }
-    else {
-        closeTag = true;
+    TRY_READ_ATTR(anchor)
+
+    if (!link_target.isEmpty() || !anchor.isEmpty()) {
         body->startElement("text:a");
         body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+        closeTag = true;
+        if (!anchor.isEmpty())
+        {
+            body->addAttribute("xlink:href", QString("#%1").arg(anchor));
+        }
+        else {
+            body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+        }
     }
 
     while (!atEnd()) {
@@ -2208,6 +2184,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 
         body->startElement("text:span", false);
         body->addAttribute("text:style-name", currentTextStyleName);
+
+        m_closeHyperlink = handleSpecialField();
+
         if (m_complexCharStatus == ExecuteInstrNow) {
             if (m_complexCharType == ReferenceNextComplexFieldCharType) {
                 body->startElement("text:bookmark-ref");
@@ -2215,38 +2194,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 body->addAttribute("text:ref-name", m_complexCharValue);
                 m_closeHyperlink = true;
             }
-            else if (m_complexCharType == CurrentPageComplexFieldCharType) {
-                body->startElement("text:page-number");
-                body->addAttribute("text:select-page", "current");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == NumberOfPagesComplexFieldCharType) {
-                body->startElement("text:page-count");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == CurrentDateComplexFieldCharType) {
-                body->startElement("text:date");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == CreateDateComplexFieldCharType) {
-                body->startElement("text:creation-date");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == SaveDateComplexFieldCharType) {
-                body->startElement("text:modification-date");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == CurrentTimeComplexFieldCharType) {
-                body->startElement("text:time");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == PrintDateComplexFieldCharType) {
-                body->startElement("text:print-date");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == EditTimeComplexFieldCharType) {
-                body->startElement("text:modification-time");
-                m_closeHyperlink = true;
+            else {
+                m_specialCharacters = m_complexCharValue;
+                m_closeHyperlink = handleSpecialField();
             }
         }
 
@@ -2265,11 +2215,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         body->endElement(); //text:span
 
         if (m_complexCharStatus == InstrExecute) {
-             if (m_complexCharType == ReferenceNextComplexFieldCharType) {
-                 body->endElement(); //text:bookmar-ref
-                 m_complexCharType = NoComplexFieldCharType;
-             }
-             else if (m_complexCharType == ReferenceComplexFieldCharType) {
+             if (m_complexCharType == ReferenceComplexFieldCharType) {
                  m_complexCharType = ReferenceNextComplexFieldCharType;
              }
         }
@@ -2278,7 +2224,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
         else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
             body->endElement(); // text:a
-        //    m_complexCharType = NoComplexFieldCharType;
         }
 
         // Case where there's hyperlink with read_instrText, we only want to use the link
@@ -3678,6 +3623,70 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
     READ_EPILOGUE
 }
 
+bool DocxXmlDocumentReader::handleSpecialField()
+{
+    if (m_specialCharacters.isEmpty()) {
+        return false;
+    }
+    QString instr = m_specialCharacters.trimmed();
+    m_specialCharacters = QString();
+    QVector<QString> instructions;
+    while (instr.indexOf(' ') > 0) {
+        int place = instr.indexOf(' ');
+        instructions.push_back(instr.left(place));
+        instr = instr.mid(place + 1);
+    }
+    instructions.push_back(instr);
+    QString command = instructions.at(0);
+
+    if (command == "PAGEREF") {
+        // Do something
+    }
+    else if (command == "PAGE") {
+        body->startElement("text:page-number");
+        body->addAttribute("text:select-page", "current");
+        return true;
+    }
+    else if (command == "NUMPAGES") {
+        body->startElement("text:page-count");
+        return true;
+    }
+    else if (command == "REF") {
+        if ((instructions.size() > 3) && instructions.contains("\\h")) {
+            body->startElement("text:bookmark-ref");
+            body->addAttribute("text:reference-format", "page");
+            body->addAttribute("text:ref-name", instructions.at(1));
+            return true;
+        }
+    }
+    else if (command == "DATE") {
+        body->startElement("text:date");
+        return true;
+    }
+    else if (command == "CREATEDATE") {
+        body->startElement("text:creation-date");
+        return true;
+    }
+    else if (command == "SAVEDATE") {
+        body->startElement("text:modification-date");
+        return true;
+    }
+    else if (command == "TIME") {
+        body->startElement("text:time");
+        return true;
+    }
+    else if (command == "PRINTDATE") {
+        body->startElement("text:print-date");
+        return true;
+    }
+    else if (command == "EDITIME") {
+        body->startElement("text:modification-time");
+        return true;
+    }
+
+    return false;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL fldSimple
 //! fldSimple handler (Simple Field)
@@ -3737,20 +3746,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(instr)
-    instr = instr.trimmed();
 
-    bool closeElement = false;
-
-    if (instr == "PAGE" || instr.startsWith("PAGE ")) {
-        body->startElement("text:page-number");
-        body->addAttribute("text:select-page", "current");
-        closeElement = true;
-    }
-
-    if (instr == "NUMPAGES" || instr.startsWith("NUMPAGES ")) {
-        body->startElement("text:page-count");
-        closeElement = true;
-    }
+    m_specialCharacters = instr;
 
 // @todo support all attributes
 
@@ -3768,10 +3765,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             ELSE_TRY_READ_IF_NS(m, oMath)
             SKIP_UNKNOWN
         }
-    }
-
-    if (closeElement) {
-        body->endElement(); // text:page-number | text:page-count
     }
 
     READ_EPILOGUE
@@ -5919,8 +5912,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
 
+    bool closeHyperLink = handleSpecialField();
+
     // Writing the internal body of read_t now
     body = buffer.releaseWriter();
+
+    if (closeHyperLink) {
+        body->endElement(); // some special field
+    }
 
     body->endElement(); //text:span
 
