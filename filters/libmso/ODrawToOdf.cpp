@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
-   Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -439,17 +438,11 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     // size of rectangle is 100*100 with the middle in 0,0
     // line coordinates are x1,y1; 0,0; x2,y2
     int dx=0,dy=0;
-    int angle = (int)toQReal(ds.fillAngle());
+    int angle = ((int)toQReal(ds.fillAngle())-90)%360;
 
-    // from observations of the documents it seems
-    // that angle is stored in -180,180 in MS 2003 documents
     if (angle < 0) {
-        angle = angle + 180;
+        angle = angle + 360;
     }
-
-    // 0 angle means that the angle is actually 90 degrees
-    // From docs: Zero angle represents the vector from bottom to top. [MS-ODRAW:fillAngle], p.198
-    angle = (angle + 90) % 360;
 
     qreal cosA = cos(angle * M_PI / 180);
     qreal sinA = sin(angle * M_PI / 180);
@@ -469,44 +462,10 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     }
 
     style.addAttribute("svg:spreadMethod", "reflect");
-
-    int x1 = 50 - dx;
-    int y1 = 50 + dy;
-    int x2 = 50 + dx;
-    int y2 = 50 - dy;
-
-    if (ds.fillFocus() == 100) {
-        qSwap(x1,x2);
-        qSwap(y1,y2);
-    } else if (ds.fillFocus() == 50) {
-        int sx = (x2 - x1) * 0.5;
-        int sy = (y2 - y1) * 0.5;
-        x2 = x1 +  sx;
-        y2 = y1 +  sy;
-
-        // in one case don't swap the gradient vector
-        if (angle != 90) {
-            qSwap(x1,x2);
-            qSwap(y1,y2);
-        }
-    } else if (ds.fillFocus() == -50) {
-        int sx = (x2 - x1) * 0.5;
-        int sy = (y2 - y1) * 0.5;
-        x2 = x1 + sx;
-        y2 = y1 + sy;
-        // in this case we have to swap the gradient vector
-        // check some gradient file from MS Office 2003
-        if (angle == 90) {
-            qSwap(x1,x2);
-            qSwap(y1,y2);
-        }
-    }
-
-
-    style.addAttribute("svg:x1", QString("%1\%").arg(x1));
-    style.addAttribute("svg:y1", QString("%1\%").arg(y1));
-    style.addAttribute("svg:x2", QString("%1\%").arg(x2));
-    style.addAttribute("svg:y2", QString("%1\%").arg(y2));
+    style.addAttribute("svg:x1", QString("%1\%").arg(50 - dx));
+    style.addAttribute("svg:x2", QString("%1\%").arg(50 + dx));
+    style.addAttribute("svg:y1", QString("%1\%").arg(50 + dy));
+    style.addAttribute("svg:y2", QString("%1\%").arg(50 - dy));
 
     QBuffer writerBuffer;
     writerBuffer.open(QIODevice::WriteOnly);
