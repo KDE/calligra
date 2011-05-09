@@ -2345,8 +2345,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
 //! pPr handler (Text Paragraph Properties) 21.1.2.2.7, p.3588.
 /*!
  Parent elements:
-  - fld (§21.1.2.2.4)
-  - p (§21.1.2.2.6)
+  - [done] fld (§21.1.2.2.4)
+  - [done] p (§21.1.2.2.6)
+
  Attributes:
   - [incomplete] algn (Alignment)
   - defTabSz (Default Tab Size)
@@ -2359,6 +2360,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - marL (Left Margin)
   - marR (Right Margin)
   - rtl (Right To Left)
+
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
   - [done] buBlip (Picture Bullet) §21.1.2.4.2
@@ -5282,13 +5284,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     if (type == "slidenum") {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
+    } else {
+        body->startElement("text:date");
     }
 
     (void)fldBuf.releaseWriter();
 
-    if (type == "slidenum") {
-        body->endElement(); // text:page-number
-    }
+    body->endElement(); // text:page-number, some date format
     body->endElement(); //text:span
 
     delete m_currentTextStyleProperties;

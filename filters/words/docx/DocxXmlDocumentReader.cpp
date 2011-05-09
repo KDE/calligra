@@ -2204,7 +2204,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                     body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
                 }
             }
-            else if (m_complexCharType == ReferenceNextComplexFieldCharType) {
+        }
+
+        body->startElement("text:span", false);
+        body->addAttribute("text:style-name", currentTextStyleName);
+        if (m_complexCharStatus == ExecuteInstrNow) {
+            if (m_complexCharType == ReferenceNextComplexFieldCharType) {
                 body->startElement("text:bookmark-ref");
                 body->addAttribute("text:reference-format", "page");
                 body->addAttribute("text:ref-name", m_complexCharValue);
@@ -2245,15 +2250,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             }
         }
 
-        body->startElement("text:span", false);
-        body->addAttribute("text:style-name", currentTextStyleName);
-
         if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
             body->addTextSpan(m_complexCharValue);
         }
 
         // Writing the internal body of read_t now
         body = buffer.releaseWriter();
+
+        if (m_closeHyperlink) {
+            body->endElement(); //either text:bookmark-ref or text:a or text:page-number etc.
+            m_closeHyperlink = false;
+        }
 
         body->endElement(); //text:span
 
@@ -2279,13 +2286,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         if (m_complexCharStatus == InstrExecute) {
             m_complexCharStatus = ExecuteInstrNow;
         }
-        if (m_closeHyperlink) {
-            body->endElement(); //either text:bookmark-ref or text:a or text:page-number or text:page-count
-            m_closeHyperlink = false;
-        }
     }
     else {
-        // Writing the internal body of read_t now 
+        // Writing the internal body of read_t now
         body = buffer.releaseWriter();
     }
 
