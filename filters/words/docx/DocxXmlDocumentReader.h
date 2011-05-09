@@ -283,7 +283,10 @@ private:
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
        ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType,
-       CurrentPageComplexFieldCharType, NumberOfPagesComplexFieldCharType
+       CurrentPageComplexFieldCharType, NumberOfPagesComplexFieldCharType,
+       CurrentDateComplexFieldCharType, CreateDateComplexFieldCharType,
+       SaveDateComplexFieldCharType, CurrentTimeComplexFieldCharType,
+       PrintDateComplexFieldCharType, EditTimeComplexFieldCharType
     };
     //! Type of complex field characters we have
     ComplexFieldCharType m_complexCharType;

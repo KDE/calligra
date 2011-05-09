@@ -1624,6 +1624,24 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
             else if (instruction.startsWith("NUMPAGES")) {
                 m_complexCharType = NumberOfPagesComplexFieldCharType;
             }
+            else if (instruction.startsWith("DATE")) {
+                m_complexCharType = CurrentDateComplexFieldCharType;
+            }
+            else if (instruction.startsWith("CREATEDATE")) {
+                m_complexCharType = CreateDateComplexFieldCharType;
+            }
+            else if (instruction.startsWith("SAVEDATE")) {
+                m_complexCharType = SaveDateComplexFieldCharType;
+            }
+            else if (instruction.startsWith("TIME")) {
+                m_complexCharType = CurrentTimeComplexFieldCharType;
+            }
+            else if (instruction.startsWith("PRINTDATE")) {
+                m_complexCharType = PrintDateComplexFieldCharType;
+            }
+            else if (instruction.startsWith("EDITIME")) {
+                m_complexCharType = EditTimeComplexFieldCharType;
+            }
             //! @todo: Add rest of the instructions
         }
     }
@@ -2076,7 +2094,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - [done] footnoteReference (Footnote Reference) §17.11.14
  - [done] instrText (Field Code) §17.16.23
  - [done] lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
-  - monthLong (Date Block - Long Month Format) §17.3.3.15
+ - monthLong (Date Block - Long Month Format) §17.3.3.15
  - monthShort (Date Block - Short Month Format) §17.3.3.16
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
  - [done] object (Embedded Object) §17.3.3.19
@@ -2199,6 +2217,30 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             }
             else if (m_complexCharType == NumberOfPagesComplexFieldCharType) {
                 body->startElement("text:page-count");
+                m_closeHyperlink = true;
+            }
+            else if (m_complexCharType == CurrentDateComplexFieldCharType) {
+                body->startElement("text:date");
+                m_closeHyperlink = true;
+            }
+            else if (m_complexCharType == CreateDateComplexFieldCharType) {
+                body->startElement("text:creation-date");
+                m_closeHyperlink = true;
+            }
+            else if (m_complexCharType == SaveDateComplexFieldCharType) {
+                body->startElement("text:modification-date");
+                m_closeHyperlink = true;
+            }
+            else if (m_complexCharType == CurrentTimeComplexFieldCharType) {
+                body->startElement("text:time");
+                m_closeHyperlink = true;
+            }
+            else if (m_complexCharType == PrintDateComplexFieldCharType) {
+                body->startElement("text:print-date");
+                m_closeHyperlink = true;
+            }
+            else if (m_complexCharType == EditTimeComplexFieldCharType) {
+                body->startElement("text:modification-time");
                 m_closeHyperlink = true;
             }
         }
