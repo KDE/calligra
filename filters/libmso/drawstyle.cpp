@@ -184,10 +184,10 @@ GETTER(qint32,                 ShadowOffsetX,        shadowOffsetX,        0x633
 GETTER(qint32,                 ShadowOffsetY,        shadowOffsetY,        0x6338)         // 2.3.13.7
 GETTER(MSO::FixedPoint,        Rotation,             rotation,             zero())         // 2.3.18.5
 GETTER(qint32,                 ITxid,                iTxid,                0)              // 2.3.21.1
-GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0)              // 2.3.21.2
-GETTER(qint32,                 DyTextTop,            dyTextTop,            0)              // 2.3.21.3
-GETTER(qint32,                 DxTextRight,          dxTextRight,          0)              // 2.3.21.4
-GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)              // 2.3.21.5
+GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0x00016530)     // 2.3.21.2
+GETTER(qint32,                 DyTextTop,            dyTextTop,            0x0000B298)     // 2.3.21.3
+GETTER(qint32,                 DxTextRight,          dxTextRight,          0x00016530)     // 2.3.21.4
+GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0x0000B298)     // 2.3.21.5
 GETTER(quint32,                WrapText,             wrapText,             0)              // 2.3.21.6
 GETTER(quint32,                AnchorText,           anchorText,           0)              // 2.3.21.8
 GETTER(quint32,                TxflTextFlow,         txflTextFlow,         0)              // 2.3.21.9

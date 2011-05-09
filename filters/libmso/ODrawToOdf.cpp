@@ -129,7 +129,6 @@ const char* arrowHeads[6] = {
     "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
 };
 
-
 QString format(double v)
 {
     static const QString f("%1");
@@ -359,9 +358,13 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:clip
     // fo:margin
     // fo:margin-bottom
+    style.addProperty("fo:margin-bottom", pt(ds.dyTextBottom()/12700.), gt);
     // fo:margin-left
+    style.addProperty("fo:margin-left", pt(ds.dxTextLeft()/12700.), gt);
     // fo:margin-right
+    style.addProperty("fo:margin-right", pt(ds.dxTextRight()/12700.), gt);
     // fo:margin-top
+    style.addProperty("fo:margin-top", pt(ds.dyTextTop()/12700.), gt);
     // fo:max-height
     // fo:max-width
     // fo:min-height
