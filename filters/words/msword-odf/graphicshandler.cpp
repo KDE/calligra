@@ -45,6 +45,13 @@ using Conversion::twipsToPt;
 
 //#define DEBUG_GHANDLER
 
+// Specifies the format of the picture data for the PICF structure.
+enum
+{
+    MM_SHAPE = 0x0064,
+    MM_SHAPEFILE = 0x0066
+};
+
 namespace
 {
 QString format(double v) {

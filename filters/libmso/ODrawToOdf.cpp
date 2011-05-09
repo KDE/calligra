@@ -20,6 +20,7 @@
 
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
+#include "msodraw.h"
 #include <KoXmlWriter.h>
 #include <QtCore/QtDebug>
 #include <QtGui/QColor>
@@ -811,21 +812,21 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
 const char* getFillType(quint32 fillType)
 {
     switch (fillType) {
-    case 1: // msofillPattern
+    case msofillPattern:
         // NOTE: there's usually a DIB file used for the pattern, check also
         // draw:fill="hatch" and <draw:hatch> in ODF specification
-    case 2: // msofillTexture
-    case 3: // msofillPicture
+    case msofillTexture:
+    case msofillPicture:
         return "bitmap";
-    case 4: // msofillShade
-    case 5: // msofillShadeCenter
-    case 6: // msofillShadeShape
-    case 7: // msofillShadeScale
-    case 8: // msofillShadeTitle
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeScale:
+    case msofillShadeTitle:
         return "gradient";
-    case 9: // msofillBackground
+    case msofillBackground:
         return "none";
-    case 0: // msofillSolid
+    case msofillSolid:
     default:
         return "solid";
     }
@@ -834,18 +835,18 @@ const char* getFillType(quint32 fillType)
 const char* getRepeatStyle(quint32 fillType)
 {
     switch (fillType) {
-    case 3: // msofillPicture
-    case 7: // msofillShadeScale
+    case msofillPicture:
+    case msofillShadeScale:
         return "stretch";
-    case 0: // msofillSolid
-    case 4: // msofillShade
-    case 5: // msofillShadeCenter
-    case 6: // msofillShadeShape
-    case 8: // msofillShadeTitle
-    case 9: // msofillBackground
+    case msofillSolid:
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeTitle:
+    case msofillBackground:
         return "no-repeat";
-    case 1: // msofillPattern
-    case 2: // msofillTexture
+    case msofillPattern:
+    case msofillTexture:
     default:
         return "repeat";
     }
@@ -855,16 +856,16 @@ const char* getGradientRendering(quint32 fillType)
 {
     //TODO: Add the logic!!!
     switch (fillType) {
-    case 0: //msofillSolid
-    case 1: //msofillPattern
-    case 2: //msofillTexture
-    case 3: //msofillPicture
-    case 4: //msofillShade
-    case 5: //msofillShadeCenter
-    case 6: //msofillShadeShape
-    case 7: //msofillShadeScale
-    case 8: //msofillShadeTitle
-    case 9: //msofillBackground
+    case msofillSolid:
+    case msofillPattern:
+    case msofillTexture:
+    case msofillPicture:
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeScale:
+    case msofillShadeTitle:
+    case msofillBackground:
     default:
         return "axial";
     }
@@ -945,17 +946,17 @@ const char* getVerticalRel(quint32 posRelV)
 const char* getHorizontalAlign(quint32 anchorText)
 {
     switch (anchorText) {
-    case 0: //msoanchorTop
-    case 6: //msoanchorTopBaseline
-    case 1: //msoanchorMiddle
-    case 2: //msoanchorBottom
-    case 7: //msoanchorBottomBaseline
+    case msoanchorTop:
+    case msoanchorTopBaseline:
+    case msoanchorMiddle:
+    case msoanchorBottom:
+    case msoanchorBottomBaseline:
         return "left";
-    case 3: //msoanchorTopCentered
-    case 8: //msoanchorTopCenteredBaseline
-    case 4: //msoanchorMiddleCentered
-    case 5: //msoanchorBottomCentered
-    case 9: //msoanchorBottomCenteredBaseline
+    case msoanchorTopCentered:
+    case msoanchorTopCenteredBaseline:
+    case msoanchorMiddleCentered:
+    case msoanchorBottomCentered:
+    case msoanchorBottomCenteredBaseline:
         return "justify";
     default:
         return "left";
@@ -965,18 +966,18 @@ const char* getHorizontalAlign(quint32 anchorText)
 const char* getVerticalAlign(quint32 anchorText)
 {
     switch (anchorText) {
-    case 0: //msoanchorTop
-    case 3: //msoanchorTopCentered
-    case 6: //msoanchorTopBaseline - not compatible with ODF
-    case 8: //msoanchorTopCenteredBaseline - not compatible with ODF
+    case msoanchorTop:
+    case msoanchorTopCentered:
+    case msoanchorTopBaseline: //not compatible with ODF
+    case msoanchorTopCenteredBaseline: //not compatible with ODF
         return "top";
-    case 1: //msoanchorMiddle
-    case 4: //msoanchorMiddleCentered
+    case msoanchorMiddle:
+    case msoanchorMiddleCentered:
         return "middle";
-    case 2: //msoanchorBottom
-    case 5: //msoanchorBottomCentered
-    case 7: //msoanchorBottomBaseline - not compatible with ODF
-    case 9: //msoanchorBottomCenteredBaseline - not compatible with ODF
+    case msoanchorBottom:
+    case msoanchorBottomCentered:
+    case msoanchorBottomBaseline: //not compatible with ODF
+    case msoanchorBottomCenteredBaseline: //not compatible with ODF
         return "bottom";
     default:
         return "top";
