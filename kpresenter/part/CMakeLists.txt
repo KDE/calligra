@@ -1,4 +1,4 @@
-project(kpresenter)
+project(calligra-stage)
 
 include_directories( ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
@@ -136,7 +136,7 @@ kde4_add_ui_files(calligrastageprivate_LIB_SRCS
 
 kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 
-target_link_libraries(calligrastageprivate kopageapp kowidgets ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
+target_link_libraries(calligrastageprivate kopageapp kowidgets textlayout ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
@@ -153,34 +153,34 @@ target_link_libraries(calligrastagepart calligrastageprivate )
 
 install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-### kdeinit kpresenter ###
-set(kpresenter_KDEINIT_SRCS main.cpp )
+### kdeinit stage ###
+set(stage_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(kpresenter_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kpresenter.png")
+kde4_add_app_icon(stage_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-stage.png")
 
-kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
+kde4_add_kdeinit_executable(calligrastage ${stage_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-   set_target_properties(kpresenter PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(kpresenter PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.kpresenter")
-   set_target_properties(kpresenter PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KPresenter 2")
+   set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.stage")
+   set_target_properties(calligrastage PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Stage 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_kpresenter komain )
+target_link_libraries(kdeinit_calligrastage komain )
 
-install(TARGETS kdeinit_kpresenter ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligrastage ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries(kpresenter kdeinit_kpresenter)
-install(TARGETS kpresenter ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries(calligrastage kdeinit_calligrastage)
+install(TARGETS calligrastage ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
 install( FILES stagepart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS kpresenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS stage.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
 install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
 
-install( FILES kpresenterrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES stagerc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 ### Include files ###
 install( FILES 

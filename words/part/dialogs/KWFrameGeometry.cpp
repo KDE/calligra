@@ -18,7 +18,6 @@
  */
 #include "KWFrameGeometry.h"
 #include "KWDocument.h"
-#include "frames/KWTextFrame.h"
 #include "frames/KWTextFrameSet.h"
 
 #include <KoShape.h>
@@ -87,7 +86,7 @@ void KWFrameGeometry::open(KoShape *shape)
 
     if (shape->isGeometryProtected()) {
         widget.protectSize->setCheckState(Qt::Checked);
-        KWTextFrame *tf = dynamic_cast<KWTextFrame*>(shape->applicationData());
+        KWFrame *tf = dynamic_cast<KWFrame*>(shape->applicationData());
         if (tf && static_cast<KWTextFrameSet*>(tf->frameSet())->textFrameSetType() != KWord::OtherTextFrameSet)
             widget.protectSize->setEnabled(false); // auto-generated frame, can't edit
     }

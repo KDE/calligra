@@ -26,7 +26,6 @@
 #include "KWPage.h"
 
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>

@@ -96,48 +96,13 @@
   <Action name="format_header"/>
   <Action name="format_footer"/>
  </Menu>
- <Menu name="frames"><text>Fra&amp;mes</text>
-  <Action name="format_frameset"/>
-  <Separator/>
-  <Action name="raiseframe"/>
-  <Action name="lowerframe"/>
-  <Action name="bring_tofront_frame"/>
-  <Action name="send_toback_frame"/>
-  <Separator/>
-  <Action name="create_linked_frame"/>
-  <Action name="create_custom_outline"/>
-  <Action name="create_clipped_frame"/>
-  <Action name="remove_clipped_frame"/>
-  <Action name="convert_to_text_box"/>
-  <Separator/>
-  <Action name="frame_stylist"/>
-  <Action name="create_framestyle"/>
-  <Action name="frame_stylemenu"/>
-  <!--<Action name="border_color"/> Can't do that while we're sharing the action with paragraphs-->
-  <Action name="border_backgroundcolor"/>
- </Menu>
- <Menu name="tables"><text>Tables</text>
-  <Menu name="semantic_object_menu"><text>Insert</text>
-    <Action name="insert_tablerow_above"/>
-    <Action name="insert_tablerow_below"/>
-    <Action name="insert_tablecolumn_left"/>
-    <Action name="insert_tablecolumn_right"/>
-  </Menu>
-  <Menu name="semantic_object_menu"><text>Delete</text>
-    <Action name="delete_tablerow"/>
-    <Action name="delete_tablecolumn"/>
-  </Menu>
- </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
   <Menu name="SpellCheck"><text>Spellcheck</text>
       <Action name="tool_auto_spellcheck"/>
       <Action name="apply_spellcheck"/>
       <Action name="tool_configure_spellcheck"/>
   </Menu>
-  <Menu name="AutoFormat"><text>Autocorrection</text>
-    <Action name="enable_autocorrection"/>
-    <Action name="apply_autocorrection"/>
-  </Menu>
+  <Action name="enable_autocorrection"/>
   <Menu name="Changes"><text>Change Tracking</text>
     <Action name="edit_show_changes"/>
     <Action name="edit_record_changes"/>

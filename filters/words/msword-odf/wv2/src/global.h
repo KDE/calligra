@@ -20,7 +20,7 @@
 #define GLOBAL_H
 
 #include "wv2_export.h"
-#include "wv2version.h"  // ###### WV2 0.3: Remove this #include
+//#include "wv2version.h"  // ###### WV2 0.3: Remove this #include
 
 /** @file
  * We use this typedefs to be compatible with the types from
@@ -28,7 +28,7 @@
  */
 
 // A few defines used for "inline" debugging
-//#define WV2_DUMP_PIECE_TABLE 0 // has to be defined as we just #if it
+#define WV2_DUMP_PIECE_TABLE 0 // has to be defined as we just #if it
 //#define WV2_DUMP_FIB 0
 
 //#define WV2_DEBUG_FIB 1

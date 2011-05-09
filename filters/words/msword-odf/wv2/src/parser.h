@@ -136,7 +136,7 @@ public:
     /**
      * This Drawings holds all the information about drawings the Word file
      */
-    virtual Drawings * getDrawings() = 0;
+    virtual const Drawings* getDrawings() const = 0;
 
     /**
      * This table holds actuald MS-Doc stream
@@ -144,9 +144,11 @@ public:
     virtual OLEStreamReader* getTable() = 0;
 
     /**
-     * Looks for textbox text data and process them
+     * Look for textbox text data and process them.
+     * @param index into plcfTxbxTxt
+     * @param processing a header/footer
      */
-    virtual void parseTextBox( uint lid, bool bodyDrawing) =0;
+    virtual void parseTextBox(uint index, bool stylesxml) = 0;
 
     /**
      * The inline replacement handler is used to replace certain characters on the fly.

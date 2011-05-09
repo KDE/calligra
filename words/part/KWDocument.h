@@ -100,6 +100,12 @@ public:
     Q_SCRIPTABLE KWPageManager *pageManager() {
         return &m_pageManager;
     }
+    /**
+     * Return the frameLayout used in this document.
+     */
+    Q_SCRIPTABLE KWFrameLayout *frameLayout() {
+        return &m_frameLayout;
+    }
 
     /**
      * Insert a new page after another,
@@ -153,11 +159,7 @@ public:
         return m_config;
     }
 
-#ifndef NDEBUG
-    /// Use a log of kDebug calls to print out the internal state of the document and its members
-    void printDebug();
-#endif
-
+    /// This emits the pageSetupChanged signal which will call KWViewMode::updatePageCache.
     void firePageSetupChanged();
 
     // reimplemented slot from KoDocument

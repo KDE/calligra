@@ -241,13 +241,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_currentDrawStyle->addProperty("style:mirror", mirror);
     }
 
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 #endif
 
@@ -517,13 +516,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     body = drawFrameBuf.originalWriter();
     body->startElement("draw:g");
 
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 
     (void)drawFrameBuf.releaseWriter();
@@ -707,12 +705,9 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     //We assume that the textbox is empty by default
     d->textBoxHasContent = false;
 
-    // If called from the pptx converter, handle different contexts
-    // (Slide, SlideMaster, SlideLayout)
-    if (m_context->type == Slide) {
-        m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
-    }
-    else if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+    m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
+
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
     }
     else if (m_context->type == SlideLayout) {
@@ -772,14 +767,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
     m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
 
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+#endif
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
-    }
-
     const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
 
     if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -795,15 +791,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
-    QString presentationStyleName;
-    //body->addAttribute("draw:style-name", );
     if (!m_currentPresentationStyle.isEmpty()) {
-        presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-            mainStyles->markStyleForStylesXml(presentationStyleName);
+            m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
         }
-    }
-    if (!presentationStyleName.isEmpty()) {
+        QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
 
@@ -1421,8 +1413,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
  - [done] style (§20.1.2.2.37);
  - [done] style (§20.5.2.31);
  - [done] style (§19.3.1.46);
- - tblBg (§20.1.4.2.25);
- - tcStyle (§20.1.4.2.29)
+ - [done] tblBg (§20.1.4.2.25);
+ - [done] tcStyle (§20.1.4.2.29)
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
@@ -1695,6 +1687,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     body = textPBuf.setWriter(body);
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
+#ifdef PPTXXMLSLIDEREADER_CPP
+    m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
+    m_currentParagraphStyle.addProperty("fo:line-height", "100%" );
+#endif
     bool pprRead = false;
     bool rRead = false;
 
@@ -1745,7 +1741,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
                 delete m_currentTextStyleProperties;
                 m_currentTextStyleProperties = 0;
-                MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+                KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
                 fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
                 if (!fontSize.isEmpty()) {
                     fontSize.remove("pt");
@@ -1835,10 +1831,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
              for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                  body->startElement("text:list");
                  if (listDepth == 0) {
-                     QString listStyleName = mainStyles->insert(m_currentListStyle);
                      if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-                         mainStyles->markStyleForStylesXml(listStyleName);
+                         m_currentListStyle.setAutoStyleInStylesDotXml(true);
                      }
+                     QString listStyleName = mainStyles->insert(m_currentListStyle);
                      Q_ASSERT(!listStyleName.isEmpty());
                      body->addAttribute("text:style-name", listStyleName);
                      m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
@@ -1871,6 +1867,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
      body->startElement("text:p", false);
 
+     // OOxml sometimes defines margins as percentages, however percentages in odf mean a bit different
+     // thing, so here we transform them to points
      QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
      if (spcBef.contains("%")) {
          spcBef.remove("%");
@@ -1884,12 +1882,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", percentage * m_largestParaFont);
      }
 
-     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
 #ifdef PPTXXMLSLIDEREADER_CPP
      if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-         mainStyles->markStyleForStylesXml(currentParagraphStyleName);
+         m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
      }
 #endif
+     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
      body->addAttribute("text:style-name", currentParagraphStyleName);
 
      (void)textPBuf.releaseWriter();
@@ -1943,6 +1941,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
     m_currentTextStyleProperties = new KoCharacterStyle();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#endif
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (!m_insideTable) {
@@ -1951,7 +1954,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 #endif
 
-    MSOOXML::Utils::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
 
     while (!atEnd()) {
         readNext();
@@ -1986,12 +1989,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
             m_largestParaFont = realSize;
         }
     }
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
-    }
-#endif
 
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
@@ -2348,8 +2345,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
 //! pPr handler (Text Paragraph Properties) 21.1.2.2.7, p.3588.
 /*!
  Parent elements:
-  - fld (§21.1.2.2.4)
-  - p (§21.1.2.2.6)
+  - [done] fld (§21.1.2.2.4)
+  - [done] p (§21.1.2.2.6)
+
  Attributes:
   - [incomplete] algn (Alignment)
   - defTabSz (Default Tab Size)
@@ -2362,6 +2360,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - marL (Left Margin)
   - marR (Right Margin)
   - rtl (Right To Left)
+
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
   - [done] buBlip (Picture Bullet) §21.1.2.4.2
@@ -2797,10 +2796,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
  a BLIP is tiled to fill the available area.
 
  Parent elements:
-    - blipFill (§21.3.2.2) - DrawingML, p. 3919
+    - [done]blipFill (§21.3.2.2) - DrawingML, p. 3919
     - [done] blipFill (§20.1.8.14) - DrawingML, p. 3195
-    - blipFill (§20.2.2.1) - DrawingML, p. 3456
-    - blipFill (§20.5.2.2) - DrawingML, p. 3518
+    - [done] blipFill (§20.2.2.1) - DrawingML, p. 3456
+    - [done] blipFill (§20.5.2.2) - DrawingML, p. 3518
     - [done] blipFill (§19.3.1.4) - PresentationML, p. 2818
 
  Child elements:
@@ -3004,7 +3003,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
         int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
 
         QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
-            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);;
+            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
         QImage image;
         m_context->import->imageFromFile(m_recentDestName, image);
         image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
@@ -3047,13 +3046,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 {
     READ_PROLOGUE
 
-//    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs( attributes() );
 //! @todo use ST_Percentage_withMsooxmlFix_to_double for attributes b, l, r, t
-    /*    TRY_READ_ATTR_WITHOUT_NS(r, b)
-        TRY_READ_ATTR_WITHOUT_NS(r, l)
-        TRY_READ_ATTR_WITHOUT_NS(r, r)
-        TRY_READ_ATTR_WITHOUT_NS(r, t)*/
+    TRY_READ_ATTR_WITHOUT_NS(b)
+    TRY_READ_ATTR_WITHOUT_NS(l)
+    TRY_READ_ATTR_WITHOUT_NS(r)
+    TRY_READ_ATTR_WITHOUT_NS(t)
 //MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+
+    if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:repeat", QLatin1String("no-repeat"));
+
+        // TODO: One way to approach this would be to first scale the image to the size of the slide
+        // then, resize it according to the percentages & make sure there are no black areas
+    }
 
     readNext();
     READ_EPILOGUE
@@ -4078,10 +4084,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
-#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-    m_currentPen.setColor(m_currentColor);
-#endif
-
     READ_EPILOGUE
 }
 
@@ -4779,6 +4781,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
+    m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
     inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
@@ -5246,7 +5249,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     inheritTextStyle(m_currentTextStyle);
 #endif
 
-    MSOOXML::Utils::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
 
     while (!atEnd()) {
         readNext();
@@ -5264,12 +5267,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
     body = fldBuf.originalWriter();
 
@@ -5281,13 +5284,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     if (type == "slidenum") {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
+    } else {
+        body->startElement("text:date");
     }
 
     (void)fldBuf.releaseWriter();
 
-    if (type == "slidenum") {
-        body->endElement(); // text:page-number
-    }
+    body->endElement(); // text:page-number, some date format
     body->endElement(); //text:span
 
     delete m_currentTextStyleProperties;

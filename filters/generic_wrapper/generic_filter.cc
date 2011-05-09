@@ -68,11 +68,11 @@ KoFilter::ConversionStatus GenericFilter::convert(const QByteArray &from, const 
 
     //decide between import/export
     if (m_to == "application/x-kword" || m_to == "application/x-karbon" ||
-            m_to == "application/x-kspread" || m_to == "application/x-kivio" ||
+            m_to == "application/x-kspread" || m_to == "application/x-flow" ||
             m_to == "application/x-kchart" || m_to == "application/x-kpresenter")
         return doImport();
     else if (m_from == "application/x-kword" || m_from == "application/x-karbon" ||
-             m_from == "application/x-kspread" || m_from == "application/x-kivio" ||
+             m_from == "application/x-kspread" || m_from == "application/x-flow" ||
              m_from == "application/x-kchart" || m_from == "application/x-kpresenter")
         return doExport();
     else

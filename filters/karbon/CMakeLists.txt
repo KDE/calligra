@@ -3,7 +3,9 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/rectangle/RectangleShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/star/StarShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp)
+    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextRange.cpp
+)
 
 
 include_directories(

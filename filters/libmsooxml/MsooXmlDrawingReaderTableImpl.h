@@ -260,6 +260,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
         cell->setRowSpan(rowSpan.toInt());
     }
 
+    TRY_READ_ATTR_WITHOUT_NS(vMerge)
+    TRY_READ_ATTR_WITHOUT_NS(hMerge)
+
+    if (vMerge == "1" || hMerge == "1") {
+        cell->setCovered(true);
+    }
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -334,6 +341,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
                 TRY_READ(solidFill)
                 m_currentLocalStyleProperties->backgroundColor = m_currentColor;
                 m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
+                if (m_currentAlpha > 0) {
+                    m_currentLocalStyleProperties->backgroundOpacity = m_currentAlpha;
+                    m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundOpacity;
+                }
             }
             SKIP_UNKNOWN // Added to make sure that solidfill eg inside 'lnT' does not mess with the color
         }

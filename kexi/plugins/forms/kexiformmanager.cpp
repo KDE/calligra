@@ -501,6 +501,8 @@ void KexiFormManager::showFormUICode()
 void KexiFormManager::slotAssignAction()
 {
     KexiFormView* formView = activeFormViewWidget();
+    if (!formView)
+        return;
     KFormDesigner::Form *form = formView->form();
     KexiDBForm *dbform = 0;
     if (form->mode() != KFormDesigner::Form::DesignMode

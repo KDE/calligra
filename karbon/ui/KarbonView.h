@@ -110,6 +110,9 @@ public slots:
     void clipObjects();
     void unclipObjects();
 
+    void flipVertical();
+    void flipHorizontal();
+
     void closePath();
     void combinePath();
     void separatePath();
@@ -164,8 +167,8 @@ private:
     void updateRuler();
 
     void selectionDistribute(KoShapeDistributeCommand::Distribute distribute);
-
     void booleanOperation(KarbonBooleanCommand::BooleanOperation operation);
+    void selectionFlip(bool horizontally, bool vertically);
 
     /// Returns a list of all selected path shapes
     QList<KoPathShape*> selectedPathShapes();

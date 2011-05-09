@@ -7865,16 +7865,17 @@ struct PICF : public Shared {
 
     // Data
     /**
-     * number of bytes in the PIC structure plus size of following picture
-     * data which may be a Window's metafile, a bitmap, or the filename of a TIFF
-     * file. In the case of a Macintosh PICT picture, this includes the size of
-     * the PIC, the standard "x" metafile, and the Macintosh PICT data. See Appendix
-     * B for more information.
+     * Number of bytes in the PICF structure plus size of following picture
+     * data which may be a Window's metafile, a bitmap, or the filename of a
+     * TIFF file.  In the case of a Macintosh PICT picture, this includes the
+     * size of the PIC, the standard "x" metafile, and the Macintosh PICT
+     * data. See Appendix B for more information.
      */
     U32 lcb;
 
     /**
-     * number of bytes in the PIC (to allow for future expansion).
+     * An unsigned integer that specifies the size, in bytes, of this PICF
+     * structure. This value MUST be 0x44.
      */
     U16 cbHeader;
 
@@ -7893,19 +7894,30 @@ struct PICF : public Shared {
      * Rect for window origin and extents when metafile is stored -- ignored
      * if 0 (8 bytes).
      */
+
+    /**
+     * innerHeader (14 bytes): A PICF_Shape structure that specifies additional
+     * header information.  According to [MS-DOC] — v20101219
+     */
     U8 bm_rcWinMF[14];
 
     /**
-     * horizontal measurement in twips of the rectangle the picture should
-     * be imaged within. when scaling bitmaps, dxaGoal and dyaGoal may be ignored
-     * if the operation would cause the bitmap to shrink or grow by a non -power-of-two
-     * factor
+     * [ BEGIN ] picmid (38 bytes): A PICMID structure that specifies the size
+     * and border information of the picture.  According to [MS-DOC] —
+     * v20101219
+     */
+
+    /**
+     * A signed integer that specifies the initial width of the picture, in
+     * twips, before cropping or scaling occurs. This value MUST be greater
+     * than zero.
      */
     S16 dxaGoal;
 
     /**
-     * vertical measurement in twips of the rectangle the picture should be
-     * imaged within.
+     * A signed integer that specifies the initial height of the picture, in
+     * twips, before cropping or scaling occurs. This value MUST be greater
+     * than zero.
      */
     S16 dyaGoal;
 
@@ -7920,25 +7932,22 @@ struct PICF : public Shared {
     U16 my;
 
     /**
-     * the amount the picture has been cropped on the left in twips. for all
-     * of the Crop values, a positive measurement means the specified border has
-     * been moved inward from its original setting and a negative measurement
-     * means the border has been moved outward from its original setting.
+     * dxaReserved1 - This value MUST be zero and MUST be ignored.
      */
     S16 dxaCropLeft;
 
     /**
-     * the amount the picture has been cropped on the top in twips.
+     * dyaReserved1 - This value MUST be zero and MUST be ignored.
      */
     S16 dyaCropTop;
 
     /**
-     * the amount the picture has been cropped on the right in twips.
+     * dxaReserved2 - This value MUST be zero and MUST be ignored.
      */
     S16 dxaCropRight;
 
     /**
-     * the amount the picture has been cropped on the bottom in twips.
+     * dyaReserved2 - This value MUST be zero and MUST be ignored.
      */
     S16 dyaCropBottom;
 
@@ -8001,17 +8010,20 @@ struct PICF : public Shared {
     BRC brcRight;
 
     /**
-     * horizontal offset of hand annotation origin
+     * This value MUST be zero and MUST be ignored.
      */
     S16 dxaOrigin;
 
     /**
-     * vertical offset of hand annotation origin
+     * This value MUST be zero and MUST be ignored.
      */
     S16 dyaOrigin;
 
     /**
-     * unused
+     * [ END ] picmid
+     */
+    /**
+     * This value MUST be 0 and MUST be ignored.
      */
     S16 cProps;
 

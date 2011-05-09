@@ -316,12 +316,13 @@ void KoWmfPaint::recalculateWorldTransform()
         kDebug(31000) << "Scale for Window -> Viewport"
                       << mWindowViewportScaleX << mWindowViewportScaleY;
 #endif
-    } else {
-        // Only one of window and viewport ext is set: Use same width for window and viewport
+    }
+    else {
+        // At most one of window and viewport ext is set: Use same width for window and viewport
         mWindowViewportScaleX = qreal(1.0);
         mWindowViewportScaleY = qreal(1.0);
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "Only one of Window or Viewport set: scale = 1";
+        kDebug(31000) << "Only one of Window or Viewport set: scale window -> viewport = 1";
 #endif
     }
 
@@ -342,7 +343,7 @@ void KoWmfPaint::recalculateWorldTransform()
         flip = true;
     }
     if (flip) {
-        //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
+        kDebug(31000) << "Flipping round midpoint" << midpointX << midpointY << scaleX << scaleY;
         mWorldTransform.translate(midpointX, midpointY);
         mWorldTransform.scale(scaleX, scaleY);
         mWorldTransform.translate(-midpointX, -midpointY);
@@ -356,7 +357,10 @@ void KoWmfPaint::recalculateWorldTransform()
         mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
     } 
     else {
-        mWorldTransform.translate(mWindowOrg.x(), mWindowOrg.y());
+        // If viewport is not set, but window is, then the output is
+        // always in the same place, namely (0, 0) -> (windowWidth,
+        // windowHeight)
+        ;
     }
     //kDebug(31000) << "After window viewport calculation" << mWorldTransform;
 
@@ -688,10 +692,11 @@ void KoWmfPaint::patBlt(int x, int y, int width, int height, quint32 rasterOpera
 }
 
 
-void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QString& text, double)
+void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QString& text,
+                          double textRotation)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text;
+    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text << textRotation;
 #endif
 
     // The TA_UPDATECP flag tells us to use the current position

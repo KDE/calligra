@@ -4,9 +4,11 @@ include_directories(
     ${KOMAIN_INCLUDES}
 )
 
-add_subdirectory(src)
-add_subdirectory(templates)
+add_subdirectory(part)
+add_subdirectory(plugins)
 add_subdirectory(stencils)
+add_subdirectory(templates)
+
 
 ########### install files ###############
 

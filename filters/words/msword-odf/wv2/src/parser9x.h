@@ -108,7 +108,7 @@ namespace wvWare
 
         virtual const StyleSheet& styleSheet() const;
 
-        virtual Drawings * getDrawings();
+        virtual const Drawings* getDrawings() const;
 
         virtual OLEStreamReader* getTable();
 
@@ -126,8 +126,9 @@ namespace wvWare
         void parseAnnotation( const AnnotationData& data );
         void parseTableRow( const TableRowData& data );
         void parsePicture( const PictureData& data );
-        //I can't create Functor for textbox in advance because i don't know lid
-        virtual void parseTextBox( uint lid, bool bodyDrawing);
+
+        //Can't create Functor for textbox in advance.  Index into plcfTxbxTxt unknown.
+        virtual void parseTextBox(uint index, bool stylesxml);
 
     protected:
         // First all variables which don't change their state during
@@ -272,9 +273,9 @@ namespace wvWare
         // Helper method to use std::accumulate in the table handling code
         static int accumulativeLength( int len, const Chunk& chunk );
 
-        // Private variables, no access needed in 95/97 code
-        // First all variables which don't change their state during
-        // the parsing process. We don't have to save and restore those.
+        // Private variables, no access needed in 95/97 code.  First all
+        // variables which don't change their state during the parsing
+        // process.  We don't have to save and restore those.
         ListInfoProvider* m_lists;
         TextConverter* m_textconverter;
         Fields* m_fields;
@@ -286,20 +287,25 @@ namespace wvWare
 
         PLCF<Word97::PCD>* m_plcfpcd;     // piece table
 
-        // From here on we have all variables which change their state depending
-        // on the parsed content. These variables have to be saved and restored
-        // to make the parsing code reentrant.
+        // From here on we have all variables which change their state
+        // depending on the parsed content.  These variables have to be saved
+        // and restored to make the parsing code reentrant.
         Position* m_tableRowStart;      // If != 0 this represents the start of a table row
         U32 m_tableRowLength;           // Lenght of the table row (in characters). Only valid
         bool m_cellMarkFound;           // if m_tableRowStart != 0
         int m_remainingCells;           // The number of remaining cells for the processed row
 
+        // Table skimming is a phase in which we try to locate the last
+        // paragraph of a table.  Using parseHelper to parse the table content.
+        bool m_table_skimming;
+
         Paragraph* m_currentParagraph;
 
         U32 m_remainingChars;
+
+        // The num. of the section being processed.
         U32 m_sectionNumber;
 
-        bool m_table_skimming;
         // Keeps track of the current sub document
         SubDocument m_subDocument;
 
@@ -311,16 +317,17 @@ namespace wvWare
         struct ParsingState
         {
             ParsingState( Position* tableRowS, U32 tableRowL, bool cMarkFound,
-                          int remCells, Paragraph* parag, U32 remChars, U32 sectionNum,
+                          int remCells, bool ts, Paragraph* parag, U32 remChars, U32 sectionNum,
                           SubDocument subD, ParsingMode mode ) :
                 tableRowStart( tableRowS ), tableRowLength( tableRowL ), cellMarkFound( cMarkFound),
-                remainingCells( remCells ), paragraph( parag ), remainingChars( remChars ),
+                remainingCells( remCells ), tableSkimming( ts ), paragraph( parag ), remainingChars( remChars ),
                 sectionNumber( sectionNum ), subDocument( subD ), parsingMode( mode ) {}
 
             Position* tableRowStart;
             U32 tableRowLength;
             bool cellMarkFound;
             int remainingCells;
+            bool tableSkimming;
             Paragraph* paragraph;
             U32 remainingChars;
             U32 sectionNumber;   // not strictly necessary, but doesn't hurt

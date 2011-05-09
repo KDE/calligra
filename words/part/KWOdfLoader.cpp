@@ -27,7 +27,6 @@
 #include "KWPage.h"
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoOdfStylesReader.h>
@@ -212,7 +211,6 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoTextShapeData textShapeData;
     if (hasMainText) {
         KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
-        mainFs->setAllowLayout(false);
         mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
         m_document->addFrameSet(mainFs);
         textShapeData.setDocument(mainFs->document(), false);
@@ -221,7 +219,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     if (updater) updater->setProgress(60);
 
     // load the main text shape right here so we can use the progress information of the KoTextLoader
-    KoTextLoader loader(sc, m_document->documentRdfBase(), 0);
+    KoTextLoader loader(sc);
     QTextCursor cursor(textShapeData.document());
 
     QPointer<KoUpdater> loadUpdater;
@@ -314,7 +312,6 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPa
 {
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setPageStyle(pageStyle);
-    fs->setAllowLayout(false);
     m_document->addFrameSet(fs);
 
     kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
@@ -329,7 +326,7 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPa
     sharedData->loadOdfStyles(ctxt, styleManager);
     ctxt.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 
-    KoTextLoader loader(ctxt, m_document->documentRdfBase());
+    KoTextLoader loader(ctxt);
     QTextCursor cursor(fs->document());
     loader.loadBody(elem, cursor);
 

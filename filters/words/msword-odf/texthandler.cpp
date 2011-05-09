@@ -90,18 +90,15 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_fldChp(0)
 //     , m_index(0)
 {
-#ifdef IMAGE_IMPORT
-    kDebug(30513) << "we have image support";
-#else
-    kDebug(30513) << "no image support";
-#endif
+    //set the pointer to bodyWriter for writing to content.xml in office:text
     if (bodyWriter) {
-        m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing to content.xml in office:text
+        m_bodyWriter = bodyWriter;
     } else {
         kWarning() << "No bodyWriter!";
     }
+    //for collecting most of the styles
     if (mainStyles) {
-        m_mainStyles = mainStyles; //for collecting most of the styles
+        m_mainStyles = mainStyles;
     } else {
         kWarning() << "No mainStyles!";
     }
@@ -116,19 +113,18 @@ KoXmlWriter* KWordTextHandler::currentWriter() const
 {
     KoXmlWriter* writer = NULL;
 
-    if (document()->writingHeader()) {
+    if (m_insideDrawing) {
+        writer = m_drawingWriter;
+    }
+    else if (document()->writingHeader()) {
         writer = document()->headerWriter();
     }
     else if (m_insideFootnote) {
         writer = m_footnoteWriter;
     }
-    else if (m_insideDrawing) {
-        writer = m_drawingWriter;
-    }
     else if (m_insideAnnotation) {
         writer = m_annotationWriter;
-    }
-    else {
+    } else {
         writer = m_bodyWriter;
     }
     return writer;
@@ -603,8 +599,6 @@ void KWordTextHandler::tableEndFound()
     emit tableFound(table);
 }
 
-#ifdef IMAGE_IMPORT
-
 //TODO: merge inlineObjectFound with floatingObjectFound, both of them are
 //stable actually
 
@@ -713,10 +707,8 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     delete m_drawingWriter;
     m_drawingWriter = 0;
 }
-#endif // IMAGE_IMPORT
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
-
 void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
 {
     kDebug(30513) << "**********************************************";
@@ -938,7 +930,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     //instructions and the content between fieldSeparator and fieldEnd
     //represents the field RESULT [optional].  In most cases the field RESULT
     //stores the complete information (instruction are applied by msword).
-    kDebug(30513) << "fld->flt:" << fld->flt << "(" << hex << fld->flt << ")";
+    kDebug(30513) << "fld->flt:" << fld->flt << "( 0x" << hex << fld->flt << ")";
 
     //nested field
     if (m_fld->m_insideField) {
@@ -981,11 +973,14 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case EDITTIME:
     case FILENAME:
     case MERGEFIELD:
+    case REF_WITHOUT_KEYWORD:
     case SEQ:
     case SHAPE:
         kWarning(30513) << "Warning: field instructions not supported!";
         kWarning(30513) << "Warning: processing field result!";
         break;
+    case UNSUPPORTED:
+        kWarning(30513) << "Warning: Fld data missing, ignoring!";
     default:
         kWarning(30513) << "Warning: unrecognized field type" << m_fld->m_type << ", ignoring!";
         m_fld->m_type = UNSUPPORTED;
@@ -1588,6 +1583,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case EDITTIME:
             case FILENAME:
             case MERGEFIELD:
+            case REF_WITHOUT_KEYWORD:
             case SEQ:
             case SHAPE:
             case TOC:

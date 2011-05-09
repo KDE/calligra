@@ -20,8 +20,6 @@
 #include "KWFrameConnectSelector.h"
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
-
 
 KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
         : m_state(state),
@@ -39,7 +37,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
 {
     m_state->addUser();
     m_frame = frame;
-    KWTextFrame *textFrame = dynamic_cast<KWTextFrame*>(frame);
+    KWFrame *textFrame = dynamic_cast<KWFrame*>(frame);
     if (textFrame == 0)
         return false;
     widget.framesList->clear();
@@ -127,7 +125,7 @@ void KWFrameConnectSelector::save()
 
 void KWFrameConnectSelector::open(KoShape *shape)
 {
-    KWFrame *frame = new KWTextFrame(shape, 0);
+    KWFrame *frame = new KWFrame(shape, 0);
     m_state->setFrame(frame);
     open(frame);
 }
