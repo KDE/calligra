@@ -443,8 +443,12 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
     foreach (KWFrame *frame, fs->frames())
         addFrame(frame);
 
-    if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs))
+    if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
         Q_ASSERT(tfs->pageManager() == pageManager());
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+        Q_ASSERT(lay);
+        connect(lay, SIGNAL(finishedLayout()), this, SLOT(mainTextFrameSetLayoutDone()));
+    }
 #if 0
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if (tfs) {
