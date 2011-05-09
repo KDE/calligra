@@ -502,7 +502,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 
                     // clear the cache if the zoom changed
                     qreal zoom = 1.0;
-                    qreal actualZoom = viewConverter()->zoom();
                     if (m_currentZoom != zoom) {
                         m_pageCacheManager->clear();
                         m_currentZoom = zoom;
@@ -591,8 +590,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     }
                     QImage copy = pageCache->cache->copy(clipRectOnPage.toRect());
 
-                    //qDebug() << "size of copy before scaling" << copy.size();
-
                     // Now calculate where to paint pour stuff
                     pageTopView = viewConverter()->documentToViewY(pageTopDocument);
                     pageRectView = viewConverter()->documentToView(pageRectDocument);
@@ -600,8 +597,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     clipRectOnPage = clipRectOnPage.translated(-pageRectView.x(), -pageTopView);
 
                     copy = copy.scaled(clipRectOnPage.width(), clipRectOnPage.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-                    //qDebug() << "cliprect on page" << clipRectOnPage << "paintrect" << paintRect << "scaled copy" << copy.size();
 
                     // paint from the cached page image on the original painter.
                     QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
