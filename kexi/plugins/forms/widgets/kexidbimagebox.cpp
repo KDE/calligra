@@ -44,7 +44,6 @@
 #include <KIconEffect>
 
 #include <widget/utils/kexidropdownbutton.h>
-#include <widget/utils/kexicontextmenuutils.h>
 #include <kexiutils/utils.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
