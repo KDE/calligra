@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "drawstyle.h"
+#include "msodraw.h"
 
 namespace
 {
@@ -281,7 +282,7 @@ GETTER(fRecolorFillAsPicture, fUsefRecolorFillAsPicture, false)
 GETTER(fNoLineDrawDash,       fUseNoLineDrawDash,        false)
 GETTER(fLineFillShape,        fUseLineFillShape,         false)
 GETTER(fHitTestLine,          fUseHitTestLine,           true)
-GETTER(fLine,                 fUsefLine,                 true)
+// GETTER(fLine,                 fUsefLine,                 true)
 GETTER(fArrowHeadsOK,         fUsefArrowHeadsOK,         false)
 GETTER(fInsetPenOK,           fUseInsetPenOK,            true)
 GETTER(fInsetPen,             fUseInsetPen,              false)
@@ -305,6 +306,33 @@ GETTER(fLooping,              fUsefLooping,              false)
 GETTER(fRewind,               fUsefRewind,               false)
 GETTER(fPicturePreserveGrays, fUsefPicturePreserveGrays, false)
 #undef FOPT
+
+// The override was discussed at Office File Formats Forum:
+// http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a1cf51a7-fb93-4028-b3ac-3ed2fd77a94b
+bool DrawStyle::fLine() const
+{
+    const MSO::LineStyleBooleanProperties* p = 0;
+    quint16 shapeType = msosptNil;
+
+    if (sp) {
+        shapeType = sp->shapeProp.rh.recInstance;
+        p = get<MSO::LineStyleBooleanProperties>(*sp);
+        if (p && p->fUsefLine) {
+            return p->fLine;
+        }
+    }
+    if (mastersp) {
+        p = get<MSO::LineStyleBooleanProperties>(*mastersp);
+        if (p && p->fUsefLine) {
+            return p->fLine;
+        }
+    }
+    if (shapeType == msosptPictureFrame) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 #define COMPLEX(FOPT, NAME) \
     IMsoArray DrawStyle::NAME() const \
