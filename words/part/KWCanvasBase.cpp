@@ -590,9 +590,8 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                         shapeManager()->paint(gc, localViewConverter, false);
                     }
                     QImage copy = pageCache->cache->copy(clipRectOnPage.toRect());
-                    copy = copy.scaled(clipRectOnPage.width() * actualZoom, clipRectOnPage.height() * actualZoom, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-                    pageCache->cache->save(QString("cache_%1_%2.png").arg(vm.page.pageNumber()).arg(iteration));
-                    copy.save(QString("copy_%1_%2_%3_%4_%5_%6.png").arg(vm.page.pageNumber()).arg(iteration).arg(clipRectOnPage.left()).arg(clipRectOnPage.top()).arg(clipRectOnPage.width()).arg(clipRectOnPage.height()));
+
+                    //qDebug() << "size of copy before scaling" << copy.size();
 
                     // Now calculate where to paint pour stuff
                     pageTopView = viewConverter()->documentToViewY(pageTopDocument);
@@ -600,13 +599,17 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     clipRectOnPage = viewConverter()->documentToView(documentClipRect);
                     clipRectOnPage = clipRectOnPage.translated(-pageRectView.x(), -pageTopView);
 
+                    copy = copy.scaled(clipRectOnPage.width(), clipRectOnPage.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+                    //qDebug() << "cliprect on page" << clipRectOnPage << "paintrect" << paintRect << "scaled copy" << copy.size();
+
                     // paint from the cached page image on the original painter.
                     QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
                                       pageRectView.y() + clipRectOnPage.y(),
                                       clipRectOnPage.width(),
                                       clipRectOnPage.height());
 
-                    painter.drawImage(dst, copy);
+                    painter.drawImage(dst.x(), dst.y(), copy, 0, 0, copy.width(), copy.height());
                     painter.restore();
 
                     // put the cache back
