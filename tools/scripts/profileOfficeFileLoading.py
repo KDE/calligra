@@ -11,9 +11,9 @@
 import sys, os, tempfile, time, signal, subprocess, re, lxml.etree, zipfile
 
 applications = {
-  'kword': ['odt', 'doc', 'docx'],
-  'kpresenter': ['odp', 'ppt', 'pptx'],
-  'kspread': ['ods', 'xls', 'xlsx']
+  'words': ['odt', 'doc', 'docx'],
+  'calligrastage': ['odp', 'ppt', 'pptx'],
+  'calligratables': ['ods', 'xls', 'xlsx']
 }
 
 # limit how many backtraces are recordes, since it takes a lot of time
