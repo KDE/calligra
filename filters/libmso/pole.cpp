@@ -36,7 +36,9 @@
 #include <vector>
 
 #include <string.h>
+
 #include <QList>
+#include <QString>
 
 // enable to activate debugging output
 //#define POLE_DEBUG
@@ -551,10 +553,12 @@ const unsigned DirTree::End = 0xffffffff;
 /*
  * Compare DirEntry names according to the spec.
  */
-int ename_cmp(std::string str1, std::string str2)
+int ename_cmp(QString& str1, QString& str2)
 {
-    if (str1.length() < str2.length()) return -1;
-    else if (str1.length() > str2.length()) return 1;
+    str1 = str1.toUpper();
+    str2 = str2.toUpper();
+    if (str1.size() < str2.size()) return -1;
+    else if (str1.size() > str2.size()) return 1;
     else return str1.compare(str2);
 }
 
@@ -569,13 +573,13 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 
 #ifdef POLE_DEBUG
     e = dirtree->entry(index);
-    printf("DirEntry: name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+    printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
            e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
 
-    std::cout << "[KIDS]" << std::endl;
+    if (chi.size()) std::cout << "[KIDS]:" << std::endl;
     for (unsigned i = 0; i < chi.size(); i++) {
         e = dirtree->entry(chi[i]);
-        printf("DirEntry: name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+        printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
                e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
     }
     std::cout << "---------------------" << std::endl;
@@ -595,18 +599,19 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 bool DirTree::valid() const
 {
     const DirEntry* e;
+    QString str1, str2;
     for (unsigned i = 0; i < entries.size(); i++) {
         e = &entries[i];
 
         //Looking for invalid user streams.
         if (!e->valid && e->size) {
-            std::cerr << "DirTree::valid() Invalid user stream detected!" << std::endl;
+            std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
             return false;
         }
         if ( (i > 0) &&
              (e->valid && !e->dir) && ((int)e->child != -1))
         {
-            std::cerr << "DirTree::valid() Invalid user stream detected!" << std::endl;
+            std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
             return false;
         }
         //Looking for invalid user storages. The ((int)e->child == -1)
@@ -615,24 +620,27 @@ bool DirTree::valid() const
              (e->valid && e->dir) &&
              ((e->size != 0) || (e->start != 0)) )
         {
-            std::cerr << "DirTree::valid() Invalid user storage detected!" << std::endl;
+            std::cerr << "DirTree::valid Invalid user storage detected!" << std::endl;
             return false;
         }
         //Looking for duplicate names of DirEntries at this level.
         if (!valid_enames(const_cast<DirTree*>(this), i)) {
-            std::cerr << "DirTree::valid() Invalid DirEntry detected!" << std::endl;
+            std::cerr << "DirTree::valid Invalid DirEntry detected!" << std::endl;
             return false;
         }
         //Check the name of the left/right DirEntry.
+        str1 = QString(e->name.data());
         if ((int)e->prev != -1) {
-            if (ename_cmp(e->name, (entries[e->prev]).name) < 0) {
-		std::cerr << "DirTree::valid() [name, position] mismatch detected!" << std::endl;
+            str2 = QString(entries[e->prev].name.data());
+            if (ename_cmp(str1, str2) < 0) {
+		std::cerr << "DirTree::valid [name, position] mismatch detected (prev)!" << std::endl;
                 return false;
             }
         }
         if ((int)e->next != -1) {
-            if (ename_cmp(e->name, (entries[e->next]).name) > 0) {
-		std::cerr << "DirTree::valid() [name, position] mismatch detected!" << std::endl;
+            str2 = QString(entries[e->next].name.data());
+            if (ename_cmp(str1, str2) > 0) {
+		std::cerr << "DirTree::valid [name, position] mismatch detected (next)!" << std::endl;
                 return false;
             }
         }
