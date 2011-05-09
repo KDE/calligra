@@ -1699,16 +1699,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         link_target.remove(0, m_context->path.size() + 1);
     }
 
+    bool closeTag = false;
+
     if (link_target.isEmpty()) {
         TRY_READ_ATTR(anchor)
         if (!anchor.isEmpty())
         {
+            closeTag = true;
             body->startElement("text:bookmark-ref");
             body->addAttribute("text:reference-format", "page");
             body->addAttribute("text:ref-name", anchor);
         }
     }
     else {
+        closeTag = true;
         body->startElement("text:a");
         body->addAttribute("xlink:type", "simple");
         body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
@@ -1728,7 +1732,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    body->endElement(); // text:bookmark, text.a
+    if (closeTag) {
+        body->endElement(); // text:bookmark, text:a
+    }
 
     READ_EPILOGUE
 }
@@ -1823,15 +1829,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 /*!
  Parent elements:
  - [done] body (§17.2.2)
- - comment (§17.13.4.2)
+ - [done] comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
- - sdtContent (§17.5.2.34)
- - tc (§17.4.66)
+ - [done] endnote (§17.11.2)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
+ - [done] sdtContent (§17.5.2.34)
+ - [done] tc (§17.4.66)
  - [done] p (§17.3.1.22)
 
  Child elements:
