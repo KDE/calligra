@@ -360,7 +360,10 @@ void KoWmfPaint::recalculateWorldTransform()
         // If viewport is not set, but window is, then the output is
         // always in the same place, namely (0, 0) -> (windowWidth,
         // windowHeight)
-        ;
+        if (mWindowExt.width() < 0) 
+            mWorldTransform.translate(mWindowOrg.x(), qreal(0.0));
+        if (mWindowExt.height() < 0) 
+            mWorldTransform.translate(qreal(0.0), mWindowOrg.y());
     }
     //kDebug(31000) << "After window viewport calculation" << mWorldTransform;
 
