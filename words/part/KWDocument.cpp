@@ -445,9 +445,11 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 
     if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
         Q_ASSERT(tfs->pageManager() == pageManager());
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
-        Q_ASSERT(lay);
-        connect(lay, SIGNAL(finishedLayout()), this, SLOT(mainTextFrameSetLayoutDone()));
+        if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            Q_ASSERT(lay);
+            connect(lay, SIGNAL(finishedLayout()), this, SLOT(mainTextFrameSetLayoutDone()));
+        }
     }
 #if 0
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
