@@ -65,6 +65,11 @@ Rectangle {
         }
     }
 
+    transitions: Transition {
+         // smoothly reanchor myRect and move into new position
+         AnchorAnimation { duration: 500 }
+     }
+
     states : [
         State {
             name: "doc"
