@@ -36,5 +36,10 @@ ListView {
         imageSource: "qrc:///images/words.png"
         text: modelData
         width: buttonWidth; height: buttonHeight;
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: doc.openDocument(modelData);
+        }
     }
 }

@@ -19,60 +19,62 @@
  * 02110-1301 USA
  */
 
-import QtQuick 1.0 as QML
+import QtQuick 1.0
 import CalligraMobile 1.0
 
-QML.Rectangle {
-    id: rootRect
+Item {
+    id: docRootRect
+    property string fileName
+    signal documentLoaded
 
-    width: 800; height: 600
-    gradient: QML.Gradient {
-         QML.GradientStop { position: 0.0; color: "#808080" }
-         QML.GradientStop { position: 1.0; color: "#303030" }
+    function openDocument(path) {
+        canvas.openDocument(path);
     }
 
-    QML.Row {
-        anchors.fill: parent
-
-        QML.Loader {
-            id: toolbarLoader
-
-            height: parent.height
-            width: parent.width*0.05
-
-            QML.Component.onCompleted : {
-                if (canvas.documentType == CanvasController.Spreadsheet) {
-                    toolbarLoader.source = "SpreadsheetToolbar.qml"
-                } else if (canvas.documentType == CanvasController.TextDocument) {
-                    toolbarLoader.source = "WordsToolbar.qml"
-                }
-            }
-        }
-
-        CanvasController {
-            id: canvas
-
-            height: parent.height
-            width: parent.width*0.95
-
-            cameraX: docFlickable.contentX
-            cameraY: docFlickable.contentY
+    function initToolbar() {
+        if (canvas.documentType == CanvasController.Spreadsheet) {
+            toolbarLoader.source = "SpreadsheetToolbar.qml"
+        } else if (canvas.documentType == CanvasController.TextDocument) {
+            toolbarLoader.source = "WordsToolbar.qml"
         }
     }
 
-    QML.Flickable {
+    Loader {
+        id: toolbarLoader
+
+        height: parent.height
+        width: parent.width*0.05
+
+        anchors.left: parent.left; anchors.top: parent.top;
+    }
+
+    CanvasController {
+        id: canvas
+
+        height: parent.height
+        width: parent.width*0.95
+        anchors.left: toolbarLoader.right; anchors.top: parent.top;
+
+        cameraX: docFlickable.contentX
+        cameraY: docFlickable.contentY
+
+        Component.onCompleted: documentLoaded.connect(initToolbar)
+        onDocumentLoaded: docRootRect.documentLoaded()
+    }
+
+    Flickable {
         id: docFlickable
         x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
 
         contentWidth: proxyItem.width; contentHeight: proxyItem.height;
         clip: true
 
-        QML.Item {
+        Item {
             id: proxyItem
             height: canvas.docHeight
             width: canvas.docWidth
         }
     }
 
-    QML.Component.onCompleted: canvas.openDocument(fileName);
+    //Component.onCompleted: canvas.openDocument(fileName);
 }

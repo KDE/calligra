@@ -53,5 +53,35 @@ Rectangle {
         anchors.margins: 10
     }
 
-    CanvasController { }
+    Doc {
+        id: doc
+
+        width: parent.width; height: parent.height;
+        anchors.left: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+
+        onDocumentLoaded: {
+            rootRect.state = "doc"
+        }
+    }
+
+    states : [
+        State {
+            name: "doc"
+            AnchorChanges {
+                target: docTypeSelector
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: recentFiles
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: doc
+                anchors.left: parent.left
+            }
+        }
+    ]
 }

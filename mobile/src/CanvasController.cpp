@@ -164,6 +164,7 @@ void CanvasController::openDocument(const QString& path)
         m_recentFiles << path;
 
     emit sheetCountChanged();
+    emit documentLoaded();
 }
 
 void CanvasController::setVastScrolling(qreal factor)

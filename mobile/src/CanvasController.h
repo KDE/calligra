@@ -115,6 +115,7 @@ signals:
     void cameraXChanged();
     void cameraYChanged();
     void documentTypeChanged();
+    void documentLoaded();
 };
 
 #endif // CANVASCONTROLLER_H
