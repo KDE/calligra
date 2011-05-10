@@ -573,8 +573,8 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 // the origin is always (0, 0).
                 orgX = 0;
                 orgY = 0;
-                extX = windowWidth;
-                extY = windowHeight;
+                extX = qAbs(windowWidth);
+                extY = qAbs(windowHeight);
             }
 
             // If ext < 0, switch the org and org+ext
