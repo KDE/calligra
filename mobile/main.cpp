@@ -26,9 +26,13 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    QCoreApplication::setOrganizationName("KDE");
+    QCoreApplication::setOrganizationDomain("kde.org");
+    QCoreApplication::setApplicationName("Calligra Mobile");
 
     MainWindow window;
-    window.openFile(app.arguments().at(1));
+    if (app.argc() > 1)
+        window.openFile(app.arguments().at(1));
     window.show();
 
     return app.exec();

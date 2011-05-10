@@ -19,48 +19,22 @@
  * 02110-1301 USA
  */
 
-import QtQuick 1.0 as QML
+import QtQuick 1.0
 
-QML.Item {
-    id: container
-
+ListView {
     property int buttonWidth
     property int buttonHeight
-    property bool hidden : false
 
     width: parent.width; height: parent.height;
+    spacing: 10
 
-    QML.Column {
-        id: docChoicesColumn
-        anchors.fill: parent
-        spacing: 10
+    model: recentFilesModel
 
-        Button {
-            id: button1
-            textPosition: "right"
+    delegate: Button {
+        textPosition: "right"
 
-            imageSource: "qrc:///images/words.png"
-            text: "Document"
-            width: buttonWidth; height: buttonHeight
-        }
-
-        Button {
-            id: button2
-            textPosition: "right"
-
-            imageSource: "qrc:///images/tables.png"
-            text: "Spreadsheet"
-            width: buttonWidth; height: buttonHeight
-        }
-        Button {
-            id: button3
-            textPosition: "right"
-
-            imageSource: "qrc:///images/stage.png"
-            text: "Presentation"
-            width: buttonWidth; height: buttonHeight
-
-            onClicked: rootRect.state = "presentation"
-        }
+        imageSource: "qrc:///images/words.png"
+        text: modelData
+        width: buttonWidth; height: buttonHeight;
     }
 }

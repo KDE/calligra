@@ -47,6 +47,7 @@ public:
     enum DocumentType { Undefined, TextDocument, Spreadsheet, Presentation };
 
     explicit CanvasController(QDeclarativeItem *parent = 0);
+    virtual ~CanvasController();
     virtual void setVastScrolling(qreal factor);
     virtual void setZoomWithWheel(bool zoom);
     virtual void updateDocumentSize(const QSize& sz, bool recalculateCenter);
@@ -98,6 +99,10 @@ private:
     DocumentType m_documentType;
     QSizeF m_documentViewSize;
     KoDocument *m_doc;
+    QStringList m_recentFiles;
+
+    void loadSettings();
+    void saveSettings();
 
 protected:
     bool isPresentationDocumentExtension(const QString& extension) const;

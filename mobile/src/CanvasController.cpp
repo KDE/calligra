@@ -50,6 +50,7 @@
 #include <tables/Map.h>
 #include <tables/DocBase.h>
 #include "PAView.h"
+#include <QSettings>
 
 /*!
 * extensions
@@ -75,6 +76,7 @@ CanvasController::CanvasController(QDeclarativeItem* parent)
     m_canvas(0), m_currentPoint(QPoint(0,0)), m_documentViewSize(QSizeF(0,0)), m_doc(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
+    loadSettings();
 }
 
 void CanvasController::openDocument(const QString& path)
@@ -157,6 +159,10 @@ void CanvasController::openDocument(const QString& path)
 
     KoToolManager::instance()->requestToolActivation(this);
     setCanvas(m_canvas);
+
+    if (!m_recentFiles.contains(path))
+        m_recentFiles << path;
+
     emit sheetCountChanged();
 }
 
@@ -433,6 +439,23 @@ void CanvasController::previousSheet()
     if (!sheet)
         return;
     canvasItem->setActiveSheet(sheet);
+}
+
+void CanvasController::loadSettings()
+{
+    QSettings settings;
+    m_recentFiles = settings.value("recentFiles").toStringList();
+}
+
+void CanvasController::saveSettings()
+{
+    QSettings settings;
+    settings.setValue("recentFiles", m_recentFiles);
+}
+
+CanvasController::~CanvasController()
+{
+    saveSettings();
 }
 
 #include "CanvasController.moc"

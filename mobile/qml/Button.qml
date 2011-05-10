@@ -19,51 +19,77 @@
  * 02110-1301 USA
  */
 
-import QtQuick 1.0 as QML
+import QtQuick 1.0
 
-QML.Item {
-    id: container
+Rectangle {
+    id: buttonContainer
 
     property alias text: buttonText.text
     property alias imageSource: buttonImage.source
+    property alias textPosition: buttonContainer.state
     signal clicked
 
-    QML.Rectangle {
-        gradient: QML.Gradient {
-            QML.GradientStop { position: 0.0; color: "#DCDCDC" }
-            QML.GradientStop { position: 1.0; color: "#ABABAB" }
-        }
+    gradient: Gradient {
+        GradientStop { position: 0.0; color: "#DCDCDC" }
+        GradientStop { position: 1.0; color: "#ABABAB" }
+    }
+    radius: 10
 
-        anchors.fill: parent
-        radius: 10
+    Image {
+        id: buttonImage
 
-        QML.Column {
-            id: column
+        anchors.horizontalCenter: buttonContainer.horizontalCenter
+        width: height
+        height: buttonContainer.height - buttonText.height
+
+        MouseArea {
             anchors.fill: parent
-            anchors.margins: 10
-
-            QML.Image {
-                id: buttonImage
-
-                width: parent.width
-                height: parent.height*0.75
-            }
-
-            QML.Text {
-                id: buttonText
-
-                color: "white"
-                width: parent.width
-                height: parent.height*0.25
-                horizontalAlignment: QML.Text.AlignHCenter
-                verticalAlignment: QML.Text.AlignVCenter
-            }
-        }
-
-        QML.MouseArea {
-                anchors.fill: column
-
-                onClicked: container.clicked()
+            onClicked: buttonContainer.clicked()
         }
     }
+
+    Text {
+        id: buttonText
+
+        width: buttonContainer.width
+        anchors.top: buttonImage.bottom;
+        anchors.horizontalCenter: buttonImage.horizontalCenter
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+        elide: Text.ElideMiddle
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: buttonContainer.clicked()
+        }
+    }
+
+    states: [
+        State {
+            name: "right"
+            AnchorChanges {
+                target: buttonImage
+                anchors.verticalCenter: buttonContainer.verticalCenter
+                anchors.horizontalCenter: undefined
+                anchors.left: buttonContainer.left
+            }
+            PropertyChanges {
+                target: buttonImage
+                height: buttonContainer.height
+            }
+            AnchorChanges {
+                target: buttonText
+                anchors.verticalCenter: buttonImage.verticalCenter
+                anchors.horizontalCenter: undefined
+                anchors.left: buttonImage.right
+            }
+            PropertyChanges {
+                target: buttonText
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                width: buttonContainer.width - buttonImage.width
+            }
+        }
+    ]
 }

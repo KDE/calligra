@@ -19,40 +19,39 @@
  * 02110-1301 USA
  */
 
-import QtQuick 1.0 as QML
+import QtQuick 1.0
 import CalligraMobile 1.0
 
-QML.Rectangle {
+Rectangle {
     id: rootRect
 
     width: 800; height: 600;
-    gradient: QML.Gradient {
-         QML.GradientStop { position: 0.0; color: "#808080" }
-         QML.GradientStop { position: 1.0; color: "#303030" }
+    gradient: Gradient {
+         GradientStop { position: 0.0; color: "#808080" }
+         GradientStop { position: 1.0; color: "#303030" }
     }
 
     DocumentTypeSelector {
         id: docTypeSelector
 
-        buttonWidth: 100; buttonHeight: 100;
-        x:0;y:0
+        buttonWidth: rootRect.width/2.1; buttonHeight: 100;
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.right: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
     }
 
-    PresentationTemplatesView {
-        id: presentationTemplatesView
-        height: 400; width: 800;
+    RecentFiles {
+        id: recentFiles
 
-        anchors.centerIn: parent
-        visible: false
+        buttonWidth: rootRect.width/2.1; buttonHeight: 100;
+        anchors.left: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
     }
-
-    states: [
-        QML.State {
-            name: "presentation"
-            QML.PropertyChanges { target: docTypeSelector; x: -(parent.width * 1.5) }
-            QML.PropertyChanges { target: presentationTemplatesView; visible: true }
-        }
-    ]
 
     CanvasController { }
 }

@@ -25,19 +25,29 @@
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
 {
     qmlRegisterType<CanvasController>("CalligraMobile", 1, 0, "CanvasController");
+    m_view = new QDeclarativeView(this);
+
+    QSettings settings;
+    QStringList recentFilesList = settings.value("recentFiles").toStringList();
+    qDebug() << recentFilesList;
+    m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFilesList));
+    m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
+                        + "/share/calligra-mobile/qml/HomeScreen.qml"));
+    setCentralWidget(m_view);
 }
 
 void MainWindow::openFile(const QString &path)
 {
-    m_view = new QDeclarativeView(this);
+    if (path.isEmpty())
+        return;
     m_view->rootContext()->setContextProperty("fileName", path);
     m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
                         + "/share/calligra-mobile/qml/Doc.qml"));
-    setCentralWidget(m_view);
 }
 
 MainWindow::~MainWindow()
