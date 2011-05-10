@@ -2040,7 +2040,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - customXml (§17.5.1.3)
  - del (§17.13.5.14)
  - dir (§17.3.2.8)
- - fldSimple (§17.16.19)
+ - [done] fldSimple (§17.16.19)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - moveFrom (§17.13.5.22)
@@ -3639,52 +3639,57 @@ bool DocxXmlDocumentReader::handleSpecialField()
     instructions.push_back(instr);
     QString command = instructions.at(0);
 
-    if (command == "PAGEREF") {
-        // Do something
+    bool returnTrue = true;
+
+    if (command == "AUTHOR") {
+        body->startElement("text:author-name");
+    }
+    else if (command == "CREATEDATE") {
+        body->startElement("text:creation-date");
+    }
+    else if (command == "DATE") {
+        body->startElement("text:date");
+    }
+    else if (command == "EDITIME") {
+        body->startElement("text:modification-time");
+    }
+    else if (command == "FILENAME") {
+        body->startElement("text:file-name");
+    }
+    else if (command == "NUMPAGES") {
+        body->startElement("text:page-count");
+    }
+    else if (command == "NUMWORDS") {
+        body->startElement("text:word-count");
     }
     else if (command == "PAGE") {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
-        return true;
     }
-    else if (command == "NUMPAGES") {
-        body->startElement("text:page-count");
-        return true;
+    else if (command == "PRINTDATE") {
+        body->startElement("text:print-date");
     }
     else if (command == "REF") {
         if ((instructions.size() > 3) && instructions.contains("\\h")) {
             body->startElement("text:bookmark-ref");
             body->addAttribute("text:reference-format", "page");
             body->addAttribute("text:ref-name", instructions.at(1));
-            return true;
         }
-    }
-    else if (command == "DATE") {
-        body->startElement("text:date");
-        return true;
-    }
-    else if (command == "CREATEDATE") {
-        body->startElement("text:creation-date");
-        return true;
-    }
-    else if (command == "SAVEDATE") {
-        body->startElement("text:modification-date");
-        return true;
+        else {
+            returnTrue = false;
+        }
     }
     else if (command == "TIME") {
         body->startElement("text:time");
-        return true;
     }
-    else if (command == "PRINTDATE") {
-        body->startElement("text:print-date");
-        return true;
+    else if (command == "SAVEDATE") {
+        body->startElement("text:modification-date");
     }
-    else if (command == "EDITIME") {
-        body->startElement("text:modification-time");
-        return true;
+    else {
+        returnTrue = false;
     }
 
-    return false;
+    return returnTrue;
 }
 
 #undef CURRENT_EL
