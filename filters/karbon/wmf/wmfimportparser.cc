@@ -127,9 +127,11 @@ void WMFImportParser::restore()
 }
 
 
-void WMFImportParser::setFont(const QFont &font)
+void WMFImportParser::setFont(const QFont &font, int rotation, int fontHeight)
 {
     mFont = font;
+    Q_UNUSED(rotation);
+    Q_UNUSED(fontHeight);
 }
 
 
