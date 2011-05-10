@@ -105,6 +105,7 @@ public:
     bool valid;            // false if invalid (should be skipped)
     std::string name;      // the name, not in unicode anymore
     bool dir;              // true if directory
+    bool color;            // false = red, true = black
     unsigned long size;    // size (not valid if directory)
     unsigned long start;   // starting block
     unsigned prev;         // previous sibling
@@ -573,14 +574,14 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 
 #ifdef POLE_DEBUG
     e = dirtree->entry(index);
-    printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
-           e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
+    printf("DirEntry::valid_enames name=%s color=%i prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+           e->name.c_str(), e->color, e->prev, e->next, e->child, e->start, e->size, e->dir);
 
     if (chi.size()) std::cout << "[KIDS]:" << std::endl;
     for (unsigned i = 0; i < chi.size(); i++) {
         e = dirtree->entry(chi[i]);
-        printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
-               e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
+        printf("DirEntry::valid_enames name=%s color=%i prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+               e->name.c_str(), e->color, e->prev, e->next, e->child, e->start, e->size, e->dir);
     }
     std::cout << "---------------------" << std::endl;
 #endif
@@ -628,22 +629,23 @@ bool DirTree::valid() const
             std::cerr << "DirTree::valid Invalid DirEntry detected!" << std::endl;
             return false;
         }
+#ifdef CHECK_SIBLINGS
+        //NOTE: Too many False Positives, mainly files with embedded documents.
+
         //Check the name of the left/right DirEntry.
-        str1 = QString(e->name.data());
         if ((int)e->prev != -1) {
-            str2 = QString(entries[e->prev].name.data());
-            if (ename_cmp(str1, str2) < 0) {
-		std::cerr << "DirTree::valid [name, position] mismatch detected (prev)!" << std::endl;
-                return false;
-            }
+            str1 = QString(entries[e->prev].name.data());
         }
         if ((int)e->next != -1) {
             str2 = QString(entries[e->next].name.data());
+        }
+        if (!str1.isEmpty() && !str2.isEmpty()) {
             if (ename_cmp(str1, str2) > 0) {
-		std::cerr << "DirTree::valid [name, position] mismatch detected (next)!" << std::endl;
+                std::cerr << "DirTree::valid [name, position] mismatch detected!" << std::endl;
                 return false;
             }
         }
+#endif
     }
     return true;
 }
@@ -867,6 +869,7 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         DirEntry e;
         e.valid = true;
         e.name = name;
+        e.color = buffer[ 0x43 + p ];
         e.start = readU32(buffer + 0x74 + p);
         e.size = readU32(buffer + 0x78 + p);
         e.prev = readU32(buffer + 0x44 + p);
