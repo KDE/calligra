@@ -34,7 +34,7 @@ KoWmfPaint::KoWmfPaint()
     , mSaveCount(0)
 {
     mTarget = 0;
-    mIsInternalPainter = true;
+    mIsInternalPainter = false;
     mPainter = 0;
     mWorldTransform = QTransform();
 }
