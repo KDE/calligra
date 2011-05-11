@@ -5341,7 +5341,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 if (!expectElEnd(QUALIFIED_NAME(wrapNone))) {
                     return KoFilter::WrongFormat;
                 }
-                saveStyleWrap("none");
+                if (!m_behindDoc) {
+                    saveStyleWrap("none");
+                }
+                else {
+                    m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                    m_currentDrawStyle->addProperty("style:run-through", "background");
+                }
             } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
                 // This element specifies that text shall wrap around the top

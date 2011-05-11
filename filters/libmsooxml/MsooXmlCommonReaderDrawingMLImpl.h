@@ -3055,8 +3055,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 //MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
     if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:repeat", QLatin1String("no-repeat"));
-
         // TODO: One way to approach this would be to first scale the image to the size of the slide
         // then, resize it according to the percentages & make sure there are no black areas
     }
