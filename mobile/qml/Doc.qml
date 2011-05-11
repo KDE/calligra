@@ -24,7 +24,6 @@ import CalligraMobile 1.0
 
 Item {
     id: docRootRect
-    property string fileName
     signal documentLoaded
 
     function openDocument(path) {

@@ -135,7 +135,8 @@ void PAView::doUpdateActivePage(KoPAPageBase* page)
     KoPageLayout &layout = page->pageLayout();
 
     QSizeF pageSize( layout.width, layout.height );
-    m_paCanvas->setDocumentOrigin(QPointF(layout.width, layout.height));
+    //m_paCanvas->setDocumentOrigin(QPointF(layout.width, layout.height));
+    m_paCanvas->setDocumentOrigin(QPointF(0, 0));
     // the page is in the center of the canvas
     m_zoomController->setDocumentSize(pageSize * 3);
     m_zoomController->setPageSize(pageSize);
