@@ -9,7 +9,8 @@ set(kprvariables_PART_SRCS
 kde4_add_plugin(kprvariables ${kprvariables_PART_SRCS})
 
 target_link_libraries(
-    kprvariables 
+    kprvariables
+    textlayout
     calligrastageprivate
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}

@@ -39,6 +39,11 @@ public:
 
     void setProgress(const int percent);
 
+private:
+    // checks from FIB if document is encrypted
+    bool isEncrypted(const QString &inputfile);
+
+
 };
 
 #endif // MSWORDODFIMPORT_H

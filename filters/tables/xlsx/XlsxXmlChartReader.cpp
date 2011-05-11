@@ -440,6 +440,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
             ELSE_TRY_READ_IF(title)
             ELSE_TRY_READ_IF(legend)
             ELSE_TRY_READ_IF(spPr)
+            ELSE_TRY_READ_IF(txPr)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(autoTitleDeleted))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
@@ -493,6 +494,86 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     m_context = 0;
     return KoFilter::OK;
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL txPr
+KoFilter::ConversionStatus XlsxXmlChartReader::read_txPr()
+{
+    READ_PROLOGUE
+    while( !atEnd() )
+    {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if ( isStartElement() )
+            if ( qualifiedName() == "a:p" )
+                read_p();
+    }
+    READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL p
+KoFilter::ConversionStatus XlsxXmlChartReader::read_p()
+{
+    //READ_PROLOGUE
+    while( !atEnd() )
+    {
+        readNext();
+        if ( isEndElement() && qualifiedName() == QLatin1String( "a:p") )
+            break;
+        if ( isStartElement() )
+            if ( qualifiedName() == "a:pPr" )
+                read_pPr();
+            //TRY_READ_IF_NS(a,pPr);
+    }
+    //READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL pPr
+KoFilter::ConversionStatus XlsxXmlChartReader::read_pPr()
+{
+    //READ_PROLOGUE
+    while( !atEnd() )
+    {
+        readNext();
+        if ( isEndElement() && qualifiedName() == QLatin1String( "a:pPr") )
+            break;
+        if ( isStartElement() )
+            if ( qualifiedName() == "a:defRPr" )
+                read_defRPr();
+    }
+    //READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL defRPr
+KoFilter::ConversionStatus XlsxXmlChartReader::read_defRPr()
+{
+    //READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(sz);
+    bool ok = false;
+    const qreal size = sz.toDouble( &ok );
+    if ( ok )
+    {
+        m_context->m_chart->m_textSize = size / 100.0;
+    }
+    while( !atEnd() )
+    {
+        if ( isEndElement() && qualifiedName() == QLatin1String( "a:defRPr") )
+            break;
+        readNext();
+        //BREAK_IF_END_OF(CURRENT_EL);
+    }
+    //READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+
 
 #undef CURRENT_EL
 #define CURRENT_EL valAx

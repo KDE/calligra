@@ -1618,13 +1618,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("PAGE")) {
-                m_complexCharType = CurrentPageComplexFieldCharType;
+            else {
+                m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("NUMPAGES")) {
-                m_complexCharType = NumberOfPagesComplexFieldCharType;
-            }
-            //! @todo: Add rest of the instructions
         }
     }
     READ_EPILOGUE
@@ -1699,19 +1695,21 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         link_target.remove(0, m_context->path.size() + 1);
     }
 
-    if (link_target.isEmpty()) {
-        TRY_READ_ATTR(anchor)
-        if (!anchor.isEmpty())
-        {
-            body->startElement("text:bookmark-ref");
-            body->addAttribute("text:reference-format", "page");
-            body->addAttribute("text:ref-name", anchor);
-        }
-    }
-    else {
+    bool closeTag = false;
+
+    TRY_READ_ATTR(anchor)
+
+    if (!link_target.isEmpty() || !anchor.isEmpty()) {
         body->startElement("text:a");
         body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+        closeTag = true;
+        if (!anchor.isEmpty())
+        {
+            body->addAttribute("xlink:href", QString("#%1").arg(anchor));
+        }
+        else {
+            body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+        }
     }
 
     while (!atEnd()) {
@@ -1728,7 +1726,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    body->endElement(); // text:bookmark, text.a
+    if (closeTag) {
+        body->endElement(); // text:bookmark, text:a
+    }
 
     READ_EPILOGUE
 }
@@ -1823,15 +1823,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 /*!
  Parent elements:
  - [done] body (§17.2.2)
- - comment (§17.13.4.2)
+ - [done] comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
- - sdtContent (§17.5.2.34)
- - tc (§17.4.66)
+ - [done] endnote (§17.11.2)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
+ - [done] sdtContent (§17.5.2.34)
+ - [done] tc (§17.4.66)
  - [done] p (§17.3.1.22)
 
  Child elements:
@@ -2040,7 +2040,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - customXml (§17.5.1.3)
  - del (§17.13.5.14)
  - dir (§17.3.2.8)
- - fldSimple (§17.16.19)
+ - [done] fldSimple (§17.16.19)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - moveFrom (§17.13.5.22)
@@ -2070,7 +2070,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - [done] footnoteReference (Footnote Reference) §17.11.14
  - [done] instrText (Field Code) §17.16.23
  - [done] lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
-  - monthLong (Date Block - Long Month Format) §17.3.3.15
+ - monthLong (Date Block - Long Month Format) §17.3.3.15
  - monthShort (Date Block - Short Month Format) §17.3.3.16
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
  - [done] object (Embedded Object) §17.3.3.19
@@ -2180,25 +2180,25 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                     body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
                 }
             }
-            else if (m_complexCharType == ReferenceNextComplexFieldCharType) {
+        }
+
+        body->startElement("text:span", false);
+        body->addAttribute("text:style-name", currentTextStyleName);
+
+        m_closeHyperlink = handleSpecialField();
+
+        if (m_complexCharStatus == ExecuteInstrNow) {
+            if (m_complexCharType == ReferenceNextComplexFieldCharType) {
                 body->startElement("text:bookmark-ref");
                 body->addAttribute("text:reference-format", "page");
                 body->addAttribute("text:ref-name", m_complexCharValue);
                 m_closeHyperlink = true;
             }
-            else if (m_complexCharType == CurrentPageComplexFieldCharType) {
-                body->startElement("text:page-number");
-                body->addAttribute("text:select-page", "current");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == NumberOfPagesComplexFieldCharType) {
-                body->startElement("text:page-count");
-                m_closeHyperlink = true;
+            else {
+                m_specialCharacters = m_complexCharValue;
+                m_closeHyperlink = handleSpecialField();
             }
         }
-
-        body->startElement("text:span", false);
-        body->addAttribute("text:style-name", currentTextStyleName);
 
         if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
             body->addTextSpan(m_complexCharValue);
@@ -2207,14 +2207,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         // Writing the internal body of read_t now
         body = buffer.releaseWriter();
 
+        if (m_closeHyperlink) {
+            body->endElement(); //either text:bookmark-ref or text:a or text:page-number etc.
+            m_closeHyperlink = false;
+        }
+
         body->endElement(); //text:span
 
         if (m_complexCharStatus == InstrExecute) {
-             if (m_complexCharType == ReferenceNextComplexFieldCharType) {
-                 body->endElement(); //text:bookmar-ref
-                 m_complexCharType = NoComplexFieldCharType;
-             }
-             else if (m_complexCharType == ReferenceComplexFieldCharType) {
+             if (m_complexCharType == ReferenceComplexFieldCharType) {
                  m_complexCharType = ReferenceNextComplexFieldCharType;
              }
         }
@@ -2223,7 +2224,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
         else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
             body->endElement(); // text:a
-        //    m_complexCharType = NoComplexFieldCharType;
         }
 
         // Case where there's hyperlink with read_instrText, we only want to use the link
@@ -2231,13 +2231,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         if (m_complexCharStatus == InstrExecute) {
             m_complexCharStatus = ExecuteInstrNow;
         }
-        if (m_closeHyperlink) {
-            body->endElement(); //either text:bookmark-ref or text:a or text:page-number or text:page-count
-            m_closeHyperlink = false;
-        }
     }
     else {
-        // Writing the internal body of read_t now 
+        // Writing the internal body of read_t now
         body = buffer.releaseWriter();
     }
 
@@ -3017,9 +3013,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     }
 
     TRY_READ_ATTR(firstLine)
-    const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
-    if (ok) {
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+    TRY_READ_ATTR(hanging)
+    if (!hanging.isEmpty()) {
+        const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
+        if (ok) {
+           m_currentParagraphStyle.addPropertyPt("fo:text-indent", leftInd - firstInd);
+        }
+
+    }
+    else if (firstLine.isEmpty()) {
+        const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
+        if (ok) {
+           m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+        }
     }
 
     TRY_READ_ATTR(right)
@@ -3182,10 +3188,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     // for rPr
     TRY_READ_ATTR(val)
 
-    const int pointSize = (TWIP_TO_POINT(val.toInt(&ok)));
+    const qreal pointSize = (TWIP_TO_POINT(val.toDouble(&ok)));
 
     if (ok) {
-        m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
+        m_currentTextStyle.addPropertyPt("fo:letter-spacing", qreal(pointSize) / 100.0);
     }
 
     TRY_READ_ATTR(lineRule)
@@ -3538,20 +3544,21 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
     borderData.style = borderMap.value(val);
 
     TRY_READ_ATTR(themeColor)
+    TRY_READ_ATTR(color)
 
-    if(!themeColor.isEmpty()) {
+    if (color.isEmpty()) {
+        QString colorString = QString("#").append(color);
+        borderData.color = QColor(colorString);
+    }
+
+    // Fallback to theme
+    if (!borderData.color.isValid() && !themeColor.isEmpty()) {
+
         MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
         colorItem = m_context->themes->colorScheme.value(themeColor);
         if (colorItem) {
             borderData.color = colorItem->value();
         }
-    }
-
-    //No themeColor or not valid color, fallback to the color attribute
-    if(!borderData.color.isValid()) {
-        TRY_READ_ATTR(color)
-        QString colorString = QString("#").append(color);
-        borderData.color = QColor(colorString);
     }
 
     TRY_READ_ATTR(sz)
@@ -3617,6 +3624,75 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
     READ_EPILOGUE
 }
 
+bool DocxXmlDocumentReader::handleSpecialField()
+{
+    if (m_specialCharacters.isEmpty()) {
+        return false;
+    }
+    QString instr = m_specialCharacters.trimmed();
+    m_specialCharacters = QString();
+    QVector<QString> instructions;
+    while (instr.indexOf(' ') > 0) {
+        int place = instr.indexOf(' ');
+        instructions.push_back(instr.left(place));
+        instr = instr.mid(place + 1);
+    }
+    instructions.push_back(instr);
+    QString command = instructions.at(0);
+
+    bool returnTrue = true;
+
+    if (command == "AUTHOR") {
+        body->startElement("text:author-name");
+    }
+    else if (command == "CREATEDATE") {
+        body->startElement("text:creation-date");
+    }
+    else if (command == "DATE") {
+        body->startElement("text:date");
+    }
+    else if (command == "EDITIME") {
+        body->startElement("text:modification-time");
+    }
+    else if (command == "FILENAME") {
+        body->startElement("text:file-name");
+    }
+    else if (command == "NUMPAGES") {
+        body->startElement("text:page-count");
+    }
+    else if (command == "NUMWORDS") {
+        body->startElement("text:word-count");
+    }
+    else if (command == "PAGE") {
+        body->startElement("text:page-number");
+        body->addAttribute("text:select-page", "current");
+    }
+    else if (command == "PRINTDATE") {
+        body->startElement("text:print-date");
+    }
+    else if (command == "REF") {
+        if ((instructions.size() > 3) && instructions.contains("\\h")) {
+            body->startElement("text:bookmark-ref");
+            body->addAttribute("text:reference-format", "page");
+            body->addAttribute("text:ref-name", instructions.at(1));
+        }
+        else {
+            returnTrue = false;
+        }
+    }
+    else if (command == "TIME") {
+        body->startElement("text:time");
+    }
+    else if (command == "SAVEDATE") {
+        body->startElement("text:modification-date");
+    }
+    else {
+        returnTrue = false;
+    }
+
+    return returnTrue;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL fldSimple
 //! fldSimple handler (Simple Field)
@@ -3676,20 +3752,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(instr)
-    instr = instr.trimmed();
 
-    bool closeElement = false;
-
-    if (instr == "PAGE" || instr.startsWith("PAGE ")) {
-        body->startElement("text:page-number");
-        body->addAttribute("text:select-page", "current");
-        closeElement = true;
-    }
-
-    if (instr == "NUMPAGES" || instr.startsWith("NUMPAGES ")) {
-        body->startElement("text:page-count");
-        closeElement = true;
-    }
+    m_specialCharacters = instr;
 
 // @todo support all attributes
 
@@ -3707,10 +3771,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             ELSE_TRY_READ_IF_NS(m, oMath)
             SKIP_UNKNOWN
         }
-    }
-
-    if (closeElement) {
-        body->endElement(); // text:page-number | text:page-count
     }
 
     READ_EPILOGUE
@@ -4371,6 +4431,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if(QUALIFIED_NAME_IS(tblPr)) {
+                m_currentStyleProperties = new MSOOXML::TableStyleProperties;
                 TRY_READ(tblPr)
                 m_currentDefaultCellStyle = m_currentStyleProperties;
                 m_currentStyleProperties = 0;
@@ -4462,8 +4523,6 @@ void DocxXmlDocumentReader::defineTableStyles()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
 {
     READ_PROLOGUE
-
-    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
 
     while (!atEnd()) {
         readNext();
@@ -4869,6 +4928,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 m_currentTableStyle = currentTableStyle;
             }
             else if(QUALIFIED_NAME_IS(tcPr)) {
+                m_currentStyleProperties = new MSOOXML::TableStyleProperties;
                 TRY_READ(tcPr)
                 m_currentLocalTableStyles->setLocalStyle(m_currentStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
                 m_currentStyleProperties = 0;
@@ -4933,8 +4993,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 {
     READ_PROLOGUE
-
-    m_currentStyleProperties = new MSOOXML::TableStyleProperties;
 
     while (!atEnd()) {
         readNext();
@@ -5283,7 +5341,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 if (!expectElEnd(QUALIFIED_NAME(wrapNone))) {
                     return KoFilter::WrongFormat;
                 }
-                saveStyleWrap("none");
+                if (!m_behindDoc) {
+                    saveStyleWrap("none");
+                }
+                else {
+                    m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                    m_currentDrawStyle->addProperty("style:run-through", "background");
+                }
             } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
                 // This element specifies that text shall wrap around the top
@@ -5860,8 +5924,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
 
+    bool closeHyperLink = handleSpecialField();
+
     // Writing the internal body of read_t now
     body = buffer.releaseWriter();
+
+    if (closeHyperLink) {
+        body->endElement(); // some special field
+    }
 
     body->endElement(); //text:span
 

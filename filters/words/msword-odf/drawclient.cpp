@@ -70,22 +70,30 @@ KWordGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
 }
 
 QString
-KWordGraphicsHandler::DrawClient::getPicturePath(int pib)
+KWordGraphicsHandler::DrawClient::getPicturePath(const quint32 pib)
 {
     return gh->getPicturePath(pib);
 }
 
-//TODO: Implementation required, but at the moment textboxes are parsed and processed in
-//the graphicshandler, so no hurry.
 void
 KWordGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                                        const MSO::OfficeArtClientData* cd,
                                                        Writer& out)
 {
-    Q_UNUSED(ct);
     Q_UNUSED(cd);
     Q_UNUSED(out);
-    kDebug(30513) << "Not implemented YET, not that bad actually!";
+    const DocOfficeArtClientTextBox* tb = ct.anon.get<DocOfficeArtClientTextBox>();
+    if (!tb) {
+        kDebug(30513) << "DocOfficeArtClientTextBox missing!";
+        return;
+    }
+    //NOTE: Dividing the high 2 bytes by 0x10000 specifies a 1-based index into
+    //PlcfTxbxTxt of the FTXBXS structure where the text for this textbox is
+    //located.  The low 2 bytes specify the zero-based index in the textbox
+    //chain that the textbox occupies.  [MS-DOC] — v20101219
+
+    uint index = (tb->clientTextBox / 0x10000) - 1;
+    gh->emitTextBoxFound(index, out.stylesxml);
 }
 
 KoGenStyle
@@ -167,6 +175,7 @@ KWordGraphicsHandler::DrawClient::formatPos(qreal v)
 
 //NOTE: OfficeArtClientData.clientdata (4 bytes): An integer that SHOULD be
 //ignored.  [MS-DOC] — v20100926
+
 bool
 KWordGraphicsHandler::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
 {

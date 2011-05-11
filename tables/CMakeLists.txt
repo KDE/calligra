@@ -13,6 +13,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${CMAKE_SOURCE_DIR}/kchart
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
+                    ${TEXTLAYOUT_INCLUDES}
                     ${Boost_INCLUDE_DIR}
                     ${EIGEN2_INCLUDE_DIR} )
 
@@ -187,6 +188,7 @@ SET (calligratablescommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
+    Find.cpp
     tests/inspector.cpp
     ${chart_DIR_SRCS}
     ${commands_DIR_SRCS}
@@ -359,6 +361,7 @@ install( FILES
     Style.h
     Value.h
     ValueConverter.h
+    Find.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES
     part/CanvasBase.h

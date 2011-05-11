@@ -51,7 +51,8 @@ struct MSOOXML_EXPORT TableStyleProperties
         BottomMargin = 2048,
         LeftMargin = 4096,
         VerticalAlign = 8192,
-        GlyphOrientation = 16384
+        GlyphOrientation = 16384,
+        BackgroundOpacity = 32768
     };
     Q_DECLARE_FLAGS(Properties, Property)
     Properties setProperties;
@@ -66,6 +67,7 @@ struct MSOOXML_EXPORT TableStyleProperties
     KoBorder::BorderData tr2bl;
 
     QColor backgroundColor;
+    qreal backgroundOpacity;
 
     qreal topMargin;
     qreal rightMargin;
@@ -74,6 +76,9 @@ struct MSOOXML_EXPORT TableStyleProperties
 
     QString verticalAlign;
     bool glyphOrientation;
+
+    KoGenStyle textStyle;
+    KoGenStyle paragraphStyle;
 };
 
 class MSOOXML_EXPORT TableStyle

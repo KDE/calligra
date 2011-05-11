@@ -19,6 +19,7 @@
 */
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
+#include "msodraw.h"
 #include "generated/leinputstream.h"
 
 #include <KoXmlWriter.h>
@@ -34,227 +35,6 @@ using namespace MSO;
 
 namespace
 {
-enum MSOSPT
-{
-    msosptMin = 0,
-    msosptNotPrimitive = msosptMin,
-    msosptRectangle = 1,
-    msosptRoundRectangle = 2,
-    msosptEllipse = 3,
-    msosptDiamond = 4,
-    msosptIsoscelesTriangle = 5,
-    msosptRightTriangle = 6,
-    msosptParallelogram = 7,
-    msosptTrapezoid = 8,
-    msosptHexagon = 9,
-    msosptOctagon = 10,
-    msosptPlus = 11,
-    msosptStar = 12,
-    msosptArrow = 13,
-    msosptThickArrow = 14,
-    msosptHomePlate = 15,
-    msosptCube = 16,
-    msosptBalloon = 17,
-    msosptSeal = 18,
-    msosptArc = 19,
-    msosptLine = 20,
-    msosptPlaque = 21,
-    msosptCan = 22,
-    msosptDonut = 23,
-    msosptTextSimple = 24,
-    msosptTextOctagon = 25,
-    msosptTextHexagon = 26,
-    msosptTextCurve = 27,
-    msosptTextWave = 28,
-    msosptTextRing = 29,
-    msosptTextOnCurve = 30,
-    msosptTextOnRing = 31,
-    msosptStraightConnector1 = 32,
-    msosptBentConnector2 = 33,
-    msosptBentConnector3 = 34,
-    msosptBentConnector4 = 35,
-    msosptBentConnector5 = 36,
-    msosptCurvedConnector2 = 37,
-    msosptCurvedConnector3 = 38,
-    msosptCurvedConnector4 = 39,
-    msosptCurvedConnector5 = 40,
-    msosptCallout1 = 41,
-    msosptCallout2 = 42,
-    msosptCallout3 = 43,
-    msosptAccentCallout1 = 44,
-    msosptAccentCallout2 = 45,
-    msosptAccentCallout3 = 46,
-    msosptBorderCallout1 = 47,
-    msosptBorderCallout2 = 48,
-    msosptBorderCallout3 = 49,
-    msosptAccentBorderCallout1 = 50,
-    msosptAccentBorderCallout2 = 51,
-    msosptAccentBorderCallout3 = 52,
-    msosptRibbon = 53,
-    msosptRibbon2 = 54,
-    msosptChevron = 55,
-    msosptPentagon = 56,
-    msosptNoSmoking = 57,
-    msosptSeal8 = 58,
-    msosptSeal16 = 59,
-    msosptSeal32 = 60,
-    msosptWedgeRectCallout = 61,
-    msosptWedgeRRectCallout = 62,
-    msosptWedgeEllipseCallout = 63,
-    msosptWave = 64,
-    msosptFoldedCorner = 65,
-    msosptLeftArrow = 66,
-    msosptDownArrow = 67,
-    msosptUpArrow = 68,
-    msosptLeftRightArrow = 69,
-    msosptUpDownArrow = 70,
-    msosptIrregularSeal1 = 71,
-    msosptIrregularSeal2 = 72,
-    msosptLightningBolt = 73,
-    msosptHeart = 74,
-    msosptPictureFrame = 75,
-    msosptQuadArrow = 76,
-    msosptLeftArrowCallout = 77,
-    msosptRightArrowCallout = 78,
-    msosptUpArrowCallout = 79,
-    msosptDownArrowCallout = 80,
-    msosptLeftRightArrowCallout = 81,
-    msosptUpDownArrowCallout = 82,
-    msosptQuadArrowCallout = 83,
-    msosptBevel = 84,
-    msosptLeftBracket = 85,
-    msosptRightBracket = 86,
-    msosptLeftBrace = 87,
-    msosptRightBrace = 88,
-    msosptLeftUpArrow = 89,
-    msosptBentUpArrow = 90,
-    msosptBentArrow = 91,
-    msosptSeal24 = 92,
-    msosptStripedRightArrow = 93,
-    msosptNotchedRightArrow = 94,
-    msosptBlockArc = 95,
-    msosptSmileyFace = 96,
-    msosptVerticalScroll = 97,
-    msosptHorizontalScroll = 98,
-    msosptCircularArrow = 99,
-    msosptNotchedCircularArrow = 100,
-    msosptUturnArrow = 101,
-    msosptCurvedRightArrow = 102,
-    msosptCurvedLeftArrow = 103,
-    msosptCurvedUpArrow = 104,
-    msosptCurvedDownArrow = 105,
-    msosptCloudCallout = 106,
-    msosptEllipseRibbon = 107,
-    msosptEllipseRibbon2 = 108,
-    msosptFlowChartProcess = 109,
-    msosptFlowChartDecision = 110,
-    msosptFlowChartInputOutput = 111,
-    msosptFlowChartPredefinedProcess = 112,
-    msosptFlowChartInternalStorage = 113,
-    msosptFlowChartDocument = 114,
-    msosptFlowChartMultidocument = 115,
-    msosptFlowChartTerminator = 116,
-    msosptFlowChartPreparation = 117,
-    msosptFlowChartManualInput = 118,
-    msosptFlowChartManualOperation = 119,
-    msosptFlowChartConnector = 120,
-    msosptFlowChartPunchedCard = 121,
-    msosptFlowChartPunchedTape = 122,
-    msosptFlowChartSummingJunction = 123,
-    msosptFlowChartOr = 124,
-    msosptFlowChartCollate = 125,
-    msosptFlowChartSort = 126,
-    msosptFlowChartExtract = 127,
-    msosptFlowChartMerge = 128,
-    msosptFlowChartOfflineStorage = 129,
-    msosptFlowChartOnlineStorage = 130,
-    msosptFlowChartMagneticTape = 131,
-    msosptFlowChartMagneticDisk = 132,
-    msosptFlowChartMagneticDrum = 133,
-    msosptFlowChartDisplay = 134,
-    msosptFlowChartDelay = 135,
-    msosptTextPlainText = 136,
-    msosptTextStop = 137,
-    msosptTextTriangle = 138,
-    msosptTextTriangleInverted = 139,
-    msosptTextChevron = 140,
-    msosptTextChevronInverted = 141,
-    msosptTextRingInside = 142,
-    msosptTextRingOutside = 143,
-    msosptTextArchUpCurve = 144,
-    msosptTextArchDownCurve = 145,
-    msosptTextCircleCurve = 146,
-    msosptTextButtonCurve = 147,
-    msosptTextArchUpPour = 148,
-    msosptTextArchDownPour = 149,
-    msosptTextCirclePour = 150,
-    msosptTextButtonPour = 151,
-    msosptTextCurveUp = 152,
-    msosptTextCurveDown = 153,
-    msosptTextCascadeUp = 154,
-    msosptTextCascadeDown = 155,
-    msosptTextWave1 = 156,
-    msosptTextWave2 = 157,
-    msosptTextWave3 = 158,
-    msosptTextWave4 = 159,
-    msosptTextInflate = 160,
-    msosptTextDeflate = 161,
-    msosptTextInflateBottom = 162,
-    msosptTextDeflateBottom = 163,
-    msosptTextInflateTop = 164,
-    msosptTextDeflateTop = 165,
-    msosptTextDeflateInflate = 166,
-    msosptTextDeflateInflateDeflate = 167,
-    msosptTextFadeRight = 168,
-    msosptTextFadeLeft = 169,
-    msosptTextFadeUp = 170,
-    msosptTextFadeDown = 171,
-    msosptTextSlantUp = 172,
-    msosptTextSlantDown = 173,
-    msosptTextCanUp = 174,
-    msosptTextCanDown = 175,
-    msosptFlowChartAlternateProcess = 176,
-    msosptFlowChartOffpageConnector = 177,
-    msosptCallout90 = 178,
-    msosptAccentCallout90 = 179,
-    msosptBorderCallout90 = 180,
-    msosptAccentBorderCallout90 = 181,
-    msosptLeftRightUpArrow = 182,
-    msosptSun = 183,
-    msosptMoon = 184,
-    msosptBracketPair = 185,
-    msosptBracePair = 186,
-    msosptSeal4 = 187,
-    msosptDoubleWave = 188,
-    msosptActionButtonBlank = 189,
-    msosptActionButtonHome = 190,
-    msosptActionButtonHelp = 191,
-    msosptActionButtonInformation = 192,
-    msosptActionButtonForwardNext = 193,
-    msosptActionButtonBackPrevious = 194,
-    msosptActionButtonEnd = 195,
-    msosptActionButtonBeginning = 196,
-    msosptActionButtonReturn = 197,
-    msosptActionButtonDocument = 198,
-    msosptActionButtonSound = 199,
-    msosptActionButtonMovie = 200,
-    msosptHostControl = 201,
-    msosptTextBox = 202,
-    msosptMax,
-    msosptNil = 0x0FFF
-};
-
-enum MSOPATHTYPE
-{
-    msopathLineTo = 0,
-    msopathCurveTo,
-    msopathMoveTo,
-    msopathClose,
-    msopathEnd,
-    msopathEscape,
-    msopathClientEscape
-};
-
 void equation(Writer& out, const char* name, const char* formula)
 {
     out.xml.startElement("draw:equation");
@@ -389,13 +169,25 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10 10 10 7.5 5");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
 
     setShapeMirroring(o, out);
+
     if (o.shapeProp.rh.recInstance == msosptRightTriangle) {
         out.xml.addAttribute("draw:type", "right-triangle");
-    } else if (o.shapeProp.rh.recInstance == msosptIsoscelesTriangle) {
+        out.xml.addAttribute("draw:glue-points","10800 0 5400 10800 0 21600 10800 21600 21600 21600 16200 10800");
+        out.xml.addAttribute("draw:text-areas","1900 12700 12700 19700");
+        out.xml.addAttribute("draw:enhanced-path","M 0 0 L 21600 21600 0 21600 0 0 Z N");
+    } else if (o.shapeProp.rh.recInstance == msosptIsocelesTriangle) {
         out.xml.addAttribute("draw:type", "isosceles-triangle");
+        out.xml.addAttribute("draw:glue-points", "10800 0 ?f1 10800 0 21600 10800 21600 21600 21600 ?f7 10800");
+        out.xml.addAttribute("draw:text-areas","?f1 10800 ?f2 18000 ?f3 7200 ?f4 21600");
+        out.xml.addAttribute("draw:enhanced-path","M ?f0 0 L 21600 21600 0 21600 Z N");
+
+        QList<int> defaultModifierValue;
+        defaultModifierValue << 10800;
+        processModifiers(o, out, defaultModifierValue);
+
         equation(out, "f0", "$0");
         equation(out, "f1", "$0 /2");
         equation(out, "f2", "?f1 +10800");
@@ -404,13 +196,13 @@ void ODrawToOdf::processTriangle(const OfficeArtSpContainer& o, Writer& out)
         equation(out, "f5", "21600-?f0");
         equation(out, "f6", "?f5 /2");
         equation(out, "f7", "21600-?f6");
+
         out.xml.startElement("draw:handle");
         out.xml.addAttribute("draw:handle-range-x-maximum", 21600);
         out.xml.addAttribute("draw:handle-range-x-minimum", 0);
         out.xml.addAttribute("draw:handle-position", "$0 top");
         out.xml.endElement();
     }
-
     out.xml.endElement();    // enhanced-geometry
     out.xml.endElement(); // custom-shape
 }
@@ -421,14 +213,17 @@ void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:type", "trapezoid");
-    out.xml.addAttribute("draw:glue-points", "5 0 2.5 5 0 10 5 10");
-    if (o.shapeProp.fFlipV) {
-        out.xml.addAttribute("draw:mirror-vertical", "true");
-    }
-    if (o.shapeProp.fFlipH) {
-        out.xml.addAttribute("draw:mirror-horizontal", "true");
-    }
+    out.xml.addAttribute("draw:glue-points", "?f6 10800 10800 21600 ?f5 10800 10800 0");
+    setShapeMirroring(o, out);
+    out.xml.addAttribute("draw:text-areas","?f3 ?f3 ?f4 ?f4");
+    out.xml.addAttribute("draw:enhanced-path","M 0 0 L 21600 0 ?f0 21600 ?f1 21600 Z N");
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
     equation(out, "f0", "21600-$0");
     equation(out, "f1", "$0");
     equation(out, "f2", "$0 *10/18");
@@ -440,7 +235,7 @@ void ODrawToOdf::processTrapezoid(const OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
     out.xml.addAttribute("draw:handle-range-x-minimum", 0);
     out.xml.addAttribute("draw:handle-position", "$0 bottom");
-    out.xml.endElement();
+    out.xml.endElement(); // handle
     out.xml.endElement(); // enhanced-geometry
     out.xml.endElement(); // custom-shape
 }
@@ -451,9 +246,17 @@ void ODrawToOdf::processParallelogram(const OfficeArtSpContainer& o, Writer& out
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:type", "parallelogram");
-    out.xml.addAttribute("draw:glue-points", "6.25 0 4.5 0 8.75 5 3.75 10 5 10 1.25 5");
+    out.xml.addAttribute("draw:glue-points", "?f6 0 10800 ?f8 ?f11 10800 ?f9 21600 10800 ?f10 ?f5 10800");
+    out.xml.addAttribute("draw:text-areas", "?f3 ?f3 ?f4 ?f4");
     setShapeMirroring(o, out);
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
+    out.xml.addAttribute("draw:enhanced-path","M ?f0 0 L 21600 0 ?f1 21600 0 21600 Z N");
     equation(out, "f0", "$0");
     equation(out, "f1", "21600-$0");
     equation(out, "f2", "$0 *10/24");
@@ -513,6 +316,41 @@ void ODrawToOdf::processHexagon(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // enhanced-geometry
     out.xml.endElement(); // custom-shape
 }
+
+void ODrawToOdf::processPlus(const OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "cross");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800");
+    out.xml.addAttribute("draw:path-stretchpoint-x","10800");
+    out.xml.addAttribute("draw:path-stretchpoint-y","10800");
+    out.xml.addAttribute("draw:text-areas","?f1 ?f1 ?f2 ?f3");
+    setShapeMirroring(o,out);
+
+    QList<int> defaultModifierValue;
+    defaultModifierValue << 5400;
+    processModifiers(o, out, defaultModifierValue);
+
+    out.xml.addAttribute("draw:enhanced-path","M ?f1 0 L ?f2 0 ?f2 ?f1 21600 ?f1 21600 ?f3 ?f2 ?f3 ?f2 21600 ?f1 21600 ?f1 ?f3 0 ?f3 0 ?f1 ?f1 ?f1 ?f1 0 Z N");
+    equation(out, "f0","$0 *10799/10800");
+    equation(out, "f1","?f0 ");
+    equation(out, "f2","right-?f0 ");
+    equation(out, "f3","bottom-?f0 ");
+
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-range-x-maximum", 10800);
+    out.xml.addAttribute("draw:handle-range-x-minimum", 0);
+    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-switched","true");
+    out.xml.endElement(); // handle
+    out.xml.endElement(); // enhanced-geometry
+    out.xml.endElement(); // custom-shape
+}
+
 
 void ODrawToOdf::processOctagon(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -1709,6 +1547,7 @@ void ODrawToOdf::processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Write
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800");
     out.xml.addAttribute("draw:text-areas", "0 3100 18500 18500");
+    setShapeMirroring(o, out);
     out.xml.addAttribute("draw:enhanced-path", "M 10800 0 X 21600 10800 10800 21600 L 0 21600 0 0 Z N");
     out.xml.endElement(); // draw:enhanced-geometry
     out.xml.endElement(); // draw:custom-shape
@@ -1727,12 +1566,17 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     const Pib* pib = get<Pib>(o);
     if (pib && client) {
         url = client->getPicturePath(pib->pib);
+    } else {
+        // Does not make much sense to display an empty frame, following
+        // PPT->ODP filters of both OOo and MS Office.
+        return;
     }
     out.xml.startElement("draw:frame");
     processStyleAndText(o, out);
+
+    // if the image cannot be found, just place an empty frame
     if (url.isEmpty()) {
-        // if the image cannot be found, just place an empty frame
-        out.xml.endElement(); // frame
+        out.xml.endElement(); //draw:frame
         return;
     }
     out.xml.startElement("draw:image");
@@ -1849,7 +1693,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processRoundRectangle(o, out);
     } else  if (shapeType == msosptDiamond) {
         processDiamond(o, out);
-    } else  if (shapeType == msosptIsoscelesTriangle ||
+    } else  if (shapeType == msosptIsocelesTriangle ||
                 shapeType == msosptRightTriangle) {
         processTriangle(o, out);
     } else if (shapeType == msosptTrapezoid) {
@@ -1860,6 +1704,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processHexagon(o, out);
     } else if (shapeType == msosptOctagon) {
         processOctagon(o, out);
+    } else if (shapeType == msosptPlus) {
+        processPlus(o, out);
     } else if (shapeType == msosptLeftArrow ||
                shapeType == msosptUpArrow ||
                shapeType == msosptDownArrow){
@@ -2216,14 +2062,10 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         //draw:mirror-horizontal
         if (o.shapeProp.fFlipH) {
             out.xml.addAttribute("draw:mirror-horizontal", "true");
-        } else {
-            out.xml.addAttribute("draw:mirror-horizontal", "false");
         }
         //draw:mirror-vertical
         if (o.shapeProp.fFlipV) {
             out.xml.addAttribute("draw:mirror-vertical", "true");
-        } else {
-            out.xml.addAttribute("draw:mirror-vertical", "false");
         }
         //draw:modifiers
         //draw:path-stretchpoint-x

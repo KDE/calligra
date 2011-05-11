@@ -236,7 +236,7 @@ private:
     {
         UNSUPPORTED = 0,
         //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
-        //REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
+        REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
         //REF = 0x03, ///< Reference
         //FTNREF = 0x05, ///< Identicial to NOTEREF (not a reference)
         //SET = 0x06,

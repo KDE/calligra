@@ -27,9 +27,10 @@
 #include "KWPageCacheManager.h"
 
 KWPageCache::KWPageCache(QImage *img)
+    : cache(img)
 {
-    cache = img;
     cache->fill(Qt::white);
+    //qDebug() << "Creating new cache with existing image" << this << "," << cache;
 }
 
 KWPageCache::KWPageCache(int w, int h)
@@ -37,73 +38,83 @@ KWPageCache::KWPageCache(int w, int h)
 {
     cache = new QImage(w, h, QImage::Format_ARGB32);
     cache->fill(Qt::white);
+    //qDebug() << "creating new cache with new image" << this << "," << cache;
 }
 
 
 KWPageCache::~KWPageCache()
 {
     // DO NOT DELETE THE CACHE IMAGE
+    //qDebug() << "deleting cache " << this << "returning image" << cache;
 }
 
-KWPageCacheManager::KWPageCacheManager(const QSize &size, int weight, qreal scale)
-    : m_destructing(false)
+KWPageCacheManager::KWPageCacheManager(const QSize &size, int cacheSize)
+    : m_cacheSize(cacheSize)
 {
-    for (int i = 0; i < weight / scale; ++i) {
+    //qDebug() << "creating new cache manager for size" << size << "creating " << cacheSize <<  "images";
+    for (int i = 0; i < cacheSize; ++i) {
         QImage *img = new QImage(size, QImage::Format_ARGB32);
+        //qDebug() << "\tcreating new cache image" << img;
         m_imageQueue.enqueue(img);
     }
 }
 
 KWPageCacheManager::~KWPageCacheManager()
 {
-    m_destructing = true;
+    //qDebug() << "delete page cache manager";
     clear();
 }
 
 KWPageCache *KWPageCacheManager::take(const KWPage page)
 {
-    return m_cache.take(page);
+    KWPageCache *cache = 0;
+    if (m_cache.contains(page)) {
+        cache = m_cache.take(page);
+        //cache->cache->save(QString("cache_%1.png").arg((int)cache->cache));
+    }
+    return cache;
 }
 
-void KWPageCacheManager::insert(KWPage page, KWPageCache *cache, int weight)
+void KWPageCacheManager::insert(KWPage page, KWPageCache *cache)
 {
-    m_cache.insert(page, cache, weight);
+    // first in, first out, let's keep it simple
+    if (m_cache.size() > m_cacheSize) {
+        KWPageCache *discard = m_cache.take(m_cache.keys().first());
+        m_imageQueue.enqueue(discard->cache);
+        delete discard;
+    }
+    m_cache.insert(page, cache);
 }
 
 KWPageCache *KWPageCacheManager::cache(QSize size)
 {
+    //qDebug() << "creating new page cache";
     KWPageCache *cache = 0;
     while (!cache && m_imageQueue.size() > 0) {
         QImage *img = m_imageQueue.dequeue();
         if (img->size() == size) {
             cache = new KWPageCache(img);
         }
+        else {
+            delete img;
+        }
     }
     if (!cache){
         cache = new KWPageCache(size.width(), size.height());
     }
-    connect(cache, SIGNAL(destroyed(QObject*)), this, SLOT(queueImage(QObject*)));
-    m_cacheMap.insert(cache, cache->cache);
     return cache;
 }
 
 void KWPageCacheManager::clear()
 {
+    //qDebug() << "clearing page cache manager";
     qDeleteAll(m_imageQueue);
     m_imageQueue.clear();
-
+    foreach(KWPageCache *cache, m_cache.values()) {
+        delete cache->cache;
+        delete cache;
+    }
     m_cache.clear();
 
-    qDeleteAll(m_cacheMap);
-    m_cacheMap.clear();
-
-
-}
-
-void KWPageCacheManager::queueImage(QObject *obj)
-{
-    if (m_cacheMap.contains(obj)) {
-        m_imageQueue.enqueue(m_cacheMap.take(obj));
-    }
 }
 

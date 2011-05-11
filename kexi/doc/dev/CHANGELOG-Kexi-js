@@ -86,6 +86,24 @@ TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cp
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
 
+2011-05-09
+Forms
+*fixed possible crash in context menus
+**backported to 2.3.x
+**backported to 2.2.x
+Examples
+*make forms andreport in "Simple Database" example look a bit more modern
+*remove auto tabs to avoid focus
+TODO: fix auto tabs!
+
+2011-05-06
+Examples
+*updated examples generation scripts to use system sqlite3 instead of old ksqlite command
+Forms
+*fixed possible crash in tab ordering code
+**backported to 2.3.x
+**backported to 2.2.x
+
 2011-03-28
 KexiDB
 *fix possible crash when handling queries with lookup columns

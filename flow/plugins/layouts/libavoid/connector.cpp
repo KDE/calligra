@@ -124,11 +124,8 @@ ConnRef::~ConnRef()
         delete m_src_vert;
         m_src_vert = NULL;
     }
-    if (m_src_connend)
-    {
-        delete m_src_connend;
-        m_src_connend = NULL;
-    }
+    delete m_src_connend;
+    m_src_connend = NULL;
 
     if (m_dst_vert)
     {
@@ -137,11 +134,8 @@ ConnRef::~ConnRef()
         delete m_dst_vert;
         m_dst_vert = NULL;
     }
-    if (m_dst_connend)
-    {
-        delete m_dst_connend;
-        m_dst_connend = NULL;
-    }
+    delete m_dst_connend;
+    m_dst_connend = NULL;
 
     // Clear checkpoint vertices.
     for (size_t i = 0; i < m_checkpoint_vertices.size(); ++i)
@@ -285,11 +279,8 @@ void ConnRef::common_updateEndPoint(const unsigned int type, ConnEnd connEnd)
         }
         m_dst_vert->visDirections = connEnd.directions();
         
-        if (m_dst_connend)
-        {
-            delete m_dst_connend;
-            m_dst_connend = NULL;
-        }
+        delete m_dst_connend;
+        m_dst_connend = NULL;
         if (connEnd.isPinConnection())
         {
             m_dst_connend = new ConnEnd(connEnd);

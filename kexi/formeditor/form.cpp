@@ -1508,7 +1508,9 @@ void Form::autoAssignTabStops()
         QWidget *nextw = it==list.constEnd() ? 0 : *it;
         QObject *page_w = 0;
         KFormDesigner::TabWidget *tab_w = KFormDesigner::findParent<KFormDesigner::TabWidget>(w, "KFormDesigner::TabWidget", page_w);
-        while (nextw) {
+        
+        for (; it!=list.constEnd(); ++it) {
+            QWidget *nextw = *it;
             if (KexiUtils::hasParent(w, nextw)) // do not group (sort) widgets where on is a child of another
                 break;
             if (nextw->y() >= (w->y() + 20))
@@ -1522,8 +1524,6 @@ void Form::autoAssignTabStops()
                 }
             }
             hlist.append(nextw);
-            ++it;
-            nextw = *it;
         }
         hlist.sort();
 

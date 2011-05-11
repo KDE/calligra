@@ -27,6 +27,7 @@
 #include <KoShapeMoveCommand.h>
 
 #include <KLocale>
+#include <KDebug>
 
 KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, QUndoCommand *parent)
         : QUndoCommand(i18n("Remove Page"), parent),
@@ -42,6 +43,8 @@ KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, QUnd
     Q_ASSERT(document);
     Q_ASSERT(page.pageStyle().isValid());
     Q_ASSERT(document->pageManager()->page(m_pageNumber) == page);
+
+    kDebug(32001) << "pageNumber=" << page.pageNumber();
 
     const qreal top = page.offsetInDocument();
     KoInsets padding = document->pageManager()->padding();
@@ -94,6 +97,8 @@ KWPageRemoveCommand::~KWPageRemoveCommand()
 
 void KWPageRemoveCommand::redo()
 {
+    kDebug(32001) << "pageNumber=" << m_pageNumber;
+
     KWPage page = m_document->pageManager()->page(m_pageNumber);
     Q_ASSERT(page.isValid());
     // remove the page in KWPageManager
@@ -122,6 +127,8 @@ void KWPageRemoveCommand::redo()
 
 void KWPageRemoveCommand::undo()
 {
+    kDebug(32001) << "pageNumber=" << m_pageNumber;
+
     QUndoCommand::undo();
 
     // insert the page

@@ -49,6 +49,8 @@ enum ObjectType { Inline, Floating };
  * Drawing Writer
  * ************************************************
  */
+//NOTE: Deprecated!
+
 class DrawingWriter : public Writer
 {
 public:
@@ -88,7 +90,7 @@ private:
     {
     private:
         virtual QRectF getRect(const MSO::OfficeArtClientAnchor&);
-        virtual QString getPicturePath(int pib);
+        virtual QString getPicturePath(const quint32 pib);
         virtual bool onlyClientData(const MSO::OfficeArtClientData& o);
         virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
                                        const MSO::OfficeArtClientData& o,
@@ -152,11 +154,11 @@ public:
      * generated from the picture with the given pib. (check
      * libmso/ODrawToOdf.h)
      */
-    QString getPicturePath(int pib) const;
+    QString getPicturePath(quint32 pib) const;
 
     // Communication with Document, without having to know about Document
 signals:
-    void textBoxFound( uint lid, bool bodyDrawing);
+    void textBoxFound(unsigned int index, bool stylesxml);
 
 private:
     /**
@@ -242,11 +244,6 @@ private:
     void processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
 
     /**
-     * Process a rectangle shape.
-     */
-    void processRectangle(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
-
-    /**
      * Process a line shape.
      */
     void processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
@@ -260,6 +257,18 @@ private:
      * Process an inline frame shape.
      */
     void processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+
+    /**
+     * Emit the textBoxFound signal.
+     * @param index into plcfTxbxTxt
+     * @param writing into styles.xml
+     */
+    void emitTextBoxFound(unsigned int index, bool stylesxml);
+
+    /**
+     * Insert an empty frame.  Use when the picture is an external file.
+     */
+    void insertEmptyInlineFrame(DrawingWriter& out);
 
     Document* m_document;
     KoStore* m_store;
@@ -277,9 +286,13 @@ private:
     QMap<QByteArray, QString> m_picNames; //picture names
 
     /*
+     * Group specific attributes.
+     */
+    bool m_processingGroup;
+
+    /*
      * Object specific attributes.
      */
-
     ObjectType m_objectType; // Type of the object in {Inline, Floating}.
     QByteArray m_rgbUid;     // Unique identifier of a BLIP.
     int m_zIndex;            // Position of current shape on z axis.

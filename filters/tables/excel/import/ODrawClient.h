@@ -32,7 +32,7 @@ public:
     explicit ODrawClient(Swinder::Sheet* sheet);
     virtual QRectF getRect(const MSO::OfficeArtClientAnchor& anchor);
     QRectF getGlobalRect(const MSO::OfficeArtClientAnchor& anchor);
-    virtual QString getPicturePath(int pib);
+    virtual QString getPicturePath(const quint32 pib);
     virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
     virtual void processClientData(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData &o, Writer &out);
     virtual void processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out);

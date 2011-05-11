@@ -545,7 +545,23 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
     bool ok = false;
     const qreal leftInd = qreal(TWIP_TO_POINT(left.toDouble(&ok)));
     if (ok) {
-        m_currentBulletProperties.setIndent(leftInd);
+        m_currentBulletProperties.setMargin(leftInd);
+    }
+
+    TRY_READ_ATTR(firstLine)
+    TRY_READ_ATTR(hanging)
+    if (!hanging.isEmpty()) {
+        const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
+        if (ok) {
+           m_currentBulletProperties.setIndent(leftInd - firstInd);
+        }
+
+    }
+    else if (firstLine.isEmpty()) {
+        const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
+        if (ok) {
+           m_currentBulletProperties.setIndent(leftInd - firstInd);
+        }
     }
 
     readNext();
