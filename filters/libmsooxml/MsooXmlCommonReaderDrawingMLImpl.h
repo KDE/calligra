@@ -2090,7 +2090,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
     if (!spc.isEmpty()) {
         int spcInt;
         STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
+        m_currentTextStyle.addPropertyPt("fo:letter-spacing", qreal(spcInt) / 100.0);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(sz)
