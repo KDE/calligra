@@ -3544,20 +3544,21 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
     borderData.style = borderMap.value(val);
 
     TRY_READ_ATTR(themeColor)
+    TRY_READ_ATTR(color)
 
-    if(!themeColor.isEmpty()) {
+    if (color.isEmpty()) {
+        QString colorString = QString("#").append(color);
+        borderData.color = QColor(colorString);
+    }
+
+    // Fallback to theme
+    if (!borderData.color.isValid() && !themeColor.isEmpty()) {
+
         MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
         colorItem = m_context->themes->colorScheme.value(themeColor);
         if (colorItem) {
             borderData.color = colorItem->value();
         }
-    }
-
-    //No themeColor or not valid color, fallback to the color attribute
-    if(!borderData.color.isValid()) {
-        TRY_READ_ATTR(color)
-        QString colorString = QString("#").append(color);
-        borderData.color = QColor(colorString);
     }
 
     TRY_READ_ATTR(sz)
