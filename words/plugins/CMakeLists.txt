@@ -1,3 +1,4 @@
 if (SHOULD_BUILD_SCRIPTING)
-    add_subdirectory(scripting)
+    #TODO port to textlayout-rework
+    #add_subdirectory(scripting)
 endif (SHOULD_BUILD_SCRIPTING)

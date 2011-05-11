@@ -31,16 +31,27 @@ struct PictureReference {
 
 /**
  * Save the next picture record in the 'Pictures' stream into the ODF store.
- * The parameter @position is used to give the picture a unique name.
- * The pictures are saved in the currently opened folder of the ODF store.
- * It is customary to switch to the folder 'Pictures' before calling this
+ *
+ * The pictures are saved in the currently opened folder of the ODF store.  It
+ * is customary to switch to the folder 'Pictures' before calling this
  * function.
- * @return The name under which the image is saved or an empty string when
- *         an error occurred.
+ *
+ * @return The name under which the image is saved or an empty string when an
+ *         error occurred.
  **/
 PictureReference savePicture(POLE::Stream& stream, KoStore* store);
 
 PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a,
                              KoStore* store);
+
+/**
+ * Look in blipStore for the id mapping to this object.
+ *
+ * @param dgg container for OfficeArt records that contain document-wide data
+ * @param pib specifies the BLIP to display in the picture shape
+ * @param offset into the associated OfficeArtBStoreDelay record
+ * @return unique identifier of the pixel data in the BLIP
+ **/
+QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32& offset);
 
 #endif

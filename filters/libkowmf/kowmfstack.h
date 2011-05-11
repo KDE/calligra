@@ -66,6 +66,7 @@ public:
     virtual void apply(KoWmfRead *);
     QFont font;
     int rotation;
+    int height;                 // Can be negative. In 'font' above, we store the absolute value.
 };
 
 #endif

@@ -76,6 +76,11 @@ MsooXmlImport::~MsooXmlImport()
 {
 }
 
+void MsooXmlImport::reportProgress(unsigned progress)
+{
+    emit sigProgress(progress);
+}
+
 KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
                                                          KoOdfWriters *writers)
 {

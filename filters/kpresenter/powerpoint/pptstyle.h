@@ -187,11 +187,12 @@ public:
      *
      * @param tc TextContainer
      * @param start position of the text run in current text
+     * @param num. of chars already formatted by the TextCFRun
      *
      * @return the number of characters of the corresponding text to which this
      * character formatting applies
      */
-    int addCurrentCFRun(const MSO::TextContainer* tc, quint32 start);
+    int addCurrentCFRun(const MSO::TextContainer* tc, quint32 start, quint32& num);
 
     bool bold() const;
     bool italic() const;

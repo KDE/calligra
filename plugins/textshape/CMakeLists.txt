@@ -1,10 +1,11 @@
 project( textPlugin)
 
 add_subdirectory( pics )
-add_subdirectory( tests )
+#add_subdirectory( tests )
 
 include_directories(
     ${KOTEXT_INCLUDES}
+    ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets/
@@ -20,15 +21,12 @@ SET ( textshape_SRCS
     TextEditingPluginContainer.cpp
     TextToolFactory.cpp
     ToCGenerator.cpp
-    Layout.cpp
-    ListItemsHelper.cpp
     ShrinkToFitShapeContainer.cpp
-    Outline.cpp
-    TextLine.cpp
+    SimpleRootAreaProvider.cpp
 
     ChangeTracker.cpp
-    ChangeTrackingTool.cpp
-    ChangeTrackingToolFactory.cpp
+    ReviewTool.cpp
+    ReviewToolFactory.cpp
     TextChanges.cpp
     TextChange.cpp
     FontSizeAction.cpp
@@ -36,17 +34,15 @@ SET ( textshape_SRCS
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
 
-    TableLayout.cpp
-    TableLayoutData.cpp
-    
-    FloatingAnchorStrategy.cpp
-    InlineAnchorStrategy.cpp
-
     dialogs/StylesWidget.cpp
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleStylesWidget.cpp
     dialogs/SimpleTableWidget.cpp
+    dialogs/SimpleTableOfContentsWidget.cpp
+    dialogs/SimpleCitationWidget.cpp
+    dialogs/SimpleFootEndNotesWidget.cpp
+    dialogs/SimpleCaptionsWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp
     dialogs/ParagraphDecorations.cpp
@@ -73,8 +69,10 @@ SET ( textshape_SRCS
     dialogs/QuickTableButton.cpp
     dialogs/FormattingButton.cpp
     dialogs/ChangeConfigureDialog.cpp
+    dialogs/AcceptRejectChangeDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
+    dialogs/ChangeTrackingOptionsWidget.cpp
 
     commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
@@ -94,6 +92,10 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
+    dialogs/SimpleTableOfContentsWidget.ui
+    dialogs/SimpleCitationWidget.ui
+    dialogs/SimpleFootEndNotesWidget.ui
+    dialogs/SimpleCaptionsWidget.ui
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui
@@ -111,12 +113,14 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/FontLayoutTab.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
+    dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
+    dialogs/ChangeTrackingOptionsWidget.ui
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})
 
-target_link_libraries(textshape kotext komain ${EXTRA_LIBS})
+target_link_libraries(textshape kotext textlayout komain ${EXTRA_LIBS})
 if( Soprano_FOUND )
     target_link_libraries(textshape ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )

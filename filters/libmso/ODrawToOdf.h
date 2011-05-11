@@ -25,6 +25,7 @@
 
 class DrawStyle;
 class QColor;
+class QPainterPath;
 
 class ODrawToOdf
 {
@@ -42,7 +43,7 @@ public:
          * Get the path in the ODF document that corresponds to the
          * image generated from the image with the given pib.
          **/
-        virtual QString getPicturePath(int pib) = 0;
+        virtual QString getPicturePath(const quint32 pib) = 0;
         /**
          * Check if the clientdata is the main content of a drawing object.
          **/
@@ -65,7 +66,10 @@ public:
          **/
         virtual KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
-            const MSO::OfficeArtClientData* cd, Writer& out) = 0;
+            const MSO::OfficeArtClientData* cd,
+            const DrawStyle& ds,
+            Writer& out) = 0;
+
         /**
          * Add text properties to the style.
          * Host application specific style properties are added. These
@@ -75,7 +79,8 @@ public:
         virtual void addTextStyles(
             const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
-            Writer& out, KoGenStyle& style) = 0;
+            KoGenStyle& style,
+            Writer& out) = 0;
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.
@@ -105,6 +110,28 @@ public:
     };
 private:
     Client* const client;
+
+    /**
+     * Both OfficeArtClientAnchorData and OfficeArtChildAnchor might contain a
+     * 90 degrees rotated rectangle.  It depends on the value of the rotation
+     * property and the intervals differ for each shape type.
+     *
+     * @param shapeType
+     * @param rotation [degrees] - normalization will be applied
+     * @param rect the group, client or child rectangle
+     * @return copy of the rectangle free of any transformations
+     */
+    QRectF processRect(const quint16 shapeType, const qreal rotation, QRectF &rect);
+
+    /**
+     * MSOffice 2003/2007 use different values for the rotation property so we
+     * have to normalize before processing.
+     *
+     * @param rotation [degrees]
+     * @return rotation in <0, 360>
+     */
+    qint16 normalizeRotation(qreal rotation);
+
     QRectF getRect(const MSO::OfficeArtFSPGR &r);
     QRectF getRect(const MSO::OfficeArtSpContainer &o);
     void processEllipse(const MSO::OfficeArtSpContainer& fsp, Writer& out);
@@ -116,8 +143,12 @@ private:
     void processParallelogram(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processPlus(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processLeftRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processBentConnector3(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSmiley(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processHeart(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processQuadArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -132,28 +163,37 @@ private:
     void processCloudCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processIrregularSeal1(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processSeal16(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processLightningBolt(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRibbon(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processRibbon2(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processHorizontalScroll(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDoubleWave(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartTerminator(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartProcess(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDecision(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartManualOperation(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartMagneticTape(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processActionButtonInformation(const MSO::OfficeArtSpContainer& o, Writer& out);
 
-    void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processText(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStyleAndText(const MSO::OfficeArtSpContainer& o, Writer& out);
 
     void processModifiers(const MSO::OfficeArtSpContainer& o, Writer& out, const QList<int>& defaults = QList<int>());
     /**
-    * @brief set the width, height rotation and starting point for the given container
-    */
+     * @brief set the width, height rotation and starting point for the given
+     * container
+     */
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
     void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
-
+    QString path2svg(const QPainterPath &path);
+    void setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out);
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
@@ -162,6 +202,7 @@ public:
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
+    QString defineDashStyle(quint32 lineDashing, KoGenStyles& styles);
 
     /**
      * Apply the logic defined in MS-ODRAW subsection 2.2.2 to the provided
@@ -181,8 +222,15 @@ inline qreal toQReal(const MSO::FixedPoint& f)
 {
     return f.integral + f.fractional / 65536.0;
 }
+
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
 const char* getGradientRendering(quint32 fillType);
+const char* getHorizontalPos(quint32 posH);
+const char* getHorizontalRel(quint32 posRelH);
+const char* getVerticalPos(quint32 posV);
+const char* getVerticalRel(quint32 posRelV);
+const char* getHorizontalAlign(quint32 anchorText);
+const char* getVerticalAlign(quint32 anchorText);
 
 #endif

@@ -53,8 +53,17 @@ void rcps_problem_setfitness_mode(struct rcps_problem *p, int mode) {
 }
 
 void rcps_problem_set_weight_callback(struct rcps_problem *p,
-                int (*weight_callback)(int time, int duration, int nominal_weight, void *arg)) {
-    p->weight_callback = weight_callback;
+			int (*weight_callback)(int time, int duration, struct rcps_fitness *nominal_weight, void *arg, void *fitness_arg)) {
+	p->weight_callback = weight_callback;
+}
+
+void rcps_problem_set_fitness_callback(struct rcps_problem *p,
+			void* (*fitness_callback_init)(void *arg),
+			void *init_arg,
+			int (*fitness_callback_result)(struct rcps_fitness *fitness, void *arg)) {
+	p->fitness_callback_init = fitness_callback_init;
+	p->fitness_init_arg = init_arg;
+	p->fitness_callback_result = fitness_callback_result;
 }
 
 struct rcps_resource* rcps_resource_new() {
@@ -303,11 +312,11 @@ void* rcps_mode_get_cbarg(struct rcps_mode *m) {
 }
 
 void rcps_mode_set_weight_cbarg(struct rcps_mode *m, void *arg) {
-    m->weight_cb_arg = arg;
+	m->weight_cb_arg = arg;
 }
 
 void *rcps_mode_get_weight_cbarg(struct rcps_mode *m) {
-    return m->weight_cb_arg;
+	return m->weight_cb_arg;
 }
 
 void rcps_mode_add(struct rcps_job *j, struct rcps_mode *m) {
@@ -488,7 +497,7 @@ struct rcps_solver* rcps_solver_new() {
 		memset(ret, 0, sizeof(struct rcps_solver));
 	}
 
-    ret->pop_size = DEFAULT_POP_SIZE;
+	ret->pop_size = DEFAULT_POP_SIZE;
 	ret->mut_sched = DEFAULT_MUT_SCHED;
 	ret->mut_mode = DEFAULT_MUT_MODE;
 	ret->mut_alt = DEFAULT_MUT_ALT;
@@ -535,7 +544,7 @@ char *rcps_error(int code) {
 }
 
 int job_compare(const void *a, const void *b) {
-        return (char *)a - (char *) b;
+	return (char *)a - (char *)b;
 }
 
 int check_circulardependencies(struct rcps_job *job, struct slist *visited) {
@@ -618,13 +627,12 @@ int rcps_check(struct rcps_problem *p) {
 	return result;
 }
 
-int individual_cmp(const void *a, const void *b) {
-    return ((struct rcps_individual*)a)->fitness - ((struct rcps_individual*)b)->fitness;
+int rcps_fitness_cmp(const struct rcps_fitness *a, const struct rcps_fitness *b) {
+	return a->group == b->group ? a->weight - b->weight : a->group - b->group;
+}
 
-/*	float r = ((struct rcps_individual*)a)->fitness - ((struct rcps_individual*)b)->fitness;
-    if ( r < 0 ) return -1;
-    if ( r > 0 ) return 1;
-    return 0;*/
+int individual_cmp(const void *a, const void *b) {
+	return rcps_fitness_cmp(&(((struct rcps_individual*)a)->fitness), &(((struct rcps_individual*)b)->fitness));
 }
 
 void add_individual(struct rcps_individual *ind, struct rcps_population *pop) {
@@ -655,8 +663,11 @@ struct rcps_population *new_population(struct rcps_solver *s,
 	struct rcps_population *pop;
 	struct rcps_individual *ind;
 	int i;
-	int best_fitness = -1;
 	int lcount = 0;
+	struct rcps_fitness best_fitness;
+	best_fitness.group = FITNESS_MAX_GROUP;
+	best_fitness.weight = 0;
+
 	pop = (struct rcps_population*)malloc(sizeof(struct rcps_population));
 	pop->individuals = slist_new(individual_cmp);
 	pop->size = s->pop_size;
@@ -667,7 +678,7 @@ struct rcps_population *new_population(struct rcps_solver *s,
 			struct rcps_phenotype *pheno = decode(s, problem, 
 				&ind->genome);
 			ind->fitness = fitness(problem, &ind->genome, pheno);
-			if ((best_fitness < 0) || (best_fitness > ind->fitness)) {
+			if (rcps_fitness_cmp(&(ind->fitness), &best_fitness) < 0) {
 				best_fitness = ind->fitness;
 			}
 			add_individual(ind, pop);
@@ -700,15 +711,18 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 	int count = 0;
 	int tcount = 0;
 	int lcount = 0;
-	int last_fitness = -1;
+	struct rcps_fitness last_fitness;
 	int last_overuse = 1;
-        int breakoff_count =0;
+	int breakoff_count = 0;
 	int desperate = 0;
 
-        fflush(stderr);
+	last_fitness.group = FITNESS_MAX_GROUP;
+	last_fitness.weight = 0;
 
-        // make this configurable
-        breakoff_count = 100000 / s->jobs;
+	fflush(stderr);
+
+	// make this configurable
+	breakoff_count = 100000 / s->jobs;
 
 #ifdef HAVE_PTHREAD	
 	// XXX look at error code
@@ -716,14 +730,17 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 #endif
 	do {
 		// breed
-                int i,j;
-                int son_overuse, daughter_overuse, best_overuse;
-                int f1, f2;
-                struct rcps_individual *father;
+		int i,j;
+		int son_overuse, daughter_overuse, best_overuse;
+		struct rcps_individual *father;
 		struct rcps_individual *mother;
 		struct rcps_individual *son;
 		struct rcps_individual *daughter;
-                struct rcps_phenotype *pheno;
+		struct rcps_phenotype *pheno;
+		struct rcps_fitness f1, f2;
+		f1.group = FITNESS_MAX_GROUP;
+		f1.weight = 0;
+		f2 = f1;
 
 		son = (struct rcps_individual*)malloc(sizeof(struct rcps_individual));
 		son->genome.schedule = (int*)malloc(sizeof(int) * p->job_count);
@@ -769,7 +786,7 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 			p->genome_alternatives, s->mut_mode);
 
 		// add to population
-                pheno = decode(s, p, &son->genome);
+		pheno = decode(s, p, &son->genome);
 		son->fitness = fitness(p, &son->genome, pheno);
 		son_overuse = pheno->overuse_count;
 		pheno = decode(s, p, &daughter->genome);
@@ -788,17 +805,13 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 		f2 = ((struct rcps_individual*)slist_node_getdata(slist_last(
 			s->population->individuals)))->fitness;
 		// get the best overuse count
-                best_overuse = son_overuse < daughter_overuse ?
+		best_overuse = son_overuse < daughter_overuse ?
 			son_overuse : daughter_overuse;
 		// check if we want to stop
-		if ((f1 < last_fitness) && (last_fitness < 0)) {
+		if (rcps_fitness_cmp(&f1, &last_fitness) < 0) {
 			last_fitness = f1;
 			last_overuse = best_overuse;
 			count = 0;
-		}
-		else if (last_fitness < 0) {
-			last_fitness = f1;
-			last_overuse = best_overuse;
 		}
 		count++;
 		tcount++;
@@ -852,23 +865,23 @@ void *threadfunc(void *a) {
 
 void rcps_solver_set_progress_callback(struct rcps_solver *s, 
 	int steps, void *arg,
-	int (*progress_callback)(int generations, int fitness, void *arg)) {
+	int (*progress_callback)(int generations, struct rcps_fitness fitness, void *arg)) {
 	s->progress_callback = progress_callback;
 	s->cb_arg = arg;
 	s->cb_steps = steps;
 }
 
 void rcps_solver_set_duration_callback(struct rcps_solver *s,
-    int (*duration_callback)(int direction, int starttime, 
+		int (*duration_callback)(int direction, int starttime, 
 		int nominal_duration, void *arg)) {
 	s->duration_callback = duration_callback;
 }
 
 void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 	int i, j, k;
-        struct rcps_genome *genome;
-        struct rcps_phenotype *pheno;
-        /* init the random number generator */
+	struct rcps_genome *genome;
+	struct rcps_phenotype *pheno;
+	/* init the random number generator */
 	srand(time(NULL));
 	/* fix the indices */
 	for (i = 0; i < p->job_count; i++) {
@@ -897,7 +910,7 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 		// do the modes
 		if (job->mode_count > 1) {
 			p->genome_modes++;
-                        p->modes_max = (int*) realloc(p->modes_max, p->genome_modes*sizeof(int));
+			p->modes_max = (int*) realloc(p->modes_max, p->genome_modes*sizeof(int));
 			p->modes_max[p->genome_modes-1] = job->mode_count;
 			job->genome_position = p->genome_modes-1;
 		}
@@ -914,7 +927,7 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 				// do the alternatives
 				if (request->alternative_count > 1) {
 					p->genome_alternatives++;
-                                        p->alternatives_max = (int*) realloc(p->alternatives_max,
+					p->alternatives_max = (int*) realloc(p->alternatives_max,
 						p->genome_alternatives*sizeof(int));
 					p->alternatives_max[p->genome_alternatives-1] = 
 						request->alternative_count;
@@ -949,30 +962,32 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 		args.p = p;
 		int i;
 		for (i = 0; i < s->jobs; i++) {
-			assert(pthread_create(&threads[i], NULL, threadfunc, &args) == 0);
+			int result = pthread_create(&threads[i], NULL, threadfunc, &args);
+			assert(result == 0);
 		}
 
 		// XXX join them all!
 		for (i = 0; i < s->jobs; i++) {
-			assert(pthread_join(threads[i], NULL) == 0);
+			int result = pthread_join(threads[i], NULL);
+			assert(result == 0);
 		}
 	}
 #else
 	s->reproductions = run_alg(s, p);
 #endif
 
-// 	float fit = ((struct rcps_individual*)slist_node_getdata(slist_first(
+// 	struct rcps_fitness fit = ((struct rcps_individual*)slist_node_getdata(slist_first(
 // 		s->population->individuals)))->fitness;
-// 	printf("cycles: \t%i\nfitness:\t%f\n", tcount, fit);
+// 	printf("cycles: \t%i\nfitness:\t[%d, %d]\n", tcount, fit.group, fit.weight);
 
 	// transfer the results to the problem structure
-        genome = &((struct rcps_individual*)slist_node_getdata(
-		slist_first(s->population->individuals)))->genome;
+	genome = &((struct rcps_individual*)slist_node_getdata(
+	slist_first(s->population->individuals)))->genome;
 	// XXX we could save us this decoding step if we would keep the best ones
 	// from before, not really worth it
 	
 	// save a warning if the schedule is not valid
-        pheno = decode(s, p, genome);
+	pheno = decode(s, p, genome);
 	if (pheno->overuse_count) {
 		s->warnings = 1;
 	}
@@ -981,19 +996,19 @@ void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p) {
 	}
 
 	for (i = 0; i < p->job_count; i++) {
-                struct rcps_job *job;
-                struct rcps_mode *mode;
-                job = p->jobs[i];
+		struct rcps_job *job;
+		struct rcps_mode *mode;
+		job = p->jobs[i];
 		job->res_start = pheno->job_start[job->index];
 		job->res_mode = 
 			job->genome_position == -1 
 				? 0 
 				: genome->modes[job->genome_position];
-			
-                mode = job->modes[job->res_mode];
+
+		mode = job->modes[job->res_mode];
 		for (j = 0; j < mode->request_count; j++) {
-                        struct rcps_request *request;
-                        request = mode->requests[j];
+			struct rcps_request *request;
+			request = mode->requests[j];
 			request->res_alternative =
 				request->genome_position == -1 
 					? 0 

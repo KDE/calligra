@@ -26,7 +26,7 @@
 #define TEXTHANDLER_H
 
 #include "tablehandler.h"
-#include "versionmagic.h"
+//#include "versionmagic.h"
 #include "paragraph.h"
 
 #include <wv2/src/handlers.h>
@@ -99,10 +99,8 @@ public:
     virtual void bookmarkStart( const wvWare::BookmarkData& data );
     virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
-#ifdef IMAGE_IMPORT
     virtual void inlineObjectFound(const wvWare::PictureData& data);
     virtual void floatingObjectFound(unsigned int globalCP );
-#endif // IMAGE_IMPORT
 
     ///////// Our own interface
 
@@ -238,7 +236,7 @@ private:
     {
         UNSUPPORTED = 0,
         //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
-        //REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
+        REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
         //REF = 0x03, ///< Reference
         //FTNREF = 0x05, ///< Identicial to NOTEREF (not a reference)
         //SET = 0x06,

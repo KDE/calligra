@@ -1,13 +1,8 @@
 SVG export
 - pattern strokes
 - text
-- for text on path: when on path shape 
-    -> path data into defs
-    -> path shape with use on defs path data
-    => maps back to text on path shape when importing
 
 SVG import
 - fix text
-- text on path shape -> see above for export
 - pattern strokes
-- clipping, masking
+- masking

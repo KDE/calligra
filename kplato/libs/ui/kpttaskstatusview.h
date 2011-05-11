@@ -277,7 +277,14 @@ protected slots:
 
 private:
     struct ChartContents {
-        ~ChartContents() { delete dateaxis; }
+        ~ChartContents() {
+            delete dateaxis;
+            if ( ! inuse ) {
+                delete effortplane;
+                delete costplane;
+            }
+        }
+        bool inuse;
         ChartProxyModel costproxy;
         ChartProxyModel effortproxy;
     

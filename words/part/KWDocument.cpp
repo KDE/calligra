@@ -33,7 +33,6 @@
 #include "KWPage.h"
 #include "KWPageStyle.h"
 #include "KWOdfLoader.h"
-#include "KWDLoader.h"
 #include "KWOdfWriter.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
@@ -44,6 +43,7 @@
 #include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
 #include "commands/KWPageRemoveCommand.h"
+#include "changetracker/KoChangeTracker.h"
 
 // koffice libs includes
 #include <KoShapeManager.h>
@@ -65,6 +65,7 @@
 #include <KoListLevelProperties.h>
 #include <KoTextShapeData.h>
 #include <KoSelection.h>
+#include <KoTextDocumentLayout.h>
 
 #include <rdf/KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
@@ -94,6 +95,7 @@
 class MagicCurtain : public KoShapeContainer
 {
 public:
+    MagicCurtain(KWDocument *document) : m_document(document) {}
     // reimplemented pure virtual calls
     bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return false; }
     void saveOdf(KoShapeSavingContext&) const { }
@@ -107,25 +109,37 @@ public:
     void revealFramesForPage(int pageNumber, qreal moveFrames);
 
 private:
+    KWDocument *m_document;
     QHash<int, QList<KWFrame*> > m_data;
 };
 
 void MagicCurtain::addFrame(KWFrame *frame)
 {
+#if 0
     Q_ASSERT(frame->loadingPageNumber() > 0);
     QList<KWFrame*> frames = m_data.value(frame->loadingPageNumber());
     frames << frame;
     m_data.insert(frame->loadingPageNumber(), frames);
     frame->shape()->setParent(this);
+#else
+    KWPage p = frame->shape() ? m_document->pageManager()->page(frame->shape()) : KWPage();
+    Q_ASSERT_X(false, __FUNCTION__, QString().arg(p.isValid() ? p.pageNumber() : -1).toLocal8Bit());
+#endif
 }
 
 void MagicCurtain::addShape(KoShape *shape)
 {
+#if 0
     shape->setParent(this);
+#else
+    KWPage p = m_document->pageManager()->page(shape);
+    Q_ASSERT_X(false, __FUNCTION__, QString("pageNumber=%1").arg(p.isValid() ? p.pageNumber() : -1).toLocal8Bit());
+#endif
 }
 
 void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
 {
+#if 0
     QPointF offset(0, moveFrames);
     foreach (KWFrame *frame, m_data.value(pageNumber)) {
         frame->shape()->setPosition(frame->shape()->position() + offset);
@@ -133,8 +147,10 @@ void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
         frame->clearLoadingData();
     }
     m_data.remove(pageNumber);
+#else
+    Q_ASSERT_X(false, __FUNCTION__, QString("pageNumber=%1 moveFrames=%2").arg(pageNumber).arg(moveFrames).toLocal8Bit());
+#endif
 }
-
 
 // KWDocument
 KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMode)
@@ -185,21 +201,28 @@ KWDocument::~KWDocument()
     qDeleteAll(m_frameSets);
 }
 
+// Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
+// will call addFrameSet.  Which will itself call addFrame()
+// any call coming in here is due to the undo/redo framework, pasting or for nested frames
 void KWDocument::addShape(KoShape *shape)
 {
-    // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
-    // will call addFrameSet.  Which will itself call addFrame()
-    // any call coming in here is due to the undo/redo framework or for nested frames
-
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+    kDebug(32001) << "shape=" << shape << "frame=" << frame;
     if (frame == 0) {
-        KWFrameSet *fs = new KWFrameSet();
-        fs->setName(shape->shapeId());
-        frame = new KWFrame(shape, fs);
+        if (shape->shapeId() == TextShape_SHAPEID) {
+            KWTextFrameSet *tfs = new KWTextFrameSet(this);
+            tfs->setName("Text");
+            frame = new KWFrame(shape, tfs);
+        } else {
+            KWFrameSet *fs = new KWFrameSet();
+            fs->setName(shape->shapeId());
+            frame = new KWFrame(shape, fs);
+        }
     }
     Q_ASSERT(frame->frameSet());
-    addFrameSet(frame->frameSet());
-
+    if (!m_frameSets.contains(frame->frameSet())) {
+        addFrameSet(frame->frameSet());
+    }
     foreach (KoView *view, views()) {
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->shapeManager()->addShape(shape);
@@ -209,6 +232,7 @@ void KWDocument::addShape(KoShape *shape)
 void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? KWord::frameSetTypeName(frame->frameSet()) : QString());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
         Q_ASSERT(fs);
@@ -230,7 +254,6 @@ void KWDocument::paintContent(QPainter&, const QRect &rect)
 #ifdef __GNUC__
     #warning TODO: implement KWDocument::paintContent
 #endif
-
 }
 
 KoView *KWDocument::createViewInstance(QWidget *parent)
@@ -284,6 +307,7 @@ QGraphicsItem *KWDocument::createCanvasItem()
 
 KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
 {
+    kDebug(32001) << "afterPageNum=" << afterPageNum << "masterPageName=" << masterPageName;
     KWPageInsertCommand *cmd = new KWPageInsertCommand(this, afterPageNum, masterPageName);
     addCommand(cmd);
     Q_ASSERT(cmd->page().isValid());
@@ -314,6 +338,7 @@ void KWDocument::removePage(int pageNumber)
 
 void KWDocument::firePageSetupChanged()
 {
+    kDebug(32001);
     if (inlineTextObjectManager())
         inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
     emit pageSetupChanged();
@@ -321,6 +346,7 @@ void KWDocument::firePageSetupChanged()
 
 void KWDocument::removeFrameSet(KWFrameSet *fs)
 {
+    kDebug(32001) << "frameSet=" << fs;
     m_frameSets.removeAt(m_frameSets.indexOf(fs));
     setModified(true);
     foreach (KWFrame *frame, fs->frames())
@@ -329,26 +355,33 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
         canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
+    disconnect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
+    disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
 
 void KWDocument::relayout()
 {
+    kDebug(32001) << "frameSets=" << m_frameSets;
+
+#if 0
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
         if (tfs->textFrameSetType() != KWord::MainTextFrameSet) continue;
-        // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
-        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+
         QSet<KWPage> coveredPages;
+        QList<int> coveredPageNumbers;
         foreach (KWFrame *frame, tfs->frames()) {
             KWPage page = pageManager()->page(frame->shape());
             if (page.isValid()) {
                 if (! coveredPages.contains(page)) {
                     coveredPages += page;
+                    coveredPageNumbers << page.pageNumber();
                     continue; // keep one frame per page.
                 }
             }
 
+            kDebug(32001) << "Delete frame=" << frame << "pageNumber=" << page.pageNumber();
             foreach (KoView *view, views()) {
                 KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
                 canvas->shapeManager()->remove(frame->shape());
@@ -356,20 +389,69 @@ void KWDocument::relayout()
             tfs->removeFrame(frame);
             delete frame->shape();
         }
+
+        kDebug(32001) << "coveredPageNumbers=" << coveredPageNumbers;
     }
-    PageProcessingQueue *ppq = pageQueue();
-    foreach (const KWPage &page, pageManager()->pages())
-        ppq->addPage(page);
+#endif
+
+    // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
+    KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+
+    // remove header/footer frames that are not visible.
+    //m_frameLayout.cleanupHeadersFooters();
+
+    // re-layout the pages
+    foreach (const KWPage &page, m_pageManager.pages()) {
+        m_frameLayout.createNewFramesForPage(page.pageNumber());
+    }
+
+    foreach (KWFrameSet *fs, m_frameSets) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (!tfs)
+            continue;
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+        Q_ASSERT(lay);
+        lay->scheduleLayout();
+    }
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
 {
-    if (m_frameSets.contains(fs)) return;
+    kDebug(32001) << "frameSet=" << fs;
+
+    Q_ASSERT(!m_frameSets.contains(fs));
     setModified(true);
+#if 0
     m_frameSets.append(fs);
+#else
+    // Be sure we add headers and footers to the beginning of the m_frameSets QList and every other KWFrameTextType
+    // after them so future operations iterating over that QList always handle headers and footers first.
+    int insertAt = m_frameSets.count();
+    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+    if (tfs && KWord::isHeaderFooter(tfs)) {
+        insertAt = 0;
+        for(int i = 0; i < m_frameSets.count(); ++i) {
+            KWTextFrameSet *_tfs = dynamic_cast<KWTextFrameSet*>(m_frameSets[i]);
+            if (_tfs && !KWord::isHeaderFooter(_tfs)) {
+                insertAt = i;
+                break;
+            }
+        }
+    }
+    m_frameSets.insert(insertAt, fs);
+#endif
     foreach (KWFrame *frame, fs->frames())
         addFrame(frame);
 
+    if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
+        Q_ASSERT(tfs->pageManager() == pageManager());
+        if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            Q_ASSERT(lay);
+            connect(lay, SIGNAL(finishedLayout()), this, SLOT(mainTextFrameSetLayoutDone()));
+        }
+    }
+#if 0
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if (tfs) {
         tfs->setPageManager(pageManager());
@@ -387,28 +469,33 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
                     this, SLOT(updateHeaderFooter(KWTextFrameSet*)));
         }
     }
-
+#endif
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
 
 void KWDocument::addFrame(KWFrame *frame)
 {
+    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+
+    //firePageSetupChanged();
+
     foreach (KoView *view, views()) {
         KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
-        canvas->shapeManager()->addShape(frame->shape());
+        canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
         canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
     if (viewCount() == 0) {
         KoCanvasBase *canvas = dynamic_cast<KoCanvasBase *>(canvasItem(false));
         if (canvas) {
-            canvas->shapeManager()->addShape(frame->shape());
+            canvas->shapeManager()->addShape(frame->shape(), KoShapeManager::AddWithoutRepaint);
             canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
         }
     }
+#if 0
     if (frame->loadingPageNumber() > 0) {
         if (m_magicCurtain == 0) {
-            m_magicCurtain = new MagicCurtain();
+            m_magicCurtain = new MagicCurtain(this);
             m_magicCurtain->setVisible(false);
             foreach (KoView *view, views()) {
                 static_cast<KWView*>(view)->canvasBase()->shapeManager()->addShape(m_magicCurtain);
@@ -425,11 +512,16 @@ void KWDocument::addFrame(KWFrame *frame)
     }
     else
         frame->shape()->update();
+#else
+    //Q_ASSERT(frame->loadingPageNumber() <= 0);
+    //frame->shape()->update();
+#endif
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
 {
     if (frame->shape() == 0) return;
+    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     removeFrameFromViews(frame);
     KWPage page = pageManager()->page(frame->shape());
     if (!page.isValid()) return;
@@ -553,7 +645,7 @@ void KWDocument::initEmpty()
     parag->setName(i18n("Bullet List"));
     KoListStyle *list = new KoListStyle(parag);
     KoListLevelProperties llp = list->levelProperties(0);
-    llp.setStyle(KoListStyle::DiscItem);
+    llp.setStyle(KoListStyle::Bullet);
     list->setLevelProperties(llp);
     parag->setListStyle(list);
     styleManager->add(parag);
@@ -599,17 +691,13 @@ bool KWDocument::loadOdf(KoOdfReadStore &odfStore)
 
 bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 {
-    clear();
-    KoXmlElement root = doc.documentElement();
-    KWDLoader loader(this, store);
-    bool rc = loader.load(root);
-    if (rc)
-        endOfLoading();
-    return rc;
+    return false;
 }
 
 void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
+    kDebug(32001);
+
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
         updater = progressUpdater()->startSubtask(1, "KWDocument::endOfLoading");
@@ -632,6 +720,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         foreach (KWFrame *frame, fs->frames())
         maxBottom = qMax(maxBottom, frame->shape()->boundingRect().bottom());
     }
+#if 0
     // The Document we loaded could have specified
     //  1) a number of pages
     //  2) a number of frames
@@ -645,21 +734,26 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         foreach (KWPage page, m_pageManager.pages())
             m_magicCurtain->revealFramesForPage(page.pageNumber(), page.offsetInDocument());
     }
-
+    PageProcessingQueue *ppq = pageQueue();
+#endif
     // Here we look at point 'b'. We add pages so at least all frames have a page.
     // btw. the observent reader might notice that cases b and c are not mutually exclusive ;)
-    PageProcessingQueue *ppq = pageQueue();
     while (docHeight <= maxBottom) {
         kDebug(32001) << "KWDocument::endOfLoading appends a page";
-        if (m_pageManager.pageCount() == 0) // apply the firstPageMasterName only on the first page
-            lastpage = m_pageManager.appendPage(m_pageManager.pageStyle(firstPageMasterName));
-        else // normally this shouldn't happen cause that loop is only run once...
-            lastpage = m_pageManager.appendPage();
-        ppq->addPage(lastpage);
+        if (m_pageManager.pageCount() == 0) { // apply the firstPageMasterName only on the first page
+            //lastpage = m_pageManager.appendPage(m_pageManager.pageStyle(firstPageMasterName));
+            lastpage = appendPage(firstPageMasterName);
+        } else { // normally this shouldn't happen cause that loop is only run once...
+            //lastpage = m_pageManager.appendPage();
+            lastpage = appendPage();
+        }
         docHeight += lastpage.height();
+#if 0
+        ppq->addPage(lastpage);
         if (m_magicCurtain) {
             m_magicCurtain->revealFramesForPage(lastpage.pageNumber(), lastpage.offsetInDocument());
         }
+#endif
     }
 
     if (updater) updater->setProgress(50);
@@ -669,7 +763,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     for (int i = frameSetCount() - 1; i > -1; i--) {
         KWFrameSet *fs = frameSet(i);
         if (!fs) {
-            kWarning() << "frameset " << i << " is NULL!!";
+            kWarning(32001) << "frameset " << i << " is NULL!!";
             m_lstFrameSet.remove(i);
             continue;
         }
@@ -679,23 +773,23 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             for (int f = fs->frameCount() - 1; f >= 0; f--) {
                 KWFrame *frame = fs->frame(f);
                 if (frame->left() < 0) {
-                    kWarning() << fs->name() << " frame " << f << " pos.x is < 0, moving frame";
+                    kWarning(32001) << fs->name() << " frame " << f << " pos.x is < 0, moving frame";
                     frame->moveBy(0 - frame->left(), 0);
                 }
                 if (frame->right() > m_pageLayout.ptWidth) {
-                    kWarning() << fs->name() << " frame " << f << " rightborder outside page ("
+                    kWarning(32001) << fs->name() << " frame " << f << " rightborder outside page ("
                     << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking";
                     frame->setRight(m_pageLayout.ptWidth);
                 }
                 if (fs->isProtectSize())
                     continue; // don't make frames bigger of a protected frameset.
                 if (frame->height() < s_minFrameHeight) {
-                    kWarning() << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
+                    kWarning(32001) << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
                     << frame->height() << " is: " << s_minFrameHeight << ")";
                     frame->setHeight(s_minFrameHeight);
                 }
                 if (frame->width() < s_minFrameWidth) {
-                    kWarning() << fs->name() << " frame " << f << " width is so small no text will fit, adjusting (was: "
+                    kWarning(32001) << fs->name() << " frame " << f << " width is so small no text will fit, adjusting (was: "
                     << frame->width() << " is: " << s_minFrameWidth  << ")";
                     frame->setWidth(s_minFrameWidth);
                 }
@@ -709,7 +803,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
                 fs->addFrame(frame);
             }
         } else if (fs->frameCount() == 0) {
-            kWarning() << "frameset " << i << " " << fs->name() << " has no frames";
+            kWarning(32001) << "frameset " << i << " " << fs->name() << " has no frames";
             removeFrameSet(fs);
             if (fs->type() == FT_PART)
                 delete static_cast<KWPartFrameSet *>(fs)->getChild();
@@ -719,7 +813,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         if (fs->frameCount() > 0) {
             KWFrame *frame = fs->frame(0);
             if (frame->isCopy()) {
-                kWarning() << "First frame in a frameset[" << fs->name() << "] was set to be a copy; resetting";
+                kWarning(32001) << "First frame in a frameset[" << fs->name() << "] was set to be a copy; resetting";
                 frame->setCopy(false);
             }
         }
@@ -729,14 +823,16 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>(m_lstFrameSet.getFirst());
     if (frameset)
         frameset->renumberFootNotes(false /*no repaint*/);
-
 #endif
+
     // remove header/footer frames that are not visible.
-    m_frameLayout.cleanupHeadersFooters();
+//     m_frameLayout.cleanupHeadersFooters();
 
-    foreach (const KWPage &page, m_pageManager.pages())
+    foreach (const KWPage &page, m_pageManager.pages()) {
         m_frameLayout.createNewFramesForPage(page.pageNumber());
+    }
 
+#if 0
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
@@ -746,7 +842,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObject);
             if (anchor) {
                 if (m_magicCurtain == 0) {
-                    m_magicCurtain = new MagicCurtain();
+                    m_magicCurtain = new MagicCurtain(this);
                     m_magicCurtain->setVisible(false);
                     foreach (KoView *view, views())
                         static_cast<KWView*>(view)->canvasBase()->shapeManager()->addShape(m_magicCurtain);
@@ -756,13 +852,24 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         }
         tfs->setAllowLayout(true);
     }
+#endif
+
+    foreach (KWFrameSet *fs, m_frameSets) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (!tfs)
+            continue;
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+        Q_ASSERT(lay);
+        lay->scheduleLayout();
+    }
 
     if (updater) updater->setProgress(100);
 
     kDebug(32001) << "KWDocument::endOfLoading done";
-
+#if 0
     // Note that more stuff will happen in completeLoading
     firePageSetupChanged();
+#endif
     setModified(false);
 }
 
@@ -782,7 +889,8 @@ QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) 
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
 {
-    // kDebug(32002) << fs;
+    kDebug(32002) << fs;
+#if 0
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
@@ -795,10 +903,16 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
         if (shape) {
             KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
             if (data) {
+#if 0
                 QTextBlock block = fs->document()->findBlock(data->endPosition() + 1);
                 if (block.isValid()) {
                     masterPageName = block.blockFormat().stringProperty(KoParagraphStyle::MasterPageName);
                 }
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
             }
         }
     }
@@ -808,7 +922,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
     if (page.pageSide() == KWPage::PageSpread)
         pageDiff--;
     if (pageDiff >= (lastFrame->frameOnBothSheets() ? 1 : 2)) {
-        //kDebug() << "frameSet=" << fs << "pageDiff=" << pageDiff << "pageCount=" << m_pageManager.pageCount() << "pageNumber=" << page.pageNumber();
+        //kDebug(32001) << "frameSet=" << fs << "pageDiff=" << pageDiff << "pageCount=" << m_pageManager.pageCount() << "pageNumber=" << page.pageNumber();
 
         // its enough to just create a new frame.
         m_frameLayout.createNewFrameForPage(fs, page.pageNumber()
@@ -819,7 +933,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
         if (last.isValid())
             afterPageNum = last.pageNumber();
 
-        //kDebug() << "frameSet=" << fs << "pageDiff=" << pageDiff << "pageCount=" << m_pageManager.pageCount() << "pageNumber=" << page.pageNumber() << "afterPageNum=" << afterPageNum;
+        //kDebug(32001) << "frameSet=" << fs << "pageDiff=" << pageDiff << "pageCount=" << m_pageManager.pageCount() << "pageNumber=" << page.pageNumber() << "afterPageNum=" << afterPageNum;
 
         KWPageInsertCommand cmd(this, afterPageNum, masterPageName);
         cmd.redo(); // does also schedule an update using the PageProcessingQueue
@@ -829,17 +943,22 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
         if (m_magicCurtain)
             m_magicCurtain->revealFramesForPage(newPage.pageNumber(), newPage.offsetInDocument());
     }
+#else
+    Q_ASSERT(false);
+#endif
 }
 
 void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
 {
     // find all pages that have the page style set and re-layout them.
+    kDebug(32001);
     Q_ASSERT(tfs->pageStyle().isValid());
     updatePagesForStyle(tfs->pageStyle());
 }
 
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
+    kDebug(32001);
     PageProcessingQueue *ppq = pageQueue();
     foreach (KWPage page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
@@ -883,62 +1002,6 @@ void KWDocument::removeFrameFromViews(KWFrame *frame)
         canvas->shapeManager()->remove(frame->shape());
     }
 }
-
-#ifndef NDEBUG
-void KWDocument::printDebug()
-{
-    static const char * headerFooterType[] = { "None", "EvenOdd", "Uniform", "ERROR" };
-
-    kDebug(32001) << "----------------------------------------";
-    kDebug(32001) << "                 Debug info";
-    kDebug(32001) << "Document:" << this;
-    /*kDebug(32001) <<"Type of document:" << (m_pageStyle.hasMainTextFrame()?"WP":"DTP"); */
-    kDebug(32001) << "Units:" << KoUnit::unitName(unit());
-    kDebug(32001) << "# Framesets:" << frameSetCount();
-    int i = 0;
-    foreach (KWFrameSet *fs, m_frameSets) {
-        kDebug(32001) << "Frameset" << i++ << ":" <<
-        fs->name() << '(' << fs << ')';
-        fs->printDebug();
-    }
-
-    kDebug(32001) << "PageManager holds" << pageCount() << " pages";
-    KWPage page = m_pageManager.begin();
-    while (page.isValid()) {
-        int pgnum = page.pageNumber();
-        QString side = "[Left] ";
-        QString num = QString::number(pgnum);
-        if (page.pageSide() == KWPage::Right)
-            side = "[Right]";
-        else if (page.pageSide() == KWPage::PageSpread) {
-            side = "[PageSpread]";
-            pgnum++;
-            num += '-' + QString::number(pgnum);
-        }
-        kDebug(32001) << "Page" << num << side << " width:" << page.width() << " height:" << page.height() << "following" << page.pageStyle().name();
-        if (page.isAutoGenerated())
-            kDebug(32001) << "     Auto-generated page (inserted for text layout)";
-        page = page.next();
-    }
-
-    foreach (const KWPageStyle &style, m_pageManager.pageStyles()) {
-        kDebug(32001) << "PageStyle" << style.name();
-        kDebug(32001) << "     Header:" << headerFooterType[style.headerPolicy()];
-        kDebug(32001) << "     Footer:" << headerFooterType[style.footerPolicy()];
-        KoColumns columns = style.columns();
-        if (columns.columns != 1)
-            kDebug(32001) << " +-- Columns:" << columns.columns << columns.columnSpacing << "pt spacing";
-        KoPageLayout layout = style.pageLayout();
-        kDebug(32001) << "     PageSize: " << layout.width << "x" << layout.height;
-        kDebug(32001) << "     Indents: (tlbr, edge, binding)"
-                      << layout.topMargin << layout.leftMargin
-                      << layout.bottomMargin << layout.rightMargin
-                      << layout.pageEdge << layout.bindingSide;
-    }
-
-    kDebug(32001) << "  The height of the doc (in pt) is:" << pageManager()->bottomOfPage(pageManager()->pageCount() - 1);
-}
-#endif
 
 QList<KoDocument::CustomDocumentWidgetItem> KWDocument::createCustomDocumentWidgets(QWidget *parent)
 {
@@ -994,6 +1057,8 @@ void PageProcessingQueue::addPage(KWPage page)
 
 void PageProcessingQueue::process()
 {
+    kDebug(32001);
+#if 0
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
     QList<int> pages = m_pages;
@@ -1015,4 +1080,5 @@ void PageProcessingQueue::process()
     if (m_deleteLater)
         deleteLater();
     emit m_document->pageSetupChanged();
+#endif
 }

@@ -37,6 +37,7 @@
 #include <MsooXmlUtils.h>
 
 #include <QFontMetricsF>
+#include <QDateTime>
 
 class SpPr {
 public:
@@ -47,6 +48,7 @@ class NumCache {
 public:
     int m_ptCount;
     QVector< QString > m_cache;
+    QString formatCode;
     NumCache() : m_ptCount(0) {}
 };
 
@@ -109,8 +111,9 @@ public:
 
 QString Cat::writeRefToInternalTable(XlsxXmlChartReader *chartReader)
 {
+    const bool dateFormat = !m_numRef.m_numCache.formatCode.isEmpty() && m_numRef.m_numCache.formatCode != "General";
     if (m_numRef.m_numCache.m_ptCount != 0) {
-        chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache,"float");
+        chartReader->WriteIntoInternalTable(m_numRef.m_f,m_numRef.m_numCache.m_cache, dateFormat ? "date-format" : "float", m_numRef.m_numCache.formatCode );
         return m_numRef.m_f;
     }
 
@@ -437,6 +440,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
             ELSE_TRY_READ_IF(title)
             ELSE_TRY_READ_IF(legend)
             ELSE_TRY_READ_IF(spPr)
+            ELSE_TRY_READ_IF(txPr)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(autoTitleDeleted))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
@@ -490,6 +494,86 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     m_context = 0;
     return KoFilter::OK;
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL txPr
+KoFilter::ConversionStatus XlsxXmlChartReader::read_txPr()
+{
+    READ_PROLOGUE
+    while( !atEnd() )
+    {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if ( isStartElement() )
+            if ( qualifiedName() == "a:p" )
+                read_p();
+    }
+    READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL p
+KoFilter::ConversionStatus XlsxXmlChartReader::read_p()
+{
+    //READ_PROLOGUE
+    while( !atEnd() )
+    {
+        readNext();
+        if ( isEndElement() && qualifiedName() == QLatin1String( "a:p") )
+            break;
+        if ( isStartElement() )
+            if ( qualifiedName() == "a:pPr" )
+                read_pPr();
+            //TRY_READ_IF_NS(a,pPr);
+    }
+    //READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL pPr
+KoFilter::ConversionStatus XlsxXmlChartReader::read_pPr()
+{
+    //READ_PROLOGUE
+    while( !atEnd() )
+    {
+        readNext();
+        if ( isEndElement() && qualifiedName() == QLatin1String( "a:pPr") )
+            break;
+        if ( isStartElement() )
+            if ( qualifiedName() == "a:defRPr" )
+                read_defRPr();
+    }
+    //READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL defRPr
+KoFilter::ConversionStatus XlsxXmlChartReader::read_defRPr()
+{
+    //READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(sz);
+    bool ok = false;
+    const qreal size = sz.toDouble( &ok );
+    if ( ok )
+    {
+        m_context->m_chart->m_textSize = size / 100.0;
+    }
+    while( !atEnd() )
+    {
+        if ( isEndElement() && qualifiedName() == QLatin1String( "a:defRPr") )
+            break;
+        readNext();
+        //BREAK_IF_END_OF(CURRENT_EL);
+    }
+    //READ_EPILOGUE
+    return KoFilter::OK;
+}
+
+
 
 #undef CURRENT_EL
 #define CURRENT_EL valAx
@@ -913,8 +997,32 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_numCache()
         if (isStartElement()) {
             TRY_READ_IF(ptCount)
             ELSE_TRY_READ_IF(pt)
+            ELSE_TRY_READ_IF(formatCode)
         }
     }
+    READ_EPILOGUE
+}
+
+
+#undef CURRENT_EL
+#define CURRENT_EL formatCode
+//! formatCode (Format Code)
+/*! ECMA-376, 21.2.2.71, p.3802.
+
+ Parent elements:
+ - numCache (§21.2.2.120)
+
+*/
+KoFilter::ConversionStatus XlsxXmlChartReader::read_formatCode()
+{
+    READ_PROLOGUE
+    const QString val = readElementText();
+    d->m_currentNumCache->formatCode = val;
+//     while (!atEnd()) {
+//         readNext();
+//         BREAK_IF_END_OF(CURRENT_EL);
+//         
+//     }
     READ_EPILOGUE
 }
 
@@ -1927,6 +2035,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pieChart_Ser()
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempPieSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
 
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+        && !tempPieSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+    )
+        m_context->m_chart->m_title = tempPieSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
     m_currentSeries->m_labelCell = tempPieSeriesData->m_tx.writeRefToInternalTable(this);
 
     m_currentSeries->m_valuesCellRangeAddress = tempPieSeriesData->m_val.writeRefToInternalTable(this);
@@ -2004,7 +2116,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart_Ser()
         }
     }
 
-    // set data ranges and write data to internal table
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempBubbleSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempBubbleSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
+    // set data ranges and write data to internal table    
     m_currentSeries->m_labelCell = tempBubbleSeriesData->m_tx.writeRefToInternalTable(this);
 
     m_currentSeries->m_countYValues = tempBubbleSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;
@@ -2089,6 +2205,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
         }
     }
 
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempScatterSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempScatterSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
     // set data ranges and write data to internal table
     m_currentSeries->m_labelCell = tempScatterSeriesData->m_tx.writeRefToInternalTable(this);
 
@@ -2166,6 +2286,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempBarSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempBarSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempBarSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
@@ -2233,6 +2357,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempAreaSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempAreaSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempAreaSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
@@ -2297,6 +2425,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_radarChart_Ser()
             ELSE_TRY_READ_IF(dLbls)
         }
     }
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempRadarSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempRadarSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempRadarSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
@@ -2388,6 +2520,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
 //             }
         }
     }
+    if ( ( m_context->m_chart->m_title.isEmpty() || m_context->m_chart->m_title == QString::fromLatin1( "Chart Title" ) ) && m_context->m_chart->m_series.count() == 1
+            && !tempLineSeriesData->m_tx.m_strRef.m_strCache.m_cache.isEmpty()
+        )
+        m_context->m_chart->m_title = tempLineSeriesData->m_tx.m_strRef.m_strCache.m_cache[ 0 ];
 
     // set data ranges and write data to internal table
     m_currentSeries->m_countYValues = tempLineSeriesData->m_val.m_numRef.m_numCache.m_ptCount;
@@ -3040,7 +3176,22 @@ QString XlsxXmlChartReader::AlocateAndWriteIntoInternalTable(QVector< QString > 
     return range;
 }
 
-void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString > &buffer, QString format)
+QString convertToFormat( const QString& format, const QString& value )
+{
+    QString res = value;
+    if ( !format.isEmpty() && format != QString::fromLatin1( "General" ) )
+    {
+        int ivalue = value.toInt();
+        QString newFormat = format;
+        newFormat.replace( QRegExp( "[m{1}]" ), "M" );
+        QDateTime time( QDate( 1899, 12, 30 ) );
+        time = time.addDays( ivalue );
+        res = time.toString( newFormat );
+    }
+    return res;
+}
+
+void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString > &buffer, const QString& format, const QString& formatString)
 {
     if(range.isEmpty()) {
         return;
@@ -3083,7 +3234,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
             for(int i = startColumn; i <=endColumn; i++,bufferIndex++) {
                 Charting::Cell *cell = internalTable->cell(i,startRow,true);
                 cell->m_valueType = format;
-                cell->m_value = buffer[bufferIndex];
+                cell->m_value = convertToFormat( formatString, buffer[bufferIndex] );
 //                kDebug()<<"m_value " << format;
 //                kDebug()<<"buffer[bufferIndex] " << buffer[bufferIndex];
 //                kDebug()<<"cell row" << startRow;
@@ -3097,7 +3248,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
             for(int i = startRow; i <=endRow; i++,bufferIndex++) {
                 Charting::Cell *cell = internalTable->cell(startColumn,i,true);
                 cell->m_valueType = format;
-                cell->m_value = buffer[bufferIndex];
+                cell->m_value = convertToFormat( formatString, buffer[bufferIndex] );
 //                kDebug()<<"m_value " << format;
 //                kDebug()<<"buffer[bufferIndex] " << buffer[bufferIndex];
 //                kDebug()<<"cell row" << i;
@@ -3108,7 +3259,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
         if (buffer.size() != 0) {
             Charting::Cell *cell = internalTable->cell(startColumn,startRow,true);
             cell->m_valueType = format;
-            cell->m_value = buffer[0];
+            cell->m_value = convertToFormat( formatString, buffer[ 0 ] );
 //            kDebug()<<"m_value " << format;
 //            kDebug()<<"buffer[bufferIndex] " << buffer[0];
 //            kDebug()<<"cell row" << startRow;

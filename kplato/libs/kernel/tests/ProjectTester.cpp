@@ -65,7 +65,7 @@ void ProjectTester::cleanupTestCase()
 
 void ProjectTester::testAddTask()
 {
-    m_task = m_project->createTask( m_project );
+    m_task = m_project->createTask();
     QVERIFY( m_project->addTask( m_task, m_project ) );
     QVERIFY( m_task->parentNode() == m_project );
     QCOMPARE( m_project->findNode( m_task->id() ), m_task );
@@ -76,7 +76,7 @@ void ProjectTester::testAddTask()
 
 void ProjectTester::testTakeTask()
 {
-    m_task = m_project->createTask( m_project );
+    m_task = m_project->createTask();
     m_project->addTask( m_task, m_project );
     QCOMPARE( m_project->findNode( m_task->id() ), m_task );
 
@@ -88,7 +88,7 @@ void ProjectTester::testTakeTask()
 
 void ProjectTester::testTaskAddCmd()
 {
-    m_task = m_project->createTask( m_project );
+    m_task = m_project->createTask();
     SubtaskAddCmd *cmd = new SubtaskAddCmd( m_project, m_task, m_project );
     cmd->execute();
     QVERIFY( m_task->parentNode() == m_project );
@@ -101,7 +101,7 @@ void ProjectTester::testTaskAddCmd()
 
 void ProjectTester::testTaskDeleteCmd()
 {
-    m_task = m_project->createTask( m_project );
+    m_task = m_project->createTask();
     QVERIFY( m_project->addTask( m_task, m_project ) );
     QVERIFY( m_task->parentNode() == m_project );
 
@@ -127,7 +127,7 @@ void ProjectTester::schedule()
     QTime t2 ( 17, 0, 0 );
     int length = t1.msecsTo( t2 );
 
-    Task *t = m_project->createTask( m_project );
+    Task *t = m_project->createTask();
     t->setName( "T1" );
     m_project->addTask( t, m_project );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -191,6 +191,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource 50% available -----------------";
@@ -211,6 +212,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 1, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource 50% available, Request 50% load ---------";
@@ -232,6 +234,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 3, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource 200% available, Request 50% load ---------";
@@ -253,6 +256,7 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
 
     s = "Calculate forward, Task: ASAP, Resource 200% available, Request 100% load ---------";
@@ -274,7 +278,42 @@ void ProjectTester::schedule()
 
     QCOMPARE( t->startTime(), DateTime( today, t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 4, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
     QVERIFY( t->schedulingError() == false );
+
+    s = "Calculate forward, 2 tasks: Resource 200% available, Request 50% load each ---------";
+    qDebug()<<endl<<"Testing:"<<s;
+    r->setUnits( 200 );
+    rr->setUnits( 50 );
+
+    Task *task2 = m_project->createTask( *t );
+    task2->setName( "T2" );
+    m_project->addTask( task2, t );
+
+    ResourceGroupRequest *gr2 = new ResourceGroupRequest( g );
+    task2->addRequest( gr2 );
+    ResourceRequest *rr2 = new ResourceRequest( r, 50 );
+    gr2->addResourceRequest( rr2 );
+
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    sm->createSchedules();
+    m_project->calculate( *sm );
+
+    Debug::print( m_project, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->plannedEffort().toHours(), 8.0 );
+
+    QCOMPARE( task2->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( task2->endTime(), task2->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( task2->plannedEffort().toHours(), 8.0 );
+    QVERIFY( task2->schedulingError() == false );
+
+    m_project->takeTask( task2 );
+    delete task2;
 
     s = "Calculate forward, Task: ASAP, Resource available tomorrow --------";
     qDebug()<<endl<<"Testing:"<<s;
@@ -815,7 +854,7 @@ void ProjectTester::schedule()
     t->estimate()->setUnit( Duration::Unit_d );
     t->estimate()->setExpectedEstimate( 2.0 );
 
-    Task *tsk2 = m_project->createTask( *t, m_project );
+    Task *tsk2 = m_project->createTask( *t );
     tsk2->setName( "T2" );
     m_project->addTask( tsk2, m_project );
 
@@ -925,7 +964,7 @@ void ProjectTester::scheduleFullday()
     r->setAvailableUntil( r->availableFrom().addDays( 21 ) );
     m_project->addResource( g, r );
 
-    Task *t = m_project->createTask( m_project );
+    Task *t = m_project->createTask();
     t->setName( "T1" );
     t->setId( m_project->uniqueNodeId() );
     m_project->addTask( t, m_project );
@@ -1036,7 +1075,7 @@ void ProjectTester::scheduleWithExternalAppointments()
     r->addExternalAppointment( "Ext-1", "External project 1", targetstart, targetstart.addDays( 1 ), 100 );
     r->addExternalAppointment( "Ext-1", "External project 1", targetend.addDays( -1 ), targetend, 100 );
 
-    Task *t = project.createTask( &project );
+    Task *t = project.createTask();
     t->setName( "T1" );
     project.addTask( t, &project );
     t->estimate()->setUnit( Duration::Unit_h );
@@ -1136,7 +1175,7 @@ void ProjectTester::reschedule()
     QString s = "Re-schedule; schedule tasks T1, T2, T3 ---------------";
     qDebug()<<endl<<"Testing:"<<s;
 
-    Task *task1 = project.createTask( &project );
+    Task *task1 = project.createTask();
     task1->setName( "T1" );
     project.addTask( task1, &project );
     task1->estimate()->setUnit( Duration::Unit_h );
@@ -1147,7 +1186,7 @@ void ProjectTester::reschedule()
     gr->addResourceRequest( new ResourceRequest( r, 100 ) );
     task1->addRequest( gr );
 
-    Task *task2 = project.createTask( &project );
+    Task *task2 = project.createTask();
     task2->setName( "T2" );
     project.addTask( task2, &project );
     task2->estimate()->setUnit( Duration::Unit_h );
@@ -1158,7 +1197,7 @@ void ProjectTester::reschedule()
     gr->addResourceRequest( new ResourceRequest( r, 100 ) );
     task2->addRequest( gr );
 
-    Task *task3 = project.createTask( &project );
+    Task *task3 = project.createTask();
     task3->setName( "T3" );
     project.addTask( task3, &project );
     task3->estimate()->setUnit( Duration::Unit_h );
@@ -1259,7 +1298,7 @@ void ProjectTester::materialResource()
     }
     project.addCalendar( c );
 
-    Task *task1 = project.createTask( &project );
+    Task *task1 = project.createTask();
     task1->setName( "T1" );
     project.addTask( task1, &project );
     task1->estimate()->setUnit( Duration::Unit_h );
@@ -1339,7 +1378,7 @@ void ProjectTester::requiredResource()
     }
     project.addCalendar( c );
 
-    Task *task1 = project.createTask( &project );
+    Task *task1 = project.createTask();
     task1->setName( "T1" );
     project.addTask( task1, &project );
     task1->estimate()->setUnit( Duration::Unit_h );
@@ -1460,7 +1499,7 @@ void ProjectTester::resourceWithLimitedAvailability()
     }
     project.addCalendar( c );
 
-    Task *task1 = project.createTask( &project );
+    Task *task1 = project.createTask();
     task1->setName( "T1" );
     project.addTask( task1, &project );
     task1->estimate()->setUnit( Duration::Unit_d );
@@ -1526,7 +1565,7 @@ void ProjectTester::unavailableResource()
     }
     project.addCalendar( c );
 
-    Task *task1 = project.createTask( &project );
+    Task *task1 = project.createTask();
     task1->setName( "T1" );
     project.addTask( task1, &project );
     task1->estimate()->setUnit( Duration::Unit_d );
@@ -1609,7 +1648,7 @@ void ProjectTester::team()
     }
     project.addCalendar( c );
 
-    Task *task1 = project.createTask( &project );
+    Task *task1 = project.createTask();
     task1->setName( "T1" );
     project.addTask( task1, &project );
     task1->estimate()->setUnit( Duration::Unit_d );
@@ -1770,7 +1809,7 @@ void ProjectTester::inWBSOrder()
     r1->setName( "R1" );
     p.addResource( g, r1 );
 
-    Task *t = p.createTask( &p );
+    Task *t = p.createTask();
     t->setName( "T1" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -1782,7 +1821,7 @@ void ProjectTester::inWBSOrder()
     ResourceRequest *tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T2" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -1794,7 +1833,7 @@ void ProjectTester::inWBSOrder()
     tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T3" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -1806,7 +1845,7 @@ void ProjectTester::inWBSOrder()
     tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T4" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -1869,7 +1908,7 @@ void ProjectTester::resourceConflictALAP()
     r1->setName( "R1" );
     p.addResource( g, r1 );
 
-    Task *t = p.createTask( &p );
+    Task *t = p.createTask();
     t->setName( "T1" );
     t->setConstraint( Node::ALAP );
     p.addSubTask( t, &p );
@@ -1882,7 +1921,7 @@ void ProjectTester::resourceConflictALAP()
     ResourceRequest *tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T2" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -1894,7 +1933,7 @@ void ProjectTester::resourceConflictALAP()
     tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T3" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -1906,7 +1945,7 @@ void ProjectTester::resourceConflictALAP()
     tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T4" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -2043,7 +2082,7 @@ void ProjectTester::resourceConflictMustStartOn()
     r1->setName( "R1" );
     p.addResource( g, r1 );
 
-    Task *t = p.createTask( &p );
+    Task *t = p.createTask();
     t->setName( "T1" );
     t->setConstraint( Node::MustStartOn );
     t->setConstraintStartTime( st + Duration( 1, 8, 0 ) );
@@ -2057,7 +2096,7 @@ void ProjectTester::resourceConflictMustStartOn()
     ResourceRequest *tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T2" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -2069,7 +2108,7 @@ void ProjectTester::resourceConflictMustStartOn()
     tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T3" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -2081,7 +2120,7 @@ void ProjectTester::resourceConflictMustStartOn()
     tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    t = p.createTask( &p );
+    t = p.createTask();
     t->setName( "T4" );
     p.addSubTask( t, &p );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -2259,7 +2298,7 @@ void ProjectTester::resourceConflictMustFinishOn()
     r1->setName( "R1" );
     p.addResource( g, r1 );
 
-    Task *task1 = p.createTask( &p );
+    Task *task1 = p.createTask();
     task1->setName( "T1" );
     task1->setConstraint( Node::MustFinishOn );
     task1->setConstraintEndTime( st + Duration( 1, 16, 0 ) );
@@ -2273,7 +2312,7 @@ void ProjectTester::resourceConflictMustFinishOn()
     ResourceRequest *tr = new ResourceRequest( r1, 100 );
     gr->addResourceRequest( tr );
 
-    Task *task2 = p.createTask( &p );
+    Task *task2 = p.createTask();
     task2->setName( "T2" );
     p.addSubTask( task2, &p );
     task2->estimate()->setUnit( Duration::Unit_d );
@@ -2462,7 +2501,7 @@ void ProjectTester::fixedInterval()
     r1->setName( "R1" );
     p.addResource( g, r1 );
 
-    Task *task1 = p.createTask( &p );
+    Task *task1 = p.createTask();
     task1->setName( "T1" );
     task1->setConstraint( Node::FixedInterval );
     task1->setConstraintStartTime( DateTime::fromString( "2010-10-21 08:00" ) );
@@ -2524,7 +2563,7 @@ void ProjectTester::estimateDuration()
     r1->setName( "R1" );
     p.addResource( g, r1 );
 
-    Task *task1 = p.createTask( &p );
+    Task *task1 = p.createTask();
     task1->setName( "T1" );
     task1->setConstraint( Node::ASAP );
     p.addTask( task1, &p );

@@ -12,6 +12,7 @@ endif( QCA2_FOUND )
 set(koodf_LIB_SRCS
     KoOdf.cpp
     KoXmlNS.cpp
+    KoOdfManifestEntry.cpp
     KoDom.cpp
     KoGenStyle.cpp
     KoGenStyles.cpp
@@ -57,7 +58,7 @@ set(koodf_LIB_SRCS
     KoTable.cpp
     KoColumnStyle.cpp
     KoRowStyle.cpp
-    KoTableStyle.cpp
+    KoTblStyle.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
@@ -78,6 +79,7 @@ install( FILES
     koodf_export.h
     KoOdf.h
     KoXmlNS.h
+    KoOdfManifestEntry.h
     KoDom.h
     KoGenStyle.h
     KoGenStyles.h

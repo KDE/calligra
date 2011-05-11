@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -96,6 +98,12 @@ public:
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
 
+    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
+
+    KWTextFrameSet* getFrameSet(KWord::TextFrameSetType type, const KWPageStyle &pageStyle) const;
+
+    KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
+
 signals:
     /**
      * Signal emitted when a frameset is created
@@ -122,6 +130,7 @@ private:
     };
 
     KoShape *createTextShape(const KWPage &page);
+
     /**
      * Get or create a text frameset of the specified \a type on the specified \a page.
      * A page follows a KWPageStyle and we have individual framesets for each style.
@@ -133,12 +142,10 @@ private:
      */
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
     QList<KWFrame *> framesInPage(const QRectF &page) const;
+
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
-    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
     void cleanFrameSet(KWTextFrameSet *fs);
-    KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
-
 
     const KWPageManager *m_pageManager;
     const QList<KWFrameSet *> &m_frameSets;
@@ -146,8 +153,7 @@ private:
 
     KWTextFrameSet *m_maintext;
     KWFrameSet *m_backgroundFrameSet;
-
-    const KWDocument *m_document;
+    KWDocument *m_document;
 
     bool m_setup;
 };

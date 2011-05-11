@@ -13,7 +13,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/textshape
 set(TestDocumentLayout_test_SRCS
     TestDocumentLayout.cpp
     TestLists.cpp
-    ../Layout.cpp
+    ../TextShapeLayout.cpp
     ../TextLine.cpp
     ../Outline.cpp
     ../TextShape.cpp
@@ -82,9 +82,12 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
+    ../dialogs/ChangeTrackingOptionsWidget.cpp
+    ../dialogs/SimpleTableWidget.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
-    ../Layout.cpp
+    ../TextShapeLayout.cpp
     ../TextLine.cpp
     ../Outline.cpp
     ../TableLayout.cpp
@@ -136,7 +139,7 @@ set(TestTableLayout_test_SRCS
     TestTableLayout.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
-    ../Layout.cpp
+    ../TextShapeLayout.cpp
     ../TextLine.cpp
     ../Outline.cpp
     ../TextShape.cpp
@@ -155,7 +158,7 @@ set(TestSections_test_SRCS
     TestSections.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
-    ../Layout.cpp
+    ../TextShapeLayout.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp
     ../ToCGenerator.cpp
@@ -186,6 +189,7 @@ set(TestTextTool_test_SRCS
     ../commands/TextPasteCommand.cpp
     ../commands/AutoResizeCommand.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/CharacterHighlighting.cpp
     ../dialogs/FontDecorations.cpp
@@ -218,7 +222,8 @@ set(TestTextTool_test_SRCS
     ../dialogs/TableDialog.cpp
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
-    ../Layout.cpp
+    ../dialogs/ChangeTrackingOptionsWidget.cpp
+    ../TextShapeLayout.cpp
     ../TextLine.cpp
     ../Outline.cpp
     ../ListItemsHelper.cpp
@@ -288,9 +293,12 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
+    ../dialogs/ChangeTrackingOptionsWidget.cpp
+    ../dialogs/SimpleTableWidget.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
-    ../Layout.cpp
+    ../TextShapeLayout.cpp
     ../TextLine.cpp
     ../Outline.cpp
     ../TableLayout.cpp

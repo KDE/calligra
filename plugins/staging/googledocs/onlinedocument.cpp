@@ -24,6 +24,8 @@
 #include <KoView.h>
 #include <KoDocument.h>
 #include <kpluginfactory.h>
+#include <kparts/partmanager.h>
+#include <KoMainWindow.h>
 #include <onlinedocument.moc>
 #include "loginwindow.h"
 #include "googledocumentservice.h"
@@ -33,6 +35,7 @@ K_EXPORT_PLUGIN(OnlineDocumentFactory("googledocs_plugin"))
 
 OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)
+    , m_login(0)
 {
     setComponentData(OnlineDocumentFactory::componentData());
 
@@ -43,21 +46,23 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
 
 OnlineDocument::~OnlineDocument()
 {
+    delete m_login;
 }
 
 void OnlineDocument::slotOnlineDocument()
 {
-    GoogleDocumentService *m_gDoc;
-    LoginWindow *login = new LoginWindow();
-    if (login->exec()) {
-        m_gDoc = login->googleService();
-        connect(m_gDoc, SIGNAL(receivedDocument(const QString &)), this,
-                SLOT(receivedOnlineDocument(const QString &)));
-    }
-    delete login;
+//    if (0 = m_login) {
+        m_login = new LoginWindow();
+        if (QDialog::Accepted == m_login->exec()) {
+            connect(m_login->googleService(), SIGNAL(receivedDocument(QString)), this,
+                    SLOT(receivedOnlineDocument(QString )));
+        }
+//    } else {
+//        m_login->
+//    }
 }
 
-void OnlineDocument::receivedOnlineDocument(const QString & path)
+void OnlineDocument::receivedOnlineDocument(QString  path)
 {
     KoView *view = dynamic_cast<KoView *>(parent());
     if (!view) {
@@ -66,8 +71,5 @@ void OnlineDocument::receivedOnlineDocument(const QString & path)
 
     KUrl url;
     url.setPath(path);
-    KoDocument *kodoc = view->koDocument();
-
-    kodoc->openUrl(url);
-
+    view->shell()->openDocument(url);
 }

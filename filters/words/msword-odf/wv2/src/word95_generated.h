@@ -5959,8 +5959,16 @@ struct PICF : public Shared {
      * Window's bitmap structure when PIC describes a BITMAP. rect for window
      * origin and extents whenmetafile is stored -- ignored if 0
      */
+    /*
+     * innerHeader (14 bytes): A PICF_Shape structure that specifies additional
+     * header information.  According to [MS-DOC] — v20101219
+     */
     U8 bm_rcWinMF[14];
 
+    /*
+     * BEGIN picmid (38 bytes): A PICMID structure that specifies the size and
+     * border information of the picture.  According to [MS-DOC] — v20101219
+     */
     /**
      * horizontalmeasurement in twips of therectangle the picture should be
      * imaged within.

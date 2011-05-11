@@ -104,8 +104,10 @@ private:
     //! Saves annotation element (comments) for cell specified by @a col and @a row it there is any annotation defined.
     void saveAnnotation(int col, int row);
 
-    QList<QPair<QString, int> > m_conditionalIndices;
-    QList<QMap<QString, QString> > m_conditionalStyles;
+    typedef QPair<int, QMap<QString, QString> > Condition;
+    QList<Condition> m_conditionalIndices;
+    QMap<QString, QList<Condition> > m_conditionalStyles;
+
     QString m_formula;
 
 #include <MsooXmlCommonReaderMethods.h>
@@ -153,9 +155,9 @@ public:
 
     bool firstRoundOfReading;
 
-    QList<QMap<QString, QString> > conditionalStyleForPosition(const QString& positionLetter, const QString& positionNumber);
+    QList<QMap<QString, QString> > conditionalStyleForPosition(const QString& positionLetter, int positionNumber);
 
-    QMap<QString, QMap<QString, QString> > conditionalStyles;
+    QList<QPair<QString, QMap<QString, QString> > >conditionalStyles;
 };
 
 #endif

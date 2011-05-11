@@ -130,7 +130,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
  - [done] nwCell (Northwest Cell) §20.1.4.2.21
  - [done] seCell (Southeast Cell) §20.1.4.2.23
  - [done] swCell (Southwest Cell) §20.1.4.2.24
- - tblBg (Table Background) §20.1.4.2.25
+ - [done] tblBg (Table Background) §20.1.4.2.25
  - [done] wholeTbl (Whole Table) §20.1.4.2.34
 */
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
@@ -159,7 +159,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
             ELSE_TRY_READ_IF(nwCell)
             ELSE_TRY_READ_IF(seCell)
             ELSE_TRY_READ_IF(swCell)
-//             ELSE_TRY_READ_IF(tblBg)
+            ELSE_TRY_READ_IF(tblBg)
             ELSE_TRY_READ_IF(wholeTbl)
             SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
@@ -167,6 +167,59 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
     }
 
     m_context->styleList->insert(styleId, m_currentStyle);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tblBg
+/*
+ Parent elements:
+ - tableStyle (§21.1.3.11);
+ - [done] tblStyle (§20.1.4.2.26)
+
+ Child elements:
+ - effect (Effect) §20.1.4.2.7
+ - effectRef (Effect Reference) §20.1.4.2.8
+ - [done] fill (Fill) §20.1.4.2.9
+ - [done] fillRef (Fill Reference) §20.1.4.2.10
+
+*/
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblBg()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = m_currentStyle->properties(DrawingTableStyle::WholeTbl);
+    if (m_currentTableStyleProperties == 0) {
+        m_currentTableStyleProperties = new TableStyleProperties;
+    }
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if(isStartElement()) {
+            TRY_READ_IF(fill)
+            else if (name() == "fillRef") {
+                // NOTE: This is a heavy simplifiaction for the moment
+                // In reality we should use graphic properties in the cell-style
+                // but it is not supported atm.
+                TRY_READ(fillRef)
+                if (m_currentColor.isValid()) {
+                    m_currentTableStyleProperties->backgroundColor = m_currentColor;
+                    m_currentTableStyleProperties->setProperties |= TableStyleProperties::BackgroundColor;
+                }
+            }
+            SKIP_UNKNOWN
+        }
+    }
+
+    // What should happen if tblBg defines a picture, is it meant for call cells separately or one picture
+    // divided between the cells?
+    m_currentStyle->addProperties(DrawingTableStyle::WholeTbl, m_currentTableStyleProperties);
+
+    popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
@@ -454,7 +507,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
 {
     READ_PROLOGUE
 
-    m_currentTableStyleProperties = new TableStyleProperties;
+    m_currentTableStyleProperties = m_currentStyle->properties(DrawingTableStyle::WholeTbl);
+    if (m_currentTableStyleProperties == 0) {
+        m_currentTableStyleProperties = new TableStyleProperties;
+    }
 
     while(!atEnd()) {
         readNext();
@@ -473,9 +529,34 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
 
 #undef CURRENT_EL
 #define CURRENT_EL tcStyle
+/*
+ Parent elements:
+ - [done] band1H (§20.1.4.2.1);
+ - [done] band1V (§20.1.4.2.2);
+ - [done] band2H (§20.1.4.2.3);
+ - [done] band2V (§20.1.4.2.4);
+ - [done] firstCol (§20.1.4.2.11);
+ - [done] firstRow (§20.1.4.2.12);
+ - [done] lastCol (§20.1.4.2.16);
+ - [done] lastRow (§20.1.4.2.17);
+ - [done] neCell (§20.1.4.2.20);
+ - [done] nwCell (§20.1.4.2.21);
+ - [done] seCell (§20.1.4.2.23);
+ - [done] swCell (§20.1.4.2.24);
+ - [done] wholeTbl (§20.1.4.2.34)
+
+ Child elements:
+ - cell3D (Cell 3-D) §21.1.3.1
+ - [done] fill (Fill) §20.1.4.2.9
+ - [done] fillRef (Fill Reference) §20.1.4.2.10
+ - [done] tcBdr (Table Cell Borders) §20.1.4.2.28
+
+*/
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
 {
     READ_PROLOGUE
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
     while(!atEnd()) {
         readNext();
@@ -483,26 +564,99 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
         if(isStartElement()) {
 //             TRY_READ_IF(cell3D)
             TRY_READ_IF(fill)
-//             ELSE_TRY_READ_IF(fillRef)
+            else if (name() == "fillRef") {
+                // NOTE: This is a heavy simplifiaction for the moment
+                // In reality we should use graphic properties in the cell-style
+                // but it is not supported atm.
+                TRY_READ(fillRef)
+                if (m_currentColor.isValid()) {
+                    m_currentTableStyleProperties->backgroundColor = m_currentColor;
+                    m_currentTableStyleProperties->setProperties |= TableStyleProperties::BackgroundColor;
+                }
+            }
             ELSE_TRY_READ_IF(tcBdr)
             SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
         }
     }
 
+    popCurrentDrawStyle();
+
     READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL tcTxStyle
+/*
+ Parent elements:
+ - [done] band1H (§20.1.4.2.1);
+ - [done] band1V (§20.1.4.2.2);
+ - [done] band2H (§20.1.4.2.3);
+ - [done] band2V (§20.1.4.2.4);
+ - [done] firstCol (§20.1.4.2.11);
+ - [done] firstRow (§20.1.4.2.12);
+ - [done] lastCol (§20.1.4.2.16);
+ - [done] lastRow (§20.1.4.2.17);
+ - [done] neCell (§20.1.4.2.20);
+ - [done] nwCell (§20.1.4.2.21);
+ - [done] seCell (§20.1.4.2.23);
+ - [done] swCell (§20.1.4.2.24);
+ - [done] wholeTbl (§20.1.4.2.34)
+
+ Child elements:
+ - extLst (Extension List) §20.1.2.2.15
+ - font (Font) §20.1.4.2.13
+ - [done] fontRef (Font Reference) §20.1.4.1.17
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
+
+*/
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
 {
     READ_PROLOGUE
 
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentColor = QColor();
+    m_referredFontName = QString();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            //TODO hslClr hue, saturation, luminecence color
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(prstClr)
+            ELSE_TRY_READ_IF(fontRef)
+            SKIP_UNKNOWN
+        }
     }
+
+    TRY_READ_ATTR(b)
+    TRY_READ_ATTR(i)
+    if (b == "on") {
+        m_currentTextStyle.addProperty("svg:font-weight", "bold");
+    }
+    if (i == "on") {
+        m_currentTextStyle.addProperty("svg:font-style", "italic");
+    }
+    if (m_currentColor.isValid()) {
+        m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
+        m_currentColor = QColor();
+    }
+    if (!m_referredFontName.isEmpty()) {
+        m_currentTextStyle.addProperty("fo:font-family", m_referredFontName);
+    }
+
+    m_currentTableStyleProperties->textStyle = m_currentTextStyle;
 
     READ_EPILOGUE
 }
@@ -822,6 +976,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
                 TRY_READ(solidFill)
                 m_currentTableStyleProperties->backgroundColor = m_currentColor;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::BackgroundColor;
+                if (m_currentAlpha > 0) {
+                    m_currentTableStyleProperties->backgroundOpacity = m_currentAlpha;
+                    m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundOpacity;
+                }
             }
             SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT

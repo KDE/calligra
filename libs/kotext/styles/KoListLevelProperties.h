@@ -27,6 +27,7 @@
 
 #include <KoXmlReader.h>
 
+class KoCharacterStyle;
 class KoListStyle;
 class KoShapeLoadingContext;
 class KoXmlWriter;
@@ -35,8 +36,9 @@ class KoImageData;
 /**
  * Properties per list level.
  */
-class KOTEXT_EXPORT KoListLevelProperties
+class KOTEXT_EXPORT KoListLevelProperties : public QObject
 {
+    Q_OBJECT
 public:
     /// Constructor
     explicit KoListLevelProperties();
@@ -78,14 +80,14 @@ public:
     void setCharacterStyleId(int id);
     /// return the styleId of the KoCharacterStyle to be used to layout the listitem
     int characterStyleId() const;
+    /// set the style for the bullet or the number of the list
+    void setMarkCharacterStyle(QSharedPointer<KoCharacterStyle> style);
+    /// return the KoCharacterStyle for the bullet or the number of the list
+    QSharedPointer<KoCharacterStyle> markCharacterStyle() const;
     /// set the character to be used as the counter of the listitem
     void setBulletCharacter(QChar character);
     /// return the character to be used as the counter of the listitem
     QChar bulletCharacter() const;
-    /// set the color to be used as the counter of the listitem
-    void setBulletColor(QColor color);
-    /// return the color to be used as the counter of the listitem
-    QColor bulletColor() const;
     /// set the size, in percent, of the bullet counter relative to the fontsize of the counter
     void setRelativeBulletSize(int percent);
     /// return the size, in percent, of the bullet counter relative to the fontsize of the counter
@@ -140,6 +142,31 @@ public:
     /// returns the minimum distance between the counter and text
     qreal minimumDistance() const;
 
+    /// sets the margin of the list
+    void setMargin(qreal vlaue);
+    /// returns the margin of the list
+    qreal margin() const;
+
+    /// sets the text indent of the the list item
+    void setTextIndent(qreal value);
+    /// returns the text indent of the list item
+    qreal textIndent() const;
+
+    /// set the item that follows the label; this is used if alignmentMode() is true
+    void setLabelFollowedBy(KoListStyle::ListLabelFollowedBy value);
+    /// returns the item that follows the label; this is used if alignmentMode() is true
+    KoListStyle::ListLabelFollowedBy labelFollowedBy() const;
+
+    /// sets the value of tab stop that follows the label, it is used only if ListLabelFollowedBy is ListTab
+    void setTabStopPosition(qreal value);
+    /// returns the value of tab stop that follows the label, it is used only if ListLabelFollowedBy is ListTab
+    qreal tabStopPosition() const;
+
+    /// sets the alignment mode of the list isLabelAlignmentMode=true if ist-level-position-and-space-mode=label-alignment
+    void setAlignmentMode(bool isLabelAlignmentMode);
+    /// return the alignment mode of the list isLabelAlignmentMode=true if ist-level-position-and-space-mode=label-alignment
+    bool alignmentMode() const;
+
     bool operator==(const KoListLevelProperties &other) const;
     bool operator!=(const KoListLevelProperties &other) const;
     KoListLevelProperties & operator=(const KoListLevelProperties &other);
@@ -164,6 +191,12 @@ public:
      * Save the properties of the style using the OpenDocument format
      */
     void saveOdf(KoXmlWriter *writer) const;
+
+public slots:
+    void onStyleChanged(int key);
+
+signals:
+    void styleChanged(int key);
 
 private:
     void setProperty(int key, const QVariant &value);

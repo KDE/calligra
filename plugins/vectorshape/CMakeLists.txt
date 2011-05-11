@@ -16,11 +16,12 @@ SET ( VectorShape_SRCS
     VectorShapeFactory.cpp
     #VectorCollection.cpp
     #VectorData.cpp
-    # No tool yet.
-    #VectorTool.cpp
-    #VectorToolFactory.cpp
+    VectorTool.cpp
+    VectorToolFactory.cpp
+    ChangeVectorDataCommand.cpp
 
     libemf/EmfRecords.cpp
+    libemf/EmfObjects.cpp
     libemf/EmfHeader.cpp
     libemf/BitmapHeader.cpp
     libemf/Bitmap.cpp
@@ -28,6 +29,11 @@ SET ( VectorShape_SRCS
     libemf/EmfOutput.cpp
     libemf/EmfOutputDebugStrategy.cpp
     libemf/EmfOutputPainterStrategy.cpp
+
+    libsvm/SvmStructs.cpp
+    libsvm/SvmGraphicsContext.cpp
+    libsvm/SvmParser.cpp
+    libsvm/SvmPainterBackend.cpp
 )
 
 #kde4_add_ui_files(VectorShape_SRCS

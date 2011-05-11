@@ -55,6 +55,7 @@ PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
           path(_path), file(_file), relationships(&_relationships)
 {
     firstReadRound = true;
+    numberOfItems = 0;
 }
 
 class PptxXmlDocumentReader::Private
@@ -216,7 +217,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
     context.firstReadingRound = true;
 
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
-        &slideLayoutReader, slideLayoutPath + "/" + slideLayoutFile, &context);
+        &slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideLayoutReader.errorString();
         return 0;
@@ -227,7 +228,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(
 
     context.firstReadingRound = false;
     status = m_context->import->loadAndParseDocument(
-        &slideLayoutReader, slideLayoutPath + "/" + slideLayoutFile, &context);
+        &slideLayoutReader, slideLayoutPath + '/' + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideLayoutReader.errorString();
         return 0;
@@ -414,7 +415,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     PptxXmlSlideReader notesMasterReader(this);
     context.firstReadingRound = true;
     status = m_context->import->loadAndParseDocument(
-        &notesMasterReader, notesMasterPath + "/" + notesMasterFile, &context);
+        &notesMasterReader, notesMasterPath + '/' + notesMasterFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << notesMasterReader.errorString();
         return status;
@@ -427,7 +428,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterId()
     context.firstReadingRound = false;
 
     status = m_context->import->loadAndParseDocument(
-        &notesMasterReader, notesMasterPath + "/" + notesMasterFile, &context);
+        &notesMasterReader, notesMasterPath + '/' + notesMasterFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << notesMasterReader.errorString();
         return status;
@@ -509,7 +510,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     PptxXmlSlideReader slideMasterReader(this);
     context.firstReadingRound = true;
     status = m_context->import->loadAndParseDocument(
-        &slideMasterReader, slideMasterPath + "/" + slideMasterFile, &context);
+        &slideMasterReader, slideMasterPath + '/' + slideMasterFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideMasterReader.errorString();
         return status;
@@ -522,7 +523,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     context.firstReadingRound = false;
 
     status = m_context->import->loadAndParseDocument(
-        &slideMasterReader, slideMasterPath + "/" + slideMasterFile, &context);
+        &slideMasterReader, slideMasterPath + '/' + slideMasterFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideMasterReader.errorString();
         return status;
@@ -553,7 +554,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(sldId)
+            if (name() == "sldId") {
+                TRY_READ(sldId)
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -578,7 +585,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterIdLst()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(notesMasterId)
+            if (name() == "notesMasterId") {
+                TRY_READ(notesMasterId)
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -606,7 +619,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(sldMasterId)
+            if (name() == "sldMasterId") {
+                TRY_READ(sldMasterId)
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -803,8 +822,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
             d->masterPageStyles.push_back(KoGenStyle(KoGenStyle::MasterPageStyle));
             if (d->sldSzRead) {
                 KoGenStyle pageLayoutStyle(d->pageLayout.saveOdf());
+                pageLayoutStyle.setAutoStyleInStylesDotXml(true);
                 const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
-                mainStyles->markStyleForStylesXml(pageLayoutStyleName);
                 kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
 
                 d->masterPageStyles[index].addAttribute("style:page-layout-name", pageLayoutStyleName);
@@ -817,6 +836,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
                 mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
             ++index;
         }
+    } else {
+        m_context->numberOfItems = m_context->relationships->targetCountWithWord("slideMasters") +
+            m_context->relationships->targetCountWithWord("notesMasters") +
+            m_context->relationships->targetCountWithWord("slides");
     }
 
     READ_EPILOGUE

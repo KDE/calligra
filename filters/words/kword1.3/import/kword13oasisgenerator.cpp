@@ -682,21 +682,21 @@ void KWord13OasisGenerator::writeMetaXml(void)
     str = m_kwordDocument->getDocumentInfo("about:title");
     if (!str.isEmpty()) {
         writer->startElement("dc:title");
-        writer->addTextSpan(str);
+        writer->addTextNode(str);
         writer->endElement();
     }
 
     str = m_kwordDocument->getDocumentInfo("about:abstract");
     if (!str.isEmpty()) {
         writer->startElement("dc:description");
-        writer->addTextSpan(str);
+        writer->addTextNode(str);
         writer->endElement();
     }
 
     str = m_kwordDocument->getDocumentInfo("author:full-name");
     if (!str.isEmpty()) {
         writer->startElement("dc:creator");
-        writer->addTextSpan(str);
+        writer->addTextNode(str);
         writer->endElement();
     }
 

@@ -11,9 +11,9 @@
 import sys, os, tempfile, time, signal, subprocess, re, lxml.etree, zipfile
 
 applications = {
-  'kword': ['odt', 'doc', 'docx'],
-  'kpresenter': ['odp', 'ppt', 'pptx'],
-  'kspread': ['ods', 'xls', 'xlsx']
+  'words': ['odt', 'doc', 'docx'],
+  'calligrastage': ['odp', 'ppt', 'pptx'],
+  'calligratables': ['ods', 'xls', 'xlsx']
 }
 
 # limit how many backtraces are recordes, since it takes a lot of time
@@ -88,6 +88,8 @@ def containsRealError(err):
 	# some errors reported by libxml2 are false positives, we filter them
 	# out
 	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element styles failed to validate content") != -1:
+		return None
+	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element automatic-styles failed to validate content") != -1:
 		return None
 	return err
 
