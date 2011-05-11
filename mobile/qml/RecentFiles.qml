@@ -39,7 +39,7 @@ ListView {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: doc.openDocument(modelData);
+            onClicked: homeScreen.openDocument(modelData);
         }
     }
 }

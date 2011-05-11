@@ -20,7 +20,6 @@
  */
 
 import QtQuick 1.0
-import CalligraMobile 1.0
 
 Item {
     id: container
@@ -37,26 +36,6 @@ Item {
             width: parent.width
 
             onClicked: homeScreen.state = ""
-        }
-
-        Button {
-            id: nextSheet
-            text: "Next"
-            imageSource: "qrc:///images/arrow-right.png"
-            height: parent.width
-            width: parent.width
-
-            onClicked: canvas.nextSheet()
-        }
-
-        Button {
-            id: previousSheet
-            text: "Prev"
-            imageSource: "qrc:///images/arrow-left.png"
-            height: parent.width
-            width: parent.width
-
-            onClicked: canvas.previousSheet()
         }
     }
 }

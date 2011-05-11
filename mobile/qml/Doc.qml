@@ -25,6 +25,7 @@ import CalligraMobile 1.0
 Item {
     id: docRootRect
     signal documentLoaded
+    clip: true
 
     function openDocument(path) {
         canvas.openDocument(path);
@@ -35,6 +36,8 @@ Item {
             toolbarLoader.source = "SpreadsheetToolbar.qml"
         } else if (canvas.documentType == CanvasController.TextDocument) {
             toolbarLoader.source = "WordsToolbar.qml"
+        } else if (canvas.documentType == CanvasController.Presentation) {
+            toolbarLoader.source = "PresentationToolbar.qml"
         }
     }
 

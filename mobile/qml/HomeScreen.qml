@@ -23,7 +23,11 @@ import QtQuick 1.0
 import CalligraMobile 1.0
 
 Rectangle {
-    id: rootRect
+    id: homeScreen
+
+    function openDocument(path) {
+        doc.openDocument(path);
+    }
 
     width: 800; height: 600;
     gradient: Gradient {
@@ -34,7 +38,7 @@ Rectangle {
     DocumentTypeSelector {
         id: docTypeSelector
 
-        buttonWidth: rootRect.width/2.1; buttonHeight: 100;
+        buttonWidth: homeScreen.width/2.1; buttonHeight: 100;
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.horizontalCenter
@@ -45,7 +49,7 @@ Rectangle {
     RecentFiles {
         id: recentFiles
 
-        buttonWidth: rootRect.width/2.1; buttonHeight: 100;
+        buttonWidth: homeScreen.width/2.1; buttonHeight: 100;
         anchors.left: parent.horizontalCenter
         anchors.top: parent.top
         anchors.right: parent.right
@@ -61,7 +65,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
 
         onDocumentLoaded: {
-            rootRect.state = "doc"
+            homeScreen.state = "doc"
         }
     }
 

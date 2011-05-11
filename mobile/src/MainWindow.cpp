@@ -45,9 +45,9 @@ void MainWindow::openFile(const QString &path)
 {
     if (path.isEmpty())
         return;
-    m_view->rootContext()->setContextProperty("fileName", path);
-    m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
-                        + "/share/calligra-mobile/qml/Doc.qml"));
+
+    QObject *object = m_view->rootObject();
+    QMetaObject::invokeMethod(object, "openDocument", Q_ARG(QVariant, QVariant(path)));
 }
 
 MainWindow::~MainWindow()
