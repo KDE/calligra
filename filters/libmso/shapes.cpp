@@ -1477,7 +1477,19 @@ void ODrawToOdf::processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer &o
     out.xml.endElement(); // draw:custom-shape
 }
 
-
+void ODrawToOdf::processFlowChartExtract(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 5400 10800 10800 21600 16200 10800");
+    out.xml.addAttribute("draw:text-areas", "5400 10800 16200 21600");
+    out.xml.addAttribute("draw:type", "flowchart-extract");
+    out.xml.addAttribute("draw:enhanced-path", "M 10800 0 L 21600 21600 0 21600 10800 0 Z N");
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
 
 void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
@@ -1760,6 +1772,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processFlowChartManualOperation(o, out);
     } else if (shapeType == msosptFlowChartConnector) {
         processFlowChartConnector(o, out);
+    } else if (shapeType == msosptFlowChartExtract) {
+        processFlowChartExtract(o, out);
     } else if (shapeType == msosptFlowChartMagneticTape) {
         processFlowChartMagneticTape(o, out);
     } else if (shapeType == msosptFlowChartMagneticDisk) {

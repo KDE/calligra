@@ -176,6 +176,7 @@ private:
     void processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartMagneticTape(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartExtract(const MSO::OfficeArtSpContainer &o, Writer &out);
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
