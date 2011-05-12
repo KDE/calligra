@@ -45,6 +45,7 @@
 #include <KoFontFace.h>
 
 #include "document.h"
+#include "msdoc.h"
 
 wvWare::U8 KWordReplacementHandler::hardLineBreak()
 {
@@ -142,18 +143,18 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     kDebug(30513) << "section" << m_sectionNumber << "| sep->bkc:" << sep->bkc;
 
     //page layout could change
-    if (sep->bkc != 1) {
+    if (sep->bkc != bkcNewColumn) {
         emit sectionFound(sep);
     }
     //check for a column break
-    if (sep->bkc == 1) {
-    }
+//     if (sep->bkc == bkcNewColumn) {
+//     }
     int numColumns = sep->ccolM1 + 1;
 
     //NOTE: We used to save the content of a section having a "continuous
-    //section break" (sep-bkc == 0) into the <text:section> element.  We are
-    //now creating a <master-page> for it because the page layout or
-    //header/footer content could change.
+    //section break" (sep-bkc == bkcContinuous) into the <text:section>
+    //element.  We are now creating a <master-page> for it because the page
+    //layout or header/footer content could change.
     //
     //But this way the section content is placed at a new page, which is wrong.
     //There's actually no direct support for "continuous section break" in ODF.
@@ -253,7 +254,7 @@ void KWordTextHandler::sectionEnd()
         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
     }
 
-    if (m_sep->bkc != 1) {
+    if (m_sep->bkc != bkcNewColumn) {
         emit sectionEnd(m_sep);
     }
     if (m_sep->ccolM1 > 0) {
@@ -278,7 +279,7 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
     //NOTE: only parse headers if we're in a section that can have new headers
     //ie. new sections for columns trigger this function again, but we've
     //already parsed the headers
-    if (m_sep->bkc != 1) {
+    if (m_sep->bkc != bkcNewColumn) {
         emit headersFound(new wvWare::HeaderFunctor(parseHeaders), 0);
     }
 }
