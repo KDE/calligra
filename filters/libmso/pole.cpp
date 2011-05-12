@@ -43,6 +43,9 @@
 // enable to activate debugging output
 //#define POLE_DEBUG
 
+// validate sibling names against positions in the black red tree
+//#define CHECK_SIBLINGS
+
 #define OLE_HEADER_SIZE 0x200
 
 namespace POLE
@@ -105,7 +108,6 @@ public:
     bool valid;            // false if invalid (should be skipped)
     std::string name;      // the name, not in unicode anymore
     bool dir;              // true if directory
-    bool color;            // false = red, true = black
     unsigned long size;    // size (not valid if directory)
     unsigned long start;   // starting block
     unsigned prev;         // previous sibling
@@ -574,14 +576,14 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 
 #ifdef POLE_DEBUG
     e = dirtree->entry(index);
-    printf("DirEntry::valid_enames name=%s color=%i prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
-           e->name.c_str(), e->color, e->prev, e->next, e->child, e->start, e->size, e->dir);
+    printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+           e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
 
     if (chi.size()) std::cout << "[KIDS]:" << std::endl;
     for (unsigned i = 0; i < chi.size(); i++) {
         e = dirtree->entry(chi[i]);
-        printf("DirEntry::valid_enames name=%s color=%i prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
-               e->name.c_str(), e->color, e->prev, e->next, e->child, e->start, e->size, e->dir);
+        printf("DirEntry::valid_enames name=%s prev=%i next=%i child=%i start=%lu size=%lu dir=%i\n",
+               e->name.c_str(), e->prev, e->next, e->child, e->start, e->size, e->dir);
     }
     std::cout << "---------------------" << std::endl;
 #endif
@@ -869,7 +871,6 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         DirEntry e;
         e.valid = true;
         e.name = name;
-        e.color = buffer[ 0x43 + p ];
         e.start = readU32(buffer + 0x74 + p);
         e.size = readU32(buffer + 0x78 + p);
         e.prev = readU32(buffer + 0x44 + p);
