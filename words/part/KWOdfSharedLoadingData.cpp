@@ -25,7 +25,6 @@
 #include "KWOdfLoader.h"
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 #include "frames/KWCopyShape.h"
 
 #include <KoTextShapeData.h>
@@ -78,12 +77,11 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
             fs = dynamic_cast<KWTextFrameSet*>(previous->frameSet());
         if (fs == 0) {
             fs = new KWTextFrameSet(m_loader->document());
-            fs->setAllowLayout(false);
             fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
             m_loader->document()->addFrameSet(fs);
         }
 
-        KWTextFrame *frame = new KWTextFrame(shape, fs, pageNumber);
+        KWFrame *frame = new KWFrame(shape, fs, pageNumber);
         if (style) {
             if (! fillFrameProperties(frame, *style))
                 return; // done
@@ -155,7 +153,5 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
     else
         frame->setNewFrameBehavior(KWord::NoFollowupFrame);
 
-    frame->setFrameOnBothSheets(properties.attributeNS(KoXmlNS::koffice,
-                "frame-copy-to-facing-pages default").compare("true", Qt::CaseInsensitive));
     return true;
 }

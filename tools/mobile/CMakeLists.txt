@@ -126,9 +126,9 @@ if(QT_QTOPENGL_FOUND)
     )
 endif(QT_QTOPENGL_FOUND)
 
-add_executable(CalligraMobile ${CalligraMobile_SRCS})
+add_executable(calligramobile ${CalligraMobile_SRCS})
 
-target_link_libraries(CalligraMobile
+target_link_libraries(calligramobile
     ${LIBXML2_LIBRARIES}
     ${OPENSSL_LIBRARIES}
     ${X11_X11_LIB}
@@ -143,20 +143,20 @@ target_link_libraries(CalligraMobile
 )
 
 if (QT_QTOPENGL_FOUND)
-    target_link_libraries(CalligraMobile
+    target_link_libraries(calligramobile
         ${QT_QTOPENGL_LIBRARY}
         ${OPENGL_LIBRARIES}
     )
 endif (QT_QTOPENGL_FOUND)
 
 if(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(CalligraMobile
+    target_link_libraries(calligramobile
         ${QT_QMAEMO5_LIBRARY}
         ${SOPRANO_LIBRARIES}
     )
 endif(QT_QMAEMO5_LIBRARY)
 
-install(TARGETS CalligraMobile RUNTIME DESTINATION bin)
+install(TARGETS calligramobile RUNTIME DESTINATION bin)
 install(FILES calligramobile.desktop DESTINATION share/applications/hildon)
 install(FILES images/178x200/calligramobile.png DESTINATION share/icons/hicolor/178x200/apps)
 install(FILES images/64x64/calligramobile.png DESTINATION share/icons/hicolor/64x64/apps)

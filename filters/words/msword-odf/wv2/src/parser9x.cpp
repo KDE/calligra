@@ -314,35 +314,29 @@ void Parser9x::parseTableRow( const TableRowData& data )
 #endif
 }
 
-void Parser9x::parseTextBox( uint lid, bool bodyDrawing)
+void Parser9x::parseTextBox(uint index, bool stylesxml)
 {
     wvlog << "Parser9x::parseTextBox" << endl;
 
     const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
-    if (bodyDrawing) {
-        plcftxbxTxt =  m_drawings->getTxbxTxt();
-    } else {
+    if (stylesxml) {
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
+    } else {
+        plcftxbxTxt =  m_drawings->getTxbxTxt();
     }
-
     if (!plcftxbxTxt) {
         return;
     }
     //NOTE: text ranges for each FTXBXS structure are separated by 0x0D
     //characters that MUST be the last character in each range.
 
-    PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( 0 ) );
+    PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( index ) );
 
-    for (size_t i = 0; i < plcftxbxTxt->count(); i++, ++it) {
-        if (it.current()->lid == (S32)lid) {
-
-            saveState( it.currentRun() - 1, TextBox );
-            U32 offset = m_fib.ccpText + it.currentStart();
-            offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn + m_fib.ccpEdn;
-            parseHelper( Position( offset, m_plcfpcd ) );
-            restoreState();
-        }
-    }
+    saveState( it.currentRun() - 1, TextBox );
+    U32 offset = m_fib.ccpText + it.currentStart();
+    offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn + m_fib.ccpEdn;
+    parseHelper( Position( offset, m_plcfpcd ) );
+    restoreState();
 }
 
 std::string Parser9x::tableStream() const
@@ -1027,7 +1021,9 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
 }
 }
 
-void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
+void Parser9x::emitFootnote( UString characters, U32 globalCP,
+                             SharedPtr<const Word97::CHP> chp,
+                             U32 /* length */ )
 {
     if ( !m_footnotes ) {
         wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << endl;
@@ -1039,7 +1035,8 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const W
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
     if ( ok ) {
-        m_textHandler->footnoteFound( data.type, characters, chp,
+        SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( globalCP ) );
+        m_textHandler->footnoteFound( data.type, characters, sep, chp,
                                       make_functor( *this, &Parser9x::parseFootnote, data ));
     }
 }
@@ -1140,11 +1137,14 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     }
     stream->pop();
 
-    if ( picf->cbHeader < 58 ) {
-        wvlog << "Error: Found an image with a PICF smaller than 58 bytes! Skipping the image." << endl;
+    //[MS-DOC] — v20101219, 419/621
+    if ( picf->cbHeader != 0x44 ) {
+        wvlog << "Error: Expected size of the PICF structure is 0x44, got " << hex << picf->cbHeader;
+        wvlog << "Skipping the image!" << endl;
         delete picf;
         return;
     }
+
     if ( picf->fError ) {
         wvlog << "Information: Skipping the image, fError is set" << endl;
         delete picf;
@@ -1163,17 +1163,19 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     if ( picf->mfp.mm == 0x0066 )
     {
         U8 cchPicName = stream->readU8();
-	U8* stPicName = new U8[cchPicName + 1];
-
-        stream->read(stPicName, cchPicName);
-	stPicName[cchPicName] = '\0';
-
 #ifdef WV2_DEBUG_PICTURES
         wvlog << "cchPicName: " << cchPicName << endl;
-        wvlog << "stPicName: " << stPicName << endl;
 #endif
+        if (cchPicName) {
+            U8* stPicName = new U8[cchPicName + 1];
+            stream->read(stPicName, cchPicName);
+            stPicName[cchPicName] = '\0';
+#ifdef WV2_DEBUG_PICTURES
+            wvlog << "stPicName: " << stPicName << endl;
+#endif
+            delete [] stPicName;
+        }
 	offset += cchPicName + 1;
-	delete [] stPicName;
     }
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );

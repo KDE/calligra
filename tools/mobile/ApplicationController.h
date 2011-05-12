@@ -159,6 +159,8 @@ public:
     //! Called from main window's paintEvent()
     void handleMainWindowPaintEvent(QPaintEvent *event);
 
+    //! Called from main window's resizeEvent()
+    void handleMainWindowResizeEvent(QResizeEvent* event);
 public slots:
     //! Implemented for KoAbstractApplicationController
     virtual void setWindowTitle(const QString& title);

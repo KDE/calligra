@@ -432,7 +432,8 @@ void KWPageStyle::setDirection(KoText::Direction direction)
 
 bool KWPageStyle::operator==(const KWPageStyle &other) const
 {
-    return d == other.d;
+    bool equals = d == other.d;
+    return equals;
 }
 
 KWPageStylePrivate *KWPageStyle::priv()

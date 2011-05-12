@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -69,22 +72,6 @@ public:
 
     /**
      * For frame duplication policy on new page creation.
-     * Determines if this frame will be copied on even or odd pages only.
-     */
-    bool frameOnBothSheets() const {
-        return m_copyToEverySheet;
-    }
-    /**
-     * Determines if this frame will be copied on even or odd pages only.
-     * Altering this does not change the frames placed until a new page is created.
-     * @param both if true this frame will be copied to every page, if false only every other page
-     */
-    void setFrameOnBothSheets(bool both) {
-        m_copyToEverySheet = both;
-    }
-
-    /**
-     * For frame duplication policy on new page creation.
      */
     KWord::NewFrameBehavior newFrameBehavior() const {
         return m_newFrameBehavior;
@@ -97,6 +84,17 @@ public:
     void setNewFrameBehavior(KWord::NewFrameBehavior nf) {
         m_newFrameBehavior = nf;
     }
+
+    /**
+     * Set the minimum height of the frame.
+     * @param minimumFrameHeight the minimum height of the frame.
+     */
+    void setMinimumFrameHeight(qreal minimumFrameHeight);
+    /**
+     * Return the minimum height of the frame.
+     * @return the minimum height of the frame. Default is 0.0.
+     */
+    qreal minimumFrameHeight() const;
 
     /**
      * Each frame will be rendered by a shape which also holds the position etc.
@@ -120,6 +118,8 @@ public:
      * @param newFrameSet the new frameset
      */
     virtual void setFrameSet(KWFrameSet *newFrameSet);
+
+    void cleanupShape(KoShape* shape);
 
     void clearLoadingData() {
         m_anchoredPageNumber = -1;
@@ -159,6 +159,7 @@ private:
     int m_anchoredPageNumber;
 
     KWFrameSet *m_frameSet;
+    qreal m_minimumFrameHeight;
 };
 
 #endif

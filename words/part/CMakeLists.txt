@@ -1,8 +1,9 @@
 project(wordspart)
 
-add_subdirectory( tests )
+#TODO port to textlayout-rework
+#add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES}  ${KDE4_INCLUDE_DIR}/threadweaver/ )
+include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/ )
 
 ########### KWordPrivate library ###############
 
@@ -20,7 +21,6 @@ set(wordsprivate_LIB_SRCS
     KWPageCacheManager.cpp
     KWPageManager.cpp
     KWPageStyle.cpp
-    KWPageTextInfo.cpp
     KWViewMode.cpp
     KWViewModeNormal.cpp
     KWViewModePreview.cpp
@@ -28,13 +28,11 @@ set(wordsprivate_LIB_SRCS
     KWOdfLoader.cpp
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
-    KWDLoader.cpp
+    KWRootAreaProvider.cpp
 
-    frames/KWTextDocumentLayout.cpp
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
-    frames/KWTextFrame.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
     frames/KWOutlineShape.cpp
@@ -99,7 +97,7 @@ endif( Soprano_FOUND )
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(wordsprivate komain)
+target_link_libraries(wordsprivate komain textlayout)
 if( Soprano_FOUND )
     target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
@@ -169,6 +167,9 @@ KWViewModeNormal.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/words/part COMPONENT Devel)
 
 install( FILES
+frames/KWFrame.h
 frames/KWFrameLayout.h
+frames/KWFrameSet.h
+frames/KWTextFrameSet.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 

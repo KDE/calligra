@@ -127,9 +127,11 @@ void WMFImportParser::restore()
 }
 
 
-void WMFImportParser::setFont(const QFont &font)
+void WMFImportParser::setFont(const QFont &font, int rotation, int fontHeight)
 {
     mFont = font;
+    Q_UNUSED(rotation);
+    Q_UNUSED(fontHeight);
 }
 
 
@@ -488,8 +490,8 @@ void WMFImportParser::drawText(int x, int y, int , int , int flags, const QStrin
     if (! textShape)
         return;
 
+    textShape->setPlainText(text);
     textShape->setFont(font);
-    textShape->setText(text);
 
     // determine y-offset from given baseline position
     qreal yOffset = 0.0;

@@ -103,6 +103,10 @@ Forms
 *fixed possible crash in context menus
 **backported to 2.3.x
 **backported to 2.2.x
+Examples
+*make forms andreport in "Simple Database" example look a bit more modern
+*remove auto tabs to avoid focus
+TODO: fix auto tabs!
 
 2011-05-06
 Examples

@@ -648,8 +648,8 @@ void TaskEditor::slotAddTask()
 {
     kDebug();
     if ( selectedRowCount() == 0 || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
-        Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(),  m_view->project() );
-        QModelIndex idx = m_view->baseModel()->insertSubtask( t, t->parentNode() );
+        Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
+        QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
         m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
@@ -659,7 +659,7 @@ void TaskEditor::slotAddTask()
     if ( sib == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), sib->parentNode() );
+    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
     edit( idx );
@@ -670,9 +670,9 @@ void TaskEditor::slotAddMilestone()
     kDebug();
     if ( selectedRowCount() == 0  || ( selectedRowCount() == 1 && selectedNode() == 0 ) ) {
         // None selected or only project selected: insert under main project
-        Task *t = m_view->project()->createTask( m_view->project() );
+        Task *t = m_view->project()->createTask();
         t->estimate()->clear();
-        QModelIndex idx = m_view->baseModel()->insertSubtask( t, t->parentNode() );
+        QModelIndex idx = m_view->baseModel()->insertSubtask( t, m_view->project() );
         Q_ASSERT( idx.isValid() );
         m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
         edit( idx );
@@ -682,7 +682,7 @@ void TaskEditor::slotAddMilestone()
     if ( sib == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( sib->parentNode() );
+    Task *t = m_view->project()->createTask();
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
@@ -701,7 +701,7 @@ void TaskEditor::slotAddSubMilestone()
     if ( parent == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), parent );
+    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     t->estimate()->clear();
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
@@ -720,7 +720,7 @@ void TaskEditor::slotAddSubtask()
     if ( parent == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), parent );
+    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults() );
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
     m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
