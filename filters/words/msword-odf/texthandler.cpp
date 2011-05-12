@@ -521,11 +521,15 @@ void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::Shar
     // XXX: get the date from the .doc
     m_annotationWriter->endElement();
 
-    //save the state of tables & paragraphs because we'll get new ones in the annotation
+    //save the state of tables/paragraphs/lists
     saveState();
     //signal Document to parse the annotation
     emit annotationFound(new wvWare::AnnotationFunctor(parseAnnotation), 0);
-    //and now restore state
+
+    //TODO: we should really improve processing of lists somehow
+    if (listIsOpen()) {
+        closeList();
+    }
     restoreState();
 
     //end the elements
