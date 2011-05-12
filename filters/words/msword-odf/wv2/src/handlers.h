@@ -340,7 +340,9 @@ namespace wvWare {
          * invokes the functor.
          */
         virtual void footnoteFound( FootnoteData::Type type, UString characters,
-                                    SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote);
+                                    SharedPtr<const Word97::SEP> sep,
+                                    SharedPtr<const Word97::CHP> chp,
+                                    const FootnoteFunctor& parseFootnote);
 
         /**
          * The parser found an annotation. The passed functor will trigger the parsing of this

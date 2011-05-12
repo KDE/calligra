@@ -8703,6 +8703,18 @@ struct SEP : public Shared {
      */
     OLST olstAnm;
 
+    /**
+     * Specifies the numbering format used for footnotes.  By default,
+     * footnotes use the msonfcArabic numbering format.
+     */
+    U16 nfcFtnRef;
+
+    /**
+     * Specifies the numbering format used for endnotes.  By default, endnotes
+     * use the msonfcLCRoman numbering format.
+     */
+    U16 nfcEdnRef;
+
 }; // SEP
 
 bool operator==(const SEP &lhs, const SEP &rhs);

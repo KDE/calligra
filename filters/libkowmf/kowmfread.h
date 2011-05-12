@@ -98,7 +98,7 @@ public:
     virtual void  restore() = 0;
 
     // Drawing tools
-    virtual void  setFont(const QFont &) = 0;
+    virtual void  setFont(const QFont &, int rotation, int fontHeight) = 0;
     // the pen : the width of the pen is in logical coordinate
     virtual void  setPen(const QPen &p) = 0;
     virtual void  setTextPen(const QPen &p) = 0;

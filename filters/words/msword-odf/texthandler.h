@@ -28,6 +28,7 @@
 #include "tablehandler.h"
 //#include "versionmagic.h"
 #include "paragraph.h"
+#include "exceptions.h"
 
 #include <wv2/src/handlers.h>
 #include <wv2/src/functordata.h>
@@ -45,6 +46,7 @@
 #include <string>
 #include <vector>
 #include <stack>
+
 
 class Document;
 
@@ -81,6 +83,7 @@ public:
     virtual void pageBreak();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
     virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
+                               wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);
     virtual void annotationFound(wvWare::UString characters,
@@ -214,7 +217,7 @@ private:
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
     QString createBulletStyle(const QString& textStyleName) const;
-    void updateListStyle(const QString& textStyleName);
+    void updateListStyle(const QString& textStyleName) throw(InvalidFormatException);
 
     QString m_listSuffixes[9]; // The suffix for every list level seen so far
     QString m_listStyleName; //track the name of the list style

@@ -59,6 +59,10 @@ enum TabLC {
 //define the static attribute
 QString Paragraph::m_bgColor = "";
 
+//definition of local functions
+const char* getStrokeValue(const uint brcType);
+
+
 Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, bool inHeaderFooter, int outlineLevel)
         : m_paragraphProperties(0),
         m_paragraphProperties2(0),
@@ -252,7 +256,8 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
     if ( !m_paragraphProperties->pap().fInTable &&
          (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs) )
     {
-        KoGenStyle userStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+        KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "graphic");
+        const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
         QString drawStyleName;
 
         writer->startElement("text:p", false);
@@ -265,73 +270,81 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
         //MS-DOC - sprmPDxaAbs - relative horizontal position to anchor
         // (-4) - center, (-8) - right, (-12) - inside, (-16) - outside
         if (pap.dxaAbs == -4) {
-            userStyle.addProperty("style:horizontal-pos","center");
+            gs.addProperty("style:horizontal-pos","center", gt);
         }
         else if (pap.dxaAbs == -8) {
-            userStyle.addProperty("style:horizontal-pos","right");
+            gs.addProperty("style:horizontal-pos","right", gt);
         }
         else if (pap.dxaAbs == -12) {
-            userStyle.addProperty("style:horizontal-pos","inside");
+            gs.addProperty("style:horizontal-pos","inside", gt);
         }
         else if (pap.dxaAbs == -16) {
-            userStyle.addProperty("style:horizontal-pos","outside");
+            gs.addProperty("style:horizontal-pos","outside", gt);
         }
         else {
             dxaAbs = pap.dxaAbs;
-            userStyle.addProperty("style:horizontal-pos","from-left");
+            gs.addProperty("style:horizontal-pos","from-left", gt);
         }
         //MS-DOC - sprmPDyaAbs - relative vertical position to anchor
         // (-4) - top, (-8) - middle, (-12) - bottom, (-16) - inside,
         // (-20) - outside
         if (pap.dyaAbs == -4) {
-            userStyle.addProperty("style:vertical-pos","top");
+            gs.addProperty("style:vertical-pos","top", gt);
         }
         else if (pap.dyaAbs == -8) {
-            userStyle.addProperty("style:vertical-pos","middle");
+            gs.addProperty("style:vertical-pos","middle", gt);
         }
         else if (pap.dyaAbs == -12) {
-            userStyle.addProperty("style:vertical-pos","bottom");
+            gs.addProperty("style:vertical-pos","bottom", gt);
         }
         else if (pap.dyaAbs == -16) {
-            userStyle.addProperty("style:vertical-pos","inline");
+            gs.addProperty("style:vertical-pos","inline", gt);
         }
         else if (pap.dyaAbs == -20) {
-            userStyle.addProperty("style:vertical-pos","inline");
+            gs.addProperty("style:vertical-pos","inline", gt);
         }
         else {
             dyaAbs = pap.dyaAbs;
-            userStyle.addProperty("style:vertical-pos","from-top");
+            gs.addProperty("style:vertical-pos","from-top", gt);
         }
         //MS-DOC - PositionCodeOperand - anchor vertical position
         // 0 - margin, 1 - page, 2 - paragraph
         if (pap.pcVert == 0) {
-            userStyle.addProperty("style:vertical-rel","page-content");
+            gs.addProperty("style:vertical-rel","page-content", gt);
         }
         else if (pap.pcVert == 1) {
-            userStyle.addProperty("style:vertical-rel","page");
+            gs.addProperty("style:vertical-rel","page", gt);
         }
         else if (pap.pcVert == 2) {
-            userStyle.addProperty("style:vertical-rel","paragraph");
+            gs.addProperty("style:vertical-rel","paragraph", gt);
         }
         //MS-DOC - PositionCodeOperand - anchor horizontal position
         // 0 - current column, 1 - margin, 2 - page
         if (pap.pcHorz == 0) {
-            userStyle.addProperty("style:horizontal-rel","paragraph");
+            gs.addProperty("style:horizontal-rel","paragraph", gt);
         }
         else if (pap.pcHorz == 1) {
-            userStyle.addProperty("style:horizontal-rel","page-content");
+            gs.addProperty("style:horizontal-rel","page-content", gt);
         }
         else if (pap.pcHorz == 2) {
-            userStyle.addProperty("style:horizontal-rel","page");
+            gs.addProperty("style:horizontal-rel","page", gt);
         }
 
         //in case a header or footer is processed, save the style into styles.xml
         if (m_inStylesDotXml) {
-            userStyle.setAutoStyleInStylesDotXml(true);
+            gs.setAutoStyleInStylesDotXml(true);
         }
 
+        //TODO: improve frame borders support
+        if ( pap.brcLeft.brcType || pap.brcTop.brcType ||
+             pap.brcRight.brcType || pap.brcBottom.brcType )
+        {
+            kDebug(30513) << "Frame bordes not fully supported!";
+        }
+        gs.addProperty("draw:stroke", getStrokeValue(pap.brcLeft.brcType), gt);
+
         drawStyleName = "fr";
-        drawStyleName = m_mainStyles->insert(userStyle, drawStyleName);
+        drawStyleName = m_mainStyles->insert(gs, drawStyleName);
         writer->startElement("draw:frame");
         writer->addAttribute("draw:style-name", drawStyleName.toUtf8());
         writer->addAttribute("text:anchor-type", "paragraph");
@@ -1098,4 +1111,23 @@ QString Paragraph::contrastFontColor(QString name)
         d = 255; // dark colors - white font
     }
     return  QColor(d, d, d).name();
+}
+
+const char* getStrokeValue(const uint brcType)
+{
+    //TODO: create corresponding dash styles
+    switch (brcType) {
+    case 0x01: //A single line.
+    case 0x03: //A double line.
+    case 0x05: //A thin single solid line.
+    case 0x14: //A single wavy line.
+    case 0x15: //A double wavy line.
+    case 0x18: //threeDEmboss
+    case 0x19: //threeDEngrave
+    case 0x1A: //outset
+    case 0x1B: //inset
+	return "solid";
+    default:
+        return "none";
+    }
 }

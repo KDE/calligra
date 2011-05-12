@@ -376,7 +376,10 @@ static const wvWare::Word97::BRC& brcWinner(const wvWare::Word97::BRC& brc1, con
 void KWordTableHandler::tableCellStart()
 {
     kDebug(30513) ;
+
+    //TODO: It would be secure to end with KoFilter::InvalidFormat
     Q_ASSERT(m_tap);
+
     if (!m_tap) {
         return;
     }
@@ -725,11 +728,13 @@ void KWordTableHandler::tableCellEnd()
     }
     m_colSpan = 1;
 
-    //if the backgroud-color was provided, then remove it from stack
-    const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
-    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
-    if (!shd.shdAutoOrNill && !(tc.fVertMerge && !tc.fVertRestart)) {
-        document()->rmBgColor();
+    if (m_tap) {
+        //if the backgroud-color was provided, then remove it from stack
+        const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
+        const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
+        if (!shd.shdAutoOrNill && !(tc.fVertMerge && !tc.fVertRestart)) {
+            document()->rmBgColor();
+        }
     }
 }
 

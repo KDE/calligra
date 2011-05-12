@@ -89,6 +89,8 @@ def containsRealError(err):
 	# out
 	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element styles failed to validate content") != -1:
 		return None
+	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element automatic-styles failed to validate content") != -1:
+		return None
 	return err
 
 class odfvalidator:

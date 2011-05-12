@@ -2040,7 +2040,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - customXml (§17.5.1.3)
  - del (§17.13.5.14)
  - dir (§17.3.2.8)
- - fldSimple (§17.16.19)
+ - [done] fldSimple (§17.16.19)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - moveFrom (§17.13.5.22)
@@ -2094,7 +2094,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 {
     READ_PROLOGUE
 
-    m_currentRunStyleName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     if (m_moveToStylesXml) {
         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
@@ -2154,87 +2153,81 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
-    if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() ||
-             m_complexCharType != NoComplexFieldCharType || !m_currentTextStyle.parentName().isEmpty()) {
-        // We want to write to the higher body level
-        body = buffer.originalWriter();
-        QString currentTextStyleName;
-        if (!m_currentRunStyleName.isEmpty()) {
-            currentTextStyleName = m_currentRunStyleName;
-        }
-        else {
-            currentTextStyleName = mainStyles->insert(m_currentTextStyle);
-        }
-        if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-                body->startElement("text:a");
-                body->addAttribute("xlink:type", "simple");
-                if (m_complexCharType == HyperlinkComplexFieldCharType) {
-                    body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
-                }
-                else {
-                    int spacePosition = m_complexCharValue.indexOf(' ');
-                    QString textValue = "#";
-                    textValue.append(m_complexCharValue.left(spacePosition));
-                    m_complexCharValue.remove(0, textValue.length());
-                    body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
-                }
-            }
-        }
-
-        body->startElement("text:span", false);
-        body->addAttribute("text:style-name", currentTextStyleName);
-
-        m_closeHyperlink = handleSpecialField();
-
-        if (m_complexCharStatus == ExecuteInstrNow) {
-            if (m_complexCharType == ReferenceNextComplexFieldCharType) {
-                body->startElement("text:bookmark-ref");
-                body->addAttribute("text:reference-format", "page");
-                body->addAttribute("text:ref-name", m_complexCharValue);
-                m_closeHyperlink = true;
+    // We want to write to the higher body level
+    body = buffer.originalWriter();
+    QString currentTextStyleName;
+    if (!m_currentTextStyle.isEmpty()) {
+        currentTextStyleName = mainStyles->insert(m_currentTextStyle);
+    }
+    if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+            body->startElement("text:a");
+            body->addAttribute("xlink:type", "simple");
+            if (m_complexCharType == HyperlinkComplexFieldCharType) {
+                body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
             }
             else {
-                m_specialCharacters = m_complexCharValue;
-                m_closeHyperlink = handleSpecialField();
+                int spacePosition = m_complexCharValue.indexOf(' ');
+                QString textValue = "#";
+                textValue.append(m_complexCharValue.left(spacePosition));
+                m_complexCharValue.remove(0, textValue.length());
+                body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
             }
         }
+    }
 
-        if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->addTextSpan(m_complexCharValue);
+    if (!currentTextStyleName.isEmpty()) {
+        body->startElement("text:span", false);
+        body->addAttribute("text:style-name", currentTextStyleName);
+    }
+
+    m_closeHyperlink = handleSpecialField();
+
+    if (m_complexCharStatus == ExecuteInstrNow) {
+        if (m_complexCharType == ReferenceNextComplexFieldCharType) {
+            body->startElement("text:bookmark-ref");
+            body->addAttribute("text:reference-format", "page");
+            body->addAttribute("text:ref-name", m_complexCharValue);
+            m_closeHyperlink = true;
         }
-
-        // Writing the internal body of read_t now
-        body = buffer.releaseWriter();
-
-        if (m_closeHyperlink) {
-            body->endElement(); //either text:bookmark-ref or text:a or text:page-number etc.
-            m_closeHyperlink = false;
-        }
-
-        body->endElement(); //text:span
-
-        if (m_complexCharStatus == InstrExecute) {
-             if (m_complexCharType == ReferenceComplexFieldCharType) {
-                 m_complexCharType = ReferenceNextComplexFieldCharType;
-             }
-        }
-        if (m_complexCharStatus == ExecuteInstrNow && m_complexCharType == HyperlinkComplexFieldCharType) {
-            body->endElement(); // text:a
-        }
-        else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->endElement(); // text:a
-        }
-
-        // Case where there's hyperlink with read_instrText, we only want to use the link
-        // with the next r element, not this.
-        if (m_complexCharStatus == InstrExecute) {
-            m_complexCharStatus = ExecuteInstrNow;
+        else {
+            m_specialCharacters = m_complexCharValue;
+            m_closeHyperlink = handleSpecialField();
         }
     }
-    else {
-        // Writing the internal body of read_t now
-        body = buffer.releaseWriter();
+
+    if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        body->addTextSpan(m_complexCharValue);
+    }
+
+    // Writing the internal body of read_t now
+    body = buffer.releaseWriter();
+
+    if (m_closeHyperlink) {
+        body->endElement(); //either text:bookmark-ref or text:a or text:page-number etc.
+        m_closeHyperlink = false;
+    }
+
+    if (!currentTextStyleName.isEmpty()) {
+        body->endElement(); //text:span
+    }
+
+    if (m_complexCharStatus == InstrExecute) {
+         if (m_complexCharType == ReferenceComplexFieldCharType) {
+             m_complexCharType = ReferenceNextComplexFieldCharType;
+         }
+    }
+    if (m_complexCharStatus == ExecuteInstrNow && m_complexCharType == HyperlinkComplexFieldCharType) {
+        body->endElement(); // text:a
+    }
+    else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        body->endElement(); // text:a
+    }
+
+    // Case where there's hyperlink with read_instrText, we only want to use the link
+    // with the next r element, not this.
+    if (m_complexCharStatus == InstrExecute) {
+        m_complexCharStatus = ExecuteInstrNow;
     }
 
     if (m_dropCapStatus == DropCapDone) {
@@ -3188,10 +3181,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     // for rPr
     TRY_READ_ATTR(val)
 
-    const int pointSize = (TWIP_TO_POINT(val.toInt(&ok)));
+    const qreal pointSize = (TWIP_TO_POINT(val.toDouble(&ok)));
 
     if (ok) {
-        m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
+        m_currentTextStyle.addPropertyPt("fo:letter-spacing", qreal(pointSize) / 100.0);
     }
 
     TRY_READ_ATTR(lineRule)
@@ -3544,20 +3537,21 @@ KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
     borderData.style = borderMap.value(val);
 
     TRY_READ_ATTR(themeColor)
+    TRY_READ_ATTR(color)
 
-    if(!themeColor.isEmpty()) {
+    if (color.isEmpty()) {
+        QString colorString = QString("#").append(color);
+        borderData.color = QColor(colorString);
+    }
+
+    // Fallback to theme
+    if (!borderData.color.isValid() && !themeColor.isEmpty()) {
+
         MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
         colorItem = m_context->themes->colorScheme.value(themeColor);
         if (colorItem) {
             borderData.color = colorItem->value();
         }
-    }
-
-    //No themeColor or not valid color, fallback to the color attribute
-    if(!borderData.color.isValid()) {
-        TRY_READ_ATTR(color)
-        QString colorString = QString("#").append(color);
-        borderData.color = QColor(colorString);
     }
 
     TRY_READ_ATTR(sz)
@@ -3639,52 +3633,57 @@ bool DocxXmlDocumentReader::handleSpecialField()
     instructions.push_back(instr);
     QString command = instructions.at(0);
 
-    if (command == "PAGEREF") {
-        // Do something
+    bool returnTrue = true;
+
+    if (command == "AUTHOR") {
+        body->startElement("text:author-name");
+    }
+    else if (command == "CREATEDATE") {
+        body->startElement("text:creation-date");
+    }
+    else if (command == "DATE") {
+        body->startElement("text:date");
+    }
+    else if (command == "EDITIME") {
+        body->startElement("text:modification-time");
+    }
+    else if (command == "FILENAME") {
+        body->startElement("text:file-name");
+    }
+    else if (command == "NUMPAGES") {
+        body->startElement("text:page-count");
+    }
+    else if (command == "NUMWORDS") {
+        body->startElement("text:word-count");
     }
     else if (command == "PAGE") {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
-        return true;
     }
-    else if (command == "NUMPAGES") {
-        body->startElement("text:page-count");
-        return true;
+    else if (command == "PRINTDATE") {
+        body->startElement("text:print-date");
     }
     else if (command == "REF") {
         if ((instructions.size() > 3) && instructions.contains("\\h")) {
             body->startElement("text:bookmark-ref");
             body->addAttribute("text:reference-format", "page");
             body->addAttribute("text:ref-name", instructions.at(1));
-            return true;
         }
-    }
-    else if (command == "DATE") {
-        body->startElement("text:date");
-        return true;
-    }
-    else if (command == "CREATEDATE") {
-        body->startElement("text:creation-date");
-        return true;
-    }
-    else if (command == "SAVEDATE") {
-        body->startElement("text:modification-date");
-        return true;
+        else {
+            returnTrue = false;
+        }
     }
     else if (command == "TIME") {
         body->startElement("text:time");
-        return true;
     }
-    else if (command == "PRINTDATE") {
-        body->startElement("text:print-date");
-        return true;
+    else if (command == "SAVEDATE") {
+        body->startElement("text:modification-date");
     }
-    else if (command == "EDITIME") {
-        body->startElement("text:modification-time");
-        return true;
+    else {
+        returnTrue = false;
     }
 
-    return false;
+    return returnTrue;
 }
 
 #undef CURRENT_EL
@@ -5299,7 +5298,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     m_docPrName.clear();
     m_docPrDescr.clear();
     m_drawing_anchor = true; // for pic:pic
-    m_behindDoc = false;
+    bool behindDoc = false;
+    bool allowOverlap = false;
 
     const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
@@ -5312,7 +5312,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     READ_ATTR_WITHOUT_NS(distR)
     distToODF("fo:margin-right", distR);
 
-    m_behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+    behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+    allowOverlap = MSOOXML::Utils::convertBooleanAttr(attrs.value("allowOverlap").toString());
 
     while (!atEnd()) {
         readNext();
@@ -5335,7 +5336,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 if (!expectElEnd(QUALIFIED_NAME(wrapNone))) {
                     return KoFilter::WrongFormat;
                 }
-                saveStyleWrap("none");
+                if (allowOverlap) {
+                    m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                    if (behindDoc) {
+                        m_currentDrawStyle->addProperty("style:run-through", "background");
+                    }
+                    else {
+                        m_currentDrawStyle->addProperty("style:run-through", "foreground");
+                    }
+                }
+                else {
+                    saveStyleWrap("none");
+                }
             } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
                 // This element specifies that text shall wrap around the top

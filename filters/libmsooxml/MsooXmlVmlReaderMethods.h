@@ -52,6 +52,8 @@ protected:
     KoFilter::ConversionStatus read_group();
     KoFilter::ConversionStatus read_stroke();
 
+    void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
+
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
@@ -107,3 +109,5 @@ protected:
     int m_formulaIndex;
     QString m_shapeTypeString;
     QMap<QString, QString> m_shapeTypeStrings;
+    QMap<QString, QString> m_strokeTypeStrings;
+    QMap<QString, QString> m_fillTypeStrings;

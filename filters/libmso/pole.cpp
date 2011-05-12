@@ -43,6 +43,9 @@
 // enable to activate debugging output
 //#define POLE_DEBUG
 
+// validate sibling names against positions in the black red tree
+//#define CHECK_SIBLINGS
+
 #define OLE_HEADER_SIZE 0x200
 
 namespace POLE
@@ -628,22 +631,23 @@ bool DirTree::valid() const
             std::cerr << "DirTree::valid Invalid DirEntry detected!" << std::endl;
             return false;
         }
+#ifdef CHECK_SIBLINGS
+        //NOTE: Too many False Positives, mainly files with embedded documents.
+
         //Check the name of the left/right DirEntry.
-        str1 = QString(e->name.data());
         if ((int)e->prev != -1) {
-            str2 = QString(entries[e->prev].name.data());
-            if (ename_cmp(str1, str2) < 0) {
-		std::cerr << "DirTree::valid [name, position] mismatch detected (prev)!" << std::endl;
-                return false;
-            }
+            str1 = QString(entries[e->prev].name.data());
         }
         if ((int)e->next != -1) {
             str2 = QString(entries[e->next].name.data());
+        }
+        if (!str1.isEmpty() && !str2.isEmpty()) {
             if (ename_cmp(str1, str2) > 0) {
-		std::cerr << "DirTree::valid [name, position] mismatch detected (next)!" << std::endl;
+                std::cerr << "DirTree::valid [name, position] mismatch detected!" << std::endl;
                 return false;
             }
         }
+#endif
     }
     return true;
 }

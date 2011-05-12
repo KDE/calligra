@@ -180,8 +180,9 @@ private:
 
     /**
      * Parse floating pictures data from the WordDocument stream.
+     * @return 0 - success, 1 - failed
      */
-    void parseFloatingPictures(void);
+    int parseFloatingPictures(void);
 
     /**
      * Store floating pictures into ODT, write the appropriate manifest entry.
