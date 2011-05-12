@@ -564,15 +564,16 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDggContainer(in, m_officeArtDggContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing parseOfficeArtDggContainer";
+        kDebug(30513) << "Caught IOException while parsing OfficeArtDggContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing parseOfficeArtDggContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDggContainer.";
         return;
     }
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "OfficeArtDggContainer parsed successfully" ;
+    kDebug(30513) << "OfficeArtDggContainer [ OK ]" ;
 #endif
 
     // parse drawingsVariable from msdoc
@@ -583,11 +584,12 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         drawingsVariable = in.readuint8();
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing drawingsVariable ";
+        kDebug(30513) << "Caught IOException while parsing DrawingsVariable.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing drawingsVariable";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing DrawingsVariable.";
         return;
     }
 
@@ -603,27 +605,31 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing OfficeArtDgContainer ";
+        kDebug(30513) << "Caught IOException while parsing OfficeArtDgContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing OfficeArtDgContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
         return;
     }
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+#endif
 
     // parse drawingsVariable from msdoc
-    // 0 - next OfficeArtDgContainer belongs to Main document;
+    // 0 - next OfficeArtDgContainer belongs to Main Document
     // 1 - next OfficeArtDgContainer belongs to Header Document
     try {
         drawingsVariable = in.readuint8();
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing second drawingsVariable ";
-        //wvlog << "in position: " << in.getPosition() << std::endl;
+        kDebug(30513) << "Caught IOException while parsing the 2nd DrawingsVariable.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing second drawingsVariable";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd DrawingsVariable.";
         return;
     }
 
@@ -636,8 +642,7 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
                 delete m_pOfficeArtBodyDgContainer;
             }
             m_pOfficeArtBodyDgContainer = pDgContainer;
-        }
-        else {
+        } else {
             if (m_pOfficeArtHeaderDgContainer != 0) {
                 delete m_pOfficeArtHeaderDgContainer;
             }
@@ -646,17 +651,22 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing second OfficeArtDgContainer ";
+        kDebug(30513) << "Caught IOException while parsing the 2nd OfficeArtDgContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing second OfficeArtDgContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd OfficeArtDgContainer.";
         return;
     }
 
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+#endif
+
     quint32 r = buffer.size() - in.getPosition();
     if (r > 0) {
-        kError(30513) << r << "bytes left to parse from the OfficeArtDggContainer";
+        kError(30513) << "Error:" << r << "bytes left to parse from the OfficeArtContent!";
     }
 }
 
