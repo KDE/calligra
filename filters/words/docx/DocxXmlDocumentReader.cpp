@@ -2094,7 +2094,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 {
     READ_PROLOGUE
 
-    m_currentRunStyleName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     if (m_moveToStylesXml) {
         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
@@ -2154,87 +2153,81 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
-    if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() ||
-             m_complexCharType != NoComplexFieldCharType || !m_currentTextStyle.parentName().isEmpty()) {
-        // We want to write to the higher body level
-        body = buffer.originalWriter();
-        QString currentTextStyleName;
-        if (!m_currentRunStyleName.isEmpty()) {
-            currentTextStyleName = m_currentRunStyleName;
-        }
-        else {
-            currentTextStyleName = mainStyles->insert(m_currentTextStyle);
-        }
-        if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-                body->startElement("text:a");
-                body->addAttribute("xlink:type", "simple");
-                if (m_complexCharType == HyperlinkComplexFieldCharType) {
-                    body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
-                }
-                else {
-                    int spacePosition = m_complexCharValue.indexOf(' ');
-                    QString textValue = "#";
-                    textValue.append(m_complexCharValue.left(spacePosition));
-                    m_complexCharValue.remove(0, textValue.length());
-                    body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
-                }
-            }
-        }
-
-        body->startElement("text:span", false);
-        body->addAttribute("text:style-name", currentTextStyleName);
-
-        m_closeHyperlink = handleSpecialField();
-
-        if (m_complexCharStatus == ExecuteInstrNow) {
-            if (m_complexCharType == ReferenceNextComplexFieldCharType) {
-                body->startElement("text:bookmark-ref");
-                body->addAttribute("text:reference-format", "page");
-                body->addAttribute("text:ref-name", m_complexCharValue);
-                m_closeHyperlink = true;
+    // We want to write to the higher body level
+    body = buffer.originalWriter();
+    QString currentTextStyleName;
+    if (!m_currentTextStyle.isEmpty()) {
+        currentTextStyleName = mainStyles->insert(m_currentTextStyle);
+    }
+    if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+            body->startElement("text:a");
+            body->addAttribute("xlink:type", "simple");
+            if (m_complexCharType == HyperlinkComplexFieldCharType) {
+                body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
             }
             else {
-                m_specialCharacters = m_complexCharValue;
-                m_closeHyperlink = handleSpecialField();
+                int spacePosition = m_complexCharValue.indexOf(' ');
+                QString textValue = "#";
+                textValue.append(m_complexCharValue.left(spacePosition));
+                m_complexCharValue.remove(0, textValue.length());
+                body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
             }
         }
+    }
 
-        if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->addTextSpan(m_complexCharValue);
+    if (!currentTextStyleName.isEmpty()) {
+        body->startElement("text:span", false);
+        body->addAttribute("text:style-name", currentTextStyleName);
+    }
+
+    m_closeHyperlink = handleSpecialField();
+
+    if (m_complexCharStatus == ExecuteInstrNow) {
+        if (m_complexCharType == ReferenceNextComplexFieldCharType) {
+            body->startElement("text:bookmark-ref");
+            body->addAttribute("text:reference-format", "page");
+            body->addAttribute("text:ref-name", m_complexCharValue);
+            m_closeHyperlink = true;
         }
-
-        // Writing the internal body of read_t now
-        body = buffer.releaseWriter();
-
-        if (m_closeHyperlink) {
-            body->endElement(); //either text:bookmark-ref or text:a or text:page-number etc.
-            m_closeHyperlink = false;
-        }
-
-        body->endElement(); //text:span
-
-        if (m_complexCharStatus == InstrExecute) {
-             if (m_complexCharType == ReferenceComplexFieldCharType) {
-                 m_complexCharType = ReferenceNextComplexFieldCharType;
-             }
-        }
-        if (m_complexCharStatus == ExecuteInstrNow && m_complexCharType == HyperlinkComplexFieldCharType) {
-            body->endElement(); // text:a
-        }
-        else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->endElement(); // text:a
-        }
-
-        // Case where there's hyperlink with read_instrText, we only want to use the link
-        // with the next r element, not this.
-        if (m_complexCharStatus == InstrExecute) {
-            m_complexCharStatus = ExecuteInstrNow;
+        else {
+            m_specialCharacters = m_complexCharValue;
+            m_closeHyperlink = handleSpecialField();
         }
     }
-    else {
-        // Writing the internal body of read_t now
-        body = buffer.releaseWriter();
+
+    if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        body->addTextSpan(m_complexCharValue);
+    }
+
+    // Writing the internal body of read_t now
+    body = buffer.releaseWriter();
+
+    if (m_closeHyperlink) {
+        body->endElement(); //either text:bookmark-ref or text:a or text:page-number etc.
+        m_closeHyperlink = false;
+    }
+
+    if (!currentTextStyleName.isEmpty()) {
+        body->endElement(); //text:span
+    }
+
+    if (m_complexCharStatus == InstrExecute) {
+         if (m_complexCharType == ReferenceComplexFieldCharType) {
+             m_complexCharType = ReferenceNextComplexFieldCharType;
+         }
+    }
+    if (m_complexCharStatus == ExecuteInstrNow && m_complexCharType == HyperlinkComplexFieldCharType) {
+        body->endElement(); // text:a
+    }
+    else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        body->endElement(); // text:a
+    }
+
+    // Case where there's hyperlink with read_instrText, we only want to use the link
+    // with the next r element, not this.
+    if (m_complexCharStatus == InstrExecute) {
+        m_complexCharStatus = ExecuteInstrNow;
     }
 
     if (m_dropCapStatus == DropCapDone) {
