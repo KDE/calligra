@@ -39,19 +39,16 @@
 //------------------------------------------------
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const QVariantList &l)
-        : KexiPart::Part(parent, l)
+  : KexiPart::Part(parent,
+        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+              "Use '_' character instead of spaces. First character should be a..z character. "
+              "If you cannot use latin characters in your language, use english word.",
+              "query"),
+        i18nc("tooltip", "Create new query"),
+        i18nc("what's this", "Creates new query."),
+        l)
 {
-    setInternalPropertyValue("instanceName",
-                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                                   "Use '_' character instead of spaces. First character should be a..z character. "
-                                   "If you cannot use latin characters in your language, use english word.",
-                                   "query"));
-    setInternalPropertyValue("instanceCaption", i18n("Query"));
-    setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new query"));
-    setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new query."));
-// setInternalPropertyValue("textViewModeCaption", i18n("&SQL View"));
     setInternalPropertyValue("textViewModeCaption", i18n("SQL"));
-    setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode);
 }
 
 KexiQueryPart::~KexiQueryPart()
@@ -62,7 +59,7 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 {
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
-    data->listenerInfoString = window->part()->instanceCaption() + " \""
+    data->listenerInfoString = window->part()->info()->instanceCaption() + " \""
                                + window->partItem()->name() + "\"";
     return data;
 }

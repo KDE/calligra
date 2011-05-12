@@ -255,7 +255,9 @@ void KexiProjectListView::setProject(KexiProject* prj, const QString& itemsPartC
     m_itemsPartClass = itemsPartClass;
     m_list->setRootIsDecorated(m_itemsPartClass.isEmpty());
 
-    KexiPart::PartInfoList* plist = Kexi::partManager().partInfoList();
+    KexiPart::PartInfoList* plist = Kexi::partManager().infoList();
+    if (!plist)
+        return;
     foreach(KexiPart::Info *info, *plist) {
         if (!info->isVisibleInNavigator())
             continue;
@@ -450,13 +452,13 @@ KexiProjectListView::slotSelectionChanged(Q3ListViewItem* i)
 //todo setAvailable("edit_edititem",gotitem);
 #endif
 
-    m_openAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DataViewMode));
+    m_openAction->setEnabled(gotitem && part && (part->info()->supportedViewModes() & Kexi::DataViewMode));
     if (m_designAction) {
 //  m_designAction->setVisible(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
-        m_designAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
+        m_designAction->setEnabled(gotitem && part && (part->info()->supportedViewModes() & Kexi::DesignViewMode));
     }
     if (m_editTextAction)
-        m_editTextAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::TextViewMode));
+        m_editTextAction->setEnabled(gotitem && part && (part->info()->supportedViewModes() & Kexi::TextViewMode));
 
 // if (m_features & ContextMenus) {
 //  m_openAction->setVisible(m_openAction->isEnabled());
@@ -481,14 +483,14 @@ KexiProjectListView::slotSelectionChanged(Q3ListViewItem* i)
         if (part) {
           if (m_newObjectAction) {
             m_newObjectAction->setText(
-              i18n("&Create Object: %1...", part->instanceCaption() ));
+              i18n("&Create Object: %1...", part->info()->instanceCaption() ));
             m_newObjectAction->setIcon( KIcon(part->info()->createItemIcon()) );
             if (m_features & Toolbar) {
 /*              m_newObjectToolButton->setIcon( KIcon(part->info()->createItemIcon()) );
               m_newObjectToolButton->setToolTip(
-                i18n("Create object: %1", part->instanceCaption().toLower() ));
+                i18n("Create object: %1", part->info()->instanceCaption().toLower() ));
               m_newObjectToolButton->setWhatsThis(
-                i18n("Creates a new object: %1", part->instanceCaption().toLower() ));*/
+                i18n("Creates a new object: %1", part->info()->instanceCaption().toLower() ));*/
             }
           }
         } else {

@@ -195,13 +195,15 @@ public:
         item = new ActionSelectorDialogListItem("kaction", this, i18n("Application actions"));
         item->setPixmap(0, SmallIcon("kexi"));
 
-        KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
-        foreach(KexiPart::Info *info, *pl) {
-            KexiPart::Part *part = Kexi::partManager().part(info);
-            if (!info->isVisibleInNavigator() || !part)
-                continue;
-            item = new KexiProjectListViewItem(this, info);
-            item->setText(0, part->instanceCaption());
+        KexiPart::PartInfoList *pl = Kexi::partManager().infoList();
+        if (pl) {
+            foreach(KexiPart::Info *info, *pl) {
+                KexiPart::Part *part = Kexi::partManager().part(info);
+                if (!info->isVisibleInNavigator() || !part)
+                    continue;
+                item = new KexiProjectListViewItem(this, info);
+                item->setText(0, part->info()->instanceCaption());
+            }
         }
         Q3ListViewItem *formItem = itemForAction("form");
         if (formItem) {
@@ -256,7 +258,7 @@ public:
         KexiPart::Part *part = Kexi::partManager().partForClass(m_currentPartClass);
         if (!part)
             return;
-        int supportedViewModes = part->supportedViewModes();
+        Kexi::ViewModes supportedViewModes = part->info()->supportedViewModes();
         ActionSelectorDialogListItem *item;
         const QPixmap noIcon(KexiUtils::emptyIcon(KIconLoader::Small));
         if (supportedViewModes & Kexi::DataViewMode) {

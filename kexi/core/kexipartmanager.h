@@ -48,7 +48,7 @@ typedef QHash<QString, Part*> PartDict;
 /**
  * @short KexiPart's manager: looks up and instantiates them
  *
- * It dlopens them when needed, they aren't dlopened at startup is not necessary.
+ * It creates instances only when needed.
  */
 class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 {
@@ -60,12 +60,6 @@ public:
      */
     Manager(QObject *parent = 0);
     ~Manager();
-
-    /**
-     * Queries ktrader and creates a list of available parts.
-     * \return false is required servicetype was not found (what means the installation is broken).
-     */
-    bool lookup();
 
     /**
      * \return a part object for specified class name, e.g. "org.kexi-project.table"
@@ -107,11 +101,10 @@ public:
 
 
     /**
-     * @returns a list of the available KexiParts in well-defined order
+     * @return a list of the available KexiParts in well-defined order
+     * Can return 0 if plugins were not found (what means the installation is broken).
      */
-    PartInfoList *partInfoList() {
-        return &m_partlist;
-    }
+    PartInfoList* infoList();
 
 signals:
     void partLoaded(KexiPart::Part*);
@@ -121,13 +114,17 @@ protected:
     void insertStaticPart(KexiPart::StaticPart* part);
 
 private:
+    /**
+     * Queries the plugin system and creates a list of available parts.
+     * @return false if required servicetype was not found (what means the installation is broken).
+     */
+    bool lookup();
+
+    Q_DISABLE_COPY(Manager)
+
     PartDict m_parts;
     PartInfoList m_partlist;
     PartInfoDict m_partsByClass;
-#if 0 // moved to KexiProject
-    MissingList m_missing;
-#endif
-//    int m_nextTempProjectPartID;
     bool m_lookupDone;
     bool m_lookupResult;
 

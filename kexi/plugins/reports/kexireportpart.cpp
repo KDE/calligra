@@ -45,19 +45,16 @@ public:
 };
 
 KexiReportPart::KexiReportPart(QObject *parent, const QVariantList &l)
-        : KexiPart::Part(parent, l)
-        , d(new Private())
+  : KexiPart::Part(parent,
+        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+              "Use '_' character instead of spaces. First character should be a..z character. "
+              "If you cannot use latin characters in your language, use english word.",
+              "report"),
+        i18nc("tooltip", "Create new report"),
+        i18nc("what's this", "Creates new report."),
+        l)
+  , d(new Private)
 {
-    kDebug();
-    setInternalPropertyValue("instanceName",
-                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                                   "Use '_' character instead of spaces. First character should be a..z character. "
-                                   "If you cannot use latin characters in your language, use english word.",
-                                   "report"));
-    setInternalPropertyValue("instanceCaption", i18n("Report"));
-    setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new report"));
-    setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new report."));
-    setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
     setInternalPropertyValue("newObjectsAreDirty", true);
 }
 

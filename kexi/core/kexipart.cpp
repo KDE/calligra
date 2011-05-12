@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,10 +48,11 @@ class Part::Private
 {
 public:
     Private()
-            : guiClient(0)
-//            , registeredPartID(-1) //no registered ID by default
-            , newObjectsAreDirty(false)
-            , instanceActionsInitialized(false) {
+    : info(0)
+    , guiClient(0)
+    , newObjectsAreDirty(false)
+    , instanceActionsInitialized(false)
+    {
     }
 
     //! Helper, used in Part::openInstance()
@@ -79,11 +80,9 @@ public:
         return cancelled;
     }
 
-    /*! Supported modes for dialogs created by this part.
-    @see supportedViewModes() */
-    Kexi::ViewModes supportedViewModes;
-
-    Kexi::ViewModes supportedUserViewModes;
+    QString instanceName;
+    QString toolTip;
+    QString whatsThis;
 
     Info *info;
     GUIClient *guiClient;
@@ -99,7 +98,6 @@ public:
 #endif
 
     bool newObjectsAreDirty;
-
     bool instanceActionsInitialized;
 };
 }
@@ -108,24 +106,34 @@ public:
 
 using namespace KexiPart;
 
-Part::Part(QObject *parent, const QVariantList &)
-        : QObject(parent)
-        , d(new Private())
+Part::Part(QObject *parent, 
+           const QString& instanceName,
+           const QString& toolTip,
+           const QString& whatsThis,
+           const QVariantList& list)
+    : QObject(parent)
+    , d(new Private())
 {
-    d->info = 0;
-//    d->registeredPartID = partID;
-    d->supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
-    d->supportedUserViewModes = Kexi::DataViewMode;
+    Q_UNUSED(list);
+    d->instanceName = KexiUtils::string2Identifier(
+        instanceName.isEmpty()
+        ? i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+                "Use '_' character instead of spaces. First character should be a..z character. "
+                "If you cannot use latin characters in your language, use english word.",
+                "object").toLower()
+        : instanceName);
+    d->toolTip = toolTip;
+    d->whatsThis = whatsThis;
 }
 
-Part::Part(QObject* parent, StaticInfo *info)
+Part::Part(QObject* parent, StaticPartInfo *info)
         : QObject(parent)
         , d(new Private())
 {
     setObjectName("StaticPart");
     d->info = info;
-    d->supportedViewModes = Kexi::DesignViewMode;
-    d->supportedUserViewModes = 0;
+/*    d->supportedViewModes = Kexi::DesignViewMode;
+    d->supportedUserViewModes = 0;*/
 }
 
 Part::~Part()
@@ -141,18 +149,18 @@ void Part::createGUIClients()//KexiMainWindow *win)
         d->guiClient = new GUIClient(this, false, "part");
 
         //default actions for part's gui client:
-        KAction *act = new KAction(
-            KIcon(info()->createItemIcon()),
-            instanceCaption() + "...",
-            KexiMainWindowIface::global()->actionCollection()
-        );
-        act->setObjectName(KexiPart::nameForCreateAction(*info()));
-        QString defaultToolTip(i18n("Create new object of type \"%1\"", instanceCaption().toLower()));
-        act->setToolTip(internalPropertyValue("instanceToolTip", defaultToolTip).toString());
-        QString defaultWhatsThis(i18n("Creates new object of type \"%1\"", instanceCaption().toLower()));
-        act->setWhatsThis(internalPropertyValue("instanceWhatsThis", defaultWhatsThis).toString());
+        QAction* act = KexiMainWindowIface::global()->actionCollection()->action(
+                            KexiPart::nameForCreateAction(*info()));
+        // - update action's tooltip and "what's this"
+        QString tip(toolTip());
+        if (tip.isEmpty())
+            tip = i18n("Create new object of type \"%1\"", info()->instanceCaption().toLower());
+        act->setToolTip(tip);
+        QString what(whatsThis());
+        if (what.isEmpty())
+            what = i18n("Creates new object of type \"%1\"", info()->instanceCaption().toLower());
+        act->setWhatsThis(what);
         connect(act, SIGNAL(triggered()), this, SLOT(slotCreate()));
-        KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
 #ifdef __GNUC__
 #warning TODO  KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently
 #else
@@ -163,7 +171,7 @@ void Part::createGUIClients()//KexiMainWindow *win)
         //NONE
         //let init specific actions for part instances
         for (int mode = 1; mode <= 0x01000; mode <<= 1) {
-            if (d->supportedViewModes & (Kexi::ViewMode)mode) {
+            if (d->info->supportedViewModes() & (Kexi::ViewMode)mode) {
                 GUIClient *instanceGuiClient = new GUIClient(
                     this, true, Kexi::nameForViewMode((Kexi::ViewMode)mode).toLatin1());
                 d->instanceGuiClients.insert((Kexi::ViewMode)mode, instanceGuiClient);
@@ -260,7 +268,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
 
     d->status.clearStatus();
     KexiWindow *window = new KexiWindow(parent,
-                                        d->supportedViewModes, *this, item);
+                                        d->info->supportedViewModes(), *this, item);
 
     KexiProject *project = KexiMainWindowIface::global()->project();
     KexiDB::SchemaData sdata(project->idForClass(d->info->partClass())); // d->info->projectPartID());
@@ -449,19 +457,17 @@ void Part::setupCustomPropertyPanelTabs(KTabWidget *)
 
 QString Part::instanceName() const
 {
-    // "instanceName" should be already valid identifier but we're using
-    // KexiUtils::string2Identifier() to be sure translators did it right.
-    return KexiUtils::string2Identifier(
-               internalPropertyValue("instanceName",
-                                     i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                                           "Use '_' character instead of spaces. First character should be a..z character. "
-                                           "If you cannot use latin characters in your language, use english word.",
-                                           "object")).toString()).toLower();
+    return d->instanceName;
 }
 
-QString Part::instanceCaption() const
+QString Part::toolTip() const
 {
-    return internalPropertyValue("instanceCaption", i18n("Object")).toString();
+    return d->toolTip;
+}
+
+QString Part::whatsThis() const
+{
+    return d->whatsThis;
 }
 
 tristate Part::rename(KexiPart::Item &item, const QString& newName)
@@ -474,16 +480,6 @@ tristate Part::rename(KexiPart::Item &item, const QString& newName)
 GUIClient* Part::instanceGuiClient(Kexi::ViewMode mode) const
 {
     return d->instanceGuiClients.value((int)mode);
-}
-
-Kexi::ViewModes Part::supportedViewModes() const
-{
-    return d->supportedViewModes;
-}
-
-Kexi::ViewModes Part::supportedUserViewModes() const
-{
-    return d->supportedUserViewModes;
 }
 
 Info* Part::info() const
@@ -512,20 +508,10 @@ int Part::registeredPartID() const
     return d->registeredPartID;
 }*/
 
-void Part::setSupportedViewModes(Kexi::ViewModes modes)
-{
-    d->supportedViewModes = modes;
-}
-
-void Part::setSupportedUserViewModes(Kexi::ViewModes modes)
-{
-    d->supportedUserViewModes = modes;
-}
-
 KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item& item, KexiPart::Part *part)
 {
     if (part)
-        return item.name() + " : " + part->instanceCaption();
+        return item.name() + " : " + part->info()->instanceCaption();
     return item.name();
 }
 

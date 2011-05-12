@@ -206,4 +206,12 @@ void Manager::insertStaticPart(StaticPart* part)
     m_parts.insert(part->info()->partClass(), part);
 }
 
+PartInfoList* Manager::infoList()
+{
+    if (!lookup()) {
+        return 0;
+    }
+    return &m_partlist;
+}
+
 #include "kexipartmanager.moc"
