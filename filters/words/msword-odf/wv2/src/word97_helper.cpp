@@ -221,6 +221,8 @@ typedef enum
     sprmSPgnStart = 0x501C,
     sprmSDmPaperReq = 0x5026,
     sprmSClm = 0x5032,
+    sprmSNfcFtnRef = 0x5040,
+    sprmSNfcEdnRef = 0x5042,
     sprmSTextFlow = 0x5033,
     sprmSPgbProp = 0x522F,
     sprmTJc = 0x5400,
@@ -1936,6 +1938,12 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             break;
         case SPRM::sprmSClm:
             clm = readU16( ptr );
+            break;
+        case SPRM::sprmSNfcFtnRef:
+            nfcFtnRef = readU16( ptr );
+            break;
+        case SPRM::sprmSNfcEdnRef:
+            nfcEdnRef = readU16( ptr );
             break;
         case SPRM::sprmSTextFlow:
             wTextFlow = readU16( ptr );

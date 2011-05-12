@@ -288,10 +288,12 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 //this part puts the marker in the text, and signals for the rest to be parsed later
 void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
                                      wvWare::UString characters,
+                                     wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                      const wvWare::FootnoteFunctor& parseFootnote)
 {
     Q_UNUSED(chp);
+    Q_UNUSED(sep);
 
     kDebug(30513) ;
 
@@ -317,48 +319,60 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
         int noteNumber = (type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
         QString noteNumberString;
         char letter = 'a';
+        uint ref = msonfcArabic;
 
-        switch (m_parser->dop().nfcFtnRef2) {
-        case 0:
+        //TODO: check SEP if required
+
+	//checking DOP - documents default
+        if (type == wvWare::FootnoteData::Endnote) {
+            ref = m_parser->dop().nfcEdnRef2;
+        } else {
+            ref = m_parser->dop().nfcFtnRef2;
+        }
+        switch (ref) {
+        case msonfcArabic:
             noteNumberString = QString::number(noteNumber);
             break;
-        case 1: // uppercase roman
-        case 2:  { // lowercase roman
-                QString numDigitsLower[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i" };
-                QString numDigitsUpper[] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
-                QString *numDigits = (m_parser->dop().nfcFtnRef2 == 1 ? numDigitsUpper : numDigitsLower);
-                int numValues[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        case msonfcUCRoman:
+        case msonfcLCRoman:
+        {
+            QString numDigitsLower[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i" };
+            QString numDigitsUpper[] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+            QString *numDigits = (ref == 1 ? numDigitsUpper : numDigitsLower);
+            int numValues[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
 
-                for (int i = 0; i < 13; ++i) {
-                    while (noteNumber >= numValues[i]) {
-                        noteNumber -= numValues[i];
-                        noteNumberString += numDigits[i];
-                    }
+            for (int i = 0; i < 13; ++i) {
+                while (noteNumber >= numValues[i]) {
+                    noteNumber -= numValues[i];
+                    noteNumberString += numDigits[i];
                 }
-                break;
             }
-        case 3: // uppercase letter
+            break;
+        }
+        case msonfcUCLetter:
             letter = 'A';
-        case 4: { // lowercase letter
-                while (noteNumber / 25 > 0) {
-                    noteNumberString += QString::number(noteNumber / 25);
-                    noteNumber = noteNumber % 25;
-                    noteNumberString += QChar(letter - 1 + noteNumber / 25);
-                }
-                noteNumberString += QChar(letter - 1 + noteNumber);
-                break;
+        case msonfcLCLetter:
+        {
+            while (noteNumber / 25 > 0) {
+                noteNumberString += QString::number(noteNumber / 25);
+                noteNumber = noteNumber % 25;
+                noteNumberString += QChar(letter - 1 + noteNumber / 25);
             }
-        case 9: {
-                QChar chicagoStyle[] =  {42, 8224, 8225, 167};
-                int styleIndex = (noteNumber - 1) % 4;
-                int repeatCount = (noteNumber - 1) / 4;
-                noteNumberString = QString(chicagoStyle[styleIndex]);
-                while (repeatCount > 0) {
-                    noteNumberString += QString(chicagoStyle[styleIndex]);
-                    repeatCount--;
-                }
-                break;
+            noteNumberString += QChar(letter - 1 + noteNumber);
+            break;
+        }
+        case msonfcChiManSty:
+        {
+            QChar chicagoStyle[] =  {42, 8224, 8225, 167};
+            int styleIndex = (noteNumber - 1) % 4;
+            int repeatCount = (noteNumber - 1) / 4;
+            noteNumberString = QString(chicagoStyle[styleIndex]);
+            while (repeatCount > 0) {
+                noteNumberString += QString(chicagoStyle[styleIndex]);
+                repeatCount--;
             }
+            break;
+        }
         default:
             noteNumberString = QString::number(noteNumber);
             break;

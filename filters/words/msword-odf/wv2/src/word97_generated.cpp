@@ -8193,6 +8193,8 @@ bool SEP::read(OLEStreamReader *stream, bool preservePos) {
     fLayout=stream->readU8();
     unused490=stream->readU16();
     olstAnm.read(stream, false);
+    nfcFtnRef=stream->readU16();
+    nfcEdnRef=stream->readU16();
 
     if(preservePos)
         stream->pop();
@@ -8268,6 +8270,8 @@ bool SEP::write(OLEStreamWriter *stream, bool preservePos) const {
     stream->write(fLayout);
     stream->write(unused490);
     olstAnm.write(stream, false);
+    stream->write(nfcFtnRef);
+    stream->write(nfcEdnRef);
 
     if(preservePos)
         stream->pop();
@@ -8336,6 +8340,8 @@ void SEP::clear() {
     fLayout=0;
     unused490=0;
     olstAnm.clear();
+    nfcFtnRef=0;
+    nfcEdnRef=0;
 }
 
 void SEP::dump() const
@@ -8470,6 +8476,10 @@ std::string SEP::toString() const
     s += uint2string( unused490 );
     s += "\nolstAnm=";
     s += "\n{" + olstAnm.toString() + "}\n";
+    s += "\nnfcFtnRef=";
+    s += uint2string( nfcFtnRef );
+    s += "\nnfcEdnRef=";
+    s += uint2string( nfcEdnRef );
     s += "\nSEP Done.";
     return s;
 }
@@ -8536,7 +8546,9 @@ bool operator==(const SEP &lhs, const SEP &rhs) {
            lhs.dmOrientFirst==rhs.dmOrientFirst &&
            lhs.fLayout==rhs.fLayout &&
            lhs.unused490==rhs.unused490 &&
-           lhs.olstAnm==rhs.olstAnm;
+           lhs.olstAnm==rhs.olstAnm &&
+           lhs.nfcFtnRef==rhs.nfcFtnRef &&
+           lhs.nfcEdnRef==rhs.nfcEdnRef;
 }
 
 bool operator!=(const SEP &lhs, const SEP &rhs) {

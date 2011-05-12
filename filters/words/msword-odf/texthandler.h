@@ -83,6 +83,7 @@ public:
     virtual void pageBreak();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
     virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
+                               wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);
     virtual void annotationFound(wvWare::UString characters,
