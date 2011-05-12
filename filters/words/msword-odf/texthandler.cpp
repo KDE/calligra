@@ -816,11 +816,21 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     m_paragraph->setParagraphProperties(paragraphProperties);
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     //m_currentStyle = 0;
-    //check for a named style for this paragraph
-    if (paragraphProperties) { // Always set when called by wv2. But not set when called by tableStart.
+
+    //Check for a named style for this paragraph.  paragraphProperties are
+    //always set when called by wv2.  But not set when called by tableStart.
+    if (paragraphProperties) {
         kDebug(30513) << "set paragraph style";
+
+        //TODO: It would be secure to end with KoFilter::InvalidFormat
         const wvWare::Style* paragraphStyle = styles.styleByIndex(paragraphProperties->pap().istd);
-        Q_ASSERT(paragraphStyle);
+        if (!paragraphStyle && styles.size()) {
+            paragraphStyle = styles.styleByIndex(0);
+            kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
+        } else {
+            Q_ASSERT(paragraphStyle);
+        }
+
         //set current named style in m_paragraph
         m_paragraph->setParagraphStyle(paragraphStyle);
 
@@ -828,7 +838,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         //KoGenStyle* paragraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
         //writeLayout(*paragraphProperties, paragraphStyle, m_currentStyle, true, namedStyleName);
     } else {
-        kWarning() << "paragraphProperties was NOT set";
+        kWarning() << "paragraphProperties NOT set!";
     }
 
     KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
@@ -982,7 +992,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case UNSUPPORTED:
         kWarning(30513) << "Warning: Fld data missing, ignoring!";
     default:
-        kWarning(30513) << "Warning: unrecognized field type" << m_fld->m_type << ", ignoring!";
+        kWarning(30513) << "Warning: unrecognized field type, ignoring!";
         m_fld->m_type = UNSUPPORTED;
         break;
     }
@@ -1827,7 +1837,7 @@ QString KWordTextHandler::createBulletStyle(const QString& textStyleName) const
     return m_mainStyles->insert(style, QString("T"));
 }
 
-void KWordTextHandler::updateListStyle(const QString& textStyleName)
+void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(InvalidFormatException)
 {
     kDebug(30513) << "writing the list-level-style";
 
@@ -1843,7 +1853,8 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName)
     buf.open(QIODevice::WriteOnly);
     KoXmlWriter listStyleWriter(&buf);
     KoGenStyle* listStyle = 0;
-    //text() returns a struct consisting of a UString text string (called text) & a pointer to a CHP (called chp)
+    //text() returns a struct consisting of a UString text string (called text)
+    //& a pointer to a CHP (called chp)
     wvWare::UString text = listInfo->text().text;
 
     //NOTE: Reuse the automatic style of the text until we manage to process
@@ -1865,7 +1876,8 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName)
             // With bullets, text can only be one character, which
             // tells us what kind of bullet to use
             unsigned int code = text[0].unicode();
-            if ((code & 0xFF00) == 0xF000) {  // unicode: private use area (0xf000 - 0xf0ff)
+            // unicode: private use area (0xf000 - 0xf0ff)
+            if ((code & 0xFF00) == 0xF000) {
                 if (code >= 0x20) {
                     // microsoft symbol charset shall apply here.
                     code = Conversion::MS_SYMBOL_ENCODING[code%256];
@@ -1884,10 +1896,13 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName)
 
         listStyleWriter.startElement("style:list-level-properties");
         if (listInfo->space()) {
-            // This produces wrong results (see the document attached to KDE bug 244411 and it's not clear why that is so. The
-            // specs say that the dxaSpace is the "minimum space between number and paragraph" and as such following should be
-            // right but it is not. So, we disabled it for now till someone has an idea why that is so.
-            //listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+            // This produces wrong results (see the document attached to KDE
+            // bug 244411 and it's not clear why that is so. The specs say that
+            // the dxaSpace is the "minimum space between number and paragraph"
+            // and as such following should be right but it is not. So, we
+            // disabled it for now till someone has an idea why that is so.
+            // listStyleWriter.addAttributePt("text:min-label-distance",
+            // listInfo->space()/20.0);
         }
         if (listInfo->indent()) {
             // Is this correct?
@@ -2033,6 +2048,12 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName)
     //now add this info to our list style
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
     listStyle = m_mainStyles->styleForModification(m_listStyleName);
+
+    // It's secure to end with KoFilter::InvalidFormat.
+    if (!listStyle) {
+        throw InvalidFormatException("Could not access listStyle to update it!");
+    }
+
     //we'll add each one with a unique name
     QString name("listlevels");
     listStyle->addChildElement(name.append(QString::number(pap.ilvl)), contents);

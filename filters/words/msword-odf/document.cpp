@@ -407,9 +407,11 @@ void Document::processStyles()
 bool Document::parse()
 {
     kDebug(30513) ;
-    if (m_parser)
-        return m_parser->parse();
-    return false;
+    bool ret = false;
+    if (m_parser) {
+        ret = m_parser->parse();
+    }
+    return ret;
 }
 
 void Document::setProgress(const int percent)

@@ -34,6 +34,7 @@
 
 #include "mswordodfimport.h"
 #include "document.h"
+#include "exceptions.h"
 
 #include "generated/simpleParser.h"
 #include "pole.h"
@@ -206,8 +207,13 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         return KoFilter::WrongFormat;
     }
     //actual parsing & action
-    if (!document->parse()) {
-        return KoFilter::CreationError;
+    try {
+        if (!document->parse()) {
+            return KoFilter::CreationError;
+        }
+    } catch (InvalidFormatException _e) {
+        kDebug(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
     }
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
