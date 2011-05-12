@@ -1222,15 +1222,19 @@ void KexiTabbedToolBar::tabBarAnimationFinished()
 
 void KexiTabbedToolBar::setupCreateWidgetToolbar()
 {
+    if (!d->createWidgetToolBar->actions().isEmpty())
+        return;
 //! @todo separate core object types from custom....
-    KexiPart::PartInfoList *plist = Kexi::partManager().partInfoList(); //this list is properly sorted
-    foreach(KexiPart::Info *info, *plist) {
-        QAction* a = d->ac->action(
-                         KexiPart::nameForCreateAction(*info));
-        if (a) {
-            d->createWidgetToolBar->addAction(a);//->icon(), a->text());
-        } else {
-            //! @todo err
+    KexiPart::PartInfoList *plist = Kexi::partManager().infoList(); //this list is properly sorted
+    if (plist) {
+        foreach(KexiPart::Info *info, *plist) {
+            QAction* a = d->ac->action(
+                            KexiPart::nameForCreateAction(*info));
+            if (a) {
+                d->createWidgetToolBar->addAction(a);//->icon(), a->text());
+            } else {
+                //! @todo err
+            }
         }
     }
 }

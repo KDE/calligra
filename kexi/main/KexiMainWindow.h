@@ -176,7 +176,7 @@ public:
 
     /*! \return true if opening of item \a item in \a viewMode mode is allowed.
      userMode() is taken into account as well
-     as KexiPart::Part::supportedUserViewModes() for \a  item. */
+     as KexiPart::PartInfo::supportedUserViewModes() for \a  item. */
     bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage = 0);
 
 //TODO REMOVE?  virtual bool eventFilter( QObject *obj, QEvent * e );
