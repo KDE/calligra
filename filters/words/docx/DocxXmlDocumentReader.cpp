@@ -5305,7 +5305,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     m_docPrName.clear();
     m_docPrDescr.clear();
     m_drawing_anchor = true; // for pic:pic
-    m_behindDoc = false;
+    bool behindDoc = false;
+    bool allowOverlap = false;
 
     const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
@@ -5318,7 +5319,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     READ_ATTR_WITHOUT_NS(distR)
     distToODF("fo:margin-right", distR);
 
-    m_behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+    behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+    allowOverlap = MSOOXML::Utils::convertBooleanAttr(attrs.value("allowOverlap").toString());
 
     while (!atEnd()) {
         readNext();
@@ -5341,12 +5343,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 if (!expectElEnd(QUALIFIED_NAME(wrapNone))) {
                     return KoFilter::WrongFormat;
                 }
-                if (!m_behindDoc) {
-                    saveStyleWrap("none");
+                if (allowOverlap) {
+                    m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                    if (behindDoc) {
+                        m_currentDrawStyle->addProperty("style:run-through", "background");
+                    }
+                    else {
+                        m_currentDrawStyle->addProperty("style:run-through", "foreground");
+                    }
                 }
                 else {
-                    m_currentDrawStyle->addProperty("style:wrap", "run-through");
-                    m_currentDrawStyle->addProperty("style:run-through", "background");
+                    saveStyleWrap("none");
                 }
             } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
