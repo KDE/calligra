@@ -99,7 +99,9 @@ public:
     KWTextFrameSet *mainFrameSet() const;
 
     KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
+    QList<KWFrame *> framesOn(KWFrameSet *fs, int pageNumber) const;
 
+    QList<KWTextFrameSet*> getFrameSets(const KWPageStyle &pageStyle) const;
     KWTextFrameSet* getFrameSet(KWord::TextFrameSetType type, const KWPageStyle &pageStyle) const;
 
     KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
