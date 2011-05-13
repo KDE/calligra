@@ -38,7 +38,10 @@ MainWindow::MainWindow(QWidget *parent)
     m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFilesList));
     m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
                         + "/share/calligra-mobile/qml/HomeScreen.qml"));
+    m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
     setCentralWidget(m_view);
+    connect(m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
+    resize(800, 600);
 }
 
 void MainWindow::openFile(const QString &path)
@@ -48,6 +51,11 @@ void MainWindow::openFile(const QString &path)
 
     QObject *object = m_view->rootObject();
     QMetaObject::invokeMethod(object, "openDocument", Q_ARG(QVariant, QVariant(path)));
+}
+
+void MainWindow::adjustWindowSize (QSize size)
+{
+    resize(size);
 }
 
 MainWindow::~MainWindow()

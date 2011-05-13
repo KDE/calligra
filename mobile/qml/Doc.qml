@@ -51,12 +51,14 @@ Item {
         anchors.left: parent.left; anchors.top: parent.top;
     }
 
+
     CanvasController {
         id: canvas
 
         height: parent.height
         width: parent.width*0.95
         anchors.left: toolbarLoader.right; anchors.top: parent.top;
+        anchors.verticalCenter: parent.verticalCenter
 
         cameraX: docFlickable.contentX
         cameraY: docFlickable.contentY

@@ -36,6 +36,9 @@ public:
     void openFile(const QString &path);
 private:
     QDeclarativeView *m_view;
+
+private slots:
+    void adjustWindowSize(QSize size);
 };
 
 #endif // MAINWINDOW_H

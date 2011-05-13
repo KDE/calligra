@@ -34,8 +34,7 @@ class PAView : public QObject, public KoPAViewBase
 {
 Q_OBJECT
 public:
-    PAView(KoCanvasController *canvasController, KoPACanvasBase *canvas, KPrDocument *prDocument,
-           KoZoomController *zoomController);
+    PAView(KoCanvasController *canvasController, KoPACanvasBase *canvas, KPrDocument *prDocument);
     virtual ~PAView();
     virtual void setShowRulers(bool show);
     virtual void editPaste();

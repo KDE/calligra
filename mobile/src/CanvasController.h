@@ -125,6 +125,7 @@ private:
 protected:
     bool isPresentationDocumentExtension(const QString& extension) const;
     bool isSpreadsheetDocumentExtension(const QString& extension) const;
+    virtual void geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry);
 
 signals:
     void sheetCountChanged();

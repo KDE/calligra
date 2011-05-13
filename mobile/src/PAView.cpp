@@ -38,14 +38,16 @@
 #include <qgraphicsitem.h>
 #include <KoCanvasController.h>
 #include <KoPACanvasItem.h>
+#include <KoZoomHandler.h>
 
-PAView::PAView(KoCanvasController *canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument, KoZoomController* zoomController)
-    : m_canvasController(canvasController), m_paCanvas(canvas), m_prDocument(prDocument),
-        m_zoomController(zoomController), m_page(0)
+PAView::PAView(KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)
+    : m_canvasController(canvasController), m_paCanvas(canvas), m_prDocument(prDocument), m_page(0)
 {
     KoPAViewModeNormal *mode = new KoPAViewModeNormal(this, m_paCanvas);
     setViewMode(mode);
-    connect(zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
+    m_zoomController = new KoZoomController(canvasController, static_cast<KoZoomHandler*>(viewConverter()),
+                                            prDocument->actionCollection());
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 }
 
 PAView::~PAView()
