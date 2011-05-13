@@ -21,21 +21,8 @@
 
 import QtQuick 1.0
 
-Item {
-    id: container
-
-    Column {
-        anchors.fill: parent
-        spacing: 10
-
-        Button {
-            id: goBack
-            text: "Back"
-            imageSource: "qrc:///images/arrow-left.png"
-            height: parent.width
-            width: parent.width
-
-            onClicked: homeScreen.state = ""
-        }
-    }
+Item
+{
+    property bool containsMouse: false
+    anchors.fill: parent
 }

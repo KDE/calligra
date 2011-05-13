@@ -21,41 +21,36 @@
 
 import QtQuick 1.0
 
-Item {
-    id: container
+Item
+{
+    property bool containsMouse: previousSlide.containsMouse || nextSlide.containsMouse
+    anchors.fill: parent
 
-    Column {
-        anchors.fill: parent
-        spacing: 10
+    Button {
+        id: previousSlide
+        text: "Prev"
+        drawBackground: false
+        imageSource: "qrc:///images/arrow-left.png"
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        height: 64
+        width: 64
+        z: 2
 
-        Button {
-            id: goBack
-            text: "Back"
-            imageSource: "qrc:///images/arrow-left.png"
-            height: parent.width
-            width: parent.width
+        onClicked: canvas.previousSlide()
+    }
 
-            onClicked: homeScreen.state = ""
-        }
+    Button {
+        id: nextSlide
+        text: "Next"
+        drawBackground: false
+        imageSource: "qrc:///images/arrow-right.png"
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        height: 64
+        width: 64
+        z: 2
 
-        Button {
-            id: nextSlide
-            text: "Next"
-            imageSource: "qrc:///images/arrow-right.png"
-            height: parent.width
-            width: parent.width
-
-            onClicked: canvas.nextSlide()
-        }
-
-        Button {
-            id: previousSlide
-            text: "Prev"
-            imageSource: "qrc:///images/arrow-left.png"
-            height: parent.width
-            width: parent.width
-
-            onClicked: canvas.previousSlide()
-        }
+        onClicked: canvas.nextSlide()
     }
 }

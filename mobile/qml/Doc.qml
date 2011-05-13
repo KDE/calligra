@@ -42,23 +42,11 @@ Item {
         }
     }
 
-    Loader {
-        id: toolbarLoader
-
-        height: parent.height
-        width: parent.width*0.05
-
-        anchors.left: parent.left; anchors.top: parent.top;
-    }
-
-
     CanvasController {
         id: canvas
 
-        height: parent.height
-        width: parent.width*0.95
-        anchors.left: toolbarLoader.right; anchors.top: parent.top;
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.fill: parent
+        z: -1
 
         cameraX: docFlickable.contentX
         cameraY: docFlickable.contentY
@@ -67,10 +55,44 @@ Item {
         onDocumentLoaded: docRootRect.documentLoaded()
     }
 
-    Flickable {
-        id: docFlickable
-        x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
+    MouseArea {
+        id: flickableMouseArea
+        anchors.fill: parent
+        drag.filterChildren: true
 
-        contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+        Flickable {
+            id: docFlickable
+            x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
+
+            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+        }
+
+        Loader {
+            id: toolbarLoader
+            property bool containsMouse: toolbarLoader.item.containsMouse
+
+            anchors.fill: parent
+            opacity: 0
+        }
     }
+
+    states : [
+        State {
+            name: "toolbarShown";
+            when: (flickableMouseArea.pressed || toolbarLoader.containsMouse) && !docFlickable.moving
+            PropertyChanges { target: toolbarLoader; opacity: 1 }
+        }
+    ]
+
+    transitions : [
+        Transition {
+            from: "toolbarShown"
+            SequentialAnimation {
+                PauseAnimation { duration: 2000 }
+                NumberAnimation {
+                    target: toolbarLoader; properties: "opacity"; duration: 3000
+                }
+            }
+        }
+    ]
 }

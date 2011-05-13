@@ -20,43 +20,37 @@
  */
 
 import QtQuick 1.0
-import CalligraMobile 1.0
 
-Item {
-    id: container
+Item
+{
+    property bool containsMouse: previousSheet.containsMouse || nextSheet.containsMouse
+    anchors.fill: parent
 
-    Column {
-        anchors.fill: parent
-        spacing: 10
+    Button {
+        id: previousSheet
+        text: "Prev"
+        drawBackground: false
+        imageSource: "qrc:///images/arrow-left.png"
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        height: 64
+        width: 64
+        z: 1
 
-        Button {
-            id: goBack
-            text: "Back"
-            imageSource: "qrc:///images/arrow-left.png"
-            height: parent.width
-            width: parent.width
+        onClicked: canvas.previousSheet()
+    }
 
-            onClicked: homeScreen.state = ""
-        }
+    Button {
+        id: nextSheet
+        text: "Next"
+        drawBackground: false
+        imageSource: "qrc:///images/arrow-right.png"
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        height: 64
+        width: 64
+        z: 1
 
-        Button {
-            id: nextSheet
-            text: "Next"
-            imageSource: "qrc:///images/arrow-right.png"
-            height: parent.width
-            width: parent.width
-
-            onClicked: canvas.nextSheet()
-        }
-
-        Button {
-            id: previousSheet
-            text: "Prev"
-            imageSource: "qrc:///images/arrow-left.png"
-            height: parent.width
-            width: parent.width
-
-            onClicked: canvas.previousSheet()
-        }
+        onClicked: canvas.nextSheet()
     }
 }

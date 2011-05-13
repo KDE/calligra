@@ -21,19 +21,36 @@
 
 import QtQuick 1.0
 
-Rectangle {
+Item {
     id: buttonContainer
 
     property alias text: buttonText.text
     property alias imageSource: buttonImage.source
     property alias textPosition: buttonContainer.state
+    property bool containsMouse: mouseArea1.containsMouse || mouseArea2.containsMouse
+    property bool drawBackground: true
     signal clicked
+    signal entered
+    signal exited
 
-    gradient: Gradient {
-        GradientStop { position: 0.0; color: "#DCDCDC" }
-        GradientStop { position: 1.0; color: "#ABABAB" }
+    Component {
+        id: backgroundRect
+        Rectangle {
+            anchors.fill: parent
+            radius: 5
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#DCDCDC" }
+                GradientStop { position: 1.0; color: "#ABABAB" }
+            }
+        }
     }
-    radius: 10
+
+    Loader {
+        id: backgroundLoader
+
+        anchors.fill: parent
+        sourceComponent: drawBackground ? backgroundRect : undefined
+    }
 
     Image {
         id: buttonImage
@@ -43,8 +60,12 @@ Rectangle {
         height: buttonContainer.height - buttonText.height
 
         MouseArea {
+            id: mouseArea1
             anchors.fill: parent
+            hoverEnabled: true
             onClicked: buttonContainer.clicked()
+            onEntered: buttonContainer.entered()
+            onExited: buttonContainer.exited()
         }
     }
 
@@ -60,8 +81,12 @@ Rectangle {
         elide: Text.ElideMiddle
 
         MouseArea {
+            id: mouseArea2
             anchors.fill: parent
+            hoverEnabled: true
             onClicked: buttonContainer.clicked()
+            onEntered: buttonContainer.entered()
+            onExited: buttonContainer.exited()
         }
     }
 
