@@ -51,6 +51,8 @@
 #include <tables/DocBase.h>
 #include "PAView.h"
 #include <QSettings>
+#include <flow/part/FlowPage.h>
+#include <part/Doc.h>
 
 /*!
 * extensions
@@ -71,9 +73,8 @@ const QString EXT_XLSX("xlsx");
 
 CanvasController::CanvasController(QDeclarativeItem* parent)
     : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(Undefined),
-    m_zoomHandler(new KoZoomHandler()),
-    m_zoomController(new KoZoomController(this, m_zoomHandler, new KActionCollection(this))),
-    m_canvas(0), m_currentPoint(QPoint(0,0)), m_documentViewSize(QSizeF(0,0)), m_doc(0)
+    m_zoomHandler(0), m_zoomController(0), m_canvasItem(0), m_currentPoint(QPoint(0,0)),
+    m_documentViewSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
     loadSettings();
@@ -105,60 +106,75 @@ void CanvasController::openDocument(const QString& path)
         KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
         prDocument->openUrl(KUrl(path));
 
-        m_canvas = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
+        m_canvasItem = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
         KoToolManager::instance()->addController(this);
-        KoPACanvasItem *paCanvas = dynamic_cast<KoPACanvasItem*>(m_canvas);
+        KoPACanvasItem *paCanvas = dynamic_cast<KoPACanvasItem*>(m_canvasItem);
 
-        PAView *view = new PAView(dynamic_cast<KoPACanvasBase*>(m_canvas), prDocument, m_zoomController,
-                                  m_zoomHandler);
-        paCanvas->setView(view);
-        view->doUpdateActivePage(prDocument->pageByIndex(1, false));
+        m_paView = new PAView(this, dynamic_cast<KoPACanvasBase*>(m_canvasItem), prDocument, m_zoomController);
+        paCanvas->setView(m_paView);
+        m_currentSlideNum = 0;
+        nextSlide();
 
         if (paCanvas) {
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
             connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), paCanvas, SLOT(slotSetDocumentOffset(QPoint)));
             // whenever the size of the document viewed in the canvas changes, inform the zoom controller
             connect(paCanvas, SIGNAL(documentSize(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
+            //connect(paCanvas, SIGNAL(documentSize(QSize)), proxyObject, SLOT(updateDocumentSize(QSize)));
             paCanvas->update();
         }
     } else if (isSpreadsheetDocumentExtension(ext)) {
         m_documentType = Spreadsheet;
         emit documentTypeChanged();
-
         m_doc->openUrl(KUrl(path));
+        Calligra::Tables::Doc *tablesDoc = static_cast<Calligra::Tables::Doc*>(m_doc);
+        m_zoomHandler = new KoZoomHandler();
+        m_zoomController = new KoZoomController(this, m_zoomHandler, tablesDoc->actionCollection());
+        m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
         // get the one canvas item for this document
-        m_canvas = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
+        m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
+        setCanvasMode(KoCanvasController::Spreadsheet);
         KoToolManager::instance()->addController(this);
-        Calligra::Tables::CanvasItem *canvas = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
+        Calligra::Tables::CanvasItem *canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem);
+        connect(canvasItem, SIGNAL(documentSizeChanged(QSize)),
+                proxyObject, SLOT(updateDocumentSize(QSize)));
 
-        if (canvas) {
+        if (canvasItem) {
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
+            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvasItem, SLOT(setDocumentOffset(QPoint)));
             // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-            connect(canvas, SIGNAL(documentSizeChanged(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
-            canvas->update();
+            connect(canvasItem, SIGNAL(documentSizeChanged(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
+            canvasItem->update();
         }
     } else {
         m_documentType = TextDocument;
         emit documentTypeChanged();
 
         m_doc->openUrl(KUrl(path));
-        // get the one canvas item for this document
-        m_canvas = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
-        KoToolManager::instance()->addController(this);
-        KWCanvasItem *canvas = dynamic_cast<KWCanvasItem*>(m_canvas);
 
-        if (canvas) {
+        KWDocument *kwDoc = static_cast<KWDocument*>(m_doc);
+        m_currentTextDocPage = kwDoc->pageManager()->begin();
+        ///connect(m_document, SIGNAL(completed()), this, SLOT(loadingCompleted()));
+        m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
+        m_zoomHandler = static_cast<KoZoomHandler*>(m_canvasItem->viewConverter());
+        m_zoomController = new KoZoomController(this, m_zoomHandler, m_doc->actionCollection());
+        m_zoomController->setPageSize(m_currentTextDocPage.rect().size());
+        KoToolManager::instance()->addController(this);
+        KWCanvasItem *canvasItem = dynamic_cast<KWCanvasItem*>(m_canvasItem);
+        connect(canvasItem, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
+        canvasItem->updateSize();
+        m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+
+        if (canvasItem) {
             // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvas, SLOT(setDocumentOffset(QPoint)));
-            // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-            connect(canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
-            canvas->updateSize();
+            connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), canvasItem, SLOT(setDocumentOffset(QPoint)));
+            canvasItem->updateSize();
         }
     }
 
     KoToolManager::instance()->requestToolActivation(this);
-    setCanvas(m_canvas);
+    connect(m_doc, SIGNAL(sigProgress(int)), SLOT(processLoadProgress(int)));
+    setCanvas(m_canvasItem);    //FIXME: doesn't work, no emits
 
     if (!m_recentFiles.contains(path))
         m_recentFiles << path;
@@ -183,7 +199,7 @@ void CanvasController::updateDocumentSize(const QSize& sz, bool recalculateCente
     emit docHeightChanged();
     emit docWidthChanged();
 
-    kDebug() << sz << recalculateCenter;
+    qDebug() << sz << recalculateCenter;
 }
 
 void CanvasController::setScrollBarValue(const QPoint& value)
@@ -248,7 +264,7 @@ void CanvasController::ensureVisible(const QRectF& rect, bool smooth)
 
 int CanvasController::canvasOffsetY() const
 {
-    kDebug() << "ASKING";
+    ////kDebug() << "ASKING";
     return 0;
 }
 
@@ -259,20 +275,20 @@ int CanvasController::canvasOffsetX() const
 
 int CanvasController::visibleWidth() const
 {
-    kDebug() << "ASKING";
+    ////kDebug() << "ASKING";
     return 0;
 }
 
 int CanvasController::visibleHeight() const
 {
-    kDebug() << "ASKING";
+    //kDebug() << "ASKING";
     return 0;
 }
 
 KoCanvasBase* CanvasController::canvas() const
 {
-    kDebug() << "ASKING";
-    return m_canvas;
+    ////kDebug() << "ASKING";
+    return m_canvasItem;
 }
 
 void CanvasController::setCanvas(KoCanvasBase* canvas)
@@ -286,13 +302,13 @@ void CanvasController::setCanvas(KoCanvasBase* canvas)
 
 void CanvasController::setDrawShadow(bool drawShadow)
 {
-    kDebug() << "ASKING";
+    //kDebug() << "ASKING";
     kDebug() << drawShadow;
 }
 
 QSize CanvasController::viewportSize() const
 {
-    kDebug() << "ASKING";
+    //kDebug() << "ASKING";
     return QSize();
 }
 
@@ -306,7 +322,7 @@ void CanvasController::scrollDown()
     return;
     m_currentPoint.ry()+=50;
     proxyObject->emitMoveDocumentOffset(m_currentPoint);
-    dynamic_cast<KWCanvasItem*>(m_canvas)->update();
+    dynamic_cast<KWCanvasItem*>(m_canvasItem)->update();
 }
 
 void CanvasController::scrollUp()
@@ -314,7 +330,7 @@ void CanvasController::scrollUp()
     return;
     m_currentPoint.ry()-=50;
     proxyObject->emitMoveDocumentOffset(m_currentPoint);
-    dynamic_cast<KWCanvasItem*>(m_canvas)->update();
+    dynamic_cast<KWCanvasItem*>(m_canvasItem)->update();
 
 }
 
@@ -336,8 +352,8 @@ bool CanvasController::isSpreadsheetDocumentExtension(const QString& extension) 
 
 int CanvasController::sheetCount() const
 {
-    if (m_canvas && m_documentType == Spreadsheet) {
-        Calligra::Tables::CanvasItem *canvas = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
+    if (m_canvasItem && m_documentType == Spreadsheet) {
+        Calligra::Tables::CanvasItem *canvas = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem);
         return canvas->activeSheet()->map()->count();
     } else {
         return 0;
@@ -395,22 +411,13 @@ void CanvasController::centerToCamera()
         proxyObject->emitMoveDocumentOffset(m_currentPoint);
     }
 
-    if (m_canvas) {
-        switch (m_documentType) {
-            case TextDocument:
-                dynamic_cast<KWCanvasItem*>(m_canvas)->update();
-                break;
-            case Spreadsheet:
-                dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas)->update();
-                break;
-        }
-    }
+    updateCanvasItem();
 }
 
 
 void CanvasController::nextSheet()
 {
-    Calligra::Tables::CanvasItem *canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
+    Calligra::Tables::CanvasItem *canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem);
     if (!canvasItem)
         return;
     Calligra::Tables::Sheet *sheet = canvasItem->activeSheet();
@@ -423,11 +430,12 @@ void CanvasController::nextSheet()
     if (!sheet)
         return;
     canvasItem->setActiveSheet(sheet);
+    updateDocumentSize(sheet->cellCoordinatesToDocument(sheet->usedArea(false)).toRect().size(), false);
 }
 
 void CanvasController::previousSheet()
 {
-    Calligra::Tables::CanvasItem *canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvas);
+    Calligra::Tables::CanvasItem *canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem);
     if (!canvasItem)
         return;
     Calligra::Tables::Sheet *sheet = canvasItem->activeSheet();
@@ -440,6 +448,7 @@ void CanvasController::previousSheet()
     if (!sheet)
         return;
     canvasItem->setActiveSheet(sheet);
+    updateDocumentSize(sheet->cellCoordinatesToDocument(sheet->usedArea(false)).toRect().size(), false);
 }
 
 void CanvasController::loadSettings()
@@ -458,5 +467,85 @@ CanvasController::~CanvasController()
 {
     saveSettings();
 }
+
+void CanvasController::nextSlide()
+{
+    if (m_documentType != Presentation)
+        return;
+    m_currentSlideNum++;
+    KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
+    if (m_currentSlideNum >= prDocument->pageCount())
+        m_currentSlideNum = prDocument->pageCount()-1;
+    m_paView->doUpdateActivePage(prDocument->pageByIndex(m_currentSlideNum, false));
+    zoomToFit();
+}
+
+void CanvasController::previousSlide()
+{
+    if (m_documentType != Presentation)
+        return;
+    m_currentSlideNum--;
+    KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
+    if (m_currentSlideNum < 0)
+        m_currentSlideNum = 0;
+    m_paView->doUpdateActivePage(prDocument->pageByIndex(m_currentSlideNum, false));
+    zoomToFit();
+}
+
+void CanvasController::zoomToFit()
+{
+    QSizeF pageSize = m_paView->activePage()->size();
+    QSizeF size = static_cast<KoPACanvasItem*>(m_canvasItem)->size();
+
+    KoZoomHandler *handler = m_paView->zoomHandler();
+    if (pageSize.width() > pageSize.height()) {
+        handler->setZoom(size.width()/pageSize.width() * 0.75);
+    } else {
+        handler->setZoom(size.height()/pageSize.height() * 0.75);
+    }
+}
+
+void CanvasController::updateCanvasItem()
+{
+    if (m_canvasItem) {
+        switch (m_documentType) {
+            case TextDocument:
+                dynamic_cast<KWCanvasItem*>(m_canvasItem)->update();
+                break;
+            case Spreadsheet:
+                dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem)->update();
+                updateDocumentSizeForActiveSheet();
+                break;
+            case Presentation:
+                dynamic_cast<KoPACanvasItem*>(m_canvasItem)->update();
+                break;
+        }
+    }
+}
+
+void CanvasController::processLoadProgress (int value)
+{
+    m_loadProgress = value;
+    emit loadProgressChanged();
+    if (value == 100) {
+        switch (m_documentType) {
+        case Presentation:
+            updateDocumentSizeForActiveSheet();
+            break;
+        }
+    }
+}
+
+int CanvasController::loadProgress() const
+{
+    return m_loadProgress;
+}
+
+void CanvasController::updateDocumentSizeForActiveSheet()
+{
+    Calligra::Tables::Sheet *sheet = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem)->activeSheet();
+    updateDocumentSize(sheet->cellCoordinatesToDocument(sheet->usedArea(false)).toRect().size(), false);
+}
+
 
 #include "CanvasController.moc"

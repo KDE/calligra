@@ -24,8 +24,12 @@
 #define CANVASCONTROLLER_H
 
 #include "KoCanvasController.h"
+
+#include <KWPage.h>
 #include <QDeclarativeItem>
 
+class KWPage;
+class PAView;
 class KoDocument;
 class KoCanvasBase;
 class KoZoomController;
@@ -41,6 +45,7 @@ class CanvasController : public QDeclarativeItem, KoCanvasController
     Q_PROPERTY(int cameraX READ cameraX WRITE setCameraX NOTIFY cameraXChanged)
     Q_PROPERTY(int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
     Q_PROPERTY(DocumentType documentType READ documentType NOTIFY documentTypeChanged)
+    Q_PROPERTY(int loadProgress READ loadProgress NOTIFY loadProgressChanged)
     Q_ENUMS(DocumentType)
 
 public:
@@ -81,6 +86,7 @@ public:
     int cameraY() const;
     void setCameraX(int cameraX);
     void setCameraY(int cameraY);
+    int loadProgress() const;
 
 public slots:
     void openDocument(const QString &path);
@@ -90,19 +96,31 @@ public slots:
     void centerToCamera();
     void nextSheet();
     void previousSheet();
+    void nextSlide();
+    void previousSlide();
+    void zoomToFit();
+
+private slots:
+    void processLoadProgress(int value);
 
 private:
     KoZoomHandler *m_zoomHandler;
     KoZoomController *m_zoomController;
-    KoCanvasBase *m_canvas;
+    KoCanvasBase * m_canvasItem;
     QPoint m_currentPoint;
     DocumentType m_documentType;
     QSizeF m_documentViewSize;
     KoDocument *m_doc;
     QStringList m_recentFiles;
+    int m_currentSlideNum;
+    PAView *m_paView;
+    KWPage m_currentTextDocPage;
+    int m_loadProgress;
 
     void loadSettings();
     void saveSettings();
+    void updateCanvasItem();
+    inline void updateDocumentSizeForActiveSheet();
 
 protected:
     bool isPresentationDocumentExtension(const QString& extension) const;
@@ -116,6 +134,7 @@ signals:
     void cameraYChanged();
     void documentTypeChanged();
     void documentLoaded();
+    void loadProgressChanged();
 };
 
 #endif // CANVASCONTROLLER_H

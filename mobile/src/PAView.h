@@ -23,16 +23,19 @@
 #define PAVIEW_H
 
 #include <libs/kopageapp/KoPAViewBase.h>
+#include <KoZoomMode.h>
 
+class KoCanvasController;
+class KoZoomMode;
 class KPrDocument;
 class KoPACanvasBase;
 
-class PAView : public KoPAViewBase
+class PAView : public QObject, public KoPAViewBase
 {
-
+Q_OBJECT
 public:
-    PAView(KoPACanvasBase *canvas, KPrDocument *prDocument, KoZoomController *zoomController,
-        KoZoomHandler *zoomHandler);
+    PAView(KoCanvasController *canvasController, KoPACanvasBase *canvas, KPrDocument *prDocument,
+           KoZoomController *zoomController);
     virtual ~PAView();
     virtual void setShowRulers(bool show);
     virtual void editPaste();
@@ -49,11 +52,14 @@ public:
     virtual KoPACanvasBase* kopaCanvas() const;
 
 private:
+    KoCanvasController *m_canvasController;
     KoPACanvasBase *m_paCanvas;
     KPrDocument *m_prDocument;
     KoZoomController *m_zoomController;
-    KoZoomHandler *m_zoomHandler;
     KoPAPageBase *m_page;
+
+private slots:
+    void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 };
 
 #endif // PAVIEW_H

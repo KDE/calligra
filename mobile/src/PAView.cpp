@@ -36,13 +36,16 @@
 #include <KoPAPage.h>
 #include <KoPAMasterPage.h>
 #include <qgraphicsitem.h>
+#include <KoCanvasController.h>
+#include <KoPACanvasItem.h>
 
-PAView::PAView(KoPACanvasBase* canvas, KPrDocument* prDocument, KoZoomController* zoomController,
-                       KoZoomHandler* zoomHandler) : m_paCanvas(canvas), m_prDocument(prDocument),
-                       m_zoomController(zoomController), m_zoomHandler(zoomHandler), m_page(0)
+PAView::PAView(KoCanvasController *canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument, KoZoomController* zoomController)
+    : m_canvasController(canvasController), m_paCanvas(canvas), m_prDocument(prDocument),
+        m_zoomController(zoomController), m_page(0)
 {
     KoPAViewModeNormal *mode = new KoPAViewModeNormal(this, m_paCanvas);
     setViewMode(mode);
+    connect(zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 }
 
 PAView::~PAView()
@@ -141,7 +144,6 @@ void PAView::doUpdateActivePage(KoPAPageBase* page)
     m_zoomController->setDocumentSize(pageSize * 3);
     m_zoomController->setPageSize(pageSize);
     m_paCanvas->resourceManager()->setResource( KoCanvasResource::PageSize, pageSize );
-
     QGraphicsItem *item = dynamic_cast<QGraphicsItem*>(m_paCanvas);
     item->update();
 
@@ -162,3 +164,30 @@ KoPACanvasBase* PAView::kopaCanvas() const
 {
     return m_paCanvas;
 }
+
+void PAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
+{
+    Q_UNUSED(zoom);
+    if (m_page) {
+        if (mode == KoZoomMode::ZOOM_PAGE) {
+            KoPageLayout &layout = m_page->pageLayout();
+            QRectF pageRect( 0, 0, layout.width, layout.height );
+            m_canvasController->ensureVisible(m_paCanvas->viewConverter()->documentToView(pageRect));
+        } else if (mode == KoZoomMode::ZOOM_WIDTH) {
+            // horizontally center the page
+            KoPageLayout &layout = m_page->pageLayout();
+            QRectF pageRect( 0, 0, layout.width, layout.height );
+            QRect viewRect = m_paCanvas->viewConverter()->documentToView(pageRect).toRect();
+            viewRect.translate(m_paCanvas->documentOrigin());
+            QRect currentVisible(qMax(0, -m_canvasController->canvasOffsetX()),
+                                 qMax(0, -m_canvasController->canvasOffsetY()),
+                                 m_canvasController->visibleWidth(),
+                                 m_canvasController->visibleHeight());
+            int horizontalMove = viewRect.center().x() - currentVisible.center().x();
+            m_canvasController->pan(QPoint(horizontalMove, 0));
+        }
+        dynamic_cast<KoPACanvasItem*>(m_paCanvas)->update();
+    }
+}
+
+#include "PAView.moc"

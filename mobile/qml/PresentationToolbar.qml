@@ -37,5 +37,25 @@ Item {
 
             onClicked: homeScreen.state = ""
         }
+
+        Button {
+            id: nextSlide
+            text: "Next"
+            imageSource: "qrc:///images/arrow-right.png"
+            height: parent.width
+            width: parent.width
+
+            onClicked: canvas.nextSlide()
+        }
+
+        Button {
+            id: previousSlide
+            text: "Prev"
+            imageSource: "qrc:///images/arrow-left.png"
+            height: parent.width
+            width: parent.width
+
+            onClicked: canvas.previousSlide()
+        }
     }
 }

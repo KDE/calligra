@@ -25,6 +25,7 @@ import CalligraMobile 1.0
 Item {
     id: docRootRect
     signal documentLoaded
+    property alias loadProgress: canvas.loadProgress
     clip: true
 
     function openDocument(path) {
@@ -68,15 +69,6 @@ Item {
         id: docFlickable
         x: canvas.x; y: canvas.y; width: canvas.width; height: canvas.height;
 
-        contentWidth: proxyItem.width; contentHeight: proxyItem.height;
-        clip: true
-
-        Item {
-            id: proxyItem
-            height: canvas.docHeight
-            width: canvas.docWidth
-        }
+        contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
     }
-
-    //Component.onCompleted: canvas.openDocument(fileName);
 }

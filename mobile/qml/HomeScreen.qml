@@ -42,7 +42,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.horizontalCenter
-        anchors.bottom: parent.bottom
+        anchors.bottom: progressBar.top
         anchors.margins: 10
     }
 
@@ -53,8 +53,16 @@ Rectangle {
         anchors.left: parent.horizontalCenter
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors.bottom: progressBar.top
         anchors.margins: 10
+    }
+
+    Rectangle {
+        id: progressBar
+
+        color: "blue"
+        width: parent.width/100*doc.loadProgress; height: 32;
+        anchors.bottom: parent.bottom
     }
 
     Doc {
