@@ -706,6 +706,9 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     d->textBoxHasContent = false;
 
     m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
+    }
 
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
@@ -791,10 +794,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
-    if (!m_currentPresentationStyle.isEmpty()) {
-        if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-            m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
-        }
+    if (!m_currentPresentationStyle.isEmpty() || !m_currentPresentationStyle.parentName().isEmpty()) {
         QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }

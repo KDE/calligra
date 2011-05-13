@@ -124,11 +124,11 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
         style->setGlyphOrientation(styleProperties->glyphOrientation);
     }
 
-    if (!styleProperties->textStyle.isEmpty()) {
+    if (!styleProperties->textStyle.isEmpty() || !styleProperties->textStyle.parentName().isEmpty()) {
         style->setTextStyle(styleProperties->textStyle);
     }
 
-    if (!styleProperties->paragraphStyle.isEmpty()) {
+    if (!styleProperties->paragraphStyle.isEmpty() || !styleProperties->paragraphStyle.parentName().isEmpty()) {
         style->setParagraphStyle(styleProperties->paragraphStyle);
     }
 

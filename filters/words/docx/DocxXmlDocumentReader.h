@@ -274,8 +274,6 @@ private:
     //! Used by read_strike() and read_dstrike()
     void readStrikeElement(KoCharacterStyle::LineType type);
 
-    void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
-
     //! Applies border styles and paddings obtained in readBorderElement()
     //! to style @a style (paragraph or page...)
     void applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding);

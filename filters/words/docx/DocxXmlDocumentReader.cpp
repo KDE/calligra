@@ -2156,7 +2156,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     // We want to write to the higher body level
     body = buffer.originalWriter();
     QString currentTextStyleName;
-    if (!m_currentTextStyle.isEmpty()) {
+    if (!m_currentTextStyle.isEmpty() || !m_currentTextStyle.parentName().isEmpty()) {
         currentTextStyleName = mainStyles->insert(m_currentTextStyle);
     }
     if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
@@ -2309,13 +2309,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
     Q_ASSERT(m_currentTextStyleProperties == 0);
     m_currentTextStyleProperties = new KoCharacterStyle();
 
-    if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-        if (m_moveToStylesXml) {
-            m_currentTextStyle.setAutoStyleInStylesDotXml(true);
-        }
-    }
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -2353,26 +2346,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
     m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
-}
-
-//! CASE #410
-void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttributes& attrs)
-{
-    TRY_READ_ATTR(pStyle)
-    if (pStyle.isEmpty()) {
-//! CASE #412
-//! @todo
-    } else {
-//! CASE #411
-        if (isDefaultTocStyle(pStyle)) {
-            pStyle = QLatin1String("Contents") + pStyle.mid(3);
-        }
-    }
-
-    if (pStyle.isEmpty())
-        return;
-    kDebug() << "parent paragraph style name set to:" << pStyle;
-    m_currentParagraphStyle.setParentName(pStyle);
 }
 
 #undef CURRENT_EL
@@ -2444,7 +2417,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    setParentParagraphStyleName(attrs);
+    TRY_READ_ATTR(pStyle)
+    if (!pStyle.isEmpty()) {
+        m_currentParagraphStyle.setParentName(pStyle);
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
     m_pPr_lvl = lvl.toUInt(); // 0 (the default) on failure, so ok.
@@ -2454,7 +2430,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(rPr)
+            if (name() == "rPr") {
+                m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+                TRY_READ(rPr)
+                KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+            }
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(jc)
             ELSE_TRY_READ_IF(tabs)
@@ -3039,7 +3019,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_b()
 {
     READ_PROLOGUE
-    m_currentTextStyleProperties->setFontWeight(READ_BOOLEAN_VAL ? QFont::Bold : QFont::Normal);
+    if (READ_BOOLEAN_VAL) {
+        m_currentTextStyle.addProperty("fo:font-weight", "bold");
+    }
+    else {
+        m_currentTextStyle.addProperty("fo:font-weight", "normal");
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3051,7 +3036,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_b()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_i()
 {
     READ_PROLOGUE
-    m_currentTextStyleProperties->setFontItalic(READ_BOOLEAN_VAL);
+    if (READ_BOOLEAN_VAL) {
+        m_currentTextStyle.addProperty("fo:font-style", "italic");
+    }
     readNext();
     READ_EPILOGUE
 }
