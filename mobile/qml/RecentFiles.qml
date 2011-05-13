@@ -22,6 +22,7 @@
 import QtQuick 1.0
 
 ListView {
+    id: recentFilesListView
     property int buttonWidth
     property int buttonHeight
 
@@ -29,7 +30,6 @@ ListView {
     spacing: 10
 
     model: recentFilesModel
-
     delegate: Button {
         textPosition: "right"
 
@@ -41,9 +41,6 @@ ListView {
             anchors.fill: parent
             onClicked: homeScreen.openDocument(modelData);
         }
-
-        SequentialAnimation on y {
-            PropertyAnimation { duration: 1000 }
-        }
     }
 }
+
