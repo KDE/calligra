@@ -41,5 +41,9 @@ ListView {
             anchors.fill: parent
             onClicked: homeScreen.openDocument(modelData);
         }
+
+        SequentialAnimation on y {
+            PropertyAnimation { duration: 1000 }
+        }
     }
 }

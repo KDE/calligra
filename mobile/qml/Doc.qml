@@ -69,10 +69,15 @@ Item {
 
         Loader {
             id: toolbarLoader
-            property bool containsMouse: toolbarLoader.item.containsMouse
+            property bool containsMouse: false
 
             anchors.fill: parent
             opacity: 0
+        }
+
+        Connections {
+            target: toolbarLoader.item
+            onContainsMouseChanged: toolbarLoader.containsMouse = toolbarLoader.item.containsMouse
         }
     }
 
