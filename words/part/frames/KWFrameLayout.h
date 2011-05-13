@@ -98,6 +98,9 @@ public:
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
 
+    QList<KWFrame *> framesInPage(const QRectF &page) const;
+    QList<KWFrame *> framesInPage(int pageNumber) const;
+
     KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
     QList<KWFrame *> framesOn(KWFrameSet *fs, int pageNumber) const;
 
@@ -143,7 +146,6 @@ private:
      * \note the main text frameset is consistent across all pages and page styles.
      */
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
-    QList<KWFrame *> framesInPage(const QRectF &page) const;
 
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);

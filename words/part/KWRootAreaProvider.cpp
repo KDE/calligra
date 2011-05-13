@@ -161,6 +161,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 
     int requiredRootAreaCount = 1;
     if (rootAreaPage && m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
+        Q_ASSERT(rootAreaPage->page.isValid());
         Q_ASSERT(rootAreaPage->page.pageStyle().isValid());
         requiredRootAreaCount = rootAreaPage->page.pageStyle().hasMainTextFrame() ? rootAreaPage->page.pageStyle().columns().columns : 0;
     }

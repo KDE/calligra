@@ -545,6 +545,13 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
     return true;
 }
 
+QList<KWFrame *> KWFrameLayout::framesInPage(int pageNumber) const
+{
+    KWPage page = m_pageManager->page(pageNumber);
+    Q_ASSERT(page.isValid());
+    return framesInPage(page.rect());
+}
+
 QList<KWFrame *> KWFrameLayout::framesInPage(const QRectF &page) const
 {
     // hopefully replaced with a tree
