@@ -321,13 +321,16 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
     // NOTE: OOo interprets solid line with width 0 as hairline, so if width ==
     // 0, stroke *must* be none to avoid OOo from displaying a line
-    if (ds.fLine() || ds.fNoLineDrawDash()) {
+    if (!ds.fLine() && ds.fNoLineDrawDash()) {
+        style.addProperty("draw:stroke", "dash", gt);
+        style.addProperty("draw:stroke-dash", defineDashStyle(msolineDashSys, styles), gt);
+    }
+    else if (ds.fLine()) {
         quint32 lineDashing = ds.lineDashing();
         if (lineWidthPt == 0) {
             style.addProperty("draw:stroke", "none", gt);
         } else if (lineDashing > 0 && lineDashing < 11) {
             style.addProperty("draw:stroke", "dash", gt);
-            // draw:stroke-dash from 2.3.8.17 lineDashing
             style.addProperty("draw:stroke-dash", defineDashStyle(lineDashing, styles), gt);
         } else {
             style.addProperty("draw:stroke", "solid", gt);
@@ -596,54 +599,54 @@ QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
 
     KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
     switch (lineDashing) {
-    case 0: // msolineSolid, not a real stroke dash
+    case msolineSolid:
         break;
-    case 1: // msolineDashSys
+    case msolineDashSys:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "300%");
         strokeDash.addAttribute("draw:distance", "100%");
         break;
-    case 2: // msolineDotSys
+    case msolineDotSys:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "200%");
         break;
-    case 3: // msolineDashDotSys
+    case msolineDashDotSys:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "300%");
         strokeDash.addAttribute("draw:dots2", "1");
         strokeDash.addAttribute("draw:dots2-length", "100%");
         break;
-    case 4: // msolineDashDotDotSys
+    case msolineDashDotDotSys:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "300%");
         strokeDash.addAttribute("draw:dots2", "1");
         strokeDash.addAttribute("draw:dots2-length", "100%");
         break;
-    case 5: // msolineDotGEL
+    case msolineDotGEL:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "100%");
         break;
-    case 6: // msolineDashGEL
+    case msolineDashGEL:
         strokeDash.addAttribute("draw:dots1", "4");
         strokeDash.addAttribute("draw:dots1-length", "100%");
         break;
-    case 7: // msolineLongDashGEL
+    case msolineLongDashGEL:
         strokeDash.addAttribute("draw:dots1", "8");
         strokeDash.addAttribute("draw:dots1-length", "100%");
         break;
-    case 8: // msolineDashDotGEL
+    case msolineDashDotGEL:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "300%");
         strokeDash.addAttribute("draw:dots2", "1");
         strokeDash.addAttribute("draw:dots2-length", "100%");
         break;
-    case 9: // msolineLongDashDotGEL
+    case msolineLongDashDotGEL:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "800%");
         strokeDash.addAttribute("draw:dots2", "1");
         strokeDash.addAttribute("draw:dots2-length", "100%");
         break;
-    case 10: // msolineLongDashDotDotGEL
+    case msolineLongDashDotDotGEL:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "800%");
         strokeDash.addAttribute("draw:dots2", "2");
