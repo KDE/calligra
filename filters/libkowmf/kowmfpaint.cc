@@ -335,12 +335,12 @@ void KoWmfPaint::recalculateWorldTransform()
     qreal scaleX = 1.0;
     qreal scaleY = 1.0;
     if (mWindowExt.width() < 0) {
-        midpointX = mWindowOrg.x() + mWindowExt.width() / qreal(2.0);
+        midpointX = (mWindowOrg.x() + mWindowExt.width()) / qreal(2.0);
         scaleX = -1.0;
         flip = true;
     }
     if (mWindowExt.height() < 0) {
-        midpointY = mWindowOrg.y() + mWindowExt.height() / qreal(2.0);
+        midpointY = (mWindowOrg.y() + mWindowExt.height()) / qreal(2.0);
         scaleY = -1.0;
         flip = true;
     }
@@ -359,13 +359,14 @@ void KoWmfPaint::recalculateWorldTransform()
         mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
     } 
     else {
-        // If viewport is not set, but window is, then the output is
-        // always in the same place, namely (0, 0) -> (windowWidth,
-        // windowHeight)
+        // If viewport is not set, but window is *and* the window
+        // width/height is negative, then we must compensate for this.
+        // If the width/height is positive, we already did it with the
+        // first translate before the scale() above.
         if (mWindowExt.width() < 0) 
-            mWorldTransform.translate(mWindowOrg.x(), qreal(0.0));
+            mWorldTransform.translate(mWindowOrg.x() + mWindowExt.width(), qreal(0.0));
         if (mWindowExt.height() < 0) 
-            mWorldTransform.translate(qreal(0.0), mWindowOrg.y());
+            mWorldTransform.translate(qreal(0.0), mWindowOrg.y() + mWindowExt.height());
     }
     //kDebug(31000) << "After window viewport calculation" << mWorldTransform;
 
