@@ -50,6 +50,9 @@ public:
         return true;
     }
 
+private slots:
+    void enoughRunAroundToggled(bool checked);
+
 private:
     Ui::KWRunAroundProperties widget;
     FrameConfigSharedState *m_state;
