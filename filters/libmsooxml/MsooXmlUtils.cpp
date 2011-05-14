@@ -1545,7 +1545,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
     }
     returnValue += ">";
 
-    returnValue += "<style:list-level-properties>";
+    returnValue += "<style:list-level-properties ";
 
     returnValue += QString("text:list-level-position-and-space-mode=\"label-alignment\" ");
 
@@ -1553,6 +1553,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
         returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
             arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
     }
+    returnValue += ">";
 
     if (m_margin != "UNUSED") {
         returnValue += "<style:list-level-label-alignment ";

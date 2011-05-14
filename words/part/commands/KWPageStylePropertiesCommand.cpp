@@ -42,7 +42,7 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
     Q_ASSERT(m_styleAfter != m_styleBefore); // would be kinda useless
     m_styleBefore.detach("dummy"); // all mine now!
     m_styleAfter.detach("dummy"); // all mine now!
-
+#if 0
     // All frames below \a pos move \a distance upon redoing this command
     QMap<qreal, qreal> offsetsMap; // posInDocument, distance.
 
@@ -129,6 +129,7 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
 
     if (page.pageNumber() % 2 == 0 && newLayout.leftMargin < 0)
         new KWPageInsertCommand(m_document, page.pageNumber(), QString(), this);
+#endif
 #endif
 }
 

@@ -368,10 +368,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
         }
     }
-    MSOOXML::Utils::Setter<bool> currentTextStylePredefinedSetter(&m_currentTextStylePredefined, false);
-    MSOOXML::Utils::Setter<bool> currentParagraphStylePredefinedSetter(&m_currentParagraphStylePredefined, false);
-    m_currentTextStylePredefined = true;
-    m_currentParagraphStylePredefined = true;
 
     QString nextStyleName;
 
@@ -458,9 +454,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
     // When reading from styles, we allow duplicates
     insertionFlags = insertionFlags | KoGenStyles::AllowDuplicates;
-
-    m_currentTextStylePredefined = false;
-    m_currentParagraphStylePredefined = false;
 
     // insert style
     if (isDefault) {

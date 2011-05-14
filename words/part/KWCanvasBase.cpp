@@ -87,13 +87,11 @@ KoShapeManager *KWCanvasBase::shapeManager() const
     return m_shapeManager;
 }
 
-/// reimplemented method from superclass
 KoUnit KWCanvasBase::unit() const
 {
     return m_document->unit();
 }
 
-/// reimplemented method from superclass
 KoToolProxy *KWCanvasBase::toolProxy() const
 {
     return m_toolProxy;
@@ -154,7 +152,7 @@ KWViewMode *KWCanvasBase::viewMode() const
 
 void KWCanvasBase::ensureVisible(const QRectF &rect)
 {
-    QRectF viewRect = m_viewMode->documentToView(rect);
+    QRectF viewRect = m_viewMode->documentToView(rect, m_viewConverter);
     canvasController()->ensureVisible(viewRect);
 }
 
@@ -215,6 +213,7 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
                                    const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
                                    int inwardsX, int inwardsY) const
 {
+
     // Return if nothing to paint
     if (borderData.style == KoBorder::BorderNone)
         return;
@@ -269,192 +268,363 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
     }
 }
 
+void KWCanvasBase::paintGrid(QPainter &painter, KWViewMode::ViewMap &vm)
+{
+    painter.save();
+    painter.translate(-vm.distance.x(), -vm.distance.y());
+    painter.setRenderHint(QPainter::Antialiasing, false);
+    const QRectF clipRect = viewConverter()->viewToDocument(vm.clipRect);
+    document()->gridData().paintGrid(painter, *(viewConverter()), clipRect);
+    document()->guidesData().paintGuides(painter, *(viewConverter()), clipRect);
+    painter.restore();
+}
+
 void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 {
     painter.translate(-m_documentOffset);
 
-    //    static int iteration = 0;
-    //    iteration++;
+    static int iteration = 0;
+    iteration++;
 
     if (m_viewMode->hasPages()) {
+
         int pageContentArea = 0;
-        // Create a list of clipRects in the document space from the
-        // current view. Each rect corresponds to a part of a page
-        // that is shown on the canvas.
-        //
-        // Then go through them and paint each one.
-        QList<KWViewMode::ViewMap> map =
-                m_viewMode->clipRectToDocument(paintRect.toRect().translated(m_documentOffset));
+        if (!m_cacheEnabled || !m_pageCacheManager) { // no caching, simple case
 
-        foreach (KWViewMode::ViewMap vm, map) {
+            QList<KWViewMode::ViewMap> map =
+                    m_viewMode->mapExposedRects(paintRect.translated(m_documentOffset),
+                                                viewConverter());
+            foreach (KWViewMode::ViewMap vm, map) {
 
-            painter.save();
+                painter.save();
 
-            // Set up the painter to clip the part of the canvas that contains the rect.
-            painter.translate(vm.distance.x(), vm.distance.y());
-            vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
-            painter.setClipRect(vm.clipRect);
+                // Set up the painter to clip the part of the canvas that contains the rect.
+                painter.translate(vm.distance.x(), vm.distance.y());
+                vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
+                painter.setClipRect(vm.clipRect);
 
-            // Paint the background of the page.
-            QColor color = Qt::white;
+                // Paint the background of the page.
+                QColor color = Qt::white;
 #ifdef DEBUG_REPAINT
-            color = QColor(random() % 255, random() % 255, random() % 255);
+                color = QColor(random() % 255, random() % 255, random() % 255);
 #endif
-            painter.fillRect(vm.clipRect, QBrush(color));
+                painter.fillRect(vm.clipRect, QBrush(color));
 
-            // Paint the contents of the page.
-            painter.setRenderHint(QPainter::Antialiasing);
+                // Paint the contents of the page.
+                painter.setRenderHint(QPainter::Antialiasing);
 
-            if (m_cacheEnabled && m_pageCacheManager) {
+                m_shapeManager->paint(painter, *(viewConverter()), false);
 
-                // clear the cache if the zoom changed
-                qreal zoom = viewConverter()->zoom();
-                qreal actualZoom = zoom;
-                if (zoom > m_maxZoom) {
-                    zoom = 1.0; // if the zoomlevel is higher than maxzoom, we scale the cache
-                                // from 1.0, instead of filling the cache with huge
+                // Paint the page decorations: border, shadow, etc.
+                paintPageDecorations(painter, vm);
+
+                // Paint the grid
+                paintGrid(painter, vm);
+
+                // paint whatever the tool wants to paint
+                m_toolProxy->paint(painter, *(viewConverter()));
+                painter.restore();
+
+                int contentArea = qRound(vm.clipRect.width() * vm.clipRect.height());
+                if (contentArea > pageContentArea) {
+                    pageContentArea = contentArea;
                 }
-                if (m_currentZoom != zoom) {
-                    m_pageCacheManager->clear();
-                    m_currentZoom = zoom;
-                }
+            }
+        }
+        else {
+            if (viewConverter()->zoom() <= m_maxZoom) { // we cache at the actual zoom level
 
-                // we take the cache object from the cache, grabbing ownership because
-                // QCache can decide to delete stuff from the cache at any moment.
-                KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
+                QList<KWViewMode::ViewMap> map =
+                        m_viewMode->mapExposedRects(paintRect.translated(m_documentOffset),
+                                                    viewConverter());
 
-                if (!pageCache) {
-                    pageCache = m_pageCacheManager->cache(QSize(viewConverter()->documentToViewX(vm.page.width()),
-                                                                viewConverter()->documentToViewY(vm.page.height())));
-                }
+                foreach (KWViewMode::ViewMap vm, map) {
 
-                Q_ASSERT(pageCache->cache);
+                    painter.save();
 
-                QSizeF pageSizeDocument(vm.page.width(), vm.page.height());
-                QSizeF pageSizeView = viewConverter()->documentToView(pageSizeDocument);
+                    // Set up the painter to clip the part of the canvas that contains the rect.
+                    painter.translate(vm.distance.x(), vm.distance.y());
+                    vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
+                    painter.setClipRect(vm.clipRect);
 
-                qreal  pageTopDocument = vm.page.offsetInDocument();
-                qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
+                    // Paint the background of the page.
+                    QColor color = Qt::white;
+#ifdef DEBUG_REPAINT
+                    color = QColor(random() % 255, random() % 255, random() % 255);
+#endif
+                    painter.fillRect(vm.clipRect, QBrush(color));
 
-                QRectF pageRectDocument = vm.page.rect();
-                QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
+                    // Paint the contents of the page.
+                    painter.setRenderHint(QPainter::Antialiasing);
 
-                // translated from the page topleft to 0,0 for our cache image
-                QRect clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
-
-#if 1 // render bit by bit
-
-                // create exposed rects when the page is to be completely repainted.
-                // we cannot wait for the updateCanvas calls to actually tell us which parts
-                // need painting, because updateCanvas is not called when a page is done
-                // layouting.
-                if (pageCache->allExposed)  {
-
-                    pageCache->exposed.clear();
-                    QRect rc(QPoint(0,0), pageSizeView.toSize());
-
-                    const int UPDATE_SIZE = 64; //pixels
-
-                    if (rc.height() < UPDATE_SIZE) {
-                        pageCache->exposed << rc;
+                    // clear the cache if the zoom changed
+                    qreal zoom = viewConverter()->zoom();
+                    if (m_currentZoom != zoom) {
+                        m_pageCacheManager->clear();
+                        m_currentZoom = zoom;
                     }
-                    else {
-                        int row = 0;
-                        int hleft = rc.height();
-                        int w = rc.width();
-                        while (hleft > 0) {
-                            QRect rc2(0, row, w, qMin(hleft, UPDATE_SIZE));
-                            pageCache->exposed << rc2;
-                            hleft -= UPDATE_SIZE;
-                            row += UPDATE_SIZE;
-                        }
+
+                    KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
+
+                    if (!pageCache) {
+                        pageCache = m_pageCacheManager->cache(QSize(viewConverter()->documentToViewX(vm.page.width()),
+                                                                    viewConverter()->documentToViewY(vm.page.height())));
                     }
-                    pageCache->allExposed = false;
-                }
 
-                // There is stuff to be repainted, so collect all the repaintable
-                // rects that are in view and paint them.
-                if (!pageCache->exposed.isEmpty()) {
-                    QRegion paintRegion;
-                    QRegion remainingUnExposed;
-                    const QVector<QRect> &exposed = pageCache->exposed;
-                    for (int i = 0; i < exposed.size(); ++i) {
+                    Q_ASSERT(pageCache->cache);
 
-                        QRect rc = exposed.at(i);
+                    // vm.page is in points, not view units
+                    QSizeF pageSizeDocument(vm.page.width(), vm.page.height());
+                    QSizeF pageSizeView = viewConverter()->documentToView(pageSizeDocument);
 
-                        if (rc.intersects(clipRectOnPage)) {
-                            paintRegion += rc;
-                            QPainter gc(pageCache->cache);
-                            gc.eraseRect(rc);
-                            gc.end();
+                    qreal  pageTopDocument = vm.page.offsetInDocument();
+                    qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
+
+                    QRectF pageRectDocument = vm.page.rect();
+                    QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
+
+                    // translated from the page topleft to 0,0 for our cache image
+                    QRectF clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
+
+                    // create exposed rects when the page is to be completely repainted.
+                    // we cannot wait for the updateCanvas calls to actually tell us which parts
+                    // need painting, because updateCanvas is not called when a page is done
+                    // layouting.
+                    if (pageCache->allExposed)  {
+
+                        pageCache->exposed.clear();
+                        QRect rc(QPoint(0,0), pageSizeView.toSize());
+
+                        const int UPDATE_SIZE = 64; //pixels
+
+                        if (rc.height() < UPDATE_SIZE) {
+                            pageCache->exposed << rc;
                         }
                         else {
-                            remainingUnExposed += rc;
+                            int row = 0;
+                            int hleft = rc.height();
+                            int w = rc.width();
+                            while (hleft > 0) {
+                                QRect rc2(0, row, w, qMin(hleft, UPDATE_SIZE));
+                                pageCache->exposed << rc2;
+                                hleft -= UPDATE_SIZE;
+                                row += UPDATE_SIZE;
+                            }
                         }
+                        pageCache->allExposed = false;
                     }
 
-                    pageCache->exposed = remainingUnExposed.rects();
+                    // There is stuff to be repainted, so collect all the repaintable
+                    // rects that are in view and paint them.
+                    if (!pageCache->exposed.isEmpty()) {
+                        QRegion paintRegion;
+                        QRegion remainingUnExposed;
+                        const QVector<QRect> &exposed = pageCache->exposed;
+                        for (int i = 0; i < exposed.size(); ++i) {
 
-                    // paint the exposed regions of the page
-                    QPainter gc(pageCache->cache);
-                    gc.translate(0, -pageTopView);
-                    gc.setClipRegion(paintRegion.translated(0, pageTopView));
+                            QRect rc = exposed.at(i);
 
-                    shapeManager()->paint(gc, *viewConverter(), false);
+                            if (rc.intersects(clipRectOnPage.toRect())) {
+                                paintRegion += rc;
+                                QPainter gc(pageCache->cache);
+                                gc.eraseRect(rc);
+                                gc.end();
+                            }
+                            else {
+                                remainingUnExposed += rc;
+                            }
+                        }
 
-                    //                    pageCache->cache.save(QString("page_%1_iteration_%2.png")
-                    //                                           .arg(vm.page.pageNumber())
-                    //                                           .arg(iteration));
+                        pageCache->exposed = remainingUnExposed.rects();
 
-                }
-#else // use the thumbnailer to render the whole page in one go
-                if (pageCache->allExposed || !pageCache->exposed.isEmpty()) {
-                    pageCache->cache = vm.page.thumbnail(pageSizeView.toSize(), m_shapeManager);
+                        // paint the exposed regions of the page
+                        QPainter gc(pageCache->cache);
+                        gc.translate(0, -pageTopView);
+                        gc.setClipRegion(paintRegion.translated(0, pageTopView));
 
-                }
-#endif
-                // paint from the cached page image on the original painter
+                        // paint into the cache
+                        shapeManager()->paint(gc, *viewConverter(), false);
 
-                QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
-                                  pageRectView.y() + clipRectOnPage.y(),
-                                  clipRectOnPage.width(),
-                                  clipRectOnPage.height());
+                    }
+                    // paint from the cached page image on the original painter
 
-                if (viewConverter()->zoom() > m_maxZoom) {
-                    painter.save();
-                    painter.scale(actualZoom, actualZoom);
+                    QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
+                                      pageRectView.y() + clipRectOnPage.y(),
+                                      clipRectOnPage.width(),
+                                      clipRectOnPage.height());
+
                     painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
+
+                    // put the cache back
+                    m_pageCacheManager->insert(vm.page, pageCache);
+                    // Paint the page decorations: border, shadow, etc.
+                    paintPageDecorations(painter, vm);
+
+                    // Paint the grid
+                    paintGrid(painter, vm);
+
+                    // paint whatever the tool wants to paint
+                    m_toolProxy->paint(painter, *(viewConverter()));
                     painter.restore();
+
+                    int contentArea = qRound(vm.clipRect.width() * vm.clipRect.height());
+                    if (contentArea > pageContentArea) {
+                        pageContentArea = contentArea;
+                    }
                 }
-                else {
-                    painter.drawImage(dst, *pageCache->cache, clipRectOnPage);
+            }
+            else { // we cache at 100%, but paint at the actual zoom level
+
+                KoViewConverter localViewConverter;
+                localViewConverter.setZoom(1.0);
+
+                QList<KWViewMode::ViewMap> map =
+                        m_viewMode->mapExposedRects(paintRect.translated(m_documentOffset),
+                                                    viewConverter());
+                foreach (KWViewMode::ViewMap vm, map) {
+
+                    painter.save();
+
+                    // Set up the painter to clip the part of the canvas that contains the rect.
+                    painter.translate(vm.distance.x(), vm.distance.y());
+                    vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
+                    painter.setClipRect(vm.clipRect);
+
+                    // Paint the background of the page.
+                    QColor color = Qt::white;
+#ifdef DEBUG_REPAINT
+                    color = QColor(random() % 255, random() % 255, random() % 255);
+#endif
+                    painter.fillRect(vm.clipRect, QBrush(color));
+
+                    // Paint the contents of the page.
+                    painter.setRenderHint(QPainter::Antialiasing);
+
+                    // clear the cache if the zoom changed
+                    qreal zoom = 1.0;
+                    if (m_currentZoom != zoom) {
+                        m_pageCacheManager->clear();
+                        m_currentZoom = zoom;
+                    }
+
+                    KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
+                    if (!pageCache) {
+                        pageCache = m_pageCacheManager->cache(QSize(localViewConverter.documentToViewX(vm.page.width()),
+                                                                    localViewConverter.documentToViewY(vm.page.height())));
+                    }
+                    Q_ASSERT(pageCache->cache);
+
+                    // vm.page is in points, not view units
+                    QSizeF pageSizeDocument(vm.page.width(), vm.page.height());
+                    QSizeF pageSizeView = localViewConverter.documentToView(pageSizeDocument);
+
+                    qreal  pageTopDocument = vm.page.offsetInDocument();
+                    qreal  pageTopView = localViewConverter.documentToViewY(pageTopDocument);
+
+                    QRectF pageRectDocument = vm.page.rect();
+                    QRectF pageRectView = localViewConverter.documentToView(pageRectDocument);
+
+                    // translated from the page topleft to 0,0 for our cache image
+                    QRectF documentClipRect = m_viewMode->viewToDocument(vm.clipRect, viewConverter());
+                    QRectF clipRectOnPage = localViewConverter.documentToView(documentClipRect);
+                    clipRectOnPage = clipRectOnPage.translated(-pageRectView.x(), -pageTopView);
+
+                    // create exposed rects when the page is to be completely repainted.
+                    // we cannot wait for the updateCanvas calls to actually tell us which parts
+                    // need painting, because updateCanvas is not called when a page is done
+                    // layouting.
+                    if (pageCache->allExposed)  {
+
+                        pageCache->exposed.clear();
+                        QRect rc(QPoint(0,0), pageSizeView.toSize());
+
+                        const int UPDATE_SIZE = 64; //pixels
+
+                        if (rc.height() < UPDATE_SIZE) {
+                            pageCache->exposed << rc;
+                        }
+                        else {
+                            int row = 0;
+                            int hleft = rc.height();
+                            int w = rc.width();
+                            while (hleft > 0) {
+                                QRect rc2(0, row, w, qMin(hleft, UPDATE_SIZE));
+                                pageCache->exposed << rc2;
+                                hleft -= UPDATE_SIZE;
+                                row += UPDATE_SIZE;
+                            }
+                        }
+                        pageCache->allExposed = false;
+                    }
+
+                    // There is stuff to be repainted, so collect all the repaintable
+                    // rects that are in view and paint them.
+                    if (!pageCache->exposed.isEmpty()) {
+                        QRegion paintRegion;
+                        QRegion remainingUnExposed;
+                        const QVector<QRect> &exposed = pageCache->exposed;
+                        for (int i = 0; i < exposed.size(); ++i) {
+
+                            QRect rc = exposed.at(i);
+
+                            if (rc.intersects(clipRectOnPage.toRect())) {
+                                paintRegion += rc;
+                                QPainter gc(pageCache->cache);
+                                gc.eraseRect(rc);
+                                gc.end();
+                            }
+                            else {
+                                remainingUnExposed += rc;
+                            }
+                        }
+
+                        pageCache->exposed = remainingUnExposed.rects();
+
+                        // paint the exposed regions of the page
+                        QPainter gc(pageCache->cache);
+                        gc.translate(0, -pageTopView);
+                        gc.setClipRegion(paintRegion.translated(0, pageTopView));
+
+                        // paint into the cache
+                        shapeManager()->paint(gc, localViewConverter, false);
+                    }
+                    QImage copy = pageCache->cache->copy(clipRectOnPage.toRect());
+
+                    // Now calculate where to paint pour stuff
+                    pageTopView = viewConverter()->documentToViewY(pageTopDocument);
+                    pageRectView = viewConverter()->documentToView(pageRectDocument);
+                    clipRectOnPage = viewConverter()->documentToView(documentClipRect);
+                    clipRectOnPage = clipRectOnPage.translated(-pageRectView.x(), -pageTopView);
+
+                    copy = copy.scaled(clipRectOnPage.width(), clipRectOnPage.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+                    // paint from the cached page image on the original painter.
+                    QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
+                                      pageRectView.y() + clipRectOnPage.y(),
+                                      clipRectOnPage.width(),
+                                      clipRectOnPage.height());
+
+                    painter.drawImage(dst.x(), dst.y(), copy, 0, 0, copy.width(), copy.height());
+                    painter.restore();
+
+                    // put the cache back
+                    m_pageCacheManager->insert(vm.page, pageCache);
+
+                    // Paint the page decorations: border, shadow, etc.
+                    paintPageDecorations(painter, vm);
+
+                    // Paint the grid
+                    paintGrid(painter, vm);
+
+                    // paint whatever the tool wants to paint
+                    m_toolProxy->paint(painter, *(viewConverter()));
+
+
+                    int contentArea = qRound(vm.clipRect.width() * vm.clipRect.height());
+                    if (contentArea > pageContentArea) {
+                        pageContentArea = contentArea;
+                    }
                 }
-                // put the cache back
-                m_pageCacheManager->insert(vm.page, pageCache, 100 * viewConverter()->zoom());
-
-            }
-            else {
-                m_shapeManager->paint(painter, *(viewConverter()), false);
-            }
-            // Paint the page decorations: border, shadow, etc.
-            paintPageDecorations(painter, vm);
-
-            // Paint the grid
-            painter.save();
-            painter.translate(-vm.distance.x(), -vm.distance.y());
-            painter.setRenderHint(QPainter::Antialiasing, false);
-            const QRectF clipRect = viewConverter()->viewToDocument(vm.clipRect);
-            document()->gridData().paintGrid(painter, *(viewConverter()), clipRect);
-            document()->guidesData().paintGuides(painter, *(viewConverter()), clipRect);
-            painter.restore();
-
-            // paint whatever the tool wants to paint
-            m_toolProxy->paint(painter, *(viewConverter()));
-            painter.restore();
-
-            int contentArea = qRound(vm.clipRect.width() * vm.clipRect.height());
-            if (contentArea > pageContentArea) {
-                pageContentArea = contentArea;
             }
         }
     } else {
@@ -465,55 +635,128 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 
 void KWCanvasBase::updateCanvas(const QRectF &rc)
 {
-    QRectF zoomedRect = m_viewMode->documentToView(rc);
-    QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
-    foreach (KWViewMode::ViewMap vm, map) {
-        vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
-        QRect finalClip((int)(vm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
-                        (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
-                        vm.clipRect.width(), vm.clipRect.height());
+    if (!m_cacheEnabled) { // no caching
+        QRectF zoomedRect = m_viewMode->documentToView(rc, viewConverter());
+        QList<KWViewMode::ViewMap> map = m_viewMode->mapExposedRects(zoomedRect,
+                                                                     viewConverter());
+        foreach (KWViewMode::ViewMap vm, map) {
+            vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
+            QRect finalClip((int)(vm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
+                            (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
+                            vm.clipRect.width(), vm.clipRect.height());
+            updateCanvasInternal(finalClip);
+        }
+    }
+    else { // Caching at the actual zoom level
+        if (viewConverter()->zoom() <= m_maxZoom) {
+            QRectF zoomedRect = m_viewMode->documentToView(rc, viewConverter());
+            QList<KWViewMode::ViewMap> map = m_viewMode->mapExposedRects(zoomedRect,
+                                                                         viewConverter());
+            foreach (KWViewMode::ViewMap vm, map) {
+                vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
+                QRect finalClip((int)(vm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
+                                (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
+                                vm.clipRect.width(), vm.clipRect.height());
 
-        if (m_cacheEnabled) {
-            QRectF pageRectDocument = vm.page.rect();
-            QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
+                QRectF pageRectDocument = vm.page.rect();
+                QRectF pageRectView = viewConverter()->documentToView(pageRectDocument);
 
-            if (!m_pageCacheManager) {
-                // no pageCacheManager, so create one for the current view. This happens only once!
-                // so on zoom change, we don't re-pre-generate weight/zoom images.
-                m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize, viewConverter()->zoom());
-            }
-
-            // clear the cache if the zoom changed
-            qreal zoom = viewConverter()->zoom();
-            if (zoom > m_maxZoom) {
-                zoom = 1.0; // if the zoomlevel is higher than maxzoom, we scale the cache
-                            // from 1.0, instead of filling the cache with huge
-            }
-            if (m_currentZoom != zoom) {
-                m_pageCacheManager->clear();
-                m_currentZoom = zoom;
-            }
-
-            KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
-            if (pageCache) {
-                if (rc.isNull()) {
-                    pageCache->allExposed = true;
-                    pageCache->exposed.clear();
+                if (!m_pageCacheManager) {
+                    // no pageCacheManager, so create one for the current view. This happens only once!
+                    // so on zoom change, we don't re-pre-generate weight/zoom images.
+                    m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize);
                 }
-                else {
-                    qreal  pageTopDocument = vm.page.offsetInDocument();
-                    qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
 
-                    // translated from the page topleft to 0,0 for our cache image
-                    QRect clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
-
-                    pageCache->exposed.append(clipRectOnPage);
+                if (!m_currentZoom == viewConverter()->zoom()) {
+                    m_currentZoom = viewConverter()->zoom();
+                    m_pageCacheManager->clear();
                 }
-                m_pageCacheManager->insert(vm.page, pageCache, viewConverter()->zoom());
+
+                KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
+                if (pageCache) {
+                    if (rc.isNull()) {
+                        pageCache->allExposed = true;
+                        pageCache->exposed.clear();
+                    }
+                    else {
+                        qreal  pageTopDocument = vm.page.offsetInDocument();
+                        qreal  pageTopView = viewConverter()->documentToViewY(pageTopDocument);
+
+                        // translated from the page topleft to 0,0 for our cache image
+                        QRect clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
+
+                        pageCache->exposed.append(clipRectOnPage);
+                    }
+                    m_pageCacheManager->insert(vm.page, pageCache);
+                }
+                updateCanvasInternal(finalClip);
             }
         }
+        else { // Cache at 100%, but update the canvas at the actual zoom level
 
-        updateCanvasInternal(finalClip);
+            KoViewConverter localViewConverter;
+            localViewConverter.setZoom(1.0);
+
+            // Viewmap scaled to 100% for calculating which parts of the cached page image
+            // are exposed.
+            QRectF zoomedRect = m_viewMode->documentToView(rc, &localViewConverter);
+            QList<KWViewMode::ViewMap> map = m_viewMode->mapExposedRects(zoomedRect, &localViewConverter);
+
+            // Viewmap scaled to the actual size of the canvas, so we know which areas to call
+            // update() for.
+            zoomedRect = m_viewMode->documentToView(rc, viewConverter());
+            QList<KWViewMode::ViewMap> actualMap = m_viewMode->mapExposedRects(zoomedRect, viewConverter());
+
+            Q_ASSERT(actualMap.size() == map.size());
+
+            for (int index = 0; index < map.size(); ++index) {
+
+                Q_ASSERT(index < map.size());
+                KWViewMode::ViewMap vm = map.at(index);
+                vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
+
+                Q_ASSERT(index < actualMap.size());
+                KWViewMode::ViewMap actualVm = actualMap.at(index);
+                actualVm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
+                QRect finalClip = QRect((int)(actualVm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
+                                        (int)(actualVm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
+                                        actualVm.clipRect.width(),
+                                        actualVm.clipRect.height());
+
+                QRectF pageRectDocument = vm.page.rect();
+                QRectF pageRectView = localViewConverter.documentToView(pageRectDocument);
+
+                if (!m_pageCacheManager) {
+                    // no pageCacheManager, so create one for the current view. This happens only once!
+                    // so on zoom change, we don't re-pre-generate weight/zoom images.
+                    m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize);
+                }
+
+                if (m_currentZoom != 1.0) {
+                    m_pageCacheManager->clear();
+                    m_currentZoom = 1.0;
+                }
+
+                KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
+                if (pageCache) {
+                    if (rc.isNull()) {
+                        pageCache->allExposed = true;
+                        pageCache->exposed.clear();
+                    }
+                    else {
+                        qreal pageTopDocument = vm.page.offsetInDocument();
+                        qreal pageTopView = localViewConverter.documentToViewY(pageTopDocument);
+
+                        // translated from the page topleft to 0,0 for our cache image
+                        QRect clipRectOnPage = vm.clipRect.translated(-pageRectView.x(), -pageTopView);
+
+                        pageCache->exposed.append(clipRectOnPage);
+                    }
+                    m_pageCacheManager->insert(vm.page, pageCache);
+                }
+                updateCanvasInternal(finalClip);
+            }
+        }
     }
 }
 

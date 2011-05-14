@@ -706,6 +706,9 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     d->textBoxHasContent = false;
 
     m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
+    }
 
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
@@ -791,10 +794,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
-    if (!m_currentPresentationStyle.isEmpty()) {
-        if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-            m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
-        }
+    if (!m_currentPresentationStyle.isEmpty() || !m_currentPresentationStyle.parentName().isEmpty()) {
         QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
@@ -2067,6 +2067,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
         m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
         m_currentColor = QColor();
     }
+
+    handleRprAttributes(attrs);
+
+    READ_EPILOGUE
+}
+
+void MSOOXML_CURRENT_CLASS::handleRprAttributes(const QXmlStreamAttributes& attrs)
+{
+    // DrawingML: b, i, strike, u attributes:
     if (attrs.hasAttribute("b")) {
         m_currentTextStyleProperties->setFontWeight(
             MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
@@ -2085,20 +2094,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
             m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
         }
     }
-
     TRY_READ_ATTR_WITHOUT_NS(spc)
     if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
+        int spcInt = spc.toInt();
+        m_currentTextStyle.addPropertyPt("fo:letter-spacing", qreal(spcInt) / 100.0);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(sz)
     if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "rPr@sz")
+        int szInt = sz.toInt();
         m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
     }
+    // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
     TRY_READ_ATTR_WITHOUT_NS(strike)
     if (strike == QLatin1String("sngStrike")) {
         m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
@@ -2112,20 +2119,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
     // from
     TRY_READ_ATTR_WITHOUT_NS(baseline)
     if (!baseline.isEmpty()) {
-        int baselineInt;
-        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
-        if (baselineInt > 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
-        else if (baselineInt < 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
+        int baselineInt = baseline.toInt();
+        if (baselineInt > 0) {
+            m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        }
+        else if (baselineInt < 0) {
+            m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
+        }
     }
 
     TRY_READ_ATTR_WITHOUT_NS(u)
     if (!u.isEmpty()) {
         MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
     }
-
-    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -2221,67 +2227,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         m_currentColor = QColor();
     }
 
-    // Read Attributes
-
-    // DrawingML: b, i, strike, u attributes:
-    if (attrs.hasAttribute("b")) {
-        m_currentTextStyleProperties->setFontWeight(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
-    }
-    if (attrs.hasAttribute("i")) {
-        m_currentTextStyleProperties->setFontItalic(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(cap);
-    if (!cap.isEmpty()) {
-        if (cap == QLatin1String("small")) {
-            m_currentTextStyle.addProperty("fo:font-variant", "small-caps");
-        }
-        else if (cap == QLatin1String("all")) {
-            m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
-        }
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(spc)
-    if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(sz)
-    if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "rPr@sz")
-        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
-    }
-    // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
-    TRY_READ_ATTR_WITHOUT_NS(strike)
-    if (strike == QLatin1String("sngStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else if (strike == QLatin1String("dblStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else {
-        // empty or "noStrike"
-    }
-    // from
-    TRY_READ_ATTR_WITHOUT_NS(baseline)
-    if (!baseline.isEmpty()) {
-        int baselineInt;
-        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
-        if (baselineInt > 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
-        else if (baselineInt < 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(u)
-    if (!u.isEmpty()) {
-        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
-    }
+    handleRprAttributes(attrs);
 
     READ_EPILOGUE
 }
@@ -2345,8 +2291,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
 //! pPr handler (Text Paragraph Properties) 21.1.2.2.7, p.3588.
 /*!
  Parent elements:
-  - fld (§21.1.2.2.4)
-  - p (§21.1.2.2.6)
+  - [done] fld (§21.1.2.2.4)
+  - [done] p (§21.1.2.2.6)
+
  Attributes:
   - [incomplete] algn (Alignment)
   - defTabSz (Default Tab Size)
@@ -2359,6 +2306,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - marL (Left Margin)
   - marR (Right Margin)
   - rtl (Right To Left)
+
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
   - [done] buBlip (Picture Bullet) §21.1.2.4.2
@@ -3053,8 +3001,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 //MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
     if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:repeat", QLatin1String("no-repeat"));
-
         // TODO: One way to approach this would be to first scale the image to the size of the slide
         // then, resize it according to the percentages & make sure there are no black areas
     }
@@ -5282,13 +5228,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     if (type == "slidenum") {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
+    } else {
+        body->startElement("text:date");
     }
 
     (void)fldBuf.releaseWriter();
 
-    if (type == "slidenum") {
-        body->endElement(); // text:page-number
-    }
+    body->endElement(); // text:page-number, some date format
     body->endElement(); //text:span
 
     delete m_currentTextStyleProperties;
@@ -5675,63 +5621,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         m_currentColor = QColor();
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(sz)
-    if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "defRPr@sz")
-        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
-    }
-
-    if (attrs.hasAttribute("b")) {
-        m_currentTextStyleProperties->setFontWeight(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
-    }
-    if (attrs.hasAttribute("i")) {
-        m_currentTextStyleProperties->setFontItalic(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(cap);
-    if (!cap.isEmpty()) {
-        if (cap == QLatin1String("small")) {
-            m_currentTextStyle.addProperty("fo:font-variant", "small-caps");
-        }
-        else if (cap == QLatin1String("all")) {
-            m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
-        }
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(spc)
-    if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
-    }
-    TRY_READ_ATTR_WITHOUT_NS(strike)
-    if (strike == QLatin1String("sngStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else if (strike == QLatin1String("dblStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else {
-        // empty or "noStrike"
-    }
-    // from
-    TRY_READ_ATTR_WITHOUT_NS(baseline)
-    if (!baseline.isEmpty()) {
-        int baselineInt;
-        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
-        if (baselineInt > 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
-        else if (baselineInt < 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(u)
-    if (!u.isEmpty()) {
-        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
-    }
+    handleRprAttributes(attrs);
 
     READ_EPILOGUE
 }

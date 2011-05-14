@@ -35,7 +35,7 @@
 #include <math.h>
 
 
-#define DEBUG_BBOX 0
+#define DEBUG_BBOX    0
 #define DEBUG_RECORDS 0
 
 
@@ -573,8 +573,8 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 // the origin is always (0, 0).
                 orgX = 0;
                 orgY = 0;
-                extX = windowWidth;
-                extY = windowHeight;
+                extX = qAbs(windowWidth);
+                extY = qAbs(windowHeight);
             }
 
             // If ext < 0, switch the org and org+ext
@@ -1352,15 +1352,15 @@ void KoWmfReadPrivate::createFontIndirect(quint32 size, QDataStream& stream)
         mTextRotation = -rotation / 10;
         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
 
-        // A negative width means to use device units.  This is irrelevant for us here.
+        // A negative width means to use device units.
         kDebug(31000) << "Font height:" << height;
-        height = qAbs(height);
+        handle->height = height;
         // FIXME: For some reason this value needs to be multiplied by
         //        a factor.  0.6 seems to give a good result, but why??
         // ANSWER(?): The doc says the height is the height of the character cell.
         //            But normally the font height is only the height above the baseline,
         //            isn't it?
-        handle->font.setPointSize(height * 6 / 10);
+        handle->font.setPointSize(qAbs(height) * 6 / 10);
         if (weight == 0)
             weight = QFont::Normal;
         else {

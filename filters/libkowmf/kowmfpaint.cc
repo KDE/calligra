@@ -34,7 +34,7 @@ KoWmfPaint::KoWmfPaint()
     , mSaveCount(0)
 {
     mTarget = 0;
-    mIsInternalPainter = true;
+    mIsInternalPainter = false;
     mPainter = 0;
     mWorldTransform = QTransform();
 }
@@ -161,12 +161,14 @@ void KoWmfPaint::restore()
 }
 
 
-void KoWmfPaint::setFont(const QFont &font)
+void KoWmfPaint::setFont(const QFont &font, int rotation, int fontHeight)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << font;
+    kDebug(31000) << font << rotation << fontHeight;
 #endif
     mPainter->setFont(font);
+    mFontRotation = rotation;
+    mFontHeight = fontHeight;
 }
 
 
@@ -333,12 +335,12 @@ void KoWmfPaint::recalculateWorldTransform()
     qreal scaleX = 1.0;
     qreal scaleY = 1.0;
     if (mWindowExt.width() < 0) {
-        midpointX = mWindowOrg.x() + mWindowExt.width() / qreal(2.0);
+        midpointX = (mWindowOrg.x() + mWindowExt.width()) / qreal(2.0);
         scaleX = -1.0;
         flip = true;
     }
     if (mWindowExt.height() < 0) {
-        midpointY = mWindowOrg.y() + mWindowExt.height() / qreal(2.0);
+        midpointY = (mWindowOrg.y() + mWindowExt.height()) / qreal(2.0);
         scaleY = -1.0;
         flip = true;
     }
@@ -357,10 +359,14 @@ void KoWmfPaint::recalculateWorldTransform()
         mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
     } 
     else {
-        // If viewport is not set, but window is, then the output is
-        // always in the same place, namely (0, 0) -> (windowWidth,
-        // windowHeight)
-        ;
+        // If viewport is not set, but window is *and* the window
+        // width/height is negative, then we must compensate for this.
+        // If the width/height is positive, we already did it with the
+        // first translate before the scale() above.
+        if (mWindowExt.width() < 0) 
+            mWorldTransform.translate(mWindowOrg.x() + mWindowExt.width(), qreal(0.0));
+        if (mWindowExt.height() < 0) 
+            mWorldTransform.translate(qreal(0.0), mWindowOrg.y() + mWindowExt.height());
     }
     //kDebug(31000) << "After window viewport calculation" << mWorldTransform;
 
@@ -733,8 +739,21 @@ void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QStri
 #endif
 
     // Use the special pen defined by mTextPen for text.
-    QPen  savePen = mPainter->pen();
+    mPainter->save();
     mPainter->setPen(mTextPen);
+
+    // If the actual height is < 0, we should use device units.  This
+    // means that if the text is currently upside-down due to some
+    // transformations, we should un-upside-down it before painting.
+    //kDebug(31000) << "fontheight:" << mFontHeight << "height:" << height << "y" << y;
+    if (mFontHeight < 0 && mPainter->worldTransform().m22() < 0) {
+        mPainter->translate(0, -(y - height / 2));
+        mPainter->scale(qreal(1.0), qreal(-1.0));
+        mPainter->translate(0, +(y - height / 2));
+
+        // This is necessary to get drawText(x, y, ...) right below.
+        y = -3 * y;
+    }
 
     // Sometimes it happens that w and/or h == -1, and then the bounding box
     // isn't valid any more.  In that case, use our own calculated values.
@@ -745,5 +764,5 @@ void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QStri
         mPainter->drawText(x, y, w, h, Qt::AlignLeft|Qt::AlignTop, text);
     }
 
-    mPainter->setPen(savePen);
+    mPainter->restore();
 }

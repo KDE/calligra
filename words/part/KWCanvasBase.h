@@ -111,6 +111,8 @@ protected:
 
     void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
 
+    void paintGrid(QPainter &painter, KWViewMode::ViewMap &viewMap);
+
     /**
      * paint one border along one of the 4 sides.
      * @param inwardsX is the horizontal vector (with value -1, 0 or 1) for the vector
@@ -138,6 +140,7 @@ protected:
     qreal m_maxZoom; //< above this zoomlevel we scale the cached image, instead of recreating the cache.
     KWPageCacheManager *m_pageCacheManager;
     int m_cacheSize;
+
 };
 
 #endif // KWCANVASBASE_H

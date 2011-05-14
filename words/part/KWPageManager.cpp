@@ -372,42 +372,6 @@ void KWPageManager::removePage(const KWPage &page)
 #endif
 }
 
-QPointF KWPageManager::clipToDocument(const QPointF &point) const
-{
-    qreal startOfpage = 0.0;
-
-    KWPage page;
-    // decrease the pagenumbers of pages following the pageNumber
-    QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
-    while (iter != d->pageNumbers.constEnd()) {
-        const KWPageManagerPrivate::Page p = d->pages[iter.value()];
-        startOfpage += p.style.pageLayout().height + d->padding.top + d->padding.bottom;
-        if (startOfpage >= point.y()) {
-            page = KWPage(d, iter.value());
-            break;
-        }
-        ++iter;
-    }
-    if (! page.isValid())
-        page = last();
-
-    QRectF rect = page.rect();
-    if (rect.contains(point))
-        return point;
-
-    QPointF rc(point);
-    if (rect.top() > rc.y())
-        rc.setY(rect.top());
-    else if (rect.bottom() < rc.y())
-        rc.setY(rect.bottom());
-
-    if (rect.left() > rc.x())
-        rc.setX(rect.left());
-    else if (rect.right() < rc.x())
-        rc.setX(rect.right());
-    return rc;
-}
-
 QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
 {
     QList<KWPage> answer;

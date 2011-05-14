@@ -44,6 +44,7 @@
 #include "commands/KWPageInsertCommand.h"
 #include "commands/KWPageRemoveCommand.h"
 #include "changetracker/KoChangeTracker.h"
+#include "KWRootAreaProvider.h"
 
 // koffice libs includes
 #include <KoShapeManager.h>
@@ -66,6 +67,7 @@
 #include <KoTextShapeData.h>
 #include <KoSelection.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
 
 #include <rdf/KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
@@ -443,8 +445,14 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
     foreach (KWFrame *frame, fs->frames())
         addFrame(frame);
 
-    if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs))
+    if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
         Q_ASSERT(tfs->pageManager() == pageManager());
+        if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            Q_ASSERT(lay);
+            connect(lay, SIGNAL(finishedLayout()), this, SLOT(mainTextFrameSetLayoutDone()));
+        }
+    }
 #if 0
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if (tfs) {
@@ -953,11 +961,31 @@ void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
     kDebug(32001);
-    PageProcessingQueue *ppq = pageQueue();
+    QList<KWTextFrameSet*> framesets;
+    foreach(KWFrameSet *fs, frameLayout()->getFrameSets(style)) {
+        KWTextFrameSet* tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (tfs)
+            framesets.append(tfs);
+    }
+    int pageNumber = -1;
     foreach (KWPage page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
-            ppq->addPage(page);
+            pageNumber = page.pageNumber();
+            break;
         }
+    }
+    Q_ASSERT(pageNumber >= 1);
+    //TODO handle lesser pages
+    for(int i = pageNumber; i <= pageManager()->pageCount(); ++i) {
+        frameLayout()->createNewFramesForPage(i);
+    }
+    foreach(KWTextFrameSet *fs, framesets) {
+        fs->rootAreaProvider()->clearPages(pageNumber);
+    }
+    foreach(KWTextFrameSet *fs, framesets) {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(fs->document()->documentLayout());
+        Q_ASSERT(lay);
+        lay->scheduleLayout();
     }
 }
 

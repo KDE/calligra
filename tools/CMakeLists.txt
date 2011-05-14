@@ -18,6 +18,8 @@ if(OKULAR_FOUND)
     add_subdirectory( okularodpgenerator )
 endif(OKULAR_FOUND)
 
+add_subdirectory(scripts)
+
 macro_optional_find_package(X11)
 macro_optional_find_package(Qt4)
 macro_optional_find_package(LibXml2) # calligra mobile uses xml2 directly

@@ -124,14 +124,6 @@ public:
     void removePage(const KWPage &page);
 
     /**
-     * Returns the argument point, with altered coordinats if the point happens to be
-     * outside all pages.
-     * The resulting point is the shortest distance from the argument inside the document.
-     * @param point the point to test
-     */
-    QPointF clipToDocument(const QPointF &point) const;
-
-    /**
      * Return an ordered list of all pages.
      * @param pageStyle if non empty return only the pages that follow the page style.
      */

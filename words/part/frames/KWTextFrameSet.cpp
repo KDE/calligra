@@ -115,11 +115,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         if (page.pageNumber() <= m_rootAreaProvider->pages().count()) {
             // The just added KWFrame needs to invalidate the layouter so the layouter picks up the new
             // KWFrame on the next layout-run.
-            KoTextLayoutRootArea *prevRootArea = page.pageNumber() >= 2 ? m_rootAreaProvider->pages()[page.pageNumber() - 2] : 0;
-            m_rootAreaProvider->releaseAllAfter(prevRootArea);
-            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-            Q_ASSERT(lay);
-            lay->removeRootArea(prevRootArea);
+            m_rootAreaProvider->clearPages(page.pageNumber());
         }
     }
 

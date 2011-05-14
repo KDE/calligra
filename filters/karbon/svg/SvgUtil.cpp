@@ -177,7 +177,7 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
     if (!start) {
         return 0.0;
     }
-    double value = 0.0;
+    qreal value = 0.0;
     const char *end = parseNumber(start, value);
 
     if (int(end - start) < unit.length()) {

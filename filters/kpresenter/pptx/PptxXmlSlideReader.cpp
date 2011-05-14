@@ -1547,8 +1547,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
         }
     }
 
-    popCurrentDrawStyle();
-
     body = buffer.originalWriter();
     body->startElement("draw:frame");
 
@@ -1557,6 +1555,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
     }
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
+
+    popCurrentDrawStyle();
 
     body->addAttribute("draw:name", m_cNvPrName);
     body->addAttribute("draw:layer", "layout");

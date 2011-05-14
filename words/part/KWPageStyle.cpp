@@ -433,7 +433,6 @@ void KWPageStyle::setDirection(KoText::Direction direction)
 bool KWPageStyle::operator==(const KWPageStyle &other) const
 {
     bool equals = d == other.d;
-    Q_ASSERT_X(!d || !other.d || (equals == (d->name == other.d->name)), __FUNCTION__, QString("Different styles with the same name are not allowed, equals=%1 name1=%2 name2=%3").arg(equals).arg(d->name).arg(other.d->name).toLocal8Bit());
     return equals;
 }
 
