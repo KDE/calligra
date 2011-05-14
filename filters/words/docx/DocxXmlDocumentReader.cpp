@@ -1086,20 +1086,20 @@ void DocxXmlDocumentReader::applyBorders(KoGenStyle *style, QMap<BorderSide, QSt
     const qreal bottomPadding = sourcePadding.value(BottomBorder);
     const qreal rightPadding = sourcePadding.value(RightBorder);
     if (sourcePadding.contains(TopBorder) && leftPadding == topPadding && bottomPadding == topPadding && rightPadding == topPadding) {
-        style->addProperty("fo:padding", QString::number(topPadding) + "pt"); // all sides the same
+        style->addPropertyPt("fo:padding", topPadding); // all sides the same
     }
     else {
         if (sourcePadding.contains(TopBorder)) {
-            style->addProperty("fo:padding-top", QString::number(topPadding) + "pt");
+            style->addPropertyPt("fo:padding-top", topPadding);
         }
         if (sourcePadding.contains(LeftBorder)) {
-            style->addProperty("fo:padding-left", QString::number(leftPadding) + "pt");
+            style->addPropertyPt("fo:padding-left", leftPadding);
         }
         if (sourcePadding.contains(BottomBorder)) {
-            style->addProperty("fo:padding-bottom", QString::number(bottomPadding) + "pt");
+            style->addPropertyPt("fo:padding-bottom", bottomPadding);
         }
         if (sourcePadding.contains(RightBorder)) {
-            style->addProperty("fo:padding-right", QString::number(rightPadding) + "pt");
+            style->addPropertyPt("fo:padding-right", rightPadding);
         }
     }
     sourcePadding.clear();
@@ -1113,16 +1113,16 @@ void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin,
             qreal margin = pageMargins.value(MarginTop);
             qreal padding = pagePadding.value(TopBorder);
             if(offsetFrom == "page") {
-                style.addProperty("fo:margin-top", QString::number(padding) + "pt");
-                style.addProperty("fo:padding-top", QString::number(margin - padding) + "pt");
+                style.addPropertyPt("fo:margin-top", padding);
+                style.addPropertyPt("fo:padding-top", margin - padding);
             }
             else {
-                style.addProperty("fo:margin-top", QString::number(margin - padding) + "pt");
-                style.addProperty("fo:padding-top", QString::number(padding) + "pt");
+                style.addPropertyPt("fo:margin-top", margin - padding);
+                style.addPropertyPt("fo:padding-top", padding);
             }
         }
         else {
-            style.addProperty("fo:margin-top", QString::number(pageMargins.value(MarginTop)) + "pt");
+            style.addPropertyPt("fo:margin-top", pageMargins.value(MarginTop));
         }
     }
 
@@ -1131,16 +1131,16 @@ void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin,
             qreal margin = pageMargins.value(MarginBottom);
             qreal padding = pagePadding.value(BottomBorder);
             if(offsetFrom == "page") {
-                style.addProperty("fo:margin-bottom", QString::number(padding) + "pt");
-                style.addProperty("fo:padding-bottom", QString::number(margin - padding) + "pt");
+                style.addPropertyPt("fo:margin-bottom", padding);
+                style.addPropertyPt("fo:padding-bottom", margin - padding);
             }
             else {
-                style.addProperty("fo:margin-bottom", QString::number(margin - padding) + "pt");
-                style.addProperty("fo:padding-bottom", QString::number(padding) + "pt");
+                style.addPropertyPt("fo:margin-bottom", margin - padding);
+                style.addPropertyPt("fo:padding-bottom", padding);
             }
         }
         else {
-            style.addProperty("fo:margin-bottom", QString::number(pageMargins.value(MarginBottom)) + "pt");
+            style.addPropertyPt("fo:margin-bottom", pageMargins.value(MarginBottom));
         }
     }
 
@@ -1149,16 +1149,16 @@ void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin,
             qreal margin = pageMargins.value(MarginLeft);
             qreal padding = pagePadding.value(LeftBorder);
             if(offsetFrom == "page") {
-                style.addProperty("fo:margin-left", QString::number(padding) + "pt");
-                style.addProperty("fo:padding-left", QString::number(margin - padding) + "pt");
+                style.addPropertyPt("fo:margin-left", padding);
+                style.addPropertyPt("fo:padding-left", margin - padding);
             }
             else {
-                style.addProperty("fo:margin-left", QString::number(margin - padding) + "pt");
-                style.addProperty("fo:padding-left", QString::number(padding) + "pt");
+                style.addPropertyPt("fo:margin-left", margin - padding);
+                style.addPropertyPt("fo:padding-left", padding);
             }
         }
         else {
-            style.addProperty("fo:margin-left", QString::number(pageMargins.value(MarginLeft)) + "pt");
+            style.addPropertyPt("fo:margin-left", pageMargins.value(MarginLeft));
         }
     }
 
@@ -1167,16 +1167,16 @@ void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin,
             qreal margin = pageMargins.value(MarginRight);
             qreal padding = pagePadding.value(RightBorder);
             if(offsetFrom == "page") {
-                style.addProperty("fo:margin-right", QString::number(padding) + "pt");
-                style.addProperty("fo:padding-right", QString::number(margin - padding) + "pt");
+                style.addPropertyPt("fo:margin-right", padding);
+                style.addPropertyPt("fo:padding-right", margin - padding);
             }
             else {
-                style.addProperty("fo:margin-right", QString::number(margin - padding) + "pt");
-                style.addProperty("fo:padding-right", QString::number(padding) + "pt");
+                style.addPropertyPt("fo:margin-right", margin - padding);
+                style.addPropertyPt("fo:padding-right", padding);
             }
         }
         else {
-            style.addProperty("fo:margin-right", QString::number(pageMargins.value(MarginRight)) + "pt");
+            style.addPropertyPt("fo:margin-right", pageMargins.value(MarginRight));
         }
     }
 
