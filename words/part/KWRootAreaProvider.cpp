@@ -481,10 +481,6 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
     QList<KoTextLayoutObstruction*> obstructions;
     Q_ASSERT(rootArea);
 
-    if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_textFrameSet))
-        if (tfs->textFrameSetType() != KWord::OtherTextFrameSet)
-            return obstructions; // headers, footers and the main-text never collide with anything.
-
     KoShape *currentShape = rootArea->associatedShape();
 
     if(!currentShape)
@@ -495,8 +491,16 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
 
     //TODO would probably be faster if we could use the RTree of the shape manager
     foreach (KWFrameSet *fs, m_textFrameSet->kwordDocument()->frameSets()) {
-        if (fs  == m_textFrameSet)
-            continue;
+        if (fs  == m_textFrameSet) {
+            continue; // we don't collide with ourselves
+        }
+
+        if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
+            if (tfs->textFrameSetType() != KWord::OtherTextFrameSet) {
+                continue; // we don't collide with headers, footers and main-text.
+            }
+        }
+
         foreach (KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
             if (shape == currentShape)
