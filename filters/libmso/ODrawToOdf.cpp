@@ -116,8 +116,10 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
                                            o.clientData.data(), ds, out);
     }
     defineGraphicProperties(style, ds, out.styles);
+
     if (client) {
-        client->addTextStyles(o.clientTextbox.data(),
+        client->addTextStyles(o.shapeProp.rh.recInstance,
+                              o.clientTextbox.data(),
                               o.clientData.data(), style, out);
     }
 }

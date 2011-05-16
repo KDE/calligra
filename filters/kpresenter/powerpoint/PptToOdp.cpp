@@ -25,6 +25,7 @@
 #include "globalobjectcollectors.h"
 #include "pictures.h"
 #include "ODrawToOdf.h"
+#include "msodraw.h"
 #include "msppt.h"
 
 #include <kdebug.h>
@@ -236,9 +237,11 @@ private:
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
             const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
-    void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
-            const MSO::OfficeArtClientData* clientData,
-            KoGenStyle& style, Writer& out);
+    void addTextStyles(const quint16 msospt,
+                       const MSO::OfficeArtClientTextBox* clientTextbox,
+                       const MSO::OfficeArtClientData* clientData,
+                       KoGenStyle& style, Writer& out);
+
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
     const MSO::OfficeArtSpContainer* defaultShapeContainer() { return dc_data->defaultShape; };
@@ -429,6 +432,7 @@ KoGenStyle PptToOdp::DrawClient::createGraphicStyle(
 }
 
 void PptToOdp::DrawClient::addTextStyles(
+        const quint16 msospt,
         const MSO::OfficeArtClientTextBox* clientTextbox,
         const MSO::OfficeArtClientData* clientData,
         KoGenStyle& style, Writer& out)
@@ -441,12 +445,23 @@ void PptToOdp::DrawClient::addTextStyles(
     if (clientTextbox) {
         tb = clientTextbox->anon.get<PptOfficeArtClientTextBox>();
     }
+
+    //NOTE: [content.xml] As soon the content or graphic-style of a placeholder
+    //changed, make it a normal shape to be ODF compliant.
+    //
+    //TODO: check if the graphic-style changed compared to the parent
+
     bool isPlaceholder = false;
+    bool potentialPlaceholder = false;
     if ( (cd && cd->placeholderAtom) &&
           placeholderAllowed(cd->placeholderAtom.data()) )
     {
         isPlaceholder = true;
     }
+    if (msospt == msosptRectangle) {
+        potentialPlaceholder = true;
+    }
+
     if (out.stylesxml) {
         //get the main master slide's MasterOrSlideContainer
         const MasterOrSlideContainer* m = 0;
@@ -474,11 +489,8 @@ void PptToOdp::DrawClient::addTextStyles(
         QString className = getPresentationClass(cd->placeholderAtom.data());
         const TextContainer* tc = ppttoodp->getTextContainer(tb, cd);
 
-        //NOTE: [content.xml] As soon the content or graphic-style of a
-        //placeholder changed, make it a normal shape.
-
-        //TODO: check if the graphic-style changed compared to the parent
-        if (className.isEmpty() || (!out.stylesxml && getText(tc).size()))
+        if ( className.isEmpty() ||
+             (!out.stylesxml && (!potentialPlaceholder || getText(tc).size())) )
         {
             className = getPresentationClass(tc);
             out.xml.addAttribute("presentation:placeholder", "false");

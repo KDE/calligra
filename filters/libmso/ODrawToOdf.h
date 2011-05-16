@@ -77,6 +77,7 @@ public:
          * or style:text-properties.
          **/
         virtual void addTextStyles(
+            const quint16 msospt,
             const MSO::OfficeArtClientTextBox* clientTextbox,
             const MSO::OfficeArtClientData* clientData,
             KoGenStyle& style,
