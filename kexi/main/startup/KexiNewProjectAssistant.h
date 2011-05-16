@@ -115,6 +115,7 @@ public:
 
 class KexiServerDBNamePage;
 class KexiGUIMessageHandler;
+class KexiProjectData;
 class KexiProjectSet;
 class KexiProjectSelectorWidget;
 class KexiProjectDatabaseNameSelectionPage : public KexiAssistantPage
@@ -133,13 +134,19 @@ public:
 private slots:
     void slotTitleChanged(const QString &capt);
     void slotNameChanged(const QString &);
+    void overwriteActionTriggered();
+
 private:
+    QString enteredDbName() const;
     KexiGUIMessageHandler* m_msgHandler;
     KexiProjectSet *m_projectSetToShow;
     KexiProjectSelectorWidget* m_projectSelector;
 
     bool m_dbNameAutofill;
     bool m_le_dbname_txtchanged_enabled;
+    KexiProjectData* m_projectDataToOverwrite;
+    QAction* m_messageWidgetActionYes;
+    QAction* m_messageWidgetActionNo;
 };
 
 class KexiProjectData;

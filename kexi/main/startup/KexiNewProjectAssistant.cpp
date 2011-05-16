@@ -446,8 +446,12 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(QWidg
                        "You can change the database name too."),
                   parent)
 {
+    m_projectDataToOverwrite = 0;
+    m_messageWidgetActionYes = 0;
+    m_messageWidgetActionNo = 0;
     setBackButtonVisible(true);
     setNextButtonVisible(true);
+    setNextButtonText(i18n("Create"));
 
     m_projectSetToShow = 0;
     m_dbNameAutofill = true;
@@ -522,6 +526,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_le_dbname_txtchanged_enabled = false;
         QString captionAsId = KexiUtils::string2Identifier(capt);
         contents->le_dbname->setText(captionAsId);
+        m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;
     }
 }
@@ -530,7 +535,13 @@ void KexiProjectDatabaseNameSelectionPage::slotNameChanged(const QString &)
 {
     if (!m_le_dbname_txtchanged_enabled)
         return;
+    m_projectDataToOverwrite = 0;
     m_dbNameAutofill = false;
+}
+
+QString KexiProjectDatabaseNameSelectionPage::enteredDbName() const
+{
+    return contents->le_dbname->text().trimmed();
 }
 
 bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
@@ -543,13 +554,50 @@ bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
         contents->le_title->setText(QString());
         return false;
     }
-    if (contents->le_dbname->text().trimmed().isEmpty()) {
+    QString dbName(enteredDbName());
+    if (dbName.isEmpty()) {
         messageWidget = new KexiContextMessageWidget(contents->formLayout,
             contents->le_dbname,
             i18n("Enter database name."));
         return false;
     }
+    if (m_projectSetToShow) {
+        KexiProjectData* projectData = m_projectSetToShow->findProject(dbName);
+        if (projectData) {
+            if (m_projectDataToOverwrite == projectData) {
+                delete messageWidget;
+                return true;
+            }
+            KexiContextMessage message(
+                i18n("Database with this name already exists. "
+                     "Do you want to delete it and create a new one?"));
+            if (!m_messageWidgetActionYes) {
+                m_messageWidgetActionYes = new QAction(i18n("Delete and Create New"),
+                                                            this);
+                connect(m_messageWidgetActionYes, SIGNAL(triggered()),
+                        this, SLOT(overwriteActionTriggered()));
+                m_messageWidgetActionNo = new QAction(
+                    KStandardGuiItem::no().text(), this);
+            }
+            message.addAction(m_messageWidgetActionYes);
+            message.setDefaultAction(m_messageWidgetActionNo);
+            message.addAction(m_messageWidgetActionNo);
+            messageWidget = new KexiContextMessageWidget(
+                this, contents->formLayout,
+                contents->le_dbname, message);
+            messageWidget->setNextFocusWidget(contents->le_title);
+//            connect(messageWidgetActionNo, SIGNAL(triggered()),
+//                    messageWidget, SLOT(animatedHide()));
+            return false;
+        }
+    }
     return true;
+}
+
+void KexiProjectDatabaseNameSelectionPage::overwriteActionTriggered()
+{
+    m_projectDataToOverwrite = m_projectSetToShow->findProject(enteredDbName());
+    next();
 }
 
 // ----
