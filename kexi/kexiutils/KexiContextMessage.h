@@ -26,7 +26,7 @@
 class KEXIUTILS_EXPORT KexiContextMessage
 {
 public:
-    KexiContextMessage(const QString& text = QString());
+    explicit KexiContextMessage(const QString& text = QString());
 
     explicit KexiContextMessage(const KexiContextMessage& other);
 
@@ -87,7 +87,7 @@ public:
     //! By default context widget passed to constructor will be focused.
     //! Useful in modal mode.
     void setNextFocusWidget(QWidget *widget);
-    
+
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 
@@ -97,6 +97,9 @@ private slots:
 private:
     void init(QWidget *page, QFormLayout* layout,
         QWidget *context, const KexiContextMessage& message);
+    
+    //! Made private to disable addAction().
+    void addAction(QAction* action) { Q_UNUSED(action); }
 
     class Private;
     Private * const d;

@@ -176,7 +176,7 @@ void KexiContextMessageWidget::init(
 
     if (d->hasActions) {
         foreach(QAction* action, message.actions()) {
-            addAction(action);
+            KMessageWidget::addAction(action);
             connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
         }
 
