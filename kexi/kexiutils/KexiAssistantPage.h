@@ -44,6 +44,9 @@ public slots:
     void setNextButtonVisible(bool set);
     void back();
     void next();
+    //! Sets text @a text for the 'next' button.
+    //! It can be used to set e.g. "Finish" or "Create" text.
+    void setNextButtonText(const QString& text);
 signals:    
     void back(KexiAssistantPage* page);
     void next(KexiAssistantPage* page);

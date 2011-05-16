@@ -45,6 +45,11 @@ public:
     QPointer<QWidget> focusWidget;
 };
 
+static QString nextButtonText()
+{
+    return QString::fromUtf8("<a href=\"KexiAssistantPage:next\">%1</a> ›");
+}
+
 void KexiAssistantPage::Private::setButtonVisible(QLabel** button,
                                                   bool back, /* or next */
                                                   bool set, int x, int y)
@@ -60,7 +65,7 @@ void KexiAssistantPage::Private::setButtonVisible(QLabel** button,
                     .arg(KStandardGuiItem::back().text().replace('&', ""));
             }
             else {
-                text = QString::fromUtf8("<a href=\"KexiAssistantPage:next\">%1</a> ›")
+                text = nextButtonText()
                     .arg(i18nc("Button text: Next page in assistant (wizard)", "Next"));
             }
             *button = new QLabel(text);
@@ -207,6 +212,11 @@ QWidget* KexiAssistantPage::focusWidget() const
 void KexiAssistantPage::setFocusWidget(QWidget* widget)
 {
     d->focusWidget = widget;
+}
+
+void KexiAssistantPage::setNextButtonText(const QString& text)
+{
+    d->nextButton->setText(nextButtonText().arg(text));
 }
 
 #include "KexiAssistantPage.moc"
