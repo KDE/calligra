@@ -23,17 +23,44 @@
 #define CADOCUMENTINFO_H
 
 #include <QObject>
+#include <QHash>
+
+class QDataStream;
 
 class CADocumentInfo : public QObject
 {
     Q_OBJECT
     Q_ENUMS(DocumentType)
-    /*Q_PROPERTY(DocumentType type READ name NOTIFY nameChanged)
+    Q_PROPERTY(DocumentType type READ type NOTIFY typeChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString path READ name NOTIFY nameChanged)*/
+    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 
 public:
     enum DocumentType { Undefined, TextDocument, Spreadsheet, Presentation };
+
+    explicit CADocumentInfo(QObject* parent = 0);
+    explicit CADocumentInfo(DocumentType type, QString name, QString path, QObject* parent = 0);
+    DocumentType type() const;
+    QString name() const;
+    QString path() const;
+    QStringList toStringList() const;
+    static CADocumentInfo *fromStringList(QStringList list);
+
+    bool operator==(const CADocumentInfo &docInfo);
+
+private:
+    DocumentType m_type;
+    QString m_name;
+    QString m_path;
+
+    static QString stringFromDocumentType(DocumentType type);
+    static DocumentType documentTypeFromString(QString type);
+    static QHash<DocumentType, QString> typeNameHash();
+
+signals:
+    void typeChanged();
+    void nameChanged();
+    void pathChanged();
 };
 
 #endif // CADOCUMENTINFO_H

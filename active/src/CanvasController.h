@@ -47,7 +47,6 @@ class CanvasController : public QDeclarativeItem, KoCanvasController
     Q_PROPERTY(int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
     Q_PROPERTY(CADocumentInfo::DocumentType documentType READ documentType NOTIFY documentTypeChanged)
     Q_PROPERTY(int loadProgress READ loadProgress NOTIFY loadProgressChanged)
-    Q_ENUMS(CADocumentInfo::DocumentType)
 
 public:
 
@@ -111,7 +110,7 @@ private:
     CADocumentInfo::DocumentType m_documentType;
     QSizeF m_documentViewSize;
     KoDocument *m_doc;
-    QStringList m_recentFiles;
+    QList<CADocumentInfo*> m_recentFiles;
     int m_currentSlideNum;
     PAView *m_paView;
     KWPage m_currentTextDocPage;

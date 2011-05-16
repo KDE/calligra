@@ -53,6 +53,7 @@
 #include <QSettings>
 #include <flow/part/FlowPage.h>
 #include <part/Doc.h>
+#include <qfileinfo.h>
 
 /*!
 * extensions
@@ -190,8 +191,16 @@ void CanvasController::openDocument(const QString& path)
     //FIXME: doesn't work, no emits
     connect(m_doc, SIGNAL(sigProgress(int)), SLOT(processLoadProgress(int)));
 
-    if (!m_recentFiles.contains(path))
-        m_recentFiles << path;
+    bool recentFileAlreadyExists = false;
+    foreach(CADocumentInfo *docInfo, m_recentFiles) {
+        if (docInfo->path() == path) {
+            recentFileAlreadyExists = true;
+            break;
+        }
+    }
+    if (!recentFileAlreadyExists) {
+        m_recentFiles << new CADocumentInfo(m_documentType, QFileInfo(path).fileName(), path);
+    }
 
     emit sheetCountChanged();
     emit documentLoaded();
@@ -468,13 +477,19 @@ void CanvasController::previousSheet()
 void CanvasController::loadSettings()
 {
     QSettings settings;
-    m_recentFiles = settings.value("recentFiles").toStringList();
+    foreach(QString string, settings.value("recentFiles").toStringList()) {
+        m_recentFiles.append(CADocumentInfo::fromStringList(string.split(";")));
+    }
 }
 
 void CanvasController::saveSettings()
 {
     QSettings settings;
-    settings.setValue("recentFiles", m_recentFiles);
+    QStringList list;
+    foreach(CADocumentInfo *docInfo, m_recentFiles) {
+        list << docInfo->toStringList().join(";");
+    }
+    settings.setValue("recentFiles", list);
 }
 
 CanvasController::~CanvasController()

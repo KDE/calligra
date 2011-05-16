@@ -21,4 +21,70 @@
 
 #include "CADocumentInfo.h"
 
+#include <QStringList>
+#include <QVariant>
+
+CADocumentInfo::CADocumentInfo(QObject* parent): QObject(parent)
+{
+
+}
+
+CADocumentInfo::CADocumentInfo(CADocumentInfo::DocumentType type, QString name, QString path, QObject* parent)
+    : QObject(parent), m_type(type), m_name(name), m_path(path)
+{
+
+}
+
+QString CADocumentInfo::name() const
+{
+    return m_name;
+}
+
+QString CADocumentInfo::path() const
+{
+    return m_path;
+}
+
+CADocumentInfo::DocumentType CADocumentInfo::type() const
+{
+    return m_type;
+}
+
+CADocumentInfo::DocumentType CADocumentInfo::documentTypeFromString(QString type)
+{
+    return typeNameHash().key(type);
+}
+
+QString CADocumentInfo::stringFromDocumentType(CADocumentInfo::DocumentType type)
+{
+    return typeNameHash()[type];
+}
+
+CADocumentInfo* CADocumentInfo::fromStringList(QStringList list)
+{
+    return new CADocumentInfo(documentTypeFromString(list.at(0)), list.at(1), list.at(2));
+}
+
+QStringList CADocumentInfo::toStringList() const
+{
+    QStringList list;
+    list << stringFromDocumentType(type()) << name() << path();
+    return list;
+}
+
+QHash< CADocumentInfo::DocumentType, QString > CADocumentInfo::typeNameHash()
+{
+    QHash<DocumentType, QString> hash;
+    hash[Undefined] = "Undefined";
+    hash[TextDocument] = "TextDocument";
+    hash[Spreadsheet] = "Spreadsheet";
+    hash[Presentation] = "Presentation";
+    return hash;
+}
+
+bool CADocumentInfo::operator==(const CADocumentInfo& docInfo)
+{
+    return (docInfo.path() == m_path);
+}
+
 #include "CADocumentInfo.moc"

@@ -21,6 +21,7 @@
 
 #include "MainWindow.h"
 #include "CanvasController.h"
+#include "CADocumentInfo.h"
 #include "calligra_mobile_global.h"
 
 #include <QDeclarativeView>
@@ -30,15 +31,21 @@
 MainWindow::MainWindow(QWidget *parent)
 {
     qmlRegisterType<CanvasController>("CalligraMobile", 1, 0, "CanvasController");
+    qmlRegisterType<CADocumentInfo>("CalligraMobile", 1, 0, "CADocumentInfo");
+
     m_view = new QDeclarativeView(this);
 
+    QList<QObject*> recentFiles;
     QSettings settings;
-    QStringList recentFilesList = settings.value("recentFiles").toStringList();
-    qDebug() << recentFilesList;
-    m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFilesList));
+    foreach(QString string, settings.value("recentFiles").toStringList()) {
+        recentFiles.append(CADocumentInfo::fromStringList(string.split(";")));
+    }
+    m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFiles));
+
     m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
                         + "/share/calligra-mobile/qml/HomeScreen.qml"));
     m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+
     setCentralWidget(m_view);
     connect(m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
     resize(800, 600);
