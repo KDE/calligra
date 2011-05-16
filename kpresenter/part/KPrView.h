@@ -22,9 +22,7 @@
 #define KPRVIEW_H
 
 #include "stage_export.h"
-
 #include <QObject>
-
 #include <KoPAView.h>
 
 class KPrDocument;
@@ -66,6 +64,43 @@ public:
      */
     bool isPresentationRunning() const;
 
+    /**
+      * Load zoom configuration
+      */
+    void initZoomConfig();
+
+    /**
+      * Restore zoom configuration
+      */
+    void restoreZoomConfig();
+
+    /**
+      * Save zoom value
+      */
+    void saveZoomConfig(KoZoomMode::Mode zoomMode, int zoom);
+
+    /**
+     * Setter of the zoom
+     *
+     * @param zoom percent
+     * @param zoom mode
+     */
+    void setZoom(KoZoomMode::Mode zoomMode, int zoom);
+
+    /**
+     * Return the last zoom stored
+     *
+     * @return the last zoom stored
+     */
+    int zoom();
+
+    /**
+     * Return the last zoom mode stored
+     *
+     * @return the last zoom mode stored
+     */
+    KoZoomMode::Mode zoomMode();
+
 public slots:
     /**
      * Activate the presentation view mode
@@ -101,6 +136,8 @@ protected slots:
     void highlightPresentation();
     void blackPresentation();
     void showStatusBar(bool toggled);
+    /// called if the zoom changed
+    void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
 private:
     KActionMenu *m_actionStartPresentation;
@@ -121,6 +158,8 @@ private:
     KPrViewModeSlidesSorter *m_slidesSorterMode;
 
     KPrViewAdaptor *m_dbus;
+    int m_zoom;
+    KoZoomMode::Mode m_zoomMode;
 
     virtual KoPrintJob *createPdfPrintJob();
 };
