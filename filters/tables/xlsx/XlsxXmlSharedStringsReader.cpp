@@ -205,7 +205,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
 
     body = buf.releaseWriter();
     siBuffer.close();
-    (*m_context->strings)[m_index] = siData;
+    (*m_context->strings)[m_index] = QString::fromUtf8(siData);
 
     m_index++;
     READ_EPILOGUE
