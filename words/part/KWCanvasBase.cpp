@@ -575,7 +575,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                 gc.end();
                             }
                             else {
-                                remainingUnExposed += rc;
+                                remainingUnExposed << rc;
                             }
                         }
 

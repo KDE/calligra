@@ -343,7 +343,6 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
 
-qDebug() << "Stroke now 1";
     m_strokeWidth = 1 ; // This seems to be the default
     m_shapeColor.clear();
     m_strokeColor.clear();
@@ -355,11 +354,6 @@ qDebug() << "Stroke now 1";
     }
 
     TRY_READ_ATTR_WITHOUT_NS(type)
-    if (!type.isEmpty()) {
-        type = type.mid(1); // removes extra # from the start
-        body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
-    }
-
     TRY_READ_ATTR_WITHOUT_NS(filled)
     if (filled.isEmpty()) {
         filled = m_fillTypeStrings[type];
@@ -374,7 +368,6 @@ qDebug() << "Stroke now 1";
     }
     if (stroked == "f" || stroked == "false") {
         m_strokeWidth = 0;
-        qDebug() << "Stroke now 0";
     }
     else if (!strokecolor.isEmpty()) {
         m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
@@ -1665,7 +1658,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
-        if (isCustomShape) {
+        if (isCustomShape && o_connectortype.isEmpty()) {
             if (!type.isEmpty()) {
                 type = type.mid(1); // removes extra # from the start
                 body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());

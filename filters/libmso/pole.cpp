@@ -617,11 +617,11 @@ bool DirTree::valid() const
             std::cerr << "DirTree::valid Invalid user stream detected!" << std::endl;
             return false;
         }
-        //Looking for invalid user storages. The ((int)e->child == -1)
-        //condition results in false positives.
+        //Looking for invalid user storages.  The following conditions result
+        //in false positives on Word8 documents: ((int)e->child == -1),
+        //(e->start != 0)
         if ( (i > 0) &&
-             (e->valid && e->dir) &&
-             ((e->size != 0) || (e->start != 0)) )
+             (e->valid && e->dir) && (e->size != 0) )
         {
             std::cerr << "DirTree::valid Invalid user storage detected!" << std::endl;
             return false;
