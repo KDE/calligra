@@ -42,6 +42,8 @@ QML.Item {
             imageSource: "qrc:///images/words.png"
             text: "Document"
             width: buttonWidth; height: buttonHeight
+
+            onClicked: homeScreen.state = "showTextDocs";
         }
 
         Button {
@@ -51,6 +53,8 @@ QML.Item {
             imageSource: "qrc:///images/tables.png"
             text: "Spreadsheet"
             width: buttonWidth; height: buttonHeight
+
+            onClicked: homeScreen.state = "showSpreadsheets";
         }
         Button {
             id: button3
@@ -60,7 +64,7 @@ QML.Item {
             text: "Presentation"
             width: buttonWidth; height: buttonHeight
 
-            onClicked: rootRect.state = "presentation"
+            onClicked: homeScreen.state = "showPresentations";
         }
     }
 }

@@ -36,11 +36,30 @@ MainWindow::MainWindow(QWidget *parent)
     m_view = new QDeclarativeView(this);
 
     QList<QObject*> recentFiles;
+    QList<QObject*> recentTextDocs;
+    QList<QObject*> recentSpreadsheets;
+    QList<QObject*> recentPresentations;
     QSettings settings;
     foreach(QString string, settings.value("recentFiles").toStringList()) {
-        recentFiles.append(CADocumentInfo::fromStringList(string.split(";")));
+        CADocumentInfo *docInfo = CADocumentInfo::fromStringList(string.split(";"));
+        recentFiles.append(docInfo);
+        switch (docInfo->type()) {
+            case CADocumentInfo::TextDocument:
+                recentTextDocs.append(docInfo);
+                break;
+            case CADocumentInfo::Spreadsheet:
+                recentSpreadsheets.append(docInfo);
+                break;
+            case CADocumentInfo::Presentation:
+                recentPresentations.append(docInfo);
+                break;
+        }
     }
+
     m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFiles));
+    m_view->rootContext()->setContextProperty("recentTextDocsModel", QVariant::fromValue(recentTextDocs));
+    m_view->rootContext()->setContextProperty("recentSpreadsheetsModel", QVariant::fromValue(recentSpreadsheets));
+    m_view->rootContext()->setContextProperty("recentPresentationsModel", QVariant::fromValue(recentPresentations));
 
     m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
                         + "/share/calligra-mobile/qml/HomeScreen.qml"));
