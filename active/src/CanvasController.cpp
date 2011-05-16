@@ -72,7 +72,7 @@ const QString EXT_XLS("xls");
 const QString EXT_XLSX("xlsx");
 
 CanvasController::CanvasController(QDeclarativeItem* parent)
-    : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(Undefined),
+    : KoCanvasController(0), QDeclarativeItem(parent), m_documentType(CADocumentInfo::Undefined),
     m_zoomHandler(0), m_zoomController(0), m_canvasItem(0), m_currentPoint(QPoint(0,0)),
     m_documentViewSize(QSizeF(0,0)), m_doc(0), m_currentSlideNum(-1), m_paView(0), m_loadProgress(0)
 {
@@ -99,7 +99,7 @@ void CanvasController::openDocument(const QString& path)
     }
 
     if (isPresentationDocumentExtension(ext)) {
-        m_documentType = Presentation;
+        m_documentType = CADocumentInfo::Presentation;
         emit documentTypeChanged();
 
         KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
@@ -129,7 +129,7 @@ void CanvasController::openDocument(const QString& path)
             paCanvasItem->update();
         }
     } else if (isSpreadsheetDocumentExtension(ext)) {
-        m_documentType = Spreadsheet;
+        m_documentType = CADocumentInfo::Spreadsheet;
         emit documentTypeChanged();
 
         Calligra::Tables::Doc *tablesDoc = static_cast<Calligra::Tables::Doc*>(m_doc);
@@ -157,7 +157,7 @@ void CanvasController::openDocument(const QString& path)
             canvasItem->update();
         }
     } else {
-        m_documentType = TextDocument;
+        m_documentType = CADocumentInfo::TextDocument;
         emit documentTypeChanged();
 
         KWDocument *kwDoc = static_cast<KWDocument*>(m_doc);
@@ -366,7 +366,7 @@ bool CanvasController::isSpreadsheetDocumentExtension(const QString& extension) 
 
 int CanvasController::sheetCount() const
 {
-    if (m_canvasItem && m_documentType == Spreadsheet) {
+    if (m_canvasItem && m_documentType == CADocumentInfo::Spreadsheet) {
         Calligra::Tables::CanvasItem *canvas = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem);
         return canvas->activeSheet()->map()->count();
     } else {
@@ -380,7 +380,7 @@ void CanvasController::tellZoomControllerToSetDocumentSize(QSize size)
     setDocumentSize(size);
 }
 
-CanvasController::DocumentType CanvasController::documentType() const
+CADocumentInfo::DocumentType CanvasController::documentType() const
 {
     return m_documentType;
 }
@@ -484,7 +484,7 @@ CanvasController::~CanvasController()
 
 void CanvasController::nextSlide()
 {
-    if (m_documentType != Presentation)
+    if (m_documentType != CADocumentInfo::Presentation)
         return;
     m_currentSlideNum++;
     KPrDocument *prDocument = static_cast<KPrDocument*>(m_doc);
@@ -524,14 +524,14 @@ void CanvasController::updateCanvasItem()
 {
     if (m_canvasItem) {
         switch (m_documentType) {
-            case TextDocument:
+            case CADocumentInfo::TextDocument:
                 dynamic_cast<KWCanvasItem*>(m_canvasItem)->update();
                 break;
-            case Spreadsheet:
+            case CADocumentInfo::Spreadsheet:
                 dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem)->update();
                 updateDocumentSizeForActiveSheet();
                 break;
-            case Presentation:
+            case CADocumentInfo::Presentation:
                 dynamic_cast<KoPACanvasItem*>(m_canvasItem)->update();
                 break;
         }
@@ -544,7 +544,7 @@ void CanvasController::processLoadProgress (int value)
     emit loadProgressChanged();
     if (value == 100) {
         switch (m_documentType) {
-        case Presentation:
+        case CADocumentInfo::Presentation:
             updateDocumentSizeForActiveSheet();
             break;
         }
@@ -558,7 +558,7 @@ int CanvasController::loadProgress() const
 
 void CanvasController::updateDocumentSizeForActiveSheet()
 {
-    if (m_documentType != Spreadsheet)
+    if (m_documentType != CADocumentInfo::Spreadsheet)
         return;
     Calligra::Tables::Sheet *sheet = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem)->activeSheet();
     updateDocumentSize(sheet->cellCoordinatesToDocument(sheet->usedArea(false)).toRect().size(), false);
@@ -572,7 +572,7 @@ void CanvasController::geometryChanged (const QRectF& newGeometry, const QRectF&
         widget->setVisible(true);
         widget->setGeometry(newGeometry);
 
-        if (m_documentType == Presentation) {
+        if (m_documentType == CADocumentInfo::Presentation) {
             zoomToFit();
         }
     }

@@ -21,6 +21,7 @@ qt4_add_resources(calligra-mobile_RCC_SRCS ${calligra-mobile_RCCS})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_mobile_global.h.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_mobile_global.h)
 
 set(calligra-mobile_SRCS
+    src/CADocumentInfo.cpp
     src/PAView.cpp
     src/CanvasController.cpp
     src/MainWindow.cpp

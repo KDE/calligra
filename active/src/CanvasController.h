@@ -24,6 +24,7 @@
 #define CANVASCONTROLLER_H
 
 #include "KoCanvasController.h"
+#include "CADocumentInfo.h"
 
 #include <KWPage.h>
 #include <QDeclarativeItem>
@@ -44,12 +45,11 @@ class CanvasController : public QDeclarativeItem, KoCanvasController
     Q_PROPERTY(qreal docWidth READ docWidth NOTIFY docWidthChanged)
     Q_PROPERTY(int cameraX READ cameraX WRITE setCameraX NOTIFY cameraXChanged)
     Q_PROPERTY(int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
-    Q_PROPERTY(DocumentType documentType READ documentType NOTIFY documentTypeChanged)
+    Q_PROPERTY(CADocumentInfo::DocumentType documentType READ documentType NOTIFY documentTypeChanged)
     Q_PROPERTY(int loadProgress READ loadProgress NOTIFY loadProgressChanged)
-    Q_ENUMS(DocumentType)
+    Q_ENUMS(CADocumentInfo::DocumentType)
 
 public:
-    enum DocumentType { Undefined, TextDocument, Spreadsheet, Presentation };
 
     explicit CanvasController(QDeclarativeItem *parent = 0);
     virtual ~CanvasController();
@@ -79,7 +79,7 @@ public:
     virtual void scrollContentsBy(int dx, int dy);
 
     int sheetCount() const;
-    DocumentType documentType() const;
+    CADocumentInfo::DocumentType documentType() const;
     qreal docWidth() const;
     qreal docHeight() const;
     int cameraX() const;
@@ -108,7 +108,7 @@ private:
     KoZoomController *m_zoomController;
     KoCanvasBase * m_canvasItem;
     QPoint m_currentPoint;
-    DocumentType m_documentType;
+    CADocumentInfo::DocumentType m_documentType;
     QSizeF m_documentViewSize;
     KoDocument *m_doc;
     QStringList m_recentFiles;
