@@ -55,7 +55,11 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
                 data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
             }
         }
-        if (parentFrameSet->textFrameSetType() != KWord::OtherTextFrameSet) {
+        if (parentFrameSet->textFrameSetType() == KWord::OtherTextFrameSet) {
+            if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+                data->setResizeMethod(KoTextShapeDataBase::NoResize);
+            }
+        } else {
             shape->setGeometryProtected(true);
         }
     }

@@ -55,21 +55,7 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *kwordDocument, KWord::TextFrameSetTyp
 {
     Q_ASSERT(m_kwordDocument);
     setName(KWord::frameSetTypeName(m_textFrameSetType));
-
-    m_document->setUseDesignMetrics(true);
-
-    KoTextDocument doc(m_document);
-    doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-    KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-    doc.setStyleManager(styleManager);
-    KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
-    doc.setChangeTracker(changeTracker);
-    doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
-
-    // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
-    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
-    m_document->setDocumentLayout(lay);
-    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
+    setupDocument();
 
     kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType());
 }
@@ -129,7 +115,17 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 
     kDebug(32001) << "frameSet=" << frame->frameSet() << "frame=" << frame << "pageNumber=" << page.pageNumber();
 
-    // the QTexDocument is shared between the shapes
+    // Handle the special case that the KoTextShapeData already defines a QTextDocument that we need
+    // to take over. This is the case for example with OtherTextFrameSet's where the KWTextFrameSet
+    // and the KWFrame are created after the TextShape was created and it's loadOdf was called what
+    // means that the QTextDocument of the KoTextShapeData already has content we like to take over.
+    if (frameCount() == 1 && data->document() && m_document->isEmpty()) {
+        delete m_document;
+        m_document = data->document();
+        setupDocument();
+    }
+
+    // The QTexDocument is shared between the shapes and we are the owner.
     data->setDocument(m_document, false);
 
 #if 0
@@ -187,6 +183,24 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 #endif
 }
 
+void KWTextFrameSet::setupDocument()
+{
+    m_document->setUseDesignMetrics(true);
+
+    KoTextDocument doc(m_document);
+    doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
+    KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    doc.setStyleManager(styleManager);
+    KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    doc.setChangeTracker(changeTracker);
+    doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
+
+    // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
+    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
+    m_document->setDocumentLayout(lay);
+    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
+}
+    
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
     kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
