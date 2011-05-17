@@ -1549,7 +1549,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
 
     returnValue += QString("text:list-level-position-and-space-mode=\"label-alignment\" ");
 
-    if (!m_bulletSize.isEmpty()) {
+    if (!m_bulletSize.isEmpty() && m_type == ParagraphBulletProperties::PictureType) {
         returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
             arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
     }
@@ -1570,6 +1570,9 @@ QString Utils::ParagraphBulletProperties::convertToListProperties() const
 
     if (m_bulletColor != "UNUSED") {
     	returnValue += QString("fo:color=\"%1\" ").arg(m_bulletColor);
+    }
+    if (m_type != ParagraphBulletProperties::PictureType) {
+        returnValue += QString("fo:font-size=\"%1%\" ").arg(m_bulletRelativeSize);
     }
 
     returnValue += "/>";
