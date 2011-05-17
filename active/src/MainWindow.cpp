@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_view->rootContext()->setContextProperty("recentPresentationsModel", QVariant::fromValue(recentPresentations));
 
     m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
-                        + "/share/calligra-mobile/qml/HomeScreen.qml"));
+                        + "/share/calligraactive/qml/HomeScreen.qml"));
     m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
     setCentralWidget(m_view);
