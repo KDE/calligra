@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_view->rootContext()->setContextProperty("recentSpreadsheetsModel", QVariant::fromValue(recentSpreadsheets));
     m_view->rootContext()->setContextProperty("recentPresentationsModel", QVariant::fromValue(recentPresentations));
 
-    m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
+    m_view->setSource(QUrl::fromLocalFile(CalligraActive::Global::installPrefix()
                         + "/share/calligraactive/qml/HomeScreen.qml"));
     m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
