@@ -17,21 +17,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_MOBILE_GLOBAL
-#define CALLIGRA_MOBILE_GLOBAL
+#ifndef CALLIGRA_ACTIVE_GLOBAL
+#define CALLIGRA_ACTIVE_GLOBAL
 
-#define CALLIGRA_MOBILE_INSTALL_PREFIX    QString("${CMAKE_INSTALL_PREFIX}")
+#define CALLIGRA_ACTIVE_INSTALL_PREFIX    QString("${CMAKE_INSTALL_PREFIX}")
 
-namespace CalligraMobile
+namespace CalligraActive
 {
     class Global
     {
     public:
         static QString installPrefix()
         {
-            return CALLIGRA_MOBILE_INSTALL_PREFIX;
+            return CALLIGRA_ACTIVE_INSTALL_PREFIX;
         }
     };
 }
 
-#endif  //CALLIGRA_MOBILE_GLOBAL
+#endif  //CALLIGRA_ACTIVE_GLOBAL

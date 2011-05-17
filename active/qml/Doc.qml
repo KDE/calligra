@@ -20,7 +20,7 @@
  */
 
 import QtQuick 1.0
-import CalligraMobile 1.0
+import CalligraActive 1.0
 
 Item {
     id: docRootRect

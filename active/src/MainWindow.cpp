@@ -22,7 +22,7 @@
 #include "MainWindow.h"
 #include "CanvasController.h"
 #include "CADocumentInfo.h"
-#include "calligra_mobile_global.h"
+#include "calligra_active_global.h"
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
@@ -30,8 +30,8 @@
 
 MainWindow::MainWindow(QWidget *parent)
 {
-    qmlRegisterType<CanvasController>("CalligraMobile", 1, 0, "CanvasController");
-    qmlRegisterType<CADocumentInfo>("CalligraMobile", 1, 0, "CADocumentInfo");
+    qmlRegisterType<CanvasController>("CalligraActive", 1, 0, "CanvasController");
+    qmlRegisterType<CADocumentInfo>("CalligraActive", 1, 0, "CADocumentInfo");
 
     m_view = new QDeclarativeView(this);
 
@@ -61,8 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_view->rootContext()->setContextProperty("recentSpreadsheetsModel", QVariant::fromValue(recentSpreadsheets));
     m_view->rootContext()->setContextProperty("recentPresentationsModel", QVariant::fromValue(recentPresentations));
 
-    m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
-                        + "/share/calligra-mobile/qml/HomeScreen.qml"));
+    m_view->setSource(QUrl::fromLocalFile(CalligraActive::Global::installPrefix()
+                        + "/share/calligra-active/qml/HomeScreen.qml"));
     m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
     setCentralWidget(m_view);
