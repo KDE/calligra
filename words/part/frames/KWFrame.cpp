@@ -61,6 +61,7 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
             }
         } else {
             shape->setGeometryProtected(true);
+            shape->setCollisionDetection(false);
         }
     }
 
