@@ -80,6 +80,7 @@ public:
      */
     void cleanupHeadersFooters();
 
+#if 0
     /**
      * For the one frameset create all the frames that would be auto-placed
      * on the target pagenumber if the page was appended.  Will only place
@@ -89,6 +90,7 @@ public:
      * @param pageNumber the (already existing) page where the new frame(s) will show
      */
     void createNewFrameForPage(KWTextFrameSet *fs, int pageNumber);
+#endif
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) {

@@ -277,7 +277,6 @@ else kDebug(32001) << "Nooooo FooterTextFrame";
 
 void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 {
-    kDebug(32001) <<"pageNumber=" << pageNumber;
     /* assumes all frames are there and will do layouting of all the frames
         - headers/footers/main FS are positioned
         - normal frames are clipped to page */
@@ -340,7 +339,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     QList<KWFrame *> frames = framesInPage(pageRect);
 
-    kDebug(32001) << "hasMainTextFrame=" << pageStyle.hasMainTextFrame() << "columns=" << pageStyle.columns().columns << "frames=" << frames;
+    kDebug(32001) << "pageNumber=" << pageNumber << "hasMainTextFrame=" << pageStyle.hasMainTextFrame() << "columns=" << pageStyle.columns().columns << "frameCount=" << frames.count();
     foreach (KWFrame *frame, frames) {
         KWTextFrameSet *textFrameSet = 0;
         switch (frame->frameSet()->type()) {
@@ -360,6 +359,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         }
         Q_ASSERT(textFrameSet);
 
+        /*
         KWPage page = m_pageManager->page(frame->shape());
         Q_ASSERT(page.isValid());
         kDebug(32001) << "textFrameSetType=" << KWord::frameSetTypeName(textFrameSet->textFrameSetType())
@@ -369,6 +369,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
                  << "size=" << frame->shape()->size()
                  << "outlineRect=" << frame->shape()->outlineRect()
                  << "boundingRect=" << frame->shape()->boundingRect();
+        */
 
         switch (textFrameSet->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
@@ -787,10 +788,10 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
     }
 }
 
+#if 0
 void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 {
     kDebug(32001);
-#if 0
     if (fs->frameCount() == 0)
         return;
     if (pageNumber == m_pageManager->begin().pageNumber())
@@ -833,10 +834,9 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
         frame->shape()->setPosition(QPointF(frame->shape()->position().x(),
                                             offsetInDocument + offsetFromPage));
     }
-#else
     Q_ASSERT(false);
-#endif
 }
+#endif
 
 KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 {
