@@ -61,6 +61,7 @@ GenericName[x-test]=xxTablesxx
 GenericName[zh_CN]=表
 GenericName[zh_TW]=表格
 Name=Table
+Name[el]=Πίνακας
 Name[pt]=Tabela
 Name[sv]=Tabell
 Name[uk]=Таблиця

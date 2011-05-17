@@ -31,9 +31,9 @@ set(calligra-active_SRCS
 
 qt4_automoc(${calligra-active_SRCS})
 
-add_executable(calligra-active ${calligra-active_SRCS})
+add_executable(calligraactive ${calligra-active_SRCS})
 
-target_link_libraries(calligra-active
+target_link_libraries(calligraactive
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
     komain
@@ -42,6 +42,7 @@ target_link_libraries(calligra-active
     kopageapp
 )
 
-install(TARGETS calligra-active RUNTIME DESTINATION bin)
-install(DIRECTORY qml DESTINATION share/calligra-active)
-install(DIRECTORY templates DESTINATION share/calligra-active)
+install(TARGETS calligraactive RUNTIME DESTINATION bin)
+install(FILES calligraactive.desktop DESTINATION share/applications)
+install(DIRECTORY qml DESTINATION share/calligraactive)
+install(DIRECTORY templates DESTINATION share/calligraactive)

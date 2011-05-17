@@ -60,6 +60,7 @@ GenericName[x-test]=xxScriptsxx
 GenericName[zh_CN]=脚本
 GenericName[zh_TW]=命令稿
 Name=Script
+Name[el]=Σενάριο
 Name[pt]=Programa
 Name[sv]=Skript
 Name[uk]=Скрипт
