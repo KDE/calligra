@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Flow/Dock
 Comment=Docker for Flow
+Comment[el]=Προσάρτηση για το Flow
 Comment[es]=Anclaje para Flow
 Comment[et]=Flow dokk
 Comment[it]=Gancio per Flow
