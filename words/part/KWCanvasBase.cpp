@@ -49,14 +49,6 @@
 
 //#define DEBUG_REPAINT
 
-void printTime(const QString &note)
-{
-    struct timeval tv;
-    gettimeofday(&tv, 0);
-    QString time = QString("%1.%2").arg(tv.tv_sec).arg(tv.tv_usec);
-    qDebug() << note << time;
-}
-
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
     : KoCanvasBase(document),
       m_document(document),
@@ -291,7 +283,6 @@ void KWCanvasBase::paintGrid(QPainter &painter, KWViewMode::ViewMap &vm)
 
 void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 {
-    printTime("XXX Start");
     painter.translate(-m_documentOffset);
 
     static int iteration = 0;
@@ -403,13 +394,11 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     // need painting, because updateCanvas is not called when a page is done
                     // layouting.
                     qDebug() << __PRETTY_FUNCTION__ << "expose" << pageCache->allExposed << pageCache->exposed.size();
-                    printTime("XXX foo");
                     if (pageCache->allExposed)  {
 
                         pageCache->exposed.clear();
                         QRect rc(QPoint(0,0), pageSizeView.toSize());
 
-#if 1
                         const int UPDATE_WIDTH = 900;
                         const int UPDATE_HEIGHT = 128;
 
@@ -422,7 +411,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             while (columnLeft > 0) {
                                 int width = qMin(columnLeft, UPDATE_WIDTH);
                                 QRect rc2(column, row, width, height);
-                                qDebug() << __PRETTY_FUNCTION__ << "add rect" << rc2;
                                 pageCache->exposed << rc2;
                                 columnLeft -= width;
                                 column += width;
@@ -430,28 +418,8 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             heightLeft -= height;
                             row += height;
                         }
-#else
-                        const int UPDATE_SIZE = 64; //pixels
-
-                        if (rc.height() < UPDATE_SIZE) {
-                            pageCache->exposed << rc;
-                        }
-                        else {
-                            int row = 0;
-                            int hleft = rc.height();
-                            int w = rc.width();
-                            while (hleft > 0) {
-                                QRect rc2(0, row, w, qMin(hleft, UPDATE_SIZE));
-                                pageCache->exposed << rc2;
-                                hleft -= UPDATE_SIZE;
-                                row += UPDATE_SIZE;
-                            }
-                        }
-#endif
                         pageCache->allExposed = false;
                     }
-
-                    printTime("XXX expose done");
 
                     // There is stuff to be repainted, so collect all the repaintable
                     // rects that are in view and paint them.
@@ -474,22 +442,25 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                 remainingUnExposed << rc;
                             }
                         }
-                        printTime("XXX cache cleared");
                         pageCache->exposed = remainingUnExposed;
-                        qDebug() << __PRETTY_FUNCTION__ << "paint region" << paintRegion.rects();
                         if (!paintRegion.isEmpty()) {
                             qDebug() << __PRETTY_FUNCTION__ << "paint";
                             // paint the exposed regions of the page
-                            QPainter gc(pageCache->cache);
-                            gc.translate(0, -pageTopView);
-                            gc.setClipRegion(paintRegion.translated(0, pageTopView));
-                            printTime("XXX painter setup");
 
-                            // paint into the cache
-                            shapeManager()->paint(gc, *viewConverter(), false);
+                            QRect r = paintRegion.boundingRect();
+                            QImage img(r.size(), QImage::Format_RGB16);
+                            img.fill(0xffff);
+
+                            // we paint to a small image as it is much faster the painting to the big image
+                            QPainter tilePainter(&img);
+                            tilePainter.setClipRect(QRect(QPoint(0,0), r.size()));
+                            tilePainter.translate(-r.left(), -pageTopView - r.top());
+                            shapeManager()->paint(tilePainter, *viewConverter(), false);
+
+                            QPainter imagePainter(pageCache->cache);
+                            imagePainter.drawImage(r.topLeft(), img);
                         }
                     }
-                    printTime("XXX empty done");
                     // paint from the cached page image on the original painter
 
                     QRect dst = QRect(pageRectView.x() + clipRectOnPage.x(),
@@ -505,9 +476,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     else {
                         painter.drawImage(dst, cacheImage, clipRectOnPage);
                     }
-                    printTime("XXX draw done");
-
-                    qDebug() << __PRETTY_FUNCTION__ << "dest" << dst << clipRectOnPage;
 
                     // put the cache back
                     m_pageCacheManager->insert(vm.page, pageCache);
@@ -525,7 +493,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     if (contentArea > pageContentArea) {
                         pageContentArea = contentArea;
                     }
-                    printTime("XXX end");
                 }
             }
             else { // we cache at 100%, but paint at the actual zoom level
