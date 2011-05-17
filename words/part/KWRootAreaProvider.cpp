@@ -333,6 +333,50 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
         rootArea->setBottom(rootArea->top() + newSize.height());
         //rootArea->associatedShape()->setAbsolutePosition(centerpos);
 
+//TODO we would need to do something like the following to relayout all affected
+//pages again but that is so terrible slow that it's unusable. We need to find
+//a better solution for that.
+#if 0
+        // the list of pages that need 
+        QList<int> relayoutPages;
+        
+        // transfer the new size to the copy-shapes
+        if (KWFrame *frame = dynamic_cast<KWFrame*>(rootArea->associatedShape()->applicationData())) {
+            foreach(KWFrame* f, frame->copies()) {
+                if (f->shape()) {
+                    f->shape()->setSize(newSize);
+                    KWPage p = pageManager->page(f->shape());
+                    if (p.isValid() && !relayoutPages.contains(p.pageNumber()))
+                        relayoutPages.append(p.pageNumber());
+                }
+            }
+        }
+            
+        if (isHeaderFooter) {
+            // adjust the minimum frame height for headers and footer
+            Q_ASSERT(m_textFrameSet->frameCount() > 0);
+            KWFrame *frame = static_cast<KWFrame*>(m_textFrameSet->frames().first());
+            if (frame->minimumFrameHeight() != newSize.height()) {
+                frame->setMinimumFrameHeight(newSize.height());
+                if (!relayoutPages.contains(page.pageNumber()))
+                    relayoutPages.append(page.pageNumber());
+            }
+        }
+
+        qSort(relayoutPages);
+        foreach(int pageNumber, relayoutPages)
+            m_textFrameSet->kwordDocument()->frameLayout()->layoutFramesOnPage(pageNumber);
+#else
+
+        // transfer the new size to the copy-shapes
+        if (KWFrame *frame = dynamic_cast<KWFrame*>(rootArea->associatedShape()->applicationData())) {
+            foreach(KWFrame* f, frame->copies()) {
+                if (f->shape()) {
+                    f->shape()->setSize(newSize);
+                }
+            }
+        }
+
         if (isHeaderFooter) {
             // adjust the minimum frame height for headers and footer
             Q_ASSERT(m_textFrameSet->frameCount() > 0);
@@ -344,6 +388,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
                 m_textFrameSet->kwordDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
             }
         }
+#endif
     }
 
 #if 0

@@ -96,7 +96,14 @@ qreal KWFrame::minimumFrameHeight() const
 
 void KWFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
 {
+    if (m_minimumFrameHeight == minimumFrameHeight)
+        return;
     m_minimumFrameHeight = minimumFrameHeight;
+
+    // transfer the minimumFrameHeight to the copy-shapes
+    foreach(KWFrame* copyFrame, m_copyShapes) {
+        copyFrame->setMinimumFrameHeight(m_minimumFrameHeight);
+    }
 }
 
 void KWFrame::cleanupShape(KoShape* shape)
@@ -134,6 +141,22 @@ void KWFrame::setFrameSet(KWFrameSet *fs)
     m_frameSet = fs;
     if (fs)
         fs->addFrame(this);
+}
+
+QList<KWFrame*> KWFrame::copies() const
+{
+    return m_copyShapes;
+}
+
+void KWFrame::addCopy(KWFrame* frame)
+{
+    if (!m_copyShapes.contains(frame))
+        m_copyShapes.append(frame);
+}
+
+void KWFrame::removeCopy(KWFrame* frame)
+{
+    m_copyShapes.removeAll(frame);
 }
 
 void KWFrame::copySettings(const KWFrame *frame)

@@ -129,6 +129,15 @@ public:
     }
 
     /**
+     * Returns the list of copy-shapes, see @a KWCopyShape , that
+     * are copies of this KWFrame.
+     */
+    QList<KWFrame*> copies() const;
+
+    void addCopy(KWFrame* frame);
+    void removeCopy(KWFrame* frame);
+
+    /**
      * States if this frame is a copy of the previous one.
      * If this frame is a copy, then this frame is drawn with the same content as the
      * previous frame in this frameset.
@@ -160,6 +169,7 @@ private:
 
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
+    QList<KWFrame*> m_copyShapes;
 };
 
 #endif
