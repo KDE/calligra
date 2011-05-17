@@ -409,7 +409,28 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                         pageCache->exposed.clear();
                         QRect rc(QPoint(0,0), pageSizeView.toSize());
 
+#if 1
+                        const int UPDATE_WIDTH = 900;
+                        const int UPDATE_HEIGHT = 128;
 
+                        int row = 0;
+                        int heightLeft = rc.height();
+                        while (heightLeft > 0) {
+                            int height = qMin(heightLeft, UPDATE_HEIGHT);
+                            int column = 0;
+                            int columnLeft = rc.width();
+                            while (columnLeft > 0) {
+                                int width = qMin(columnLeft, UPDATE_WIDTH);
+                                QRect rc2(column, row, width, height);
+                                qDebug() << __PRETTY_FUNCTION__ << "add rect" << rc2;
+                                pageCache->exposed << rc2;
+                                columnLeft -= width;
+                                column += width;
+                            }
+                            heightLeft -= height;
+                            row += height;
+                        }
+#else
                         const int UPDATE_SIZE = 64; //pixels
 
                         if (rc.height() < UPDATE_SIZE) {
@@ -426,6 +447,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                 row += UPDATE_SIZE;
                             }
                         }
+#endif
                         pageCache->allExposed = false;
                     }
 
@@ -452,14 +474,16 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                                 remainingUnExposed << rc;
                             }
                         }
+                        printTime("XXX cache cleared");
                         pageCache->exposed = remainingUnExposed;
-                        qDebug() << __PRETTY_FUNCTION__ << "paint region" << paintRegion.isEmpty();
+                        qDebug() << __PRETTY_FUNCTION__ << "paint region" << paintRegion.rects();
                         if (!paintRegion.isEmpty()) {
                             qDebug() << __PRETTY_FUNCTION__ << "paint";
                             // paint the exposed regions of the page
                             QPainter gc(pageCache->cache);
                             gc.translate(0, -pageTopView);
                             gc.setClipRegion(paintRegion.translated(0, pageTopView));
+                            printTime("XXX painter setup");
 
                             // paint into the cache
                             shapeManager()->paint(gc, *viewConverter(), false);
