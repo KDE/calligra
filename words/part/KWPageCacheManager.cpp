@@ -30,22 +30,22 @@ KWPageCache::KWPageCache(QImage *img)
     : cache(img)
 {
     cache->fill(Qt::white);
-    //qDebug() << "Creating new cache with existing image" << this << "," << cache;
+    qDebug() << "Creating new cache with existing image" << this << "," << cache;
 }
 
 KWPageCache::KWPageCache(int w, int h)
     : allExposed(true)
 {
-    cache = new QImage(w, h, QImage::Format_ARGB32);
+    cache = new QImage(w, h, QImage::Format_RGB16);
     cache->fill(Qt::white);
-    //qDebug() << "creating new cache with new image" << this << "," << cache;
+    qDebug() << "creating new cache with new image" << this << "," << cache;
 }
 
 
 KWPageCache::~KWPageCache()
 {
     // DO NOT DELETE THE CACHE IMAGE
-    //qDebug() << "deleting cache " << this << "returning image" << cache;
+    qDebug() << "deleting cache " << this << "returning image" << cache;
 }
 
 KWPageCacheManager::KWPageCacheManager(const QSize &size, int cacheSize)
@@ -53,7 +53,7 @@ KWPageCacheManager::KWPageCacheManager(const QSize &size, int cacheSize)
 {
     //qDebug() << "creating new cache manager for size" << size << "creating " << cacheSize <<  "images";
     for (int i = 0; i < cacheSize; ++i) {
-        QImage *img = new QImage(size, QImage::Format_ARGB32);
+        QImage *img = new QImage(size, QImage::Format_RGB16);
         //qDebug() << "\tcreating new cache image" << img;
         m_imageQueue.enqueue(img);
     }
@@ -71,7 +71,9 @@ KWPageCache *KWPageCacheManager::take(const KWPage page)
     if (m_cache.contains(page)) {
         cache = m_cache.take(page);
         //cache->cache->save(QString("cache_%1.png").arg((int)cache->cache));
+        qDebug() << __PRETTY_FUNCTION__ << cache << cache->allExposed << cache->exposed.size();
     }
+    qDebug() << __PRETTY_FUNCTION__ << cache;
     return cache;
 }
 
@@ -83,6 +85,7 @@ void KWPageCacheManager::insert(KWPage page, KWPageCache *cache)
         m_imageQueue.enqueue(discard->cache);
         delete discard;
     }
+    qDebug() << __PRETTY_FUNCTION__ << cache;
     m_cache.insert(page, cache);
 }
 
@@ -102,12 +105,13 @@ KWPageCache *KWPageCacheManager::cache(QSize size)
     if (!cache){
         cache = new KWPageCache(size.width(), size.height());
     }
+    qDebug() << __PRETTY_FUNCTION__ << cache;
     return cache;
 }
 
 void KWPageCacheManager::clear()
 {
-    //qDebug() << "clearing page cache manager";
+    qDebug() << "clearing page cache manager";
     qDeleteAll(m_imageQueue);
     m_imageQueue.clear();
     foreach(KWPageCache *cache, m_cache.values()) {
