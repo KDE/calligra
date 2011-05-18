@@ -354,6 +354,9 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
     }
 
     TRY_READ_ATTR_WITHOUT_NS(type)
+    if (!type.isEmpty()) {
+        type = type.mid(1); // removes extra # from the start
+    }
     TRY_READ_ATTR_WITHOUT_NS(filled)
     if (filled.isEmpty()) {
         filled = m_fillTypeStrings[type];
