@@ -793,4 +793,6 @@ void KWCanvasBase::setCacheEnabled(bool enabled, int cacheSize, qreal maxZoom)
     m_cacheEnabled = enabled;
     m_cacheSize = cacheSize;
     m_maxZoom = maxZoom;
+    if (m_pageCacheManager) delete m_pageCacheManager;
+    m_pageCacheManager = new KWPageCacheManager(m_cacheSize);
 }
