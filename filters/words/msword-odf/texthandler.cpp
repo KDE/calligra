@@ -1914,19 +1914,35 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         }
 
         listStyleWriter.startElement("style:list-level-properties");
+        listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
+        listStyleWriter.startElement("style:list-level-label-alignment");
+
+        switch (listInfo->followingChar()) {
+        case 0:
+            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            break;
+        case 1:
+            listStyleWriter.addAttribute("text:label-followed-by", "nothing");
+            break;
+        case 2:
+            listStyleWriter.addAttribute("text:label-followed-by", "space");
+            break;
+        default:
+            break;
+        }
+
         if (listInfo->space()) {
             // This produces wrong results (see the document attached to KDE
             // bug 244411 and it's not clear why that is so. The specs say that
             // the dxaSpace is the "minimum space between number and paragraph"
             // and as such following should be right but it is not. So, we
             // disabled it for now till someone has an idea why that is so.
-            // listStyleWriter.addAttributePt("text:min-label-distance",
-            // listInfo->space()/20.0);
+            // listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
         }
         if (listInfo->indent()) {
-            // Is this correct?
-            listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);
+            listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
         }
+        listStyleWriter.endElement(); //style:list-level-label-alignment
         listStyleWriter.endElement(); //style:list-level-properties
         //close element
         listStyleWriter.endElement(); //text:list-level-style-bullet
@@ -2038,6 +2054,7 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         //listInfo->followingchar() ignored, it's always a space in KWord currently
         //*************************************
         listStyleWriter.startElement("style:list-level-properties");
+        listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
         switch (listInfo->alignment()) {
         case 1:
             listStyleWriter.addAttribute("fo:text-align", "center");
@@ -2052,13 +2069,30 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
             break;
         }
 
+        listStyleWriter.startElement("style:list-level-label-alignment");
+
+        switch (listInfo->followingChar()) {
+        case 0:
+            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            break;
+        case 1:
+            listStyleWriter.addAttribute("text:label-followed-by", "nothing");
+            break;
+        case 2:
+            listStyleWriter.addAttribute("text:label-followed-by", "space");
+            break;
+        default:
+            break;
+        }
+
         if (listInfo->space()) {
             // Disabled for now. Have a look at the comment at the other text:min-label-distance above to see why.
             //listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
         }
         if (listInfo->indent()) {
-            listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);
+            listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
         }
+        listStyleWriter.endElement(); //style:list-level-label-alignment
         listStyleWriter.endElement(); //style:list-level-properties
         //close element
         listStyleWriter.endElement(); //text:list-level-style-number
