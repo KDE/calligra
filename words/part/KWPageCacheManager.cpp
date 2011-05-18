@@ -29,7 +29,7 @@
 KWPageCache::KWPageCache(QImage *img)
     : cache(img)
 {
-    cache->fill(Qt::white);
+    cache->fill(0xffff);
     qDebug() << "Creating new cache with existing image" << this << "," << cache;
 }
 
@@ -37,7 +37,7 @@ KWPageCache::KWPageCache(int w, int h)
     : allExposed(true)
 {
     cache = new QImage(w, h, QImage::Format_RGB16);
-    cache->fill(Qt::white);
+    cache->fill(0xffff);
     qDebug() << "creating new cache with new image" << this << "," << cache;
 }
 
