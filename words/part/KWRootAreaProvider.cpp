@@ -37,6 +37,7 @@
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
+#include <KoParagraphStyle.h>
 
 #include <QTimer>
 #include <kdebug.h>
@@ -173,7 +174,16 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         if (m_textFrameSet->textFrameSetType() == KWord::MainTextFrameSet) {
             // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
             for(int i = pageManager->pageCount(); i < pageNumber; ++i) {
-                KWPage page = kwdoc->appendPage();
+                QString masterPageName;
+                foreach(KoTextLayoutRootArea *area, m_pages[i - 1]->rootAreas) {
+                    QTextBlock firstBlock = area->startTextFrameIterator().currentBlock();
+                    if (firstBlock.isValid()) {
+                        QString n = firstBlock.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
+                        if (!n.isEmpty())
+                            masterPageName = n;
+                    }
+                }
+                KWPage page = kwdoc->appendPage(masterPageName);
                 Q_ASSERT(page.isValid());
             }
         } else if (pageNumber > pageManager->pageCount()) {
