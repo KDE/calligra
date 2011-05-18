@@ -177,6 +177,10 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
                 QString masterPageName;
                 QList<KoTextLayoutRootArea *> rootAreasBefore = m_pages[i - 1]->rootAreas;
                 if (!rootAreasBefore.isEmpty()) {
+                    //FIXME this assumes that a) endTextFrameIterator() will return the starting-it of the
+                    //next QTextBlock which wasn't layouted yet and b) that it's a good idea to deal with
+                    //the API on that level. We probably like to hide such logic direct within the
+                    //textlayout-library and provide a more abstract way to deal with content.
                     QTextFrame::iterator it = rootAreasBefore.last()->endTextFrameIterator();
                     QTextBlock firstBlock = it.currentBlock();
                     if (firstBlock.isValid()) {
