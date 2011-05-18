@@ -21,22 +21,17 @@
 #define KEXINEWPROJECTASSISTANT_H
 
 #include "kexidbconnectionset.h"
-//#include "ui_KexiOpenExistingFile.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <kexidb/connectiondata.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 
-#include <QLabel>
 #include <QPointer>
-
-class Q3ListViewItem;
 
 class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
 class KCategorizedView;
-class KPushButton;
 
 class KexiTemplateSelectionPage : public KexiAssistantPage
 {
@@ -102,7 +97,6 @@ public:
     QProgressBar* m_progressBar;
 };
 
-class KexiConnSelectorWidget;
 class KexiProjectConnectionSelectionPage : public KexiAssistantPage
 {
     Q_OBJECT
@@ -171,62 +165,5 @@ private:
     class Private;
     Private* const d;
 };
-
-// MOC_SKIP_BEGIN
-#ifdef OLD_KexiNewProjectWizard
-
-class KEXIMAIN_EXPORT KexiNewProjectAssistant : public K3Wizard
-{
-    Q_OBJECT
-public:
-    KexiNewProjectAssistant(KexiDBConnectionSet& conn_set, QWidget *parent = 0);
-    virtual ~KexiNewProjectAssistant();
-
-    /*! \return name for a new project's database if server-based project
-     type was selected. Returns file name if file-based project was selected. */
-    QString projectDBName() const;
-
-    /*! \return name for a new project. Used for both file- and serever- based projects. */
-    QString projectCaption() const;
-
-    /*! \return data of selected connection for new project,
-     if server-based project type was selected.
-     Returns NULL if no selection has been made or file-based project
-     has been selected. */
-    KexiDB::ConnectionData* projectConnectionData() const;
-
-    /*! Reimplemented for internal reasons */
-    virtual void show();
-
-    /*! If true, user will be asked to accept overwriting existing project.
-     This is true by default. */
-    void setConfirmOverwrites(bool set);
-
-protected slots:
-    void slotLvTypesSelected(Q3ListViewItem *);
-    void slotLvTypesExecuted(Q3ListViewItem *);
-    void slotServerDBCaptionTxtChanged(const QString &capt);
-    void slotServerDBNameTxtChanged(const QString &n);
-
-    virtual void done(int r);
-    virtual void next();
-    virtual void accept();
-
-protected:
-    virtual void showPage(QWidget *page);
-
-    KexiNewPrjTypeSelector *m_prjtype_sel;
-    KexiDBTitlePage *m_db_title;
-    KexiServerDBNamePage *m_server_db_name;
-    KexiProjectSelectorWidget* m_project_selector;
-
-    KexiConnSelectorWidget *m_conn_sel;
-    QWidget *m_conn_sel_widget;
-
-    class Private;
-    Private * const d;
-};
-#endif
-// MOC_SKIP_END
 
 #endif
