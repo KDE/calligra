@@ -686,7 +686,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                 if (!m_pageCacheManager) {
                     // no pageCacheManager, so create one for the current view. This happens only once!
                     // so on zoom change, we don't re-pre-generate weight/zoom images.
-                    m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize);
+                    m_pageCacheManager = new KWPageCacheManager(m_cacheSize);
                 }
 
                 if (!m_currentZoom == viewConverter()->zoom()) {
@@ -751,7 +751,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                 if (!m_pageCacheManager) {
                     // no pageCacheManager, so create one for the current view. This happens only once!
                     // so on zoom change, we don't re-pre-generate weight/zoom images.
-                    m_pageCacheManager = new KWPageCacheManager(pageRectView.size().toSize(), m_cacheSize);
+                    m_pageCacheManager = new KWPageCacheManager(m_cacheSize);
                 }
 
                 if (m_currentZoom != 1.0) {

@@ -38,11 +38,12 @@ public:
 
     /// create a pagecache object with the existing
     /// QImage.
-    KWPageCache(QImage *img);
+    KWPageCache(KWPageCacheManager *manager, QImage *img);
     /// create a new pagecache object with a new QImage
-    KWPageCache(int w, int h);
+    KWPageCache(KWPageCacheManager *manager, int w, int h);
     ~KWPageCache();
 
+    KWPageCacheManager* m_manager;
     QImage *cache;
     // List of logical exposed rects in view coordinates
     // These are the rects that are queued for updating, not
@@ -56,7 +57,7 @@ class KWPageCacheManager {
 
 public:
 
-    KWPageCacheManager(const QSize &size, int cacheSize);
+    KWPageCacheManager(int cacheSize);
 
     ~KWPageCacheManager();
 
@@ -69,9 +70,9 @@ public:
     void clear();
 
 private:
-    QMap<KWPage, KWPageCache*> m_cache;
+    QCache<KWPage, KWPageCache> m_cache;
     QQueue<QImage*> m_imageQueue;
-    int m_cacheSize;
+    friend class KWPageCache;
 };
 
 #endif
