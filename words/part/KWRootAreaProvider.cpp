@@ -175,12 +175,12 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
             for(int i = pageManager->pageCount(); i < pageNumber; ++i) {
                 QString masterPageName;
-                foreach(KoTextLayoutRootArea *area, m_pages[i - 1]->rootAreas) {
-                    QTextBlock firstBlock = area->startTextFrameIterator().currentBlock();
+                QList<KoTextLayoutRootArea *> rootAreasBefore = m_pages[i - 1]->rootAreas;
+                if (!rootAreasBefore.isEmpty()) {
+                    QTextFrame::iterator it = rootAreasBefore.last()->endTextFrameIterator();
+                    QTextBlock firstBlock = it.currentBlock();
                     if (firstBlock.isValid()) {
-                        QString n = firstBlock.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
-                        if (!n.isEmpty())
-                            masterPageName = n;
+                        masterPageName = firstBlock.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
                     }
                 }
                 KWPage page = kwdoc->appendPage(masterPageName);
