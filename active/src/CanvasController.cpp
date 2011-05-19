@@ -97,6 +97,8 @@ void CanvasController::openDocument(const QString& path)
 
     if (!ext.isEmpty()) {
         fname.chop(ext.length() + 1);
+    } else {
+        kDebug() << "Extension detection failed. This is bad.";
     }
 
     if (isPresentationDocumentExtension(ext)) {
@@ -107,7 +109,11 @@ void CanvasController::openDocument(const QString& path)
         prDocument->openUrl(KUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(prDocument->canvasItem());
-        setCanvas(m_canvasItem);
+        if (m_canvasItem) {
+            setCanvas(m_canvasItem);
+        } else {
+            kDebug() << "Failed to fetch a canvas item";
+        }
 
         KoToolManager::instance()->addController(this);
         KoPACanvasItem *paCanvasItem = dynamic_cast<KoPACanvasItem*>(m_canvasItem);
@@ -137,7 +143,11 @@ void CanvasController::openDocument(const QString& path)
         tablesDoc->openUrl(KUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
-        setCanvas(m_canvasItem);
+        if (m_canvasItem) {
+            setCanvas(m_canvasItem);
+        } else {
+            kDebug() << "Failed to fetch a canvas item";
+        }
 
         KoToolManager::instance()->addController(this);
         Calligra::Tables::CanvasItem *canvasItem = dynamic_cast<Calligra::Tables::CanvasItem*>(m_canvasItem);
@@ -161,14 +171,24 @@ void CanvasController::openDocument(const QString& path)
         m_documentType = CADocumentInfo::TextDocument;
         emit documentTypeChanged();
 
+        kDebug() << "Trying to open the document";
         KWDocument *kwDoc = static_cast<KWDocument*>(m_doc);
         kwDoc->openUrl(KUrl(path));
 
         m_canvasItem = dynamic_cast<KoCanvasBase*>(m_doc->canvasItem());
-        setCanvas(m_canvasItem);
+        if (m_canvasItem) {
+            setCanvas(m_canvasItem);
+        } else {
+            kDebug() << "Failed to fetch a canvas item";
+        }
 
+        kDebug() << "Will now attempt to typecast";
         KoToolManager::instance()->addController(this);
         KWCanvasItem *canvasItem = dynamic_cast<KWCanvasItem*>(m_canvasItem);
+
+        if (!canvasItem) {
+            kDebug() << "Failed to get KWCanvasItem";
+        }
 
         m_zoomHandler = static_cast<KoZoomHandler*>(m_canvasItem->viewConverter());
         m_zoomController = new KoZoomController(this, m_zoomHandler, m_doc->actionCollection());
@@ -187,9 +207,12 @@ void CanvasController::openDocument(const QString& path)
         }
     }
 
+    kDebug() << "Requesting tool activation";
     KoToolManager::instance()->requestToolActivation(this);
     //FIXME: doesn't work, no emits
     connect(m_doc, SIGNAL(sigProgress(int)), SLOT(processLoadProgress(int)));
+
+    kDebug() << "Trying to add to recent files";
 
     bool recentFileAlreadyExists = false;
     foreach(CADocumentInfo *docInfo, m_recentFiles) {
@@ -204,6 +227,7 @@ void CanvasController::openDocument(const QString& path)
 
     emit sheetCountChanged();
     emit documentLoaded();
+    kDebug() << "Everything done loading";
 }
 
 void CanvasController::setVastScrolling(qreal factor)
