@@ -2,6 +2,10 @@
 Version=1.0
 Type=Application
 Name=Calligra Active
+Name[pt]=Calligra Active
+Name[sv]=Calligra Active
+Name[uk]=Calligra Active
+Name[x-test]=xxCalligra Activexx
 Exec=/usr/bin/calligraactive
 Icon=calligramobile
 X-Window-Icon=calligramobile

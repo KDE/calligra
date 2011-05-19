@@ -57,7 +57,6 @@ public:
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
-    virtual bool suggestPageBreak(KoTextLayoutRootArea *beforeThis);
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 private:
