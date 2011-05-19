@@ -371,14 +371,7 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
     writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
     //TODO: insert <text:tab> elements at specified locations
-/*    if (m_paragraphProperties->pap().itbdMac) {
-	//checking the list tab
-        if (m_paragraphProperties->pap().rgdxaTab[0].tbd.jc == jcList) {
-            writer->startElement("text:tab", false);
-            writer->endElement();
-        }
-    }
-*/
+
     //if there's any paragraph content
     if (!m_textStrings.isEmpty()) {
         //Loop through each text strings and styles (equal # of both) and write
