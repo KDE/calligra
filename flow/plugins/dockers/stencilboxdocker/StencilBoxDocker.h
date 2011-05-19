@@ -58,6 +58,7 @@ class StencilBoxDocker : public QDockWidget
     Q_OBJECT
     public:
         explicit StencilBoxDocker(QWidget* parent = 0);
+        void setViewMode(QListView::ViewMode iconMode);
 
     protected:
         /// Load the default koffice shapes
@@ -75,7 +76,7 @@ class StencilBoxDocker : public QDockWidget
 	
     private:
         QMap<QString, CollectionItemModel*> m_modelMap;
-        QMap<QString, QSortFilterProxyModel*> m_proxyMap;
+        //QMap<QString, QSortFilterProxyModel*> m_proxyMap;
 
         CollectionTreeWidget *m_treeWidget;
         QMenu* m_menu;
@@ -88,7 +89,7 @@ class StencilBoxDocker : public QDockWidget
         void reapplyFilter();
         void getHotNewStuff();
         void installStencil();
-        void regenerateProxyMap();
+        //void regenerateProxyMap();
 };
 
 #endif //KOSHAPECOLLECTIONDOCKER_H

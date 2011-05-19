@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -94,13 +97,6 @@ public:
         return m_frames.count();
     }
 
-#ifndef NDEBUG
-    /// use kDebug calls to print internal info on this frameset
-    virtual void printDebug();
-    /// use kDebug calls to print internal info of the argument frame
-    virtual void printDebug(KWFrame *frame);
-#endif
-
     KWord::FrameSetType type() const {
         return m_type;
     }
@@ -119,6 +115,7 @@ signals:
 
 protected:
     friend class KWFrame;
+
     /**
      * Called from addFrame.
      * Overwrite in inheriting classes to do something with the frame on add.
@@ -128,11 +125,12 @@ protected:
         Q_UNUSED(frame);
     }
 
+private:
     /// The list of frames that this frameset owns.
     QList<KWFrame*> m_frames;
+    /// The type of the frameset.
     KWord::FrameSetType m_type;
-
-private:
+    /// The name of the frameset.
     QString m_name;
 };
 

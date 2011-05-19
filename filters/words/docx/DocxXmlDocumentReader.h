@@ -252,6 +252,11 @@ protected:
 private:
     void init();
 
+    //! Returns true if the field returned something that requires a closing element
+    bool handleSpecialField();
+
+    QString m_specialCharacters;
+
     QColor m_backgroundColor; //Documet background color
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
@@ -282,8 +287,7 @@ private:
 
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
-       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType,
-       CurrentPageComplexFieldCharType, NumberOfPagesComplexFieldCharType
+       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType
     };
     //! Type of complex field characters we have
     ComplexFieldCharType m_complexCharType;

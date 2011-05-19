@@ -556,8 +556,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
         if (isStartElement()) {
             if (name() == "sldId") {
                 TRY_READ(sldId)
-                m_context->import->reportProgress(100 / m_context->numberOfItems);
-                m_context->numberOfItems = m_context->numberOfItems - 1;
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
             }
             ELSE_WRONG_FORMAT
         }
@@ -585,8 +587,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_notesMasterIdLst()
         if (isStartElement()) {
             if (name() == "notesMasterId") {
                 TRY_READ(notesMasterId)
-                m_context->import->reportProgress(100 / m_context->numberOfItems);
-                m_context->numberOfItems = m_context->numberOfItems - 1;
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
             }
             ELSE_WRONG_FORMAT
         }
@@ -617,8 +621,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
         if (isStartElement()) {
             if (name() == "sldMasterId") {
                 TRY_READ(sldMasterId)
-                m_context->import->reportProgress(100 / m_context->numberOfItems);
-                m_context->numberOfItems = m_context->numberOfItems - 1;
+                if (m_context->numberOfItems > 0) {
+                    m_context->import->reportProgress(100 / m_context->numberOfItems);
+                    m_context->numberOfItems = m_context->numberOfItems - 1;
+                }
             }
             ELSE_WRONG_FORMAT
         }

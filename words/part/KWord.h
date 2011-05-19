@@ -100,6 +100,7 @@ namespace KWord
      * @param type the framset-type for which a localized name should be returned.
      */
     QString frameSetTypeName(TextFrameSetType type);
+    QString frameSetTypeName(KWFrameSet* frameset);
 }
 
 #endif

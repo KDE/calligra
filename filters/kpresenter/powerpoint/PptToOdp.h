@@ -91,10 +91,11 @@ public:
 
     /**
      * Get path to an already stored picture based on its identifier.
+     *
      * @param pib specifies which BLIP to display in the picture shape.
      * @return path
      */
-    QString getPicturePath(int pib) const;
+    QString getPicturePath(const quint32 pib) const;
 private:
 
     /**
@@ -241,12 +242,10 @@ private:
      * Function that does the actual conversion.
      *
      * It is shared by the two convert() functions.
-     * @param input an open OLE container that contains the ppt data.
      * @param output an open KoStore to write the odp into.
      * @return result code of the conversion.
      */
-    KoFilter::ConversionStatus doConversion(POLE::Storage& input,
-                                            KoStore* output);
+    KoFilter::ConversionStatus doConversion(KoStore* output);
 
     /**
      * TODO:
