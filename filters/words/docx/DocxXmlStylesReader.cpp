@@ -344,13 +344,13 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         kDebug() << "Setting default style of family" << odfType << "...";
         if (type == "character") {
             m_currentTextStyle = *m_defaultStyles.value(odfType.toLatin1());
-            MSOOXML::Utils::copyPropertiesFromStyle(m_defaultTextStyle, m_currentTextStyle, KoGenStyle::TextType);
+            KoGenStyle::copyPropertiesFromStyle(m_defaultTextStyle, m_currentTextStyle, KoGenStyle::TextType);
         }
         else if (type == "paragraph") {
             m_currentParagraphStyle = *m_defaultStyles.value(odfType.toLatin1());
             // Both types must be copied as it can contain both
-            MSOOXML::Utils::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::ParagraphType);
-            MSOOXML::Utils::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+            KoGenStyle::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::ParagraphType);
+            KoGenStyle::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             // Fixme: this value should be in fact read from settings.xml, in practise it most often it seems to be 720
             // which equals to 36 pt
             m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", 36);
@@ -368,10 +368,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
         }
     }
-    MSOOXML::Utils::Setter<bool> currentTextStylePredefinedSetter(&m_currentTextStylePredefined, false);
-    MSOOXML::Utils::Setter<bool> currentParagraphStylePredefinedSetter(&m_currentParagraphStylePredefined, false);
-    m_currentTextStylePredefined = true;
-    m_currentParagraphStylePredefined = true;
 
     QString nextStyleName;
 
@@ -459,9 +455,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
     // When reading from styles, we allow duplicates
     insertionFlags = insertionFlags | KoGenStyles::AllowDuplicates;
 
-    m_currentTextStylePredefined = false;
-    m_currentParagraphStylePredefined = false;
-
     // insert style
     if (isDefault) {
         // do not insert, will be inserted at the end
@@ -470,7 +463,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             *m_defaultStyles.value(odfType.toLatin1()) = m_currentTextStyle;
         }
         else if (type == "paragraph") {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+            KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             *m_defaultStyles.value(odfType.toLatin1()) = m_currentParagraphStyle;
         }
         else if (type == "table") {
@@ -491,7 +484,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         else if (type == "paragraph") {
             m_currentParagraphStyle.addAttribute("style:class", "text");
 
-            MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+            KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             styleName = mainStyles->insert(m_currentParagraphStyle, styleName, insertionFlags);
         }
         else if (type == "table") {

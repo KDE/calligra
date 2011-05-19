@@ -155,7 +155,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
         }
 
         cursor.insertText(text());
-        shapeData->foul();
+        shapeData->setDirty();
         shapeData->document()->setUndoRedoEnabled(true);
     }
     return true;

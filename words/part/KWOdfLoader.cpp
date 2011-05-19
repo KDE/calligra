@@ -27,7 +27,6 @@
 #include "KWPage.h"
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoOdfStylesReader.h>
@@ -212,7 +211,6 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoTextShapeData textShapeData;
     if (hasMainText) {
         KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
-        mainFs->setAllowLayout(false);
         mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
         m_document->addFrameSet(mainFs);
         textShapeData.setDocument(mainFs->document(), false);
@@ -259,21 +257,21 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
 void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *textDoc)
 {
-    KoTextDocument(textDoc).setRelativeTabs(false);
+    KoTextDocument(textDoc).setRelativeTabs(true);
     if (settingsDoc.isNull())
         return;
 
     kDebug(32001) << "KWOdfLoader::loadSettings";
     KoOasisSettings settings(settingsDoc);
-    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
-    if (!viewSettings.isNull())
+    KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
+    if (!viewSettings.isNull()) {
         m_document->setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
-    //1.6: KWOasisLoader::loadOasisIgnoreList
-    KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
+    }
+
+    KoOasisSettings::Items configurationSettings = settings.itemSet("ooo:configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
         kDebug(32001) << "Ignorelist:" << ignorelist;
-        //1.6: m_document->setSpellCheckIgnoreList(QStringList::split(',', ignorelist));
 
         KoTextDocument(textDoc).setRelativeTabs(configurationSettings.parseConfigItemBool("TabsRelativeToIndent", true));
     }
@@ -314,7 +312,6 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPa
 {
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setPageStyle(pageStyle);
-    fs->setAllowLayout(false);
     m_document->addFrameSet(fs);
 
     kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();

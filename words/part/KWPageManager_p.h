@@ -49,7 +49,8 @@ public:
 
     KWPageManagerPrivate();
 
-    qreal pageOffset(int pageNum, bool bottom) const;
+    void setPageOffset(int pageNum, qreal offset);
+    qreal pageOffset(int pageNum) const;
 
     /**
      * Update the page number for the page related to the pageId and also update the
@@ -59,7 +60,6 @@ public:
 
     /// helper method for the commands.
     void insertPage(const Page &page);
-
 
     // use a sorted map to find page the identifier for page objects based on the page number.
     QMap<int, int> pageNumbers; // page number to pageId
@@ -74,6 +74,8 @@ public:
     QHash <QString, KWPageStyle> pageStyles;
     KoInsets padding;
     KWPageStyle defaultPageStyle;
+    QHash<int, qreal> pageOffsets;
+    QHash<int, qreal> pageHeights;
 };
 
 #endif

@@ -52,8 +52,7 @@ public:
     /// reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    KoShape *original() {return m_original;}
-    void retire() {m_original=0;}
+    KoShape *original() const;
 
 private:
     KoShape *m_original;

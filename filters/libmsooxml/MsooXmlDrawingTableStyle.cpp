@@ -36,11 +36,16 @@ DrawingTableStyleConverter::~DrawingTableStyleConverter()
 
 void DrawingTableStyleConverter::applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
-    if(!m_style) {
+    if (!m_style) {
         return;
     }
 
-    TableStyleProperties* const styleProperties = m_style->properties(type);
+    TableStyleProperties* styleProperties = m_style->properties(type);
+
+    if (type == DrawingTableStyle::WholeTbl) {
+        styleProperties->bordersToEdgesOnly = true;
+    }
+
     TableStyleConverter::applyStyle(styleProperties, style, row, column);
 }
 

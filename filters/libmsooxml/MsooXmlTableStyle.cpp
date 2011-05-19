@@ -124,12 +124,27 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
         style->setGlyphOrientation(styleProperties->glyphOrientation);
     }
 
-    if (!styleProperties->textStyle.isEmpty()) {
+    if (!styleProperties->textStyle.isEmpty() || !styleProperties->textStyle.parentName().isEmpty()) {
         style->setTextStyle(styleProperties->textStyle);
     }
 
-    if (!styleProperties->paragraphStyle.isEmpty()) {
+    if (!styleProperties->paragraphStyle.isEmpty() || !styleProperties->paragraphStyle.parentName().isEmpty()) {
         style->setParagraphStyle(styleProperties->paragraphStyle);
+    }
+
+    TableStyleProperties::Properties setProperties = styleProperties->setProperties;
+
+    if (setProperties & TableStyleProperties::TopMargin) {
+        style->setTopPadding(styleProperties->topMargin);
+    }
+    if (setProperties & TableStyleProperties::BottomMargin) {
+        style->setBottomPadding(styleProperties->bottomMargin);
+    }
+    if (setProperties & TableStyleProperties::LeftMargin) {
+        style->setLeftPadding(styleProperties->leftMargin);
+    }
+    if (setProperties & TableStyleProperties::RightMargin) {
+        style->setRightPadding(styleProperties->rightMargin);
     }
 }
 
@@ -138,8 +153,11 @@ void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties,
     Q_UNUSED(row);
     Q_UNUSED(column);
 
-    if(styleProperties->setProperties & TableStyleProperties::BackgroundColor) {
+    if (styleProperties->setProperties & TableStyleProperties::BackgroundColor) {
         style->setBackgroundColor(styleProperties->backgroundColor);
+    }
+    if (styleProperties->setProperties & TableStyleProperties::BackgroundOpacity) {
+        style->setBackgroundOpacity(styleProperties->backgroundOpacity);
     }
 }
 
@@ -153,70 +171,90 @@ void TableStyleConverter::applyBordersStyle(TableStyleProperties* stylePropertie
 
     TableStyleProperties::Properties setProperties = styleProperties->setProperties;
 
-    if(setProperties & TableStyleProperties::TopBorder) {
+    if (setProperties & TableStyleProperties::TopBorder) {
         KoBorder::BorderData* topData;
         if (row == 0) {
             topData = &styleProperties->top;
         }
         else {
             topData = &styleProperties->insideH;
+            if (topData->width == 0) {
+                topData = &styleProperties->top;
+            }
         }
-        style->borders()->setTopBorderColor(topData->color);
-        style->borders()->setTopBorderSpacing(topData->spacing);
-        style->borders()->setTopBorderStyle(topData->style);
-        style->borders()->setTopBorderWidth(topData->width);
+        if (!styleProperties->bordersToEdgesOnly || row == 0) {
+            style->borders()->setTopBorderColor(topData->color);
+            style->borders()->setTopBorderSpacing(topData->spacing);
+            style->borders()->setTopBorderStyle(topData->style);
+            style->borders()->setTopBorderWidth(topData->width);
+        }
     }
 
-    if(setProperties & TableStyleProperties::BottomBorder) {
+    if (setProperties & TableStyleProperties::BottomBorder) {
         KoBorder::BorderData* bottomData;
         if (row == lastRow) {
             bottomData = &styleProperties->bottom;
         }
         else {
             bottomData = &styleProperties->insideH;
+            if (bottomData->width == 0) {
+                bottomData = &styleProperties->bottom;
+            }
         }
-        style->borders()->setBottomBorderColor(bottomData->color);
-        style->borders()->setBottomBorderSpacing(bottomData->spacing);
-        style->borders()->setBottomBorderStyle(bottomData->style);
-        style->borders()->setBottomBorderWidth(bottomData->width);
+        if (!styleProperties->bordersToEdgesOnly || row == lastRow) {
+            style->borders()->setBottomBorderColor(bottomData->color);
+            style->borders()->setBottomBorderSpacing(bottomData->spacing);
+            style->borders()->setBottomBorderStyle(bottomData->style);
+            style->borders()->setBottomBorderWidth(bottomData->width);
+        }
     }
 
-    if(setProperties & TableStyleProperties::LeftBorder) {
+    if (setProperties & TableStyleProperties::LeftBorder) {
         KoBorder::BorderData* leftData;
         if (column == 0) {
             leftData = &styleProperties->left;
         }
         else {
             leftData = &styleProperties->insideV;
+            if (leftData->width == 0) {
+                leftData = &styleProperties->left;
+            }
         }
-        style->borders()->setLeftBorderColor(leftData->color);
-        style->borders()->setLeftBorderSpacing(leftData->spacing);
-        style->borders()->setLeftBorderStyle(leftData->style);
-        style->borders()->setLeftBorderWidth(leftData->width);
+        if (!styleProperties->bordersToEdgesOnly || column == 0) {
+            style->borders()->setLeftBorderColor(leftData->color);
+            style->borders()->setLeftBorderSpacing(leftData->spacing);
+            style->borders()->setLeftBorderStyle(leftData->style);
+            style->borders()->setLeftBorderWidth(leftData->width);
+        }
     }
 
-    if(setProperties & TableStyleProperties::RightBorder) {
+    if (setProperties & TableStyleProperties::RightBorder) {
         KoBorder::BorderData* rightData;
         if (column == lastColumn) {
             rightData = &styleProperties->right;
         }
         else {
             rightData = &styleProperties->insideV;
+            if (rightData->width == 0) {
+                rightData = &styleProperties->right;
+            }
         }
-        style->borders()->setRightBorderColor(rightData->color);
-        style->borders()->setRightBorderSpacing(rightData->spacing);
-        style->borders()->setRightBorderStyle(rightData->style);
-        style->borders()->setRightBorderWidth(rightData->width);
+        if (!styleProperties->bordersToEdgesOnly || column == lastColumn) {
+            style->borders()->setRightBorderColor(rightData->color);
+            style->borders()->setRightBorderSpacing(rightData->spacing);
+            style->borders()->setRightBorderStyle(rightData->style);
+            style->borders()->setRightBorderWidth(rightData->width);
+        }
     }
 
-    if(setProperties & TableStyleProperties::Tl2brBorder) {
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
         KoBorder::BorderData* tl2brData = &styleProperties->tl2br;
         style->borders()->setTlbrBorderColor(tl2brData->color);
         style->borders()->setTlbrBorderSpacing(tl2brData->spacing);
         style->borders()->setTlbrBorderStyle(tl2brData->style);
         style->borders()->setTlbrBorderWidth(tl2brData->width);
     }
-    if(setProperties & TableStyleProperties::Tr2blBorder) {
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
         KoBorder::BorderData* tr2blData = &styleProperties->tr2bl;
         style->borders()->setTrblBorderColor(tr2blData->color);
         style->borders()->setTrblBorderSpacing(tr2blData->spacing);

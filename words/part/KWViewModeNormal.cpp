@@ -18,7 +18,6 @@
  */
 
 #include "KWViewModeNormal.h"
-#include "KWCanvas.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include <KoViewConverter.h>
@@ -32,9 +31,12 @@ KWViewModeNormal::KWViewModeNormal()
 {
 }
 
-QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const
+QList<KWViewMode::ViewMap> KWViewModeNormal::mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const
 {
     QList<ViewMap> answer;
+    if (!viewConverter) return answer;
+
+#if 1
     if (m_pageTops.isEmpty())
         return answer;
     KWPage page  = m_pageManager->begin();
@@ -44,7 +46,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     int begin = 0;
     int end = m_pageTops.count() - 1;
     int index = 0;
-    const qreal value = m_viewConverter->viewToDocument(viewRect.topLeft()).y();
+    const qreal value = viewConverter->viewToDocument(viewRect.topLeft()).y();
     if (m_pageTops.value(end) <= value) { // check extremes. Only end is needed since begin is zero.
         begin = end;
         index = end;
@@ -67,22 +69,18 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     }
 
     int emptyPages = 0;
-    while (page.isValid()) {
-#ifndef NDEBUG
-        if (page.pageNumber() - pageOffset >= m_pageTops.count()) {
-            kWarning(32003) << "ERROR; pagemanager has more pages than viewmode ("
-                << m_pageManager->pageCount() << ">" << m_pageTops.count()
-                << "). Make sure you add pages via the document!";
-            break;
-        }
-#endif
+    for(; page.isValid(); page = page.next()) {
+        Q_ASSERT_X(page.pageNumber()-pageOffset < m_pageTops.count(), __FUNCTION__,
+                   QString("Pagemanager has more pages than viewmode (%1>%2 with pageOffset=%3 and pageNumber=%4 and pageCount=%5). Make sure you add pages via the document!")
+                   .arg(page.pageNumber()-pageOffset).arg(m_pageTops.count()).arg(pageOffset).arg(page.pageNumber()).arg(m_pageManager->pageCount()).toLocal8Bit());
+
         const QRectF pageRect = page.rect();
-        const QRectF zoomedPage = m_viewConverter->documentToView(pageRect);
+        const QRectF zoomedPage = viewConverter->documentToView(pageRect);
         ViewMap vm;
         vm.page = page;
         //kDebug(32003) <<"page" << page.pageNumber();
         const qreal offsetY = m_pageTops[page.pageNumber() - pageOffset] - pageRect.top();
-        vm.distance = m_viewConverter->documentToView(QPointF(offsetX, offsetY));
+        vm.distance = viewConverter->documentToView(QPointF(offsetX, offsetY));
 
         const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(),
                 zoomedPage.width() , zoomedPage.height());
@@ -103,9 +101,35 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
             else
                 offsetX = 0.0;
         }
-        page = page.next();
     }
+#else
+    KWPage page  = m_pageManager->begin();
+    Q_ASSERT(page.isValid());
+    qreal offsetX = 0.0;
+    const int pageOffset = page.pageNumber();
+    for(; page.isValid(); page = page.next()) {
+        const QRectF pageRect = page.rect();
+        const QRectF zoomedPage = viewConverter->documentToView(pageRect);
+        ViewMap vm;
+        vm.page = page;
 
+        const qreal offsetY = m_pageTops[page.pageNumber() - pageOffset] - pageRect.top();
+        vm.distance = viewConverter->documentToView(QPointF(offsetX, offsetY));
+#if 0
+        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(), zoomedPage.width() , zoomedPage.height());
+        QRectF intersection = targetPage.intersect(viewRect);
+        if (! intersection.isEmpty()) {
+            intersection.moveTopLeft(intersection.topLeft() - vm.distance);
+            vm.clipRect = intersection.toRect();
+            answer.append(vm);
+        }
+#else
+        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(), zoomedPage.width() , zoomedPage.height());
+        vm.clipRect = targetPage.toRect();
+        answer.append(vm);
+#endif
+    }
+#endif
     return answer;
 }
 
@@ -175,8 +199,10 @@ void KWViewModeNormal::updatePageCache()
     m_contents = QSizeF(width, bottom);
 }
 
-QPointF KWViewModeNormal::documentToView(const QPointF & point) const
+QPointF KWViewModeNormal::documentToView(const QPointF & point, KoViewConverter *viewConverter) const
 {
+    Q_ASSERT(viewConverter);
+
     KWPage page = m_pageManager->page(point);
     if (! page.isValid())
         page = m_pageManager->last();
@@ -191,23 +217,25 @@ QPointF KWViewModeNormal::documentToView(const QPointF & point) const
     }
 
     QPointF offsetInPage(point.x(),  + point.y() - page.offsetInDocument());
-    Q_ASSERT(pageIndex >= 0 && pageIndex < m_pageTops.count());
+    Q_ASSERT(pageIndex >= 0);
+    Q_ASSERT(pageIndex < m_pageTops.count());
     QPointF translated(x, m_pageTops[pageIndex]);
-    Q_ASSERT(m_viewConverter);
-    return m_viewConverter->documentToView(translated + offsetInPage);
+    return viewConverter->documentToView(translated + offsetInPage);
 }
 
-QPointF KWViewModeNormal::viewToDocument(const QPointF & point) const
+QPointF KWViewModeNormal::viewToDocument(const QPointF & point, KoViewConverter *viewConverter) const
 {
+    Q_ASSERT(viewConverter);
+
     QPointF clippedPoint(qMax(qreal(0.0), point.x()), qMax(qreal(0.0), point.y()));
-    QPointF translated = m_viewConverter->viewToDocument(clippedPoint);
+    QPointF translated = viewConverter->viewToDocument(clippedPoint);
     int pageNumber = 0;
     foreach (qreal top, m_pageTops) {
         if (translated.y() < top)
             break;
         pageNumber++;
     }
-    translated = m_viewConverter->viewToDocument(point);
+    translated = viewConverter->viewToDocument(point);
     KWPage page = m_pageManager->page(pageNumber - 1 + m_pageManager->begin().pageNumber());
     qreal xOffset = translated.x();
 

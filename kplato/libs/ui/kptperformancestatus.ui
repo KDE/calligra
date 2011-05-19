@@ -149,7 +149,7 @@
             <enum>Qt::NoContextMenu</enum>
            </property>
            <property name="text">
-            <string extracomment="@title:column Schedule Performance Index">SPI</string>
+            <string comment="@title:column Schedule Performance Index">SPI</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -162,7 +162,7 @@
             <enum>Qt::NoContextMenu</enum>
            </property>
            <property name="text">
-            <string extracomment="@title:column Cost Performance Index">CPI</string>
+            <string comment="@title:column Cost Performance Index">CPI</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

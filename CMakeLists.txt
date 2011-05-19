@@ -28,6 +28,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
+option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
 
@@ -359,9 +361,13 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${KOODF_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/main)
 
+# TextLayout depends on kotext
+set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/textlayout)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
-                    ${KOTEXT_INCLUDES}
+                    ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
@@ -371,7 +377,11 @@ if(SHOULD_BUILD_SCRIPTING)
 endif(SHOULD_BUILD_SCRIPTING)
 
 # kopageapp
-set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
+set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
+                    ${PIGMENT_INCLUDES}
+                    ${KOMAIN_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgets
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
 # koproperty
 SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
@@ -444,7 +454,7 @@ endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 ###################
 
 if(SHOULD_BUILD_WORDS)
-    macro_optional_add_subdirectory(words)
+   macro_optional_add_subdirectory(words)
 endif(SHOULD_BUILD_WORDS)
 
 if (SHOULD_BUILD_KFORMULA)
@@ -495,6 +505,10 @@ endif(SHOULD_BUILD_KARBON)
 if(SHOULD_BUILD_BRAINDUMP)
   macro_optional_add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
+
+if(SHOULD_BUILD_ACTIVE)
+  macro_optional_add_subdirectory(active)
+endif(SHOULD_BUILD_ACTIVE)
 
 if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)

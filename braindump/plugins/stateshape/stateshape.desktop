@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=State Shape
+Name[el]=Σχήμα κατάστασης
 Name[en_GB]=State Shape
 Name[et]=Olekukujund
 Name[it]=Forma di stato
@@ -8,6 +9,7 @@ Name[nl]=Statusvorm
 Name[pt]=Forma de Estados
 Name[pt_BR]=Forma de estados
 Name[sv]=Tillståndsform
+Name[ug]=ھالەت شەكىللىرى
 Name[uk]=Форма стану
 Name[x-test]=xxState Shapexx
 Name[zh_TW]=狀態元件

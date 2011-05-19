@@ -499,7 +499,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     foreach( KoShape *label, labels() ) {
         TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
         KoTextDocument doc( labelData->document() );
-        doc.setResizeMethod( KoTextDocument::AutoResize );
+//FIXME        doc.setResizeMethod( KoTextDocument::AutoResize );
     }
 
     KoColorBackground *background = new KoColorBackground( Qt::white );
@@ -729,7 +729,7 @@ void ChartShape::paintComponent( QPainter &painter,
 
         // Calculate the clipping rect
         QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
-        painter.setClipRect( paintRect );
+        painter.setClipRect( paintRect, Qt::IntersectClip );
 
         QPainterPath p;
         p.addRect( paintRect );

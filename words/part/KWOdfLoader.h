@@ -77,7 +77,7 @@ private:
     void loadHeaderFooter(KoOdfLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPageStyle, HFLoadType headerFooter);
     void loadFinished(KoOdfLoadingContext &context, QTextCursor &cursor);
 
-    /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
+    /// helper function to create a KWTextFrameSet+KWFrame for a header/footer.
     void loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::TextFrameSetType fsType);
 
 private:

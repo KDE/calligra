@@ -41,11 +41,13 @@ public:
     std::vector<Format*> formats;
     MSO::OfficeArtDggContainer* dggContainer;
     QList<QColor> colorTable;
+    Version version;
 };
 
 Workbook::Workbook(KoStore* store)
 {
     d = new Workbook::Private();
+    d->version = Unknown;
     d->store = store;
     d->passwordProtected = false;
     d->activeTab = -1;
@@ -272,6 +274,16 @@ QColor Workbook::color(unsigned index) const
     }
 
     return color;
+}
+
+Workbook::Version Workbook::version() const
+{
+    return d->version;
+}
+
+void Workbook::setVersion(Version ver)
+{
+    d->version = ver;
 }
 
 #ifdef SWINDER_XLS2RAW

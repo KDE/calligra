@@ -26,7 +26,6 @@
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
 #include "KoTextBlockData.h"
-#include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
 #include "KoTextSharedLoadingData.h"
@@ -1390,12 +1389,20 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
     const QString breakBefore(styleStack.property(KoXmlNS::fo, "break-before"));
-    if (!breakBefore.isEmpty() && breakBefore != "auto") {
-        setBreakBefore(true);
+    if (!breakBefore.isEmpty()) {
+        if (breakBefore == "page") {
+            setBreakBefore(true);
+        }
     }
     const QString breakAfter(styleStack.property(KoXmlNS::fo, "break-after"));
-    if (!breakAfter.isEmpty() && breakAfter != "auto") {
-        setBreakAfter(true);
+    if (!breakAfter.isEmpty()) {
+        if (breakAfter == "page") {
+            setBreakAfter(true);
+        }
+    }
+    const QString keepTogether(styleStack.property(KoXmlNS::fo, "keep-together"));
+    if (keepTogether == "always") {
+        setNonBreakableLines(true);
     }
 
     // The fo:background-color attribute specifies the background color of a paragraph.
@@ -1411,6 +1418,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             brush.setColor(bgcolor); // #rrggbb format
         }
         setBackground(brush);
+    }
+    
+    // Support for an old non-standard OpenOffice attribute that we still find in too many documents...
+    if (styleStack.hasProperty(KoXmlNS::text, "enable-numbering")) {
+        setProperty(ForceDisablingList, styleStack.property(KoXmlNS::text, "enable-numbering") == "false");
     }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
@@ -1558,6 +1570,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
             if (breakAfter())
                 style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
+        } else if (key == QTextFormat::BlockNonBreakableLines) {
+            if (nonBreakableLines()) {
+                style.addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);
+            }
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)

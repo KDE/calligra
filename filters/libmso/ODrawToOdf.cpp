@@ -19,6 +19,7 @@
 
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
+#include "msodraw.h"
 #include <KoXmlWriter.h>
 #include <QtCore/QtDebug>
 #include <QtGui/QColor>
@@ -115,8 +116,10 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
                                            o.clientData.data(), ds, out);
     }
     defineGraphicProperties(style, ds, out.styles);
+
     if (client) {
-        client->addTextStyles(o.clientTextbox.data(),
+        client->addTextStyles(o.shapeProp.rh.recInstance,
+                              o.clientTextbox.data(),
                               o.clientData.data(), style, out);
     }
 }
@@ -127,7 +130,6 @@ const char* arrowHeads[6] = {
     "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
     "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
 };
-
 
 QString format(double v)
 {
@@ -177,7 +179,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // dr3d:texture-mode
     // dr3d:vertical-segments
     // draw:auto-grow-height
+    style.addProperty("draw:auto-grow-height", "false", gt);
     // draw:auto-grow-width
+    style.addProperty("draw:auto-grow-width", "false", gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
@@ -189,6 +193,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:caption-type
     // draw:color-inversion
     // draw:color-mode
+    if (ds.fPictureBiLevel()) {
+        style.addProperty("draw:color-mode", "mono", gt);
+    } else if (ds.fPictureGray()) {
+        style.addProperty("draw:color-mode", "greyscale", gt);
+    }
     // draw:contrast
     // draw:decimal-places
     // draw:end-guide
@@ -314,13 +323,16 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
     // NOTE: OOo interprets solid line with width 0 as hairline, so if width ==
     // 0, stroke *must* be none to avoid OOo from displaying a line
-    if (ds.fLine() || ds.fNoLineDrawDash()) {
+    if (!ds.fLine() && ds.fNoLineDrawDash()) {
+        style.addProperty("draw:stroke", "dash", gt);
+        style.addProperty("draw:stroke-dash", defineDashStyle(msolineDashSys, styles), gt);
+    }
+    else if (ds.fLine()) {
         quint32 lineDashing = ds.lineDashing();
         if (lineWidthPt == 0) {
             style.addProperty("draw:stroke", "none", gt);
         } else if (lineDashing > 0 && lineDashing < 11) {
             style.addProperty("draw:stroke", "dash", gt);
-            // draw:stroke-dash from 2.3.8.17 lineDashing
             style.addProperty("draw:stroke-dash", defineDashStyle(lineDashing, styles), gt);
         } else {
             style.addProperty("draw:stroke", "solid", gt);
@@ -332,7 +344,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:stroke-linejoin
     // draw:symbol-color
     // draw:textarea-horizontal-align
+    style.addProperty("draw:textarea-horizontal-align", getHorizontalAlign(ds.anchorText()), gt);
     // draw:textarea-vertical-align
+    style.addProperty("draw:textarea-vertical-align", getVerticalAlign(ds.anchorText()), gt);
     // draw:tile-repeat-offset
     // draw:unit
     // draw:visible-area-height
@@ -347,11 +361,19 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:border-right
     // fo:border-top
     // fo:clip
-    // fo:margin
-    // fo:margin-bottom
-    // fo:margin-left
-    // fo:margin-right
-    // fo:margin-top
+    // TODO: Else the containing shape SHOULD use a set of default internal
+    // margins for text on shapes.  Test files required.
+    if (!ds.fAutoTextMargin()) {
+        // fo:margin
+        // fo:margin-bottom
+        style.addProperty("fo:margin-bottom", pt(ds.dyTextBottom()/12700.), gt);
+        // fo:margin-left
+        style.addProperty("fo:margin-left", pt(ds.dxTextLeft()/12700.), gt);
+        // fo:margin-right
+        style.addProperty("fo:margin-right", pt(ds.dxTextRight()/12700.), gt);
+        // fo:margin-top
+        style.addProperty("fo:margin-top", pt(ds.dyTextTop()/12700.), gt);
+    }
     // fo:max-height
     // fo:max-width
     // fo:min-height
@@ -421,9 +443,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
 void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 {
-    // TODO another fill types
+    // TODO: another fill types
 
-    // convert angle to two points representing crossing of the line with rectangle to use it in svg
+    // convert angle to two points representing crossing of
+    // the line with rectangle to use it in svg
     // size of rectangle is 100*100 with the middle in 0,0
     // line coordinates are x1,y1; 0,0; x2,y2
     int dx=0,dy=0;
@@ -472,9 +495,25 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
         OfficeArtCOLORREF color;
         FixedPoint fixedPoint;
-        for (int i=0; i<a.nElems; i++) {
-            parseOfficeArtCOLORREF(in,color);
-            parseFixedPoint(in,fixedPoint);
+        for (int i = 0; i < a.nElems; i++) {
+            try {
+                parseOfficeArtCOLORREF(in,color);
+            } catch (EOFException _e) {
+                qDebug() << _e.msg;
+                break;
+            } catch (IOException _e) {
+                qDebug() << _e.msg;
+                break;
+            }
+            try {
+                parseFixedPoint(in,fixedPoint);
+            } catch (EOFException _e) {
+                qDebug() << _e.msg;
+                break;
+            } catch (IOException _e) {
+                qDebug() << _e.msg;
+                break;
+            }
 
             elementWriter.startElement("svg:stop");
             elementWriter.addAttribute("svg:offset", QString("%1").arg(toQReal(fixedPoint)));
@@ -562,54 +601,54 @@ QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
 
     KoGenStyle strokeDash(KoGenStyle::StrokeDashStyle);
     switch (lineDashing) {
-    case 0: // msolineSolid, not a real stroke dash
+    case msolineSolid:
         break;
-    case 1: // msolineDashSys
+    case msolineDashSys:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "300%");
         strokeDash.addAttribute("draw:distance", "100%");
         break;
-    case 2: // msolineDotSys
+    case msolineDotSys:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "200%");
         break;
-    case 3: // msolineDashDotSys
+    case msolineDashDotSys:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "300%");
         strokeDash.addAttribute("draw:dots2", "1");
         strokeDash.addAttribute("draw:dots2-length", "100%");
         break;
-    case 4: // msolineDashDotDotSys
+    case msolineDashDotDotSys:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "300%");
         strokeDash.addAttribute("draw:dots2", "1");
         strokeDash.addAttribute("draw:dots2-length", "100%");
         break;
-    case 5: // msolineDotGEL
+    case msolineDotGEL:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "100%");
         break;
-    case 6: // msolineDashGEL
+    case msolineDashGEL:
         strokeDash.addAttribute("draw:dots1", "4");
         strokeDash.addAttribute("draw:dots1-length", "100%");
         break;
-    case 7: // msolineLongDashGEL
+    case msolineLongDashGEL:
         strokeDash.addAttribute("draw:dots1", "8");
         strokeDash.addAttribute("draw:dots1-length", "100%");
         break;
-    case 8: // msolineDashDotGEL
+    case msolineDashDotGEL:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "300%");
         strokeDash.addAttribute("draw:dots2", "1");
         strokeDash.addAttribute("draw:dots2-length", "100%");
         break;
-    case 9: // msolineLongDashDotGEL
+    case msolineLongDashDotGEL:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "800%");
         strokeDash.addAttribute("draw:dots2", "1");
         strokeDash.addAttribute("draw:dots2-length", "100%");
         break;
-    case 10: // msolineLongDashDotDotGEL
+    case msolineLongDashDotDotGEL:
         strokeDash.addAttribute("draw:dots1", "1");
         strokeDash.addAttribute("draw:dots1-length", "800%");
         strokeDash.addAttribute("draw:dots2", "2");
@@ -744,21 +783,21 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
 const char* getFillType(quint32 fillType)
 {
     switch (fillType) {
-    case 1: // msofillPattern
+    case msofillPattern:
         // NOTE: there's usually a DIB file used for the pattern, check also
         // draw:fill="hatch" and <draw:hatch> in ODF specification
-    case 2: // msofillTexture
-    case 3: // msofillPicture
+    case msofillTexture:
+    case msofillPicture:
         return "bitmap";
-    case 4: // msofillShade
-    case 5: // msofillShadeCenter
-    case 6: // msofillShadeShape
-    case 7: // msofillShadeScale
-    case 8: // msofillShadeTitle
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeScale:
+    case msofillShadeTitle:
         return "gradient";
-    case 9: // msofillBackground
+    case msofillBackground:
         return "none";
-    case 0: // msofillSolid
+    case msofillSolid:
     default:
         return "solid";
     }
@@ -767,18 +806,18 @@ const char* getFillType(quint32 fillType)
 const char* getRepeatStyle(quint32 fillType)
 {
     switch (fillType) {
-    case 3: // msofillPicture
-    case 7: // msofillShadeScale
+    case msofillPicture:
+    case msofillShadeScale:
         return "stretch";
-    case 0: // msofillSolid
-    case 4: // msofillShade
-    case 5: // msofillShadeCenter
-    case 6: // msofillShadeShape
-    case 8: // msofillShadeTitle
-    case 9: // msofillBackground
+    case msofillSolid:
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeTitle:
+    case msofillBackground:
         return "no-repeat";
-    case 1: // msofillPattern
-    case 2: // msofillTexture
+    case msofillPattern:
+    case msofillTexture:
     default:
         return "repeat";
     }
@@ -788,16 +827,16 @@ const char* getGradientRendering(quint32 fillType)
 {
     //TODO: Add the logic!!!
     switch (fillType) {
-    case 0: //msofillSolid
-    case 1: //msofillPattern
-    case 2: //msofillTexture
-    case 3: //msofillPicture
-    case 4: //msofillShade
-    case 5: //msofillShadeCenter
-    case 6: //msofillShadeShape
-    case 7: //msofillShadeScale
-    case 8: //msofillShadeTitle
-    case 9: //msofillBackground
+    case msofillSolid:
+    case msofillPattern:
+    case msofillTexture:
+    case msofillPicture:
+    case msofillShade:
+    case msofillShadeCenter:
+    case msofillShadeShape:
+    case msofillShadeScale:
+    case msofillShadeTitle:
+    case msofillBackground:
     default:
         return "axial";
     }
@@ -872,5 +911,46 @@ const char* getVerticalRel(quint32 posRelV)
         return "line";
     default:
         return "page-content";
+    }
+}
+
+const char* getHorizontalAlign(quint32 anchorText)
+{
+    switch (anchorText) {
+    case msoanchorTop:
+    case msoanchorTopBaseline:
+    case msoanchorMiddle:
+    case msoanchorBottom:
+    case msoanchorBottomBaseline:
+        return "left";
+    case msoanchorTopCentered:
+    case msoanchorTopCenteredBaseline:
+    case msoanchorMiddleCentered:
+    case msoanchorBottomCentered:
+    case msoanchorBottomCenteredBaseline:
+        return "justify";
+    default:
+        return "left";
+    }
+}
+
+const char* getVerticalAlign(quint32 anchorText)
+{
+    switch (anchorText) {
+    case msoanchorTop:
+    case msoanchorTopCentered:
+    case msoanchorTopBaseline: //not compatible with ODF
+    case msoanchorTopCenteredBaseline: //not compatible with ODF
+        return "top";
+    case msoanchorMiddle:
+    case msoanchorMiddleCentered:
+        return "middle";
+    case msoanchorBottom:
+    case msoanchorBottomCentered:
+    case msoanchorBottomBaseline: //not compatible with ODF
+    case msoanchorBottomCenteredBaseline: //not compatible with ODF
+        return "bottom";
+    default:
+        return "top";
     }
 }

@@ -90,7 +90,7 @@ private:
     {
     private:
         virtual QRectF getRect(const MSO::OfficeArtClientAnchor&);
-        virtual QString getPicturePath(int pib);
+        virtual QString getPicturePath(const quint32 pib);
         virtual bool onlyClientData(const MSO::OfficeArtClientData& o);
         virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
                                        const MSO::OfficeArtClientData& o,
@@ -102,9 +102,11 @@ private:
                                               const MSO::OfficeArtClientData* cd,
                                               const DrawStyle& ds,
                                               Writer& out);
-        virtual void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
+        virtual void addTextStyles(const quint16 msospt,
+                                   const MSO::OfficeArtClientTextBox* clientTextbox,
                                    const MSO::OfficeArtClientData* clientData,
                                    KoGenStyle& style, Writer& out);
+
 
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
@@ -154,7 +156,7 @@ public:
      * generated from the picture with the given pib. (check
      * libmso/ODrawToOdf.h)
      */
-    QString getPicturePath(int pib) const;
+    QString getPicturePath(quint32 pib) const;
 
     // Communication with Document, without having to know about Document
 signals:
@@ -180,8 +182,9 @@ private:
 
     /**
      * Parse floating pictures data from the WordDocument stream.
+     * @return 0 - success, 1 - failed
      */
-    void parseFloatingPictures(void);
+    int parseFloatingPictures(void);
 
     /**
      * Store floating pictures into ODT, write the appropriate manifest entry.
@@ -265,6 +268,11 @@ private:
      */
     void emitTextBoxFound(unsigned int index, bool stylesxml);
 
+    /**
+     * Insert an empty frame.  Use when the picture is an external file.
+     */
+    void insertEmptyInlineFrame(DrawingWriter& out);
+
     Document* m_document;
     KoStore* m_store;
     KoXmlWriter* m_bodyWriter;
@@ -281,9 +289,13 @@ private:
     QMap<QByteArray, QString> m_picNames; //picture names
 
     /*
+     * Group specific attributes.
+     */
+    bool m_processingGroup;
+
+    /*
      * Object specific attributes.
      */
-
     ObjectType m_objectType; // Type of the object in {Inline, Floating}.
     QByteArray m_rgbUid;     // Unique identifier of a BLIP.
     int m_zIndex;            // Position of current shape on z axis.

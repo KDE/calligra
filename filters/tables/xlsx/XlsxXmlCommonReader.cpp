@@ -154,7 +154,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
     body = rBuf.originalWriter();
 
     body->startElement("text:span", false);
-    if (!m_currentTextStyle.isEmpty()) {
+    if (!m_currentTextStyle.isEmpty() || !m_currentTextStyle.parentName().isEmpty()) {
         const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
         body->addAttribute("text:style-name", currentTextStyleName);
     }

@@ -67,6 +67,24 @@ Type=QString
 [PropertyDef::X-Kexi-NoObject]
 Type=bool
 
+[PropertyDef::X-Kexi-SupportsDataView]
+Type=bool
+
+[PropertyDef::X-Kexi-SupportsDesignView]
+Type=bool
+
+[PropertyDef::X-Kexi-SupportsTextView]
+Type=bool
+
+[PropertyDef::X-Kexi-SupportsDataViewInUserMode]
+Type=bool
+
+[PropertyDef::X-Kexi-SupportsDesignViewInUserMode]
+Type=bool
+
+[PropertyDef::X-Kexi-SupportsTextViewInUserMode]
+Type=bool
+
 [PropertyDef::X-Kexi-SupportsExecution]
 Type=bool
 

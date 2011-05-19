@@ -34,7 +34,10 @@
 
 #include "mswordodfimport.h"
 #include "document.h"
-#include "fibbase.h"
+#include "exceptions.h"
+#include "msdoc.h"
+
+#include "generated/simpleParser.h"
 #include "pole.h"
 
 //function prototypes of local functions
@@ -85,7 +88,14 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     LEInputStream wdstm(&buff1);
 
-    FibBase fb(wdstm);
+    MSO::FibBase fb;
+    LEInputStream::Mark m = wdstm.setMark();
+    try {
+        parseFibBase(wdstm, fb);
+    } catch (IOException _e) {
+        kError(30513) << _e.msg;
+    }
+    wdstm.rewind(m);
 
     //document is encrypted or obfuscated
     if (fb.fEncrypted) {
@@ -196,8 +206,13 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         return KoFilter::WrongFormat;
     }
     //actual parsing & action
-    if (!document->parse()) {
-        return KoFilter::CreationError;
+    try {
+        if (!document->parse()) {
+            return KoFilter::CreationError;
+        }
+    } catch (InvalidFormatException _e) {
+        kDebug(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
     }
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
@@ -238,6 +253,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     storeout->open("settings.xml");
     KoStoreDevice settingsDev(storeout);
     KoXmlWriter *settingsWriter = oasisStore.createOasisXmlWriter(&settingsDev, "office:document-settings");
+    settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
     settingsWriter->startElement("config:config-item");
@@ -252,6 +268,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     settingsWriter->endElement();
     settingsWriter->endElement(); // config-item-set
 
+    settingsWriter->endElement(); // settings
     settingsWriter->endElement(); // document-settings
     settingsWriter->endDocument();
     delete settingsWriter;

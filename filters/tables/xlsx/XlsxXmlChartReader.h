@@ -54,6 +54,7 @@ public:
     void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, const QString& format, const QString& formatString = QString());
     QString AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, QString format);
 protected:
+    KoFilter::ConversionStatus read_txPr();
     KoFilter::ConversionStatus read_plotArea();
     KoFilter::ConversionStatus read_valAx();
     KoFilter::ConversionStatus read_catAx();
@@ -105,6 +106,9 @@ protected:
     KoFilter::ConversionStatus read_bubble3D();
 
     KoFilter::ConversionStatus read_pt();
+    KoFilter::ConversionStatus read_p();
+    KoFilter::ConversionStatus read_pPr();
+    KoFilter::ConversionStatus read_defRPr();
     KoFilter::ConversionStatus read_order();
     KoFilter::ConversionStatus read_idx();
     KoFilter::ConversionStatus read_explosion();

@@ -43,8 +43,14 @@ using namespace MSO;
 
 using Conversion::twipsToPt;
 
-#define IMG_BUF_SIZE 2048L
+//#define DEBUG_GHANDLER
 
+// Specifies the format of the picture data for the PICF structure.
+enum
+{
+    MM_SHAPE = 0x0064,
+    MM_SHAPEFILE = 0x0066
+};
 
 namespace
 {
@@ -162,6 +168,7 @@ KWordGraphicsHandler::KWordGraphicsHandler(Document* doc,
 , m_fib(fib)
 , m_pOfficeArtHeaderDgContainer(0)
 , m_pOfficeArtBodyDgContainer(0)
+, m_processingGroup(false)
 , m_objectType(Inline)
 , m_rgbUid(0)
 , m_zIndex(0)
@@ -191,8 +198,11 @@ void KWordGraphicsHandler::init()
     defineDefaultGraphicStyle(m_mainStyles);
 
     //parse and store floating pictures  
-    parseFloatingPictures();
-    m_picNames = createFloatingPictures(m_store, m_manifestWriter);
+    if (parseFloatingPictures()) {
+        kDebug(30513) << "Failed to parse floating shapes!";
+    } else {
+        m_picNames = createFloatingPictures(m_store, m_manifestWriter);
+    }
 
     //Provide the backgroud color information to the Document
     DrawStyle ds = getBgDrawStyle();
@@ -228,43 +238,77 @@ DrawStyle KWordGraphicsHandler::getBgDrawStyle()
 void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
     kDebug(30513) ;
+    quint32 size = (data.picf->lcb - data.picf->cbHeader);
+
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "\nPICF DEBUG:"
+                  << "\nPICF size: 0x" << hex << data.picf->cbHeader
+                  << "\nOfficeArtInlineSpContainer size:" << dec << size
+                  << "\nStorage Format: 0x" << hex << data.picf->mfp.mm;
+#endif
+
+    //the picture is store in some external file
+    if (data.picf->mfp.mm == MM_SHAPEFILE) {
+        DrawingWriter out(*m_bodyWriter, *m_mainStyles, m_document->writingHeader());
+        m_objectType = Inline;
+        m_picf = data.picf;
+        insertEmptyInlineFrame(out);
+        return;
+    }
+
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->dataStream();
-    int size = (data.picf->lcb - data.picf->cbHeader);
+    if (!in) {
+        kDebug(30513) << "Data stream not provided, no access to inline shapes!";
+        return;
+    }
+    if (data.fcPic > in->getSize()) {
+        kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
+        return;
+    }
 
-    kDebug(30513) << "\nCurrent stream position: " << in->getPosition()
-		  << "\nOfficeArtInlineSpContainer offset: " << data.fcPic
-                  << "\nPICF size: " << data.picf->cbHeader
-                  << "\nOfficeArtData size: " << size;
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "\nCurrent stream position:" << in->getPosition()
+                  << "\nOfficeArtInlineSpContainer offset:" << dec << data.fcPic;
+#endif
 
     // parse the OfficeArtInlineSpContainer and rewind the stream
     LEInputStream::Mark _zero;
     _zero = in->setMark();
     in->skip(data.fcPic);
+
     OfficeArtInlineSpContainer co;
-    parseOfficeArtInlineSpContainer(*in, co);
+    try {
+        parseOfficeArtInlineSpContainer(*in, co);
+    } catch (IOException _e) {
+        kDebug(30513) << _e.msg;
+        in->rewind(_zero);
+        return;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        in->rewind(_zero);
+        return;
+    }
+    in->rewind(_zero);
 
     int n = (data.fcPic + size) - in->getPosition();
     if (n) {
         kDebug(30513) << n << "bytes left while parsing OfficeArtInlineSpContainer";
     }
-    in->rewind(_zero);
 
-    // store picture data if present and update m_picNames
     PictureReference ref;
+    // store picture data if present and update m_picNames
     m_store->enterDirectory("Pictures");
     foreach (const OfficeArtBStoreContainerFileBlock& block, co.rgfb) {
         const OfficeArtFBSE* fbse = block.anon.get<MSO::OfficeArtFBSE>();
         if (!fbse) {
             kDebug(30513) << "Warning: FBSE container not found, skipping ";
-        }
-        else {
+        } else {
             //check if this BLIP is already in hash table
             if (m_picNames.contains(fbse->rgbUid)) {
                 ref.uid = fbse->rgbUid;
                 continue;
-            }
-            else {
+            } else {
                 ref = savePicture(block, m_store);
                 if (ref.name.length() == 0) {
                     kDebug(30513) << "empty name in picture reference";
@@ -291,8 +335,9 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
 void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 {
+#ifdef DEBUG_GHANDLER
     kDebug(30513) << "globalCP" << globalCP ;
-
+#endif
     if (!m_drawings) {
         return;
     }
@@ -392,9 +437,26 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     if (o.rgfb.size() < 2) {
         return;
     }
-    //TODO: create corresponding style and apply style properties
-    out.xml.startElement("draw:g");
     const OfficeArtSpContainer *first = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+
+    //create graphic style for the group shape
+    QString styleName;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+
+    DrawStyle ds(&m_officeArtDggContainer, first);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    defineWrappingAttributes(style, ds);
+    styleName = out.styles.insert(style, "gr");
+
+    out.xml.startElement("draw:g");
+    out.xml.addAttribute("draw:style-name", styleName);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+    m_processingGroup = true;
 
     if (first && first->shapeGroup) {
         //process shape information for the group
@@ -408,11 +470,13 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
                 out.setChildRectangle(*sp.childAnchor);
             }
             processDrawingObject(sp, out);
-            m_zIndex++;
-        } 
-	//TODO: Another group shape might be here!
+        } else {
+            kDebug(30513) << "Nested group shapes not supported!";
+            //TODO: nested group shape!
+        }
     }
     out.xml.endElement(); // draw:g
+    m_processingGroup = false;
 }
 
 void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
@@ -423,27 +487,34 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
-    // check the shape type and process it
+#ifdef DEBUG_GHANDLER
     kDebug(30513) << "shapeType: " << hex << o.shapeProp.rh.recInstance;
     kDebug(30513) << "grupShape: " << o.shapeProp.fGroup;
     kDebug(30513) << "Selected properties: ";
     kDebug(30513) << "pib: " << ds.pib();
+#endif
 
     switch (o.shapeProp.rh.recInstance) {
     case msosptTextBox:
+#ifdef DEBUG_GHANDLER
         kDebug(30513)<< "processing TextBox";
+#endif
         processTextBox(o, out);
         break;
     case msosptRectangle:
         if (ds.fHorizRule()) {
+#ifdef DEBUG_GHANDLER
             kDebug(30513)<< "processing Line";
+#endif
             processLineShape(o, out);
         } else {
             odrawtoodf.processDrawingObject(o, out);
         }
         break;
     case msosptPictureFrame:
+#ifdef DEBUG_GHANDLER
         kDebug(30513)<< "processing PictureFrame";
+#endif
         if (m_objectType == Inline) {
             processInlinePictureFrame(o, out);
         } else {
@@ -451,7 +522,9 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
         }
         break;
     case msosptHostControl:
+#ifdef DEBUG_GHANDLER
         kDebug(30513)<< "processing Host Control";
+#endif
         processTextBox(o, out);
         break;
     default:
@@ -491,14 +564,17 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDggContainer(in, m_officeArtDggContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing parseOfficeArtDggContainer";
+        kDebug(30513) << "Caught IOException while parsing OfficeArtDggContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing parseOfficeArtDggContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDggContainer.";
         return;
     }
-    kDebug(30513) << "OfficeArtDggContainer parsed successfully" ;
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDggContainer [ OK ]" ;
+#endif
 
     // parse drawingsVariable from msdoc
     // 0 - next OfficeArtDgContainer belongs to Main document;
@@ -508,11 +584,12 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         drawingsVariable = in.readuint8();
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing drawingsVariable ";
+        kDebug(30513) << "Caught IOException while parsing DrawingsVariable.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing drawingsVariable";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing DrawingsVariable.";
         return;
     }
 
@@ -528,27 +605,31 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing OfficeArtDgContainer ";
+        kDebug(30513) << "Caught IOException while parsing OfficeArtDgContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing OfficeArtDgContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
         return;
     }
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+#endif
 
     // parse drawingsVariable from msdoc
-    // 0 - next OfficeArtDgContainer belongs to Main document;
+    // 0 - next OfficeArtDgContainer belongs to Main Document
     // 1 - next OfficeArtDgContainer belongs to Header Document
     try {
         drawingsVariable = in.readuint8();
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing second drawingsVariable ";
-        //wvlog << "in position: " << in.getPosition() << std::endl;
+        kDebug(30513) << "Caught IOException while parsing the 2nd DrawingsVariable.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing second drawingsVariable";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd DrawingsVariable.";
         return;
     }
 
@@ -561,8 +642,7 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
                 delete m_pOfficeArtBodyDgContainer;
             }
             m_pOfficeArtBodyDgContainer = pDgContainer;
-        }
-        else {
+        } else {
             if (m_pOfficeArtHeaderDgContainer != 0) {
                 delete m_pOfficeArtHeaderDgContainer;
             }
@@ -571,70 +651,97 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing second OfficeArtDgContainer ";
+        kDebug(30513) << "Caught IOException while parsing the 2nd OfficeArtDgContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing second OfficeArtDgContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd OfficeArtDgContainer.";
         return;
     }
 
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+#endif
+
     quint32 r = buffer.size() - in.getPosition();
     if (r > 0) {
-        kError(30513) << r << "bytes left to parse from the OfficeArtDggContainer";
+        kError(30513) << "Error:" << r << "bytes left to parse from the OfficeArtContent!";
     }
 }
 
-void KWordGraphicsHandler::parseFloatingPictures(void)
+int KWordGraphicsHandler::parseFloatingPictures(void)
 {
     kDebug(30513);
 
     // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
     LEInputStream& in = m_document->wdocumentStream();
-
     const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (blipStore) {
-        for (int i = 0; i < blipStore->rgfb.size(); i++) {
-            OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
+    if (!blipStore) return(1);
 
-	    //we are looking for the missing content of OfficeArtFBSE
-            if (block.anon.is<OfficeArtFBSE>()) {
-                OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
-                if (!fbse->embeddedBlip) {
+    for (int i = 0; i < blipStore->rgfb.size(); i++) {
+        OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
 
-                    //NOTE: An foDelay value of 0xffffffff specifies that the
-                    //file is not in the delay stream and cRef must be zero.
+	//Parse content of the Delay stream by using offsets from OfficeArtFBSE
+	//containers.  Not parsing Blip store because MD4 digests in
+	//OfficeArtFBSE happen to be out-dated, which complicates the pib to
+	//picture path association.
+        if (block.anon.is<OfficeArtFBSE>()) {
+            OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
+            if (!fbse->embeddedBlip) {
 
-                    //NOTE: A cRef value of 0x00000000 specifies an empty slot
-                    //in the OfficeArtBStoreContainer.
+                //NOTE: An foDelay value of 0xffffffff specifies that the
+                //file is not in the delay stream and cRef must be zero.
 
-                    if (fbse->foDelay != 0xffffffff) {
-                        if (!fbse->cRef) {
-                            kDebug(30513) << "Strange, no references to this BLIP, skipping";
-                            continue;
-                        }
-                        LEInputStream::Mark _zero;
-                        _zero = in.setMark();
-                        in.skip(fbse->foDelay);
+                //NOTE: A cRef value of 0x00000000 specifies an empty slot
+                //in the OfficeArtBStoreContainer.
 
-                        //let's check the record header if there's a BLIP stored
-                        LEInputStream::Mark _m;
-                        _m = in.setMark();
-                        OfficeArtRecordHeader rh;
-                        parseOfficeArtRecordHeader(in, rh);
-                        in.rewind(_m);
-                        if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
-                            continue;
-                        }
-                        fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
-                        parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
-                        in.rewind(_zero);
+                if (fbse->foDelay != 0xffffffff) {
+                    if (!fbse->cRef) {
+                        kDebug(30513) << "Strange, no references to this BLIP, skipping";
+                        continue;
                     }
+                    LEInputStream::Mark _zero;
+                    _zero = in.setMark();
+                    in.skip(fbse->foDelay);
+
+                    //let's check the record header if there's a BLIP stored
+                    LEInputStream::Mark _m;
+                    _m = in.setMark();
+                    OfficeArtRecordHeader rh;
+                    try {
+                        parseOfficeArtRecordHeader(in, rh);
+                    } catch (IOException _e) {
+                        kDebug(30513) << _e.msg;
+                        in.rewind(_zero);
+                        continue;
+                    } catch (...) {
+                        kWarning(30513) << "Warning: Caught an unknown exception!";
+                        in.rewind(_zero);
+                        continue;
+                    }
+                    in.rewind(_m);
+                    if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
+                        continue;
+                    }
+                    fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
+                    try {
+                        parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
+                    } catch (IOException _e) {
+                        kDebug(30513) << _e.msg;
+                        in.rewind(_zero);
+                        continue;
+                    } catch (...) {
+                        kWarning(30513) << "Warning: Caught an unknown exception!";
+                        in.rewind(_zero);
+                        continue;
+                    }
+                    in.rewind(_zero);
                 }
             } //else there's an OfficeArtBlip inside
         }
     }
-    return;
+    return(0);
 }
 
 QMap<QByteArray, QString>
@@ -660,11 +767,20 @@ KWordGraphicsHandler::createFloatingPictures(KoStore* store, KoXmlWriter* manife
     return fileNames;
 }
 
-QString KWordGraphicsHandler::getPicturePath(int pib) const
+QString KWordGraphicsHandler::getPicturePath(quint32 pib) const
 {
-    int picturePosition = pib - 1;
-    QByteArray rgbUid = getRgbUid(&m_officeArtDggContainer, picturePosition);
-    return rgbUid.length() ? "Pictures/" + m_picNames[rgbUid] : "";
+    quint32 n = pib - 1;
+    quint32 offset = 0;
+    QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, n, offset);
+
+    if (rgbUid.length()) {
+        if (m_picNames.contains(rgbUid)) {
+            return "Pictures/" + m_picNames[rgbUid];
+        } else {
+            qDebug() << "UNKNOWN picture reference!";
+        }
+    }
+    return QString();
 }
 
 void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
@@ -681,6 +797,7 @@ void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
 
 void KWordGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds)
 {
+    if (m_processingGroup) return;
     if (m_objectType == Inline) return;
 
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
@@ -767,8 +884,9 @@ void KWordGraphicsHandler::defineWrappingAttributes(KoGenStyle& style, const Dra
 
 void KWordGraphicsHandler::definePositionAttributes(KoGenStyle& style, const DrawStyle& ds)
 {
-    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+    if (m_processingGroup) return;
 
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     if (m_objectType == Inline) {
         style.addProperty("style:vertical-rel", "baseline", gt);
         style.addProperty("style:vertical-pos", "top", gt);
@@ -782,6 +900,8 @@ void KWordGraphicsHandler::definePositionAttributes(KoGenStyle& style, const Dra
 
 void KWordGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
 {
+    if (m_processingGroup) return;
+
     // text:anchor-type
     if (m_objectType == Inline) {
         out.xml.addAttribute("text:anchor-type", "as-char");
@@ -792,6 +912,8 @@ void KWordGraphicsHandler::setAnchorTypeAttribute(DrawingWriter& out)
 
 void KWordGraphicsHandler::setZIndexAttribute(DrawingWriter& out)
 {
+    if (m_processingGroup) return;
+
     // draw:z-index
     if (m_objectType == Floating) {
         out.xml.addAttribute("draw:z-index", m_zIndex);
@@ -873,28 +995,26 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     definePositionAttributes(style, ds);
     styleName = out.styles.insert(style);
 
-    QString url;
-    QString name = m_picNames.value(m_rgbUid);
-    if (!name.isEmpty()) {
-        url.append("Pictures/");
-        url.append(name);
-    }
     out.xml.startElement("draw:frame");
-    if (url.isEmpty()) {
-        // if the image cannot be found, just place an empty frame
-        out.xml.endElement(); //draw:frame
-        return;
-    }
     out.xml.addAttribute("draw:style-name", styleName);
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
 
     double hscale = m_picf->mx / 1000.0;
     double vscale = m_picf->my / 1000.0;
-
     out.xml.addAttributePt("svg:width", twipsToPt(m_picf->dxaGoal) * hscale);
     out.xml.addAttributePt("svg:height", twipsToPt(m_picf->dyaGoal) * vscale);
 
+    QString url;
+    QString name = m_picNames.value(m_rgbUid);
+    if (!name.isEmpty()) {
+        url.append("Pictures/");
+        url.append(name);
+    } else {
+        // if the image cannot be found, just place an empty frame
+        out.xml.endElement(); //draw:frame
+        return;
+    }
     //TODO: process border information (complex properties)
 
     out.xml.startElement("draw:image");
@@ -926,13 +1046,12 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     QString url;
     if (ds.pib()) {
         url = getPicturePath(ds.pib());
-    }
-    out.xml.startElement("draw:frame");
-    if (url.isEmpty()) {
-        //if the image cannot be found, just place an empty frame
-        out.xml.endElement(); //draw:frame
+    } else {
+        // Does not make much sense to display an empty frame, following
+        // PPT->ODP filters of both OOo and MS Office 2007.
         return;
     }
+    out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
@@ -942,6 +1061,11 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.addAttribute("svg:x", mm(out.hOffset()));
     out.xml.addAttribute("svg:y", mm(out.vOffset()));
 
+    //if the image cannot be found, just place an empty frame
+    if (url.isEmpty()) {
+        out.xml.endElement(); //draw:frame
+        return;
+    }
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);
     out.xml.addAttribute("xlink:type", "simple");
@@ -1049,6 +1173,33 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N");
     out.xml.endElement(); //enhanced-geometry
     out.xml.endElement(); //custom-shape
+}
+
+void KWordGraphicsHandler::insertEmptyInlineFrame(DrawingWriter& out)
+{
+    if (m_objectType != Inline) return;
+
+    QString styleName;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+    style.setAutoStyleInStylesDotXml(out.stylesxml);
+
+    DrawStyle ds(0, 0);
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+    odrawtoodf.defineGraphicProperties(style, ds, out.styles);
+    definePositionAttributes(style, ds);
+    defineWrappingAttributes(style, ds);
+    styleName = out.styles.insert(style);
+
+    out.xml.startElement("draw:frame");
+    out.xml.addAttribute("draw:style-name", styleName);
+    setAnchorTypeAttribute(out);
+    setZIndexAttribute(out);
+    double hscale = m_picf->mx / 1000.0;
+    double vscale = m_picf->my / 1000.0;
+    out.xml.addAttributePt("svg:width", twipsToPt(m_picf->dxaGoal) * hscale);
+    out.xml.addAttributePt("svg:height", twipsToPt(m_picf->dyaGoal) * vscale);
+    out.xml.endElement(); //draw:frame
 }
 
 #include "graphicshandler.moc"

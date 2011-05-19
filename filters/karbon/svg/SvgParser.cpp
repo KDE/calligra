@@ -27,9 +27,6 @@
 #include "SvgUtil.h"
 #include "SvgTextHelper.h"
 
-#include <KarbonGlobal.h>
-#include <KarbonPart.h>
-
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>

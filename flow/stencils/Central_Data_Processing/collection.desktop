@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Central Data Processing
+Name[el]=Κεντρική επεξεργασία δεδομένων
 Name[et]=Serveriruum
 Name[nl]=Centrale gegevensverwerking
 Name[pt]=Processamento de Dados Centrais
@@ -7,4 +8,5 @@ Name[pt_BR]=Central de processamento de dados
 Name[sv]=Central databehandling
 Name[uk]=Централізована обробка даних
 Name[x-test]=xxCentral Data Processingxx
+Name[zh_TW]=中央資料處理
 X-KDE-DirType=odg-collection

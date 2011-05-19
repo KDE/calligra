@@ -144,8 +144,12 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     setupActions();
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    
+    QList<QTextDocument*> texts;
+    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
+    connect(m_document, SIGNAL(completed()), this, SLOT(loadingCompleted()));
 
-    m_find = new KoFindText(m_canvas->resourceManager(), this);
+    m_find = new KoFindText(texts, this);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
@@ -353,7 +357,7 @@ void KWView::setupActions()
     actionCollection()->addAction("insert_footendnote", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertFootEndNote()));
 
-    action = new KAction(i18n("Frame Borders"), this);
+    action = new KAction(i18n("Page Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
@@ -1020,7 +1024,7 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
-
+#if 0
     KoBookmark *bookmark = manager->retrieveBookmark(name);
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
@@ -1038,10 +1042,16 @@ void KWView::selectBookmark()
         rm->clearResource(KoText::SelectedTextAnchor);
     } else
         rm->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
+#else
+#ifdef __GNUC__
+    #warning FIXME: port to textlayout-rework
+#endif
+#endif
 }
 
 void KWView::deleteBookmark(const QString &name)
 {
+#if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
     KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
     if (!bookmark || !bookmark->shape())
@@ -1057,6 +1067,11 @@ void KWView::deleteBookmark(const QString &name)
     }
     cursor.setPosition(bookmark->position());
     manager->removeInlineObject(cursor);
+#else
+#ifdef __GNUC__
+    #warning FIXME: port to textlayout-rework
+#endif
+#endif
 }
 
 void KWView::editDeleteFrame()
@@ -1436,7 +1451,8 @@ void KWView::goToPage(const KWPage &page)
 {
     KoCanvasController *controller = m_gui->canvasController();
     QPoint origPos = controller->scrollBarValue();
-    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()));
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()),
+                                                       m_canvas->viewConverter());
     origPos.setY((int)pos.y());
     controller->setScrollBarValue(origPos);
 }
@@ -1543,4 +1559,11 @@ void KWView::findMatchFound(KoFindMatch match)
 
     m_canvas->resourceManager()->setResource(KoText::CurrentTextAnchor, cursor.anchor());
     m_canvas->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
+}
+
+void KWView::loadingCompleted()
+{
+    QList<QTextDocument*> texts;
+    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
+    m_find->addDocuments(texts);
 }

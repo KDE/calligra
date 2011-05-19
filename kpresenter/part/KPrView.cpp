@@ -38,6 +38,7 @@
 #include <KoDocumentInfo.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLayer.h>
+#include <KoZoomController.h>
 
 #include "KPrDocument.h"
 #include "KPrPage.h"
@@ -50,6 +51,7 @@
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
 #include "KPrPicturesImport.h"
+#include "KPrFactory.h"
 #include "commands/KPrAnimationCreateCommand.h"
 #include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
@@ -101,10 +103,12 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     if (canvas) {
         m_slidesSorterMode = new KPrViewModeSlidesSorter(this, canvas);
     }
+    connect(zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
 }
 
 KPrView::~KPrView()
 {
+    saveZoomConfig(zoomMode(), zoom());
     delete m_presentationMode;
     delete m_notesMode;
     delete m_slidesSorterMode;
@@ -180,6 +184,7 @@ void KPrView::initGUI()
     if ( !group.hasKey( "State" ) ) {
         group.writeEntry( "State", state );
     }
+    initZoomConfig();
 }
 
 void KPrView::initActions()
@@ -431,6 +436,60 @@ void KPrView::insertPictures()
     }
     KPrPicturesImport pictureImport;
     pictureImport.import(this);
+}
+
+void KPrView::initZoomConfig()
+{
+    KSharedConfigPtr config = KPrFactory::componentData().config();
+    int m_zoom = 100;
+    KoZoomMode::Mode m_zoomMode = KoZoomMode::ZOOM_PAGE;
+
+    if (config->hasGroup("Interface")) {
+        const KConfigGroup interface = config->group("Interface");
+        m_zoom = interface.readEntry("Zoom", m_zoom);
+        m_zoomMode = static_cast<KoZoomMode::Mode>(interface.readEntry("ZoomMode", (int) m_zoomMode));
+    }
+    zoomController()->setZoom(m_zoomMode, m_zoom/100.);
+    setZoom(m_zoomMode, m_zoom);
+    centerPage();
+}
+
+void KPrView::zoomChanged(KoZoomMode::Mode mode, qreal zoom)
+{
+    setZoom(mode, qRound(zoom * 100.));
+}
+
+void KPrView::saveZoomConfig(KoZoomMode::Mode mode, int zoom)
+{
+    KSharedConfigPtr config = KPrFactory::componentData().config();
+
+    if (config->hasGroup("Interface")) {
+        KConfigGroup interface = config->group("Interface");
+        interface.writeEntry("Zoom", zoom);
+        interface.writeEntry("ZoomMode", (int)mode);
+    }
+}
+
+void KPrView::setZoom(KoZoomMode::Mode zoomMode, int zoom)
+{
+    m_zoom = zoom;
+    m_zoomMode = zoomMode;
+}
+
+int KPrView::zoom()
+{
+    return m_zoom;
+}
+
+KoZoomMode::Mode KPrView::zoomMode()
+{
+    return m_zoomMode;
+}
+
+void KPrView::restoreZoomConfig()
+{
+    zoomController()->setZoom(zoomMode(), zoom()/100.);
+    centerPage();
 }
 
 #include "KPrView.moc"

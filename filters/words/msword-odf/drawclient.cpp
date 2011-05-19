@@ -70,7 +70,7 @@ KWordGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
 }
 
 QString
-KWordGraphicsHandler::DrawClient::getPicturePath(int pib)
+KWordGraphicsHandler::DrawClient::getPicturePath(const quint32 pib)
 {
     return gh->getPicturePath(pib);
 }
@@ -114,7 +114,8 @@ KWordGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientT
 }
 
 void
-KWordGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
+KWordGraphicsHandler::DrawClient::addTextStyles(const quint16 msospt,
+                                                const MSO::OfficeArtClientTextBox* clientTextbox,
                                                 const MSO::OfficeArtClientData* clientData,
                                                 KoGenStyle& style,
                                                 Writer& out)

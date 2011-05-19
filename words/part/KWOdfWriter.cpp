@@ -26,7 +26,6 @@
 #include "KWPage.h"
 
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
@@ -65,6 +64,8 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedS
     KoXmlWriter writer(&buffer);
 
     KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
+    
+    context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml);
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);

@@ -56,7 +56,7 @@ namespace {
 //  TextPFRun/TextCFRun
 // ************************************************
 template <class Run>
-const Run* getRun(const QList<Run> &runs, quint32 start)
+const Run* getRun(const QList<Run> &runs, quint32 start, quint32& num)
 {
     int i = 0;
     quint32 end = 0;
@@ -69,22 +69,25 @@ const Run* getRun(const QList<Run> &runs, quint32 start)
         }
         i++;
     }
+    num = end - start;
     return run;
 }
 
 const TextPFRun*
 getPFRun(const TextContainer* tc, quint32 start)
 {
+    //TODO: make use of the num variable if required!
+    quint32 num;
     if (tc && tc->style) {
-        return getRun<TextPFRun>(tc->style->rgTextPFRun, start);
+        return getRun<TextPFRun>(tc->style->rgTextPFRun, start, num);
     }
     return 0;
 }
 const TextCFRun*
-getCFRun(const TextContainer* tc, const quint32 start)
+getCFRun(const TextContainer* tc, const quint32 start, quint32& num)
 {
     if (tc && tc->style) {
-        return getRun<TextCFRun>(tc->style->rgTextCFRun, start);
+        return getRun<TextCFRun>(tc->style->rgTextCFRun, start, num);
     }
     return 0;
 }
@@ -680,7 +683,7 @@ void PptTextCFRun::processCFDefaults(const DocumentContainer* d)
     cfs.append(getDefaultCF(d));
 }
 
-int PptTextCFRun::addCurrentCFRun(const TextContainer* tc, quint32 start)
+int PptTextCFRun::addCurrentCFRun(const TextContainer* tc, quint32 start, quint32& num)
 {
     int n = -1;
 
@@ -690,10 +693,11 @@ int PptTextCFRun::addCurrentCFRun(const TextContainer* tc, quint32 start)
         m_cfrun_rm = false;
     }
 
-    const TextCFRun* cfrun = getCFRun(tc, start);
+    const TextCFRun* cfrun = getCFRun(tc, start, num);
     if (cfrun) {
         cfs.prepend(&cfrun->cf);
         n = cfrun->count;
+        num = n - num;
         m_cfrun_rm = true;
     }
     return n;

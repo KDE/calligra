@@ -64,7 +64,7 @@ public:
 #ifndef NDEBUG
     explicit TextTool(MockCanvas *canvas);
 #endif
-    ~TextTool();
+    virtual ~TextTool();
 
     /// reimplemented from superclass
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
@@ -122,11 +122,14 @@ public:
 
     void setShapeData(KoTextShapeData *data);
 
-    KoTextEditor *textEditor() { return m_textEditor.data(); }
-
-    QRectF caretRect(int position) const;
+    QRectF caretRect(QTextCursor *cursor) const;
 
     QRectF textRect(QTextCursor &cursor) const;
+
+protected:
+    virtual void createActions();
+
+    KoTextEditor *textEditor() { return m_textEditor.data(); }
 
 public slots:
     /// start the textedit-plugin.
@@ -260,6 +263,7 @@ private slots:
     void shapeAddedToCanvas();
 
     void blinkCaret();
+    void relayoutContent();
 
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
@@ -271,8 +275,7 @@ private slots:
     void debugTextDocument();
     /// print debug about the details of the styles on the current text document
     void debugTextStyles();
-    /// the document we are editing has received an extra shape
-    void shapeAddedToDoc(KoShape *shape);
+
     void ensureCursorVisible();
 
     void testSlot(bool);
@@ -280,7 +283,6 @@ private slots:
 private:
     void repaintCaret();
     void repaintSelection();
-    void repaintSelection(QTextCursor &cursor);
     int pointToPosition(const QPointF & point) const;
     void updateActions();
     void updateStyleManager();
@@ -302,8 +304,8 @@ private:
     friend class ShowChangesCommand;
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
-    TextShape *m_textShape;
-    KoTextShapeData *m_textShapeData;
+    TextShape *m_textShape; // where caret of m_textEditor currently is
+    KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
     bool m_allowActions;
@@ -314,7 +316,6 @@ private:
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
-    int m_caretColorState;
     KAction *m_actionFormatBold;
     KAction *m_actionFormatItalic;
     KAction *m_actionFormatUnderline;
@@ -360,6 +361,7 @@ private:
     QTimer m_changeTipTimer;
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
+    bool m_delayedEnsureVisible;
 };
 
 #endif

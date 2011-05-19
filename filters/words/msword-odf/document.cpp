@@ -30,8 +30,9 @@
 #include "texthandler.h"
 #include "graphicshandler.h"
 //#include "versionmagic.h"
-#include "msodraw.h"
 #include "mswordodfimport.h"
+#include "msodraw.h"
+#include "msdoc.h"
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -51,13 +52,6 @@
 
 #include <QBuffer>
 #include <QColor>
-
-//specifies the location from which the offset of a page border is measured
-enum PgbOffsetFrom {
-    pgbFromText,  //offset measured from the text
-    pgbFromEdge   //offset measured from the edge of the page
-};
-
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
@@ -407,9 +401,11 @@ void Document::processStyles()
 bool Document::parse()
 {
     kDebug(30513) ;
-    if (m_parser)
-        return m_parser->parse();
-    return false;
+    bool ret = false;
+    if (m_parser) {
+        ret = m_parser->parse();
+    }
+    return ret;
 }
 
 void Document::setProgress(const int percent)
@@ -478,16 +474,22 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 //             textHandler()->set_breakBeforePage(true);
 //         }
 
-        //A continuous section break. The next section starts on the next line.
-        if (sep->bkc == 0) {
+        switch (sep->bkc) {
+        case bkcContinuous:
             kDebug(30513) << "omitting page-layout & master-page creation";
             m_omittMasterPage = true;
-        }
-        //A new page section break. The next section starts on the next page.
-        else if (sep->bkc == 2) {
+            break;
+        case bkcNewPage:
+        case bkcEvenPage:
+        case bkcOddPage:
             kDebug(30513) << "using the last defined master-page";
             m_useLastMasterPage = true;
             m_writeMasterPageName = true;
+            break;
+        default:
+            kWarning(30513) << "Warning: section break type (" << sep->bkc << ") NOT SUPPORTED!";
+            m_omittMasterPage = true;
+            break;
         }
 
         //cleaning required!

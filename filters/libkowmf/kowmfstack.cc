@@ -37,6 +37,6 @@ void KoWmfPatternBrushHandle::apply(KoWmfRead *p)
 
 void KoWmfFontHandle::apply(KoWmfRead *p)
 {
-    p->setFont(font);
+    p->setFont(font, rotation, height);
 }
 

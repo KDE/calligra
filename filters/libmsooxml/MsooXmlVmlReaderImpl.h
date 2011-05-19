@@ -337,6 +337,46 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
     return KoFilter::OK;
 }
 
+void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attrs)
+{
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+
+    m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    if (!type.isEmpty()) {
+        type = type.mid(1); // removes extra # from the start
+    }
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    if (filled.isEmpty()) {
+        filled = m_fillTypeStrings[type];
+    }
+    if (filled != "f" && filled != "false") {
+        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    if (stroked.isEmpty()) {
+        stroked = m_strokeTypeStrings[type];
+    }
+    if (stroked == "f" || stroked == "false") {
+        m_strokeWidth = 0;
+    }
+    else if (!strokecolor.isEmpty()) {
+        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+    }
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL rect
 //! rect handler (Rectangle)
@@ -385,33 +425,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
-    m_strokeWidth = 1 ; // This seems to be the default
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-    m_currentPen = QPen();
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
-        m_strokeColor = "#000000"; // Black color seems to be default
-    }
-
-    if (!fillcolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(filled)
-        if (filled != "f" && filled != "false") {
-            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-        }
-    }
-
-    if (!strokecolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(stroked)
-        if (stroked != "f" && stroked != "false") {
-            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-        }
-    }
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -651,18 +665,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         m_strokeColor = "#000000"; // Black color seems to be default
     }
 
-    if (!fillcolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(filled)
-        if (filled != "f" && filled != "false") {
-            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-        }
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    if (filled != "f" && filled != "false") {
+        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
     }
 
-    if (!strokecolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(stroked)
-        if (stroked != "f" && stroked != "false") {
-            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-        }
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    if (stroked == "f" || stroked == "false") {
+        m_strokeWidth = 0;
+    }
+    else if (!strokecolor.isEmpty()) {
+        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
     }
 
     createFrameStart(GroupStart);
@@ -690,33 +703,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
-    m_strokeWidth = 1 ; // This seems to be the default
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-    m_currentPen = QPen();
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
-        m_strokeColor = "#000000"; // Black color seems to be default
-    }
-
-    if (!fillcolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(filled)
-        if (filled != "f" && filled != "false") {
-            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-        }
-    }
-
-    if (!strokecolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(stroked)
-        if (stroked != "f" && stroked != "false") {
-            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-        }
-    }
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -1354,6 +1341,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
         m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(enPath);
     }
 
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    m_fillTypeStrings[id] = filled;
+    m_strokeTypeStrings[id] = stroked;
+
     m_shapeTypeString += ">";
 
     while (!atEnd()) {
@@ -1609,33 +1601,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         m_shapeTypeString += ">";
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
-    m_strokeWidth = 1 ; // This seems to be the default
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-    m_currentPen = QPen();
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
-        m_strokeColor = "#000000"; // Black color seems to be default
-    }
-
-    if (!fillcolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(filled)
-        if (filled != "f" && filled != "false") {
-            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-        }
-    }
-
-    if (!strokecolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(stroked)
-        if (stroked != "f" && stroked != "false") {
-            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-        }
-    }
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -1695,7 +1661,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
-        if (isCustomShape) {
+        if (isCustomShape && o_connectortype.isEmpty()) {
             if (!type.isEmpty()) {
                 type = type.mid(1); // removes extra # from the start
                 body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
