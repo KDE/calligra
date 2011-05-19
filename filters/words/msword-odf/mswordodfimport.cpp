@@ -253,6 +253,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     storeout->open("settings.xml");
     KoStoreDevice settingsDev(storeout);
     KoXmlWriter *settingsWriter = oasisStore.createOasisXmlWriter(&settingsDev, "office:document-settings");
+    settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
     settingsWriter->startElement("config:config-item");
@@ -267,6 +268,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     settingsWriter->endElement();
     settingsWriter->endElement(); // config-item-set
 
+    settingsWriter->endElement(); // settings
     settingsWriter->endElement(); // document-settings
     settingsWriter->endDocument();
     delete settingsWriter;
