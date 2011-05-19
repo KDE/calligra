@@ -499,6 +499,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
 }
 
+/*
 bool KWRootAreaProvider::suggestPageBreak(KoTextLayoutRootArea *beforeThis)
 {
     if (m_textFrameSet->textFrameSetType() != KWord::MainTextFrameSet)
@@ -515,6 +516,7 @@ bool KWRootAreaProvider::suggestPageBreak(KoTextLayoutRootArea *beforeThis)
     KWRootAreaPage *pageBefore = m_pages[index - 1];
     return page->page.masterPageName() != pageBefore->page.masterPageName();
 }
+*/
 
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
