@@ -2635,6 +2635,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkEnd()
  this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
  defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
  numbering definition shall be used instead.
+
+ Parent elements:
+ - [done] pPr (§17.3.1.26);
+ - [done] pPr (§17.3.1.25);
+ - [done] pPr (§17.7.5.2);
+ - [done] pPr (§17.7.6.1);
+ - [done] pPr (§17.9.23);
+ - [done] pPr (§17.7.8.2)
+
+ Child elements:
+ - [done] ilvl (Numbering Level Reference) §17.9.3
+ - ins (Inserted Numbering Properties) §17.13.5.19
+ - [done] numId (Numbering Definition Instance Reference) §17.9.19
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
 {
@@ -2690,13 +2703,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ilvl()
 //! numPr handler (Numbering Definition Instance Reference)
 /*!
  This element specifies that the current paragraph references a numbering definition instance in the current document.
- 
+
  The presence of this element specifies that the paragraph will inherit the properties specified by the numbering
  definition in the num element (§2.9.16) at the level specified by the level specified in the lvl element (§2.9.7)
  and shall have an associated number positioned before the beginning of the text flow in this paragraph. When
  this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
  defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
  numbering definition shall be used instead.
+
+ Parent elements:
+ - [done] numPr (§17.3.1.19)
+
+ Child elements:
+ - none
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
 {
@@ -2709,6 +2728,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
     // The styles from numbering have to be given some name, NumStyle has been chosen here
     if (!val.isEmpty()) {
         m_currentListStyleName = QString("NumStyle%1").arg(val);
+        if (val == "0") {
+            m_listFound = false; // spec says that this means deleted list
+        }
     }
 
     readNext();
