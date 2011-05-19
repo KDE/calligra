@@ -257,7 +257,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
 void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *textDoc)
 {
-    KoTextDocument(textDoc).setRelativeTabs(false);
+    KoTextDocument(textDoc).setRelativeTabs(true);
     if (settingsDoc.isNull())
         return;
 
