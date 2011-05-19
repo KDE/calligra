@@ -39,6 +39,8 @@
 #include <QTextDocument>
 #include <KMenu>
 
+#include "KoRdfSemanticTreeWidgetItem.h"
+
 KWRdfDocker::KWRdfDocker()
     : m_canvas(0),
     m_lastCursorPosition(-1),
