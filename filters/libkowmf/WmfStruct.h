@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KOWMFSTRUCT_H_
-#define _KOWMFSTRUCT_H_
+#ifndef _WMFSTRUCT_H_
+#define _WMFSTRUCT_H_
 
 #include <qglobal.h>
 #include <qnamespace.h>

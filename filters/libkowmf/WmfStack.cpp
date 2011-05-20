@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kowmfstack.h"
+#include "WmfStack.h"
 #include "kowmfread.h"
 
 void KoWmfBrushHandle::apply(KoWmfRead *p)

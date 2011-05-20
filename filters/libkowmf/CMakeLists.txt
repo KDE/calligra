@@ -19,8 +19,8 @@ install(TARGETS kwmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### next target ###############
 
 set(kowmf_LIB_SRCS 
+   WmfStack.cpp
    kowmfreadprivate.cc 
-   kowmfstack.cc 
    kowmfread.cc 
    kowmfwrite.cc 
    kowmfpaint.cc )

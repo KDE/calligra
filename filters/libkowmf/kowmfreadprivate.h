@@ -26,7 +26,7 @@
 
 #include "WmfEnums.h"
 #include "WmfStruct.h"
-#include "kowmfstack.h"
+#include "WmfStack.h"
 
 class KoWmfRead;
 class QBuffer;

@@ -16,8 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef _KOWMFSTACK_H_
-#define _KOWMFSTACK_H_
+#ifndef _WMFSTACK_H_
+#define _WMFSTACK_H_
 
 #include <QPen>
 #include <QColor>
