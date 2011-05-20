@@ -29,6 +29,7 @@
 
 #include "KPrSlidesSorterDocumentModel.h"
 #include "KPrFactory.h"
+#include "KPrSlidesManagerView.h"
 #include <KoResourceManager.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
@@ -56,7 +57,8 @@
 
 KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas)
     : KoPAViewMode( view, canvas )
-    , m_slidesSorter( new KPrSlidesSorter(this, view->parentWidget()) )
+    //, m_slidesSorter( new KPrSlidesSorter(this, view->parentWidget()) )
+    , m_slidesSorter( new KPrSlidesManagerView(m_toolProxy, view->parentWidget()))
     , m_documentModel(new KPrSlidesSorterDocumentModel(this, view->parentWidget()))
     , m_iconSize( QSize(200, 200) )
     , m_itemSize( QRect(0, 0, 0, 0) )
@@ -67,10 +69,11 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
 {
     m_slidesSorter->hide();
     m_slidesSorter->setIconSize( m_iconSize );
-}
 
-KPrViewModeSlidesSorter::KPrSlidesSorter::~KPrSlidesSorter()
-{
+    connect(m_slidesSorter, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
+    connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
+
+    m_slidesSorter->installEventFilter(this);
 }
 
 KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
@@ -81,79 +84,6 @@ KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
 
 void KPrViewModeSlidesSorter::paint(KoPACanvasBase* /*canvas*/, QPainter& /*painter*/, const QRectF &/*paintRect*/)
 {
-}
-
-void KPrViewModeSlidesSorter::KPrSlidesSorter::paintEvent( QPaintEvent* event )
-{
-    event->accept();
-    QListView::paintEvent(event);
-
-    // Paint the line where the slide should go
-    int lastItemNumber = m_viewModeSlidesSorter->lastItemNumber();
-    int currentItemNumber = lastItemNumber;
-
-    //20 is for the rigth margin
-    int slidesNumber = qFloor((contentsRect().width() - 20)/m_viewModeSlidesSorter->itemSize().width());
-
-    if (m_viewModeSlidesSorter->isDraging() && currentItemNumber >= 0) {
-        QSize size(m_viewModeSlidesSorter->itemSize().width(), m_viewModeSlidesSorter->itemSize().height());
-
-        int numberMod = currentItemNumber % slidesNumber;
-
-        //put line after last slide.
-        if (numberMod == 0 && currentItemNumber == m_viewModeSlidesSorter->pageCount()) {
-            numberMod = slidesNumber;
-        }
-        int verticalValue = (currentItemNumber - numberMod) / slidesNumber * size.height() - verticalScrollBar()->value();
-
-        QPoint point1(numberMod * size.width(), verticalValue);
-        QPoint point2(numberMod * size.width(), verticalValue + size.height());
-        QLineF line(point1, point2);
-
-        QPainter painter(this->viewport());
-        painter.drawLine(line);
-    }
-
-}
-
-void KPrViewModeSlidesSorter::KPrSlidesSorter::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    event->accept();
-    QListView::mouseDoubleClickEvent(event);
-    m_viewModeSlidesSorter->activateNormalViewMode();
-}
-
-void KPrViewModeSlidesSorter::KPrSlidesSorter::contextMenuEvent(QContextMenuEvent *event)
-{
-    QMenu menu(this);
-
-    menu.addAction(SmallIcon("document-new"), i18n("Add a new slide"), m_viewModeSlidesSorter, SLOT(addSlide()));
-    menu.addAction(i18n("Delete current Slide"), m_viewModeSlidesSorter, SLOT(deleteSlide()));
-
-    menu.addAction(i18n("Cut") ,m_viewModeSlidesSorter, SLOT(editCut()));
-    menu.addAction(i18n("Copy"), m_viewModeSlidesSorter, SLOT(editCopy()));
-    menu.addAction(i18n("Paste"), m_viewModeSlidesSorter, SLOT(editPaste()));
-
-    menu.exec(event->globalPos());
-}
-
-void KPrViewModeSlidesSorter::KPrSlidesSorter::keyPressEvent(QKeyEvent *event)
-{
-    m_viewModeSlidesSorter->m_toolProxy->keyPressEvent(event);
-
-    if (!event->isAccepted()) {
-        event->accept();
-
-        switch (event->key()) {
-            case Qt::Key_Delete:
-                m_viewModeSlidesSorter->deleteSlide();
-                break;
-
-            default:
-                event->ignore();
-                return;
-        }
-    }
 }
 
 void KPrViewModeSlidesSorter::paintEvent( KoPACanvas * canvas, QPaintEvent* event )
@@ -307,80 +237,6 @@ void KPrViewModeSlidesSorter::removeShape( KoShape *shape )
     Q_UNUSED(shape);
 }
 
-void KPrViewModeSlidesSorter::KPrSlidesSorter::startDrag ( Qt::DropActions supportedActions )
-{
-    Q_UNUSED(supportedActions);
-    QAbstractItemView::startDrag(Qt::MoveAction);
-}
-
-
-void KPrViewModeSlidesSorter::KPrSlidesSorter::dragMoveEvent(QDragMoveEvent* ev)
-{
-    ev->accept();
-    m_viewModeSlidesSorter->setDragingFlag();
-    pageBefore(ev->pos());
-    viewport()->update();
-}
-
-void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
-{
-    m_viewModeSlidesSorter->setDragingFlag(false);
-    ev->setDropAction(Qt::IgnoreAction);
-    ev->accept();
-
-    int newIndex;
-    QByteArray encoded = ev->mimeData()->data("application/x-koffice-sliderssorter");
-    QDataStream stream(&encoded, QIODevice::ReadOnly);
-    QList<KoPAPageBase *> slides;
-
-    // decode the data
-    while (! stream.atEnd()) {
-        QVariant v;
-        stream >> v;
-        KoPAPageBase *page = m_viewModeSlidesSorter->m_view->kopaDocument()->pageByIndex(v.toInt (),false);
-        if (page) {
-            slides.append(page);
-        }
-    }
-
-    if (slides.empty ()) {
-        return;
-    }
-
-    QModelIndex itemNew = indexAt(ev->pos());
-    if (itemNew.row() >= 0)
-    {
-        // Normal case
-        newIndex = itemNew.row();
-    } else {
-        // In case you point the end (no slides under the pointer)
-        newIndex = m_viewModeSlidesSorter->pageCount();
-    }
-
-     m_viewModeSlidesSorter->movePages(slides, newIndex - 1);
-
-    // This selection helps the user
-    itemNew = currentIndex().model()->index(m_viewModeSlidesSorter->m_view->kopaDocument()->pageIndex (slides.first()), 0);
-    clearSelection();
-    setCurrentIndex(itemNew);
-    m_viewModeSlidesSorter->updateDocumentDock();
-}
-
-int KPrViewModeSlidesSorter::KPrSlidesSorter::pageBefore(QPoint point)
-{
-    QModelIndex item = indexAt(point);
-    int pageBeforeNumber = -1;
-    if (item.row()>=0) {
-        //normal case
-        pageBeforeNumber = item.row();
-    } else {
-        //after the last slide
-        pageBeforeNumber = m_viewModeSlidesSorter->pageCount();
-    }
-    m_viewModeSlidesSorter->setLastItemNumber(pageBeforeNumber);
-    return pageBeforeNumber;
-}
-
 void KPrViewModeSlidesSorter::populate()
 {
     m_documentModel->setDocument(m_view->kopaDocument());
@@ -391,21 +247,7 @@ void KPrViewModeSlidesSorter::populate()
 
     m_slidesSorter->setDragDropMode(QAbstractItemView::InternalMove);
     QModelIndex item = m_documentModel->index(0,0);
-    setItemSize(m_slidesSorter->visualRect(item));
-}
-
-void KPrViewModeSlidesSorter::movePages(const QList<KoPAPageBase *> &slides, int pageAfterNumber)
-{
-    KoPAPageBase * pageAfter = 0;
-
-    if (pageAfterNumber >= 0) {
-        pageAfter = m_view->kopaDocument()->pageByIndex(pageAfterNumber,false);
-    }
-
-    if (!slides.empty ()) {
-        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_view->kopaDocument(), slides, pageAfter);
-        m_view->kopaDocument()->addCommand(command);
-    }
+    m_slidesSorter->setItemSize (m_slidesSorter->visualRect(item));
 }
 
 int KPrViewModeSlidesSorter::pageCount() const
@@ -460,18 +302,15 @@ void KPrViewModeSlidesSorter::itemClicked(const QModelIndex index)
         return;
     }
 
+    //Avoid deselect slides when dragging
+    if (m_slidesSorter->selectionModel ()->selectedIndexes ().length () > 1) {
+        return;
+    }
+
     KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(index.row(), false);
 
     if (page) {
         m_view->setActivePage(page);
-    }
-}
-
-void KPrViewModeSlidesSorter::KPrSlidesSorter::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (event->mimeData()->hasFormat("application/x-koffice-sliderssorter")) {
-        event->setDropAction(Qt::MoveAction);
-        event->accept();
     }
 }
 
@@ -559,7 +398,7 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
 
     //update item size
     QModelIndex item = m_documentModel->index(0,0);
-    setItemSize(m_slidesSorter->visualRect(item));
+    m_slidesSorter->setItemSize(m_slidesSorter->visualRect(item));
 
     setZoom(qRound(zoom * 100.));
 }
@@ -599,4 +438,45 @@ void KPrViewModeSlidesSorter::setZoom(int zoom)
 int KPrViewModeSlidesSorter::zoom()
 {
     return m_zoom;
+}
+
+void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
+{
+    QMenu menu(m_slidesSorter);
+
+    // Not connected yet
+    menu.addAction(SmallIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
+    menu.addAction(i18n("Delete selected slides"), this, SLOT(deleteSlide()));
+
+    menu.addAction(i18n( "Cut" ) ,this,  SLOT(editCut()));
+    menu.addAction(i18n( "Copy" ), this,  SLOT(editCopy()));
+    menu.addAction(i18n( "Paste" ), this, SLOT(editPaste()));
+
+    menu.exec(event->globalPos());
+}
+
+bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_slidesSorter) {
+        switch (event->type()) {
+            case QEvent::KeyPress: {
+                QKeyEvent *keyEv = static_cast<QKeyEvent *>(event);
+                switch (keyEv->key()) {
+                    case Qt::Key_Delete: {
+                        deleteSlide();
+                        break;
+                    }
+
+                    default:
+                       break;
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
+    } //endIf
+
+    return QObject::eventFilter(watched, event);
 }

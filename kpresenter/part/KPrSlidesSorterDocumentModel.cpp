@@ -24,6 +24,12 @@
 #include <QMimeData>
 #include "KPrViewModeSlidesSorter.h"
 #include <KoPAPageBase.h>
+#include <KoPAViewBase.h>
+#include <KoPAPage.h>
+#include <KoPAPageDeleteCommand.h>
+#include <KoPAPageInsertCommand.h>
+#include <KoPAPageMoveCommand.h>
+
 
 KPrSlidesSorterDocumentModel::KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document)
    : QAbstractListModel(parent)
@@ -140,10 +146,12 @@ Qt::ItemFlags KPrSlidesSorterDocumentModel::flags(const QModelIndex &index) cons
         return 0;
     }
 
+    Qt::ItemFlags defaultFlags = QAbstractListModel::flags (index);
+
     if (index.isValid()) {
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;//| defaultFlags;
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
     } else {
-        return Qt::ItemIsDropEnabled; //| defaultFlags;
+        return Qt::ItemIsDropEnabled | defaultFlags;
     }
 }
 
@@ -151,6 +159,66 @@ void KPrSlidesSorterDocumentModel::update()
 {
     emit layoutAboutToBeChanged();
     emit layoutChanged();
+}
+
+bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+    if (action == Qt::IgnoreAction) {
+        return true;
+    }
+
+    if (!data->hasFormat("application/x-koffice-sliderssorter")) {
+        return false;
+    }
+
+    if (column > 0) {
+        return false;
+    }
+
+    QByteArray encoded = data->data("application/x-koffice-sliderssorter");
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QList<KoPAPageBase *> slides;
+
+    // decode the data
+    while (! stream.atEnd()) {
+        QVariant v;
+        stream >> v;
+        KoPAPageBase *page = m_document->pageByIndex(v.toInt (),false);
+        if (page) {
+            slides.append(page);
+        }
+    }
+
+    if (slides.empty ()) {
+        return false;
+    }
+
+    int beginRow;
+
+    if (row != -1) {
+        beginRow = row;
+    } else if (parent.isValid ()) {
+        beginRow = parent.row ();
+
+    } else {
+        beginRow = rowCount (QModelIndex());
+    }
+
+    KoPAPageBase * pageAfter = 0;
+
+    if ((beginRow - 1) >= 0) {
+        pageAfter = m_document->pageByIndex(beginRow - 1,false);
+    }
+
+
+    if (!slides.empty ()) {
+        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
+        m_document->addCommand(command);
+    }
+
+    m_viewModeSlidesSorter->view()->setActivePage (slides.first ());
+
+    return true;
 }
 
 #include "KPrSlidesSorterDocumentModel.moc"

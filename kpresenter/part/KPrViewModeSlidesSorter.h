@@ -29,6 +29,7 @@ class KoPAView;
 class KoPACanvas;
 class KoPAPageBase;
 class KPrSlidesSorterDocumentModel;
+class KPrSlidesManagerView;
 
 class KPrViewModeSlidesSorter : public KoPAViewMode
 {
@@ -52,7 +53,6 @@ public:
     void deactivate();
     void updateActivePage( KoPAPageBase *page );
     void updateDocumentModel();
-    void activateNormalViewMode();
 
     void addShape( KoShape *shape );
     void removeShape( KoShape *shape );
@@ -65,20 +65,14 @@ public:
      */
     QSize iconSize() const;
 
+    bool eventFilter(QObject *watched, QEvent *event);
+
 protected:
 
     /**
      * Fills the editor with presentation slides and ordored them in the KPrSlidesSorter
      */
     void populate();
-
-    /**
-     * Moves a page from pageNumber to pageAfterNumber
-     *
-     * @param slides a list with pages to move
-     * @param pageAfterNumber the number of the place the page should move to
-     */
-    void movePages( const QList<KoPAPageBase *> &slides, int pageAfterNumber );
 
     /**
      * The count of the page
@@ -160,53 +154,8 @@ protected:
       */
     void saveZoomConfig(int zoom);
 
-
-    /**
-     * This class manage the QListWidget itself.
-     * Use all the getters and setters of the KPrViewModeSlidesSorter.
-     * Most of the functions are Qt overrides to have the wished comportment.
-     */
-    class KPrSlidesSorter : public QListView {
-        public:
-            KPrSlidesSorter (KPrViewModeSlidesSorter * viewModeSlidesSorter, QWidget * parent = 0)
-                : QListView(parent)
-                , m_viewModeSlidesSorter(viewModeSlidesSorter)
-            {
-                setViewMode(QListView::IconMode);
-                setFlow(QListView::LeftToRight);
-                setWrapping(TRUE);
-                setResizeMode(QListView::Adjust);
-                setDragEnabled(true);
-                setAcceptDrops(true);
-                setDropIndicatorShown(true);
-            };
-
-            ~KPrSlidesSorter();
-
-            virtual void paintEvent ( QPaintEvent * ev);
-
-            virtual void mouseDoubleClickEvent(QMouseEvent *event);
-
-            virtual void contextMenuEvent(QContextMenuEvent *event);
-
-            virtual void keyPressEvent(QKeyEvent *event);
-
-            virtual void startDrag ( Qt::DropActions supportedActions );
-
-            virtual void dropEvent(QDropEvent* ev);
-
-            virtual void dragMoveEvent(QDragMoveEvent* ev);
-
-            virtual void dragEnterEvent(QDragEnterEvent *event);
-
-            int pageBefore(QPoint point);
-
-        private:
-            KPrViewModeSlidesSorter * m_viewModeSlidesSorter;
-    };
-
 private:
-    KPrSlidesSorter * m_slidesSorter;
+    KPrSlidesManagerView * m_slidesSorter;
     KPrSlidesSorterDocumentModel * m_documentModel;
     QSize m_iconSize;
     QRect m_itemSize;
@@ -227,6 +176,8 @@ private slots:
     void editPaste();
     void updateZoom(KoZoomMode::Mode mode, qreal zoom);
     void updateToActivePageIndex();
+    void activateNormalViewMode();
+    void slidesSorterContextMenu(QContextMenuEvent* event);
 
 signals:
     void pageChanged(KoPAPageBase *page);

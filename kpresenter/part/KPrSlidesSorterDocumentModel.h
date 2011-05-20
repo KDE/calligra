@@ -49,11 +49,13 @@ public:
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+
 public slots:
     void update();
 
 private:
-    const KoPADocument *m_document;
+    KoPADocument *m_document;
     KPrViewModeSlidesSorter *m_viewModeSlidesSorter;
 };
 
