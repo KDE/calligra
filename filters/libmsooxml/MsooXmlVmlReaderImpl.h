@@ -288,11 +288,13 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 #endif
 
-    m_currentPen.setWidthF(m_strokeWidth);
-    m_currentPen.setColor(QColor(m_strokeColor));
-    m_currentPen.setJoinStyle(Qt::MiterJoin);
+    if (m_strokeWidth > 0) {
+        m_currentPen.setWidthF(m_strokeWidth);
+        m_currentPen.setColor(QColor(m_strokeColor));
+        m_currentPen.setJoinStyle(Qt::MiterJoin);
 
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+        KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    }
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
@@ -964,9 +966,10 @@ static QString getArgument(QString& source, bool commaMeansZero, bool& wasComman
     return "0"; // this means case 1,e
 }
 
-static QString convertToEnhancedPath(const QString& source)
+static QString convertToEnhancedPath(const QString& source, QString& extraShapeFormulas)
 {
     enum ConversionState {CommandExpected, ArgumentExpected};
+    int extraFormulaIndex = 1;
     QString parsedString = source;
     QString returnedString;
     ConversionState state = CommandExpected;
@@ -1244,12 +1247,24 @@ static QString convertToEnhancedPath(const QString& source)
                 fourth = getArgument(parsedString, false, argumentMove);
                 fifth = getArgument(parsedString, false, argumentMove);
                 sixth = getArgument(parsedString, false, argumentMove);
-                // These are most likely wrong, spec does not mention which units the angle uses
-                // nor how the angle should be interpreted
+                seventh = QString("?extraFormula%1").arg(extraFormulaIndex);
+                extraShapeFormulas += "\n<draw:equation ";
+                extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
+                extraShapeFormulas += QString("%1 / 65536").arg(fifth);
+                extraShapeFormulas += "\" ";
+                extraShapeFormulas += "/>";
+                ++extraFormulaIndex;
+                eighth = QString("?extraFormula%1").arg(extraFormulaIndex);
+                extraShapeFormulas += "\n<draw:equation ";
+                extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
+                extraShapeFormulas += QString("%1 / 65536").arg(sixth);
+                extraShapeFormulas += "\" ";
+                extraShapeFormulas += "/>";
+                ++extraFormulaIndex;
                 currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
                 currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
                 returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).arg(fourth).
-                    arg(fifth).arg(sixth);
+                    arg(seventh).arg(eighth);
                 while (true) {
                     first = getArgument(parsedString, false, argumentMove);
                     if (argumentMove) {
@@ -1261,10 +1276,24 @@ static QString convertToEnhancedPath(const QString& source)
                     fourth = getArgument(parsedString, false, argumentMove);
                     fifth = getArgument(parsedString, false, argumentMove);
                     sixth = getArgument(parsedString, false, argumentMove);
+                    seventh = QString("?extraFormula%1").arg(extraFormulaIndex);
+                    extraShapeFormulas += "\n<draw:equation ";
+                    extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
+                    extraShapeFormulas += QString("%1 / 65536").arg(fifth);
+                    extraShapeFormulas += "\" ";
+                    extraShapeFormulas += "/>";
+                    ++extraFormulaIndex;
+                    eighth = QString("?extraFormula%1").arg(extraFormulaIndex);
+                    extraShapeFormulas += "\n<draw:equation ";
+                    extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
+                    extraShapeFormulas += QString("%1 / 65536").arg(sixth);
+                    extraShapeFormulas += "\" ";
+                    extraShapeFormulas += "/>";
+                    ++extraFormulaIndex;
                     currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
                     currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
                     returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).arg(fourth).
-                    arg(fifth).arg(sixth);
+                    arg(seventh).arg(eighth);
                 }
                 break;
             }
@@ -1328,6 +1357,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
 
     if (!adj.isEmpty()) {
         QString tempModifiers = adj;
+        tempModifiers.replace(",,", ",0,");
         tempModifiers.replace(',', " ");
         m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
     }
@@ -1336,8 +1366,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
         tempViewBox.replace(',', " ");
         m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
     }
+    m_extraShapeFormulas = QString();
     if (!path.isEmpty()) {
-        QString enPath = convertToEnhancedPath(path);
+        QString enPath = convertToEnhancedPath(path, m_extraShapeFormulas);
         m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(enPath);
     }
 
@@ -1357,6 +1388,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
         }
     }
 
+    m_shapeTypeString += m_extraShapeFormulas;
     m_shapeTypeString += "</draw:enhanced-geometry>";
     m_shapeTypeStrings[id] = m_shapeTypeString;
 
@@ -1468,7 +1500,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
             m_shapeTypeString += QString("max(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "if") {
-            m_shapeTypeString += QString("if(max(%1,0),%2,%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_shapeTypeString += QString("if(%1,%2,%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sqrt") {
             m_shapeTypeString += QString("sqrt(%1)").arg(parameters.at(0));
@@ -1482,8 +1514,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
         else if (command == "ellipse") {
             m_shapeTypeString += QString("%3-sqrt(1-(%1/%2)*(%1/%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
-        else if (command == "atan2") {
-            m_shapeTypeString += QString("atan2(%2,%1)").arg(parameters.at(0)).arg(parameters.at(1));
+        else if (command == "atan2") { // converting to fd unit (degrees * 65536)
+            m_shapeTypeString += QString("3754936*atan2(%2,%1)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "cosatan2") {
             m_shapeTypeString += QString("%1*cos(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
@@ -1494,14 +1526,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
         else if (command == "sumangle") {
             m_shapeTypeString += QString("%1+%2*65536-%3*65536").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
-        else if (command == "sin") {
-            m_shapeTypeString += QString("%1*sin(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
+        else if (command == "sin") { // converting fd unit to radians
+            m_shapeTypeString += QString("%1*sin(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "cos") {
-            m_shapeTypeString += QString("%1*cos(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("%1*cos(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "tan") {
-            m_shapeTypeString += QString("%1*tan(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("%1*tan(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
     }
 
@@ -1589,6 +1621,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
         if (!adj.isEmpty()) {
             QString tempModifiers = adj;
+            tempModifiers.replace(",,", ",0,");
             tempModifiers.replace(',', " ");
             m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
         }
@@ -1597,7 +1630,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             tempViewBox.replace(',', " ");
             m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
         }
-        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(convertToEnhancedPath(path));
+        m_extraShapeFormulas = QString();
+
+        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(convertToEnhancedPath(path, m_extraShapeFormulas));
         m_shapeTypeString += ">";
     }
 
@@ -1639,6 +1674,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     // Case of a custom shape which is not defined in a shapetype
     if (!path.isEmpty()) {
+        m_shapeTypeString += m_extraShapeFormulas;
         m_shapeTypeString += "</draw:enhanced-geometry>";
     }
 
