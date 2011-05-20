@@ -143,6 +143,8 @@ void KWPageRemoveCommand::redo()
     lay->removeRootArea(0);
 
     lay->layout();
+    
+    m_document->firePageSetupChanged();
 }
 
 void KWPageRemoveCommand::undo()
