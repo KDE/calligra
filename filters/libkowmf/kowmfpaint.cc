@@ -29,7 +29,7 @@
 
 
 KoWmfPaint::KoWmfPaint()
-    : KoWmfRead()
+    : WmfAbstractBackend()
     , mTextPen()
     , mSaveCount(0)
 {
@@ -52,7 +52,7 @@ bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
 
     // Play the wmf file
     mSaveCount = 0;
-    bool ret = KoWmfRead::play();
+    bool ret = WmfAbstractBackend::play();
 
     // Make sure that the painter is in the same state as before KoWmfRead::play()
     for (; mSaveCount > 0; mSaveCount--)
@@ -75,7 +75,7 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
 
     // Play the wmf file
     mSaveCount = 0;
-    bool ret = KoWmfRead::play();
+    bool ret = WmfAbstractBackend::play();
 
     // Make sure that the painter is in the same state as before KoWmfRead::play()
     for (; mSaveCount > 0; mSaveCount--)

@@ -19,8 +19,8 @@
 #ifndef _KOWMFPAINT_H_
 #define _KOWMFPAINT_H_
 
-#include "kowmfread.h"
 #include <kowmf_export.h>
+#include "WmfAbstractBackend.h"
 
 #include <QPainter>
 #include <QTransform>
@@ -47,13 +47,13 @@ class QPolygon;
  *
  */
 
-class KOWMF_EXPORT KoWmfPaint : public KoWmfRead
+class KOWMF_EXPORT KoWmfPaint : public WmfAbstractBackend
 {
 public:
     KoWmfPaint();
     ~KoWmfPaint() { }
 
-    using KoWmfRead::play;
+    using WmfAbstractBackend::play;
 
     /**
      * Play a WMF file on a QPaintDevice. Return true on success.

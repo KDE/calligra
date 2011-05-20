@@ -1,5 +1,7 @@
 /* This file is part of the KDE libraries
+
    Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
+   Copyright (c) 2011 Inge Wallin (inge@lysator.liu.se)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef _KOWMFREAD_H_
-#define _KOWMFREAD_H_
+#ifndef _WMFABSTRACTBACKEND_H_
+#define _WMFABSTRACTBACKEND_H_
 
 #include <kowmf_export.h>
 
@@ -34,7 +36,7 @@ class QImage;
 class QMatrix;
 
 /**
- * KoWmfRead allows the redirection of the actions stored in a WMF file.
+ * WmfAbstractBackend allows the redirection of the actions stored in a WMF file.
  * Most of the virtuals functions are compatible with QPainter format.
  *
  * How to use :
@@ -43,11 +45,11 @@ class QMatrix;
  *
  */
 
-class KOWMF_EXPORT KoWmfRead
+class KOWMF_EXPORT WmfAbstractBackend
 {
 public:
-    KoWmfRead();
-    virtual ~KoWmfRead();
+    WmfAbstractBackend();
+    virtual ~WmfAbstractBackend();
 
     /**
      * Load WMF file. Returns true on success.
@@ -151,7 +153,6 @@ public:
 
 private:
     KoWmfReadPrivate  *mKwmf;
-
 };
 
 #endif

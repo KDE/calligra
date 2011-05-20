@@ -25,7 +25,7 @@
 #include <QBrush>
 #include <QPixmap>
 
-class KoWmfRead;
+class WmfAbstractBackend;
 
 /**
  * WMF file allows manipulation on a stack of object.
@@ -35,27 +35,27 @@ class KoWmfHandle
 {
 public:
     virtual ~KoWmfHandle() {}
-    virtual void apply(KoWmfRead *) = 0;
+    virtual void apply(WmfAbstractBackend *) = 0;
 };
 
 class KoWmfBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(KoWmfRead *);
+    virtual void apply(WmfAbstractBackend *);
     QBrush brush;
 };
 
 class KoWmfPenHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(KoWmfRead *);
+    virtual void apply(WmfAbstractBackend *);
     QPen pen;
 };
 
 class KoWmfPatternBrushHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(KoWmfRead *);
+    virtual void apply(WmfAbstractBackend *);
     QBrush brush;
     QPixmap image;
 };
@@ -63,7 +63,7 @@ public:
 class KoWmfFontHandle: public KoWmfHandle
 {
 public:
-    virtual void apply(KoWmfRead *);
+    virtual void apply(WmfAbstractBackend *);
     QFont font;
     int rotation;
     int height;                 // Can be negative. In 'font' above, we store the absolute value.

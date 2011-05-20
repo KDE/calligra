@@ -20,19 +20,20 @@
 #define _WMFIMPORTPARSER_H_
 
 #include <QPainter>
-#include <kowmfread.h>
+
+#include <WmfAbstractBackend.h>
 
 class KoShape;
 class KoPathShape;
 class KarbonDocument;
 
 /**
- * WMFImportParser inherit KoWmfRead
+ * WMFImportParser inherit WmfAbstractBackend
  * and translate WMF functions
  *
  */
 
-class WMFImportParser : public KoWmfRead
+class WMFImportParser : public WmfAbstractBackend
 {
 public:
     WMFImportParser();
@@ -41,7 +42,7 @@ public:
     /**
      * play WMF file on a KarbonDocument. Return true on success.
      */
-    using KoWmfRead::play;
+    using WmfAbstractBackend::play;
     bool play(KarbonDocument& doc);
 
 

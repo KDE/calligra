@@ -28,7 +28,7 @@
 #include "WmfStruct.h"
 #include "WmfStack.h"
 
-class KoWmfRead;
+class WmfAbstractBackend;
 class QBuffer;
 class QPolygon;
 
@@ -52,7 +52,7 @@ public:
      * Plays a metafile in @p readKwmf and returns true on success.
      * To draw on a device you have to inherit the class ReadKwmf
      */
-    bool play(KoWmfRead* readKwmf);
+    bool play(WmfAbstractBackend* readKwmf);
 
 
     /* Metafile painter methods */
@@ -234,7 +234,7 @@ public:
 
 private:
     // the output strategy
-    KoWmfRead *mReadWmf;
+    WmfAbstractBackend *m_backend;
 
     // The current window.  The union of all windows in the file is the bounding box.
     //

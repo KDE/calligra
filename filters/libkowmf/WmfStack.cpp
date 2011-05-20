@@ -18,24 +18,24 @@
 */
 
 #include "WmfStack.h"
-#include "kowmfread.h"
+#include "WmfAbstractBackend.h"
 
-void KoWmfBrushHandle::apply(KoWmfRead *p)
+void KoWmfBrushHandle::apply(WmfAbstractBackend *p)
 {
     p->setBrush(brush);
 }
 
-void KoWmfPenHandle::apply(KoWmfRead *p)
+void KoWmfPenHandle::apply(WmfAbstractBackend *p)
 {
     p->setPen(pen);
 }
 
-void KoWmfPatternBrushHandle::apply(KoWmfRead *p)
+void KoWmfPatternBrushHandle::apply(WmfAbstractBackend *p)
 {
     p->setBrush(brush);
 }
 
-void KoWmfFontHandle::apply(KoWmfRead *p)
+void KoWmfFontHandle::apply(WmfAbstractBackend *p)
 {
     p->setFont(font, rotation, height);
 }

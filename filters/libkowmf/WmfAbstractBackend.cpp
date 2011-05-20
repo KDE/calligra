@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
+ *
  * Copyright (c) 2003      Thierry Lorthiois (lorthioist@wanadoo.fr)
- *               2009-2010 Inge Wallin <inge@lysator.liu.se>
+ *               2009-2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kowmfread.h"
+#include "WmfAbstractBackend.h"
 #include "kowmfreadprivate.h"
 
 #include <kdebug.h>
@@ -25,23 +26,23 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 
-KoWmfRead::KoWmfRead()
+WmfAbstractBackend::WmfAbstractBackend()
 {
     mKwmf = new KoWmfReadPrivate();
 }
 
-KoWmfRead::~KoWmfRead()
+WmfAbstractBackend::~WmfAbstractBackend()
 {
     delete mKwmf;
 }
 
 
-bool KoWmfRead::load(const QString& filename)
+bool WmfAbstractBackend::load(const QString& filename)
 {
     QFile file(filename);
 
     if (!file.open(QIODevice::ReadOnly)) {
-        kDebug() << "KoWmfRead : Cannot open file" << QFile::encodeName(filename);
+        kDebug() << "Cannot open file" << QFile::encodeName(filename);
         return false;
     }
 
@@ -52,43 +53,43 @@ bool KoWmfRead::load(const QString& filename)
 }
 
 
-bool KoWmfRead::load(const QByteArray& array)
+bool WmfAbstractBackend::load(const QByteArray& array)
 {
     return mKwmf->load(array);
 }
 
 
-bool KoWmfRead::play()
+bool WmfAbstractBackend::play()
 {
     return mKwmf->play(this);
 }
 
 
-bool KoWmfRead::isValid(void) const
+bool WmfAbstractBackend::isValid(void) const
 {
     return mKwmf->mValid;
 }
 
 
-bool KoWmfRead::isStandard(void) const
+bool WmfAbstractBackend::isStandard(void) const
 {
     return mKwmf->mStandard;
 }
 
 
-bool KoWmfRead::isPlaceable(void) const
+bool WmfAbstractBackend::isPlaceable(void) const
 {
     return mKwmf->mPlaceable;
 }
 
 
-bool KoWmfRead::isEnhanced(void) const
+bool WmfAbstractBackend::isEnhanced(void) const
 {
     return mKwmf->mEnhanced;
 }
 
 
-QRect KoWmfRead::boundingRect(void) const
+QRect WmfAbstractBackend::boundingRect(void) const
 {
     return QRect(QPoint(mKwmf->mBBoxLeft, mKwmf->mBBoxTop),
                  QSize(mKwmf->mBBoxRight - mKwmf->mBBoxLeft,
@@ -96,7 +97,7 @@ QRect KoWmfRead::boundingRect(void) const
 }
 
 
-int KoWmfRead::defaultDpi(void) const
+int WmfAbstractBackend::defaultDpi(void) const
 {
     if (mKwmf->mPlaceable) {
         return mKwmf->mDpi;
@@ -106,7 +107,7 @@ int KoWmfRead::defaultDpi(void) const
 }
 
 
-void KoWmfRead::setDebug(int nbrFunc)
+void WmfAbstractBackend::setDebug(int nbrFunc)
 {
     mKwmf->mNbrFunc = nbrFunc;
 }
