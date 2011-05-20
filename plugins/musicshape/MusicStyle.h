@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,9 +43,22 @@ public:
     virtual void renderAccidental(QPainter& painter, qreal x, qreal y, int accidental, const QColor& color = Qt::black);
     virtual void renderTimeSignatureNumber(QPainter& painter, qreal x, qreal y, qreal w, int number, const QColor& color = Qt::black);
     virtual void renderNoteFlags(QPainter& painter, qreal x, qreal y, MusicCore::Duration duration, bool stemsUp, const QColor& color = Qt::black);
+    /**
+     * Render text either as text or as path, as specified by the textAsPath value
+     */
+    virtual void renderText(QPainter& painter, qreal x, qreal y, const QString& text);
+    /**
+     * Whether to render text as paths. Default value is false (render text as text)
+     */
+    virtual void setTextAsPath(bool drawTextAsPath);
+    /**
+     * Whether to render text as paths
+     */
+    virtual bool textAsPath() const;
 private:
     QPen m_staffLinePen, m_stemPen, m_noteDotPen;
     QFont m_font;
+    bool m_textAsPath;
 };
 
 #endif // MUSIC_STYLE_H

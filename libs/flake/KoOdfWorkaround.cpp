@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Johannes Simon <johannes.simon@gmail.com>
-   Copyright (C) 2010 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2010,2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,10 +25,12 @@
 #include "KoShape.h"
 #include <KoPathShape.h>
 #include <KoOdfLoadingContext.h>
+#include <KoOdfWorkaround.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoColorBackground.h>
 #include <KoStyleStack.h>
+#include <KoUnit.h>
 
 #include <QPen>
 #include <QColor>
@@ -220,10 +222,26 @@ KoColorBackground *KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoS
             const QString color(styleStack.property(KoXmlNS::draw, "fill-color"));
             if (color.isEmpty()) {
                 colorBackground = new KoColorBackground(QColor(153, 204, 255));
-            } else { 
+            } else {
                 colorBackground = new KoColorBackground(color);
             }
         }
     }
     return colorBackground;
+}
+
+void KoOdfWorkaround::fixGluePointPosition(QString &positionString, KoShapeLoadingContext &context)
+{
+    KoOdfLoadingContext::GeneratorType type(context.odfLoadingContext().generatorType());
+    if (type == KoOdfLoadingContext::OpenOffice && !positionString.endsWith('%')) {
+        const qreal pos = KoUnit::parseValue(positionString);
+        positionString = QString("%1%%").arg(KoUnit::toMillimeter(pos));
+    }
+}
+
+void KoOdfWorkaround::fixMissingFillRule(Qt::FillRule& fillRule, KoShapeLoadingContext& context)
+{
+    if ((context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice)) {
+        fillRule = Qt::OddEvenFill;
+    }
 }

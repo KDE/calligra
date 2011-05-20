@@ -106,7 +106,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->setColumnStretch( 1, 1 );
     layout->setColumnStretch( 2, 2 );
     layout->setSpacing( 0 );
-    layout->setMargin( 3 );
+    layout->setMargin( 0 );
 
     updateRemoveButtonState();
 }
@@ -150,9 +150,11 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
         KNS3::DownloadDialog dialog(this);
         dialog.exec();
+/*
         foreach (const KNS3::Entry& e, dialog.changedEntries()) {
             qDebug() << "Changed Entry: " << e.name() << e.installedFiles();
         }
+*/
     }
     else if (button == Button_GhnsUpload) {
 

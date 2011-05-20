@@ -142,6 +142,16 @@ bool Account::isChildOf( const Account *account) const
     return  m_parent->isChildOf( account );
 }
 
+bool Account::isBaselined( long id ) const
+{
+    foreach ( CostPlace *p, m_costPlaces ) {
+        if ( p->isBaselined( id ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Account::load(KoXmlElement &element, Project &project) {
     m_name = element.attribute("name");
     m_description = element.attribute("description");
@@ -539,6 +549,35 @@ Account::CostPlace::~CostPlace() {
         if (m_running)
             m_resource->setAccount(0);
     }
+}
+
+bool Account::CostPlace::isBaselined( long id ) const
+{
+    if ( m_node ) {
+        if ( m_running ) {
+            if ( m_node->isBaselined( id ) ) {
+                return true;
+            }
+        }
+        if ( m_startup ) {
+            if ( m_node->isBaselined( id ) ) {
+                return true;
+            }
+        }
+        if ( m_shutdown ) {
+            if ( m_node->isBaselined( id ) ) {
+                return true;
+            }
+        }
+    }
+    if ( m_resource ) {
+        if ( m_running ) {
+            if ( m_resource->isBaselined( id ) ) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void Account::CostPlace::setNode(Node* node)

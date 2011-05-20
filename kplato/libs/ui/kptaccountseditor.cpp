@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -214,7 +215,9 @@ void AccountsEditor::updateActionsEnabled(  bool on )
     bool more = lst.count() > 1;
     actionAddAccount->setEnabled( on && !more );
     actionAddSubAccount->setEnabled( on && one );
-    actionDeleteSelection->setEnabled( on && one );
+
+    bool baselined = project() ? project()->isBaselined() : false;
+    actionDeleteSelection->setEnabled( on && one && ! baselined );
 }
 
 void AccountsEditor::setupGui()

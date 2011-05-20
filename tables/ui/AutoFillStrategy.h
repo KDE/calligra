@@ -34,7 +34,7 @@ namespace Tables
  * Created, when the user presses the left mouse button on the selection handle.
  * Nothing happens, if the selection did not change.
  */
-class CALLIGRA_TABLES_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
+class CALLIGRA_TABLES_COMMON_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
 {
 public:
     /**

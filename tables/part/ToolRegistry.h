@@ -33,7 +33,7 @@ namespace Tables
  * Registry for tools.
  * \ingroup Plugin
  */
-class CALLIGRA_TABLES_EXPORT ToolRegistry : public QObject
+class CALLIGRA_TABLES_COMMON_EXPORT ToolRegistry : public QObject
 {
 public:
     /**

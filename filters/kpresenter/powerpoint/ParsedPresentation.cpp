@@ -31,10 +31,16 @@ readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
         path = "PP97_DUALSTORAGE" + path;
     }
     POLE::Stream stream(&storage, path);
+    if (stream.fail()) {
+        qDebug() << "Unable to construct " << streampath << "stream";
+        return false;
+    }
+
     QByteArray array;
     array.resize(stream.size());
     unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
     if (r != stream.size()) {
+        qDebug() << "Error while reading from " << streampath << "stream";
         return false;
     }
     buffer.setData(array);
@@ -96,7 +102,8 @@ parsePictures(POLE::Storage& storage, PicturesStream& pps)
 {
     QBuffer buffer;
     if (!readStream(storage, "/Pictures", buffer)) {
-        return false;
+        qDebug() << "Failed to open /Pictures stream, no big deal (OPTIONAL).";
+        return true;
     }
     LEInputStream stream(&buffer);
     try {
@@ -307,6 +314,8 @@ ParsedPresentation::parse(POLE::Storage& storage)
 const MSO::MasterOrSlideContainer*
 ParsedPresentation::getMaster(const SlideContainer* slide) const
 {
+    //masterIdRef MUST be 0x00000000 if the record that contains this SlideAtom
+    //record is a MainMasterContainer record (MS-PPT 2.5.10)
     if (!slide) return 0;
     foreach(const MasterPersistAtom& m, documentContainer->masterList.rgMasterPersistAtom) {
         if (m.masterId == slide->slideAtom.masterIdRef) {

@@ -46,6 +46,8 @@ void PerformanceTester::cleanup()
 void PerformanceTester::init()
 {
     p1 = new Project();
+    p1->setId( p1->uniqueNodeId() );
+    p1->registerNodeId( p1 );
     p1->setName( "PerformanceTester" );
     p1->setConstraintStartTime( DateTime::fromString( "2010-11-19T08:00:00Z" ) );
     p1->setConstraintEndTime( DateTime::fromString( "2010-11-29T16:00:00Z" ) );
@@ -62,22 +64,22 @@ void PerformanceTester::init()
     }
     p1->addCalendar( c );
 
-    s1 = p1->createTask( p1 );
+    s1 = p1->createTask();
     s1->setName( "S1" );
     p1->addTask( s1, p1 );
 
-    t1 = p1->createTask( s1 );
+    t1 = p1->createTask();
     t1->setName( "T1" );
     t1->estimate()->setUnit( Duration::Unit_d );
     t1->estimate()->setExpectedEstimate( 5.0 );
     t1->estimate()->setType( Estimate::Type_Effort );
     p1->addSubTask( t1, s1 );
     
-    s2 = p1->createTask( p1 );
+    s2 = p1->createTask();
     s2->setName( "S2" );
     p1->addTask( s2, p1 );
 
-    m1 = p1->createTask( s2 );
+    m1 = p1->createTask();
     m1->estimate()->setExpectedEstimate( 0 );
     m1->setName( "M1" );
     p1->addSubTask( m1, s2 );
@@ -976,7 +978,7 @@ void PerformanceTester::bcwpPrDayProject()
     QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.25 ); // 100% progress
 
     // add a new task with a material resource
-    Task *tt = p1->createTask( p1 );
+    Task *tt = p1->createTask();
     tt->setName( "TT" );
     p1->addTask( tt, p1 );
     tt->estimate()->setUnit( Duration::Unit_d );

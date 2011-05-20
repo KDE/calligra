@@ -124,9 +124,9 @@ enum Type {
 };
 
 //helper functions for the formatting
-CALLIGRA_TABLES_EXPORT bool isDate(Type type);
-CALLIGRA_TABLES_EXPORT bool isTime(Type type);
-CALLIGRA_TABLES_EXPORT bool isFraction(Type type);
+CALLIGRA_TABLES_ODF_EXPORT bool isDate(Type type);
+CALLIGRA_TABLES_ODF_EXPORT bool isTime(Type type);
+CALLIGRA_TABLES_ODF_EXPORT bool isFraction(Type type);
 
 } // namespace Format
 } // namespace Tables

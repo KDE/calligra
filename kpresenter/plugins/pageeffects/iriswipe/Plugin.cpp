@@ -42,7 +42,6 @@ Plugin::Plugin(QObject *parent, const QVariantList &)
     KPrPageEffectRegistry::instance()->add(new KPrIrisWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrTriangleWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrArrowHeadWipeEffectFactory());
-    KPrPageEffectRegistry::instance()->add(new KPrArrowHeadWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrEllipseWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrRoundRectWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrPentagonWipeEffectFactory());

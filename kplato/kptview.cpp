@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -110,6 +110,7 @@
 #include "kptpertresult.h"
 #include "kpttaskdefaultpanel.h"
 #include "kptworkpackageconfigpanel.h"
+#include "kptcolorsconfigpanel.h"
 #include "kptinsertfiledlg.h"
 #include "kpthtmlview.h"
 #include "reports/reportview.h"
@@ -372,7 +373,7 @@ void View::slotCreateTemplate()
     QPixmap pix = getPart()->generatePreview(QSize(width, height));
 
     KTemporaryFile tempFile;
-    tempFile.setSuffix( ".kplatot" );
+    tempFile.setSuffix( ".plant" );
     //Check that creation of temp file was successful
     if ( ! tempFile.open() ) {
         kWarning()<<"Creation of temprary file to store template failed.";
@@ -380,7 +381,7 @@ void View::slotCreateTemplate()
     }
     kDebug()<<"Created temporaray file:"<<tempFile.fileName();
     getPart()->saveNativeFormat( tempFile.fileName() );
-    KoTemplateCreateDia::createTemplate( "kplato_template", Factory::global(), tempFile.fileName(), pix, this );
+    KoTemplateCreateDia::createTemplate( "plan_template", Factory::global(), tempFile.fileName(), pix, this );
 }
 
 void View::createViews()
@@ -839,6 +840,7 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
 
     connect( handler->scheduleEditor(), SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
     connect( handler->scheduleEditor(), SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+    connect( handler->scheduleEditor(), SIGNAL( moveScheduleManager(ScheduleManager*, ScheduleManager*, int)), SLOT(slotMoveScheduleManager(ScheduleManager*, ScheduleManager*, int)));
 
     connect( handler->scheduleEditor(), SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
@@ -1244,7 +1246,7 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    emit currentScheduleManagerChanged( currentScheduleManager() );
+    v->setScheduleManager( currentScheduleManager() );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     connect( v, SIGNAL( editReportDesign( ReportView* ) ), SLOT( slotEditReportDesign( ReportView* ) ) );
@@ -1546,9 +1548,6 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    if ( sm == currentScheduleManager() ) {
-        connect( project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
-    }
 //    m_text = new QLabel( i18nc( "@info:status 1=schedule name", "%1: Calculating...", sm->name() ) );
 //    addStatusBarItem( m_text, 0, true );
     m_progress = new QProgressBar();
@@ -1669,9 +1668,18 @@ void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
     getPart() ->addCommand( cmd );
 }
 
+void View::slotMoveScheduleManager( ScheduleManager *sm, ScheduleManager *parent, int index )
+{
+    if ( sm == 0 ) {
+        return;
+    }
+    MoveScheduleManagerCmd *cmd =  new MoveScheduleManagerCmd( sm, parent, index, i18n( "Move schedule %1", sm->name() ) );
+    getPart() ->addCommand( cmd );
+}
+
 void View::slotAddSubTask()
 {
-    Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
+    Task * node = getProject().createTask( getPart() ->config().taskDefaults() );
     SubTaskAddDialog *dia = new SubTaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotAddSubTaskFinished(int)));
     dia->show();
@@ -1694,7 +1702,7 @@ void View::slotAddSubTaskFinished( int result )
 
 void View::slotAddTask()
 {
-    Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
+    Task * node = getProject().createTask( getPart() ->config().taskDefaults() );
     TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
     connect(dia, SIGNAL(finished(int)), SLOT(slotAddTaskFinished(int)));
     dia->show();
@@ -1717,7 +1725,7 @@ void View::slotAddTaskFinished( int result )
 
 void View::slotAddMilestone()
 {
-    Task * node = getProject().createTask( currentTask() );
+    Task * node = getProject().createTask();
     node->estimate() ->clear();
 
     TaskAddDialog *dia = new TaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
@@ -1743,7 +1751,7 @@ void View::slotAddMilestoneFinished( int result )
 
 void View::slotAddSubMilestone()
 {
-    Task * node = getProject().createTask( currentTask() );
+    Task * node = getProject().createTask();
     node->estimate() ->clear();
 
     SubTaskAddDialog *dia = new SubTaskAddDialog( getProject(), *node, currentNode(), getProject().accounts(), this );
@@ -1802,6 +1810,7 @@ void View::slotConfigure()
     }
     KConfigDialog *dialog = new KConfigDialog( this, "KPlato Settings", KPlatoSettings::self() );
     dialog->addPage(new TaskDefaultPanel(), i18n("Task Defaults"), "view-task" );
+    dialog->addPage(new ColorsConfigPanel(), i18n("Task Colors"), "fill-color" );
     dialog->addPage(new WorkPackageConfigPanel(), i18n("Work Package"), "kplatowork" );
 /*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
     connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/
@@ -2604,7 +2613,6 @@ void View::slotOpenReportFile()
 {
     KFileDialog *dlg = new KFileDialog( KUrl(), QString(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOpenReportFileFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -2633,6 +2641,7 @@ void View::slotOpenReportFileFinished( int result )
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
+    connect(dlg, SIGNAL(modifyReportDefinition(QUndoCommand*)), SLOT(slotModifyReportDefinition(QUndoCommand*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
     dlg->show();
     dlg->raise();
@@ -2948,7 +2957,7 @@ QString View::standardTaskStatusReport() const
     s += "<report:page-style report:print-orientation=\"portrait\" fo:margin-bottom=\"1,00cm\" fo:margin-top=\"1,00cm\" fo:margin-left=\"1,00cm\" fo:margin-right=\"1,00cm\" report:page-size=\"A4\" >predefined</report:page-style>";
     s += "<report:body>";
     s += "<report:section svg:height=\"1,75cm\" fo:background-color=\"#ffffff\" report:section-type=\"header-page-any\" >";
-    s += "<report:field report:name=\"field16\" report:horizontal-align=\"left\" report:control-source=\"=project.Manager()\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0cm\" report:vertical-align=\"bottom\" svg:height=\"0.9388cm\" report:z-index=\"-2\" >";
+    s += "<report:field report:name=\"field16\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Manager()\" svg:x=\"13cm\" svg:width=\"5.9714cm\" svg:y=\"0cm\" report:vertical-align=\"bottom\" svg:height=\"0.9388cm\" report:z-index=\"-2\" >";
     s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
@@ -2956,7 +2965,7 @@ QString View::standardTaskStatusReport() const
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
-    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:control-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0cm\" report:vertical-align=\"bottom\" svg:height=\"1cm\" report:z-index=\"-1\" >";
+    s += "<report:field report:name=\"field17\" report:horizontal-align=\"left\" report:item-data-source=\"=project.Name()\" svg:x=\"0cm\" svg:width=\"12.5cm\" svg:y=\"0cm\" report:vertical-align=\"bottom\" svg:height=\"1cm\" report:z-index=\"-1\" >";
     s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"10\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
@@ -2975,11 +2984,11 @@ QString View::standardTaskStatusReport() const
     s += "</report:label>";
     s += "</report:section>";
     s += "<report:section svg:height=\"2,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"footer-page-any\" >";
-    s += "<report:field report:name=\"field10\" report:horizontal-align=\"right\" report:control-source=\"=constants.PageNumber()\" svg:x=\"6.75cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
+    s += "<report:field report:name=\"field10\" report:horizontal-align=\"right\" report:item-data-source=\"=constants.PageNumber()\" svg:x=\"6.75cm\" svg:width=\"0.75cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
-    s += "<report:field report:name=\"field11\" report:horizontal-align=\"left\" report:control-source=\"=constants.PageTotal()\" svg:x=\"8.25cm\" svg:width=\"3cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
+    s += "<report:field report:name=\"field11\" report:horizontal-align=\"left\" report:item-data-source=\"=constants.PageTotal()\" svg:x=\"8.25cm\" svg:width=\"3cm\" svg:y=\"0.25cm\" report:vertical-align=\"center\" svg:height=\"0.75cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
@@ -3002,7 +3011,7 @@ QString View::standardTaskStatusReport() const
         s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
         s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
-    s += "<report:field report:name=\"field8\" report:horizontal-align=\"left\" report:control-source=\"Parent\" svg:x=\"0.5cm\" svg:width=\"8cm\" svg:y=\"1cm\" report:vertical-align=\"center\" svg:height=\"0.689cm\" report:z-index=\"0\" >";
+    s += "<report:field report:name=\"field8\" report:horizontal-align=\"left\" report:item-data-source=\"Parent\" svg:x=\"0.5cm\" svg:width=\"8cm\" svg:y=\"1cm\" report:vertical-align=\"center\" svg:height=\"0.689cm\" report:z-index=\"0\" >";
         s += "<report:text-style fo:font-weight=\"bold\" fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
         s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
@@ -3013,11 +3022,11 @@ QString View::standardTaskStatusReport() const
     s += "</report:section>";
     s += "</report:group>";
     s += "<report:section svg:height=\"0,50cm\" fo:background-color=\"#ffffff\" report:section-type=\"detail\" >";
-    s += "<report:field report:name=\"field7\" report:horizontal-align=\"left\" report:control-source=\"NodeName\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
+    s += "<report:field report:name=\"field7\" report:horizontal-align=\"left\" report:item-data-source=\"NodeName\" svg:x=\"0.5cm\" svg:width=\"3.75cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";
-    s += "<report:field report:name=\"field9\" report:horizontal-align=\"center\" report:control-source=\"NodeCompleted\" svg:x=\"4.25cm\" svg:width=\"4.25cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
+    s += "<report:field report:name=\"field9\" report:horizontal-align=\"center\" report:item-data-source=\"NodeCompleted\" svg:x=\"4.25cm\" svg:width=\"4.25cm\" svg:y=\"0cm\" report:vertical-align=\"center\" svg:height=\"0.5cm\" report:z-index=\"0\" >";
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:field>";

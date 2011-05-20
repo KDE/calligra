@@ -34,6 +34,8 @@
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option.h>
+#include <kis_color_source_option.h>
+#include <kis_pressure_spacing_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -57,6 +59,7 @@ public:
 private:
     KisColorSource* m_colorSource;
     KisPressureSizeOption m_sizeOption;
+    KisPressureSpacingOption m_spacingOption;
     KisPressureMirrorOption m_mirrorOption;
     KisPressureOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;
@@ -68,6 +71,7 @@ private:
     QList<KisPressureHSVOption*> m_hsvOptions;
     KoColorTransformation* m_hsvTransfo;
     KisPaintDeviceSP m_dab;
+    KisPaintDeviceSP m_colorSourceDevice;
 };
 
 #endif // KIS_BRUSHOP_H_

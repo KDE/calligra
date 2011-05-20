@@ -21,16 +21,22 @@
 
 #include <kparts/plugin.h>
 
+class GoogleDocumentService;
+class LoginWindow;
+
 class OnlineDocument : public KParts::Plugin
 {
     Q_OBJECT
-    public:
-        OnlineDocument(QObject *parent, const QVariantList &);
-        virtual ~OnlineDocument();
+public:
+    OnlineDocument(QObject *parent, const QVariantList &);
+    virtual ~OnlineDocument();
 
-    private slots:
-        void slotOnlineDocument();
-        void receivedOnlineDocument(const QString & path);
+private slots:
+    void slotOnlineDocument();
+    void receivedOnlineDocument(QString path);
+
+private:
+    LoginWindow *m_login;
 };
 
 #endif

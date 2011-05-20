@@ -81,7 +81,8 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
 
 KexiSourceSelector::~KexiSourceSelector()
 {
-
+    delete m_kexiDBData;
+    delete m_kexiMigrateData;
 }
 
 QStringList KexiSourceSelector::queryList()

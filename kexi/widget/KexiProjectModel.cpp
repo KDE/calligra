@@ -65,8 +65,9 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     delete d->rootItem;
     d->rootItem = new KexiProjectModelItem(prj->data()->databaseName());
     
-    KexiPart::PartInfoList* plist = Kexi::partManager().partInfoList();
-    
+    KexiPart::PartInfoList* plist = Kexi::partManager().infoList();
+    if (!plist)
+        return;
     foreach(KexiPart::Info *info, *plist) {
         if (!info->isVisibleInNavigator())
             continue;
@@ -78,8 +79,8 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
         //load part - we need this to have GUI merged with part's actions
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
         kDebug() << info->partClass() << info->objectName();
-        KexiPart::Part *p = Kexi::partManager().part(info);
-        if (p) {
+// no need to load part so early:        KexiPart::Part *p = Kexi::partManager().part(info);
+// no need to load part so early:        if (p) {
             KexiProjectModelItem *groupItem = 0;
             if (d->itemsPartClass.isEmpty() /*|| m_itemsPartClass == info->partClass()*/) {
                 groupItem = addGroup(*info, d->rootItem);
@@ -111,6 +112,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
                 break; //the only group added, so our work is completed
             }
             groupItem->sortChildren();
+/* no need to load part so early:            
         } else {
             //add this error to the list that will be displayed later
             QString msg, details;
@@ -125,7 +127,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
                     partManagerErrorMessages->append(QString("<br>") + details);
                 partManagerErrorMessages->append("</li>");
             }
-        }
+        }*/
     }
     if (partManagerErrorMessages && !partManagerErrorMessages->isEmpty())
         partManagerErrorMessages->append("</ul></p>");

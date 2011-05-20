@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright 2004 Ariya Hidayat <ariya@kde.org>
@@ -46,7 +46,7 @@ class Map;
 class Sheet;
 class SheetAccessModel;
 
-class CALLIGRA_TABLES_EXPORT DocBase : public KoDocument
+class CALLIGRA_TABLES_ODF_EXPORT DocBase : public KoDocument
 {
     Q_OBJECT
 public:

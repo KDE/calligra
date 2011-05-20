@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Basic project
 Name[ca]=Projecte bàsic
+Name[ca@valencia]=Projecte bàsic
 Name[da]=Basisprojekt
 Name[de]=Einfaches Projekt
+Name[el]=Βασικό έργο
 Name[en_GB]=Basic project
 Name[es]=Proyecto básico
 Name[et]=Lihtne projekt
@@ -22,5 +24,5 @@ Name[x-test]=xxBasic projectxx
 Name[zh_TW]=基本專案
 Type=Link
 Icon=template_timechart
-URL=.source/Basicproject.kplatot
+URL=.source/Basicproject.plant
 X-KDE-Hidden=false

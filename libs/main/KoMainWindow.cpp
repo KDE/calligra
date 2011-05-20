@@ -208,12 +208,12 @@ public:
     QByteArray lastExportedFormat;
     int lastExportSpecialOutputFlag;
 
-    QMap<QString, QDockWidget*> dockWidgetsMap;
-    KActionMenu* dockWidgetMenu;
-    QMap<QDockWidget*, bool> dockWidgetVisibilityMap;
+    QMap<QString, QDockWidget *> dockWidgetsMap;
+    KActionMenu *dockWidgetMenu;
+    QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     KoDockerManager *dockerManager;
-    QList<QDockWidget*> dockWidgets;
-    QList<QDockWidget*> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
+    QList<QDockWidget *> dockWidgets;
+    QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -341,7 +341,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->splitViewActionList.append(sep);
 
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
-    d->toggleDockers->setCheckedState(KGuiItem(i18n("Hide Dockers")));
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
 
@@ -384,7 +383,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     restoreWindowSize( config );
 
     d->dockerManager = new KoDockerManager(this);
-    connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
 }
 
 KoMainWindow::~KoMainWindow()
@@ -1046,6 +1044,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
     if (queryClose()) {
+        if (d->docToOpen) {
+            // The open pane is visible
+            d->docToOpen->deleteOpenPane(true);
+        }
         // Reshow the docker that were temporarely hidden before saving settings
         foreach(QDockWidget* dw, d->hiddenDockwidgets) {
             dw->show();
@@ -1325,10 +1327,23 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
     if (!rootView())
         return 0;
     if (pdfFileName.isEmpty()) {
-        KFileDialog dialog(KUrl("kfiledialog:///SaveDialog/"), QString::fromLatin1("*.pdf *.ps"), this);
+        KUrl startUrl = KUrl("kfiledialog:///SaveDialog/");
+        KoDocument* pDoc = rootDocument();
+        /** if document has a file name, take file name and replace extension with .pdf */
+        if (pDoc && pDoc->url().isValid()) {
+            startUrl = pDoc->url();
+            QString fileName = startUrl.fileName();
+            fileName = fileName.replace( QRegExp( "\\.\\w{2,5}$", Qt::CaseInsensitive ), ".pdf" );
+            startUrl.setFileName( fileName );
+        }
+
+        QStringList mimeTypes;
+        mimeTypes << "application/pdf" << "application/postscript";
+        KFileDialog dialog(startUrl, QString(), this);
+        dialog.setMimeFilter(mimeTypes);
         dialog.setObjectName("print file");
         dialog.setMode(KFile::File);
-        dialog.setCaption(i18n("Write PDF"));
+        dialog.setCaption(i18n("Export to PDF"));
         if (dialog.exec() != QDialog::Accepted)
             return 0;
         KUrl url(dialog.selectedUrl());
@@ -1350,6 +1365,7 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
 
     // TODO for remote files we have to first save locally and then upload.
     printJob->printer().setOutputFileName(pdfFileName);
+    printJob->printer().setColorMode(QPrinter::Color);
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
     return printJob;
 }
@@ -1357,7 +1373,18 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
 
 void KoMainWindow::slotConfigureKeys()
 {
+    //The undo/redo action text is "undo" + command, replace by simple text while inside editor
+    QAction* undoAction = currentView()->actionCollection()->action("edit_undo");
+    QAction* redoAction = currentView()->actionCollection()->action("edit_redo");
+    QString oldUndoText = undoAction->text();
+    QString oldRedoText = redoAction->text();
+    undoAction->setText(i18n("Undo"));
+    redoAction->setText(i18n("Redo"));
+
     guiFactory()->configureShortcuts();
+
+    undoAction->setText(oldUndoText);
+    redoAction->setText(oldRedoText);
 }
 
 void KoMainWindow::slotConfigureToolbars()
@@ -1514,7 +1541,7 @@ void KoMainWindow::slotSetOrientation()
 
 void KoMainWindow::slotProgress(int value)
 {
-    //kDebug(30003) <<"KoMainWindow::slotProgress" << value;
+    kDebug(30003) << "KoMainWindow::slotProgress" << value;
     if (value <= -1) {
         if (d->progress) {
             statusBar()->removeWidget(d->progress);
@@ -1565,6 +1592,10 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         //kDebug(30003) <<"no need to change the GUI";
         return;
     }
+
+    // important so dockermanager can move toolbars back
+    emit beforeHandlingToolBars();
+
 
     KXMLGUIFactory *factory = guiFactory();
 
@@ -1638,6 +1669,8 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         d->activeView = 0;
         d->activePart = 0;
     }
+    // important so dockermanager can move toolbars where wanted
+    emit afterHandlingToolBars();
 // ###  setUpdatesEnabled( true );
 }
 

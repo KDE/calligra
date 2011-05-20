@@ -1,0 +1,20 @@
+set(braindumpcore_LIB_SRCS
+  State.cpp
+  StateCategory.cpp
+  StatesRegistry.cpp
+)
+
+kde4_add_library(braindumpcore SHARED ${braindumpcore_LIB_SRCS})
+target_link_libraries(braindumpcore ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSVG_LIBRARY} ${KDE4_KDECORE_LIBRARY})
+
+target_link_libraries(braindumpcore LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY})
+
+install(TARGETS braindumpcore ${INSTALL_TARGETS_DEFAULT_ARGS} )
+
+install(
+    FILES
+    StatesRegistry.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)
+

@@ -42,7 +42,7 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class MagicCurtain;
-
+class PageProcessingQueue;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
 
@@ -100,6 +100,12 @@ public:
     Q_SCRIPTABLE KWPageManager *pageManager() {
         return &m_pageManager;
     }
+    /**
+     * Return the frameLayout used in this document.
+     */
+    Q_SCRIPTABLE KWFrameLayout *frameLayout() {
+        return &m_frameLayout;
+    }
 
     /**
      * Insert a new page after another,
@@ -153,11 +159,7 @@ public:
         return m_config;
     }
 
-#ifndef NDEBUG
-    /// Use a log of kDebug calls to print out the internal state of the document and its members
-    void printDebug();
-#endif
-
+    /// This emits the pageSetupChanged signal which will call KWViewMode::updatePageCache.
     void firePageSetupChanged();
 
     // reimplemented slot from KoDocument
@@ -169,6 +171,9 @@ public:
 
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
+
+    /// Returns the PageProcessingQueue used to queue and process page-updates.
+    PageProcessingQueue* pageQueue();
 
 public slots:
     /// Relayout the pages
@@ -233,8 +238,8 @@ private:
     MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
     bool m_mainFramesetEverFinished;
 
-
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
+    PageProcessingQueue *m_pageQueue;
 };
 
 #endif

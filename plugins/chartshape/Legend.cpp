@@ -56,7 +56,7 @@
 // Kchart
 #include "PlotArea.h"
 #include "ScreenConversions.h"
-#include "Layout.h"
+#include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
 
 using namespace KChart;
@@ -381,7 +381,7 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
     // Calculate the clipping rect
     QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
     //clipRect.intersect( paintRect );
-    painter.setClipRect( paintRect );
+    painter.setClipRect( paintRect, Qt::IntersectClip );
 
     // Get the current zoom level
     QPointF zoomLevel;

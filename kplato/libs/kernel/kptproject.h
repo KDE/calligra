@@ -44,7 +44,6 @@
 #include <klocale.h>
 #include <ktimezone.h>
 
-class KPlatoXmlLoader;
 
 /// The main namespace.
 namespace KPlato
@@ -56,6 +55,7 @@ class ScheduleManager;
 class XMLLoaderObject;
 class Task;
 class SchedulerPlugin;
+class KPlatoXmlLoaderBase;
 
 /**
  * Project is the main node in a project, it contains child nodes and
@@ -127,7 +127,7 @@ public:
     
     /**
      * Add the node @p task to the project, after node @p position
-     * If @p postition is zero, it will be added to this project.
+     * If @p postition is zero or the project node, it will be added to this project.
      */
     bool addTask( Node* task, Node* position );
     /**
@@ -155,15 +155,15 @@ public:
     bool canMoveTaskDown( Node* node );
     bool moveTaskDown( Node* node );
     /**
-     * Create a task with a unique id with its parent set to @p parent.
-     * The task is not added to the parent. Do this with addSubTask().
+     * Create a task with a unique id.
+     * The task is not added to the project. Do this with addSubTask().
      */
-    Task *createTask( Node* parent );
+    Task *createTask();
     /**
-     * Create a copy of @p def with a unique id with its parent set to @p parent.
-     * The task is not added to the parent. Do this with addSubTask().
+     * Create a copy of @p def with a unique id.
+     * The task is not added to the project. Do this with addSubTask().
      */
-    Task *createTask( const Task &def, Node* parent );
+    Task *createTask( const Task &def );
 
     int resourceGroupCount() const { return m_resourceGroups.count(); }
     QList<ResourceGroup*> &resourceGroups();
@@ -431,6 +431,7 @@ public:
     bool isScheduleManager( void* ptr ) const;
     void addScheduleManager( ScheduleManager *sm, ScheduleManager *parent = 0, int index = -1 );
     int takeScheduleManager( ScheduleManager *sm );
+    void moveScheduleManager( ScheduleManager *sm, ScheduleManager *newparent = 0, int newindex = -1 );
     ScheduleManager *findScheduleManagerByName( const QString &name ) const;
     /// Returns a list of all schedule managers
     QList<ScheduleManager*> allScheduleManagers() const;
@@ -579,7 +580,9 @@ signals:
     void scheduleManagerToBeAdded( const ScheduleManager *sch, int row );
     void scheduleManagerRemoved( const ScheduleManager *sch );
     void scheduleManagerToBeRemoved( const ScheduleManager *sch );
-    
+    void scheduleManagerMoved( const ScheduleManager *sch, int row );
+    void scheduleManagerToBeMoved( const ScheduleManager *sch );
+
     void scheduleChanged( MainSchedule *sch );
     void scheduleToBeAdded( const ScheduleManager *manager, int row );
     void scheduleAdded( const MainSchedule *sch );
@@ -612,6 +615,8 @@ signals:
     void relationToBeRemoved( Relation *rel );
     /// Emitted when the relation @p rel has been removed.
     void relationRemoved( Relation *rel );
+    /// Emitted when the relation @p rel shall be modified.
+    void relationToBeModified( Relation *rel );
     /// Emitted when the relation @p rel has been modified.
     void relationModified( Relation *rel );
 
@@ -638,7 +643,7 @@ protected:
     void tasksBackward();
 
 protected:
-    friend class KPlatoXmlLoader;
+    friend class KPlatoXmlLoaderBase;
 
     virtual void changed(Node *node);
     

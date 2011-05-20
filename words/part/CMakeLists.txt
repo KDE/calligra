@@ -1,8 +1,9 @@
 project(wordspart)
 
-add_subdirectory( tests )
+#TODO port to textlayout-rework
+#add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES}  ${KDE4_INCLUDE_DIR}/threadweaver/ )
+include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### KWordPrivate library ###############
 
@@ -17,9 +18,9 @@ set(wordsprivate_LIB_SRCS
     KWGui.cpp
     KWView.cpp
     KWPage.cpp
+    KWPageCacheManager.cpp
     KWPageManager.cpp
     KWPageStyle.cpp
-    KWPageTextInfo.cpp
     KWViewMode.cpp
     KWViewModeNormal.cpp
     KWViewModePreview.cpp
@@ -27,23 +28,19 @@ set(wordsprivate_LIB_SRCS
     KWOdfLoader.cpp
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
-    KWDLoader.cpp
+    KWRootAreaProvider.cpp
 
-    frames/KWTextDocumentLayout.cpp
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
-    frames/KWTextFrame.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
-    frames/KWAnchorStrategy.cpp
     frames/KWOutlineShape.cpp
-    frames/Outline.cpp
     frames/KWPageBackground.cpp
 
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWFrameGeometry.cpp
-    dialogs/KWFrameRunaroundProperties.cpp
+    dialogs/KWRunAroundProperties.cpp
     dialogs/KWGeneralFrameProperties.cpp
     dialogs/KWFrameDialog.cpp
     dialogs/KWShapeConfigFactory.cpp
@@ -65,7 +62,6 @@ set(wordsprivate_LIB_SRCS
     commands/KWNewPageStyleCommand.cpp
     commands/KWFrameDeleteCommand.cpp
     commands/KWFrameCreateCommand.cpp
-    commands/KWCreateOutlineCommand.cpp
     commands/KWClipFrameCommand.cpp
     commands/KWRemoveFrameClipCommand.cpp
     commands/KWChangePageStyleCommand.cpp
@@ -81,7 +77,7 @@ endif( Soprano_FOUND )
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
     dialogs/KWFrameGeometry.ui
-    dialogs/KWFrameRunaroundProperties.ui
+    dialogs/KWRunAroundProperties.ui
     dialogs/KWGeneralFrameProperties.ui
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui
@@ -101,7 +97,7 @@ endif( Soprano_FOUND )
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(wordsprivate komain)
+target_link_libraries(wordsprivate komain textlayout)
 if( Soprano_FOUND )
     target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
@@ -165,7 +161,15 @@ KWCanvas.h
 KWCanvasItem.h
 KWDocument.h
 KWApplicationConfig.h
-frames/KWFrameLayout.h
 KWViewMode.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+KWView.h
+KWViewModeNormal.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/words/part COMPONENT Devel)
+
+install( FILES
+frames/KWFrame.h
+frames/KWFrameLayout.h
+frames/KWFrameSet.h
+frames/KWTextFrameSet.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 

@@ -47,7 +47,7 @@ typedef QHash<Cell, Cell> CellIndirection;
  * \ingroup Value
  * A formula token.
  */
-class CALLIGRA_TABLES_EXPORT Token
+class CALLIGRA_TABLES_ODF_EXPORT Token
 {
 public:
     /**
@@ -295,7 +295,7 @@ protected:
  *
  *
  */
-class CALLIGRA_TABLES_EXPORT Formula
+class CALLIGRA_TABLES_ODF_EXPORT Formula
 {
 public:
     /**

@@ -892,8 +892,9 @@ struct WV2_EXPORT BRC {
     U16 brcType:8;
 
     /**
-     * width of space to maintain between border and text within border. Must
-     * be 0 when BRC is a substructure of TC. Stored in points.
+     * Specifies the distance from the text to the border, in points.  For page
+     * borders, sprmSPgbProp can specify that this value shall specify the
+     * distance from the edge of the page to the border.
      */
     U16 dptSpace:5;
 
@@ -3548,11 +3549,18 @@ struct DOP {
     U16 grfSuppression:2;
 
     /**
-     * footnote position code
-     * 0 print as endnotes
-     * 1 print at bottom of page
-     * 2 print immediately beneath text
-     * Default 1.
+     * Specifies where footnotes are placed on the page when they are
+     * referenced by text in the current document for documents that have an
+     * nFib <= 0x00D9.  This MUST be one of the following values.
+     *
+     * 0 Specifies that all footnotes are placed at the end of the section in
+     * which they are referenced.
+     *
+     * 1 Specifies that footnotes are displayed at the bottom margin of the
+     * page on which the note reference mark appears.
+     *
+     * 2 Specifies that footnotes are displayed immediately following the last
+     * line of text on the page on which the note reference mark appears.
      */
     U16 fpc:2;
 
@@ -3567,16 +3575,23 @@ struct DOP {
     U16 grpfIhdt:8;
 
     /**
-     * restart index for footnotes
-     * 0 don't restart note numbering
-     * 1 restart for each section
-     * 2 restart for each page
-     * Default 0.
+     * Specifies when all automatic numbering for the footnote reference marks
+     * is restarted for documents that have an nFib <= 0x00D9.  For those
+     * documents that rely on rncFtn, when restarted, the next automatically
+     * numbered footnote in the document restarts to the specified nFtn value.
+     * This MUST be one of the following values.
+     *
+     * 0 Numbering continues from the previous section in the document.
+     * 1 Reset to the starting value for each unique section in the document.
+     * 2 Reset to the starting value for each unique page in the document.
      */
     U16 rncFtn:2;
 
     /**
-     * initial footnote number for document. Default 1.
+     * For those documents that have an nFib <= 0x00D9, this element specifies
+     * the starting number for the first automatically numbered footnotes in
+     * the document, and the first automatically numbered footnotes after each
+     * restart point that is specified by the rncFtn element.
      */
     U16 nFtn:14;
 
@@ -3852,22 +3867,33 @@ struct DOP {
     S32 cParas;
 
     /**
-     * restart endnote number code
-     * 0 don't restart endnote numbering
-     * 1 restart for each section
-     * 2 restart for each page
+     * Specifies when automatic numbering for the endnote reference marks is
+     * reset to the beginning number for documents that have an nFib <= 0x00D9.
+     * For those documents that rely on rncEdn, when restarted, the next
+     * automatically numbered endnote in the document is reset to the specified
+     * nEdn value.  This value MUST be one of the following.
+     *
+     * 0 Numbering of endnotes continues from the previous section.
+     * 1 Reset to the starting value for each unique section in the document.
+     * 2 Reset to the starting value for each unique page in the document.
      */
     U16 rncEdn:2;
 
     /**
-     * beginning endnote number
+     * For those documents that have an nFib <= 0x00D9, this element specifies
+     * the starting number for the first automatically numbered endnote in the
+     * document, and the first automatically numbered endnote after each
+     * restart point that is specified by the rncEdn element.
      */
     U16 nEdn:14;
 
     /**
-     * endnote position code
-     * 0 display endnotes at end of section
-     * 3 display endnotes at end of document
+     * Specifies where endnotes are placed on the page when they are referenced
+     * by text in the current document.  This value MUST be one of the
+     * following.
+     *
+     * 0 Endnotes placed at the end of the section in which they are referenced.
+     * 3 All endnotes are placed at the end of the current document.
      */
     U16 epc:2;
 
@@ -3879,6 +3905,7 @@ struct DOP {
      * 3 Upper case Letter
      * 4 Lower case Letter
      * [This field is obsoleted by nfcFtnRef2 at 0x1ec (Werner)]
+     * [unused14 in [MS-DOC] — v20101219 (uzak)]
      */
     U16 nfcFtnRef:4;
 
@@ -3890,6 +3917,7 @@ struct DOP {
      * 3 Upper case Letter
      * 4 Lower case Letter
      * [This field is obsoleted by nfcEdnRef2 at 0x1ee (Werner)]
+     * [unused15 in [MS-DOC] — v20101219 (uzak)]
      */
     U16 nfcEdnRef:4;
 
@@ -4250,7 +4278,9 @@ struct DOP {
     U32 unused488;
 
     /**
-     * number format code for auto footnote references
+     * For those documents that have an nFib <= 0x00D9, specifies the numbering
+     * format code to use for footnotes in the document.
+     *
      * 0 Arabic
      * 1 Upper case Roman
      * 2 Lower case Roman
@@ -4260,9 +4290,11 @@ struct DOP {
     S16 nfcFtnRef2;
 
     /**
-     * number format code for auto endnote references
+     * For those documents that have an nFib <= 0x00D9, specifies the numbering
+     * format code to use for endnotes in the document.
+     *
      * 0 Arabic
-     * <div CLASS="tt">1 Upper case Roman</div>
+     * 1 Upper case Roman
      * 2 Lower case Roman
      * 3 Upper case Letter
      * 4 Lower case Letter
@@ -4426,6 +4458,11 @@ struct FIB {
      * Same as reading :)
      */
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
+
+    /**
+     * Validate FIB.
+     */
+    bool valid() const;
 
     /**
      * Set all the fields to the inital value (default is 0)
@@ -5670,6 +5707,20 @@ struct FIB {
     U32 fcSttbfUssr;
 
     U32 lcbSttbfUssr;
+
+    /**
+     * An unsigned integer that specifies the count of 16-bit values
+     * corresponding to fibRgCswNew that follow.  This MUST be one of the
+     * following values, depending on the value of nFib.
+     *
+     * [nFib] [value]
+     * 0x00C1 0
+     * 0x00D9 0x0002
+     * 0x0101 0x0002
+     * 0x010C 0x0002
+     * 0x0112 0x0005
+     */
+    U16 cswNew;
 
 }; // FIB
 
@@ -7252,6 +7303,19 @@ struct PAP : public Shared {
      */
     DCS dcs;
 
+    /**
+     * An unsigned 8-bit integer value that specifies the outline level of the
+     * paragraph.  This value MUST be one of the following.
+     *
+     * 0x0 - 0x8
+     * The value is the zero-based outline level that this paragraph is in.
+     * 0x9
+     * The paragraph at any outline level; instead, the paragraph is body text.
+     *
+     * This MUST be ignored if the paragraph has an istd that is greater than
+     * or equal to 0x1 and less than or equal to 0x9.  By default, paragraphs
+     * are body text, and are therefore not in any outline level.
+     */
     S8 lvl;
 
     S8 fBiDi;
@@ -7801,16 +7865,17 @@ struct PICF : public Shared {
 
     // Data
     /**
-     * number of bytes in the PIC structure plus size of following picture
-     * data which may be a Window's metafile, a bitmap, or the filename of a TIFF
-     * file. In the case of a Macintosh PICT picture, this includes the size of
-     * the PIC, the standard "x" metafile, and the Macintosh PICT data. See Appendix
-     * B for more information.
+     * Number of bytes in the PICF structure plus size of following picture
+     * data which may be a Window's metafile, a bitmap, or the filename of a
+     * TIFF file.  In the case of a Macintosh PICT picture, this includes the
+     * size of the PIC, the standard "x" metafile, and the Macintosh PICT
+     * data. See Appendix B for more information.
      */
     U32 lcb;
 
     /**
-     * number of bytes in the PIC (to allow for future expansion).
+     * An unsigned integer that specifies the size, in bytes, of this PICF
+     * structure. This value MUST be 0x44.
      */
     U16 cbHeader;
 
@@ -7829,19 +7894,30 @@ struct PICF : public Shared {
      * Rect for window origin and extents when metafile is stored -- ignored
      * if 0 (8 bytes).
      */
+
+    /**
+     * innerHeader (14 bytes): A PICF_Shape structure that specifies additional
+     * header information.  According to [MS-DOC] — v20101219
+     */
     U8 bm_rcWinMF[14];
 
     /**
-     * horizontal measurement in twips of the rectangle the picture should
-     * be imaged within. when scaling bitmaps, dxaGoal and dyaGoal may be ignored
-     * if the operation would cause the bitmap to shrink or grow by a non -power-of-two
-     * factor
+     * [ BEGIN ] picmid (38 bytes): A PICMID structure that specifies the size
+     * and border information of the picture.  According to [MS-DOC] —
+     * v20101219
+     */
+
+    /**
+     * A signed integer that specifies the initial width of the picture, in
+     * twips, before cropping or scaling occurs. This value MUST be greater
+     * than zero.
      */
     S16 dxaGoal;
 
     /**
-     * vertical measurement in twips of the rectangle the picture should be
-     * imaged within.
+     * A signed integer that specifies the initial height of the picture, in
+     * twips, before cropping or scaling occurs. This value MUST be greater
+     * than zero.
      */
     S16 dyaGoal;
 
@@ -7856,25 +7932,22 @@ struct PICF : public Shared {
     U16 my;
 
     /**
-     * the amount the picture has been cropped on the left in twips. for all
-     * of the Crop values, a positive measurement means the specified border has
-     * been moved inward from its original setting and a negative measurement
-     * means the border has been moved outward from its original setting.
+     * dxaReserved1 - This value MUST be zero and MUST be ignored.
      */
     S16 dxaCropLeft;
 
     /**
-     * the amount the picture has been cropped on the top in twips.
+     * dyaReserved1 - This value MUST be zero and MUST be ignored.
      */
     S16 dyaCropTop;
 
     /**
-     * the amount the picture has been cropped on the right in twips.
+     * dxaReserved2 - This value MUST be zero and MUST be ignored.
      */
     S16 dxaCropRight;
 
     /**
-     * the amount the picture has been cropped on the bottom in twips.
+     * dyaReserved2 - This value MUST be zero and MUST be ignored.
      */
     S16 dyaCropBottom;
 
@@ -7937,17 +8010,20 @@ struct PICF : public Shared {
     BRC brcRight;
 
     /**
-     * horizontal offset of hand annotation origin
+     * This value MUST be zero and MUST be ignored.
      */
     S16 dxaOrigin;
 
     /**
-     * vertical offset of hand annotation origin
+     * This value MUST be zero and MUST be ignored.
      */
     S16 dyaOrigin;
 
     /**
-     * unused
+     * [ END ] picmid
+     */
+    /**
+     * This value MUST be 0 and MUST be ignored.
      */
     S16 cProps;
 
@@ -8499,9 +8575,9 @@ struct SEP : public Shared {
     U16 pgbPageDepth:2;
 
     /**
-     * page border offset from:
-     * 0 offset from text
-     * 1 offset from edge of page
+     * Specifies from where the offset of the page border is measured:
+     * 0 - offset measured from the text
+     * 1 - offset measured from the edge of the page
      */
     U16 pgbOffsetFrom:3;
 
@@ -8541,12 +8617,26 @@ struct SEP : public Shared {
     U32 dxaRight;
 
     /**
-     * default value is 1440 twipstop margin
+     * Specifies the height of the top margin, in twips.  A positive value
+     * indicates a minimum top margin; this margin MUST be grown to avoid
+     * overlapping the space that is occupied by headers.  A negative value
+     * indicates a fixed margin; the top margin MUST be the absolute value of
+     * the value that is specified by this SPRM regardless of the space that is
+     * occupied by headers.
+     *
+     * default value is 1440 twips
      */
     S32 dyaTop;
 
     /**
-     * default value is 1440 twipsbottom margin
+     * Specifies the height of the bottom margin, in twips.  A positive value
+     * specifies a minimum bottom margin; this margin MUST be grown to avoid
+     * overlapping the space that is occupied by footers or footnotes.  A
+     * negative value specifies a fixed margin; the bottom margin MUST be the
+     * absolute value of the value that is specified by this SPRM regardless of
+     * the space that is occupied by footers or footnotes.
+     *
+     * default value is 1440 twips
      */
     S32 dyaBottom;
 
@@ -8612,6 +8702,18 @@ struct SEP : public Shared {
      * multilevel autonumbering list data (see OLST definition)
      */
     OLST olstAnm;
+
+    /**
+     * Specifies the numbering format used for footnotes.  By default,
+     * footnotes use the msonfcArabic numbering format.
+     */
+    U16 nfcFtnRef;
+
+    /**
+     * Specifies the numbering format used for endnotes.  By default, endnotes
+     * use the msonfcLCRoman numbering format.
+     */
+    U16 nfcEdnRef;
 
 }; // SEP
 
@@ -8839,6 +8941,11 @@ struct STSHI {
      * Set all the fields to the inital value (default is 0)
      */
     void clear();
+
+    /**
+     * Dumps all fields of this structure (for debugging)
+     */
+    void dump() const;
 
     // Size of the structure
     static const unsigned int sizeOf;

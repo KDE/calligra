@@ -28,6 +28,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kmessagebox.h>
 
 #include "KoColorSpace.h"
 #include "KoStore.h"
@@ -71,11 +72,9 @@ KisClipboard* KisClipboard::instance()
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 {
-    dbgUI << selection->exactBounds();
-
-    if (!selection)
+    if (!dev)
         return;
 
     m_hasClip = true;
@@ -89,10 +88,10 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
 
     // Layer data
     if (store->open("layerdata")) {
-        if (!selection->write(store)) {
-            selection->disconnect();
+        if (!dev->write(store)) {
+            dev->disconnect();
             store->close();
-	    delete store;
+            delete store;
             return;
         }
         store->close();
@@ -105,18 +104,18 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
     }
     // ColorSpace id of layer data
     if (store->open("colormodel")) {
-        QString csName = selection->colorSpace()->colorModelId().id();
+        QString csName = dev->colorSpace()->colorModelId().id();
         store->write(csName.toAscii(), strlen(csName.toAscii()));
         store->close();
     }
     if (store->open("colordepth")) {
-        QString csName = selection->colorSpace()->colorDepthId().id();
+        QString csName = dev->colorSpace()->colorDepthId().id();
         store->write(csName.toAscii(), strlen(csName.toAscii()));
         store->close();
     }
 
-    if (selection->colorSpace()->profile()) {
-        const KoColorProfile *profile = selection->colorSpace()->profile();
+    if (dev->colorSpace()->profile()) {
+        const KoColorProfile *profile = dev->colorSpace()->profile();
         KisAnnotationSP annotation;
 
         if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
@@ -134,32 +133,54 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
 
     delete store;
 
-    // We also create a QImage so we can interchange with other applications
-    QImage qimage;
-    KisConfig cfg;
-    QString monitorProfileName = cfg.monitorProfile();
-    const KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
-    qimage = selection->convertToQImage(monitorProfile);
+
 
     QMimeData *mimeData = new QMimeData;
     Q_CHECK_PTR(mimeData);
 
     if (mimeData) {
-        if (!qimage.isNull()) {
+        mimeData->setData(mimeType, buffer.buffer());
+    }
+
+    QRect rc = dev->exactBounds();
+    // warn if the clip is over ten megapixels
+    bool makeExchangeClip = true;
+    if (rc.width() * rc.height() > 10 * 1024 * 1024) {
+        makeExchangeClip =
+                (KMessageBox::Continue ==
+                 KMessageBox::warningContinueCancel(0,
+                                                    i18n("You are putting more than 10 megapixels on the clipboard."
+                                                         " Do you want to make this data available to other applications as well?"),
+                                                    i18n("Krita"),
+                                                    KStandardGuiItem::cont(),
+                                                    KStandardGuiItem::cancel(),
+                                                    "krita_big_clip_on_clipboard"));
+    }
+
+    // We also create a QImage so we can interchange with other applications
+    if (makeExchangeClip) {
+        QImage qimage;
+        KisConfig cfg;
+        QString monitorProfileName = cfg.monitorProfile();
+        const KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+        qimage = dev->convertToQImage(monitorProfile);
+        if (!qimage.isNull() && mimeData) {
             mimeData->setImageData(qimage);
         }
 
-        mimeData->setData(mimeType, buffer.buffer());
+    }
 
+    if (mimeData) {
         m_pushedClipboard = true;
         QClipboard *cb = QApplication::clipboard();
         cb->setMimeData(mimeData);
     }
+
 }
 
 KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
 {
-    bool customTopLeft = false;
+    bool customTopLeft = false; // will be true if pasting from a krita clip
     QPoint topLeft = topLeftHint;
     QClipboard *cb = QApplication::clipboard();
     QByteArray mimeType("application/x-krita-selection");
@@ -221,7 +242,8 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
             store->close();
         }
         delete store;
-    } else {
+    }
+    else {
         dbgUI << "Use clip as QImage";
         QImage qimage = cb->image();
 
@@ -252,8 +274,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         Q_CHECK_PTR(clip);
         clip->convertFromQImage(qimage, profileName);
     }
-    if (!customTopLeft)
-    {
+    if (!customTopLeft) {
         QRect exactBounds = clip->exactBounds();
         topLeft -= exactBounds.topLeft() / 2;
     }

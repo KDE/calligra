@@ -40,7 +40,7 @@ enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean
  * \ingroup Value
  * A function parameter.
  */
-class CALLIGRA_TABLES_EXPORT FunctionParameter
+class CALLIGRA_TABLES_ODF_EXPORT FunctionParameter
 {
 public:
     FunctionParameter();
@@ -67,7 +67,7 @@ private:
  * \ingroup Value
  * A function description.
  */
-class CALLIGRA_TABLES_EXPORT FunctionDescription
+class CALLIGRA_TABLES_ODF_EXPORT FunctionDescription
 {
 public:
     FunctionDescription();

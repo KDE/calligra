@@ -69,6 +69,11 @@ bool KexiStartupData::isProjectNavigatorVisible() const
     return true;
 }
 
+bool KexiStartupData::isMainMenuVisible() const
+{
+    return m_isMainMenuVisible;
+}
+
 KexiStartupData::Import KexiStartupData::importActionData() const
 {
     return m_importActionData;

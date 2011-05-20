@@ -147,6 +147,17 @@ bool ResourceGroup::isScheduled() const
     return false;
 }
 
+bool ResourceGroup::isBaselined( long id ) const
+{
+    foreach ( const Resource *r, m_resources ) {
+        if ( r->isBaselined() ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 void ResourceGroup::addResource(int index, Resource* resource, Risk*) {
     int i = index == -1 ? m_resources.count() : index;
     resource->setParentGroup( this );
@@ -541,6 +552,7 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
             m_externalAppointments[ id ] = a;
         }
     }
+    loadCalendarIntervalsCache( element, status );
     return true;
 }
 
@@ -584,10 +596,10 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("type", typeToString());
     me.setAttribute("units", m_units);
     if ( m_availableFrom.isValid() ) {
-        me.setAttribute("available-from", m_availableFrom.toString( KDateTime::ISODate ));
+        me.setAttribute("available-from", m_availableFrom.toString( Qt::ISODate ));
     }
     if ( m_availableUntil.isValid() ) {
-        me.setAttribute("available-until", m_availableUntil.toString( KDateTime::ISODate ));
+        me.setAttribute("available-until", m_availableUntil.toString( Qt::ISODate ));
     }
     me.setAttribute("normal-rate", m_project->locale()->formatMoney(cost.normalRate));
     me.setAttribute("overtime-rate", m_project->locale()->formatMoney(cost.overtimeRate));
@@ -616,6 +628,7 @@ void Resource::save(QDomElement &element) const {
             m_externalAppointments[ id ]->intervals().saveXML( el );
         }
     }
+    saveCalendarIntervalsCache( me );
 }
 
 bool Resource::isAvailable(Task * /*task*/) {
@@ -673,6 +686,20 @@ void Resource::initiateCalculation(Schedule &sch) {
 Schedule *Resource::schedule( long id ) const
 {
     return id == -1 ? m_currentSchedule : findSchedule( id );
+}
+
+bool Resource::isBaselined( long id ) const
+{
+    if ( m_type == Resource::Type_Team ) {
+        foreach ( const Resource *r, m_teamMembers ) {
+            if ( r->isBaselined( id ) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    Schedule *s = schedule( id );
+    return s ? s->isBaselined() : false;
 }
 
 Schedule *Resource::findSchedule( long id ) const
@@ -759,27 +786,27 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 {
     Q_ASSERT( m_currentSchedule );
     DateTimeInterval interval( start, end );
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
     if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required available in interval: %1" ).arg( interval.toString() ) );
 #endif
     DateTime availableFrom = m_availableFrom.isValid() ? m_availableFrom : ( m_project ? m_project->constraintStartTime() : DateTime() );
     DateTime availableUntil = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
     DateTimeInterval x = interval.limitedTo( availableFrom, availableUntil );
     if ( calendar() == 0 ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required available: no calendar, %1" ).arg( x.toString() ) );
 #endif
         return x;
     }
     DateTimeInterval i = m_currentSchedule->firstBookedInterval( x, node );
     if ( i.isValid() ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required available: booked, %1" ).arg( i.toString() ) );
 #endif
         return i; 
     }
     i = calendar()->firstInterval(x.first, x.second, m_currentSchedule);
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
     if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required first available in %1:  %2" ).arg( x.toString() ).arg( i.toString() ) );
 #endif
     return i;
@@ -787,6 +814,7 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end, int load, const QList<Resource*> &required ) {
     //kDebug()<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
+    KLocale *locale = KGlobal::locale();
     if (!from.isValid() || !end.isValid()) {
         m_currentSchedule->logWarning( i18n( "Make appointments: Invalid time" ) );
         return;
@@ -796,16 +824,15 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
         m_currentSchedule->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return;
     }
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
     if ( m_currentSchedule ) {
         QStringList lst; foreach ( Resource *r, required ) { lst << r->name(); }
-        m_currentSchedule->logDebug( QString( "Make appointments from %1 to %2, required: %3" ).arg( from.toString() ).arg( end.toString() ).arg( lst.join(",") ) );
+        m_currentSchedule->logDebug( QString( "Make appointments from %1 to %2 load=%4, required: %3" ).arg( from.toString() ).arg( end.toString() ).arg( lst.join(",") ).arg( load ) );
     }
 #endif
-    double l = load * .01;
     AppointmentIntervalList lst = workIntervals( from, end );
-    foreach ( const AppointmentInterval &i, lst ) {
-        m_currentSchedule->addAppointment( node, i.startTime(), i.endTime(), i.load() * l );
+    foreach ( const AppointmentInterval &i, lst.map() ) {
+        m_currentSchedule->addAppointment( node, i.startTime(), i.endTime(), load );
         foreach ( Resource *r, required ) {
             r->addAppointment( node, i.startTime(), i.endTime(), r->units() ); //FIXME: units may not be correct
         }
@@ -824,7 +851,7 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
         return;
     }
     if ( m_type == Type_Team ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         m_currentSchedule->logDebug( "Make appointments to team " + m_name );
 #endif
         Duration e;
@@ -868,7 +895,7 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
         time = r->availableAfter( time, end );
         end = r->availableBefore( end, time );
         if ( ! ( time.isValid() && end.isValid() ) ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
             if ( m_currentSchedule ) m_currentSchedule->logDebug( "The required resource '" + r->name() + "'is not available in interval:" + node->startTime.toString() + "," + node->endTime.toString() );
 #endif
             break;
@@ -883,6 +910,11 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
     makeAppointment(node, time, end, load, required);
 }
 
+AppointmentIntervalList Resource::workIntervals( const DateTime &from, const DateTime &until ) const
+{
+    return workIntervals( from, until, 0 );
+}
+
 AppointmentIntervalList Resource::workIntervals( const DateTime &from, const DateTime &until, Schedule *sch ) const
 {
     Calendar *cal = calendar();
@@ -892,9 +924,8 @@ AppointmentIntervalList Resource::workIntervals( const DateTime &from, const Dat
     // update cache
     calendarIntervals( from, until );
     AppointmentIntervalList work = m_workinfocache.intervals.extractIntervals( from, until );
-    Schedule *s = sch ? sch : m_currentSchedule;
-    if ( s && ! s->allowOverbooking() ) {
-        foreach ( const Appointment *a, s->appointments() ) {
+    if ( sch && ! sch->allowOverbooking() ) {
+        foreach ( const Appointment *a, sch->appointments( sch->calculationMode() ) ) {
             work -= a->intervals();
         }
         foreach ( const Appointment *a, m_externalAppointments ) {
@@ -917,36 +948,161 @@ void Resource::calendarIntervals( const DateTime &from, const DateTime &until ) 
     }
     if ( ! m_workinfocache.isValid() ) {
         // First time
+//         kDebug()<<"First time:"<<from<<until;
         m_workinfocache.start = from;
         m_workinfocache.end = until;
         m_workinfocache.intervals = cal->workIntervals( from, until, m_units );
+//         kDebug()<<"calendarIntervals:"<<m_workinfocache.intervals;
     } else {
         if ( from < m_workinfocache.start ) {
+            //kDebug()<<"Add to start:"<<from<<m_workinfocache.start;
             m_workinfocache.intervals += cal->workIntervals( from, m_workinfocache.start, m_units );
             m_workinfocache.start = from;
+//             kDebug()<<"calendarIntervals:"<<m_workinfocache.intervals;
         }
         if ( until > m_workinfocache.end ) {
+            //kDebug()<<"Add to end:"<<m_workinfocache.end<<until;
             m_workinfocache.intervals += cal->workIntervals( m_workinfocache.end, until, m_units );
             m_workinfocache.end = until;
+//             kDebug()<<"calendarIntervals:"<<m_workinfocache.intervals;
         }
     }
-    //kDebug()<<"calendarIntervals"<<m_workinfocache.intervals;
 }
 
-Duration Resource::effort( const DateTime &start, const Duration &duration, bool backward, const QList<Resource*> &required ) const
+bool Resource::loadCalendarIntervalsCache( const KoXmlElement &element, XMLLoaderObject &status )
 {
-    return effort( m_currentSchedule, start, duration, backward, required );
+    KoXmlElement e = element.namedItem( "work-intervals-cache" ).toElement();
+    if ( e.isNull() ) {
+        kError()<<"No 'work-intervals-cache' element";
+        return true;
+    }
+    m_workinfocache.load( e, status );
+    return true;
+}
+
+void Resource::saveCalendarIntervalsCache( QDomElement &element ) const
+{
+    QDomElement me = element.ownerDocument().createElement("work-intervals-cache");
+    element.appendChild(me);
+    m_workinfocache.save( me );
+}
+
+DateTime Resource::WorkInfoCache::firstAvailableAfter( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const
+{
+    QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constEnd();
+    if ( start.isValid() && start <= time ) {
+        // possibly usefull cache
+        it = intervals.map().lowerBound( time.date() );
+    }
+    if ( it == intervals.map().constEnd() ) {
+        // nothing cached, check the old way
+        DateTime t = cal ? cal->firstAvailableAfter( time, limit, sch ) : DateTime();
+        return t;
+    }
+    AppointmentInterval inp( time, limit );
+    for ( ; it != intervals.map().constEnd() && it.key() <= limit.date(); ++it ) {
+        if ( ! it.value().intersects( inp ) && it.value() < inp ) {
+            continue;
+        }
+        if ( sch ) {
+            DateTimeInterval ti = sch->available( DateTimeInterval( it.value().startTime(), it.value().endTime() ) );
+            if ( ti.isValid() && ti.first < limit ) {
+                ti.first = qMax( ti.first, time );
+                return ti.first;
+            }
+        } else {
+            DateTime t = qMax( it.value().startTime(), time );
+            return t;
+        }
+    }
+    if ( it == intervals.map().constEnd() ) {
+        // ran out of cache, check the old way
+        DateTime t = cal ? cal->firstAvailableAfter( time, limit, sch ) : DateTime();
+        return t;
+    }
+    return DateTime();
+}
+
+DateTime Resource::WorkInfoCache::firstAvailableBefore( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const
+{
+    if ( time <= limit ) {
+        return DateTime();
+    }
+    QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constBegin();
+    if ( time.isValid() && limit.isValid() && end.isValid() && end >= time && ! intervals.isEmpty() ) {
+        // possibly usefull cache
+        it = intervals.map().upperBound( time.date() );
+    }
+    if ( it == intervals.map().constBegin() ) {
+        // nothing cached, check the old way
+        DateTime t = cal ? cal->firstAvailableBefore( time, limit, sch ) : DateTime();
+        return t;
+    }
+    AppointmentInterval inp( limit, time );
+    for ( --it; it != intervals.map().constBegin() && it.key() >= limit.date(); --it ) {
+        if ( ! it.value().intersects( inp ) && inp < it.value() ) {
+            continue;
+        }
+        if ( sch ) {
+            DateTimeInterval ti = sch->available( DateTimeInterval( it.value().startTime(), it.value().endTime() ) );
+            if ( ti.isValid() && ti.second > limit ) {
+                ti.second = qMin( ti.second, time );
+                return ti.second;
+            }
+        } else {
+            DateTime t = qMin( it.value().endTime(), time );
+            return t;
+        }
+    }
+    if ( it == intervals.map().constBegin() ) {
+        // ran out of cache, check the old way
+        DateTime t = cal ? cal->firstAvailableBefore( time, limit, sch ) : DateTime();
+        return t;
+    }
+    return DateTime();
+}
+
+bool Resource::WorkInfoCache::load( const KoXmlElement &element, XMLLoaderObject &status )
+{
+    clear();
+    version = element.attribute( "version" ).toInt();
+    effort = Duration::fromString( element.attribute( "effort" ) );
+    start = DateTime::fromString( element.attribute( "start" ) );
+    end = DateTime::fromString( element.attribute( "end" ) );
+    KoXmlElement e = element.namedItem( "intervals" ).toElement();
+    if ( ! e.isNull() ) {
+        intervals.loadXML( e, status );
+    }
+    //kDebug()<<*this;
+    return true;
+}
+
+void Resource::WorkInfoCache::save( QDomElement &element ) const
+{
+    element.setAttribute( "version", version );
+    element.setAttribute( "effort", effort.toString() );
+    element.setAttribute( "start", start.toString( Qt::ISODate ) );
+    element.setAttribute( "end", end.toString( Qt::ISODate ) );
+    QDomElement me = element.ownerDocument().createElement("intervals");
+    element.appendChild(me);
+
+    intervals.saveXML( me );
+}
+
+Duration Resource::effort( const DateTime& start, const Duration& duration, int units, bool backward, const QList< Resource* >& required ) const
+{
+    return effort( m_currentSchedule, start, duration, units, backward, required );
 }
 
 // the amount of effort we can do within the duration
-Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward, const QList<Resource*> &required ) const
+Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration &duration, int units, bool backward, const QList<Resource*> &required ) const
 {
-    //kDebug()<<m_name<<":"<<start<<" for duration"<<duration.toString(Duration::Format_Day);
+    //kDebug()<<m_name<<": ("<<(backward?"B )":"F )")<<start<<" for duration"<<duration.toString(Duration::Format_Day);
 #if 0
-    if ( sch ) sch->logDebug( "Check effort in interval:" + start.toString() + "," + (start+duration).toString() );
+    if ( sch ) sch->logDebug( QString( "Check effort in interval %1: %2, %3").arg(backward?"backward":"forward").arg( start.toString() ).arg( (backward?start-duration:start+duration).toString() ) );
 #endif
     Duration e;
-    if ( duration == 0 || m_units == 0 ) {
+    if ( duration == 0 || m_units == 0 || units == 0 ) {
         kWarning()<<"zero duration or zero units";
         return e;
     }
@@ -969,7 +1125,7 @@ Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration 
         until = availableBefore( start + duration, start, sch );
     }
     if ( ! ( from.isValid() && until.isValid() ) ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "Resource not available in interval:" + start.toString() + "," + (start+duration).toString() );
 #endif
     } else {
@@ -977,7 +1133,7 @@ Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration 
             from = r->availableAfter( from, until );
             until = r->availableBefore( until, from );
             if ( ! ( from.isValid() && until.isValid() ) ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
                 if ( sch ) sch->logDebug( "The required resource '" + r->name() + "'is not available in interval:" + start.toString() + "," + (start+duration).toString() );
 #endif
                     break;
@@ -985,15 +1141,21 @@ Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration 
         }
     }
     if ( from.isValid() && until.isValid() ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch && until < from ) sch->logDebug( " until < from: until=" + until.toString() + " from=" + from.toString() );
 #endif
-        e = workIntervals( from, until, sch ).effort( from, until );
+        e = workIntervals( from, until ).effort( from, until ) * units / 100;
+        if ( sch && ( ! sch->allowOverbooking() || sch->allowOverbookingState() == Schedule::OBS_Deny ) ) {
+            Duration avail = workIntervals( from, until, sch ).effort( from, until );
+            if ( avail < e ) {
+                e = avail;
+            }
+        }
 //        e = ( cal->effort( from, until, sch ) ) * m_units / 100;
     }
     //kDebug()<<m_name<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
-#ifndef NDEBUG
-    if ( sch ) sch->logDebug( QString( "effort: %2 for %3 hours = %4" ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( e.toString( Duration::Format_HourFraction ) ) );
+#ifndef PLAN_NLOGDEBUG
+    if ( sch ) sch->logDebug( QString( "effort: %1 for %2 hours = %3" ).arg( start.toString() ).arg( duration.toString( Duration::Format_HourFraction ) ).arg( e.toString( Duration::Format_HourFraction ) ) );
 #endif
     return e;
 }
@@ -1029,7 +1191,8 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
         //kDebug()<<t<<lmt;
         return DateTime();
     }
-    t = cal->firstAvailableAfter(t, lmt, sch);
+    t = m_workinfocache.firstAvailableAfter( t, lmt, cal, sch );
+//    t = cal->firstAvailableAfter(t, lmt, sch);
     //kDebug()<<m_currentSchedule<<""<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns:"<<time.toString()<<"="<<t.toString()<<""<<lmt.toString();
     return t;
 }
@@ -1052,18 +1215,19 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, S
     }
     DateTime availableUntil = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
     if ( ! availableUntil.isValid() ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( sch ) sch->logDebug( "availabelUntil is invalid" );
 #endif
         t = time;
     } else {
         t = availableUntil < time ? availableUntil : time;
     }
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
     if ( sch && t < lmt ) sch->logDebug( "t < lmt: " + t.toString() + " < " + lmt.toString() );
 #endif
-    t = cal->firstAvailableBefore(t, lmt, sch );
-#ifndef NDEBUG
+    t = m_workinfocache.firstAvailableBefore( t, lmt, cal, sch );
+//    t = cal->firstAvailableBefore(t, lmt, sch );
+#ifndef PLAN_NLOGDEBUG
     if ( sch && t.isValid() && t < lmt ) sch->logDebug( " t < lmt: t=" + t.toString() + " lmt=" + lmt.toString() );
 #endif
     return t;
@@ -1088,14 +1252,14 @@ Calendar *Resource::findCalendar(const QString &id) const {
 }
 
 bool Resource::isOverbooked() const {
-    return isOverbooked(KDateTime(), KDateTime());
+    return isOverbooked( DateTime(), DateTime() );
 }
 
 bool Resource::isOverbooked(const QDate &date) const {
-    return isOverbooked(KDateTime(date), KDateTime(date.addDays(1)));
+    return isOverbooked( DateTime( date ), DateTime( date.addDays(1 ) ) );
 }
 
-bool Resource::isOverbooked(const KDateTime &start, const KDateTime &end) const {
+bool Resource::isOverbooked(const DateTime &start, const DateTime &end) const {
     //kDebug()<<m_name<<":"<<start.toString()<<" -"<<end.toString()<<" cs=("<<m_currentSchedule<<")";
     return m_currentSchedule ? m_currentSchedule->isOverbooked(start, end) : false;
 }
@@ -1203,12 +1367,12 @@ AppointmentIntervalList Resource::externalAppointments( const QString &id )
     return m_externalAppointments[ id ]->intervals();
 }
 
-AppointmentIntervalList Resource::externalAppointments() const
+AppointmentIntervalList Resource::externalAppointments( const DateTimeInterval &interval ) const
 {
     //kDebug()<<m_externalAppointments;
     Appointment app;
     foreach ( Appointment *a, m_externalAppointments ) {
-        app += *a;
+        app += interval.isValid() ? a->extractIntervals( interval ) : *a;
     }
     return app.intervals();
 }
@@ -1271,6 +1435,18 @@ void Resource::removeTeamMember( Resource *resource )
     if ( m_teamMembers.contains( resource ) ) {
         m_teamMembers.removeAt( m_teamMembers.indexOf( resource ) );
     }
+}
+
+QDebug operator<<( QDebug dbg, const KPlato::Resource::WorkInfoCache &c )
+{
+    dbg.nospace()<<"WorkInfoCache: ["<<" version="<<c.version<<" start="<<c.start.toString( Qt::ISODate )<<" end="<<c.end.toString( Qt::ISODate )<<" intervals="<<c.intervals.map().count();
+    if ( ! c.intervals.isEmpty() ) {
+        foreach ( const AppointmentInterval &i, c.intervals.map() ) {
+        dbg<<endl<<"   "<<i;
+        }
+    }
+    dbg<<"]";
+    return dbg;
 }
 
 /////////   Risk   /////////
@@ -1495,9 +1671,9 @@ DateTime ResourceRequest::availableBefore(const DateTime &time, Schedule *ns) {
 Duration ResourceRequest::effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward )
 {
     setCurrentSchedulePtr( ns );
-    Duration e = m_resource->effort( time, duration, backward, m_required );
+    Duration e = m_resource->effort( time, duration, m_units, backward, m_required );
     //kDebug()<<m_resource->name()<<time<<duration.toString()<<"delivers:"<<e.toString()<<"request:"<<(m_units/100)<<"parts";
-    return e * m_units / 100;
+    return e;
 }
 
 void ResourceRequest::makeAppointment( Schedule *ns )
@@ -2140,7 +2316,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
     int inc = backward ? -1 : 1;
     DateTime end = start;
     Duration e1;
-    Duration d(1, 0, 0); // 1 day
+    Duration d( 1, 0, 0 );
     int nDays = numDays(lst, time, backward) + 1;
     int day = 0;
     for (day=0; !match && day <= nDays; ++day) {
@@ -2160,7 +2336,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         }
     }
     if ( ! match && day <= nDays ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( ns ) ns->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
 #endif
         logtime = start;
@@ -2176,7 +2352,12 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
                 e += e1;
                 match = true;
             } else {
-                end = start;
+                if ( false/*roundToHour*/ && ( _effort - e ) <  ( e + e1 - _effort ) ) {
+                    end = start;
+                    match = true;
+                } else {
+                    end = start;
+                }
                 break;
             }
             //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
@@ -2184,7 +2365,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
     }
     if ( ! match && day <= nDays ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( ns ) ns->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
 #endif
         logtime = start;
@@ -2212,11 +2393,13 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
     if ( ! match && _effort > 5 * 60000 ) {
         if ( ( _effort - e ) <= 60000 ){
             match = true;
+#ifndef PLAN_NLOGDEBUG
             if ( ns ) ns->logDebug( "Deviation match:" + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
+#endif
         }
     }
     if ( ! match && day <= nDays ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( ns ) ns->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
 #endif
         logtime = start;
@@ -2239,7 +2422,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         }
     }
     if ( ! match && day <= nDays ) {
-#ifndef NDEBUG
+#ifndef PLAN_NLOGDEBUG
         if ( ns ) ns->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
 #endif
         d = Duration(0, 0, 0, 0, 1); // 1 millisecond

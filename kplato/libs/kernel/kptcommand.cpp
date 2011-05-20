@@ -1,11 +1,12 @@
 /* This file is part of the KDE project
   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
   License as published by the Free Software Foundation; either
   version 2 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -37,22 +38,6 @@
 namespace KPlato
 {
 
-void NamedCommand::setSchDeleted()
-{
-    QMap<Schedule*, bool>::Iterator it;
-    for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
-        //kDebug() << it.key() ->id() <<":" << it.value();
-        it.key() ->setDeleted( it.value() );
-    }
-}
-void NamedCommand::setSchDeleted( bool state )
-{
-    QMap<Schedule*, bool>::Iterator it;
-    for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
-        //kDebug() << it.key() ->id() <<":" << state;
-        it.key() ->setDeleted( state );
-    }
-}
 void NamedCommand::setSchScheduled()
 {
     QMap<Schedule*, bool>::Iterator it;
@@ -78,18 +63,6 @@ void NamedCommand::addSchScheduled( Schedule *sch )
             m_schedules.insert( a->resource(), a->resource() ->isScheduled() );
         } else if ( a->resource() == sch ) {
             m_schedules.insert( a->node(), a->node() ->isScheduled() );
-        }
-    }
-}
-void NamedCommand::addSchDeleted( Schedule *sch )
-{
-    //kDebug() << sch->id() <<":" << sch->isDeleted();
-    m_schedules.insert( sch, sch->isDeleted() );
-    foreach ( Appointment * a, sch->appointments() ) {
-        if ( a->node() == sch ) {
-            m_schedules.insert( a->resource(), a->resource() ->isDeleted() );
-        } else if ( a->resource() == sch ) {
-            m_schedules.insert( a->node(), a->node() ->isDeleted() );
         }
     }
 }
@@ -192,7 +165,6 @@ CalendarRemoveCmd::~CalendarRemoveCmd()
 }
 void CalendarRemoveCmd::execute()
 {
-//    setSchScheduled( false );
     m_cmd->execute();
     m_project->takeCalendar( m_cal );
     m_mine = true;
@@ -202,7 +174,6 @@ void CalendarRemoveCmd::unexecute()
 {
     m_project->addCalendar( m_cal, m_parent, m_index );
     m_cmd->unexecute();
-//    setSchScheduled();
     m_mine = false;
 
 }
@@ -280,16 +251,12 @@ void CalendarModifyParentCmd::execute()
     m_project->takeCalendar( m_cal );
     m_project->addCalendar( m_cal, m_newvalue, m_newindex );
     m_cmd->execute();
-//    setSchScheduled( false );
-
 }
 void CalendarModifyParentCmd::unexecute()
 {
     m_cmd->unexecute();
     m_project->takeCalendar( m_cal );
     m_project->addCalendar( m_cal, m_oldvalue, m_oldindex );
-//    setSchScheduled();
-
 }
 
 CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const QString& name )
@@ -312,15 +279,11 @@ void CalendarModifyTimeZoneCmd::execute()
 {
     m_cmd->execute();
     m_cal->setTimeZone( m_newvalue );
-//    setSchScheduled( false );
-
 }
 void CalendarModifyTimeZoneCmd::unexecute()
 {
     m_cal->setTimeZone( m_oldvalue );
     m_cmd->unexecute();
-//    setSchScheduled();
-
 }
 
 CalendarAddDayCmd::CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, const QString& name )
@@ -343,16 +306,12 @@ void CalendarAddDayCmd::execute()
     //kDebug()<<m_cal->name();
     m_cal->addDay( m_newvalue );
     m_mine = false;
-//    setSchScheduled( false );
-
 }
 void CalendarAddDayCmd::unexecute()
 {
     //kDebug()<<m_cal->name();
     m_cal->takeDay( m_newvalue );
     m_mine = true;
-//    setSchScheduled();
-
 }
 
 CalendarRemoveDayCmd::CalendarRemoveDayCmd( Calendar *cal,CalendarDay *day, const QString& name )
@@ -384,16 +343,12 @@ void CalendarRemoveDayCmd::execute()
     //kDebug()<<m_cal->name();
     m_cal->takeDay( m_value );
     m_mine = true;
-//    setSchScheduled( false );
-
 }
 void CalendarRemoveDayCmd::unexecute()
 {
     //kDebug()<<m_cal->name();
     m_cal->addDay( m_value );
     m_mine = false;
-//    setSchScheduled();
-
 }
 
 CalendarModifyDayCmd::CalendarModifyDayCmd( Calendar *cal, CalendarDay *value, const QString& name )
@@ -421,8 +376,6 @@ void CalendarModifyDayCmd::execute()
     m_cal->takeDay( m_oldvalue );
     m_cal->addDay( m_newvalue );
     m_mine = false;
-//    setSchScheduled( false );
-
 }
 void CalendarModifyDayCmd::unexecute()
 {
@@ -430,8 +383,6 @@ void CalendarModifyDayCmd::unexecute()
     m_cal->takeDay( m_newvalue );
     m_cal->addDay( m_oldvalue );
     m_mine = true;
-//    setSchScheduled();
-
 }
 
 CalendarModifyStateCmd::CalendarModifyStateCmd( Calendar *calendar, CalendarDay *day, CalendarDay::State value, const QString& name )
@@ -551,17 +502,13 @@ CalendarModifyWeekdayCmd::~CalendarModifyWeekdayCmd()
 void CalendarModifyWeekdayCmd::execute()
 {
     m_cal->setWeekday( m_weekday, *m_value );
-//    setSchScheduled( false );
-
 }
 void CalendarModifyWeekdayCmd::unexecute()
 {
     m_cal->setWeekday( m_weekday, m_orig );
-//    setSchScheduled();
-
 }
 
-CalendarModifyDateCmd::CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, QDate &value, const QString& name )
+CalendarModifyDateCmd::CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, const QDate &value, const QString& name )
     : NamedCommand( name ),
     m_cal( cal ),
     m_day( day ),
@@ -573,14 +520,10 @@ CalendarModifyDateCmd::CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, Q
 void CalendarModifyDateCmd::execute()
 {
     m_cal->setDate( m_day, m_newvalue );
-//    setSchScheduled( false );
-
 }
 void CalendarModifyDateCmd::unexecute()
 {
     m_cal->setDate( m_day, m_oldvalue );
-//    setSchScheduled();
-
 }
 
 ProjectModifyDefaultCalendarCmd::ProjectModifyDefaultCalendarCmd( Project *project, Calendar *cal, const QString& name )
@@ -610,7 +553,7 @@ NodeDeleteCmd::NodeDeleteCmd( Node *node, const QString& name )
 
     m_parent = node->parentNode();
     m_mine = false;
-    
+
     m_project = static_cast<Project*>( node->projectNode() );
     if ( m_project ) {
         foreach ( Schedule * s, m_project->schedules() ) {
@@ -658,17 +601,12 @@ void NodeDeleteCmd::execute()
     if ( m_parent && m_project ) {
         m_index = m_parent->findChildNode( m_node );
         //kDebug()<<m_node->name()<<""<<m_index;
-/*        foreach ( Appointment * a, m_node->appointments() ) {
-            a->detach();
-            m_appointments.append( a );
-        }*/
         if ( m_cmd ) {
             m_cmd->execute();
         }
         m_project->takeTask( m_node );
         m_mine = true;
         setSchScheduled( false );
-    
     }
 }
 void NodeDeleteCmd::unexecute()
@@ -679,12 +617,8 @@ void NodeDeleteCmd::unexecute()
         if ( m_cmd ) {
             m_cmd->unexecute();
         }
-/*        while ( !m_appointments.isEmpty() ) {
-            m_appointments.takeFirst() ->attach();
-        }*/
         m_mine = false;
         setSchScheduled();
-    
     }
 }
 
@@ -751,7 +685,7 @@ SubtaskAddCmd::SubtaskAddCmd( Project *project, Node *node, Node *parent, const 
     node->setLateFinish( node->endTime() );
     node->setWorkStartTime( node->startTime() );
     node->setWorkEndTime( node->endTime() );
-    
+
     // Summarytasks can't have resources, so remove resource requests from the new parent
     foreach ( ResourceGroupRequest *r, parent->requests().requests() ) {
         if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
@@ -864,22 +798,14 @@ NodeModifyConstraintCmd::NodeModifyConstraintCmd( Node &node, Node::ConstraintTy
         newConstraint( c ),
         oldConstraint( static_cast<Node::ConstraintType>( node.constraint() ) )
 {
-
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void NodeModifyConstraintCmd::execute()
 {
     m_node.setConstraint( newConstraint );
-//    setSchScheduled( false );
-
 }
 void NodeModifyConstraintCmd::unexecute()
 {
     m_node.setConstraint( oldConstraint );
-//    setSchScheduled();
-
 }
 
 NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd( Node &node, const QDateTime& dt, const QString& name )
@@ -916,14 +842,10 @@ NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd( Node &node, cons
 void NodeModifyConstraintEndTimeCmd::execute()
 {
     m_node.setConstraintEndTime( DateTime( newTime, m_spec ) );
-//    setSchScheduled( false );
-
 }
 void NodeModifyConstraintEndTimeCmd::unexecute()
 {
     m_node.setConstraintEndTime( oldTime );
-//    setSchScheduled();
-
 }
 
 NodeModifyStartTimeCmd::NodeModifyStartTimeCmd( Node &node, const QDateTime& dt, const QString& name )
@@ -1177,15 +1099,11 @@ void AddRelationCmd::execute()
     //kDebug()<<m_rel->parent()<<" to"<<m_rel->child();
     m_taken = false;
     m_project.addRelation( m_rel, false );
-//    setSchScheduled( false );
-
 }
 void AddRelationCmd::unexecute()
 {
     m_taken = true;
     m_project.takeRelation( m_rel );
-//    setSchScheduled();
-
 }
 
 DeleteRelationCmd::DeleteRelationCmd( Project &project, Relation *rel, const QString& name )
@@ -1205,15 +1123,11 @@ void DeleteRelationCmd::execute()
     //kDebug()<<m_rel->parent()<<" to"<<m_rel->child();
     m_taken = true;
     m_project.takeRelation( m_rel );
-//    setSchScheduled( false );
-
 }
 void DeleteRelationCmd::unexecute()
 {
     m_taken = false;
     m_project.addRelation( m_rel, false );
-//    setSchScheduled();
-
 }
 
 ModifyRelationTypeCmd::ModifyRelationTypeCmd( Relation *rel, Relation::Type type, const QString& name )
@@ -1224,26 +1138,17 @@ ModifyRelationTypeCmd::ModifyRelationTypeCmd( Relation *rel, Relation::Type type
 
     m_oldtype = rel->type();
     m_project = dynamic_cast<Project*>( rel->parent() ->projectNode() );
-/*    if ( m_project ) {
-        foreach ( Schedule * s, m_project->schedules() ) {
-            addSchScheduled( s );
-        }
-    }*/
 }
 void ModifyRelationTypeCmd::execute()
 {
     if ( m_project ) {
         m_project->setRelationType( m_rel, m_newtype );
-//        setSchScheduled( false );
-    
     }
 }
 void ModifyRelationTypeCmd::unexecute()
 {
     if ( m_project ) {
         m_project->setRelationType( m_rel, m_oldtype );
-//        setSchScheduled();
-    
     }
 }
 
@@ -1255,26 +1160,17 @@ ModifyRelationLagCmd::ModifyRelationLagCmd( Relation *rel, Duration lag, const Q
 
     m_oldlag = rel->lag();
     m_project = dynamic_cast<Project*>( rel->parent() ->projectNode() );
-/*    if ( m_project ) {
-        foreach ( Schedule * s, m_project->schedules() ) {
-            addSchScheduled( s );
-        }
-    }*/
 }
 void ModifyRelationLagCmd::execute()
 {
     if ( m_project ) {
         m_project->setRelationLag( m_rel, m_newlag );
-//        setSchScheduled( false );
-    
     }
 }
 void ModifyRelationLagCmd::unexecute()
 {
     if ( m_project ) {
         m_project->setRelationLag( m_rel, m_oldlag );
-//        setSchScheduled();
-    
     }
 }
 
@@ -1296,16 +1192,12 @@ void AddResourceRequestCmd::execute()
     //kDebug()<<"group="<<m_group<<" req="<<m_request;
     m_group->addResourceRequest( m_request );
     m_mine = false;
-//    setSchScheduled( false );
-
 }
 void AddResourceRequestCmd::unexecute()
 {
     //kDebug()<<"group="<<m_group<<" req="<<m_request;
     m_group->takeResourceRequest( m_request );
     m_mine = true;
-//    setSchScheduled();
-
 }
 
 RemoveResourceRequestCmd::RemoveResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const QString& name )
@@ -1316,12 +1208,6 @@ RemoveResourceRequestCmd::RemoveResourceRequestCmd( ResourceGroupRequest *group,
 
     m_mine = false;
     //kDebug()<<"group req="<<group<<" req="<<request<<" to gr="<<m_group->group();
-/*    Task *t = request->task();
-    if ( t ) { // safety, something is seriously wrong!
-        foreach ( Schedule * s, t->schedules() ) {
-            addSchScheduled( s );
-        }
-    }*/
 }
 RemoveResourceRequestCmd::~RemoveResourceRequestCmd()
 {
@@ -1332,15 +1218,11 @@ void RemoveResourceRequestCmd::execute()
 {
     m_group->takeResourceRequest( m_request );
     m_mine = true;
-//    setSchScheduled( false );
-
 }
 void RemoveResourceRequestCmd::unexecute()
 {
     m_group->addResourceRequest( m_request );
     m_mine = false;
-//    setSchScheduled();
-
 }
 
 ModifyResourceRequestUnitsCmd::ModifyResourceRequestUnitsCmd( ResourceRequest *request, int oldvalue, int newvalue, const QString& name )
@@ -1399,9 +1281,6 @@ ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newval
     m_newvalue( newvalue ),
     m_cmd( 0 )
 {
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
     if ( newvalue == 0.0 ) {
         // Milestones can't have resources, so remove resource requests
         foreach ( ResourceGroupRequest *r, node.requests().requests() ) {
@@ -1444,22 +1323,14 @@ EstimateModifyOptimisticRatioCmd::EstimateModifyOptimisticRatioCmd( Node &node, 
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
-
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void EstimateModifyOptimisticRatioCmd::execute()
 {
     m_estimate->setOptimisticRatio( m_newvalue );
-//    setSchScheduled( false );
-
 }
 void EstimateModifyOptimisticRatioCmd::unexecute()
 {
     m_estimate->setOptimisticRatio( m_oldvalue );
-//    setSchScheduled();
-
 }
 
 EstimateModifyPessimisticRatioCmd::EstimateModifyPessimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name )
@@ -1468,22 +1339,14 @@ EstimateModifyPessimisticRatioCmd::EstimateModifyPessimisticRatioCmd( Node &node
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
-
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void EstimateModifyPessimisticRatioCmd::execute()
 {
     m_estimate->setPessimisticRatio( m_newvalue );
-//    setSchScheduled( false );
-
 }
 void EstimateModifyPessimisticRatioCmd::unexecute()
 {
     m_estimate->setPessimisticRatio( m_oldvalue );
-//    setSchScheduled();
-
 }
 
 ModifyEstimateTypeCmd::ModifyEstimateTypeCmd( Node &node, int oldvalue, int newvalue, const QString& name )
@@ -1492,22 +1355,14 @@ ModifyEstimateTypeCmd::ModifyEstimateTypeCmd( Node &node, int oldvalue, int newv
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
-
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void ModifyEstimateTypeCmd::execute()
 {
     m_estimate->setType( static_cast<Estimate::Type>( m_newvalue ) );
-//    setSchScheduled( false );
-
 }
 void ModifyEstimateTypeCmd::unexecute()
 {
     m_estimate->setType( static_cast<Estimate::Type>( m_oldvalue ) );
-//    setSchScheduled();
-
 }
 
 ModifyEstimateCalendarCmd::ModifyEstimateCalendarCmd( Node &node, Calendar *oldvalue, Calendar *newvalue, const QString& name )
@@ -1549,22 +1404,14 @@ EstimateModifyRiskCmd::EstimateModifyRiskCmd( Node &node, int oldvalue, int newv
         m_oldvalue( oldvalue ),
         m_newvalue( newvalue )
 {
-
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void EstimateModifyRiskCmd::execute()
 {
     m_estimate->setRisktype( static_cast<Estimate::Risktype>( m_newvalue ) );
-//    setSchScheduled( false );
-
 }
 void EstimateModifyRiskCmd::unexecute()
 {
     m_estimate->setRisktype( static_cast<Estimate::Risktype>( m_oldvalue ) );
-//    setSchScheduled();
-
 }
 
 AddResourceGroupRequestCmd::AddResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const QString& name )
@@ -1572,7 +1419,6 @@ AddResourceGroupRequestCmd::AddResourceGroupRequestCmd( Task &task, ResourceGrou
         m_task( task ),
         m_request( request )
 {
-
     m_mine = true;
 }
 void AddResourceGroupRequestCmd::execute()
@@ -1694,23 +1540,12 @@ void RemoveResourceCmd::execute()
         r->parent() ->takeResourceRequest( r );
         //kDebug()<<"Remove request for"<<r->resource()->name();
     }
-/*    foreach ( Appointment * a, m_resource->appointments() ) {
-        m_appointments.append( a );
-    }
-    foreach ( Appointment * a, m_appointments ) {
-        a->detach(); //NOTE: removes from m_resource->appointments()
-        //kDebug()<<"detached:"<<a;
-    }*/
     AddResourceCmd::unexecute();
     m_cmd.execute();
     setSchScheduled( false );
 }
 void RemoveResourceCmd::unexecute()
 {
-/*    while ( !m_appointments.isEmpty() ) {
-        //kDebug()<<"attach:"<<m_appointments.first();
-        m_appointments.takeFirst() ->attach();
-    }*/
     foreach ( ResourceRequest * r, m_requests ) {
         r->parent() ->addResourceRequest( r );
         //kDebug()<<"Add request for"<<r->resource()->name();
@@ -1805,22 +1640,14 @@ ModifyResourceTypeCmd::ModifyResourceTypeCmd( Resource *resource, int value, con
         m_newvalue( value )
 {
     m_oldvalue = resource->type();
-
-/*    foreach ( Schedule * s, resource->schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void ModifyResourceTypeCmd::execute()
 {
     m_resource->setType( ( Resource::Type ) m_newvalue );
-//    setSchScheduled( false );
-
 }
 void ModifyResourceTypeCmd::unexecute()
 {
     m_resource->setType( ( Resource::Type ) m_oldvalue );
-//    setSchScheduled();
-
 }
 ModifyResourceUnitsCmd::ModifyResourceUnitsCmd( Resource *resource, int value, const QString& name )
         : NamedCommand( name ),
@@ -1828,22 +1655,14 @@ ModifyResourceUnitsCmd::ModifyResourceUnitsCmd( Resource *resource, int value, c
         m_newvalue( value )
 {
     m_oldvalue = resource->units();
-
-/*    foreach ( Schedule * s, resource->schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void ModifyResourceUnitsCmd::execute()
 {
     m_resource->setUnits( m_newvalue );
-//    setSchScheduled( false );
-
 }
 void ModifyResourceUnitsCmd::unexecute()
 {
     m_resource->setUnits( m_oldvalue );
-//    setSchScheduled();
-
 }
 
 ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Resource *resource, const QDateTime& value, const QString& name )
@@ -1853,34 +1672,14 @@ ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Resource *resour
 {
     m_oldvalue = resource->availableFrom();
     m_spec = resource->timeSpec();
-/*    DateTime v = DateTime( value, m_spec );
-    if ( resource->project() ) {
-        DateTime s;
-        DateTime e;
-        foreach ( Schedule * rs, resource->schedules() ) {
-            Schedule * sch = resource->project() ->findSchedule( rs->id() );
-            if ( sch ) {
-                s = sch->start();
-                e = sch->end();
-                //kDebug() <<"old=" << m_oldvalue <<" new=" << value <<" s=" << s <<" e=" << e;
-            }
-            if ( !s.isValid() || !e.isValid() || ( ( m_oldvalue > s || v > s ) && ( m_oldvalue < e || v < e ) ) ) {
-                addSchScheduled( rs );
-            }
-        }
-    }*/
 }
 void ModifyResourceAvailableFromCmd::execute()
 {
     m_resource->setAvailableFrom( DateTime( m_newvalue, m_spec ) );
-//    setSchScheduled( false );
- //FIXME
 }
 void ModifyResourceAvailableFromCmd::unexecute()
 {
     m_resource->setAvailableFrom( m_oldvalue );
-//    setSchScheduled();
- //FIXME
 }
 
 ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Resource *resource, const QDateTime& value, const QString& name )
@@ -1890,34 +1689,14 @@ ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Resource *reso
 {
     m_oldvalue = resource->availableUntil();
     m_spec = resource->timeSpec();
-/*    DateTime v = DateTime( value, m_spec );
-    if ( resource->project() ) {
-        DateTime s;
-        DateTime e;
-        foreach ( Schedule * rs, resource->schedules() ) {
-            Schedule * sch = resource->project() ->findSchedule( rs->id() );
-            if ( sch ) {
-                s = sch->start();
-                e = sch->end();
-                //kDebug() <<"old=" << m_oldvalue <<" new=" << value <<" s=" << s <<" e=" << e;
-            }
-            if ( !s.isValid() || !e.isValid() || ( ( m_oldvalue > s || v > s ) && ( m_oldvalue < e || v < e ) ) ) {
-                addSchScheduled( rs );
-            }
-        }
-    }*/
 }
 void ModifyResourceAvailableUntilCmd::execute()
 {
     m_resource->setAvailableUntil( DateTime( m_newvalue, m_spec ) );
-//    setSchScheduled( false );
- //FIXME
 }
 void ModifyResourceAvailableUntilCmd::unexecute()
 {
     m_resource->setAvailableUntil( m_oldvalue );
-//    setSchScheduled();
- //FIXME
 }
 
 ModifyResourceNormalRateCmd::ModifyResourceNormalRateCmd( Resource *resource, double value, const QString& name )
@@ -1965,22 +1744,14 @@ ModifyResourceCalendarCmd::ModifyResourceCalendarCmd( Resource *resource, Calend
         m_newvalue( value )
 {
     m_oldvalue = resource->calendar( true );
-
-/*    foreach ( Schedule * s, resource->schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void ModifyResourceCalendarCmd::execute()
 {
     m_resource->setCalendar( m_newvalue );
-//    setSchScheduled( false );
-
 }
 void ModifyResourceCalendarCmd::unexecute()
 {
     m_resource->setCalendar( m_oldvalue );
-//    setSchScheduled();
-
 }
 
 ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name )
@@ -2780,22 +2551,14 @@ ProjectModifyConstraintCmd::ProjectModifyConstraintCmd( Project &node, Node::Con
         newConstraint( c ),
         oldConstraint( static_cast<Node::ConstraintType>( node.constraint() ) )
 {
-
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void ProjectModifyConstraintCmd::execute()
 {
     m_node.setConstraint( newConstraint );
-//    setSchScheduled( false );
-
 }
 void ProjectModifyConstraintCmd::unexecute()
 {
     m_node.setConstraint( oldConstraint );
-//    setSchScheduled();
-
 }
 
 ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Project &node, const QDateTime& dt, const QString& name )
@@ -2805,22 +2568,15 @@ ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Project &node, const QDate
         oldTime( node.startTime() )
 {
     m_spec = node.timeSpec();
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 
 void ProjectModifyStartTimeCmd::execute()
 {
     m_node.setConstraintStartTime( DateTime( newTime, m_spec ) );
-//    setSchScheduled( false );
-
 }
 void ProjectModifyStartTimeCmd::unexecute()
 {
     m_node.setConstraintStartTime( oldTime );
-//    setSchScheduled();
-
 }
 
 ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd( Project &node, const QDateTime& dt, const QString& name )
@@ -2830,22 +2586,15 @@ ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd( Project &node, const QDateTime
         oldTime( node.endTime() )
 {
     m_spec = node.timeSpec();
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
 }
 void ProjectModifyEndTimeCmd::execute()
 {
     m_node.setEndTime( DateTime( newTime, m_spec ) );
     m_node.setConstraintEndTime( DateTime( newTime, m_spec ) );
-//    setSchScheduled( false );
-
 }
 void ProjectModifyEndTimeCmd::unexecute()
 {
     m_node.setConstraintEndTime( oldTime );
-//    setSchScheduled();
-
 }
 
 //----------------------------
@@ -2921,6 +2670,26 @@ void DeleteScheduleManagerCmd::unexecute()
 {
     AddScheduleManagerCmd::execute();
     cmd.unexecute();
+}
+
+MoveScheduleManagerCmd::MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm ),
+    m_oldparent( sm->parentManager() ),
+    m_newparent( newparent ),
+    m_newindex( newindex )
+{
+    m_oldindex = sm->parentManager() ? sm->parentManager()->indexOf( sm ) : sm->project().indexOf( sm );
+}
+
+void MoveScheduleManagerCmd::execute()
+{
+    m_sm->project().moveScheduleManager( m_sm, m_newparent, m_newindex );
+}
+
+void MoveScheduleManagerCmd::unexecute()
+{
+    m_sm->project().moveScheduleManager( m_sm, m_oldparent, m_oldindex );
 }
 
 ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name )
@@ -3376,6 +3145,9 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             gr->group()->unregisterRequest( gr );
             int i = n->requests().takeRequest( gr );
             Q_ASSERT( i >= 0 );
+#ifdef NDEBUG
+            Q_UNUSED(i);
+#endif
         }
     }
     QMap<ResourceGroup*, ResourceGroup*> existingGroups;

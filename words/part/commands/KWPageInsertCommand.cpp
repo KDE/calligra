@@ -85,9 +85,30 @@ void KWPageInsertCommand::redo()
 
     if (! d->pageCreated) { // create the page the first time.
         d->pageCreated = true;
+
         //KWPage prevPage = m_document->pageManager().page(m_afterPageNum);
         KWPageStyle pageStyle = d->document->pageManager()->pageStyle(d->masterPageName);
         d->page = d->document->pageManager()->insertPage(d->pageNumber, pageStyle);
+        Q_ASSERT(d->page.isValid());
+        Q_ASSERT(d->page.pageNumber() >= 1 && d->page.pageNumber() <= d->document->pageManager()->pageCount());
+
+        // Set the y-offset of the new page.
+        KWPage prevPage = d->page.previous();
+        if (prevPage.isValid()) {
+            KoInsets padding = d->document->pageManager()->padding();
+            d->page.setOffsetInDocument(prevPage.offsetInDocument() + prevPage.height() + padding.top + padding.bottom);
+        } else {
+            d->page.setOffsetInDocument(0.0);
+            //d->page.setHeight(pageManager->defaultPageStyle().pageLayout().height);
+        }
+
+        kDebug(32001) << "pageNumber=" << d->page.pageNumber();
+
+        // Create the KWTextFrame's for the new KWPage
+        KWFrameLayout *framelayout = d->document->frameLayout();
+        framelayout->createNewFramesForPage(d->page.pageNumber());
+
+#if 0
         // move shapes after this page down.
         QList<KoShape *> shapes;
         QList<QPointF> previousPositions;
@@ -107,20 +128,27 @@ void KWPageInsertCommand::redo()
 
         if (shapes.count() > 0)
             d->shapeMoveCommand = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
     } else { // we inserted it before, lets do so again.
         d->pageData.pageNumber = d->pageNumber;
         d->document->pageManager()->priv()->insertPage(d->pageData);
         d->page = d->document->pageManager()->page(d->pageNumber);
     }
-
+#if 1
     // make sure we have updated the view before we do anything else
     d->document->firePageSetupChanged();
-
+#endif
     if (d->shapeMoveCommand)
         d->shapeMoveCommand->redo();
     Q_ASSERT(d->page.isValid());
-    PageProcessingQueue *ppq = new PageProcessingQueue(d->document);
-    ppq->addPage(d->page);
+
+#if 0
+    d->document->pageQueue()->addPage(d->page);
+#endif
 }
 
 void KWPageInsertCommand::undo()

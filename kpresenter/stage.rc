@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="117">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="118">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -41,7 +41,6 @@
   <Action name="view_master"/>
   <Separator/>
   <Action name="view_formattingchars"/>
-  <Separator/>
   <Action name="view_guidelines"/>
   <Action name="add_guideline"/>
   <Action name="view_grid"/>
@@ -177,12 +176,10 @@
   <Action name="screen_last"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-  <Separator group="settings_show"/>
   <Action name="direct_cursor" group="settings_show"/>
-  <Separator group="settings_show"/>
   <Action name="extra_autocorrection" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
-  <Separator group="settings_show"/>
+  <Action name="showStatusBar" group="settings_show"/>
   <Action name="extra_configure" group="settings_configure"/>
  </Menu>
 </MenuBar>

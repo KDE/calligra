@@ -96,10 +96,10 @@ bool EnhancedPathCommand::execute()
         bool lineTo = m_command.unicode() == 'T';
 
         for (int i = 0; i < pointsCount; i+=3) {
-            const QPointF &radii = points[i+1];
+            const QPointF &radii = points[i+1]/2;
             const QPointF &angles = points[i+2] / rad2deg;
             // compute the ellipses starting point
-            QPointF start(radii.x() * cos(angles.x()), radii.y() * sin(angles.x()));
+            QPointF start(radii.x() * cos(angles.x()), -1 * radii.y() * sin(angles.x()));
             qreal sweepAngle = degSweepAngle(points[i+2].x(), points[i+2].y(), false);
 
             if (lineTo)
@@ -250,6 +250,9 @@ qreal EnhancedPathCommand::angleFromPoint(const QPointF &point) const
 qreal EnhancedPathCommand::radSweepAngle(qreal start, qreal stop, bool clockwise) const
 {
     qreal sweepAngle = stop - start;
+    if (fabs(sweepAngle) < 0.1) {
+        return 2*M_PI;
+    }
     if (clockwise) {
         // we are moving clockwise to the end angle
         if (stop > start)
@@ -266,6 +269,9 @@ qreal EnhancedPathCommand::radSweepAngle(qreal start, qreal stop, bool clockwise
 qreal EnhancedPathCommand::degSweepAngle(qreal start, qreal stop, bool clockwise) const
 {
     qreal sweepAngle = stop - start;
+    if (fabs(sweepAngle) < 0.1) {
+        return 360.0;
+    }
     if (clockwise) {
         // we are moving clockwise to the end angle
         if (stop > start)

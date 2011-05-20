@@ -41,7 +41,7 @@ namespace Tables
  * If a cell in the region is updated, the BindingManager informs this Binding, which
  * in turn informs the model it holds.
  */
-class CALLIGRA_TABLES_EXPORT Binding
+class CALLIGRA_TABLES_ODF_EXPORT Binding
 {
 public:
     Binding();

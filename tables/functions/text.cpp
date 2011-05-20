@@ -32,6 +32,7 @@
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+#include "ValueFormatter.h"
 
 #include <KLocale>
 
@@ -97,6 +98,7 @@ TextModule::TextModule(QObject* parent, const QVariantList&)
     f = new Function("JIS", func_jis);
     add(f);
     f = new Function("LEN", func_len);
+    f->setAlternateName("LENB");
     add(f);
     f = new Function("LOWER", func_lower);
     add(f);
@@ -138,15 +140,18 @@ TextModule::TextModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("FIND", func_find);
     f->setParamCount(2, 3);
+    f->setAlternateName("FINDB");
     add(f);
     f = new Function("FIXED", func_fixed);
     f->setParamCount(1, 3);
     add(f);
     f = new Function("LEFT", func_left);
     f->setParamCount(1, 2);
+    f->setAlternateName("LEFTB");
     add(f);
     f = new Function("MID", func_mid);
     f->setParamCount(2, 3);
+    f->setAlternateName("MIDB");
     add(f);
     f = new Function("REGEXP", func_regexp);
     f->setParamCount(2, 4);
@@ -156,15 +161,18 @@ TextModule::TextModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("REPLACE", func_replace);
     f->setParamCount(4);
+    f->setAlternateName("REPLACEB");
     add(f);
     f = new Function("REPT", func_rept);
     f->setParamCount(2);
     add(f);
     f = new Function("RIGHT", func_right);
     f->setParamCount(1, 2);
+    f->setAlternateName("RIGHTB");
     add(f);
     f = new Function("SEARCH", func_search);
     f->setParamCount(2, 3);
+    f->setAlternateName("SEARCHB");
     add(f);
     f = new Function("SUBSTITUTE", func_substitute);
     f->setParamCount(3, 4);
@@ -658,8 +666,11 @@ Value func_t (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: TEXT
 Value func_text(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    //Second parameter is format_text. It is currently ignored.
-    return calc->conv()->asString(args[0]);
+    ValueFormatter fmt(calc->conv());
+
+    return Value(fmt.formatText(args[0], Format::Generic, -1, Style::OnlyNegSigned,
+                            QString(), QString(), QString(),
+                            calc->conv()->asString(args[1]).asString()));
 }
 
 // Function: TOGGLE

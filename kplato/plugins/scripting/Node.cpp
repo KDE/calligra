@@ -39,12 +39,12 @@ QString Scripting::Node::name()
 
 QDate Scripting::Node::startDate()
 {
-    return m_node->startTime().dateTime().date();
+    return m_node->startTime().date();
 }
 
 QDate Scripting::Node::endDate()
 {
-    return m_node->endTime().dateTime().date();
+    return m_node->endTime().date();
 }
 
 QString Scripting::Node::id()

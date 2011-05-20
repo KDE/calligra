@@ -27,7 +27,6 @@
 
 #include <MsooXmlThemesReader.h>
 #include <MsooXmlCommonReader.h>
-#include "XlsxSharedString.h"
 
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
@@ -57,6 +56,9 @@ protected:
     KoFilter::ConversionStatus read_cols();
     KoFilter::ConversionStatus read_col();
     KoFilter::ConversionStatus read_sheetData();
+    KoFilter::ConversionStatus read_conditionalFormatting();
+    KoFilter::ConversionStatus read_cfRule();
+    KoFilter::ConversionStatus read_formula();
     KoFilter::ConversionStatus read_row();
     KoFilter::ConversionStatus read_c();
     KoFilter::ConversionStatus read_f();
@@ -67,8 +69,16 @@ protected:
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_hyperlinks();
     KoFilter::ConversionStatus read_picture();
+    KoFilter::ConversionStatus read_autoFilter();
+    KoFilter::ConversionStatus read_filterColumn();
+    KoFilter::ConversionStatus read_filters();
+    KoFilter::ConversionStatus read_filter();
+    KoFilter::ConversionStatus read_customFilters();
+    KoFilter::ConversionStatus read_customFilter();
     KoFilter::ConversionStatus read_oleObjects();
     KoFilter::ConversionStatus read_oleObject();
+    KoFilter::ConversionStatus read_tableParts();
+    KoFilter::ConversionStatus read_tablePart();
 
     XlsxXmlWorksheetReaderContext* m_context;
 
@@ -100,6 +110,12 @@ private:
     //! Saves annotation element (comments) for cell specified by @a col and @a row it there is any annotation defined.
     void saveAnnotation(int col, int row);
 
+    typedef QPair<int, QMap<QString, QString> > Condition;
+    QList<Condition> m_conditionalIndices;
+    QMap<QString, QList<Condition> > m_conditionalStyles;
+
+    QString m_formula;
+
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 
@@ -116,8 +132,8 @@ public:
         const QString& _worksheetName,
         const QString& _state,
         const QString _path, const QString _file,
-        /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/& _themes,
-        const XlsxSharedStringVector& _sharedStrings,
+        MSOOXML::DrawingMLTheme*& _themes,
+        const QVector<QString>& _sharedStrings,
         const XlsxComments& _comments,
         const XlsxStyles& _styles,
         MSOOXML::MsooXmlRelationships& _relationships,
@@ -131,8 +147,8 @@ public:
     const uint worksheetNumber;
     const QString worksheetName;
     QString state;
-    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>**/ themes;
-    const XlsxSharedStringVector *sharedStrings;
+    MSOOXML::DrawingMLTheme* themes;
+    const QVector<QString> *sharedStrings;
     const XlsxComments* comments;
     const XlsxStyles* styles;
 
@@ -142,6 +158,29 @@ public:
 
     QMap<QString, QString> oleReplacements;
     QMap<QString, QString> oleFrameBegins;
+
+    struct AutoFilterCondition {
+        QString field;
+        QString value;
+        QString opField;
+    };
+
+    struct AutoFilter {
+        QString type; // empty, -and, -or
+        QString area;
+        QString field;
+        QVector<AutoFilterCondition> filterConditions;
+    };
+
+    QVector<XlsxXmlWorksheetReaderContext::AutoFilter> autoFilters;
+
+    AutoFilterCondition currentFilterCondition;
+
+    bool firstRoundOfReading;
+
+    QList<QMap<QString, QString> > conditionalStyleForPosition(const QString& positionLetter, int positionNumber);
+
+    QList<QPair<QString, QMap<QString, QString> > >conditionalStyles;
 };
 
 #endif

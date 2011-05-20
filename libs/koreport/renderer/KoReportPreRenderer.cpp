@@ -101,10 +101,8 @@ KoReportPreRendererPrivate::KoReportPreRendererPrivate()
 
 KoReportPreRendererPrivate::~KoReportPreRendererPrivate()
 {
-    if (m_reportData) {
-        delete m_reportData;
-        m_reportData = 0;
-    }
+    delete m_reportData;
+    m_reportData = 0;
 
     m_postProcText.clear();
 }
@@ -399,19 +397,17 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
         
         if (itemHeight > sectionHeight) {
             sectionHeight = itemHeight;
-        }
-        
-#if 0 //!TODO Handle post processing of text data
-        if (ob->type() == OROTextBox::TextBox) {
-            OROTextBox *text = dynamic_cast<OROTextBox*>(ob);
+        }        
+    }
+    for (int i = 0; i < m_page->primitives(); ++i) {
+        OROPrimitive *prim = m_page->primitive(i);
+        if (prim->type() == OROTextBox::TextBox) {
+            OROTextBox *text = static_cast<OROTextBox*>(prim);
             if (text->requiresPostProcessing()) {
                 m_postProcText.append(text);
             }
-
-#endif
- 
+        }
     }
-
     m_yOffset += sectionHeight;
 
     return sectionHeight;
@@ -633,9 +629,7 @@ ORODocument* KoReportPreRenderer::generate()
     delete d->m_kodata;
     d->m_postProcText.clear();
 
-    ORODocument * pDoc = d->m_document;
-    d->m_document = 0;
-    return pDoc;
+    return d->m_document;
 }
 
 void KoReportPreRenderer::setSourceData(KoReportData *data)
@@ -648,8 +642,7 @@ void KoReportPreRenderer::setSourceData(KoReportData *data)
 bool KoReportPreRenderer::setDom(const QDomElement &docReport)
 {
     if (d) {
-        if (d->m_reportData)
-            delete d->m_reportData;
+        delete d->m_reportData;
         d->m_valid = false;
 
 	if (docReport.tagName() != "report:content") {

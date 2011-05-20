@@ -1202,8 +1202,8 @@ KoShape * KarbonImport::loadText(const KoXmlElement &element)
     if (! textShape)
         return 0;
 
+    textShape->setPlainText(text);
     textShape->setFont(font);
-    textShape->setText(text);
     textShape->setTextAnchor(static_cast<ArtisticTextShape::TextAnchor>(alignment));
 
     KoXmlElement e = element.firstChild().toElement();

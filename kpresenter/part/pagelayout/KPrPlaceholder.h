@@ -36,7 +36,7 @@ public:
     /**
      * @brief Load the presentation:placeholder
      *
-     * as OO uses absolute values and in kpresenter we use relative values for the placeholders
+     * as OO uses absolute values and in stage we use relative values for the placeholders
      * we need to pass the page size in case the placeholder is saved in absolute values so it 
      * can be converted to relative ones.
      */

@@ -24,6 +24,8 @@
 #ifndef MSOOXMLVMLREADER_IMPL_H
 #define MSOOXMLVMLREADER_IMPL_H
 
+#include <math.h>
+
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "v"
 
@@ -59,6 +61,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     else if (startType == StraightConnectorStart) {
         body->startElement("draw:line");
     }
+    else if (startType == GroupStart) {
+        body->startElement("draw:g");
+    }
     else if (startType == CustomStart) {
         body->startElement("draw:custom-shape");
     }
@@ -73,11 +78,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString leftPos(m_vmlStyle.value("left"));
     QString topPos(m_vmlStyle.value("top"));
     QString position(m_vmlStyle.value("position"));
-    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
+    QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
+    QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
+    QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
+    QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
     const QString ver_align(m_vmlStyle.value("v-text-anchor"));
+    const QString rotation(m_vmlStyle.value("rotation"));
 
     qreal x_position = 0;
     QString x_pos_string, y_pos_string, widthString, heightString;
@@ -87,8 +93,8 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
     if (!x_mar.isEmpty()) {
         if (m_insideGroup) {
-            x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
-            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupUnit);
+            x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth + m_groupXOffset;
+            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
         } else {
             x_position = x_mar.left(x_mar.length() - 2).toDouble(); // removing the unit
             x_pos_string = x_mar;
@@ -96,17 +102,22 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else if (!leftPos.isEmpty()) {
         if (m_insideGroup) {
-            x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
-            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupUnit);
+            x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth + m_groupXOffset;
+            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
         } else {
             x_position = leftPos.left(leftPos.length() - 2).toDouble();
             x_pos_string = leftPos;
         }
     }
+    else {
+        if (m_insideGroup) {
+            x_pos_string = QString("%1%2").arg(m_groupXOffset).arg(m_groupWidthUnit);
+        }
+    }
     if (!y_mar.isEmpty()) {
         if (m_insideGroup) {
-            y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
-            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupUnit);
+            y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight + m_groupYOffset;
+            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
         } else {
             y_position = y_mar.left(y_mar.length() -2).toDouble();
             y_pos_string = y_mar;
@@ -114,17 +125,22 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else if (!topPos.isEmpty()) {
         if (m_insideGroup) {
-            y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
-            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupUnit);
+            y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight + m_groupYOffset;
+            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
         } else {
             y_position = topPos.left(topPos.length() - 2).toDouble();
             y_pos_string = topPos;
         }
     }
+    else {
+        if (m_insideGroup) {
+            y_pos_string = QString("%1%2").arg(m_groupYOffset).arg(m_groupHeightUnit);
+        }
+    }
     if (!width.isEmpty()) {
         if (m_insideGroup) {
             widthValue = width.toInt() * m_real_groupWidth / m_groupWidth;
-            widthString = QString("%1%2").arg(widthValue).arg(m_groupUnit);
+            widthString = QString("%1%2").arg(widthValue).arg(m_groupWidthUnit);
         } else {
             widthValue = width.left(width.length() - 2).toDouble();
             widthString = width;
@@ -133,7 +149,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (!height.isEmpty()) {
         if (m_insideGroup) {
             heightValue = height.toInt() * m_real_groupHeight / m_groupHeight;
-            heightString = QString("%1%2").arg(heightValue).arg(m_groupUnit);
+            heightString = QString("%1%2").arg(heightValue).arg(m_groupHeightUnit);
         }
         else {
             heightValue = height.left(height.length() - 2).toDouble();
@@ -163,10 +179,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         body->addAttribute("svg:y2", y2);
     }
     else {
-        body->addAttribute("svg:x", x_pos_string);
-        body->addAttribute("svg:y", y_pos_string);
-        body->addAttribute("svg:width", widthString);
-        body->addAttribute("svg:height", heightString);
+        if (startType != GroupStart) {
+            if (!x_pos_string.isEmpty()) {
+                body->addAttribute("svg:x", x_pos_string);
+            }
+            if (!y_pos_string.isEmpty()) {
+                body->addAttribute("svg:y", y_pos_string);
+            }
+            body->addAttribute("svg:width", widthString);
+            body->addAttribute("svg:height", heightString);
+        }
     }
 
     if (!m_shapeColor.isEmpty()) {
@@ -178,46 +200,102 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:textarea-vertical-align", ver_align);
     }
 
+    if (!hor_pos.isEmpty()) {
+        if (hor_pos == "absolute") {
+            hor_pos = "from-left";
+        }
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (!ver_pos.isEmpty()) {
+        if (ver_pos == "absolute") {
+            ver_pos = "from-top";
+        }
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
+    if (!hor_pos_rel.isEmpty()) {
+        if (hor_pos_rel == "outer-margin-area" || hor_pos_rel == "left-margin-area") {
+            hor_pos_rel = "page-start-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        else if (hor_pos_rel == "margin") {
+            hor_pos_rel = "paragraph-start-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        else if (hor_pos_rel == "inner-margin-area" || hor_pos_rel == "right-margin-area") {
+            hor_pos_rel = "page-end-margin";
+            m_anchorType = "paragraph"; //forced
+        }
+        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+    }
+    if (!ver_pos_rel.isEmpty()) {
+        if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
+            ver_pos_rel = "page-content";
+        }
+        else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" || ver_pos_rel == "outer-margin-area") {
+            ver_pos_rel = "page";
+        }
+        else if (ver_pos_rel == "bottom-margin-area") {
+            ver_pos_rel = "page";
+            // This effectively emulates the bottom-margin-area
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        }
+        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+    }
+
 #ifdef DOCXXMLDOCREADER_H
-    // These seem to be decent defaults
-    m_currentDrawStyle->addProperty("style:horizonal-pos", "from-left");
-    m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+    bool asChar = false;
     if (!m_wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
         if (position.isEmpty() || position == "static") { // Default
+            asChar = true;
             body->addAttribute("text:anchor-type", "as-char");
-            m_currentDrawStyle->addProperty("style:vertical-rel", "char"); // check this
         }
         else {
             body->addAttribute("text:anchor-type", "char");
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+            if (m_currentDrawStyle->property("style:vertical-rel").isEmpty()) {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            }
+            if (m_currentDrawStyle->property("style:horizontal-rel").isEmpty()) {
+                m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+            }
+
+            if (m_vmlStyle.contains("z-index")) {
+                m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                if (m_vmlStyle.value("z-index").toInt() > 0) {
+                    m_currentDrawStyle->addProperty("style:run-through", "foreground");
+                }
+                else {
+                    m_currentDrawStyle->addProperty("style:run-through", "background");
+                }
+            }
+            else {
+                m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                m_currentDrawStyle->addProperty("style:run-through", "foreground");
+            }
         }
     }
     else {
         body->addAttribute("text:anchor-type", m_anchorType);
     }
+    if (!asChar) {
+        // These seem to be decent defaults
+        if (m_currentDrawStyle->property("style:horizontal-pos").isEmpty()) {
+            m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        }
+        if (m_currentDrawStyle->property("style:vertical-pos").isEmpty()) {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+        }
+    }
 #endif
 
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
-    }
+    m_currentPen.setWidthF(m_strokeWidth);
+    m_currentPen.setColor(QColor(m_strokeColor));
+    m_currentPen.setJoinStyle(Qt::MiterJoin);
+
+    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
-        if (m_moveToStylesXml) {
-            mainStyles->markStyleForStylesXml(drawStyleName);
-        }
-
         body->addAttribute("draw:style-name", drawStyleName);
     }
 }
@@ -257,6 +335,46 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
     body->endElement(); //draw:frame or draw:rect
 
     return KoFilter::OK;
+}
+
+void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attrs)
+{
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+
+    m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    if (!type.isEmpty()) {
+        type = type.mid(1); // removes extra # from the start
+    }
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    if (filled.isEmpty()) {
+        filled = m_fillTypeStrings[type];
+    }
+    if (filled != "f" && filled != "false") {
+        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    if (stroked.isEmpty()) {
+        stroked = m_strokeTypeStrings[type];
+    }
+    if (stroked == "f" || stroked == "false") {
+        m_strokeWidth = 0;
+    }
+    else if (!strokecolor.isEmpty()) {
+        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+    }
 }
 
 #undef CURRENT_EL
@@ -307,31 +425,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
-    m_strokeWidth = 1 ; // This seems to be the default
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
-    }
-
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-
-    if (!fillcolor.isEmpty()) {
-        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-    }
-
-    if (!strokecolor.isEmpty()) {
-        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-    }
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
 
     // Note that image fill is not yet supported in fill parameter, but this should be used
     // when it's done
@@ -340,7 +442,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fill)
             else if (qualifiedName() == "v:textbox") {
@@ -384,8 +486,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentPen = QPen();
-
     TRY_READ_ATTR_WITHOUT_NS(endcap)
     Qt::PenCapStyle penCap = m_currentPen.capStyle();
     if (endcap.isEmpty() || endcap == "sq") {
@@ -398,10 +498,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
         penCap = Qt::FlatCap;
     }
     m_currentPen.setCapStyle(penCap);
-    m_currentPen.setWidthF(m_strokeWidth);
-    m_currentPen.setColor(QColor(m_strokeColor));
 
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    TRY_READ_ATTR_WITHOUT_NS(dashstyle)
+    if (!dashstyle.isEmpty()) {
+        if (dashstyle == "1 1") {
+            m_currentPen.setStyle(Qt::DashLine);
+        }
+        else if (dashstyle == "dashDot") {
+            m_currentPen.setStyle(Qt::DashDotLine);
+        }
+    }
 
     readNext();
     READ_EPILOGUE
@@ -410,6 +516,51 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
 #undef CURRENT_EL
 #define CURRENT_EL group
 //! Vml group handler
+/*
+ Parent elements:
+ - background (Part 1, §17.2.1);
+ - group (§14.1.2.7);
+ - object (Part 1, §17.3.3.19);
+ - [done] pict (§9.2.2.2);
+ - [done] pict (§9.5.1)
+
+ Child elements:
+ - anchorlock (Anchor Location Is Locked) §14.3.2.1
+ - arc (Arc Segment) §14.1.2.1
+ - borderbottom (Bottom Border) §14.3.2.2
+ - borderleft (Left Border) §14.3.2.3
+ - borderright (Right Border) §14.3.2.4
+ - bordertop (Top Border) §14.3.2.5
+ - callout (Callout) §14.2.2.2
+ - ClientData (Attached Object Data) §14.4.2.12
+ - clippath (Shape Clipping Path) §14.2.2.3
+ - curve (Bezier Curve) §14.1.2.3
+ - diagram (VML Diagram) §14.2.2.8
+ - extrusion (3D Extrusion) §14.2.2.11
+ - [done] fill (Shape Fill Properties) §14.1.2.5
+ - formulas (Set of Formulas) §14.1.2.6
+ - [done] group (Shape Group) §14.1.2.7
+ - handles (Set of Handles) §14.1.2.9
+ - image (Image File) §14.1.2.10
+ - imagedata (Image Data) §14.1.2.11
+ - line (Line) §14.1.2.12
+ - lock (Shape Protections) §14.2.2.18
+ - [done] oval (Oval) §14.1.2.13
+ - path (Shape Path) §14.1.2.14
+ - polyline (Multiple Path Line) §14.1.2.15
+ - [done] rect (Rectangle) §14.1.2.16
+ - [done] roundrect (Rounded Rectangle) §14.1.2.17
+ - shadow (Shadow Effect) §14.1.2.18
+ - [done] shape (Shape Definition) §14.1.2.19
+ - [done] shapetype (Shape Template) §14.1.2.20
+ - signatureline (Digital Signature Line) §14.2.2.30
+ - skew (Skew Transform) §14.2.2.31
+ - [done] stroke (Line Stroke Settings) §14.1.2.21
+ - textbox (Text Box) §14.1.2.22
+ - textdata (VML Diagram Text) §14.5.2.2
+ - textpath (Text Layout Path) §14.1.2.23
+ - [done] wrap (Text Wrapping) §14.3.2.6
+*/
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 {
     READ_PROLOGUE
@@ -417,97 +568,142 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
-    body->startElement("draw:g");
-
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
-
-    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
-
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 
-    if (!m_currentDrawStyle->isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
-        if (m_moveToStylesXml) {
-            mainStyles->markStyleForStylesXml(drawStyleName);
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+
+    // To handle nested groups
+    bool groupStartsFromMe = false;
+
+    if (!m_insideGroup) {
+
+        const QString width(m_vmlStyle.value("width"));
+        const QString height(m_vmlStyle.value("height"));
+
+        // These potentially cause an offset to all shapes in the group
+        // Unhandled case: theoretically x_mar could be in different units
+        // than width, in this case they should be added somehow intelligently
+        const QString x_mar(m_vmlStyle.value("margin-left"));
+        const QString y_mar(m_vmlStyle.value("margin-top"));
+
+        m_insideGroup = true;
+        groupStartsFromMe = true;
+
+        m_groupWidthUnit = width.right(2); // pt, cm etc.
+        m_groupHeightUnit = height.right(2);
+        m_real_groupWidth = width.left(width.length() - 2).toDouble();
+        m_real_groupHeight = height.left(height.length() - 2).toDouble();
+
+        m_groupX = 0;
+        m_groupY = 0;
+        m_groupWidth = 0;
+        m_groupHeight = 0;
+        m_groupXOffset = 0;
+        m_groupYOffset = 0;
+        // Assuming that two last chars are unit (cm, pt)
+        m_groupXOffset = x_mar.left(x_mar.length() - 2).toDouble();
+        m_groupYOffset = y_mar.left(y_mar.length() - 2).toDouble();
+
+        TRY_READ_ATTR_WITHOUT_NS(coordsize)
+
+        if (!coordsize.isEmpty()) {
+            m_groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
+            m_groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
         }
 
-        body->addAttribute("draw:style-name", drawStyleName);
+        TRY_READ_ATTR_WITHOUT_NS(coordorigin)
+        if (!coordorigin.isEmpty()) {
+            m_groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
+            m_groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
+        }
     }
 
-    const QString width(m_vmlStyle.value("width"));
-    const QString height(m_vmlStyle.value("height"));
+    MSOOXML::Utils::XmlWriteBuffer frameBuf;
+    body = frameBuf.setWriter(body);
 
-    m_groupUnit = width.right(2); // pt, cm etc.
-    m_real_groupWidth = width.left(width.length() - 2).toDouble();
-    m_real_groupHeight = height.left(height.length() - 2).toDouble();
-
-    m_groupX = 0;
-    m_groupY = 0;
-    m_groupWidth = 0;
-    m_groupHeight = 0;
-
-    TRY_READ_ATTR_WITHOUT_NS(coordsize)
-
-    if (!coordsize.isEmpty()) {
-        m_groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
-        m_groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(coordorigin)
-    if (!coordorigin.isEmpty()) {
-        m_groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
-        m_groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
-    }
-
-    m_insideGroup = true;
+    m_wrapRead = false;
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rect)
+            ELSE_TRY_READ_IF(shapetype)
+            ELSE_TRY_READ_IF(roundrect)
+            ELSE_TRY_READ_IF(oval)
+            ELSE_TRY_READ_IF(shape)
+            ELSE_TRY_READ_IF(group)
+            ELSE_TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(stroke)
+            else if (qualifiedName() == "w10:wrap") {
+                m_wrapRead = true;
+                TRY_READ(wrap)
+            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    body->endElement(); // draw:g
+    if (groupStartsFromMe) {
+        m_insideGroup = false;
+    }
 
-    m_insideGroup = false;
+    body = frameBuf.originalWriter();
+
+    m_strokeWidth = 1 ; // This seems to be the default
+    m_shapeColor.clear();
+    m_strokeColor.clear();
+    m_currentPen = QPen();
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        m_strokeColor = "#000000"; // Black color seems to be default
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    if (filled != "f" && filled != "false") {
+        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    if (stroked == "f" || stroked == "false") {
+        m_strokeWidth = 0;
+    }
+    else if (!strokecolor.isEmpty()) {
+        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+    }
+
+    createFrameStart(GroupStart);
+
+    (void)frameBuf.releaseWriter();
+
+    body->endElement(); // draw:g
 
     popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL roundrect
-//! roundrect handler (Rouned rectangle)
-// For parents, children, look from rect
-// Note: this is atm. simplified, should in reality make a round rectangle
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
+// Generic helper which approximates all figures to be rectangles
+// use until better implementation is done
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 {
-    READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 //! @todo support more attrs
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -517,8 +713,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
+        if (isEndElement() && qualifiedName() == m_currentEl) {
+            break;
+        }
+        else if (isStartElement()) {
             TRY_READ_IF(fill)
             else if (qualifiedName() == "v:textbox") {
                 TRY_READ(textbox)
@@ -549,6 +747,42 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     createFrameEnd();
 
     popCurrentDrawStyle();
+
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL oval
+//! oval handler (Oval)
+// For parents, children, look from rect
+// Note: this is atm. simplified, should in reality make an oval
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_oval()
+{
+    READ_PROLOGUE
+
+    m_currentEl = "v:oval";
+    KoFilter::ConversionStatus status = genericReader();
+    if (status != KoFilter::OK) {
+        return status;
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL roundrect
+//! roundrect handler (Rouned rectangle)
+// For parents, children, look from rect
+// Note: this is atm. simplified, should in reality make a round rectangle
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
+{
+    READ_PROLOGUE
+
+    m_currentEl = "v:roundrect";
+    KoFilter::ConversionStatus status = genericReader();
+    if (status != KoFilter::OK) {
+        return status;
+    }
 
     READ_EPILOGUE
 }
@@ -602,7 +836,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //            TRY_READ_IF(fill)
 //! @todo add ELSE_WRONG_FORMAT
@@ -643,7 +877,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
     //const QXmlStreamAttributes attrs(attributes());
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fill)
             ELSE_WRONG_FORMAT
@@ -737,12 +971,13 @@ static QString convertToEnhancedPath(const QString& source)
     QString returnedString;
     ConversionState state = CommandExpected;
     enum CommandType {MoveCommand, LineCommand, RelativeLineCommand, QuadEllipXCommand, QuadEllipYCommand,
-                      CurveCommand};
+                      CurveCommand, RelativeCurveCommand, ArcCommand, ArcToCommand, ArcCommandClock, ArcToCommandClock,
+                      AngleEllipseToCommand, AngleEllipseCommand};
     CommandType lastCommand = MoveCommand;
     QString firstMoveX, firstMoveY, currentX, currentY;
     bool argumentMove;
     QChar command;
-    QString first, second, third, fourth, fifth, sixth;
+    QString first, second, third, fourth, fifth, sixth, seventh, eighth;
 
     while (true) {
         if (parsedString.length() == 0) {
@@ -767,7 +1002,6 @@ static QString convertToEnhancedPath(const QString& source)
             }
             else if (command == 'x') {
                 state = CommandExpected;
-                //returnedString += QString(" L%1 %2").arg(firstMoveX).arg(firstMoveY);
                 returnedString += " Z";
             }
             else if (command == 'e') {
@@ -777,14 +1011,51 @@ static QString convertToEnhancedPath(const QString& source)
             else if (command == 'c') {
                 lastCommand = CurveCommand;
             }
+            else if (command == 'v') {
+                lastCommand = RelativeCurveCommand;
+            }
             else if (command == 'q') {
                 QChar subcommand = parsedString.at(0);
                 parsedString = parsedString.mid(1);
                 if (subcommand == 'x') {
                     lastCommand = QuadEllipXCommand;
+                    returnedString += " X";
                 }
                 else {
                     lastCommand = QuadEllipYCommand;
+                    returnedString += " Y";
+                }
+            }
+            else if (command == 'a') {
+                QChar subcommand = parsedString.at(0);
+                parsedString = parsedString.mid(1);
+                if (subcommand == 'r') {
+                    lastCommand = ArcCommand;
+                    returnedString += " B";
+                }
+                else if (subcommand == 'e') {
+                    lastCommand = AngleEllipseToCommand;
+                    returnedString += " T";
+                }
+                else if (subcommand == 'l') {
+                    lastCommand = AngleEllipseCommand;
+                    returnedString += " U";
+                }
+                else {
+                    lastCommand = ArcToCommand;
+                    returnedString += " A";
+                }
+            }
+            else if (command == 'w') {
+                QChar subcommand = parsedString.at(0);
+                parsedString = parsedString.mid(1);
+                if (subcommand == 'r') {
+                    lastCommand = ArcCommandClock;
+                    returnedString += " V";
+                }
+                else {
+                    lastCommand = ArcToCommandClock;
+                    returnedString += " W";
                 }
             }
             else if (command == 'n') {
@@ -811,6 +1082,42 @@ static QString convertToEnhancedPath(const QString& source)
                 returnedString += QString(" M %1 %2").arg(first).arg(second);
                 state = CommandExpected;
                 break;
+            case RelativeCurveCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                first = QString("%1").arg(first.toInt() + currentX.toInt());
+                second = QString("%1").arg(second.toInt() + currentY.toInt());
+                third = QString("%1").arg(third.toInt() + currentX.toInt());
+                fourth = QString("%1").arg(fourth.toInt() + currentY.toInt());
+                currentX = QString("%1").arg(fifth.toInt() + currentX.toInt());
+                currentY = QString("%1").arg(sixth.toInt() + currentY.toInt());
+                returnedString += QString(" C %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
+                                  arg(fourth).arg(currentX).arg(currentY);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    first = QString("%1").arg(first.toInt() + currentX.toInt());
+                    second = QString("%1").arg(second.toInt() + currentY.toInt());
+                    third = QString("%1").arg(third.toInt() + currentX.toInt());
+                    fourth = QString("%1").arg(fourth.toInt() + currentY.toInt());
+                    currentX = QString("%1").arg(fifth.toInt() + currentX.toInt());
+                    currentY = QString("%1").arg(sixth.toInt() + currentY.toInt());
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
+                                      arg(fourth).arg(currentX).arg(currentY);
+                }
+                break;
             case CurveCommand:
                 first = getArgument(parsedString, true, argumentMove);
                 second = getArgument(parsedString, false, argumentMove);
@@ -820,6 +1127,8 @@ static QString convertToEnhancedPath(const QString& source)
                 sixth = getArgument(parsedString, false, argumentMove);
                 returnedString += QString(" C %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
                                   arg(fourth).arg(fifth).arg(sixth);
+                currentX = fifth;
+                currentY = sixth;
                 while (true) {
                     first = getArgument(parsedString, false, argumentMove);
                     if (argumentMove) {
@@ -833,6 +1142,8 @@ static QString convertToEnhancedPath(const QString& source)
                     sixth = getArgument(parsedString, false, argumentMove);
                     returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).
                                       arg(fourth).arg(fifth).arg(sixth);
+                    currentX = fifth;
+                    currentY = sixth;
                 }
                 break;
             case LineCommand:
@@ -856,10 +1167,9 @@ static QString convertToEnhancedPath(const QString& source)
             case RelativeLineCommand:
                 first = getArgument(parsedString, true, argumentMove);
                 second = getArgument(parsedString, false, argumentMove);
-                returnedString += QString(" L %1 %2").arg(first.toInt() + currentX.toInt()).
-                                                     arg(second.toInt() + currentY.toInt());
-                currentX = first;
-                currentY = second;
+                currentX = QString("%1").arg(first.toInt() + currentX.toInt());
+                currentY = QString("%1").arg(second.toInt() + currentY.toInt());
+                returnedString += QString(" L %1 %2").arg(currentX).arg(currentY);
                 while (true) {
                     first = getArgument(parsedString, false, argumentMove);
                     if (argumentMove) {
@@ -867,16 +1177,16 @@ static QString convertToEnhancedPath(const QString& source)
                         break;
                     }
                     second = getArgument(parsedString, false, argumentMove);
-                    currentX = first;
-                    currentY = second;
-                    returnedString += QString(" %1 %2").arg(first.toInt() + currentX.toInt()).
-                                                        arg(second.toInt() + currentY.toInt());
+                    currentX = QString("%1").arg(first.toInt() + currentX.toInt());
+                    currentY = QString("%1").arg(second.toInt() + currentY.toInt());
+                    returnedString += QString(" %1 %2").arg(currentX).arg(currentY);
                 }
                 break;
             case QuadEllipXCommand:
+            case QuadEllipYCommand:
                 first = getArgument(parsedString, true, argumentMove);
                 second = getArgument(parsedString, false, argumentMove);
-                returnedString += QString(" X %1 %2").arg(first).arg(second);
+                returnedString += QString(" %1 %2").arg(first).arg(second);
                 currentX = first;
                 currentY = second;
                 while (true) {
@@ -891,12 +1201,22 @@ static QString convertToEnhancedPath(const QString& source)
                     returnedString += QString(" %1 %2").arg(first).arg(second);
                 }
                 break;
-            case QuadEllipYCommand:
+            case ArcCommand:
+            case ArcToCommand:
+            case ArcCommandClock:
+            case ArcToCommandClock:
                 first = getArgument(parsedString, true, argumentMove);
                 second = getArgument(parsedString, false, argumentMove);
-                returnedString += QString(" Y %1 %2").arg(first).arg(second);
-                currentX = first;
-                currentY = second;
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                seventh = getArgument(parsedString, false, argumentMove);
+                eighth = getArgument(parsedString, false, argumentMove);
+                currentX = seventh;
+                currentY = eighth;
+                returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth).arg(seventh).arg(eighth);
                 while (true) {
                     first = getArgument(parsedString, false, argumentMove);
                     if (argumentMove) {
@@ -904,9 +1224,47 @@ static QString convertToEnhancedPath(const QString& source)
                         break;
                     }
                     second = getArgument(parsedString, false, argumentMove);
-                    currentX = first;
-                    currentY = second;
-                    returnedString += QString(" %1 %2").arg(first).arg(second);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    seventh = getArgument(parsedString, false, argumentMove);
+                    eighth = getArgument(parsedString, false, argumentMove);
+                    currentX = seventh;
+                    currentY = eighth;
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6 %7 %8").arg(first).arg(second).arg(third).arg(fourth).
+                        arg(fifth).arg(sixth).arg(seventh).arg(eighth);
+                }
+                break;
+            case AngleEllipseToCommand:
+            case AngleEllipseCommand:
+                first = getArgument(parsedString, true, argumentMove);
+                second = getArgument(parsedString, false, argumentMove);
+                third = getArgument(parsedString, false, argumentMove);
+                fourth = getArgument(parsedString, false, argumentMove);
+                fifth = getArgument(parsedString, false, argumentMove);
+                sixth = getArgument(parsedString, false, argumentMove);
+                // These are most likely wrong, spec does not mention which units the angle uses
+                // nor how the angle should be interpreted
+                currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
+                currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
+                returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth);
+                while (true) {
+                    first = getArgument(parsedString, false, argumentMove);
+                    if (argumentMove) {
+                        state = CommandExpected;
+                        break;
+                    }
+                    second = getArgument(parsedString, false, argumentMove);
+                    third = getArgument(parsedString, false, argumentMove);
+                    fourth = getArgument(parsedString, false, argumentMove);
+                    fifth = getArgument(parsedString, false, argumentMove);
+                    sixth = getArgument(parsedString, false, argumentMove);
+                    currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
+                    currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
+                    returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).arg(fourth).
+                    arg(fifth).arg(sixth);
                 }
                 break;
             }
@@ -983,11 +1341,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
         m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(enPath);
     }
 
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    m_fillTypeStrings[id] = filled;
+    m_strokeTypeStrings[id] = stroked;
+
     m_shapeTypeString += ">";
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(formulas)
             SKIP_UNKNOWN
@@ -1032,7 +1395,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_formulas()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(f)
             ELSE_WRONG_FORMAT
@@ -1063,6 +1426,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
         eqn = eqn.trimmed();
         eqn.replace('#', '$'); // value reference
         eqn.replace('@', "?f"); // function reference
+        eqn.replace("pixelWidth", "width");
+        eqn.replace("pixelHeight", "height");
+        eqn.replace("emuWidth", "width");
+        eqn.replace("emuHeight", "height");
+        eqn.replace("emuWidth2", "(width/2)");
+        eqn.replace("emuHeight2", "(height/2)");
+        eqn.replace("lineDrawn", "hasstroke");
+        eqn.replace("pixelLineWidth", "1");
+        eqn.replace("xcenter", "(width/2)");
+        eqn.replace("ycenter", "(height/2)");
         int commandIndex = eqn.indexOf(' ');
         QString command = eqn.left(commandIndex);
         eqn = eqn.mid(commandIndex + 1);
@@ -1089,13 +1462,46 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
             m_shapeTypeString += QString("abs(%1)").arg(parameters.at(0));
         }
         else if (command == "min") {
-            m_shapeTypeString += QString("min(%1, %2)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("min(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "max") {
-            m_shapeTypeString += QString("max(%1, %2)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_shapeTypeString += QString("max(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "if") {
-            m_shapeTypeString += QString("if(%1, %2, %3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_shapeTypeString += QString("if(max(%1,0),%2,%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+        }
+        else if (command == "sqrt") {
+            m_shapeTypeString += QString("sqrt(%1)").arg(parameters.at(0));
+        }
+        else if (command == "mid") {
+            m_shapeTypeString += QString("(%1+%2)/2").arg(parameters.at(0)).arg(parameters.at(1));
+        }
+        else if (command == "mod") {
+            m_shapeTypeString += QString("sqrt(%1*%1+%2*%2+%3*%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+        }
+        else if (command == "ellipse") {
+            m_shapeTypeString += QString("%3-sqrt(1-(%1/%2)*(%1/%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+        }
+        else if (command == "atan2") {
+            m_shapeTypeString += QString("atan2(%2,%1)").arg(parameters.at(0)).arg(parameters.at(1));
+        }
+        else if (command == "cosatan2") {
+            m_shapeTypeString += QString("%1*cos(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+        }
+        else if (command == "sinatan2") {
+            m_shapeTypeString += QString("%1*sin(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+        }
+        else if (command == "sumangle") {
+            m_shapeTypeString += QString("%1+%2*65536-%3*65536").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+        }
+        else if (command == "sin") {
+            m_shapeTypeString += QString("%1*sin(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
+        }
+        else if (command == "cos") {
+            m_shapeTypeString += QString("%1*cos(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
+        }
+        else if (command == "tan") {
+            m_shapeTypeString += QString("%1*tan(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
         }
     }
 
@@ -1130,7 +1536,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
  - equationxml (Storage for Alternate Math Content) §14.2.2.10
  - extrusion (3D Extrusion) §14.2.2.11
  - fill (Shape Fill Properties) §14.1.2.5
- - formulas (Set of Formulas) §14.1.2.6
+ - [done] formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
  - [done] imagedata (Image Data) §14.1.2.11
  - ink (Ink) §14.2.2.15
@@ -1174,39 +1580,44 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
     TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS(path)
+    TRY_READ_ATTR_WITHOUT_NS(adj)
+    TRY_READ_ATTR_WITHOUT_NS(coordsize)
+    if (!path.isEmpty()) {
+        m_shapeTypeString = "<draw:enhanced-geometry ";
 
-    m_strokeWidth = 1 ; // This seems to be the default
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        if (!adj.isEmpty()) {
+            QString tempModifiers = adj;
+            tempModifiers.replace(',', " ");
+            m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
+        }
+        if (!coordsize.isEmpty()) {
+            QString tempViewBox = "0 0 " + coordsize;
+            tempViewBox.replace(',', " ");
+            m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
+        }
+        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(convertToEnhancedPath(path));
+        m_shapeTypeString += ">";
     }
 
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-
-    if (!fillcolor.isEmpty()) {
-        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-    }
-
-    if (!strokecolor.isEmpty()) {
-        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-    }
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+
     m_wrapRead = false;
 
     bool isCustomShape = true;
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "v:imagedata") {
                 isCustomShape = false;
@@ -1221,8 +1632,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 m_wrapRead = true;
                 TRY_READ(wrap)
             }
+            ELSE_TRY_READ_IF(formulas)
             SKIP_UNKNOWN
         }
+    }
+
+    // Case of a custom shape which is not defined in a shapetype
+    if (!path.isEmpty()) {
+        m_shapeTypeString += "</draw:enhanced-geometry>";
     }
 
     body = frameBuf.originalWriter();
@@ -1244,9 +1661,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
-        if (isCustomShape) {
-            type = type.mid(1); // removes extra # from the start
-            body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+        if (isCustomShape && o_connectortype.isEmpty()) {
+            if (!type.isEmpty()) {
+                type = type.mid(1); // removes extra # from the start
+                body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
+            }
+            else {
+                body->addCompleteElement(m_shapeTypeString.toUtf8());
+            }
         }
         createFrameEnd();
     }
@@ -1337,7 +1759,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 #ifdef DOCXXMLDOCREADER_CPP
             TRY_READ_IF_NS(w, txbxContent)
@@ -1366,7 +1788,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     TRY_READ_ATTR_WITHOUT_NS(side)
 
     if (type.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:wrap", "none");
+        if (m_vmlStyle.contains("z-index")) {
+            m_currentDrawStyle->addProperty("style:wrap", "run-through");
+            if (m_vmlStyle.value("z-index").toInt() > 0) {
+                m_currentDrawStyle->addProperty("style:run-through", "foreground");
+            }
+            else {
+                m_currentDrawStyle->addProperty("style:run-through", "background");
+            }
+        }
+        else {
+            m_currentDrawStyle->addProperty("style:wrap", "run-through");
+            m_currentDrawStyle->addProperty("style:run-through", "foreground");
+        }
     }
     else if (type == "through") {
         m_currentDrawStyle->addProperty("style:wrap", "run-through");
@@ -1412,7 +1846,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     }
     else { // margin
         m_anchorType = "paragraph";
-        m_currentDrawStyle->addProperty("text:anchor-type", "paragraph");
         m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
     }
 

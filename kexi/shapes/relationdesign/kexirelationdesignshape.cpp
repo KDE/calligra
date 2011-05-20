@@ -250,11 +250,7 @@ void KexiRelationDesignShape::setRelation(const QString& rel){
 
 void KexiRelationDesignShape::addConnectionPoints()
 {
-    const int point_count = connectionPoints().count();
-
-    for (int j = 0; j < point_count; ++j) {
-        removeConnectionPoint(0);
-    }
+    clearConnectionPoints();
 
     uint i = 0;
     int offset = 0;

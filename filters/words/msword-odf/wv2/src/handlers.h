@@ -25,7 +25,6 @@
 #include "sharedptr.h"
 #include "functordata.h"
 #include "wv2_export.h"
-#include "ms_odraw.h"
 
 namespace wvWare {
 
@@ -76,6 +75,12 @@ namespace wvWare {
     {
     public:
         virtual ~SubDocumentHandler();
+
+        /**
+	 * Set the progress of WordDocument Stream processing.  All other
+	 * streams (Table, Data) are refered from this one.
+	 */
+        virtual void setProgress(const int percent);
 
         /**
          * This method is called as soon as you call @ref Parser::parse. It indicates
@@ -197,75 +202,6 @@ namespace wvWare {
          * This method is invoked every time we reach a cell end.
          */
         virtual void tableCellEnd();
-    };
-
-    //NOTE: PictureHandler is OBSOLETE, graphics are handled by the
-    //GraphicsHandler and msword-odf filter is using msoscheme to parse
-    //MS-ODRAW containers and structures.
-
-    class OLEImageReader;
-
-    /**
-     * The PictureHandler class is the interface for all image related
-     * callbacks. All the image data is passed to the consumer via this
-     * interface.
-     */
-
-    class WV2_EXPORT PictureHandler
-    {
-    public:
-        /**
-         * A small helper struct to express the dimensions of the passed
-         * .wmf. A dimension of 0 indicates an invalid dimension.
-         */
-        // ###### FIXME: Do we really need that?
-        /*
-        struct WMFDimensions
-        {
-            WMFDimensions( const U8* rcWinMF )
-            {
-                left = readS16( rcWinMF );
-                top = readS16( rcWinMF + 2 );
-                width = readU16( rcWinMF + 4 );
-                height = readU16( rcWinMF + 6 );
-            }
-            S16 left;
-            S16 top;
-            U16 width;
-            U16 height;
-        };
-        */
-
-        virtual ~PictureHandler();
-
-        /**
-         * This method is called when you invoke a PictureFunctor and the embedded
-         * image is a bitmap. The bitmap data can be accessed using the OLEImageReader.
-         * Note: The reader will only be valid until you return form that method, and
-         * don't forget that you're directly accessing little-endian image data!
-         */
-        virtual void bitmapData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf );
-        /**
-         * This method is called when the image is escher data.
-         */
-        virtual void escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf, int type, const U8* rgbUid);
-        virtual void escherData( std::vector<U8> data, SharedPtr<const Word97::PICF> picf, int type, const U8* rgbUid);
-        /**
-         * This method is called when you invoke a PictureFunctor and the embedded
-         * image is a .wmf file. The data can be accessed using the OLEImageReader.
-         * Note: The reader will only be valid until you return form that method, and
-         * don't forget that you're directly accessing little-endian data!
-         */
-        virtual void wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf );
-        /**
-         * Word allows to store .tif, .bmp, or .gif images externally.
-         */
-        virtual void externalImage( const UString& name, SharedPtr<const Word97::PICF> picf );
-
-        /**
-         * For the output of officeArt.
-         */
-        virtual void officeArt(wvWare::OfficeArtProperties *artProperties);
     };
 
     /**
@@ -404,7 +340,9 @@ namespace wvWare {
          * invokes the functor.
          */
         virtual void footnoteFound( FootnoteData::Type type, UString characters,
-                                    SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote);
+                                    SharedPtr<const Word97::SEP> sep,
+                                    SharedPtr<const Word97::CHP> chp,
+                                    const FootnoteFunctor& parseFootnote);
 
         /**
          * The parser found an annotation. The passed functor will trigger the parsing of this

@@ -81,7 +81,6 @@ private slots:
     void nodeChanged(KisNode * node);
     
     void updateNodes();
-    
 private:
 
     class Private;

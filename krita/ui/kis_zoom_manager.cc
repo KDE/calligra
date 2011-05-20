@@ -59,21 +59,27 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_actualPixels(0)
         , m_actualSize(0)
         , m_fitToCanvas(0)
+        , m_zoomActionWidget(0)
 {
 }
 
 KisZoomManager::~KisZoomManager()
 {
+    m_view->removeStatusBarItem(m_zoomActionWidget);
     KisConfig cfg;
     cfg.setShowRulers(m_showRulersAction->isChecked());
 }
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
+    KoZoomMode::setMinimumZoom(0.00391);
+    KoZoomMode::setMaximumZoom(256.0);
+
     KisConfig cfg;
     m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
     m_zoomHandler->setZoom(1.0);
+
 
     KisImageWSP image = m_view->image();
     m_zoomController->setPageSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));
@@ -81,7 +87,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     m_zoomAction = m_zoomController->zoomAction();
     actionCollection->addAction("zoom", m_zoomAction);
-    m_view->addStatusBarItem(m_zoomAction->createWidget(m_view->KoView::statusBar()), 0, true);
+    m_zoomActionWidget = m_zoomAction->createWidget(m_view->KoView::statusBar());
+    m_view->addStatusBarItem(m_zoomActionWidget, 0, true);
 
     m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection->addAction("view_ruler", m_showRulersAction);
@@ -161,7 +168,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     KisImageWSP image = m_view->image();
 
     m_view->canvasBase()->notifyZoomChanged();
-    m_view->canvas()->update();
+    m_canvasController->pan(m_view->canvasBase()->coordinatesConverter()->updateOffsetAfterTransform());
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

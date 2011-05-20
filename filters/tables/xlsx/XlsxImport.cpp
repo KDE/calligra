@@ -28,7 +28,6 @@
 #include "XlsxXmlSharedStringsReader.h"
 #include "XlsxXmlStylesReader.h"
 #include "XlsxXmlCommentsReader.h"
-#include "XlsxSharedString.h"
 
 #include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
@@ -549,35 +548,16 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    <!-- /COPIED -->"
     );
 
-    // 1. parse shared strings
-    XlsxSharedStringVector sharedStrings;
-    {
-        XlsxXmlSharedStringsReader sharedStringsReader(writers);
-        XlsxXmlSharedStringsReaderContext context(sharedStrings);
-        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
-                            MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context))
-    }
-    // 2. parse styles
-    XlsxStyles styles;
-    {
-        XlsxXmlStylesReader stylesReader(writers);
-        XlsxXmlStylesReaderContext context(styles);
-        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
-                            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context))
-    }
-    // 3. parse comments
-    XlsxComments comments;
-    {
-        XlsxXmlCommentsReader commentsReader(writers);
-        XlsxXmlCommentsReaderContext context(comments);
-        RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
-//! @todo only support "xl/comments1.xml" filename for comments?
-            "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
-    }
+    // Todo, find out whether these are defaults for xlsx or whether they can be read somewhere
+    writers->body->startElement("table:calculation-settings");
+    writers->body->addAttribute("table:case-sensitive", "false");
+    writers->body->addAttribute("table:automatic-find-labels", "false");
+    writers->body->addAttribute("table:use-regular-expressions", "false");
+    writers->body->endElement(); // table:calculation-settings
 
-    // 4. parse themes
+    // 1. parse themes
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
-    
+
     // following is a workaround till the patch at https://bugs.freedesktop.org/show_bug.cgi?id=30417 is applied
     // so we are able to proper handle this case already before using the mimetype.
     if (partNames.isEmpty() && d->type != XlsxMacroDocument) {
@@ -611,13 +591,57 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     KoFilter::ConversionStatus status
         = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
 
+    reportProgress(5);
+
+    // 2. parse styles
+    XlsxStyles styles;
+    XlsxXmlStylesReaderContext colorContext(styles, true, &themes);
+    {
+        // In first round we read color overrides, in 2nd round we can actually use them.
+        XlsxXmlStylesReader stylesReader(writers);
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
+                            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &colorContext))
+        reportProgress(15);
+        XlsxXmlStylesReaderContext context2(styles, false, &themes);
+        context2.colorIndices = colorContext.colorIndices; // Overriding default colors potentially
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
+                            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context2))
+    }
+
+    reportProgress(30);
+
+    // 3. parse shared strings
+    QVector<QString> sharedStrings;
+    {
+        XlsxXmlSharedStringsReader sharedStringsReader(writers);
+        XlsxXmlSharedStringsReaderContext context(sharedStrings, &themes, colorContext.colorIndices);
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
+                            MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context))
+    }
+
+    reportProgress(35);
+
+    // 4. parse comments
+    XlsxComments comments;
+    {
+        XlsxXmlCommentsReader commentsReader(writers);
+        XlsxXmlCommentsReaderContext context(comments, &themes, colorContext.colorIndices);
+        RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+//! @todo only support "xl/comments1.xml" filename for comments?
+            "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
+    }
+
+    reportProgress(40);
+
     // 5. parse document
     {
         XlsxXmlDocumentReaderContext context(*this, &themes, sharedStrings, comments, styles, *relationships);
         XlsxXmlDocumentReader documentReader(writers);
-        RETURN_IF_ERROR(loadAndParseDocument(
-            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
+        RETURN_IF_ERROR(loadAndParseDocument(d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context))
     }
+
+    reportProgress(100);
+
     // more here...
     return KoFilter::OK;
 }

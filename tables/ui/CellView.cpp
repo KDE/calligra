@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
@@ -66,6 +66,7 @@
 
 // KSpread
 #include "ApplicationSettings.h"
+#include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Condition.h"
 #include "Map.h"
@@ -99,7 +100,6 @@ public:
             , shrinkToFitFontSize(0.0)
             , hidden(false)
             , merged(false)
-            , obscured(false)
             , fittingHeight(true)
             , fittingWidth(true)
             , filterButton(false)
@@ -129,20 +129,13 @@ public:
 
     bool hidden         : 1;
     bool merged         : 1;
-    bool obscured       : 1;
     bool fittingHeight  : 1;
     bool fittingWidth   : 1;
     bool filterButton   : 1;
     // NOTE Stefan: A cell is either obscured by an other one or obscures others itself.
     //              But never both at the same time, so we can share the memory for this.
-    union {
-        int obscuringCellX : 16; // KS_colMax
-        int obscuredCellsX : 16; // KS_colMax
-    };
-    union {
-        int obscuringCellY : 16; // KS_rowMax
-        int obscuredCellsY : 16; // KS_rowMax
-    };
+    int obscuredCellsX : 16; // KS_colMax
+    int obscuredCellsY : 24; // KS_rowMax
 
     // This is the text we want to display. Not necessarily the same
     // as the user input, e.g. Cell::userInput()="1" and displayText="1.00".
@@ -243,7 +236,8 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         value = sheet->map()->formatter()->formatText(cell.value(), d->style.formatType(),
                 d->style.precision(), d->style.floatFormat(),
                 d->style.prefix(), d->style.postfix(),
-                d->style.currency().symbol(), d->style.customFormat());
+                d->style.currency().symbol(), d->style.customFormat(),
+                d->style.thousandsSep());
         d->displayText = value.asString();
 
         QSharedPointer<QTextDocument> doc = cell.richText();
@@ -267,6 +261,9 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         // if the format is text, align it according to the text direction
         else if (d->style.formatType() == Format::Text || value.format() == Value::fmt_String)
             d->style.setHAlign(d->displayText.isRightToLeft() ? Style::Right : Style::Left);
+        // if the value is a boolean, center-align
+        else if (cell.value().type() == Value::Boolean)
+            d->style.setHAlign(Style::Center);
         // if the style does not define a specific format, align it according to the sheet layout
         else
             d->style.setHAlign(cell.sheet()->layoutDirection() == Qt::RightToLeft ? Style::Left : Style::Right);
@@ -333,9 +330,10 @@ QRectF CellView::textRect() const
 
 QString CellView::testAnchor(SheetView* sheetView, const Cell& cell, qreal x, qreal y) const
 {
-    if (isObscured()) {
+    if (sheetView->isObscured(cell.cellPosition())) {
+        QPoint obscuringCell = sheetView->obscuringCell(cell.cellPosition());
         Sheet* sheet = cell.sheet();
-        Cell otherCell = Cell(sheet, d->obscuringCellX, d->obscuringCellY);
+        Cell otherCell = Cell(sheet, obscuringCell.x(), obscuringCell.y());
         const CellView& otherView = sheetView->cellView(otherCell.column(), otherCell.row());
         if (cell.column() != otherCell.column()) x += sheet->columnPosition(cell.column()) - sheet->columnPosition(otherCell.column());
         if (cell.row() != otherCell.row()) y += sheet->rowPosition(cell.row()) - sheet->rowPosition(otherCell.row());
@@ -387,7 +385,7 @@ void CellView::paintCellContents(const QRectF& /*paintRect*/, QPainter& painter,
         return;
     if (d->merged)
         return;
-    if (d->obscured)
+    if (sheetView->isObscured(cell.cellPosition()))
         return;
 
     // ----------------  Start the actual painting.  ----------------
@@ -674,11 +672,11 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
     }
 
     // Check obscuring...
-    if (isObscured()) {
+    if (sheetView->isObscured(cell.cellPosition())) {
         // by default: none ...
         paintBorder = NoBorder;
         // left and top, only if it's the left or top of the obscuring cell
-        const QPoint obscuringCell = this->obscuringCell();
+        const QPoint obscuringCell = sheetView->obscuringCell(cell.cellPosition());
         if (cell.column() == obscuringCell.x())
             paintBorder |= LeftBorder;
         else if (cell.row() == obscuringCell.y())
@@ -1122,8 +1120,9 @@ void CellView::paintText(QPainter& painter,
 
     // set a clipping region for non-rotated text
     painter.save();
-    if (tmpAngle == 0)
-        painter.setClipRect(QRectF(coordinate, QSizeF(d->width, d->height)));
+    if (tmpAngle == 0) {
+        painter.setClipRect(QRectF(coordinate.x(), coordinate.y(), d->width, d->height), Qt::IntersectClip);
+    }
 
 
     // Actually paint the text.
@@ -1202,6 +1201,7 @@ void CellView::paintText(QPainter& painter,
 #endif
         QTextDocument* doc = d->richText->clone();
         doc->setDefaultTextOption(d->textOptions());
+        doc->setUseDesignMetrics(true);
         const QPointF position(coordinate.x() + indent,
                                coordinate.y() + d->textY - d->textHeight);
         painter.translate(position);
@@ -1469,6 +1469,11 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
         // Not enough space but align to left
         qreal  len = 0.0;
 
+        // If it fits in the width, chopping won't do anything
+        if (d->fittingWidth) {
+            return d->displayText;
+        }
+
         len = d->width;
 #if 0
         for (int i = cell.column(); i <= cell.column() + d->obscuredCellsX; i++) {
@@ -1482,9 +1487,14 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
         if (!cell.isEmpty())
             tmpIndent = style().indentation();
 
+        KLocale* locale = cell.sheet()->map()->calculationSettings()->locale();
+
         // Estimate worst case length to reduce the number of iterations.
         int start = qRound((len - 4.0 - 1.0 - tmpIndent) / fm.width('.'));
         start = qMin(d->displayText.length(), start);
+        int idxOfDecimal = d->displayText.indexOf(locale->decimalSymbol());
+        if (idxOfDecimal < 0) idxOfDecimal = d->displayText.length();
+
         // Start out with the whole text, cut one character at a time, and
         // when the text finally fits, return it.
         for (int i = start; i >= 0; i--) {
@@ -1504,8 +1514,17 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
                 //out of space to fit even the integer part of the number then display #########
                 //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
 
-                if (!tmp.contains('.'))
-                    d->displayText = QString().fill('#', 20);
+                if (i < idxOfDecimal) {
+                    //first try removing thousands seperators before replacing text with ######
+                    QString tmp2 = d->displayText;
+                    tmp2.remove(locale->thousandsSeparator());
+                    int sepCount = d->displayText.length() - tmp2.length();
+                    if (i < idxOfDecimal - sepCount) {
+                        tmp = QString().fill('#', i);
+                    } else {
+                        tmp = tmp2.left(i);
+                    }
+                }
             }
 
             // 4 equal length of red triangle +1 point.
@@ -1882,7 +1901,7 @@ void CellView::obscureHorizontalCells(SheetView* sheetView, const Cell& masterCe
                 d->width += extraWidth;
 
                 const QRect obscuredRange(effectiveCol + 1, masterCell.row(), d->obscuredCellsX, 1);
-                sheetView->obscureCells(obscuredRange, masterCell.cellPosition());
+                sheetView->obscureCells(masterCell.cellPosition(), d->obscuredCellsX, d->obscuredCellsY);
 
                 // Not enough space
                 if (status == NotEnoughSpace)
@@ -1944,7 +1963,7 @@ void CellView::obscureVerticalCells(SheetView* sheetView, const Cell& masterCell
             d->height += extraHeight;
 
             const QRect obscuredRange(masterCell.column(), effectiveRow + 1, 1, d->obscuredCellsY);
-            sheetView->obscureCells(obscuredRange, masterCell.cellPosition());
+            sheetView->obscureCells(masterCell.cellPosition(), d->obscuredCellsX, d->obscuredCellsY);
 
             // Not enough space
             if (status == NotEnoughSpace)
@@ -2001,33 +2020,6 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
         textLayout.draw(&painter, QPointF(location.x(), (location.y() + offset)));
         offset += height;
     }
-}
-
-void CellView::obscure(int col, int row)
-{
-    d->obscured = true;
-    d->obscuringCellX = col;
-    d->obscuringCellY = row;
-}
-
-QSize CellView::obscuredRange() const
-{
-    return d->obscured ? QSize() : QSize(d->obscuredCellsX, d->obscuredCellsY);
-}
-
-QPoint CellView::obscuringCell() const
-{
-    return d->obscured ? QPoint(d->obscuringCellX, d->obscuringCellY) : QPoint();
-}
-
-bool CellView::isObscured() const
-{
-    return d->obscured && (d->obscuringCellX != 0 && d->obscuringCellY != 0);
-}
-
-bool CellView::obscuresCells() const
-{
-    return !d->obscured && (d->obscuredCellsX != 0 || d->obscuredCellsY != 0);
 }
 
 qreal CellView::cellHeight() const
@@ -2232,5 +2224,6 @@ QTextOption CellView::Private::textOptions() const
     if (style.verticalText())
         options.setAlignment(Qt::AlignHCenter);
     options.setWrapMode(style.wrapText() ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
+    options.setUseDesignMetrics(true);
     return options;
 }

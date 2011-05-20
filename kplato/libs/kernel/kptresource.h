@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  Copyright (C) 2001 Thomas Zander zander@kde.org
  Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -101,6 +102,9 @@ public:
 
     bool isScheduled() const;
     
+    /// Return true if any resource in this group is baselined
+    bool isBaselined( long id = BASELINESCHEDULE ) const;
+
     /** Manage the resources in this list
      * <p>At some point we will have to look at not mixing types of resources
      * (e.g. you can't add a person to a list of computers
@@ -255,13 +259,13 @@ public:
     ResourceGroup *parentGroup() const { return m_parent; }
     
     /// Set the time from when the resource is available to this project
-    void setAvailableFrom( const QDateTime &af ) { m_availableFrom = KDateTime( af ); changed();}
+    void setAvailableFrom( const QDateTime &af ) { m_availableFrom = af; changed();}
     /// Set the time from when the resource is available to this project
     void setAvailableFrom( const DateTime &af ) { m_availableFrom = af; changed(); }
     /// Return the time when the resource is available to this project
     const DateTime &availableFrom() const { return m_availableFrom;}
     /// Set the time when the resource is no longer available to this project
-    void setAvailableUntil( const QDateTime &au ) { m_availableUntil = KDateTime( au ); changed(); }
+    void setAvailableUntil( const QDateTime &au ) { m_availableUntil = au; changed(); }
     /// Set the time when the resource is no longer available to this project
     void setAvailableUntil( const DateTime &au ) { m_availableUntil = au; changed(); }
     /// Return the time when the resource is no longer available to this project.
@@ -298,7 +302,7 @@ public:
     /// check if overbooked on date.
     bool isOverbooked( const QDate &date ) const;
     /// check if overbooked within the interval start, end.
-    bool isOverbooked( const KDateTime &start, const KDateTime &end ) const;
+    bool isOverbooked( const DateTime &start, const DateTime &end ) const;
 
     double normalRate() const { return cost.normalRate; }
     void setNormalRate( double rate ) { cost.normalRate = rate; changed(); }
@@ -348,25 +352,32 @@ public:
     { return m_requests; }
 
     /// Returns a list of work intervals in the interval @p from, @p until.
-    /// Appointments are subtracted if @p schedule is not 0.
-    AppointmentIntervalList workIntervals( const DateTime &from, const DateTime &until, Schedule *schedule = 0 ) const;
+    /// Appointments are subtracted if @p schedule is not 0 and overbooking is not allowed.
+    AppointmentIntervalList workIntervals( const DateTime &from, const DateTime &until, Schedule *schedule ) const;
+
+    /// Returns a list of work intervals in the interval @p from, @p until.
+    AppointmentIntervalList workIntervals( const DateTime &from, const DateTime &until ) const;
 
     /// Updates work interval cache a list of work intervals extracted from the resource calendar
     /// with @p load in the interval @p from, @p until.
     /// The load of the intervals is set to m_units
     /// Note: The list may contain intervals outside @p from, @p until
     void calendarIntervals( const DateTime &from, const DateTime &until ) const;
+    /// Load cache from @p element
+    bool loadCalendarIntervalsCache( const KoXmlElement& element, KPlato::XMLLoaderObject& status );
+    /// Save cache to @p element
+    void saveCalendarIntervalsCache( QDomElement &element ) const;
 
     /// Returns the effort that can be done starting at @p start within @p duration.
     /// The current schedule is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
-    Duration effort( const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>() ) const;
+    Duration effort( const DateTime &start, const Duration &duration, int units = 100, bool backward = false, const QList<Resource*> &required = QList<Resource*>() ) const;
 
     /// Returns the effort that can be done starting at @p start within @p duration.
     /// The schedule @p sch is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
     /// Status is returned in @p ok
-    Duration effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>() ) const;
+    Duration effort( KPlato::Schedule* sch, const DateTime &start, const Duration& duration, int units = 100, bool backward = false, const QList< Resource* >& required = QList<Resource*>() ) const;
 
 
     /**
@@ -417,10 +428,14 @@ public:
     QHash<long, Schedule*> schedules() const { return m_schedules; }
     /**
      * Return schedule with @id
-     * If @id == -1, return m_currentSchedule
-     * Return 0 if schedule with @id doesn't exist.
+     * If @p id == CURRENTSCHEDULE, return m_currentSchedule
+     * Return 0 if schedule with @p id doesn't exist.
      */
-    Schedule *schedule( long id = -1 ) const;
+    Schedule *schedule( long id = CURRENTSCHEDULE ) const;
+    /// Returns true if schedule with @p id is baselined.
+    /// if Team resource, if any of the team members is baselined
+    /// By default returns true if any schedule is baselined
+    bool isBaselined( long id = BASELINESCHEDULE ) const;
     /**
      * Return schedule with @id
      * Return 0 if schedule with @id doesn't exist.
@@ -444,7 +459,7 @@ public:
     void clearExternalAppointments();
     void clearExternalAppointments( const QString id );
     AppointmentIntervalList externalAppointments( const QString &id );
-    AppointmentIntervalList externalAppointments() const;
+    AppointmentIntervalList externalAppointments( const DateTimeInterval &interval = DateTimeInterval() ) const;
 
     int numExternalAppointments() const { return m_externalAppointments.count(); }
     QList<Appointment*> externalAppointmentList() const { return m_externalAppointments.values(); }
@@ -489,11 +504,17 @@ public:
         WorkInfoCache() { clear(); }
         void clear() { start = end = DateTime(); effort = Duration::zeroDuration; intervals.clear(); version = -1; }
         bool isValid() const { return start.isValid() && end.isValid(); }
+        DateTime firstAvailableAfter( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const;
+        DateTime firstAvailableBefore( const DateTime &time, const DateTime &limit, Calendar *cal, Schedule *sch ) const;
+
         DateTime start;
         DateTime end;
         Duration effort;
         AppointmentIntervalList intervals;
         int version;
+
+        bool load( const KoXmlElement& element, KPlato::XMLLoaderObject& status );
+        void save( QDomElement &element ) const;
     };
 
 signals:
@@ -553,6 +574,7 @@ public:
 #endif
 };
 
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Resource::WorkInfoCache &c );
 
 /**
  * Risk is associated with a resource/task pairing to indicate the planner's confidence in the

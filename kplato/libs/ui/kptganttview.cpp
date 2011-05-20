@@ -81,10 +81,12 @@ GanttChartDisplayOptionsPanel::GanttChartDisplayOptionsPanel( GanttItemDelegate 
     connect( ui_showResourceNames, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showDependencies, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showPositiveFloat, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showNegativeFloat, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showCriticalPath, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showCriticalTasks, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showCompletion, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showSchedulingError, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showTimeConstraint, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
 }
 
 void GanttChartDisplayOptionsPanel::slotOk()
@@ -93,10 +95,12 @@ void GanttChartDisplayOptionsPanel::slotOk()
     m_delegate->showResources = ui_showResourceNames->checkState() == Qt::Checked;
     m_delegate->showTaskLinks = ui_showDependencies->checkState() == Qt::Checked;
     m_delegate->showPositiveFloat = ui_showPositiveFloat->checkState() == Qt::Checked;
+    m_delegate->showNegativeFloat = ui_showNegativeFloat->checkState() == Qt::Checked;
     m_delegate->showCriticalPath = ui_showCriticalPath->checkState() == Qt::Checked;
     m_delegate->showCriticalTasks = ui_showCriticalTasks->checkState() == Qt::Checked;
     m_delegate->showProgress = ui_showCompletion->checkState() == Qt::Checked;
     m_delegate->showSchedulingError = ui_showSchedulingError->checkState() == Qt::Checked;
+    m_delegate->showTimeConstraint = ui_showTimeConstraint->checkState() == Qt::Checked;
 }
 
 void GanttChartDisplayOptionsPanel::setValues( const GanttItemDelegate &del )
@@ -105,10 +109,12 @@ void GanttChartDisplayOptionsPanel::setValues( const GanttItemDelegate &del )
     ui_showResourceNames->setCheckState( del.showResources ? Qt::Checked : Qt::Unchecked );
     ui_showDependencies->setCheckState( del.showTaskLinks ? Qt::Checked : Qt::Unchecked );
     ui_showPositiveFloat->setCheckState( del.showPositiveFloat ? Qt::Checked : Qt::Unchecked );
+    ui_showNegativeFloat->setCheckState( del.showNegativeFloat ? Qt::Checked : Qt::Unchecked );
     ui_showCriticalPath->setCheckState( del.showCriticalPath ? Qt::Checked : Qt::Unchecked );
     ui_showCriticalTasks->setCheckState( del.showCriticalTasks ? Qt::Checked : Qt::Unchecked );
     ui_showCompletion->setCheckState( del.showProgress ? Qt::Checked : Qt::Unchecked );
     ui_showSchedulingError->setCheckState( del.showSchedulingError ? Qt::Checked : Qt::Unchecked );
+    ui_showTimeConstraint->setCheckState( del.showTimeConstraint ? Qt::Checked : Qt::Unchecked );
 }
 
 void GanttChartDisplayOptionsPanel::setDefault()
@@ -129,21 +135,42 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( TreeViewBase *view, GanttItemD
 }
 
 //-------------------------
-GanttPrintingOptions::GanttPrintingOptions( QWidget *parent )
+GanttPrintingOptions::GanttPrintingOptions()
+    : printRowLabels( true ),
+    singlePage( true )
+{
+}
+
+bool GanttPrintingOptions::loadContext( const KoXmlElement &settings )
+{
+    KoXmlElement e = settings.namedItem( "print-options" ).toElement();
+    if ( ! e.isNull() ) {
+        printRowLabels = (bool)( e.attribute( "print-rowlabels", "0" ).toInt() );
+        singlePage = (bool)( e.attribute( "print-singlepage", "0" ).toInt() );
+    }
+    return true;
+}
+
+void GanttPrintingOptions::saveContext( QDomElement &settings ) const
+{
+    QDomElement e = settings.ownerDocument().createElement( "print-options" );
+    settings.appendChild( e );
+    e.setAttribute( "print-rowlabels", printRowLabels );
+    e.setAttribute( "print-singlepage", singlePage );
+}
+
+GanttPrintingOptionsWidget::GanttPrintingOptionsWidget( QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
-    ui_printRowLabels->hide(); // TODO or remove?
-    setWindowTitle( i18n("Options") );
+    setWindowTitle( i18nc( "@title:tab", "Chart" ) );
 }
 
 //----------------
-GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
+GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, GanttViewBase *gantt )
     : PrintingDialog( view ),
     m_gantt( gantt ),
-    m_options( 0 ),
-    m_singlePage( true ),
-    m_printRowLabels( true )
+    m_options( 0 )
 {
     m_headerHeight = gantt->graphicsView()->headerHeight();
     m_sceneRect = m_gantt->graphicsView()->printRect();
@@ -160,53 +187,75 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
         c -= printer().pageRect().height();
     }
     kDebug()<<m_sceneRect<<printer().pageRect()<<m_horPages<<m_vertPages;
-    printer().setFromTo( documentFirstPage(), documentLastPage() );
+    printer().setFromTo( documentFirstPage(), documentFirstPage() + ( m_horPages * m_vertPages  ) - 1 );
 }
 
 void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
-    if ( m_options ) {
-        m_singlePage = m_options->singlePage();
-        //m_printRowLabels = m_options->printRowLabels();
+    QList<int> pages;
+    if ( printer().fromPage() > 0 ) {
+        pages << printer().fromPage();
+        if ( ! m_gantt->m_printOptions.singlePage ) {
+            int last = printer().toPage();
+            for ( int i = pages.first() + 1; i <= last; ++i ) {
+                pages << i;
+            }
+        }
     }
+    setPageRange( pages );
+
     PrintingDialog::startPrinting( removePolicy );
 }
 
 QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
 {
     //kDebug();
-    GanttPrintingOptions *w = new GanttPrintingOptions();
-    //w->setPrintRowLabels( m_printRowLabels );
-    w->setSinglePage( m_singlePage );
-
+    GanttPrintingOptionsWidget *w = new GanttPrintingOptionsWidget();
+    w->setPrintRowLabels( m_gantt->m_printOptions.printRowLabels );
+    connect(w->ui_printRowLabels, SIGNAL(toggled(bool)), SLOT(slotPrintRowLabelsToogled(bool)));
+    w->setSinglePage( m_gantt->m_printOptions.singlePage );
+    connect(w->ui_singlePage, SIGNAL(toggled(bool)), SLOT(slotSinglePageToogled(bool)));
     const_cast<GanttPrintingDialog*>( this )->m_options = w;
 
     return QList<QWidget*>() << createPageLayoutWidget() << m_options;
 }
 
+void GanttPrintingDialog::slotPrintRowLabelsToogled( bool on )
+{
+    m_gantt->m_printOptions.printRowLabels = on;
+}
+
+void GanttPrintingDialog::slotSinglePageToogled( bool on )
+{
+    m_gantt->m_printOptions.singlePage = on;
+}
+
 int GanttPrintingDialog::documentLastPage() const
 {
-    kDebug()<<m_horPages<<m_vertPages;
-    return m_singlePage ? documentFirstPage() : m_horPages * m_vertPages;
+    //kDebug()<<m_gantt->m_printOptions.singlePage<<m_horPages<<m_vertPages;
+    return m_gantt->m_printOptions.singlePage ? documentFirstPage() : m_horPages * m_vertPages;
 }
 
 
 void GanttPrintingDialog::printPage( int page, QPainter &painter )
 {
+    kDebug()<<"page:"<<page<<"first"<<documentFirstPage()<<"last:"<<documentLastPage();
     QRectF sourceRect = m_sceneRect;
     int p = page - documentFirstPage();
     QRectF pageRect = printer().pageRect();
     pageRect.moveTo( 0, 0 );
-    int vert = m_singlePage ? 0 : p / m_horPages;
-    int hor = m_singlePage ? 0 : p % m_horPages;
-    if ( ! m_singlePage && documentLastPage() > documentFirstPage() ) {
+    bool singlePage = m_gantt->m_printOptions.singlePage;
+    int vert = singlePage ? 0 : p / m_horPages;
+    int hor = singlePage ? 0 : p % m_horPages;
+    if ( ! singlePage && documentLastPage() > documentFirstPage() ) {
         // print on multiple pages, so calculate rects to print
         qreal hh = vert == 0 ? m_headerHeight : 0;
         qreal ho = vert > 0 ? m_headerHeight : 0;
         sourceRect = QRectF( sourceRect.x() + ( pageRect.width() * hor ), sourceRect.y() + ( ( pageRect.height() * vert ) - ho ), pageRect.width(), pageRect.height() - hh );
         kDebug()<<p<<hor<<vert<<sourceRect;
     }
-    m_gantt->print( &painter, pageRect, sourceRect, m_printRowLabels, vert == 0 );
+    painter.setClipRect( pageRect.adjusted( -1.0, -1.0, 1.0, 1.0 ) );
+    m_gantt->print( &painter, pageRect, sourceRect, hor == 0 && m_gantt->m_printOptions.printRowLabels, vert == 0 );
 }
 
 //---------------------
@@ -234,11 +283,17 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 
 //-------------------------------------------
 GanttViewBase::GanttViewBase( QWidget *parent )
-    : KDGantt::View( parent ),
+    : KDGantt::View( parent )
+{
+}
+
+//-------------------------------------------
+NodeGanttViewBase::NodeGanttViewBase( QWidget *parent )
+    : GanttViewBase( parent ),
     m_project( 0 ),
     m_ganttdelegate( new GanttItemDelegate( this ) )
 {
-    kDebug()<<"------------------- create GanttViewBase -----------------------";
+    kDebug()<<"------------------- create NodeGanttViewBase -----------------------";
     graphicsView()->setItemDelegate( m_ganttdelegate );
     GanttTreeView *tv = new GanttTreeView( this );
     tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -252,34 +307,34 @@ GanttViewBase::GanttViewBase( QWidget *parent )
     KDGantt::View::setModel( m );
 }
 
-NodeSortFilterProxyModel *GanttViewBase::sfModel() const
+NodeSortFilterProxyModel *NodeGanttViewBase::sfModel() const
 {
     return static_cast<NodeSortFilterProxyModel*>( KDGantt::View::model() );
 }
 
-void GanttViewBase::setItemModel( ItemModelBase *model )
+void NodeGanttViewBase::setItemModel( ItemModelBase *model )
 {
     sfModel()->setSourceModel( model );
 }
 
-ItemModelBase *GanttViewBase::model() const
+ItemModelBase *NodeGanttViewBase::model() const
 {
     return sfModel()->itemModel();
 }
 
-GanttTreeView *GanttViewBase::treeView() const
+GanttTreeView *NodeGanttViewBase::treeView() const
 {
     QAbstractItemView *v = const_cast<QAbstractItemView*>( leftView() );
     return static_cast<GanttTreeView*>( v );
 }
 
-void GanttViewBase::setProject( Project *project )
+void NodeGanttViewBase::setProject( Project *project )
 {
     model()->setProject( project );
     m_project = project;
 }
 
-bool GanttViewBase::loadContext( const KoXmlElement &settings )
+bool NodeGanttViewBase::loadContext( const KoXmlElement &settings )
 {
     treeView()->loadContext( model()->columnMap(), settings );
 
@@ -293,11 +348,15 @@ bool GanttViewBase::loadContext( const KoXmlElement &settings )
         m_ganttdelegate->showCriticalTasks = (bool)( e.attribute( "show-criticaltasks", "0" ).toInt() );
         m_ganttdelegate->showPositiveFloat = (bool)( e.attribute( "show-positivefloat", "0" ).toInt() );
         m_ganttdelegate->showSchedulingError = (bool)( e.attribute( "show-schedulingerror", "0" ).toInt() );
+        m_ganttdelegate->showTimeConstraint = (bool)( e.attribute( "show-timeconstraint", "0" ).toInt() );
+        m_ganttdelegate->showNegativeFloat = (bool)( e.attribute( "show-negativefloat", "0" ).toInt() );
+
+        m_printOptions.loadContext( e );
     }
     return true;
 }
 
-void GanttViewBase::saveContext( QDomElement &settings ) const
+void NodeGanttViewBase::saveContext( QDomElement &settings ) const
 {
     kDebug();
     treeView()->saveContext( model()->columnMap(), settings );
@@ -312,11 +371,15 @@ void GanttViewBase::saveContext( QDomElement &settings ) const
     e.setAttribute( "show-criticaltasks", m_ganttdelegate->showCriticalTasks );
     e.setAttribute( "show-positivefloat", m_ganttdelegate->showPositiveFloat );
     e.setAttribute( "show-schedulingerror", m_ganttdelegate->showSchedulingError );
+    e.setAttribute( "show-timeconstraint", m_ganttdelegate->showTimeConstraint );
+    e.setAttribute( "show-negativefloat", m_ganttdelegate->showNegativeFloat );
+
+    m_printOptions.saveContext( e );
 }
 
 //-------------------------------------------
 MyKDGanttView::MyKDGanttView( QWidget *parent )
-    : GanttViewBase( parent ),
+    : NodeGanttViewBase( parent ),
     m_manager( 0 )
 {
     kDebug()<<"------------------- create MyKDGanttView -----------------------";
@@ -355,19 +418,23 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
 
 GanttItemModel *MyKDGanttView::model() const
 {
-    return static_cast<GanttItemModel*>( GanttViewBase::model() );
+    return static_cast<GanttItemModel*>( NodeGanttViewBase::model() );
 }
 
 void MyKDGanttView::setProject( Project *proj )
 {
     clearDependencies();
     if ( project() ) {
+        disconnect( project(), SIGNAL( relationToBeModified(Relation*)), this, SLOT( removeDependency(Relation*)));
+        disconnect( project(), SIGNAL( relationModified(Relation*)), this, SLOT( addDependency(Relation*)));
         disconnect( project(), SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
         disconnect( project(), SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
         disconnect( project(), SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    GanttViewBase::setProject( proj );
+    NodeGanttViewBase::setProject( proj );
     if ( proj ) {
+        connect( project(), SIGNAL( relationToBeModified(Relation*)), this, SLOT( removeDependency(Relation*)));
+        connect( project(), SIGNAL( relationModified(Relation*)), this, SLOT( addDependency(Relation*)));
         connect( proj, SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
         connect( proj, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
         connect( proj, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
@@ -390,7 +457,7 @@ void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
     model()->setScheduleManager( sm );
     m_manager = sm;
     if ( sm && project() ) {
-        QDateTime start = project()->startTime( sm->scheduleId() ).dateTime().addDays( -1 );
+        QDateTime start = project()->startTime( sm->scheduleId() ).addDays( -1 );
         KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
         if ( g->startDateTime() !=  start ) {
             g->setStartDateTime( start );
@@ -653,7 +720,7 @@ void GanttView::updateReadWrite( bool on )
 
 //------------------------
 MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
-    : GanttViewBase( parent ),
+    : NodeGanttViewBase( parent ),
     m_manager( 0 )
 {
     kDebug()<<"------------------- create MilestoneKDGanttView -----------------------";
@@ -693,7 +760,7 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
 
 MilestoneItemModel *MilestoneKDGanttView::model() const
 {
-    return static_cast<MilestoneItemModel*>( GanttViewBase::model() );
+    return static_cast<MilestoneItemModel*>( NodeGanttViewBase::model() );
 }
 
 void MilestoneKDGanttView::setProject( Project *proj )
@@ -701,7 +768,7 @@ void MilestoneKDGanttView::setProject( Project *proj )
     if ( project() ) {
         disconnect( project(), SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
-    GanttViewBase::setProject( proj );
+    NodeGanttViewBase::setProject( proj );
     if ( proj ) {
         connect( proj, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
@@ -722,7 +789,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
     if ( sm && m_project ) {
         QDateTime start;
         foreach ( const Node *n, model()->mileStones() ) {
-            QDateTime nt = n->startTime( sm->scheduleId() ).dateTime();
+            QDateTime nt = n->startTime( sm->scheduleId() );
             if ( ! nt.isValid() ) {
                 continue;
             }
@@ -732,7 +799,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
             }
         }
         if ( ! start.isValid() ) {
-            start = project()->startTime( sm->scheduleId() ).dateTime();
+            start = project()->startTime( sm->scheduleId() );
         }
         KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
         start = start.addDays( -1 );
@@ -892,7 +959,7 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView( KoDocument *part, 
 {
     kDebug() <<" ---------------- KPlato: Creating ResourceAppointmentsGanttView ----------------";
 
-    m_gantt = new KDGantt::View( this );
+    m_gantt = new GanttViewBase( this );
     m_gantt->graphicsView()->setItemDelegate( new ResourceGanttItemDelegate( m_gantt ) );
 
     GanttTreeView *tv = new GanttTreeView( m_gantt );
@@ -938,7 +1005,7 @@ Project *ResourceAppointmentsGanttView::project() const
 
 void ResourceAppointmentsGanttView::setProject( Project *project )
 {
-    static_cast<KDGantt::DateTimeGrid*>( m_gantt->grid() )->setStartDateTime( project->startTime().dateTime() );
+    static_cast<KDGantt::DateTimeGrid*>( m_gantt->grid() )->setStartDateTime( project->startTime() );
     m_model->setProject( project );
 }
 
@@ -1003,7 +1070,7 @@ void ResourceAppointmentsGanttView::updateReadWrite( bool on )
 
 KoPrintJob *ResourceAppointmentsGanttView::createPrintJob()
 {
-    return 0;
+    return new GanttPrintingDialog( this, m_gantt );
 }
 
 }  //KPlato namespace

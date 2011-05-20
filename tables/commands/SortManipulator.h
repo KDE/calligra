@@ -33,7 +33,7 @@ class CellStorage;
  * \ingroup Commands
  * \brief Sorts the values in a cell range.
  */
-class CALLIGRA_TABLES_EXPORT SortManipulator : public AbstractDFManipulator
+class CALLIGRA_TABLES_COMMON_EXPORT SortManipulator : public AbstractDFManipulator
 {
 public:
     SortManipulator();

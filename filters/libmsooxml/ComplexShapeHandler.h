@@ -24,13 +24,15 @@
 #ifndef COMPLEXSHAPEHANDLER_H
 #define COMPLEXSHAPEHANDLER_H
 
+#include "msooxml_export.h"
+
 #include <QXmlStreamReader>
 #include <QString>
 
 // This class is meant to be used as a helper class to understand
 // drawingML elements avLst, gdLst and pathLst and to help
 // create a custom-shape from them
-class ComplexShapeHandler {
+class MSOOXML_EXPORT ComplexShapeHandler {
 
 public:
 

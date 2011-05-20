@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -69,22 +72,6 @@ public:
 
     /**
      * For frame duplication policy on new page creation.
-     * Determines if this frame will be copied on even or odd pages only.
-     */
-    bool frameOnBothSheets() const {
-        return m_copyToEverySheet;
-    }
-    /**
-     * Determines if this frame will be copied on even or odd pages only.
-     * Altering this does not change the frames placed until a new page is created.
-     * @param both if true this frame will be copied to every page, if false only every other page
-     */
-    void setFrameOnBothSheets(bool both) {
-        m_copyToEverySheet = both;
-    }
-
-    /**
-     * For frame duplication policy on new page creation.
      */
     KWord::NewFrameBehavior newFrameBehavior() const {
         return m_newFrameBehavior;
@@ -99,48 +86,15 @@ public:
     }
 
     /**
-     * Return the side around text from another (text)frame should flow.
+     * Set the minimum height of the frame.
+     * @param minimumFrameHeight the minimum height of the frame.
      */
-    KWord::RunAroundSide runAroundSide() const {
-        return m_runAroundSide;
-    }
+    void setMinimumFrameHeight(qreal minimumFrameHeight);
     /**
-     * Set the side around text from another (text)frame should flow.
-     * @param side the requested side
+     * Return the minimum height of the frame.
+     * @return the minimum height of the frame. Default is 0.0.
      */
-    void setRunAroundSide(KWord::RunAroundSide side) {
-        m_runAroundSide = side;
-    }
-
-    /**
-     * Return the text runaround property for this frame.
-     * This property specifies how text from another textframe will behave when this frame
-     * intersects with it.
-     */
-    KWord::TextWrap textWrap() const {
-        return m_textWrap;
-    }
-    /**
-     * Set the text runaround property for this frame.
-     * This property specifies how text from another textframe will behave when this frame
-     * intersects with it.
-     */
-    void setTextWrap(KWord::TextWrap runAround, KWord::Through runThrought = KWord::Background);
-
-    /**
-     * The space between this frames edge and the text when that text runs around this frame.
-     * @return the space around this frame to keep free from text
-     */
-    qreal runAroundDistance() const {
-        return m_runAroundDistance;
-    }
-    /**
-     * Set the space between this frames edge and the text when that text runs around this frame.
-     * @param distance the space around this frame to keep free from text
-     */
-    void setRunAroundDistance(qreal distance) {
-        m_runAroundDistance = distance;
-    }
+    qreal minimumFrameHeight() const;
 
     /**
      * Each frame will be rendered by a shape which also holds the position etc.
@@ -165,12 +119,23 @@ public:
      */
     virtual void setFrameSet(KWFrameSet *newFrameSet);
 
+    void cleanupShape(KoShape* shape);
+
     void clearLoadingData() {
         m_anchoredPageNumber = -1;
     }
     int loadingPageNumber() const {
         return m_anchoredPageNumber;
     }
+
+    /**
+     * Returns the list of copy-shapes, see @a KWCopyShape , that
+     * are copies of this KWFrame.
+     */
+    QList<KWFrame*> copies() const;
+
+    void addCopy(KWFrame* frame);
+    void removeCopy(KWFrame* frame);
 
     /**
      * States if this frame is a copy of the previous one.
@@ -192,26 +157,19 @@ public:
      */
     void saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset = 0) const;
 
-    KWOutlineShape *outlineShape() const {
-        return m_outline;
-    }
-    void setOutlineShape(KWOutlineShape *outline);
-
 private:
     KoShape *m_shape;
     KWord::FrameBehavior m_frameBehavior;
     bool m_copyToEverySheet;
     KWord::NewFrameBehavior m_newFrameBehavior;
-    KWord::RunAroundSide m_runAroundSide;
-    KWord::TextWrap m_textWrap;
-    qreal m_runAroundDistance;
     // The page number is only used during loading.
     // It is set to the page number if the frame contains a page anchored frame.
     // In all other cases it is set to -1.
     int m_anchoredPageNumber;
 
     KWFrameSet *m_frameSet;
-    KWOutlineShape *m_outline;
+    qreal m_minimumFrameHeight;
+    QList<KWFrame*> m_copyShapes;
 };
 
 #endif

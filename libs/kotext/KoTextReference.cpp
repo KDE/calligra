@@ -18,8 +18,13 @@
  */
 
 #include "KoTextReference.h"
+
+#include "KoShapeLoadingContext.h"
+#include "KoShapeSavingContext.h"
 #include "KoTextLocator.h"
 #include "KoInlineTextObjectManager.h"
+
+#include <KoXmlReader.h>
 
 KoTextReference::KoTextReference(int indexId)
         : KoVariable(),
@@ -34,9 +39,8 @@ KoTextReference::~KoTextReference()
         loc->removeListener(this);
 }
 
-void KoTextReference::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument)
+void KoTextReference::variableMoved(const QTextDocument *document, int posInDocument)
 {
-    Q_UNUSED(shape);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
     Q_ASSERT(manager());
@@ -50,7 +54,7 @@ void KoTextReference::variableMoved(const KoShape *shape, const QTextDocument *d
 void KoTextReference::setup()
 {
     locator()->addListener(this);
-    variableMoved(0, 0, 0);
+    variableMoved(0, 0);
 }
 
 KoTextLocator* KoTextReference::locator()

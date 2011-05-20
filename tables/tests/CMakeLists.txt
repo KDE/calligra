@@ -4,6 +4,12 @@ include_directories( ${CMAKE_SOURCE_DIR}/tables  ${EIGEN2_INCLUDE_DIR} ${KOMAIN_
 
 ########### Core Functionality ###############
 
+set(TestCellStorage_SRCS TestCellStorage.cpp)
+kde4_add_unit_test(TestCellStorage TESTNAME kspread-CellStorage  ${TestCellStorage_SRCS})
+target_link_libraries(TestCellStorage calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestDependencies_SRCS TestDependencies.cpp)
 kde4_add_unit_test(TestDependencies TESTNAME kspread-Dependencies ${TestDependencies_SRCS})
 target_link_libraries(TestDependencies calligratablescommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})

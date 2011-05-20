@@ -43,7 +43,7 @@ class RowFormatStorage;
 /**
  * A row style.
  */
-class CALLIGRA_TABLES_EXPORT RowFormat
+class CALLIGRA_TABLES_ODF_EXPORT RowFormat
 {
 public:
     RowFormat();
@@ -129,7 +129,7 @@ private:
 /**
  * A column style.
  */
-class CALLIGRA_TABLES_EXPORT ColumnFormat
+class CALLIGRA_TABLES_ODF_EXPORT ColumnFormat
 {
 public:
     ColumnFormat();

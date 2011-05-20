@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2008-2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright (C) 2003,2004 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
@@ -1575,7 +1575,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1) == 0)
+            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) == 0)
                 val1 = Value(true);
             else
                 val1 = Value(false);
@@ -1592,7 +1592,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1) < 0)
+            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) < 0)
                 val1 = Value(true);
             else
                 val1 = Value(false);
@@ -1609,7 +1609,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 ;
             else if (val2.isError())
                 val1 = val2;
-            else if (val2.compare(val1) > 0)
+            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) > 0)
                 val1 = Value(true);
             else
                 val1 = Value(false);

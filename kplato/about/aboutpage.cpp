@@ -203,7 +203,7 @@ QString KPlatoAboutPage::tutorial1()
 
 QString KPlatoAboutPage::tutorial2()
 {
-    KDateTime dt = m_project->startTime();
+    DateTime dt = m_project->startTime();
     if ( m_project->defaultCalendar() ) {
         dt = m_project->defaultCalendar()->firstAvailableAfter( dt, m_project->endTime() );
     }

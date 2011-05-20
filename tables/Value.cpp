@@ -740,7 +740,7 @@ bool Value::allowComparison(const Value& v) const
 }
 
 // compare values. looks strange in order to be compatible with Excel
-int Value::compare(const Value& v) const
+int Value::compare(const Value& v, Qt::CaseSensitivity cs) const
 {
     Value::Type t1 = d->type;
     Value::Type t2 = v.type();
@@ -852,28 +852,28 @@ int Value::compare(const Value& v) const
 
     // The-Real-String comparison
     if ((t1 == String) && (t2 == String))
-        return asString().compare(v.asString());
+        return asString().compare(v.asString(), cs);
 
     // Undefined, actually allowComparison would return false
     return 0;
 }
 
-bool Value::equal(const Value& v) const
+bool Value::equal(const Value& v, Qt::CaseSensitivity cs) const
 {
     if (!allowComparison(v)) return false;
-    return compare(v) == 0;
+    return compare(v, cs) == 0;
 }
 
-bool Value::less(const Value& v) const
+bool Value::less(const Value& v, Qt::CaseSensitivity cs) const
 {
     if (!allowComparison(v)) return false;
-    return compare(v) < 0;
+    return compare(v, cs) < 0;
 }
 
-bool Value::greater(const Value& v) const
+bool Value::greater(const Value& v, Qt::CaseSensitivity cs) const
 {
     if (!allowComparison(v)) return false;
-    return compare(v) > 0;
+    return compare(v, cs) > 0;
 }
 
 QTextStream& operator<<(QTextStream& ts, Value::Type type)

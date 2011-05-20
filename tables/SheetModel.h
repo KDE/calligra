@@ -36,7 +36,7 @@ class Sheet;
  * A model for a sheet.
  * \ingroup Model
  */
-class CALLIGRA_TABLES_EXPORT SheetModel : public QAbstractTableModel
+class CALLIGRA_TABLES_ODF_EXPORT SheetModel : public QAbstractTableModel
 {
 public:
     explicit SheetModel(Sheet* sheet);

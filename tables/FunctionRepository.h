@@ -38,7 +38,7 @@ class FunctionDescription;
  * \ingroup Value
  * The function repository.
  */
-class CALLIGRA_TABLES_EXPORT FunctionRepository
+class CALLIGRA_TABLES_ODF_EXPORT FunctionRepository
 {
 public:
     FunctionRepository();

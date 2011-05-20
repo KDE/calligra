@@ -185,8 +185,9 @@ KoListStyle.StartValue= ++i;
 KoListStyle.Level= ++i;
 KoListStyle.DisplayLevel= ++i;
 KoListStyle.CharacterStyleId= ++i;
+KoListStyle.MarkCharacterStyleId= ++i;
 KoListStyle.BulletCharacter= ++i;
-KoListStyle.BulletSize= ++i;
+KoListStyle.RelativeBulletSize= ++i;
 KoListStyle.Alignment= ++i;
 KoListStyle.MinimumWidth= ++i;
 KoListStyle.ListId= ++i;
@@ -199,6 +200,11 @@ KoListStyle.MinimumDistance= ++i;
 KoListStyle.Width= ++i;
 KoListStyle.Height= ++i;
 KoListStyle.BulletImageKey = ++i;
+KoListStyle.Margin = ++i;
+KoListStyle.TextIndent = ++i;
+KoListStyle.AlignmentMode = ++i;
+KoListStyle.LableFollowedBy = ++i;
+KoListStyle.TabStopPosition = ++i;
 
 KoListStyle.SquareItem = QTextListFormat.ListSquare;
 KoListStyle.DiscItem = QTextListFormat.ListDisc;
@@ -211,6 +217,8 @@ i = 1;
 KoListStyle.None = i++;
 KoListStyle.RomanLowerItem = i++;
 KoListStyle.UpperRomanItem = i++;
+KoListStyle.Bullet = i++;
+KoListStyle.BlackCircle = i++;
 KoListStyle.BoxItem = i++;
 KoListStyle.RhombusItem = i++;
 KoListStyle.HeavyCheckMarkItem = i++;
@@ -223,6 +231,7 @@ var defaultListItemFormat = QTextCharFormat.clone(defaultTextFormat); // new QTe
 
 var defaultListFormat = new QTextListFormat;
 setFormatProperty(defaultListFormat, KoListStyle.Level, 1);
+setFormatProperty(defaultListFormat, KoListStyle.AlignmentMode,false);
 
 // Default table formatting
 QTextTableFormat.clone = function(fmt) {
@@ -270,4 +279,4 @@ KoTableCellStyle.RightBorderSpacing = i++;
 KoTableCellStyle.RightBorderInnerPen = i++;
 KoTableCellStyle.CellBackgroundBrush = i++;
 KoTableCellStyle.MasterPageName = i++;
-KoTableCellStyle.InlineRdf = i++;       
+KoTableCellStyle.InlineRdf = i++;

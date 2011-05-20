@@ -9,7 +9,7 @@
    version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   but WITHOUT ANY WARRANTY without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoOdfWorkaround.h"
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
 #include "KoPathPoint.h"
@@ -32,7 +33,6 @@
 #include "KoShapeBackground.h"
 #include "KoShapeContainer.h"
 #include "KoFilterEffectStack.h"
-#include "KoTextOnShapeContainer.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -53,7 +53,7 @@ static bool qIsNaNPoint(const QPointF &p) {
 #endif
 
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
-    : KoShapePrivate(q),
+    : KoTosContainerPrivate(q),
     fillRule(Qt::OddEvenFill)
 {
 }
@@ -93,12 +93,12 @@ void KoPathShapePrivate::applyViewboxTransformation(const KoXmlElement &element)
 
 /////////////////////////
 KoPathShape::KoPathShape()
-    :KoShape(*(new KoPathShapePrivate(this)))
+    :KoTosContainer(*(new KoPathShapePrivate(this)))
 {
 }
 
 KoPathShape::KoPathShape(KoPathShapePrivate &dd)
-    : KoShape(dd)
+    : KoTosContainer(dd)
 {
 }
 
@@ -117,8 +117,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().addAttribute("koffice:nodeTypes", d->nodeTypes());
 
     saveOdfCommonChildElements(context);
-    if (parent())
-        parent()->saveOdfChildElements(context);
+    saveText(context);
     context.xmlWriter().endElement();
 }
 
@@ -177,7 +176,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     setPosition(pos);
 
     loadOdfAttributes(element, context, OdfTransformation);
-    KoTextOnShapeContainer::tryWrapShape(this, element, context);
+    loadText(element, context);
 
     return true;
 }
@@ -200,8 +199,15 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
 
     if (styleStack.hasProperty(KoXmlNS::svg, "fill-rule")) {
         QString rule = styleStack.property(KoXmlNS::svg, "fill-rule");
-        d->fillRule = rule == "nonzero" ?  Qt::WindingFill : Qt::OddEvenFill;
+        d->fillRule = (rule == "nonzero") ?  Qt::WindingFill : Qt::OddEvenFill;
+    } else {
+        d->fillRule = Qt::WindingFill;
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixMissingFillRule(d->fillRule, context);
+#endif
     }
+
+
 }
 
 QRectF KoPathShape::loadOdfViewbox(const KoXmlElement & element) const
@@ -315,6 +321,7 @@ QPainterPath KoPathShape::outline() const
 {
     QPainterPath path;
     foreach(KoSubpath * subpath, m_subpaths) {
+//qDebug() << "Inside foreach in KoPathShape::outline()";
         KoPathPoint * lastPoint = subpath->first();
         bool activeCP = false;
         foreach(KoPathPoint * currPoint, *subpath) {
@@ -603,7 +610,7 @@ QPointF KoPathShape::normalize()
 
     // keep the top left point of the object
     applyTransformation(matrix.inverted());
-
+    d->shapeChanged(ContentChanged);
     return tl;
 }
 

@@ -64,6 +64,7 @@ class Cell;
 class CellEditor;
 class CanvasItem;
 class ColumnHeader;
+class Damage;
 class Doc;
 class Sheet;
 class RowHeader;
@@ -74,7 +75,7 @@ class View;
 /**
  * The scrollable area showing the cells.
  */
-class CALLIGRA_TABLES_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
+class CALLIGRA_TABLES_COMMON_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
 {
     friend class ColumnHeaderItem;
     friend class RowHeaderItem;
@@ -115,6 +116,12 @@ public Q_SLOTS:
 
     void refreshSheetViews();
     void setActiveSheet(Sheet* sheet);
+
+    /**
+     * \ingroup Damages
+     * Handles damages that need visual updates.
+     */
+    void handleDamages(const QList<Damage*>& damages);
 Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
 

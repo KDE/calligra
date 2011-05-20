@@ -30,22 +30,8 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-typedef struct {
-    int r;
-    int g;
-    int b;
-
-    int c;
-    int m;
-    int y;
-    int k;
-} t_mycolor;
-
-typedef struct {
-    QStringList tabname;
-    QStringList rc;
-} t_rc;
-
+struct t_mycolor;
+struct t_rc;
 
 class APPLIXSPREADImport : public KoFilter
 {

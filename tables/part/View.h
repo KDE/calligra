@@ -81,7 +81,7 @@ class TabBar;
  *  \li tab bar to select active worksheet
  *  \li status bar to show status messages
  */
-class CALLIGRA_TABLES_EXPORT View : public KoView
+class CALLIGRA_TABLES_COMMON_EXPORT View : public KoView
 {
     Q_OBJECT
 

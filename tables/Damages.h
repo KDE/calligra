@@ -39,7 +39,7 @@ class Region;
  * \ingroup Damages
  * An abstract damage.
  */
-class CALLIGRA_TABLES_EXPORT Damage
+class CALLIGRA_TABLES_ODF_EXPORT Damage
 {
 public:
     virtual ~Damage() {}
@@ -63,7 +63,7 @@ public:
  * \ingroup Damages
  * A cell range damage.
  */
-class CALLIGRA_TABLES_EXPORT CellDamage : public Damage
+class CALLIGRA_TABLES_ODF_EXPORT CellDamage : public Damage
 {
 public:
     enum Change {
@@ -112,7 +112,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CellDamage::Changes)
  * \ingroup Damages
  * A sheet damage.
  */
-class CALLIGRA_TABLES_EXPORT SheetDamage : public Damage
+class CALLIGRA_TABLES_ODF_EXPORT SheetDamage : public Damage
 {
 public:
 
@@ -185,7 +185,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
  * \ingroup Damages
  * A selection damage.
  */
-class CALLIGRA_TABLES_EXPORT SelectionDamage : public Damage
+class CALLIGRA_TABLES_ODF_EXPORT SelectionDamage : public Damage
 {
 public:
     SelectionDamage(const Region& region);
@@ -212,9 +212,9 @@ private:
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Damage& d);
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::CellDamage& d);
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::SheetDamage& d);
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::SelectionDamage& d);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Damage& d);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::CellDamage& d);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::SheetDamage& d);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::SelectionDamage& d);
 
 #endif // CALLIGRA_TABLES_DAMAGES

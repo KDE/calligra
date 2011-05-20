@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,9 +43,10 @@ public:
      */
     ~PixmapCachingSheetView();
 
-    virtual void invalidateRegion(const Region& region);
     virtual void invalidate();
     virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect);
+protected:
+    virtual void invalidateRange(const QRect &range);
 private slots:
     void jobDone(ThreadWeaver::Job* job);
 private:

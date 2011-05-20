@@ -3,6 +3,7 @@
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -27,7 +28,6 @@
 #include "generated/leinputstream.h"
 #include "pole.h"
 #include "tablehandler.h"
-
 
 #include <wv2/src/handlers.h>
 #include <wv2/src/functor.h>
@@ -57,7 +57,8 @@ namespace Word97 {
 class BRC;
 }
 }
-class KoFilterChain;
+class MSWordOdfImport;
+/* class KoFilterChain; */
 class KWordReplacementHandler;
 class KWordTableHandler;
 class KWordPictureHandler;
@@ -68,11 +69,15 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
-             KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
-             KoStore* store, POLE::Storage* storage,
-             LEInputStream* data, LEInputStream* table, LEInputStream* wdoc);
+    Document(const std::string& fileName,
+             MSWordOdfImport* filter,
+/*              KoFilterChain* chain, */
+             KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
+             KoStore* store, KoGenStyles* mainStyles,
+             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data);
     virtual ~Document();
+
+    virtual void setProgress(int percent);
 
     virtual void bodyStart();
     virtual void bodyEnd();
@@ -104,7 +109,7 @@ public:
         QString extraName;
     };
 
-    // Provide access to private attributes for our handlers
+    // Provide access to private attributes for other handlers
     QString masterPageName(void) const {
         return m_masterPageName_list.size() ? m_masterPageName_list.first() : m_lastMasterPageName;
     }
@@ -136,22 +141,31 @@ public:
     /**
      * @return the current background-color.
      */
-    QString currentBgColor() { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
+    QString currentBgColor(void) { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
+
+    /**
+     * @return the list of names of TOC related styles.
+     */
+    QList<QString> tocStyleNames(void) { return m_tocStyleNames; }
 
     /**
      * Checks if the header/footer content of the current section differs from
-     * the previous section's header/footer.  @return TRUE - different content;
-     * FALSE - no difference or the Header document doesn't exist.
+     * the previous section's header/footer.
+     *
+     * @return TRUE - different content; FALSE - no difference or the Header
+     * document doesn't exist.
      */
     bool headersChanged(void) const;
 
-    POLE::Storage* storage(void) const { return m_storage; }
-    LEInputStream* data_stream(void) const { return m_data_stream; }
-    LEInputStream* table_stream(void) const { return m_table_stream; }
-    LEInputStream* wdocument_stream(void) const { return m_wdocument_stream; }
+    // Provide access to POLE/LEInput streams to other handlers.
+    POLE::Stream& poleTableStream(void) const { return m_tblstm_pole; }
+    LEInputStream& wdocumentStream(void) const { return m_wdstm; }
+    LEInputStream* tableStream(void) const { return m_tblstm; }
+    LEInputStream* dataStream(void) const { return m_datastm; }
 
     // get the style name used for line numbers
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
+
 public slots:
     // Connected to the KWordTextHandler only when parsing the body
     void slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
@@ -174,20 +188,28 @@ public slots:
 
     void slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
 
-    void slotTextBoxFound(uint lid, bool bodyDrawing);
+    void slotTextBoxFound(unsigned int index, bool stylesxml);
 
-    // Similar to footnoteStart/footnoteEnd but for cells.
-    // This is connected to KWordTableHandler
-    //void slotTableCellStart( int row, int column, int rowSize, int columnSize, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
-    //void slotTableCellEnd();
+    // Similar to footnoteStart/footnoteEnd but cells, connected to KWordTableHandler
+/*     void slotTableCellStart(int row, int column, int rowSize, int columnSize, const QRectF& cellRect, */
+/*                             const QString& tableName, */
+/*                             const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, */
+/*                             const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, */
+/*                             const wvWare::Word97::SHD& shd ); */
+/*     void slotTableCellEnd(); */
 
 private:
     void processStyles();
     void processAssociatedStrings();
-    enum NewFrameBehavior { Reconnect = 0, NoFollowup = 1, Copy = 2 };
-    void generateFrameBorder(QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd);
 
-    void setPageLayoutStyle(KoGenStyle* pageLayoutStyle, wvWare::SharedPtr<const wvWare::Word97::SEP> sep, bool firstPage);
+/*     enum NewFrameBehavior { Reconnect = 0, NoFollowup = 1, Copy = 2 }; */
+/*     void generateFrameBorder(QDomElement& frameElementOut, */
+/*                              const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, */
+/*                              const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, */
+/*                              const wvWare::Word97::SHD& shd); */
+
+    void setPageLayoutStyle(KoGenStyle* pageLayoutStyle, wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
+                            bool firstPage);
 
     // Handlers for different data types in the document.
     KWordTextHandler*        m_textHandler;
@@ -195,7 +217,9 @@ private:
     KWordReplacementHandler* m_replacementHandler;
     KWordGraphicsHandler*    m_graphicsHandler;
 
-    KoFilterChain* m_chain;
+    MSWordOdfImport* m_filter;
+/*     KoFilterChain* m_chain; */
+
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
     std::queue<KWord::Table> m_tableQueue;
@@ -237,15 +261,19 @@ private:
     QString m_lineNumbersStyleName;
     QString m_lastMasterPageName;
 
-    //pointers to the POLE store content
-    LEInputStream* m_data_stream;
-    LEInputStream* m_table_stream;
-    LEInputStream* m_wdocument_stream;
-    POLE::Storage* m_storage; // pointer to the pole storage
+    //pointers to streams
+    LEInputStream& m_wdstm;
+    LEInputStream* m_tblstm;
+    LEInputStream* m_datastm;
+    POLE::Stream& m_tblstm_pole;
 
     //A stack for backgroud-colors, which represets a background color context
     //for automatic colors.
     QStack<QString> m_bgColors;
+
+    //A list storing names of TOC related styles required in TextHandler to
+    //process the TOC field.
+    QList<QString> m_tocStyleNames;
 };
 
 #endif // DOCUMENT_H

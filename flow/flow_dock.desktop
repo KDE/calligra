@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Flow/Dock
+Comment=Docker for Flow
+Comment[el]=Προσάρτηση για το Flow
+Comment[es]=Anclaje para Flow
+Comment[et]=Flow dokk
+Comment[it]=Gancio per Flow
+Comment[nb]=Dokker for Flow
+Comment[nl]=Vastzetten van Flow
+Comment[pt]=Acoplador para o Flow
+Comment[pt_BR]=Acoplador para o Flow
+Comment[sv]=Dockningsfönster för flöde
+Comment[uk]=Бічна панель Flow
+Comment[x-test]=xxDocker for Flowxx
+Comment[zh_TW]=Flow 的嵌入器

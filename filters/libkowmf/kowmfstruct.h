@@ -148,24 +148,39 @@ static const Qt::BrushStyle koWmfHatchedStyleBrush[] = {
     Qt::DiagCrossPattern
 };
 
-static const Qt::BrushStyle koWmfStyleBrush[] = { Qt::SolidPattern,
-        Qt::NoBrush,
-        Qt::FDiagPattern,   /* hatched */
-        Qt::Dense4Pattern,  /* should be custom bitmap pattern */
-        Qt::HorPattern,     /* should be BS_INDEXED (?) */
-        Qt::VerPattern,     /* should be device-independent bitmap */
-        Qt::Dense6Pattern,  /* should be device-independent packed-bitmap */
-        Qt::Dense2Pattern,  /* should be BS_PATTERN8x8 */
-        Qt::Dense3Pattern   /* should be device-independent BS_DIBPATTERN8x8 */
-                                                };
+static const Qt::BrushStyle koWmfStyleBrush[] = {
+    Qt::SolidPattern,
+    Qt::NoBrush,
+    Qt::FDiagPattern,   /* hatched */
+    Qt::Dense4Pattern,  /* should be custom bitmap pattern */
+    Qt::HorPattern,     /* should be BS_INDEXED (?) */
+    Qt::VerPattern,     /* should be device-independent bitmap */
+    Qt::Dense6Pattern,  /* should be device-independent packed-bitmap */
+    Qt::Dense2Pattern,  /* should be BS_PATTERN8x8 */
+    Qt::Dense3Pattern   /* should be device-independent BS_DIBPATTERN8x8 */
+};
 
-static const Qt::PenStyle koWmfStylePen[] = { Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine,
-        Qt::NoPen, Qt::SolidLine
-                                            };
+static const Qt::PenStyle koWmfStylePen[] = {
+    Qt::SolidLine,
+    Qt::DashLine,
+    Qt::DotLine,
+    Qt::DashDotLine,
+    Qt::DashDotDotLine,
+    Qt::NoPen,
+    Qt::SolidLine
+};
 
-static const Qt::PenCapStyle koWmfCapStylePen[] = { Qt::RoundCap, Qt::SquareCap, Qt::FlatCap };
+static const Qt::PenCapStyle koWmfCapStylePen[] = {
+    Qt::RoundCap,
+    Qt::SquareCap,
+    Qt::FlatCap
+};
 
-static const Qt::PenJoinStyle koWmfJoinStylePen[] = { Qt::RoundJoin, Qt::BevelJoin, Qt::MiterJoin };
+static const Qt::PenJoinStyle koWmfJoinStylePen[] = {
+    Qt::RoundJoin,
+    Qt::BevelJoin,
+    Qt::MiterJoin
+};
 
 #endif
 

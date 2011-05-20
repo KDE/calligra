@@ -28,14 +28,17 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+option(BUILD_koabstraction "Build directory koabstraction" ON) # koabstraction isn't buildable at the moment
+option(BUILD_mobile "Build directory mobile" ON) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
 
-option(TINY "compile a tiny KOffice" OFF)
+option(TINY "compile a tiny Calligra" OFF)
+option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
-    set(SHOULD_BUILD_KPRESENTER TRUE)
+    set(SHOULD_BUILD_STAGE TRUE)
     set(SHOULD_BUILD_TABLES TRUE)
     set(SHOULD_BUILD_KARBON FALSE)
     set(SHOULD_BUILD_KRITA FALSE)
@@ -47,11 +50,35 @@ IF (TINY)
     set(SHOULD_BUILD_KDGANTT FALSE)
     set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_F_OFFICE TRUE)
+    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
-ELSE(TINY)
+    set(SHOULD_BUILD_BRAINDUMP FALSE)
+    set(SHOULD_BUILD_CALLIGRA FALSE)
+    set(SHOULD_BUILD_CSTESTER FALSE)
+    set(SHOULD_BUILD_KOABSTRACTION TRUE)
+ELSEIF (CREATIVEONLY)
+    set(SHOULD_BUILD_WORDS FALSE)
+    set(SHOULD_BUILD_STAGE FALSE)
+    set(SHOULD_BUILD_TABLES FALSE)
+    set(SHOULD_BUILD_KARBON TRUE)
+    set(SHOULD_BUILD_KRITA TRUE)
+    set(SHOULD_BUILD_KEXI FALSE)
+    set(SHOULD_BUILD_FLOW FALSE)
+    set(SHOULD_BUILD_KPLATO FALSE)
+    set(SHOULD_BUILD_KFORMULA FALSE)
+    set(SHOULD_BUILD_KCHART FALSE)
+    set(SHOULD_BUILD_KDGANTT FALSE)
+    set(SHOULD_BUILD_KOUNAVAIL FALSE)
+    set(SHOULD_BUILD_SCRIPTING TRUE)
+    set(SHOULD_BUILD_MOBILE FALSE)
+    set(SHOULD_BUILD_KOREPORT FALSE)
+    set(SHOULD_BUILD_BRAINDUMP FALSE)
+    set(SHOULD_BUILD_CALLIGRA FALSE)
+    set(SHOULD_BUILD_CSTESTER FALSE)
+    set(SHOULD_BUILD_KOABSTRACTION FALSE)
+ELSE()
     set(SHOULD_BUILD_WORDS TRUE)
-    set(SHOULD_BUILD_KPRESENTER TRUE)
+    set(SHOULD_BUILD_STAGE TRUE)
     set(SHOULD_BUILD_TABLES TRUE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
@@ -63,9 +90,13 @@ ELSE(TINY)
     set(SHOULD_BUILD_KDGANTT TRUE)
     set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_F_OFFICE TRUE)
+    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
-ENDIF(TINY)
+    set(SHOULD_BUILD_BRAINDUMP TRUE)
+    set(SHOULD_BUILD_CALLIGRA TRUE)
+    set(SHOULD_BUILD_CSTESTER TRUE)
+    set(SHOULD_BUILD_KOABSTRACTION TRUE)
+ENDIF()
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FOO_TEST_EXPORT macro do something
@@ -160,7 +191,7 @@ macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Manag
 ## Test for boost
 ##
 macro_optional_find_package(Boost)
-macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by KPresenter")
+macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by Stage")
 
 ##
 ## Test for eigen2
@@ -245,6 +276,26 @@ else(WIN32)
 endif(WIN32)
 
 ##
+## Test for Fontconfig
+##
+macro_optional_find_package(Fontconfig)
+macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+
+##
+## Test for Freetype
+##
+macro_optional_find_package(Freetype)
+macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+
+if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
+    set(FONTCONFIG_INCLUDE_DIR "")
+    set(FREETYPE_INCLUDE_DIRS "")
+else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
+endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+  
+
+##
 ## Test endianess
 ##
 include (TestBigEndian)
@@ -310,11 +361,16 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${KOODF_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/main)
 
+# TextLayout depends on kotext
+set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/textlayout)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
-                    ${KOTEXT_INCLUDES}
+                    ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_SOURCE_DIR}/libs/main/rdf
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 if(SHOULD_BUILD_SCRIPTING)
@@ -322,7 +378,11 @@ if(SHOULD_BUILD_SCRIPTING)
 endif(SHOULD_BUILD_SCRIPTING)
 
 # kopageapp
-set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
+set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
+                    ${PIGMENT_INCLUDES}
+                    ${KOMAIN_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgets
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
 # koproperty
 SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
@@ -348,13 +408,13 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 
 
 ### Tables: eigen2, boost
-if(NOT EIGEN2_FOUND AND NOT Boost_FOUND)
+if(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
     set(SHOULD_BUILD_TABLES FALSE)
-endif(NOT EIGEN2_FOUND AND NOT Boost_FOUND)
+endif(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
 
-### KPresenter: boost
+### Stage: boost
 if(NOT Boost_FOUND)
-    set(SHOULD_BUILD_KPRESENTER FALSE)
+    set(SHOULD_BUILD_STAGE FALSE)
 endif(NOT Boost_FOUND)
 
 ### Krita: pigment, eigen2, exiv2
@@ -395,7 +455,7 @@ endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 ###################
 
 if(SHOULD_BUILD_WORDS)
-    macro_optional_add_subdirectory(words)
+   macro_optional_add_subdirectory(words)
 endif(SHOULD_BUILD_WORDS)
 
 if (SHOULD_BUILD_KFORMULA)
@@ -419,9 +479,9 @@ if (SHOULD_BUILD_KCHART)
     macro_optional_add_subdirectory(kchart)
 endif (SHOULD_BUILD_KCHART)
 
-if(SHOULD_BUILD_KPRESENTER)
+if(SHOULD_BUILD_STAGE)
   macro_optional_add_subdirectory(kpresenter)
-endif(SHOULD_BUILD_KPRESENTER)
+endif(SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_KEXI)
     macro_optional_add_subdirectory(kexi)
@@ -442,6 +502,36 @@ endif(SHOULD_BUILD_KRITA)
 if(SHOULD_BUILD_KARBON)
   macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
+
+if(SHOULD_BUILD_BRAINDUMP)
+  macro_optional_add_subdirectory(braindump)
+endif(SHOULD_BUILD_BRAINDUMP)
+
+if(SHOULD_BUILD_ACTIVE)
+  macro_optional_add_subdirectory(active)
+endif(SHOULD_BUILD_ACTIVE)
+
+if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
+    set(SHOULD_BUILD_KOABSTRACTION FALSE)
+endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
+
+if(SHOULD_BUILD_KOABSTRACTION)
+    # koabstraction depends on kotext & flake
+    set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
+                        ${KOTEXT_INCLUDES}
+                        ${FLAKE_INCLUDES}
+                        ${KOPAGEAPP_INCLUDES}
+                        ${KOMAIN_INCLUDES}
+                        ${CMAKE_SOURCE_DIR}/tools/koabstraction)
+else(SHOULD_BUILD_KOABSTRACTION)
+    set(SHOULD_BUILD_MOBILE FALSE)
+endif(SHOULD_BUILD_KOABSTRACTION)
+
+if(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+    # build cstester
+else(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+    set(SHOULD_BUILD_CSTESTER FALSE)
+endif(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
 
 macro_optional_add_subdirectory(doc)
 
@@ -468,15 +558,18 @@ message(STATUS "---------------- The following applications will be built ------
 
 macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
 macro_display_application_enabled(tables ${SHOULD_BUILD_TABLES})
-macro_display_application_enabled(kpresenter ${SHOULD_BUILD_KPRESENTER})
+macro_display_application_enabled(kpresenter ${SHOULD_BUILD_STAGE})
 macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
 macro_display_application_enabled(kplato ${SHOULD_BUILD_KPLATO})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
+macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
 macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
 macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
-macro_display_application_enabled(f-office ${SHOULD_BUILD_F_OFFICE})
+macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
+macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
+macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

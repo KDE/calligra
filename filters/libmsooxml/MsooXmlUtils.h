@@ -66,7 +66,7 @@ enum autoFitStatus {
     autoFitUnUsed, autoFitOn, autoFitOff
 };
 
-class ParagraphBulletProperties
+class MSOOXML_EXPORT ParagraphBulletProperties
 {
 public:
 
@@ -85,6 +85,8 @@ public:
     void setAlign(const QString& align);
 
     void setNumFormat(const QString& numFormat);
+
+    void setMargin(qreal margin);
 
     void setIndent(qreal indent);
 
@@ -123,6 +125,7 @@ private:
     QString m_suffix;
     QString m_align;
     QString m_indent;
+    QString m_margin;
     QString m_picturePath;
     QString m_bulletColor;
     QSize m_bulletSize;
@@ -200,9 +203,6 @@ private:
     T** m_pptr;
 };
 
-//! Copies properties from one KoGenStyle to another
-MSOOXML_EXPORT void copyPropertiesFromStyle(const KoGenStyle& sourceStyle, KoGenStyle& targetStyle, KoGenStyle::PropertyType type);
-
 //! Decodes boolean attribute @a value. If unspecified returns @a defaultValue.
 //! @return true unless @a value is equal to "false", "off" or "0".
 MSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue = false);
@@ -248,9 +248,13 @@ MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader* re
  @return KoFilter::OK on success.
  On failure @a errorMessage is set. */
 KoFilter::ConversionStatus copyFile(const KZip* zip, QString& errorMessage,
-                                    const QString& sourceName,
-                                    KoStore *outputStore,
+                                    const QString& sourceName, KoStore *outputStore,
                                     const QString& destinationName, bool oleType=false);
+
+/*! Creates a file */
+KoFilter::ConversionStatus createImage(QString& errorMessage,
+                                       const QImage& source, KoStore *outputStore,
+                                       const QString& destinationName);
 
 /*! @return size of image file @a sourceName read from zip archive @a zip.
  Size of the image is returned in @a size.

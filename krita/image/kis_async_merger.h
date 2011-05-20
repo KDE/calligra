@@ -20,6 +20,7 @@
 #define __KIS_ASYNC_MERGER_H
 
 #include <QDebug>
+#include <QBitArray>
 
 //#include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -97,13 +98,6 @@ public:
         if(!m_projection) return true;
         QRect applyRect = m_updateRect & m_projection->extent();
 
-        /**
-         * FIXME: check whether it's right to leave a selection to
-         * a projection mechanism, not for the filter
-         */
-        KisConstProcessingInformation srcCfg(m_projection, applyRect.topLeft(), 0);
-        KisProcessingInformation dstCfg(originalDevice, applyRect.topLeft(), 0);
-
         Q_ASSERT(layer->nodeProgressProxy());
 
         KoProgressUpdater updater(layer->nodeProgressProxy());
@@ -111,8 +105,7 @@ public:
         QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
         // We do not create a transaction here, as srcDevice != dstDevice
-        filter->process(srcCfg, dstCfg, applyRect.size(),
-                        filterConfig, updaterPtr);
+        filter->process(m_projection, originalDevice, 0, applyRect, filterConfig, updaterPtr);
 
         updaterPtr->setProgress(100);
 
@@ -159,7 +152,6 @@ private:
     QRect m_updateRect;
     KisPaintDeviceSP m_projection;
 };
-
 
 class KisAsyncMerger
 {
@@ -303,9 +295,40 @@ private:
 
         QRect needRect = rect & device->extent();
         if(needRect.isEmpty()) return true;
+        
+        QBitArray channelFlags = layer->channelFlags();
+        
+        // if the color spaces don't match we will have a problem with the channel flags
+        // because the channel flags from the source layer doesn't match with the colorspace of the projection device
+        // this leads to the situation that the wrong channels will be enabled/disabled
+        if(!channelFlags.isEmpty() && m_currentProjection->colorSpace() != device->colorSpace()) {
+            KoColorSpace* src = device->colorSpace();
+            KoColorSpace* dst = m_currentProjection->colorSpace();
+            
+            bool alphaFlagIsSet        = (src->channelFlags(false,true) & channelFlags) == src->channelFlags(false,true);
+            bool allColorFlagsAreSet   = (src->channelFlags(true,false) & channelFlags) == src->channelFlags(true,false);
+            bool allColorFlagsAreUnset = (src->channelFlags(true,false) & channelFlags).count(true) == 0;
+            
+            if(allColorFlagsAreSet) {
+                channelFlags = dst->channelFlags(true, alphaFlagIsSet);
+            }
+            else if(allColorFlagsAreUnset) {
+                channelFlags = dst->channelFlags(false, alphaFlagIsSet);
+            }
+            else {
+                //TODO: convert the cannel flags properly
+                //      for now just the alpha channel bit is copied and the other channels are left alone
+                for(quint32 i=0; i<dst->channelCount(); ++i) {
+                    if(dst->channels()[i]->channelType() == KoChannelInfo::ALPHA) {
+                        channelFlags.setBit(i, alphaFlagIsSet);
+                        break;
+                    }
+                }
+            }
+        }
 
         KisPainter gc(m_currentProjection);
-        gc.setChannelFlags(layer->channelFlags());
+        gc.setChannelFlags(channelFlags);
         gc.setCompositeOp(layer->compositeOp());
         gc.setOpacity(layer->opacity());
         gc.bitBlt(needRect.topLeft(), device, needRect);

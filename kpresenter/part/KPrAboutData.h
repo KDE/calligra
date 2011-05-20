@@ -49,7 +49,7 @@ KAboutData * newKPresenterAboutData()
     aboutData->addAuthor(ki18n("Casper Boemann "), KLocalizedString(), "cbr@boemann.dk");
     aboutData->addAuthor(ki18n("Fredy Yanardi "), KLocalizedString(), "fyanardi@gmail.com");
     aboutData->addAuthor(ki18n("Jan Hambrecht "), KLocalizedString(), "jaham@gmx.net");
-    aboutData->addAuthor(ki18n("Marijn Kruisselbrink "), KLocalizedString(), "m.kruisselbrink@student.tue.nl");
+    aboutData->addAuthor(ki18n("Marijn Kruisselbrink "), KLocalizedString(), "mkruisselbrink@kde.org");
     aboutData->addAuthor(ki18n("Martin Pfeiffer "), KLocalizedString(), "hubipete@gmx.net");
     aboutData->addAuthor(ki18n("Sven Langkamp "), KLocalizedString(), "sven.langkamp@gmail.com");
     aboutData->addAuthor(ki18n("Timothée Lacroix "), KLocalizedString(), "dakeyras.khan@gmail.com");

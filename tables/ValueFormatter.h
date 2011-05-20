@@ -39,7 +39,7 @@ class ValueConverter;
  * \ingroup Value
  * Generates a textual representation of a Value with a given formatting.
  */
-class CALLIGRA_TABLES_EXPORT ValueFormatter
+class CALLIGRA_TABLES_ODF_EXPORT ValueFormatter
 {
 public:
     /**
@@ -67,7 +67,9 @@ public:
                      Style::FloatFormat floatFormat = Style::OnlyNegSigned,
                      const QString& prefix = QString(),
                      const QString& postfix = QString(),
-                     const QString& currencySymbol = QString(), const QString& formatString = QString());
+                     const QString& currencySymbol = QString(),
+                     const QString& formatString = QString(),
+                     bool thousandsSep = true);
 
     /**
      * Creates a date format.
@@ -106,7 +108,8 @@ protected:
                                Format::Type formatType,
                                Style::FloatFormat floatFormat,
                                const QString& currencySymbol,
-                               const QString& formatString);
+                               const QString& formatString,
+                               bool thousandsSep);
 
     /**
      * Creates a fraction format.
@@ -124,7 +127,8 @@ protected:
     QString complexFormat(const Value& value, int precision,
                           Format::Type formatType,
                           Style::FloatFormat floatFormat,
-                          const QString& currencySymbol);
+                          const QString& currencySymbol,
+                          bool thousandsSep);
 
     /**
      * Removes the trailing zeros and the decimal symbol \p decimalSymbol in

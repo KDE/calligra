@@ -5,6 +5,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +26,6 @@
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
 #include "KoTextBlockData.h"
-#include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
 #include "KoTextSharedLoadingData.h"
@@ -1007,7 +1007,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
         if (ok)
             setDefaultOutlineLevel(level);
     }
-    
+
     // 15.5.30 - 31
     if (element->hasAttributeNS(KoXmlNS::text, "number-lines")) {
         setLineNumbering(element->attributeNS(KoXmlNS::text, "number-lines", "false") == "true");
@@ -1018,7 +1018,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
                 setLineNumberStartValue(startValue);
                 }
             }
-    }           
+    }
 
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();
@@ -1166,7 +1166,9 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         QList<KoText::Tab> tabList;
         KoXmlElement tabStop;
         forEachElement(tabStop, tabStops) {
-            Q_ASSERT(tabStop.localName() == "tab-stop");
+            if(tabStop.localName() != "tab-stop")
+                continue;
+
             // Tab position
             KoText::Tab tab;
             tab.position = KoUnit::parseValue(tabStop.attributeNS(KoXmlNS::style, "position", QString()));
@@ -1387,12 +1389,20 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
     const QString breakBefore(styleStack.property(KoXmlNS::fo, "break-before"));
-    if (!breakBefore.isEmpty() && breakBefore != "auto") {
-        setBreakBefore(true);
+    if (!breakBefore.isEmpty()) {
+        if (breakBefore == "page") {
+            setBreakBefore(true);
+        }
     }
     const QString breakAfter(styleStack.property(KoXmlNS::fo, "break-after"));
-    if (!breakAfter.isEmpty() && breakAfter != "auto") {
-        setBreakAfter(true);
+    if (!breakAfter.isEmpty()) {
+        if (breakAfter == "page") {
+            setBreakAfter(true);
+        }
+    }
+    const QString keepTogether(styleStack.property(KoXmlNS::fo, "keep-together"));
+    if (keepTogether == "always") {
+        setNonBreakableLines(true);
     }
 
     // The fo:background-color attribute specifies the background color of a paragraph.
@@ -1408,6 +1418,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             brush.setColor(bgcolor); // #rrggbb format
         }
         setBackground(brush);
+    }
+    
+    // Support for an old non-standard OpenOffice attribute that we still find in too many documents...
+    if (styleStack.hasProperty(KoXmlNS::text, "enable-numbering")) {
+        setProperty(ForceDisablingList, styleStack.property(KoXmlNS::text, "enable-numbering") == "false");
     }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
@@ -1555,6 +1570,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
             if (breakAfter())
                 style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
+        } else if (key == QTextFormat::BlockNonBreakableLines) {
+            if (nonBreakableLines()) {
+                style.addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);
+            }
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)
@@ -1748,6 +1767,15 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         style.addChildElement("style:tab-stops", elementContents);
 
     }
+}
+
+bool KoParagraphStyle::hasDefaults() const
+{
+    int size=d->stylesPrivate.properties().size();
+    if ((size == 0) || (size==1 && d->stylesPrivate.properties().contains(StyleId))) {
+        return true;
+    }
+    return false;
 }
 
 #include <KoParagraphStyle.moc>

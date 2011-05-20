@@ -36,6 +36,9 @@
 protected:
 
     // v namespace:
+    KoFilter::ConversionStatus genericReader();
+    QString m_currentEl;
+    KoFilter::ConversionStatus read_oval();
     KoFilter::ConversionStatus read_roundrect();
     KoFilter::ConversionStatus read_rect();
     KoFilter::ConversionStatus read_fill();
@@ -49,10 +52,12 @@ protected:
     KoFilter::ConversionStatus read_group();
     KoFilter::ConversionStatus read_stroke();
 
+    void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
+
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
-    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart};
+    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart, GroupStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
     KoFilter::ConversionStatus createFrameEnd();
@@ -88,17 +93,21 @@ protected:
     bool m_insideGroup;
 
     // Relative group widths
-    int m_groupWidth;
-    int m_groupHeight;
+    int m_groupWidth, m_groupHeight;
 
     // Relative group original
-    int m_groupX;
-    int m_groupY;
+    int m_groupX, m_groupY;
 
-    QString m_groupUnit; // pt, cm etc.
+    // Offset caused by the group parent
+    qreal m_groupXOffset, m_groupYOffset;
+
+    QString m_groupWidthUnit; // pt, cm etc.
+    QString m_groupHeightUnit;
     qreal m_real_groupWidth;
     qreal m_real_groupHeight;
 
     int m_formulaIndex;
     QString m_shapeTypeString;
     QMap<QString, QString> m_shapeTypeStrings;
+    QMap<QString, QString> m_strokeTypeStrings;
+    QMap<QString, QString> m_fillTypeStrings;

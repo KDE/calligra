@@ -90,6 +90,27 @@ QVariant NodeModel::name( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Qt::DecorationRole:
+            if ( node->isBaselined() ) {
+                return KIcon( "view-time-schedule-baselined" );
+            }
+            break;
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task:
+                    return static_cast<const Task*>( node )->completion().isFinished() ? m_project->config().taskFinishedColor() : m_project->config().taskNormalColor();
+                case Node::Type_Milestone:
+                    return static_cast<const Task*>( node )->completion().isFinished() ? m_project->config().milestoneFinishedColor() : m_project->config().milestoneNormalColor();
+                case Node::Type_Summarytask:
+                    return m_project->config().summaryTaskLevelColor( node->level() );
+                default:
+                    break;
+            }
+            break;
+        }
     }
     return QVariant();
 }
@@ -246,7 +267,7 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
                 return KGlobal::locale()->formatDateTime( node->constraintStartTime(), KLocale::LongDate, KLocale::TimeZone );
             }
             case Qt::EditRole:
-                return node->constraintStartTime().dateTime();
+                return node->constraintStartTime();
             case Qt::StatusTipRole:
             case Qt::WhatsThisRole:
                 return QVariant();
@@ -269,7 +290,7 @@ QVariant NodeModel::constraintStartTime( const Node *node, int role ) const
             break;
         }
         case Qt::EditRole:
-            return node->constraintStartTime().dateTime();
+            return node->constraintStartTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -285,10 +306,10 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
                 return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
             }
             case Qt::ToolTipRole: {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime().dateTime() );
+                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
             }
             case Qt::EditRole:
-                return node->constraintEndTime().dateTime();
+                return node->constraintEndTime();
             case Qt::StatusTipRole:
             case Qt::WhatsThisRole:
                 return QVariant();
@@ -306,12 +327,12 @@ QVariant NodeModel::constraintEndTime( const Node *node, int role ) const
         case Qt::ToolTipRole: {
             int c = node->constraint();
             if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime().dateTime() );
+                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
             }
             break;
         }
         case Qt::EditRole:
-            return node->constraintEndTime().dateTime();
+            return node->constraintEndTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -694,7 +715,7 @@ QVariant NodeModel::startTime( const Node *node, int role ) const
             //kDebug()<<node->name()<<", "<<role;
             return i18n( "Scheduled start: %1", KGlobal::locale()->formatDateTime( node->startTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::EditRole:
-            return node->startTime( id() ).dateTime();
+            return node->startTime( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -711,7 +732,7 @@ QVariant NodeModel::endTime( const Node *node, int role ) const
             //kDebug()<<node->name()<<", "<<role;
             return i18n( "Scheduled finish: %1", KGlobal::locale()->formatDateTime( node->endTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::EditRole:
-            return node->endTime( id() ).dateTime();
+            return node->endTime( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -963,7 +984,7 @@ QVariant NodeModel::earlyStart( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->earlyStart( id() ).date() );
         case Qt::EditRole:
-            return t->earlyStart( id() ).dateTime();
+            return t->earlyStart( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -983,7 +1004,7 @@ QVariant NodeModel::earlyFinish( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->earlyFinish( id() ).date() );
         case Qt::EditRole:
-            return t->earlyFinish( id() ).dateTime();
+            return t->earlyFinish( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1003,7 +1024,7 @@ QVariant NodeModel::lateStart( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->lateStart( id() ).date() );
         case Qt::EditRole:
-            return t->lateStart( id() ).dateTime();
+            return t->lateStart( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1023,7 +1044,7 @@ QVariant NodeModel::lateFinish( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->lateFinish( id() ).date() );
         case Qt::EditRole:
-            return t->lateFinish( id() ).dateTime();
+            return t->lateFinish( id() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1240,7 +1261,7 @@ QVariant NodeModel::startedTime( const Node *node, int role ) const
             break;
         case Qt::EditRole:
             if ( t->completion().isStarted() ) {
-                return t->completion().startTime().dateTime();
+                return t->completion().startTime();
             }
             return QDateTime::currentDateTime();
         case Qt::StatusTipRole:
@@ -1291,7 +1312,7 @@ QVariant NodeModel::finishedTime( const Node *node, int role ) const
             break;
         case Qt::EditRole:
             if ( t->completion().isFinished() ) {
-                return t->completion().finishTime().dateTime();
+                return t->completion().finishTime();
             }
             break;
         case Qt::StatusTipRole:
@@ -1478,6 +1499,17 @@ QVariant NodeModel::resourceIsMissing( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1500,6 +1532,17 @@ QVariant NodeModel::resourceIsOverbooked( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1522,6 +1565,17 @@ QVariant NodeModel::resourceIsNotAvailable( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1530,20 +1584,31 @@ QVariant NodeModel::schedulingConstraintsError( const Node *node, int role ) con
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->constraintError( id() ) ) {
                 return i18n( "Error" );
             }
             break;
         case Qt::EditRole:
-            return node->schedulingError( id() );
+            return node->constraintError( id() );
         case Qt::ToolTipRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->constraintError( id() ) ) {
                 return i18nc( "@info:tooltip", "Failed to comply with a timing constraint" );
             }
             break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1559,13 +1624,24 @@ QVariant NodeModel::nodeIsNotScheduled( const Node *node, int role ) const
         case Qt::EditRole:
             return node->notScheduled( id() );
         case Qt::ToolTipRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->notScheduled( id() ) ) {
                 return i18nc( "@info:tooltip", "This task has not been scheduled" );
             }
             break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1581,13 +1657,57 @@ QVariant NodeModel::effortNotMet( const Node *node, int role ) const
         case Qt::EditRole:
             return node->effortMetError( id() );
         case Qt::ToolTipRole:
-            if ( node->schedulingError( id() ) ) {
+            if ( node->effortMetError( id() ) ) {
                 return i18nc( "@info:tooltip", "The assigned resources cannot deliver the required estimated effort" );
             }
             break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::schedulingError( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            if ( node->schedulingError( id() ) ) {
+                return i18n( "Error" );
+            }
+            break;
+        case Qt::EditRole:
+            return node->schedulingError( id() );
+        case Qt::ToolTipRole:
+            if ( node->schedulingError( id() ) ) {
+                return i18nc( "@info:tooltip", "Scheduling error" );
+            }
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskErrorColor();
+                case Node::Type_Milestone: return m_project->config().milestoneErrorColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1686,6 +1806,17 @@ QVariant NodeModel::nodeIsCritical( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskNormalColor();
+                case Node::Type_Milestone: return m_project->config().milestoneNormalColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1699,6 +1830,17 @@ QVariant NodeModel::nodeInCriticalPath( const Node *node, int role ) const
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        case Role::Foreground: {
+            if ( ! m_project ) {
+                break;
+            }
+            switch ( node->type() ) {
+                case Node::Type_Task: return m_project->config().taskNormalColor();
+                case Node::Type_Milestone: return m_project->config().milestoneNormalColor();
+                default:
+                    break;
+            }
+        }
     }
     return QVariant();
 }
@@ -1874,6 +2016,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeResourceUnavailable: result = resourceIsNotAvailable( n, role ); break;
         case NodeConstraintsError: result = schedulingConstraintsError( n, role ); break;
         case NodeEffortNotMet: result = effortNotMet( n, role ); break;
+        case NodeSchedulingError: result = schedulingError( n, role ); break;
 
         case NodeWBSCode: result = wbsCode( n, role ); break;
         case NodeLevel: result = nodeLevel( n, role ); break;
@@ -1984,6 +2127,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeResourceUnavailable: return i18nc( "@title:column", "Resource Unavailable" );
             case NodeConstraintsError: return i18nc( "@title:column", "Constraints Error" );
             case NodeEffortNotMet: return i18nc( "@title:column", "Effort Not Met" );
+            case NodeSchedulingError: return i18nc( "@title:column", "Scheduling Error" );
 
             case NodeWBSCode: return i18nc( "@title:column", "WBS Code" );
             case NodeLevel: return i18nc( "@title:column Node level", "Level" );
@@ -2074,6 +2218,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeResourceUnavailable: return ToolTip::nodeResourceUnavailable();
             case NodeConstraintsError: return ToolTip::nodeConstraintsError();
             case NodeEffortNotMet: return ToolTip::nodeEffortNotMet();
+            case NodeSchedulingError: return ToolTip::nodeSchedulingError();
 
             case NodeWBSCode: return ToolTip::nodeWBS();
             case NodeLevel: return ToolTip::nodeLevel();
@@ -2151,6 +2296,9 @@ void NodeItemModel::slotNodeRemoved( Node *node )
 {
     //kDebug()<<node->name();
     Q_ASSERT( node == m_node );
+#ifdef NDEBUG
+    Q_UNUSED(node)
+#endif
     endRemoveRows();
     m_node = 0;
 }
@@ -2242,6 +2390,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
     }
     Node *n = node( index );
     if ( m_readWrite && n != 0 ) {
+        bool baselined = n->isBaselined();
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
             case NodeModel::NodeName: // name
@@ -2261,14 +2410,14 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case NodeModel::NodeOptimisticRatio: // optimisticRatio
             case NodeModel::NodePessimisticRatio: // pessimisticRatio
             {
-                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
             case NodeModel::NodeEstimateCalendar:
             {
-                if ( n->type() == Node::Type_Task )
+                if ( ! baselined && n->type() == Node::Type_Task )
                 {
                     flags |= Qt::ItemIsEditable;
                 }
@@ -2276,22 +2425,22 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             }
             case NodeModel::NodeRisk: // risktype
             {
-                if ( n->type() == Node::Type_Task ) {
+                if ( ! baselined && n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
             case NodeModel::NodeConstraint: // constraint type
-                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             case NodeModel::NodeConstraintStart: { // constraint start
-                if ( n->type() == Node::Type_Project ) {
+                if ( ! baselined && n->type() == Node::Type_Project ) {
                     flags |= Qt::ItemIsEditable;
                     break;
                 }
-                if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                if ( ! baselined && ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
                 int c = n->constraint();
@@ -2301,11 +2450,11 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case NodeModel::NodeConstraintEnd: { // constraint end
-                if ( n->type() == Node::Type_Project ) {
+                if ( ! baselined && n->type() == Node::Type_Project ) {
                     flags |= Qt::ItemIsEditable;
                     break;
                 }
-                if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
+                if ( ! baselined && ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
                 int c = n->constraint();
@@ -2315,7 +2464,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case NodeModel::NodeRunningAccount: // running account
-                if ( n->type() == Node::Type_Task ) {
+                if ( ! baselined && n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -2323,7 +2472,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case NodeModel::NodeStartupCost: // startup cost
             case NodeModel::NodeShutdownAccount: // shutdown account
             case NodeModel::NodeShutdownCost: { // shutdown cost
-                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                if ( ! baselined && ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -2619,12 +2768,15 @@ bool NodeItemModel::setConstraint( Node *node, const QVariant &value, int role )
 bool NodeItemModel::setConstraintStartTime( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
+        case Qt::EditRole: {
+            QDateTime dt = value.toDateTime();
+            dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
+            if ( dt == node->constraintStartTime() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
+            emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, dt, "Modify constraint start time" ) );
             return true;
+        }
     }
     return false;
 }
@@ -2632,12 +2784,15 @@ bool NodeItemModel::setConstraintStartTime( Node *node, const QVariant &value, i
 bool NodeItemModel::setConstraintEndTime( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
-        case Qt::EditRole:
-            if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
+        case Qt::EditRole: {
+            QDateTime dt = value.toDateTime();
+            dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
+            if ( dt == node->constraintEndTime() ) {
                 return false;
             }
-            emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );
+            emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, dt, "Modify constraint end time" ) );
             return true;
+        }
     }
     return false;
 }
@@ -3286,7 +3441,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
         return;
     }
     int row = node->parentNode()->findChildNode( node );
-    kDebug()<<node->name()<<row;
+    Q_ASSERT( row >= 0 );
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount()-1, node ) );
 }
 
@@ -3771,7 +3926,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
                     case NodeModel::NodeName: return "Early Start";
                     case NodeModel::NodeType: return KDGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
-                    case NodeModel::NodeEndTime: return n->earlyStart( id() ).dateTime();
+                    case NodeModel::NodeEndTime: return n->earlyStart( id() );
                     default: break;
                 }
             }
@@ -3783,7 +3938,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
                     case NodeModel::NodeName: return "Late Finish";
                     case NodeModel::NodeType: return KDGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
-                    case NodeModel::NodeEndTime: return n->lateFinish( id() ).dateTime();
+                    case NodeModel::NodeEndTime: return n->lateFinish( id() );
                     default: break;
                 }
             }
@@ -3795,7 +3950,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
                     case NodeModel::NodeName: return "Late Start";
                     case NodeModel::NodeType: return KDGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
-                    case NodeModel::NodeEndTime: return n->lateStart( id() ).dateTime();
+                    case NodeModel::NodeEndTime: return n->lateStart( id() );
                     default: break;
                 }
             }
@@ -3807,7 +3962,7 @@ QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
                     case NodeModel::NodeName: return "Early Finish";
                     case NodeModel::NodeType: return KDGantt::TypeEvent;
                     case NodeModel::NodeStartTime:
-                    case NodeModel::NodeEndTime: return n->earlyFinish( id() ).dateTime();
+                    case NodeModel::NodeEndTime: return n->earlyFinish( id() );
                     default: break;
                 }
             }
@@ -4107,7 +4262,7 @@ bool MilestoneItemModel::setConstraintStartTime( Node *node, const QVariant &val
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
+            if ( value.toDateTime() == node->constraintStartTime() ) {
                 return false;
             }
             emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
@@ -4120,7 +4275,7 @@ bool MilestoneItemModel::setConstraintEndTime( Node *node, const QVariant &value
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
+            if ( value.toDateTime() == node->constraintEndTime() ) {
                 return false;
             }
             emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );

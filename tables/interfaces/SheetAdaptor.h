@@ -39,7 +39,7 @@ class Damage;
 class Sheet;
 class CellProxy;
 
-class CALLIGRA_TABLES_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_TABLES_COMMON_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.sheet")

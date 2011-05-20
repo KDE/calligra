@@ -60,7 +60,7 @@ class FormulaDialog : public KDialog
 {
     Q_OBJECT
 public:
-    FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& expression = 0);
+    FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& expression = QString());
     ~FormulaDialog();
 private:
     /**

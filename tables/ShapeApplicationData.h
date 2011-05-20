@@ -32,7 +32,7 @@ namespace Tables
  * \ingroup Embedding
  * KSpread specific data attached to each shape.
  */
-class CALLIGRA_TABLES_EXPORT ShapeApplicationData : public KoShapeApplicationData
+class CALLIGRA_TABLES_ODF_EXPORT ShapeApplicationData : public KoShapeApplicationData
 {
 public:
     /**

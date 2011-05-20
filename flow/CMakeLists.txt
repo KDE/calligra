@@ -4,6 +4,14 @@ include_directories(
     ${KOMAIN_INCLUDES}
 )
 
-add_subdirectory(src)
+add_subdirectory(part)
+add_subdirectory(plugins)
+add_subdirectory(stencils)
 add_subdirectory(templates)
-add_subdirectory(shapecollection)
+
+
+########### install files ###############
+
+install( FILES
+    flow_dock.desktop
+    DESTINATION ${SERVICETYPES_INSTALL_DIR})

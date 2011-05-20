@@ -34,14 +34,14 @@ KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
 
     createProperties();
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
     m_bottomPadding = element.toElement().attribute("report:bottom-padding").toDouble();
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
-    
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
@@ -71,6 +71,7 @@ KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
 
 KoReportItemText::~KoReportItemText()
 {
+    delete m_set;
 }
 
 Qt::Alignment KoReportItemText::textFlags() const
@@ -105,7 +106,7 @@ void KoReportItemText::createProperties()
     QStringList keys, strings;
 
     //_query = new KoProperty::Property ( "Query", QStringList(), QStringList(), "Data Source", "Query" );
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
@@ -189,7 +190,7 @@ QString KoReportItemText::typeName() const
 int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
     Q_UNUSED(script);
-    
+
     QString qstrValue;
 
     QString cs = itemDataSource();
@@ -252,12 +253,21 @@ int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset
                     tb->setFlags(textFlags());
                     tb->setTextStyle(textStyle());
                     tb->setLineStyle(lineStyle());
-                    if (page) page->addPrimitive(tb);
-
-                    OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
-                    tb2->setPosition(m_pos.toPoint());
-                    if (section) section->addPrimitive(tb2);
-
+                    
+                    if (page) {
+                        page->addPrimitive(tb);
+                    }
+                    
+                    if (section) {
+                        OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
+                        tb2->setPosition(m_pos.toPoint());
+                        section->addPrimitive(tb2);
+                    }
+                    
+                    if (!page) {
+                        delete tb;
+                    }
+    
                     intStretch += intRectHeight;
                     intLineCounter++;
                 }
@@ -286,5 +296,6 @@ int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset
 
         intStretch += (m_bottomPadding / 100.0);
     }
+    
     return intStretch; //Item returns its required section height
 }

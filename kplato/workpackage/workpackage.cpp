@@ -493,10 +493,10 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp )
         m->addCommand( new NodeModifyDescriptionCmd( *to, from->description() ) );
     }
     if ( to->startTime() != from->startTime() ) {
-        m->addCommand( new NodeModifyStartTimeCmd( *to, from->startTime().dateTime() ) );
+        m->addCommand( new NodeModifyStartTimeCmd( *to, from->startTime() ) );
     }
     if ( to->endTime() != from->endTime() ) {
-        m->addCommand( new NodeModifyEndTimeCmd( *to, from->endTime().dateTime() ) );
+        m->addCommand( new NodeModifyEndTimeCmd( *to, from->endTime() ) );
     }
     if ( to->leader() != from->leader() ) {
         m->addCommand( new NodeModifyLeaderCmd( *to, from->leader() ) );

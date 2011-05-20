@@ -47,7 +47,7 @@ QVariantList Scripting::Resource::appointmentIntervals( qlonglong schedule ) con
 {
     KPlato::Appointment app = m_resource->appointmentIntervals( schedule );
     QVariantList lst;
-    foreach ( const KPlato::AppointmentInterval &ai, app.intervals() ) {
+    foreach ( const KPlato::AppointmentInterval &ai, app.intervals().map() ) {
         lst << QVariant( QVariantList() << ai.startTime().toString() << ai.endTime().toString() << ai.load() );
     }
     return lst;
@@ -69,7 +69,7 @@ QVariantList Scripting::Resource::externalAppointments() const
 {
     KPlato::AppointmentIntervalList ilst = m_resource->externalAppointments();
     QVariantList lst;
-    foreach ( const KPlato::AppointmentInterval &ai, ilst ) {
+    foreach ( const KPlato::AppointmentInterval &ai, ilst.map() ) {
         lst << QVariant( QVariantList() << ai.startTime().toString() << ai.endTime().toString() << ai.load() );
     }
     return lst;

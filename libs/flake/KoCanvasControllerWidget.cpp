@@ -86,7 +86,7 @@ public:
 void KoCanvasControllerWidget::Private::setDocumentOffset()
 {
     // The margins scroll the canvas widget inside the viewport, not
-    // the document. The documentOffset is meant the be the value that
+    // the document. The documentOffset is meant to be the value that
     // the canvas must add to the update rect in its paint event, to
     // compensate.
 
@@ -197,15 +197,16 @@ void KoCanvasControllerWidget::Private::activate()
 
 
 ////////////
-KoCanvasControllerWidget::KoCanvasControllerWidget(QWidget *parent)
+KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
     : QAbstractScrollArea(parent)
-    , KoCanvasController()
+    , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
     setFrameShape(NoFrame);
     d->viewportWidget = new Viewport(this);
     setViewport(d->viewportWidget);
 
+    //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setAutoFillBackground(false);
     /*
       Fixes:   apps starting at zero zoom.
@@ -502,20 +503,15 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
 
 void KoCanvasControllerWidget::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap)
 {
-    QWidget *w = this;
-    while (w->parentWidget()) {
-        // XXX: This is an ugly hidden dependency
-        if (w->inherits("KoView")) {
-            emit toolOptionWidgetsChanged(widgetMap, w);
-            break;
-        }
-        w = w->parentWidget();
-    }
     emit toolOptionWidgetsChanged(widgetMap);
 }
 
 void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
+    // Don't update if the document-size didn't changed to prevent infinite loops and unneeded updates.
+    if (KoCanvasController::documentSize() == sz)
+        return;
+
     if (!recalculateCenter) {
         // assume the distance from the top stays equal and recalculate the center.
         setPreferredCenterFractionX(documentSize().width() * preferredCenterFractionX() / sz.width());

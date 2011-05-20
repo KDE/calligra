@@ -128,10 +128,12 @@ public:
 
         // numbering
         LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
-        LineNumberStartValue     ///< integer value that specifies the number for the first line in the paragraph
-
+        LineNumberStartValue,    ///< integer value that specifies the number for the first line in the paragraph
+        SectionStart,            ///< section definition
+        SectionEnd,               ///< end of a named section
 // do 15.5.24
 // continue at 15.5.28
+        ForceDisablingList       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
     };
 
     /// Constructor
@@ -588,7 +590,11 @@ public:
      * @returns a QVariant which holds the property value.
      */
     QVariant value(int key) const;
-
+    /**
+     * Returns true if this pragraph style has default properties
+     * Note that the value of StyleId property is not considered
+     */
+    bool hasDefaults() const;
 signals:
     void nameChanged(const QString &newName);
 

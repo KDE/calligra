@@ -27,7 +27,7 @@
 #include <KoView.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
-#include <KoShapeReorderCommand.h>
+#include <KoFindMatch.h>
 
 #include <QWidget>
 
@@ -38,6 +38,7 @@ class KWGui;
 
 class KoCanvasBase;
 class KoZoomController;
+class KoFindText;
 class KoRdfSemanticItem;
 class KActionMenu;
 
@@ -138,21 +139,13 @@ private slots:
     /// snap to grid
     void toggleSnapToGrid();
     /** Move the selected frame above maximum 1 frame that is in front of it. */
-    void raiseFrame() {
-        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::RaiseShape);
-    }
+    void raiseFrame();
     /** Move the selected frame behind maximum 1 frame that is behind it */
-    void lowerFrame() {
-        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::LowerShape);
-    }
+    void lowerFrame();
     /** Move the selected frame(s) to be in the front most position. */
-    void bringToFront() {
-        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::BringToFront);
-    }
+    void bringToFront();
     /** Move the selected frame(s) to be behind all other frames */
-    void sendToBack() {
-        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::SendToBack);
-    }
+    void sendToBack();
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
@@ -181,8 +174,6 @@ private slots:
     void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
-    /// create a KWOutlineShape for the selected frame(s).
-    void createCustomOutline();
     /// Wrap the selected frames into a clipping shape container.
     void createFrameClipping();
     /// unwrap the selected frames into a clipping shape container.
@@ -203,11 +194,12 @@ private slots:
     void goToNextPage();
     /// A semantic item was updated and should have it's text refreshed.
     void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
-    void createTextOnShape();
+    /// A match was found when searching.
+    void findMatchFound(KoFindMatch match);
+    /// The document has finished loading. This is used to update the text that can be searched.
+    void loadingCompleted();
 
 private:
-    /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
-    void adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction);
 
     /// loops over the selected shapes and returns the frames that go with them.
     QList<KWFrame*> selectedFrames() const;
@@ -219,6 +211,7 @@ private:
     KoZoomHandler m_zoomHandler;
     KoZoomController *m_zoomController;
     KWPage m_currentPage;
+    KoFindText *m_find;
 
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;

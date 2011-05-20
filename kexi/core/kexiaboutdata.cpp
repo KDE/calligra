@@ -46,7 +46,7 @@ KAboutData* Kexi::createAboutData()
 #endif
         , ki18n(description),
         KAboutData::License_LGPL_V2,
-        ki18n("(c) 2002-2010, Kexi Team"),
+        ki18n("(c) 2002-2011, Kexi Team"),
         ki18n("This software is developed by Kexi Team - an international group\n"
               "of independent developers."),
         "http://www.calligra-suite.org/kexi",

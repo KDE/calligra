@@ -34,7 +34,7 @@ namespace Tables
  * The drag starts, if the mouse leaves the cell, where the mouse press occurred.
  * If this cell is not left, the cell becomes selected.
  */
-class CALLIGRA_TABLES_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
+class CALLIGRA_TABLES_COMMON_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
 {
 public:
     /**

@@ -38,7 +38,7 @@ class Sheet;
  * printing, and TablePageManager, which does the same for the table shape in
  * page based hosting apps.
  */
-class CALLIGRA_TABLES_EXPORT PageManager
+class CALLIGRA_TABLES_COMMON_EXPORT PageManager
 {
 public:
     /**

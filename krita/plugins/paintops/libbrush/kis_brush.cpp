@@ -261,7 +261,7 @@ void KisBrush::toXML(QDomDocument& document , QDomElement& element) const
 KisBrushSP KisBrush::fromXML(const QDomElement& element)
 {
     KisBrushSP brush = KisBrushRegistry::instance()->getOrCreateBrush(element);
-    if(element.attribute("BrushVersion", "1") == "1")
+    if(brush && element.attribute("BrushVersion", "1") == "1")
     {
         brush->setScale(brush->scale() * 2.0);
     }
@@ -317,6 +317,23 @@ qint32 KisBrush::maskHeight(double scale, double angle) const
     } else {
         return qAbs(static_cast<qint32>(ceil(-width_ * sin(angle) + height_ * cos(angle)) + 1));
     }
+}
+
+double KisBrush::maskAngle(double angle) const
+{
+    angle += d->angle;
+    
+    // Make sure the angle stay in [0;2*M_PI]
+    if(angle < 0)      { angle += 2*M_PI; }
+    if(angle > 2*M_PI) { angle -= 2*M_PI; }
+    
+    return angle;
+}
+
+quint32 KisBrush::brushIndex(const KisPaintInformation& info) const
+{
+    Q_UNUSED(info);
+    return 0;
 }
 
 double KisBrush::xSpacing(double scale) const

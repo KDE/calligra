@@ -107,8 +107,17 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderCo
 /*!
 
  Parent elements:
+ - [done] numbering (§17.9.17)
 
  Child elements:
+ - [done] lvl (Numbering Level Definition) §17.9.7
+ - multiLevelType (Abstract Numbering Definition Type) §17.9.13
+ - name (Abstract Numbering Definition Name) §17.9.14
+ - nsid (Abstract Numbering Definition Identifier) §17.9.15
+ - numStyleLink (Numbering Style Reference) §17.9.22
+ - styleLink (Numbering Style Definition) §17.9.28
+ - tmpl (Numbering Template Code) §17.9.30
+
 //! @todo: Handle all children
 */
 KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNum()
@@ -118,18 +127,62 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNum()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(abstractNumId)
 
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
+    m_currentBulletList.clear();
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            TRY_READ_IF(lvl)
+            if (name() == "lvl") {
+                m_currentBulletProperties.clear();
+                TRY_READ(lvl)
+                m_currentBulletList.append(m_currentBulletProperties);
+            }
             SKIP_UNKNOWN
         }
     }
 
-    m_abstractListStyles[abstractNumId] = m_currentListStyle;
+    m_abstractListStyles[abstractNumId] = m_currentBulletList;
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvlOverride
+//! w:lvlOverride handler (Numbering Level Definition Override)
+/*!
+ Parent elements:
+ - [done] num (§17.9.16)
+
+ Child elements:
+ - [done] lvl (Numbering Level Override Definition) §17.9.6
+ - startOverride (Numbering Level Starting Value Override) §17.9.27
+
+*/
+KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlOverride()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (name() == "lvl") {
+                m_currentBulletProperties.clear();
+                TRY_READ(lvl)
+                int index = 0;
+                while (index < m_currentBulletList.size()) {
+                    // Overriding lvl information
+                    if (m_currentBulletList.at(index).m_level == m_currentBulletProperties.m_level) {
+                        m_currentBulletList.replace(index, m_currentBulletProperties);
+                        break;
+                    }
+                    ++index;
+                }
+            }
+            SKIP_UNKNOWN
+        }
+    }
 
     READ_EPILOGUE
 }
@@ -140,8 +193,22 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNum()
 /*!
 
  Parent elements:
+ - [done] abstractNum (§17.9.1)
 
  Child elements:
+ - isLgl (Display All Levels Using Arabic Numerals) §17.9.4
+ - legacy (Legacy Numbering Level Properties) §17.9.5
+ - [done] lvlJc (Justification) §17.9.8
+ - [done] lvlPicBulletId (Picture Numbering Symbol Definition Reference) §17.9.10
+ - lvlRestart (Restart Numbering Level Symbol) §17.9.11
+ - [done] lvlText (Numbering Level Text) §17.9.12
+ - [done] numFmt (Numbering Format) §17.9.18
+ - [done] pPr (Numbering Level Associated Paragraph Properties) §17.9.23
+ - pStyle (Paragraph Style's Associated Numbering Level) §17.9.24
+ - [done] rPr (Numbering Symbol Run Properties) §17.9.25
+ - [done] start (Starting Value) §17.9.26
+ - suff (Content Between Numbering Symbol and Paragraph Text) §17.9.29
+
 //! @todo: Handle all children
 */
 KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
@@ -149,8 +216,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-
-    m_currentBulletProperties.clear();
 
     TRY_READ_ATTR(ilvl)
     if (!ilvl.isEmpty()) {
@@ -170,14 +235,14 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
             ELSE_TRY_READ_IF(numFmt)
             ELSE_TRY_READ_IF(lvlText)
             ELSE_TRY_READ_IF(lvlJc)
-            else if (qualifiedName() == QLatin1String("w:lvlPicBulletId")) {
+            else if (name() == "lvlPicBulletId") {
                 TRY_READ(lvlPicBulletId)
                 pictureType = true;
             }
-            else if (qualifiedName() == QLatin1String("w:pPr")) {
+            else if (name() == "pPr") {
                 TRY_READ(pPr_numbering)
             }
-            else if (qualifiedName() == QLatin1String("w:rPr")) {
+            else if (name() == "rPr") {
                 TRY_READ(rPr_numbering)
             }
             SKIP_UNKNOWN
@@ -187,9 +252,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
     if (!pictureType && m_bulletStyle && !m_bulletCharacter.isEmpty()) {
         m_currentBulletProperties.setBulletChar(m_bulletCharacter);
     }
-
-    m_currentListStyle.addChildElement("list-style-properties",
-        m_currentBulletProperties.convertToListProperties());
 
     READ_EPILOGUE
 }
@@ -362,9 +424,11 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlText()
 /*!
 
  Parent elements:
+ - [done] numbering (§17.9.17)
 
  Child elements:
-//! @todo: Handle all children
+ - [done] abstractNumId (Abstract Numbering Definition Reference) §17.9.2
+ - [done] lvlOverride (Numbering Level Definition Override) §17.9.9
 */
 KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
 {
@@ -374,12 +438,28 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
 
     TRY_READ_ATTR(numId);
 
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            TRY_READ_IF(abstractNumId)
+            if (name() == "abstractNumId") {
+               TRY_READ(abstractNumId)
+               m_currentBulletList = m_abstractListStyles[m_currentAbstractId];
+            }
+            // lvlOverride may modify the bulletlist which we get above
+            ELSE_TRY_READ_IF(lvlOverride)
+            ELSE_WRONG_FORMAT
         }
+    }
+
+    int index = 0;
+    while (index < m_currentBulletList.size()) {
+        m_currentBulletProperties = m_currentBulletList.at(index);
+        m_currentListStyle.addChildElement("list-style-properties",
+            m_currentBulletProperties.convertToListProperties());
+        ++index;
     }
 
     if (!numId.isEmpty()) {
@@ -456,9 +536,10 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_pPr_numbering()
 /*!
 
  Parent elements:
+ - [donee] num (§17.9.16)
 
  Child elements:
-//! @todo: Handle all children
+ - none
 */
 KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNumId()
 {
@@ -468,7 +549,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNumId()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_currentListStyle = m_abstractListStyles[val];
+        m_currentAbstractId = val;
     }
 
     readNext();
@@ -545,7 +626,23 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
     bool ok = false;
     const qreal leftInd = qreal(TWIP_TO_POINT(left.toDouble(&ok)));
     if (ok) {
-        m_currentBulletProperties.setIndent(leftInd);
+        m_currentBulletProperties.setMargin(leftInd);
+    }
+
+    TRY_READ_ATTR(firstLine)
+    TRY_READ_ATTR(hanging)
+    if (!hanging.isEmpty()) {
+        const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
+        if (ok) {
+           m_currentBulletProperties.setIndent(leftInd - firstInd);
+        }
+
+    }
+    else if (firstLine.isEmpty()) {
+        const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
+        if (ok) {
+           m_currentBulletProperties.setIndent(leftInd - firstInd);
+        }
     }
 
     readNext();

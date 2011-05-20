@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2003 Norbert Andres <nandres@web.de>
 
@@ -109,6 +109,7 @@ QString SubStyle::name(Style::Key key)
     case Style::Prefix:                 name = "Prefix"; break;
     case Style::Postfix:                name = "Postfix"; break;
     case Style::Precision:              name = "Precision"; break;
+    case Style::ThousandsSep:           name = "Thousands seperator"; break;
     case Style::FormatTypeKey:          name = "Format type"; break;
     case Style::FloatFormatKey:         name = "Float format"; break;
     case Style::FloatColorKey:          name = "Float color"; break;
@@ -339,6 +340,8 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
                 precision = -11;
             theStyle->setPrecision(precision);
         }
+
+        theStyle->setThousandsSep(dataStyle.thousandsSep);
 
         theStyle->setCustomFormat(dataStyle.formatStr);
 
@@ -736,14 +739,15 @@ Format::Type Style::fractionType(const QString &_format)
 QString Style::saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
                                    Format::Type _style,
                                    const QString &_prefix, const QString &_postfix,
-                                   int _precision, const QString& symbol)
+                                   int _precision, const QString& symbol,
+                                   bool thousandsSep)
 {
 //  kDebug(36003) ;
     QString styleName;
     QString valueType;
     switch (_style) {
     case Format::Number:
-        styleName = saveOdfStyleNumericNumber(mainStyles, _style, _precision, _prefix, _postfix);
+        styleName = saveOdfStyleNumericNumber(mainStyles, _style, _precision, _prefix, _postfix, thousandsSep);
         valueType = "float";
         break;
     case Format::Text:
@@ -759,7 +763,7 @@ QString Style::saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
         valueType = "percentage";
         break;
     case Format::Scientific:
-        styleName = saveOdfStyleNumericScientific(mainStyles, _style, _prefix, _postfix, _precision);
+        styleName = saveOdfStyleNumericScientific(mainStyles, _style, _prefix, _postfix, _precision, thousandsSep);
         valueType = "float";
         break;
     case Format::ShortDate:
@@ -836,7 +840,7 @@ QString Style::saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
     case Format::Generic:
     case Format::None:
         if (_precision > -1 || !_prefix.isEmpty() || !_postfix.isEmpty()) {
-            styleName = saveOdfStyleNumericNumber(mainStyles, _style, _precision, _prefix, _postfix);
+            styleName = saveOdfStyleNumericNumber(mainStyles, _style, _precision, _prefix, _postfix, thousandsSep);
             valueType = "float";
         }
         break;
@@ -851,7 +855,7 @@ QString Style::saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
 }
 
 QString Style::saveOdfStyleNumericNumber(KoGenStyles& mainStyles, Format::Type /*_style*/, int _precision,
-        const QString& _prefix, const QString& _postfix)
+        const QString& _prefix, const QString& _postfix, bool thousandsSep)
 {
     QString format;
     if (_precision == -1)
@@ -863,7 +867,7 @@ QString Style::saveOdfStyleNumericNumber(KoGenStyles& mainStyles, Format::Type /
         }
         format = "0." + tmp;
     }
-    return KoOdfNumberStyles::saveOdfNumberStyle(mainStyles, format, _prefix, _postfix);
+    return KoOdfNumberStyles::saveOdfNumberStyle(mainStyles, format, _prefix, _postfix, thousandsSep);
 }
 
 QString Style::saveOdfStyleNumericText(KoGenStyles& /*mainStyles*/, Format::Type /*_style*/, int /*_precision*/,
@@ -912,7 +916,7 @@ QString Style::saveOdfStyleNumericPercentage(KoGenStyles&mainStyles, Format::Typ
 
 
 QString Style::saveOdfStyleNumericScientific(KoGenStyles&mainStyles, Format::Type /*_style*/,
-        const QString &_prefix, const QString &_suffix, int _precision)
+        const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep)
 {
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -927,7 +931,7 @@ QString Style::saveOdfStyleNumericScientific(KoGenStyles&mainStyles, Format::Typ
         }
         format = "0." + tmp + "E+00";
     }
-    return KoOdfNumberStyles::saveOdfScientificStyle(mainStyles, format, _prefix, _suffix);
+    return KoOdfNumberStyles::saveOdfScientificStyle(mainStyles, format, _prefix, _suffix, thousandsSep);
 }
 
 QString Style::saveOdfStyleNumericDate(KoGenStyles&mainStyles, Format::Type _style,
@@ -1431,6 +1435,10 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
         _postfix = postfix();
     if (keysToStore.contains(Precision) && precision() != -1)
         _precision = precision();
+    bool _thousandsSep = false;
+    if (keysToStore.contains(ThousandsSep)) {
+        _thousandsSep = thousandsSep();
+    }
 
     QString currencyCode;
     if (keysToStore.contains(FormatTypeKey) && formatType() == Format::Money) {
@@ -1439,7 +1447,7 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
 
     QString numericStyle = saveOdfStyleNumeric(style, mainStyles, formatType(),
                            _prefix, _postfix, _precision,
-                           currencyCode);
+                           currencyCode, _thousandsSep);
     if (!numericStyle.isEmpty())
         style.addAttribute("style:data-style-name", numericStyle);
 }
@@ -2069,6 +2077,13 @@ int Style::precision() const
     return static_cast<const SubStyleOne<Precision, int>*>(d->subStyles[Precision].data())->value1;
 }
 
+bool Style::thousandsSep() const
+{
+    if (!d->subStyles.contains(ThousandsSep))
+        return false;
+    return static_cast<const SubStyleOne<ThousandsSep, bool>*>(d->subStyles[ThousandsSep].data())->value1;
+}
+
 int Style::angle() const
 {
     if (!d->subStyles.contains(Angle))
@@ -2272,6 +2287,11 @@ void Style::setPrecision(int precision)
     insertSubStyle(Precision, precision);
 }
 
+void Style::setThousandsSep(bool thousandsSep)
+{
+    insertSubStyle(ThousandsSep, thousandsSep);
+}
+
 void Style::setPrefix(QString const & prefix)
 {
     insertSubStyle(Prefix, prefix);
@@ -2392,6 +2412,8 @@ bool Style::compare(const SubStyle* one, const SubStyle* two)
         return static_cast<const SubStyleOne<Postfix, QString>*>(one)->value1 == static_cast<const SubStyleOne<Postfix, QString>*>(two)->value1;
     case Precision:
         return static_cast<const SubStyleOne<Precision, int>*>(one)->value1 == static_cast<const SubStyleOne<Precision, int>*>(two)->value1;
+    case ThousandsSep:
+        return static_cast<const SubStyleOne<ThousandsSep, bool>*>(one)->value1 == static_cast<const SubStyleOne<ThousandsSep, bool>*>(two)->value1;
     case FormatTypeKey:
         return static_cast<const SubStyleOne<FormatTypeKey, Format::Type>*>(one)->value1 == static_cast<const SubStyleOne<FormatTypeKey, Format::Type>*>(two)->value1;
     case FloatFormatKey:
@@ -2588,6 +2610,9 @@ SharedSubStyle Style::createSubStyle(Key key, const QVariant& value)
     case Precision:
         newSubStyle = new SubStyleOne<Precision, int>(value.value<int>());
         break;
+    case ThousandsSep:
+        newSubStyle = new SubStyleOne<ThousandsSep, bool>(value.value<bool>());
+        break;
     case FormatTypeKey:
         newSubStyle = new SubStyleOne<FormatTypeKey, Format::Type>((Format::Type)value.value<int>());
         break;
@@ -2712,8 +2737,20 @@ CustomStyle::CustomStyle(QString const & name, CustomStyle * parent)
         setParentName(parent->name());
 }
 
+CustomStyle::CustomStyle(const CustomStyle& style)
+        : Style(style), d(style.d)
+{
+}
+
 CustomStyle::~CustomStyle()
 {
+}
+
+CustomStyle& CustomStyle::operator=(const CustomStyle& style)
+{
+	Style::operator=(style);
+	d = style.d;
+	return *this;
 }
 
 Style::StyleType CustomStyle::type() const

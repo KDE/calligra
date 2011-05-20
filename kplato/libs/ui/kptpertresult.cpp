@@ -495,7 +495,7 @@ void PertCpmView::draw()
             return;
         }
         widget.scheduleName->setText( current_schedule->name() );
-        widget.finishTime->setDateTime( m_project->endTime( id ).dateTime() );
+        widget.finishTime->setDateTime( m_project->endTime( id ) );
         bool ro = model()->variance( Qt::EditRole ).toDouble() == 0.0;
         if ( ro ) {
             widget.probability->setValue( 50 );
@@ -537,7 +537,7 @@ void PertCpmView::slotProbabilityChanged( int value )
     DateTime et = m_project->endTime( current_schedule->scheduleId() );
     double p = valueZ( value );
     DateTime t = et + Duration( qint64( p * dev ) );
-    widget.finishTime->setDateTime( t.dateTime() );
+    widget.finishTime->setDateTime( t );
     //kDebug()<<p<<", "<<t.toString();
     block = false;
 }

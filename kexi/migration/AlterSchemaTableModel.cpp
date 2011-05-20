@@ -38,7 +38,7 @@ QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) cons
     if (!index.isValid())
         return QVariant();
     
-    if (index.row() >= (int)m_schema->fieldCount())
+    if (index.column() >= (int)m_schema->fieldCount())
         return QVariant();
     
     if (role == Qt::DisplayRole) {

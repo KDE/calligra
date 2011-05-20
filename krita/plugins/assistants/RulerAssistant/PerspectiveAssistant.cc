@@ -39,10 +39,10 @@ PerspectiveAssistant::PerspectiveAssistant()
 inline qreal distsqr(const QPointF& pt, const QLineF& line)
 {
     // distance = |(p2 - p1) x (p1 - pt)| / |p2 - p1|
-    
+
     // magnitude of (p2 - p1) x (p1 - pt)
     const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
-    
+
     return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
 }
 
@@ -55,7 +55,7 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
         if (!quad(poly)) return nullPoint;
         // avoid problems with multiple assistants: only snap if starting in the grid
         if (!poly.containsPoint(strokeBegin, Qt::OddEvenFill)) return nullPoint;
-        
+
         const qreal
             dx = pt.x() - strokeBegin.x(),
             dy = pt.y() - strokeBegin.y();
@@ -63,7 +63,7 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
             // allow some movement before snapping
             return strokeBegin;
         }
-        
+
         // construct transformation
         QTransform transform;
         if (!QTransform::squareToQuad(poly, transform)) return nullPoint; // shouldn't happen
@@ -166,10 +166,13 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
 }
 
 // draw a vanishing point marker
-inline void drawX(QPainter& gc, const QPointF& pt)
+inline QPainterPath drawX(QPainter& gc, const QPointF& pt)
 {
-    gc.drawLine(QPointF(pt.x() - 5.0, pt.y() - 5.0), QPointF(pt.x() + 5.0, pt.y() + 5.0));
-    gc.drawLine(QPointF(pt.x() - 5.0, pt.y() + 5.0), QPointF(pt.x() + 5.0, pt.y() - 5.0));
+    Q_UNUSED(gc);
+    QPainterPath path;
+    path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
+    path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
+    return path;
 }
 
 void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
@@ -182,8 +185,15 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     gc.setTransform(initialTransform);
     if (!quad(poly)) {
         // color red for an invalid transform, but not for an incomplete one
-        gc.setPen((handles().size() == 4) ? QColor(255, 0, 0, 125) : QColor(0, 0, 0, 125));
-        gc.drawPolygon(poly);
+        if(handles().size() == 4)
+        {
+            gc.setPen(QColor(255, 0, 0, 125));
+            gc.drawPolygon(poly);
+        } else {
+            QPainterPath path;
+            path.addPolygon(poly);
+            drawPath(gc, path);
+        }
         gc.restore();
     } else {
         gc.setPen(QColor(0, 0, 0, 125));
@@ -196,20 +206,27 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             return;
         }
         gc.setTransform(transform, true);
+        QPainterPath path;
         for (int y = 0; y <= 8; ++y)
-            gc.drawLine(QPointF(0.0, y * 0.125), QPointF(1.0, y * 0.125));
+        {
+            path.moveTo(QPointF(0.0, y * 0.125));
+            path.lineTo(QPointF(1.0, y * 0.125));
+        }
         for (int x = 0; x <= 8; ++x)
-            gc.drawLine(QPointF(x * 0.125, 0.0), QPointF(x * 0.125, 1.0));
-
+        {
+            path.moveTo(QPointF(x * 0.125, 0.0));
+            path.lineTo(QPointF(x * 0.125, 1.0));
+        }
+        drawPath(gc, path);
         gc.restore();
-        
+
         // draw vanishing points
         QPointF intersection(0, 0);
         if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-            drawX(gc, initialTransform.map(intersection));
+            drawPath(gc, drawX(gc, initialTransform.map(intersection)));
         }
         if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-            drawX(gc, initialTransform.map(intersection));
+            drawPath(gc, drawX(gc, initialTransform.map(intersection)));
         }
     }
 }

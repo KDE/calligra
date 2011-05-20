@@ -97,7 +97,6 @@
 #include "kis_group_layer.h"
 #include "kis_custom_palette.h"
 #include "kis_resource_server_provider.h"
-#include "kis_node_model.h"
 #include "kis_projection.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
@@ -169,13 +168,14 @@ public:
         delete perspectiveGridManager;
         delete paintingAssistantManager;
         delete viewConverter;
+        delete statusBar;
     }
 
 public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
-    KoZoomHandler * viewConverter;
+    KisCoordinatesConverter * viewConverter;
     KoCanvasController * canvasController;
     KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
@@ -229,9 +229,9 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     }
 
     m_d->doc = doc;
-    m_d->viewConverter = new KoZoomHandler();
+    m_d->viewConverter = new KisCoordinatesConverter();
 
-    KoCanvasControllerWidget *canvasController = new KisCanvasController(this);
+    KoCanvasControllerWidget *canvasController = new KisCanvasController(this, actionCollection());
     canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
@@ -283,13 +283,20 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvas, SLOT(resetCanvasTransformations()));
 
+    //Workaround, by default has the same shortcut as mirrorCanvas
+    KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    if (action) {
+        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+    }
+
     if (shell())
     {
-        KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
+        KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
     }
 
     m_d->statusBar = new KisStatusBar(this);
@@ -382,13 +389,13 @@ void KisView2::dropEvent(QDropEvent *event)
         KMenu popup;
         popup.setObjectName("drop_popup");
 
-        QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
-        QAction *insertAsNewLayers = new QAction(i18n("Insert as New Layers"), &popup);
+        QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
+        QAction *insertAsNewLayers = new KAction(i18n("Insert as New Layers"), &popup);
 
-        QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
-        QAction *openInNewDocuments = new QAction(i18n("Open in New Documents"), &popup);
+        QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
+        QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
-        QAction *cancel = new QAction(i18n("Cancel"), &popup);
+        QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
         if (urls.count() == 1) {
             if (!image().isNull()) {
@@ -616,11 +623,6 @@ void KisView2::createManagers()
 
     m_d->nodeManager = new KisNodeManager(this, m_d->doc);
     m_d->nodeManager->setup(actionCollection());
-    connect(m_d->doc->nodeModel(), SIGNAL(requestAddNode(KisNodeSP, KisNodeSP)), m_d->nodeManager, SLOT(addNode(KisNodeSP, KisNodeSP)));
-    connect(m_d->doc->nodeModel(), SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, int)), m_d->nodeManager, SLOT(insertNode(KisNodeSP, KisNodeSP, int)));
-    connect(m_d->doc->nodeModel(), SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP)), m_d->nodeManager, SLOT(moveNode(KisNodeSP, KisNodeSP)));
-    connect(m_d->doc->nodeModel(), SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, int)), m_d->nodeManager, SLOT(moveNodeAt(KisNodeSP, KisNodeSP, int)));
-
 
     // the following cast is not really safe, but better here than in the zoomManager
     // best place would be outside kisview too
@@ -672,9 +674,6 @@ void KisView2::connectCurrentImage()
     }
 
     m_d->canvas->connectCurrentImage();
-
-    connect(m_d->doc->nodeModel(), SIGNAL(nodeActivated(KisNodeSP)),
-            m_d->nodeManager, SLOT(activateNode(KisNodeSP)));
 
     if (m_d->controlFrame) {
         connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
@@ -860,7 +859,7 @@ void KisView2::slotFirstRun()
         // for initDoc to fill in the recent docs list
         // and for KoDocument::slotStarted
         doc->addShell(shell);
-        doc->showStartUpWidget(shell);
+        doc->showStartUpWidget(shell, true);
         doc->openUrl(fname);
     }
 

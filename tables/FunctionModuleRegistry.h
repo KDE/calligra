@@ -37,7 +37,7 @@ namespace Tables
  * \ingroup Value
  * Registry for function modules.
  */
-class CALLIGRA_TABLES_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
+class CALLIGRA_TABLES_ODF_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
 {
 public:
     /**

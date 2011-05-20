@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2005-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,7 @@ class Sheet;
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * \since 1.5
  */
-class CALLIGRA_TABLES_EXPORT Region
+class CALLIGRA_TABLES_ODF_EXPORT Region
 {
 public:
     class Element;
@@ -511,7 +511,7 @@ protected:
  * m_point: 8 bytes
  * sum: 16 bytes
  */
-class Region::Point : public Region::Element
+class CALLIGRA_TABLES_ODF_EXPORT Region::Point : public Region::Element
 {
 public:
     Point() : Element(), m_point() {}
@@ -594,7 +594,7 @@ private:
  * m_range: 16 bytes
  * sum: 24 bytes
  */
-class Region::Range : public Region::Element
+class CALLIGRA_TABLES_ODF_EXPORT Region::Range : public Region::Element
 {
 public:
     Range(const QRect&);

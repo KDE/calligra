@@ -186,9 +186,7 @@ KisImage::~KisImage()
 {
     dbgImage << "deleting kisimage" << objectName();
 
-    if (m_d->projection) {
-        delete m_d->projection;
-    }
+    delete m_d->projection;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
@@ -1098,6 +1096,11 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
 vKisAnnotationSP_it KisImage::endAnnotations()
 {
     return m_d->annotations.end();
+}
+
+void KisImage::notifyAboutToBeDeleted()
+{
+    emit sigAboutToBeDeleted();
 }
 
 KisPerspectiveGrid* KisImage::perspectiveGrid()

@@ -34,7 +34,7 @@ namespace Tables
 {
 class Sheet;
 
-class CALLIGRA_TABLES_EXPORT HeaderFooter
+class CALLIGRA_TABLES_ODF_EXPORT HeaderFooter
 {
 public:
     explicit HeaderFooter(Sheet* sheet);

@@ -1,6 +1,6 @@
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
-   Copyright (C) 2006,2009 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2006,2009 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright (C) 2009,2010 Sebastian Sauer <sebsauer@kdab.com>
 
    This library is free software; you can redistribute it and/or
@@ -88,7 +88,7 @@ FormulaToken::~FormulaToken()
 FormulaToken FormulaToken::createBool(bool value)
 {
     FormulaToken t(Bool);
-    unsigned char data = value ? : 0;
+    unsigned char data = value ? 1: 0;
     t.setData(1, &data);
     return t;
 }
@@ -1452,6 +1452,10 @@ FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const u
 {
     FormulaTokens tokens;
     const unsigned formula_len = readU16(data + pos);
+    if (formula_len + pos + 2 > size) {
+        std::cerr << "formula is longer than available data" << std::endl;
+        return tokens;
+    }
     for (unsigned j = pos + 2; j < size;) {
         unsigned ptg = data[j++];
         ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;

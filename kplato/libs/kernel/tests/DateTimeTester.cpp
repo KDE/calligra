@@ -69,6 +69,8 @@ void DateTimeTester::subtractSecond()
     QVERIFY((dt2-d).toString() == dt1.toString());
     
 }
+
+#if QT_VERSION  >= 0x040700
 void DateTimeTester::subtractMillisecond()
 {
     DateTime dt1(QDate(2006, 1, 1), QTime(0, 0, 0, 0 ));
@@ -96,6 +98,7 @@ void DateTimeTester::subtractMillisecond()
     QVERIFY((dt2-d) == dt1);
     
 }
+#endif
 
 void DateTimeTester::addDay()
 {

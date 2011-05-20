@@ -1,19 +1,20 @@
 /* This file is part of the wvWare 2 project
-  Copyright (C) 2002-2003 KO GmbH <jean.nicolas.artaud@kogmbh.>
+   Copyright (C) 2002-2003 KO GmbH <jean.nicolas.artaud@kogmbh.>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License version 2 as published by the Free Software Foundation.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02111-1307, USA.
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "bookmark.h"
@@ -23,6 +24,7 @@
 
 #include "wvlog.h"
 #include "kdebug.h"
+#include <QList>
 
 using namespace wvWare;
 
@@ -37,9 +39,6 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 #endif
 
     tableStream->push();
-
-    /// Init the bookmark
-
 
     if (fib.lcbPlcfbkf != 0)
     {
@@ -67,11 +66,16 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 #ifdef WV2_DEBUG_BOOKMARK
         name->dumpStrings();
 #endif
-        for (unsigned int i = 0; i < name->count(); i++ ) {
+        for (uint i = 0; i < name->count(); i++ ) {
             m_name.push_back(name->stringAt(i));
         }
-        m_nameIt = m_name.begin();
     }
+
+    //The BKL is no longer stored in the plcfbkl or plcfatnbkl, and is instead
+    //reconstructed from the plcfbkf or plcfatnbkf when the file is opened.
+    //Microsoft Word 97 (aka Version 8)
+
+    //TODO: Reconstruct BKL!
 
     if (fib.lcbPlcfbkl != 0)
     {
@@ -83,34 +87,40 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
             m_end = new PLCF<Word97::BKL>(fib.lcbPlcfbkl, tableStream);
             m_endIt = new PLCFIterator<Word97::BKL>(*m_end);
             count = m_end->count();
-        }
-        //The BKL is no longer stored in the plcfbkl or plcfatnbkl, and is
-        //instead reconstructed from the plcfbkf or plcfatnbkf when the file is
-        //opened.  Microsoft Word 97 (aka Version 8)
-        else {
+        } else {
             count = (fib.lcbPlcfbkl - 4) / 4;
             for ( int i = 0; i < count + 1; i++ ) {
                 m_endCP.push_back( tableStream->readU32() );
             }
-            m_endCP_It = m_endCP.begin();
         }
 
 #ifdef WV2_DEBUG_BOOKMARK
         wvlog << "Num. of bookmarks to end: " << count << endl;
         wvlog << "m_end/m_endCP init done" << endl;
 
-        for ( int i = 0; i < count + 1; i++ ) {
-            wvlog << "dumpCPs:   " << m_endCP[i] << endl;
+        if ( fib.nFib < Word8nFib ) {
+            m_end->dumpCPs();
+        } else {
+            for ( uint i = 0; i < m_endCP.size(); i++ ) {
+                wvlog << "dumpCPs:   " << m_endCP[i] << endl;
+            }
         }
 #endif
     }
-
 
 #ifdef WV2_DEBUG_BOOKMARK
     wvlog << "Bookmark init done" << endl;
 #endif
 
     tableStream->pop();
+
+    U16 num = 0;
+    if (!valid(num)) {
+        wvlog << "Num. of invalid bookmarks:" << num;
+    }
+
+    //using custom bookmark names if missing!
+    m_nameIt = m_name.begin();
 }
 
 Bookmarks::~Bookmarks()
@@ -128,25 +138,30 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 #ifdef WV2_DEBUG_BOOKMARK
     wvlog << " globalCP=" << globalCP << endl;
 #endif
-    ok = true;
 
-    if ( m_startIt &&
+    if ( (m_startIt && m_startIt->current()) &&
          (m_startIt->currentStart() == globalCP) &&
          (m_nameIt != m_name.end()) )
     {
-        U32 start = m_startIt->currentStart(); 
+        if (!m_valid.isEmpty() && m_valid.first()) {
+            ok = true;
+        } else {
+            ok = false;
+        }
+
+        U32 start = m_startIt->currentStart();
         U32 end = start;
 
         if (m_nFib < Word8nFib) {
             end = m_endIt->currentStart();
             ++( *m_endIt );
         } else {
-            end = *m_endCP_It;
-            ++m_endCP_It;
+            U16 ibkl = m_startIt->current()->ibkl;
+            end = m_endCP[ibkl];
         }
 
-        // yay, but it is hard to make that more elegant
         ++( *m_startIt );
+        m_valid.removeFirst();
 
         UString name = *m_nameIt;
         ++m_nameIt;
@@ -155,6 +170,7 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
         wvlog << "start = " << start << endl;
         wvlog << "end = " << end << endl;
         wvlog << "name = " << name.ascii() << endl;
+        wvlog << "valid = " << ok << endl;
 #endif
         return BookmarkData( start, end, name );
     }
@@ -165,21 +181,153 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 
 U32 Bookmarks::nextBookmarkStart() const
 {
-    return m_startIt && m_startIt->current() ? m_startIt->currentStart() : 0xffffffff;
+    U32 ret = 0xffffffff;
+
+    if (m_startIt && m_startIt->current()) {
+        if (!m_valid.isEmpty() && m_valid.first()) {
+            ret = m_startIt->currentStart();
+        } else {
+            ++( *m_startIt );
+        }
+    }
+    return ret;
 }
 
-U32 Bookmarks::nextBookmarkEnd() const
+U32 Bookmarks::nextBookmarkEnd()
 {
     U32 ret = 0xffffffff;
+
+    if (!m_valid.isEmpty() && !m_valid.first()) {
+        if (m_nFib < Word8nFib) {
+            ++( *m_endIt );
+        }
+        m_valid.removeFirst();
+        return ret;
+    }
+
     if (m_nFib < Word8nFib) {
         if (m_endIt && m_endIt->current()) {
             ret = m_endIt->currentStart();
         }
     } else {
-        if (m_startIt->current()) {
-            S16 n = (m_startIt->current())->ibkl;
-            ret = m_endCP[n];
+        if (m_startIt && m_startIt->current()) {
+            U16 ibkl = (m_startIt->current())->ibkl;
+            ret = m_endCP[ibkl];
         }
     }
+    return ret;
+}
+
+void Bookmarks::check( U32 globalCP )
+{
+    while (nextBookmarkStart() < globalCP)
+    {
+        if (m_nFib < Word8nFib) {
+            ++( *m_endIt );
+        }
+        ++( *m_startIt );
+        ++m_nameIt;
+
+        if (!m_valid.isEmpty()) {
+            m_valid.removeFirst();
+        }
+
+#ifdef WV2_DEBUG_BOOKMARK
+        wvlog << "Bookmark skipped!";
+#endif
+    }
+}
+
+bool Bookmarks::valid(U16 &num)
+{
+    PLCFIterator<Word97::BKF> startIt(*m_start);
+    QList<U16> ibkls;
+    bool ret = true;
+    U16 ibkl = 0;
+    num = 0;
+
+#ifdef WV2_DEBUG_BOOKMARK
+    U16 n = 1;
+#endif
+
+    if (m_nFib < Word8nFib) {
+        PLCFIterator<Word97::BKL> endIt(*m_end);
+        while (startIt.current()) {
+            if ( !endIt.current() ||
+                 (startIt.currentStart() > endIt.currentStart()) )
+            {
+                m_valid.append(false);
+                ret = false;
+                num++;
+#ifdef WV2_DEBUG_BOOKMARK
+                wvlog << "bkmk" << n << ": (startCP > endCP) || endCP missing";
+#endif
+            } else {
+                m_valid.append(true);
+            }
+#ifdef WV2_DEBUG_BOOKMARK
+            n++;
+#endif
+            ++startIt;
+            ++endIt;
+        }
+    } else {
+        while (startIt.current()) {
+            ibkl = (startIt.current())->ibkl;
+            //MUST be unique for all FBKFs inside a given PlcfBkf
+            if (ibkls.contains(ibkl) || (ibkl > m_endCP.size())) {
+                m_valid.append(false);
+                ret = false;
+                num++;
+#ifdef WV2_DEBUG_BOOKMARK
+                wvlog << "bkmk" << n << ": ibkl invalid!";
+                n++;
+#endif
+                ++startIt;
+                continue;
+            } else {
+                ibkls.append(ibkl);
+            }
+
+            if (startIt.currentStart() > m_endCP[ibkl]) {
+                m_valid.append(false);
+                ret = false;
+                num++;
+#ifdef WV2_DEBUG_BOOKMARK
+		wvlog << "bkmk" << n << ": startCP > endCP";
+#endif
+            } else {
+                m_valid.append(true);
+            }
+#ifdef WV2_DEBUG_BOOKMARK
+            n++;
+#endif
+            ++startIt;
+        }
+    }
+
+    //check bookmark names
+    for (uint i = 0; i < m_name.size(); i++) {
+        if ( (m_name[i] == UString::null) ) {
+            m_name[i] == UString().from(i + 1);
+        }
+    }
+
+    if (m_name.size() < m_start->count()) {
+        for (uint i = m_name.size(); i < m_start->count(); i++) {
+            m_name.push_back(UString().from(i + 1));
+        }
+#ifdef WV2_DEBUG_BOOKMARK
+        wvlog << "Warning: bookmark names missing!  Adding custom names.";
+        wvlog << "Num. of bookmark names:" << m_name.size();
+
+        std::vector<UString>::const_iterator it = m_name.begin();
+        while(it != m_name.end()) {
+            wvlog << "bkmk name:" << (*it).ascii();
+            it++;
+        }
+#endif
+    }
+
     return ret;
 }

@@ -75,20 +75,6 @@ public:
     QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 };
 
-//! Data structure collecting information about single slide/master slide
-class PptxSlideProperties
-{
-public:
-    PptxSlideProperties();
-    ~PptxSlideProperties();
-    //! Shapes map addressed by type
-    QMap<QString, PptxShapeProperties*> shapesMap;
-    //! Clear the shapes and shapesMap lists.
-    void clear();
-private:
-    Q_DISABLE_COPY(PptxSlideProperties)
-};
-
 //! Properties of a single placeholder for shapes defined by layouts
 class PptxPlaceholder
 {
@@ -103,15 +89,22 @@ public:
     int rot;
 };
 
-//! Data structure collecting information about single layout
-class PptxSlideLayoutProperties
+//! Data structure collecting information about single layout/master
+class PptxSlideProperties
 {
 public:
-    PptxSlideLayoutProperties();
-    ~PptxSlideLayoutProperties();
+    PptxSlideProperties();
+    ~PptxSlideProperties();
 
-    //! Shapes map addressed by type
-    QMap<QString, PptxShapeProperties*> shapesMap;
+    //! geometry type
+    QMap<QString, QString> contentTypeMap;
+
+    //! geometry type
+    QMap<QString, QString> contentEquations;
+
+    //! geometry type
+    QMap<QString, QString> contentPath;
+
     //! The presentation:presentation-page-layout-name
     QString pageLayoutStyleName;
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
@@ -123,6 +116,9 @@ public:
     //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 
+    //! Map of spPr based graphicStyles, these contain fillColor & outline
+    QMap<QString, KoGenStyle> graphicStyles;
+
     //! Position of the text
     QMap<QString, QString> textShapePositions;
 
@@ -134,53 +130,26 @@ public:
     QMap<QString, QString> textRightBorders;
     QMap<QString, QString> textBottomBorders;
     QMap<QString, QString> textTopBorders;
+
+    KoGenStyle m_drawingPageProperties;
+
+    // Layout specific
 
     // Extras frames such as pictures from layout, which should be put to the slide.
     QVector<QString> layoutFrames;
 
-    KoGenStyle m_drawingPageProperties;
-
     // Name of the slidemaster to be used with this layout
     QString m_slideMasterName;
-private:
 
-    Q_DISABLE_COPY(PptxSlideLayoutProperties)
-};
+    // Master specific
+    MSOOXML::DrawingMLTheme theme;
 
-//! Data structure collecting information about master slide
-class PptxSlideMasterPageProperties
-{
-public:
-    PptxSlideMasterPageProperties();
-    void clear();
+    //! Shapes map addressed by type
+    QMap<QString, PptxShapeProperties*> shapesMap;
 
     QMap<QString, QString> colorMap;
 
-    //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,KoGenStyle> > styles;
-
-    //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,KoGenStyle> > textStyles;
-
-    //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
-    QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
-
-    //! Position of the text
-    QMap<QString, QString> textShapePositions;
-
-    //! Possible text shrinkage
-    QMap<QString, MSOOXML::Utils::autoFitStatus> m_textAutoFit;
-
-    //! Borders in the frame
-    QMap<QString, QString> textLeftBorders;
-    QMap<QString, QString> textRightBorders;
-    QMap<QString, QString> textBottomBorders;
-    QMap<QString, QString> textTopBorders;
-
-    // Them to which this masterslide refers to.
-    MSOOXML::DrawingMLTheme theme;
-
-    KoGenStyle m_drawingPageProperties;
+private:
 };
 
 //! A class reading MSOOXML PPTX markup - ppt/slides/slide*.xml part.
@@ -191,7 +160,9 @@ public:
     enum Type {
         Slide,
         SlideLayout,
-        SlideMaster
+        SlideMaster,
+        NotesMaster,
+        Notes
     };
 
     explicit PptxXmlSlideReader(KoOdfWriters *writers);
@@ -204,12 +175,15 @@ public:
 protected:
 
     KoFilter::ConversionStatus read_titleStyle();
+    KoFilter::ConversionStatus read_notesStyle();
     KoFilter::ConversionStatus read_bodyStyle();
     KoFilter::ConversionStatus read_otherStyle();
     KoFilter::ConversionStatus read_txStyles();
     KoFilter::ConversionStatus readInternal();
     KoFilter::ConversionStatus read_sld();
+    KoFilter::ConversionStatus read_notes();
     KoFilter::ConversionStatus read_sldInternal();
+    KoFilter::ConversionStatus read_notesMaster();
     KoFilter::ConversionStatus read_sldMaster(); //!< For SlideMaster mode
     KoFilter::ConversionStatus read_sldLayout(); //!< For SlideLayout mode
     KoFilter::ConversionStatus read_cSld();
@@ -230,7 +204,6 @@ protected:
     KoFilter::ConversionStatus read_clrMap();
     KoFilter::ConversionStatus read_clrMapOvr();
 
-//    KoGenStyle m_currentPageStyle;
     PptxXmlSlideReaderContext* m_context;
     PptxShapeProperties* m_currentShapeProperties;
 
@@ -244,7 +217,11 @@ protected:
     // can be used later for inheritance purposes
     void saveCurrentStyles();
 
+    // Saves current list styles
     void saveCurrentListStyles();
+
+    // Saves outline & fill style
+    void saveCurrentGraphicStyles();
 
     // Copies 9 lvls of text and paragraph styles to current styles
     void inheritAllTextAndParagraphStyles();
@@ -283,7 +260,14 @@ protected:
     // Inherits shape x, y, width etc. from slideLayout/slideMaster
     void inheritShapePosition();
 
+    // Inherits shapes geometry, fill color etc. from slideLayout/slideMaster
+    void inheritShapeGeometry();
+
 private:
+
+    void saveBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);
+    void inheritBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);
+
     void init();
     class Private;
     Private* const d;
@@ -303,9 +287,10 @@ public:
         PptxImport& _import, const QString& _path, const QString& _file,
         uint _slideNumber,
         MSOOXML::DrawingMLTheme* _themes,
-        PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
-        PptxSlideLayoutProperties* _slideLayoutProperties,
-        PptxSlideMasterPageProperties* _slideMasterPageProperties,
+        PptxXmlSlideReader::Type _type,
+        PptxSlideProperties* _slideLayoutProperties,
+        PptxSlideProperties* _slideMasterProperties,
+        PptxSlideProperties* _notesMasterProperties,
         MSOOXML::MsooXmlRelationships& _relationships,
         QMap<int, QString> _commentAuthors,
         QMap<QString, QString> masterColorMap,
@@ -318,10 +303,11 @@ public:
     const uint slideNumber;
     MSOOXML::DrawingMLTheme* themes;
     PptxXmlSlideReader::Type type;
-    PptxSlideProperties* slideProperties;
-    PptxSlideLayoutProperties* slideLayoutProperties;
-    PptxSlideMasterPageProperties* slideMasterPageProperties;
+    PptxSlideProperties* slideLayoutProperties;
+    PptxSlideProperties* slideMasterProperties;
+    PptxSlideProperties* notesMasterProperties;
     PptxActualSlideProperties currentSlideStyles;
+    PptxActualSlideProperties currentNotesStyles;
 
     // There could potentially be multiple of these...todo
     QString pageDrawStyleName; //!< written in read_sldInternal()
@@ -340,11 +326,18 @@ public:
     // to fully understand cSld element
     bool firstReadingRound;
 
+    void initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
+        const QVector<KoGenStyle>& _defaultTextStyles, const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
+        const QVector<QString>& _defaultBulletColors, const QVector<QString>& _defaultTextColors, const QVector<QString>& _defaultLatinFonts);
+
     // These have to be in context, because each slide/layout/master may define their own colormap
     // therefore the way default text is interpreted cannot be static
     QVector<KoGenStyle> defaultTextStyles;
     QVector<KoGenStyle> defaultParagraphStyles;
     QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
+    QVector<QString> defaultBulletColors;
+    QVector<QString> defaultTextColors;
+    QVector<QString> defaultLatinFonts;
 
     // We need to know where to find the table styles when needed
     QString tableStylesFilePath;

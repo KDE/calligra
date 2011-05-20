@@ -61,15 +61,30 @@ void rcps_problem_free(struct rcps_problem *p);
 /* set fitness calculation mode */
 void rcps_problem_setfitness_mode(struct rcps_problem *problem, int mode);
 
-/* register a callback that gets called every time we want to calculate the project fitness.
- * arguments are the jobs start time, duration, and an argument that can be set per job mode.
+/* holds the result of the fitness calculation for a problem or job */
+#define FITNESS_MAX_GROUP	9999	/* the maximum fitness group allowed */
+struct rcps_fitness {
+    int group;	/* the group this weight belongs to ( less is better) */
+    int weight;	/* the weight (less is better) */
+};
+/* compare two fitness values */
+int rcps_fitness_cmp(const struct rcps_fitness *a, const struct rcps_fitness *b);
+
+/* register a callback that gets called for each job every time we want to calculate the project fitness.
+ * arguments are the jobs start time, duration, an argument that can be set per job mode and an argument that
+ * can be set for the problem.
  * should return the weight of this job mode.
  * the weight does not need to be constant, it may change dependent on eg start time, duration or cost.
  * the arg is set using rcps_job_set_weight_cbarg.
  */
 void rcps_problem_set_weight_callback(struct rcps_problem *p,
-    int (*weight_callback)(int time, int duration, int nominal_weight, void *arg));
+    int (*weight_callback)(int time, int duration, struct rcps_fitness *nominal_weight, void *arg, void *fitness_arg));
 
+/* register callbacks that gets called every time we want to calculate the project fitness. */
+void rcps_problem_set_fitness_callback(struct rcps_problem *p,
+                void* (*fitness_callback_init)(void *arg),
+                void *init_arg,
+                int (*fitness_callback_result)(struct rcps_fitness *fitness, void *arg));
 
 /* create a new resource structure */
 struct rcps_resource* rcps_resource_new();
@@ -282,7 +297,7 @@ void rcps_solver_setparam(struct rcps_solver *s, int param, int value);
  */
 void rcps_solver_set_progress_callback(struct rcps_solver *s, 
 	int steps, void *arg,
-	int (*progress_callback)(int generations, int duration, void *arg));
+	int (*progress_callback)(int generations, struct rcps_fitness fitness, void *arg));
 
 /* register a callback that gets called every time we want to determine the 
  * duration of a mode at a given time. arguments are the 'nominal'

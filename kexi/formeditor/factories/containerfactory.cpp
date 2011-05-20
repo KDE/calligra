@@ -620,6 +620,9 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
 
     m_propDesc["tabPosition"] = i18n("Tab Position");
     m_propDesc["tabPosition"] = i18n("Tab Position");
+    m_propDesc["tabsClosable"] = i18n("Closable Tabs");
+    m_propDesc["movable"] = i18n("Movable Tabs");
+    m_propDesc["documentMode"] = i18n("Document Mode");
 
     m_propValDesc["Rounded"] = i18nc("for Tab Shape", "Rounded");
     m_propValDesc["Triangular"] = i18nc("for Tab Shape", "Triangular");

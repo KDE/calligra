@@ -174,6 +174,7 @@ set(kritaimage_LIB_SRCS
    kis_transformation_mask.cpp
    kis_transparency_mask.cc
    kis_undo_adapter.cc
+   krita_utils.cpp
    kis_dumb_undo_adapter.cpp
    kis_outline_generator.cpp
    metadata/kis_meta_data_entry.cc
@@ -194,6 +195,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_value.cc
    recorder/kis_action_recorder.cc
    recorder/kis_macro.cc
+   recorder/kis_macro_player.cc
    recorder/kis_node_query_path.cc
    recorder/kis_play_info.cc
    recorder/kis_recorded_action.cc
@@ -202,6 +204,7 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_action_save_context.cpp
    recorder/kis_recorded_filter_action.cpp
    recorder/kis_recorded_fill_paint_action.cpp
+   recorder/kis_recorded_node_action.cc
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_path_paint_action.cpp
    recorder/kis_recorded_shape_paint_action.cpp

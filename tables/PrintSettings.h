@@ -40,7 +40,7 @@ class Sheet;
 /**
  * Settings used for printing.
  */
-class CALLIGRA_TABLES_EXPORT PrintSettings
+class CALLIGRA_TABLES_ODF_EXPORT PrintSettings
 {
 public:
     enum PageOrder { TopToBottom, LeftToRight };

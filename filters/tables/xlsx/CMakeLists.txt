@@ -5,7 +5,6 @@ include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
 ########### next target ###############
 
 set(xlsximport_PART_SRCS
-    ColorConversions.cpp # TODO: only include for TINY target
     XlsxImport.cpp
     XlsxXmlCommonReader.cpp
     XlsxXmlDocumentReader.cpp
@@ -15,6 +14,7 @@ set(xlsximport_PART_SRCS
     XlsxXmlDrawingReader.cpp
     XlsxXmlChartReader.cpp
     XlsxXmlCommentsReader.cpp
+    XlsxXmlTableReader.cpp
     NumberFormatParser.cpp
     ChartExport.cpp
     FormulaParser.cpp

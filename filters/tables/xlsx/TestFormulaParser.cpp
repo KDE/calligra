@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
- * Copyright (C) 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+ * Copyright (C) 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
  *
  * Contact: Suresh Chande suresh.chande@nokia.com
  *

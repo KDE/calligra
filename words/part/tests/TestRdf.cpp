@@ -79,11 +79,11 @@ static KoDocumentRdf *loadDocument(const QString &odt)
     KoDocumentRdf *rdf = new KoDocumentRdf;
     QString error;
     if (!odfReadStore.loadAndParse(error)) {
-	delete store;
+        delete store;
         return 0;
     }
     if (!rdf->loadOasis(store)) {
-	delete store;
+        delete store;
         return 0;
     }
     delete store;
@@ -97,7 +97,7 @@ void TestRdf::basicload()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
     QCOMPARE (234, m->statementCount());
 
@@ -139,13 +139,13 @@ void TestRdf::findStatements()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
 
     StatementIterator it;
     QList<Statement> allStatements;
 
-    Soprano::Model * submodel = rdf->findStatements("james2");
+    const Soprano::Model * submodel = rdf->findStatements("james2");
     QVERIFY (submodel);
     QCOMPARE (9, submodel->statementCount());
     it = submodel->listStatements(
@@ -287,7 +287,7 @@ void TestRdf::locations()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
 
     QString nameThatRemains ("This one will remain, as it's not in the RDF");
@@ -388,7 +388,7 @@ void TestRdf::addAndSage()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    Soprano::Model *m = const_cast<Soprano::Model*>(rdf->model());
     QVERIFY(m);
     QCOMPARE (234, m->statementCount());
 
@@ -453,7 +453,7 @@ void TestRdf::semanticItemViewSite()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
     QCOMPARE (234, m->statementCount());
 
@@ -480,7 +480,7 @@ void TestRdf::sopranoTableModel()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
 
     // FIXME: hmm, tablemodel would need to be exported for this
@@ -496,7 +496,7 @@ void TestRdf::expandStatementsToIncludeRdfLists()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
     Soprano::Model *localModel = Soprano::createModel();
 
@@ -535,7 +535,7 @@ void TestRdf::expandStatementsToIncludeOtherPredicates()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
     Soprano::Model *localModel = Soprano::createModel();
 
@@ -572,7 +572,7 @@ void TestRdf::expandStatementsReferencingSubject()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
     Soprano::Model *localModel = Soprano::createModel();
 
@@ -746,7 +746,7 @@ void TestRdf::createUserStylesheet()
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
-    Soprano::Model *m = rdf->model();
+    const Soprano::Model *m = rdf->model();
     QVERIFY(m);
 
     KoRdfSemanticItem* f = KoRdfSemanticItem::createSemanticItem(rdf, rdf, "Contact");

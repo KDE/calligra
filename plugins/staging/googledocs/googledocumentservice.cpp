@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QTimer>
 
 const QString GoogleDocumentService::GOOGLE_DOCUMENT_URL = "docs.google.com";
 const QString GoogleDocumentService::GOOGLE_SPREADSHEET_URL = "spreadsheets.google.com";
@@ -35,6 +36,7 @@ GoogleDocumentService::GoogleDocumentService()
         : newInformation(true)
           , waitingForDoc(false)
           , loggedin(false)
+          , documentList(0)
 {
     connect(&networkManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(handleNetworkData(QNetworkReply*)));
@@ -43,12 +45,27 @@ GoogleDocumentService::GoogleDocumentService()
     xmlReader.setContentHandler(gHandler);
 }
 
+GoogleDocumentService::~GoogleDocumentService()
+{
+    delete documentList;
+    documentList = 0;
+
+    delete gHandler;
+    gHandler = 0;
+}
+
 void GoogleDocumentService::clientLogin(const QString & username, const QString & password)
 {
     QByteArray data;
-    data.append(QString("Email="+username+"&Passwd="+password).toUtf8());
-    data.append(QString("&service=writely&source=KOfficev2").toUtf8());
+    data.append(QString("Email=" + username + "&Passwd=" + password).toUtf8());
 
+    if(!haveDocAuthToken) {
+        data.append(QString("&service=writely&source=KOfficev2").toUtf8());
+        this->username = username;
+        this->password = password;
+    } else {
+        data.append(QString("&service=wise&source=KOfficev2").toUtf8());
+    }
     QNetworkRequest req(QUrl("https://www.google.com/accounts/ClientLogin"));
     req.setRawHeader("Host", "www.google.com");
     req.setRawHeader("GData-Version", "3.0");
@@ -60,6 +77,7 @@ void GoogleDocumentService::clientLogin(const QString & username, const QString 
 
 void GoogleDocumentService::listDocuments()
 {
+    authToken = docAuthToken;
     QNetworkRequest requestHeader(QUrl("https://docs.google.com/feeds/default/private/full"));
     requestHeader.setRawHeader("Host", "docs.google.com");
     requestHeader.setRawHeader("User-Agent", "KOffice");
@@ -68,6 +86,7 @@ void GoogleDocumentService::listDocuments()
     requestHeader.setRawHeader("Authorization", authToken.toUtf8());
 
     networkManager.get(requestHeader);
+    emit progressUpdate("Successfully authenticated!!! Retreiving document list...");
 }
 
 void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
@@ -76,15 +95,21 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
     bool ok = false;
     if (!networkReply->error()) {
         if (!loggedin) {
-            QByteArray m_data = networkReply->readAll();
-            qDebug() << m_data;
-            QString text(m_data.data());
-            text = text.right(text.length()-text.indexOf("Auth=")-5);
-            authToken = QString("GoogleLogin auth=")+text.left(text.indexOf("\n"));
-            if (authToken.length() > 20) {
-                loggedin = true;
-                emit userAuthenticated(loggedin);
+            QString text(networkReply->readAll());
+            text = text.right(text.length() - text.indexOf("Auth=") - 5);
+            authToken = QString("GoogleLogin auth=") + text.left(text.indexOf("\n"));
+            if(authToken.length() > 20) {
+                if(!haveDocAuthToken) {
+                    docAuthToken = authToken;
+                    haveDocAuthToken = true;
+                    clientLogin(this->username, this->password);
+                    return;
+                }
                 listDocuments();
+                spreadAuthToken = authToken;
+                authToken = "";
+                loggedin = true;
+                emit userAuthenticated(loggedin, "");
             }
         }
         else if (waitingForDoc) {
@@ -95,67 +120,61 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
             file.close();
             qDebug() << "Received Document!!!!! " << file.fileName();
             emit receivedDocument(file.fileName());
-            /*QTemporaryFile *file = new QTemporaryFile(documentList->currentDocument());
-            file->open();
-            file->write(data);
-            file->close();
-            qDebug() << "Received Document!!!!! " << QDir::tempPath() + "/" + file->fileName();
-            emit receivedDocument(QDir::tempPath() + "/" + file->fileName());*/
             waitingForDoc = false;
             hideDocumentListWindow();
         }
         else {
             xmlInput.setData(networkReply->readAll());
             qDebug() << "Part received.........";
-             if (newInformation) {
-                 ok = xmlReader.parse(&xmlInput, true);
-                 newInformation = false;
-                 getDocument();
-             }
-             //else
-             //    ok = xmlReader.parseContinue();
-
+            if (newInformation) {
+                emit progressUpdate("Parsing document list...");
+                ok = xmlReader.parse(&xmlInput, true);
+                newInformation = false;
+                getDocument();
+            }
         }
+    } else {
+        QString errorString(networkReply->readAll());
+        errorString = errorString.right(errorString.length() - errorString.indexOf("Error=") - 6);
+        emit userAuthenticated(false, errorString);
     }
-    else
-        qDebug() << networkReply->readAll();
-
-    networkReply->deleteLater();
 }
 
 void GoogleDocumentService::getDocument()
 {
     QList<GoogleDocument *> gList = gHandler->documentList()->entries();
-    if(gList.count() > 0)
-        documentList = new DocumentListWindow(this, gList);
+    if(gList.count() > 0) {
+        emit showingDocumentList();
+        documentList = new DocumentListWindow(this, gHandler->documentList());
+    }
     else
-        QMessageBox msgBox(QMessageBox::NoIcon, i18n("Office Viewer"), i18n("No Documents Found !!!"));
+        QMessageBox msgBox(QMessageBox::Information, i18n("Online Document Services"), i18n("No Documents Found !!!"));
 }
 
-void GoogleDocumentService::downloadDocument(GoogleDocument *doc)
+void GoogleDocumentService::downloadDocument(const QString & _url, const QString & _type)
 {
-    QString url = doc->documentUrl();
-    QString type = doc->documentType();
-    QString hostName = GOOGLE_DOCUMENT_URL;
+    authToken = docAuthToken;
+    QString url = _url;
+    QString type = _type;
     url.replace("docId", "docID", Qt::CaseInsensitive);
-    QString exportFormat = "&exportFormat=odt";
+    QString exportFormat = "";
 
-    if (QString::compare(type, "spreadsheet") == 0 ) {
-        hostName = GOOGLE_SPREADSHEET_URL;
-        exportFormat = "&exportFormat=xls";
-        url.replace("https://", "http://", Qt::CaseInsensitive);
+    if(QString::compare(type, "spreadsheet", Qt::CaseInsensitive) == 0) {
+        exportFormat = "&exportFormat=ods&format=ods";
+        authToken = spreadAuthToken;
+    } else if(QString::compare(type, "presentation", Qt::CaseInsensitive) == 0) {
+        exportFormat = "&exportFormat=ppt&format=ppt";
     }
-    else if (QString::compare(type, "presentation") == 0 )
-        exportFormat = "&exportFormat=ppt";
+    else if(QString::compare(type, "document", Qt::CaseInsensitive) == 0) {
+        exportFormat = "&exportFormat=odt&format=odt";
+    }
 
     qDebug() << "URL = " <<  url + exportFormat;
-    QUrl documentUrl(url);
+    QUrl documentUrl(url + exportFormat);
 
     QNetworkRequest requestHeader(documentUrl);
-    requestHeader.setRawHeader("Host", hostName.toUtf8());
     requestHeader.setRawHeader("User-Agent", "KOffice");
     requestHeader.setRawHeader("GData-Version", "3.0");
-    requestHeader.setRawHeader("Content-Type", "application/atom+xml");
     requestHeader.setRawHeader("Authorization", authToken.toUtf8());
 
     QList<QByteArray> headerlist = requestHeader.rawHeaderList();
@@ -171,6 +190,4 @@ void GoogleDocumentService::downloadDocument(GoogleDocument *doc)
 void GoogleDocumentService::hideDocumentListWindow()
 {
     documentList->hide();
-    delete documentList;
-    documentList = 0;
 }

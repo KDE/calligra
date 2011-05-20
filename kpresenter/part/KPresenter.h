@@ -24,7 +24,7 @@
 
 #include <KoResourceManager.h>
 
-/// The kpresenter-global namespace for all KPresenter related things.
+/// The stage-global namespace for all Stage related things.
 namespace KPresenter
 {
     /// Specifies the KPresenter specific resources that you can put and get from the KoResourceManager

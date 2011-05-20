@@ -1,5 +1,7 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2005, 2007-2008, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2005, 2007-2008, 2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,12 +26,14 @@
 #include "kword_export.h"
 
 #include <KoText.h>
+#include <KoTextPage.h>
 #include <QRectF>
 #include <QObject>
 
 class KoInlineObject;
 class KoZoomHandler;
 class KWPageManagerPrivate;
+class KoShapeManager;
 
 /**
  * This class represents a printed page of the document.  Each page is either left, right or
@@ -38,7 +42,7 @@ class KWPageManagerPrivate;
  * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage
+class KWORD_EXPORT KWPage : public KoTextPage
 {
 public:
     inline KWPage() : priv(0), n(0) {}
@@ -80,15 +84,8 @@ public:
 
     /**
      * return a rectangle outlining this page, using the offset in the document.
-     * For page-spreads the page size will effectively be 2 pages unless the
-     * pageNumber param is specified and the pagenumber of either the left or the
-     * right page is passed.
-     * @param pageNumber passing a pagenumber will return the rect of either the
-     *  left or the right halve of a pageSpread.
-     * Passing a pagenumber that is not represented by this object will have
-     *  unpredictabe results.
      */
-    QRectF rect(int pageNumber = -1) const;
+    QRectF rect() const;
 
     // the y coordinate
     /**
@@ -99,6 +96,10 @@ public:
      * add the height of all the pages that come before this one.
      */
     qreal offsetInDocument() const;
+    /**
+     * Set the offset of the page.
+     */
+    void setOffsetInDocument(qreal offset);
 
     /// Return the pageSide of this page, see the PageSide
     PageSide pageSide() const;
@@ -154,10 +155,25 @@ public:
 
     bool isValid() const;
 
+    /**
+     * Create a thumbnail image for this page.
+     * Note: if the page has not been laid out yet, the result may be empty!
+     *
+     * @param size: the size in pixels of the thumbnail
+     * @param shapeManager the shape manager containing the page's shapes
+     * @returns the thumbnail
+     */
+    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager);
+
     bool operator==(const KWPage &other) const;
     inline bool operator!=(const KWPage &other) const { return ! operator==(other); }
-
+    inline bool operator<(const KWPage &other) const { return n < other.n; }
+    inline bool operator>(const KWPage &other) const { return n > other.n; }
     uint hash() const;
+
+    /// reimplemented from KoTextPage
+    virtual int pageNumber(PageSelection select, int adjustment = 0) const;
+    virtual QString masterPageName() const;
 
 private:
     friend class KWPageTextInfo;

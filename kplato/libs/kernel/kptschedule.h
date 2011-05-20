@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- Copyright (C) 2005 - 2007 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2005 - 2011 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -35,7 +35,6 @@
 class QDomElement;
 class QStringList;
 
-class KPlatoXmlLoader;
 
 /// The main namespace
 namespace KPlato
@@ -50,6 +49,7 @@ class Task;
 class ScheduleManager;
 class XMLLoaderObject;
 class SchedulerPlugin;
+class KPlatoXmlLoaderBase;
 
 /**
  * The Schedule class holds data calculated during project
@@ -126,6 +126,8 @@ public:
     int calculationMode() const { return m_calculationMode; }
     /// Return the list of appointments
     QList<Appointment*> appointments() const { return m_appointments; }
+    /// Return true if the @p which list is not empty
+    bool hasAppointments( int which ) const;
     /// Return the list of appointments
     /// @param which specifies which list is returned
     QList<Appointment*> appointments(int which) const;
@@ -142,10 +144,11 @@ public:
     DateTime appointmentStartTime() const;
     DateTime appointmentEndTime() const;
 
-    virtual Appointment appointmentIntervals( int which = Scheduling ) const;
+    virtual Appointment appointmentIntervals( int which = Scheduling, const DateTimeInterval &interval = DateTimeInterval() ) const;
+    void copyAppointments( CalculationMode from, CalculationMode to );
 
     virtual bool isOverbooked() const { return false; }
-    virtual bool isOverbooked( const KDateTime & /*start*/, const KDateTime & /*end*/ ) const { return false; }
+    virtual bool isOverbooked( const DateTime & /*start*/, const DateTime & /*end*/ ) const { return false; }
     virtual QStringList overbookedResources() const;
     /// Returns the first booked interval to @p node that intersects @p interval (limited to @p interval)
     virtual DateTimeInterval firstBookedInterval( const DateTimeInterval &interval, const Schedule *node ) const;
@@ -203,7 +206,18 @@ public:
     DateTime end() const { return endTime; }
 
     QStringList state() const;
-    
+
+    void setResourceError( bool on ) { resourceError = on; }
+    void setResourceOverbooked( bool on ) { resourceOverbooked = on; }
+    void setResourceNotAvailable( bool on ) { resourceNotAvailable = on; }
+    void setConstraintError( bool on ) { constraintError = on; }
+    void setNotScheduled( bool on ) { notScheduled = on; }
+    void setSchedulingError( bool on ) { schedulingError = on; }
+
+    void setPositiveFloat( const Duration &f ) { positiveFloat = f; }
+    void setNegativeFloat( const Duration &f ) { negativeFloat = f; }
+    void setFreeFloat( const Duration &f ) { freeFloat = f; }
+
     virtual ScheduleManager *manager() const { return 0; }
     
     class Log {
@@ -212,12 +226,9 @@ public:
             Log() 
                 : node( 0 ), resource( 0 ), severity( 0 ), phase( -1 )
             {}
-            Log( const Node *n, int sev, const QString &msg, int ph = -1 )
-                : node( n ), resource( 0 ), message( msg ), severity( sev ), phase( ph )
-            {}
-            Log( const Node *n, const Resource *r, int sev, const QString &msg, int ph = -1 )
-                : node( n ), resource( r ), message( msg ), severity( sev ), phase( ph )
-            {}
+            Log( const Node *n, int sev, const QString &msg, int ph = -1 );
+            Log( const Node *n, const Resource *r, int sev, const QString &msg, int ph = -1 );
+
             const Node *node;
             const Resource *resource;
             QString message;
@@ -238,7 +249,7 @@ public:
 protected:
     virtual void changed( Schedule * /*sch*/ ) {}
     
-public: // temporary
+protected:
     QString m_name;
     Type m_type;
     long m_id;
@@ -257,7 +268,7 @@ public: // temporary
     friend class Resource;
     friend class RecalculateProjectCmd;
     friend class ScheduleManager;
-    friend class KPlatoXmlLoader;
+    friend class KPlatoXmlLoaderBase;
     /**
       * earlyStart is calculated by PERT/CPM.
       * A task may be scheduled to start later because of constraints
@@ -304,9 +315,13 @@ public: // temporary
     /// Set if the requested resource is not available
     bool resourceNotAvailable;
     /// Set if the task cannot be scheduled to fullfil all the constraints
-    bool schedulingError;
+    bool constraintError;
     /// Set if the node has not been scheduled
     bool notScheduled;
+    /// Set if the assigned resource cannot deliver the requered estimated effort
+    bool effortNotMet;
+    /// Set if some other scheduling error occurs
+    bool schedulingError;
 
     DateTime workStartTime;
     DateTime workEndTime;
@@ -388,7 +403,7 @@ public:
     virtual void takeAppointment( Appointment *appointment, int type = Scheduling );
 
     virtual bool isOverbooked() const;
-    virtual bool isOverbooked( const KDateTime &start, const KDateTime &end ) const;
+    virtual bool isOverbooked( const DateTime &start, const DateTime &end ) const;
 
     virtual Resource *resource() const { return m_resource; }
     virtual double normalRatePrHour() const;
@@ -656,24 +671,28 @@ public:
     /// Load an existing MainSchedule
     bool loadMainSchedule( MainSchedule *schedule, KoXmlElement &element, XMLLoaderObject &status );
 
+    QMap< int, QString > phaseNames() const;
+
 public slots:
     /// Set maximum progress. Emits signal maxProgressChanged
     void setMaxProgress( int value );
     /// Set progress. Emits signal progressChanged
     void setProgress( int value );
 
-    /// Add @p log to expected()
-    /// Usually connected to sigLogAdded() (other manager) to syncronize this with the other manager
-    void slotAddLog( KPlato::Schedule::Log log );
-
+    /// Add the lis of logs @p log to expected()
     void slotAddLog( const QList<KPlato::Schedule::Log> &log );
+
+    void setPhaseNames( const QMap<int, QString> &phasenames );
 
 signals:
     void maxProgressChanged( int );
     void progressChanged( int );
 
-    /// Emitted by logAdded() (but not by slotAddLog())
-    /// Usually connected to slotAddLog() (other manager) to syncronize the other manager with this manager
+    /// Emitted by logAdded() when new log entries are added
+    void logInserted( MainSchedule*, int firstrow, int lastrow );
+
+    /// Emitted by logAdded()
+    /// Used by scheduling thread
     void sigLogAdded( Schedule::Log log );
 
 protected:
@@ -706,6 +725,6 @@ protected:
 
 } //namespace KPlato
 
-QDebug &operator<<( QDebug &dbg, const KPlato::Schedule::Log &log );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule::Log &log );
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -103,9 +103,10 @@ QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor
 }
 
 
-QString ODrawClient::getPicturePath(int pib)
+QString ODrawClient::getPicturePath(const quint32 pib)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
+    Q_UNUSED(pib);
     return QString();
 }
 
@@ -115,7 +116,8 @@ bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
     return !m_shapeText.m_text.isEmpty();
 }
 
-void ODrawClient::processClientData(const MSO::OfficeArtClientData &o, Writer &out)
+void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
+                                    const MSO::OfficeArtClientData &o, Writer &out)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
     QStringList lines = m_shapeText.m_text.split(QRegExp("[\n\r]"));
@@ -140,13 +142,18 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientData &o, Writer &o
     }
 }
 
-void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out)
+void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct,
+                                       const MSO::OfficeArtClientData *cd, Writer &out)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
 }
 
-KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, Writer &out)
+KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct,
+                                           const MSO::OfficeArtClientData *cd,
+                                           const DrawStyle& ds,
+                                           Writer &out)
 {
+    Q_UNUSED(ds);
     KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     if (!m_shapeText.m_text.isEmpty()) {
         switch (m_shapeText.halign) {
@@ -177,8 +184,12 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
     return style;
 }
 
-void ODrawClient::addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, Writer &out, KoGenStyle &style)
+void ODrawClient::addTextStyles(const quint16 msospt,
+                                const MSO::OfficeArtClientTextBox *clientTextbox,
+                                const MSO::OfficeArtClientData *clientData,
+                                KoGenStyle &style, Writer &out)
 {
+    Q_UNUSED(msospt);
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
 }
