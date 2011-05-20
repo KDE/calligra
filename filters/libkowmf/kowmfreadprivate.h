@@ -25,7 +25,7 @@
 #include <QtCore/QRect>
 
 #include "WmfEnums.h"
-#include "kowmfstruct.h"
+#include "WmfStruct.h"
 #include "kowmfstack.h"
 
 class KoWmfRead;

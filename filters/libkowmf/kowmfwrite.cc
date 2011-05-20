@@ -17,7 +17,8 @@
 */
 
 #include "kowmfwrite.h"
-#include "kowmfstruct.h"
+
+#include "WmfStruct.h"
 #include "kowmfreadprivate.h"
 
 #include <kdebug.h>
