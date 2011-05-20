@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-#include "kowmfenums.h"
+#include "WmfEnums.h"
 
 
 KoWmfPaint::KoWmfPaint()

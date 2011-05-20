@@ -24,7 +24,7 @@
 #include <QtGui/QColor>
 #include <QtCore/QRect>
 
-#include "kowmfenums.h"
+#include "WmfEnums.h"
 #include "kowmfstruct.h"
 #include "kowmfstack.h"
 
