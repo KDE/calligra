@@ -1,5 +1,7 @@
 /* This file is part of the KDE libraries
+
    Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
+   Copyright (c) 2011 Inge Wallin (inge@lysator.liu.se)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,14 +17,14 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef _KOWMFWRITE_H_
-#define _KOWMFWRITE_H_
+#ifndef _WMFWRITER_H_
+#define _WMFWRITER_H_
 
 #include <kowmf_export.h>
 
 #include <QtGui/QPainter>
 
-class KoWmfWritePrivate;
+class WmfWriterPrivate;
 class QPen;
 class QBrush;
 class QColor;
@@ -32,23 +34,23 @@ class QString;
 class QImage;
 
 /**
- * KoWmfWrite allows to create a windows placeable meta file (WMF).
+ * WmfWriter allows to create a windows placeable meta file (WMF).
  * Most of the functions are compatible with QPainter format.
  *
  * sample of utilization:
  *   <pre>
- *   KoWmfWrite  wmf("/home/test.wmf");
+ *   WmfWriter  wmf("/home/test.wmf");
  *   wmf.begin();
  *   wmf.setWindow(0, 0, 200, 200);
  *   wmf.drawRect(10, 20, 50, 120);
  *   wmf.end();
  *   </pre>
  */
-class KOWMF_EXPORT KoWmfWrite
+class KOWMF_EXPORT WmfWriter
 {
 public:
-    explicit KoWmfWrite(const QString& fileName);
-    virtual ~KoWmfWrite();
+    explicit WmfWriter(const QString& fileName);
+    virtual ~WmfWriter();
 
 
     // -------------------------------------------------------------------------
@@ -132,7 +134,7 @@ private:
 
 
 private:
-    KoWmfWritePrivate * const d;
+    WmfWriterPrivate * const d;
 
 };
 

@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
+ *
  * Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
- *               2009-2010 Inge Wallin <inge@lysator.liu.se>
+ *               2009-2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,14 +32,14 @@ class QPolygon;
 
 
 /**
- * KoWmfPaint inherits the abstract class KoWmfRead
+ * WmfPainterBackend inherits the abstract class WmfAbstractbackend
  * and redirects WMF actions onto a QPaintDevice.
  * Uses relative or absolute coordinate.
  *
  * how to use:
  * <pre>
  *   QPixmap pix( 100, 100 );
- *   KoWmfPaint wmf;
+ *   WmfPainterBackend wmf;
  *   if ( wmf.load( "/home/test.wmf" ) ) {
  *      wmf.play( pix );
  *   }
@@ -47,11 +48,11 @@ class QPolygon;
  *
  */
 
-class KOWMF_EXPORT KoWmfPaint : public WmfAbstractBackend
+class KOWMF_EXPORT WmfPainterBackend : public WmfAbstractBackend
 {
 public:
-    KoWmfPaint();
-    ~KoWmfPaint() { }
+    WmfPainterBackend();
+    ~WmfPainterBackend() { }
 
     using WmfAbstractBackend::play;
 

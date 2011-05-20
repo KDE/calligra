@@ -20,11 +20,11 @@ install(TARGETS kwmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(kowmf_LIB_SRCS 
    WmfStack.cpp
-   kowmfreadprivate.cc 
+   WmfParser.cpp 
    WmfAbstractBackend.cpp 
-   kowmfpaint.cc
+   WmfPainterBackend.cpp
 
-   kowmfwrite.cc 
+   WmfWriter.cpp
  )
 
 kde4_add_library(kowmf SHARED ${kowmf_LIB_SRCS})

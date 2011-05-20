@@ -26,7 +26,7 @@
 #include <QtGui/QRegion>
 #include <QtGui/QPainter>
 
-class KoWmfReadPrivate;
+class WmfParser;
 class QString;
 class QPen;
 class QBrush;
@@ -152,7 +152,7 @@ public:
     virtual void  setMatrix(const QMatrix &, bool combine = false) = 0;
 
 private:
-    KoWmfReadPrivate  *mKwmf;
+    WmfParser  *m_parser;
 };
 
 #endif

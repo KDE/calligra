@@ -19,7 +19,7 @@
 */
 
 #include "WmfAbstractBackend.h"
-#include "kowmfreadprivate.h"
+#include "WmfParser.h"
 
 #include <kdebug.h>
 
@@ -28,12 +28,12 @@
 
 WmfAbstractBackend::WmfAbstractBackend()
 {
-    mKwmf = new KoWmfReadPrivate();
+    m_parser = new WmfParser();
 }
 
 WmfAbstractBackend::~WmfAbstractBackend()
 {
-    delete mKwmf;
+    delete m_parser;
 }
 
 
@@ -46,7 +46,7 @@ bool WmfAbstractBackend::load(const QString& filename)
         return false;
     }
 
-    bool ret = mKwmf->load(file.readAll());
+    bool ret = m_parser->load(file.readAll());
     file.close();
 
     return ret;
@@ -55,52 +55,52 @@ bool WmfAbstractBackend::load(const QString& filename)
 
 bool WmfAbstractBackend::load(const QByteArray& array)
 {
-    return mKwmf->load(array);
+    return m_parser->load(array);
 }
 
 
 bool WmfAbstractBackend::play()
 {
-    return mKwmf->play(this);
+    return m_parser->play(this);
 }
 
 
 bool WmfAbstractBackend::isValid(void) const
 {
-    return mKwmf->mValid;
+    return m_parser->mValid;
 }
 
 
 bool WmfAbstractBackend::isStandard(void) const
 {
-    return mKwmf->mStandard;
+    return m_parser->mStandard;
 }
 
 
 bool WmfAbstractBackend::isPlaceable(void) const
 {
-    return mKwmf->mPlaceable;
+    return m_parser->mPlaceable;
 }
 
 
 bool WmfAbstractBackend::isEnhanced(void) const
 {
-    return mKwmf->mEnhanced;
+    return m_parser->mEnhanced;
 }
 
 
 QRect WmfAbstractBackend::boundingRect(void) const
 {
-    return QRect(QPoint(mKwmf->mBBoxLeft, mKwmf->mBBoxTop),
-                 QSize(mKwmf->mBBoxRight - mKwmf->mBBoxLeft,
-                       mKwmf->mBBoxBottom - mKwmf->mBBoxTop));
+    return QRect(QPoint(m_parser->mBBoxLeft, m_parser->mBBoxTop),
+                 QSize(m_parser->mBBoxRight - m_parser->mBBoxLeft,
+                       m_parser->mBBoxBottom - m_parser->mBBoxTop));
 }
 
 
 int WmfAbstractBackend::defaultDpi(void) const
 {
-    if (mKwmf->mPlaceable) {
-        return mKwmf->mDpi;
+    if (m_parser->mPlaceable) {
+        return m_parser->mDpi;
     } else {
         return  0;
     }
@@ -109,6 +109,6 @@ int WmfAbstractBackend::defaultDpi(void) const
 
 void WmfAbstractBackend::setDebug(int nbrFunc)
 {
-    mKwmf->mNbrFunc = nbrFunc;
+    m_parser->mNbrFunc = nbrFunc;
 }
 
