@@ -739,8 +739,9 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 tmpWriter.addAttribute("style:type", "right");
                 break;
             case jcDecimal:
+                tmpWriter.addAttribute("style:type", "char");
+                break;
             case jcBar:
-		//decimal tab -> align on decimal point
                 //bar -> just creates a vertical bar at that point that's always visible
                 kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
                 break;
