@@ -377,9 +377,6 @@ void KWordTableHandler::tableCellStart()
 {
     kDebug(30513) ;
 
-    //TODO: It would be secure to end with KoFilter::InvalidFormat
-    Q_ASSERT(m_tap);
-
     if (!m_tap) {
         return;
     }
@@ -701,23 +698,30 @@ void KWordTableHandler::tableCellEnd()
 {
     kDebug(30513);
 
+    if (!m_cellOpen) {
+        kDebug(30513) << "BUG: !m_cellOpen";
+        return;
+    }
+
     // Text lists aren't closed explicitly so we have to close them
     // when something happens like a new paragraph or, in this case,
     // the table cell ends.
-    if (document()->textHandler()->listIsOpen())
+    if (document()->textHandler()->listIsOpen()) {
         document()->textHandler()->closeList();
+    }
     KoXmlWriter*  writer = currentWriter();
 
-    // End table cell in content, but only if we actually opened a cell.
-    if (m_cellOpen) {
+    // End table cell in content
+//     if (m_cellOpen) {
         QList<const char*> openTags = writer->tagHierarchy();
         for (int i = 0; i < openTags.size(); ++i)
             kDebug(30513) << openTags[i];
 
         writer->endElement();//table:table-cell
         m_cellOpen = false;
-    } else
-        kDebug(30513) << "Didn't close the cell because !m_cellOpen!!";
+//     } else {
+//         kDebug(30513) << "Didn't close the cell because !m_cellOpen!!";
+//     }
 
     // If this cell covers other cells (i.e. is merged), then create
     // as many table:covered-table-cell tags as there are covered

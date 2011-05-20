@@ -120,6 +120,7 @@ KWordGraphicsHandler::DrawClient::addTextStyles(const quint16 msospt,
                                                 KoGenStyle& style,
                                                 Writer& out)
 {
+    Q_UNUSED(msospt);
     Q_UNUSED(clientTextbox);
     Q_UNUSED(clientData);
 

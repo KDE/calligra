@@ -8716,6 +8716,19 @@ void STSHI::clear() {
         rgftcStandardChpStsh[_i]=0;
 }
 
+void STSHI::dump() const
+{
+    wvlog << "Dumping STSHI:" <<
+    "\ncstd= 0x" << hex << cstd << dec << "(" << cstd << ")" <<
+    "\ncbSTDBaseInFile=" << cbSTDBaseInFile <<
+    "\nfStdStylenamesWritten=" << fStdStylenamesWritten <<
+    "\nstiMaxWhenSaved= 0x" << hex << stiMaxWhenSaved <<
+     dec << "(" << stiMaxWhenSaved  << ")" <<
+    "\nistdMaxFixedWhenSaved= 0x" << hex << istdMaxFixedWhenSaved <<
+    "\nnVerBuiltInNamesWhenSaved=" << dec << nVerBuiltInNamesWhenSaved <<
+    "\nDumping STSHI done:" << endl;
+}
+
 bool operator==(const STSHI &lhs, const STSHI &rhs) {
 
     for(int _i=0; _i<(3); ++_i) {

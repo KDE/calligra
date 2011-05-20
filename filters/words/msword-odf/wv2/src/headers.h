@@ -19,6 +19,8 @@
 #ifndef HEADERS_H
 #define HEADERS_H
 
+#include "../../exceptions.h"
+
 #include "global.h"
 #include "wv2_export.h"
 #include <utility>
@@ -39,7 +41,7 @@ namespace wvWare
     class Headers
     {
     public:
-        Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version );
+        Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version ) throw(InvalidFormatException);
         virtual ~Headers();
 
         /**

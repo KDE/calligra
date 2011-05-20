@@ -782,7 +782,7 @@ void Parser9x::processParagraph( U32 fc )
 
         if ( m_cellMarkFound ) {
             m_tableHandler->tableCellEnd();
-            if ( --m_remainingCells ) {
+            if ( --m_remainingCells > 0) {
                 m_tableHandler->tableCellStart();
             }
         }
