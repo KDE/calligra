@@ -35,8 +35,8 @@ kwmf.{h,cc]     "a generic parser for WMFs.  The output is a series of callbacks
                 Not used anywhere.
 
 
-kowmfenums.h    Most of the enums defined in the [MS-EMF].pdf documentation
-kowmfstruct.h   A number of structs used in the wmf file.  Seems
+WmfEnums.h      Most of the enums defined in the [MS-EMF].pdf documentation
+WmfStruct.h     A number of structs used in the wmf file.  Seems
                 similar to wmfstruct.h
 kowmfstack.{h,cc}
                 "WMF file allows manipulation on a stack of object.

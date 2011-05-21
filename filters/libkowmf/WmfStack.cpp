@@ -1,10 +1,10 @@
-/* This file is part of the KDE project
-   Copyright (C) 2010 by Nokia
+/* This file is part of the KDE libraries
+   Copyright (c) 1998 Stefan Taferner
+                      2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   License version 2 as published by the Free Software Foundation.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,24 +17,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWPAGEBACKGROUND_H
-#define KWPAGEBACKGROUND_H
+#include "WmfStack.h"
+#include "WmfAbstractBackend.h"
 
-
-// KOffice
-#include <KoShape.h>
-
-class KWPageBackground : public KoShape
+void KoWmfBrushHandle::apply(WmfAbstractBackend *p)
 {
-public:
-    KWPageBackground();
-    virtual ~KWPageBackground();
+    p->setBrush(brush);
+}
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+void KoWmfPenHandle::apply(WmfAbstractBackend *p)
+{
+    p->setPen(pen);
+}
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+void KoWmfPatternBrushHandle::apply(WmfAbstractBackend *p)
+{
+    p->setBrush(brush);
+}
 
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-};
+void KoWmfFontHandle::apply(WmfAbstractBackend *p)
+{
+    p->setFont(font, rotation, height);
+}
 
-#endif

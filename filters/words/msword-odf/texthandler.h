@@ -82,7 +82,7 @@ public:
     virtual void sectionEnd();
     virtual void pageBreak();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
-    virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
+    virtual void footnoteFound(wvWare::FootnoteData data, wvWare::UString characters,
                                wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);

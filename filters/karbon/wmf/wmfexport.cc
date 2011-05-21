@@ -18,7 +18,7 @@
 */
 
 #include "wmfexport.h"
-#include <kowmfwrite.h>
+#include <WmfWriter.h>
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
@@ -64,7 +64,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
         return KoFilter::WrongFormat;
 
     // open Placeable Wmf file
-    mWmf = new KoWmfWrite(m_chain->outputFile());
+    mWmf = new WmfWriter(m_chain->outputFile());
     if (!mWmf->begin()) {
         delete mWmf;
         return KoFilter::WrongFormat;

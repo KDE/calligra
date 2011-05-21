@@ -14,10 +14,17 @@ public:
 
     virtual void paintEvent ( QPaintEvent * event);
 
+<<<<<<< HEAD
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
+=======
+    virtual void contextMenuEvent(QContextMenuEvent *event);
+
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
+
+>>>>>>> master
     virtual void startDrag ( Qt::DropActions supportedActions );
 
     virtual void dropEvent(QDropEvent* ev);
@@ -37,7 +44,10 @@ public:
 
 
 signals:
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     void requestContextMenu(QContextMenuEvent *event);
     void slideDblClick();
 

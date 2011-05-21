@@ -195,10 +195,20 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    Document *document = new Document(QFile::encodeName(inputFile).data(), this,
-                                      bodyWriter, &metaWriter, &manifestWriter,
-                                      storeout, mainStyles,
-                                      wdstm, tblstm_pole, datastm);
+    Document *document = 0;
+
+    try {
+        document = new Document(QFile::encodeName(inputFile).data(), this,
+                                bodyWriter, &metaWriter, &manifestWriter,
+                                storeout, mainStyles,
+                                wdstm, tblstm_pole, datastm);
+    } catch (InvalidFormatException _e) {
+        kDebug(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
+    }  catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+    }
+
     finalizer.m_document = document;
 
     //check that we can parse the document?
@@ -213,7 +223,10 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     } catch (InvalidFormatException _e) {
         kDebug(30513) << _e.msg;
         return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
     }
+
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
 

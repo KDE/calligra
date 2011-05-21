@@ -1,5 +1,7 @@
 /* This file is part of the KDE libraries
+ *
  * Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ * Copyright (c) 2011 Inge Wallin (inge@lysator.liu.se)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,9 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kowmfwrite.h"
-#include "kowmfstruct.h"
-#include "kowmfreadprivate.h"
+#include "WmfWriter.h"
+
+#include "WmfStruct.h"
+#include "WmfParser.h"
 
 #include <kdebug.h>
 
@@ -36,7 +39,7 @@
 /**
  * Private data
  */
-class KoWmfWritePrivate
+class WmfWriterPrivate
 {
 public:
     QRect    mBBox;      // bounding rectangle
@@ -50,21 +53,21 @@ public:
 
 
 
-KoWmfWrite::KoWmfWrite(const QString& fileName)
-        : d(new KoWmfWritePrivate)
+WmfWriter::WmfWriter(const QString& fileName)
+        : d(new WmfWriterPrivate)
 {
     d->mDpi = 1024;
     d->mMaxRecordSize = 0;
     d->mFileOut.setFileName(fileName);
 }
 
-KoWmfWrite::~KoWmfWrite()
+WmfWriter::~WmfWriter()
 {
     delete d;
 }
 
 
-void KoWmfWrite::setDefaultDpi(int dpi)
+void WmfWriter::setDefaultDpi(int dpi)
 {
     d->mDpi = dpi;
 }
@@ -73,7 +76,7 @@ void KoWmfWrite::setDefaultDpi(int dpi)
 //-----------------------------------------------------------------------------
 // Virtual Painter => create the WMF
 
-bool KoWmfWrite::begin()
+bool WmfWriter::begin()
 {
 
     if (!d->mFileOut.open(QIODevice::WriteOnly)) {
@@ -104,7 +107,7 @@ bool KoWmfWrite::begin()
 }
 
 
-bool KoWmfWrite::end()
+bool WmfWriter::end()
 {
     WmfPlaceableHeader pheader = { 0x9AC6CDD7, 0, 0, 0, 0, 0, 0, 0, 0 };
     quint16  checksum;
@@ -118,7 +121,7 @@ bool KoWmfWrite::end()
     pheader.right = d->mBBox.right();
     pheader.bottom = d->mBBox.bottom();
     pheader.inch = d->mDpi;
-    checksum = KoWmfReadPrivate::calcCheckSum(&pheader);
+    checksum = WmfParser::calcCheckSum(&pheader);
 
     // write headers
     d->mFileOut.reset();
@@ -134,19 +137,19 @@ bool KoWmfWrite::end()
 }
 
 
-void KoWmfWrite::save()
+void WmfWriter::save()
 {
     d->mSt << (quint32)3 << (quint16)0x001E;
 }
 
 
-void KoWmfWrite::restore()
+void WmfWriter::restore()
 {
     d->mSt << (quint32)4 << (quint16)0x0127 << (quint16)1;
 }
 
 
-void KoWmfWrite::setPen(const QPen &pen)
+void WmfWriter::setPen(const QPen &pen)
 {
     int style;
     int max = sizeof(koWmfStylePen) / sizeof(Qt::SolidLine);
@@ -172,7 +175,7 @@ void KoWmfWrite::setPen(const QPen &pen)
 }
 
 
-void KoWmfWrite::setBrush(const QBrush &brush)
+void WmfWriter::setBrush(const QBrush &brush)
 {
     int style;
     int max = sizeof(koWmfStyleBrush) / sizeof(Qt::NoBrush);
@@ -198,18 +201,18 @@ void KoWmfWrite::setBrush(const QBrush &brush)
 }
 
 
-void KoWmfWrite::setFont(const QFont &)
+void WmfWriter::setFont(const QFont &)
 {
 }
 
 
-void KoWmfWrite::setBackgroundColor(const QColor &c)
+void WmfWriter::setBackgroundColor(const QColor &c)
 {
     d->mSt << (quint32)5 << (quint16)0x0201 << (quint32)winColor(c);
 }
 
 
-void KoWmfWrite::setBackgroundMode(Qt::BGMode mode)
+void WmfWriter::setBackgroundMode(Qt::BGMode mode)
 {
     d->mSt << (quint32)4 << (quint16)0x0102;
     if (mode == Qt::TransparentMode)
@@ -219,13 +222,13 @@ void KoWmfWrite::setBackgroundMode(Qt::BGMode mode)
 }
 
 
-void KoWmfWrite::setCompositionMode(QPainter::CompositionMode op)
+void WmfWriter::setCompositionMode(QPainter::CompositionMode op)
 {
     d->mSt << (quint32)5 << (quint16)0x0104 << (quint32)qtRasterToWin32(op);
 }
 
 
-void KoWmfWrite::setWindow(int left, int top, int width, int height)
+void WmfWriter::setWindow(int left, int top, int width, int height)
 {
     d->mBBox.setRect(left, top, width, height);
 
@@ -237,13 +240,13 @@ void KoWmfWrite::setWindow(int left, int top, int width, int height)
 }
 
 
-void KoWmfWrite::setClipRegion(const QRegion &)
+void WmfWriter::setClipRegion(const QRegion &)
 {
 
 }
 
 
-void KoWmfWrite::clipping(bool enable)
+void WmfWriter::clipping(bool enable)
 {
     if (!enable) {
         // clipping region == bounding rectangle
@@ -252,19 +255,19 @@ void KoWmfWrite::clipping(bool enable)
 }
 
 
-void KoWmfWrite::moveTo(int left, int top)
+void WmfWriter::moveTo(int left, int top)
 {
     d->mSt << (quint32)5 << (quint16)0x0214 << (quint16)top << (quint16)left;
 }
 
 
-void KoWmfWrite::lineTo(int left, int top)
+void WmfWriter::lineTo(int left, int top)
 {
     d->mSt << (quint32)5 << (quint16)0x0213 << (quint16)top << (quint16)left;
 }
 
 
-void KoWmfWrite::drawRect(int left, int top, int width, int height)
+void WmfWriter::drawRect(int left, int top, int width, int height)
 {
     QRect rec(left, top, width, height);
 
@@ -273,7 +276,7 @@ void KoWmfWrite::drawRect(int left, int top, int width, int height)
 }
 
 
-void KoWmfWrite::drawRoundRect(int left, int top, int width, int height , int roudw, int roudh)
+void WmfWriter::drawRoundRect(int left, int top, int width, int height , int roudw, int roudh)
 {
     int  widthCorner, heightCorner;
     QRect rec(left, top, width, height);
@@ -289,7 +292,7 @@ void KoWmfWrite::drawRoundRect(int left, int top, int width, int height , int ro
 }
 
 
-void KoWmfWrite::drawEllipse(int left, int top, int width, int height)
+void WmfWriter::drawEllipse(int left, int top, int width, int height)
 {
     QRect rec(left, top, width, height);
 
@@ -298,7 +301,7 @@ void KoWmfWrite::drawEllipse(int left, int top, int width, int height)
 }
 
 
-void KoWmfWrite::drawArc(int left, int top, int width, int height , int a, int alen)
+void WmfWriter::drawArc(int left, int top, int width, int height , int a, int alen)
 {
     int xCenter, yCenter;
     int  offXStart, offYStart, offXEnd, offYEnd;
@@ -317,7 +320,7 @@ void KoWmfWrite::drawArc(int left, int top, int width, int height , int a, int a
 }
 
 
-void KoWmfWrite::drawPie(int left, int top, int width, int height , int a, int alen)
+void WmfWriter::drawPie(int left, int top, int width, int height , int a, int alen)
 {
     int xCenter, yCenter;
     int  offXStart, offYStart, offXEnd, offYEnd;
@@ -336,7 +339,7 @@ void KoWmfWrite::drawPie(int left, int top, int width, int height , int a, int a
 }
 
 
-void KoWmfWrite::drawChord(int left, int top, int width, int height , int a, int alen)
+void WmfWriter::drawChord(int left, int top, int width, int height , int a, int alen)
 {
     int xCenter, yCenter;
     int  offXStart, offYStart, offXEnd, offYEnd;
@@ -355,7 +358,7 @@ void KoWmfWrite::drawChord(int left, int top, int width, int height , int a, int
 }
 
 
-void KoWmfWrite::drawPolyline(const QPolygon &pa)
+void WmfWriter::drawPolyline(const QPolygon &pa)
 {
     int size = 4 + (pa.size() * 2);
 
@@ -366,7 +369,7 @@ void KoWmfWrite::drawPolyline(const QPolygon &pa)
 }
 
 
-void KoWmfWrite::drawPolygon(const QPolygon &pa, bool)
+void WmfWriter::drawPolygon(const QPolygon &pa, bool)
 {
     int size = 4 + (pa.size() * 2);
 
@@ -377,7 +380,7 @@ void KoWmfWrite::drawPolygon(const QPolygon &pa, bool)
 }
 
 
-void KoWmfWrite::drawPolyPolygon(QList<QPolygon>& listPa, bool)
+void WmfWriter::drawPolyPolygon(QList<QPolygon>& listPa, bool)
 {
 
     int sizeArrayPoly = 0;
@@ -402,7 +405,7 @@ void KoWmfWrite::drawPolyPolygon(QList<QPolygon>& listPa, bool)
 }
 
 
-void KoWmfWrite::drawImage(int , int , const QImage &, int , int , int , int)
+void WmfWriter::drawImage(int , int , const QImage &, int , int , int , int)
 {
     /*
         QImage img;
@@ -417,7 +420,7 @@ void KoWmfWrite::drawImage(int , int , const QImage &, int , int , int , int)
 }
 
 
-void KoWmfWrite::drawText(int , int , int , int , int , const QString& , double)
+void WmfWriter::drawText(int , int , int , int , int , const QString& , double)
 {
 //    d->mSt << (quint32)3 << (quint16)0x0A32;
 }
@@ -425,7 +428,7 @@ void KoWmfWrite::drawText(int , int , int , int , int , const QString& , double)
 //-----------------------------------------------------------------------------
 // Utilities and conversion Qt --> Wmf
 
-void KoWmfWrite::pointArray(const QPolygon &pa)
+void WmfWriter::pointArray(const QPolygon &pa)
 {
     int  left, top, i, max;
 
@@ -436,7 +439,7 @@ void KoWmfWrite::pointArray(const QPolygon &pa)
 }
 
 
-quint32 KoWmfWrite::winColor(const QColor &color)
+quint32 WmfWriter::winColor(const QColor &color)
 {
     quint32 c;
 
@@ -448,7 +451,7 @@ quint32 KoWmfWrite::winColor(const QColor &color)
 }
 
 
-void KoWmfWrite::angleToxy(int &xStart, int &yStart, int &xEnd, int &yEnd, int a, int alen)
+void WmfWriter::angleToxy(int &xStart, int &yStart, int &xEnd, int &yEnd, int a, int alen)
 {
     double angleStart, angleLength;
 
@@ -462,7 +465,7 @@ void KoWmfWrite::angleToxy(int &xStart, int &yStart, int &xEnd, int &yEnd, int a
 }
 
 
-quint16  KoWmfWrite::qtRasterToWin16(QPainter::CompositionMode op) const
+quint16  WmfWriter::qtRasterToWin16(QPainter::CompositionMode op) const
 {
     int i;
 
@@ -477,7 +480,7 @@ quint16  KoWmfWrite::qtRasterToWin16(QPainter::CompositionMode op) const
 }
 
 
-quint32  KoWmfWrite::qtRasterToWin32(QPainter::CompositionMode op) const
+quint32  WmfWriter::qtRasterToWin32(QPainter::CompositionMode op) const
 {
     int i;
 

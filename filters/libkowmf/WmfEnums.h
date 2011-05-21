@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ *
  * Copyright (C) 2010 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,8 +19,8 @@
  */
 
 
-#ifndef KOWMFENUMS_H
-#define KOWMFENUMS_H
+#ifndef WMFENUMS_H
+#define WMFENUMS_H
 
 
 // ----------------------------------------------------------------

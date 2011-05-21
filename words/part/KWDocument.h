@@ -41,8 +41,6 @@
 class KWView;
 class KWPage;
 class KWFrameSet;
-class MagicCurtain;
-class PageProcessingQueue;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
 
@@ -172,9 +170,6 @@ public:
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
 
-    /// Returns the PageProcessingQueue used to queue and process page-updates.
-    PageProcessingQueue* pageQueue();
-
 public slots:
     /// Relayout the pages
     void relayout();
@@ -198,21 +193,19 @@ private slots:
     /// Frame maintenance on already registered framesets
     void addFrame(KWFrame *frame);
     void removeFrame(KWFrame *frame);
-    void requestMoreSpace(KWTextFrameSet *fs);
     void removeFrameFromViews(KWFrame*);
-    void updateHeaderFooter(KWTextFrameSet*);
-
     /// Called after the constructor figures out there is an install problem.
     void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
 private:
-    friend class PageProcessingQueue;
     friend class KWDLoader;
     friend class KWOdfLoader;
     friend class KWPagePropertiesCommand;
     QString renameFrameSet(const QString &prefix , const QString &base);
-    /// post process loading after either oasis or oldxml loading finished
+    /**
+     * post process loading after either oasis or oldxml loading finished
+     */
     void endOfLoading();
     /**
      * Called before loading
@@ -223,23 +216,19 @@ private:
     void clear();
 
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
-    /// emits pageSetupChanged
-
+    /**
+     * emits pageSetupChanged
+     */
     void saveConfig();
 
 private:
     QList<KWFrameSet*> m_frameSets;
     QString m_viewMode;
-
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
-
-    MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
     bool m_mainFramesetEverFinished;
-
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
-    PageProcessingQueue *m_pageQueue;
 };
 
 #endif

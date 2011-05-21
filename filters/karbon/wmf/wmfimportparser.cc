@@ -41,7 +41,7 @@
 bug : see motar.wmf
 */
 
-WMFImportParser::WMFImportParser() : KoWmfRead()
+WMFImportParser::WMFImportParser() : WmfAbstractBackend()
 {
 }
 
@@ -52,7 +52,7 @@ bool WMFImportParser::play(KarbonDocument& doc)
     mScaleX = mScaleY = 1;
 
     // Play the wmf file
-    if (! KoWmfRead::play())
+    if (! WmfAbstractBackend::play())
         return false;
 
     KoShapeLayer * layer = 0;
@@ -191,14 +191,14 @@ void WMFImportParser::setWindowExt(int width, int height)
 void WMFImportParser::setViewportOrg(int left, int top)
 {
     // FIXME: Not Yet Implemented
-    //        See filters/libkowmf/kowmfpaint.cc for how to use this.
+    //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
 }
 
 
 void WMFImportParser::setViewportExt(int width, int height)
 {
     // FIXME: Not Yet Implemented
-    //        See filters/libkowmf/kowmfpaint.cc for how to use this.
+    //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
 }
 
 

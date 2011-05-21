@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
+ *
  * Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
- *               2009-2010 Inge Wallin <inge@lysator.liu.se>
+ *               2009-2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kowmfpaint.h"
+#include "WmfPainterBackend.h"
 
 #include <QPolygon>
 #include <QPrinter>
@@ -25,11 +26,11 @@
 
 #include <kdebug.h>
 
-#include "kowmfenums.h"
+#include "WmfEnums.h"
 
 
-KoWmfPaint::KoWmfPaint()
-    : KoWmfRead()
+WmfPainterBackend::WmfPainterBackend()
+    : WmfAbstractBackend()
     , mTextPen()
     , mSaveCount(0)
 {
@@ -40,7 +41,7 @@ KoWmfPaint::KoWmfPaint()
 }
 
 
-bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
+bool WmfPainterBackend::play(QPaintDevice& target, bool relativeCoord)
 {
     if (!mPainter)
         mPainter = new QPainter(&target);
@@ -52,7 +53,7 @@ bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
 
     // Play the wmf file
     mSaveCount = 0;
-    bool ret = KoWmfRead::play();
+    bool ret = WmfAbstractBackend::play();
 
     // Make sure that the painter is in the same state as before KoWmfRead::play()
     for (; mSaveCount > 0; mSaveCount--)
@@ -60,7 +61,7 @@ bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
     return ret;
 }
 
-bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
+bool WmfPainterBackend::play(QPainter &painter, bool relativeCoord)
 {
     // If there is already a painter and it's owned by us, then delete i
     if (mPainter && mIsInternalPainter)
@@ -75,7 +76,7 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
 
     // Play the wmf file
     mSaveCount = 0;
-    bool ret = KoWmfRead::play();
+    bool ret = WmfAbstractBackend::play();
 
     // Make sure that the painter is in the same state as before KoWmfRead::play()
     for (; mSaveCount > 0; mSaveCount--)
@@ -87,7 +88,7 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
 //-----------------------------------------------------------------------------
 // Virtual Painter
 
-bool KoWmfPaint::begin()
+bool WmfPainterBackend::begin()
 {
     // If the painter is our own, we have to call begin() on it.
     // If it's external, we assume that it's already done for us.
@@ -116,7 +117,7 @@ bool KoWmfPaint::begin()
 }
 
 
-bool KoWmfPaint::end()
+bool WmfPainterBackend::end()
 {
     bool ret = true;
     if (mIsInternalPainter)
@@ -126,7 +127,7 @@ bool KoWmfPaint::end()
 }
 
 
-void KoWmfPaint::save()
+void WmfPainterBackend::save()
 {
     // A little trick here: Save the worldTransform in the painter.
     // If we didn't do this, we would have to create a separate stack
@@ -144,7 +145,7 @@ void KoWmfPaint::save()
 }
 
 
-void KoWmfPaint::restore()
+void WmfPainterBackend::restore()
 {
     if (mSaveCount > 0) {
         mPainter->restore();
@@ -161,7 +162,7 @@ void KoWmfPaint::restore()
 }
 
 
-void KoWmfPaint::setFont(const QFont &font, int rotation, int fontHeight)
+void WmfPainterBackend::setFont(const QFont &font, int rotation, int fontHeight)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << font << rotation << fontHeight;
@@ -172,7 +173,7 @@ void KoWmfPaint::setFont(const QFont &font, int rotation, int fontHeight)
 }
 
 
-void KoWmfPaint::setTextPen(const QPen &pen)
+void WmfPainterBackend::setTextPen(const QPen &pen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << pen;
@@ -181,7 +182,7 @@ void KoWmfPaint::setTextPen(const QPen &pen)
     mTextPen = pen;
 }
 
-void KoWmfPaint::setPen(const QPen &pen)
+void WmfPainterBackend::setPen(const QPen &pen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << pen;
@@ -211,13 +212,13 @@ void KoWmfPaint::setPen(const QPen &pen)
 }
 
 
-const QPen &KoWmfPaint::pen() const
+const QPen &WmfPainterBackend::pen() const
 {
     return mPainter->pen();
 }
 
 
-void KoWmfPaint::setBrush(const QBrush &brush)
+void WmfPainterBackend::setBrush(const QBrush &brush)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << brush;
@@ -226,7 +227,7 @@ void KoWmfPaint::setBrush(const QBrush &brush)
 }
 
 
-void KoWmfPaint::setBackgroundColor(const QColor &c)
+void WmfPainterBackend::setBackgroundColor(const QColor &c)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << c;
@@ -244,7 +245,7 @@ void KoWmfPaint::setBackgroundColor(const QColor &c)
 }
 
 
-void KoWmfPaint::setBackgroundMode(Qt::BGMode mode)
+void WmfPainterBackend::setBackgroundMode(Qt::BGMode mode)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << mode << "(ignored)";
@@ -254,7 +255,7 @@ void KoWmfPaint::setBackgroundMode(Qt::BGMode mode)
 }
 
 
-void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
+void WmfPainterBackend::setCompositionMode(QPainter::CompositionMode mode)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << mode << "(ignored)";
@@ -302,7 +303,7 @@ void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 // and relative/absolute coordinate
 
 
-void KoWmfPaint::recalculateWorldTransform()
+void WmfPainterBackend::recalculateWorldTransform()
 {
     mWorldTransform = QTransform();
 
@@ -387,7 +388,7 @@ void KoWmfPaint::recalculateWorldTransform()
 
 
 
-void KoWmfPaint::setWindowOrg(int left, int top)
+void WmfPainterBackend::setWindowOrg(int left, int top)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << left << " " << top;
@@ -428,7 +429,7 @@ void KoWmfPaint::setWindowOrg(int left, int top)
 }
 
 
-void KoWmfPaint::setWindowExt(int width, int height)
+void WmfPainterBackend::setWindowExt(int width, int height)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << width << " " << height;
@@ -467,7 +468,7 @@ void KoWmfPaint::setWindowExt(int width, int height)
 #endif
 }
 
-void KoWmfPaint::setViewportOrg( int left, int top )
+void WmfPainterBackend::setViewportOrg( int left, int top )
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << left << top;
@@ -482,7 +483,7 @@ void KoWmfPaint::setViewportOrg( int left, int top )
     recalculateWorldTransform();
 }
 
-void KoWmfPaint::setViewportExt( int width, int height )
+void WmfPainterBackend::setViewportExt( int width, int height )
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << width << height;
@@ -499,7 +500,7 @@ void KoWmfPaint::setViewportExt( int width, int height )
 }
 
 
-void KoWmfPaint::setMatrix(const QMatrix &wm, bool combine)
+void WmfPainterBackend::setMatrix(const QMatrix &wm, bool combine)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << wm << " " << combine;
@@ -514,19 +515,19 @@ void KoWmfPaint::setMatrix(const QMatrix &wm, bool combine)
 //                         Drawing
 
 
-void KoWmfPaint::setClipRegion(const QRegion &rec)
+void WmfPainterBackend::setClipRegion(const QRegion &rec)
 {
     mPainter->setClipRegion(rec);
 }
 
 
-QRegion KoWmfPaint::clipRegion()
+QRegion WmfPainterBackend::clipRegion()
 {
     return mPainter->clipRegion();
 }
 
 
-void KoWmfPaint::moveTo(int x, int y)
+void WmfPainterBackend::moveTo(int x, int y)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000)<< x << ", " << y;
@@ -535,7 +536,7 @@ void KoWmfPaint::moveTo(int x, int y)
 }
 
 
-void KoWmfPaint::lineTo(int x, int y)
+void WmfPainterBackend::lineTo(int x, int y)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << " using " << mPainter->pen()
@@ -548,7 +549,7 @@ void KoWmfPaint::lineTo(int x, int y)
 }
 
 
-void KoWmfPaint::drawRect(int x, int y, int w, int h)
+void WmfPainterBackend::drawRect(int x, int y, int w, int h)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -559,7 +560,7 @@ void KoWmfPaint::drawRect(int x, int y, int w, int h)
 }
 
 
-void KoWmfPaint::drawRoundRect(int x, int y, int w, int h, int roudw, int roudh)
+void WmfPainterBackend::drawRoundRect(int x, int y, int w, int h, int roudw, int roudh)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -568,7 +569,7 @@ void KoWmfPaint::drawRoundRect(int x, int y, int w, int h, int roudw, int roudh)
 }
 
 
-void KoWmfPaint::drawEllipse(int x, int y, int w, int h)
+void WmfPainterBackend::drawEllipse(int x, int y, int w, int h)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -577,7 +578,7 @@ void KoWmfPaint::drawEllipse(int x, int y, int w, int h)
 }
 
 
-void KoWmfPaint::drawArc(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawArc(int x, int y, int w, int h, int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -586,7 +587,7 @@ void KoWmfPaint::drawArc(int x, int y, int w, int h, int a, int alen)
 }
 
 
-void KoWmfPaint::drawPie(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawPie(int x, int y, int w, int h, int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -595,7 +596,7 @@ void KoWmfPaint::drawPie(int x, int y, int w, int h, int a, int alen)
 }
 
 
-void KoWmfPaint::drawChord(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawChord(int x, int y, int w, int h, int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h
@@ -605,7 +606,7 @@ void KoWmfPaint::drawChord(int x, int y, int w, int h, int a, int alen)
 }
 
 
-void KoWmfPaint::drawPolyline(const QPolygon &pa)
+void WmfPainterBackend::drawPolyline(const QPolygon &pa)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << pa;
@@ -614,7 +615,7 @@ void KoWmfPaint::drawPolyline(const QPolygon &pa)
 }
 
 
-void KoWmfPaint::drawPolygon(const QPolygon &pa, bool winding)
+void WmfPainterBackend::drawPolygon(const QPolygon &pa, bool winding)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << pa << winding;
@@ -628,7 +629,7 @@ void KoWmfPaint::drawPolygon(const QPolygon &pa, bool winding)
 }
 
 
-void KoWmfPaint::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
+void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000);
@@ -670,7 +671,7 @@ void KoWmfPaint::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 }
 
 
-void KoWmfPaint::drawImage(int x, int y, const QImage &img, int sx, int sy, int sw, int sh)
+void WmfPainterBackend::drawImage(int x, int y, const QImage &img, int sx, int sy, int sw, int sh)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << " " << y << " " << sx << " " << sy << " " << sw << " " << sh;
@@ -679,7 +680,7 @@ void KoWmfPaint::drawImage(int x, int y, const QImage &img, int sx, int sy, int 
 }
 
 
-void KoWmfPaint::patBlt(int x, int y, int width, int height, quint32 rasterOperation)
+void WmfPainterBackend::patBlt(int x, int y, int width, int height, quint32 rasterOperation)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << y << width << height << hex << rasterOperation << dec;
@@ -698,8 +699,8 @@ void KoWmfPaint::patBlt(int x, int y, int width, int height, quint32 rasterOpera
 }
 
 
-void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QString& text,
-                          double textRotation)
+void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, const QString& text,
+                                 double textRotation)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << y << w << h << hex << textAlign << dec << text << textRotation;

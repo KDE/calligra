@@ -68,14 +68,16 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
     }
 }
 
-void KPrSlidesManagerView::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    emit slideDblClick();
-}
-
 void KPrSlidesManagerView::contextMenuEvent(QContextMenuEvent *event)
 {
     emit requestContextMenu(event);
+}
+
+void KPrSlidesManagerView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    event->accept();
+    QListView::mouseDoubleClickEvent(event);
+    emit slideDblClick();
 }
 
 void KPrSlidesManagerView::startDrag(Qt::DropActions supportedActions)

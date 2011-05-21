@@ -568,6 +568,8 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
                 continue;
             if (! shape->isVisible(true))
                 continue;
+            if (shape->isAnchored())
+                continue;
             if (shape->textRunAroundSide() == KoShape::RunThrough)
                 continue;
             if (shape->zIndex() <= currentShape->zIndex())

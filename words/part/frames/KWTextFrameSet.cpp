@@ -26,7 +26,6 @@
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
 #include "KWDocument.h"
-#include "KWDocument_p.h"
 #include "KWCopyShape.h"
 
 #include <KoTextShapeData.h>
@@ -129,50 +128,20 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     data->setDocument(m_document, false);
 
 #if 0
-    PageProcessingQueue *ppq = m_kwordDocument->pageQueue();
-    ppq->addPage(page);
-#else
-    /* following would recursivly call KWRootAreaProvider::provide again...
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-    Q_ASSERT(lay);
-    lay->layout();
-    */
-#endif
-
-#if 0
-    if (data == 0) {// probably a copy frame.
-        Q_ASSERT(frameCount() > 1);
-        return;
-    }
-    if (frameCount() == 1 && m_document->isEmpty()) { // just added first frame...
-        delete m_document;
-        m_document = data->document();
-        m_document->setDocumentLayout(new KWTextDocumentLayout(this));
-        if (m_kwordDocument) {
-            KoTextDocument doc(m_document);
-            KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-            doc.setStyleManager(styleManager);
-            KoChangeTracker *changeTracker = m_kwordDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
-            doc.setChangeTracker(changeTracker);
-            doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
-            doc.setUndoStack(m_kwordDocument->resourceManager()->undoStack());
-        }
-        data->setDocument(m_document, false);
-    } else {
-        m_frameOrderDirty = true;
-        data->setDocument(m_document, false);
-        data->setEndPosition(-1);
-        data->foul();
-        if (m_allowLayoutRequests) {
-            KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
-            if (lay) {
-                lay->scheduleLayout();
-                emit lay->shapeAdded(frame->shape());
-            }
+    m_frameOrderDirty = true;
+    data->setDocument(m_document, false);
+    data->setEndPosition(-1);
+    data->foul();
+    if (m_allowLayoutRequests) {
+        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
+        if (lay) {
+            lay->scheduleLayout();
+            emit lay->shapeAdded(frame->shape());
         }
     }
     connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
-#else
+#endif
+
     KoTextDocument doc(m_document);
     KoStyleManager *styleManager = m_kwordDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(doc.styleManager() == styleManager);
@@ -180,7 +149,6 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     Q_ASSERT(doc.changeTracker() == changeTracker);
     Q_ASSERT(doc.inlineTextObjectManager() == m_kwordDocument->inlineTextObjectManager());
     Q_ASSERT(doc.undoStack() == m_kwordDocument->resourceManager()->undoStack());
-#endif
 }
 
 void KWTextFrameSet::setupDocument()

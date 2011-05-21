@@ -286,16 +286,13 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
-void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
+void KWordTextHandler::footnoteFound(wvWare::FootnoteData data,
                                      wvWare::UString characters,
                                      wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                      const wvWare::FootnoteFunctor& parseFootnote)
 {
-    Q_UNUSED(chp);
     Q_UNUSED(sep);
-
-    kDebug(30513) ;
 
     m_insideFootnote = true;
 
@@ -306,7 +303,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
 
     m_footnoteWriter->startElement("text:note");
     //set footnote or endnote
-    m_footnoteWriter->addAttribute("text:note-class", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
+    m_footnoteWriter->addAttribute("text:note-class", data.type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
     //autonumber or character
     m_footnoteWriter->startElement("text:note-citation");
 
@@ -314,9 +311,18 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
 
     //NOTE: besides converting the number to text here the format is specified
     //in section-properties -> notes-configuration too
-    if (characters[0].unicode() == 2) {
+    //
+    //The character in the main document at the position specified by the
+    //corresponding CP MUST be equal 0x02 and have sprmCFSpec applied with a
+    //value of 1.  Let's be a bit more relaxed and follow the behavior of OOo
+    //and MS Office 2007.
+    if (!chp->fSpec || !(characters[0].unicode() == 2)) {
+        kWarning(30513) << "Warning: Trying to process a broken footnote/endnote!";
+    }
 
-        int noteNumber = (type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
+    if ( data.autoNumbered ) {
+
+        int noteNumber = (data.type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
         QString noteNumberString;
         char letter = 'a';
         uint ref = msonfcArabic;
@@ -324,7 +330,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
         //TODO: check SEP if required
 
 	//checking DOP - documents default
-        if (type == wvWare::FootnoteData::Endnote) {
+        if (data.type == wvWare::FootnoteData::Endnote) {
             ref = m_parser->dop().nfcEdnRef2;
         } else {
             ref = m_parser->dop().nfcFtnRef2;
@@ -397,7 +403,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     //save the state of tables/paragraphs/lists
     saveState();
     //signal Document to parse the footnote
-    emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), type);
+    emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), data.type);
 
     //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {

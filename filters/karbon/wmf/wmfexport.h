@@ -24,7 +24,7 @@
 #include <KoFilter.h>
 #include <QVariantList>
 
-class KoWmfWrite;
+class WmfWriter;
 class KarbonDocument;
 class KoShape;
 class KoShapeBorderModel;
@@ -52,7 +52,7 @@ private:
     int coordY(double top);
 
 private:
-    KoWmfWrite *mWmf;
+    WmfWriter *mWmf;
     int       mDpi;
     double    mScaleX;
     double    mScaleY;

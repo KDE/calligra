@@ -108,6 +108,8 @@ protected:
 
     int m_formulaIndex;
     QString m_shapeTypeString;
+    QString m_extraShapeFormulas;
+    int m_extraFormulaIndex;
     QMap<QString, QString> m_shapeTypeStrings;
     QMap<QString, QString> m_strokeTypeStrings;
     QMap<QString, QString> m_fillTypeStrings;

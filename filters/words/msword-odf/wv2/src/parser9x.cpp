@@ -782,7 +782,7 @@ void Parser9x::processParagraph( U32 fc )
 
         if ( m_cellMarkFound ) {
             m_tableHandler->tableCellEnd();
-            if ( --m_remainingCells ) {
+            if ( --m_remainingCells > 0) {
                 m_tableHandler->tableCellStart();
             }
         }
@@ -1035,8 +1035,13 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP,
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
     if ( ok ) {
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "char: 0x" << hex << characters[0].unicode() <<
+                 "| fAuto:" << data.autoNumbered <<
+                 "| fSpec:" << chp->fSpec;
+#endif
         SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( globalCP ) );
-        m_textHandler->footnoteFound( data.type, characters, sep, chp,
+        m_textHandler->footnoteFound( data, characters, sep, chp,
                                       make_functor( *this, &Parser9x::parseFootnote, data ));
     }
 }

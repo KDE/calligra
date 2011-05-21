@@ -327,7 +327,7 @@ void Document::processStyles()
         }
 
         // Process paragraph styles.
-        if (style && style->type() == wvWare::Style::sgcPara) {
+        if (style && style->type() == sgcPara) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
@@ -364,7 +364,7 @@ void Document::processStyles()
             if (actualName.contains("TOC")) {
                 m_tocStyleNames.append(actualName);
             }
-        } else if (style && style->type() == wvWare::Style::sgcChp) {
+        } else if (style && style->type() == sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "text");

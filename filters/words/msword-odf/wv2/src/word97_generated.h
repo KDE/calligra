@@ -8942,6 +8942,11 @@ struct STSHI {
      */
     void clear();
 
+    /**
+     * Dumps all fields of this structure (for debugging)
+     */
+    void dump() const;
+
     // Size of the structure
     static const unsigned int sizeOf;
 

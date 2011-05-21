@@ -33,16 +33,20 @@ enum nFib
     Word2k7nFib = 0x0112
 };
 
-//Specifies the location from which the offset of a page border is measured.
-//[MS-DOC] — v20101219
+/**
+ * Specifies the location from which the offset of a page border is measured.
+ * [MS-DOC] — v20101219
+ */
 enum PgbOffsetFrom
 {
     pgbFromText = 0x0,  //offset measured from the text
     pgbFromEdge         //offset measured from the edge of the page
 };
 
-//Specifies the type of the section break that is being described.
-//[MS-DOC] — v20101219
+/**
+ * Specifies the type of the section break that is being described.
+ * [MS-DOC] — v20101219
+ */
 enum SBkcOperand 
 {
     bkcContinuous = 0x00, 
@@ -52,8 +56,10 @@ enum SBkcOperand
     bkcOddPage
 };
 
-//Specifies the list of numbering formats that can be used for a group of
-//automatically numbered objects.  [MS-OSHARED] — v20101219
+/**
+ * Specifies the list of numbering formats that can be used for a group of
+ * automatically numbered objects.  [MS-OSHARED] — v20101219
+ */
 enum MSONFC
 {
     msonfcArabic = 0x00, //decimal
@@ -117,6 +123,19 @@ enum MSONFC
     msonfcLCRus,         //russianLower
     msonfcUCRus,         //russianUpper
     msonfcNone = 0xFF    //Specifies that the sequence will not display any numbering
+};
+
+/**
+ * Specifies the Style Type.
+ * [ECMA-376]
+ */
+enum ST_StyleType
+{
+    sgcUnknown = 0,
+    sgcPara = 1,   //Paragraph style
+    sgcChp = 2,    //Character style
+    sgcTbl = 3,    //Table style
+    sgcNmbr = 4    //Numbering style
 };
 
 #endif
