@@ -35,6 +35,8 @@ public:
 
     void setDocument(KoPADocument *document);
 
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
+
     QVariant data(const QModelIndex &index, int role) const;
 
     int rowCount(const QModelIndex &parent) const;

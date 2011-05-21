@@ -30,6 +30,7 @@ class KoPACanvas;
 class KoPAPageBase;
 class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
+class KPrSelectionManager;
 
 class KPrViewModeSlidesSorter : public KoPAViewMode
 {
@@ -164,6 +165,7 @@ private:
     bool m_dragingFlag;
     int m_lastItemNumber;
     int m_zoom;
+    KPrSelectionManager *m_selectionManagerSlidesSorter;
 
 private slots:
     void updateDocumentDock();

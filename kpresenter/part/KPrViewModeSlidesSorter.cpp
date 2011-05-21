@@ -30,6 +30,8 @@
 #include "KPrSlidesSorterDocumentModel.h"
 #include "KPrFactory.h"
 #include "KPrSlidesManagerView.h"
+#include "KPrSelectionManager.h"
+
 #include <KoResourceManager.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
@@ -74,6 +76,9 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
 
     m_slidesSorter->installEventFilter(this);
+
+    //install selection manager for Slides Sorter View
+    m_selectionManagerSlidesSorter = new KPrSelectionManager(m_slidesSorter, m_view->kopaDocument());
 }
 
 KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
@@ -217,7 +222,7 @@ void KPrViewModeSlidesSorter::updateActivePage( KoPAPageBase *page )
 void KPrViewModeSlidesSorter::updateToActivePageIndex()
 {
     int row = m_view->kopaDocument()->pageIndex(m_view->activePage());
-    QModelIndex index = m_documentModel->index(row, 0);
+    QModelIndex index = m_documentModel->index(row, 0, QModelIndex());
     m_slidesSorter->setCurrentIndex(index);
 }
 
@@ -246,7 +251,7 @@ void KPrViewModeSlidesSorter::populate()
     m_slidesSorter->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     m_slidesSorter->setDragDropMode(QAbstractItemView::InternalMove);
-    QModelIndex item = m_documentModel->index(0,0);
+    QModelIndex item = m_documentModel->index(0, 0, QModelIndex());
     m_slidesSorter->setItemSize (m_slidesSorter->visualRect(item));
 }
 
@@ -397,7 +402,7 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
     m_slidesSorter->setIconSize(iconSize());
 
     //update item size
-    QModelIndex item = m_documentModel->index(0,0);
+    QModelIndex item = m_documentModel->index(0, 0, QModelIndex());
     m_slidesSorter->setItemSize(m_slidesSorter->visualRect(item));
 
     setZoom(qRound(zoom * 100.));

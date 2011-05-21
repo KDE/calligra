@@ -49,6 +49,22 @@ void KPrSlidesSorterDocumentModel::setDocument(KoPADocument *document)
     reset();
 }
 
+QModelIndex KPrSlidesSorterDocumentModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if( !m_document )
+        return QModelIndex();
+
+    // check if parent is root node
+    if(!parent.isValid())
+    {
+        if( row >= 0 && row < m_document->pages(false).count() )
+            return createIndex(row, column, m_document->pages(false).at(row));
+        else
+            return QModelIndex();
+    }
+    return QModelIndex();
+}
+
 QVariant KPrSlidesSorterDocumentModel::data(const QModelIndex &index, int role) const
 {
     if (! index.isValid() || !m_document) {
