@@ -62,8 +62,8 @@ public:
      *   absolute coord. reset the world transfomation Matrix (by default)
      *   relative coord. use the existing world transfomation Matrix
      */
-    bool play(QPaintDevice& target, bool relativeCoord = false);
-    bool play(QPainter &painter, bool relativeCoord = false);
+    bool play(QPaintDevice& target);
+    bool play(QPainter &painter);
 
 
 private:

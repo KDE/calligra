@@ -41,7 +41,7 @@ WmfPainterBackend::WmfPainterBackend()
 }
 
 
-bool WmfPainterBackend::play(QPaintDevice& target, bool relativeCoord)
+bool WmfPainterBackend::play(QPaintDevice& target)
 {
     if (!mPainter)
         mPainter = new QPainter(&target);
@@ -49,7 +49,6 @@ bool WmfPainterBackend::play(QPaintDevice& target, bool relativeCoord)
 
     if (mPainter->isActive()) return false;
     mTarget = &target;
-    mRelativeCoord = relativeCoord;
 
     // Play the wmf file
     mSaveCount = 0;
@@ -61,7 +60,7 @@ bool WmfPainterBackend::play(QPaintDevice& target, bool relativeCoord)
     return ret;
 }
 
-bool WmfPainterBackend::play(QPainter &painter, bool relativeCoord)
+bool WmfPainterBackend::play(QPainter &painter)
 {
     // If there is already a painter and it's owned by us, then delete it.
     if (mPainter && mIsInternalPainter)
@@ -72,7 +71,6 @@ bool WmfPainterBackend::play(QPainter &painter, bool relativeCoord)
     mPainter = &painter;
 
     mTarget = mPainter->device();
-    mRelativeCoord = relativeCoord;
 
     // Play the wmf file
     mSaveCount = 0;
