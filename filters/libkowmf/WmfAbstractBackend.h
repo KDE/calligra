@@ -26,7 +26,6 @@
 #include <QtGui/QRegion>
 #include <QtGui/QPainter>
 
-class WmfParser;
 class QString;
 class QPen;
 class QBrush;
@@ -34,6 +33,14 @@ class QFont;
 class QColor;
 class QImage;
 class QMatrix;
+
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+class WmfParser;
 
 /**
  * WmfAbstractBackend allows the redirection of the actions stored in a WMF file.
@@ -154,6 +161,8 @@ public:
 private:
     WmfParser  *m_parser;
 };
+
+}
 
 #endif
 

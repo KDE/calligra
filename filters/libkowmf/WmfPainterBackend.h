@@ -30,6 +30,12 @@ class QPolygon;
 
 #define DEBUG_WMFPAINT 0
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
 
 /**
  * WmfPainterBackend inherits the abstract class WmfAbstractbackend
@@ -160,5 +166,8 @@ protected:
     
     int mSaveCount; //number of times Save() was called without Restore()
 };
+
+
+}
 
 #endif

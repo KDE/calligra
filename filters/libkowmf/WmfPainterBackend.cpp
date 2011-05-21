@@ -29,6 +29,13 @@
 #include "WmfEnums.h"
 
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
 WmfPainterBackend::WmfPainterBackend()
     : WmfAbstractBackend()
     , mTextPen()
@@ -757,4 +764,7 @@ void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, cons
     }
 
     mPainter->restore();
+}
+
+
 }

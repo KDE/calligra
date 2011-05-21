@@ -23,6 +23,13 @@
 #define WMFENUMS_H
 
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
 // ----------------------------------------------------------------
 //                             Enums
 
@@ -738,5 +745,7 @@ typedef enum {
 #define VTA_LEFT     0x0008
 #define VTA_BASELINE 0x0018
 
+
+}
 
 #endif  // KOWMFENUMS_H

@@ -64,7 +64,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
         return KoFilter::WrongFormat;
 
     // open Placeable Wmf file
-    mWmf = new WmfWriter(m_chain->outputFile());
+    mWmf = new Libwmf::WmfWriter(m_chain->outputFile());
     if (!mWmf->begin()) {
         delete mWmf;
         return KoFilter::WrongFormat;

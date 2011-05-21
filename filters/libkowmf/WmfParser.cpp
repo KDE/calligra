@@ -40,6 +40,13 @@
 #define DEBUG_RECORDS 0
 
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
 WmfParser::WmfParser()
 {
     mNbrFunc = 0;
@@ -1688,3 +1695,5 @@ bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
     }
 }
 
+
+}
