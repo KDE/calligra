@@ -3,6 +3,7 @@
  * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2010 by Nokia, Matus Hanzes
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,17 +28,45 @@
 #include "KWPage.h"
 #include "KWCopyShape.h"
 #include "KWDocument.h"
-#include "KWPageBackground.h"
 #include "KWord.h"
 
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
+#include <KoShapeBackground.h>
 
 #include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>
 #include <kdebug.h>
 #include <limits.h>
+
+class KWPageBackground : public KoShape
+{
+public:
+    KWPageBackground()
+    {
+        setSelectable(false);
+    }
+    virtual ~KWPageBackground()
+    {
+    }
+    virtual void paint(QPainter &painter, const KoViewConverter &converter)
+    {
+        if (background()) {
+            applyConversion(painter, converter);
+            QPainterPath p;
+            p.addRect(QRectF(QPointF(), size()));
+            background()->paint(painter, p);
+        }
+    }
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
+    {
+        return true;
+    }
+    virtual void saveOdf(KoShapeSavingContext &) const
+    {
+    }
+};
 
 KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets)
         : m_pageManager(pageManager),
