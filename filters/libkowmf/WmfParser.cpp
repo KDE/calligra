@@ -227,8 +227,8 @@ bool WmfParser::load(const QByteArray& array)
     unsigned short checksum;
     int filePos;
 
-    QDataStream st(mBuffer);
-    st.setByteOrder(QDataStream::LittleEndian);
+    QDataStream stream(mBuffer);
+    stream.setByteOrder(QDataStream::LittleEndian);
     mStackOverflow = false;
     mLayout = LAYOUT_LTR;
     mTextAlign = 0;
@@ -255,7 +255,7 @@ bool WmfParser::load(const QByteArray& array)
 #if DEBUG_RECORDS
     kDebug(31000) << "--------------------------- Starting parsing WMF ---------------------------";
 #endif
-    st >> pheader.key;
+    stream >> pheader.key;
     if (pheader.key == (quint32)APMHEADER_KEY) {
         //----- Read placeable metafile header
         mPlaceable = true;
@@ -263,26 +263,26 @@ bool WmfParser::load(const QByteArray& array)
         kDebug(31000) << "Placeable header!  Yessss!";
 #endif
 
-        st >> pheader.handle;
-        st >> pheader.left;
-        st >> pheader.top;
-        st >> pheader.right;
-        st >> pheader.bottom;
-        st >> pheader.inch;
-        st >> pheader.reserved;
-        st >> pheader.checksum;
+        stream >> pheader.handle;
+        stream >> pheader.left;
+        stream >> pheader.top;
+        stream >> pheader.right;
+        stream >> pheader.bottom;
+        stream >> pheader.inch;
+        stream >> pheader.reserved;
+        stream >> pheader.checksum;
         checksum = calcCheckSum(&pheader);
         if (pheader.checksum != checksum) {
             kWarning() << "Checksum for placeable metafile header is incorrect ( actual checksum" << pheader.checksum << ", expected checksum" << checksum << ")";
             return false;
         }
-        st >> header.fileType;
-        st >> header.headerSize;
-        st >> header.version;
-        st >> header.fileSize;
-        st >> header.numOfObjects;
-        st >> header.maxRecordSize;
-        st >> header.numOfParameters;
+        stream >> header.fileType;
+        stream >> header.headerSize;
+        stream >> header.version;
+        stream >> header.fileSize;
+        stream >> header.numOfObjects;
+        stream >> header.maxRecordSize;
+        stream >> header.numOfParameters;
 
         mNbrObject = header.numOfObjects;
 
@@ -303,43 +303,43 @@ bool WmfParser::load(const QByteArray& array)
         mBuffer->reset();
         //----- Read as enhanced metafile header
         filePos = mBuffer->pos();
-        st >> eheader.recordType;
-        st >> eheader.recordSize;
-        st >> eheader.boundsLeft;
-        st >> eheader.boundsTop;
-        st >> eheader.boundsRight;
-        st >> eheader.boundsBottom;
-        st >> eheader.frameLeft;
-        st >> eheader.frameTop;
-        st >> eheader.frameRight;
-        st >> eheader.frameBottom;
+        stream >> eheader.recordType;
+        stream >> eheader.recordSize;
+        stream >> eheader.boundsLeft;
+        stream >> eheader.boundsTop;
+        stream >> eheader.boundsRight;
+        stream >> eheader.boundsBottom;
+        stream >> eheader.frameLeft;
+        stream >> eheader.frameTop;
+        stream >> eheader.frameRight;
+        stream >> eheader.frameBottom;
 
-        st >> eheader.signature;
+        stream >> eheader.signature;
         if (eheader.signature == ENHMETA_SIGNATURE) {
             mEnhanced = true;
-            st >> eheader.version;
-            st >> eheader.size;
-            st >> eheader.numOfRecords;
-            st >> eheader.numHandles;
-            st >> eheader.reserved;
-            st >> eheader.sizeOfDescription;
-            st >> eheader.offsetOfDescription;
-            st >> eheader.numPaletteEntries;
-            st >> eheader.widthDevicePixels;
-            st >> eheader.heightDevicePixels;
-            st >> eheader.widthDeviceMM;
-            st >> eheader.heightDeviceMM;
+            stream >> eheader.version;
+            stream >> eheader.size;
+            stream >> eheader.numOfRecords;
+            stream >> eheader.numHandles;
+            stream >> eheader.reserved;
+            stream >> eheader.sizeOfDescription;
+            stream >> eheader.offsetOfDescription;
+            stream >> eheader.numPaletteEntries;
+            stream >> eheader.widthDevicePixels;
+            stream >> eheader.heightDevicePixels;
+            stream >> eheader.widthDeviceMM;
+            stream >> eheader.heightDeviceMM;
         } else {
             //----- Read as standard metafile header
             mStandard = true;
             mBuffer->seek(filePos);
-            st >> header.fileType;
-            st >> header.headerSize;
-            st >> header.version;
-            st >> header.fileSize;
-            st >> header.numOfObjects;
-            st >> header.maxRecordSize;
-            st >> header.numOfParameters;
+            stream >> header.fileType;
+            stream >> header.headerSize;
+            stream >> header.version;
+            stream >> header.fileSize;
+            stream >> header.numOfObjects;
+            stream >> header.maxRecordSize;
+            stream >> header.numOfParameters;
             mNbrObject = header.numOfObjects;
         }
     }
@@ -356,7 +356,7 @@ bool WmfParser::load(const QByteArray& array)
     // check bounding rectangle for standard meta file
     if (mStandard && mValid) {
         // Note that this call can change mValid.
-        createBoundingBox(st);
+        createBoundingBox(stream);
 
 #if DEBUG_RECORDS
         kDebug(31000) << "bounding box created by going through all records: "
@@ -397,13 +397,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
         mObjHandleTab[ i ] = 0;
     }
 
-    quint16 numFunction;
+    quint16 recordType;
     quint32 size;
-    int  bufferOffset, j;
+    int  bufferOffset;
 
-    // buffer with functions
-    QDataStream st(mBuffer);
-    st.setByteOrder(QDataStream::LittleEndian);
+    // Create a stream from which the records will be read.
+    QDataStream stream(mBuffer);
+    stream.setByteOrder(QDataStream::LittleEndian);
 
     // Set the output strategy.
     m_backend = backend;
@@ -417,31 +417,34 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     QRect bbox(QPoint(mBBoxLeft,mBBoxTop),
                QSize(mBBoxRight - mBBoxLeft, mBBoxBottom - mBBoxTop));
     if (m_backend->begin(bbox)) {
-        // play wmf functions
+        // Play WMF functions.
         mBuffer->seek(mOffsetFirstRecord);
-        numFunction = j = 1;
+        recordType = 1;
         mWinding = false;
 
-        while ((numFunction) && (!mStackOverflow)) {
+        while ((recordType) && (!mStackOverflow)) {
+            int j = 1;
+
             bufferOffset = mBuffer->pos();
-            st >> size >> numFunction;
+            stream >> size;
+            stream >> recordType;
             
             // mapping between n function and index of table 'metaFuncTab'
             // lower 8 digits of the function => entry in the table
-            quint16 index = numFunction & 0xFF;
+            quint16 index = recordType & 0xFF;
             if (index > 0x5F) {
                 index -= 0x90;
             }
             
 #if DEBUG_RECORDS
             kDebug(31000) << "Record = " << koWmfFunc[ index ].name
-                          << " (" << hex << numFunction
+                          << " (" << hex << recordType
                           << ", index" << dec << index << ")";
 #endif
 
             if ((index > 111) || (koWmfFunc[ index ].method == 0)) {
                 // function outside WMF specification
-                kError(31000) << "BROKEN WMF file: Record number" << hex << numFunction << dec
+                kError(31000) << "BROKEN WMF file: Record number" << hex << recordType << dec
                               << " index " << index;
                 mValid = false;
                 break;
@@ -456,7 +459,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     kDebug(31000) <<  j << " :" << index << " :";
                     for (quint16 i = 0 ; i < (size - 3) ; i++) {
-                        st >> param;
+                        stream >> param;
                         kDebug(31000) <<  param << "";
                     }
                     kDebug(31000);
@@ -468,8 +471,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 j++;
             }
 
-            // Execute the function.
-            (this->*koWmfFunc[ index ].method)(size, st);
+            // Execute the function and parse the record.
+            (this->*koWmfFunc[index].method)(size, stream);
 
             mBuffer->seek(bufferOffset + (size << 1));
         }
@@ -492,7 +495,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 //-----------------------------------------------------------------------------
 
 
-void WmfParser::createBoundingBox(QDataStream &st)
+void WmfParser::createBoundingBox(QDataStream &stream)
 {
     // Check bounding rectangle for standard meta file.
     // This calculation is done in device coordinates.
@@ -502,7 +505,7 @@ void WmfParser::createBoundingBox(QDataStream &st)
     bool windowExtIsSet = false;
     bool viewportExtIsSet = false;
 
-    quint16 numFunction = 1;
+    quint16 recordType = 1;
     quint32 size;
 
     int filePos;
@@ -519,10 +522,10 @@ void WmfParser::createBoundingBox(QDataStream &st)
     qint16 viewportWidth = 0;
     qint16 viewportHeight = 0;
     bool   bboxRecalculated = false;
-    while (numFunction) {
+    while (recordType) {
 
         filePos = mBuffer->pos();
-        st >> size >> numFunction;
+        stream >> size >> recordType;
 
         if (size == 0) {
             kDebug(31000) << "WmfParser: incorrect file!";
@@ -536,10 +539,10 @@ void WmfParser::createBoundingBox(QDataStream &st)
         qint16  orgY = 0;
         qint16  extX = 0;
         qint16  extY = 0;
-        switch (numFunction &= 0xFF) {
+        switch (recordType &= 0xFF) {
         case 11: // setWindowOrg
             {
-                st >> windowOrgY >> windowOrgX;
+                stream >> windowOrgY >> windowOrgX;
 #if DEBUG_BBOX
                 kDebug(31000) << "setWindowOrg" << windowOrgX << windowOrgY;
 #endif
@@ -570,7 +573,7 @@ void WmfParser::createBoundingBox(QDataStream &st)
 
         case 12: // setWindowExt
             {
-                st >> windowHeight >> windowWidth;
+                stream >> windowHeight >> windowWidth;
                 windowExtIsSet = true;
                 bboxRecalculated = false;
 
@@ -601,7 +604,7 @@ void WmfParser::createBoundingBox(QDataStream &st)
 
         case 13: //setViewportOrg
             {
-                st >> viewportOrgY >> viewportOrgX;
+                stream >> viewportOrgY >> viewportOrgX;
                 bboxRecalculated = false;
 
 #if DEBUG_BBOX
@@ -630,7 +633,7 @@ void WmfParser::createBoundingBox(QDataStream &st)
 
         case 14: //setViewportExt
             {
-                st >> viewportHeight >> viewportWidth;
+                stream >> viewportHeight >> viewportWidth;
                 viewportExtIsSet = true;
                 bboxRecalculated = false;
 
@@ -681,7 +684,7 @@ void WmfParser::createBoundingBox(QDataStream &st)
         case 67: // stretchDib
         case 72: // extFloodFill
 #if DEBUG_BBOX
-            kDebug(31000) << "drawing record: " << (numFunction & 0xff);
+            kDebug(31000) << "drawing record: " << (recordType & 0xff);
 #endif
             doRecalculateBBox = true;
             break;
