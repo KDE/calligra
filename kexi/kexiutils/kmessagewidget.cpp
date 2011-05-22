@@ -152,6 +152,7 @@ void KMessageWidgetPrivate::createLayout()
         QToolButton* button = new QToolButton(content);
         button->setDefaultAction(action);
         button->setFocusPolicy(Qt::StrongFocus);
+        button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         buttons.append(button);
         if (defaultAction == action) {
             buttonsTabOrder.prepend(button); // default button is focused first
