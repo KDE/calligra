@@ -26,7 +26,7 @@
 class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
 {
 public:
-    KexiGUIMessageHandler(QWidget *parent = 0);
+    explicit KexiGUIMessageHandler(QWidget *parent = 0);
     virtual ~KexiGUIMessageHandler();
     virtual void showErrorMessage(const QString &title, const QString &details = QString());
     virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString());
