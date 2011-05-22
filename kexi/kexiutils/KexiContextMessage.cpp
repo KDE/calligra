@@ -157,8 +157,6 @@ void KexiContextMessageWidget::init(
     d->context = context;
     d->page = page;
     hide();
-    int row;
-    layout->getWidgetPosition(context, &row, 0);
     setText(message.text());
     setMessageType(KMessageWidget::WarningMessageType);
     setWordWrap(true);
@@ -172,7 +170,16 @@ void KexiContextMessageWidget::init(
                                                                // so 'this' is not disabled
     }
 
-    layout->insertRow(row, QString(), this);
+    if (layout) {
+        int row;
+        layout->getWidgetPosition(context, &row, 0);
+        layout->insertRow(row, QString(), this);
+    }
+    else {
+        if (d->page) {
+            setParent(page);
+        }
+    }
 
     if (d->hasActions) {
         foreach(QAction* action, message.actions()) {
