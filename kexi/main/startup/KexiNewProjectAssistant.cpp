@@ -31,7 +31,9 @@
 #include <kexiprojectset.h>
 #include <kexiprojectdata.h>
 #include <kexiguimsghandler.h>
+#include <kexitextmsghandler.h>
 #include <kexidb/utils.h>
+#include <kexidb/object.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
@@ -211,7 +213,7 @@ void KexiTemplateSelectionPage::slotItemClicked(const QModelIndex& index)
 
     //! @todo support templates
     if (selectedTemplate == "blank" && selectedCategory == "blank") {
-        emit next(this);
+        next();
         return;
     }
     KEXI_UNFINISHED(i18n("Templates"));
@@ -247,7 +249,7 @@ KexiProjectStorageTypeSelectionPage::~KexiProjectStorageTypeSelectionPage()
 void KexiProjectStorageTypeSelectionPage::buttonClicked()
 {
     m_fileTypeSelected = sender() == btn_file;
-    emit next(this);
+    next();
 }
 
 // ----
@@ -399,16 +401,18 @@ KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
 
 // ----
 
-KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(QWidget* parent)
+KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
+    KexiNewProjectAssistant* parent)
  : KexiAssistantPage(i18n("Project Title & Database Name"),
                   i18n("Enter title for the new project. "
                        "Database name will created automatically based on the title. "
                        "You can change the database name too."),
                   parent)
+ , m_assistant(parent)
 {
     m_projectDataToOverwrite = 0;
     m_messageWidgetActionYes = 0;
-    m_messageWidgetActionNo = 0;
+    m_messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), this);
     setBackButtonVisible(true);
     setNextButtonVisible(true);
     setNextButtonText(i18n("Create"));
@@ -458,7 +462,7 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData*
         m_projectSelector->setProjectSet(0);
         conndataToShow = 0;
         if (data) {
-            m_projectSetToShow = new KexiProjectSet(*data, m_msgHandler);
+            m_projectSetToShow = new KexiProjectSet(*data, m_assistant);
             if (m_projectSetToShow->error()) {
                 delete m_projectSetToShow;
                 m_projectSetToShow = 0;
@@ -536,9 +540,8 @@ bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
                                                             this);
                 connect(m_messageWidgetActionYes, SIGNAL(triggered()),
                         this, SLOT(overwriteActionTriggered()));
-                m_messageWidgetActionNo = new QAction(
-                    KStandardGuiItem::no().text(), this);
             }
+            m_messageWidgetActionNo->setText(KStandardGuiItem::no().text());
             message.addAction(m_messageWidgetActionYes);
             message.setDefaultAction(m_messageWidgetActionNo);
             message.addAction(m_messageWidgetActionNo);
@@ -546,8 +549,6 @@ bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
                 this, contents->formLayout,
                 contents->le_dbname, message);
             messageWidget->setNextFocusWidget(contents->le_title);
-//            connect(messageWidgetActionNo, SIGNAL(triggered()),
-//                    messageWidget, SLOT(animatedHide()));
             return false;
         }
     }
@@ -590,13 +591,13 @@ public:
         return page<KexiProjectConnectionSelectionPage>(&m_projectConnectionSelectionPage);
     }
     KexiProjectDatabaseNameSelectionPage* projectDatabaseNameSelectionPage() {
-        return page<KexiProjectDatabaseNameSelectionPage>(&m_projectDatabaseNameSelectionPage);
+        return page<KexiProjectDatabaseNameSelectionPage>(&m_projectDatabaseNameSelectionPage, q);
     }
     
     template <class C>
-    C* page(QPointer<C>* p) {
+    C* page(QPointer<C>* p, KexiNewProjectAssistant *parent = 0) {
         if (p->isNull()) {
-            *p = new C;
+            *p = new C(parent);
             q->addPage(*p);
         }
         return *p;
@@ -608,6 +609,11 @@ public:
     QPointer<KexiProjectCreationPage> m_projectCreationPage;
     QPointer<KexiProjectConnectionSelectionPage> m_projectConnectionSelectionPage;
     QPointer<KexiProjectDatabaseNameSelectionPage> m_projectDatabaseNameSelectionPage;
+    
+    QAction* messageWidgetActionNo;
+    QAction* messageWidgetActionTryAgain;
+    QPointer<KexiContextMessageWidget> messageWidget;
+
     KexiNewProjectAssistant *q;
 };
 
@@ -617,6 +623,8 @@ KexiNewProjectAssistant::KexiNewProjectAssistant(QWidget* parent)
  : KexiAssistantWidget(parent)
  , d(new Private(this))
 {
+    d->messageWidgetActionNo = 0;
+    d->messageWidgetActionTryAgain = 0;
     setCurrentPage(d->templateSelectionPage());
     setFocusProxy(d->templateSelectionPage());
 }
@@ -697,6 +705,52 @@ void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
     //TODO?
+}
+
+void KexiNewProjectAssistant::showErrorMessage(
+    const QString &title, const QString &details)
+{
+}
+
+void KexiNewProjectAssistant::showErrorMessage(
+    KexiDB::Object *obj, const QString& msg)
+{
+    QString _msg, _details;
+    if (!obj) {
+        showErrorMessage(_msg);
+        return;
+    }
+    //QString _details(details);
+    KexiTextMessageHandler textHandler(_msg, _details);
+    textHandler.showErrorMessage(obj, msg);
+    //KexiDB::getHTMLErrorMesage(obj, _msg, _details);
+    //showErrorMessage(_msg, _details);
+
+    KexiContextMessage message(_msg); 
+    //! @todo + _details
+    if (!d->messageWidgetActionTryAgain) {
+        d->messageWidgetActionTryAgain = new QAction(
+            KIcon("view-refresh"), i18n("Try Again"), this);
+        connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
+                this, SLOT(tryAgainActionTriggered()));
+    }
+    if (!d->messageWidgetActionNo) {
+        d->messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), this);
+    }
+    d->messageWidgetActionNo->setText(KStandardGuiItem::cancel().text());
+    message.addAction(d->messageWidgetActionTryAgain);
+    message.setDefaultAction(d->messageWidgetActionNo);
+    message.addAction(d->messageWidgetActionNo);
+    delete d->messageWidget;
+    d->messageWidget = new KexiContextMessageWidget(
+        this, 0 /*contents->formLayout*/,
+        0/*contents->le_dbname*/, message);
+    //d->messageWidget->setNextFocusWidget(contents->le_title);
+}
+
+void KexiNewProjectAssistant::tryAgainActionTriggered()
+{
+    d->m_projectConnectionSelectionPage->next();
 }
 
 #include "KexiNewProjectAssistant.moc"

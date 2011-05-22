@@ -23,6 +23,7 @@
 #include "kexidbconnectionset.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <kexidb/connectiondata.h>
+#include <kexidb/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
@@ -48,7 +49,8 @@ public:
     QString selectedCategory;
 };
 
-class KexiProjectStorageTypeSelectionPage : public KexiAssistantPage, public Ui::KexiProjectStorageTypeSelectionPage
+class KexiProjectStorageTypeSelectionPage : public KexiAssistantPage,
+                                            public Ui::KexiProjectStorageTypeSelectionPage
 {
     Q_OBJECT
 public:
@@ -112,11 +114,13 @@ class KexiGUIMessageHandler;
 class KexiProjectData;
 class KexiProjectSet;
 class KexiProjectSelectorWidget;
+class KexiNewProjectAssistant;
 class KexiProjectDatabaseNameSelectionPage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiProjectDatabaseNameSelectionPage(QWidget* parent = 0);
+    explicit KexiProjectDatabaseNameSelectionPage(
+        KexiNewProjectAssistant* parent);
     virtual ~KexiProjectDatabaseNameSelectionPage();
 
     bool setConnection(KexiDB::ConnectionData* data);
@@ -125,6 +129,7 @@ public:
     QPointer<KexiDB::ConnectionData> conndataToShow;
     QPointer<KexiContextMessageWidget> messageWidget;
     bool isAcceptable();
+
 private slots:
     void slotTitleChanged(const QString &capt);
     void slotNameChanged(const QString &);
@@ -132,6 +137,7 @@ private slots:
 
 private:
     QString enteredDbName() const;
+    KexiNewProjectAssistant* m_assistant;
     KexiGUIMessageHandler* m_msgHandler;
     KexiProjectSet *m_projectSetToShow;
     KexiProjectSelectorWidget* m_projectSelector;
@@ -145,16 +151,26 @@ private:
 
 class KexiProjectData;
 
-class KexiNewProjectAssistant : public KexiAssistantWidget
+class KexiNewProjectAssistant : public KexiAssistantWidget,
+                                public KexiDB::MessageHandler
 {
     Q_OBJECT
 public:
     explicit KexiNewProjectAssistant(QWidget* parent = 0);
     ~KexiNewProjectAssistant();
+
+    //! Implementation for KexiDB::MessageHandler.
+    virtual void showErrorMessage(const QString &title,
+                                  const QString &details = QString());
+
+    //! Implementation for KexiDB::MessageHandler.
+    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString());
+
 public slots:
     virtual void previousPageRequested(KexiAssistantPage* page);
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
+    void tryAgainActionTriggered();
 signals:
     void createProject(KexiProjectData* data);
 private:
