@@ -221,8 +221,8 @@ bool WmfParser::load(const QByteArray& array)
     mBuffer->open(QIODevice::ReadOnly);
 
     // read and check the header
-    WmfEnhMetaHeader eheader;
-    WmfMetaHeader header;
+    WmfMetaHeader      header;
+    WmfEnhMetaHeader   eheader;
     WmfPlaceableHeader pheader; // Contains a bounding box
     unsigned short checksum;
     int filePos;
@@ -413,10 +413,6 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     mWindowLeft   = 0;
     mWindowWidth  = 1;
     mWindowHeight = 1;
-    mViewportTop    = 0;
-    mViewportLeft   = 0;
-    mViewportWidth  = 1;
-    mViewportHeight = 1;
 
     if (m_backend->begin()) {
         // play wmf functions
@@ -824,8 +820,6 @@ void WmfParser::setViewportOrg(quint32, QDataStream& stream)
 
     stream >> top >> left;
     m_backend->setViewportOrg(left, top);
-    mViewportLeft = left;
-    mViewportTop = top;
 
 #if DEBUG_RECORDS
     kDebug(31000) <<"Org: (" << left <<","  << top <<")";
@@ -846,8 +840,6 @@ void WmfParser::setViewportExt(quint32, QDataStream& stream)
 #endif
 
     m_backend->setViewportExt(width, height);
-    mViewportWidth  = width;
-    mViewportHeight = height;
 }
 
 

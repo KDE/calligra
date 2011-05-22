@@ -57,10 +57,10 @@ public:
     bool load(const QByteArray& array);
 
     /**
-     * Plays a metafile in @p readKwmf and returns true on success.
-     * To draw on a device you have to inherit the class ReadKwmf
+     * Plays a metafile using @p backend as backend and returns true on success.
+     * To draw on a device you have to inherit the class WmfAbstractBackend.
      */
-    bool play(WmfAbstractBackend* readKwmf);
+    bool play(WmfAbstractBackend* backend);
 
 
     /* Metafile painter methods */
