@@ -414,7 +414,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     mWindowWidth  = 1;
     mWindowHeight = 1;
 
-    if (m_backend->begin()) {
+    QRect bbox(QPoint(mBBoxLeft,mBBoxTop),
+               QSize(mBBoxRight - mBBoxLeft, mBBoxBottom - mBBoxTop));
+    if (m_backend->begin(bbox)) {
         // play wmf functions
         mBuffer->seek(mOffsetFirstRecord);
         numFunction = j = 1;
@@ -472,6 +474,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             mBuffer->seek(bufferOffset + (size << 1));
         }
 
+        // Let the backend clean up it's internal state.
         m_backend->end();
     }
 

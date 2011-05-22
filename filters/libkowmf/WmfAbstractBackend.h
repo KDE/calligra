@@ -17,6 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
 #ifndef _WMFABSTRACTBACKEND_H_
 #define _WMFABSTRACTBACKEND_H_
 
@@ -34,13 +35,17 @@ class QColor;
 class QImage;
 class QMatrix;
 
+
 /**
    Namespace for Windows Metafile (WMF) classes
 */
 namespace Libwmf
 {
 
+
 class WmfParser;
+class WmfDeviceContext;
+
 
 /**
  * WmfAbstractBackend allows the redirection of the actions stored in a WMF file.
@@ -101,7 +106,7 @@ public:
     // -------------------------------------------------------------------------
     // A virtual QPainter : inherit those virtuals functions
     // for a good documentation : check QPainter documentation
-    virtual bool  begin() = 0;
+    virtual bool  begin(const QRect &boundingBox) = 0;
     virtual bool  end() = 0;
     virtual void  save() = 0;
     virtual void  restore() = 0;
@@ -158,7 +163,7 @@ public:
     // matrix transformation : only used for bitmap manipulation
     virtual void  setMatrix(const QMatrix &, bool combine = false) = 0;
 
-private:
+protected:
     WmfParser  *m_parser;
 };
 

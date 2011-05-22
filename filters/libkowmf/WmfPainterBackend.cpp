@@ -27,6 +27,7 @@
 #include <kdebug.h>
 
 #include "WmfEnums.h"
+#include "WmfParser.h"
 
 
 /**
@@ -36,18 +37,23 @@ namespace Libwmf
 {
 
 
-WmfPainterBackend::WmfPainterBackend()
+WmfPainterBackend::WmfPainterBackend(QPainter *painter, const QSizeF &outputSize)
     : WmfAbstractBackend()
+    , mPainter(painter)
+    , mOutputSize(outputSize)
     , mTextPen()
     , mSaveCount(0)
 {
-    mTarget = 0;
+    mTarget = painter->device();
     mIsInternalPainter = false;
-    mPainter = 0;
     mWorldTransform = QTransform();
 }
 
+WmfPainterBackend::~WmfPainterBackend()
+{
+}
 
+#if 0
 bool WmfPainterBackend::play(QPaintDevice& target)
 {
     if (!mPainter)
@@ -66,26 +72,19 @@ bool WmfPainterBackend::play(QPaintDevice& target)
         restore();
     return ret;
 }
+#endif
 
-bool WmfPainterBackend::play(QPainter &painter)
+bool WmfPainterBackend::play()
 {
     // If there is already a painter and it's owned by us, then delete it.
     if (mPainter && mIsInternalPainter)
         delete mPainter;
 
-    // Set the new painter
-    mIsInternalPainter = false;
-    mPainter = &painter;
-
     mTarget = mPainter->device();
 
     // Play the wmf file
-    mSaveCount = 0;
-    bool ret = WmfAbstractBackend::play();
+    bool ret = m_parser->play(this);
 
-    // Make sure that the painter is in the same state as before calling play above().
-    for (; mSaveCount > 0; mSaveCount--)
-        restore();
     return ret;
 }
 
@@ -94,7 +93,7 @@ bool WmfPainterBackend::play(QPainter &painter)
 // Virtual Painter
 
 
-bool WmfPainterBackend::begin()
+bool WmfPainterBackend::begin(const QRect &boundingBox)
 {
     // If the painter is our own, we have to call begin() on it.
     // If it's external, we assume that it's already done for us.
@@ -119,12 +118,30 @@ bool WmfPainterBackend::begin()
                   << "Background: " << mPainter->background() << " " << mPainter->backgroundMode();
 #endif
 
+    qreal  scaleX = mOutputSize.width()  / boundingBox.width();
+    qreal  scaleY = mOutputSize.height() / boundingBox.height();
+
+    // Transform the WMF object so that it fits in the shape as much
+    // as possible.  The topleft will be the top left of the shape.
+    mPainter->scale( scaleX, scaleY );
+
+    mOutputTransform = mPainter->transform();
+
+    mPainter->setRenderHint(QPainter::Antialiasing);
+    mPainter->setRenderHint(QPainter::TextAntialiasing);
+
+    mSaveCount = 0;
+
     return true;
 }
 
 
 bool WmfPainterBackend::end()
 {
+    // Make sure that the painter is in the same state as before calling play above().
+    for (; mSaveCount > 0; mSaveCount--)
+        restore();
+
     bool ret = true;
     if (mIsInternalPainter)
         ret = mPainter->end();

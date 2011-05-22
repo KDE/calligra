@@ -49,7 +49,7 @@ public:
 private:
     // -------------------------------------------------------------------------
     // A virtual QPainter
-    bool  begin();
+    bool  begin(const QRect &boundingBox);
     bool  end();
     void  save();
     void  restore();
