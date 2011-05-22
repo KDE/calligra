@@ -20,6 +20,13 @@
 #include "WmfStack.h"
 #include "WmfAbstractBackend.h"
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
 void KoWmfBrushHandle::apply(WmfAbstractBackend *p)
 {
     p->setBrush(brush);
@@ -40,3 +47,4 @@ void KoWmfFontHandle::apply(WmfAbstractBackend *p)
     p->setFont(font, rotation, height);
 }
 
+}

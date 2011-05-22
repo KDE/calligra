@@ -15,10 +15,11 @@ CMakeLists.txt file.
 3. The third parser is also a generic one that uses callbacks. This
    API has several implementations, including one using a QPainter
    like the first one, and one that only outputs debuginfo.  This
-   parser consists of all the kowmf* files.
+   parser consists of all the Wmf* files.
 
-This parser is included in the kowmf library, also created by
-CMakeLists.txt. 
+This parser is included in the libwmf library, also created by
+CMakeLists.txt.  It is also the most advanced one, and the one that is
+used in the filters and in the vector shape.
 
 
 Files
@@ -35,23 +36,23 @@ kwmf.{h,cc]     "a generic parser for WMFs.  The output is a series of callbacks
                 Not used anywhere.
 
 
-WmfEnums.h      Most of the enums defined in the [MS-EMF].pdf documentation
-WmfStruct.h     A number of structs used in the wmf file.  Seems
-                similar to wmfstruct.h
-kowmfstack.{h,cc}
+---------------- The actively maintained parser ----------------
+
+WmfEnums.h      Most of the enums defined in the [MS-WMF].pdf documentation
+WmfStruct.h     A number of structs used in the WMF file.
+WmfStack.{h,cpp}
                 "WMF file allows manipulation on a stack of object.
                 It's possible to create, delete or select an object."
-kowmfread.{h,cc}
+WmfParser.{h,cpp}
+                Contains a parser for WMF. This parser will call
+                functions in the backend to perform actions.
+WmfAbstractBackend.{h,cpp}
                 Abstract base class of the callback interface.
                 Also contains some implemented methods.
-kowmfreadprivate.{h,cc}
-                Private class for kowmfread. Contains the actual implementation.
-kowmfpaint.{h,cc}
-                Implementation of the kowmfread interface using a QPainter.
-kowmfwrite.{h,cc}
-                Implementation of a writer for placeable WMF's using
-                the same interface as the callback interface to the
-                parser.  Probably (although I haven't checked), this
-                makes it possible to create a new WMF using kowmfwrite
-                as a backend to kowmfread.
-                
+WmfPainterBackend.{h,cpp}
+                Implementation of the WmfAbstractBackend interface using a QPainter.
+WmfWriter.{h,cpp}
+
+                Implementation of a writer for WMF's using the same
+                interface as the callback interface to the parser.
+                This makes it possible to create a new WMF file.

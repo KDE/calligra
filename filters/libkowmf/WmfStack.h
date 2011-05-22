@@ -25,7 +25,14 @@
 #include <QBrush>
 #include <QPixmap>
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
 class WmfAbstractBackend;
+
 
 /**
  * WMF file allows manipulation on a stack of object.
@@ -68,5 +75,8 @@ public:
     int rotation;
     int height;                 // Can be negative. In 'font' above, we store the absolute value.
 };
+
+
+}
 
 #endif

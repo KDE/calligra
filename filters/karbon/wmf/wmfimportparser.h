@@ -33,7 +33,7 @@ class KarbonDocument;
  *
  */
 
-class WMFImportParser : public WmfAbstractBackend
+class WMFImportParser : public Libwmf::WmfAbstractBackend
 {
 public:
     WMFImportParser();

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2010 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2010-11 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +23,20 @@
 #define WMFENUMS_H
 
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
 // ----------------------------------------------------------------
 //                             Enums
 
 
 // MS-WMF 2.1.1.2 Binary RasterOperation Enumeration
 
-typedef enum {
+enum WmfBinaryRasterOperation {
     R2_BLACK       = 0x0001,
     R2_NOTMERGEPEN = 0x0002,
     R2_MASKNOTPEN  = 0x0003,
@@ -46,15 +53,17 @@ typedef enum {
     R2_MERGEPENNOT = 0x000E,
     R2_MERGEPEN    = 0x000F,
     R2_WHITE       = 0x0010
-} WmfBinaryRasterOperation;
+};
 
 
-// MS-WMF 2.1.1.3 BitCount Enumeration
-//
-// The BitCount Enumeration specifies the number of bits that define
-// each pixel and the maximum number of colors in a device-independent
-// bitmap (DIB).
-typedef enum {
+/**
+   WMF 2.1.1.3 BitCount Enumeration
+
+   The BitCount Enumeration specifies the number of bits that define
+   each pixel and the maximum number of colors in a device-independent
+   bitmap (DIB).
+*/
+enum WmfBitCount {
     BI_BITCOUNT_0 = 0x0000,
     BI_BITCOUNT_1 = 0x0001,
     BI_BITCOUNT_2 = 0x0004,
@@ -62,16 +71,18 @@ typedef enum {
     BI_BITCOUNT_4 = 0x0010,
     BI_BITCOUNT_5 = 0x0018,
     BI_BITCOUNT_6 = 0x0020
-} WmfBitCount;
+};
 
 
-// MS-WMF 2.1.1.4 BrushStyle Enumeration
-//
-// The BrushStyle Enumeration specifies the different possible brush
-// types that can be used in graphics operations. For more
-// information, see the specification of the Brush Object (section 2.2.1.1).
+/**
+   MS-WMF 2.1.1.4 BrushStyle Enumeration
 
-typedef enum {
+   The BrushStyle Enumeration specifies the different possible brush
+   types that can be used in graphics operations. For more
+   information, see the specification of the Brush Object (section 2.2.1.1).
+*/
+
+enum WmfBrushStyle {
     BS_SOLID         = 0x0000,
     BS_NULL          = 0x0001,
     BS_HATCHED       = 0x0002,
@@ -82,15 +93,17 @@ typedef enum {
     BS_PATTERN8X8    = 0x0007,
     BS_DIBPATTERN8X8 = 0x0008,
     BS_MONOPATTERN   = 0x0009
-} WmfBrushStyle;
+};
 
 
-// MS-WMF 2.1.1.5 CharacterSet Enumeration
-//
-// The CharacterSet Enumeration defines the possible sets of character
-// glyphs that are defined in fonts for graphics output.
+/**
+   MS-WMF 2.1.1.5 CharacterSet Enumeration
 
-typedef enum {
+   The CharacterSet Enumeration defines the possible sets of character
+   glyphs that are defined in fonts for graphics output.
+*/
+
+enum WmfCharacterSet {
     ANSI_CHARSET        = 0x00000000,
     DEFAULT_CHARSET     = 0x00000001,
     SYMBOL_CHARSET      = 0x00000002,
@@ -110,27 +123,31 @@ typedef enum {
     THAI_CHARSET        = 0x000000DE,
     EASTEUROPE_CHARSET  = 0x000000EE,
     OEM_CHARSET         = 0x000000FF
-} WmfCharacterSet;
+};
 
 
-// MS-WMF 2.1.1.6 ColorUsage Enumeration
-//
-// The ColorUsage Enumeration specifies whether a color table exists
-// in a device -independent bitmap (DIB) and how to interpret its values.
+/**
+   MS-WMF 2.1.1.6 ColorUsage Enumeration
 
-typedef enum {
+   The ColorUsage Enumeration specifies whether a color table exists
+   in a device -independent bitmap (DIB) and how to interpret its values.
+*/
+
+enum WmfColorUsage {
     DIB_RGB_COLORS  = 0x0000,
     DIB_PAL_COLORS  = 0x0001,
     DIB_PAL_INDICES = 0x0002
-} WmfColorUsage;
+};
 
 
-// MS-WMF 2.1.1.7 Compression Enumeration
-//
-// The Compression Enumeration specifies the type of compression for a
-// bitmap image.
+/**
+   MS-WMF 2.1.1.7 Compression Enumeration
 
-typedef enum {
+   The Compression Enumeration specifies the type of compression for a
+   bitmap image.
+*/
+
+enum WmfCompression {
     BI_RGB       = 0x0000,
     BI_RLE8      = 0x0001,
     BI_RLE4      = 0x0002,
@@ -140,14 +157,16 @@ typedef enum {
     BI_CMYK      = 0x000B,
     BI_CMYKRLE8  = 0x000C,
     BI_CMYKRLE4  = 0x000D
-} WmfCompression;
+};
 
 
-// MS-WMF 2.1.1.8 FamilyFont Enumeration
-//
-// The FamilyFont enumeration specifies the font family. Font families
-// describe the look of a font in a general way. They are intended for
-// specifying fonts when the exact typeface desired is not available.
+/**
+   MS-WMF 2.1.1.8 FamilyFont Enumeration
+
+   The FamilyFont enumeration specifies the font family. Font families
+   describe the look of a font in a general way. They are intended for
+   specifying fonts when the exact typeface desired is not available.
+*/
 
 typedef enum {
     FF_DONTCARE   = 0x00,
@@ -159,104 +178,123 @@ typedef enum {
 } WmfFamilyFont;
 
 
-// MS-WMF 2.1.1.9 FloodFill Enumeration
-//
-// The FloodFill Enumeration specifies the type of fill operation to
-// be performed.
+/**
+   MS-WMF 2.1.1.9 FloodFill Enumeration
 
-typedef enum {
+   The FloodFill Enumeration specifies the type of fill operation to
+   be performed.
+*/
+
+enum WmfFloodFill {
     FLOODFILLBORDER  = 0x0000,
     FLOODFILLSURFACE = 0x0001
-} WmfFloodFill;
+};
 
-// MS-WMF 2.1.1.10 FontQuality Enumeration
-//
-// The FontQuality Enumeration specifies how closely the attributes of
-// the logical font should match those of the physical font when
-// rendering text.
 
-typedef enum {
+/**
+   MS-WMF 2.1.1.10 FontQuality Enumeration
+
+   The FontQuality Enumeration specifies how closely the attributes of
+   the logical font should match those of the physical font when
+   rendering text.
+*/
+
+enum WmfFontQuality {
     DEFAULT_QUALITY        = 0x00,
     DRAFT_QUALITY          = 0x01,
     PROOF_QUALITY          = 0x02,
     NONANTIALIASED_QUALITY = 0x03,
     ANTIALIASED_QUALITY    = 0x04,
     CLEARTYPE_QUALITY      = 0x05
-} WmfFontQuality;
+};
 
 
-// MS-WMF 2.1.1.11 GamutMappingInte nt Enumeration
-//
-// The GamutMappingIntent Enumeration specifies the relationship
-// between logical and physical colors.
+/*
+  MS-WMF 2.1.1.11 GamutMappingIntent Enumeration
 
-typedef enum {
+  The GamutMappingIntent Enumeration specifies the relationship
+  between logical and physical colors.
+*/
+
+enum WmfGamutMappingIntent {
     LCS_GM_ABS_COLORIMETRIC = 0x00000008,
     LCS_GM_BUSINESS         = 0x00000001,
     LCS_GM_GRAPHICS         = 0x00000002,
     LCS_GM_IMAGES           = 0x00000004
-} WmfGamutMappingIntent;
+};
 
 
-// MS-WMF 2.1.1.12 HatchStyle Enumeration
-//
-// The HatchStyle Enumeration specifies the hatch pattern.
+/**
+   MS-WMF 2.1.1.12 HatchStyle Enumeration
 
-typedef enum {
+   The HatchStyle Enumeration specifies the hatch pattern.
+*/
+
+enum WmfHatchStyle {
     HS_HORIZONTAL = 0x0000,
     HS_VERTICAL   = 0x0001,
     HS_FDIAGONAL  = 0x0002,
     HS_BDIAGONAL  = 0x0003,
     HS_CROSS      = 0x0004,
     HS_DIAGCROSS  = 0x0005
-} WmfHatchStyle;
+};
 
 
-// MS-WMF 2.1.1.13 Layout Enumeration
-//
-// The Layout Enumeration defines options for controlling the
-// direction in which text and graphics are drawn.
+/**
+   MS-WMF 2.1.1.13 Layout Enumeration
 
-typedef enum {
+   The Layout Enumeration defines options for controlling the
+   direction in which text and graphics are drawn.
+*/
+
+enum WmfLayout {
     LAYOUT_LTR = 0x0000,
     LAYOUT_RTL = 0x0001,
+    LAYOUT_BTT = 0x0002,
+    LAYOUT_VBH = 0x0004,
     LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008
-} WmfLayout;
+};
 
 
-// MS-WMF 2.1.1.14 LogicalColorSpace Enumeration
-//
-// The LogicalColorSpace Enumeration specifies the type of color space.
+/**
+   MS-WMF 2.1.1.14 LogicalColorSpace Enumeration
 
-typedef enum {
+   The LogicalColorSpace Enumeration specifies the type of color space.
+*/
+
+enum WmfLogicalColorSpace {
     LCS_CALIBRATED_RGB      = 0x00000000,
     LCS_sRGB                = 0x73524742,
     LCS_WINDOWS_COLOR_SPACE = 0x57696E20
-} WmfLogicalColorSpace;
+};
 
 
-// MS-WMF 2.1.1.15 LogicalColorSpaceV5 Enumeration
-//
-// The LogicalColorSpaceV5 Enumeration is used to specify where to
-// find color profile information for a DeviceIndependentBitmap (DIB)
-// Object (section 2.2.2.9) that has a header of type BitmapV5Header
-// Object (section 2.2.2.5).
+/**
+   MS-WMF 2.1.1.15 LogicalColorSpaceV5 Enumeration
 
-typedef enum {
+   The LogicalColorSpaceV5 Enumeration is used to specify where to
+   find color profile information for a DeviceIndependentBitmap (DIB)
+   Object (section 2.2.2.9) that has a header of type BitmapV5Header
+   Object (section 2.2.2.5).
+*/
+
+enum WmfLogicalColorSpaceV5 {
     LCS_PROFILE_LINKED   = 0x4C494E4B,
     LCS_PROFILE_EMBEDDED = 0x4D424544
-} WmfLogicalColorSpaceV5;
+};
 
 
-// MS-WMF 2.1.1.16 MapMode Enumeration
-//
-// The MapMode Enumeration defines how logical units are mapped to
-// physical units; that is, assuming that the origins in both the
-// logical and physical coordinate systems are at the same point on
-// the drawing surface, what is the physical coordinate (x',y') that
-// corresponds to logical coordinate (x,y).
+/**
+   MS-WMF 2.1.1.16 MapMode Enumeration
 
-typedef enum {
+   The MapMode Enumeration defines how logical units are mapped to
+   physical units; that is, assuming that the origins in both the
+   logical and physical coordinate systems are at the same point on
+   the drawing surface, what is the physical coordinate (x',y') that
+   corresponds to logical coordinate (x,y).
+*/
+
+enum WmfMapMode {
     MM_TEXT        = 0x0001,
     MM_LOMETRIC    = 0x0002,
     MM_HIMETRIC    = 0x0003,
@@ -265,49 +303,57 @@ typedef enum {
     MM_TWIPS       = 0x0006,
     MM_ISOTROPIC   = 0x0007,
     MM_ANISOTROPIC = 0x0008
-} WmfMapMode;
+};
 
 
-// MS-WMF 2.1.1.18 Metafile Type Enumeration
-//
-// The MetafileType Enumeration specifies where the metafile is stored.
+/**
+   MS-WMF 2.1.1.18 Metafile Type Enumeration
 
-typedef enum {
+   The MetafileType Enumeration specifies where the metafile is stored.
+*/
+
+enum WmfMetafileType {
     MEMORYMETAFILE = 0x0001,
     DISKMETAFILE   = 0x0002
-} WmfMetafileType;
+};
 
 
-// MS-WMF 2.1.1.19 MetafileVersion Enumeration
-//
-// The MetafileVersion Enumeration defines values that specify support
-// for device-independent bitmaps (DIBs) in metafiles.
+/**
+   MS-WMF 2.1.1.19 MetafileVersion Enumeration
+  
+   The MetafileVersion Enumeration defines values that specify support
+   for device-independent bitmaps (DIBs) in metafiles.
+*/
 
-typedef enum {
+enum WmfMetafileVersion {
     METAVERSION100 = 0x0100,
     METAVERSION300 = 0x0300
-} WmfMetafileVersion;
+};
 
 
-// MS-WMF 2.1.1.20 MixMode Enumeration
-//
-// The MixMode Enumeration specifies the background mix mode for text,
-// hatched brushes, and other nonsolid pen styles.
+/**
+   MS-WMF 2.1.1.20 MixMode Enumeration
+  
+   The MixMode Enumeration specifies the background mix mode for text,
+   hatched brushes, and other nonsolid pen styles.
+*/
 
-typedef enum {
+enum WmfMixMode {
     TRANSPARENT = 0x0001,
     OPAQUE      = 0x0002
-} WmfMixMode;
+};
 
 
-// MS-WMF 2.1.1.21 OutPrecision Enumeration
-//
-// The OutPrecision enumeration defines values for output precision,
-// which is the requirement for the font mapper to match specific font
-// parameters, including height, width, character orientation,
-// escapement, pitch, and font type.
+/**
+   MS-WMF 2.1.1.21 OutPrecision Enumeration
+  
+   The OutPrecision enumeration defines values for output precision,
+   which is the requirement for the font mapper to match specific font
+   parameters, including height, width, character orientation,
+   escapement, pitch, and font type.
+*/
 
-typedef enum {
+enum WmfOutPrecision {
     OUT_DEFAULT_PRECIS        = 0x00000000,
     OUT_STRING_PRECIS         = 0x00000001,
     OUT_STROKE_PRECIS         = 0x00000003,
@@ -318,29 +364,33 @@ typedef enum {
     OUT_OUTLINE_PRECIS        = 0x00000008,
     OUT_SCREEN_OUTLINE_PRECIS = 0x00000009,
     OUT_PS_ONLY_PRECIS        = 0x0000000A
-} WmfOutPrecision;
+};
 
 
-// MS-WMF 2.1.1.22 PaletteEntryFlag Enumeration
-//
-// The PaletteEntryFlag Enumeration specifies how the palette entry should be used.
+/**
+   MS-WMF 2.1.1.22 PaletteEntryFlag Enumeration
+  
+   The PaletteEntryFlag Enumeration specifies how the palette entry should be used.
+*/
 
-typedef enum {
+enum WmfPaletteEntryFlag {
     PC_RESERVED   = 0x01,
     PC_EXPLICIT   = 0x02,
     PC_NOCOLLAPSE = 0x04
-} WmfPaletteEntryFlag;
+};
 
 
-// MS-WMF 2.1.1.23 Pe nStyle Enumeration
-//
-// The 16-bit PenStyle Enumeration is used to specify different types
-// of pens that can be used in graphics operations.
-//
-// Various styles can be combined by using a logical OR statement, one
-// from each subsection of Style, EndCap, Join, and Type (Cosmetic).
+/**
+   MS-WMF 2.1.1.23 Pe nStyle Enumeration
+  
+   The 16-bit PenStyle Enumeration is used to specify different types
+   of pens that can be used in graphics operations.
+  
+   Various styles can be combined by using a logical OR statement, one
+   from each subsection of Style, EndCap, Join, and Type (Cosmetic).
+*/
 
-typedef enum {
+enum WmfPenStyle {
     PS_COSMETIC      = 0x0000,
     PS_ENDCAP_ROUND  = 0x0000,
     PS_JOIN_ROUND    = 0x0000,
@@ -357,55 +407,63 @@ typedef enum {
     PS_ENDCAP_FLAT   = 0x0200,
     PS_JOIN_BEVEL    = 0x1000,
     PS_JOIN_MITER    = 0x2000
-} WmfPenStyle;
+};
 
 
-// MS-WMF 2.1.1.24 PitchFont Enumeration
-//
-// The PitchFont enumeration defines values that are used for
-// specifying characteristics of a font. The values are used to
-// indicate whether the characters in a font have a fixed or variable
-// width, or pitch.
+/**
+   MS-WMF 2.1.1.24 PitchFont Enumeration
+  
+   The PitchFont enumeration defines values that are used for
+   specifying characteristics of a font. The values are used to
+   indicate whether the characters in a font have a fixed or variable
+   width, or pitch.
+*/
 
-typedef enum {
+enum WmfPitchFont {
     DEFAULT_PITCH  = 0,
     FIXED_PITCH    = 1,
     VARIABLE_PITCH = 2
-} WmfPitchFont;
+};
 
 
-// MS-WMF 2.1.1.25 PolyFillMode Enumeration
-//
-// The PolyFillMode Enumeration specifies the method used for filling
-// a polygon.
+/*
+   MS-WMF 2.1.1.25 PolyFillMode Enumeration
+  
+   The PolyFillMode Enumeration specifies the method used for filling
+   a polygon.
+*/
 
-typedef enum {
+enum WmfPolyFillMode {
     ALTERNATE = 0x0001,
     WINDING   = 0x0002
-} WmfPolyFillMode;
+};
 
 
-// MS-WMF 2.1.1.29 StretchMode Enumeration
-//
-// The StretchMode Enumeration specifies the bitmap stretching mode,
-// which defines how the system combines rows or columns of a bitmap
-// with existing pixels.
+/**
+   MS-WMF 2.1.1.29 StretchMode Enumeration
+  
+   The StretchMode Enumeration specifies the bitmap stretching mode,
+   which defines how the system combines rows or columns of a bitmap
+   with existing pixels.
+*/
 
-typedef enum {
+enum WmfStretchMode {
     BLACKONWHITE = 0x0001,
     WHITEONBLACK = 0x0002,
     COLORONCOLOR = 0x0003,
     HALFTONE     = 0x0004
-} WmfStretchMode;
+};
 
 
-// MS-WMF 2.1.1.30 Ternary RasterOperation Enumeration
-//
-// The TernaryRasterOperation Enumeration specifies ternary raster
-// operation codes, which define how to combine the bits in a source
-// bitmap with the bits in a destination bitmap.
+/**
+   MS-WMF 2.1.1.30 Ternary RasterOperation Enumeration
+  
+   The TernaryRasterOperation Enumeration specifies ternary raster
+   operation codes, which define how to combine the bits in a source
+   bitmap with the bits in a destination bitmap.
+*/
 
-typedef enum {
+enum WmfTernaryRasterOperation {
     BLACKNESS = 0x00,
     DPSOON = 0x01,
     DPSONA = 0x02,
@@ -663,17 +721,20 @@ typedef enum {
     PSDNOO = 0xFD,
     DPSOO = 0xFE,
     WHITENESS = 0xFF
-} WmfTernaryRasterOperation;
+};
 
 
 // ----------------------------------------------------------------
 //                             Flags
 
-// MS-WMF 2.1.2.1 ClipPrecision Flags
-//
-// ClipPrecision Flags specify clipping precision, which defines how
-// to clip characters that are partially outside a clipping
-// region. These flags can be combined to specify multiple options.
+
+/**
+   MS-WMF 2.1.2.1 ClipPrecision Flags
+  
+   ClipPrecision Flags specify clipping precision, which defines how
+   to clip characters that are partially outside a clipping
+   region. These flags can be combined to specify multiple options.
+*/
 
 #define CLIP_DEFAULT_PRECIS   0x00000000
 #define CLIP_CHARACTER_PRECIS 0x00000001
@@ -684,10 +745,12 @@ typedef enum {
 #define CLIP_EMBEDDED         0x00000080
 
 
-// MS-WMF 2.1.2.2 ExtTextOutOptions Flags
-//
-// ExtTextOutOptions Flags specify various characteristics of the
-// output of text. These flags can be combined to specify multiple options.
+/**
+   MS-WMF 2.1.2.2 ExtTextOutOptions Flags
+  
+   ExtTextOutOptions Flags specify various characteristics of the
+   output of text. These flags can be combined to specify multiple options.
+*/
 
 #define ETO_OPAQUE        0x0002
 #define ETO_CLIPPED       0x0004
@@ -698,16 +761,18 @@ typedef enum {
 #define ETO_PDY           0x2000
 
 
-// MS-WMF 2.1.2.3 TextAlignmentMode Flags
-//
-// TextAlignmentMode Flags specify the relationship between a
-// reference point and a bounding rectangle, for text alignment. These
-// flags can be combined to specify multiple options, with the
-// restriction that only one flag can be chosen that alters the
-// drawing position in the playback device context.
-//
-// Horizontal text alignment is performed when the font has a
-// horizontal default baseline.
+/**
+   MS-WMF 2.1.2.3 TextAlignmentMode Flags
+  
+   TextAlignmentMode Flags specify the relationship between a
+   reference point and a bounding rectangle, for text alignment. These
+   flags can be combined to specify multiple options, with the
+   restriction that only one flag can be chosen that alters the
+   drawing position in the playback device context.
+  
+   Horizontal text alignment is performed when the font has a
+   horizontal default baseline.
+*/
 
 #define TA_NOUPDATECP 0x0000  /// Do not update Current Point (default)
 #define TA_LEFT       0x0000  /// The reference point is on the left edge of the bounding rectangle
@@ -718,6 +783,11 @@ typedef enum {
 #define TA_BOTTOM     0x0008  /// The reference point is on the bottom edge of the bounding rectangle 
 #define TA_BASELINE   0x0018  /// The reference point is on the baseline
 #define TA_RTLREADING 0x0100  /// The text is laid out in Right-to-Left direction. 
+
+// Some useful masks, not part of the specification:
+#define TA_HORZMASK 0x0006
+#define TA_VERTMASK 0x0018
+
 
 
 // MS-WMF 2.1.2.4 VerticalTextAlignmentMode Flags
@@ -738,5 +808,7 @@ typedef enum {
 #define VTA_LEFT     0x0008
 #define VTA_BASELINE 0x0018
 
+
+}
 
 #endif  // KOWMFENUMS_H

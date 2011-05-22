@@ -29,6 +29,13 @@
 #include "WmfEnums.h"
 
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
 WmfPainterBackend::WmfPainterBackend()
     : WmfAbstractBackend()
     , mTextPen()
@@ -41,7 +48,7 @@ WmfPainterBackend::WmfPainterBackend()
 }
 
 
-bool WmfPainterBackend::play(QPaintDevice& target, bool relativeCoord)
+bool WmfPainterBackend::play(QPaintDevice& target)
 {
     if (!mPainter)
         mPainter = new QPainter(&target);
@@ -49,21 +56,20 @@ bool WmfPainterBackend::play(QPaintDevice& target, bool relativeCoord)
 
     if (mPainter->isActive()) return false;
     mTarget = &target;
-    mRelativeCoord = relativeCoord;
 
     // Play the wmf file
     mSaveCount = 0;
     bool ret = WmfAbstractBackend::play();
 
-    // Make sure that the painter is in the same state as before KoWmfRead::play()
+    // Make sure that the painter is in the same state as before WmfParser::play()
     for (; mSaveCount > 0; mSaveCount--)
         restore();
     return ret;
 }
 
-bool WmfPainterBackend::play(QPainter &painter, bool relativeCoord)
+bool WmfPainterBackend::play(QPainter &painter)
 {
-    // If there is already a painter and it's owned by us, then delete i
+    // If there is already a painter and it's owned by us, then delete it.
     if (mPainter && mIsInternalPainter)
         delete mPainter;
 
@@ -72,13 +78,12 @@ bool WmfPainterBackend::play(QPainter &painter, bool relativeCoord)
     mPainter = &painter;
 
     mTarget = mPainter->device();
-    mRelativeCoord = relativeCoord;
 
     // Play the wmf file
     mSaveCount = 0;
     bool ret = WmfAbstractBackend::play();
 
-    // Make sure that the painter is in the same state as before KoWmfRead::play()
+    // Make sure that the painter is in the same state as before calling play above().
     for (; mSaveCount > 0; mSaveCount--)
         restore();
     return ret;
@@ -87,6 +92,7 @@ bool WmfPainterBackend::play(QPainter &painter, bool relativeCoord)
 
 //-----------------------------------------------------------------------------
 // Virtual Painter
+
 
 bool WmfPainterBackend::begin()
 {
@@ -232,15 +238,7 @@ void WmfPainterBackend::setBackgroundColor(const QColor &c)
 #if DEBUG_WMFPAINT
     kDebug(31000) << c;
 #endif
-    // FIXME: This needs more investigation, but it seems that the
-    //        concept of "background" in WMF is the same as the
-    //        "brush" in QPainter.
-    // Update: No, it wasn't.  I changed back now because it didn't work.  I'm leaving
-    //         the fixme and this comment to remind the next fixer that calling
-    //         setBrush() is not the solution.  I hope nothing breaks now.
-    //         The date is now 2010-01-20.  If nothing breaks in a couple of months,
-    //         all this commentry can be removed.
-    //mPainter->setBrush(QBrush(c));
+
     mPainter->setBackground(QBrush(c));
 }
 
@@ -274,12 +272,12 @@ void WmfPainterBackend::setCompositionMode(QPainter::CompositionMode mode)
 
 // General note about coordinate spaces and transforms:
 //
-// There are several coordinate spaces in use when drawing an EMF file:
-//  1. The object space, in which the objects' coordinates are expressed inside the EMF.
+// There are several coordinate spaces in use when drawing an WMF file:
+//  1. The object space, in which the objects' coordinates are expressed inside the WMF.
 //     In general there are several of these.
-//  2. The page space, which is where they end up being painted in the EMF picture.
-//     The union of these form the bounding box of the EMF.
-//  3. (possibly) the output space, where the EMF picture itself is placed
+//  2. The page space, which is where they end up being painted in the WMF picture.
+//     The union of these form the bounding box of the WMF.
+//  3. (possibly) the output space, where the WMF picture itself is placed
 //     and/or scaled, rotated, etc
 //
 // The transform between spaces 1. and 2. is called the World Transform.
@@ -766,4 +764,7 @@ void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, cons
     }
 
     mPainter->restore();
+}
+
+
 }

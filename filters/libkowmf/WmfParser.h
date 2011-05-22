@@ -34,6 +34,13 @@ class QBuffer;
 class QPolygon;
 
 /**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
+/**
  * WmfParser allows to read WMF files
  *
  */
@@ -389,6 +396,8 @@ static const struct KoWmfFunc {
     { &WmfParser::createRegion, "createRegion" } // 111 0xff
 };
 
+
+}
 
 #endif
 

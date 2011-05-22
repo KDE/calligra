@@ -30,6 +30,12 @@ class QPolygon;
 
 #define DEBUG_WMFPAINT 0
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
 
 /**
  * WmfPainterBackend inherits the abstract class WmfAbstractbackend
@@ -62,8 +68,8 @@ public:
      *   absolute coord. reset the world transfomation Matrix (by default)
      *   relative coord. use the existing world transfomation Matrix
      */
-    bool play(QPaintDevice& target, bool relativeCoord = false);
-    bool play(QPainter &painter, bool relativeCoord = false);
+    bool play(QPaintDevice& target);
+    bool play(QPainter &painter);
 
 
 private:
@@ -160,5 +166,8 @@ protected:
     
     int mSaveCount; //number of times Save() was called without Restore()
 };
+
+
+}
 
 #endif
