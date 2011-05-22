@@ -36,11 +36,12 @@ KexiTextMessageHandler::~KexiTextMessageHandler()
 {
 }
 
-void
-KexiTextMessageHandler::showMessage(MessageType type,
-                                    const QString &title, const QString &details)
+void KexiTextMessageHandler::showMessage(MessageType type,
+                                         const QString &title, const QString &details,
+                                         const QString& dontShowAgainName)
 {
     Q_UNUSED(type);
+    Q_UNUSED(dontShowAgainName);
     if (!m_enableMessages)
         return;
 
