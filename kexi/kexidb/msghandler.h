@@ -39,7 +39,7 @@ namespace KexiDB
 class KEXI_DB_EXPORT MessageTitle
 {
 public:
-    MessageTitle(KexiDB::Object* o, const QString& msg = QString());
+    explicit MessageTitle(KexiDB::Object* o, const QString& msg = QString());
     ~MessageTitle();
 
 protected:
@@ -57,7 +57,7 @@ public:
 
     /*! Constructs message handler, \a parent is a widget that will be a parent
      for displaying gui elements (e.g. message boxes). Can be 0 for non-gui usage. */
-    MessageHandler(QWidget *parent = 0);
+    explicit MessageHandler(QWidget *parent = 0);
     virtual ~MessageHandler();
 
     /*! This method can be used to block/unblock messages.
@@ -81,7 +81,7 @@ public:
     /*! Interactively asks a question. For GUI version, KMessageBox class is used.
      See KMessageBox documentation for explanation of the parameters.
      \a defaultResult is returned in case when no message handler is installed.
-     \a message should be i18n's string.
+     \a message should be i18n'd string.
      Value from KMessageBox::ButtonCode enum is returned.
      Reimplement this. This implementation does nothing, just returns \a defaultResult. */
     virtual int askQuestion(const QString& message,
