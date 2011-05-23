@@ -189,7 +189,7 @@ else kDebug(32001) << "Nooooo FooterTextFrame";
             KoShape * shape = createTextShape(page);
             shape->setPosition(QPoint(c * colwidth, page.offsetInDocument()));
             shape->setSize(QSizeF(colwidth, colheight));
-            new KWFrame(shape, fs, page.pageNumber());
+            new KWFrame(shape, fs);
         }
     }
 #if 0
@@ -877,7 +877,7 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
         KoShape *shape = createTextShape(page);
         shape->setPosition(QPointF(0, page.offsetInDocument()));
         shape->setSize(QSize(20, 10));
-        KWFrame *frame = new KWFrame(shape, tfs, page.pageNumber());
+        KWFrame *frame = new KWFrame(shape, tfs);
         return frame;
     }
 
@@ -894,7 +894,7 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
 
     KWCopyShape *shape = new KWCopyShape(orig, m_pageManager);
     shape->setPosition(QPointF(0, page.offsetInDocument()));
-    KWFrame *frame = new KWFrame(shape, fs, page.pageNumber());
+    KWFrame *frame = new KWFrame(shape, fs);
     return frame;
 }
 
