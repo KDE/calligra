@@ -514,20 +514,21 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
         }
     }
 
-
-    style.addAttribute("svg:x1", QString("%1\%").arg(x1));
-    style.addAttribute("svg:y1", QString("%1\%").arg(y1));
-    style.addAttribute("svg:x2", QString("%1\%").arg(x2));
-    style.addAttribute("svg:y2", QString("%1\%").arg(y2));
-
     QBuffer writerBuffer;
     writerBuffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&writerBuffer);
 
+    qreal fillOpacity = toQReal(ds.fillOpacity());
+    qreal fillBackOpacity = toQReal(ds.fillBackOpacity());
     // if fillShadeColors() is not empty use the colors and points defined inside
     // if it is empty use the colors defined inside fillColor() and fillBackColor
 
     if (ds.fillShadeColors()) {
+        style.addAttribute("svg:x1", QString("%1\%").arg(x1));
+        style.addAttribute("svg:y1", QString("%1\%").arg(y1));
+        style.addAttribute("svg:x2", QString("%1\%").arg(x2));
+        style.addAttribute("svg:y2", QString("%1\%").arg(y2));
+
         IMsoArray a = ds.fillShadeColors_complex();
 
         QBuffer streamBuffer(&a.data);
@@ -556,78 +557,48 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
                 break;
             }
 
+            qreal offset = toQReal(fixedPoint);
             elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", QString("%1").arg(toQReal(fixedPoint)));
+            elementWriter.addAttribute("svg:offset", QString("%1").arg(offset));
             elementWriter.addAttribute("svg:stop-color", processOfficeArtCOLORREF(color, ds).name());
+            qreal opacity = ((1.0 - offset) * fillBackOpacity + offset * fillOpacity);
+            if (opacity != 1.0) {
+                elementWriter.addAttribute("svg:stop-opacity", opacity);
+            }
             elementWriter.endElement();
         }
         streamBuffer.close();
     } else {
-
         QColor fillColor = processOfficeArtCOLORREF(ds.fillColor(), ds);
         QColor backColor = processOfficeArtCOLORREF(ds.fillBackColor(), ds);
 
-        // if the angle is negative the colors are swapped
-        if (toQReal(ds.fillAngle()) >= 0) {
-            QColor tempColor = fillColor;
-            fillColor = backColor;
-            backColor = tempColor;
+        if (ds.fillFocus() == 50){
+            if (toQReal( ds.fillAngle() ) > 0){
+                qSwap(x1,x2);
+                qSwap(y1,y2);
+            }
         }
 
-        // if fillFocus() is 0 or 100 than use only two colors for gradient fill
-        // else place one of the colors at 0 and 1 position of gradient fill and the second color between them
-        int fillFocus = ds.fillFocus();
-        if (fillFocus == 100) {
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "0");
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
+        style.addAttribute("svg:x1", QString("%1\%").arg(x1));
+        style.addAttribute("svg:y1", QString("%1\%").arg(y1));
+        style.addAttribute("svg:x2", QString("%1\%").arg(x2));
+        style.addAttribute("svg:y2", QString("%1\%").arg(y2));
 
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "1");
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-        } else if (fillFocus == 0) {
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "0");
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "1");
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
-        } else if (fillFocus < 0) {
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "0");
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", QString("%1").arg((fillFocus+100)/100.0));
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "1");
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-        } else {
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "0");
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", QString("%1").arg((fillFocus)/100.0));
-            elementWriter.addAttribute("svg:stop-color", fillColor.name());
-            elementWriter.endElement();
-
-            elementWriter.startElement("svg:stop");
-            elementWriter.addAttribute("svg:offset", "1");
-            elementWriter.addAttribute("svg:stop-color", backColor.name());
-            elementWriter.endElement();
+        elementWriter.startElement("svg:stop");
+        elementWriter.addAttribute("svg:offset", "0");
+        elementWriter.addAttribute("svg:stop-color", fillColor.name());
+        if (fillOpacity != 1.0) {
+            elementWriter.addAttribute("svg:stop-opacity", fillOpacity);
         }
+        elementWriter.endElement();
+
+        elementWriter.startElement("svg:stop");
+        elementWriter.addAttribute("svg:offset", "1");
+        elementWriter.addAttribute("svg:stop-color", backColor.name());
+        if (fillBackOpacity != 1.0) {
+            elementWriter.addAttribute("svg:stop-opacity", fillBackOpacity);
+        }
+        elementWriter.endElement();
     }
 
     QString elementContents = QString::fromUtf8(writerBuffer.buffer(), writerBuffer.buffer().size());
