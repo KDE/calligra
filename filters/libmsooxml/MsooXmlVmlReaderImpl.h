@@ -1840,9 +1840,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     }
     else if (type == "through") {
         m_currentDrawStyle->addProperty("style:wrap", "run-through");
+        if (m_vmlStyle.value("z-index").toInt() > 0) {
+            m_currentDrawStyle->addProperty("style:run-through", "foreground");
+        }
+        else {
+            m_currentDrawStyle->addProperty("style:run-through", "background");
+        }
     }
     else if (type == "topAndBottom") {
         m_currentDrawStyle->addProperty("style:wrap", "none");
+    }
+    else if (type == "square" || type == "tight") {
+        m_currentDrawStyle->addProperty("style:wrap", "parallel");
     }
     else {
         if (side.isEmpty()) { // Note doc doesn't say which one is default
