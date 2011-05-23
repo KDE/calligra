@@ -124,7 +124,7 @@ public:
     void clearLoadingData() {
         m_anchoredPageNumber = -1;
     }
-    int loadingPageNumber() const {
+    int anchoredPageNumber() const {
         return m_anchoredPageNumber;
     }
 

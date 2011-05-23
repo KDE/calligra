@@ -41,7 +41,6 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         m_anchoredPageNumber(pageNumber),
         m_frameSet(parent),
         m_minimumFrameHeight(0.0) // no minimum height per default
-
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
