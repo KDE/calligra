@@ -1851,7 +1851,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
         m_currentDrawStyle->addProperty("style:wrap", "none");
     }
     else if (type == "square" || type == "tight") {
-        m_currentDrawStyle->addProperty("style:wrap", "parallel");
+        if (side.isEmpty()) {
+            m_currentDrawStyle->addProperty("style:wrap", "parallel");
+        }
+        else if (side == "left") {
+            m_currentDrawStyle->addProperty("style:wrap", "left");
+        }
+        else if (side == "largest") {
+            m_currentDrawStyle->addProperty("style:wrap", "biggest");
+        }
+        else if (side == "right") {
+            m_currentDrawStyle->addProperty("style:wrap", "right");
+        }
+        else if (side == "both") {
+            m_currentDrawStyle->addProperty("style:wrap", "parallel");
+        }
     }
     else {
         if (side.isEmpty()) { // Note doc doesn't say which one is default
