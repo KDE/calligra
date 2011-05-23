@@ -212,7 +212,8 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             continue;
         foreach (KWFrame *frame, fs->frames()) {
             if (frame->anchoredPageNumber() == pageNumber) {
-                QPointF pos(frame->shape()->position().x(), frame->shape()->position().y() + rootAreaPage->page.offsetInDocument());
+                frame->setAnchoredFrameOffset(rootAreaPage->page.offsetInDocument() - frame->anchoredFrameOffset());
+                QPointF pos(frame->shape()->position().x(), frame->shape()->position().y() + frame->anchoredFrameOffset());
                 frame->shape()->setPosition(pos);
             }
         }

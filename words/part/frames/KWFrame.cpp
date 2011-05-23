@@ -39,6 +39,7 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         m_frameBehavior(KWord::AutoExtendFrameBehavior),
         m_newFrameBehavior(KWord::NoFollowupFrame),
         m_anchoredPageNumber(pageNumber),
+        m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
         m_minimumFrameHeight(0.0) // no minimum height per default
 {
