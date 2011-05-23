@@ -1,0 +1,17 @@
+TODO
+- javascripts to be further re-factored
+- svgWriter.h should add the js to the svg doc
+- More attributes to be added for frames
+
+STEPS
+1. Make libsvg accept an abstract document rather 
+than just a karbon document
+2. Make karbon link to libsvg rather than the stuff
+in the svg dir.
+3. Add a small method in SvgWriter to write arbitrary
+tags and arbitrary content such as:
+<a>
+   b
+</a>
+4. Port the rectangle, circle, etc export functions to use
+this new method.
