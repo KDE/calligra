@@ -101,10 +101,17 @@ class KEXIUTILS_EXPORT KMessageWidget : public QFrame
     Q_PROPERTY(MessageType messageType READ messageType WRITE setMessageType)
 public:
     enum MessageType {
-        PositiveMessageType,
-        InformationMessageType,
-        WarningMessageType,
-        ErrorMessageType
+        Positive,
+        Information,
+        Warning,
+        Error
+#ifndef KDE_NO_DEPRECATED
+        ,
+        PositiveMessageType = Positive,
+        InformationMessageType = Information,
+        WarningMessageType = Warning,
+        ErrorMessageType = Error
+#endif
     };
 
     /**

@@ -137,7 +137,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     
     defaultAction = 0;
     autoDelete = false;
-    q->setMessageType(KMessageWidget::InformationMessageType);
+    q->setMessageType(KMessageWidget::Information);
 }
 
 void KMessageWidgetPrivate::createLayout()
@@ -323,23 +323,23 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
     KIcon icon;
     d->colorSet = KColorScheme::Window;
     switch (type) {
-    case PositiveMessageType:
+    case Positive:
         icon = KIcon("dialog-ok");
         d->bgRole = KColorScheme::PositiveBackground;
         d->fgRole = KColorScheme::PositiveText;
         break;
-    case InformationMessageType:
+    case Information:
         icon = KIcon("dialog-information");
         d->bgRole = KColorScheme::NormalBackground;
         d->fgRole = KColorScheme::NormalText;
         d->colorSet = KColorScheme::Tooltip;
         break;
-    case WarningMessageType:
+    case Warning:
         icon = KIcon("dialog-warning");
         d->bgRole = KColorScheme::NeutralBackground;
         d->fgRole = KColorScheme::NeutralText;
         break;
-    case ErrorMessageType:
+    case Error:
         icon = KIcon("dialog-error");
         d->bgRole = KColorScheme::NegativeBackground;
         d->fgRole = KColorScheme::NegativeText;
