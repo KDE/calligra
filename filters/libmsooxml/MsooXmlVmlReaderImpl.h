@@ -298,7 +298,14 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("svg:stroke-width", m_strokeWidth);
         m_currentDrawStyle->addProperty("svg:stroke-color", m_strokeColor);
         m_currentDrawStyle->addProperty("svg:stroke-linecap", m_lineCapStyle);
-        m_currentDrawStyle->addProperty("draw:stroke", "solid");
+        m_currentDrawStyle->addProperty("draw:stroke-linejoin", m_joinStyle);
+        if (m_strokeStyleName.isEmpty()) {
+            m_currentDrawStyle->addProperty("draw:stroke", "solid");
+        }
+        else {
+            m_currentDrawStyle->addProperty("draw:stroke", "dash");
+            m_currentDrawStyle->addProperty("draw:stroke-dash", m_strokeStyleName);
+        }
     }
 
     if (!m_currentDrawStyle->isEmpty()) {
@@ -354,6 +361,8 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
     m_shapeColor.clear();
     m_strokeColor.clear();
     m_lineCapStyle = "square";
+    m_joinStyle = "middle";
+    m_strokeStyleName = QString();
 
     if (!strokeweight.isEmpty()) {
         if (strokeweight.at(0) == '.') {
@@ -506,8 +515,45 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
         m_lineCapStyle = "flat";
     }
 
+    TRY_READ_ATTR_WITHOUT_NS(joinstyle)
+    if (!joinstyle.isEmpty()) {
+        m_joinStyle = joinstyle;
+    }
+
     TRY_READ_ATTR_WITHOUT_NS(dashstyle)
     if (!dashstyle.isEmpty()) {
+        // This is over simplification
+        QPen pen;
+        pen.setWidthF(2);
+        pen.setStyle(Qt::DashLine);
+        m_currentDrawStyle->addProperty("draw:stroke", "dash");
+        KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
+        dashStyle.addAttribute("draw:style", "rect");
+        QVector<qreal> dashes = pen.dashPattern();
+        dashStyle.addAttribute("draw:dots1", static_cast<int>(1));
+        dashStyle.addAttributePt("draw:dots1-length", dashes[0]*pen.widthF());
+        dashStyle.addAttributePt("draw:distance", dashes[1]*pen.widthF());
+        if (dashes.size() > 2) {
+            dashStyle.addAttribute("draw:dots2", static_cast<int>(1));
+            dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
+        }
+        m_strokeStyleName = mainStyles->insert(dashStyle, "dash");
+        /* TODO : implement in reality
+        if (dashStyle == "dashDot") {
+
+        }
+        else if (dashStyle == "longDash") {
+
+        }
+        else if (dashStyle == "1 1") {
+
+        }
+        else if (dashStyle == "3 1") {
+
+        }
+        else if (dashStyle == "dash") {
+
+        }*/
     // TODO
     }
 
@@ -630,6 +676,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     m_wrapRead = false;
 
+    // TODO: With the current approach, the stroke and fill elements of the group
+    // have no effect whatsoever, what should be created is a struct with the current properties
+    // and the struct should be in a stack so that we're sure that we handle always the correct one
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -661,6 +710,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     m_shapeColor.clear();
     m_strokeColor.clear();
     m_lineCapStyle = "square";
+    m_joinStyle = "middle";
+    m_strokeStyleName = QString();
 
     if (!strokeweight.isEmpty()) {
         if (strokeweight.at(0) == '.') {
@@ -1840,13 +1891,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
             m_currentDrawStyle->addProperty("style:run-through", "foreground");
         }
     }
-    else if (type == "through") {
-        m_currentDrawStyle->addProperty("style:wrap", "parallel");
-    }
-    else if (type == "topAndBottom") {
-        m_currentDrawStyle->addProperty("style:wrap", "none");
-    }
-    else if (type == "square" || type == "tight") {
+    else if (type == "through" || type == "square" || type == "tight") {
         if (side.isEmpty()) {
             m_currentDrawStyle->addProperty("style:wrap", "parallel");
         }
@@ -1862,6 +1907,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
         else if (side == "both") {
             m_currentDrawStyle->addProperty("style:wrap", "parallel");
         }
+    }
+    else if (type == "topAndBottom") {
+        m_currentDrawStyle->addProperty("style:wrap", "none");
     }
     else {
         if (side.isEmpty()) { // Note doc doesn't say which one is default
