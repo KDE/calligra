@@ -105,13 +105,6 @@ public:
         Information,
         Warning,
         Error
-#ifndef KDE_NO_DEPRECATED
-        ,
-        PositiveMessageType = Positive,
-        InformationMessageType = Information,
-        WarningMessageType = Warning,
-        ErrorMessageType = Error
-#endif
     };
 
     /**
