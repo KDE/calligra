@@ -158,9 +158,6 @@ protected:
     QSize         mViewportExt;
     bool          mWindowExtIsSet;
     bool          mViewportExtIsSet;
-    qreal         mWindowViewportScaleX;
-    qreal         mWindowViewportScaleY;
-    bool          mWindowViewportIsSet;
     QTransform    mOutputTransform;
     QTransform    mWorldTransform;
     
