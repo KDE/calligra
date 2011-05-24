@@ -124,11 +124,11 @@ public:
 
     MessageType messageType() const;
 
-    void addAction(QAction* action);
+    void addAction(QAction *action);
 
-    void removeAction(QAction* action);
+    void removeAction(QAction *action);
 
-    void setDefaultAction(QAction* action);
+    void setDefaultAction(QAction *action);
 
     /**
      * @brief Sets autodeletion flag to be on or off.
@@ -143,26 +143,34 @@ public:
     QSize minimumSizeHint() const;
 
 public Q_SLOTS:
-    void setText(const QString &);
+    void setText(const QString &text);
 
-    void setWordWrap(bool);
+    void setWordWrap(bool wordWrap);
 
-    void setCloseButtonVisible(bool);
+    void setCloseButtonVisible(bool visible);
 
-    void setMessageType(KMessageWidget::MessageType);
+    void setMessageType(KMessageWidget::MessageType type);
 
+    /**
+     * Show the widget using an animation, unless
+     * KGlobalSettings::graphicsEffectLevel() does not allow simple effects.
+     */
     void animatedShow();
 
+    /**
+     * Hide the widget using an animation, unless
+     * KGlobalSettings::graphicsEffectLevel() does not allow simple effects.
+     */
     void animatedHide();
 
 protected:
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent *event);
 
-    bool event(QEvent*);
+    bool event(QEvent *event);
 
-    void resizeEvent(QResizeEvent*);
+    void resizeEvent(QResizeEvent *event);
 
-    void showEvent(QShowEvent*);
+    void showEvent(QShowEvent *event);
 
 private:
     KMessageWidgetPrivate *const d;
