@@ -101,6 +101,8 @@ public:
     void createLayout();
     void updateSnapShot();
     void updateLayout();
+    void slotTimeLineChanged(qreal);
+    void slotTimeLineFinished();
     void updateStyleSheet();
 };
 
@@ -108,7 +110,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
 {
     q = q_ptr;
 
-    q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    q->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     timeLine = new QTimeLine(500, q);
     QObject::connect(timeLine, SIGNAL(valueChanged(qreal)), q, SLOT(slotTimeLineChanged(qreal)));
@@ -223,6 +225,26 @@ void KMessageWidgetPrivate::updateSnapShot()
     content->render(&contentSnapShot, QPoint(), QRegion(), QWidget::DrawChildren);
 }
 
+void KMessageWidgetPrivate::slotTimeLineChanged(qreal value)
+{
+    q->setFixedHeight(qMin(value * 2, 1.) * content->height());
+    q->repaint();
+}
+
+void KMessageWidgetPrivate::slotTimeLineFinished()
+{
+    if (timeLine->direction() == QTimeLine::Forward) {
+        // Show
+        content->move(0, 0);
+        if (defaultButton) {
+            defaultButton->setFocus();
+        }
+    } else {
+        // Hide
+        q->hide();
+    }
+}
+
 void KMessageWidgetPrivate::updateStyleSheet()
 {
     KColorScheme scheme(QPalette::Active, colorSet);
@@ -287,9 +309,6 @@ QString KMessageWidget::text() const
 void KMessageWidget::setText(const QString& text)
 {
     d->textLabel->setText(text);
-    if (d->content->sizeHint().height() >= 0) {
-        setFixedHeight(d->content->sizeHint().height());
-    }
     updateGeometry();
 }
 
@@ -331,6 +350,18 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
 
     d->updateStyleSheet();
     d->updateLayout();
+}
+
+QSize KMessageWidget::sizeHint() const
+{
+    ensurePolished();
+    return d->content->sizeHint();
+}
+
+QSize KMessageWidget::minimumSizeHint() const
+{
+    ensurePolished();
+    return d->content->minimumSizeHint();
 }
 
 bool KMessageWidget::event(QEvent* event)
@@ -439,26 +470,6 @@ void KMessageWidget::animatedShow()
     d->timeLine->setDirection(QTimeLine::Forward);
     if (d->timeLine->state() == QTimeLine::NotRunning) {
         d->timeLine->start();
-    }
-}
-
-void KMessageWidget::slotTimeLineChanged(qreal value)
-{
-    setFixedHeight(qMin(value * 2, 1.) * d->content->height());
-    repaint();
-}
-
-void KMessageWidget::slotTimeLineFinished()
-{
-    if (d->timeLine->direction() == QTimeLine::Forward) {
-        // Show
-        d->content->move(0, 0);
-        if (d->defaultButton) {
-            d->defaultButton->setFocus();
-        }
-    } else {
-        // Hide
-        hide();
     }
 }
 
