@@ -94,7 +94,6 @@ protected:
     bool m_moveToStylesXml;
 
     QSize m_imageSize;
-    QPen m_currentPen;
 
     QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files
 
