@@ -24,6 +24,13 @@
 #include <qnamespace.h>
 #include <QPainter>
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
 #define APMHEADER_KEY 0x9AC6CDD7
 #define ENHMETA_SIGNATURE       0x464D4520
 
@@ -182,5 +189,7 @@ static const Qt::PenJoinStyle koWmfJoinStylePen[] = {
     Qt::MiterJoin
 };
 
-#endif
 
+}
+
+#endif

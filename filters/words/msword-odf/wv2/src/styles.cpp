@@ -908,14 +908,19 @@ StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf 
     // STSHI reading
     // ------------------------------------------------------------
     //
-    if ( cbStshi == Word95::STSHI::sizeOf ) {
+    if (!cbStshi) {
+        //each FIB MUST contain a stylesheet
+        throw InvalidFormatException("MISSING StyleSheet detected!");
+    }
+    else if ( cbStshi == Word95::STSHI::sizeOf ) {
         Word95::STSHI stsh( tableStream, false );
         m_stsh = Word95::toWord97( stsh );
-        version = Word67;   // okay, it's Word 6/7 after all
+        // okay, it's Word 6/7 after all
+        version = Word67;
     }
-    else if ( cbStshi == Word97::STSHI::sizeOf )
+    else if ( cbStshi == Word97::STSHI::sizeOf ) {
         m_stsh.read( tableStream, false );
-    else {
+    } else {
         wvlog << "Detected a different STSHI, check this (trying to read Word97 one)" << endl;
         m_stsh.read( tableStream, false );
     }

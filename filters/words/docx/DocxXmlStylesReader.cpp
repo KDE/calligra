@@ -22,6 +22,7 @@
  */
 
 #include "DocxXmlStylesReader.h"
+#include "DocxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
@@ -351,9 +352,10 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             // Both types must be copied as it can contain both
             KoGenStyle::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::ParagraphType);
             KoGenStyle::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::TextType);
-            // Fixme: this value should be in fact read from settings.xml, in practise it most often it seems to be 720
-            // which equals to 36 pt
-            m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", 36);
+            if (m_context->import->documentSettings().contains("defaultTabStop")) {
+                QString val = m_context->import->documentSetting("defaultTabStop").toString();
+                m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", TWIP_TO_POINT(val.toDouble()));
+            }
         }
         else if (type == "table") {
             m_currentStyle = new MSOOXML::DrawingTableStyle;

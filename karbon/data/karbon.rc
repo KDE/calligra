@@ -45,6 +45,8 @@
             <Action name="edit_select_all"/>
             <Action name="edit_deselect_all"/>
             <Action name="edit_delete"/>
+            <Separator/>
+            <Action name="edit_guides"/>
         </Menu>
         <Menu name="view">
             <text>&amp;View</text>

@@ -24,7 +24,6 @@
 
 #include <QtGui/QPainter>
 
-class WmfWriterPrivate;
 class QPen;
 class QBrush;
 class QColor;
@@ -32,6 +31,14 @@ class QFont;
 class QRegion;
 class QString;
 class QImage;
+
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+class WmfWriterPrivate;
 
 /**
  * WmfWriter allows to create a windows placeable meta file (WMF).
@@ -138,5 +145,7 @@ private:
 
 };
 
-#endif
 
+}
+
+#endif

@@ -26,6 +26,13 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
 WmfAbstractBackend::WmfAbstractBackend()
 {
     m_parser = new WmfParser();
@@ -112,3 +119,5 @@ void WmfAbstractBackend::setDebug(int nbrFunc)
     m_parser->mNbrFunc = nbrFunc;
 }
 
+
+}
