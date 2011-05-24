@@ -28,8 +28,8 @@ class QAbstractItemView;
 class QModelIndex;
 class QItemSelection;
 class KPrSelectionToggle;
-class KoPAPageBase;
 class KoPADocument;
+class KoPAPageBase;
 
 /**
  * @brief Allows to select and deselect items for item views.

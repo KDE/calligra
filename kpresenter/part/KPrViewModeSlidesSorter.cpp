@@ -328,6 +328,8 @@ QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
         return slides;
     }
 
+    qSort(selectedItems.begin(), selectedItems.end());
+
     foreach (const QModelIndex & index, selectedItems) {
         KoPAPageBase * page = m_view->kopaDocument()->pageByIndex(index.row (), false);
         if (page) {

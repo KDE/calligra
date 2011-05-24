@@ -153,7 +153,7 @@ void KPrSelectionManager::slotEntered(const QModelIndex& index)
 
     m_toggle->hide();
     if (isSelectionCandidate) {
-        m_toggle->setPage(pageForIndex(index));
+        m_toggle->setIndex(index);
 
         // Increase the size of the toggle for large items
         const int iconHeight = m_view->iconSize().height();
@@ -181,7 +181,7 @@ void KPrSelectionManager::slotEntered(const QModelIndex& index)
         m_toggle->setChecked(selModel->isSelected(index));
         m_toggle->show();
     } else {
-        m_toggle->setPage(NULL);
+        m_toggle->setIndex(QModelIndex());
     }
 }
 
@@ -197,8 +197,8 @@ void KPrSelectionManager::setItemSelected(bool selected)
 {
     emit selectionChanged();
 
-    if (m_toggle && m_toggle->page()) {
-        const QModelIndex index = indexForPage(m_toggle->page());
+    if (m_toggle && m_toggle->index() != QModelIndex()) {
+        QModelIndex index = m_toggle->index();
         if (index.isValid()) {
             QItemSelectionModel* selModel = m_view->selectionModel();
             if (selected) {
@@ -228,8 +228,8 @@ void KPrSelectionManager::slotSelectionChanged(const QItemSelection& selected,
     // The selection has been changed outside the scope of the selection manager
     // (e. g. by the rubberband or the "Select All" action). Take care updating
     // the state of the toggle button.
-    if (m_toggle && m_toggle->page()) {
-        const QModelIndex index = indexForPage(m_toggle->page());
+    if (m_toggle && m_toggle->index() != QModelIndex()) {
+        const QModelIndex index = m_toggle->index();
         if (index.isValid()) {
             if (selected.contains(index)) {
                 m_toggle->setChecked(true);
