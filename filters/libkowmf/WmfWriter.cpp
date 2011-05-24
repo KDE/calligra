@@ -37,6 +37,13 @@
 #include <math.h>
 
 /**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
+
+/**
  * Private data
  */
 class WmfWriterPrivate
@@ -54,7 +61,7 @@ public:
 
 
 WmfWriter::WmfWriter(const QString& fileName)
-        : d(new WmfWriterPrivate)
+    : d(new WmfWriterPrivate)
 {
     d->mDpi = 1024;
     d->mMaxRecordSize = 0;
@@ -494,3 +501,5 @@ quint32  WmfWriter::qtRasterToWin32(QPainter::CompositionMode op) const
         return koWmfOpTab32[ 0 ].winRasterOp;
 }
 
+
+}

@@ -47,6 +47,8 @@ public:
     ~KWRdfDocker();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas() {m_canvas = 0;}
+    
     KoCanvasBase *canvas();
 
 private slots:

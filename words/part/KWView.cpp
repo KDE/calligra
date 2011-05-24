@@ -98,6 +98,7 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <KParts/PartManager>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
 
@@ -147,7 +148,10 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-    connect(m_document, SIGNAL(completed()), this, SLOT(loadingCompleted()));
+    KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
+    if(win) {
+        connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
+    }
 
     m_find = new KoFindText(texts, this);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);

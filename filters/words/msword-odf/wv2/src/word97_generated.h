@@ -4460,7 +4460,9 @@ struct FIB {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Validate FIB.
+     * Validate FIB.  Don't take this info and warnings too seriously at the
+     * moment.  I still have to spend some time to process the info from FIB
+     * properly.
      */
     bool valid() const;
 

@@ -30,6 +30,12 @@ class QPolygon;
 
 #define DEBUG_WMFPAINT 0
 
+/**
+   Namespace for Windows Metafile (WMF) classes
+*/
+namespace Libwmf
+{
+
 
 /**
  * WmfPainterBackend inherits the abstract class WmfAbstractbackend
@@ -38,12 +44,13 @@ class QPolygon;
  *
  * how to use:
  * <pre>
- *   QPixmap pix( 100, 100 );
- *   WmfPainterBackend wmf;
- *   if ( wmf.load( "/home/test.wmf" ) ) {
- *      wmf.play( pix );
+ *   QPixmap  pix(100, 100);
+ *   QPainter painter(pix);
+ *   WmfPainterBackend wmf(painter, pix.size());
+ *   if (wmf.load("/home/test.wmf" )) {
+ *      wmf.play(pix);
  *   }
- *   paint.drawPixmap( 0, 0, pix );
+ *   paint.drawPixmap(0, 0, pix);
  * </pre>
  *
  */
@@ -51,25 +58,23 @@ class QPolygon;
 class KOWMF_EXPORT WmfPainterBackend : public WmfAbstractBackend
 {
 public:
-    WmfPainterBackend();
-    ~WmfPainterBackend() { }
+    WmfPainterBackend(QPainter *painter, const QSizeF &outputSize);
+    ~WmfPainterBackend();
 
     using WmfAbstractBackend::play;
 
     /**
      * Play a WMF file on a QPaintDevice. Return true on success.
-     * Use absolute or relative coordinate :
-     *   absolute coord. reset the world transfomation Matrix (by default)
-     *   relative coord. use the existing world transfomation Matrix
      */
-    bool play(QPaintDevice& target, bool relativeCoord = false);
-    bool play(QPainter &painter, bool relativeCoord = false);
+    //bool play(QPaintDevice& target);
+    //bool play(QPainter &painter);
+    bool play();
 
 
 private:
     // -------------------------------------------------------------------------
     // A virtual QPainter
-    bool  begin();
+    bool  begin(const QRect &boundingBox);
     bool  end();
     void  save();
     void  restore();
@@ -138,6 +143,7 @@ private:
 protected:
     bool  mIsInternalPainter;      // True if the painter wasn't externally provided.
     QPainter *mPainter;
+    QSizeF    mOutputSize;
     int       mFontRotation;
     int       mFontHeight;
     QPen  mTextPen;
@@ -160,5 +166,8 @@ protected:
     
     int mSaveCount; //number of times Save() was called without Restore()
 };
+
+
+}
 
 #endif

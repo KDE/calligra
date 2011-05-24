@@ -54,6 +54,9 @@ void KWRdfDockerTree::setDocumentRdf(KoDocumentRdf *rdf)
 
 void KWRdfDockerTree::setCanvas(KoCanvasBase *canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
+    }
     m_canvas = canvas;
 }
 

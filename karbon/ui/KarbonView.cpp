@@ -946,6 +946,10 @@ void KarbonView::initActions()
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(d->canvas->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
+
+    KAction *actionEditGuides = new KAction(i18n("Edit Guides"), this);
+    actionCollection()->addAction("edit_guides", actionEditGuides);
+    connect(actionEditGuides, SIGNAL(triggered()), this, SLOT(editGuides()));
     // edit <-----
 
     // object ----->
@@ -1173,6 +1177,11 @@ void KarbonView::showGuides()
 {
     d->part->guidesData().setShowGuideLines(d->showGuidesAction->isChecked());
     d->canvas->update();
+}
+
+void KarbonView::editGuides()
+{
+    KoToolManager::instance()->switchToolRequested("GuidesTool_ID");
 }
 
 void KarbonView::snapToGrid()

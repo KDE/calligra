@@ -207,6 +207,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         return KoFilter::InvalidFormat;
     }  catch (...) {
         kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::StupidError;
     }
 
     finalizer.m_document = document;
@@ -225,6 +226,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         return KoFilter::InvalidFormat;
     } catch (...) {
         kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::StupidError;
     }
 
     document->processSubDocQueue(); //process the queues we've created?

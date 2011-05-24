@@ -143,7 +143,12 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     }
 
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
+    if (!msTextStyle && styles.size()) {
+        msTextStyle = styles.styleByID(stiNormalChar);
+        kDebug(30513) << "Invalid reference to text style, reusing NormalChar";
+    }
     Q_ASSERT(msTextStyle);
+
     QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
@@ -1068,7 +1073,12 @@ QString Paragraph::string(int index) const
 QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::StyleSheet& styles)
 {
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
+    if (!msTextStyle && styles.size()) {
+        msTextStyle = styles.styleByID(stiNormalChar);
+        kDebug(30513) << "Invalid reference to text style, reusing NormalChar";
+    }
     Q_ASSERT(msTextStyle);
+
     QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 

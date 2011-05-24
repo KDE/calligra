@@ -18,7 +18,7 @@ install(TARGETS kwmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### next target ###############
 
-set(kowmf_LIB_SRCS 
+set(libwmf_LIB_SRCS 
    WmfStack.cpp
    WmfParser.cpp 
    WmfAbstractBackend.cpp 
@@ -27,10 +27,10 @@ set(kowmf_LIB_SRCS
    WmfWriter.cpp
  )
 
-kde4_add_library(kowmf SHARED ${kowmf_LIB_SRCS})
+kde4_add_library(libwmf SHARED ${libwmf_LIB_SRCS})
 
-target_link_libraries(kowmf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(libwmf  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
-set_target_properties(kowmf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kowmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(libwmf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+install(TARGETS libwmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

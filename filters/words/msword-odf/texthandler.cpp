@@ -850,11 +850,10 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         //TODO: It would be secure to end with KoFilter::InvalidFormat
         const wvWare::Style* paragraphStyle = styles.styleByIndex(paragraphProperties->pap().istd);
         if (!paragraphStyle && styles.size()) {
-            paragraphStyle = styles.styleByIndex(0);
+            paragraphStyle = styles.styleByID(stiNormal);
             kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
-        } else {
-            Q_ASSERT(paragraphStyle);
         }
+        Q_ASSERT(paragraphStyle);
 
         //set current named style in m_paragraph
         m_paragraph->setParagraphStyle(paragraphStyle);
