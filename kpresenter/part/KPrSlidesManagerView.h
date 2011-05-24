@@ -46,6 +46,8 @@ public:
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
 
+    virtual bool eventFilter(QObject *, QEvent *);
+
     int pageBefore(QPoint point);
 
     /**
@@ -60,6 +62,7 @@ signals:
 
     void requestContextMenu(QContextMenuEvent *event);
     void slideDblClick();
+    void indexChanged(QModelIndex index);
 
 private:
 

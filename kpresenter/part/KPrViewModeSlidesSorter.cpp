@@ -156,6 +156,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     m_slidesSorter->setFocus(Qt::ActiveWindowFocusReason);
     updateToActivePageIndex();
 
+    connect(m_slidesSorter,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_slidesSorter, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(const QModelIndex)));
     connect(this, SIGNAL(pageChanged(KoPAPageBase*)), m_view->proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));

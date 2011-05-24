@@ -25,6 +25,7 @@
 
 class KPrViewModeSlidesSorter;
 class KoPADocument;
+class KoPAPageBase;
 
 class KPrSlidesSorterDocumentModel: public QAbstractListModel
 {
@@ -52,6 +53,8 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
     virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+
+    void doDrop(QList<KoPAPageBase *> slides, KoPAPageBase * pageAfter, Qt::DropAction action);
 
 public slots:
     void update();

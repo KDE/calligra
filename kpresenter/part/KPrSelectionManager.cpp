@@ -20,13 +20,17 @@
 */
 
 #include "KPrSelectionManager.h"
+
+//Calligra headers
 #include "KPrSelectionToggle.h"
 #include "KoPADocument.h"
 
+//KDE headers
 #include <KGlobalSettings>
 #include <KIconLoader>
 #include <KIconEffect>
 
+//Qt Headers
 #include <QAbstractButton>
 #include <QAbstractItemView>
 #include <QAbstractProxyModel>
@@ -60,7 +64,6 @@ KPrSelectionManager::KPrSelectionManager(QAbstractItemView* parent, KoPADocument
 
     m_view->viewport()->installEventFilter(this);
     m_view->setMouseTracking(true);
-    //m_view->installEventFilter(this);
 }
 
 KPrSelectionManager::~KPrSelectionManager()

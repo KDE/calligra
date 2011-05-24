@@ -166,6 +166,8 @@ private:
     int m_lastItemNumber;
     int m_zoom;
     KPrSelectionManager *m_selectionManagerSlidesSorter;
+public slots:
+    void editPaste();
 
 private slots:
     void updateDocumentDock();
@@ -175,7 +177,6 @@ private slots:
     void addSlide();
     void editCut();
     void editCopy();
-    void editPaste();
     void updateZoom(KoZoomMode::Mode mode, qreal zoom);
     void updateToActivePageIndex();
     void activateNormalViewMode();
