@@ -845,12 +845,12 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             bkmk_length = nextBkl - nextBkf;
             disruption = nextBkf;
 
-            Q_ASSERT (nextBkf <= nextBkl);
-
 #ifdef WV2_DEBUG_BOOKMARK
-            wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << 
-                     " disruption=" << disruption << " length=" << length << endl;
+            wvlog << "nextBkf=" << nextBkf << "(0x" << hex << nextBkf << ")" <<dec<<
+                     "nextBkl=" << nextBkl << "(0x" << hex << nextBkl << ")" <<dec<<
+                     "disruption=" << disruption << "length=" << length << endl;
 #endif
+            Q_ASSERT (nextBkf <= nextBkl);
         }
 
         if ( (disruption >= startCP) && (disruption < (startCP + length)) ) {
