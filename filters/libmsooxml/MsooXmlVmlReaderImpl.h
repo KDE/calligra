@@ -200,18 +200,11 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:textarea-vertical-align", ver_align);
     }
 
-    if (!hor_pos.isEmpty()) {
-        if (hor_pos == "absolute") {
-            hor_pos = "from-left";
-        }
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    bool asChar = false;
+    if (position.isEmpty() || position == "static") {
+        asChar = true;
     }
-    if (!ver_pos.isEmpty()) {
-        if (ver_pos == "absolute") {
-            ver_pos = "from-top";
-        }
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
+
     if (!hor_pos_rel.isEmpty()) {
         if (hor_pos_rel == "outer-margin-area" || hor_pos_rel == "left-margin-area") {
             hor_pos_rel = "page-start-margin";
@@ -225,30 +218,35 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             hor_pos_rel = "page-end-margin";
             m_anchorType = "paragraph"; //forced
         }
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+        if (!asChar) {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+        }
     }
     if (!ver_pos_rel.isEmpty()) {
         if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
-            ver_pos_rel = "page-content";
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
         }
         else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" || ver_pos_rel == "outer-margin-area") {
-            ver_pos_rel = "page";
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
         }
         else if (ver_pos_rel == "bottom-margin-area") {
-            ver_pos_rel = "page";
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
             // This effectively emulates the bottom-margin-area
             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+        else {
+            m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+        }
     }
 
 #ifdef DOCXXMLDOCREADER_H
-    bool asChar = false;
     if (!m_wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
-        if (position.isEmpty() || position == "static") { // Default
-            asChar = true;
+        if (asChar) { // Default
             body->addAttribute("text:anchor-type", "as-char");
+            if (ver_pos_rel == "line") {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "text");
+            }
         }
         else {
             body->addAttribute("text:anchor-type", "char");
@@ -278,22 +276,36 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         body->addAttribute("text:anchor-type", m_anchorType);
     }
     if (!asChar) {
-        // These seem to be decent defaults
-        if (m_currentDrawStyle->property("style:horizontal-pos").isEmpty()) {
-            m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        if (hor_pos.isEmpty() || hor_pos == "absolute") {
+            hor_pos = "from-left";
         }
-        if (m_currentDrawStyle->property("style:vertical-pos").isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (ver_pos.isEmpty() || ver_pos == "absolute") {
+        if (asChar) {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        }
+        else {
             m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
         }
     }
+    else {
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
 #endif
 
-    if (m_strokeWidth > 0) {
-        m_currentPen.setWidthF(m_strokeWidth);
-        m_currentPen.setColor(QColor(m_strokeColor));
-        m_currentPen.setJoinStyle(Qt::MiterJoin);
-
-        KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    if (!m_strokeWidth.isEmpty()) {
+        m_currentDrawStyle->addProperty("svg:stroke-width", m_strokeWidth);
+        m_currentDrawStyle->addProperty("svg:stroke-color", m_strokeColor);
+        m_currentDrawStyle->addProperty("svg:stroke-linecap", m_lineCapStyle);
+        m_currentDrawStyle->addProperty("draw:stroke-linejoin", m_joinStyle);
+        if (m_strokeStyleName.isEmpty()) {
+            m_currentDrawStyle->addProperty("draw:stroke", "solid");
+        }
+        else {
+            m_currentDrawStyle->addProperty("draw:stroke", "dash");
+            m_currentDrawStyle->addProperty("draw:stroke-dash", m_strokeStyleName);
+        }
     }
 
     if (!m_currentDrawStyle->isEmpty()) {
@@ -345,13 +357,17 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
 
-    m_strokeWidth = 1 ; // This seems to be the default
+    m_strokeWidth = "1pt" ; // This seems to be the default
     m_shapeColor.clear();
     m_strokeColor.clear();
-    m_currentPen = QPen();
+    m_lineCapStyle = "square";
+    m_joinStyle = "middle";
+    m_strokeStyleName = QString();
 
     if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        if (strokeweight.at(0) == '.') {
+            m_strokeWidth = "0" + strokeweight;
+        }
         m_strokeColor = "#000000"; // Black color seems to be default
     }
 
@@ -372,7 +388,7 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
         stroked = m_strokeTypeStrings[type];
     }
     if (stroked == "f" || stroked == "false") {
-        m_strokeWidth = 0;
+        m_strokeWidth = QString();
     }
     else if (!strokecolor.isEmpty()) {
         m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
@@ -489,26 +505,56 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(endcap)
-    Qt::PenCapStyle penCap = m_currentPen.capStyle();
     if (endcap.isEmpty() || endcap == "sq") {
-       penCap = Qt::SquareCap;
+       m_lineCapStyle = "square";
     }
     else if (endcap == "round") {
-        penCap = Qt::RoundCap;
+         m_lineCapStyle = "round";
     }
     else if (endcap == "flat") {
-        penCap = Qt::FlatCap;
+        m_lineCapStyle = "flat";
     }
-    m_currentPen.setCapStyle(penCap);
+
+    TRY_READ_ATTR_WITHOUT_NS(joinstyle)
+    if (!joinstyle.isEmpty()) {
+        m_joinStyle = joinstyle;
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(dashstyle)
     if (!dashstyle.isEmpty()) {
-        if (dashstyle == "1 1") {
-            m_currentPen.setStyle(Qt::DashLine);
+        // This is over simplification
+        QPen pen;
+        pen.setWidthF(2);
+        pen.setStyle(Qt::DashLine);
+        m_currentDrawStyle->addProperty("draw:stroke", "dash");
+        KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
+        dashStyle.addAttribute("draw:style", "rect");
+        QVector<qreal> dashes = pen.dashPattern();
+        dashStyle.addAttribute("draw:dots1", static_cast<int>(1));
+        dashStyle.addAttributePt("draw:dots1-length", dashes[0]*pen.widthF());
+        dashStyle.addAttributePt("draw:distance", dashes[1]*pen.widthF());
+        if (dashes.size() > 2) {
+            dashStyle.addAttribute("draw:dots2", static_cast<int>(1));
+            dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
         }
-        else if (dashstyle == "dashDot") {
-            m_currentPen.setStyle(Qt::DashDotLine);
+        m_strokeStyleName = mainStyles->insert(dashStyle, "dash");
+        /* TODO : implement in reality
+        if (dashStyle == "dashDot") {
+
         }
+        else if (dashStyle == "longDash") {
+
+        }
+        else if (dashStyle == "1 1") {
+
+        }
+        else if (dashStyle == "3 1") {
+
+        }
+        else if (dashStyle == "dash") {
+
+        }*/
+    // TODO
     }
 
     readNext();
@@ -630,6 +676,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     m_wrapRead = false;
 
+    // TODO: With the current approach, the stroke and fill elements of the group
+    // have no effect whatsoever, what should be created is a struct with the current properties
+    // and the struct should be in a stack so that we're sure that we handle always the correct one
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -657,13 +706,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     body = frameBuf.originalWriter();
 
-    m_strokeWidth = 1 ; // This seems to be the default
+    m_strokeWidth = "1pt" ; // This seems to be the default
     m_shapeColor.clear();
     m_strokeColor.clear();
-    m_currentPen = QPen();
+    m_lineCapStyle = "square";
+    m_joinStyle = "middle";
+    m_strokeStyleName = QString();
 
     if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+        if (strokeweight.at(0) == '.') {
+            m_strokeWidth = "0" + strokeweight;
+        }
         m_strokeColor = "#000000"; // Black color seems to be default
     }
 
@@ -674,7 +727,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     TRY_READ_ATTR_WITHOUT_NS(stroked)
     if (stroked == "f" || stroked == "false") {
-        m_strokeWidth = 0;
+        m_strokeWidth = QString();
     }
     else if (!strokecolor.isEmpty()) {
         m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
@@ -1838,19 +1891,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
             m_currentDrawStyle->addProperty("style:run-through", "foreground");
         }
     }
-    else if (type == "through") {
-        m_currentDrawStyle->addProperty("style:wrap", "run-through");
-        if (m_vmlStyle.value("z-index").toInt() > 0) {
-            m_currentDrawStyle->addProperty("style:run-through", "foreground");
-        }
-        else {
-            m_currentDrawStyle->addProperty("style:run-through", "background");
-        }
-    }
-    else if (type == "topAndBottom") {
-        m_currentDrawStyle->addProperty("style:wrap", "none");
-    }
-    else if (type == "square" || type == "tight") {
+    else if (type == "through" || type == "square" || type == "tight") {
         if (side.isEmpty()) {
             m_currentDrawStyle->addProperty("style:wrap", "parallel");
         }
@@ -1866,6 +1907,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
         else if (side == "both") {
             m_currentDrawStyle->addProperty("style:wrap", "parallel");
         }
+    }
+    else if (type == "topAndBottom") {
+        m_currentDrawStyle->addProperty("style:wrap", "none");
     }
     else {
         if (side.isEmpty()) { // Note doc doesn't say which one is default

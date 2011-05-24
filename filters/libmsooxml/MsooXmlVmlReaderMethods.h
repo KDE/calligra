@@ -78,7 +78,10 @@ protected:
     QString m_currentShapeId; //!< set in read_shape()
 
     QString m_strokeColor; // stroke color
-    qreal m_strokeWidth; // stroke width
+    QString m_strokeWidth; // stroke width
+    QString m_lineCapStyle;
+    QString m_joinStyle;
+    QString m_strokeStyleName;
 
     //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
     //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
