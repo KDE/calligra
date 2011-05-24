@@ -21,8 +21,6 @@
 
 #include "KPrSelectionToggle.h"
 
-#include "KoPAPageBase.h"
-
 #include <KGlobalSettings>
 #include <KIcon>
 #include <KIconLoader>
@@ -45,8 +43,7 @@ KPrSelectionToggle::KPrSelectionToggle(QWidget* parent) :
     m_fadingValue(0),
     m_margin(0),
     m_icon(),
-    m_fadingTimeLine(0),
-    m_page(0)
+    m_fadingTimeLine(0)
 {
     setFocusPolicy(Qt::NoFocus);
     parent->installEventFilter(this);
@@ -69,14 +66,14 @@ QSize KPrSelectionToggle::sizeHint() const
 
 void KPrSelectionToggle::reset()
 {
-    m_page = 0;
+    m_index = QModelIndex();
     hide();
 }
 
-void KPrSelectionToggle::setPage(KoPAPageBase* page)
+void KPrSelectionToggle::setIndex(const QModelIndex& index)
 {
-    m_page = page;
-    if (page) {
+    m_index = index;
+    if (m_index != QModelIndex()) {
         startFading();
     }
 }
@@ -94,9 +91,9 @@ int KPrSelectionToggle::margin() const
     return m_margin;
 }
 
-KoPAPageBase* KPrSelectionToggle::page() const
+QModelIndex KPrSelectionToggle::index() const
 {
-    return m_page;
+    return m_index;
 }
 
 void KPrSelectionToggle::setVisible(bool visible)

@@ -24,9 +24,7 @@
 
 #include <QAbstractButton>
 #include <QPixmap>
-
-class KoPAPageBase;
-
+#include <QModelIndex>
 
 class QTimeLine;
 
@@ -53,8 +51,8 @@ public:
      */
     void reset();
 
-    void setPage(KoPAPageBase* page);
-    KoPAPageBase* page() const;
+    void setIndex(const QModelIndex& index);
+    QModelIndex index() const;
 
     /**
      * Sets the margin around the selection-icon in pixels. Per default
@@ -96,7 +94,7 @@ private:
     int m_margin;
     QPixmap m_icon;
     QTimeLine* m_fadingTimeLine;
-    KoPAPageBase* m_page;
+    QModelIndex m_index;
 };
 
 #endif // KPRSELECTIONTOGGLE_H
