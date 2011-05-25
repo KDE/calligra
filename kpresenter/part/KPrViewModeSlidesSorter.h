@@ -32,6 +32,8 @@ class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
 class KPrSelectionManager;
 
+//This view mode holds Slides Sorter view widget and
+//TODO: holds view and toolbar to manage custom slides shows
 class KPrViewModeSlidesSorter : public KoPAViewMode
 {
     Q_OBJECT
@@ -52,11 +54,21 @@ public:
 
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
+
+    /**
+     * Change the KPrView active page
+     * @param page pointer to the new active page
+     */
     void updateActivePage( KoPAPageBase *page );
-    void updateDocumentModel();
 
     void addShape( KoShape *shape );
     void removeShape( KoShape *shape );
+
+    /**
+      * Return a list with the pointer to the selected slides
+      *
+      * @return a list of KoPAPageBase pointers to the slides sorter selected slides.
+      */
     QList<KoPAPageBase*> extractSelectedSlides();
 
     /**
@@ -66,6 +78,7 @@ public:
      */
     QSize iconSize() const;
 
+    //Add a delete key feature to the slides sorter view
     bool eventFilter(QObject *watched, QEvent *event);
 
 protected:
@@ -74,55 +87,6 @@ protected:
      * Fills the editor with presentation slides and ordored them in the KPrSlidesSorter
      */
     void populate();
-
-    /**
-     * The count of the page
-     *
-     * @return the count of the page
-     */
-    int pageCount() const;
-
-    /**
-     * The rect of an items, essentialy used to have the size of the full icon
-     *
-     * @return the rect of the item
-     */
-    QRect itemSize() const;
-
-    /**
-     * Setter of the size with a rect
-     *
-     * @param size which is a QRect
-     */
-    void setItemSize(QRect size);
-
-    /**
-     * Permit to know if a slide is draging
-     *
-     * @return boolean
-     */
-    bool isDraging() const;
-
-    /**
-     * Setter for the draging flag
-     *
-     * @param flag boolean
-     */
-    void setDragingFlag(bool flag = true);
-
-    /**
-     * Return the last item number it were on
-     *
-     * @return the last item number it was on
-     */
-    int lastItemNumber() const;
-
-    /**
-     * Setter of the last item number it were on
-     *
-     * @param number of the item number it is on
-     */
-    void setLastItemNumber(int number);
 
     /**
      * Setter of the icon size
@@ -159,31 +123,45 @@ private:
     KPrSlidesManagerView * m_slidesSorter;
     KPrSlidesSorterDocumentModel * m_documentModel;
     QSize m_iconSize;
-    QRect m_itemSize;
-    bool m_sortNeeded;
-    const int m_pageCount;
-    bool m_dragingFlag;
-    int m_lastItemNumber;
     int m_zoom;
     KPrSelectionManager *m_selectionManagerSlidesSorter;
+
 public slots:
     void editPaste();
 
 private slots:
-    void updateDocumentDock();
-    void updateModel();
-    void itemClicked(const QModelIndex);
-    void deleteSlide();
-    void addSlide();
-    void editCut();
-    void editCopy();
-    void updateZoom(KoZoomMode::Mode mode, qreal zoom);
-    void updateToActivePageIndex();
-    void activateNormalViewMode();
-    void slidesSorterContextMenu(QContextMenuEvent* event);
+    /** Changes the view active page to match the slides sorter current index*/
+    void updateActivePageToCurrentIndex();
 
-signals:
-    void pageChanged(KoPAPageBase *page);
+    /** Update the slides sorter document model*/
+    void updateSlidesSorterDocumentModel();
+
+    /** Changes the view active page to match the slides sorter item selected*/
+    void itemClicked(const QModelIndex);
+
+    /** delete the current selected slides*/
+    void deleteSlide();
+
+    /** add a new slide after the current active page*/
+    void addSlide();
+
+    /** cut the current selected slides*/
+    void editCut();
+
+    /** copy the current selected slides*/
+    void editCopy();
+
+    /** update the zoom of the Slides Sorter view*/
+    void updateZoom(KoZoomMode::Mode mode, qreal zoom);
+
+    /** Changes the slides sorter current index to match view active page*/
+    void updateToActivePageIndex();
+
+    /** Hide KPrViewModeSlidesSorter and return to normal view*/
+    void activateNormalViewMode();
+
+    /** Provides a custom context menu for the slides sorter view*/
+    void slidesSorterContextMenu(QContextMenuEvent* event);
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H
