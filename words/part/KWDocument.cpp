@@ -323,13 +323,21 @@ void KWDocument::relayout()
         m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
 
-    foreach (KWFrameSet *fs, m_frameSets) {
+    relayoutFrameset(m_frameSets);
+}
+
+void KWDocument::relayoutFrameset(QList<KWFrameSet*> framesets)
+{
+    foreach (KWFrameSet *fs, framesets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
             continue;
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
         Q_ASSERT(lay);
-        lay->scheduleLayout();
+        if (KWord::isHeaderFooter(tfs))
+            lay->layout();
+        else
+            lay->scheduleLayout();
     }
 }
 
@@ -687,14 +695,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
 
-    foreach (KWFrameSet *fs, m_frameSets) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (!tfs)
-            continue;
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
-        Q_ASSERT(lay);
-        lay->scheduleLayout();
-    }
+    relayoutFrameset(m_frameSets);
 
     if (updater) updater->setProgress(100);
 
@@ -723,7 +724,7 @@ QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) 
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
     kDebug(32001);
-    QList<KWTextFrameSet*> framesets;
+    QList<KWFrameSet*> framesets;
     foreach(KWFrameSet *fs, frameLayout()->getFrameSets(style)) {
         KWTextFrameSet* tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs)
@@ -741,14 +742,10 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
     for(int i = pageNumber; i <= pageManager()->pageCount(); ++i) {
         frameLayout()->createNewFramesForPage(i);
     }
-    foreach(KWTextFrameSet *fs, framesets) {
-        fs->rootAreaProvider()->clearPages(pageNumber);
+    foreach(KWFrameSet *fs, framesets) {
+        static_cast<KWTextFrameSet*>(fs)->rootAreaProvider()->clearPages(pageNumber);
     }
-    foreach(KWTextFrameSet *fs, framesets) {
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(fs->document()->documentLayout());
-        Q_ASSERT(lay);
-        lay->scheduleLayout();
-    }
+    relayoutFrameset(framesets);
 }
 
 void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

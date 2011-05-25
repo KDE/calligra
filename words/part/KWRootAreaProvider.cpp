@@ -111,18 +111,18 @@ void KWRootAreaProvider::handleDependentProviders(int pageNumber)
         if (p.second > pageNumber) { // only handle providers which would continue layouting at the page we just processed
             continue;
         }
-
+        Q_ASSERT(pageNumber - 1 <= p.first->m_pages.count());
         m_dependentProviders.removeAt(i); // this one is handled now
-
-        Q_ASSERT(pageNumber - 1 < p.first->m_pages.count());
-        KWRootAreaPage *page = p.first->m_pages[pageNumber - 1];
-        foreach(KoTextLayoutRootArea *rootArea, page->rootAreas) {
-            rootArea->setDirty();
-
-            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(p.first->m_textFrameSet->document()->documentLayout());
-            Q_ASSERT(lay);
-            if (!layouts.contains(lay))
-                layouts.append(lay);
+        if (pageNumber - 1 < p.first->m_pages.count()) {
+            KWRootAreaPage *page = p.first->m_pages[pageNumber - 1];
+            foreach(KoTextLayoutRootArea *rootArea, page->rootAreas) {
+                rootArea->setDirty(); // be sure the root-areas from the page are relayouted
+            }
+        }
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(p.first->m_textFrameSet->document()->documentLayout());
+        Q_ASSERT(lay);
+        if (!layouts.contains(lay)) {
+            layouts.append(lay);
         }
     }
 
@@ -191,6 +191,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
                 Q_ASSERT(page.isValid());
             }
         } else if (pageNumber > pageManager->pageCount()) {
+            kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider()->addDependentProvider(this, pageNumber);
             return 0; // not ready to layout this yet
         }
 

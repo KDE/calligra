@@ -220,6 +220,10 @@ private:
      * emits pageSetupChanged
      */
     void saveConfig();
+    /**
+     * Relayout all framesets.
+     */
+    void relayoutFrameset(QList<KWFrameSet*> framesets);
 
 private:
     QList<KWFrameSet*> m_frameSets;
