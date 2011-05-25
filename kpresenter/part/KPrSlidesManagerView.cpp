@@ -19,7 +19,6 @@
 */
 
 #include "KPrSlidesManagerView.h"
-#include "KPrViewModeSlidesSorter.h"
 
 //Qt headers
 #include <QScrollBar>
@@ -28,14 +27,13 @@
 #include <QPaintEvent>
 #include <QtGui>
 
-//Kde libs
+//Kde headers
 #include <klocale.h>
 #include <KIconLoader>
 
-//Calligra libs
+//Calligra headers
 #include <KoToolProxy.h>
-
-
+#include "KPrViewModeSlidesSorter.h"
 
 KPrSlidesManagerView::KPrSlidesManagerView(KoToolProxy *toolProxy, QWidget *parent)
     : QListView(parent)
@@ -49,6 +47,7 @@ KPrSlidesManagerView::KPrSlidesManagerView(KoToolProxy *toolProxy, QWidget *pare
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
+    viewport()->installEventFilter(this);
 }
 
 KPrSlidesManagerView::~KPrSlidesManagerView()
@@ -179,4 +178,31 @@ void KPrSlidesManagerView::setDragingFlag(bool flag)
 bool KPrSlidesManagerView::isDraging()
 {
     return m_dragingFlag;
+}
+
+bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == viewport()) {
+        switch (event->type()) {
+        case QEvent::MouseButtonPress: {
+            QModelIndex item = indexAt(QWidget::mapFromGlobal(QCursor::pos()));
+            QMouseEvent *mouseEv = static_cast<QMouseEvent *>(event);
+
+            //Left button is used to deselect, but rigth button needs a selected item for
+            //context menu actions
+            if ((item.row() < 0) & (mouseEv->button() != Qt::LeftButton) ) {
+                // Selects the last item
+                QModelIndex last_index = model()->index(model()->rowCount(QModelIndex()) - 1, 0, QModelIndex());
+                setCurrentIndex(last_index);
+                emit indexChanged(last_index);
+            }
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+
+    return QObject::eventFilter(watched, event);
 }

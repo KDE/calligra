@@ -58,7 +58,7 @@ DocxXmlNumberingReader::~DocxXmlNumberingReader()
 
 void DocxXmlNumberingReader::init()
 {
-    m_insideGroup = false;
+    m_currentVMLProperties.insideGroup = false;
     m_outputFrames = false;
 }
 
@@ -282,7 +282,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numPicBullet()
         }
     }
 
-    m_picBulletPaths[numPicBulletId] = m_imagedataPath;
+    m_picBulletPaths[numPicBulletId] = m_currentVMLProperties.imagedataPath;
     m_picBulletSizes[numPicBulletId] = m_imageSize;
 
     READ_EPILOGUE

@@ -24,6 +24,12 @@
 #include <QListView>
 class KoToolProxy;
 
+/**
+ * Class meant to hold a List View of slides thumbnails
+ * This view lets display slides as thumbnails in a List view, using standard QT
+ * view/model framework. It paint a line between thumbnails when dragging and
+ * creates a pixmap the contains all icons of the items that are dragged.
+ */
 class KPrSlidesManagerView : public QListView
 {
     Q_OBJECT
@@ -34,6 +40,9 @@ public:
 
     virtual void paintEvent ( QPaintEvent * event);
 
+
+     //It emits a slideDblClick signal and then calls the parent
+     //implementation
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -46,6 +55,15 @@ public:
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
 
+    //Manage click events outside of items, to provide
+    //a suitable active item for the context menu.
+    virtual bool eventFilter(QObject *, QEvent *);
+
+    /**
+     * Calculates the item row that correspond to the slide placed after
+     * the line displayed when dragging
+     * @param point the location of the mouse pointer when dragging
+     */
     int pageBefore(QPoint point);
 
     /**
@@ -58,13 +76,31 @@ public:
 
 signals:
 
+    /** Is emitted if the user has request a context menu */
     void requestContextMenu(QContextMenuEvent *event);
+
+    /** Is emitted if the user has double click an item */
     void slideDblClick();
+
+    //lets update the active page when changing the current index
+    //without a item selected event.
+    /** Is emitted if the selection has been changed within a procedure code */
+    void indexChanged(QModelIndex index);
 
 private:
 
+    /**
+     * Save the item row corresponding to the slide placed after
+     * the line displayed when dragging
+     * @param int the row of the last visited slide
+     */
     void setLastItemNumber(int number);
 
+    /**
+     * Return the item row corresponding to the slide placed
+     * after the line displayed when dragging
+     * @return returns int that represent the item row.
+     */
     int lastItemNumber();
 
     /**

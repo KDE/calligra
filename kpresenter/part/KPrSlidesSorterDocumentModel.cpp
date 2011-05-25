@@ -20,15 +20,26 @@
 
 #include "KPrSlidesSorterDocumentModel.h"
 
-#include <KoPADocument.h>
-#include <QMimeData>
 #include "KPrViewModeSlidesSorter.h"
+
+//Calligra headers
+#include <KoPADocument.h>
 #include <KoPAPageBase.h>
 #include <KoPAViewBase.h>
 #include <KoPAPage.h>
 #include <KoPAPageDeleteCommand.h>
 #include <KoPAPageInsertCommand.h>
 #include <KoPAPageMoveCommand.h>
+#include <KoPAOdfPageSaveHelper.h>
+#include <KoDrag.h>
+
+//KDE Headers
+#include <KIcon>
+
+//Qt Headers
+#include <QMimeData>
+#include <QMenu>
+#include <QApplication>
 
 
 KPrSlidesSorterDocumentModel::KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document)
@@ -144,7 +155,7 @@ QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexe
 
 Qt::DropActions KPrSlidesSorterDocumentModel::supportedDropActions() const
 {
-    return Qt::MoveAction;
+    return Qt::MoveAction | Qt::CopyAction;
 }
 
 bool KPrSlidesSorterDocumentModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -209,6 +220,8 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         return false;
     }
 
+    qSort(slides.begin(), slides.end());
+
     int beginRow;
 
     if (row != -1) {
@@ -217,7 +230,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         beginRow = parent.row ();
 
     } else {
-        beginRow = rowCount (QModelIndex());
+        beginRow = rowCount(QModelIndex());
     }
 
     KoPAPageBase * pageAfter = 0;
@@ -228,13 +241,78 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
 
 
     if (!slides.empty ()) {
-        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
-        m_document->addCommand(command);
+        doDrop(slides, pageAfter, action);
     }
 
-    m_viewModeSlidesSorter->view()->setActivePage (slides.first ());
-
     return true;
+
+}
+
+void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action)
+{
+     Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+
+     if (((modifiers & Qt::ControlModifier) == 0) &&
+         ((modifiers & Qt::ShiftModifier) == 0)) {
+            QMenu popup;
+            QString seq = QKeySequence(Qt::ShiftModifier).toString();
+            seq.chop(1);
+            QAction* popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
+            popupMoveAction->setIcon(KIcon("go-jump"));
+            seq = QKeySequence(Qt::ControlModifier).toString();
+            seq.chop(1);
+            QAction* popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
+            popupCopyAction->setIcon(KIcon("edit-copy"));
+            seq = QKeySequence( Qt::ControlModifier + Qt::ShiftModifier ).toString();
+            seq.chop(1);
+            QAction* popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
+            popupCancelAction->setIcon(KIcon("process-stop"));
+
+            popup.addAction(popupMoveAction);
+            popup.addAction(popupCopyAction);
+
+            popup.addSeparator();
+            popup.addAction(popupCancelAction);
+
+            QAction* result = popup.exec(QCursor::pos());
+
+            if(result == popupCopyAction)
+                action = Qt::CopyAction;
+            else if(result == popupMoveAction)
+                action = Qt::MoveAction;
+            else {
+                return;
+            }
+     } else if ((modifiers & Qt::ControlModifier) != 0) {
+         action = Qt::CopyAction;
+     } else if ((modifiers & Qt::ShiftModifier) != 0) {
+         action = Qt::MoveAction;
+     } else {
+         return;
+     }
+
+
+    switch ( action ) {
+    case Qt::MoveAction : {
+        KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
+        m_document->addCommand(command);
+        m_viewModeSlidesSorter->view()->setActivePage(slides.first());
+        return;
+    }
+    case Qt::CopyAction : {
+        KoPAOdfPageSaveHelper saveHelper(m_document, slides);
+        KoDrag drag;
+        drag.setOdf(KoOdf::mimeType(m_document->documentType()), saveHelper);
+        drag.addToClipboard();
+        m_viewModeSlidesSorter->view()->setActivePage(pageAfter);
+        m_viewModeSlidesSorter->editPaste();
+        m_viewModeSlidesSorter->view()->setActivePage(slides.first());
+        return;
+    }
+    default :
+        qDebug("Unknown action: %d ", (int)action);
+        return;
+    }
 }
 
 #include "KPrSlidesSorterDocumentModel.moc"

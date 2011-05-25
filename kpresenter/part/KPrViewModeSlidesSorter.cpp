@@ -63,11 +63,6 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     , m_slidesSorter( new KPrSlidesManagerView(m_toolProxy, view->parentWidget()))
     , m_documentModel(new KPrSlidesSorterDocumentModel(this, view->parentWidget()))
     , m_iconSize( QSize(200, 200) )
-    , m_itemSize( QRect(0, 0, 0, 0) )
-    , m_sortNeeded(false)
-    , m_pageCount(m_view->kopaDocument()->pages().count())
-    , m_dragingFlag(false)
-    , m_lastItemNumber(-1)
 {
     m_slidesSorter->hide();
     m_slidesSorter->setIconSize( m_iconSize );
@@ -156,11 +151,11 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     m_slidesSorter->setFocus(Qt::ActiveWindowFocusReason);
     updateToActivePageIndex();
 
+    connect(m_slidesSorter,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_slidesSorter, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(const QModelIndex)));
-    connect(this, SIGNAL(pageChanged(KoPAPageBase*)), m_view->proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
-    connect(m_view->kopaDocument(),SIGNAL(pageAdded(KoPAPageBase*)),this, SLOT(updateModel()));
-    connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(updateModel()));
+    connect(m_view->kopaDocument(),SIGNAL(pageAdded(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
+    connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
 
     //change zoom saving slot
     connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
@@ -205,7 +200,8 @@ void KPrViewModeSlidesSorter::deactivate()
 
 
 }
-void KPrViewModeSlidesSorter::updateModel()
+
+void KPrViewModeSlidesSorter::updateSlidesSorterDocumentModel()
 {
     m_documentModel->update();
     updateToActivePageIndex();
@@ -226,7 +222,7 @@ void KPrViewModeSlidesSorter::updateToActivePageIndex()
     m_slidesSorter->setCurrentIndex(index);
 }
 
-void KPrViewModeSlidesSorter::updateDocumentDock()
+void KPrViewModeSlidesSorter::updateActivePageToCurrentIndex()
 {
     QModelIndex c_index = m_slidesSorter->currentIndex();
     m_view->setActivePage(m_view->kopaDocument()->pageByIndex(c_index.row(), false));
@@ -255,44 +251,9 @@ void KPrViewModeSlidesSorter::populate()
     m_slidesSorter->setItemSize (m_slidesSorter->visualRect(item));
 }
 
-int KPrViewModeSlidesSorter::pageCount() const
-{
-    return m_view->kopaDocument()->pages().count();
-}
-
 QSize KPrViewModeSlidesSorter::iconSize() const
 {
     return m_iconSize;
-}
-
-QRect KPrViewModeSlidesSorter::itemSize() const
-{
-    return m_itemSize;
-}
-
-void KPrViewModeSlidesSorter::setItemSize(QRect size)
-{
-    m_itemSize = size;
-}
-
-bool KPrViewModeSlidesSorter::isDraging() const
-{
-    return m_dragingFlag;
-}
-
-void KPrViewModeSlidesSorter::setDragingFlag(bool flag)
-{
-    m_dragingFlag = flag;
-}
-
-int KPrViewModeSlidesSorter::lastItemNumber() const
-{
-    return m_lastItemNumber;
-}
-
-void KPrViewModeSlidesSorter::setLastItemNumber(int number)
-{
-    m_lastItemNumber = number;
 }
 
 void KPrViewModeSlidesSorter::activateNormalViewMode()
@@ -308,7 +269,7 @@ void KPrViewModeSlidesSorter::itemClicked(const QModelIndex index)
     }
 
     //Avoid deselect slides when dragging
-    if (m_slidesSorter->selectionModel ()->selectedIndexes ().length () > 1) {
+    if (m_slidesSorter->selectionModel()->selectedIndexes().length () > 1) {
         return;
     }
 
@@ -359,11 +320,6 @@ void KPrViewModeSlidesSorter::addSlide()
     if (view) {
         view->insertPage();
     }
-}
-
-void KPrViewModeSlidesSorter::updateDocumentModel()
-{
-    m_documentModel->update();
 }
 
 void KPrViewModeSlidesSorter::editCut()

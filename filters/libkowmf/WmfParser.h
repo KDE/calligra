@@ -26,7 +26,7 @@
 #include <QtCore/QRect>
 
 #include "WmfEnums.h"
-#include "WmfStruct.h"
+#include "WmfStructs.h"
 #include "WmfStack.h"
 
 class WmfAbstractBackend;

@@ -21,20 +21,21 @@
 
 #include "KPrSelectionToggle.h"
 
+//KDE Headers
 #include <KGlobalSettings>
 #include <KIcon>
 #include <KIconLoader>
 #include <KIconEffect>
 #include <KLocale>
+#include <KDebug>
 
+//Qt Headers
 #include <QApplication>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QRect>
 #include <QTimer>
 #include <QTimeLine>
-
-#include <KDebug>
 
 KPrSelectionToggle::KPrSelectionToggle(QWidget* parent) :
     QAbstractButton(parent),
