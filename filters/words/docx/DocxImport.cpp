@@ -85,6 +85,7 @@ public:
     DocxDocumentType type;
     bool macrosEnabled;
     QMap<QString, QVariant> documentSettings;
+    QMap<QString, QString> colorMap;
 };
 
 DocxImport::DocxImport(QObject* parent, const QVariantList &)
@@ -142,7 +143,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 {
     // 0. parse settings.xml
     {
-        DocxXmlSettingsReaderContext context(d->documentSettings);
+        DocxXmlSettingsReaderContext context(d->documentSettings, d->colorMap);
         DocxXmlSettingsReader settingsReader(writers);
 
         RETURN_IF_ERROR( loadAndParseDocumentIfExists(

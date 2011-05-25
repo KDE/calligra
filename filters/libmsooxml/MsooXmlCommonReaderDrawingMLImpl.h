@@ -2319,7 +2319,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - [done] buSzPct (Bullet Size Percentage) §21.1.2.4.9
   - buSzPts (Bullet Size Points) §21.1.2.4.10
   - buSzTx (Bullet Size Follows Text) §21.1.2.4.11
-  - defRPr (Default Text Run Properties) §21.1.2.3.2
+  - [done] defRPr (Default Text Run Properties) §21.1.2.3.2
   - extLst (Extension List) §20.1.2.2.15
   - [done] lnSpc (Line Spacing) §21.1.2.2.5
   - [done] spcAft (Space After) §21.1.2.2.9
@@ -2380,11 +2380,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
     }
 
+    m_currentTextStyleProperties = new KoCharacterStyle();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(buAutoNum)
+            ELSE_TRY_READ_IF(defRPr)
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
             ELSE_TRY_READ_IF(buClrTx)
@@ -2407,6 +2411,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             SKIP_UNKNOWN
         }
     }
+
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
+    KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
 
     READ_EPILOGUE
 }
@@ -3345,8 +3354,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 #define CURRENT_EL latin
 /*! latin handler (Latin Font) ECMA-376, 21.1.2.3.7, p.3621.
  Parent elements:
- - defRPr (§21.1.2.3)
- - endParaRPr (§21.1.2.2.3)
+ - [done] defRPr (§21.1.2.3)
+ - [done] endParaRPr (§21.1.2.2.3)
  - font (§20.1.4.2.13)
  - majorFont (§20.1.4.1.24)
  - minorFont (§20.1.4.1.25)
@@ -3425,8 +3434,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
  This element specifies the highlight color that is present for a run of text.
 
  Parent elements:
- - defRPr (§21.1.2.3.2)
- - endParaRPr (§21.1.2.2.3)
+ - [done] defRPr (§21.1.2.3.2)
+ - [done] endParaRPr (§21.1.2.2.3)
  - [done] rPr (§21.1.2.3.9)
 
  Child elements:
