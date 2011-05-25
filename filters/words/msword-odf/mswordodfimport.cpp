@@ -94,8 +94,10 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         parseFibBase(wdstm, fibBase);
     } catch (IOException _e) {
         kError(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
     } catch (...) {
         kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::InvalidFormat;
     }
     wdstm.rewind(m);
 
