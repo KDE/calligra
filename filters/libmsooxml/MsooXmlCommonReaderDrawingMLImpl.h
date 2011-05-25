@@ -5191,9 +5191,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     TRY_READ_ATTR_WITHOUT_NS(type)
 
-    m_currentTextStyleProperties = new KoCharacterStyle();
-    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
 
@@ -5209,7 +5206,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(rPr)) {
+                m_currentTextStyleProperties = new KoCharacterStyle();
+                m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
                 TRY_READ(DrawingML_rPr)
+                m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+                delete m_currentTextStyleProperties;
+                m_currentTextStyleProperties = 0;
             }
             else if (QUALIFIED_NAME_IS(pPr)) {
                 TRY_READ(DrawingML_pPr)
@@ -5219,7 +5221,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
         }
     }
 
-    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
@@ -5245,9 +5246,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     body->endElement(); // text:page-number, some date format
     body->endElement(); //text:span
-
-    delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
 }
