@@ -280,9 +280,12 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
 
-void KWDocument::relayout()
+void KWDocument::relayout(QList<KWFrameSet*> framesets)
 {
-    kDebug(32001) << "frameSets=" << m_frameSets;
+    if (framesets.isEmpty())
+        framesets = m_frameSets;
+
+    kDebug(32001) << "frameSets=" << framesets;
 
 #if 0
     foreach (KWFrameSet *fs, m_frameSets) {
@@ -313,21 +316,17 @@ void KWDocument::relayout()
 #endif
 
     // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
-    KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+    //KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
 
     // remove header/footer frames that are not visible.
     //m_frameLayout.cleanupHeadersFooters();
 
-    // re-layout the pages
+    // create new frames and lay them out on the pages
     foreach (const KWPage &page, m_pageManager.pages()) {
         m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
 
-    relayoutFrameset(m_frameSets);
-}
-
-void KWDocument::relayoutFrameset(QList<KWFrameSet*> framesets)
-{
+    // re-layout the content displayed within the pages
     foreach (KWFrameSet *fs, framesets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
@@ -689,14 +688,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         frameset->renumberFootNotes(false /*no repaint*/);
 #endif
 
-    // remove header/footer frames that are not visible.
-    //m_frameLayout.cleanupHeadersFooters();
-
-    foreach (const KWPage &page, m_pageManager.pages()) {
-        m_frameLayout.createNewFramesForPage(page.pageNumber());
-    }
-
-    relayoutFrameset(m_frameSets);
+    relayout();
 
     if (updater) updater->setProgress(100);
 
@@ -739,14 +731,10 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
         }
     }
     Q_ASSERT(pageNumber >= 1);
-    //TODO handle lesser pages
-    for(int i = pageNumber; i <= pageManager()->pageCount(); ++i) {
-        frameLayout()->createNewFramesForPage(i);
-    }
     foreach(KWFrameSet *fs, framesets) {
         static_cast<KWTextFrameSet*>(fs)->rootAreaProvider()->clearPages(pageNumber);
     }
-    relayoutFrameset(framesets);
+    relayout(framesets);
 }
 
 void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

@@ -171,10 +171,18 @@ public:
     void updatePagesForStyle(const KWPageStyle &style);
 
 public slots:
-    /// Relayout the pages
-    void relayout();
-    /// Register new frameset
-    void addFrameSet(KWFrameSet *f);
+    /**
+     * Relayout the pages or frames within the framesets.
+     * @param framesets The framesets that should be relayouted. If no framesets are
+     * provided (empty list) then all framesets and therefore all pages are relayouted.
+     */
+    void relayout(QList<KWFrameSet*> framesets = QList<KWFrameSet*>());
+    /**
+     * Register a frameset.
+     * @param frameset The frameset that should be registered. Future operations like
+     * for example @a relayout() operate on all registered framesets.
+     */
+    void addFrameSet(KWFrameSet *frameset);
     /**
      * Remove frameset from the document stopping it from being saved or displayed.
      * Note that the document is normally the one that deletes framesets when the
@@ -220,10 +228,6 @@ private:
      * emits pageSetupChanged
      */
     void saveConfig();
-    /**
-     * Relayout all framesets.
-     */
-    void relayoutFrameset(QList<KWFrameSet*> framesets);
 
 private:
     QList<KWFrameSet*> m_frameSets;
