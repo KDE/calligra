@@ -334,6 +334,7 @@ void KWDocument::relayoutFrameset(QList<KWFrameSet*> framesets)
             continue;
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
         Q_ASSERT(lay);
+        // Layout headers first since they will define the remaining size available for the mainframe per page.
         if (KWord::isHeaderFooter(tfs))
             lay->layout();
         else
