@@ -39,6 +39,7 @@
 #include <QToolButton>
 #include <QPointer>
 #include <QPainterPath>
+#include <QTransform>
 
 //---------------------------------------------------------------------
 // KMessageWidgetFrame
@@ -52,35 +53,50 @@ KMessageWidgetFrame::KMessageWidgetFrame(QWidget* parent)
 void KMessageWidgetFrame::paintEvent(QPaintEvent* event)
 {
     QFrame::paintEvent(event);
-    if (calloutPointerDirection != KMessageWidget::NoPointer) {
-        paintCalloutPointer();
-    }
+    paintCalloutPointer();
 }
 
 void KMessageWidgetFrame::paintCalloutPointer()
 {
+    const QSizeF s(size());
+    const qreal rad = radius;
+    QTransform t;
+    // Original: [v    ]
+    //           [     ]
     switch (calloutPointerDirection) {
     case KMessageWidget::Up:
-        return;
+        //  ^
+        // [    ]
+        t.rotate(180.0)
+         .translate(- rad * 5.0 + 0.5, - rad * 2 - 1.5);
         break;
     case KMessageWidget::Down:
+        // [    ]
+        //  v
+        // No rotation needed, this is original position of polyline below
+        t.translate(rad * 3.0 + 0.5, s.height() - rad * 2);
         break;
     case KMessageWidget::Left:
-        return;
+        // <[     ]
+        //  [     ]
+        t.rotate(90.0)
+         .translate(rad * 1.5 + 0.5, - rad * 2 - 2.5);
         break;
     case KMessageWidget::Right:
-        return;
+        // [     ]>
+        // [     ]
+        t.rotate(-90.0)
+         .translate(- rad * 3.5 - 0.5, s.width() - rad * 2 - 2.5);
         break;
     default:
         return;
     }
     QPainter painter(this);
-    const QSizeF s(size());
-    const qreal rad = radius;
+    painter.setTransform(t);
     QPolygonF polyline;
-    polyline << QPointF(rad * 3.0 + 0.5, s.height() - rad * 2)
-             << QPointF(rad * 3.0 + 0.5 + rad, s.height() - 0.5)
-             << QPointF(rad * 3.0 + 0.5 + rad * 2.0, s.height() - rad * 2);
+    polyline << QPointF(0, 0)
+             << QPointF(rad, rad * 2.0 - 0.5)
+             << QPointF(rad * 2.0, 0);
     QPolygonF polygon;
     polygon << QPointF(polyline[0].x(), polyline[0].y() - 1)
             << QPointF(polyline[1].x(), polyline[1].y() - 1)
@@ -236,6 +252,11 @@ void KMessageWidgetPrivate::createLayout()
     q->getContentsMargins(&left, &top, &right, &bottom);
     kDebug() << "q->getContentsMargins:" << left << top << right << bottom;
     int add = buttons.isEmpty() ? 2 : (content->radius - 1);
+    top *= 2;
+    bottom*= 2;
+    left *= 2;
+    right *= 2;
+    add *= 2;
     switch (content->calloutPointerDirection) {
     case KMessageWidget::Up:
         top += add;
@@ -244,16 +265,15 @@ void KMessageWidgetPrivate::createLayout()
         bottom += add;
         break;
     case KMessageWidget::Left:
-        left += add;
+        left += add + 4;
         break;
     case KMessageWidget::Right:
-        right += add;
+        right += add + 4;
         break;
     default:;
     }
-
     content->layout()->setContentsMargins(
-        left * 2, top * 2, right * 2, bottom * 2);
+        left, top, right, bottom);
 
     if (q->isVisible()) {
         if (content->sizeHint().height() >= 0) {
@@ -261,6 +281,7 @@ void KMessageWidgetPrivate::createLayout()
             q->setFixedHeight(QWIDGETSIZE_MAX);
         }
     }
+    content->updateGeometry();
     q->updateGeometry();
 }
 
@@ -434,6 +455,8 @@ KMessageWidget::CalloutPointerDirection KMessageWidget::calloutPointerDirection(
 void KMessageWidget::setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction)
 {
     d->content->calloutPointerDirection = direction;
+    d->updateStyleSheet();
+    d->updateLayout();
 }
 
 QSize KMessageWidget::sizeHint() const

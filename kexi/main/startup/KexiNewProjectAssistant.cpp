@@ -746,6 +746,7 @@ void KexiNewProjectAssistant::showErrorMessage(
         this, 0 /*contents->formLayout*/,
         0/*contents->le_dbname*/, message);
     //d->messageWidget->setNextFocusWidget(contents->le_title);
+    d->messageWidget->setCalloutPointerDirection(KMessageWidget::Right);
 }
 
 void KexiNewProjectAssistant::tryAgainActionTriggered()
