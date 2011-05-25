@@ -158,7 +158,7 @@ void KexiContextMessageWidget::init(
     d->page = page;
     hide();
     setText(message.text());
-    setMessageType(KMessageWidget::WarningMessageType);
+    setMessageType(KMessageWidget::Warning);
     setWordWrap(true);
     setCloseButtonVisible(false);
     setAutoDelete(true);
@@ -174,6 +174,7 @@ void KexiContextMessageWidget::init(
         int row;
         layout->getWidgetPosition(context, &row, 0);
         layout->insertRow(row, QString(), this);
+        setCalloutPointerDirection(KMessageWidget::Down);
     }
     else {
         if (d->page) {

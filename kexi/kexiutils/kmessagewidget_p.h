@@ -21,7 +21,7 @@
 #ifndef KMESSAGEWIDGET_P_H
 #define KMESSAGEWIDGET_P_H
 
-#include <QFrame>
+#include "kmessagewidget.h"
 
 class KMessageWidgetFrame : public QFrame
 {
@@ -31,9 +31,12 @@ public:
     virtual void paintEvent(QPaintEvent* event);
 
     const int radius;
-    const qreal arr;
     QBrush bgBrush;
     QBrush borderBrush;
+    KMessageWidget::CalloutPointerDirection calloutPointerDirection;
+
+private:
+    void paintCalloutPointer();
 };
 
 #endif /* KMESSAGEWIDGET_P_H */

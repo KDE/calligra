@@ -61,12 +61,14 @@ class KEXIUTILS_EXPORT KexiContextMessageWidget : public KMessageWidget
     Q_OBJECT
 public:
     //! Creates message widget constructed out of context message @a message.
-    //! Inserts itself into layout @a layout on top of the widget @a context.
-    //! If @page is not 0 and @a message has any actions added,
-    //! all children of @a page widget will be visually disabled to indicate 
-    //! modality of the message.
-    //! The message widget will be automatically destroyed after triggering
-    //! of any associated action.
+    /*! Inserts itself into layout @a layout on top of the widget @a context.
+       If @page is not 0 and @a message has any actions added,
+       all children of @a page widget will be visually disabled to indicate 
+       modality of the message.
+       The message widget will be automatically destroyed after triggering
+       of any associated action.
+       If @a layout is provided, direction of callout pointer is set by default
+       to KMessageWidget::Down. This can be changed using setCalloutPointerDirection(). */
     KexiContextMessageWidget(QWidget *page,
                              QFormLayout* layout, QWidget *context,
                              const KexiContextMessage& message);

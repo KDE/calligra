@@ -106,6 +106,14 @@ public:
         Warning,
         Error
     };
+    
+    enum CalloutPointerDirection {
+        NoPointer,
+        Up,
+        Down,
+        Left,
+        Right
+    };
 
     /**
      * Constructs a KMessageWidget with the specified parent.
@@ -123,6 +131,8 @@ public:
     bool isCloseButtonVisible() const;
 
     MessageType messageType() const;
+
+    CalloutPointerDirection calloutPointerDirection() const;
 
     void addAction(QAction *action);
 
@@ -150,6 +160,8 @@ public Q_SLOTS:
     void setCloseButtonVisible(bool visible);
 
     void setMessageType(KMessageWidget::MessageType type);
+
+    void setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction);
 
     /**
      * Show the widget using an animation, unless
