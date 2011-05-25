@@ -133,9 +133,10 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
         slideMasterProperties(_slideMasterProperties),
         notesMasterProperties(_notesMasterProperties),
         commentAuthors(_commentAuthors),
-        colorMap(masterColorMap), oleReplacements(_oleReplacements), firstReadingRound(false),
+        oleReplacements(_oleReplacements), firstReadingRound(false),
         tableStylesFilePath(_tableStylesFilePath)
 {
+    colorMap = masterColorMap;
 }
 
 void PptxXmlSlideReaderContext::initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
