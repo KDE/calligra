@@ -51,6 +51,7 @@ protected:
 public:
     virtual ~MsooXmlReaderContext();
     MSOOXML::MsooXmlRelationships* relationships;
+    QMap<QString, QString> colorMap;
 private:
     Q_DISABLE_COPY(MsooXmlReaderContext)
 };

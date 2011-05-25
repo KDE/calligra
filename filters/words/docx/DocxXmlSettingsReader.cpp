@@ -30,9 +30,8 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlReader_p.h>
 
-DocxXmlSettingsReaderContext::DocxXmlSettingsReaderContext(QMap<QString, QVariant>& _documentSettings, QMap<QString, QString>& _colorMap)
-    : documentSettings(_documentSettings),
-      colorMap(_colorMap)
+DocxXmlSettingsReaderContext::DocxXmlSettingsReaderContext(QMap<QString, QVariant>& _documentSettings)
+    : documentSettings(_documentSettings)
 {
 }
 

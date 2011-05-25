@@ -30,10 +30,9 @@
 class DocxXmlSettingsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    DocxXmlSettingsReaderContext(QMap<QString, QVariant>& _documentSettings, QMap<QString, QString>& _colorMap);
+    DocxXmlSettingsReaderContext(QMap<QString, QVariant>& _documentSettings);
 
     QMap<QString, QVariant>& documentSettings;
-    QMap<QString, QString>& colorMap;
 };
 
 //! A class reading application settings

@@ -3988,8 +3988,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
 
-#if defined(PPTXXMLSLIDEREADER_CPP) || defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
-
     QString valTransformed = m_context->colorMap.value(val);
 
     if (valTransformed.isEmpty()) {
@@ -3998,10 +3996,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     } else {
         colorItem = m_context->themes->colorScheme.value(valTransformed);
     }
-#else
-    // This should most likely be checked from a color map, see above
-    colorItem = m_context->themes->colorScheme.value(val);
-#endif
+
     // Parse the child elements
     MSOOXML::Utils::DoubleModifier lumMod;
     MSOOXML::Utils::DoubleModifier lumOff;

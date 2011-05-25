@@ -143,8 +143,9 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 {
     // 0. parse settings.xml
     {
-        DocxXmlSettingsReaderContext context(d->documentSettings, d->colorMap);
+        DocxXmlSettingsReaderContext context(d->documentSettings);
         DocxXmlSettingsReader settingsReader(writers);
+        d->colorMap = context.colorMap;
 
         RETURN_IF_ERROR( loadAndParseDocumentIfExists(
             MSOOXML::ContentTypes::wordSettings, &settingsReader, writers, errorMessage, &context) )

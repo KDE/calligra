@@ -314,10 +314,6 @@ public:
     QVector<QString> pageFrames; //! Frames which go to masterslide
     QMap<int, QString> commentAuthors;
 
-    // This value is always initialized with values from master slide, but it is possible
-    // that slide/layout override it with custom map
-    QMap<QString, QString> colorMap;
-
     QMap<QString, QString> oleReplacements;
 
     // Used to keep track, whether we should skip elements
