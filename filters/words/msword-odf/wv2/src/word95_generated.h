@@ -3993,6 +3993,10 @@ struct WV2_EXPORT FIB {
     void clear();
 
     // Data
+
+    // FibBase - BEGIN
+    // --------------------
+
     /**
      * magic number
      */
@@ -4114,6 +4118,9 @@ struct WV2_EXPORT FIB {
      * file offset of last character of text in document text stream+ 1
      */
     U32 fcMac;
+
+    // --------------------
+    // FibBase - END
 
     /**
      * file offset of last byte written to file + 1.

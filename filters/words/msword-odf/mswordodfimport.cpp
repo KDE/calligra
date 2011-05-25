@@ -88,25 +88,27 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     LEInputStream wdstm(&buff1);
 
-    MSO::FibBase fb;
+    MSO::FibBase fibBase;
     LEInputStream::Mark m = wdstm.setMark();
     try {
-        parseFibBase(wdstm, fb);
+        parseFibBase(wdstm, fibBase);
     } catch (IOException _e) {
         kError(30513) << _e.msg;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
     }
     wdstm.rewind(m);
 
     //document is encrypted or obfuscated
-    if (fb.fEncrypted) {
+    if (fibBase.fEncrypted) {
         return KoFilter::PasswordProtected;
     }
 
     //1Table Stream or 0Table Stream
-    const char* tblstm_name = fb.fWhichTblStm ? "1Table" : "0Table";
+    const char* tblstm_name = fibBase.fWhichTblStm ? "1Table" : "0Table";
     POLE::Stream tblstm_pole(&storage, tblstm_name);
     if (tblstm_pole.fail()) {
-        if (fb.nFib >= Word8nFib) {
+        if (fibBase.nFib >= Word8nFib) {
             kDebug(30513) << "Either the 1Table stream or the 0Table stream MUST be present in the file!";
             return KoFilter::InvalidFormat;
         }
@@ -205,7 +207,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     } catch (InvalidFormatException _e) {
         kDebug(30513) << _e.msg;
         return KoFilter::InvalidFormat;
-    }  catch (...) {
+    } catch (...) {
         kWarning(30513) << "Warning: Caught an unknown exception!";
         return KoFilter::StupidError;
     }

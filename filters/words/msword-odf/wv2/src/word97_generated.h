@@ -4460,9 +4460,12 @@ struct FIB {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Validate FIB.  Don't take this info and warnings too seriously at the
-     * moment.  I still have to spend some time to process the info from FIB
-     * properly.
+     * Validate FIB.  Don't take warnings too seriously.  It seems that the
+     * information depends on the file content saved by a specific MS Office
+     * version.  Don't expect to recognize the MS Office version which saved
+     * the file based on the value of the nFib or the nFibNew attribute.  The
+     * nFib seems to be used for backward compatibility.  The nFibNew seems to
+     * be used by MS Office > 2k, sometimes.
      */
     bool valid() const;
 
@@ -4472,6 +4475,10 @@ struct FIB {
     void clear();
 
     // Data
+
+    // FibBase - BEGIN
+    // --------------------
+
     /**
      * (fibh) FIBH Beginning of the FIB header magic number
      */
@@ -4629,6 +4636,9 @@ struct FIB {
      * file offset of last character of text in document text stream + 1
      */
     U32 fcMac;
+
+    // --------------------
+    // FibBase - END
 
     /**
      * Count of fields in the array of "shorts"
