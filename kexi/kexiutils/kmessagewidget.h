@@ -163,6 +163,8 @@ public Q_SLOTS:
 
     void setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction);
 
+    void setCalloutPointerPosition(const QPoint& globalPos);
+
     /**
      * Show the widget using an animation, unless
      * KGlobalSettings::graphicsEffectLevel() does not allow simple effects.

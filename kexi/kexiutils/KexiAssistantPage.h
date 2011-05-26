@@ -38,6 +38,8 @@ public:
     void setContents(QLayout* layout);
     QWidget* focusWidget() const;
     void setFocusWidget(QWidget* widget);
+    QLabel* backButton();
+    QLabel* nextButton();
 public slots:
     void setDescription(const QString& text);
     void setBackButtonVisible(bool set);
@@ -51,9 +53,6 @@ signals:
     void back(KexiAssistantPage* page);
     void next(KexiAssistantPage* page);
     void cancelled(KexiAssistantPage* page);
-protected:
-    QLabel* backButton();
-    QLabel* nextButton();
 
 private slots:    
     void slotLinkActivated(const QString& link);

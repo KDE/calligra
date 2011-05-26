@@ -46,8 +46,15 @@
 //---------------------------------------------------------------------
 
 KMessageWidgetFrame::KMessageWidgetFrame(QWidget* parent)
- : QFrame(parent), radius(5), calloutPointerDirection(KMessageWidget::NoPointer)
+ : QFrame(parent), radius(5), m_calloutPointerDirection(KMessageWidget::NoPointer)
 {
+    const qreal rad = radius;
+    m_polyline << QPointF(0, 0)
+               << QPointF(rad, rad * 2.0 - 0.5)
+               << QPointF(rad * 2.0, 0);
+    m_polygon << QPointF(m_polyline[0].x(), m_polyline[0].y() - 1)
+              << QPointF(m_polyline[1].x(), m_polyline[1].y() - 1)
+              << QPointF(m_polyline[2].x(), m_polyline[2].y() - 1);
 }
 
 void KMessageWidgetFrame::paintEvent(QPaintEvent* event)
@@ -56,58 +63,74 @@ void KMessageWidgetFrame::paintEvent(QPaintEvent* event)
     paintCalloutPointer();
 }
 
-void KMessageWidgetFrame::paintCalloutPointer()
+KMessageWidget::CalloutPointerDirection KMessageWidgetFrame::calloutPointerDirection() const
 {
+    return m_calloutPointerDirection;
+}
+
+void KMessageWidgetFrame::setCalloutPointerDirection(
+    KMessageWidget::CalloutPointerDirection direction)
+{
+    m_calloutPointerDirection = direction;
+    m_calloutPointerTransformation.reset();
+
     const QSizeF s(size());
     const qreal rad = radius;
-    QTransform t;
     // Original: [v    ]
     //           [     ]
-    switch (calloutPointerDirection) {
+    switch (m_calloutPointerDirection) {
     case KMessageWidget::Up:
         //  ^
         // [    ]
-        t.rotate(180.0)
-         .translate(- rad * 5.0 + 0.5, - rad * 2 - 1.5);
+        m_calloutPointerTransformation
+            .rotate(180.0)
+            .translate(- rad * 5.0 + 0.5, - rad * 2 - 1.5);
         break;
     case KMessageWidget::Down:
         // [    ]
         //  v
         // No rotation needed, this is original position of polyline below
-        t.translate(rad * 3.0 + 0.5, s.height() - rad * 2);
+        m_calloutPointerTransformation
+            .translate(rad * 3.0 + 0.5, s.height() - rad * 2);
         break;
     case KMessageWidget::Left:
         // <[     ]
         //  [     ]
-        t.rotate(90.0)
-         .translate(rad * 1.5 + 0.5, - rad * 2 - 2.5);
+        m_calloutPointerTransformation
+            .rotate(90.0)
+            .translate(rad * 1.5 + 0.5, - rad * 2 - 2.5);
         break;
     case KMessageWidget::Right:
         // [     ]>
         // [     ]
-        t.rotate(-90.0)
-         .translate(- rad * 3.5 - 0.5, s.width() - rad * 2 - 2.5);
+        m_calloutPointerTransformation
+            .rotate(-90.0)
+            .translate(- rad * 3.5, s.width() - rad * 2 - 2.5);
         break;
     default:
-        return;
+        break;
     }
+}
+
+void KMessageWidgetFrame::paintCalloutPointer()
+{
+    if (m_calloutPointerTransformation.isIdentity())
+        return;
     QPainter painter(this);
-    painter.setTransform(t);
-    QPolygonF polyline;
-    polyline << QPointF(0, 0)
-             << QPointF(rad, rad * 2.0 - 0.5)
-             << QPointF(rad * 2.0, 0);
-    QPolygonF polygon;
-    polygon << QPointF(polyline[0].x(), polyline[0].y() - 1)
-            << QPointF(polyline[1].x(), polyline[1].y() - 1)
-            << QPointF(polyline[2].x(), polyline[2].y() - 1);
+    painter.setTransform(m_calloutPointerTransformation);
     
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QPen(bgBrush.color(), 1.0));
     painter.setBrush(bgBrush);
-    painter.drawPolygon(polygon);
+    painter.drawPolygon(m_polygon);
     painter.setPen(QPen(borderBrush, 1.0));
-    painter.drawPolyline(polyline);
+    painter.drawPolyline(m_polyline);
+}
+
+QPoint KMessageWidgetFrame::pointerPosition() const
+{
+    //kDebug() << "MAPPED:" << t.map(polyline[1]) << mapToGlobal(t.map(polyline[1]).toPoint());
+    return m_calloutPointerTransformation.map(m_polyline[1]).toPoint();
 }
 
 //---------------------------------------------------------------------
@@ -257,7 +280,7 @@ void KMessageWidgetPrivate::createLayout()
     left *= 2;
     right *= 2;
     add *= 2;
-    switch (content->calloutPointerDirection) {
+    switch (content->calloutPointerDirection()) {
     case KMessageWidget::Up:
         top += add;
         break;
@@ -337,7 +360,7 @@ void KMessageWidgetPrivate::updateStyleSheet()
     kDebug() << "q->getContentsMargins:" << left << top << right << bottom;
 #if 1
     int add = content->radius * 2;
-    switch (content->calloutPointerDirection) {
+    switch (content->calloutPointerDirection()) {
     case KMessageWidget::Up:
         top += add;
         break;
@@ -449,12 +472,12 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
 
 KMessageWidget::CalloutPointerDirection KMessageWidget::calloutPointerDirection() const
 {
-    return d->content->calloutPointerDirection;
+    return d->content->calloutPointerDirection();
 }
 
 void KMessageWidget::setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction)
 {
-    d->content->calloutPointerDirection = direction;
+    d->content->setCalloutPointerDirection(direction);
     d->updateStyleSheet();
     d->updateLayout();
 }
@@ -614,6 +637,14 @@ void KMessageWidget::animatedHide()
     if (d->timeLine->state() == QTimeLine::NotRunning) {
         d->timeLine->start();
     }
+}
+
+void KMessageWidget::setCalloutPointerPosition(const QPoint& globalPos)
+{
+    move(    
+        parentWidget()->mapFromGlobal(
+            globalPos - d->content->pos() - d->content->pointerPosition())
+    );
 }
 
 #include "kmessagewidget.moc"

@@ -28,15 +28,26 @@ class KMessageWidgetFrame : public QFrame
     Q_OBJECT
 public:
     KMessageWidgetFrame(QWidget* parent = 0);
+
     virtual void paintEvent(QPaintEvent* event);
+
+    KMessageWidget::CalloutPointerDirection calloutPointerDirection() const;
+
+    void setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction);
+
+    QPoint pointerPosition() const;
 
     const int radius;
     QBrush bgBrush;
     QBrush borderBrush;
-    KMessageWidget::CalloutPointerDirection calloutPointerDirection;
 
 private:
     void paintCalloutPointer();
+
+    KMessageWidget::CalloutPointerDirection m_calloutPointerDirection;
+    QTransform m_calloutPointerTransformation;
+    QPolygonF m_polyline;
+    QPolygonF m_polygon;
 };
 
 #endif /* KMESSAGEWIDGET_P_H */
