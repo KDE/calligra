@@ -222,8 +222,12 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     //actual parsing & action
     try {
-        if (!document->parse()) {
+        quint8 ret = document->parse();
+        switch (ret) {
+        case 1:
             return KoFilter::CreationError;
+        case 2:
+            return KoFilter::StupidError;
         }
     } catch (InvalidFormatException _e) {
         kDebug(30513) << _e.msg;

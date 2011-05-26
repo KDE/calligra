@@ -92,7 +92,12 @@ public:
     virtual void annotationStart();
     virtual void annotationEnd();
 
-    bool parse();
+    /**
+     * Call the wv2 parser and check if our handlers are fine after the parsing
+     * process is finished.
+     * @return 0 - Ok, 1 - parser error, 2 - handler error
+     */
+    quint8 parse();
 
     void processSubDocQueue();
 
