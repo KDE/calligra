@@ -747,6 +747,9 @@ void KexiNewProjectAssistant::showErrorMessage(
         0/*contents->le_dbname*/, message);
     //d->messageWidget->setNextFocusWidget(contents->le_title);
     d->messageWidget->setCalloutPointerDirection(KMessageWidget::Right);
+    QWidget *b = currentPage()->nextButton();
+    d->messageWidget->setCalloutPointerPosition(
+        b->mapToGlobal(QPoint(0, b->height() / 2)));
 }
 
 void KexiNewProjectAssistant::tryAgainActionTriggered()
