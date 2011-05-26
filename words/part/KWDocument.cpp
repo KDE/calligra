@@ -287,11 +287,6 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
 
     kDebug(32001) << "frameSets=" << framesets;
 
-    if (progressUpdater()) {
-        m_progressUpdater = progressUpdater()->startSubtask(1, "Layouting");
-        m_progressUpdater->setProgress(0);
-    }
-
 #if 0
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -339,7 +334,7 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
         Q_ASSERT(lay);
 
-        if (tfs->textFrameSetType() == KWord::MainTextFrameSet && m_progressUpdater) {
+        if (tfs->textFrameSetType() == KWord::MainTextFrameSet && m_layoutProgressUpdater) {
             connect(lay, SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
             connect(lay, SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
         }
@@ -354,17 +349,17 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
 
 void KWDocument::layoutProgressChanged(int percent)
 {
-    Q_ASSERT(m_progressUpdater);
-    m_progressUpdater->setProgress(percent);
+    Q_ASSERT(m_layoutProgressUpdater);
+    m_layoutProgressUpdater->setProgress(percent);
 }
 
 void KWDocument::layoutFinished()
 {
-    Q_ASSERT(m_progressUpdater);
+    Q_ASSERT(m_layoutProgressUpdater);
     disconnect(QObject::sender(), SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
     disconnect(QObject::sender(), SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
-    m_progressUpdater->setProgress(100);
-    m_progressUpdater = 0; // free the instance
+    m_layoutProgressUpdater->setProgress(100);
+    m_layoutProgressUpdater = 0; // free the instance
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
@@ -585,6 +580,13 @@ void KWDocument::clear()
 
     if (inlineTextObjectManager())
         inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
+}
+
+void KWDocument::setupOpenFileSubProgress()
+{
+    if (progressUpdater()) {
+        m_layoutProgressUpdater = progressUpdater()->startSubtask(1, "Layouting");
+    }
 }
 
 bool KWDocument::loadOdf(KoOdfReadStore &odfStore)

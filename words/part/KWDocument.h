@@ -211,6 +211,10 @@ private slots:
     void layoutProgressChanged(int percent);
     void layoutFinished();
 
+protected:
+    /// reimplemented from KoDocument
+    virtual void setupOpenFileSubProgress();
+
 private:
     friend class KWDLoader;
     friend class KWOdfLoader;
@@ -242,7 +246,7 @@ private:
     KWApplicationConfig m_config;
     bool m_mainFramesetEverFinished;
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
-    QPointer<KoUpdater> m_progressUpdater;
+    QPointer<KoUpdater> m_layoutProgressUpdater;
 };
 
 #endif
