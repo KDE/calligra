@@ -339,12 +339,8 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
             connect(lay, SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
         }
 
-        // Delay layouting of the mainframe till headers, footers and other textframe's are layouted.
-        // This is needed cause they define the remaining size available for the mainframe per page.
-        if (tfs->textFrameSetType() == KWord::MainTextFrameSet)
-            lay->scheduleLayout();
-        else
-            lay->layout();
+        // schedule all calls so multiple layout calls are compressed
+        lay->scheduleLayout();
     }
 }
 
