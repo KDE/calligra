@@ -73,6 +73,8 @@ public:
      */
     void setItemSize(QRect size);
 
+    QPixmap createDragPixmap() const;
+
 
 signals:
 

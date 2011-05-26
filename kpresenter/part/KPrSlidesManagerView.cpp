@@ -80,6 +80,15 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
 
         QPoint point1(numberMod * size.width(), verticalValue);
         QPoint point2(numberMod * size.width(), verticalValue + size.height());
+
+        qDebug("NumberMod: %d", numberMod);
+        qDebug("VerticalValue: %d", verticalValue);
+        qDebug("SlidesNumber: %d", slidesNumber);
+        qDebug("size: %d, %d", size.width(), size.height());
+        qDebug ("point 1: %d, %d", point1.x(), point1.y());
+        qDebug ("point 2: %d, %d", point2.x(), point2.y());
+        qDebug("Mouse pointer: %d, %d", QWidget::mapFromGlobal(QCursor::pos()).x(), QWidget::mapFromGlobal(QCursor::pos()).y());
+
         QLineF line(point1, point2);
 
         QPainter painter(this->viewport());
@@ -101,8 +110,20 @@ void KPrSlidesManagerView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void KPrSlidesManagerView::startDrag(Qt::DropActions supportedActions)
 {
-    Q_UNUSED(supportedActions);
-    QAbstractItemView::startDrag(Qt::MoveAction);
+    const QModelIndexList indexes = selectionModel()->selectedIndexes();
+    if (!indexes.isEmpty()) {
+        QMimeData *data = model()->mimeData(indexes);
+        if (!data) {
+            return;
+        }
+
+        QDrag* drag = new QDrag(this);
+        drag->setPixmap(createDragPixmap());
+        drag->setMimeData(data);
+
+        //m_dragSource = this;
+        drag->exec(supportedActions, Qt::CopyAction);
+    }
 }
 
 void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
@@ -205,4 +226,59 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QObject::eventFilter(watched, event);
+}
+
+QPixmap KPrSlidesManagerView::createDragPixmap() const
+{
+    const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+     Q_ASSERT(!selectedIndexes.isEmpty());
+
+     const int itemCount = selectedIndexes.count();
+
+     // If more than one item is dragged, align the items inside a
+     // rectangular grid. The maximum grid size is limited to 4 x 4 items.
+     int xCount = 2;
+     int size = KIconLoader::SizeEnormous;
+     if (itemCount > 9) {
+         xCount = 4;
+         size = KIconLoader::SizeLarge;
+     } else if (itemCount > 5) {
+         xCount = 3;
+         size = KIconLoader::SizeHuge;
+     }
+
+     if (itemCount < xCount) {
+         xCount = itemCount;
+     }
+
+     int yCount = itemCount / xCount;
+     if (itemCount % xCount != 0) {
+         ++yCount;
+     }
+     if (yCount > xCount) {
+         yCount = xCount;
+     }
+
+     // Draw the selected items into the grid cells
+     QPixmap dragPixmap(xCount * size + xCount - 1, yCount * size + yCount - 1);
+     dragPixmap.fill(Qt::transparent);
+
+     QPainter painter(&dragPixmap);
+     int x = 0;
+     int y = 0;
+     foreach (const QModelIndex& selectedIndex, selectedIndexes) {
+         const QIcon icon = (model()->data(selectedIndex, Qt::DecorationRole)).value<QIcon>();
+         painter.drawPixmap(x, y, icon.pixmap(size, size));
+
+         x += size + 1;
+         if (x >= dragPixmap.width()) {
+             x = 0;
+             y += size + 1;
+         }
+         if (y >= dragPixmap.height()) {
+             break;
+         }
+     }
+
+     return dragPixmap;
 }
