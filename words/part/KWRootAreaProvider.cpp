@@ -177,7 +177,10 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
                 Q_ASSERT(page.isValid());
             }
         } else if (pageNumber > pageManager->pageCount()) {
-            kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider()->addDependentProvider(this, pageNumber);
+            if (KWord::isHeaderFooter(m_textFrameSet)) {
+                // Headers and footers are special in that they continue with every page what is why they depend on the mainframe.
+                kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider()->addDependentProvider(this, pageNumber);
+            }
             return 0; // not ready to layout this yet
         }
 
