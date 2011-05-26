@@ -37,12 +37,14 @@
 #include <QObject>
 #include <QPainter>
 #include <QRect>
+#include <QPointer>
 
 class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
+class KoUpdater;
 
 class KLocalizedString;
 class QIODevice;
@@ -206,6 +208,13 @@ private slots:
     void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
+    void layoutProgressChanged(int percent);
+    void layoutFinished();
+
+protected:
+    /// reimplemented from KoDocument
+    virtual void setupOpenFileSubProgress();
+
 private:
     friend class KWDLoader;
     friend class KWOdfLoader;
@@ -237,6 +246,7 @@ private:
     KWApplicationConfig m_config;
     bool m_mainFramesetEverFinished;
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
+    QPointer<KoUpdater> m_layoutProgressUpdater;
 };
 
 #endif
