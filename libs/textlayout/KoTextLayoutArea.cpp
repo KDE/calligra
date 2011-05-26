@@ -1053,6 +1053,26 @@ qreal KoTextLayoutArea::verticalAlignOffset() const
     return m_verticalAlignOffset;
 }
 
+/*
+ *   m_y = 0; // top of a possible table following
+ *   m_prevLineDescent = 0;
+ *
+ *   Stage/Impress/Powerpoint linespacing
+ *   ------------------------------------
+ *   linespacing is based on baseline to baseline
+ *   proportional: factor * (m_prevLineDescent + line.ascent)
+ *   fixed: value
+ *
+ *   line.y = m_y - m_prevLineDescent + linespacing - line.ascent
+ *   m_y = line.y + line.ascent + line.descent
+ *   reduces to m_y += linespacing - m_prevLineDescent + line.descent
+ *   m_prevLineDescent = line.descent
+ *
+ *   Words/Writer/Word linespacing
+ *   -----------------------------
+ *   fixed linespacing m_y to baseline
+ *   proportional is placing top of _next_line
+ */
 qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData)
 {
     QTextBlock block = cursor->it.currentBlock();
