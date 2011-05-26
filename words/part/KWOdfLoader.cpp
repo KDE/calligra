@@ -73,10 +73,12 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     //kDebug(32001) << "========================> KWOdfLoader::load START";
 
     QPointer<KoUpdater> updater;
+    QPointer<KoUpdater> loadUpdater;
     if (m_document->progressUpdater()) {
-        updater = m_document->progressUpdater()->startSubtask(1,
-                                                           "KWOdfLoader::load");
+        updater = m_document->progressUpdater()->startSubtask(1, "KWOdfLoader::load");
+        loadUpdater = m_document->progressUpdater()->startSubtask(5, "KWOdfLoader::loadOdf");
         updater->setProgress(0);
+        loadUpdater->setProgress(0);
     }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -222,10 +224,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoTextLoader loader(sc);
     QTextCursor cursor(textShapeData.document());
 
-    QPointer<KoUpdater> loadUpdater;
-    if (m_document->progressUpdater()) {
-        loadUpdater = m_document->progressUpdater()->startSubtask(5, "KWOdfLoader::loadOdf");
-        loadUpdater->setProgress(0);
+    if (loadUpdater) {
         connect(&loader, SIGNAL(sigProgress(int)), loadUpdater, SLOT(setProgress(int)));
     }
 
