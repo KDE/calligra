@@ -370,6 +370,8 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
     m_currentVMLProperties.lineCapStyle = "square";
     m_currentVMLProperties.joinStyle = "middle";
     m_currentVMLProperties.strokeStyleName = QString();
+    m_currentVMLProperties.filled = QString();
+    m_currentVMLProperties.stroked = QString();
 
     if (!strokeweight.isEmpty()) {
         if (strokeweight.at(0) == '.') {
@@ -383,18 +385,18 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
         type = type.mid(1); // removes extra # from the start
     }
     TRY_READ_ATTR_WITHOUT_NS(filled)
-    if (filled.isEmpty()) {
-        filled = m_fillTypeStrings[type];
+    if (!filled.isEmpty()) {
+        m_currentVMLProperties.filled = filled;
     }
-    if (filled != "f" && filled != "false") {
+    if (m_currentVMLProperties.filled != "f" && m_currentVMLProperties.filled != "false") {
         m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(stroked)
-    if (stroked.isEmpty()) {
-        stroked = m_strokeTypeStrings[type];
+    if (!stroked.isEmpty()) {
+        m_currentVMLProperties.stroked = stroked;
     }
-    if (stroked == "f" || stroked == "false") {
+    if (m_currentVMLProperties.stroked == "f" || m_currentVMLProperties.stroked == "false") {
         m_currentVMLProperties.strokeWidth = QString();
     }
     else if (!strokecolor.isEmpty()) {
@@ -643,8 +645,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         const QString x_mar(m_currentVMLProperties.vmlStyle.value("margin-left"));
         const QString y_mar(m_currentVMLProperties.vmlStyle.value("margin-top"));
 
-        m_currentVMLProperties.insideGroup = true;
-
         m_currentVMLProperties.groupWidthUnit = width.right(2); // pt, cm etc.
         m_currentVMLProperties.groupHeightUnit = height.right(2);
         m_currentVMLProperties.real_groupWidth = width.left(width.length() - 2).toDouble();
@@ -685,6 +685,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     m_currentVMLProperties.lineCapStyle = "square";
     m_currentVMLProperties.joinStyle = "middle";
     m_currentVMLProperties.strokeStyleName = QString();
+    m_currentVMLProperties.filled = QString();
+    m_currentVMLProperties.stroked = QString();
 
     if (!strokeweight.isEmpty()) {
         if (strokeweight.at(0) == '.') {
@@ -697,29 +699,39 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            TRY_READ_IF(shapetype)
+            if (name() == "shapetype") {
+                m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
+                TRY_READ(shapetype)
+                m_currentVMLProperties = m_VMLShapeStack.pop();
+            }
             else if (name() == "rect") {
                 m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
                 TRY_READ(rect)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
             else if (name() == "roundrect") {
                 m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
                 TRY_READ(roundrect)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
             else if (name() == "oval") {
                 m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
                 TRY_READ(oval)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
             else if (name() == "shape") {
                 m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
                 TRY_READ(shape)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
             else if (name() == "group") {
                 m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
                 TRY_READ(group)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
@@ -733,8 +745,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
-    m_currentVMLProperties.insideGroup = false;
 
     body = frameBuf.originalWriter();
 
@@ -1444,9 +1454,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
     }
 
     TRY_READ_ATTR_WITHOUT_NS(filled)
+    m_currentVMLProperties.filled = filled;
     TRY_READ_ATTR_WITHOUT_NS(stroked)
-    m_fillTypeStrings[id] = filled;
-    m_strokeTypeStrings[id] = stroked;
+    m_currentVMLProperties.stroked = stroked;
 
     m_currentVMLProperties.shapeTypeString += ">";
 
@@ -1461,7 +1471,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
 
     m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
     m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
-    m_shapeTypeStrings[id] = m_currentVMLProperties.shapeTypeString;
+
+    m_definedShapeTypes[id] = m_currentVMLProperties;
 
     READ_EPILOGUE
 }
@@ -1664,6 +1675,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
            </v:shape>*/
     const QXmlStreamAttributes attrs(attributes());
 
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    if (!type.isEmpty()) {
+        type = type.mid(1); // removes extra # from the start
+    }
+    // Inheriting all values from the template shape
+    m_currentVMLProperties = m_definedShapeTypes.value(type);
+
     TRY_READ_ATTR_WITHOUT_NS(id)
     m_currentVMLProperties.currentShapeId = id;
 
@@ -1683,7 +1701,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_currentVMLProperties.shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_currentVMLProperties.shapeTitle)
-    TRY_READ_ATTR_WITHOUT_NS(type)
     TRY_READ_ATTR_WITHOUT_NS(path)
     TRY_READ_ATTR_WITHOUT_NS(adj)
     TRY_READ_ATTR_WITHOUT_NS(coordsize)
@@ -1770,13 +1787,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     if (m_outputFrames) {
         if (isCustomShape && o_connectortype.isEmpty()) {
-            if (!type.isEmpty()) {
-                type = type.mid(1); // removes extra # from the start
-                body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
-            }
-            else {
-                body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
-            }
+            body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
         }
         createFrameEnd();
     }

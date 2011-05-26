@@ -1641,6 +1641,10 @@ std::string TAP::toString() const
     s += "\ntextWrap=";
     s += uint2string( textWrap );
     s += "\nrgdxaCenter=";
+    for(uint i = 0; i < rgdxaCenter.size(); i++) {
+        s += "\nrgdxaCenter[" + int2string( i ) + "]=";
+        s += int2string(rgdxaCenter[i]);
+    }
     // skipping the std::vector rgdxaCenter
     s += "\nrgdxaCenterPrint=";
     // skipping the std::vector rgdxaCenterPrint

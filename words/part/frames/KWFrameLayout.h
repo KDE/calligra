@@ -73,24 +73,6 @@ public:
      * @param pageNumber the number of the page to re-layout.
      */
     void layoutFramesOnPage(int pageNumber);
-    //void relayoutFrames(old layout, new layout); // per page ? Or per doc?
-    /**
-     *  delete any unneeded header/footer frames (but not their contents) based on
-     * the document settings
-     */
-    void cleanupHeadersFooters();
-
-#if 0
-    /**
-     * For the one frameset create all the frames that would be auto-placed
-     * on the target pagenumber if the page was appended.  Will only place
-     * frames if the already present frames in the frameset plus the
-     * newFrameBehavior state it should.
-     * @param fs the frameset to attach a new textframe to
-     * @param pageNumber the (already existing) page where the new frame(s) will show
-     */
-    void createNewFrameForPage(KWTextFrameSet *fs, int pageNumber);
-#endif
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) {
@@ -126,7 +108,6 @@ private slots:
     void mainframeRemoved(KWFrame *frame);
 
 private:
-    friend class TestFrameLayout;
     struct FrameSets {
         FrameSets() : oddHeaders(0), evenHeaders(0), oddFooters(0), evenFooters(0), pageBackground(0) {}
         KWTextFrameSet *oddHeaders;

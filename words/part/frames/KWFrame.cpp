@@ -65,12 +65,12 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         }
     }
 
-    kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
+    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
 }
 
 KWFrame::~KWFrame()
 {
-    kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
+    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
 
     KoShape *ourShape = m_shape;
     m_shape = 0; // no delete is needed as the shape deletes us.

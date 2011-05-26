@@ -86,6 +86,8 @@ protected:
         QString shapeAltText; //!< set in read_shape()
         QString shapeTitle; //!< set in read_shape()
 
+        QString stroked, filled;
+
         // Relative group widths
         int groupWidth, groupHeight;
 
@@ -123,6 +125,5 @@ protected:
 
     bool m_outputFrames; // Whether read_shape should output something to shape
 
-    QMap<QString, QString> m_shapeTypeStrings;
-    QMap<QString, QString> m_strokeTypeStrings;
-    QMap<QString, QString> m_fillTypeStrings;
+    // Elements defined by v:shapeType
+    QMap<QString, VMLShapeProperties> m_definedShapeTypes;

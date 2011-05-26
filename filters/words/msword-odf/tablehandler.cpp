@@ -35,6 +35,8 @@
 #include "document.h"
 #include "texthandler.h"
 
+//#define DEBUG_TABLEHANDLER
+
 using Conversion::twipsToPt;
 
 KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles) :
@@ -68,7 +70,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     m_currentTable = table;
     m_cellOpen = false;
 
-#if 0
+#ifdef DEBUG_TABLEHANDLER
     for (unsigned int i = 0; i < (unsigned int)table->m_cellEdges.size(); i++) {
         kDebug(30513) << table->m_cellEdges[i];
     }
@@ -398,9 +400,9 @@ void KWordTableHandler::tableCellStart()
     const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
 
     //left boundary of current cell
-    int left = m_tap->rgdxaCenter[ m_column ]; // in DXAs
+    int leftEdgePos = m_tap->rgdxaCenter[ m_column ]; // in DXAs
     //right boundary of current cell
-    int right = m_tap->rgdxaCenter[ m_column+1 ]; // in DXAs
+    int rightEdgePos = m_tap->rgdxaCenter[ m_column+1 ]; // in DXAs
 
     // Check for merged cells
     // ## We can ignore that one. Our cell-edge magic is much more flexible.
@@ -428,8 +430,8 @@ void KWordTableHandler::tableCellStart()
             KWord::TAPptr tapBelow = (*it).tap;
             const wvWare::Word97::TC* tcBelow = 0L;
             for (int c = 0; !tcBelow && c < tapBelow->itcMac ; ++c) {
-                if (qAbs(tapBelow->rgdxaCenter[ c ] - left) <= 3
-                        && qAbs(tapBelow->rgdxaCenter[ c + 1 ] - right) <= 3) {
+                if (qAbs(tapBelow->rgdxaCenter[ c ] - leftEdgePos) <= 3
+                        && qAbs(tapBelow->rgdxaCenter[ c + 1 ] - rightEdgePos) <= 3) {
                     tcBelow = &tapBelow->rgtc[ c ];
 //                     kDebug(30513) <<"found cell below, at (Word) column" << c
 //                                   <<" fVertMerge:" << tcBelow->fVertMerge;
@@ -445,8 +447,8 @@ void KWordTableHandler::tableCellStart()
     }
 
     // Check how many cells that means, according to our cell edge array.
-    int leftCellNumber  = m_currentTable->columnNumber(left);
-    int rightCellNumber = m_currentTable->columnNumber(right);
+    int leftCellNumber  = m_currentTable->columnNumber(leftEdgePos);
+    int rightCellNumber = m_currentTable->columnNumber(rightEdgePos);
 
     // In cases where not all columns are present, ensure that the last
     // column spans the remainder of the table.
@@ -454,16 +456,20 @@ void KWordTableHandler::tableCellStart()
     // an empty cell from m_column+1 to the last column. (table-6.doc)
     if (m_column == nbCells - 1)  {
         rightCellNumber = m_currentTable->m_cellEdges.size() - 1;
-        right = m_currentTable->m_cellEdges[ rightCellNumber ];
+        rightEdgePos = m_currentTable->m_cellEdges[ rightCellNumber ];
     }
 
-#if 0
-    kDebug(30513) << "left edge = " << left << ", right edge = " << right;
+#ifdef DEBUG_TABLEHANDLER
+    kDebug(30513) << "left edge = " << leftEdgePos << ", right edge = " << rightEdgePos;
 
     kDebug(30513) << "leftCellNumber = " << leftCellNumber
     << ", rightCellNumber = " << rightCellNumber;
 #endif
-    Q_ASSERT(rightCellNumber >= leftCellNumber);   // you'd better be...
+
+    //NOTE: The cacheCellEdge f. took care of unsorted tap->rgdxaCenter values.
+    //The following assert is not up2date.
+//     Q_ASSERT(rightCellNumber >= leftCellNumber);
+
     // the resulting number of merged cells horizontally
     int colSpan = rightCellNumber - leftCellNumber;
 
@@ -480,12 +486,12 @@ void KWordTableHandler::tableCellStart()
         return;
     }
     // We are now sure we have a real cell (and not a covered one)
-    QRectF cellRect(left / 20.0,  // left
+    QRectF cellRect(leftEdgePos / 20.0,  // left
                     m_currentY, // top
-                    (right - left) / 20.0,   // width
+                    (rightEdgePos - leftEdgePos) / 20.0,   // width
                     rowHeight());  // height
     // I can pass these sizes to ODF now...
-#if 0
+#ifdef DEBUG_TABLEHANDLER
     kDebug(30513) << " tableCellStart row=" << m_row << " WordColumn="
                   << m_column << " colSpan="
                   << colSpan << " (from" << leftCellNumber
@@ -511,7 +517,7 @@ void KWordTableHandler::tableCellStart()
     //  - The cell to the left of the border always defines the value.
     //  - Well then a winner with the table wide definitions is also found.
     //
-#if 0
+#ifdef DEBUG_TABLEHANDLER
     kDebug(30513) << "CellBorders=" << m_row << m_column
                   << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth
                   << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth
@@ -711,21 +717,16 @@ void KWordTableHandler::tableCellEnd()
     }
     KoXmlWriter*  writer = currentWriter();
 
-    // End table cell in content
-//     if (m_cellOpen) {
-        QList<const char*> openTags = writer->tagHierarchy();
-        for (int i = 0; i < openTags.size(); ++i)
-            kDebug(30513) << openTags[i];
 
-        writer->endElement();//table:table-cell
-        m_cellOpen = false;
-//     } else {
-//         kDebug(30513) << "Didn't close the cell because !m_cellOpen!!";
-//     }
+    QList<const char*> openTags = writer->tagHierarchy();
+    for (int i = 0; i < openTags.size(); ++i) {
+        kDebug(30513) << openTags[i];
+    }
+    writer->endElement();//table:table-cell
+    m_cellOpen = false;
 
-    // If this cell covers other cells (i.e. is merged), then create
-    // as many table:covered-table-cell tags as there are covered
-    // columns.
+    // If this cell covers other cells (i.e. is merged), then create as many
+    // table:covered-table-cell tags as there are covered columns.
     for (int i = 1; i < m_colSpan; i++) {
         writer->startElement("table:covered-table-cell");
         writer->endElement();
@@ -742,9 +743,6 @@ void KWordTableHandler::tableCellEnd()
     }
 }
 
-
-// Add cell edge into the cache of cell edges for a given table.
-// Might as well keep it sorted here
 void KWord::Table::cacheCellEdge(int cellEdge)
 {
     kDebug(30513) ;
@@ -767,8 +765,6 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     kDebug(30513) << cellEdge << " -> added. Size=" << size + 1;
 }
 
-// Lookup a cell edge from the cache of cell edges
-// And return the column number
 int KWord::Table::columnNumber(int cellEdge) const
 {
     kDebug(30513) ;

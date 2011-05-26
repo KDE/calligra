@@ -109,6 +109,13 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
 }
+bool KWordTextHandler::stateOk() const
+{
+    if (m_fldStart != m_fldEnd) {
+        return false;
+    }
+    return true;
+}
 
 KoXmlWriter* KWordTextHandler::currentWriter() const
 {
@@ -577,20 +584,36 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
     }
 
     if (!m_currentTable) {
-        // We need to put the table in a paragraph. For wv2 tables are between paragraphs.
-        //Q_ASSERT( !m_bInParagraph );
-        //paragraphStart( 0L );
         static int s_tableNumber = 0;
         m_currentTable = new KWord::Table();
         m_currentTable->name = i18n("Table %1", ++s_tableNumber);
         m_currentTable->tap = tap;
         //insertAnchor( m_currentTable->name );
     }
+//     kDebug(30513) << "tap->itcMac:" << tap->itcMac << "tap->rgdxaCenter.size():" << tap->rgdxaCenter.size();
 
-    // Add all cell edges to our array.
-    for (int i = 0; i <= tap->itcMac; i++)
+    // NOTE: Number of columns MUST be at least zero, and MUST NOT exceed 63.
+    // The rgdxaCenter vector MUST contain exactly one value for every column,
+    // incremented by 1.  The values in the vector MUST be in non-decreasing
+    // order, [MS-DOC] — v20101219, 514/621
+    if ( (tap->itcMac < 0) || (tap->itcMac > 63) ) {
+        throw InvalidFormatException("Table row: INVALID num. of culumns!");
+    }
+    if ( tap->rgdxaCenter.empty() ||
+         (tap->rgdxaCenter.size() != (quint16)(tap->itcMac + 1)) )
+    {
+        throw InvalidFormatException("Table row: tap->rgdxaCenter.size() INVALID!");
+    }
+    for (uint i = 0; i < (quint16) tap->itcMac; i++) {
+        if (tap->rgdxaCenter[i] > tap->rgdxaCenter[i + 1]) {
+            kWarning(30513) << "Warning: tap->rgdxaCenter INVALID, tablehandler will try to fix!";
+            break;
+        }
+    }
+    // Add all cell edges to an array where tablehandler will keep them sorted.
+    for (int i = 0; i <= tap->itcMac; i++) {
         m_currentTable->cacheCellEdge(tap->rgdxaCenter[ i ]);
-
+    }
     KWord::Row row(new wvWare::TableRowFunctor(functor), tap);
     m_currentTable->rows.append(row);
 }
