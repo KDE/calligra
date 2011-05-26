@@ -288,6 +288,7 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
     kDebug(32001) << "frameSets=" << framesets;
 
     if (progressUpdater()) {
+        progressUpdater()->start(); // we need to restart the progressUpdater for the case another subTask finished it meanwhile
         m_progressUpdater = progressUpdater()->startSubtask(1, "Layouting");
         m_progressUpdater->setProgress(0);
     }
