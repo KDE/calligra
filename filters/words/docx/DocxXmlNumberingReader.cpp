@@ -638,7 +638,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
         }
 
     }
-    else if (firstLine.isEmpty()) {
+    else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
         if (ok) {
            m_currentBulletProperties.setIndent(firstInd);

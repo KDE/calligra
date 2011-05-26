@@ -3012,11 +3012,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     if (!hanging.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
         if (ok) {
-           m_currentParagraphStyle.addPropertyPt("fo:text-indent", leftInd - firstInd);
+           m_currentParagraphStyle.addPropertyPt("fo:text-indent", -firstInd);
         }
 
     }
-    else if (firstLine.isEmpty()) {
+    else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
         if (ok) {
            m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
