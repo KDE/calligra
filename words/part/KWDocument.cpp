@@ -287,6 +287,11 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
 
     kDebug(32001) << "frameSets=" << framesets;
 
+    if (progressUpdater()) {
+        m_progressUpdater = progressUpdater()->startSubtask(1, "Layouting");
+        m_progressUpdater->setProgress(0);
+    }
+
 #if 0
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -333,12 +338,33 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
             continue;
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
         Q_ASSERT(lay);
+
+        if (tfs->textFrameSetType() == KWord::MainTextFrameSet && m_progressUpdater) {
+            connect(lay, SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
+            connect(lay, SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
+        }
+
         // Layout headers first since they will define the remaining size available for the mainframe per page.
         if (KWord::isHeaderFooter(tfs))
             lay->layout();
         else
             lay->scheduleLayout();
     }
+}
+
+void KWDocument::layoutProgressChanged(int percent)
+{
+    Q_ASSERT(m_progressUpdater);
+    m_progressUpdater->setProgress(percent);
+}
+
+void KWDocument::layoutFinished()
+{
+    Q_ASSERT(m_progressUpdater);
+    disconnect(QObject::sender(), SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
+    disconnect(QObject::sender(), SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
+    m_progressUpdater->setProgress(100);
+    m_progressUpdater = 0; // free the instance
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
@@ -582,12 +608,6 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
     kDebug(32001);
 
-    QPointer<KoUpdater> updater;
-    if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "KWDocument::endOfLoading");
-        updater->setProgress(0);
-    }
-
     // Get the master page name of the first page.
     QString firstPageMasterName;
     if (mainFrameSet()) {
@@ -618,8 +638,6 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         }
         docHeight += lastpage.height();
     }
-
-    if (updater) updater->setProgress(50);
 
 #if 0
     // do some sanity checking on document.
@@ -689,8 +707,6 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 #endif
 
     relayout();
-
-    if (updater) updater->setProgress(100);
 
     kDebug(32001) << "KWDocument::endOfLoading done";
 #if 0
