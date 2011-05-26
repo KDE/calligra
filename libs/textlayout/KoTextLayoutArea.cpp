@@ -1054,19 +1054,17 @@ qreal KoTextLayoutArea::verticalAlignOffset() const
 }
 
 /*
- *   m_y = 0; // top of a possible table following
- *   m_prevLineDescent = 0;
+ *   m_y is always top of a possible table following
  *
  *   Stage/Impress/Powerpoint linespacing
  *   ------------------------------------
- *   linespacing is based on baseline to baseline
- *   proportional: factor * (m_prevLineDescent + line.ascent)
+ *   linespacing is based on current line only
+ *   proportional: factor * height
  *   fixed: value
  *
- *   line.y = m_y - m_prevLineDescent + linespacing - line.ascent
- *   m_y = line.y + line.ascent + line.descent
- *   reduces to m_y += linespacing - m_prevLineDescent + line.descent
- *   m_prevLineDescent = line.descent
+ *   surplus height or additional explicit linespace is added above current line
+ *   first line in shape (not every paragraph) removes any such additional height
+ *
  *
  *   Words/Writer/Word linespacing
  *   -----------------------------
@@ -1162,25 +1160,32 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     }
 
     qreal lineAdjust = 0.0;
-    qreal fixedLineHeight = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    if (fixedLineHeight != 0.0) {
-        lineAdjust = fixedLineHeight - height;
-        height = fixedLineHeight;
-    } else {
-        qreal lineSpacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
-        if (lineSpacing == 0.0) { // unset
-            int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
-            if (percent != 0) {
-                height *= percent / 100.0;
-            } else
-                height *= 1.2; // default
+    qreal advanceY = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+    int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
+    if (advanceY != 0.0 || percent != 0) {
+        if (percent != 0) {
+            advanceY = height * percent / 100.0;
         }
-        height += lineSpacing;
+
+        qreal minimum = format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
+        if (minimum > 0.0) {
+            advanceY = qMax(advanceY, minimum);
+        }
+
+        advanceY += format.doubleProperty(KoParagraphStyle::LineSpacing);
+    } else {
+        // "Normal" calculation (disables LineSpacing and MinimumLineHeight)
+        advanceY = height * 1.2; //default
     }
 
-    qreal minimum = format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
-    if (minimum > 0.0)
-        height = qMax(height, minimum);
+    bool presentationMode = false;
+    if (presentationMode && m_y == top()) {
+        advanceY = height; //first line and presentation mode
+    }
+
+    if(presentationMode || percent) {
+        lineAdjust = advanceY - height;
+    }
 
     //rounding problems due to Qt-scribe internally using ints.
     //also used when line was moved down because of intersections with other shapes
@@ -1188,11 +1193,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         m_y = line.y();
     }
 
-    if (lineAdjust) {
-        line.setPosition(QPointF(line.x(), line.y() + lineAdjust));
-    }
+    line.setPosition(QPointF(line.x(), line.y() + lineAdjust));
 
-    return height;
+    return advanceY;
 }
 
 
