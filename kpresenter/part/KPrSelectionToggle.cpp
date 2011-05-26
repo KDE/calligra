@@ -74,7 +74,7 @@ void KPrSelectionToggle::reset()
 void KPrSelectionToggle::setIndex(const QModelIndex& index)
 {
     m_index = index;
-    if (m_index != QModelIndex()) {
+    if (m_index.isValid()) {
         startFading();
     }
 }

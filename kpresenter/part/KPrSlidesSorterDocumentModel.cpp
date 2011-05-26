@@ -224,9 +224,8 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
 
     if (row != -1) {
         beginRow = row;
-    } else if (parent.isValid ()) {
-        beginRow = parent.row ();
-
+    } else if (parent.isValid()) {
+        beginRow = parent.row();
     } else {
         beginRow = rowCount(QModelIndex());
     }

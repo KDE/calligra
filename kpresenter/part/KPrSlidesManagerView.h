@@ -60,20 +60,28 @@ public:
     virtual bool eventFilter(QObject *, QEvent *);
 
     /**
-     * Calculates the item row that correspond to the slide placed after
-     * the line displayed when dragging
-     * @param point the location of the mouse pointer when dragging
-     */
-    int pageBefore(QPoint point);
-
-    /**
      * Setter of the size with a rect
      *
      * @param size which is a QRect
      */
     void setItemSize(QRect size);
 
+    /**
+     * Creates a pixmap the contains the all icons of the items
+     * that are dragged.
+     */
     QPixmap createDragPixmap() const;
+
+    /**
+     * Calculates the index of the nearest item to the cursor position
+     */
+    int cursorSlideIndex() const;
+
+    /**
+     * Calculates row and column of the nearest item to the cursor position
+     * return a QPair with 0, 0 for the first item.
+     */
+    QPair<int, int> cursorRowAndColumn() const;
 
 
 signals:
@@ -90,20 +98,6 @@ signals:
     void indexChanged(QModelIndex index);
 
 private:
-
-    /**
-     * Save the item row corresponding to the slide placed after
-     * the line displayed when dragging
-     * @param int the row of the last visited slide
-     */
-    void setLastItemNumber(int number);
-
-    /**
-     * Return the item row corresponding to the slide placed
-     * after the line displayed when dragging
-     * @return returns int that represent the item row.
-     */
-    int lastItemNumber();
 
     /**
      * The rect of an items, essentialy used to have the size of the full icon
@@ -126,7 +120,6 @@ private:
      */
     bool isDraging();
 
-    int m_lastItemNumber;
     QRect m_itemSize;
     bool m_dragingFlag;
     KoToolProxy * m_toolProxy;
