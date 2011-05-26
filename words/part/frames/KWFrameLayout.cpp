@@ -104,7 +104,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             createCopyFrame(fs, page);
         }
     }
-else kDebug(32001) << "Nooooo HeaderTextFrame";
+
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
@@ -113,7 +113,6 @@ else kDebug(32001) << "Nooooo HeaderTextFrame";
             createCopyFrame(fs, page);
         }
     }
-else kDebug(32001) << "Nooooo FooterTextFrame";
 
     //kDebug(32001) <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << KWord::frameSetTypeName(origin);
 
@@ -433,7 +432,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             requestedHeight[3] = -1; // rest
             break;
         }
-        // TODO endnote frameset
         default:;
         }
     }
@@ -518,9 +516,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             main[i]->setFrameBehavior(KWord::AutoCreateNewFrameBehavior);
             main[i]->setNewFrameBehavior(KWord::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
-#if 0
-            shape->update();
-#endif
             shape->setPosition(points[i]);
             shape->setSize(QSizeF(columnWidth -
                                   (first ? 0 : page.pageStyle().columns().columnSpacing),
@@ -550,7 +545,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         pageBackground->shape()->setSize(QSizeF(width, page.height()));
     }
     delete [] main;
-// TODO endnotes
 }
 
 bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin)
@@ -642,7 +636,6 @@ void KWFrameLayout::setup()
 {
     if (m_setup)
         return;
-kDebug();
 
     KWTextFrameSet *oldMainText = m_maintext;
     m_maintext = 0;
@@ -724,10 +717,10 @@ QList<KWFrame *> KWFrameLayout::framesOn(KWFrameSet *fs, int pageNumber) const
     return frames;
 }
 
+#if 0
 void KWFrameLayout::cleanupHeadersFooters()
 {
     kDebug(32001);
-#if 0
     QHash<KWPageStyle, FrameSets> pageStyles;
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -798,11 +791,9 @@ kDebug()<<"remove evenFooters frameSets";
             break;
         }
     }
-#else
-    Q_ASSERT(false);
-#endif
     m_setup = false;
 }
+#endif
 
 void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
 {

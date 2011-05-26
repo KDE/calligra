@@ -37,12 +37,14 @@
 #include <QObject>
 #include <QPainter>
 #include <QRect>
+#include <QPointer>
 
 class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
+class KoUpdater;
 
 class KLocalizedString;
 class QIODevice;
@@ -171,10 +173,18 @@ public:
     void updatePagesForStyle(const KWPageStyle &style);
 
 public slots:
-    /// Relayout the pages
-    void relayout();
-    /// Register new frameset
-    void addFrameSet(KWFrameSet *f);
+    /**
+     * Relayout the pages or frames within the framesets.
+     * @param framesets The framesets that should be relayouted. If no framesets are
+     * provided (empty list) then all framesets and therefore all pages are relayouted.
+     */
+    void relayout(QList<KWFrameSet*> framesets = QList<KWFrameSet*>());
+    /**
+     * Register a frameset.
+     * @param frameset The frameset that should be registered. Future operations like
+     * for example @a relayout() operate on all registered framesets.
+     */
+    void addFrameSet(KWFrameSet *frameset);
     /**
      * Remove frameset from the document stopping it from being saved or displayed.
      * Note that the document is normally the one that deletes framesets when the
@@ -197,6 +207,13 @@ private slots:
     /// Called after the constructor figures out there is an install problem.
     void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
+
+    void layoutProgressChanged(int percent);
+    void layoutFinished();
+
+protected:
+    /// reimplemented from KoDocument
+    virtual void setupOpenFileSubProgress();
 
 private:
     friend class KWDLoader;
@@ -229,6 +246,7 @@ private:
     KWApplicationConfig m_config;
     bool m_mainFramesetEverFinished;
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
+    QPointer<KoUpdater> m_layoutProgressUpdater;
 };
 
 #endif

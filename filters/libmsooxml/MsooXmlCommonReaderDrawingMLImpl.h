@@ -1281,7 +1281,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
-    if (!r_id.isEmpty()) {
+    if (!r_id.isEmpty() && m_context->relationships) {
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         Charting::Chart* chart = new Charting::Chart;
@@ -1347,48 +1347,50 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITH_NS(r, cs) // colors
-    TRY_READ_ATTR_WITH_NS(r, dm) // data
-    TRY_READ_ATTR_WITH_NS(r, lo) // layout
-    TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            TRY_READ_IF(spPr)
-            ELSE_TRY_READ_IF(style)
+    if (m_context->relationships) {
+        const QXmlStreamAttributes attrs(attributes());
+        TRY_READ_ATTR_WITH_NS(r, cs) // colors
+        TRY_READ_ATTR_WITH_NS(r, dm) // data
+        TRY_READ_ATTR_WITH_NS(r, lo) // layout
+        TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL)
+            if (isStartElement()) {
+                TRY_READ_IF(spPr)
+                ELSE_TRY_READ_IF(style)
+            }
         }
-    }
 
-    //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
-    const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
-    const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
-    //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
-    QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
+        //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
+        const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
+        const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
+        //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
+        QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
 
-    // first read the data-model
-    MSOOXML::MsooXmlDiagramReader dataReader(this);
-    const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
-    if (dataReaderResult != KoFilter::OK) {
-       raiseError(dataReader.errorString());
-       return dataReaderResult;
-    }
+        // first read the data-model
+        MSOOXML::MsooXmlDiagramReader dataReader(this);
+        const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
+        if (dataReaderResult != KoFilter::OK) {
+        raiseError(dataReader.errorString());
+        return dataReaderResult;
+        }
 
-    // then read the layout definition
-    MSOOXML::MsooXmlDiagramReader layoutReader(this);
-    const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
-    if (layoutReaderResult != KoFilter::OK) {
-       raiseError(layoutReader.errorString());
-       return layoutReaderResult;
-    }
+        // then read the layout definition
+        MSOOXML::MsooXmlDiagramReader layoutReader(this);
+        const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
+        if (layoutReaderResult != KoFilter::OK) {
+        raiseError(layoutReader.errorString());
+        return layoutReaderResult;
+        }
 
-    // and finally start the process that will produce the ODF
+        // and finally start the process that will produce the ODF
 #if defined(XLSXXMLDRAWINGREADER_CPP)
-    m_currentDrawingObject->setDiagram(context.take());
+        m_currentDrawingObject->setDiagram(context.take());
 #else
-    context->saveIndex(body, QRect(EMU_TO_CM(m_svgX), EMU_TO_CM(m_svgY), m_svgHeight > 0 ? EMU_TO_CM(m_svgWidth) : 100, m_svgHeight > 0 ? EMU_TO_CM(m_svgHeight) : 100));
+        context->saveIndex(body, QRect(EMU_TO_CM(m_svgX), EMU_TO_CM(m_svgY), m_svgHeight > 0 ? EMU_TO_CM(m_svgWidth) : 100, m_svgHeight > 0 ? EMU_TO_CM(m_svgHeight) : 100));
 #endif
+    }
 
     READ_EPILOGUE
 }
@@ -2262,7 +2264,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
 
-    if (!r_id.isEmpty()) {
+    if (!r_id.isEmpty() && m_context->relationships) {
         m_hyperLink = true;
         m_hyperLinkTarget = m_context->relationships->target(m_context->path, m_context->file, r_id);
         m_hyperLinkTarget.remove(0, m_context->path.length() + 1);
@@ -2708,7 +2710,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
 //! @todo more attrs
     TRY_READ_ATTR_WITH_NS(r, embed)
     kDebug() << "embed:" << r_embed;
-    if (!r_embed.isEmpty()) {
+    if (!r_embed.isEmpty() && m_context->relationships) {
         const QString sourceName(m_context->relationships->target(m_context->path,
                                                                   m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;

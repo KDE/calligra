@@ -74,7 +74,7 @@ class KWordTextHandler : public QObject, public wvWare::TextHandler
     Q_OBJECT
 public:
     KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~KWordTextHandler() { Q_ASSERT (m_fldStart == m_fldEnd); }
+    ~KWordTextHandler() { }
 
     //////// TextHandler interface
 
@@ -106,6 +106,13 @@ public:
     virtual void floatingObjectFound(unsigned int globalCP );
 
     ///////// Our own interface
+
+    /**
+     * Check the current texthandler state.  At the moment only the number of
+     * opened and closed fields if checked.
+     * @return 0 - Not Ok, 1 - Ok
+     */
+    bool stateOk() const;
 
     /**
      * Paragraph can be present in {header, footer, footnote, endnote,
