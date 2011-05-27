@@ -523,6 +523,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         case msosptCircularArrow: {
             processCircularArrow(o, out); break;
         }
+        case msosptArc: // OpenOffice abuses msosptNotchedCircularArrow for arc, according MS ODraw docs it is unused value
         case msosptNotchedCircularArrow: {
             processNotchedCircularArrow(o, out); break;
         }
