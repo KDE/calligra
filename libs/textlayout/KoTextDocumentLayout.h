@@ -110,6 +110,16 @@ public:
     /// are the tabs relative to indent or not
     bool relativeTabs() const;
 
+    /// if we should use presentation mode line spacing where linespacing is above current
+    /// line or textdocument linespacing where it's below currentline
+    /// Default is on meaning presentation mode
+    bool presentationModeLineSpacing();
+
+    /// Set if we should use presentation mode line spacing where linespacing is above current
+    /// line or textdocument linespacing where it's below currentline
+    /// Default is on meaning presentation mode
+    void setPresentationModeLineSpacing(bool on);
+
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 

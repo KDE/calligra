@@ -68,6 +68,7 @@ public:
        , provider(0)
        , anchoringIndex(0)
        , defaultTabSizing(0)
+       , presentationModeLineSpacing(true)
        , y(0)
        , isLayouting(false)
        , layoutScheduled(false)
@@ -97,6 +98,7 @@ public:
     KoTextLayoutRootArea *anchoringRootArea;
 
     qreal defaultTabSizing;
+    bool presentationModeLineSpacing;
     qreal y;
     bool isLayouting;
     bool layoutScheduled;
@@ -222,6 +224,16 @@ void KoTextDocumentLayout::setTabSpacing(qreal spacing)
 qreal KoTextDocumentLayout::defaultTabSpacing()
 {
     return d->defaultTabSizing;
+}
+
+bool KoTextDocumentLayout::presentationModeLineSpacing()
+{
+    d->presentationModeLineSpacing;
+}
+
+void KoTextDocumentLayout::setPresentationModeLineSpacing(bool on)
+{
+    d->presentationModeLineSpacing = on;
 }
 
 

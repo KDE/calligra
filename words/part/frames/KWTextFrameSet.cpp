@@ -166,6 +166,7 @@ void KWTextFrameSet::setupDocument()
     // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     m_document->setDocumentLayout(lay);
+    lay->setPresentationModeLineSpacing(false); // Textdocuments have special linespacing
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 }
     
