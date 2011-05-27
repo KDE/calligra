@@ -258,9 +258,12 @@ int KPrSlidesManagerView::cursorSlideIndex() const
 
 QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
 {
+    //20 is for the margin.
     int slidesNumber = qFloor((contentsRect().width() - 20)/itemSize().width());
+
     QSize size(itemSize().width(), itemSize().height());
     QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
+
     int numberColumn = qFloor(cursorPosition.x()/size.width());
     int numberRow = qFloor(cursorPosition.y()/size.height());
     int numberMod = (numberColumn + slidesNumber * numberRow) % (model()->rowCount(QModelIndex()) + 1);
