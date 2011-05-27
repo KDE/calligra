@@ -169,7 +169,7 @@ void KWTextFrameSet::setupDocument()
     lay->setPresentationModeLineSpacing(false); // Textdocuments have special linespacing
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 }
-    
+
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
     kDebug () << "frameSet=" << this << "frameSetType=" << KWord::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();

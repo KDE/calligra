@@ -1165,8 +1165,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
 
     qreal lineAdjust = 0.0;
     qreal advanceY = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+    bool fixed = advanceY != 0.0;
     int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
-    if (advanceY != 0.0 || percent != 0) {
+    if (fixed || percent != 0) {
         if (percent != 0) {
             advanceY = height * percent / 100.0;
         }
@@ -1183,10 +1184,10 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     }
 
     if (documentLayout()->presentationModeLineSpacing() && m_y == top()) {
-        advanceY = height; //first line and presentation mode
+        advanceY = height; //first line or presentation mode
     }
 
-    if(documentLayout()->presentationModeLineSpacing() || percent) {
+    if(documentLayout()->presentationModeLineSpacing() || fixed) {
         lineAdjust = advanceY - height;
     }
 

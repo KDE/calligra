@@ -228,7 +228,7 @@ qreal KoTextDocumentLayout::defaultTabSpacing()
 
 bool KoTextDocumentLayout::presentationModeLineSpacing()
 {
-    d->presentationModeLineSpacing;
+    return d->presentationModeLineSpacing;
 }
 
 void KoTextDocumentLayout::setPresentationModeLineSpacing(bool on)
