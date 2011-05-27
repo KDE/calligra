@@ -1551,16 +1551,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
 
     TRY_READ_ATTR(type)
 
-    if (type.isEmpty()) {
-        body->startElement("text:line-break");
-        body->endElement();
-    }
-
     if (type == "column") {
         m_currentParagraphStyle.addProperty("fo:break-before", "column");
     }
     else if (type == "page") {
         m_currentParagraphStyle.addProperty("fo:break-after", "page");
+    }
+    else {
+        body->startElement("text:line-break");
+        body->endElement();
     }
     readNext();
     READ_EPILOGUE
@@ -2288,7 +2287,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [done] rStyle (Referenced Character Style) §17.3.2.29
  - rtl (Right To Left Text) §17.3.2.30
  - shadow (Shadow) §17.3.2.31
- - shd (Run Shading) §17.3.2.32
+ - [done] shd (Run Shading) §17.3.2.32
  - [done] smallCaps (Small Caps) §17.3.2.33
  - snapToGrid (Use Document Grid Settings For Inter-Character Spacing) §17.3.2.34
  - [done] spacing (Character Spacing Adjustment) §17.3.2.35
@@ -2510,12 +2509,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_webHidden()
  - dir (§17.3.2.8)
  - docPartBody (§17.12.6)
  - e (§22.1.2.32)
- - endnote (§17.11.2)
+ - [done] endnote (§17.11.2)
  - fldSimple (§17.16.19)
  - fName (§22.1.2.37)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
@@ -2578,12 +2577,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
  - dir (§17.3.2.8)
  - docPartBody (§17.12.6)
  - e (§22.1.2.32)
- - endnote (§17.11.2)
+ - [done] endnote (§17.11.2)
  - fldSimple (§17.16.19)
  - fName (§22.1.2.37)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
@@ -3101,12 +3100,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_u()
  - rPr (§17.3.1.30)
  - rPr (§17.5.2.28)
  - rPr (§17.9.25)
- - rPr (§17.7.9.1)
- - rPr (§17.7.5.4) (within style)
+ - [done] rPr (§17.7.9.1)
+ - [done] rPr (§17.7.5.4) (within style)
  - [done] rPr (§17.3.2.28)
- - rPr (§17.5.2.27)
- - rPr (§17.7.6.2)
- - rPr (§17.3.2.27)
+ - [done] rPr (§17.5.2.27)
+ - [done] rPr (§17.7.6.2)
+ - [done] rPr (§17.3.2.27)
  No child elements.
 */
 //! @todo support all elements
@@ -4298,7 +4297,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lang()
  containing the background element.
 
  Child element:
- - drawing (§17.3.3.9)
+ - [done] drawing (§17.3.3.9)
+
  Attributes:
  - [done] color (Background Color)
  - themeColor (Background Theme Color)
@@ -4360,10 +4360,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
  - comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2);
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] endnote (§17.11.2);
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - sdtContent (§17.5.2.34)
  - [done] tc (§17.4.66)
 
@@ -4571,6 +4571,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridCol)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -4613,13 +4614,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
     style->setWidth(columnWidth);
     column->setStyle(style);
 
-    while(!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-//         if(isStartElement()) {
-//             TRY_READ_IF(extLst)
-//         }
-    }
+    readNext();
 
     READ_EPILOGUE
 }
@@ -4696,7 +4691,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 #define CURRENT_EL trPr
 /*
 Parent elements:
- - tr (§17.4.79)
+ - [done] tr (§17.4.79)
 
 child elements:
  - cantSplit (Table Row Cannot Break Across Pages) §17.4.6
