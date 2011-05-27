@@ -55,6 +55,8 @@ public:
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
 
+    virtual void dragLeaveEvent(QDragLeaveEvent *e);
+
     //Manage click events outside of items, to provide
     //a suitable active item for the context menu.
     virtual bool eventFilter(QObject *, QEvent *);

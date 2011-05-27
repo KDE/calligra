@@ -140,6 +140,13 @@ void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
+
+void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    Q_UNUSED(e);
+    setDragingFlag(false);
+}
+
 QRect KPrSlidesManagerView::itemSize() const
 {
     return m_itemSize;
