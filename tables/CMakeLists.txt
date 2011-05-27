@@ -356,11 +356,13 @@ install( FILES
     PointStorage.h
     PrintSettings.h
     ProtectableObject.h
+    RectStorage.h
     Region.h
     Sheet.h
     Style.h
     Value.h
     ValueConverter.h
+    ValueStorage.h
     Find.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/tables COMPONENT Devel)
 install( FILES
