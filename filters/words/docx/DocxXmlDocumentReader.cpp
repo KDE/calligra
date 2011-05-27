@@ -265,6 +265,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
+
+    body->addAttribute("text:use-soft-page-breaks", "true");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
