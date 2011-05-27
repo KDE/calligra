@@ -280,9 +280,12 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     disconnect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
 
-void KWDocument::relayout()
+void KWDocument::relayout(QList<KWFrameSet*> framesets)
 {
-    kDebug(32001) << "frameSets=" << m_frameSets;
+    if (framesets.isEmpty())
+        framesets = m_frameSets;
+
+    kDebug(32001) << "frameSets=" << framesets;
 
 #if 0
     foreach (KWFrameSet *fs, m_frameSets) {
@@ -313,33 +316,47 @@ void KWDocument::relayout()
 #endif
 
     // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
-    KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+    //KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
 
     // remove header/footer frames that are not visible.
     //m_frameLayout.cleanupHeadersFooters();
 
-    // re-layout the pages
+    // create new frames and lay them out on the pages
     foreach (const KWPage &page, m_pageManager.pages()) {
         m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
 
-    relayoutFrameset(m_frameSets);
-}
-
-void KWDocument::relayoutFrameset(QList<KWFrameSet*> framesets)
-{
+    // re-layout the content displayed within the pages
     foreach (KWFrameSet *fs, framesets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
             continue;
         KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
         Q_ASSERT(lay);
-        // Layout headers first since they will define the remaining size available for the mainframe per page.
-        if (KWord::isHeaderFooter(tfs))
-            lay->layout();
-        else
-            lay->scheduleLayout();
+
+        if (tfs->textFrameSetType() == KWord::MainTextFrameSet && m_layoutProgressUpdater) {
+            connect(lay, SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
+            connect(lay, SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
+        }
+
+        // schedule all calls so multiple layout calls are compressed
+        lay->scheduleLayout();
     }
+}
+
+void KWDocument::layoutProgressChanged(int percent)
+{
+    Q_ASSERT(m_layoutProgressUpdater);
+    m_layoutProgressUpdater->setProgress(percent);
+}
+
+void KWDocument::layoutFinished()
+{
+    Q_ASSERT(m_layoutProgressUpdater);
+    disconnect(QObject::sender(), SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
+    disconnect(QObject::sender(), SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
+    m_layoutProgressUpdater->setProgress(100);
+    m_layoutProgressUpdater = 0; // free the instance
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
@@ -562,6 +579,13 @@ void KWDocument::clear()
         inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
+void KWDocument::setupOpenFileSubProgress()
+{
+    if (progressUpdater()) {
+        m_layoutProgressUpdater = progressUpdater()->startSubtask(1, "Layouting");
+    }
+}
+
 bool KWDocument::loadOdf(KoOdfReadStore &odfStore)
 {
     clear();
@@ -582,12 +606,6 @@ bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
     kDebug(32001);
-
-    QPointer<KoUpdater> updater;
-    if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "KWDocument::endOfLoading");
-        updater->setProgress(0);
-    }
 
     // Get the master page name of the first page.
     QString firstPageMasterName;
@@ -619,8 +637,6 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         }
         docHeight += lastpage.height();
     }
-
-    if (updater) updater->setProgress(50);
 
 #if 0
     // do some sanity checking on document.
@@ -689,16 +705,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         frameset->renumberFootNotes(false /*no repaint*/);
 #endif
 
-    // remove header/footer frames that are not visible.
-    //m_frameLayout.cleanupHeadersFooters();
-
-    foreach (const KWPage &page, m_pageManager.pages()) {
-        m_frameLayout.createNewFramesForPage(page.pageNumber());
-    }
-
-    relayoutFrameset(m_frameSets);
-
-    if (updater) updater->setProgress(100);
+    relayout();
 
     kDebug(32001) << "KWDocument::endOfLoading done";
 #if 0
@@ -739,14 +746,10 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
         }
     }
     Q_ASSERT(pageNumber >= 1);
-    //TODO handle lesser pages
-    for(int i = pageNumber; i <= pageManager()->pageCount(); ++i) {
-        frameLayout()->createNewFramesForPage(i);
-    }
     foreach(KWFrameSet *fs, framesets) {
         static_cast<KWTextFrameSet*>(fs)->rootAreaProvider()->clearPages(pageNumber);
     }
-    relayoutFrameset(framesets);
+    relayout(framesets);
 }
 
 void KWDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

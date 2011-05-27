@@ -397,15 +397,19 @@ void Document::processStyles()
     m_mainStyles->insert(defaultStyle, "nevershown");
 }
 
-//just call parsing function
-bool Document::parse()
+quint8 Document::parse()
 {
-    kDebug(30513) ;
-    bool ret = false;
     if (m_parser) {
-        ret = m_parser->parse();
+        if (!m_parser->parse()) {
+            return 1;
+        }
     }
-    return ret;
+    //make sure texthandler is fine after parsing
+    if (!m_textHandler->stateOk()) {
+        kError(30513) << "TextHandler state after parsing NOT Ok!";
+        return 2;
+    }
+    return 0;
 }
 
 void Document::setProgress(const int percent)
