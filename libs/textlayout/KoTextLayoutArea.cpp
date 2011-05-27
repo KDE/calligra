@@ -1117,7 +1117,8 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
             fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
         }
         // read max font height
-        height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
+        height = cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch;
+        height = (line.ascent() + line.descent()) * fontStretch;
 
         KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
         objectAscent = qMax(objectAscent, pos.m_ascent);
@@ -1126,6 +1127,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
                         block.position() + line.textStart() + line.textLength() - 1))) {
             cursor->fragmentIterator++;
+  continue;
             if (cursor->fragmentIterator.atEnd()) {
                 break;
             }
@@ -1154,6 +1156,8 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     }
 
     height = qMax(height, objectAscent + objectDescent);
+    //height = line.ascent() + line.descent();
+    //height *= 1.11197;
 
     if (height < 0.01) {
         height = 12; // default size for uninitialized styles.
@@ -1178,12 +1182,11 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         advanceY = height * 1.2; //default
     }
 
-    bool presentationMode = false;
-    if (presentationMode && m_y == top()) {
+    if (documentLayout()->presentationModeLineSpacing() && m_y == top()) {
         advanceY = height; //first line and presentation mode
     }
 
-    if(presentationMode || percent) {
+    if(documentLayout()->presentationModeLineSpacing() || percent) {
         lineAdjust = advanceY - height;
     }
 
