@@ -96,7 +96,7 @@ enum MSOSPT
     msosptSeal16 = 0x3b,
     msosptSeal32 = 0x3c,
     msosptWedgeRectCallout = 0x3d,
-    msosptWedgeRRectCalloud = 0x3e,
+    msosptWedgeRRectCallout = 0x3e,
     msosptWedgeEllipseCallout = 0x3f,
 
     msosptWave = 0x40,

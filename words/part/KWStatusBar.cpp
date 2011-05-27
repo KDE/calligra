@@ -93,6 +93,7 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showMouse(bool)));
 
     m_statusLabel = new KSqueezedTextLabel(m_statusbar);
+    m_statusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusbar->addWidget(m_statusLabel, 1);
     connect(m_statusbar, SIGNAL(messageChanged(const QString&)), this, SLOT(setText(const QString&)));
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString&)),
