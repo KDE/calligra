@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 *
-* Copyright (C) 2008 by Peter Penz <peter.penz19@gmail.com>
+* Copyright (C) 2008 Peter Penz <peter.penz19@gmail.com>
 * Copyright (C) 2011 Paul Mendez <paulestebanms@gmail.com>
 *
 * This library is free software; you can redistribute it and/or
