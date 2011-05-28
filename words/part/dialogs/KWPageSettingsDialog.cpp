@@ -51,6 +51,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     pageStyleLayout->setMargin(0);
     KPageWidgetItem *stylePage = addPage(pageStyleWidget, i18n("Style"));
     m_pageStylesView = new QListWidget(this);
+    m_pageStylesView->setSortingEnabled(true);
     pageStyleLayout->addWidget(m_pageStylesView, 1);
     connect(m_pageStylesView, SIGNAL(currentRowChanged(int)), this, SLOT(pageStyleCurrentRowChanged(int)));
     QVBoxLayout *pageStyleLayout2 = new QVBoxLayout(pageStyleWidget);
@@ -186,7 +187,6 @@ void KWPageSettingsDialog::distributeUnit(const KoUnit &unit)
 void KWPageSettingsDialog::reloadPageStyles()
 {
     QStringList pagestyles = m_document->pageManager()->pageStyles().keys();
-    qSort(pagestyles);
     m_pageStylesView->clear();
     m_pageStylesView->addItems(pagestyles);
     m_pageStylesView->setCurrentRow(pagestyles.indexOf(m_pageStyle.name()));
@@ -201,7 +201,9 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
     class Validator : public QValidator {
     public:
         Validator(KWDocument *document) : QValidator(), m_document(document) {}
-        virtual State validate(QString &input, int&) const { return m_document->pageManager()->pageStyle(input).isValid() ? Intermediate : Acceptable; }
+        virtual State validate(QString &input, int&) const {
+            return input.trimmed().isEmpty() || m_document->pageManager()->pageStyle(input).isValid() ? Intermediate : Acceptable;
+        }
     private:
         KWDocument *m_document;
     };
