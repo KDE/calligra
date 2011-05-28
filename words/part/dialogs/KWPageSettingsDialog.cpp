@@ -51,7 +51,6 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     pageStyleLayout->setMargin(0);
     KPageWidgetItem *stylePage = addPage(pageStyleWidget, i18n("Style"));
     m_pageStylesView = new QListWidget(this);
-    m_pageStylesView->setSortingEnabled(true);
     pageStyleLayout->addWidget(m_pageStylesView, 1);
     connect(m_pageStylesView, SIGNAL(currentRowChanged(int)), this, SLOT(pageStyleCurrentRowChanged(int)));
     QVBoxLayout *pageStyleLayout2 = new QVBoxLayout(pageStyleWidget);
@@ -187,6 +186,7 @@ void KWPageSettingsDialog::distributeUnit(const KoUnit &unit)
 void KWPageSettingsDialog::reloadPageStyles()
 {
     QStringList pagestyles = m_document->pageManager()->pageStyles().keys();
+    qSort(pagestyles);
     m_pageStylesView->clear();
     m_pageStylesView->addItems(pagestyles);
     m_pageStylesView->setCurrentRow(pagestyles.indexOf(m_pageStyle.name()));
@@ -208,7 +208,7 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
         KWDocument *m_document;
     };
     Validator validator(m_document);
-    QString name = KInputDialog::getText(i18n("Clone"), QString(), pagestyle.name(), 0, this, &validator);
+    QString name = KInputDialog::getText(i18n("Clone Page Style"), i18n("Add a new page style with the name:"), pagestyle.name(), 0, this, &validator);
     if (name.isEmpty())
         return;
     pagestyle.detach(name);
