@@ -276,7 +276,7 @@ U32 Properties97::fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* par
     // CHPX found in the style entry for the CHP, unless it's istdNormalChar (10)
     if ( chp->istd != 10 ) {
         const Style* style = m_stylesheet->styleByIndex( chp->istd );
-        if ( style && style->type() == Style::sgcChp ) {
+        if ( style && style->type() == sgcChp ) {
             const UPECHPX& upechpx( style->upechpx() );
             chp->apply( upechpx.grpprl, upechpx.cb, paragraphStyle, m_stylesheet, 0, m_version );
         }

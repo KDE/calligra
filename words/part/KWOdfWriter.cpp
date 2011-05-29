@@ -64,6 +64,8 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedS
     KoXmlWriter writer(&buffer);
 
     KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
+    
+    context.setOptions(KoShapeSavingContext::AutoStyleInStyleXml);
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);

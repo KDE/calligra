@@ -198,7 +198,8 @@ private slots:
     void findMatchFound(KoFindMatch match);
     /// The document has finished loading. This is used to update the text that can be searched.
     void loadingCompleted();
-
+    /// The KWPageSettingsDialog was closed.
+    void pageSettingsDialogFinished();
 private:
 
     /// loops over the selected shapes and returns the frames that go with them.
@@ -233,6 +234,7 @@ private:
     KActionMenu* m_actionMenu;
 
     bool m_snapToGrid;
+    QString m_lastPageSettingsTab;
 };
 
 #endif

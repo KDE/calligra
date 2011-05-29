@@ -4630,12 +4630,9 @@ void MSO::parsetodo(LEInputStream& in, todo& _s) {
 void MSO::parseFibBase(LEInputStream& in, FibBase& _s) {
     _s.streamOffset = in.getPosition();
     _s.wIdent = in.readuint16();
-    if (!(((quint16)_s.wIdent) == 0xA5EC)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.wIdent) == 0xA5EC");
-    }
     _s.nFib = in.readuint16();
-    if (!(((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112");
+    if (!(((quint16)_s.nFib) == 0x65 || ((quint16)_s.nFib) == 0x67 || ((quint16)_s.nFib) == 0x68 || ((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112)) {
+        throw IncorrectValueException(in.getPosition(), "((quint16)_s.nFib) == 0x65 || ((quint16)_s.nFib) == 0x67 || ((quint16)_s.nFib) == 0x68 || ((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112");
     }
     _s.unused = in.readuint16();
     _s.lid = in.readuint16();
@@ -4654,9 +4651,6 @@ void MSO::parseFibBase(LEInputStream& in, FibBase& _s) {
     _s.fFarEast = in.readbit();
     _s.fObfuscated = in.readbit();
     _s.nFibBack = in.readuint16();
-    if (!(((quint16)_s.nFibBack) == 0xBF || ((quint16)_s.nFibBack) == 0xC1)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.nFibBack) == 0xBF || ((quint16)_s.nFibBack) == 0xC1");
-    }
     _s.IKey = in.readuint32();
     _s.envr = in.readuint8();
     if (!(((quint8)_s.envr) == 0)) {

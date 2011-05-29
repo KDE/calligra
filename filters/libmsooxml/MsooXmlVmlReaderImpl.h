@@ -34,18 +34,21 @@
 //! @todo reuse KHTML parser?
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
 {
-    m_vmlStyle.clear();
+    m_currentVMLProperties.vmlStyle.clear();
     foreach( const QString& pair, style.split(";", QString::SkipEmptyParts)) {
         const int splitIndex = pair.indexOf(":");
-        if (splitIndex < 1)
+        if (splitIndex < 1) {
             continue;
+        }
         const QByteArray name(pair.left(splitIndex).toLatin1().trimmed());
         QString value(pair.mid(splitIndex+1).trimmed());
-        if (name.isEmpty())
+        if (name.isEmpty()) {
             continue;
-        if (value.startsWith("'") && value.endsWith("'"))
+        }
+        if (value.startsWith("'") && value.endsWith("'")) {
             value = value.mid(1, value.length() - 2); // strip ' '
-        m_vmlStyle.insert(name, value);
+        }
+        m_currentVMLProperties.vmlStyle.insert(name, value);
         kDebug() << "name:" << name << "value:" << value;
     }
     return KoFilter::OK;
@@ -71,19 +74,19 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         body->startElement("draw:frame");
     }
 
-    QString width(m_vmlStyle.value("width")); // already in "...cm" format
-    QString height(m_vmlStyle.value("height")); // already in "...cm" format
-    QString x_mar(m_vmlStyle.value("margin-left"));
-    QString y_mar(m_vmlStyle.value("margin-top"));
-    QString leftPos(m_vmlStyle.value("left"));
-    QString topPos(m_vmlStyle.value("top"));
-    QString position(m_vmlStyle.value("position"));
-    QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
-    const QString ver_align(m_vmlStyle.value("v-text-anchor"));
-    const QString rotation(m_vmlStyle.value("rotation"));
+    QString width(m_currentVMLProperties.vmlStyle.value("width")); // already in "...cm" format
+    QString height(m_currentVMLProperties.vmlStyle.value("height")); // already in "...cm" format
+    QString x_mar(m_currentVMLProperties.vmlStyle.value("margin-left"));
+    QString y_mar(m_currentVMLProperties.vmlStyle.value("margin-top"));
+    QString leftPos(m_currentVMLProperties.vmlStyle.value("left"));
+    QString topPos(m_currentVMLProperties.vmlStyle.value("top"));
+    QString position(m_currentVMLProperties.vmlStyle.value("position"));
+    QString hor_pos(m_currentVMLProperties.vmlStyle.value("mso-position-horizontal"));
+    QString ver_pos(m_currentVMLProperties.vmlStyle.value("mso-position-vertical"));
+    QString hor_pos_rel(m_currentVMLProperties.vmlStyle.value("mso-position-horizontal-relative"));
+    QString ver_pos_rel(m_currentVMLProperties.vmlStyle.value("mso-position-vertical-relative"));
+    const QString ver_align(m_currentVMLProperties.vmlStyle.value("v-text-anchor"));
+    const QString rotation(m_currentVMLProperties.vmlStyle.value("rotation"));
 
     qreal x_position = 0;
     QString x_pos_string, y_pos_string, widthString, heightString;
@@ -92,64 +95,68 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     qreal heightValue = 0;
 
     if (!x_mar.isEmpty()) {
-        if (m_insideGroup) {
-            x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth + m_groupXOffset;
-            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
+        if (m_currentVMLProperties.insideGroup) {
+            x_position = (x_mar.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+                m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
+            x_pos_string = QString("%1%2").arg(x_position).arg(m_currentVMLProperties.groupWidthUnit);
         } else {
             x_position = x_mar.left(x_mar.length() - 2).toDouble(); // removing the unit
             x_pos_string = x_mar;
         }
     }
     else if (!leftPos.isEmpty()) {
-        if (m_insideGroup) {
-            x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth + m_groupXOffset;
-            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupWidthUnit);
+        if (m_currentVMLProperties.insideGroup) {
+            x_position = (leftPos.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+                m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
+            x_pos_string = QString("%1%2").arg(x_position).arg(m_currentVMLProperties.groupWidthUnit);
         } else {
             x_position = leftPos.left(leftPos.length() - 2).toDouble();
             x_pos_string = leftPos;
         }
     }
     else {
-        if (m_insideGroup) {
-            x_pos_string = QString("%1%2").arg(m_groupXOffset).arg(m_groupWidthUnit);
+        if (m_currentVMLProperties.insideGroup) {
+            x_pos_string = QString("%1%2").arg(m_currentVMLProperties.groupXOffset).arg(m_currentVMLProperties.groupWidthUnit);
         }
     }
     if (!y_mar.isEmpty()) {
-        if (m_insideGroup) {
-            y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight + m_groupYOffset;
-            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
+        if (m_currentVMLProperties.insideGroup) {
+            y_position = (y_mar.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+                m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
+            y_pos_string = QString("%1%2").arg(y_position).arg(m_currentVMLProperties.groupHeightUnit);
         } else {
             y_position = y_mar.left(y_mar.length() -2).toDouble();
             y_pos_string = y_mar;
         }
     }
     else if (!topPos.isEmpty()) {
-        if (m_insideGroup) {
-            y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight + m_groupYOffset;
-            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupHeightUnit);
+        if (m_currentVMLProperties.insideGroup) {
+            y_position = (topPos.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+                m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
+            y_pos_string = QString("%1%2").arg(y_position).arg(m_currentVMLProperties.groupHeightUnit);
         } else {
             y_position = topPos.left(topPos.length() - 2).toDouble();
             y_pos_string = topPos;
         }
     }
     else {
-        if (m_insideGroup) {
-            y_pos_string = QString("%1%2").arg(m_groupYOffset).arg(m_groupHeightUnit);
+        if (m_currentVMLProperties.insideGroup) {
+            y_pos_string = QString("%1%2").arg(m_currentVMLProperties.groupYOffset).arg(m_currentVMLProperties.groupHeightUnit);
         }
     }
     if (!width.isEmpty()) {
-        if (m_insideGroup) {
-            widthValue = width.toInt() * m_real_groupWidth / m_groupWidth;
-            widthString = QString("%1%2").arg(widthValue).arg(m_groupWidthUnit);
+        if (m_currentVMLProperties.insideGroup) {
+            widthValue = width.toInt() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
+            widthString = QString("%1%2").arg(widthValue).arg(m_currentVMLProperties.groupWidthUnit);
         } else {
             widthValue = width.left(width.length() - 2).toDouble();
             widthString = width;
         }
     }
     if (!height.isEmpty()) {
-        if (m_insideGroup) {
-            heightValue = height.toInt() * m_real_groupHeight / m_groupHeight;
-            heightString = QString("%1%2").arg(heightValue).arg(m_groupHeightUnit);
+        if (m_currentVMLProperties.insideGroup) {
+            heightValue = height.toInt() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
+            heightString = QString("%1%2").arg(heightValue).arg(m_currentVMLProperties.groupHeightUnit);
         }
         else {
             heightValue = height.left(height.length() - 2).toDouble();
@@ -158,7 +165,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 
     if (startType == StraightConnectorStart) {
-        QString flip(m_vmlStyle.value("flip"));
+        QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
         QString y1 = y_pos_string;
         QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2)); // right(2) takes the unit
         QString x1 = x_pos_string;
@@ -191,64 +198,62 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-    if (!m_shapeColor.isEmpty()) {
+    if (!m_currentVMLProperties.shapeColor.isEmpty()) {
         m_currentDrawStyle->addProperty("draw:fill", "solid");
-        m_currentDrawStyle->addProperty("draw:fill-color", m_shapeColor);
+        m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
     }
 
     if (!ver_align.isEmpty()) {
         m_currentDrawStyle->addProperty("draw:textarea-vertical-align", ver_align);
     }
 
-    if (!hor_pos.isEmpty()) {
-        if (hor_pos == "absolute") {
-            hor_pos = "from-left";
-        }
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    bool asChar = false;
+    if (position.isEmpty() || position == "static") {
+        asChar = true;
     }
-    if (!ver_pos.isEmpty()) {
-        if (ver_pos == "absolute") {
-            ver_pos = "from-top";
-        }
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
+
     if (!hor_pos_rel.isEmpty()) {
         if (hor_pos_rel == "outer-margin-area" || hor_pos_rel == "left-margin-area") {
             hor_pos_rel = "page-start-margin";
-            m_anchorType = "paragraph"; //forced
+            m_currentVMLProperties.anchorType = "paragraph"; //forced
         }
         else if (hor_pos_rel == "margin") {
             hor_pos_rel = "paragraph-start-margin";
-            m_anchorType = "paragraph"; //forced
+            m_currentVMLProperties.anchorType = "paragraph"; //forced
         }
         else if (hor_pos_rel == "inner-margin-area" || hor_pos_rel == "right-margin-area") {
             hor_pos_rel = "page-end-margin";
-            m_anchorType = "paragraph"; //forced
+            m_currentVMLProperties.anchorType = "paragraph"; //forced
         }
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+        if (!asChar) {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+        }
     }
     if (!ver_pos_rel.isEmpty()) {
         if (ver_pos_rel == "margin" || ver_pos_rel == "line") {
-            ver_pos_rel = "page-content";
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
         }
         else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" || ver_pos_rel == "outer-margin-area") {
-            ver_pos_rel = "page";
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
         }
         else if (ver_pos_rel == "bottom-margin-area") {
-            ver_pos_rel = "page";
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
             // This effectively emulates the bottom-margin-area
             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+        else {
+            m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+        }
     }
 
 #ifdef DOCXXMLDOCREADER_H
-    bool asChar = false;
-    if (!m_wrapRead) {
+    if (!m_currentVMLProperties.wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
-        if (position.isEmpty() || position == "static") { // Default
-            asChar = true;
+        if (asChar) { // Default
             body->addAttribute("text:anchor-type", "as-char");
+            if (ver_pos_rel == "line") {
+                m_currentDrawStyle->addProperty("style:vertical-rel", "text");
+            }
         }
         else {
             body->addAttribute("text:anchor-type", "char");
@@ -259,9 +264,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
                 m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
             }
 
-            if (m_vmlStyle.contains("z-index")) {
+            if (m_currentVMLProperties.vmlStyle.contains("z-index")) {
                 m_currentDrawStyle->addProperty("style:wrap", "run-through");
-                if (m_vmlStyle.value("z-index").toInt() > 0) {
+                if (m_currentVMLProperties.vmlStyle.value("z-index").toInt() > 0) {
                     m_currentDrawStyle->addProperty("style:run-through", "foreground");
                 }
                 else {
@@ -275,45 +280,61 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
     else {
-        body->addAttribute("text:anchor-type", m_anchorType);
+        body->addAttribute("text:anchor-type", m_currentVMLProperties.anchorType);
     }
     if (!asChar) {
-        // These seem to be decent defaults
-        if (m_currentDrawStyle->property("style:horizontal-pos").isEmpty()) {
-            m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        if (hor_pos.isEmpty() || hor_pos == "absolute") {
+            hor_pos = "from-left";
         }
-        if (m_currentDrawStyle->property("style:vertical-pos").isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (ver_pos.isEmpty() || ver_pos == "absolute") {
+        if (asChar) {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        }
+        else {
             m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
         }
     }
+    else {
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
 #endif
 
-    m_currentPen.setWidthF(m_strokeWidth);
-    m_currentPen.setColor(QColor(m_strokeColor));
-    m_currentPen.setJoinStyle(Qt::MiterJoin);
-
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    if (!m_currentVMLProperties.strokeWidth.isEmpty()) {
+        m_currentDrawStyle->addProperty("svg:stroke-width", m_currentVMLProperties.strokeWidth);
+        m_currentDrawStyle->addProperty("svg:stroke-color", m_currentVMLProperties.strokeColor);
+        m_currentDrawStyle->addProperty("svg:stroke-linecap", m_currentVMLProperties.lineCapStyle);
+        m_currentDrawStyle->addProperty("draw:stroke-linejoin", m_currentVMLProperties.joinStyle);
+        if (m_currentVMLProperties.strokeStyleName.isEmpty()) {
+            m_currentDrawStyle->addProperty("draw:stroke", "solid");
+        }
+        else {
+            m_currentDrawStyle->addProperty("draw:stroke", "dash");
+            m_currentDrawStyle->addProperty("draw:stroke-dash", m_currentVMLProperties.strokeStyleName);
+        }
+    }
 
     if (!m_currentDrawStyle->isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
+        const QString drawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
         body->addAttribute("draw:style-name", drawStyleName);
     }
 }
 
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
 {
-    if (!m_imagedataPath.isEmpty()) {
+    if (!m_currentVMLProperties.imagedataPath.isEmpty()) {
         body->startElement("draw:image");
         body->addAttribute("xlink:type", "simple");
         body->addAttribute("xlink:show", "embed");
         body->addAttribute("xlink:actuate", "onLoad");
-        body->addAttribute("xlink:href", m_imagedataPath);
+        body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
         body->endElement(); // draw:image
     }
 
     {
         {
-            const QString rId(m_vmlStyle.value("v:fill@r:id"));
+            const QString rId(m_currentVMLProperties.vmlStyle.value("v:fill@r:id"));
             if (!rId.isEmpty()) {
                 body->startElement("draw:image");
                 const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));
@@ -323,7 +344,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
                 }
 
                 QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-                RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+                RETURN_IF_ERROR(m_context->import->copyFile(sourceName, destinationName, false ))
                 addManifestEntryForFile(destinationName);
                 addManifestEntryForPicturesDir();
                 body->addAttribute("xlink:href", destinationName);
@@ -335,6 +356,52 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
     body->endElement(); //draw:frame or draw:rect
 
     return KoFilter::OK;
+}
+
+void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attrs)
+{
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+
+    m_currentVMLProperties.strokeWidth = "1pt" ; // This seems to be the default
+    m_currentVMLProperties.shapeColor.clear();
+    m_currentVMLProperties.strokeColor.clear();
+    m_currentVMLProperties.lineCapStyle = "square";
+    m_currentVMLProperties.joinStyle = "middle";
+    m_currentVMLProperties.strokeStyleName = QString();
+    m_currentVMLProperties.filled = QString();
+    m_currentVMLProperties.stroked = QString();
+
+    if (!strokeweight.isEmpty()) {
+        if (strokeweight.at(0) == '.') {
+            m_currentVMLProperties.strokeWidth = "0" + strokeweight;
+        }
+        m_currentVMLProperties.strokeColor = "#000000"; // Black color seems to be default
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    if (!type.isEmpty()) {
+        type = type.mid(1); // removes extra # from the start
+    }
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    if (!filled.isEmpty()) {
+        m_currentVMLProperties.filled = filled;
+    }
+    if (m_currentVMLProperties.filled != "f" && m_currentVMLProperties.filled != "false") {
+        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    if (!stroked.isEmpty()) {
+        m_currentVMLProperties.stroked = stroked;
+    }
+    if (m_currentVMLProperties.stroked == "f" || m_currentVMLProperties.stroked == "false") {
+        m_currentVMLProperties.strokeWidth = QString();
+    }
+    else if (!strokecolor.isEmpty()) {
+        m_currentVMLProperties.strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+    }
 }
 
 #undef CURRENT_EL
@@ -385,33 +452,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
-    m_strokeWidth = 1 ; // This seems to be the default
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-    m_currentPen = QPen();
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
-        m_strokeColor = "#000000"; // Black color seems to be default
-    }
-
-    if (!fillcolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(filled)
-        if (filled != "f" && filled != "false") {
-            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-        }
-    }
-
-    if (!strokecolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(stroked)
-        if (stroked != "f" && stroked != "false") {
-            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-        }
-    }
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -424,7 +465,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     // Note that image fill is not yet supported in fill parameter, but this should be used
     // when it's done
     bool textBoxOrImage = false;
-    m_wrapRead = false;
+    m_currentVMLProperties.wrapRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -437,7 +478,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
             }
             ELSE_TRY_READ_IF(stroke)
             else if (qualifiedName() == "w10:wrap") {
-                m_wrapRead = true;
+                m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
             SKIP_UNKNOWN
@@ -473,26 +514,56 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(endcap)
-    Qt::PenCapStyle penCap = m_currentPen.capStyle();
     if (endcap.isEmpty() || endcap == "sq") {
-       penCap = Qt::SquareCap;
+       m_currentVMLProperties.lineCapStyle = "square";
     }
     else if (endcap == "round") {
-        penCap = Qt::RoundCap;
+         m_currentVMLProperties.lineCapStyle = "round";
     }
     else if (endcap == "flat") {
-        penCap = Qt::FlatCap;
+        m_currentVMLProperties.lineCapStyle = "flat";
     }
-    m_currentPen.setCapStyle(penCap);
+
+    TRY_READ_ATTR_WITHOUT_NS(joinstyle)
+    if (!joinstyle.isEmpty()) {
+        m_currentVMLProperties.joinStyle = joinstyle;
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(dashstyle)
     if (!dashstyle.isEmpty()) {
-        if (dashstyle == "1 1") {
-            m_currentPen.setStyle(Qt::DashLine);
+        // This is over simplification
+        QPen pen;
+        pen.setWidthF(2);
+        pen.setStyle(Qt::DashLine);
+        m_currentDrawStyle->addProperty("draw:stroke", "dash");
+        KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
+        dashStyle.addAttribute("draw:style", "rect");
+        QVector<qreal> dashes = pen.dashPattern();
+        dashStyle.addAttribute("draw:dots1", static_cast<int>(1));
+        dashStyle.addAttributePt("draw:dots1-length", dashes[0]*pen.widthF());
+        dashStyle.addAttributePt("draw:distance", dashes[1]*pen.widthF());
+        if (dashes.size() > 2) {
+            dashStyle.addAttribute("draw:dots2", static_cast<int>(1));
+            dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
         }
-        else if (dashstyle == "dashDot") {
-            m_currentPen.setStyle(Qt::DashDotLine);
+        m_currentVMLProperties.strokeStyleName = mainStyles->insert(dashStyle, "dash");
+        /* TODO : implement in reality
+        if (dashStyle == "dashDot") {
+
         }
+        else if (dashStyle == "longDash") {
+
+        }
+        else if (dashStyle == "1 1") {
+
+        }
+        else if (dashStyle == "3 1") {
+
+        }
+        else if (dashStyle == "dash") {
+
+        }*/
+    // TODO
     }
 
     readNext();
@@ -563,71 +634,111 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
 
-    // To handle nested groups
-    bool groupStartsFromMe = false;
+    if (!m_currentVMLProperties.insideGroup) {
 
-    if (!m_insideGroup) {
-
-        const QString width(m_vmlStyle.value("width"));
-        const QString height(m_vmlStyle.value("height"));
+        const QString width(m_currentVMLProperties.vmlStyle.value("width"));
+        const QString height(m_currentVMLProperties.vmlStyle.value("height"));
 
         // These potentially cause an offset to all shapes in the group
         // Unhandled case: theoretically x_mar could be in different units
         // than width, in this case they should be added somehow intelligently
-        const QString x_mar(m_vmlStyle.value("margin-left"));
-        const QString y_mar(m_vmlStyle.value("margin-top"));
+        const QString x_mar(m_currentVMLProperties.vmlStyle.value("margin-left"));
+        const QString y_mar(m_currentVMLProperties.vmlStyle.value("margin-top"));
 
-        m_insideGroup = true;
-        groupStartsFromMe = true;
+        m_currentVMLProperties.groupWidthUnit = width.right(2); // pt, cm etc.
+        m_currentVMLProperties.groupHeightUnit = height.right(2);
+        m_currentVMLProperties.real_groupWidth = width.left(width.length() - 2).toDouble();
+        m_currentVMLProperties.real_groupHeight = height.left(height.length() - 2).toDouble();
 
-        m_groupWidthUnit = width.right(2); // pt, cm etc.
-        m_groupHeightUnit = height.right(2);
-        m_real_groupWidth = width.left(width.length() - 2).toDouble();
-        m_real_groupHeight = height.left(height.length() - 2).toDouble();
-
-        m_groupX = 0;
-        m_groupY = 0;
-        m_groupWidth = 0;
-        m_groupHeight = 0;
-        m_groupXOffset = 0;
-        m_groupYOffset = 0;
+        m_currentVMLProperties.groupX = 0;
+        m_currentVMLProperties.groupY = 0;
+        m_currentVMLProperties.groupWidth = 0;
+        m_currentVMLProperties.groupHeight = 0;
+        m_currentVMLProperties.groupXOffset = 0;
+        m_currentVMLProperties.groupYOffset = 0;
         // Assuming that two last chars are unit (cm, pt)
-        m_groupXOffset = x_mar.left(x_mar.length() - 2).toDouble();
-        m_groupYOffset = y_mar.left(y_mar.length() - 2).toDouble();
+        m_currentVMLProperties.groupXOffset = x_mar.left(x_mar.length() - 2).toDouble();
+        m_currentVMLProperties.groupYOffset = y_mar.left(y_mar.length() - 2).toDouble();
 
         TRY_READ_ATTR_WITHOUT_NS(coordsize)
 
         if (!coordsize.isEmpty()) {
-            m_groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
-            m_groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
+            m_currentVMLProperties.groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
+            m_currentVMLProperties.groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
         }
 
         TRY_READ_ATTR_WITHOUT_NS(coordorigin)
         if (!coordorigin.isEmpty()) {
-            m_groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
-            m_groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
+            m_currentVMLProperties.groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
+            m_currentVMLProperties.groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
         }
     }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
-    m_wrapRead = false;
+    m_currentVMLProperties.wrapRead = false;
+
+    m_currentVMLProperties.strokeWidth = "1pt" ; // This seems to be the default
+    m_currentVMLProperties.shapeColor.clear();
+    m_currentVMLProperties.strokeColor.clear();
+    m_currentVMLProperties.lineCapStyle = "square";
+    m_currentVMLProperties.joinStyle = "middle";
+    m_currentVMLProperties.strokeStyleName = QString();
+    m_currentVMLProperties.filled = QString();
+    m_currentVMLProperties.stroked = QString();
+
+    if (!strokeweight.isEmpty()) {
+        if (strokeweight.at(0) == '.') {
+            m_currentVMLProperties.strokeWidth = "0" + strokeweight;
+        }
+        m_currentVMLProperties.strokeColor = "#000000"; // Black color seems to be default
+    }
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            TRY_READ_IF(rect)
-            ELSE_TRY_READ_IF(shapetype)
-            ELSE_TRY_READ_IF(roundrect)
-            ELSE_TRY_READ_IF(oval)
-            ELSE_TRY_READ_IF(shape)
-            ELSE_TRY_READ_IF(group)
+            if (name() == "shapetype") {
+                m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
+                TRY_READ(shapetype)
+                m_currentVMLProperties = m_VMLShapeStack.pop();
+            }
+            else if (name() == "rect") {
+                m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
+                TRY_READ(rect)
+                m_currentVMLProperties = m_VMLShapeStack.pop();
+            }
+            else if (name() == "roundrect") {
+                m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
+                TRY_READ(roundrect)
+                m_currentVMLProperties = m_VMLShapeStack.pop();
+            }
+            else if (name() == "oval") {
+                m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
+                TRY_READ(oval)
+                m_currentVMLProperties = m_VMLShapeStack.pop();
+            }
+            else if (name() == "shape") {
+                m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
+                TRY_READ(shape)
+                m_currentVMLProperties = m_VMLShapeStack.pop();
+            }
+            else if (name() == "group") {
+                m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
+                TRY_READ(group)
+                m_currentVMLProperties = m_VMLShapeStack.pop();
+            }
             ELSE_TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(stroke)
             else if (qualifiedName() == "w10:wrap") {
-                m_wrapRead = true;
+                m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
             SKIP_UNKNOWN
@@ -635,34 +746,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         }
     }
 
-    if (groupStartsFromMe) {
-        m_insideGroup = false;
-    }
-
     body = frameBuf.originalWriter();
 
-    m_strokeWidth = 1 ; // This seems to be the default
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-    m_currentPen = QPen();
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
-        m_strokeColor = "#000000"; // Black color seems to be default
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    if (filled != "f" && filled != "false") {
+        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
     }
 
-    if (!fillcolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(filled)
-        if (filled != "f" && filled != "false") {
-            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-        }
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    if (stroked == "f" || stroked == "false") {
+        m_currentVMLProperties.strokeWidth = QString();
     }
-
-    if (!strokecolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(stroked)
-        if (stroked != "f" && stroked != "false") {
-            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-        }
+    else if (!strokecolor.isEmpty()) {
+        m_currentVMLProperties.strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
     }
 
     createFrameStart(GroupStart);
@@ -690,43 +786,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
-    m_strokeWidth = 1 ; // This seems to be the default
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-    m_currentPen = QPen();
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
-        m_strokeColor = "#000000"; // Black color seems to be default
-    }
-
-    if (!fillcolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(filled)
-        if (filled != "f" && filled != "false") {
-            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-        }
-    }
-
-    if (!strokecolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(stroked)
-        if (stroked != "f" && stroked != "false") {
-            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-        }
-    }
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
     bool textBoxOrImage = false;
-    m_wrapRead = false;
+    m_currentVMLProperties.wrapRead = false;
 
     while (!atEnd()) {
         readNext();
-        if (isEndElement() && qualifiedName() == m_currentEl) {
+        if (isEndElement() && qualifiedName() == m_currentVMLProperties.currentEl) {
             break;
         }
         else if (isStartElement()) {
@@ -737,7 +807,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
             }
             ELSE_TRY_READ_IF(stroke)
             else if (qualifiedName() == "w10:wrap") {
-                m_wrapRead = true;
+                m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
             SKIP_UNKNOWN
@@ -773,7 +843,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_oval()
 {
     READ_PROLOGUE
 
-    m_currentEl = "v:oval";
+    m_currentVMLProperties.currentEl = "v:oval";
     KoFilter::ConversionStatus status = genericReader();
     if (status != KoFilter::OK) {
         return status;
@@ -791,7 +861,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
 {
     READ_PROLOGUE
 
-    m_currentEl = "v:roundrect";
+    m_currentVMLProperties.currentEl = "v:roundrect";
     KoFilter::ConversionStatus status = genericReader();
     if (status != KoFilter::OK) {
         return status;
@@ -837,7 +907,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
 //! @todo support more attrs
     // Relationship ID of the relationship to the image used for this fill.
     TRY_READ_ATTR_WITH_NS(r, id)
-    m_vmlStyle.insert("v:fill@r:id", r_id);
+    m_currentVMLProperties.vmlStyle.insert("v:fill@r:id", r_id);
     // The kind of fill. Default is solid.
     TRY_READ_ATTR_WITHOUT_NS(type)
     // frame (Stretch Image to Fit) - The image is stretched to fill the shape.
@@ -896,7 +966,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
             ELSE_WRONG_FORMAT
         }
     }
-    const QString rId(m_vmlStyle.value("v:fill@r:id"));
+    const QString rId(m_currentVMLProperties.vmlStyle.value("v:fill@r:id"));
     if (!rId.isEmpty()) {
         const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));
         kDebug() << "sourceName:" << sourceName;
@@ -977,9 +1047,10 @@ static QString getArgument(QString& source, bool commaMeansZero, bool& wasComman
     return "0"; // this means case 1,e
 }
 
-static QString convertToEnhancedPath(const QString& source)
+static QString convertToEnhancedPath(const QString& source, QString& extraShapeFormulas)
 {
     enum ConversionState {CommandExpected, ArgumentExpected};
+    int extraFormulaIndex = 1;
     QString parsedString = source;
     QString returnedString;
     ConversionState state = CommandExpected;
@@ -1257,12 +1328,24 @@ static QString convertToEnhancedPath(const QString& source)
                 fourth = getArgument(parsedString, false, argumentMove);
                 fifth = getArgument(parsedString, false, argumentMove);
                 sixth = getArgument(parsedString, false, argumentMove);
-                // These are most likely wrong, spec does not mention which units the angle uses
-                // nor how the angle should be interpreted
+                seventh = QString("?extraFormula%1").arg(extraFormulaIndex);
+                extraShapeFormulas += "\n<draw:equation ";
+                extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
+                extraShapeFormulas += QString("%1 / 65536").arg(fifth);
+                extraShapeFormulas += "\" ";
+                extraShapeFormulas += "/>";
+                ++extraFormulaIndex;
+                eighth = QString("?extraFormula%1").arg(extraFormulaIndex);
+                extraShapeFormulas += "\n<draw:equation ";
+                extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
+                extraShapeFormulas += QString("%1 / 65536").arg(sixth);
+                extraShapeFormulas += "\" ";
+                extraShapeFormulas += "/>";
+                ++extraFormulaIndex;
                 currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
                 currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
                 returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).arg(fourth).
-                    arg(fifth).arg(sixth);
+                    arg(seventh).arg(eighth);
                 while (true) {
                     first = getArgument(parsedString, false, argumentMove);
                     if (argumentMove) {
@@ -1274,10 +1357,24 @@ static QString convertToEnhancedPath(const QString& source)
                     fourth = getArgument(parsedString, false, argumentMove);
                     fifth = getArgument(parsedString, false, argumentMove);
                     sixth = getArgument(parsedString, false, argumentMove);
+                    seventh = QString("?extraFormula%1").arg(extraFormulaIndex);
+                    extraShapeFormulas += "\n<draw:equation ";
+                    extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
+                    extraShapeFormulas += QString("%1 / 65536").arg(fifth);
+                    extraShapeFormulas += "\" ";
+                    extraShapeFormulas += "/>";
+                    ++extraFormulaIndex;
+                    eighth = QString("?extraFormula%1").arg(extraFormulaIndex);
+                    extraShapeFormulas += "\n<draw:equation ";
+                    extraShapeFormulas += QString("draw:name=\"extraFormula%1\" draw:formula=\"").arg(extraFormulaIndex);
+                    extraShapeFormulas += QString("%1 / 65536").arg(sixth);
+                    extraShapeFormulas += "\" ";
+                    extraShapeFormulas += "/>";
+                    ++extraFormulaIndex;
                     currentX = QString("%1").arg(first.toInt() + cos(sixth.toDouble()));
                     currentY = QString("%1").arg(first.toInt() + sin(sixth.toDouble()));
                     returnedString += QString(" %1 %2 %3 %4 %5 %6").arg(first).arg(second).arg(third).arg(fourth).
-                    arg(fifth).arg(sixth);
+                    arg(seventh).arg(eighth);
                 }
                 break;
             }
@@ -1337,24 +1434,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
 
     // Using KoXmlWriters is another opinion, but this one is used to avoid
     // hassle with deletions (koxmlwriter not deleting its device etc)
-    m_shapeTypeString = "<draw:enhanced-geometry ";
+    m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
     if (!adj.isEmpty()) {
         QString tempModifiers = adj;
+        tempModifiers.replace(",,", ",0,");
         tempModifiers.replace(',', " ");
-        m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
+        m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
     }
     if (!coordsize.isEmpty()) {
         QString tempViewBox = "0 0 " + coordsize;
         tempViewBox.replace(',', " ");
-        m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
+        m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
     }
+    m_currentVMLProperties.extraShapeFormulas = QString();
     if (!path.isEmpty()) {
-        QString enPath = convertToEnhancedPath(path);
-        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(enPath);
+        QString enPath = convertToEnhancedPath(path, m_currentVMLProperties.extraShapeFormulas);
+        m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(enPath);
     }
 
-    m_shapeTypeString += ">";
+    TRY_READ_ATTR_WITHOUT_NS(filled)
+    m_currentVMLProperties.filled = filled;
+    TRY_READ_ATTR_WITHOUT_NS(stroked)
+    m_currentVMLProperties.stroked = stroked;
+
+    m_currentVMLProperties.shapeTypeString += ">";
 
     while (!atEnd()) {
         readNext();
@@ -1365,8 +1469,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
         }
     }
 
-    m_shapeTypeString += "</draw:enhanced-geometry>";
-    m_shapeTypeStrings[id] = m_shapeTypeString;
+    m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
+    m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
+
+    m_definedShapeTypes[id] = m_currentVMLProperties;
 
     READ_EPILOGUE
 }
@@ -1399,7 +1505,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_formulas()
 {
     READ_PROLOGUE
 
-    m_formulaIndex = 0;
+    m_currentVMLProperties.formulaIndex = 0;
 
     while (!atEnd()) {
         readNext();
@@ -1427,8 +1533,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(eqn)
-    m_shapeTypeString += "\n<draw:equation ";
-    m_shapeTypeString += QString("draw:name=\"f%1\" draw:formula=\"").arg(m_formulaIndex);
+    m_currentVMLProperties.shapeTypeString += "\n<draw:equation ";
+    m_currentVMLProperties.shapeTypeString += QString("draw:name=\"f%1\" draw:formula=\"").arg(m_currentVMLProperties.formulaIndex);
 
     if (!eqn.isEmpty()) {
         eqn = eqn.trimmed();
@@ -1458,65 +1564,65 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
             eqn = eqn.mid(commandIndex + 1);
         }
         if (command == "val") {
-            m_shapeTypeString += parameters.at(0);
+            m_currentVMLProperties.shapeTypeString += parameters.at(0);
         }
         else if (command == "sum") {
-            m_shapeTypeString += parameters.at(0) + "+" + parameters.at(1) + "-" + parameters.at(2);
+            m_currentVMLProperties.shapeTypeString += parameters.at(0) + "+" + parameters.at(1) + "-" + parameters.at(2);
         }
         else if (command == "prod") {
-            m_shapeTypeString += parameters.at(0) + "*" + parameters.at(1) + "/" + parameters.at(2);
+            m_currentVMLProperties.shapeTypeString += parameters.at(0) + "*" + parameters.at(1) + "/" + parameters.at(2);
         }
         else if (command == "abs") {
-            m_shapeTypeString += QString("abs(%1)").arg(parameters.at(0));
+            m_currentVMLProperties.shapeTypeString += QString("abs(%1)").arg(parameters.at(0));
         }
         else if (command == "min") {
-            m_shapeTypeString += QString("min(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.shapeTypeString += QString("min(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "max") {
-            m_shapeTypeString += QString("max(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.shapeTypeString += QString("max(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "if") {
-            m_shapeTypeString += QString("if(max(%1,0),%2,%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.shapeTypeString += QString("if(%1,%2,%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sqrt") {
-            m_shapeTypeString += QString("sqrt(%1)").arg(parameters.at(0));
+            m_currentVMLProperties.shapeTypeString += QString("sqrt(%1)").arg(parameters.at(0));
         }
         else if (command == "mid") {
-            m_shapeTypeString += QString("(%1+%2)/2").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.shapeTypeString += QString("(%1+%2)/2").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "mod") {
-            m_shapeTypeString += QString("sqrt(%1*%1+%2*%2+%3*%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.shapeTypeString += QString("sqrt(%1*%1+%2*%2+%3*%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "ellipse") {
-            m_shapeTypeString += QString("%3-sqrt(1-(%1/%2)*(%1/%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.shapeTypeString += QString("%3-sqrt(1-(%1/%2)*(%1/%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
-        else if (command == "atan2") {
-            m_shapeTypeString += QString("atan2(%2,%1)").arg(parameters.at(0)).arg(parameters.at(1));
+        else if (command == "atan2") { // converting to fd unit (degrees * 65536)
+            m_currentVMLProperties.shapeTypeString += QString("3754936*atan2(%2,%1)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "cosatan2") {
-            m_shapeTypeString += QString("%1*cos(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.shapeTypeString += QString("%1*cos(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sinatan2") {
-            m_shapeTypeString += QString("%1*sin(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.shapeTypeString += QString("%1*sin(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sumangle") {
-            m_shapeTypeString += QString("%1+%2*65536-%3*65536").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.shapeTypeString += QString("%1+%2*65536-%3*65536").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
-        else if (command == "sin") {
-            m_shapeTypeString += QString("%1*sin(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
+        else if (command == "sin") { // converting fd unit to radians
+            m_currentVMLProperties.shapeTypeString += QString("%1*sin(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "cos") {
-            m_shapeTypeString += QString("%1*cos(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.shapeTypeString += QString("%1*cos(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "tan") {
-            m_shapeTypeString += QString("%1*tan(%2*65536)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.shapeTypeString += QString("%1*tan(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
     }
 
-    m_shapeTypeString += "\" ";
-    m_shapeTypeString += "/>";
+    m_currentVMLProperties.shapeTypeString += "\" ";
+    m_currentVMLProperties.shapeTypeString += "/>";
 
-    ++m_formulaIndex;
+    ++m_currentVMLProperties.formulaIndex;
     readNext();
     READ_EPILOGUE
 }
@@ -1569,13 +1675,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
            </v:shape>*/
     const QXmlStreamAttributes attrs(attributes());
 
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    if (!type.isEmpty()) {
+        type = type.mid(1); // removes extra # from the start
+    }
+    // Inheriting all values from the template shape
+    m_currentVMLProperties = m_definedShapeTypes.value(type);
+
     TRY_READ_ATTR_WITHOUT_NS(id)
-    m_currentShapeId = id;
+    m_currentVMLProperties.currentShapeId = id;
 
     // For some shapes, it seems that this is the correct id.
     TRY_READ_ATTR_WITH_NS(o, spid)
     if (!o_spid.isEmpty()) {
-        m_currentShapeId = o_spid;
+        m_currentVMLProperties.currentShapeId = o_spid;
     }
 
     TRY_READ_ATTR_WITH_NS(o, connectortype)
@@ -1583,59 +1696,36 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     // CSS2 styling properties of the shape, http://www.w3.org/TR/REC-CSS2
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
-    kDebug() << "m_vmlStyle:" << m_vmlStyle;
+    kDebug() << "m_vmlStyle:" << m_currentVMLProperties.vmlStyle;
 
     //! @todo position (can be relative...)
-    TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
-    TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
-    TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_currentVMLProperties.shapeAltText)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_currentVMLProperties.shapeTitle)
     TRY_READ_ATTR_WITHOUT_NS(path)
     TRY_READ_ATTR_WITHOUT_NS(adj)
     TRY_READ_ATTR_WITHOUT_NS(coordsize)
     if (!path.isEmpty()) {
-        m_shapeTypeString = "<draw:enhanced-geometry ";
+        m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
         if (!adj.isEmpty()) {
             QString tempModifiers = adj;
+            tempModifiers.replace(",,", ",0,");
             tempModifiers.replace(',', " ");
-            m_shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
+            m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
         }
         if (!coordsize.isEmpty()) {
             QString tempViewBox = "0 0 " + coordsize;
             tempViewBox.replace(',', " ");
-            m_shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
+            m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
         }
-        m_shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(convertToEnhancedPath(path));
-        m_shapeTypeString += ">";
+        m_currentVMLProperties.extraShapeFormulas = QString();
+
+        m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
+            arg(convertToEnhancedPath(path, m_currentVMLProperties.extraShapeFormulas));
+        m_currentVMLProperties.shapeTypeString += ">";
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
-    m_strokeWidth = 1 ; // This seems to be the default
-    m_shapeColor.clear();
-    m_strokeColor.clear();
-    m_currentPen = QPen();
-
-    if (!strokeweight.isEmpty()) {
-        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
-        m_strokeColor = "#000000"; // Black color seems to be default
-    }
-
-    if (!fillcolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(filled)
-        if (filled != "f" && filled != "false") {
-            m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-        }
-    }
-
-    if (!strokecolor.isEmpty()) {
-        TRY_READ_ATTR_WITHOUT_NS(stroked)
-        if (stroked != "f" && stroked != "false") {
-            m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-        }
-    }
+    handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -1645,7 +1735,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 
-    m_wrapRead = false;
+    m_currentVMLProperties.wrapRead = false;
 
     bool isCustomShape = true;
 
@@ -1663,7 +1753,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             }
             ELSE_TRY_READ_IF(stroke)
             else if (qualifiedName() == "w10:wrap") {
-                m_wrapRead = true;
+                m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
             }
             ELSE_TRY_READ_IF(formulas)
@@ -1673,7 +1763,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     // Case of a custom shape which is not defined in a shapetype
     if (!path.isEmpty()) {
-        m_shapeTypeString += "</draw:enhanced-geometry>";
+        m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
+        m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
     }
 
     body = frameBuf.originalWriter();
@@ -1695,14 +1786,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
-        if (isCustomShape) {
-            if (!type.isEmpty()) {
-                type = type.mid(1); // removes extra # from the start
-                body->addCompleteElement(m_shapeTypeStrings.value(type).toUtf8());
-            }
-            else {
-                body->addCompleteElement(m_shapeTypeString.toUtf8());
-            }
+        if (isCustomShape && o_connectortype.isEmpty()) {
+            body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
         }
         createFrameEnd();
     }
@@ -1762,10 +1847,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
 //! @todo ooo saves binaries to the root dir; should we?
         m_context->import->imageSize(imagedata, m_imageSize);
 
-        m_imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);;
-        RETURN_IF_ERROR( m_context->import->copyFile(imagedata, m_imagedataPath, false ) )
-        addManifestEntryForFile(m_imagedataPath);
-        m_imagedataFile = imagedata;
+        m_currentVMLProperties.imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);;
+        RETURN_IF_ERROR( m_context->import->copyFile(imagedata, m_currentVMLProperties.imagedataPath, false ) )
+        addManifestEntryForFile(m_currentVMLProperties.imagedataPath);
+        m_currentVMLProperties.imagedataFile = imagedata;
         addManifestEntryForPicturesDir();
     }
 
@@ -1822,9 +1907,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     TRY_READ_ATTR_WITHOUT_NS(side)
 
     if (type.isEmpty()) {
-        if (m_vmlStyle.contains("z-index")) {
+        if (m_currentVMLProperties.vmlStyle.contains("z-index")) {
             m_currentDrawStyle->addProperty("style:wrap", "run-through");
-            if (m_vmlStyle.value("z-index").toInt() > 0) {
+            if (m_currentVMLProperties.vmlStyle.value("z-index").toInt() > 0) {
                 m_currentDrawStyle->addProperty("style:run-through", "foreground");
             }
             else {
@@ -1836,8 +1921,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
             m_currentDrawStyle->addProperty("style:run-through", "foreground");
         }
     }
-    else if (type == "through") {
-        m_currentDrawStyle->addProperty("style:wrap", "run-through");
+    else if (type == "through" || type == "square" || type == "tight") {
+        if (side.isEmpty()) {
+            m_currentDrawStyle->addProperty("style:wrap", "parallel");
+        }
+        else if (side == "left") {
+            m_currentDrawStyle->addProperty("style:wrap", "left");
+        }
+        else if (side == "largest") {
+            m_currentDrawStyle->addProperty("style:wrap", "biggest");
+        }
+        else if (side == "right") {
+            m_currentDrawStyle->addProperty("style:wrap", "right");
+        }
+        else if (side == "both") {
+            m_currentDrawStyle->addProperty("style:wrap", "parallel");
+        }
     }
     else if (type == "topAndBottom") {
         m_currentDrawStyle->addProperty("style:wrap", "none");
@@ -1868,18 +1967,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
 
     if (anchory == "page") {
         m_currentDrawStyle->addProperty("style:vertical-rel", "page");
-        m_anchorType = "page";
+        m_currentVMLProperties.anchorType = "page";
     }
     else if (anchory == "text") {
-        m_anchorType = "as-char";
+        m_currentVMLProperties.anchorType = "as-char";
         m_currentDrawStyle->addProperty("style:vertical-rel", "text");
     }
     else if (anchory == "line") {
-        m_anchorType = "as-char";
+        m_currentVMLProperties.anchorType = "as-char";
         m_currentDrawStyle->addProperty("style:vertical-rel", "line");
     }
     else { // margin
-        m_anchorType = "paragraph";
+        m_currentVMLProperties.anchorType = "paragraph";
         m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
     }
 

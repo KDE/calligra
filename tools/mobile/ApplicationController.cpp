@@ -1701,6 +1701,12 @@ void ApplicationController::showFullScreenPresentationIcons()
                                    size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
     }
 
+    if (currentPage() <= document()->pageCount() && currentPage() != 1 && m_presentationTool && !m_presentationTool->toolsActivated())
+    {
+        m_fsPPTBackButton->show();
+        m_fsPPTBackButton->raise();
+    }
+
     if (!m_fsPPTDrawPenButton && m_presentationTool) {
         m_fsPPTDrawPenButton = new QPushButton(m_mainWindow);
 #ifdef Q_WS_MAEMO_5
@@ -1709,7 +1715,8 @@ void ApplicationController::showFullScreenPresentationIcons()
         m_fsPPTDrawPenButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
         m_fsPPTDrawPenButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/pen.png"));
         m_fsPPTDrawPenButton->setIconSize(QSize(48, 48));
-        m_fsPPTDrawPenButton->move(736 ,284);
+        m_fsPPTDrawPenButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                   size.height() - FS_BUTTON_SIZE*3 - hScrlbarHeight);
         connect(m_fsPPTDrawPenButton,SIGNAL(clicked()),m_presentationTool,SLOT(togglePenTool()));
     }
 
@@ -1724,7 +1731,8 @@ void ApplicationController::showFullScreenPresentationIcons()
         m_fsPPTDrawHighlightButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
         m_fsPPTDrawHighlightButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/highlight.png"));
         m_fsPPTDrawHighlightButton->setIconSize(QSize(48, 48));
-        m_fsPPTDrawHighlightButton->move(736,350);
+        m_fsPPTDrawHighlightButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                         size.height() - FS_BUTTON_SIZE*2 - hScrlbarHeight);
         connect(m_fsPPTDrawHighlightButton,SIGNAL(clicked()),m_presentationTool,SLOT(toggleHighlightTool()));
     }
 
@@ -1738,13 +1746,6 @@ void ApplicationController::showFullScreenPresentationIcons()
         m_fsPPTForwardButton->raise();
     }
 
-    if (currentPage() <= document()->pageCount() && currentPage() != 1 && m_presentationTool && !m_presentationTool->toolsActivated())
-    {
-        m_fsPPTBackButton->move(size.width() - FS_BUTTON_SIZE*3 - vScrlbarWidth,
-                                size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
-        m_fsPPTBackButton->show();
-        m_fsPPTBackButton->raise();
-    }
     if(documentType() == PresentationDocument) {
         if (!m_slideNotesButton) {
             m_slideNotesButton = new QPushButton(m_mainWindow);
@@ -1756,7 +1757,8 @@ void ApplicationController::showFullScreenPresentationIcons()
             m_slideNotesButton->setIcon(m_slideNotesIcon);
             m_slideNotesButton->setIconSize(QSize(48, 48));
             connect(m_slideNotesButton, SIGNAL(clicked()), SLOT(slideNotesButtonClicked()));
-            m_slideNotesButton->move(736,222);
+            m_slideNotesButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                     size.height() - FS_BUTTON_SIZE*4 - hScrlbarHeight);
         }
         m_slideNotesButton->show();
         m_slideNotesButton->raise();
@@ -1767,7 +1769,8 @@ void ApplicationController::showFullScreenPresentationIcons()
              m_fsAccButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
              m_fsAccButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
              m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
-             m_fsAccButton->move(736,156);
+             m_fsAccButton->move(size.width() - FS_BUTTON_SIZE - vScrlbarWidth,
+                                      size.height() - FS_BUTTON_SIZE*5 - hScrlbarHeight);
              connect(m_fsAccButton, SIGNAL(clicked(bool)), SLOT(switchToSlid()));
         }
         m_fsAccButton->show();
@@ -2866,9 +2869,9 @@ void ApplicationController::handleMainWindowPaintEvent( QPaintEvent */*event*/ )
 
     if (m_presentationTool->toolsActivated()) {
         QPainter painter(m_mainWindow);
-        QRectF target(0,0,800,480);
-        QRectF source(0,0,800,480);
-        painter.drawImage(target, *m_presentationTool->getImage(), source);
+        painter.drawImage( QRectF(QPointF(0,0), m_mainWindow->size()),
+                          *m_presentationTool->getImage(),
+                          QRectF(QPointF(0,0), m_presentationTool->getImage()->size()));
     }
 
     if (!m_presentationTool->getPenToolStatus() && !m_presentationTool->getHighlightToolStatus() && canvasControllerWidget()) {
@@ -3417,7 +3420,7 @@ bool ApplicationController::startNewInstance(const KoAbstractApplicationOpenDocu
                              ? QString() : args.documentsToOpen.first();
     cmdLineArgs << fileName;
     cmdLineArgs << (args.openAsTemplates ? "true" : "false");
-    return QProcess::startDetached(FREOFFICE_APPLICATION_PATH, cmdLineArgs);
+    return QProcess::startDetached(qApp->applicationFilePath(), cmdLineArgs);
 }
 
 void ApplicationController::setProgressIndicatorVisible(bool visible)

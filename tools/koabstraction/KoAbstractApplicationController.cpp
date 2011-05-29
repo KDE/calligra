@@ -319,7 +319,9 @@ bool KoAbstractApplicationController::openDocuments(
         m_cellTool = dynamic_cast<KoCellTool *>(
             KoToolManager::instance()->toolById(tablesView->selection()->canvas(), cellToolFactoryId()));
         tablesView->showTabBar(false);
+#ifdef Q_WS_MAEMO_5
         tablesView->setStyleSheet("* { color:white; } ");
+#endif
 
         //set the central widget. Note: The central widget for spreadsheet is m_view.
         setCentralWidget(tablesView);

@@ -221,6 +221,8 @@ typedef enum
     sprmSPgnStart = 0x501C,
     sprmSDmPaperReq = 0x5026,
     sprmSClm = 0x5032,
+    sprmSNfcFtnRef = 0x5040,
+    sprmSNfcEdnRef = 0x5042,
     sprmSTextFlow = 0x5033,
     sprmSPgbProp = 0x522F,
     sprmTJc = 0x5400,
@@ -1134,7 +1136,7 @@ namespace
             chp = &paragraphStyle->chp();
         else if ( istd != 10 && styleSheet ) {
             const Style* style( styleSheet->styleByIndex( istd ) );
-            chp = style != 0 && style->type() == Style::sgcChp ? &style->chp() : 0;
+            chp = style != 0 && style->type() == sgcChp ? &style->chp() : 0;
         }
         else
             wvlog << "Warning: sprmCFxyz couldn't find a style" << endl;
@@ -1228,7 +1230,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             if ( styleSheet ) {
                 wvlog << "Trying to change the character style to " << istd << endl;
                 const Style* style = styleSheet->styleByIndex( istd );
-                if ( style && style->type() == Style::sgcChp ) {
+                if ( style && style->type() == sgcChp ) {
                     wvlog << "got a character style!" << endl;
                     const UPECHPX& upechpx( style->upechpx() );
                     apply( upechpx.grpprl, upechpx.cb, paragraphStyle, styleSheet, dataStream, version );
@@ -1936,6 +1938,12 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             break;
         case SPRM::sprmSClm:
             clm = readU16( ptr );
+            break;
+        case SPRM::sprmSNfcFtnRef:
+            nfcFtnRef = readU16( ptr );
+            break;
+        case SPRM::sprmSNfcEdnRef:
+            nfcEdnRef = readU16( ptr );
             break;
         case SPRM::sprmSTextFlow:
             wTextFlow = readU16( ptr );

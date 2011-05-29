@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Stage
+Name[el]=Calligra Stage
 Name[et]=Calligra Stage
 Name[pt]=Calligra Stage
 Name[pt_BR]=Calligra Stage
@@ -44,6 +45,7 @@ GenericName[sl]=Predstavitev
 GenericName[sv]=Presentation
 GenericName[tg]=Тақдим
 GenericName[tr]=Sunum
+GenericName[ug]=كۆرسەتمە
 GenericName[uk]=Презентація
 GenericName[wa]=Prezintaedje
 GenericName[x-test]=xxPresentationxx
@@ -54,7 +56,7 @@ Comment[ca]=Escriu documents de presentació
 Comment[ca@valencia]=Escriu documents de presentació
 Comment[da]=Skriv præsentationsdokumenter
 Comment[de]=Präsentationsdokumente verfassen
-Comment[el]=Γράψτε αρχεία παρουσιάσεων
+Comment[el]=Γράψτε έγγραφα παρουσιάσεων
 Comment[en_GB]=Write presentation documents
 Comment[es]=Escribir documentos de presentación
 Comment[et]=Esitlusdokumentide kirjutamine

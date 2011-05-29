@@ -133,9 +133,10 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
         slideMasterProperties(_slideMasterProperties),
         notesMasterProperties(_notesMasterProperties),
         commentAuthors(_commentAuthors),
-        colorMap(masterColorMap), oleReplacements(_oleReplacements), firstReadingRound(false),
+        oleReplacements(_oleReplacements), firstReadingRound(false),
         tableStylesFilePath(_tableStylesFilePath)
 {
+    colorMap = masterColorMap;
 }
 
 void PptxXmlSlideReaderContext::initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
@@ -1547,8 +1548,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
         }
     }
 
-    popCurrentDrawStyle();
-
     body = buffer.originalWriter();
     body->startElement("draw:frame");
 
@@ -1557,6 +1556,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
     }
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
+
+    popCurrentDrawStyle();
 
     body->addAttribute("draw:name", m_cNvPrName);
     body->addAttribute("draw:layer", "layout");

@@ -22,9 +22,9 @@
 #include "wv2_export.h"
 //#include "wv2version.h"  // ###### WV2 0.3: Remove this #include
 
-/** @file
- * We use this typedefs to be compatible with the types from
- * the MS HTML specifications.
+/**
+ * @file We use this typedefs to be compatible with the types from the MS HTML
+ * specifications.
  */
 
 // A few defines used for "inline" debugging

@@ -706,6 +706,9 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     d->textBoxHasContent = false;
 
     m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
+    }
 
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
@@ -791,10 +794,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
-    if (!m_currentPresentationStyle.isEmpty()) {
-        if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
-            m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
-        }
+    if (!m_currentPresentationStyle.isEmpty() || !m_currentPresentationStyle.parentName().isEmpty()) {
         QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
@@ -1281,7 +1281,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
-    if (!r_id.isEmpty()) {
+    if (!r_id.isEmpty() && m_context->relationships) {
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         Charting::Chart* chart = new Charting::Chart;
@@ -1347,48 +1347,50 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITH_NS(r, cs) // colors
-    TRY_READ_ATTR_WITH_NS(r, dm) // data
-    TRY_READ_ATTR_WITH_NS(r, lo) // layout
-    TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
-        if (isStartElement()) {
-            TRY_READ_IF(spPr)
-            ELSE_TRY_READ_IF(style)
+    if (m_context->relationships) {
+        const QXmlStreamAttributes attrs(attributes());
+        TRY_READ_ATTR_WITH_NS(r, cs) // colors
+        TRY_READ_ATTR_WITH_NS(r, dm) // data
+        TRY_READ_ATTR_WITH_NS(r, lo) // layout
+        TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL)
+            if (isStartElement()) {
+                TRY_READ_IF(spPr)
+                ELSE_TRY_READ_IF(style)
+            }
         }
-    }
 
-    //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
-    const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
-    const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
-    //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
-    QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
+        //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
+        const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
+        const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
+        //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
+        QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
 
-    // first read the data-model
-    MSOOXML::MsooXmlDiagramReader dataReader(this);
-    const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
-    if (dataReaderResult != KoFilter::OK) {
-       raiseError(dataReader.errorString());
-       return dataReaderResult;
-    }
+        // first read the data-model
+        MSOOXML::MsooXmlDiagramReader dataReader(this);
+        const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
+        if (dataReaderResult != KoFilter::OK) {
+        raiseError(dataReader.errorString());
+        return dataReaderResult;
+        }
 
-    // then read the layout definition
-    MSOOXML::MsooXmlDiagramReader layoutReader(this);
-    const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
-    if (layoutReaderResult != KoFilter::OK) {
-       raiseError(layoutReader.errorString());
-       return layoutReaderResult;
-    }
+        // then read the layout definition
+        MSOOXML::MsooXmlDiagramReader layoutReader(this);
+        const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
+        if (layoutReaderResult != KoFilter::OK) {
+        raiseError(layoutReader.errorString());
+        return layoutReaderResult;
+        }
 
-    // and finally start the process that will produce the ODF
+        // and finally start the process that will produce the ODF
 #if defined(XLSXXMLDRAWINGREADER_CPP)
-    m_currentDrawingObject->setDiagram(context.take());
+        m_currentDrawingObject->setDiagram(context.take());
 #else
-    context->saveIndex(body, QRect(EMU_TO_CM(m_svgX), EMU_TO_CM(m_svgY), m_svgHeight > 0 ? EMU_TO_CM(m_svgWidth) : 100, m_svgHeight > 0 ? EMU_TO_CM(m_svgHeight) : 100));
+        context->saveIndex(body, QRect(EMU_TO_CM(m_svgX), EMU_TO_CM(m_svgY), m_svgHeight > 0 ? EMU_TO_CM(m_svgWidth) : 100, m_svgHeight > 0 ? EMU_TO_CM(m_svgHeight) : 100));
 #endif
+    }
 
     READ_EPILOGUE
 }
@@ -2067,6 +2069,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
         m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
         m_currentColor = QColor();
     }
+
+    handleRprAttributes(attrs);
+
+    READ_EPILOGUE
+}
+
+void MSOOXML_CURRENT_CLASS::handleRprAttributes(const QXmlStreamAttributes& attrs)
+{
+    // DrawingML: b, i, strike, u attributes:
     if (attrs.hasAttribute("b")) {
         m_currentTextStyleProperties->setFontWeight(
             MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
@@ -2085,20 +2096,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
             m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
         }
     }
-
     TRY_READ_ATTR_WITHOUT_NS(spc)
     if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
+        int spcInt = spc.toInt();
+        m_currentTextStyle.addPropertyPt("fo:letter-spacing", qreal(spcInt) / 100.0);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(sz)
     if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "rPr@sz")
+        int szInt = sz.toInt();
         m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
     }
+    // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
     TRY_READ_ATTR_WITHOUT_NS(strike)
     if (strike == QLatin1String("sngStrike")) {
         m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
@@ -2112,20 +2121,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
     // from
     TRY_READ_ATTR_WITHOUT_NS(baseline)
     if (!baseline.isEmpty()) {
-        int baselineInt;
-        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
-        if (baselineInt > 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
-        else if (baselineInt < 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
+        int baselineInt = baseline.toInt();
+        if (baselineInt > 0) {
+            m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        }
+        else if (baselineInt < 0) {
+            m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
+        }
     }
 
     TRY_READ_ATTR_WITHOUT_NS(u)
     if (!u.isEmpty()) {
         MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
     }
-
-    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -2221,67 +2229,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         m_currentColor = QColor();
     }
 
-    // Read Attributes
-
-    // DrawingML: b, i, strike, u attributes:
-    if (attrs.hasAttribute("b")) {
-        m_currentTextStyleProperties->setFontWeight(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
-    }
-    if (attrs.hasAttribute("i")) {
-        m_currentTextStyleProperties->setFontItalic(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(cap);
-    if (!cap.isEmpty()) {
-        if (cap == QLatin1String("small")) {
-            m_currentTextStyle.addProperty("fo:font-variant", "small-caps");
-        }
-        else if (cap == QLatin1String("all")) {
-            m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
-        }
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(spc)
-    if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(sz)
-    if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "rPr@sz")
-        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
-    }
-    // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
-    TRY_READ_ATTR_WITHOUT_NS(strike)
-    if (strike == QLatin1String("sngStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else if (strike == QLatin1String("dblStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else {
-        // empty or "noStrike"
-    }
-    // from
-    TRY_READ_ATTR_WITHOUT_NS(baseline)
-    if (!baseline.isEmpty()) {
-        int baselineInt;
-        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
-        if (baselineInt > 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
-        else if (baselineInt < 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(u)
-    if (!u.isEmpty()) {
-        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
-    }
+    handleRprAttributes(attrs);
 
     READ_EPILOGUE
 }
@@ -2316,7 +2264,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
 
-    if (!r_id.isEmpty()) {
+    if (!r_id.isEmpty() && m_context->relationships) {
         m_hyperLink = true;
         m_hyperLinkTarget = m_context->relationships->target(m_context->path, m_context->file, r_id);
         m_hyperLinkTarget.remove(0, m_context->path.length() + 1);
@@ -2345,8 +2293,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
 //! pPr handler (Text Paragraph Properties) 21.1.2.2.7, p.3588.
 /*!
  Parent elements:
-  - fld (§21.1.2.2.4)
-  - p (§21.1.2.2.6)
+  - [done] fld (§21.1.2.2.4)
+  - [done] p (§21.1.2.2.6)
+
  Attributes:
   - [incomplete] algn (Alignment)
   - defTabSz (Default Tab Size)
@@ -2359,6 +2308,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - marL (Left Margin)
   - marR (Right Margin)
   - rtl (Right To Left)
+
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
   - [done] buBlip (Picture Bullet) §21.1.2.4.2
@@ -2371,7 +2321,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - [done] buSzPct (Bullet Size Percentage) §21.1.2.4.9
   - buSzPts (Bullet Size Points) §21.1.2.4.10
   - buSzTx (Bullet Size Follows Text) §21.1.2.4.11
-  - defRPr (Default Text Run Properties) §21.1.2.3.2
+  - [done] defRPr (Default Text Run Properties) §21.1.2.3.2
   - extLst (Extension List) §20.1.2.2.15
   - [done] lnSpc (Line Spacing) §21.1.2.2.5
   - [done] spcAft (Space After) §21.1.2.2.9
@@ -2432,11 +2382,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
     }
 
+    m_currentTextStyleProperties = new KoCharacterStyle();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(buAutoNum)
+            ELSE_TRY_READ_IF(defRPr)
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
             ELSE_TRY_READ_IF(buClrTx)
@@ -2459,6 +2413,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             SKIP_UNKNOWN
         }
     }
+
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
+    KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
 
     READ_EPILOGUE
 }
@@ -2751,7 +2710,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
 //! @todo more attrs
     TRY_READ_ATTR_WITH_NS(r, embed)
     kDebug() << "embed:" << r_embed;
-    if (!r_embed.isEmpty()) {
+    if (!r_embed.isEmpty() && m_context->relationships) {
         const QString sourceName(m_context->relationships->target(m_context->path,
                                                                   m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;
@@ -3053,8 +3012,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 //MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
     if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:repeat", QLatin1String("no-repeat"));
-
         // TODO: One way to approach this would be to first scale the image to the size of the slide
         // then, resize it according to the percentages & make sure there are no black areas
     }
@@ -3399,8 +3356,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 #define CURRENT_EL latin
 /*! latin handler (Latin Font) ECMA-376, 21.1.2.3.7, p.3621.
  Parent elements:
- - defRPr (§21.1.2.3)
- - endParaRPr (§21.1.2.2.3)
+ - [done] defRPr (§21.1.2.3)
+ - [done] endParaRPr (§21.1.2.2.3)
  - font (§20.1.4.2.13)
  - majorFont (§20.1.4.1.24)
  - minorFont (§20.1.4.1.25)
@@ -3479,8 +3436,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
  This element specifies the highlight color that is present for a run of text.
 
  Parent elements:
- - defRPr (§21.1.2.3.2)
- - endParaRPr (§21.1.2.2.3)
+ - [done] defRPr (§21.1.2.3.2)
+ - [done] endParaRPr (§21.1.2.2.3)
  - [done] rPr (§21.1.2.3.9)
 
  Child elements:
@@ -4033,8 +3990,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
 
-#if defined(PPTXXMLSLIDEREADER_CPP) || defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
-
     QString valTransformed = m_context->colorMap.value(val);
 
     if (valTransformed.isEmpty()) {
@@ -4043,10 +3998,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     } else {
         colorItem = m_context->themes->colorScheme.value(valTransformed);
     }
-#else
-    // This should most likely be checked from a color map, see above
-    colorItem = m_context->themes->colorScheme.value(val);
-#endif
+
     // Parse the child elements
     MSOOXML::Utils::DoubleModifier lumMod;
     MSOOXML::Utils::DoubleModifier lumOff;
@@ -5236,9 +5188,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     TRY_READ_ATTR_WITHOUT_NS(type)
 
-    m_currentTextStyleProperties = new KoCharacterStyle();
-    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
 
@@ -5254,7 +5203,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(rPr)) {
+                m_currentTextStyleProperties = new KoCharacterStyle();
+                m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
                 TRY_READ(DrawingML_rPr)
+                m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+                delete m_currentTextStyleProperties;
+                m_currentTextStyleProperties = 0;
             }
             else if (QUALIFIED_NAME_IS(pPr)) {
                 TRY_READ(DrawingML_pPr)
@@ -5264,7 +5218,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
         }
     }
 
-    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 #ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentTextStyle.setAutoStyleInStylesDotXml(true);
@@ -5282,17 +5235,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     if (type == "slidenum") {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
+    } else {
+        body->startElement("text:date");
     }
 
     (void)fldBuf.releaseWriter();
 
-    if (type == "slidenum") {
-        body->endElement(); // text:page-number
-    }
+    body->endElement(); // text:page-number, some date format
     body->endElement(); //text:span
-
-    delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
 }
@@ -5675,63 +5625,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         m_currentColor = QColor();
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(sz)
-    if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "defRPr@sz")
-        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
-    }
-
-    if (attrs.hasAttribute("b")) {
-        m_currentTextStyleProperties->setFontWeight(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
-    }
-    if (attrs.hasAttribute("i")) {
-        m_currentTextStyleProperties->setFontItalic(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(cap);
-    if (!cap.isEmpty()) {
-        if (cap == QLatin1String("small")) {
-            m_currentTextStyle.addProperty("fo:font-variant", "small-caps");
-        }
-        else if (cap == QLatin1String("all")) {
-            m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
-        }
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(spc)
-    if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
-    }
-    TRY_READ_ATTR_WITHOUT_NS(strike)
-    if (strike == QLatin1String("sngStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else if (strike == QLatin1String("dblStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else {
-        // empty or "noStrike"
-    }
-    // from
-    TRY_READ_ATTR_WITHOUT_NS(baseline)
-    if (!baseline.isEmpty()) {
-        int baselineInt;
-        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
-        if (baselineInt > 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
-        else if (baselineInt < 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(u)
-    if (!u.isEmpty()) {
-        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
-    }
+    handleRprAttributes(attrs);
 
     READ_EPILOGUE
 }

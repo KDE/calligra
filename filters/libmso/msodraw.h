@@ -21,11 +21,13 @@
 #ifndef MSODRAW_H
 #define MSODRAW_H
 
-// Specifies the preset shapes and preset text shape geometries that will be
-// used for a shape.  An enumeration of this type is used so that a custom
-// geometry does not need to be specified but can instead be automatically
-// constructed by the generating application.  [MS-ODRAW] — v20101219
-
+/**
+ * The MSOSPT enumeration specifies the preset shapes and preset text shape
+ * geometries that will be used for a shape.  An enumeration of this type is
+ * used so that a custom geometry does not need to be specified but can instead
+ * be automatically constructed by the generating application.
+ * [MS-ODRAW] — v20101219
+ */
 enum MSOSPT
 {
     msosptMin = 0x0, //libmso specific
@@ -94,7 +96,7 @@ enum MSOSPT
     msosptSeal16 = 0x3b,
     msosptSeal32 = 0x3c,
     msosptWedgeRectCallout = 0x3d,
-    msosptWedgeRRectCalloud = 0x3e,
+    msosptWedgeRRectCallout = 0x3e,
     msosptWedgeEllipseCallout = 0x3f,
 
     msosptWave = 0x40,
@@ -247,7 +249,44 @@ enum MSOSPT
     msosptNil = 0x0FFF //libmso specific
 };
 
-// Specifies the fill types.  [MS-ODRAW] — v20101219
+/**
+ * The MSOLINESTYLE enumeration specifies the type of line style that will be
+ * used.  [MS-ODRAW] — v20101219
+ */
+enum MSOLINESTYLE
+{
+    msolineSimple,      //0x00  A simple line.
+    msolineDouble,      //0x01  A double line.
+    msolineThickThin,   //0x02  A thick line and a thin line.
+    msolineThinThick,   //0x03  A thin line and a thick line.
+    msolineTripl        //0x04  A triple line.
+};
+
+/**
+ * The MSOLINEDASHING enumeration, as shown in the following table, specifies
+ * preset dashed-line values. Each style corresponds to a precise binary
+ * representation of the repeating dash style. Each 1 corresponds to a line
+ * segment, and each 0 corresponds to a space.  [MS-ODRAW] — v20101219
+ */
+enum MSOLINEDASHING
+{
+    msolineSolid,             //0x00  1
+    msolineDashSys,           //0x01  1110
+    msolineDotSys,            //0x02  10
+    msolineDashDotSys,        //0x03  111010
+    msolineDashDotDotSys,     //0x04  11101010
+    msolineDotGEL,            //0x05  1000
+    msolineDashGEL,           //0x06  1111000
+    msolineLongDashGEL,       //0x07  11111111000
+    msolineDashDotGEL,        //0x08  11110001000
+    msolineLongDashDotGEL,    //0x09  111111110001000
+    msolineLongDashDotDotGEL  //0x0A  1111111100010001000
+};
+
+/**
+ * The MSOFILLTYPE enumeration specifies the fill types.
+ * [MS-ODRAW] — v20101219
+ */
 enum MSOFILLTYPE
 {
     msofillSolid = 0x0,
@@ -262,8 +301,10 @@ enum MSOFILLTYPE
     msofillBackground = 0x9
 };
 
-// Specifies how the individual pieces of a path SHOULD be interpreted.
-// [MS-ODRAW] — v20101219
+/**
+ * The MSOPATHTYPE enumeration specifies how the individual pieces of a path
+ * SHOULD be interpreted.  [MS-ODRAW] — v20101219
+ */
 enum MSOPATHTYPE
 {
     msopathLineTo = 0,
@@ -275,11 +316,14 @@ enum MSOPATHTYPE
     msopathClientEscape
 };
 
-// Specifies the suggested placement rule for a body of text.  These
-// enumeration values are relative to the orientation, text box area, and
-// margin sizes of the containing shape.  The exact placement of the text is
-// application dependent and varies to accommodate other languages and text
-// properties.  These enumeration values MAY be used.  [MS-ODRAW] — v20101219
+/**
+ * The MSOANCHOR enumeration specifies the suggested placement rule for a body
+ * of text.  These enumeration values are relative to the orientation, text box
+ * area, and margin sizes of the containing shape.  The exact placement of the
+ * text is application dependent and varies to accommodate other languages and
+ * text properties.  These enumeration values MAY be used.
+ * [MS-ODRAW] — v20101219
+ */
 enum MSOANCHOR
 {
     msoanchorTop = 0x0,
@@ -294,7 +338,10 @@ enum MSOANCHOR
     msoanchorBottomCenteredBaseline = 0x9
 };
 
-// Specifies the type of horizontal positioning to use for a shape.
+/**
+ * The POSH enumeration specifies the type of horizontal positioning to use for
+ * a shape.  [MS-ODRAW] — v20101219
+ */
 enum POSH
 {
     msophAbs = 0x0,
@@ -305,20 +352,23 @@ enum POSH
     msophOutside = 0x5
 };
 
-// Specifies a page element relative to which a shape is horizontally
-// positioned.
-
-// FIXME: shapes and drawstyle files require an update, we have wrong
-// values there!
+/**
+ * The POSRELH enumeration specifies a page element relative to which a shape
+ * is horizontally positioned.  [MS-ODRAW] — v20101219
+ */
 enum POSRELH
 {
+// NOTE: Based on our tests the enumeration should start from ZERO.
     msoprhMargin = 0x1,
     msoprhPage = 0x2,
     msoprhText = 0x3,
     msoprhChar = 0x4
 };
 
-// Specifies the type of vertical positioning to use for a shape.
+/**
+ * The POSV enumeration specifies the type of vertical positioning to use for a
+ * shape.  [MS-ODRAW] — v20101219
+ */
 enum POSV
 {
     msopvAbs = 0x0,
@@ -329,19 +379,29 @@ enum POSV
     msopvOutside = 0x5
 };
 
-// Specifies a page element relative to which a shape is vertically positioned.
+/**
+ * The POSRELV enumeration specifies a page element relative to which a shape
+ * is vertically positioned.  [MS-ODRAW] — v20101219
+ */
 
-// FIXME: shapes and drawstyle files require an update, we have wrong
-// values there!
 enum POSRELV
 {
+// NOTE: Based on our tests the enumeration should start from ZERO.
     msoprvMargin = 0x1,
     msoprvPage = 0x2,
     msoprvText = 0x3,
     msoprvLine = 0x4
 };
 
-// Specifies horizontal alignment.
+/*
+ * ---------------------------------------------------
+ * Following enumeration are not defined in [MS-ODRAW]
+ * ---------------------------------------------------
+ */
+
+/**
+ * The HALIGN enumeration specifies horizontal alignment.
+ */
 enum HALIGN
 {
     hAlignLeft = 0x0,
@@ -349,7 +409,9 @@ enum HALIGN
     hAlignRight = 0x2
 };
 
-// Specifies vertical alignment.
+/**
+ * The VALIGN enumeration specifies vertical alignment.
+ */
 enum VALIGN
 {
     vAlignTop = 0x0,

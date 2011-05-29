@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "drawstyle.h"
+#include "msodraw.h"
 
 namespace
 {
@@ -184,10 +185,10 @@ GETTER(qint32,                 ShadowOffsetX,        shadowOffsetX,        0x633
 GETTER(qint32,                 ShadowOffsetY,        shadowOffsetY,        0x6338)         // 2.3.13.7
 GETTER(MSO::FixedPoint,        Rotation,             rotation,             zero())         // 2.3.18.5
 GETTER(qint32,                 ITxid,                iTxid,                0)              // 2.3.21.1
-GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0)              // 2.3.21.2
-GETTER(qint32,                 DyTextTop,            dyTextTop,            0)              // 2.3.21.3
-GETTER(qint32,                 DxTextRight,          dxTextRight,          0)              // 2.3.21.4
-GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)              // 2.3.21.5
+GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0x00016530)     // 2.3.21.2
+GETTER(qint32,                 DyTextTop,            dyTextTop,            0x0000B298)     // 2.3.21.3
+GETTER(qint32,                 DxTextRight,          dxTextRight,          0x00016530)     // 2.3.21.4
+GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0x0000B298)     // 2.3.21.5
 GETTER(quint32,                WrapText,             wrapText,             0)              // 2.3.21.6
 GETTER(quint32,                AnchorText,           anchorText,           0)              // 2.3.21.8
 GETTER(quint32,                TxflTextFlow,         txflTextFlow,         0)              // 2.3.21.9
@@ -281,7 +282,7 @@ GETTER(fRecolorFillAsPicture, fUsefRecolorFillAsPicture, false)
 GETTER(fNoLineDrawDash,       fUseNoLineDrawDash,        false)
 GETTER(fLineFillShape,        fUseLineFillShape,         false)
 GETTER(fHitTestLine,          fUseHitTestLine,           true)
-GETTER(fLine,                 fUsefLine,                 true)
+// GETTER(fLine,                 fUsefLine,                 true)
 GETTER(fArrowHeadsOK,         fUsefArrowHeadsOK,         false)
 GETTER(fInsetPenOK,           fUseInsetPenOK,            true)
 GETTER(fInsetPen,             fUseInsetPen,              false)
@@ -305,6 +306,33 @@ GETTER(fLooping,              fUsefLooping,              false)
 GETTER(fRewind,               fUsefRewind,               false)
 GETTER(fPicturePreserveGrays, fUsefPicturePreserveGrays, false)
 #undef FOPT
+
+// The override was discussed at Office File Formats Forum:
+// http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a1cf51a7-fb93-4028-b3ac-3ed2fd77a94b
+bool DrawStyle::fLine() const
+{
+    const MSO::LineStyleBooleanProperties* p = 0;
+    quint16 shapeType = msosptNil;
+
+    if (sp) {
+        shapeType = sp->shapeProp.rh.recInstance;
+        p = get<MSO::LineStyleBooleanProperties>(*sp);
+        if (p && p->fUsefLine) {
+            return p->fLine;
+        }
+    }
+    if (mastersp) {
+        p = get<MSO::LineStyleBooleanProperties>(*mastersp);
+        if (p && p->fUsefLine) {
+            return p->fLine;
+        }
+    }
+    if (shapeType == msosptPictureFrame) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 #define COMPLEX(FOPT, NAME) \
     IMsoArray DrawStyle::NAME() const \

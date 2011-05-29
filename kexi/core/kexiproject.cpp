@@ -187,7 +187,7 @@ KexiProject::open()
 tristate
 KexiProject::openInternal(bool *incompatibleWithKexi)
 {
-    if (!Kexi::partManager().lookup()) {
+    if (!Kexi::partManager().infoList()) {
         setError(&Kexi::partManager());
         return cancelled;
     }
@@ -309,7 +309,7 @@ KexiProject::create(bool forceOverwrite)
         return false;
     //</add some data>
 
-    if (!Kexi::partManager().lookup()) {
+    if (!Kexi::partManager().infoList()) {
         setError(&Kexi::partManager());
         return cancelled;
     }
@@ -972,7 +972,8 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
     if (n >= 1000)
         return 0;
 
-    QString new_caption(suggestedCaption.isEmpty() ? part->instanceCaption() : suggestedCaption);
+    QString new_caption(suggestedCaption.isEmpty()
+        ? part->info()->instanceCaption() : suggestedCaption);
     if (n >= 1)
         new_caption += QString::number(n);
 

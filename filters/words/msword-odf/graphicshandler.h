@@ -102,9 +102,11 @@ private:
                                               const MSO::OfficeArtClientData* cd,
                                               const DrawStyle& ds,
                                               Writer& out);
-        virtual void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
+        virtual void addTextStyles(const quint16 msospt,
+                                   const MSO::OfficeArtClientTextBox* clientTextbox,
                                    const MSO::OfficeArtClientData* clientData,
                                    KoGenStyle& style, Writer& out);
+
 
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
@@ -180,8 +182,9 @@ private:
 
     /**
      * Parse floating pictures data from the WordDocument stream.
+     * @return 0 - success, 1 - failed
      */
-    void parseFloatingPictures(void);
+    int parseFloatingPictures(void);
 
     /**
      * Store floating pictures into ODT, write the appropriate manifest entry.

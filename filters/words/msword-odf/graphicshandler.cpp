@@ -198,8 +198,11 @@ void KWordGraphicsHandler::init()
     defineDefaultGraphicStyle(m_mainStyles);
 
     //parse and store floating pictures  
-    parseFloatingPictures();
-    m_picNames = createFloatingPictures(m_store, m_manifestWriter);
+    if (parseFloatingPictures()) {
+        kDebug(30513) << "Failed to parse floating shapes!";
+    } else {
+        m_picNames = createFloatingPictures(m_store, m_manifestWriter);
+    }
 
     //Provide the backgroud color information to the Document
     DrawStyle ds = getBgDrawStyle();
@@ -277,11 +280,13 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     OfficeArtInlineSpContainer co;
     try {
         parseOfficeArtInlineSpContainer(*in, co);
-    } catch (IncorrectValueException _e) {
+    } catch (IOException _e) {
         kDebug(30513) << _e.msg;
+        in->rewind(_zero);
         return;
-    } catch (EOFException _e) {
-        kDebug(30513) << _e.msg;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        in->rewind(_zero);
         return;
     }
     in->rewind(_zero);
@@ -330,8 +335,9 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
 void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 {
+#ifdef DEBUG_GHANDLER
     kDebug(30513) << "globalCP" << globalCP ;
-
+#endif
     if (!m_drawings) {
         return;
     }
@@ -481,26 +487,34 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
 
+#ifdef DEBUG_GHANDLER
     kDebug(30513) << "shapeType: " << hex << o.shapeProp.rh.recInstance;
     kDebug(30513) << "grupShape: " << o.shapeProp.fGroup;
     kDebug(30513) << "Selected properties: ";
     kDebug(30513) << "pib: " << ds.pib();
+#endif
 
     switch (o.shapeProp.rh.recInstance) {
     case msosptTextBox:
+#ifdef DEBUG_GHANDLER
         kDebug(30513)<< "processing TextBox";
+#endif
         processTextBox(o, out);
         break;
     case msosptRectangle:
         if (ds.fHorizRule()) {
+#ifdef DEBUG_GHANDLER
             kDebug(30513)<< "processing Line";
+#endif
             processLineShape(o, out);
         } else {
             odrawtoodf.processDrawingObject(o, out);
         }
         break;
     case msosptPictureFrame:
+#ifdef DEBUG_GHANDLER
         kDebug(30513)<< "processing PictureFrame";
+#endif
         if (m_objectType == Inline) {
             processInlinePictureFrame(o, out);
         } else {
@@ -508,7 +522,9 @@ void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer&
         }
         break;
     case msosptHostControl:
+#ifdef DEBUG_GHANDLER
         kDebug(30513)<< "processing Host Control";
+#endif
         processTextBox(o, out);
         break;
     default:
@@ -548,14 +564,17 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDggContainer(in, m_officeArtDggContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing parseOfficeArtDggContainer";
+        kDebug(30513) << "Caught IOException while parsing OfficeArtDggContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing parseOfficeArtDggContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDggContainer.";
         return;
     }
-    kDebug(30513) << "OfficeArtDggContainer parsed successfully" ;
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDggContainer [ OK ]" ;
+#endif
 
     // parse drawingsVariable from msdoc
     // 0 - next OfficeArtDgContainer belongs to Main document;
@@ -565,11 +584,12 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         drawingsVariable = in.readuint8();
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing drawingsVariable ";
+        kDebug(30513) << "Caught IOException while parsing DrawingsVariable.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing drawingsVariable";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing DrawingsVariable.";
         return;
     }
 
@@ -585,27 +605,31 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing OfficeArtDgContainer ";
+        kDebug(30513) << "Caught IOException while parsing OfficeArtDgContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing OfficeArtDgContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
         return;
     }
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+#endif
 
     // parse drawingsVariable from msdoc
-    // 0 - next OfficeArtDgContainer belongs to Main document;
+    // 0 - next OfficeArtDgContainer belongs to Main Document
     // 1 - next OfficeArtDgContainer belongs to Header Document
     try {
         drawingsVariable = in.readuint8();
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing second drawingsVariable ";
-        //wvlog << "in position: " << in.getPosition() << std::endl;
+        kDebug(30513) << "Caught IOException while parsing the 2nd DrawingsVariable.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing second drawingsVariable";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd DrawingsVariable.";
         return;
     }
 
@@ -618,8 +642,7 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
                 delete m_pOfficeArtBodyDgContainer;
             }
             m_pOfficeArtBodyDgContainer = pDgContainer;
-        }
-        else {
+        } else {
             if (m_pOfficeArtHeaderDgContainer != 0) {
                 delete m_pOfficeArtHeaderDgContainer;
             }
@@ -628,33 +651,41 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         parseOfficeArtDgContainer(in, *pDgContainer);
     }
     catch (IOException e) {
-        kDebug(30513) << "caught IOException while parsing second OfficeArtDgContainer ";
+        kDebug(30513) << "Caught IOException while parsing the 2nd OfficeArtDgContainer.";
+        kDebug(30513) << e.msg;
         return;
     }
     catch (...) {
-        kDebug(30513) << "caught unknown exception while parsing second OfficeArtDgContainer";
+        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd OfficeArtDgContainer.";
         return;
     }
 
+#ifdef DEBUG_GHANDLER
+    kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
+#endif
+
     quint32 r = buffer.size() - in.getPosition();
     if (r > 0) {
-        kError(30513) << r << "bytes left to parse from the OfficeArtDggContainer";
+        kError(30513) << "Error:" << r << "bytes left to parse from the OfficeArtContent!";
     }
 }
 
-void KWordGraphicsHandler::parseFloatingPictures(void)
+int KWordGraphicsHandler::parseFloatingPictures(void)
 {
     kDebug(30513);
 
     // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
     LEInputStream& in = m_document->wdocumentStream();
     const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (!blipStore) return;
+    if (!blipStore) return(1);
 
     for (int i = 0; i < blipStore->rgfb.size(); i++) {
         OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
 
-	//looking for the missing content of OfficeArtFBSE
+	//Parse content of the Delay stream by using offsets from OfficeArtFBSE
+	//containers.  Not parsing Blip store because MD4 digests in
+	//OfficeArtFBSE happen to be out-dated, which complicates the pib to
+	//picture path association.
         if (block.anon.is<OfficeArtFBSE>()) {
             OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
             if (!fbse->embeddedBlip) {
@@ -678,18 +709,39 @@ void KWordGraphicsHandler::parseFloatingPictures(void)
                     LEInputStream::Mark _m;
                     _m = in.setMark();
                     OfficeArtRecordHeader rh;
-                    parseOfficeArtRecordHeader(in, rh);
+                    try {
+                        parseOfficeArtRecordHeader(in, rh);
+                    } catch (IOException _e) {
+                        kDebug(30513) << _e.msg;
+                        in.rewind(_zero);
+                        continue;
+                    } catch (...) {
+                        kWarning(30513) << "Warning: Caught an unknown exception!";
+                        in.rewind(_zero);
+                        continue;
+                    }
                     in.rewind(_m);
                     if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
                         continue;
                     }
                     fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
-                    parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
+                    try {
+                        parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
+                    } catch (IOException _e) {
+                        kDebug(30513) << _e.msg;
+                        in.rewind(_zero);
+                        continue;
+                    } catch (...) {
+                        kWarning(30513) << "Warning: Caught an unknown exception!";
+                        in.rewind(_zero);
+                        continue;
+                    }
                     in.rewind(_zero);
                 }
             } //else there's an OfficeArtBlip inside
         }
     }
+    return(0);
 }
 
 QMap<QByteArray, QString>

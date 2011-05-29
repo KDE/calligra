@@ -135,5 +135,4 @@ const QString FREOFFICE_PATH("/com/nokia/CalligraMobile");
  */
 const QString FREOFFICE_SERVICE_NAME("com.nokia.CalligraMobile");
 
-const QString FREOFFICE_APPLICATION_PATH("/usr/bin/CalligraMobile");
 #endif // COMMON_H

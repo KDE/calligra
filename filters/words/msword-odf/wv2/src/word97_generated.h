@@ -4460,7 +4460,12 @@ struct FIB {
     bool write(OLEStreamWriter *stream, bool preservePos=false) const;
 
     /**
-     * Validate FIB.
+     * Validate FIB.  Don't take warnings too seriously.  It seems that the
+     * information depends on the file content saved by a specific MS Office
+     * version.  Don't expect to recognize the MS Office version which saved
+     * the file based on the value of the nFib or the nFibNew attribute.  The
+     * nFib seems to be used for backward compatibility.  The nFibNew seems to
+     * be used by MS Office > 2k, sometimes.
      */
     bool valid() const;
 
@@ -4470,6 +4475,10 @@ struct FIB {
     void clear();
 
     // Data
+
+    // FibBase - BEGIN
+    // --------------------
+
     /**
      * (fibh) FIBH Beginning of the FIB header magic number
      */
@@ -4627,6 +4636,9 @@ struct FIB {
      * file offset of last character of text in document text stream + 1
      */
     U32 fcMac;
+
+    // --------------------
+    // FibBase - END
 
     /**
      * Count of fields in the array of "shorts"
@@ -8703,6 +8715,18 @@ struct SEP : public Shared {
      */
     OLST olstAnm;
 
+    /**
+     * Specifies the numbering format used for footnotes.  By default,
+     * footnotes use the msonfcArabic numbering format.
+     */
+    U16 nfcFtnRef;
+
+    /**
+     * Specifies the numbering format used for endnotes.  By default, endnotes
+     * use the msonfcLCRoman numbering format.
+     */
+    U16 nfcEdnRef;
+
 }; // SEP
 
 bool operator==(const SEP &lhs, const SEP &rhs);
@@ -8929,6 +8953,11 @@ struct STSHI {
      * Set all the fields to the inital value (default is 0)
      */
     void clear();
+
+    /**
+     * Dumps all fields of this structure (for debugging)
+     */
+    void dump() const;
 
     // Size of the structure
     static const unsigned int sizeOf;

@@ -73,22 +73,6 @@ public:
      * @param pageNumber the number of the page to re-layout.
      */
     void layoutFramesOnPage(int pageNumber);
-    //void relayoutFrames(old layout, new layout); // per page ? Or per doc?
-    /**
-     *  delete any unneeded header/footer frames (but not their contents) based on
-     * the document settings
-     */
-    void cleanupHeadersFooters();
-
-    /**
-     * For the one frameset create all the frames that would be auto-placed
-     * on the target pagenumber if the page was appended.  Will only place
-     * frames if the already present frames in the frameset plus the
-     * newFrameBehavior state it should.
-     * @param fs the frameset to attach a new textframe to
-     * @param pageNumber the (already existing) page where the new frame(s) will show
-     */
-    void createNewFrameForPage(KWTextFrameSet *fs, int pageNumber);
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) {
@@ -98,8 +82,13 @@ public:
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
 
-    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
+    QList<KWFrame *> framesInPage(const QRectF &page) const;
+    QList<KWFrame *> framesInPage(int pageNumber) const;
 
+    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
+    QList<KWFrame *> framesOn(KWFrameSet *fs, int pageNumber) const;
+
+    QList<KWTextFrameSet*> getFrameSets(const KWPageStyle &pageStyle) const;
     KWTextFrameSet* getFrameSet(KWord::TextFrameSetType type, const KWPageStyle &pageStyle) const;
 
     KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
@@ -119,7 +108,6 @@ private slots:
     void mainframeRemoved(KWFrame *frame);
 
 private:
-    friend class TestFrameLayout;
     struct FrameSets {
         FrameSets() : oddHeaders(0), evenHeaders(0), oddFooters(0), evenFooters(0), pageBackground(0) {}
         KWTextFrameSet *oddHeaders;
@@ -141,7 +129,6 @@ private:
      * \note the main text frameset is consistent across all pages and page styles.
      */
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
-    QList<KWFrame *> framesInPage(const QRectF &page) const;
 
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);

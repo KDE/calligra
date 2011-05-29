@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Mani Chandrasekar<maninc@gmail.com>
  *
  * Contact: Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
@@ -151,7 +152,7 @@ void PresentationTool::drawEllipse( const QPoint &cpoint )
     QPainterPath ellipse;
     ellipse.addEllipse( cpoint.x() - 50, cpoint.y() - 50, 100, 100 );
     QPainterPath myPath;
-    myPath.addRect( 0, 0, 800, 480);
+    myPath.addRect( QRectF(QPointF(0, 0), m_window->size()));
     // We draw the difference
     painter.fillPath( myPath.subtracted( ellipse ), c );
     m_window->update();

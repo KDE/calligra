@@ -109,6 +109,8 @@ void KPrClickActionDocker::selectionChanged()
 
 void KPrClickActionDocker::setCanvas( KoCanvasBase *canvas )
 {
+    m_canvas->disconnectCanvasObserver(this);
+    
     m_canvas = canvas;
 
     if ( m_canvas ) {
