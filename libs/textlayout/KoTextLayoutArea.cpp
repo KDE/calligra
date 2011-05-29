@@ -57,6 +57,7 @@
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoPostscriptPaintDevice.h>
 
 #include <KDebug>
 
@@ -1096,68 +1097,93 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     }
 
     qreal height = 0;
-    qreal objectAscent = 0.0;
-    qreal objectDescent = 0.0;
+    qreal ascent = 0.0;
+    qreal descent = 0.0;
     const bool useFontProperties = format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
 
-    if (cursor->fragmentIterator.atEnd()) {// no text in parag.
-        qreal fontStretch = 1;
-        if (useFontProperties) {
+    if (useFontProperties) {
+        if (cursor->fragmentIterator.atEnd()) {// no text in parag.
             //stretch line height to powerpoint size
-            fontStretch = PresenterFontStretch;
-        }
-        height = block.charFormat().fontPointSize() * fontStretch;
-    } else {
-        qreal fontStretch = 1;
-        if (useFontProperties) {
+            height = block.charFormat().fontPointSize() * PresenterFontStretch;
+        } else {
             //stretch line height to powerpoint size
-            fontStretch = PresenterFontStretch;
-        } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-            // stretch line height to ms-word size
-            fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
-        }
-        // read max font height
-        height = cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch;
-        height = (line.ascent() + line.descent()) * fontStretch;
+            height = cursor->fragmentIterator.fragment().charFormat().fontPointSize() * PresenterFontStretch;
 
-        KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
-        objectAscent = qMax(objectAscent, pos.m_ascent);
-        objectDescent = qMax(objectDescent, pos.m_descent);
+            KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+            ascent = qMax(ascent, pos.m_ascent);
+            descent = qMax(descent, pos.m_descent);
 
-        while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
-                        block.position() + line.textStart() + line.textLength() - 1))) {
-            cursor->fragmentIterator++;
-  continue;
-            if (cursor->fragmentIterator.atEnd()) {
-                break;
-            }
-            if (!m_documentLayout->changeTracker()
-                || !m_documentLayout->changeTracker()->displayChanges()
-                || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
-                || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
-                || m_documentLayout->changeTracker()->displayChanges()) {
-                qreal fontStretch = 1;
-                if (useFontProperties) {
-                    //stretch line height to powerpoint size
-                    fontStretch = PresenterFontStretch;
-                } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-                    // stretch line height to ms-word size
-                    fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+            while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
+                            block.position() + line.textStart() + line.textLength() - 1))) {
+                cursor->fragmentIterator++;
+                if (cursor->fragmentIterator.atEnd()) {
+                    break;
                 }
-                // read max font height
-                height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
+                if (!m_documentLayout->changeTracker()
+                    || !m_documentLayout->changeTracker()->displayChanges()
+                    || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
+                    || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                    || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
+                    || m_documentLayout->changeTracker()->displayChanges()) {
 
-                KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
-                objectAscent = qMax(objectAscent, pos.m_ascent);
-                objectDescent = qMax(objectDescent, pos.m_descent);
+                    // read max font height
+                    height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * PresenterFontStretch);
+
+                    KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+                    ascent = qMax(ascent, pos.m_ascent);
+                    descent = qMax(descent, pos.m_descent);
+                }
+            }
+            height = qMax(height, ascent + descent);
+        }
+    } else {
+        if (cursor->fragmentIterator.atEnd()) {// no text in parag.
+            QFontMetricsF fm(block.charFormat().font(), m_documentLayout->paintDevice());
+            ascent = qMax(ascent, fm.ascent());
+            descent = qMax(descent, fm.descent());
+        } else {
+            qreal fontStretch = 1;
+            if (cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                // stretch line height to ms-word size
+                fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+            }
+            QFontMetricsF fm(cursor->fragmentIterator.fragment().charFormat().font(), m_documentLayout->paintDevice());
+            ascent = qMax(ascent, fontStretch * fm.ascent());
+            descent = qMax(descent, fontStretch * fm.descent());
+
+            KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+            ascent = qMax(ascent, pos.m_ascent);
+            descent = qMax(descent, pos.m_descent);
+
+            while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
+                            block.position() + line.textStart() + line.textLength() - 1))) {
+                cursor->fragmentIterator++;
+                if (cursor->fragmentIterator.atEnd()) {
+                    break;
+                }
+                if (!m_documentLayout->changeTracker()
+                    || !m_documentLayout->changeTracker()->displayChanges()
+                    || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
+                    || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                    || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
+                    || m_documentLayout->changeTracker()->displayChanges()) {
+                    qreal fontStretch = 1;
+                    if (cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                        // stretch line height to ms-word size
+                        fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+                    }
+                    QFontMetricsF fm(cursor->fragmentIterator.fragment().charFormat().font(), m_documentLayout->paintDevice());
+                    ascent = qMax(ascent, fontStretch * fm.ascent());
+                    descent = qMax(descent, fontStretch * fm.descent());
+
+                    KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+                    ascent = qMax(ascent, pos.m_ascent);
+                    descent = qMax(descent, pos.m_descent);
+                }
             }
         }
+        height = ascent + descent;
     }
-
-    height = qMax(height, objectAscent + objectDescent);
-    //height = line.ascent() + line.descent();
-    //height *= 1.11197;
 
     if (height < 0.01) {
         height = 12; // default size for uninitialized styles.
