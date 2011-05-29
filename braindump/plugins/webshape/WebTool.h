@@ -47,7 +47,7 @@ class WebTool : public KoToolBase
   signals:
     void shapeChanged(WebShape* );
   protected:
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
   private:
     WebShape* m_currentShape;
