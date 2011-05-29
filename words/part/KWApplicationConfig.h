@@ -60,6 +60,30 @@ public:
         return m_statusBarShowPage;
     }
 
+    bool statusBarShowPageStyle() {
+        return m_statusBarShowPageStyle;
+    }
+
+    void setStatusBarShowPageStyle(bool on) {
+        m_statusBarShowPageStyle = on;
+    }
+
+    bool statusBarShowPageSize() {
+        return m_statusBarShowPageSize;
+    }
+
+    void setStatusBarShowPageSize(bool on) {
+        m_statusBarShowPageSize = on;
+    }
+
+    void setStatusBarShowLineNumber(bool on) {
+        m_statusBarShowLineNumber = on;
+    }
+
+    bool statusBarShowLineNumber() {
+        return m_statusBarShowLineNumber;
+    }
+
     void setStatusBarShowModified(bool on) {
         m_statusBarShowModified = on;
     }
@@ -129,7 +153,8 @@ private:
     bool m_viewFrameBorders, m_viewRulers, m_viewFormattingChars, m_viewFormattingBreak, m_viewFormattingSpace;
     bool m_viewFormattingEndParag, m_viewFormattingTabs;
     bool m_createBackupFile;
-    bool m_statusBarShowPage, m_statusBarShowModified;
+    bool m_statusBarShowPage, m_statusBarShowPageStyle, m_statusBarShowPageSize;
+    bool m_statusBarShowLineNumber, m_statusBarShowModified;
     bool m_statusBarShowMouse, m_statusBarShowZoom;
 
     int m_zoom; /// < zoom level in percent
