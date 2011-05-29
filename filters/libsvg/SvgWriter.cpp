@@ -67,7 +67,6 @@
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 
-
 static void printIndentation(QTextStream *stream, unsigned int indent)
 {
     static const QString INDENT("  ");
@@ -85,6 +84,7 @@ SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
     foreach(KoShapeLayer *layer, layers)
         m_toplevelShapes.append(layer);
 }
+
 
 SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize)
     : m_indent(0), m_indent2(0), m_toplevelShapes(toplevelShapes), m_pageSize(pageSize)
@@ -163,6 +163,9 @@ bool SvgWriter::save(QIODevice &outputDevice)
     // end tag:
     printIndentation(m_defs, --m_indent2);
     *m_defs << "</defs>" << endl; //?
+    
+    saveScript();
+
     *m_body << "</svg>" << endl;
 
     *m_stream << defs; //?
@@ -237,11 +240,10 @@ void SvgWriter::saveShape(KoShape * shape)
         } else if (shape->shapeId() == "PictureShape") {
             saveImage(shape);
         }
-        else
+        else 
 	{
-//	  *m_body << "<text>Text here!</text>";
 
-	    savePlainText(static_cast<TextShape*>(shape));// Saving plain text
+    savePlainText();// Saving plain text
 	}
     }
 }
@@ -259,77 +261,20 @@ void SvgWriter::savePath(KoPathShape * path)
     *m_body << " />" << endl;
 }
 
-void SvgWriter::savePlainText(TextShape *text) 
+void SvgWriter::savePlainText() 
 { 
    printIndentation(m_body, m_indent++);
-    *m_body << "<text" << getID(text);
-
-    //getStyle(text, m_body);
-
-    /*const QList<ArtisticTextRange> formattedText = text->text();
-
-    // if we have only a single text range, save the font on the text element
-    const bool hasSingleRange = formattedText.size() == 1;
-    if (hasSingleRange) {
-        saveFont(formattedText.first().font(), m_body);
-    }
-
-    qreal anchorOffset = 0.0;
-    if (text->textAnchor() == ArtisticTextShape::AnchorMiddle) {
-        anchorOffset += 0.5 * text->size().width();
-        *m_body << " text-anchor=\"middle\"";
-    } else if (text->textAnchor() == ArtisticTextShape::AnchorEnd) {
-        anchorOffset += text->size().width();
-        *m_body << " text-anchor=\"end\"";
-    }
-*/
-    printIndentation(m_body, m_indent);
-
-/*    // check if we are set on a path
-    if (text->layout() == TextShape::Straight) {
-        QTransform m = text->transformation();
-        if (isTranslation(m)) {
-            QPointF position = text->position();
-            *m_body << " x=\"" << position.x() + anchorOffset << "pt\"";
-            *m_body << " y=\"" << position.y() + text->baselineOffset() << "pt\"";
-        } else {
-            *m_body << " x=\"" << anchorOffset << "pt\"";
-            *m_body << " y=\"" << text->baselineOffset() << "pt\"";
-            *m_body << getTransform(text->transformation(), " transform");
-        }
-        *m_body << ">" << endl;
-        //foreach(const ArtisticTextRange &range, formattedText) {
-          //  saveTextRange(range, m_body, !hasSingleRange, text->baselineOffset());
-        //}
-    } else {*/
-     /*   KoPathShape * baseline = KoPathShape::createShapeFromPainterPath(text->baseline());
-
-        QString id;
-
-        printIndentation(m_defs, m_indent);
-
-        id = createUID();
-        *m_defs << "<path id=\"" << id << "\"";
-        *m_defs << " d=\"" << baseline->toString(baseline->absoluteTransformation(0) * m_userSpaceMatrix) << "\" ";
-        *m_defs << " />" << endl;
-
-        *m_body << ">" << endl;
-        *m_body << "<textPath xlink:href=\"#" << id << "\"";
-        if (text->startOffset() > 0.0)
-            *m_body << " startOffset=\"" << text->startOffset() * 100.0 << "%\"";
-        *m_body << ">";
-        //foreach(const ArtisticTextRange &range, formattedText) {
-          //  saveTextRange(range, m_body, !hasSingleRange, text->baselineOffset());
-        //}
-        *m_body << "</textPath>" << endl;
-
-        delete baseline;
-    //}
-*/
-  //  printIndentation(m_body, --m_indent);
-  *m_body << text-
+    *m_body << "<text" << "Here comes the text";
+    //printIndentation(m_body, m_indent);
     *m_body << "</text>" << endl;
   
+}
+
+void SvgWriter::saveScript(){
+script  = "Here comes the javascript.";
+  printIndentation(m_body, m_indent++);
+    *m_body << "<script>" << script << "</script>" << endl;
+
 }
 void SvgWriter::saveEllipse(EllipseShape * ellipse)
 {

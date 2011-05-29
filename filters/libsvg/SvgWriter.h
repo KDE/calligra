@@ -43,6 +43,7 @@ class TextShape;
 class ArtisticTextRange;
 class EllipseShape;
 class RectangleShape;
+class Frame;
 class KoPatternBackground;
 class QTextStream;
 class QPixmap;
@@ -79,7 +80,9 @@ private:
 
     void saveImage(KoShape *picture);
     void saveText(ArtisticTextShape * text);
-    void savePlainText(TextShape* text);
+    void savePlainText();
+
+    void saveScript();
 
     void getStyle(KoShape * shape, QTextStream * stream);
     void getFill(KoShape * shape, QTextStream *stream);
@@ -93,8 +96,10 @@ private:
     void saveFont(const QFont &font, QTextStream *stream);
     void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
 
+    void saveFrame(Frame *frame);
     QString getID(const KoShape *obj);
     QString createID(const KoShape * obj);
+
 
     /// Checks if the matrix only has translation set
     bool isTranslation(const QTransform &);
@@ -112,6 +117,8 @@ private:
     QSizeF m_pageSize;
     bool m_writeInlineImages;
     QString m_filename;
+
+    QString script;
 };
 
 #endif // SVGWRITER_H
