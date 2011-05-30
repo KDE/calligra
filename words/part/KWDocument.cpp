@@ -731,7 +731,7 @@ QStringList KWDocument::extraNativeMimeTypes(ImportExportType importExportType) 
 
 void KWDocument::updatePagesForStyle(const KWPageStyle &style)
 {
-    kDebug(32001);
+    kDebug(32001) << "pageStyleName=" << style.name();
     QList<KWFrameSet*> framesets;
     foreach(KWFrameSet *fs, frameLayout()->getFrameSets(style)) {
         KWTextFrameSet* tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -745,7 +745,9 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
             break;
         }
     }
-    Q_ASSERT(pageNumber >= 1);
+    //Q_ASSERT(pageNumber >= 1);
+    if (pageNumber < 1)
+        return;
     foreach(KWFrameSet *fs, framesets) {
         static_cast<KWTextFrameSet*>(fs)->rootAreaProvider()->clearPages(pageNumber);
     }

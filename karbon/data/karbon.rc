@@ -144,7 +144,7 @@
         <Action name="edit_paste"/>
         <Action name="edit_delete"/>
     </ToolBar>
-    <ToolBar name="object_toolbar" hidden="true" fullWidth="false">
+    <ToolBar name="object_toolbar" hidden="true">
         <text>Object</text>
         <Action name="object_order_front"/>
         <Action name="object_order_raise"/>
@@ -153,7 +153,7 @@
         <Action name="selection_group"/>
         <Action name="selection_ungroup"/>
     </ToolBar>
-    <ToolBar name="align_toolbar" hidden="true" fullWidth="false">
+    <ToolBar name="align_toolbar" hidden="true">
         <text>Align</text>
         <Action name="object_align_horizontal_left"/>
         <Action name="object_align_horizontal_center"/>
@@ -162,7 +162,7 @@
         <Action name="object_align_vertical_center"/>
         <Action name="object_align_vertical_bottom"/>
     </ToolBar>
-    <ToolBar name="Effects" hidden="true" fullWidth="false">
+    <ToolBar name="Effects" hidden="true">
         <text>Effects</text>
     </ToolBar>
 </gui>

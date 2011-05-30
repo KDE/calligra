@@ -297,6 +297,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
     else {
+        if (ver_pos == "center") {
+            ver_pos = "middle";
+        }
         m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
     }
 #endif

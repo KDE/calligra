@@ -1137,7 +1137,19 @@ void KWView::formatPage()
         if (editor)
             dia->showTextDirection(editor->isBidiDocument());
     }
+    if (!m_lastPageSettingsTab.isEmpty()) {
+        KPageWidgetItem *item = dia->pageItem(m_lastPageSettingsTab);
+        if (item)
+            dia->setCurrentPage(item);
+    }
+    connect(dia, SIGNAL(finished()), this, SLOT(pageSettingsDialogFinished()));
     dia->show();
+}
+
+void KWView::pageSettingsDialogFinished()
+{
+    KWPageSettingsDialog *dia = qobject_cast<KWPageSettingsDialog*>(QObject::sender());
+    m_lastPageSettingsTab = dia && dia->currentPage() ? dia->currentPage()->name() : QString();
 }
 
 void KWView::editSemanticStylesheets()
