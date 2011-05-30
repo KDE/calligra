@@ -198,7 +198,7 @@ void KWStatusBar::updatePageSize()
     QString text;
     if (page.isValid() && page.pageStyle().isValid()) {
         KoPageLayout l = page.pageStyle().pageLayout();
-        text = QString("%1x%1").arg(KGlobal::locale()->formatNumber(l.width, 0)).arg(KGlobal::locale()->formatNumber(l.height, 0));
+        text = QString("%1x%2").arg(KGlobal::locale()->formatNumber(l.width, 0)).arg(KGlobal::locale()->formatNumber(l.height, 0));
     }
     m_pageSizeLabel->setText(text);
 }
