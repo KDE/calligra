@@ -16,9 +16,17 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #define FrameId "Frame"
 
 #include <QString>
+
+/*
+ * This class is used to define the attributes of frames.
+ * Frames are used in making an animated SVSG presentation.
+ * Instead of a new slide, in an animated SVG presentation, 
+ * each frame is zoomed into.
+ */
 
 class Frame {
   public:
