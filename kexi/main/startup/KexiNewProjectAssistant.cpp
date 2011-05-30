@@ -84,12 +84,15 @@ KexiServerDBNamePage::KexiServerDBNamePage(QWidget* parent)
 
 #if KDE_IS_VERSION(4,5,0)
 class KexiTemplatesCategoryDrawer : public KCategoryDrawerV3
-#else
-class KexiTemplatesCategoryDrawer : public KCategoryDrawerV2
-#endif
 {
 public:
-    KexiTemplatesCategoryDrawer() {}
+    KexiTemplatesCategoryDrawer() : KCategoryDrawerV3(0) {}
+#else
+class KexiTemplatesCategoryDrawer : public KCategoryDrawerV2
+{
+public:
+    KexiTemplatesCategoryDrawer() : KCategoryDrawerV2(0) {}
+#endif
 protected:
 #if KDE_IS_VERSION(4,5,0)
     void mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event) {
