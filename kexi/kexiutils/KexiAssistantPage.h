@@ -24,31 +24,28 @@
 
 #include "kexiutils_export.h"
 
-class QLabel;
+class KexiLinkWidget;
 
 //! A single page for assistant (KexiAssistantWidget).
 class KEXIUTILS_EXPORT KexiAssistantPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KexiAssistantPage(const QString& title, const QString& description,
-                               QWidget* parent = 0);
+    KexiAssistantPage(const QString& title, const QString& description,
+                      QWidget* parent = 0);
     virtual ~KexiAssistantPage();
     void setContents(QWidget* widget);
     void setContents(QLayout* layout);
     QWidget* focusWidget() const;
     void setFocusWidget(QWidget* widget);
-    QLabel* backButton();
-    QLabel* nextButton();
+    KexiLinkWidget* backButton();
+    KexiLinkWidget* nextButton();
 public slots:
     void setDescription(const QString& text);
     void setBackButtonVisible(bool set);
     void setNextButtonVisible(bool set);
     void back();
     void next();
-    //! Sets text @a text for the 'next' button.
-    //! It can be used to set e.g. "Finish" or "Create" text.
-    void setNextButtonText(const QString& text);
 signals:    
     void back(KexiAssistantPage* page);
     void next(KexiAssistantPage* page);
@@ -56,6 +53,7 @@ signals:
 
 private slots:    
     void slotLinkActivated(const QString& link);
+
 private:
     class Private;
     Private * const d;

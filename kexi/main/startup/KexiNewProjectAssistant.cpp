@@ -37,6 +37,7 @@
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
+#include <kexiutils/KexiLinkWidget.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -418,7 +419,7 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     m_messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), this);
     setBackButtonVisible(true);
     setNextButtonVisible(true);
-    setNextButtonText(i18n("Create"));
+    nextButton()->setLinkText(i18n("Create"));
 
     m_projectSetToShow = 0;
     m_dbNameAutofill = true;

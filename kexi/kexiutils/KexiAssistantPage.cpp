@@ -20,37 +20,36 @@
 #include "KexiAssistantPage.h"
 
 #include "KexiTitleLabel.h"
+#include "KexiLinkWidget.h"
 
 #include <KAcceleratorManager>
 #include <KStandardGuiItem>
 #include <KLocale>
 
-#include <QLabel>
 #include <QGridLayout>
 #include <QPointer>
+#include <QEvent>
+
+#include <KDebug>
 
 class KexiAssistantPage::Private {
 public:    
     Private(KexiAssistantPage* q_) : q(q_), backButton(0), nextButton(0)
     {
     }
-    void setButtonVisible(QLabel** button, bool back, bool set,
+    void setButtonVisible(KexiLinkWidget** button, bool back, bool set,
                           int x, int y);
+    QColor linkColor() const;
     KexiAssistantPage * const q;
     QGridLayout* mainLyr;
     QLabel* descriptionLabel;
-    QLabel* backButton;
-    QLabel* nextButton;
-    QLabel* cancelButton;
+    KexiLinkWidget* backButton;
+    KexiLinkWidget* nextButton;
+    KexiLinkWidget* cancelButton;
     QPointer<QWidget> focusWidget;
 };
 
-static QString nextButtonText()
-{
-    return QString::fromUtf8("<a href=\"KexiAssistantPage:next\">%1</a> ›");
-}
-
-void KexiAssistantPage::Private::setButtonVisible(QLabel** button,
+void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
                                                   bool back, /* or next */
                                                   bool set, int x, int y)
 {
@@ -61,15 +60,19 @@ void KexiAssistantPage::Private::setButtonVisible(QLabel** button,
         else {
             QString text;
             if (back) {
-                text = QString::fromUtf8("‹ <a href=\"KexiAssistantPage:back\">%1</a>")
-                    .arg(KStandardGuiItem::back().text().replace('&', ""));
+                *button = new KexiLinkWidget(
+                    QLatin1String("KexiAssistantPage:back"),
+                    KStandardGuiItem::back().text().replace('&', ""), q);
+                (*button)->setFormat(
+                    i18nc("Back button arrow: back button in assistant (wizard)", "‹ %L"));
             }
             else {
-                text = nextButtonText()
-                    .arg(i18nc("Button text: Next page in assistant (wizard)", "Next"));
+                *button = new KexiLinkWidget(
+                    QLatin1String("KexiAssistantPage:next"),
+                    i18nc("Button text: Next page in assistant (wizard)", "Next"), q);
+                (*button)->setFormat(
+                    i18nc("Next button arrow: next button in assistant (wizard)", "%L ›"));
             }
-            *button = new QLabel(text);
-            (*button)->setFocusPolicy(Qt::StrongFocus);
             int space = (*button)->fontMetrics().height() / 2;
             Qt::Alignment align;
             if (back) {
@@ -121,9 +124,12 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     m_mainLyr->addWidget(m_nextButton, 1, 2);*/
     //KAcceleratorManager::manage(this);
     
-    QString text = QString::fromUtf8("<a href=\"KexiAssistantPage:cancel\">%1</a>  ")
-        .arg(KStandardGuiItem::cancel().text().replace('&', ""));
-    d->cancelButton = new QLabel(text);
+    d->cancelButton = new KexiLinkWidget(
+        QLatin1String("KexiAssistantPage:cancel"),
+        KStandardGuiItem::cancel().text().replace('&', ""),
+        this);
+    d->cancelButton->setContentsMargins(0, 0,
+        d->cancelButton->fontMetrics().width(QString::fromUtf8(" ›")), 0);
     connect(d->cancelButton, SIGNAL(linkActivated(QString)),
             this, SLOT(slotLinkActivated(QString)));
     d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop|Qt::AlignRight);
@@ -163,20 +169,20 @@ void KexiAssistantPage::setContents(QLayout* layout)
 
 void KexiAssistantPage::slotLinkActivated(const QString& link)
 {
-    if (link == QLatin1String("KexiAssistantPage:back")) {
-        emit back(this);
+    if (d->backButton && link == d->backButton->link()) {
+        back();
     }
-    else if (link == QLatin1String("KexiAssistantPage:next")) {
-        emit next(this);
+    else if (d->nextButton && link == d->nextButton->link()) {
+        next();
     }
-    else if (link == QLatin1String("KexiAssistantPage:cancel")) {
+    else if (link == d->cancelButton->link()) {
         emit cancelled(this);
         if (parentWidget())
             parentWidget()->deleteLater();
     }
 }
 
-QLabel* KexiAssistantPage::backButton()
+KexiLinkWidget* KexiAssistantPage::backButton()
 {
     if (!d->backButton) {
         setBackButtonVisible(true);
@@ -185,7 +191,7 @@ QLabel* KexiAssistantPage::backButton()
     return d->backButton;
 }
 
-QLabel* KexiAssistantPage::nextButton()
+KexiLinkWidget* KexiAssistantPage::nextButton()
 {
     if (!d->nextButton) {
         setNextButtonVisible(true);
@@ -212,11 +218,6 @@ QWidget* KexiAssistantPage::focusWidget() const
 void KexiAssistantPage::setFocusWidget(QWidget* widget)
 {
     d->focusWidget = widget;
-}
-
-void KexiAssistantPage::setNextButtonText(const QString& text)
-{
-    d->nextButton->setText(nextButtonText().arg(text));
 }
 
 #include "KexiAssistantPage.moc"

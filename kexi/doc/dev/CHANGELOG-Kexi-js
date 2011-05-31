@@ -94,6 +94,10 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-05-27..31
+Startup
+*Message Widget: added KexiLinkWidget for better supported 'link' buttons with proper colors in active and disabled modes
+
 2011-05-26
 Startup
 *Message Widget: add positioning of the callout pointer at specified point to the API

@@ -26,6 +26,8 @@
 #include <QEvent>
 
 #include <kexiutils/utils.h>
+#include "KexiAssistantPage.h"
+#include "KexiLinkWidget.h"
 
 #include <KDebug>
 
@@ -117,6 +119,7 @@ public:
     }
 
     QPointer<QWidget> page;
+    QList< QPointer<QWidget> > enabledLinks;
     QPalette origPagePalette;
     QPointer<QWidget> context;
     QPointer<QWidget> nextFocusWidget;
@@ -166,6 +169,13 @@ void KexiContextMessageWidget::init(
     d->hasActions = !message.actions().isEmpty();
     if (d->page && d->hasActions) {
         d->setDisabledColorsForPage();
+        foreach (KexiLinkWidget* w, d->page->findChildren<KexiLinkWidget*>()) {
+            kDebug() << w << w->isEnabled();
+            if (w->isEnabled()) {
+                d->enabledLinks.append(w);
+                w->setEnabled(false);
+            }
+        }
         KexiUtils::installRecursiveEventFilter(d->page, this); // before inserting,
                                                                // so 'this' is not disabled
     }
@@ -201,8 +211,14 @@ void KexiContextMessageWidget::init(
 
 KexiContextMessageWidget::~KexiContextMessageWidget()
 {
-    d->setEnabledColorsForPage();
     d->eventBlocking = false;
+    d->setEnabledColorsForPage();
+    foreach (QPointer<QWidget> w, d->enabledLinks) {
+        if (w) {
+            w->setEnabled(true);
+            w->unsetCursor();
+        }
+    }
     if (d->nextFocusWidget)
         d->nextFocusWidget->setFocus();
     else if (d->context)

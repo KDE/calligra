@@ -19,6 +19,7 @@ set(kexiutils_LIB_SRCS
   kmessagewidget.cpp 
   KexiContextMessage.cpp
   KexiTitleLabel.cpp
+  KexiLinkWidget.cpp
   KexiAssistantPage.cpp
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp
