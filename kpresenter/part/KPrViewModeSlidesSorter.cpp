@@ -26,11 +26,19 @@
 #include <QScrollBar>
 #include <QMenu>
 #include <QtCore/qmath.h>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QSplitter>
+#include <QComboBox>
+#include <QLabel>
+#include <QPropertyAnimation>
 
 #include "KPrSlidesSorterDocumentModel.h"
 #include "KPrFactory.h"
 #include "KPrSlidesManagerView.h"
 #include "KPrSelectionManager.h"
+#include "KPrCustomSlideShowsModel.h"
+#include "KPrDocument.h"
 
 #include <KoResourceManager.h>
 #include <KoRuler.h>
@@ -56,24 +64,81 @@
 #include <klocale.h>
 #include <KDebug>
 #include <kconfiggroup.h>
+#include <KIconLoader>
+#include <KGlobalSettings>
 
 KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas)
-    : KoPAViewMode( view, canvas )
-    //, m_slidesSorter( new KPrSlidesSorter(this, view->parentWidget()) )
-    , m_slidesSorter( new KPrSlidesManagerView(m_toolProxy, view->parentWidget()))
+    : KoPAViewMode(view, canvas)
+    , m_slidesSorter(new KPrSlidesManagerView())
+    , m_customSlidesShowView(new KPrSlidesManagerView())
     , m_documentModel(new KPrSlidesSorterDocumentModel(this, view->parentWidget()))
-    , m_iconSize( QSize(200, 200) )
+    , m_centralWidget(new QWidget(view->parentWidget()))
+    , m_customShowsModel(new KPrCustomSlideShowsModel(view->parentWidget()))
+    , m_iconSize(QSize(200, 200))
+    , m_editCustomShows(false)
 {
-    m_slidesSorter->hide();
-    m_slidesSorter->setIconSize( m_iconSize );
+    //Create customSlideShow GUI
+    QWidget *m_customShowsToolBar = new QWidget();
+
+    QHBoxLayout *toolBarLayout = new QHBoxLayout(m_customShowsToolBar);
+    QVBoxLayout *centralWidgetLayout = new QVBoxLayout(m_centralWidget);
+
+    QLabel *slideShowsLabel = new QLabel(i18n("Slide Show: "));
+    QComboBox *slideShowsList = new QComboBox;
+
+    QToolButton *buttonAdd = new QToolButton();
+    buttonAdd->setIcon(SmallIcon("list-add"));
+    buttonAdd->setEnabled(false);
+
+    QToolButton *buttonDel = new QToolButton();
+    buttonDel->setIcon(SmallIcon("list-remove"));
+    buttonDel->setEnabled(false);
+
+    QSplitter *viewsSplitter = new QSplitter(Qt::Vertical);
+
+    //hide Custom Shows View
+    m_customSlidesShowView->setMaximumHeight(0);
+
+    //Layout Widgets
+
+    toolBarLayout->addWidget(slideShowsLabel);
+    toolBarLayout->addWidget(slideShowsList);
+    toolBarLayout->addWidget(buttonAdd);
+    toolBarLayout->addWidget(buttonDel);
+
+    viewsSplitter->addWidget(m_slidesSorter);
+    viewsSplitter->addWidget(m_customSlidesShowView);
+    centralWidgetLayout->addWidget(viewsSplitter);
+    centralWidgetLayout->addWidget(m_customShowsToolBar);
+
+    //m_slidesSorter->hide();
+    m_centralWidget->hide();
+    m_slidesSorter->setIconSize(m_iconSize);
+    m_customSlidesShowView->setIconSize(m_iconSize);
+
+    //Populate ComboBox
+    KPrDocument *document = dynamic_cast<KPrDocument *>(view->kopaDocument());
+    if (document) {
+        m_customShowsModel->setCustomSlideShows(document->customSlideShows());
+    }
+
+    QStringList slideShows;
+
+    slideShows << i18n("Default") << (m_customShowsModel->customShowsNamesList());
+
+    slideShowsList->addItems(slideShows);
+
+    //setup signals
 
     connect(m_slidesSorter, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
+    connect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
 
     m_slidesSorter->installEventFilter(this);
 
     //install selection manager for Slides Sorter View
     m_selectionManagerSlidesSorter = new KPrSelectionManager(m_slidesSorter, m_view->kopaDocument());
+
 }
 
 KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
@@ -147,7 +212,8 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     if (view) {
         view->hide();
     }
-    m_slidesSorter->show();
+    //m_slidesSorter->show();
+    m_centralWidget->show();
     m_slidesSorter->setFocus(Qt::ActiveWindowFocusReason);
     updateToActivePageIndex();
 
@@ -171,7 +237,8 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeSlidesSorter::deactivate()
 {
-    m_slidesSorter->hide();
+    //m_slidesSorter->hide();
+    m_centralWidget->hide();
     // Give the ressources back to the canvas
     m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, 0);
     // Active the view as a basic but active one
@@ -442,4 +509,32 @@ bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
     } //endIf
 
     return QObject::eventFilter(watched, event);
+}
+
+void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
+{
+    bool panelVisible = true;
+    if (showNumber < 1)
+        panelVisible = false;
+
+    if (panelVisible != m_editCustomShows) {
+
+        const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
+        const int duration = animate ? 600 : 1;
+
+        QPropertyAnimation *animation = new QPropertyAnimation (m_customSlidesShowView, "maximumHeight");
+
+        if (!panelVisible) {
+            animation->setDuration(duration);
+            animation->setStartValue(m_customSlidesShowView->maximumHeight());
+             animation->setEndValue(0);
+        } else {
+            animation->setDuration(duration);
+            animation->setStartValue(0);
+            animation->setEndValue(m_slidesSorter->height()/2);
+        }
+        animation->start();
+    }
+
+    m_editCustomShows = panelVisible;
 }

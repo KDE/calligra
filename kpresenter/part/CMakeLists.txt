@@ -71,6 +71,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesManagerView.cpp
      KPrSelectionManager.cpp
      KPrSelectionToggle.cpp
+     KPrCustomSlideShowsModel.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp

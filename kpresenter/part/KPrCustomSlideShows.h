@@ -87,6 +87,8 @@ public:
      */
     QList<KoPAPageBase*> getByName( const QString &name ) const;
 
+    KoPAPageBase* pageByIndex(const QString &name, int index) const;
+
     /**
      * @brief Insert a slide to the right of the given position of all the known custom SlideShows.
      * If the position is higher than the size of the list of the SlideShow, the slide is inserted at the end.

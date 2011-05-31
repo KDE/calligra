@@ -312,4 +312,10 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
     }
 }
 
+KoPAPageBase * KPrSlidesSorterDocumentModel::pageFromIndex(const QModelIndex &index) const
+{
+    Q_ASSERT(index.internalPointer());
+    return static_cast<KoPAPageBase*>(index.internalPointer());
+}
+
 #include "KPrSlidesSorterDocumentModel.moc"

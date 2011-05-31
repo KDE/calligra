@@ -35,10 +35,9 @@
 #include <KoToolProxy.h>
 #include "KPrViewModeSlidesSorter.h"
 
-KPrSlidesManagerView::KPrSlidesManagerView(KoToolProxy *toolProxy, QWidget *parent)
+KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     : QListView(parent)
     , m_dragingFlag(false)
-    , m_toolProxy(toolProxy)
 {
     setViewMode(QListView::IconMode);
     setFlow(QListView::LeftToRight);
@@ -117,6 +116,9 @@ void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 
     clearSelection();
 
+    if (!model())
+        return;
+
     int newIndex = cursorSlideIndex();
 
     if (newIndex >= model()->rowCount(QModelIndex()))
@@ -128,8 +130,12 @@ void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 void KPrSlidesManagerView::dragMoveEvent(QDragMoveEvent *ev)
 {
     ev->accept();
+    if (!model())
+        return;
+
     setDragingFlag();
     viewport()->update();
+
 }
 
 void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
@@ -169,7 +175,7 @@ bool KPrSlidesManagerView::isDraging()
 
 bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == viewport()) {
+    if (watched == viewport() && model()) {
         switch (event->type()) {
         case QEvent::MouseButtonPress: {
             QModelIndex item = indexAt(QWidget::mapFromGlobal(QCursor::pos()));

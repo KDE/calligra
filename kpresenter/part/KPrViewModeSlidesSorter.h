@@ -31,6 +31,8 @@ class KoPAPageBase;
 class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
 class KPrSelectionManager;
+class QSplitter;
+class KPrCustomSlideShowsModel;
 
 //This view mode holds Slides Sorter view widget and
 //TODO: holds view and toolbar to manage custom slides shows
@@ -121,10 +123,14 @@ protected:
 
 private:
     KPrSlidesManagerView * m_slidesSorter;
+    KPrSlidesManagerView * m_customSlidesShowView;
     KPrSlidesSorterDocumentModel * m_documentModel;
-    QSize m_iconSize;
     int m_zoom;
     KPrSelectionManager *m_selectionManagerSlidesSorter;
+    QWidget *m_centralWidget;
+    KPrCustomSlideShowsModel *m_customShowsModel;
+    QSize m_iconSize;
+    bool m_editCustomShows;
 
 public slots:
     void editPaste();
@@ -162,6 +168,8 @@ private slots:
 
     /** Provides a custom context menu for the slides sorter view*/
     void slidesSorterContextMenu(QContextMenuEvent* event);
+
+    void customShowChanged(int showNumber);
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

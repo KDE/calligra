@@ -34,7 +34,7 @@ class KPrSlidesManagerView : public QListView
 {
     Q_OBJECT
 public:
-    explicit KPrSlidesManagerView(KoToolProxy *toolProxy, QWidget *parent = 0);
+    explicit KPrSlidesManagerView(QWidget *parent = 0);
 
     ~KPrSlidesManagerView();
 
