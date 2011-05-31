@@ -179,9 +179,10 @@ void KWStatusBar::setModified(bool modified)
 
 void KWStatusBar::updatePageCount()
 {
-    if (m_currentView)
+    if (m_currentView) {
         m_pageLabel->setText(i18nPage.subs(m_currentView->currentPage().pageNumber())
             .subs(m_currentView->kwdocument()->pageCount()).toString());
+    }
     else
         m_pageLabel->setText(i18nPage.toString());
 }
