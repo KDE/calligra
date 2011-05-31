@@ -251,18 +251,18 @@ void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& ou
 
 void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
 {
-    QString url;
-    const Pib* pib = get<Pib>(o);
-    if (pib && client) {
-        url = client->getPicturePath(pib->pib);
-    } else {
-        // Does not make much sense to display an empty frame, following
-        // PPT->ODP filters of both OOo and MS Office.
-        return;
-    }
+    DrawStyle ds(0, &o);
+
+    // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
+    if (!ds.pib()) return;
+
     out.xml.startElement("draw:frame");
     processStyleAndText(o, out);
 
+    QString url;
+    if (client) {
+        url = client->getPicturePath(ds.pib());
+    }
     // if the image cannot be found, just place an empty frame
     if (url.isEmpty()) {
         out.xml.endElement(); //draw:frame
