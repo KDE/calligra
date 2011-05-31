@@ -55,7 +55,7 @@ namespace Libwmf
  *
  */
 
-class KOWMF_EXPORT WmfPainterBackend : public WmfAbstractBackend
+class LIBWMF_EXPORT WmfPainterBackend : public WmfAbstractBackend
 {
 public:
     WmfPainterBackend(QPainter *painter, const QSizeF &outputSize);

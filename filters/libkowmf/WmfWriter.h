@@ -53,7 +53,7 @@ class WmfWriterPrivate;
  *   wmf.end();
  *   </pre>
  */
-class KOWMF_EXPORT WmfWriter
+class LIBWMF_EXPORT WmfWriter
 {
 public:
     explicit WmfWriter(const QString& fileName);

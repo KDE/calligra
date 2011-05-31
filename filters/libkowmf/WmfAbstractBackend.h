@@ -57,7 +57,7 @@ class WmfDeviceContext;
  *
  */
 
-class KOWMF_EXPORT WmfAbstractBackend
+class LIBWMF_EXPORT WmfAbstractBackend
 {
 public:
     WmfAbstractBackend();
