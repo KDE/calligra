@@ -384,6 +384,9 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.stroked = true; // default
     m_currentVMLProperties.opacity = 0; // default
     m_currentVMLProperties.shadowed = false;
+    m_currentVMLProperties.shadowColor = "#101010"; // default
+    m_currentVMLProperties.shadowXOffset = "2pt"; // default
+    m_currentVMLProperties.shadowYOffset = "2pt"; //default
 }
 
 void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attrs)
@@ -576,16 +579,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS(on)
-    TRY_READ_ATTR_WITHOUT_NS(color)
-    TRY_READ_ATTR_WITHOUT_NS(offset)
 
-    if (on == "t" || on == "true") {
-        m_currentVMLProperties.shadowed = true;
+    m_currentVMLProperties.shadowed = true; // default in this function
+
+    TRY_READ_ATTR_WITHOUT_NS(on)
+    if (on == "f" || on == "false") {
+        m_currentVMLProperties.shadowed = false;
     }
 
-    m_currentVMLProperties.shadowColor = MSOOXML::Utils::rgbColor(color);
+    TRY_READ_ATTR_WITHOUT_NS(color)
+    if (!color.isEmpty()) {
+        m_currentVMLProperties.shadowColor = MSOOXML::Utils::rgbColor(color);
+    }
 
+    TRY_READ_ATTR_WITHOUT_NS(offset)
     int index = offset.indexOf(',');
     if (index > 0) {
         m_currentVMLProperties.shadowXOffset = offset.left(index);
@@ -629,6 +636,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
+
+    m_currentVMLProperties.stroked = true; // default in this function
+
+    TRY_READ_ATTR_WITHOUT_NS(on)
+    if (on == "f" || on == "false") {
+        m_currentVMLProperties.stroked = false;
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(endcap)
     if (endcap.isEmpty() || endcap == "sq") {
@@ -1010,6 +1024,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     // pattern (Image Pattern) - The image is used to create a pattern using the fill colors.
     // tile (Tiled Image) - The fill image is tiled.
     // solid (Solid Fill) - The fill pattern is a solid color.
+
+    m_currentVMLProperties.filled = true; // default in this function
+
+    TRY_READ_ATTR_WITHOUT_NS(on)
+    if (on == "f" || on == "false") {
+        m_currentVMLProperties.filled = false;
+    }
+
+    // Note this is only like this for solidfill, for others do something...
+    TRY_READ_ATTR_WITHOUT_NS(color)
+    if (!color.isEmpty()) {
+        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(color2)
+    TRY_READ_ATTR_WITHOUT_NS(angle)
 
     TRY_READ_ATTR_WITHOUT_NS(opacity)
     if (!opacity.isEmpty()) {
