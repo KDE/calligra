@@ -575,8 +575,8 @@ void KMessageWidget::showEvent(QShowEvent* event)
 {
     QFrame::showEvent(event);
     if (!event->spontaneous()) {
-        int wantedHeight = d->content->sizeHint().height();
 #if 0
+        int wantedHeight = d->content->sizeHint().height();
         d->content->setGeometry(0, 0, width(), wantedHeight);
         if (d->buttons.isEmpty()) {
             setFixedHeight(wantedHeight);
