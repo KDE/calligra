@@ -218,7 +218,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             m_currentVMLProperties.anchorType = "paragraph"; //forced
         }
         else if (hor_pos_rel == "margin") {
-            hor_pos_rel = "paragraph-start-margin";
+            hor_pos_rel = "page-content";
             m_currentVMLProperties.anchorType = "paragraph"; //forced
         }
         else if (hor_pos_rel == "inner-margin-area" || hor_pos_rel == "right-margin-area") {
@@ -323,6 +323,10 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:shadow-color", m_currentVMLProperties.shadowColor);
         m_currentDrawStyle->addProperty("draw:shadow-offset-x", m_currentVMLProperties.shadowXOffset);
         m_currentDrawStyle->addProperty("draw:shadow-offset-y", m_currentVMLProperties.shadowYOffset);
+    }
+
+    if (m_currentVMLProperties.opacity > 0) {
+        m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentVMLProperties.opacity));
     }
 
     if (!m_currentDrawStyle->isEmpty()) {
@@ -477,6 +481,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     // when it's done
     bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
+    m_currentVMLProperties.shadowed = false;
+    m_currentVMLProperties.opacity = 0;
 
     while (!atEnd()) {
         readNext();
@@ -779,6 +785,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     m_currentVMLProperties.filled = QString();
     m_currentVMLProperties.stroked = QString();
     m_currentVMLProperties.shadowed = false;
+    m_currentVMLProperties.opacity = 0;
 
     if (!strokeweight.isEmpty()) {
         if (strokeweight.at(0) == '.') {
@@ -887,6 +894,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
     bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
     m_currentVMLProperties.shadowed = false;
+    m_currentVMLProperties.opacity = 0;
 
     while (!atEnd()) {
         readNext();
@@ -1011,6 +1019,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     // pattern (Image Pattern) - The image is used to create a pattern using the fill colors.
     // tile (Tiled Image) - The fill image is tiled.
     // solid (Solid Fill) - The fill pattern is a solid color.
+
+    TRY_READ_ATTR_WITHOUT_NS(opacity)
+    if (!opacity.isEmpty()) {
+        if (opacity.right(1) == "f") {
+            opacity = opacity.left(opacity.length()-1);
+            m_currentVMLProperties.opacity = 100 * opacity.toInt() / 65536;
+        }
+        else {
+            if (opacity.left(1) == ".") {
+                opacity = "0" + opacity;
+            }
+            m_currentVMLProperties.opacity = 100 * opacity.toDouble();
+        }
+    }
 
     while (!atEnd()) {
         readNext();
@@ -1554,6 +1576,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
     m_currentVMLProperties.stroked = stroked;
 
     m_currentVMLProperties.shadowed = false;
+    m_currentVMLProperties.opacity = 0;
 
     m_currentVMLProperties.shapeTypeString += ">";
 
@@ -1837,6 +1860,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     m_currentVMLProperties.wrapRead = false;
     m_currentVMLProperties.shadowed = false;
+    m_currentVMLProperties.opacity = 0;
 
     bool isCustomShape = true;
 

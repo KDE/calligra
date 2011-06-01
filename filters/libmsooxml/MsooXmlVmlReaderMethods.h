@@ -80,6 +80,8 @@ protected:
         QString strokeStyleName;
         QString shapeColor; //!< set in read_shape()
 
+        qreal opacity;
+
         bool wrapRead;
         QString currentShapeId; //!< set in read_shape()
         QString imagedataPath; //!< set in read_shape()
