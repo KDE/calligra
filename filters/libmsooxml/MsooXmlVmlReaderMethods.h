@@ -50,8 +50,10 @@ protected:
     KoFilter::ConversionStatus read_textbox();
     KoFilter::ConversionStatus read_group();
     KoFilter::ConversionStatus read_stroke();
+    KoFilter::ConversionStatus read_shadow();
 
     void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
+    void takeDefaultValues();
 
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
@@ -79,6 +81,8 @@ protected:
         QString strokeStyleName;
         QString shapeColor; //!< set in read_shape()
 
+        qreal opacity;
+
         bool wrapRead;
         QString currentShapeId; //!< set in read_shape()
         QString imagedataPath; //!< set in read_shape()
@@ -86,7 +90,10 @@ protected:
         QString shapeAltText; //!< set in read_shape()
         QString shapeTitle; //!< set in read_shape()
 
-        QString stroked, filled;
+        bool stroked, filled, shadowed;
+
+        QString shadowColor;
+        QString shadowXOffset, shadowYOffset;
 
         // Relative group widths
         int groupWidth, groupHeight;
