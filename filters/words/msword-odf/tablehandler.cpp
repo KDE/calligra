@@ -21,19 +21,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "tablehandler.h"
-#include "conversion.h"
-#include "msodraw.h"
-
 #include <wv2/src/word97_generated.h>
+#include "tablehandler.h"
+#include "texthandler.h"
+#include "document.h"
+#include "conversion.h"
+#include "msdoc.h"
 
 #include <kdebug.h>
 #include <QList>
 #include <QRectF>
 #include <KoGenStyle.h>
 
-#include "document.h"
-#include "texthandler.h"
 
 //#define DEBUG_TABLEHANDLER
 
@@ -628,23 +627,9 @@ void KWordTableHandler::tableCellStart()
         }
     }
 
-    //check if we have to ignore the shading information
-    if (!shd.shdAutoOrNill) {
-        QString color = QString('#');
-        //ipatPct5 to ipatPct90
-        if (shd.ipat >= 0x02 && shd.ipat <= 0x0d) {
-            //get the color from the shading pattern
-            uint grayColor = Conversion::shadingPatternToColor(shd.ipat);
-            color.append(QString::number(grayColor | 0xff000000, 16).right(6).toUpper());
-        }
-        //ipatSolid or ipatnil means that no pattern is applied, but only color
-        //The case of neither color nor pattern is tested above by the shdAutoOrNill
-        else if (shd.ipat == 0x01 || shd.ipat == 0x00) {
-            color.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
-        } else {
-            kWarning(30513) << "Warning: Unsupported shading, using current background-color";
-            color = document()->currentBgColor();
-        }
+    //process shading information
+    QString color = Conversion::shdToColorStr(shd);
+    if (!color.isEmpty()) {
         cellStyle.addProperty("fo:background-color", color);
         //add the current background-color to stack
         document()->addBgColor(color);
@@ -737,7 +722,10 @@ void KWordTableHandler::tableCellEnd()
         //if the backgroud-color was provided, then remove it from stack
         const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
         const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
-        if (!shd.shdAutoOrNill && !(tc.fVertMerge && !tc.fVertRestart)) {
+
+        if ( !Conversion::shdToColorStr(shd).isEmpty() &&
+             !(tc.fVertMerge && !tc.fVertRestart) )
+        {
             document()->rmBgColor();
         }
     }

@@ -25,11 +25,12 @@
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
 #include "pictures.h"
+#include "msodraw.h"
 
 #include "graphicshandler.h"
-#include "document.h"
 #include "conversion.h"
-#include "msodraw.h"
+#include "document.h"
+#include "msdoc.h"
 
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
