@@ -43,9 +43,11 @@ public:
 
 private:
     void paintCalloutPointer();
+    void updateCalloutPointerTransformation() const;
 
     KMessageWidget::CalloutPointerDirection m_calloutPointerDirection;
-    QTransform m_calloutPointerTransformation;
+    mutable QTransform m_calloutPointerTransformation;
+    mutable QSize m_sizeForRecentTransformation;
     QPolygonF m_polyline;
     QPolygonF m_polygon;
 };

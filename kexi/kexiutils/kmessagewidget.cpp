@@ -46,7 +46,9 @@
 //---------------------------------------------------------------------
 
 KMessageWidgetFrame::KMessageWidgetFrame(QWidget* parent)
- : QFrame(parent), radius(5), m_calloutPointerDirection(KMessageWidget::NoPointer)
+ : QFrame(parent), radius(5),
+   m_calloutPointerDirection(KMessageWidget::NoPointer),
+   m_sizeForRecentTransformation(-1, -1)
 {
     const qreal rad = radius;
     m_polyline << QPointF(0, 0)
@@ -72,9 +74,18 @@ void KMessageWidgetFrame::setCalloutPointerDirection(
     KMessageWidget::CalloutPointerDirection direction)
 {
     m_calloutPointerDirection = direction;
+    m_sizeForRecentTransformation = QSize(-1, -1);
+}
+
+void KMessageWidgetFrame::updateCalloutPointerTransformation() const
+{
+    if (m_sizeForRecentTransformation == size())
+        return;
+
     m_calloutPointerTransformation.reset();
 
     const QSizeF s(size());
+    m_sizeForRecentTransformation = size();
     const qreal rad = radius;
     // Original: [v    ]
     //           [     ]
@@ -114,6 +125,8 @@ void KMessageWidgetFrame::setCalloutPointerDirection(
 
 void KMessageWidgetFrame::paintCalloutPointer()
 {
+    updateCalloutPointerTransformation();
+
     if (m_calloutPointerTransformation.isIdentity())
         return;
     QPainter painter(this);
@@ -129,6 +142,7 @@ void KMessageWidgetFrame::paintCalloutPointer()
 
 QPoint KMessageWidgetFrame::pointerPosition() const
 {
+    updateCalloutPointerTransformation();
     //kDebug() << "MAPPED:" << t.map(polyline[1]) << mapToGlobal(t.map(polyline[1]).toPoint());
     return m_calloutPointerTransformation.map(m_polyline[1]).toPoint();
 }
