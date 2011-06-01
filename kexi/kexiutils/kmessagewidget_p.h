@@ -37,6 +37,10 @@ public:
 
     QPoint pointerPosition() const;
 
+    void setCalloutPointerPosition(const QPoint& globalPos);
+
+    void updateCalloutPointerPosition() const;
+
     const int radius;
     QBrush bgBrush;
     QBrush borderBrush;
@@ -48,6 +52,7 @@ private:
     KMessageWidget::CalloutPointerDirection m_calloutPointerDirection;
     mutable QTransform m_calloutPointerTransformation;
     mutable QSize m_sizeForRecentTransformation;
+    QPoint m_calloutPointerGlobalPosition;
     QPolygonF m_polyline;
     QPolygonF m_polygon;
 };

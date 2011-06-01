@@ -48,7 +48,8 @@
 KMessageWidgetFrame::KMessageWidgetFrame(QWidget* parent)
  : QFrame(parent), radius(5),
    m_calloutPointerDirection(KMessageWidget::NoPointer),
-   m_sizeForRecentTransformation(-1, -1)
+   m_sizeForRecentTransformation(-1, -1),
+   m_calloutPointerGlobalPosition(-QWIDGETSIZE_MAX, -QWIDGETSIZE_MAX)
 {
     const qreal rad = radius;
     m_polyline << QPointF(0, 0)
@@ -120,6 +121,25 @@ void KMessageWidgetFrame::updateCalloutPointerTransformation() const
         break;
     default:
         break;
+    }
+}
+
+void KMessageWidgetFrame::setCalloutPointerPosition(const QPoint& globalPos)
+{
+    m_calloutPointerGlobalPosition = globalPos;
+    updateCalloutPointerPosition();
+}
+
+void KMessageWidgetFrame::updateCalloutPointerPosition() const
+{
+    if (m_calloutPointerGlobalPosition == QPoint(-QWIDGETSIZE_MAX, -QWIDGETSIZE_MAX))
+        return;
+    QWidget *messageWidgetParent = parentWidget()->parentWidget();
+    if (messageWidgetParent) {
+        parentWidget()->move(
+            messageWidgetParent->mapFromGlobal(
+                m_calloutPointerGlobalPosition - pos() - pointerPosition())
+        );
     }
 }
 
@@ -347,6 +367,7 @@ void KMessageWidgetPrivate::slotTimeLineFinished()
     if (timeLine->direction() == QTimeLine::Forward) {
         // Show
         content->move(0, 0);
+        content->updateCalloutPointerPosition();
         //q->setFixedHeight(QWIDGETSIZE_MAX);
         if (defaultButton) {
             defaultButton->setFocus();
@@ -620,6 +641,7 @@ void KMessageWidget::animatedShow()
         return;
     }
 
+    d->content->updateCalloutPointerPosition();
     QFrame::show();
     setFixedHeight(0);
     int wantedHeight = d->content->sizeHint().height();
@@ -655,10 +677,7 @@ void KMessageWidget::animatedHide()
 
 void KMessageWidget::setCalloutPointerPosition(const QPoint& globalPos)
 {
-    move(    
-        parentWidget()->mapFromGlobal(
-            globalPos - d->content->pos() - d->content->pointerPosition())
-    );
+    d->content->setCalloutPointerPosition(globalPos);
 }
 
 #include "kmessagewidget.moc"
