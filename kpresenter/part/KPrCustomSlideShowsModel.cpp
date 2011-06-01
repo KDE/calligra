@@ -23,10 +23,9 @@ KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(QObject *parent, KPrCustomSli
 
 QVariant KPrCustomSlideShowsModel::data(const QModelIndex &index, int role) const
 {
-    if (! index.isValid() || !m_customShows || m_currentSlideShowName.isEmpty()) {
+    if (!index.isValid() || !m_customShows || m_currentSlideShowName.isEmpty()) {
         return QVariant();
     }
-
     Q_ASSERT(index.model() == this);
 
     KoPAPageBase *page = m_customShows->pageByIndex(m_currentSlideShowName, index.row());
@@ -74,10 +73,20 @@ void KPrCustomSlideShowsModel::setCustomSlideShows(KPrCustomSlideShows *customSh
 
 void KPrCustomSlideShowsModel::setCurrentSlideShow(QString name)
 {
+    if (!m_customShows | (m_currentSlideShowName == name))
+        return;
     if (m_customShows->names().contains(name)) {
         m_currentSlideShowName = name;
     }
     reset();
+}
+
+void KPrCustomSlideShowsModel::setCurrentSlideShow(int index)
+{
+    if (!m_customShows)
+        return;
+    QString name = m_customShows->names().value(index);
+    setCurrentSlideShow(name);
 }
 
 void KPrCustomSlideShowsModel::setIconSize(QSize size)

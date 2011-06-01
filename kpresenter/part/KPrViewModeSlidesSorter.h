@@ -31,7 +31,6 @@ class KoPAPageBase;
 class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
 class KPrSelectionManager;
-class QSplitter;
 class KPrCustomSlideShowsModel;
 
 //This view mode holds Slides Sorter view widget and

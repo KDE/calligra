@@ -34,6 +34,8 @@ public:
 
     void setCurrentSlideShow(QString name);
 
+    void setCurrentSlideShow(int index);
+
     void setIconSize(QSize size);
 
     QStringList customShowsNamesList() const;

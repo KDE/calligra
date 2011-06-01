@@ -111,10 +111,11 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     centralWidgetLayout->addWidget(viewsSplitter);
     centralWidgetLayout->addWidget(m_customShowsToolBar);
 
-    //m_slidesSorter->hide();
+    //initialize widgets
     m_centralWidget->hide();
     m_slidesSorter->setIconSize(m_iconSize);
     m_customSlidesShowView->setIconSize(m_iconSize);
+
 
     //Populate ComboBox
     KPrDocument *document = dynamic_cast<KPrDocument *>(view->kopaDocument());
@@ -128,12 +129,21 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
 
     slideShowsList->addItems(slideShows);
 
+    //Setup customSlideShows view
+    m_customSlidesShowView->setModel(m_customShowsModel);
+
+    m_customSlidesShowView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_customSlidesShowView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+    m_customSlidesShowView->setDragDropMode(QAbstractItemView::InternalMove);
+
     //setup signals
 
     connect(m_slidesSorter, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
     connect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
 
+    //filter some m_slidesSorter key events
     m_slidesSorter->installEventFilter(this);
 
     //install selection manager for Slides Sorter View
@@ -307,6 +317,7 @@ void KPrViewModeSlidesSorter::removeShape( KoShape *shape )
 
 void KPrViewModeSlidesSorter::populate()
 {
+    //Init m_slidesSorter view
     m_documentModel->setDocument(m_view->kopaDocument());
     m_slidesSorter->setModel(m_documentModel);
 
@@ -315,7 +326,11 @@ void KPrViewModeSlidesSorter::populate()
 
     m_slidesSorter->setDragDropMode(QAbstractItemView::InternalMove);
     QModelIndex item = m_documentModel->index(0, 0, QModelIndex());
-    m_slidesSorter->setItemSize (m_slidesSorter->visualRect(item));
+    m_slidesSorter->setItemSize(m_slidesSorter->visualRect(item));
+
+    //Init m_customSlidesShowsView
+    m_customSlidesShowView->setItemSize(m_slidesSorter->visualRect(item));
+
 }
 
 QSize KPrViewModeSlidesSorter::iconSize() const
@@ -514,9 +529,11 @@ bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
 void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
 {
     bool panelVisible = true;
-    if (showNumber < 1)
+    if (showNumber < 1) {
         panelVisible = false;
+    }
 
+    //Decide show or hide Custom Slide Shows View
     if (panelVisible != m_editCustomShows) {
 
         const bool animate = KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects;
@@ -537,4 +554,12 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     }
 
     m_editCustomShows = panelVisible;
+
+    //Populate Custom Slide Shows View if visible
+
+    if (panelVisible) {
+        m_customShowsModel->setCurrentSlideShow(showNumber - 1);
+    }
+
+
 }
