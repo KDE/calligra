@@ -184,7 +184,7 @@ void KexiContextMessageWidget::init(
         int row;
         layout->getWidgetPosition(context, &row, 0);
         layout->insertRow(row, QString(), this);
-        setCalloutPointerDirection(KMessageWidget::Left);
+        setCalloutPointerDirection(KMessageWidget::Down);
     }
     else {
         if (d->page) {
