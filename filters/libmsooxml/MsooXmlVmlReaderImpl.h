@@ -198,15 +198,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-    if (!m_currentVMLProperties.shapeColor.isEmpty()) {
-        m_currentDrawStyle->addProperty("draw:fill", "solid");
-        m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
-    }
-
-    if (!ver_align.isEmpty()) {
-        m_currentDrawStyle->addProperty("draw:textarea-vertical-align", ver_align);
-    }
-
     bool asChar = false;
     if (position.isEmpty() || position == "static") {
         asChar = true;
@@ -261,7 +252,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
                 m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
             }
             if (m_currentDrawStyle->property("style:horizontal-rel").isEmpty()) {
-                m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+                m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
             }
 
             if (m_currentVMLProperties.vmlStyle.contains("z-index")) {
@@ -304,7 +295,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 #endif
 
-    if (!m_currentVMLProperties.strokeWidth.isEmpty()) {
+    if (m_currentVMLProperties.stroked) {
         m_currentDrawStyle->addProperty("svg:stroke-width", m_currentVMLProperties.strokeWidth);
         m_currentDrawStyle->addProperty("svg:stroke-color", m_currentVMLProperties.strokeColor);
         m_currentDrawStyle->addProperty("svg:stroke-linecap", m_currentVMLProperties.lineCapStyle);
@@ -316,6 +307,15 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             m_currentDrawStyle->addProperty("draw:stroke", "dash");
             m_currentDrawStyle->addProperty("draw:stroke-dash", m_currentVMLProperties.strokeStyleName);
         }
+    }
+
+    if (m_currentVMLProperties.filled) {
+        m_currentDrawStyle->addProperty("draw:fill", "solid");
+        m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
+    }
+
+    if (!ver_align.isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:textarea-vertical-align", ver_align);
     }
 
     if (m_currentVMLProperties.shadowed == true) {
@@ -372,27 +372,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
     return KoFilter::OK;
 }
 
-void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attrs)
+void MSOOXML_CURRENT_CLASS::takeDefaultValues()
 {
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
-    m_currentVMLProperties.strokeWidth = "1pt" ; // This seems to be the default
-    m_currentVMLProperties.shapeColor.clear();
-    m_currentVMLProperties.strokeColor.clear();
+    m_currentVMLProperties.strokeColor = "#000000"; // default
+    m_currentVMLProperties.strokeWidth = "1pt" ; // default
+    m_currentVMLProperties.shapeColor = "#ffffff"; //default
     m_currentVMLProperties.lineCapStyle = "square";
     m_currentVMLProperties.joinStyle = "middle";
     m_currentVMLProperties.strokeStyleName = QString();
-    m_currentVMLProperties.filled = QString();
+    m_currentVMLProperties.filled = true; // default
+    m_currentVMLProperties.stroked = true; // default
+    m_currentVMLProperties.opacity = 0; // default
+    m_currentVMLProperties.shadowed = false;
+}
 
-    m_currentVMLProperties.stroked = QString();
-
+void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attrs)
+{
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
     if (!strokeweight.isEmpty()) {
         if (strokeweight.at(0) == '.') {
             m_currentVMLProperties.strokeWidth = "0" + strokeweight;
         }
-        m_currentVMLProperties.strokeColor = "#000000"; // Black color seems to be default
     }
 
     TRY_READ_ATTR_WITHOUT_NS(type)
@@ -401,21 +401,46 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
     }
     TRY_READ_ATTR_WITHOUT_NS(filled)
     if (!filled.isEmpty()) {
-        m_currentVMLProperties.filled = filled;
+        if (filled == "f" || filled == "false") {
+            m_currentVMLProperties.filled = false;
+        }
+        else {
+            m_currentVMLProperties.filled = true;
+        }
     }
-    if (m_currentVMLProperties.filled != "f" && m_currentVMLProperties.filled != "false") {
+
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    if (!fillcolor.isEmpty()) {
         m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(stroked)
     if (!stroked.isEmpty()) {
-        m_currentVMLProperties.stroked = stroked;
+        if (stroked == "f" || stroked == "false") {
+            m_currentVMLProperties.stroked = false;
+        }
+        else {
+            m_currentVMLProperties.stroked = true;
+        }
     }
-    if (m_currentVMLProperties.stroked == "f" || m_currentVMLProperties.stroked == "false") {
-        m_currentVMLProperties.strokeWidth = QString();
-    }
-    else if (!strokecolor.isEmpty()) {
+
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    if (!strokecolor.isEmpty()) {
         m_currentVMLProperties.strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(opacity)
+    if (!opacity.isEmpty()) {
+        if (opacity.right(1) == "f") {
+            opacity = opacity.left(opacity.length()-1);
+            m_currentVMLProperties.opacity = 100 * opacity.toInt() / 65536;
+        }
+        else {
+            if (opacity.left(1) == ".") {
+                opacity = "0" + opacity;
+            }
+            m_currentVMLProperties.opacity = 100 * opacity.toDouble();
+        }
     }
 }
 
@@ -467,6 +492,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
+    takeDefaultValues();
     handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
@@ -481,8 +507,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     // when it's done
     bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
-    m_currentVMLProperties.shadowed = false;
-    m_currentVMLProperties.opacity = 0;
 
     while (!atEnd()) {
         readNext();
@@ -727,10 +751,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
-    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
-
     if (!m_currentVMLProperties.insideGroup) {
 
         const QString width(m_currentVMLProperties.vmlStyle.value("width"));
@@ -776,23 +796,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     m_currentVMLProperties.wrapRead = false;
 
-    m_currentVMLProperties.strokeWidth = "1pt" ; // This seems to be the default
-    m_currentVMLProperties.shapeColor.clear();
-    m_currentVMLProperties.strokeColor.clear();
-    m_currentVMLProperties.lineCapStyle = "square";
-    m_currentVMLProperties.joinStyle = "middle";
-    m_currentVMLProperties.strokeStyleName = QString();
-    m_currentVMLProperties.filled = QString();
-    m_currentVMLProperties.stroked = QString();
-    m_currentVMLProperties.shadowed = false;
-    m_currentVMLProperties.opacity = 0;
-
-    if (!strokeweight.isEmpty()) {
-        if (strokeweight.at(0) == '.') {
-            m_currentVMLProperties.strokeWidth = "0" + strokeweight;
-        }
-        m_currentVMLProperties.strokeColor = "#000000"; // Black color seems to be default
-    }
+    takeDefaultValues();
+    handleStrokeAndFill(attrs);
 
     while (!atEnd()) {
         readNext();
@@ -848,19 +853,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     body = frameBuf.originalWriter();
 
-    TRY_READ_ATTR_WITHOUT_NS(filled)
-    if (filled != "f" && filled != "false") {
-        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(stroked)
-    if (stroked == "f" || stroked == "false") {
-        m_currentVMLProperties.strokeWidth = QString();
-    }
-    else if (!strokecolor.isEmpty()) {
-        m_currentVMLProperties.strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
-    }
-
     createFrameStart(GroupStart);
 
     (void)frameBuf.releaseWriter();
@@ -886,6 +878,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 
+    takeDefaultValues();
     handleStrokeAndFill(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
@@ -893,8 +886,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 
     bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
-    m_currentVMLProperties.shadowed = false;
-    m_currentVMLProperties.opacity = 0;
 
     while (!atEnd()) {
         readNext();
@@ -1570,13 +1561,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
         m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(enPath);
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(filled)
-    m_currentVMLProperties.filled = filled;
-    TRY_READ_ATTR_WITHOUT_NS(stroked)
-    m_currentVMLProperties.stroked = stroked;
-
-    m_currentVMLProperties.shadowed = false;
-    m_currentVMLProperties.opacity = 0;
+    takeDefaultValues();
+    handleStrokeAndFill(attrs);
 
     m_currentVMLProperties.shapeTypeString += ">";
 
@@ -1801,9 +1787,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS(type)
     if (!type.isEmpty()) {
         type = type.mid(1); // removes extra # from the start
+        // Inheriting all values from the template shape
+         m_currentVMLProperties = m_definedShapeTypes.value(type);
     }
-    // Inheriting all values from the template shape
-    m_currentVMLProperties = m_definedShapeTypes.value(type);
+    else {
+        takeDefaultValues();
+    }
+
+    handleStrokeAndFill(attrs);
 
     TRY_READ_ATTR_WITHOUT_NS(id)
     m_currentVMLProperties.currentShapeId = id;
@@ -1848,8 +1839,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         m_currentVMLProperties.shapeTypeString += ">";
     }
 
-    handleStrokeAndFill(attrs);
-
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
@@ -1859,8 +1848,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     }
 
     m_currentVMLProperties.wrapRead = false;
-    m_currentVMLProperties.shadowed = false;
-    m_currentVMLProperties.opacity = 0;
 
     bool isCustomShape = true;
 

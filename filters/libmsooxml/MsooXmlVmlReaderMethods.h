@@ -53,6 +53,7 @@ protected:
     KoFilter::ConversionStatus read_shadow();
 
     void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
+    void takeDefaultValues();
 
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
@@ -89,9 +90,8 @@ protected:
         QString shapeAltText; //!< set in read_shape()
         QString shapeTitle; //!< set in read_shape()
 
-        QString stroked, filled;
+        bool stroked, filled, shadowed;
 
-        bool shadowed;
         QString shadowColor;
         QString shadowXOffset, shadowYOffset;
 

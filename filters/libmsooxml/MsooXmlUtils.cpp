@@ -1333,6 +1333,12 @@ MSOOXML_EXPORT QString Utils::rgbColor(QString color)
     else if (color == "yellow") {
         newColor = "#ffff00";
     }
+    else if (color == "window") {
+        newColor = "#ffffff";
+    }
+    else if (color == "windowText") {
+        newColor = "#000000";
+    }
     else {
         newColor = color;
     }
