@@ -200,7 +200,7 @@ void KPrSelectionManager::setItemSelected(bool selected)
 {
     emit selectionChanged();
 
-    if (m_toggle && m_toggle->index() != QModelIndex()) {
+    if (m_toggle && m_toggle->index().isValid()) {
         QModelIndex index = m_toggle->index();
         if (index.isValid()) {
             QItemSelectionModel* selModel = m_view->selectionModel();
@@ -231,7 +231,7 @@ void KPrSelectionManager::slotSelectionChanged(const QItemSelection& selected,
     // The selection has been changed outside the scope of the selection manager
     // (e. g. by the rubberband or the "Select All" action). Take care updating
     // the state of the toggle button.
-    if (m_toggle && m_toggle->index() != QModelIndex()) {
+    if (m_toggle && m_toggle->index().isValid()) {
         const QModelIndex index = m_toggle->index();
         if (index.isValid()) {
             if (selected.contains(index)) {

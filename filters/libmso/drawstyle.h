@@ -45,7 +45,7 @@ public:
                        const MSO::OfficeArtSpContainer* sp_ = 0)
             : d(d_), mastersp(mastersp_), sp(sp_) {}
 
-    // Shape Property Set
+    // Shape property set
     quint32 hspMaster() const;
     quint32 cxstyle() const;
     quint32 bWMode() const;
@@ -60,7 +60,7 @@ public:
     bool fPolicyBarcode() const;
     bool fPolicyLabel() const;
 
-    // Group Shape Property Set
+    // Group Shape property set
     quint32 pWrapPolygonVertices() const;
     IMsoArray pWrapPolygonVertices_complex() const;
     qint32 dxWrapDistLeft() const;
@@ -110,7 +110,7 @@ public:
     bool fUsefIsBullet() const;
     bool fUsefLayoutInCell() const;
 
-    // Geometry Property Set
+    // Geometry property set
     qint32 geoLeft() const;
     qint32 geoTop() const;
     qint32 geoRight() const;
@@ -134,7 +134,7 @@ public:
     bool f3DOK() const;
     bool fShadowOK() const;
 
-    // Fill Style Property Set
+    // Fill Style property set
     quint32 fillType() const;
     MSO::OfficeArtCOLORREF fillColor() const;
     MSO::FixedPoint        fillOpacity() const;
@@ -196,7 +196,7 @@ public:
     bool fInsetPen() const;
     bool fLineOpaqueBackColor() const;
 
-    // Shadow Style Property Set
+    // Shadow Style property set
     quint32 shadowType() const;
     MSO::OfficeArtCOLORREF shadowColor() const;
     MSO::FixedPoint shadowOpacity() const;
@@ -206,10 +206,17 @@ public:
     bool fShadowObscured() const;
     bool fShadow() const;
 
-    // Transformation Property set
+    // Diagram property set
+    // Diagram Boolean Properties
+    bool fPseudoInline() const;
+    bool fDoLayout() const;
+    bool fReverse() const;
+    bool fDoFormat() const;
+
+    // Transformation property set
     MSO::FixedPoint rotation() const;
 
-    // Text Property Set
+    // Text property set
     qint32 iTxid() const;
     qint32 dxTextLeft() const;
     qint32 dyTextTop() const;
@@ -226,7 +233,7 @@ public:
     bool fAutoTextMargin() const;
     bool fSelectText() const;
 
-    // Blip Property Set
+    // Blip property set
     MSO::FixedPoint cropFromTop() const;
     MSO::FixedPoint cropFromBottom() const;
     MSO::FixedPoint cropFromLeft() const;

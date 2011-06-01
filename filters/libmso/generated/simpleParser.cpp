@@ -9143,28 +9143,22 @@ void MSO::parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanPropert
     if (!(_s.opid.fComplex == false)) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
-    _s.fLockAgainstGrouping = in.readbit();
-    _s.fLockAdjustHandles = in.readbit();
-    _s.fLockText = in.readbit();
-    _s.fLockVertices = in.readbit();
-    _s.fLockCropping = in.readbit();
-    _s.fLockAgainstSelect = in.readbit();
-    _s.fLockPosition = in.readbit();
-    _s.fLockAspectRatio = in.readbit();
-    _s.fLockRotation = in.readbit();
-    _s.fLockAgainstUngrouping = in.readbit();
-    _s.unused6 = in.readuint6();
-    _s.fUsefLockAgainstGrouping = in.readbit();
-    _s.fUseLockAdjustHandles = in.readbit();
-    _s.fUseLockText = in.readbit();
-    _s.fUsefLockVertices = in.readbit();
-    _s.fUsefLockCropping = in.readbit();
-    _s.fUsefLockAgainstSelect = in.readbit();
-    _s.fUsefLockPosition = in.readbit();
-    _s.fUsefLockAspectRatio = in.readbit();
-    _s.fUsefLockRotation = in.readbit();
-    _s.fUsefLockAgainstUngrouping = in.readbit();
-    _s.unused2 = in.readuint6();
+    _s.fPseudoInline = in.readbit();
+    _s.fDoLayout = in.readbit();
+    _s.fReverse = in.readbit();
+    _s.fDoFormat = in.readbit();
+    _s.unused1 = in.readbit();
+    _s.unused2 = in.readbit();
+    _s.unused3a = in.readuint2();
+    _s.unused3b = in.readuint8();
+    _s.fUsefPseudoInline = in.readbit();
+    _s.fUsefDoLayout = in.readbit();
+    _s.fUsefReverse = in.readbit();
+    _s.fUsefDoFormat = in.readbit();
+    _s.unused4 = in.readbit();
+    _s.unused5 = in.readbit();
+    _s.unused6a = in.readuint2();
+    _s.unused6b = in.readuint8();
 }
 void MSO::parsePptOfficeArtClientAnchor(LEInputStream& in, PptOfficeArtClientAnchor& _s) {
     _s.streamOffset = in.getPosition();

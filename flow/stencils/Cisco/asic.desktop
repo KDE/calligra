@@ -2,6 +2,7 @@
 Name=ASIC Processor
 Name[el]=Επεξεργαστής ASIC
 Name[et]=ASIC protsessor
+Name[nb]=ASIC-prosessor
 Name[nl]=ASIC-processor
 Name[pt]=Processador ASIC
 Name[pt_BR]=Processador ASIC
@@ -9,3 +10,4 @@ Name[sv]=Kundanpassad processorkrets
 Name[uk]=Процесор ASIC
 Name[x-test]=xxASIC Processorxx
 Name[zh_CN]=ASIC 处理器
+Name[zh_TW]=ASIC 處理器

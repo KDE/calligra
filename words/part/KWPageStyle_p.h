@@ -30,6 +30,7 @@ public:
     ~KWPageStylePrivate();
     void clear();
 
+    KWPageStyle::PageUsageType pageUsage;
     KoColumns columns;
     KoPageLayout pageLayout;
     QString name;
@@ -50,6 +51,7 @@ public:
 
     // called from the command
     void copyProperties(KWPageStylePrivate *other) {
+        pageUsage = other->pageUsage;
         columns = other->columns;
         pageLayout = other->pageLayout;
         //name = other->name;

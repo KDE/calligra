@@ -765,7 +765,6 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     if (m_currentTable) {
         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
     }
-
     //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
     bool inStylesDotXml = false;
@@ -774,6 +773,8 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         inStylesDotXml = true;
     }
 
+    const wvWare::StyleSheet& styles = m_parser->styleSheet();
+    const wvWare::Style* paragraphStyle = 0;
     m_currentPPs = paragraphProperties;
 
     // Check list information, because that's bigger than a paragraph, and
@@ -785,26 +786,46 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
     //TODO: <text:numbered-paragraph>
 
-    //TODO: Put all the heading related logic here!
+    //headings related logic
     if (paragraphProperties) {
-        uint istd = paragraphProperties->pap().istd;
+        quint16 istd = paragraphProperties->pap().istd;
+
+        //Check for a named style for this paragraph.
+        paragraphStyle = styles.styleByIndex(istd);
+        if (!paragraphStyle) {
+            paragraphStyle = styles.styleByID(stiNormal);
+            kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
+        }
+        Q_ASSERT(paragraphStyle);
+
+        //An unsigned integer that specifies the istd of the parent style from
+        //which this style inherits in the style inheritance tree, or 0x0FFF if
+        //this style does not inherit from any other style.
+        quint16 istdBase = 0x0fff;
+        if (!paragraphStyle->isEmpty()) {
+            istdBase = paragraphStyle->m_std->istdBase;
+        }
+//         kDebug(30513) << "istd:" << istd << "| istdBase:" << istdBase;
 
         //Applying a heading style, paragraph is a heading.
         if ( (istd >= 0x1) && (istd <= 0x9) ) {
             isHeading = true;
             //according to [MS-DOC] - v20100926
             outlineLevel = istd - 1;
+        } else if ( (istdBase >= 0x1) && (istdBase <= 0x9) ) {
+            isHeading = true;
+            outlineLevel = istdBase - 1;
+        }
+        if (isHeading) {
             //MS-DOC outline level is ZERO based, whereas ODF has ONE based.
             outlineLevel++;
         }
+    } else {
+        Q_ASSERT(paragraphProperties);
     }
 
-    // ilfo = when non-zero, (1-based) index into the pllfo identifying the
-    // list to which the paragraph belongs.
-    if (!paragraphProperties) {
-        // TODO: What to do here?
-        kDebug(30513) << "PAP Missing (Big mess-up!)";
-    } else if ( (paragraphProperties->pap().ilfo == 0)) {
+    //lists related logic
+    if (paragraphProperties->pap().ilfo == 0) {
 
         // Not in a list at all in the word document, so check if we need to
         // close one in the odt.
@@ -852,41 +873,14 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     kDebug(30513) << "create new Paragraph";
     m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
 
+    //set paragraph properties
+    m_paragraph->setParagraphProperties(paragraphProperties);
+
+    //set current named style in m_paragraph
+    m_paragraph->setParagraphStyle(paragraphStyle);
+
     //provide the background color information
     m_paragraph->setBgColor(m_document->currentBgColor());
-
-    //if ( m_bInParagraph )
-    //    paragraphEnd();
-    //m_bInParagraph = true;
-    //kDebug(30513) <<"paragraphStart. style index:" << paragraphProperties->pap().istd;
-
-    kDebug(30513) << "set paragraph properties";
-    m_paragraph->setParagraphProperties(paragraphProperties);
-    const wvWare::StyleSheet& styles = m_parser->styleSheet();
-    //m_currentStyle = 0;
-
-    //Check for a named style for this paragraph.  paragraphProperties are
-    //always set when called by wv2.  But not set when called by tableStart.
-    if (paragraphProperties) {
-        kDebug(30513) << "set paragraph style";
-
-        //TODO: It would be secure to end with KoFilter::InvalidFormat
-        const wvWare::Style* paragraphStyle = styles.styleByIndex(paragraphProperties->pap().istd);
-        if (!paragraphStyle && styles.size()) {
-            paragraphStyle = styles.styleByID(stiNormal);
-            kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
-        }
-        Q_ASSERT(paragraphStyle);
-
-        //set current named style in m_paragraph
-        m_paragraph->setParagraphStyle(paragraphStyle);
-
-        //write the paragraph formatting
-        //KoGenStyle* paragraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
-        //writeLayout(*paragraphProperties, paragraphStyle, m_currentStyle, true, namedStyleName);
-    } else {
-        kWarning() << "paragraphProperties NOT set!";
-    }
 
     KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
 
@@ -897,8 +891,9 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         document()->set_writeMasterPageName(false);
     }
     //check if the break-before property is required
-    if (m_breakBeforePage &&
-        !document()->writingHeader() && !paragraphProperties->pap().fInTable)
+    if ( m_breakBeforePage &&
+         !document()->writingHeader() &&
+         !paragraphProperties->pap().fInTable )
     {
         style->addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
         m_breakBeforePage = false;

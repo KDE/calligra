@@ -60,26 +60,18 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
     QListView::paintEvent(event);
 
     // Paint the line where the slide should go
-    int lastItem = lastItemNumber();
-    int currentItemNumber = lastItem;
-
-    //20 is for the rigth margin
-    int slidesNumber = qFloor((contentsRect().width() - 20)/itemSize().width());
-
-    if (isDraging() && currentItemNumber >= 0) {
+    if (isDraging()) {
 
         QSize size(itemSize().width(), itemSize().height());
 
-        int numberMod = currentItemNumber % slidesNumber;
+        QPair <int, int> m_pair = cursorRowAndColumn();
 
-        //put line after last slide.
-        if (numberMod == 0 && currentItemNumber == model()->rowCount(QModelIndex())) {
-            numberMod = slidesNumber;
-        }
-        int verticalValue = (currentItemNumber - numberMod) / slidesNumber * size.height() - verticalScrollBar()->value();
+        int numberColumn = m_pair.first;
+        int numberRow = m_pair.second;
 
-        QPoint point1(numberMod * size.width(), verticalValue);
-        QPoint point2(numberMod * size.width(), verticalValue + size.height());
+        QPoint point1(numberColumn * size.width(), numberRow * size.height());
+        QPoint point2(numberColumn * size.width(), (numberRow + 1) * size.height());
+
         QLineF line(point1, point2);
 
         QPainter painter(this->viewport());
@@ -101,8 +93,20 @@ void KPrSlidesManagerView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void KPrSlidesManagerView::startDrag(Qt::DropActions supportedActions)
 {
-    Q_UNUSED(supportedActions);
-    QAbstractItemView::startDrag(Qt::MoveAction);
+    const QModelIndexList indexes = selectionModel()->selectedIndexes();
+    if (!indexes.isEmpty()) {
+        QMimeData *data = model()->mimeData(indexes);
+        if (!data) {
+            return;
+        }
+
+        QDrag* drag = new QDrag(this);
+        drag->setPixmap(createDragPixmap());
+        drag->setMimeData(data);
+
+        //m_dragSource = this;
+        drag->exec(supportedActions, Qt::CopyAction);
+    }
 }
 
 void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
@@ -113,17 +117,18 @@ void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 
     clearSelection();
 
-    int newIndex;
-    QModelIndex itemNew = indexAt(ev->pos());
-    newIndex = itemNew.row();
-    model()->dropMimeData (ev->mimeData (), Qt::MoveAction, newIndex, -1, QModelIndex());
+    int newIndex = cursorSlideIndex();
+
+    if (newIndex >= model()->rowCount(QModelIndex()))
+        newIndex = -1;
+
+    model()->dropMimeData(ev->mimeData(), Qt::MoveAction, newIndex, -1, QModelIndex());
 }
 
 void KPrSlidesManagerView::dragMoveEvent(QDragMoveEvent *ev)
 {
     ev->accept();
-    setDragingFlag ();
-    pageBefore(ev->pos());
+    setDragingFlag();
     viewport()->update();
 }
 
@@ -135,29 +140,11 @@ void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-int KPrSlidesManagerView::pageBefore(QPoint point)
-{
-    QModelIndex item = indexAt(point);
-    int pageBeforeNumber = -1;
-    if (item.row()>=0) {
-        //normal case
-        pageBeforeNumber = item.row();
-    } else {
-        //after the last slide
-        pageBeforeNumber = model()->rowCount(QModelIndex());
-    }
-    setLastItemNumber(pageBeforeNumber);
-    return pageBeforeNumber;
-}
 
-void KPrSlidesManagerView::setLastItemNumber(int number)
+void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    m_lastItemNumber = number;
-}
-
-int KPrSlidesManagerView::lastItemNumber()
-{
-    return m_lastItemNumber;
+    Q_UNUSED(e);
+    setDragingFlag(false);
 }
 
 QRect KPrSlidesManagerView::itemSize() const
@@ -191,8 +178,8 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
             //Left button is used to deselect, but rigth button needs a selected item for
             //context menu actions
             if ((item.row() < 0) & (mouseEv->button() != Qt::LeftButton) ) {
-                // Selects the last item
-                QModelIndex last_index = model()->index(model()->rowCount(QModelIndex()) - 1, 0, QModelIndex());
+                // Selects the last item of the row
+                QModelIndex last_index = model()->index(cursorSlideIndex() - 1, 0, QModelIndex());
                 setCurrentIndex(last_index);
                 emit indexChanged(last_index);
             }
@@ -205,4 +192,100 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QObject::eventFilter(watched, event);
+}
+
+QPixmap KPrSlidesManagerView::createDragPixmap() const
+{
+    const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+     Q_ASSERT(!selectedIndexes.isEmpty());
+
+     const int itemCount = selectedIndexes.count();
+
+     // If more than one item is dragged, align the items inside a
+     // rectangular grid. The maximum grid size is limited to 4 x 4 items.
+     int xCount = 2;
+     int size = KIconLoader::SizeHuge;
+     if (itemCount > 9) {
+         xCount = 4;
+         size = KIconLoader::SizeMedium;
+     } else if (itemCount > 5) {
+         xCount = 3;
+         size = KIconLoader::SizeLarge;
+     }
+
+     if (itemCount < xCount) {
+         xCount = itemCount;
+     }
+
+     int yCount = itemCount / xCount;
+     if (itemCount % xCount != 0) {
+         ++yCount;
+     }
+     if (yCount > xCount) {
+         yCount = xCount;
+     }
+
+     // Draw the selected items into the grid cells
+     QPixmap dragPixmap(xCount * size + xCount - 1, yCount * size + yCount - 1);
+     dragPixmap.fill(Qt::transparent);
+
+     QPainter painter(&dragPixmap);
+     int x = 0;
+     int y = 0;
+     foreach (const QModelIndex& selectedIndex, selectedIndexes) {
+         const QIcon icon = (model()->data(selectedIndex, Qt::DecorationRole)).value<QIcon>();
+         painter.drawPixmap(x, y, icon.pixmap(size, size));
+
+         x += size + 1;
+         if (x >= dragPixmap.width()) {
+             x = 0;
+             y += size + 1;
+         }
+         if (y >= dragPixmap.height()) {
+             break;
+         }
+     }
+
+     return dragPixmap;
+}
+
+int KPrSlidesManagerView::cursorSlideIndex() const
+{
+    QPair <int, int> m_pair = cursorRowAndColumn();
+    int slidesNumber = qFloor((contentsRect().width() - 20)/itemSize().width());
+    return (m_pair.first + m_pair.second * slidesNumber);
+}
+
+QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
+{
+    //20 is for the margin.
+    int slidesNumber = qFloor((contentsRect().width() - 20)/itemSize().width());
+
+    QSize size(itemSize().width(), itemSize().height());
+    QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
+
+    int numberColumn = qFloor(cursorPosition.x()/size.width());
+    int numberRow = qFloor(cursorPosition.y()/size.height());
+    int numberMod = (numberColumn + slidesNumber * numberRow) % (model()->rowCount(QModelIndex()) + 1);
+
+     int totalRows = qCeil((model()->rowCount(QModelIndex()))/slidesNumber);
+
+    if (numberColumn > slidesNumber) {
+        numberColumn = slidesNumber;
+    }
+
+    if (numberColumn > numberMod) {
+        numberColumn = numberColumn - (numberMod + 1);
+    }
+
+    if (numberRow > totalRows) {
+        numberRow = totalRows;
+        numberColumn = model()->rowCount(QModelIndex()) % slidesNumber;
+    }
+
+    QPair <int, int> m_pair;
+    m_pair.first = numberColumn;
+    m_pair.second = numberRow;
+
+    return m_pair;
 }

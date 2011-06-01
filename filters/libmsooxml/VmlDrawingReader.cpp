@@ -118,13 +118,16 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
             break;
         }
         if (isStartElement()) {
-            if (qualifiedName() == "v:shape") {
-                TRY_READ(shape) //from vml
-                m_content[m_currentVMLProperties.currentShapeId] = m_currentVMLProperties.imagedataPath;
+            if (name() == "shapetype") {
+                TRY_READ(shapetype)
+            }
+            else if (name() == "shape") {
                 oldBody = body; // Body protetion starts
                 QBuffer frameBuf;
                 KoXmlWriter frameWriter(&frameBuf);
                 body = &frameWriter;
+                TRY_READ(shape) //from vml
+                m_content[m_currentVMLProperties.currentShapeId] = m_currentVMLProperties.imagedataPath;
                 pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
                 createFrameStart();
                 popCurrentDrawStyle();
