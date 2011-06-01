@@ -5,6 +5,7 @@
 #include <QSize>
 
 class KPrCustomSlideShows;
+class KoPAPageBase;
 
 class KPrCustomSlideShowsModel : public QAbstractListModel
 {
@@ -16,19 +17,28 @@ public:
 
     int rowCount(const QModelIndex &parent) const;
 
-    //virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
 
-    //virtual QStringList mimeTypes() const;
+    virtual QStringList mimeTypes() const;
 
-    //virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
+    virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
 
-    //virtual Qt::DropActions supportedDropActions() const;
+    virtual Qt::DropActions supportedDropActions() const;
 
     //virtual bool removeRows(int row, int count, const QModelIndex &parent);
 
-    //virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    //virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+    virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+
+    /**
+     * Drop selected slides (copy/move) if a modifier key is pressed
+     * or display a context menu with alternatives.
+     * @param slides list of slides to be dropped
+     * @param pageAfter destination of the drop
+     * @param action the drop action
+     */
+    void doDrop(QList<KoPAPageBase *> slides, KoPAPageBase * pageAfter, Qt::DropAction action);
 
     void setCustomSlideShows(KPrCustomSlideShows *customShows);
 

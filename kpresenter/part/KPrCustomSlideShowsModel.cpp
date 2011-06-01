@@ -6,12 +6,17 @@
 
 //Calligra headers
 #include "KoPAPageBase.h"
+#include "KoPAPageBase.h"
 
 //KDE headers
 #include "KLocalizedString"
+#include "KIcon"
 
 //Qt headers
 #include <QIcon>
+#include <QMimeData>
+#include <QApplication>
+#include <QMenu>
 
 KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(QObject *parent, KPrCustomSlideShows *customShows)
     : QAbstractListModel(parent)
@@ -62,6 +67,193 @@ int KPrCustomSlideShowsModel::rowCount(const QModelIndex &parent) const
     }
 
     return 0;
+}
+
+Qt::ItemFlags KPrCustomSlideShowsModel::flags(const QModelIndex &index) const
+{
+    if (m_currentSlideShowName.isEmpty()) {
+        return 0;
+    }
+
+    Qt::ItemFlags defaultFlags = QAbstractListModel::flags (index);
+
+    if (index.isValid()) {
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    } else {
+        return Qt::ItemIsDropEnabled | defaultFlags;
+    }
+}
+
+QModelIndex KPrCustomSlideShowsModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if(m_currentSlideShowName.isEmpty())
+        return QModelIndex();
+
+    // check if parent is root node
+    if(!parent.isValid())
+    {
+        if(row >= 0 && row < rowCount(QModelIndex()))
+            return createIndex(row, column, m_customShows->pageByIndex(m_currentSlideShowName, row));
+    }
+    return QModelIndex();
+}
+
+QStringList KPrCustomSlideShowsModel::mimeTypes() const
+{
+    return QStringList() << "application/x-koffice-customslideshows";
+}
+
+QMimeData * KPrCustomSlideShowsModel::mimeData(const QModelIndexList &indexes) const
+{
+    // check if there is data to encode
+    if( ! indexes.count() )
+        return 0;
+
+    // check if we support a format
+    QStringList types = mimeTypes();
+    if( types.isEmpty() )
+        return 0;
+
+    QMimeData *data = new QMimeData();
+    QString format = types[0];
+    QByteArray encoded;
+    QDataStream stream(&encoded, QIODevice::WriteOnly);
+
+    // encode the data
+    QModelIndexList::ConstIterator it = indexes.begin();
+    for( ; it != indexes.end(); ++it)
+        stream << QVariant::fromValue( qulonglong( it->internalPointer() ) );
+
+    data->setData(format, encoded);
+    return data;
+}
+
+Qt::DropActions KPrCustomSlideShowsModel::supportedDropActions() const
+{
+    return Qt::MoveAction | Qt::CopyAction;
+}
+
+bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+    if (action == Qt::IgnoreAction) {
+        return true;
+    }
+
+    if (!data->hasFormat("application/x-koffice-sliderssorter") & !data->hasFormat("application/x-koffice-customslideshows")) {
+        return false;
+    }
+
+    if (column > 0) {
+        return false;
+    }
+
+    QList<KoPAPageBase *> slides;
+
+    int beginRow;
+
+    if (row != -1) {
+        beginRow = row;
+    } else if (parent.isValid()) {
+        beginRow = parent.row();
+    } else {
+        beginRow = rowCount(QModelIndex());
+    }
+
+    if (data->hasFormat("application/x-koffice-sliderssorter")) {
+
+        QByteArray encoded = data->data("application/x-koffice-sliderssorter");
+        QDataStream stream(&encoded, QIODevice::ReadOnly);
+
+        // decode the data
+        while( ! stream.atEnd() )
+        {
+            QVariant v;
+            stream >> v;
+            slides.append( static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
+        }
+
+        if (slides.empty ()) {
+            return false;
+        }
+
+        qSort(slides.begin(), slides.end());
+
+        //get the slideshow
+        QList<KoPAPageBase*> selectedSlideShow = m_customShows->getByName(m_currentSlideShowName);
+
+        //insert the slides and update the Widget
+        int i = beginRow;
+        foreach(KoPAPageBase* page, slides)
+        {
+            selectedSlideShow.insert(i, page);
+            i++;
+        }
+
+        //update the SlideShow with the resulting list
+        m_customShows->update(m_currentSlideShowName, selectedSlideShow);
+        reset();
+
+        return true;
+    }
+
+    return false;
+}
+
+void KPrCustomSlideShowsModel::doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action)
+{
+    Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+
+    if (((modifiers & Qt::ControlModifier) == 0) &&
+        ((modifiers & Qt::ShiftModifier) == 0)) {
+           QMenu popup;
+           QString seq = QKeySequence(Qt::ShiftModifier).toString();
+           seq.chop(1);
+           QAction* popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
+           popupMoveAction->setIcon(KIcon("go-jump"));
+           seq = QKeySequence(Qt::ControlModifier).toString();
+           seq.chop(1);
+           QAction* popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
+           popupCopyAction->setIcon(KIcon("edit-copy"));
+           seq = QKeySequence( Qt::ControlModifier + Qt::ShiftModifier ).toString();
+           seq.chop(1);
+           QAction* popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
+           popupCancelAction->setIcon(KIcon("process-stop"));
+
+           popup.addAction(popupMoveAction);
+           popup.addAction(popupCopyAction);
+
+           popup.addSeparator();
+           popup.addAction(popupCancelAction);
+
+           QAction* result = popup.exec(QCursor::pos());
+
+           if(result == popupCopyAction)
+               action = Qt::CopyAction;
+           else if(result == popupMoveAction)
+               action = Qt::MoveAction;
+           else {
+               return;
+           }
+    } else if ((modifiers & Qt::ControlModifier) != 0) {
+        action = Qt::CopyAction;
+    } else if ((modifiers & Qt::ShiftModifier) != 0) {
+        action = Qt::MoveAction;
+    } else {
+        return;
+    }
+
+
+   switch ( action ) {
+   case Qt::MoveAction : {
+       return;
+   }
+   case Qt::CopyAction : {
+       return;
+   }
+   default :
+       qDebug("Unknown action: %d ", (int)action);
+       return;
+   }
 }
 
 void KPrCustomSlideShowsModel::setCustomSlideShows(KPrCustomSlideShows *customShows)

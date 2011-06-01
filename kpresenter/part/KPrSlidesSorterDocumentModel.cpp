@@ -38,8 +38,8 @@
 
 //Qt Headers
 #include <QMimeData>
-#include <QMenu>
 #include <QApplication>
+#include <QMenu>
 
 
 KPrSlidesSorterDocumentModel::KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document)
@@ -126,15 +126,13 @@ QStringList KPrSlidesSorterDocumentModel::mimeTypes() const
 QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexes) const
 {
     // check if there is data to encode
-    if (! indexes.count()) {
+    if( ! indexes.count() )
         return 0;
-    }
 
     // check if we support a format
     QStringList types = mimeTypes();
-    if (types.isEmpty()) {
+    if( types.isEmpty() )
         return 0;
-    }
 
     QMimeData *data = new QMimeData();
     QString format = types[0];
@@ -143,9 +141,8 @@ QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexe
 
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
-    for (; it != indexes.end(); ++it) {
-        stream << QVariant::fromValue((*it).row());
-    }
+    for( ; it != indexes.end(); ++it)
+        stream << QVariant::fromValue( qulonglong( it->internalPointer() ) );
 
     data->setData(format, encoded);
     return data;
@@ -202,16 +199,14 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
 
     QByteArray encoded = data->data("application/x-koffice-sliderssorter");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
-    QList<KoPAPageBase *> slides;
+    QList<KoPAPageBase *> slides;   
 
     // decode the data
-    while (! stream.atEnd()) {
+    while( ! stream.atEnd() )
+    {
         QVariant v;
         stream >> v;
-        KoPAPageBase *page = m_document->pageByIndex(v.toInt (),false);
-        if (page) {
-            slides.append(page);
-        }
+        slides.append( static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
     }
 
     if (slides.empty ()) {
@@ -242,7 +237,6 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
     }
 
     return true;
-
 }
 
 void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action)
