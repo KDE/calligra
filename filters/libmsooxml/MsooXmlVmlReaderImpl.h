@@ -318,6 +318,13 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
+    if (m_currentVMLProperties.shadowed == true) {
+        m_currentDrawStyle->addProperty("draw:shadow", "visible");
+        m_currentDrawStyle->addProperty("draw:shadow-color", m_currentVMLProperties.shadowColor);
+        m_currentDrawStyle->addProperty("draw:shadow-offset-x", m_currentVMLProperties.shadowXOffset);
+        m_currentDrawStyle->addProperty("draw:shadow-offset-y", m_currentVMLProperties.shadowYOffset);
+    }
+
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
         body->addAttribute("draw:style-name", drawStyleName);
@@ -374,6 +381,7 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
     m_currentVMLProperties.joinStyle = "middle";
     m_currentVMLProperties.strokeStyleName = QString();
     m_currentVMLProperties.filled = QString();
+
     m_currentVMLProperties.stroked = QString();
 
     if (!strokeweight.isEmpty()) {
@@ -437,7 +445,7 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
  - imagedata (Image Data) §14.1.2.11
  - lock (Shape Protections) §14.2.2.18
  - path (Shape Path) §14.1.2.14
- - shadow (Shadow Effect) §14.1.2.18
+ - [done] shadow (Shadow Effect) §14.1.2.18
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
  - [done] stroke (Line Stroke Settings) §14.1.2.21
@@ -480,6 +488,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
                 textBoxOrImage = true;
             }
             ELSE_TRY_READ_IF(stroke)
+            ELSE_TRY_READ_IF(shadow)
             else if (qualifiedName() == "w10:wrap") {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
@@ -509,8 +518,83 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL shadow
+//! Shadow handler
+/*
+ Parent elements:
+ - arc (§14.1.2.1);
+ - background (Part 1, §17.2.1);
+ - curve (§14.1.2.3);
+ - [done] group (§14.1.2.7);
+ - image (§14.1.2.10);
+ - line (§14.1.2.12);
+ - object (Part 1, §17.3.3.19);
+ - [done] oval (§14.1.2.13);
+ - pict (§9.2.2.2);
+ - pict (§9.5.1);
+ - polyline (§14.1.2.15);
+ - [done] rect (§14.1.2.16);
+ - [done] roundrect (§14.1.2.17);
+ - [done] shape (§14.1.2.19);
+ - shapedefaults (§14.2.2.28);
+ - [done] shapetype (§14.1.2.20)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(on)
+    TRY_READ_ATTR_WITHOUT_NS(color)
+    TRY_READ_ATTR_WITHOUT_NS(offset)
+
+    if (on == "t" || on == "true") {
+        m_currentVMLProperties.shadowed = true;
+    }
+
+    m_currentVMLProperties.shadowColor = MSOOXML::Utils::rgbColor(color);
+
+    int index = offset.indexOf(',');
+    if (index > 0) {
+        m_currentVMLProperties.shadowXOffset = offset.left(index);
+        m_currentVMLProperties.shadowYOffset = offset.mid(index + 1);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL stroke
 //! Stroke style handler
+/*
+ Parent elements:
+ - arc (§14.1.2.1);
+ - background (Part 1, §17.2.1);
+ - curve (§14.1.2.3);
+ - [done] group (§14.1.2.7);
+ - image (§14.1.2.10);
+ - line (§14.1.2.12);
+ - object (Part 1, §17.3.3.19);
+ - [done] oval (§14.1.2.13);
+ - pict (§9.2.2.2);
+ - pict (§9.5.1);
+ - polyline (§14.1.2.15);
+ - [done] rect (§14.1.2.16);
+ - [done] roundrect (§14.1.2.17);
+ - [done] shape (§14.1.2.19);
+ - shapedefaults (§14.2.2.28);
+ - [done] shapetype (§14.1.2.20)
+
+ Child elements:
+ - bottom (Text Box Bottom Stroke) §14.2.2.1
+ - column (Text Box Interior Stroke) §14.2.2.6
+ - left (Text Box Left Stroke) §14.2.2.16
+ - right (Text Box Right Stroke) §14.2.2.26
+ - top (Text Box Top Stroke) §14.2.2.32
+*/
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
 {
     READ_PROLOGUE
@@ -569,7 +653,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     // TODO
     }
 
-    readNext();
+    while (!atEnd()) {
+        BREAK_IF_END_OF(CURRENT_EL)
+        readNext();
+    }
+
     READ_EPILOGUE
 }
 
@@ -610,7 +698,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
  - polyline (Multiple Path Line) §14.1.2.15
  - [done] rect (Rectangle) §14.1.2.16
  - [done] roundrect (Rounded Rectangle) §14.1.2.17
- - shadow (Shadow Effect) §14.1.2.18
+ - [done] shadow (Shadow Effect) §14.1.2.18
  - [done] shape (Shape Definition) §14.1.2.19
  - [done] shapetype (Shape Template) §14.1.2.20
  - signatureline (Digital Signature Line) §14.2.2.30
@@ -690,6 +778,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     m_currentVMLProperties.strokeStyleName = QString();
     m_currentVMLProperties.filled = QString();
     m_currentVMLProperties.stroked = QString();
+    m_currentVMLProperties.shadowed = false;
 
     if (!strokeweight.isEmpty()) {
         if (strokeweight.at(0) == '.') {
@@ -740,6 +829,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
             }
             ELSE_TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(stroke)
+            ELSE_TRY_READ_IF(shadow)
             else if (qualifiedName() == "w10:wrap") {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
@@ -796,6 +886,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 
     bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
+    m_currentVMLProperties.shadowed = false;
 
     while (!atEnd()) {
         readNext();
@@ -809,6 +900,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
                 textBoxOrImage = true;
             }
             ELSE_TRY_READ_IF(stroke)
+            ELSE_TRY_READ_IF(shadow)
             else if (qualifiedName() == "w10:wrap") {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
@@ -885,19 +977,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
  - background (Part 1, §17.2.1)
  - background (§14.1.2.2)
  - curve (§14.1.2.3)
- - group (§14.1.2.7)
+ - [done] group (§14.1.2.7)
  - image (§14.1.2.10)
  - line (§14.1.2.12)
  - object (Part 1, §17.3.3.19)
- - oval (§14.1.2.13)
+ - [done] oval (§14.1.2.13)
  - pict (§9.2.2.2)
  - pict (§9.5.1)
  - polyline (§14.1.2.15)
  - [done] rect (§14.1.2.16)
- - roundrect (§14.1.2.17)
- - shape (§14.1.2.19)
+ - [done] roundrect (§14.1.2.17)
+ - [done] shape (§14.1.2.19)
  - shapedefaults (§14.2.2.28)
- - shapetype (§14.1.2.20)
+ - [done] shapetype (§14.1.2.20)
 
  Child elements:
  - fill (Shape Fill Extended Properties) §14.2.2.13
@@ -1397,7 +1489,7 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
 
  Parent elements:
  - background (Part 1, §17.2.1)
- - group (§14.1.2.7)
+ - [done] group (§14.1.2.7)
  - [done] object (Part 1, §17.3.3.19)
  - pict (§9.2.2.2)
  - pict (§9.5.1)
@@ -1409,16 +1501,16 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
  - clippath (Shape Clipping Path) §14.2.2.3
  - complex (Complex) §14.2.2.7
  - extrusion (3D Extrusion) §14.2.2.11
- - fill (Shape Fill Properties) §14.1.2.5
+ - [done] fill (Shape Fill Properties) §14.1.2.5
  - [done] formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
  - imagedata (Image Data) §14.1.2.11
  - lock (Shape Protections) §14.2.2.18
  - path (Shape Path) §14.1.2.14
- - shadow (Shadow Effect) §14.1.2.18
+ - [done shadow (Shadow Effect) §14.1.2.18
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
- - stroke (Line Stroke Settings) §14.1.2.21
+ - [done] stroke (Line Stroke Settings) §14.1.2.21
  - textbox (Text Box) §14.1.2.22
  - textdata (VML Diagram Text) §14.5.2.2
  - textpath (Text Layout Path) §14.1.2.23
@@ -1461,6 +1553,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
     TRY_READ_ATTR_WITHOUT_NS(stroked)
     m_currentVMLProperties.stroked = stroked;
 
+    m_currentVMLProperties.shadowed = false;
+
     m_currentVMLProperties.shapeTypeString += ">";
 
     while (!atEnd()) {
@@ -1468,6 +1562,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(formulas)
+            ELSE_TRY_READ_IF(shadow)
+            ELSE_TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(stroke)
             SKIP_UNKNOWN
         }
     }
@@ -1652,7 +1749,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
  - clippath (Shape Clipping Path) §14.2.2.3
  - equationxml (Storage for Alternate Math Content) §14.2.2.10
  - extrusion (3D Extrusion) §14.2.2.11
- - fill (Shape Fill Properties) §14.1.2.5
+ - [done] fill (Shape Fill Properties) §14.1.2.5
  - [done] formulas (Set of Formulas) §14.1.2.6
  - handles (Set of Handles) §14.1.2.9
  - [done] imagedata (Image Data) §14.1.2.11
@@ -1660,7 +1757,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
  - iscomment (Ink Annotation Flag) §14.5.2.1
  - lock (Shape Protections) §14.2.2.18
  - path (Shape Path) §14.1.2.14
- - shadow (Shadow Effect) §14.1.2.18
+ - [done] shadow (Shadow Effect) §14.1.2.18
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
  - [done] stroke (Line Stroke Settings) §14.1.2.21
@@ -1739,6 +1836,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     }
 
     m_currentVMLProperties.wrapRead = false;
+    m_currentVMLProperties.shadowed = false;
 
     bool isCustomShape = true;
 
@@ -1755,6 +1853,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 TRY_READ(textbox)
             }
             ELSE_TRY_READ_IF(stroke)
+            ELSE_TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(shadow)
             else if (qualifiedName() == "w10:wrap") {
                 m_currentVMLProperties.wrapRead = true;
                 TRY_READ(wrap)
