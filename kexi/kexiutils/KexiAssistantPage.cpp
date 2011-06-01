@@ -112,7 +112,7 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->mainLyr->addWidget(titleLabel, 0, 1, Qt::AlignTop);
     d->descriptionLabel = new QLabel(description);
     int space = d->descriptionLabel->fontMetrics().height();
-    d->descriptionLabel->setContentsMargins(0, 0, 0, space);
+    d->descriptionLabel->setContentsMargins(2, 0, 0, space);
     d->descriptionLabel->setWordWrap(true);
     d->mainLyr->addWidget(d->descriptionLabel, 1, 1, Qt::AlignTop);
     /*m_backButton = new KPushButton(KStandardGuiItem::back());
