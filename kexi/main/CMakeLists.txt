@@ -24,6 +24,7 @@ kexinewstuff.cpp
 
 startup/KexiConnSelector.cpp
 startup/KexiNewProjectAssistant.cpp
+startup/KexiOpenProjectAssistant.cpp
 startup/KexiProjectSelector.cpp
 startup/KexiStartupFileWidget.cpp
 startup/KexiStartupFileHandler.cpp

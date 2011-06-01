@@ -262,7 +262,7 @@ void KexiConnSelectorWidget::showSimpleConn()
     d->stack->setCurrentWidget(fileWidget);
 }
 
-int KexiConnSelectorWidget::selectedConnectionType() const
+KexiConnSelectorWidget::ConnectionType KexiConnSelectorWidget::selectedConnectionType() const
 {
     return (d->stack->currentWidget() == fileWidget) ? FileBased : ServerBased;
 }

@@ -220,12 +220,12 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
             << data->constConnectionData()->driverName << "'!";
         }
     }
-    if (list()->topLevelItemCount() > 0) {
-        list()->topLevelItem(0)->setSelected(true);
-    }
     list()->setSortingEnabled(true);
     list()->sortItems(0, Qt::AscendingOrder);
     list()->resizeColumnToContents(0);
+    if (list()->topLevelItemCount() > 0) {
+        list()->topLevelItem(0)->setSelected(true);
+    }
 }
 
 void KexiProjectSelectorWidget::setSelectable(bool set)

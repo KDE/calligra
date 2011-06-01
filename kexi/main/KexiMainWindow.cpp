@@ -107,6 +107,7 @@
 
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectAssistant.h"
+#include "startup/KexiOpenProjectAssistant.h"
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
@@ -1603,15 +1604,18 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
         delete d->prj;
         d->prj = 0;
         return cancelled;
-    } else if (!res) {
+    }
+    else if (!res) {
         delete d->prj;
         d->prj = 0;
         if (incompatibleWithKexi) {
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this,
-                    i18n("<qt>Database project %1 does not appear to have been created using Kexi.<br><br>Do you want to import it as a new Kexi project?</qt>",
+                    i18n("Database project %1 does not appear to have been created using Kexi."
+                         "<p>Do you want to import it as a new Kexi project?",
                          projectData.infoString()),
                     0, KGuiItem(i18nc("Import Database", "&Import..."), "database_import"),
-                    KStandardGuiItem::quit())) {
+                    KStandardGuiItem::cancel()))
+            {
                 const bool anotherProjectAlreadyOpened = d->prj;
                 tristate res = showProjectMigrationWizard("application/x-kexi-connectiondata",
                                projectData.databaseName(), projectData.constConnectionData());
@@ -1633,6 +1637,8 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     invalidateActions();
 // d->disableErrorMessages = true;
     enableMessages(false);
+    
+    d->tabbedToolBar->hideMainMenu();
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
     return true;
@@ -3225,10 +3231,13 @@ void KexiMainWindow::slotProjectOpen()
     if (!d->tabbedToolBar)
         return;
     d->tabbedToolBar->showMainMenu("project_open");
-    KexiStartupDialog *openWindow = new KexiStartupDialog(
-        KexiStartupDialog::Templates/*KexiStartupDialog::OpenExisting*/, 0, Kexi::connset(),
-        Kexi::recentProjects(), 0);
-    d->tabbedToolBar->setMainMenuContent(openWindow);
+    KexiOpenProjectAssistant* assistant = new KexiOpenProjectAssistant;
+    connect(assistant, SIGNAL(openProject(KexiProjectData)), 
+            this, SLOT(openProject(KexiProjectData)));
+//    KexiStartupDialog *openWindow = new KexiStartupDialog(
+//        KexiStartupDialog::Templates/*KexiStartupDialog::OpenExisting*/, 0, Kexi::connset(),
+//        Kexi::recentProjects(), 0);
+    d->tabbedToolBar->setMainMenuContent(assistant);
 
 #if 0 // before MODERN
     KexiStartupDialog dlg(

@@ -39,14 +39,14 @@ class KexiTemplateSelectionPage : public KexiAssistantPage
     Q_OBJECT
 public:
     explicit KexiTemplateSelectionPage(QWidget* parent = 0);
+
+    QString selectedTemplate;
+    QString selectedCategory;
     
 protected slots:
     void slotItemClicked(const QModelIndex& index);
 private:
     KCategorizedView* m_templatesList;
-public:
-    QString selectedTemplate;
-    QString selectedCategory;
 };
 
 class KexiProjectStorageTypeSelectionPage : public KexiAssistantPage,
@@ -173,6 +173,7 @@ public slots:
     void tryAgainActionTriggered();
 signals:
     void createProject(KexiProjectData* data);
+    
 private:
     void createProject(
         const KexiDB::ConnectionData& cdata, const QString& databaseName,

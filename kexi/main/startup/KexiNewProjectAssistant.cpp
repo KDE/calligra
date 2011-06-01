@@ -461,7 +461,6 @@ KexiProjectDatabaseNameSelectionPage::~KexiProjectDatabaseNameSelectionPage()
 
 bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData* data)
 {
-    QString selectorLabel;
     if (conndataToShow != data) {
         m_projectSelector->setProjectSet(0);
         conndataToShow = 0;

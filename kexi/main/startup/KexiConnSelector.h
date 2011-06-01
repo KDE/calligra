@@ -66,7 +66,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 
 public:
     //! Defines connection type
-    enum ConnType {
+    enum ConnectionType {
         FileBased = 1, //!< the widget displays file-based connection
         ServerBased = 2 //!< the widget displays server-based connection
     };
@@ -83,8 +83,8 @@ public:
     virtual ~KexiConnSelectorWidget();
 
     /*! After accepting this dialog this method returns wherher user selected
-     file- or server- based connection (ConnType enum). */
-    int selectedConnectionType() const;
+     file- or server-based connection. */
+    ConnectionType selectedConnectionType() const;
 
     /*! \return data of selected connection, if server-based connection was selected.
      Returns NULL if no selection has been made or file-based connection
