@@ -21,7 +21,7 @@
 #ifndef _WMFABSTRACTBACKEND_H_
 #define _WMFABSTRACTBACKEND_H_
 
-#include <kowmf_export.h>
+#include "kowmf_export.h"
 
 #include <QtCore/QRect>
 #include <QtGui/QRegion>

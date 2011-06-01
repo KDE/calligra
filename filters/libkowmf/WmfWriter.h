@@ -20,7 +20,7 @@
 #ifndef _WMFWRITER_H_
 #define _WMFWRITER_H_
 
-#include <kowmf_export.h>
+#include "kowmf_export.h"
 
 #include <QtGui/QPainter>
 

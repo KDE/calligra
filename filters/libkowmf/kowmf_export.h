@@ -49,6 +49,7 @@
 #else /* UNIX */
 
 #define KOWMF_EXPORT KDE_EXPORT
+#define LIBWMF_EXPORT KDE_EXPORT
 
 #endif
 

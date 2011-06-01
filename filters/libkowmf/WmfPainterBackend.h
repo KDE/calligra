@@ -20,7 +20,7 @@
 #ifndef _KOWMFPAINT_H_
 #define _KOWMFPAINT_H_
 
-#include <kowmf_export.h>
+#include "kowmf_export.h"
 #include "WmfAbstractBackend.h"
 
 #include <QPainter>
