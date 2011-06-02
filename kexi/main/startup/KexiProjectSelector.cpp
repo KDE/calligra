@@ -72,15 +72,19 @@ public:
         if (selector->d->showConnectionColumns) {
             QString drvname = info.caption.isEmpty() ? cdata->driverName : info.caption;
             if (info.fileBased) {
-                setText(colnum++, i18n("File") + " (" + drvname + ")  ");
+                setText(colnum++, i18n("File (%1)").arg(drvname));
             } else {
                 setText(colnum++, drvname + "  ");
             }
 
             QString conn;
-            if (!cdata->caption.isEmpty())
-                conn = cdata->caption + ": ";
-            conn += cdata->serverInfoString();
+            if (cdata->caption.isEmpty()) {
+                conn = cdata->serverInfoString();
+            }
+            else {
+                conn = i18nc("caption: server_info", "%1: %2")
+                        .arg(cdata->caption).arg(cdata->serverInfoString());
+            }
             setText(3, conn + "  ");
         }
     }
