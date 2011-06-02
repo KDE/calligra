@@ -25,11 +25,12 @@
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
 #include "pictures.h"
+#include "msodraw.h"
 
 #include "graphicshandler.h"
-#include "document.h"
 #include "conversion.h"
-#include "msodraw.h"
+#include "document.h"
+#include "msdoc.h"
 
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
@@ -917,6 +918,8 @@ void KWordGraphicsHandler::setZIndexAttribute(DrawingWriter& out)
     // draw:z-index
     if (m_objectType == Floating) {
         out.xml.addAttribute("draw:z-index", m_zIndex);
+    } else {
+        out.xml.addAttribute("draw:z-index", 0);
     }
 }
 
@@ -926,7 +929,7 @@ void KWordGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -984,18 +987,29 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
 {
     kDebug(30513) ;
 
+    // Shape instance contained in OfficeArtInlineSpContainer.  BLIP properties
+    // contained in o.shapePrimaryOptions or o.shapeTertiaryOptions1 are stored
+    // in the order they are encountered, and the property values
+    // OfficeArtFOPTE.opid.fBid, OfficeArtFOPTE.opid.fComplex, and
+    // OfficeArtFOPTE.op MUST be ignored.  [MS-ODRAW] — v20101219
+
     QString styleName;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
     definePositionAttributes(style, ds);
     styleName = out.styles.insert(style);
 
-    out.xml.startElement("draw:frame");
+    // A diagram drawing canvas placed inline with surrounding text.
+    if (ds.fPseudoInline()) {
+        out.xml.startElement("draw:rect");
+    } else {
+        out.xml.startElement("draw:frame");
+    }
     out.xml.addAttribute("draw:style-name", styleName);
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
@@ -1005,14 +1019,14 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     out.xml.addAttributePt("svg:width", twipsToPt(m_picf->dxaGoal) * hscale);
     out.xml.addAttributePt("svg:height", twipsToPt(m_picf->dyaGoal) * vscale);
 
-    QString url;
     QString name = m_picNames.value(m_rgbUid);
+    QString url;
     if (!name.isEmpty()) {
         url.append("Pictures/");
         url.append(name);
     } else {
         // if the image cannot be found, just place an empty frame
-        out.xml.endElement(); //draw:frame
+        out.xml.endElement(); //draw:frame (draw:rect)
         return;
     }
     //TODO: process border information (complex properties)
@@ -1031,11 +1045,15 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     kDebug(30513) ;
 
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
+
+    // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
+    if (!ds.pib()) return;
+
     QString styleName;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1043,14 +1061,6 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     defineWrappingAttributes(style, ds);
     styleName = out.styles.insert(style);
 
-    QString url;
-    if (ds.pib()) {
-        url = getPicturePath(ds.pib());
-    } else {
-        // Does not make much sense to display an empty frame, following
-        // PPT->ODP filters of both OOo and MS Office 2007.
-        return;
-    }
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
     setAnchorTypeAttribute(out);
@@ -1060,6 +1070,8 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.addAttribute("svg:height", mm(out.vLength()));
     out.xml.addAttribute("svg:x", mm(out.hOffset()));
     out.xml.addAttribute("svg:y", mm(out.vOffset()));
+
+    QString url = getPicturePath(ds.pib());
 
     //if the image cannot be found, just place an empty frame
     if (url.isEmpty()) {
@@ -1113,7 +1125,7 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1183,7 +1195,7 @@ void KWordGraphicsHandler::insertEmptyInlineFrame(DrawingWriter& out)
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(0, 0);
+    DrawStyle ds;
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);

@@ -107,7 +107,6 @@ bool WmfPainterBackend::begin(const QRect &boundingBox)
     mViewportOrg = QPoint(0, 0);
     mWindowExtIsSet = false;
     mViewportExtIsSet = false;
-    mWindowViewportIsSet = false;
     mOutputTransform = mPainter->transform();
     mWorldTransform = QTransform();
 
@@ -326,19 +325,21 @@ void WmfPainterBackend::recalculateWorldTransform()
         return;
 
     // FIXME: Check windowExt == 0 in any direction
+    qreal windowViewportScaleX;
+    qreal windowViewportScaleY;
     if (mWindowExtIsSet && mViewportExtIsSet) {
         // Both window and viewport are set.
-        mWindowViewportScaleX = qreal(mViewportExt.width()) / qreal(mWindowExt.width());
-        mWindowViewportScaleY = qreal(mViewportExt.height()) / qreal(mWindowExt.height());
+        windowViewportScaleX = qreal(mViewportExt.width()) / qreal(mWindowExt.width());
+        windowViewportScaleY = qreal(mViewportExt.height()) / qreal(mWindowExt.height());
 #if DEBUG_WMFPAINT
         kDebug(31000) << "Scale for Window -> Viewport"
-                      << mWindowViewportScaleX << mWindowViewportScaleY;
+                      << windowViewportScaleX << windowViewportScaleY;
 #endif
     }
     else {
         // At most one of window and viewport ext is set: Use same width for window and viewport
-        mWindowViewportScaleX = qreal(1.0);
-        mWindowViewportScaleY = qreal(1.0);
+        windowViewportScaleX = qreal(1.0);
+        windowViewportScaleY = qreal(1.0);
 #if DEBUG_WMFPAINT
         kDebug(31000) << "Only one of Window or Viewport set: scale window -> viewport = 1";
 #endif
@@ -370,7 +371,7 @@ void WmfPainterBackend::recalculateWorldTransform()
 
     // Calculate the world transform.
     mWorldTransform.translate(-mWindowOrg.x(), -mWindowOrg.y());
-    mWorldTransform.scale(mWindowViewportScaleX, mWindowViewportScaleY);
+    mWorldTransform.scale(windowViewportScaleX, windowViewportScaleY);
     if (mViewportExtIsSet) {
         mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
     } 
@@ -390,7 +391,6 @@ void WmfPainterBackend::recalculateWorldTransform()
 
     // Apply the world transform to the painter.
     mPainter->setWorldTransform(mWorldTransform);
-    mWindowViewportIsSet = true;
 
     // Apply the output transform.
     QTransform currentMatrix = mPainter->worldTransform();

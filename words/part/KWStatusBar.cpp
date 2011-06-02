@@ -179,9 +179,10 @@ void KWStatusBar::setModified(bool modified)
 
 void KWStatusBar::updatePageCount()
 {
-    if (m_currentView)
+    if (m_currentView) {
         m_pageLabel->setText(i18nPage.subs(m_currentView->currentPage().pageNumber())
             .subs(m_currentView->kwdocument()->pageCount()).toString());
+    }
     else
         m_pageLabel->setText(i18nPage.toString());
 }
@@ -198,7 +199,7 @@ void KWStatusBar::updatePageSize()
     QString text;
     if (page.isValid() && page.pageStyle().isValid()) {
         KoPageLayout l = page.pageStyle().pageLayout();
-        text = QString("%1x%1").arg(KGlobal::locale()->formatNumber(l.width, 0)).arg(KGlobal::locale()->formatNumber(l.height, 0));
+        text = QString("%1x%2").arg(KGlobal::locale()->formatNumber(l.width, 0)).arg(KGlobal::locale()->formatNumber(l.height, 0));
     }
     m_pageSizeLabel->setText(text);
 }

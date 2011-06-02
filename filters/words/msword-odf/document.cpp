@@ -333,9 +333,10 @@ void Document::processStyles()
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
-            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
+            const wvWare::Style* followingStyle = styles.styleByIndex(style->followingStyle());
             if (followingStyle && followingStyle != style) {
-                QString followingName = Conversion::string(followingStyle->name());
+                QString followingName = Conversion::styleNameString(followingStyle->name());
+                userStyle.addAttribute("style:next-style-name", followingName);
             }
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
