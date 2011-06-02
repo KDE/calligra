@@ -11,7 +11,6 @@ int main() {
   
 AddFrameData2Shapes obj = new AddFrameData2Shapes(shape);
   
-  //obj.addBasicProperties();
   obj.addNewFrame(frame);
   
   SvgWriter writer = new SvgWriter(shapeList, pageSize);

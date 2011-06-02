@@ -11,11 +11,6 @@ public:
  */
   void addNewFrame(Frame *frame);
   
-  /*
-   * Add some arbitrary properties to the shape
-   */
-  void addBasicProperties();
-  
 private:
   KoShape *shape;
 };
