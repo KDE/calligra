@@ -32,7 +32,10 @@ class Frame {
   public:
     Frame();
    ~Frame();
-   
+   /*
+    * Sets the default values for all frame attrbutes
+    */
+   void setDefaultValues();
    void setTitle(QString *title);
    void setRefId(QString *refId); //Data type for ref id of groups/shapes?
    void setSequence(int seq);

@@ -77,7 +77,10 @@ private:
     void savePath(KoPathShape * path);
     void saveEllipse(EllipseShape * ellipse);
     void saveRectangle(RectangleShape * rectangle);
-
+    /*
+     * Saves the properties associated with the shape used for SVg animation.
+     */
+    void saveFrame(Frame * frame);
     void saveImage(KoShape *picture);
     void saveText(ArtisticTextShape * text);
     void savePlainText();
@@ -107,7 +110,8 @@ private:
     QTextStream* m_stream;
     QTextStream* m_defs;
     QTextStream* m_body;
-
+    QTextStream* m_frames;
+    
     unsigned int m_indent;
     unsigned int m_indent2;
 

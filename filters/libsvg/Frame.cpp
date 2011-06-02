@@ -19,11 +19,23 @@
 #include "Frame.h"
 
 Frame::Frame() {
+  setDefaultValues();
 }
 
 Frame::~Frame() {
    }
    
+void Frame::setDefaultValues()
+{
+title = "Frame title";
+refId = "Shape #1";
+sequence = 1;
+zoomFactor = 1; // How is zoom factor used in the javascript? % or factor?
+transitionStyle = "linear";
+timeMs = 100;
+
+}
+
    void Frame::setTitle(QString *title) {
      this->title = title;
    }

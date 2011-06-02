@@ -125,6 +125,8 @@ bool SvgWriter::save(QIODevice &outputDevice)
     m_body = new QTextStream(&body, QIODevice::ReadWrite);
     QString defs;
     m_defs = new QTextStream(&defs, QIODevice::ReadWrite);
+    QString frames;
+    m_frames = new QTextStream(&frames, QIODevice::ReadWrite);
 
     // standard header:
     *m_defs <<
@@ -165,7 +167,8 @@ bool SvgWriter::save(QIODevice &outputDevice)
     *m_defs << "</defs>" << endl; //?
     
     saveScript();
-
+    //TODO:m_frames has to be written here.
+    
     *m_body << "</svg>" << endl;
 
     *m_stream << defs; //?
@@ -200,6 +203,7 @@ void SvgWriter::saveLayer(KoShapeLayer * layer)
 
 void SvgWriter::saveGroup(KoShapeGroup * group)
 {
+  
     printIndentation(m_body, m_indent++);
     *m_body << "<g" << getID(group);
     *m_body << getTransform(group->transformation(), " transform");
@@ -219,6 +223,10 @@ void SvgWriter::saveGroup(KoShapeGroup * group)
 
     printIndentation(m_body, --m_indent);
     *m_body << "</g>" << endl;
+    //TODO:Save additonal attributes to m_frames. (Not workign with groups still)
+    //This stream will be written to the doc before the </svg> tag
+    
+    
 }
 
 void SvgWriter::saveShape(KoShape * shape)
@@ -246,6 +254,9 @@ void SvgWriter::saveShape(KoShape * shape)
     savePlainText();// Saving plain text
 	}
     }
+    //Save additonal attributes to m_frames
+    //This stream will be written to the doc before the </svg> tag
+    *m_frames << saveFrame(shape);
 }
 
 void SvgWriter::savePath(KoPathShape * path)
