@@ -1035,7 +1035,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     // Note this is only like this for solidfill, for others do something...
     TRY_READ_ATTR_WITHOUT_NS(color)
     if (!color.isEmpty()) {
-        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(color);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(color2)
