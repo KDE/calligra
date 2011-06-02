@@ -32,6 +32,7 @@ class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
 class KPrSelectionManager;
 class KPrCustomSlideShowsModel;
+class KPrCustomSlideShows;
 
 //This view mode holds Slides Sorter view widget and
 //TODO: holds view and toolbar to manage custom slides shows
@@ -169,6 +170,9 @@ private slots:
     void slidesSorterContextMenu(QContextMenuEvent* event);
 
     void customShowChanged(int showNumber);
+
+    void changeActiveSlideShow(QString name);
+
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

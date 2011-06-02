@@ -77,6 +77,7 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrPageEffectSetCommand.cpp
      commands/KPrPageLayoutCommand.cpp
      commands/KPrSetCustomSlideShowsCommand.cpp
+     commands/KPrEditCustomSlideShowsCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp

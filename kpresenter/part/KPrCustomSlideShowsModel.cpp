@@ -2,11 +2,12 @@
 
 #include "KPrCustomSlideShowsModel.h"
 
-#include "KPrCustomSlideShows.h"
 
 //Calligra headers
+#include "KPrCustomSlideShows.h"
+#include "KPrDocument.h"
 #include "KoPAPageBase.h"
-#include "KoPAPageBase.h"
+#include "commands/KPrEditCustomSlideShowsCommand.h"
 
 //KDE headers
 #include "KLocalizedString"
@@ -18,12 +19,16 @@
 #include <QApplication>
 #include <QMenu>
 
-KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(QObject *parent, KPrCustomSlideShows *customShows)
+KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(QObject *parent, KPrCustomSlideShows *customShows, KPrDocument *document)
     : QAbstractListModel(parent)
     , m_customShows(customShows)
     , m_iconSize(QSize(200,200))
+    , m_document(document)
 {
 
+}
+
+KPrCustomSlideShowsModel::~KPrCustomSlideShowsModel(){
 }
 
 QVariant KPrCustomSlideShowsModel::data(const QModelIndex &index, int role) const
@@ -139,59 +144,100 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
         return true;
     }
 
-    if (!data->hasFormat("application/x-koffice-sliderssorter") & !data->hasFormat("application/x-koffice-customslideshows")) {
-        return false;
-    }
+    if (data->hasFormat("application/x-koffice-sliderssorter") | data->hasFormat("application/x-koffice-customslideshows")) {
 
-    if (column > 0) {
-        return false;
-    }
-
-    QList<KoPAPageBase *> slides;
-
-    int beginRow;
-
-    if (row != -1) {
-        beginRow = row;
-    } else if (parent.isValid()) {
-        beginRow = parent.row();
-    } else {
-        beginRow = rowCount(QModelIndex());
-    }
-
-    if (data->hasFormat("application/x-koffice-sliderssorter")) {
-
-        QByteArray encoded = data->data("application/x-koffice-sliderssorter");
-        QDataStream stream(&encoded, QIODevice::ReadOnly);
-
-        // decode the data
-        while( ! stream.atEnd() )
-        {
-            QVariant v;
-            stream >> v;
-            slides.append( static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
-        }
-
-        if (slides.empty ()) {
+        if (column > 0) {
             return false;
         }
 
-        qSort(slides.begin(), slides.end());
+        QList<KoPAPageBase *> slides;
+        QList<KoPAPageBase*> selectedSlideShow;
 
-        //get the slideshow
-        QList<KoPAPageBase*> selectedSlideShow = m_customShows->getByName(m_currentSlideShowName);
+        int beginRow;
 
-        //insert the slides and update the Widget
-        int i = beginRow;
-        foreach(KoPAPageBase* page, slides)
-        {
-            selectedSlideShow.insert(i, page);
-            i++;
+        if (row != -1) {
+            beginRow = row;
+        } else if (parent.isValid()) {
+            beginRow = parent.row();
+        } else {
+            beginRow = rowCount(QModelIndex());
+        }
+
+        if (data->hasFormat("application/x-koffice-sliderssorter")) {
+
+            QByteArray encoded = data->data("application/x-koffice-sliderssorter");
+            QDataStream stream(&encoded, QIODevice::ReadOnly);
+
+            // decode the data
+            while( ! stream.atEnd() )
+            {
+                QVariant v;
+                stream >> v;
+                slides.append( static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
+            }
+
+            if (slides.empty ()) {
+                return false;
+            }
+
+            qSort(slides.begin(), slides.end());
+
+            //get the slideshow
+            selectedSlideShow = m_customShows->getByName(m_currentSlideShowName);
+
+            //insert the slides and update the Widget
+            int i = beginRow;
+            foreach(KoPAPageBase* page, slides)
+            {
+                selectedSlideShow.insert(i, page);
+                i++;
+            }
+
+        }
+
+        if (data->hasFormat("application/x-koffice-customslideshows")) {
+
+            QByteArray encoded = data->data("application/x-koffice-customslideshows");
+            QDataStream stream(&encoded, QIODevice::ReadOnly);
+
+            // decode the data
+            while( ! stream.atEnd() )
+            {
+                QVariant v;
+                stream >> v;
+                slides.append( static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
+            }
+
+            if (slides.empty ()) {
+                return false;
+            }
+
+            //order slides
+            QMap<int, KoPAPageBase*> map;
+            foreach (KoPAPageBase* slide, slides)
+                map.insert(m_customShows->indexByPage(m_currentSlideShowName, slide), slide);
+
+            slides = map.values();
+
+            //get the slideshow
+           selectedSlideShow = m_customShows->getByName(m_currentSlideShowName);
+
+            //insert the slides and update the Widget
+           if (beginRow >= selectedSlideShow.count())
+               beginRow = selectedSlideShow.count() - 1;
+
+            foreach(KoPAPageBase* page, slides)
+            {
+                int from = selectedSlideShow.indexOf(page);
+                selectedSlideShow.move(from, beginRow);
+            }
+
         }
 
         //update the SlideShow with the resulting list
-        m_customShows->update(m_currentSlideShowName, selectedSlideShow);
-        reset();
+        KPrEditCustomSlideShowsCommand *command = new KPrEditCustomSlideShowsCommand(
+                    m_document, this, m_currentSlideShowName, selectedSlideShow);
+        m_document->addCommand(command);
 
         return true;
     }
@@ -295,4 +341,16 @@ QStringList KPrCustomSlideShowsModel::customShowsNamesList() const
 
     return QStringList();
 
+}
+
+void KPrCustomSlideShowsModel::setDocument(KPrDocument *document)
+{
+    m_document = document;
+    setCustomSlideShows(document->customSlideShows());
+}
+
+void KPrCustomSlideShowsModel::updateCustomShow(QString name, QList<KoPAPageBase *> newCustomShow)
+{
+    m_customShows->update(name, newCustomShow);
+    reset();
 }

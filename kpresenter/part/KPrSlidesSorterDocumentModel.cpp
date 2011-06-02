@@ -213,7 +213,11 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         return false;
     }
 
-    qSort(slides.begin(), slides.end());
+    //order slides
+    QMap<int, KoPAPageBase*> map;
+    foreach (KoPAPageBase* slide, slides)
+        map.insert(m_document->pages(false).indexOf(slide), slide);
+    slides = map.values();
 
     int beginRow;
 

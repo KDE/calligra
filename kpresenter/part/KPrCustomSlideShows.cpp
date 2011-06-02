@@ -90,6 +90,13 @@ KoPAPageBase * KPrCustomSlideShows::pageByIndex(const QString &name, int index) 
     return pages.value(index);
 }
 
+
+int KPrCustomSlideShows::indexByPage(const QString &name, KoPAPageBase *page) const
+{
+    QList<KoPAPageBase*> pages = getByName(name);
+    return pages.indexOf(page);
+}
+
 void KPrCustomSlideShows::addSlideToAll( KoPAPageBase* page, unsigned int position )
 {
     QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();

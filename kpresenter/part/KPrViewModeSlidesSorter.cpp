@@ -39,6 +39,8 @@
 #include "KPrSelectionManager.h"
 #include "KPrCustomSlideShowsModel.h"
 #include "KPrDocument.h"
+#include "KPrCustomSlideShows.h"
+#include "commands/KPrSetCustomSlideShowsCommand.h"
 
 #include <KoResourceManager.h>
 #include <KoRuler.h>
@@ -120,7 +122,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     //Populate ComboBox
     KPrDocument *document = dynamic_cast<KPrDocument *>(view->kopaDocument());
     if (document) {
-        m_customShowsModel->setCustomSlideShows(document->customSlideShows());
+        m_customShowsModel->setDocument(document);
     }
 
     QStringList slideShows;
@@ -142,6 +144,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_slidesSorter, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
     connect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+    connect(slideShowsList, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeActiveSlideShow(QString)));
 
     //filter some m_slidesSorter key events
     m_slidesSorter->installEventFilter(this);
@@ -371,14 +374,18 @@ QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
         return slides;
     }
 
-    qSort(selectedItems.begin(), selectedItems.end());
-
     foreach (const QModelIndex & index, selectedItems) {
         KoPAPageBase * page = m_view->kopaDocument()->pageByIndex(index.row (), false);
         if (page) {
             slides.append(page);
         }
     }
+
+    //order slides
+    QMap<int, KoPAPageBase*> map;
+    foreach (KoPAPageBase* slide, slides)
+        map.insert(m_view->kopaDocument()->pages(false).indexOf(slide), slide);
+    slides = map.values();
 
     return slides;
 }
@@ -560,6 +567,15 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     if (panelVisible) {
         m_customShowsModel->setCurrentSlideShow(showNumber - 1);
     }
+}
 
-
+void KPrViewModeSlidesSorter::changeActiveSlideShow(QString name)
+{
+    //Change document current custom slide show
+    if (name == i18n("Default"))
+        name = QString();
+    KPrDocument *doc = static_cast<KPrDocument *>(m_view->kopaDocument());
+    if (doc) {
+        doc->setActiveCustomSlideShow(name);
+    }
 }

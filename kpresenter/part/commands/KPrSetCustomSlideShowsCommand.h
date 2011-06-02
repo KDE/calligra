@@ -28,7 +28,7 @@ class KPrDocument;
 class KPrSetCustomSlideShowsCommand : public QUndoCommand
 {
 public:
-    KPrSetCustomSlideShowsCommand( KPrDocument * doc, KPrCustomSlideShows * newSlideShows, QUndoCommand *parent = 0 );
+    KPrSetCustomSlideShowsCommand(KPrDocument * doc, KPrCustomSlideShows * newSlideShows, QUndoCommand *parent = 0 );
     virtual ~KPrSetCustomSlideShowsCommand();
 
     /// redo the command

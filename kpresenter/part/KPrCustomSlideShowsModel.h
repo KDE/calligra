@@ -6,12 +6,15 @@
 
 class KPrCustomSlideShows;
 class KoPAPageBase;
+class KPrDocument;
 
 class KPrCustomSlideShowsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit KPrCustomSlideShowsModel(QObject *parent = 0, KPrCustomSlideShows *customShows = 0);
+    explicit KPrCustomSlideShowsModel(QObject *parent = 0, KPrCustomSlideShows *customShows = 0, KPrDocument *document = 0);
+
+    virtual ~KPrCustomSlideShowsModel();
 
     QVariant data(const QModelIndex &index, int role) const;
 
@@ -50,6 +53,10 @@ public:
 
     QStringList customShowsNamesList() const;
 
+    void setDocument(KPrDocument* document);
+
+    void updateCustomShow(QString name, QList<KoPAPageBase *> newCustomShow);
+
 signals:
 
 public slots:
@@ -58,6 +65,7 @@ private:
     KPrCustomSlideShows *m_customShows;
     QString m_currentSlideShowName;
     QSize m_iconSize;
+    KPrDocument *m_document;
 
 };
 
