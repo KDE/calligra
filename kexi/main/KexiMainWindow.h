@@ -323,6 +323,9 @@ public slots:
     tristate openProject(const QString& aFileName,
                          const QString& fileNameForConnectionData, const QString& dbName = QString());
 
+    /*! Helper. Opens project pointed by \a aFileName. */
+    tristate openProject(const QString& aFileName);
+
     /*! Creates a new project usign template pointed by \a projectData.
      Application state (e.g. actions) is updated.
      New project data is copied into a project structures.

@@ -20,6 +20,7 @@
 #include "KexiOpenProjectAssistant.h"
 #include "KexiProjectSelector.h"
 #include "KexiConnSelector.h"
+#include "KexiStartupFileWidget.h"
 
 #include <QTimer>
 #include <QVBoxLayout>
@@ -57,6 +58,9 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     fileSelector->layout()->setContentsMargins(0, 0, 0, 0);
     fileSelector->hideHelpers();
     fileSelector->hideDescription();
+    //connect(fileSelector->fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(fileSelector->fileWidget, SIGNAL(fileHighlighted()),
+            this, SLOT(next()));
                       
     m_connSelectorWidget = new QWidget;
     tabWidget->addTab(m_connSelectorWidget, KIcon(KEXI_ICON_DATABASE_SERVER),
@@ -220,6 +224,10 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
     if (page == d->m_projectOpenPage) {
         if (d->m_projectOpenPage->tabWidget->currentIndex() == 0) {
             // file-based
+            if (!d->m_projectOpenPage->fileSelector->fileWidget->checkSelectedFile())
+                return;
+            emit openProject(
+                d->m_projectOpenPage->fileSelector->fileWidget->highlightedFile());
         }
         else { // server-based
             KexiDB::ConnectionData *cdata

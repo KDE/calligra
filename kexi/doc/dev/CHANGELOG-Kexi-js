@@ -94,10 +94,16 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-06-02
+Startup
+*"Open Project" assistant: opening files works
+
 2011-06-01
 Startup
 *Message Widget: fixes for positioning callout pointer
 *"Open Project" assistant added
+
+TODO: display db connection error properly
 
 2011-05-27..31
 Startup

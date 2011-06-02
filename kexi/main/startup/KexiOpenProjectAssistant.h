@@ -94,6 +94,7 @@ public slots:
 
 signals:
     void openProject(const KexiProjectData& data);
+    void openProject(const QString& fileName);
 
 private:
     class Private;

@@ -1637,8 +1637,6 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     invalidateActions();
 // d->disableErrorMessages = true;
     enableMessages(false);
-    
-    d->tabbedToolBar->hideMainMenu();
 
     QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
     return true;
@@ -1877,6 +1875,8 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 
     // if (!d->prj->data()->autoopenObjects.isEmpty())
 //2.0 d->restoreNavigatorWidth();
+
+    d->tabbedToolBar->hideMainMenu();
 
     qApp->processEvents();
     emit projectOpened();
@@ -3234,6 +3234,9 @@ void KexiMainWindow::slotProjectOpen()
     KexiOpenProjectAssistant* assistant = new KexiOpenProjectAssistant;
     connect(assistant, SIGNAL(openProject(KexiProjectData)), 
             this, SLOT(openProject(KexiProjectData)));
+    connect(assistant, SIGNAL(openProject(QString)), 
+            this, SLOT(openProject(QString)));
+            
 //    KexiStartupDialog *openWindow = new KexiStartupDialog(
 //        KexiStartupDialog::Templates/*KexiStartupDialog::OpenExisting*/, 0, Kexi::connset(),
 //        Kexi::recentProjects(), 0);
@@ -3249,6 +3252,11 @@ void KexiMainWindow::slotProjectOpen()
 
     openProject(dlg.selectedFileName(), dlg.selectedExistingConnection());
 #endif
+}
+
+tristate KexiMainWindow::openProject(const QString& aFileName)
+{
+    return openProject(aFileName, QString(), QString());
 }
 
 tristate KexiMainWindow::openProject(const QString& aFileName,
