@@ -36,7 +36,7 @@ static const char* version = KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData = new KAboutData("tables", 0, ki18n("Calligra Tables"),
+    KAboutData * aboutData = new KAboutData("tables", 0, ki18n("Tables"),
                                             version, ki18n(description), KAboutData::License_LGPL,
                                             ki18n("(c) 1998-2010, The Calligra Tables Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/tables/");
