@@ -106,8 +106,11 @@ public:
     /// set the pageSide of this page, see the PageSide
     void setPageSide(PageSide ps);
 
-    /// returns the user visible number of this page.
-    int pageNumber() const;
+    /// reimplemented from KoTextPage
+    virtual int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
+
+    /// reimplemented from KoTextPage
+    virtual int pageNumber() const;
 
     /**
      * Adjusts the page number of this page and all pages following.
@@ -115,6 +118,9 @@ public:
      * Instead you should insert a pagraph in the main-text flow with the new page number.
      */
     void setPageNumber(int pageNumber);
+
+    /// reimplemented from KoTextPage
+    virtual QString masterPageName() const;
 
     /// returns the page style applied on this page
     KWPageStyle pageStyle() const;
@@ -170,10 +176,6 @@ public:
     inline bool operator<(const KWPage &other) const { return n < other.n; }
     inline bool operator>(const KWPage &other) const { return n > other.n; }
     uint hash() const;
-
-    /// reimplemented from KoTextPage
-    virtual int pageNumber(PageSelection select, int adjustment = 0) const;
-    virtual QString masterPageName() const;
 
 private:
     friend class KWPageTextInfo;

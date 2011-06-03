@@ -328,7 +328,7 @@ QImage KWPage::thumbnail(const QSize &size, KoShapeManager *shapeManager)
     return img;
 }
 
-int KWPage::pageNumber(PageSelection select, int adjustment) const
+int KWPage::visiblePageNumber(PageSelection select, int adjustment) const
 {
     KWPage page = *(const_cast<KWPage*>(this));
     switch (select) {
