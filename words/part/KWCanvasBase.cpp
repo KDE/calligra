@@ -696,9 +696,10 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
 
                 KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
                 if (pageCache) {
-                    if (rc.isNull()) {
+                    //if (rc.isNull()) {
                         pageCache->allExposed = true;
                         pageCache->exposed.clear();
+#if 0
                     }
                     else {
                         qreal  pageTopDocument = vm.page.offsetInDocument();
@@ -709,6 +710,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
 
                         pageCache->exposed.append(clipRectOnPage);
                     }
+#endif
                     m_pageCacheManager->insert(vm.page, pageCache);
                 }
                 updateCanvasInternal(finalClip);
@@ -761,9 +763,10 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
 
                 KWPageCache *pageCache = m_pageCacheManager->take(vm.page);
                 if (pageCache) {
-                    if (rc.isNull()) {
+                    //if (rc.isNull()) {
                         pageCache->allExposed = true;
                         pageCache->exposed.clear();
+#if 0
                     }
                     else {
                         qreal pageTopDocument = vm.page.offsetInDocument();
@@ -774,6 +777,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
 
                         pageCache->exposed.append(clipRectOnPage);
                     }
+#endif
                     m_pageCacheManager->insert(vm.page, pageCache);
                 }
                 updateCanvasInternal(finalClip);
