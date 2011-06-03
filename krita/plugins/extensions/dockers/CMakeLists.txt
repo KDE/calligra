@@ -7,3 +7,5 @@ add_subdirectory(advancedcolorselector)
 add_subdirectory(presetdocker)
 add_subdirectory(historydocker)
 add_subdirectory(channeldocker)
+add_subdirectory(animatordocker)
+

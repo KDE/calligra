@@ -1,0 +1,36 @@
+Before 0.1 release:
+* [DONE] Showing last layer if no frame here
+* [DONE] Create frames from context menu (ui)
+* [DONE] Extending frames count (ui)
+* [DONE] Manual frame switcher (ui)
+* [DONE] [BUG] Remove slowness of frame switching
+* [DONE] [to-improve-later] Add frame export (ui included) (do not show annoying dialogs on each export)
+* [DONE] [BUG] Fix crashing on exit
+* [DONE] Set vertical header size
+* [DONE] [BUG] Fix opening & exporting of normal documents
+* [WONTFIXNOW][BUG] Fix crashing on re-opening -- where is this bug (plugin/krita/openglcanvas/driver)?
+* [DONE] Create/delete frame layers (ui included)
+* [DONE] Export with leading-zeros names
+* [DONE] Add "onion skin"
+* [DONE] Fix crash on documents without zero frame
+
+Before 0.2 release:
+* [DONE] Export to document directory (or may be to custom directory)
+* [DONE] Add player
+* [DONE] Improve creating frames (more options)
+* [DONE] More updating
+* [DONE] Move/rename frame layer
+* [DONE] Extended light table
+* [DONE] Fix adding group frame
+
+Before 0.3 release:
+* Group layers full support
+* [INPROGRESS] Moving/deleting/adding frames
+* Add support for disabling shape filling
+
+Before 1.0 release:
+* Real-time player
+* Filter extended support (extrapolation)
+* Add support for shape filters to Krita (may be not as plugin)
+* Do not show annoying dialogs on each export
+* Clean UI
