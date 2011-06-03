@@ -152,7 +152,7 @@ void DocxXmlDocumentReader::init()
     m_closeHyperlink = false;
     m_createSectionStyle = false;
     m_createSectionToNext = false;
-    m_insideGroup = false;
+    m_currentVMLProperties.insideGroup = false;
     m_outputFrames = true;
 }
 
@@ -265,6 +265,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
+
+    body->addAttribute("text:use-soft-page-breaks", "true");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1086,20 +1089,20 @@ void DocxXmlDocumentReader::applyBorders(KoGenStyle *style, QMap<BorderSide, QSt
     const qreal bottomPadding = sourcePadding.value(BottomBorder);
     const qreal rightPadding = sourcePadding.value(RightBorder);
     if (sourcePadding.contains(TopBorder) && leftPadding == topPadding && bottomPadding == topPadding && rightPadding == topPadding) {
-        style->addProperty("fo:padding", QString::number(topPadding) + "pt"); // all sides the same
+        style->addPropertyPt("fo:padding", topPadding); // all sides the same
     }
     else {
         if (sourcePadding.contains(TopBorder)) {
-            style->addProperty("fo:padding-top", QString::number(topPadding) + "pt");
+            style->addPropertyPt("fo:padding-top", topPadding);
         }
         if (sourcePadding.contains(LeftBorder)) {
-            style->addProperty("fo:padding-left", QString::number(leftPadding) + "pt");
+            style->addPropertyPt("fo:padding-left", leftPadding);
         }
         if (sourcePadding.contains(BottomBorder)) {
-            style->addProperty("fo:padding-bottom", QString::number(bottomPadding) + "pt");
+            style->addPropertyPt("fo:padding-bottom", bottomPadding);
         }
         if (sourcePadding.contains(RightBorder)) {
-            style->addProperty("fo:padding-right", QString::number(rightPadding) + "pt");
+            style->addPropertyPt("fo:padding-right", rightPadding);
         }
     }
     sourcePadding.clear();
@@ -1113,16 +1116,16 @@ void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin,
             qreal margin = pageMargins.value(MarginTop);
             qreal padding = pagePadding.value(TopBorder);
             if(offsetFrom == "page") {
-                style.addProperty("fo:margin-top", QString::number(padding) + "pt");
-                style.addProperty("fo:padding-top", QString::number(margin - padding) + "pt");
+                style.addPropertyPt("fo:margin-top", padding);
+                style.addPropertyPt("fo:padding-top", margin - padding);
             }
             else {
-                style.addProperty("fo:margin-top", QString::number(margin - padding) + "pt");
-                style.addProperty("fo:padding-top", QString::number(padding) + "pt");
+                style.addPropertyPt("fo:margin-top", margin - padding);
+                style.addPropertyPt("fo:padding-top", padding);
             }
         }
         else {
-            style.addProperty("fo:margin-top", QString::number(pageMargins.value(MarginTop)) + "pt");
+            style.addPropertyPt("fo:margin-top", pageMargins.value(MarginTop));
         }
     }
 
@@ -1131,16 +1134,16 @@ void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin,
             qreal margin = pageMargins.value(MarginBottom);
             qreal padding = pagePadding.value(BottomBorder);
             if(offsetFrom == "page") {
-                style.addProperty("fo:margin-bottom", QString::number(padding) + "pt");
-                style.addProperty("fo:padding-bottom", QString::number(margin - padding) + "pt");
+                style.addPropertyPt("fo:margin-bottom", padding);
+                style.addPropertyPt("fo:padding-bottom", margin - padding);
             }
             else {
-                style.addProperty("fo:margin-bottom", QString::number(margin - padding) + "pt");
-                style.addProperty("fo:padding-bottom", QString::number(padding) + "pt");
+                style.addPropertyPt("fo:margin-bottom", margin - padding);
+                style.addPropertyPt("fo:padding-bottom", padding);
             }
         }
         else {
-            style.addProperty("fo:margin-bottom", QString::number(pageMargins.value(MarginBottom)) + "pt");
+            style.addPropertyPt("fo:margin-bottom", pageMargins.value(MarginBottom));
         }
     }
 
@@ -1149,16 +1152,16 @@ void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin,
             qreal margin = pageMargins.value(MarginLeft);
             qreal padding = pagePadding.value(LeftBorder);
             if(offsetFrom == "page") {
-                style.addProperty("fo:margin-left", QString::number(padding) + "pt");
-                style.addProperty("fo:padding-left", QString::number(margin - padding) + "pt");
+                style.addPropertyPt("fo:margin-left", padding);
+                style.addPropertyPt("fo:padding-left", margin - padding);
             }
             else {
-                style.addProperty("fo:margin-left", QString::number(margin - padding) + "pt");
-                style.addProperty("fo:padding-left", QString::number(padding) + "pt");
+                style.addPropertyPt("fo:margin-left", margin - padding);
+                style.addPropertyPt("fo:padding-left", padding);
             }
         }
         else {
-            style.addProperty("fo:margin-left", QString::number(pageMargins.value(MarginLeft)) + "pt");
+            style.addPropertyPt("fo:margin-left", pageMargins.value(MarginLeft));
         }
     }
 
@@ -1167,16 +1170,16 @@ void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin,
             qreal margin = pageMargins.value(MarginRight);
             qreal padding = pagePadding.value(RightBorder);
             if(offsetFrom == "page") {
-                style.addProperty("fo:margin-right", QString::number(padding) + "pt");
-                style.addProperty("fo:padding-right", QString::number(margin - padding) + "pt");
+                style.addPropertyPt("fo:margin-right", padding);
+                style.addPropertyPt("fo:padding-right", margin - padding);
             }
             else {
-                style.addProperty("fo:margin-right", QString::number(margin - padding) + "pt");
-                style.addProperty("fo:padding-right", QString::number(padding) + "pt");
+                style.addPropertyPt("fo:margin-right", margin - padding);
+                style.addPropertyPt("fo:padding-right", padding);
             }
         }
         else {
-            style.addProperty("fo:margin-right", QString::number(pageMargins.value(MarginRight)) + "pt");
+            style.addPropertyPt("fo:margin-right", pageMargins.value(MarginRight));
         }
     }
 
@@ -1288,10 +1291,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(dxaOrig)
-    m_currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
-    kDebug() << "m_currentObjectWidthCm" << m_currentObjectWidthCm;
+    m_currentVMLProperties.currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
+    kDebug() << "m_currentObjectWidthCm" << m_currentVMLProperties.currentObjectWidthCm;
     TRY_READ_ATTR(dyaOrig)
-    m_currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
+    m_currentVMLProperties.currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
 
     while (!atEnd()) {
         readNext();
@@ -1548,16 +1551,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
 
     TRY_READ_ATTR(type)
 
-    if (type.isEmpty()) {
-        body->startElement("text:line-break");
-        body->endElement();
-    }
-
     if (type == "column") {
         m_currentParagraphStyle.addProperty("fo:break-before", "column");
     }
     else if (type == "page") {
         m_currentParagraphStyle.addProperty("fo:break-after", "page");
+    }
+    else {
+        body->startElement("text:line-break");
+        body->endElement();
     }
     readNext();
     READ_EPILOGUE
@@ -2156,7 +2158,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     // We want to write to the higher body level
     body = buffer.originalWriter();
     QString currentTextStyleName;
-    if (!m_currentTextStyle.isEmpty()) {
+    if (!m_currentTextStyle.isEmpty() || !m_currentTextStyle.parentName().isEmpty()) {
         currentTextStyleName = mainStyles->insert(m_currentTextStyle);
     }
     if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
@@ -2285,7 +2287,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [done] rStyle (Referenced Character Style) §17.3.2.29
  - rtl (Right To Left Text) §17.3.2.30
  - shadow (Shadow) §17.3.2.31
- - shd (Run Shading) §17.3.2.32
+ - [done] shd (Run Shading) §17.3.2.32
  - [done] smallCaps (Small Caps) §17.3.2.33
  - snapToGrid (Use Document Grid Settings For Inter-Character Spacing) §17.3.2.34
  - [done] spacing (Character Spacing Adjustment) §17.3.2.35
@@ -2308,13 +2310,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
 
     Q_ASSERT(m_currentTextStyleProperties == 0);
     m_currentTextStyleProperties = new KoCharacterStyle();
-
-    if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-        if (m_moveToStylesXml) {
-            m_currentTextStyle.setAutoStyleInStylesDotXml(true);
-        }
-    }
 
     while (!atEnd()) {
         readNext();
@@ -2353,26 +2348,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
     m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
-}
-
-//! CASE #410
-void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttributes& attrs)
-{
-    TRY_READ_ATTR(pStyle)
-    if (pStyle.isEmpty()) {
-//! CASE #412
-//! @todo
-    } else {
-//! CASE #411
-        if (isDefaultTocStyle(pStyle)) {
-            pStyle = QLatin1String("Contents") + pStyle.mid(3);
-        }
-    }
-
-    if (pStyle.isEmpty())
-        return;
-    kDebug() << "parent paragraph style name set to:" << pStyle;
-    m_currentParagraphStyle.setParentName(pStyle);
 }
 
 #undef CURRENT_EL
@@ -2444,7 +2419,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    setParentParagraphStyleName(attrs);
+    TRY_READ_ATTR(pStyle)
+    if (!pStyle.isEmpty()) {
+        m_currentParagraphStyle.setParentName(pStyle);
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
     m_pPr_lvl = lvl.toUInt(); // 0 (the default) on failure, so ok.
@@ -2454,7 +2432,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(rPr)
+            if (name() == "rPr") {
+                m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+                TRY_READ(rPr)
+                KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+            }
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(jc)
             ELSE_TRY_READ_IF(tabs)
@@ -2527,12 +2509,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_webHidden()
  - dir (§17.3.2.8)
  - docPartBody (§17.12.6)
  - e (§22.1.2.32)
- - endnote (§17.11.2)
+ - [done] endnote (§17.11.2)
  - fldSimple (§17.16.19)
  - fName (§22.1.2.37)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
@@ -2595,12 +2577,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
  - dir (§17.3.2.8)
  - docPartBody (§17.12.6)
  - e (§22.1.2.32)
- - endnote (§17.11.2)
+ - [done] endnote (§17.11.2)
  - fldSimple (§17.16.19)
  - fName (§22.1.2.37)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
@@ -2655,6 +2637,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkEnd()
  this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
  defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
  numbering definition shall be used instead.
+
+ Parent elements:
+ - [done] pPr (§17.3.1.26);
+ - [done] pPr (§17.3.1.25);
+ - [done] pPr (§17.7.5.2);
+ - [done] pPr (§17.7.6.1);
+ - [done] pPr (§17.9.23);
+ - [done] pPr (§17.7.8.2)
+
+ Child elements:
+ - [done] ilvl (Numbering Level Reference) §17.9.3
+ - ins (Inserted Numbering Properties) §17.13.5.19
+ - [done] numId (Numbering Definition Instance Reference) §17.9.19
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
 {
@@ -2710,13 +2705,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ilvl()
 //! numPr handler (Numbering Definition Instance Reference)
 /*!
  This element specifies that the current paragraph references a numbering definition instance in the current document.
- 
+
  The presence of this element specifies that the paragraph will inherit the properties specified by the numbering
  definition in the num element (§2.9.16) at the level specified by the level specified in the lvl element (§2.9.7)
  and shall have an associated number positioned before the beginning of the text flow in this paragraph. When
  this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
  defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
  numbering definition shall be used instead.
+
+ Parent elements:
+ - [done] numPr (§17.3.1.19)
+
+ Child elements:
+ - none
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
 {
@@ -2729,6 +2730,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
     // The styles from numbering have to be given some name, NumStyle has been chosen here
     if (!val.isEmpty()) {
         m_currentListStyleName = QString("NumStyle%1").arg(val);
+        if (val == "0") {
+            m_listFound = false; // spec says that this means deleted list
+        }
     }
 
     readNext();
@@ -3010,11 +3014,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     if (!hanging.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
         if (ok) {
-           m_currentParagraphStyle.addPropertyPt("fo:text-indent", leftInd - firstInd);
+           m_currentParagraphStyle.addPropertyPt("fo:text-indent", -firstInd);
         }
 
     }
-    else if (firstLine.isEmpty()) {
+    else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
         if (ok) {
            m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
@@ -3039,7 +3043,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_b()
 {
     READ_PROLOGUE
-    m_currentTextStyleProperties->setFontWeight(READ_BOOLEAN_VAL ? QFont::Bold : QFont::Normal);
+    if (READ_BOOLEAN_VAL) {
+        m_currentTextStyle.addProperty("fo:font-weight", "bold");
+    }
+    else {
+        m_currentTextStyle.addProperty("fo:font-weight", "normal");
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3051,7 +3060,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_b()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_i()
 {
     READ_PROLOGUE
-    m_currentTextStyleProperties->setFontItalic(READ_BOOLEAN_VAL);
+    if (READ_BOOLEAN_VAL) {
+        m_currentTextStyle.addProperty("fo:font-style", "italic");
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3089,12 +3100,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_u()
  - rPr (§17.3.1.30)
  - rPr (§17.5.2.28)
  - rPr (§17.9.25)
- - rPr (§17.7.9.1)
- - rPr (§17.7.5.4) (within style)
+ - [done] rPr (§17.7.9.1)
+ - [done] rPr (§17.7.5.4) (within style)
  - [done] rPr (§17.3.2.28)
- - rPr (§17.5.2.27)
- - rPr (§17.7.6.2)
- - rPr (§17.3.2.27)
+ - [done] rPr (§17.5.2.27)
+ - [done] rPr (§17.7.6.2)
+ - [done] rPr (§17.3.2.27)
  No child elements.
 */
 //! @todo support all elements
@@ -4286,7 +4297,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lang()
  containing the background element.
 
  Child element:
- - drawing (§17.3.3.9)
+ - [done] drawing (§17.3.3.9)
+
  Attributes:
  - [done] color (Background Color)
  - themeColor (Background Theme Color)
@@ -4348,10 +4360,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
  - comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2);
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] endnote (§17.11.2);
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - sdtContent (§17.5.2.34)
  - [done] tc (§17.4.66)
 
@@ -4559,6 +4571,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridCol)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -4601,13 +4614,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
     style->setWidth(columnWidth);
     column->setStyle(style);
 
-    while(!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-//         if(isStartElement()) {
-//             TRY_READ_IF(extLst)
-//         }
-    }
+    readNext();
 
     READ_EPILOGUE
 }
@@ -4684,7 +4691,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 #define CURRENT_EL trPr
 /*
 Parent elements:
- - tr (§17.4.79)
+ - [done] tr (§17.4.79)
 
 child elements:
  - cantSplit (Table Row Cannot Break Across Pages) §17.4.6

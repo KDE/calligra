@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=ATA
+Name[el]=ATA
 Name[et]=ATA
+Name[nb]=ATA
 Name[nl]=ATA
 Name[pt]=ATA
 Name[pt_BR]=ATA
@@ -8,3 +10,4 @@ Name[sv]=ATA
 Name[ug]=ATA
 Name[uk]=ATA
 Name[x-test]=xxATAxx
+Name[zh_TW]=ATA

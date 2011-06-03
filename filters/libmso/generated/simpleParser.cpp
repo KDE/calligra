@@ -4630,12 +4630,9 @@ void MSO::parsetodo(LEInputStream& in, todo& _s) {
 void MSO::parseFibBase(LEInputStream& in, FibBase& _s) {
     _s.streamOffset = in.getPosition();
     _s.wIdent = in.readuint16();
-    if (!(((quint16)_s.wIdent) == 0xA5EC)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.wIdent) == 0xA5EC");
-    }
     _s.nFib = in.readuint16();
-    if (!(((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112");
+    if (!(((quint16)_s.nFib) == 0x65 || ((quint16)_s.nFib) == 0x67 || ((quint16)_s.nFib) == 0x68 || ((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112)) {
+        throw IncorrectValueException(in.getPosition(), "((quint16)_s.nFib) == 0x65 || ((quint16)_s.nFib) == 0x67 || ((quint16)_s.nFib) == 0x68 || ((quint16)_s.nFib) == 0xC0 || ((quint16)_s.nFib) == 0xC1 || ((quint16)_s.nFib) == 0xC2 || ((quint16)_s.nFib) == 0x101 || ((quint16)_s.nFib) == 0x10B || ((quint16)_s.nFib) == 0x10C || ((quint16)_s.nFib) == 0x112");
     }
     _s.unused = in.readuint16();
     _s.lid = in.readuint16();
@@ -4654,9 +4651,6 @@ void MSO::parseFibBase(LEInputStream& in, FibBase& _s) {
     _s.fFarEast = in.readbit();
     _s.fObfuscated = in.readbit();
     _s.nFibBack = in.readuint16();
-    if (!(((quint16)_s.nFibBack) == 0xBF || ((quint16)_s.nFibBack) == 0xC1)) {
-        throw IncorrectValueException(in.getPosition(), "((quint16)_s.nFibBack) == 0xBF || ((quint16)_s.nFibBack) == 0xC1");
-    }
     _s.IKey = in.readuint32();
     _s.envr = in.readuint8();
     if (!(((quint8)_s.envr) == 0)) {
@@ -9149,28 +9143,22 @@ void MSO::parseDiagramBooleanProperties(LEInputStream& in, DiagramBooleanPropert
     if (!(_s.opid.fComplex == false)) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
-    _s.fLockAgainstGrouping = in.readbit();
-    _s.fLockAdjustHandles = in.readbit();
-    _s.fLockText = in.readbit();
-    _s.fLockVertices = in.readbit();
-    _s.fLockCropping = in.readbit();
-    _s.fLockAgainstSelect = in.readbit();
-    _s.fLockPosition = in.readbit();
-    _s.fLockAspectRatio = in.readbit();
-    _s.fLockRotation = in.readbit();
-    _s.fLockAgainstUngrouping = in.readbit();
-    _s.unused6 = in.readuint6();
-    _s.fUsefLockAgainstGrouping = in.readbit();
-    _s.fUseLockAdjustHandles = in.readbit();
-    _s.fUseLockText = in.readbit();
-    _s.fUsefLockVertices = in.readbit();
-    _s.fUsefLockCropping = in.readbit();
-    _s.fUsefLockAgainstSelect = in.readbit();
-    _s.fUsefLockPosition = in.readbit();
-    _s.fUsefLockAspectRatio = in.readbit();
-    _s.fUsefLockRotation = in.readbit();
-    _s.fUsefLockAgainstUngrouping = in.readbit();
-    _s.unused2 = in.readuint6();
+    _s.fPseudoInline = in.readbit();
+    _s.fDoLayout = in.readbit();
+    _s.fReverse = in.readbit();
+    _s.fDoFormat = in.readbit();
+    _s.unused1 = in.readbit();
+    _s.unused2 = in.readbit();
+    _s.unused3a = in.readuint2();
+    _s.unused3b = in.readuint8();
+    _s.fUsefPseudoInline = in.readbit();
+    _s.fUsefDoLayout = in.readbit();
+    _s.fUsefReverse = in.readbit();
+    _s.fUsefDoFormat = in.readbit();
+    _s.unused4 = in.readbit();
+    _s.unused5 = in.readbit();
+    _s.unused6a = in.readuint2();
+    _s.unused6b = in.readuint8();
 }
 void MSO::parsePptOfficeArtClientAnchor(LEInputStream& in, PptOfficeArtClientAnchor& _s) {
     _s.streamOffset = in.getPosition();

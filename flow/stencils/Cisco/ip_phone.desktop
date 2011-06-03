@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=IP Phone
+Name[el]=IP τηλέφωνο
 Name[et]=IP-telefon
 Name[nl]=IP telefoon
 Name[pt]=Telefone IP
@@ -7,3 +8,4 @@ Name[pt_BR]=Telefone IP
 Name[sv]=Internet-telefon
 Name[uk]=IP-телефон
 Name[x-test]=xxIP Phonexx
+Name[zh_TW]=IP 電話

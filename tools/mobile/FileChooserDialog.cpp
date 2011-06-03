@@ -153,7 +153,7 @@ int FileChooserDialog::checkFileType(QString ext)
         return WORDS;
     else if (stageExtensions.contains(ext))
         return STAGE;
-    else if (tableExtensions.contains("ext"))
+    else if (tableExtensions.contains(ext))
         return TABLES;
 
     return UNKNOWN;

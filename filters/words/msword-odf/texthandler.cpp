@@ -109,6 +109,13 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
         m_footNoteNumber = m_parser->dop().nFtn - 1;
     }
 }
+bool KWordTextHandler::stateOk() const
+{
+    if (m_fldStart != m_fldEnd) {
+        return false;
+    }
+    return true;
+}
 
 KoXmlWriter* KWordTextHandler::currentWriter() const
 {
@@ -286,16 +293,13 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 
 
 //this part puts the marker in the text, and signals for the rest to be parsed later
-void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
+void KWordTextHandler::footnoteFound(wvWare::FootnoteData data,
                                      wvWare::UString characters,
                                      wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                      const wvWare::FootnoteFunctor& parseFootnote)
 {
-    Q_UNUSED(chp);
     Q_UNUSED(sep);
-
-    kDebug(30513) ;
 
     m_insideFootnote = true;
 
@@ -306,7 +310,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
 
     m_footnoteWriter->startElement("text:note");
     //set footnote or endnote
-    m_footnoteWriter->addAttribute("text:note-class", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
+    m_footnoteWriter->addAttribute("text:note-class", data.type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
     //autonumber or character
     m_footnoteWriter->startElement("text:note-citation");
 
@@ -314,9 +318,18 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
 
     //NOTE: besides converting the number to text here the format is specified
     //in section-properties -> notes-configuration too
-    if (characters[0].unicode() == 2) {
+    //
+    //The character in the main document at the position specified by the
+    //corresponding CP MUST be equal 0x02 and have sprmCFSpec applied with a
+    //value of 1.  Let's be a bit more relaxed and follow the behavior of OOo
+    //and MS Office 2007.
+    if (!chp->fSpec || !(characters[0].unicode() == 2)) {
+        kWarning(30513) << "Warning: Trying to process a broken footnote/endnote!";
+    }
 
-        int noteNumber = (type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
+    if ( data.autoNumbered ) {
+
+        int noteNumber = (data.type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
         QString noteNumberString;
         char letter = 'a';
         uint ref = msonfcArabic;
@@ -324,7 +337,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
         //TODO: check SEP if required
 
 	//checking DOP - documents default
-        if (type == wvWare::FootnoteData::Endnote) {
+        if (data.type == wvWare::FootnoteData::Endnote) {
             ref = m_parser->dop().nfcEdnRef2;
         } else {
             ref = m_parser->dop().nfcFtnRef2;
@@ -397,7 +410,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     //save the state of tables/paragraphs/lists
     saveState();
     //signal Document to parse the footnote
-    emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), type);
+    emit footnoteFound(new wvWare::FootnoteFunctor(parseFootnote), data.type);
 
     //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {
@@ -571,20 +584,36 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
     }
 
     if (!m_currentTable) {
-        // We need to put the table in a paragraph. For wv2 tables are between paragraphs.
-        //Q_ASSERT( !m_bInParagraph );
-        //paragraphStart( 0L );
         static int s_tableNumber = 0;
         m_currentTable = new KWord::Table();
         m_currentTable->name = i18n("Table %1", ++s_tableNumber);
         m_currentTable->tap = tap;
         //insertAnchor( m_currentTable->name );
     }
+//     kDebug(30513) << "tap->itcMac:" << tap->itcMac << "tap->rgdxaCenter.size():" << tap->rgdxaCenter.size();
 
-    // Add all cell edges to our array.
-    for (int i = 0; i <= tap->itcMac; i++)
+    // NOTE: Number of columns MUST be at least zero, and MUST NOT exceed 63.
+    // The rgdxaCenter vector MUST contain exactly one value for every column,
+    // incremented by 1.  The values in the vector MUST be in non-decreasing
+    // order, [MS-DOC] — v20101219, 514/621
+    if ( (tap->itcMac < 0) || (tap->itcMac > 63) ) {
+        throw InvalidFormatException("Table row: INVALID num. of culumns!");
+    }
+    if ( tap->rgdxaCenter.empty() ||
+         (tap->rgdxaCenter.size() != (quint16)(tap->itcMac + 1)) )
+    {
+        throw InvalidFormatException("Table row: tap->rgdxaCenter.size() INVALID!");
+    }
+    for (uint i = 0; i < (quint16) tap->itcMac; i++) {
+        if (tap->rgdxaCenter[i] > tap->rgdxaCenter[i + 1]) {
+            kWarning(30513) << "Warning: tap->rgdxaCenter INVALID, tablehandler will try to fix!";
+            break;
+        }
+    }
+    // Add all cell edges to an array where tablehandler will keep them sorted.
+    for (int i = 0; i <= tap->itcMac; i++) {
         m_currentTable->cacheCellEdge(tap->rgdxaCenter[ i ]);
-
+    }
     KWord::Row row(new wvWare::TableRowFunctor(functor), tap);
     m_currentTable->rows.append(row);
 }
@@ -736,7 +765,6 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     if (m_currentTable) {
         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
     }
-
     //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
     bool inStylesDotXml = false;
@@ -745,6 +773,8 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         inStylesDotXml = true;
     }
 
+    const wvWare::StyleSheet& styles = m_parser->styleSheet();
+    const wvWare::Style* paragraphStyle = 0;
     m_currentPPs = paragraphProperties;
 
     // Check list information, because that's bigger than a paragraph, and
@@ -756,26 +786,46 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 
     //TODO: <text:numbered-paragraph>
 
-    //TODO: Put all the heading related logic here!
+    //headings related logic
     if (paragraphProperties) {
-        uint istd = paragraphProperties->pap().istd;
+        quint16 istd = paragraphProperties->pap().istd;
+
+        //Check for a named style for this paragraph.
+        paragraphStyle = styles.styleByIndex(istd);
+        if (!paragraphStyle) {
+            paragraphStyle = styles.styleByID(stiNormal);
+            kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
+        }
+        Q_ASSERT(paragraphStyle);
+
+        //An unsigned integer that specifies the istd of the parent style from
+        //which this style inherits in the style inheritance tree, or 0x0FFF if
+        //this style does not inherit from any other style.
+        quint16 istdBase = 0x0fff;
+        if (!paragraphStyle->isEmpty()) {
+            istdBase = paragraphStyle->m_std->istdBase;
+        }
+//         kDebug(30513) << "istd:" << istd << "| istdBase:" << istdBase;
 
         //Applying a heading style, paragraph is a heading.
         if ( (istd >= 0x1) && (istd <= 0x9) ) {
             isHeading = true;
             //according to [MS-DOC] - v20100926
             outlineLevel = istd - 1;
+        } else if ( (istdBase >= 0x1) && (istdBase <= 0x9) ) {
+            isHeading = true;
+            outlineLevel = istdBase - 1;
+        }
+        if (isHeading) {
             //MS-DOC outline level is ZERO based, whereas ODF has ONE based.
             outlineLevel++;
         }
+    } else {
+        Q_ASSERT(paragraphProperties);
     }
 
-    // ilfo = when non-zero, (1-based) index into the pllfo identifying the
-    // list to which the paragraph belongs.
-    if (!paragraphProperties) {
-        // TODO: What to do here?
-        kDebug(30513) << "PAP Missing (Big mess-up!)";
-    } else if ( (paragraphProperties->pap().ilfo == 0)) {
+    //lists related logic
+    if (paragraphProperties->pap().ilfo == 0) {
 
         // Not in a list at all in the word document, so check if we need to
         // close one in the odt.
@@ -823,42 +873,14 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     kDebug(30513) << "create new Paragraph";
     m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
 
+    //set paragraph properties
+    m_paragraph->setParagraphProperties(paragraphProperties);
+
+    //set current named style in m_paragraph
+    m_paragraph->setParagraphStyle(paragraphStyle);
+
     //provide the background color information
     m_paragraph->setBgColor(m_document->currentBgColor());
-
-    //if ( m_bInParagraph )
-    //    paragraphEnd();
-    //m_bInParagraph = true;
-    //kDebug(30513) <<"paragraphStart. style index:" << paragraphProperties->pap().istd;
-
-    kDebug(30513) << "set paragraph properties";
-    m_paragraph->setParagraphProperties(paragraphProperties);
-    const wvWare::StyleSheet& styles = m_parser->styleSheet();
-    //m_currentStyle = 0;
-
-    //Check for a named style for this paragraph.  paragraphProperties are
-    //always set when called by wv2.  But not set when called by tableStart.
-    if (paragraphProperties) {
-        kDebug(30513) << "set paragraph style";
-
-        //TODO: It would be secure to end with KoFilter::InvalidFormat
-        const wvWare::Style* paragraphStyle = styles.styleByIndex(paragraphProperties->pap().istd);
-        if (!paragraphStyle && styles.size()) {
-            paragraphStyle = styles.styleByIndex(0);
-            kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
-        } else {
-            Q_ASSERT(paragraphStyle);
-        }
-
-        //set current named style in m_paragraph
-        m_paragraph->setParagraphStyle(paragraphStyle);
-
-        //write the paragraph formatting
-        //KoGenStyle* paragraphStyle = new KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
-        //writeLayout(*paragraphProperties, paragraphStyle, m_currentStyle, true, namedStyleName);
-    } else {
-        kWarning() << "paragraphProperties NOT set!";
-    }
 
     KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
 
@@ -869,8 +891,9 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         document()->set_writeMasterPageName(false);
     }
     //check if the break-before property is required
-    if (m_breakBeforePage &&
-        !document()->writingHeader() && !paragraphProperties->pap().fInTable)
+    if ( m_breakBeforePage &&
+         !document()->writingHeader() &&
+         !paragraphProperties->pap().fInTable )
     {
         style->addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
         m_breakBeforePage = false;
@@ -1914,19 +1937,35 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         }
 
         listStyleWriter.startElement("style:list-level-properties");
+        listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
+        listStyleWriter.startElement("style:list-level-label-alignment");
+
+        switch (listInfo->followingChar()) {
+        case 0:
+            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            break;
+        case 1:
+            listStyleWriter.addAttribute("text:label-followed-by", "nothing");
+            break;
+        case 2:
+            listStyleWriter.addAttribute("text:label-followed-by", "space");
+            break;
+        default:
+            break;
+        }
+
         if (listInfo->space()) {
             // This produces wrong results (see the document attached to KDE
             // bug 244411 and it's not clear why that is so. The specs say that
             // the dxaSpace is the "minimum space between number and paragraph"
             // and as such following should be right but it is not. So, we
             // disabled it for now till someone has an idea why that is so.
-            // listStyleWriter.addAttributePt("text:min-label-distance",
-            // listInfo->space()/20.0);
+            // listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
         }
         if (listInfo->indent()) {
-            // Is this correct?
-            listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);
+            listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
         }
+        listStyleWriter.endElement(); //style:list-level-label-alignment
         listStyleWriter.endElement(); //style:list-level-properties
         //close element
         listStyleWriter.endElement(); //text:list-level-style-bullet
@@ -2038,6 +2077,7 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         //listInfo->followingchar() ignored, it's always a space in KWord currently
         //*************************************
         listStyleWriter.startElement("style:list-level-properties");
+        listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
         switch (listInfo->alignment()) {
         case 1:
             listStyleWriter.addAttribute("fo:text-align", "center");
@@ -2052,13 +2092,30 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
             break;
         }
 
+        listStyleWriter.startElement("style:list-level-label-alignment");
+
+        switch (listInfo->followingChar()) {
+        case 0:
+            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            break;
+        case 1:
+            listStyleWriter.addAttribute("text:label-followed-by", "nothing");
+            break;
+        case 2:
+            listStyleWriter.addAttribute("text:label-followed-by", "space");
+            break;
+        default:
+            break;
+        }
+
         if (listInfo->space()) {
             // Disabled for now. Have a look at the comment at the other text:min-label-distance above to see why.
             //listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
         }
         if (listInfo->indent()) {
-            listStyleWriter.addAttributePt("text:min-label-width", listInfo->indent()/20.0);
+            listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
         }
+        listStyleWriter.endElement(); //style:list-level-label-alignment
         listStyleWriter.endElement(); //style:list-level-properties
         //close element
         listStyleWriter.endElement(); //text:list-level-style-number

@@ -327,15 +327,16 @@ void Document::processStyles()
         }
 
         // Process paragraph styles.
-        if (style && style->type() == wvWare::Style::sgcPara) {
+        if (style && style->type() == sgcPara) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
-            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
+            const wvWare::Style* followingStyle = styles.styleByIndex(style->followingStyle());
             if (followingStyle && followingStyle != style) {
-                QString followingName = Conversion::string(followingStyle->name());
+                QString followingName = Conversion::styleNameString(followingStyle->name());
+                userStyle.addAttribute("style:next-style-name", followingName);
             }
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
@@ -364,7 +365,7 @@ void Document::processStyles()
             if (actualName.contains("TOC")) {
                 m_tocStyleNames.append(actualName);
             }
-        } else if (style && style->type() == wvWare::Style::sgcChp) {
+        } else if (style && style->type() == sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "text");
@@ -397,15 +398,19 @@ void Document::processStyles()
     m_mainStyles->insert(defaultStyle, "nevershown");
 }
 
-//just call parsing function
-bool Document::parse()
+quint8 Document::parse()
 {
-    kDebug(30513) ;
-    bool ret = false;
     if (m_parser) {
-        ret = m_parser->parse();
+        if (!m_parser->parse()) {
+            return 1;
+        }
     }
-    return ret;
+    //make sure texthandler is fine after parsing
+    if (!m_textHandler->stateOk()) {
+        kError(30513) << "TextHandler state after parsing NOT Ok!";
+        return 2;
+    }
+    return 0;
 }
 
 void Document::setProgress(const int percent)

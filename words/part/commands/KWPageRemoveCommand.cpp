@@ -23,6 +23,8 @@
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "frames/KWFrame.h"
+#include "KWRootAreaProvider.h"
+#include "KoTextLayoutRootArea.h"
 
 #include <KoShapeMoveCommand.h>
 
@@ -45,7 +47,7 @@ KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, QUnd
     Q_ASSERT(document->pageManager()->page(m_pageNumber) == page);
 
     kDebug(32001) << "pageNumber=" << page.pageNumber();
-
+#if 0
     const qreal top = page.offsetInDocument();
     KoInsets padding = document->pageManager()->padding();
     const qreal bottom = top + page.height();
@@ -87,8 +89,11 @@ KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, QUnd
             }
         }
     }
+#if 0
     if (! shapesToMove.isEmpty())
         new KoShapeMoveCommand(shapesToMove, previousPositions, newPositions, this);
+#endif
+#endif
 }
 
 KWPageRemoveCommand::~KWPageRemoveCommand()
@@ -98,31 +103,48 @@ KWPageRemoveCommand::~KWPageRemoveCommand()
 void KWPageRemoveCommand::redo()
 {
     kDebug(32001) << "pageNumber=" << m_pageNumber;
+    QUndoCommand::redo();
 
     KWPage page = m_document->pageManager()->page(m_pageNumber);
     Q_ASSERT(page.isValid());
-    // remove the page in KWPageManager
-    m_document->pageManager()->removePage(page);
-    QUndoCommand::redo();
 
-    foreach (const AutoGenFrameSet &agf, m_autoGenFrameSets) {
-        KWTextFrameSet *tfs = agf.frameSet;
-        while (tfs->frameCount() > agf.deleteFromFrame) {
-            KWFrame *frame = tfs->frames().at(agf.deleteFromFrame);
-            tfs->removeFrame(frame);
-            delete frame->shape();
-        }
+    // remove the text displayed on the page from the accros all pages shared QTextDocument
+    KWTextFrameSet *mainfs = m_document->frameLayout()->mainFrameSet();
+    KWRootAreaProvider *provider = mainfs->rootAreaProvider();
+    QList<KWRootAreaPage *> pages = provider->pages();
+    Q_ASSERT(m_pageNumber <= pages.count());
+    KWRootAreaPage *rootAreaPage = pages[m_pageNumber - 1];
+    foreach(KoTextLayoutRootArea *area, rootAreaPage->rootAreas) {
+        QTextFrame::iterator it = area->startTextFrameIterator();
+        QTextFrame::iterator stop = area->endTextFrameIterator();
+        if (it == stop)
+            continue;
+        --stop;
+        QTextCursor cursor(it.currentBlock());
+        cursor.setPosition(stop.currentBlock().position() + stop.currentBlock().length(), QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
     }
-    // update changes
+
+    //TODO remove also to the page / a character anchored objects like e.g. images
+
+    // remove the KWFrame's displayed on that page
+    foreach(KWFrame *frame, m_document->frameLayout()->framesInPage(page.pageNumber())) {
+        new KWFrameDeleteCommand(m_document, frame, this);
+    }
+
+    // finally remove the page from the KWPageManager
+    m_document->pageManager()->removePage(page);
+
+    // and ask for a relayout
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->frameLayout()->mainFrameSet()->document()->documentLayout());
+    Q_ASSERT(lay);
+
+    m_document->frameLayout()->mainFrameSet()->rootAreaProvider()->clearPages(1);
+    lay->removeRootArea(0);
+
+    lay->layout();
+    
     m_document->firePageSetupChanged();
-
-    // TODO Alter frame properties to not auto-create a frame again.
-
-    // TODO remove the text include possible pagebreak displayed on the page from the
-    // mainframe's QTextDocument. Atm this results in a new page being added after the
-    // selected page got removed :-/
-
-    //m_document->relayout(); //needed?
 }
 
 void KWPageRemoveCommand::undo()
@@ -130,7 +152,7 @@ void KWPageRemoveCommand::undo()
     kDebug(32001) << "pageNumber=" << m_pageNumber;
 
     QUndoCommand::undo();
-
+#if 0
     // insert the page
     KWPage page = m_document->pageManager()->insertPage(m_pageNumber);
     page.setPageSide(m_pageSide);
@@ -143,5 +165,6 @@ void KWPageRemoveCommand::undo()
 
     m_document->firePageSetupChanged();
     //m_document->relayout(); //needed?
+#endif
 }
 

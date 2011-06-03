@@ -143,7 +143,12 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     }
 
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
+    if (!msTextStyle && styles.size()) {
+        msTextStyle = styles.styleByID(stiNormalChar);
+        kDebug(30513) << "Invalid reference to text style, reusing NormalChar";
+    }
     Q_ASSERT(msTextStyle);
+
     QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
@@ -371,13 +376,6 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
     writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
     //TODO: insert <text:tab> elements at specified locations
-    if (m_paragraphProperties->pap().itbdMac) {
-	//checking the list tab
-        if (m_paragraphProperties->pap().rgdxaTab[0].tbd.jc == jcList) {
-            writer->startElement("text:tab", false);
-            writer->endElement();
-        }
-    }
 
     //if there's any paragraph content
     if (!m_textStrings.isEmpty()) {
@@ -563,16 +561,14 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty("style:writing-mode", "lr-tb", KoGenStyle::ParagraphType);
     }
 
-    // if there is no parent style OR the parent and child background color
+    // If there is no parent style OR the parent and child background color
     // don't match OR parent color was invalid, childs color is valid
-    if (!refPap || refPap->shd.cvBack != pap.shd.cvBack ||
-        (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
+    if ( !refPap ||
+         (refPap->shd.cvBack != pap.shd.cvBack) ||
+         (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
     {
-        QString color;
-        // is the color valid? (don't compare to black - 0xff000000 !!!)
-        if (!pap.shd.shdAutoOrNill) {
-            color = '#' + QString::number(pap.shd.cvBack | 0xff000000, 16).right(6).toUpper();
-            //update the background-color information
+        QString color = Conversion::shdToColorStr(pap.shd);
+        if (!color.isEmpty()) {
             setBgColor(color);
         } else {
             color = "transparent";
@@ -746,8 +742,9 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 tmpWriter.addAttribute("style:type", "right");
                 break;
             case jcDecimal:
+                tmpWriter.addAttribute("style:type", "char");
+                break;
             case jcBar:
-		//decimal tab -> align on decimal point
                 //bar -> just creates a vertical bar at that point that's always visible
                 kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
                 break;
@@ -1074,7 +1071,12 @@ QString Paragraph::string(int index) const
 QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::StyleSheet& styles)
 {
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
+    if (!msTextStyle && styles.size()) {
+        msTextStyle = styles.styleByID(stiNormalChar);
+        kDebug(30513) << "Invalid reference to text style, reusing NormalChar";
+    }
     Q_ASSERT(msTextStyle);
+
     QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 

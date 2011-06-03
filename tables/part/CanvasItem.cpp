@@ -271,6 +271,8 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
         connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                 this, SLOT(setDocumentSize(const QSizeF&)));
+        connect(d->sheetViews[ sheet ], SIGNAL(obscuredRangeChanged(QSize)),
+                this, SLOT(setObscuredRange(QSize)));
         //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                 //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
         connect(sheet, SIGNAL(visibleSizeChanged()),
@@ -285,6 +287,8 @@ void CanvasItem::refreshSheetViews()
     for (int i = 0; i < sheetViews.count(); ++i) {
         disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
                    this, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetViews[i], SIGNAL(obscuredRangeChanged(QSize)),
+                this, SLOT(setObscuredRange(QSize)));
         //disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
                    //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
         disconnect(sheetViews[i]->sheet(), SIGNAL(visibleSizeChanged()),
@@ -478,6 +482,14 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
     } else if (paintMode == Everything) {
         update();
     }
+}
+
+void CanvasItem::setObscuredRange(const QSize &size)
+{
+    SheetView* sheetView = qobject_cast<SheetView*>(sender());
+    if (!sheetView) return;
+
+    emit obscuredRangeChanged(sheetView->sheet(), size);
 }
 
 #include "CanvasItem.moc"

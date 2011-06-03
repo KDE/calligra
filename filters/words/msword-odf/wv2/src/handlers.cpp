@@ -184,8 +184,8 @@ void TextHandler::specialCharacter( SpecialCharacter /*character*/, SharedPtr<co
 {
 }
 
-void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UString characters,
-                                 SharedPtr<const Word97::SEP> sep,
+void TextHandler::footnoteFound( FootnoteData /*data*/, UString characters,
+                                 SharedPtr<const Word97::SEP> /*sep*/,
                                  SharedPtr<const Word97::CHP> chp,
                                  const FootnoteFunctor& parseFootnote)
 {

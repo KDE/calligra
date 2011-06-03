@@ -325,7 +325,7 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
 /*! ECMA-376, 18.3.1.99, p. 1894.
  Root element of Worksheet parts within a SpreadsheetML document.
  Child elements:
- - autoFilter (AutoFilter Settings) §18.3.1.2
+ - [done] autoFilter (AutoFilter Settings) §18.3.1.2
  - cellWatches (Cell Watch Items) §18.3.1.9
  - colBreaks (Vertical Page Breaks) §18.3.1.14
  - [done] cols (Column Information) §18.3.1.17
@@ -409,6 +409,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             ELSE_TRY_READ_IF(hyperlinks)
             ELSE_TRY_READ_IF(picture)
             ELSE_TRY_READ_IF(oleObjects)
+            ELSE_TRY_READ_IF(autoFilter)
             SKIP_UNKNOWN
         }
         else if (isStartElement() && m_context->firstRoundOfReading) {
@@ -611,6 +612,44 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     }
 
     body->endElement(); // table:table
+
+    if (!m_context->autoFilters.isEmpty()) {
+        body->startElement("table:database-ranges");
+        int index = 0;
+        while (index < m_context->autoFilters.size()) {
+            body->startElement("table:database-range");
+            body->addAttribute("table:target-range-address", m_context->autoFilters.at(index).area);
+            body->addAttribute("table:display-filter-buttons", "true");
+            body->addAttribute("table:name", QString("%1_%2").arg(m_context->worksheetName).arg(index));
+            QString type = m_context->autoFilters.at(index).type;
+            int filterConditionSize = m_context->autoFilters.at(index).filterConditions.size();
+            if (filterConditionSize > 0) {
+                if (type == "and") {
+                    body->startElement("table:filter-and");
+                }
+                else if (type == "or") {
+                    body->startElement("table:filter-or");
+                }
+                else {
+                    body->startElement("table:filter");
+                }
+                int conditionIndex = 0;
+                while (conditionIndex < filterConditionSize) {
+                    body->startElement("table:filter-condition");
+                    body->addAttribute("table:field-number", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).field);
+                    body->addAttribute("table:value", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).value);
+                    body->addAttribute("table:operator", m_context->autoFilters.at(index).filterConditions.at(conditionIndex).opField);
+                    body->endElement(); // table:filter-condition
+                    ++conditionIndex;
+                }
+                body->endElement(); // table:filter | table:filter-or | table:filter-and
+            }
+            body->endElement(); // table:database-range
+            ++index;
+        }
+
+        body->endElement(); // table:database-ranges
+    }
 
     if (m_context->firstRoundOfReading) {
         body = oldBody;
@@ -1663,6 +1702,233 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
             ELSE_WRONG_FORMAT
         }
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL customFilters
+/*
+ Parent elements:
+ - [done] filterColumn (§18.3.2.7)
+
+ Child elements:
+ - [done] customFilter (Custom Filter Criteria) §18.3.2.2
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_customFilters()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    QString andValue = attrs.value("and").toString();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(customFilter)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    if (!m_context->autoFilters.isEmpty()) {
+        if (andValue == "1") {
+            m_context->autoFilters.last().type = "and";
+        } else {
+            m_context->autoFilters.last().type = "or";
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL filters
+/*
+ Parent elements:
+ - [done] filterColumn (§18.3.2.7)
+
+ Child elements:
+ - dateGroupItem (Date Grouping) §18.3.2.4
+ - [done] filter (Filter) §18.3.2.6
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filters()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(blank)
+
+    m_context->currentFilterCondition.value = "^(";
+
+    bool hasValueAlready = false;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (name() == "filter") {
+                if (hasValueAlready) {
+                    m_context->currentFilterCondition.value += "|";
+                }
+                hasValueAlready = true;
+                TRY_READ(filter)
+            }
+            SKIP_UNKNOWN
+        }
+    }
+
+    m_context->currentFilterCondition.value += ")$";
+    m_context->currentFilterCondition.opField = "match";
+
+    if (blank == "1") {
+        m_context->currentFilterCondition.value = "0";
+        m_context->currentFilterCondition.opField = "empty";
+    }
+
+    if (!m_context->autoFilters.isEmpty()) {
+        m_context->autoFilters.last().filterConditions.push_back(m_context->currentFilterCondition);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL customFilter
+/*
+ Parent elements:
+ - [done] customFilters (§18.3.2.2)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_customFilter()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    QString opValue = attrs.value("operator").toString();
+
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    m_context->currentFilterCondition.value = val;
+
+    if (opValue == "notEqual") {
+        m_context->currentFilterCondition.opField = "!=";
+    }
+    else {
+        m_context->currentFilterCondition.opField = "=";
+    }
+
+    if (!m_context->autoFilters.isEmpty()) {
+        m_context->autoFilters.last().filterConditions.push_back(m_context->currentFilterCondition);
+    }
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL filter
+/*
+ Parent elements:
+ - [done] filters (§18.3.2.8)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filter()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    m_context->currentFilterCondition.value += val;
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL filterColumn
+/*
+ Parent elements:
+ - [done] autoFilter (§18.3.1.2)
+
+ Child elements:
+ - colorFilter (Color Filter Criteria) §18.3.2.1
+ - [done] customFilters (Custom Filters) §18.3.2.3
+ - dynamicFilter (Dynamic Filter) §18.3.2.5
+ - extLst (Future Feature Data Storage Area) §18.2.10
+ - [done] filters (Filter Criteria) §18.3.2.8
+ - iconFilter (Icon Filter) §18.3.2.9
+ - top10 (Top 10) §18.3.2.10
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filterColumn()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(colId)
+
+    m_context->currentFilterCondition.field = colId;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(filters)
+            ELSE_TRY_READ_IF(customFilters)
+            SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL autoFilter
+/*
+ Parent elements:
+ - customSheetView (§18.3.1.25)
+ - filter (§18.10.1.33)
+ - table (§18.5.1.2)
+ - [done] worksheet (§18.3.1.99)
+
+ Child elements:
+ - extLst (Future Feature Data Storage Area) §18.2.10
+ - [done] filterColumn (AutoFilter Column) §18.3.2.7
+ - sortState (Sort State) §18.3.1.92
+*/
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_autoFilter()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(ref)
+
+    ref.prepend(".");
+    ref.prepend(m_context->worksheetName);
+
+    int colon = ref.indexOf(':');
+    if (colon > 0) {
+        ref.insert(colon + 1, '.');
+        ref.insert(colon + 1, m_context->worksheetName);
+    }
+
+    XlsxXmlWorksheetReaderContext::AutoFilter autoFilter;
+    autoFilter.area = ref;
+    m_context->autoFilters.push_back(autoFilter);
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(filterColumn)
+            SKIP_UNKNOWN
+        }
+    }
+
     READ_EPILOGUE
 }
 

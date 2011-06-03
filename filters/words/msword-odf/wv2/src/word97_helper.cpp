@@ -1136,7 +1136,7 @@ namespace
             chp = &paragraphStyle->chp();
         else if ( istd != 10 && styleSheet ) {
             const Style* style( styleSheet->styleByIndex( istd ) );
-            chp = style != 0 && style->type() == Style::sgcChp ? &style->chp() : 0;
+            chp = style != 0 && style->type() == sgcChp ? &style->chp() : 0;
         }
         else
             wvlog << "Warning: sprmCFxyz couldn't find a style" << endl;
@@ -1230,7 +1230,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             if ( styleSheet ) {
                 wvlog << "Trying to change the character style to " << istd << endl;
                 const Style* style = styleSheet->styleByIndex( istd );
-                if ( style && style->type() == Style::sgcChp ) {
+                if ( style && style->type() == sgcChp ) {
                     wvlog << "got a character style!" << endl;
                     const UPECHPX& upechpx( style->upechpx() );
                     apply( upechpx.grpprl, upechpx.cb, paragraphStyle, styleSheet, dataStream, version );

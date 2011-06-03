@@ -1641,6 +1641,10 @@ std::string TAP::toString() const
     s += "\ntextWrap=";
     s += uint2string( textWrap );
     s += "\nrgdxaCenter=";
+    for(uint i = 0; i < rgdxaCenter.size(); i++) {
+        s += "\nrgdxaCenter[" + int2string( i ) + "]=";
+        s += int2string(rgdxaCenter[i]);
+    }
     // skipping the std::vector rgdxaCenter
     s += "\nrgdxaCenterPrint=";
     // skipping the std::vector rgdxaCenterPrint
@@ -8714,6 +8718,19 @@ void STSHI::clear() {
     nVerBuiltInNamesWhenSaved=0;
     for(int _i=0; _i<(3); ++_i)
         rgftcStandardChpStsh[_i]=0;
+}
+
+void STSHI::dump() const
+{
+    wvlog << "Dumping STSHI:" <<
+    "\ncstd= 0x" << hex << cstd << dec << "(" << cstd << ")" <<
+    "\ncbSTDBaseInFile=" << cbSTDBaseInFile <<
+    "\nfStdStylenamesWritten=" << fStdStylenamesWritten <<
+    "\nstiMaxWhenSaved= 0x" << hex << stiMaxWhenSaved <<
+     dec << "(" << stiMaxWhenSaved  << ")" <<
+    "\nistdMaxFixedWhenSaved= 0x" << hex << istdMaxFixedWhenSaved <<
+    "\nnVerBuiltInNamesWhenSaved=" << dec << nVerBuiltInNamesWhenSaved <<
+    "\nDumping STSHI done:" << endl;
 }
 
 bool operator==(const STSHI &lhs, const STSHI &rhs) {

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Circuit
+Name[el]=Κύκλωμα
 Name[et]=Vooluring
+Name[nb]=Krets
 Name[nl]=Elektrisch schema
 Name[pt]=Circuito
 Name[pt_BR]=Circuito
@@ -8,4 +10,5 @@ Name[sv]=Krets
 Name[uk]=Електричні схеми
 Name[x-test]=xxCircuitxx
 Name[zh_CN]=电路
+Name[zh_TW]=線路
 X-KDE-DirType=odg-collection

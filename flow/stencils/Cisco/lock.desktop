@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Lock
+Name[el]=Κλειδαριά
 Name[nl]=Vergrendelen
 Name[pt]=Cadeado
 Name[pt_BR]=Cadeado
@@ -7,3 +8,4 @@ Name[sv]=Lås
 Name[ug]=قۇلۇپلا
 Name[uk]=Замок
 Name[x-test]=xxLockxx
+Name[zh_TW]=鎖

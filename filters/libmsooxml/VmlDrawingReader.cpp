@@ -66,7 +66,7 @@ VmlDrawingReader::~VmlDrawingReader()
 
 void VmlDrawingReader::init()
 {
-    m_insideGroup = false;
+    m_currentVMLProperties.insideGroup = false;
     m_outputFrames = false;
 }
 
@@ -118,17 +118,20 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
             break;
         }
         if (isStartElement()) {
-            if (qualifiedName() == "v:shape") {
-                TRY_READ(shape) //from vml
-                m_content[m_currentShapeId] = m_imagedataPath;
+            if (name() == "shapetype") {
+                TRY_READ(shapetype)
+            }
+            else if (name() == "shape") {
                 oldBody = body; // Body protetion starts
                 QBuffer frameBuf;
                 KoXmlWriter frameWriter(&frameBuf);
                 body = &frameWriter;
+                TRY_READ(shape) //from vml
+                m_content[m_currentVMLProperties.currentShapeId] = m_currentVMLProperties.imagedataPath;
                 pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
                 createFrameStart();
                 popCurrentDrawStyle();
-                m_frames[m_currentShapeId] = QString::fromUtf8(frameBuf.buffer(), frameBuf.buffer().size()).append(">");
+                m_frames[m_currentVMLProperties.currentShapeId] = QString::fromUtf8(frameBuf.buffer(), frameBuf.buffer().size()).append(">");
                 body = oldBody; // Body protection ends
                 ++index;
             }

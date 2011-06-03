@@ -39,9 +39,9 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
         m_frameBehavior(KWord::AutoExtendFrameBehavior),
         m_newFrameBehavior(KWord::NoFollowupFrame),
         m_anchoredPageNumber(pageNumber),
+        m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
         m_minimumFrameHeight(0.0) // no minimum height per default
-
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -55,17 +55,22 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
                 data->setResizeMethod(KoTextShapeDataBase::AutoGrowHeight);
             }
         }
-        if (parentFrameSet->textFrameSetType() != KWord::OtherTextFrameSet) {
+        if (parentFrameSet->textFrameSetType() == KWord::OtherTextFrameSet) {
+            if (KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData())) {
+                data->setResizeMethod(KoTextShapeDataBase::NoResize);
+            }
+        } else {
             shape->setGeometryProtected(true);
+            shape->setCollisionDetection(false);
         }
     }
 
-    kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
+    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
 }
 
 KWFrame::~KWFrame()
 {
-    kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
+    //kDebug(32001) << "frame=" << this << "frameSet=" << frameSet() << "frameSetType=" << KWord::frameSetTypeName(frameSet()) << "anchoredPageNumber=" << m_anchoredPageNumber;
 
     KoShape *ourShape = m_shape;
     m_shape = 0; // no delete is needed as the shape deletes us.
@@ -92,7 +97,14 @@ qreal KWFrame::minimumFrameHeight() const
 
 void KWFrame::setMinimumFrameHeight(qreal minimumFrameHeight)
 {
+    if (m_minimumFrameHeight == minimumFrameHeight)
+        return;
     m_minimumFrameHeight = minimumFrameHeight;
+
+    // transfer the minimumFrameHeight to the copy-shapes
+    foreach(KWFrame* copyFrame, m_copyShapes) {
+        copyFrame->setMinimumFrameHeight(m_minimumFrameHeight);
+    }
 }
 
 void KWFrame::cleanupShape(KoShape* shape)
@@ -130,6 +142,22 @@ void KWFrame::setFrameSet(KWFrameSet *fs)
     m_frameSet = fs;
     if (fs)
         fs->addFrame(this);
+}
+
+QList<KWFrame*> KWFrame::copies() const
+{
+    return m_copyShapes;
+}
+
+void KWFrame::addCopy(KWFrame* frame)
+{
+    if (!m_copyShapes.contains(frame))
+        m_copyShapes.append(frame);
+}
+
+void KWFrame::removeCopy(KWFrame* frame)
+{
+    m_copyShapes.removeAll(frame);
 }
 
 void KWFrame::copySettings(const KWFrame *frame)

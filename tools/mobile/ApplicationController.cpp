@@ -3420,7 +3420,7 @@ bool ApplicationController::startNewInstance(const KoAbstractApplicationOpenDocu
                              ? QString() : args.documentsToOpen.first();
     cmdLineArgs << fileName;
     cmdLineArgs << (args.openAsTemplates ? "true" : "false");
-    return QProcess::startDetached(FREOFFICE_APPLICATION_PATH, cmdLineArgs);
+    return QProcess::startDetached(qApp->applicationFilePath(), cmdLineArgs);
 }
 
 void ApplicationController::setProgressIndicatorVisible(bool visible)

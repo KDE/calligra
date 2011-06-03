@@ -41,7 +41,7 @@
 bug : see motar.wmf
 */
 
-WMFImportParser::WMFImportParser() : KoWmfRead()
+WMFImportParser::WMFImportParser() : WmfAbstractBackend()
 {
 }
 
@@ -52,7 +52,7 @@ bool WMFImportParser::play(KarbonDocument& doc)
     mScaleX = mScaleY = 1;
 
     // Play the wmf file
-    if (! KoWmfRead::play())
+    if (! WmfAbstractBackend::play())
         return false;
 
     KoShapeLayer * layer = 0;
@@ -78,31 +78,29 @@ bool WMFImportParser::play(KarbonDocument& doc)
 //-----------------------------------------------------------------------------
 // Virtual Painter
 
-bool WMFImportParser::begin()
+bool WMFImportParser::begin(const QRect &boundingBox)
 {
-    QRect bounding = boundingRect();
-
     mBackgroundMode = Qt::TransparentMode;
-    mCurrentOrg.setX(bounding.left());
-    mCurrentOrg.setY(bounding.top());
+    mCurrentOrg.setX(boundingBox.left());
+    mCurrentOrg.setY(boundingBox.top());
 
     if (isStandard()) {
         //mDoc->setUnit(KoUnit(KoUnit::Point));
-        mDoc->setPageSize(bounding.size());
+        mDoc->setPageSize(boundingBox.size());
     } else {
         // Placeable Wmf store the boundingRect() in pixel and the default DPI
         // The placeable format doesn't have information on which Unit to use
         // so we choose millimeters by default
         //mDoc->setUnit(KoUnit(KoUnit::Millimeter));
-        mDoc->setPageSize(QSizeF(INCH_TO_POINT((double)bounding.width() / defaultDpi()),
-                                 INCH_TO_POINT((double)bounding.height() / defaultDpi())));
+        mDoc->setPageSize(QSizeF(INCH_TO_POINT((double)boundingBox.width() / defaultDpi()),
+                                 INCH_TO_POINT((double)boundingBox.height() / defaultDpi())));
     }
-    if ((bounding.width() != 0) && (bounding.height() != 0)) {
-        mScaleX = mDoc->pageSize().width() / (double)bounding.width();
-        mScaleY = mDoc->pageSize().height() / (double)bounding.height();
+    if ((boundingBox.width() != 0) && (boundingBox.height() != 0)) {
+        mScaleX = mDoc->pageSize().width() / (double)boundingBox.width();
+        mScaleY = mDoc->pageSize().height() / (double)boundingBox.height();
     }
 
-    kDebug(30504) << "bounding rect =" << bounding;
+    kDebug(30504) << "bounding rect =" << boundingBox;
     kDebug(30504) << "page size =" << mDoc->pageSize();
     kDebug(30504) << "scale x =" << mScaleX;
     kDebug(30504) << "scale y =" << mScaleY;
@@ -191,14 +189,14 @@ void WMFImportParser::setWindowExt(int width, int height)
 void WMFImportParser::setViewportOrg(int left, int top)
 {
     // FIXME: Not Yet Implemented
-    //        See filters/libkowmf/kowmfpaint.cc for how to use this.
+    //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
 }
 
 
 void WMFImportParser::setViewportExt(int width, int height)
 {
     // FIXME: Not Yet Implemented
-    //        See filters/libkowmf/kowmfpaint.cc for how to use this.
+    //        See filters/libkowmf/WmfPainterBackend.cpp for how to use this.
 }
 
 

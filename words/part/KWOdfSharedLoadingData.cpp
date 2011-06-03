@@ -127,15 +127,18 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
 
     QString copy = properties.attributeNS(KoXmlNS::draw, "copy-of");
     if (! copy.isEmpty()) {
+        //TODO "return false" and untested code...
+#if 0
         // untested... No app saves this currently..
         foreach (KWFrame *f, frame->frameSet()->frames()) {
             if (f->shape()->name() == copy) {
                 KWCopyShape *shape = new KWCopyShape(f->shape());
-                new KWFrame(shape, frame->frameSet(), frame->loadingPageNumber());
+                new KWFrame(shape, frame->frameSet(), frame->anchoredPageNumber());
                 delete frame;
                 return false;
             }
         }
+#endif
     }
 
     QString overflow = properties.attributeNS(KoXmlNS::style, "overflow-behavior", QString());

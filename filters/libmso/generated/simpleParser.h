@@ -4636,28 +4636,22 @@ public:
 class DiagramBooleanProperties : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
-    bool fLockAgainstGrouping;
-    bool fLockAdjustHandles;
-    bool fLockText;
-    bool fLockVertices;
-    bool fLockCropping;
-    bool fLockAgainstSelect;
-    bool fLockPosition;
-    bool fLockAspectRatio;
-    bool fLockRotation;
-    bool fLockAgainstUngrouping;
-    quint8 unused6;
-    bool fUsefLockAgainstGrouping;
-    bool fUseLockAdjustHandles;
-    bool fUseLockText;
-    bool fUsefLockVertices;
-    bool fUsefLockCropping;
-    bool fUsefLockAgainstSelect;
-    bool fUsefLockPosition;
-    bool fUsefLockAspectRatio;
-    bool fUsefLockRotation;
-    bool fUsefLockAgainstUngrouping;
-    quint8 unused2;
+    bool fPseudoInline;
+    bool fDoLayout;
+    bool fReverse;
+    bool fDoFormat;
+    bool unused1;
+    bool unused2;
+    quint8 unused3a;
+    quint8 unused3b;
+    bool fUsefPseudoInline;
+    bool fUsefDoLayout;
+    bool fUsefReverse;
+    bool fUsefDoFormat;
+    bool unused4;
+    bool unused5;
+    quint8 unused6a;
+    quint8 unused6b;
     DiagramBooleanProperties(void* /*dummy*/ = 0) {}
 };
 class PptOfficeArtClientAnchor : public StreamOffset {

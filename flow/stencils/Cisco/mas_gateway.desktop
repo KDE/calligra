@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=MAS Gateway
+Name[el]=MAS Gateway
 Name[et]=MAS lüüs
 Name[nl]=MAS gateway
 Name[pt]='Gateway' MAS
@@ -7,3 +8,4 @@ Name[pt_BR]=Gateway MAS
 Name[sv]=MAS-förmedlingsnod
 Name[uk]=Шлюз MAS
 Name[x-test]=xxMAS Gatewayxx
+Name[zh_TW]=MAS 閘道

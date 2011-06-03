@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Front End Processor
+Name[el]=Περιβάλλον επεξεργαστή
 Name[et]=Eesprotsessor
 Name[nl]=Frontend-processor
 Name[pt]=Processador de Interface
@@ -8,3 +9,4 @@ Name[sv]=Frontprocessor
 Name[uk]=Процесор передньої панелі
 Name[x-test]=xxFront End Processorxx
 Name[zh_CN]=前端处理器
+Name[zh_TW]=前端處理器

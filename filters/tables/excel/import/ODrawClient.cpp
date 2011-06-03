@@ -184,10 +184,12 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
     return style;
 }
 
-void ODrawClient::addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox,
+void ODrawClient::addTextStyles(const quint16 msospt,
+                                const MSO::OfficeArtClientTextBox *clientTextbox,
                                 const MSO::OfficeArtClientData *clientData,
                                 KoGenStyle &style, Writer &out)
 {
+    Q_UNUSED(msospt);
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
 }

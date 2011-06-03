@@ -69,6 +69,12 @@ protected:
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_hyperlinks();
     KoFilter::ConversionStatus read_picture();
+    KoFilter::ConversionStatus read_autoFilter();
+    KoFilter::ConversionStatus read_filterColumn();
+    KoFilter::ConversionStatus read_filters();
+    KoFilter::ConversionStatus read_filter();
+    KoFilter::ConversionStatus read_customFilters();
+    KoFilter::ConversionStatus read_customFilter();
     KoFilter::ConversionStatus read_oleObjects();
     KoFilter::ConversionStatus read_oleObject();
     KoFilter::ConversionStatus read_tableParts();
@@ -152,6 +158,23 @@ public:
 
     QMap<QString, QString> oleReplacements;
     QMap<QString, QString> oleFrameBegins;
+
+    struct AutoFilterCondition {
+        QString field;
+        QString value;
+        QString opField;
+    };
+
+    struct AutoFilter {
+        QString type; // empty, -and, -or
+        QString area;
+        QString field;
+        QVector<AutoFilterCondition> filterConditions;
+    };
+
+    QVector<XlsxXmlWorksheetReaderContext::AutoFilter> autoFilters;
+
+    AutoFilterCondition currentFilterCondition;
 
     bool firstRoundOfReading;
 

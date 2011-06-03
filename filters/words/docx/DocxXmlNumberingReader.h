@@ -57,6 +57,7 @@ protected:
     KoFilter::ConversionStatus read_lvlJc();
     KoFilter::ConversionStatus read_lvlPicBulletId();
     KoFilter::ConversionStatus read_numPicBullet();
+    KoFilter::ConversionStatus read_lvlOverride();
 
     // Note we read pPr here for now because we are only interested in subset of pPr/rPr features
     // which can be used with lists.
@@ -68,11 +69,13 @@ protected:
 
     bool m_bulletStyle;
 
-    QMap<QString, KoGenStyle> m_abstractListStyles;
+    QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
+    QMap<QString, QList<MSOOXML::Utils::ParagraphBulletProperties> > m_abstractListStyles;
     QMap<QString, QString> m_picBulletPaths;
     QMap<QString, QSize> m_picBulletSizes;
 
     QString m_bulletCharacter;
+    QString m_currentAbstractId;
 
 private:
     void init();

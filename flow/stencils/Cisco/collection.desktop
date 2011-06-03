@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Cisco
+Name[el]=Cisco
 Name[es]=Cisco
 Name[et]=Cisco
 Name[nl]=Cisco
@@ -9,4 +10,5 @@ Name[sv]=Cisco
 Name[uk]=Cisco
 Name[x-test]=xxCiscoxx
 Name[zh_CN]=Cisco
+Name[zh_TW]=Cisco
 X-KDE-DirType=odg-collection
