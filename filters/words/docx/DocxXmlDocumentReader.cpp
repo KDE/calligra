@@ -1300,7 +1300,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            //! @todo support VML here
             TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(o, OLEObject)
@@ -5232,8 +5231,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 //! @todo ooo saves binaries to the root dir; should we?
 
     QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
-    RETURN_IF_ERROR( m_context->import->copyFile(oleName, destinationName, false ) )
-    addManifestEntryForFile(destinationName);
+    KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
+    if (stat == KoFilter::OK) {
+        addManifestEntryForFile(destinationName);
+    }
 
     while (!atEnd()) {
         readNext();

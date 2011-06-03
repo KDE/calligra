@@ -824,7 +824,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         if (isStartElement()) {
             if (name() == "shapetype") {
                 m_VMLShapeStack.push(m_currentVMLProperties);
-                m_currentVMLProperties.insideGroup = true;
+                // Template by default should not have any group info
                 TRY_READ(shapetype)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
