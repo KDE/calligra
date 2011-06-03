@@ -169,9 +169,13 @@ private slots:
     /** Provides a custom context menu for the slides sorter view*/
     void slidesSorterContextMenu(QContextMenuEvent* event);
 
+    void customSlideShowsContextMenu(QContextMenuEvent* event);
+
     void customShowChanged(int showNumber);
 
     void changeActiveSlideShow(QString name);
+
+    void deleteSlideFromCustomShow();
 
 };
 

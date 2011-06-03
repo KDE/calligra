@@ -168,7 +168,6 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
         }
 
         QList<KoPAPageBase *> slides;
-        QList<KoPAPageBase*> selectedSlideShow;
 
         int beginRow;
 
@@ -197,19 +196,14 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
                 return false;
             }
 
-            qSort(slides.begin(), slides.end());
+            //order slides
+            QMap<int, KoPAPageBase*> map;
+            foreach (KoPAPageBase* slide, slides)
+                map.insert(m_document->pageIndex(slide), slide);
 
-            //get the slideshow
-            selectedSlideShow = m_customShows->getByName(m_currentSlideShowName);
+            slides = map.values();
 
-            //insert the slides and update the Widget
-            int i = beginRow;
-            foreach(KoPAPageBase* page, slides)
-            {
-                selectedSlideShow.insert(i, page);
-                i++;
-            }
-
+            doCustomShowAction(KPrCustomSlideShowsModel::SLIDES_ADD, slides, beginRow);
         }
 
         if (data->hasFormat("application/x-koffice-customslideshows")) {
@@ -236,87 +230,11 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
 
             slides = map.values();
 
-            //get the slideshow
-           selectedSlideShow = m_customShows->getByName(m_currentSlideShowName);
-
-            //insert the slides and update the Widget
-           if (beginRow >= selectedSlideShow.count())
-               beginRow = selectedSlideShow.count() - 1;
-
-            foreach(KoPAPageBase* page, slides)
-            {
-                int from = selectedSlideShow.indexOf(page);
-                selectedSlideShow.move(from, beginRow);
-            }
-
+            doCustomShowAction(KPrCustomSlideShowsModel::SLIDES_MOVE, slides, beginRow);
         }
-
-        //update the SlideShow with the resulting list
-        KPrEditCustomSlideShowsCommand *command = new KPrEditCustomSlideShowsCommand(
-                    m_document, this, m_currentSlideShowName, selectedSlideShow);
-        m_document->addCommand(command);
-
         return true;
     }
-
     return false;
-}
-
-void KPrCustomSlideShowsModel::doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action)
-{
-    Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
-
-    if (((modifiers & Qt::ControlModifier) == 0) &&
-        ((modifiers & Qt::ShiftModifier) == 0)) {
-           QMenu popup;
-           QString seq = QKeySequence(Qt::ShiftModifier).toString();
-           seq.chop(1);
-           QAction* popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
-           popupMoveAction->setIcon(KIcon("go-jump"));
-           seq = QKeySequence(Qt::ControlModifier).toString();
-           seq.chop(1);
-           QAction* popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
-           popupCopyAction->setIcon(KIcon("edit-copy"));
-           seq = QKeySequence( Qt::ControlModifier + Qt::ShiftModifier ).toString();
-           seq.chop(1);
-           QAction* popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
-           popupCancelAction->setIcon(KIcon("process-stop"));
-
-           popup.addAction(popupMoveAction);
-           popup.addAction(popupCopyAction);
-
-           popup.addSeparator();
-           popup.addAction(popupCancelAction);
-
-           QAction* result = popup.exec(QCursor::pos());
-
-           if(result == popupCopyAction)
-               action = Qt::CopyAction;
-           else if(result == popupMoveAction)
-               action = Qt::MoveAction;
-           else {
-               return;
-           }
-    } else if ((modifiers & Qt::ControlModifier) != 0) {
-        action = Qt::CopyAction;
-    } else if ((modifiers & Qt::ShiftModifier) != 0) {
-        action = Qt::MoveAction;
-    } else {
-        return;
-    }
-
-
-   switch ( action ) {
-   case Qt::MoveAction : {
-       return;
-   }
-   case Qt::CopyAction : {
-       return;
-   }
-   default :
-       qDebug("Unknown action: %d ", (int)action);
-       return;
-   }
 }
 
 void KPrCustomSlideShowsModel::setCustomSlideShows(KPrCustomSlideShows *customShows)
@@ -368,6 +286,80 @@ void KPrCustomSlideShowsModel::setDocument(KPrDocument *document)
 
 void KPrCustomSlideShowsModel::updateCustomShow(QString name, QList<KoPAPageBase *> newCustomShow)
 {
+    if (!m_customShows)
+        return;
     m_customShows->update(name, newCustomShow);
     reset();
 }
+
+void KPrCustomSlideShowsModel::removeSlidesFromAll(QList<KoPAPageBase *> pages)
+{
+    if (!m_customShows)
+        return;
+    m_customShows->removeSlidesFromAll(pages);
+    reset();
+}
+
+void KPrCustomSlideShowsModel::removeIndexes(QModelIndexList pageIndexes)
+{
+    QList<KoPAPageBase *> slides;
+
+    foreach (QModelIndex index, pageIndexes)
+        slides.append(m_customShows->pageByIndex(m_currentSlideShowName, index.row()));
+
+    doCustomShowAction(KPrCustomSlideShowsModel::SLIDES_DELETE, slides, 0);
+}
+
+bool KPrCustomSlideShowsModel::doCustomShowAction(CustomShowActions c_action, QList<KoPAPageBase *> slides, int beginRow)
+{
+    bool updated = false;
+
+    //get the slideshow
+    QList<KoPAPageBase*> selectedSlideShow = m_customShows->getByName(m_currentSlideShowName);
+
+    if (c_action == KPrCustomSlideShowsModel::SLIDES_ADD) {
+        //insert the slides on the current custom show
+        int i = beginRow;
+        foreach(KoPAPageBase* page, slides)
+        {
+            //You can insert a slide just one time.
+            if (!selectedSlideShow.contains(page)) {
+                selectedSlideShow.insert(i, page);
+                i++;
+            }
+        }
+        updated = true;
+    } else if (c_action == KPrCustomSlideShowsModel::SLIDES_MOVE) {
+       //move the slides on the current custom show
+       // slides order within the slides list is important to get the expected behaviour
+       if (beginRow >= selectedSlideShow.count())
+           beginRow = selectedSlideShow.count() - 1;
+
+        foreach(KoPAPageBase* page, slides)
+        {
+            int from = selectedSlideShow.indexOf(page);
+            selectedSlideShow.move(from, beginRow);
+        }
+        updated = true;
+    } else if (c_action == KPrCustomSlideShowsModel::SLIDES_DELETE) {
+        //delete de slides on the current custom show
+        foreach(KoPAPageBase* page, slides)
+        {
+            selectedSlideShow.removeAll(page);
+        }
+        updated = true;
+    } else {
+        updated = false;
+    }
+
+    if (updated) {
+        //update the SlideShow with the resulting list
+        KPrEditCustomSlideShowsCommand *command = new KPrEditCustomSlideShowsCommand(
+                    m_document, this, m_currentSlideShowName, selectedSlideShow);
+        m_document->addCommand(command);
+    }
+
+    return updated;
+}
+
+

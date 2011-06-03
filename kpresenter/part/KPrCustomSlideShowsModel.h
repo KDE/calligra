@@ -32,6 +32,16 @@ class KPrCustomSlideShowsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+
+    //List the actions that you could perform with slides
+    //within a custom show.
+    enum CustomShowActions
+    {
+        SLIDES_ADD = 0,        ///< add slides
+        SLIDES_DELETE    = 1,  ///< delete slides
+        SLIDES_MOVE     = 2,  ///< move slides
+    };
+
     explicit KPrCustomSlideShowsModel(QObject *parent = 0, KPrCustomSlideShows *customShows = 0, KPrDocument *document = 0);
 
     virtual ~KPrCustomSlideShowsModel();
@@ -54,15 +64,6 @@ public:
 
     virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
-    /**
-     * Drop selected slides (copy/move) if a modifier key is pressed
-     * or display a context menu with alternatives.
-     * @param slides list of slides to be dropped
-     * @param pageAfter destination of the drop
-     * @param action the drop action
-     */
-    void doDrop(QList<KoPAPageBase *> slides, KoPAPageBase * pageAfter, Qt::DropAction action);
-
     void setCustomSlideShows(KPrCustomSlideShows *customShows);
 
     void setCurrentSlideShow(QString name);
@@ -76,6 +77,17 @@ public:
     void setDocument(KPrDocument* document);
 
     void updateCustomShow(QString name, QList<KoPAPageBase *> newCustomShow);
+
+    /**
+     * @brief Deletes all the ocurrencies of a given list of slides from all the known custom SlideShows
+     *
+     * @param slideShow list of slides to be removed
+     */
+    void removeSlidesFromAll(QList<KoPAPageBase *> pages);
+
+    void removeIndexes(QModelIndexList pageIndexes);
+
+    bool doCustomShowAction(CustomShowActions c_action, QList<KoPAPageBase *> slides, int beginRow);
 
 signals:
 

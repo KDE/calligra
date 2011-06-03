@@ -142,12 +142,15 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     //setup signals
 
     connect(m_slidesSorter, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
+    connect(m_customSlidesShowView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(customSlideShowsContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
     connect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
     connect(slideShowsList, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeActiveSlideShow(QString)));
 
+
     //filter some m_slidesSorter key events
     m_slidesSorter->installEventFilter(this);
+    m_customSlidesShowView->installEventFilter(this);
 
     //install selection manager for Slides Sorter View
     m_selectionManagerSlidesSorter = new KPrSelectionManager(m_slidesSorter, m_view->kopaDocument());
@@ -399,6 +402,7 @@ void KPrViewModeSlidesSorter::deleteSlide()
          QUndoCommand *cmd = new KoPAPageDeleteCommand(m_view->kopaDocument(), selectedSlides);
         if (cmd) {
             m_view->kopaDocument()->addCommand(cmd);
+            m_customShowsModel->removeSlidesFromAll(selectedSlides);
         }
     }
 }
@@ -497,13 +501,22 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
     QMenu menu(m_slidesSorter);
 
     // Not connected yet
-    menu.addAction(SmallIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
-    menu.addAction(i18n("Delete selected slides"), this, SLOT(deleteSlide()));
+    menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
+    menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
-    menu.addAction(i18n( "Cut" ) ,this,  SLOT(editCut()));
-    menu.addAction(i18n( "Copy" ), this,  SLOT(editCopy()));
-    menu.addAction(i18n( "Paste" ), this, SLOT(editPaste()));
+    menu.addAction(KIcon("edit-cut"), i18n( "Cut" ) ,this,  SLOT(editCut()));
+    menu.addAction(KIcon("edit-copy"), i18n( "Copy" ), this,  SLOT(editCopy()));
+    menu.addAction(KIcon("edit-paste"), i18n( "Paste" ), this, SLOT(editPaste()));
 
+    menu.exec(event->globalPos());
+}
+
+void KPrViewModeSlidesSorter::customSlideShowsContextMenu(QContextMenuEvent *event)
+{
+    QMenu menu(m_customSlidesShowView);
+
+    // Not connected yet
+    menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlideFromCustomShow()));
     menu.exec(event->globalPos());
 }
 
@@ -516,6 +529,27 @@ bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
                 switch (keyEv->key()) {
                     case Qt::Key_Delete: {
                         deleteSlide();
+                        break;
+                    }
+
+                    default:
+                       break;
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
+    } //endIf
+
+    if (watched == m_customSlidesShowView) {
+        switch (event->type()) {
+            case QEvent::KeyPress: {
+                QKeyEvent *keyEv = static_cast<QKeyEvent *>(event);
+                switch (keyEv->key()) {
+                    case Qt::Key_Delete: {
+                        deleteSlideFromCustomShow();
                         break;
                     }
 
@@ -578,4 +612,15 @@ void KPrViewModeSlidesSorter::changeActiveSlideShow(QString name)
     if (doc) {
         doc->setActiveCustomSlideShow(name);
     }
+}
+
+void KPrViewModeSlidesSorter::deleteSlideFromCustomShow()
+{
+    QModelIndexList selectedItems = m_customSlidesShowView->selectionModel()->selectedIndexes();
+    if (selectedItems.count() == 0) {
+        return;
+    }
+
+    m_customShowsModel->removeIndexes(selectedItems);
+
 }
