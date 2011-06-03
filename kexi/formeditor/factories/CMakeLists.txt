@@ -5,12 +5,8 @@ add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
 ########### next target ###############
 
-find_package(Marble)
-
 if(MARBLE_FOUND)
   add_subdirectory(mapbrowser)
-else(MARBLE_FOUND)
-  message(WARNING "No marble found - There is on marble in system")
 endif(MARBLE_FOUND)
 
 ########### next target ###############
