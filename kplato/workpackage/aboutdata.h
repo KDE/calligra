@@ -33,7 +33,7 @@ static const char* KPLATOWORK_VERSION=KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "planwork", 0, ki18n("Plan WorkPackage Handler"),
+    KAboutData * aboutData=new KAboutData( "planwork", 0, ki18nc("application name", "Plan WorkPackage Handler"),
                                            KPLATOWORK_VERSION, ki18n(KPLATOWORK_DESCRIPTION),
                                            KAboutData::License_GPL,
                                            ki18n("(c) 2007-2011, The Plan Team"),
