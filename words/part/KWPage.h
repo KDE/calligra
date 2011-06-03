@@ -113,11 +113,15 @@ public:
     virtual int pageNumber() const;
 
     /**
-     * Adjusts the page number of this page and all pages following.
-     * Page numbers that are set like this are never saved, this is runtime data only.
-     * Instead you should insert a pagraph in the main-text flow with the new page number.
+     * Adjusts the visible page number of this page.
+     *
+     * This implements hard-coded page numbers like those defined via @a KoParagraphStyle::PageNumber . If
+     * the page number equals zero then the page has an auto page number. That means previous page number
+     * plus one.
+     *
+     * @param pageNumber The visible page-number for this page.
      */
-    void setPageNumber(int pageNumber);
+    void setVisiblePageNumber(int pageNumber);
 
     /// reimplemented from KoTextPage
     virtual QString masterPageName() const;
