@@ -100,11 +100,11 @@ void KPrPageEffectRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "PageEffectPlugins";
     config.blacklist = "PageEffectPluginsDisabled";
-    config.group = "kpresenter";
+    config.group = "stage";
 
     // XXX: Use minversion here?
     // The plugins are responsible for adding a factory to the registry
-    KoPluginLoader::instance()->load( QString::fromLatin1("KPresenter/PageEffect"),
+    KoPluginLoader::instance()->load( QString::fromLatin1("CalligraStage/PageEffect"),
             QString::fromLatin1("[X-KPresenter-Version] <= 0"),
             config);
 

@@ -70,7 +70,7 @@ public:
             formula = m_handler->globals()->decodeFormula(0, 0, true, tokens);
         }
 
-        if (m_value) delete m_value;
+        delete m_value;
         m_value = new Charting::Value(dataId, type, formula, isUnlinkedFormat, numberFormat);
     }
 

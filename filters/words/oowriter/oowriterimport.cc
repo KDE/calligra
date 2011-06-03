@@ -1190,7 +1190,7 @@ void OoWriterImport::writeFormat(QDomDocument& doc, QDomElement& formats, int id
         format.appendChild(fontElem);
     }
     if (m_styleStack.hasProperty(ooNS::fo, "font-size")) {     // 3.10.14
-        double pointSize = m_styleStack.fontSize();
+        qreal pointSize = m_styleStack.fontSize().first;
 
         QDomElement fontSize(doc.createElement("SIZE"));
         fontSize.setAttribute("value", qRound(pointSize));   // KWord uses toInt()!

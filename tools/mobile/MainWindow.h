@@ -49,6 +49,7 @@ public:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
     /*!
      * Event filter to catch all mouse events to be able to properly show and hide

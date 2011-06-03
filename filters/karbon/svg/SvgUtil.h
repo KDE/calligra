@@ -26,6 +26,7 @@
 
 class QString;
 class QRectF;
+class SvgGraphicsContext;
 
 class SvgUtil
 {
@@ -80,6 +81,24 @@ public:
      * @return the resulting transformation matrix
      */
     static QTransform parseTransform(const QString &transform);
+
+    /// Parses a viewbox attribute into an rectangle
+    static QRectF parseViewBox(QString viewbox);
+
+    /// Parses a length attribute
+    static qreal parseUnit(SvgGraphicsContext *gc, const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
+
+    /// parses a length attribute in x-direction
+    static qreal parseUnitX(SvgGraphicsContext *gc, const QString &unit);
+
+    /// parses a length attribute in y-direction
+    static qreal parseUnitY(SvgGraphicsContext *gc, const QString &unit);
+
+    /// parses a length attribute in xy-direction
+    static qreal parseUnitXY(SvgGraphicsContext *gc, const QString &unit);
+
+    /// parses the number into parameter number
+    static const char * parseNumber(const char *ptr, qreal &number);
 };
 
 #endif // SVGUTIL_H

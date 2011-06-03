@@ -74,18 +74,16 @@ public:
 };
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const QVariantList& l)
-        : KexiPart::Part(parent, l)
-        , d(new Private(this))
+  : KexiPart::Part(parent,
+        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+              "Use '_' character instead of spaces. First character should be a..z character. "
+              "If you cannot use latin characters in your language, use english word.",
+              "script"),
+        i18nc("tooltip", "Create new script"),
+        i18nc("what's this", "Creates new script."),
+        l)
+  , d(new Private(this))
 {
-    setInternalPropertyValue("instanceName",
-                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                                   "Use '_' character instead of spaces. First character should be a..z character. "
-                                   "If you cannot use latin characters in your language, use english word.",
-                                   "script"));
-    setInternalPropertyValue("instanceCaption", i18n("Script"));
-    setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new script"));
-    setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new script."));
-    setSupportedViewModes(Kexi::DesignViewMode);
     //setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
     //setInternalPropertyValue("newObjectsAreDirty", true);
 }

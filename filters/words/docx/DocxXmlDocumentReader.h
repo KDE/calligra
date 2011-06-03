@@ -31,6 +31,8 @@
 #include <MsooXmlThemesReader.h>
 #include "DocxXmlNotesReader.h"
 
+#include <MsooXmlDrawingTableStyle.h>
+
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <styles/KoCharacterStyle.h>
@@ -43,7 +45,6 @@ class DocxXmlDocumentReaderContext;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
-class DocumentTableStyle;
 class TableStyleProperties;
 class LocalTableStyles;
 }
@@ -75,6 +76,8 @@ protected:
     KoFilter::ConversionStatus read_numId();
     KoFilter::ConversionStatus read_ilvl();
     KoFilter::ConversionStatus read_sectPr();
+    bool m_footerActive;
+    bool m_headerActive;
     KoFilter::ConversionStatus read_footerReference();
     KoFilter::ConversionStatus read_headerReference();
     KoFilter::ConversionStatus read_cols();
@@ -111,6 +114,7 @@ protected:
     KoFilter::ConversionStatus read_jc();
     KoFilter::ConversionStatus read_spacing();
     KoFilter::ConversionStatus read_trPr();
+    KoFilter::ConversionStatus read_cnfStyle();
     KoFilter::ConversionStatus read_trHeight();
     enum shdCaller {
         shd_rPr,
@@ -149,8 +153,12 @@ protected:
     KoFilter::ConversionStatus read_tr();
     KoFilter::ConversionStatus read_tc();
     KoFilter::ConversionStatus read_tcPr();
+    KoFilter::ConversionStatus read_vAlign();
+    KoFilter::ConversionStatus read_textDirectionTc();
     KoFilter::ConversionStatus read_vMerge();
     KoFilter::ConversionStatus read_tcBorders();
+    KoFilter::ConversionStatus read_tl2br();
+    KoFilter::ConversionStatus read_tr2bl();
     KoFilter::ConversionStatus read_tcMar();
     KoFilter::ConversionStatus read_gridSpan();
     int m_gridSpan;
@@ -244,6 +252,11 @@ protected:
 private:
     void init();
 
+    //! Returns true if the field returned something that requires a closing element
+    bool handleSpecialField();
+
+    QString m_specialCharacters;
+
     QColor m_backgroundColor; //Documet background color
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
@@ -261,21 +274,18 @@ private:
     //! Used by read_strike() and read_dstrike()
     void readStrikeElement(KoCharacterStyle::LineType type);
 
-    void setParentParagraphStyleName(const QXmlStreamAttributes& attrs);
-
     //! Applies border styles and paddings obtained in readBorderElement()
     //! to style @a style (paragraph or page...)
     void applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding);
 
     //! Applies border styles and paddings for page
-    void appyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide,QString> &pageBorder,
+    void applyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide,QString> &pageBorder,
                          QMap<BorderSide, qreal> &pagePadding, QString & offsetFrom);
     void defineTableStyles();
 
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
-       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType,
-       CurrentPageComplexFieldCharType, NumberOfPagesComplexFieldCharType
+       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType
     };
     //! Type of complex field characters we have
     ComplexFieldCharType m_complexCharType;
@@ -309,6 +319,8 @@ private:
     KoGenStyle m_currentTableRowStyle;
     QString m_currentTableName;
     qreal m_currentTableWidth; //!< in cm
+    MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
+
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
 
     bool m_closeHyperlink; // should read_r close hyperlink
@@ -348,8 +360,7 @@ public:
     QMap<QString, QString> m_comments;
 
     QMap<QString, QString> m_endnotes;
-
-    QMap<QString, MSOOXML::DocumentTableStyle*> m_tableStyles;
+    QMap<QString, MSOOXML::DrawingTableStyle*> m_tableStyles;
 
 private:
 };

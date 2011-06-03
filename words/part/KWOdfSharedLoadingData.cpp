@@ -25,7 +25,6 @@
 #include "KWOdfLoader.h"
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 #include "frames/KWCopyShape.h"
 
 #include <KoTextShapeData.h>
@@ -78,12 +77,11 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
             fs = dynamic_cast<KWTextFrameSet*>(previous->frameSet());
         if (fs == 0) {
             fs = new KWTextFrameSet(m_loader->document());
-            fs->setAllowLayout(false);
             fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
             m_loader->document()->addFrameSet(fs);
         }
 
-        KWTextFrame *frame = new KWTextFrame(shape, fs, pageNumber);
+        KWFrame *frame = new KWFrame(shape, fs, pageNumber);
         if (style) {
             if (! fillFrameProperties(frame, *style))
                 return; // done
@@ -129,15 +127,18 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
 
     QString copy = properties.attributeNS(KoXmlNS::draw, "copy-of");
     if (! copy.isEmpty()) {
+        //TODO "return false" and untested code...
+#if 0
         // untested... No app saves this currently..
         foreach (KWFrame *f, frame->frameSet()->frames()) {
             if (f->shape()->name() == copy) {
                 KWCopyShape *shape = new KWCopyShape(f->shape());
-                new KWFrame(shape, frame->frameSet(), frame->loadingPageNumber());
+                new KWFrame(shape, frame->frameSet(), frame->anchoredPageNumber());
                 delete frame;
                 return false;
             }
         }
+#endif
     }
 
     QString overflow = properties.attributeNS(KoXmlNS::style, "overflow-behavior", QString());
@@ -155,7 +156,5 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
     else
         frame->setNewFrameBehavior(KWord::NoFollowupFrame);
 
-    frame->setFrameOnBothSheets(properties.attributeNS(KoXmlNS::koffice,
-                "frame-copy-to-facing-pages default").compare("true", Qt::CaseInsensitive));
     return true;
 }

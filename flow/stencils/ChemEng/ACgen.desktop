@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=ACgen
+Name[el]=ACgen
 Name[et]=Vahelduvvoolu generaator
 Name[nl]=ACgen
 Name[pt]=GeradorAC
 Name[pt_BR]=gerador de CA
+Name[sv]=växelströmsgenerator
 Name[uk]=Генератор змінного струму
 Name[x-test]=xxACgenxx

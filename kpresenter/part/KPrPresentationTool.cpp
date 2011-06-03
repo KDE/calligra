@@ -39,6 +39,8 @@
 #include <KoEventAction.h>
 #include <KoPACanvas.h>
 #include <KoTextShapeData.h>
+#include <KoTextLayoutRootArea.h>
+#include <KoPointedAt.h>
 
 #include "KPrViewModePresentation.h"
 #include "KPrPresentationStrategy.h"
@@ -295,20 +297,17 @@ bool KPrPresentationTool::checkHyperlink(KoPointerEvent *event, KoShape *shape, 
 
     KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
     if (textShapeData) {
+        if (!textShapeData->rootArea()) {
+            return false ; // not layouted yet
+        }
         QPointF p = shape->absoluteTransformation(0).inverted().map(event->point);
         p = p + QPointF(0.0, textShapeData->documentOffset());
 
-        int caretPos = textShapeData->document()->documentLayout()->hitTest(p, Qt::ExactHit);
+        KoPointedAt pointedAt = textShapeData->rootArea()->hitTest(p, Qt::ExactHit);
 
-        if (textShapeData->endPosition() != -1 && caretPos != -1) {
-            QTextCursor mouseOver(textShapeData->document());
-            mouseOver.setPosition(caretPos);
-
-            QTextCharFormat fmt = mouseOver.charFormat();
-            hyperLink = fmt.anchorHref();
-            if (!hyperLink.isEmpty()) {
-                return true;
-            }
+        if (!textShapeData->isDirty() && !pointedAt.externalHRef.isEmpty()) {
+            hyperLink = pointedAt.externalHRef;
+            return true;
         }
     }
     return false;

@@ -53,7 +53,6 @@ public:
     void updateActivePage( KoPAPageBase *page );
     void updateDocumentModel();
     void activateNormalViewMode();
-    void updateToActivePageIndex();
 
     void addShape( KoShape *shape );
     void removeShape( KoShape *shape );
@@ -138,6 +137,31 @@ protected:
     void setIconSize(QSize size);
 
     /**
+     * load the last zoom value used
+     */
+    void loadZoomConfig();
+
+    /**
+     * Setter of the zoom value
+     *
+     * @param zoom percent
+     */
+    void setZoom(int zoom);
+
+    /**
+     * Return the last zoom stored
+     *
+     * @return the last zoom stored
+     */
+    int zoom();
+
+    /**
+      * save zoom value
+      */
+    void saveZoomConfig(int zoom);
+
+
+    /**
      * This class manage the QListWidget itself.
      * Use all the getters and setters of the KPrViewModeSlidesSorter.
      * Most of the functions are Qt overrides to have the wished comportment.
@@ -190,11 +214,11 @@ private:
     const int m_pageCount;
     bool m_dragingFlag;
     int m_lastItemNumber;
+    int m_zoom;
 
 private slots:
     void updateDocumentDock();
     void updateModel();
-    void updatePageAdded();
     void itemClicked(const QModelIndex);
     void deleteSlide();
     void addSlide();
@@ -202,6 +226,7 @@ private slots:
     void editCopy();
     void editPaste();
     void updateZoom(KoZoomMode::Mode mode, qreal zoom);
+    void updateToActivePageIndex();
 
 signals:
     void pageChanged(KoPAPageBase *page);

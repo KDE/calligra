@@ -27,7 +27,6 @@
 #include "KWPage.h"
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoOdfStylesReader.h>
@@ -74,10 +73,12 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     //kDebug(32001) << "========================> KWOdfLoader::load START";
 
     QPointer<KoUpdater> updater;
+    QPointer<KoUpdater> loadUpdater;
     if (m_document->progressUpdater()) {
-        updater = m_document->progressUpdater()->startSubtask(1,
-                                                           "KWOdfLoader::load");
+        updater = m_document->progressUpdater()->startSubtask(1, "KWOdfLoader::load");
+        loadUpdater = m_document->progressUpdater()->startSubtask(5, "KWOdfLoader::loadOdf");
         updater->setProgress(0);
+        loadUpdater->setProgress(0);
     }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -212,7 +213,6 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoTextShapeData textShapeData;
     if (hasMainText) {
         KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
-        mainFs->setAllowLayout(false);
         mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
         m_document->addFrameSet(mainFs);
         textShapeData.setDocument(mainFs->document(), false);
@@ -221,13 +221,10 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     if (updater) updater->setProgress(60);
 
     // load the main text shape right here so we can use the progress information of the KoTextLoader
-    KoTextLoader loader(sc, m_document->documentRdfBase(), 0);
+    KoTextLoader loader(sc);
     QTextCursor cursor(textShapeData.document());
 
-    QPointer<KoUpdater> loadUpdater;
-    if (m_document->progressUpdater()) {
-        loadUpdater = m_document->progressUpdater()->startSubtask(5, "KWOdfLoader::loadOdf");
-        loadUpdater->setProgress(0);
+    if (loadUpdater) {
         connect(&loader, SIGNAL(sigProgress(int)), loadUpdater, SLOT(setProgress(int)));
     }
 
@@ -259,21 +256,21 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
 void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *textDoc)
 {
-    KoTextDocument(textDoc).setRelativeTabs(false);
+    KoTextDocument(textDoc).setRelativeTabs(true);
     if (settingsDoc.isNull())
         return;
 
     kDebug(32001) << "KWOdfLoader::loadSettings";
     KoOasisSettings settings(settingsDoc);
-    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
-    if (!viewSettings.isNull())
+    KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
+    if (!viewSettings.isNull()) {
         m_document->setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
-    //1.6: KWOasisLoader::loadOasisIgnoreList
-    KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
+    }
+
+    KoOasisSettings::Items configurationSettings = settings.itemSet("ooo:configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
         kDebug(32001) << "Ignorelist:" << ignorelist;
-        //1.6: m_document->setSpellCheckIgnoreList(QStringList::split(',', ignorelist));
 
         KoTextDocument(textDoc).setRelativeTabs(configurationSettings.parseConfigItemBool("TabsRelativeToIndent", true));
     }
@@ -314,7 +311,6 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPa
 {
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setPageStyle(pageStyle);
-    fs->setAllowLayout(false);
     m_document->addFrameSet(fs);
 
     kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
@@ -329,7 +325,7 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPa
     sharedData->loadOdfStyles(ctxt, styleManager);
     ctxt.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 
-    KoTextLoader loader(ctxt, m_document->documentRdfBase());
+    KoTextLoader loader(ctxt);
     QTextCursor cursor(fs->document());
     loader.loadBody(elem, cursor);
 

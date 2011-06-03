@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 
-#include <QMap>
+#include <QList>
 #include <QLabel>
 #include <QPainter>
 
@@ -73,7 +73,7 @@ void KPrAnimationTool::mouseReleaseEvent( KoPointerEvent *event )
 }
 
 
-QMap<QString, QWidget *> KPrAnimationTool::createOptionWidgets()
+QList<QWidget *> KPrAnimationTool::createOptionWidgets()
 {
     KPrPageEffectDocker *effectWidget = new KPrPageEffectDocker( );
     effectWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
@@ -81,13 +81,16 @@ QMap<QString, QWidget *> KPrAnimationTool::createOptionWidgets()
     KPrClickActionDocker *clickActionWidget = new KPrClickActionDocker();
     clickActionWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
 
-    QMap<QString, QWidget *> widgets;
-    widgets.insert(i18n("Transitions"), effectWidget);
-    widgets.insert(i18n("Click Actions"), clickActionWidget);
+    QList<QWidget *> widgets;
+    effectWidget->setWindowTitle(i18n("Transitions"));
+    widgets.append(effectWidget);
+    clickActionWidget->setWindowTitle(i18n("Click Actions"));
+    widgets.append(clickActionWidget);
     QLabel *label =new QLabel(i18n("Not implemented in 2.0"));
     label->setMinimumWidth(180); //try to make it visible
     label->setObjectName( "ShapeAnimationLabel" );
-    widgets.insert(i18n("Shape Animation"), label);
+    label->setWindowTitle(i18n("Shape Animation"));
+    widgets.append(label);
     return widgets;
 }
 

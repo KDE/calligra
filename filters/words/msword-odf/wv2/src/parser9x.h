@@ -108,7 +108,7 @@ namespace wvWare
 
         virtual const StyleSheet& styleSheet() const;
 
-        virtual Drawings * getDrawings();
+        virtual const Drawings* getDrawings() const;
 
         virtual OLEStreamReader* getTable();
 
@@ -126,8 +126,9 @@ namespace wvWare
         void parseAnnotation( const AnnotationData& data );
         void parseTableRow( const TableRowData& data );
         void parsePicture( const PictureData& data );
-        //I can't create Functor for textbox in advance because i don't know lid
-        virtual void parseTextBox( uint lid, bool bodyDrawing);
+
+        //Can't create Functor for textbox in advance.  Index into plcfTxbxTxt unknown.
+        virtual void parseTextBox(uint index, bool stylesxml);
 
     protected:
         // First all variables which don't change their state during

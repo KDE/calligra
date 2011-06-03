@@ -183,7 +183,7 @@ void ProjectTester::oneTask()
     QTime t2 ( 17, 0, 0 );
     int length = t1.msecsTo( t2 );
 
-    Task *t = m_project->createTask( m_project );
+    Task *t = m_project->createTask();
     t->setName( "T1" );
     m_project->addTask( t, m_project );
     t->estimate()->setUnit( Duration::Unit_d );
@@ -423,7 +423,7 @@ void ProjectTester::team()
     }
     project.addCalendar( c );
 
-    Task *task1 = project.createTask( &project );
+    Task *task1 = project.createTask();
     task1->setName( "T1" );
     project.addTask( task1, &project );
     task1->estimate()->setUnit( Duration::Unit_d );
@@ -582,7 +582,7 @@ void ProjectTester::mustStartOn()
 
     ResourceGroup *g = createWorkResources( project, 1 );
 
-    Task *t = project.createTask( &project );
+    Task *t = project.createTask();
     t->setName( "T1" );
     project.addTask( t, &project );
     t->estimate()->setUnit( Duration::Unit_h );
@@ -614,7 +614,7 @@ void ProjectTester::mustStartOn()
     s = "Calculate forward, 2 Tasks ------------------------------";
     qDebug()<<s;
 
-    Task *t2 = project.createTask( &project );
+    Task *t2 = project.createTask();
     t2->setName( "T2" );
     project.addTask( t2, &project );
     t2->estimate()->setUnit( Duration::Unit_d );
@@ -662,7 +662,7 @@ void ProjectTester::startNotEarlier()
 
     ResourceGroup *g = createWorkResources( project, 1 );
 
-    Task *t = project.createTask( &project );
+    Task *t = project.createTask();
     t->setName( "T1" );
     project.addTask( t, &project );
     t->estimate()->setUnit( Duration::Unit_h );
@@ -694,7 +694,7 @@ void ProjectTester::startNotEarlier()
     s = "Calculate forward, 2 Tasks ------------------------------";
     qDebug()<<s;
 
-    Task *t2 = project.createTask( &project );
+    Task *t2 = project.createTask();
     t2->setName( "T2" );
     project.addTask( t2, &project );
     t2->estimate()->setUnit( Duration::Unit_d );

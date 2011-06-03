@@ -23,6 +23,7 @@
 */
 
 #include "conversion.h"
+#include "msdoc.h"
 
 #include <wv2/src/word97_generated.h>
 #include <wv2/src/functordata.h>
@@ -187,13 +188,54 @@ uint Conversion::shadingPatternToColor(int ipat)
     uint resultColor = 0xffffff, grayLevel = 0;
     bool ok;
 
-    grayLevel = ditheringToGray(ipat, &ok);     // try to convert ipat to gray level
+    // try to convert ipat to gray level
+    grayLevel = ditheringToGray(ipat, &ok);
 
-    if(ok != true)                              // if conversion failed, return white (shouldn't happen)
+    // if conversion failed, return white (shouldn't happen)
+    if (!ok) {
         return resultColor;
-
-    resultColor = (grayLevel << 16) | (grayLevel <<  8) | grayLevel;    // construct RGB from the same value (to create gray)
+    }
+    // construct RGB from the same value (to create gray)
+    resultColor = (grayLevel << 16) | (grayLevel <<  8) | grayLevel;
     return resultColor;
+}
+
+QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd)
+{
+    QString ret;
+    if (shd.shdAutoOrNill) return ret;
+
+    switch (shd.ipat) {
+    case ipatAuto:
+    case ipatSolid:
+        ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
+        ret.prepend('#');
+        break;
+    case ipatPct5:
+    case ipatPct10:
+    case ipatPct20:
+    case ipatPct25:
+    case ipatPct30:
+    case ipatPct40:
+    case ipatPct50:
+    case ipatPct60:
+    case ipatPct70:
+    case ipatPct75:
+    case ipatPct80:
+    case ipatPct90:
+    {
+        uint grayClr = shadingPatternToColor(shd.ipat);
+        ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
+        ret.prepend('#');
+        break;
+    }
+    case ipatNil:
+        break;
+    default:
+        kDebug(30513) << "Unsupported shading pattern (0x" << hex << shd.ipat << ")";
+        break;
+    }
+    return ret;
 }
 
 int Conversion::ditheringToGray(int ipat, bool* ok)
@@ -625,6 +667,12 @@ int Conversion::fldToFieldType(const wvWare::FLD* fld)
         kDebug(30513) << "unhandled field: fld.ftl:" << (int)fld->flt;
 
     return m_fieldType;
+}
+
+qreal Conversion::twipsToMM(int twips)
+{
+    qreal mm = twipsToInch(twips) * 25.4;
+    return mm;
 }
 
 qreal Conversion::twipsToInch(int twips)

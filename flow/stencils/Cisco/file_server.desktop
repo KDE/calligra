@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=File Server
+Name[el]=Εξυπηρετητής αρχείων
 Name[es]=Servidor de archivos
 Name[et]=Failiserver
-Name[pt]=Servidor Ficheiros
+Name[nl]=Bestandsserver
+Name[pt]=Servidor de Ficheiros
 Name[pt_BR]=Servidor de arquivos
 Name[sv]=Filserver
 Name[uk]=Файловий сервер
 Name[x-test]=xxFile Serverxx
+Name[zh_TW]=檔案伺服器

@@ -36,9 +36,20 @@
 # endif
 #endif
 
+#ifndef LIBWMF_EXPORT
+# if defined(MAKE_LIBWMF_LIB)
+/* We are building this library */
+#  define LIBWMF_EXPORT KDE_EXPORT
+# else
+/* We are using this library */
+#  define LIBWMF_EXPORT KDE_IMPORT
+# endif
+#endif
+
 #else /* UNIX */
 
 #define KOWMF_EXPORT KDE_EXPORT
+#define LIBWMF_EXPORT KDE_EXPORT
 
 #endif
 

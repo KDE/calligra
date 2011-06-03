@@ -1651,6 +1651,11 @@ const StyleStorage* CellStorage::styleStorage() const
     return d->styleStorage;
 }
 
+const UserInputStorage* CellStorage::userInputStorage() const
+{
+    return d->userInputStorage;
+}
+
 const ValidityStorage* CellStorage::validityStorage() const
 {
     return d->validityStorage;

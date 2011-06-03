@@ -18,6 +18,7 @@ set(docximport_PART_SRCS
     DocxXmlNumberingReader.cpp
     DocxXmlFootnoteReader.cpp
     DocxXmlEndnoteReader.cpp
+    DocxXmlSettingsReader.cpp
     DocxImport.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/XlsxXmlChartReader.cpp

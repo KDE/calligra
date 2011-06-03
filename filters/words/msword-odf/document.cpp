@@ -23,14 +23,16 @@
    Boston, MA 02110-1301, USA.
 */
 #include "generated/leinputstream.h"
+#include "drawstyle.h"
+
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
-#include "versionmagic.h"
-#include "drawstyle.h"
-#include "msodraw.h"
+//#include "versionmagic.h"
 #include "mswordodfimport.h"
+#include "msodraw.h"
+#include "msdoc.h"
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -51,22 +53,14 @@
 #include <QBuffer>
 #include <QColor>
 
-//specifies the location from which the offset of a page border is measured
-enum PgbOffsetFrom {
-    pgbFromText,  //offset measured from the text
-    pgbFromEdge   //offset measured from the edge of the page
-};
-
-
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
 Document::Document(const std::string& fileName,
                    MSWordOdfImport* filter,
 //                    KoFilterChain* chain,
-                   KoXmlWriter* bodyWriter,
-                   KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
-                   KoStore* store, POLE::Storage* storage,
-                   LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
+                   KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
+                   KoStore* store, KoGenStyles* mainStyles,
+                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
@@ -90,9 +84,10 @@ Document::Document(const std::string& fileName,
         , m_writeMasterPageName(false)
         , m_omittMasterPage(false)
         , m_useLastMasterPage(false)
-        , m_data_stream(data)
-        , m_table_stream(table)
-        , m_wdocument_stream(wdocument)
+        , m_wdstm(wordDocument)
+        , m_tblstm(0)
+        , m_datastm(data)
+        , m_tblstm_pole(table)
 {
     kDebug(30513);
     addBgColor("#ffffff"); //initialize the background-colors stack
@@ -105,13 +100,13 @@ Document::Document(const std::string& fileName,
         m_buffer = 0; //set pointers to 0
         m_bufferEven = 0;
         m_headerWriter = 0;
-        m_storage = storage;
 
         m_textHandler  = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
         m_textHandler->setDocument(this);
         m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
         m_tableHandler->setDocument(this);
-        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles);
+        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles,
+                                                     m_parser->getDrawings(), m_parser->fib());
 
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
@@ -125,24 +120,29 @@ Document::Document(const std::string& fileName,
                 this, SLOT(slotTableFound(KWord::Table*)));
         connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&,KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
-        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int , KoXmlWriter* )),
-                this, SLOT(slotFloatingObjectFound(unsigned int , KoXmlWriter* )));
-        connect(m_graphicsHandler, SIGNAL(textBoxFound(uint , bool)),
-                this, SLOT(slotTextBoxFound(uint , bool)));
+        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter* )),
+                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter* )));
+        connect(m_graphicsHandler, SIGNAL(textBoxFound(unsigned int, bool)),
+                this, SLOT(slotTextBoxFound(unsigned int, bool)));
 
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);
         m_parser->setTableHandler(m_tableHandler);
-        m_graphicsHandler->init(m_parser->getDrawings(), m_parser->fib());
         m_parser->setGraphicsHandler(m_graphicsHandler);
         m_parser->setInlineReplacementHandler(m_replacementHandler);
 
         processStyles();
         processAssociatedStrings();
-        //connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
-        //         this, SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
-        //connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
-        //         this, SLOT( slotTableCellEnd() ) );
+
+//         connect( m_tableHandler,
+//                  SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&,
+//                          const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&,
+//                          const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
+//                  this,
+//                  SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&,
+//                        const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&,
+//                        const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
+//         connect( m_tableHandler, SIGNAL( sigTableCellEnd() ), this, SLOT( slotTableCellEnd() ) );
     }
 }
 
@@ -274,32 +274,33 @@ void Document::processAssociatedStrings()
     wvWare::AssociatedStrings strings(m_parser->associatedStrings());
     if (!strings.author().isNull()) {
         m_metaWriter->startElement("meta:initial-creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.author()));
+        m_metaWriter->addTextNode(Conversion::string(strings.author()));
         m_metaWriter->endElement();
     }
     if (!strings.title().isNull()) {
         m_metaWriter->startElement("dc:title");
-        m_metaWriter->addTextSpan(Conversion::string(strings.title()));
+        qDebug() << "TITLE: " << Conversion::string(strings.title());
+        m_metaWriter->addTextNode(Conversion::string(strings.title()));
         m_metaWriter->endElement();
     }
     if (!strings.subject().isNull()) {
         m_metaWriter->startElement("dc:subject");
-        m_metaWriter->addTextSpan(Conversion::string(strings.subject()));
+        m_metaWriter->addTextNode(Conversion::string(strings.subject()));
         m_metaWriter->endElement();
     }
     if (!strings.lastRevBy().isNull()) {
         m_metaWriter->startElement("dc:creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()));
+        m_metaWriter->addTextNode(Conversion::string(strings.lastRevBy()));
         m_metaWriter->endElement();
     }
     if (!strings.keywords().isNull()) {
         m_metaWriter->startElement("meta:keyword");
-        m_metaWriter->addTextSpan(Conversion::string(strings.keywords()));
+        m_metaWriter->addTextNode(Conversion::string(strings.keywords()));
         m_metaWriter->endElement();
     }
     if (!strings.comments().isNull()) {
         m_metaWriter->startElement("meta:comments");
-        m_metaWriter->addTextSpan(Conversion::string(strings.comments()));
+        m_metaWriter->addTextNode(Conversion::string(strings.comments()));
         m_metaWriter->endElement();
     }
 }
@@ -326,15 +327,16 @@ void Document::processStyles()
         }
 
         // Process paragraph styles.
-        if (style && style->type() == wvWare::Style::sgcPara) {
+        if (style && style->type() == sgcPara) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
-            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
+            const wvWare::Style* followingStyle = styles.styleByIndex(style->followingStyle());
             if (followingStyle && followingStyle != style) {
-                QString followingName = Conversion::string(followingStyle->name());
+                QString followingName = Conversion::styleNameString(followingStyle->name());
+                userStyle.addAttribute("style:next-style-name", followingName);
             }
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
@@ -363,7 +365,7 @@ void Document::processStyles()
             if (actualName.contains("TOC")) {
                 m_tocStyleNames.append(actualName);
             }
-        } else if (style && style->type() == wvWare::Style::sgcChp) {
+        } else if (style && style->type() == sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "text");
@@ -396,13 +398,19 @@ void Document::processStyles()
     m_mainStyles->insert(defaultStyle, "nevershown");
 }
 
-//just call parsing function
-bool Document::parse()
+quint8 Document::parse()
 {
-    kDebug(30513) ;
-    if (m_parser)
-        return m_parser->parse();
-    return false;
+    if (m_parser) {
+        if (!m_parser->parse()) {
+            return 1;
+        }
+    }
+    //make sure texthandler is fine after parsing
+    if (!m_textHandler->stateOk()) {
+        kError(30513) << "TextHandler state after parsing NOT Ok!";
+        return 2;
+    }
+    return 0;
 }
 
 void Document::setProgress(const int percent)
@@ -471,16 +479,22 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 //             textHandler()->set_breakBeforePage(true);
 //         }
 
-        //A continuous section break. The next section starts on the next line.
-        if (sep->bkc == 0) {
+        switch (sep->bkc) {
+        case bkcContinuous:
             kDebug(30513) << "omitting page-layout & master-page creation";
             m_omittMasterPage = true;
-        }
-        //A new page section break. The next section starts on the next page.
-        else if (sep->bkc == 2) {
+            break;
+        case bkcNewPage:
+        case bkcEvenPage:
+        case bkcOddPage:
             kDebug(30513) << "using the last defined master-page";
             m_useLastMasterPage = true;
             m_writeMasterPageName = true;
+            break;
+        default:
+            kWarning(30513) << "Warning: section break type (" << sep->bkc << ") NOT SUPPORTED!";
+            m_omittMasterPage = true;
+            break;
         }
 
         //cleaning required!
@@ -763,8 +777,9 @@ void Document::annotationEnd()
 {
 }
 
-//disable this for now - we should be able to do everything in TableHandler
-//create frame for the table cell?
+//NOTE: disable this for now - we should be able to do everything in
+//TableHandler create frame for the table cell?
+
 //void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 //{
 //kDebug(30513) ;
@@ -937,12 +952,10 @@ void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* write
     }
 }
 
-void Document::slotTextBoxFound( uint spid, bool bodyDrawing)
+void Document::slotTextBoxFound(unsigned int index, bool stylesxml)
 {
     kDebug(30513) ;
-
-    //NOTE: spid == lid in wv2
-    m_parser->parseTextBox(spid, bodyDrawing);
+    m_parser->parseTextBox(index, stylesxml);
 }
 
 //process through all the subDocs and the tables
@@ -993,7 +1006,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addProperty("style:print-orientation", landscape ? "landscape" : "portrait");
     pageLayoutStyle->addProperty("style:num-format", "1");
 
-    DrawStyle ds = m_graphicsHandler->getDrawingStyle();
+    DrawStyle ds = m_graphicsHandler->getBgDrawStyle();
     switch (ds.fillType()) {
     case msofillSolid:
     {

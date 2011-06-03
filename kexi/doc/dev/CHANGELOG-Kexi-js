@@ -80,9 +80,43 @@ TODO: fix https://bugs.kde.org/show_bug.cgi?id=241144
 
 TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
+TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cpp/fid005249EAAF7BE50E0DF5B02243622557BCE5A466.aspx) and use for any recursion guard
+
 ===================== Kexi 2.4  =====================
 
 ~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
+
+Tabbed toolbar TODOS:
+*add tab hiding to the API
+**can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
+*should we remove the accelerators from the tabs?
+
+2011-05-11
+Core
+*Delayed loading of plugins, improves startup times
+
+2011-05-09
+Forms
+*fixed possible crash in context menus
+**backported to 2.3.x
+**backported to 2.2.x
+Examples
+*make forms andreport in "Simple Database" example look a bit more modern
+*remove auto tabs to avoid focus
+TODO: fix auto tabs!
+
+2011-05-06
+Examples
+*updated examples generation scripts to use system sqlite3 instead of old ksqlite command
+Forms
+*fixed possible crash in tab ordering code
+**backported to 2.3.x
+**backported to 2.2.x
+
+2011-03-28
+KexiDB
+*fix possible crash when handling queries with lookup columns
+**backported to 2.3.x
 
 Forms
 *added --hide-menu command line option: Hides the main menu (the tabbed toolbar) completely.

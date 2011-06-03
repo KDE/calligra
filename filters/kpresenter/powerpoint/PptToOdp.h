@@ -91,10 +91,11 @@ public:
 
     /**
      * Get path to an already stored picture based on its identifier.
+     *
      * @param pib specifies which BLIP to display in the picture shape.
      * @return path
      */
-    QString getPicturePath(int pib) const;
+    QString getPicturePath(const quint32 pib) const;
 private:
 
     /**
@@ -201,32 +202,6 @@ private:
     }InteractiveInfoActionEnum;
 
     /**
-    * TextAutoNumberSchemeEnum
-    * Referenced by: TextAutoNumberScheme
-    * An enumeration that specifies the character sequence and delimiters to use for automatic
-    * numbering.
-    */
-    enum {
-        ANM_AlphaLcPeriod,     //0x0000  Example: a., b., c., ...Lowercase Latin character followed by a period.
-        ANM_AlphaUcPeriod ,    //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
-        ANM_ArabicParenRight,  //0x0002  Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
-        ANM_ArabicPeriod,      //0x0003  Example: 1., 2., 3., ...Arabic numeral followed by a period.
-        ANM_RomanLcParenBoth,  //0x0004  Example: (i), (ii), (iii), ...Lowercase Roman numeral in parentheses.
-        ANM_RomanLcParenRight, //0x0005  Example: i), ii), iii), ...Lowercase Roman numeral and a closing parenthesis.
-        ANM_RomanLcPeriod,     //0x0006  Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
-        ANM_RomanUcPeriod ,    //0x0007  Example: I., II., III., ...Uppercase Roman numeral followed by a period.
-        ANM_AlphaLcParenBoth,  //0x0008  Example: (a), (b), (c), ...Lowercase alphabetic character in parentheses.
-        ANM_AlphaLcParenRight, //0x0009  Example: a), b), c), ...Lowercase alphabetic character followed by a closing
-        ANM_AlphaUcParenBoth,  //0x000A  Example: (A), (B), (C), ...Uppercase alphabetic character in parentheses.
-        ANM_AlphaUcParenRight, //0x000B  Example: A), B), C), ...Uppercase alphabetic character followed by a closing
-        ANM_ArabicParenBoth,   //0x000C  Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
-        ANM_ArabicPlain,       //0x000D  Example: 1, 2, 3, ...Arabic numeral.
-        ANM_RomanUcParenBoth,  //0x000E  Example: (I), (II), (III), ...Uppercase Roman numeral in parentheses.
-        ANM_RomanUcParenRight, //0x000F  Example: I), II), III), ...Uppercase Roman numeral and a closing parenthesis.
-        //Future
-    } TextAutoNumberSchemeEnum;
-
-    /**
     * Declaration Type
     * Referenced by: Declaration Type
     * A declaration type ex:- Header,Footer,DateTime
@@ -241,12 +216,10 @@ private:
      * Function that does the actual conversion.
      *
      * It is shared by the two convert() functions.
-     * @param input an open OLE container that contains the ppt data.
      * @param output an open KoStore to write the odp into.
      * @return result code of the conversion.
      */
-    KoFilter::ConversionStatus doConversion(POLE::Storage& input,
-                                            KoStore* output);
+    KoFilter::ConversionStatus doConversion(KoStore* output);
 
     /**
      * TODO:
@@ -611,25 +584,6 @@ private:
         return hf;
     }
 
-    /**
-     * Look in blipStore for the id mapping to this object
-     **/
-    QByteArray getRgbUid(quint16 pib) const
-    {
-        // return 16 byte rgbuid for this given blip id
-        if (p->documentContainer->drawingGroup.OfficeArtDgg.blipStore) {
-            const MSO::OfficeArtBStoreContainer* b
-            = p->documentContainer->drawingGroup.OfficeArtDgg.blipStore.data();
-            if (pib < b->rgfb.size()
-                    && b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>()) {
-                return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
-            }
-        }
-        if (pib != 0xFFFF && pib != 0) {
-            qDebug() << "Could not find image for pib " << pib;
-        }
-        return QByteArray();
-    }
     const MSO::FontEntityAtom* getFont(quint16 fontRef)
     {
         const MSO::FontCollectionContainer* f =
@@ -675,6 +629,7 @@ private:
     const MSO::SlideListWithTextSubContainerOrAtom* m_currentSlideTexts;
     const MSO::MasterOrSlideContainer* m_currentMaster;
     const MSO::SlideContainer* m_currentSlide;
+    bool m_processingMasters; //false - processing presentation slides
 
     QMap<QByteArray, QString> pictureNames;
     QMap<quint16, QString> bulletPictureNames;

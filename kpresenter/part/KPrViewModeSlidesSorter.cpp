@@ -28,6 +28,7 @@
 #include <QtCore/qmath.h>
 
 #include "KPrSlidesSorterDocumentModel.h"
+#include "KPrFactory.h"
 #include <KoResourceManager.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
@@ -51,6 +52,7 @@
 
 #include <klocale.h>
 #include <KDebug>
+#include <kconfiggroup.h>
 
 KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas)
     : KoPAViewMode( view, canvas )
@@ -73,6 +75,8 @@ KPrViewModeSlidesSorter::KPrSlidesSorter::~KPrSlidesSorter()
 
 KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
 {
+    //save zoom value
+    saveZoomConfig(zoom());
 }
 
 void KPrViewModeSlidesSorter::paint(KoPACanvasBase* /*canvas*/, QPainter& /*painter*/, const QRectF &/*paintRect*/)
@@ -219,10 +223,20 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
     connect(m_slidesSorter, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(const QModelIndex)));
     connect(this, SIGNAL(pageChanged(KoPAPageBase*)), m_view->proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
-    connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updatePageAdded()));
+    connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
     connect(m_view->kopaDocument(),SIGNAL(pageAdded(KoPAPageBase*)),this, SLOT(updateModel()));
     connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(updateModel()));
-    connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(updateZoom(KoZoomMode::Mode,qreal)));
+
+    //change zoom saving slot
+    connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
+
+    KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
+    if (kPrview) {
+        disconnect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+        m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
+        loadZoomConfig();
+    }
+
 }
 
 void KPrViewModeSlidesSorter::deactivate()
@@ -237,19 +251,29 @@ void KPrViewModeSlidesSorter::deactivate()
     if (view) {
         view->show();
     }
+
+    //save zoom value
+    saveZoomConfig(zoom());
+
+    //change zoom saving slot and restore normal view zoom values
+    disconnect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
+
+    m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_PAGE | KoZoomMode::ZOOM_WIDTH);
+
     m_view->setActivePage(m_view->kopaDocument()->pageByIndex(m_slidesSorter->currentIndex().row(), false));
+
+    KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
+    if (kPrview) {
+        kPrview->restoreZoomConfig();
+        connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+    }
+
+
 }
 void KPrViewModeSlidesSorter::updateModel()
 {
     m_documentModel->update();
     updateToActivePageIndex();
-}
-void KPrViewModeSlidesSorter::updatePageAdded()
-{
-    m_documentModel->update();
-    int row = m_view->kopaDocument()->pageIndex(m_view->activePage());
-    QModelIndex index = m_documentModel->index(row, 0);
-    m_slidesSorter->setCurrentIndex(index);
 }
 
 void KPrViewModeSlidesSorter::updateActivePage( KoPAPageBase *page )
@@ -536,6 +560,8 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
     //update item size
     QModelIndex item = m_documentModel->index(0,0);
     setItemSize(m_slidesSorter->visualRect(item));
+
+    setZoom(qRound(zoom * 100.));
 }
 
 void KPrViewModeSlidesSorter::setIconSize(QSize size)
@@ -544,4 +570,33 @@ void KPrViewModeSlidesSorter::setIconSize(QSize size)
         m_iconSize = size;
     }
 
+}
+
+void KPrViewModeSlidesSorter::loadZoomConfig()
+{
+    KSharedConfigPtr config = KPrFactory::componentData().config();
+    int s_zoom = 100;
+
+    if (config->hasGroup("Interface")) {
+        const KConfigGroup interface = config->group("Interface");
+        s_zoom = interface.readEntry("ZoomSlidesSorter", s_zoom);
+    }
+    m_view->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, s_zoom/100.);
+}
+
+void KPrViewModeSlidesSorter::saveZoomConfig(int zoom)
+{
+    KSharedConfigPtr config = KPrFactory::componentData().config();
+    KConfigGroup interface = config->group("Interface");
+    interface.writeEntry("ZoomSlidesSorter", zoom);
+}
+
+void KPrViewModeSlidesSorter::setZoom(int zoom)
+{
+    m_zoom = zoom;
+}
+
+int KPrViewModeSlidesSorter::zoom()
+{
+    return m_zoom;
 }

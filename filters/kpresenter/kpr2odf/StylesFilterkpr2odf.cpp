@@ -331,7 +331,7 @@ const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientEle
     switch (type) {
     case 1:
         typeString = "linear";
-        angle = "0";
+        angle = '0';
         break;
     case 2:
         typeString = "linear";
@@ -347,15 +347,15 @@ const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientEle
         break;
     case 5:
         typeString = "radial";
-        angle = "0";
+        angle = '0';
         break;
     case 6:
         typeString = "square";
-        angle = "0";
+        angle = '0';
         break;
     case 7:
         typeString = "axial";
-        angle = "0";
+        angle = '0';
         break;
     }//switch type
     style.addAttribute("draw:style", typeString);
@@ -737,32 +737,32 @@ const QString Filterkpr2odf::createStrokeDashStyle(int strokeStyle)
     case 2:
         displayName = "Fine Dashed";
         styleString = "rect";
-        dots1 = "1";
+        dots1 = '1';
         dots1_length = "0.508cm";
-        dots2 = "1";
+        dots2 = '1';
         dots2_length = "0.508cm";
         distance = "0.508cm";
         break;
     case 3:
         displayName = "Fine Dotted";
         styleString = "rect";
-        dots1 = "1";
+        dots1 = '1';
         distance = "0.257cm";
         break;
     case 4:
         displayName = "Ultrafine 1 Dot 1 Dash";
         styleString = "rect";
-        dots1 = "1";
+        dots1 = '1';
         dots1_length = "0.051cm";
-        dots2 = "1";
+        dots2 = '1';
         dots2_length = "0.254cm";
         distance = "0.127cm";
         break;
     case 5:
         displayName = "2 Dots 1 Dash";
         styleString = "rect";
-        dots1 = "2";
-        dots2 = "1";
+        dots1 = '2';
+        dots2 = '1';
         dots2_length = "0.203cm";
         distance = "0.203cm";
         break;
@@ -803,7 +803,7 @@ const QString Filterkpr2odf::createHatchStyle(int brushStyle, QString fillColor)
         displayName = fillColor + " 0 Degrees";
         styleString = "single";
         distance = "0.102cm";
-        rotation = "0";
+        rotation = '0';
         break;
     case 10:
         displayName = fillColor + " 90 Degrees";

@@ -154,7 +154,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
     body = rBuf.originalWriter();
 
     body->startElement("text:span", false);
-    if (!m_currentTextStyle.isEmpty()) {
+    if (!m_currentTextStyle.isEmpty() || !m_currentTextStyle.parentName().isEmpty()) {
         const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
         body->addAttribute("text:style-name", currentTextStyleName);
     }
@@ -183,7 +183,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
  - extend §18.8.17
  - family §18.8.18
  - [done] i §18.8.26
- - outline §18.4.2
+ - [done] outline §18.4.2
  - [done] rFont §18.4.5
  - [done] scheme §18.8.35
  - shadow §18.8.36
@@ -213,6 +213,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
             ELSE_TRY_READ_IF(i)
             ELSE_TRY_READ_IF(b)
             ELSE_TRY_READ_IF(strike)
+            ELSE_TRY_READ_IF(outline)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -389,6 +390,32 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_b()
     TRY_READ_ATTR_WITHOUT_NS(val)
     if (val == "1") {
         m_currentTextStyleProperties->setFontWeight(QFont::Bold);
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL outline
+//! outline handler (Outline)
+/*!
+
+ Parent elements:
+ - [done] font (§18.8.22)
+ - [done] rPr (§18.4.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus XlsxXmlCommonReader::read_outline()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    if (val == "1") {
+        m_currentTextStyleProperties->setTextOutline(QPen(Qt::SolidLine));
     }
 
     readNext();

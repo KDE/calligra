@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007,2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -435,8 +435,8 @@ void KarbonGradientTool::initialize()
 
     delete m_gradient;
     GradientStrategy * strategy = m_currentStrategy ? m_currentStrategy : m_strategies.values().first();
-    GradientStrategy::setHandleRadius(canvas()->resourceManager()->handleRadius());
-    GradientStrategy::setGrabSensitivity(canvas()->resourceManager()->grabSensitivity());
+    GradientStrategy::setHandleRadius(handleRadius());
+    GradientStrategy::setGrabSensitivity(grabSensitivity());
     m_gradient = KoFlake::cloneGradient(strategy->gradient());
     if (m_gradientWidget) {
         m_gradientWidget->setGradient(*m_gradient);
@@ -468,14 +468,14 @@ void KarbonGradientTool::deactivate()
 void KarbonGradientTool::resourceChanged(int key, const QVariant & res)
 {
     switch (key) {
-    case KoCanvasResource::HandleRadius:
+    case KoDocumentResource::HandleRadius:
         foreach(GradientStrategy *strategy, m_strategies)
-        strategy->repaint(*canvas()->viewConverter());
+            strategy->repaint(*canvas()->viewConverter());
         GradientStrategy::setHandleRadius(res.toUInt());
         foreach(GradientStrategy *strategy, m_strategies)
-        strategy->repaint(*canvas()->viewConverter());
+            strategy->repaint(*canvas()->viewConverter());
         break;
-    case KoCanvasResource::GrabSensitivity:
+    case KoDocumentResource::GrabSensitivity:
         GradientStrategy::setGrabSensitivity(res.toUInt());
         break;
     default:
@@ -483,7 +483,7 @@ void KarbonGradientTool::resourceChanged(int key, const QVariant & res)
     }
 }
 
-QMap<QString, QWidget *> KarbonGradientTool::createOptionWidgets()
+QList<QWidget *> KarbonGradientTool::createOptionWidgets()
 {
     m_gradientWidget = new KarbonGradientEditWidget();
     m_gradientWidget->setGradient(*m_gradient);
@@ -499,9 +499,11 @@ QMap<QString, QWidget *> KarbonGradientTool::createOptionWidgets()
     connect(chooser, SIGNAL(resourceSelected(KoResource *)),
             this, SLOT(gradientSelected(KoResource *)));
 
-    QMap<QString, QWidget *> widgets;
-    widgets.insert(i18n("Edit Gradient"), m_gradientWidget);
-    widgets.insert(i18n("Predefined Gradients"), chooser);
+    QList<QWidget *> widgets;
+    m_gradientWidget->setWindowTitle(i18n("Edit Gradient"));
+    widgets.append(m_gradientWidget);
+    chooser->setWindowTitle(i18n("Predefined Gradients"));
+    widgets.append(chooser);
 
     return widgets;
 }

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001 David Faure <faure@kde.org>
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,34 +21,33 @@
 
 #include "KWViewMode.h"
 
-#include <KoCanvasBase.h>
+#include <KoViewConverter.h>
 
 #include "KWDocument.h"
 #include "KWViewModeNormal.h"
 #include "KWViewModePreview.h"
 
 KWViewMode::KWViewMode()
-    : m_pageManager(0),
-    m_viewConverter(0),
-    m_drawFrameBorders(false)
+    : m_pageManager(0)
+    , m_drawFrameBorders(false)
 {
 }
 
-QRectF KWViewMode::documentToView(const QRectF &rect) const
+QRectF KWViewMode::documentToView(const QRectF &rect, KoViewConverter *viewConverter) const
 {
     QRectF r;
-    QPointF topLeft(documentToView(rect.topLeft()));
-    QPointF bottomRight(documentToView(rect.bottomRight()));
+    QPointF topLeft(documentToView(rect.topLeft(), viewConverter));
+    QPointF bottomRight(documentToView(rect.bottomRight(), viewConverter));
 
     r.setCoords(topLeft.x(), topLeft.y(), bottomRight.x(), bottomRight.y());
     return r;
 }
 
-QRectF KWViewMode::viewToDocument(const QRectF &rect) const
+QRectF KWViewMode::viewToDocument(const QRectF &rect, KoViewConverter *viewConverter) const
 {
     QRectF r;
-    QPointF topLeft(viewToDocument(rect.topLeft()));
-    QPointF bottomRight(viewToDocument(rect.bottomRight()));
+    QPointF topLeft(viewToDocument(rect.topLeft(), viewConverter));
+    QPointF bottomRight(viewToDocument(rect.bottomRight(), viewConverter));
 
     r.setCoords(topLeft.x(), topLeft.y(), bottomRight.x(), bottomRight.y());
     return r;
@@ -60,7 +59,7 @@ void KWViewMode::pageSetupChanged()
 }
 
 // static
-KWViewMode *KWViewMode::create(const QString &viewModeType, KWDocument *document, KoCanvasBase *canvas)
+KWViewMode *KWViewMode::create(const QString &viewModeType, KWDocument *document)
 {
     KWViewMode * vm = 0;
     if (viewModeType == KWViewModePreview::viewMode())
@@ -69,7 +68,6 @@ KWViewMode *KWViewMode::create(const QString &viewModeType, KWDocument *document
         vm = new KWViewModeNormal();
 
     vm->setPageManager(document->pageManager());
-    vm->setViewConverter(canvas->viewConverter());
     return vm;
 }
 

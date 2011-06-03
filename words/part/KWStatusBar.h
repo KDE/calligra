@@ -61,11 +61,17 @@ public slots:
 private slots:
     void setModified(bool modified);
     void updatePageCount();
+    void updatePageStyle();
+    void updatePageSize();
+    void updateCursorPosition();
     void updateMousePosition(const QPoint&);
     void resourceChanged(int, const QVariant&);
     void updateCurrentTool(KoCanvasController*);
     void createZoomWidget();
     void showPage(bool visible);
+    void showPageStyle(bool visible);
+    void showPageSize(bool visible);
+    void showLineColumn(bool visible);
     void showModified(bool visible);
     void showMouse(bool visible);
     void showZoom(bool visible);
@@ -93,6 +99,9 @@ private:
 
     QLabel *m_modifiedLabel;
     QLabel *m_pageLabel;
+    QLabel *m_pageStyleLabel;
+    QLabel *m_pageSizeLabel;
+    QLabel *m_lineColumnLabel;
     QLabel *m_mousePosLabel;
     KSqueezedTextLabel *m_statusLabel;
     QList<KWView*> m_views;

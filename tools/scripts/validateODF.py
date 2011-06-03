@@ -8,12 +8,12 @@ def getODFVersion(zip):
 		"{urn:oasis:names:tc:opendocument:xmlns:office:1.0}version")
 
 def getJing():
-	jingjar = "jing-20081028/bin/jing.jar"
+	jingjar = "jing-20091111/bin/jing.jar"
 	path = os.path.join(sys.path[0], jingjar)
 	if os.path.isfile(path):
 		return path
 	print "Downloading jing.jar"
-	z = "jing-20081028.zip"
+	z = "jing-20091111.zip"
 	urllib.urlretrieve("http://jing-trang.googlecode.com/files/" + z, z);
 	zip = zipfile.ZipFile(z, "r");
 	zip.extract(jingjar, sys.path[0])
@@ -23,7 +23,7 @@ def getJing():
 	h.update(f.read())
 	f.close()
 	hash = h.hexdigest()
-	if hash != "60197956be7f8f2e29e1941ca42273abe7315293":
+	if hash != "daa0cf7b1679264f8e68171f7f253255794773f7":
 		print "Wrong hash code: wrong file."
 		os.unlink(path)
 		return

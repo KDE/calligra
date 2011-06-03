@@ -24,6 +24,7 @@
 
 #include <KoCellStyle.h>
 #include <KoBorder.h>
+#include <KoGenStyle.h>
 
 #include <QColor>
 #include <QFlags>
@@ -35,6 +36,10 @@ namespace MSOOXML {
 
 struct MSOOXML_EXPORT TableStyleProperties
 {
+    TableStyleProperties() {
+        bordersToEdgesOnly = false;
+    }
+
     enum Property {
         BottomBorder = 1,
         InsideHBorder = 2,
@@ -48,7 +53,10 @@ struct MSOOXML_EXPORT TableStyleProperties
         TopMargin = 512,
         RightMargin = 1024,
         BottomMargin = 2048,
-        LeftMargin = 4096
+        LeftMargin = 4096,
+        VerticalAlign = 8192,
+        GlyphOrientation = 16384,
+        BackgroundOpacity = 32768
     };
     Q_DECLARE_FLAGS(Properties, Property)
     Properties setProperties;
@@ -63,11 +71,22 @@ struct MSOOXML_EXPORT TableStyleProperties
     KoBorder::BorderData tr2bl;
 
     QColor backgroundColor;
+    qreal backgroundOpacity;
 
     qreal topMargin;
     qreal rightMargin;
     qreal bottomMargin;
     qreal leftMargin;
+
+    QString verticalAlign;
+    bool glyphOrientation;
+
+    // There seems to be behavior that when ooxml defines wholetbl borders, it wants them to be
+    // applied only to the cells which are on the edges, not to every cell
+    bool bordersToEdgesOnly;
+
+    KoGenStyle textStyle;
+    KoGenStyle paragraphStyle;
 };
 
 class MSOOXML_EXPORT TableStyle

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=PNP Transistor
+Name[el]=PNP Transistor
 Name[et]=PNP transistor
+Name[nb]=PNP-transistor
 Name[nl]=PNP transistor
 Name[pt]=Transístor PNP
 Name[pt_BR]=Transistor PNP
@@ -8,3 +10,4 @@ Name[sv]=PNP-transistor
 Name[uk]=Транзистор PNP
 Name[x-test]=xxPNP Transistorxx
 Name[zh_CN]=PNP 三极管
+Name[zh_TW]=PNP 電晶體
