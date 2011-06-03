@@ -154,6 +154,16 @@ private slots:
     void editSemanticStylesheets();
     /// convert current frame to an inline frame
     void inlineFrame();
+    /// anchor the current shape "as-char"
+    void anchorAsChar();
+    /// anchor the current shape "to-char"
+    void anchorToChar();
+    /// anchor the current shape "to-paragraph"
+    void anchorToParagraph();
+    /// anchor the current shape "to-page"
+    void anchorToPage();
+    /// make the current shape free floating
+    void setFloating();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
