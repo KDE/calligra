@@ -29,10 +29,11 @@ static const char* FLOW_VERSION = KOFFICE_VERSION_STRING;
 
 KAboutData* newFlowAboutData()
 {
-  KAboutData* aboutData = new KAboutData("flow", 0, ki18n("Flow"),
+  KAboutData* aboutData = new KAboutData("flow", 0, ki18nc("application name", "Flow"),
                                 FLOW_VERSION, ki18n(FLOW_DESCRIPTION), KAboutData::License_LGPL,
                                 ki18n("(C) 2000-2010, The Flow Team"), KLocalizedString(),
                                 "http://www.calligra-suite.org/flow/");
+  aboutData->setProductName("calligra-flow"); // for bugs.kde.org
   aboutData->addAuthor(ki18n("Yue Liu"), ki18n("Maintainer"), "opuspace@gmail.com");
 
   return aboutData;

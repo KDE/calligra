@@ -399,13 +399,17 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement() && !m_context->firstRoundOfReading) {
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
             ELSE_TRY_READ_IF(sheetData) // does fill the m_context->sheet
             ELSE_TRY_READ_IF(mergeCells)
-            ELSE_TRY_READ_IF(drawing)
+            else if (name() == "drawing") {
+                body->startElement("table:shapes");
+                TRY_READ(drawing)
+                body->endElement(); //table:shapes
+            }
             ELSE_TRY_READ_IF(hyperlinks)
             ELSE_TRY_READ_IF(picture)
             ELSE_TRY_READ_IF(oleObjects)
@@ -681,7 +685,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_conditionalFormatting()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(cfRule)
             SKIP_UNKNOWN
@@ -775,7 +779,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "formula") {
                 TRY_READ(formula)
@@ -883,7 +887,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cols()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_WRONG_FORMAT
@@ -1045,7 +1049,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(row)
             ELSE_WRONG_FORMAT
@@ -1135,7 +1139,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(c) // modifies m_currentColumn
             SKIP_UNKNOWN
@@ -1198,7 +1202,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(f)
             ELSE_TRY_READ_IF(v)
@@ -1396,7 +1400,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
 
     while (!atEnd() && !hasError()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isCharacters()) {
             cell->formula = MSOOXML::convertFormula(text().toString());
         }
@@ -1584,7 +1588,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCells()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(mergeCell)
             ELSE_WRONG_FORMAT
@@ -1640,7 +1644,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
     }
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
     READ_EPILOGUE
 }
@@ -1696,7 +1700,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(hyperlink)
             ELSE_WRONG_FORMAT
@@ -1723,7 +1727,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_customFilters()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(customFilter)
             ELSE_WRONG_FORMAT
@@ -1764,7 +1768,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filters()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "filter") {
                 if (hasValueAlready) {
@@ -1876,7 +1880,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_filterColumn()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(filters)
             ELSE_TRY_READ_IF(customFilters)
@@ -1922,7 +1926,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_autoFilter()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(filterColumn)
             SKIP_UNKNOWN
@@ -1973,7 +1977,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_tableParts()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if( isStartElement() ) {
             TRY_READ_IF(tablePart)
             ELSE_WRONG_FORMAT
@@ -2026,7 +2030,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if( isStartElement() ) {
             TRY_READ_IF(oleObject)
             ELSE_WRONG_FORMAT
@@ -2069,7 +2073,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
     READ_EPILOGUE
 }

@@ -154,6 +154,16 @@ private slots:
     void editSemanticStylesheets();
     /// convert current frame to an inline frame
     void inlineFrame();
+    /// anchor the current shape "as-char"
+    void anchorAsChar();
+    /// anchor the current shape "to-char"
+    void anchorToChar();
+    /// anchor the current shape "to-paragraph"
+    void anchorToParagraph();
+    /// anchor the current shape "to-page"
+    void anchorToPage();
+    /// make the current shape free floating
+    void setFloating();
     /// called if the zoom changed
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
@@ -235,6 +245,9 @@ private:
 
     bool m_snapToGrid;
     QString m_lastPageSettingsTab;
+
+    QSizeF m_maxPageSize; // The maximum size of the pages we have encountered. This is used to
+                         // make sure that we always show all pages correctly in page/pagewidth mode.
 };
 
 #endif

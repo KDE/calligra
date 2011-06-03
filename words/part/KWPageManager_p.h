@@ -52,13 +52,8 @@ public:
     void setPageOffset(int pageNum, qreal offset);
     qreal pageOffset(int pageNum) const;
 
-    /**
-     * Update the page number for the page related to the pageId and also update the
-     * page number of all pages following the page.
-     */
-    void setPageNumberForId(int pageId, int newPageNumber);
+    void setVisiblePageNumber(int pageId, int newPageNumber);
 
-    /// helper method for the commands.
     void insertPage(const Page &page);
 
     // use a sorted map to find page the identifier for page objects based on the page number.
@@ -66,6 +61,8 @@ public:
 
     // use a fast access hash to store the page objects, sorted by their identifier
     QHash<int, Page> pages; // pageId to page struct
+
+    QMap<int, int> visiblePageNumbers;
 
     int lastId; // pageIds are distributed serially,
 

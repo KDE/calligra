@@ -62,7 +62,7 @@ SvgParser::SvgParser(KoResourceManager *documentResourceManager)
 {
     // the order of the font attributes is important, don't change without reason !!!
     m_fontAttributes << "font-family" << "font-size" << "font-weight";
-    m_fontAttributes << "text-decoration" << "letter-spacing" << "word-spacing";
+    m_fontAttributes << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
     // the order of the style attributes is important, don't change without reason !!!
     m_styleAttributes << "color" << "display";
     m_styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -866,6 +866,8 @@ void SvgParser::parsePA(SvgGraphicsContext *gc, const QString &command, const QS
             gc->font.setUnderline(true);
     } else if (command == "letter-spacing") {
         gc->letterSpacing = parseUnitX(params);
+    } else if (command == "baseline-shift") {
+        gc->baselineShift = params;
     } else if (command == "word-spacing") {
         gc->wordSpacing = parseUnitX(params);
     } else if (command == "color") {
@@ -1650,6 +1652,17 @@ ArtisticTextRange createTextRange(const QString &text, SvgTextHelper &context, S
     range.setRotations(context.rotations(textLength));
     range.setLetterSpacing(gc->letterSpacing);
     range.setWordSpacing(gc->wordSpacing);
+    if(gc->baselineShift == "sub") {
+        range.setBaselineShift(ArtisticTextRange::Sub);
+    } else if(gc->baselineShift == "super") {
+        range.setBaselineShift(ArtisticTextRange::Super);
+    } else if(gc->baselineShift.endsWith('%')) {
+        range.setBaselineShift(ArtisticTextRange::Percent, SvgUtil::fromPercentage(gc->baselineShift));
+    } else {
+        qreal value = SvgUtil::parseUnitX(gc, gc->baselineShift);
+        if (value != 0.0)
+            range.setBaselineShift(ArtisticTextRange::Length, value);
+    }
 
     //range.printDebug();
 
