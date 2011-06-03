@@ -245,6 +245,9 @@ private:
 
     bool m_snapToGrid;
     QString m_lastPageSettingsTab;
+
+    QSizeF m_maxPageSize; // The maximum size of the pages we have encountered. This is used to
+                         // make sure that we always show all pages correctly in page/pagewidth mode.
 };
 
 #endif
