@@ -36,7 +36,6 @@ class QPolygon;
 namespace Libwmf
 {
 
-class WmfDeviceContext;
 
 /**
  * WmfPainterBackend inherits the abstract class WmfAbstractbackend
@@ -140,9 +139,6 @@ private:
 
     // matrix transformation : only used in some bitmap manipulation
     void  setMatrix(const QMatrix &, bool combine = false);
-
- private:
-    void updateFromGraphicscontext(WmfDeviceContext &context);
 
 protected:
     bool  mIsInternalPainter;      // True if the painter wasn't externally provided.

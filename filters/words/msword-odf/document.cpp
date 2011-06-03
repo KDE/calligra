@@ -319,7 +319,7 @@ void Document::processStyles()
         const wvWare::Style* style = styles.styleByIndex(i);
         Q_ASSERT(style);
         QString displayName = Conversion::string(style->name());
-        QString name = Conversion::styleName2QString(style->name());
+        QString name = Conversion::styleNameString(style->name());
 
         // if the invariant style identifier says it's a style used for line numbers
         if (style->sti() == 40) {
@@ -335,13 +335,13 @@ void Document::processStyles()
 
             const wvWare::Style* followingStyle = styles.styleByIndex(style->followingStyle());
             if (followingStyle && followingStyle != style) {
-                QString followingName = Conversion::styleName2QString(followingStyle->name());
+                QString followingName = Conversion::styleNameString(followingStyle->name());
                 userStyle.addAttribute("style:next-style-name", followingName);
             }
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
             if (parentStyle) {
-                userStyle.setParentName(Conversion::styleName2QString(parentStyle->name()));
+                userStyle.setParentName(Conversion::styleNameString(parentStyle->name()));
             }
 
             //set font name in style
@@ -373,7 +373,7 @@ void Document::processStyles()
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
             if (parentStyle) {
-                userStyle.setParentName(Conversion::styleName2QString(parentStyle->name()));
+                userStyle.setParentName(Conversion::styleNameString(parentStyle->name()));
             }
 
             //set font name in style

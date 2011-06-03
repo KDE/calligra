@@ -95,7 +95,7 @@ public:
     QPolygon  region;           // Region
 
     // Structure Objects
-    QColor  backgroundColor;    // Background text color
+    QBrush  backgroundColor;    // Background text color
     QPoint  currentPosition;    // Drawing position (Current point)
     QColor  foregroundTextColor; // Foreground text color
     ;    //Output Surface**  (what is this good for?  Mixing colors?)
@@ -106,18 +106,17 @@ public:
 
     // Graphic Properties
     quint16  bgMixMode;         // Background mix mode
-    //Break extra space NYI
-    //Font mapping mode NYI
+    //Break extra space
+    //Font mapping mode
     quint16  rop;               // Foreground mix mode
     quint16  layoutMode;        // Layout mode
-    //Mapping mode NYI
+    //Mapping mode
     quint16  polyFillMode;      // Polygon fill mode
-    //Stretchblt mode NYI
+    //Stretchblt mode
     quint16  textAlign;         // Text alignment mode
-    //Text extra space NYI
+    //Text extra space
 
     // ----------------------------------------------------------------
-    //                         Helper data
 
     // This is not part of the actual device context, but indicates
     // changed items.  It is used by the backends to update their
@@ -125,8 +124,7 @@ public:
     quint32  changedItems;      // bitmap of DeviceContextMembers
 
 
-    // Cached values
-
+    // Extra values
     // window and viewport calculation
     bool        m_windowExtIsSet;
     bool        m_viewportExtIsSet;

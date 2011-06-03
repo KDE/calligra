@@ -18,8 +18,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- */
-
+*/
 #ifndef _WMFPARSER_H_
 #define _WMFPARSER_H_
 
@@ -28,7 +27,6 @@
 
 #include "WmfEnums.h"
 #include "WmfStructs.h"
-#include "WmfDeviceContext.h"
 #include "WmfStack.h"
 
 class WmfAbstractBackend;
@@ -145,8 +143,6 @@ private:
     qint16   mViewportHeight;
 
     // Current state of the drawing
-    WmfDeviceContext  *mDeviceContext;
-
     WmfLayout   mLayout;
     QColor      mTextColor;
     quint16     mTextAlign;

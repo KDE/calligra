@@ -260,7 +260,7 @@ Value func_true(valVector, ValueCalc *, FuncExtra *)
 //
 Value func_xor(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    // exclusive OR - odd number of values must be true
+    // exclusive OR - exactly one value must be true
     int cnt = args.count();
     Value count(0);
     for (int i = 0; i < cnt; ++i) {
@@ -269,7 +269,7 @@ Value func_xor(valVector args, ValueCalc *calc, FuncExtra *)
     }
     for (int i = 0; i < cnt; ++i)
         calc->arrayWalk(args[i], count, awXor, Value(0));
-    return Value((count.asInteger() & 1) == 1);
+    return Value(count.asInteger() == 1);
 }
 
 #include "LogicModule.moc"
