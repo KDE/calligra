@@ -561,16 +561,14 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty("style:writing-mode", "lr-tb", KoGenStyle::ParagraphType);
     }
 
-    // if there is no parent style OR the parent and child background color
+    // If there is no parent style OR the parent and child background color
     // don't match OR parent color was invalid, childs color is valid
-    if (!refPap || refPap->shd.cvBack != pap.shd.cvBack ||
-        (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
+    if ( !refPap ||
+         (refPap->shd.cvBack != pap.shd.cvBack) ||
+         (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
     {
-        QString color;
-        // is the color valid? (don't compare to black - 0xff000000 !!!)
-        if (!pap.shd.shdAutoOrNill) {
-            color = '#' + QString::number(pap.shd.cvBack | 0xff000000, 16).right(6).toUpper();
-            //update the background-color information
+        QString color = Conversion::shdToColorStr(pap.shd);
+        if (!color.isEmpty()) {
             setBgColor(color);
         } else {
             color = "transparent";

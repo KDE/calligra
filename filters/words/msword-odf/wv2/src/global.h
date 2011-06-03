@@ -29,10 +29,9 @@
 
 // A few defines used for "inline" debugging
 #define WV2_DUMP_PIECE_TABLE 0 // has to be defined as we just #if it
-//#define WV2_DUMP_FIB 0
+//#define WV2_DUMP_FIB 1
 
 //#define WV2_DEBUG_FIB 1
-//#define WV2_DEBUG_DOP 1
 //#define WV2_DEBUG_STYLESHEET 1
 //#define WV2_DEBUG_SPRMS 1
 //#define WV2_DEBUG_LIST_READING 1

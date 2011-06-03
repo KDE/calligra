@@ -87,6 +87,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString ver_pos_rel(m_currentVMLProperties.vmlStyle.value("mso-position-vertical-relative"));
     const QString ver_align(m_currentVMLProperties.vmlStyle.value("v-text-anchor"));
     const QString rotation(m_currentVMLProperties.vmlStyle.value("rotation"));
+    const QString z_index(m_currentVMLProperties.vmlStyle.value("z-index"));
 
     qreal x_position = 0;
     QString x_pos_string, y_pos_string, widthString, heightString;
@@ -196,6 +197,10 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             body->addAttribute("svg:width", widthString);
             body->addAttribute("svg:height", heightString);
         }
+    }
+
+    if (!z_index.isEmpty()) {
+        body->addAttribute("draw:z-index", z_index);
     }
 
     bool asChar = false;
@@ -819,7 +824,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         if (isStartElement()) {
             if (name() == "shapetype") {
                 m_VMLShapeStack.push(m_currentVMLProperties);
-                m_currentVMLProperties.insideGroup = true;
+                // Template by default should not have any group info
                 TRY_READ(shapetype)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
@@ -1035,7 +1040,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     // Note this is only like this for solidfill, for others do something...
     TRY_READ_ATTR_WITHOUT_NS(color)
     if (!color.isEmpty()) {
-        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(color);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(color2)
@@ -1817,8 +1822,35 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS(type)
     if (!type.isEmpty()) {
         type = type.mid(1); // removes extra # from the start
-        // Inheriting all values from the template shape
-         m_currentVMLProperties = m_definedShapeTypes.value(type);
+        // Inheriting all values from the template shape, except for group values
+        // since it is possible that the template was declared outside the group
+        bool _insideGroup = m_currentVMLProperties.insideGroup;
+        int _groupWidth = m_currentVMLProperties.groupWidth;
+        int _groupHeight = m_currentVMLProperties.groupHeight;
+        int _groupX = m_currentVMLProperties.groupX;
+        int _groupY = m_currentVMLProperties.groupY;
+        qreal _groupXOffset = m_currentVMLProperties.groupXOffset;
+        qreal _groupYOffset = m_currentVMLProperties.groupYOffset;
+        QString _groupWidthUnit = m_currentVMLProperties.groupWidthUnit;
+        QString _groupHeightUnit = m_currentVMLProperties.groupHeightUnit;
+        qreal _real_groupWidth = m_currentVMLProperties.real_groupWidth;
+        qreal _real_groupHeight = m_currentVMLProperties.real_groupHeight;
+
+        m_currentVMLProperties = m_definedShapeTypes.value(type);
+
+        if (_insideGroup) {
+            m_currentVMLProperties.insideGroup = _insideGroup;
+            m_currentVMLProperties.groupWidth = _groupWidth;
+            m_currentVMLProperties.groupHeight = _groupHeight;
+            m_currentVMLProperties.groupX = _groupX;
+            m_currentVMLProperties.groupY = _groupY;
+            m_currentVMLProperties.groupXOffset = _groupXOffset;
+            m_currentVMLProperties.groupYOffset = _groupYOffset;
+            m_currentVMLProperties.groupWidthUnit = _groupWidthUnit;
+            m_currentVMLProperties.groupHeightUnit = _groupHeightUnit;
+            m_currentVMLProperties.real_groupWidth = _real_groupWidth;
+            m_currentVMLProperties.real_groupHeight = _real_groupHeight;
+        }
     }
     else {
         takeDefaultValues();

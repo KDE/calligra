@@ -156,11 +156,13 @@ enum nFib
 {
     Word2nFib = 0x0063,
     Word6nFib = 0x0065,
-    Word7nFib = 0x0067,  //also 0x0068
-    Word8nFib = 0x00c1,  //also 0x00c0 and 0x00c2
+    Word7nFib = 0x0067,   //also 0x0068
+    Word8nFib = 0x00c1,
+    Word8nFib0 = 0x00c0,
+    Word8nFib2 = 0x00c2,
     Word2knFib = 0x00D9,
     Word2k2nFib = 0x0101,
-    Word2k3nFib = 0x010C,
+    Word2k3nFib = 0x010c, //also 0x10b
     Word2k7nFib = 0x0112
 };
 
@@ -185,6 +187,67 @@ enum SBkcOperand
     bkcNewPage,
     bkcEvenPage,
     bkcOddPage
+};
+
+/**
+ * The Ipat enumeration is an index to a shading pattern.  [MS-DOC] — v20101219
+ */
+enum IPAT
+{
+    ipatAuto,             //0x0000  Clear, ST_Shd: clear
+    ipatSolid,            //0x0001  Solid, ST_Shd: solid
+    ipatPct5,             //0x0002  5%,    ST_Shd: pct5
+    ipatPct10,            //0x0003  10%,   ST_Shd: pct10
+    ipatPct20,            //0x0004  20%,   ST_Shd: pct20
+    ipatPct25,            //0x0005  25%,   ST_Shd: pct25
+    ipatPct30,            //0x0006  30%,   ST_Shd: pct30
+    ipatPct40,            //0x0007  40%,   ST_Shd: pct40
+    ipatPct50,            //0x0008  50%,   ST_Shd: pct50
+    ipatPct60,            //0x0009  60%,   ST_Shd: pct60
+    ipatPct70,            //0x000A  70%,   ST_Shd: pct70
+    ipatPct75,            //0x000B  75%,   ST_Shd: pct75
+    ipatPct80,            //0x000C  80%,   ST_Shd: pct80
+    ipatPct90,            //0x000D  90%,   ST_Shd: pct90
+    ipatDkHorizontal,     //0x000E  Horizontal Stripe,            ST_Shd: horzStripe
+    ipatDkVertical,       //0x000F  Vertical Stripe,              ST_Shd: vertStripe
+    ipatDkForeDiag,       //0x0010  Reverse Diagonal Stripe,      ST_Shd: reverseDiagStripe
+    ipatDkBackDiag,       //0x0011  Diagonal Stripe,              ST_Shd: diagStripe
+    ipatDkCross,          //0x0012  Horizontal Cross,             ST_Shd: horzCross
+    ipatDkDiagCross,      //0x0013  Diagonal Cross,               ST_Shd: diagCross
+    ipatHorizontal,       //0x0014  Thin Horizontal Stripe,       ST_Shd: thinHorzStripe
+    ipatVertical,         //0x0015  Thin Vertical Stripe,         ST_Shd: thinVertStripe
+    ipatForeDiag,         //0x0016  Thin Reverse Diagonal Stripe, ST_Shd: thinReverseDiagStripe
+    ipatBackDiag,         //0x0017  Thin Diagonal Stripe,         ST_Shd: thinDiagStripe
+    ipatCross,            //0x0018  Thin Horizontal Cross,        ST_Shd: thinHorzCross
+    ipatDiagCross,        //0x0019  Thin Diagonal Cross,          ST_Shd: thinDiagCross
+    ipatPctNew2 = 0x0023, //0x0023  2.5% fill pattern
+    ipatPctNew7,          //0x0024  7.5% fill pattern
+    ipatPctNew12,         //0x0025  12.5%,               ST_Shd: pct12
+    ipatPctNew15,         //0x0026  15%,                 ST_Shd: pct15
+    ipatPctNew17,         //0x0027  17.5% fill pattern
+    ipatPctNew22,         //0x0028  22.5% fill pattern
+    ipatPctNew27,         //0x0029  27.5% fill pattern
+    ipatPctNew32,         //0x002A  32.5% fill pattern
+    ipatPctNew35,         //0x002B  35%,                 ST_Shd: pct35
+    ipatPctNew37,         //0x002C  37.5%,               ST_Shd: pct37
+    ipatPctNew42,         //0x002D  42.5% fill pattern
+    ipatPctNew45,         //0x002E  45%,                 ST_Shd: pct45
+    ipatPctNew47,         //0x002F  47.5% fill pattern
+    ipatPctNew52,         //0x0030  52.5% fill pattern
+    ipatPctNew55,         //0x0031  55%,                 ST_Shd: pct55
+    ipatPctNew57,         //0x0032  57.5% fill pattern
+    ipatPctNew62,         //0x0033  62.5%,               ST_Shd: pct62
+    ipatPctNew65,         //0x0034  65%,                 ST_Shd: pct65
+    ipatPctNew67,         //0x0035  67.5% fill pattern
+    ipatPctNew72,         //0x0036  72.5% fill pattern
+    ipatPctNew77,         //0x0037  77.5% fill pattern
+    ipatPctNew82,         //0x0038  82.5% fill pattern
+    ipatPctNew85,         //0x0039  85%,                 ST_Shd: pct85
+    ipatPctNew87,         //0x003A  87.5%,               ST_Shd: pct87
+    ipatPctNew92,         //0x003B  92.5% fill pattern
+    ipatPctNew95,         //0x003C  95%,                 ST_Shd: pct95
+    ipatPctNew97,         //0x003D  97.5% fill pattern
+    ipatNil = 0xFFFF      //0xFFFF  Nil,                 ST_Shd: nil
 };
 
 /**
@@ -267,6 +330,32 @@ enum ST_StyleType
     sgcChp = 2,    //Character style
     sgcTbl = 3,    //Table style
     sgcNmbr = 4    //Numbering style
+};
+
+/*
+ * ---------------------------------------------------
+ * Following enumeration are not defined in [MS-DOC]
+ * ---------------------------------------------------
+ */
+
+/**
+ * The HALIGN enumeration specifies horizontal alignment.
+ */
+enum HALIGN
+{
+    hAlignLeft = 0x0,
+    hAlignCenter = 0x1,
+    hAlignRight = 0x2
+};
+
+/**
+ * The VALIGN enumeration specifies vertical alignment.
+ */
+enum VALIGN
+{
+    vAlignTop = 0x0,
+    vAlignMiddle = 0x1,
+    vAlignBottom = 0x2
 };
 
 #endif

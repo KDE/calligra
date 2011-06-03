@@ -28,6 +28,7 @@
 // If you find bugs or strange behavior please contact Werner Trobin
 // <trobin@kde.org>
 
+#include "../../msdoc.h"
 #include <word97_generated.h>
 #include <olestream.h>
 #include <string.h>  // memset(), memcpy()
@@ -4776,59 +4777,44 @@ bool FIB::valid() const
         valid = false;
     }
     switch (nFib) {
-    case 0x00C1:
+    case Word8nFib:
+    case Word8nFib0:
+    case Word8nFib2:
         if (cfclcb != 0x005D) {
             wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 93" << endl;
             valid = false;
         }
-        if (cswNew != 0) {
-            wvlog << "Warning: cswNew:" << cswNew << "| expected: 0" << endl;
-            valid = false;
-        }
         break;
-    case 0x00D9:
+    case Word2knFib:
         if (cfclcb != 0x006C) {
             wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 108" << endl;
             valid = false;
         }
-        if (cswNew != 0x0002) {
-            wvlog << "Warning: cswNew:" << cswNew << "| expected: 2" << endl;
-            valid = false;
-        }
         break;
-    case 0x0101:
+    case Word2k2nFib:
         if (cfclcb != 0x0088) {
             wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 136" << endl;
             valid = false;
         }
-        if (cswNew != 0x0002) {
-            wvlog << "Warning: cswNew:" << cswNew << "| expected: 2" << endl;
-            valid = false;
-        }
         break;
-    case 0x010C:
+    case Word2k3nFib:
         if (cfclcb != 0x00A4) {
             wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 164" << endl;
             valid = false;
         }
-        if (cswNew != 0x0002) {
-            wvlog << "Warning: cswNew:" << cswNew << "| expected: 2" << endl;
-            valid = false;
-        }
         break;
-    case 0x0112:
+    case Word2k7nFib:
         if (cfclcb != 0x00B7) {
             wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 183" << endl;
             valid = false;
         }
-        if (cswNew != 0x0005) {
-            wvlog << "Warning: cswNew:" << cswNew << "| expected: 5" << endl;
-            valid = false;
-        }
         break;
     default:
-        wvlog << "Warning: Can't fully validate FIB for this document";
+        wvlog << "Warning: A document < Word8, complete validation not supported!";
         break;
+    }
+    if (cswNew) {
+        wvlog << "Warning: A document > Word8, Dop > Dop97 not supported!";
     }
     return valid;
 }

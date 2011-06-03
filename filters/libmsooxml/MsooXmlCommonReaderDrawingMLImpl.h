@@ -948,6 +948,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 {
     READ_PROLOGUE
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    KoXmlWriter *bodyBackup = body;
+    body = m_currentDrawingObject->setShape(new XlsxShape());
+#endif
+
     preReadSp();
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -990,6 +995,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 #endif
 
     popCurrentDrawStyle();
+
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    body = bodyBackup;
+#endif
 
     READ_EPILOGUE
 }
@@ -1060,10 +1069,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             ELSE_TRY_READ_IF(txBody)
 #endif
             else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
-                KoXmlWriter* w = body;
-                body->startElement("draw:text-box");
                 TRY_READ(DrawingML_txBody)
-                w->endElement();
             }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -5823,6 +5829,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
+    m_previousListWasAltered = false;
+
+    MSOOXML::Utils::XmlWriteBuffer listBuf;
+    body = listBuf.setWriter(body);
 
     while (!atEnd()) {
         readNext();
@@ -5846,6 +5856,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
             body->endElement(); // text:list
         }
         m_prevListLevel = 0;
+    }
+
+    body = listBuf.originalWriter();
+    bool createTextBox = false;
+
+    if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
+        createTextBox = true;
+    }
+
+    if (createTextBox) {
+        body->startElement("draw:text-box"); // CASE #P436
+    }
+
+    body = listBuf.releaseWriter();
+
+    if (createTextBox) {
+        body->endElement(); // draw:text-box
     }
 
     READ_EPILOGUE

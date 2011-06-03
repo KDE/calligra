@@ -25,11 +25,12 @@
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
 #include "pictures.h"
+#include "msodraw.h"
 
 #include "graphicshandler.h"
-#include "document.h"
 #include "conversion.h"
-#include "msodraw.h"
+#include "document.h"
+#include "msdoc.h"
 
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
@@ -928,7 +929,7 @@ void KWordGraphicsHandler::processTextBox(const MSO::OfficeArtSpContainer& o, Dr
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -996,7 +997,7 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1044,7 +1045,7 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 {
     kDebug(30513) ;
 
-    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
     if (!ds.pib()) return;
@@ -1124,7 +1125,7 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, &o);
+    DrawStyle ds(&m_officeArtDggContainer, 0, &o);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -1194,7 +1195,7 @@ void KWordGraphicsHandler::insertEmptyInlineFrame(DrawingWriter& out)
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(0, 0);
+    DrawStyle ds;
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
