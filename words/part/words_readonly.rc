@@ -5,7 +5,7 @@
  </Menu>
  <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_copy"/>
-  <Action name="edit_selectall"/>
+  <Action name="edit_select_all"/>
   <Separator/>
   <Action name="edit_find"/>
  </Menu>

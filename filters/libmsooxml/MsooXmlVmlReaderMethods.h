@@ -95,20 +95,6 @@ protected:
         QString shadowColor;
         QString shadowXOffset, shadowYOffset;
 
-        // Relative group widths
-        int groupWidth, groupHeight;
-
-        // Relative group original
-        int groupX, groupY;
-
-        // Offset caused by the group parent
-        qreal groupXOffset, groupYOffset;
-
-        QString groupWidthUnit; // pt, cm etc.
-        QString groupHeightUnit;
-        qreal real_groupWidth;
-        qreal real_groupHeight;
-
         QString anchorType;
 
         //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
@@ -116,12 +102,18 @@ protected:
         QString currentObjectWidthCm;
         QString currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
 
-        // For group shape situation
-        bool insideGroup;
         int formulaIndex;
         QString shapeTypeString;
         QString extraShapeFormulas;
         int extraFormulaIndex;
+
+        // Parameters for group shape situation
+        bool insideGroup;
+        int groupWidth, groupHeight; // Relative group extends
+        int groupX, groupY; // Relative group origin
+        qreal groupXOffset, groupYOffset; // Offset caused by the group parent
+        QString groupWidthUnit, groupHeightUnit; // pt, cm etc.
+        qreal real_groupWidth, real_groupHeight;
     };
 
     VMLShapeProperties m_currentVMLProperties;

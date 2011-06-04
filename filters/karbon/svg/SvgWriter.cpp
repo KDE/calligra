@@ -735,7 +735,29 @@ void SvgWriter::saveTextRange(const ArtisticTextRange &range, QTextStream *strea
         }
         *stream << "\"";
     }
-    if (!saveRangeFont)
+    if (range.baselineShift() != ArtisticTextRange::None) {
+        switch(range.baselineShift()) {
+        case ArtisticTextRange::Sub:
+            *stream << " baseline-shift=\"sub\"";
+            break;
+        case ArtisticTextRange::Super:
+            *stream << " baseline-shift=\"super\"";
+            break;
+        case ArtisticTextRange::Percent:
+            *stream << " baseline-shift=\"";
+            *stream << QString("%1%").arg(range.baselineShiftValue()*100);
+            *stream << "\"";
+            break;
+        case ArtisticTextRange::Length:
+            *stream << " baseline-shift=\"";
+            *stream << QString("%1%").arg(SvgUtil::toUserSpace(range.baselineShiftValue()));
+            *stream << "\"";
+            break;
+        default:
+            break;
+        }
+    }
+    if (saveRangeFont)
         saveFont(range.font(), stream);
     *stream << ">";
     *stream << range.text();

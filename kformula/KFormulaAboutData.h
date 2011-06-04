@@ -35,6 +35,7 @@ KAboutData * newKFormulaAboutData()
                                              version, ki18n(description), KAboutData::License_GPL,
                                              ki18n("(c) 1998-2008, The KFormula Team"), KLocalizedString(),
 					     "http://www.calligra-suite.org/kformula/" );
+    aboutData->setProductName( "calligra-formula" ); // for bugs.kde.org
     aboutData->addAuthor( ki18n("Andrea Rizzi"), ki18n( "original author" ), "rizzi@kde.org" );
     aboutData->addAuthor( ki18n("Ulrich Kuettler"), ki18n( "core developer" ), "ulrich.kuettler@gmx.de" );
     aboutData->addAuthor( ki18n("Heinrich Kuettler"), ki18n( "core developer" ), "heinrich.kuettler@gmx.de" );

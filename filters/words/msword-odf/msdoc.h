@@ -156,11 +156,13 @@ enum nFib
 {
     Word2nFib = 0x0063,
     Word6nFib = 0x0065,
-    Word7nFib = 0x0067,  //also 0x0068
-    Word8nFib = 0x00c1,  //also 0x00c0 and 0x00c2
+    Word7nFib = 0x0067,   //also 0x0068
+    Word8nFib = 0x00c1,
+    Word8nFib0 = 0x00c0,
+    Word8nFib2 = 0x00c2,
     Word2knFib = 0x00D9,
     Word2k2nFib = 0x0101,
-    Word2k3nFib = 0x010C,
+    Word2k3nFib = 0x010c, //also 0x10b
     Word2k7nFib = 0x0112
 };
 

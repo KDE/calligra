@@ -1,25 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Words
-Name[cs]=Words
-Name[de]=Words
-Name[el]=Words
-Name[en_GB]=Words
-Name[es]=Words
-Name[et]=Words
-Name[it]=Words
-Name[nb]=Words
-Name[nds]=Words
-Name[nl]=Woorden
-Name[pt]=Words
-Name[pt_BR]=Words
-Name[ru]=Words
-Name[sv]=Words
-Name[ug]=سۆزلەر
-Name[uk]=Words
-Name[x-test]=xxWordsxx
-Name[zh_CN]=Words
-Name[zh_TW]=文書處理_Words
+Name=Calligra Words
 Exec=words %u
 GenericName=Word Processor
 GenericName[bg]=Текстообработваща програма

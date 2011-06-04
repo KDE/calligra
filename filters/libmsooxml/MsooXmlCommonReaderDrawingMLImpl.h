@@ -948,6 +948,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 {
     READ_PROLOGUE
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    KoXmlWriter *bodyBackup = body;
+    body = m_currentDrawingObject->setShape(new XlsxShape());
+#endif
+
     preReadSp();
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -967,10 +972,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
             ELSE_TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF(style)
 #ifdef PPTXXMLSLIDEREADER_CPP
-            else {
-                TRY_READ_IF(txBody)
-            }
+            ELSE_TRY_READ_IF(txBody)
 #endif
+            else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
+                bool boxCreated = false;
+                if (m_contentType == "rect" || m_contentType.isEmpty() ||
+                    unsupportedPredefinedShape()) {
+                    body->startElement("draw:text-box"); // CASE #P436
+                    boxCreated = true;
+                }
+                TRY_READ(DrawingML_txBody)
+                if (boxCreated) {
+                    body->endElement(); // draw:text-box
+                }
+            }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -990,6 +1006,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 #endif
 
     popCurrentDrawStyle();
+
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    body = bodyBackup;
+#endif
 
     READ_EPILOGUE
 }
@@ -1014,7 +1034,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
     - [done] nvSpPr (Non-Visual Properties for a Shape) §20.1.2.2.29 - DrawingML
     - [done] spPr (Shape Properties) §19.3.1.44
     - [done] spPr (Shape Properties) §20.1.2.2.35 - DrawingML
-    - style (Shape Style) §19.3.1.46
+    - [done] style (Shape Style) §19.3.1.46
     - [done] style (Shape Style) §20.1.2.2.37 - DrawingML
     - [done] txBody (Shape Text Body) §19.3.1.51 - PML
     - [done] txSp (Text Shape) §20.1.2.2.41 - DrawingML
@@ -1060,10 +1080,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             ELSE_TRY_READ_IF(txBody)
 #endif
             else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
-                KoXmlWriter* w = body;
-                body->startElement("draw:text-box");
+                bool boxCreated = false;
+                if (m_contentType == "rect" || m_contentType.isEmpty() ||
+                    unsupportedPredefinedShape()) {
+                    body->startElement("draw:text-box"); // CASE #P436
+                    boxCreated = true;
+                }
                 TRY_READ(DrawingML_txBody)
-                w->endElement();
+                if (boxCreated) {
+                    body->endElement(); // draw:text-box
+                }
             }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -5823,6 +5849,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
+    m_previousListWasAltered = false;
 
     while (!atEnd()) {
         readNext();

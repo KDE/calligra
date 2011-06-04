@@ -46,13 +46,13 @@ class KWTextLayoutRootArea : public KoTextLayoutRootArea
 {
     public:
         KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, KWFrame *frame, int pageNumber) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_frame(frame), m_pageNumber(pageNumber) {
-            kDebug(32001);
+            //kDebug(32001);
         }
         virtual ~KWTextLayoutRootArea() {
-            kDebug();
+            //kDebug(32001);
         }
         virtual bool layout(FrameIterator *cursor) {
-            kDebug(32001) << "pageNumber=" << m_pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
+            //kDebug(32001) << "pageNumber=" << m_pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
             bool ok = KoTextLayoutRootArea::layout(cursor);
             return ok;
         }
@@ -161,6 +161,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             // Create missing KWPage's (they will also create a KWFrame and TextShape per page)
             for(int i = pageManager->pageCount(); i < pageNumber; ++i) {
                 QString masterPageName;
+                int visiblePageNumber = -1;
                 QList<KoTextLayoutRootArea *> rootAreasBefore = m_pages[i - 1]->rootAreas;
                 if (!rootAreasBefore.isEmpty()) {
                     //FIXME this assumes that a) endTextFrameIterator() will return the starting-it of the
@@ -171,10 +172,16 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
                     QTextBlock firstBlock = it.currentBlock();
                     if (firstBlock.isValid()) {
                         masterPageName = firstBlock.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
+                        bool ok;
+                        int num = firstBlock.blockFormat().property(KoParagraphStyle::PageNumber).toInt(&ok);
+                        if (ok)
+                            visiblePageNumber = num;
                     }
                 }
                 KWPage page = kwdoc->appendPage(masterPageName);
                 Q_ASSERT(page.isValid());
+                if (visiblePageNumber >= 0)
+                    page.setVisiblePageNumber(visiblePageNumber);
             }
         } else if (pageNumber > pageManager->pageCount()) {
             if (KWord::isHeaderFooter(m_textFrameSet)) {
@@ -190,7 +197,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         m_pages.append(rootAreaPage);
     }
 
-    kDebug() << "pageNumber=" << pageNumber <<  "frameSet=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
+    kDebug(32001) << "pageNumber=" << pageNumber <<  "frameSet=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
 
     handleDependentProviders(pageNumber);
 
@@ -209,7 +216,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         }
     }
 
-    //kDebug()<<rootAreaPage->rootAreas.count() << frames.count();
+    //kDebug(32001)<<rootAreaPage->rootAreas.count() << frames.count();
     //Q_ASSERT(rootAreaPage->rootAreas.count() < frames.count());
     KWFrame *frame = rootAreaPage->rootAreas.count() < frames.count() ? frames[rootAreaPage->rootAreas.count()] : 0;
 
@@ -284,7 +291,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     Q_ASSERT(data);
     bool isHeaderFooter = KWord::isHeaderFooter(m_textFrameSet);
 
-    kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "size=" << rootArea->associatedShape()->size();
+    kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "isDirty=" << rootArea->isDirty();
 
     QRectF updateRect = rootArea->associatedShape()->outlineRect();
     //rootArea->associatedShape()->update(updateRect);
