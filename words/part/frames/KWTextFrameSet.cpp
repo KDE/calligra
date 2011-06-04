@@ -118,7 +118,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     // to take over. This is the case for example with OtherTextFrameSet's where the KWTextFrameSet
     // and the KWFrame are created after the TextShape was created and it's loadOdf was called what
     // means that the QTextDocument of the KoTextShapeData already has content we like to take over.
-    if (frameCount() == 1 && data->document() && m_document->isEmpty()) {
+    // The mainTextFrame's are created on demand and need to be ignored.
+    if (textFrameSetType() != KWord::MainTextFrameSet && frameCount() == 1 && data->document() && m_document->isEmpty()) {
+        Q_ASSERT(m_document != data->document());
         delete m_document;
         m_document = data->document();
         setupDocument();
