@@ -38,7 +38,7 @@ public:
 
     ~KPrSlidesManagerView();
 
-    virtual void paintEvent ( QPaintEvent * event);
+    virtual void paintEvent ( QPaintEvent *event);
 
 
      //It emits a slideDblClick signal and then calls the parent
@@ -49,9 +49,9 @@ public:
 
     virtual void startDrag ( Qt::DropActions supportedActions );
 
-    virtual void dropEvent(QDropEvent* ev);
+    virtual void dropEvent(QDropEvent *ev);
 
-    virtual void dragMoveEvent(QDragMoveEvent* ev);
+    virtual void dragMoveEvent(QDragMoveEvent *ev);
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
 
@@ -59,7 +59,7 @@ public:
 
     //Manage click events outside of items, to provide
     //a suitable active item for the context menu.
-    virtual bool eventFilter(QObject *, QEvent *);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 
     /**
      * Setter of the size with a rect
@@ -124,7 +124,7 @@ private:
 
     QRect m_itemSize;
     bool m_dragingFlag;
-    KoToolProxy * m_toolProxy;
+    KoToolProxy *m_toolProxy;
 
 };
 

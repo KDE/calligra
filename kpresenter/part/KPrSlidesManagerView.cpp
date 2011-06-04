@@ -208,7 +208,8 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
      if (itemCount > 9) {
          xCount = 4;
          size = KIconLoader::SizeMedium;
-     } else if (itemCount > 5) {
+     }
+     else if (itemCount > 5) {
          xCount = 3;
          size = KIconLoader::SizeLarge;
      }

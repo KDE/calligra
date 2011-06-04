@@ -41,8 +41,8 @@ public:
     KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas);
     ~KPrViewModeSlidesSorter();
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
-    void paintEvent(KoPACanvas * canvas, QPaintEvent* event);
+    void paint(KoPACanvasBase *canvas, QPainter& painter, const QRectF &paintRect);
+    void paintEvent(KoPACanvas *canvas, QPaintEvent* event);
     void tabletEvent(QTabletEvent *event, const QPointF &point);
     void mousePressEvent(QMouseEvent *event, const QPointF &point);
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
@@ -50,7 +50,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-    void wheelEvent(QWheelEvent * event, const QPointF &point);
+    void wheelEvent(QWheelEvent *event, const QPointF &point);
 
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
@@ -59,10 +59,10 @@ public:
      * Change the KPrView active page
      * @param page pointer to the new active page
      */
-    void updateActivePage( KoPAPageBase *page );
+    void updateActivePage(KoPAPageBase *page);
 
-    void addShape( KoShape *shape );
-    void removeShape( KoShape *shape );
+    void addShape(KoShape *shape);
+    void removeShape(KoShape *shape);
 
     /**
       * Return a list with the pointer to the selected slides
@@ -120,8 +120,8 @@ protected:
     void saveZoomConfig(int zoom);
 
 private:
-    KPrSlidesManagerView * m_slidesSorter;
-    KPrSlidesSorterDocumentModel * m_documentModel;
+    KPrSlidesManagerView *m_slidesSorter;
+    KPrSlidesSorterDocumentModel *m_documentModel;
     QSize m_iconSize;
     int m_zoom;
     KPrSelectionManager *m_selectionManagerSlidesSorter;
@@ -161,7 +161,7 @@ private slots:
     void activateNormalViewMode();
 
     /** Provides a custom context menu for the slides sorter view*/
-    void slidesSorterContextMenu(QContextMenuEvent* event);
+    void slidesSorterContextMenu(QContextMenuEvent *event);
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

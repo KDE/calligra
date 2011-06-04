@@ -37,7 +37,7 @@
 #include <QTimer>
 #include <QTimeLine>
 
-KPrSelectionToggle::KPrSelectionToggle(QWidget* parent) :
+KPrSelectionToggle::KPrSelectionToggle(QWidget *parent) :
     QAbstractButton(parent),
     m_isHovered(false),
     m_leftMouseButtonPressed(false),
@@ -71,7 +71,7 @@ void KPrSelectionToggle::reset()
     hide();
 }
 
-void KPrSelectionToggle::setIndex(const QModelIndex& index)
+void KPrSelectionToggle::setIndex(const QModelIndex &index)
 {
     m_index = index;
     if (m_index.isValid()) {
@@ -108,7 +108,7 @@ void KPrSelectionToggle::setVisible(bool visible)
 
 }
 
-bool KPrSelectionToggle::eventFilter(QObject* obj, QEvent* event)
+bool KPrSelectionToggle::eventFilter(QObject *obj, QEvent *event)
 {
     if ((obj == parent()) && (event->type() == QEvent::MouseMove) && m_leftMouseButtonPressed) {
         // Don't forward mouse move events to the viewport,
@@ -121,7 +121,7 @@ bool KPrSelectionToggle::eventFilter(QObject* obj, QEvent* event)
     return QAbstractButton::eventFilter(obj, event);
 }
 
-void KPrSelectionToggle::enterEvent(QEvent* event)
+void KPrSelectionToggle::enterEvent(QEvent *event)
 {
     QAbstractButton::enterEvent(event);
 
@@ -137,7 +137,7 @@ void KPrSelectionToggle::enterEvent(QEvent* event)
     update();
 }
 
-void KPrSelectionToggle::leaveEvent(QEvent* event)
+void KPrSelectionToggle::leaveEvent(QEvent *event)
 {
     QAbstractButton::leaveEvent(event);
 
@@ -145,25 +145,25 @@ void KPrSelectionToggle::leaveEvent(QEvent* event)
     update();
 }
 
-void KPrSelectionToggle::mousePressEvent(QMouseEvent* event)
+void KPrSelectionToggle::mousePressEvent(QMouseEvent *event)
 {
     QAbstractButton::mousePressEvent(event);
     m_leftMouseButtonPressed = (event->buttons() & Qt::LeftButton);
 }
 
-void KPrSelectionToggle::mouseReleaseEvent(QMouseEvent* event)
+void KPrSelectionToggle::mouseReleaseEvent(QMouseEvent *event)
 {
     QAbstractButton::mouseReleaseEvent(event);
     m_leftMouseButtonPressed = (event->buttons() & Qt::LeftButton);
 }
 
-void KPrSelectionToggle::resizeEvent(QResizeEvent* event)
+void KPrSelectionToggle::resizeEvent(QResizeEvent *event)
 {
     QAbstractButton::resizeEvent(event);
     setIconOverlay(isChecked());
 }
 
-void KPrSelectionToggle::paintEvent(QPaintEvent* event)
+void KPrSelectionToggle::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setClipRect(event->rect());
@@ -174,7 +174,8 @@ void KPrSelectionToggle::paintEvent(QPaintEvent* event)
         KIconEffect *iconEffect = KIconLoader::global()->iconEffect();
         QPixmap activeIcon = iconEffect->apply(m_icon, KIconLoader::Desktop, KIconLoader::ActiveState);
         painter.drawPixmap(pos, activeIcon);
-    } else {
+    }
+    else {
         if (m_fadingValue < 255) {
             // apply an alpha mask respecting the fading value to the icon
             QPixmap icon = m_icon;
@@ -183,7 +184,8 @@ void KPrSelectionToggle::paintEvent(QPaintEvent* event)
             alphaMask.fill(color);
             icon.setAlphaChannel(alphaMask);
             painter.drawPixmap(pos, icon);
-        } else {
+        }
+        else {
             // no fading is required
             painter.drawPixmap(pos, m_icon);
         }

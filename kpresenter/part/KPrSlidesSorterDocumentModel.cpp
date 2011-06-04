@@ -175,7 +175,8 @@ Qt::ItemFlags KPrSlidesSorterDocumentModel::flags(const QModelIndex &index) cons
 
     if (index.isValid()) {
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
-    } else {
+    }
+    else {
         return Qt::ItemIsDropEnabled | defaultFlags;
     }
 }
@@ -224,9 +225,11 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
 
     if (row != -1) {
         beginRow = row;
-    } else if (parent.isValid()) {
+    }
+    else if (parent.isValid()) {
         beginRow = parent.row();
-    } else {
+    }
+    else {
         beginRow = rowCount(QModelIndex());
     }
 
@@ -280,11 +283,14 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
             else {
                 return;
             }
-     } else if ((modifiers & Qt::ControlModifier) != 0) {
+     }
+     else if ((modifiers & Qt::ControlModifier) != 0) {
          action = Qt::CopyAction;
-     } else if ((modifiers & Qt::ShiftModifier) != 0) {
+     }
+     else if ((modifiers & Qt::ShiftModifier) != 0) {
          action = Qt::MoveAction;
-     } else {
+     }
+     else {
          return;
      }
 

@@ -86,7 +86,7 @@ void KPrViewModeSlidesSorter::paint(KoPACanvasBase* /*canvas*/, QPainter& /*pain
 {
 }
 
-void KPrViewModeSlidesSorter::paintEvent( KoPACanvas * canvas, QPaintEvent* event )
+void KPrViewModeSlidesSorter::paintEvent( KoPACanvas *canvas, QPaintEvent *event )
 {
     Q_UNUSED(canvas);
     Q_UNUSED(event);
