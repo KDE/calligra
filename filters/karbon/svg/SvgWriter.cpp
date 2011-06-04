@@ -16,7 +16,7 @@
    Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
    Copyright (C) 2006 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
-
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -33,8 +33,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+
 #include "SvgWriter.h"
 #include "SvgUtil.h"
+
 
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
@@ -56,6 +58,7 @@
 #include <KTemporaryFile>
 #include <KIO/NetAccess>
 #include <KIO/CopyJob>
+#include <plugins/textshape/TextShape.h>
 
 #include <QtCore/QFile>
 #include <QtCore/QString>
@@ -64,6 +67,11 @@
 #include <QtCore/QFileInfo>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
+
+#include "SvgAnimationData.h"
+
+
+
 
 static void printIndentation(QTextStream *stream, unsigned int indent)
 {
@@ -82,6 +90,7 @@ SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
     foreach(KoShapeLayer *layer, layers)
         m_toplevelShapes.append(layer);
 }
+
 
 SvgWriter::SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize)
     : m_indent(0), m_indent2(0), m_toplevelShapes(toplevelShapes), m_pageSize(pageSize)
@@ -122,6 +131,8 @@ bool SvgWriter::save(QIODevice &outputDevice)
     m_body = new QTextStream(&body, QIODevice::ReadWrite);
     QString defs;
     m_defs = new QTextStream(&defs, QIODevice::ReadWrite);
+    QString frames;
+    m_frames = new QTextStream(&frames, QIODevice::ReadWrite);
 
     // standard header:
     *m_defs <<
@@ -159,10 +170,14 @@ bool SvgWriter::save(QIODevice &outputDevice)
 
     // end tag:
     printIndentation(m_defs, --m_indent2);
-    *m_defs << "</defs>" << endl;
+    *m_defs << "</defs>" << endl; //?
+    
+    saveScript();
+    //TODO:m_frames has to be written here.
+    
     *m_body << "</svg>" << endl;
 
-    *m_stream << defs;
+    *m_stream << defs; //?
     *m_stream << body;
 
     delete m_stream;
@@ -194,6 +209,7 @@ void SvgWriter::saveLayer(KoShapeLayer * layer)
 
 void SvgWriter::saveGroup(KoShapeGroup * group)
 {
+  
     printIndentation(m_body, m_indent++);
     *m_body << "<g" << getID(group);
     *m_body << getTransform(group->transformation(), " transform");
@@ -213,6 +229,10 @@ void SvgWriter::saveGroup(KoShapeGroup * group)
 
     printIndentation(m_body, --m_indent);
     *m_body << "</g>" << endl;
+    //TODO:Save additonal attributes to m_frames. (Not workign with groups still)
+    //This stream will be written to the doc before the </svg> tag
+    
+    
 }
 
 void SvgWriter::saveShape(KoShape * shape)
@@ -234,7 +254,42 @@ void SvgWriter::saveShape(KoShape * shape)
         } else if (shape->shapeId() == "PictureShape") {
             saveImage(shape);
         }
+        else 
+	{
+
+    savePlainText();// Saving plain text
+	}
     }
+    //Save additonal attributes to m_frames
+    //This stream will be written to the doc before the </svg> tag
+    
+forTesting(shape);// Adds a frame object to this shape
+
+SvgAnimationData * appData = dynamic_cast<SvgAnimationData*>( shape->applicationData() );
+Frame *frameObj = new Frame();
+frameObj = appData->getFrame();
+     saveFrame(frameObj);
+}
+//This function will eventually be removed.
+//Only used for dummy data.
+void SvgWriter::forTesting(KoShape * shape)
+{
+//First save Frame properties to a shape. This is for testing only.
+SvgAnimationData  * obj = new SvgAnimationData();
+Frame * frame = new Frame(); //Default properties set 
+  obj->addNewFrame(shape, frame);
+  
+}
+
+void SvgWriter::saveFrame(Frame * frame)
+{
+  //Dummy data.
+  //Only for testing
+  int sequence = frame->getSequence();
+  
+  *m_body << "<desc>" << "Frame's dummy info. Sequence = " << sequence << "</desc>";
+//*m_body << "<calligra:sequence>" << sequence <<"</>"; 
+  //TODO: This needs to be written to a different stream finally and with this namespace
 }
 
 void SvgWriter::savePath(KoPathShape * path)
@@ -250,6 +305,21 @@ void SvgWriter::savePath(KoPathShape * path)
     *m_body << " />" << endl;
 }
 
+void SvgWriter::savePlainText() 
+{ 
+   printIndentation(m_body, m_indent++);
+    *m_body << "<text" << "Here comes the text";
+    //printIndentation(m_body, m_indent);
+    *m_body << "</text>" << endl;
+  
+}
+
+void SvgWriter::saveScript(){
+script  = "Here comes the javascript.";
+  printIndentation(m_body, m_indent++);
+    *m_body << "<script>" << script << "</script>" << endl;
+
+}
 void SvgWriter::saveEllipse(EllipseShape * ellipse)
 {
     if (ellipse->type() == EllipseShape::Arc && ellipse->startAngle() == ellipse->endAngle()) {

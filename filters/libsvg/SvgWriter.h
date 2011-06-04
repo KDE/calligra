@@ -33,6 +33,7 @@
 #include <QVariantList>
 #include <QtGui/QGradient>
 
+
 class KoShapeLayer;
 class KoShapeGroup;
 class KoShape;
@@ -50,6 +51,7 @@ class QPixmap;
 class QImage;
 class QColor;
 class QBrush;
+
 
 /// Implements exporting shapes to SVG
 class SvgWriter
@@ -71,6 +73,7 @@ public:
     bool save(const QString &filename, bool writeInlineImages);
 
 private:
+  void forTesting(KoShape * shape);
     void saveLayer(KoShapeLayer * layer);
     void saveGroup(KoShapeGroup * group);
     void saveShape(KoShape * shape);
@@ -99,7 +102,7 @@ private:
     void saveFont(const QFont &font, QTextStream *stream);
     void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
 
-    void saveFrame(Frame *frame);
+    
     QString getID(const KoShape *obj);
     QString createID(const KoShape * obj);
 

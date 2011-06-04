@@ -1,17 +1,11 @@
 TODO
 - javascripts to be further re-factored
-- svgWriter.h should add the js to the svg doc
-- More attributes to be added for frames
+- More attributes to be added to Frame.
 
 STEPS
-1. Make libsvg accept an abstract document rather 
-than just a karbon document
-2. Make karbon link to libsvg rather than the stuff
-in the svg dir.
-3. Add a small method in SvgWriter to write arbitrary
-tags and arbitrary content such as:
-<a>
-   b
-</a>
-4. Port the rectangle, circle, etc export functions to use
-this new method.
+1. Add custom data to KoShapes using setApplicationData() - done in test program
+2. SvgAnimationData extends KoShapeApplicationData and stores a Frame object. - done
+3. Frame object carries all frame attributes and their values. It has setters and getters for each. - done
+4. SvgWriter accepts a list of top level shapes. - done, already there.
+5. SvgWriter::saveFrame() should extract and save all frame attributes to a separate stream.
+6. Finally write this stream to the file after the scripts ahve been added.

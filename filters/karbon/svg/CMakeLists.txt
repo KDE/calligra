@@ -5,7 +5,9 @@ ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes  ${KDE4_I
 ########### next target ###############
 
 set(karbonsvgexport_PART_SRCS 
-    SvgExport.cpp
+SvgAnimationData.cpp
+Frame.cpp
+SvgExport.cpp
     SvgUtil.cpp
     SvgWriter.cpp
     ${SHAPES_SOURCES} 

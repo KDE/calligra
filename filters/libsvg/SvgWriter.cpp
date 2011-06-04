@@ -33,6 +33,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+
 #include "SvgWriter.h"
 #include "SvgUtil.h"
 
@@ -66,6 +67,11 @@
 #include <QtCore/QFileInfo>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
+
+#include "SvgAnimationData.h"
+
+
+
 
 static void printIndentation(QTextStream *stream, unsigned int indent)
 {
@@ -256,7 +262,34 @@ void SvgWriter::saveShape(KoShape * shape)
     }
     //Save additonal attributes to m_frames
     //This stream will be written to the doc before the </svg> tag
-    *m_frames << saveFrame(shape);
+    
+forTesting(shape);// Adds a frame object to this shape
+
+SvgAnimationData * appData = dynamic_cast<SvgAnimationData*>( shape->applicationData() );
+Frame *frameObj = new Frame();
+frameObj = appData->getFrame();
+     saveFrame(frameObj);
+}
+//This function will eventually be removed.
+//Only used for dummy data.
+void SvgWriter::forTesting(KoShape * shape)
+{
+//First save Frame properties to a shape. This is for testing only.
+SvgAnimationData  * obj = new SvgAnimationData();
+Frame * frame = new Frame(); //Default properties set 
+  obj->addNewFrame(shape, frame);
+  
+}
+
+void SvgWriter::saveFrame(Frame * frame)
+{
+  //Dummy data.
+  //Only for testing
+  int sequence = frame->getSequence();
+  
+  *m_body << "<desc>" << "Frame's dummy info. Sequence = " << sequence << "</desc>";
+//*m_body << "<calligra:sequence>" << sequence <<"</>"; 
+  //TODO: This needs to be written to a different stream finally and with this namespace
 }
 
 void SvgWriter::savePath(KoPathShape * path)

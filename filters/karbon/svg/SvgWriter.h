@@ -33,21 +33,25 @@
 #include <QVariantList>
 #include <QtGui/QGradient>
 
+
 class KoShapeLayer;
 class KoShapeGroup;
 class KoShape;
 class KoPathShape;
 class KoShapeBorderModel;
 class ArtisticTextShape;
+class TextShape;
 class ArtisticTextRange;
 class EllipseShape;
 class RectangleShape;
+class Frame;
 class KoPatternBackground;
 class QTextStream;
 class QPixmap;
 class QImage;
 class QColor;
 class QBrush;
+
 
 /// Implements exporting shapes to SVG
 class SvgWriter
@@ -69,15 +73,22 @@ public:
     bool save(const QString &filename, bool writeInlineImages);
 
 private:
+  void forTesting(KoShape * shape);
     void saveLayer(KoShapeLayer * layer);
     void saveGroup(KoShapeGroup * group);
     void saveShape(KoShape * shape);
     void savePath(KoPathShape * path);
     void saveEllipse(EllipseShape * ellipse);
     void saveRectangle(RectangleShape * rectangle);
-
+    /*
+     * Saves the properties associated with the shape used for SVg animation.
+     */
+    void saveFrame(Frame * frame);
     void saveImage(KoShape *picture);
     void saveText(ArtisticTextShape * text);
+    void savePlainText();
+
+    void saveScript();
 
     void getStyle(KoShape * shape, QTextStream * stream);
     void getFill(KoShape * shape, QTextStream *stream);
@@ -91,8 +102,10 @@ private:
     void saveFont(const QFont &font, QTextStream *stream);
     void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
 
+    
     QString getID(const KoShape *obj);
     QString createID(const KoShape * obj);
+
 
     /// Checks if the matrix only has translation set
     bool isTranslation(const QTransform &);
@@ -100,7 +113,8 @@ private:
     QTextStream* m_stream;
     QTextStream* m_defs;
     QTextStream* m_body;
-
+    QTextStream* m_frames;
+    
     unsigned int m_indent;
     unsigned int m_indent2;
 
@@ -110,6 +124,8 @@ private:
     QSizeF m_pageSize;
     bool m_writeInlineImages;
     QString m_filename;
+
+    QString script;
 };
 
 #endif // SVGWRITER_H
