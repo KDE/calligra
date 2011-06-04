@@ -205,7 +205,7 @@ void KPrSelectionToggle::setFadingValue(int value)
 
 void KPrSelectionToggle::setIconOverlay(bool checked)
 {
-    const char* icon = checked ? "list-remove" : "list-add";
+    const char *icon = checked ? "list-remove" : "list-add";
     const int size = qMin(width() - 2 * m_margin, height() - 2 * m_margin);
     m_icon = KIconLoader::global()->loadIcon(icon,
                                              KIconLoader::NoGroup,
