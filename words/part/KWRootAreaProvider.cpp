@@ -46,15 +46,14 @@ class KWTextLayoutRootArea : public KoTextLayoutRootArea
 {
     public:
         KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, KWFrame *frame, int pageNumber) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_frame(frame), m_pageNumber(pageNumber) {
-            kDebug(32001);
+            //kDebug(32001);
         }
         virtual ~KWTextLayoutRootArea() {
-            kDebug();
+            //kDebug(32001);
         }
         virtual bool layout(FrameIterator *cursor) {
-            kDebug() << "START pageNumber=" << m_pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
+            //kDebug(32001) << "pageNumber=" << m_pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
             bool ok = KoTextLayoutRootArea::layout(cursor);
-            kDebug() << "END pageNumber=" << m_pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
             return ok;
         }
         KWTextFrameSet *m_frameSet;
@@ -198,7 +197,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         m_pages.append(rootAreaPage);
     }
 
-    kDebug() << "pageNumber=" << pageNumber <<  "frameSet=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
+    kDebug(32001) << "pageNumber=" << pageNumber <<  "frameSet=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
 
     handleDependentProviders(pageNumber);
 
@@ -217,7 +216,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         }
     }
 
-    //kDebug()<<rootAreaPage->rootAreas.count() << frames.count();
+    //kDebug(32001)<<rootAreaPage->rootAreas.count() << frames.count();
     //Q_ASSERT(rootAreaPage->rootAreas.count() < frames.count());
     KWFrame *frame = rootAreaPage->rootAreas.count() < frames.count() ? frames[rootAreaPage->rootAreas.count()] : 0;
 
