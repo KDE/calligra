@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>673</width>
+    <width>613</width>
     <height>335</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
+   <item row="0" column="1" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -39,7 +39,7 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="2" rowspan="2">
+   <item row="0" column="3" rowspan="2">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -67,13 +67,19 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item row="1" column="1" colspan="2">
     <widget class="QFrame" name="frmOptionWidgetContainer">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>4</verstretch>
       </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -83,28 +89,28 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="2" column="1">
     <widget class="QPushButton" name="bnDefaultPreset">
      <property name="text">
       <string>Default preset</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="2" column="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>267</width>
+       <width>0</width>
        <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="2" column="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item row="2" column="3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0">
      <item>
       <widget class="QPushButton" name="fillLayer">
        <property name="text">
@@ -135,6 +141,28 @@
      </item>
     </layout>
    </item>
+   <item row="0" column="0" rowspan="3">
+    <widget class="KisPaintOpListWidget" name="paintopList" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>150</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>150</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -142,6 +170,12 @@
    <class>KisScratchPad</class>
    <extends>QWidget</extends>
    <header>kis_scratch_pad.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisPaintOpListWidget</class>
+   <extends>QWidget</extends>
+   <header>kis_paintop_list_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

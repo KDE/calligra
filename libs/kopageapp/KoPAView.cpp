@@ -179,7 +179,7 @@ void KoPAView::initGUI()
     setLayout( gridLayout );
 
     d->canvas = new KoPACanvas( this, d->doc, this );
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( this );
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
     d->canvasController = canvasController;
     d->canvasController->setCanvas( d->canvas );
     KoToolManager::instance()->addController( d->canvasController );
@@ -240,8 +240,8 @@ void KoPAView::initGUI()
     if (shell())
     {
         shell()->createDockWidget( &toolBoxFactory );
-        connect( canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
-             shell()->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+             shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -1066,6 +1066,20 @@ bool KoPAView::isMasterUsed( KoPAPageBase * page )
     }
 
     return used;
+}
+
+void KoPAView::centerPage()
+{
+    KoPageLayout &layout = d->activePage->pageLayout();
+    QSizeF pageSize( layout.width, layout.height );
+
+    QPoint documentCenter =
+        zoomHandler()->documentToView(QPoint(pageSize.width(),
+                                              pageSize.height())).toPoint();
+
+    d->canvasController->setPreferredCenter(documentCenter);
+    d->canvasController->recenterPreferred();
+
 }
 
 #include <KoPAView.moc>

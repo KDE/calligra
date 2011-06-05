@@ -43,7 +43,6 @@ struct STTBF;
 class InlineReplacementHandler;
 class SubDocumentHandler;
 class TableHandler;
-class PictureHandler;
 class TextHandler;
 class GraphicsHandler;
 class OLEStorage;
@@ -137,7 +136,7 @@ public:
     /**
      * This Drawings holds all the information about drawings the Word file
      */
-    virtual Drawings * getDrawings() = 0;
+    virtual const Drawings* getDrawings() const = 0;
 
     /**
      * This table holds actuald MS-Doc stream
@@ -145,9 +144,11 @@ public:
     virtual OLEStreamReader* getTable() = 0;
 
     /**
-     * Looks for textbox text data and process them
+     * Look for textbox text data and process them.
+     * @param index into plcfTxbxTxt
+     * @param processing a header/footer
      */
-    virtual void parseTextBox( uint lid, bool bodyDrawing) =0;
+    virtual void parseTextBox(uint index, bool stylesxml) = 0;
 
     /**
      * The inline replacement handler is used to replace certain characters on the fly.
@@ -164,11 +165,7 @@ public:
      * We don't take ownership of the handler!
      */
     void setTableHandler( TableHandler* handler );
-    /**
-     * The picture handler passes the image/drawing data to the consumer.
-     * We don't take ownership of the handler!
-     */
-    void setPictureHandler( PictureHandler* handler );
+
     /**
      * The text handler is the main worker among all handlers. It's used to forward
      * the formatted text to the document, make sure that it's fast.
@@ -188,13 +185,11 @@ protected:
     InlineReplacementHandler* m_inlineHandler;
     SubDocumentHandler* m_subDocumentHandler;
     TableHandler* m_tableHandler;
-    PictureHandler* m_pictureHandler;
     TextHandler* m_textHandler;
     GraphicsHandler* m_graphicsHandler;
     bool m_ourInlineHandler;
     bool m_ourSubDocumentHandler;
     bool m_ourTableHandler;
-    bool m_ourPictureHandler;
     bool m_ourTextHandler;
     bool m_ourGraphicsHandler;
 

@@ -1,6 +1,6 @@
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
-   Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2006 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright (C) 2009,2010 Sebastian Sauer <sebsauer@kdab.com>
 
    This library is free software; you can redistribute it and/or
@@ -1766,6 +1766,7 @@ void MsoDrawingRecord::dump(std::ostream& out) const
 
 void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
+    Q_UNUSED(continuePositions);
     QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
     QBuffer buff(&byteArr);
     buff.open(QIODevice::ReadOnly);
@@ -2378,7 +2379,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             break;
             default:
               if (markerOrLength > 65535) {
-                printf("invalid length reading compobj stream: %ul\n", markerOrLength);
+                printf("invalid length reading compobj stream: %lu\n", markerOrLength);
               } else {
                 bytes_read = combObjStream->read( buffer, markerOrLength );
                 QString ansiString = readByteString(buffer, markerOrLength);
@@ -2583,6 +2584,41 @@ void ExcelReader::handleBOF(BOFRecord* record)
 
     if (record->type() == BOFRecord::Workbook) {
         d->handlerStack.push_back(d->globals);
+        qDebug() << "figuring out version" << record->version() << record->rawVersion();
+        if (record->version() == Swinder::Excel95) {
+            d->workbook->setVersion(Workbook::Excel95);
+        } else if (record->version() == Swinder::Excel97) {
+            if (record->recordSize() >= 8) {
+                switch (record->verLastXLSaved()) {
+                case BOFRecord::LExcel97:
+                    d->workbook->setVersion(Workbook::Excel97);
+                    break;
+                case BOFRecord::LExcel2000:
+                    d->workbook->setVersion(Workbook::Excel2000);
+                    break;
+                case BOFRecord::LExcel2002:
+                    d->workbook->setVersion(Workbook::Excel2002);
+                    break;
+                case BOFRecord::LExcel2003:
+                    d->workbook->setVersion(Workbook::Excel2003);
+                    break;
+                case BOFRecord::LExcel2007:
+                    d->workbook->setVersion(Workbook::Excel2007);
+                    break;
+                case BOFRecord::LExcel2010:
+                    d->workbook->setVersion(Workbook::Excel2010);
+                    break;
+                default:
+                    // pretend that anything newer than 2010 is 2010
+                    d->workbook->setVersion(Workbook::Excel2010);
+                    break;
+                }
+            } else {
+                d->workbook->setVersion(Workbook::Excel97);
+            }
+        } else {
+            d->workbook->setVersion(Workbook::Unknown);
+        }
     } else if (record->type() == BOFRecord::Worksheet) {
         // find the sheet and make it active
         // which sheet ? look from from previous BoundSheet

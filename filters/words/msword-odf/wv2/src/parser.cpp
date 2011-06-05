@@ -26,9 +26,9 @@ using namespace wvWare;
 
 Parser::Parser( OLEStorage* storage, OLEStreamReader* wordDocument ) :
     m_inlineHandler( new InlineReplacementHandler ), m_subDocumentHandler( new SubDocumentHandler ),
-    m_tableHandler( new TableHandler ), m_pictureHandler( new PictureHandler ),
-    m_textHandler( new TextHandler ),m_graphicsHandler( new GraphicsHandler ), m_ourInlineHandler( true ),
-    m_ourSubDocumentHandler( true ), m_ourTableHandler( true ), m_ourPictureHandler( true ),
+    m_tableHandler( new TableHandler ), m_textHandler( new TextHandler ),
+    m_graphicsHandler( new GraphicsHandler ), m_ourInlineHandler( true ),
+    m_ourSubDocumentHandler( true ), m_ourTableHandler( true ),
     m_ourTextHandler( true ), m_ourGraphicsHandler ( true ), m_storage( storage ),
     m_wordDocument( wordDocument ), m_okay( true )
 {
@@ -54,8 +54,6 @@ Parser::~Parser()
         delete m_subDocumentHandler;
     if ( m_ourTableHandler )
         delete m_tableHandler;
-    if ( m_ourPictureHandler )
-        delete m_pictureHandler;
     if ( m_ourTextHandler )
         delete m_textHandler;
     if( m_ourGraphicsHandler)
@@ -80,11 +78,6 @@ void Parser::setSubDocumentHandler( SubDocumentHandler* handler )
 void Parser::setTableHandler( TableHandler* handler )
 {
     setHandler<TableHandler>( handler, &m_tableHandler, m_ourTableHandler );
-}
-
-void Parser::setPictureHandler( PictureHandler* handler )
-{
-    setHandler<PictureHandler>( handler, &m_pictureHandler, m_ourPictureHandler );
 }
 
 void Parser::setTextHandler( TextHandler* handler )

@@ -35,11 +35,8 @@ KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * 
 {
     m_widget = new KPrPresentationDrawWidget(canvas());
     // TODO
-    QString str("kpresenter");
-    KIconLoader kicon(str);
-    str.clear();
-    str.append("pen.png");
-    QPixmap pix(kicon.loadIcon(str, kicon.Small));
+    KIconLoader kicon("stage");
+    QPixmap pix(kicon.loadIcon("pen.png", kicon.Small));
     const qreal factor = 1.2;
     pix = pix.scaledToHeight(pix.height()*factor);
     pix = pix.scaledToWidth(pix.width()*factor);

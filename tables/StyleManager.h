@@ -48,7 +48,7 @@ class ValueParser;
  * The StyleManager takes care of named styles. It also provides some static
  * methods for the preloading of OpenDocument autostyles.
  */
-class CALLIGRA_TABLES_EXPORT StyleManager
+class CALLIGRA_TABLES_ODF_EXPORT StyleManager
 {
     friend class StyleManagerDialog;
 

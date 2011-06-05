@@ -49,9 +49,9 @@
 #include "dialogs/KWInsertInlineNoteDialog.h"
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
-#include "commands/KWCreateOutlineCommand.h"
 #include "commands/KWClipFrameCommand.h"
 #include "commands/KWRemoveFrameClipCommand.h"
+#include <KoShapeReorderCommand.h>
 
 // koffice libs includes
 #include <kofficeversion.h>
@@ -65,7 +65,6 @@
 #include <KoStandardAction.h>
 #include <KoPasteController.h>
 #include <KoShape.h>
-#include <KoTextOnShapeContainer.h>
 #include <KoText.h>
 #include <KoFind.h>
 #include <KoShapeContainer.h>
@@ -99,6 +98,9 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <KParts/PartManager>
+#include <KoFindText.h>
+#include <KoFindToolbar.h>
 
 static KWFrame *frameForShape(KoShape *shape)
 {
@@ -131,7 +133,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
@@ -144,7 +146,20 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
-    new KoFind(this, m_canvas->resourceManager(), actionCollection());
+    QList<QTextDocument*> texts;
+    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
+    KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
+    if(win) {
+        connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
+    }
+
+    m_find = new KoFindText(texts, this);
+    KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
+    toolbar->setVisible(false);
+    connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
+    connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
+
+    layout->addWidget(toolbar);
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
 
@@ -238,8 +253,6 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("create_custom_outline");
     if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("showStatusBar");
-    if (action) action->setEnabled(readWrite);
 }
 
 void KWView::setupActions()
@@ -332,6 +345,7 @@ void KWView::setupActions()
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
     KAction *action = new KAction(i18n("Select Bookmark..."), this);
+    action->setIconText(i18n("Bookmark"));
     action->setIcon(KIcon("bookmarks"));
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
@@ -346,8 +360,8 @@ void KWView::setupActions()
     action->setToolTip(i18n("Insert a footnote referencing the selected text"));
     actionCollection()->addAction("insert_footendnote", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertFootEndNote()));
-    
-    action = new KAction(i18n("Frame Borders"), this);
+
+    action = new KAction(i18n("Page Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
@@ -374,6 +388,31 @@ void KWView::setupActions()
     action->setWhatsThis(i18n("Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position."));
     actionCollection()->addAction("inline_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
+
+    action = new KAction(i18n("As Character"), this);
+    action->setToolTip(i18n("Insert the current shape as a character in the text"));
+    actionCollection()->addAction("anchor_as_character", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorAsChar()));
+
+    action = new KAction(i18n("To Character"), this);
+    action->setToolTip(i18n("Anchor the current shape to the character at the current position"));
+    actionCollection()->addAction("anchor_to_character", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToChar()));
+
+    action = new KAction(i18n("To Paragraph"), this);
+    action->setToolTip(i18n("Anchor the current shape to current paragraph"));
+    actionCollection()->addAction("anchor_to_paragraph", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToParagraph()));
+
+    action = new KAction(i18n("To Page"), this);
+    action->setToolTip(i18n("Anchor the current shape to current page"));
+    actionCollection()->addAction("anchor_to_page", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(anchorToPage()));
+
+    action = new KAction(i18n("Set Floating"), this);
+    action->setToolTip(i18n("Set the current shape floating"));
+    actionCollection()->addAction("set_shape_floating", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(setFloating()));
 
     action = new KAction(i18n("Previous Page"), this);
     actionCollection()->addAction("page_previous", action);
@@ -451,12 +490,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action->setWhatsThis(i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies."));
     connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
 
-    action = new KAction(i18n("Create Custom Outline"), this);
-    actionCollection()->addAction("create_custom_outline", action);
-    action->setToolTip(i18n("Create a custom vector outline that text will run around"));
-    action->setWhatsThis(i18n("Text normally runs around the content of a shape, when you want a custom outline that is independent of the content you can create one and alter it with the vector tools"));
-    connect(action, SIGNAL(triggered()), this, SLOT(createCustomOutline()));
-
     action = new KAction(i18n("Create Frame-clip"), this);
     actionCollection()->addAction("create_clipped_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(createFrameClipping()));
@@ -464,10 +497,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action = new KAction(i18n("Remove Frame-clip"), this);
     actionCollection()->addAction("remove_clipped_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(removeFrameClipping()));
-
-    action = new KAction(i18n("Add Text on Shape"), this);
-    actionCollection()->addAction("add_text_on_shape", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(createTextOnShape()));
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
@@ -856,11 +885,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
         m_actionEditCustomVars = new KAction(i18n("Edit Variable..."), 0,
                 this, SLOT(editCustomVariable()),
                 actionCollection(), "edit_customvars");
-        m_actionApplyAutoFormat= new KAction(i18n("Apply Autocorrection"), 0,
-                this, SLOT(applyAutoFormat()),
-                actionCollection(), "apply_autoformat");
-        m_actionApplyAutoFormat->setToolTip(i18n("Manually force Words to scan the entire document and apply autocorrection"));
-        m_actionApplyAutoFormat->setWhatsThis(i18n("Manually force Words to scan the entire document and apply autocorrection."));
 
         m_actionCreateStyleFromSelection = new KAction(i18n("Create Style From Selection..."), 0,
                 this, SLOT(createStyleFromSelection()),
@@ -959,8 +983,8 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("Words %1.%2.$3").arg(KOffice::versionMajor(),
-        KOffice::versionMinor(), KOffice::versionRelease()));
+    dia->printer().setCreator(QString("KWord %1.%2.%3").arg(KOffice::versionMajor())
+                              .arg(KOffice::versionMinor()).arg(KOffice::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -1029,7 +1053,7 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
-
+#if 0
     KoBookmark *bookmark = manager->retrieveBookmark(name);
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
@@ -1047,10 +1071,16 @@ void KWView::selectBookmark()
         rm->clearResource(KoText::SelectedTextAnchor);
     } else
         rm->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
+#else
+#ifdef __GNUC__
+    #warning FIXME: port to textlayout-rework
+#endif
+#endif
 }
 
 void KWView::deleteBookmark(const QString &name)
 {
+#if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
     KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
     if (!bookmark || !bookmark->shape())
@@ -1066,6 +1096,11 @@ void KWView::deleteBookmark(const QString &name)
     }
     cursor.setPosition(bookmark->position());
     manager->removeInlineObject(cursor);
+#else
+#ifdef __GNUC__
+    #warning FIXME: port to textlayout-rework
+#endif
+#endif
 }
 
 void KWView::editDeleteFrame()
@@ -1108,14 +1143,6 @@ void KWView::toggleSnapToGrid()
     m_document->gridData().setSnapToGrid(m_snapToGrid); // for persistency
 }
 
-void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction)
-{
-    // TODO we should not allow any shapes to fall behind the main text frame.
-    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(canvasBase()->shapeManager()->selection()->selectedShapes(),
-                        canvasBase()->shapeManager(), direction);
-    if (cmd)
-        m_document->addCommand(cmd);
-}
 
 void KWView::toggleViewFrameBorders(bool on)
 {
@@ -1135,7 +1162,19 @@ void KWView::formatPage()
         if (editor)
             dia->showTextDirection(editor->isBidiDocument());
     }
+    if (!m_lastPageSettingsTab.isEmpty()) {
+        KPageWidgetItem *item = dia->pageItem(m_lastPageSettingsTab);
+        if (item)
+            dia->setCurrentPage(item);
+    }
+    connect(dia, SIGNAL(finished()), this, SLOT(pageSettingsDialogFinished()));
     dia->show();
+}
+
+void KWView::pageSettingsDialogFinished()
+{
+    KWPageSettingsDialog *dia = qobject_cast<KWPageSettingsDialog*>(QObject::sender());
+    m_lastPageSettingsTab = dia && dia->currentPage() ? dia->currentPage()->name() : QString();
 }
 
 void KWView::editSemanticStylesheets()
@@ -1204,6 +1243,32 @@ void KWView::inlineFrame()
     handler->insertInlineObject(anchor);
 }
 
+void KWView::anchorAsChar()
+{
+
+}
+
+void KWView::anchorToChar()
+{
+
+}
+
+void KWView::anchorToParagraph()
+{
+
+}
+
+void KWView::anchorToPage()
+{
+
+}
+
+void KWView::setFloating()
+{
+
+}
+
+
 void KWView::showStatisticsDialog()
 {
     KWStatisticsDialog *dia = new KWStatisticsDialog(this);
@@ -1244,7 +1309,7 @@ void KWView::createLinkedFrame()
 
 void KWView::showStatusBar(bool toggled)
 {
-    statusBar()->setVisible(toggled);
+    if (statusBar()) statusBar()->setVisible(toggled);
 }
 
 void KWView::deletePage()
@@ -1294,31 +1359,6 @@ void KWView::editSelectAllFrames()
 void KWView::editDeleteSelection()
 {
     canvasBase()->toolProxy()->deleteSelection();
-}
-
-void KWView::createCustomOutline()
-{
-    QList<KWFrame *> frames = selectedFrames();
-    if (frames.count() == 0)
-        return;
-    if (frames.count() == 1) {
-        m_document->addCommand(new KWCreateOutlineCommand(m_document, frames.at(0)));
-    } else {
-        QUndoCommand *cmd = new QUndoCommand(i18n("Create outlines"));
-        foreach (KWFrame *frame, frames)
-            new KWCreateOutlineCommand(m_document, frame, cmd);
-        m_document->addCommand(cmd);
-    }
-
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    selection->deselectAll();
-    foreach (KWFrame *frame, frames) {
-        KoShapeContainer *group = frame->shape()->parent();
-        if (group)
-            selection->select(group);
-    }
-
-    KoToolManager::instance()->switchToolRequested("PathToolFactoryId");
 }
 
 void KWView::createFrameClipping()
@@ -1397,33 +1437,6 @@ void KWView::setGuideVisibility(bool on)
     m_canvas->update();
 }
 
-void KWView::createTextOnShape()
-{
-    QSet<KoShape *> frameShapes;
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = frameForShape(shape);
-        Q_ASSERT(frame);
-        if (frame->shape()->parent() == 0) {
-            frameShapes << frame->shape();
-        }
-    }
-#if 0
-    if (!frameShapes.isEmpty()) {
-        KoAddTextOnShapeCommand *cmd = new KoAddTextOnShapeCommand(frameShapes.toList(), m_document);
-        m_document->addCommand(cmd);
-    }
-#else
-    foreach (KoShape *shape, frameShapes) {
-        selection->deselect(shape);
-        KoTextOnShapeContainer *decorator = new KoTextOnShapeContainer(shape, m_document->resourceManager());
-        decorator->setPlainText("dummy text, la la la enzo");
-        m_document->addShape(decorator);
-        selection->select(decorator);
-    }
-#endif
-}
-
 // end of actions
 
 void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions)
@@ -1481,7 +1494,15 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
         m_canvas->resourceManager()->setResource(KoCanvasResource::CurrentPage, m_currentPage.pageNumber());
-        m_zoomController->setPageSize(m_currentPage.rect().size());
+
+        QSizeF newPageSize = m_currentPage.rect().size();
+        QSizeF newMaxPageSize = QSize(qMax(m_maxPageSize.width(), newPageSize.width()),
+                                     qMax(m_maxPageSize.height(), newPageSize.height()));
+        if (newMaxPageSize != m_maxPageSize) {
+            m_maxPageSize = newMaxPageSize;
+            m_zoomController->setPageSize(m_maxPageSize);
+        }
+
         m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
         m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
     }
@@ -1505,7 +1526,8 @@ void KWView::goToPage(const KWPage &page)
 {
     KoCanvasController *controller = m_gui->canvasController();
     QPoint origPos = controller->scrollBarValue();
-    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()));
+    QPointF pos = m_canvas->viewMode()->documentToView(QPointF(0, page.offsetInDocument()),
+                                                       m_canvas->viewConverter());
     origPos.setY((int)pos.y());
     controller->setScrollBarValue(origPos);
 }
@@ -1574,4 +1596,49 @@ void KWView::variableChanged(){
     m_actionMenu->menu()->clear();
     foreach (QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(canvasBase()))
         m_actionMenu->addAction(action);
+}
+
+void adjustZOrderOfSelectedFrames(KoCanvasBase *canvasBase, KWDocument *document, KoShapeReorderCommand::MoveShapeType direction)
+{
+    // TODO we should not allow any shapes to fall behind the main text frame.
+    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(canvasBase->shapeManager()->selection()->selectedShapes(),
+                        canvasBase->shapeManager(), direction);
+    if (cmd)
+        document->addCommand(cmd);
+}
+
+
+void KWView::raiseFrame() {
+    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::RaiseShape);
+}
+
+void KWView::lowerFrame() {
+    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::LowerShape);
+}
+
+void KWView::bringToFront() {
+    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::BringToFront);
+}
+
+void KWView::sendToBack() {
+    adjustZOrderOfSelectedFrames(canvasBase(), m_document, KoShapeReorderCommand::SendToBack);
+}
+
+void KWView::findMatchFound(KoFindMatch match)
+{
+    if(!match.isValid() || !match.location().canConvert<QTextCursor>() || !match.container().canConvert<QTextDocument*>()) {
+        return;
+    }
+
+    QTextCursor cursor = match.location().value<QTextCursor>();
+
+    m_canvas->resourceManager()->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+    m_canvas->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
+}
+
+void KWView::loadingCompleted()
+{
+    QList<QTextDocument*> texts;
+    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
+    m_find->addDocuments(texts);
 }

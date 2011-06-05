@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008-2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2008-2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
              (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 1999-2003 Laurent Montel <montel@kde.org>
@@ -538,7 +538,7 @@ static void showEntry(KLineEdit* edit, QLabel* label,
     label->setText(desc->param(param).helpText() + ':');
     label->show();
     ParameterType elementType = desc->param(param).type();
-    KFloatValidator *validate = 0;
+    KDoubleValidator *validate = 0;
     switch (elementType) {
     case KSpread_String:
     case KSpread_Boolean:
@@ -546,7 +546,7 @@ static void showEntry(KLineEdit* edit, QLabel* label,
         edit->setValidator(0);
         break;
     case KSpread_Float:
-        validate = new KFloatValidator(edit);
+        validate = new KDoubleValidator(edit);
         validate->setAcceptLocalizedNumbers(true);
         edit->setValidator(validate);
         edit->setText("0");

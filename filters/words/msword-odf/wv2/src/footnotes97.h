@@ -1,5 +1,6 @@
 /* This file is part of the wvWare 2 project
    Copyright (C) 2002-2003 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,6 +65,13 @@ namespace wvWare
          * 0xffffffff if none exists.
          */
         U32 nextEndnote() const;
+
+        /**
+         * Check for unprocessed footnotes/endnotes located before @param
+         * globalCP.  This might be the result of a skipped chunk or
+         * overlapping.  Any unprocessed footnotes/endnotes are skipped.
+         */
+        void check( U32 globalCP );
 
     private:
         Footnotes97( const Footnotes97& rhs );

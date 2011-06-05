@@ -22,6 +22,8 @@
 #include <iostream>
 #include <QtCore/QDebug>
 
+//#define DEBUG_PICTURES
+
 // Use anonymous namespace to cover following functions
 namespace
 {
@@ -195,7 +197,8 @@ savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
     savePicture(ref, a.anon.get<MSO::OfficeArtBlipTIFF>(), store);
     return ref;
 }
-}
+} //namespace
+
 PictureReference
 savePicture(POLE::Stream& stream, KoStore* out)
 {
@@ -278,4 +281,32 @@ savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
         return savePicture(*fbse->embeddedBlip, store);
     }
     return PictureReference();
+}
+
+QByteArray
+getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32& offset)
+{
+    // return 16 byte rgbuid for this given blip id
+    if (dgg.blipStore) {
+        const MSO::OfficeArtBStoreContainer* b = dgg.blipStore.data();
+        if (pib < (quint32) b->rgfb.size() &&
+            b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>())
+        {
+            const MSO::OfficeArtFBSE* fbse = b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>();
+#ifdef DEBUG_PICTURES
+            qDebug() << "rgfb.size():" << b->rgfb.size();
+            qDebug() << "OfficeArtFBSE: DEBUG";
+            qDebug() << "tag:" << fbse->tag;
+            qDebug() << "cRef:" << fbse->cRef;
+            qDebug() << "foDelay:" << fbse->foDelay;
+            qDebug() << "embeddeBlip:" << fbse->embeddedBlip;
+#endif
+            offset = fbse->foDelay;
+            return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
+        }
+    }
+    if (pib != 0xFFFF && pib != 0) {
+        qDebug() << "Could not find image for pib " << pib;
+    }
+    return QByteArray();
 }

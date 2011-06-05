@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include <QFont>
 #include <QMenu>
 #include <QAction>
+#include <QShowEvent>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
@@ -57,6 +59,7 @@ public:
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
     bool detached;
+    bool ignoreHideEvents;
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
@@ -82,9 +85,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlay(QRect(25, 25, 200, 200));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KIcon("newlayer"));
+    m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();
     m_d->uiWdgPaintOpPresetSettings.fillGradient->setIcon(KIcon("krita_tool_gradient"));
     m_d->uiWdgPaintOpPresetSettings.fillSolid->setIcon(KIcon("krita_tool_color_fill"));
-    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KIcon("list-remove"));
+    m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setIcon(KIcon("edit-clear"));
 
     connect(m_d->uiWdgPaintOpPresetSettings.eraseScratchPad, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(clear()));
@@ -109,12 +113,20 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
-            
+
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
-            
+
+    connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
+            this, SIGNAL(presetNameLineEditChanged(QString)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(const QString&)),
+            this, SIGNAL(paintopActivated(QString)));
+
+
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
+    m_d->ignoreHideEvents = false;
 
 }
 
@@ -161,18 +173,32 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     }
 
     if (widget) {
-
-        
-        
         widget->setFont(m_d->smallFont);
 
-        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+        widget->setMinimumSize(QSize(750, 450));
+        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
         m_d->layout->addWidget(widget);
 
         m_d->layout->update();
         widget->show();
     }
 }
+
+void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
+{
+    QPalette palette;
+
+    if (change) {
+        palette.setColor(QPalette::Base, QColor(255,200,200));
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+    else {
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+}
+
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {
@@ -218,8 +244,10 @@ void KisPaintOpPresetsPopup::switchDetached()
 
         m_d->detached = !m_d->detached;
         if (m_d->detached) {
+            m_d->ignoreHideEvents = true;
             parentWidget()->setWindowFlags(Qt::Tool);
             parentWidget()->show();
+            m_d->ignoreHideEvents = false;
         }
         else {
             parentWidget()->setWindowFlags(Qt::Popup);
@@ -241,5 +269,40 @@ void KisPaintOpPresetsPopup::showScratchPad()
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(true);
 }
 
+void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
+{
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+}
+
+void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
+{
+   m_d->uiWdgPaintOpPresetSettings.paintopList->setPaintOpList(list);
+}
+
+void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
+{
+    m_d->uiWdgPaintOpPresetSettings.paintopList->setCurrent(paintOpId);
+}
+
+QString KisPaintOpPresetsPopup::currentPaintOp()
+{
+    return m_d->uiWdgPaintOpPresetSettings.paintopList->currentItem();
+}
+
+void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
+{
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setPresetImage(image);
+}
+
+void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
+{
+    if(m_d->ignoreHideEvents) {
+        return;
+    }
+    if (m_d->detached) {
+        switchDetached();
+    }
+    QWidget::hideEvent(event);
+}
 
 #include "kis_paintop_presets_popup.moc"

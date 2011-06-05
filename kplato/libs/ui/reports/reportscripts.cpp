@@ -46,6 +46,14 @@ QString ProjectAccess::Manager() const
     return QString();
 }
 
+QString ProjectAccess::Plan() const
+{
+    if ( m_reportdata && m_reportdata->scheduleManager() ) {
+        return m_reportdata->scheduleManager()->name();
+    }
+    return QString();
+}
+
 QVariant ProjectAccess::BCWS() const
 {
     if ( m_reportdata && m_reportdata->project() ) {

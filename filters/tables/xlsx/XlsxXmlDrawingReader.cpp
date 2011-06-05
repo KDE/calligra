@@ -264,6 +264,9 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
             ELSE_TRY_READ_IF(pic)
             // a graphic-frame
             ELSE_TRY_READ_IF(graphicFrame)
+            ELSE_TRY_READ_IF(cxnSp)
+            ELSE_TRY_READ_IF(grpSp)
+            SKIP_UNKNOWN
         }
     }
 

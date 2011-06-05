@@ -47,7 +47,7 @@ class CellEditorBase;
 /**
  * Abstract tool providing actions acting on cell ranges.
  */
-class CALLIGRA_TABLES_EXPORT CellToolBase : public KoInteractionTool
+class CALLIGRA_TABLES_COMMON_EXPORT CellToolBase : public KoInteractionTool
 {
     Q_OBJECT
 
@@ -106,7 +106,7 @@ public Q_SLOTS:
 
 protected:
     void init();
-    virtual QWidget* createOptionWidget();
+    virtual QList <QWidget*> createOptionWidgets();
     void applyUserInput(const QString &userInput, bool expandMatrix = false);
     virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
 

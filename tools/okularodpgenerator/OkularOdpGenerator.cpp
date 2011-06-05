@@ -64,9 +64,9 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
 {
     KComponentData cd("OkularOdpGenerator", QByteArray(),
                       KComponentData::SkipMainComponentRegistration);
-    KPluginFactory *factory = KPluginLoader("libcalligrastagepart", cd).factory();
+    KPluginFactory *factory = KPluginLoader("calligrastagepart", cd).factory();
     if (!factory) {
-        qDebug() << "could not load libcalligrastagepart";
+        qDebug() << "could not load calligrastagepart";
         return false;
     }
     KoPADocument* doc = factory->create<KoPADocument>();

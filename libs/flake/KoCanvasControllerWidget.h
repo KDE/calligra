@@ -48,7 +48,7 @@ public:
      * Constructor.
      * @param parent the parent this widget will belong to
      */
-    explicit KoCanvasControllerWidget(QWidget *parent = 0);
+    explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
     virtual ~KoCanvasControllerWidget();
 
     /// Reimplemented from QObject
@@ -101,7 +101,7 @@ public:
      *
      * @param widgets the map of widgets
      */
-    void setToolOptionWidgets(const QMap<QString, QWidget *> &widgets);
+    void setToolOptionWidgets(const QList<QWidget *> &widgets);
 
     virtual void zoomIn(const QPoint &center);
 
@@ -147,12 +147,7 @@ signals:
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &map, QWidget *widgets);
-
-    /**
-     * Emit the new tool option widgets to be used with this canvas.
-     */
-    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &widgets);
+    void toolOptionWidgetsChanged(const QList<QWidget *> &widgets);
 
 private slots:
 

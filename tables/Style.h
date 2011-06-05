@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2003 Norbert Andres <nandres@web.de>
 
@@ -55,13 +55,13 @@ typedef QHash<QString, Style>       Styles;
 // needs to be ordered (QMap) for the style dialog
 typedef QMap<QString, CustomStyle*> CustomStyles;
 
-CALLIGRA_TABLES_EXPORT uint qHash(const Style& style);
+CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
 
 /**
  * \ingroup Style
  * A cell style.
  */
-class CALLIGRA_TABLES_EXPORT Style
+class CALLIGRA_TABLES_ODF_EXPORT Style
 {
 public:
     enum HAlign {
@@ -137,6 +137,7 @@ public:
         Prefix,
         Postfix,
         Precision,
+        ThousandsSep,
         FormatTypeKey,
         FloatFormatKey,
         FloatColorKey,
@@ -228,6 +229,7 @@ public:
     uint   fontFlags()    const;
     int    fontSize()     const;
     int    precision()    const;
+    bool   thousandsSep() const;
     int    angle()        const;
     double indentation()  const;
     bool   shrinkToFit()  const;
@@ -280,6 +282,7 @@ public:
     void setFormatType(Format::Type format);
     void setCustomFormat(QString const & strFormat);
     void setPrecision(int precision);
+    void setThousandsSep(bool thousandsSep);
     void setPrefix(QString const & prefix);
     void setPostfix(QString const & postfix);
     void setCurrency(Currency const & currency);
@@ -308,7 +311,8 @@ public:
      * boolean, text)
      */
     static QString saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles, Format::Type _style,
-                                       const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol);
+                                       const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol,
+                                       bool thousandsSep);
     static QString saveOdfStyleNumericDate(KoGenStyles &mainStyles, Format::Type _style,
                                            const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericFraction(KoGenStyles &mainStyles, Format::Type _style,
@@ -318,7 +322,7 @@ public:
     static QString saveOdfStyleNumericCustom(KoGenStyles&mainStyles, Format::Type _style,
             const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericScientific(KoGenStyles&mainStyles, Format::Type _style,
-            const QString &_prefix, const QString &_suffix, int _precision);
+            const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep);
     static QString saveOdfStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type _style, int _precision,
             const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericMoney(KoGenStyles&mainStyles, Format::Type _style,
@@ -327,7 +331,7 @@ public:
     static QString saveOdfStyleNumericText(KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                            const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericNumber(KoGenStyles&mainStyles, Format::Type _style, int _precision,
-            const QString &_prefix, const QString &_suffix);
+            const QString &_prefix, const QString &_suffix, bool thousandsSep);
     static QString saveOdfBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush);
 
     /**
@@ -344,7 +348,7 @@ public:
     inline bool operator!=(const Style& other) const {
         return !operator==(other);
     }
-    friend uint qHash(const Style& style);
+    friend CALLIGRA_TABLES_ODF_EXPORT uint qHash(const Style& style);
     void operator=(const Style& style);
     Style operator-(const Style& style) const;
     void merge(const Style& style);
@@ -385,7 +389,7 @@ private:
  * \ingroup Style
  * A named cell style.
  */
-class CALLIGRA_TABLES_EXPORT CustomStyle : public Style
+class CALLIGRA_TABLES_ODF_EXPORT CustomStyle : public Style
 {
 public:
     /**
@@ -395,7 +399,9 @@ public:
      * \param parent The style whose attributes are inherited - the parent style.
      */
     explicit CustomStyle(const QString& name, CustomStyle* parent = 0);
+	CustomStyle(const CustomStyle& style);
     virtual ~CustomStyle();
+    CustomStyle& operator=(const CustomStyle& other);
 
     virtual StyleType type() const;
     void setType(StyleType type);
@@ -426,10 +432,10 @@ public:
                             const StyleManager* manager) const;
 
 
-    bool operator==(const CustomStyle& other) const;
-    inline bool operator!=(const CustomStyle& other) const {
-        return !operator==(other);
-    }
+    //bool operator==(const CustomStyle& other) const;
+    //inline bool operator!=(const CustomStyle& other) const {
+    //    return !operator==(other);
+    //}
 
     /**
      * @return the number of references to this style.
@@ -454,7 +460,7 @@ private:
  * \ingroup Style
  * A single style attribute.
  */
-class CALLIGRA_TABLES_TEST_EXPORT SubStyle : public QSharedData
+class CALLIGRA_TABLES_ODF_TEST_EXPORT SubStyle : public QSharedData
 {
 public:
     SubStyle() {}

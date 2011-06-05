@@ -66,9 +66,9 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
     DateTime st = project.constraintStartTime();
     DateTime et = project.constraintEndTime();
     startDate->setDate(st.date());
-    startTime->setTime(st.time());
+    startTime->setTime( QTime( st.time().hour(), st.time().minute() ) );
     endDate->setDate(et.date());
-    endTime->setTime(et.time());
+    endTime->setTime( QTime( et.time().hour(), et.time().minute() ) );
     enableDateTime();
     namefield->setFocus();
 
@@ -99,11 +99,11 @@ MacroCommand *MainProjectPanel::buildCommand() {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new NodeModifyLeaderCmd(project, leaderfield->text()));
     }
-    if (startDateTime() != project.constraintStartTime().dateTime()) {
+    if (startDateTime() != project.constraintStartTime()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(project, startDateTime()));
     }
-    if (endDateTime() != project.constraintEndTime().dateTime()) {
+    if (endDateTime() != project.constraintEndTime()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(project, endDateTime()));
     }

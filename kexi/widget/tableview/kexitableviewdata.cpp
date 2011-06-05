@@ -565,12 +565,12 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiDB::RecordData *record,
 
 //get a new value (if present in the buffer), or the old one, otherwise
 //(taken here for optimization)
-#define GET_VALUE if (!val) { \
-        val = d->cursor \
+#define GET_VALUE if (!pval) { \
+        pval = d->cursor \
               ? d->pRowEditBuffer->at( *(*it_f)->columnInfo(), (*it_r).isNull() /* useDefaultValueIfPossible */ ) \
               : d->pRowEditBuffer->at( *f ); \
-        if (!val) \
-            val = &(*it_r); /* get old value */ \
+        val = pval ? *pval : *it_r; /* get old value */ \
+        /*kDebug() << col << (*it_f)->columnInfo()->debugString() << "val:" << val;*/ \
     }
 
 //! @todo if there're multiple views for this data, we need multiple buffers!
@@ -584,13 +584,14 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
     KexiTableViewColumn::ListIterator it_f(m_columns.constBegin());
     KexiDB::RecordData::ConstIterator it_r = record.constBegin();
     int col = 0;
-    const QVariant *val = 0;
+    const QVariant *pval = 0;
+    QVariant val;
     for (;it_f != m_columns.constEnd() && it_r != record.constEnd();++it_f, ++it_r, col++) {
         KexiDB::Field *f = (*it_f)->field();
         if (f->isNotNull()) {
             GET_VALUE;
             //check it
-            if (val->isNull() && !f->isAutoIncrement()) {
+            if (val.isNull() && !f->isAutoIncrement()) {
                 //NOT NULL violated
                 d->result.msg = i18n("\"%1\" column requires a value to be entered.",
                                      f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();
@@ -601,7 +602,7 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
         }
         if (f->isNotEmpty()) {
             GET_VALUE;
-            if (!f->isAutoIncrement() && (val->isNull() || KexiDB::isEmptyValue(f, *val))) {
+            if (!f->isAutoIncrement() && (val.isNull() || KexiDB::isEmptyValue(f, val))) {
                 //NOT EMPTY violated
                 d->result.msg = i18n("\"%1\" column requires a value to be entered.",
                                      f->captionOrName()) + "\n\n" + Kexi::msgYouCanImproveData();

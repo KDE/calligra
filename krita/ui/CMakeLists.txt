@@ -1,13 +1,12 @@
 include_directories( ${KOTEXT_INCLUDES}	
-	${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
+    ${TEXTLAYOUT_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
 	${CMAKE_CURRENT_SOURCE_DIR}/flake 
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/openrastertk
 	${CMAKE_SOURCE_DIR}/krita/image/metadata 
 	${EXIV2_INCLUDE_DIR} )
-
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 add_subdirectory( tests )
 
@@ -20,6 +19,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp 
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp 
     canvas/kis_grid_manager.cpp 
@@ -52,7 +52,6 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
-    kis_brushengine_selector.cpp
     kis_canvas_resource_provider.cpp 
     kis_categorized_item_delegate.cpp
     kis_clipboard.cc 
@@ -95,10 +94,12 @@ set(kritaui_LIB_SRCS
     kis_view2.cpp 
     kis_zoom_manager.cc
     ko_favorite_resource_manager.cpp
+    kis_workspace_resource.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
     kisexiv2/kis_xmp_io.cpp
+    kra/kis_kra_utils.cpp
     kra/kis_kra_load_visitor.cpp
     kra/kis_kra_loader.cpp 
     kra/kis_kra_save_visitor.cpp 
@@ -110,9 +111,14 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
+    recorder/kis_node_query_path_editor.cc
+    recorder/kis_recorded_action_creator.cc
+    recorder/kis_recorded_action_creator_factory.cc
+    recorder/kis_recorded_action_creator_factory_registry.cc
     recorder/kis_recorded_action_editor_factory.cc
     recorder/kis_recorded_action_editor_factory_registry.cc
     recorder/kis_recorded_filter_action_editor.cc
+    recorder/kis_recorded_filter_action_creator.cpp
     recorder/kis_recorded_paint_action_editor.cc
     tool/kis_selection_tool_helper.cpp 
     tool/kis_shape_tool_helper.cpp 
@@ -128,7 +134,7 @@ set(kritaui_LIB_SRCS
     tool/kis_color_picker_utils.cpp
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
-    widgets/kis_cmb_paintop.cpp
+    widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc 
     widgets/kis_color_space_selector.cc
     widgets/kis_curve_widget.cpp
@@ -155,7 +161,9 @@ set(kritaui_LIB_SRCS
     widgets/kis_tree_view_popup.cc 
     widgets/kis_slider_spin_box.cpp
     widgets/kis_wdg_generator.cpp
+    widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
+    widgets/kis_categorized_list_view.cpp
 )
 
 if(HAVE_OPENGL)
@@ -180,6 +188,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
+    forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui
@@ -212,6 +221,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfilternodecreation.ui
     forms/wdgpaintactioneditor.ui
     forms/wdgmultipliersdoublesliderspinbox.ui
+    forms/wdgnodequerypatheditor.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

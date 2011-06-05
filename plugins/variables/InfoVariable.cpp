@@ -33,6 +33,7 @@ static const struct {
     const char * tag;
     const char * saveTag;
 } propertyData[] = {
+    { KoInlineObject::AuthorName, "creator", "text:creator" },
     { KoInlineObject::DocumentURL, "file-name", "text:file-name" },
     { KoInlineObject::Title, "title", "text:title" },
     { KoInlineObject::Subject, "subject", "text:subject" },
@@ -53,13 +54,13 @@ QStringList InfoVariable::tags()
 
 InfoVariable::InfoVariable()
         : KoVariable(true),
-        m_type(KoInlineObject::DocumentURL)
+        m_type(KoInlineObject::AuthorName)
 {
 }
 
 void InfoVariable::readProperties(const KoProperties *props)
 {
-    m_type = (Property) props->property("property").value<int>();
+    m_type = (Property) props->property("vartype").value<int>();
 }
 
 void InfoVariable::propertyChanged(Property property, const QVariant &value)

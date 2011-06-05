@@ -54,6 +54,7 @@ class KoOpenPane;
 class KUndoStack;
 class KoTextEditor;
 class KoProgressUpdater;
+class KoProgressProxy;
 
 class KoVersionInfo
 {
@@ -78,6 +79,7 @@ class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocum
     Q_OBJECT
 //     Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
+    Q_PROPERTY(int pageCount READ pageCount)
 
 public:
 
@@ -362,12 +364,13 @@ public:
     int viewCount() const;
 
     /**
-     * @return a QGraphicsItem canvas displaying this document. The QGraphicsItem
-     * is created on first call. There is only one QGraphicsItem canvas that can
+     * @return a QGraphicsItem canvas displaying this document. There is only one QGraphicsItem canvas that can
      * be shown by many QGraphicsView subclasses (those should reimplement KoCanvasController
      * as well).
+     *
+     * @param create if true, a new canvas item is created if there wasn't one.
      */
-    QGraphicsItem *canvasItem();
+    QGraphicsItem *canvasItem(bool create = true);
 
     /**
      * Reimplemented from KParts::Part
@@ -412,6 +415,11 @@ public:
      * @param alwaysShow always show the widget even if the user has configured it to not show.
      */
     virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
+
+    /**
+     * Removes the startupWidget shown at application start up.
+     */
+    void deleteOpenPane(bool closing = false);
 
     /**
      *  Tells the document that its title has been modified, either because
@@ -498,13 +506,6 @@ public:
     static QString tagNameToDocumentType(const QString& localName);
 
     /**
-     *  Save the document. The default implementation is to call
-     *  saveXML(). This method exists only for applications that
-     *  don't use QDomDocument for saving, i.e. kword and kpresenter.
-     */
-    virtual bool saveToStream(QIODevice *dev);
-
-    /**
      *  Loads a document in the native format from a given URL.
      *  Reimplement if your native format isn't XML.
      *
@@ -582,6 +583,12 @@ public:
      * accurate. If no active progress reporter is present, 0 is returned.
      **/
     KoProgressUpdater *progressUpdater() const;
+
+    /**
+     * Set a custom progress proxy to use to report loading
+     * progress to.
+     */
+    void setProgressProxy(KoProgressProxy *progressProxy);
 
     /**
      * Appends the shell to the list of shells which show this
@@ -922,6 +929,13 @@ protected:
     virtual bool openFile();
 
     /**
+     * This method is called by @a openFile() to allow applications to setup there
+     * own KoProgressUpdater-subTasks which are then taken into account for the
+     * displayed progressbar during loading.
+     */
+    virtual void setupOpenFileSubProgress() {}
+
+    /**
      *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
      *  remote documents)
      *  Applies a filter if necessary, and calls saveNativeFormat in any case
@@ -1009,15 +1023,12 @@ private slots:
     void slotStarted(KIO::Job*);
     void startCustomDocument();
 
-    /**
-     * Removes the open widget shown at application start up.
-     */
-    void deleteOpenPane();
-
 private:
 
     bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
     bool saveNativeFormatKOffice(KoStore *store);
+    bool saveToStream(QIODevice *dev);
+
 
     /// @return the current KoMainWindow shell
     KoMainWindow *currentShell();

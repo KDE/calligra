@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright 1999-2006 The KSpread Team <koffice-devel@kde.org>
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@ namespace Calligra
 namespace Tables
 {
 
-class CALLIGRA_TABLES_EXPORT CellEditorBase
+class CALLIGRA_TABLES_COMMON_EXPORT CellEditorBase
 {
 public:
     CellEditorBase();

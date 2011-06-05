@@ -20,17 +20,18 @@
 #define GLOBAL_H
 
 #include "wv2_export.h"
-#include "wv2version.h"  // ###### WV2 0.3: Remove this #include
+//#include "wv2version.h"  // ###### WV2 0.3: Remove this #include
 
-/** @file
- * We use this typedefs to be compatible with the types from
- * the MS HTML specifications.
+/**
+ * @file We use this typedefs to be compatible with the types from the MS HTML
+ * specifications.
  */
 
 // A few defines used for "inline" debugging
-//#define WV2_DUMP_PIECE_TABLE 0 // has to be defined as we just #if it
-//#define WV2_DUMP_FIB 0
+#define WV2_DUMP_PIECE_TABLE 0 // has to be defined as we just #if it
+//#define WV2_DUMP_FIB 1
 
+//#define WV2_DEBUG_FIB 1
 //#define WV2_DEBUG_STYLESHEET 1
 //#define WV2_DEBUG_SPRMS 1
 //#define WV2_DEBUG_LIST_READING 1
@@ -39,6 +40,7 @@
 //#define WV2_DEBUG_FOOTNOTES 1
 //#define WV2_DEBUG_HEADERS 1
 //#define WV2_DEBUG_TABLES 1
+//#define WV2_DEBUG_PARAGRAPHS 1
 //#define WV2_DEBUG_PICTURES 1
 //#define WV2_DEBUG_ANNOTATIONS 1
 //#define WV2_DEBUG_BOOKMARK 1

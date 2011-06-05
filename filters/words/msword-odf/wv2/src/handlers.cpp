@@ -64,6 +64,10 @@ SubDocumentHandler::~SubDocumentHandler()
 {
 }
 
+void SubDocumentHandler::setProgress( const int /*value*/ )
+{
+}
+
 void SubDocumentHandler::bodyStart()
 {
 }
@@ -129,35 +133,6 @@ void TableHandler::tableCellEnd()
 {
 }
 
-
-PictureHandler::~PictureHandler()
-{
-}
-
-void PictureHandler::bitmapData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/ )
-{
-}
-
-void PictureHandler::escherData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/, const wvWare::U8* /*rgbUid*/)
-{
-}
-
-void PictureHandler::escherData( std::vector<U8>, SharedPtr<const Word97::PICF> /*picf*/, int /*type*/, const wvWare::U8* /*rgbUid*/)
-{
-}
-
-void PictureHandler::wmfData( OLEImageReader& /*reader*/, SharedPtr<const Word97::PICF> /*picf*/ )
-{
-}
-
-void PictureHandler::externalImage( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )
-{
-}
-
-void PictureHandler::officeArt(wvWare::OfficeArtProperties* /*artProperties*/)
-{
-}
-
 GraphicsHandler::~GraphicsHandler()
 {
 
@@ -209,8 +184,10 @@ void TextHandler::specialCharacter( SpecialCharacter /*character*/, SharedPtr<co
 {
 }
 
-void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UString characters,
-                                 SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote)
+void TextHandler::footnoteFound( FootnoteData /*data*/, UString characters,
+                                 SharedPtr<const Word97::SEP> /*sep*/,
+                                 SharedPtr<const Word97::CHP> chp,
+                                 const FootnoteFunctor& parseFootnote)
 {
     if ( characters[0].unicode() != 2 )
         runOfText( characters, chp ); // The character shouldn't get lost unless it's the auto-number

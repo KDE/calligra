@@ -39,6 +39,8 @@
 #include <QRegExp>
 #include <QImage>
 #include <QInputDialog>
+#include <QImageReader>
+#include <QFileInfo>
 
 #include <kdeversion.h>
 #include <KDebug>
@@ -72,6 +74,11 @@ MsooXmlImport::MsooXmlImport(const QString& bodyContentElement, QObject* parent)
 
 MsooXmlImport::~MsooXmlImport()
 {
+}
+
+void MsooXmlImport::reportProgress(unsigned progress)
+{
+    emit sigProgress(progress);
 }
 
 KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
@@ -323,7 +330,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
         unsigned rem = infoStream.size() - infoStream.tell();
         bytes_read = infoStream.read(buffer, qMin(4096u, rem));
         QByteArray encryptedVerifierHash(reinterpret_cast<const char*>(buffer), bytes_read);
-        const unsigned spinCount = 50000;
+        const int spinCount = 50000; //FIXME better use long int or qint32
 
         bool first = true;
         while (true) {
@@ -429,7 +436,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             kDebug() << "unexpected element in key encryptor";
             return 0;
         }
-        unsigned spinCount = encryptedKey.attribute("spinCount").toInt();
+        const int spinCount = encryptedKey.attribute("spinCount").toInt();
         QByteArray keyDataSalt = QByteArray::fromBase64(keyData.attribute("saltValue").toLatin1());
         QByteArray salt = QByteArray::fromBase64(encryptedKey.attribute("saltValue").toLatin1());
         QByteArray encryptedVerifierHashInput = QByteArray::fromBase64(encryptedKey.attribute("encryptedVerifierHashInput").toLatin1());
@@ -533,6 +540,20 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
 #endif
 }
 
+KoFilter::ConversionStatus MsooXmlImport::createImage(const QImage& source,
+                                       const QString& destinationName)
+{
+    if (!m_zip || !m_outputStore) {
+        return KoFilter::UsageError;
+    }
+    QString errorMessage;
+    const KoFilter::ConversionStatus status = Utils::createImage(errorMessage, source, m_outputStore, destinationName);
+    if (status != KoFilter::OK) {
+        kWarning() << "Failed to createImage:" << errorMessage;
+    }
+    return status;
+}
+
 KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
         const QString& destinationName, bool oleFile)
 {
@@ -545,6 +566,28 @@ KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
 //! @todo transmit the error to the GUI...
     if(status != KoFilter::OK)
         kWarning() << "Failed to copyFile:" << errorMessage;
+    return status;
+}
+
+KoFilter::ConversionStatus MsooXmlImport::imageFromFile(const QString& sourceName, QImage& image)
+{
+    if (!m_zip) {
+        return KoFilter::UsageError;
+    }
+
+    QString errorMessage;
+    KoFilter::ConversionStatus status = KoFilter::OK;
+
+    std::auto_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(m_zip, errorMessage, sourceName, status));
+    if (!inputDevice.get()) {
+        return status;
+    }
+    QImageReader r(inputDevice.get(), QFileInfo(sourceName).suffix().toLatin1());
+    if (!r.canRead()) {
+        return KoFilter::WrongFormat;
+    }
+    image = r.read();
+
     return status;
 }
 

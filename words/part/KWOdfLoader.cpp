@@ -27,7 +27,6 @@
 #include "KWPage.h"
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoOdfStylesReader.h>
@@ -39,6 +38,7 @@
 #include <KoShapeFactoryBase.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocument.h>
+#include <KoTextEditor.h>
 #include <KoShapeLoadingContext.h>
 #include <KoStyleManager.h>
 #include <KoOdfLoadingContext.h>
@@ -73,10 +73,12 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     //kDebug(32001) << "========================> KWOdfLoader::load START";
 
     QPointer<KoUpdater> updater;
+    QPointer<KoUpdater> loadUpdater;
     if (m_document->progressUpdater()) {
-        updater = m_document->progressUpdater()->startSubtask(1,
-                                                           "KWOdfLoader::load");
+        updater = m_document->progressUpdater()->startSubtask(1, "KWOdfLoader::load");
+        loadUpdater = m_document->progressUpdater()->startSubtask(5, "KWOdfLoader::loadOdf");
         updater->setProgress(0);
+        loadUpdater->setProgress(0);
     }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -133,9 +135,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     if (updater) updater->setProgress(40);
 
-    KoOdfLoadingContext context(odfStore.styles(), odfStore.store(), m_document->componentData());
-
-    loadMasterPageStyles(context, hasMainText);
+    loadMasterPageStyles(sc, hasMainText);
 
     // add page background frame set
     KWFrameSet *pageBackgroundFrameSet = new KWFrameSet(KWord::BackgroundFrameSet);
@@ -211,7 +211,6 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoTextShapeData textShapeData;
     if (hasMainText) {
         KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
-        mainFs->setAllowLayout(false);
         mainFs->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
         m_document->addFrameSet(mainFs);
         textShapeData.setDocument(mainFs->document(), false);
@@ -219,8 +218,26 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     if (updater) updater->setProgress(60);
 
-    // Let the TextShape handle loading the body element.
-    textShapeData.loadOdf(body, sc, m_document->documentRdfBase());
+    // load the main text shape right here so we can use the progress information of the KoTextLoader
+    KoTextLoader loader(sc);
+    QTextCursor cursor(textShapeData.document());
+
+    if (loadUpdater) {
+        connect(&loader, SIGNAL(sigProgress(int)), loadUpdater, SLOT(setProgress(int)));
+    }
+
+    loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
+
+    if (loadUpdater) {
+        loadUpdater->setProgress(100);
+    }
+
+    KoTextEditor *editor = KoTextDocument(textShapeData.document()).textEditor();
+    if (editor) // at one point we have to get the position from the odf doc instead.
+        editor->setPosition(0);
+    editor->finishedLoading();
+
+    if (updater) updater->setProgress(90);
 
     // Grab weak references to all the Rdf stuff that was loaded
     if (KoDocumentRdfBase *rdf = m_document->documentRdfBase()) {
@@ -237,35 +254,35 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
 void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *textDoc)
 {
-    KoTextDocument(textDoc).setRelativeTabs(false);
+    KoTextDocument(textDoc).setRelativeTabs(true);
     if (settingsDoc.isNull())
         return;
 
     kDebug(32001) << "KWOdfLoader::loadSettings";
     KoOasisSettings settings(settingsDoc);
-    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
-    if (!viewSettings.isNull())
+    KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
+    if (!viewSettings.isNull()) {
         m_document->setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
-    //1.6: KWOasisLoader::loadOasisIgnoreList
-    KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
+    }
+
+    KoOasisSettings::Items configurationSettings = settings.itemSet("ooo:configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
         kDebug(32001) << "Ignorelist:" << ignorelist;
-        //1.6: m_document->setSpellCheckIgnoreList(QStringList::split(',', ignorelist));
 
         KoTextDocument(textDoc).setRelativeTabs(configurationSettings.parseConfigItemBool("TabsRelativeToIndent", true));
     }
     //1.6: m_document->variableCollection()->variableSetting()->loadOasis(settings);
 }
 
-void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext &context, bool hasMainText)
+void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context, bool hasMainText)
 {
     kDebug(32001) << " !!!!!!!!!!!!!! loadMasterPageStyles called !!!!!!!!!!!!!!";
-    kDebug(32001) << "Number of items :" << context.stylesReader().masterPages().size();
+    kDebug(32001) << "Number of items :" << context.odfLoadingContext().stylesReader().masterPages().size();
 
     //TODO probably we should introduce more logic to handle the "standard" even
     //in faulty documents. See also bugreport #129585 as example.
-    const KoOdfStylesReader &styles = context.stylesReader();
+    const KoOdfStylesReader &styles = context.odfLoadingContext().stylesReader();
     QHashIterator<QString, KoXmlElement *> it(styles.masterPages());
     while (it.hasNext()) {
         it.next();
@@ -277,7 +294,7 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext &context, bool hasMai
         const KoXmlElement *masterNode = it.value();
         const KoXmlElement *masterPageStyle = masterNode ? styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString())) : 0;
         if (masterPageStyle) {
-            masterPage.loadOdf(context, *masterNode, *masterPageStyle, m_document->resourceManager());
+            masterPage.loadOdf(context.odfLoadingContext(), *masterNode, *masterPageStyle, m_document->resourceManager());
             loadHeaderFooter(context, masterPage, *masterNode, LoadHeader);
             loadHeaderFooter(context, masterPage, *masterNode, LoadFooter);
         }
@@ -288,35 +305,27 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext &context, bool hasMai
 }
 
 // helper function to create a KWTextFrameSet for a header/footer.
-void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::TextFrameSetType fsType)
+void KWOdfLoader::loadHeaderFooterFrame(KoShapeLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::TextFrameSetType fsType)
 {
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setPageStyle(pageStyle);
-    fs->setAllowLayout(false);
     m_document->addFrameSet(fs);
 
     kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
 
     // use auto-styles from styles.xml, not those from content.xml
-    context.setUseStylesAutoStyles(true);
+    context.odfLoadingContext().setUseStylesAutoStyles(true);
 
-    KoShapeLoadingContext ctxt(context, m_document->resourceManager());
-    KWOdfSharedLoadingData *sharedData = new KWOdfSharedLoadingData(this);
-    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
-    Q_ASSERT(styleManager);
-    sharedData->loadOdfStyles(ctxt, styleManager);
-    ctxt.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
-
-    KoTextLoader loader(ctxt, m_document->documentRdfBase());
+    KoTextLoader loader(context);
     QTextCursor cursor(fs->document());
     loader.loadBody(elem, cursor);
 
     // restore use of auto-styles from content.xml, not those from styles.xml
-    context.setUseStylesAutoStyles(false);
+    context.odfLoadingContext().setUseStylesAutoStyles(false);
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
-void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPage, HFLoadType headerFooter)
+void KWOdfLoader::loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPage, HFLoadType headerFooter)
 {
     // The actual content of the header/footer.
     KoXmlElement elem = KoXml::namedItemNS(masterPage, KoXmlNS::style, headerFooter == LoadHeader ? "header" : "footer");

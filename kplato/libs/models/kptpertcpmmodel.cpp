@@ -299,7 +299,7 @@ void CriticalPathItemModel::slotNodeChanged( Node *node )
         return;
     }
     int row = m_path.indexOf( node );
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount() - 1, node ) );
 }
 
 
@@ -580,7 +580,7 @@ QVariant PertResultItemModel::earlyStart( const Task *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->earlyStart( m_manager->scheduleId() ).dateTime();
+            return node->earlyStart( m_manager->scheduleId() );
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->earlyStart( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
@@ -595,7 +595,7 @@ QVariant PertResultItemModel::earlyFinish( const Task *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->earlyFinish( m_manager->scheduleId() ).dateTime();
+            return node->earlyFinish( m_manager->scheduleId() );
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->earlyFinish( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
@@ -610,7 +610,7 @@ QVariant PertResultItemModel::lateStart( const Task *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->lateStart( m_manager->scheduleId() ).dateTime();
+            return node->lateStart( m_manager->scheduleId() );
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->lateStart( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
@@ -626,7 +626,7 @@ QVariant PertResultItemModel::lateFinish( const Task *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->lateFinish( m_manager->scheduleId() ).dateTime();
+            return node->lateFinish( m_manager->scheduleId() );
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->lateFinish( m_manager->scheduleId() ).date() );
         case Qt::EditRole:
@@ -869,7 +869,7 @@ void PertResultItemModel::slotNodeChanged( Node *)
         return;
     }
     int row = node->getParent()->findChildNode( node );
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );*/
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount() - 1, node ) );*/
 }
 
 

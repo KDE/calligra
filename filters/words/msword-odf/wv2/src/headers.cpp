@@ -24,7 +24,7 @@ using namespace wvWare;
 
 const int Headers::headerTypes = 6;
 
-Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version )
+Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version ) throw(InvalidFormatException)
 {
     if ( lcbPlcfhdd == 0 ) {
         return;
@@ -55,17 +55,17 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* ta
     tableStream->seek( fcPlcfhdd, G_SEEK_SET );
 
     U32 i = 0;
-    QList<U32> tmp;
-
     if ( version == Word8 ) {
         //CPs of footnote/endnote separators related stories
         for ( ; i < 6 * sizeof( U32 ); i += sizeof( U32 ) ) {
             tableStream->readU32();
         }
     }
+
+    QList<U32> strsCPs;
     //CPs of header/footer related stories 
     for ( ; i < lcbPlcfhdd; i += sizeof( U32 ) ) {
-        tmp.append( tableStream->readU32() );
+        strsCPs.append( tableStream->readU32() );
     }
 
     //NOTE: Except for the last CP, each CP of Plcfhdd MUST be greater than or
@@ -73,32 +73,41 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* ta
     //prior to the next CP.  Again second-to-last CP ends the last story, last
     //CP must be ignored.
 
-    uint n = lcbPlcfhdd / sizeof( U32 ) - 2; //num. of stories in PlcfHdd
-    uint m = (n - 6) / 6; //num. of sections based on the num. of header/footer stories
-    QList<U32> sct[m];
+    //num. of stories in PlcfHdd
+    uint n = lcbPlcfhdd / sizeof( U32 ) - 2;
+    //num. of sections based on the num. of header/footer stories
+    uint m = (n - 6) / 6;
+    QList<U32> sect[m];
 
     //Validate CPs!
     int l = 0;
-    for (int k = 0; l < (tmp.length() - 3); k++) {
+    for (int k = 0; l < (strsCPs.length() - 3); k++) {
         for (int j = 0; j < 6; j++, l++) {
-            if ((tmp[l] <= tmp[l + 1]) && (tmp[l] < ccpHdd)) { 
-                sct[k].append(tmp[l]);
+            if ( (strsCPs[l] <= strsCPs[l + 1]) &&
+                 (strsCPs[l] < ccpHdd) )
+            {
+                sect[k].append(strsCPs[l]);
             }
         }
         //section has invalid header/footer stories, simulate that the header
         //or footer of the corresponding type of the previous section is used
-        if (sct[k].length() < 6) {
+        if (sect[k].length() < 6) {
             for (int j = 0; j < 6; j++) {
-                m_headers.append(sct[k - 1].last());
+                //already the CPs of the first section are screwed
+                if (k == 0) {
+                    throw InvalidFormatException("INVALID header document detected");
+                } else {
+                    m_headers.append(sect[k - 1].last());
+                }
             }
         } else {
-            m_headers.append(sct[k]);
+            m_headers.append(sect[k]);
 	}
     }
 
     //append second-to-last and last CP
-    m_headers.append(tmp[l]);
-    m_headers.append(tmp[l + 1]);
+    m_headers.append(strsCPs[l]);
+    m_headers.append(strsCPs[l + 1]);
 
     tableStream->pop();
 }

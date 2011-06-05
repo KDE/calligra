@@ -555,16 +555,24 @@ void ViewListWidget::slotRemoveCategory()
             return;
         }
     }
+    // first remove all views in this category
+    while ( m_contextitem->childCount() > 0 ) {
+        ViewListItem *itm = static_cast<ViewListItem*>( m_contextitem->child( 0 ) );
+        takeViewListItem( itm );
+        delete itm->view();
+        delete itm;
+    }
     takeViewListItem( m_contextitem );
     delete m_contextitem;
-    emit modified();
     m_contextitem = 0;
+    emit modified();
 }
 
 void ViewListWidget::slotRemoveView()
 {
     if ( m_contextitem ) {
         takeViewListItem( m_contextitem );
+        delete m_contextitem->view();
         delete m_contextitem;
         emit modified();
     }

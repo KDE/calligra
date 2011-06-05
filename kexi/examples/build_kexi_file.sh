@@ -5,14 +5,9 @@
 # $2 can be omitted if $1 is of a form "name.kexi.sql" - then
 # the destination file will be "name.kexi".
 # Only .kexi file that is older than .sql file is recreated.
-# ksqlite is needed on the $PATH.
+# sqlite3 command line tool is needed on the $PATH.
 
-KEXISQL3PATH=../3rdparty/kexisql3/src/.libs/
-PATH=$KEXISQL3PATH:$PATH
-export PATH
-LD_LIBRARY_PATH=$KEXISQL3PATH:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH
-which ksqlite > /dev/null || exit 1
+which sqlite3 > /dev/null || exit 1
 
 [ $# -lt 1 ] && echo "Missing .sql filename." && exit 1
 
@@ -29,5 +24,5 @@ fi
 
 rm -f "$kexi_file"
 echo "Creating \"$kexi_file\" ... "
-ksqlite "$kexi_file" < "$1" || exit 1
+sqlite3 "$kexi_file" < "$1" || exit 1
 echo "OK"

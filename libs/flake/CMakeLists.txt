@@ -36,7 +36,6 @@ set(flake_SRCS
     KoShapeContainerDefaultModel.cpp
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
-    KoShapeManagerCachedPaintingStrategy.cpp
     KoShapeManager.cpp
     KoShapePainter.cpp
     KoFrameShape.cpp
@@ -45,10 +44,10 @@ set(flake_SRCS
     #KoUnavailCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
-    KoCanvasControllerGraphicsWidget.cpp
     KoCanvasControllerWidget.cpp
     KoCanvasControllerWidgetViewport_p.cpp
     KoShapeRegistry.cpp
+    KoDeferredShapeFactoryBase.cpp
     KoToolFactoryBase.cpp
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
@@ -85,6 +84,7 @@ set(flake_SRCS
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
     KoShapePaste.cpp
+    KoConnectionPoint.cpp
     KoConnectionShape.cpp
     KoConnectionShapeLoadingUpdater.cpp
     KoConnectionShapeFactory.cpp
@@ -114,8 +114,10 @@ set(flake_SRCS
     KoFilterEffectConfigWidgetBase.cpp
     KoFilterEffectRenderContext.cpp
     KoFilterEffectLoadingContext.cpp
-    KoTextOnShapeContainer.cpp
     KoTextShapeDataBase.cpp
+    KoTosContainer.cpp
+    KoTosContainerModel.cpp
+    KoClipPath.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -155,6 +157,8 @@ set(flake_SRCS
     commands/KoShapeRenameCommand.cpp
     commands/KoPathPointMergeCommand.cpp
     commands/KoShapeTransparencyCommand.cpp
+    commands/KoShapeClipCommand.cpp
+    commands/KoShapeUnclipCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp
@@ -225,11 +229,13 @@ install(
     KoCanvasObserverBase.h
     KoCanvasSupervisor.h
     KoResourceManager.h
+    KoConnectionPoint.h
     KoCopyController.h
     KoCutController.h
     KoDataCenterBase.h
     KoDockFactoryBase.h
     KoDockRegistry.h
+    KoDeferredShapeFactoryBase.h
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h
@@ -241,6 +247,7 @@ install(
     KoInsets.h
     KoPathSegment.h
     KoPointerEvent.h
+    KoRTree.h
     KoSelection.h
     KoShape.h
     KoShapeBorderModel.h
@@ -260,13 +267,11 @@ install(
     KoShapeConfigWidgetBase.h
     KoShapeManager.h
     KoShapeManagerPaintingStrategy.h
-    KoShapeManagerCachedPaintingStrategy.h
     KoShapeRegistry.h
     KoShapeSavingContext.h
     KoShapeUserData.h
     KoShapeApplicationData.h
     KoSharedSavingData.h
-    KoTextOnShapeContainer.h
     KoTextShapeDataBase.h
     KoToolBase.h
     KoToolManager.h
@@ -311,6 +316,7 @@ install(
     commands/KoShapeUngroupCommand.h
     commands/KoSubpathRemoveCommand.h
     tools/KoInteractionTool.h
+    tools/KoPanTool.h
     KoViewConverter.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

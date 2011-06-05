@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ namespace Tables
   * Current implementation doesn't have very optimal insertRows/removeRows functions, but the rest of
   * the methods are quite okay.
   */
-class CALLIGRA_TABLES_TEST_EXPORT RowRepeatStorage
+class CALLIGRA_TABLES_ODF_TEST_EXPORT RowRepeatStorage
 {
 public:
     RowRepeatStorage();

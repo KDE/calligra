@@ -43,7 +43,7 @@ K_EXPORT_PLUGIN(tonemappingPluginFactory("krita"))
 tonemappingPlugin::tonemappingPlugin(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
-    if (parent->inherits("KisView2")) {
+    if (parent->inherits("KisView2") && KisToneMappingOperatorsRegistry::instance()->count() > 0) {
         m_view = (KisView2*) parent;
 
         setComponentData(tonemappingPluginFactory::componentData());
@@ -72,7 +72,7 @@ void tonemappingPlugin::slotToneMapping()
 
 void tonemappingPlugin::slotNodeChanged(const KisNodeSP node)
 {
-    m_toneMappingAction->setEnabled(node->inherits("KisPaintLayer"));
+    m_toneMappingAction->setEnabled(node && node->inherits("KisPaintLayer"));
 }
 
 #include "tonemapping.moc"

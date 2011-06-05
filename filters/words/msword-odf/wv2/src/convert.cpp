@@ -882,8 +882,8 @@ Word97::SEP toWord97(const Word95::SEP &s) {
     ret.yaPage=s.yaPage;
     ret.dxaLeft=s.dxaLeft;
     ret.dxaRight=s.dxaRight;
-    ret.dyaTop=s.dyaTop;
-    ret.dyaBottom=s.dyaBottom;
+    ret.dyaTop=qAbs(s.dyaTop);
+    ret.dyaBottom=qAbs(s.dyaBottom);
     ret.dzaGutter=s.dzaGutter;
     ret.dmBinFirst=s.dmBinFirst;
     ret.dmBinOther=s.dmBinOther;

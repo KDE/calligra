@@ -24,7 +24,7 @@
    Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -101,6 +101,7 @@
 // KSpread
 #include "CalculationSettings.h"
 #include "CellStorage.h"
+#include "Damages.h"
 #include "Doc.h"
 #include "Global.h"
 #include "HeaderItems.h"
@@ -169,6 +170,8 @@ CanvasItem::CanvasItem(Doc *doc)
     d->selection->setActiveSheet(activeSheet());
     connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
+    connect(doc->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
+            SLOT(handleDamages(const QList<Damage*>&)));
 }
 
 CanvasItem::~CanvasItem()
@@ -268,6 +271,8 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
         connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                 this, SLOT(setDocumentSize(const QSizeF&)));
+        connect(d->sheetViews[ sheet ], SIGNAL(obscuredRangeChanged(QSize)),
+                this, SLOT(setObscuredRange(QSize)));
         //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                 //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
         connect(sheet, SIGNAL(visibleSizeChanged()),
@@ -282,6 +287,8 @@ void CanvasItem::refreshSheetViews()
     for (int i = 0; i < sheetViews.count(); ++i) {
         disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
                    this, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetViews[i], SIGNAL(obscuredRangeChanged(QSize)),
+                this, SLOT(setObscuredRange(QSize)));
         //disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
                    //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
         disconnect(sheetViews[i]->sheet(), SIGNAL(visibleSizeChanged()),
@@ -313,7 +320,7 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
 
     // flake
     // Change the active shape controller and its shapes.
-    shapeController()->setShapeControllerBase(d->activeSheet);
+    shapeController()->setShapeControllerBase(d->activeSheet, this);
     shapeManager()->setShapes(d->activeSheet->shapes());
     // Tell the Canvas about the new visible sheet size.
     sheetView(d->activeSheet)->updateAccessedCellRange();
@@ -396,6 +403,93 @@ RowHeader* CanvasItem::rowHeader() const
 void CanvasItem::setCursor(const QCursor &cursor)
 {
     QGraphicsWidget::setCursor(cursor);
+}
+
+void CanvasItem::handleDamages(const QList<Damage*>& damages)
+{
+    QRegion paintRegion;
+    enum { Nothing, Everything, Clipped } paintMode = Nothing;
+
+    QList<Damage*>::ConstIterator end(damages.end());
+    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage* damage = *it;
+        if (!damage) continue;
+
+        if (damage->type() == Damage::Cell) {
+            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            kDebug(36007) << "Processing\t" << *cellDamage;
+            Sheet* const damagedSheet = cellDamage->sheet();
+
+            if (cellDamage->changes() & CellDamage::Appearance) {
+                const Region& region = cellDamage->region();
+                sheetView(damagedSheet)->invalidateRegion(region);
+                paintMode = Everything;
+            }
+            continue;
+        }
+
+        if (damage->type() == Damage::Sheet) {
+            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            kDebug(36007) << *sheetDamage;
+            const SheetDamage::Changes changes = sheetDamage->changes();
+            if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
+//                d->tabBar->setTabs(doc()->map()->visibleSheets());
+                paintMode = Everything;
+            }
+            if (changes & (SheetDamage::Shown | SheetDamage::Hidden)) {
+//                updateShowSheetMenu();
+                paintMode = Everything;
+            }
+            // The following changes only affect the active sheet.
+            if (sheetDamage->sheet() != d->activeSheet) {
+                continue;
+            }
+            if (changes.testFlag(SheetDamage::ContentChanged)) {
+                update();
+                paintMode = Everything;
+            }
+            if (changes.testFlag(SheetDamage::PropertiesChanged)) {
+                sheetView(d->activeSheet)->invalidate();
+                paintMode = Everything;
+            }
+            if (sheetDamage->changes() & SheetDamage::ColumnsChanged)
+                columnHeader()->update();
+            if (sheetDamage->changes() & SheetDamage::RowsChanged)
+                rowHeader()->update();
+            continue;
+        }
+
+        if (damage->type() == Damage::Selection) {
+            SelectionDamage* selectionDamage = static_cast<SelectionDamage*>(damage);
+            kDebug(36007) << "Processing\t" << *selectionDamage;
+            const Region region = selectionDamage->region();
+
+            if (paintMode == Clipped) {
+                const QRectF rect = cellCoordinatesToView(region.boundingRect());
+                paintRegion += rect.toRect().adjusted(-3, -3, 4, 4);
+            } else {
+                paintMode = Everything;
+            }
+            continue;
+        }
+
+        kDebug(36007) << "Unhandled\t" << *damage;
+    }
+
+    // At last repaint the dirty cells.
+    if (paintMode == Clipped) {
+        update(paintRegion.boundingRect());
+    } else if (paintMode == Everything) {
+        update();
+    }
+}
+
+void CanvasItem::setObscuredRange(const QSize &size)
+{
+    SheetView* sheetView = qobject_cast<SheetView*>(sender());
+    if (!sheetView) return;
+
+    emit obscuredRangeChanged(sheetView->sheet(), size);
 }
 
 #include "CanvasItem.moc"

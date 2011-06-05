@@ -71,7 +71,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         m_viewlistModified( false )
 {
     setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
-    setTemplateType( "kplato_template" );
+    setTemplateType( "plan_template" );
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     // Add library translation files
     KLocale *locale = KGlobal::locale();
@@ -279,15 +279,15 @@ This test does not work any longer. KoXml adds a couple of elements not present 
 QDomDocument Part::saveXML()
 {
     kDebug();
-    QDomDocument document( "kplato" );
+    QDomDocument document( "plan" );
 
     document.appendChild( document.createProcessingInstruction(
                               "xml",
                               "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement doc = document.createElement( "kplato" );
-    doc.setAttribute( "editor", "KPlato" );
-    doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
+    doc.setAttribute( "editor", "Plan" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
     doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
     document.appendChild( doc );
 
@@ -681,10 +681,10 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
             cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
         }
         if ( org.startTime() != curr.startTime() ) {
-            cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime().dateTime() ) );
+            cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime() ) );
         }
         if ( org.finishTime() != curr.finishTime() ) {
-            cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime().dateTime() ) );
+            cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime() ) );
         }
     }
     QList<QDate> orgdates = org.entries().keys();
@@ -740,7 +740,7 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
     WorkPackage *wp = new WorkPackage( from->workPackage() );
     wp->setParentTask( to );
     if ( ! wp->transmitionTime().isValid() ) {
-        wp->setTransmitionTime( DateTime::currentLocalDateTime() );
+        wp->setTransmitionTime( DateTime::currentDateTime() );
     }
     wp->setTransmitionStatus( WorkPackage::TS_Receive );
     cmd->addCommand( new WorkPackageAddCmd( m_project, to, wp ) );

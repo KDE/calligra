@@ -19,7 +19,7 @@
 
 #include "KWShapeConfigFactory.h"
 #include "KWGeneralFrameProperties.h"
-#include "KWFrameRunaroundProperties.h"
+#include "KWRunAroundProperties.h"
 #include "KWFrameConnectSelector.h"
 #include "KWFrameGeometry.h"
 #include <KWCanvas.h>
@@ -64,19 +64,19 @@ bool KWFrameGeometryFactory::showForShapeId(const QString &id) const
 }
 
 
-KoShapeConfigWidgetBase *KWFrameRunaroundPropertiesFactory::createConfigWidget(KoShape *shape)
+KoShapeConfigWidgetBase *KWRunAroundPropertiesFactory::createConfigWidget(KoShape *shape)
 {
-    KWFrameRunaroundProperties *widget = new KWFrameRunaroundProperties(m_state);
+    KWRunAroundProperties *widget = new KWRunAroundProperties(m_state);
     widget->open(shape);
     return widget;
 }
 
-QString KWFrameRunaroundPropertiesFactory::name() const
+QString KWRunAroundPropertiesFactory::name() const
 {
     return i18n("Text Run Around");
 }
 
-bool KWFrameRunaroundPropertiesFactory::showForShapeId(const QString &id) const
+bool KWRunAroundPropertiesFactory::showForShapeId(const QString &id) const
 {
     return id == TextShape_SHAPEID;
 }

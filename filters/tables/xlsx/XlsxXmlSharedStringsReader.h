@@ -25,15 +25,17 @@
 #define XLSXXMLSHAREDSTRINGSREADER_H
 
 #include "XlsxXmlCommonReader.h"
-#include "XlsxSharedString.h"
 
 class XlsxImport;
 
 class XlsxXmlSharedStringsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    explicit XlsxXmlSharedStringsReaderContext(XlsxSharedStringVector& _strings);
-    XlsxSharedStringVector* strings;
+    explicit XlsxXmlSharedStringsReaderContext(QVector<QString>& _strings, MSOOXML::DrawingMLTheme* _themes,
+        QVector<QString>& _colorIndices);
+    QVector<QString>* strings;
+    MSOOXML::DrawingMLTheme* themes;
+    QVector<QString>& colorIndices;
 };
 
 //! A class reading MSOOXML XLSX markup - sharedStrings.xml part.

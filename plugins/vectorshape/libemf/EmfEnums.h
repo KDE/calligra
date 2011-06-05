@@ -1,6 +1,6 @@
 /*
   Copyright 2008 Brad Hards <bradh@frogmouth.net>
-  Copyright 2009 Inge Wallin <inge@lysator.liu.se>
+  Copyright 2009-2011 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -29,12 +29,62 @@
    Enumerations used in various parts of EMF files
 */
 
+
+// We need most of the WMF enums and flags as well in an EMF file.
+#include <WmfEnums.h>
+
+using namespace Libwmf;
+
+
 /**
    Namespace for Enhanced Metafile (EMF) classes
 */
 namespace Libemf
 {
+   
+/**
+   Background fill mode
+   
+   See [MS-EMF] Section 2.1.4
+*/
+#if 0
+    enum BackgroundMode {
+        TRANSPARENT = 0x01, ///< Equivalent to Qt::TransparentMode
+        OPAQUE      = 0x02  ///< Equivalent to Qt::OpaqueMode
+    };
+#else
+    typedef Libwmf::WmfMixMode EmfBackgroundMode; // This is exactly the same.
+#endif
+    
+    /**
+       Parameters for text output.
+       
+       See [MS-EMF] Section 2.1.11
+    */
+    enum TextOutOptions {
+        //ETO_OPAQUE            = 0x000002,    // Already defined in WmfEnums.h
+        //ETO_CLIPPED           = 0x000004,
+        //ETO_GLYPH_INDEX       = 0x000010,
+        //ETO_RTLREADING        = 0x000080,
+        ETO_NO_RECT           = 0x000100,
+        ETO_SMALL_CHARS       = 0x000200,
+        //ETO_NUMERICSLOCAL     = 0x000400,
+        //ETO_NUMERICSLATIN     = 0x000800,
+        ETO_IGNORELANGUAGE    = 0x001000,
+        //ETO_PDY               = 0x002000,
+        ETO_REVERSE_INDEX_MAP = 0x010000
+    };
 
+    /**
+       Graphics mode, used to interpret shape data such as rectangles
+       
+       See [MS-EMF] Section 2.1.16
+    */
+    enum GraphicsMode {
+        GM_COMPATIBLE = 0x01,
+        GM_ADVANCED   = 0x02
+    };
+    
     /**
        MapModes
 
@@ -88,89 +138,6 @@ namespace Libemf
 	PS_GEOMETRIC     = 0x00010000
     };
 
-
-    /**
-       Image bit/byte organisation
-
-       See [MS-WMF] Section 2.1.1.3
-    */
-    enum BitCount {
-        BI_BITCOUNT_0 = 0x0000,
-        BI_BITCOUNT_1 = 0x0001,
-        BI_BITCOUNT_2 = 0x0004,
-        BI_BITCOUNT_3 = 0x0008,
-        BI_BITCOUNT_4 = 0x0010, ///< Sometimes equivalent to QImage::Format_RGB555
-        BI_BITCOUNT_5 = 0x0018, ///< equivalent to QImage::Format_RGB888
-        BI_BITCOUNT_6 = 0x0020
-    };
-
-    /**
-       Brush Styles
-
-       See [MS-WMF] Section 2.1.1.4
-    */
-    enum BrushStyle {
-	BS_SOLID	= 0x00,
-	BS_NULL		= 0x01,
-	BS_HATCHED	= 0x02,
-	BS_PATTERN	= 0x03,
-	BS_INDEXED	= 0x04,
-	BS_DIBPATTERN	= 0x05,
-	BS_DIBPATTERNPT = 0x06,
-	BS_PATTERN8X8	= 0x07,
-	BS_DIBPATTERN8X8 = 0x08,
-	BS_MONOPATTERN	= 0x09
-    };
-
-    /**
-        Compression Types
-
-        See [MS-WMF] Section 2.1.1.8
-    */
-    enum Compression {
-        BI_RGB          = 0x0000,
-        BI_RLE8         = 0x0001,
-        BI_RLE4         = 0x0002,
-        BI_BITFIELDS    = 0x0003,
-        BI_JPEG         = 0x0004,
-        BI_PNG          = 0x0005,
-        BI_CMYK         = 0x000B,
-        BI_CMYKRLE8     = 0x000C,
-        BI_CMYKRLE4     = 0x000D
-    };
-
-    /**
-        Layout Direction
-
-        See [MS-WMF] Section 2.1.1.13
-    */
-    enum LayoutMode {
-        LAYOUT_LTR                              = 0x00,
-        LAYOUT_RTL                              = 0x01,
-        LAYOUT_BTT                              = 0x02,
-        LAYOUT_VBH                              = 0x04,
-        LAYOUT_BITMAPORIENTATIONPRESERVED       = 0x08
-    };
-
-    /**
-        Horizontal Text Alignment
-        
-        See [MS-WMF] Section 2.1.2.3
-    */
-    enum TextAlignFlags {
-        TA_TOP          = 0x0000,
-        TA_LEFT         = 0x0000,
-        TA_NOUPDATECP   = 0x0000,
-        TA_UPDATECP     = 0x0001,
-        TA_RIGHT        = 0x0002,
-        TA_CENTER       = 0x0006,
-        TA_HORZMASK     = 0x0006,
-        TA_BOTTOM       = 0x0008,
-        TA_BASELINE     = 0x0018,
-        TA_VERTMASK     = 0x0018,
-        TA_RTLREADING   = 0x0100
-    };
-
     /**
        Stock Objects
 
@@ -205,19 +172,9 @@ namespace Libemf
     */
     enum PolygonFillMode {
 	    ALTERNATE = 0x01, ///< Equivalent to Qt::OddEvenFill
-	    WINDING = 0x02    ///< Equivalent to Qt::WindingFill
+	    WINDING   = 0x02  ///< Equivalent to Qt::WindingFill
     };
-    
-    /**
-       Background fill mode
-       
-       See [MS-EMF] Section 2.1.4
-    */
-    enum BackgroundMode {
-        TRANSPARENT = 0x01, ///< Equivalent to Qt::TransparentMode
-        OPAQUE = 0x2        ///< Equivalent to Qt::OpaqueMode
-    };
-    
+
     /**
       Clipping region mode
       
@@ -230,5 +187,24 @@ namespace Libemf
         RGN_DIFF = 0x04,
         RGN_COPY = 0x05   ///< Equivalent to Qt::ReplaceClip
     };
+
+    /**
+       Comment type as defined for the EMR_COMMENT record.
+
+       See [MS-EMF] section 2.3.3
+     */
+    enum CommentType {
+        EMR_COMMENT_EMFSPOOL = 0x00000000,
+        EMR_COMMENT_EMFPLUS  = 0x2B464D45, // The string "EMF+"
+        EMR_COMMENT_PUBLIC   = 0x43494447,
+
+        // The following value is not defined in [MS-EMF].pdf, but
+        // according to google it means that the file was created by
+        // Microsoft Graph.  It is present in one test file
+        // (Presentation_tips.ppt).
+        EMR_COMMENT_MSGR     = 0x5247534d // The string MSGR
+    };
 }
+
+
 #endif

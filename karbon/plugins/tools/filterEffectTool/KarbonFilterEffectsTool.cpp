@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (c) 2009-2010 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2009-2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -157,8 +157,8 @@ public:
             // get the transformation from document to shape coordinates
             QTransform transform = currentShape->absoluteTransformation(0).inverted();
             // adjust filter rectangle by grab sensitivity
-            int grabSensitivity = tool->canvas()->resourceManager()->grabSensitivity();
-            QPointF border = tool->canvas()->viewConverter()->viewToDocument(QPointF(grabSensitivity, grabSensitivity));
+            const int grabDistance = tool->grabSensitivity();
+            QPointF border = tool->canvas()->viewConverter()->viewToDocument(QPointF(grabDistance, grabDistance));
             filterRect.adjust(-border.x(), -border.y(), border.x(), border.y());
             // map event point from document to shape coordinates
             QPointF shapePoint = transform.map(mousePosition);
@@ -245,7 +245,7 @@ void KarbonFilterEffectsTool::repaintDecorations()
 {
     if (d->currentShape && d->currentShape->filterEffectStack()) {
         QRectF bb = d->currentShape->boundingRect();
-        int radius = canvas()->resourceManager()->handleRadius();
+        const int radius = handleRadius();
         canvas()->updateCanvas(bb.adjusted(-radius, -radius, radius, radius));
     }
 }
@@ -399,9 +399,9 @@ void KarbonFilterEffectsTool::regionHeightChanged(double height)
     canvas()->addCommand(new FilterRegionChangeCommand(d->currentEffect, region, d->currentShape));
 }
 
-QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
+QList<QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
 {
-    QMap<QString, QWidget*> widgets;
+    QList<QWidget*> widgets;
 
     FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
     KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
@@ -431,7 +431,8 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     addFilterLayout->addWidget(editButton, 0, 2);
     connect(editButton, SIGNAL(clicked()), this, SLOT(editFilter()));
 
-    widgets.insert(i18n("Add Filter"), addFilterWidget);
+    addFilterWidget->setWindowTitle(i18n("Add Filter"));
+    widgets.append(addFilterWidget);
 
     //---------------------------------------------------------------------
 
@@ -447,7 +448,8 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     configFilterLayout->addWidget(d->configStack, 1, 0);
     configFilterLayout->setContentsMargins(0, 0, 0, 0);
 
-    widgets.insert(i18n("Effect Properties"), configFilterWidget);
+    configFilterWidget->setWindowTitle(i18n("Effect Properties"));
+    widgets.append(configFilterWidget);
 
     //---------------------------------------------------------------------
 
@@ -479,10 +481,10 @@ QMap<QString, QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
     filterRegionLayout->addWidget(new QLabel(i18n("H:")), 1, 2);
     filterRegionLayout->addWidget(d->posH, 1, 3);
     filterRegionLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), 2, 0);
-
     filterRegionLayout->setContentsMargins(0, 0, 0, 0);
-
-    widgets.insert(i18n("Effect Region"), filterRegionWidget);
+    
+    filterRegionWidget->setWindowTitle(i18n("Effect Region"));
+    widgets.append(filterRegionWidget);
 
     //---------------------------------------------------------------------
 

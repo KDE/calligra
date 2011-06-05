@@ -1,5 +1,6 @@
 /* This file is part of the wvWare 2 project
    Copyright (C) 2002-2003 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,6 +37,14 @@ Footnotes97::Footnotes97( OLEStreamReader* tableStream, const Word97::FIB& fib )
           << "   fcPlcfendTxt=" << fib.fcPlcfendTxt << " lcbPlcfendTxt=" << fib.lcbPlcfendTxt << endl;
 #endif
     tableStream->push();
+
+#ifdef WV2_DEBUG_FOOTNOTES
+    wvlog << "ccpFtn:" << fib.ccpFtn;
+    wvlog << "ccpEdn:" << fib.ccpEdn;
+#endif
+
+    //TODO: validation required!
+
     // Footnotes
     init( fib.fcPlcffndRef, fib.lcbPlcffndRef, fib.fcPlcffndTxt, fib.lcbPlcffndTxt,
           tableStream, &m_footnoteRef, &m_footnoteRefIt, m_footnoteTxt, m_footnoteTxtIt );
@@ -128,4 +137,23 @@ void Footnotes97::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
 #ifdef WV2_DEBUG_FOOTNOTES
     wvlog << "Footnotes97::init() done" << endl;
 #endif
+}
+
+void Footnotes97::check( U32 globalCP )
+{
+    while (nextFootnote() < globalCP) {
+        ++( *m_footnoteRefIt );
+        ++m_footnoteTxtIt;
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "Footnote skipped!";
+#endif
+    }
+
+    while (nextEndnote() < globalCP) {
+        ++( *m_endnoteRefIt );
+        ++m_endnoteTxtIt;
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "Endnote skipped!";
+#endif
+    }
 }

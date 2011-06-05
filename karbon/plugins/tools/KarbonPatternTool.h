@@ -49,7 +49,7 @@ public:
     void deactivate();
 
 protected:
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
 private slots:
     virtual void resourceChanged(int key, const QVariant & res);

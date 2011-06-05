@@ -38,8 +38,8 @@ MyPaintPlugin::MyPaintPlugin(QObject *parent, const QVariantList &)
 {
     //setComponentData(MyPaintPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new MyPaintFactory);
-
+    MyPaintFactory* factory = new MyPaintFactory;
+    r->add(factory);
 }
 
 MyPaintPlugin::~MyPaintPlugin()

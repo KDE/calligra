@@ -16,34 +16,45 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef SIMPLESTYLESWIDGET_H
+#define SIMPLESTYLESWIDGET_H
+
 #include <QWidget>
-#include <QList>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
 
-#include <ui_StylesWidget.h>
 
+class StylesWidget;
+class SpecialButton;
 class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
-class StylesModel;
 
 class SimpleStylesWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit SimpleStylesWidget(QWidget *parent = 0);
+    virtual ~SimpleStylesWidget();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
+    void hidePopups();
+
+signals:
+    void doneWithFocus();
+    void characterStyleSelected(KoCharacterStyle *);
+    void paragraphStyleSelected(KoParagraphStyle *);
 
 private:
     KoStyleManager *m_styleManager;
     QTextBlockFormat m_currentBlockFormat;
     QTextCharFormat m_currentCharFormat;
     bool m_blockSignals;
+    StylesWidget *m_popupForBlock;
+    StylesWidget *m_popupForChar;
 };
 
 #endif

@@ -18,22 +18,133 @@
  */
 #include "SimpleStylesWidget.h"
 #include "TextTool.h"
+#include "StylesWidget.h"
+
+#include <KoStyleManager.h>
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
 
 #include <KAction>
 #include <KDebug>
 
 #include <QWidget>
+#include <QFrame>
+#include <QComboBox> // just to query style
+#include <QHBoxLayout>
+#include <QDesktopWidget>
+
+class SpecialButton : public QFrame
+{
+public:
+    SpecialButton(QWidget *parent);
+
+    void setStylesWidget(StylesWidget *stylesWidget);
+
+    void showPopup();
+protected:
+    virtual void mousePressEvent(QMouseEvent *event);
+
+    StylesWidget *m_stylesWidget;
+};
+
+SpecialButton::SpecialButton(QWidget *parent)
+    : QFrame(parent)
+{
+    setFrameShape(QFrame::StyledPanel);
+    setFrameShadow(QFrame::Sunken);
+
+    QWidget *preview = new QWidget(this);
+    preview->setAutoFillBackground(true);
+    preview->setBackgroundRole(QPalette::Base);
+    preview->setMinimumWidth(50);
+    preview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    QHBoxLayout *l = new QHBoxLayout(this);
+    l->addWidget(preview);
+    l->setMargin(0);
+    setLayout(l);
+}
+
+void SpecialButton::showPopup()
+{
+    if (!m_stylesWidget) {
+        return;
+    }
+
+    QRect popupRect(mapToGlobal(QPoint(0, height())), m_stylesWidget->sizeHint());
+
+    // Make sure the popup is not drawn outside the screen area
+    QRect screenRect = QApplication::desktop()->availableGeometry(this);
+    if (popupRect.right() > screenRect.right())
+        popupRect.translate(screenRect.right() - popupRect.right(), 0);
+    if (popupRect.left() < screenRect.left())
+        popupRect.translate(screenRect.left() - popupRect.left(), 0);
+    if (popupRect.bottom() > screenRect.bottom())
+        popupRect.translate(0, -(height() + m_stylesWidget->height()));
+
+    m_stylesWidget->setGeometry(popupRect);
+    m_stylesWidget->raise();
+    m_stylesWidget->show();
+}
+
+void SpecialButton::setStylesWidget(StylesWidget *stylesWidget)
+{
+    m_stylesWidget = stylesWidget;
+}
+
+void SpecialButton::mousePressEvent(QMouseEvent *)
+{
+    showPopup();
+}
 
 SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
         : QWidget(parent)
-        ,m_blockSignals(false)
+        , m_blockSignals(false)
+{
+    setObjectName("simplestyleswidget");
+    m_popupForBlock = new StylesWidget(this, true, Qt::Popup);
+    m_popupForBlock->setFrameShape(QFrame::StyledPanel);
+    m_popupForBlock->setFrameShadow(QFrame::Raised);
+    m_popupForChar = new StylesWidget(this, false, Qt::Popup);
+    m_popupForChar->setFrameShape(QFrame::StyledPanel);
+    m_popupForChar->setFrameShadow(QFrame::Raised);
+
+    SpecialButton *blockFrame = new SpecialButton(this);
+    blockFrame->setStylesWidget(m_popupForBlock);
+
+    SpecialButton *charFrame = new SpecialButton(this);
+    charFrame->setStylesWidget(m_popupForChar);
+
+    QHBoxLayout *l = new QHBoxLayout(this);
+    l->addWidget(blockFrame);
+    l->addWidget(charFrame);
+    l->setMargin(0);
+    setLayout(l);
+
+    connect(m_popupForBlock, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
+    connect(m_popupForBlock, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
+    connect(m_popupForBlock, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopups()));
+    connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
+    connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
+    connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopups()));
+}
+
+SimpleStylesWidget::~SimpleStylesWidget()
 {
 }
 
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
+    m_popupForBlock->setStyleManager(sm);
+    m_popupForChar->setStyleManager(sm);
 }
+
+void SimpleStylesWidget::hidePopups()
+{
+    m_popupForBlock->hide();
+    m_popupForChar->hide();
+}
+
 
 void SimpleStylesWidget::setCurrentFormat(const QTextBlockFormat &format)
 {

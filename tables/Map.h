@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -77,7 +77,7 @@ class ValueCalc;
  * The "embedded document".
  * The Map holds all the document data.
  */
-class CALLIGRA_TABLES_EXPORT Map : public QObject, public KoDataCenterBase, public ProtectableObject
+class CALLIGRA_TABLES_ODF_EXPORT Map : public QObject, public KoDataCenterBase, public ProtectableObject
 {
     Q_OBJECT
 public:

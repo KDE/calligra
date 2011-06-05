@@ -22,7 +22,6 @@
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 
 // koffice
 #include <KoShapeRegistry.h>
@@ -51,7 +50,7 @@
 KWDLoader::KWDLoader(KWDocument *parent, KoStore *store)
         : m_document(parent),
         m_store(store),
-        m_pageManager(&parent->m_pageManager),
+        m_pageManager(parent->pageManager()),
         m_pageStyle(m_pageManager->defaultPageStyle()),
         m_foundMainFS(false)
 {
@@ -362,6 +361,7 @@ bool KWDLoader::load(KoXmlElement &root)
     loadEmbeddedObjects(root);
 #endif
     if (m_firstPageStyle.isValid()) {
+        Q_ASSERT(m_pageManager->pageCount()==0);
         m_pageManager->appendPage(m_firstPageStyle);
         m_pageManager->appendPage(m_pageStyle);
     }
@@ -439,7 +439,6 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem)
                 type = KWord::OtherTextFrameSet; break;
             }
             KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
-            fs->setAllowLayout(false);
             fs->setName(fsname);
             fs->setPageStyle(styleForFS);
             fill(fs, framesetElem);
@@ -556,9 +555,9 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
             KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
             Q_ASSERT(factory);
             KoShape *shape = factory->createDefaultShape(m_document->resourceManager());
-            KWTextFrame *frame = new KWTextFrame(shape, fs);
+            Q_ASSERT(shape);
+            KWFrame *frame = new KWFrame(shape, fs);
             fill(frame, frameElem);
-
             //m_doc->progressItemLoaded();
         }
     }
@@ -688,7 +687,13 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
                             note->setLabel(footnote.attribute("value"));
                             note->setAutoNumbering(footnote.attribute("numberingtype", "auto") == "auto");
+#if 0
                             note->setText(i18n("Unable to locate footnote text"));
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
@@ -708,7 +713,13 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             KoInlineNote *note = new KoInlineNote(type);
                             note->setLabel(footEndNote.attribute("value"));
                             note->setAutoNumbering(footEndNote.attribute("numberingtype", "auto") == "auto");
+#if 0
                             note->setText(i18n("Unable to locate note-text"));
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
@@ -847,7 +858,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout)
         }
         case 8: llp.setStyle(KoListStyle::CircleItem); break;
         case 9: llp.setStyle(KoListStyle::SquareItem); break;
-        case 10: llp.setStyle(KoListStyle::DiscItem); break;
+        case 10: llp.setStyle(KoListStyle::Bullet); break;
         case 11: llp.setStyle(KoListStyle::BoxItem); break;
         case 7: llp.setStyle(KoListStyle::CustomCharItem);
             kWarning(32001) << "According to spec COUNTER with type 7 is not supported, ignoring";
@@ -1061,25 +1072,25 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem)
 
     switch (frameElem.attribute("runaround", "0").toInt()) {
     case 0:
-        frame->setTextWrap(KWord::RunThrough);
+        frame->shape()->setTextRunAroundSide(KoShape::RunThrough);
         break;
     case 2:
-        frame->setTextWrap(KWord::NoRunAround);
+        frame->shape()->setTextRunAroundSide(KoShape::NoRunAround);
         break;
     default:
-        frame->setTextWrap(KWord::RunAround);
+        frame->shape()->setTextRunAroundSide(KoShape::BiggestRunAroundSide);
         break;
     }
 
     QString side = frameElem.attribute("runaroundSide", "biggest");
     if (side == "left")
-        frame->setRunAroundSide(KWord::LeftRunAroundSide);
+        frame->shape()->setTextRunAroundSide(KoShape::LeftRunAroundSide);
     else if (side == "right")
-        frame->setRunAroundSide(KWord::RightRunAroundSide);
+        frame->shape()->setTextRunAroundSide(KoShape::RightRunAroundSide);
 
     int zIndex = frameElem.attribute("z-index", "0").toInt();
 
-    KWTextFrame *tf = dynamic_cast<KWTextFrame*>(frame);
+    KWFrame *tf = dynamic_cast<KWFrame*>(frame);
     if (tf) {
         if (zIndex <= 0 && static_cast<KWTextFrameSet*>(tf->frameSet())->textFrameSetType() == KWord::OtherTextFrameSet)
             zIndex = 1; // OtherTextFrameSet types always live on top of the main frames.
@@ -1206,7 +1217,13 @@ void KWDLoader::insertNotes()
         }
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs && tfs->document()) {
+#if 0
             note.note->setText(tfs->document()->toPlainText());
+#else
+    #ifdef __GNUC__
+        #warning FIXME: port to textlayout-rework
+    #endif
+#endif
 //kDebug(32001) << "setting the text to" << note.note->text();
         }
         m_document->removeFrameSet(fs);

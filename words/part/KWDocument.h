@@ -37,14 +37,14 @@
 #include <QObject>
 #include <QPainter>
 #include <QRect>
+#include <QPointer>
 
 class KWView;
 class KWPage;
 class KWFrameSet;
-class MagicCurtain;
-
 class KoInlineTextObjectManager;
 class KoShapeConfigFactoryBase;
+class KoUpdater;
 
 class KLocalizedString;
 class QIODevice;
@@ -100,6 +100,12 @@ public:
     Q_SCRIPTABLE KWPageManager *pageManager() {
         return &m_pageManager;
     }
+    /**
+     * Return the frameLayout used in this document.
+     */
+    Q_SCRIPTABLE KWFrameLayout *frameLayout() {
+        return &m_frameLayout;
+    }
 
     /**
      * Insert a new page after another,
@@ -153,11 +159,7 @@ public:
         return m_config;
     }
 
-#ifndef NDEBUG
-    /// Use a log of kDebug calls to print out the internal state of the document and its members
-    void printDebug();
-#endif
-
+    /// This emits the pageSetupChanged signal which will call KWViewMode::updatePageCache.
     void firePageSetupChanged();
 
     // reimplemented slot from KoDocument
@@ -171,10 +173,18 @@ public:
     void updatePagesForStyle(const KWPageStyle &style);
 
 public slots:
-    /// Relayout the pages
-    void relayout();
-    /// Register new frameset
-    void addFrameSet(KWFrameSet *f);
+    /**
+     * Relayout the pages or frames within the framesets.
+     * @param framesets The framesets that should be relayouted. If no framesets are
+     * provided (empty list) then all framesets and therefore all pages are relayouted.
+     */
+    void relayout(QList<KWFrameSet*> framesets = QList<KWFrameSet*>());
+    /**
+     * Register a frameset.
+     * @param frameset The frameset that should be registered. Future operations like
+     * for example @a relayout() operate on all registered framesets.
+     */
+    void addFrameSet(KWFrameSet *frameset);
     /**
      * Remove frameset from the document stopping it from being saved or displayed.
      * Note that the document is normally the one that deletes framesets when the
@@ -193,21 +203,26 @@ private slots:
     /// Frame maintenance on already registered framesets
     void addFrame(KWFrame *frame);
     void removeFrame(KWFrame *frame);
-    void requestMoreSpace(KWTextFrameSet *fs);
     void removeFrameFromViews(KWFrame*);
-    void updateHeaderFooter(KWTextFrameSet*);
-
     /// Called after the constructor figures out there is an install problem.
     void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
+    void layoutProgressChanged(int percent);
+    void layoutFinished();
+
+protected:
+    /// reimplemented from KoDocument
+    virtual void setupOpenFileSubProgress();
+
 private:
-    friend class PageProcessingQueue;
     friend class KWDLoader;
     friend class KWOdfLoader;
     friend class KWPagePropertiesCommand;
     QString renameFrameSet(const QString &prefix , const QString &base);
-    /// post process loading after either oasis or oldxml loading finished
+    /**
+     * post process loading after either oasis or oldxml loading finished
+     */
     void endOfLoading();
     /**
      * Called before loading
@@ -218,23 +233,20 @@ private:
     void clear();
 
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
-    /// emits pageSetupChanged
-
+    /**
+     * emits pageSetupChanged
+     */
     void saveConfig();
 
 private:
     QList<KWFrameSet*> m_frameSets;
     QString m_viewMode;
-
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
-
-    MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
     bool m_mainFramesetEverFinished;
-
-
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
+    QPointer<KoUpdater> m_layoutProgressUpdater;
 };
 
 #endif

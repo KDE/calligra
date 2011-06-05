@@ -201,7 +201,7 @@ void TestRTree::testInsertRows()
     QList< QPair<QRectF, QString> > undo = tree.insertRows(3, 3);
     QList< QPair<QRectF, QString> > pairs = tree.intersectingPairs(QRect(1, 1, 10, 10)).values();
     QCOMPARE(pairs.count(), 9);
-    QCOMPARE(pairs[0].first, QRectF(1, 1, 1, 5));
+    QCOMPARE(pairs[0].first, QRectF(1, 1, 1, 2));
     QCOMPARE(pairs[0].second, QString("1"));
     QCOMPARE(pairs[1].first, QRectF(2, 1, 1, 6));
     QCOMPARE(pairs[1].second, QString("2"));
@@ -232,6 +232,19 @@ void TestRTree::testInsertRows()
     QCOMPARE(pairs[1].first, QRectF(2, 1, 1, 6));
     QCOMPARE(undo.count(), 0);
 #endif
+
+    RTree<bool> boolTree;
+    boolTree.insert(QRect(1, 2, 2, 1), true);
+    boolTree.insert(QRect(1, 3, 1, 2), true);
+    boolTree.insertRows(6, 1);
+    QList< QPair<QRectF, bool> > boolPairs = boolTree.intersectingPairs(QRect(1, 2, 1, 1)).values();
+    QCOMPARE(boolPairs.count(), 1);
+    QCOMPARE(boolPairs[0].first, QRectF(1, 2, 2, 1));
+    QCOMPARE(boolPairs[0].second, true);
+    boolPairs = boolTree.intersectingPairs(QRect(1, 3, 1, 1)).values();
+    QCOMPARE(boolPairs.count(), 1);
+    QCOMPARE(boolPairs[0].first, QRectF(1, 3, 1, 2));
+    QCOMPARE(boolPairs[0].second, true);
 }
 
 void TestRTree::testRemoveColumns()

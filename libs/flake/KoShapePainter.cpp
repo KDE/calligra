@@ -78,7 +78,7 @@ public:
         return 0;
     }
 
-    virtual const KoViewConverter *viewConverter() const
+    virtual KoViewConverter *viewConverter() const
     {
         return 0;
     }
@@ -175,7 +175,7 @@ void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QR
     // convert document rectangle to view coordinates
     QRectF zoomedBound = converter.documentToView(documentRect);
     // calculate offset between painter rectangle and converted document rectangle
-    QPointF offset = QPointF(painterRect.center()) - zoomedBound.center();
+    QPointF offset = QRectF(painterRect).center() - zoomedBound.center();
     // center content in painter rectangle
     painter.translate(offset.x(), offset.y());
 

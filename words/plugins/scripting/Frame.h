@@ -72,9 +72,14 @@ public:
      * one of these properties set on it intersects with it.
      */
     enum TextWrap {
-        NoRunAround = KWord::NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
-        RunAround = KWord::RunAround, ///< The text will run around the outline of the frame
-        RunThrough = KWord::RunThrough ///< The text will completely ignore the frame and layout as if it was not there
+        BiggestRunAroundSide = KoShape::BiggestRunAroundSide,   ///< Run other text around the side that has the most space
+        LeftRunAroundSide = KoShape::LeftRunAroundSide,      ///< Run other text around the left side of the frame
+        RightRunAroundSide = KoShape::RightRunAroundSide,     ///< Run other text around the right side of the frame
+        AutoRunAroundSide = KoShape::AutoRunAroundSide,      ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
+        BothRunAroundSide = KoShape::BothRunAroundSide,      ///< Run other text around both sides of the shape
+        NoRunAround = KoShape::NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
+        RunThrough = KoShape::RunThrough, ///< The text will completely ignore the frame and layout as if it was not there
+        RunAround = KoShape::BiggestRunAroundSide ///< The text will run around the outline of the frame
     };
 
     /// what should happen when the frame is full (too small for its contents)
@@ -135,7 +140,7 @@ public slots:
     /** Return the text runaround property for this frame. This property specifies
     how text from another textframe will behave when this frame intersects with it. */
     int textWrap() const {
-        return m_frame->textWrap();
+        return m_frame->shape()->textRunAroundSide();
     }
     /**
     * Set the text runaround property for this frame.
@@ -152,17 +157,17 @@ public slots:
     * myframe2.setTextWrap(myframe.RunThrough)
     * \endcode
     */
-    void setTextWrap(int textWrap) {
-        return m_frame->setTextWrap((KWord::TextWrap) textWrap);
+    void setTextWrap(int runaround) {
+        return m_frame->shape()->setTextRunAroundSide((KoShape::TextRunAroundSide) runaround);
     }
 
     /** Return the space between this frames edge and the text when that text runs around this frame. */
     qreal runAroundDistance() const {
-        return m_frame->runAroundDistance();
+        return m_frame->shape()->textRunAroundDistance();
     }
     /** Set the space between this frames edge and the text when that text runs around this frame. */
     void setRunAroundDistance(qreal runarounddistance) {
-        m_frame->setRunAroundDistance(runarounddistance);
+        m_frame->shape()->setTextRunAroundDistance(runarounddistance);
     }
 
     /** Request a repaint to be queued. */

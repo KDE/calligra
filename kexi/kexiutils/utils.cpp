@@ -674,8 +674,9 @@ bool StaticSetOfStrings::contains(const QByteArray& string) const
 {
     if (!d->set) {
         d->set = new QSet<QByteArray>();
-        for (const char ** p = d->array;*p;p++)
-            d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p) + 1));
+        for (const char ** p = d->array;*p;p++) { 
+            d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p)));
+        }
     }
     return d->set->contains(string);
 }

@@ -21,19 +21,20 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "tablehandler.h"
-#include "conversion.h"
-
 #include <wv2/src/word97_generated.h>
-#include <wv2/src/ms_odraw.h>
+#include "tablehandler.h"
+#include "texthandler.h"
+#include "document.h"
+#include "conversion.h"
+#include "msdoc.h"
 
 #include <kdebug.h>
 #include <QList>
 #include <QRectF>
 #include <KoGenStyle.h>
 
-#include "document.h"
-#include "texthandler.h"
+
+//#define DEBUG_TABLEHANDLER
 
 using Conversion::twipsToPt;
 
@@ -68,9 +69,10 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     m_currentTable = table;
     m_cellOpen = false;
 
-#if 0
-    for (unsigned int i = 0; i < (unsigned int)table->m_cellEdges.size(); i++)
+#ifdef DEBUG_TABLEHANDLER
+    for (unsigned int i = 0; i < (unsigned int)table->m_cellEdges.size(); i++) {
         kDebug(30513) << table->m_cellEdges[i];
+    }
 #endif
 
     m_row = -1;
@@ -216,13 +218,13 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     QString align;
     if (m_floatingTable != true) {
         switch (tap->jc) {
-        case wvWare::hAlignLeft:
+        case hAlignLeft:
             align = QString("left");
             break;
-        case wvWare::hAlignCenter:
+        case hAlignCenter:
             align = QString("center");
             break;
-        case wvWare::hAlignRight:
+        case hAlignRight:
             align = QString("right");
             break;
         }
@@ -359,45 +361,47 @@ void KWordTableHandler::tableRowEnd()
 
 static const wvWare::Word97::BRC& brcWinner(const wvWare::Word97::BRC& brc1, const wvWare::Word97::BRC& brc2)
 {
-    if (brc1.brcType == 0 || brc1.brcType >= 64)
+    if (brc1.brcType == 0 || brc1.brcType >= 64) {
         return brc2;
-    else if (brc2.brcType == 0 || brc2.brcType >= 64)
+    }
+    else if (brc2.brcType == 0 || brc2.brcType >= 64) {
         return brc1;
-    else if (brc1.dptLineWidth >= brc2.dptLineWidth)
+    }
+    else if (brc1.dptLineWidth >= brc2.dptLineWidth) {
         return brc1;
-    else
+    } else {
         return brc2;
+    }
 }
 
 void KWordTableHandler::tableCellStart()
 {
     kDebug(30513) ;
-    Q_ASSERT(m_tap);
-    if (!m_tap)
+
+    if (!m_tap) {
         return;
+    }
     KoXmlWriter*  writer = currentWriter();
 
     //increment the column number so we know where we are
     m_column++;
     //get the number of cells in this row
     int nbCells = m_tap->itcMac;
-    //make sure we haven't gotten more columns than possible
-    //with the number of cells
+    //make sure we didn't get more columns than possible number of cells
     Q_ASSERT(m_column < nbCells);
-    //if our column number is greater than or equal to number
-    //of cells, just return
-    if (m_column >= nbCells)
+    //if our column number is greater than or equal to number of cells
+    if (m_column >= nbCells) {
         return;
-
+    }
     // Get table cell descriptor
     //merging, alignment, ... information
     const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
     const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
 
     //left boundary of current cell
-    int left = m_tap->rgdxaCenter[ m_column ]; // in DXAs
+    int leftEdgePos = m_tap->rgdxaCenter[ m_column ]; // in DXAs
     //right boundary of current cell
-    int right = m_tap->rgdxaCenter[ m_column+1 ]; // in DXAs
+    int rightEdgePos = m_tap->rgdxaCenter[ m_column+1 ]; // in DXAs
 
     // Check for merged cells
     // ## We can ignore that one. Our cell-edge magic is much more flexible.
@@ -416,7 +420,7 @@ void KWordTableHandler::tableCellStart()
     int rowSpan = 1;
     //if this is the first of some vertically merged cells...
     if (tc.fVertRestart) {
-        //kDebug(30513) <<"fVertRestart is set!";
+//         kDebug(30513) <<"fVertRestart is set!";
         // This cell is the first one of a series of vertically merged cells ->
         // we want to find out its size.
         QList<KWord::Row>::Iterator it = m_currentTable->rows.begin() +  m_row + 1;
@@ -425,23 +429,25 @@ void KWordTableHandler::tableCellStart()
             KWord::TAPptr tapBelow = (*it).tap;
             const wvWare::Word97::TC* tcBelow = 0L;
             for (int c = 0; !tcBelow && c < tapBelow->itcMac ; ++c) {
-                if (qAbs(tapBelow->rgdxaCenter[ c ] - left) <= 3
-                        && qAbs(tapBelow->rgdxaCenter[ c + 1 ] - right) <= 3) {
+                if (qAbs(tapBelow->rgdxaCenter[ c ] - leftEdgePos) <= 3
+                        && qAbs(tapBelow->rgdxaCenter[ c + 1 ] - rightEdgePos) <= 3) {
                     tcBelow = &tapBelow->rgtc[ c ];
-                    //kDebug(30513) <<"found cell below, at (Word) column" << c <<" fVertMerge:" << tcBelow->fVertMerge;
+//                     kDebug(30513) <<"found cell below, at (Word) column" << c
+//                                   <<" fVertMerge:" << tcBelow->fVertMerge;
                 }
             }
-            if (tcBelow && tcBelow->fVertMerge && !tcBelow->fVertRestart)
+            if (tcBelow && tcBelow->fVertMerge && !tcBelow->fVertRestart) {
                 ++rowSpan;
-            else
+            } else {
                 break;
+            }
         }
         //kDebug(30513) <<"rowSpan=" << rowSpan;
     }
 
     // Check how many cells that means, according to our cell edge array.
-    int leftCellNumber  = m_currentTable->columnNumber(left);
-    int rightCellNumber = m_currentTable->columnNumber(right);
+    int leftCellNumber  = m_currentTable->columnNumber(leftEdgePos);
+    int rightCellNumber = m_currentTable->columnNumber(rightEdgePos);
 
     // In cases where not all columns are present, ensure that the last
     // column spans the remainder of the table.
@@ -449,42 +455,47 @@ void KWordTableHandler::tableCellStart()
     // an empty cell from m_column+1 to the last column. (table-6.doc)
     if (m_column == nbCells - 1)  {
         rightCellNumber = m_currentTable->m_cellEdges.size() - 1;
-        right = m_currentTable->m_cellEdges[ rightCellNumber ];
+        rightEdgePos = m_currentTable->m_cellEdges[ rightCellNumber ];
     }
 
-#if 0
-    kDebug(30513) << "left edge = " << left << ", right edge = " << right;
+#ifdef DEBUG_TABLEHANDLER
+    kDebug(30513) << "left edge = " << leftEdgePos << ", right edge = " << rightEdgePos;
 
     kDebug(30513) << "leftCellNumber = " << leftCellNumber
     << ", rightCellNumber = " << rightCellNumber;
 #endif
-    Q_ASSERT(rightCellNumber >= leftCellNumber);   // you'd better be...
-    int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells horizontally
+
+    //NOTE: The cacheCellEdge f. took care of unsorted tap->rgdxaCenter values.
+    //The following assert is not up2date.
+//     Q_ASSERT(rightCellNumber >= leftCellNumber);
+
+    // the resulting number of merged cells horizontally
+    int colSpan = rightCellNumber - leftCellNumber;
 
     // Put a filler in for cells that are part of a merged cell.
     //
     // The MSWord spec says they must be empty anyway (and we'll get a
     // warning if not).
+    //
     if (tc.fVertMerge && !tc.fVertRestart) {
         m_cellOpen = true;
         writer->startElement("table:covered-table-cell");
-        
-        m_colSpan = colSpan; // store colSpan so covered elements can be added on cell close
+        // store colSpan so covered elements can be added on cell close
+        m_colSpan = colSpan;
         return;
     }
     // We are now sure we have a real cell (and not a covered one)
-
-    QRectF cellRect(left / 20.0,  // left
+    QRectF cellRect(leftEdgePos / 20.0,  // left
                     m_currentY, // top
-                    (right - left) / 20.0,   // width
+                    (rightEdgePos - leftEdgePos) / 20.0,   // width
                     rowHeight());  // height
     // I can pass these sizes to ODF now...
-#if 0
+#ifdef DEBUG_TABLEHANDLER
     kDebug(30513) << " tableCellStart row=" << m_row << " WordColumn="
-    << m_column << " colSpan="
-    << colSpan << " (from" << leftCellNumber
-    << " to" << rightCellNumber << " for KWord) rowSpan="
-    << rowSpan << " cellRect=" << cellRect;
+                  << m_column << " colSpan="
+                  << colSpan << " (from" << leftCellNumber
+                  << " to" << rightCellNumber << " for KWord) rowSpan="
+                  << rowSpan << " cellRect=" << cellRect;
 #endif
 
     // Sort out the borders.
@@ -505,18 +516,19 @@ void KWordTableHandler::tableCellStart()
     //  - The cell to the left of the border always defines the value.
     //  - Well then a winner with the table wide definitions is also found.
     //
-#if 0
+#ifdef DEBUG_TABLEHANDLER
     kDebug(30513) << "CellBorders=" << m_row << m_column
-    << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth
-    << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth
-    << "bottom" << tc.brcBottom.brcType << tc.brcBottom.dptLineWidth
-    << "right" << tc.brcRight.brcType << tc.brcRight.dptLineWidth;
+                  << "top" << tc.brcTop.brcType << tc.brcTop.dptLineWidth
+                  << "left" << tc.brcLeft.brcType << tc.brcLeft.dptLineWidth
+                  << "bottom" << tc.brcBottom.brcType << tc.brcBottom.dptLineWidth
+                  << "right" << tc.brcRight.brcType << tc.brcRight.dptLineWidth;
 #endif
 
     const wvWare::Word97::BRC brcNone;
     const wvWare::Word97::BRC& brcTop = (m_row > 0) ?
                                         brcWinner(tc.brcTop, m_tap->rgbrcTable[4]) :
-                                        ((tc.brcTop.brcType > 0 && tc.brcTop.brcType < 64) ? tc.brcTop : m_tap->rgbrcTable[0]);
+                                        ((tc.brcTop.brcType > 0 && tc.brcTop.brcType < 64) ? tc.brcTop :
+                                        m_tap->rgbrcTable[0]);
     const wvWare::Word97::BRC& brcBottom = (m_row < m_currentTable->rows.size() - 1) ?
                                            brcWinner(tc.brcBottom, m_tap->rgbrcTable[4]) :
                                            brcWinner(tc.brcBottom, m_tap->rgbrcTable[2]);
@@ -545,8 +557,9 @@ void KWordTableHandler::tableCellStart()
             cellStyle.addProperty("koffice:specialborder-top",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcTop);
-        if (!dba.isEmpty())
+        if (!dba.isEmpty()) {
             cellStyle.addProperty("style:border-line-width-top", dba);
+        }
     }
 
     //left
@@ -557,8 +570,9 @@ void KWordTableHandler::tableCellStart()
             cellStyle.addProperty("koffice:specialborder-left",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcLeft);
-        if (!dba.isEmpty())
+        if (!dba.isEmpty()) {
             cellStyle.addProperty("style:border-line-width-left", dba);
+        }
     }
 
     //bottom
@@ -569,8 +583,9 @@ void KWordTableHandler::tableCellStart()
             cellStyle.addProperty("koffice:specialborder-bottom",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcBottom);
-        if (!dba.isEmpty())
+        if (!dba.isEmpty()) {
             cellStyle.addProperty("style:border-line-width-bottom", dba);
+        }
     }
 
     //right
@@ -581,8 +596,9 @@ void KWordTableHandler::tableCellStart()
             cellStyle.addProperty("koffice:specialborder-right",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcRight);
-        if (!dba.isEmpty())
+        if (!dba.isEmpty()) {
             cellStyle.addProperty("style:border-line-width-right", dba);
+        }
     }
 
     //top left to bottom right
@@ -611,26 +627,10 @@ void KWordTableHandler::tableCellStart()
         }
     }
 
-    //check if we have to ignore the shading information
-    if (!shd.shdAutoOrNill) {
-        QString color = QString('#');
-        //ipatPct5 to ipatPct90
-        if (shd.ipat >= 0x02 && shd.ipat <= 0x0d) {
-            //get the color from the shading pattern
-            uint grayColor = Conversion::shadingPatternToColor(shd.ipat);
-            color.append(QString::number(grayColor | 0xff000000, 16).right(6).toUpper());
-        }
-        //ipatSolid or ipatnil means that no pattern is applied, but only color
-        //The case of neither color nor pattern is tested above by the shdAutoOrNill
-        else if (shd.ipat == 0x01 || shd.ipat == 0x00) {
-            color.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
-        }
-        else {
-            kDebug(30513) << "Warning: Unsupported shading pattern, using current background-color";
-            color = document()->currentBgColor();
-        }
+    //process shading information
+    QString color = Conversion::shdToColorStr(shd);
+    if (!color.isEmpty()) {
         cellStyle.addProperty("fo:background-color", color);
-
         //add the current background-color to stack
         document()->addBgColor(color);
     }
@@ -643,13 +643,13 @@ void KWordTableHandler::tableCellStart()
     //process vertical alignment information 
     QString align;
     switch (tc.vertAlign) {
-    case wvWare::vAlignTop:
+    case vAlignTop:
         align = QString("top");
         break;
-    case wvWare::vAlignMiddle:
+    case vAlignMiddle:
         align = QString("middle");
         break;
-    case wvWare::vAlignBottom:
+    case vAlignBottom:
         align = QString("bottom");
         break;
     }
@@ -665,7 +665,8 @@ void KWordTableHandler::tableCellStart()
 
     QString cellStyleName = m_mainStyles->insert(cellStyle, QLatin1String("cell"));
 
-    //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
+//     emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name,
+//                             brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
 
     // Start a table cell in the content.
     writer->startElement("table:table-cell");
@@ -679,8 +680,7 @@ void KWordTableHandler::tableCellStart()
         writer->addAttribute("table:number-columns-spanned", colSpan);
         m_colSpan = colSpan;
     } else {
-        // If we don't set it to colSpan, we still need to (re)set it
-        // to a known value.
+        // If not set to colSpan, we need to (re)set it to a known value.
         m_colSpan = 1;
     }
 }
@@ -689,43 +689,48 @@ void KWordTableHandler::tableCellEnd()
 {
     kDebug(30513);
 
+    if (!m_cellOpen) {
+        kDebug(30513) << "BUG: !m_cellOpen";
+        return;
+    }
+
     // Text lists aren't closed explicitly so we have to close them
     // when something happens like a new paragraph or, in this case,
     // the table cell ends.
-    if (document()->textHandler()->listIsOpen())
+    if (document()->textHandler()->listIsOpen()) {
         document()->textHandler()->closeList();
+    }
     KoXmlWriter*  writer = currentWriter();
 
-    // End table cell in content, but only if we actually opened a cell.
-    if (m_cellOpen) {
-        QList<const char*> openTags = writer->tagHierarchy();
-        for (int i = 0; i < openTags.size(); ++i)
-            kDebug(30513) << openTags[i];
 
-        writer->endElement();//table:table-cell
-        m_cellOpen = false;
-    } else
-        kDebug(30513) << "Didn't close the cell because !m_cellOpen!!";
+    QList<const char*> openTags = writer->tagHierarchy();
+    for (int i = 0; i < openTags.size(); ++i) {
+        kDebug(30513) << openTags[i];
+    }
+    writer->endElement();//table:table-cell
+    m_cellOpen = false;
 
-    // If this cell covers other cells (i.e. is merged), then create
-    // as many table:covered-table-cell tags as there are covered
-    // columns.
+    // If this cell covers other cells (i.e. is merged), then create as many
+    // table:covered-table-cell tags as there are covered columns.
     for (int i = 1; i < m_colSpan; i++) {
         writer->startElement("table:covered-table-cell");
         writer->endElement();
     }
     m_colSpan = 1;
 
-    //check if a cell backgroud-color was provided and remove it from stack
-    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
-    if (!shd.shdAutoOrNill) {
-        document()->rmBgColor();
+    if (m_tap) {
+        //if the backgroud-color was provided, then remove it from stack
+        const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
+        const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
+
+        if ( !Conversion::shdToColorStr(shd).isEmpty() &&
+             !(tc.fVertMerge && !tc.fVertRestart) )
+        {
+            document()->rmBgColor();
+        }
     }
 }
 
-
-// Add cell edge into the cache of cell edges for a given table.
-// Might as well keep it sorted here
 void KWord::Table::cacheCellEdge(int cellEdge)
 {
     kDebug(30513) ;
@@ -748,14 +753,13 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     kDebug(30513) << cellEdge << " -> added. Size=" << size + 1;
 }
 
-// Lookup a cell edge from the cache of cell edges
-// And return the column number
 int KWord::Table::columnNumber(int cellEdge) const
 {
     kDebug(30513) ;
     for (unsigned int i = 0; i < (unsigned int)m_cellEdges.size(); i++) {
-        if (m_cellEdges[i] == cellEdge)
+        if (m_cellEdges[i] == cellEdge) {
             return i;
+        }
     }
     // This can't happen, if cacheCellEdge has been properly called
     kWarning(30513) << "Column not found for cellEdge x=" << cellEdge << " - BUG.";

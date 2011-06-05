@@ -764,6 +764,25 @@ void KisConfig::setFirstRun(const bool first) const
     m_cfg.writeEntry("firstRun", first);
 }
 
+int KisConfig::horizontalSplitLines() const
+{
+    return m_cfg.readEntry("horizontalSplitLines", 1);
+}
+void KisConfig::setHorizontalSplitLines(const int numberLines) const
+{
+    m_cfg.writeEntry("horizontalSplitLines", numberLines);
+}
+
+int KisConfig::verticalSplitLines() const
+{
+    return m_cfg.readEntry("verticalSplitLines", 1);
+}
+
+void KisConfig::setVerticalSplitLines(const int numberLines) const
+{
+    m_cfg.writeEntry("verticalSplitLines", numberLines);
+}
+
 bool KisConfig::clicklessSpacePan() const
 {
     return m_cfg.readEntry("clicklessSpacePan", true);
@@ -772,4 +791,66 @@ bool KisConfig::clicklessSpacePan() const
 void KisConfig::setClicklessSpacePan(const bool toggle) const
 {
     m_cfg.writeEntry("clicklessSpacePan", toggle);
+}
+
+
+int KisConfig::hideDockersFullscreen()
+{
+    return m_cfg.readEntry("hideDockersFullScreen", (int)Qt::Checked);
+}
+
+void KisConfig::setHideDockersFullscreen(const int value) const
+{
+    m_cfg.writeEntry("hideDockersFullScreen", value);
+}
+
+int KisConfig::hideMenuFullscreen()
+{
+    return m_cfg.readEntry("hideMenuFullScreen", (int)Qt::Checked);
+}
+
+void KisConfig::setHideMenuFullscreen(const int value) const
+{
+    m_cfg.writeEntry("hideMenuFullScreen", value);
+}
+
+int KisConfig::hideScrollbarsFullscreen()
+{
+    return m_cfg.readEntry("hideScrollbarsFullScreen", (int)Qt::Checked);
+}
+
+void KisConfig::setHideScrollbarsFullscreen(const int value) const
+{
+    m_cfg.writeEntry("hideScrollbarsFullScreen", value);
+}
+
+int KisConfig::hideStatusbarFullscreen()
+{
+    return m_cfg.readEntry("hideStatusbarFullScreen", (int)Qt::Checked);
+}
+
+void KisConfig::setHideStatusbarFullscreen(const int value) const
+{
+    m_cfg.writeEntry("hideStatusbarFullScreen", value);
+}
+
+
+int KisConfig::hideTitlebarFullscreen()
+{
+    return m_cfg.readEntry("hideTitleBarFullscreen", (int)Qt::Checked);
+}
+void KisConfig::setHideTitlebarFullscreen(const int value) const
+{
+    m_cfg.writeEntry("hideTitleBarFullscreen", value);
+}
+
+
+int KisConfig::hideToolbarFullscreen()
+{
+    return m_cfg.readEntry("hideToolbarFullscreen", (int)Qt::Checked);
+}
+
+void KisConfig::setHideToolbarFullscreen(const int value) const
+{
+    m_cfg.writeEntry("hideToolbarFullscreen", value);
 }

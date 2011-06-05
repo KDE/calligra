@@ -31,6 +31,8 @@
 #include <QThread>
 
 #include "mypaint_brush_resource.h"
+#include <kis_paintop_registry.h>
+#include <kis_resource_server_provider.h>
 
 class MyPaintFactory::Private {
 public:
@@ -45,6 +47,7 @@ MyPaintFactory::MyPaintFactory()
     : m_d( new Private )
 {
     KGlobal::mainComponent().dirs()->addResourceType("mypaint_brushes", "data", "krita/brushes/");
+    KGlobal::mainComponent().dirs()->addResourceDir("mypaint_brushes", "/usr/share/mypaint/brushes/");
 
     m_d->brushServer = new KoResourceServer<MyPaintBrushResource>("mypaint_brushes", "*.myb");
     KoResourceLoaderThread thread(m_d->brushServer);
@@ -74,8 +77,10 @@ KisPaintOp * MyPaintFactory::createOp(const KisPaintOpSettingsSP settings, KisPa
 {
     const MyPaintSettings *mypaintSettings = dynamic_cast<const MyPaintSettings *>(settings.data());
     Q_ASSERT(settings == 0 || mypaintSettings != 0);
+    if (!settings || !mypaintSettings) {
+        return 0;
+    }
     KisPaintOp * op = new MyPaint(mypaintSettings, painter, image);
-    qDebug() << "got op" << op;
     Q_CHECK_PTR(op);
     return op;
 }
@@ -106,5 +111,28 @@ MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
     }
 }
 
+void MyPaintFactory::processAfterLoading()
+{
+    KoResourceServer<KisPaintOpPreset>* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QMapIterator<QString, MyPaintBrushResource*> i(m_d->brushes);
+    while (i.hasNext()) {
+        i.next();
+
+        //Create a preset for every loaded brush
+        KisPaintOpSettingsSP s = settings(0);
+        s->setProperty("paintop", id());
+        s->setProperty("filename", i.key());
+
+        KisPaintOpPreset* preset = new KisPaintOpPreset();
+        preset->setName(i.key());
+        preset->setSettings(s);
+        KoID paintOpID(id(), name());
+        preset->setPaintOp(paintOpID);
+        preset->setValid(true);
+        preset->setImage(i.value()->image());
+
+        rserver->addResource(preset, false);
+    }
+}
 
 #include "mypaint_paintop_factory.moc"

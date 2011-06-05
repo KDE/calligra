@@ -28,6 +28,11 @@
 #include "KoUpdater.h"
 #include "KoProgressProxy.h"
 
+#include <kdebug.h>
+
+// 10 updates/second should be enough?
+#define PROGRESSUPDATER_GUITIMERINTERVAL 100
+
 class KoProgressUpdater::Private
 {
 public:
@@ -41,6 +46,7 @@ public:
         , currentProgress(0)
         , updated(false)
         , output(output_)
+        , canceled(false)
     {
     }
 
@@ -49,8 +55,7 @@ public:
     Mode mode;
     int totalWeight;
     int currentProgress;
-    bool updated;          // is true whe
-                           // never the progress needs to be recomputed
+    bool updated;          // is true whenever the progress needs to be recomputed
     QTextStream *output;
     QTimer updateGuiTimer; // fires regulary to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
@@ -59,6 +64,7 @@ public:
 
     static void logEvents(QTextStream& out, KoProgressUpdater::Private *updater,
                           const QTime& startTime, const QString& prefix);
+    bool canceled;
 };
 
 // NOTE: do not make the KoProgressUpdater object part of the QObject
@@ -100,7 +106,8 @@ QTime KoProgressUpdater::referenceTime() const
 
 void KoProgressUpdater::start(int range, const QString &text)
 {
-    d->updateGuiTimer.start(100); // 10 updates/second should be enough?
+    kDebug(30003) << range << text;
+    d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
 
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
@@ -115,11 +122,13 @@ void KoProgressUpdater::start(int range, const QString &text)
         d->progressBar->setFormat(text);
     }
     d->totalWeight = 0;
+    d->canceled = false;
 }
 
 QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
                                                     const QString &name)
 {
+    kDebug(30003) << name << weight;
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name);
     d->totalWeight += weight;
     d->subtasks.append(p);
@@ -127,6 +136,12 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
 
     QPointer<KoUpdater> updater = new KoUpdater(p);
     d->subTaskWrappers.append(updater);
+
+    if (!d->updateGuiTimer.isActive()) {
+        // we maybe need to restart the timer if it was stopped in updateUi() cause
+        // other sub-tasks created before this one finished already.
+        d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
+    }
 
     return updater;
 }
@@ -137,6 +152,7 @@ void KoProgressUpdater::cancel()
         updater->setProgress(100);
         updater->interrupt();
     }
+    d->canceled = true;
     updateUi();
 }
 
@@ -188,6 +204,16 @@ void KoProgressUpdater::updateUi()
         d->updateGuiTimer.stop(); // 10 updates/second should be enough?
     }
     d->progressBar->setValue(d->currentProgress);
+}
+
+bool KoProgressUpdater::interrupted() const
+{
+    return d->canceled;
+}
+
+bool KoProgressUpdater::hasOutput() const
+{
+    return d->output != 0;
 }
 
 void KoProgressUpdater::Private::logEvents(QTextStream& out,

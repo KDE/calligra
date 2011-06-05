@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koconverter.h"
-
 #include <kaboutdata.h>
 #include <kimageio.h>
 #include <kcmdlineargs.h>
@@ -38,24 +36,13 @@ bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uO
 {
     KoFilterManager* manager = new KoFilterManager( uIn.path() );
 
-    ProgressObject progressObj;
-    QObject::connect(manager, SIGNAL(sigProgress(int)), &progressObj, SLOT(slotProgress(int)));
-
     manager->setBatchMode( batch );
 
     QByteArray mime( outputFormat.toLatin1() );
     KoFilter::ConversionStatus status = manager->exportDocument( uOut.path(), mime );
-    progressObj.slotProgress(-1);
 
     delete manager;
     return status == KoFilter::OK;
-}
-
-void ProgressObject::slotProgress(int /* progress */ )
-{
-    // Well, we could have a nifty "=====> " progress bar, but with all the
-    // debug output, it would be badly messed up :)
-    // kDebug() <<"ProgressObject::slotProgress" << progress;
 }
 
 int main( int argc, char **argv )
@@ -81,8 +68,6 @@ int main( int argc, char **argv )
 
     // Install the libkoffice* translations
     KGlobal::locale()->insertCatalog("calligra");
-
-
 
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
@@ -155,5 +140,3 @@ int main( int argc, char **argv )
     KCmdLineArgs::usageError(i18n("Two arguments required"));
     return 3;
 }
-
-#include "koconverter.moc"

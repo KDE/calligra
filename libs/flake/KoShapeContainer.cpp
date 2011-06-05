@@ -39,11 +39,6 @@ KoShapeContainerPrivate::~KoShapeContainerPrivate()
     delete model;
 }
 
-KoShapeContainer::KoShapeContainer()
-    : KoShape(*(new KoShapeContainerPrivate(this)))
-{
-}
-
 KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
         : KoShape(*(new KoShapeContainerPrivate(this)))
 {
@@ -71,6 +66,7 @@ void KoShapeContainer::addShape(KoShape *shape)
     Q_ASSERT(shape);
     if (shape->parent() == this && shapes().contains(shape))
         return;
+    // TODO add a method to create a default model depending on the shape container
     if (d->model == 0)
         d->model = new KoShapeContainerDefaultModel();
     if (shape->parent() && shape->parent() != this)
@@ -88,6 +84,24 @@ void KoShapeContainer::removeShape(KoShape *shape)
         return;
     d->model->remove(shape);
     shape->setParent(0);
+    shapeCountChanged();
+
+    KoShapeContainer * grandparent = parent();
+    if (grandparent) {
+        grandparent->model()->childChanged(this, KoShape::ChildChanged);
+    }
+}
+
+void KoShapeContainer::removeAllShapes()
+{
+    Q_D(KoShapeContainer);
+    if (d->model == 0)
+        return;
+    for(int i = d->model->shapes().count() - 1; i >= 0; --i) {
+        KoShape *shape = d->model->shapes()[i];
+        d->model->remove(shape);
+        shape->setParent(0);
+    }
     shapeCountChanged();
 
     KoShapeContainer * grandparent = parent();
@@ -158,7 +172,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     m.scale(zoomX, zoomY);
-    painter.setClipPath(m.map(outline()));
+    painter.setClipPath(m.map(outline()), Qt::IntersectClip);
 
     QRectF toPaintRect = converter.viewToDocument(painter.clipRegion().boundingRect());
     toPaintRect = transform().mapRect(toPaintRect);
@@ -238,9 +252,4 @@ KoShapeContainerModel *KoShapeContainer::model() const
 {
     Q_D(const KoShapeContainer);
     return d->model;
-}
-
-void KoShapeContainer::saveOdfChildElements(KoShapeSavingContext &context) const
-{
-    Q_UNUSED(context);
 }

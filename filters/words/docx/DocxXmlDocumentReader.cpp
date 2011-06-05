@@ -38,12 +38,59 @@
 #include <ChartExport.h>
 #include <XlsxXmlChartReader.h>
 
+#include <MsooXmlTableStyle.h>
+
 #define MSOOXML_CURRENT_NS "w"
 #define MSOOXML_CURRENT_CLASS DocxXmlDocumentReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 #define DOCXXMLDOCREADER_CPP
 
 #include <MsooXmlReader_p.h>
+
+#include <KoTable.h>
+#include <KoCell.h>
+#include <KoRow.h>
+#include <KoColumn.h>
+#include <KoRawCellChild.h>
+
+namespace {
+
+class BorderMap : public QMap<QString, KoBorder::BorderStyle>
+{
+public:
+    BorderMap() {
+        insert(QString(), KoBorder::BorderNone);
+        insert("nil", KoBorder::BorderNone);
+        insert("none", KoBorder::BorderNone);
+        insert("single", KoBorder::BorderSolid);
+        insert("thick", KoBorder::BorderSolid); //FIXME find a better representation
+        insert("double", KoBorder::BorderDouble);
+        insert("dotted", KoBorder::BorderDotted);
+        insert("dashed", KoBorder::BorderDashed);
+        insert("dotDash", KoBorder::BorderDashDotPattern);
+        insert("dotDotDash", KoBorder::BorderDashDotDotPattern);
+        insert("triple", KoBorder::BorderDouble); //FIXME
+        insert("thinThickSmallGap", KoBorder::BorderSolid); //FIXME
+        insert("thickThinSmallGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickThinSmallGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickMediumGap", KoBorder::BorderSolid); //FIXME
+        insert("thickThinMediumGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickThinMediumGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickLargeGap", KoBorder::BorderSolid); //FIXME
+        insert("thickThinLargeGap", KoBorder::BorderSolid); //FIXME
+        insert("thinThickThinLargeGap", KoBorder::BorderSolid); //FIXME
+        insert("wave", KoBorder::BorderSolid); //FIXME
+        insert("dobleWave", KoBorder::BorderSolid); //FIXME
+        insert("dashSmallGap", KoBorder::BorderSolid); //FIXME
+        insert("dashDotStroked", KoBorder::BorderSolid); //FIXME
+        insert("threeDEmboss", KoBorder::BorderSolid); //FIXME
+        insert("threeDEngrave", KoBorder::BorderSolid); //FIXME
+        insert("outset", KoBorder::BorderOutset);
+        insert("inset", KoBorder::BorderInset);
+    }
+} borderMap;
+
+}
 
 DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     DocxImport& _import,
@@ -58,14 +105,6 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
 
 // ---------------------------------------------------------------------
 
-//! Column style info, allows to keep information about repeated columns
-class ColumnStyleInfo
-{
-public:
-    ColumnStyleInfo(KoGenStyle *s = 0) : count(0), style(s) {}
-    uint count;
-    KoGenStyle* style; //!< not owned
-};
 
 class DocxXmlDocumentReader::Private
 {
@@ -73,15 +112,6 @@ public:
     Private() {
     }
     ~Private() {
-    }
-
-    QList<ColumnStyleInfo> columnStyles; //!< for collecting column styles
-
-    void clearColumnStyles() {
-        foreach (const ColumnStyleInfo& info, columnStyles) {
-            delete info.style;
-        }
-        columnStyles.clear();
     }
 };
 
@@ -122,13 +152,15 @@ void DocxXmlDocumentReader::init()
     m_closeHyperlink = false;
     m_createSectionStyle = false;
     m_createSectionToNext = false;
-    m_insideGroup = false;
+    m_currentVMLProperties.insideGroup = false;
     m_outputFrames = true;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
     m_context = dynamic_cast<DocxXmlDocumentReaderContext*>(context);
+    Q_ASSERT(m_context);
+
     m_createSectionStyle = true;
     kDebug() << "=============================";
     readNext();
@@ -233,6 +265,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     for (int i = 0; i < namespaces.count(); i++) {
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }*/
+
+    body->addAttribute("text:use-soft-page-breaks", "true");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -290,6 +325,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 {
     READ_PROLOGUE
 
+    m_footerActive = false;
+    m_headerActive = false;
+
     m_currentPageStyle = KoGenStyle(KoGenStyle::PageLayoutStyle);
     m_currentPageStyle.setAutoStyleInStylesDotXml(true);
     m_currentPageStyle.addProperty("style:writing-mode", "lr-tb");
@@ -308,6 +346,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     m_footers.clear();
     m_headers.clear();
 
+    m_pageMargins.clear();
+    m_pageBorderStyles.clear();
+    m_pageBorderPaddings.clear();
+    m_pageBorderOffsetFrom = "text";
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -325,6 +368,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             SKIP_UNKNOWN
         }
     }
+
+    applyPageBorders(m_currentPageStyle, m_pageMargins, m_pageBorderStyles, m_pageBorderPaddings, m_pageBorderOffsetFrom);
 
     // Currently if there are 3 header/footer styles, the one with 'first' is ignored
     if (!m_headers.isEmpty()) {
@@ -463,31 +508,77 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(top)
-    if (!top.isEmpty()) {
-        const QString s(MSOOXML::Utils::TWIP_to_ODF(top));
-        if (!s.isEmpty())
-            m_currentPageStyle.addProperty("fo:margin-top", s);
-    }
+
     TRY_READ_ATTR(right)
     if (!right.isEmpty()) {
-        const QString s(MSOOXML::Utils::TWIP_to_ODF(right));
-        if (!s.isEmpty())
-            m_currentPageStyle.addProperty("fo:margin-right", s);
-    }
-    TRY_READ_ATTR(bottom)
-    if (!bottom.isEmpty()) {
-        const QString s(MSOOXML::Utils::TWIP_to_ODF(bottom));
-        if (!s.isEmpty())
-            m_currentPageStyle.addProperty("fo:margin-bottom", s);
+        int rightNum = 0;
+        STRING_TO_INT(right, rightNum, QString("w:right"));
+        m_pageMargins.insert(MarginRight,TWIP_TO_POINT(rightNum));
     }
     TRY_READ_ATTR(left)
     if (!left.isEmpty()) {
-        const QString s(MSOOXML::Utils::TWIP_to_ODF(left));
-        if (!s.isEmpty()) {
-            m_currentPageStyle.addProperty("fo:margin-left", s);
+        int leftNum = 0;
+        STRING_TO_INT(left, leftNum, QString("w:left"));
+        m_pageMargins.insert(MarginLeft,TWIP_TO_POINT(leftNum));
+    }
+
+    TRY_READ_ATTR(footer)
+    TRY_READ_ATTR(header)
+    TRY_READ_ATTR(top)
+    TRY_READ_ATTR(bottom)
+    int topNum = 0;
+    int bottomNum = 0;
+    int headerNum = 0;
+    int footerNum = 0;
+    topNum = top.toInt();
+    bottomNum = bottom.toInt();
+    headerNum = header.toInt();
+    footerNum = footer.toInt();
+    if (!m_headerActive) {
+        m_pageMargins.insert(MarginTop, TWIP_TO_POINT(topNum));
+    }
+    else {
+        m_pageMargins.insert(MarginTop, TWIP_TO_POINT(headerNum));
+    }
+    if (!m_footerActive) {
+        m_pageMargins.insert(MarginBottom, TWIP_TO_POINT(bottomNum));
+    }
+    else {
+        m_pageMargins.insert(MarginBottom, TWIP_TO_POINT(footerNum));
+    }
+
+    QBuffer headerBuffer;
+    headerBuffer.open( QIODevice::WriteOnly );
+    KoXmlWriter headerWriter(&headerBuffer, 3);
+    headerWriter.startElement("style:header-style");
+    headerWriter.startElement("style:header-footer-properties");
+    headerWriter.addAttribute("style:dynamic-spacing", "true");
+    if (m_headerActive) {
+        if (topNum > headerNum) {
+            headerWriter.addAttributePt("fo:min-height", TWIP_TO_POINT(topNum - headerNum));
         }
     }
+    headerWriter.endElement(); // style:header-footer-properties
+    headerWriter.endElement(); // style:header-style
+    QString headerContents = QString::fromUtf8(headerBuffer.buffer(), headerBuffer.buffer().size() );
+    m_currentPageStyle.addStyleChildElement("header-style", headerContents);
+
+    QBuffer footerBuffer;
+    footerBuffer.open( QIODevice::WriteOnly );
+    KoXmlWriter footerWriter(&footerBuffer, 3);
+    footerWriter.startElement("style:footer-style");
+    footerWriter.startElement("style:header-footer-properties");
+    footerWriter.addAttribute("style:dynamic-spacing", "true");
+    if (m_footerActive) {
+        if (bottomNum > footerNum) {
+            footerWriter.addAttributePt("fo:min-height", TWIP_TO_POINT(bottomNum - footerNum));
+        }
+    }
+    footerWriter.endElement(); // style:header-footer-properties
+    footerWriter.endElement(); // style:footer-style
+    QString footerContents = QString::fromUtf8(footerBuffer.buffer(), footerBuffer.buffer().size() );
+    m_currentPageStyle.addStyleChildElement("footer-style", footerContents);
+
     readNext();
     READ_EPILOGUE
 }
@@ -524,6 +615,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             ELSE_TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(v, group)
+            ELSE_TRY_READ_IF_NS(v, oval)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -548,6 +640,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 {
     READ_PROLOGUE
+
+    m_footerActive = true;
+
     const QXmlStreamAttributes attrs(attributes());
 
     QString link_target;
@@ -621,6 +716,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
 {
     READ_PROLOGUE
+
+    m_headerActive = true;
+
     const QXmlStreamAttributes attrs(attributes());
 
     QString link_target;
@@ -934,70 +1032,182 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgBorders()
 {
     READ_PROLOGUE
-    m_borderStyles.clear();
-    m_borderPaddings.clear();
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(offsetFrom)
+    m_pageBorderOffsetFrom = offsetFrom;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
+                RETURN_IF_ERROR(readBorderElement(TopBorder, "top", m_pageBorderStyles, m_pageBorderPaddings));
             }
             else if (QUALIFIED_NAME_IS(left)) {
-                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
+                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left", m_pageBorderStyles, m_pageBorderPaddings));
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
+                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom", m_pageBorderStyles, m_pageBorderPaddings));
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
+                RETURN_IF_ERROR(readBorderElement(RightBorder, "right", m_pageBorderStyles, m_pageBorderPaddings));
             }
             ELSE_WRONG_FORMAT
         }
     }
-    applyBorders(&m_currentPageStyle, m_borderStyles, m_borderPaddings);
     READ_EPILOGUE
 }
 
-void DocxXmlDocumentReader::applyBorders(KoGenStyle *style, QMap<QString, BorderSide> sourceBorder, QMap<QString, BorderSide> sourcePadding)
+void DocxXmlDocumentReader::applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding)
 {
-    if (sourceBorder.count(sourceBorder.key(TopBorder)) == 4) {
-        style->addProperty("fo:border", sourceBorder.key(TopBorder)); // all sides the same
+    const QString topBorder = sourceBorder.value(TopBorder,QString());
+    const QString leftBorder = sourceBorder.value(LeftBorder,QString());
+    const QString bottomBorder = sourceBorder.value(BottomBorder,QString());
+    const QString rightBorder = sourceBorder.value(RightBorder,QString());
+    if (!topBorder.isEmpty() && leftBorder == topBorder && bottomBorder == topBorder && rightBorder == topBorder) {
+        style->addProperty("fo:border", topBorder); // all sides the same
     }
     else {
-        if (!sourceBorder.key(TopBorder).isEmpty()) {
-            style->addProperty("fo:border-top", sourceBorder.key(TopBorder));
+        if (!topBorder.isEmpty()) {
+            style->addProperty("fo:border-top", topBorder);
         }
-        if (!sourceBorder.key(LeftBorder).isEmpty()) {
-            style->addProperty("fo:border-left", sourceBorder.key(LeftBorder));
+        if (!leftBorder.isEmpty()) {
+            style->addProperty("fo:border-left", leftBorder);
         }
-        if (!sourceBorder.key(BottomBorder).isEmpty()) {
-            style->addProperty("fo:border-bottom", sourceBorder.key(BottomBorder));
+        if (!bottomBorder.isEmpty()) {
+            style->addProperty("fo:border-bottom", bottomBorder);
         }
-        if (!sourceBorder.key(RightBorder).isEmpty()) {
-            style->addProperty("fo:border-right", sourceBorder.key(RightBorder));
+        if (!rightBorder.isEmpty()) {
+            style->addProperty("fo:border-right", rightBorder);
         }
     }
     sourceBorder.clear();
 
-    if (sourcePadding.count(sourcePadding.key(TopBorder)) == 4) {
-        style->addProperty("fo:padding", sourcePadding.key(TopBorder)); // all sides the same
+    const qreal topPadding = sourcePadding.value(TopBorder);
+    const qreal leftPadding = sourcePadding.value(LeftBorder);
+    const qreal bottomPadding = sourcePadding.value(BottomBorder);
+    const qreal rightPadding = sourcePadding.value(RightBorder);
+    if (sourcePadding.contains(TopBorder) && leftPadding == topPadding && bottomPadding == topPadding && rightPadding == topPadding) {
+        style->addPropertyPt("fo:padding", topPadding); // all sides the same
     }
     else {
-        if (!sourcePadding.key(TopBorder).isEmpty()) {
-            style->addProperty("fo:padding-top", sourcePadding.key(TopBorder));
+        if (sourcePadding.contains(TopBorder)) {
+            style->addPropertyPt("fo:padding-top", topPadding);
         }
-        if (!sourcePadding.key(LeftBorder).isEmpty()) {
-            style->addProperty("fo:padding-left", sourcePadding.key(LeftBorder));
+        if (sourcePadding.contains(LeftBorder)) {
+            style->addPropertyPt("fo:padding-left", leftPadding);
         }
-        if (!sourcePadding.key(BottomBorder).isEmpty()) {
-            style->addProperty("fo:padding-bottom", sourcePadding.key(BottomBorder));
+        if (sourcePadding.contains(BottomBorder)) {
+            style->addPropertyPt("fo:padding-bottom", bottomPadding);
         }
-        if (!sourcePadding.key(RightBorder).isEmpty()) {
-            style->addProperty("fo:padding-right", sourcePadding.key(RightBorder));
+        if (sourcePadding.contains(RightBorder)) {
+            style->addPropertyPt("fo:padding-right", rightPadding);
         }
     }
     sourcePadding.clear();
+}
+
+void DocxXmlDocumentReader::applyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins,
+        QMap<BorderSide,QString> &pageBorder, QMap<BorderSide, qreal> &pagePadding, QString & offsetFrom)
+{
+    if (pageMargins.contains(MarginTop)) {
+        if (pagePadding.contains(TopBorder)) {
+            qreal margin = pageMargins.value(MarginTop);
+            qreal padding = pagePadding.value(TopBorder);
+            if(offsetFrom == "page") {
+                style.addPropertyPt("fo:margin-top", padding);
+                style.addPropertyPt("fo:padding-top", margin - padding);
+            }
+            else {
+                style.addPropertyPt("fo:margin-top", margin - padding);
+                style.addPropertyPt("fo:padding-top", padding);
+            }
+        }
+        else {
+            style.addPropertyPt("fo:margin-top", pageMargins.value(MarginTop));
+        }
+    }
+
+    if (pageMargins.contains(MarginBottom)) {
+        if (pagePadding.contains(BottomBorder)) {
+            qreal margin = pageMargins.value(MarginBottom);
+            qreal padding = pagePadding.value(BottomBorder);
+            if(offsetFrom == "page") {
+                style.addPropertyPt("fo:margin-bottom", padding);
+                style.addPropertyPt("fo:padding-bottom", margin - padding);
+            }
+            else {
+                style.addPropertyPt("fo:margin-bottom", margin - padding);
+                style.addPropertyPt("fo:padding-bottom", padding);
+            }
+        }
+        else {
+            style.addPropertyPt("fo:margin-bottom", pageMargins.value(MarginBottom));
+        }
+    }
+
+    if (pageMargins.contains(MarginLeft)) {
+        if (pagePadding.contains(LeftBorder)) {
+            qreal margin = pageMargins.value(MarginLeft);
+            qreal padding = pagePadding.value(LeftBorder);
+            if(offsetFrom == "page") {
+                style.addPropertyPt("fo:margin-left", padding);
+                style.addPropertyPt("fo:padding-left", margin - padding);
+            }
+            else {
+                style.addPropertyPt("fo:margin-left", margin - padding);
+                style.addPropertyPt("fo:padding-left", padding);
+            }
+        }
+        else {
+            style.addPropertyPt("fo:margin-left", pageMargins.value(MarginLeft));
+        }
+    }
+
+    if (pageMargins.contains(MarginRight)) {
+        if (pagePadding.contains(RightBorder)) {
+            qreal margin = pageMargins.value(MarginRight);
+            qreal padding = pagePadding.value(RightBorder);
+            if(offsetFrom == "page") {
+                style.addPropertyPt("fo:margin-right", padding);
+                style.addPropertyPt("fo:padding-right", margin - padding);
+            }
+            else {
+                style.addPropertyPt("fo:margin-right", margin - padding);
+                style.addPropertyPt("fo:padding-right", padding);
+            }
+        }
+        else {
+            style.addPropertyPt("fo:margin-right", pageMargins.value(MarginRight));
+        }
+    }
+
+    pageMargins.clear();
+    pagePadding.clear();
+
+    const QString topBorder = pageBorder.value(TopBorder,QString());
+    const QString leftBorder = pageBorder.value(LeftBorder,QString());
+    const QString bottomBorder = pageBorder.value(BottomBorder,QString());
+    const QString rightBorder = pageBorder.value(RightBorder,QString());
+    if (!topBorder.isEmpty() && leftBorder == topBorder && bottomBorder == topBorder && rightBorder == topBorder) {
+        style.addProperty("fo:border", topBorder); // all sides the same
+    }
+    else {
+        if (!topBorder.isEmpty()) {
+            style.addProperty("fo:border-top", topBorder);
+        }
+        if (!leftBorder.isEmpty()) {
+            style.addProperty("fo:border-left", leftBorder);
+        }
+        if (!bottomBorder.isEmpty()) {
+            style.addProperty("fo:border-bottom", bottomBorder);
+        }
+        if (!rightBorder.isEmpty()) {
+            style.addProperty("fo:border-right", rightBorder);
+        }
+    }
+    pageBorder.clear();
 }
 
 //! Converts 17.18.2 ST_Border (Border Styles, p. 1462, 4357) value to W3C CSS2 border-style value
@@ -1016,26 +1226,26 @@ static QString ST_Border_to_ODF(const QString& s)
     return QLatin1String("solid");
 }
 
-KoFilter::ConversionStatus DocxXmlDocumentReader::readBorderElement(
-    BorderSide borderSide, const char *borderSideName)
+KoFilter::ConversionStatus DocxXmlDocumentReader::readBorderElement(BorderSide borderSide,
+        const char *borderSideName, QMap<BorderSide, QString> &sourceBorder, QMap<BorderSide, qreal> &sourcePadding)
 {
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(val)
     TRY_READ_ATTR(sz)
     TRY_READ_ATTR(color)
-    createBorderStyle(sz, color, val, borderSide);
+    createBorderStyle(sz, color, val, borderSide, sourceBorder);
     TRY_READ_ATTR(space)
     if (!space.isEmpty()) {
         int sp;
         STRING_TO_INT(space, sp, QString("w:%1@space").arg(borderSideName));
-        m_borderPaddings.insertMulti(QString::number(sp) + "pt", borderSide);
+        sourcePadding.insertMulti(borderSide, sp);
     }
     readNext();
     return KoFilter::OK;
 }
 
 void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString& color,
-    const QString& lineStyle, BorderSide borderSide)
+    const QString& lineStyle, BorderSide borderSide, QMap<BorderSide, QString> &sourceBorder)
 {
     const QString odfLineStyle(ST_Border_to_ODF(lineStyle));
     if (odfLineStyle.isEmpty())
@@ -1067,7 +1277,7 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
         border.append(QLatin1String("#000000"));
     }
 
-    m_borderStyles.insertMulti(border, borderSide);
+    sourceBorder.insertMulti(borderSide,border);
 }
 
 #undef CURRENT_EL
@@ -1081,16 +1291,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(dxaOrig)
-    m_currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
-    kDebug() << "m_currentObjectWidthCm" << m_currentObjectWidthCm;
+    m_currentVMLProperties.currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
+    kDebug() << "m_currentObjectWidthCm" << m_currentVMLProperties.currentObjectWidthCm;
     TRY_READ_ATTR(dyaOrig)
-    m_currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
+    m_currentVMLProperties.currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            //! @todo support VML here
             TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(o, OLEObject)
@@ -1341,16 +1550,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
 
     TRY_READ_ATTR(type)
 
-    if (type.isEmpty()) {
-        body->startElement("text:line-break");
-        body->endElement();
-    }
-
     if (type == "column") {
         m_currentParagraphStyle.addProperty("fo:break-before", "column");
     }
     else if (type == "page") {
         m_currentParagraphStyle.addProperty("fo:break-after", "page");
+    }
+    else {
+        body->startElement("text:line-break");
+        body->endElement();
     }
     readNext();
     READ_EPILOGUE
@@ -1411,13 +1619,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("PAGE")) {
-                m_complexCharType = CurrentPageComplexFieldCharType;
+            else {
+                m_complexCharValue = instruction;
             }
-            else if (instruction.startsWith("NUMPAGES")) {
-                m_complexCharType = NumberOfPagesComplexFieldCharType;
-            }
-            //! @todo: Add rest of the instructions
         }
     }
     READ_EPILOGUE
@@ -1492,19 +1696,21 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         link_target.remove(0, m_context->path.size() + 1);
     }
 
-    if (link_target.isEmpty()) {
-        TRY_READ_ATTR(anchor)
-        if (!anchor.isEmpty())
-        {
-            body->startElement("text:bookmark-ref");
-            body->addAttribute("text:reference-format", "page");
-            body->addAttribute("text:ref-name", anchor);
-        }
-    }
-    else {
+    bool closeTag = false;
+
+    TRY_READ_ATTR(anchor)
+
+    if (!link_target.isEmpty() || !anchor.isEmpty()) {
         body->startElement("text:a");
         body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+        closeTag = true;
+        if (!anchor.isEmpty())
+        {
+            body->addAttribute("xlink:href", QString("#%1").arg(anchor));
+        }
+        else {
+            body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
+        }
     }
 
     while (!atEnd()) {
@@ -1521,7 +1727,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    body->endElement(); // text:bookmark, text.a
+    if (closeTag) {
+        body->endElement(); // text:bookmark, text:a
+    }
 
     READ_EPILOGUE
 }
@@ -1616,15 +1824,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 /*!
  Parent elements:
  - [done] body (§17.2.2)
- - comment (§17.13.4.2)
+ - [done] comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
- - sdtContent (§17.5.2.34)
- - tc (§17.4.66)
+ - [done] endnote (§17.11.2)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
+ - [done] sdtContent (§17.5.2.34)
+ - [done] tc (§17.4.66)
  - [done] p (§17.3.1.22)
 
  Child elements:
@@ -1691,6 +1899,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     } else {
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+        if (m_moveToStylesXml) {
+            m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
+        }
 
         // MS2007 has a different way of marking drop cap, it divides them to two paragraphs
         // here we apply the status to current paragraph if previous one had dropCap
@@ -1782,9 +1993,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                     else {
                         currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
                     }
-                    if (m_moveToStylesXml) {
-                        mainStyles->markStyleForStylesXml(currentParagraphStyleName);
-                    }
                     body->addAttribute("text:style-name", currentParagraphStyleName);
                 }
                 else {
@@ -1833,7 +2041,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - customXml (§17.5.1.3)
  - del (§17.13.5.14)
  - dir (§17.3.2.8)
- - fldSimple (§17.16.19)
+ - [done] fldSimple (§17.16.19)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - moveFrom (§17.13.5.22)
@@ -1863,7 +2071,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - [done] footnoteReference (Footnote Reference) §17.11.14
  - [done] instrText (Field Code) §17.16.23
  - [done] lastRenderedPageBreak (Position of Last Calculated Page Break) §17.3.3.13
-  - monthLong (Date Block - Long Month Format) §17.3.3.15
+ - monthLong (Date Block - Long Month Format) §17.3.3.15
  - monthShort (Date Block - Short Month Format) §17.3.3.16
  - noBreakHyphen (Non Breaking Hyphen Character) §17.3.3.18
  - [done] object (Embedded Object) §17.3.3.19
@@ -1887,8 +2095,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 {
     READ_PROLOGUE
 
-    m_currentRunStyleName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    if (m_moveToStylesXml) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
 
     KoXmlWriter* oldWriter = body;
 
@@ -1944,94 +2154,81 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
-    if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() ||
-             m_complexCharType != NoComplexFieldCharType || !m_currentTextStyle.parentName().isEmpty()) {
-        // We want to write to the higher body level
-        body = buffer.originalWriter();
-        QString currentTextStyleName;
-        if (!m_currentRunStyleName.isEmpty()) {
-            currentTextStyleName = m_currentRunStyleName;
-        }
-        else {
-            currentTextStyleName = mainStyles->insert(m_currentTextStyle);
-            if (m_moveToStylesXml) {
-                mainStyles->markStyleForStylesXml(currentTextStyleName);
+    // We want to write to the higher body level
+    body = buffer.originalWriter();
+    QString currentTextStyleName;
+    if (!m_currentTextStyle.isEmpty() || !m_currentTextStyle.parentName().isEmpty()) {
+        currentTextStyleName = mainStyles->insert(m_currentTextStyle);
+    }
+    if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+            body->startElement("text:a");
+            body->addAttribute("xlink:type", "simple");
+            if (m_complexCharType == HyperlinkComplexFieldCharType) {
+                body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
             }
-        }
-        if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-                body->startElement("text:a");
-                body->addAttribute("xlink:type", "simple");
-                if (m_complexCharType == HyperlinkComplexFieldCharType) {
-                    body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
-                }
-                else {
-                    int spacePosition = m_complexCharValue.indexOf(' ');
-                    QString textValue = "#";
-                    textValue.append(m_complexCharValue.left(spacePosition));
-                    m_complexCharValue.remove(0, textValue.length());
-                    body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
-                }
+            else {
+                int spacePosition = m_complexCharValue.indexOf(' ');
+                QString textValue = "#";
+                textValue.append(m_complexCharValue.left(spacePosition));
+                m_complexCharValue.remove(0, textValue.length());
+                body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
             }
-            else if (m_complexCharType == ReferenceNextComplexFieldCharType) {
-                body->startElement("text:bookmark-ref");
-                body->addAttribute("text:reference-format", "page");
-                body->addAttribute("text:ref-name", m_complexCharValue);
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == CurrentPageComplexFieldCharType) {
-                body->startElement("text:page-number");
-                body->addAttribute("text:select-page", "current");
-                m_closeHyperlink = true;
-            }
-            else if (m_complexCharType == NumberOfPagesComplexFieldCharType) {
-                body->startElement("text:page-count");
-                m_closeHyperlink = true;
-            }
-        }
-
-        body->startElement("text:span", false);
-        body->addAttribute("text:style-name", currentTextStyleName);
-
-        if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->addTextSpan(m_complexCharValue);
-        }
-
-        // Writing the internal body of read_t now
-        body = buffer.releaseWriter();
-
-        body->endElement(); //text:span
-
-        if (m_complexCharStatus == InstrExecute) {
-             if (m_complexCharType == ReferenceNextComplexFieldCharType) {
-                 body->endElement(); //text:bookmar-ref
-                 m_complexCharType = NoComplexFieldCharType;
-             }
-             else if (m_complexCharType == ReferenceComplexFieldCharType) {
-                 m_complexCharType = ReferenceNextComplexFieldCharType;
-             }
-        }
-        if (m_complexCharStatus == ExecuteInstrNow && m_complexCharType == HyperlinkComplexFieldCharType) {
-            body->endElement(); // text:a
-        }
-        else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
-            body->endElement(); // text:a
-        //    m_complexCharType = NoComplexFieldCharType;
-        }
-
-        // Case where there's hyperlink with read_instrText, we only want to use the link
-        // with the next r element, not this.
-        if (m_complexCharStatus == InstrExecute) {
-            m_complexCharStatus = ExecuteInstrNow;
-        }
-        if (m_closeHyperlink) {
-            body->endElement(); //either text:bookmark-ref or text:a or text:page-number or text:page-count
-            m_closeHyperlink = false;
         }
     }
-    else {
-        // Writing the internal body of read_t now 
-        body = buffer.releaseWriter();
+
+    if (!currentTextStyleName.isEmpty()) {
+        body->startElement("text:span", false);
+        body->addAttribute("text:style-name", currentTextStyleName);
+    }
+
+    m_closeHyperlink = handleSpecialField();
+
+    if (m_complexCharStatus == ExecuteInstrNow) {
+        if (m_complexCharType == ReferenceNextComplexFieldCharType) {
+            body->startElement("text:bookmark-ref");
+            body->addAttribute("text:reference-format", "page");
+            body->addAttribute("text:ref-name", m_complexCharValue);
+            m_closeHyperlink = true;
+        }
+        else {
+            m_specialCharacters = m_complexCharValue;
+            m_closeHyperlink = handleSpecialField();
+        }
+    }
+
+    if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        body->addTextSpan(m_complexCharValue);
+    }
+
+    // Writing the internal body of read_t now
+    body = buffer.releaseWriter();
+
+    if (m_closeHyperlink) {
+        body->endElement(); //either text:bookmark-ref or text:a or text:page-number etc.
+        m_closeHyperlink = false;
+    }
+
+    if (!currentTextStyleName.isEmpty()) {
+        body->endElement(); //text:span
+    }
+
+    if (m_complexCharStatus == InstrExecute) {
+         if (m_complexCharType == ReferenceComplexFieldCharType) {
+             m_complexCharType = ReferenceNextComplexFieldCharType;
+         }
+    }
+    if (m_complexCharStatus == ExecuteInstrNow && m_complexCharType == HyperlinkComplexFieldCharType) {
+        body->endElement(); // text:a
+    }
+    else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        body->endElement(); // text:a
+    }
+
+    // Case where there's hyperlink with read_instrText, we only want to use the link
+    // with the next r element, not this.
+    if (m_complexCharStatus == InstrExecute) {
+        m_complexCharStatus = ExecuteInstrNow;
     }
 
     if (m_dropCapStatus == DropCapDone) {
@@ -2089,7 +2286,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [done] rStyle (Referenced Character Style) §17.3.2.29
  - rtl (Right To Left Text) §17.3.2.30
  - shadow (Shadow) §17.3.2.31
- - shd (Run Shading) §17.3.2.32
+ - [done] shd (Run Shading) §17.3.2.32
  - [done] smallCaps (Small Caps) §17.3.2.33
  - snapToGrid (Use Document Grid Settings For Inter-Character Spacing) §17.3.2.34
  - [done] spacing (Character Spacing Adjustment) §17.3.2.35
@@ -2112,10 +2309,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
 
     Q_ASSERT(m_currentTextStyleProperties == 0);
     m_currentTextStyleProperties = new KoCharacterStyle();
-
-    if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-    }
 
     while (!atEnd()) {
         readNext();
@@ -2154,26 +2347,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
     m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
-}
-
-//! CASE #410
-void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttributes& attrs)
-{
-    TRY_READ_ATTR(pStyle)
-    if (pStyle.isEmpty()) {
-//! CASE #412
-//! @todo
-    } else {
-//! CASE #411
-        if (isDefaultTocStyle(pStyle)) {
-            pStyle = QLatin1String("Contents") + pStyle.mid(3);
-        }
-    }
-
-    if (pStyle.isEmpty())
-        return;
-    kDebug() << "parent paragraph style name set to:" << pStyle;
-    m_currentParagraphStyle.setParentName(pStyle);
 }
 
 #undef CURRENT_EL
@@ -2245,7 +2418,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    setParentParagraphStyleName(attrs);
+    TRY_READ_ATTR(pStyle)
+    if (!pStyle.isEmpty()) {
+        m_currentParagraphStyle.setParentName(pStyle);
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
     m_pPr_lvl = lvl.toUInt(); // 0 (the default) on failure, so ok.
@@ -2255,7 +2431,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(rPr)
+            if (name() == "rPr") {
+                m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+                TRY_READ(rPr)
+                KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+            }
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(jc)
             ELSE_TRY_READ_IF(tabs)
@@ -2328,12 +2508,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_webHidden()
  - dir (§17.3.2.8)
  - docPartBody (§17.12.6)
  - e (§22.1.2.32)
- - endnote (§17.11.2)
+ - [done] endnote (§17.11.2)
  - fldSimple (§17.16.19)
  - fName (§22.1.2.37)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
@@ -2396,12 +2576,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkStart()
  - dir (§17.3.2.8)
  - docPartBody (§17.12.6)
  - e (§22.1.2.32)
- - endnote (§17.11.2)
+ - [done] endnote (§17.11.2)
  - fldSimple (§17.16.19)
  - fName (§22.1.2.37)
- - footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - [done] hyperlink (§17.16.22)
  - ins (§17.13.5.18)
  - lim (§22.1.2.52)
@@ -2456,6 +2636,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkEnd()
  this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
  defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
  numbering definition shall be used instead.
+
+ Parent elements:
+ - [done] pPr (§17.3.1.26);
+ - [done] pPr (§17.3.1.25);
+ - [done] pPr (§17.7.5.2);
+ - [done] pPr (§17.7.6.1);
+ - [done] pPr (§17.9.23);
+ - [done] pPr (§17.7.8.2)
+
+ Child elements:
+ - [done] ilvl (Numbering Level Reference) §17.9.3
+ - ins (Inserted Numbering Properties) §17.13.5.19
+ - [done] numId (Numbering Definition Instance Reference) §17.9.19
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
 {
@@ -2511,13 +2704,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ilvl()
 //! numPr handler (Numbering Definition Instance Reference)
 /*!
  This element specifies that the current paragraph references a numbering definition instance in the current document.
- 
+
  The presence of this element specifies that the paragraph will inherit the properties specified by the numbering
  definition in the num element (§2.9.16) at the level specified by the level specified in the lvl element (§2.9.7)
  and shall have an associated number positioned before the beginning of the text flow in this paragraph. When
  this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
  defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
  numbering definition shall be used instead.
+
+ Parent elements:
+ - [done] numPr (§17.3.1.19)
+
+ Child elements:
+ - none
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
 {
@@ -2530,6 +2729,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
     // The styles from numbering have to be given some name, NumStyle has been chosen here
     if (!val.isEmpty()) {
         m_currentListStyleName = QString("NumStyle%1").arg(val);
+        if (val == "0") {
+            m_listFound = false; // spec says that this means deleted list
+        }
     }
 
     readNext();
@@ -2566,8 +2768,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     m_hyperLink = false;
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
+    m_rot = 0;
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
 
     applyBorders(m_currentDrawStyle, m_textBorderStyles, m_textBorderPaddings);
 
@@ -2670,9 +2876,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     }
 
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-    if (m_moveToStylesXml) {
-        mainStyles->markStyleForStylesXml(styleName);
-    }
     body->addAttribute("draw:style-name", styleName);
 
 //! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
@@ -2689,8 +2892,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         body->addAttribute("draw:name", m_docPrName);
     }
     body->addAttribute("draw:layer", "layout");
-    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-    body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+
+    if (m_rot == 0) {
+        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+    }
+    else {
+        // m_rot is in 1/60,000th of a degree
+        qreal angle, xDiff, yDiff;
+        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+        QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                            .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+        body->addAttribute("draw:transform", rotString);
+    }
+
     body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
     body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
 
@@ -2794,9 +3009,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     }
 
     TRY_READ_ATTR(firstLine)
-    const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
-    if (ok) {
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+    TRY_READ_ATTR(hanging)
+    if (!hanging.isEmpty()) {
+        const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
+        if (ok) {
+           m_currentParagraphStyle.addPropertyPt("fo:text-indent", -firstInd);
+        }
+
+    }
+    else if (!firstLine.isEmpty()) {
+        const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
+        if (ok) {
+           m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+        }
     }
 
     TRY_READ_ATTR(right)
@@ -2817,7 +3042,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_b()
 {
     READ_PROLOGUE
-    m_currentTextStyleProperties->setFontWeight(READ_BOOLEAN_VAL ? QFont::Bold : QFont::Normal);
+    if (READ_BOOLEAN_VAL) {
+        m_currentTextStyle.addProperty("fo:font-weight", "bold");
+    }
+    else {
+        m_currentTextStyle.addProperty("fo:font-weight", "normal");
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -2829,7 +3059,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_b()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_i()
 {
     READ_PROLOGUE
-    m_currentTextStyleProperties->setFontItalic(READ_BOOLEAN_VAL);
+    if (READ_BOOLEAN_VAL) {
+        m_currentTextStyle.addProperty("fo:font-style", "italic");
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -2867,12 +3099,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_u()
  - rPr (§17.3.1.30)
  - rPr (§17.5.2.28)
  - rPr (§17.9.25)
- - rPr (§17.7.9.1)
- - rPr (§17.7.5.4) (within style)
+ - [done] rPr (§17.7.9.1)
+ - [done] rPr (§17.7.5.4) (within style)
  - [done] rPr (§17.3.2.28)
- - rPr (§17.5.2.27)
- - rPr (§17.7.6.2)
- - rPr (§17.3.2.27)
+ - [done] rPr (§17.5.2.27)
+ - [done] rPr (§17.7.6.2)
+ - [done] rPr (§17.3.2.27)
  No child elements.
 */
 //! @todo support all elements
@@ -2959,10 +3191,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
     // for rPr
     TRY_READ_ATTR(val)
 
-    const int pointSize = (TWIP_TO_POINT(val.toInt(&ok)));
+    const qreal pointSize = (TWIP_TO_POINT(val.toDouble(&ok)));
 
     if (ok) {
-        m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
+        m_currentTextStyle.addPropertyPt("fo:letter-spacing", qreal(pointSize) / 100.0);
     }
 
     TRY_READ_ATTR(lineRule)
@@ -3029,7 +3261,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_shd(shdCaller caller)
             m_currentParagraphStyle.addProperty("fo:background-color", fillColor);
         }
         if (caller == shd_tcPr) {
-            m_currentTableCellStyle.addProperty("fo:background-color", fillColor);
+            m_currentStyleProperties->backgroundColor = fillColor;
+            m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
         }
         if (caller == shd_rPr && val == "clear") {
             if (m_currentTextStyleProperties->background() == QBrush()) {
@@ -3155,12 +3388,59 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL tcMar
+//! tcMar (cell margin)
+/*!
+ Parent elements:
+ - ....
+
+ Child elements:
+ - ...
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcMar()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            const QXmlStreamAttributes attrs(attributes());
+            if (QUALIFIED_NAME_IS(top)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
+            }
+            else if (QUALIFIED_NAME_IS(right)) {
+                READ_ATTR(w)
+                m_currentStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL tblCellMar
 //! tblCellMar (cell margin defaults)
 /*!
  Parent elements:
  - [done] tblPr (§17.4.60)
- - [done] tblPr (§17.4.59) 
+ - [done] tblPr (§17.4.59)
  - [done] tblPr (§17.7.6.4)
  - [done] tblPr (§17.7.6.3)
 
@@ -3173,42 +3453,30 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
 {
     READ_PROLOGUE
 
-    QString side = QString();
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            const QXmlStreamAttributes attrs(attributes());
             if (QUALIFIED_NAME_IS(top)) {
-                side = "top";
+                READ_ATTR(w)
+                m_currentStyleProperties->topMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopMargin;
             }
             else if (QUALIFIED_NAME_IS(left)) {
-                side = "left";
+                READ_ATTR(w)
+                m_currentStyleProperties->leftMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftMargin;
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                side = "bottom";
+                READ_ATTR(w)
+                m_currentStyleProperties->bottomMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomMargin;
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                side = "right";
-            }
-            else {
-                side = QString();
-            }
-        }
-        if (!(side == QString())) {
-            const QXmlStreamAttributes attrs(attributes());
-            TRY_READ_ATTR(w)
-            if (!w.isEmpty()) {
-                bool ok;
-                const qreal distance = qreal(TWIP_TO_POINT(w.toDouble(&ok)));
-                if (ok) {
-                    m_currentTableCellStyleLeft.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleRight.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleBottom.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleTop.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideV.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideH.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
-                }
+                READ_ATTR(w)
+                m_currentStyleProperties->rightMargin = TWIP_TO_POINT(w.toDouble());
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightMargin;
             }
         }
     }
@@ -3235,75 +3503,71 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
 {
     READ_PROLOGUE
 
-    m_borderStyles.clear();
-    m_borderPaddings.clear();
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
-                if (!m_borderStyles.key(TopBorder).isEmpty()) {
-                    m_currentTableCellStyleTop.addProperty("fo:border-top", m_borderStyles.key(TopBorder), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(TopBorder).isEmpty()) {
-                    m_currentTableCellStyleTop.addProperty("fo:padding-top", m_borderPaddings.key(TopBorder), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->top = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
             }
             else if (QUALIFIED_NAME_IS(left)) {
-                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
-                if (!m_borderStyles.key(LeftBorder).isEmpty()) {
-                    m_currentTableCellStyleLeft.addProperty("fo:border-left", m_borderStyles.key(LeftBorder), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(LeftBorder).isEmpty()) {
-                    m_currentTableCellStyleLeft.addProperty("fo:padding-left", m_borderPaddings.key(LeftBorder), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->left = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::LeftBorder;
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
-                if (!m_borderStyles.key(BottomBorder).isEmpty()) {
-                    m_currentTableCellStyleBottom.addProperty("fo:border-bottom", m_borderStyles.key(BottomBorder), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(BottomBorder).isEmpty()) {
-                    m_currentTableCellStyleBottom.addProperty("fo:padding-bottom", m_borderPaddings.key(BottomBorder), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->bottom = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
-                if (!m_borderStyles.key(RightBorder).isEmpty()) {
-                    m_currentTableCellStyleRight.addProperty("fo:border-right", m_borderStyles.key(RightBorder), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(RightBorder).isEmpty()) {
-                    m_currentTableCellStyleRight.addProperty("fo:padding-right", m_borderPaddings.key(RightBorder), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->right = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::RightBorder;
             }
             else if (QUALIFIED_NAME_IS(insideV)) {
-                RETURN_IF_ERROR(readBorderElement(InsideV, "insideV"));
-                if (!m_borderStyles.key(InsideV).isEmpty()) {
-                    m_currentTableCellStyleInsideV.addProperty("fo:border-left", m_borderStyles.key(InsideV), KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideV.addProperty("fo:border-right", m_borderStyles.key(InsideV), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(InsideV).isEmpty()) {
-                    m_currentTableCellStyleInsideV.addProperty("fo:padding-left", m_borderPaddings.key(InsideV), KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideV.addProperty("fo:padding-right", m_borderPaddings.key(InsideV), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->insideV = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
             }
             else if (QUALIFIED_NAME_IS(insideH)) {
-                RETURN_IF_ERROR(readBorderElement(InsideH, "insideH"));
-                if (!m_borderStyles.key(InsideH).isEmpty()) {
-                    m_currentTableCellStyleInsideH.addProperty("fo:border-top", m_borderStyles.key(InsideH), KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideH.addProperty("fo:border-bottom", m_borderStyles.key(InsideH), KoGenStyle::TableCellType);
-                }
-                if (!m_borderPaddings.key(InsideH).isEmpty()) {
-                    m_currentTableCellStyleInsideH.addProperty("fo:padding-top", m_borderPaddings.key(InsideH), KoGenStyle::TableCellType);
-                    m_currentTableCellStyleInsideH.addProperty("fo:padding-bottom", m_borderPaddings.key(InsideH), KoGenStyle::TableCellType);
-                }
+                m_currentStyleProperties->insideH = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
             }
         }
     }
 
     READ_EPILOGUE
+}
+
+KoBorder::BorderData DocxXmlDocumentReader::getBorderData()
+{
+    const QXmlStreamAttributes attrs(attributes());
+
+    KoBorder::BorderData borderData;
+
+    TRY_READ_ATTR(val)
+    borderData.style = borderMap.value(val);
+
+    TRY_READ_ATTR(themeColor)
+    TRY_READ_ATTR(color)
+
+    if (color.isEmpty()) {
+        QString colorString = QString("#").append(color);
+        borderData.color = QColor(colorString);
+    }
+
+    // Fallback to theme
+    if (!borderData.color.isValid() && !themeColor.isEmpty()) {
+
+        MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+        colorItem = m_context->themes->colorScheme.value(themeColor);
+        if (colorItem) {
+            borderData.color = colorItem->value();
+        }
+    }
+
+    TRY_READ_ATTR(sz)
+    borderData.width = sz.toDouble() / 8.0;
+
+    return borderData;
 }
 
 #undef CURRENT_EL
@@ -3325,8 +3589,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    m_currentTableStyle.setParentName(val);
+    m_currentTableStyle = val;
+
     readNext();
+
     READ_EPILOGUE
 }
 
@@ -3359,6 +3625,75 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
 
     readNext();
     READ_EPILOGUE
+}
+
+bool DocxXmlDocumentReader::handleSpecialField()
+{
+    if (m_specialCharacters.isEmpty()) {
+        return false;
+    }
+    QString instr = m_specialCharacters.trimmed();
+    m_specialCharacters = QString();
+    QVector<QString> instructions;
+    while (instr.indexOf(' ') > 0) {
+        int place = instr.indexOf(' ');
+        instructions.push_back(instr.left(place));
+        instr = instr.mid(place + 1);
+    }
+    instructions.push_back(instr);
+    QString command = instructions.at(0);
+
+    bool returnTrue = true;
+
+    if (command == "AUTHOR") {
+        body->startElement("text:author-name");
+    }
+    else if (command == "CREATEDATE") {
+        body->startElement("text:creation-date");
+    }
+    else if (command == "DATE") {
+        body->startElement("text:date");
+    }
+    else if (command == "EDITIME") {
+        body->startElement("text:modification-time");
+    }
+    else if (command == "FILENAME") {
+        body->startElement("text:file-name");
+    }
+    else if (command == "NUMPAGES") {
+        body->startElement("text:page-count");
+    }
+    else if (command == "NUMWORDS") {
+        body->startElement("text:word-count");
+    }
+    else if (command == "PAGE") {
+        body->startElement("text:page-number");
+        body->addAttribute("text:select-page", "current");
+    }
+    else if (command == "PRINTDATE") {
+        body->startElement("text:print-date");
+    }
+    else if (command == "REF") {
+        if ((instructions.size() > 3) && instructions.contains("\\h")) {
+            body->startElement("text:bookmark-ref");
+            body->addAttribute("text:reference-format", "page");
+            body->addAttribute("text:ref-name", instructions.at(1));
+        }
+        else {
+            returnTrue = false;
+        }
+    }
+    else if (command == "TIME") {
+        body->startElement("text:time");
+    }
+    else if (command == "SAVEDATE") {
+        body->startElement("text:modification-date");
+    }
+    else {
+        returnTrue = false;
+    }
+
+    return returnTrue;
 }
 
 #undef CURRENT_EL
@@ -3420,20 +3755,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(instr)
-    instr = instr.trimmed();
 
-    bool closeElement = false;
-
-    if (instr == "PAGE" || instr.startsWith("PAGE ")) {
-        body->startElement("text:page-number");
-        body->addAttribute("text:select-page", "current");
-        closeElement = true;
-    }
-
-    if (instr == "NUMPAGES" || instr.startsWith("NUMPAGES ")) {
-        body->startElement("text:page-count");
-        closeElement = true;
-    }
+    m_specialCharacters = instr;
 
 // @todo support all attributes
 
@@ -3451,10 +3774,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             ELSE_TRY_READ_IF_NS(m, oMath)
             SKIP_UNKNOWN
         }
-    }
-
-    if (closeElement) {
-        body->endElement(); // text:page-number | text:page-count
     }
 
     READ_EPILOGUE
@@ -3618,16 +3937,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
-                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
+                RETURN_IF_ERROR(readBorderElement(TopBorder, "top", m_borderStyles, m_borderPaddings));
             }
             else if (QUALIFIED_NAME_IS(left)) {
-                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
+                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left", m_borderStyles, m_borderPaddings));
             }
             else if (QUALIFIED_NAME_IS(bottom)) {
-                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
+                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom", m_borderStyles, m_borderPaddings));
             }
             else if (QUALIFIED_NAME_IS(right)) {
-                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
+                RETURN_IF_ERROR(readBorderElement(RightBorder, "right", m_borderStyles, m_borderPaddings));
             }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -3665,29 +3984,27 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bdr()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_borderStyles.clear();
+    m_textBorderStyles.clear();
     m_textBorderPaddings.clear();
 
     READ_ATTR(val)
     TRY_READ_ATTR(sz)
     TRY_READ_ATTR(color)
-    createBorderStyle(sz, color, val, TopBorder);
-    createBorderStyle(sz, color, val, LeftBorder);
-    createBorderStyle(sz, color, val, BottomBorder);
-    createBorderStyle(sz, color, val, RightBorder);
+    createBorderStyle(sz, color, val, TopBorder, m_textBorderStyles);
+    createBorderStyle(sz, color, val, LeftBorder, m_textBorderStyles);
+    createBorderStyle(sz, color, val, BottomBorder, m_textBorderStyles);
+    createBorderStyle(sz, color, val, RightBorder, m_textBorderStyles);
     TRY_READ_ATTR(space)
     if (!space.isEmpty()) {
         bool ok = false;
         const qreal sp = qreal(TWIP_TO_POINT(space.toDouble(&ok)));
         if (ok) {
-            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", TopBorder);
-            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", LeftBorder);
-            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", RightBorder);
-            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", BottomBorder);
+            m_textBorderPaddings.insertMulti(TopBorder, sp);
+            m_textBorderPaddings.insertMulti(LeftBorder, sp);
+            m_textBorderPaddings.insertMulti(RightBorder, sp);
+            m_textBorderPaddings.insertMulti(BottomBorder, sp);
         }
     }
-
-    m_textBorderStyles = m_borderStyles;
 
     // Note that styles are not applied to anything, odf does not support
     // border around normal text run, but ooxml uses this element also to determine
@@ -3979,7 +4296,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lang()
  containing the background element.
 
  Child element:
- - drawing (§17.3.3.9)
+ - [done] drawing (§17.3.3.9)
+
  Attributes:
  - [done] color (Background Color)
  - themeColor (Background Theme Color)
@@ -3991,24 +4309,41 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(color)
+    // The specs say that the background will not be shown in the default view but only in the fullscreen-view except the
+    // displayBackgroundShape is defined. Since we cannot (and don't want to) make such assumptions about the available
+    // views we only take over whatever is displayed in that default view. That's inline with what OO.org does too.
+    bool displayBackgroundShape = m_context->import->documentSettings().contains("displayBackgroundShape");
+    if (displayBackgroundShape) {
+        QString val = m_context->import->documentSetting("displayBackgroundShape").toString();
+        displayBackgroundShape = (val != "off" && val != "0" && val != "false");
+    }
 
-    QColor tmpColor(MSOOXML::Utils::ST_HexColorRGB_to_QColor(color));
-    if (tmpColor.isValid())
-        m_backgroundColor = tmpColor;
+    if (displayBackgroundShape) {
+        const QXmlStreamAttributes attrs(attributes());
+        TRY_READ_ATTR(color)
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            if (qualifiedName() == "v:background") {
-                TRY_READ(VML_background)
+        QColor tmpColor(MSOOXML::Utils::ST_HexColorRGB_to_QColor(color));
+        if (tmpColor.isValid())
+            m_backgroundColor = tmpColor;
+
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL);
+            if (isStartElement()) {
+                if (qualifiedName() == "v:background") {
+                    TRY_READ(VML_background)
+                }
+                ELSE_TRY_READ_IF(drawing)
+                SKIP_UNKNOWN
             }
-            ELSE_TRY_READ_IF(drawing)
-            SKIP_UNKNOWN
+        }
+    } else {
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL)
         }
     }
+
     READ_EPILOGUE
 }
 
@@ -4024,9 +4359,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
  - comment (§17.13.4.2)
  - customXml (§17.5.1.6)
  - docPartBody (§17.12.6)
- - endnote (§17.11.2);footnote (§17.11.10)
- - ftr (§17.10.3)
- - hdr (§17.10.4)
+ - [done] endnote (§17.11.2);
+ - [done] footnote (§17.11.10)
+ - [done] ftr (§17.10.3)
+ - [done] hdr (§17.10.4)
  - sdtContent (§17.5.2.34)
  - [done] tc (§17.4.66)
 
@@ -4067,90 +4403,92 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 {
     READ_PROLOGUE
 
-    MSOOXML::Utils::XmlWriteBuffer tableBuf;
-    body = tableBuf.setWriter(body);
+    KoTable table;
+    m_table = &table;
 
-    //const QXmlStreamAttributes attrs(attributes());
-    d->clearColumnStyles();
-    m_currentTableName = QLatin1String("Table") + QString::number(m_currentTableNumber + 1);
-    m_currentTableStyle = KoGenStyle(KoGenStyle::TableAutoStyle, "table");
-    m_currentTableWidth = 0.0;
+    m_table->setName(QLatin1String("Table") + QString::number(m_currentTableNumber++));
     m_currentTableRowNumber = 0;
+    m_currentTableColumnNumber = 0;
 
-    //! @todo fix hardcoded table:align
-    m_currentTableStyle.addProperty("table:align", "left");
+    m_currentDefaultCellStyle = 0;
+    m_currentStyleProperties = 0;
+    m_currentLocalTableStyles = new MSOOXML::LocalTableStyles;
 
-    QString currentTableStyleName;
+    m_currentTableStyle.clear();
 
+    bool sectionAdded = false;
     if (m_createSectionStyle) {
-        // This is done to avoid the style to being duplicate to some other style
-        m_currentTableStyle.addAttribute("style:master-page-name", "placeholder");
-        currentTableStyleName = mainStyles->insert(m_currentTableStyle, m_currentTableName, KoGenStyles::DontAddNumberToName);
         m_createSectionStyle = false;
-        m_currentSectionStyleName = currentTableStyleName;
+        sectionAdded = true;
+        KoTblStyle::Ptr style = KoTblStyle::create();
+        if (m_moveToStylesXml) {
+            style->setAutoStyleInStylesDotXml(true);
+        }
+        style->setName("TableMainStyle" + QString::number(m_currentTableNumber - 1));
+        m_table->setTableStyle(style);
     }
-    else {
-        currentTableStyleName = mainStyles->insert(m_currentTableStyle, m_currentTableName, KoGenStyles::DontAddNumberToName);
-    }
-    if (m_moveToStylesXml) {
-        mainStyles->markStyleForStylesXml(currentTableStyleName);
-    }
-
-    m_currentTableCellStyleLeft = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-    m_currentTableCellStyleRight = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-    m_currentTableCellStyleTop = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-    m_currentTableCellStyleBottom = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-    m_currentTableCellStyleInsideV = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-    m_currentTableCellStyleInsideH = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    // Fix me, for tables inside tables this might not work
+    m_activeRoles = 0;
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(tblPr)
+            if(QUALIFIED_NAME_IS(tblPr)) {
+                m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                TRY_READ(tblPr)
+                m_currentDefaultCellStyle = m_currentStyleProperties;
+                m_currentStyleProperties = 0;
+
+                m_currentTableStyleBase = m_currentTableStyle;
+                m_currentTableStyle.clear();
+            }
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
-            ELSE_TRY_READ_IF(bookmarkStart)
-            ELSE_TRY_READ_IF(bookmarkEnd)
-//! @todo add ELSE_WRONG_FORMAT
+//             ELSE_TRY_READ_IF(bookmarkStart)
+//             ELSE_TRY_READ_IF(bookmarkEnd)
+//             ELSE_WRONG_FORMAT
         }
     }
 
-    body = tableBuf.originalWriter();
-    body->startElement("table:table");
-    body->addAttribute("table:name", m_currentTableName);
-    m_currentTableStyle.addProperty(
-        "style:width", QString::number(m_currentTableWidth) + QLatin1String("cm"),
-        KoGenStyle::TableType);
-    body->addAttribute("table:style-name", currentTableStyleName);
-    uint column = 0;
-    foreach (const ColumnStyleInfo& columnStyle, d->columnStyles) {
-        body->startElement("table:table-column");
-        const QString columnStyleName(
-            mainStyles->insert(
-                *columnStyle.style,
-                m_currentTableName + '.' + MSOOXML::Utils::columnName(column),
-                KoGenStyles::DontAddNumberToName)
-        );
-        if (m_moveToStylesXml) {
-            mainStyles->markStyleForStylesXml(columnStyleName);
-        }
+    defineTableStyles();
 
-        body->addAttribute("table:style-name", columnStyleName);
-        if (columnStyle.count > 1) {
-            body->addAttribute("table:number-columns-repeated", columnStyle.count);
-        }
-        body->endElement(); // table:table-column
-        column += columnStyle.count;
+    m_table->saveOdf(*body, *mainStyles);
+
+
+    if (sectionAdded) {
+        m_currentSectionStyleName = m_table->tableStyle()->name();
     }
-    d->clearColumnStyles();
 
-    (void)tableBuf.releaseWriter();
-    body->endElement(); // table:table
-
-    m_currentTableNumber++;
+    delete m_currentLocalTableStyles;
 
     READ_EPILOGUE
+}
+
+void DocxXmlDocumentReader::defineTableStyles()
+{
+    const int rowCount = m_table->rowCount();
+    const int columnCount = m_table->columnCount();
+
+    MSOOXML::DrawingTableStyleConverterProperties converterProperties;
+    converterProperties.setRowCount(rowCount);
+    converterProperties.setColumnCount(columnCount);
+    MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleBase);
+    converterProperties.setRoles(m_activeRoles);
+    converterProperties.setLocalStyles(*m_currentLocalTableStyles);
+
+    MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
+    for(int row = 0; row < rowCount; ++row ) {
+        for(int column = 0; column < columnCount; ++column ) {
+            KoCellStyle::Ptr style = styleConverter.style(row, column);
+            if (m_moveToStylesXml) {
+                style->setAutoStyleInStylesDotXml(true);
+            }
+            m_table->cellAt(row, column)->setStyle(style);
+        }
+    }
+
+    //converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
 }
 
 #undef CURRENT_EL
@@ -4224,14 +4562,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
 {
     READ_PROLOGUE
+
+    m_currentTableColumnNumber = 0;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridCol)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
     READ_EPILOGUE
 }
 
@@ -4255,21 +4598,23 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
 {
     READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
+
     TRY_READ_ATTR(w)
-    const QString widthCm(MSOOXML::Utils::ST_TwipsMeasure_to_cm(w));
-    KoGenStyle *columnStyle = new KoGenStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
-    if (!widthCm.isEmpty()) {
-        columnStyle->addProperty("style:column-width", widthCm, KoGenStyle::TableColumnType);
-        m_currentTableWidth += widthCm.left(widthCm.length()-2).toFloat();
+
+    const qreal columnWidth = w.toFloat() / 20.0;
+
+    KoColumn* column = m_table->columnAt(m_currentTableColumnNumber++);
+    KoColumnStyle::Ptr style = KoColumnStyle::create();
+    if (m_moveToStylesXml) {
+        style->setAutoStyleInStylesDotXml(true);
     }
-    // only add the style if it different than the previous; else just increate the counter
-    if (d->columnStyles.isEmpty() || !(*d->columnStyles.last().style == *columnStyle)) {
-        d->columnStyles.append(ColumnStyleInfo(columnStyle));
-    }
-    d->columnStyles.last().count++;
+    style->setWidth(columnWidth);
+    column->setStyle(style);
 
     readNext();
+
     READ_EPILOGUE
 }
 
@@ -4321,11 +4666,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 {
     READ_PROLOGUE
-    MSOOXML::Utils::XmlWriteBuffer rowBuf;
-    body = rowBuf.setWriter(body);
+
     m_currentTableColumnNumber = 0;
-    m_currentTableRowStyle = KoGenStyle(KoGenStyle::TableRowAutoStyle, "table-row");
-    m_currentTableRowNumber = 0;
 
     while (!atEnd()) {
         readNext();
@@ -4339,27 +4681,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
         }
     }
 
-    body = rowBuf.originalWriter();
-    body->startElement("table:table-row");
-
-    //! @todo add style:keep-together property
-    //! @todo add fo:keep-together
-    const QString tableRowStyleName(
-        mainStyles->insert(
-            m_currentTableRowStyle,
-            m_currentTableName + '.' + QString::number(m_currentTableRowNumber + 1),
-            KoGenStyles::DontAddNumberToName)
-    );
-    if (m_moveToStylesXml) {
-        mainStyles->markStyleForStylesXml(tableRowStyleName);
-    }
-
-    body->addAttribute("table:style-name", tableRowStyleName);
-
-
-    (void)rowBuf.releaseWriter();
-    body->endElement(); // table:table-row
-
     m_currentTableRowNumber++;
 
     READ_EPILOGUE
@@ -4369,11 +4690,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 #define CURRENT_EL trPr
 /*
 Parent elements:
- - tr (§17.4.79)
+ - [done] tr (§17.4.79)
 
 child elements:
  - cantSplit (Table Row Cannot Break Across Pages) §17.4.6
- - cnfStyle (Table Row Conditional Formatting) §17.4.7
+ - [done] cnfStyle (Table Row Conditional Formatting) §17.4.7
  - del (Deleted Table Row)§17.13.5.12
  - divId (Associated HTML div ID)§17.4.9
  - gridAfter (Grid Columns After Last Cell)§17.4.14
@@ -4385,7 +4706,7 @@ child elements:
  - tblHeader (Repeat Table Row on Every New Page) §17.4.50
  - [done]trHeight (Table Row Height) §17.4.81
  - trPrChange (Revision Information for Table Row Properties) §17.13.5.37
- - wAfter (Preferred Width After Table Row) §17.4.86 
+ - wAfter (Preferred Width After Table Row) §17.4.86
  - wBefore (Preferred Width Before Table Row) §17.4.87
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_trPr()
@@ -4396,8 +4717,73 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(trHeight)
+            ELSE_TRY_READ_IF(cnfStyle)
         }
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL cnfStyle
+/*
+Parent elements:
+ - many, eg. tr, tc, ppr
+
+child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_cnfStyle()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    // Note this parameter does not follow ooxml spec at all at least in office2007 but
+    // produces values from office 2003 ie. val with binary
+    // FirstRow, LastRow, FirstColumn, LastColumn, Band1Vertical, Band2Vertical,
+    // Band1Horizontal, Band2Horizontal, NE Cell, NW Cell, SE Cell, SW Cell.
+
+    TRY_READ_ATTR(val)
+
+    if (val.length() == 12) {
+        if (val.at(0) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstRow;
+        }
+        if (val.at(1) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::LastRow;
+        }
+        if (val.at(2) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::FirstCol;
+        }
+        if (val.at(3) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::LastCol;
+        }
+        if (val.at(4) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::ColumnBanded;
+        }
+        if (val.at(5) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::ColumnBanded;
+        }
+        if (val.at(6) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::RowBanded;
+        }
+        if (val.at(7) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::RowBanded;
+        }
+        if (val.at(8) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::NeCell;
+        }
+        if (val.at(9) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::NwCell;
+        }
+        if (val.at(10) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::SeCell;
+        }
+        if (val.at(11) == '1') {
+            m_activeRoles |= MSOOXML::DrawingTableStyleConverterProperties::SwCell;
+        }
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -4413,19 +4799,31 @@ Parent elements:
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
 {
     READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
     TRY_READ_ATTR(hRule)
-    const QString s(MSOOXML::Utils::TWIP_to_ODF(val));
+
+    KoRow* row = m_table->rowAt(m_currentTableRowNumber);
+    KoRowStyle::Ptr style = KoRowStyle::create();
+    if (m_moveToStylesXml) {
+        style->setAutoStyleInStylesDotXml(true);
+    }
+
+    style->setHeight(TWIP_TO_POINT(val.toFloat()));
+
     if (hRule == QLatin1String("exact")) {
-	m_currentTableRowStyle.addProperty("style:row-height",s, KoGenStyle::TableRowType);
+        style->setHeightType(KoRowStyle::ExactHeight);
     }
     else if (hRule == QLatin1String("atLeast")) {
-        m_currentTableRowStyle.addProperty("style:min-row-height",s, KoGenStyle::TableRowType);
+        style->setHeightType(KoRowStyle::MinimumHeight);
     }
     else {
-        m_currentTableRowStyle.addProperty("style:min-row-height",s, KoGenStyle::TableRowType);
+        style->setHeightType(KoRowStyle::MinimumHeight);
     }
+
+    row->setStyle(style);
+
     readNext();
     READ_EPILOGUE
 }
@@ -4479,125 +4877,79 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 {
     READ_PROLOGUE
-    MSOOXML::Utils::XmlWriteBuffer cellBuf;
-    body = cellBuf.setWriter(body);
-    m_currentTableCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-    m_gridSpan = 1;
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(p)
-            ELSE_TRY_READ_IF(tbl)
-            ELSE_TRY_READ_IF(tcPr)
-            ELSE_TRY_READ_IF(bookmarkStart)
-            ELSE_TRY_READ_IF(bookmarkEnd)
+            if(qualifiedName() == "w:p") {
+                KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+
+                QBuffer buffer;
+                KoXmlWriter* oldBody = body;
+                KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
+                body = &newBody;
+                TRY_READ(p)
+
+                KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
+                cell->appendChild(textChild);
+
+                body = oldBody;
+            }
+            else if(QUALIFIED_NAME_IS(tbl)) {
+                KoTable* currentTable = m_table;
+                int currentRow =  m_currentTableRowNumber;
+                int currentColumn = m_currentTableColumnNumber;
+                MSOOXML::TableStyleProperties* currentDefaultCellStyle = m_currentDefaultCellStyle;
+                MSOOXML::TableStyleProperties* currentStyleProperties = m_currentStyleProperties;
+                MSOOXML::LocalTableStyles* currentLocalStyles = m_currentLocalTableStyles;
+                QString currentTableStyle = m_currentTableStyle;
+                KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+
+                QBuffer buffer;
+                KoXmlWriter* oldBody = body;
+                KoXmlWriter newBody(&buffer, oldBody->indentLevel()+1);
+                body = &newBody;
+
+                TRY_READ(tbl)
+
+                KoRawCellChild* textChild = new KoRawCellChild(buffer.data());
+                cell->appendChild(textChild);
+
+                body = oldBody;
+
+                m_table = currentTable;
+                m_currentTableRowNumber = currentRow;
+                m_currentTableColumnNumber = currentColumn;
+                m_currentDefaultCellStyle = currentDefaultCellStyle;
+                m_currentStyleProperties = currentStyleProperties;
+                m_currentLocalTableStyles = currentLocalStyles;
+                m_currentTableStyle = currentTableStyle;
+            }
+            else if(QUALIFIED_NAME_IS(tcPr)) {
+                m_currentStyleProperties = new MSOOXML::TableStyleProperties;
+                TRY_READ(tcPr)
+                m_currentLocalTableStyles->setLocalStyle(m_currentStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
+                m_currentStyleProperties = 0;
+            }
+//             ELSE_TRY_READ_IF(bookmarkStart)
+//             ELSE_TRY_READ_IF(bookmarkEnd)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
-    body = cellBuf.originalWriter();
-    body->startElement("table:table-cell");
-    if (m_gridSpan > 1) {
-       body->addAttribute("table:number-columns-spanned", m_gridSpan);
-    }
-
-    bool lastColumn = false;
-
-    READ_EPILOGUE_WITHOUT_RETURN
-
-    readNext();
-    if (QUALIFIED_NAME_IS(tr)) {
-        lastColumn = true;
-    }
-    undoReadNext();
-
-    // We have to do this because ooxml predefined table styles so that you can specily
-    // all kinds of styles for one table style, where as odf does not allow it, but
-    // wants to have separate style for cell style.
-    QString currentParent = m_currentTableStyle.parentName();
-    const KoGenStyle *parentCellStyle = 0;
-
-    // FIXME: Current approach works for everything except last row.
-    m_currentTableCellStyle.addProperty("fo:border-bottom", "0.5pt solid #000000", KoGenStyle::TableCellType);
-
-    // Applying styles is done in two phases, first we apply styles from referenced style
-    // and in second phase from local styles to make sure local styles haver preference
-
-    // Phase 1 starts
-    if (m_currentTableColumnNumber == 0) {
-        if (!currentParent.isEmpty()) {
-            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsLeft"));
+    // Setting cell covers in case of cell span in horizontal
+    KoCell* const cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+    int columnSpan = cell->columnSpan();
+    if (columnSpan > 1) {
+        int columnIndex = 1;
+        while (columnIndex < columnSpan) {
+            ++m_currentTableColumnNumber;
+            KoCell* coveredCell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+            coveredCell->setCovered(true);
+            ++columnIndex;
         }
     }
-    else {
-        if (!currentParent.isEmpty()) {
-            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsInsideV"));
-        }
-    }
-    if (parentCellStyle != 0) {
-        MSOOXML::Utils::copyPropertiesFromStyle(*parentCellStyle, m_currentTableCellStyle, KoGenStyle::TableCellType);
-        parentCellStyle = 0;
-    }
-    if (lastColumn) {
-        if (!currentParent.isEmpty()) {
-            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsRight"));
-        }
-    }
-    if (parentCellStyle != 0) {
-        MSOOXML::Utils::copyPropertiesFromStyle(*parentCellStyle, m_currentTableCellStyle, KoGenStyle::TableCellType);
-        parentCellStyle = 0;
-    }
-    if (m_currentTableRowNumber == 0) {
-        if (!currentParent.isEmpty()) {
-            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsTop"));
-        }
-    }
-    else {
-        if (!currentParent.isEmpty()) {
-            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsInsideH"));
-        }
-    }
-    if (parentCellStyle != 0) {
-        MSOOXML::Utils::copyPropertiesFromStyle(*parentCellStyle, m_currentTableCellStyle, KoGenStyle::TableCellType);
-        parentCellStyle = 0;
-    }
-
-    // Phase 2 starts
-    if (m_currentTableColumnNumber == 0) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleLeft, m_currentTableCellStyle, KoGenStyle::TableCellType);
-    }
-    else {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleInsideV, m_currentTableCellStyle, KoGenStyle::TableCellType);
-    }
-    if (lastColumn) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleRight, m_currentTableCellStyle, KoGenStyle::TableCellType);
-    }
-    if (m_currentTableRowNumber == 0) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleTop, m_currentTableCellStyle, KoGenStyle::TableCellType);
-    }
-    else {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleInsideH, m_currentTableCellStyle, KoGenStyle::TableCellType);
-    }
-
-    const QString tableCellStyleName(
-        mainStyles->insert(
-            m_currentTableCellStyle,
-            m_currentTableName + '.' + MSOOXML::Utils::columnName(m_currentTableColumnNumber)
-                + QString::number(m_currentTableRowNumber + 1),
-            KoGenStyles::DontAddNumberToName)
-    );
-    if (m_moveToStylesXml) {
-        mainStyles->markStyleForStylesXml(tableCellStyleName);
-    }
-
-    body->addAttribute("table:style-name", tableCellStyleName);
-    //! @todo import various cell types
-    body->addAttribute("office:value-type", "string");
-
-    (void)cellBuf.releaseWriter();
-    body->endElement(); // table:table-cell
 
     m_currentTableColumnNumber++;
 
@@ -4620,35 +4972,205 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - cellDel (Table Cell Deletion) §17.13.5.1
  - cellIns (Table Cell Insertion) §17.13.5.2
  - cellMerge (Vertically Merged/Split Table Cells) §17.13.5.3
- - cnfStyle (Table Cell Conditional Formatting) §17.4.8
+ - [done] cnfStyle (Table Cell Conditional Formatting) §17.4.8
  - [done] gridSpan (Grid Columns Spanned by Current Table Cell) §17.4.17
  - headers (Header Cells Associated With Table Cell) §17.4.19
  - hideMark (Ignore End Of Cell Marker In Row Height Calculation) §17.4.21
  - hMerge (Horizontally Merged Cell) §17.4.22
  - noWrap (Don't Wrap Cell Content) §17.4.30
  - [done] shd (Table Cell Shading) §17.4.33
- - tcBorders (Table Cell Borders) §17.4.67
+ - [done] tcBorders (Table Cell Borders) §17.4.67
  - tcFitText (Fit Text Within Cell) §17.4.68
- - tcMar (Single Table Cell Margins) §17.4.69
+ - [done] tcMar (Single Table Cell Margins) §17.4.69
  - tcPrChange (Revision Information for Table Cell Properties) §17.13.5.36
  - tcW (Preferred Table Cell Width) §17.4.72
- - textDirection (Table Cell Text Flow Direction) §17.4.73
- - vAlign (Table Cell Vertical Alignment) §17.4.84
- - vMerge (Vertically Merged Cell) §17.4.85
+ - [done] textDirection (Table Cell Text Flow Direction) §17.4.73
+ - [done] vAlign (Table Cell Vertical Alignment) §17.4.84
+ - [done] vMerge (Vertically Merged Cell) §17.4.85
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
 {
     READ_PROLOGUE
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridSpan)
+            ELSE_TRY_READ_IF(cnfStyle)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
+            ELSE_TRY_READ_IF(tcBorders)
+            ELSE_TRY_READ_IF(tcMar)
+            ELSE_TRY_READ_IF(vMerge)
+            ELSE_TRY_READ_IF(vAlign)
+            else if (name() == "textDirection") {
+                TRY_READ(textDirectionTc)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL vAlign
+//! vAlign Handler (Table Cell Vertical Alignement)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_vAlign()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        m_currentStyleProperties->verticalAlign = val;
+        m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::VerticalAlign;
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL textDirection
+//! textDirection Handler (Table Cell Text Flow Direction)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_textDirectionTc()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        m_currentStyleProperties->glyphOrientation = false;
+        m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::GlyphOrientation;
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL vMerge
+//! vMerge Handler (vertically merged cell)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_vMerge()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) { // Not empty value marks the start of the vertical merging
+        KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setRowSpan(1);
+    } else {
+        // In this case, it should continue from which ever cell above was the starter
+        KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setCovered(true);
+        int previousRow = m_currentTableRowNumber - 1;
+        while (previousRow > -1) {
+            KoCell* previousRowCell = m_table->cellAt(previousRow, m_currentTableColumnNumber);
+            if (!previousRowCell->isCovered()) {
+                previousRowCell->setRowSpan(previousRowCell->rowSpan() + 1);
+                // This current cell should be replaced with <table:covered-table-cell>
+                cell->setCovered(true);
+                break;
+            }
+            --previousRow;
+        }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tcBorders
+//! tcBorders handlers (table cell borders)
+/*
+ Parent elements:
+ - [done] tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - [done] bottom (Table Cell Bottom Border) §17.4.3
+ - end (Table Cell Trailing Edge Border) §17.4.12
+ - [done] insideH (Table Cell Inside Horizontal Edges Border) §17.4.24
+ - [done] insideV (Table Cell Inside Vertical Edges Border) §17.4.26
+ - start (Table Cell Leading Edge Border) §17.4.34
+ - [done] tl2br (Table Cell Top Left to Bottom Right Diagonal Border) §17.4.74
+ - [done] top (Table Cell Top Border) §17.4.75
+ - [done] tr2bl (Table Cell Top Right to Bottom Left Diagonal Border) §17.4.80
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcBorders()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(top)) {
+                m_currentStyleProperties->top = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::TopBorder;
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                m_currentStyleProperties->bottom = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BottomBorder;
+            }
+            else if (QUALIFIED_NAME_IS(insideV)) {
+                m_currentStyleProperties->insideV = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideVBorder;
+            }
+            else if (QUALIFIED_NAME_IS(insideH)) {
+                m_currentStyleProperties->insideH = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::InsideHBorder;
+            }
+            else if (QUALIFIED_NAME_IS(tl2br)) {
+                m_currentStyleProperties->tl2br = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tl2brBorder;
+            }
+            else if (QUALIFIED_NAME_IS(tr2bl)) {
+                m_currentStyleProperties->tr2bl = getBorderData();
+                m_currentStyleProperties->setProperties |= MSOOXML::TableStyleProperties::Tr2blBorder;
+            }
+        }
+    }
+
     READ_EPILOGUE
 }
 
@@ -4673,7 +5195,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridSpan()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_gridSpan = val.toInt();
+        KoCell* const cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+        cell->setColumnSpan(val.toInt());
     }
 
     readNext();
@@ -4705,9 +5228,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
     kDebug() << "oleName:" << oleName;
 
-    QString destinationName;
 //! @todo ooo saves binaries to the root dir; should we?
-    RETURN_IF_ERROR( copyFile(oleName, QString(), destinationName) )
+
+    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
+    KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
+    if (stat == KoFilter::OK) {
+        addManifestEntryForFile(destinationName);
+    }
 
     while (!atEnd()) {
         readNext();
@@ -4779,7 +5306,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     m_docPrName.clear();
     m_docPrDescr.clear();
     m_drawing_anchor = true; // for pic:pic
-    m_behindDoc = false;
+    bool behindDoc = false;
+    bool allowOverlap = false;
 
     const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
@@ -4792,7 +5320,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     READ_ATTR_WITHOUT_NS(distR)
     distToODF("fo:margin-right", distR);
 
-    m_behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+    behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+    allowOverlap = MSOOXML::Utils::convertBooleanAttr(attrs.value("allowOverlap").toString());
 
     while (!atEnd()) {
         readNext();
@@ -4815,7 +5344,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 if (!expectElEnd(QUALIFIED_NAME(wrapNone))) {
                     return KoFilter::WrongFormat;
                 }
-                saveStyleWrap("none");
+                if (allowOverlap) {
+                    m_currentDrawStyle->addProperty("style:wrap", "run-through");
+                    if (behindDoc) {
+                        m_currentDrawStyle->addProperty("style:run-through", "background");
+                    }
+                    else {
+                        m_currentDrawStyle->addProperty("style:run-through", "foreground");
+                    }
+                }
+                else {
+                    saveStyleWrap("none");
+                }
             } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
                 // This element specifies that text shall wrap around the top
@@ -5187,9 +5727,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
     READ_PROLOGUE
     readWrap();
 
-    saveStyleWrap("run-through");
-    m_currentDrawStyle->addProperty(QLatin1String("style:run-through"),
-                                    (m_behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground", KoGenStyle::GraphicType);
+    // Note that the name wrapThrough is misleading, it does not mean run-through it just means that wrapping
+    // happens potentially inside the container
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -5367,6 +5907,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
     READ_PROLOGUE
 
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    if (m_moveToStylesXml) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
 
     MSOOXML::Utils::XmlWriteBuffer buffer;
     body = buffer.setWriter(body);
@@ -5385,15 +5928,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
     body = buffer.originalWriter();
 
     QString currentTextStyleName = mainStyles->insert(m_currentTextStyle);
-    if (m_moveToStylesXml) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
-    }
 
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
 
+    bool closeHyperLink = handleSpecialField();
+
     // Writing the internal body of read_t now
     body = buffer.releaseWriter();
+
+    if (closeHyperLink) {
+        body->endElement(); // some special field
+    }
 
     body->endElement(); //text:span
 

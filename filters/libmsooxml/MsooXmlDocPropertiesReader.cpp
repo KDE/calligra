@@ -59,9 +59,9 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext
 
     readNext();
 
-    if (!expectEl("cp:coreProperties")) 
+    if (!expectEl("cp:coreProperties"))
         return KoFilter::WrongFormat;
-    
+
     if (!expectNS(MSOOXML::Schemas::core_properties))
         return KoFilter::WrongFormat;
 
@@ -79,7 +79,7 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext
 
     kDebug() << qualifiedName();
     TRY_READ(coreProperties)
-    
+
     kDebug() << "===========finished============";
     return KoFilter::OK;
 }
@@ -90,9 +90,9 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
 {
     READ_PROLOGUE
 
-    while(true) {
+    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             const QString qn = qualifiedName().toString();
             while (!isEndElement() && !isCharacters())

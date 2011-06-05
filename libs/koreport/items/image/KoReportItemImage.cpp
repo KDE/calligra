@@ -34,12 +34,12 @@ KoReportItemImage::KoReportItemImage(QDomNode & element)
     QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
     Z = element.toElement().attribute("report:z-index").toDouble();
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
-    
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
@@ -52,6 +52,11 @@ KoReportItemImage::KoReportItemImage(QDomNode & element)
         }
     }
 
+}
+
+KoReportItemImage::~KoReportItemImage()
+{
+    delete m_set;
 }
 
 bool KoReportItemImage::isInline() const
@@ -107,7 +112,7 @@ void KoReportItemImage::createProperties()
 {
     m_set = new KoProperty::Set(0, "Image");
 
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     QStringList keys, strings;
     keys << "clip" << "stretch";
@@ -141,7 +146,7 @@ QString KoReportItemImage::typeName() const
 int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
-    
+
     QString uudata;
     QByteArray imgdata;
     if (!isInline()) {
@@ -163,11 +168,20 @@ int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offse
 
     id->setPosition(m_pos.toScene() + offset);
     id->setSize(m_size.toScene());
-    if (page) page->addPrimitive(id);
-
-    OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
-    i2->setPosition(m_pos.toPoint());
-    if (section) section->addPrimitive(i2);
+    if (page) {
+        page->addPrimitive(id);
+    }
+    
+    if (section) {
+        OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
+        i2->setPosition(m_pos.toPoint());
+        section->addPrimitive(i2);
+    }
+    
+    if (!page) {
+        delete id;
+    }
+    
     return 0; //Item doesnt stretch the section height
 }
 

@@ -48,7 +48,7 @@ class StyleStorageLoaderJob;
  * replacement of this backend. Decorated with some additional features like
  * garbage collection, caching, used area tracking, etc.
  */
-class CALLIGRA_TABLES_EXPORT StyleStorage : public QObject
+class CALLIGRA_TABLES_ODF_EXPORT StyleStorage : public QObject
 {
     Q_OBJECT
 
@@ -130,7 +130,7 @@ public:
     /**
      * Assigns \p subStyle to the area \p rect .
      */
-    void insert(const QRect& rect, const SharedSubStyle& subStyle);
+    void insert(const QRect& rect, const SharedSubStyle& subStyle, bool markRegionChanged = true);
 
     /**
      * Assigns the substyles contained in \p style to the area \p region .

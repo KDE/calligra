@@ -66,9 +66,11 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas() { m_canvas = 0; }
 private slots:
 
     void setImage(KisImageWSP image);
+    void notifyImageDeleted();
 
     void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);
 
@@ -101,10 +103,9 @@ private slots:
     void slotNewEffectMask();
     void slotNewTransformationMask();
     void slotNewSelectionMask();
-    void slotCompositeOpChanged(const QString&);
+    void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
     void slotOpacitySliderMoved(qreal opacity);
-    void slotNodeActivated(const QModelIndex &);
 
 private:
 

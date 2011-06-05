@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright (C) 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009,2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -135,12 +135,13 @@ void KarbonPatternTool::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
     case Qt::Key_I: {
-        uint handleRadius = canvas()->resourceManager()->handleRadius();
+        KoResourceManager *rm = canvas()->shapeController()->resourceManager();
+        uint handleRadius = rm->handleRadius();
         if (event->modifiers() & Qt::ControlModifier)
             handleRadius--;
         else
             handleRadius++;
-        canvas()->resourceManager()->setHandleRadius(handleRadius);
+        rm->setHandleRadius(handleRadius);
     }
     break;
     default:
@@ -220,8 +221,8 @@ void KarbonPatternTool::activate(ToolActivation toolActivation, const QSet<KoSha
 
     initialize();
 
-    KarbonPatternEditStrategyBase::setHandleRadius(canvas()->resourceManager()->handleRadius());
-    KarbonPatternEditStrategyBase::setGrabSensitivity(canvas()->resourceManager()->grabSensitivity());
+    KarbonPatternEditStrategyBase::setHandleRadius(handleRadius());
+    KarbonPatternEditStrategyBase::setGrabSensitivity(grabSensitivity());
 
     useCursor(Qt::ArrowCursor);
 
@@ -249,16 +250,16 @@ void KarbonPatternTool::deactivate()
 void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
 {
     switch (key) {
-    case KoCanvasResource::HandleRadius:
+    case KoDocumentResource::HandleRadius:
         foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
-        strategy->repaint();
+            strategy->repaint();
 
         KarbonPatternEditStrategyBase::setHandleRadius(res.toUInt());
 
         foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
-        strategy->repaint();
+            strategy->repaint();
         break;
-    case KoCanvasResource::GrabSensitivity:
+    case KoDocumentResource::GrabSensitivity:
         KarbonPatternEditStrategyBase::setGrabSensitivity(res.toUInt());
         break;
     default:
@@ -266,9 +267,9 @@ void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
     }
 }
 
-QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
+QList<QWidget *> KarbonPatternTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
 
     m_optionsWidget = new KarbonPatternOptionsWidget();
     connect(m_optionsWidget, SIGNAL(patternChanged()),
@@ -282,11 +283,11 @@ QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
     connect(chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(patternSelected(KoResource*)));
 
-    widgets.insert(i18n("Pattern Options"), m_optionsWidget);
-    widgets.insert(i18n("Patterns"), chooser);
-
+    m_optionsWidget->setWindowTitle(i18n("Pattern Options"));
+    widgets.append(m_optionsWidget);
+    chooser->setWindowTitle(i18n("Patterns"));
+    widgets.append(chooser);
     updateOptionsWidget();
-
     return widgets;
 }
 

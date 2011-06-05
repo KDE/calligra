@@ -1,5 +1,6 @@
 /* This file is part of the wvWare 2 project
    Copyright (C) 2001-2003 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -41,7 +42,6 @@
 #include "convert.h"
 #include "zcodec.hxx"
 #include "wvlog.h"
-#include "ms_odraw.h"
 
 #include <gsf/gsf-input.h>
 #include <gsf/gsf-output.h>
@@ -70,8 +70,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
         m_properties( 0 ), m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ),
         m_footnotes( 0 ), m_annotations( 0 ), m_fonts( 0 ), m_drawings( 0 ), m_bookmarks(0),
         m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ), m_cellMarkFound( false ),
-        m_remainingCells( 0 ), m_currentParagraph( new Paragraph ), m_remainingChars( 0 ),
-        m_sectionNumber( 0 ), m_table_skimming( 0 ), m_subDocument( None ), m_parsingMode( Default )
+        m_remainingCells( 0 ), m_table_skimming( 0 ),
+        m_currentParagraph( new Paragraph ), m_remainingChars( 0 ),
+        m_sectionNumber( 0 ), m_subDocument( None ), m_parsingMode( Default )
 {
     if ( !isOk() )
         return;
@@ -90,10 +91,13 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
         m_data = 0;
     }
 
+    //validate FIB, keep going even if it's not perfect
+    m_fib.valid();
+
 #ifdef WV2_DUMP_FIB
     wvlog << "Dumping some parts of the FIB: " << endl;
     wvlog << "   wIdent=" << m_fib.wIdent << endl;
-    wvlog << "   nFib=" << m_fib.nFib << endl;
+    wvlog << "   nFib=0x" << hex << m_fib.nFib << dec << endl;
     wvlog << "   nFibBack=" << m_fib.nFibBack << endl;
     wvlog << "   lid=0x" << hex << m_fib.lid << dec << endl;
     wvlog << "   lidFE=0x" << hex << m_fib.lidFE << dec << endl;
@@ -117,9 +121,8 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
     wvlog << "   cpnBtePap=" << m_fib.cpnBtePap << endl;
     wvlog << "   fcPlcfandRef=" << m_fib.fcPlcfandRef << endl;
     wvlog << "   lcbPlcfandRef=" << m_fib.lcbPlcfandRef << endl;
-
+    wvlog << "   cswNew=" << hex << m_fib.cswNew << dec << endl;
 #endif
-
     // Initialize all the cached data structures like stylesheets, fonts,
     // textconverter,...
     init();
@@ -128,8 +131,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
 Parser9x::~Parser9x()
 {
     // Sanity check
-    if ( !oldParsingStates.empty() || m_subDocument != None )
+    if ( !oldParsingStates.empty() || m_subDocument != None ) {
         wvlog << "Bug: Someone messed up the save/restore stack!" << endl;
+    }
 
     delete m_currentParagraph;
     delete m_tableRowStart;
@@ -204,7 +208,7 @@ const StyleSheet& Parser9x::styleSheet() const
     return m_properties->styleSheet();
 }
 
-Drawings * Parser9x::getDrawings()
+const Drawings* Parser9x::getDrawings() const
 {
     return m_drawings;
 }
@@ -232,15 +236,18 @@ void Parser9x::parseFootnote( const FootnoteData& data )
 #ifdef WV2_DEBUG_FOOTNOTES
     wvlog << "Parser9x::parseFootnote() #####################" << endl;
 #endif
-    if ( data.limCP - data.startCP == 0 ) // shouldn't happen, but well...
+    // shouldn't happen, but well...
+    if ( data.limCP - data.startCP == 0 ) {
         return;
+    }
 
     saveState( data.limCP - data.startCP, data.type == FootnoteData::Footnote ? Footnote : Endnote );
     m_subDocumentHandler->footnoteStart();
 
     U32 offset = m_fib.ccpText + data.startCP;
-    if ( data.type == FootnoteData::Endnote )
+    if ( data.type == FootnoteData::Endnote ) {
         offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpMcr + m_fib.ccpAtn;
+    }
     parseHelper( Position( offset, m_plcfpcd ) );
 
     m_subDocumentHandler->footnoteEnd();
@@ -255,13 +262,15 @@ void Parser9x::parseAnnotation( const AnnotationData& data )
 #ifdef WV2_DEBUG_ANNOTATIONS
     wvlog << "Parser9x::parseAnnotation() #####################" << endl;
 #endif
-    if ( data.limCP - data.startCP == 0 ) // shouldn't happen, but well...
+    // shouldn't happen, but well...
+    if ( data.limCP - data.startCP == 0 ) {
         return;
+    }
 
     saveState( data.limCP - data.startCP, Annotation );
     m_subDocumentHandler->annotationStart();
 
-    U32 offset = m_fib.ccpText + data.startCP;
+    U32 offset = m_fib.ccpText + m_fib.ccpFtn + m_fib.ccpHdd + data.startCP;
     parseHelper( Position( offset, m_plcfpcd ) );
 
     m_subDocumentHandler->annotationEnd();
@@ -278,8 +287,9 @@ void Parser9x::parseTableRow( const TableRowData& data )
              " startOffset=" << data.startOffset << " length=" << data.length << endl;
 #endif
 
-    if ( data.length == 0 ) // idiot safe ;-)
+    if ( data.length == 0 ) {
         return;
+    }
 
     saveState( data.length, static_cast<SubDocument>( data.subDocument ), Table );
     m_remainingCells = data.tap->itcMac;
@@ -296,35 +306,29 @@ void Parser9x::parseTableRow( const TableRowData& data )
 #endif
 }
 
-void Parser9x::parseTextBox( uint lid, bool bodyDrawing)
+void Parser9x::parseTextBox(uint index, bool stylesxml)
 {
     wvlog << "Parser9x::parseTextBox" << endl;
 
-    PLCF<Word97::FTXBXS> * plcftxbxTxt =  NULL;
-    if (bodyDrawing) {
-        plcftxbxTxt =  m_drawings->getTxbxTxt();
-    } else {
+    const PLCF<Word97::FTXBXS>* plcftxbxTxt = 0;
+    if (stylesxml) {
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
+    } else {
+        plcftxbxTxt =  m_drawings->getTxbxTxt();
     }
-
-    if (plcftxbxTxt == NULL) {
+    if (!plcftxbxTxt) {
         return;
     }
     //NOTE: text ranges for each FTXBXS structure are separated by 0x0D
     //characters that MUST be the last character in each range.
 
-    PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( 0 ) );
+    PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( index ) );
 
-    for (size_t i = 0; i < plcftxbxTxt->count(); i++, ++it) {
-        if (it.current()->lid == (S32)lid) {
-
-            saveState( it.currentRun() - 1, TextBox );
-            U32 offset = m_fib.ccpText + it.currentStart();
-            offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn + m_fib.ccpEdn;
-            parseHelper( Position( offset, m_plcfpcd ) );
-            restoreState();
-        }
-    }
+    saveState( it.currentRun() - 1, TextBox );
+    U32 offset = m_fib.ccpText + it.currentStart();
+    offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn + m_fib.ccpEdn;
+    parseHelper( Position( offset, m_plcfpcd ) );
+    restoreState();
 }
 
 std::string Parser9x::tableStream() const
@@ -463,12 +467,15 @@ bool Parser9x::parseBody()
     m_subDocumentHandler->bodyStart();
 
     SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( 0 ) );
-    if ( !sep )
+    if ( !sep ) {
         sep = new Word97::SEP(); // don't pass 0 pointers in any case
-    m_textHandler->sectionStart( sep ); // First section, starting at CP 0
+    }
 #ifdef WV2_DEBUG_SECTIONS
     sep->dump();
 #endif
+
+    m_textHandler->sectionStart( sep ); // First section, starting at CP 0
+
     emitHeaderData( sep );
     sep = 0; // get rid of the huge SEP
 
@@ -547,7 +554,9 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
             if ( !m_currentParagraph->empty() || start != index ) {
                 // No "index - start + 1" here, as we don't want to copy the section mark!
                 UString ustring( processPieceStringHelper( string, start, index ) );
-                m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+                m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                                      fc + start * sizeof( String ),
+                                                      sizeof( String ) == sizeof( XCHAR ) ) );
 
                 processParagraph( fc + index * sizeof( String ) );
             }
@@ -583,10 +592,20 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
             // No "index - start + 1" here, as we don't want to copy the
             // paragraph mark!
             UString ustring( processPieceStringHelper( string, start, index ) );
-            m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+            m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                                  fc + start * sizeof( String ),
+                                                  sizeof( String ) == sizeof( XCHAR ) ) );
             processParagraph( fc + index * sizeof( String ) );
             m_cellMarkFound = false;
             start = ++index;
+
+            //signal progress
+            if (m_subDocument == Main && m_parsingMode == Default) {
+                int value = m_fib.ccpText - m_remainingChars + index;
+                int percentage = (int)((value / (float) m_fib.ccpText) * 100);
+                m_subDocumentHandler->setProgress( percentage );
+            }
+
             break;
         }
         // "Special" characters
@@ -623,7 +642,8 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
         // Finally we have to add the remaining text to the current paragraph
         // (if there is any)
         UString ustring( processPieceStringHelper( string, start, limit ) );
-        m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+        m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
+                                              fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
     }
     delete [] string;
 }
@@ -696,6 +716,10 @@ void Parser9x::processParagraph( U32 fc )
         delete props;
     }
     else {
+#ifdef WV2_DEBUG_PARAGRAPHS
+        props->pap().dump();
+#endif
+
         //Check if table skimming was active lately.  If yes, then this is the
         //paragraph behind the table (either a PARAGRAPH_MARK or a SECTION_MARK
         //follows a table)!
@@ -704,7 +728,6 @@ void Parser9x::processParagraph( U32 fc )
             wvlog << "A table was identified lately: informing the texthandler.";
             m_textHandler->tableEndFound();
         }
-
 
         // Now that we have the complete PAP, let's see if this paragraph belongs to a list
         props->createListInfo( *m_lists );
@@ -731,8 +754,9 @@ void Parser9x::processParagraph( U32 fc )
             while ( index < limit ) {
                 Word97::CHP* chp = new Word97::CHP( style->chp() );
                 U32 length = m_properties->fullSavedChp( ( *it ).m_startFC + index * ( ( *it ).m_isUnicode ? 2 : 1 ), chp, style );
-                if ( ( *it ).m_isUnicode )
+                if ( ( *it ).m_isUnicode ) {
                     length >>= 1;
+                }
                 length = length > limit - index ? limit - index : length;
 
                 m_properties->applyClxGrpprl( pcdIt.current(), m_fib.fcClx, chp, style );
@@ -750,7 +774,7 @@ void Parser9x::processParagraph( U32 fc )
 
         if ( m_cellMarkFound ) {
             m_tableHandler->tableCellEnd();
-            if ( --m_remainingCells ) {
+            if ( --m_remainingCells > 0) {
                 m_tableHandler->tableCellStart();
             }
         }
@@ -778,73 +802,90 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
     // O(1) nextFootnote() call to something like an O(n) containsFootnote( start, lim )
     // Up to now Word 97, 2000, and 2002 seem to be bug compatible and fullfill that precondition.
     //
+
+    //only process the chunk if not marked hidden, TODO use text:display="none"
+    if (chp->fVanish == 1) {
+        return;
+    }
+
     while ( length > 0 ) {
+        U32 startCP = currentStart + chunk.m_position.offset + index;
         U32 disruption = 0xffffffff; // "infinity"
         U32 bkmk_length = 0; //num. of CPs enclosed in a bookmark
 
         if ( m_footnotes ) {
+            if (m_subDocument == Main) {
+                m_footnotes->check(startCP);
+            }
+
             U32 nextFtn = m_footnotes->nextFootnote();
             U32 nextEnd = m_footnotes->nextEndnote();
             disruption = nextFtn < nextEnd ? nextFtn : nextEnd;
+
 #ifdef WV2_DEBUG_FOOTNOTES
             wvlog << "nextFtn=" << nextFtn << " nextEnd=" << nextEnd <<
                      " disruption=" << disruption << " length=" << length << endl;
 #endif
         } else if ( m_bookmarks ) {
+            if (m_subDocument == Main) {
+                m_bookmarks->check(startCP);
+            }
+
             U32 nextBkf = m_bookmarks->nextBookmarkStart();
             U32 nextBkl = m_bookmarks->nextBookmarkEnd();
-            bkmk_length = nextBkl - nextBkf;
 
-            //it shouldn't be possible that (nextBkf < nextBkl)
-            Q_ASSERT (nextBkf <= nextBkl);
+            bkmk_length = nextBkl - nextBkf;
             disruption = nextBkf;
 
 #ifdef WV2_DEBUG_BOOKMARK
-            wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << 
-                     " disruption=" << disruption << " length=" << length << endl;
+            wvlog << "nextBkf=" << nextBkf << "(0x" << hex << nextBkf << ")" <<dec<<
+                     "nextBkl=" << nextBkl << "(0x" << hex << nextBkl << ")" <<dec<<
+                     "disruption=" << disruption << "length=" << length << endl;
 #endif
+            Q_ASSERT (nextBkf <= nextBkl);
         }
-        U32 startCP = currentStart + chunk.m_position.offset + index;
 
         if ( (disruption >= startCP) && (disruption < (startCP + length)) ) {
 
 #if defined WV2_DEBUG_FOOTNOTES || defined WV2_DEBUG_BOOKMARK
             wvlog << "startCP=" << startCP << " disruption=" << disruption << 
-		     " bkmk_length=" << bkmk_length << " length=" << length << endl;;
+		     " bkmk_length=" << bkmk_length << " length=" << length << endl;
 #endif
             U32 disLen = disruption - startCP;
             //there's something to be processed before the bookmark
             if ( disLen != 0 ) {
                 processRun( chunk, chp, disLen, index, currentStart );
+                length -= disLen;
+                index += disLen;
             }
-            length -= disLen;
-            index += disLen;
 
             if ( m_footnotes ) {
+                //TODO: support for bookmarks in the number of a footnote
                 m_customFootnote = chunk.m_text.substr(index, length);
                 emitFootnote( m_customFootnote, disruption, chp, length );
                 m_customFootnote = "";
-
                 length = 0;
-                index += length;
-            } 
+            }
             else if ( m_bookmarks ) {
 
-                //TODO: there may be a number of bookmarks having different
-                //lengths at the current CP
+                //TODO: There might a number of bookmarks to process at the
+                //current CP.  The first one gets processed, the rest is
+                //skipped at the moment.
 
-                //TODO: we need to handle a number of overlapping bookmarks in
-                //this chunk
+                //TODO: Bookmarks can overlap, handle all bookmarks of a chunk.
 
+                //TODO: A bookmark can denote text comrised of segments
+                //belonging into different chunks.
+
+                //NOTE: Not checking the ok value, invalid bookmarks were
+                //already reported.  So it's obsolete at the moment.
 		bool ok;
 		BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
 
-                //TODO: a bookmark can cover text from several chunks
                 if ( !(bkmk_length <= length) ) {
                     wvlog << "WARNING: bookmarks covering several chunks are not supported yet!";
                     processRun( chunk, chp, length, index, currentStart );
                     length = 0;
-                    index += length;
                 } else {
                     m_textHandler->bookmarkStart( data );
                     if (bkmk_length > 0) {
@@ -855,18 +896,9 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                     }
                 }
             }
-        }
-        else {
-            //common case, no disruption at all (or the end of a disrupted chunk)
-            //In case of custom footnotes do not add label to footnote body.
-            if ( m_footnotes ) {
-                if (m_customFootnote.find(chunk.m_text.substr(index, length), 0) != 0) {
-                    processRun( chunk, chp, length, index, currentStart );
-                }
-            } else {
-                processRun( chunk, chp, length, index, currentStart );
-            }
-            break;   // should be faster than messing with length...
+        } else {
+            processRun( chunk, chp, length, index, currentStart );
+            break; // should be faster than messing with length...
         }
     }
 }
@@ -934,27 +966,42 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
     case TextHandler::FieldBegin:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldStart( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldStart( &dummy, chp );
+            }
             break;
         }
     case TextHandler::FieldSeparator:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldSeparator( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldSeparator( &dummy, chp );
+            }
             break;
         }
     case TextHandler::FieldEnd:
         {
             const FLD* fld( m_fields->fldForCP( m_subDocument, toLocalCP( globalCP ) ) );
-            if ( fld )
+            if ( fld ) {
                 m_textHandler->fieldEnd( fld, chp );
+            } else {
+                FLD dummy;
+                m_textHandler->fieldEnd( &dummy, chp );
+            }
             break;
         }
     case TextHandler::AnnotationRef:
         {
-            emitAnnotation(UString(character), globalCP, chp);
+            //comment reference characters are only in the Main Document
+            if (m_subDocument == Main) {
+                emitAnnotation( UString(character), globalCP, chp );
+            }
         }
     case TextHandler::FieldEscapeChar:
             wvlog << "Found an escape character ++++++++++++++++++++?" << endl;
@@ -966,7 +1013,9 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
 }
 }
 
-void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
+void Parser9x::emitFootnote( UString characters, U32 globalCP,
+                             SharedPtr<const Word97::CHP> chp,
+                             U32 /* length */ )
 {
     if ( !m_footnotes ) {
         wvlog << "Bug: Found a footnote, but m_footnotes == 0!" << endl;
@@ -977,8 +1026,16 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const W
 #endif
     bool ok;
     FootnoteData data( m_footnotes->footnote( globalCP, ok ) );
-    if ( ok )
-        m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
+    if ( ok ) {
+#ifdef WV2_DEBUG_FOOTNOTES
+        wvlog << "char: 0x" << hex << characters[0].unicode() <<
+                 "| fAuto:" << data.autoNumbered <<
+                 "| fSpec:" << chp->fSpec;
+#endif
+        SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( globalCP ) );
+        m_textHandler->footnoteFound( data, characters, sep, chp,
+                                      make_functor( *this, &Parser9x::parseFootnote, data ));
+    }
 }
 
 void Parser9x::emitBookmark( U32 globalCP )
@@ -1006,10 +1063,6 @@ void Parser9x::emitBookmark( U32 globalCP )
 
 void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 /* length */ )
 {
-    for (int i = 0; i < characters.length(); ++i) {
-        wvlog << characters[i].unicode();
-    }
-    wvlog << endl;
     if ( !m_annotations ) {
         wvlog << "Bug: Found an annotation, but m_annotations == 0!" << endl;
         return;
@@ -1017,8 +1070,10 @@ void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const
 
     bool ok;
     AnnotationData data( m_annotations->annotation( globalCP, ok ) );
-    if ( ok )
-        m_textHandler->annotationFound(characters, chp, make_functor( *this, &Parser9x::parseAnnotation, data ));
+    if ( ok ) {
+        m_textHandler->annotationFound(characters, chp,
+                                       make_functor( *this, &Parser9x::parseAnnotation, data ));
+    }
 }
 
 void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
@@ -1072,17 +1127,21 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     stream->seek( chp->fcPic_fcObj_lTagObj, G_SEEK_SET );
 
     Word97::PICF* picf( 0 );
-    if ( m_fib.nFib < Word8nFib )
+    if ( m_fib.nFib < Word8nFib ) {
         picf = new Word97::PICF( Word95::toWord97( Word95::PICF( stream, false ) ) );
-    else
+    } else {
         picf = new Word97::PICF( stream, false );
+    }
     stream->pop();
 
-    if ( picf->cbHeader < 58 ) {
-        wvlog << "Error: Found an image with a PICF smaller than 58 bytes! Skipping the image." << endl;
+    //[MS-DOC] — v20101219, 419/621
+    if ( picf->cbHeader != 0x44 ) {
+        wvlog << "Error: Expected size of the PICF structure is 0x44, got " << hex << picf->cbHeader;
+        wvlog << "Skipping the image!" << endl;
         delete picf;
         return;
     }
+
     if ( picf->fError ) {
         wvlog << "Information: Skipping the image, fError is set" << endl;
         delete picf;
@@ -1093,27 +1152,27 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     picf->dump();
 #endif
 
-    //offset into the data stream for the GraphicsHandler
-    int offset = 0;
-    //update the offset information
-    offset += chp->fcPic_fcObj_lTagObj + picf->cbHeader;
+    //offset into the Data stream for the GraphicsHandler, position of the
+    //OfficeArtInlineSpContainer to parse with libmso
+    int offset = chp->fcPic_fcObj_lTagObj + picf->cbHeader;
 
     //read cchPicName and stPicName in case of a shape file, MS-DOC p.422/609
     if ( picf->mfp.mm == 0x0066 )
     {
         U8 cchPicName = stream->readU8();
-	U8* stPicName = new U8[cchPicName + 1];
-
-        stream->read(stPicName, cchPicName);
-	stPicName[cchPicName] = '\0';
-
 #ifdef WV2_DEBUG_PICTURES
         wvlog << "cchPicName: " << cchPicName << endl;
-        wvlog << "stPicName: " << stPicName << endl;
 #endif
-	//update the offset
+        if (cchPicName) {
+            U8* stPicName = new U8[cchPicName + 1];
+            stream->read(stPicName, cchPicName);
+            stPicName[cchPicName] = '\0';
+#ifdef WV2_DEBUG_PICTURES
+            wvlog << "stPicName: " << stPicName << endl;
+#endif
+            delete [] stPicName;
+        }
 	offset += cchPicName + 1;
-	delete [] stPicName;
     }
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );
@@ -1172,18 +1231,24 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 void Parser9x::saveState( U32 newRemainingChars, SubDocument newSubDocument, ParsingMode newParsingMode )
 {
     oldParsingStates.push( ParsingState( m_tableRowStart, m_tableRowLength, m_cellMarkFound, m_remainingCells,
-                                         m_currentParagraph, m_remainingChars, m_sectionNumber, m_subDocument,
-                                         m_parsingMode ) );
+                                         m_table_skimming, m_currentParagraph, m_remainingChars, m_sectionNumber,
+                                         m_subDocument, m_parsingMode ) );
     m_tableRowStart = 0;
     m_cellMarkFound = false;
+    m_table_skimming = false;
     m_currentParagraph = new Paragraph;
     m_remainingChars = newRemainingChars;
     m_subDocument = newSubDocument;
     m_parsingMode = newParsingMode;
 
+    // save current positions in OLEStreams
     m_wordDocument->push();
-    if ( m_data )
+    if ( m_data ) {
         m_data->push();
+    }
+    if ( m_table ) {
+        m_table->push();
+    }
 }
 
 void Parser9x::restoreState()
@@ -1193,28 +1258,39 @@ void Parser9x::restoreState()
         return;
     }
 
-    if ( m_data )
-        m_data->pop();
+    // restore positions in OLEStreams
     m_wordDocument->pop();
+    if ( m_data ) {
+        m_data->pop();
+    }
+    if ( m_table ) {
+        m_table->pop();
+    }
 
     ParsingState ps( oldParsingStates.top() );
     oldParsingStates.pop();
 
-    if ( m_tableRowStart )
+    if ( m_tableRowStart ) {
         wvlog << "Bug: We still have to process the table row." << endl;
-    delete m_tableRowStart;   // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
+    }
+    // Should be a no-op, but I hate mem-leaks even for buggy code ;-)
+    delete m_tableRowStart;
+
     m_tableRowStart = ps.tableRowStart;
     m_tableRowLength = ps.tableRowLength;
     m_cellMarkFound = ps.cellMarkFound;
     m_remainingCells = ps.remainingCells;
+    m_table_skimming = ps.tableSkimming;
 
-    if ( !m_currentParagraph->empty() )
+    if ( !m_currentParagraph->empty() ) {
         wvlog << "Bug: The current paragraph isn't empty." << endl;
+    }
     delete m_currentParagraph;
     m_currentParagraph = ps.paragraph;
 
-    if ( m_remainingChars != 0 )
+    if ( m_remainingChars != 0 ) {
         wvlog << "Bug: Still got " << m_remainingChars << " remaining chars." << endl;
+    }
     m_remainingChars = ps.remainingChars;
     m_sectionNumber = ps.sectionNumber;
 
@@ -1264,306 +1340,3 @@ int Parser9x::accumulativeLength( int len, const Parser9x::Chunk& chunk )
 {
     return len + chunk.m_text.length();
 }
-
-/*
- * ************************************************
- *  OBSOLETE STUFF -> handled by GraphicsHanler
- * ************************************************
- */
-#undef PARSER9X_OBSOLETE
-#ifdef PARSER9X_OBSOLETE
-
-void Parser9x::parsePicture( const PictureData& data )
-{
-    wvlog << "Parser9x::parsePicture" << endl;
-    OLEStreamReader* stream = m_fib.nFib < Word8nFib ? m_wordDocument : m_data;
-    stream->push(); // saveState would be overkill
-
-    //go to the position in the stream after the PICF, where the actual picture data/escher is
-    if ( !stream->seek( data.fcPic + data.picf->cbHeader, G_SEEK_SET ) ) {
-        wvlog << "Error: Parser9x::parsePicture couldn't seek properly" << endl;
-        stream->pop();
-        return;
-    }
-    if ( data.picf->mfp.mm == 0x64 || data.picf->mfp.mm == 0x66 ) {
-        wvlog << "Linked graphic in Escher object" << endl;
-        parsePictureEscher( data, stream, data.picf->lcb, data.fcPic );
-    }
-    else {
-        switch ( data.picf->mfp.mm ) {
-        case 94: // A .bmp or a .gif name is stored after the PICF
-        case 98: // The .tiff name is stored after the PICF
-            parsePictureExternalHelper( data, stream );
-            break;
-        case 99: // A full bmp is stored after the PICF -- not handled in OOo??
-            parsePictureBitmapHelper( data, stream );
-            break;
-        default: // It has to be a .wmf or .emf file (right after the PICF)
-            wvlog << "assuming WMF/EMF file... not sure this is correct" << endl;
-            parsePictureWmfHelper( data, stream );
-            break;
-        }
-    }
-    stream->pop();
-}
-
-void Parser9x::parsePictureEscher( const PictureData& data, OLEStreamReader* stream,
-                                   int totalPicfSize, int picfStartPos )
-{
-    int endOfPicf = picfStartPos + totalPicfSize;
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureEscher:\n  Total PICF size = " << totalPicfSize
-            << "\n  PICF start position = " << picfStartPos
-            << "\n  current stream position = " << stream->tell()
-            << "\n  endOfPicf = " << endOfPicf << endl;
-#endif
-
-    // which BLIP to display in the picture shape
-    U32 pib = 0;
-
-    OfficeArtProperties artProps;
-    memset(&artProps, 0, sizeof(artProps));
-    artProps.width = 100.0f;                    // default is 100% width
-
-    //now we do a big loop, just reading each record until we get to the end of the picf
-    do
-    {
-        //read header
-        EscherHeader header( stream );
-#ifdef WV2_DEBUG_PICTURES
-        wvlog << "Starting new outer record: " << endl;
-        header.dump();
-#endif
-        //process record
-        wvlog << header.getRecordType().c_str() << endl;
-        if( !header.isAtom() )
-        {
-            wvlog << "Reading container..." << endl;
-            //same process again with container
-            int endOfContainer = stream->tell() + header.recordSize();
-            do
-            {
-                //read header
-                EscherHeader h( stream );
-#ifdef WV2_DEBUG_PICTURES
-                wvlog << "  starting new inner record: " << endl;
-                h.dump();
-                wvlog << h.getRecordType().c_str() << endl;
-#endif
-                //process record
-                if (h.isAtom()) {
-                    U8 alreadyProcessed = 0;
-                    // is it 'OfficeArtFSP'? (MS-ODRAW, page 80/621)
-                    if (h.getRecordType() == "msofbtSp") {
-
-                    }
-                    // is it 'OfficeArtFOPT' or 'OfficeArtTertiaryFOPT'?
-                    if (h.getRecordType() == "msofbtOPT" ||
-                        h.getRecordType() == "msofbtTerOPT") {
-                        parseOfficeArtFOPT(stream, h.recordSize(), &artProps, &pib);
-                        alreadyProcessed = 1;
-                    }
-
-                    if (alreadyProcessed != 1) {
-                        U8 *s = new U8[ h.recordSize() ];
-                        stream->read( s, h.recordSize() );
-                        //clean up memory
-                        delete [] s;
-                    }
-                }
-                else
-                  {
-                    wvlog << "  Error - container inside a container!" << endl;
-                  }
-            } while (stream->tell() != endOfContainer);
-            wvlog << "End of container." << endl;
-
-            m_pictureHandler->officeArt(&artProps);
-
-        } //finished processing a container
-        else
-        {
-            wvlog << "Reading atom" << endl;
-            if( header.getRecordType() == "msofbtBSE" )
-            {
-                //process image
-                FBSE fbse( stream );
-#ifdef WV2_DEBUG_PICTURES
-                fbse.dump();
-                wvlog << "name length is " << fbse.getNameLength() << endl;
-#endif
-                //the data is actually in a new record!
-                EscherHeader h( stream );
-#ifdef WV2_DEBUG_PICTURES
-                wvlog << " reading data record after fbse record" << endl;
-                h.dump();
-#endif
-                string blipType = h.getRecordType();
-                Blip blip( stream, blipType );
-#ifdef WV2_DEBUG_PICTURES
-                wvlog << "  Blip record dump:" << endl;
-                blip.dump();
-#endif
-                //if Blip is compressed, we have to process differently
-                if( blip.isCompressed() )
-                {
-                    wvlog << "Decompressing image data at " << stream->tell() << "..." << endl;
-                    ZCodec z( 0x8000, 0x8000 );
-                    z.BeginCompression();
-                    z.SetBreak(blip.compressedImageSize());
-                    std::vector<U8> outBuffer;
-                    int err = z.Decompress( *stream, &outBuffer );
-                    wvlog << "  err=" << err << endl;
-#ifdef WV2_DEBUG_PICTURES
-                    wvlog << "  outBuffer size = " << outBuffer.size() << endl;
-#endif
-                    z.EndCompression(&outBuffer);
-                    //pass vector to escherData instead of OLEImageReader
-                    m_pictureHandler->escherData(outBuffer, data.picf, fbse.getBlipType(), fbse.getRgbUid());
-                }
-                //normal data, just create an OLEImageReader to be read
-                else
-                {
-                    int start = stream->tell();
-                    int limit = endOfPicf; //TODO is it possible that it wouldn't go all the way to the end?
-                    OLEImageReader reader( *stream, start, limit);
-                    m_pictureHandler->escherData(reader, data.picf, fbse.getBlipType(), fbse.getRgbUid());
-                    //we've read the data in OLEImageReader, so advance stream to the
-                    //end of OLEImageReader
-                    stream->seek( endOfPicf, G_SEEK_SET );
-                }
-            }
-            else
-            {
-                //we can't really process this atom, because we don't recognize the type
-                //so just skip to the end of this picf
-                wvlog << "  unrecognized atom, so we'll skip this image" << endl;
-                stream->seek( endOfPicf );
-                //U8* string = new U8[ header.recordSize() ];
-                //stream->read( string, header.recordSize() );
-                //clean up memory
-                //delete [] string;
-            }
-            wvlog << "End of atom." << endl;
-        } //finished processing an atom record
-        wvlog << "current position: " << stream->tell() << ", endOfPicf:" << endOfPicf << endl;
-        if( stream->tell() > endOfPicf )
-            wvlog << "Error! We read past the end of the picture!" << endl;
-    } while (stream->tell() != endOfPicf); //end of record
-}
-
-void Parser9x::parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream )
-{
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureExternalHelper" << endl;
-#endif
-
-    // Guessing... some testing would be nice
-    const U8 length( stream->readU8() );
-    U8* string = new U8[ length ];
-    stream->read( string, length );
-    // Do we have to use the textconverter here?
-    UString ustring( m_textconverter->convert( reinterpret_cast<char*>( string ),
-                                               static_cast<unsigned int>( length ) ) );
-    delete [] string;
-
-    m_pictureHandler->externalImage( ustring, data.picf );
-}
-
-void Parser9x::parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream )
-{
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureBitmapHelper" << endl;
-#endif
-    OLEImageReader reader( *stream, data.fcPic + data.picf->cbHeader, data.fcPic + data.picf->lcb );
-    m_pictureHandler->bitmapData( reader, data.picf );
-}
-
-void Parser9x::parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream )
-{
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "Parser9x::parsePictureWmfHelper" << endl;
-#endif
-    // ###### TODO: Handle the Mac case (x-wmf + PICT)
-    // ###### CHECK: Do we want to do anything about .emf files?
-    OLEImageReader reader( *stream, data.fcPic + data.picf->cbHeader, data.fcPic + data.picf->lcb );
-    m_pictureHandler->wmfData( reader, data.picf );
-}
-
-void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties, U32* pib)
-{
-#ifdef WV2_DEBUG_PICTURES
-  wvlog << "parseOfficeArtFOPT - processing bytes: " << dataSize << endl;
-#endif
-
-  U16 opid, opidOpid;
-  U8 fBid, fComplex;
-  S32 op;
-
-  while (dataSize >= 6) {
-      opid = stream->readU16();
-      op = stream->readS32();
-
-      fBid      = (opid >> 14) & 0x01;          // get bit 14
-      fComplex  = (opid >> 15) & 0x01;          // get bit 15
-      opidOpid  = opid & 0x3fff;                // leave only lowest 14 bits
-
-#ifdef WV2_DEBUG_PICTURES
-      wvlog << "opidOpid" <<  hex << (int) opidOpid << dec << endl;
-#endif
-
-      switch (opidOpid) {
-          case opidGroupShapeProps:
-              if ((op & ((1<<11) | (1<<27))) == ((1<<11) | (1<<27))) {  // if true, it's a horizontal rule
-                  artProperties->shapeType = msosptLine;
-              }
-              break;
-
-          case opidPctHR:
-              artProperties->width = ((U16) op) / 10;
-              break;
-
-          case opidAlignHR:
-              artProperties->align = (wvWare::H_ALIGN) op;
-              break;
-
-          case opidDxHeightHR:
-              artProperties->height = ((float) op) / 1440.0f;
-              break;
-
-          case opidFillCollor:
-              artProperties->color.r = (op      ) & 0xff;
-              artProperties->color.g = (op >>  8) & 0xff;
-              artProperties->color.b = (op >> 16) & 0xff;
-              break;
-
-          case opidPib:
-#ifdef WV2_DEBUG_PICTURES
-	      wvlog << "parseOfficeArtFOPT - BLIP to display: " << (U32) op << endl;
-#endif
-	      *pib = (U32) op;
-	      artProperties->pib = 1;
-              break;
-
-          default:
-#ifdef WV2_DEBUG_PICTURES
-              wvlog << " >> [opid - fBid - fComplex = op] [ " <<  hex << (int) opidOpid << " - " << (int) fBid << " - " << (int) fComplex  << " = " << op  << " ] " << dec << endl;
-#endif
-              break;
-      }
-
-      dataSize = dataSize - 6;
-  }
-
-    if (dataSize > 0) {
-#ifdef WV2_DEBUG_PICTURES
-        wvlog << "parseOfficeArtFOPT - discarding bytes: " << dataSize << endl;
-#endif
-
-        U8* s = new U8[ dataSize ];
-        stream->read( s, dataSize );
-        //clean up memory
-        delete [] s;
-    }
-}
-#endif //PARSER9X_OBSOLETE

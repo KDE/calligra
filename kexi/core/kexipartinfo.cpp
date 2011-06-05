@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,27 +19,64 @@
 */
 
 #include "kexipartinfo_p.h"
+#include "KexiMainWindowIface.h"
 
 #include <kexidb/global.h>
+#include <KAction>
+#include <KActionCollection>
 
 using namespace KexiPart;
 
 Info::Private::Private(const KService::Ptr& aPtr)
         : ptr(aPtr)
-        , groupName(aPtr->name())
+        , instanceCaption(aPtr->name())
+        , groupName(aPtr->genericName())
 //        , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
         , itemIcon(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
         , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
 //        , projectPartID( aPtr->property("X-Kexi-TypeId").toInt() )
-        , partClass( aPtr->property("X-Kexi-Class", QVariant::String).toString() )
+        , partClass(aPtr->property("X-Kexi-Class", QVariant::String).toString())
         , broken(false)
         , idStoredInPartDatabase(false)
 {
-    QVariant val = ptr->property("X-Kexi-NoObject", QVariant::Bool);
-    isVisibleInNavigator = val.isValid() ? !val.toBool() : true;
+    bool dataView = true;
+    getBooleanProperty(aPtr, "X-Kexi-SupportsDataView", &dataView);
+    if (dataView) {
+        supportedViewModes |= Kexi::DataViewMode;
+    }
+    bool designView = true;
+    getBooleanProperty(aPtr, "X-Kexi-SupportsDesignView", &designView);
+    if (designView) {
+        supportedViewModes |= Kexi::DesignViewMode;
+    }
+    bool textView = false;
+    getBooleanProperty(aPtr, "X-Kexi-SupportsTextView", &textView);
+    if (textView) {
+        supportedViewModes |= Kexi::TextViewMode;
+    }
+    dataView = true;
+    getBooleanProperty(aPtr, "X-Kexi-SupportsDataViewInUserMode", &dataView);
+    if (dataView) {
+        supportedUserViewModes |= Kexi::DataViewMode;
+    }
+    designView = false;
+    getBooleanProperty(aPtr, "X-Kexi-SupportsDesignViewInUserMode", &designView);
+    if (designView) {
+        supportedUserViewModes |= Kexi::DesignViewMode;
+    }
+    textView = false;
+    getBooleanProperty(aPtr, "X-Kexi-SupportsTextViewInUserMode", &textView);
+    if (textView) {
+        supportedUserViewModes |= Kexi::TextViewMode;
+    }
+    
+    isVisibleInNavigator = true;
+    getBooleanProperty(aPtr, "X-Kexi-NoObject", &isVisibleInNavigator);
 
-    val = aPtr->property("X-Kexi-PropertyEditorAlwaysVisibleInDesignMode", QVariant::Bool);
-    isPropertyEditorAlwaysVisibleInDesignMode = val.isValid() ? val.toBool() : true;
+    isPropertyEditorAlwaysVisibleInDesignMode = true;
+    getBooleanProperty(aPtr, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode",
+                       &isPropertyEditorAlwaysVisibleInDesignMode);
+
 #if 0
     if (projectPartID == 0) {
         if (isVisibleInNavigator) {
@@ -68,13 +105,24 @@ Info::Private::Private()
 Info::Info(KService::Ptr ptr)
         : d(new Private(ptr))
 {
+    KAction *act = new KAction(
+        KIcon(createItemIcon()),
+        instanceCaption() + "...",
+        KexiMainWindowIface::global()->actionCollection()
+    );
+    act->setObjectName(KexiPart::nameForCreateAction(*this));
+    KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
 }
 
-Info::Info()
-        : d(new Private())
-{
-}
-
+Info::Info(const QString& partClass, const QString& itemIcon,
+           const QString& objectName)
+        : d(new Private)
+{                       
+    d->partClass = partClass;
+    d->itemIcon = itemIcon;
+    d->objectName = objectName;
+}                       
+                       
 Info::~Info()
 {
     delete d;
@@ -83,6 +131,11 @@ Info::~Info()
 QString Info::groupName() const
 {
     return d->groupName;
+}
+
+QString Info::instanceCaption() const
+{
+    return d->instanceCaption;
 }
 
 QString Info::partClass() const
@@ -103,6 +156,16 @@ QString Info::createItemIcon() const
 QString Info::objectName() const
 {
     return d->objectName;
+}
+
+Kexi::ViewModes Info::supportedViewModes() const
+{
+    return d->supportedViewModes;
+}
+
+Kexi::ViewModes Info::supportedUserViewModes() const
+{
+    return d->supportedUserViewModes;
 }
 
 KService::Ptr Info::ptr() const

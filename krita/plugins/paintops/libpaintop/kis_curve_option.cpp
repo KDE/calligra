@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,23 +19,32 @@
  */
 #include "kis_curve_option.h"
 
-KisCurveOption::KisCurveOption(const QString & label, const QString& name, const QString & category, bool checked)
+KisCurveOption::KisCurveOption(const QString & label, const QString& name, const QString & category,
+                               bool checked, qreal value, qreal min, qreal max, bool useCurve
+)
         : m_label(label)
         , m_category(category)
         , m_sensor(0)
-        , m_customCurve(false)
         , m_name(name)
         , m_checkable(true)
         , m_checked(checked)
+        , m_useCurve(useCurve)
 {
     setSensor(KisDynamicSensor::id2Sensor(PressureId.id()));
     setMinimumLabel(i18n("0.0"));
     setMaximumLabel(i18n("1.0"));
+    setValueRange(min, max);
+    setValue(value);
 }
 
 KisCurveOption::~KisCurveOption()
 {
     delete m_sensor;
+}
+
+const QString& KisCurveOption::name() const
+{
+    return m_name;
 }
 
 const QString & KisCurveOption::label() const
@@ -47,15 +57,19 @@ const QString& KisCurveOption::category() const
     return m_category;
 }
 
-KisCubicCurve KisCurveOption::curve() const
+qreal KisCurveOption::minValue() const
 {
-    return m_curve;
+    return m_minValue;
 }
 
-void KisCurveOption::setCurve(const KisCubicCurve& curve)
+qreal KisCurveOption::maxValue() const
 {
-    m_curve = curve;
-    m_customCurve = true;
+    return m_maxValue;
+}
+
+qreal KisCurveOption::value() const
+{
+    return m_value;
 }
 
 void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
@@ -63,27 +77,34 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     if (m_checkable) {
         setting->setProperty("Pressure" + m_name, isChecked());
     }
-    setting->setProperty("Custom" + m_name, m_customCurve);
-    setting->setProperty(QString(m_name + "Sensor"), sensor()->toXML());
-    if (m_customCurve) {
-        setting->setProperty("Curve" + m_name, qVariantFromValue(m_curve));
-    }
+    
+    setting->setProperty(m_name + "Sensor"  , sensor()->toXML());
+    setting->setProperty(m_name + "UseCurve", m_useCurve);
+    setting->setProperty(m_name + "Value"   , m_value);
 }
 
 void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    if (m_checkable) {
-        setChecked(setting->getBool("Pressure" + m_name, false));
-    }
-    m_customCurve = setting->getBool("Custom" + m_name, false);
+    readNamedOptionSetting(m_name, setting);
+}
 
-    KisDynamicSensor* sensor = KisDynamicSensor::createFromXML(setting->getString(QString(m_name + "Sensor")));
-    if(sensor) {
+void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting)
+{
+    if(m_checkable)
+        setChecked(setting->getBool("Pressure" + prefix, false));
+
+    KisDynamicSensor* sensor = KisDynamicSensor::createFromXML(setting->getString(prefix + "Sensor"));
+    
+    if(sensor)
         setSensor(sensor);
-    }
-    if (m_customCurve) {
-        m_curve = setting->getCubicCurve("Curve" + m_name);
-    }
+
+    bool customCurve = setting->getBool("Custom" + prefix, false);
+    
+    if(customCurve)
+        m_sensor->setCurve(setting->getCubicCurve("Curve" + prefix));
+    
+    m_value    = setting->getDouble(m_name + "Value"   , m_maxValue);
+    m_useCurve = setting->getBool  (m_name + "UseCurve", true);
 }
 
 void KisCurveOption::setSensor(KisDynamicSensor* sensor)
@@ -96,6 +117,11 @@ void KisCurveOption::setSensor(KisDynamicSensor* sensor)
 KisDynamicSensor* KisCurveOption::sensor() const
 {
     return m_sensor;
+}
+
+bool KisCurveOption::isCurveUsed() const
+{
+    return m_useCurve;
 }
 
 bool KisCurveOption::isCheckable()
@@ -113,6 +139,10 @@ void KisCurveOption::setChecked(bool checked)
     m_checked = checked;
 }
 
+void KisCurveOption::setCurveUsed(bool useCurve)
+{
+    m_useCurve = useCurve;
+}
 
 const KisCurveLabel& KisCurveOption::minimumLabel() const
 {
@@ -132,4 +162,15 @@ void KisCurveOption::setMinimumLabel(const KisCurveLabel& _label)
 void KisCurveOption::setMaximumLabel(const KisCurveLabel& _label)
 {
     m_maximumLabel = _label;
+}
+
+void KisCurveOption::setValueRange(qreal min, qreal max)
+{
+    m_minValue = qMin(min, max);
+    m_maxValue = qMax(min, max);
+}
+
+void KisCurveOption::setValue(qreal value)
+{
+    m_value = qBound(m_minValue, value, m_maxValue);
 }

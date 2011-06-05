@@ -4,6 +4,7 @@
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
    Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -20,15 +21,18 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-
 */
 #include "generated/leinputstream.h"
+#include "drawstyle.h"
+
 #include "document.h"
 #include "conversion.h"
 #include "texthandler.h"
 #include "graphicshandler.h"
-#include "versionmagic.h"
-#include "drawstyle.h"
+//#include "versionmagic.h"
+#include "mswordodfimport.h"
+#include "msodraw.h"
+#include "msdoc.h"
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -41,9 +45,9 @@
 #include <wv2/src/parserfactory.h>
 #include <wv2/src/paragraphproperties.h>
 #include <wv2/src/associatedstrings.h>
+
 #include <klocale.h>
 #include <KoStore.h>
-#include <KoFilterChain.h>
 #include <KoFontFace.h>
 
 #include <QBuffer>
@@ -51,15 +55,18 @@
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
-Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
-                   KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
-                   KoStore* store, POLE::Storage* storage,
-                   LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
+Document::Document(const std::string& fileName,
+                   MSWordOdfImport* filter,
+//                    KoFilterChain* chain,
+                   KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
+                   KoStore* store, KoGenStyles* mainStyles,
+                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
         , m_graphicsHandler(0)
-        , m_chain(chain)
+        , m_filter(filter)
+//         , m_chain(chain)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
         , m_bodyFound(false)
         , m_footNoteNumber(0)
@@ -77,9 +84,10 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_writeMasterPageName(false)
         , m_omittMasterPage(false)
         , m_useLastMasterPage(false)
-        , m_data_stream(data)
-        , m_table_stream(table)
-        , m_wdocument_stream(wdocument)
+        , m_wdstm(wordDocument)
+        , m_tblstm(0)
+        , m_datastm(data)
+        , m_tblstm_pole(table)
 {
     kDebug(30513);
     addBgColor("#ffffff"); //initialize the background-colors stack
@@ -92,13 +100,13 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         m_buffer = 0; //set pointers to 0
         m_bufferEven = 0;
         m_headerWriter = 0;
-        m_storage = storage;
 
         m_textHandler  = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
         m_textHandler->setDocument(this);
         m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
         m_tableHandler->setDocument(this);
-        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles);
+        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles,
+                                                     m_parser->getDrawings(), m_parser->fib());
 
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
@@ -112,24 +120,29 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
                 this, SLOT(slotTableFound(KWord::Table*)));
         connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&,KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
-        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int , KoXmlWriter* )),
-                this, SLOT(slotFloatingObjectFound(unsigned int , KoXmlWriter* )));
-        connect(m_graphicsHandler, SIGNAL(textBoxFound(uint , bool)),
-                this, SLOT(slotTextBoxFound(uint , bool)));
+        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter* )),
+                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter* )));
+        connect(m_graphicsHandler, SIGNAL(textBoxFound(unsigned int, bool)),
+                this, SLOT(slotTextBoxFound(unsigned int, bool)));
 
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);
         m_parser->setTableHandler(m_tableHandler);
-        m_graphicsHandler->init(m_parser->getDrawings(), m_parser->fib());
         m_parser->setGraphicsHandler(m_graphicsHandler);
         m_parser->setInlineReplacementHandler(m_replacementHandler);
 
         processStyles();
         processAssociatedStrings();
-        //connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
-        //         this, SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
-        //connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
-        //         this, SLOT( slotTableCellEnd() ) );
+
+//         connect( m_tableHandler,
+//                  SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&,
+//                          const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&,
+//                          const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
+//                  this,
+//                  SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&,
+//                        const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&,
+//                        const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
+//         connect( m_tableHandler, SIGNAL( sigTableCellEnd() ), this, SLOT( slotTableCellEnd() ) );
     }
 }
 
@@ -139,6 +152,9 @@ Document::~Document()
     delete m_tableHandler;
     delete m_replacementHandler;
     delete m_graphicsHandler;
+    //expecting the background-color of the document on top of the stack
+    Q_ASSERT(m_bgColors.size() == 1);
+    m_bgColors.clear();
 }
 
 //set whether or not document has header or footer
@@ -186,7 +202,8 @@ void Document::finishDocument()
                                "text:footnotes-position=\"page\" "
                                "text:start-numbering-at=\"%3\" "
                                "/>");
-
+        //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
+        //use the infos from SEP (sprmSFpc, sprmSRncFtn, sprmSNFtn, sprmSNfcFtnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
                                                        .arg(m_initialFootnoteNumber)
@@ -204,7 +221,8 @@ void Document::finishDocument()
                               "text:start-value=\"%2\" "
                               //"text:start-numbering-at=\"%3\" "
                               "/>");
-
+        //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
+        //use the infos from SEP (sprmSFEndnote, sprmSRncEdn, sprmSNEdn, sprmSNfcEdnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
                                                       .arg(m_initialEndnoteNumber)
@@ -256,22 +274,33 @@ void Document::processAssociatedStrings()
     wvWare::AssociatedStrings strings(m_parser->associatedStrings());
     if (!strings.author().isNull()) {
         m_metaWriter->startElement("meta:initial-creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.author()));
+        m_metaWriter->addTextNode(Conversion::string(strings.author()));
         m_metaWriter->endElement();
     }
     if (!strings.title().isNull()) {
         m_metaWriter->startElement("dc:title");
-        m_metaWriter->addTextSpan(Conversion::string(strings.title()));
+        qDebug() << "TITLE: " << Conversion::string(strings.title());
+        m_metaWriter->addTextNode(Conversion::string(strings.title()));
         m_metaWriter->endElement();
     }
     if (!strings.subject().isNull()) {
         m_metaWriter->startElement("dc:subject");
-        m_metaWriter->addTextSpan(Conversion::string(strings.subject()));
+        m_metaWriter->addTextNode(Conversion::string(strings.subject()));
         m_metaWriter->endElement();
     }
     if (!strings.lastRevBy().isNull()) {
         m_metaWriter->startElement("dc:creator");
-        m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()));
+        m_metaWriter->addTextNode(Conversion::string(strings.lastRevBy()));
+        m_metaWriter->endElement();
+    }
+    if (!strings.keywords().isNull()) {
+        m_metaWriter->startElement("meta:keyword");
+        m_metaWriter->addTextNode(Conversion::string(strings.keywords()));
+        m_metaWriter->endElement();
+    }
+    if (!strings.comments().isNull()) {
+        m_metaWriter->startElement("meta:comments");
+        m_metaWriter->addTextNode(Conversion::string(strings.comments()));
         m_metaWriter->endElement();
     }
 }
@@ -298,15 +327,16 @@ void Document::processStyles()
         }
 
         // Process paragraph styles.
-        if (style && style->type() == wvWare::Style::sgcPara) {
+        if (style && style->type() == sgcPara) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
-            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
+            const wvWare::Style* followingStyle = styles.styleByIndex(style->followingStyle());
             if (followingStyle && followingStyle != style) {
-                QString followingName = Conversion::string(followingStyle->name());
+                QString followingName = Conversion::styleNameString(followingStyle->name());
+                userStyle.addAttribute("style:next-style-name", followingName);
             }
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
@@ -330,7 +360,12 @@ void Document::processStyles()
             // had in the .doc.
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
             kDebug(30513) << "added style " << actualName;
-        } else if (style && style->type() == wvWare::Style::sgcChp) {
+
+            //save names of TOC related styles
+            if (actualName.contains("TOC")) {
+                m_tocStyleNames.append(actualName);
+            }
+        } else if (style && style->type() == sgcChp) {
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT textstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "text");
@@ -363,13 +398,24 @@ void Document::processStyles()
     m_mainStyles->insert(defaultStyle, "nevershown");
 }
 
-//just call parsing function
-bool Document::parse()
+quint8 Document::parse()
 {
-    kDebug(30513) ;
-    if (m_parser)
-        return m_parser->parse();
-    return false;
+    if (m_parser) {
+        if (!m_parser->parse()) {
+            return 1;
+        }
+    }
+    //make sure texthandler is fine after parsing
+    if (!m_textHandler->stateOk()) {
+        kError(30513) << "TextHandler state after parsing NOT Ok!";
+        return 2;
+    }
+    return 0;
+}
+
+void Document::setProgress(const int percent)
+{
+    m_filter->setProgress(percent);
 }
 
 //connects firstSectionFound signal & slot together; sets flag to true
@@ -433,16 +479,22 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 //             textHandler()->set_breakBeforePage(true);
 //         }
 
-        //A continuous section break. The next section starts on the next line.
-        if (sep->bkc == 0) {
+        switch (sep->bkc) {
+        case bkcContinuous:
             kDebug(30513) << "omitting page-layout & master-page creation";
             m_omittMasterPage = true;
-        }
-        //A new page section break. The next section starts on the next page.
-        else if (sep->bkc == 2) {
+            break;
+        case bkcNewPage:
+        case bkcEvenPage:
+        case bkcOddPage:
             kDebug(30513) << "using the last defined master-page";
             m_useLastMasterPage = true;
             m_writeMasterPageName = true;
+            break;
+        default:
+            kWarning(30513) << "Warning: section break type (" << sep->bkc << ") NOT SUPPORTED!";
+            m_omittMasterPage = true;
+            break;
         }
 
         //cleaning required!
@@ -481,9 +533,9 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     //NOTE: The first master-page-name has to be "Standard", kword has hard
     //coded that the value of fo:backgroud-color from this style is used for
     //the entire frameset.
-    if (m_textHandler->m_sectionNumber > 1) {
+    if (m_textHandler->sectionNumber() > 1) {
         masterStyleName.append("MP");
-        masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
+        masterStyleName.append(QString::number(m_textHandler->sectionNumber()));
     } else {
         masterStyleName.append("Standard");
     }
@@ -503,8 +555,8 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
         masterStyleName.clear();
         masterStyleName.append("First_Page");
 
-        if (m_textHandler->m_sectionNumber > 1) {
-            masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
+        if (m_textHandler->sectionNumber() > 1) {
+            masterStyleName.append(QString::number(m_textHandler->sectionNumber()));
         }
         masterStyle->addAttribute("style:display-name", masterStyleName);
         masterStyle->addAttribute("style:next-style-name", m_masterPageName_list.last());
@@ -543,16 +595,14 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 
         //set the margins - depends on whether a header/footer is present
         if (m_hasHeader_list[i]) {
-            kDebug(30513) << "setting margin for header...";
             pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
         } else if (sep->brcTop.brcType == 0) {
-            kDebug(30513) << "setting margin for no header and no top border...";
-            pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
+            pageLayoutStyle->addPropertyPt("fo:margin-top", qAbs((double)sep->dyaTop) / 20.0);
         }
         if (m_hasFooter_list[i]) {
             pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
         } else if (sep->brcBottom.brcType == 0) {
-            pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
+            pageLayoutStyle->addPropertyPt("fo:margin-bottom", qAbs((double)sep->dyaBottom) / 20.0);
         }
 
         pageLayoutName = m_mainStyles->insert(*pageLayoutStyle, "Mpm");
@@ -727,8 +777,9 @@ void Document::annotationEnd()
 {
 }
 
-//disable this for now - we should be able to do everything in TableHandler
-//create frame for the table cell?
+//NOTE: disable this for now - we should be able to do everything in
+//TableHandler create frame for the table cell?
+
 //void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 //{
 //kDebug(30513) ;
@@ -901,12 +952,10 @@ void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* write
     }
 }
 
-void Document::slotTextBoxFound( uint spid, bool bodyDrawing)
+void Document::slotTextBoxFound(unsigned int index, bool stylesxml)
 {
     kDebug(30513) ;
-
-    //NOTE: spid == lid in wv2
-    m_parser->parseTextBox(spid, bodyDrawing);
+    m_parser->parseTextBox(index, stylesxml);
 }
 
 //process through all the subDocs and the tables
@@ -957,76 +1006,112 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addProperty("style:print-orientation", landscape ? "landscape" : "portrait");
     pageLayoutStyle->addProperty("style:num-format", "1");
 
-    // Set default left/right margins for the case when there is no
-    // border.  This will be changed below if there are borders defined.
-    pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
-    pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
-
-    DrawStyle ds = m_graphicsHandler->getDrawingStyle();
-
+    DrawStyle ds = m_graphicsHandler->getBgDrawStyle();
     switch (ds.fillType()) {
-        case 0: //msofillSolid
-        {
-            // PptToOdp::toQColor helper function can be used instead of this conversion
-            MSO::OfficeArtCOLORREF clr = ds.fillColor();
-            QColor color(clr.red, clr.green, clr.blue);
-            QString tmp = color.name();
-            pageLayoutStyle->addProperty("fo:background-color", tmp);
+    case msofillSolid:
+    {
+        // PptToOdp::toQColor helper function can be used instead of this conversion
+        MSO::OfficeArtCOLORREF clr = ds.fillColor();
+        QColor color(clr.red, clr.green, clr.blue);
+        QString tmp = color.name();
+        pageLayoutStyle->addProperty("fo:background-color", tmp);
 
-            //update the background-color information if required
-            if (tmp != currentBgColor()) {
-                updateBgColor(tmp);
-            }
-            break;
+        //update the background-color information if required
+        if (tmp != currentBgColor()) {
+            updateBgColor(tmp);
         }
-        case 0x3: //msofillPicture
-        {
-            // picture can be stored in OfficeArtBStoreContainer or in fillBlip_complex if complex = true
-            // only picture in OfficeArtBStoreContainer is handled now
-            QString filePath = m_graphicsHandler->getPicturePath(ds.fillBlip());
+        break;
+    }
+    case msofillPicture:
+    {
+        // picture can be stored in OfficeArtBStoreContainer or in fillBlip_complex if complex = true
+        // only picture in OfficeArtBStoreContainer is handled now
+        QString filePath = m_graphicsHandler->getPicturePath(ds.fillBlip());
 
-            if (!filePath.isEmpty()) {
-                QBuffer buffer;
-                KoXmlWriter bkgImageWriter(&buffer);
+        if (!filePath.isEmpty()) {
+            QBuffer buffer;
+            KoXmlWriter bkgImageWriter(&buffer);
 
-                bkgImageWriter.startElement("style:background-image");
-                bkgImageWriter.addAttribute("xlink:href", filePath);
-                bkgImageWriter.addAttribute("xlink:type", "simple");
-                bkgImageWriter.addAttribute("xlink:actuate", "onLoad");
-                bkgImageWriter.endElement(); //style:background-image
+            bkgImageWriter.startElement("style:background-image");
+            bkgImageWriter.addAttribute("xlink:href", filePath);
+            bkgImageWriter.addAttribute("xlink:type", "simple");
+            bkgImageWriter.addAttribute("xlink:actuate", "onLoad");
+            bkgImageWriter.endElement(); //style:background-image
 
-                QString contents = QString::fromUtf8(((QBuffer*)bkgImageWriter.device())->buffer(),
-                                             ((QBuffer*)bkgImageWriter.device())->buffer().size());
+            QString contents = QString::fromUtf8(((QBuffer*)bkgImageWriter.device())->buffer(),
+                                         ((QBuffer*)bkgImageWriter.device())->buffer().size());
 
-                pageLayoutStyle->addChildElement("0", contents);
-            }
+            pageLayoutStyle->addChildElement("0", contents);
         }
-            break;
-        default:
-            break;
+        break;
+    }
+    default:
+        break;
     }
 
-    //set the minimum height of header/footer to the full margin minus margin above header
-    //problem with footer is that it is not possible to say how big the footer is.
+    // NOTE: margin-top and margin-bottom are updated in slotSectionFound based
+    // on the information if the header/footer was empty/non-empty.
+    //
+    // Maybe we shoud set the minimum height of header/footer to qAbs(dyaTop -
+    // dyaHdrTop)/qAbs(dyaBottom - dyaHdrBottom)
+    //
+    // The height of both header and footer is unknown, so it's not possible to
+    // set margin-bottom for the header and margin-top for the footer properly.
+    // Both dyaTop and dyaBottom do not tell us where the header/footer ends.
+    //
+    // MSWord specific:
+    // For each x in {header, footer, body}, x has an independent ruler.
+    //
+    // Also both header and footer are treated like a separate document, so if
+    // you insert a border into the body, then header/footer margins do not
+    // change.  We are not able to store this into ODF properly.
+
     QString header("<style:header-style>");
-    header.append("<style:header-footer-properties fo:margin-bottom=\"");
-    header.append(QString::number((sep->dyaTop - sep->dyaHdrTop) / 20.0));
-    header.append("pt\" fo:min-height=\"14pt\"/>");
+    header.append("<style:header-footer-properties");
+
+    // The spec says the top-margin MUST be grown to avoid overlapping the
+    // space that is occupied by headers.  Not ODF compatible.
+    if (sep->dyaTop >= 0) {
+        header.append(" style:dynamic-spacing=\"true\"");
+        header.append(" fo:margin-bottom=\"0pt\"");
+    } else {
+        //TODO: tests required, I would prefer margin-bottom set to ZERO
+        header.append(" style:dynamic-spacing=\"false\"");
+        header.append(" fo:margin-bottom=\"");
+#if 0
+        qreal headerMarginTop = qAbs(sep->dyaTop) - sep->dyaHdrTop;
+        if (headerMarginTop > 0) {
+            header.append(QString::number(headerMarginTop / 20.0));
+        } else
+#endif
+            header.append("0");
+        header.append("pt\"");
+
+    }
+    header.append(" fo:min-height=\"14pt\"/>");
     header.append("</style:header-style>");
 
     QString footer("<style:footer-style>");
-    footer.append("<style:header-footer-properties fo:margin-top=\"");
-    if (sep->dyaBottom > (int)sep->dyaHdrBottom) {
-        if ((sep->dyaBottom - sep->dyaHdrBottom) >= 400) {
-            footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom) / 20.0));
+    footer.append("<style:header-footer-properties");
+
+    // The spec says the bottom-margin MUST be grown to avoid overlapping the
+    // space that is occupied by footers or footnotes.  Not ODF compatible.
+    if (sep->dyaBottom > 0) {
+        footer.append(" style:dynamic-spacing=\"true\"");
+        footer.append(" fo:margin-top=\"0pt\"");
+    } else {
+        //TODO: tests required, I would prefer margin-top set to ZERO
+        footer.append(" style:dynamic-spacing=\"false\"");
+        footer.append(" fo:margin-top=\"");
+        qreal headerMarginBottom = qAbs(sep->dyaBottom) - sep->dyaHdrBottom;
+        if (headerMarginBottom >= 400) {
+            footer.append(QString::number(headerMarginBottom / 20.0));
         } else {
             footer.append("14");
         }
+        footer.append("pt\"");
     }
-    else {
-        footer.append("14");
-    }
-    footer.append("pt\" fo:min-height=\"10pt\"/>");
+    footer.append(" fo:min-height=\"10pt\"/>");
     footer.append("</style:footer-style>");
 
     pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
@@ -1067,17 +1152,21 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
                                          Conversion::borderKOfficeAttributes(sep->brcBottom));
         }
     }
+    // Set default left/right margins for the case when there is no border.
+    // This will be changed below if there are borders defined.
+    pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
+    pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
+
     // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
-    if (sep->pgbOffsetFrom == 0) {
-        // page border offset is from the text
+    switch (sep->pgbOffsetFrom) {
+    case pgbFromText:
         pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);
         pageLayoutStyle->addPropertyPt("fo:padding-top",    sep->brcTop.dptSpace);
         pageLayoutStyle->addPropertyPt("fo:padding-right",  sep->brcRight.dptSpace);
         pageLayoutStyle->addPropertyPt("fo:padding-bottom", sep->brcBottom.dptSpace);
         // FIXME: How should fo:margin be created in this case?
-    } else {
-        // page border offset is from the edge of the page
-
+        break;
+    case pgbFromEdge:
         // Add margin. This value is fetched directly from the BRC's.
         pageLayoutStyle->addPropertyPt("fo:margin-left",   sep->brcLeft.dptSpace);
         pageLayoutStyle->addPropertyPt("fo:margin-top",    sep->brcTop.dptSpace);
@@ -1088,18 +1177,19 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         pageLayoutStyle->addPropertyPt("fo:padding-left",
                                          (sep->dxaLeft - (sep->brcLeft.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-top",
-                                         (sep->dyaTop - (sep->brcTop.dptSpace * 20)) / 20);
+                                         (qAbs(sep->dyaTop) - (sep->brcTop.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-right",
                                          (sep->dxaRight - (sep->brcRight.dptSpace * 20)) / 20);
         pageLayoutStyle->addPropertyPt("fo:padding-bottom",
-                                         (sep->dyaBottom - (sep->brcBottom.dptSpace * 20)) / 20);
+                                         (qAbs(sep->dyaBottom) - (sep->brcBottom.dptSpace * 20)) / 20);
+        break;
     }
     // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
 
 bool Document::headersChanged(void) const
 {
-    int n = m_textHandler->m_sectionNumber - 1;
+    int n = m_textHandler->sectionNumber() - 1;
     bool ret = false;
 
     if (n < m_headersMask.size()) {

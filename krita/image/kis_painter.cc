@@ -6,6 +6,7 @@
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,6 +58,7 @@
 #include "kis_vec.h"
 #include "kis_iterators_pixel.h"
 #include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
@@ -105,6 +107,9 @@ struct KisPainter::Private {
     KisPaintDeviceSP            polygon;
     qint32                      maskImageWidth;
     qint32                      maskImageHeight;
+    QPointF                     axisCenter;
+    bool                        mirrorHorizontaly;
+    bool                        mirrorVerticaly;
 };
 
 KisPainter::KisPainter()
@@ -148,6 +153,8 @@ void KisPainter::init()
     d->fillPainter = 0;
     d->maskImageWidth = 255;
     d->maskImageHeight = 255;
+    d->mirrorHorizontaly = false;
+    d->mirrorVerticaly = false;
 
     KConfigGroup cfg = KGlobal::config()->group("");
     d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
@@ -283,13 +290,13 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                           quint32 srcWidth, quint32 srcHeight)
 {
     // TODO: get selX and selY working as intended
-    
+
     /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
     initializing they perform some dummy passes with those parameters, and it must not crash */
     if (srcWidth == 0 || srcHeight == 0) return;
     if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
-    
+
     // TODO: What purpose has checking if src and this have the same pixel size?
     Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
     // Check that selection has an alpha colorspace, crash if false
@@ -297,18 +304,18 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
 
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
     QRect selRect = QRect(selX, selY, srcWidth, srcHeight);
-    
+
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize YET as it would obfuscate the mistake. */
     Q_ASSERT(selection->bounds().contains(selRect));
-    
+
     /* KisPaintDevice is a tricky beast, and it can easily have unpredictable exactBounds() or extent()
     in limit cases (for example, when brushes become too small in a brush engine). That's why there's no
     Q_ASSERT to check correlation between srcRect and those bounds.
     Below lies a speed optimization that shrinks srcRect only when srcDev is smaller than it. This is no
     problem and without it there would be no illegal read from memory since reading out the bounds of a
     KisPaintDevice gives the default pixel.*/
-    
+
     /* In case of COMPOSITE_COPY restricting bitBlt to extent can
     have unexpected behavior since it would reduce the area that
     is copied (Read below). */
@@ -334,11 +341,11 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     to the current paint device (d->device) */
     quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
-    
+
     // Copy the relevant bytes of raw data from srcDev
     quint8* srcBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     srcDev->readBytes(srcBytes, srcX, srcY, srcWidth, srcHeight);
-    
+
     /* This checks whether there is nothing selected.
     When there is nothing selected, execute the IF block.
     When there is something selected, execute the ELSE block.
@@ -368,7 +375,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
         quint8 * mergedSelectionBytes = new quint8[ totalBytes ];
         d->selection->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
-        
+
         // Merge selections here by multiplying them - compositeOP(COMPOSITE_MULT)
         KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)
         ->composite(mergedSelectionBytes,
@@ -399,8 +406,9 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     }
 
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
-    
+
     delete[] dstBytes;
+    delete[] srcBytes;
 
     addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
 }
@@ -588,6 +596,278 @@ void KisPainter::bitBlt(const QPoint & pos, const KisPaintDeviceSP srcDev, const
     bitBlt(pos.x(), pos.y(), srcDev, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 }
 
+void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
+                        const KisPaintDeviceSP srcDev,
+                        qint32 srcX, qint32 srcY,
+                        qint32 srcWidth, qint32 srcHeight)
+{
+    /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
+    initializing they perform some dummy passes with those parameters, and it must not crash */
+    if (srcWidth == 0 || srcHeight == 0) return;
+    if (srcDev.isNull()) return;
+    if (d->device.isNull()) return;
+
+    QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
+
+    /* In case of COMPOSITE_COPY restricting bitBlt to extent can
+    have unexpected behavior since it would reduce the area that
+    is copied (Read below). */
+    if (d->compositeOp->id() != COMPOSITE_COPY) {
+        /* If srcDev->extent() (the area of the tiles containing srcDev)
+        is smaller than srcRect, then shrink srcRect to that size. This
+        is done as a speed optimization, useful for stack recomposition
+        in KisImage. srcRect won't grow if srcDev->extent() is larger. */
+        srcRect &= srcDev->extent();
+
+        if (srcRect.isEmpty()) return;
+
+        // Readjust the function paramenters to the new dimensions.
+        dstX += srcRect.x() - srcX;    // This will only add, not substract
+        dstY += srcRect.y() - srcY;    // Idem
+        srcX = srcRect.x();
+        srcY = srcRect.y();
+        srcWidth = srcRect.width();
+        srcHeight = srcRect.height();
+    }
+    const KoColorSpace * srcCs = srcDev->colorSpace();
+
+    qint32 dstY_ = dstY;
+    qint32 srcY_ = srcY;
+    qint32 rowsRemaining = srcHeight;
+
+    // Read below
+    KisRandomConstAccessorPixel srcIt = srcDev->createRandomConstAccessor(srcX, srcY);
+    KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(dstX, dstY);
+
+    /* Here be a huge block of verbose code that does roughly the same than
+    the other bit blit operations. This one is longer than the rest in an effort to
+    optimize speed and memory use */
+    if (d->selection) {
+
+        KisRandomConstAccessorPixel maskIt = d->selection->createRandomConstAccessor(dstX, dstY);
+
+        while (rowsRemaining > 0) {
+
+            qint32 dstX_ = dstX;
+            qint32 srcX_ = srcX;
+            qint32 columnsRemaining = srcWidth;
+            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
+            qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+            qint32 numContiguousSelRows = d->selection->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+
+            qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
+            rows = qMin(rows, numContiguousSelRows);
+            rows = qMin(rows, rowsRemaining);
+
+            while (columnsRemaining > 0) {
+
+                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
+                qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+                qint32 numContiguousSelColumns = d->selection->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+
+                qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
+                columns = qMin(columns, numContiguousSelColumns);
+                columns = qMin(columns, columnsRemaining);
+
+                qint32 srcRowStride = srcDev->rowStride(srcX_, srcY_);
+                srcIt.moveTo(srcX_, srcY_);
+
+                qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
+                dstIt.moveTo(dstX_, dstY_);
+
+                qint32 maskRowStride = d->selection->rowStride(dstX_, dstY_);
+                maskIt.moveTo(dstX_, dstY_);
+
+                d->colorSpace->bitBlt(dstIt.rawData(),
+                                      dstRowStride,
+                                      srcCs,
+                                      srcIt.oldRawData(),
+                                      srcRowStride,
+                                      maskIt.rawData(),
+                                      maskRowStride,
+                                      d->opacity,
+                                      rows,
+                                      columns,
+                                      d->compositeOp,
+                                      d->channelFlags);
+                srcX_ += columns;
+                dstX_ += columns;
+                columnsRemaining -= columns;
+            }
+
+            srcY_ += rows;
+            dstY_ += rows;
+            rowsRemaining -= rows;
+        }
+    }
+    else {
+
+        while (rowsRemaining > 0) {
+
+            qint32 dstX_ = dstX;
+            qint32 srcX_ = srcX;
+            qint32 columnsRemaining = srcWidth;
+            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
+            qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+
+            qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
+            rows = qMin(rows, rowsRemaining);
+
+            while (columnsRemaining > 0) {
+
+                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
+                qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+
+                qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
+                columns = qMin(columns, columnsRemaining);
+
+                qint32 srcRowStride = srcDev->rowStride(srcX_, srcY_);
+                srcIt.moveTo(srcX_, srcY_);
+
+                qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
+                dstIt.moveTo(dstX_, dstY_);
+
+                d->colorSpace->bitBlt(dstIt.rawData(),
+                                      dstRowStride,
+                                      srcCs,
+                                      srcIt.oldRawData(),
+                                      srcRowStride,
+                                      0,
+                                      0,
+                                      d->opacity,
+                                      rows,
+                                      columns,
+                                      d->compositeOp,
+                                      d->channelFlags);
+
+                srcX_ += columns;
+                dstX_ += columns;
+                columnsRemaining -= columns;
+            }
+
+            srcY_ += rows;
+            dstY_ += rows;
+            rowsRemaining -= rows;
+        }
+    }
+
+    addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
+}
+
+
+void KisPainter::bitBltOldData(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect)
+{
+    bitBltOldData(pos.x(), pos.y(), srcDev, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
+}
+
+
+void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoColor& color)
+{
+    /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
+     * initializing they perform some dummy passes with those parameters, and it must not crash */
+    if(width == 0 || height == 0 || d->device.isNull())
+        return;
+
+    KoColor srcColor(color, d->colorSpace);
+    qint32  dstY          = y;
+    qint32  rowsRemaining = height;
+
+    KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(x, y);
+
+    if(d->selection) {
+
+        KisRandomConstAccessorSP maskIt = d->selection->createRandomConstAccessorNG(x, y);
+
+        while(rowsRemaining > 0) {
+
+            qint32 dstX                 = x;
+            qint32 columnsRemaining     = width;
+            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 numContiguousSelRows = d->selection->numContiguousRows(dstY, dstX, dstX+width-1);
+
+            qint32 rows = qMin(numContiguousDstRows, numContiguousSelRows);
+            rows = qMin(rows, rowsRemaining);
+
+            while (columnsRemaining > 0) {
+
+                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 numContiguousSelColumns = d->selection->numContiguousColumns(dstX, dstY, dstY+rows-1);
+
+                qint32 columns = qMin(numContiguousDstColumns, numContiguousSelColumns);
+                columns = qMin(columns, columnsRemaining);
+
+                qint32 dstRowStride = d->device->rowStride(dstX, dstY);
+                dstIt->moveTo(dstX, dstY);
+
+                qint32 maskRowStride = d->selection->rowStride(dstX, dstY);
+                maskIt->moveTo(dstX, dstY);
+
+                d->colorSpace->bitBlt(
+                    dstIt->rawData(),
+                    dstRowStride,
+                    d->colorSpace,
+                    srcColor.data(),
+                    0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
+                    maskIt->oldRawData(),
+                    maskRowStride,
+                    d->opacity,
+                    rows,
+                    columns,
+                    d->compositeOp,
+                    d->channelFlags
+                );
+
+                dstX             += columns;
+                columnsRemaining -= columns;
+            }
+
+            dstY          += rows;
+            rowsRemaining -= rows;
+        }
+    }
+    else {
+
+        while(rowsRemaining > 0) {
+
+            qint32 dstX                 = x;
+            qint32 columnsRemaining     = width;
+            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 rows                 = qMin(numContiguousDstRows, rowsRemaining);
+
+            while(columnsRemaining > 0) {
+
+                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 columns                 = qMin(numContiguousDstColumns, columnsRemaining);
+                qint32 dstRowStride            = d->device->rowStride(dstX, dstY);
+                dstIt->moveTo(dstX, dstY);
+
+                d->colorSpace->bitBlt(
+                    dstIt->rawData(),
+                    dstRowStride,
+                    d->colorSpace,
+                    srcColor.data(),
+                    0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
+                    0,
+                    0,
+                    d->opacity,
+                    rows,
+                    columns,
+                    d->compositeOp,
+                    d->channelFlags
+                );
+
+                dstX             += columns;
+                columnsRemaining -= columns;
+            }
+
+            dstY          += rows;
+            rowsRemaining -= rows;
+        }
+    }
+
+    addDirtyRect(QRect(x, y, width, height));
+}
+
 
 void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
                           const KisFixedPaintDeviceSP srcDev,
@@ -599,19 +879,19 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     if (srcWidth == 0 || srcHeight == 0) return;
     if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
-    
+
     // TODO: What purpose has checking if src and this have the same pixel size?
     Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
 
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
-    
+
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
     Q_ASSERT(srcDev->bounds().contains(srcRect));
-    
+
     // Convenient renaming
     const KoColorSpace * srcCs = d->colorSpace;
-    
+
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (aka: d->device) */
     quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
@@ -676,31 +956,31 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
                                             quint32 srcWidth, quint32 srcHeight)
 {
     // TODO: get selX and selY working as intended
-    
+
     /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
     initializing they perform some dummy passes with those parameters, and it must not crash */
     if (srcWidth == 0 || srcHeight == 0) return;
     if (srcDev.isNull()) return;
     if (d->device.isNull()) return;
-    
+
     // TODO: What purpose has checking if src and this have the same pixel size?
     Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
     // Check that selection has an alpha colorspace, crash if false
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
-    
+
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
     QRect selRect = QRect(selX, selY, srcWidth, srcHeight);
-    
+
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
     Q_ASSERT(srcDev->bounds().contains(srcRect));
     Q_ASSERT(selection->bounds().contains(selRect));
-    
+
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (aka: d->device) */
     quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
-    
+
     // Check bitBltWithFixedSelection for an explanation of this if-check
     if (!(d->selection && !d->selection->isDeselected())) {
         /* As there's nothing selected, blit to dstBytes (intermediary bit array),
@@ -724,7 +1004,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
         quint8 * mergedSelectionBytes = new quint8[ totalBytes ];
         d->selection->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
-        
+
         // Merge selections here by multiplying them - compositeOp(COMPOSITE_MULT)
         KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)
         ->composite(mergedSelectionBytes,
@@ -750,12 +1030,12 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
                               srcWidth,
                               d->compositeOp,
                               d->channelFlags);
-                        
+
         delete[] mergedSelectionBytes;
     }
 
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
-    
+
     delete[] dstBytes;
 
     addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
@@ -1057,11 +1337,15 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         break;
     case FillStylePattern:
         Q_ASSERT(d->pattern != 0);
-        d->fillPainter->fillRect(fillRect, d->pattern);
+        if (d->pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
+            d->fillPainter->fillRect(fillRect, d->pattern);
+        }
         break;
     case FillStyleGenerator:
         Q_ASSERT(d->generator != 0);
-        d->fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());
+        if (d->generator) { // if the user hasn't got any generators, we shouldn't crash...
+            d->fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());\
+        }
         break;
     }
 
@@ -1114,7 +1398,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     // we are drawing mask, it has to be white
     // color of the path is given by paintColor()
     Q_ASSERT(pen.color() == Qt::white);
-    
+
     if (!d->fillPainter) {
         d->polygon = new KisPaintDevice(d->device->colorSpace());
         d->fillPainter = new KisFillPainter(d->polygon);
@@ -1135,10 +1419,10 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     // take width of the pen into account
     int penWidth = qRound(pen.widthF());
     fillRect.adjust(-penWidth, -penWidth, penWidth, penWidth);
-    
+
     // Expand the rectangle to allow for anti-aliasing.
     fillRect.adjust(-1, -1, 1, 1);
-    
+
 
     // Clip to the image bounds.
     if (d->bounds.isValid()) {
@@ -1157,7 +1441,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     const QColor black(Qt::black);
     QPen oldPen = d->maskPainter->pen();
     d->maskPainter->setPen(pen);
-        
+
     for (qint32 x = fillRect.x(); x < fillRect.x() + fillRect.width(); x += d->maskImageWidth) {
         for (qint32 y = fillRect.y(); y < fillRect.y() + fillRect.height(); y += d->maskImageHeight) {
 
@@ -1185,7 +1469,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 
         }
     }
-    
+
     d->maskPainter->setPen(oldPen);
     QRect r = d->polygon->extent();
 
@@ -1200,20 +1484,20 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     int y2 = end.y();
 
     if ((x2 == x1 ) && (y2 == y1)) return;
-    
+
     int dstX = x2-x1;
     int dstY = y2-y1;
 
     qreal _C = dstX*y1 - dstY*x1;
     qreal projectionDenominator = 1.0 / (pow(dstX,2) + pow(dstY,2));
-   
+
     qreal subPixel;
     if (qAbs(dstX) > qAbs(dstY)){
         subPixel = start.x() - x1;
     }else{
         subPixel = start.y() - y1;
     }
-    
+
     qreal halfWidth = width * 0.5 + subPixel;
     int W_ = qRound(halfWidth) + 1;
 
@@ -1222,47 +1506,47 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
     int Y1_ = y1;
     int X2_ = x2;
     int Y2_ = y2;
-    
+
     if (x2<x1) qSwap(x1,x2);
     if (y2<y1) qSwap(y1,y2);
-   
+
     qreal denominator = sqrt(pow(dstY,2) + pow(dstX,2));
     if (denominator == 0.0) {
         denominator = 1.0;
     }
     denominator = 1.0/denominator;
-    
+
     qreal projection,scanX,scanY,AA_;
-    quint8 pixelOpacity = d->opacity;    
+    quint8 pixelOpacity = d->opacity;
     int pixelSize = d->device->pixelSize();
     KisRandomAccessorPixel accessor = d->device->createRandomAccessor(x1, y1, d->selection);
-    
+
     for (int y = y1-W_; y < y2+W_ ; y++){
         for (int x = x1-W_; x < x2+W_; x++){
-           
+
             projection = ( (x-X1_)* dstX + (y-Y1_)*dstY ) * projectionDenominator;
             scanX = X1_ + projection * dstX;
             scanY = Y1_ + projection * dstY;
 
             if (((scanX < x1) || (scanX > x2)) || ((scanY < y1) || (scanY > y2))) {
-                AA_ = qMin( sqrt( pow(x-X1_,2) + pow(y-Y1_,2) ), 
-                            sqrt( pow(x-X2_,2) + pow(y-Y2_,2) ));   
+                AA_ = qMin( sqrt( pow(x-X1_,2) + pow(y-Y1_,2) ),
+                            sqrt( pow(x-X2_,2) + pow(y-Y2_,2) ));
             }else{
                 AA_ = qAbs(dstY*x - dstX*y + _C) * denominator;
             }
-         
-            if (AA_>halfWidth) { 
-                continue; 
+
+            if (AA_>halfWidth) {
+                continue;
             }
-            
+
             if (antialias){
                 if (AA_ > halfWidth-1.0) {
                     pixelOpacity = d->opacity * ( 1.0 - (AA_-(halfWidth-1.0)));
                 }else{
                     pixelOpacity = d->opacity;
                 }
-            } 
-            
+            }
+
             accessor.moveTo(x, y);
             if (accessor.isSelected()) {
                 d->compositeOp->composite(accessor.rawData(), pixelSize, d->paintColor.data() , pixelSize, 0,0,1,1,pixelOpacity);
@@ -1307,7 +1591,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     if (fabs(m) > 1.0f) {
         inc = (yd > 0) ? 1 : -1;
         m = 1.0f / m;
-        m *= inc;    
+        m *= inc;
         while (y != y2) {
             y = y + inc;
             fx = fx + m;
@@ -1353,11 +1637,11 @@ void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
     float fy = (y = y1);
     float m = (float)yd / (float)xd;
     int inc;
-    
+
     if (fabs(m) > 1) {
         inc = (yd > 0) ? 1 : -1;
         m = 1.0f / m;
-        m *= inc;    
+        m *= inc;
         while (y != y2) {
             fx = fx + m;
             y = y + inc;
@@ -1646,7 +1930,7 @@ void KisPainter::drawWuLine(const QPointF & start, const QPointF & end)
 
 void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int startWidth, int endWidth)
 {
-    
+
     KisRandomAccessorPixel accessor = d->device->createRandomAccessor(start.x(), start.y(), d->selection);
     int pixelSize = d->device->pixelSize();
     KoColorSpace * cs = d->device->colorSpace();
@@ -2152,7 +2436,7 @@ void KisPainter::setGradient(const KoAbstractGradient* gradient)
     d->gradient = gradient;
 }
 
-const KoAbstractGradient* KisPainter::gradient()
+const KoAbstractGradient* KisPainter::gradient() const
 {
     return d->gradient;
 }
@@ -2160,8 +2444,15 @@ const KoAbstractGradient* KisPainter::gradient()
 void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image)
 {
     d->paintOpPreset = preset;
-    delete d->paintOp;
-    d->paintOp = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
+    KisPaintOp *paintop = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
+    Q_ASSERT(paintop);
+    if (paintop) {
+        delete d->paintOp;
+        d->paintOp = paintop;
+    }
+    else {
+        qWarning() << "Could not create paintop for preset " << preset->name();
+    }
 }
 
 KisPaintOpPresetSP KisPainter::preset() const
@@ -2176,8 +2467,16 @@ KisPaintOp* KisPainter::paintOp() const
 
 void KisPainter::setMirrorInformation(const QPointF& axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly)
 {
-    d->paintOp->setMirrorInformation(axisCenter,mirrorHorizontaly,mirrorVerticaly);
+    d->axisCenter = axisCenter;
+    d->mirrorHorizontaly = mirrorHorizontaly;
+    d->mirrorVerticaly = mirrorVerticaly;
 }
+
+void KisPainter::copyMirrorInformation(KisPainter* painter)
+{
+    painter->setMirrorInformation(d->axisCenter, d->mirrorHorizontaly, d->mirrorVerticaly);
+}
+
 
 void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 {
@@ -2212,5 +2511,137 @@ bool KisPainter::alphaLocked() const
     QBitArray switcher =
         d->colorSpace->channelFlags(false, true, false, false);
     return !(d->channelFlags & switcher).count(true);
+}
+
+void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
+{
+    int x = rc.topLeft().x();
+    int y = rc.topLeft().y();
+
+    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
+    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
+
+    if (d->mirrorHorizontaly && d->mirrorVerticaly){
+        dab->mirror(true, false);
+        bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
+        dab->mirror(false,true);
+        bltFixed(mirrorX, mirrorY, dab, 0,0,rc.width(),rc.height());
+        dab->mirror(true, false);
+        bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
+
+    }else if (d->mirrorHorizontaly){
+        dab->mirror(true, false);
+        bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
+    }else if (d->mirrorVerticaly){
+        dab->mirror(false, true);
+        bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
+    }
+
+}
+
+QVector<QRect> KisPainter::regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
+{
+    QVector<QRect> region;
+    int x = rc.topLeft().x();
+    int y = rc.topLeft().y();
+
+    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
+    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
+
+    if (d->mirrorHorizontaly && d->mirrorVerticaly){
+        dab->mirror(true, false);
+        bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
+        region.append( QRect(QPoint(mirrorX,y),rc.size()) );
+
+        dab->mirror(false,true);
+        bltFixed(mirrorX, mirrorY, dab, 0,0,rc.width(),rc.height());
+        region.append( QRect(QPoint(mirrorX,mirrorY),rc.size()) );
+
+        dab->mirror(true, false);
+        bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
+        region.append( QRect(QPoint(x,mirrorY),rc.size()) );
+
+    }else if (d->mirrorHorizontaly){
+        dab->mirror(true, false);
+        bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
+        region.append( QRect(QPoint(mirrorX,y),rc.size()) );
+    }else if (d->mirrorVerticaly){
+        dab->mirror(false, true);
+        bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
+        region.append( QRect(QPoint(x,mirrorY),rc.size()) );
+    }
+    return region;
+}
+
+
+void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask)
+{
+    int x = rc.topLeft().x();
+    int y = rc.topLeft().y();
+
+    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
+    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
+
+    if (d->mirrorHorizontaly && d->mirrorVerticaly){
+        dab->mirror(true, false);
+        mask->mirror(true, false);
+        bltFixedWithFixedSelection(mirrorX,y, dab, mask, rc.width() ,rc.height() );
+
+        dab->mirror(false,true);
+        mask->mirror(false, true);
+        bltFixedWithFixedSelection(mirrorX,mirrorY, dab, mask, rc.width() ,rc.height() );
+
+        dab->mirror(true, false);
+        mask->mirror(true, false);
+        bltFixedWithFixedSelection(x,mirrorY, dab, mask, rc.width() ,rc.height() );
+
+    }else if (d->mirrorHorizontaly){
+        dab->mirror(true, false);
+        mask->mirror(true, false);
+        bltFixedWithFixedSelection(mirrorX,y, dab, mask, rc.width() ,rc.height() );
+
+    }else if (d->mirrorVerticaly){
+        dab->mirror(false, true);
+        mask->mirror(false, true);
+        bltFixedWithFixedSelection(x,mirrorY, dab, mask, rc.width() ,rc.height() );
+    }
+
+}
+
+
+void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
+    if (d->mirrorHorizontaly || d->mirrorVerticaly){
+        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(device()->colorSpace());
+        QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
+        mirrorDab->setRect(dabRc);
+        mirrorDab->initialize();
+
+        dab->readBytes(mirrorDab->data(),rc);
+
+        renderMirrorMask( QRect(rc.topLeft(),dabRc.size()), mirrorDab);
+    }
+}
+
+void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask){
+    if (d->mirrorHorizontaly || d->mirrorVerticaly){
+        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(device()->colorSpace());
+        QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
+        mirrorDab->setRect(dabRc);
+        mirrorDab->initialize();
+        dab->readBytes(mirrorDab->data(),rc);
+        renderMirrorMask(rc, mirrorDab, mask);
+    }
+}
+
+void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask)
+{
+    if (d->mirrorHorizontaly || d->mirrorVerticaly){
+        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(device()->colorSpace());
+        QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
+        mirrorDab->setRect(dabRc);
+        mirrorDab->initialize();
+        dab->readBytes(mirrorDab->data(),QRect(QPoint(sx,sy),rc.size()));
+        renderMirrorMask(rc, mirrorDab, mask);
+    }
 }
 

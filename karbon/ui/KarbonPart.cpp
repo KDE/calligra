@@ -108,16 +108,6 @@ public:
     {
         KSharedConfigPtr config = part->componentData().config();
 
-        uint grabSensitivity = 3;
-        uint handleRadius = 3;
-        if (config->hasGroup("Misc")) {
-            KConfigGroup miscGroup = config->group("Misc");
-            grabSensitivity = miscGroup.readEntry("GrabSensitivity", grabSensitivity);
-            handleRadius = miscGroup.readEntry("HandleRadius", handleRadius);
-        }
-        canvas->resourceManager()->setHandleRadius(handleRadius);
-        canvas->resourceManager()->setGrabSensitivity(grabSensitivity);
-
         QColor color(Qt::white);
         if (config->hasGroup("Interface")) {
             color = config->group("Interface").readEntry("CanvasColor", color);

@@ -33,7 +33,7 @@ class ValueParser;
  * \ingroup Value
  * Converts between the different Value types.
  */
-class CALLIGRA_TABLES_EXPORT ValueConverter
+class CALLIGRA_TABLES_ODF_EXPORT ValueConverter
 {
 public:
     /**

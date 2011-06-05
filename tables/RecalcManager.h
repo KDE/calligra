@@ -50,7 +50,7 @@ class Sheet;
  * Cell value changes are blocked while doing this, i.e. they do not
  * trigger a new recalculation event.
  */
-class CALLIGRA_TABLES_EXPORT RecalcManager : public QObject
+class CALLIGRA_TABLES_ODF_EXPORT RecalcManager : public QObject
 {
     Q_OBJECT
 public:

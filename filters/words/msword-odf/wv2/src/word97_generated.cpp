@@ -28,10 +28,12 @@
 // If you find bugs or strange behavior please contact Werner Trobin
 // <trobin@kde.org>
 
+#include "../../msdoc.h"
 #include <word97_generated.h>
 #include <olestream.h>
 #include <string.h>  // memset(), memcpy()
 #include "wvlog.h"
+#include "global.h"
 
 namespace wvWare {
 
@@ -1640,6 +1642,10 @@ std::string TAP::toString() const
     s += "\ntextWrap=";
     s += uint2string( textWrap );
     s += "\nrgdxaCenter=";
+    for(uint i = 0; i < rgdxaCenter.size(); i++) {
+        s += "\nrgdxaCenter[" + int2string( i ) + "]=";
+        s += int2string(rgdxaCenter[i]);
+    }
     // skipping the std::vector rgdxaCenter
     s += "\nrgdxaCenterPrint=";
     // skipping the std::vector rgdxaCenterPrint
@@ -4456,9 +4462,11 @@ bool FIB::read(OLEStreamReader *stream, bool preservePos) {
 
     U8 shifterU8;
     U16 shifterU16;
+    int start = stream->tell();
 
-    if(preservePos)
+    if (preservePos) {
         stream->push();
+    }
 
     wIdent=stream->readU16();
     nFib=stream->readU16();
@@ -4736,9 +4744,79 @@ bool FIB::read(OLEStreamReader *stream, bool preservePos) {
     fcSttbfUssr=stream->readU32();
     lcbSttbfUssr=stream->readU32();
 
-    if(preservePos)
+    //sizeof(base) + sizeof(csw) + sizeof(clw) + sizeof(cfclcb) +
+    //sizeof(fibRgW) + sizeof(fibRgLw) + sizeof(fibRgFcLcbBlob)
+    int expected = 32 + 6 + (csw * 2) + (clw * 4) + (cfclcb * 8);
+    int n = stream->tell() - start;
+#ifdef WV2_DEBUG_FIB
+    wvlog << "FIB bytes expected:" << expected << endl;
+    wvlog << "FIB bytes read:" << n << endl;
+#endif
+    if ((expected - n) > 0) {
+        stream->seek( (expected - n), G_SEEK_SET );
+    }
+    //this is new compared to Word6/Word8
+    cswNew=stream->readU16();
+
+    if (preservePos) {
         stream->pop();
+    }
+
     return true;
+}
+
+bool FIB::valid() const
+{
+    bool valid = true;
+    if (csw != 0x000e) {
+        wvlog << "Warning: fibRgW count:" << csw << "| expected: 14" << endl;
+        valid = false;
+    }
+    if (clw != 0x0016) {
+        wvlog << "Warning: fibRgLw count:" << clw << "| expected: 22" << endl;
+        valid = false;
+    }
+    switch (nFib) {
+    case Word8nFib:
+    case Word8nFib0:
+    case Word8nFib2:
+        if (cfclcb != 0x005D) {
+            wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 93" << endl;
+            valid = false;
+        }
+        break;
+    case Word2knFib:
+        if (cfclcb != 0x006C) {
+            wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 108" << endl;
+            valid = false;
+        }
+        break;
+    case Word2k2nFib:
+        if (cfclcb != 0x0088) {
+            wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 136" << endl;
+            valid = false;
+        }
+        break;
+    case Word2k3nFib:
+        if (cfclcb != 0x00A4) {
+            wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 164" << endl;
+            valid = false;
+        }
+        break;
+    case Word2k7nFib:
+        if (cfclcb != 0x00B7) {
+            wvlog << "Warning: fibRgFcLcbBlob count:" << cfclcb << "| expected: 183" << endl;
+            valid = false;
+        }
+        break;
+    default:
+        wvlog << "Warning: A document < Word8, complete validation not supported!";
+        break;
+    }
+    if (cswNew) {
+        wvlog << "Warning: A document > Word8, Dop > Dop97 not supported!";
+    }
+    return valid;
 }
 
 bool FIB::write(OLEStreamWriter *stream, bool preservePos) const {
@@ -5270,6 +5348,7 @@ void FIB::clear() {
     lcbSttbListNames=0;
     fcSttbfUssr=0;
     lcbSttbfUssr=0;
+    cswNew=0;
 }
 
 bool operator==(const FIB &lhs, const FIB &rhs) {
@@ -5529,7 +5608,8 @@ bool operator==(const FIB &lhs, const FIB &rhs) {
            lhs.fcSttbListNames==rhs.fcSttbListNames &&
            lhs.lcbSttbListNames==rhs.lcbSttbListNames &&
            lhs.fcSttbfUssr==rhs.fcSttbfUssr &&
-           lhs.lcbSttbfUssr==rhs.lcbSttbfUssr;
+           lhs.lcbSttbfUssr==rhs.lcbSttbfUssr &&
+           lhs.cswNew==rhs.cswNew;
 }
 
 bool operator!=(const FIB &lhs, const FIB &rhs) {
@@ -8103,6 +8183,8 @@ bool SEP::read(OLEStreamReader *stream, bool preservePos) {
     fLayout=stream->readU8();
     unused490=stream->readU16();
     olstAnm.read(stream, false);
+    nfcFtnRef=stream->readU16();
+    nfcEdnRef=stream->readU16();
 
     if(preservePos)
         stream->pop();
@@ -8178,6 +8260,8 @@ bool SEP::write(OLEStreamWriter *stream, bool preservePos) const {
     stream->write(fLayout);
     stream->write(unused490);
     olstAnm.write(stream, false);
+    stream->write(nfcFtnRef);
+    stream->write(nfcEdnRef);
 
     if(preservePos)
         stream->pop();
@@ -8246,6 +8330,8 @@ void SEP::clear() {
     fLayout=0;
     unused490=0;
     olstAnm.clear();
+    nfcFtnRef=0;
+    nfcEdnRef=0;
 }
 
 void SEP::dump() const
@@ -8380,6 +8466,10 @@ std::string SEP::toString() const
     s += uint2string( unused490 );
     s += "\nolstAnm=";
     s += "\n{" + olstAnm.toString() + "}\n";
+    s += "\nnfcFtnRef=";
+    s += uint2string( nfcFtnRef );
+    s += "\nnfcEdnRef=";
+    s += uint2string( nfcEdnRef );
     s += "\nSEP Done.";
     return s;
 }
@@ -8446,7 +8536,9 @@ bool operator==(const SEP &lhs, const SEP &rhs) {
            lhs.dmOrientFirst==rhs.dmOrientFirst &&
            lhs.fLayout==rhs.fLayout &&
            lhs.unused490==rhs.unused490 &&
-           lhs.olstAnm==rhs.olstAnm;
+           lhs.olstAnm==rhs.olstAnm &&
+           lhs.nfcFtnRef==rhs.nfcFtnRef &&
+           lhs.nfcEdnRef==rhs.nfcEdnRef;
 }
 
 bool operator!=(const SEP &lhs, const SEP &rhs) {
@@ -8612,6 +8704,19 @@ void STSHI::clear() {
     nVerBuiltInNamesWhenSaved=0;
     for(int _i=0; _i<(3); ++_i)
         rgftcStandardChpStsh[_i]=0;
+}
+
+void STSHI::dump() const
+{
+    wvlog << "Dumping STSHI:" <<
+    "\ncstd= 0x" << hex << cstd << dec << "(" << cstd << ")" <<
+    "\ncbSTDBaseInFile=" << cbSTDBaseInFile <<
+    "\nfStdStylenamesWritten=" << fStdStylenamesWritten <<
+    "\nstiMaxWhenSaved= 0x" << hex << stiMaxWhenSaved <<
+     dec << "(" << stiMaxWhenSaved  << ")" <<
+    "\nistdMaxFixedWhenSaved= 0x" << hex << istdMaxFixedWhenSaved <<
+    "\nnVerBuiltInNamesWhenSaved=" << dec << nVerBuiltInNamesWhenSaved <<
+    "\nDumping STSHI done:" << endl;
 }
 
 bool operator==(const STSHI &lhs, const STSHI &rhs) {

@@ -150,6 +150,8 @@ public:
     /// Insert a new page after the current one
     void insertPage();
 
+    void centerPage();
+
 protected:
 
     /// creates the widgets (called from the constructor)
@@ -165,6 +167,14 @@ protected:
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
+
+public slots:
+
+    /// Copy Page
+    void copyPage();
+
+    /// Delete the current page
+    void deletePage();
 
 protected slots:
 
@@ -191,12 +201,6 @@ protected slots:
 
     /// Called when the selection changed
     virtual void selectionChanged();
-
-    /// Copy Page
-    void copyPage();
-
-    /// Delete the current page
-    void deletePage();
 
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();

@@ -1,14 +1,18 @@
 [Desktop Entry]
 Type=Service
 Name=Krita ODG Import Filter
+Name[cs]=Importní filtr formátu ODG pro Kritu
 Name[de]=Krita-ODG-Importfilter
+Name[el]=Φίλτρο εισαγωγής ODG του Krita
+Name[en_GB]=Krita ODG Import Filter
+Name[es]=Filtro de Krita de importación de ODG
 Name[et]=Krita ODG impordifilter
-Name[fr]=Filtre d'importation ODG  de Krita
 Name[it]=Filtro di importazione ODG per Krita
+Name[nb]=ODG-importfilter for Krita
 Name[nds]=ODG-Importfilter för Krita
 Name[nl]=ODG-importfilter voor Krita
 Name[pt]=Filtro de Importação de ODG para o Krita
-Name[pt_BR]=Filtro de Importação Krita ODG
+Name[pt_BR]=Filtro de importação de ODG para o Krita
 Name[sv]=Krita ODG-importfilter
 Name[uk]=Фільтр імпорту ODG для Krita
 Name[x-test]=xxKrita ODG Import Filterxx

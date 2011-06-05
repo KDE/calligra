@@ -221,6 +221,8 @@ typedef enum
     sprmSPgnStart = 0x501C,
     sprmSDmPaperReq = 0x5026,
     sprmSClm = 0x5032,
+    sprmSNfcFtnRef = 0x5040,
+    sprmSNfcEdnRef = 0x5042,
     sprmSTextFlow = 0x5033,
     sprmSPgbProp = 0x522F,
     sprmTJc = 0x5400,
@@ -365,9 +367,16 @@ U16 determineParameterLength( U16 sprm, const U8* in, WordVersion version )
         static const char operandSizes[ 8 ] = { 1, 1, 2, 4, 2, 2, 0, 3 };
 
         int index = ( sprm & 0xE000 ) >> 13;
-        if ( operandSizes[ index ] != 0 )
+        if ( operandSizes[ index ] != 0 ) {
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "==> Size of the sprm argument:" << (U16) operandSizes[index] << endl;
+#endif
             return operandSizes[ index ];
+        }
         else {
+#ifdef WV2_DEBUG_SPRMS
+            wvlog << "==> Variable size of the sprm argument:";
+#endif
             // Get length of variable size operand.
             switch ( sprm ) {
                 case sprmTDefTable10:
@@ -1127,7 +1136,7 @@ namespace
             chp = &paragraphStyle->chp();
         else if ( istd != 10 && styleSheet ) {
             const Style* style( styleSheet->styleByIndex( istd ) );
-            chp = style != 0 && style->type() == Style::sgcChp ? &style->chp() : 0;
+            chp = style != 0 && style->type() == sgcChp ? &style->chp() : 0;
         }
         else
             wvlog << "Warning: sprmCFxyz couldn't find a style" << endl;
@@ -1221,7 +1230,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             if ( styleSheet ) {
                 wvlog << "Trying to change the character style to " << istd << endl;
                 const Style* style = styleSheet->styleByIndex( istd );
-                if ( style && style->type() == Style::sgcChp ) {
+                if ( style && style->type() == sgcChp ) {
                     wvlog << "got a character style!" << endl;
                     const UPECHPX& upechpx( style->upechpx() );
                     apply( upechpx.grpprl, upechpx.cb, paragraphStyle, styleSheet, dataStream, version );
@@ -1872,10 +1881,10 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             dxaRight = readU16( ptr );
             break;
         case SPRM::sprmSDyaTop:
-            dyaTop = readU16( ptr );
+            dyaTop = readS16( ptr );
             break;
         case SPRM::sprmSDyaBottom:
-            dyaBottom = readU16( ptr );
+            dyaBottom = readS16( ptr );
             break;
         case SPRM::sprmSDzaGutter:
             dzaGutter = readU16( ptr );
@@ -1929,6 +1938,12 @@ S16 SEP::applySEPSPRM( const U8* ptr, const Style* /*style*/, const StyleSheet* 
             break;
         case SPRM::sprmSClm:
             clm = readU16( ptr );
+            break;
+        case SPRM::sprmSNfcFtnRef:
+            nfcFtnRef = readU16( ptr );
+            break;
+        case SPRM::sprmSNfcEdnRef:
+            nfcEdnRef = readU16( ptr );
             break;
         case SPRM::sprmSTextFlow:
             wTextFlow = readU16( ptr );

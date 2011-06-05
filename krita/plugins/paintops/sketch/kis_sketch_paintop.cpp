@@ -65,9 +65,12 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_rotationOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
     m_brushOption.readOptionSetting(settings);
+    m_densityOption.readOptionSetting(settings);
+    m_lineWidthOption.readOptionSetting(settings);
+    m_offsetScaleOption.readOptionSetting(settings);
 
     m_brush = m_brushOption.brush();
-    
+
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
@@ -81,19 +84,18 @@ KisSketchPaintOp::~KisSketchPaintOp()
     delete m_painter;
 }
 
-void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end)
+void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)
 {
-    if (m_sketchProperties.lineWidth == 1){
-        m_painter->drawThickLine(start, end, m_sketchProperties.lineWidth,m_sketchProperties.lineWidth);
+    if (lineWidth == 1.0){
+        m_painter->drawThickLine(start, end, lineWidth,lineWidth);
     }else{
-        m_painter->drawLine(start, end, m_sketchProperties.lineWidth, true);
+        m_painter->drawLine(start, end, lineWidth, true);
     }
-   
 }
 
 void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation){
     m_maskDab = cachedDab(m_dab->colorSpace());
-    
+
     if (m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
         m_maskDab = m_brush->paintDevice(m_dab->colorSpace(), scale, rotation, info, 0.0, 0.0);
     } else {
@@ -111,7 +113,9 @@ void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal sc
 KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
-    if (!painter()) return KisDistanceInformation();
+    
+    if (!m_brush || !painter())
+        return KisDistanceInformation();
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());
@@ -124,20 +128,22 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     QPointF mousePosition = pi2.pos();
     m_points.append(mousePosition);
 
+    const double scale = m_sizeOption.apply(pi2);
+    const double rotation = m_rotationOption.apply(pi2);
+    const double currentProbability = m_densityOption.apply(pi2, m_sketchProperties.probability);
+    const double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
+    const double currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection){
-        drawConnection(prevMouse,mousePosition);
+        drawConnection(prevMouse, mousePosition, currentLineWidth);
     }
 
-    double scale = m_sizeOption.apply(pi2);
-    double rotation = m_rotationOption.apply(pi2);
-    
     setCurrentScale(scale);
     setCurrentRotation(rotation);
-    
-    qreal thresholdDistance;
-    
+
+    qreal thresholdDistance = 0.0;
+
     // update the mask for simple mode only once
     // determine the radius
     if (m_count == 0 && m_sketchProperties.simpleMode){
@@ -145,7 +151,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
         //m_radius = qMax(m_maskDab->bounds().width(),m_maskDab->bounds().height()) * 0.5;
         m_radius = 0.5 * qMax(m_brush->width(), m_brush->height());
     }
-    
+
     if (!m_sketchProperties.simpleMode){
         updateBrushMask(pi2,scale,rotation);
         m_radius = qMax(m_maskDab->bounds().width(),m_maskDab->bounds().height()) * 0.5;
@@ -155,19 +161,18 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     if (m_sketchProperties.simpleMode){
         // update the radius according scale in simple mode
         thresholdDistance = pow(m_radius * scale,2);
-    }    
+    }
 
     // determine density
-    qreal density = thresholdDistance * m_sketchProperties.probability;
-    
+    const qreal density = thresholdDistance * currentProbability;
+
     // probability behaviour
-    // TODO: make this option
-    qreal probability = 1.0 - m_sketchProperties.probability;
+    qreal probability = 1.0 - currentProbability;
 
     QColor painterColor = painter()->paintColor().toQColor();
     QColor randomColor;
     KoColor color(m_dab->colorSpace());
-    
+
     int w = m_maskDab->bounds().width();
     quint8 opacityU8 = 0;
     quint8 * pixel;
@@ -181,7 +186,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     for (int i = 0; i < size; i++) {
         diff = m_points.at(i) - mousePosition;
         distance = diff.x() * diff.x() + diff.y() * diff.y();
-        
+
         // circle test
         bool makeConnection = false;
         if (m_sketchProperties.simpleMode){
@@ -190,7 +195,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
             }
         // mask test
         }else{
-            
+
             if ( m_brushBoundingBox.contains( m_points.at(i) ) ){
                 positionInMask = (diff + m_hotSpot).toPoint();
                 pixel = m_maskDab->data() + ((positionInMask.y() * w + positionInMask.x()) * m_maskDab->pixelSize());
@@ -199,9 +204,9 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
                     makeConnection = true;
                 }
             }
-            
+
         }
-        
+
         if (!makeConnection){
             // check next point
             continue;
@@ -213,8 +218,8 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
         // density check
         if (drand48() >= probability) {
-            QPointF offsetPt = diff * m_sketchProperties.offset;
-            
+            QPointF offsetPt = diff * currentOffsetScale;
+
             if (m_sketchProperties.randomRGB){
                 // some color transformation per line goes here
                 randomColor.setRgbF(drand48() * painterColor.redF(),
@@ -224,27 +229,27 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
                 color.fromQColor(randomColor);
                 m_painter->setPaintColor(color);
             }
-            
+
             // distance based opacity
             quint8 opacity = OPACITY_OPAQUE_U8;
-            if (m_sketchProperties.distanceOpacity){ 
+            if (m_sketchProperties.distanceOpacity){
                 opacity *= qRound((1.0 - (distance / thresholdDistance)));
             }
-            
+
             if (m_sketchProperties.randomOpacity){
                 opacity *= drand48();
             }
-            
+
             m_painter->setOpacity(opacity);
-            
+
             if (m_sketchProperties.magnetify) {
-                drawConnection(mousePosition + offsetPt, m_points.at(i) - offsetPt);
+                drawConnection(mousePosition + offsetPt, m_points.at(i) - offsetPt, currentLineWidth);
             }else{
-                drawConnection(mousePosition + offsetPt, mousePosition - offsetPt);
+                drawConnection(mousePosition + offsetPt, mousePosition - offsetPt, currentLineWidth);
             }
 
-            
-            
+
+
         }
     }// end of MAIN LOOP
 
@@ -254,7 +259,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    renderMirrorMask(rc, m_dab);
+    painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
     KisVector2D end = toKisVector2D(pi2.pos());

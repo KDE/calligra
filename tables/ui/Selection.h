@@ -46,7 +46,7 @@ class CellEditor;
  * \author Torben Weis <weis@kde.org>
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_TABLES_EXPORT Selection : public KoToolSelection, public Region
+class CALLIGRA_TABLES_COMMON_EXPORT Selection : public KoToolSelection, public Region
 {
     Q_OBJECT
 

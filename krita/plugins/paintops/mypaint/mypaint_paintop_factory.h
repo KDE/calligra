@@ -70,6 +70,8 @@ public:
 
     QList<MyPaintBrushResource*> brushes() const;
     MyPaintBrushResource* brush(const QString& fileName) const;
+    
+    virtual void processAfterLoading();
 
 private:
 

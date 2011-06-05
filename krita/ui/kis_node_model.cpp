@@ -66,23 +66,27 @@ KisNodeModel::~KisNodeModel()
 
 void KisNodeModel::setImage(KisImageWSP image)
 {
-    dbgUI << "KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
     if (m_d->image) {
         m_d->image->disconnect(this);
     }
-    m_d->image = image;
-    connect(m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(layersChanged()));
 
-    connect(m_d->image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
-            SLOT(beginInsertNodes(KisNode*, int)));
-    connect(m_d->image, SIGNAL(sigNodeHasBeenAdded(KisNode*, int)),
-            SLOT(endInsertNodes(KisNode*, int)));
-    connect(m_d->image, SIGNAL(sigAboutToRemoveANode(KisNode*, int)),
-            SLOT(beginRemoveNodes(KisNode*, int)));
-    connect(m_d->image, SIGNAL(sigNodeHasBeenRemoved(KisNode*, int)),
-            SLOT(endRemoveNodes(KisNode*, int)));
-    connect(m_d->image, SIGNAL(sigNodeChanged(KisNode*)),
-            SLOT(nodeChanged(KisNode*)));
+    m_d->image = image;
+
+    if(m_d->image) {
+        connect(m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)),
+                SLOT(layersChanged()));
+        connect(m_d->image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
+                SLOT(beginInsertNodes(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigNodeHasBeenAdded(KisNode*, int)),
+                SLOT(endInsertNodes(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigAboutToRemoveANode(KisNode*, int)),
+                SLOT(beginRemoveNodes(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigNodeHasBeenRemoved(KisNode*, int)),
+                SLOT(endRemoveNodes(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigNodeChanged(KisNode*)),
+                SLOT(nodeChanged(KisNode*)));
+    }
+    reset();
 }
 
 KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index)
@@ -132,6 +136,9 @@ QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
 int KisNodeModel::rowCount(const QModelIndex &parent) const
 {
     //dbgUI <<"KisNodeModel::rowCount" << parent;
+    if (!m_d->image) {
+        return 0;
+    }
 
     if (!parent.isValid()) {
         if (m_d->image) {
@@ -160,7 +167,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 {
     //dbgUI <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
 
-    if (!hasIndex(row, column, parent)) {
+    if (!m_d->image || !hasIndex(row, column, parent)) {
         //dbgUI << "Does not have index";
         return QModelIndex();
     }
@@ -197,7 +204,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 {
     //dbgUI <<"KisNodeModel::parent " << index;
-    if (!index.isValid())
+    if (!m_d->image || !index.isValid())
         return QModelIndex();
 
     Q_ASSERT(index.model() == this);
@@ -365,7 +372,7 @@ void KisNodeModel::beginRemoveNodes(KisNode * parent, int index)
 {
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
-    
+
     //dbgUI <<"KisNodeModel::beginRemoveNodes parent=" << parent << ", index=" << index;
     beginRemoveRows(indexFromNode(parent), parent->childCount() - 1 - index, parent->childCount() - 1 - index);
 }

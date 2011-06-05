@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
-   Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2006 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
    Contact: Manikandaprasad Chandrasekar <manikandaprasad.chandrasekar@nokia.com>
    Copyright (c) 2010 Carlos Licea <carlos@kdab.com>
@@ -411,6 +411,32 @@ void ExcelImport::Private::processMetaData()
     // template
     // lastauthor
     // edittime
+
+    switch (workbook->version()) {
+    case Workbook::Excel95:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 95");
+        break;
+    case Workbook::Excel97:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 97");
+        break;
+    case Workbook::Excel2000:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2000");
+        break;
+    case Workbook::Excel2002:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2002");
+        break;
+    case Workbook::Excel2003:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2003");
+        break;
+    case Workbook::Excel2007:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2007");
+        break;
+    case Workbook::Excel2010:
+        info->setOriginalGenerator("Calligra xls Filter/Excel 2010");
+        break;
+    default:
+        info->setOriginalGenerator("Calligra xls Filter/Unknown");
+    }
 }
 
 void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store)

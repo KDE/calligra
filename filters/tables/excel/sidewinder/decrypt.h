@@ -1,5 +1,5 @@
 /* Swinder - Portable library for spreadsheet
-   Copyright (C) 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (C) 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,10 +21,6 @@
 
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
-
-#ifdef HAVE_QCA2
-    #include <QtCrypto>
-#endif
 
 namespace Swinder
 {
@@ -51,9 +47,6 @@ public:
     void decryptBytes(unsigned count, unsigned char* data);
     void skipBytes(unsigned count);
 private:
-#ifdef HAVE_QCA2
-    QCA::Initializer m_qca;
-#endif
     QByteArray m_salt;
     QByteArray m_encryptedVerifier;
     QByteArray m_encryptedVerifierHash;

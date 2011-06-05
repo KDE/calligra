@@ -58,7 +58,11 @@ public:
         CurrentKritaNode,
         CurrentPaintOpPreset,
         CurrentGeneratorConfiguration,
-        CurrentCompositeOp
+        CurrentCompositeOp,
+        MirrorHorizontal,
+        MirrorVertical,
+        MirrorAxisCenter,
+        Opacity
     };
 
 
@@ -102,6 +106,14 @@ public:
     void addPerspectiveGrid(KisAbstractPerspectiveGrid*);
     void removePerspectiveGrid(KisAbstractPerspectiveGrid*);
 
+    void setMirrorHorizontal(bool mirrorHorizontal);
+    bool mirrorHorizontal() const;
+
+    void setMirrorVertical(bool mirrorVertical);
+    bool mirrorVertical() const;
+
+    void setOpacity(int opacity);
+    int opacity();
 
 public slots:
 

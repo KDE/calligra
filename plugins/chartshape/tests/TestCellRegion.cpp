@@ -56,6 +56,15 @@ void TestCellRegion::testToStringSingleTable()
     QCOMPARE( m_region1.toString(), QString( "$Table1.$B$3:$K$13" ) );
 }
 
+void TestCellRegion::testSkippedTableEntry()
+{
+    const CellRegion region( &m_source, QString( "Table1.$A$3:.$C$3" ) );
+    QVector< QRect > rects;
+    rects.append( QRect( QPoint( 1, 3 ), QPoint( 3, 3 ) ) );
+    QCOMPARE( region.rects(), rects );
+}
+
+
 void TestCellRegion::testFromStringSingleTable()
 {
     QCOMPARE( m_region1, CellRegion( &m_source, "$Table1.$B$3:$K$13" ) );
@@ -132,3 +141,5 @@ void TestCellRegion::testFromStringWithSpecialCharactersMultipleTables()
 }
 
 QTEST_MAIN( TestCellRegion )
+
+#include "TestCellRegion.moc"

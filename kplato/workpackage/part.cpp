@@ -431,7 +431,7 @@ bool Part::loadWorkPackages()
 {
     m_loadingFromProjectStore = true;
     KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "projects", "*.kplatowork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
+    QStringList lst = sd->findAllResources( "projects", "*.planwork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
     //kDebug()<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {
@@ -447,7 +447,7 @@ bool Part::loadKPlatoWorkPackages()
 {
     m_loadingFromProjectStore = true;
     KStandardDirs *sd = componentData().dirs();
-    QStringList lst = sd->findAllResources( "projects", "*.kplatowork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
+    QStringList lst = sd->findAllResources( "kplatoprojects", "*.kplatowork", KStandardDirs::Recursive | KStandardDirs::NoDuplicates );
     //kDebug()<<lst;
     foreach ( const QString &file, lst ) {
         if ( ! loadNativeFormatFromStore( file ) ) {

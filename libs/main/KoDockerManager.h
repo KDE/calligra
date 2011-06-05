@@ -23,7 +23,6 @@
 #include "komain_export.h"
 
 #include <QObject>
-#include <QMap>
 
 class KoMainWindow;
 
@@ -38,14 +37,17 @@ public:
     ~KoDockerManager();
 
 public slots:
-    void removeUnusedOptionWidgets();
+    //void removeUnusedOptionWidgets();
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap, QWidget *callingView);
+    void newOptionWidgets(const QList<QWidget *> & optionWidgetList);
 
 
 private:
+    Q_PRIVATE_SLOT(d, void moveToolBarsBack())
+    Q_PRIVATE_SLOT(d, void moveToolBars())
+    Q_PRIVATE_SLOT(d, void restoringDone())
     class Private;
     Private * const d;
 };

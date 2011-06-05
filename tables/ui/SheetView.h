@@ -49,7 +49,7 @@ class CanvasBase;
  * The SheetView controls the painting of the sheets' cells.
  * It caches a set of CellViews.
  */
-class CALLIGRA_TABLES_EXPORT SheetView : public QObject
+class CALLIGRA_TABLES_COMMON_EXPORT SheetView : public QObject
 {
     Q_OBJECT
 
@@ -89,8 +89,10 @@ public:
      */
 #ifdef CALLIGRA_TABLES_MT
     CellView cellView(int col, int row);
+    CellView cellView(const QPoint& pos);
 #else
     const CellView& cellView(int col, int row);
+    const CellView& cellView(const QPoint& pos);
 #endif
 
     /**
@@ -102,7 +104,7 @@ public:
     /**
      * Invalidates all cached CellViews in \p region .
      */
-    virtual void invalidateRegion(const Region& region);
+    void invalidateRegion(const Region& region);
 
     /**
      * Invalidates all CellViews, the cached and the default.
@@ -114,28 +116,37 @@ public:
      */
     virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas = 0, const QRect& visibleRect = QRect());
 
+    QPoint obscuringCell(const QPoint& obscuredCell) const;
+    QSize obscuredRange(const QPoint& obscuringCell) const;
+    QRect obscuredArea(const QPoint& cell) const;
+    bool isObscured(const QPoint& cell) const;
+    bool obscuresCells(const QPoint& cell) const;
+    QSize totalObscuredRange() const;
+
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
 
 Q_SIGNALS:
     void visibleSizeChanged(const QSizeF&);
+    void obscuredRangeChanged(const QSize&);
 
 protected:
     virtual CellView* createDefaultCellView();
     virtual CellView* createCellView(int col, int row);
-private:
+    QRect paintCellRange() const;
+protected:
     /**
      * Helper method for invalidateRegion().
      * Invalidates all cached CellViews in \p range .
      * \internal
      */
-    void invalidateRange(const QRect& range);
+    virtual void invalidateRange(const QRect& range);
 
     /**
      * Marks other CellViews in \p range as obscured by the CellView at \p position .
      * Used by CellView.
      */
-    void obscureCells(const QRect& range, const QPoint& position);
+    void obscureCells(const QPoint& position, int numXCells, int numYCells);
 
     /**
      * Returns the default CellView.
@@ -147,6 +158,7 @@ private:
     const CellView& defaultCellView() const;
 #endif
 
+private:
     Q_DISABLE_COPY(SheetView)
 
     class Private;

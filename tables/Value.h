@@ -31,8 +31,6 @@
 
 #include <kdebug.h>
 
-#include "calligra_tables_export.h"
-
 #include "Number.h"
 
 using namespace std;
@@ -53,7 +51,7 @@ class ValueStorage;
  *
  * Value uses implicit data sharing to reduce memory usage.
  */
-class CALLIGRA_TABLES_EXPORT Value
+class CALLIGRA_TABLES_ODF_EXPORT Value
 {
 
 public:
@@ -469,22 +467,22 @@ public:
      * Returns -1, 0, 1, depends whether this value is less than, equal to, or
      * greater than v.
      */
-    int compare(const Value& v) const;
+    int compare(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is equal to v.
      */
-    bool equal(const Value& v) const;
+    bool equal(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is less than v.
      */
-    bool less(const Value& v) const;
+    bool less(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     /**
      * Returns true if this value is greater than v.
      */
-    bool greater(const Value& v) const;
+    bool greater(const Value& v, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
 
     // comparison operator - returns true only if strictly identical, unlike equal()/compare()
     bool operator==(const Value& v) const;
@@ -520,14 +518,14 @@ Q_DECLARE_TYPEINFO(Calligra::Tables::Value, Q_MOVABLE_TYPE);
   QTextStream support
 ****************************************************************************/
 
-CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value::Type type);
-CALLIGRA_TABLES_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value value);
+CALLIGRA_TABLES_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value::Type type);
+CALLIGRA_TABLES_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Tables::Value value);
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_TABLES_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Value& v);
+CALLIGRA_TABLES_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Tables::Value& v);
 QDebug operator<<(QDebug stream, const Calligra::Tables::Value::Format& f);
 
 #endif // CALLIGRA_TABLES_VALUE_H

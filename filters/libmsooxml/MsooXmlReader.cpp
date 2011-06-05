@@ -118,6 +118,7 @@ void MsooXmlReader::init()
     m_readUndoed = false;
 }
 
+/*
 static const char * tokenNames[] = {
     "NoToken", "Invalid", "StartDocument", "EndDocument",
     "StartElement", "EndElement", "Characters", "Comment",
@@ -131,6 +132,7 @@ static const char* tokenName(QXmlStreamReader::TokenType t)
         i = QXmlStreamReader::ProcessingInstruction + 1;
     return tokenNames[i];
 }
+*/
 
 bool MsooXmlReader::readBooleanAttr(const char* attrName, bool defaultValue) const
 {
@@ -149,6 +151,7 @@ void MsooXmlReader::raiseError(const QString & message)
     kDebug() << errorString();
 }
 
+/*
 QXmlStreamReader::TokenType MsooXmlReader::readNext()
 {
     if (m_readUndoed) {
@@ -164,6 +167,7 @@ void MsooXmlReader::undoReadNext()
 {
     m_readUndoed = true;
 }
+*/
 
 void MsooXmlReader::raiseElNotFoundError(const char* elementName)
 {

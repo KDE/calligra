@@ -2,7 +2,7 @@
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,12 +22,19 @@
 #ifndef KWCANVASBASE_H
 #define KWCANVASBASE_H
 
+#include <QCache>
+#include <QDebug>
+
 #include "KWDocument.h"
 #include "kword_export.h"
 #include "KWViewMode.h"
+#include "KWPage.h"
 
 #include <KoCanvasBase.h>
+
 #include <QRectF>
+#include <QImage>
+#include <QQueue>
 
 class QRect;
 class QPainter;
@@ -36,6 +43,7 @@ class KWGui;
 class KoToolProxy;
 class KoShape;
 class KoViewConverter;
+class KWPageCacheManager;
 
 class KWORD_EXPORT KWCanvasBase : public KoCanvasBase
 {
@@ -70,7 +78,7 @@ public: // KoCanvasBase interface methods.
     virtual KoGuidesData *guidesData();
 
     /// reimplemented method from superclass
-    virtual const KoViewConverter *viewConverter() const;
+    virtual KoViewConverter *viewConverter() const;
 
     /// return the document that this canvas works on
     KWDocument *document() const;
@@ -81,6 +89,20 @@ public: // KoCanvasBase interface methods.
     /// reimplemented method from superclass
     virtual void ensureVisible(const QRectF &rect);
 
+    /**
+     * Enable or disable the page cache. The cache stores the rendered pages. It is
+     * emptied when the zoomlevel changes.
+     *
+     * @param enabled: if true, we cache the contents of the document for this canvas,
+     *  for the current zoomlevel
+     * @param cachesize: the the maximum size for the cache. The cache will throw away
+     *  pages once this size is reached. Depending on Qt's implementation of QCache, the
+     *  unit is pages.
+     * @param maxZoom above this zoomlevel we'll paint a scaled version of the cache, instead
+     *  of creating a new cache
+     */
+    virtual void setCacheEnabled(bool enabled, int cacheSize = 50, qreal maxZoom = 2.0);
+
 protected:
 
     void paint(QPainter &painter, const QRectF &paintRect);
@@ -88,6 +110,8 @@ protected:
     void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
 
     void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
+
+    void paintGrid(QPainter &painter, KWViewMode::ViewMap &viewMap);
 
     /**
      * paint one border along one of the 4 sides.
@@ -110,6 +134,13 @@ protected:
     KWViewMode *m_viewMode;
     QPoint m_documentOffset;
     KoViewConverter *m_viewConverter;
+
+    bool m_cacheEnabled;
+    qreal m_currentZoom;
+    qreal m_maxZoom; //< above this zoomlevel we scale the cached image, instead of recreating the cache.
+    KWPageCacheManager *m_pageCacheManager;
+    int m_cacheSize;
+
 };
 
 #endif // KWCANVASBASE_H

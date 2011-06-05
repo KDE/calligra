@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 1998, 1999 Torben Weis <weis@kde.org>
    Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
 
@@ -24,6 +24,7 @@
 
 #include <float.h>
 
+#include "CalculationSettings.h"
 #include "Cell.h"
 #include "Formula.h"
 #include "Map.h"
@@ -134,27 +135,27 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
 
         switch (condition.cond) {
         case Conditional::Equal:
-            if (value.equal(condition.value1)) {
+            if (value.equal(condition.value1, calc->settings()->caseSensitiveComparisons())) {
                 return true;
             }
             break;
         case Conditional::Superior:
-            if (value.greater(condition.value1)) {
+            if (value.greater(condition.value1, calc->settings()->caseSensitiveComparisons())) {
                 return true;
             }
             break;
         case Conditional::Inferior:
-            if (value.less(condition.value1)) {
+            if (value.less(condition.value1, calc->settings()->caseSensitiveComparisons())) {
                 return true;
             }
             break;
         case Conditional::SuperiorEqual:
-            if (value.compare(condition.value1) >= 0) {
+            if (value.compare(condition.value1, calc->settings()->caseSensitiveComparisons()) >= 0) {
                 return true;
             }
             break;
         case Conditional::InferiorEqual:
-            if (value.compare(condition.value1) <= 0) {
+            if (value.compare(condition.value1, calc->settings()->caseSensitiveComparisons()) <= 0) {
                 return true;
             }
             break;
@@ -162,7 +163,8 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
             const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
             const Value min = calc->min(values);
             const Value max = calc->max(values);
-            if (value.compare(min) >= 0 && value.compare(max) <= 0) {
+            if (value.compare(min, calc->settings()->caseSensitiveComparisons()) >= 0
+                    && value.compare(max, calc->settings()->caseSensitiveComparisons()) <= 0) {
                 return true;
             }
             break;
@@ -171,13 +173,14 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
             const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
             const Value min = calc->min(values);
             const Value max = calc->max(values);
-            if (value.greater(max) || value.less(min)) {
+            if (value.greater(max, calc->settings()->caseSensitiveComparisons())
+                    || value.less(min, calc->settings()->caseSensitiveComparisons())) {
                 return true;
             }
             break;
         }
         case Conditional::DifferentTo:
-            if (!value.equal(condition.value1)) {
+            if (!value.equal(condition.value1, calc->settings()->caseSensitiveComparisons())) {
                 return true;
             }
             break;

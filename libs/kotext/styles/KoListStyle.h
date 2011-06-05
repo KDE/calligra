@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
+ * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,6 +33,7 @@
 class KoListLevelProperties;
 class KoShapeLoadingContext;
 class KoGenStyle;
+
 
 /**
  * This class groups all styling-options for lists.
@@ -83,6 +85,10 @@ public:
         RomanLowerItem,
         /// use upper roman counting.  (I, II, III, IV, ...)
         UpperRomanItem,
+        /// bullet, a small circle Unicode char U+2022
+        Bullet,
+        /// black circle, a large circle Unicode char U+25CF
+        BlackCircle,
         /// draw a box
         BoxItem,
         /// rhombus, like a SquareItem but rotated by 45 degree
@@ -124,8 +130,9 @@ public:
         Level,          ///< list nesting level, is 1 or higher, or zero when implied
         DisplayLevel,   ///< show this many levels. Is always lower than the (implied) level.
         CharacterStyleId,///< CharacterStyle used for markup of the counter
+        MarkCharacterStyleId, ///< This stores the character style used for the mark of the list item
         BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
-        BulletSize,     ///< size in percent relative to the height of the text
+        RelativeBulletSize,     ///< size in percent relative to the height of the text
         Alignment,      ///< Alignment of the counter
         MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
         ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
@@ -138,7 +145,18 @@ public:
         Width,          ///< The width, in pt, of  a picture bullet.
         Height,         ///< The height, in pt, of a picture bullet.
         BulletImageKey, ///< Bullet image stored as a key for lookup in the imageCollection
-        BulletColor     ///< color of the counter
+        Margin,         ///< Stores the margin of the list
+        TextIndent,     ///< Stores the text indent of list item
+        AlignmentMode,   ///< Is true if list-level-position-and-space-mode=label-alignment
+        LabelFollowedBy,  ///< Label followed by one of the enums ListLabelFollowedBy
+        TabStopPosition   ///< Specifies the additional tab stops
+    };
+
+    enum ListLabelFollowedBy
+    {
+        ListTab,  ///< Label is followed by a list tab
+        Space,    ///< Label followed by a Space
+        Nothing      ///< Nothing is present between label and the text
     };
 
     /**
@@ -242,5 +260,6 @@ private:
     class Private;
     Private * const d;
 };
+
 
 #endif

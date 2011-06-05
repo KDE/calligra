@@ -53,9 +53,9 @@ public:
     KActionCollection actionCollection;
     KAction *insertFromFileAction, *saveAsAction, *cutAction, *copyAction, *pasteAction,
     *deleteAction
-#ifdef KEXI_NO_UNFINISHED
+//#ifdef KEXI_NO_UNFINISHED
     , *propertiesAction
-#endif
+//#endif
     ;
 };
 

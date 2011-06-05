@@ -41,7 +41,7 @@
 XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     XlsxImport& _import,
     MSOOXML::DrawingMLTheme* _themes,
-    const XlsxSharedStringVector& _sharedStrings,
+    const QVector<QString>& _sharedStrings,
     const XlsxComments& _comments,
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships
@@ -187,6 +187,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_workbook()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(sheets)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -210,12 +211,18 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 {
     READ_PROLOGUE
 
+    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(sheet)
+            if (name() == "sheet") {
+                TRY_READ(sheet)
+                m_context->import->reportProgress(45 + 55/numberOfWorkSheets);
+                --numberOfWorkSheets;
+            }
             ELSE_WRONG_FORMAT
         }
     }
@@ -282,11 +289,19 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
                                           *m_context->relationships, m_context->import,
                                           vmlreader.content(),
                                           vmlreader.frames());
-    const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
-                &worksheetReader, filepath, &context);
-    if (result != KoFilter::OK) {
+    // Due to some information being available only in the later part of the document, we have to read twice
+    // In the first round we get the later information and in 2nd round we read the rest and use the information
+    context.firstRoundOfReading = true;
+    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(&worksheetReader, filepath, &context);
+    if (status != KoFilter::OK) {
         raiseError(worksheetReader.errorString());
-        return result;
+        return status;
+    }
+    context.firstRoundOfReading = false;
+    status = m_context->import->loadAndParseDocument(&worksheetReader, filepath, &context);
+    if (status != KoFilter::OK) {
+        raiseError(worksheetReader.errorString());
+        return status;
     }
 
     readNext();

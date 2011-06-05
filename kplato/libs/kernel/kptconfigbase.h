@@ -46,10 +46,29 @@ public:
     virtual int minimumDurationUnit() const { return Duration::Unit_h; }
     virtual int maximumDurationUnit() const { return Duration::Unit_Y; }
 
-    
+    QBrush summaryTaskLevelColor( int level ) const;
+    virtual bool summaryTaskLevelColorsEnabled() const;
+    virtual QBrush summaryTaskDefaultColor() const;
+    virtual QBrush summaryTaskLevelColor_1() const;
+    virtual QBrush summaryTaskLevelColor_2() const;
+    virtual QBrush summaryTaskLevelColor_3() const;
+    virtual QBrush summaryTaskLevelColor_4() const;
+
+    virtual QBrush taskNormalColor() const;
+    virtual QBrush taskErrorColor() const;
+    virtual QBrush taskCriticalColor() const;
+    virtual QBrush taskFinishedColor() const;
+
+    virtual QBrush milestoneNormalColor() const;
+    virtual QBrush milestoneErrorColor() const;
+    virtual QBrush milestoneCriticalColor() const;
+    virtual QBrush milestoneFinishedColor() const;
+
     void setLocale( KLocale *locale );
     const KLocale *locale() const;
     KLocale *locale();
+
+    static QBrush gradientBrush( const QColor &c );
 
 protected:
     bool m_readWrite;

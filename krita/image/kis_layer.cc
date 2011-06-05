@@ -27,6 +27,8 @@
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <KoProperties.h>
 #include <KoCompositeOp.h>
@@ -140,7 +142,7 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    if (m_d->image)
+    if (m_d->image.isValid())
         return m_d->image->colorSpace();
     return 0;
 }
@@ -175,6 +177,24 @@ void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyL
 {
     KisBaseNode::setSectionModelProperties(properties);
 }
+
+void KisLayer::disableAlphaChannel(bool disable)
+{
+    if(m_d->channelFlags.isEmpty())
+        m_d->channelFlags = colorSpace()->channelFlags(true, true, true, true);
+    
+    if(disable)
+        m_d->channelFlags &= colorSpace()->channelFlags(true, false, true, true);
+    else
+        m_d->channelFlags |= colorSpace()->channelFlags(false, true, false, false);
+}
+
+bool KisLayer::alphaChannelDisabled() const
+{
+    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->channelFlags;
+    return flags.count(true) == 0 && !m_d->channelFlags.isEmpty();
+}
+
 
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
@@ -252,7 +272,7 @@ KisSelectionSP KisLayer::selection() const
 
     if (layer->selectionMask())
         return layer->selectionMask()->selection();
-    else if (m_d->image)
+    else if (m_d->image.isValid())
         return m_d->image->globalSelection();
     else
         return KisSelectionSP(new KisSelection());

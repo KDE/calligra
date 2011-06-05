@@ -157,7 +157,11 @@ bool WidgetTreeWidgetItem::operator<( const QTreeWidgetItem & other ) const
     return m_customSortingKey < otherItem->customSortingKey();
 }
 
-#warning port WidgetTreeWidgetItem::paintCell 
+#ifdef __GNUC__
+#warning port WidgetTreeWidgetItem::paintCell
+#else
+#pragma WARNING( port WidgetTreeWidgetItem::paintCell )
+#endif
 #if 0
 void
 WidgetTreeWidgetItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align)
@@ -283,7 +287,11 @@ WidgetTreeWidget::~WidgetTreeWidget()
 {
 }
 
+#ifdef __GNUC__
 #warning TODO WidgetTreeWidget::sizeHint() const
+#else
+#pragma WARNING( TODO WidgetTreeWidget::sizeHint() const )
+#endif
 // QSize
 // WidgetTreeWidget::sizeHint() const
 // {

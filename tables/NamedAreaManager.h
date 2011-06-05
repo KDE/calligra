@@ -44,7 +44,7 @@ class Region;
 /**
  * Manages named cell areas.
  */
-class CALLIGRA_TABLES_EXPORT NamedAreaManager : public QObject
+class CALLIGRA_TABLES_ODF_EXPORT NamedAreaManager : public QObject
 {
     Q_OBJECT
 

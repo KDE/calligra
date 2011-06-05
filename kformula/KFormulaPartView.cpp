@@ -50,7 +50,7 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
 
     m_formulaCanvas = new KFormulaCanvas( this, m_partDocument );
     m_zoomHandler = new KoZoomHandler();
-    m_canvasController = new KoCanvasControllerWidget( this );
+    m_canvasController = new KoCanvasControllerWidget(actionCollection(), this );
     m_canvasController->setCanvas( m_formulaCanvas );
 
     if ( !doc->isReadWrite() )

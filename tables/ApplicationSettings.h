@@ -36,7 +36,7 @@ namespace Tables
 /**
  * Visual settings.
  */
-class CALLIGRA_TABLES_EXPORT ApplicationSettings : public QObject
+class CALLIGRA_TABLES_ODF_EXPORT ApplicationSettings : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool showVerticalScrollBar READ showVerticalScrollBar WRITE setShowVerticalScrollBar)

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Matus Hanzes <matus.hanzes@ixonos.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +30,20 @@ class KoShape;
 class KoTextAnchorPrivate;
 class KoXmlElement;
 class KoShapeLoadingContext;
+class KoShapeContainer;
+
+/**
+ * This class is an interface that positions the shape linked to text anchor
+ */
+class KOTEXT_EXPORT KoAnchorStrategy {
+public:
+    KoAnchorStrategy(){};
+    virtual ~KoAnchorStrategy(){};
+
+    virtual void detachFromModel() = 0;
+
+    virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position) = 0;
+};
 
 /**
  * This class is the object that is positioned in the text to be an anchor for a shape.
@@ -104,6 +119,7 @@ public:
         VParagraphContent,
         VText
     };
+
     /**
      * Constructor for an in-place anchor.
      * @param shape the anchored shape that this anchor links to.
@@ -172,19 +188,28 @@ public:
     /**
      * Returns true if the anchored frame is positioned as a (potentially big) character in
      * the text layout or false when it will not take any space as an inline object.
-     * An anchor which behaves as a characterin the text will potentially change the
+     * An anchor which behaves as a character in the text will potentially change the
      * ascent/descent of the line.
      */
     bool behavesAsCharacter() const;
 
     /**
-     * Set if the anchor shuld behave as a character
+     * Set if the anchor should behave as a character
      */
     void setBehavesAsCharacter(bool);
 
     /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
     void detachFromModel();
 
+    // get anchor strategy which is used to position shape linked to text anchor
+    KoAnchorStrategy * anchorStrategy();
+
+    // set anchor strategy which is used to position shape linked to text anchor
+    void setAnchorStrategy(KoAnchorStrategy * anchorStrategy);
+
+    qreal inlineObjectAscent();
+
+    qreal inlineObjectDescent();
 private:
     Q_DECLARE_PRIVATE(KoTextAnchor)
 };

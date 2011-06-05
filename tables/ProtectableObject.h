@@ -37,7 +37,7 @@ namespace Tables
  * The inheriting object decides which of its data should be protected.
  * It has to use isProtected() to check wether it's protected.
  */
-class CALLIGRA_TABLES_EXPORT ProtectableObject
+class CALLIGRA_TABLES_ODF_EXPORT ProtectableObject
 {
 public:
     enum Mode {

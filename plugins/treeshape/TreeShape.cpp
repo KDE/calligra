@@ -19,11 +19,11 @@
 */
 
 #include "TreeShape.h"
-#include "Layout.h"
+#include "TreeLayout.h"
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoConnectionShape.h"
-#include "KoTextOnShapeContainer.h"
+#include "KoTosContainer.h"
 #include "KoShapeLayer.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
@@ -40,17 +40,18 @@
 #include "kdebug.h"
 
 TreeShape::TreeShape(KoResourceManager *documentResources)
-            : KoShapeContainer(new Layout(this))
+            : KoShapeContainer(new TreeLayout(this))
             , m_documentResources(documentResources)
 {
     m_nextShape = 0;
     setName("TreeShape0");
     KoShape *root = KoShapeRegistry::instance()->value("RectangleShape")->createDefaultShape();
     root->setSize(QSizeF(60,30));
-    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(root, documentResources);
-    tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
-    tos->setPlainText(" ");
-    root = tos;
+    KoTosContainer *tosContainer = dynamic_cast<KoTosContainer*>(root);
+    tosContainer->setResizeBehavior(KoTosContainer::IndependentSizes);
+    // we need to create the text shape first before we can set the text to it
+    // There is no text so it should not be needed to set it
+    // tos->setPlainText(" ");
     root->setName("TextOnShape0");
     root->setParent(this);
     layout()->setRoot(root, Rectangle);
@@ -61,7 +62,7 @@ TreeShape::TreeShape(KoResourceManager *documentResources)
 }
 
 TreeShape::TreeShape(KoShape *shape, KoResourceManager *documentResources)
-            : KoShapeContainer(new Layout(this))
+            : KoShapeContainer(new TreeLayout(this))
             , m_documentResources(documentResources)
 {
     m_nextShape = 0;
@@ -89,10 +90,6 @@ TreeShape::~TreeShape()
 void TreeShape::setZIndex(int zIndex)
 {
     KoShape::setZIndex(zIndex);
-    KoTextOnShapeContainer *tos = dynamic_cast<KoTextOnShapeContainer*>(layout()->root());
-    foreach (KoShape *shape, tos->shapes())
-        shape->setZIndex(zIndex-2);
-    //layout()->root()->setZIndex(zIndex-1);
 }
 
 void TreeShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
@@ -230,7 +227,7 @@ bool TreeShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
             KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape->parent());
             if (layer)
                 usedLayers[layer]++;
-            KoTextOnShapeContainer *tos = dynamic_cast<KoTextOnShapeContainer*>(shape);
+            KoTosContainer *tos = dynamic_cast<KoTosContainer*>(shape);
             TreeShape *tree = dynamic_cast<TreeShape*>(shape);
             KoConnectionShape *connector = dynamic_cast<KoConnectionShape*>(shape);
             if (tos) {
@@ -301,7 +298,7 @@ void TreeShape::addChild(KoShape* tree, KoShape* connector)
 
 KoShape* TreeShape::connector(KoShape *shape)
 {
-    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *layout = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     return layout->connector(shape);
 }
@@ -315,7 +312,7 @@ void TreeShape::setRoot(KoShape* shape, TreeShape::RootType type)
 
 KoShape* TreeShape::root() const
 {
-    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *layout = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     return layout->root();
 }
@@ -327,7 +324,7 @@ TreeShape::RootType TreeShape::rootType() const
 
 void TreeShape::setStructure(TreeShape::TreeType structure)
 {
-    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *layout = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     kDebug() << "";
     layout->setStructure(structure);
@@ -335,7 +332,7 @@ void TreeShape::setStructure(TreeShape::TreeType structure)
 
 TreeShape::TreeType TreeShape::structure() const
 {
-    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *layout = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     return layout->structure();
 }
@@ -359,9 +356,11 @@ QList<KoShape*> TreeShape::addNewChild()
 
     KoShape *root = KoShapeRegistry::instance()->value("RectangleShape")->createDefaultShape();
     root->setSize(QSizeF(50,20));
-    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(root, m_documentResources);
-    tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
-    tos->setPlainText(" ");
+    KoTosContainer *tos = dynamic_cast<KoTosContainer*>(root);
+    tos->setResizeBehavior(KoTosContainer::IndependentSizes);
+    // we need to create the text shape first before we can set the text to it
+    // There is no text so it should not be needed to set it
+    // tos->setPlainText(" ");
     root = tos;
     KoShape *child = new TreeShape(root, m_documentResources);
     shapes.append(child);
@@ -394,9 +393,9 @@ TreeShape::TreeType TreeShape::proposeStructure()
     return layout()->proposeStructure();
 }
 
-Layout* TreeShape::layout() const
+TreeLayout* TreeShape::layout() const
 {
-    Layout *l = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *l = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(l);
     return l;
 }

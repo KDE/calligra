@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +31,8 @@ void SheetTest::init()
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     m_sheet = m_doc->map()->sheet(0);
+    m_sheet->map()->setDefaultRowHeight(10.0);
+    m_sheet->map()->setDefaultColumnWidth(10.0);
 }
 
 void SheetTest::cleanup()
@@ -53,7 +55,7 @@ void SheetTest::testRemoveRows_data()
     QTest::newRow("range middle row")   << "=SUM(C4:C7)" << 5 << "=SUM(C4:C6)";
     QTest::newRow("range end row")      << "=SUM(C4:C7)" << 7 << "=SUM(C4:C6)";
     QTest::newRow("range after end")    << "=SUM(C4:C7)" << 8 << "=SUM(C4:C7)";
-    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 4 << "=#Dependency!";
+    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 4 << "=SUM(#Dependency!:#Dependency!)";
 
     QTest::newRow("2d range before start") << "=SUM(C4:E7)" << 3 << "=SUM(C3:E6)";
     QTest::newRow("2d range start row")    << "=SUM(C4:E7)" << 4 << "=SUM(C4:E6)";
@@ -90,7 +92,7 @@ void SheetTest::testRemoveColumns_data()
     QTest::newRow("range middle row")   << "=SUM(C4:E4)" << 4 << "=SUM(C4:D4)";
     QTest::newRow("range end row")      << "=SUM(C4:E4)" << 5 << "=SUM(C4:D4)";
     QTest::newRow("range after end")    << "=SUM(C4:E4)" << 6 << "=SUM(C4:E4)";
-    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 3 << "=#Dependency!";
+    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 3 << "=SUM(#Dependency!:#Dependency!)";
 
     QTest::newRow("2d range before start") << "=SUM(C4:E7)" << 2 << "=SUM(B4:D7)";
     QTest::newRow("2d range start row")    << "=SUM(C4:E7)" << 3 << "=SUM(C4:D7)";
@@ -110,6 +112,27 @@ void SheetTest::testRemoveColumns()
     m_sheet->removeColumns(columnToRemove, 1);
 
     QCOMPARE(cell.userInput(), result);
+}
+
+
+void SheetTest::testDocumentToCellCoordinates_data()
+{
+    QTest::addColumn<QRectF>("area");
+    QTest::addColumn<QRect>("result");
+
+    QTest::newRow("simple") << QRectF(5, 5, 10, 10) << QRect(1, 1, 2, 2);
+    QTest::newRow("bigger") << QRectF(5, 5, 200, 100) << QRect(1, 1, 21, 11);
+    QTest::newRow("wide") << QRectF(5, 5, 300000, 10) << QRect(1, 1, 30001, 2);
+    QTest::newRow("tall") << QRectF(5, 5, 10, 300000) << QRect(1, 1, 2, 30001);
+    QTest::newRow("very tall") << QRectF(5, 5, 10, 10000000) << QRect(1, 1, 2, 1000001);
+}
+
+void SheetTest::testDocumentToCellCoordinates()
+{
+    QFETCH(QRectF, area);
+    QFETCH(QRect, result);
+
+    QCOMPARE(m_sheet->documentToCellCoordinates(area), result);
 }
 
 QTEST_KDEMAIN(SheetTest, GUI)

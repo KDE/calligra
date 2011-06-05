@@ -32,7 +32,6 @@
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
-#include <KoTextOnShapeContainer.h>
 
 #include <QPainter>
 #include <QTimer>
@@ -96,7 +95,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
         return;
     }
     const QRect pixels = pixelsF.toRect();
-    QSize pixmapSize = pixels.size();
+    QSize pixmapSize = pixelsF.size().toSize();
 
     QString key(generate_key(imageData->key(), pixmapSize));
     QPixmap pixmap;
@@ -176,7 +175,7 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
         m_printQualityImage = image.scaled(pixels, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     else {
-    QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
+        QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
         QString key(generate_key(imageData->key(), pixels));
         if (QPixmapCache::find(key) == 0) {
             QPixmap pixmap = imageData->pixmap(pixels);
@@ -204,11 +203,8 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
-    if (parent()) {
-        parent()->saveOdfChildElements(context);
-    }
+    saveText(context);
     writer.endElement(); // draw:image
-    saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
 
     context.addDataCenter(m_imageCollection);
@@ -242,7 +238,7 @@ bool PictureShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadi
         }
     }
 
-    KoTextOnShapeContainer::tryWrapShape(this, element, context);
+    loadText(element, context);
 
     return true;
 }

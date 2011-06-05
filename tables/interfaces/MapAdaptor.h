@@ -35,7 +35,7 @@ class Map;
 /**
 * The MapAdaptor class provides additional functionality to deal with sheets.
 */
-class CALLIGRA_TABLES_EXPORT MapAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_TABLES_COMMON_EXPORT MapAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.map")

@@ -38,7 +38,7 @@ namespace Tables
  *
  * \see AbstractSelectionStrategy
  */
-class CALLIGRA_TABLES_EXPORT SelectionStrategy : public AbstractSelectionStrategy
+class CALLIGRA_TABLES_COMMON_EXPORT SelectionStrategy : public AbstractSelectionStrategy
 {
 public:
     /**

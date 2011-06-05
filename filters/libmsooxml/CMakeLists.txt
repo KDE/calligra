@@ -28,6 +28,7 @@ set(msooxml_LIB_SRCS
     ooxml_pole.cpp
     MsooXmlDrawingTableStyleReader.cpp
     MsooXmlDrawingTableStyle.cpp
+    MsooXmlTableStyle.cpp
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
@@ -74,6 +75,8 @@ install( FILES
     MsooXmlDrawingTableStyleReader.h
     MsooXmlDrawingTableStyle.h
     VmlDrawingReader.h
+    ComplexShapeHandler.h
+    PredefinedShapeHelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )
 endif (FALSE)

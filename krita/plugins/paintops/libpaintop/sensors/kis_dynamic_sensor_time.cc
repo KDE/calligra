@@ -31,7 +31,7 @@ KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(
     setLength(3);
 }
 
-qreal KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
+qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
 {
     m_time += pi.currentTime() - m_lastTime;
     m_lastTime = pi.currentTime();
@@ -62,7 +62,7 @@ void KisDynamicSensorTime::setLength(int length)
     setMaximumLabel(i18n("%1 s", length));
 }
 
-QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
+QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, QWidget* ss)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorTimeConfiguration stc;
@@ -85,6 +85,7 @@ void KisDynamicSensorTime::toXML(QDomDocument& doc, QDomElement& e) const
 
 void KisDynamicSensorTime::fromXML(const QDomElement& e)
 {
+    KisDynamicSensor::fromXML(e);
     m_periodic = e.attribute("periodic", "0").toInt();
     m_length = e.attribute("duration", "30").toInt();
 }

@@ -271,6 +271,29 @@ public:
     bool clicklessSpacePan() const;
     void setClicklessSpacePan(const bool toggle) const;
 
+    int horizontalSplitLines() const;
+    void setHorizontalSplitLines(const int numberLines) const;
+
+    int verticalSplitLines() const;
+    void setVerticalSplitLines(const int numberLines) const;
+
+    int hideDockersFullscreen();
+    void setHideDockersFullscreen(const int value) const;
+
+    int hideMenuFullscreen();
+    void setHideMenuFullscreen(const int value) const;
+
+    int hideScrollbarsFullscreen();
+    void setHideScrollbarsFullscreen(const int value) const;
+
+    int hideStatusbarFullscreen();
+    void setHideStatusbarFullscreen(const int value) const;
+
+    int hideTitlebarFullscreen();
+    void setHideTitlebarFullscreen(const int value) const;
+
+    int hideToolbarFullscreen();
+    void setHideToolbarFullscreen(const int value) const;
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

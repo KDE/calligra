@@ -47,9 +47,11 @@
 #include "Charting.h"
 #include "ChartExport.h"
 #include "XlsxXmlChartReader.h"
+#include "ComplexShapeHandler.h"
 
 #include <MsooXmlReader.h>
 #include <MsooXmlCommonReader.h>
+#include <MsooXmlDiagramReader.h>
 #include <QScopedPointer>
 
 // ================================================================
@@ -61,29 +63,21 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_hyperLink = false;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
-    m_fillImageRenderingStyleStretch = false;
+    m_insideTable = false;
 }
 
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
 {
     // some conditions are not supported with custom shapes properly yet, remove them when possible
 
-    // Lines and connectors are handled elsewhere
-    if (m_contentType == "line" || m_contentType.contains("Connector")) {
+    // Custom geometry has its own handling
+    if (m_contentType == "custom") {
         return false;
     }
 
-    // custom shape supports showing text lists
-    return true;
-
-    // Picture fill in custom-shape supported
-    if (!m_xlinkHref.isEmpty()) {
-        return true;
-    }
-
-    // Remove me when custom-shape suppors rotation
-    if (m_rot != 0) {
-        return true;
+    // Lines and connectors are handled elsewhere
+    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")) {
+        return false;
     }
 
     // These shapes are not properly supported atm. some have bugs in predefinedShapes.xml,
@@ -98,30 +92,6 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
 }
 
 // ----------------------------------------------------------------
-
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName,
-                                                           const QString& destinationDir,
-                                                           QString& destinationName,
-                                                           bool oleType)
-{
-    destinationName = destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
-    if (oleType) {
-        // If it's of type ole, we don't know the file type, by default it has .bin
-        // ending which we're removing here.
-        destinationName.remove(".bin");
-    }
-
-    if (m_copiedFiles.contains(destinationName)) {
-        kDebug() << sourceName << "already copied - skipping";
-    }
-    else {
-//! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
-        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, oleType) )
-        addManifestEntryForFile(destinationName);
-        m_copiedFiles.insert(destinationName);
-    }
-    return KoFilter::OK;
-}
 
 // ================================================================
 // DrawingML tags
@@ -166,7 +136,7 @@ static QString mirrorToOdf(bool flipH, bool flipV)
  - [done] spPr (Shape Properties) §19.3.1.44
  - [done] spPr (Shape Properties) §20.1.2.2.35 - DrawingML
  - style (Shape Style) §19.3.1.46
- - style (Shape Style) §20.1.2.2.37 - DrawingML
+ - [done] style (Shape Style) §20.1.2.2.37 - DrawingML
 */
 //! @todo support all elements
 //! CASE #P401
@@ -182,7 +152,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
-    m_fillImageRenderingStyleStretch = false;
     m_flipH = false;
     m_flipV = false;
     m_rot = 0;
@@ -192,14 +161,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 #endif
 
+    m_referredFont = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(nvPicPr)
+            ELSE_TRY_READ_IF(style)
             SKIP_UNKNOWN
         }
     }
@@ -222,11 +194,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
     body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 #endif
-//todo        body->addAttribute("presentation:style-name", styleName);
-//! @todo for pptx: maybe use KoGenStyle::PresentationAutoStyle?
-    if (m_noFill) {
-        m_currentDrawStyle->addAttribute("style:fill", constNone);
-    }
 
     if (m_rot == 0) {
 #if defined(XLSXXMLDRAWINGREADER_CPP)
@@ -274,13 +241,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_currentDrawStyle->addProperty("style:mirror", mirror);
     }
 
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 #endif
 
@@ -351,7 +317,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPicPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(cNvPicPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(cNvPr)
@@ -389,7 +355,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPicPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -447,7 +413,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr(cNvPrCaller caller)
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //            TRY_READ_IF()
 //! @todo add ELSE_WRONG_FORMAT
@@ -482,7 +448,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(cNvPr)
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -492,6 +458,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
             ELSE_WRONG_FORMAT
         }
     }
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    inheritShapeGeometry();
+#endif
+
     READ_EPILOGUE
 }
 
@@ -526,7 +497,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(grpSp)
@@ -545,13 +516,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     body = drawFrameBuf.originalWriter();
     body->startElement("draw:g");
 
-    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 
     (void)drawFrameBuf.releaseWriter();
@@ -575,13 +545,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
  - spTree (§19.3.1.45)
 
  Child elements:
- - blipFill (Picture Fill) §20.1.8.14
+ - [done] blipFill (Picture Fill) §20.1.8.14
  - effectDag (Effect Container) §20.1.8.25
- - effectLst (Effect Container) §20.1.8.26
+ - [done] effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §20.1.2.2.15
  - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
- - noFill (No Fill) §20.1.8.44
+ - [done] noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
  - scene3d (3D Scene Properties) §20.1.4.1.26
  - [done] solidFill (Solid Fill) §20.1.8.54
@@ -596,21 +566,42 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, xfrm)
+            else if (qualifiedName() == QLatin1String("a:effectLst")) {
+                TRY_READ(effectLst)
+            }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
                 // We must set the color immediately, otherwise currentColor may be modified by eg. ln
-                m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-                m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
-                m_currentColor = QColor();
+                if (m_currentColor != QColor()) {
+                    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+                    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                    m_currentColor = QColor();
+                }
             }
             else if ( qualifiedName() == QLatin1String("a:ln") ) {
                 TRY_READ(ln)
             }
+            else if (qualifiedName() == QLatin1String("a:noFill")) {
+                m_currentDrawStyle->addAttribute("style:fill", constNone);
+            }
+            else if (qualifiedName() == QLatin1String("a:blipFill")) {
+                TRY_READ_IN_CONTEXT(blipFill)
+                if (!m_xlinkHref.isEmpty()) {
+                    KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
+                    fillStyle.addProperty("xlink:href", m_xlinkHref);
+                    fillStyle.addProperty("xlink:type", "simple");
+                    fillStyle.addProperty("xlink:actuate", "onLoad");
+                    const QString imageName = mainStyles->insert(fillStyle);
+                    m_currentDrawStyle->addProperty("draw:fill", "bitmap");
+                    m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
+                    m_xlinkHref.clear();
+                }
+            }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
-                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
                 TRY_READ(gradFill)
                 m_currentDrawStyle->addProperty("draw:fill", "gradient");
                 const QString gradName = mainStyles->insert(m_currentGradientStyle);
@@ -648,7 +639,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvCxnSpPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(cNvPr)
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -689,7 +680,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         /*        if (isStartElement()) {
                     TRY_READ_IF(...)
         //! @todo add ELSE_WRONG_FORMAT
@@ -714,12 +705,12 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     //We assume that the textbox is empty by default
     d->textBoxHasContent = false;
 
-    // If called from the pptx converter, handle different contexts
-    // (Slide, SlideMaster, SlideLayout)
-    if (m_context->type == Slide) {
-        m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
+    m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentPresentationStyle.setAutoStyleInStylesDotXml(true);
     }
-    else if (m_context->type == SlideMaster) {
+
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
     }
     else if (m_context->type == SlideLayout) {
@@ -741,21 +732,32 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     inheritDefaultBodyProperties();
     inheritBodyProperties(); // Properties may or may not override default ones.
 
-    if (m_normAutoFit == MSOOXML::Utils::autoFitOn) {
+    if (m_normAutofit == MSOOXML::Utils::autoFitOn) {
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
-    if (m_contentType == "line") {
+    if (m_contentType == "line" || m_contentType == "arc") {
         body->startElement("draw:line");
     }
     else if (m_contentType.contains("Connector")) {
         body->startElement("draw:line"); // This should be maybe draw:connector but calligra doesn't seem to
                                          // handle that element yet
     }
-    else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
-        body->startElement("draw:frame"); // CASE #P475
+    else if (m_contentType == "custom") { // custGeom
+        body->startElement("draw:custom-shape");
     }
-    else {
+    else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
+#ifdef PPTXXMLSLIDEREADER_CPP
+        if (d->phType == "sldImg") {
+            body->startElement("draw:page-thumbnail"); // Special feature for presentation notes
+        } else {
+            body->startElement("draw:frame");
+        }
+#else
+        body->startElement("draw:frame");
+#endif
+    }
+    else { // For predefined shapes
         body->startElement("draw:custom-shape");
     }
     if (!m_cNvPrName.isEmpty()) {
@@ -768,14 +770,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
     m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
 
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+#endif
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
-        mainStyles->markStyleForStylesXml(styleName);
-    }
-
     const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
 
     if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -791,19 +794,11 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 
-    QString presentationStyleName;
-    //body->addAttribute("draw:style-name", );
-    if (!m_currentPresentationStyle.isEmpty()) {
-        presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
-        if (m_context->type == SlideMaster) {
-            mainStyles->markStyleForStylesXml(presentationStyleName);
-        }
-    }
-    if (!presentationStyleName.isEmpty()) {
+    if (!m_currentPresentationStyle.isEmpty() || !m_currentPresentationStyle.parentName().isEmpty()) {
+        QString presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         body->addAttribute("presentation:style-name", presentationStyleName);
     }
 
-    // Inheriting shape placement information from layout/master
     inheritShapePosition();
 
     if (m_context->type == Slide) {
@@ -814,9 +809,31 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
                  << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
     }
+#endif
+
     if (m_svgWidth > -1 && m_svgHeight > -1) {
+#ifdef PPTXXMLSLIDEREADER_CPP
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line" || m_contentType.contains("Connector")){
+#endif
+        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.contains("Connector")) {
+#ifdef XLSXXMLDRAWINGREADER_CPP
+            XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+            body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
+            body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
+            QString y1 = EMU_TO_CM_STRING(f.m_rowOff);
+            QString y2 = EMU_TO_CM_STRING(f.m_rowOff + m_svgHeight);
+            QString x1 = EMU_TO_CM_STRING(f.m_colOff);
+            QString x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth);
+            if (m_rot != 0) {
+                qreal angle, xDiff, yDiff;
+                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                //! @todo, in case of connector, these should maybe be reversed?
+                x1 = EMU_TO_CM_STRING(f.m_colOff + xDiff);
+                y1 = EMU_TO_CM_STRING(f.m_rowOff + yDiff);
+                x2 = EMU_TO_CM_STRING(f.m_colOff + m_svgWidth - xDiff);
+                y2 = EMU_TO_CM_STRING(f.m_rowOff + m_svgHeight - yDiff);
+            }
+#else
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
@@ -830,6 +847,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                 x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
                 y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
             }
+#endif
             if (m_flipV) {
                 QString temp = y2;
                 y2 = y1;
@@ -846,6 +864,23 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:y2", y2);
         }
         else {
+#ifdef XLSXXMLDRAWINGREADER_CPP
+            // No rotation support for xlsx yet
+            if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+                XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+                body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
+                body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
+                if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+                    f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
+                    body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
+                    body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
+                    body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
+                } else {
+                    body->addAttributePt("svg:width", EMU_TO_POINT(m_svgWidth));
+                    body->addAttributePt("svg:height", EMU_TO_POINT(m_svgHeight));
+                }
+            }
+#else
             if (m_rot == 0) {
                 body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
                 body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -859,46 +894,50 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-            if (m_contentType != "rect" && !m_contentType.isEmpty() && !unsupportedPredefinedShape()) {
+#endif
+            if (m_contentType == "custom") {
                 body->startElement("draw:enhanced-geometry");
+                if (m_flipV) {
+                    body->addAttribute("draw:mirror-vertical", "true");
+                }
+                if (m_flipH) {
+                    body->addAttribute("draw:mirror-horizontal", "true");
+                }
+                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
+                body->addAttribute("draw:enhanced-path", m_customPath);
+                body->addCompleteElement(m_customEquations.toUtf8());
+                body->endElement(); // draw:enhanced-geometry
+            }
+            else if (m_contentType != "rect" && !m_contentType.isEmpty() && !unsupportedPredefinedShape()) {
+                body->startElement("draw:enhanced-geometry");
+                if (m_flipV) {
+                    body->addAttribute("draw:mirror-vertical", "true");
+                }
+                if (m_flipH) {
+                    body->addAttribute("draw:mirror-horizontal", "true");
+                }
                 body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
                 body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
-                body->addCompleteElement(m_context->import->m_shapeHelper.equations.value(m_contentType).toUtf8());
+                QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
+                // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
+                if (m_contentAvLstExists && false) {
+                    QMapIterator<QString, QString> i(m_avModifiers);
+                    while (i.hasNext()) {
+                        i.next();
+                        int index = 0;
+                        index = equations.indexOf(i.key());
+                        if (index > -1) {
+                            // We go forward by name and '" draw:formula="'
+                            index += i.key().length() + 16;
+                            equations.replace(index, equations.indexOf('\"', index) - index, i.value());
+                        }
+                    }
+                }
+                body->addCompleteElement(equations.toUtf8());
                 body->endElement(); // draw:enhanced-geometry
             }
         }
     }
-#elif defined(XLSXXMLDRAWINGREADER_CPP)
-    if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
-        XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
-        body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
-        body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
-        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
-            f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-            body->addAttribute("table:end-cell-address", Calligra::Tables::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
-            body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
-            body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
-        } else {
-            body->addAttributePt("svg:width", EMU_TO_POINT(m_svgWidth));
-            body->addAttributePt("svg:height", EMU_TO_POINT(m_svgHeight));
-        }
-    }
-#else
-#ifdef __GNUC__
-#warning TODO: docx
-#endif
-#endif // PPTXXMLSLIDEREADER_H
-    // In case of a blipFill
-    if (!m_xlinkHref.isEmpty()) {
-        body->startElement("draw:image");
-        body->addAttribute("xlink:href", m_xlinkHref);
-        body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:show", "embed");
-        body->addAttribute("xlink:actuate", "onLoad");
-        body->endElement(); //draw:image
-        m_xlinkHref.clear();
-    }
-
 }
 
 #undef CURRENT_EL
@@ -909,6 +948,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 {
     READ_PROLOGUE
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    KoXmlWriter *bodyBackup = body;
+    body = m_currentDrawingObject->setShape(new XlsxShape());
+#endif
+
     preReadSp();
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -916,19 +960,33 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
     // to write after the child elements are generated
     body = drawFrameBuf.setWriter(body);
+
+    m_referredFont = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(nvCxnSpPr)
             ELSE_TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF(style)
 #ifdef PPTXXMLSLIDEREADER_CPP
-            else {
-                TRY_READ_IF(txBody)
-            }
+            ELSE_TRY_READ_IF(txBody)
 #endif
+            else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
+                bool boxCreated = false;
+                if (m_contentType == "rect" || m_contentType.isEmpty() ||
+                    unsupportedPredefinedShape()) {
+                    body->startElement("draw:text-box"); // CASE #P436
+                    boxCreated = true;
+                }
+                TRY_READ(DrawingML_txBody)
+                if (boxCreated) {
+                    body->endElement(); // draw:text-box
+                }
+            }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -948,6 +1006,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 #endif
 
     popCurrentDrawStyle();
+
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    body = bodyBackup;
+#endif
 
     READ_EPILOGUE
 }
@@ -972,7 +1034,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
     - [done] nvSpPr (Non-Visual Properties for a Shape) §20.1.2.2.29 - DrawingML
     - [done] spPr (Shape Properties) §19.3.1.44
     - [done] spPr (Shape Properties) §20.1.2.2.35 - DrawingML
-    - style (Shape Style) §19.3.1.46
+    - [done] style (Shape Style) §19.3.1.46
     - [done] style (Shape Style) §20.1.2.2.37 - DrawingML
     - [done] txBody (Shape Text Body) §19.3.1.51 - PML
     - [done] txSp (Text Shape) §20.1.2.2.41 - DrawingML
@@ -1004,10 +1066,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     // to write after the child elements are generated
     body = drawFrameBuf.setWriter(body);
 
+    m_referredFont = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(nvSpPr)
             ELSE_TRY_READ_IF(spPr)
@@ -1016,10 +1080,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             ELSE_TRY_READ_IF(txBody)
 #endif
             else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
-                KoXmlWriter* w = body;
-                body->startElement("draw:text-box");
+                bool boxCreated = false;
+                if (m_contentType == "rect" || m_contentType.isEmpty() ||
+                    unsupportedPredefinedShape()) {
+                    body->startElement("draw:text-box"); // CASE #P436
+                    boxCreated = true;
+                }
                 TRY_READ(DrawingML_txBody)
-                w->endElement();
+                if (boxCreated) {
+                    body->endElement(); // draw:text-box
+                }
             }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -1054,14 +1124,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 //! style handler (Shape style)
 /*
  Parent elements:
- - cxnSp (§19.3.1.19);
- - pic (§19.3.1.37);
+ - [done] cxnSp (§19.3.1.19);
+ - [done] pic (§19.3.1.37);
  - [done] sp (§19.3.1.43)
 
  Child elements:
  - effectRef (Effect Reference) §20.1.4.2.8
  - [done] fillRef (Fill Reference) §20.1.4.2.10
- . fontRef (Font Reference) §20.1.4.1.17
+ . [done] fontRef (Font Reference) §20.1.4.1.17
  - [done] lnRef (Line Reference) §20.1.4.2.19
 
 */
@@ -1070,19 +1140,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 {
     READ_PROLOGUE
 
-    // We don't want to overlap the current style
-    if (!m_currentDrawStyle->isEmpty()) {
-        skipCurrentElement();
-        READ_EPILOGUE
-    }
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, fillRef)
             ELSE_TRY_READ_IF_NS(a, lnRef)
+            else if (qualifiedName() == "a:fontRef") {
+                m_currentColor = QColor();
+                m_referredFontName = QString();
+                TRY_READ(fontRef)
+                if (m_currentColor.isValid()) {
+                    m_referredFont.addProperty("fo:color", m_currentColor.name());
+                    m_currentColor = QColor();
+                }
+                if (!m_referredFontName.isEmpty()) {
+                    m_referredFont.addProperty("fo:font-family", m_referredFontName);
+                }
+            }
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1111,13 +1187,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 
  Child elements:
     - [done] blipFill (Picture Fill) §20.1.8.14
-    - custGeom (Custom Geometry) §20.1.9.8
+    - [done] custGeom (Custom Geometry) §20.1.9.8
     - effectDag (Effect Container) §20.1.8.25
-    - effectLst (Effect Container) §20.1.8.26
+    - [done] effectLst (Effect Container) §20.1.8.26
     - [done] extLst (Extension List) §20.1.2.2.15
     - [done] gradFill (Gradient Fill) §20.1.8.33
     - grpFill (Group Fill) §20.1.8.35
-    - ln (Outline) §20.1.2.2.24
+    - [done] ln (Outline) §20.1.2.2.24
     - [done] noFill (No Fill) §20.1.8.44
     - pattFill (Pattern Fill) §20.1.8.47
     - [done] prstGeom (Preset geometry) §20.1.9.18
@@ -1132,63 +1208,90 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
-    m_noFill = false;
+    m_contentAvLstExists = false;
+    m_customPath = QString();
+    m_customEquations = QString();
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:xfrm")) {
                 TRY_READ(xfrm)
                 m_xfrm_read = true;
+            }
+            else if (qualifiedName() == "a:custGeom") {
+                TRY_READ(custGeom)
+                m_contentType = "custom";
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
                 d->textBoxHasContent = true; // We count normal fill and gardient as content
 #endif
                 TRY_READ(solidFill)
-                // We must set the color immediately, otherwise currentColor may be modified by eg. ln
-                m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-                m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
-                m_currentColor = QColor();
+                if (m_currentColor != QColor()) {
+                    // We must set the color immediately, otherwise currentColor may be modified by eg. ln
+                    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+                    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                    m_currentColor = QColor();
+                    if (m_currentAlpha > 0) {
+                        m_currentDrawStyle->addProperty("draw:opacity", QString("%1%").arg(m_currentAlpha));
+                    }
+                }
             }
-            else if ( qualifiedName() == QLatin1String("a:ln") ) {
+            else if (qualifiedName() == QLatin1String("a:ln")) {
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
-                m_noFill = true;
+                m_currentDrawStyle->addProperty("draw:fill", constNone);
             }
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
             }
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IN_CONTEXT(blipFill)
+                if (!m_xlinkHref.isEmpty()) {
+                    KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
+                    fillStyle.addProperty("xlink:href", m_xlinkHref);
+                    fillStyle.addProperty("xlink:type", "simple");
+                    fillStyle.addProperty("xlink:actuate", "onLoad");
+                    const QString imageName = mainStyles->insert(fillStyle);
+                    m_currentDrawStyle->addProperty("draw:fill", "bitmap");
+                    m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
+                    m_xlinkHref.clear();
+                }
+            }
+            else if (qualifiedName() == QLatin1String("a:effectLst")) {
+                TRY_READ(effectLst)
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
                 d->textBoxHasContent = true;
 #endif
-                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
                 TRY_READ(gradFill)
                 m_currentDrawStyle->addProperty("draw:fill", "gradient");
                 const QString gradName = mainStyles->insert(m_currentGradientStyle);
                 m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
             }
             SKIP_UNKNOWN
-//! @todo a:prstGeom...
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
+#ifdef PPTXXMLSLIDEREADER_CPP
+    saveCurrentGraphicStyles();
+#endif
+
     READ_EPILOGUE
 }
+
+#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
 
 // ================================================================
 //                             NameSpace "c"
 // ================================================================
-#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
 
@@ -1204,7 +1307,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
-    if (!r_id.isEmpty()) {
+    if (!r_id.isEmpty() && m_context->relationships) {
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         Charting::Chart* chart = new Charting::Chart;
@@ -1248,13 +1351,77 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE
 }
 
+// ================================================================
+//                             NameSpace "dgm"
+// ================================================================
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "dgm"
+
+#undef CURRENT_EL
+#define CURRENT_EL relIds
+//! DrawingML diagram handler
+/*!
+@todo documentation
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_relIds()
+{
+    READ_PROLOGUE
+
+    if (m_context->relationships) {
+        const QXmlStreamAttributes attrs(attributes());
+        TRY_READ_ATTR_WITH_NS(r, cs) // colors
+        TRY_READ_ATTR_WITH_NS(r, dm) // data
+        TRY_READ_ATTR_WITH_NS(r, lo) // layout
+        TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
+        while (!atEnd()) {
+            readNext();
+            BREAK_IF_END_OF(CURRENT_EL)
+            if (isStartElement()) {
+                TRY_READ_IF(spPr)
+                ELSE_TRY_READ_IF(style)
+            }
+        }
+
+        //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
+        const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
+        const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
+        //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
+        QScopedPointer<MSOOXML::MsooXmlDiagramReaderContext> context(new MSOOXML::MsooXmlDiagramReaderContext(mainStyles));
+
+        // first read the data-model
+        MSOOXML::MsooXmlDiagramReader dataReader(this);
+        const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context.data());
+        if (dataReaderResult != KoFilter::OK) {
+        raiseError(dataReader.errorString());
+        return dataReaderResult;
+        }
+
+        // then read the layout definition
+        MSOOXML::MsooXmlDiagramReader layoutReader(this);
+        const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context.data());
+        if (layoutReaderResult != KoFilter::OK) {
+        raiseError(layoutReader.errorString());
+        return layoutReaderResult;
+        }
+
+        // and finally start the process that will produce the ODF
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+        m_currentDrawingObject->setDiagram(context.take());
+#else
+        context->saveIndex(body, QRect(EMU_TO_CM(m_svgX), EMU_TO_CM(m_svgY), m_svgHeight > 0 ? EMU_TO_CM(m_svgWidth) : 100, m_svgHeight > 0 ? EMU_TO_CM(m_svgHeight) : 100));
 #endif
+    }
+
+    READ_EPILOGUE
+}
+
+#endif // MSOOXMLDRAWINGTABLESTYLEREADER_CPP
 
 // ================================================================
 //                             NameSpace "a"
@@ -1274,8 +1441,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
  - [done] style (§20.1.2.2.37);
  - [done] style (§20.5.2.31);
  - [done] style (§19.3.1.46);
- - tblBg (§20.1.4.2.25);
- - tcStyle (§20.1.4.2.29)
+ - [done] tblBg (§20.1.4.2.25);
+ - [done] tcStyle (§20.1.4.2.29)
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
@@ -1290,11 +1457,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+    int index = idx.toInt();
+
+    // If it has draw:fill it means that the style has already been defined
+    if (!m_currentDrawStyle->property("draw:fill").isEmpty()) {
+        skipCurrentElement();
+        READ_EPILOGUE
+    }
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(scrgbClr)
@@ -1306,15 +1482,71 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
         }
     }
 
-    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+    MSOOXML::DrawingMLFillBase *fillBase = m_context->themes->formatScheme.fillStyles.value(index);
+    if (fillBase) {
+        fillBase->writeStyles(*mainStyles, m_currentDrawStyle, m_currentColor);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fontRef
+//! fontRef handler (Font reference)
+/*
+ Parent elements:
+ - [done] style (§21.3.2.24);
+ - [done] style (§21.4.2.28);
+ - [done] style (§20.1.2.2.37);
+ - [done] style (§20.5.2.31);
+ - [done] style (§19.3.1.46);
+ - [done] tcTxStyle (§20.1.4.2.30)
+
+ Child elements:
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fontRef()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+
+    if (!idx.isEmpty()) {
+        if (idx.startsWith("major")) {
+            m_referredFontName = m_context->themes->fontScheme.majorFonts.latinTypeface;
+        }
+        else if (idx.startsWith("minor")) {
+            m_referredFontName = m_context->themes->fontScheme.minorFonts.latinTypeface;
+        }
+    }
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(prstClr)
+            SKIP_UNKNOWN
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
 
     READ_EPILOGUE
 }
 
 #undef CURRENT_EL
 #define CURRENT_EL lnRef
-//! fillREf handler (Line reference)
+//! fillRef handler (Line reference)
 /*
  Parent elements:
  - [done] style (§21.3.2.24);
@@ -1340,22 +1572,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentPen = QPen();
-
     TRY_READ_ATTR_WITHOUT_NS(idx)
 
     if (!idx.isEmpty()) {
         int index = idx.toInt();
         if (m_context->themes->formatScheme.lineStyles.size() > index) {
             qreal penWidth = EMU_TO_POINT(m_context->themes->formatScheme.lineStyles.at(index).toDouble());
-            m_currentPen.setWidthF(penWidth);
+            if (m_currentDrawStyle->property("svg:stroke-width").isEmpty()) {
+                m_currentDrawStyle->addPropertyPt("svg:stroke-width", penWidth);
+            }
         }
     }
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(srgbClr)
@@ -1367,8 +1599,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
         }
     }
 
-    m_currentPen.setColor(m_currentColor);
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+    if (m_currentDrawStyle->property("svg:stroke-color").isEmpty()) {
+        m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
+    }
+
+    // Todo, this would need to be read from theme
+    if (m_currentDrawStyle->property("draw:stroke").isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:stroke", "solid");
+    }
+    if (m_currentDrawStyle->property("draw:stroke-linejoin").isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:stroke-linejoin", "bevel");
+    }
 
     READ_EPILOGUE
 }
@@ -1406,7 +1647,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1422,7 +1663,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 /*!
  Parent elements:
  - rich (§21.2.2.156)
- - t (§21.4.3.8)
  - txBody (§21.3.2.26)
  - txBody (§20.1.2.2.40)
  - txBody (§20.5.2.34)
@@ -1431,7 +1671,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
 
  Child elements:
  - [done] br (Text Line Break) §21.1.2.2.1
- - endParaRPr (End Paragraph Run Properties) §21.1.2.2.3
+ - [done] endParaRPr (End Paragraph Run Properties) §21.1.2.2.3
  - [done] fld (Text Field) §21.1.2.2.4
  - [done] pPr (Text Paragraph Properties) §21.1.2.2.7
  - [done] r (Text Run) §21.1.2.3.8
@@ -1441,6 +1681,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 {
     READ_PROLOGUE2(DrawingML_p)
 
+    m_largestParaFont = 0;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
@@ -1454,6 +1695,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #else
     m_prevListLevel = m_currentListLevel = 0;
 #endif
+
+    QString fontSize = QString();
+    QString bulletColor = QString();
 
     // Creating a list ouf of what we have, note that ppr maybe overwrite the list style if it wishes
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
@@ -1471,13 +1715,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     body = textPBuf.setWriter(body);
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
+#ifdef PPTXXMLSLIDEREADER_CPP
+    m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
+    m_currentParagraphStyle.addProperty("fo:line-height", "100%" );
+#endif
     bool pprRead = false;
     bool rRead = false;
 
     while (!atEnd()) {
         readNext();
         kDebug() << "isStartElement:" << isStartElement();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 // CASE #400.1
             if (QUALIFIED_NAME_IS(pPr)) {
@@ -1487,6 +1735,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             else if (QUALIFIED_NAME_IS(br)) {
                 body->startElement("text:line-break");
                 body->endElement(); // text:line-break
+                skipCurrentElement(); // Skipping rest of br element
             }
 // CASE #400.2
 //! @todo add more conditions testing the parent
@@ -1496,13 +1745,41 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 d->textBoxHasContent = true;
 #endif
                 TRY_READ(DrawingML_r)
+                if (fontSize.isEmpty()) {
+                    fontSize = m_currentTextStyle.property("fo:font-size");
+                }
+                if (bulletColor.isEmpty()) {
+                    bulletColor = m_currentTextStyle.property("fo:color");
+                }
             }
             else if (QUALIFIED_NAME_IS(fld)) {
                 rRead = true;
                 TRY_READ(fld)
             }
-            SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            else if (QUALIFIED_NAME_IS(endParaRPr)) {
+#ifdef PPTXXMLSLIDEREADER_CPP
+                if (!m_insideTable) {
+                    inheritDefaultTextStyle(m_currentParagraphStyle);
+                    inheritTextStyle(m_currentParagraphStyle);
+                }
+#endif
+                m_currentTextStyleProperties = new KoCharacterStyle();
+                m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+                TRY_READ(endParaRPr)
+                m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+                delete m_currentTextStyleProperties;
+                m_currentTextStyleProperties = 0;
+                KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+                fontSize = m_currentParagraphStyle.property("fo:font-size", KoGenStyle::TextType);
+                if (!fontSize.isEmpty()) {
+                    fontSize.remove("pt");
+                    qreal realSize = fontSize.toDouble();
+                    if (realSize > m_largestParaFont) {
+                        m_largestParaFont = realSize;
+                    }
+                }
+            }
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1511,12 +1788,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         inheritDefaultParagraphStyle(m_currentParagraphStyle);
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
-    }
-    if (!rRead) {
-        // We are inheriting to paragraph's text-properties because there is no text
-        // and thus m_currentTextStyle is not used
-        inheritDefaultTextStyle(m_currentParagraphStyle);
-        inheritTextStyle(m_currentParagraphStyle);
     }
 #endif
 
@@ -1534,15 +1805,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
         m_previousListWasAltered = false;
     }
+
+    // This approach has the risk that numbered lists might have different bullet sizes -> different lists
+    //  -> numbering won't work as expected
     if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
         m_listStylePropertiesAltered = true;
-        QString textSize = m_currentTextStyle.property("fo:font-size");
-        if (!textSize.isEmpty()) {
-            textSize = textSize.left(textSize.length() - 2); // removes 'pt'
-            qreal convertedSize = textSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
+        if (!fontSize.isEmpty()) {
+            fontSize = fontSize.left(fontSize.length() - 2); // removes 'pt'
+            qreal convertedSize = fontSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
+    /* Commented out for now, as this creates completely new lists which is not wanted
+       Maybe the correct behaviour would be to default to text color of the text in calligra instead of using this
+    if (m_currentBulletProperties.bulletColor() == "UNUSED") {
+        m_listStylePropertiesAltered = true;
+        if (!bulletColor.isEmpty()) {
+            m_currentBulletProperties.setBulletColor(bulletColor);
+        }
+    }*/
+
     if (m_listStylePropertiesAltered) {
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
@@ -1577,10 +1859,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
              for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                  body->startElement("text:list");
                  if (listDepth == 0) {
-                     QString listStyleName = mainStyles->insert(m_currentListStyle);
-                     if (m_context->type == SlideMaster) {
-                         mainStyles->markStyleForStylesXml(listStyleName);
+                     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+                         m_currentListStyle.setAutoStyleInStylesDotXml(true);
                      }
+                     QString listStyleName = mainStyles->insert(m_currentListStyle);
                      Q_ASSERT(!listStyleName.isEmpty());
                      body->addAttribute("text:style-name", listStyleName);
                      m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
@@ -1612,13 +1894,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 
      body->startElement("text:p", false);
+
+     // OOxml sometimes defines margins as percentages, however percentages in odf mean a bit different
+     // thing, so here we transform them to points
+     QString spcBef = m_currentParagraphStyle.property("fo:margin-top");
+     if (spcBef.contains("%")) {
+         spcBef.remove("%");
+         qreal percentage = spcBef.toDouble() / 100.0;
+         m_currentParagraphStyle.addPropertyPt("fo:margin-top", percentage * m_largestParaFont);
+     }
+     QString spcAft = m_currentParagraphStyle.property("fo:margin-bottom");
+     if (spcAft.contains("%")) {
+         spcAft.remove("%");
+         qreal percentage = spcAft.toDouble() / 100.0;
+         m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", percentage * m_largestParaFont);
+     }
+
 #ifdef PPTXXMLSLIDEREADER_CPP
-     if (m_context->type == SlideMaster) {
-         m_moveToStylesXml = true;
+     if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+         m_currentParagraphStyle.setAutoStyleInStylesDotXml(true);
      }
 #endif
-
-     setupParagraphStyle();
+     QString currentParagraphStyleName(mainStyles->insert(m_currentParagraphStyle));
+     body->addAttribute("text:style-name", currentParagraphStyleName);
 
      (void)textPBuf.releaseWriter();
      body->endElement(); //text:p
@@ -1671,15 +1969,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
     m_currentTextStyleProperties = new KoCharacterStyle();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
+    }
+#endif
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    inheritDefaultTextStyle(m_currentTextStyle);
-    inheritTextStyle(m_currentTextStyle);
+    if (!m_insideTable) {
+        inheritDefaultTextStyle(m_currentTextStyle);
+        inheritTextStyle(m_currentTextStyle);
+    }
 #endif
+
+    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(rPr)) {
                 TRY_READ(DrawingML_rPr)
@@ -1690,7 +1997,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
 
     // elements
-    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
     body = rBuf.originalWriter();
 
@@ -1700,13 +2006,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
     }
 
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
+    QString fontSize = m_currentTextStyle.property("fo:font-size");
+    if (!fontSize.isEmpty()) {
+        fontSize.remove("pt");
+        qreal realSize = fontSize.toDouble();
+        if (realSize > m_largestParaFont) {
+            m_largestParaFont = realSize;
+        }
     }
-#endif
 
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
@@ -1724,15 +2034,132 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     READ_EPILOGUE
 }
 
-static QFont::Capitalization capToOdf(const QString& cap)
+#undef CURRENT_EL
+#define CURRENT_EL endParaRPr
+//! endParaRPr handler (End Paragraph Run Properties)
+/*
+ Parent elements:
+ - [done] p (§21.1.2.2.6)
+
+ Child elements:
+ - blipFill (Picture Fill) §20.1.8.14
+ - cs (Complex Script Font) §21.1.2.3.1
+ - ea (East Asian Font) §21.1.2.3.3
+ - effectDag (Effect Container) §20.1.8.25
+ - effectLst (Effect Container) §20.1.8.26
+ - extLst (Extension List) §20.1.2.2.15
+ - gradFill (Gradient Fill) §20.1.8.33
+ - grpFill (Group Fill) §20.1.8.35
+ - [done] highlight (Highlight Color) §21.1.2.3.4
+ - [done] hlinkClick (Click Hyperlink) §21.1.2.3.5
+ - hlinkMouseOver (Mouse-Over Hyperlink) §21.1.2.3.6
+ - [done] latin (Latin Font) §21.1.2.3.7
+ - ln (Outline) §20.1.2.2.24
+ - noFill (No Fill) §20.1.8.44
+ - pattFill (Pattern Fill) §20.1.8.47
+ - rtl (Right to Left Run) §21.1.2.2.8
+ - [done] solidFill (Solid Fill) §20.1.8.54
+ - sym (Symbol Font) §21.1.2.3.10
+ - uFill (Underline Fill) §21.1.2.3.12
+ - uFillTx (Underline Fill Properties Follow Text) §21.1.2.3.13
+ - uLn (Underline Stroke) §21.1.2.3.14
+ - uLnTx (Underline Follows Text) §21.1.2.3.15
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_endParaRPr()
 {
-    if (cap == QLatin1String("small")) {
-        return QFont::SmallCaps;
+    READ_PROLOGUE
+
+    m_hyperLink = false;
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentColor = QColor();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(latin)
+            ELSE_TRY_READ_IF(solidFill)
+            else if (QUALIFIED_NAME_IS(highlight)) {
+                TRY_READ(DrawingML_highlight)
+            }
+            ELSE_TRY_READ_IF(hlinkClick)
+            SKIP_UNKNOWN
+//! @todo add ELSE_WRONG_FORMAT
+        }
     }
-    else if (cap == QLatin1String("all")) {
-        return QFont::AllUppercase;
+
+    if (m_currentColor.isValid()) {
+        m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
+        m_currentColor = QColor();
     }
-    return QFont::MixedCase;
+
+    handleRprAttributes(attrs);
+
+    READ_EPILOGUE
+}
+
+void MSOOXML_CURRENT_CLASS::handleRprAttributes(const QXmlStreamAttributes& attrs)
+{
+    // DrawingML: b, i, strike, u attributes:
+    if (attrs.hasAttribute("b")) {
+        m_currentTextStyleProperties->setFontWeight(
+            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
+    }
+    if (attrs.hasAttribute("i")) {
+        m_currentTextStyleProperties->setFontItalic(
+            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(cap);
+    if (!cap.isEmpty()) {
+        if (cap == QLatin1String("small")) {
+            m_currentTextStyle.addProperty("fo:font-variant", "small-caps");
+        }
+        else if (cap == QLatin1String("all")) {
+            m_currentTextStyle.addProperty("fo:text-transform", "uppercase");
+        }
+    }
+    TRY_READ_ATTR_WITHOUT_NS(spc)
+    if (!spc.isEmpty()) {
+        int spcInt = spc.toInt();
+        m_currentTextStyle.addPropertyPt("fo:letter-spacing", qreal(spcInt) / 100.0);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(sz)
+    if (!sz.isEmpty()) {
+        int szInt = sz.toInt();
+        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
+    }
+    // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
+    TRY_READ_ATTR_WITHOUT_NS(strike)
+    if (strike == QLatin1String("sngStrike")) {
+        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
+        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    } else if (strike == QLatin1String("dblStrike")) {
+        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
+        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    } else {
+        // empty or "noStrike"
+    }
+    // from
+    TRY_READ_ATTR_WITHOUT_NS(baseline)
+    if (!baseline.isEmpty()) {
+        int baselineInt = baseline.toInt();
+        if (baselineInt > 0) {
+            m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+        }
+        else if (baselineInt < 0) {
+            m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
+        }
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(u)
+    if (!u.isEmpty()) {
+        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
+    }
 }
 
 #undef CURRENT_EL
@@ -1742,8 +2169,9 @@ static QFont::Capitalization capToOdf(const QString& cap)
 /*!
  Parent elements:
  - br (§21.1.2.2.1)
- - fld (§21.1.2.2.4)
+ - [done] fld (§21.1.2.2.4)
  - [done] r (§21.1.2.3.8)
+
  Attributes:
  - altLang (Alternative Language)
  - b (Bold)
@@ -1764,6 +2192,7 @@ static QFont::Capitalization capToOdf(const QString& cap)
  - strike (Strikethrough)
  - sz (Font Size)
  - u (Underline)
+
  Child elements:
  - [done] blipFill (Picture Fill) §20.1.8.14
  - cs (Complex Script Font) §21.1.2.3.1
@@ -1802,10 +2231,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     // Read child elements
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(latin)
-            ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
+            //ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
             // As odf does not support gradFill for text, it's better to not use it at all, as relying on the first color
             // can create bad results.
@@ -1814,7 +2243,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
             }
-            ELSE_TRY_READ_IF(ln)
+            //ELSE_TRY_READ_IF(ln) // Disabled as this is not supported by odf
             ELSE_TRY_READ_IF(hlinkClick)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -1822,70 +2251,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentTextStyleProperties->setForeground(m_currentColor);
+        m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
         m_currentColor = QColor();
     }
 
-    // Read Attributes
-
-    // DrawingML: b, i, strike, u attributes:
-    if (attrs.hasAttribute("b")) {
-        m_currentTextStyleProperties->setFontWeight(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
-    }
-    if (attrs.hasAttribute("i")) {
-        m_currentTextStyleProperties->setFontItalic(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(cap);
-    if (!cap.isEmpty()) {
-        m_currentTextStyleProperties->setFontCapitalization(capToOdf(cap));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(spc)
-    if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
-    }
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    kDebug() << "d->phType ____" << d->phType;
-#endif
-
-    TRY_READ_ATTR_WITHOUT_NS(sz)
-    if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "rPr@sz")
-        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
-    }
-    // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
-    TRY_READ_ATTR_WITHOUT_NS(strike)
-    if (strike == QLatin1String("sngStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else if (strike == QLatin1String("dblStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else {
-        // empty or "noStrike"
-    }
-    // from
-    TRY_READ_ATTR_WITHOUT_NS(baseline)
-    if (!baseline.isEmpty()) {
-        int baselineInt;
-        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
-        if (baselineInt > 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
-        else if (baselineInt < 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(u)
-    if (!u.isEmpty()) {
-        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
-    }
+    handleRprAttributes(attrs);
 
     READ_EPILOGUE
 }
@@ -1920,7 +2290,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
 
-    if (!r_id.isEmpty()) {
+    if (!r_id.isEmpty() && m_context->relationships) {
         m_hyperLink = true;
         m_hyperLinkTarget = m_context->relationships->target(m_context->path, m_context->file, r_id);
         m_hyperLinkTarget.remove(0, m_context->path.length() + 1);
@@ -1928,8 +2298,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
+
+#if defined(PPTXXMLSLIDEREADER_CPP) || defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
+    // Where there is a hyperlink, hlink value should be used by default
+    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+    QString valTransformed = m_context->colorMap.value("hlink");
+    colorItem = m_context->themes->colorScheme.value(valTransformed);
+    if (colorItem) {
+        m_currentColor = colorItem->value();
+    }
+#endif
 
     READ_EPILOGUE
 }
@@ -1939,8 +2319,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
 //! pPr handler (Text Paragraph Properties) 21.1.2.2.7, p.3588.
 /*!
  Parent elements:
-  - fld (§21.1.2.2.4)
-  - p (§21.1.2.2.6)
+  - [done] fld (§21.1.2.2.4)
+  - [done] p (§21.1.2.2.6)
+
  Attributes:
   - [incomplete] algn (Alignment)
   - defTabSz (Default Tab Size)
@@ -1953,19 +2334,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - marL (Left Margin)
   - marR (Right Margin)
   - rtl (Right To Left)
+
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
   - [done] buBlip (Picture Bullet) §21.1.2.4.2
   - [done] buChar (Character Bullet) §21.1.2.4.3
   - [done] buClr (Color Specified) §21.1.2.4.4
-  - buClrTx (Follow Text) §21.1.2.4.5
+  - [done] buClrTx (Follow Text) §21.1.2.4.5
   - [done] buFont (Specified) §21.1.2.4.6
   - buFontTx (Follow text) §21.1.2.4.7
   - [done] buNone (No Bullet) §21.1.2.4.8
   - [done] buSzPct (Bullet Size Percentage) §21.1.2.4.9
   - buSzPts (Bullet Size Points) §21.1.2.4.10
   - buSzTx (Bullet Size Follows Text) §21.1.2.4.11
-  - defRPr (Default Text Run Properties) §21.1.2.3.2
+  - [done] defRPr (Default Text Run Properties) §21.1.2.3.2
   - extLst (Extension List) §20.1.2.2.15
   - [done] lnSpc (Line Spacing) §21.1.2.2.5
   - [done] spcAft (Space After) §21.1.2.2.9
@@ -2006,29 +2388,38 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
+        qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
+        // value added to left marginal
+        if (!indent.isEmpty()) {
+            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
+    } else if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
     }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
-    }
-    if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
     if (!defTabSz.isEmpty()) {
         const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
     }
 
+    m_currentTextStyleProperties = new KoCharacterStyle();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(buAutoNum)
+            ELSE_TRY_READ_IF(defRPr)
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
+            ELSE_TRY_READ_IF(buClrTx)
             ELSE_TRY_READ_IF(buClr)
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
@@ -2046,6 +2437,61 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
                 TRY_READ(lnSpc)
             }
             SKIP_UNKNOWN
+        }
+    }
+
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
+    KoGenStyle::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL custGeom
+//! custGeom Handler (Custom Geometry)
+/*
+ Parent elements:
+ - [done] spPr (§21.2.2.197);
+ - [done] spPr (§21.3.2.23);
+ - [done] spPr (§21.4.3.7);
+ - [done] spPr (§20.1.2.2.35);
+ - [done] spPr (§20.2.2.6);
+ - [done] spPr (§20.5.2.30);
+ - [done] spPr (§19.3.1.44)
+
+ Child elements:
+ - ahLst (List of Shape Adjust Handles) §20.1.9.1
+ - avLst (List of Shape Adjust Values) §20.1.9.5
+ - cxnLst (List of Shape Connection Sites) §20.1.9.10
+ - gdLst (List of Shape Guides) §20.1.9.12
+ - pathLst (List of Shape Paths) §20.1.9.16
+ - rect (Shape Text Rectangle) §20.1.9.22
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_custGeom()
+{
+    READ_PROLOGUE
+
+    ComplexShapeHandler handler;
+    m_customEquations = handler.defaultEquations();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (name() == "avLst") {
+                m_customEquations += handler.handle_avLst(this);
+            }
+            else if (name() == "gdLst") {
+                m_customEquations += handler.handle_gdLst(this);
+            }
+            else if (name() == "pathLst") {
+                m_customPath = handler.handle_pathLst(this);
+                m_customEquations += handler.pathEquationsCreated();
+            }
+
         }
     }
 
@@ -2094,7 +2540,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(off)) {
                 TRY_READ(off);
@@ -2290,7 +2736,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
 //! @todo more attrs
     TRY_READ_ATTR_WITH_NS(r, embed)
     kDebug() << "embed:" << r_embed;
-    if (!r_embed.isEmpty()) {
+    if (!r_embed.isEmpty() && m_context->relationships) {
         const QString sourceName(m_context->relationships->target(m_context->path,
                                                                   m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;
@@ -2300,10 +2746,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
-        QString destinationName;
-
-        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
-        m_recentSourceName = sourceName;
+        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+        addManifestEntryForFile(destinationName);
+        m_recentDestName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
     }
@@ -2312,7 +2758,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(biLevel)
             ELSE_TRY_READ_IF(grayscl)
@@ -2333,10 +2779,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
  a BLIP is tiled to fill the available area.
 
  Parent elements:
-    - blipFill (§21.3.2.2) - DrawingML, p. 3919
+    - [done]blipFill (§21.3.2.2) - DrawingML, p. 3919
     - [done] blipFill (§20.1.8.14) - DrawingML, p. 3195
-    - blipFill (§20.2.2.1) - DrawingML, p. 3456
-    - blipFill (§20.5.2.2) - DrawingML, p. 3518
+    - [done] blipFill (§20.2.2.1) - DrawingML, p. 3456
+    - [done] blipFill (§20.5.2.2) - DrawingML, p. 3518
     - [done] blipFill (§19.3.1.4) - PresentationML, p. 2818
 
  Child elements:
@@ -2347,13 +2793,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
 {
     READ_PROLOGUE
 
-    m_fillImageRenderingStyleStretch = true;
     m_currentDrawStyle->addProperty("style:repeat", QLatin1String("stretch"));
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fillRect)
             ELSE_WRONG_FORMAT
@@ -2505,6 +2950,61 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tile()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL srcRect
+//! srcRect handler (Source Rectangle)
+/*
+ Parent elements:
+ - [done] blipFill (§21.3.2.2);
+ - [done] blipFill (§20.1.8.14);
+ - [done] blipFill (§20.2.2.1);
+ - [done] blipFill (§20.5.2.2);
+ - [done] blipFill (§19.3.1.4)
+
+ No child elements.
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs( attributes() );
+    TRY_READ_ATTR_WITHOUT_NS(b)
+    TRY_READ_ATTR_WITHOUT_NS(l)
+    TRY_READ_ATTR_WITHOUT_NS(r)
+    TRY_READ_ATTR_WITHOUT_NS(t)
+
+    if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
+        qreal bReal = b.toDouble() / 100000;
+        qreal tReal = t.toDouble() / 100000;
+        qreal lReal = l.toDouble() / 100000;
+        qreal rReal = r.toDouble() / 100000;
+
+        int rectLeft = m_imageSize.rwidth() * lReal;
+        int rectTop = m_imageSize.rheight() * tReal;
+        int rectWidth = m_imageSize.rwidth() - m_imageSize.rwidth() * rReal - rectLeft;
+        int rectHeight = m_imageSize.rheight() - m_imageSize.rheight() * bReal - rectTop;
+
+        QString destinationName = QLatin1String("Pictures/") +  b + l + r + t +
+            m_recentDestName.mid(m_recentDestName.lastIndexOf('/') + 1);
+        QImage image;
+        m_context->import->imageFromFile(m_recentDestName, image);
+        image = image.copy(rectLeft, rectTop, rectWidth, rectHeight);
+
+        if (bReal < 0 || tReal < 0 || lReal < 0 || rReal < 0) {
+            // Todo, here we should delete the generated black area(s)
+        }
+
+        RETURN_IF_ERROR( m_context->import->createImage(image, destinationName) )
+        addManifestEntryForFile(destinationName);
+        m_xlinkHref = destinationName;
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL fillRect
 //! fillRect handler (Fill Rectangle)
 //! ECMA-376, 20.1.8.30, p. 3212
@@ -2529,15 +3029,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 {
     READ_PROLOGUE
 
-//    const QXmlStreamAttributes attrs( attributes() );
+    const QXmlStreamAttributes attrs( attributes() );
 //! @todo use ST_Percentage_withMsooxmlFix_to_double for attributes b, l, r, t
-    /*    TRY_READ_ATTR_WITHOUT_NS(r, b)
-        TRY_READ_ATTR_WITHOUT_NS(r, l)
-        TRY_READ_ATTR_WITHOUT_NS(r, r)
-        TRY_READ_ATTR_WITHOUT_NS(r, t)*/
+    TRY_READ_ATTR_WITHOUT_NS(b)
+    TRY_READ_ATTR_WITHOUT_NS(l)
+    TRY_READ_ATTR_WITHOUT_NS(r)
+    TRY_READ_ATTR_WITHOUT_NS(t)
 //MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
-    //m_fillImageRenderingStyle = QLatin1String("stretch");
+    if (!b.isEmpty() || !l.isEmpty() || !r.isEmpty() || !t.isEmpty()) {
+        // TODO: One way to approach this would be to first scale the image to the size of the slide
+        // then, resize it according to the percentages & make sure there are no black areas
+    }
 
     readNext();
     READ_EPILOGUE
@@ -2572,7 +3075,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(graphicData)
             ELSE_WRONG_FORMAT
@@ -2605,11 +3108,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-            ELSE_TRY_READ_IF_NS(c, chart)
+            ELSE_TRY_READ_IF_NS(c, chart) // Charting diagram
+            ELSE_TRY_READ_IF_NS(dgm, relIds) // DrawingML diagram
 #endif
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF_NS(p, oleObj)
@@ -2669,7 +3173,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 
  Child elements:
     - [done] blip (Blip) §20.1.8.13
-    - srcRect (Source Rectangle) §20.1.8.55
+    - [done] srcRect (Source Rectangle) §20.1.8.55
     - [done] stretch (Stretch) §20.1.8.56
     - [done] tile (Tile) §20.1.8.58
 
@@ -2706,8 +3210,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
         return KoFilter::WrongFormat;
     }
 
-    m_fillImageRenderingStyleStretch = false;
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -2716,8 +3218,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
             TRY_READ_IF(blip)
             ELSE_TRY_READ_IF(stretch)
             ELSE_TRY_READ_IF(tile)
-            SKIP_UNKNOWN
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_TRY_READ_IF(srcRect)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -2729,23 +3231,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
     }
     return KoFilter::OK;
 }
-
-//! @todo KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srcRect()
-/*
- No child elements.
-
- Attributes:
-    - b (Bottom Offset)
-    - l (Left Offset)
-    - r (Right Offset)
-    - t (Top Offset)
-
- Complex type: CT_RelativeRect, p. 4545
-
- const QXmlStreamAttributes attrs( attributes() );
- use qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)....
-*/
-
 
 #if 0 //todo
 #undef CURRENT_EL
@@ -2858,7 +3343,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
-    if (m_context->type == SlideMaster || m_context->type == SlideLayout) {
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster || m_context->type == SlideLayout) {
         inheritAllTextAndParagraphStyles();
     }
 #endif
@@ -2866,7 +3351,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -2897,8 +3382,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 #define CURRENT_EL latin
 /*! latin handler (Latin Font) ECMA-376, 21.1.2.3.7, p.3621.
  Parent elements:
- - defRPr (§21.1.2.3)
- - endParaRPr (§21.1.2.2.3)
+ - [done] defRPr (§21.1.2.3)
+ - [done] endParaRPr (§21.1.2.2.3)
  - font (§20.1.4.2.13)
  - majorFont (§20.1.4.1.24)
  - minorFont (§20.1.4.1.25)
@@ -2936,7 +3421,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
         else if (typeface.startsWith("+mn")) {
            font = m_context->themes->fontScheme.minorFonts.latinTypeface;
         }
-        m_currentTextStyleProperties->setFontFamily(font);
+        m_currentTextStyle.addProperty("fo:font-family", font);
     }
     TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
     if (!pitchFamily.isEmpty()) {
@@ -2977,8 +3462,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
  This element specifies the highlight color that is present for a run of text.
 
  Parent elements:
- - defRPr (§21.1.2.3.2)
- - endParaRPr (§21.1.2.2.3)
+ - [done] defRPr (§21.1.2.3.2)
+ - [done] endParaRPr (§21.1.2.2.3)
  - [done] rPr (§21.1.2.3.9)
 
  Child elements:
@@ -2996,7 +3481,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(scrgbClr)
@@ -3076,7 +3561,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(scrgbClr)
@@ -3096,17 +3581,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
 /*
  Parent Elements:
  - bg (§21.4.3.1);
- - bgFillStyleLst (§20.1.4.1.7);
- - bgPr (§19.3.1.2); defRPr (§21.1.2.3.2);
+ - [done] bgFillStyleLst (§20.1.4.1.7);
+ - [done] bgPr (§19.3.1.2);
+ - defRPr (§21.1.2.3.2);
  - endParaRPr (§21.1.2.2.3);
  - fill (§20.1.8.28);
  - fill (§20.1.4.2.9);
  - fillOverlay (§20.1.8.29);
- - fillStyleLst (§20.1.4.1.13);
- - grpSpPr (§21.3.2.14);
- - grpSpPr (§20.1.2.2.22);
- - grpSpPr (§20.5.2.18);
- - grpSpPr (§19.3.1.23);
+ - [done] fillStyleLst (§20.1.4.1.13);
+ - [done] grpSpPr (§21.3.2.14);
+ - [done] grpSpPr (§20.1.2.2.22);
+ - [done] grpSpPr (§20.5.2.18);
+ - [done] grpSpPr (§19.3.1.23);
  - ln (§20.1.2.2.24);
  - lnB (§21.1.3.5);
  - lnBlToTr (§21.1.3.6);
@@ -3129,7 +3615,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
 
  Child Elements:
  - [done] gsLst (Gradient Stop List) §20.1.8.37
- - lin (Linear Gradient Fill) §20.1.8.41
+ - [done] lin (Linear Gradient Fill) §20.1.8.41
  - path (Path Gradient) §20.1.8.46
  - tileRect (Tile Rectangle) §20.1.8.59
 
@@ -3140,23 +3626,56 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_gradRotation = false;
-    m_gradPosition = 0;
-
-    TRY_READ_ATTR_WITHOUT_NS(rotWithShape)
-    if (rotWithShape == "1") {
-        m_gradRotation = true;
-    }
+    bool gradRotation = false;
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gsLst)
+            else if (qualifiedName() == "a:lin") {
+                gradRotation = true;
+                TRY_READ(lin)
+            }
             SKIP_UNKNOWN
         }
     }
 
+    if (gradRotation) {
+        qreal angle = -m_gradAngle.toDouble() / 60000.0 / 180.0 * M_PI;
+        m_currentGradientStyle.addAttribute("svg:x1", QString("%1%").arg(50 - 50 * cos(angle)));
+        m_currentGradientStyle.addAttribute("svg:y1", QString("%1%").arg(50 + 50 * sin(angle)));
+        m_currentGradientStyle.addAttribute("svg:x2", QString("%1%").arg(50 + 50 * cos(angle)));
+        m_currentGradientStyle.addAttribute("svg:y2", QString("%1%").arg(50 - 50 * sin(angle)));
+    } else {
+        m_currentGradientStyle.addAttribute("svg:x1", "50%");
+        m_currentGradientStyle.addAttribute("svg:y1", "0%");
+        m_currentGradientStyle.addAttribute("svg:x2", "50%");
+        m_currentGradientStyle.addAttribute("svg:y2", "100%");
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lin
+//! linear gradient fill
+/*
+ Parent Elements:
+ - [done] gradFill (§20.1.8.33)
+
+ Child Elements:
+ - none
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lin()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS_INTO(ang, m_gradAngle)
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3175,65 +3694,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 {
     READ_PROLOGUE
 
-    QVector<QColor> colors;
-    QVector<int> positions;
-    QVector<int> alphas;
+    int index = 0;
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(gs)) {
                 TRY_READ(gs)
-                colors.push_back(m_currentColor);
-                positions.push_back(m_gradPosition);
-                alphas.push_back(m_currentAlpha);
+                QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").arg(m_gradPosition/100.0).arg(m_currentColor.name());
+                QString name = QString("%1").arg(index);
+                m_currentGradientStyle.addChildElement(name, contents);
+                ++index;
             }
             ELSE_WRONG_FORMAT
         }
-    }
-
-    bool gradFilled = false;
-    // This gradient logic should be replace with a more generic one if possible
-    if (colors.size() == 3) {
-        // Case: axial gradient
-        if (positions.at(0) == 0 && positions.at(1) == 50  && positions.at(2) == 100 &&
-            colors.at(0) == colors.at(2) && colors.at(0) != colors.at(1)) {
-            m_currentGradientStyle.addAttribute("draw:style", "axial");
-            m_currentGradientStyle.addAttribute("draw:end-color", colors.at(0).name());
-            if (alphas.at(0) > 0) {
-                m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(alphas.at(0)));
-            }
-            else {
-                m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
-            }
-            if (alphas.at(2) > 0) {
-                m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(alphas.at(0)));
-            }
-            else {
-                m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
-            }
-            m_currentGradientStyle.addAttribute("draw:start-color", colors.at(1).name());
-            gradFilled = true;
-        }
-    }
-    // Currently used for all other encountered gradient types
-    if (colors.size() > 1 && !gradFilled) {
-        m_currentGradientStyle.addAttribute("draw:style", "linear");
-        if (alphas.at(0) > 0) {
-            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(alphas.at(0)));
-        }
-        else {
-            m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
-        }
-        if (alphas.at(alphas.size()-1) > 0) {
-            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(alphas.at(alphas.size()-1)));
-        }
-        else {
-            m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
-        }
-        m_currentGradientStyle.addAttribute("draw:start-color", colors.at(0).name());
-        m_currentGradientStyle.addAttribute("draw:end-color", colors.at(colors.size()-1).name());
     }
 
     READ_EPILOGUE
@@ -3265,7 +3740,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(srgbClr)
@@ -3306,7 +3781,7 @@ Parents:
     - spPr (§21.4.3.7)
     - spPr (§20.1.2.2.35)
     - spPr (§20.2.2.6)
-    - spPr (§20(§19.3.1.44) 
+    - spPr (§20(§19.3.1.44)
     - tblPr (§21.1.3.15)
     - tcPr (§21.1.3.17)
     - uFill (§21.1.2.3.12)
@@ -3336,7 +3811,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_noFill(noFillCaller calle
  - [done] spPr (§19.3.1.44)
 
  Child elements:
- - avLst (List of Shape Adjust Values) §20.1.9.5
+ - [done] avLst (List of Shape Adjust Values) §20.1.9.5
 
 */
 #undef CURRENT_EL
@@ -3348,11 +3823,79 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstGeom()
     TRY_READ_ATTR_WITHOUT_NS(prst)
     m_contentType = prst;
 
-    while (true) {
+    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(avLst)
+            ELSE_WRONG_FORMAT
+        }
     }
 
+    READ_EPILOGUE
+}
+
+// avLst handler (List of Shape Adjust Values)
+/*
+ Parent elements:
+ - [done - special handling in customGeom] custGeom (§20.1.9.8);
+ . [done] prstGeom (§20.1.9.18);
+ -  prstTxWarp (§20.1.9.19)
+
+ Child elements:
+ - [done] gd (Shape Guide) §20.1.9.11
+
+*/
+#undef CURRENT_EL
+#define CURRENT_EL avLst
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_avLst()
+{
+    READ_PROLOGUE
+
+    m_contentAvLstExists = true;
+    m_avModifiers.clear();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(gd)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+// gd handler (Shape guide)
+/*
+ Parent elements:
+ - [done] avLst (§20.1.9.5);
+ - [done - elsewhere] gdLst (§20.1.9.12)
+
+ Child elements:
+ - none
+
+*/
+#undef CURRENT_EL
+#define CURRENT_EL gd
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gd()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(name)
+    TRY_READ_ATTR_WITHOUT_NS(fmla)
+
+    // In theory we should interpret all possible values here, not just "val"
+    // in practise it does not happen
+    if (fmla.startsWith("val")) {
+        fmla = fmla.mid(3);
+    }
+
+    m_avModifiers[name] = fmla;
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3473,20 +4016,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
 
-#if defined(PPTXXMLSLIDEREADER_CPP) or defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
-
     QString valTransformed = m_context->colorMap.value(val);
-    colorItem = m_context->themes->colorScheme.value(valTransformed);
-#else
-    // This should most likely be checked from a color map, see above
-    colorItem = m_context->themes->colorScheme.value(val);
-#endif
+
+    if (valTransformed.isEmpty()) {
+        // In some cases, such as fontRef, mapping is bypassed
+        colorItem = m_context->themes->colorScheme.value(val);
+    } else {
+        colorItem = m_context->themes->colorScheme.value(valTransformed);
+    }
+
     // Parse the child elements
     MSOOXML::Utils::DoubleModifier lumMod;
     MSOOXML::Utils::DoubleModifier lumOff;
-    while (true) {
+    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             // @todo: Hmm, are these color modifications only available for pptx?
             if (QUALIFIED_NAME_IS(lumMod)) {
@@ -3512,10 +4056,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     }
 
     col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
-
-#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-    m_currentPen.setColor(col);
-#endif
     m_currentColor = col;
 
     MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
@@ -3654,6 +4194,117 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumOff()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL effectLst
+//! Effect list
+/*
+ Parent elements:
+ - bg (§21.4.3.1);
+ - [done] bgPr (§19.3.1.2);
+ - defRPr (§21.1.2.3.2);
+ - effect (§20.1.4.2.7);
+ - effectStyle (§20.1.4.1.11);
+ - endParaRPr (§21.1.2.2.3);
+ - [done] grpSpPr (§21.3.2.14);
+ - [done] grpSpPr (§20.1.2.2.22);
+ - [done] grpSpPr (§20.5.2.18);
+ - [done] grpSpPr (§19.3.1.23);
+ - rPr (§21.1.2.3.9);
+ - [done] spPr (§21.2.2.197);
+ - [done] spPr (§21.3.2.23);
+ - [done] spPr (§21.4.3.7);
+ - [done] spPr (§20.1.2.2.35);
+ - [done] spPr (§20.2.2.6);
+ - [done] spPr (§20.5.2.30);
+ - [done] spPr (§19.3.1.44);
+ - tblPr (§21.1.3.15);
+ - whole (§21.4.3.9)
+
+ Child elements:
+ - blur (Blur Effect) §20.1.8.15
+ - fillOverlay (Fill Overlay Effect) §20.1.8.29
+ - glow (Glow Effect) §20.1.8.32
+ - innerShdw (Inner Shadow Effect) §20.1.8.40
+ - [done] outerShdw (Outer Shadow Effect) §20.1.8.45
+ - prstShdw (Preset Shadow) §20.1.8.49
+ - reflection (Reflection Effect) §20.1.8.50
+ - softEdge (Soft Edge Effect) §20.1.8.53
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_effectLst()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(outerShdw)
+            SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL outerShdw
+//! Outer shadow
+/*
+ Parent elements:
+ - cont (§20.1.8.20);
+ - effectDag (§20.1.8.25);
+ - [done] effectLst (§20.1.8.26)
+
+ Child elements:
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - [done] prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_outerShdw()
+{
+    READ_PROLOGUE
+
+    QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(dir)
+    TRY_READ_ATTR_WITHOUT_NS(dist)
+
+    qreal angle = (qreal)dir.toDouble() * ((qreal)(M_PI) / (qreal)180.0)/ (qreal)60000.0;
+    qreal xDist = EMU_TO_CM(dist.toInt() / 2) * cos(angle);
+    qreal yDist = EMU_TO_CM(dist.toInt() / 2) * sin(angle);
+
+    m_currentDrawStyle->addProperty("draw:shadow-offset-x", QString("%1cm").arg(xDist));
+    m_currentDrawStyle->addProperty("draw:shadow-offset-y", QString("%1cm").arg(yDist));
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(prstClr)
+            SKIP_UNKNOWN
+        }
+    }
+
+    if (m_currentColor != QColor()) {
+        m_currentDrawStyle->addProperty("draw:shadow", "visible");
+        m_currentDrawStyle->addProperty("draw:shadow-color", m_currentColor.name());
+        m_currentColor = QColor();
+        if (m_currentAlpha > 0) {
+            m_currentDrawStyle->addProperty("draw:shadow-opacity", QString("%1%").arg(m_currentAlpha));
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL ln
 //! Outline
 //! DrawingML ECMA-376, 20.1.2.2.24, p. 3048.
@@ -3667,7 +4318,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumOff()
     - gradFill (Gradient Fill) §20.1.8.33
     - headEnd (Line Head/End Style) §20.1.8.38
     - miter (Miter Line Join) §20.1.8.43
-    - noFill (No Fill) §20.1.8.44
+    - [done] noFill (No Fill) §20.1.8.44
     - pattFill (Pattern Fill) §20.1.8.47
     - [done] prstDash (Preset Dash) §20.1.8.48
     - round (Round Line Join) §20.1.8.52
@@ -3685,8 +4336,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     READ_PROLOGUE
     QXmlStreamAttributes attrs(attributes());
 
-    m_currentPen = QPen();
-
     //align
     TRY_READ_ATTR_WITHOUT_NS(algn)
     //center
@@ -3698,20 +4347,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 
     //line ending cap
     TRY_READ_ATTR_WITHOUT_NS(cap)
-    Qt::PenCapStyle penCap = m_currentPen.capStyle();
-    //flat
     if (cap.isEmpty() || cap == "sq") {
-       penCap = Qt::SquareCap;
+       m_currentDrawStyle->addProperty("svg:stroke-linecap", "square");
     }
-    //round
     else if (cap == "rnd") {
-        penCap = Qt::RoundCap;
+        m_currentDrawStyle->addProperty("svg:stroke-linecap", "round");
     }
-    //square
     else if (cap == "flat") {
-        penCap = Qt::FlatCap;
+        m_currentDrawStyle->addProperty("svg:stroke-linecap", "butt");
     }
-    m_currentPen.setCapStyle(penCap);
 
     //TODO
     //compound line type
@@ -3733,18 +4377,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     }
 
     TRY_READ_ATTR_WITHOUT_NS(w) //width
-    if(w.isEmpty()) {
-        w = "0";
+    qreal penWidth = 0;
+    if (!w.isEmpty()) {
+        penWidth = EMU_TO_POINT(w.toDouble());
+        m_currentDrawStyle->addPropertyPt("svg:stroke-width", penWidth);
+        // defaults..for now
+        m_currentDrawStyle->addProperty("draw:stroke", "solid");
+        m_currentDrawStyle->addProperty("draw:stroke-linejoin", "bevel");
     }
-    qreal penWidth = EMU_TO_POINT(w.toDouble());
-
-    m_currentPen.setWidthF(penWidth);
-
-    bool colorRead = false;
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if( isStartElement() ) {
             //Line join bevel
 //             if(qualifiedName() == QLatin1String("a:bevel")) {
@@ -3765,9 +4409,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 //             //miter line join
 //             else if(qualifiedName() == QLatin1String("a:miter")) {
 //             }
-//             //no fill
-//             else if(qualifiedName() == QLatin1String("a:noFill")) {
-//             }
 //             //pattern fill
 //             else if(qualifiedName() == QLatin1String("a:pattFill")) {
 //             }
@@ -3777,13 +4418,36 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
             //solid fill
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
-                colorRead = true;
+                m_currentDrawStyle->addProperty("svg:stroke-color", m_currentColor.name());
+                // Opacity is currently disabled as there's a bug somewhere which makes even 1% opacity hide lines.
+                /*
+                if (m_currentAlpha > 0) {
+                    m_currentDrawStyle->addProperty("svg:stroke-opacity", QString("%1%").arg(m_currentAlpha/100.0));
+                }*/
+            }
+            else if(qualifiedName() == QLatin1String("a:noFill")) {
+                m_currentDrawStyle->addProperty("draw:stroke", "none");
             }
             else if (qualifiedName() == QLatin1String("a:prstDash")) {
                 attrs = attributes();
                 TRY_READ_ATTR_WITHOUT_NS(val)
+                QPen pen;
+                pen.setWidthF(penWidth);
                 if (val == "dash") {
-                    m_currentPen.setStyle(Qt::DashLine);
+                    pen.setStyle(Qt::DashLine);
+                    m_currentDrawStyle->addProperty("draw:stroke", "dash");
+                    KoGenStyle dashStyle(KoGenStyle::StrokeDashStyle);
+                    dashStyle.addAttribute("draw:style", "rect");
+                    QVector<qreal> dashes = pen.dashPattern();
+                    dashStyle.addAttribute("draw:dots1", static_cast<int>(1));
+                    dashStyle.addAttributePt("draw:dots1-length", dashes[0]*pen.widthF());
+                    dashStyle.addAttributePt("draw:distance", dashes[1]*pen.widthF());
+                    if (dashes.size() > 2) {
+                        dashStyle.addAttribute("draw:dots2", static_cast<int>(1));
+                        dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
+                    }
+                    QString dashStyleName = mainStyles->insert(dashStyle, "dash");
+                    m_currentDrawStyle->addProperty("draw:stroke-dash", dashStyleName);
                 }
             }
             SKIP_UNKNOWN
@@ -3792,15 +4456,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 //             }
         }
     }
-
-    m_currentPen.setColor(m_currentColor);
-
-    // No color means that it should not have outline
-    if (!colorRead) {
-        m_currentPen = QPen();
-    }
-
-    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
 
     READ_EPILOGUE
 }
@@ -3877,9 +4532,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
                                       qreal(MSOOXML::Utils::ST_Percentage_to_double(b, okB)));
 
     //TODO: all the color transformations
-    while (true) {
+    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(alpha)
@@ -3947,9 +4602,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
     m_currentColor = QColor( QLatin1Char('#') + val );
 
     //TODO: all the color transformations
-    while (true) {
+    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(shade)
@@ -4015,9 +4670,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
     }
 
     //TODO: all the color transformations
-    while (true) {
+    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(shade)
@@ -4059,9 +4714,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
     }
 
     //TODO: all the color transformations
-    while (true) {
+    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(shade)
@@ -4102,23 +4757,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
+    m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
     inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
 
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
+    if (!marL.isEmpty()) {
+        qreal realMarginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        // Note that indent is not the same as fo:text-indent in odf, but rather an additional
+        // value added to left marginal
+        if (!indent.isEmpty()) {
+            realMarginal += qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", realMarginal);
+    } else if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", firstInd);
+    }
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
-    }
-    if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
-    }
-    if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
     if (!defTabSz.isEmpty()) {
         const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
@@ -4142,6 +4802,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
             ELSE_TRY_READ_IF(buClr)
+            ELSE_TRY_READ_IF(buClrTx)
             ELSE_TRY_READ_IF(buSzPct)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
@@ -4196,7 +4857,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
   - [done] buBlip (Picture Bullet)              §21.1.2.4.2
   - [done] buChar (Character Bullet)            §21.1.2.4.3
   - [done] buClr (Color Specified)              §21.1.2.4.4
-  - buClrTx (Follow Text)                §21.1.2.4.5
+  - [done] buClrTx (Follow Text)                §21.1.2.4.5
   - [done] buFont (Specified)                   §21.1.2.4.6
   - buFontTx (Follow text)               §21.1.2.4.7
   - [done] buNone (No Bullet)                   §21.1.2.4.8
@@ -4329,7 +4990,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(blip)
             ELSE_WRONG_FORMAT
@@ -4338,7 +4999,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
 
     if (!m_xlinkHref.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_xlinkHref);
-        m_currentBulletProperties.setBulletSize(m_imageSize);
         m_listStylePropertiesAltered = true;
     }
 
@@ -4414,9 +5074,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
     m_colorState = PptxXmlDocumentReader::buClrState;
 #endif
 
-    while (true) {
+    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(schemeClr)
@@ -4432,6 +5092,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
     	m_listStylePropertiesAltered = true;
     }
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buClrTx
+//! buClrTx - follow text
+/*!
+ Parent elements:
+ - defPPr  (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClrTx()
+{
+    READ_PROLOGUE
+    m_currentBulletProperties.setBulletColor("UNUSED");
+    readNext();
     READ_EPILOGUE
 }
 
@@ -4526,9 +5214,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     TRY_READ_ATTR_WITHOUT_NS(type)
 
-    m_currentTextStyleProperties = new KoCharacterStyle();
-    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
 
@@ -4537,12 +5222,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     inheritTextStyle(m_currentTextStyle);
 #endif
 
+    KoGenStyle::copyPropertiesFromStyle(m_referredFont, m_currentTextStyle, KoGenStyle::TextType);
+
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(rPr)) {
+                m_currentTextStyleProperties = new KoCharacterStyle();
+                m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
                 TRY_READ(DrawingML_rPr)
+                m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+                delete m_currentTextStyleProperties;
+                m_currentTextStyleProperties = 0;
             }
             else if (QUALIFIED_NAME_IS(pPr)) {
                 TRY_READ(DrawingML_pPr)
@@ -4552,13 +5244,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
         }
     }
 
-    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 #ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideMaster) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
+    if (m_context->type == SlideMaster || m_context->type == NotesMaster) {
+        m_currentTextStyle.setAutoStyleInStylesDotXml(true);
     }
 #endif
+    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
     body = fldBuf.originalWriter();
 
@@ -4570,17 +5261,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     if (type == "slidenum") {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
+    } else {
+        body->startElement("text:date");
     }
 
     (void)fldBuf.releaseWriter();
 
-    if (type == "slidenum") {
-        body->endElement(); // text:page-number
-    }
+    body->endElement(); // text:page-number, some date format
     body->endElement(); //text:span
-
-    delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
 }
@@ -4616,7 +5304,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcBef()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(spcPts)
             ELSE_TRY_READ_IF(spcPct)
@@ -4657,7 +5345,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcAft()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(spcPts)
             ELSE_TRY_READ_IF(spcPct)
@@ -4697,7 +5385,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnSpc()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(spcPct)
             ELSE_TRY_READ_IF(spcPts)
@@ -4948,10 +5636,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
-            ELSE_TRY_READ_IF(gradFill) // we do not support this properly, at least we get the color
+            //ELSE_TRY_READ_IF(gradFill) // we do not support this properly, thus disabded for the moment
             ELSE_TRY_READ_IF(latin)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
@@ -4959,62 +5647,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     }
 
     if (m_currentColor.isValid()) {
-        m_currentTextStyleProperties->setForeground(m_currentColor);
+        m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
         m_currentColor = QColor();
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(sz)
-    if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "defRPr@sz")
-        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
-    }
-
-    if (attrs.hasAttribute("b")) {
-        m_currentTextStyleProperties->setFontWeight(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
-    }
-    if (attrs.hasAttribute("i")) {
-        m_currentTextStyleProperties->setFontItalic(
-            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(cap);
-    if (!cap.isEmpty()) {
-        m_currentTextStyleProperties->setFontCapitalization(capToOdf(cap));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(spc)
-    if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
-    }
-    TRY_READ_ATTR_WITHOUT_NS(strike)
-    if (strike == QLatin1String("sngStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else if (strike == QLatin1String("dblStrike")) {
-        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
-        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
-    } else {
-        // empty or "noStrike"
-    }
-    // from
-    TRY_READ_ATTR_WITHOUT_NS(baseline)
-    if (!baseline.isEmpty()) {
-        int baselineInt;
-        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
-        if (baselineInt > 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
-        else if (baselineInt < 0)
-            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(u)
-    if (!u.isEmpty()) {
-        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
-    }
+    handleRprAttributes(attrs);
 
     READ_EPILOGUE
 }
@@ -5069,6 +5706,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     TRY_READ_ATTR_WITHOUT_NS(rIns)
     TRY_READ_ATTR_WITHOUT_NS(bIns)
     TRY_READ_ATTR_WITHOUT_NS(tIns)
+    TRY_READ_ATTR_WITHOUT_NS(vert)
+
+    // Todo
+    if (!vert.isEmpty()) {
+        if (vert == "vert270") {
+        }
+    }
+
 //TODO    TRY_READ_ATTR_WITHOUT_NS(fontAlgn)
 
     m_shapeTextPosition.clear();
@@ -5077,7 +5722,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_shapeTextLeftOff.clear();
     m_shapeTextRightOff.clear();
 
-    m_normAutoFit =  MSOOXML::Utils::autoFitUnUsed;
+    m_normAutofit =  MSOOXML::Utils::autoFitUnUsed;
 
     if (!lIns.isEmpty()) {
         m_shapeTextLeftOff = lIns;
@@ -5112,20 +5757,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     bool spAutoFit = false;
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:spAutoFit")) {
                 TRY_READ(spAutoFit)
                 spAutoFit = true;
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:normAutofit")) {
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                TRY_READ(normAutofit)
+                m_normAutofit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:prstTxWarp")) {
-                // The handling here is not correct but better than nothing
-                // Also normAutoFit = true seems to be correct for value 'textNoShape'
-                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+                // This element describes text transformation, todo:
             }
             SKIP_UNKNOWN
         }
@@ -5143,6 +5787,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_currentPresentationStyle.addProperty("fo:wrap-option",
         wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
 #endif
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL normAutofit
+//! Normal autofit handler (Normal AutoFit)
+/*!
+
+ Parent elements:
+ - [done] bodyPr (§21.1.2.1.1)
+
+ No child elements.
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_normAutofit()
+{
+    READ_PROLOGUE
+    readNext();
     READ_EPILOGUE
 }
 
@@ -5188,16 +5849,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
+    m_previousListWasAltered = false;
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, bodyPr)
             ELSE_TRY_READ_IF_NS(a, lstStyle)
             else if (qualifiedName() == QLatin1String("a:p")) {
-                TRY_READ(DrawingML_p);
+                TRY_READ(DrawingML_p)
             }
             SKIP_UNKNOWN
         }

@@ -1,9 +1,9 @@
-Packaging Information for KOffice.
-----------------------------------
+Packaging Information for Calligra Suite
+----------------------------------------
 
-We recommend building several binary packages from the KOffice source.
+We recommend building several binary packages from the Calligra source.
 
-Splitting KOffice into packages:
+Splitting Calligra into packages:
  * gives users a better choice of which components they have
    installed;
  * allows users to install just the applications without unnecessary
@@ -22,7 +22,7 @@ Table Of Contents
 2. Krita
 2.1. Krita development files
 3. Debug information
-4. KOffice libraries
+4. Calligra libraries
 
 1. Kexi
 =======
@@ -95,7 +95,7 @@ This will:
 2.1. Krita development files
 ----------------------------
 
-Location: koffice/krita/image, koffice/krita/ui
+Location: calligra/krita/image, calligra/krita/ui
 
 These directories contain header files that are installed and can be
 used by plugin developers to extend Krita with new tools, colorspaces,
@@ -111,14 +111,14 @@ production packages the -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT" is recommended
 A significant performance increase will be the result.
 
 
-4. KOffice libraries
+4. Calligra libraries
 ====================
 
-KOffice share common functionality within libraries, placed in libs/ subdirectory.
-KOffice libraries should be placed in a single package, separate from KOffice applications.
+Calligra share common functionality within libraries, placed in libs/ subdirectory.
+Calligra libraries should be placed in a single package, separate from Calligra applications.
 Below is the list of the libraries.
 
-Name       Conditional compilation flag    Globally used in KOffice?   Public API
+Name       Conditional compilation flag    Globally used in Calligra?   Public API
                                                                        (headers installed)
            (default: NO)                   (default: YES)              (default: YES)
 ------------------------------------------------------------------------------------------

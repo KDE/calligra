@@ -29,10 +29,11 @@ static const char* version=KOFFICE_VERSION_STRING;
 
 KAboutData * newKPresenterAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "stage", 0, ki18n("Stage"),
+    KAboutData * aboutData=new KAboutData( "stage", 0, ki18nc("application name", "Stage"),
                                            version, ki18n(description), KAboutData::License_LGPL,
                                            ki18n("(c) 1998-2010, The Stage Team"), KLocalizedString(),
                                            "http://www.calligra-suite.org/stage/");
+    aboutData->setProductName("calligra-stage"); // for bugs.kde.org
     aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("Maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Former maintainer"), "montel@kde.org");
     aboutData->addAuthor(ki18n("Reginald Stadlbauer"),ki18n("Original author"), "reggie@kde.org");
@@ -49,7 +50,7 @@ KAboutData * newKPresenterAboutData()
     aboutData->addAuthor(ki18n("Casper Boemann "), KLocalizedString(), "cbr@boemann.dk");
     aboutData->addAuthor(ki18n("Fredy Yanardi "), KLocalizedString(), "fyanardi@gmail.com");
     aboutData->addAuthor(ki18n("Jan Hambrecht "), KLocalizedString(), "jaham@gmx.net");
-    aboutData->addAuthor(ki18n("Marijn Kruisselbrink "), KLocalizedString(), "m.kruisselbrink@student.tue.nl");
+    aboutData->addAuthor(ki18n("Marijn Kruisselbrink "), KLocalizedString(), "mkruisselbrink@kde.org");
     aboutData->addAuthor(ki18n("Martin Pfeiffer "), KLocalizedString(), "hubipete@gmx.net");
     aboutData->addAuthor(ki18n("Sven Langkamp "), KLocalizedString(), "sven.langkamp@gmail.com");
     aboutData->addAuthor(ki18n("Timothée Lacroix "), KLocalizedString(), "dakeyras.khan@gmail.com");

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
@@ -77,7 +77,7 @@ class Value;
  * storages in CellStorage. It provides methods to alter and retrieve this data
  * and methods related to loading and saving the contents.
  */
-class CALLIGRA_TABLES_EXPORT Cell
+class CALLIGRA_TABLES_ODF_EXPORT Cell
 {
 public:
     /**

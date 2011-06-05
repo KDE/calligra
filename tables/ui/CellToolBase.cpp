@@ -940,7 +940,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
     const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
-    if (col > maxCol() || row > maxRow()) {
+    if (col < 1 || row < 1 || col > maxCol() || row > maxRow()) {
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else {
         const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();
@@ -1127,8 +1127,9 @@ void CellToolBase::init()
 {
 }
 
-QWidget* CellToolBase::createOptionWidget()
+QList <QWidget*> CellToolBase::createOptionWidgets()
 {
+    QList<QWidget *> widgets;
     d->optionWidget = new CellToolOptionWidget(this);
 
     connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
@@ -1137,7 +1138,9 @@ QWidget* CellToolBase::createOptionWidget()
             d->optionWidget->locationComboBox(), SLOT(slotRemoveAreaName(const QString&)));
 
     selection()->update(); // initialize the location combobox
-    return d->optionWidget;
+    d->optionWidget->setWindowTitle(i18n("Cell Editor"));
+    widgets.append(d->optionWidget);
+    return widgets;
 }
 
 KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
@@ -3420,11 +3423,11 @@ void CellToolBase::listChoosePopupMenu()
     if (itemList.isEmpty()) {
         return;
     }
-    double tx = selection()->activeSheet()->columnPosition(selection()->marker().x());
-    double ty = selection()->activeSheet()->rowPosition(selection()->marker().y());
+    double tx = sheet->columnPosition(selection()->marker().x());
+    double ty = sheet->rowPosition(selection()->marker().y());
     double h = cursorCell.height();
-    const CellView& cellView = sheetView(selection()->activeSheet())->cellView(selection()->marker().x(), selection()->marker().y());
-    if (cellView.obscuresCells()) {
+    if (sheetView(sheet)->obscuresCells(selection()->marker())) {
+        const CellView& cellView = sheetView(sheet)->cellView(selection()->marker().x(), selection()->marker().y());
         h = cellView.cellHeight();
     }
     ty += h;

@@ -107,6 +107,12 @@ public slots:
 
     void fileImportGraphic();
 
+    void clipObjects();
+    void unclipObjects();
+
+    void flipVertical();
+    void flipHorizontal();
+
     void closePath();
     void combinePath();
     void separatePath();
@@ -128,6 +134,7 @@ public slots:
     void togglePageMargins(bool);
     void showRuler();
     void showGuides();
+    void editGuides();
     void snapToGrid();
 
 protected slots:
@@ -161,8 +168,8 @@ private:
     void updateRuler();
 
     void selectionDistribute(KoShapeDistributeCommand::Distribute distribute);
-
     void booleanOperation(KarbonBooleanCommand::BooleanOperation operation);
+    void selectionFlip(bool horizontally, bool vertically);
 
     /// Returns a list of all selected path shapes
     QList<KoPathShape*> selectedPathShapes();

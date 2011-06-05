@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -60,7 +61,11 @@ public:
         ColumnAndRowStyleManager,     ///< QVariant of a KoColumnAndRowStyleManager
                                                              /// It's not really a property of KoTableStyle but defined here for convenience
         CollapsingBorders,     ///< If true, then the table has collapsing border model
-        MasterPageName         ///< Optional name of the master-page
+        MasterPageName,         ///< Optional name of the master-page
+        NumberHeadingRows,      ///< Count the number of heading rows
+        Visible,                ///< If true, the table is visible
+        PageNumber,             ///< The page number that is applied after the page break
+        TextProgressionDirection    ///< The direction of the text in the table
     };
 
     /// Constructor
@@ -70,7 +75,7 @@ public:
     /// Destructor
     ~KoTableStyle();
 
-    /// Creates a KoTableStyle that represents the formatting of \a block.
+    /// Creates a KoTableStyle that represents the formatting of \a table.
     static KoTableStyle *fromTable(const QTextTable &table, QObject *parent = 0);
 
     /// creates a clone of this style with the specified parent
@@ -81,9 +86,12 @@ public:
 
     /// The property specifies if the table should be kept together with the next paragraph
     void setKeepWithNext(bool keep);
+    
+    bool keepWithNext() const;
 
     /// The property specifies if the table should allow it to be break. Break within a row is specified per row
     void setMayBreakBetweenRows(bool allow);
+    bool mayBreakBetweenRows() const;
 
     /// See similar named method on QTextBlockFormat
     void setBackground(const QBrush &brush);
@@ -91,34 +99,43 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
+    
+    int pageNumber() const;
+    void setPageNumber (int page);
 
-    void setBreakBefore(bool on);
-    bool breakBefore();
-    void setBreakAfter(bool on);
-    bool breakAfter();
+    void setBreakBefore(KoText::KoTextBreakProperty state);
+    KoText::KoTextBreakProperty breakBefore();
+    void setBreakAfter(KoText::KoTextBreakProperty state);
+    KoText::KoTextBreakProperty breakAfter();
+
+    void setVisible(bool on);
+    bool visible();
     
     void setCollapsingBorderModel(bool on);
     bool collapsingBorderModel();
+    
+    KoText::Direction textDirection() const;
+    void setTextDirection(KoText::Direction direction);
 
     // ************ properties from QTextTableFormat
     /// duplicated property from QTextBlockFormat
-    void setTopMargin(qreal topMargin);
+    void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
     qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin(qreal margin);
+    void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal bottomMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin(qreal margin);
+    void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal leftMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin(qreal margin);
+    void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal rightMargin() const;
     /// set the margin around the table, making the margin on all sides equal.
-    void setMargin(qreal margin);
+    void setMargin(QTextLength margin);
 
     /// duplicated property from QTextBlockFormat
     void setAlignment(Qt::Alignment alignment);
@@ -164,6 +181,9 @@ public:
     bool operator==(const KoTableStyle &other) const;
 
     void removeDuplicates(const KoTableStyle &other);
+    
+    /// return true when there are keys defined for this style
+    bool isEmpty() const;
 
     /**
      * Load the style form the element
@@ -210,6 +230,7 @@ private:
     Qt::Alignment alignmentFromString(const QString &align);
     QString alignmentToString(Qt::Alignment alignment);
     qreal propertyDouble(int key) const;
+    QTextLength propertyLength(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;

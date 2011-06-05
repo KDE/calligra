@@ -39,13 +39,20 @@
 
 #include <QTimer>
 #include <QUrl>
+#include <QTextLayout>
+#include <QTextBlock>
+#include <QTextCursor>
+#include <QPixmap>
+#include <QMap>
 #include <kdebug.h>
 #include <klocale.h>
 
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0) { }
+    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0)
+    {
+    }
     ~Private() {
         qDeleteAll(automaticListStyles);
     }

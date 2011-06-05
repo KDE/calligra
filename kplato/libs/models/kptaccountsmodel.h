@@ -1,5 +1,6 @@
 /* This file is KoDocument of the KDE project
-  Copyright (C) 2007 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -32,6 +33,7 @@ class Project;
 class Account;
 class ScheduleManager;
 class Node;
+class AccountItemModel;
 
 class KPLATOMODELS_EXPORT AccountModel : public QObject
 {
@@ -49,10 +51,14 @@ public:
     
     virtual QVariant data( const Account *a, int property, int role = Qt::DisplayRole ) const; 
     virtual QVariant headerData( int property, int role = Qt::DisplayRole ) const; 
-    
+
 protected:
     QVariant name( const Account *account, int role ) const;
     QVariant description( const Account *account, int role ) const;
+
+private:
+    friend class AccountItemModel;
+    Project *m_project;
 };
 
 class KPLATOMODELS_EXPORT AccountItemModel : public ItemModelBase

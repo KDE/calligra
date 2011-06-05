@@ -13,7 +13,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02111-1307, USA.
+   Boston, MA 02111-1301, USA.
 */
 
 // This code is generated from the Microsoft HTML specification of the
@@ -3993,6 +3993,10 @@ struct WV2_EXPORT FIB {
     void clear();
 
     // Data
+
+    // FibBase - BEGIN
+    // --------------------
+
     /**
      * magic number
      */
@@ -4114,6 +4118,9 @@ struct WV2_EXPORT FIB {
      * file offset of last character of text in document text stream+ 1
      */
     U32 fcMac;
+
+    // --------------------
+    // FibBase - END
 
     /**
      * file offset of last byte written to file + 1.
@@ -5959,8 +5966,16 @@ struct PICF : public Shared {
      * Window's bitmap structure when PIC describes a BITMAP. rect for window
      * origin and extents whenmetafile is stored -- ignored if 0
      */
+    /*
+     * innerHeader (14 bytes): A PICF_Shape structure that specifies additional
+     * header information.  According to [MS-DOC] — v20101219
+     */
     U8 bm_rcWinMF[14];
 
+    /*
+     * BEGIN picmid (38 bytes): A PICMID structure that specifies the size and
+     * border information of the picture.  According to [MS-DOC] — v20101219
+     */
     /**
      * horizontalmeasurement in twips of therectangle the picture should be
      * imaged within.
@@ -6431,12 +6446,12 @@ struct SEP : public Shared {
     /**
      * top margin default value is 1440 twips
      */
-    U16 dyaTop;
+    S16 dyaTop;
 
     /**
      * bottom margin default value is 1440 twips
      */
-    U16 dyaBottom;
+    S16 dyaBottom;
 
     /**
      * gutter width default value is 0 twips

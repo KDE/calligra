@@ -34,10 +34,11 @@ static const char* KWORD_VERSION = KOFFICE_VERSION_STRING;
 
 KAboutData * newKWordAboutData()
 {
-    KAboutData * aboutData = new KAboutData("words", 0, ki18n("Words"),
+    KAboutData * aboutData = new KAboutData("words", 0, ki18nc("application name", "Words"),
                                             KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
                                             ki18n("(c) 1998-2010, The Words Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/words/");
+    aboutData->setProductName("calligra-words"); // for bugs.kde.org
     aboutData->addAuthor(ki18n("Pierre Ducroquet"), ki18n("Co maintainer"), "");
     aboutData->addAuthor(ki18n("Casper Boemann"), ki18n("Co maintainer"), "cbo@boemann.dk");
     aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("Everything"), "mail@dipe.org");

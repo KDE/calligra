@@ -45,6 +45,23 @@ public:
     virtual int minimumDurationUnit() const;
     virtual int maximumDurationUnit() const;
 
+    virtual bool summaryTaskLevelColorsEnabled() const;
+    virtual QBrush summaryTaskDefaultColor() const;
+    virtual QBrush summaryTaskLevelColor_1() const;
+    virtual QBrush summaryTaskLevelColor_2() const;
+    virtual QBrush summaryTaskLevelColor_3() const;
+    virtual QBrush summaryTaskLevelColor_4() const;
+
+    virtual QBrush taskNormalColor() const;
+    virtual QBrush taskErrorColor() const;
+    virtual QBrush taskCriticalColor() const;
+    virtual QBrush taskFinishedColor() const;
+
+    virtual QBrush milestoneNormalColor() const;
+    virtual QBrush milestoneErrorColor() const;
+    virtual QBrush milestoneCriticalColor() const;
+    virtual QBrush milestoneFinishedColor() const;
+
 };
 
 }  //KPlato namespace

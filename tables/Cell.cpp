@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
@@ -1126,10 +1126,9 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             (tableContext.rowDefaultStyles.contains(row) && tableContext.rowDefaultStyles[row] != cellStyle) ||
             (tableContext.columnDefaultStyles.contains(column) && tableContext.columnDefaultStyles[column] != cellStyle)) {
         KoGenStyle currentCellStyle; // the type determined in saveOdfCellStyle
-        saveOdfCellStyle(currentCellStyle, mainStyles);
+        QString styleName = saveOdfCellStyle(currentCellStyle, mainStyles);
         // skip 'table:style-name' attribute for the default style
         if (!currentCellStyle.isDefaultStyle()) {
-            QString styleName = mainStyles.styles().value(currentCellStyle, QString());
             if (!styleName.isEmpty())
                 xmlwriter.addAttribute("table:style-name", styleName);
         }
@@ -1216,8 +1215,8 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             QTextCharFormat format = style().asCharFormat();
             sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
 
-            KoEmbeddedDocumentSaver saver;
-            KoShapeSavingContext shapeContext(xmlwriter, mainStyles, saver);
+            KoEmbeddedDocumentSaver embeddedSaver;
+            KoShapeSavingContext shapeContext(xmlwriter, mainStyles, embeddedSaver);
             KoTextWriter writer(shapeContext);
 
             writer.write(doc.data(), 0);

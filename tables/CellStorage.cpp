@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    Copyright 2007, 2009 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -1649,6 +1649,11 @@ const LinkStorage* CellStorage::linkStorage() const
 const StyleStorage* CellStorage::styleStorage() const
 {
     return d->styleStorage;
+}
+
+const UserInputStorage* CellStorage::userInputStorage() const
+{
+    return d->userInputStorage;
 }
 
 const ValidityStorage* CellStorage::validityStorage() const

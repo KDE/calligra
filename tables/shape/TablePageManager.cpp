@@ -78,6 +78,7 @@ void TablePageManager::insertPage(int page)
 
 void TablePageManager::preparePage(int page)
 {
+#if 0
     // The first page is the master page, which always exists.
     if (page == 1) {
         return;
@@ -104,4 +105,5 @@ void TablePageManager::preparePage(int page)
         d->pages.append(shape);
         textShape->addShape(shape);
     }
+#endif
 }

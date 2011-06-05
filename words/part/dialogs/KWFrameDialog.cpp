@@ -21,7 +21,7 @@
 
 #include "KWShapeConfigFactory.h"
 #include "KWFrameConnectSelector.h"
-#include "KWFrameRunaroundProperties.h"
+#include "KWRunAroundProperties.h"
 #include "KWGeneralFrameProperties.h"
 #include "frames/KWFrame.h"
 
@@ -36,8 +36,8 @@ KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document
     setFaceType(Tabbed);
     m_generalFrameProperties = new KWGeneralFrameProperties(m_state);
     addPage(m_generalFrameProperties, i18n("Options"));
-    m_frameRunaroundProperties = new KWFrameRunaroundProperties(m_state);
-    addPage(m_frameRunaroundProperties, i18n("Text Run Around"));
+    m_runAroundProperties = new KWRunAroundProperties(m_state);
+    addPage(m_runAroundProperties, i18n("Text Run Around"));
 
     if (frames.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
@@ -55,7 +55,7 @@ KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document
     }
 
     m_generalFrameProperties->open(frames);
-    m_frameRunaroundProperties->open(frames);
+    m_runAroundProperties->open(frames);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
     connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));
@@ -70,7 +70,7 @@ void KWFrameDialog::okClicked()
     if (m_frameConnectSelector)
         m_frameConnectSelector->save();
     m_generalFrameProperties->save();
-    m_frameRunaroundProperties->save();
+    m_runAroundProperties->save();
     if (m_frameGeometry)
         m_frameGeometry->save();
 }
@@ -88,7 +88,7 @@ QList<KoShapeConfigFactoryBase *> KWFrameDialog::panels(KWDocument *doc)
     FrameConfigSharedState *state = new FrameConfigSharedState(doc);
     answer.append(new KWFrameConnectSelectorFactory(state));
     answer.append(new KWFrameGeometryFactory(state));
-    answer.append(new KWFrameRunaroundPropertiesFactory(state));
+    answer.append(new KWRunAroundPropertiesFactory(state));
     answer.append(new KWGeneralFramePropertiesFactory(state));
     return answer;
 }

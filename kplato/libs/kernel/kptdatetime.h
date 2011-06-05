@@ -31,26 +31,29 @@ namespace KPlato
 class Duration;
 
 /**
- * DateTime is a KDateTime which knows about Duration
- * Note that in KPlato all datetimes are really in the time zone specified
+ * DateTime is a QDateTime which knows about Duration
+ * Note that in Plan all datetimes are often in the time zone specified
  * in the project.
  * Exception to this is the calendar related dates and times which has
  * their own time zone specification.
  */
-class KPLATOKERNEL_EXPORT DateTime : public KDateTime {
+class KPLATOKERNEL_EXPORT DateTime : public QDateTime {
 
 public:
     /// Create a DateTime.
     DateTime();
-    /// Create a datetime in the specified time zone
-    DateTime(const QDateTime &dt, const KDateTime::Spec &spec);
-    /// Create a copy of @p dt (same time, same time zone).
-    DateTime(const KDateTime &dt);
-    /// Create a date-only DateTime.
-    explicit DateTime(const QDate &date, const KDateTime::Spec &spec);
-    /// Create a DateTime.
-    DateTime(const QDate &date, const QTime &time, const KDateTime::Spec &spec=KDateTime::Spec(LocalZone));
+    /// Constructs a datetime with the given date, a valid time(00:00:00.000), and sets the timeSpec() to Qt::LocalTime.
+    explicit DateTime( const QDate & );
+    ///Constructs a datetime with the given date and time, using the time specification defined by @p spec.
+    /// If date is valid and time is not, the time will be set to midnight.
+    DateTime( const QDate &, const QTime &, Qt::TimeSpec spec = Qt::LocalTime );
+    /// Constructs a copy of the @p other datetime.
+    DateTime( const QDateTime &other );
 
+    /// Constructs a datetime from @p dt with timespec @p spec
+    DateTime( const QDateTime &dt, const KDateTime::Spec &spec );
+    /// Constructs a copy of the @p dt KDateTime.
+    DateTime( const KDateTime &dt );
     /**
      * Adds the duration @p duration to the datetime
      */
@@ -75,7 +78,7 @@ public:
     /**
      * Parse a datetime string and return a DateTime.
      */
-    static DateTime fromString(const QString dts, const KDateTime::Spec &spec=LocalZone);
+    static DateTime fromString(const QString dts, const KDateTime::Spec &spec=KDateTime::LocalZone);
 private:
 
     Duration duration(const DateTime &dt) const;
