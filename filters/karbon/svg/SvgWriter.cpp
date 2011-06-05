@@ -131,7 +131,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
     m_body = new QTextStream(&body, QIODevice::ReadWrite);
     QString defs;
     m_defs = new QTextStream(&defs, QIODevice::ReadWrite);
-    QString frames;
+    QString frames; //To write frame data
     m_frames = new QTextStream(&frames, QIODevice::ReadWrite);
 
     // standard header:
@@ -174,12 +174,14 @@ bool SvgWriter::save(QIODevice &outputDevice)
     
     saveScript();
     //TODO:m_frames has to be written here.
-    
+   *m_body << frames;
     *m_body << "</svg>" << endl;
-
+   
     *m_stream << defs; //?
+    //*m_stream << frames;
     *m_stream << body;
-
+ 
+    
     delete m_stream;
     delete m_defs;
     delete m_body;
@@ -287,7 +289,7 @@ void SvgWriter::saveFrame(Frame * frame)
   //Only for testing
   int sequence = frame->getSequence();
   
-  *m_body << "<desc>" << "Frame's dummy info. Sequence = " << sequence << "</desc>";
+  *m_frames << "<desc>" << "Frame's dummy info. Sequence = " << sequence << "</desc>";
 //*m_body << "<calligra:sequence>" << sequence <<"</>"; 
   //TODO: This needs to be written to a different stream finally and with this namespace
 }

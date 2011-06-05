@@ -35,6 +35,8 @@ Frame* SvgAnimationData::getFrame()
 {
   return frame;
 }
+//Temporary function.
+//Only for testing
 void SvgAnimationData::addNewFrame(KoShape * shape, Frame* frame)
 {
   SvgAnimationData * applicationData = dynamic_cast<SvgAnimationData*>( shape->applicationData() );
