@@ -3379,13 +3379,13 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
 #pragma WARNING( untested )
 #endif
     args << fileName;
-    QProcess proc(this);
-    proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir().absolutePath());
-    proc.start(qApp->applicationFilePath(), args);
-    const bool ok = proc.waitForStarted();
+    const bool ok = QProcess::startDetached(
+        qApp->applicationFilePath(), args,
+        QFileInfo(fileName).absoluteDir().absolutePath());
     if (!ok) {
         d->showStartProcessMsg(args);
     }
+    d->tabbedToolBar->hideMainMenu();
     return ok;
 }
 

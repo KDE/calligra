@@ -94,6 +94,11 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-06-05
+Main
+*Fix opening projects in new process: start the process in detached mode
+*use delayed deletion of Kexi menu to avoid crashes
+
 2011-06-02
 Startup
 *"Open Project" assistant: opening files works

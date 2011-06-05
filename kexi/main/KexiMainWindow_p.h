@@ -302,7 +302,9 @@ public:
         if (m_contentWidget && contentWidget) {
             fadeEffect = new KexiFadeWidgetEffect(m_content);
         }
-        delete (QWidget*)m_contentWidget;
+        //delete (QWidget*)m_contentWidget;
+        if (m_contentWidget)
+            m_contentWidget->deleteLater();
         m_contentWidget = contentWidget;
         if (m_content) {
             m_content->setGradientVisible(!m_contentWidget);
