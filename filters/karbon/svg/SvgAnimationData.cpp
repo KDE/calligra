@@ -30,10 +30,10 @@
 
   void SvgAnimationData::setFrame(Frame *frame)
   {
-  this->m_frame = frame;
+   m_frame = *frame;
   }
 
-  Frame* SvgAnimationData::frame()
+  Frame SvgAnimationData::frame()
   {
     return m_frame;
   }

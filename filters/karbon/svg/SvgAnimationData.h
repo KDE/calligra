@@ -42,7 +42,7 @@
       /*
       * Returns the Frame object which contains information for the shape animation.
       */
-      Frame* frame();
+      Frame frame();
       /*
       * This function adds a new frame to a shape.
       * This function will only be used for tests.
@@ -52,7 +52,7 @@
     
       private:
       // The Frame object which contains frame attributes and their values
-      Frame *m_frame;
+      Frame m_frame;
   };
 
   #endif /*SVGANIMATIONDATA_H */
