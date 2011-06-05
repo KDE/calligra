@@ -114,7 +114,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     val_min = new KLineEdit(page1);
     tmpGridLayout->addWidget(val_min, 3, 1);
-    val_min->setValidator(new KFloatValidator(val_min));
+    val_min->setValidator(new KDoubleValidator(val_min));
 
     edit2 = new QLabel(page1);
     edit2->setText(i18n("Maximum:"));
@@ -122,7 +122,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     val_max = new KLineEdit(page1);
     tmpGridLayout->addWidget(val_max, 4, 1);
-    val_max->setValidator(new KFloatValidator(val_max));
+    val_max->setValidator(new KDoubleValidator(val_max));
 
     //Apply minimum width of column1 to avoid horizontal move when changing option
     //A bit ugly to apply text always, but I couldn't get a label->QFontMetrix.boundingRect("text").width()
@@ -276,8 +276,8 @@ void ValidityDialog::changeIndexType(int _index)
     case 1:
         val_min->setEnabled(true);
         choose->setEnabled(true);
-        val_min->setValidator(new KFloatValidator(val_min));
-        val_max->setValidator(new KFloatValidator(val_max));
+        val_min->setValidator(new KDoubleValidator(val_min));
+        val_max->setValidator(new KDoubleValidator(val_max));
         if (choose->currentIndex() <= 4) {
             edit1->setText(i18n("Number:"));
             edit2->setText("");
