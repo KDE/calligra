@@ -73,23 +73,24 @@ public:
     bool save(const QString &filename, bool writeInlineImages);
 
 private:
-  void forTesting(KoShape * shape);
+  
     void saveLayer(KoShapeLayer * layer);
     void saveGroup(KoShapeGroup * group);
     void saveShape(KoShape * shape);
     void savePath(KoPathShape * path);
     void saveEllipse(EllipseShape * ellipse);
     void saveRectangle(RectangleShape * rectangle);
+    void saveImage(KoShape *picture);
+    void saveText(ArtisticTextShape * text);
+
     /*
      * Saves the properties associated with the shape used for SVg animation.
      */
-    void saveFrame(Frame * frame);
-    void saveImage(KoShape *picture);
-    void saveText(ArtisticTextShape * text);
+    void saveFrame(Frame *frame);
     void savePlainText();
-
     void saveScript();
-
+    void forTesting(KoShape *shape);
+    
     void getStyle(KoShape * shape, QTextStream * stream);
     void getFill(KoShape * shape, QTextStream *stream);
     void getStroke(KoShape * shape, QTextStream *stream);
@@ -125,7 +126,7 @@ private:
     bool m_writeInlineImages;
     QString m_filename;
 
-    QString script;
+    QString m_script;
 };
 
-#endif // SVGWRITER_H
+#endif /*SVGWRITER_H */
