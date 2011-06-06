@@ -444,10 +444,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper()
             ELSE_TRY_READ_IF(mergeCells)
             else if (name() == "drawing") {
                 KoXmlWriter *tempBodyHolder = body;
-                body = heldBody;
+                body = new KoXmlWriter(&drawingBuffer);
                 body->startElement("table:shapes");
                 TRY_READ(drawing)
                 body->endElement(); //table:shapes
+                delete body;
                 body = tempBodyHolder;
             }
             ELSE_TRY_READ_IF(legacyDrawing)
