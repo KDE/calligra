@@ -1,5 +1,8 @@
 #!/usr/bin/python -Qwarnall
 # -*- coding: utf-8 -*-
+
+# This is a simple irc bot that reports progress to the Calligra irc channel
+
 import time, lxml.etree, urllib2, re, sys, socket, string
 
 HOST='irc.freenode.org' #The server we want to connect to
@@ -26,8 +29,13 @@ def getMessage():
                 link = tree.xpath("/a:feed/a:entry[1]/a:link/@href", namespaces=ns)[0]
                 title = tree.xpath("/a:feed/a:entry[1]/a:title/text()", namespaces=ns)[0]
                 summary = tree.xpath("/a:feed/a:entry[1]/a:summary/text()", namespaces=ns)[0]
-                summary = re.search('strong>([^<]*)<', summary).group(1)
-                newmessage = title + " " + summary + " " + link
+                s = re.search('strong>([^<]*)<', summary).group(1)
+                newmessage = title + " " + s + " " + link
+                try:
+                        who = re.search('by\s+(\S*)', summary).group(1)
+                        newmessage = who + ": " + newmessage
+                except:
+                        pass
         except:
                 newmessage = "Error in reading RSS"
         return newmessage
@@ -50,4 +58,3 @@ while 1:
                         message = newmessage
                         s.send("PRIVMSG " + CHANNELINIT + " :" + message + "\n")
                 lastchecktime = time.time()
-
