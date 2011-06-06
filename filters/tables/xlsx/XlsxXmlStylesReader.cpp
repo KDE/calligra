@@ -486,7 +486,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             // In the first round we read potential color overrides
             if (m_context->skipFirstPart) {
@@ -536,7 +536,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fonts()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(font)) {
                 m_currentFontStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
@@ -579,7 +579,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
     while( !atEnd() )
     {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if( isStartElement() )
         {
             TRY_READ_IF( numFmt )
@@ -664,7 +664,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(sz)
             ELSE_TRY_READ_IF(name)
@@ -741,7 +741,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxfs()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(dxf)
             ELSE_WRONG_FORMAT
@@ -781,7 +781,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_dxf()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(font)
             ELSE_TRY_READ_IF(fill)
@@ -844,7 +844,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_cellXfs()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(xf)
             ELSE_WRONG_FORMAT
@@ -928,7 +928,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(alignment)
             SKIP_UNKNOWN
@@ -1008,7 +1008,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fills()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(fill)) {
                 m_currentFillStyle = new KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
@@ -1049,7 +1049,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fill()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(gradientFill)
             ELSE_TRY_READ_IF(patternFill)
@@ -1085,7 +1085,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_patternFill()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bgColor)
             ELSE_TRY_READ_IF(fgColor)
@@ -1318,7 +1318,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_gradientFill()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //! @todo            TRY_READ_IF(stop)
 //todo            ELSE_WRONG_FORMAT
@@ -1354,7 +1354,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_borders()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(border)) {
                 m_currentBorderStyle = new KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
@@ -1391,7 +1391,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_border()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bottom)
             ELSE_TRY_READ_IF(diagonal)
@@ -1426,7 +1426,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bottom()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1460,7 +1460,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_top()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1493,7 +1493,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_left()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1526,7 +1526,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_right()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1559,7 +1559,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_diagonal()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(color)
             ELSE_WRONG_FORMAT
@@ -1600,7 +1600,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_colors()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(indexedColors)
             SKIP_UNKNOWN
@@ -1626,7 +1626,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_indexedColors()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(rgbColor)
             ELSE_WRONG_FORMAT
