@@ -118,10 +118,10 @@ Document::Document(const std::string& fileName,
                 this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
                 this, SLOT(slotTableFound(KWord::Table*)));
-        connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&,KoXmlWriter*)),
+        connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
-        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter* )),
-                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter* )));
+        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter*)),
+                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter*)));
         connect(m_graphicsHandler, SIGNAL(textBoxFound(unsigned int, bool)),
                 this, SLOT(slotTextBoxFound(unsigned int, bool)));
 
@@ -927,29 +927,19 @@ void Document::slotTableFound(KWord::Table* table)
 void Document::slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer)
 {
     kDebug(30513) ;
-    //if we have a temp writer, tell the graphicsHandler
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(writer);
-    }
+    Q_UNUSED(writer);
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
     m_graphicsHandler->handleInlineObject(data);
-
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(m_bodyWriter);
-    }
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
 }
 
 void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* writer)
 {
     kDebug(30513) ;
-    //if we have a temp writer, tell the graphicsHandler
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(writer);
-    }
+    Q_UNUSED(writer);
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
     m_graphicsHandler->handleFloatingObject(globalCP);
-
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(m_bodyWriter);
-    }
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
 }
 
 void Document::slotTextBoxFound(unsigned int index, bool stylesxml)

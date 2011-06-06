@@ -155,14 +155,15 @@ void DrawingWriter::setChildRectangle(MSO::OfficeArtChildAnchor& anchor)
  * ************************************************
  */
 KWordGraphicsHandler::KWordGraphicsHandler(Document* doc,
-                                           KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
+                                           KoXmlWriter* bodyWriter,
+                                           KoXmlWriter* manifestWriter,
                                            KoStore* store, KoGenStyles* mainStyles,
                                            const wvWare::Drawings* p_drawings,
                                            const wvWare::Word97::FIB& fib)
 : QObject()
 , m_document(doc)
 , m_store(store)
-, m_bodyWriter(bodyWriter)
+, m_currentWriter(bodyWriter)
 , m_manifestWriter(manifestWriter)
 , m_mainStyles(mainStyles)
 , m_drawings(p_drawings)
@@ -222,11 +223,6 @@ void KWordGraphicsHandler::emitTextBoxFound(unsigned int index, bool stylesxml)
     emit textBoxFound(index, stylesxml);
 }
 
-void KWordGraphicsHandler::setBodyWriter(KoXmlWriter* writer)
-{
-    m_bodyWriter = writer;
-}
-
 DrawStyle KWordGraphicsHandler::getBgDrawStyle()
 {
     const OfficeArtSpContainer* shape = 0;
@@ -250,7 +246,7 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 
     //the picture is store in some external file
     if (data.picf->mfp.mm == MM_SHAPEFILE) {
-        DrawingWriter out(*m_bodyWriter, *m_mainStyles, m_document->writingHeader());
+        DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
         m_objectType = Inline;
         m_picf = data.picf;
         insertEmptyInlineFrame(out);
@@ -323,7 +319,7 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     m_store->leaveDirectory();
 
     bool inStylesXml = m_document->writingHeader();
-    DrawingWriter out(*m_bodyWriter, *m_mainStyles, inStylesXml);
+    DrawingWriter out(*m_currentWriter, *m_mainStyles, inStylesXml);
 
     //global attributes
     m_objectType = Inline;
@@ -372,7 +368,7 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 
         if ((it.currentStart() + threshold) == globalCP) {
             bool inStylesXml = m_document->writingHeader();
-            DrawingWriter out(*m_bodyWriter, *m_mainStyles, inStylesXml);
+            DrawingWriter out(*m_currentWriter, *m_mainStyles, inStylesXml);
 
             //global attributes
             m_objectType = Floating;

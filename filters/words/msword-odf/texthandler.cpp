@@ -662,13 +662,17 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         return;
     }
 
-    m_insideDrawing = true;
+    //save the state of tables/paragraphs/lists (text-box)
+    saveState();
 
-    //create temporary writer for the picture tags
+    //Create temporary writer for the picture tags.
+    KoXmlWriter* writer = 0;
     QBuffer buf;
+
     buf.open(QIODevice::WriteOnly);
-    m_drawingWriter = new KoXmlWriter(&buf);
-    KoXmlWriter* writer = m_drawingWriter;
+    writer = new KoXmlWriter(&buf);
+    m_drawingWriter = writer;
+    m_insideDrawing = true;
 
     //frame or drawing shape acting as a hyperlink
     if (m_fld->m_hyperLinkActive) {
@@ -677,30 +681,27 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    //save the state of tables/paragraphs/lists (text-box)
-    saveState();
-    emit inlineObjectFound(data, m_drawingWriter);
+    emit inlineObjectFound(data, writer);
 
     //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {
         closeList();
     }
-    restoreState();
-
     if (m_fld->m_hyperLinkActive) {
         writer->endElement();
         m_fld->m_hyperLinkActive = false;
     }
+    //cleanup
+    delete m_drawingWriter;
+    m_drawingWriter = 0;
+    m_insideDrawing = false;
+
+    //restore the state
+    restoreState();
 
     //now add content to our current paragraph
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
     m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
-
-    m_insideDrawing = false;
-
-    //cleanup
-    delete m_drawingWriter;
-    m_drawingWriter = 0;
 }
 
 void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
@@ -715,13 +716,17 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
         return;
     }
 
-    m_insideDrawing = true;
+    //save the state of tables/paragraphs/lists (text-box)
+    saveState();
 
-    //create temporary writer for the picture tags
-    QBuffer drawingBuffer;
-    drawingBuffer.open(QIODevice::WriteOnly);
-    m_drawingWriter = new KoXmlWriter(&drawingBuffer);
-    KoXmlWriter* writer = m_drawingWriter;
+    //Create temporary writer for the picture tags.
+    KoXmlWriter* writer = 0;
+    QBuffer buf;
+
+    buf.open(QIODevice::WriteOnly);
+    writer = new KoXmlWriter(&buf);
+    m_drawingWriter = writer;
+    m_insideDrawing = true;
 
     //frame or drawing shape acting as a hyperlink
     if (m_fld->m_hyperLinkActive) {
@@ -730,30 +735,27 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    //save the state of tables/paragraphs/lists (text-box)
-    saveState();
-    emit floatingObjectFound(globalCP, m_drawingWriter);
+    emit floatingObjectFound(globalCP, writer);
 
     //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {
         closeList();
     }
-    restoreState();
-
     if (m_fld->m_hyperLinkActive) {
         writer->endElement();
         m_fld->m_hyperLinkActive = false;
     }
-
-    //now add content to our current paragraph
-    QString contents = QString::fromUtf8(drawingBuffer.buffer(), drawingBuffer.buffer().size());
-    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
-
-    m_insideDrawing = false;
-
     //cleanup
     delete m_drawingWriter;
     m_drawingWriter = 0;
+    m_insideDrawing = false;
+
+    //restore the state
+    restoreState();
+
+    //now add content to our current paragraph
+    QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
 }
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
@@ -2220,13 +2222,17 @@ void KWordTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push(State(m_currentTable, m_paragraph, m_listStyleName,
-                           m_currentListDepth, m_currentListID, m_previousLists));
+                           m_currentListDepth, m_currentListID, m_previousLists,
+                           m_drawingWriter, m_insideDrawing));
     m_currentTable = 0;
     m_paragraph = 0;
     m_listStyleName = "";
     m_currentListDepth = -1;
     m_currentListID = 0;
     m_previousLists.clear();
+
+    m_drawingWriter = 0;
+    m_insideDrawing = false;
 }
 
 void KWordTextHandler::restoreState()
@@ -2242,17 +2248,24 @@ void KWordTextHandler::restoreState()
 
     //warn if pointers weren't reset properly, but restore state anyway
     if (m_paragraph != 0) {
-        kWarning() << "m_paragraph pointer wasn't reset";
+        kWarning() << "Warning: m_paragraph pointer wasn't reset!";
     }
-    m_paragraph = s.paragraph;
     if (m_currentTable != 0) {
-        kWarning() << "m_currentTable pointer wasn't reset";
+        kWarning() << "Warning: m_currentTable pointer wasn't reset!";
     }
-    m_currentTable = s.currentTable;
+    if (m_drawingWriter != 0) {
+        kWarning() << "Warning: m_drawingWriter pointer wasn't reset!";
+    }
+
+    m_paragraph = s.paragraph;
+    m_currentTable = s.table;
     m_listStyleName = s.listStyleName;
-    m_currentListDepth = s.currentListDepth;
-    m_currentListID = s.currentListID;
+    m_currentListDepth = s.listDepth;
+    m_currentListID = s.listID;
     m_previousLists = s.previousLists;
+
+    m_drawingWriter = s.drawingWriter;
+    m_insideDrawing = s.insideDrawing;
 }
 
 void KWordTextHandler::fld_saveState()
