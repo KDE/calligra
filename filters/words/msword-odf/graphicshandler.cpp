@@ -382,7 +382,7 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
             //global attributes
             m_objectType = Floating;
             m_pSpa = it.current();
-            m_zIndex = 0;
+            m_zIndex = 1;
 
             locateDrawing((dg->groupShape).data(), it.current(), (uint)it.current()->spid, out);
             return;
@@ -406,13 +406,17 @@ void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
     //shape containers and other group (4) containers.  Each group (4) is a
     //shape.  The first container MUST be an OfficeArtSpContainer record, which
     //MUST contain shape information for the group.  MS-ODRAW, 2.2.16
+    const OfficeArtSpContainer* sp = spgr->rgfb[0].anon.get<OfficeArtSpContainer>();
+    if (sp && (sp->shapeProp.spid == spid)) {
+        kDebug(30513) << "An unprocessed shape referred from text, ignoring!";
+        return;
+    }
 
-    foreach (const OfficeArtSpgrContainerFileBlock& co, spgr->rgfb) {
-
+    for(int i = 1; i < spgr->rgfb.size(); i++) {
+        const OfficeArtSpgrContainerFileBlock& co = spgr->rgfb[i];
         if (co.anon.is<OfficeArtSpgrContainer>()) {
-            const OfficeArtSpContainer* first = 
-                (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
-            if (first && first->shapeProp.spid == spid) {
+            sp = (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
+            if (sp && sp->shapeProp.spid == spid) {
                 out.setRectangle(*spa);
                 processGroupShape(*co.anon.get<OfficeArtSpgrContainer>(), out);
                 break;
@@ -420,17 +424,10 @@ void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr
                 m_zIndex = m_zIndex + (*co.anon.get<OfficeArtSpgrContainer>()).rgfb.size();
             }
         } else {
-            const OfficeArtSpContainer &sp = *co.anon.get<OfficeArtSpContainer>();
-            if (sp.shapeProp.fGroup) {
-		if (sp.shapeGroup) {
-                    out.setGroupRectangle(*sp.shapeGroup);
-                }
-                if (sp.shapeProp.spid == spid) {
-                    kDebug(30513) << "An unprocessed shape storing information for the group is referred from text!";
-                }
-            } else if (sp.shapeProp.spid == spid) {
+            sp = co.anon.get<OfficeArtSpContainer>();
+            if (sp && sp->shapeProp.spid == spid) {
                 out.setRectangle(*spa);
-                processDrawingObject(sp, out);
+                processDrawingObject(*sp, out);
                 break;
             }
             m_zIndex++;
@@ -443,14 +440,14 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     if (o.rgfb.size() < 2) {
         return;
     }
-    const OfficeArtSpContainer *first = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    const OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
 
     //create graphic style for the group shape
     QString styleName;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, first);
+    DrawStyle ds(&m_officeArtDggContainer, sp);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -464,9 +461,9 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     setZIndexAttribute(out);
     m_processingGroup = true;
 
-    if (first && first->shapeGroup) {
+    if (sp && sp->shapeGroup) {
         //process shape information for the group
-        out.setGroupRectangle(*first->shapeGroup);
+        out.setGroupRectangle(*sp->shapeGroup);
     }
 
     for (int i = 1; i < o.rgfb.size(); ++i) {
