@@ -40,7 +40,6 @@ KisPropertiesConfiguration* KritaWidgetOpenCL::configuration() const
 
 void KritaWidgetOpenCL::setConfiguration(const KisPropertiesConfiguration* config)
 {
-    config->
 }
 
 #include "kritawidgetopencl.moc"
