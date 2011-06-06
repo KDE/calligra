@@ -28,7 +28,6 @@
 class QTimer;
 class QTextDocument;
 class KoResourceManager;
-class KoActionf;
 class KoSelection;
 class KWDocument;
 
@@ -53,7 +52,6 @@ private:
     Ui::KWStatistics widget;
     Ui::KWStatisticsDocker widgetDocker;
     KoResourceManager *m_resourceManager;
-    KoAction *m_action;
     KoSelection *m_selection;
     KWDocument *m_document;
     QTextDocument *m_textDocument;
