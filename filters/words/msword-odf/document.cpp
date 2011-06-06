@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -1132,26 +1132,26 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         if (sep->brcLeft.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-left",
                                          Conversion::setBorderAttributes(sep->brcLeft));
-            pageLayoutStyle->addProperty("koffice:specialborder-left",
-                                         Conversion::borderKOfficeAttributes(sep->brcLeft));
+            pageLayoutStyle->addProperty("calligra:specialborder-left",
+                                         Conversion::borderCalligraAttributes(sep->brcLeft));
         }
         if (sep->brcTop.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-top",
                                          Conversion::setBorderAttributes(sep->brcTop));
-            pageLayoutStyle->addProperty("koffice:specialborder-top",
-                                         Conversion::borderKOfficeAttributes(sep->brcTop));
+            pageLayoutStyle->addProperty("calligra:specialborder-top",
+                                         Conversion::borderCalligraAttributes(sep->brcTop));
         }
         if (sep->brcRight.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-right",
                                          Conversion::setBorderAttributes(sep->brcRight));
-            pageLayoutStyle->addProperty("koffice:specialborder-right",
-                                         Conversion::borderKOfficeAttributes(sep->brcRight));
+            pageLayoutStyle->addProperty("calligra:specialborder-right",
+                                         Conversion::borderCalligraAttributes(sep->brcRight));
         }
         if (sep->brcBottom.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-bottom",
                                          Conversion::setBorderAttributes(sep->brcBottom));
-            pageLayoutStyle->addProperty("koffice:specialborder-bottom",
-                                         Conversion::borderKOfficeAttributes(sep->brcBottom));
+            pageLayoutStyle->addProperty("calligra:specialborder-bottom",
+                                         Conversion::borderCalligraAttributes(sep->brcBottom));
         }
     }
     // Set default left/right margins for the case when there is no border.

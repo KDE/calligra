@@ -148,7 +148,7 @@ bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElem
         frame->setFrameBehavior(KWord::AutoCreateNewFrameBehavior);
     else
         frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
-    QString newFrameBehavior = properties.attributeNS(KoXmlNS::koffice, "frame-behavior-on-new-page", QString());
+    QString newFrameBehavior = properties.attributeNS(KoXmlNS::calligra, "frame-behavior-on-new-page", QString());
     if (newFrameBehavior == "followup")
         frame->setNewFrameBehavior(KWord::ReconnectNewFrame);
     else if (newFrameBehavior == "copy")

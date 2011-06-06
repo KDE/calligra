@@ -1697,11 +1697,11 @@ void ExcelImport::Private::processFormat(const Format* format, KoGenStyle& style
             break;
         case Format::VJustify:
             style.addProperty("style:vertical-align", "top");
-            style.addProperty("koffice:vertical-distributed", "distributed");
+            style.addProperty("calligra:vertical-distributed", "distributed");
             break;
         case Format::VDistributed:
             style.addProperty("style:vertical-align", "middle");
-            style.addProperty("koffice:vertical-distributed", "distributed");
+            style.addProperty("calligra:vertical-distributed", "distributed");
             break;
         }
 

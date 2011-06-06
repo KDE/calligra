@@ -1,5 +1,5 @@
 Changes in trunk
-These are changes that can not be backported, and will be available from KOffice 1.5
+These are changes that can not be backported, and will be available from Calligra 1.5
 - Changed version to 0.2.90
 - Added names of contributors
 - Enabled right mouse click to zoom out of canvas, partially fixing bug 96944

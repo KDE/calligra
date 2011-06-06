@@ -46,8 +46,8 @@ KoFilter::ConversionStatus GenericFilter::convert(const QByteArray &from, const 
 {
 
     //find the right script to use
-    KService::List offers = KServiceTypeTrader::self()->query("KOfficeGenericFilter",
-                            "(Type == 'Service') and ('KOfficeGenericFilter' in ServiceTypes) and (exist Exec)");
+    KService::List offers = KServiceTypeTrader::self()->query("CalligraGenericFilter",
+                            "(Type == 'Service') and ('CalligraGenericFilter' in ServiceTypes) and (exist Exec)");
 
     if (offers.isEmpty())
         return KoFilter::NotImplemented;

@@ -62,4 +62,4 @@ X-KDE-Export=application/vnd.palm
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=palmdocexport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

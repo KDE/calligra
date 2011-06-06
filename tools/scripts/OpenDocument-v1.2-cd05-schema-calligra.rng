@@ -63,7 +63,7 @@
     xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
     xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
 
-    xmlns:koffice="http://www.koffice.org/2005/"
+    xmlns:calligra="http://www.calligra-suite.org/2005/"
 >
     <define name="office-process-content">
         <optional>
@@ -6005,7 +6005,7 @@
             </zeroOrMore>
             <ref name="draw-text"/>
             <optional>
-                <attribute name="koffice:nodeTypes">
+                <attribute name="calligra:nodeTypes">
                     <ref name="string"/>
                 </attribute>
             </optional>
@@ -6519,7 +6519,7 @@
                 </attribute>
             </optional>
             <optional>
-                <attribute name="koffice:anchor-type">
+                <attribute name="calligra:anchor-type">
                     <ref name="string"/>
                 </attribute>
             </optional>

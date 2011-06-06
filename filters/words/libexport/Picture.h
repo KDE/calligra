@@ -36,7 +36,7 @@ class KUrl;
 class PictureShared;
 
 /**
- * Picture is a container class for various types of pictures supported by %KOffice.
+ * Picture is a container class for various types of pictures supported by %Calligra.
  *
  * @short A picture container class
  */

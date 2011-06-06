@@ -89,7 +89,7 @@ public:
     Key* searchKey(const QString& keyName);
     /** Save the file in a temp file. */
     QString extractData(const QString& key);
-    /** Build a DOM tree (e.g. a KOffice part) */
+    /** Build a DOM tree (e.g. a Calligra part) */
     //QDomNode extractKoData(const QString& key);
     //Pixmap*  searchPixmap(const QString&);
 

@@ -185,7 +185,7 @@ Bugfixes:
 Changes between KPresenter-1.2-beta2 and KPresenter-1.2-RC1
 ===========================================================
 New:
-- Like all of KOffice: a readonly GUI for embedding into Konqueror
+- Like all of Calligra: a readonly GUI for embedding into Konqueror
 - More DCOP calls
 
 Bugfixes:

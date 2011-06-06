@@ -123,7 +123,7 @@ void KWApplicationConfig::load(KWDocument *document)
     }
 
     // Load personal dict
-    KConfigGroup spelling = KoGlobal::kofficeConfig()->group("Spelling");
+    KConfigGroup spelling = KoGlobal::calligraConfig()->group("Spelling");
 //    m_spellCheckPersonalDict = spelling.readListEntry("PersonalDict");
 
 }

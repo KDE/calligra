@@ -62,4 +62,4 @@ X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Export=application/wordperfect
 X-KDE-Library=wpexport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

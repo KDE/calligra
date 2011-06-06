@@ -62,14 +62,14 @@ Files where the supposed children of <VARIABLE> are directly children of <FORMAT
 === OASIS questions ===
 How to transform "keepAspectRatio" for picture/image?
 
-=== File kofficetests/documents/export/kword/para/chapter.kwd ===
+=== File calligratests/documents/export/kword/para/chapter.kwd ===
 [File of syntax 1]
 What are those (Table of content support?)
 <NAME> as child of <PARAGRAPH>
 <INFO>
 <CPARAGS>, <PARAG>
 
-=== File kofficetests/documents/export/kword/text/all.kwd ===
+=== File calligratests/documents/export/kword/text/all.kwd ===
 [File of syntax 2]
 Floating image
 Formula

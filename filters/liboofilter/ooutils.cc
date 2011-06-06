@@ -201,25 +201,25 @@ void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& s
         QString type = tabStop.attributeNS(ooNS::style, "type", QString());   // left, right, center or char
 
         QDomElement elem = parentElement.ownerDocument().createElement("TABULATOR");
-        int kOfficeType = 0;
+        int calligraType = 0;
         if (type == "left")
-            kOfficeType = 0;
+            calligraType = 0;
         else if (type == "center")
-            kOfficeType = 1;
+            calligraType = 1;
         else if (type == "right")
-            kOfficeType = 2;
+            calligraType = 2;
         else if (type == "char") {
             QString delimiterChar = tabStop.attributeNS(ooNS::style, "char", QString());   // single character
             elem.setAttribute("alignchar", delimiterChar);
-            kOfficeType = 3; // "alignment on decimal point"
+            calligraType = 3; // "alignment on decimal point"
         }
 
-        elem.setAttribute("type", kOfficeType);
+        elem.setAttribute("type", calligraType);
 
         double pos = KoUnit::parseValue(tabStop.attributeNS(ooNS::style, "position", QString()));
         elem.setAttribute("ptpos", pos);
 
-        // TODO Convert leaderChar's unicode value to the KOffice enum
+        // TODO Convert leaderChar's unicode value to the Calligra enum
         // (blank/dots/line/dash/dash-dot/dash-dot-dot, 0 to 5)
         QString leaderChar = tabStop.attributeNS(ooNS::style, "leader-char", QString());   // single character
         if (!leaderChar.isEmpty()) {

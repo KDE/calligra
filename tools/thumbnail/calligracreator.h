@@ -1,5 +1,5 @@
 /*  This file is part of the KDE libraries
-    Copyright (C) 2002 Simon MacMullen <koffice@babysimon.co.uk>
+    Copyright (C) 2002 Simon MacMullen <calligra@babysimon.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KOFFICECREATOR_H_
-#define _KOFFICECREATOR_H_ 
+#ifndef _CALLIGRACREATOR_H_
+#define _CALLIGRACREATOR_H_ 
 
 #include <kio/thumbcreator.h>
 #include <kparts/part.h>
@@ -27,12 +27,12 @@
 
 class KoDocument;
 
-class KOfficeCreator : public QObject, public ThumbCreator
+class CalligraCreator : public QObject, public ThumbCreator
 {
     Q_OBJECT
 public:
-    KOfficeCreator();
-    virtual ~KOfficeCreator();
+    CalligraCreator();
+    virtual ~CalligraCreator();
     virtual bool create(const QString &path, int width, int height, QImage &img);
     virtual Flags flags() const;
 

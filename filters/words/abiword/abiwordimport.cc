@@ -842,7 +842,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
             kWarning(30506) << "Unknown unit type: " << strUnits;
         }
     } else {
-        // We have a format known by KOffice, so use KOffice's functions
+        // We have a format known by Calligra, so use Calligra's functions
         kwordHeight = MillimetresToPoints(KoPageFormat::height(kwordFormat));
         kwordWidth  = MillimetresToPoints(KoPageFormat::width(kwordFormat));
     }
@@ -1348,7 +1348,7 @@ void StructureParser::createDocInfo(void)
 {
     QDomImplementation implementation;
     QDomDocument doc(implementation.createDocumentType("document-info",
-                     "-//KDE//DTD document-info 1.2//EN", "http://www.koffice.org/DTD/document-info-1.2.dtd"));
+                     "-//KDE//DTD document-info 1.2//EN", "http://www.calligra-suite.org/DTD/document-info-1.2.dtd"));
 
     m_info = doc;
 
@@ -1357,7 +1357,7 @@ void StructureParser::createDocInfo(void)
             "xml", "version=\"1.0\" encoding=\"UTF-8\""));
 
     QDomElement elementDoc(mainDocument.createElement("document-info"));
-    elementDoc.setAttribute("xmlns", "http://www.koffice.org/DTD/document-info");
+    elementDoc.setAttribute("xmlns", "http://www.calligra-suite.org/DTD/document-info");
     m_info.appendChild(elementDoc);
 
     QDomElement about(mainDocument.createElement("about"));
@@ -1446,7 +1446,7 @@ void StructureParser :: createDocument(void)
 {
     QDomImplementation implementation;
     QDomDocument doc(implementation.createDocumentType("DOC",
-                     "-//KDE//DTD kword 1.2//EN", "http://www.koffice.org/DTD/kword-1.2.dtd"));
+                     "-//KDE//DTD kword 1.2//EN", "http://www.calligra-suite.org/DTD/kword-1.2.dtd"));
 
     mainDocument = doc;
 
@@ -1456,7 +1456,7 @@ void StructureParser :: createDocument(void)
 
     QDomElement elementDoc;
     elementDoc = mainDocument.createElement("DOC");
-    elementDoc.setAttribute("xmlns", "http://www.koffice.org/DTD/kword");
+    elementDoc.setAttribute("xmlns", "http://www.calligra-suite.org/DTD/kword");
     elementDoc.setAttribute("editor", "AbiWord Import Filter");
     elementDoc.setAttribute("mime", "application/x-kword");
     elementDoc.setAttribute("syntaxVersion", 3);

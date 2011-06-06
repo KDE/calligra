@@ -1,7 +1,7 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
     Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
 
-    (version information based on kofficeversion.h)
+    (version information based on calligraversion.h)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public

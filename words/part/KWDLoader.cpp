@@ -23,7 +23,7 @@
 #include "KWPage.h"
 #include "frames/KWTextFrameSet.h"
 
-// koffice
+// calligra
 #include <KoShapeRegistry.h>
 #include <KoInlineNote.h>
 #include <KoShapeFactoryBase.h>

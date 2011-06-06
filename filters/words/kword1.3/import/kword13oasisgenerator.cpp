@@ -30,7 +30,7 @@
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
@@ -672,8 +672,8 @@ void KWord13OasisGenerator::writeMetaXml(void)
     QString strVersion;
     strVersion += "KWord-OneDotThree-Import-Filter/";
     strVersion += QString("$Revision$").mid(10).remove('$').trimmed();
-    strVersion += " KOffice/";
-    strVersion += KOFFICE_VERSION_STRING;
+    strVersion += " Calligra/";
+    strVersion += CALLIGRA_VERSION_STRING;
     writer->addTextSpan(strVersion);
     writer->endElement();
 

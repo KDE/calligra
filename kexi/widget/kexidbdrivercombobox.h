@@ -39,7 +39,7 @@
 \endcode
 
 A more complete example can be found in
-<a href="http://websvn.kde.org/trunk/koffice/kexi/tests/widgets/kexidbdrivercombotest.cpp?&view=auto">koffice/kexi/tests/widgets/</a>.
+<a href="http://websvn.kde.org/trunk/calligra/kexi/tests/widgets/kexidbdrivercombotest.cpp?&view=auto">calligra/kexi/tests/widgets/</a>.
 */
 class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 {

@@ -22,8 +22,8 @@
 
 /*
    The classes in this file are based on a class in the old files:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
-    /home/kde/koffice/filters/kword/docbookexpert/docbookexport.cc
+    /home/kde/calligra/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/kword/docbookexpert/docbookexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>

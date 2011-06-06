@@ -50,7 +50,7 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
-// KOffice
+// Calligra
 #include <KoCsvImportDialog.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>

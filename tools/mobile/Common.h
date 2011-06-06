@@ -1,5 +1,5 @@
 /*
- * This file is part of Maemo 5 Office UI for KOffice
+ * This file is part of Maemo 5 Office UI for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -91,13 +91,13 @@ const QString FS_PPT_BACK_BUTTON_PATH(":/images/48x48/general_back.png");
 const QString FS_PPT_FORWARD_BUTTON_PATH(":/images/48x48/general_forward.png");
 
 /*!
-* Path for splash screen KOffice logo
+* Path for splash screen Calligra logo
 */
-const QString SPLASH_LOGO_KOFFICE_PATH(":/images/178x200/calligramobile.png");
+const QString SPLASH_LOGO_CALLIGRA_PATH(":/images/178x200/calligramobile.png");
 /*!
- * * KOffice pixmap in about dialog
+ * * Calligra pixmap in about dialog
  */
-const QString ABOUT_DIALOG_KOFFICE_PIXMAP("/usr/share/icons/hicolor/64x64/apps/calligramobile.png");
+const QString ABOUT_DIALOG_CALLIGRA_PIXMAP("/usr/share/icons/hicolor/64x64/apps/calligramobile.png");
 /*!
  * * Nokia pixmap in about dialog
  * */

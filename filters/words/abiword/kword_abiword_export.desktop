@@ -62,4 +62,4 @@ X-KDE-Export=application/x-abiword
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=abiwordexport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

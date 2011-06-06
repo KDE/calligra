@@ -364,8 +364,8 @@ public:
         // TODO: error checking
         writeTextInternal("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         writeTextInternal("<!DOCTYPE DOC PUBLIC \"-//KDE//DTD kword 1.3//EN\" "
-                          "\"http://www.koffice.org/DTD/kword-1.3.dtd\">");
-        writeTextInternal("<DOC xmlns=\"http://www.koffice.org/DTD/kword\" "
+                          "\"http://www.calligra-suite.org/DTD/kword-1.3.dtd\">");
+        writeTextInternal("<DOC xmlns=\"http://www.calligra-suite.org/DTD/kword\" "
                           "mime=\"application/x-kword\" "
                           "syntaxVersion=\"3\" editor=\"KWord\">");
 
@@ -1213,8 +1213,8 @@ public:
         return writeTextInternal("\xC2\xAD");
     }
 
-    void setKOfficeLink(MSWriteImport *kofficeLink) {
-        m_koLink = kofficeLink;
+    void setCalligraLink(MSWriteImport *calligraLink) {
+        m_koLink = calligraLink;
     }
 
     void sigProgress(const int value) {
@@ -1319,7 +1319,7 @@ KoFilter::ConversionStatus MSWriteImport::convert(const QByteArray &from, const 
     m_generator->setFilterChain(m_chain);
 
     // hand over sigProgess to give some feedback to the user
-    m_generator->setKOfficeLink(this);
+    m_generator->setCalligraLink(this);
 
 
     // hook up Generator to Parser
@@ -1329,7 +1329,7 @@ KoFilter::ConversionStatus MSWriteImport::convert(const QByteArray &from, const 
     // filter!
     if (!m_parser->parse()) {
         // try to return somewhat more meaningful errors than StupidError
-        // for the day that KOffice actually reports them to the user properly
+        // for the day that Calligra actually reports them to the user properly
         int errorCode = m_device->bad();
         switch (errorCode) {
         case MSWrite::Error::Ok:

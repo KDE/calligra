@@ -61,4 +61,4 @@ X-KDE-Export=text/vnd.wap.wml
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=wmlexport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

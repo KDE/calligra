@@ -23,12 +23,12 @@ What to change?
 KexiDB should be merged with non-visual (but db-related) parts of KexiProject.
 KexiProject then should be renamed to KexiDBProject and be moved to KexiDB.
 Visual (document-like) project container (formerly KexiProject) that inherits KoDocument
-could be then named to something else and still exist since Kexi, as KOffice application,
+could be then named to something else and still exist since Kexi, as Calligra application,
 needs to implement KoDocument. (KexiProjectHandler is also visual-related)
 
 What we got then?
 After that move, KexiProject becames a non-visual general-purpose entity. SO it can be instantiated
-not only as Kexi Koffice document window, but also:
+not only as Kexi Calligra document window, but also:
 - for batch (non-visual) data processing (equivalents of given features availabe from gui, e.g. data export)
 - for easy use in Kexi plugins and/or other apps that would know about enchanced database properties
 provided by Kexi projects' metadata
@@ -36,7 +36,7 @@ provided by Kexi projects' metadata
 projects do not have to be visible as regular projects, but its metadata is loaded)
 
 Other motivation:
-It's not necessary for KexiProject to be dependent on KOfficelibs.
+It's not necessary for KexiProject to be dependent on Calligralibs.
 
 
 3. KexiDBConnection should be moved to KexiDB module and it should be only connection data container.

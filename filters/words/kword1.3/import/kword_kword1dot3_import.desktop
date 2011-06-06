@@ -60,4 +60,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-kword
 X-KDE-Weight=20
 X-KDE-Library=kwordkword1dot3import
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

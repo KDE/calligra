@@ -45,7 +45,7 @@
 #include "changetracker/KoChangeTracker.h"
 #include "KWRootAreaProvider.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
 #include <KoTextAnchor.h>
@@ -806,7 +806,7 @@ void KWDocument::saveConfig()
 {
     if (!isReadWrite())
         return;
-//   KConfigGroup group(KoGlobal::kofficeConfig(), "Spelling");
+//   KConfigGroup group(KoGlobal::calligraConfig(), "Spelling");
 //   group.writeEntry("PersonalDict", m_spellCheckPersonalDict);
     if (isEmbedded())
         return;

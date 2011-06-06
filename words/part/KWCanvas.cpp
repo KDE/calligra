@@ -27,7 +27,7 @@
 #include "KWViewMode.h"
 #include "KWPage.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>

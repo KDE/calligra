@@ -52,7 +52,7 @@ QObject* Factory::create( const char* iface, QWidget* parentWidget, QObject *par
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 
-    // If classname is "KoDocument", our host is a koffice application
+    // If classname is "KoDocument", our host is a calligra application
     // otherwise, the host wants us as a simple part, so switch to readonly
     // and single view.
     bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
@@ -83,10 +83,10 @@ const KComponentData &Factory::global()
 
         // Add any application-specific resource directories here
         s_global->dirs()->addResourceType("plan_template", "data", "plan/templates/");
-        s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
+        s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
 
-        // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
         
     }
     return *s_global;

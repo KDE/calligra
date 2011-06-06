@@ -2,7 +2,7 @@ Begin4
 Title:          keximdb
 Version:        @VERSION@
 Entered-date:   @DATE@
-Description:    MS Access (MDB) driver for Kexi, the KOffice database program
+Description:    MS Access (MDB) driver for Kexi, the Calligra database program
 Keywords:       Microsoft Access to Kexi (KexiDB) database migration driver 
 Author:         martin.ellis@kdemail.net (Martin Ellis)
 Maintained-by:  martin.ellis@kdemail.net (Martin Ellis)

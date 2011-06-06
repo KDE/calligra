@@ -34,9 +34,9 @@ class XmlParser
 {
     /** Latex output file */
     QString _filename;
-    /** The Koffice app document stored in a XML DOM Tree. */
+    /** The Calligra app document stored in a XML DOM Tree. */
     QDomDocument _document;
-    /** The koffice document (maindoc, picture, ...). */
+    /** The calligra document (maindoc, picture, ...). */
     static KoStore* _in;
 
 protected:

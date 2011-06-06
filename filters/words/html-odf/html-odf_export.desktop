@@ -28,4 +28,4 @@ X-KDE-Export=text/html
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Weight=50
 X-KDE-Library=htmlodf_export
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

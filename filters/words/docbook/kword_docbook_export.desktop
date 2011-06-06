@@ -62,4 +62,4 @@ X-KDE-Export=text/sgml
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=docbookexport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

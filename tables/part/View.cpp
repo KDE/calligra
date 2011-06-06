@@ -81,7 +81,7 @@
 #include <kicon.h>
 #include <knotifyconfigwidget.h>
 
-// KOffice includes
+// Calligra includes
 #include <KoGlobal.h>
 #include <KoDpi.h>
 #include <KoCanvasControllerWidget.h>
