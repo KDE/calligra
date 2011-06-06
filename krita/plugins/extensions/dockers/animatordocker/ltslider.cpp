@@ -57,3 +57,13 @@ void LTSlider::visibilityEmitter(bool value)
 {
     emit visibilityChanged(m_number, value);
 }
+
+void LTSlider::setOpacity(double n)
+{
+    m_slider->setValue(n*1000);
+}
+
+void LTSlider::setVisibility(bool o)
+{
+    m_check->setChecked(o);;
+}

@@ -24,6 +24,7 @@
 #include <QDockWidget>
 #include <QSlider>
 #include <QBoxLayout>
+#include <QLayoutItem>
 #include <QSpinBox>
 
 #include <KoCanvasObserverBase.h>
@@ -55,6 +56,10 @@ private:        // GUI
     QHBoxLayout* m_sliders_layout;
     QList<LTSlider*> m_sliders;
     QSpinBox* m_near_spinbox;
+    
+    // Spacers
+    QSpacerItem* m_sp_l;
+    QSpacerItem* m_sp_r;
 };
 
 #endif // ANIMATOR_LIGHT_TABLE_DOCK_H

@@ -437,8 +437,8 @@ void AnimatorModel::lightTableUpdate()
         // New extended lighttable
         for (int fnum = -m_light_table->getNear(); fnum <= m_light_table->getNear(); ++fnum)
         {
-            if (fnum == 0)
-                continue;
+//             if (fnum == 0)
+//                 continue;
             
             KisNode* fnode = nodeAtIndex(createIndex(i, m_frame+fnum));
             if (fnode)

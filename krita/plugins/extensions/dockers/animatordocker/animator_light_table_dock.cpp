@@ -42,6 +42,11 @@ AnimatorLightTableDock::AnimatorLightTableDock() : QDockWidget(i18n("Light table
 //     connect(m_near_spinbox, SIGNAL(valueChanged(int)), this, SLOT(slidersUpdate()));
     
     m_sliders_layout = new QHBoxLayout(this);
+    
+    m_sp_l = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_sp_r = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_sliders_layout->addSpacerItem(m_sp_l);
+    
     m_layout->addLayout(m_sliders_layout);
     
     slidersUpdate();
@@ -77,18 +82,27 @@ void AnimatorLightTableDock::slidersUpdate()
             m_sliders[j]->disconnect();
         }
         
+        m_sliders_layout->removeItem(m_sp_l);
+        m_sliders_layout->removeItem(m_sp_r);
+        
+        m_sliders_layout->addSpacerItem(m_sp_l);
+        
         for (int i = -m_ltable->getNear(); i <= m_ltable->getNear(); ++i)
         {
-            if (i != 0)
-            {
+//             if (i != 0)
+//             {
 //                 std::cout << std::abs(i)*2+(i < 0) << std::endl;
-                m_sliders_layout->addWidget(m_sliders[std::abs(i)*2+(i < 0)]);
-                m_sliders[std::abs(i)*2+(i < 0)]->show();
-                m_sliders[std::abs(i)*2+(i < 0)]->setNumbner(i);
-                connect(m_sliders[std::abs(i)*2+(i < 0)], SIGNAL(opacityChanged(int,int)), m_ltable, SLOT(setOpacity(int,int)));
-                connect(m_sliders[std::abs(i)*2+(i < 0)], SIGNAL(visibilityChanged(int,bool)), m_ltable, SLOT(setVisibility(int,bool)));
-            }
+	    m_sliders_layout->addWidget(m_sliders[std::abs(i)*2+(i < 0)]);
+	    m_sliders[std::abs(i)*2+(i < 0)]->show();
+	    m_sliders[std::abs(i)*2+(i < 0)]->setNumbner(i);
+            m_sliders[std::abs(i)*2+(i < 0)]->setOpacity(m_ltable->getOpacity(i));
+            m_sliders[std::abs(i)*2+(i < 0)]->setVisibility(m_ltable->getVisibility(i));
+	    connect(m_sliders[std::abs(i)*2+(i < 0)], SIGNAL(opacityChanged(int,int)), m_ltable, SLOT(setOpacity(int,int)));
+	    connect(m_sliders[std::abs(i)*2+(i < 0)], SIGNAL(visibilityChanged(int,bool)), m_ltable, SLOT(setVisibility(int,bool)));
+//             }
         }
+        
+        m_sliders_layout->addSpacerItem(m_sp_r);
     }
 }
 
@@ -103,6 +117,7 @@ void AnimatorLightTableDock::setLightTable(AnimatorLightTable* table)
     m_ltable = table;
     connect(m_near_spinbox, SIGNAL(valueChanged(int)), m_ltable, SLOT(setNear(int)));
     connect(m_ltable, SIGNAL(nearChanged(int)), this, SLOT(slidersUpdate()));
+    slidersUpdate();
 }
 
 

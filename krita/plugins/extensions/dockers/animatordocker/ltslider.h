@@ -39,6 +39,9 @@ public slots:
     void opacityEmitter(int value);
     void visibilityEmitter(bool value);
     
+    void setOpacity(double n);
+    void setVisibility(bool o);
+    
 signals:
     void opacityChanged(int num, int value);
     void visibilityChanged(int num, bool value);
