@@ -1,0 +1,7 @@
+[Desktop Entry]
+Icon=
+Name=OpenCL filter
+X-KDE-ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritaopenclfilter
+X-Krita-Version=4
