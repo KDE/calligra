@@ -350,17 +350,8 @@ int KWPage::visiblePageNumber(PageSelection select, int adjustment) const
     }
 
     if (pageNumber == 0) {
-        if (page.pageNumber() == 1) {
-            pageNumber = 1;
-        } else {
-            pageNumber = -1;
-            page = page.previous();
-            if (page.isValid()) {
-                int n = page.visiblePageNumber();
-                if (n >= 1)
-                    pageNumber = n + 1;
-            }
-        }
+        page = page.previous();
+        pageNumber = page.isValid() ? qMax(1, page.visiblePageNumber() + 1) : 1;
     }
 
     if (adjustment != 0) {

@@ -26,8 +26,6 @@
 #include <KoFilterChain.h>
 
 #include <KPluginFactory>
-#include <KRun>
-#include <KProcess>
 #include <KShell>
 #include <KDebug>
 

@@ -349,7 +349,7 @@ void KWPageManager::removePage(int pageNumber)
 void KWPageManager::removePage(const KWPage &page)
 {
     Q_ASSERT(page.isValid());
-    kDebug() << page.pageNumber();
+    kDebug(32001) << page.pageNumber();
 
     const int removedPageNumber = page.pageNumber();
     const int offset = page.pageSide() == KWPage::PageSpread ? 2 : 1;

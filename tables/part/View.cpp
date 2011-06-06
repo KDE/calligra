@@ -61,7 +61,6 @@
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kcomponentdata.h>
-#include <kdatatool.h>
 #include <kdebug.h>
 
 #include <KFontChooser>

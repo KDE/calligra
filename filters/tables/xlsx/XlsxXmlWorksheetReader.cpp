@@ -259,7 +259,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     readNext();
     //kDebug() << *this << namespaceUri();
 
-    if (!expectEl("worksheet")) {
+    if (name() != "worksheet" && name() != "dialogsheet" && name() != "chartsheet") {
         return KoFilter::WrongFormat;
     }
     if (!expectNS(MSOOXML::Schemas::spreadsheetml)) {
@@ -280,7 +280,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
-    TRY_READ(worksheet)
+    if (name() == "worksheet") {
+        TRY_READ(worksheet)
+    }
+    else if (name() == "dialogsheet") {
+        TRY_READ(dialogsheet)
+    }
+
     kDebug() << "===========finished============";
     return KoFilter::OK;
 }
@@ -318,6 +324,27 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
     body->endElement(); // office:annotation
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL chartsheet
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_chartsheet()
+{
+    READ_PROLOGUE
+
+    return read_sheetHelper();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL dialogsheet
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_dialogsheet()
+{
+    READ_PROLOGUE
+
+    return read_sheetHelper();
+
+    READ_EPILOGUE
+}
 
 #undef CURRENT_EL
 #define CURRENT_EL worksheet
@@ -369,6 +396,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 {
     READ_PROLOGUE
 
+    return read_sheetHelper();
+
+    READ_EPILOGUE
+}
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper()
+{
     // In the first round we do not wish to output anything
     QBuffer fakeBuffer;
     KoXmlWriter fakeBody(&fakeBuffer);
@@ -392,9 +426,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     //The style might be changed depending on what elements we find,
     //hold the body writer so that we can set the proper style
     KoXmlWriter* heldBody = body;
-    QBuffer* bodyBuffer = new QBuffer();
-    bodyBuffer->open(QIODevice::ReadWrite);
-    body = new KoXmlWriter(bodyBuffer);
+    QBuffer bodyBuffer;
+    bodyBuffer.open(QIODevice::ReadWrite);
+    body = new KoXmlWriter(&bodyBuffer);
+
+    QBuffer drawingBuffer;
+    drawingBuffer.open(QIODevice::ReadWrite);
 
     while (!atEnd()) {
         readNext();
@@ -406,10 +443,15 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             ELSE_TRY_READ_IF(sheetData) // does fill the m_context->sheet
             ELSE_TRY_READ_IF(mergeCells)
             else if (name() == "drawing") {
+                KoXmlWriter *tempBodyHolder = body;
+                body = new KoXmlWriter(&drawingBuffer);
                 body->startElement("table:shapes");
                 TRY_READ(drawing)
                 body->endElement(); //table:shapes
+                delete body;
+                body = tempBodyHolder;
             }
+            ELSE_TRY_READ_IF(legacyDrawing)
             ELSE_TRY_READ_IF(hyperlinks)
             ELSE_TRY_READ_IF(picture)
             ELSE_TRY_READ_IF(oleObjects)
@@ -422,8 +464,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             SKIP_UNKNOWN
         }
     }
-
-    bodyBuffer->close();
 
     if (m_context->firstRoundOfReading) {
         // Sorting conditional styles according to the priority
@@ -486,9 +526,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 
     const QString currentTableStyleName(mainStyles->insert(m_tableStyle, "ta"));
     heldBody->addAttribute("table:style-name", currentTableStyleName);
-    heldBody->addCompleteElement(bodyBuffer);
+    heldBody->addCompleteElement(&bodyBuffer);
     delete body;
-    delete bodyBuffer;
     body = heldBody;
 
     // now we have everything to start writing the actual cells
@@ -615,6 +654,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
         body->endElement(); // table:table-row
     }
 
+    // Adding drawings, if there are any
+    body->addCompleteElement(&drawingBuffer);
+
     body->endElement(); // table:table
 
     if (!m_context->autoFilters.isEmpty()) {
@@ -659,7 +701,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
         body = oldBody;
     }
 
-    READ_EPILOGUE
+    return KoFilter::OK;
 }
 
 #undef CURRENT_EL
@@ -2011,6 +2053,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_tablePart()
         return result;
     }
 
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL legacyDrawing
+// todo
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_legacyDrawing()
+{
+    READ_PROLOGUE
     readNext();
     READ_EPILOGUE
 }

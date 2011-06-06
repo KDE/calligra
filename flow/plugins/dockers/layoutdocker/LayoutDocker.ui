@@ -16,9 +16,6 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle">
-   <string>DockWidget</string>
-  </property>
   <widget class="QWidget" name="dockWidgetContents">
    <widget class="QWidget" name="">
     <property name="geometry">

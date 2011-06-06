@@ -242,6 +242,14 @@ void ODrawToOdf::processRightTriangle(const MSO::OfficeArtSpContainer& o, Writer
 }
 
 
+void ODrawToOdf::processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:ellipse");
+    processStyleAndText(o, out);
+    out.xml.endElement(); // draw:ellipse
+}
+
+/*
 void ODrawToOdf::processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
@@ -256,7 +264,7 @@ void ODrawToOdf::processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // enhanced geometry
     out.xml.endElement(); // custom shape
 }
-
+*/
 
 void ODrawToOdf::processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.startElement("draw:custom-shape");

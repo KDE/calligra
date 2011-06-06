@@ -89,9 +89,12 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
                 // temporary switch the used KoTextPage to be sure the proper page-numbers are displayed.
                 KWPage originalpage = m_pageManager->page(shape);
                 Q_ASSERT(originalpage.isValid());
-                data->rootArea()->setPage(new KWPage(copypage));
+                KoTextLayoutRootArea *area = data->rootArea();
+                if (area)
+                    area->setPage(new KWPage(copypage));
                 shape->paint(painter, converter);
-                data->rootArea()->setPage(new KWPage(originalpage));
+                if (area)
+                    area->setPage(new KWPage(originalpage));
             }
             painter.restore();
             if (shape->border()) {
