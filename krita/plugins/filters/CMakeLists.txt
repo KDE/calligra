@@ -22,5 +22,6 @@ add_subdirectory( cubismfilter )
 add_subdirectory( levelfilter )
 add_subdirectory( dodgeburn )
 add_subdirectory( phongbumpmap )
+add_subdirectory( openclfitler )
 
 message(STATUS "Filters that still need to be fixed: bumpmap")
