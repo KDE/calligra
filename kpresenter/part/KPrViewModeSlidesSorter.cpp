@@ -167,7 +167,7 @@ void KPrViewModeSlidesSorter::paint(KoPACanvasBase* /*canvas*/, QPainter& /*pain
 {
 }
 
-void KPrViewModeSlidesSorter::paintEvent( KoPACanvas * canvas, QPaintEvent* event )
+void KPrViewModeSlidesSorter::paintEvent( KoPACanvas *canvas, QPaintEvent *event )
 {
     Q_UNUSED(canvas);
     Q_UNUSED(event);
@@ -377,8 +377,8 @@ QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
         return slides;
     }
 
-    foreach (const QModelIndex & index, selectedItems) {
-        KoPAPageBase * page = m_view->kopaDocument()->pageByIndex(index.row (), false);
+    foreach (const QModelIndex &index, selectedItems) {
+        KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(index.row (), false);
         if (page) {
             slides.append(page);
         }
@@ -386,7 +386,7 @@ QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
 
     //order slides
     QMap<int, KoPAPageBase*> map;
-    foreach (KoPAPageBase* slide, slides)
+    foreach (KoPAPageBase *slide, slides)
         map.insert(m_view->kopaDocument()->pages(false).indexOf(slide), slide);
     slides = map.values();
 
@@ -586,7 +586,8 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
             animation->setDuration(duration);
             animation->setStartValue(m_customSlidesShowView->maximumHeight());
              animation->setEndValue(0);
-        } else {
+        }
+        else {
             animation->setDuration(duration);
             animation->setStartValue(0);
             animation->setEndValue(m_slidesSorter->height()/2);

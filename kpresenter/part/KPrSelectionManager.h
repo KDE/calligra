@@ -42,9 +42,9 @@ class KPrSelectionManager : public QObject
     Q_OBJECT
 
 public:
-    KPrSelectionManager(QAbstractItemView* parent, KoPADocument* document=0);
+    KPrSelectionManager(QAbstractItemView *parent, KoPADocument *document=0);
     virtual ~KPrSelectionManager();
-    virtual bool eventFilter(QObject* watched, QEvent* event);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 
 public slots:
     /**
@@ -58,23 +58,23 @@ signals:
     void selectionChanged();
 
 private slots:
-    void slotEntered(const QModelIndex& index);
+    void slotEntered(const QModelIndex &index);
     void slotViewportEntered();
     void setItemSelected(bool selected);
-    void slotRowsRemoved(const QModelIndex& parent, int start, int end);
-    void slotSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotRowsRemoved(const QModelIndex &parent, int start, int end);
+    void slotSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private:
-    KoPAPageBase* pageForIndex(const QModelIndex& index) const;
-    const QModelIndex indexForPage(KoPAPageBase* page) const;
+    KoPAPageBase* pageForIndex(const QModelIndex &index) const;
+    const QModelIndex indexForPage(KoPAPageBase *page) const;
     void applyPointingHandCursor();
     void restoreCursor();
 
 private:
-    QAbstractItemView* m_view;
-    KPrSelectionToggle* m_toggle;
+    QAbstractItemView *m_view;
+    KPrSelectionToggle *m_toggle;
     bool m_connected;
     bool m_appliedPointingHandCursor;
-    KoPADocument* m_document;
+    KoPADocument *m_document;
 };
 #endif // KPRSELECTIONMANAGER_H

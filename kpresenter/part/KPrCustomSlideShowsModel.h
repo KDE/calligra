@@ -54,7 +54,7 @@ public:
 
     virtual QStringList mimeTypes() const;
 
-    virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
+    virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
 
     virtual Qt::DropActions supportedDropActions() const;
 
@@ -74,7 +74,7 @@ public:
 
     QStringList customShowsNamesList() const;
 
-    void setDocument(KPrDocument* document);
+    void setDocument(KPrDocument *document);
 
     void updateCustomShow(QString name, QList<KoPAPageBase *> newCustomShow);
 

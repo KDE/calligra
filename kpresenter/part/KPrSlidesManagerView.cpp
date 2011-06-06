@@ -99,7 +99,7 @@ void KPrSlidesManagerView::startDrag(Qt::DropActions supportedActions)
             return;
         }
 
-        QDrag* drag = new QDrag(this);
+        QDrag *drag = new QDrag(this);
         drag->setPixmap(createDragPixmap());
         drag->setMimeData(data);
 
@@ -212,7 +212,8 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
      if (itemCount > 9) {
          xCount = 4;
          size = KIconLoader::SizeMedium;
-     } else if (itemCount > 5) {
+     }
+     else if (itemCount > 5) {
          xCount = 3;
          size = KIconLoader::SizeLarge;
      }
@@ -236,7 +237,7 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
      QPainter painter(&dragPixmap);
      int x = 0;
      int y = 0;
-     foreach (const QModelIndex& selectedIndex, selectedIndexes) {
+     foreach (const QModelIndex &selectedIndex, selectedIndexes) {
          const QIcon icon = (model()->data(selectedIndex, Qt::DecorationRole)).value<QIcon>();
          painter.drawPixmap(x, y, icon.pixmap(size, size));
 

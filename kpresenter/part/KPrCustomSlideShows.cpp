@@ -97,7 +97,7 @@ int KPrCustomSlideShows::indexByPage(const QString &name, KoPAPageBase *page) co
     return pages.indexOf(page);
 }
 
-void KPrCustomSlideShows::addSlideToAll( KoPAPageBase* page, unsigned int position )
+void KPrCustomSlideShows::addSlideToAll( KoPAPageBase *page, unsigned int position )
 {
     QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
     //FIXME: should we allow negative index?

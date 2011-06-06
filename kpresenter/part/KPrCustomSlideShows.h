@@ -104,7 +104,7 @@ public:
      * @return a int index of the page within the SlideShow if it was found
      *         -1 if the page was not found
      */
-    int indexByPage(const QString &name, KoPAPageBase * page) const;
+    int indexByPage(const QString &name, KoPAPageBase *page) const;
 
     /**
      * @brief Insert a slide to the right of the given position of all the known custom SlideShows.
@@ -115,7 +115,7 @@ public:
      * If it's 0 it will be prepended to the list, if it's the size it will be appended to the list.
      * Negative numbers can be used to count backwards.
      */
-    void addSlideToAll( KoPAPageBase* page, unsigned int position );
+    void addSlideToAll( KoPAPageBase *page, unsigned int position );
 
     /**
      * @brief Insert a  list of slides to the right of the given position of all the known custom SlideShows.
@@ -131,7 +131,7 @@ public:
      *
      * @param slide slide to be removed
      */
-    void removeSlideFromAll( KoPAPageBase* page );
+    void removeSlideFromAll( KoPAPageBase *page );
 
     /**
      * @brief Deletes all the ocurrencies of a given list of slides from all the known custom SlideShows

@@ -41,7 +41,7 @@
 #include <QRect>
 #include <QTimeLine>
 
-KPrSelectionManager::KPrSelectionManager(QAbstractItemView* parent, KoPADocument* document) :
+KPrSelectionManager::KPrSelectionManager(QAbstractItemView *parent, KoPADocument *document) :
     QObject(parent),
     m_view(parent),
     m_toggle(0),
@@ -70,7 +70,7 @@ KPrSelectionManager::~KPrSelectionManager()
 {
 }
 
-bool KPrSelectionManager::eventFilter(QObject* watched, QEvent* event)
+bool KPrSelectionManager::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_view->viewport()) {
         switch (event->type()) {
@@ -95,7 +95,8 @@ bool KPrSelectionManager::eventFilter(QObject* watched, QEvent* event)
         default:
             break;
         }
-    } else if (watched == m_toggle) {
+    }
+    else if (watched == m_toggle) {
         switch (event->type()) {
         case QEvent::Enter:
             QApplication::changeOverrideCursor(Qt::ArrowCursor);
@@ -120,7 +121,7 @@ void KPrSelectionManager::reset()
     }
 }
 
-void KPrSelectionManager::slotEntered(const QModelIndex& index)
+void KPrSelectionManager::slotEntered(const QModelIndex &index)
 {
     const bool isSelectionCandidate = index.isValid() &&
                                       (QApplication::mouseButtons() == Qt::NoButton);
@@ -140,7 +141,8 @@ void KPrSelectionManager::slotEntered(const QModelIndex& index)
                     SLOT(slotSelectionChanged(const QItemSelection&, const QItemSelection&)));
             m_connected = true;
         }
-    } else {
+    }
+    else {
         disconnect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
                    this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
         disconnect(m_view->selectionModel(),
@@ -164,7 +166,8 @@ void KPrSelectionManager::slotEntered(const QModelIndex& index)
         int toggleSize = KIconLoader::SizeSmall;
         if (iconHeight >= KIconLoader::SizeEnormous) {
             toggleSize = KIconLoader::SizeMedium;
-        } else if (iconHeight >= KIconLoader::SizeLarge) {
+        }
+        else if (iconHeight >= KIconLoader::SizeLarge) {
             toggleSize = KIconLoader::SizeSmallMedium;
         }
 
@@ -180,10 +183,11 @@ void KPrSelectionManager::slotEntered(const QModelIndex& index)
         m_toggle->resize(toggleSize, toggleSize);
         m_toggle->move(rect.topLeft());
 
-        QItemSelectionModel* selModel = m_view->selectionModel();
+        QItemSelectionModel *selModel = m_view->selectionModel();
         m_toggle->setChecked(selModel->isSelected(index));
         m_toggle->show();
-    } else {
+    }
+    else {
         m_toggle->setIndex(QModelIndex());
     }
 }
@@ -203,10 +207,11 @@ void KPrSelectionManager::setItemSelected(bool selected)
     if (m_toggle && m_toggle->index().isValid()) {
         QModelIndex index = m_toggle->index();
         if (index.isValid()) {
-            QItemSelectionModel* selModel = m_view->selectionModel();
+            QItemSelectionModel *selModel = m_view->selectionModel();
             if (selected) {
                 selModel->select(index, QItemSelectionModel::Select);
-            } else {
+            }
+            else {
                 selModel->select(index, QItemSelectionModel::Deselect);
             }
             selModel->setCurrentIndex(index, QItemSelectionModel::Current);
@@ -214,7 +219,7 @@ void KPrSelectionManager::setItemSelected(bool selected)
     }
 }
 
-void KPrSelectionManager::slotRowsRemoved(const QModelIndex& parent, int start, int end)
+void KPrSelectionManager::slotRowsRemoved(const QModelIndex &parent, int start, int end)
 {
     Q_UNUSED(parent);
     Q_UNUSED(start);
@@ -225,8 +230,8 @@ void KPrSelectionManager::slotRowsRemoved(const QModelIndex& parent, int start, 
     restoreCursor();
 }
 
-void KPrSelectionManager::slotSelectionChanged(const QItemSelection& selected,
-                                            const QItemSelection& deselected)
+void KPrSelectionManager::slotSelectionChanged(const QItemSelection &selected,
+                                            const QItemSelection &deselected)
 {
     // The selection has been changed outside the scope of the selection manager
     // (e. g. by the rubberband or the "Select All" action). Take care updating
@@ -245,18 +250,14 @@ void KPrSelectionManager::slotSelectionChanged(const QItemSelection& selected,
     }
 }
 
-KoPAPageBase* KPrSelectionManager::pageForIndex(const QModelIndex& index) const
+KoPAPageBase* KPrSelectionManager::pageForIndex(const QModelIndex &index) const
 {
-    //QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
-    //const QModelIndex pageIndex = proxyModel->mapToSource(index);
     return m_document->pageByIndex(index.row(), false);
 }
 
-const QModelIndex KPrSelectionManager::indexForPage(KoPAPageBase* page) const
+const QModelIndex KPrSelectionManager::indexForPage(KoPAPageBase *page) const
 {
-    //QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
     QModelIndex pageIndex = m_view->model()->index(m_document->pageIndex(page), 0, QModelIndex());
-    //return proxyModel->mapFromSource(pageIndex);
     return pageIndex;
 }
 

@@ -38,7 +38,7 @@ public:
 
     ~KPrSlidesManagerView();
 
-    virtual void paintEvent ( QPaintEvent * event);
+    virtual void paintEvent ( QPaintEvent *event);
 
 
      //It emits a slideDblClick signal and then calls the parent
@@ -49,9 +49,9 @@ public:
 
     virtual void startDrag ( Qt::DropActions supportedActions );
 
-    virtual void dropEvent(QDropEvent* ev);
+    virtual void dropEvent(QDropEvent *ev);
 
-    virtual void dragMoveEvent(QDragMoveEvent* ev);
+    virtual void dragMoveEvent(QDragMoveEvent *ev);
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
 
@@ -124,7 +124,7 @@ private:
 
     QRect m_itemSize;
     bool m_dragingFlag;
-    KoToolProxy * m_toolProxy;
+    KoToolProxy *m_toolProxy;
 
 };
 

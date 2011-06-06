@@ -24,7 +24,7 @@
 #include "KPrCustomSlideShowsModel.h"
 
 KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(
-    KPrDocument * doc, KPrCustomSlideShowsModel *model, QString name, QList<KoPAPageBase *> newCustomShow, QUndoCommand *parent)
+    KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, QList<KoPAPageBase *> newCustomShow, QUndoCommand *parent)
 : QUndoCommand( parent )
 , m_doc(doc)
 , m_model(model)

@@ -29,7 +29,7 @@ class KPrCustomSlideShowsModel;
 class KPrEditCustomSlideShowsCommand: public QUndoCommand
 {
 public:
-    KPrEditCustomSlideShowsCommand(KPrDocument * doc, KPrCustomSlideShowsModel *model, QString name, QList<KoPAPageBase *> newCustomShow, QUndoCommand *parent = 0 );
+    KPrEditCustomSlideShowsCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, QList<KoPAPageBase *> newCustomShow, QUndoCommand *parent = 0 );
 
     virtual ~KPrEditCustomSlideShowsCommand();
 
@@ -39,7 +39,7 @@ public:
     virtual void undo();
 
 private:
-    KPrDocument * m_doc;
+    KPrDocument *m_doc;
     KPrCustomSlideShowsModel *m_model;
     QString m_name;
     QList<KoPAPageBase *> m_newCustomShow;

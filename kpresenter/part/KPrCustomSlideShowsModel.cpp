@@ -101,7 +101,8 @@ Qt::ItemFlags KPrCustomSlideShowsModel::flags(const QModelIndex &index) const
 
     if (index.isValid()) {
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
-    } else {
+    }
+    else {
         return Qt::ItemIsDropEnabled | defaultFlags;
     }
 }
@@ -173,9 +174,11 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
 
         if (row != -1) {
             beginRow = row;
-        } else if (parent.isValid()) {
+        }
+        else if (parent.isValid()) {
             beginRow = parent.row();
-        } else {
+        }
+        else {
             beginRow = rowCount(QModelIndex());
         }
 
@@ -198,7 +201,7 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
 
             //order slides
             QMap<int, KoPAPageBase*> map;
-            foreach (KoPAPageBase* slide, slides)
+            foreach (KoPAPageBase *slide, slides)
                 map.insert(m_document->pageIndex(slide), slide);
 
             slides = map.values();
@@ -225,7 +228,7 @@ bool KPrCustomSlideShowsModel::dropMimeData(const QMimeData *data, Qt::DropActio
 
             //order slides
             QMap<int, KoPAPageBase*> map;
-            foreach (KoPAPageBase* slide, slides)
+            foreach (KoPAPageBase *slide, slides)
                 map.insert(m_customShows->indexByPage(m_currentSlideShowName, slide), slide);
 
             slides = map.values();
@@ -320,7 +323,7 @@ bool KPrCustomSlideShowsModel::doCustomShowAction(CustomShowActions c_action, QL
     if (c_action == KPrCustomSlideShowsModel::SLIDES_ADD) {
         //insert the slides on the current custom show
         int i = beginRow;
-        foreach(KoPAPageBase* page, slides)
+        foreach(KoPAPageBase *page, slides)
         {
             //You can insert a slide just one time.
             if (!selectedSlideShow.contains(page)) {
@@ -329,26 +332,29 @@ bool KPrCustomSlideShowsModel::doCustomShowAction(CustomShowActions c_action, QL
             }
         }
         updated = true;
-    } else if (c_action == KPrCustomSlideShowsModel::SLIDES_MOVE) {
+    }
+    else if (c_action == KPrCustomSlideShowsModel::SLIDES_MOVE) {
        //move the slides on the current custom show
        // slides order within the slides list is important to get the expected behaviour
        if (beginRow >= selectedSlideShow.count())
            beginRow = selectedSlideShow.count() - 1;
 
-        foreach(KoPAPageBase* page, slides)
+        foreach(KoPAPageBase *page, slides)
         {
             int from = selectedSlideShow.indexOf(page);
             selectedSlideShow.move(from, beginRow);
         }
         updated = true;
-    } else if (c_action == KPrCustomSlideShowsModel::SLIDES_DELETE) {
+    }
+    else if (c_action == KPrCustomSlideShowsModel::SLIDES_DELETE) {
         //delete de slides on the current custom show
-        foreach(KoPAPageBase* page, slides)
+        foreach(KoPAPageBase *page, slides)
         {
             selectedSlideShow.removeAll(page);
         }
         updated = true;
-    } else {
+    }
+    else {
         updated = false;
     }
 

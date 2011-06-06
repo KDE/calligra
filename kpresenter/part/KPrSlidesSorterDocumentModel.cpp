@@ -172,7 +172,8 @@ Qt::ItemFlags KPrSlidesSorterDocumentModel::flags(const QModelIndex &index) cons
 
     if (index.isValid()) {
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
-    } else {
+    }
+    else {
         return Qt::ItemIsDropEnabled | defaultFlags;
     }
 }
@@ -215,7 +216,7 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
 
     //order slides
     QMap<int, KoPAPageBase*> map;
-    foreach (KoPAPageBase* slide, slides)
+    foreach (KoPAPageBase *slide, slides)
         map.insert(m_document->pages(false).indexOf(slide), slide);
     slides = map.values();
 
@@ -223,13 +224,15 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
 
     if (row != -1) {
         beginRow = row;
-    } else if (parent.isValid()) {
+    }
+    else if (parent.isValid()) {
         beginRow = parent.row();
-    } else {
+    }
+    else {
         beginRow = rowCount(QModelIndex());
     }
 
-    KoPAPageBase * pageAfter = 0;
+    KoPAPageBase *pageAfter = 0;
 
     if ((beginRow - 1) >= 0) {
         pageAfter = m_document->pageByIndex(beginRow - 1,false);
@@ -252,15 +255,15 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
             QMenu popup;
             QString seq = QKeySequence(Qt::ShiftModifier).toString();
             seq.chop(1);
-            QAction* popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
+            QAction *popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
             popupMoveAction->setIcon(KIcon("go-jump"));
             seq = QKeySequence(Qt::ControlModifier).toString();
             seq.chop(1);
-            QAction* popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
+            QAction *popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
             popupCopyAction->setIcon(KIcon("edit-copy"));
             seq = QKeySequence( Qt::ControlModifier + Qt::ShiftModifier ).toString();
             seq.chop(1);
-            QAction* popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
+            QAction *popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
             popupCancelAction->setIcon(KIcon("process-stop"));
 
             popup.addAction(popupMoveAction);
@@ -269,7 +272,7 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
             popup.addSeparator();
             popup.addAction(popupCancelAction);
 
-            QAction* result = popup.exec(QCursor::pos());
+            QAction *result = popup.exec(QCursor::pos());
 
             if(result == popupCopyAction)
                 action = Qt::CopyAction;
@@ -278,11 +281,14 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
             else {
                 return;
             }
-     } else if ((modifiers & Qt::ControlModifier) != 0) {
+     }
+     else if ((modifiers & Qt::ControlModifier) != 0) {
          action = Qt::CopyAction;
-     } else if ((modifiers & Qt::ShiftModifier) != 0) {
+     }
+     else if ((modifiers & Qt::ShiftModifier) != 0) {
          action = Qt::MoveAction;
-     } else {
+     }
+     else {
          return;
      }
 

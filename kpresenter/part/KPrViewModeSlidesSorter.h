@@ -43,8 +43,8 @@ public:
     KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas);
     ~KPrViewModeSlidesSorter();
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
-    void paintEvent(KoPACanvas * canvas, QPaintEvent* event);
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);
+    void paintEvent(KoPACanvas *canvas, QPaintEvent *event);
     void tabletEvent(QTabletEvent *event, const QPointF &point);
     void mousePressEvent(QMouseEvent *event, const QPointF &point);
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
@@ -52,7 +52,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-    void wheelEvent(QWheelEvent * event, const QPointF &point);
+    void wheelEvent(QWheelEvent *event, const QPointF &point);
 
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
@@ -122,9 +122,9 @@ protected:
     void saveZoomConfig(int zoom);
 
 private:
-    KPrSlidesManagerView * m_slidesSorter;
-    KPrSlidesManagerView * m_customSlidesShowView;
-    KPrSlidesSorterDocumentModel * m_documentModel;
+    KPrSlidesManagerView *m_slidesSorter;
+    KPrSlidesManagerView *m_customSlidesShowView;
+    KPrSlidesSorterDocumentModel *m_documentModel;
     int m_zoom;
     KPrSelectionManager *m_selectionManagerSlidesSorter;
     QWidget *m_centralWidget;
@@ -167,9 +167,9 @@ private slots:
     void activateNormalViewMode();
 
     /** Provides a custom context menu for the slides sorter view*/
-    void slidesSorterContextMenu(QContextMenuEvent* event);
+    void slidesSorterContextMenu(QContextMenuEvent *event);
 
-    void customSlideShowsContextMenu(QContextMenuEvent* event);
+    void customSlideShowsContextMenu(QContextMenuEvent *event);
 
     void customShowChanged(int showNumber);
 
