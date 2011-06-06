@@ -7,6 +7,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
     ${CMAKE_SOURCE_DIR}/kplato/libs/models
     ${CMAKE_BINARY_DIR}/kplato/libs/models
+    ${CMAKE_SOURCE_DIR}/kplato/libs/ui/reports/odt
     ${CMAKE_BINARY_DIR}/kplato/libs/ui
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
@@ -35,6 +36,13 @@ set(kplatoui_LIB_SRCS
     reports/reportsourceeditor.cpp
     reports/reportscripts.cpp
     reports/reportexportpanel.cpp
+    reports/odt/ReportODTRenderer.cpp
+    reports/odt/KoSimpleOdtDocument.cpp
+    reports/odt/KoSimpleOdtImage.cpp
+    reports/odt/KoSimpleOdtPicture.cpp
+    reports/odt/KoSimpleOdtTextBox.cpp
+    reports/odt/KoSimpleOdtLine.cpp
+    reports/odt/KoSimpleOdtPrimitive.cpp
 
     kptganttitemdelegate.cpp
 

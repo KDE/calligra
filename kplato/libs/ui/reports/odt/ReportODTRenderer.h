@@ -20,7 +20,7 @@
 #ifndef REPORTODTRENDERER_H
 #define REPORTODTRENDERER_H
 
-#include <ReportRendererBase.h>
+#include <KoReportRendererBase.h>
 
 class QTextDocument;
 

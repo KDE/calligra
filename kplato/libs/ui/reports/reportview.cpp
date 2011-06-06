@@ -26,7 +26,7 @@
 #include "reportsourceeditor.h"
 #include "reportscripts.h"
 #include "reportexportpanel.h"
-
+#include "ReportODTRenderer.h"
 #include "kptnodechartmodel.h"
 
 #include <KoReportPage.h>
@@ -349,8 +349,8 @@ void ReportView::slotExportFinished( int result )
 void ReportView::exportToOdt( KoReportRendererContext &context )
 {
     kDebug()<<"Export to odt:"<<context.destinationUrl;
-    KoReportRendererBase *renderer;
-    renderer = m_factory.createInstance("odt");
+    KoReportRendererBase *renderer = new ReportODTRenderer();
+//    renderer = m_factory.createInstance("odt");
     if ( renderer == 0 ) {
         kError()<<"Cannot create odt renderer";
         return;

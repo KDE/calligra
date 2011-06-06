@@ -17,10 +17,11 @@
  */
 
 #include "ReportODTRenderer.h"
-#include "odt/KoSimpleOdtDocument.h"
-#include "odt/KoSimpleOdtTextBox.h"
-#include "odt/KoSimpleOdtImage.h"
-#include "odt/KoSimpleOdtPicture.h"
+#include "KoSimpleOdtDocument.h"
+#include "KoSimpleOdtTextBox.h"
+#include "KoSimpleOdtImage.h"
+#include "KoSimpleOdtPicture.h"
+#include "KoSimpleOdtLine.h"
 #include "renderobjects.h"
 #include <kdebug.h>
 
@@ -54,6 +55,10 @@ bool ReportODTRenderer::render(const KoReportRendererContext& context, ORODocume
 /*                KoSimpleOdtPrimitive *sp = new KoSimpleOdtPicture(static_cast<OROPicture*>(prim));
                 sp->setUID(uid++);
                 doc.addPrimitive(sp);*/
+            } else if (prim->type() == OROLine::Line) {
+                KoSimpleOdtPrimitive *sp = new KoSimpleOdtLine(static_cast<OROLine*>(prim));
+                sp->setUID(uid++);
+                doc.addPrimitive(sp);
             } else {
                 kDebug() << "unhandled primitive type";
             }

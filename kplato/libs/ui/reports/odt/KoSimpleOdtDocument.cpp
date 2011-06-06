@@ -42,6 +42,11 @@ KoSimpleOdtDocument::KoSimpleOdtDocument()
 
 KoSimpleOdtDocument::~KoSimpleOdtDocument()
 {
+    foreach (const QList<KoSimpleOdtPrimitive*> &lst, m_pagemap) {
+        foreach(KoSimpleOdtPrimitive *p, lst) {
+            delete p;
+        }
+    }
 }
 
 void KoSimpleOdtDocument::setPageOptions(const ReportPageOptions &pageOptions)
@@ -66,7 +71,18 @@ QFile::FileError KoSimpleOdtDocument::saveDocument(const QString& path)
 
     KoOdfWriteStore oasisStore(store);
     manifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.text");
+    if (!manifestWriter) {
+        return QFile::NoError;
+    }
+    // save extra data like images...
+    foreach (const QList<KoSimpleOdtPrimitive*> &lst, m_pagemap) {
+        foreach(KoSimpleOdtPrimitive *p, lst) {
+            p->saveData(store, manifestWriter);
+        }
+    }
+    kDebug()<<"data saved";
     KoGenStyles coll;
+    createStyles(coll); // create basic styles
     bool ok = createContent(&oasisStore, coll);
     if (ok) {
         // save styles to styles.xml
@@ -121,9 +137,6 @@ void KoSimpleOdtDocument::createStyles(KoGenStyles &coll)
 
 bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &coll)
 {
-    // create basic styles
-    createStyles(coll);
-
     KoXmlWriter* bodyWriter = store->bodyWriter();
     KoXmlWriter* contentWriter = store->contentWriter();
 
@@ -136,46 +149,21 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
     manifestWriter->addManifestEntry("content.xml",  "text/xml");
 //     manifestWriter->addManifestEntry("styles.xml",  "text/xml");
 
-    // save extra data like images...
-    foreach (const QList<KoSimpleOdtPrimitive*> &lst, m_pagemap) {
-        foreach(KoSimpleOdtPrimitive *p, lst) {
-            p->saveData(store->store(), manifestWriter);
-        }
-    }
-
-
-    // FIXME this is dummy and hardcoded, replace with real font names
-    
     contentWriter->startElement("office:automatic-styles");
-    
-//     contentWriter->startElement("style:style");
-//     contentWriter->addAttribute("style:parent-style-name", "Frame");
-//     contentWriter->addAttribute("style:name", "textbox");
-//     contentWriter->addAttribute("style:family", "graphic");
-//     contentWriter->startElement("style:graphic-properties");
-//     contentWriter->addAttribute("style:vertical-pos", "from-top");
-//     contentWriter->addAttribute("style:vertical-rel", "page");
-//     contentWriter->addAttribute("style:horizontal-pos", "from-left");
-//     contentWriter->addAttribute("style:horizontal-rel", "page");
-//     contentWriter->endElement(); // style:graphic-properties
-//     contentWriter->endElement(); // style:style
 
     //new page
     contentWriter->startElement("style:style");
     contentWriter->addAttribute("style:name", "NewPage");
     contentWriter->addAttribute("style:family", "paragraph");
     contentWriter->addAttribute("style:font-name", "Arial");
-//    contentWriter->addAttribute("style:parent-style-name", "Standard");
     contentWriter->startElement("style:paragraph-properties");
     contentWriter->addAttribute("fo:break", "page");
-    
     contentWriter->endElement(); // style:fo:break
     contentWriter->endElement(); // style:style
     
      // office:body
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
-    contentWriter->addAttribute("text:use-soft-page-breaks", "true");
 
     contentWriter->startElement("text:sequence-decls");
     contentWriter->startElement("text:sequence-decl");
