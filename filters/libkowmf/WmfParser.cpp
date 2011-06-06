@@ -101,6 +101,7 @@ bool WmfParser::load(const QByteArray& array)
 
     QDataStream stream(mBuffer);
     stream.setByteOrder(QDataStream::LittleEndian);
+
     mStackOverflow = false;
     mLayout = LAYOUT_LTR;
     mTextAlign = 0;
@@ -269,6 +270,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
         mObjHandleTab[ i ] = 0;
     }
 
+    mDeviceContext = new WmfDeviceContext();
+
     quint16 recordType;
     quint32 size;
     int  bufferOffset;
@@ -346,6 +349,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> color;
                     m_backend->setBackgroundColor(qtColor(color));
+
+                    mDeviceContext->backgroundColor = qtColor(color);
+                    mDeviceContext->changedItems |= DCBgTextColor;
                 }
                 break;
             case (META_SETBKMODE & 0xff):
@@ -353,16 +359,24 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     quint16 bkMode;
 
                     stream >> bkMode;
-                    if (bkMode == 1)
+                    //kDebug(31000) << "New bkMode: " << bkMode;
+
+                    if (bkMode == TRANSPARENT) // TRANSPARENT=1, OPAQUE=2
                         m_backend->setBackgroundMode(Qt::TransparentMode);
                     else
                         m_backend->setBackgroundMode(Qt::OpaqueMode);
+
+                    mDeviceContext->bgMixMode = bkMode;
+                    mDeviceContext->changedItems |= DCBgMixMode;
                 }
                 break;
             case (META_SETMAPMODE & 0xff):
                 {
                     stream >> mMapMode;
                     //kDebug(31000) << "New mapmode: " << mMapMode;
+
+                    //mDeviceContext->FontMapMode = mMapMode;Not defined yet
+                    mDeviceContext->changedItems |= DCFontMapMode;
                 }
                 break;
             case (META_SETROP2 & 0xff):
@@ -371,6 +385,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> rop;
                     m_backend->setCompositionMode(winToQtComposition(rop));
+
+                    mDeviceContext->rop = rop;
+                    mDeviceContext->changedItems |= DCFgMixMode;
                 }                break;
             case (META_SETRELABS & 0xff):
                 break;
@@ -380,6 +397,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> winding;
                     mWinding = (winding != 0);
+
+                    mDeviceContext->polyFillMode = winding;
+                    mDeviceContext->changedItems |= DCPolyFillMode;
                 }
                 break;
             case (META_SETSTRETCHBLTMODE & 0xff):
@@ -391,8 +411,10 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> color;
                     mTextColor = qtColor(color);
-
                     m_backend->setTextPen(QPen(mTextColor));
+
+                    mDeviceContext->foregroundTextColor = mTextColor;
+                    mDeviceContext->changedItems |= DCFgTextColor;
                 }
                 break;
             case (META_SETTEXTJUSTIFICATION & 0xff):
@@ -502,7 +524,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
                 }
                 break;
+
             // ----------------------------------------------------------------
+            //                         Drawing records
 
             case (META_LINETO & 0xff):
                 {
@@ -958,11 +982,14 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // negative value allowed for width and height
                     stream >> layout >> reserved;
+#if DEBUG_RECORDS
+                    kDebug(31000) << "layout=" << layout;
+#endif
                     mLayout = (WmfLayout)layout;
 
-#if DEBUG_RECORDS
-                    kDebug(31000) << "setLayout: layout=" << layout;
-#endif
+                    mDeviceContext->layoutMode = mLayout;
+                    mDeviceContext->changedItems |= DCLayoutMode;
+
                 }
                 break;
             case (META_DELETEOBJECT & 0xff):
@@ -1139,6 +1166,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     }
     delete[] mObjHandleTab;
     mObjHandleTab = 0;
+
+    delete mDeviceContext;
+    mDeviceContext = 0;
 
     return true;
 }
