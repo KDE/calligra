@@ -67,7 +67,6 @@
 #include <KTemporaryFile>
 
 #include <kmessagebox.h>
-#include <krun.h>
 #include <kvbox.h>
 #include <kmimetype.h>
 #include <kprocess.h>
