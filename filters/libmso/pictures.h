@@ -21,6 +21,7 @@
 
 #include <pole.h>
 #include <KoStore.h>
+#include <KoXmlWriter.h>
 #include "generated/simpleParser.h"
 
 struct PictureReference {
@@ -53,5 +54,17 @@ PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a,
  * @return unique identifier of the pixel data in the BLIP
  **/
 QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32& offset);
+
+/**
+ * Save pictures into the ODF store and write the appropriate manifest entry.
+ *
+ * @param ODF store
+ * @param manifest writer
+ * @param rgfb list of records that specifies the BLIP data.  The rgfb list is
+ * either part of the OfficeArtBStoreContainer or OfficeArtBStoreDelay.
+ * @return map of picture names vs. MD4 digests of the picture data.
+ **/
+QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const QList<MSO::OfficeArtBStoreContainerFileBlock>* rgfb);
+
 
 #endif

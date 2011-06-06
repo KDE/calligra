@@ -1048,7 +1048,7 @@ public:
 };
 class OfficeArtBStoreDelay : public StreamOffset {
 public:
-    QList<OfficeArtBStoreContainerFileBlock> anon1;
+    QList<OfficeArtBStoreContainerFileBlock> rgfb;
     OfficeArtBStoreDelay(void* /*dummy*/ = 0) {}
 };
 class OfficeArtRecordHeader : public StreamOffset {

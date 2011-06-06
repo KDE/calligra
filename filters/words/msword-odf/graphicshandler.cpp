@@ -44,7 +44,7 @@ using namespace MSO;
 
 using Conversion::twipsToPt;
 
-//#define DEBUG_GHANDLER
+#define DEBUG_GHANDLER
 
 // Specifies the format of the picture data for the PICF structure.
 enum
@@ -199,13 +199,6 @@ void KWordGraphicsHandler::init()
     //create default GraphicStyle using information from OfficeArtDggContainer
     defineDefaultGraphicStyle(m_mainStyles);
 
-    //parse and store floating pictures  
-    if (parseFloatingPictures()) {
-        kDebug(30513) << "Failed to parse floating shapes!";
-    } else {
-        m_picNames = createFloatingPictures(m_store, m_manifestWriter);
-    }
-
     //Provide the backgroud color information to the Document
     DrawStyle ds = getBgDrawStyle();
     if (ds.fFilled()) {
@@ -215,6 +208,22 @@ void KWordGraphicsHandler::init()
         if (tmp != m_document->currentBgColor()) {
             m_document->updateBgColor(tmp);
         }
+    }
+
+    const OfficeArtBStoreContainer* blipStore = 0;
+    blipStore = m_officeArtDggContainer.blipStore.data();
+
+    if (!blipStore) {
+#ifdef DEBUG_GHANDLER
+        kDebug(30513) << "Container of BLIPs not present.";
+#endif
+        return;
+    }
+    //parse and store floating pictures
+    if (!parseFloatingPictures(blipStore)) {
+        m_store->enterDirectory("Pictures");
+        m_picNames = createPictures(m_store, m_manifestWriter, &blipStore->rgfb);
+        m_store->leaveDirectory();
     }
 }
 
@@ -667,14 +676,14 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
     }
 }
 
-int KWordGraphicsHandler::parseFloatingPictures(void)
+int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* blipStore)
 {
     kDebug(30513);
 
+    if (!blipStore) return(1);
+
     // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
     LEInputStream& in = m_document->wdocumentStream();
-    const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (!blipStore) return(1);
 
     for (int i = 0; i < blipStore->rgfb.size(); i++) {
         OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
@@ -735,40 +744,24 @@ int KWordGraphicsHandler::parseFloatingPictures(void)
                     }
                     in.rewind(_zero);
                 }
-            } //else there's an OfficeArtBlip inside
+#ifdef DEBUG_GHANDLER
+                else {
+                    kDebug(30513) << "File not in the delay stream, skipping!";
+                }
+#endif
+            } else {
+                //TODO: parse the OfficeArtBlip record that follows
+                kDebug(30513) << "Embedded BLIP found, no support at the moment!";
+            }
         }
     }
     return(0);
 }
 
-QMap<QByteArray, QString>
-KWordGraphicsHandler::createFloatingPictures(KoStore* store, KoXmlWriter* manifest)
-{
-    PictureReference ref;
-    QMap<QByteArray, QString> fileNames;
-
-    const OfficeArtBStoreContainer* blipStore = m_officeArtDggContainer.blipStore.data();
-    if (blipStore) {
-        store->enterDirectory("Pictures");
-        foreach (const OfficeArtBStoreContainerFileBlock& block, blipStore->rgfb) {
-            ref = savePicture(block, store);
-            if (ref.name.length() == 0) {
-                kDebug(30513) << "Note: Empty picture reference, probably an empty slot";
-                continue;
-	    }
-            manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
-            fileNames[ref.uid] = ref.name;
-        }
-        store->leaveDirectory();
-    }
-    return fileNames;
-}
-
 QString KWordGraphicsHandler::getPicturePath(quint32 pib) const
 {
-    quint32 n = pib - 1;
     quint32 offset = 0;
-    QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, n, offset);
+    QByteArray rgbUid = getRgbUid(m_officeArtDggContainer, pib, offset);
 
     if (rgbUid.length()) {
         if (m_picNames.contains(rgbUid)) {

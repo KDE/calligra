@@ -133,14 +133,14 @@ void MSO::parseOfficeArtBStoreDelay(LEInputStream& in, OfficeArtBStoreDelay& _s)
     while (!_atend) {
         _m = in.setMark();
         try {
-            _s.anon1.append(OfficeArtBStoreContainerFileBlock(&_s));
-            parseOfficeArtBStoreContainerFileBlock(in, _s.anon1.last());
+            _s.rgfb.append(OfficeArtBStoreContainerFileBlock(&_s));
+            parseOfficeArtBStoreContainerFileBlock(in, _s.rgfb.last());
         } catch(IncorrectValueException _e) {
-            _s.anon1.removeLast();
+            _s.rgfb.removeLast();
             _atend = true;
             in.rewind(_m);
         } catch(EOFException _e) {
-            _s.anon1.removeLast();
+            _s.rgfb.removeLast();
             _atend = true;
             in.rewind(_m);
         }

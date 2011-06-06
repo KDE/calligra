@@ -184,14 +184,13 @@ private:
 
     /**
      * Parse floating pictures data from the WordDocument stream.
+     *
+     * @param specifies the container for all the BLIPs that are used in all
+     * the drawings in the parent document.
+     *
      * @return 0 - success, 1 - failed
      */
-    int parseFloatingPictures(void);
-
-    /**
-     * Store floating pictures into ODT, write the appropriate manifest entry.
-     */
-    QMap<QByteArray, QString> createFloatingPictures(KoStore* store, KoXmlWriter* manifest);
+    int parseFloatingPictures(const MSO::OfficeArtBStoreContainer* blipStore);
 
     /**
      * Process the default properties for all drawing objects stored in
