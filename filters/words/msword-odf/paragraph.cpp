@@ -149,7 +149,7 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     }
     Q_ASSERT(msTextStyle);
 
-    QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
+    QString msTextStyleName = Conversion::styleName2QString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
     KoGenStyle *textStyle;
@@ -455,7 +455,7 @@ void Paragraph::setParagraphStyle(const wvWare::Style* paragraphStyle)
     kDebug(30513);
     m_paragraphStyle = paragraphStyle;
     m_odfParagraphStyle->addAttribute("style:parent-style-name",
-                                      Conversion::styleNameString(m_paragraphStyle->name()));
+                                      Conversion::styleName2QString(m_paragraphStyle->name()));
 }
 
 KoGenStyle* Paragraph::getOdfParagraphStyle()
@@ -1077,7 +1077,7 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
     }
     Q_ASSERT(msTextStyle);
 
-    QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
+    QString msTextStyleName = Conversion::styleName2QString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
     KoGenStyle *textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");

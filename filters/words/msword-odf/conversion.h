@@ -78,8 +78,15 @@ namespace Conversion
     /**
      * Special version of string() that replaces spaces with _20_, since style
      * names can't have spaces in them.
+     * @param UString
      */
-    QString styleNameString(const wvWare::UString& str);
+    QString styleName2QString(const wvWare::UString& str);
+
+    /**
+     * Replace spaces with _20_, since style names can't have spaces in them.
+     * @param QString
+     */
+    QString processStyleName(QString str);
 
     /**
      * Prepare text for inclusion in XML
