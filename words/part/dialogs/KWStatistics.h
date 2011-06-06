@@ -28,7 +28,7 @@
 class QTimer;
 class QTextDocument;
 class KoResourceManager;
-class KoAction;
+class KoActionf;
 class KoSelection;
 class KWDocument;
 
@@ -40,7 +40,7 @@ public:
                  KoSelection *selection = 0, QWidget *parent = 0);
 
 private slots:
-    void updateResource(int which);
+
     void updateData();
     void updateDataUi();
     void setAutoUpdate(int);
