@@ -21,6 +21,8 @@
     #define FRAME_H
 
     #include <QString>
+    #include <KoXmlReader.h>
+
 
     /*
     * This class is used to define the attributes of frames.
@@ -28,7 +30,7 @@
     * Instead of a new slide, in an animated SVG presentation, 
     * each frame is zoomed into.
     */
-  class Frame 
+  class Frame :public KoXmlElement
     {
       public:
         Frame();
@@ -39,27 +41,46 @@
       void setDefaultValues();
       void setTitle(const QString& title);
       void setRefId(const QString& refId); //Data type for ref id of groups/shapes?
+      void setTransitionProfile(const QString& transProfile);
+
+      void setHide(bool condition);
+      void setClip(bool condition);
+      void enableTimeout(bool condition);
+
       void setSequence(int seq);
-      void setZoomPercent(qreal zoomFactor);
-      void setTransitionStyle(const QString& transitionStyle); //-2,-1,0,1,2 ?
-      void setTransitionDuration(qreal timeMs);
+      void setZoomPercent(int zoomPercent);
+      void setTimeout(int timeoutMs);
+      void setTransitionDuration(int timeMs);
       
       QString title() const;
       QString refId() const; 
+      QString transitionProfile() const;
+      
+      bool isHide() const;
+      bool isClip() const;
+      bool isEnableTimeout() const;
+      
       int sequence() const;
-      qreal zoomPercent() const;
-      QString transitionStyle() const; 
-      qreal transitionDuration() const;
+      int zoomPercent() const;
+      int timeout() const;
+      int transitionDuration() const;
       
     private:
       QString m_title;
       QString m_refId;
-      QString m_transitionStyle;
+      QString m_transitionProfile;
       
+      bool m_hide;
+      bool m_clip;
+      bool m_timeoutEnable;
+
       int m_sequence;
+      int m_transitionZoomPercent;
+      int m_transitionDurationMs;
+      int m_timeoutMs;
+
       
-      qreal m_zoomFactor;
-      qreal m_timeMs;
+      
     };
     
     #endif /*FRAME_H*/

@@ -145,9 +145,10 @@
           *m_defs <<
           "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
 
-          *m_defs <<
-          "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ns1=\"http://sozi.baierouge.fr\" width=\"" <<
-          m_pageSize.width() << "pt\" height=\"" << m_pageSize.height() << "pt\">" << endl;
+          *m_defs << "<svg xmlns=\"http://www.w3.org/2000/svg\" ";
+          *m_defs << "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " ;
+          *m_defs << "xmlns:calligra=\"http://sozi.baierouge.fr\" "; //Namespace used for frame attributes
+          *m_defs << "width=\"" << m_pageSize.width() << "pt\" height=\"" << m_pageSize.height() << "pt\">" << endl;
           printIndentation(m_defs, ++m_indent2);
           *m_defs << "<defs>" << endl;
 
@@ -262,9 +263,7 @@
           //TODO: Still doesn't save text correctly.
           }
           }
-          //Save additonal attributes to m_frames
-          //This stream will be written to the doc before the </svg> tag
-          
+         
           forTesting(shape);// Adds a frame object to this shape
 
           SvgAnimationData * appData = dynamic_cast<SvgAnimationData*>( shape->applicationData() );
@@ -273,6 +272,7 @@
           
           saveFrame(frameObj);
       }
+      
       //This function will eventually be removed.
       //Only used for dummy data.
       void SvgWriter::forTesting(KoShape * shape)
@@ -280,19 +280,45 @@
       //First save Frame properties to a shape. This is for testing only.
         SvgAnimationData  *obj = new SvgAnimationData();
         Frame *frame = new Frame(); //Default properties set 
+        QString refId = getID(shape);
+        refId.chop(1);
+        refId.remove(0, 5);
+        
+        frame->setRefId(refId);
         
         obj->addNewFrame(shape, frame);
         }
 
       void SvgWriter::saveFrame(Frame * frame)
       {
-        //TODO:printIndentation() ??
+       
         *m_frames << "<desc>" << "Frame info." << "</desc>" << endl;
-        *m_frames << "<ns1:frame" << endl;
+        printIndentation(m_frames, ++m_indent);
+        *m_frames << "<calligra:frame" << endl;
+       
+        printIndentation(m_frames, ++m_indent);
+        *m_frames << "calligra:" << "title=\"" << frame->title() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "refid=\"" << frame->refId() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "transition-profile=\"" << frame->transitionProfile() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "hide=\"" << frame->isHide() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "clip=\"" << frame->isClip() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "timeout-enable=\"" << frame->isEnableTimeout() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "sequence=\"" << frame->sequence() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "transition-zoom-percent=\"" << frame->zoomPercent() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "timeout-ms=\"" << frame->timeout() << "\"" << endl;
+        printIndentation(m_frames, m_indent);
+        *m_frames << "calligra:" << "transition-duration-ms=\"" << frame->transitionDuration() << "\"" << endl;
         
-        *m_frames << "ns1:" << "sequence=\"" << frame->sequence() << "\"" << endl;
         
-        *m_frames << "/>";
+        *m_frames << "/>" << endl;
       }
 
       void SvgWriter::savePath(KoPathShape * path)
@@ -322,7 +348,7 @@
       {
       m_script  = "Here comes the javascript.";
       
-      printIndentation(m_body, m_indent++);
+      printIndentation(m_body, m_indent--);
       
       *m_body << "<script>" << m_script << "</script>" << endl;
       }
