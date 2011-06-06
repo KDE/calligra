@@ -2,7 +2,7 @@
                         The design of kformula
                           (as we imagine it)
 
-NOTE: This file is imported from KOffice 1.6.  There have been a
+NOTE: This file is imported from Calligra 1.6.  There have been a
       number of changes since then.  We have to go through it and
       document the things that have changed.
 
@@ -284,7 +284,7 @@ Save and Load (Import/Export)
 there are quite a few formats we want to read and write:
 
 Built in:
-- native koffice xml
+- native calligra xml
 
 Import/Export filters
 - MathML 

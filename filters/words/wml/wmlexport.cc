@@ -73,7 +73,7 @@ bool WMLWorker::doOpenDocument(void)
 {
     result = "<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\"\n";
     result += "      \"http://www.wapforum.org/DTD/wml_1.1.xml\" >\n";
-    result += "<!-- Created using KWord, see www.koffice.org/kword -->\n";
+    result += "<!-- Created using KWord, see www.calligra-suite.org/kword -->\n";
     result += "<wml>\n";
     result += "<card>\n";
 

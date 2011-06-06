@@ -1,38 +1,38 @@
  js, lucijan, 2003-10-19
 
-!Why Kexi does not behave as well as KOffice application using kofficelibs compared to others apps from the family?
+!Why Kexi does not behave as well as Calligra application using calligralibs compared to others apps from the family?
 
 
-* Kexi, unlike (all?) others KOffice application is not document-driven
+* Kexi, unlike (all?) others Calligra application is not document-driven
 ;: Kexi is project-driven insted. Thus it is conceptually more like KDevelop.
 
 * Application's environment.
-;:Typical KOffice application is built upon the fact that there is a main document (that also can act as KPart) for the application view, and most application logic is built around this single native format/mime type and the KPart class that uses data in this single format.
+;:Typical Calligra application is built upon the fact that there is a main document (that also can act as KPart) for the application view, and most application logic is built around this single native format/mime type and the KPart class that uses data in this single format.
 
 ;:Kexi has more distributed nature, there is more than just one mode (or two) for editing a document or viewing it as read-only (both modes for e.g. KWord uses mostly the same KPart widget(s), only with certain actions disabled/enabled). Some Kexi KParts have editors that are built as strictly different components that are used for viewing (as an example, "table altering" dialog versus table/query data view).
 
 * Storage differences
-;: KOffice depends on storing its native format in single file (in some cases, it can be non-xml but still it is self-contained file)
+;: Calligra depends on storing its native format in single file (in some cases, it can be non-xml but still it is self-contained file)
 ;:Kexi has many storage options, since one of its goals is integration of external database systems. Kexi allows you to save a short XML informational file (something like a shortcut to a database connection) that specifies how to connect to the database (where your project is stored) again.
 ;:The other project storage method for Kexi uses file-based databases (currently, binary SQLite-compatible, with Kexi system objects inside). For end-user convenience, such a SQLite database file can be self contained and no additional information (in other XML files) is required (although it is still possible to have one).
 
-* KOffice behaves differently at opening projects than Kexi.
-;: When a non-native format is encountered, KOffice framework automatically invokes filters to convert the foreign format into that KOffice applications native format.
+* Calligra behaves differently at opening projects than Kexi.
+;: When a non-native format is encountered, Calligra framework automatically invokes filters to convert the foreign format into that Calligra applications native format.
 
 ;:Kexi is not expected to do so: there is generalisation inside KexiDB module; this module handles all differences "on-line". Otherwise it would be impossible to use Kexi: you don't need to convert e.g. MySQL-embedded-file to a SQLite file, since if there is a driver for MySQL-embedded it is still neutral to SQLite one.
 
-;:Similarly, Kexi does not download all data from SQL server and converts that format to "common" internal data representation and then operates on this representation. The "filter chains" from KOffice framework could force Kexi to do so (otherwise wrapping should be added), while in most cases the only thing that is converted (on demand) in Kexi projects are the database schemas.
+;:Similarly, Kexi does not download all data from SQL server and converts that format to "common" internal data representation and then operates on this representation. The "filter chains" from Calligra framework could force Kexi to do so (otherwise wrapping should be added), while in most cases the only thing that is converted (on demand) in Kexi projects are the database schemas.
 
 ;: Above notes do not mean that Kexi is designed to lack filters functionality. Kexi filters functionality is designed with a knowledge that importing database schemas is not fully automatic, because there is not always enough database schema information (e.g. when migrating database from raw MySQL format to Firebird-driven Kexi project). The same applies for export: after exporting, much of project's information can disappear. You can say it is quite like exporting e.g. KWord document to, say, RTF. Yes, but Kexi often has to offer additional dialogs to ask user for additional hints -- summing up, KO filter chains are not so usable in Kexi, since we are not performing just "convert-file-to-file" task.
 
 
-!Why kexi is still a member of KOffice suite?
+!Why kexi is still a member of Calligra suite?
 
-* Kexi is still part of KOffice suite, what mean that from end-user perspective, strategy is the same as before. This implies that we will do our best to honour KOffice release 
+* Kexi is still part of Calligra suite, what mean that from end-user perspective, strategy is the same as before. This implies that we will do our best to honour Calligra release 
 
 * Kexi is a missing application for Free platforms like Linux, *BSD
 
-* It (will be) still properly integrated with other KOffice compontents (KWord mailmerge, KChart graphs, Kugar reports, KSpread tables ...) and/or reuse them
+* It (will be) still properly integrated with other Calligra compontents (KWord mailmerge, KChart graphs, Kugar reports, KSpread tables ...) and/or reuse them
 
 * Work on moving Kexi-as-KoMainWindow/KoDocument-driven application to Kexi-as-KXmlGuiWindow/KexiDB-driven application is stared by Kexi Team
 

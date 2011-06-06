@@ -28,7 +28,7 @@
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
 
-// koffice
+// calligra
 #include <KoOdfStylesReader.h>
 #include <KoOasisSettings.h>
 #include <KoOdfReadStore.h>

@@ -76,7 +76,7 @@ const KComponentData &KWFactory::componentData()
                                             "data", "words/templates/");
         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
 
-        KIconLoader::global()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("calligra");
     }
     return *s_instance;
 }

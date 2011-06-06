@@ -61,6 +61,6 @@ Name[wa]=Passete d' abagaedje LATEX di KWord
 Name[x-test]=xxKWord Latex Import Filterxx
 Name[zh_CN]=KWord Latex 导入过滤器
 Name[zh_TW]=KWord Latex 匯入過濾程式
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter
 Type=Service
 X-KDE-Library=kwordlateximport

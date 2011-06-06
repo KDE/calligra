@@ -609,9 +609,9 @@ bool Connection::createDatabase(const QString &dbName)
       FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
       if (!fl)
         createDatabase_ERROR;
-      if (!insertRecord(*fl, QVariant(1), QVariant("Tables"), QVariant("kexi/table"), QVariant("http://koffice.org/kexi/")))
+      if (!insertRecord(*fl, QVariant(1), QVariant("Tables"), QVariant("kexi/table"), QVariant("http://calligra-suite.org/kexi/")))
         createDatabase_ERROR;
-      if (!insertRecord(*fl, QVariant(2), QVariant("Queries"), QVariant("kexi/query"), QVariant("http://koffice.org/kexi/")))
+      if (!insertRecord(*fl, QVariant(2), QVariant("Queries"), QVariant("kexi/query"), QVariant("http://calligra-suite.org/kexi/")))
         createDatabase_ERROR;
     */
 

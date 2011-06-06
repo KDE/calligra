@@ -128,7 +128,7 @@ KoAbstractApplicationController::~KoAbstractApplicationController()
 QStringList KoAbstractApplicationController::supportedExtensions() const
 {
     if (m_supportedExtensions.isEmpty()) {
-        //Add Txt extension after adding ascii filter to koffice package
+        //Add Txt extension after adding ascii filter to calligra package
         /*extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \*/
         m_supportedExtensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT
             << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_PPS << EXT_PPSX
@@ -150,7 +150,7 @@ QStringList KoAbstractApplicationController::supportedFilters() const
 bool KoAbstractApplicationController::isSupportedExtension(const QString& extension) const
 {
     QList<QString> extensions;
-    //Add Txt extension after adding ascii filter to koffice package
+    //Add Txt extension after adding ascii filter to calligra package
     /*extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \*/
     extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT
         << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_PPS << EXT_PPSX
@@ -805,7 +805,7 @@ bool KoAbstractApplicationController::triggerAction(const char* name)
 {
     if (m_view) {
         // the cast in the next line is no longer needed for
-        // koffice revision 1004085 and newer
+        // calligra revision 1004085 and newer
         QAction* action = ((KXMLGUIClient*)m_view)->action(name);
         if (action) {
             action->activate(QAction::Trigger);

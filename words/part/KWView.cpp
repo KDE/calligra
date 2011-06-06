@@ -53,8 +53,8 @@
 #include "commands/KWRemoveFrameClipCommand.h"
 #include <KoShapeReorderCommand.h>
 
-// koffice libs includes
-#include <kofficeversion.h>
+// calligra libs includes
+#include <calligraversion.h>
 #include <KoCopyController.h>
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>
@@ -983,8 +983,8 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("KWord %1.%2.%3").arg(KOffice::versionMajor())
-                              .arg(KOffice::versionMinor()).arg(KOffice::versionRelease()));
+    dia->printer().setCreator(QString("KWord %1.%2.%3").arg(Calligra::versionMajor())
+                              .arg(Calligra::versionMinor()).arg(Calligra::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }

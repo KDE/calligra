@@ -60,4 +60,4 @@ X-KDE-Export=application/vnd.sun.xml.writer
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=oowriterexport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

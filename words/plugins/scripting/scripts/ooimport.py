@@ -7,7 +7,7 @@ This python script connects KWord and OpenOffice.org together.
 (C)2006 Sebastian Sauer <mail@dipe.org>
 
 http://kross.dipe.org
-http://www.koffice.org/kword
+http://www.calligra-suite.org/kword
 http://udk.openoffice.org/python/python-bridge.html
 
 Dual-licensed under LGPL v2+higher and the BSD license.

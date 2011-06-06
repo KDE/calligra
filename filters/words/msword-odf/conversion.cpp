@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -717,8 +717,8 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 
     return value;
 }
-//get a  koffice:borderspecial value "style"
-QString Conversion::borderKOfficeAttributes(const wvWare::Word97::BRC& brc)
+//get a  calligra:borderspecial value "style"
+QString Conversion::borderCalligraAttributes(const wvWare::Word97::BRC& brc)
 {
     kDebug(30153) << "brc.brcType      = " << brc.brcType;
     kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;

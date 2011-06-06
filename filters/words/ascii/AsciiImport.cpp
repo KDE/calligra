@@ -30,7 +30,7 @@
 #include <kpluginfactory.h>
 #include <kencodingprober.h>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoStore.h>
@@ -302,7 +302,7 @@ bool AsciiImport::createMeta(KoOdfWriteStore &store)
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
-    xmlWriter->addTextNode(QString("KOConverter/%1").arg(KOFFICE_VERSION_STRING));
+    xmlWriter->addTextNode(QString("KOConverter/%1").arg(CALLIGRA_VERSION_STRING));
     xmlWriter->endElement();
 
     xmlWriter->startElement("meta:creation-date");

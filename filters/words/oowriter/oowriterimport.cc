@@ -161,8 +161,8 @@ KoFilter::ConversionStatus OoWriterImport::convert(QByteArray const & from, QByt
     // store preview
 
     if (! thumbnail.isNull()) {
-        // ### TODO: thumbnail.setAlphaBuffer( false ); // legacy KOffice previews have no alpha channel
-        // Legacy KOffice previews are 256x256x8 instead of 128x128x32
+        // ### TODO: thumbnail.setAlphaBuffer( false ); // legacy Calligra previews have no alpha channel
+        // Legacy Calligra previews are 256x256x8 instead of 128x128x32
         QImage preview(thumbnail.smoothScale(256, 256).convertDepth(8, Qt::AvoidDither | Qt::DiffuseDither));
         // Not to be able to generate a preview is not an error
         if (!preview.isNull()) {

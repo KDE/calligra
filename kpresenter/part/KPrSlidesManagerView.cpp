@@ -132,7 +132,7 @@ void KPrSlidesManagerView::dragMoveEvent(QDragMoveEvent *ev)
 
 void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-koffice-sliderssorter")) {
+    if (event->mimeData()->hasFormat("application/x-calligra-sliderssorter")) {
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }

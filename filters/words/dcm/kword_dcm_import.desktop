@@ -26,4 +26,4 @@ X-KDE-Export=application/x-kword
 X-KDE-Import=application/dicom
 X-KDE-Weight=1
 X-KDE-Library=dcmimport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

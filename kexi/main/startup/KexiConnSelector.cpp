@@ -374,7 +374,7 @@ bool KexiConnSelectorWidget::confirmOverwrites() const
   return i18n("To define or change a connection, use command line options or click on .kexis file. "
     "You can find example .kexis file at <a href=\"%1\">here</a>.").arg("") //temporary, please do not change for 0.8!
     + "\nhttp://www.kexi-project.org/resources/testdb.kexis"; */
-//  .arg("http://websvn.kde.org/*checkout*/branches/kexi/0.9/koffice/kexi/tests/startup/testdb.kexis");
+//  .arg("http://websvn.kde.org/*checkout*/branches/kexi/0.9/calligra/kexi/tests/startup/testdb.kexis");
 //}
 
 void KexiConnSelectorWidget::slotRemoteAddBtnClicked()

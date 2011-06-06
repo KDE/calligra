@@ -34,7 +34,7 @@ install(TARGETS latexgenerator  DESTINATION ${PLUGIN_INSTALL_DIR})
 #
 #INCLUDES= -I$(srcdir) -I$(srcdir)/../parser -I../parser $(all_includes)
 #liblatexgenerator_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-#liblatexgenerator_la_LIBADD  = -lm $(KOFFICE_LIBS)
+#liblatexgenerator_la_LIBADD  = -lm $(CALLIGRA_LIBS)
 #
 ######## Files
 #

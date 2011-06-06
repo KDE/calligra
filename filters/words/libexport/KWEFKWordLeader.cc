@@ -22,7 +22,7 @@
 
 /*
    Part of this code comes from the old file:
-    /home/kde/koffice/filters/kword/ascii/asciiexport.cc
+    /home/kde/calligra/filters/kword/ascii/asciiexport.cc
 
    The old file was copyrighted by
     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -491,7 +491,7 @@ static void ProcessFramesetTag(QDomNode        myNode,
         break;
 
     case 2: // PICTURE
-    case 5: { // CLIPART: deprecated (up to KOffice 1.2 Beta 2)
+    case 5: { // CLIPART: deprecated (up to Calligra 1.2 Beta 2)
 #if 0
         kDebug(30508) << "DEBUG: FRAMESET name of picture is" << name;
 #endif
@@ -694,7 +694,7 @@ static void ProcessVariableSettingsTag(QDomNode myNode, void *, KWEFKWordLeader 
     ;
 
     // Some files have the creation and modification date not in one attribute but in an attribute for each the year, the month, the day
-    // ( e.g. syntax 2 file kofficetests/documents/export/kword/text/all.kwd )
+    // ( e.g. syntax 2 file calligratests/documents/export/kword/text/all.kwd )
     attrProcessingList
     << AttrProcessing("modifyFileYear", modificationYear)
     << AttrProcessing("modifyFileMonth", modificationMonth)

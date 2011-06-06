@@ -23,7 +23,7 @@ Problems that could be fixed in the future
 MS Write renders text with an uncommon form of linespacing (where the
 text is aligned to the bottom).
 
-This has been discussed on koffice-devel and has resulted in a
+This has been discussed on calligra-devel and has resulted in a
 work-around: use of the OFFSETS tag to "fake" space before each line.
 Unfortunately, this is not perfect esp. the trailing linespacing at the
 end of the paragraph and where paragraphs span more than one line.
@@ -63,7 +63,7 @@ of the footer but not the top).
 In other words, AFAIK, the current KWord file format does not allow the
 specification of the exact position of each frame.
 
-See my post "Specifying exact frame positions" to the koffice-devel mailinglist
+See my post "Specifying exact frame positions" to the calligra-devel mailinglist
 on 2002-01-27 and the number of responses I got to it.
 
 Also, the concept of Margins are different in MS Write.  In MS Write,
@@ -80,7 +80,7 @@ from the left margin.
 
 In KWord, it is impossible to do this (for anchored images, which are
 required to maintain the relative positions of surrounding text and the
-image), at the moment (see my post "Images and Stores" to koffice-devel on
+image), at the moment (see my post "Images and Stores" to calligra-devel on
 2002-01-26).  So at the moment, paragraph indenting is used to emulate it.
 
 
@@ -114,7 +114,7 @@ What you can do to help
 
 1. Contribute to LibMSWrite (http://sourceforge.net/projects/libmswrite/)
 
-2. Fix something in the KOffice end of the filter (mswriteimport.*)
+2. Fix something in the Calligra end of the filter (mswriteimport.*)
 
 3. Send me an email telling me what I've done wrong
 

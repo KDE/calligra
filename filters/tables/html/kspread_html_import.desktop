@@ -30,4 +30,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=text/html
 X-KDE-Weight=50
 X-KDE-Library=kspreadhtmlimport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

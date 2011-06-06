@@ -22,7 +22,7 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 static const char* BRAINDUMP_DESCRIPTION = I18N_NOOP("Braindump: directly from your brain to the computer.");
 static const char* BRAINDUMP_VERSION = "0.10.0";

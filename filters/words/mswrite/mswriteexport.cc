@@ -1088,7 +1088,7 @@ public:
         kDebug(30509) << "\tActual dimensions: width=" << imageActualWidth
         << " height=" << imageActualHeight;
 
-        kDebug(30509) << "\tKOffice position: left=" << frameAnchor.frame.left
+        kDebug(30509) << "\tCalligra position: left=" << frameAnchor.frame.left
         << " right=" << frameAnchor.frame.right
         << " top=" << frameAnchor.frame.top
         << " bottom=" << frameAnchor.frame.bottom;
@@ -1370,7 +1370,7 @@ public:
             }
 
             // Write only supports Decimal and Left tabs
-            // TODO: KOffice 1.3 alignchar (modify libexport)
+            // TODO: Calligra 1.3 alignchar (modify libexport)
             if ((*tabIt).m_type == 3 /* && (*tabIt).m_alignchar == '.' */)
                 tab.setIsDecimal();
             else
@@ -1502,7 +1502,7 @@ public:
                     startOfWRIParagraph = false;
                     break;
                 }
-                case 5: // footnote (KOffice 1.1)
+                case 5: // footnote (Calligra 1.1)
                     m_device->error(MSWrite::Error::Warn, "Footnote unsupported\n");
                     break;
                 case 6: // anchor for frame
@@ -1752,7 +1752,7 @@ KoFilter::ConversionStatus MSWriteExport::convert(const QByteArray &from, const 
     delete worker;
 
     // try to return somewhat more meaningful errors than KoFilter::StupidError
-    // for the day that KOffice actually reports them to the user properly
+    // for the day that Calligra actually reports them to the user properly
     switch (errorCode) {
     case MSWrite::Error::Ok:
         kDebug(30509) << "Returning error code" << ret;

@@ -103,7 +103,7 @@
 #include "dialogs/SubtotalDialog.h"
 #include "dialogs/ValidityDialog.h"
 
-// KOffice
+// Calligra
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoResourceManager.h>

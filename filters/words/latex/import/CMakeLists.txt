@@ -33,9 +33,9 @@ install( FILES  kword_latex_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 #
 ######## General stuff
 #
-#INCLUDES= -I$(srcdir) -I$(srcdir)/parser -I$(srcdir)/generator $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
+#INCLUDES= -I$(srcdir) -I$(srcdir)/parser -I$(srcdir)/generator $(CALLIGRA_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
 #libkwordlateximport_la_LDFLAGS= $(all_libraries) -module -avoid-version -no-undefined
-#libkwordlateximport_la_LIBADD = $(KOFFICE_LIBS) parser/liblatexparser.la generator/liblatexgenerator.la
+#libkwordlateximport_la_LIBADD = $(CALLIGRA_LIBS) parser/liblatexparser.la generator/liblatexgenerator.la
 #
 ######## Files
 #

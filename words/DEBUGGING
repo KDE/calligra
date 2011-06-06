@@ -11,4 +11,4 @@ Ctrl-Shift-P : Paragraphs debug. Outputs information about all paragraphs of the
 Alt-Ctrl-Shift-S : Styles debug. Prints all KoStyles.
 Alt-Ctrl-Shift-M : Mark the debug output. Just prints the current date/time.
 
-(The code is in koffice/kword/part/KWCanvas.cpp method keyReleaseEvent() and in the textTool)
+(The code is in calligra/kword/part/KWCanvas.cpp method keyReleaseEvent() and in the textTool)

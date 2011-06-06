@@ -15,19 +15,19 @@ introduction to the structure of the code.  For a more detailed
 description of the classes, see the API-docs generated from doxygen.
 
 
-1. KOffice 1.x architecture
+1. Calligra 1.x architecture
 ---------------------------
 
 Before we start to describe the design of KChart 2.x, we should
-recapitulate how KOffice 1.x was designed and also KChart 1.x.  We
+recapitulate how Calligra 1.x was designed and also KChart 1.x.  We
 will then emphasize differences between this and the new design for
 those who have seen the old code.
 
-KOffice 1.x was generally built on KParts, the general KDE embedding
-technology.  Each KOffice 1.x application (component) consist of the
+Calligra 1.x was generally built on KParts, the general KDE embedding
+technology.  Each Calligra 1.x application (component) consist of the
 application itself, which is really not much more than a frame, and an
 embeddable KPart.  The KPart implements the real functionality of the
-application, and can also be embedded into other non-KOffice
+application, and can also be embedded into other non-Calligra
 applications, like Konqueror.
 
 When one document embeds another, e.g. a chart in a spreadsheet, and
@@ -45,7 +45,7 @@ changes to the KChart one.
 KChart 1.x is built as a GUI for the embeddable chart component
 KDChart from Klarälvdalens Datakonsult AB. This is a commercial
 component that was graciously released under a GPL license and made
-available for KOffice to use.  KDChart is built in the subdirectory
+available for Calligra to use.  KDChart is built in the subdirectory
 kchart/kdchart, and is really the component that provides the real
 functionality for KChart.  One example of how deep the dependency of
 KDChart goes is the fact that the file format for KChart 1.x is the
@@ -73,10 +73,10 @@ implemented.
 
 So, to conclude, the main classes of KChart 1.x was:
 
- - KChartPart : public KoDocument (via KoChart in koffice/interfaces)
+ - KChartPart : public KoDocument (via KoChart in calligra/interfaces)
        The class that held the chart document itself as represented by
        the KDChart classes above.  This class provided embedding into
-       other KOffice 1.x classes as well as other KDE
+       other Calligra 1.x classes as well as other KDE
        applications.  There was support for both read/write editing of
        the chart and also a read-only variation for only show.
 
@@ -85,14 +85,14 @@ So, to conclude, the main classes of KChart 1.x was:
        This was the important part of the KChart application.
 
 
-2. KOffice 2.x architecture
+2. Calligra 2.x architecture
 ---------------------------
 
-The architecture of KOffice 2.x is totally different.  The most
+The architecture of Calligra 2.x is totally different.  The most
 important change is that KParts are no longer used  for embedding
 documents into other documents.  Instead, embedding is done with so
 called Flake Shapes, as defined and implemented by the Flake library
-in koffice/libs/flake.  
+in calligra/libs/flake.  
 
 A Flake Shape (from now on 'shape') can be as simple as a line or
 circle, or as complex as a full spreadsheet or a chart. Each shape can
@@ -104,16 +104,16 @@ Score Shape.  We will not go into more details about Flake here, but
 instead ask the eager developer to read the Flake API docs.
 
 
-1.1 KOffice 2.x and KChart
+1.1 Calligra 2.x and KChart
 - - - - - - - - - - - - - 
 
-From the above, we realize that the main part of KChart for KOffice
+From the above, we realize that the main part of KChart for Calligra
 2.x has to be a Chart Flake Shape.  This shape will contain all
 necessary classes to represent the chart and the data to be shown in
 the chart.  In addition, we have to provide some Flake Tools that will
 aid the user in the manipulation of the chart shape.
 
-But even if KOffice embedding is no longer done by KParts, we still
+But even if Calligra embedding is no longer done by KParts, we still
 need to provide a KChart KPart.  Without it, Konqueror will not be
 able to show a .odc (OpenDocument Chart) file, and neither will any
 other KDE application.
@@ -127,7 +127,7 @@ So, to summarize we will provide:
 
  - ChartShape : public KoShape
        the class that implements the Chart Flake Shape.  This will
-       make the chart embeddable into any KOffice application.  In
+       make the chart embeddable into any Calligra application.  In
        addition to the shape, there will also be a number of Flake
        Tools to manipulate the chart.
 
@@ -137,7 +137,7 @@ So, to summarize we will provide:
        user change its size and manipulate it in other ways.
 
  - KChartView : public KoView
-       A standard KOffice view, containing toolbars and all the
+       A standard Calligra view, containing toolbars and all the
        actions that are needed to save and load the document and do
        all the other tasks that the user should be able to do.  This
        basically defines the KChart application.
@@ -236,14 +236,14 @@ Especially the first 4 are important.
    http://books.evc-cit.info/ 
 
  * Introduction to the Flake library
-   http://api.kde.org/koffice-api/koffice-apidocs/libs/flake/html/index.html
-   http://wiki.koffice.org/index.php?title=Flake
+   http://api.kde.org/calligra-api/calligra-apidocs/libs/flake/html/index.html
+   http://wiki.calligra-suite.org/index.php?title=Flake
 
  * KDChart Programmers Manual
-   trunk/koffice/kchart/kdchart/doc/kdchart.pdf
+   trunk/calligra/kchart/kdchart/doc/kdchart.pdf
 
- * Loading and Saving OpenDocument in KOffice
-   http://wiki.koffice.org/index.php?title=KOffice_and_ODF
+ * Loading and Saving OpenDocument in Calligra
+   http://wiki.calligra-suite.org/index.php?title=Calligra_and_ODF
 
  * The full OpenDocument 1.1 standard
    http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office#odf11

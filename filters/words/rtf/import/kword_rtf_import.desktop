@@ -64,4 +64,4 @@ ImportDescription=RTF
 X-KDE-Export=application/x-kword
 ExportDescription=KWord
 X-KDE-Library=rtfimport
-X-KDE-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=CalligraFilter

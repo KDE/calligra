@@ -193,7 +193,7 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     case KWord::CopyNewFrame: value = "copy"; break;
     }
     if (!value.isEmpty()) {
-        m_shape->setAdditionalStyleAttribute("koffice:frame-behavior-on-new-page", value);
+        m_shape->setAdditionalStyleAttribute("calligra:frame-behavior-on-new-page", value);
     }
 
     // shape properties

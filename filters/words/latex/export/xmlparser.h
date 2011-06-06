@@ -39,9 +39,9 @@ class KoStore;
  */
 class XmlParser
 {
-    /** The Koffice app document stored in a XML DOM Tree. */
+    /** The Calligra app document stored in a XML DOM Tree. */
     QDomDocument _document;
-    /** The koffice document (maindoc, picture, ...). */
+    /** The calligra document (maindoc, picture, ...). */
     static KoStore* _in;
     /** Configuration */
     Config *_config;

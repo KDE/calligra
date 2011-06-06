@@ -21,7 +21,7 @@ else
   mkdir -p $out/share
   mkdir -p $out/share/apps
   cp -r $KDEDIR/share/apps/stage $out/share/apps/
-  cp -r $KDEDIR/share/apps/koffice $out/share/apps/
+  cp -r $KDEDIR/share/apps/calligra $out/share/apps/
   cp -r $KDEDIR/share/apps/kstyle $out/share/apps/
   mkdir -p $out/share/config
   cp $KDEDIR/share/config/kdebug.areas $out/share/config/
@@ -30,9 +30,9 @@ else
   ### cp $KDEDIR/share/icons $out/share/
   cp -r $KDEDIR/share/toolbar $out/share/
   mkdir -p $out/share/servicetypes
-  cp $KDEDIR/share/servicetypes/kofficepart.desktop $out/share/servicetypes
+  cp $KDEDIR/share/servicetypes/calligrapart.desktop $out/share/servicetypes
   mkdir -p $out/share/applnk
-  cp $KDEDIR/share/applnk/KOffice/stage.desktop $out/share/applnk/
+  cp $KDEDIR/share/applnk/Calligra/stage.desktop $out/share/applnk/
 
 ########### Libraries (warning, using Linux specific ldd !)
   TMPFILE=/tmp/__stage_ldd.tmp

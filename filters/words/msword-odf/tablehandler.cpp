@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -551,9 +551,9 @@ void KWordTableHandler::tableCellStart()
     //set borders for the four edges of the cell
     if (brcTop.brcType > 0 && brcTop.brcType < 64) {
         cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
-        QString kba = Conversion::borderKOfficeAttributes(brcTop);
+        QString kba = Conversion::borderCalligraAttributes(brcTop);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-top",kba);
+            cellStyle.addProperty("calligra:specialborder-top",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcTop);
         if (!dba.isEmpty()) {
@@ -564,9 +564,9 @@ void KWordTableHandler::tableCellStart()
     //left
     if (brcLeft.brcType > 0 && brcLeft.brcType < 64) {
         cellStyle.addProperty("fo:border-left", Conversion::setBorderAttributes(brcLeft));
-        QString kba = Conversion::borderKOfficeAttributes(brcLeft);
+        QString kba = Conversion::borderCalligraAttributes(brcLeft);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-left",kba);
+            cellStyle.addProperty("calligra:specialborder-left",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcLeft);
         if (!dba.isEmpty()) {
@@ -577,9 +577,9 @@ void KWordTableHandler::tableCellStart()
     //bottom
     if (brcBottom.brcType != 0 && brcBottom.brcType < 64) {
         cellStyle.addProperty("fo:border-bottom", Conversion::setBorderAttributes(brcBottom));
-        QString kba = Conversion::borderKOfficeAttributes(brcBottom);
+        QString kba = Conversion::borderCalligraAttributes(brcBottom);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-bottom",kba);
+            cellStyle.addProperty("calligra:specialborder-bottom",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcBottom);
         if (!dba.isEmpty()) {
@@ -590,9 +590,9 @@ void KWordTableHandler::tableCellStart()
     //right
     if (brcRight.brcType > 0 && brcRight.brcType < 64) {
         cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
-        QString kba = Conversion::borderKOfficeAttributes(brcRight);
+        QString kba = Conversion::borderCalligraAttributes(brcRight);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-right",kba);
+            cellStyle.addProperty("calligra:specialborder-right",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcRight);
         if (!dba.isEmpty()) {
@@ -603,9 +603,9 @@ void KWordTableHandler::tableCellStart()
     //top left to bottom right
     if (brcTL2BR.brcType > 0 && brcTL2BR.brcType < 64) {
         cellStyle.addProperty("style:diagonal-tl-br", Conversion::setBorderAttributes(brcTL2BR));
-        QString kba = Conversion::borderKOfficeAttributes(brcTL2BR);
+        QString kba = Conversion::borderCalligraAttributes(brcTL2BR);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-tl-br",kba);
+            cellStyle.addProperty("calligra:specialborder-tl-br",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcTL2BR);
         if (!dba.isEmpty()) {
@@ -616,9 +616,9 @@ void KWordTableHandler::tableCellStart()
     //top right to bottom left
     if (brcTR2BL.brcType > 0 && brcTR2BL.brcType < 64) {
         cellStyle.addProperty("style:diagonal-bl-tr", Conversion::setBorderAttributes(brcTR2BL));
-        QString kba = Conversion::borderKOfficeAttributes(brcTR2BL);
+        QString kba = Conversion::borderCalligraAttributes(brcTR2BL);
         if (!kba.isEmpty()) {
-            cellStyle.addProperty("koffice:specialborder-tr-bl",kba);
+            cellStyle.addProperty("calligra:specialborder-tr-bl",kba);
         }
         QString dba = Conversion::setDoubleBorderAttributes(brcTR2BL);
         if (!dba.isEmpty()) {

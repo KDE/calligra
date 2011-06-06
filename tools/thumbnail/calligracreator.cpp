@@ -1,5 +1,5 @@
 /*  This file is part of the KDE libraries
-    Copyright (C) 2002 Simon MacMullen <koffice@babysimon.co.uk>
+    Copyright (C) 2002 Simon MacMullen <calligra@babysimon.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "kofficecreator.h"
+#include "calligracreator.h"
 #include <time.h>
 
 #include <QPixmap>
@@ -39,21 +39,21 @@ extern "C"
 {
     KDE_EXPORT ThumbCreator *new_creator()
     {
-        return new KOfficeCreator;
+        return new CalligraCreator;
     }
 }
 
-KOfficeCreator::KOfficeCreator()
+CalligraCreator::CalligraCreator()
     : m_doc(0)
 {
 }
 
-KOfficeCreator::~KOfficeCreator()
+CalligraCreator::~CalligraCreator()
 {
     delete m_doc;
 }
 
-bool KOfficeCreator::create(const QString &path, int width, int height, QImage &img)
+bool CalligraCreator::create(const QString &path, int width, int height, QImage &img)
 {
     KoStore* store = KoStore::createStore(path, KoStore::Read);
 
@@ -103,21 +103,21 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
     return true;
 }
 
-void KOfficeCreator::timerEvent(QTimerEvent *)
+void CalligraCreator::timerEvent(QTimerEvent *)
 {
     m_doc->closeUrl();
     m_completed = true;
 }
 
-void KOfficeCreator::slotCompleted()
+void CalligraCreator::slotCompleted()
 {
     m_completed = true;
 }
 
-ThumbCreator::Flags KOfficeCreator::flags() const
+ThumbCreator::Flags CalligraCreator::flags() const
 {
     return (Flags)(DrawFrame | BlendIcon);
 }
 
-#include "kofficecreator.moc"
+#include "calligracreator.moc"
 

@@ -36,7 +36,7 @@ int main( int argc, char **argv )
 
   KUniqueApplication app;
 
-  KIconLoader::global()->addAppDir("koffice");
+  KIconLoader::global()->addAppDir("calligra");
   KoGlobal::initialize();
 
   KComponentData* m_documentData = new KComponentData(about);

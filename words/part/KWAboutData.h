@@ -22,15 +22,15 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 static const char* KWORD_DESCRIPTION = I18N_NOOP("Calligra Word Processor");
 // First official public release Oct 2000 version 0.8
-// KOffice-1.1-beta1: version 0.9
-// KOffice-1.1-beta2: version 1.1 (to remove confusion)
-// KOffice-1.2: version 1.2
-// From then on: always the same as the KOffice version
-static const char* KWORD_VERSION = KOFFICE_VERSION_STRING;
+// Calligra-1.1-beta1: version 0.9
+// Calligra-1.1-beta2: version 1.1 (to remove confusion)
+// Calligra-1.2: version 1.2
+// From then on: always the same as the Calligra version
+static const char* KWORD_VERSION = CALLIGRA_VERSION_STRING;
 
 KAboutData * newKWordAboutData()
 {

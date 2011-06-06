@@ -826,12 +826,12 @@ INSERT INTO "kexi__objects" VALUES(106,7,'open_cars_and_go_to_last','Open cars a
 INSERT INTO "kexi__objects" VALUES(107,2,'persons_by_age','Persons by age',NULL);
 INSERT INTO "kexi__objects" VALUES(108,4,'persons_and_cars','Persons and cars',NULL);
 CREATE TABLE kexi__parts (p_id INTEGER PRIMARY KEY, p_name Text(200), p_mime Text(200), p_url Text(200));
-INSERT INTO "kexi__parts" VALUES(1,'Tables','kexi/table','http://koffice.org/kexi/');
-INSERT INTO "kexi__parts" VALUES(2,'Queries','kexi/query','http://koffice.org/kexi/');
-INSERT INTO "kexi__parts" VALUES(3,'Formularze','kexi/form','http://koffice.org/kexi/');
-INSERT INTO "kexi__parts" VALUES(4,'Reports','kexi/report','http://www.koffice.org/kexi/');
-INSERT INTO "kexi__parts" VALUES(5,'Scripts','kexi/script','http://www.koffice.org/kexi/');
-INSERT INTO "kexi__parts" VALUES(7,'Macros','kexi/macro','http://www.koffice.org/kexi/');
+INSERT INTO "kexi__parts" VALUES(1,'Tables','kexi/table','http://calligra-suite.org/kexi/');
+INSERT INTO "kexi__parts" VALUES(2,'Queries','kexi/query','http://calligra-suite.org/kexi/');
+INSERT INTO "kexi__parts" VALUES(3,'Formularze','kexi/form','http://calligra-suite.org/kexi/');
+INSERT INTO "kexi__parts" VALUES(4,'Reports','kexi/report','http://www.calligra-suite.org/kexi/');
+INSERT INTO "kexi__parts" VALUES(5,'Scripts','kexi/script','http://www.calligra-suite.org/kexi/');
+INSERT INTO "kexi__parts" VALUES(7,'Macros','kexi/macro','http://www.calligra-suite.org/kexi/');
 CREATE TABLE kexi__querydata (q_id UNSIGNED Integer, q_sql CLOB, q_valid Boolean);
 CREATE TABLE kexi__queryfields (q_id UNSIGNED Integer, f_order Integer, f_id Integer, f_tab_asterisk UNSIGNED Integer, f_alltab_asterisk Boolean);
 CREATE TABLE kexi__querytables (q_id UNSIGNED Integer, t_id UNSIGNED Integer, t_order UNSIGNED Integer);

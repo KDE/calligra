@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -260,7 +260,7 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     case JustifyVerticalAlignment: // ok?
     case DistributedVerticalAlignment:
         cellStyle->addProperty("style:vertical-align", "top");
-        cellStyle->addProperty("koffice:vertical-distributed", "distributed");
+        cellStyle->addProperty("calligra:vertical-distributed", "distributed");
         wrapOption = 1;
         break;
     case NoVerticalAlignment:

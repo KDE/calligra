@@ -1438,7 +1438,7 @@ void RTFImport::addImportedPicture(const QString& rawFileName)
 
     QString slashPath(rawFileName);
     slashPath.replace('\\', '/'); // Replace directory separators.
-    // ### TODO: what with MS-DOS absolute paths? (Will only work for KOffice on Win32)
+    // ### TODO: what with MS-DOS absolute paths? (Will only work for Calligra on Win32)
     QFileInfo info;
     info.setFile(inFileName);
     QDir dir(info.path());

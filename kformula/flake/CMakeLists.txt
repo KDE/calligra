@@ -53,7 +53,7 @@ kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
 target_link_libraries(kformulalib komain)
 target_link_libraries(kformulalib LINK_INTERFACE_LIBRARIES komain)
 
-set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
 install(TARGETS kformulalib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -80,7 +80,7 @@ kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
 target_link_libraries(formulashape kformulaprivate kformulalib)
 
 
-#set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+#set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS formulashape  DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES formulashape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
