@@ -236,7 +236,10 @@ KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName, b
     else
         cmd->redo();
     Q_ASSERT(cmd->page().isValid());
-    return cmd->page();
+    KWPage page = cmd->page();
+    if (!addUndoRedoCommand)
+        delete cmd;
+    return page;
 }
 
 KWPage KWDocument::appendPage(const QString &masterPageName, bool addUndoRedoCommand)
