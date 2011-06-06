@@ -216,8 +216,8 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
     }
 
     while (!atEnd()) {
-        QXmlStreamReader::TokenType tokenType = readNext();
-        if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             const QStringRef s = qualifiedName();
             if ( s == "xdr:oneCellAnchor" || s == "xdr:twoCellAnchor" || s == "xdr:absoluteAnchor" || s == "xdr:grpSp" ) {
@@ -251,9 +251,9 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
     DrawingObjectGuard _guard(&m_currentDrawingObject);
 
     while (!atEnd()) {
-        QXmlStreamReader::TokenType tokenType = readNext();
-        if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
-        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        kDebug() << *this;
         if (isStartElement()) {
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)
@@ -293,7 +293,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
     m_anchorType = XlsxDrawingObject::FromAnchor;
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_TRY_READ_IF(row)
@@ -313,7 +313,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
     m_anchorType = XlsxDrawingObject::ToAnchor;
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_TRY_READ_IF(row)
@@ -377,7 +377,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "a:graphic") {
                 read_graphic2();
@@ -399,7 +399,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphic2()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "a:graphicData") {
                 read_graphicData2();
@@ -417,11 +417,10 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicData2()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            //TRY_READ_IF_NS(pic, pic)
             TRY_READ_IF_NS(pic, pic)
-            if (qualifiedName() == "c:chart") {
+            else if (qualifiedName() == "c:chart") {
                 read_chart();
             }
             else if (qualifiedName() == QLatin1String("dgm:relIds")) {

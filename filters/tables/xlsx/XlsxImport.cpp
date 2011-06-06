@@ -635,7 +635,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
 
     // 5. parse document
     {
-        XlsxXmlDocumentReaderContext context(*this, &themes, sharedStrings, comments, styles, *relationships);
+        XlsxXmlDocumentReaderContext context(*this, &themes, sharedStrings, comments, styles, *relationships, "workbook.xml", "xl");
         XlsxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR(loadAndParseDocument(d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context))
     }
