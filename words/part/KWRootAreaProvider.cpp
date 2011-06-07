@@ -178,7 +178,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
                             visiblePageNumber = num;
                     }
                 }
-                KWPage page = kwdoc->appendPage(masterPageName);
+                KWPage page = kwdoc->appendPage(masterPageName, false);
                 Q_ASSERT(page.isValid());
                 if (visiblePageNumber >= 0)
                     page.setVisiblePageNumber(visiblePageNumber);
@@ -205,13 +205,18 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 
     // position OtherFrameSet's which are anchored to this page
     foreach(KWFrameSet* fs, kwdoc->frameSets()) {
-        if (fs->type() != KWord::OtherFrameSet)
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (fs->type() != KWord::OtherFrameSet && (!tfs || tfs->textFrameSetType() != KWord::OtherTextFrameSet))
             continue;
         foreach (KWFrame *frame, fs->frames()) {
             if (frame->anchoredPageNumber() == pageNumber) {
-                frame->setAnchoredFrameOffset(rootAreaPage->page.offsetInDocument() - frame->anchoredFrameOffset());
-                QPointF pos(frame->shape()->position().x(), frame->shape()->position().y() + frame->anchoredFrameOffset());
-                frame->shape()->setPosition(pos);
+                qreal oldOffset = frame->anchoredFrameOffset();
+                qreal newOffset = rootAreaPage->page.offsetInDocument();
+                if (!qFuzzyCompare(1 + oldOffset, 1 + newOffset)) {
+                    frame->setAnchoredFrameOffset(newOffset);
+                    QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
+                    frame->shape()->setPosition(pos);
+                }
             }
         }
     }

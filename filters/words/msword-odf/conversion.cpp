@@ -35,25 +35,28 @@
 #include <QString>
 #include <klocale.h>
 
-QString Conversion::styleNameString(const wvWare::UString& str)
+QString Conversion::styleName2QString(const wvWare::UString& str)
 {
-    QString string = QString::fromRawData(reinterpret_cast<const QChar*>(str.data()), str.length());
+    return processStyleName(QString::fromRawData(reinterpret_cast<const QChar*>(str.data()), str.length()));
+}
+
+QString Conversion::processStyleName(QString str)
+{
     //first replace all spaces with _20_
-    string.replace(' ', "_20_");
-    //now remove random characters
-    for (int i = 0; i < string.size(); i++) {
-        if (!string[i].isLetterOrNumber()) {
-            if (string[i] != '_') {
-                string.remove(i, 1);
+    str.replace(' ', "_20_");
+    for (int i = 0; i < str.size(); i++) {
+        if (!str[i].isLetterOrNumber()) {
+            if (str[i] != '_') {
+                str.remove(i, 1);
                 i--;
             }
         }
     }
     //if first character is a digit, it doesn't validate properly
-    if (string[0].isDigit()) {
-        string.prepend("s");
+    if (str[0].isDigit()) {
+        str.prepend("s");
     }
-    return string;
+    return str;
 }
 
 QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
@@ -191,7 +194,6 @@ uint Conversion::shadingPatternToColor(int ipat)
     // try to convert ipat to gray level
     grayLevel = ditheringToGray(ipat, &ok);
 
-    // if conversion failed, return white (shouldn't happen)
     if (!ok) {
         return resultColor;
     }
@@ -207,33 +209,31 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd)
 
     switch (shd.ipat) {
     case ipatAuto:
+        // TODO: What to do here!  There are test files which require to
+        // process this ipat as ipatSolid.
+        //
     case ipatSolid:
+        // TODO: COLORREF: If fAuto is 0xFF, this COLORREF designates the
+        // default color for the application.  An application MAY<210> use
+        // different default colors based on context.  COLORREF with fAuto set
+        // to 0xFF is referred to as cvAuto.
+        //
+        if (shd.cvBack == 0xff000000) {
+            kDebug(30513) << "Automatic color required!";
+            break;
+        }
         ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
         ret.prepend('#');
         break;
-    case ipatPct5:
-    case ipatPct10:
-    case ipatPct20:
-    case ipatPct25:
-    case ipatPct30:
-    case ipatPct40:
-    case ipatPct50:
-    case ipatPct60:
-    case ipatPct70:
-    case ipatPct75:
-    case ipatPct80:
-    case ipatPct90:
+    case ipatNil:
+        break;
+    default:
     {
         uint grayClr = shadingPatternToColor(shd.ipat);
         ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
         ret.prepend('#');
-        break;
     }
-    case ipatNil:
-        break;
-    default:
-        kDebug(30513) << "Unsupported shading pattern (0x" << hex << shd.ipat << ")";
-        break;
+    break;
     }
     return ret;
 }
@@ -242,87 +242,91 @@ int Conversion::ditheringToGray(int ipat, bool* ok)
 {
     *ok = true; // optimistic ;)
     switch (ipat)  {
-    case 2: // 5%
-        return 255 - qRound(0.05 * 255);
-    case 35: // 2.5 Percent
-        return 255 - qRound(0.025 * 255);
-    case 36: // 7.5 Percent
-        return 255 - qRound(0.075 * 255);
-    case 3: // 10%
-        return 255 - qRound(0.1 * 255);
-    case 37: // 12.5 Percent
-        return 255 - qRound(0.125 * 255);
-    case 38: // 15 Percent
-        return 255 - qRound(0.15 * 255);
-    case 39: // 17.5 Percent
-        return 255 - qRound(0.175 * 255);
-    case 4: // 20%
-        return 255 - qRound(0.2 * 255);
-    case 40: // 22.5 Percent
-        return 255 - qRound(0.225 * 255);
-    case 5: // 25%
-        return 255 - qRound(0.25 * 255);
-    case 41: // 27.5 Percent
-        return 255 - qRound(0.275 * 255);
-    case 6: // 30%
-        return 255 - qRound(0.3 * 255);
-    case 42: // 32.5 Percent
-        return 255 - qRound(0.325 * 255);
-    case 43: // 35 Percent
-        return 255 - qRound(0.35 * 255);
-    case 44: // 37.5 Percent
-        return 255 - qRound(0.375 * 255);
-    case 7: // 40%
-        return 255 - qRound(0.4 * 255);
-    case 45: // 42.5 Percent
-        return 255 - qRound(0.425 * 255);
-    case 46: // 45 Percent
-        return 255 - qRound(0.45 * 255);
-    case 47: // 47.5 Percent
-        return 255 - qRound(0.475 * 255);
-    case 8: // 50%
-        return 255 - qRound(0.5 * 255);
-    case 48: // 52.5 Percent
-        return 255 - qRound(0.525 * 255);
-    case 49: // 55 Percent
-        return 255 - qRound(0.55 * 255);
-    case 50: // 57.5 Percent
-        return 255 - qRound(0.575 * 255);
-    case 9: // 60%
-        return 255 - qRound(0.6 * 255);
-    case 51: // 62.5 Percent
-        return 255 - qRound(0.625 * 255);
-    case 52: // 65 Percent
-        return 255 - qRound(0.65 * 255);
-    case 53: // 67.5 Percent
-        return 255 - qRound(0.675 * 255);
-    case 10: // 70%
-        return 255 - qRound(0.7 * 255);
-    case 54: // 72.5 Percent
-        return 255 - qRound(0.725 * 255);
-    case 11: // 75%
-        return 255 - qRound(0.75 * 255);
-    case 55: // 77.5 Percent
-        return 255 - qRound(0.775 * 255);
-    case 12: // 80%
-        return 255 - qRound(0.8 * 255);
-    case 56: // 82.5 Percent
-        return 255 - qRound(0.825 * 255);
-    case 57: // 85 Percent
-        return 255 - qRound(0.85 * 255);
-    case 58: // 87.5 Percent
-        return 255 - qRound(0.875 * 255);
-    case 13: // 90%
-        return 255 - qRound(0.9 * 255);
-    case 59: // 92.5 Percent
-        return 255 - qRound(0.925 * 255);
-    case 60: // 95 Percent
-        return 255 - qRound(0.95 * 255);
-    case 61: // 97.5 Percent
-        return 255 - qRound(0.975 * 255);
-    case 62: // 97 Percent
-        return 255 - qRound(0.97 * 255);
+    case ipatPct5:
+        return (255 - qRound(0.05 * 255));
+    case ipatPct10:
+        return (255 - qRound(0.1 * 255));
+    case ipatPct20:
+        return (255 - qRound(0.2 * 255));
+    case ipatPct25:
+        return (255 - qRound(0.25 * 255));
+    case ipatPct30:
+        return (255 - qRound(0.3 * 255));
+    case ipatPct40:
+        return (255 - qRound(0.4 * 255));
+    case ipatPct50:
+        return (255 - qRound(0.5 * 255));
+    case ipatPct60:
+        return (255 - qRound(0.6 * 255));
+    case ipatPct70:
+        return (255 - qRound(0.7 * 255));
+    case ipatPct75:
+        return (255 - qRound(0.75 * 255));
+    case ipatPct80:
+        return (255 - qRound(0.8 * 255));
+    case ipatPct90:
+        return (255 - qRound(0.9 * 255));
+    /*
+     * TODO: ipatDkHorizontal, ipatDkVertical, ipatDkForeDiag, ipatDkBackDiag,
+     * ipatDkCross, ipatDkDiagCross, ipatHorizontal, ipatVertical,
+     * ipatForeDiag, ipatBackDiag, ipatCross, ipatDiagCross
+     */
+    case ipatPctNew2:
+        return (255 - qRound(0.025 * 255));
+    case ipatPctNew7:
+        return (255 - qRound(0.075 * 255));
+    case ipatPctNew12:
+        return (255 - qRound(0.125 * 255));
+    case ipatPctNew15:
+        return (255 - qRound(0.15 * 255));
+    case ipatPctNew17:
+        return (255 - qRound(0.175 * 255));
+    case ipatPctNew22:
+        return (255 - qRound(0.225 * 255));
+    case ipatPctNew27:
+        return (255 - qRound(0.275 * 255));
+    case ipatPctNew32:
+        return (255 - qRound(0.325 * 255));
+    case ipatPctNew35:
+        return (255 - qRound(0.35 * 255));
+    case ipatPctNew37:
+        return (255 - qRound(0.375 * 255));
+    case ipatPctNew42:
+        return (255 - qRound(0.425 * 255));
+    case ipatPctNew45:
+        return (255 - qRound(0.45 * 255));
+    case ipatPctNew47:
+        return (255 - qRound(0.475 * 255));
+    case ipatPctNew52:
+        return (255 - qRound(0.525 * 255));
+    case ipatPctNew55:
+        return (255 - qRound(0.55 * 255));
+    case ipatPctNew57:
+        return (255 - qRound(0.575 * 255));
+    case ipatPctNew62:
+        return (255 - qRound(0.625 * 255));
+    case ipatPctNew65:
+        return (255 - qRound(0.65 * 255));
+    case ipatPctNew67:
+        return (255 - qRound(0.675 * 255));
+    case ipatPctNew72:
+        return (255 - qRound(0.725 * 255));
+    case ipatPctNew77:
+        return (255 - qRound(0.775 * 255));
+    case ipatPctNew82:
+        return (255 - qRound(0.825 * 255));
+    case ipatPctNew85:
+        return (255 - qRound(0.85 * 255));
+    case ipatPctNew87:
+        return (255 - qRound(0.875 * 255));
+    case ipatPctNew92:
+        return (255 - qRound(0.925 * 255));
+    case ipatPctNew95:
+        return (255 - qRound(0.95 * 255));
+    case ipatPctNew97:
+        return (255 - qRound(0.975 * 255));
     default:
+        kDebug(30513) << "Unsupported shading pattern (0x" << hex << ipat << ")";
         *ok = false;
         return 0;
     }

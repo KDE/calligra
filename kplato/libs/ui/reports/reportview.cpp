@@ -26,7 +26,7 @@
 #include "reportsourceeditor.h"
 #include "reportscripts.h"
 #include "reportexportpanel.h"
-
+#include "ReportODTRenderer.h"
 #include "kptnodechartmodel.h"
 
 #include <KoReportPage.h>
@@ -349,8 +349,8 @@ void ReportView::slotExportFinished( int result )
 void ReportView::exportToOdt( KoReportRendererContext &context )
 {
     kDebug()<<"Export to odt:"<<context.destinationUrl;
-    KoReportRendererBase *renderer;
-    renderer = m_factory.createInstance("odt");
+    KoReportRendererBase *renderer = new ReportODTRenderer();
+//    renderer = m_factory.createInstance("odt");
     if ( renderer == 0 ) {
         kError()<<"Cannot create odt renderer";
         return;
@@ -751,30 +751,7 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
     connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
 
-    // Populate toolbar
-    tb->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-    KAction *a = new KAction( i18n( "Section Editor" ), this );
-    a->setObjectName("sectionedit");
-    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotSectionEditor()));
-    tb->addAction( a );
-    tb->addSeparator();
-    a = new KAction( KIcon( "arrow-up" ), i18n( "Raise" ), this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotRaiseSelected()));
-    tb->addAction( a );
-    a = new KAction( KIcon( "arrow-down" ), i18n( "Lower" ), this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotLowerSelected()));
-    tb->addAction( a );
-
-    a = new KAction( KIcon( "edit-delete" ), i18n( "Remove" ), this );
-    connect(a, SIGNAL(activated()), m_designer, SLOT(slotEditDelete()));
-    tb->addAction( a );
-
-    tb->addSeparator();
-
-    foreach( QAction *a, m_designer->actions(this) ) {
-        tb->addAction( a );
-        connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
-    }
+    populateToolbar( tb );
 }
 
 ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*manager*/, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent )
@@ -819,7 +796,11 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
     connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
     connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
 
-    // Populate toolbar
+    populateToolbar( tb );
+}
+
+void ReportDesignPanel::populateToolbar( KToolBar *tb )
+{
     tb->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
     KAction *a = new KAction( i18n( "Section Editor" ), this );
     a->setObjectName("sectionedit");
@@ -840,6 +821,9 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
     tb->addSeparator();
 
     foreach( QAction *a, m_designer->actions(this) ) {
+        if ( a->objectName() == "report:image" || a->objectName() == "report:shape" ) {
+            continue;
+        }
         tb->addAction( a );
         connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
     }
