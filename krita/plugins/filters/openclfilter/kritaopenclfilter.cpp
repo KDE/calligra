@@ -33,6 +33,7 @@ KritaOpenCLFilter::KritaOpenCLFilter() : KisFilter(id(), categoryOther(), i18n("
     setSupportsPainting(false);
     setSupportsIncrementalPainting(false);
     setSupportsAdjustmentLayers(false);
+    setSupportsThreading(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     
     // OpenCL 
@@ -56,6 +57,12 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                            ) const
 {
+    QVariant text;
+    config->getProperty("kernel", text);
+    QString kernel = text.toString();
+    
+    qDebug() << "String: ";
+    qDebug() << kernel;
     // Iterating over every pixel
     KisRectIteratorSP iterator = device->createRectIteratorNG(0, 0, 2, 2);
     //int currentPixel = 0;
