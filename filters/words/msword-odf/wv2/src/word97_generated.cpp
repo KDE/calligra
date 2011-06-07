@@ -582,6 +582,12 @@ void SHD::readPtr(const U8 *ptr) {
     shifterU16>>=5;
     ipat=shifterU16;
 
+#ifdef DEBUG_SHD
+    wvlog << "icoFore: 0x" << hex << icoFore << endl;
+    wvlog << "icoBack: 0x" << hex << icoBack << endl;
+    wvlog << "ipat: 0x" << hex << ipat << endl;
+#endif
+
     //check for Shd80Nil 
     if (icoFore == 0x001F && icoBack == 0x001F && ipat == 0x003F) {
         shdAutoOrNill = true;
@@ -623,28 +629,40 @@ void SHD::readSHDOperandPtr(const U8 *ptr) {
     U16 shifterU16;
     U8 r,g,b,cvauto;
 
-    readU8( ptr );      // read the cb property and do nothing with it
-
-    cvauto=readU8(ptr);
+    // read the cb property
+    U8 n = readU8( ptr );
     ptr+=sizeof(U8);
+    if (n != 10) {
+        wvlog << "Warning: Invalid SHDOperand!";
+        return;
+    }
+
     r=readU8(ptr);
     ptr+=sizeof(U8);
     g=readU8(ptr);
     ptr+=sizeof(U8);
     b=readU8(ptr);
+    ptr+=sizeof(U8);
+    cvauto=readU8(ptr);
     ptr+=sizeof(U8);
     cvFore=(cvauto<<24)|(r<<16)|(g<<8)|(b);
-    cvauto=readU8(ptr);
-    ptr+=sizeof(U8);
     r=readU8(ptr);
     ptr+=sizeof(U8);
     g=readU8(ptr);
     ptr+=sizeof(U8);
     b=readU8(ptr);
+    ptr+=sizeof(U8);
+    cvauto=readU8(ptr);
     ptr+=sizeof(U8);
     cvBack=(cvauto<<24)|(r<<16)|(g<<8)|(b);
     shifterU16=readU16(ptr);
     ipat=shifterU16;
+
+#ifdef DEBUG_SHD
+    wvlog << "cvFore: 0x" << hex << cvFore << endl;
+    wvlog << "cvBack: 0x" << hex << cvBack << endl;
+    wvlog << "ipat: 0x" << hex << ipat << endl;
+#endif
 
     // call just to set the member variable shdAutoOrNill
     isShdAutoOrNill();
@@ -707,7 +725,7 @@ std::string SHD::toString() const
     std::string s( "SHD:" );
     s += "\ncvFore=";
     s += uint2string( cvFore );
-    s += "\nicvBack=";
+    s += "\ncvBack=";
     s += uint2string( cvBack );
     s += "\nipat=";
     s += uint2string( ipat );
