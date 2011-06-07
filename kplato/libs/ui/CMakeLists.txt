@@ -42,6 +42,7 @@ set(kplatoui_LIB_SRCS
     reports/odt/KoSimpleOdtPicture.cpp
     reports/odt/KoSimpleOdtTextBox.cpp
     reports/odt/KoSimpleOdtLine.cpp
+    reports/odt/KoSimpleOdtCheckBox.cpp
     reports/odt/KoSimpleOdtPrimitive.cpp
 
     kptganttitemdelegate.cpp

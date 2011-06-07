@@ -22,6 +22,7 @@
 #include "KoSimpleOdtImage.h"
 #include "KoSimpleOdtPicture.h"
 #include "KoSimpleOdtLine.h"
+#include "KoSimpleOdtCheckBox.h"
 #include "renderobjects.h"
 #include <kdebug.h>
 
@@ -59,8 +60,14 @@ bool ReportODTRenderer::render(const KoReportRendererContext& context, ORODocume
                 KoSimpleOdtPrimitive *sp = new KoSimpleOdtLine(static_cast<OROLine*>(prim));
                 sp->setUID(uid++);
                 doc.addPrimitive(sp);
+            } else if (prim->type() == OROCheck::Check) {
+                KoSimpleOdtPrimitive *sp = new KoSimpleOdtCheckBox(static_cast<OROCheck*>(prim));
+                sp->setUID(uid++);
+                doc.addPrimitive(sp);
+            } else if (prim->type() == ORORect::Rect) {
+                // TODO: section background
             } else {
-                kDebug() << "unhandled primitive type";
+                kDebug() << "unhandled primitive type."<<prim->type();
             }
         }
     }
