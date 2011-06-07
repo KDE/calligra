@@ -406,7 +406,6 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_slidesSorter);
 
-    // Not connected yet
     menu.addAction(SmallIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
     menu.addAction(i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
