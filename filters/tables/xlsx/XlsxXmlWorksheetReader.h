@@ -54,7 +54,7 @@ protected:
     KoFilter::ConversionStatus read_chartsheet();
     KoFilter::ConversionStatus read_worksheet();
     KoFilter::ConversionStatus read_dialogsheet();
-    KoFilter::ConversionStatus read_sheetHelper();
+    KoFilter::ConversionStatus read_sheetHelper(const QString& type);
     KoFilter::ConversionStatus read_sheetFormatPr();
     KoFilter::ConversionStatus read_cols();
     KoFilter::ConversionStatus read_col();

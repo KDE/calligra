@@ -217,12 +217,14 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
+        if (isEndElement() && name() == "wsDr") {
+            break;
+        }
         if (isStartElement()) {
-            const QStringRef s = qualifiedName();
-            if ( s == "xdr:oneCellAnchor" || s == "xdr:twoCellAnchor" || s == "xdr:absoluteAnchor" || s == "xdr:grpSp" ) {
-                read_anchor(s);
-            }
+            TRY_READ_IF(oneCellAnchor)
+            ELSE_TRY_READ_IF(twoCellAnchor)
+            ELSE_TRY_READ_IF(absoluteAnchor)
+            SKIP_UNKNOWN
         }
     }
 #if 0
@@ -234,10 +236,39 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 
 #undef CURRENT_EL
 #define CURRENT_EL twoCellAnchor
-KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_twoCellAnchor()
 {
     READ_PROLOGUE
 
+    return read_anchor("twoCellAnchor");
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL oneCellAnchor
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_oneCellAnchor()
+{
+    READ_PROLOGUE
+
+    return read_anchor("oneCellAnchor");
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL absoluteAnchor
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_absoluteAnchor()
+{
+    READ_PROLOGUE
+
+    return read_anchor("absoluteAnchor");
+
+    READ_EPILOGUE
+}
+
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QString& reference)
+{
     class DrawingObjectGuard { // like QScopedPointer but sets the pointer to NULL afterwards
         public:
             DrawingObjectGuard(XlsxDrawingObject** obj) : m_obj(obj) {}
@@ -252,7 +283,9 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL)
+        if (isEndElement() && name() == reference) {
+            break;
+        }
         kDebug() << *this;
         if (isStartElement()) {
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
@@ -278,8 +311,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
             m_currentDrawingObject = 0;
         }
     }
-
-    READ_EPILOGUE
+    return KoFilter::OK;
 }
 
 #undef CURRENT_EL
