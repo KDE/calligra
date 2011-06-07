@@ -527,6 +527,7 @@ bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
                 if (keyEv && keyEv->key() == Qt::Key_Delete) {
                     deleteSlide();
                 }
+                break;
             }
 
             default:
@@ -538,14 +539,9 @@ bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
         switch (event->type()) {
             case QEvent::KeyPress: {
                 QKeyEvent *keyEv = static_cast<QKeyEvent *>(event);
-                switch (keyEv->key()) {
-                    case Qt::Key_Delete: {
-                        deleteSlideFromCustomShow();
-                        break;
-                    }
 
-                    default:
-                       break;
+                if (keyEv && keyEv->key() == Qt::Key_Delete) {
+                    deleteSlideFromCustomShow();
                 }
                 break;
             }

@@ -141,7 +141,7 @@ QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexe
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
     for( ; it != indexes.end(); ++it)
-        stream << QVariant::fromValue( qulonglong( it->internalPointer() ) );
+        stream << QVariant::fromValue(qulonglong(it->internalPointer()));
 
     data->setData(format, encoded);
     return data;
@@ -202,11 +202,11 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
     QList<KoPAPageBase *> slides;   
 
     // decode the data
-    while( ! stream.atEnd() )
+    while(!stream.atEnd())
     {
         QVariant v;
         stream >> v;
-        slides.append( static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
+        slides.append(static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
     }
 
     if (slides.empty()) {
