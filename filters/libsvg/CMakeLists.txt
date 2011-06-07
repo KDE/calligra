@@ -1,44 +1,28 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon
-${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes  ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/plugins/pathshapes  ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 
-set(karbonsvgexport_PART_SRCS 
-    SvgExport.cpp
-    SvgUtil.cpp
-    SvgWriter.cpp
+set(SHAPES_SOURCES
+    ${CMAKE_SOURCE_DIR}/plugins/pathshapes/ellipse/EllipseShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/pathshapes/rectangle/RectangleShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/pathshapes/star/StarShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShapeLoadingUpdater.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextRange.cpp
+)
+
+set(svgexport_PART_SRCS 
+    Frame.cpp
+    SvgWriter_generic.cpp
     ${SHAPES_SOURCES} 
 )
 
-kde4_add_plugin(karbonsvgexport ${karbonsvgexport_PART_SRCS})
 
-target_link_libraries(karbonsvgexport karbonui)
+kde4_add_plugin(svgexport ${svgexport_PART_SRCS})
 
-install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-########### next target ###############
-
-set(karbonsvgimport_PART_SRCS 
-    SvgImport.cpp
-    SvgUtil.cpp
-    SvgParser.cpp
-    SvgGradientHelper.cpp
-    SvgPatternHelper.cpp
-    SvgFilterHelper.cpp
-    SvgCssHelper.cpp
-    SvgClipPathHelper.cpp
-    SvgTextHelper.cpp
-    SvgLoadingContext.cpp
-    ${SHAPES_SOURCES} 
-)
-
-kde4_add_plugin(karbonsvgimport ${karbonsvgimport_PART_SRCS})
-
-target_link_libraries(karbonsvgimport karbonui)
-
-install(TARGETS karbonsvgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS svgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  karbon_svg_export.desktop karbon_svg_import.desktop karbon_svgz_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  svg_export.desktop DESTINATION ${SERVICES_INSTALL_DIR})

@@ -1,4 +1,5 @@
-  /* This file is part of the KDE project
+
+/* This file is part of the KDE project
     Copyright (C) 2002 Lars Siebold <khandha5@gmx.net>
     Copyright (C) 2002 Werner Trobin <trobin@kde.org>
     Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
@@ -32,7 +33,7 @@
   #include <KoFilter.h>
   #include <QVariantList>
   #include <QtGui/QGradient>
-
+  
 
   class KoShapeLayer;
   class KoShapeGroup;
@@ -54,26 +55,31 @@
 
 
   /// Implements exporting shapes to SVG
-  class SvgWriter
+  class SvgWriter_generic
   {
   public:
       /// Creates svg writer to export specified layers
-      SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize);
+      SvgWriter_generic(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize);
 
       /// Creates svg writer to export specified shapes
-      SvgWriter(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize);
+      SvgWriter_generic(const QList<KoShape*> &toplevelShapes, const QSizeF &pageSize);
 
       /// Destroys the svg writer
-      virtual ~SvgWriter();
+      virtual ~SvgWriter_generic();
 
       /// Writes svg to specified output device
       bool save(QIODevice &outputDevice);
+      
+      /// Writes svg with additonal app data to specified output device
+      bool save(QIODevice &outputDevice, QTextStream *appDataStream);
 
       /// Writes svg to the specified file
       bool save(const QString &filename, bool writeInlineImages);
 
+      virtual void saveAppData(KoShape *shape) =0;
+      
   private:
-    
+      
       void saveLayer(KoShapeLayer * layer);
       void saveGroup(KoShapeGroup * group);
       void saveShape(KoShape * shape);
@@ -83,14 +89,6 @@
       void saveImage(KoShape *picture);
       void saveText(ArtisticTextShape * text);
 
-      /*
-      * Saves the properties associated with the shape used for SVg animation.
-      */
-      void saveFrame(Frame *frame);
-      void savePlainText();
-      void saveScript();
-      void forTesting(KoShape *shape);
-      
       void getStyle(KoShape * shape, QTextStream * stream);
       void getFill(KoShape * shape, QTextStream *stream);
       void getStroke(KoShape * shape, QTextStream *stream);
@@ -111,11 +109,17 @@
       /// Checks if the matrix only has translation set
       bool isTranslation(const QTransform &);
 
+      void startDocument();
+      void saveToplevelShapes();
+      void endDocument(const QString *defs, const QString *body);
+      void endDocument(const QString *defs, const QString *body, const QString *appData);
+      void savePlainText();
+      void printIndentation(QTextStream *stream, unsigned int indent);
+      
       QTextStream* m_stream;
       QTextStream* m_defs;
       QTextStream* m_body;
-      QTextStream* m_frames;
-      
+            
       unsigned int m_indent;
       unsigned int m_indent2;
 
@@ -126,7 +130,7 @@
       bool m_writeInlineImages;
       QString m_filename;
 
-      QString m_script;
-  };
+      bool m_appData;
+      };
 
   #endif /*SVGWRITER_H */

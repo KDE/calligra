@@ -1,16 +1,20 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon
-${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes  ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 
+set(LIBSVG_SOURCES
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/Frame.cpp
+    )
+
 set(karbonsvgexport_PART_SRCS 
-SvgAnimationData.cpp
-Frame.cpp
-SvgExport.cpp
+    SvgExport.cpp
     SvgUtil.cpp
     SvgWriter.cpp
     ${SHAPES_SOURCES} 
+    ${LIBSVG_SOURCES}
 )
 
 kde4_add_plugin(karbonsvgexport ${karbonsvgexport_PART_SRCS})
