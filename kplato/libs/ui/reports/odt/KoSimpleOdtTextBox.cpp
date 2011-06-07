@@ -64,38 +64,24 @@ void KoSimpleOdtTextBox::createStyle(KoGenStyles &coll)
     pen.setColor(textBox()->lineStyle().lineColor);
     pen.setWidthF(textBox()->lineStyle().weight);
     pen.setStyle(textBox()->lineStyle().style);
-    kDebug()<<"------"<<pen;
     KoOdfGraphicStyles::saveOdfStrokeStyle(gs, coll, pen);
     gs.addProperty("style:horizontal-pos", "from-left");
     gs.addProperty("style:horizontal-rel", "page");
     gs.addProperty("style:vertical-pos", "from-top");
     gs.addProperty("style:vertical-rel", "page");
     m_frameStyleName = coll.insert(gs, "F");
-    kDebug()<<coll.styles().values();
 }
 
 void KoSimpleOdtTextBox::createBody(KoXmlWriter *bodyWriter) const
 {
-
-    kDebug()<<textBox()->text()<<":"<<m_primitive->position()<<m_primitive->size();
-
-    // convert to inches
-    qreal x = m_primitive->position().x() / KoDpi::dpiX();
-    qreal y = m_primitive->position().y() / KoDpi::dpiY();
-    qreal w = m_primitive->size().width() / KoDpi::dpiX();
-    qreal h = m_primitive->size().height() / KoDpi::dpiY();
-
     bodyWriter->startElement("draw:frame");
     bodyWriter->addAttribute("draw:id", itemName());
     bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
     bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
     bodyWriter->addAttribute("draw:style-name", m_frameStyleName);
-    bodyWriter->addAttribute("svg:x", QString("%1in").arg(x));
-    bodyWriter->addAttribute("svg:y", QString("%1in").arg(y));
-    bodyWriter->addAttribute("svg:width", QString("%1in").arg(w));
-    bodyWriter->addAttribute("svg:height", QString("%1in").arg(h));
-    bodyWriter->addAttribute("draw:z-index", "3");
+
+    commonAttributes(bodyWriter);
 
     bodyWriter->startElement("draw:text-box");
 

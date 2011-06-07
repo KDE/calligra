@@ -79,25 +79,14 @@ void KoSimpleOdtCheckBox::createStyle(KoGenStyles &coll)
 
 void KoSimpleOdtCheckBox::createBody(KoXmlWriter *bodyWriter) const
 {
-    // convert to inches
-    QString x = QString("%1in").arg(m_primitive->position().x() / KoDpi::dpiX());
-    QString y = QString("%1in").arg(m_primitive->position().y() / KoDpi::dpiX());
-    QString w = QString("%1in").arg(m_primitive->size().width() / KoDpi::dpiX());
-    QString h = QString("%1in").arg(m_primitive->size().height() / KoDpi::dpiY());
-
-    kDebug()<<m_primitive->position()<<m_primitive->size();
-    
     bodyWriter->startElement("draw:frame");
     bodyWriter->addAttribute("draw:id", itemName());
     bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
     bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
     bodyWriter->addAttribute("draw:style-name", m_frameStyleName);
-    bodyWriter->addAttribute("draw:z-index", "3");
-    bodyWriter->addAttribute("svg:x", x);
-    bodyWriter->addAttribute("svg:y", y);
-    bodyWriter->addAttribute("svg:width", w);
-    bodyWriter->addAttribute("svg:height", h);
+
+    commonAttributes(bodyWriter);
 
     bodyWriter->startElement("draw:image");
     bodyWriter->addAttribute("xlink:href", "Pictures/" + imageName());
@@ -107,8 +96,6 @@ void KoSimpleOdtCheckBox::createBody(KoXmlWriter *bodyWriter) const
     bodyWriter->endElement(); // draw:image
 
     bodyWriter->endElement(); // draw:frame
-    
-    kDebug();
 }
 
 QString KoSimpleOdtCheckBox::imageName() const
@@ -123,7 +110,6 @@ bool KoSimpleOdtCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWriter) 
         return false;
     }
     OROCheck * chk = checkBox();
-    kDebug()<<name<<chk->checkType()<<chk->value();
     QSizeF sz = chk->size();
     QPen fpen; // frame pen
     if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {
@@ -156,7 +142,6 @@ bool KoSimpleOdtCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWriter) 
             QRectF r = rc.adjusted(ox + ps.x(), oy + ps.y(), -(ox + ps.x()), -(oy + ps.y()));
             painter.drawLine(r.topLeft(), r.bottomRight());
             painter.drawLine(r.bottomLeft(), r.topRight());
-            kDebug()<<"rc="<<rc<<"r"<<r;
         }
     } else if (chk->checkType() == "Dot") {
         //Radio Style
@@ -170,15 +155,15 @@ bool KoSimpleOdtCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWriter) 
         }
     } else {
         //Tickbox Style
-        painter.drawRoundedRect(rc, sz.width() / 10 , sz.height() / 10);
+        painter.drawRoundedRect(rc.adjusted(ps.x(), ps.y(), -ps.x(), -ps.y()), sz.width() / 10 , sz.height() / 10);
 
         if (chk->value()) {
             QPen lp;
             lp.setColor(chk->foregroundColor());
             lp.setWidth(ox > oy ? oy : ox);
             painter.setPen(lp);
-            painter.drawLine(QPointF(ox, sz.height() / 2), QPointF(sz.width() / 2, sz.height() - oy));
-            painter.drawLine(QPointF(sz.width() / 2, sz.height() - oy), QPointF(sz.width() - ox, oy));
+            painter.drawLine(QPointF(ox, sz.height() / 2) + ps, QPointF(sz.width() / 2, sz.height() - oy) + ps);
+            painter.drawLine(QPointF(sz.width() / 2, sz.height() - oy) + ps, QPointF(sz.width() - ox, oy) + ps);
         }
     }
     painter.end();

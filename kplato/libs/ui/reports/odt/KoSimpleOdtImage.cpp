@@ -52,8 +52,11 @@ void KoSimpleOdtImage::createBody(KoXmlWriter *bodyWriter) const
 {
     bodyWriter->startElement("draw:frame");
     bodyWriter->addAttribute("draw:style-name", "picture");
-    bodyWriter->addAttribute("draw:name", QString("name_%1x%2").arg(m_primitive->position().x()).arg(m_primitive->position().y()));
+    bodyWriter->addAttribute("draw:id", itemName());
+    bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
+    bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
+    bodyWriter->addAttribute("draw:style-name", m_frameStyleName);
 
     commonAttributes(bodyWriter);
 

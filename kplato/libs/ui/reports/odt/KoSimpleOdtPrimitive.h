@@ -51,6 +51,8 @@ protected:
 protected:
     OROPrimitive *m_primitive;
     int m_uid;
+    QString m_frameStyleName;
+
 };
 
 #endif // KOSIMPLEODTPRIMITIVE_H

@@ -48,7 +48,6 @@ protected:
     QString imageName() const;
 
 private:
-    QString m_frameStyleName;
     QString m_paragraphStyleName;
     QString m_textStyleName;
 };
