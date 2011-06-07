@@ -28,8 +28,6 @@ class QAbstractItemView;
 class QModelIndex;
 class QItemSelection;
 class KPrSelectionToggle;
-class KoPADocument;
-class KoPAPageBase;
 
 /**
  * @brief Allows to select and deselect items for item views.
@@ -42,7 +40,8 @@ class KPrSelectionManager : public QObject
     Q_OBJECT
 
 public:
-    KPrSelectionManager(QAbstractItemView *parent, KoPADocument *document=0);
+    KPrSelectionManager(QAbstractItemView *parent);
+
     virtual ~KPrSelectionManager();
     virtual bool eventFilter(QObject *watched, QEvent *event);
 
@@ -65,16 +64,11 @@ private slots:
     void slotSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private:
-    KoPAPageBase* pageForIndex(const QModelIndex &index) const;
-    const QModelIndex indexForPage(KoPAPageBase *page) const;
     void applyPointingHandCursor();
     void restoreCursor();
-
-private:
     QAbstractItemView *m_view;
     KPrSelectionToggle *m_toggle;
     bool m_connected;
     bool m_appliedPointingHandCursor;
-    KoPADocument *m_document;
 };
 #endif // KPRSELECTIONMANAGER_H

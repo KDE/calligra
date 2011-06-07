@@ -153,8 +153,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     m_customSlidesShowView->installEventFilter(this);
 
     //install selection manager for Slides Sorter View
-    m_selectionManagerSlidesSorter = new KPrSelectionManager(m_slidesSorter, m_view->kopaDocument());
-
+    m_selectionManagerSlidesSorter = new KPrSelectionManager(m_slidesSorter);
 }
 
 KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
@@ -500,7 +499,6 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_slidesSorter);
 
-    // Not connected yet
     menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
     menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
@@ -515,7 +513,6 @@ void KPrViewModeSlidesSorter::customSlideShowsContextMenu(QContextMenuEvent *eve
 {
     QMenu menu(m_customSlidesShowView);
 
-    // Not connected yet
     menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlideFromCustomShow()));
     menu.exec(event->globalPos());
 }
@@ -525,17 +522,11 @@ bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_slidesSorter) {
         switch (event->type()) {
             case QEvent::KeyPress: {
-                QKeyEvent *keyEv = static_cast<QKeyEvent *>(event);
-                switch (keyEv->key()) {
-                    case Qt::Key_Delete: {
-                        deleteSlide();
-                        break;
-                    }
+                QKeyEvent *keyEv = dynamic_cast<QKeyEvent *>(event);
 
-                    default:
-                       break;
+                if (keyEv && keyEv->key() == Qt::Key_Delete) {
+                    deleteSlide();
                 }
-                break;
             }
 
             default:

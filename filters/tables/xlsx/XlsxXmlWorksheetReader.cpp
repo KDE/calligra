@@ -330,7 +330,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_chartsheet()
 {
     READ_PROLOGUE
 
-    return read_sheetHelper();
+    return read_sheetHelper("chartsheet");
 
     READ_EPILOGUE
 }
@@ -341,7 +341,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_dialogsheet()
 {
     READ_PROLOGUE
 
-    return read_sheetHelper();
+    return read_sheetHelper("dialogsheet");
 
     READ_EPILOGUE
 }
@@ -396,12 +396,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 {
     READ_PROLOGUE
 
-    return read_sheetHelper();
+    return read_sheetHelper("worksheet");
 
     READ_EPILOGUE
 }
 
-KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper()
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QString& type)
 {
     // In the first round we do not wish to output anything
     QBuffer fakeBuffer;
@@ -436,7 +436,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL)
+        if (isEndElement() && name() == type) {
+            break;
+        }
         if (isStartElement() && !m_context->firstRoundOfReading) {
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
@@ -531,23 +533,47 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper()
     body = heldBody;
 
     // now we have everything to start writing the actual cells
-    for(int c = 0; c <= m_context->sheet->maxColumn(); ++c) {
+    int c = 0;
+    while (c <= m_context->sheet->maxColumn()) {
         body->startElement("table:table-column");
-        if (Column* column = m_context->sheet->column(c, false)) {
-            //xmlWriter->addAttribute("table:default-cell-style-name", defaultStyleName);
-            if (column->hidden) {
-                body->addAttribute("table:visibility", "collapse");
+        int repeatedColumns = 1;
+        bool currentColumnHidden = false;
+        Column* column = m_context->sheet->column(c, false);
+        if (column && column->hidden) {
+            body->addAttribute("table:visibility", "collapse");
+            currentColumnHidden = true;
+        }
+        ++c;
+        while (c <= m_context->sheet->maxColumn()) {
+            column = m_context->sheet->column(c, false);
+            if (column && column->hidden ) {
+                if (currentColumnHidden) {
+                    ++repeatedColumns;
+                }
+                else {
+                    break;
+                }
             }
-            //xmlWriter->addAttribute("table:number-columns-repeated", );
-            //xmlWriter->addAttribute("table:style-name", styleName);
+            else {
+                if (!currentColumnHidden) {
+                    ++repeatedColumns;
+                }
+                else {
+                    break;
+                }
+            }
+            ++c;
+        }
+        if (repeatedColumns > 1) {
+           body->addAttribute("table:number-columns-repeated", repeatedColumns);
         }
         body->endElement();  // table:table-column
     }
+
     const int rowCount = m_context->sheet->maxRow();
     for(int r = 0; r <= rowCount; ++r) {
         body->startElement("table:table-row");
         if (Row* row = m_context->sheet->row(r, false)) {
-
             if (!row->styleName.isEmpty()) {
                 body->addAttribute("table:style-name", row->styleName);
             }

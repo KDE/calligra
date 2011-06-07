@@ -21,11 +21,9 @@
 #include "KPrSlidesManagerView.h"
 
 //Qt headers
-#include <QScrollBar>
-#include <QMenu>
 #include <QtCore/qmath.h>
 #include <QPaintEvent>
-#include <QtGui>
+#include <QScrollBar>
 
 //Kde headers
 #include <klocale.h>
@@ -33,7 +31,6 @@
 
 //Calligra headers
 #include <KoToolProxy.h>
-#include "KPrViewModeSlidesSorter.h"
 
 KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     : QListView(parent)
@@ -41,7 +38,7 @@ KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
 {
     setViewMode(QListView::IconMode);
     setFlow(QListView::LeftToRight);
-    setWrapping(TRUE);
+    setWrapping(true);
     setResizeMode(QListView::Adjust);
     setDragEnabled(true);
     setAcceptDrops(true);
@@ -64,12 +61,12 @@ void KPrSlidesManagerView::paintEvent(QPaintEvent *event)
         QSize size(itemSize().width(), itemSize().height());
 
         QPair <int, int> m_pair = cursorRowAndColumn();
-
         int numberColumn = m_pair.first;
         int numberRow = m_pair.second;
+        int scrollBarValue = verticalScrollBar()->value();
 
-        QPoint point1(numberColumn * size.width(), numberRow * size.height());
-        QPoint point2(numberColumn * size.width(), (numberRow + 1) * size.height());
+        QPoint point1(numberColumn * size.width(), numberRow * size.height() - scrollBarValue);
+        QPoint point2(numberColumn * size.width(), (numberRow + 1) * size.height() - scrollBarValue);
 
         QLineF line(point1, point2);
 
@@ -121,8 +118,9 @@ void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 
     int newIndex = cursorSlideIndex();
 
-    if (newIndex >= model()->rowCount(QModelIndex()))
+    if (newIndex >= model()->rowCount(QModelIndex())) {
         newIndex = -1;
+    }
 
     model()->dropMimeData(ev->mimeData(), Qt::MoveAction, newIndex, -1, QModelIndex());
 }
@@ -166,7 +164,7 @@ void KPrSlidesManagerView::setDragingFlag(bool flag)
     m_dragingFlag = flag;
 }
 
-bool KPrSlidesManagerView::isDraging()
+bool KPrSlidesManagerView::isDraging() const
 {
     return m_dragingFlag;
 }
@@ -200,7 +198,7 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
 
 QPixmap KPrSlidesManagerView::createDragPixmap() const
 {
-    const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+     const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
      Q_ASSERT(!selectedIndexes.isEmpty());
 
      const int itemCount = selectedIndexes.count();
@@ -222,10 +220,8 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
          xCount = itemCount;
      }
 
-     int yCount = itemCount / xCount;
-     if (itemCount % xCount != 0) {
-         ++yCount;
-     }
+    int yCount = qCeil(itemCount/xCount);
+
      if (yCount > xCount) {
          yCount = xCount;
      }
@@ -257,23 +253,24 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
 int KPrSlidesManagerView::cursorSlideIndex() const
 {
     QPair <int, int> m_pair = cursorRowAndColumn();
-    int slidesNumber = qFloor((contentsRect().width() - 20)/itemSize().width());
+    int slidesNumber = qFloor((contentsRect().width() - 20) / itemSize().width());
     return (m_pair.first + m_pair.second * slidesNumber);
 }
 
 QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
 {
     //20 is for the margin.
-    int slidesNumber = qFloor((contentsRect().width() - 20)/itemSize().width());
+    int slidesNumber = qFloor((contentsRect().width() - 20) / itemSize().width());
+    int scrollBarValue = verticalScrollBar()->value();
 
     QSize size(itemSize().width(), itemSize().height());
     QPoint cursorPosition = QWidget::mapFromGlobal(QCursor::pos());
 
-    int numberColumn = qFloor(cursorPosition.x()/size.width());
-    int numberRow = qFloor(cursorPosition.y()/size.height());
+    int numberColumn = qFloor(cursorPosition.x() / size.width());
+    int numberRow = qFloor((cursorPosition.y() + scrollBarValue) / size.height());
     int numberMod = (numberColumn + slidesNumber * numberRow) % (model()->rowCount(QModelIndex()) + 1);
 
-     int totalRows = qCeil((model()->rowCount(QModelIndex()))/slidesNumber);
+     int totalRows = qCeil((model()->rowCount(QModelIndex())) / slidesNumber);
 
     if (numberColumn > slidesNumber) {
         numberColumn = slidesNumber;
@@ -288,9 +285,5 @@ QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
         numberColumn = model()->rowCount(QModelIndex()) % slidesNumber;
     }
 
-    QPair <int, int> m_pair;
-    m_pair.first = numberColumn;
-    m_pair.second = numberRow;
-
-    return m_pair;
+    return QPair<int,int>(numberColumn, numberRow);
 }

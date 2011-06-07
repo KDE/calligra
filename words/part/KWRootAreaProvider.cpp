@@ -212,9 +212,11 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
             if (frame->anchoredPageNumber() == pageNumber) {
                 qreal oldOffset = frame->anchoredFrameOffset();
                 qreal newOffset = rootAreaPage->page.offsetInDocument();
-                frame->setAnchoredFrameOffset(newOffset);
-                QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
-                frame->shape()->setPosition(pos);
+                if (!qFuzzyCompare(1 + oldOffset, 1 + newOffset)) {
+                    frame->setAnchoredFrameOffset(newOffset);
+                    QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
+                    frame->shape()->setPosition(pos);
+                }
             }
         }
     }

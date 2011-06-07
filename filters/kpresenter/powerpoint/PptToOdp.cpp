@@ -2552,6 +2552,10 @@ PptToOdp::processParagraph(Writer& out,
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineParagraphProperties(style, pf, min_fontsize);
+    //NOTE: Help text layout to apply correct line-height for empty lines.
+    if (start == end) {
+        defineTextProperties(style, cf, 0, 0, 0);
+    }
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
     out.xml.addCompleteElement(&spans_buf);
     out.xml.endElement(); //text:p

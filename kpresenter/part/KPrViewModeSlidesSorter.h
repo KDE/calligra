@@ -61,10 +61,10 @@ public:
      * Change the KPrView active page
      * @param page pointer to the new active page
      */
-    void updateActivePage( KoPAPageBase *page );
+    void updateActivePage(KoPAPageBase *page);
 
-    void addShape( KoShape *shape );
-    void removeShape( KoShape *shape );
+    void addShape(KoShape *shape);
+    void removeShape(KoShape *shape);
 
     /**
       * Return a list with the pointer to the selected slides
@@ -176,7 +176,6 @@ private slots:
     void changeActiveSlideShow(QString name);
 
     void deleteSlideFromCustomShow();
-
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

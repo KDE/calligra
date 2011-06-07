@@ -382,19 +382,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:border-right
     // fo:border-top
     // fo:clip
-    // TODO: Else the containing shape SHOULD use a set of default internal
-    // margins for text on shapes.  Test files required.
-    if (!ds.fAutoTextMargin()) {
-        // fo:margin
-        // fo:margin-bottom
-        style.addProperty("fo:margin-bottom", pt(ds.dyTextBottom()/12700.), gt);
-        // fo:margin-left
-        style.addProperty("fo:margin-left", pt(ds.dxTextLeft()/12700.), gt);
-        // fo:margin-right
-        style.addProperty("fo:margin-right", pt(ds.dxTextRight()/12700.), gt);
-        // fo:margin-top
-        style.addProperty("fo:margin-top", pt(ds.dyTextTop()/12700.), gt);
-    }
+    // fo:margin
+    // fo:margin-bottom
+    // fo:margin-left
+    // fo:margin-right
+    // fo:margin-top
     // fo:max-height
     // fo:max-width
     // fo:min-height
@@ -404,6 +396,14 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:padding-left
     // fo:padding-right
     // fo:padding-top
+    // TODO: Else the containing shape SHOULD use a set of default internal
+    // margins for text on shapes.  Test files required.
+    if (!ds.fAutoTextMargin()) {
+        style.addProperty("fo:padding-bottom", pt(ds.dyTextBottom()/12700.), gt);
+        style.addProperty("fo:padding-left", pt(ds.dxTextLeft()/12700.), gt);
+        style.addProperty("fo:padding-right", pt(ds.dxTextRight()/12700.), gt);
+        style.addProperty("fo:padding-top", pt(ds.dyTextTop()/12700.), gt);
+    }
     // fo:wrap-option
     // style:border-line-width
     // style:border-line-width-bottom

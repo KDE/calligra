@@ -626,8 +626,13 @@ bool Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<St
 
 void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
 {
-    if ( !m_isWrapped || !m_std )
+    if ( !m_isWrapped || !m_std ) {
         return;
+    }
+
+#ifdef WV2_DEBUG_SPRMS
+    wvlog << "Unwrapping style:" << "ASCII Name: '" << name().ascii() << "'" << endl;
+#endif
 
     if ( m_std->sgc == sgcPara ) {
         const Style* parentStyle = 0;
@@ -635,6 +640,7 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         if ( m_std->istdBase != 0x0fff ) {
             parentStyle = stylesheet.styleByIndex( m_std->istdBase );
             if ( parentStyle ) {
+                wvlog << "#### parent style ASCII Name: '" << parentStyle->name().ascii() << "'" << endl;
                 const_cast<Style*>( parentStyle )->unwrapStyle( stylesheet, version );
                 m_properties->pap() = parentStyle->paragraphProperties().pap();
                 *m_chp = parentStyle->chp();
@@ -655,7 +661,7 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         m_properties->pap().apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
         data += cbUPX;
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# done" << endl;
+        wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
 #endif
 
         // character
@@ -666,7 +672,7 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
 #endif
         m_chp->apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# done" << endl;
+        wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
 #endif
     }
     else if ( m_std->sgc == sgcChp ) {
@@ -675,15 +681,16 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         if ( m_std->istdBase != 0x0fff ) {
             parentStyle = stylesheet.styleByIndex( m_std->istdBase );
             if ( parentStyle ) {
-                wvlog << "##### in here, parent style = " << parentStyle->sti() << endl;
+                wvlog << "#### parent style ASCII Name: '" << parentStyle->name().ascii() << "'" << endl;
                 const_cast<Style*>( parentStyle )->unwrapStyle( stylesheet, version );
                 bool ok;
                 m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
                 wvlog << "our istd = " << m_upechpx->istd << " sti = " << m_std->sti << endl;
                 mergeUpechpx( parentStyle, version );
             }
-            else
+            else {
                 wvlog << "################# NO parent style for this character style found" << endl;
+            }
         }
         else {
             // no need to do anything regarding the stiNormalChar parentStyle
@@ -696,8 +703,9 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         //finally apply so the chpx so we have ourselves a nice chp
         m_chp->apply(m_upechpx->grpprl, m_upechpx->cb, parentStyle, &stylesheet, 0, version);
     }
-    else
+    else {
         wvlog << "Warning: Unknown style type code detected" << endl;
+    }
     m_isWrapped = false;
 }
 
@@ -997,8 +1005,9 @@ StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf 
           it != m_styles.end(); ++it )
     {
 #ifdef WV2_DEBUG_STYLESHEET
-        wvlog << "Unwrapping style: " << i << endl;
-        ++i;
+        wvlog << "Going to unwrap style:" << "[" << i << "]" <<
+                 "ASCII Name: '" << (*it)->name().ascii() << "'" << endl;
+        i++;
 #endif
         (*it)->unwrapStyle( *this, version );
     }

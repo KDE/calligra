@@ -23,31 +23,22 @@
 
 //Calligra headers
 #include "KPrSelectionToggle.h"
-#include "KoPADocument.h"
 
 //KDE headers
 #include <KGlobalSettings>
 #include <KIconLoader>
-#include <KIconEffect>
 
 //Qt Headers
-#include <QAbstractButton>
 #include <QAbstractItemView>
-#include <QAbstractProxyModel>
-#include <QApplication>
 #include <QModelIndex>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QRect>
-#include <QTimeLine>
+#include <QApplication>
 
-KPrSelectionManager::KPrSelectionManager(QAbstractItemView *parent, KoPADocument *document) :
-    QObject(parent),
-    m_view(parent),
-    m_toggle(0),
-    m_connected(false),
-    m_appliedPointingHandCursor(false),
-    m_document(document)
+KPrSelectionManager::KPrSelectionManager(QAbstractItemView *parent)
+    : QObject(parent)
+    , m_view(parent)
+    , m_toggle(0)
+    , m_connected(false)
+    , m_appliedPointingHandCursor(false)
 {
     connect(parent, SIGNAL(entered(const QModelIndex&)),
             this, SLOT(slotEntered(const QModelIndex&)));
@@ -249,18 +240,6 @@ void KPrSelectionManager::slotSelectionChanged(const QItemSelection &selected,
         }
     }
 }
-
-KoPAPageBase* KPrSelectionManager::pageForIndex(const QModelIndex &index) const
-{
-    return m_document->pageByIndex(index.row(), false);
-}
-
-const QModelIndex KPrSelectionManager::indexForPage(KoPAPageBase *page) const
-{
-    QModelIndex pageIndex = m_view->model()->index(m_document->pageIndex(page), 0, QModelIndex());
-    return pageIndex;
-}
-
 
 void KPrSelectionManager::applyPointingHandCursor()
 {
