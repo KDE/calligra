@@ -27,8 +27,6 @@
 #include <KoPAPageBase.h>
 #include <KoPAViewBase.h>
 #include <KoPAPage.h>
-#include <KoPAPageDeleteCommand.h>
-#include <KoPAPageInsertCommand.h>
 #include <KoPAPageMoveCommand.h>
 #include <KoPAOdfPageSaveHelper.h>
 #include <KoDrag.h>
@@ -62,14 +60,15 @@ void KPrSlidesSorterDocumentModel::setDocument(KoPADocument *document)
 
 QModelIndex KPrSlidesSorterDocumentModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if( !m_document )
+    if(!m_document) {
         return QModelIndex();
+    }
 
     // check if parent is root node
-    if(!parent.isValid())
-    {
-        if( row >= 0 && row < m_document->pages(false).count() )
+    if(!parent.isValid()) {
+        if(row >= 0 && row < m_document->pages(false).count()) {
             return createIndex(row, column, m_document->pages(false).at(row));
+        }
     }
     return QModelIndex();
 }
@@ -209,13 +208,13 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
     while (! stream.atEnd()) {
         QVariant v;
         stream >> v;
-        KoPAPageBase *page = m_document->pageByIndex(v.toInt (),false);
+        KoPAPageBase *page = m_document->pageByIndex(v.toInt(),false);
         if (page) {
             slides.append(page);
         }
     }
 
-    if (slides.empty ()) {
+    if (slides.empty()) {
         return false;
     }
 
@@ -239,13 +238,11 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
         pageAfter = m_document->pageByIndex(beginRow - 1,false);
     }
 
-
     if (!slides.empty ()) {
         doDrop(slides, pageAfter, action);
     }
 
     return true;
-
 }
 
 void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action)
@@ -295,14 +292,14 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
      }
 
 
-    switch ( action ) {
-    case Qt::MoveAction : {
+    switch (action) {
+    case Qt::MoveAction: {
         KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
         m_document->addCommand(command);
         m_viewModeSlidesSorter->view()->setActivePage(slides.first());
         return;
     }
-    case Qt::CopyAction : {
+    case Qt::CopyAction: {
         KoPAOdfPageSaveHelper saveHelper(m_document, slides);
         KoDrag drag;
         drag.setOdf(KoOdf::mimeType(m_document->documentType()), saveHelper);
@@ -312,7 +309,7 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
         m_viewModeSlidesSorter->view()->setActivePage(slides.first());
         return;
     }
-    default :
+    default:
         qDebug("Unknown action: %d ", (int)action);
         return;
     }

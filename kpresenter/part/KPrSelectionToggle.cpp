@@ -30,21 +30,19 @@
 #include <KDebug>
 
 //Qt Headers
-#include <QApplication>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QRect>
-#include <QTimer>
 #include <QTimeLine>
 
-KPrSelectionToggle::KPrSelectionToggle(QWidget *parent) :
-    QAbstractButton(parent),
-    m_isHovered(false),
-    m_leftMouseButtonPressed(false),
-    m_fadingValue(0),
-    m_margin(0),
-    m_icon(),
-    m_fadingTimeLine(0)
+KPrSelectionToggle::KPrSelectionToggle(QWidget *parent)
+    : QAbstractButton(parent)
+    , m_isHovered(false)
+    , m_leftMouseButtonPressed(false)
+    , m_fadingValue(0)
+    , m_margin(0)
+    , m_icon()
+    , m_fadingTimeLine(0)
 {
     setFocusPolicy(Qt::NoFocus);
     parent->installEventFilter(this);
