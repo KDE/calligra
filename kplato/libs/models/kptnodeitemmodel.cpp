@@ -2995,13 +2995,13 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
         QDate date = dt.date();
         MacroCommand *m = new MacroCommand( i18n( "Modify completion" ) );
         if ( ! c.isStarted() ) {
-            m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
+            m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
         }
         m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, value.toInt() ) );
         if ( value.toInt() == 100 ) {
-            m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
             m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
+            m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
         }
         emit executeCommand( m ); // also adds a new entry if necessary
         if ( c.entrymode() == Completion::EnterCompleted ) {
@@ -3023,10 +3023,10 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
             QDateTime dt = QDateTime::currentDateTime();
             QDate date = dt.date();
             MacroCommand *m = new MacroCommand( i18n( "Set finished" ) );
-            m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
-            m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
+            m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
+            m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
             m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, 100 ) );
             emit executeCommand( m ); // also adds a new entry if necessary
             return true;

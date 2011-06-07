@@ -44,7 +44,7 @@ using namespace MSO;
 
 using Conversion::twipsToPt;
 
-#define DEBUG_GHANDLER
+//#define DEBUG_GHANDLER
 
 // Specifies the format of the picture data for the PICF structure.
 enum
@@ -693,62 +693,59 @@ int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
             OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
             if (!fbse->embeddedBlip) {
 
-                //NOTE: An foDelay value of 0xffffffff specifies that the
-                //file is not in the delay stream and cRef must be zero.
+                //NOTE: An foDelay value of 0xffffffff specifies that the file
+                //is not in the delay stream and cRef must be zero.  A cRef
+                //value of 0x00000000 specifies an empty slot in the
+                //OfficeArtBStoreContainer.
 
-                //NOTE: A cRef value of 0x00000000 specifies an empty slot
-                //in the OfficeArtBStoreContainer.
-
-                if (fbse->foDelay != 0xffffffff) {
-                    if (!fbse->cRef) {
-                        kDebug(30513) << "Strange, no references to this BLIP, skipping";
-                        continue;
-                    }
-                    LEInputStream::Mark _zero;
-                    _zero = in.setMark();
-                    in.skip(fbse->foDelay);
-
-                    //let's check the record header if there's a BLIP stored
-                    LEInputStream::Mark _m;
-                    _m = in.setMark();
-                    OfficeArtRecordHeader rh;
-                    try {
-                        parseOfficeArtRecordHeader(in, rh);
-                    } catch (IOException _e) {
-                        kDebug(30513) << _e.msg;
-                        in.rewind(_zero);
-                        continue;
-                    } catch (...) {
-                        kWarning(30513) << "Warning: Caught an unknown exception!";
-                        in.rewind(_zero);
-                        continue;
-                    }
-                    in.rewind(_m);
-                    if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
-                        continue;
-                    }
-                    fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
-                    try {
-                        parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
-                    } catch (IOException _e) {
-                        kDebug(30513) << _e.msg;
-                        in.rewind(_zero);
-                        continue;
-                    } catch (...) {
-                        kWarning(30513) << "Warning: Caught an unknown exception!";
-                        in.rewind(_zero);
-                        continue;
-                    }
-                    in.rewind(_zero);
-                }
+                if (fbse->foDelay == 0xffffffff) {
 #ifdef DEBUG_GHANDLER
-                else {
-                    kDebug(30513) << "File not in the delay stream, skipping!";
-                }
+                    kDebug(30513) << "File not in the delay stream, continuing.";
 #endif
-            } else {
-                //TODO: parse the OfficeArtBlip record that follows
-                kDebug(30513) << "Embedded BLIP found, no support at the moment!";
+                    continue;
+                }
+                if (!fbse->cRef) {
+#ifdef DEBUG_GHANDLER
+                    kDebug(30513) << "Empty slot, continuing.";
+#endif
+                    continue;
+                }
+                LEInputStream::Mark _zero;
+                _zero = in.setMark();
+                in.skip(fbse->foDelay);
+
+                //let's check the record header if there's a BLIP stored
+                LEInputStream::Mark _m;
+                _m = in.setMark();
+                OfficeArtRecordHeader rh;
+                try {
+                    parseOfficeArtRecordHeader(in, rh);
+                } catch (IOException _e) {
+                    kDebug(30513) << _e.msg;
+                    in.rewind(_zero);
+                    continue;
+                } catch (...) {
+                    kWarning(30513) << "Warning: Caught an unknown exception!";
+                    in.rewind(_zero);
+                    continue;
+                }
+                in.rewind(_m);
+                if ( !(rh.recType >= 0xF018 && rh.recType <= 0xF117) ) {
+                    continue;
+                }
+                fbse->embeddedBlip = QSharedPointer<OfficeArtBlip>(new OfficeArtBlip(fbse));
+                try {
+                    parseOfficeArtBlip(in, *(fbse->embeddedBlip.data()));
+                } catch (IOException _e) {
+                    kDebug(30513) << _e.msg;
+                    in.rewind(_zero);
+                    continue;
+                } catch (...) {
+                    kWarning(30513) << "Warning: Caught an unknown exception!";
+                    in.rewind(_zero);
+                    continue;
+                }
+                in.rewind(_zero);
             }
         }
     }

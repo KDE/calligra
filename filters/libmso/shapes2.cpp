@@ -18,6 +18,9 @@
 #include "ODrawToOdf.h"
 
 #include <KoXmlWriter.h>
+#include "drawstyle.h"
+
+using namespace MSO;
 
 namespace
 {
@@ -2114,7 +2117,17 @@ void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 180<< 0<< 5500);
+    // custom way for processing modifieres as this shape
+    // return the AdjustValue, AdjustValue2 16-bit shifted
+    // see bug 274684, file mp03_cycle_default.ppt
+    const AdjustValue* val1 = get<AdjustValue>(o);
+    const Adjust2Value* val2 = get<Adjust2Value>(o);
+    const Adjust3Value* val3 = get<Adjust3Value>(o);
+    QString modifiers = QString::number(val1 ? val1->adjustvalue >> 16 : 180);
+    modifiers += QString(" %1").arg(val2 ? val2->adjust2value >> 16 : 0);
+    modifiers += QString(" %1").arg(val3 ? val3->adjust3value : 5500);
+    out.xml.addAttribute("draw:modifiers", modifiers);
+
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "B ?f3 ?f3 ?f20 ?f20 ?f19 ?f18 ?f17 ?f16 W 0 0 21600 21600 ?f9 ?f8 ?f11 ?f10 L ?f24 ?f23 ?f47 ?f46 ?f29 ?f28 Z N");
     out.xml.addAttribute("draw:type", "circular-arrow");

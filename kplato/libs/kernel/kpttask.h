@@ -148,8 +148,10 @@ public:
     /// Save to document
     void saveXML(QDomElement &element) const;
     
+    bool startIsValid() const { return m_started && m_startTime.isValid(); }
     bool isStarted() const { return m_started; }
     void setStarted( bool on );
+    bool finishIsValid() const { return m_finished && m_finishTime.isValid(); }
     bool isFinished() const { return m_finished; }
     void setFinished( bool on );
     DateTime startTime() const { return m_startTime; }

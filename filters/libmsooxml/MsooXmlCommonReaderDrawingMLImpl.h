@@ -1257,8 +1257,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         }
 #else
         chartexport->m_drawLayer = true;
-        chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
-        chartexport->m_y = EMU_TO_POINT(qMax(0, m_svgY));
+        chartexport->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
+        chartexport->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
         chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
         chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
 #endif
@@ -2516,9 +2516,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(x)
-    STRING_TO_INT(x, m_svgX, "off@x")
+    STRING_TO_LONGLONG(x, m_svgX, "off@x")
     READ_ATTR_WITHOUT_NS(y)
-    STRING_TO_INT(y, m_svgY, "off@y")
+    STRING_TO_LONGLONG(y, m_svgY, "off@y")
 
     if (!m_inGrpSpPr) {
         int index = 0;
