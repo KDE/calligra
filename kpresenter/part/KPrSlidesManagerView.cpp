@@ -207,7 +207,7 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
          xCount = 4;
          size = KIconLoader::SizeMedium;
      }
-     else if (itemCount > 5) {
+     else if (itemCount > 4) {
          xCount = 3;
          size = KIconLoader::SizeLarge;
      }
@@ -216,7 +216,10 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
          xCount = itemCount;
      }
 
-    int yCount = qCeil(itemCount/xCount);
+     int yCount = itemCount / xCount;
+     if (itemCount % xCount != 0) {
+         ++yCount;
+     }
 
      if (yCount > xCount) {
          yCount = xCount;
