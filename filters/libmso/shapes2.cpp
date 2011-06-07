@@ -19,8 +19,6 @@
 
 #include <KoXmlWriter.h>
 #include "drawstyle.h"
-#include "msodraw.h"
-#include "generated/leinputstream.h"
 
 using namespace MSO;
 
