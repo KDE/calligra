@@ -77,7 +77,7 @@ void KoSimpleOdtTextBox::createBody(KoXmlWriter *bodyWriter) const
 
     // convert to inches
     qreal x = m_primitive->position().x() / KoDpi::dpiX();
-    qreal y = m_primitive->position().y() / KoDpi::dpiX();
+    qreal y = m_primitive->position().y() / KoDpi::dpiY();
     qreal w = m_primitive->size().width() / KoDpi::dpiX();
     qreal h = m_primitive->size().height() / KoDpi::dpiY();
 
