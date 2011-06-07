@@ -51,7 +51,10 @@ public:
 
 protected:
     KoFilter::ConversionStatus readInternal();
+    KoFilter::ConversionStatus read_chartsheet();
     KoFilter::ConversionStatus read_worksheet();
+    KoFilter::ConversionStatus read_dialogsheet();
+    KoFilter::ConversionStatus read_sheetHelper();
     KoFilter::ConversionStatus read_sheetFormatPr();
     KoFilter::ConversionStatus read_cols();
     KoFilter::ConversionStatus read_col();
@@ -66,6 +69,7 @@ protected:
     KoFilter::ConversionStatus read_mergeCell();
     KoFilter::ConversionStatus read_mergeCells();
     KoFilter::ConversionStatus read_drawing();
+    KoFilter::ConversionStatus read_legacyDrawing();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_hyperlinks();
     KoFilter::ConversionStatus read_picture();

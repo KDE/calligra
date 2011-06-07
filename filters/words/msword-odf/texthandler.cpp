@@ -662,13 +662,17 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         return;
     }
 
-    m_insideDrawing = true;
+    //save the state of tables/paragraphs/lists (text-box)
+    saveState();
 
-    //create temporary writer for the picture tags
+    //Create temporary writer for the picture tags.
+    KoXmlWriter* writer = 0;
     QBuffer buf;
+
     buf.open(QIODevice::WriteOnly);
-    m_drawingWriter = new KoXmlWriter(&buf);
-    KoXmlWriter* writer = m_drawingWriter;
+    writer = new KoXmlWriter(&buf);
+    m_drawingWriter = writer;
+    m_insideDrawing = true;
 
     //frame or drawing shape acting as a hyperlink
     if (m_fld->m_hyperLinkActive) {
@@ -677,30 +681,27 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    //save the state of tables/paragraphs/lists (text-box)
-    saveState();
-    emit inlineObjectFound(data, m_drawingWriter);
+    emit inlineObjectFound(data, writer);
 
     //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {
         closeList();
     }
-    restoreState();
-
     if (m_fld->m_hyperLinkActive) {
         writer->endElement();
         m_fld->m_hyperLinkActive = false;
     }
+    //cleanup
+    delete m_drawingWriter;
+    m_drawingWriter = 0;
+    m_insideDrawing = false;
+
+    //restore the state
+    restoreState();
 
     //now add content to our current paragraph
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
     m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
-
-    m_insideDrawing = false;
-
-    //cleanup
-    delete m_drawingWriter;
-    m_drawingWriter = 0;
 }
 
 void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
@@ -715,13 +716,17 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
         return;
     }
 
-    m_insideDrawing = true;
+    //save the state of tables/paragraphs/lists (text-box)
+    saveState();
 
-    //create temporary writer for the picture tags
-    QBuffer drawingBuffer;
-    drawingBuffer.open(QIODevice::WriteOnly);
-    m_drawingWriter = new KoXmlWriter(&drawingBuffer);
-    KoXmlWriter* writer = m_drawingWriter;
+    //Create temporary writer for the picture tags.
+    KoXmlWriter* writer = 0;
+    QBuffer buf;
+
+    buf.open(QIODevice::WriteOnly);
+    writer = new KoXmlWriter(&buf);
+    m_drawingWriter = writer;
+    m_insideDrawing = true;
 
     //frame or drawing shape acting as a hyperlink
     if (m_fld->m_hyperLinkActive) {
@@ -730,30 +735,27 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
         writer->addAttribute("xlink:href", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
     }
 
-    //save the state of tables/paragraphs/lists (text-box)
-    saveState();
-    emit floatingObjectFound(globalCP, m_drawingWriter);
+    emit floatingObjectFound(globalCP, writer);
 
     //TODO: we should really improve processing of lists somehow
     if (listIsOpen()) {
         closeList();
     }
-    restoreState();
-
     if (m_fld->m_hyperLinkActive) {
         writer->endElement();
         m_fld->m_hyperLinkActive = false;
     }
-
-    //now add content to our current paragraph
-    QString contents = QString::fromUtf8(drawingBuffer.buffer(), drawingBuffer.buffer().size());
-    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
-
-    m_insideDrawing = false;
-
     //cleanup
     delete m_drawingWriter;
     m_drawingWriter = 0;
+    m_insideDrawing = false;
+
+    //restore the state
+    restoreState();
+
+    //now add content to our current paragraph
+    QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
 }
 
 // Sets m_currentStyle with PAP->istd (index to STSH structure)
@@ -761,67 +763,66 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
 {
     kDebug(30513) << "**********************************************";
 
+    //TODO: what has to be done in this situation
+    Q_ASSERT(paragraphProperties);
+    m_currentPPs = paragraphProperties;
+
     //check for a table to be parsed and processed
     if (m_currentTable) {
         kWarning(30513) << "==> WOW, unprocessed table: ignoring";
     }
     //set correct writer and style location
     KoXmlWriter* writer = currentWriter();
-    bool inStylesDotXml = false;
-
-    if (document()->writingHeader()) {
-        inStylesDotXml = true;
-    }
+    bool inStylesDotXml = document()->writingHeader();
 
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     const wvWare::Style* paragraphStyle = 0;
-    m_currentPPs = paragraphProperties;
 
     // Check list information, because that's bigger than a paragraph, and
-    // we'll track that here in the TextHandler. NOT TRUE any more according to
-    // [MS-DOC] - v20100926
+    // we'll track that here in the TextHandler.  NOT TRUE any more according
+    // to [MS-DOC] - v20100926
     //
-    bool isHeading = false;
-    int outlineLevel = 0;
-
     //TODO: <text:numbered-paragraph>
 
+    quint16 istd = paragraphProperties->pap().istd;
+
+    //Check for a named style for this paragraph.
+    paragraphStyle = styles.styleByIndex(istd);
+    if (!paragraphStyle) {
+        paragraphStyle = styles.styleByID(stiNormal);
+        kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
+    }
+    Q_ASSERT(paragraphStyle);
+
     //headings related logic
-    if (paragraphProperties) {
-        quint16 istd = paragraphProperties->pap().istd;
+    uint outlineLevel = 0;
+    bool isHeading = false;
 
-        //Check for a named style for this paragraph.
-        paragraphStyle = styles.styleByIndex(istd);
-        if (!paragraphStyle) {
-            paragraphStyle = styles.styleByID(stiNormal);
-            kDebug(30513) << "Invalid reference to paragraph style, reusing Normal";
-        }
-        Q_ASSERT(paragraphStyle);
+    //An unsigned integer that specifies the istd of the parent style from
+    //which this style inherits in the style inheritance tree, or 0x0FFF if
+    //this style does not inherit from any other style.
+    quint16 istdBase = 0x0fff;
 
-        //An unsigned integer that specifies the istd of the parent style from
-        //which this style inherits in the style inheritance tree, or 0x0FFF if
-        //this style does not inherit from any other style.
-        quint16 istdBase = 0x0fff;
-        if (!paragraphStyle->isEmpty()) {
-            istdBase = paragraphStyle->m_std->istdBase;
-        }
-//         kDebug(30513) << "istd:" << istd << "| istdBase:" << istdBase;
-
-        //Applying a heading style, paragraph is a heading.
-        if ( (istd >= 0x1) && (istd <= 0x9) ) {
-            isHeading = true;
-            //according to [MS-DOC] - v20100926
-            outlineLevel = istd - 1;
-        } else if ( (istdBase >= 0x1) && (istdBase <= 0x9) ) {
-            isHeading = true;
-            outlineLevel = istdBase - 1;
-        }
-        if (isHeading) {
-            //MS-DOC outline level is ZERO based, whereas ODF has ONE based.
-            outlineLevel++;
-        }
+    //Applying a heading style => paragraph is a heading.  MS-DOC outline level
+    //is ZERO based, whereas ODF has ONE based.
+    if ( (istd >= 0x1) && (istd <= 0x9) ) {
+        isHeading = true;
+        outlineLevel = istd;
     } else {
-        Q_ASSERT(paragraphProperties);
+        const wvWare::Style* ps = paragraphStyle;
+        while (!ps->isEmpty()) {
+            istdBase = ps->m_std->istdBase;
+//             kDebug(30513) << "istd:" << hex << istd << "| istdBase:" << istdBase;
+            if (istdBase == 0x0fff) {
+                break;
+            } else if ( (istdBase >= 0x1) && (istdBase <= 0x9) ) {
+                isHeading = true;
+                outlineLevel = istdBase;
+                break;
+            } else {
+                ps = styles.styleByIndex(istdBase);
+            }
+        }
     }
 
     //lists related logic
@@ -868,17 +869,15 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         }
     } //end pap.ilfo > 0 (ie. we're in a list or heading)
 
-    // Now that the bookkeeping is taken care of for old paragraphs,
-    // then actually create the new one.
+    // Now that the bookkeeping is taken care of for old paragraphs, then
+    // actually create the new one.
     kDebug(30513) << "create new Paragraph";
     m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
 
     //set paragraph properties
     m_paragraph->setParagraphProperties(paragraphProperties);
-
     //set current named style in m_paragraph
     m_paragraph->setParagraphStyle(paragraphStyle);
-
     //provide the background color information
     m_paragraph->setBgColor(m_document->currentBgColor());
 
@@ -1377,12 +1376,6 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         // Text in this switch's field-argument shall match the identifier in
         // the SEQ field.
         //
-        // \t field-argument - Uses paragraphs formatted with styles other than
-        // the built-in heading styles.  Text in this switch's field-argument
-        // specifies those styles as a set of comma-separated doublets, with
-        // each doublet being a comma-separated set of style name and table of
-        // content level.  \t can be combined with \o.
-        //
         // \u - Uses the applied paragraph outline level.
         // \w - Preserves tab entries within table entries.
         // \x - Preserves newline characters within table entries.
@@ -1392,20 +1385,21 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         //by the writeToFile function.  The m_fldStates stack should be empty.
         Q_ASSERT(m_fldStates.empty());
 
-        QRegExp rx;
-        QString hlinkStyleName;
-        QList<QString> styleNames = document()->tocStyleNames();
-
+        /*
+         * ************************************************
+         * process switches
+         * ************************************************
+         */
         // \h - Makes the table of contents entries hyperlinks.
-        rx = QRegExp("\\s\\\\h\\s");
+        QRegExp rx = QRegExp("\\s\\\\h\\s");
+        QString hlinkStyleName;
         bool hyperlink = false;
 
         if (rx.indexIn(*inst) >= 0) {
             hyperlink = true;
         }
-
-        //hyperlink style info not provided by the TOC field, reusing the text
-        //style of text:index-body content, expecting a text style
+        // Hyperlink style info is not provided by the TOC field, reusing the
+        // text style of text:index-body content.
         if (m_fld->m_styleName.contains('T')) {
             hlinkStyleName = m_mainStyles->style(m_fld->m_styleName)->parentName();
         } else {
@@ -1428,13 +1422,11 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         // range are specified by text in field-argument.  If no heading range
         // is specified, all heading levels used in the document are listed.
         rx = QRegExp("\\s\\\\o\\s\"(\\S+)\"");
-        int levels;
+        int levels = 0;
 
         if (rx.indexIn(*inst) >= 0) {
             QStringList levels_lst = rx.cap(1).split("-");
             levels = levels_lst.last().toInt();
-        } else {
-            levels = styleNames.size();
         }
 
         // \p field-argument - text in this switch's field-argument specifies a
@@ -1454,6 +1446,35 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
             }
         }
 
+        // \t field-argument - Uses paragraphs formatted with styles other than
+        // the built-in heading styles.  Text in this switch's field-argument
+        // specifies those styles as a set of comma-separated doublets, with
+        // each doublet being a comma-separated set of style name and table of
+        // content level.  \t can be combined with \o.
+        rx = QRegExp("\\s\\\\t\\s\"(.+)\"");
+        QMap<QString, int> customStyles;
+        bool useOutlineLevel = true;
+
+        if (rx.indexIn(*inst) >= 0) {
+            useOutlineLevel = false;
+            QStringList fragments = rx.cap(1).split(QRegExp(";"));
+            levels = fragments.last().toInt();
+            for (int i = 0 ; i < fragments.size(); i += 2) {
+                customStyles.insert(Conversion::processStyleName(fragments[i]),
+                                    fragments[i + 1].toInt());
+            }
+        }
+        /*
+         * ************************************************
+         * post-processing
+         * ************************************************
+         */
+        QStringList styleNames = document()->tocStyleNames();
+
+        //Set levels in case any of the switches in {\t,\o} were not present.
+        if (levels == 0) {
+            levels = styleNames.size();
+        }
         //post-process m_tocStyleNames
         if (styleNames.size() < levels) {
             if (styleNames.isEmpty()) {
@@ -1481,19 +1502,54 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                 }
             }
         }
-
+        /*
+         * ************************************************
+         * table-of-content
+         * ************************************************
+         */
         //NOTE: TOC content is not encapsulated in a paragraph
         KoXmlWriter* cwriter = currentWriter();
         cwriter->startElement("text:table-of-content");
+        //text:name
         cwriter->addAttribute("text:name", QString().setNum(m_tocNumber).prepend("_TOC"));
+        //text:protected
+        //text:protection-key
+        //text:protection-key-digest-algorithm
+        //text:style-name
+        //<text:table-of-content-source>
         cwriter->startElement("text:table-of-content-source");
         cwriter->addAttribute("text:index-scope", "document");
         cwriter->addAttribute("text:outline-level", levels);
         cwriter->addAttribute("text:relative-tab-stop-position", "false");
         cwriter->addAttribute("text:use-index-marks", "false");
-        cwriter->addAttribute("text:use-index-source-styles", "false");
-        cwriter->addAttribute("text:use-outline-level", "true");
-
+        cwriter->addAttribute("text:use-index-source-styles", !useOutlineLevel);
+        cwriter->addAttribute("text:use-outline-level", useOutlineLevel);
+        //|-- <text:index-source-styles>
+        if (!useOutlineLevel) {
+            QStringList styles;
+            for (int i = 1; i <= levels; i++) {
+                styles = customStyles.keys(i);
+                if (styles.isEmpty()) {
+                    continue;
+                }
+                cwriter->startElement("text:index-source-styles");
+                cwriter->addAttribute("text:outline-level", i);
+                for (int j = 0; j < styles.size(); j++) {
+                    cwriter->startElement("text:index-source-style");
+                    cwriter->addAttribute("text:style-name", styles[j].toUtf8());
+                    cwriter->endElement(); //text:index-source-style
+                }
+                cwriter->endElement(); //text:index-source-styles
+            }
+        }
+        //|-- <text:index-title-template>
+        int n = styleNames.indexOf(QRegExp("\\S+Heading$"));
+        if (n != -1) {
+            cwriter->startElement("text:index-title-template");
+            cwriter->addAttribute("text:style-name", styleNames[n]);
+            cwriter->endElement(); //text:index-title-template
+        }
+        //|-- <text:table-of-content-entry-template>
         for (int i = 0; i < levels; i++) {
             cwriter->startElement("text:table-of-content-entry-template");
             cwriter->addAttribute("text:outline-level", i + 1);
@@ -1506,7 +1562,6 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                 }
                 cwriter->endElement(); //text:index-entry-link-start
             }
-
             //Represents the chapter number where an index entry is located.
             //FIXME: we need some logic here!
             cwriter->startElement("text:index-entry-chapter");
@@ -1537,12 +1592,13 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         }
 
         cwriter->endElement(); //text:table-of-content-source
+        //<text:index-body>
         cwriter->startElement("text:index-body");
         cwriter->addCompleteElement(m_fld->m_buffer);
         cwriter->endElement(); //text:index-body
         cwriter->endElement(); //text:table-of-content
         break;
-    }
+    } // TOC
     default:
         break;
     }
@@ -2166,13 +2222,17 @@ void KWordTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push(State(m_currentTable, m_paragraph, m_listStyleName,
-                           m_currentListDepth, m_currentListID, m_previousLists));
+                           m_currentListDepth, m_currentListID, m_previousLists,
+                           m_drawingWriter, m_insideDrawing));
     m_currentTable = 0;
     m_paragraph = 0;
     m_listStyleName = "";
     m_currentListDepth = -1;
     m_currentListID = 0;
     m_previousLists.clear();
+
+    m_drawingWriter = 0;
+    m_insideDrawing = false;
 }
 
 void KWordTextHandler::restoreState()
@@ -2188,17 +2248,24 @@ void KWordTextHandler::restoreState()
 
     //warn if pointers weren't reset properly, but restore state anyway
     if (m_paragraph != 0) {
-        kWarning() << "m_paragraph pointer wasn't reset";
+        kWarning() << "Warning: m_paragraph pointer wasn't reset!";
     }
-    m_paragraph = s.paragraph;
     if (m_currentTable != 0) {
-        kWarning() << "m_currentTable pointer wasn't reset";
+        kWarning() << "Warning: m_currentTable pointer wasn't reset!";
     }
-    m_currentTable = s.currentTable;
+    if (m_drawingWriter != 0) {
+        kWarning() << "Warning: m_drawingWriter pointer wasn't reset!";
+    }
+
+    m_paragraph = s.paragraph;
+    m_currentTable = s.table;
     m_listStyleName = s.listStyleName;
-    m_currentListDepth = s.currentListDepth;
-    m_currentListID = s.currentListID;
+    m_currentListDepth = s.listDepth;
+    m_currentListID = s.listID;
     m_previousLists = s.previousLists;
+
+    m_drawingWriter = s.drawingWriter;
+    m_insideDrawing = s.insideDrawing;
 }
 
 void KWordTextHandler::fld_saveState()

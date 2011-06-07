@@ -135,6 +135,7 @@ void
 savePicture(PictureReference& ref, const T* a, KoStore* out)
 {
     if (!a) return;
+
     ref.uid = a->rgbUid1 + a->rgbUid2;
     ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
     if (!out->open(ref.name.toLocal8Bit())) {
@@ -167,7 +168,7 @@ saveDecompressedPicture(PictureReference& ref, const T* a, KoStore* store)
         buff.prepend((char*) tmp, 4);
         buff = qUncompress(buff);
 
-        if (buff.size() != cbSize) {
+        if ((uint)buff.size() != cbSize) {
             qDebug() << "Warning: uncompressed size of the metafile differs";
         }
     }
@@ -286,27 +287,67 @@ savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
 QByteArray
 getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32& offset)
 {
+    quint32 n = pib - 1;
     // return 16 byte rgbuid for this given blip id
     if (dgg.blipStore) {
         const MSO::OfficeArtBStoreContainer* b = dgg.blipStore.data();
-        if (pib < (quint32) b->rgfb.size() &&
-            b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>())
+        if (n < (quint32) b->rgfb.size() &&
+            b->rgfb[n].anon.is<MSO::OfficeArtFBSE>())
         {
-            const MSO::OfficeArtFBSE* fbse = b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>();
+            const MSO::OfficeArtFBSE* fbse = b->rgfb[n].anon.get<MSO::OfficeArtFBSE>();
 #ifdef DEBUG_PICTURES
             qDebug() << "rgfb.size():" << b->rgfb.size();
+            qDebug() << "pib:" << pib;
             qDebug() << "OfficeArtFBSE: DEBUG";
+            qDebug() << "rgbUid:" << fbse->rgbUid.toHex();
             qDebug() << "tag:" << fbse->tag;
             qDebug() << "cRef:" << fbse->cRef;
             qDebug() << "foDelay:" << fbse->foDelay;
             qDebug() << "embeddeBlip:" << fbse->embeddedBlip;
 #endif
             offset = fbse->foDelay;
-            return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
+            return fbse->rgbUid;
         }
     }
     if (pib != 0xFFFF && pib != 0) {
         qDebug() << "Could not find image for pib " << pib;
     }
     return QByteArray();
+}
+
+QMap<QByteArray, QString>
+createPictures(KoStore* store, KoXmlWriter* manifest,
+               const QList<MSO::OfficeArtBStoreContainerFileBlock>* rgfb)
+{
+    PictureReference ref;
+    QMap<QByteArray, QString> fileNames;
+
+    if (!rgfb) return fileNames;
+
+    foreach (const MSO::OfficeArtBStoreContainerFileBlock& block, *rgfb) {
+        ref = savePicture(block, store);
+
+        if (ref.name.length() == 0) {
+            qDebug() << "Empty picture reference, probably an empty slot";
+            continue;
+        }
+        //check if the MD4 digest is up2date
+        if (block.anon.is<MSO::OfficeArtFBSE>()) {
+            const MSO::OfficeArtFBSE* fbse = block.anon.get<MSO::OfficeArtFBSE>();
+            if (fbse->rgbUid != ref.uid) {
+                ref.uid = fbse->rgbUid;
+            }
+        }
+        manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
+        fileNames[ref.uid] = ref.name;
+    }
+#ifdef DEBUG_PICTURES
+    qDebug() << "fileNames: DEBUG";
+    QMap<QByteArray, QString>::const_iterator i = fileNames.constBegin();
+    while (i != fileNames.constEnd()) {
+        qDebug() << i.key().toHex() << ": " << i.value();
+        ++i;
+    }
+#endif
+    return fileNames;
 }

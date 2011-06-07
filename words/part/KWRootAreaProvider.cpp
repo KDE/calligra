@@ -46,15 +46,14 @@ class KWTextLayoutRootArea : public KoTextLayoutRootArea
 {
     public:
         KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, KWFrame *frame, int pageNumber) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_frame(frame), m_pageNumber(pageNumber) {
-            kDebug(32001);
+            //kDebug(32001);
         }
         virtual ~KWTextLayoutRootArea() {
-            kDebug();
+            //kDebug(32001);
         }
         virtual bool layout(FrameIterator *cursor) {
-            kDebug() << "START pageNumber=" << m_pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
+            //kDebug(32001) << "pageNumber=" << m_pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
             bool ok = KoTextLayoutRootArea::layout(cursor);
-            kDebug() << "END pageNumber=" << m_pageNumber << "frameSetType=" << KWord::frameSetTypeName(m_frameSet->textFrameSetType()) << "isDirty=" << isDirty();
             return ok;
         }
         KWTextFrameSet *m_frameSet;
@@ -179,7 +178,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
                             visiblePageNumber = num;
                     }
                 }
-                KWPage page = kwdoc->appendPage(masterPageName);
+                KWPage page = kwdoc->appendPage(masterPageName, false);
                 Q_ASSERT(page.isValid());
                 if (visiblePageNumber >= 0)
                     page.setVisiblePageNumber(visiblePageNumber);
@@ -198,7 +197,7 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         m_pages.append(rootAreaPage);
     }
 
-    kDebug() << "pageNumber=" << pageNumber <<  "frameSet=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
+    kDebug(32001) << "pageNumber=" << pageNumber <<  "frameSet=" << KWord::frameSetTypeName(m_textFrameSet->textFrameSetType());
 
     handleDependentProviders(pageNumber);
 
@@ -206,18 +205,21 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
 
     // position OtherFrameSet's which are anchored to this page
     foreach(KWFrameSet* fs, kwdoc->frameSets()) {
-        if (fs->type() != KWord::OtherFrameSet)
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (fs->type() != KWord::OtherFrameSet && (!tfs || tfs->textFrameSetType() != KWord::OtherTextFrameSet))
             continue;
         foreach (KWFrame *frame, fs->frames()) {
             if (frame->anchoredPageNumber() == pageNumber) {
-                frame->setAnchoredFrameOffset(rootAreaPage->page.offsetInDocument() - frame->anchoredFrameOffset());
-                QPointF pos(frame->shape()->position().x(), frame->shape()->position().y() + frame->anchoredFrameOffset());
+                qreal oldOffset = frame->anchoredFrameOffset();
+                qreal newOffset = rootAreaPage->page.offsetInDocument();
+                frame->setAnchoredFrameOffset(newOffset);
+                QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
                 frame->shape()->setPosition(pos);
             }
         }
     }
 
-    //kDebug()<<rootAreaPage->rootAreas.count() << frames.count();
+    //kDebug(32001)<<rootAreaPage->rootAreas.count() << frames.count();
     //Q_ASSERT(rootAreaPage->rootAreas.count() < frames.count());
     KWFrame *frame = rootAreaPage->rootAreas.count() < frames.count() ? frames[rootAreaPage->rootAreas.count()] : 0;
 
