@@ -21,10 +21,20 @@
 #include "KoSimpleOdtPicture.h"
 #include <KoXmlWriter.h>
 #include <KoDpi.h>
+#include <KoOdfGraphicStyles.h>
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
+#include <KoUnit.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include "renderobjects.h"
 
+#include <KMimeType>
 #include <kdebug.h>
+
+#include <QPainter>
+#include <QPicture>
 
 KoSimpleOdtPicture::KoSimpleOdtPicture(OROPrimitive *primitive)
     : KoSimpleOdtPrimitive(primitive)
@@ -40,21 +50,62 @@ OROPicture *KoSimpleOdtPicture::picture() const
     return dynamic_cast<OROPicture*>(m_primitive);
 }
 
+void KoSimpleOdtPicture::createStyle(KoGenStyles &coll)
+{
+    KoGenStyle gs(KoGenStyle::GraphicStyle, "graphic");
+    gs.addProperty("draw:fill", "none");
+    gs.addProperty("fo:margin", "0.000000000000000pt");
+    gs.addProperty("style:horizontal-pos", "from-left");
+    gs.addProperty("style:horizontal-rel", "page");
+    gs.addProperty("style:vertical-pos", "from-top");
+    gs.addProperty("style:vertical-rel", "page");
+    gs.addProperty("style:wrap", "dynamic");
+    gs.addProperty("style:wrap-dynamic-threshold", "0.000000000000000pt");
+
+    m_frameStyleName = coll.insert(gs, "F");
+}
+
 void KoSimpleOdtPicture::createBody(KoXmlWriter *bodyWriter) const
 {
     bodyWriter->startElement("draw:frame");
-    bodyWriter->addAttribute("draw:style-name", "picture");
-    bodyWriter->addAttribute("draw:name", QString("name_%1x%2").arg(m_primitive->position().x()).arg(m_primitive->position().y()));
+    bodyWriter->addAttribute("draw:id", itemName());
+    bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
+    bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
+    bodyWriter->addAttribute("draw:style-name", m_frameStyleName);
 
     commonAttributes(bodyWriter);
 
     bodyWriter->startElement("draw:image");
-    bodyWriter->addAttribute("xlink:href", "Picture/" + pictureName());
+    bodyWriter->addAttribute("xlink:href", "Pictures/" + pictureName());
     bodyWriter->addAttribute("xlink:type", "simple");
     bodyWriter->addAttribute("xlink:show", "embed");
     bodyWriter->addAttribute("xlink:actuate", "onLoad");
     bodyWriter->endElement();
 
     bodyWriter->endElement(); // draw:frame
+}
+
+bool KoSimpleOdtPicture::saveData(KoStore* store, KoXmlWriter* manifestWriter) const
+{
+    QString name = "Pictures/" + pictureName();
+    if (!store->open(name)) {
+        return false;
+    }
+    KoStoreDevice device(store);
+    QImage image(m_primitive->size().toSize(), QImage::Format_ARGB32);
+    image.fill(0);
+    QPainter painter;
+    painter.begin(&image);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.drawPicture(0, 0, *(picture()->picture()));
+    painter.end();
+    kDebug()<<image.format();
+    bool ok = image.save(&device, "PNG");
+    if (ok) {
+        const QString mimetype(KMimeType::findByPath(name, 0 , true)->name());
+        manifestWriter->addManifestEntry(name,  mimetype);
+    }
+    ok = store->close() && ok;
+    return ok;
 }

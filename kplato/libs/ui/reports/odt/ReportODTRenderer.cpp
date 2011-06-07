@@ -53,9 +53,9 @@ bool ReportODTRenderer::render(const KoReportRendererContext& context, ORODocume
                 sp->setUID(uid++);
                 doc.addPrimitive(sp);*/
             } else if (prim->type() == OROPicture::Picture) {
-/*                KoSimpleOdtPrimitive *sp = new KoSimpleOdtPicture(static_cast<OROPicture*>(prim));
+                KoSimpleOdtPrimitive *sp = new KoSimpleOdtPicture(static_cast<OROPicture*>(prim));
                 sp->setUID(uid++);
-                doc.addPrimitive(sp);*/
+                doc.addPrimitive(sp);
             } else if (prim->type() == OROLine::Line) {
                 KoSimpleOdtPrimitive *sp = new KoSimpleOdtLine(static_cast<OROLine*>(prim));
                 sp->setUID(uid++);

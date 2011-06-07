@@ -26,6 +26,7 @@
 #include <QString>
 
 class KoXmlWriter;
+class KoStore;
 class OROPicture;
 class OROPrimitive;
 
@@ -38,7 +39,16 @@ public:
     virtual void createBody(KoXmlWriter *bodyWriter) const;
     
     OROPicture *picture() const;
-    QString pictureName() const { return "TODO"; }
+    //NOTE: Store as png atm
+    QString pictureName() const { return QString("Picture_%1.png").arg(m_uid); }
+
+protected:
+    void createStyle(KoGenStyles &coll);
+    bool saveData(KoStore* store, KoXmlWriter* manifestWriter) const;
+
+private:
+    QString m_frameStyleName;
+
 };
 
 #endif // KOSIMPLEODTPICTURE_H
