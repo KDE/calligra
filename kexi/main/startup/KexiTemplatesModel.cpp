@@ -33,6 +33,7 @@ KexiTemplatesModel::KexiTemplatesModel(
 
 int KexiTemplatesModel::rowCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return m_templates.count();
 }
 

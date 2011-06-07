@@ -23,6 +23,7 @@ set(kexiutils_LIB_SRCS
   KexiAssistantPage.cpp
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp
+  KexiCategorizedView.cpp
 )
 
 IF (KEXI_MOBILE)

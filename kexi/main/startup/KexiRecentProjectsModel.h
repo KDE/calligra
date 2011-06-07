@@ -17,15 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXITEMPLATESMODEL_H
-#define KEXITEMPLATESMODEL_H
-
-#include <QAbstractListModel>
+#ifndef KEXIRECENTPROJECTSMODEL_H
+#define KEXIRECENTPROJECTSMODEL_H
 
 #include <KCategorizedSortFilterProxyModel>
-#include <core/kexitemplateloader.h>
+#include <QAbstractListModel>
 
-class KexiTemplatesModel : public QAbstractListModel
+class KexiProjectSet;
+
+class KexiRecentProjectsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -34,8 +34,8 @@ public:
         CategoryRole = 0xA2BEF158
     };
 
-    KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,
-                       QObject *parent = 0);
+    KexiRecentProjectsModel(const KexiProjectSet& projects,
+                            QObject *parent = 0);
 
     QModelIndex  index(int row, int column = 0,
                        const QModelIndex& parent = QModelIndex() ) const;
@@ -44,15 +44,13 @@ public:
     Qt::ItemFlags flags( const QModelIndex& index ) const;
 
 private:
-    KexiTemplateCategoryInfoList m_templateCategories;
-    KexiTemplateInfoList m_templates;
-    QMap<QString, int> m_categoryNameIndex;
+    const KexiProjectSet* m_projects;
 };
  
-class KexiTemplatesProxyModel : public KCategorizedSortFilterProxyModel
+class KexiRecentProjectsProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:
-    KexiTemplatesProxyModel(QObject *parent = 0);
+    KexiRecentProjectsProxyModel(QObject *parent = 0);
 };
 
 #endif

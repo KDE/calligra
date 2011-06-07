@@ -49,7 +49,6 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kurlcombobox.h>
-#include <KCategorizedView>
 #include <KTitleWidget>
 #include <KCategoryDrawer>
 #include <KPushButton>
@@ -83,68 +82,13 @@ KexiServerDBNamePage::KexiServerDBNamePage(QWidget* parent)
 
 // ----
 
-#if KDE_IS_VERSION(4,5,0)
-class KexiTemplatesCategoryDrawer : public KCategoryDrawerV3
-{
-public:
-    KexiTemplatesCategoryDrawer() : KCategoryDrawerV3(0) {}
-#else
-class KexiTemplatesCategoryDrawer : public KCategoryDrawerV2
-{
-public:
-    KexiTemplatesCategoryDrawer() : KCategoryDrawerV2(0) {}
-#endif
-protected:
-#if KDE_IS_VERSION(4,5,0)
-    void mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event) {
-        event->accept();
-    }
-    void mouseButtonReleased(const QModelIndex&, const QRect&, QMouseEvent *event) {
-        event->accept();
-    }
-#endif
-};
-
-class KexiTemplatesSelectionModel : public QItemSelectionModel
-{
-public:
-    KexiTemplatesSelectionModel(QAbstractItemModel* model)
-        : QItemSelectionModel(model)
-    {
-    }
-
-    //! Reimplemented to disable full category selections.
-    //! Shouldn't be needed in KDElibs >= 4.5,
-    //! where KexiTemplatesCategoryDrawer::mouseButtonPressed() works.
-    void select(const QItemSelection& selection,
-                QItemSelectionModel::SelectionFlags command)
-    {
-        // kDebug() << selection.indexes().count() << command;
-        if ((command & QItemSelectionModel::Select) && 
-            !(command & QItemSelectionModel::Clear) &&
-            (selection.indexes().count() > 1 || !this->selection().indexes().isEmpty()))
-        {
-            return;
-        }
-        QItemSelectionModel::select(selection, command);
-    }
-    void select(const QModelIndex& index,
-                QItemSelectionModel::SelectionFlags command)
-    {
-        QItemSelectionModel::select(index, command);
-    }
-};
-
-// ----
-
 KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
  : KexiAssistantPage(i18n("New Project"),
                   i18n("Kexi will create a new database project. Select blank database or template."),
                   parent)
 {
-    m_templatesList = new KCategorizedView;
+    m_templatesList = new KexiCategorizedView;
     setFocusWidget(m_templatesList);
-    m_templatesList->setWordWrap(true);
     m_templatesList->setFrameShape(QFrame::NoFrame);
     m_templatesList->setContentsMargins(0, 0, 0, 0);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
@@ -152,15 +96,8 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     //m_templatesList->setCategorySpacing(5 + margin);
     //not needed in grid:
     m_templatesList->setSpacing(margin);
-    m_templatesList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_templatesList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    m_templatesList->setMouseTracking(true);
     connect(m_templatesList, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
-
-    KexiTemplatesCategoryDrawer* templatesCategoryDrawer = new KexiTemplatesCategoryDrawer;
-    m_templatesList->setCategoryDrawer(templatesCategoryDrawer);
-    m_templatesList->setViewMode(QListView::IconMode);
-    KexiTemplatesProxyModel* proxyModel = new KexiTemplatesProxyModel(m_templatesList);
 
     KexiTemplateCategoryInfoList templateCategories;
     KexiTemplateCategoryInfo templateCategory;
@@ -197,12 +134,12 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
     
+    KexiTemplatesProxyModel* proxyModel = new KexiTemplatesProxyModel(m_templatesList);
     KexiTemplatesModel* model = new KexiTemplatesModel(templateCategories);
     proxyModel->setSourceModel(model);
     m_templatesList->setModel(proxyModel);
-    m_templatesList->setSelectionModel(new KexiTemplatesSelectionModel(proxyModel));
 
-    kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer() << (KCategoryDrawer*)templatesCategoryDrawer;
+    kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
 
     setContents(m_templatesList);
 }

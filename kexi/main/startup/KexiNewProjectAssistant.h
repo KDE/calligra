@@ -27,6 +27,7 @@
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
+#include <kexiutils/KexiCategorizedView.h>
 
 #include <QPointer>
 
@@ -46,7 +47,7 @@ public:
 protected slots:
     void slotItemClicked(const QModelIndex& index);
 private:
-    KCategorizedView* m_templatesList;
+    KexiCategorizedView* m_templatesList;
 };
 
 class KexiProjectStorageTypeSelectionPage : public KexiAssistantPage,

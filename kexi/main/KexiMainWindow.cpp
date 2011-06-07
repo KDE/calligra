@@ -108,6 +108,7 @@
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectAssistant.h"
 #include "startup/KexiOpenProjectAssistant.h"
+#include "startup/KexiRecentProjectsAssistant.h"
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiStartupFileWidget.h"
 #include "kexinamedialog.h"
@@ -3236,22 +3237,7 @@ void KexiMainWindow::slotProjectOpen()
             this, SLOT(openProject(KexiProjectData)));
     connect(assistant, SIGNAL(openProject(QString)), 
             this, SLOT(openProject(QString)));
-            
-//    KexiStartupDialog *openWindow = new KexiStartupDialog(
-//        KexiStartupDialog::Templates/*KexiStartupDialog::OpenExisting*/, 0, Kexi::connset(),
-//        Kexi::recentProjects(), 0);
     d->tabbedToolBar->setMainMenuContent(assistant);
-
-#if 0 // before MODERN
-    KexiStartupDialog dlg(
-        KexiStartupDialog::OpenExisting, 0, Kexi::connset(), Kexi::recentProjects(),
-        this);
-
-    if (dlg.exec() != QDialog::Accepted)
-        return;
-
-    openProject(dlg.selectedFileName(), dlg.selectedExistingConnection());
-#endif
 }
 
 tristate KexiMainWindow::openProject(const QString& aFileName)
@@ -3394,43 +3380,11 @@ void KexiMainWindow::slotProjectOpenRecent()
     if (!d->tabbedToolBar)
         return;
     d->tabbedToolBar->showMainMenu("project_open_recent");
-    // dummy
-    QLabel *dummy = KEXI_UNFINISHED_LABEL(actionCollection()->action("project_open_recent")->text());
-    d->tabbedToolBar->setMainMenuContent(dummy);
-    /*
-    //setup
-    KMenu *popup = d->action_open_recent->popupMenu();
-    const int cnt = popup->count();
-    //remove older
-    for (int i = 0; i<cnt; i++) {
-      int id = popup->idAt(0);
-      if (id==d->action_open_recent_more_id)
-        break;
-      if (id>=0) {
-        popup->removeItem(id);
-      }
-    }
-    //insert current items
-    int cur_id = 0, cur_idx = 0;
-    //TODO:
-    cur_id = popup->insertItem("My example project 1", ++cur_id, cur_idx++);
-    cur_id = popup->insertItem("My example project 2", ++cur_id, cur_idx++);
-    cur_id = popup->insertItem("My example project 3", ++cur_id, cur_idx++);
-    */
-#if 0
-    //show recent connections
-    d->action_open_recent_connections_title_id =
-        d->action_open_recent->popupMenu()->insertTitle(i18n("Recently Connected Database Servers"));
-
-// cur_idx = popup->indexOf(d->action_open_recent_connections_title_id) + 1;
-// for (int i=cur_idx; i<count; i++) {
-//  popup->removeItemAt(cur_idx);
-// }
-    popup->insertItem(KIcon("socket"), "My connection 1");
-    popup->insertItem(KIcon("socket"), "My connection 2");
-    popup->insertItem(KIcon("socket"), "My connection 3");
-    popup->insertItem(KIcon("socket"), "My connection 4");
-#endif
+    KexiRecentProjectsAssistant* assistant = new KexiRecentProjectsAssistant(
+        &Kexi::recentProjects());
+    connect(assistant, SIGNAL(openProject(KexiProjectData)), 
+            this, SLOT(openProject(KexiProjectData)));
+    d->tabbedToolBar->setMainMenuContent(assistant);
 }
 
 void

@@ -25,6 +25,7 @@ kexinewstuff.cpp
 startup/KexiConnSelector.cpp
 startup/KexiNewProjectAssistant.cpp
 startup/KexiOpenProjectAssistant.cpp
+startup/KexiRecentProjectsAssistant.cpp
 startup/KexiProjectSelector.cpp
 startup/KexiStartupFileWidget.cpp
 startup/KexiStartupFileHandler.cpp
@@ -33,6 +34,7 @@ startup/KexiStartup.cpp
 startup/KexiDBTitlePage.cpp
 startup/KexiStartupDialogTemplatesPage.cpp
 startup/KexiTemplatesModel.cpp
+startup/KexiRecentProjectsModel.cpp
 
 #todo printing/kexisimpleprintingengine.cpp
 #todo printing/kexisimpleprintingpagesetup.cpp
