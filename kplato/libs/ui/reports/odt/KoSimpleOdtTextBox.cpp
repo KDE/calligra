@@ -66,6 +66,10 @@ void KoSimpleOdtTextBox::createStyle(KoGenStyles &coll)
     pen.setStyle(textBox()->lineStyle().style);
     kDebug()<<"------"<<pen;
     KoOdfGraphicStyles::saveOdfStrokeStyle(gs, coll, pen);
+    gs.addProperty("style:horizontal-pos", "from-left");
+    gs.addProperty("style:horizontal-rel", "page");
+    gs.addProperty("style:vertical-pos", "from-top");
+    gs.addProperty("style:vertical-rel", "page");
     m_frameStyleName = coll.insert(gs, "F");
     kDebug()<<coll.styles().values();
 }
