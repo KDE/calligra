@@ -366,6 +366,8 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     //get informed
     connect(&Kexi::partManager(), SIGNAL(partLoaded(KexiPart::Part*)),
             this, SLOT(slotPartLoaded(KexiPart::Part*)));
+    connect(&Kexi::partManager(), SIGNAL(newObjectRequested(KexiPart::Info*)),
+            this, SLOT(newObject(KexiPart::Info*)));
 //2.0: unused  connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(slotCaptionForCurrentMDIChild(bool)) );
 //2.0: unused  connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(KMdiChildFrm*)), this, SLOT(slotNoMaximizedChildFrmLeft(KMdiChildFrm*)));
 // connect( this, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
@@ -2339,8 +2341,6 @@ void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 {
     if (!p)
         return;
-    connect(p, SIGNAL(newObjectRequest(KexiPart::Info*)),
-            this, SLOT(newObject(KexiPart::Info*)));
     p->createGUIClients();//this);
 }
 
