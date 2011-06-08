@@ -35,6 +35,7 @@
 
 class QLabel;
 class KAboutData;
+class KexiRecentProjects;
 
 namespace Kexi
 {
@@ -62,7 +63,7 @@ KEXICORE_EXPORT QString iconNameForViewMode(ViewMode mode);
 KEXICORE_EXPORT KexiDBConnectionSet& connset();
 
 //! A set available of project information
-KEXICORE_EXPORT KexiProjectSet& recentProjects();
+KEXICORE_EXPORT KexiRecentProjects* recentProjects();
 
 //! shared driver manager
 KEXICORE_EXPORT KexiDB::DriverManager& driverManager();

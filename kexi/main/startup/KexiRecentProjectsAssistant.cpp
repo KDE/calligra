@@ -19,20 +19,13 @@
 
 #include "KexiRecentProjectsAssistant.h"
 
-#include "ui_KexiServerDBNamePage.h"
-#include "KexiConnSelector.h"
-#include "KexiDBTitlePage.h"
-#include "KexiProjectSelector.h"
-#include "KexiStartupFileWidget.h"
-#include "KexiTemplatesModel.h"
-#include "KexiStartupFileHandler.h"
 #include "KexiRecentProjectsModel.h"
 
-#include <kexi.h>
-#include <kexiprojectset.h>
-#include <kexiprojectdata.h>
-#include <kexiguimsghandler.h>
-#include <kexitextmsghandler.h>
+#include <core/kexi.h>
+#include <core/KexiRecentProjects.h>
+#include <core/kexiprojectdata.h>
+#include <core/kexiguimsghandler.h>
+#include <core/kexitextmsghandler.h>
 #include <kexidb/utils.h>
 #include <kexidb/object.h>
 #include <kexiutils/identifier.h>
@@ -55,10 +48,10 @@
 #include <KPushButton>
 #include <KAcceleratorManager>
 #include <KFileDialog>
+#include <KFileItemDelegate>
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLayout>
+#include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QProgressBar>
@@ -70,7 +63,10 @@ KexiMainRecentProjectsPage::KexiMainRecentProjectsPage(
                   parent)
  , m_assistant(assistant)
 {
+    connect(this, SIGNAL(openProject(KexiProjectData)),
+            assistant, SIGNAL(openProject(KexiProjectData)));
     m_recentProjects = new KexiCategorizedView;
+    //m_recentProjects->setItemDelegate(new KFileItemDelegate(this));
     setFocusWidget(m_recentProjects);
     m_recentProjects->setFrameShape(QFrame::NoFrame);
     m_recentProjects->setContentsMargins(0, 0, 0, 0);
@@ -81,10 +77,10 @@ KexiMainRecentProjectsPage::KexiMainRecentProjectsPage(
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
 
-    KexiRecentProjectsProxyModel* proxyModel = new KexiRecentProjectsProxyModel(m_recentProjects);
+    m_recentProjectsProxyModel = new KexiRecentProjectsProxyModel(m_recentProjects);
     KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects());
-    proxyModel->setSourceModel(model);
-    m_recentProjects->setModel(proxyModel);
+    m_recentProjectsProxyModel->setSourceModel(model);
+    m_recentProjects->setModel(m_recentProjectsProxyModel);
     setContents(m_recentProjects);
 }
 
@@ -92,14 +88,17 @@ void KexiMainRecentProjectsPage::slotItemClicked(const QModelIndex& index)
 {
     if (!index.isValid())
         return;
-    KexiProjectData *pdata = static_cast<KexiProjectData*>(index.internalPointer());
+    QModelIndex sourceIndex = m_recentProjectsProxyModel->mapToSource(index);
+    KexiProjectData *pdata = static_cast<KexiProjectData*>(sourceIndex.internalPointer());
+    kDebug() << *pdata;
     //selectedTemplate = index.data(KexiTemplatesModel::NameRole).toString();
     //selectedCategory = index.data(KexiTemplatesModel::CategoryRole).toString();
     //m_templatesList->clearSelection();
 
     if (pdata) {
-        next();
-        return;
+        emit openProject(*pdata);
+//        next();
+//        return;
     }
 }
 
@@ -118,7 +117,7 @@ public:
     }
     
     KexiMainRecentProjectsPage* mainRecentProjectsPage() {
-        KexiMainRecentProjectsPage *p = page<KexiMainRecentProjectsPage>(&m_mainRecentProjectsPage, q);
+        return page<KexiMainRecentProjectsPage>(&m_mainRecentProjectsPage, q);
     }
     
     template <class C>
@@ -136,7 +135,7 @@ public:
     QAction* messageWidgetActionTryAgain;
     QPointer<KexiContextMessageWidget> messageWidget;
 
-    KexiProjectSet* projects;
+    KexiRecentProjects* projects;
     
     KexiRecentProjectsAssistant *q;
 };
@@ -144,7 +143,7 @@ public:
 // ----
 
 KexiRecentProjectsAssistant::KexiRecentProjectsAssistant(
-    KexiProjectSet* projects, QWidget* parent)
+    KexiRecentProjects* projects, QWidget* parent)
  : KexiAssistantWidget(parent)
  , d(new Private(this))
 {
@@ -236,7 +235,7 @@ void KexiRecentProjectsAssistant::tryAgainActionTriggered()
 //    d->m_projectConnectionSelectionPage->next();
 }
 
-KexiProjectSet* KexiRecentProjectsAssistant::projects()
+KexiRecentProjects* KexiRecentProjectsAssistant::projects()
 {
     return d->projects;
 }

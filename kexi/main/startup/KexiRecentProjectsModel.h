@@ -23,7 +23,7 @@
 #include <KCategorizedSortFilterProxyModel>
 #include <QAbstractListModel>
 
-class KexiProjectSet;
+class KexiRecentProjects;
 
 class KexiRecentProjectsModel : public QAbstractListModel
 {
@@ -34,7 +34,7 @@ public:
         CategoryRole = 0xA2BEF158
     };
 
-    KexiRecentProjectsModel(const KexiProjectSet& projects,
+    KexiRecentProjectsModel(const KexiRecentProjects& projects,
                             QObject *parent = 0);
 
     QModelIndex  index(int row, int column = 0,
@@ -44,7 +44,7 @@ public:
     Qt::ItemFlags flags( const QModelIndex& index ) const;
 
 private:
-    const KexiProjectSet* m_projects;
+    const KexiRecentProjects* m_projects;
 };
  
 class KexiRecentProjectsProxyModel : public KCategorizedSortFilterProxyModel

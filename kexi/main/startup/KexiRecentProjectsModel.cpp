@@ -20,13 +20,13 @@
 #include "KexiRecentProjectsModel.h"
 #include <kexi.h>
 
-#include <core/kexiprojectset.h>
+#include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
 
 #include <kexidb/utils.h>
 
 KexiRecentProjectsModel::KexiRecentProjectsModel(
-    const KexiProjectSet& projects, QObject *parent)
+    const KexiRecentProjects& projects, QObject *parent)
  : QAbstractListModel(parent), m_projects(&projects)
 {
 }
@@ -38,7 +38,7 @@ int KexiRecentProjectsModel::rowCount(const QModelIndex& parent) const
 }
 
 QModelIndex KexiRecentProjectsModel::index(int row, int column,
-                                           const QModelIndex& parent ) const
+                                           const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
     if (row < 0 || row >= m_projects->list().count())

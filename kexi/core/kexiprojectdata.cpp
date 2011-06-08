@@ -205,3 +205,9 @@ bool KexiProjectData::isReadOnly() const
     return d->readOnly;
 }
 
+KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d)
+{
+    dbg.nospace() << "KexiProjectData" << "databaseName=" << d.databaseName()
+        << "lastOpened=" << d.lastOpened() << "description=" << d.description();
+    return dbg.space();
+}

@@ -64,5 +64,5 @@ private:
     KexiProjectSetPrivate * const d;
 };
 
-#endif // KEXINEWDBCONNDIALOG_H
+#endif // KEXIPROJECTSET_H
 

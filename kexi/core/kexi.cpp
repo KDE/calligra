@@ -20,7 +20,7 @@
 #include "kexi.h"
 #include "kexiaboutdata.h"
 #include "kexicmdlineargs.h"
-//#include <config-kexi.h> //why this new KDE4 include?
+#include "KexiRecentProjects.h"
 #include <kexiutils/identifier.h>
 #include <kexidb/msghandler.h>
 
@@ -48,13 +48,15 @@ class KexiInternal
 {
 public:
     KexiInternal()
-            : connset(0) {
+            : connset(0)
+    {
     }
     ~KexiInternal() {
         delete connset;
     }
+    
     KexiDBConnectionSet* connset;
-    KexiProjectSet recentProjects;
+    KexiRecentProjects recentProjects;
     KexiDBConnectionSet recentConnections;
     KexiDB::DriverManager driverManager;
     KexiPart::Manager partManager;
@@ -73,9 +75,9 @@ KexiDBConnectionSet& Kexi::connset()
     return *_int->connset;
 }
 
-KexiProjectSet& Kexi::recentProjects()
+KexiRecentProjects* Kexi::recentProjects()
 {
-    return _int->recentProjects;
+    return &_int->recentProjects;
 }
 
 KexiDB::DriverManager& Kexi::driverManager()

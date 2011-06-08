@@ -648,7 +648,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             //create d->startupDialog for reuse because it can be used again after conn err.
             d->startupDialog = new KexiStartupDialog(
                 KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
-                Kexi::connset(), Kexi::recentProjects(), 0);
+                Kexi::connset(), /*fake:*/ *(new KexiProjectSet),  /*Kexi::recentProjects()*/
+                0);
         }
         if (d->startupDialog->exec() != QDialog::Accepted)
             return true;

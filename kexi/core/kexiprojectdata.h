@@ -27,6 +27,7 @@
 
 #include <QDateTime>
 #include <QList>
+#include <QtDebug>
 
 class KexiProjectDataPrivate;
 
@@ -124,5 +125,7 @@ public:
 private:
     KexiProjectDataPrivate * const d;
 };
+
+KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d);
 
 #endif

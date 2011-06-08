@@ -97,6 +97,10 @@ Tabbed toolbar TODOS:
 2011-06-08
 Core
 *Fix regression added with the delayed loading of plugins: "Create" toolbar works now
+Startup
+*initial functionality for "Recent Projects" assistant
+
+TODO: group by date, type/server...
 
 2011-06-06..07
 Startup

@@ -20,8 +20,6 @@
 #ifndef KEXIRECENTPROJECTSASSISTANT_H
 #define KEXIRECENTPROJECTSASSISTANT_H
 
-#include "kexidbconnectionset.h"
-#include "ui_KexiProjectStorageTypeSelectionPage.h"
 #include <kexidb/connectiondata.h>
 #include <kexidb/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
@@ -32,9 +30,11 @@
 #include <QPointer>
 
 class KexiConnSelectorWidget;
+class KexiProjectData;
 class KexiProjectSelectorWidget;
 class KCategorizedView;
 class KexiRecentProjectsAssistant;
+class KexiRecentProjectsProxyModel;
 
 class KexiMainRecentProjectsPage : public KexiAssistantPage
 {
@@ -46,22 +46,26 @@ public:
     QString selectedTemplate;
     QString selectedCategory;
     
+signals:
+    void openProject(const KexiProjectData& data);
+
 protected slots:
     void slotItemClicked(const QModelIndex& index);
 private:
     KexiCategorizedView* m_recentProjects;
+    KexiRecentProjectsProxyModel* m_recentProjectsProxyModel;
     KexiRecentProjectsAssistant* m_assistant;
 };
 
 class KexiProjectData;
-class KexiProjectSet;
+class KexiRecentProjects;
 
 class KexiRecentProjectsAssistant : public KexiAssistantWidget,
                                     public KexiDB::MessageHandler
 {
     Q_OBJECT
 public:
-    explicit KexiRecentProjectsAssistant(KexiProjectSet* projects, QWidget* parent = 0);
+    explicit KexiRecentProjectsAssistant(KexiRecentProjects* projects, QWidget* parent = 0);
     ~KexiRecentProjectsAssistant();
 
     //! Implementation for KexiDB::MessageHandler.
@@ -71,7 +75,7 @@ public:
     //! Implementation for KexiDB::MessageHandler.
     virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString());
 
-    KexiProjectSet* projects();
+    KexiRecentProjects* projects();
     
 public slots:
     virtual void previousPageRequested(KexiAssistantPage* page);
@@ -79,7 +83,7 @@ public slots:
     virtual void cancelRequested(KexiAssistantPage* page);
     void tryAgainActionTriggered();
 signals:
-    void openProject(KexiProjectData* data);
+    void openProject(const KexiProjectData& data);
     
 private:
     void createProject(

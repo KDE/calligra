@@ -81,6 +81,8 @@
 #include <kexiutils/utils.h>
 
 #include <core/KexiWindow.h>
+#include <core/KexiRecentProjects.h>
+
 #include "kexiactionproxy.h"
 #include "kexipartmanager.h"
 #include "kexipart.h"
@@ -88,7 +90,6 @@
 #include "kexipartguiclient.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
-#include "kexiprojectset.h"
 #include "kexi.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
@@ -1635,7 +1636,8 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
         return false;
     }
     setupProjectNavigator();
-    Kexi::recentProjects().addProjectData(newProjectData);
+    newProjectData->setLastOpened(QDateTime::currentDateTime());
+    Kexi::recentProjects()->addProjectData(newProjectData);
     updateReadOnlyState();
     invalidateActions();
 // d->disableErrorMessages = true;
@@ -3220,7 +3222,8 @@ tristate KexiMainWindow::createNewProject(KexiProjectData* projectData)
     d->tabbedToolBar->hideMainMenu();
     kDebug() << "new project created ---";
     setupProjectNavigator();
-    Kexi::recentProjects().addProjectData(projectData);
+    projectData->setLastOpened(QDateTime::currentDateTime());
+    Kexi::recentProjects()->addProjectData(projectData);
 
     invalidateActions();
     updateAppCaption();
@@ -3381,7 +3384,7 @@ void KexiMainWindow::slotProjectOpenRecent()
         return;
     d->tabbedToolBar->showMainMenu("project_open_recent");
     KexiRecentProjectsAssistant* assistant = new KexiRecentProjectsAssistant(
-        &Kexi::recentProjects());
+        Kexi::recentProjects());
     connect(assistant, SIGNAL(openProject(KexiProjectData)), 
             this, SLOT(openProject(KexiProjectData)));
     d->tabbedToolBar->setMainMenuContent(assistant);
@@ -4860,8 +4863,9 @@ void KexiMainWindow::slotToolsCompactDatabase()
     const bool projectWasOpened = d->prj;
 
     if (!d->prj) {
+        KexiProjectSet fake;
         KexiStartupDialog dlg(
-            KexiStartupDialog::OpenExisting, 0, Kexi::connset(), Kexi::recentProjects(),
+            KexiStartupDialog::OpenExisting, 0, Kexi::connset(), fake,
             this);
 
         if (dlg.exec() != QDialog::Accepted)
