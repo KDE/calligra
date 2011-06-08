@@ -627,8 +627,12 @@ void PAP::apply( const U8* grpprl, U16 count, const Style* style, const StyleShe
     SPRM::apply<PAP>( this, &PAP::applyPAPSPRM, grpprl, count, style, styleSheet, dataStream, version );
 }
 
-    U32 icoToRGB(U16 ico)
+    U32 icoToCOLORREF(U16 ico)
     {
+        //TODO: Do not place the fAuto byte in front!  The MS-ODRAW
+        //OfficeArtCOLORREF is an equivalent and has the byte properly at the
+        //end.  Oooo, it's confusing ...
+
         switch(ico)
         {
             case 0: //default and we choose black as most paper is white
@@ -1420,7 +1424,7 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         case SPRM::sprmCIco: {
             U16 ico = *ptr;
-            cv=Word97::icoToRGB(ico);
+            cv=Word97::icoToCOLORREF(ico);
             break;
         }
         case SPRM::sprmCCv: {

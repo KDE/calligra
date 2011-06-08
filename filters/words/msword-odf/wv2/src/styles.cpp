@@ -587,30 +587,29 @@ bool Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<St
 
     //TODO: check the m_std.stk
 
+    m_invalid = true;
+
     if ((m_std->istdBase != 0x0fff) &&
         (m_std->istdBase >= rglpstd_cnt)) {
         wvlog << "istdBase - invalid index into rglpstd!" << endl;
-        m_invalid = true;
         return false;
     }
     if (m_std->istdBase == istd) {
         wvlog << "istdBase MUST NOT be same as istd!" << endl;
-        m_invalid = true;
         return false;
     }
     if ((m_std->istdBase != 0x0fff) &&
         styles[m_std->istdBase]->isEmpty()) {
         wvlog << "istdBase - style definition EMPTY!" << endl;
-        m_invalid = true;
         return false;
     }
 
     if ((m_std->istdNext != 0x0fff) &&
         (m_std->istdNext >= rglpstd_cnt)) {
         wvlog << "istdNext - invalid index into rglpstd!" << endl;
-        m_invalid = true;
         return false;
     }
+    //TODO: Why did I disable this one ???
 //     if (m_std->istdNext == istd) {
 //         wvlog << "istdNext MUST NOT be same as istd!" << endl;
 //         return false;
@@ -618,9 +617,10 @@ bool Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<St
     if ((m_std->istdNext != 0x0fff) &&
         styles[m_std->istdNext]->isEmpty()) {
         wvlog << "istdNext - style definition EMPTY!" << endl;
-        m_invalid = true;
         return false;
     }
+    m_invalid = false;
+
     return true;
 }
 
@@ -640,7 +640,9 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         if ( m_std->istdBase != 0x0fff ) {
             parentStyle = stylesheet.styleByIndex( m_std->istdBase );
             if ( parentStyle ) {
+#ifdef WV2_DEBUG_SPRMS
                 wvlog << "#### parent style ASCII Name: '" << parentStyle->name().ascii() << "'" << endl;
+#endif
                 const_cast<Style*>( parentStyle )->unwrapStyle( stylesheet, version );
                 m_properties->pap() = parentStyle->paragraphProperties().pap();
                 *m_chp = parentStyle->chp();
@@ -681,15 +683,21 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         if ( m_std->istdBase != 0x0fff ) {
             parentStyle = stylesheet.styleByIndex( m_std->istdBase );
             if ( parentStyle ) {
+#ifdef WV2_DEBUG_SPRMS
                 wvlog << "#### parent style ASCII Name: '" << parentStyle->name().ascii() << "'" << endl;
+#endif
                 const_cast<Style*>( parentStyle )->unwrapStyle( stylesheet, version );
                 bool ok;
                 m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
+#ifdef WV2_DEBUG_SPRMS
                 wvlog << "our istd = " << m_upechpx->istd << " sti = " << m_std->sti << endl;
+#endif
                 mergeUpechpx( parentStyle, version );
             }
             else {
+#ifdef WV2_DEBUG_SPRMS
                 wvlog << "################# NO parent style for this character style found" << endl;
+#endif
             }
         }
         else {

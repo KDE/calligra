@@ -50,9 +50,9 @@ namespace Word97 {
     const U32 cvAuto = 0xff000000;
 
     /**
-     * Helper function to convert ico color codes to 24bit rgb values
+     * Helper function to convert ico color codes to 24bit COLORREF
      */
-    U32 icoToRGB(U16 ico);
+    U32 icoToCOLORREF(U16 ico);
 
 /**
  * Font Family Name (FFN), this code is located in the template-Word97.h

@@ -628,7 +628,7 @@ void KWordTableHandler::tableCellStart()
     }
 
     //process shading information
-    QString color = Conversion::shdToColorStr(shd);
+    QString color = Conversion::shdToColorStr(shd, document()->currentBgColor());
     if (!color.isEmpty()) {
         cellStyle.addProperty("fo:background-color", color);
         //add the current background-color to stack
@@ -723,7 +723,7 @@ void KWordTableHandler::tableCellEnd()
         const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
         const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
 
-        if ( !Conversion::shdToColorStr(shd).isEmpty() &&
+        if ( !Conversion::shdToColorStr(shd, document()->currentBgColor()).isEmpty() &&
              !(tc.fVertMerge && !tc.fVertRestart) )
         {
             document()->rmBgColor();

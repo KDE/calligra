@@ -552,10 +552,10 @@ bool SHD::read(OLEStreamReader *stream, bool preservePos) {
 
     shifterU16=stream->readU16();
     ico=shifterU16;
-    cvFore=Word97::icoToRGB(ico);
+    cvFore=Word97::icoToCOLORREF(ico);
     shifterU16>>=5;
     ico=shifterU16;
-    cvBack=Word97::icoToRGB(ico);
+    cvBack=Word97::icoToCOLORREF(ico);
     shifterU16>>=5;
     ipat=shifterU16;
 
@@ -575,10 +575,10 @@ void SHD::readPtr(const U8 *ptr) {
     shifterU16=readU16(ptr);
     ptr+=sizeof(U16);
     icoFore=shifterU16 & 0x1F;
-    cvFore=Word97::icoToRGB(icoFore);
+    cvFore=Word97::icoToCOLORREF(icoFore);
     shifterU16>>=5;
     icoBack=shifterU16 & 0x1F;
-    cvBack=Word97::icoToRGB(icoBack);
+    cvBack=Word97::icoToCOLORREF(icoBack);
     shifterU16>>=5;
     ipat=shifterU16;
 
@@ -924,7 +924,7 @@ bool BRC::read(OLEStreamReader *stream, bool preservePos) {
     brcType=shifterU16;
     shifterU16=stream->readU16();
     ico=shifterU16 & 0xFF;
-    cv=Word97::icoToRGB(ico);
+    cv=Word97::icoToCOLORREF(ico);
     shifterU16>>=8;
     dptSpace=shifterU16;
     shifterU16>>=5;
@@ -951,7 +951,7 @@ void BRC::readPtr(const U8 *ptr) {
     shifterU16=readU16(ptr);
     ptr+=sizeof(U16);
     ico=shifterU16 & 0xFF;
-    cv=Word97::icoToRGB(ico);
+    cv=Word97::icoToCOLORREF(ico);
     shifterU16>>=8;
     dptSpace=shifterU16;
     shifterU16>>=5;

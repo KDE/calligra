@@ -91,12 +91,6 @@ public:
     static void setBgColor(QString val) { m_bgColor = val; }
 
     /**
-     * @return the name of a color contrasting to the background color of the
-     * provided name.
-     */
-    static QString contrastFontColor(QString name);
-
-    /**
      * A special purpose method, which creates a KoGenStyle for a <text:span>
      * element and inserts it into the styles collection.  Use this function if
      * you have to create XML snippets.  In any other case use addRunOfText.

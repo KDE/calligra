@@ -22,8 +22,8 @@
 
 */
 
-#include "conversion.h"
 #include "msdoc.h"
+#include "conversion.h"
 
 #include <wv2/src/word97_generated.h>
 #include <wv2/src/functordata.h>
@@ -186,14 +186,32 @@ int Conversion::fillPatternStyle(int ipat)
     }
 }
 
-uint Conversion::shadingPatternToColor(int ipat)
+QString Conversion::contrastFontColor(QString name)
 {
-    uint resultColor = 0xffffff, grayLevel = 0;
+    QColor color(name);
+    int d = 0;
+
+    // counting the perceptive luminance - human eye favors green color...
+    double a = 1 - (0.299 * color.red() + 0.587 * color.green() + 0.114 * color.blue()) / 255;
+
+    if (a < 0.5) {
+        d = 0; // bright colors - black font
+    } else {
+        d = 255; // dark colors - white font
+    }
+    return  QColor(d, d, d).name();
+}
+
+quint32 Conversion::shadingPatternToColor(const quint16 ipat)
+{
+    quint32 resultColor = 0xff000000;
+    uint grayLevel = 0;
     bool ok;
 
     // try to convert ipat to gray level
     grayLevel = ditheringToGray(ipat, &ok);
 
+    //looking for a contrast color to the current background
     if (!ok) {
         return resultColor;
     }
@@ -202,7 +220,7 @@ uint Conversion::shadingPatternToColor(int ipat)
     return resultColor;
 }
 
-QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd)
+QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, QString color)
 {
     QString ret;
     if (shd.shdAutoOrNill) return ret;
@@ -219,26 +237,31 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd)
         // to 0xFF is referred to as cvAuto.
         //
         if (shd.cvBack == 0xff000000) {
-            kDebug(30513) << "Automatic color required!";
-            break;
+            ret = contrastFontColor(color);
+        } else {
+            ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
+            ret.prepend('#');
         }
-        ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
-        ret.prepend('#');
         break;
     case ipatNil:
         break;
     default:
     {
-        uint grayClr = shadingPatternToColor(shd.ipat);
-        ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
-        ret.prepend('#');
+        //handle remaining Ipat values
+        quint32 grayClr = shadingPatternToColor(shd.ipat);
+        if (grayClr == 0xff000000) {
+            ret = contrastFontColor(color);
+        } else {
+            ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
+            ret.prepend('#');
+        }
     }
     break;
     }
     return ret;
 }
 
-int Conversion::ditheringToGray(int ipat, bool* ok)
+int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
 {
     *ok = true; // optimistic ;)
     switch (ipat)  {
@@ -267,10 +290,24 @@ int Conversion::ditheringToGray(int ipat, bool* ok)
     case ipatPct90:
         return (255 - qRound(0.9 * 255));
     /*
-     * TODO: ipatDkHorizontal, ipatDkVertical, ipatDkForeDiag, ipatDkBackDiag,
-     * ipatDkCross, ipatDkDiagCross, ipatHorizontal, ipatVertical,
-     * ipatForeDiag, ipatBackDiag, ipatCross, ipatDiagCross
+     * TODO: Implementation required, returning default to at least show the
+     * user that some type of shading is applied.
      */
+    case ipatDkHorizontal:
+    case ipatDkVertical:
+    case ipatDkForeDiag:
+    case ipatDkBackDiag:
+    case ipatDkCross:
+    case ipatDkDiagCross:
+    case ipatHorizontal:
+    case ipatVertical:
+    case ipatForeDiag:
+    case ipatBackDiag:
+    case ipatCross:
+    case ipatDiagCross:
+        kDebug(30513) << "Unsupported shading pattern (0x" << hex << ipat << ")";
+        return (255 - qRound(0.3 * 255));
+
     case ipatPctNew2:
         return (255 - qRound(0.025 * 255));
     case ipatPctNew7:
@@ -705,4 +742,3 @@ QString Conversion::rncToStartNumberingAt(int rnc)
         return "page";
     }
 }
-

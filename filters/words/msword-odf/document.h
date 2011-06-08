@@ -129,7 +129,8 @@ public:
     bool bodyFound(void) const { return m_bodyFound; }
 
     /**
-     * Add element val to the backgroud-color stack.
+     * Add a color item to the backgroud-color stack.
+     * @param color in the format "#RRGGBB"
      */
     void addBgColor(const QString val) { m_bgColors.push(val); }
 
@@ -140,11 +141,12 @@ public:
 
     /**
      * Update the last item of the background-color stack.
+     * @param color in the format "#RRGGBB"
      */
     void updateBgColor(const QString val) { m_bgColors.pop(); m_bgColors.push(val); }
 
     /**
-     * @return the current background-color.
+     * @return the current background-color in the format "#RRGGBB".
      */
     QString currentBgColor(void) { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
 
