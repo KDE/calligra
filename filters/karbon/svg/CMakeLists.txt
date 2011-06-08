@@ -7,12 +7,14 @@ ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_S
 set(LIBSVG_SOURCES
     ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
     ${CMAKE_SOURCE_DIR}/filters/libsvg/Frame.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgAnimationData.cpp
     )
 
 set(karbonsvgexport_PART_SRCS 
     SvgExport.cpp
     SvgUtil.cpp
     SvgWriter.cpp
+    SvgWriter_Stage.cpp
     ${SHAPES_SOURCES} 
     ${LIBSVG_SOURCES}
 )

@@ -71,13 +71,14 @@
       bool save(QIODevice &outputDevice);
       
       /// Writes svg with additonal app data to specified output device
-      bool save(QIODevice &outputDevice, QTextStream *appDataStream);
+//      bool save(QIODevice &outputDevice, QTextStream *appDataStream);
 
       /// Writes svg to the specified file
       bool save(const QString &filename, bool writeInlineImages);
 
       virtual void saveAppData(KoShape *shape) =0;
-      
+      void addAppData(QString &appData);
+
   private:
       
       void saveLayer(KoShapeLayer * layer);
@@ -119,7 +120,7 @@
       QTextStream* m_stream;
       QTextStream* m_defs;
       QTextStream* m_body;
-            
+                  
       unsigned int m_indent;
       unsigned int m_indent2;
 
@@ -130,7 +131,8 @@
       bool m_writeInlineImages;
       QString m_filename;
 
-      bool m_appData;
+      bool m_hasAppData;
+      QString m_appData;
       };
 
   #endif /*SVGWRITER_H */

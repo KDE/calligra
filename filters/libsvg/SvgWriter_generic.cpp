@@ -91,7 +91,7 @@ void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int inden
           foreach(KoShapeLayer *layer, layers)
               m_toplevelShapes.append(layer);
           
-          m_appData = false; //Initailly does not store app data
+          m_hasAppData = false; //Initailly does not store app data
       }
 
 
@@ -102,7 +102,7 @@ void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int inden
           const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
           m_userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
           
-          m_appData = false; //Initailly does not store app data
+          m_hasAppData = false; //Initailly does not store app data
       }
 
       SvgWriter_generic::~SvgWriter_generic()
@@ -119,7 +119,7 @@ void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int inden
           m_filename = filename;
           m_writeInlineImages = writeInlineImages;
 
-          const bool success = save(fileOut);
+          const bool success = save(fileOut); 
 
           m_writeInlineImages = true;
           m_filename.clear();
@@ -128,6 +128,7 @@ void SvgWriter_generic::printIndentation(QTextStream* stream, unsigned int inden
 
           return success;
       }
+
 
 void SvgWriter_generic::startDocument()
 {
@@ -154,6 +155,12 @@ void SvgWriter_generic::startDocument()
 
 }
 
+void SvgWriter_generic::addAppData(QString &appData)
+{
+  m_appData = appData;
+  m_hasAppData = true;
+}
+
       bool SvgWriter_generic::save(QIODevice &outputDevice)
       {
         
@@ -170,7 +177,9 @@ void SvgWriter_generic::startDocument()
           printIndentation(m_defs, --m_indent2);
           *m_defs << "</defs>" << endl; 
           
- //         *m_body << appData << endl;
+          if(m_hasAppData){
+          *m_body << m_appData << endl;
+          }
           *m_body << "</svg>" << endl;
         
           *m_stream << defs; 
@@ -185,31 +194,6 @@ void SvgWriter_generic::startDocument()
           return true;
       }
       
-bool SvgWriter_generic::save(QIODevice& outputDevice, QTextStream* appDataStream)
-{
-          m_stream = new QTextStream(&outputDevice);
-          QString body;
-          m_body = new QTextStream(&body, QIODevice::ReadWrite);
-          QString defs;
-          m_defs = new QTextStream(&defs, QIODevice::ReadWrite);
-          QString appData;
-          appDataStream = new QTextStream(&defs, QIODevice::ReadWrite);
-          
-          m_appData = true;
-          
-          startDocument();
-          saveToplevelShapes();
-          endDocument(&defs, &body, &appData);
-          
-          delete m_stream;
-          delete m_defs;
-          delete m_body;
-                    
-          return true;
-
-}
-
-
 void SvgWriter_generic::saveToplevelShapes()
 {
 // top level shapes
@@ -227,7 +211,7 @@ void SvgWriter_generic::saveToplevelShapes()
           }
           }
 
-void SvgWriter_generic::endDocument(const QString *defs, const QString *body, const QString *appData)
+void SvgWriter_generic::endDocument(const QString *defs, const QString *body, const QString *appData)//tbd
 {
           // end tag:
           printIndentation(m_defs, --m_indent2);
@@ -242,7 +226,7 @@ void SvgWriter_generic::endDocument(const QString *defs, const QString *body, co
 
 }
 
-void SvgWriter_generic::endDocument(const QString *defs, const QString *body)
+void SvgWriter_generic::endDocument(const QString *defs, const QString *body)//tbd
 {
           // end tag:
           printIndentation(m_defs, --m_indent2);
@@ -329,9 +313,9 @@ void SvgWriter_generic::endDocument(const QString *defs, const QString *body)
           }
           }
          
-         if(m_appData) {
+        /* if(m_hasAppData) {
            saveAppData(shape); //virtual fucntion. Do be defined by the child class
-         }
+         }*/
           
       }
       
