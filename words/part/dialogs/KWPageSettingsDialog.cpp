@@ -30,6 +30,7 @@
 #include <QPushButton>
 #include <QListWidget>
 #include <KInputDialog>
+#include <KDebug>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
         : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),
@@ -146,14 +147,14 @@ void KWPageSettingsDialog::slotApplyClicked()
     QUndoCommand *cmd = new QUndoCommand(i18n("Change Page Style"));
     KWPageStyle styleToUpdate = m_pageStyle;
 
-    styleToUpdate.detach(styleToUpdate.name());
-
     if (styleToUpdate.name() != m_page.pageStyle().name()) {
         //new KWNewPageStyleCommand(m_document, styleToUpdate, cmd);
         foreach(KWPage page, m_document->pageManager()->pages(m_page.pageStyle().name())) {
-            new KWChangePageStyleCommand(page, styleToUpdate, cmd);
+            new KWChangePageStyleCommand(m_document, page, styleToUpdate, cmd);
         }
     }
+
+    styleToUpdate.detach(styleToUpdate.name());
 
     styleToUpdate.setDirection(textDirection());
     KoPageLayout lay = pageLayout();
