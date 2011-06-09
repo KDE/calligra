@@ -300,11 +300,11 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 #endif
 
+    m_currentDrawStyle->addProperty("svg:stroke-width", m_currentVMLProperties.strokeWidth);
+    m_currentDrawStyle->addProperty("svg:stroke-color", m_currentVMLProperties.strokeColor);
+    m_currentDrawStyle->addProperty("svg:stroke-linecap", m_currentVMLProperties.lineCapStyle);
+    m_currentDrawStyle->addProperty("draw:stroke-linejoin", m_currentVMLProperties.joinStyle);
     if (m_currentVMLProperties.stroked) {
-        m_currentDrawStyle->addProperty("svg:stroke-width", m_currentVMLProperties.strokeWidth);
-        m_currentDrawStyle->addProperty("svg:stroke-color", m_currentVMLProperties.strokeColor);
-        m_currentDrawStyle->addProperty("svg:stroke-linecap", m_currentVMLProperties.lineCapStyle);
-        m_currentDrawStyle->addProperty("draw:stroke-linejoin", m_currentVMLProperties.joinStyle);
         if (m_currentVMLProperties.strokeStyleName.isEmpty()) {
             m_currentDrawStyle->addProperty("draw:stroke", "solid");
         }
@@ -313,10 +313,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             m_currentDrawStyle->addProperty("draw:stroke-dash", m_currentVMLProperties.strokeStyleName);
         }
     }
+    else {
+        m_currentDrawStyle->addProperty("draw:stroke", "none");
+    }
 
+    m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
     if (m_currentVMLProperties.filled) {
         m_currentDrawStyle->addProperty("draw:fill", "solid");
-        m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
+    }
+    else {
+        m_currentDrawStyle->addProperty("draw:fill", "none");
     }
 
     if (!ver_align.isEmpty()) {
@@ -511,9 +517,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 
-    // Note that image fill is not yet supported in fill parameter, but this should be used
-    // when it's done
-    bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
 
     while (!atEnd()) {
@@ -521,10 +524,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fill)
-            else if (qualifiedName() == "v:textbox") {
-                TRY_READ(textbox)
-                textBoxOrImage = true;
-            }
+            ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
             else if (qualifiedName() == "w10:wrap") {
@@ -538,13 +538,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     body = frameBuf.originalWriter();
 
-    // Idea here is that if we do not have a box child, we want to still produce a rect to make sure there's a visible output
-    if (!textBoxOrImage) {
-        createFrameStart(RectStart);
-    }
-    else {
-        createFrameStart();
-    }
+    createFrameStart(RectStart);
 
     (void)frameBuf.releaseWriter();
 
@@ -903,7 +897,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
-    bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
 
     while (!atEnd()) {
@@ -913,10 +906,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
         }
         else if (isStartElement()) {
             TRY_READ_IF(fill)
-            else if (qualifiedName() == "v:textbox") {
-                TRY_READ(textbox)
-                textBoxOrImage = true;
-            }
+            ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
             else if (qualifiedName() == "w10:wrap") {
@@ -930,13 +920,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 
     body = frameBuf.originalWriter();
 
-    if (!textBoxOrImage) {
-        // This should be roundRect type at some point when it's supported
-        createFrameStart(RectStart);
-    }
-    else {
-        createFrameStart();
-    }
+    createFrameStart(RectStart);
 
     (void)frameBuf.releaseWriter();
 
@@ -1923,7 +1907,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             }
             else if (qualifiedName() == "v:textbox") {
                 isCustomShape = false;
+                body->startElement("draw:text-box");
                 TRY_READ(textbox)
+                body->endElement(); // draw:text-box
             }
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(fill)
@@ -2050,8 +2036,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    body->startElement("draw:text-box");
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -2061,8 +2045,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
 #endif
         }
     }
-
-    body->endElement(); // draw-textbox
 
     READ_EPILOGUE
 }
