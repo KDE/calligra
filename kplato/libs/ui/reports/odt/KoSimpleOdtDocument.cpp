@@ -133,6 +133,11 @@ void KoSimpleOdtDocument::createStyles(KoGenStyles &coll)
     fs.addProperty("horizontal-pos", "from-left");
     fs.addProperty("horizontal-rel", "page");
     coll.insert(fs, "Frame", KoGenStyles::DontAddNumberToName);
+    
+    KoGenStyle ps(KoGenStyle::ParagraphStyle, "paragraph");
+    ps.addAttribute("style:parent-style-name", "Standard");
+    coll.insert(ps, "P1", KoGenStyles::DontAddNumberToName);
+
 }
 
 bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &coll)
@@ -164,6 +169,10 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
      // office:body
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
+    // words crashes if there is no text element
+    bodyWriter->startElement("text:p");
+    bodyWriter->addAttribute("text:style-name", "P1");
+    bodyWriter->endElement();
 
     contentWriter->startElement("text:sequence-decls");
     contentWriter->startElement("text:sequence-decl");
