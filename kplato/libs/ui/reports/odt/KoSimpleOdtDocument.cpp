@@ -166,14 +166,6 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
     contentWriter->endElement(); // style:fo:break
     contentWriter->endElement(); // style:style
     
-     // office:body
-    bodyWriter->startElement("office:body");
-    bodyWriter->startElement("office:text");
-    // words crashes if there is no text element
-    bodyWriter->startElement("text:p");
-    bodyWriter->addAttribute("text:style-name", "P1");
-    bodyWriter->endElement();
-
     contentWriter->startElement("text:sequence-decls");
     contentWriter->startElement("text:sequence-decl");
     contentWriter->addAttribute("text:display-outline-level", "0");
@@ -192,17 +184,27 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
     contentWriter->addAttribute("text:name", "Drawing");
     contentWriter->endElement(); //text:sequence-decl
     contentWriter->endElement(); //text:sequence-decls
+    contentWriter->endElement(); // office:automatic-styles
 
-    createPages(contentWriter, bodyWriter, coll);
+    // office:body
+    bodyWriter->startElement("office:body");
+    bodyWriter->startElement("office:text");
+    // words crashes if there is no text element, and
+    // all frames need to be *inside* or else LibreWriter shows nothing
+    bodyWriter->startElement("text:p");
+    bodyWriter->addAttribute("text:style-name", "P1");
+
+    createPages(bodyWriter, coll);
+
+    bodyWriter->endElement(); // text:p
 
     bodyWriter->endElement();  // office:text
     bodyWriter->endElement();  // office:body
 
-    contentWriter->endElement(); // office:automatic-styles
     return store->closeContentWriter();
 }
 
-void KoSimpleOdtDocument::createPages(KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoGenStyles &coll)
+void KoSimpleOdtDocument::createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll)
 {
     int page = 1;
     QMap<int, QList<KoSimpleOdtPrimitive*> >::const_iterator it = m_pagemap.constBegin();
