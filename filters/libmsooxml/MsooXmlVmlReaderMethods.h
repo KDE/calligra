@@ -80,6 +80,7 @@ protected:
         QString joinStyle;
         QString strokeStyleName;
         QString shapeColor; //!< set in read_shape()
+        QString shapeSecondaryColor; // used eg. for some gradients
 
         qreal opacity;
 
@@ -94,6 +95,7 @@ protected:
 
         QString shadowColor;
         QString shadowXOffset, shadowYOffset;
+        qreal shadowOpacity;
 
         QString anchorType;
 

@@ -331,9 +331,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
     if (m_currentVMLProperties.shadowed == true) {
         m_currentDrawStyle->addProperty("draw:shadow", "visible");
-        m_currentDrawStyle->addProperty("draw:shadow-color", m_currentVMLProperties.shadowColor);
-        m_currentDrawStyle->addProperty("draw:shadow-offset-x", m_currentVMLProperties.shadowXOffset);
-        m_currentDrawStyle->addProperty("draw:shadow-offset-y", m_currentVMLProperties.shadowYOffset);
+    }
+    else {
+        m_currentDrawStyle->addProperty("draw:shadow", "hidden");
+    }
+    m_currentDrawStyle->addProperty("draw:shadow-color", m_currentVMLProperties.shadowColor);
+    m_currentDrawStyle->addProperty("draw:shadow-offset-x", m_currentVMLProperties.shadowXOffset);
+    m_currentDrawStyle->addProperty("draw:shadow-offset-y", m_currentVMLProperties.shadowYOffset);
+    if (m_currentVMLProperties.shadowOpacity > 0) {
+        m_currentDrawStyle->addProperty("draw:shadow-opacity", QString("%1%").
+            arg(m_currentVMLProperties.shadowOpacity));
     }
 
     if (m_currentVMLProperties.opacity > 0) {
@@ -388,6 +395,7 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.strokeColor = "#000000"; // default
     m_currentVMLProperties.strokeWidth = "1pt" ; // default
     m_currentVMLProperties.shapeColor = "#ffffff"; //default
+    m_currentVMLProperties.shapeSecondaryColor = "#ffffff"; //default
     m_currentVMLProperties.lineCapStyle = "square";
     m_currentVMLProperties.joinStyle = "middle";
     m_currentVMLProperties.strokeStyleName = QString();
@@ -395,6 +403,7 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.stroked = true; // default
     m_currentVMLProperties.opacity = 0; // default
     m_currentVMLProperties.shadowed = false;
+    m_currentVMLProperties.shadowOpacity = 0; // default
     m_currentVMLProperties.shadowColor = "#101010"; // default
     m_currentVMLProperties.shadowXOffset = "2pt"; // default
     m_currentVMLProperties.shadowYOffset = "2pt"; //default
@@ -598,6 +607,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
         m_currentVMLProperties.shadowYOffset = offset.mid(index + 1);
     }
 
+    TRY_READ_ATTR_WITHOUT_NS(opacity)
+    if (!opacity.isEmpty()) {
+        if (opacity.right(1) == "f") {
+            opacity = opacity.left(opacity.length()-1);
+            m_currentVMLProperties.shadowOpacity = 100 * opacity.toInt() / 65536;
+        }
+        else {
+            if (opacity.left(1) == ".") {
+                opacity = "0" + opacity;
+            }
+            m_currentVMLProperties.shadowOpacity = 100 * opacity.toDouble();
+        }
+    }
+
     readNext();
     READ_EPILOGUE
 }
@@ -636,7 +659,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentVMLProperties.stroked = true; // default in this function
+    // Spec says that this should overwrite the shape's value, but apparently
+    // a non specified value does not overwrite it
+    //m_currentVMLProperties.stroked = true; // default in this function
 
     TRY_READ_ATTR_WITHOUT_NS(on)
     if (on == "f" || on == "false") {
@@ -1014,7 +1039,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     // tile (Tiled Image) - The fill image is tiled.
     // solid (Solid Fill) - The fill pattern is a solid color.
 
-    m_currentVMLProperties.filled = true; // default in this function
+    // Spec says that this should overwrite the shape's value, but apparently
+    // a non specified value does not overwrite it
+    //m_currentVMLProperties.filled = true; // default in this function
 
     TRY_READ_ATTR_WITHOUT_NS(on)
     if (on == "f" || on == "false") {
@@ -1028,6 +1055,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     }
 
     TRY_READ_ATTR_WITHOUT_NS(color2)
+    if (!color2.isEmpty()) {
+        m_currentVMLProperties.shapeSecondaryColor = MSOOXML::Utils::rgbColor(color2, m_currentVMLProperties.shapeColor);
+    }
     TRY_READ_ATTR_WITHOUT_NS(angle)
 
     TRY_READ_ATTR_WITHOUT_NS(opacity)
