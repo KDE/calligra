@@ -79,6 +79,7 @@
 
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     uint _worksheetNumber,
+    uint _numberOfWorkSheets,
     const QString& _worksheetName,
     const QString& _state,
     const QString _path, const QString _file,
@@ -93,6 +94,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
+        , numberOfWorkSheets(_numberOfWorkSheets)
         , worksheetName(_worksheetName)
         , state(_state)
         , themes(_themes)
@@ -1204,9 +1206,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
         row->hidden = hidden.toInt() > 0;
     }
 
+    qreal range = (55.0/m_context->numberOfWorkSheets);
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        // set the progress by the position of what was read
+        qreal progress = 45 + range * (m_context->worksheetNumber - 1)
+                       + range * device()->pos() / device()->size();
+        m_context->import->reportProgress(progress);
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(c) // modifies m_currentColumn

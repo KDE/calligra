@@ -133,6 +133,7 @@ public:
     //! Creates the context object.
     XlsxXmlWorksheetReaderContext(
         uint _worksheetNumber,
+        uint _numberOfWorkSheets,
         const QString& _worksheetName,
         const QString& _state,
         const QString _path, const QString _file,
@@ -149,6 +150,7 @@ public:
 
     Sheet* sheet;
     const uint worksheetNumber;
+    const uint numberOfWorkSheets;
     const QString worksheetName;
     QString state;
     MSOOXML::DrawingMLTheme* themes;

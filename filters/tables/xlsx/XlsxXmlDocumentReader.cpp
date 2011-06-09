@@ -218,6 +218,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
     unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
         m_context->relationships->targetCountWithWord("dialogsheets") +
         m_context->relationships->targetCountWithWord("chartsheets");
+    unsigned worksheet = 1;
 
     while (!atEnd()) {
         readNext();
@@ -226,8 +227,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
         if (isStartElement()) {
             if (name() == "sheet") {
                 TRY_READ(sheet)
-                m_context->import->reportProgress(45 + 55/numberOfWorkSheets);
-                --numberOfWorkSheets;
+                ++worksheet;
+                m_context->import->reportProgress(45 + (55/numberOfWorkSheets) * worksheet);
             }
             ELSE_WRONG_FORMAT
         }
@@ -258,6 +259,9 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     TRY_READ_ATTR_WITHOUT_NS(state)
     kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name << "state:" << state;
 
+    unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
+        m_context->relationships->targetCountWithWord("dialogsheets") +
+        m_context->relationships->targetCountWithWord("chartsheets");
     d->worksheetNumber++; // counted from 1
     QString path, file;
     QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
@@ -285,7 +289,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     }
 
     XlsxXmlWorksheetReader worksheetReader(this);
-    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, state, path, file,
+    XlsxXmlWorksheetReaderContext context(d->worksheetNumber, numberOfWorkSheets, name, state, path, file,
                                           m_context->themes, *m_context->sharedStrings,
                                           *m_context->comments,
                                           *m_context->styles,
