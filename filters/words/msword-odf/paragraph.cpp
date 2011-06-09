@@ -916,6 +916,8 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
             style->addProperty("style:text-position", "super", KoGenStyle::TextType);
         else if (chp->iss == 2)   //subscript
             style->addProperty("style:text-position", "sub", KoGenStyle::TextType);
+        else   //no superscript or subscript
+            style->addProperty("style:text-position", "0% 100%", KoGenStyle::TextType);
     }
 
     //fHighlight = when 1, characters are highlighted with color specified by chp.icoHighlight
