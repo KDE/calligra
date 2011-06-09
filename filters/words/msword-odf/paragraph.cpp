@@ -567,7 +567,8 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
          (refPap->shd.cvBack != pap.shd.cvBack) ||
          (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
     {
-        QString color = Conversion::shdToColorStr(pap.shd);
+        //TODO: current background color required
+        QString color = Conversion::shdToColorStr(pap.shd, "0x000000");
         if (!color.isEmpty()) {
             setBgColor(color);
         } else {
@@ -819,7 +820,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         QString color;
         //use the color context to set the proper font color
         if (chp->cv == wvWare::Word97::cvAuto) {
-            color = contrastFontColor(bgColor);
+            color = Conversion::contrastFontColor(bgColor);
         } else {
             color = QString('#' + QString::number(chp->cv | 0xff000000, 16).right(6).toUpper());
         }
@@ -929,10 +930,11 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
     if (!refChp || refChp->shd.cvBack != chp->shd.cvBack) {
-        if (chp->shd.cvBack != 0xff000000)
-            style->addProperty(QString("fo:background-color"), '#' + QString::number(chp->shd.cvBack | 0xff000000, 16).right(6).toUpper(), KoGenStyle::TextType);
-        else
-            style->addProperty("fo:background-color", "transparent", KoGenStyle::TextType);
+        QString color = Conversion::shdToColorStr(chp->shd, bgColor);
+        if (color.isEmpty()) {
+            color = "transparent";
+        }
+        style->addProperty("fo:background-color", color, KoGenStyle::TextType);
     }
 
     //fShadow = text has shadow if 1
@@ -1096,23 +1098,6 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
     delete textStyle;
 
     return textStyleName;
-}
-
-
-QString Paragraph::contrastFontColor(QString name)
-{
-    QColor color(name);
-    int d = 0;
-
-    // counting the perceptive luminance - human eye favors green color...
-    double a = 1 - (0.299 * color.red() + 0.587 * color.green() + 0.114 * color.blue()) / 255;
-
-    if (a < 0.5) {
-        d = 0; // bright colors - black font
-    } else {
-        d = 255; // dark colors - white font
-    }
-    return  QColor(d, d, d).name();
 }
 
 const char* getStrokeValue(const uint brcType)
