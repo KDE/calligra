@@ -3,6 +3,7 @@ Type=Application
 Name=Calligra Words
 Name[pt]=Words do Calligra
 Name[pt_BR]=Calligra Words
+Name[sv]=Calligra Words
 Name[uk]=Words Calligra
 Name[x-test]=xxCalligra Wordsxx
 Exec=words %u
