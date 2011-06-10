@@ -879,7 +879,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     //set current named style in m_paragraph
     m_paragraph->setParagraphStyle(paragraphStyle);
     //provide the background color information
-    m_paragraph->setBgColor(m_document->currentBgColor());
+    m_paragraph->updateBgColor(m_document->currentBgColor());
 
     KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
 

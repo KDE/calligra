@@ -29,11 +29,60 @@
 #include <wv2/src/functordata.h>
 #include <wv2/src/fields.h>
 
-#include <kdebug.h>
-#include <QRegExp>
 #include <qdom.h>
+#include <QRegExp>
 #include <QString>
+#include <QMap>
+
+#include <kdebug.h>
 #include <klocale.h>
+
+static QMap<int, qreal> myValues() {
+    QMap<int, qreal> shadingTable;
+    shadingTable[2] = 0.05;
+    shadingTable[3] = 0.10;
+    shadingTable[4] = 0.20;
+    shadingTable[5] = 0.25;
+    shadingTable[6] = 0.30;
+    shadingTable[7] = 0.40;
+    shadingTable[8] = 0.50;
+    shadingTable[9] = 0.60;
+    shadingTable[10] = 0.70;
+    shadingTable[11] = 0.75;
+    shadingTable[12] = 0.80;
+    shadingTable[13] = 0.90;
+    shadingTable[35] = 0.025;
+    shadingTable[36] = 0.075;
+    shadingTable[37] = 0.125;
+    shadingTable[38] = 0.15;
+    shadingTable[39] = 0.175;
+    shadingTable[40] = 0.225;
+    shadingTable[41] = 0.275;
+    shadingTable[42] = 0.325;
+    shadingTable[43] = 0.35;
+    shadingTable[44] = 0.375;
+    shadingTable[45] = 0.425;
+    shadingTable[46] = 0.45;
+    shadingTable[47] = 0.475;
+    shadingTable[48] = 0.525;
+    shadingTable[49] = 0.55;
+    shadingTable[50] = 0.575;
+    shadingTable[51] = 0.625;
+    shadingTable[52] = 0.65;
+    shadingTable[53] = 0.675;
+    shadingTable[54] = 0.725;
+    shadingTable[55] = 0.775;
+    shadingTable[56] = 0.825;
+    shadingTable[57] = 0.85;
+    shadingTable[58] = 0.875;
+    shadingTable[59] = 0.925;
+    shadingTable[60] = 0.95;
+    shadingTable[61] = 0.975;
+    return shadingTable;
+}
+
+static const QMap<int, qreal> SHADING_TABLE = myValues();
+
 
 QString Conversion::styleName2QString(const wvWare::UString& str)
 {
@@ -186,9 +235,18 @@ int Conversion::fillPatternStyle(int ipat)
     }
 }
 
-QString Conversion::contrastFontColor(QString name)
+int luma(const QColor &color) {
+     return (5036060U * quint32(color.red()) + 9886846U * quint32(color.green()) + 1920103U * quint32(color.blue())) >> 24;
+}
+
+int yMix(int yFore, int yBack, qreal pct) {
+    return yBack + (yFore - yBack) * pct;
+}
+
+QString Conversion::contrastFontColor(const QString& bgColor)
 {
-    QColor color(name);
+#if 0
+    QColor color(bgColor);
     int d = 0;
 
     // counting the perceptive luminance - human eye favors green color...
@@ -200,6 +258,123 @@ QString Conversion::contrastFontColor(QString name)
         d = 255; // dark colors - white font
     }
     return  QColor(d, d, d).name();
+#else
+    int luminosity = luma(QColor(bgColor));
+    if (luminosity <= 60) {
+         return QColor(Qt::white).name();
+    } else {
+         return QColor(Qt::black).name();
+    }
+#endif
+}
+
+QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor)
+{
+    // NOTE: by definition, see
+    // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
+
+    QColor foreColor;
+    QColor backColor;
+
+    if (shd.cvFore == wvWare::Word97::cvAuto) {
+        foreColor = QColor(contrastFontColor(bgColor));
+    } else {
+        foreColor = QColor(QRgb(shd.cvFore));
+    }
+
+    if (shd.cvBack == wvWare::Word97::cvAuto) {
+        backColor = QColor(bgColor);
+    } else {
+        backColor = QColor(QRgb(shd.cvBack));
+    }
+
+    int luminosity = 0;
+
+    if (shd.ipat == ipatAuto) {
+        luminosity = luma(backColor);
+    }
+    else if (shd.ipat == ipatSolid) {
+        luminosity = luma(foreColor);
+    }
+    else if ((shd.ipat > 13) && (shd.ipat < 34)) {
+        luminosity = 61;
+    } else {
+        if (SHADING_TABLE.contains(shd.ipat)) {
+            qreal pct = SHADING_TABLE.value(shd.ipat);
+            luminosity = yMix( luma(foreColor), luma(backColor), pct);
+        } else {
+            // this should not happen, but it's binary data
+            luminosity = 61;
+        }
+    }
+
+#if 0
+    qDebug() << "ooooooooooooooooooooooooooooooo    chp: oooooooooooooooo bgColor:" << bgColor;
+    qDebug() << (shd.cvFore == wvWare::Word97::cvAuto);
+    qDebug() << (shd.cvBack == wvWare::Word97::cvAuto);
+    qDebug() << "ipat" << shd.ipat;
+
+    qDebug() << "fore" << QString::number(shd.cvFore | 0xff000000, 16).right(6) << foreColor.name();
+    qDebug() << "back" << QString::number(shd.cvBack | 0xff000000, 16).right(6) << backColor.name();
+    qDebug() << "luminosity " << luminosity;
+#endif
+
+    if (luminosity <= 60) { // it is dark color
+        // window background color
+        return QColor(Qt::white).name();
+    } else {
+        // window text color
+        return QColor(Qt::black).name();
+    }
+
+} //computeAutoColor
+
+QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor)
+{
+    QString ret;
+    if (shd.shdAutoOrNill) return ret;
+#if 0
+    qDebug() << "shdToColorStr" << shd.ipat << bgColor;
+    qDebug() << "cvBack" << QColor(shd.cvBack).name();
+    qDebug() << "cvFore" << QColor(shd.cvFore).name();
+#endif
+
+    switch (shd.ipat) {
+    case ipatAuto:
+        // TODO: What to do here!  There are test files which require to
+        // process this ipat as ipatSolid.
+        //
+//         ret = computeAutoColor(shd, bgColor);
+//         break;
+    case ipatSolid:
+        // TODO: COLORREF: If fAuto is 0xFF, this COLORREF designates the
+        // default color for the application.  An application MAY<210> use
+        // different default colors based on context.  COLORREF with fAuto set
+        // to 0xFF is referred to as cvAuto.
+        //
+        if (shd.cvBack == wvWare::Word97::cvAuto) {
+            ret = computeAutoColor(shd, bgColor);
+        } else {
+            ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
+            ret.prepend('#');
+        }
+        break;
+    case ipatNil:
+        break;
+    default:
+    {
+        //handle remaining Ipat values
+        quint32 grayClr = shadingPatternToColor(shd.ipat);
+        if (grayClr == wvWare::Word97::cvAuto) {
+            ret = computeAutoColor(shd, bgColor);
+        } else {
+            ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
+            ret.prepend('#');
+        }
+    }
+    break;
+    }
+    return ret;
 }
 
 quint32 Conversion::shadingPatternToColor(const quint16 ipat)
@@ -218,47 +393,6 @@ quint32 Conversion::shadingPatternToColor(const quint16 ipat)
     // construct RGB from the same value (to create gray)
     resultColor = (grayLevel << 16) | (grayLevel <<  8) | grayLevel;
     return resultColor;
-}
-
-QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, QString color)
-{
-    QString ret;
-    if (shd.shdAutoOrNill) return ret;
-
-    switch (shd.ipat) {
-    case ipatAuto:
-        // TODO: What to do here!  There are test files which require to
-        // process this ipat as ipatSolid.
-        //
-    case ipatSolid:
-        // TODO: COLORREF: If fAuto is 0xFF, this COLORREF designates the
-        // default color for the application.  An application MAY<210> use
-        // different default colors based on context.  COLORREF with fAuto set
-        // to 0xFF is referred to as cvAuto.
-        //
-        if (shd.cvBack == 0xff000000) {
-            ret = contrastFontColor(color);
-        } else {
-            ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
-            ret.prepend('#');
-        }
-        break;
-    case ipatNil:
-        break;
-    default:
-    {
-        //handle remaining Ipat values
-        quint32 grayClr = shadingPatternToColor(shd.ipat);
-        if (grayClr == 0xff000000) {
-            ret = contrastFontColor(color);
-        } else {
-            ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
-            ret.prepend('#');
-        }
-    }
-    break;
-    }
-    return ret;
 }
 
 int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
@@ -367,7 +501,7 @@ int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
         *ok = false;
         return 0;
     }
-}
+} //ditheringToGray
 
 void Conversion::setColorAttributes(QDomElement& element, int ico, const QString& prefix, bool defaultWhite)
 {
@@ -730,7 +864,7 @@ qreal Conversion::twipsToPt(int twips)
     return pt;
 }
 
-QString Conversion::rncToStartNumberingAt(int rnc) 
+QString Conversion::rncToStartNumberingAt(int rnc)
 {
     switch(rnc) {
     case 0:
