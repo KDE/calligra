@@ -1998,7 +1998,7 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
 
         switch (listInfo->followingChar()) {
         case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
             break;
         case 1:
             listStyleWriter.addAttribute("text:label-followed-by", "nothing");
@@ -2152,7 +2152,7 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
 
         switch (listInfo->followingChar()) {
         case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
             break;
         case 1:
             listStyleWriter.addAttribute("text:label-followed-by", "nothing");
