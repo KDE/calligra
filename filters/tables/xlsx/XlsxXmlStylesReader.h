@@ -213,9 +213,12 @@ protected:
 class XlsxXmlStylesReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart, MSOOXML::DrawingMLTheme* _themes);
+    XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart,
+                               XlsxImport* _import,
+                               MSOOXML::DrawingMLTheme* _themes);
     XlsxStyles* styles;
     bool skipFirstPart;
+    XlsxImport* import;
     MSOOXML::DrawingMLTheme* themes;
     QVector<QString> colorIndices;
 };

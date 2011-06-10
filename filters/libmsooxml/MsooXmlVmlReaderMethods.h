@@ -55,6 +55,8 @@ protected:
     void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
     void takeDefaultValues();
 
+    QString rgbColor(QString color);
+
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
@@ -79,7 +81,10 @@ protected:
         QString lineCapStyle;
         QString joinStyle;
         QString strokeStyleName;
+        QString fillType;
+        QString gradientStyle;
         QString shapeColor; //!< set in read_shape()
+        QString shapeSecondaryColor; // used eg. for some gradients
 
         qreal opacity;
 
@@ -94,6 +99,7 @@ protected:
 
         QString shadowColor;
         QString shadowXOffset, shadowYOffset;
+        qreal shadowOpacity;
 
         QString anchorType;
 

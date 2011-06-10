@@ -49,7 +49,7 @@ public:
 private:
     void createStyles(KoGenStyles &coll);
     bool createContent(KoOdfWriteStore* odfStore, KoGenStyles &coll);
-    void createPages(KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoGenStyles &coll);
+    void createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll);
     
     KoStore *m_store;
     KoXmlWriter* manifestWriter;

@@ -746,8 +746,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
             m_listIndent = textList->format().doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
-            if (! format.hasProperty(QTextFormat::BlockLeftMargin)) {
+            if (!format.hasProperty(KoParagraphStyle::ListLevel)) {
                 leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
+                m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
             }
         }
     }
@@ -895,10 +896,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
 
-        // during fit is where documentLayout->positionInlineObjects is called
-        //so now is a good time to position the obstructions
-        documentLayout()->positionAnchoredObstructions();
-
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;
@@ -968,6 +965,16 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (softBreak) {
             return false;
         }
+
+        // during fit is where documentLayout->positionInlineObjects is called
+        //so now is a good time to position the obstructions
+        int oldObstructionCount = documentLayout()->currentObstructions().size();
+
+        documentLayout()->positionAnchoredObstructions();
+
+        if (oldObstructionCount < documentLayout()->currentObstructions().size()) {
+            return false;
+        }
     }
 
     m_bottomSpacing = format.bottomMargin();
@@ -994,7 +1001,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
         return guessGlyphWidth * 3;
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (! block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
+        if (! block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
             return textList->format().doubleProperty(KoListStyle::TextIndent);
         }
     }
@@ -1086,6 +1093,9 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
+        } else if ( block.charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+            // stretch line height to ms-word size
+            fontStretch = block.charFormat().property(KoCharacterStyle::FontStretch).toDouble();
         }
         height = block.charFormat().fontPointSize() * fontStretch;
     } else {
