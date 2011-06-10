@@ -49,14 +49,24 @@ OROTextBox *KoSimpleOdtTextBox::textBox() const
 
 void KoSimpleOdtTextBox::createStyle(KoGenStyles &coll)
 {
-    KoGenStyle ps(KoGenStyle::ParagraphStyle, "paragraph");
     QFont font = textBox()->textStyle().font;
+
+    KoGenStyle ps(KoGenStyle::ParagraphStyle, "paragraph");
     m_paragraphStyleName = coll.insert(ps, "P");
 
     // text style
     KoGenStyle ts(KoGenStyle::TextStyle, "text");
     ts.addProperty("fo:font-family", font.family());
     ts.addPropertyPt("fo:font-size", font.pointSizeF());
+    ts.addProperty("fo:font-weight", font.weight() * 10);
+    ts.addProperty("fo:color", textBox()->textStyle().foregroundColor.name());
+    QString fs;
+    switch (font.style()) {
+        case QFont::StyleNormal: fs = "normal"; break;
+        case QFont::StyleItalic: fs = "italic"; break;
+        case QFont::StyleOblique: fs = "oblique"; break;
+    }
+    ts.addProperty("fo:font-style", fs);
     m_textStyleName = coll.insert(ts, "T");
 
     KoGenStyle gs(KoGenStyle::GraphicStyle, "graphic");
@@ -69,6 +79,7 @@ void KoSimpleOdtTextBox::createStyle(KoGenStyles &coll)
     gs.addProperty("style:horizontal-rel", "page");
     gs.addProperty("style:vertical-pos", "from-top");
     gs.addProperty("style:vertical-rel", "page");
+    gs.addProperty("fo:background-color", textBox()->textStyle().backgroundColor.name());
     m_frameStyleName = coll.insert(gs, "F");
 }
 
