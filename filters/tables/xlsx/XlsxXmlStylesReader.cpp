@@ -22,6 +22,7 @@
  */
 
 #include "XlsxXmlStylesReader.h"
+#include "XlsxImport.h"
 
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -309,8 +310,9 @@ bool XlsxCellFormat::setupCellStyle(
 
 //----------------------------------------------------------
 
-XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart, MSOOXML::DrawingMLTheme* _themes)
-        : styles(&_styles), skipFirstPart(_skipFirstPart), themes(_themes)
+XlsxXmlStylesReaderContext::XlsxXmlStylesReaderContext(XlsxStyles& _styles, bool _skipFirstPart,
+    XlsxImport* _import, MSOOXML::DrawingMLTheme* _themes)
+        : styles(&_styles), skipFirstPart(_skipFirstPart), import(_import), themes(_themes)
 {
     // This is default array of colors from the spec
     colorIndices.push_back("000000");
@@ -483,6 +485,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
 {
     READ_PROLOGUE
 
+    int counter = 0;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -494,6 +497,13 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_styleSheet()
                 SKIP_UNKNOWN
             }
             else {
+                if (counter == 40) {
+                    // set the progress by the position of what was read
+                    qreal progress = 5 + 25 * device()->pos() / device()->size();
+                    m_context->import->reportProgress(progress);
+                    counter = 0;
+                }
+                ++counter;
                 TRY_READ_IF(fonts)
                 ELSE_TRY_READ_IF(fills)
                 ELSE_TRY_READ_IF(numFmts)

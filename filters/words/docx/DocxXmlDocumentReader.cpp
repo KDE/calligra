@@ -267,12 +267,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     }*/
 
     body->addAttribute("text:use-soft-page-breaks", "true");
+    int counter = 0;
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            if (counter == 40) {
+                // set the progress by the position of what was read
+                qreal progress = 45 + 55 * device()->pos() / device()->size();
+                m_context->import->reportProgress(progress);
+                counter = 0;
+            }
+            ++counter;
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(sectPr)
