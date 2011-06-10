@@ -334,7 +334,9 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
         }
     }
     if (pib != 0xFFFF && pib != 0) {
+#ifdef DEBUG_PICTURES
         qDebug() << "Could not find image for pib " << pib;
+#endif
     }
     return QByteArray();
 }
@@ -350,7 +352,9 @@ QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, 
         ref = savePicture(block, store);
 
         if (ref.name.length() == 0) {
+#ifdef DEBUG_PICTURES
             qDebug() << "Empty picture reference, probably an empty slot";
+#endif
             continue;
         }
         //check if the MD4 digest is up2date
