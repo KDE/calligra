@@ -159,11 +159,12 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
     //new page
     contentWriter->startElement("style:style");
     contentWriter->addAttribute("style:name", "NewPage");
+    contentWriter->addAttribute("style:master-page-name", "Standard");
     contentWriter->addAttribute("style:family", "paragraph");
-    contentWriter->addAttribute("style:font-name", "Arial");
     contentWriter->startElement("style:paragraph-properties");
-    contentWriter->addAttribute("fo:break", "page");
-    contentWriter->endElement(); // style:fo:break
+    contentWriter->addAttribute("fo:font-family", "Arial");
+    contentWriter->addAttribute("fo:break-before", "page"); // needed by LibreOffice
+    contentWriter->endElement(); // style:paragraph-properties
     contentWriter->endElement(); // style:style
     
     contentWriter->startElement("text:sequence-decls");
@@ -189,14 +190,8 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
     // office:body
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
-    // words crashes if there is no text element, and
-    // all frames need to be *inside* or else LibreWriter shows nothing
-    bodyWriter->startElement("text:p");
-    bodyWriter->addAttribute("text:style-name", "P1");
 
     createPages(bodyWriter, coll);
-
-    bodyWriter->endElement(); // text:p
 
     bodyWriter->endElement();  // office:text
     bodyWriter->endElement();  // office:body
@@ -206,18 +201,21 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
 
 void KoSimpleOdtDocument::createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll)
 {
-    int page = 1;
-    QMap<int, QList<KoSimpleOdtPrimitive*> >::const_iterator it = m_pagemap.constBegin();
-    for (; it != m_pagemap.constEnd(); ++it) {
-        if (it.key() != page) {
-            bodyWriter->startElement("text:p");
-            bodyWriter->addAttribute("text:style-name", "NewPage");
-            bodyWriter->endElement();
-            page = it.key();
-        }
+    QMap<int, QList<KoSimpleOdtPrimitive*> >::const_iterator it;
+    for (it = m_pagemap.constBegin(); it != m_pagemap.constEnd(); ++it) {
+        bodyWriter->startElement("text:p");
+        bodyWriter->addAttribute("text:style-name", "NewPage");
+        // all frames need to be *inside* or else LibreWriter shows nothing
         foreach (KoSimpleOdtPrimitive *data, it.value()) {
             data->createStyle(coll);
             data->createBody(bodyWriter);
         }
+        bodyWriter->endElement(); // text:p
+    }
+    if (m_pagemap.isEmpty()) {
+        // words crashes if there is no text element
+        bodyWriter->startElement("text:p");
+        bodyWriter->addAttribute("text:style-name", "P1");
+        bodyWriter->endElement(); // text:p
     }
 }
