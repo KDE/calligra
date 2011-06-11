@@ -132,7 +132,7 @@ public:
      * Add a color item to the backgroud-color stack.
      * @param color in the format "#RRGGBB"
      */
-    void addBgColor(const QString val) { m_bgColors.push(val); }
+    void addBgColor(const QString& val) { m_bgColors.push(val); }
 
     /**
      * Remove the last item from the backgroud-color stack.
@@ -143,7 +143,7 @@ public:
      * Update the last item of the background-color stack.
      * @param color in the format "#RRGGBB"
      */
-    void updateBgColor(const QString val) { m_bgColors.pop(); m_bgColors.push(val); }
+    void updateBgColor(const QString& val) { m_bgColors.pop(); m_bgColors.push(val); }
 
     /**
      * @return the current background-color in the format "#RRGGBB".

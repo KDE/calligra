@@ -86,18 +86,39 @@ public:
     // them onto a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
-                                         bool setDefaultAlign, Paragraph *paragraph, QChar* tabLeader=0);
+                                         bool setDefaultAlign, Paragraph *paragraph,
+                                         QChar* tabLeader=0,
+                                         const QString& bgColor=QString());
+
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
-                                         QString bgColor,
-                                         bool suppressFontSize=false, bool combineCharacters=false);
+                                         bool suppressFontSize=false, bool combineCharacters=false,
+                                         const QString& bgColor=QString());
 
     /**
-     * Set the actual background-color to val.
+     * Add a color item to the backgroud-color stack.
+     * @param color in the format "#RRGGBB"
      */
-    static void setBgColor(QString val) { m_bgColor = val; }
+    static void addBgColor(const QString& val) { m_bgColors.push(val); }
 
     /**
+     * Remove the last item from the backgroud-color stack.
+     */
+    static void rmBgColor(void);
+
+    /**
+     * Update the last item of the background-color stack.
+     * @param color in the format "#RRGGBB"
+     */
+    static void updateBgColor(const QString& val);
+
+    /**
+     * @return the current background-color in the format "#RRGGBB".
+     */
+    static QString currentBgColor(void) { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
+
+    /**
+     * NOTE: DEPRECATED
      * A special purpose method, which creates a KoGenStyle for a <text:span>
      * element and inserts it into the styles collection.  Use this function if
      * you have to create XML snippets.  In any other case use addRunOfText.
@@ -141,8 +162,9 @@ private:
     bool m_containsPageNumberField;
     bool m_combinedCharacters;            // is true when the next characters are combined
 
-    //background-color of the current paragraph or the parent element
-    static QString m_bgColor;
+    //A stack for backgroud-colors, which represets a background color context
+    //for automatic colors.
+    static QStack<QString> m_bgColors;
 
 }; //end class Paragraph
 #endif //PARAGRAPH_H

@@ -119,13 +119,22 @@ namespace Conversion
      * @param current background-color in the format "#RRGGBB"
      * @return color in the format "#RRGGBB" or an empty string.
      */
-    QString shdToColorStr(const wvWare::Word97::SHD& shd, QString color);
+    QString shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor);
 
     /**
      * @return the name of a color contrasting to the provided background color
      * in the format "#RRGGBB".
      */
-    QString contrastFontColor(QString name);
+    QString contrastFontColor(const QString& bgColor);
+
+    /**
+     * Compute auto color
+     * @param SHD shading structure
+     * @param backgroundColor in the format "#RRGGBB"
+     * @return color in the format "#RRGGBB"
+     */
+    QString computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor);
+
 
     /**
      * Convert linespacing struct to string.
