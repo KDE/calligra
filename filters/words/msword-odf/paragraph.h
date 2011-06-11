@@ -86,7 +86,8 @@ public:
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool suppressFontSize=false, bool combineCharacters=false,
-                                         const QString& bgColor=QString());
+                                         const QString& bgColor=QString(),
+                                         bool preserveFontColor = false);
 
     /**
      * Add a color item to the backgroud-color stack.
@@ -158,6 +159,9 @@ private:
     //A stack for backgroud-colors, which represets a background color context
     //for automatic colors.
     static QStack<QString> m_bgColors;
+
+    //The font color, which represents the context for automatic colors.
+    static QString m_fontColor;
 
 }; //end class Paragraph
 #endif //PARAGRAPH_H

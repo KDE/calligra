@@ -58,6 +58,7 @@ enum TabLC {
 
 //define the static attribute
 QStack<QString> Paragraph::m_bgColors;
+QString Paragraph::m_fontColor;
 
 //definition of local functions
 const char* getStrokeValue(const uint brcType);
@@ -600,7 +601,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
          (refPap->shd.cvBack != pap.shd.cvBack) ||
          (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
     {
-        QString color = Conversion::shdToColorStr(pap.shd, currentBgColor());
+        QString color = Conversion::shdToColorStr(pap.shd, currentBgColor(), m_fontColor);
         if (!color.isEmpty()) {
             updateBgColor(color);
         } else {
@@ -817,7 +818,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     }
 } //end applyParagraphProperties
 
-void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize, bool combineCharacters, const QString& bgColor)
+void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize, bool combineCharacters, const QString& bgColor, bool preserveFontColor)
 {
     //if we have a named style, set its CHP as the refChp
     const wvWare::Word97::CHP* refChp;
@@ -851,6 +852,19 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         updateBgColor(bgColor);
     }
 
+    //ico = color of text, but this has been replaced by cv
+    if (!refChp || (refChp->cv != chp->cv) || (chp->cv == wvWare::Word97::cvAuto)) {
+        QString color;
+        //use the color context to set the proper font color
+        if (chp->cv == wvWare::Word97::cvAuto) {
+            color = Conversion::computeAutoColor(chp->shd, currentBgColor(), QString());
+        } else {
+            color = QString('#' + QString::number(chp->cv | 0xff000000, 16).right(6).toUpper());
+        }
+        style->addProperty(QString("fo:color"), color, KoGenStyle::TextType);
+        m_fontColor = color;
+    }
+
     //fHighlight = when 1, characters are highlighted with color specified by
     //chp.icoHighlight icoHighlight = highlight color (see chp.ico)
     if (!refChp ||
@@ -869,7 +883,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         (refChp->shd.cvBack != chp->shd.cvBack) ||
         (refChp->shd.shdAutoOrNill && !chp->shd.shdAutoOrNill))
     {
-        QString color = Conversion::shdToColorStr(chp->shd, bgColor);
+        QString color = Conversion::shdToColorStr(chp->shd, currentBgColor(), m_fontColor);
         if (!color.isEmpty()) {
             addBgColor(color);
         } else {
@@ -878,26 +892,14 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         style->addProperty("fo:background-color", color, KoGenStyle::TextType);
     }
 
-    //ico = color of text, but this has been replaced by cv
-    if (!refChp || (refChp->cv != chp->cv) || (chp->cv == wvWare::Word97::cvAuto)) {
-        QString color;
-        //use the color context to set the proper font color
-        if (chp->cv == wvWare::Word97::cvAuto) {
-            color = Conversion::contrastFontColor(currentBgColor());
-        } else {
-            color = QString('#' + QString::number(chp->cv | 0xff000000, 16).right(6).toUpper());
-        }
-        style->addProperty(QString("fo:color"), color, KoGenStyle::TextType);
-    }
-
     //hps = font size in half points
     if (!suppressFontSize && (!refChp || refChp->hps != chp->hps)) {
         style->addPropertyPt(QString("fo:font-size"), ((qreal) chp->hps / 2), KoGenStyle::TextType);
     }
 
     //fBold = bold text if 1
-//     if (!refChp || refChp->fBold != chp->fBold) {
-    if (!refChp || (chp->istd == 10)) {
+    if (!refChp || refChp->fBold != chp->fBold) {
+//     if (!refChp || (chp->istd == 10)) {
         style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
     }
 
@@ -1034,6 +1036,10 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //remove the background-colors collected for this text chunk
     while (m_bgColors.size() > 1) {
         rmBgColor();
+    }
+    //reset the fo:color value
+    if (!preserveFontColor) {
+        m_fontColor = QString();
     }
 }
 

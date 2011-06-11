@@ -37,6 +37,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+//#define CONVERSION_DEBUG_SHD
+
 static QMap<int, qreal> myValues() {
     QMap<int, qreal> shadingTable;
     shadingTable[2] = 0.05;
@@ -245,7 +247,7 @@ int yMix(int yFore, int yBack, qreal pct) {
 
 QString Conversion::contrastFontColor(const QString& bgColor)
 {
-#if 0
+#if 0 
     QColor color(bgColor);
     int d = 0;
 
@@ -268,16 +270,26 @@ QString Conversion::contrastFontColor(const QString& bgColor)
 #endif
 }
 
-QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor)
+QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
 {
     // NOTE: by definition, see
     // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
+
+    Q_ASSERT(!bgColor.isNull());
+
+    if (shd.shdAutoOrNill) {
+        return contrastFontColor(bgColor);
+    }
 
     QColor foreColor;
     QColor backColor;
 
     if (shd.cvFore == wvWare::Word97::cvAuto) {
-        foreColor = QColor(contrastFontColor(bgColor));
+        if (fontColor.isNull()) {
+            foreColor = QColor(contrastFontColor(bgColor));
+        } else {
+            foreColor = QColor(fontColor);
+        }
     } else {
         foreColor = QColor(QRgb(shd.cvFore));
     }
@@ -308,8 +320,9 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
         }
     }
 
-#if 0
+#ifdef CONVERSION_DEBUG_SHD
     qDebug() << "ooooooooooooooooooooooooooooooo    chp: oooooooooooooooo bgColor:" << bgColor;
+    qDebug() << "fontColor:" << fontColor;
     qDebug() << (shd.cvFore == wvWare::Word97::cvAuto);
     qDebug() << (shd.cvBack == wvWare::Word97::cvAuto);
     qDebug() << "ipat" << shd.ipat;
@@ -329,14 +342,20 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
 
 } //computeAutoColor
 
-QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor)
+QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
 {
     QString ret;
-    if (shd.shdAutoOrNill) return ret;
-#if 0
-    qDebug() << "shdToColorStr" << shd.ipat << bgColor;
-    qDebug() << "cvBack" << QColor(shd.cvBack).name();
-    qDebug() << "cvFore" << QColor(shd.cvFore).name();
+    if (shd.shdAutoOrNill) {
+        return ret;
+    }
+
+#ifdef CONVERSION_DEBUG_SHD
+    qDebug() << "==> shdToColorStr";
+    qDebug() << "bgColor:" << bgColor;
+    qDebug() << "fontColor:" << fontColor;
+    qDebug() << "ipat:" << shd.ipat;
+    qDebug() << "cvBack:" << QColor(shd.cvBack).name();
+    qDebug() << "cvFore:" << QColor(shd.cvFore).name();
 #endif
 
     switch (shd.ipat) {
@@ -353,7 +372,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         // to 0xFF is referred to as cvAuto.
         //
         if (shd.cvBack == wvWare::Word97::cvAuto) {
-            ret = computeAutoColor(shd, bgColor);
+            ret = computeAutoColor(shd, bgColor, fontColor);
         } else {
             ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
@@ -366,7 +385,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         //handle remaining Ipat values
         quint32 grayClr = shadingPatternToColor(shd.ipat);
         if (grayClr == wvWare::Word97::cvAuto) {
-            ret = computeAutoColor(shd, bgColor);
+            ret = computeAutoColor(shd, bgColor, fontColor);
         } else {
             ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
