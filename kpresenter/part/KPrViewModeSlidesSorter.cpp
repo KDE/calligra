@@ -52,10 +52,14 @@
 #include <KoPAPageDeleteCommand.h>
 #include <KoPAOdfPageSaveHelper.h>
 #include <KoDrag.h>
+#include <KoCanvasController.h>
+#include <KoCopyController.h>
+#include <KoCutController.h>
 
 #include <klocale.h>
 #include <KDebug>
 #include <kconfiggroup.h>
+#include <KActionCollection>
 
 KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas)
     : KoPAViewMode( view, canvas )
@@ -68,8 +72,14 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
 
     connect(m_slidesSorter, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
+    connect(m_slidesSorter, SIGNAL(selectionCleared()), this, SLOT(disableEditActions()));
+    connect(m_slidesSorter, SIGNAL(itemSelected()), this, SLOT(enableEditActions()));
 
-    m_slidesSorter->installEventFilter(this);
+    //connect signals for manage standard edit actions
+    connect(view->copyController(), SIGNAL(copyRequested()), this, SLOT(editCopy()));
+    connect(view->cutController(), SIGNAL(copyRequested()), this, SLOT(editCut()));
+    connect(view, SIGNAL(selectAllRequested()), m_slidesSorter, SLOT(selectAll()));
+    connect(view, SIGNAL(deselectAllRequested()), m_slidesSorter, SLOT(clearSelection()));
 
     //install selection manager for Slides Sorter View
     m_selectionManagerSlidesSorter = new KPrSelectionManager(m_slidesSorter);
@@ -164,8 +174,9 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
         disconnect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
         m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
         loadZoomConfig();
+        disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
+        connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
     }
-
 }
 
 void KPrViewModeSlidesSorter::deactivate()
@@ -195,9 +206,11 @@ void KPrViewModeSlidesSorter::deactivate()
     if (kPrview) {
         kPrview->restoreZoomConfig();
         connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
+        connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
+        disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
     }
 
-
+    disableEditActions();
 }
 
 void KPrViewModeSlidesSorter::updateSlidesSorterDocumentModel()
@@ -277,6 +290,7 @@ void KPrViewModeSlidesSorter::itemClicked(const QModelIndex index)
     if (page) {
         m_view->setActivePage(page);
     }
+    enableEditActions();
 }
 
 QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
@@ -406,33 +420,28 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_slidesSorter);
 
-    // Not connected yet
-    menu.addAction(SmallIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
-    menu.addAction(i18n("Delete selected slides"), this, SLOT(deleteSlide()));
+    menu.addAction(KIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
+    menu.addAction(KIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
 
-    menu.addAction(i18n("Cut") ,this,  SLOT(editCut()));
-    menu.addAction(i18n("Copy"), this,  SLOT(editCopy()));
-    menu.addAction(i18n("Paste"), this, SLOT(editPaste()));
+    menu.addAction(KIcon("edit-cut"), i18n("Cut"), this,  SLOT(editCut()));
+    menu.addAction(KIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
+    menu.addAction(KIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
 
     menu.exec(event->globalPos());
 }
 
-bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
+void KPrViewModeSlidesSorter::enableEditActions()
 {
-    if (watched == m_slidesSorter) {
-        switch (event->type()) {
-            case QEvent::KeyPress: {
-                QKeyEvent *keyEv = dynamic_cast<QKeyEvent *>(event);
+    KActionCollection *ac = canvas()->canvasController()->actionCollection();
+    ac->action("edit_copy")->setEnabled(true);
+    ac->action("edit_cut")->setEnabled(true);
+    ac->action("edit_delete")->setEnabled(true);
+}
 
-                if (keyEv && keyEv->key() == Qt::Key_Delete) {
-                    deleteSlide();
-                }
-            }
-
-            default:
-                break;
-        }
-    } //endIf
-
-    return QObject::eventFilter(watched, event);
+void KPrViewModeSlidesSorter::disableEditActions()
+{
+    KActionCollection *ac = canvas()->canvasController()->actionCollection();
+    ac->action("edit_copy")->setEnabled(false);
+    ac->action("edit_cut")->setEnabled(false);
+    ac->action("edit_delete")->setEnabled(false);
 }

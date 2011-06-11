@@ -138,11 +138,21 @@ void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-
 void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     Q_UNUSED(e);
     setDragingFlag(false);
+}
+
+void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    if (!this->selectionModel()->selection().isEmpty()) {
+        emit itemSelected();
+    }
+    else {
+        emit selectionCleared();
+    }
+    QListView::selectionChanged(selected, deselected);
 }
 
 QRect KPrSlidesManagerView::itemSize() const
@@ -175,7 +185,7 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
 
             //Left button is used to deselect, but rigth button needs a selected item for
             //context menu actions
-            if ((item.row() < 0) & (mouseEv->button() != Qt::LeftButton) ) {
+            if ((item.row() < 0) & (mouseEv->button() != Qt::LeftButton)) {
                 // Selects the last item of the row
                 QModelIndex last_index = model()->index(cursorSlideIndex() - 1, 0, QModelIndex());
                 setCurrentIndex(last_index);
