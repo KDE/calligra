@@ -487,11 +487,6 @@ void Paragraph::setParagraphStyle(const wvWare::Style* paragraphStyle)
                                       Conversion::styleName2QString(m_paragraphStyle->name()));
 }
 
-KoGenStyle* Paragraph::getOdfParagraphStyle()
-{
-    return m_odfParagraphStyle;
-}
-
 //open/closeInnerParagraph functions:
 //lets us process a paragraph inside another paragraph,
 //as in the case of footnotes. openInnerParagraph should
@@ -602,7 +597,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
          (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
     {
         QString color = Conversion::shdToColorStr(pap.shd, currentBgColor(), m_fontColor);
-        if (!color.isEmpty()) {
+        if (!color.isNull()) {
             updateBgColor(color);
         } else {
             color = "transparent";
@@ -884,7 +879,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         (refChp->shd.shdAutoOrNill && !chp->shd.shdAutoOrNill))
     {
         QString color = Conversion::shdToColorStr(chp->shd, currentBgColor(), m_fontColor);
-        if (!color.isEmpty()) {
+        if (!color.isNull()) {
             addBgColor(color);
         } else {
             color = "transparent";
@@ -898,8 +893,10 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
     //fBold = bold text if 1
-    if (!refChp || refChp->fBold != chp->fBold) {
+
+    //FIXME: This wasn't the proper fix for Bug 239172.
 //     if (!refChp || (chp->istd == 10)) {
+    if (!refChp || refChp->fBold != chp->fBold) {
         style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
     }
 

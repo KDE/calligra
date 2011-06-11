@@ -123,17 +123,17 @@ namespace Conversion
     QString shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor);
 
     /**
-     * @return the name of a color contrasting to the provided background color
-     * in the format "#RRGGBB".
+     * Compute a color contrasting to the provided background color.
+     * @return color in the format "#RRGGBB".
      */
     QString contrastFontColor(const QString& bgColor);
 
     /**
-     * Compute auto color
+     * Compute a color for a COLORREF set to cvAuto.
      * @param SHD shading structure
      * @param background color in the format "#RRGGBB"
      * @param font color in the format "#RRGGBB"
-     * @return color in the format "#RRGGBB"
+     * @return color in the format "#RRGGBB".
      */
     QString computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor,  const QString& fontColor);
 

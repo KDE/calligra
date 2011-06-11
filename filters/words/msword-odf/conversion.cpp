@@ -247,6 +247,10 @@ int yMix(int yFore, int yBack, qreal pct) {
 
 QString Conversion::contrastFontColor(const QString& bgColor)
 {
+    if (bgColor.isNull()) {
+        return QColor(Qt::black).name();
+    }
+
 #if 0 
     QColor color(bgColor);
     int d = 0;
@@ -275,8 +279,6 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     // NOTE: by definition, see
     // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
 
-    Q_ASSERT(!bgColor.isNull());
-
     if (shd.shdAutoOrNill) {
         return contrastFontColor(bgColor);
     }
@@ -295,7 +297,11 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
     }
 
     if (shd.cvBack == wvWare::Word97::cvAuto) {
-        backColor = QColor(bgColor);
+        if (bgColor.isNull()) {
+            backColor = QColor(Qt::white).name();
+        } else {
+            backColor = QColor(bgColor);
+        }
     } else {
         backColor = QColor(QRgb(shd.cvBack));
     }

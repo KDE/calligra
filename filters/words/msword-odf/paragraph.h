@@ -54,9 +54,22 @@ public:
     void closeInnerParagraph();
     void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> properties);
 
-    // Set the general named style that applies to this paragraph
+    /**
+     * Set the built-in (named) style that applies to the paragraph.
+     */
     void setParagraphStyle(const wvWare::Style* paragraphStyle);
-    KoGenStyle* getOdfParagraphStyle();
+
+    /**
+     * @return the built-in (named) style that applies to the paragraph.
+     */
+    const wvWare::Style* paragraphStyle() const { return m_paragraphStyle; }
+
+    /**
+     * @return the KoGenStyle of family Paragraph prepared for the current
+     * paragraph to other handlers.
+     */
+    KoGenStyle* koGenStyle() const { return m_odfParagraphStyle; };
+
     bool containsPageNumberField() const {
         return m_containsPageNumberField;
     }
@@ -75,8 +88,8 @@ public:
 
     void setCombinedCharacters(bool isCombined);
 
-    // Static functions for parsing wvWare properties and applying
-    // them onto a KoGenStyle.
+    // Static functions which process wvWare properties and store them into
+    // corresponding properties of a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool setDefaultAlign, Paragraph *paragraph,
@@ -107,7 +120,7 @@ public:
     static void updateBgColor(const QString& val);
 
     /**
-     * @return the current background-color in the format "#RRGGBB".
+     * @return the background color in the format "#RRGGBB" or an empty string.
      */
     static QString currentBgColor(void) { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
 

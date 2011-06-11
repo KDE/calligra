@@ -39,7 +39,7 @@
 using Conversion::twipsToPt;
 
 KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles) :
-m_floatingTable(false)
+    m_floatingTable(false)
 {
     // This strange value (-2), is used to create a check that e.g.  a
     // table row is not written before a table:table is started.
@@ -396,7 +396,6 @@ void KWordTableHandler::tableCellStart()
     // Get table cell descriptor
     //merging, alignment, ... information
     const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
-    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
 
     //left boundary of current cell
     int leftEdgePos = m_tap->rgdxaCenter[ m_column ]; // in DXAs
@@ -627,14 +626,6 @@ void KWordTableHandler::tableCellStart()
         }
     }
 
-    //process shading information
-    QString color = Conversion::shdToColorStr(shd, document()->currentBgColor(), QString());
-    if (!color.isEmpty()) {
-        cellStyle.addProperty("fo:background-color", color);
-        //add the current background-color to stack
-        document()->addBgColor(color);
-    }
-
     //text direction
     //if(tc.fVertical) {
     //    cellStyle.addProperty("style:direction", "ttb");
@@ -683,6 +674,7 @@ void KWordTableHandler::tableCellStart()
         // If not set to colSpan, we need to (re)set it to a known value.
         m_colSpan = 1;
     }
+    m_cellStyleName = cellStyleName;
 }
 
 void KWordTableHandler::tableCellEnd()
@@ -718,16 +710,20 @@ void KWordTableHandler::tableCellEnd()
     }
     m_colSpan = 1;
 
-    if (m_tap) {
-        //if the backgroud-color was provided, then remove it from stack
-        const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
-        const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
+    if (!m_tap) return;
 
-        if ( !Conversion::shdToColorStr(shd, document()->currentBgColor(), QString()).isEmpty() &&
-             !(tc.fVertMerge && !tc.fVertRestart) )
-        {
-            document()->rmBgColor();
-        }
+    //process shading information
+    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
+    QString fontColor = document()->textHandler()->paragraphBaseFontColorBkp();
+    //TODO: not sure if the document backgroud color really helps here
+    QString color = Conversion::shdToColorStr(shd, document()->currentBgColor(), fontColor);
+    if (!color.isNull()) {
+        KoGenStyle* cellStyle = m_mainStyles->styleForModification(m_cellStyleName);
+        Q_ASSERT(cellStyle);
+        cellStyle->addProperty("fo:background-color", color, KoGenStyle::TableCellType);
+        m_cellStyleName.clear();
+        //add the current background-color to stack
+//         document()->addBgColor(color);
     }
 }
 
