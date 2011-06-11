@@ -36,6 +36,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QIntValidator>
+#include <QToolButton>
 #include <QTimer>
 #include <KSqueezedTextLabel>
 #include <KStatusBar>
@@ -50,44 +51,68 @@ const KLocalizedString i18nLine = ki18n("Line %1");
 
 #define KWSTATUSBAR "KWStatusBarPointer"
 
-class KWEditableStatusBarItem : public QStackedWidget
+class KWStatusBarBaseItem : public QStackedWidget
 {
 public:
     QLabel *m_label;
-    QLineEdit *m_edit;
-    KWEditableStatusBarItem(QWidget *parent = 0) : QStackedWidget(parent)
+    QWidget *m_widget;
+    KWStatusBarBaseItem(QWidget *parent = 0) : QStackedWidget(parent), m_widget(0)
     {
 #ifdef Q_WS_MAC
         setAttribute(Qt::WA_MacMiniSize, true);
 #endif
         m_label = new QLabel(this);
         addWidget(m_label);
-        m_edit = new QLineEdit(this);
-        m_edit->setValidator(new QIntValidator(m_edit));
-        m_edit->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        addWidget(m_edit);
     }
 protected:
-    void enterEvent(QEvent*)
+    virtual void enterEvent(QEvent*)
     {
         setCurrentIndex(1);
     }
-    void leaveEvent(QEvent*)
+    virtual void leaveEvent(QEvent*)
     {
-        if (m_edit->hasFocus()) {
-            m_edit->installEventFilter(this);
-        } else {
-            setCurrentIndex(0);
-            m_edit->removeEventFilter(this);
+        if (m_widget) {
+            if (m_widget->hasFocus()) {
+                m_widget->installEventFilter(this);
+            } else {
+                setCurrentIndex(0);
+                m_widget->removeEventFilter(this);
+            }
         }
     }
-    bool eventFilter(QObject *watched, QEvent *event)
+    virtual bool eventFilter(QObject *watched, QEvent *event)
     {
-        if (watched == m_edit && event->type() == QEvent::FocusOut && !m_edit->hasFocus()) {
+        if (watched == m_widget && event->type() == QEvent::FocusOut && !m_widget->hasFocus()) {
             setCurrentIndex(0);
-            m_edit->removeEventFilter(this);
+            m_widget->removeEventFilter(this);
         }
         return false;
+    }
+};
+
+class KWStatusBarEditItem : public KWStatusBarBaseItem
+{
+public:
+    QLineEdit *m_edit;
+    KWStatusBarEditItem(QWidget *parent = 0) : KWStatusBarBaseItem(parent)
+    {
+        m_edit = new QLineEdit(this);
+        m_edit->setValidator(new QIntValidator(m_edit));
+        m_edit->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        m_widget = m_edit;
+        addWidget(m_widget);
+    }
+};
+
+class KWStatusBarButtonItem : public KWStatusBarBaseItem
+{
+public:
+    QToolButton *m_button;
+    KWStatusBarButtonItem(QWidget *parent = 0) : KWStatusBarBaseItem(parent)
+    {
+        m_button = new QToolButton(this);
+        m_widget = m_button;
+        addWidget(m_widget);
     }
 };
 
@@ -100,7 +125,7 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     KWDocument *document = view->kwdocument();
     m_statusbar->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    m_pageLabel = new KWEditableStatusBarItem();
+    m_pageLabel = new KWStatusBarEditItem();
     m_pageLabel->setFixedWidth(QFontMetrics(m_pageLabel->m_label->font()).width(i18nPage.subs("9999").subs("9999").toString()));
     m_statusbar->addWidget(m_pageLabel);
     m_pageLabel->setVisible(document->config().statusBarShowPage());
@@ -114,7 +139,7 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     m_statusbar->addAction(action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showPage(bool)));
 
-    m_lineLabel = new KWEditableStatusBarItem();
+    m_lineLabel = new KWStatusBarEditItem();
     m_lineLabel->setFixedWidth(QFontMetrics(m_lineLabel->font()).width(i18nLine.subs("999999").toString()));
     m_statusbar->addWidget(m_lineLabel);
     connect(m_lineLabel->m_edit, SIGNAL(returnPressed()), this, SLOT(gotoLine()));
@@ -127,11 +152,12 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     m_statusbar->addAction(action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showLineColumn(bool)));
 
-    m_pageStyleLabel = new QLabel();
-    m_pageStyleLabel->setMinimumWidth(qMax(60, QFontMetrics(m_pageStyleLabel->font()).width(document->pageManager()->defaultPageStyle().name())) * 2.2);
+    m_pageStyleLabel = new KWStatusBarButtonItem();
+    m_pageStyleLabel->setFixedWidth(qMax(60, QFontMetrics(m_pageStyleLabel->font()).width(I18N_NOOP("Standard"))) * 2.4);
     m_statusbar->addWidget(m_pageStyleLabel);
-    m_pageStyleLabel->setVisible(document->config().statusBarShowPageStyle());
+    connect(m_pageStyleLabel->m_button, SIGNAL(clicked()), this, SLOT(showPageStyle()));
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(updatePageStyle()));
+    m_pageStyleLabel->setVisible(document->config().statusBarShowPageStyle());
 
     action = new KAction(i18n("Page Style"), this);
     action->setObjectName("pagestyle_current_name");
@@ -171,7 +197,8 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showModified(bool)));
 
     m_mousePosLabel = new QLabel(m_statusbar);
-    m_mousePosLabel->setMinimumWidth(QFontMetrics(m_mousePosLabel->font()).width("9999:9999"));
+    m_mousePosLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    m_mousePosLabel->setMinimumWidth(QFontMetrics(m_mousePosLabel->font()).width("99999:99999"));
     m_statusbar->addWidget(m_mousePosLabel);
     m_mousePosLabel->setVisible(document->config().statusBarShowMouse());
 
@@ -250,7 +277,15 @@ void KWStatusBar::gotoPage(int pagenumber)
 void KWStatusBar::updatePageStyle()
 {
     KWPage page = m_currentView ? m_currentView->currentPage() : KWPage();
-    m_pageStyleLabel->setText(page.isValid() && page.pageStyle().isValid() ? page.pageStyle().name() : QString() );
+    QString name = page.isValid() && page.pageStyle().isValid() ? page.pageStyle().name() : QString();
+    m_pageStyleLabel->m_label->setText(name);
+    m_pageStyleLabel->m_button->setText(name);
+}
+
+void KWStatusBar::showPageStyle()
+{
+    if (m_currentView)
+        m_currentView->formatPage();
 }
 
 void KWStatusBar::updatePageSize()

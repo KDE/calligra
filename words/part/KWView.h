@@ -109,6 +109,9 @@ public slots:
     void offsetInDocumentMoved(int yOffset);
     void variableChanged();
 
+    /// displays the KWPageSettingsDialog that allows to change properties of the entire page
+    void formatPage();
+
 protected:
     /// reimplemented method from superclass
     virtual void showEvent(QShowEvent *event);
@@ -148,8 +151,6 @@ private slots:
     void sendToBack();
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
-    /// displays the KWPageSettingsDialog that allows to change properties of the entire page
-    void formatPage();
     /// displays libs/main/rdf/SemanticStylesheetsEditor to edit Rdf stylesheets
     void editSemanticStylesheets();
     /// convert current frame to an inline frame

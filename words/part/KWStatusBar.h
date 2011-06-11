@@ -38,7 +38,8 @@ class KoCanvasBase;
 
 class KWDocument;
 class KWView;
-class KWEditableStatusBarItem;
+class KWStatusBarEditItem;
+class KWStatusBarButtonItem;
 
 /**
  * The KWStatusBar class implements an extended statusbar for KWord.
@@ -63,6 +64,7 @@ private slots:
     void updatePageCount();
     void gotoPage(int pagenumber = -1);
     void updatePageStyle();
+    void showPageStyle();
     void updatePageSize();
     void updateCursorPosition();
     void gotoLine();
@@ -100,10 +102,10 @@ private:
     QAction *m_zoomAction;
 
     QLabel *m_modifiedLabel;
-    KWEditableStatusBarItem *m_pageLabel;
-    QLabel *m_pageStyleLabel;
+    KWStatusBarEditItem *m_pageLabel;
+    KWStatusBarButtonItem *m_pageStyleLabel;
     QLabel *m_pageSizeLabel;
-    KWEditableStatusBarItem *m_lineLabel;
+    KWStatusBarEditItem *m_lineLabel;
     QLabel *m_mousePosLabel;
     KSqueezedTextLabel *m_statusLabel;
     QList<KWView*> m_views;
