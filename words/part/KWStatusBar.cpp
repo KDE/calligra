@@ -32,6 +32,7 @@
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoZoomInput.h>
 #include <QStackedWidget>
 #include <QLabel>
 #include <QLineEdit>
@@ -140,7 +141,7 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showPage(bool)));
 
     m_lineLabel = new KWStatusBarEditItem();
-    m_lineLabel->setFixedWidth(QFontMetrics(m_lineLabel->font()).width(i18nLine.subs("999999").toString()));
+    m_lineLabel->setFixedWidth(QFontMetrics(m_lineLabel->m_label->font()).width(i18nLine.subs("999999").toString()));
     m_statusbar->addWidget(m_lineLabel);
     connect(m_lineLabel->m_edit, SIGNAL(returnPressed()), this, SLOT(gotoLine()));
     m_lineLabel->setVisible(document->config().statusBarShowLineNumber());
@@ -153,7 +154,10 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showLineColumn(bool)));
 
     m_pageStyleLabel = new KWStatusBarButtonItem();
-    m_pageStyleLabel->setFixedWidth(qMax(60, QFontMetrics(m_pageStyleLabel->font()).width(I18N_NOOP("Standard"))) * 2.4);
+    QFontMetrics psfm(m_pageStyleLabel->m_label->font());
+    m_pageStyleLabel->setFixedWidth(psfm.width(I18N_NOOP("Standard")) * 2.5);
+    m_pageStyleLabel->m_button->setMinimumHeight(psfm.height());
+    m_pageStyleLabel->m_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_statusbar->addWidget(m_pageStyleLabel);
     connect(m_pageStyleLabel->m_button, SIGNAL(clicked()), this, SLOT(showPageStyle()));
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(updatePageStyle()));
@@ -182,8 +186,8 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
 
     m_modifiedLabel = new QLabel(m_statusbar);
     m_modifiedLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    QFontMetrics fm(m_modifiedLabel->font());
-    m_modifiedLabel->setMinimumWidth(qMax(fm.width(i18nModified), fm.width(i18nSaved)));
+    QFontMetrics modfm(m_modifiedLabel->font());
+    m_modifiedLabel->setMinimumWidth(qMax(modfm.width(i18nModified), modfm.width(i18nSaved)));
     m_statusbar->addWidget(m_modifiedLabel);
     setModified(document->isModified());
     m_modifiedLabel->setVisible(document->config().statusBarShowModified());
