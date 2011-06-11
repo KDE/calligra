@@ -649,33 +649,38 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
             }
         }
 
-        U8 *data = m_std->grupx;
+        if (m_std->grupxLen >= 4) {
+            U8 *data = m_std->grupx;
 
-        // paragraph
-        U16 cbUPX = readU16( data );
-        data += 2;
-        m_properties->pap().istd = readU16( data );
-        data += 2;
-        cbUPX -= 2;
+            // paragraph
+            U16 cbUPX = readU16( data );
+            data += 2;
+            m_properties->pap().istd = readU16( data );
+            data += 2;
+            cbUPX -= 2;
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# Applying paragraph exceptions: " << cbUPX << endl;
+            wvlog << "############# Applying paragraph exceptions: " << cbUPX << endl;
 #endif
-        m_properties->pap().apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
-        data += cbUPX;
+            m_properties->pap().apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
+            wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
 #endif
+            U16 datapos = 4 + cbUPX + 2;
+            if (m_std->grupxLen >= datapos) {
+                data += cbUPX;
 
-        // character
-        cbUPX = readU16( data );
-        data += 2;
+                // character
+                cbUPX = readU16( data );
+                data += 2;
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# Applying character exceptions: " << cbUPX << endl;
+                wvlog << "############# Applying character exceptions: " << cbUPX << endl;
 #endif
-        m_chp->apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
+                m_chp->apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
+                wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
 #endif
+            }
+        }
     }
     else if ( m_std->sgc == sgcChp ) {
         const Style* parentStyle = 0;
