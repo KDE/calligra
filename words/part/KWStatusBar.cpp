@@ -189,7 +189,6 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     QFontMetrics modfm(m_modifiedLabel->font());
     m_modifiedLabel->setMinimumWidth(qMax(modfm.width(i18nModified), modfm.width(i18nSaved)));
     m_statusbar->addWidget(m_modifiedLabel);
-    setModified(document->isModified());
     m_modifiedLabel->setVisible(document->config().statusBarShowModified());
     connect(document, SIGNAL(modified(bool)), this, SLOT(setModified(bool)));
 
@@ -260,9 +259,12 @@ void KWStatusBar::updatePageCount()
     if (m_currentView) {
         m_pageLabel->m_label->setText(i18nPage.subs(m_currentView->currentPage().pageNumber()).subs(m_currentView->kwdocument()->pageCount()).toString());
         m_pageLabel->m_edit->setText(QString::number(m_currentView->currentPage().pageNumber()));
+        if (m_modifiedLabel->text().isEmpty())
+            setModified(m_currentView->kwdocument()->isModified());
     } else {
         m_pageLabel->m_label->setText(i18nPage.toString());
         m_pageLabel->m_edit->setText(QString());
+        m_modifiedLabel->setText(QString());
     }
 }
 
