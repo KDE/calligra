@@ -302,7 +302,8 @@ void KWStatusBar::updatePageSize()
 void KWStatusBar::updateCursorPosition()
 {
     int line = 1;
-    KoTextEditor *editor = m_currentView ? KoTextDocument(m_currentView->kwdocument()->mainFrameSet()->document()).textEditor() : 0;
+    KWTextFrameSet *fs = m_currentView ? m_currentView->kwdocument()->mainFrameSet() : 0;
+    KoTextEditor *editor = fs ? KoTextDocument(fs->document()).textEditor() : 0;
     if (editor) {
         QTextCursor *c = editor->cursor();
         if (c)
@@ -317,10 +318,11 @@ void KWStatusBar::gotoLine()
     if (!m_currentView)
         return;
     int linenumber = m_lineLabel->m_edit->text().toInt();
-    QTextBlock block = m_currentView->kwdocument()->mainFrameSet()->document()->findBlockByLineNumber(linenumber);
+    KWTextFrameSet *fs = m_currentView->kwdocument()->mainFrameSet();
+    QTextBlock block = fs ? fs->document()->findBlockByLineNumber(linenumber) : QTextBlock();
     if (!block.isValid())
         return;
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_currentView->kwdocument()->mainFrameSet()->document()->documentLayout());
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(fs->document()->documentLayout());
     Q_ASSERT(lay);
     KoTextLayoutRootArea *area = lay->rootAreaForPosition(block.position());
     if (!area)
@@ -405,10 +407,13 @@ void KWStatusBar::setCurrentView(KWView *view)
             disconnect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(showZoom(bool)));
         }
 
-        KoTextDocument doc(m_currentView->kwdocument()->mainFrameSet()->document());
-        KoTextEditor *editor = doc.textEditor();
-        if (editor) {
-            disconnect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()));
+        KWTextFrameSet *fs = m_currentView->kwdocument()->mainFrameSet();
+        if (fs) {
+            KoTextDocument doc(fs->document());
+            KoTextEditor *editor = doc.textEditor();
+            if (editor) {
+                disconnect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()));
+            }
         }
     }
 
@@ -438,10 +443,13 @@ void KWStatusBar::setCurrentView(KWView *view)
     connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)),
         this, SLOT(resourceChanged(int, QVariant)));
 
-    KoTextDocument doc(m_currentView->kwdocument()->mainFrameSet()->document());
-    KoTextEditor *editor = doc.textEditor();
-    if (editor) {
-        connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()));
+    KWTextFrameSet *fs = m_currentView->kwdocument()->mainFrameSet();
+    if (fs) {
+        KoTextDocument doc(fs->document());
+        KoTextEditor *editor = doc.textEditor();
+        if (editor) {
+            connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()));
+        }
     }
 }
 
