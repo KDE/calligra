@@ -42,7 +42,7 @@ public:
         SLIDES_MOVE     = 2,  ///< move slides
     };
 
-    explicit KPrCustomSlideShowsModel(QObject *parent = 0, KPrCustomSlideShows *customShows = 0, KPrDocument *document = 0);
+    explicit KPrCustomSlideShowsModel(KPrDocument *document, QObject *parent = 0);
 
     virtual ~KPrCustomSlideShowsModel();
 
@@ -66,6 +66,8 @@ public:
 
     void setCustomSlideShows(KPrCustomSlideShows *customShows);
 
+    QString currentSlideShow();
+
     void setCurrentSlideShow(QString name);
 
     void setCurrentSlideShow(int index);
@@ -88,6 +90,10 @@ public:
     void removeIndexes(QModelIndexList pageIndexes);
 
     bool doCustomShowAction(CustomShowActions c_action, QList<KoPAPageBase *> slides, int beginRow);
+
+    void addNewCustomShow(const QString &name);
+
+    void renameCustomShow(const QString &oldName, const QString &newName);
 
 signals:
 

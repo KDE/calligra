@@ -36,9 +36,9 @@
 #include <QApplication>
 #include <QMenu>
 
-KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(QObject *parent, KPrCustomSlideShows *customShows, KPrDocument *document)
+KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(KPrDocument *document, QObject *parent)
     : QAbstractListModel(parent)
-    , m_customShows(customShows)
+    , m_customShows(document->customSlideShows())
     , m_iconSize(QSize(200,200))
     , m_document(document)
 {
@@ -247,6 +247,12 @@ void KPrCustomSlideShowsModel::setCustomSlideShows(KPrCustomSlideShows *customSh
     reset();
 }
 
+
+QString KPrCustomSlideShowsModel::currentSlideShow()
+{
+    return m_currentSlideShowName;
+}
+
 void KPrCustomSlideShowsModel::setCurrentSlideShow(QString name)
 {
     if (!m_customShows | (m_currentSlideShowName == name))
@@ -366,6 +372,18 @@ bool KPrCustomSlideShowsModel::doCustomShowAction(CustomShowActions c_action, QL
     }
 
     return updated;
+}
+
+void KPrCustomSlideShowsModel::addNewCustomShow(const QString &name)
+{
+    m_customShows->insert(name, QList<KoPAPageBase*>());
+    setCurrentSlideShow(name);
+}
+
+void KPrCustomSlideShowsModel::renameCustomShow(const QString &oldName, const QString &newName)
+{
+    m_customShows->rename(oldName, newName);
+    setCurrentSlideShow(newName);
 }
 
 

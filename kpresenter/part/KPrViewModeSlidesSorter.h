@@ -33,6 +33,8 @@ class KPrSlidesManagerView;
 class KPrSelectionManager;
 class KPrCustomSlideShowsModel;
 class KPrCustomSlideShows;
+class QToolButton;
+class QComboBox;
 
 //This view mode holds Slides Sorter view widget and
 //TODO: holds view and toolbar to manage custom slides shows
@@ -131,6 +133,11 @@ private:
     KPrCustomSlideShowsModel *m_customShowsModel;
     QSize m_iconSize;
     bool m_editCustomShows;
+    QToolButton *buttonAdd;
+    QToolButton *buttonDel;
+    QToolButton *buttonAddSlide;
+    QToolButton *buttonDelSlide;
+    QComboBox *slideShowsList;
 
 public slots:
     void editPaste();
@@ -176,6 +183,12 @@ private slots:
     void changeActiveSlideShow(QString name);
 
     void deleteSlideFromCustomShow();
+
+    void addCustomSlideShow();
+
+    void updateCustomShowsList();
+
+    void renameCustomShow();
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

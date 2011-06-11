@@ -32,6 +32,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QPropertyAnimation>
+#include <QLineEdit>
 
 #include "KPrSlidesSorterDocumentModel.h"
 #include "KPrFactory.h"
@@ -68,6 +69,7 @@
 #include <kconfiggroup.h>
 #include <KIconLoader>
 #include <KGlobalSettings>
+#include <KMessageBox>
 
 KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *canvas)
     : KoPAViewMode(view, canvas)
@@ -75,7 +77,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     , m_customSlidesShowView(new KPrSlidesManagerView())
     , m_documentModel(new KPrSlidesSorterDocumentModel(this, view->parentWidget()))
     , m_centralWidget(new QWidget(view->parentWidget()))
-    , m_customShowsModel(new KPrCustomSlideShowsModel(view->parentWidget()))
+    , m_customShowsModel(new KPrCustomSlideShowsModel(static_cast<KPrDocument *>(view->kopaDocument()), view->parentWidget()))
     , m_iconSize(QSize(200, 200))
     , m_editCustomShows(false)
 {
@@ -86,15 +88,24 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     QVBoxLayout *centralWidgetLayout = new QVBoxLayout(m_centralWidget);
 
     QLabel *slideShowsLabel = new QLabel(i18n("Slide Show: "));
-    QComboBox *slideShowsList = new QComboBox;
+    slideShowsList = new QComboBox;
+    slideShowsList->setEditable(false);
+    slideShowsList->setInsertPolicy(QComboBox::NoInsert);
 
-    QToolButton *buttonAdd = new QToolButton();
+    buttonAdd = new QToolButton();
     buttonAdd->setIcon(SmallIcon("list-add"));
-    buttonAdd->setEnabled(false);
 
-    QToolButton *buttonDel = new QToolButton();
+    buttonDel = new QToolButton();
     buttonDel->setIcon(SmallIcon("list-remove"));
     buttonDel->setEnabled(false);
+
+    buttonAddSlide = new QToolButton();
+    buttonAddSlide->setIcon(SmallIcon("arrow-down"));
+    buttonAddSlide->setEnabled(false);
+
+    buttonDelSlide = new QToolButton();
+    buttonDelSlide->setIcon(SmallIcon("arrow-up"));
+    buttonDelSlide->setEnabled(false);
 
     QSplitter *viewsSplitter = new QSplitter(Qt::Vertical);
 
@@ -107,6 +118,9 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     toolBarLayout->addWidget(slideShowsList);
     toolBarLayout->addWidget(buttonAdd);
     toolBarLayout->addWidget(buttonDel);
+    toolBarLayout->addStretch();
+    toolBarLayout->addWidget(buttonAddSlide);
+    toolBarLayout->addWidget(buttonDelSlide);
 
     viewsSplitter->addWidget(m_slidesSorter);
     viewsSplitter->addWidget(m_customSlidesShowView);
@@ -120,16 +134,8 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
 
 
     //Populate ComboBox
-    KPrDocument *document = dynamic_cast<KPrDocument *>(view->kopaDocument());
-    if (document) {
-        m_customShowsModel->setDocument(document);
-    }
-
-    QStringList slideShows;
-
-    slideShows << i18n("Default") << (m_customShowsModel->customShowsNamesList());
-
-    slideShowsList->addItems(slideShows);
+    changeActiveSlideShow(i18n("Default"));
+    updateCustomShowsList();
 
     //Setup customSlideShows view
     m_customSlidesShowView->setModel(m_customShowsModel);
@@ -144,9 +150,9 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     connect(m_slidesSorter, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
     connect(m_customSlidesShowView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(customSlideShowsContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
-    connect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
-    connect(slideShowsList, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeActiveSlideShow(QString)));
-
+    //connect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+    //connect(slideShowsList, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeActiveSlideShow(QString)));
+    connect(buttonAdd, SIGNAL(clicked()), this, SLOT(addCustomSlideShow()));
 
     //filter some m_slidesSorter key events
     m_slidesSorter->installEventFilter(this);
@@ -573,11 +579,18 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
             animation->setDuration(duration);
             animation->setStartValue(m_customSlidesShowView->maximumHeight());
              animation->setEndValue(0);
+             //Deactivate tool buttons and edition
+             slideShowsList->setEditable(false);
+             buttonDel->setEnabled(false);
         }
         else {
             animation->setDuration(duration);
             animation->setStartValue(0);
             animation->setEndValue(m_slidesSorter->height()/2);
+            //Activate tool buttons and edition
+            slideShowsList->setEditable(true);
+            connect(slideShowsList->lineEdit(), SIGNAL(editingFinished()), this, SLOT(renameCustomShow()));
+            buttonDel->setEnabled(true);
         }
         animation->start();
     }
@@ -610,5 +623,69 @@ void KPrViewModeSlidesSorter::deleteSlideFromCustomShow()
     }
 
     m_customShowsModel->removeIndexes(selectedItems);
+
+}
+
+void KPrViewModeSlidesSorter::addCustomSlideShow()
+{
+    //We create a different default name for every SlideShow:
+    static int newSlideShowsCount = 1;
+    while(m_customShowsModel->customShowsNamesList().contains(i18n("New Slide Show %1", newSlideShowsCount)))
+    {
+        ++newSlideShowsCount;
+    }
+
+    m_customShowsModel->addNewCustomShow(i18n("New Slide Show %1", newSlideShowsCount));
+
+    updateCustomShowsList();
+}
+
+void KPrViewModeSlidesSorter::updateCustomShowsList()
+{
+
+    disconnect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+    disconnect(slideShowsList, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeActiveSlideShow(QString)));
+
+    QStringList slideShows;
+
+    slideShows << i18n("Default") << (m_customShowsModel->customShowsNamesList());
+
+    slideShowsList->clear();
+
+    slideShowsList->addItems(slideShows);
+
+    int index = slideShows.indexOf(m_customShowsModel->currentSlideShow());
+
+    slideShowsList->setCurrentIndex(index >= 0 ? index : 0);
+
+    connect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+    connect(slideShowsList, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeActiveSlideShow(QString)));
+
+}
+
+void KPrViewModeSlidesSorter::renameCustomShow()
+{
+    QString newName = slideShowsList->currentText();
+
+    if (newName == m_customShowsModel->currentSlideShow()) {
+        return;
+    }
+
+    // Empty string is not allowed as a name, if the name is empty, revert back to previous name
+    if (newName.isEmpty()) {
+        updateCustomShowsList();
+    }
+    //If the name is not already in use, use it
+    else if(!m_customShowsModel->customShowsNamesList().contains(newName)) {
+       m_customShowsModel->renameCustomShow(m_customShowsModel->currentSlideShow(), newName);
+       updateCustomShowsList();
+    }
+    //otherwise let the user know
+    else {
+        KMessageBox Message;
+        Message.sorry(m_customSlidesShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"), KMessageBox::Notify );
+
+        updateCustomShowsList();
+    }
 
 }
