@@ -582,7 +582,7 @@ void SHD::readPtr(const U8 *ptr) {
     shifterU16>>=5;
     ipat=shifterU16;
 
-#ifdef DEBUG_SHD
+#ifdef WV2_DEBUG_SHD
     wvlog << "icoFore: 0x" << hex << icoFore << endl;
     wvlog << "icoBack: 0x" << hex << icoBack << endl;
     wvlog << "ipat: 0x" << hex << ipat << endl;
@@ -658,7 +658,7 @@ void SHD::readSHDOperandPtr(const U8 *ptr) {
     shifterU16=readU16(ptr);
     ipat=shifterU16;
 
-#ifdef DEBUG_SHD
+#ifdef WV2_DEBUG_SHD
     wvlog << "cvFore: 0x" << hex << cvFore << endl;
     wvlog << "cvBack: 0x" << hex << cvBack << endl;
     wvlog << "ipat: 0x" << hex << ipat << endl;

@@ -851,9 +851,12 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         updateBgColor(bgColor);
     }
 
-    //fHighlight = when 1, characters are highlighted with color specified by chp.icoHighlight
-    //icoHighlight = highlight color (see chp.ico)
-    if (!refChp || refChp->fHighlight != chp->fHighlight || refChp->icoHighlight != chp->icoHighlight) {
+    //fHighlight = when 1, characters are highlighted with color specified by
+    //chp.icoHighlight icoHighlight = highlight color (see chp.ico)
+    if (!refChp ||
+        (refChp->fHighlight != chp->fHighlight) ||
+        (refChp->icoHighlight != chp->icoHighlight))
+    {
         QString color("transparent");
         if (chp->fHighlight) {
             color = Conversion::color(chp->icoHighlight, -1);
@@ -862,7 +865,10 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         style->addProperty("fo:background-color", color, KoGenStyle::TextType);
     }
 
-    if (!refChp || refChp->shd.cvBack != chp->shd.cvBack) {
+    if (!refChp ||
+        (refChp->shd.cvBack != chp->shd.cvBack) ||
+        (refChp->shd.shdAutoOrNill && !chp->shd.shdAutoOrNill))
+    {
         QString color = Conversion::shdToColorStr(chp->shd, bgColor);
         if (!color.isEmpty()) {
             addBgColor(color);
