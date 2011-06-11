@@ -581,16 +581,20 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     //dxaLeft = indent from left margin (signed)
     //dxaRight = indent from right margin (signed)
     if (!refPap || refPap->dxaLeft != pap.dxaLeft) {
-        // apply twip -> pt conversion
-        style->addPropertyPt("fo:margin-left", (double)pap.dxaLeft / 20.0, KoGenStyle::ParagraphType);
+        // apply twip -> pt conversion, only if not in a list
+        if (pap.ilfo == 0) {
+            style->addPropertyPt("fo:margin-left", (double)pap.dxaLeft / 20.0, KoGenStyle::ParagraphType);
+        }
     }
     if (!refPap || refPap->dxaRight != pap.dxaRight) {
         // apply twip -> pt conversion
         style->addPropertyPt("fo:margin-right", (double)pap.dxaRight / 20.0, KoGenStyle::ParagraphType);
     }
     if (!refPap || refPap->dxaLeft1 != pap.dxaLeft1) {
-        // apply twip -> pt conversion
-        style->addPropertyPt("fo:text-indent", (double)pap.dxaLeft1 / 20.0, KoGenStyle::ParagraphType);
+        // apply twip -> pt conversion, only if not in a list
+        if (pap.ilfo == 0) {
+            style->addPropertyPt("fo:text-indent", (double)pap.dxaLeft1 / 20.0, KoGenStyle::ParagraphType);
+        }
     }
 
     //dyaBefore = vertical spacing before paragraph (unsigned)
@@ -716,9 +720,9 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
 
     //TODO: introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
 
-    // Tabulators
-    //itbdMac = number of tabs stops defined for paragraph. Must be >= 0 and <= 64.
-    if (pap.itbdMac) {
+    // Tabulators, only if not in a list.  itbdMac = number of tabs stops
+    // defined for paragraph.  Must be >= 0 and <= 64.
+    if (pap.itbdMac && (pap.ilfo == 0)) {
         kDebug(30513) << "processing tab stops";
         //looks like we need to write these out with an xmlwriter
         QBuffer buf;

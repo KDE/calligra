@@ -52,10 +52,17 @@ public:
     void addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp, QString fontName, const wvWare::StyleSheet& styles, bool addCompleteElement=false);
     void openInnerParagraph();
     void closeInnerParagraph();
+
+    /**
+     * Set the named style from the stylesheet that applies to this paragraph.
+     */
+    void setParagraphStyle(const wvWare::Style* paragraphStyle);
+
+    /**
+     * Set the paragraph properties (PAP) that apply to this paragraph.
+     */
     void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> properties);
 
-    // Set the general named style that applies to this paragraph
-    void setParagraphStyle(const wvWare::Style* paragraphStyle);
     KoGenStyle* getOdfParagraphStyle();
     bool containsPageNumberField() const {
         return m_containsPageNumberField;
