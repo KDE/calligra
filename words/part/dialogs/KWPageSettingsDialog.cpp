@@ -148,10 +148,7 @@ void KWPageSettingsDialog::slotApplyClicked()
     KWPageStyle styleToUpdate = m_pageStyle;
 
     if (styleToUpdate.name() != m_page.pageStyle().name()) {
-        //new KWNewPageStyleCommand(m_document, styleToUpdate, cmd);
-        foreach(KWPage page, m_document->pageManager()->pages(m_page.pageStyle().name())) {
-            new KWChangePageStyleCommand(m_document, page, styleToUpdate, cmd);
-        }
+        new KWChangePageStyleCommand(m_document, m_page, styleToUpdate, cmd);
     }
 
     styleToUpdate.detach(styleToUpdate.name());
@@ -236,13 +233,12 @@ void KWPageSettingsDialog::pageStyleCurrentRowChanged(int row)
 {
     QListWidgetItem *item = m_pageStylesView->item(row);
     KWPageStyle pagestyle = item ? m_document->pageManager()->pageStyle(item->text()) : KWPageStyle();
-    if (pagestyle.isValid()) {
+    if (pagestyle.isValid())
         m_pageStyle = pagestyle;
-        setPageLayout(m_pageStyle.pageLayout());
-        setPageSpread(m_pageStyle.isPageSpread());
-        setTextDirection(m_pageStyle.direction());
-        m_columns->setColumns(m_pageStyle.columns());
-    }
+    setPageLayout(m_pageStyle.pageLayout());
+    setPageSpread(m_pageStyle.isPageSpread());
+    setTextDirection(m_pageStyle.direction());
+    m_columns->setColumns(m_pageStyle.columns());
     m_clonePageStyleButton->setEnabled(pagestyle.isValid());
     m_deletePageStyleButton->setEnabled(pagestyle.isValid() && item->text() != m_document->pageManager()->defaultPageStyle().name());
     enableButtonOk(pagestyle.isValid());
