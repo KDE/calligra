@@ -41,7 +41,7 @@ namespace wvWare
 }
 
 /**
- * Static methods for simple MSWord->KWord conversions (enums etc.)
+ * Static methods for simple DOC->ODT conversions (enums etc.)
  */
 namespace Conversion
 {
@@ -106,18 +106,35 @@ namespace Conversion
     /**
      * Hackery for gray levels.
      */
-    int ditheringToGray(int ipat, bool* ok);
+    int ditheringToGray(const quint16 ipat, bool* ok);
 
     /**
      * Convert shading pattern (ipat) to RGB color.
      */
-    uint shadingPatternToColor(int ipat);
+    quint32 shadingPatternToColor(const quint16 ipat);
 
     /**
      * Convert the shading information to a color string.
+     * @param SHD structure
+     * @param current background-color in the format "#RRGGBB"
      * @return color in the format "#RRGGBB" or an empty string.
      */
-    QString shdToColorStr(const wvWare::Word97::SHD& shd);
+    QString shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor);
+
+    /**
+     * @return the name of a color contrasting to the provided background color
+     * in the format "#RRGGBB".
+     */
+    QString contrastFontColor(const QString& bgColor);
+
+    /**
+     * Compute auto color
+     * @param SHD shading structure
+     * @param backgroundColor in the format "#RRGGBB"
+     * @return color in the format "#RRGGBB"
+     */
+    QString computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor);
+
 
     /**
      * Convert linespacing struct to string.

@@ -88,6 +88,25 @@ public:
     QList<KoPAPageBase*> getByName( const QString &name ) const;
 
     /**
+     * @brief Return the object that match the give index in the list with the given name
+     *
+     * @param name the name of the custom SlideShow
+     / @param index the index of the slide to be retrived from the custom SlideShow
+     * @return a Page in the SlideShow if it was found or a null pointer if not.
+     */
+    KoPAPageBase* pageByIndex(const QString &name, int index) const;
+
+    /**
+     * @brief return the index of a page within a custom show
+     *
+     * @param name the name of the custom SlideShow
+     * @param page the KoPAPageBase within the custom SlideShow
+     * @return a int index of the page within the SlideShow if it was found
+     *         -1 if the page was not found
+     */
+    int indexByPage(const QString &name, KoPAPageBase *page) const;
+
+    /**
      * @brief Insert a slide to the right of the given position of all the known custom SlideShows.
      * If the position is higher than the size of the list of the SlideShow, the slide is inserted at the end.
      * 
@@ -96,7 +115,7 @@ public:
      * If it's 0 it will be prepended to the list, if it's the size it will be appended to the list.
      * Negative numbers can be used to count backwards.
      */
-    void addSlideToAll( KoPAPageBase* page, unsigned int position );
+    void addSlideToAll( KoPAPageBase *page, unsigned int position );
 
     /**
      * @brief Insert a  list of slides to the right of the given position of all the known custom SlideShows.
@@ -112,7 +131,7 @@ public:
      *
      * @param slide slide to be removed
      */
-    void removeSlideFromAll( KoPAPageBase* page );
+    void removeSlideFromAll( KoPAPageBase *page );
 
     /**
      * @brief Deletes all the ocurrencies of a given list of slides from all the known custom SlideShows

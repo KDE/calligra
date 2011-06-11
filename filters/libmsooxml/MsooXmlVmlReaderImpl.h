@@ -300,11 +300,11 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 #endif
 
+    m_currentDrawStyle->addProperty("svg:stroke-width", m_currentVMLProperties.strokeWidth);
+    m_currentDrawStyle->addProperty("svg:stroke-color", m_currentVMLProperties.strokeColor);
+    m_currentDrawStyle->addProperty("svg:stroke-linecap", m_currentVMLProperties.lineCapStyle);
+    m_currentDrawStyle->addProperty("draw:stroke-linejoin", m_currentVMLProperties.joinStyle);
     if (m_currentVMLProperties.stroked) {
-        m_currentDrawStyle->addProperty("svg:stroke-width", m_currentVMLProperties.strokeWidth);
-        m_currentDrawStyle->addProperty("svg:stroke-color", m_currentVMLProperties.strokeColor);
-        m_currentDrawStyle->addProperty("svg:stroke-linecap", m_currentVMLProperties.lineCapStyle);
-        m_currentDrawStyle->addProperty("draw:stroke-linejoin", m_currentVMLProperties.joinStyle);
         if (m_currentVMLProperties.strokeStyleName.isEmpty()) {
             m_currentDrawStyle->addProperty("draw:stroke", "solid");
         }
@@ -313,10 +313,22 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             m_currentDrawStyle->addProperty("draw:stroke-dash", m_currentVMLProperties.strokeStyleName);
         }
     }
+    else {
+        m_currentDrawStyle->addProperty("draw:stroke", "none");
+    }
 
+    m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
     if (m_currentVMLProperties.filled) {
-        m_currentDrawStyle->addProperty("draw:fill", "solid");
-        m_currentDrawStyle->addProperty("draw:fill-color", m_currentVMLProperties.shapeColor);
+        if (m_currentVMLProperties.fillType == "solid") {
+            m_currentDrawStyle->addProperty("draw:fill", "solid");
+        }
+        else if (m_currentVMLProperties.fillType == "gradient") {
+            m_currentDrawStyle->addProperty("draw:fill", "gradient");
+            m_currentDrawStyle->addProperty("draw:fill-gradient-name", m_currentVMLProperties.gradientStyle);
+        }
+    }
+    else {
+        m_currentDrawStyle->addProperty("draw:fill", "none");
     }
 
     if (!ver_align.isEmpty()) {
@@ -325,9 +337,16 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 
     if (m_currentVMLProperties.shadowed == true) {
         m_currentDrawStyle->addProperty("draw:shadow", "visible");
-        m_currentDrawStyle->addProperty("draw:shadow-color", m_currentVMLProperties.shadowColor);
-        m_currentDrawStyle->addProperty("draw:shadow-offset-x", m_currentVMLProperties.shadowXOffset);
-        m_currentDrawStyle->addProperty("draw:shadow-offset-y", m_currentVMLProperties.shadowYOffset);
+    }
+    else {
+        m_currentDrawStyle->addProperty("draw:shadow", "hidden");
+    }
+    m_currentDrawStyle->addProperty("draw:shadow-color", m_currentVMLProperties.shadowColor);
+    m_currentDrawStyle->addProperty("draw:shadow-offset-x", m_currentVMLProperties.shadowXOffset);
+    m_currentDrawStyle->addProperty("draw:shadow-offset-y", m_currentVMLProperties.shadowYOffset);
+    if (m_currentVMLProperties.shadowOpacity > 0) {
+        m_currentDrawStyle->addProperty("draw:shadow-opacity", QString("%1%").
+            arg(m_currentVMLProperties.shadowOpacity));
     }
 
     if (m_currentVMLProperties.opacity > 0) {
@@ -382,6 +401,8 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.strokeColor = "#000000"; // default
     m_currentVMLProperties.strokeWidth = "1pt" ; // default
     m_currentVMLProperties.shapeColor = "#ffffff"; //default
+    m_currentVMLProperties.fillType = "solid"; //default
+    m_currentVMLProperties.shapeSecondaryColor = "#ffffff"; //default
     m_currentVMLProperties.lineCapStyle = "square";
     m_currentVMLProperties.joinStyle = "middle";
     m_currentVMLProperties.strokeStyleName = QString();
@@ -389,9 +410,137 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.stroked = true; // default
     m_currentVMLProperties.opacity = 0; // default
     m_currentVMLProperties.shadowed = false;
+    m_currentVMLProperties.shadowOpacity = 0; // default
     m_currentVMLProperties.shadowColor = "#101010"; // default
     m_currentVMLProperties.shadowXOffset = "2pt"; // default
     m_currentVMLProperties.shadowYOffset = "2pt"; //default
+}
+
+QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
+{
+    QString extraArgument, argumentValue;
+    int colorSeparator = color.indexOf(' ');
+    if (colorSeparator > 0) {
+        extraArgument = color.mid(colorSeparator + 1);
+        color = color.left(colorSeparator);
+        int startIndex = extraArgument.indexOf('(');
+        if (startIndex > 0) {
+            argumentValue = extraArgument.mid(startIndex + 1);
+            argumentValue = argumentValue.left(argumentValue.length() - 1);
+            extraArgument = extraArgument.left(startIndex);
+        }
+    }
+
+    QString newColor;
+    if (color.startsWith("#")) {
+        newColor = color;
+    }
+    else if (color == "red") {
+        newColor = "#ff0000";
+    }
+    else if (color == "green") {
+        newColor = "#008000";
+    }
+    else if (color == "blue") {
+        newColor = "#0000ff";
+    }
+    else if (color == "yellow") {
+        newColor = "#ffff00";
+    }
+    else if (color == "window") {
+        newColor = "#ffffff";
+    }
+    else if (color == "white") {
+        newColor = "#ffffff";
+    }
+    else if (color == "black") {
+        newColor = "#000000";
+    }
+    else if (color == "silver") {
+        newColor = "#c0c0c0";
+    }
+    else if (color == "gray") {
+        newColor = "#808080";
+    }
+    else if (color == "maroon") {
+        newColor = "#800000";
+    }
+    else if (color == "purple") {
+        newColor = "#800080";
+    }
+    else if (color == "fuchsia") {
+        newColor = "#ff00ff";
+    }
+    else if (color == "lime") {
+        newColor = "#00ff00";
+    }
+    else if (color == "olive") {
+        newColor = "#808000";
+    }
+    else if (color == "navy") {
+        newColor = "#000080";
+    }
+    else if (color == "teal") {
+        newColor = "#008080";
+    }
+    else if (color == "aqua") {
+        newColor = "#00ffff";
+    }
+    else if (color == "windowText") {
+        newColor = "#000000";
+    }
+    else if (color == "fill") { // referencing the other color
+        newColor = m_currentVMLProperties.shapeColor;
+    }
+    else if (color == "line") {
+        newColor = m_currentVMLProperties.strokeColor;
+    }
+    else if (color == "shadow") {
+        newColor = m_currentVMLProperties.shadowColor;
+    }
+    else {
+        // unhandled situation, means missing implementation
+        newColor = color;
+    }
+
+    if (!argumentValue.isEmpty()) {
+        int argument = argumentValue.toInt();
+        QColor temp = newColor;
+        int red = temp.red();
+        int green = temp.green();
+        int blue = temp.blue();
+        if (extraArgument == "darken") {
+            red = red * argument / 255;
+            green = green * argument / 255;
+            blue = blue * argument / 255;
+        }
+        else if (extraArgument == "lighten") {
+            red = 255 - (255 - red) * argument / 255;
+            green = 255 - (255 - green) * argument / 255;
+            blue = 255 - (255 - blue) * argument / 255;
+        }
+        if (red > 255) {
+            red = 255;
+        }
+        else if (red < 0) {
+            red = 0;
+        }
+        if (green > 255) {
+            green = 255;
+        }
+        else if (green < 0) {
+            green = 0;
+        }
+        if (blue > 255) {
+            blue = 255;
+        }
+        else if (blue < 0) {
+            blue = 0;
+        }
+        newColor = QColor(red, green, blue).name();
+    }
+
+    return newColor;
 }
 
 void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attrs)
@@ -419,7 +568,7 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
 
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     if (!fillcolor.isEmpty()) {
-        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+        m_currentVMLProperties.shapeColor = rgbColor(fillcolor);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(stroked)
@@ -434,7 +583,7 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
 
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
     if (!strokecolor.isEmpty()) {
-        m_currentVMLProperties.strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+        m_currentVMLProperties.strokeColor = rgbColor(strokecolor);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(opacity)
@@ -511,9 +660,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
         m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
     }
 
-    // Note that image fill is not yet supported in fill parameter, but this should be used
-    // when it's done
-    bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
 
     while (!atEnd()) {
@@ -521,10 +667,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(fill)
-            else if (qualifiedName() == "v:textbox") {
-                TRY_READ(textbox)
-                textBoxOrImage = true;
-            }
+            ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
             else if (qualifiedName() == "w10:wrap") {
@@ -538,13 +681,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     body = frameBuf.originalWriter();
 
-    // Idea here is that if we do not have a box child, we want to still produce a rect to make sure there's a visible output
-    if (!textBoxOrImage) {
-        createFrameStart(RectStart);
-    }
-    else {
-        createFrameStart();
-    }
+    createFrameStart(RectStart);
 
     (void)frameBuf.releaseWriter();
 
@@ -594,7 +731,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
 
     TRY_READ_ATTR_WITHOUT_NS(color)
     if (!color.isEmpty()) {
-        m_currentVMLProperties.shadowColor = MSOOXML::Utils::rgbColor(color);
+        m_currentVMLProperties.shadowColor = rgbColor(color);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(offset)
@@ -602,6 +739,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
     if (index > 0) {
         m_currentVMLProperties.shadowXOffset = offset.left(index);
         m_currentVMLProperties.shadowYOffset = offset.mid(index + 1);
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(opacity)
+    if (!opacity.isEmpty()) {
+        if (opacity.right(1) == "f") {
+            opacity = opacity.left(opacity.length()-1);
+            m_currentVMLProperties.shadowOpacity = 100 * opacity.toInt() / 65536;
+        }
+        else {
+            if (opacity.left(1) == ".") {
+                opacity = "0" + opacity;
+            }
+            m_currentVMLProperties.shadowOpacity = 100 * opacity.toDouble();
+        }
     }
 
     readNext();
@@ -642,11 +793,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentVMLProperties.stroked = true; // default in this function
+    // Spec says that this should overwrite the shape's value, but apparently
+    // a non specified value does not overwrite it
+    //m_currentVMLProperties.stroked = true; // default in this function
 
     TRY_READ_ATTR_WITHOUT_NS(on)
     if (on == "f" || on == "false") {
         m_currentVMLProperties.stroked = false;
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(color)
+    if (!color.isEmpty()) {
+        m_currentVMLProperties.strokeColor = rgbColor(color);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(endcap)
@@ -903,7 +1061,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
-    bool textBoxOrImage = false;
     m_currentVMLProperties.wrapRead = false;
 
     while (!atEnd()) {
@@ -913,10 +1070,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
         }
         else if (isStartElement()) {
             TRY_READ_IF(fill)
-            else if (qualifiedName() == "v:textbox") {
-                TRY_READ(textbox)
-                textBoxOrImage = true;
-            }
+            ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(shadow)
             else if (qualifiedName() == "w10:wrap") {
@@ -930,13 +1084,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 
     body = frameBuf.originalWriter();
 
-    if (!textBoxOrImage) {
-        // This should be roundRect type at some point when it's supported
-        createFrameStart(RectStart);
-    }
-    else {
-        createFrameStart();
-    }
+    createFrameStart(RectStart);
 
     (void)frameBuf.releaseWriter();
 
@@ -1021,16 +1169,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     // Relationship ID of the relationship to the image used for this fill.
     TRY_READ_ATTR_WITH_NS(r, id)
     m_currentVMLProperties.vmlStyle.insert("v:fill@r:id", r_id);
-    // The kind of fill. Default is solid.
-    TRY_READ_ATTR_WITHOUT_NS(type)
-    // frame (Stretch Image to Fit) - The image is stretched to fill the shape.
-    // gradient (Linear Gradient) - The fill colors blend together in a linear gradient from bottom to top.
-    // gradientRadial (Radial Gradient) - The fill colors blend together in a radial gradient.
-    // pattern (Image Pattern) - The image is used to create a pattern using the fill colors.
-    // tile (Tiled Image) - The fill image is tiled.
-    // solid (Solid Fill) - The fill pattern is a solid color.
 
-    m_currentVMLProperties.filled = true; // default in this function
+    // Spec says that this should overwrite the shape's value, but apparently
+    // a non specified value does not overwrite it
+    //m_currentVMLProperties.filled = true; // default in this function
 
     TRY_READ_ATTR_WITHOUT_NS(on)
     if (on == "f" || on == "false") {
@@ -1040,10 +1182,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     // Note this is only like this for solidfill, for others do something...
     TRY_READ_ATTR_WITHOUT_NS(color)
     if (!color.isEmpty()) {
-        m_currentVMLProperties.shapeColor = MSOOXML::Utils::rgbColor(color);
+        m_currentVMLProperties.shapeColor = rgbColor(color);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(color2)
+    if (!color2.isEmpty()) {
+        m_currentVMLProperties.shapeSecondaryColor = rgbColor(color2);
+    }
     TRY_READ_ATTR_WITHOUT_NS(angle)
 
     TRY_READ_ATTR_WITHOUT_NS(opacity)
@@ -1068,6 +1213,39 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    if (!type.isEmpty()) {
+        if (type == "gradient") {
+            m_currentVMLProperties.fillType = type;
+            m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
+            // These should be altered based on angle attribute if present, todo later
+            m_currentGradientStyle.addAttribute("svg:x1", "50%");
+            m_currentGradientStyle.addAttribute("svg:y1", "0%");
+            m_currentGradientStyle.addAttribute("svg:x2", "50%");
+            m_currentGradientStyle.addAttribute("svg:y2", "100%");
+            // These would be different for other gradient types, todo later
+            QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").
+                arg(0).arg(m_currentVMLProperties.shapeColor);
+            QString name = QString("%1").arg(1);
+            m_currentGradientStyle.addChildElement(name, contents);
+            contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").
+                arg(1.0).arg(m_currentVMLProperties.shapeSecondaryColor);
+            name = QString("%1").arg(2);
+            m_currentGradientStyle.addChildElement(name, contents);
+            m_currentVMLProperties.gradientStyle = mainStyles->insert(m_currentGradientStyle);
+        }
+        else {
+            m_currentVMLProperties.fillType = "solid"; // defaulting
+        }
+    }
+    // frame (Stretch Image to Fit) - The image is stretched to fill the shape.
+    // gradient (Linear Gradient) - The fill colors blend together in a linear gradient from bottom to top.
+    // gradientRadial (Radial Gradient) - The fill colors blend together in a radial gradient.
+    // pattern (Image Pattern) - The image is used to create a pattern using the fill colors.
+    // tile (Tiled Image) - The fill image is tiled.
+    // solid (Solid Fill) - The fill pattern is a solid color.
+
     READ_EPILOGUE
 }
 
@@ -1923,7 +2101,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             }
             else if (qualifiedName() == "v:textbox") {
                 isCustomShape = false;
+                body->startElement("draw:text-box");
                 TRY_READ(textbox)
+                body->endElement(); // draw:text-box
             }
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(fill)
@@ -2050,8 +2230,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    body->startElement("draw:text-box");
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -2061,8 +2239,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
 #endif
         }
     }
-
-    body->endElement(); // draw-textbox
 
     READ_EPILOGUE
 }

@@ -348,6 +348,8 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
         // schedule all calls so multiple layout calls are compressed
         lay->scheduleLayout();
     }
+
+    firePageSetupChanged();
 }
 
 void KWDocument::layoutProgressChanged(int percent)

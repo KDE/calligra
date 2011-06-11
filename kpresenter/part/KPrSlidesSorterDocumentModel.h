@@ -73,6 +73,8 @@ public:
      */
     void doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action);
 
+    KoPAPageBase* pageFromIndex(const QModelIndex &index) const;
+
 public slots:
     void update();
 

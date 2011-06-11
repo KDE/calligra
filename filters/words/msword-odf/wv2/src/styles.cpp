@@ -587,30 +587,29 @@ bool Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<St
 
     //TODO: check the m_std.stk
 
+    m_invalid = true;
+
     if ((m_std->istdBase != 0x0fff) &&
         (m_std->istdBase >= rglpstd_cnt)) {
         wvlog << "istdBase - invalid index into rglpstd!" << endl;
-        m_invalid = true;
         return false;
     }
     if (m_std->istdBase == istd) {
         wvlog << "istdBase MUST NOT be same as istd!" << endl;
-        m_invalid = true;
         return false;
     }
     if ((m_std->istdBase != 0x0fff) &&
         styles[m_std->istdBase]->isEmpty()) {
         wvlog << "istdBase - style definition EMPTY!" << endl;
-        m_invalid = true;
         return false;
     }
 
     if ((m_std->istdNext != 0x0fff) &&
         (m_std->istdNext >= rglpstd_cnt)) {
         wvlog << "istdNext - invalid index into rglpstd!" << endl;
-        m_invalid = true;
         return false;
     }
+    //TODO: Why did I disable this one ???
 //     if (m_std->istdNext == istd) {
 //         wvlog << "istdNext MUST NOT be same as istd!" << endl;
 //         return false;
@@ -618,9 +617,10 @@ bool Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<St
     if ((m_std->istdNext != 0x0fff) &&
         styles[m_std->istdNext]->isEmpty()) {
         wvlog << "istdNext - style definition EMPTY!" << endl;
-        m_invalid = true;
         return false;
     }
+    m_invalid = false;
+
     return true;
 }
 
@@ -640,40 +640,47 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         if ( m_std->istdBase != 0x0fff ) {
             parentStyle = stylesheet.styleByIndex( m_std->istdBase );
             if ( parentStyle ) {
+#ifdef WV2_DEBUG_SPRMS
                 wvlog << "#### parent style ASCII Name: '" << parentStyle->name().ascii() << "'" << endl;
+#endif
                 const_cast<Style*>( parentStyle )->unwrapStyle( stylesheet, version );
                 m_properties->pap() = parentStyle->paragraphProperties().pap();
                 *m_chp = parentStyle->chp();
             }
         }
 
-        U8 *data = m_std->grupx;
+        if (m_std->grupxLen >= 4) {
+            U8 *data = m_std->grupx;
 
-        // paragraph
-        U16 cbUPX = readU16( data );
-        data += 2;
-        m_properties->pap().istd = readU16( data );
-        data += 2;
-        cbUPX -= 2;
+            // paragraph
+            U16 cbUPX = readU16( data );
+            data += 2;
+            m_properties->pap().istd = readU16( data );
+            data += 2;
+            cbUPX -= 2;
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# Applying paragraph exceptions: " << cbUPX << endl;
+            wvlog << "############# Applying paragraph exceptions: " << cbUPX << endl;
 #endif
-        m_properties->pap().apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
-        data += cbUPX;
+            m_properties->pap().apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
+            wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
 #endif
+            U16 datapos = 4 + cbUPX + 2;
+            if (m_std->grupxLen >= datapos) {
+                data += cbUPX;
 
-        // character
-        cbUPX = readU16( data );
-        data += 2;
+                // character
+                cbUPX = readU16( data );
+                data += 2;
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# Applying character exceptions: " << cbUPX << endl;
+                wvlog << "############# Applying character exceptions: " << cbUPX << endl;
 #endif
-        m_chp->apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
+                m_chp->apply( data, cbUPX, parentStyle, &stylesheet, 0, version );  // try without data stream for now
 #ifdef WV2_DEBUG_SPRMS
-        wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
+                wvlog << "############# done" << "[" << name().ascii() << "]" << endl;
 #endif
+            }
+        }
     }
     else if ( m_std->sgc == sgcChp ) {
         const Style* parentStyle = 0;
@@ -681,15 +688,21 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         if ( m_std->istdBase != 0x0fff ) {
             parentStyle = stylesheet.styleByIndex( m_std->istdBase );
             if ( parentStyle ) {
+#ifdef WV2_DEBUG_SPRMS
                 wvlog << "#### parent style ASCII Name: '" << parentStyle->name().ascii() << "'" << endl;
+#endif
                 const_cast<Style*>( parentStyle )->unwrapStyle( stylesheet, version );
                 bool ok;
                 m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
+#ifdef WV2_DEBUG_SPRMS
                 wvlog << "our istd = " << m_upechpx->istd << " sti = " << m_std->sti << endl;
+#endif
                 mergeUpechpx( parentStyle, version );
             }
             else {
+#ifdef WV2_DEBUG_SPRMS
                 wvlog << "################# NO parent style for this character style found" << endl;
+#endif
             }
         }
         else {

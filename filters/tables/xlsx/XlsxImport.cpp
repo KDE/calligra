@@ -595,14 +595,14 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
 
     // 2. parse styles
     XlsxStyles styles;
-    XlsxXmlStylesReaderContext colorContext(styles, true, &themes);
+    XlsxXmlStylesReaderContext colorContext(styles, true, this, &themes);
     {
         // In first round we read color overrides, in 2nd round we can actually use them.
         XlsxXmlStylesReader stylesReader(writers);
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &colorContext))
         reportProgress(15);
-        XlsxXmlStylesReaderContext context2(styles, false, &themes);
+        XlsxXmlStylesReaderContext context2(styles, false, this, &themes);
         context2.colorIndices = colorContext.colorIndices; // Overriding default colors potentially
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context2))

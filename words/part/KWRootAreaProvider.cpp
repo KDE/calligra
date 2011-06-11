@@ -75,11 +75,14 @@ void KWRootAreaProvider::clearPages(int pageNumber)
 {
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textFrameSet->document()->documentLayout());
     Q_ASSERT(lay);
+    int prevPageIndex = pageNumber - 2;
     do {
-        KWRootAreaPage *prevPage = pageNumber >= 2 ? m_textFrameSet->rootAreaProvider()->pages()[pageNumber - 2] : 0;
+        KWRootAreaPage *prevPage = prevPageIndex >= 0 && prevPageIndex < m_textFrameSet->rootAreaProvider()->pages().count() ? m_textFrameSet->rootAreaProvider()->pages()[prevPageIndex] : 0;
         if (prevPage) {
-            if (prevPage->rootAreas.isEmpty())
+            if (prevPage->rootAreas.isEmpty()) {
+                --prevPageIndex;
                 continue; // this page doesn't have any root-areas so try the next previous page
+            }
             QList<KoTextLayoutRootArea *> rootAreas = prevPage->rootAreas;
             foreach(KoTextLayoutRootArea *area, rootAreas) {
                 m_textFrameSet->rootAreaProvider()->releaseAllAfter(area);
@@ -266,10 +269,20 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
                 m_pageHash.remove(area);
             delete page;
         }
+        /*FIXME
+        for(int i = m_dependentProviders.count() - 1; i >= 0; --i) {
+            QPair<KWRootAreaProvider *, int> p = m_dependentProviders[i];
+            if (p.second >= afterIndex)
+                m_dependentProviders.removeAt(i);
+        }
+        */
     } else {
         qDeleteAll(m_pages);
         m_pages.clear();
         m_pageHash.clear();
+        /*FIXME
+        m_dependentProviders.clear();
+        */
     }
 }
 

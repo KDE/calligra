@@ -1313,45 +1313,6 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& 
     return value; // the original is OK
 }
 
-MSOOXML_EXPORT QString Utils::rgbColor(QString color)
-{
-    // It is possible that color is eg #abcdef [adddd], this removes the extra end
-    if (color.indexOf(' ') > 0) {
-        color = color.left(color.indexOf(' '));
-    }
-
-    QString newColor;
-    if (color == "red") {
-        newColor = "#ff0000";
-    }
-    else if (color == "green") {
-        newColor = "#00ff00";
-    }
-    else if (color == "blue") {
-        newColor = "#0000ff";
-    }
-    else if (color == "yellow") {
-        newColor = "#ffff00";
-    }
-    else if (color == "window") {
-        newColor = "#ffffff";
-    }
-    else if (color == "white") {
-        newColor = "#ffffff";
-    }
-    else if (color == "black") {
-        newColor == "#000000";
-    }
-    else if (color == "windowText") {
-        newColor = "#000000";
-    }
-    else {
-        newColor = color;
-    }
-
-    return newColor;
-}
-
 MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& value)
 {
     QString v(ST_PositiveUniversalMeasure_to_ODF(value));

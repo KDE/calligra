@@ -32,10 +32,9 @@
 //Calligra headers
 #include <KoToolProxy.h>
 
-KPrSlidesManagerView::KPrSlidesManagerView(KoToolProxy *toolProxy, QWidget *parent)
+KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     : QListView(parent)
     , m_dragingFlag(false)
-    , m_toolProxy(toolProxy)
 {
     setViewMode(QListView::IconMode);
     setFlow(QListView::LeftToRight);
@@ -114,6 +113,9 @@ void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 
     clearSelection();
 
+    if (!model())
+        return;
+
     int newIndex = cursorSlideIndex();
 
     if (newIndex >= model()->rowCount(QModelIndex())) {
@@ -126,23 +128,35 @@ void KPrSlidesManagerView::dropEvent(QDropEvent *ev)
 void KPrSlidesManagerView::dragMoveEvent(QDragMoveEvent *ev)
 {
     ev->accept();
+    if (!model())
+        return;
+
     setDragingFlag();
     viewport()->update();
+
 }
 
 void KPrSlidesManagerView::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-koffice-sliderssorter")) {
-        event->setDropAction(Qt::MoveAction);
-        event->accept();
-    }
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
 }
-
 
 void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     Q_UNUSED(e);
     setDragingFlag(false);
+}
+
+void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    if (!this->selectionModel()->selection().isEmpty()) {
+        emit itemSelected();
+    }
+    else {
+        emit selectionCleared();
+    }
+    QListView::selectionChanged(selected, deselected);
 }
 
 QRect KPrSlidesManagerView::itemSize() const
@@ -167,7 +181,7 @@ bool KPrSlidesManagerView::isDraging() const
 
 bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == viewport()) {
+    if (watched == viewport() && model()) {
         switch (event->type()) {
         case QEvent::MouseButtonPress: {
             QModelIndex item = indexAt(QWidget::mapFromGlobal(QCursor::pos()));
@@ -175,7 +189,7 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
 
             //Left button is used to deselect, but rigth button needs a selected item for
             //context menu actions
-            if ((item.row() < 0) & (mouseEv->button() != Qt::LeftButton) ) {
+            if ((item.row() < 0) & (mouseEv->button() != Qt::LeftButton)) {
                 // Selects the last item of the row
                 QModelIndex last_index = model()->index(cursorSlideIndex() - 1, 0, QModelIndex());
                 setCurrentIndex(last_index);
@@ -207,7 +221,7 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
          xCount = 4;
          size = KIconLoader::SizeMedium;
      }
-     else if (itemCount > 5) {
+     else if (itemCount > 4) {
          xCount = 3;
          size = KIconLoader::SizeLarge;
      }
@@ -216,7 +230,10 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
          xCount = itemCount;
      }
 
-    int yCount = qCeil(itemCount/xCount);
+     int yCount = itemCount / xCount;
+     if (itemCount % xCount != 0) {
+         ++yCount;
+     }
 
      if (yCount > xCount) {
          yCount = xCount;
@@ -229,7 +246,7 @@ QPixmap KPrSlidesManagerView::createDragPixmap() const
      QPainter painter(&dragPixmap);
      int x = 0;
      int y = 0;
-     foreach (const QModelIndex& selectedIndex, selectedIndexes) {
+     foreach (const QModelIndex &selectedIndex, selectedIndexes) {
          const QIcon icon = (model()->data(selectedIndex, Qt::DecorationRole)).value<QIcon>();
          painter.drawPixmap(x, y, icon.pixmap(size, size));
 

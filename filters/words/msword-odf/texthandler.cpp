@@ -826,7 +826,8 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     }
 
     //lists related logic
-    if (paragraphProperties->pap().ilfo == 0) {
+    qint16 ilfo = paragraphProperties->pap().ilfo;
+    if (ilfo == 0) {
 
         // Not in a list at all in the word document, so check if we need to
         // close one in the odt.
@@ -836,7 +837,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
             //kDebug(30513) << "closing list " << m_currentListID;
             closeList();
         }
-    } else if (paragraphProperties->pap().ilfo > 0) {
+    } else if (ilfo > 0) {
 
         // We're in a list in the word document.
         //
@@ -879,7 +880,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     //set current named style in m_paragraph
     m_paragraph->setParagraphStyle(paragraphStyle);
     //provide the background color information
-    m_paragraph->setBgColor(m_document->currentBgColor());
+    m_paragraph->updateBgColor(m_document->currentBgColor());
 
     KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
 
@@ -1995,10 +1996,33 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         listStyleWriter.startElement("style:list-level-properties");
         listStyleWriter.addAttribute("text:list-level-position-and-space-mode", "label-alignment");
         listStyleWriter.startElement("style:list-level-label-alignment");
+        //fo:margin-left
+        listStyleWriter.addAttributePt("fo:margin-left", (double)pap.dxaLeft/20.0);
+        //fo:text-indent
+        listStyleWriter.addAttributePt("fo:text-indent", (double)pap.dxaLeft1/20.0);
 
+//         if (listInfo->indent()) {
+            // NOTE: According to lists.h, this should be the indent before the
+            // label. Sounds like fo:margin-left.
+//             listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
+//         }
+//         if (listInfo->space()) {
+            // NOTE: This produces wrong results (see the document attached to KDE
+            // bug 244411 and it's not clear why that is so. The specs say that
+            // the dxaSpace is the "minimum space between number and paragraph"
+            // and as such following should be right but it is not. So, we
+            // disabled it for now till someone has an idea why that is so.
+//             listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+//         }
+
+        //text:label-followed-by
         switch (listInfo->followingChar()) {
         case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
+            //text:list-tab-stop-position
+#if 0 // as we already save the fo:margin-left this is wrong and should not be used.
+            listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
+#endif
             break;
         case 1:
             listStyleWriter.addAttribute("text:label-followed-by", "nothing");
@@ -2010,17 +2034,6 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
             break;
         }
 
-        if (listInfo->space()) {
-            // This produces wrong results (see the document attached to KDE
-            // bug 244411 and it's not clear why that is so. The specs say that
-            // the dxaSpace is the "minimum space between number and paragraph"
-            // and as such following should be right but it is not. So, we
-            // disabled it for now till someone has an idea why that is so.
-            // listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-        }
-        if (listInfo->indent()) {
-            listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
-        }
         listStyleWriter.endElement(); //style:list-level-label-alignment
         listStyleWriter.endElement(); //style:list-level-properties
         //close element
@@ -2149,10 +2162,18 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
         }
 
         listStyleWriter.startElement("style:list-level-label-alignment");
-
+        //fo:margin-left
+        listStyleWriter.addAttributePt("fo:margin-left", (double)pap.dxaLeft/20.0);
+        //fo:text-indent
+        listStyleWriter.addAttributePt("fo:text-indent", (double)pap.dxaLeft1/20.0);
+        //text:label-followed-by
         switch (listInfo->followingChar()) {
         case 0:
-            listStyleWriter.addAttribute("text:label-followed-by", "listab");
+            listStyleWriter.addAttribute("text:label-followed-by", "listtab");
+            //text:list-tab-stop-position
+#if 0 // as we already save the fo:margin-left this is wrong and should not be used.
+            listStyleWriter.addAttribute("text:list-tab-stop-position", (double)pap.dxaLeft/20.0);
+#endif
             break;
         case 1:
             listStyleWriter.addAttribute("text:label-followed-by", "nothing");
@@ -2164,13 +2185,14 @@ void KWordTextHandler::updateListStyle(const QString& textStyleName) throw(Inval
             break;
         }
 
-        if (listInfo->space()) {
-            // Disabled for now. Have a look at the comment at the other text:min-label-distance above to see why.
-            //listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
-        }
-        if (listInfo->indent()) {
-            listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
-        }
+        //NOTE: Disabled for now. Have a look at the comment at the other
+        //text:min-label-distance and text-indent above to see why.
+//         if (listInfo->space()) {
+//             listStyleWriter.addAttributePt("text:min-label-distance", listInfo->space()/20.0);
+//         }
+//         if (listInfo->indent()) {
+//             listStyleWriter.addAttributePt("text:text-indent", listInfo->indent()/20.0);
+//         }
         listStyleWriter.endElement(); //style:list-level-label-alignment
         listStyleWriter.endElement(); //style:list-level-properties
         //close element

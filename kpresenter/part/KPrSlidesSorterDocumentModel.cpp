@@ -36,8 +36,8 @@
 
 //Qt Headers
 #include <QMimeData>
-#include <QMenu>
 #include <QApplication>
+#include <QMenu>
 
 
 KPrSlidesSorterDocumentModel::KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document)
@@ -125,15 +125,13 @@ QStringList KPrSlidesSorterDocumentModel::mimeTypes() const
 QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexes) const
 {
     // check if there is data to encode
-    if (! indexes.count()) {
+    if(! indexes.count())
         return 0;
-    }
 
     // check if we support a format
     QStringList types = mimeTypes();
-    if (types.isEmpty()) {
+    if( types.isEmpty() )
         return 0;
-    }
 
     QMimeData *data = new QMimeData();
     QString format = types[0];
@@ -142,8 +140,17 @@ QMimeData * KPrSlidesSorterDocumentModel::mimeData(const QModelIndexList &indexe
 
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
-    for (; it != indexes.end(); ++it) {
-        stream << QVariant::fromValue((*it).row());
+    //  order slides
+    QMap<int, KoPAPageBase*> map;
+    for( ; it != indexes.end(); ++it) {
+        map.insert(m_document->pages(false).indexOf((KoPAPageBase*)it->internalPointer()),
+                   (KoPAPageBase*)it->internalPointer());
+    }
+
+    QList<KoPAPageBase *> slides = map.values();
+
+    foreach (KoPAPageBase *slide, slides) {
+        stream << QVariant::fromValue(qulonglong((void*)slide));
     }
 
     data->setData(format, encoded);
@@ -202,23 +209,19 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
 
     QByteArray encoded = data->data("application/x-koffice-sliderssorter");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
-    QList<KoPAPageBase *> slides;
+    QList<KoPAPageBase *> slides;   
 
     // decode the data
-    while (! stream.atEnd()) {
+    while(!stream.atEnd())
+    {
         QVariant v;
         stream >> v;
-        KoPAPageBase *page = m_document->pageByIndex(v.toInt(),false);
-        if (page) {
-            slides.append(page);
-        }
+        slides.append(static_cast<KoPAPageBase*>((void*)v.value<qulonglong>()));
     }
 
     if (slides.empty()) {
         return false;
     }
-
-    qSort(slides.begin(), slides.end());
 
     int beginRow;
 
@@ -248,6 +251,14 @@ bool KPrSlidesSorterDocumentModel::dropMimeData(const QMimeData *data, Qt::DropA
 void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPageBase *pageAfter, Qt::DropAction action)
 {
      Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+     bool enableMove = true;
+
+     foreach (KoPAPageBase *slide, slides) {
+         if (!m_document->pages(false).contains(slide)) {
+             enableMove = false;
+             break;
+         }
+     }
 
      if (((modifiers & Qt::ControlModifier) == 0) &&
          ((modifiers & Qt::ShiftModifier) == 0)) {
@@ -265,7 +276,9 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
             QAction *popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
             popupCancelAction->setIcon(KIcon("process-stop"));
 
-            popup.addAction(popupMoveAction);
+            if (enableMove) {
+                popup.addAction(popupMoveAction);
+            }
             popup.addAction(popupCopyAction);
 
             popup.addSeparator();
@@ -294,6 +307,15 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
 
     switch (action) {
     case Qt::MoveAction: {
+        //You can't move slides that not belong to the current document
+        foreach (KoPAPageBase *slide, slides) {
+            if (!m_document->pages(false).contains(slide)) {
+                slides.removeAll(slide);
+            }
+        }
+        if (slides.isEmpty()) {
+            return;
+        }
         KoPAPageMoveCommand *command = new KoPAPageMoveCommand(m_document, slides, pageAfter);
         m_document->addCommand(command);
         m_viewModeSlidesSorter->view()->setActivePage(slides.first());
@@ -313,6 +335,12 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
         qDebug("Unknown action: %d ", (int)action);
         return;
     }
+}
+
+KoPAPageBase * KPrSlidesSorterDocumentModel::pageFromIndex(const QModelIndex &index) const
+{
+    Q_ASSERT(index.internalPointer());
+    return static_cast<KoPAPageBase*>(index.internalPointer());
 }
 
 #include "KPrSlidesSorterDocumentModel.moc"
