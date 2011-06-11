@@ -516,7 +516,6 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
 
         ++currentSheet;
         const int progress = int(currentSheet / qreal(numSheetTotal) * EMBEDDEDPROGRESS + SIDEWINDERPROGRESS + ODFPROGRESS + 0.5);
-        qDebug() << __PRETTY_FUNCTION__ << "progress:" << progress;
         emit q->sigProgress(progress);
     }
 }
