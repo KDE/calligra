@@ -251,7 +251,7 @@ QString Conversion::contrastFontColor(const QString& bgColor)
         return QColor(Qt::black).name();
     }
 
-#if 0 
+#if 0
     QColor color(bgColor);
     int d = 0;
 
@@ -365,22 +365,15 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
 #endif
 
     switch (shd.ipat) {
-    case ipatAuto:
-        // TODO: What to do here!  There are test files which require to
-        // process this ipat as ipatSolid.
-        //
-//         ret = computeAutoColor(shd, bgColor);
-//         break;
+    case ipatAuto: // "Clear" in MS Office UI
+        ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
+        ret.prepend('#');
+        break;
     case ipatSolid:
-        // TODO: COLORREF: If fAuto is 0xFF, this COLORREF designates the
-        // default color for the application.  An application MAY<210> use
-        // different default colors based on context.  COLORREF with fAuto set
-        // to 0xFF is referred to as cvAuto.
-        //
-        if (shd.cvBack == wvWare::Word97::cvAuto) {
-            ret = computeAutoColor(shd, bgColor, fontColor);
+        if (shd.cvFore == wvWare::Word97::cvAuto) {
+            ret = contrastFontColor(bgColor);
         } else {
-            ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
+            ret.append(QString::number(shd.cvFore | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
         }
         break;
@@ -395,6 +388,16 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         } else {
             ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
+
+            qreal pct = QColor(ret).red() / 255.0;
+            QColor backColor(shd.cvBack);
+            QColor foreColor(shd.cvFore);
+
+            QColor result;
+            result.setRed( yMix(backColor.red(), foreColor.red(), pct) );
+            result.setGreen( yMix(backColor.green(), foreColor.green(), pct) );
+            result.setBlue( yMix(backColor.blue(), foreColor.blue(), pct) );
+            ret = result.name();
         }
     }
     break;
