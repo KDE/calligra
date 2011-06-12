@@ -166,128 +166,60 @@ void ODrawToOdf::processStraightConnector1(const OfficeArtSpContainer& o, Writer
 
 }
 
-void ODrawToOdf::processBentConnector2(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::drawPathBentConnector2(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const
 {
-    const OfficeArtDggContainer * drawingGroup = 0;
-    if (client) {
-        drawingGroup = client->getOfficeArtDggContainer();
-    }
-
-    const OfficeArtSpContainer* master = 0;
-    const DrawStyle ds(drawingGroup, master, &o);
-    qreal rotation = toQReal( ds.rotation() );
-
-    const QRectF rect = getRect(o);
-    qreal x1 = rect.x();
-    qreal y1 = rect.y();
-    qreal x2 = rect.x() + rect.width();
-    qreal y2 = rect.y() + rect.height();
-
-    QRectF shapeRect = rect;
-
-    qreal sx1 = x1;
-    qreal sy1 = y1;
-    qreal sx2 = x2;
-    qreal sy2 = y2;
-
-    if (rotation != 0.0) {
-        QTransform m;
-        m.rotate( -rotation );
-        shapeRect = m.mapRect(rect.translated(-rect.center())).translated(rect.center());
-
-        sx1 = shapeRect.topLeft().x();
-        sy1 = shapeRect.topLeft().y();
-        sx2 = shapeRect.bottomRight().x();
-        sy2 = shapeRect.bottomRight().y();
-    }
-
-    // compute path
-    QPainterPath shapePath;
     shapePath.moveTo(sx1,sy1);
     shapePath.lineTo(sx2, sy1);
     shapePath.lineTo(sx2,sy2);
-
-    // transform the path according the shape properties like flip and rotation
-    QTransform m;
-    m.reset();
-    m.translate( -shapeRect.center().x(), -shapeRect.center().y() );
-
-    // shape mirroring
-    if (o.shapeProp.fFlipH){
-        m.scale(-1,1);
-    }
-
-    if (o.shapeProp.fFlipV){
-        m.scale(1,-1);
-    }
-
-    if (rotation != 0) {
-        m.rotate(rotation);
-    }
-
-    m.translate( shapeRect.center().x(), shapeRect.center().y() );
-    shapePath = m.map(shapePath);
-
-    // translate the QPainterPath into svg:d attribute
-    QString path = path2svg(shapePath);
-
-    out.xml.startElement("draw:connector");
-    addGraphicStyleToDrawElement(out, o);
-    out.xml.addAttribute("draw:layer", "layout");
-    out.xml.addAttribute("svg:x1", client->formatPos(out.hOffset(x1)));
-    out.xml.addAttribute("svg:y1", client->formatPos(out.vOffset(y1)));
-    out.xml.addAttribute("svg:x2", client->formatPos(out.hOffset(x2)));
-    out.xml.addAttribute("svg:y2", client->formatPos(out.vOffset(y2)));
-    if (!path.isEmpty()) {
-        out.xml.addAttribute("svg:d", path);
-    }
-
-    processText(o, out);
-    out.xml.endElement();
-
 }
 
-void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::drawPathBentConnector3(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const
 {
-    const OfficeArtDggContainer * drawingGroup = 0;
-    if (client) {
-        drawingGroup = client->getOfficeArtDggContainer();
-    }
 
-    const OfficeArtSpContainer* master = 0;
-    const DrawStyle ds(drawingGroup, master, &o);
-    qreal rotation = toQReal( ds.rotation() );
-
-    const QRectF rect = getRect(o);
-    qreal x1 = rect.x();
-    qreal y1 = rect.y();
-    qreal x2 = rect.x() + rect.width();
-    qreal y2 = rect.y() + rect.height();
-
-    QRectF shapeRect = rect;
-
-    qreal sx1 = x1;
-    qreal sy1 = y1;
-    qreal sx2 = x2;
-    qreal sy2 = y2;
-
-    if (rotation != 0.0) {
-        QTransform m;
-        m.rotate( -rotation );
-        shapeRect = m.mapRect(rect.translated(-rect.center())).translated(rect.center());
-
-        sx1 = shapeRect.topLeft().x();
-        sy1 = shapeRect.topLeft().y();
-        sx2 = shapeRect.bottomRight().x();
-        sy2 = shapeRect.bottomRight().y();
-    }
-
-    // compute path
-    QPainterPath shapePath;
     shapePath.moveTo(sx1,sy1);
     shapePath.lineTo((sx1 + sx2)/2.0, sy1);
     shapePath.lineTo((sx1 + sx2)/2.0, sy2);
     shapePath.lineTo(sx2,sy2);
+}
+
+void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, PathArtist drawPath)
+{
+    const OfficeArtDggContainer * drawingGroup = 0;
+    if (client) {
+        drawingGroup = client->getOfficeArtDggContainer();
+    }
+
+    const OfficeArtSpContainer* master = 0;
+    const DrawStyle ds(drawingGroup, master, &o);
+    qreal rotation = toQReal( ds.rotation() );
+
+    const QRectF rect = getRect(o);
+    qreal x1 = rect.x();
+    qreal y1 = rect.y();
+    qreal x2 = rect.x() + rect.width();
+    qreal y2 = rect.y() + rect.height();
+
+    QRectF shapeRect = rect;
+
+    qreal sx1 = x1;
+    qreal sy1 = y1;
+    qreal sx2 = x2;
+    qreal sy2 = y2;
+
+    if (rotation != 0.0) {
+        QTransform m;
+        m.rotate( -rotation );
+        shapeRect = m.mapRect(rect.translated(-rect.center())).translated(rect.center());
+
+        sx1 = shapeRect.topLeft().x();
+        sy1 = shapeRect.topLeft().y();
+        sx2 = shapeRect.bottomRight().x();
+        sy2 = shapeRect.bottomRight().y();
+    }
+
+    // compute path
+    QPainterPath shapePath;
+    (this->*drawPath)(sx1,sy1,sx2,sy2,shapePath);
 
     // transform the path according the shape properties like flip and rotation
     QTransform m;
@@ -328,7 +260,6 @@ void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement();
 
 }
-
 
 void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -458,13 +389,13 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processStraightConnector1(o, out);
         break;
     case msosptBentConnector2:
-        processBentConnector2(o, out);
+        processConnector(o, out, &ODrawToOdf::drawPathBentConnector2);
         break;
     case msosptBentConnector3:
-        processBentConnector3(o, out);
+        processConnector(o, out, &ODrawToOdf::drawPathBentConnector3);
         break;
     //
-    // TODO: msosptBentConnector1, msosptBentConnector2, msosptBentConnector4,
+    // TODO: msosptBentConnector1, msosptBentConnector4,
     // msosptBentConnector5, msosptCurvedConnector2, msosptCurvedConnector3,
     // msosptCurvedConnector4, msosptCurvedConnector5
     //
