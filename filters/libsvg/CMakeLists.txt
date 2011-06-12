@@ -1,4 +1,3 @@
-
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/pathshapes  ${KDE4_INCLUDES}  )
 
 ########### next target ###############

@@ -1,6 +1,4 @@
 TODO
-- javascripts to be further re-factored
-- More attributes to be added to Frame.
 
 STEPS
 1. Add custom data to KoShapes using setApplicationData() - done in test program

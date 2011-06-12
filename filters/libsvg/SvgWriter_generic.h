@@ -27,8 +27,8 @@
   * Boston, MA 02110-1301, USA.
   */
 
-  #ifndef SVGWRITER_H
-  #define SVGWRITER_H
+  #ifndef SVGWRITER_GENERIC_H
+  #define SVGWRITER_GENERIC_H
 
   #include <KoFilter.h>
   #include <QVariantList>
@@ -77,8 +77,8 @@
       bool save(const QString &filename, bool writeInlineImages);
 
   protected:
+    
       virtual void saveAppData(KoShape *shape) =0;
-      //void addAppData(const QString appData);
       void printIndentation(QTextStream *stream, unsigned int indent);
                 
       bool m_hasAppData;
@@ -117,8 +117,7 @@
 
       void startDocument();
       void saveToplevelShapes();
-      void endDocument(const QString *defs, const QString *body);
-      void endDocument(const QString *defs, const QString *body, const QString *appData);
+    //  bool endDocument(const QString defs, const QString body);
       void savePlainText();
      
       
@@ -138,4 +137,4 @@
 
       };
 
-  #endif /*SVGWRITER_H */
+  #endif /*SVGWRITER_GENERIC_H */
