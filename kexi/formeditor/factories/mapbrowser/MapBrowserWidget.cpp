@@ -26,7 +26,8 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
     KFormDesigner::FormWidgetInterface()
 {
 #warning this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
-  //setMapThemeId("earth/srtm/srtm.dgml");
+  //Marble::GeoSceneDocument::head()->mapThemeId()
+  setMapThemeId("earth/srtm/srtm.dgml");
 }
 
 #include "MapBrowserWidget.moc"
