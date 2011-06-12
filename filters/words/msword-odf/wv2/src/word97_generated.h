@@ -50,9 +50,9 @@ namespace Word97 {
     const U32 cvAuto = 0xff000000;
 
     /**
-     * Helper function to convert ico color codes to 24bit rgb values
+     * Helper function to convert ico color codes to 24bit COLORREF
      */
-    U32 icoToRGB(U16 ico);
+    U32 icoToCOLORREF(U16 ico);
 
 /**
  * Font Family Name (FFN), this code is located in the template-Word97.h
@@ -3494,7 +3494,9 @@ bool operator!=(const DOGRID &lhs, const DOGRID &rhs);
 
 
 /**
- * Document Properties (DOP)
+ * Document Properties (DOP) - The Dop97 structure contains document and
+ * compatibility settings.  These settings influence the appearance and
+ * behavior of the current document and store the document-level state.
  */
 struct DOP {
     /**
@@ -3525,6 +3527,10 @@ struct DOP {
     void clear();
 
     // Data
+
+    // --------------------
+    // DopBase - BEGIN
+    // --------------------
     /**
      * 1 when facing pages should be printed.
      * Default 0.
@@ -4018,6 +4024,13 @@ struct DOP {
      */
     U16 iGutterPos:1;
 
+    // --------------------
+    //  DopBase - END
+    // --------------------
+
+    // --------------------
+    //  Copts80 - BEGIN
+    // --------------------
     /**
      * (see above)
      */
@@ -4117,6 +4130,10 @@ struct DOP {
      * (reserved)
      */
     U32 unused84_22:10;
+
+    // --------------------
+    //  Copts80 - END
+    // --------------------
 
     /**
      * Autoformat Document Type: 0 for normal. 1 for letter, and 2 for email.
@@ -4476,6 +4493,7 @@ struct FIB {
 
     // Data
 
+    // --------------------
     // FibBase - BEGIN
     // --------------------
 
@@ -4639,6 +4657,7 @@ struct FIB {
 
     // --------------------
     // FibBase - END
+    // --------------------
 
     /**
      * Count of fields in the array of "shorts"

@@ -738,33 +738,6 @@ PptToOdp::~PptToOdp()
     delete p;
 }
 
-QMap<QByteArray, QString>
-createPictures(KoStore* store, KoXmlWriter* manifest, const OfficeArtBStoreDelay& d)
-{
-    QMap<QByteArray, QString> fileNames;
-    PictureReference ref;
-
-    foreach (const OfficeArtBStoreContainerFileBlock& block, d.anon1) {
-        ref = savePicture(block, store);
-        if (ref.name.length() == 0) {
-            kDebug(30513) << "Note: Empty picture reference, probably an empty slot";
-            continue;
-        }
-        manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
-        fileNames[ref.uid] = ref.name;
-    }
-
-#ifdef DEBUG_PPTTOODP
-    qDebug() << "fileNames: DEBUG";
-    QMap<QByteArray, QString>::const_iterator i = fileNames.constBegin();
-    while (i != fileNames.constEnd()) {
-        qDebug() << i.key().toHex() << ": " << i.value();
-        ++i;
-    }
-#endif
-
-    return fileNames;
-}
 QMap<quint16, QString>
 createBulletPictures(const PP9DocBinaryTagExtension* pp9, KoStore* store, KoXmlWriter* manifest)
 {
@@ -855,7 +828,7 @@ PptToOdp::doConversion(KoStore* storeout)
     // store the images from the 'Pictures' stream
     storeout->disallowNameExpansion();
     storeout->enterDirectory("Pictures");
-    pictureNames = createPictures(storeout, manifest, p->pictures.anon1);
+    pictureNames = createPictures(storeout, manifest, &p->pictures.anon1.rgfb);
     // read pictures from the PowerPoint Document structures
     bulletPictureNames = createBulletPictures(getPP<PP9DocBinaryTagExtension>(
             p->documentContainer), storeout, manifest);
@@ -1094,11 +1067,10 @@ setRgbUid(const T* a, QByteArray& rgbUid)
 QString PptToOdp::getPicturePath(const quint32 pib) const
 {
     bool use_offset = false;
-    quint32 n = pib - 1;
     quint32 offset = 0;
 
     const OfficeArtDggContainer& dgg = p->documentContainer->drawingGroup.OfficeArtDgg;
-    QByteArray rgbUid = getRgbUid(dgg, n, offset);
+    QByteArray rgbUid = getRgbUid(dgg, pib, offset);
 
     if (!rgbUid.isEmpty()) {
         if (pictureNames.contains(rgbUid)) {
@@ -1111,7 +1083,7 @@ QString PptToOdp::getPicturePath(const quint32 pib) const
     }
     if (use_offset) {
         const OfficeArtBStoreDelay& d = p->pictures.anon1;
-        foreach (const OfficeArtBStoreContainerFileBlock& block, d.anon1) {
+        foreach (const OfficeArtBStoreContainerFileBlock& block, d.rgfb) {
             if (block.anon.is<OfficeArtBlip>()) {
                 if (block.anon.get<OfficeArtBlip>()->streamOffset == offset) {
 
@@ -2580,6 +2552,10 @@ PptToOdp::processParagraph(Writer& out,
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineParagraphProperties(style, pf, min_fontsize);
+    //NOTE: Help text layout to apply correct line-height for empty lines.
+    if (start == end) {
+        defineTextProperties(style, cf, 0, 0, 0);
+    }
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
     out.xml.addCompleteElement(&spans_buf);
     out.xml.endElement(); //text:p

@@ -53,7 +53,7 @@ public:
 
 protected:
     /// reimplemented from KoToolBase
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
     /// reimplemented from KoToolBase
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 private slots:

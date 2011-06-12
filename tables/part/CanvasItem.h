@@ -117,6 +117,8 @@ public Q_SLOTS:
     void refreshSheetViews();
     void setActiveSheet(Sheet* sheet);
 
+    void setObscuredRange(const QSize& size);
+
     /**
      * \ingroup Damages
      * Handles damages that need visual updates.
@@ -124,6 +126,7 @@ public Q_SLOTS:
     void handleDamages(const QList<Damage*>& damages);
 Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
+    void obscuredRangeChanged(const Calligra::Tables::Sheet* sheet, const QSize&);
 
 public:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);

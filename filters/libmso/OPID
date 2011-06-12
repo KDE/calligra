@@ -31,6 +31,12 @@ OfficeArtTertiaryFOPT
 8b - txdir - pecifies the direction of the text (MAY be used)
 bf - [Text Boolean Properties]
 
+[Geometry Text Property Set]
+c0 - gtextUNICODE - specifies the text for this shape’s geometry text
+c2 - gtextAlign - specifies how geometry text is aligned on this shape
+c4 - gtextSpacing - specifies the amount of spacing between characters in the text
+c5 - gtextSize - specifies the font size, in points of the geometry text for this shape
+c6 - gtextCSSFont - specifies extra font information
 ff - [Geometry Text Boolean Properties]
 
 [Blip Property Set]

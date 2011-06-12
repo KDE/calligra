@@ -57,6 +57,7 @@ void KWPageStylePrivate::clear()
     endNoteDistance = 10;
     headers = KWord::HFTypeNone;
     footers = KWord::HFTypeNone;
+    pageUsage = KWPageStyle::AllPages;
     columns.columns = 1;
     columns.columnSpacing = 17; // ~ 6mm
     direction = KoText::AutoDirection;
@@ -99,6 +100,16 @@ KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps)
 
 KWPageStyle::~KWPageStyle()
 {
+}
+
+KWPageStyle::PageUsageType KWPageStyle::pageUsage() const
+{
+    return d ? d->pageUsage : KWPageStyle::AllPages;
+}
+
+void KWPageStyle::setPageUsage(KWPageStyle::PageUsageType pageusage) const
+{
+    d->pageUsage = pageusage;
 }
 
 void KWPageStyle::setFooterPolicy(KWord::HeaderFooterType p)
@@ -345,6 +356,17 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
         return;
     QString direction = props.attributeNS(KoXmlNS::style, "writing-mode", "lr-tb");
     d->direction = KoText::directionFromString(direction);
+
+    QString pageUsage = props.attributeNS(KoXmlNS::style, "page-usage", "all");
+    if (pageUsage == "left") {
+        d->pageUsage = LeftPages;
+    } else if (pageUsage == "mirrored") {
+        d->pageUsage = MirroredPages;
+    } else if (pageUsage == "right") {
+        d->pageUsage = RightPages;
+    } else { // "all"
+        d->pageUsage = AllPages;
+    }
 
     KoXmlElement columns = KoXml::namedItemNS(props, KoXmlNS::style, "columns");
     if (!columns.isNull()) {

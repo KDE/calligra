@@ -214,29 +214,49 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // draw:fill-color
         // only set the color if the fill type is 'solid' because OOo ignores
         // fill='none' if the color is set
-        if (fillType == 0 && client) {
-            QColor tmp = processOfficeArtCOLORREF(ds.fillColor(), ds);
-            style.addProperty("draw:fill-color", tmp.name(), gt);
+        switch (fillType) {
+        case msofillSolid:
+        {
+            if (!client) break;
+            QColor color = processOfficeArtCOLORREF(ds.fillColor(), ds);
+            style.addProperty("draw:fill-color", color.name(), gt);
+            break;
         }
         // draw:fill-gradient-name
-        else if ((fillType >=4 && fillType <=8) && client) {
+        case msofillShade:
+        case msofillShadeCenter:
+        case msofillShadeShape:
+        case msofillShadeScale:
+        case msofillShadeTitle:
+        {
+            if (!client) break;
             KoGenStyle gs(KoGenStyle::LinearGradientStyle);
             defineGradientStyle(gs, ds);
-            QString tmp = styles.insert(gs);
-            style.addProperty("draw:fill-gradient-name", tmp, gt);
+            QString gname = styles.insert(gs);
+            style.addProperty("draw:fill-gradient-name", gname, gt);
+            break;
         }
         // draw:fill-hatch-name
         // draw:fill-hatch-solid
         // draw:fill-image-height
         // draw:fill-image-name
-        quint32 fillBlip = ds.fillBlip();
-        QString fillImagePath;
-        if (client) {
+        case msofillPattern:
+        case msofillTexture:
+        case msofillPicture:
+        {
+            if (!client) break;
+            quint32 fillBlip = ds.fillBlip();
+            QString fillImagePath;
             fillImagePath = client->getPicturePath(fillBlip);
+            if (!fillImagePath.isEmpty()) {
+                style.addProperty("draw:fill-image-name",
+                                  "fillImage" + QString::number(fillBlip), gt);
+            }
+            break;
         }
-        if (!fillImagePath.isEmpty()) {
-            style.addProperty("draw:fill-image-name",
-                              "fillImage" + QString::number(fillBlip), gt);
+        case msofillBackground:
+        default:
+            break;
         }
         // draw:fill-image-ref-point
         // draw:fill-image-ref-point-x
@@ -362,19 +382,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:border-right
     // fo:border-top
     // fo:clip
-    // TODO: Else the containing shape SHOULD use a set of default internal
-    // margins for text on shapes.  Test files required.
-    if (!ds.fAutoTextMargin()) {
-        // fo:margin
-        // fo:margin-bottom
-        style.addProperty("fo:margin-bottom", pt(ds.dyTextBottom()/12700.), gt);
-        // fo:margin-left
-        style.addProperty("fo:margin-left", pt(ds.dxTextLeft()/12700.), gt);
-        // fo:margin-right
-        style.addProperty("fo:margin-right", pt(ds.dxTextRight()/12700.), gt);
-        // fo:margin-top
-        style.addProperty("fo:margin-top", pt(ds.dyTextTop()/12700.), gt);
-    }
+    // fo:margin
+    // fo:margin-bottom
+    // fo:margin-left
+    // fo:margin-right
+    // fo:margin-top
     // fo:max-height
     // fo:max-width
     // fo:min-height
@@ -384,6 +396,14 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // fo:padding-left
     // fo:padding-right
     // fo:padding-top
+    // TODO: Else the containing shape SHOULD use a set of default internal
+    // margins for text on shapes.  Test files required.
+    if (!ds.fAutoTextMargin()) {
+        style.addProperty("fo:padding-bottom", pt(ds.dyTextBottom()/12700.), gt);
+        style.addProperty("fo:padding-left", pt(ds.dxTextLeft()/12700.), gt);
+        style.addProperty("fo:padding-right", pt(ds.dxTextRight()/12700.), gt);
+        style.addProperty("fo:padding-top", pt(ds.dyTextTop()/12700.), gt);
+    }
     // fo:wrap-option
     // style:border-line-width
     // style:border-line-width-bottom

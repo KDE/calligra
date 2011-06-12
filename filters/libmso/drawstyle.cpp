@@ -231,6 +231,9 @@ GETTER(qint32,                 PictureBrightness,    pictureBrightness,    0)   
         } \
         return DEFAULT; \
     }
+
+//TODO: CalloutBooleanProperties, ProtectionBooleanProperties
+
 // FOPT        NAME           TEST                       DEFAULT
 #define FOPT ShapeBooleanProperties
 GETTER(fBackground,           fUsefBackground,           false)
@@ -291,6 +294,12 @@ GETTER(fLineOpaqueBackColor,  fUsefLineOpaqueBackColor,  false)
 #define FOPT ShadowStyleBooleanProperties
 GETTER(fShadowObscured,       fUsefShadowObscured,       false)
 GETTER(fShadow,               fUsefShadow,               false)
+#undef FOPT
+#define FOPT DiagramBooleanProperties
+GETTER(fPseudoInline,         fUsefPseudoInline,         false)
+GETTER(fDoLayout,             fUsefDoLayout,             true)
+GETTER(fReverse,              fUsefReverse,              false)
+GETTER(fDoFormat,             fUsefDoFormat,             false)
 #undef FOPT
 #define FOPT TextBooleanProperties
 GETTER(fFitShapeToText,       fUsefFitShapeToText,       false)

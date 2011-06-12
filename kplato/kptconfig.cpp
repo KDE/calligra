@@ -64,23 +64,25 @@ void Config::setDefaultValues( Task &task )
     task.setConstraintStartTime( DateTime() );
     task.setConstraintEndTime( DateTime() );
     switch ( KPlatoSettings::startTimeUsage() ) {
-        case 0:
+        case KPlatoSettings::EnumStartTimeUsage::CurrentdateTime:
             task.setConstraintStartTime( DateTime( QDateTime::currentDateTime() ) );
             break;
-        case 1:
+        case KPlatoSettings::EnumStartTimeUsage::CurrentDate:
             task.setConstraintStartTime( DateTime( QDate::currentDate(), KPlatoSettings::constraintStartTime().time() ) );
             break;
+        case KPlatoSettings::EnumStartTimeUsage::SpecifiedDateTime: //fall through
         default:
             task.setConstraintStartTime( DateTime( KPlatoSettings::constraintStartTime() ) );
             break;
     }
     switch ( KPlatoSettings::endTimeUsage() ) {
-        case 0:
+        case KPlatoSettings::EnumEndTimeUsage::CurrentdateTime:
             task.setConstraintEndTime( DateTime( QDateTime::currentDateTime() ) );
             break;
-        case 1:
+        case KPlatoSettings::EnumEndTimeUsage::CurrentDate:
             task.setConstraintEndTime( DateTime( QDate::currentDate(), KPlatoSettings::constraintEndTime().time() ) );
             break;
+        case KPlatoSettings::EnumEndTimeUsage::SpecifiedDateTime: //fall through
         default:
             task.setConstraintEndTime( DateTime( KPlatoSettings::constraintEndTime() ) );
             break;

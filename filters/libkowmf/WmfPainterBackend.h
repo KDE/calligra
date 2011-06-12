@@ -20,7 +20,7 @@
 #ifndef _KOWMFPAINT_H_
 #define _KOWMFPAINT_H_
 
-#include <kowmf_export.h>
+#include "kowmf_export.h"
 #include "WmfAbstractBackend.h"
 
 #include <QPainter>
@@ -36,6 +36,7 @@ class QPolygon;
 namespace Libwmf
 {
 
+class WmfDeviceContext;
 
 /**
  * WmfPainterBackend inherits the abstract class WmfAbstractbackend
@@ -55,7 +56,7 @@ namespace Libwmf
  *
  */
 
-class KOWMF_EXPORT WmfPainterBackend : public WmfAbstractBackend
+class LIBWMF_EXPORT WmfPainterBackend : public WmfAbstractBackend
 {
 public:
     WmfPainterBackend(QPainter *painter, const QSizeF &outputSize);
@@ -140,6 +141,9 @@ private:
     // matrix transformation : only used in some bitmap manipulation
     void  setMatrix(const QMatrix &, bool combine = false);
 
+ private:
+    void updateFromGraphicscontext(WmfDeviceContext &context);
+
 protected:
     bool  mIsInternalPainter;      // True if the painter wasn't externally provided.
     QPainter *mPainter;
@@ -158,9 +162,6 @@ protected:
     QSize         mViewportExt;
     bool          mWindowExtIsSet;
     bool          mViewportExtIsSet;
-    qreal         mWindowViewportScaleX;
-    qreal         mWindowViewportScaleY;
-    bool          mWindowViewportIsSet;
     QTransform    mOutputTransform;
     QTransform    mWorldTransform;
     

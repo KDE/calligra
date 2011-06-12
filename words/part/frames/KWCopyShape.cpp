@@ -60,49 +60,9 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_ASSERT(m_original);
 
-    // Since the rootArea is shared between the copyShape and the originalShape we need to
-    // temporary switch the used KoTextPage to be sure the proper page-numbers are displayed.
-    class ScopedPageSwitcher {
-        public:
-            ScopedPageSwitcher(const KWPageManager *m_pageManager, KWCopyShape *copyshape, KoShape *original) : m_rootArea(0) {
-                KWFrame *frame = dynamic_cast<KWFrame*>(original->applicationData());
-                Q_ASSERT(frame);
-                Q_ASSERT(!frame->isCopy());
-                KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-                Q_ASSERT(frameset);
-                KWFrame *copyframe = dynamic_cast<KWFrame*>(copyshape->applicationData());
-                Q_ASSERT(copyframe);
-                Q_ASSERT(frame != copyframe);
-                Q_ASSERT(frame->frameSet() == copyframe->frameSet());
-                Q_ASSERT(m_pageManager->page(original).pageStyle().name() == m_pageManager->page(copyshape).pageStyle().name());
-
-                KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(frameset->document()->documentLayout());
-                Q_ASSERT(lay);
-
-                m_originalpage = m_pageManager->page(original);
-                Q_ASSERT(m_originalpage .isValid());
-                KWPage copypage = m_pageManager->page(copyshape);
-                Q_ASSERT(copypage .isValid());
-
-                //Q_ASSERT(m_originalpage.pageNumber() <= lay->rootAreas().count());
-                if (m_originalpage.pageNumber() <= lay->rootAreas().count()) {
-                    m_rootArea = lay->rootAreas()[m_originalpage.pageNumber() - 1];
-                    m_rootArea->setPage(new KWPage(copypage));
-                }
-            }
-            ~ScopedPageSwitcher() {
-                if (m_rootArea)
-                    m_rootArea->setPage(new KWPage(m_originalpage));
-            }
-        private:
-            KoTextLayoutRootArea *m_rootArea;
-            KWPage m_originalpage;
-    };
-    ScopedPageSwitcher scopedswitcher(m_pageManager, this, m_original);
-
     //paint all child shapes
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(m_original);
-    if (container && container->shapeCount()) {
+    if (container) {
         QList<KoShape*> sortedObjects = container->shapes();
         sortedObjects.append(m_original);
         qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
@@ -113,12 +73,29 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         // been applied once before this function is called.
         QTransform baseMatrix = container->absoluteTransformation(&converter).inverted() * painter.transform();
 
+        KWPage copypage = m_pageManager->page(this);
+        Q_ASSERT(copypage.isValid());
         foreach(KoShape *shape, sortedObjects) {
             painter.save();
             if (shape != m_original) {
                 painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
             }
-            shape->paint(painter, converter);
+            KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+            if (data == 0) {
+                shape->paint(painter, converter);
+            }
+            else {
+                // Since the rootArea is shared between the copyShape and the originalShape we need to
+                // temporary switch the used KoTextPage to be sure the proper page-numbers are displayed.
+                KWPage originalpage = m_pageManager->page(shape);
+                Q_ASSERT(originalpage.isValid());
+                KoTextLayoutRootArea *area = data->rootArea();
+                if (area)
+                    area->setPage(new KWPage(copypage));
+                shape->paint(painter, converter);
+                if (area)
+                    area->setPage(new KWPage(originalpage));
+            }
             painter.restore();
             if (shape->border()) {
                 painter.save();

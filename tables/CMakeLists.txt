@@ -358,6 +358,7 @@ install( FILES
     ProtectableObject.h
     RectStorage.h
     Region.h
+    RTree.h
     Sheet.h
     Style.h
     Value.h

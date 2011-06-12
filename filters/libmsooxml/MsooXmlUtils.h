@@ -318,9 +318,6 @@ struct MSOOXML_EXPORT DoubleModifier {
     bool valid;
 };
 
-//! Converts color string to rgb color string #xxYYZZ
-MSOOXML_EXPORT QString rgbColor(QString color);
-
 MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     const DoubleModifier& modulation, const DoubleModifier& offset);
 

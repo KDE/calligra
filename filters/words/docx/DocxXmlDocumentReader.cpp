@@ -267,12 +267,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     }*/
 
     body->addAttribute("text:use-soft-page-breaks", "true");
+    int counter = 0;
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            if (counter == 40) {
+                // set the progress by the position of what was read
+                qreal progress = 45 + 55 * device()->pos() / device()->size();
+                m_context->import->reportProgress(progress);
+                counter = 0;
+            }
+            ++counter;
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(sectPr)
@@ -1300,7 +1308,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            //! @todo support VML here
             TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(o, OLEObject)
@@ -1877,8 +1884,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 {
     READ_PROLOGUE
-    const read_p_args args = m_read_p_args;
-    m_read_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_currentStyleName.clear();
     m_currentListStyleName.clear();
@@ -1895,7 +1900,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 
     bool oldWasCaption = m_wasCaption;
     m_wasCaption = false;
-    if (oldWasCaption || (args & read_p_Skip)) {
+    if (oldWasCaption) {
         kDebug() << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
@@ -1934,13 +1939,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(p)) {
-                // CASE #301: avoid nested paragaraphs
-                kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
-                TRY_READ_WITH_ARGS(p, read_p_Skip;)
-            }
             //ELSE_TRY_READ_IF(commentRangeEnd)
-            ELSE_TRY_READ_IF(sdt)
+            TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(commentRangeStart)
             ELSE_TRY_READ_IF(bookmarkStart)
@@ -1955,7 +1955,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
     }
 
-    if (oldWasCaption || (args & read_p_Skip)) {
+    if (oldWasCaption) {
         //nothing
     } else {
         if (m_dropCapStatus == DropCapRead) {
@@ -5232,8 +5232,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 //! @todo ooo saves binaries to the root dir; should we?
 
     QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
-    RETURN_IF_ERROR( m_context->import->copyFile(oleName, destinationName, false ) )
-    addManifestEntryForFile(destinationName);
+    KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
+    if (stat == KoFilter::OK) {
+        addManifestEntryForFile(destinationName);
+    }
 
     while (!atEnd()) {
         readNext();

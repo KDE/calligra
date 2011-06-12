@@ -118,10 +118,10 @@ Document::Document(const std::string& fileName,
                 this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
                 this, SLOT(slotTableFound(KWord::Table*)));
-        connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&,KoXmlWriter*)),
+        connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
-        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter* )),
-                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter* )));
+        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter*)),
+                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter*)));
         connect(m_graphicsHandler, SIGNAL(textBoxFound(unsigned int, bool)),
                 this, SLOT(slotTextBoxFound(unsigned int, bool)));
 
@@ -319,7 +319,7 @@ void Document::processStyles()
         const wvWare::Style* style = styles.styleByIndex(i);
         Q_ASSERT(style);
         QString displayName = Conversion::string(style->name());
-        QString name = Conversion::styleNameString(style->name());
+        QString name = Conversion::styleName2QString(style->name());
 
         // if the invariant style identifier says it's a style used for line numbers
         if (style->sti() == 40) {
@@ -333,14 +333,15 @@ void Document::processStyles()
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
-            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
+            const wvWare::Style* followingStyle = styles.styleByIndex(style->followingStyle());
             if (followingStyle && followingStyle != style) {
-                QString followingName = Conversion::string(followingStyle->name());
+                QString followingName = Conversion::styleName2QString(followingStyle->name());
+                userStyle.addAttribute("style:next-style-name", followingName);
             }
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
             if (parentStyle) {
-                userStyle.setParentName(Conversion::styleNameString(parentStyle->name()));
+                userStyle.setParentName(Conversion::styleName2QString(parentStyle->name()));
             }
 
             //set font name in style
@@ -351,9 +352,9 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, currentBgColor());
-            Paragraph::applyParagraphProperties(style->paragraphProperties(),
-                                                &userStyle, parentStyle, false, 0);
+            Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle,
+                                                false, 0, 0, currentBgColor());
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle);
 
             // Add style to main collection, using the name that it
             // had in the .doc.
@@ -372,7 +373,7 @@ void Document::processStyles()
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
             if (parentStyle) {
-                userStyle.setParentName(Conversion::styleNameString(parentStyle->name()));
+                userStyle.setParentName(Conversion::styleName2QString(parentStyle->name()));
             }
 
             //set font name in style
@@ -383,7 +384,8 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, currentBgColor());
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle,
+                                                false, false, currentBgColor());
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
@@ -926,29 +928,19 @@ void Document::slotTableFound(KWord::Table* table)
 void Document::slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer)
 {
     kDebug(30513) ;
-    //if we have a temp writer, tell the graphicsHandler
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(writer);
-    }
+    Q_UNUSED(writer);
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
     m_graphicsHandler->handleInlineObject(data);
-
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(m_bodyWriter);
-    }
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
 }
 
 void Document::slotFloatingObjectFound(unsigned int globalCP, KoXmlWriter* writer)
 {
     kDebug(30513) ;
-    //if we have a temp writer, tell the graphicsHandler
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(writer);
-    }
+    Q_UNUSED(writer);
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
     m_graphicsHandler->handleFloatingObject(globalCP);
-
-    if (writer) {
-        m_graphicsHandler->setBodyWriter(m_bodyWriter);
-    }
+    m_graphicsHandler->setCurrentWriter(m_textHandler->currentWriter());
 }
 
 void Document::slotTextBoxFound(unsigned int index, bool stylesxml)
