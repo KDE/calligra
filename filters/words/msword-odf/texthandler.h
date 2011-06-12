@@ -126,6 +126,14 @@ public:
      */
     QString getFont(unsigned ftc) const;
 
+    /**
+     * A special purpose function which provides the first font color not set
+     * to cvAuto from the styles hierarchy of the lately processed paragraph.
+     *
+     * @return font color in the format "#RRGGBB" or an empty string
+     */
+    QString paragraphBaseFontColorBkp() const { return m_paragraphBaseFontColorBkp; }
+
     // Provide access to private attributes for our handlers
     Document* document() const { return m_document; }
     void setDocument(Document * document) { m_document = document; }
@@ -151,6 +159,16 @@ signals:
 /*     void updateListDepth(int); */
 
 private:
+
+    /**
+     * A special purpose function which provides the font color of the current
+     * paragraph.  Looking for the first built-in paragraph style in the styles
+     * hierarchy providing a font color not set to cvAuto.
+     *
+     * @return font color in the format "#RRGGBB" or an empty string
+     */
+    QString paragraphBaseFontColor() const;
+
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
     Document* m_document; // The document owning this text handler
@@ -169,6 +187,8 @@ private:
 
     KWord::Table* m_currentTable;
     Paragraph *m_paragraph; //pointer to paragraph object
+    QString m_paragraphBaseFontColorBkp;
+
 #if 1
     bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap
     int        m_dcs_fdct;
