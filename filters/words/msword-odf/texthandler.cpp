@@ -1457,12 +1457,24 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         bool useOutlineLevel = true;
 
         if (rx.indexIn(*inst) >= 0) {
-            useOutlineLevel = false;
+            // Most of the files contain semicolons instead of commas.
             QStringList fragments = rx.cap(1).split(QRegExp(";"));
-            levels = fragments.last().toInt();
-            for (int i = 0 ; i < fragments.size(); i += 2) {
-                customStyles.insert(Conversion::processStyleName(fragments[i]),
-                                    fragments[i + 1].toInt());
+            if (fragments.size() % 2) {
+                fragments = rx.cap(1).split(QRegExp(","));
+            }
+            if (!(fragments.size() % 2)) {
+                bool ok;
+                for (int n, i = 0 ; i < fragments.size(); i += 2) {
+                    n = fragments[i + 1].toInt(&ok);
+                    if (!ok) {
+                        continue;
+                    }
+                    else if (levels < n) {
+                        levels = n;
+                    }
+                    customStyles.insert(Conversion::processStyleName(fragments[i]), n);
+                }
+                useOutlineLevel = false;
             }
         }
         /*
@@ -1503,6 +1515,8 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                 }
             }
         }
+        //TODO: re-order m_tocStyleNames based on the outline level
+
         /*
          * ************************************************
          * table-of-content
