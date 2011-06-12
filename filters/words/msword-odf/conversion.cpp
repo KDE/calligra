@@ -365,8 +365,8 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
 #endif
 
     switch (shd.ipat) {
-    case ipatAuto: // "Clear" in MS Office UI
-        // this color is never auto, it can only be No Fill
+    case ipatAuto: // "Clear" in MS Word UI
+        // this color is never Auto, it can only be No Fill
         ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
         ret.prepend('#');
         break;
@@ -387,15 +387,21 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         if (grayClr == wvWare::Word97::cvAuto) {
             ret = computeAutoColor(shd, bgColor, fontColor);
         } else {
-            QColor foreColor;
-            QColor backColor;
             ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
-            // if both colors are cvAuto, it messes up the logic -- just return the pattern color
-            if ((shd.cvFore == wvWare::Word97::cvAuto) && (shd.cvBack == wvWare::Word97::cvAuto)) {
+
+            //TODO: Let's move the following logic into shadingPatternToColor.
+
+            // if both colors are cvAuto, it messes up the logic -- just return
+            // the pattern color
+            if ((shd.cvFore == wvWare::Word97::cvAuto) &&
+                (shd.cvBack == wvWare::Word97::cvAuto))
+            {
                 return ret;
             }
 
+            QColor foreColor;
+            QColor backColor;
             if (shd.cvFore == wvWare::Word97::cvAuto) {
                 foreColor = QColor(contrastFontColor(bgColor));
                 //qDebug() << "fr auto" << foreColor.name() << "bgColor" << bgColor;
@@ -419,7 +425,6 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
             result.setGreen( yMix(backColor.green(), foreColor.green(), pct) );
             result.setBlue( yMix(backColor.blue(), foreColor.blue(), pct) );
             ret = result.name();
-
         }
     }
     break;

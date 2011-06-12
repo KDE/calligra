@@ -464,7 +464,14 @@ QString Paragraph::writeToFile(KoXmlWriter* writer, QChar* tabLeader)
             writer->endElement(); //text:span
             startedSpan = false;
         }
-    }
+    } //if (!m_textStrings.isEmpty())
+//     else {
+
+        //TODO: Call applyCharacterProperties to add text-properties to
+        //m_odfParagraphStyle.  CHPs for empty paragraphs not provided by wv2!
+
+//     }
+
     //close the <text:p> or <text:h> tag we opened
     writer->endElement();
 
