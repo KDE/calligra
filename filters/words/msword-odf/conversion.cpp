@@ -37,6 +37,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+//#define CONVERSION_DEBUG_SHD
+
 static QMap<int, qreal> myValues() {
     QMap<int, qreal> shadingTable;
     shadingTable[2] = 0.05;
@@ -245,6 +247,10 @@ int yMix(int yFore, int yBack, qreal pct) {
 
 QString Conversion::contrastFontColor(const QString& bgColor)
 {
+    if (bgColor.isNull()) {
+        return QColor(Qt::black).name();
+    }
+
 #if 0
     QColor color(bgColor);
     int d = 0;
@@ -268,22 +274,34 @@ QString Conversion::contrastFontColor(const QString& bgColor)
 #endif
 }
 
-QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor)
+QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
 {
     // NOTE: by definition, see
     // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
+
+    if (shd.shdAutoOrNill) {
+        return contrastFontColor(bgColor);
+    }
 
     QColor foreColor;
     QColor backColor;
 
     if (shd.cvFore == wvWare::Word97::cvAuto) {
-        foreColor = QColor(contrastFontColor(bgColor));
+        if (fontColor.isNull()) {
+            foreColor = QColor(contrastFontColor(bgColor));
+        } else {
+            foreColor = QColor(fontColor);
+        }
     } else {
         foreColor = QColor(QRgb(shd.cvFore));
     }
 
     if (shd.cvBack == wvWare::Word97::cvAuto) {
-        backColor = QColor(bgColor);
+        if (bgColor.isNull()) {
+            backColor = QColor(Qt::white).name();
+        } else {
+            backColor = QColor(bgColor);
+        }
     } else {
         backColor = QColor(QRgb(shd.cvBack));
     }
@@ -308,8 +326,9 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
         }
     }
 
-#if 0
+#ifdef CONVERSION_DEBUG_SHD
     qDebug() << "ooooooooooooooooooooooooooooooo    chp: oooooooooooooooo bgColor:" << bgColor;
+    qDebug() << "fontColor:" << fontColor;
     qDebug() << (shd.cvFore == wvWare::Word97::cvAuto);
     qDebug() << (shd.cvBack == wvWare::Word97::cvAuto);
     qDebug() << "ipat" << shd.ipat;
@@ -329,33 +348,33 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
 
 } //computeAutoColor
 
-QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor)
+QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
 {
     QString ret;
-    if (shd.shdAutoOrNill) return ret;
-#if 0
-    qDebug() << "shdToColorStr" << shd.ipat << bgColor;
-    qDebug() << "cvBack" << QColor(shd.cvBack).name();
-    qDebug() << "cvFore" << QColor(shd.cvFore).name();
+    if (shd.shdAutoOrNill) {
+        return ret;
+    }
+
+#ifdef CONVERSION_DEBUG_SHD
+    qDebug() << "==> shdToColorStr";
+    qDebug() << "bgColor:" << bgColor;
+    qDebug() << "fontColor:" << fontColor;
+    qDebug() << "ipat:" << shd.ipat;
+    qDebug() << "cvBack:" << QColor(shd.cvBack).name();
+    qDebug() << "cvFore:" << QColor(shd.cvFore).name();
 #endif
 
     switch (shd.ipat) {
-    case ipatAuto:
-        // TODO: What to do here!  There are test files which require to
-        // process this ipat as ipatSolid.
-        //
-//         ret = computeAutoColor(shd, bgColor);
-//         break;
+    case ipatAuto: // "Clear" in MS Word UI
+        // this color is never Auto, it can only be No Fill
+        ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
+        ret.prepend('#');
+        break;
     case ipatSolid:
-        // TODO: COLORREF: If fAuto is 0xFF, this COLORREF designates the
-        // default color for the application.  An application MAY<210> use
-        // different default colors based on context.  COLORREF with fAuto set
-        // to 0xFF is referred to as cvAuto.
-        //
-        if (shd.cvBack == wvWare::Word97::cvAuto) {
-            ret = computeAutoColor(shd, bgColor);
+        if (shd.cvFore == wvWare::Word97::cvAuto) {
+            ret = contrastFontColor(bgColor);
         } else {
-            ret.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
+            ret.append(QString::number(shd.cvFore | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
         }
         break;
@@ -366,10 +385,46 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         //handle remaining Ipat values
         quint32 grayClr = shadingPatternToColor(shd.ipat);
         if (grayClr == wvWare::Word97::cvAuto) {
-            ret = computeAutoColor(shd, bgColor);
+            ret = computeAutoColor(shd, bgColor, fontColor);
         } else {
             ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
+
+            //TODO: Let's move the following logic into shadingPatternToColor.
+
+            // if both colors are cvAuto, it messes up the logic -- just return
+            // the pattern color
+            if ((shd.cvFore == wvWare::Word97::cvAuto) &&
+                (shd.cvBack == wvWare::Word97::cvAuto))
+            {
+                return ret;
+            }
+
+            QColor foreColor;
+            QColor backColor;
+            if (shd.cvFore == wvWare::Word97::cvAuto) {
+                foreColor = QColor(contrastFontColor(bgColor));
+                //qDebug() << "fr auto" << foreColor.name() << "bgColor" << bgColor;
+            } else {
+                foreColor = QColor(shd.cvFore);
+                //qDebug() << "fr  set" << foreColor.name();
+            }
+
+            if (shd.cvBack == wvWare::Word97::cvAuto) {
+                // it's not autocolor, it's probably background color
+                backColor = contrastFontColor(foreColor.name());
+                //qDebug() << "bg auto" << backColor.name();
+            } else {
+                backColor = QColor(shd.cvBack);
+                //qDebug() << "bg  set" << backColor.name();
+            }
+            qreal pct = QColor(ret).red() / 255.0;
+            //qDebug() << shd.ipat << "pct" << pct;
+            QColor result;
+            result.setRed( yMix(backColor.red(), foreColor.red(), pct) );
+            result.setGreen( yMix(backColor.green(), foreColor.green(), pct) );
+            result.setBlue( yMix(backColor.blue(), foreColor.blue(), pct) );
+            ret = result.name();
         }
     }
     break;
