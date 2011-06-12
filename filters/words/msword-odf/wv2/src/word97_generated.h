@@ -7067,6 +7067,22 @@ struct PAP : public Shared {
     U8 fWidowControl;
 
     /**
+     * A Bool8 value that specifies whether the space displayed before this
+     * paragraph uses auto spacing.  A value of 1 specifies that the
+     * sprmPDyaBefore value MUST be ignored when the application supports auto
+     * spacing.  By default, auto spacing is disabled for paragraphs.
+     */
+    U8 dyaBeforeAuto;
+
+    /**
+     * A Bool8 value that specifies whether the space displayed after this
+     * paragraph uses auto spacing.  A value of 1 specifies that sprmPDyaAfter
+     * MUST be ignored if the application supports auto spacing.  By default,
+     * auto spacing is disabled for paragraphs.
+     */
+    U8 dyaAfterAuto;
+
+    /**
      * indent from right margin (signed).
      */
     S32 dxaRight;
