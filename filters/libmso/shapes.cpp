@@ -767,6 +767,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     // msosptRectangle.
     case msosptTextBox:
         processRectangle(o, out);
+        break;
     default:
         qDebug() << "Cannot handle shape 0x" << hex << shapeType;
         break;
