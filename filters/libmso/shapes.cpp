@@ -166,6 +166,87 @@ void ODrawToOdf::processStraightConnector1(const OfficeArtSpContainer& o, Writer
 
 }
 
+void ODrawToOdf::processBentConnector2(const OfficeArtSpContainer& o, Writer& out)
+{
+    const OfficeArtDggContainer * drawingGroup = 0;
+    if (client) {
+        drawingGroup = client->getOfficeArtDggContainer();
+    }
+
+    const OfficeArtSpContainer* master = 0;
+    const DrawStyle ds(drawingGroup, master, &o);
+    qreal rotation = toQReal( ds.rotation() );
+
+    const QRectF rect = getRect(o);
+    qreal x1 = rect.x();
+    qreal y1 = rect.y();
+    qreal x2 = rect.x() + rect.width();
+    qreal y2 = rect.y() + rect.height();
+
+    QRectF shapeRect = rect;
+
+    qreal sx1 = x1;
+    qreal sy1 = y1;
+    qreal sx2 = x2;
+    qreal sy2 = y2;
+
+    if (rotation != 0.0) {
+        QTransform m;
+        m.rotate( -rotation );
+        shapeRect = m.mapRect(rect.translated(-rect.center())).translated(rect.center());
+
+        sx1 = shapeRect.topLeft().x();
+        sy1 = shapeRect.topLeft().y();
+        sx2 = shapeRect.bottomRight().x();
+        sy2 = shapeRect.bottomRight().y();
+    }
+
+    // compute path
+    QPainterPath shapePath;
+    shapePath.moveTo(sx1,sy1);
+    shapePath.lineTo(sx2, sy1);
+    shapePath.lineTo(sx2,sy2);
+
+    // transform the path according the shape properties like flip and rotation
+    QTransform m;
+    m.reset();
+    m.translate( -shapeRect.center().x(), -shapeRect.center().y() );
+
+    // shape mirroring
+    if (o.shapeProp.fFlipH){
+        m.scale(-1,1);
+    }
+
+    if (o.shapeProp.fFlipV){
+        m.scale(1,-1);
+    }
+
+    if (rotation != 0) {
+        m.rotate(rotation);
+    }
+
+    m.translate( shapeRect.center().x(), shapeRect.center().y() );
+    shapePath = m.map(shapePath);
+
+    // translate the QPainterPath into svg:d attribute
+    QString path = path2svg(shapePath);
+
+    out.xml.startElement("draw:connector");
+    addGraphicStyleToDrawElement(out, o);
+    out.xml.addAttribute("draw:layer", "layout");
+    out.xml.addAttribute("svg:x1", client->formatPos(out.hOffset(x1)));
+    out.xml.addAttribute("svg:y1", client->formatPos(out.vOffset(y1)));
+    out.xml.addAttribute("svg:x2", client->formatPos(out.hOffset(x2)));
+    out.xml.addAttribute("svg:y2", client->formatPos(out.vOffset(y2)));
+    if (!path.isEmpty()) {
+        out.xml.addAttribute("svg:d", path);
+    }
+
+    processText(o, out);
+    out.xml.endElement();
+
+}
+
 void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& out)
 {
     const OfficeArtDggContainer * drawingGroup = 0;
@@ -375,6 +456,9 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     //
     case msosptStraightConnector1:
         processStraightConnector1(o, out);
+        break;
+    case msosptBentConnector2:
+        processBentConnector2(o, out);
         break;
     case msosptBentConnector3:
         processBentConnector3(o, out);

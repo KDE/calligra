@@ -138,6 +138,7 @@ private:
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStraightConnector1(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processBentConnector2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processBentConnector3(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer& out);
