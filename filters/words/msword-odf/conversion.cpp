@@ -389,15 +389,15 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
             ret.append(QString::number(grayClr | 0xff000000, 16).right(6).toUpper());
             ret.prepend('#');
 
-            qreal pct = QColor(ret).red() / 255.0;
-            QColor backColor(shd.cvBack);
-            QColor foreColor(shd.cvFore);
+//             qreal pct = QColor(ret).red() / 255.0;
+//             QColor backColor(shd.cvBack);
+//             QColor foreColor(shd.cvFore);
 
-            QColor result;
-            result.setRed( yMix(backColor.red(), foreColor.red(), pct) );
-            result.setGreen( yMix(backColor.green(), foreColor.green(), pct) );
-            result.setBlue( yMix(backColor.blue(), foreColor.blue(), pct) );
-            ret = result.name();
+//             QColor result;
+//             result.setRed( yMix(backColor.red(), foreColor.red(), pct) );
+//             result.setGreen( yMix(backColor.green(), foreColor.green(), pct) );
+//             result.setBlue( yMix(backColor.blue(), foreColor.blue(), pct) );
+//             ret = result.name();
         }
     }
     break;
