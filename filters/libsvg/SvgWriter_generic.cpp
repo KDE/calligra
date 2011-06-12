@@ -68,7 +68,7 @@
       #include <QtGui/QLinearGradient>
       #include <QtGui/QRadialGradient>
 
-      #include "SvgAnimationData.h"
+      #include "filters/kpresenter/svgsinglecanvas/SvgAnimationData.h"
 
 
 
@@ -155,11 +155,11 @@ void SvgWriter_generic::startDocument()
 
 }
 
-void SvgWriter_generic::addAppData(QString &appData)
+/*void SvgWriter_generic::addAppData(const QString appData)
 {
   m_appData = appData;
   m_hasAppData = true;
-}
+}*/
 
       bool SvgWriter_generic::save(QIODevice &outputDevice)
       {
@@ -178,7 +178,7 @@ void SvgWriter_generic::addAppData(QString &appData)
           *m_defs << "</defs>" << endl; 
           
           if(m_hasAppData){
-          *m_body << m_appData << endl;
+          *m_body << m_appData; 
           }
           *m_body << "</svg>" << endl;
         
@@ -313,9 +313,9 @@ void SvgWriter_generic::endDocument(const QString *defs, const QString *body)//t
           }
           }
          
-        /* if(m_hasAppData) {
+         if(m_hasAppData) {
            saveAppData(shape); //virtual fucntion. Do be defined by the child class
-         }*/
+         }
           
       }
       

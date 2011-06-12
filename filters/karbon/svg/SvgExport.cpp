@@ -46,7 +46,6 @@
 
 #include <QtCore/QString>
 
-
 K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
 K_EXPORT_PLUGIN(SvgExportFactory("calligrafilters"))
 

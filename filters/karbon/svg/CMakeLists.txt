@@ -1,22 +1,26 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon
-${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas ${CMAKE_SOURCE_DIR}/filters/libsvg ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 
 set(LIBSVG_SOURCES
     ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgWriter_generic.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/Frame.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libsvg/SvgAnimationData.cpp
+    )
+
+set(STAGE_SOURCES
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/Frame.cpp
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgAnimationData.cpp
+    ${CMAKE_SOURCE_DIR}/filters/kpresenter/svgsinglecanvas/SvgWriter_Stage.cpp
     )
 
 set(karbonsvgexport_PART_SRCS 
     SvgExport.cpp
     SvgUtil.cpp
     SvgWriter.cpp
-    SvgWriter_Stage.cpp
     ${SHAPES_SOURCES} 
     ${LIBSVG_SOURCES}
+    ${STAGE_SOURCES} #Only for testing
 )
 
 kde4_add_plugin(karbonsvgexport ${karbonsvgexport_PART_SRCS})

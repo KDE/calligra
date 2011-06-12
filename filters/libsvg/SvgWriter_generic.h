@@ -76,9 +76,14 @@
       /// Writes svg to the specified file
       bool save(const QString &filename, bool writeInlineImages);
 
+  protected:
       virtual void saveAppData(KoShape *shape) =0;
-      void addAppData(QString &appData);
-
+      //void addAppData(const QString appData);
+      void printIndentation(QTextStream *stream, unsigned int indent);
+                
+      bool m_hasAppData;
+      QString m_appData;
+      
   private:
       
       void saveLayer(KoShapeLayer * layer);
@@ -115,7 +120,7 @@
       void endDocument(const QString *defs, const QString *body);
       void endDocument(const QString *defs, const QString *body, const QString *appData);
       void savePlainText();
-      void printIndentation(QTextStream *stream, unsigned int indent);
+     
       
       QTextStream* m_stream;
       QTextStream* m_defs;
@@ -131,8 +136,6 @@
       bool m_writeInlineImages;
       QString m_filename;
 
-      bool m_hasAppData;
-      QString m_appData;
       };
 
   #endif /*SVGWRITER_H */

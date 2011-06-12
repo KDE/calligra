@@ -32,5 +32,6 @@ private:
       void forTesting(KoShape *shape);
 
   QTextStream* m_frames;
+  //QString m_framesString;
   QString m_script;
 };  
