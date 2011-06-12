@@ -35,7 +35,7 @@
 
 
       #include "SvgWriter_generic.h"
-      #include "SvgUtil.h"
+      #include "filters/karbon/svg/SvgUtil.h"
 
 
       #include <KoShapeLayer.h>
@@ -47,8 +47,8 @@
       #include <KoPatternBackground.h>
       #include <plugins/artistictextshape/ArtisticTextShape.h>
       #include <plugins/artistictextshape/ArtisticTextRange.h>
-      #include <pathshapes/rectangle/RectangleShape.h>
-      #include <pathshapes/ellipse/EllipseShape.h>
+      #include <plugins/pathshapes/rectangle/RectangleShape.h>
+      #include <plugins/pathshapes/ellipse/EllipseShape.h>
       #include <KoImageData.h>
       #include <KoFilterEffect.h>
       #include <KoFilterEffectStack.h>
@@ -58,7 +58,7 @@
       #include <KTemporaryFile>
       #include <KIO/NetAccess>
       #include <KIO/CopyJob>
-      #include <plugins/textshape/TextShape.h>
+      //#include <TextShape.h>
 
       #include <QtCore/QFile>
       #include <QtCore/QString>
