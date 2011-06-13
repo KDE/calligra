@@ -61,6 +61,8 @@ void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &conve
 
 bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    loadOdfAttributes(element, context, OdfAdditionalAttributes);
+
 #ifndef NWORKAROUND_ODF_BUGS
     KoOdfWorkaround::fixPresentationPlaceholder(this);
 #endif
@@ -72,7 +74,7 @@ bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     }
 
     // first check if we can create a placeholder before we load the attributes
-    loadOdfAttributes( element, context, OdfAllAttributes );
+    loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfGeometry | OdfCommonChildElements);
     m_strategy->loadOdf( element, context );
 
     return true;
