@@ -148,6 +148,16 @@ void KPrSlidesManagerView::dragLeaveEvent(QDragLeaveEvent *e)
     setDragingFlag(false);
 }
 
+void KPrSlidesManagerView::focusOutEvent(QFocusEvent *event)
+{
+    emit focusLost();
+}
+
+void KPrSlidesManagerView::focusInEvent(QFocusEvent *event)
+{
+    emit focusGot();
+}
+
 void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     if (!this->selectionModel()->selection().isEmpty()) {

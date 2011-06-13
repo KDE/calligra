@@ -82,8 +82,6 @@ public:
      */
     QSize iconSize() const;
 
-    ///Add a delete key feature to the custom Shows View
-    bool eventFilter(QObject *watched, QEvent *event);
 
 protected:
 
@@ -195,6 +193,10 @@ private slots:
 
     /** Disable standard edit actions */
     void disableEditActions();
+
+    void enableEditCustomShowActions();
+
+    void disableEditCustomShowActions();
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

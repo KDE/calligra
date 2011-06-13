@@ -95,20 +95,25 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
     slideShowsList = new QComboBox;
     slideShowsList->setEditable(false);
     slideShowsList->setInsertPolicy(QComboBox::NoInsert);
+    slideShowsLabel->setBuddy(slideShowsList);
 
     buttonAdd = new QToolButton();
     buttonAdd->setIcon(SmallIcon("list-add"));
+    buttonAdd->setToolTip(i18n("Add a new custom slide show"));
 
     buttonDel = new QToolButton();
     buttonDel->setIcon(SmallIcon("list-remove"));
     buttonDel->setEnabled(false);
+    buttonDel->setToolTip(i18n("Delete current custom slide show"));
 
     buttonAddSlide = new QToolButton();
     buttonAddSlide->setIcon(SmallIcon("arrow-down"));
+    buttonAddSlide->setToolTip(i18n("Add slides to current custom slide show"));
     buttonAddSlide->setEnabled(false);
 
     buttonDelSlide = new QToolButton();
     buttonDelSlide->setIcon(SmallIcon("arrow-up"));
+    buttonDelSlide->setToolTip(i18n("Remove slides from current custom slide show"));
     buttonDelSlide->setEnabled(false);
 
     QSplitter *viewsSplitter = new QSplitter(Qt::Vertical);
@@ -143,27 +148,21 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvas *can
 
     //Setup customSlideShows view
     m_customSlidesShowView->setModel(m_customShowsModel);
-
     m_customSlidesShowView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_customSlidesShowView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
     m_customSlidesShowView->setDragDropMode(QAbstractItemView::InternalMove);
 
     //setup signals
-
     connect(m_slidesSorter, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
     connect(m_customSlidesShowView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(customSlideShowsContextMenu(QContextMenuEvent*)));
     connect(m_slidesSorter, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
-    //connect(slideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
-    //connect(slideShowsList, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeActiveSlideShow(QString)));
     connect(buttonAdd, SIGNAL(clicked()), this, SLOT(addCustomSlideShow()));
-
-    //filter some m_slidesSorter key events
-    m_customSlidesShowView->installEventFilter(this);
+    //connect(buttonAddSlide, SIGNAL(clicked()), this, SLOT(addCustomSlideShow()));
+    connect(buttonDelSlide, SIGNAL(clicked()), this, SLOT(deleteSlideFromCustomShow()));
     connect(m_slidesSorter, SIGNAL(selectionCleared()), this, SLOT(disableEditActions()));
     connect(m_slidesSorter, SIGNAL(itemSelected()), this, SLOT(enableEditActions()));
 
-    //connect signals for manage standard edit actions
+    //setup signals for manage standard edit actions
     connect(view->copyController(), SIGNAL(copyRequested()), this, SLOT(editCopy()));
     connect(view->cutController(), SIGNAL(copyRequested()), this, SLOT(editCut()));
     connect(view, SIGNAL(selectAllRequested()), m_slidesSorter, SLOT(selectAll()));
@@ -249,11 +248,14 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     m_slidesSorter->setFocus(Qt::ActiveWindowFocusReason);
     updateToActivePageIndex();
 
+    //setup signals
     connect(m_slidesSorter,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_slidesSorter, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(const QModelIndex)));
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
     connect(m_view->kopaDocument(),SIGNAL(pageAdded(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
     connect(m_view->kopaDocument(),SIGNAL(pageRemoved(KoPAPageBase*)),this, SLOT(updateSlidesSorterDocumentModel()));
+    connect(m_slidesSorter, SIGNAL(focusLost()), SLOT(disableEditActions()));
+    connect(m_customSlidesShowView, SIGNAL(focusGot()), SLOT(disableEditActions()));
 
     //change zoom saving slot
     connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(updateZoom(KoZoomMode::Mode, qreal)));
@@ -570,19 +572,16 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
         if (!panelVisible) {
             animation->setDuration(duration);
             animation->setStartValue(m_customSlidesShowView->maximumHeight());
-             animation->setEndValue(0);
-             //Deactivate tool buttons and edition
-             slideShowsList->setEditable(false);
-             buttonDel->setEnabled(false);
+            animation->setEndValue(0);
+            //Deactivate tool buttons and edition
+            disableEditCustomShowActions();
         }
         else {
             animation->setDuration(duration);
             animation->setStartValue(0);
             animation->setEndValue(m_slidesSorter->height()/2);
             //Activate tool buttons and edition
-            slideShowsList->setEditable(true);
-            connect(slideShowsList->lineEdit(), SIGNAL(editingFinished()), this, SLOT(renameCustomShow()));
-            buttonDel->setEnabled(true);
+            enableEditCustomShowActions();
         }
         animation->start();
     }
@@ -682,23 +681,19 @@ void KPrViewModeSlidesSorter::renameCustomShow()
 
 }
 
-bool KPrViewModeSlidesSorter::eventFilter(QObject *watched, QEvent *event)
+void KPrViewModeSlidesSorter::enableEditCustomShowActions()
 {
-    if (watched == m_customSlidesShowView) {
-        switch (event->type()) {
-            case QEvent::KeyPress: {
-                QKeyEvent *keyEv = static_cast<QKeyEvent *>(event);
+    slideShowsList->setEditable(true);
+    connect(slideShowsList->lineEdit(), SIGNAL(editingFinished()), this, SLOT(renameCustomShow()));
+    buttonDel->setEnabled(true);
+    buttonAddSlide->setEnabled(true);
+    buttonDelSlide->setEnabled(true);
+}
 
-                if (keyEv && keyEv->key() == Qt::Key_Delete) {
-                    deleteSlideFromCustomShow();
-                }
-                break;
-            }
-
-            default:
-                break;
-        }
-    }
-
-    return QObject::eventFilter(watched, event);
+void KPrViewModeSlidesSorter::disableEditCustomShowActions()
+{
+    slideShowsList->setEditable(false);
+    buttonDel->setEnabled(false);
+    buttonAddSlide->setEnabled(false);
+    buttonDelSlide->setEnabled(false);
 }
