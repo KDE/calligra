@@ -213,7 +213,7 @@ void SvgWriter_generic::saveLayer(KoShapeLayer * layer)
 
     printIndentation(m_body, --m_indent);
     *m_body << "</g>" << endl;
-      }
+}
 
 void SvgWriter_generic::saveGroup(KoShapeGroup * group)
 {
@@ -703,66 +703,66 @@ void SvgWriter_generic::getEffects(KoShape *shape, QTextStream *stream)
     }
 
 void SvgWriter_generic::getClipping(KoShape *shape, QTextStream *stream)
-      {
-          KoClipPath *clipPath = shape->clipPath();
-          if (!clipPath)
-              return;
+{
+    KoClipPath *clipPath = shape->clipPath();
+    if (!clipPath)
+       return;
 
-          const QSizeF shapeSize = shape->outlineRect().size();
-          KoPathShape *path = KoPathShape::createShapeFromPainterPath(clipPath->pathForSize(shapeSize));
-          if (!path)
-              return;
+    const QSizeF shapeSize = shape->outlineRect().size();
+    KoPathShape *path = KoPathShape::createShapeFromPainterPath(clipPath->pathForSize(shapeSize));
+    if (!path)
+       return;
 
-          path->close();
+    path->close();
 
-          QString uid = createUID();
+    QString uid = createUID();
 
-          printIndentation(m_defs, m_indent2);
+    printIndentation(m_defs, m_indent2);
 
-          *m_defs << "<clipPath id=\"" << uid << "\" clipPathUnits=\"userSpaceOnUse\">" << endl;
+    *m_defs << "<clipPath id=\"" << uid << "\" clipPathUnits=\"userSpaceOnUse\">" << endl;
 
-          printIndentation(m_defs, ++m_indent2);
+    printIndentation(m_defs, ++m_indent2);
 
-          *m_defs << "<path";
-          *m_defs << " d=\"" << path->toString(path->absoluteTransformation(0)*m_userSpaceMatrix) << "\"";
-          *m_defs << "/>" << endl;
+    *m_defs << "<path";
+    *m_defs << " d=\"" << path->toString(path->absoluteTransformation(0)*m_userSpaceMatrix) << "\"";
+    *m_defs << "/>" << endl;
 
-          printIndentation(m_defs, --m_indent2);
+    printIndentation(m_defs, --m_indent2);
 
-          *m_defs << "</clipPath>" << endl;
+    *m_defs << "</clipPath>" << endl;
 
-          *stream << " clip-path=\"url(#" << uid << ")\"";
-          if (clipPath->clipRule() != Qt::WindingFill)
-              *stream << " clip-rule=\"evenodd\"";
-      }
+    *stream << " clip-path=\"url(#" << uid << ")\"";
+    if (clipPath->clipRule() != Qt::WindingFill)
+        *stream << " clip-rule=\"evenodd\"";
+}
 
-      void SvgWriter_generic::saveFont(const QFont &font, QTextStream *stream)
-      {
-          *stream << " font-family=\"" << font.family() << "\"";
-          *stream << " font-size=\"" << font.pointSize() << "pt\"";
+void SvgWriter_generic::saveFont(const QFont &font, QTextStream *stream)
+{
+    *stream << " font-family=\"" << font.family() << "\"";
+    *stream << " font-size=\"" << font.pointSize() << "pt\"";
 
-          if (font.bold())
-              *stream << " font-weight=\"bold\"";
-          if (font.italic())
-              *stream << " font-style=\"italic\"";
-      }
+    if (font.bold())
+       *stream << " font-weight=\"bold\"";
+    if (font.italic())
+       *stream << " font-style=\"italic\"";
+}
 
-      void SvgWriter_generic::saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveRangeFont, qreal baselineOffset)
-      {
-          *stream << "<tspan";
-          if (range.hasXOffsets()) {
-              *stream << (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? " x=\"" : " dx=\"");
-              int charIndex = 0;
-              while(range.hasXOffset(charIndex)) {
-                  if (charIndex)
-                      *stream << ",";
-                  *stream << QString("%1").arg(SvgUtil::toUserSpace(range.xOffset(charIndex++)));
-              }
-              *stream << "\"";
-          }
-          if (range.hasYOffsets()) {
-              if (range.yOffsetType() != ArtisticTextRange::AbsoluteOffset)
-                  baselineOffset = 0;
+void SvgWriter_generic::saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveRangeFont, qreal baselineOffset)
+{
+    *stream << "<tspan";
+    if (range.hasXOffsets()) {
+        *stream << (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? " x=\"" : " dx=\"");
+    int charIndex = 0;
+    while(range.hasXOffset(charIndex)) {
+        if (charIndex)
+            *stream << ",";
+        *stream << QString("%1").arg(SvgUtil::toUserSpace(range.xOffset(charIndex++)));
+        }
+        *stream << "\"";
+        }
+        if (range.hasYOffsets()) {
+           if (range.yOffsetType() != ArtisticTextRange::AbsoluteOffset)
+              baselineOffset = 0;
               *stream << (range.yOffsetType() == ArtisticTextRange::AbsoluteOffset ? " y=\"" : " dy=\"");
               int charIndex = 0;
               while(range.hasYOffset(charIndex)) {
@@ -789,49 +789,49 @@ void SvgWriter_generic::getClipping(KoShape *shape, QTextStream *stream)
           *stream << "</tspan>" << endl;
       }
 
-      void SvgWriter_generic::saveText(ArtisticTextShape * text)
-      {
-          printIndentation(m_body, m_indent++);
-          *m_body << "<text" << getID(text);
+void SvgWriter_generic::saveText(ArtisticTextShape * text)
+{
+    printIndentation(m_body, m_indent++);
+    *m_body << "<text" << getID(text);
 
-          getStyle(text, m_body);
+    getStyle(text, m_body);
 
-          const QList<ArtisticTextRange> formattedText = text->text();
+    const QList<ArtisticTextRange> formattedText = text->text();
 
-          // if we have only a single text range, save the font on the text element
-          const bool hasSingleRange = formattedText.size() == 1;
-          if (hasSingleRange) {
-              saveFont(formattedText.first().font(), m_body);
-          }
+    // if we have only a single text range, save the font on the text element
+    const bool hasSingleRange = formattedText.size() == 1;
+    if (hasSingleRange) {
+          saveFont(formattedText.first().font(), m_body);
+      }
 
-          qreal anchorOffset = 0.0;
-          if (text->textAnchor() == ArtisticTextShape::AnchorMiddle) {
-              anchorOffset += 0.5 * text->size().width();
-              *m_body << " text-anchor=\"middle\"";
+    qreal anchorOffset = 0.0;
+    if (text->textAnchor() == ArtisticTextShape::AnchorMiddle) {
+        anchorOffset += 0.5 * text->size().width();
+        *m_body << " text-anchor=\"middle\"";
           } else if (text->textAnchor() == ArtisticTextShape::AnchorEnd) {
               anchorOffset += text->size().width();
               *m_body << " text-anchor=\"end\"";
           }
 
-          printIndentation(m_body, m_indent);
+    printIndentation(m_body, m_indent);
 
-          // check if we are set on a path
-          if (text->layout() == ArtisticTextShape::Straight) {
-              QTransform m = text->transformation();
-              if (isTranslation(m)) {
-                  QPointF position = text->position();
-                  *m_body << " x=\"" << position.x() + anchorOffset << "pt\"";
-                  *m_body << " y=\"" << position.y() + text->baselineOffset() << "pt\"";
-              } else {
-                  *m_body << " x=\"" << anchorOffset << "pt\"";
-                  *m_body << " y=\"" << text->baselineOffset() << "pt\"";
-                  *m_body << getTransform(text->transformation(), " transform");
-              }
-              *m_body << ">" << endl;
-              foreach(const ArtisticTextRange &range, formattedText) {
-                  saveTextRange(range, m_body, !hasSingleRange, text->baselineOffset());
-              }
-          } else {
+    // check if we are set on a path
+    if (text->layout() == ArtisticTextShape::Straight) {
+        QTransform m = text->transformation();
+        if (isTranslation(m)) {
+            QPointF position = text->position();
+            *m_body << " x=\"" << position.x() + anchorOffset << "pt\"";
+            *m_body << " y=\"" << position.y() + text->baselineOffset() << "pt\"";
+        } else {
+            *m_body << " x=\"" << anchorOffset << "pt\"";
+            *m_body << " y=\"" << text->baselineOffset() << "pt\"";
+            *m_body << getTransform(text->transformation(), " transform");
+        }
+        *m_body << ">" << endl;
+        foreach(const ArtisticTextRange &range, formattedText) {
+            saveTextRange(range, m_body, !hasSingleRange, text->baselineOffset());
+        }
+       } else {
               KoPathShape * baseline = KoPathShape::createShapeFromPainterPath(text->baseline());
 
               QString id;
@@ -860,30 +860,30 @@ void SvgWriter_generic::getClipping(KoShape *shape, QTextStream *stream)
           *m_body << "</text>" << endl;
       }
 
-      void SvgWriter_generic::saveImage(KoShape *picture)
-      {
-          KoImageData *imageData = qobject_cast<KoImageData*>(picture->userData());
-          if (! imageData) {
-              qWarning() << "Picture has no image data. Omitting.";
-              return;
+void SvgWriter_generic::saveImage(KoShape *picture)
+{
+    KoImageData *imageData = qobject_cast<KoImageData*>(picture->userData());
+    if (! imageData) {
+         qWarning() << "Picture has no image data. Omitting.";
+         return;
+      }
+
+    printIndentation(m_body, m_indent);
+
+    *m_body << "<image" << getID(picture);
+    QTransform m = picture->transformation();
+    if (isTranslation(m)) {
+        QPointF position = picture->position();
+        *m_body << " x=\"" << position.x() << "pt\"";
+        *m_body << " y=\"" << position.y() << "pt\"";
+        } else {
+             *m_body << getTransform(picture->transformation(), " transform");
           }
 
-          printIndentation(m_body, m_indent);
+        *m_body << " width=\"" << picture->size().width() << "pt\"";
+        *m_body << " height=\"" << picture->size().height() << "pt\"";
 
-          *m_body << "<image" << getID(picture);
-          QTransform m = picture->transformation();
-          if (isTranslation(m)) {
-              QPointF position = picture->position();
-              *m_body << " x=\"" << position.x() << "pt\"";
-              *m_body << " y=\"" << position.y() << "pt\"";
-          } else {
-              *m_body << getTransform(picture->transformation(), " transform");
-          }
-
-          *m_body << " width=\"" << picture->size().width() << "pt\"";
-          *m_body << " height=\"" << picture->size().height() << "pt\"";
-
-          if (m_writeInlineImages) {
+        if (m_writeInlineImages) {
               QByteArray ba;
               QBuffer buffer(&ba);
               buffer.open(QIODevice::WriteOnly);
