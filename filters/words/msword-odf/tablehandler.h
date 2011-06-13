@@ -150,6 +150,8 @@ private:
     QString m_margin[6];
 
     bool m_floatingTable; //true - table is floatin table; false - table is not floating table
+
+    QString m_cellStyleName;
 };
 
 #endif // TABLEHANDLER_H

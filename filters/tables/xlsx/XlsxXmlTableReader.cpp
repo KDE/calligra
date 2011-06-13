@@ -129,7 +129,7 @@ KoFilter::ConversionStatus XlsxXmlTableReader::read_table()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
         }
     }

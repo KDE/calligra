@@ -352,9 +352,8 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle,
-                                                false, 0, 0, currentBgColor());
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle);
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, false, false, currentBgColor(), true);
+            Paragraph::applyParagraphProperties(style->paragraphProperties(), &userStyle, parentStyle, false, 0, 0, QString());
 
             // Add style to main collection, using the name that it
             // had in the .doc.
@@ -384,8 +383,7 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle,
-                                                false, false, currentBgColor());
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, false, false, currentBgColor());
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);

@@ -166,7 +166,23 @@ void ODrawToOdf::processStraightConnector1(const OfficeArtSpContainer& o, Writer
 
 }
 
-void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::drawPathBentConnector2(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const
+{
+    shapePath.moveTo(sx1,sy1);
+    shapePath.lineTo(sx2, sy1);
+    shapePath.lineTo(sx2,sy2);
+}
+
+void ODrawToOdf::drawPathBentConnector3(qreal sx1, qreal sy1, qreal sx2, qreal sy2, QPainterPath &shapePath) const
+{
+
+    shapePath.moveTo(sx1,sy1);
+    shapePath.lineTo((sx1 + sx2)/2.0, sy1);
+    shapePath.lineTo((sx1 + sx2)/2.0, sy2);
+    shapePath.lineTo(sx2,sy2);
+}
+
+void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, PathArtist drawPath)
 {
     const OfficeArtDggContainer * drawingGroup = 0;
     if (client) {
@@ -203,10 +219,7 @@ void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& ou
 
     // compute path
     QPainterPath shapePath;
-    shapePath.moveTo(sx1,sy1);
-    shapePath.lineTo((sx1 + sx2)/2.0, sy1);
-    shapePath.lineTo((sx1 + sx2)/2.0, sy2);
-    shapePath.lineTo(sx2,sy2);
+    (this->*drawPath)(sx1,sy1,sx2,sy2,shapePath);
 
     // transform the path according the shape properties like flip and rotation
     QTransform m;
@@ -247,7 +260,6 @@ void ODrawToOdf::processBentConnector3(const OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement();
 
 }
-
 
 void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
 {
@@ -376,11 +388,14 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     case msosptStraightConnector1:
         processStraightConnector1(o, out);
         break;
+    case msosptBentConnector2:
+        processConnector(o, out, &ODrawToOdf::drawPathBentConnector2);
+        break;
     case msosptBentConnector3:
-        processBentConnector3(o, out);
+        processConnector(o, out, &ODrawToOdf::drawPathBentConnector3);
         break;
     //
-    // TODO: msosptBentConnector1, msosptBentConnector2, msosptBentConnector4,
+    // TODO: msosptBentConnector1, msosptBentConnector4,
     // msosptBentConnector5, msosptCurvedConnector2, msosptCurvedConnector3,
     // msosptCurvedConnector4, msosptCurvedConnector5
     //
@@ -767,6 +782,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     // msosptRectangle.
     case msosptTextBox:
         processRectangle(o, out);
+        break;
     default:
         qDebug() << "Cannot handle shape 0x" << hex << shapeType;
         break;

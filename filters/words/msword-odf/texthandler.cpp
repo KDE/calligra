@@ -138,6 +138,31 @@ KoXmlWriter* KWordTextHandler::currentWriter() const
     return writer;
 }
 
+QString KWordTextHandler::paragraphBaseFontColor() const
+{
+    if (!m_paragraph) return QString();
+
+    const wvWare::StyleSheet& styles = m_parser->styleSheet();
+    const wvWare::Style* ps = m_paragraph->paragraphStyle();
+    quint16 istdBase = 0x0fff;
+    QString color;
+
+    while (!ps->isEmpty()) {
+        if (ps->chp().cv != wvWare::Word97::cvAuto) {
+            color = QString::number(ps->chp().cv | 0xff000000, 16).right(6).toUpper();
+            color.prepend('#');
+        }
+
+        istdBase = ps->m_std->istdBase;
+        if (istdBase == 0x0fff) {
+            break;
+        } else {
+            ps = styles.styleByIndex(istdBase);
+        }
+    }
+    return color;
+}
+
 //increment m_sectionNumber
 void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
@@ -882,7 +907,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     //provide the background color information
     m_paragraph->updateBgColor(m_document->currentBgColor());
 
-    KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
+    KoGenStyle* style = m_paragraph->koGenStyle();
 
     //check if the master-page-name attribute is required
     if (document()->writeMasterPageName() && !document()->writingHeader())
@@ -971,6 +996,9 @@ void KWordTextHandler::paragraphEnd()
         updateListStyle(styleName);
         m_listLevelStyleRequired = false;
     }
+
+    //save the font color
+    m_paragraphBaseFontColorBkp = paragraphBaseFontColor();
 
     delete m_paragraph;
     m_paragraph = 0;
@@ -1457,12 +1485,24 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         bool useOutlineLevel = true;
 
         if (rx.indexIn(*inst) >= 0) {
-            useOutlineLevel = false;
+            // Most of the files contain semicolons instead of commas.
             QStringList fragments = rx.cap(1).split(QRegExp(";"));
-            levels = fragments.last().toInt();
-            for (int i = 0 ; i < fragments.size(); i += 2) {
-                customStyles.insert(Conversion::processStyleName(fragments[i]),
-                                    fragments[i + 1].toInt());
+            if (fragments.size() % 2) {
+                fragments = rx.cap(1).split(QRegExp(","));
+            }
+            if (!(fragments.size() % 2)) {
+                bool ok;
+                for (int n, i = 0 ; i < fragments.size(); i += 2) {
+                    n = fragments[i + 1].toInt(&ok);
+                    if (!ok) {
+                        continue;
+                    }
+                    else if (levels < n) {
+                        levels = n;
+                    }
+                    customStyles.insert(Conversion::processStyleName(fragments[i]), n);
+                }
+                useOutlineLevel = false;
             }
         }
         /*
@@ -1503,6 +1543,8 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                 }
             }
         }
+        //TODO: re-order m_tocStyleNames based on the outline level
+
         /*
          * ************************************************
          * table-of-content

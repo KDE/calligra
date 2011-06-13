@@ -129,6 +129,8 @@ typedef enum
     sprmPFAdjustRight = 0x2448,
     sprmPFInnerTableCell = 0x244B,
     sprmPFInnerTtp = 0x244C,
+    sprmPFDyaBeforeAuto = 0x245B,
+    sprmPFDyaAfterAuto = 0x245C,
     sprmPNLvlAnmFake = 0x25FF, // Fake entry!
     sprmPIncLvl = 0x2602,
     sprmPIlvl = 0x260A,
@@ -1079,6 +1081,12 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             break;
         case SPRM::sprmPNLvlAnmFake:
             nLvlAnm = *ptr;
+            break;
+        case SPRM::sprmPFDyaBeforeAuto:
+            dyaBeforeAuto = *ptr == 1;
+            break;
+        case SPRM::sprmPFDyaAfterAuto:
+            dyaAfterAuto = *ptr == 1;
             break;
         //START - table related SPRMs
         case SPRM::sprmPFInTable:
