@@ -171,12 +171,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2)); // right(2) takes the unit
         QString x1 = x_pos_string;
         QString y2 = QString("%1%2").arg(y_position + heightValue).arg(heightString.right(2));
-        if (flip == "x") {
+        if (flip.contains("x")) {
             QString temp = y2;
             y2 = y1;
             y1 = temp;
         }
-        if (flip == "y") {
+        if (flip.contains("y")) {
             QString temp = x2;
             x2 = x1;
             x1 = temp;
@@ -398,6 +398,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
 
 void MSOOXML_CURRENT_CLASS::takeDefaultValues()
 {
+    m_currentVMLProperties.modifiers = QString();
+    m_currentVMLProperties.viewBox = QString();
+    m_currentVMLProperties.shapePath = QString();
     m_currentVMLProperties.strokeColor = "#000000"; // default
     m_currentVMLProperties.strokeWidth = "1pt" ; // default
     m_currentVMLProperties.shapeColor = "#ffffff"; //default
@@ -1859,7 +1862,7 @@ static QString convertToEnhancedPath(const QString& source, QString& extraShapeF
  - handles (Set of Handles) §14.1.2.9
  - imagedata (Image Data) §14.1.2.11
  - lock (Shape Protections) §14.2.2.18
- - path (Shape Path) §14.1.2.14
+ - [done] path (Shape Path) §14.1.2.14
  - [done shadow (Shadow Effect) §14.1.2.18
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
@@ -1875,51 +1878,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    TRY_READ_ATTR_WITHOUT_NS(adj)
-    TRY_READ_ATTR_WITHOUT_NS(coordsize)
     TRY_READ_ATTR_WITHOUT_NS(id)
-    TRY_READ_ATTR_WITHOUT_NS(path)
-
-    // Using KoXmlWriters is another opinion, but this one is used to avoid
-    // hassle with deletions (koxmlwriter not deleting its device etc)
-    m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
-
-    if (!adj.isEmpty()) {
-        QString tempModifiers = adj;
-        tempModifiers.replace(",,", ",0,");
-        tempModifiers.replace(',', " ");
-        m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
-    }
-    if (!coordsize.isEmpty()) {
-        QString tempViewBox = "0 0 " + coordsize;
-        tempViewBox.replace(',', " ");
-        m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
-    }
-    m_currentVMLProperties.extraShapeFormulas = QString();
-    if (!path.isEmpty()) {
-        QString enPath = convertToEnhancedPath(path, m_currentVMLProperties.extraShapeFormulas);
-        m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").arg(enPath);
-    }
 
     takeDefaultValues();
     handleStrokeAndFill(attrs);
-
-    m_currentVMLProperties.shapeTypeString += ">";
+    handlePathValues(attrs);
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(formulas)
+            ELSE_TRY_READ_IF(path)
             ELSE_TRY_READ_IF(shadow)
             ELSE_TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(stroke)
             SKIP_UNKNOWN
         }
     }
-
-    m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
-    m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
 
     m_definedShapeTypes[id] = m_currentVMLProperties;
 
@@ -1955,6 +1931,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_formulas()
     READ_PROLOGUE
 
     m_currentVMLProperties.formulaIndex = 0;
+    m_currentVMLProperties.normalFormulas = QString();
 
     while (!atEnd()) {
         readNext();
@@ -1982,8 +1959,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(eqn)
-    m_currentVMLProperties.shapeTypeString += "\n<draw:equation ";
-    m_currentVMLProperties.shapeTypeString += QString("draw:name=\"f%1\" draw:formula=\"").arg(m_currentVMLProperties.formulaIndex);
+    m_currentVMLProperties.normalFormulas += "\n<draw:equation ";
+    m_currentVMLProperties.normalFormulas += QString("draw:name=\"f%1\" draw:formula=\"").arg(m_currentVMLProperties.formulaIndex);
 
     if (!eqn.isEmpty()) {
         eqn = eqn.trimmed();
@@ -2013,63 +1990,63 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
             eqn = eqn.mid(commandIndex + 1);
         }
         if (command == "val") {
-            m_currentVMLProperties.shapeTypeString += parameters.at(0);
+            m_currentVMLProperties.normalFormulas += parameters.at(0);
         }
         else if (command == "sum") {
-            m_currentVMLProperties.shapeTypeString += parameters.at(0) + "+" + parameters.at(1) + "-" + parameters.at(2);
+            m_currentVMLProperties.normalFormulas += parameters.at(0) + "+" + parameters.at(1) + "-" + parameters.at(2);
         }
         else if (command == "prod") {
-            m_currentVMLProperties.shapeTypeString += parameters.at(0) + "*" + parameters.at(1) + "/" + parameters.at(2);
+            m_currentVMLProperties.normalFormulas += parameters.at(0) + "*" + parameters.at(1) + "/" + parameters.at(2);
         }
         else if (command == "abs") {
-            m_currentVMLProperties.shapeTypeString += QString("abs(%1)").arg(parameters.at(0));
+            m_currentVMLProperties.normalFormulas += QString("abs(%1)").arg(parameters.at(0));
         }
         else if (command == "min") {
-            m_currentVMLProperties.shapeTypeString += QString("min(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.normalFormulas += QString("min(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "max") {
-            m_currentVMLProperties.shapeTypeString += QString("max(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.normalFormulas += QString("max(%1,%2)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "if") {
-            m_currentVMLProperties.shapeTypeString += QString("if(%1,%2,%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.normalFormulas += QString("if(%1,%2,%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sqrt") {
-            m_currentVMLProperties.shapeTypeString += QString("sqrt(%1)").arg(parameters.at(0));
+            m_currentVMLProperties.normalFormulas += QString("sqrt(%1)").arg(parameters.at(0));
         }
         else if (command == "mid") {
-            m_currentVMLProperties.shapeTypeString += QString("(%1+%2)/2").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.normalFormulas += QString("(%1+%2)/2").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "mod") {
-            m_currentVMLProperties.shapeTypeString += QString("sqrt(%1*%1+%2*%2+%3*%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.normalFormulas += QString("sqrt(%1*%1+%2*%2+%3*%3)").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "ellipse") {
-            m_currentVMLProperties.shapeTypeString += QString("%3-sqrt(1-(%1/%2)*(%1/%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.normalFormulas += QString("%3-sqrt(1-(%1/%2)*(%1/%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "atan2") { // converting to fd unit (degrees * 65536)
-            m_currentVMLProperties.shapeTypeString += QString("3754936*atan2(%2,%1)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.normalFormulas += QString("3754936*atan2(%2,%1)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "cosatan2") {
-            m_currentVMLProperties.shapeTypeString += QString("%1*cos(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.normalFormulas += QString("%1*cos(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sinatan2") {
-            m_currentVMLProperties.shapeTypeString += QString("%1*sin(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.normalFormulas += QString("%1*sin(atan2(%3,%2))").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sumangle") {
-            m_currentVMLProperties.shapeTypeString += QString("%1+%2*65536-%3*65536").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
+            m_currentVMLProperties.normalFormulas += QString("%1+%2*65536-%3*65536").arg(parameters.at(0)).arg(parameters.at(1)).arg(parameters.at(2));
         }
         else if (command == "sin") { // converting fd unit to radians
-            m_currentVMLProperties.shapeTypeString += QString("%1*sin(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.normalFormulas += QString("%1*sin(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "cos") {
-            m_currentVMLProperties.shapeTypeString += QString("%1*cos(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.normalFormulas += QString("%1*cos(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
         else if (command == "tan") {
-            m_currentVMLProperties.shapeTypeString += QString("%1*tan(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
+            m_currentVMLProperties.normalFormulas += QString("%1*tan(%2 * 0.000000266)").arg(parameters.at(0)).arg(parameters.at(1));
         }
     }
 
-    m_currentVMLProperties.shapeTypeString += "\" ";
-    m_currentVMLProperties.shapeTypeString += "/>";
+    m_currentVMLProperties.normalFormulas += "\" ";
+    m_currentVMLProperties.normalFormulas += "/>";
 
     ++m_currentVMLProperties.formulaIndex;
     readNext();
@@ -2105,7 +2082,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_f()
  - ink (Ink) §14.2.2.15
  - iscomment (Ink Annotation Flag) §14.5.2.1
  - lock (Shape Protections) §14.2.2.18
- - path (Shape Path) §14.1.2.14
+ - [done] path (Shape Path) §14.1.2.14
  - [done] shadow (Shadow Effect) §14.1.2.18
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
@@ -2182,29 +2159,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_currentVMLProperties.shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_currentVMLProperties.shapeTitle)
-    TRY_READ_ATTR_WITHOUT_NS(path)
-    TRY_READ_ATTR_WITHOUT_NS(adj)
-    TRY_READ_ATTR_WITHOUT_NS(coordsize)
-    if (!path.isEmpty()) {
-        m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
-        if (!adj.isEmpty()) {
-            QString tempModifiers = adj;
-            tempModifiers.replace(",,", ",0,");
-            tempModifiers.replace(',', " ");
-            m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").arg(tempModifiers);
-        }
-        if (!coordsize.isEmpty()) {
-            QString tempViewBox = "0 0 " + coordsize;
-            tempViewBox.replace(',', " ");
-            m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").arg(tempViewBox);
-        }
-        m_currentVMLProperties.extraShapeFormulas = QString();
-
-        m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
-            arg(convertToEnhancedPath(path, m_currentVMLProperties.extraShapeFormulas));
-        m_currentVMLProperties.shapeTypeString += ">";
-    }
+    handlePathValues(attrs);
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
@@ -2240,14 +2196,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 TRY_READ(wrap)
             }
             ELSE_TRY_READ_IF(formulas)
+            ELSE_TRY_READ_IF(path)
             SKIP_UNKNOWN
         }
-    }
-
-    // Case of a custom shape which is not defined in a shapetype
-    if (!path.isEmpty()) {
-        m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
-        m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
     }
 
     body = frameBuf.originalWriter();
@@ -2270,6 +2221,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     if (m_outputFrames) {
         if (isCustomShape && o_connectortype.isEmpty()) {
+            m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
+
+            QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
+            if (flip.contains("x")) {
+                m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\"";
+            }
+            if (flip.contains("y")) {
+                m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\"";
+            }
+            m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
+                arg(m_currentVMLProperties.modifiers);
+            m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").
+                arg(m_currentVMLProperties.viewBox);
+            m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
+                arg(m_currentVMLProperties.shapePath);
+            m_currentVMLProperties.shapeTypeString += ">";
+            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
+            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.normalFormulas;
+            m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
+
             body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
         }
         createFrameEnd();
@@ -2368,6 +2339,89 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
     }
 
     READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL path
+/*! path handler (Shape path)
+
+ Parent elements:
+ - arc (§14.1.2.1);
+ - background (Part 1, §17.2.1);
+ - curve (§14.1.2.3);
+ - group (§14.1.2.7);
+ - image (§14.1.2.10);
+ - line (§14.1.2.12);
+ - object (Part 1, §17.3.3.19);
+ - oval (§14.1.2.13);
+ - pict (§9.2.2.2);
+ - pict (§9.5.1);
+ - polyline (§14.1.2.15);
+ - rect (§14.1.2.16);
+ - roundrect (§14.1.2.17);
+ - [done] shape (§14.1.2.19);
+ - [done] shapetype (§14.1.2.20)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_path()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(shadowok)
+    if (shadowok == "f" || shadowok == "false") {
+        m_currentVMLProperties.shadowed = false;
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(fillok)
+    if (fillok == "f" || fillok == "false") {
+        m_currentVMLProperties.filled = false;
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(strokeok)
+    if (strokeok == "f" || strokeok == "false") {
+        m_currentVMLProperties.stroked = false;
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(v)
+    if (!v.isEmpty()) {
+        m_currentVMLProperties.extraShapeFormulas = QString();
+        m_currentVMLProperties.shapePath = convertToEnhancedPath(v, m_currentVMLProperties.extraShapeFormulas);
+    }
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
+void MSOOXML_CURRENT_CLASS::handlePathValues(const QXmlStreamAttributes& attrs)
+{
+    TRY_READ_ATTR_WITHOUT_NS(adj)
+    if (!adj.isEmpty()) {
+        QString tempModifiers = adj;
+        if (tempModifiers.at(0) == ',') {
+            tempModifiers.prepend("0");
+        }
+        tempModifiers.replace(",,", ",0,");
+        tempModifiers.replace(',', " ");
+        m_currentVMLProperties.modifiers = tempModifiers;
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(coordsize)
+    if (!coordsize.isEmpty()) {
+        QString tempViewBox = "0 0 " + coordsize;
+        tempViewBox.replace(',', " ");
+        m_currentVMLProperties.viewBox = tempViewBox;
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(path)
+    if (!path.isEmpty()) {
+        m_currentVMLProperties.extraShapeFormulas = QString();
+        m_currentVMLProperties.shapePath = convertToEnhancedPath(path, m_currentVMLProperties.extraShapeFormulas);
+    }
 }
 
 #undef MSOOXML_CURRENT_NS

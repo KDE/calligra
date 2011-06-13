@@ -45,6 +45,7 @@ protected:
     KoFilter::ConversionStatus read_VML_background();
     KoFilter::ConversionStatus read_shapetype();
     KoFilter::ConversionStatus read_formulas();
+    KoFilter::ConversionStatus read_path();
     KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_shape();
     KoFilter::ConversionStatus read_imagedata();
@@ -53,6 +54,7 @@ protected:
     KoFilter::ConversionStatus read_stroke();
     KoFilter::ConversionStatus read_shadow();
 
+    void handlePathValues(const QXmlStreamAttributes& attrs);
     void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
     void takeDefaultValues();
 
@@ -112,6 +114,10 @@ protected:
         int formulaIndex;
         QString shapeTypeString;
         QString extraShapeFormulas;
+        QString normalFormulas;
+        QString modifiers;
+        QString viewBox;
+        QString shapePath;
         int extraFormulaIndex;
 
         // Parameters for group shape situation
