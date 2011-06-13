@@ -83,6 +83,7 @@
                 
       bool m_hasAppData;
       QString m_appData;
+      QMap<const KoShape*, QString> m_shapeIds;//For testing this is made protected. Will be private as before,finally.
       
   private:
       
@@ -128,7 +129,7 @@
       unsigned int m_indent;
       unsigned int m_indent2;
 
-      QMap<const KoShape*, QString> m_shapeIds;
+      //QMap<const KoShape*, QString> m_shapeIds;
       QList<KoShape*> m_toplevelShapes;
       QTransform m_userSpaceMatrix;
       QSizeF m_pageSize;
