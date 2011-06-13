@@ -342,10 +342,44 @@ void SvgWriter_generic::saveRectangle(RectangleShape * rectangle)
     *m_body << "/>" << endl;
     }
 
+static QString createUID(const KoShape* obj)
+{
+     static unsigned int rectCount = 0;
+     static unsigned int groupCount = 0;
+     static unsigned int circleCount = 0;
+     static unsigned int textCount = 0;
+     static unsigned int pathCount = 0;
+     static unsigned int layerCount = 0;
+     static unsigned int imageCount = 0;
+     
+     const KoShapeLayer *layer = dynamic_cast<const KoShapeLayer*>(obj);
+        if(layer) {
+           return "Layer" + QString().setNum(layerCount++);
+           } else {
+               const KoShapeGroup *group = dynamic_cast<const KoShapeGroup*>(obj);
+               if (group) {
+                  return "Group" + QString().setNum(groupCount++);
+               }
+           }
+           
+     if(obj->shapeId() == RectangleShapeId) {
+       return "RectangleShape" + QString().setNum(rectCount++);
+     } else if(obj->shapeId() == EllipseShapeId) {
+           return "EllipseShape" + QString().setNum(circleCount++);
+     } else if(obj->shapeId() == ArtisticTextShapeID) {//Plain text doent work so far
+               return "ArtisticTextShape" + QString().setNum(textCount++);
+     } else if(obj->shapeId() == "PictureShape") {
+                 return "PictureShape" + QString().setNum(imageCount++);
+     } else {
+           return "PathShape" + QString().setNum(pathCount++);
+     }
+    
+     }
+
 static QString createUID()
 {
      static unsigned int nr = 0;
-
+     
      return "defitem" + QString().setNum(nr++);
 }
 
@@ -353,7 +387,7 @@ QString SvgWriter_generic::createID(const KoShape * obj)
 {
     QString id;
     if (! m_shapeIds.contains(obj)) {
-        id = obj->name().isEmpty() ? createUID() : obj->name();
+        id = obj->name().isEmpty() ? createUID(obj) : obj->name();
         m_shapeIds.insert(obj, id);
      } else {
         id = m_shapeIds[obj];
