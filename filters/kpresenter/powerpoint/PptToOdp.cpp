@@ -1310,28 +1310,47 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             quint32 fillType = ds.fillType();
             style.addProperty("draw:fill", getFillType(fillType), dp);
             // draw:fill-color
-            if (fillType == 0) {
-                // only set the color if the fill type is 'solid' because OOo ignores
-                // fill='none' if the color is set
-                QColor tmp = odrawtoodf.processOfficeArtCOLORREF(ds.fillColor(), ds);
-                style.addProperty("draw:fill-color", tmp.name(), dp);
+            switch (fillType) {
+            case msofillSolid:
+            {
+                QColor color = odrawtoodf.processOfficeArtCOLORREF(ds.fillColor(), ds);
+                style.addProperty("draw:fill-color", color.name(), dp);
+                break;
             }
             // draw:fill-gradient-name
-            else if ((fillType >= 4) && (fillType <= 8)) {
+            case msofillShade:
+            case msofillShadeCenter:
+            case msofillShadeShape:
+            case msofillShadeScale:
+            case msofillShadeTitle:
+            {
                 KoGenStyle gs(KoGenStyle::LinearGradientStyle);
                 odrawtoodf.defineGradientStyle(gs, ds);
-                QString tmp = styles.insert(gs);
-                style.addProperty("draw:fill-gradient-name", tmp, dp);
+                QString gname = styles.insert(gs);
+                style.addProperty("draw:fill-gradient-name", gname, dp);
+                break;
             }
             // draw:fill-hatch-name
             // draw:fill-hatch-solid
             // draw:fill-image-height
             // draw:fill-image-name
-            quint32 fillBlip = ds.fillBlip();
-            const QString fillImagePath = getPicturePath(fillBlip);
-            if (!fillImagePath.isEmpty()) {
-                style.addProperty("draw:fill-image-name",
-                                  "fillImage" + QString::number(fillBlip), dp);
+            case msofillPattern:
+            case msofillTexture:
+            case msofillPicture:
+            {
+                quint32 fillBlip = ds.fillBlip();
+                const QString fillImagePath = getPicturePath(fillBlip);
+                if (!fillImagePath.isEmpty()) {
+                    style.addProperty("draw:fill-image-name",
+                                      "fillImage" + QString::number(fillBlip), dp);
+                    style.addProperty("style:repeat", getRepeatStyle(fillType), dp);
+                }
+                break;
+            }
+            //TODO:
+            case msofillBackground:
+            default:
+                break;
             }
             // draw:fill-image-ref-point-x
             // draw:fill-image-ref-point-y
@@ -1340,10 +1359,11 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             // draw:gradient-step-count
             // draw:opacity-name
             // draw:opacity
+            style.addProperty("draw:opacity",
+                              percent(100.0 * toQReal(ds.fillOpacity())), dp);
             // draw:secondary-fill-color
             // draw:tile-repeat-offset
-            // style:repeat
-            style.addProperty("style:repeat", getRepeatStyle(fillType));
+            // style:repeat // handled for image see draw:fill-image-name
         } else {
             style.addProperty("draw:fill", "none", dp);
         }
