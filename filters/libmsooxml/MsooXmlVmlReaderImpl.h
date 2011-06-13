@@ -550,6 +550,9 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
         if (strokeweight.at(0) == '.') {
             m_currentVMLProperties.strokeWidth = "0" + strokeweight;
         }
+        else {
+            m_currentVMLProperties.strokeWidth = strokeweight;
+        }
     }
 
     TRY_READ_ATTR_WITHOUT_NS(type)
@@ -2274,6 +2277,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
         }
     }
     else if (type == "through" || type == "square" || type == "tight") {
+        if (type == "square" || type == "tight") {
+            m_currentDrawStyle->addProperty("style:wrap-countour-mode", "outside");
+            m_currentDrawStyle->addProperty("style:wrap-countour", "false");
+        }
+        else {
+            m_currentDrawStyle->addProperty("style:wrap-countour-mode", "full");
+            m_currentDrawStyle->addProperty("style:wrap-countour", "true");
+        }
         if (side.isEmpty()) {
             m_currentDrawStyle->addProperty("style:wrap", "parallel");
         }
