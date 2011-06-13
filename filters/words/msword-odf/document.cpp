@@ -1019,13 +1019,8 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
 //     case msofillShadeTitle:
 //
     //TODO:
-    case msofillPattern:
-    case msofillTexture:
-//     case msofillShade:
-//     case msofillShadeCenter:
-//     case msofillShadeShape:
-//     case msofillShadeScale:
-//     case msofillShadeTitle:
+//     case msofillPattern:
+//     case msofillTexture:
 //
     case msofillPicture:
     {
