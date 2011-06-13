@@ -251,6 +251,8 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
             if (!fillImagePath.isEmpty()) {
                 style.addProperty("draw:fill-image-name",
                                   "fillImage" + QString::number(fillBlip), gt);
+
+                style.addProperty("style:repeat", getRepeatStyle(fillType), gt);
             }
             break;
         }
@@ -423,7 +425,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:protect
     // style:rel-height
     // style:rel-width
-    // style:repeat
+    // style:repeat // handled for image see draw:fill-image-name
     // style:run-through
     // style:shadow
     // style:vertical-pos (NOTE: tests on PPT, XLS required)
