@@ -624,6 +624,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(v, group)
             ELSE_TRY_READ_IF_NS(v, oval)
+            ELSE_TRY_READ_IF_NS(v, line)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }

@@ -38,6 +38,7 @@ protected:
     // v namespace:
     KoFilter::ConversionStatus genericReader();
     KoFilter::ConversionStatus read_oval();
+    KoFilter::ConversionStatus read_line();
     KoFilter::ConversionStatus read_roundrect();
     KoFilter::ConversionStatus read_rect();
     KoFilter::ConversionStatus read_fill();

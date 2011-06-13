@@ -605,6 +605,124 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL line
+//! line handler (Line)
+/*
+ Parent elements:
+ - background (Part 1, §17.2.1)
+ - [done] group (§14.1.2.7)
+ - object (Part 1, §17.3.3.19)
+ - [done] pict (§9.2.2.2)
+ - [done] pict (§9.5.1)
+
+ Child elements:
+ - anchorlock (Anchor Location Is Locked) §14.3.2.1
+ - borderbottom (Bottom Border) §14.3.2.2
+ - borderleft (Left Border) §14.3.2.3
+ - borderright (Right Border) §14.3.2.4
+ - bordertop (Top Border) §14.3.2.5
+ - callout (Callout) §14.2.2.2
+ - ClientData (Attached Object Data) §14.4.2.12
+ - clippath (Shape Clipping Path) §14.2.2.3
+ - extrusion (3D Extrusion) §14.2.2.11
+ - [done] fill (Shape Fill Properties) §14.1.2.5
+ - formulas (Set of Formulas) §14.1.2.6
+ - handles (Set of Handles) §14.1.2.9
+ - imagedata (Image Data) §14.1.2.11
+ - lock (Shape Protections) §14.2.2.18
+ - path (Shape Path) §14.1.2.14
+ - [done] shadow (Shadow Effect) §14.1.2.18
+ - signatureline (Digital Signature Line) §14.2.2.30
+ - skew (Skew Transform) §14.2.2.31
+ - [done] stroke (Line Stroke Settings) §14.1.2.21
+ - [done] textbox (Text Box) §14.1.2.22
+ - textdata (VML Diagram Text) §14.5.2.2
+ - textpath (Text Layout Path) §14.1.2.23
+ - [done] wrap (Text Wrapping) §14.3.2.6
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(style)
+    RETURN_IF_ERROR(parseCSS(style))
+
+    takeDefaultValues();
+    handleStrokeAndFill(attrs);
+
+    MSOOXML::Utils::XmlWriteBuffer frameBuf;
+    body = frameBuf.setWriter(body);
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    if (m_moveToStylesXml) {
+        m_currentDrawStyle->setAutoStyleInStylesDotXml(true);
+    }
+
+    m_currentVMLProperties.wrapRead = false;
+
+    READ_ATTR_WITHOUT_NS(from)
+    READ_ATTR_WITHOUT_NS(to)
+    int index = from.indexOf(',');
+    QString temp = from.left(index);
+    if (temp == "0") {
+        temp = "0pt";
+    }
+    int fromX = temp.left(2).toInt();
+    m_currentVMLProperties.vmlStyle["left"] = temp;
+    temp = from.mid(index + 1);
+    if (temp == "0") {
+        temp = "0pt";
+    }
+    int fromY = temp.left(2).toInt();
+    m_currentVMLProperties.vmlStyle["top"] = temp;
+    index = to.indexOf(',');
+    temp = to.left(index);
+    if (temp == "0") {
+        temp = "0pt";
+    }
+    QString unit = temp.right(2);
+    int toX = temp.left(temp.size() - 2).toInt() - fromX;
+    m_currentVMLProperties.vmlStyle["width"] = QString("%1%2").arg(toX).arg(unit);
+    temp = to.mid(index + 1);
+    if (temp == "0") {
+        temp = "0pt";
+    }
+    unit = temp.right(2);
+    int toY = temp.left(temp.size() - 2).toInt() - fromY;
+    m_currentVMLProperties.vmlStyle["height"] = QString("%1%2").arg(toY).arg(unit);
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(textbox)
+            ELSE_TRY_READ_IF(stroke)
+            ELSE_TRY_READ_IF(shadow)
+            else if (qualifiedName() == "w10:wrap") {
+                m_currentVMLProperties.wrapRead = true;
+                TRY_READ(wrap)
+            }
+            SKIP_UNKNOWN
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    body = frameBuf.originalWriter();
+
+    createFrameStart(StraightConnectorStart);
+
+    (void)frameBuf.releaseWriter();
+
+    createFrameEnd();
+
+    popCurrentDrawStyle();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL rect
 //! rect handler (Rectangle)
 /*! ECMA-376 Part 4, 14.1.2.16, p.449.
@@ -613,10 +731,10 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
 
  Parent elements:
  - background (Part 1, §17.2.1)
- - group (§14.1.2.7)
+ - [done] group (§14.1.2.7)
  - object (Part 1, §17.3.3.19)
  - [done] pict (§9.2.2.2)
- - pict (§9.5.1)
+ - [done] pict (§9.5.1)
 
  Child elements:
  - anchorlock (Anchor Location Is Locked) §14.3.2.1
@@ -705,7 +823,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
  - curve (§14.1.2.3);
  - [done] group (§14.1.2.7);
  - image (§14.1.2.10);
- - line (§14.1.2.12);
+ - [done] line (§14.1.2.12);
  - object (Part 1, §17.3.3.19);
  - [done] oval (§14.1.2.13);
  - pict (§9.2.2.2);
@@ -772,7 +890,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
  - curve (§14.1.2.3);
  - [done] group (§14.1.2.7);
  - image (§14.1.2.10);
- - line (§14.1.2.12);
+ - [done] line (§14.1.2.12);
  - object (Part 1, §17.3.3.19);
  - [done] oval (§14.1.2.13);
  - pict (§9.2.2.2);
@@ -901,7 +1019,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
  - handles (Set of Handles) §14.1.2.9
  - image (Image File) §14.1.2.10
  - imagedata (Image Data) §14.1.2.11
- - line (Line) §14.1.2.12
+ - [done] line (Line) §14.1.2.12
  - lock (Shape Protections) §14.2.2.18
  - [done] oval (Oval) §14.1.2.13
  - path (Shape Path) §14.1.2.14
@@ -1017,6 +1135,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
                 m_VMLShapeStack.push(m_currentVMLProperties);
                 m_currentVMLProperties.insideGroup = true;
                 TRY_READ(group)
+                m_currentVMLProperties = m_VMLShapeStack.pop();
+            }
+            else if (name() == "line") {
+                m_VMLShapeStack.push(m_currentVMLProperties);
+                m_currentVMLProperties.insideGroup = true;
+                TRY_READ(line)
                 m_currentVMLProperties = m_VMLShapeStack.pop();
             }
             ELSE_TRY_READ_IF(fill)
@@ -1148,7 +1272,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
  - curve (§14.1.2.3)
  - [done] group (§14.1.2.7)
  - image (§14.1.2.10)
- - line (§14.1.2.12)
+ - [done] line (§14.1.2.12)
  - object (Part 1, §17.3.3.19)
  - [done] oval (§14.1.2.13)
  - pict (§9.2.2.2)
