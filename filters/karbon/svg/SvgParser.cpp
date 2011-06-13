@@ -56,6 +56,7 @@
 #include <KoClipPath.h>
 
 #include <KDebug>
+#include <QDebug>
 
 #include <QtGui/QColor>
 
@@ -1490,6 +1491,11 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
     return shapes;
 }
 
+void SvgParser::parseAppData()
+{
+    qDebug("Parsing app data");
+}
+
 QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
 {
     QList<KoShape*> shapes;
@@ -1520,6 +1526,10 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
             }
         }
 
+        if(b.tagName() == "calligra:frame") { //Script will always be saved by Stage
+          parseAppData();                    //No need to parse the script
+        }
+                
         if (b.tagName() == "svg") {
             shapes += parseSvg(b);
         } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {

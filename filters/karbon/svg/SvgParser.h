@@ -146,6 +146,7 @@ protected:
     /// Returns inherited attribute value for specified element
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
 
+    void parseAppData();
 private:
     QSizeF m_documentSize;
     SvgLoadingContext m_context;

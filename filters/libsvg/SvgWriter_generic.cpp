@@ -1,37 +1,37 @@
- /* This file is part of the KDE project
-        Copyright (C) 2002 Lars Siebold <khandha5@gmx.net>
-        Copyright (C) 2002-2003,2005 Rob Buis <buis@kde.org>
-        Copyright (C) 2002,2005-2006 David Faure <faure@kde.org>
-        Copyright (C) 2002 Werner Trobin <trobin@kde.org>
-        Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
-        Copyright (C) 2004 Nicolas Goutte <nicolasg@snafu.de>
-        Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
-        Copyright (C) 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
-        Copyright (C) 2005 Thomas Zander <zander@kde.org>
-        Copyright (C) 2005,2007-2008 Jan Hambrecht <jaham@gmx.net>
-        Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
-        Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
-        Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
-        Copyright (C) 2006 Laurent Montel <montel@kde.org>
-        Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
-        Copyright (C) 2006 Ariya Hidayat <ariya@kde.org>
-        Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+/* This file is part of the KDE project
+    Copyright (C) 2002 Lars Siebold <khandha5@gmx.net>
+    Copyright (C) 2002-2003,2005 Rob Buis <buis@kde.org>
+    Copyright (C) 2002,2005-2006 David Faure <faure@kde.org>
+    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
+    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+    Copyright (C) 2004 Nicolas Goutte <nicolasg@snafu.de>
+    Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
+    Copyright (C) 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+    Copyright (C) 2005 Thomas Zander <zander@kde.org>
+    Copyright (C) 2005,2007-2008 Jan Hambrecht <jaham@gmx.net>
+    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
+    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+    Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
+    Copyright (C) 2006 Laurent Montel <montel@kde.org>
+    Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
+    Copyright (C) 2006 Ariya Hidayat <ariya@kde.org>
+    Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
         
-        This library is free software; you can redistribute it and/or
-        modify it under the terms of the GNU Library General Public
-        License as published by the Free Software Foundation; either
-        version 2 of the License, or (at your option) any later version.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
 
-        This library is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-        Library General Public License for more details.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
 
-        You should have received a copy of the GNU Library General Public License
-        along with this library; see the file COPYING.LIB.  If not, write to
-        the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-      * Boston, MA 02110-1301, USA.
-      */
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+  * Boston, MA 02110-1301, USA.
+  */
 
 
 #include "SvgWriter_generic.h"
@@ -122,7 +122,7 @@ bool SvgWriter_generic::save(const QString &filename, bool writeInlineImages)
       }
 
 
-void SvgWriter_generic::startDocument()
+void SvgWriter_generic::startDocument()//TODO:App specific header should be written by the app itself
 {
     // standard header:
     *m_defs <<
@@ -195,27 +195,6 @@ void SvgWriter_generic::saveToplevelShapes()
           }
      }
 
-/*bool SvgWriter_generic::endDocument(const QString defs, const QString body)
-{
-    // end tag:
-    printIndentation(m_defs, --m_indent2);
-    *m_defs << "</defs>" << endl; 
-         
-    if(m_hasAppData){
-    *m_body << m_appData; 
-       }
-    *m_body << "</svg>" << endl;
-        
-    *m_stream << defs; 
-    *m_stream << body;
-              
-    delete m_stream;
-    delete m_defs;
-    delete m_body;
-                    
-    return true;
-    }
-*/
 void SvgWriter_generic::saveLayer(KoShapeLayer * layer)
 {
     printIndentation(m_body, m_indent++);
@@ -257,8 +236,11 @@ void SvgWriter_generic::saveGroup(KoShapeGroup * group)
 
     printIndentation(m_body, --m_indent);
     *m_body << "</g>" << endl;
-          //TODO:saveAppData()
-   }
+     
+    if(m_hasAppData) {
+         saveAppData(dynamic_cast<KoShape*>(group)); //virtual fucntion. Do be defined by the child class
+         }    
+}
 
 void SvgWriter_generic::saveShape(KoShape * shape)
 {
@@ -289,8 +271,7 @@ void SvgWriter_generic::saveShape(KoShape * shape)
       if(m_hasAppData) {
          saveAppData(shape); //virtual fucntion. Do be defined by the child class
          }
-          
-}
+ }
       
 void SvgWriter_generic::savePath(KoPathShape * path)
 {
