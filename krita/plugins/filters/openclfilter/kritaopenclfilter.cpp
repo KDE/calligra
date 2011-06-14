@@ -35,8 +35,6 @@ KritaOpenCLFilter::KritaOpenCLFilter() : KisFilter(id(), categoryOther(), i18n("
     setSupportsAdjustmentLayers(false);
     setSupportsThreading(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
-    
-    // OpenCL 
 }
 
 KisConfigWidget * KritaOpenCLFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP image) const
@@ -57,17 +55,38 @@ void KritaOpenCLFilter::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                            ) const
 {
+    /* GET KERNEL CODE */
     QVariant text;
     config->getProperty("kernel", text);
-    QString kernel = text.toString();
+    QString kernelCode = text.toString();
     
-    qDebug() << "String: ";
-    qDebug() << kernel;
-    // Iterating over every pixel
-    KisRectIteratorSP iterator = device->createRectIteratorNG(0, 0, 2, 2);
-    //int currentPixel = 0;
+    if(kernelCode.isEmpty() || kernelCode.size() <= 20) {
+      return;
+    }
+    
+    /* CREATE A KERNEL */
+    QCLContext context;                                                                 // context
+    if(!context.create(QCLDevice::GPU)) {
+      qFatal("Could not create OpenCL context");
+    }
+    
+    QCLProgram program = context.buildProgramFromSourceCode(qPrintable(kernelCode));   // program
+    QCLKernel kritaKernel = program.createKernel("kritaKernel");
+    kritaKernel.setGlobalWorkSize(100);
+    
+    /* CREATE DATA STRUCTURES FOR KERNEL */
+    QCLVector<int> red = context.createVector<int>(100);
+    QCLVector<int> red_output = context.createVector<int>(100);
+    
+    /* SUPPLY THE DATA TO KERNEL */
+    KisRectIteratorSP iterator = device->createRectIteratorNG(0, 0, 10, 10);
+    int currentPixel = 0;
     do {
       const quint8* pixel = iterator->rawData();
-      //currentPixel+1;
+      red[currentPixel] = *pixel;
+      currentPixel+1;
     } while (iterator->nextPixel());
+    
+    /* APPLY KERNEL */
+    kritaKernel(red, red_output);
 }

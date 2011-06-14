@@ -45,11 +45,6 @@ public:
     
     virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP ) const;
-    
-private:
-  QCLContext context;
-  QCLProgram program;
-  QCLKernel kernel;
 };
 
 #endif
