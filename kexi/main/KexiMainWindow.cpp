@@ -1565,6 +1565,10 @@ tristate KexiMainWindow::startup()
                    Kexi::startupHandler().importActionData().fileName
                );
         break;
+    case KexiStartupHandler::ShowWelcomeScreen:
+        //! @todo show welcome screen as soon as is available
+        QTimer::singleShot(1, this, SLOT(slotProjectOpenRecent()));
+        break;
     default:
         d->updatePropEditorVisibility(Kexi::NoViewMode);
     }

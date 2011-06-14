@@ -637,6 +637,13 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     if (!m_projectData) {
         cdata = KexiDB::ConnectionData(); //clear
 
+        m_action = ShowWelcomeScreen;
+        return true;
+#ifdef __GNUC__
+#warning remove startup dialog code
+#else
+#pragma WARNING( remove startup dialog code )
+#endif
         if (args->isSet("skip-startup-dialog") || !KexiStartupDialog::shouldBeShown())
             return true;
 

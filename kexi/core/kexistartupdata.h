@@ -36,6 +36,7 @@ public:
         CreateFromTemplate,
         OpenProject,
         ImportProject,
+        ShowWelcomeScreen,
         Exit
     };
 
