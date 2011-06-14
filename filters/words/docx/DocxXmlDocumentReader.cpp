@@ -1769,6 +1769,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sdtContent()
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(smartTag)
+            ELSE_TRY_READ_IF(tc)
             SKIP_UNKNOWN
         }
     }
@@ -4745,7 +4746,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
  - permEnd (Range Permission End) §17.13.7.1
  - permStart (Range Permission Start) §17.13.7.2
  - proofErr (Proofing Error Anchor) §17.13.8.1
- - sdt (Cell-Level Structured Document Tag) §17.5.2.32
+ - [done] sdt (Cell-Level Structured Document Tag) §17.5.2.32
  - tblPrEx (Table-Level Property Exceptions) §17.4.61
  - tc (Table Cell) §17.4.66
  - [done]trPr (Table Row Properties) §17.4.82
@@ -4765,6 +4766,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
             ELSE_TRY_READ_IF(trPr)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(sdt)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
