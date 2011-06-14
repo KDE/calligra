@@ -701,6 +701,12 @@ QString ODrawToOdf::defineDashStyle(quint32 lineDashing, KoGenStyles& styles)
 
 QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
 {
+    static QRgb systemColors[25] = {
+        0xc0c0c0, 0x008080, 0x000080, 0x808080, 0xc0c0c0, 0xffffff, 0x000000,
+        0x000000, 0x000000, 0xffffff, 0xc0c0c0, 0xc0c0c0, 0x808080, 0x000080,
+        0xffffff, 0xc0c0c0, 0x808080, 0x808080, 0x000000, 0xc0c0c0, 0xffffff,
+        0x000000, 0xc0c0c0, 0x000000, 0xffffc0
+    };
     //TODO: implement all cases!!!
     QColor ret;
     MSO::OfficeArtCOLORREF tmp;
@@ -710,62 +716,76 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
     // 0x00F0 map directly to system colors.  Table [1] specifies values that
     // have special meaning, [1] MS-ODRAW 2.2.2
     if (c.fSysIndex) {
+        if (c.red >= 0xF0) {
+            switch (c.red) {
+            // Use the fill color of the shape.
+            case 0xF0:
+                tmp = ds.fillColor();
+                break;
+            // If the shape contains a line, use the line color of the
+            // shape. Otherwise, use the fill color.
+            case 0xF1:
+            {
+                if (ds.fLine()) {
+                    tmp = ds.lineColor();
+                } else {
+                    tmp = ds.fillColor();
+                }
+                break;
+            }
+            // Use the line color of the shape.
+            case 0xF2:
+                tmp = ds.lineColor();
+                break;
+            // Use the shadow color of the shape.
+            case 0xF3:
+                tmp = ds.shadowColor();
+                break;
+            // TODO: Use the current, or last-used, color.
+            case 0xF4:
+                qWarning() << "red: Unhandled fSysIndex 0xF4!";
+                break;
+            // Use the fill background color of the shape.
+            case 0xF5:
+                tmp  = ds.fillBackColor();
+                break;
+            // TODO: Use the line background color of the shape.
+            case 0xF6:
+                qWarning() << "red: Unhandled fSysIndex 0xF6!";
+                break;
+            // If the shape contains a fill, use the fill color of the
+            // shape. Otherwise, use the line color.
+            case 0xF7:
+            {
+                if (ds.fFilled()) {
+                    tmp = ds.fillColor();
+                } else {
+                    tmp = ds.lineColor();
+                }
+                break;
+            }
+            default:
+                qWarning() << "red: Unhandled fSysIndex!" << c.red;
+                break;
+            }
+        } else if (c.green == 0) {
+            tmp = c;
+            // system colors
+            if (c.red < 25) {
+                const QRgb& col = systemColors[c.red];
+                tmp.red = qRed(col);
+                tmp.green = qGreen(col);
+                tmp.blue = qBlue(col);
+            } else {
+                qWarning() << "red: Unhandled system color" << c.red;
+            }
+        }
 
-        switch (c.red) {
-        // Use the fill color of the shape.
-        case 0xF0:
-            tmp = ds.fillColor();
-            break;
-        // If the shape contains a line, use the line color of the
-        // shape. Otherwise, use the fill color.
-        case 0xF1:
-        {
-            if (ds.fLine()) {
-                tmp = ds.lineColor();
-            } else {
-                tmp = ds.fillColor();
-            }
-            break;
-        }
-        // Use the line color of the shape.
-        case 0xF2:
-            tmp = ds.lineColor();
-            break;
-        // Use the shadow color of the shape.
-        case 0xF3:
-            tmp = ds.shadowColor();
-            break;
-        // TODO: Use the current, or last-used, color.
-        case 0xF4:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        // Use the fill background color of the shape.
-        case 0xF5:
-            tmp  = ds.fillBackColor();
-            break;
-        // TODO: Use the line background color of the shape.
-        case 0xF6:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        // If the shape contains a fill, use the fill color of the
-        // shape. Otherwise, use the line color.
-        case 0xF7:
-        {
-            if (ds.fFilled()) {
-                tmp = ds.fillColor();
-            } else {
-                tmp = ds.lineColor();
-            }
-            break;
-        }
-        default:
-            qWarning() << "red: Unhandled fSysIndex!";
-            break;
-        }
         ret = client->toQColor(tmp);
         qreal p = c.blue / (qreal) 255;
 
-        switch (c.green) {
+        switch (c.green & 0xF) {
+        case 0x00: break; // do nothing
         // Darken the color by the value that is specified in the blue field.
         // A blue value of 0xFF specifies that the color is to be left
         // unchanged, whereas a blue value of 0x00 specifies that the color is
@@ -801,12 +821,19 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
         case 0x04:
         case 0x05:
         case 0x06:
-        case 0x20:
-        case 0x40:
-        case 0x80:
         default:
-            qWarning() << "green: Unhandled fSysIndex!";
+            qWarning() << "green: Unhandled fSysIndex!" << c.green;
             break;
+        }
+        // TODO
+        if (c.green & 0x20) {
+            qWarning() << "green: unhandled 0x20";
+        }
+        if (c.green & 0x40) {
+            qWarning() << "green: unhandled 0x40";
+        }
+        if (c.green & 0x80) {
+            qWarning() << "green: unhandled 0x80";
         }
     } else {
         ret = client->toQColor(c);
@@ -942,7 +969,7 @@ const char* getVerticalRel(quint32 posRelV)
     case 2: //msoprvText
         return "paragraph";
     case 3: //msoprvLine
-        return "line";
+        return "char";
     default:
         return "page-content";
     }

@@ -1011,6 +1011,17 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         }
         break;
     }
+    //TODO:
+//     case msofillShade:
+//     case msofillShadeCenter:
+//     case msofillShadeShape:
+//     case msofillShadeScale:
+//     case msofillShadeTitle:
+//
+    //TODO:
+//     case msofillPattern:
+//     case msofillTexture:
+//
     case msofillPicture:
     {
         // picture can be stored in OfficeArtBStoreContainer or in fillBlip_complex if complex = true
@@ -1034,6 +1045,8 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         }
         break;
     }
+    //TODO:
+//     case msofillBackground:
     default:
         break;
     }
