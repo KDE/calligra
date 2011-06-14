@@ -51,6 +51,7 @@ const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesc
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
 const QUrl KoTextDocument::EndNotesFrameURL = QUrl("kotext://endnotesframe");
 const QUrl KoTextDocument::FootNotesFrameURL = QUrl("kotext://footnotesframe");
+const QUrl KoTextDocument::AnnotationsFrameURL = QUrl("kotext://annotationsframe");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
@@ -332,6 +333,26 @@ QTextFrame *KoTextDocument::endNotesFrame()
 
         resource.setValue(frame);
         m_document->addResource(KoTextDocument::EndNotesFrame, EndNotesFrameURL, resource);
+    }
+    return frame;
+}
+
+QTextFrame *KoTextDocument::annotationsFrame()
+{
+    QVariant resource = m_document->resource(KoTextDocument::AnnotationsFrame,
+            AnnotationsFrameURL);
+
+    QTextFrame *frame = resource.value<QTextFrame *>();
+
+    if (frame == 0) {
+        QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
+        QTextFrameFormat format;
+        format.setProperty(KoText::SubFrameType, KoText::AnnotationsFrameType);
+
+        frame = cursor.insertFrame(format);
+
+        resource.setValue(frame);
+        m_document->addResource(KoTextDocument::AnnotationsFrame, AnnotationsFrameURL, resource);
     }
     return frame;
 }

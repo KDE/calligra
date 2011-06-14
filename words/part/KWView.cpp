@@ -83,6 +83,8 @@
 #include <KoBookmark.h>
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
+#include <KoAnnotationSideBar.h>
+#include <KoBalloon.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -152,6 +154,12 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     if(win) {
         connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
     }
+    // temp comments section
+    KoAnnotationSideBar *commentbar = new KoAnnotationSideBar(this);
+    commentbar->addAnnotation(QString("This is a test"));
+    commentbar->setVisible(true);
+
+    layout->addWidget(commentbar);
 
     m_find = new KoFindText(texts, this);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);

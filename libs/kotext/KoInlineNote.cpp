@@ -76,7 +76,7 @@ void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
 
     QTextCursor cursor(motherFrame->lastCursorPosition());
     QTextFrameFormat format;
-    format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
+    format.setProperty(KoText::SubFrameType, KoText::AnnotationsFrameType);
 
     d->textFrame = cursor.insertFrame(format);
 }

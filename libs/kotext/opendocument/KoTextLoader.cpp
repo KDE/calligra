@@ -1448,14 +1448,18 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     if (textObjectManager) {
         QString className = noteElem.attributeNS(KoXmlNS::text, "note-class");
         KoInlineNote *note = 0;
-        int position = cursor.position(); // need to store this as the following might move is
+        int position = cursor.position(); // need to store this as the following might move it
         if (className == "footnote") {
             note = new KoInlineNote(KoInlineNote::Footnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
         }
-        else {
+        else if(className == "endnote") {
             note = new KoInlineNote(KoInlineNote::Endnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).endNotesFrame());
+        }
+        else {
+            note = new KoInlineNote(KoInlineNote::Annotation);
+            note->setMotherFrame(KoTextDocument(cursor.block().document()).annotationsFrame());
         }
         if (note->loadOdf(noteElem, d->context)) {
             cursor.setPosition(position); // restore the position before inserting the note
@@ -1519,7 +1523,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
         const bool isDeltaNS = ts.namespaceURI() == KoXmlNS::delta;
-        //        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
+        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
         if (node.isText()) {
             bool isLastNode = node.nextSibling().isNull();
             loadText(node.toText().data(), cursor, stripLeadingSpace,
@@ -1723,6 +1727,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             loadShapeWithHyperLink(ts, cursor);
         } else if (isDrawNS) {
             loadShape(ts, cursor);
+        } else if (isOfficeNS && (localName == "annotation" || localName == "annotation-end"))  {
+            loadNote(ts, cursor);
         } else {
             KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(ts, d->context);
 

@@ -334,7 +334,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
         if (listStyle == KoListStyle::ImageItem && imageCollection) {
             QFontMetricsF fm(data->labelFormat().font(), m_documentLayout->paintDevice());
-            qreal x = qMax(qreal(1), data->counterPosition().x());
+            qreal x = qMax((qreal)1.0, data->counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);
             qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight()/2 - height/2; // centered
