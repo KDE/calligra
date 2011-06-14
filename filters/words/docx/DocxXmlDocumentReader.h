@@ -69,6 +69,7 @@ protected:
     KoFilter::ConversionStatus read_body();
     KoFilter::ConversionStatus read_p();
     KoFilter::ConversionStatus read_r();
+    KoFilter::ConversionStatus read_smartTag();
     KoFilter::ConversionStatus read_rPr();
     KoFilter::ConversionStatus read_pPr();
     KoFilter::ConversionStatus read_vanish();

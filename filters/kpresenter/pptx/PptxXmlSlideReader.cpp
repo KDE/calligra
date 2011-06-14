@@ -685,11 +685,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txStyles()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bodyStyle)
             ELSE_TRY_READ_IF(titleStyle)
             ELSE_TRY_READ_IF(otherStyle)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -728,7 +729,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_notesStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -739,6 +740,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_notesStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -781,7 +783,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -792,6 +794,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -833,7 +836,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -899,7 +902,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -910,6 +913,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -952,7 +956,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -963,6 +967,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1003,10 +1008,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bg)
             ELSE_TRY_READ_IF(spTree)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1070,9 +1076,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMapOvr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, overrideClrMapping)
+            SKIP_UNKNOWN
         }
     }
 
@@ -1102,11 +1109,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(bgPr)
             ELSE_TRY_READ_IF(bgRef)
-//! @todo add ELSE_WRONG_FORMAT
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -1160,7 +1167,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, schemeClr)
             ELSE_TRY_READ_IF_NS(a, srgbClr)
@@ -1212,7 +1219,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ_IF_NS(a, solidFill)
@@ -1308,7 +1315,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (m_context->type == SlideLayout) {
                 shapeBuf = new QBuffer;
@@ -1424,7 +1431,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
 
    while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             // TRY_READ_IF(extLst)
 //! @todo add ELSE_WRONG_FORMAT
@@ -1467,7 +1474,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, bodyPr)
             ELSE_TRY_READ_IF_NS(a, lstStyle)
@@ -1537,7 +1544,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
             ELSE_TRY_READ_IF(nvGraphicFramePr)
@@ -1596,7 +1603,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "p:cNvPr") {
                 read_cNvPr_p();
@@ -1644,9 +1651,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(ph)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1670,7 +1678,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cNvPr_p()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE
@@ -1685,7 +1693,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_xfrm_p()
     const QXmlStreamAttributes attrs(attributes());
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:off")) {
                 TRY_READ(off);

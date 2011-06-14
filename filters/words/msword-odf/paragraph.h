@@ -54,16 +54,26 @@ public:
     void closeInnerParagraph();
 
     /**
-     * Set the named style from the stylesheet that applies to this paragraph.
-     */
-    void setParagraphStyle(const wvWare::Style* paragraphStyle);
-
-    /**
      * Set the paragraph properties (PAP) that apply to this paragraph.
      */
     void setParagraphProperties(wvWare::SharedPtr<const wvWare::ParagraphProperties> properties);
 
-    KoGenStyle* getOdfParagraphStyle();
+    /**
+     * Set the built-in (named) style that applies to the paragraph.
+     */
+    void setParagraphStyle(const wvWare::Style* paragraphStyle);
+
+    /**
+     * @return the built-in (named) style that applies to the paragraph.
+     */
+    const wvWare::Style* paragraphStyle() const { return m_paragraphStyle; }
+
+    /**
+     * @return the KoGenStyle of family Paragraph prepared for the current
+     * paragraph to other handlers.
+     */
+    KoGenStyle* koGenStyle() const { return m_odfParagraphStyle; };
+
     bool containsPageNumberField() const {
         return m_containsPageNumberField;
     }
@@ -82,8 +92,8 @@ public:
 
     void setCombinedCharacters(bool isCombined);
 
-    // Static functions for parsing wvWare properties and applying
-    // them onto a KoGenStyle.
+    // Static functions which process wvWare properties and store them into
+    // corresponding properties of a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool setDefaultAlign, Paragraph *paragraph,
@@ -93,7 +103,8 @@ public:
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
                                          bool suppressFontSize=false, bool combineCharacters=false,
-                                         const QString& bgColor=QString());
+                                         const QString& bgColor=QString(),
+                                         bool preserveFontColor = false);
 
     /**
      * Add a color item to the backgroud-color stack.
@@ -113,7 +124,7 @@ public:
     static void updateBgColor(const QString& val);
 
     /**
-     * @return the current background-color in the format "#RRGGBB".
+     * @return the background color in the format "#RRGGBB" or an empty string.
      */
     static QString currentBgColor(void) { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
 
@@ -165,6 +176,9 @@ private:
     //A stack for backgroud-colors, which represets a background color context
     //for automatic colors.
     static QStack<QString> m_bgColors;
+
+    //The font color, which represents the context for automatic colors.
+    static QString m_fontColor;
 
 }; //end class Paragraph
 #endif //PARAGRAPH_H
