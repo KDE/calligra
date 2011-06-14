@@ -969,7 +969,7 @@ const char* getVerticalRel(quint32 posRelV)
     case 2: //msoprvText
         return "paragraph";
     case 3: //msoprvLine
-        return "line";
+        return "char";
     default:
         return "page-content";
     }
