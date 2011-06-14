@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-*
 * Copyright (C) 2011 Paul Mendez <paulestebanms@gmail.com>
 *
 * This library is free software; you can redistribute it and/or
