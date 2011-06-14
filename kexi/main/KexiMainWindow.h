@@ -532,7 +532,7 @@ protected slots:
         void slotChildViewIsDetachedNow(QWidget*);*/
 
     //! internal - creates and initializes kexi project
-    void createKexiProject(KexiProjectData* new_data);
+    void createKexiProject(const KexiProjectData& new_data);
 
     /*! Handles event when user double clicked (or single -depending on settings)
      or pressed Return key on the part item in the navigator.

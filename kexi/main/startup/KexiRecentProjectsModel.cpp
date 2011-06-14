@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
-
+   
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -25,6 +25,8 @@
 
 #include <kexidb/utils.h>
 
+#include <KDateTime>
+
 KexiRecentProjectsModel::KexiRecentProjectsModel(
     const KexiRecentProjects& projects, QObject *parent)
  : QAbstractListModel(parent), m_projects(&projects)
@@ -46,6 +48,36 @@ QModelIndex KexiRecentProjectsModel::index(int row, int column,
     return createIndex(row, column, (void*)m_projects->list().at(row));
 }
 
+//! @return "opened x minutes ago" string or similar
+static QString openedString(const QDateTime& _opened)
+{
+    const KDateTime cur(KDateTime::currentUtcDateTime());
+    const KDateTime opened = KDateTime(_opened);
+    if (!opened.isValid() || opened >= cur)
+        return QString();
+    
+    const int days = opened.daysTo(cur);
+    if (days <= 1 && opened.secsTo(cur) < 24*60*60) {
+        const int minutes = opened.secsTo(cur) / 60;
+        const int hours = minutes / 60;
+        if (hours < 1) {
+            if (minutes == 0)
+                return i18n("Opened less than minute ago");
+            else
+                return i18np("Opened 1 minute ago", "Opened %1 minutes ago", minutes);
+        } else {
+            return i18np("Opened 1 hour ago", "Opened %1 hours ago", hours);
+        }
+    } else {
+        if (days < 30)
+            return i18np("Opened yesterday", "Opened %1 days ago", days);
+        if (days < 365)
+            return i18np("Opened over a month ago", "Opened %1 months ago", days / 30);
+        return i18np("Opened one year ago", "Opened %1 years ago", days / 365);
+    }
+    return QString();
+}
+
 QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
@@ -53,15 +85,28 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
     }
     KexiProjectData *pdata = static_cast<KexiProjectData*>(index.internalPointer());
     bool fileBased = !pdata->constConnectionData()->dbFileName().isEmpty();
+    QString opened(openedString(pdata->lastOpened()));
+    if (!opened.isEmpty())
+        opened.prepend('\n');
     switch (role) {
     case Qt::DisplayRole: {
         if (fileBased) {
-            return pdata->captionOrName() + "\n"
-                + pdata->constConnectionData()->fileName();
+            QString n = pdata->captionOrName();
+            if (n != pdata->constConnectionData()->dbFileName()) {
+                if (!n.isEmpty())
+                    n += '\n';
+                n += pdata->constConnectionData()->dbFileName();
+            }
+            return n
+                   + opened;
         }
         else {
-            return pdata->captionOrName() + "\n"
-                + pdata->connectionData()->serverInfoString();
+            QString n = pdata->captionOrName();
+            if (!n.isEmpty())
+                n += '\n';
+            return n
+                   + pdata->connectionData()->serverInfoString()
+                   + opened;
         }
     }
     case Qt::ToolTipRole:

@@ -61,7 +61,7 @@ void KexiCategorySingleSelectionModel::select(const QItemSelection& selection,
 KexiCategorizedView::KexiCategorizedView(QWidget *parent)
  : KCategorizedView(parent)
 {
-    setWordWrap(true);
+    //setWordWrap(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setMouseTracking(true);
     setViewMode(QListView::IconMode);

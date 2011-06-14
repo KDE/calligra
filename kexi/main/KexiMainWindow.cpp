@@ -1583,12 +1583,13 @@ static QString internalReason(KexiDB::Object *obj)
 
 tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
+    kDebug() << projectData;
     KexiProjectData *newProjectData = new KexiProjectData(projectData);
 // if (d->userMode) {
     //TODO: maybe also auto allow to open objects...
 //  return setupUserModeMode(newProjectData);
 // }
-    createKexiProject(newProjectData);
+    createKexiProject(*newProjectData);
     if (!newProjectData->connectionData()->savePassword
             && newProjectData->connectionData()->password.isEmpty()
             && newProjectData->connectionData()->fileName().isEmpty() //! @todo temp.: change this if there are file-based drivers requiring a password
@@ -3116,7 +3117,7 @@ void KexiMainWindow::slotProjectNew()
 }
 
 void
-KexiMainWindow::createKexiProject(KexiProjectData* new_data)
+KexiMainWindow::createKexiProject(const KexiProjectData& new_data)
 {
     d->prj = new KexiProject(new_data, this);
 // d->prj = ::createKexiProject(new_data);
@@ -3212,7 +3213,7 @@ void KexiMainWindow::createNewProject()
 
 tristate KexiMainWindow::createNewProject(KexiProjectData* projectData)
 {
-    createKexiProject(projectData);
+    createKexiProject(*projectData);
     tristate res = d->prj->create(true /*overwrite*/);
     if (res != true) {
         delete d->prj;
@@ -4744,7 +4745,7 @@ KexiMainWindow::setupUserMode(KexiProjectData *projectData)
     if (!projectData)
         return false;
 
-    createKexiProject(projectData); //initialize project
+    createKexiProject(*projectData); //initialize project
 // d->prj->setFinal(true);         //announce that we are in fianl mode
 
     tristate res = d->prj->open();             //try to open database

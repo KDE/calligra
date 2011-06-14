@@ -73,7 +73,7 @@ class KexiStartupHandler::Private
 public:
     Private()
             : passwordDialog(0)//, showConnectionDetailsExecuted(false)
-            , shortcutFile(0), connShortcutFile(0), connDialog(0), startupDialog(0) {
+            , connShortcutFile(0), connDialog(0), startupDialog(0) {
     }
 
     ~Private() {
@@ -90,7 +90,7 @@ public:
 
     KexiDBPasswordDialog* passwordDialog;
 //  bool showConnectionDetailsExecuted;
-    KexiDBShortcutFile *shortcutFile;
+    QString shortcutFileName;
     KexiDBConnShortcutFile *connShortcutFile;
     KexiDBConnectionDialog *connDialog;
     QString shortcutFileGroupKey;
@@ -481,19 +481,17 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 cdata.driverName = detectedDriverName;
                 if (cdata.driverName == "shortcut") {
                     //get information for a shortcut file
-                    d->shortcutFile = new KexiDBShortcutFile(cdata.fileName());
                     m_projectData = new KexiProjectData();
-                    if (!d->shortcutFile->loadProjectData(*m_projectData, &d->shortcutFileGroupKey)) {
+                    d->shortcutFileName = cdata.fileName();
+                    if (!m_projectData->load(d->shortcutFileName, &d->shortcutFileGroupKey)) {
                         KMessageBox::sorry(0, i18n("Could not open shortcut file\n\"%1\".",
                                                    QDir::convertSeparators(cdata.fileName())));
                         delete m_projectData;
                         m_projectData = 0;
-                        delete d->shortcutFile;
-                        d->shortcutFile = 0;
                         return false;
                     }
                     d->connDialog = new KexiDBConnectionDialog(0,
-                            *m_projectData, d->shortcutFile->fileName());
+                            *m_projectData, d->shortcutFileName);
                     connect(d->connDialog, SIGNAL(saveChanges()),
                             this, SLOT(slotSaveShortcutFileChanges()));
                     int res = d->connDialog->exec();
@@ -504,8 +502,6 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
                     delete d->connDialog;
                     d->connDialog = 0;
-                    delete d->shortcutFile;
-                    d->shortcutFile = 0;
 
                     if (res == QDialog::Rejected) {
                         delete m_projectData;
@@ -609,7 +605,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     if (createDB) {
         bool creationNancelled;
         KexiGUIMessageHandler gui;
-        KexiProject *prj = KexiProject::createBlankProject(creationNancelled, projectData(), &gui);
+        KexiProject *prj = KexiProject::createBlankProject(creationNancelled, *projectData(), &gui);
         bool ok = prj != 0;
         delete prj;
         if (creationNancelled)
@@ -623,7 +619,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         }
     } else if (dropDB) {
         KexiGUIMessageHandler gui;
-        tristate res = KexiProject::dropProject(projectData(), &gui, false/*ask*/);
+        tristate res = KexiProject::dropProject(*projectData(), &gui, false/*ask*/);
         if (res == true)
             KMessageBox::information(0, i18n("Project \"%1\" dropped successfully.",
                                              QDir::convertSeparators(projectData()->databaseName())));
@@ -939,19 +935,25 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled
 void KexiStartupHandler::slotSaveShortcutFileChanges()
 {
     bool ok = true;
-    if (d->shortcutFile)
-        ok = d->shortcutFile->saveProjectData(d->connDialog->currentProjectData(),
-                                              d->connDialog->savePasswordOptionSelected(),
-                                              &d->shortcutFileGroupKey);
-    else if (d->connShortcutFile)
+    QString fileName;
+    if (!d->shortcutFileName.isEmpty()) {
+        fileName = d->shortcutFileName;
+        ok = d->connDialog->currentProjectData().save(
+            d->shortcutFileName,
+            d->connDialog->savePasswordOptionSelected(),
+            &d->shortcutFileGroupKey);
+    }
+    else if (d->connShortcutFile) {
+        fileName = d->connShortcutFile->fileName();
         ok = d->connShortcutFile->saveConnectionData(
                  *d->connDialog->currentProjectData().connectionData(),
                  d->connDialog->savePasswordOptionSelected(),
                  &d->shortcutFileGroupKey);
+    }
 
     if (!ok) {
         KMessageBox::sorry(0, i18n("Failed saving connection data to\n\"%1\" file.",
-                                   QDir::convertSeparators(d->shortcutFile->fileName())));
+                           QDir::convertSeparators(fileName)));
     }
 }
 

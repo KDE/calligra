@@ -25,27 +25,34 @@
 //! @short Stores information about recent projects opened by Kexi.
 /*! The location is share/apps/kexi/recent_projects directory.
  Information about one project is store in one .kexis file.
+ The loading process is deferred.
 */
 class KEXICORE_EXPORT KexiRecentProjects : protected KexiProjectSet
 {
 public:
     ~KexiRecentProjects();
 
-    /*! Adds \a data as project data.
-    \a data will be owned by this object. */
+    /*! Adds @a data as project data.
+     @a data will be owned by this object. 
+     While saved, data will be merged with earlier saved data. */
     void addProjectData(KexiProjectData *data);
 
-    //! \return list object
+    //! @return list of data items.
     KexiProjectData::List list() const;
 
 protected:
-    /*! Creates recent projects container. */
-    KexiRecentProjects(KexiDB::MessageHandler* handler = 0);
+    //! Creates recent projects container.
+    explicit KexiRecentProjects(KexiDB::MessageHandler* handler = 0);
+
+    void addProjectDataInternal(KexiProjectData *data);
+
+    KexiProjectData* takeProjectDataInternal(KexiProjectData *data);
 
 private:
     class Private;
     Private * const d;
     friend class KexiInternal;
+    friend class Private;
 };
 
 #endif // KEXIRECENTPROJECTS_H

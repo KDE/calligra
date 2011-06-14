@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,6 +72,24 @@ public:
 
     ~KexiProjectData();
 
+    /*! Loads project data (with connection data) from @a fileName.
+     Database name and caption can be set there but these are optional.
+     @a groupKey, if provided will be set to a group key,
+     so you can later use it in saveConnectionData().
+     @return true on success. */
+    bool load(const QString& fileName, QString* _groupKey = 0);
+
+    /*! Saves project data (with connection data) to a shortcut file @a fileName.
+     If @a storePassword is true, password will be saved in the file,
+     even if data.connectionData()->savePassword is false.
+     Existing data is merged with new data. @a groupKey is reused, if specified.
+     If @a overwriteFirstGroup is true (the default) first found group will be overwritten
+     instead of creating of a new unique group. This mode is usable for updating .kexic files
+     containing single connection data, what's used for storing connections repository.
+     @return true on success. */
+    bool save(const QString& fileName, bool savePassword,
+              QString* groupKey = 0, bool overwriteFirstGroup = true);
+
     KexiProjectData& operator=(const KexiProjectData& pdata);
 
     /*! \return true if there is the User Mode set in internal
@@ -85,6 +103,7 @@ public:
     /*! \return database name.
      In fact, this is the same as KexiDB::SchemaData::name() */
     QString databaseName() const;
+   
     void setDatabaseName(const QString& dbName);
 
     /*! \return user-visible string better describing the project than just databaseName().
@@ -100,6 +119,7 @@ public:
     void setLastOpened(const QDateTime& lastOpened);
 
     QString description() const;
+
     void setDescription(const QString& desc);
 
     /*! If \a set is true, sets readonly flag for this data, so any connection opened for the project will

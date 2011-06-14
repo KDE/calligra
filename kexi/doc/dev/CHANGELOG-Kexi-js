@@ -94,13 +94,24 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+2011-06-09..10
+Core
+*Shortcut files
+**bumped version to v3: "name" for shortcuts to file-based databases is a full file path now. If the file is within the user's home directory, the dir is replaced with $HOME, e.g. name=$HOME/mydb.kexi. Not compatible with earlier versions but in these versions only filename was stored so the file was generally inaccessible anyway. "lastOpened" field added of type date/time (ISO format).
+**saving and loading code moved to KexiProjectData
+*Information about recent projects now saved, loaded and displayed properly
+
+TODO: make KexiProjectData not derived from QObject
+TODO: security: for saved server-based recent project add [Connection] group and name=<connectionfile> in it; then saved password can be found in connection data if any, and recent data would not save passwords at all
+TODO: "recent projects view": improve look of items; group by date, type/server...
+
+~~~~~~~~~~~~~~~~ 2.4 Alpha 2 (2.3.72) ~~~~~~~~~~~~~~~~
+
 2011-06-08
 Core
 *Fix regression added with the delayed loading of plugins: "Create" toolbar works now
 Startup
 *initial functionality for "Recent Projects" assistant
-
-TODO: group by date, type/server...
 
 2011-06-06..07
 Startup
@@ -146,6 +157,8 @@ Startup
 2011-05-11
 Core
 *Delayed loading of plugins, improves startup times
+
+~~~~~~~~~~~~~~~~ 2.4 Alpha 1 (2.3.71) ~~~~~~~~~~~~~~~~
 
 2011-05-09
 Forms
