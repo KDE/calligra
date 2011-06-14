@@ -716,7 +716,6 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
     // 0x00F0 map directly to system colors.  Table [1] specifies values that
     // have special meaning, [1] MS-ODRAW 2.2.2
     if (c.fSysIndex) {
-        kDebug() << "color" << kBacktrace();
         if (c.red >= 0xF0) {
             switch (c.red) {
             // Use the fill color of the shape.
