@@ -37,7 +37,7 @@ class QToolButton;
 class QComboBox;
 
 //This view mode holds Slides Sorter view widget and
-//TODO: holds view and toolbar to manage custom slides shows
+//holds view and toolbar to manage custom slide shows
 class KPrViewModeSlidesSorter : public KoPAViewMode
 {
     Q_OBJECT
@@ -122,20 +122,20 @@ protected:
     void saveZoomConfig(int zoom);
 
 private:
-    KPrSlidesManagerView *m_slidesSorter;
-    KPrSlidesManagerView *m_customSlidesShowView;
-    KPrSlidesSorterDocumentModel *m_documentModel;
+    KPrSlidesManagerView *m_slidesSorterView;
+    KPrSlidesManagerView *m_customSlideShowView;
+    KPrSlidesSorterDocumentModel *m_slidesSorterModel;
     int m_zoom;
     KPrSelectionManager *m_selectionManagerSlidesSorter;
     QWidget *m_centralWidget;
-    KPrCustomSlideShowsModel *m_customShowsModel;
+    KPrCustomSlideShowsModel *m_customSlideShowModel;
     QSize m_iconSize;
-    bool m_editCustomShows;
-    QToolButton *buttonAdd;
-    QToolButton *buttonDel;
-    QToolButton *buttonAddSlide;
-    QToolButton *buttonDelSlide;
-    QComboBox *slideShowsList;
+    bool m_editCustomSlideShow;
+    QToolButton *m_buttonAddCustomSlideShow;
+    QToolButton *m_buttonDelCustomSlideShow;
+    QToolButton *m_buttonAddSlideToCurrentShow;
+    QToolButton *m_buttonDelSlideFromCurrentShow;
+    QComboBox *m_customSlideShowsList;
 
 public slots:
     void editPaste();
@@ -174,29 +174,44 @@ private slots:
     /** Provides a custom context menu for the slides sorter view*/
     void slidesSorterContextMenu(QContextMenuEvent *event);
 
+    /** Provides a custom context menu for the slides sorter view*/
     void customSlideShowsContextMenu(QContextMenuEvent *event);
 
+    /** Updates the UI according to the custom Show selected */
     void customShowChanged(int showNumber);
 
-    void changeActiveSlideShow(QString name);
-
+    /** Delete selected slides from the current custom slide show */
     void deleteSlideFromCustomShow();
 
+    /** Add slides selected on Slides Sorter view to the current custom slide show */
+    void addSlideToCustomShow();
+
+    /** Add a new slides custom Show */
     void addCustomSlideShow();
 
-    void updateCustomShowsList();
+    /** Remove a new slides custom Show */
+    void removeCustomSlideShow();
 
-    void renameCustomShow();
+    /** Updates custom slide Shows list */
+    void updateCustomSlideShowsList();
 
-    /** Enable standard edit actions */
+    /** Renames current custom slide show */
+    void renameCustomSlideShow();
+
+    /** Enable standard edit actions for Slides Sorter View */
     void enableEditActions();
 
-    /** Disable standard edit actions */
+    /** Disable standard edit actions for Slides Sorter View */
     void disableEditActions();
 
-    void enableEditCustomShowActions();
+    /** Enable edit buttons for Custom Slide Shows List*/
+    void enableEditCustomShowButtons();
 
-    void disableEditCustomShowActions();
+    /** Disable edit buttons for Custom Slide Shows View and List*/
+    void disableEditCustomShowButtons();
+
+    /** Enable/Disable add and remove slides buttons for Custom Slide Show View */
+    void manageAddRemoveSlidesButtons();
 };
 
 #endif // KPRVIEWMODESLIDESSORTER_H

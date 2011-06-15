@@ -43,8 +43,6 @@ private:
     QString m_name;
     QList<KoPAPageBase *> m_newCustomShow;
     QList<KoPAPageBase *> m_oldCustomShow;
-    bool m_deleteNewCustomShow;
-
 };
 
 #endif // KPREDITCUSTOMSLIDESHOWSCOMMAND_H

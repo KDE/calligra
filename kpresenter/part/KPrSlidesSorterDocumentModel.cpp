@@ -21,6 +21,7 @@
 #include "KPrSlidesSorterDocumentModel.h"
 
 #include "KPrViewModeSlidesSorter.h"
+#include "KPrPage.h"
 
 //Calligra headers
 #include <KoPADocument.h>
@@ -255,6 +256,8 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
 
      foreach (KoPAPageBase *slide, slides) {
          if (!m_document->pages(false).contains(slide)) {
+             KoPAPageBase *newSlide = slide;
+             slides.replace(slides.indexOf(slide), newSlide);
              enableMove = false;
              break;
          }

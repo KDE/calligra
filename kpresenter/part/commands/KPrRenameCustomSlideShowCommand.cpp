@@ -17,34 +17,35 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrEditCustomSlideShowsCommand.h"
+#include "KPrRenameCustomSlideShowCommand.h"
+
 #include "KPrDocument.h"
-#include "KoPAPageBase.h"
 #include "KPrCustomSlideShowsModel.h"
+#include "KPrCustomSlideShows.h"
 
-KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(
-    KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, QList<KoPAPageBase *> newCustomShow, QUndoCommand *parent)
-: QUndoCommand(parent)
-, m_doc(doc)
-, m_model(model)
-, m_name(name)
-, m_newCustomShow(newCustomShow)
-, m_oldCustomShow(doc->customSlideShows()->getByName(name))
+KPrRenameCustomSlideShowCommand::KPrRenameCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &oldName, const QString &newName, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+    , m_model(model)
+    , m_oldName(oldName)
+    , m_newName(newName)
 {
-    setText(i18n("Edit custom slide shows"));
+    setText(i18n("Rename custom slide show"));
 }
 
-KPrEditCustomSlideShowsCommand::~KPrEditCustomSlideShowsCommand()
+KPrRenameCustomSlideShowCommand::~KPrRenameCustomSlideShowCommand()
 {
 
 }
 
-void KPrEditCustomSlideShowsCommand::redo()
+void KPrRenameCustomSlideShowCommand::redo()
 {
-    m_model->updateCustomShow(m_name, m_newCustomShow);
+    m_doc->customSlideShows()->rename(m_oldName, m_newName);
+    m_model->updateCustomSlideShowsList(m_newName);
 }
 
-void KPrEditCustomSlideShowsCommand::undo()
+void KPrRenameCustomSlideShowCommand::undo()
 {
-    m_model->updateCustomShow(m_name, m_oldCustomShow);
+    m_doc->customSlideShows()->rename(m_newName, m_oldName);
+    m_model->updateCustomSlideShowsList(m_oldName);
 }

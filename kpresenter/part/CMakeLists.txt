@@ -78,6 +78,9 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrPageLayoutCommand.cpp
      commands/KPrSetCustomSlideShowsCommand.cpp
      commands/KPrEditCustomSlideShowsCommand.cpp
+     commands/KPrAddCustomSlideShowCommand.cpp
+     commands/KPrDelCustomSlideShowCommand.cpp
+     commands/KPrRenameCustomSlideShowCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp

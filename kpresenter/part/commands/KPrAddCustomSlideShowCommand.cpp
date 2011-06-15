@@ -17,34 +17,34 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrEditCustomSlideShowsCommand.h"
+#include "KPrAddCustomSlideShowCommand.h"
 #include "KPrDocument.h"
-#include "KoPAPageBase.h"
 #include "KPrCustomSlideShowsModel.h"
+#include "KPrCustomSlideShows.h"
+#include "KoPAPageBase.h"
 
-KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(
-    KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, QList<KoPAPageBase *> newCustomShow, QUndoCommand *parent)
-: QUndoCommand(parent)
-, m_doc(doc)
-, m_model(model)
-, m_name(name)
-, m_newCustomShow(newCustomShow)
-, m_oldCustomShow(doc->customSlideShows()->getByName(name))
+KPrAddCustomSlideShowCommand::KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, QString name, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_doc(doc)
+    , m_model(model)
+    , m_name(name)
 {
-    setText(i18n("Edit custom slide shows"));
+    setText(i18n("Add new custom slide show"));
 }
 
-KPrEditCustomSlideShowsCommand::~KPrEditCustomSlideShowsCommand()
+KPrAddCustomSlideShowCommand::~KPrAddCustomSlideShowCommand()
 {
 
 }
 
-void KPrEditCustomSlideShowsCommand::redo()
+void KPrAddCustomSlideShowCommand::redo()
 {
-    m_model->updateCustomShow(m_name, m_newCustomShow);
+    m_doc->customSlideShows()->insert(m_name, QList<KoPAPageBase*>());
+    m_model->updateCustomSlideShowsList(m_name);
 }
 
-void KPrEditCustomSlideShowsCommand::undo()
+void KPrAddCustomSlideShowCommand::undo()
 {
-    m_model->updateCustomShow(m_name, m_oldCustomShow);
+    m_doc->customSlideShows()->remove(m_name);
+    m_model->updateCustomSlideShowsList(m_name);
 }
