@@ -63,7 +63,7 @@ protected:
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
-    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart, GroupStart};
+    enum FrameStartElement {FrameStart, RectStart, LineStart, CustomStart, GroupStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
     KoFilter::ConversionStatus createFrameEnd();
@@ -125,7 +125,6 @@ protected:
         int groupWidth, groupHeight; // Relative group extends
         int groupX, groupY; // Relative group origin
         qreal groupXOffset, groupYOffset; // Offset caused by the group parent
-        QString groupWidthUnit, groupHeightUnit; // pt, cm etc.
         qreal real_groupWidth, real_groupHeight;
     };
 

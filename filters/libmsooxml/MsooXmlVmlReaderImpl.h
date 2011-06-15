@@ -54,6 +54,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
     return KoFilter::OK;
 }
 
+static void doPrependCheck(QString& checkedString) {
+    if (!checkedString.isEmpty() && checkedString.at(0) == '0') {
+        checkedString.prepend("0");
+    }
+}
+
+static void changeToPoints(QString &value) {
+    QString unit = value.right(2);
+    if (unit == "pt") {
+        return;
+    }
+    qreal number = value.left(value.size() - 2).toDouble();
+    if (unit == "in") {
+        number = number * 71;
+    }
+    else if (unit == "mm") {
+        number = number * 56.6929130287 / 20.0;
+    }
+    else if (unit == "cm") {
+        number = number * 566.929098146 / 20.0;
+    }
+    value = QString("%1pt").arg(number);
+}
+
 void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 {
     // Todo handle here all possible shape types
@@ -61,7 +85,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         body->startElement("draw:rect");
     }
     // Simplifying connector to be a line
-    else if (startType == StraightConnectorStart) {
+    else if (startType == LineStart) {
         body->startElement("draw:line");
     }
     else if (startType == GroupStart) {
@@ -75,11 +99,17 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 
     QString width(m_currentVMLProperties.vmlStyle.value("width")); // already in "...cm" format
+    doPrependCheck(width);
     QString height(m_currentVMLProperties.vmlStyle.value("height")); // already in "...cm" format
+    doPrependCheck(height);
     QString x_mar(m_currentVMLProperties.vmlStyle.value("margin-left"));
+    doPrependCheck(x_mar);
     QString y_mar(m_currentVMLProperties.vmlStyle.value("margin-top"));
+    doPrependCheck(y_mar);
     QString leftPos(m_currentVMLProperties.vmlStyle.value("left"));
+    doPrependCheck(leftPos);
     QString topPos(m_currentVMLProperties.vmlStyle.value("top"));
+    doPrependCheck(topPos);
     QString position(m_currentVMLProperties.vmlStyle.value("position"));
     QString hor_pos(m_currentVMLProperties.vmlStyle.value("mso-position-horizontal"));
     QString ver_pos(m_currentVMLProperties.vmlStyle.value("mso-position-vertical"));
@@ -99,7 +129,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         if (m_currentVMLProperties.insideGroup) {
             x_position = (x_mar.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
                 m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
-            x_pos_string = QString("%1%2").arg(x_position).arg(m_currentVMLProperties.groupWidthUnit);
+            x_pos_string = QString("%1pt").arg(x_position);
         } else {
             x_position = x_mar.left(x_mar.length() - 2).toDouble(); // removing the unit
             x_pos_string = x_mar;
@@ -109,7 +139,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         if (m_currentVMLProperties.insideGroup) {
             x_position = (leftPos.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
                 m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
-            x_pos_string = QString("%1%2").arg(x_position).arg(m_currentVMLProperties.groupWidthUnit);
+            x_pos_string = QString("%1pt").arg(x_position);
         } else {
             x_position = leftPos.left(leftPos.length() - 2).toDouble();
             x_pos_string = leftPos;
@@ -117,14 +147,14 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else {
         if (m_currentVMLProperties.insideGroup) {
-            x_pos_string = QString("%1%2").arg(m_currentVMLProperties.groupXOffset).arg(m_currentVMLProperties.groupWidthUnit);
+            x_pos_string = QString("%1pt").arg(m_currentVMLProperties.groupXOffset);
         }
     }
     if (!y_mar.isEmpty()) {
         if (m_currentVMLProperties.insideGroup) {
             y_position = (y_mar.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
                 m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
-            y_pos_string = QString("%1%2").arg(y_position).arg(m_currentVMLProperties.groupHeightUnit);
+            y_pos_string = QString("%1pt").arg(y_position);
         } else {
             y_position = y_mar.left(y_mar.length() -2).toDouble();
             y_pos_string = y_mar;
@@ -134,7 +164,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         if (m_currentVMLProperties.insideGroup) {
             y_position = (topPos.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
                 m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
-            y_pos_string = QString("%1%2").arg(y_position).arg(m_currentVMLProperties.groupHeightUnit);
+            y_pos_string = QString("%1pt").arg(y_position);
         } else {
             y_position = topPos.left(topPos.length() - 2).toDouble();
             y_pos_string = topPos;
@@ -142,13 +172,13 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
     else {
         if (m_currentVMLProperties.insideGroup) {
-            y_pos_string = QString("%1%2").arg(m_currentVMLProperties.groupYOffset).arg(m_currentVMLProperties.groupHeightUnit);
+            y_pos_string = QString("%1pt").arg(m_currentVMLProperties.groupYOffset);
         }
     }
     if (!width.isEmpty()) {
         if (m_currentVMLProperties.insideGroup) {
             widthValue = width.toInt() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
-            widthString = QString("%1%2").arg(widthValue).arg(m_currentVMLProperties.groupWidthUnit);
+            widthString = QString("%1pt").arg(widthValue);
         } else {
             widthValue = width.left(width.length() - 2).toDouble();
             widthString = width;
@@ -157,7 +187,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (!height.isEmpty()) {
         if (m_currentVMLProperties.insideGroup) {
             heightValue = height.toInt() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
-            heightString = QString("%1%2").arg(heightValue).arg(m_currentVMLProperties.groupHeightUnit);
+            heightString = QString("%1pt").arg(heightValue);
         }
         else {
             heightValue = height.left(height.length() - 2).toDouble();
@@ -165,7 +195,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-    if (startType == StraightConnectorStart) {
+    if (startType == LineStart) {
         QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
         QString y1 = y_pos_string;
         QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2)); // right(2) takes the unit
@@ -549,13 +579,9 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
 void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attrs)
 {
     TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+    doPrependCheck(strokeweight);
     if (!strokeweight.isEmpty()) {
-        if (strokeweight.at(0) == '.') {
-            m_currentVMLProperties.strokeWidth = "0" + strokeweight;
-        }
-        else {
-            m_currentVMLProperties.strokeWidth = strokeweight;
-        }
+        m_currentVMLProperties.strokeWidth = strokeweight;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(type)
@@ -666,6 +692,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
 
     READ_ATTR_WITHOUT_NS(from)
     READ_ATTR_WITHOUT_NS(to)
+
+    // The transformations below are done in order to utilize group transformations
+    // in createFrameStart function
     int index = from.indexOf(',');
     QString temp = from.left(index);
     if (temp == "0") {
@@ -714,7 +743,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
 
     body = frameBuf.originalWriter();
 
-    createFrameStart(StraightConnectorStart);
+    createFrameStart(LineStart);
 
     (void)frameBuf.releaseWriter();
 
@@ -921,6 +950,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
     // a non specified value does not overwrite it
     //m_currentVMLProperties.stroked = true; // default in this function
 
+    TRY_READ_ATTR_WITHOUT_NS(weight)
+    doPrependCheck(weight);
+    if (!weight.isEmpty()) {
+        m_currentVMLProperties.strokeWidth = weight;
+    }
+
     TRY_READ_ATTR_WITHOUT_NS(on)
     if (on == "f" || on == "false") {
         m_currentVMLProperties.stroked = false;
@@ -1053,43 +1088,57 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     }
 
     if (!m_currentVMLProperties.insideGroup) {
-
-        const QString width(m_currentVMLProperties.vmlStyle.value("width"));
-        const QString height(m_currentVMLProperties.vmlStyle.value("height"));
+        QString width(m_currentVMLProperties.vmlStyle.value("width"));
+        doPrependCheck(width);
+        changeToPoints(width);
+        QString height(m_currentVMLProperties.vmlStyle.value("height"));
+        doPrependCheck(height);
+        changeToPoints(height);
 
         // These potentially cause an offset to all shapes in the group
         // Unhandled case: theoretically x_mar could be in different units
         // than width, in this case they should be added somehow intelligently
-        const QString x_mar(m_currentVMLProperties.vmlStyle.value("margin-left"));
-        const QString y_mar(m_currentVMLProperties.vmlStyle.value("margin-top"));
+        QString x_mar(m_currentVMLProperties.vmlStyle.value("margin-left"));
+        doPrependCheck(x_mar);
+        changeToPoints(x_mar);
+        QString y_mar(m_currentVMLProperties.vmlStyle.value("margin-top"));
+        doPrependCheck(y_mar);
+        changeToPoints(y_mar);
 
-        m_currentVMLProperties.groupWidthUnit = width.right(2); // pt, cm etc.
-        m_currentVMLProperties.groupHeightUnit = height.right(2);
         m_currentVMLProperties.real_groupWidth = width.left(width.length() - 2).toDouble();
         m_currentVMLProperties.real_groupHeight = height.left(height.length() - 2).toDouble();
-
-        m_currentVMLProperties.groupX = 0;
-        m_currentVMLProperties.groupY = 0;
-        m_currentVMLProperties.groupWidth = 0;
-        m_currentVMLProperties.groupHeight = 0;
-        m_currentVMLProperties.groupXOffset = 0;
-        m_currentVMLProperties.groupYOffset = 0;
-        // Assuming that two last chars are unit (cm, pt)
         m_currentVMLProperties.groupXOffset = x_mar.left(x_mar.length() - 2).toDouble();
         m_currentVMLProperties.groupYOffset = y_mar.left(y_mar.length() - 2).toDouble();
+    }
+    else { // We are already in a group, this is a sub group, we're calculating new relative values for its children to use
+        QString width(m_currentVMLProperties.vmlStyle.value("width"));
+        QString height(m_currentVMLProperties.vmlStyle.value("height"));
+        QString x_mar(m_currentVMLProperties.vmlStyle.value("left"));
+        QString y_mar(m_currentVMLProperties.vmlStyle.value("top"));
 
-        TRY_READ_ATTR_WITHOUT_NS(coordsize)
+        m_currentVMLProperties.groupXOffset = (x_mar.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
+            m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
+        m_currentVMLProperties.groupYOffset = (y_mar.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
+            m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
+        m_currentVMLProperties.real_groupWidth = width.toInt() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
+        m_currentVMLProperties.real_groupHeight = height.toInt() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
+    }
 
-        if (!coordsize.isEmpty()) {
-            m_currentVMLProperties.groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
-            m_currentVMLProperties.groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
-        }
+    m_currentVMLProperties.groupX = 0;
+    m_currentVMLProperties.groupY = 0;
+    m_currentVMLProperties.groupWidth = 1000; // default
+    m_currentVMLProperties.groupHeight = 1000; //default
 
-        TRY_READ_ATTR_WITHOUT_NS(coordorigin)
-        if (!coordorigin.isEmpty()) {
-            m_currentVMLProperties.groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
-            m_currentVMLProperties.groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
-        }
+    TRY_READ_ATTR_WITHOUT_NS(coordsize)
+    if (!coordsize.isEmpty()) {
+        m_currentVMLProperties.groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
+        m_currentVMLProperties.groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(coordorigin)
+    if (!coordorigin.isEmpty()) {
+        m_currentVMLProperties.groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
+        m_currentVMLProperties.groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
     }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
@@ -2113,8 +2162,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         int _groupY = m_currentVMLProperties.groupY;
         qreal _groupXOffset = m_currentVMLProperties.groupXOffset;
         qreal _groupYOffset = m_currentVMLProperties.groupYOffset;
-        QString _groupWidthUnit = m_currentVMLProperties.groupWidthUnit;
-        QString _groupHeightUnit = m_currentVMLProperties.groupHeightUnit;
         qreal _real_groupWidth = m_currentVMLProperties.real_groupWidth;
         qreal _real_groupHeight = m_currentVMLProperties.real_groupHeight;
 
@@ -2128,8 +2175,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             m_currentVMLProperties.groupY = _groupY;
             m_currentVMLProperties.groupXOffset = _groupXOffset;
             m_currentVMLProperties.groupYOffset = _groupYOffset;
-            m_currentVMLProperties.groupWidthUnit = _groupWidthUnit;
-            m_currentVMLProperties.groupHeightUnit = _groupHeightUnit;
             m_currentVMLProperties.real_groupWidth = _real_groupWidth;
             m_currentVMLProperties.real_groupHeight = _real_groupHeight;
         }
@@ -2156,7 +2201,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     RETURN_IF_ERROR(parseCSS(style))
     kDebug() << "m_vmlStyle:" << m_currentVMLProperties.vmlStyle;
 
-    //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_currentVMLProperties.shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_currentVMLProperties.shapeTitle)
 
@@ -2182,12 +2226,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 isCustomShape = false;
                 TRY_READ(imagedata)
             }
-            else if (qualifiedName() == "v:textbox") {
-                isCustomShape = false;
-                body->startElement("draw:text-box");
-                TRY_READ(textbox)
-                body->endElement(); // draw:text-box
-            }
+            ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(shadow)
@@ -2204,31 +2243,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     body = frameBuf.originalWriter();
 
     if (m_outputFrames) {
-        if (o_connectortype.isEmpty()) {
-            if (!isCustomShape) {
-                createFrameStart();
-            }
-            else {
-                createFrameStart(CustomStart);
-            }
+        if (!isCustomShape) {
+            createFrameStart();
         }
         else {
-            createFrameStart(StraightConnectorStart);
+            createFrameStart(CustomStart);
         }
     }
 
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
-        if (isCustomShape && o_connectortype.isEmpty()) {
+        if (isCustomShape) {
             m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
             QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
             if (flip.contains("x")) {
-                m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\"";
+                m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
             }
             if (flip.contains("y")) {
-                m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\"";
+                m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
             }
             m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
                 arg(m_currentVMLProperties.modifiers);
@@ -2402,9 +2436,7 @@ void MSOOXML_CURRENT_CLASS::handlePathValues(const QXmlStreamAttributes& attrs)
     TRY_READ_ATTR_WITHOUT_NS(adj)
     if (!adj.isEmpty()) {
         QString tempModifiers = adj;
-        if (tempModifiers.at(0) == ',') {
-            tempModifiers.prepend("0");
-        }
+        doPrependCheck(tempModifiers);
         tempModifiers.replace(",,", ",0,");
         tempModifiers.replace(',', " ");
         m_currentVMLProperties.modifiers = tempModifiers;

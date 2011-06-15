@@ -92,7 +92,7 @@ private:
     void saveTextRange(const ArtisticTextRange &range, QTextStream *stream, bool saveFont, qreal baselineOffset);
 
     QString getID(const KoShape *obj);
-    QString createID(const KoShape * obj);
+    QString createUID(const QString &base);
 
     /// Checks if the matrix only has translation set
     bool isTranslation(const QTransform &);
@@ -104,7 +104,8 @@ private:
     unsigned int m_indent;
     unsigned int m_indent2;
 
-    QMap<const KoShape*, QString> m_shapeIds;
+    QHash<const KoShape*, QString> m_shapeIds;
+    QHash<QString, int> m_uniqueNames;
     QList<KoShape*> m_toplevelShapes;
     QTransform m_userSpaceMatrix;
     QSizeF m_pageSize;
