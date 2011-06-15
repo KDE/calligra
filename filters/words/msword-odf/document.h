@@ -71,10 +71,9 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 public:
     Document(const std::string& fileName,
              MSWordOdfImport* filter,
-/*              KoFilterChain* chain, */
              KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, KoGenStyles* mainStyles,
-             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data);
+             QBuffer& wordDocumentBuffer, POLE::Stream& table, LEInputStream* data);
     virtual ~Document();
 
     virtual void setProgress(int percent);
@@ -166,7 +165,7 @@ public:
 
     // Provide access to POLE/LEInput streams to other handlers.
     POLE::Stream& poleTableStream(void) const { return m_tblstm_pole; }
-    LEInputStream& wdocumentStream(void) const { return m_wdstm; }
+    const QBuffer& wordDocumentBuffer(void) const { return m_wordDocumentBuffer; }
     LEInputStream* tableStream(void) const { return m_tblstm; }
     LEInputStream* dataStream(void) const { return m_datastm; }
 
@@ -269,7 +268,7 @@ private:
     QString m_lastMasterPageName;
 
     //pointers to streams
-    LEInputStream& m_wdstm;
+    QBuffer& m_wordDocumentBuffer;
     LEInputStream* m_tblstm;
     LEInputStream* m_datastm;
     POLE::Stream& m_tblstm_pole;

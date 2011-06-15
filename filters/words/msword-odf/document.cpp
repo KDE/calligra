@@ -57,16 +57,14 @@
 //OLE storage soon!
 Document::Document(const std::string& fileName,
                    MSWordOdfImport* filter,
-//                    KoFilterChain* chain,
                    KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, KoGenStyles* mainStyles,
-                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
+                   QBuffer& wordDocumentBuffer, POLE::Stream& table, LEInputStream* data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
         , m_graphicsHandler(0)
         , m_filter(filter)
-//         , m_chain(chain)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
         , m_bodyFound(false)
         , m_footNoteNumber(0)
@@ -84,7 +82,7 @@ Document::Document(const std::string& fileName,
         , m_writeMasterPageName(false)
         , m_omittMasterPage(false)
         , m_useLastMasterPage(false)
-        , m_wdstm(wordDocument)
+        , m_wordDocumentBuffer(wordDocumentBuffer)
         , m_tblstm(0)
         , m_datastm(data)
         , m_tblstm_pole(table)
@@ -728,11 +726,11 @@ void Document::headerEnd()
             name = m_masterPageName_list.first();
             masterPageStyle = m_masterPageStyle_list.first();
             m_firstOpen = false;
-	}
-	else {
+        }
+        else {
             name = m_masterPageName_list.last();
             masterPageStyle = m_masterPageStyle_list.last();
-	}
+        }
         Q_ASSERT(masterPageStyle);
         m_headerWriter->endElement(); //style:header/footer
 

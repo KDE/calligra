@@ -37,7 +37,7 @@
 #include "exceptions.h"
 #include "msdoc.h"
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "pole.h"
 
 //function prototypes of local functions
@@ -55,6 +55,28 @@ MSWordOdfImport::MSWordOdfImport(QObject *parent, const QVariantList&)
 MSWordOdfImport::~MSWordOdfImport()
 {
 }
+
+struct Finalizer {
+public:
+    Finalizer(LEInputStream* s) : m_store(0), m_genStyles(0), m_document(0),
+                                  m_contentWriter(0), m_bodyWriter(0), m_datastm(s) { }
+    ~Finalizer() {
+        delete m_store;
+        delete m_genStyles;
+        delete m_document;
+        delete m_contentWriter;
+        delete m_bodyWriter;
+        delete m_datastm;
+    }
+
+    KoStore *m_store;
+    KoGenStyles *m_genStyles;
+    Document *m_document;
+    KoXmlWriter *m_contentWriter;
+    KoXmlWriter *m_bodyWriter;
+    LEInputStream* m_datastm;
+};
+
 
 KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, const QByteArray &to)
 {
@@ -81,32 +103,23 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         kDebug(30513) << "Cannot open " << inputFile;
         return KoFilter::InvalidFormat;
     }
-    //WordDocument Stream
-    QBuffer buff1;
-    if (!readStream(storage, "/WordDocument", buff1)) {
+    // WordDocument Stream
+    QBuffer wordDocumentBuffer;
+    if (!readStream(storage, "/WordDocument", wordDocumentBuffer)) {
         return KoFilter::InvalidFormat;
     }
-    LEInputStream wdstm(&buff1);
-
-    MSO::FibBase fibBase;
-    LEInputStream::Mark m = wdstm.setMark();
-    try {
-        parseFibBase(wdstm, fibBase);
-    } catch (IOException _e) {
-        kError(30513) << _e.msg;
-        return KoFilter::InvalidFormat;
-    } catch (...) {
-        kWarning(30513) << "Warning: Caught an unknown exception!";
+    MSO::FibBase fibBase(wordDocumentBuffer.data().constData(), wordDocumentBuffer.size());
+    if (!fibBase) {
+        kError(30513) << "Could not parse fibBase";
         return KoFilter::InvalidFormat;
     }
-    wdstm.rewind(m);
 
-    //document is encrypted or obfuscated
+    // document is encrypted or obfuscated
     if (fibBase.fEncrypted) {
         return KoFilter::PasswordProtected;
     }
 
-    //1Table Stream or 0Table Stream
+    // 1Table Stream or 0Table Stream
     const char* tblstm_name = fibBase.fWhichTblStm ? "1Table" : "0Table";
     POLE::Stream tblstm_pole(&storage, tblstm_name);
     if (tblstm_pole.fail()) {
@@ -116,7 +129,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         }
     }
 
-    //Data Stream
+    // Data Stream
     LEInputStream* datastm = 0;
     QBuffer buff3;
     if (!readStream(storage, "/Data", buff3)) {
@@ -130,24 +143,6 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
      *  Processing file
      * ************************************************
      */
-    struct Finalizer {
-    public:
-        Finalizer(LEInputStream* s) : m_store(0), m_genStyles(0), m_document(0),
-                                      m_contentWriter(0), m_bodyWriter(0), m_datastm(s) { }
-        ~Finalizer() {
-            delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
-            if (m_datastm) {
-                delete m_datastm;
-            }
-        }
-
-        KoStore *m_store;
-        KoGenStyles *m_genStyles;
-        Document *m_document;
-        KoXmlWriter *m_contentWriter;
-        KoXmlWriter *m_bodyWriter;
-        LEInputStream* m_datastm;
-    };
     Finalizer finalizer(datastm);
 
     // Create output files
@@ -200,12 +195,12 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     //create our document object, writing to the temporary buffers
     Document *document = 0;
-
+    LEInputStream wdstm(&wordDocumentBuffer); // XXX: this should be removed!
     try {
         document = new Document(QFile::encodeName(inputFile).data(), this,
                                 bodyWriter, &metaWriter, &manifestWriter,
                                 storeout, mainStyles,
-                                wdstm, tblstm_pole, datastm);
+                                wordDocumentBuffer, tblstm_pole, datastm);
     } catch (InvalidFormatException _e) {
         kDebug(30513) << _e.msg;
         return KoFilter::InvalidFormat;
