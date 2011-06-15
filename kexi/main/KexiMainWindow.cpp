@@ -258,26 +258,8 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 # include "custom_exec.h"
 #endif
 
-#ifdef KEXI_DEBUG_GUI
-    QWidget* debugWindow = 0;
-#endif
-    if (GUIenabled) {
-        /*2.0  dummyWidget = new QWidget();
-            dummyWidget->setWindowIcon( DesktopIcon( "kexi" ) );
-            QApplication::setMainWidget(dummyWidget);*/
-#ifdef KEXI_DEBUG_GUI
-        KConfigGroup generalGroup = KGlobal::config()->group("General");
-        if (generalGroup.readEntry("ShowInternalDebugger", false)) {
-            debugWindow = KexiUtils::createDebugWindow(0);
-        }
-#endif
-    }
-
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
-#ifdef KEXI_DEBUG_GUI
-        delete debugWindow;
-#endif
         delete app;
         return (~res) ? 0 : 1;
     }
@@ -286,23 +268,25 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 
     /* Exit requested, e.g. after database removing. */
     if (Kexi::startupHandler().action() == KexiStartupData::Exit) {
-#ifdef KEXI_DEBUG_GUI
-        delete debugWindow;
-#endif
         delete app;
         return 0;
     }
 
     KexiMainWindow *win = new KexiMainWindow();
-#ifndef KEXI_MOBILE
-    QApplication::setMainWidget(win);
+#ifdef KEXI_DEBUG_GUI
+    QWidget* debugWindow = 0;
+    if (GUIenabled) {
+        KConfigGroup generalGroup = KGlobal::config()->group("General");
+        if (generalGroup.readEntry("ShowInternalDebugger", false)) {
+            debugWindow = KexiUtils::createDebugWindow(win);
+            debugWindow->show();
+        }
+    }
 #endif
 
-#ifdef KEXI_DEBUG_GUI
-    //if (debugWindow)
-    //debugWindow->reparent(win, QPoint(1,1));
+#ifndef KEXI_MOBILE
+    //QApplication::setMainWidget(win);
 #endif
-// delete dummyWidget;
 
     if (true != win->startup()) {
         delete win;
@@ -310,17 +294,16 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
         return 1;
     }
 
-    win->show();
-    app->processEvents();//allow refresh our app
+    //app->processEvents();//allow refresh our app
     win->restoreSettings();
+    win->show();
 #ifdef KEXI_DEBUG_GUI
     win->raise();
     static_cast<QWidget*>(win)->activateWindow();
 #endif
-//#ifdef KEXI_DEBUG_GUI
-// delete debugWindow;
-//#endif
-
+    foreach (QWidget *widget, QApplication::topLevelWidgets()) {
+        kDebug() << widget;
+    }
     return 0;
 }
 
@@ -2484,6 +2467,9 @@ bool KexiMainWindow::queryClose()
     if (res == true)
         storeSettings();
 
+    if (! ~res) {
+        qApp->quit();
+    }
     return ! ~res;
 }
 

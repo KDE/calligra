@@ -92,7 +92,11 @@ Tabbed toolbar TODOS:
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
-2011-06-09..15
+2011-06-15
+Main
+*Main window starts smoother
+
+2011-06-09..14
 Core, Startup
 *Shortcut files
 **bumped version to v3: "name" for shortcuts to file-based databases is a full file path now. If the file is within the user's home directory, the dir is replaced with $HOME, e.g. name=$HOME/mydb.kexi. Not compatible with earlier versions but in these versions only filename was stored so the file was generally inaccessible anyway. "lastOpened" field added of type date/time (ISO format).

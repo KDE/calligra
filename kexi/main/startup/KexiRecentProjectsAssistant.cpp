@@ -55,6 +55,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QProgressBar>
+#include <QTimer>
  
 KexiMainRecentProjectsPage::KexiMainRecentProjectsPage(
    KexiRecentProjectsAssistant* assistant, QWidget* parent)
@@ -76,12 +77,17 @@ KexiMainRecentProjectsPage::KexiMainRecentProjectsPage(
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
+    setContents(m_recentProjects);
 
+    QTimer::singleShot(100, this, SLOT(loadProjects()));
+}
+
+void KexiMainRecentProjectsPage::loadProjects()
+{
     m_recentProjectsProxyModel = new KexiRecentProjectsProxyModel(m_recentProjects);
     KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects());
     m_recentProjectsProxyModel->setSourceModel(model);
     m_recentProjects->setModel(m_recentProjectsProxyModel);
-    setContents(m_recentProjects);
 }
 
 void KexiMainRecentProjectsPage::slotItemClicked(const QModelIndex& index)

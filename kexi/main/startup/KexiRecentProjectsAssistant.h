@@ -49,8 +49,9 @@ public:
 signals:
     void openProject(const KexiProjectData& data);
 
-protected slots:
+private slots:
     void slotItemClicked(const QModelIndex& index);
+    void loadProjects();
 private:
     KexiCategorizedView* m_recentProjects;
     KexiRecentProjectsProxyModel* m_recentProjectsProxyModel;
@@ -82,9 +83,10 @@ public slots:
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
     void tryAgainActionTriggered();
+
 signals:
     void openProject(const KexiProjectData& data);
-    
+
 private:
     void createProject(
         const KexiDB::ConnectionData& cdata, const QString& databaseName,
