@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the KDE project
     Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
 
     (version information based on kofficeversion.h)

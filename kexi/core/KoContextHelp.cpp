@@ -228,7 +228,7 @@ void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 	{
 		e->accept();
 		if (currentAnchor.startsWith("help://#")) {
-			//that's not really useful, since koffice documents can be embedded
+			//that's not really useful, since Calligra documents can be embedded
 			KToolInvocation::invokeHelp(currentAnchor.right(currentAnchor.length()-8));
 		}
 		else
