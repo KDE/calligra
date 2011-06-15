@@ -553,31 +553,17 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
         IMsoArray a = ds.fillShadeColors_complex();
 
-        QBuffer streamBuffer(&a.data);
-        streamBuffer.open(QIODevice::ReadOnly);
-        LEInputStream in(&streamBuffer);
-
-        OfficeArtCOLORREF color;
-        FixedPoint fixedPoint;
+        const char* data = a.data.data();
+        int left = a.data.size();
         for (int i = 0; i < a.nElems; i++) {
-            try {
-                parseOfficeArtCOLORREF(in,color);
-            } catch (EOFException _e) {
-                qDebug() << _e.msg;
-                break;
-            } catch (IOException _e) {
-                qDebug() << _e.msg;
-                break;
-            }
-            try {
-                parseFixedPoint(in,fixedPoint);
-            } catch (EOFException _e) {
-                qDebug() << _e.msg;
-                break;
-            } catch (IOException _e) {
-                qDebug() << _e.msg;
-                break;
-            }
+            OfficeArtCOLORREF color(data);
+            if (!color) break;
+            data += color._size;
+            left -= color._size;
+            FixedPoint fixedPoint(data);
+            if (!fixedPoint) break;
+            data += color._size;
+            left -= color._size;
 
             qreal offset = toQReal(fixedPoint);
             elementWriter.startElement("svg:stop");
@@ -589,7 +575,6 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
             }
             elementWriter.endElement();
         }
-        streamBuffer.close();
     } else {
         QColor fillColor = processOfficeArtCOLORREF(ds.fillColor(), ds);
         QColor backColor = processOfficeArtCOLORREF(ds.fillBackColor(), ds);

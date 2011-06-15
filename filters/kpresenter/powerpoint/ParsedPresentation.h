@@ -20,9 +20,10 @@
 #ifndef PARSEDPRESENTATION_H
 #define PARSEDPRESENTATION_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "pole.h"
 #include <QtCore/QMap>
+#include <QtCore/QVector>
 
 class ParsedPresentation
 {

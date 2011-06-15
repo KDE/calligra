@@ -30,9 +30,7 @@
 #include "records.h"
 
 // libmso
-//#include <generated/simpleParser.h>
-//#include <generated/leinputstream.h>
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "generated/leinputstream.h"
 #include "drawstyle.h"
 #include "ODrawToOdf.h"

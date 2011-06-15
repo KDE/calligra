@@ -20,7 +20,7 @@
 #ifndef ODRAWTOODF_H
 #define ODRAWTOODF_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "writer.h"
 
 class DrawStyle;

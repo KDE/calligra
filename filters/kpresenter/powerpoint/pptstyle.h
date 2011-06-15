@@ -21,7 +21,8 @@
 #ifndef PPTSTYLE_H
 #define PPTSTYLE_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
+#include <QtCore/QList>
 
 enum TextTypeEnum {
     Tx_TYPE_TITLE = 0,

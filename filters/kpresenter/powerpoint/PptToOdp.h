@@ -24,7 +24,7 @@
 #ifndef PPTTOODP_H
 #define PPTTOODP_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "pptstyle.h"
 #include "drawstyle.h"
 #include "writer.h"
@@ -411,7 +411,7 @@ private:
       * @param data Vector to convert
       * @return data as string
       */
-    inline QString utf16ToString(const QVector<quint16> &data);
+    inline QString utf16ToString(const MSOCastArray<quint16> &data);
 
     /**
       * @brief Find hyperlink with specified id
@@ -510,8 +510,11 @@ private:
      * @return QColor value, may be undefined
      */
     QColor toQColor(const MSO::OfficeArtCOLORREF& color,
-                    const MSO::StreamOffset* master = NULL,
-                    const MSO::StreamOffset* common = NULL);
+                    const MSO::MainMasterContainer* master,
+                    const MSO::SlideContainer* common);
+    QColor toQColor(const MSO::OfficeArtCOLORREF& color,
+                    const MSO::SlideContainer* master,
+                    const MSO::SlideContainer* common);
 
     /**
     * @brief processTextAutoNumberScheme : process the Textautoscheme to display the Bullet and numbering.
@@ -584,12 +587,12 @@ private:
         return hf;
     }
 
-    const MSO::FontEntityAtom* getFont(quint16 fontRef)
+    const MSO::FontEntityAtom getFont(quint16 fontRef)
     {
-        const MSO::FontCollectionContainer* f =
-            p->documentContainer->documentTextInfo.fontCollection.data();
+        const MSO::FontCollectionContainer f =
+            p->documentContainer->documentTextInfo.fontCollection;
         if (f && f->rgFontCollectionEntry.size() > fontRef) {
-            return &f->rgFontCollectionEntry[fontRef].fontEntityAtom;
+            return f->rgFontCollectionEntry[fontRef].fontEntityAtom;
         }
         return 0;
     }

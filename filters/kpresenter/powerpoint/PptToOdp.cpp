@@ -124,8 +124,8 @@ getText(const TextContainer* tc)
 
     QString ret;
     if (tc->text.is<TextCharsAtom>()) {
-        const QVector<quint16> textChars(tc->text.get<TextCharsAtom>()->textChars);
-        ret = QString::fromUtf16(textChars.data(), textChars.size());
+        MSOCastArray<quint16> a = tc->text.get<TextCharsAtom>()->textChars;
+        ret = QString::fromUtf16(a.data(), a.size());
     } else if (tc->text.is<TextBytesAtom>()) {
         // each item represents the low byte of a UTF-16 Unicode character whose high byte is 0x00
         const QByteArray& textChars(tc->text.get<TextBytesAtom>()->textChars);
@@ -319,7 +319,7 @@ bool PptToOdp::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
 void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* ct,
                                              const MSO::OfficeArtClientData& o, Writer& out)
 {
-    const TextContainer* textContainer = 0;
+    TextContainer textContainer;
     const TextRuler* textRuler = 0;
     if (ct) {
         const PptOfficeArtClientTextBox* tb = ct->anon.get<PptOfficeArtClientTextBox>();
@@ -338,8 +338,8 @@ void PptToOdp::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* 
         if (pa->position >= 0 &&
             pa->position < dc_data->slideTexts->atoms.size())
         {
-            textContainer = &dc_data->slideTexts->atoms[pa->position];
-            ppttoodp->processTextForBody(out, &o, textContainer, textRuler);
+            textContainer = dc_data->slideTexts->atoms[pa->position];
+            ppttoodp->processTextForBody(out, &o, &textContainer, textRuler);
         }
     }
 }
@@ -1129,7 +1129,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     }
     // fo:country
     // fo:font-family
-    const FontEntityAtom* font = getFont(cf.fontRef());
+    const FontEntityAtom font = getFont(cf.fontRef());
     if (font) {
         const QString name = QString::fromUtf16(font->lfFaceName.data(),
                                                 font->lfFaceName.size());
@@ -1622,7 +1622,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
 #endif
             fontRef = i.cf.fontRef();
         }
-        const MSO::FontEntityAtom* font = getFont(fontRef);
+        const MSO::FontEntityAtom font = getFont(fontRef);
         if (font) {
             QString family = QString::fromUtf16(font->lfFaceName.data(),
                                                 font->lfFaceName.size());
@@ -2137,7 +2137,7 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     return contentData;
 }
 
-QString PptToOdp::utf16ToString(const QVector<quint16> &data)
+QString PptToOdp::utf16ToString(const MSOCastArray<quint16> &data)
 {
     return QString::fromUtf16(data.data(), data.size());
 }
@@ -2897,7 +2897,7 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
         return ret;
     }
 
-    const QList<ColorStruct>* colorScheme = NULL;
+    const MSOFixedArray<ColorStruct>* colorScheme = NULL;
     const MSO::MasterOrSlideContainer* m = m_currentMaster;
     const MSO::MainMasterContainer* mmc = NULL;
     const MSO::SlideContainer* tmc = NULL;

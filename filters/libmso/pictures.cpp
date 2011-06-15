@@ -341,7 +341,7 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
     return QByteArray();
 }
 
-QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const QList<MSO::OfficeArtBStoreContainerFileBlock>* rgfb)
+QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const MSOArray<MSO::OfficeArtBStoreContainerFileBlock>* rgfb)
 {
     PictureReference ref;
     QMap<QByteArray, QString> fileNames;

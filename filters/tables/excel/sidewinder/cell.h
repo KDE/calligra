@@ -27,7 +27,7 @@
 #include <QtGlobal>
 #include <QList>
 #include <QString>
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 
 namespace Swinder
 {

@@ -19,11 +19,8 @@
 
 #include "objects.h"
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "generated/leinputstream.h"
-//#include "drawstyle.h"
-//#include "ODrawToOdf.h"
-//#include "pictures.h"
 
 using namespace Swinder;
 

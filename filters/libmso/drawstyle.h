@@ -21,7 +21,9 @@
 #ifndef DRAWSTYLE_H
 #define DRAWSTYLE_H
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 class IMsoArray
 {
@@ -338,13 +340,14 @@ template <typename A, typename B>
 IMsoArray
 getComplexData(const B& b)
 {
-    MSO::OfficeArtFOPTE* p = NULL;
+    const MSO::OfficeArtFOPTE* p = NULL;
     IMsoArray a;
     const char* pData = b.complexData.data();
     uint offset = 0;
 
     foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
-        p = (MSO::OfficeArtFOPTE*) _c.anon.data();
+        const MSO::OfficeArtFOPTE pp(_c._data);
+        p = &pp;
         if (p->opid.fComplex) {
 
             // there is wrong offset inside PVertices
@@ -415,12 +418,13 @@ template <typename A, typename B>
 QString
 getComplexName(const B& b)
 {
-    MSO::OfficeArtFOPTE* p = NULL;
+    const MSO::OfficeArtFOPTE* p = NULL;
     uint offset = 0;
     QString a;
 
     foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
-        p = (MSO::OfficeArtFOPTE*) _c.anon.data();
+        const MSO::OfficeArtFOPTE pp(_c._data);
+        p = &pp;
         if (p->opid.fComplex) {
             if (_c.anon.get<A>()) {
                 a.append(b.complexData.mid(offset, p->op));

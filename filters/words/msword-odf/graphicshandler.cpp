@@ -4,6 +4,7 @@
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
    Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
    Copyright (C) 2010, 2011 Matus Hanzes <matus.hanzes@ixonos.com>
+   Copyright (C) 2011 KO GmbH <boudewijn.rempt@kogmbh.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -263,41 +264,34 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     }
 
     // going to parse and process the Data stream content
-    LEInputStream* in = m_document->dataStream();
-    if (!in) {
+    QBuffer &buf = m_document->dataStream();
+    if (buf.size() == 0) {
         kDebug(30513) << "Data stream not provided, no access to inline shapes!";
         return;
     }
-    if (data.fcPic > in->getSize()) {
+    if (data.fcPic > buf.size()) {
         kDebug(30513) << "OfficeArtInlineSpContainer offset out of range, skipping!";
         return;
     }
 
 #ifdef DEBUG_GHANDLER
-    kDebug(30513) << "\nCurrent stream position:" << in->getPosition()
+    kDebug(30513) << "\nCurrent stream position:" << buf.pos()
                   << "\nOfficeArtInlineSpContainer offset:" << dec << data.fcPic;
 #endif
 
     // parse the OfficeArtInlineSpContainer and rewind the stream
-    LEInputStream::Mark _zero;
-    _zero = in->setMark();
-    in->skip(data.fcPic);
+    int mark = buf.pos();
+    buf.seek(buf.pos() + data.fcPic);
 
-    OfficeArtInlineSpContainer co();
-    try {
-        parseOfficeArtInlineSpContainer(*in, co);
-    } catch (IOException _e) {
-        kDebug(30513) << _e.msg;
-        in->rewind(_zero);
-        return;
-    } catch (...) {
-        kWarning(30513) << "Warning: Caught an unknown exception!";
-        in->rewind(_zero);
+    OfficeArtInlineSpContainer co(buf.data().constData() + buf.pos(), buf.size() - buf.pos());
+    if (!co) {
+        kWarning(30513) << "Warning: could not parse OfficeArtInlineSpContainer!";
         return;
     }
-    in->rewind(_zero);
+    // "rewind"
+    buf.seek(mark);
 
-    int n = (data.fcPic + size) - in->getPosition();
+    int n = (data.fcPic + size) - buf.pos();
     if (n) {
         kDebug(30513) << n << "bytes left while parsing OfficeArtInlineSpContainer";
     }
@@ -440,7 +434,7 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     if (o.rgfb.size() < 2) {
         return;
     }
-    const OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
 
     //create graphic style for the group shape
     QString styleName;
@@ -549,125 +543,88 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
     }
 
     QByteArray array;
-    QBuffer buffer;
+    int pos = 0; // current position in array
     array.resize(m_fib.lcbDggInfo);
     stream.seek(m_fib.fcDggInfo);
+
     unsigned long n = stream.read((unsigned char*) array.data(), m_fib.lcbDggInfo);
     if (n != m_fib.lcbDggInfo) {
         kError(30513) << "Error while reading from " << stream.fullName().data() << "stream";
         return;
     }
 
-    buffer.setData(array);
-    buffer.open(QIODevice::ReadOnly);
-    LEInputStream in(&buffer);
-
-    //parse OfficeArfDggContainer from msdoc
-    try {
-        parseOfficeArtDggContainer(in, m_officeArtDggContainer);
-    }
-    catch (IOException e) {
-        kDebug(30513) << "Caught IOException while parsing OfficeArtDggContainer.";
-        kDebug(30513) << e.msg;
-        return;
-    }
-    catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDggContainer.";
+    m_officeArtDggContainer(array.constData(), array.size());
+    if (!m_officeArtDggContainer) {
+        kDebug(30513) << "Could not parse OfficeArtDggContainer.";
         return;
     }
 #ifdef DEBUG_GHANDLER
     kDebug(30513) << "OfficeArtDggContainer [ OK ]" ;
 #endif
+    pos = m_officeArtDggContainer._size;
 
     // parse drawingsVariable from msdoc
     // 0 - next OfficeArtDgContainer belongs to Main document;
     // 1 - next OfficeArtDgContainer belongs to Header Document
-    unsigned char drawingsVariable = 0;
-    try {
-        drawingsVariable = in.readuint8();
-    }
-    catch (IOException e) {
-        kDebug(30513) << "Caught IOException while parsing DrawingsVariable.";
-        kDebug(30513) << e.msg;
+    if (pos >= array.size()) {
+        kDebug(30513) << "Not enough data in the array to read drawingsVariable";
         return;
     }
-    catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing DrawingsVariable.";
-        return;
-    }
+    unsigned char drawingsVariable = array.at(pos);
+    pos++;
 
     //parse OfficeArfDgContainer from msdoc
     OfficeArtDgContainer *pDgContainer = 0;
-    try {
-        pDgContainer = new OfficeArtDgContainer();
+        pDgContainer = new OfficeArtDgContainer(array.constData() + pos, array.size() - pos);
+        if (!pDgContainer) {
+            kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
+            return;
+        }
+        pos += pDgContainer->_size;
         if (drawingsVariable == 0) {
             m_pOfficeArtBodyDgContainer = pDgContainer;
         } else {
             m_pOfficeArtHeaderDgContainer = pDgContainer;
         }
-        parseOfficeArtDgContainer(in, *pDgContainer);
-    }
-    catch (IOException e) {
-        kDebug(30513) << "Caught IOException while parsing OfficeArtDgContainer.";
-        kDebug(30513) << e.msg;
-        return;
-    }
-    catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
-        return;
-    }
 #ifdef DEBUG_GHANDLER
     kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
 #endif
+
 
     // parse drawingsVariable from msdoc
     // 0 - next OfficeArtDgContainer belongs to Main Document
     // 1 - next OfficeArtDgContainer belongs to Header Document
-    try {
-        drawingsVariable = in.readuint8();
-    }
-    catch (IOException e) {
-        kDebug(30513) << "Caught IOException while parsing the 2nd DrawingsVariable.";
-        kDebug(30513) << e.msg;
+    if (pos >= array.size()) {
+        kDebug(30513) << "Not enough data in the array to read drawingsVariable";
         return;
     }
-    catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd DrawingsVariable.";
-        return;
-    }
+    drawingsVariable = array.at(pos);
+    pos++;
 
     //parse OfficeArfDgContainer from msdoc
-    pDgContainer = 0;
-    try {
-        pDgContainer = new OfficeArtDgContainer();
-        if (drawingsVariable == 0) {
-            if (m_pOfficeArtBodyDgContainer != 0){
-                delete m_pOfficeArtBodyDgContainer;
-            }
-            m_pOfficeArtBodyDgContainer = pDgContainer;
-        } else {
-            if (m_pOfficeArtHeaderDgContainer != 0) {
-                delete m_pOfficeArtHeaderDgContainer;
-            }
-            m_pOfficeArtHeaderDgContainer = pDgContainer;
+    pDgContainer = new OfficeArtDgContainer(array.constData() + pos, array.size() - pos);
+    if (!pDgContainer) {
+        kDebug(30513) << "Caught UNKNOWN exception while parsing OfficeArtDgContainer.";
+        return;
+    }
+    pos += pDgContainer->_size;
+    if (drawingsVariable == 0) {
+        if (m_pOfficeArtBodyDgContainer != 0){
+            delete m_pOfficeArtBodyDgContainer;
         }
-        parseOfficeArtDgContainer(in, *pDgContainer);
-    }
-    catch (IOException e) {
-        kDebug(30513) << "Caught IOException while parsing the 2nd OfficeArtDgContainer.";
-        kDebug(30513) << e.msg;
-        return;
-    }
-    catch (...) {
-        kDebug(30513) << "Caught UNKNOWN exception while parsing the 2nd OfficeArtDgContainer.";
-        return;
+        m_pOfficeArtBodyDgContainer = pDgContainer;
+    } else {
+        if (m_pOfficeArtHeaderDgContainer != 0) {
+            delete m_pOfficeArtHeaderDgContainer;
+        }
+        m_pOfficeArtHeaderDgContainer = pDgContainer;
     }
 
 #ifdef DEBUG_GHANDLER
     kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
 #endif
 
-    quint32 r = buffer.size() - in.getPosition();
+    quint32 r = buffer.size() - pos;
     if (r > 0) {
         kError(30513) << "Error:" << r << "bytes left to parse from the OfficeArtContent!";
     }
@@ -680,7 +637,7 @@ int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
     if (!blipStore) return(1);
 
     // WordDocument stream equals the Delay stream, [MS-DOC] — v20101219
-    LEInputStream& in = m_document->wdocumentStream();
+    QBuffer& in = m_document->wordDocumentBuffer();
 
     for (int i = 0; i < blipStore->rgfb.size(); i++) {
         OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
