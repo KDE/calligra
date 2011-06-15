@@ -30,7 +30,7 @@
 //#include "versionmagic.h"
 #include "document.h"
 
-#include "generated/simpleParser.h"
+#include "generated/api.h"
 #include "writer.h"
 #include "ODrawToOdf.h"
 
