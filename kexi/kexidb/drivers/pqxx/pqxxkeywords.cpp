@@ -3,7 +3,7 @@
    Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
 
    This file has been automatically generated from
-   calligra/kexi/tools/sql_keywords/sql_keywords.sh and
+   koffice/kexi/tools/sql_keywords/sql_keywords.sh and
    postgresql-7.4.6/src/backend/parser/keywords.c.
 
    Please edit the sql_keywords.sh, not this file!
