@@ -61,7 +61,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         body->startElement("draw:rect");
     }
     // Simplifying connector to be a line
-    else if (startType == StraightConnectorStart) {
+    else if (startType == LineStart) {
         body->startElement("draw:line");
     }
     else if (startType == GroupStart) {
@@ -146,6 +146,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
     if (!width.isEmpty()) {
+        if (width.at(0) == '.') {
+            width.prepend("0");
+        }
         if (m_currentVMLProperties.insideGroup) {
             widthValue = width.toInt() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
             widthString = QString("%1%2").arg(widthValue).arg(m_currentVMLProperties.groupWidthUnit);
@@ -155,6 +158,9 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
     if (!height.isEmpty()) {
+        if (height.at(0) == '.') {
+            height.prepend("0");
+        }
         if (m_currentVMLProperties.insideGroup) {
             heightValue = height.toInt() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
             heightString = QString("%1%2").arg(heightValue).arg(m_currentVMLProperties.groupHeightUnit);
@@ -165,7 +171,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-    if (startType == StraightConnectorStart) {
+    if (startType == LineStart) {
         QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
         QString y1 = y_pos_string;
         QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2)); // right(2) takes the unit
@@ -666,6 +672,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
 
     READ_ATTR_WITHOUT_NS(from)
     READ_ATTR_WITHOUT_NS(to)
+
+    // The transformations below are done in order to utilize group transformations
+    // in createFrameStart function
     int index = from.indexOf(',');
     QString temp = from.left(index);
     if (temp == "0") {
@@ -714,7 +723,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
 
     body = frameBuf.originalWriter();
 
-    createFrameStart(StraightConnectorStart);
+    createFrameStart(LineStart);
 
     (void)frameBuf.releaseWriter();
 
@@ -2156,7 +2165,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     RETURN_IF_ERROR(parseCSS(style))
     kDebug() << "m_vmlStyle:" << m_currentVMLProperties.vmlStyle;
 
-    //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_currentVMLProperties.shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_currentVMLProperties.shapeTitle)
 
@@ -2182,12 +2190,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 isCustomShape = false;
                 TRY_READ(imagedata)
             }
-            else if (qualifiedName() == "v:textbox") {
-                isCustomShape = false;
-                body->startElement("draw:text-box");
-                TRY_READ(textbox)
-                body->endElement(); // draw:text-box
-            }
+            ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(shadow)
@@ -2204,31 +2207,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     body = frameBuf.originalWriter();
 
     if (m_outputFrames) {
-        if (o_connectortype.isEmpty()) {
-            if (!isCustomShape) {
-                createFrameStart();
-            }
-            else {
-                createFrameStart(CustomStart);
-            }
+        if (!isCustomShape) {
+            createFrameStart();
         }
         else {
-            createFrameStart(StraightConnectorStart);
+            createFrameStart(CustomStart);
         }
     }
 
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
-        if (isCustomShape && o_connectortype.isEmpty()) {
+        if (isCustomShape) {
             m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
             QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
             if (flip.contains("x")) {
-                m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\"";
+                m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
             }
             if (flip.contains("y")) {
-                m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\"";
+                m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
             }
             m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
                 arg(m_currentVMLProperties.modifiers);
