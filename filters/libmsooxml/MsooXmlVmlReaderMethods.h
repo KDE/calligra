@@ -125,7 +125,6 @@ protected:
         int groupWidth, groupHeight; // Relative group extends
         int groupX, groupY; // Relative group origin
         qreal groupXOffset, groupYOffset; // Offset caused by the group parent
-        QString groupWidthUnit, groupHeightUnit; // pt, cm etc.
         qreal real_groupWidth, real_groupHeight;
     };
 
