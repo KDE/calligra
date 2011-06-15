@@ -3,7 +3,7 @@
    Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
 
    This file has been automatically generated from
-   koffice/kexi/tools/sql_keywords/sql_keywords.sh and
+   calligra/kexi/tools/sql_keywords/sql_keywords.sh and
    ../../3rdparty/kexisql3/src/tokenize.c.
 
    Please edit the sql_keywords.sh, not this file!
