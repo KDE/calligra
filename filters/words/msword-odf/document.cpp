@@ -59,7 +59,7 @@ Document::Document(const std::string& fileName,
                    MSWordOdfImport* filter,
                    KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, KoGenStyles* mainStyles,
-                   const QBuffer& wordDocumentBuffer, POLE::Stream& table, const QBuffer& data)
+                   QBuffer& wordDocumentBuffer, POLE::Stream& table, QBuffer& data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
