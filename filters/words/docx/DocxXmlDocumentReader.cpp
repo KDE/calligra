@@ -380,12 +380,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     applyPageBorders(m_currentPageStyle, m_pageMargins, m_pageBorderStyles, m_pageBorderPaddings, m_pageBorderOffsetFrom);
 
     // Currently if there are 3 header/footer styles, the one with 'first' is ignored
+    bool useEvenAndOddHeaders = false;
+    if (m_context->import->documentSettings().contains("evenAndOddHeaders")) {
+        QString val = m_context->import->documentSettings()["evenAndOddHeaders"].toString();
+        useEvenAndOddHeaders = (val != "off" && val != "0" && val != "false");
+    }
     if (!m_headers.isEmpty()) {
-        bool useEvenAndOddHeaders = false;
-        if (m_context->import->documentSettings().contains("evenAndOddHeaders")) {
-            QString val = m_context->import->documentSettings()["evenAndOddHeaders"].toString();
-            useEvenAndOddHeaders = (val != "off" && val != "0" && val != "false");
-        }
         bool odd = false;
         if (useEvenAndOddHeaders && m_headers["even"] != "") {
             m_masterPageStyle.addChildElement("style:header-left", m_headers["even"]);
@@ -401,7 +401,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 
     if (!m_footers.isEmpty()) {
         bool odd = false;
-        if (m_footers["even"] != "") {
+        if (useEvenAndOddHeaders && m_footers["even"] != "") {
             m_masterPageStyle.addChildElement("style:footer-left", m_footers["even"]);
         }
         if (m_footers["default"] != "") {
