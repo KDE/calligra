@@ -1963,7 +1963,8 @@ tristate KexiMainWindow::closeProject()
     if (d->navigator) {
         d->navWasVisibleBeforeProjectClosing = d->navDockWidget->isVisible();
         d->navDockWidget->hide();
-        d->navigator->clear();
+        d->navigator->setProject(0);
+        //d->navigator->clear();
     }
     
     if (d->propEditorDockWidget)

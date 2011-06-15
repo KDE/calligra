@@ -132,7 +132,7 @@ public slots:
     void updateItemName(KexiPart::Item& item, bool dirty);
     void selectItem(KexiPart::Item& item);
     void clearSelection();
-    void clear();
+    //void clear();
 
     //! Sets by main window to disable actions that may try to modify the project.
     //! Does not disable actions like opening objects.

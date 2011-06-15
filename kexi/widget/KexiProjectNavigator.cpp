@@ -581,10 +581,10 @@ bool KexiProjectNavigator::isReadOnly() const
     return m_readOnly;
 }
 
-void KexiProjectNavigator::clear()
-{
-m_list->setModel(0);
-}
+// void KexiProjectNavigator::clear()
+// {
+//     m_list->setModel(0);
+// }
 
 KexiProjectModel* KexiProjectNavigator::model() const
 {
