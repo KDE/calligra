@@ -26,7 +26,7 @@
 #include "drawstyle.h"
 #include "pictures.h"
 #include "msodraw.h"
-
+#include "generated/api.h"
 #include "graphicshandler.h"
 #include "conversion.h"
 #include "document.h"
@@ -253,7 +253,7 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
                   << "\nStorage Format: 0x" << hex << data.picf->mfp.mm;
 #endif
 
-    //the picture is store in some external file
+    //the picture is stored in some external file
     if (data.picf->mfp.mm == MM_SHAPEFILE) {
         DrawingWriter out(*m_currentWriter, *m_mainStyles, m_document->writingHeader());
         m_objectType = Inline;
@@ -283,7 +283,7 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     _zero = in->setMark();
     in->skip(data.fcPic);
 
-    OfficeArtInlineSpContainer co;
+    OfficeArtInlineSpContainer co();
     try {
         parseOfficeArtInlineSpContainer(*in, co);
     } catch (IOException _e) {
@@ -685,10 +685,10 @@ int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
     for (int i = 0; i < blipStore->rgfb.size(); i++) {
         OfficeArtBStoreContainerFileBlock block = blipStore->rgfb[i];
 
-	//Parse content of the Delay stream by using offsets from OfficeArtFBSE
-	//containers.  Not parsing Blip store because MD4 digests in
-	//OfficeArtFBSE happen to be out-dated, which complicates the pib to
-	//picture path association.
+        //Parse content of the Delay stream by using offsets from OfficeArtFBSE
+        //containers.  Not parsing Blip store because MD4 digests in
+        //OfficeArtFBSE happen to be out-dated, which complicates the pib to
+        //picture path association.
         if (block.anon.is<OfficeArtFBSE>()) {
             OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
             if (!fbse->embeddedBlip) {
