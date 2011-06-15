@@ -381,8 +381,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 
     // Currently if there are 3 header/footer styles, the one with 'first' is ignored
     if (!m_headers.isEmpty()) {
+        bool useEvenAndOddHeaders = false;
+        if (m_context->import->documentSettings().contains("evenAndOddHeaders")) {
+            QString val = m_context->import->documentSettings()["evenAndOddHeaders"].toString();
+            useEvenAndOddHeaders = (val != "off" && val != "0" && val != "false");
+        }
         bool odd = false;
-        if (m_headers["even"] != "") {
+        if (useEvenAndOddHeaders && m_headers["even"] != "") {
             m_masterPageStyle.addChildElement("style:header-left", m_headers["even"]);
         }
         if (m_headers["default"] != "") {
@@ -390,7 +395,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             m_masterPageStyle.addChildElement("style:header", m_headers["default"]);
         }
         if (!odd) {
-           m_masterPageStyle.addChildElement("style:header", m_headers["first"]);
+            m_masterPageStyle.addChildElement("style:header", m_headers["first"]);
         }
     }
 
