@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
    Copyright (c) 1998 Stefan Taferner
-                      2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
+                 2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
+                 2011 Inge Wallin (inge@lysator.liu.se)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 
 #include "WmfStack.h"
 #include "WmfAbstractBackend.h"
+#include "WmfDeviceContext.h"
 
 /**
    Namespace for Windows Metafile (WMF) classes
@@ -27,24 +29,32 @@ namespace Libwmf
 {
 
 
-void KoWmfBrushHandle::apply(WmfAbstractBackend *p)
+void KoWmfBrushHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 {
     p->setBrush(brush);
+    dc->brush = brush;
+    dc->changedItems |= DCBrush;
 }
 
-void KoWmfPenHandle::apply(WmfAbstractBackend *p)
+void KoWmfPenHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 {
     p->setPen(pen);
+    dc->pen = pen;
+    dc->changedItems |= DCPen;
 }
 
-void KoWmfPatternBrushHandle::apply(WmfAbstractBackend *p)
+void KoWmfPatternBrushHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 {
     p->setBrush(brush);
+    dc->brush = brush;
+    dc->changedItems |= DCBrush;
 }
 
-void KoWmfFontHandle::apply(WmfAbstractBackend *p)
+void KoWmfFontHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 {
     p->setFont(font, rotation, height);
+    dc->font = font;
+    dc->changedItems |= DCFont;
 }
 
 }
