@@ -145,7 +145,7 @@ private:
     qint16   mViewportHeight;
 
     // Current state of the drawing
-    WmfDeviceContext  *mDeviceContext;
+    WmfDeviceContext  mDeviceContext;
 
     WmfLayout   mLayout;
     QColor      mTextColor;

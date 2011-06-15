@@ -32,43 +32,50 @@ namespace Libwmf
 
 
 WmfDeviceContext::WmfDeviceContext()
-    // Graphics Objects
-    : brush()
-    , image()
-    , font()
-    , rotation()
-    , height()
-      //Palette
-    , pen()
-    , region()
-
-    // Structure Objects
-    , backgroundColor(Qt::white)
-    , currentPosition(0, 0)
-    , foregroundTextColor(Qt::black)
-      //Output Surface**  (what is this good for?  Mixing colors?)
-    , viewportExt()
-    , viewportOrg()
-    , windowExt()
-    , windowOrg()
-
-    // Graphic Properties
-    , bgMixMode()
-      //Break extra space
-    //Font mapping mode
-    , rop()
-    , layoutMode()
-      //Mapping mode
-    , polyFillMode()
-      //Stretchblt mode
-    , textAlign()
-      //Text extra space
-
-    , changedItems(0xffffffff)  // Everything changed the first time.
 {
+    reset();
+
     m_windowExtIsSet = false;
     m_viewportExtIsSet = false;
     m_worldTransform.reset();
+}
+
+
+void WmfDeviceContext::reset()
+{
+    // Graphics Objects
+    brush = QBrush();
+    image = QImage();
+    font = QFont();
+    rotation = 0;
+    height = 0;
+    //Palette
+    pen = QPen();
+    region = QPolygon();
+
+    // Structure Objects
+    backgroundColor = QColor(Qt::white);
+    currentPosition = QPoint(0, 0);
+    foregroundTextColor = QColor(Qt::black);
+    //Output Surface**  (what is this good for?  Mixing colors?)
+    viewportExt = QSize();
+    viewportOrg = QPoint();
+    windowExt = QSize();
+    windowOrg = QPoint();
+
+    // Graphic Properties
+    bgMixMode = 0;// FIXME: Check the real default
+    //Break extra space
+    //Font mapping mode
+    rop = 0;// FIXME: Check the real default
+    layoutMode = 0;// FIXME: Check the real default
+    //Mapping mode
+    polyFillMode = 0;// FIXME: Check the real default
+    //Stretchblt mode
+    textAlign = 0;// FIXME: Check the real default
+    //Text extra space
+
+    changedItems = 0xffffffff;  // Everything changed the first time.
 }
 
 

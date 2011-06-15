@@ -83,6 +83,7 @@ class WmfDeviceContext
 {
 public:
     WmfDeviceContext();
+    void reset();
 
     // Graphic Objects
     QBrush    brush;            // Brush
