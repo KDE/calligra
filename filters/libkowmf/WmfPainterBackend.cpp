@@ -515,7 +515,7 @@ void WmfPainterBackend::setViewportExt( int width, int height )
 }
 
 
-void WmfPainterBackend::setMatrix(const QMatrix &wm, bool combine)
+void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, bool combine)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << wm << " " << combine;
@@ -530,7 +530,7 @@ void WmfPainterBackend::setMatrix(const QMatrix &wm, bool combine)
 //                         Drawing
 
 
-void WmfPainterBackend::setClipRegion(const QRegion &rec)
+void WmfPainterBackend::setClipRegion(WmfDeviceContext &context, const QRegion &rec)
 {
     mPainter->setClipRegion(rec);
 }
@@ -542,7 +542,7 @@ QRegion WmfPainterBackend::clipRegion()
 }
 
 
-void WmfPainterBackend::moveTo(int x, int y)
+void WmfPainterBackend::moveTo(WmfDeviceContext &context, int x, int y)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000)<< x << ", " << y;
@@ -551,7 +551,7 @@ void WmfPainterBackend::moveTo(int x, int y)
 }
 
 
-void WmfPainterBackend::lineTo(int x, int y)
+void WmfPainterBackend::lineTo(WmfDeviceContext &context, int x, int y)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << " using " << mPainter->pen()
@@ -564,7 +564,7 @@ void WmfPainterBackend::lineTo(int x, int y)
 }
 
 
-void WmfPainterBackend::drawRect(int x, int y, int w, int h)
+void WmfPainterBackend::drawRect(WmfDeviceContext &context, int x, int y, int w, int h)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -575,7 +575,8 @@ void WmfPainterBackend::drawRect(int x, int y, int w, int h)
 }
 
 
-void WmfPainterBackend::drawRoundRect(int x, int y, int w, int h, int roudw, int roudh)
+void WmfPainterBackend::drawRoundRect(WmfDeviceContext &context, int x, int y, int w, int h,
+                                      int roudw, int roudh)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -584,7 +585,7 @@ void WmfPainterBackend::drawRoundRect(int x, int y, int w, int h, int roudw, int
 }
 
 
-void WmfPainterBackend::drawEllipse(int x, int y, int w, int h)
+void WmfPainterBackend::drawEllipse(WmfDeviceContext &context, int x, int y, int w, int h)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -593,7 +594,8 @@ void WmfPainterBackend::drawEllipse(int x, int y, int w, int h)
 }
 
 
-void WmfPainterBackend::drawArc(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawArc(WmfDeviceContext &context, int x, int y, int w, int h,
+                                int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -602,7 +604,8 @@ void WmfPainterBackend::drawArc(int x, int y, int w, int h, int a, int alen)
 }
 
 
-void WmfPainterBackend::drawPie(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawPie(WmfDeviceContext &context, int x, int y, int w, int h,
+                                int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h;
@@ -611,7 +614,8 @@ void WmfPainterBackend::drawPie(int x, int y, int w, int h, int a, int alen)
 }
 
 
-void WmfPainterBackend::drawChord(int x, int y, int w, int h, int a, int alen)
+void WmfPainterBackend::drawChord(WmfDeviceContext &context, int x, int y, int w, int h,
+                                  int a, int alen)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << ", " << y << ", " << w << ", " << h
@@ -621,7 +625,7 @@ void WmfPainterBackend::drawChord(int x, int y, int w, int h, int a, int alen)
 }
 
 
-void WmfPainterBackend::drawPolyline(const QPolygon &pa)
+void WmfPainterBackend::drawPolyline(WmfDeviceContext &context, const QPolygon &pa)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << pa;
@@ -630,7 +634,7 @@ void WmfPainterBackend::drawPolyline(const QPolygon &pa)
 }
 
 
-void WmfPainterBackend::drawPolygon(const QPolygon &pa, bool winding)
+void WmfPainterBackend::drawPolygon(WmfDeviceContext &context, const QPolygon &pa, bool winding)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << pa << winding;
@@ -644,7 +648,8 @@ void WmfPainterBackend::drawPolygon(const QPolygon &pa, bool winding)
 }
 
 
-void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
+void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa,
+                                        bool winding)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000);
@@ -686,7 +691,8 @@ void WmfPainterBackend::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 }
 
 
-void WmfPainterBackend::drawImage(int x, int y, const QImage &img, int sx, int sy, int sw, int sh)
+void WmfPainterBackend::drawImage(WmfDeviceContext &context, int x, int y, const QImage &img,
+                                  int sx, int sy, int sw, int sh)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << " " << y << " " << sx << " " << sy << " " << sw << " " << sh;
@@ -695,7 +701,8 @@ void WmfPainterBackend::drawImage(int x, int y, const QImage &img, int sx, int s
 }
 
 
-void WmfPainterBackend::patBlt(int x, int y, int width, int height, quint32 rasterOperation)
+void WmfPainterBackend::patBlt(WmfDeviceContext &context, int x, int y, int width, int height,
+                               quint32 rasterOperation)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << y << width << height << hex << rasterOperation << dec;
@@ -714,8 +721,8 @@ void WmfPainterBackend::patBlt(int x, int y, int width, int height, quint32 rast
 }
 
 
-void WmfPainterBackend::drawText(int x, int y, int w, int h, int textAlign, const QString& text,
-                                 double textRotation)
+void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, int w, int h,
+                                 int textAlign, const QString& text, double textRotation)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << x << y << w << h << hex << textAlign << dec << text << textRotation;

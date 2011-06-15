@@ -135,33 +135,35 @@ public:
     // Clipping
     // the 'CoordinateMode' parameter is ommitted : always CoordPainter in wmf
     // setClipRegion() is often used with save() and restore() => implement all or none
-    virtual void  setClipRegion(const QRegion &) = 0;
+    virtual void  setClipRegion(WmfDeviceContext &context, const QRegion &) = 0;
     virtual QRegion clipRegion() = 0;
 
     // Graphics drawing functions
-    virtual void  moveTo(int x, int y) = 0;
-    virtual void  lineTo(int x, int y) = 0;
-    virtual void  drawRect(int x, int y, int w, int h) = 0;
-    virtual void  drawRoundRect(int x, int y, int w, int h, int = 25, int = 25) = 0;
-    virtual void  drawEllipse(int x, int y, int w, int h) = 0;
-    virtual void  drawArc(int x, int y, int w, int h, int a, int alen) = 0;
-    virtual void  drawPie(int x, int y, int w, int h, int a, int alen) = 0;
-    virtual void  drawChord(int x, int y, int w, int h, int a, int alen) = 0;
-    virtual void  drawPolyline(const QPolygon &pa) = 0;
-    virtual void  drawPolygon(const QPolygon &pa, bool winding = false) = 0;
+    virtual void  moveTo(WmfDeviceContext &context, int x, int y) = 0;
+    virtual void  lineTo(WmfDeviceContext &context, int x, int y) = 0;
+    virtual void  drawRect(WmfDeviceContext &context, int x, int y, int w, int h) = 0;
+    virtual void  drawRoundRect(WmfDeviceContext &context, int x, int y, int w, int h, int = 25, int = 25) = 0;
+    virtual void  drawEllipse(WmfDeviceContext &context, int x, int y, int w, int h) = 0;
+    virtual void  drawArc(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen) = 0;
+    virtual void  drawPie(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen) = 0;
+    virtual void  drawChord(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen) = 0;
+    virtual void  drawPolyline(WmfDeviceContext &context, const QPolygon &pa) = 0;
+    virtual void  drawPolygon(WmfDeviceContext &context, const QPolygon &pa, bool winding = false) = 0;
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    virtual void  drawPolyPolygon(QList<QPolygon>& listPa, bool winding = false) = 0;
-    virtual void  drawImage(int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1) = 0;
-    virtual void  patBlt(int x, int y, int width, int height, quint32 rasterOperation) = 0;
+    virtual void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa, bool winding = false) = 0;
+    virtual void  drawImage(WmfDeviceContext &context, int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1) = 0;
+    virtual void  patBlt(WmfDeviceContext &context, int x, int y, int width, int height,
+                         quint32 rasterOperation) = 0;
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented in KWinMetaFile
-    virtual void  drawText(int x, int y, int w, int h, int flags, const QString &s, double rotation) = 0;
+    virtual void  drawText(WmfDeviceContext &context, int x, int y, int w, int h,
+                           int flags, const QString &s, double rotation) = 0;
 
     // matrix transformation : only used for bitmap manipulation
-    virtual void  setMatrix(const QMatrix &, bool combine = false) = 0;
+    virtual void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false) = 0;
 
 protected:
     WmfParser  *m_parser;

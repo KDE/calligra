@@ -201,14 +201,15 @@ void WMFImportParser::setViewportExt(int width, int height)
 
 
 
-void WMFImportParser::setMatrix(const QMatrix &matrix, bool combine)
+void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &context, const QMatrix &matrix,
+                                bool combine)
 {
     kDebug(30504) << "matrix =" << matrix;
     kDebug(30504) << "combine =" << combine;
 }
 
 
-void WMFImportParser::setClipRegion(const QRegion &)
+void WMFImportParser::setClipRegion(Libwmf::WmfDeviceContext &context, const QRegion &)
 {
 }
 
@@ -219,14 +220,14 @@ QRegion WMFImportParser::clipRegion()
 }
 
 
-void WMFImportParser::moveTo(int left, int top)
+void WMFImportParser::moveTo(Libwmf::WmfDeviceContext &context, int left, int top)
 {
     mCurrentPoint.setX(left);
     mCurrentPoint.setY(top);
 }
 
 
-void WMFImportParser::lineTo(int left, int top)
+void WMFImportParser::lineTo(Libwmf::WmfDeviceContext &context, int left, int top)
 {
     KoPathShape * line = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! line)
@@ -244,7 +245,7 @@ void WMFImportParser::lineTo(int left, int top)
 }
 
 
-void WMFImportParser::drawRect(int left, int top, int width, int height)
+void WMFImportParser::drawRect(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height)
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
@@ -262,7 +263,7 @@ void WMFImportParser::drawRect(int left, int top, int width, int height)
 }
 
 
-void WMFImportParser::drawRoundRect(int left, int top, int width, int height, int roundw, int roundh)
+void WMFImportParser::drawRoundRect(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height, int roundw, int roundh)
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
@@ -282,7 +283,7 @@ void WMFImportParser::drawRoundRect(int left, int top, int width, int height, in
 }
 
 
-void WMFImportParser::drawEllipse(int left, int top, int width, int height)
+void WMFImportParser::drawEllipse(Libwmf::WmfDeviceContext &context, int left, int top, int width, int height)
 {
     QRectF bound = QRectF(QPointF(coordX(left), coordY(top)), QSizeF(scaleW(width), scaleH(height))).normalized();
 
@@ -300,7 +301,7 @@ void WMFImportParser::drawEllipse(int left, int top, int width, int height)
 }
 
 
-void WMFImportParser::drawArc(int x, int y, int w, int h, int aStart, int aLen)
+void WMFImportParser::drawArc(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
@@ -325,7 +326,7 @@ void WMFImportParser::drawArc(int x, int y, int w, int h, int aStart, int aLen)
 }
 
 
-void WMFImportParser::drawPie(int x, int y, int w, int h, int aStart, int aLen)
+void WMFImportParser::drawPie(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
@@ -350,7 +351,7 @@ void WMFImportParser::drawPie(int x, int y, int w, int h, int aStart, int aLen)
 }
 
 
-void WMFImportParser::drawChord(int x, int y, int w, int h, int aStart, int aLen)
+void WMFImportParser::drawChord(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int aStart, int aLen)
 {
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
@@ -375,7 +376,7 @@ void WMFImportParser::drawChord(int x, int y, int w, int h, int aStart, int aLen
 }
 
 
-void WMFImportParser::drawPolyline(const QPolygon &pa)
+void WMFImportParser::drawPolyline(Libwmf::WmfDeviceContext &context, const QPolygon &pa)
 {
     KoPathShape *polyline = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! polyline)
@@ -388,7 +389,7 @@ void WMFImportParser::drawPolyline(const QPolygon &pa)
 }
 
 
-void WMFImportParser::drawPolygon(const QPolygon &pa, bool winding)
+void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPolygon &pa, bool winding)
 {
     KoPathShape *polygon = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! polygon)
@@ -404,7 +405,7 @@ void WMFImportParser::drawPolygon(const QPolygon &pa, bool winding)
 }
 
 
-void WMFImportParser::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
+void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa, bool winding)
 {
     KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! path)
@@ -431,7 +432,7 @@ void WMFImportParser::drawPolyPolygon(QList<QPolygon>& listPa, bool winding)
 }
 
 
-void WMFImportParser::drawImage(int x, int y, const QImage &image, int sx, int sy, int sw, int sh)
+void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &context, int x, int y, const QImage &image, int sx, int sy, int sw, int sh)
 {
     KoImageData * data = mDoc->imageCollection()->createImageData(image);
     if (! data)
@@ -458,7 +459,7 @@ void WMFImportParser::drawImage(int x, int y, const QImage &image, int sx, int s
 }
 
 
-void WMFImportParser::patBlt(int x, int y, int width, int height, quint32 rasterOperation)
+void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &context, int x, int y, int width, int height, quint32 rasterOperation)
 {
     // Not Yet Implemented
     Q_UNUSED(x);
@@ -470,7 +471,7 @@ void WMFImportParser::patBlt(int x, int y, int width, int height, quint32 raster
 
 
 
-void WMFImportParser::drawText(int x, int y, int , int , int flags, const QString& text, double rotation)
+void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, int , int , int flags, const QString& text, double rotation)
 {
     enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
 

@@ -533,7 +533,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left;
 
                     stream >> top >> left;
-                    m_backend->lineTo(left, top);
+                    m_backend->lineTo(*mDeviceContext, left, top);
                 }
                 break;
             case (META_MOVETO & 0xff):
@@ -541,7 +541,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left;
 
                     stream >> top >> left;
-                    m_backend->moveTo(left, top);
+                    m_backend->moveTo(*mDeviceContext, left, top);
                 }
                 break;
             case (META_EXCLUDECLIPRECT & 0xff):
@@ -558,7 +558,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         region = region.subtract(newRegion);
                     }
 
-                    m_backend->setClipRegion(region);
+                    m_backend->setClipRegion(*mDeviceContext, region);
                 }
                 break;
             case (META_INTERSECTCLIPRECT & 0xff):
@@ -575,7 +575,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         region = region.intersect(newRegion);
                     }
 
-                    m_backend->setClipRegion(region);
+                    m_backend->setClipRegion(*mDeviceContext, region);
                 }
                 break;
             case (META_ARC & 0xff):
@@ -592,7 +592,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     xyToAngle(leftStart - xCenter, yCenter - topStart,
                               leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-                    m_backend->drawArc(left, top, right - left, bottom - top, angleStart, aLength);
+                    m_backend->drawArc(*mDeviceContext, left, top, right - left, bottom - top,
+                                       angleStart, aLength);
                 }
                 break;
             case (META_ELLIPSE & 0xff):
@@ -600,7 +601,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left, right, bottom;
 
                     stream >> bottom >> right >> top >> left;
-                    m_backend->drawEllipse(left, top, right - left, bottom - top);
+                    m_backend->drawEllipse(*mDeviceContext, left, top, right - left, bottom - top);
                 }
                 break;
             case (META_FLOODFILL & 0xff):
@@ -618,7 +619,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     yCenter = top + ((bottom - top) / 2);
                     xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-                    m_backend->drawPie(left, top, right - left, bottom - top, angleStart, aLength);
+                    m_backend->drawPie(*mDeviceContext, left, top, right - left, bottom - top,
+                                       angleStart, aLength);
                 }
                 break;
             case (META_RECTANGLE & 0xff):
@@ -627,7 +629,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> bottom >> right >> top >> left;
                     //kDebug(31000) << left << top << right << bottom;
-                    m_backend->drawRect(left, top, right - left, bottom - top);
+                    m_backend->drawRect(*mDeviceContext, left, top, right - left, bottom - top);
                 }
                 break;
             case (META_ROUNDRECT & 0xff):
@@ -645,7 +647,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     if ((bottom - top) != 0)
                         yRnd = (heightCorner * 100) / (bottom - top);
 
-                    m_backend->drawRoundRect(left, top, right - left, bottom - top, xRnd, yRnd);
+                    m_backend->drawRoundRect(*mDeviceContext, left, top, right - left, bottom - top,
+                                             xRnd, yRnd);
                 }
                 break;
             case (META_PATBLT & 0xff):
@@ -661,7 +664,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     //kDebug(31000) << "patBlt record" << hex << rasterOperation << dec
                     //              << x << y << width << height;
 
-                    m_backend->patBlt(x, y, width, height, rasterOperation);
+                    m_backend->patBlt(*mDeviceContext, x, y, width, height, rasterOperation);
                 }
                 break;
             case (META_SAVEDC & 0xff):
@@ -678,8 +681,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     QPen pen = oldPen;
                     pen.setColor(qtColor(color));
                     m_backend->setPen(pen);
-                    m_backend->moveTo(left, top);
-                    m_backend->lineTo(left, top);
+                    m_backend->moveTo(*mDeviceContext, left, top);
+                    m_backend->lineTo(*mDeviceContext, left, top);
                     m_backend->setPen(oldPen);
                 }
                 break;
@@ -709,7 +712,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // FIXME: If we ever want to support vertical text (e.g. japanese),
                     //        we need to send the vertical text align as well.
-                    m_backend->drawText(x, y, -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
+                    m_backend->drawText(*mDeviceContext, x, y, -1, -1, mTextAlign, text,
+                                        static_cast<double>(mTextRotation));
                 }
                 break;
             case (META_BITBLT & 0xff):
@@ -724,7 +728,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     QPolygon pa(num);
 
                     pointArray(stream, pa);
-                    m_backend->drawPolygon(pa, mWinding);
+                    m_backend->drawPolygon(*mDeviceContext, pa, mWinding);
                 }
                 break;
             case (META_POLYLINE & 0xff):
@@ -735,7 +739,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     QPolygon pa(num);
 
                     pointArray(stream, pa);
-                    m_backend->drawPolyline(pa);
+                    m_backend->drawPolyline(*mDeviceContext, pa);
                 }
                 break;
             case (META_ESCAPE & 0xff):
@@ -782,7 +786,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     yCenter = top + ((bottom - top) / 2);
                     xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-                    m_backend->drawChord(left, top, right - left, bottom - top, angleStart, aLength);
+                    m_backend->drawChord(*mDeviceContext, left, top, right - left, bottom - top,
+                                         angleStart, aLength);
                 }
                 break;
             case (META_SETMAPPERFLAGS & 0xff):
@@ -819,7 +824,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // FIXME: If we ever want to support vertical text (e.g. japanese),
                     //        we need to send the vertical text align as well.
-                    m_backend->drawText(x, y, -1, -1, mTextAlign, text, static_cast<double>(mTextRotation));
+                    m_backend->drawText(*mDeviceContext, x, y, -1, -1, mTextAlign, text,
+                                        static_cast<double>(mTextRotation));
                 }
                 break;
             case (META_SETDIBTODEV & 0xff):
@@ -847,7 +853,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     }
 
                     // draw polygon's
-                    m_backend->drawPolyPolygon(listPa, mWinding);
+                    m_backend->drawPolyPolygon(*mDeviceContext, listPa, mWinding);
                     listPa.clear();
                 }
                 break;
@@ -873,14 +879,15 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                             if (widthSrc < 0) {
                                 // negative width => horizontal flip
                                 QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                                m_backend->setMatrix(m, true);
+                                m_backend->setMatrix(*mDeviceContext, m, true);
                             }
                             if (heightSrc < 0) {
                                 // negative height => vertical flip
                                 QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                                m_backend->setMatrix(m, true);
+                                m_backend->setMatrix(*mDeviceContext, m, true);
                             }
-                            m_backend->drawImage(leftDst, topDst, bmpSrc, leftSrc, topSrc, widthSrc, heightSrc);
+                            m_backend->drawImage(*mDeviceContext, leftDst, topDst,
+                                                 bmpSrc, leftSrc, topSrc, widthSrc, heightSrc);
                             m_backend->restore();
                         }
                     } else {
@@ -906,18 +913,18 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         if (widthDst < 0) {
                             // negative width => horizontal flip
                             QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(m, true);
+                            m_backend->setMatrix(*mDeviceContext, m, true);
                         }
                         if (heightDst < 0) {
                             // negative height => vertical flip
                             QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(m, true);
+                            m_backend->setMatrix(*mDeviceContext, m, true);
                         }
                         bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
                         // TODO: scale the bitmap : QImage::scale(widthDst, heightDst)
                         // is actually too slow
 
-                        m_backend->drawImage(leftDst, topDst, bmpSrc);
+                        m_backend->drawImage(*mDeviceContext, leftDst, topDst, bmpSrc);
                         m_backend->restore();
                     }
                 }
@@ -958,17 +965,17 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         if (widthDst < 0) {
                             // negative width => horizontal flip
                             QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(m, true);
+                            m_backend->setMatrix(*mDeviceContext, m, true);
                         }
                         if (heightDst < 0) {
                             // negative height => vertical flip
                             QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(m, true);
+                            m_backend->setMatrix(*mDeviceContext, m, true);
                         }
                         bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
                         // TODO: scale the bitmap ( QImage::scale(param[ 8 ], param[ 7 ]) is actually too slow )
 
-                        m_backend->drawImage(leftDst, topDst, bmpSrc);
+                        m_backend->drawImage(*mDeviceContext, leftDst, topDst, bmpSrc);
                         m_backend->restore();
                     }
                 }

@@ -111,35 +111,38 @@ private:
     // Clipping
     // the 'CoordinateMode' is ommitted : always CoordPainter in wmf
     // setClipRegion() is often used with save() and restore() => implement all or none
-    void  setClipRegion(const QRegion &rec);
+    void  setClipRegion(WmfDeviceContext &context, const QRegion &rec);
     QRegion clipRegion();
 
     // Graphics drawing functions
-    void  moveTo(int x, int y);
-    void  lineTo(int x, int y);
-    void  drawRect(int x, int y, int w, int h);
-    void  drawRoundRect(int x, int y, int w, int h, int = 25, int = 25);
-    void  drawEllipse(int x, int y, int w, int h);
-    void  drawArc(int x, int y, int w, int h, int a, int alen);
-    void  drawPie(int x, int y, int w, int h, int a, int alen);
-    void  drawChord(int x, int y, int w, int h, int a, int alen);
-    void  drawPolyline(const QPolygon& pa);
-    void  drawPolygon(const QPolygon& pa, bool winding = false);
+    void  moveTo(WmfDeviceContext &context, int x, int y);
+    void  lineTo(WmfDeviceContext &context, int x, int y);
+    void  drawRect(WmfDeviceContext &context, int x, int y, int w, int h);
+    void  drawRoundRect(WmfDeviceContext &context, int x, int y, int w, int h, int = 25, int = 25);
+    void  drawEllipse(WmfDeviceContext &context, int x, int y, int w, int h);
+    void  drawArc(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
+    void  drawPie(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
+    void  drawChord(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
+    void  drawPolyline(WmfDeviceContext &context, const QPolygon& pa);
+    void  drawPolygon(WmfDeviceContext &context, const QPolygon& pa, bool winding = false);
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon(QList<QPolygon>& listPa, bool winding = false);
-    void  drawImage(int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1);
-    void  patBlt(int x, int y, int width, int height, quint32 rasterOperation);
+    void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa, bool winding = false);
+    void  drawImage(WmfDeviceContext &context, int x, int y, const QImage &,
+                    int sx = 0, int sy = 0, int sw = -1, int sh = -1);
+    void  patBlt(WmfDeviceContext &context, int x, int y, int width, int height,
+                 quint32 rasterOperation);
 
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented in KWinMetaFile
-    void  drawText(int x, int y, int w, int h, int flags, const QString &s, double rotation);
+    void  drawText(WmfDeviceContext &context, int x, int y, int w, int h,
+                   int flags, const QString &s, double rotation);
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setMatrix(const QMatrix &, bool combine = false);
+    void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false);
 
  private:
     void updateFromGraphicscontext(WmfDeviceContext &context);
