@@ -549,16 +549,18 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left, right, bottom;
 
                     stream >> bottom >> right >> top >> left;
-
-                    QRegion region = m_backend->clipRegion();
+                    
+                    QRegion region = mDeviceContext.clipRegion;
                     QRegion newRegion(left, top, right - left, bottom - top);
                     if (region.isEmpty()) {
+                        // FIXME: I doubt that if the region is previously empty,
+                        //        it should be set to the new region.  /iw
                         region = newRegion;
                     } else {
                         region = region.subtract(newRegion);
                     }
 
-                    m_backend->setClipRegion(mDeviceContext, region);
+                    mDeviceContext.clipRegion = region;
                 }
                 break;
             case (META_INTERSECTCLIPRECT & 0xff):
@@ -567,15 +569,17 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     stream >> bottom >> right >> top >> left;
 
-                    QRegion region = m_backend->clipRegion();
+                    QRegion region = mDeviceContext.clipRegion;
                     QRegion newRegion(left, top, right - left, bottom - top);
                     if (region.isEmpty()) {
+                        // FIXME: I doubt that if the region is previously empty,
+                        //        it should be set to the new region.  /iw
                         region = newRegion;
                     } else {
                         region = region.intersect(newRegion);
                     }
 
-                    m_backend->setClipRegion(mDeviceContext, region);
+                    mDeviceContext.clipRegion = region;
                 }
                 break;
             case (META_ARC & 0xff):
@@ -1149,7 +1153,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     { &WmfParser::createBitmap, "createBitmap" }, // 110 0xfe
 #endif
             case (META_CREATEREGION & 0xff):
-                // Unimplemented
+                // FIXME: Unimplemented
                 createEmptyObject();
                break;
             default:

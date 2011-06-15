@@ -209,17 +209,6 @@ void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &context, const QMatrix
 }
 
 
-void WMFImportParser::setClipRegion(Libwmf::WmfDeviceContext &context, const QRegion &)
-{
-}
-
-
-QRegion WMFImportParser::clipRegion()
-{
-    return mClippingRegion;
-}
-
-
 void WMFImportParser::moveTo(Libwmf::WmfDeviceContext &context, int left, int top)
 {
     mCurrentPoint.setX(left);

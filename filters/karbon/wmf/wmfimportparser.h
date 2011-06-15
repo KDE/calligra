@@ -135,7 +135,6 @@ private:
     KoShape * createShape(const QString &shapeID);
 
     KarbonDocument *mDoc;
-    QRegion   mClippingRegion;
     QPen      mPen;
     QPen      mTextPen;
     QBrush    mBrush;

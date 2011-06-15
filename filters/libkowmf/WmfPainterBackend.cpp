@@ -530,18 +530,6 @@ void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, 
 //                         Drawing
 
 
-void WmfPainterBackend::setClipRegion(WmfDeviceContext &context, const QRegion &rec)
-{
-    mPainter->setClipRegion(rec);
-}
-
-
-QRegion WmfPainterBackend::clipRegion()
-{
-    return mPainter->clipRegion();
-}
-
-
 void WmfPainterBackend::moveTo(WmfDeviceContext &context, int x, int y)
 {
 #if DEBUG_WMFPAINT

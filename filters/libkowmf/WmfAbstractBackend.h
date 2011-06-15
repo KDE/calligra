@@ -132,12 +132,6 @@ public:
     virtual void  setViewportOrg(int left, int top) = 0;
     virtual void  setViewportExt(int width, int height) = 0;
 
-    // Clipping
-    // the 'CoordinateMode' parameter is ommitted : always CoordPainter in wmf
-    // setClipRegion() is often used with save() and restore() => implement all or none
-    virtual void  setClipRegion(WmfDeviceContext &context, const QRegion &) = 0;
-    virtual QRegion clipRegion() = 0;
-
     // Graphics drawing functions
     virtual void  moveTo(WmfDeviceContext &context, int x, int y) = 0;
     virtual void  lineTo(WmfDeviceContext &context, int x, int y) = 0;
