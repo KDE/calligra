@@ -58,15 +58,14 @@ MSWordOdfImport::~MSWordOdfImport()
 
 struct Finalizer {
 
-    Finalizer(LEInputStream* s) : m_store(0), m_genStyles(0), m_document(0),
-                                  m_contentWriter(0), m_bodyWriter(0), m_datastm(s) { }
+    Finalizer() : m_store(0), m_genStyles(0), m_document(0),
+        m_contentWriter(0), m_bodyWriter(0) { }
     ~Finalizer() {
         delete m_store;
         delete m_genStyles;
         delete m_document;
         delete m_contentWriter;
         delete m_bodyWriter;
-        delete m_datastm;
     }
 
     KoStore *m_store;
@@ -74,7 +73,6 @@ struct Finalizer {
     Document *m_document;
     KoXmlWriter *m_contentWriter;
     KoXmlWriter *m_bodyWriter;
-    LEInputStream* m_datastm;
 };
 
 
@@ -92,22 +90,22 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     QString outputFile = m_chain->outputFile();
 
     /*
-     * ************************************************
-     *  POLE storage, POLE and LEInput streams
-     * ************************************************
+     * **************************************************
+     *  POLE storage, POLE and various gargantuan buffers
+     * **************************************************
      */
-    //TODO: POLE:Stream or LEInputStream ?
-
     POLE::Storage storage(inputFile.toLocal8Bit());
     if (!storage.open()) {
         kDebug(30513) << "Cannot open " << inputFile;
         return KoFilter::InvalidFormat;
     }
+
     // WordDocument Stream
     QBuffer wordDocumentBuffer;
     if (!readStream(storage, "/WordDocument", wordDocumentBuffer)) {
         return KoFilter::InvalidFormat;
     }
+
     MSO::FibBase fibBase(wordDocumentBuffer.data().constData(), wordDocumentBuffer.size());
     if (!fibBase) {
         kError(30513) << "Could not parse fibBase";
@@ -130,12 +128,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
 
     // Data Stream
-    LEInputStream* datastm = 0;
-    QBuffer buff3;
-    if (!readStream(storage, "/Data", buff3)) {
+    QBuffer dataBuffer;
+    if (!readStream(storage, "/Data", dataBuffer)) {
         kDebug(30513) << "Failed to open /Data stream, no big deal (OPTIONAL).";
-    } else {
-        datastm = new LEInputStream(&buff3);
     }
 
     /*
@@ -143,7 +138,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
      *  Processing file
      * ************************************************
      */
-    Finalizer finalizer(datastm);
+    Finalizer finalizer;
 
     // Create output files
     KoStore *storeout;
@@ -181,6 +176,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     KoXmlWriter *contentWriter = new KoXmlWriter(&contentBuf);
     finalizer.m_contentWriter = contentWriter;
     KoXmlWriter *bodyWriter = new KoXmlWriter(&bodyBuf);
+
     finalizer.m_bodyWriter = bodyWriter;
     if (!bodyWriter || !contentWriter) {
         //not sure if this is the right error to return
@@ -195,12 +191,11 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     //create our document object, writing to the temporary buffers
     Document *document = 0;
-    LEInputStream wdstm(&wordDocumentBuffer); // XXX: this should be removed!
     try {
         document = new Document(QFile::encodeName(inputFile).data(), this,
                                 bodyWriter, &metaWriter, &manifestWriter,
                                 storeout, mainStyles,
-                                wordDocumentBuffer, tblstm_pole, datastm);
+                                wordDocumentBuffer, tblstm_pole, dataBuffer);
     } catch (InvalidFormatException _e) {
         kDebug(30513) << _e.msg;
         return KoFilter::InvalidFormat;

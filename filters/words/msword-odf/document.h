@@ -73,7 +73,7 @@ public:
              MSWordOdfImport* filter,
              KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, KoGenStyles* mainStyles,
-             QBuffer& wordDocumentBuffer, POLE::Stream& table, LEInputStream* data);
+             const QBuffer& wordDocumentBuffer, POLE::Stream& table, const QBuffer& data);
     virtual ~Document();
 
     virtual void setProgress(int percent);
@@ -167,7 +167,7 @@ public:
     POLE::Stream& poleTableStream(void) const { return m_tblstm_pole; }
     const QBuffer& wordDocumentBuffer(void) const { return m_wordDocumentBuffer; }
     LEInputStream* tableStream(void) const { return m_tblstm; }
-    LEInputStream* dataStream(void) const { return m_datastm; }
+    const QBuffer& dataStream(void) const { return m_dataBuffer; }
 
     // get the style name used for line numbers
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
@@ -268,9 +268,9 @@ private:
     QString m_lastMasterPageName;
 
     //pointers to streams
-    QBuffer& m_wordDocumentBuffer;
+    const QBuffer& m_wordDocumentBuffer;
     LEInputStream* m_tblstm;
-    LEInputStream* m_datastm;
+    const QBuffer& m_dataBuffer;
     POLE::Stream& m_tblstm_pole;
 
     //A stack for backgroud-colors, which represets a background color context

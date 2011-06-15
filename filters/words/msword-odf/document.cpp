@@ -59,7 +59,7 @@ Document::Document(const std::string& fileName,
                    MSWordOdfImport* filter,
                    KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, KoGenStyles* mainStyles,
-                   QBuffer& wordDocumentBuffer, POLE::Stream& table, LEInputStream* data)
+                   const QBuffer& wordDocumentBuffer, POLE::Stream& table, const QBuffer& data)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
@@ -84,7 +84,7 @@ Document::Document(const std::string& fileName,
         , m_useLastMasterPage(false)
         , m_wordDocumentBuffer(wordDocumentBuffer)
         , m_tblstm(0)
-        , m_datastm(data)
+        , m_dataBuffer(data)
         , m_tblstm_pole(table)
 {
     kDebug(30513);
