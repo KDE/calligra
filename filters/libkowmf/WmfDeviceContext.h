@@ -26,6 +26,7 @@
 #include <QPen>
 #include <QFont>
 #include <QPolygon>
+#include <QRegion>
 #include <QTransform>
 
 
@@ -93,7 +94,7 @@ public:
     int       height;           //   - original font height; can be negative
     //Palette                   // Palette not supported yet
     QPen      pen;              // Pen
-    QPolygon  region;           // Region
+    QRegion   clipRegion;       // Region
 
     // Structure Objects
     QColor  backgroundColor;    // Background text color

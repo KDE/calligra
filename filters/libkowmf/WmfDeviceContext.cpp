@@ -51,7 +51,7 @@ void WmfDeviceContext::reset()
     height = 0;
     //Palette
     pen = QPen();
-    region = QPolygon();
+    clipRegion = QRegion();
 
     // Structure Objects
     backgroundColor = QColor(Qt::white);
