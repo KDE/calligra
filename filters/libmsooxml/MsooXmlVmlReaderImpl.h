@@ -55,8 +55,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
 }
 
 static void doPrependCheck(QString& checkedString) {
-    if (!checkedString.isEmpty() && checkedString.at(0) == '0') {
-        checkedString.prepend("0");
+    if (!checkedString.isEmpty()) {
+        if (checkedString.at(0) == '.') {
+            checkedString.prepend("0");
+        }
+        else if (checkedString == "0") {
+            checkedString.append("pt");
+        }
     }
 }
 
@@ -356,6 +361,18 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             m_currentDrawStyle->addProperty("draw:fill", "gradient");
             m_currentDrawStyle->addProperty("draw:fill-gradient-name", m_currentVMLProperties.gradientStyle);
         }
+        else if (m_currentVMLProperties.fillType == "picture") {
+            KoGenStyle fillStyle = KoGenStyle(KoGenStyle::FillImageStyle);
+            fillStyle.addProperty("xlink:href", m_currentVMLProperties.imagedataPath);
+            fillStyle.addProperty("xlink:type", "simple");
+            fillStyle.addProperty("xlink:actuate", "onLoad");
+            const QString imageName = mainStyles->insert(fillStyle);
+            m_currentDrawStyle->addProperty("draw:fill", "bitmap");
+            m_currentDrawStyle->addProperty("draw:fill-image-name", imageName);
+            // Fix me, whether these should be used or not is most likely some vml parameter
+            m_currentDrawStyle->addProperty("draw:fill-image-height", widthString);
+            m_currentDrawStyle->addProperty("draw:fill-image-width", heightString);
+        }
     }
     else {
         m_currentDrawStyle->addProperty("draw:fill", "none");
@@ -387,43 +404,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         const QString drawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
         body->addAttribute("draw:style-name", drawStyleName);
     }
-}
-
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
-{
-    if (!m_currentVMLProperties.imagedataPath.isEmpty()) {
-        body->startElement("draw:image");
-        body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:show", "embed");
-        body->addAttribute("xlink:actuate", "onLoad");
-        body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
-        body->endElement(); // draw:image
-    }
-
-    {
-        {
-            const QString rId(m_currentVMLProperties.vmlStyle.value("v:fill@r:id"));
-            if (!rId.isEmpty()) {
-                body->startElement("draw:image");
-                const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));
-                kDebug() << "sourceName:" << sourceName;
-                if (sourceName.isEmpty()) {
-                    return KoFilter::FileNotFound;
-                }
-
-                QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-                RETURN_IF_ERROR(m_context->import->copyFile(sourceName, destinationName, false ))
-                addManifestEntryForFile(destinationName);
-                addManifestEntryForPicturesDir();
-                body->addAttribute("xlink:href", destinationName);
-                body->endElement(); //draw:image
-            }
-        }
-    }
-
-    body->endElement(); //draw:frame or draw:rect
-
-    return KoFilter::OK;
 }
 
 void MSOOXML_CURRENT_CLASS::takeDefaultValues()
@@ -747,7 +727,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
 
     (void)frameBuf.releaseWriter();
 
-    createFrameEnd();
+    body->endElement(); //draw:frame or draw:rect
 
     popCurrentDrawStyle();
 
@@ -838,7 +818,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     (void)frameBuf.releaseWriter();
 
-    createFrameEnd();
+    body->endElement(); //draw:frame or draw:rect
 
     popCurrentDrawStyle();
 
@@ -1267,7 +1247,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::genericReader()
 
     (void)frameBuf.releaseWriter();
 
-    createFrameEnd();
+    body->endElement(); //draw:frame or draw:rect
 
     popCurrentDrawStyle();
 
@@ -1344,10 +1324,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-//! @todo support more attrs
-    // Relationship ID of the relationship to the image used for this fill.
-    TRY_READ_ATTR_WITH_NS(r, id)
-    m_currentVMLProperties.vmlStyle.insert("v:fill@r:id", r_id);
 
     // Spec says that this should overwrite the shape's value, but apparently
     // a non specified value does not overwrite it
@@ -1400,13 +1376,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
         if (type == "gradient") {
             m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
             if (angle.isEmpty()) { // default
-                m_currentGradientStyle.addAttribute("svg:x1", "0%");
-                m_currentGradientStyle.addAttribute("svg:y1", "50%");
-                m_currentGradientStyle.addAttribute("svg:x2", "100%");
-                m_currentGradientStyle.addAttribute("svg:y2", "50%");
+                m_currentGradientStyle.addAttribute("svg:x1", "50%");
+                m_currentGradientStyle.addAttribute("svg:y1", "0%");
+                m_currentGradientStyle.addAttribute("svg:x2", "50%");
+                m_currentGradientStyle.addAttribute("svg:y2", "100%");
             }
             else {
-                qreal angleReal = angle.toDouble() * M_PI / 180.0;
+                qreal angleReal = (90.0 + angle.toDouble()) * M_PI / 180.0;
                 m_currentGradientStyle.addAttribute("svg:x1", QString("%1%").arg(50 - 50 * cos(angleReal)));
                 m_currentGradientStyle.addAttribute("svg:y1", QString("%1%").arg(50 + 50 * sin(angleReal)));
                 m_currentGradientStyle.addAttribute("svg:x2", QString("%1%").arg(50 + 50 * cos(angleReal)));
@@ -1436,6 +1412,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
             m_currentGradientStyle.addAttribute("svg:cx", QString("%1%").arg(50));
             m_currentGradientStyle.addAttribute("svg:cy", QString("%1%").arg(50));
             m_currentGradientStyle.addAttribute("svg:r", "80%"); ; // fix me if possible
+        }
+        else if (type == "frame" || type == "tile" || type == "pattern") {
+            m_currentVMLProperties.fillType = "picture";
         }
         else {
             m_currentVMLProperties.fillType = "solid"; // defaulting
@@ -1490,6 +1469,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
             m_currentVMLProperties.gradientStyle = mainStyles->insert(m_currentGradientStyle);
         }
     }
+
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (!r_id.isEmpty()) {
+        const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
+        m_currentVMLProperties.imagedataPath = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        KoFilter::ConversionStatus status = m_context->import->copyFile(sourceName, m_currentVMLProperties.imagedataPath, false);
+        if (status == KoFilter::OK) {
+            addManifestEntryForFile(m_currentVMLProperties.imagedataPath);
+            addManifestEntryForPicturesDir();
+        }
+        else {
+            m_currentVMLProperties.fillType = "solid"; // defaulting
+        }
+    }
+
     // frame (Stretch Image to Fit) - The image is stretched to fill the shape.
     // gradient (Linear Gradient) - The fill colors blend together in a linear gradient from bottom to top.
     // gradientRadial (Radial Gradient) - The fill colors blend together in a radial gradient.
@@ -2288,16 +2282,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     m_currentVMLProperties.wrapRead = false;
 
-    bool isCustomShape = true;
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (qualifiedName() == "v:imagedata") {
-                isCustomShape = false;
-                TRY_READ(imagedata)
-            }
+            TRY_READ_IF(imagedata)
             ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(fill)
@@ -2315,41 +2304,35 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     body = frameBuf.originalWriter();
 
     if (m_outputFrames) {
-        if (!isCustomShape) {
-            createFrameStart();
-        }
-        else {
-            createFrameStart(CustomStart);
-        }
+        createFrameStart(CustomStart);
     }
 
     (void)frameBuf.releaseWriter();
 
     if (m_outputFrames) {
-        if (isCustomShape) {
-            m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
+        m_currentVMLProperties.shapeTypeString = "<draw:enhanced-geometry ";
 
-            QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
-            if (flip.contains("x")) {
-                m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
-            }
-            if (flip.contains("y")) {
-                m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
-            }
-            m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
-                arg(m_currentVMLProperties.modifiers);
-            m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").
-                arg(m_currentVMLProperties.viewBox);
-            m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
-                arg(m_currentVMLProperties.shapePath);
-            m_currentVMLProperties.shapeTypeString += ">";
-            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
-            m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.normalFormulas;
-            m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
-
-            body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
+        QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
+        if (flip.contains("x")) {
+            m_currentVMLProperties.shapeTypeString += "draw:mirror-vertical=\"true\" ";
         }
-        createFrameEnd();
+        if (flip.contains("y")) {
+            m_currentVMLProperties.shapeTypeString += "draw:mirror-horizontal=\"true\" ";
+        }
+        m_currentVMLProperties.shapeTypeString += QString("draw:modifiers=\"%1\" ").
+            arg(m_currentVMLProperties.modifiers);
+        m_currentVMLProperties.shapeTypeString += QString("svg:viewBox=\"%1\" ").
+            arg(m_currentVMLProperties.viewBox);
+        m_currentVMLProperties.shapeTypeString += QString("draw:enhanced-path=\"%1\" ").
+            arg(m_currentVMLProperties.shapePath);
+        m_currentVMLProperties.shapeTypeString += ">";
+        m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.extraShapeFormulas;
+        m_currentVMLProperties.shapeTypeString += m_currentVMLProperties.normalFormulas;
+        m_currentVMLProperties.shapeTypeString += "</draw:enhanced-geometry>";
+
+        body->addCompleteElement(m_currentVMLProperties.shapeTypeString.toUtf8());
+
+        body->endElement(); //draw:frame or draw:rect
     }
 
     popCurrentDrawStyle();
@@ -2404,14 +2387,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
 
     kDebug() << "imagedata:" << imagedata;
     if (!imagedata.isEmpty()) {
-//! @todo ooo saves binaries to the root dir; should we?
-        m_context->import->imageSize(imagedata, m_imageSize);
-
         m_currentVMLProperties.imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);;
-        RETURN_IF_ERROR( m_context->import->copyFile(imagedata, m_currentVMLProperties.imagedataPath, false ) )
-        addManifestEntryForFile(m_currentVMLProperties.imagedataPath);
-        m_currentVMLProperties.imagedataFile = imagedata;
-        addManifestEntryForPicturesDir();
+        KoFilter::ConversionStatus status = m_context->import->copyFile(imagedata, m_currentVMLProperties.imagedataPath, false);
+        if (status == KoFilter::OK) {
+            addManifestEntryForFile(m_currentVMLProperties.imagedataPath);
+            addManifestEntryForPicturesDir();
+            m_currentVMLProperties.fillType = "picture";
+        }
+        else {
+            m_currentVMLProperties.fillType = "solid"; // defaulting
+        }
     }
 
     readNext();
