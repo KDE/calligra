@@ -530,6 +530,20 @@ void WmfPainterBackend::setMatrix(WmfDeviceContext &context, const QMatrix &wm, 
 //                         Drawing
 
 
+void WmfPainterBackend::setPixel(WmfDeviceContext &context, int x, int y, QColor color)
+{
+#if DEBUG_WMFPAINT
+    kDebug(31000) << x << y << color;
+#endif
+
+    QPen oldPen = mPainter->pen();
+    QPen pen = oldPen;
+    pen.setColor(color);
+    mPainter->setPen(pen);
+    mPainter->drawLine(x, y, x, y);
+    mPainter->setPen(oldPen);
+}
+
 void WmfPainterBackend::moveTo(WmfDeviceContext &context, int x, int y)
 {
 #if DEBUG_WMFPAINT

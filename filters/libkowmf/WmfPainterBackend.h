@@ -109,6 +109,7 @@ private:
     void  setViewportExt(int width, int height);
 
     // Graphics drawing functions
+    void  setPixel(WmfDeviceContext &context, int x, int y, QColor color);
     void  moveTo(WmfDeviceContext &context, int x, int y);
     void  lineTo(WmfDeviceContext &context, int x, int y);
     void  drawRect(WmfDeviceContext &context, int x, int y, int w, int h);

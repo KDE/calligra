@@ -209,6 +209,16 @@ void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &context, const QMatrix
 }
 
 
+void WMFImportParser::setPixel(Libwmf::WmfDeviceContext &context, int x, int y, QColor color)
+{
+    Q_UNUSED(context);
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(color);
+
+    // Not Yet Implemented
+}
+
 void WMFImportParser::moveTo(Libwmf::WmfDeviceContext &context, int left, int top)
 {
     mCurrentPoint.setX(left);

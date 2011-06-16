@@ -89,6 +89,7 @@ private:
     QRegion clipRegion();
 
     // Graphics drawing functions
+    void  setPixel(Libwmf::WmfDeviceContext &context, int x, int y, QColor color);
     void  moveTo(Libwmf::WmfDeviceContext &context, int x, int y);
     void  lineTo(Libwmf::WmfDeviceContext &context, int x, int y);
     void  drawRect(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h);

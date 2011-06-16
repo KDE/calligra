@@ -678,11 +678,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 break;
             case (META_SETPIXEL & 0xff):
                 {
-                    qint16  top, left;
+                    qint16  left, top;
                     quint32 color;
 
                     stream >> color >> top >> left;
-
+#if 1
+                    m_backend->setPixel(mDeviceContext, left, top, qtColor(color));
+#else
                     QPen oldPen = m_backend->pen();
                     QPen pen = oldPen;
                     pen.setColor(qtColor(color));
@@ -690,6 +692,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     m_backend->moveTo(mDeviceContext, left, top);
                     m_backend->lineTo(mDeviceContext, left, top);
                     m_backend->setPen(oldPen);
+#endif
                 }
                 break;
             case (META_OFFSETCLIPRGN & 0xff):
