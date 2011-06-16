@@ -712,9 +712,9 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
         else {
             // no need to do anything regarding the stiNormalChar parentStyle
             // let's just merge the upxchpx character exceptions into ourselves
-             bool ok;
-             m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
-             mergeUpechpx(this, version);
+            bool ok;
+            m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
+            mergeUpechpx(this, version);
         }
 
         //finally apply so the chpx so we have ourselves a nice chp

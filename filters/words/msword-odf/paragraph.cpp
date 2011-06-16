@@ -195,6 +195,9 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
             textStyle->setAutoStyleInStylesDotXml(true);
         }
         textStyle->setParentName(msTextStyleName);
+
+        //FIXME: It doesn't make sense to compare CHPs, because those have been
+        //merged in the CHP::applyCHPSPRM function.
         const wvWare::Word97::CHP* refChp = &msTextStyle->chp();
 
         //if we have a new font, process that

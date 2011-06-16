@@ -62,13 +62,15 @@ Properties97::Properties97( OLEStreamReader* wordDocument, OLEStreamReader* tabl
 
     // Read the DOP
     m_table->seek( fib.fcDop );
-    if ( m_version == Word8 )
+    if ( m_version == Word8 ) {
         m_dop.read( m_table, false );
-    else
+    } else {
         m_dop = Word95::toWord97( Word95::DOP( m_table, false ) );
+    }
 
-    if ( m_table->tell() != static_cast<S32>( fib.fcDop + fib.lcbDop ) )
+    if ( m_table->tell() != static_cast<S32>( fib.fcDop + fib.lcbDop ) ) {
         wvlog << "Warning: DOP has a different size than expected." << endl;
+    }
 
     // Read the PLCF SED. The Word95::SED is different, but the differing
     // fields are unused and of the same size, so what :-)
@@ -78,35 +80,36 @@ Properties97::Properties97( OLEStreamReader* wordDocument, OLEStreamReader* tabl
     if ( fib.lcbClx != 0 ) {
         // Read the PAPX and CHPX BTE PLCFs (to locate the appropriate FKPs)
         m_table->seek( fib.fcPlcfbtePapx );
-        if ( m_version == Word8 )
+        if ( m_version == Word8 ) {
             m_plcfbtePapx = new PLCF<Word97::BTE>( fib.lcbPlcfbtePapx, m_table );
-        else
+        } else {
             m_plcfbtePapx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbtePapx, m_table ) );
-        if ( fib.cpnBtePap != 0 && fib.cpnBtePap != m_plcfbtePapx->count() )
+        }
+        if ( fib.cpnBtePap != 0 && fib.cpnBtePap != m_plcfbtePapx->count() ) {
             wvlog << "Error: The PAP piece table is incomplete! (Should be " << fib.cpnBtePap << ")" << endl;
-
+        }
         m_table->seek( fib.fcPlcfbteChpx );
-        if ( m_version == Word8 )
+        if ( m_version == Word8 ) {
             m_plcfbteChpx = new PLCF<Word97::BTE>( fib.lcbPlcfbteChpx, m_table );
-        else
+        } else {
             m_plcfbteChpx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbteChpx, m_table ) );
-        if ( fib.cpnBteChp != 0 && fib.cpnBteChp != m_plcfbteChpx->count() )
+        }
+        if ( fib.cpnBteChp != 0 && fib.cpnBteChp != m_plcfbteChpx->count() ) {
             wvlog << "Error: The CHP piece table is incomplete! (Should be " << fib.cpnBteChp << ")" << endl;
-    }
-    else {
+        }
+    } else {
         // Read the PAPX and CHPX BTE PLCFs (to locate the appropriate FKPs) from a non-complex file
         m_table->seek( fib.fcPlcfbtePapx );
         m_plcfbtePapx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbtePapx, m_table ) );
-        if ( fib.cpnBtePap != m_plcfbtePapx->count() )
+        if ( fib.cpnBtePap != m_plcfbtePapx->count() ) {
             fillBinTable( m_plcfbtePapx, fib.cpnBtePap );
-
+        }
         m_table->seek( fib.fcPlcfbteChpx );
         m_plcfbteChpx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbteChpx, m_table ) );
-        if ( fib.cpnBteChp != m_plcfbteChpx->count() )
+        if ( fib.cpnBteChp != m_plcfbteChpx->count() ) {
             fillBinTable( m_plcfbteChpx, fib.cpnBteChp );
+        }
     }
-
-
 }
 
 Properties97::~Properties97()
