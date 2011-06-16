@@ -91,6 +91,7 @@ protected:
     KoFilter::ConversionStatus read_outline();
     KoFilter::ConversionStatus read_framePr();
     KoFilter::ConversionStatus read_OLEObject();
+    KoFilter::ConversionStatus read_control();
     KoFilter::ConversionStatus read_webHidden();
     KoFilter::ConversionStatus read_bookmarkStart();
     KoFilter::ConversionStatus read_bookmarkEnd();

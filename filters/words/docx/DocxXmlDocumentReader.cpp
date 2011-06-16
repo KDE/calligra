@@ -1315,8 +1315,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(v, shapetype)
-            ELSE_TRY_READ_IF_NS(v, shape)
+            else if (name() == "shape") {
+                m_outputFrames = false;
+                TRY_READ(shape)
+                m_outputFrames = true;
+            }
             ELSE_TRY_READ_IF_NS(o, OLEObject)
+            ELSE_TRY_READ_IF(control)
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
@@ -5324,6 +5329,48 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridSpan()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL control
+//! Reads a activeX control object
+/*
+ Parent elements:
+ - [done] object (§17.3.3.19)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_control()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    body->startElement("draw:frame");
+    body->addAttribute("svg:width", m_currentVMLProperties.currentObjectWidthCm);
+    body->addAttribute("svg:height", m_currentVMLProperties.currentObjectHeightCm);
+    body->addAttribute("text:anchor-type", "as-char"); // default for these
+
+    // Do we even want to try anything with activeX controls?
+    /*
+    TRY_READ_ATTR_WITH_NS(r, id)
+    const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
+    kDebug() << "oleName:" << oleName;
+    */
+
+    // Replacement image
+    body->startElement("draw:image");
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:show", "embed");
+    body->addAttribute("xlink:actuate", "onLoad");
+    body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
+    body->endElement(); // draw:image
+
+    body->endElement(); // draw:frame
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
 // ---------------------------------------------------------------------------
 
 #define blipFill_NS "pic"
@@ -5345,22 +5392,38 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 // <o:OLEObject Type="Embed" ProgID="Visio.Drawing.11" ShapeID="_x0000_i1025"
 //              DrawAspect="Content" ObjectID="_1240488905" r:id="rId10"/>
 
+    body->startElement("draw:frame");
+    body->addAttribute("svg:width", m_currentVMLProperties.currentObjectWidthCm);
+    body->addAttribute("svg:height", m_currentVMLProperties.currentObjectHeightCm);
+    body->addAttribute("text:anchor-type", "as-char"); // default for these
+
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
     kDebug() << "oleName:" << oleName;
 
-//! @todo ooo saves binaries to the root dir; should we?
-
-    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
+    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);
     KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
     if (stat == KoFilter::OK) {
+        body->startElement("draw:object-ole");
         addManifestEntryForFile(destinationName);
+        body->addAttribute("xlink:href", destinationName);
+        body->endElement(); // draw:object-ole
     }
+
+    // Replacement image
+    body->startElement("draw:image");
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:show", "embed");
+    body->addAttribute("xlink:actuate", "onLoad");
+    body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
+    body->endElement(); // draw:image
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
     }
+
+    body->endElement(); // draw:frame
 
     READ_EPILOGUE
 }
