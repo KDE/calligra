@@ -2973,7 +2973,7 @@ QString View::standardTaskStatusReport() const
     s += "<report:text-style fo:letter-spacing=\"0%\" style:letter-kerning=\"true\" fo:font-size=\"8\" fo:foreground-color=\"#000000\" fo:font-family=\"DejaVu Sans\" fo:font-style=\"italic\" fo:background-color=\"#ffffff\" fo:background-opacity=\"100%\" />";
     s += "<report:line-style report:line-style=\"nopen\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:label>";
-    s += "<report:line report:name=\"line15\" svg:y1=\"1.2229cm\" svg:x1=\"18.9715cm\" svg:y2=\"1.2229cm\" svg:x2=\"0cm\" report:z-index=\"0\" >";
+    s += "<report:line report:name=\"line15\" svg:y1=\"1.2229cm\" svg:x1=\"0cm\" svg:y2=\"1.2229cm\" svg:x2=\"18.9715cm\" report:z-index=\"0\" >";
     s += "<report:line-style report:line-style=\"solid\" report:line-weight=\"1\" report:line-color=\"#000000\" />";
     s += "</report:line>";
     s += "</report:section>";
