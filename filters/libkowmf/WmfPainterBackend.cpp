@@ -717,11 +717,10 @@ void WmfPainterBackend::patBlt(WmfDeviceContext &context, int x, int y, int widt
 }
 
 
-void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, int w, int h,
-                                 int textAlign, const QString& text)
+void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, int textAlign, const QString& text)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text;
+    kDebug(31000) << x << y << hex << textAlign << dec << text;
 #endif
 
     // The TA_UPDATECP flag tells us to use the current position
@@ -774,14 +773,7 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, int w,
         y = -3 * y;
     }
 
-    // Sometimes it happens that w and/or h == -1, and then the bounding box
-    // isn't valid any more.  In that case, use our own calculated values.
-    if (w == -1 || h == -1) {
-        mPainter->drawText(x, y, width, height, Qt::AlignLeft|Qt::AlignTop, text);
-    }
-    else {
-        mPainter->drawText(x, y, w, h, Qt::AlignLeft|Qt::AlignTop, text);
-    }
+    mPainter->drawText(x, y, width, height, Qt::AlignLeft|Qt::AlignTop, text);
 
     mPainter->restore();
 }

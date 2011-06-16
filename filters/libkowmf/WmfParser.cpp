@@ -711,7 +711,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // FIXME: If we ever want to support vertical text (e.g. japanese),
                     //        we need to send the vertical text align as well.
-                    m_backend->drawText(mDeviceContext, x, y, -1, -1, mTextAlign, text);
+                    m_backend->drawText(mDeviceContext, x, y, mTextAlign, text);
                 }
                 break;
             case (META_BITBLT & 0xff):
@@ -822,7 +822,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // FIXME: If we ever want to support vertical text (e.g. japanese),
                     //        we need to send the vertical text align as well.
-                    m_backend->drawText(mDeviceContext, x, y, -1, -1, mTextAlign, text);
+                    m_backend->drawText(mDeviceContext, x, y, mTextAlign, text);
                 }
                 break;
             case (META_SETDIBTODEV & 0xff):

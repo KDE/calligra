@@ -466,7 +466,7 @@ void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &context, int x, int y, in
 
 
 
-void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, int , int , int flags, const QString& text)
+void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, int flags, const QString& text)
 {
     enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
 
