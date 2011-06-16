@@ -2899,70 +2899,92 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
     }
     else {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
-        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
-        // Note that many of these don't seem to have a good odf counterpart,
-        // and are thus just guesses
+        if (m_alignH.isEmpty()) {
+            m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        } else {
+            m_currentDrawStyle->addProperty("style:horizontal-pos", m_alignH);
+        }
+        if (m_alignV.isEmpty()) {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+        } else if (m_alignV == "center") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "middle");
+        } else if (m_alignV == "bottom") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        } else if (m_alignV == "top") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "top");
+        } else if (m_alignV == "outside") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        } else if (m_alignV == "inside") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "top");
+        }
+
         if (m_relativeFromV == "column") {
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
         }
         else  if (m_relativeFromV == "bottomMargin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
+            // Not supported propery by ODF, making a best guess
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
         else  if (m_relativeFromV == "insideMargin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
+            // Not supported propery by ODF, making a best guess
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentDrawStyle->addProperty("style:vertical-pos", "top");
         }
         else  if (m_relativeFromV == "line") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "line");
-            body->addAttribute("text:anchor-type", "as-char");
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
         }
         else  if (m_relativeFromV == "margin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
         }
         else  if (m_relativeFromV == "outsideMargin") {
-             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-             body->addAttribute("text:anchor-type", "paragraph");
+             // Not supported propery by ODF, making a best guess
+             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
         else  if (m_relativeFromV == "page") {
             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
-            body->addAttribute("text:anchor-type", "page");
         }
         else  if (m_relativeFromV == "paragraph") {
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
         }
         else  if (m_relativeFromV == "topMargin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
+            // Not supported propery by ODF, making a best guess
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentDrawStyle->addProperty("style:vertical-pos", "top");
         }
 
         if (m_relativeFromH == "character") {
             m_currentDrawStyle->addProperty("style:horizontal-rel", "char");
+            body->addAttribute("text:anchor-type", "char");
         }
         else if (m_relativeFromH == "column") {
             m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "insideMargin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-start-margin");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "leftMargin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-start-margin");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "margin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "outsideMargin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-end-margin");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "page") {
             m_currentDrawStyle->addProperty("style:horizontal-rel", "page");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "rightMargin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-end-margin");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
     }
 
@@ -5407,6 +5429,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     m_drawing_anchor = true; // for pic:pic
     bool behindDoc = false;
     bool allowOverlap = false;
+    m_alignH.clear();
+    m_alignV.clear();
 
     const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
@@ -5861,28 +5885,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
 {
     READ_PROLOGUE
-    switch (caller) {
-    case align_positionH:
-//! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
-        /*center
-        inside
-        left
-        outside
-        right*/
-        m_alignH = text().toString();
-        break;
-    case align_positionV:
-//! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
-        /*bottom
-        center
-        inside
-        outside
-        top*/
-        m_alignV = text().toString();
-    break;
-    }
-
     readNext();
+
+    if (!isEndElement()) {// was text
+       switch (caller) {
+       case align_positionH:
+//! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
+            /*center
+            inside
+            left
+            outside
+            right*/
+            m_alignH = text().toString();
+            break;
+        case align_positionV:
+//! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
+            /*bottom
+            center
+            inside
+            outside
+            top*/
+            m_alignV = text().toString();
+        break;
+        }
+        readNext();
+    }
 
     READ_EPILOGUE
 }
