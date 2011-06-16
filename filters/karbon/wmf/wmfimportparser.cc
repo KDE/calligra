@@ -142,12 +142,6 @@ void WMFImportParser::setPen(const QPen &pen)
 }
 
 
-void WMFImportParser::setTextPen(const QPen &pen)
-{
-    mTextPen = pen;
-}
-
-
 void WMFImportParser::setBrush(const QBrush &brush)
 {
     mBrush = brush;
@@ -512,7 +506,9 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
         textShape->applyTransformation(matrix);
     }
 
-    textShape->setBackground(new KoColorBackground(mTextPen.color()));
+    // FIXME: This must be wrong. The text pen is supposed to be used
+    //        for the foreground, not the background.  /iw
+    textShape->setBackground(new KoColorBackground(context.foregroundTextColor));
 
     mDoc->add(textShape);
 }

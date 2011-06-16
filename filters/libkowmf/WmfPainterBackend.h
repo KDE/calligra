@@ -88,7 +88,6 @@ private:
     void  setFont(const QFont& font, int rotation, int height);
     // the pen : the width of the pen is in logical coordinate
     void  setPen(const QPen& pen);
-    void  setTextPen(const QPen& pen);
     void  setBrush(const QBrush& brush);
 
     // Drawing attributes/modes
@@ -146,7 +145,6 @@ protected:
     QSizeF    mOutputSize;
     int       mFontRotation;
     int       mFontHeight;
-    QPen  mTextPen;
     QPaintDevice *mTarget;
     bool  mRelativeCoord;
     QPoint mLastPos;

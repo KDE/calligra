@@ -401,10 +401,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     quint32 color;
 
                     stream >> color;
-                    mTextColor = qtColor(color);
-                    m_backend->setTextPen(QPen(mTextColor));
-
-                    mDeviceContext.foregroundTextColor = mTextColor;
+                    mDeviceContext.foregroundTextColor = qtColor(color);
                     mDeviceContext.changedItems |= DCFgTextColor;
                 }
                 break;

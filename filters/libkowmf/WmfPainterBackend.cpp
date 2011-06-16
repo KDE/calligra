@@ -41,7 +41,6 @@ WmfPainterBackend::WmfPainterBackend(QPainter *painter, const QSizeF &outputSize
     : WmfAbstractBackend()
     , mPainter(painter)
     , mOutputSize(outputSize)
-    , mTextPen()
     , mSaveCount(0)
 {
     mTarget = painter->device();
@@ -194,15 +193,6 @@ void WmfPainterBackend::setFont(const QFont &font, int rotation, int fontHeight)
     mFontHeight = fontHeight;
 }
 
-
-void WmfPainterBackend::setTextPen(const QPen &pen)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << pen;
-#endif
-
-    mTextPen = pen;
-}
 
 void WmfPainterBackend::setPen(const QPen &pen)
 {
@@ -755,9 +745,9 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
                   << "leading = " << fm.leading();
 #endif
 
-    // Use the special pen defined by mTextPen for text.
+    // Use the special pen defined by the foregroundTextColor in the device context for text.
     mPainter->save();
-    mPainter->setPen(mTextPen);
+    mPainter->setPen(context.foregroundTextColor);
 
     // If the actual height is < 0, we should use device units.  This
     // means that if the text is currently upside-down due to some
@@ -824,12 +814,6 @@ void WmfPainterBackend::updateFromGraphicscontext(WmfDeviceContext &context)
         mPainter->setPen(context.backgroundColor);
 #if DEBUG_WMFPAINT
         kDebug(31000) << "*** Setting background text color to" << context.backgroundColor;
-#endif
-    }
-    if (context.changedItems & DCFgTextColor) {
-        mPainter->setPen(context.foregroundTextColor);
-#if DEBUG_WMFPAINT
-        kDebug(31000) << "*** Setting foreground text color to" << context.foregroundColor;
 #endif
     }
 
