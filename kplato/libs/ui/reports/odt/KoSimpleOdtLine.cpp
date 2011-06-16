@@ -103,7 +103,8 @@ void KoSimpleOdtLine::createBody(KoXmlWriter *bodyWriter) const
     bodyWriter->addAttribute("draw:style-name", m_frameStyleName);
     bodyWriter->addAttribute("draw:z-index", "3");
 
-    if (height == 0.0) {
+    if (height == 0.0 && width >= 0.0) {
+        // just a horizontal line
         bodyWriter->addAttributePt("svg:x", sx);
         bodyWriter->addAttributePt("svg:y", sy);
         bodyWriter->addAttributePt("svg:width", width);

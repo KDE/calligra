@@ -1,6 +1,8 @@
 
 Calligra Plan current:
 
+* Fix bug 274805: Effort Estimate defaults to 8.0Y instead of 8.0h on first instance.
+
 * Add odt export to reports
 
 * Fix bug 269652: Crash on save/exit.
