@@ -59,9 +59,6 @@ static void doPrependCheck(QString& checkedString) {
         if (checkedString.at(0) == '.') {
             checkedString.prepend("0");
         }
-        else if (checkedString == "0") {
-            checkedString.append("pt");
-        }
     }
 }
 
@@ -69,6 +66,9 @@ static void changeToPoints(QString &value) {
     QString unit = value.right(2);
     if (unit == "pt") {
         return;
+    }
+    if (value == "0") {
+        value = "0pt");
     }
     qreal number = value.left(value.size() - 2).toDouble();
     if (unit == "in") {
@@ -601,14 +601,12 @@ void MSOOXML_CURRENT_CLASS::handleStrokeAndFill(const QXmlStreamAttributes& attr
     TRY_READ_ATTR_WITHOUT_NS(opacity)
     if (!opacity.isEmpty()) {
         if (opacity.right(1) == "f") {
-            opacity = opacity.left(opacity.length()-1);
-            m_currentVMLProperties.opacity = 100 * opacity.toInt() / 65536;
+            opacity = opacity.left(opacity.length() - 1);
+            m_currentVMLProperties.opacity = 100.0 * opacity.toDouble() / 65536.0;
         }
         else {
-            if (opacity.left(1) == ".") {
-                opacity = "0" + opacity;
-            }
-            m_currentVMLProperties.opacity = 100 * opacity.toDouble();
+            doPrependCheck(opacity);
+            m_currentVMLProperties.opacity = 100.0 * opacity.toDouble();
         }
     }
 }
@@ -677,12 +675,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
     // in createFrameStart function
     int index = from.indexOf(',');
     QString temp = from.left(index);
+    doPrependCheck(temp);
     if (temp == "0") {
         temp = "0pt";
     }
     int fromX = temp.left(2).toInt();
     m_currentVMLProperties.vmlStyle["left"] = temp;
     temp = from.mid(index + 1);
+    doPrependCheck(temp);
     if (temp == "0") {
         temp = "0pt";
     }
@@ -690,6 +690,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
     m_currentVMLProperties.vmlStyle["top"] = temp;
     index = to.indexOf(',');
     temp = to.left(index);
+    doPrependCheck(temp);
     if (temp == "0") {
         temp = "0pt";
     }
@@ -697,6 +698,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
     int toX = temp.left(temp.size() - 2).toInt() - fromX;
     m_currentVMLProperties.vmlStyle["width"] = QString("%1%2").arg(toX).arg(unit);
     temp = to.mid(index + 1);
+    doPrependCheck(temp);
     if (temp == "0") {
         temp = "0pt";
     }
@@ -877,14 +879,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
     TRY_READ_ATTR_WITHOUT_NS(opacity)
     if (!opacity.isEmpty()) {
         if (opacity.right(1) == "f") {
-            opacity = opacity.left(opacity.length()-1);
-            m_currentVMLProperties.shadowOpacity = 100 * opacity.toInt() / 65536;
+            opacity = opacity.left(opacity.length() - 1);
+            m_currentVMLProperties.shadowOpacity = 100.0 * opacity.toDouble() / 65536.0;
         }
         else {
-            if (opacity.left(1) == ".") {
-                opacity = "0" + opacity;
-            }
-            m_currentVMLProperties.shadowOpacity = 100 * opacity.toDouble();
+            doPrependCheck(opacity);
+            m_currentVMLProperties.shadowOpacity = 100.0 * opacity.toDouble();
         }
     }
 
@@ -1351,11 +1351,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
     if (!opacity.isEmpty()) {
         if (opacity.right(1) == "f") {
             opacity = opacity.left(opacity.length() - 1);
-            m_currentVMLProperties.opacity = 100 * opacity.toInt() / 65536;
+            m_currentVMLProperties.opacity = 100.0 * opacity.toDouble() / 65536.0;
         }
         else {
             doPrependCheck(opacity);
-            m_currentVMLProperties.opacity = 100 * opacity.toDouble();
+            m_currentVMLProperties.opacity = 100.0 * opacity.toDouble();
         }
     }
 
