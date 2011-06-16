@@ -561,6 +561,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     }
 
                     mDeviceContext.clipRegion = region;
+                    mDeviceContext.changedItems |= DCClipRegion;
                 }
                 break;
             case (META_INTERSECTCLIPRECT & 0xff):
@@ -580,6 +581,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     }
 
                     mDeviceContext.clipRegion = region;
+                    mDeviceContext.changedItems |= DCClipRegion;
                 }
                 break;
             case (META_ARC & 0xff):

@@ -50,7 +50,7 @@ enum DeviceContextMembers {
     DCFont           = 0x00000002,
     DCPalette        = 0x00000004,
     DCPen            = 0x00000008,
-    DCRegion         = 0x00000010,
+    DCClipRegion     = 0x00000010,
 
     // Structure objects
     DCBgTextColor    = 0x00000020,

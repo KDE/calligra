@@ -812,7 +812,7 @@ void WmfPainterBackend::updateFromGraphicscontext(WmfDeviceContext &context)
         kDebug(31000) << "*** Setting pen to" << context.pen;
 #endif
     }
-    if (context.changedItems & DCRegion) {
+    if (context.changedItems & DCClipRegion) {
         // Not used until SETCLIPREGION is used
 #if DEBUG_WMFPAINT
         kDebug(31000) << "*** region changed to" << context.region;
