@@ -68,7 +68,7 @@ static void changeToPoints(QString &value) {
         return;
     }
     if (value == "0") {
-        value = "0pt");
+        value = "0pt";
     }
     qreal number = value.left(value.size() - 2).toDouble();
     if (unit == "in") {
@@ -2370,6 +2370,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
 {
     READ_PROLOGUE
+
+    m_currentVMLProperties.filled = true;
 
 /*    e.g. <v:imagedata r:id="rId7" o:title="..."/> */
     const QXmlStreamAttributes attrs(attributes());
