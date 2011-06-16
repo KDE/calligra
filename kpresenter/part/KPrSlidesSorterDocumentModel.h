@@ -50,6 +50,8 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const;
 
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
     int rowCount(const QModelIndex &parent) const;
 
     virtual QStringList mimeTypes() const;
