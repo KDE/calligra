@@ -128,14 +128,6 @@ void WMFImportParser::restore()
 }
 
 
-void WMFImportParser::setFont(const QFont &font, int rotation, int fontHeight)
-{
-    mFont = font;
-    Q_UNUSED(rotation);
-    Q_UNUSED(fontHeight);
-}
-
-
 void WMFImportParser::setPen(const QPen &pen)
 {
     mPen = pen;
@@ -472,8 +464,8 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
     }
 
     // adjust font size
-    QFont font = mFont;
-    font.setPointSizeF(coordY(mFont.pointSize()));
+    QFont font = context.font;
+    font.setPointSizeF(coordY(context.font.pointSize()));
 
     ArtisticTextShape * textShape = static_cast<ArtisticTextShape*>(createShape(ArtisticTextShapeID));
     if (! textShape)

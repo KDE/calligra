@@ -183,17 +183,6 @@ void WmfPainterBackend::restore()
 }
 
 
-void WmfPainterBackend::setFont(const QFont &font, int rotation, int fontHeight)
-{
-#if DEBUG_WMFPAINT
-    kDebug(31000) << font << rotation << fontHeight;
-#endif
-    mPainter->setFont(font);
-    mFontRotation = rotation;
-    mFontHeight = fontHeight;
-}
-
-
 void WmfPainterBackend::setPen(const QPen &pen)
 {
 #if DEBUG_WMFPAINT
@@ -712,6 +701,8 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
     kDebug(31000) << x << y << hex << dec << text;
 #endif
 
+    updateFromGraphicscontext(context);
+
     // The TA_UPDATECP flag tells us to use the current position
     if (context.textAlign & TA_UPDATECP) {
         // (left, top) position = current logical position
@@ -752,8 +743,8 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const 
     // If the actual height is < 0, we should use device units.  This
     // means that if the text is currently upside-down due to some
     // transformations, we should un-upside-down it before painting.
-    //kDebug(31000) << "fontheight:" << mFontHeight << "height:" << height << "y" << y;
-    if (mFontHeight < 0 && mPainter->worldTransform().m22() < 0) {
+    //kDebug(31000) << "fontheight:" << context.height << "height:" << height << "y" << y;
+    if (context.height < 0 && mPainter->worldTransform().m22() < 0) {
         mPainter->translate(0, -(y - height / 2));
         mPainter->scale(qreal(1.0), qreal(-1.0));
         mPainter->translate(0, +(y - height / 2));

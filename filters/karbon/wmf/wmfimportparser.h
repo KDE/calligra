@@ -58,7 +58,6 @@ private:
     void  restore();
 
     // Drawing tools
-    void  setFont(const QFont &font, int rotation, int fontHeight);
     // the pen : the width of the pen is in logical coordinate
     void  setPen(const QPen &pen);
     void  setBrush(const QBrush &brush);
@@ -143,7 +142,6 @@ private:
     double    mScaleY;
     // current position in WMF coordinate (INT16)
     QPoint    mCurrentPoint;
-    QFont     mFont;
 };
 
 #endif

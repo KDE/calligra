@@ -85,7 +85,6 @@ private:
     void recalculateWorldTransform();
 
     // Drawing tools
-    void  setFont(const QFont& font, int rotation, int height);
     // the pen : the width of the pen is in logical coordinate
     void  setPen(const QPen& pen);
     void  setBrush(const QBrush& brush);
@@ -143,8 +142,6 @@ protected:
     bool  mIsInternalPainter;      // True if the painter wasn't externally provided.
     QPainter *mPainter;
     QSizeF    mOutputSize;
-    int       mFontRotation;
-    int       mFontHeight;
     QPaintDevice *mTarget;
     bool  mRelativeCoord;
     QPoint mLastPos;
