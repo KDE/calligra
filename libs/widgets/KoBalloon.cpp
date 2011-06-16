@@ -1,16 +1,16 @@
 #include "KoBalloon.h"
 
-KoBalloon::KoBalloon(QString content, QWidget *parent) :
+KoBalloon::KoBalloon(QString content, int position, QWidget *parent) :
     QWidget(parent)
 {
     m_content = content;
+    m_y = position;
 }
 
 void KoBalloon::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    painter.setPen(Qt::blue);
+    QBrush brush(Qt::green);
     painter.setBackgroundMode(Qt::OpaqueMode);
-    painter.setBrush(Qt::SolidPattern);
-    painter.drawRect(this->x, this->y, this->width, this->height);
+    painter.setBackground(brush);
 }

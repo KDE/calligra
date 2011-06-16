@@ -11,10 +11,16 @@ public:
     explicit KoAnnotationSideBar(QWidget *parent = 0);
 
     // add a new annotation to the list
-    void addAnnotation(QString content);
+    void addAnnotation(QString content, int position);
+    // overridden paint event
+    void paintEvent(QPaintEvent *event);
 
 private:
-    QList<KoBalloon*> annotations;
+    // set the positions of the balloons relative to eachother and the boundries
+    void setPositions();
+
+private:
+    QList<KoBalloon*> *annotations;
 
 };
 

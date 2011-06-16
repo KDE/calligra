@@ -156,7 +156,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     }
     // temp comments section
     KoAnnotationSideBar *commentbar = new KoAnnotationSideBar(this);
-    commentbar->addAnnotation(QString("This is a test"));
+    commentbar->addAnnotation(QString("This is a test"), 0);
     commentbar->setVisible(true);
 
     layout->addWidget(commentbar);
