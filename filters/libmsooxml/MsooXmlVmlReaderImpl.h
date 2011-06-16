@@ -352,7 +352,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         if (m_currentVMLProperties.fillType == "solid") {
             m_currentDrawStyle->addProperty("draw:fill", "solid");
         }
-        else if (m_currentVMLProperties.fillType == "gradient") {
+        else if (m_currentVMLProperties.fillType == "gradient" || m_currentVMLProperties.fillType == "gradientRadial") {
             m_currentDrawStyle->addProperty("draw:fill", "gradient");
             m_currentDrawStyle->addProperty("draw:fill-gradient-name", m_currentVMLProperties.gradientStyle);
         }
@@ -1369,17 +1369,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
         m_currentVMLProperties.shapeSecondaryColor = rgbColor(color2);
     }
     TRY_READ_ATTR_WITHOUT_NS(angle)
+    TRY_READ_ATTR_WITHOUT_NS(colors)
 
     TRY_READ_ATTR_WITHOUT_NS(opacity)
     if (!opacity.isEmpty()) {
         if (opacity.right(1) == "f") {
-            opacity = opacity.left(opacity.length()-1);
+            opacity = opacity.left(opacity.length() - 1);
             m_currentVMLProperties.opacity = 100 * opacity.toInt() / 65536;
         }
         else {
-            if (opacity.left(1) == ".") {
-                opacity = "0" + opacity;
-            }
+            doPrependCheck(opacity);
             m_currentVMLProperties.opacity = 100 * opacity.toDouble();
         }
     }
@@ -1393,29 +1392,102 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
         }
     }
 
+    TRY_READ_ATTR_WITHOUT_NS(focusposition)
+
     TRY_READ_ATTR_WITHOUT_NS(type)
     if (!type.isEmpty()) {
+        m_currentVMLProperties.fillType = type;
         if (type == "gradient") {
-            m_currentVMLProperties.fillType = type;
             m_currentGradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle);
-            // These should be altered based on angle attribute if present, todo later
-            m_currentGradientStyle.addAttribute("svg:x1", "50%");
-            m_currentGradientStyle.addAttribute("svg:y1", "0%");
-            m_currentGradientStyle.addAttribute("svg:x2", "50%");
-            m_currentGradientStyle.addAttribute("svg:y2", "100%");
-            // These would be different for other gradient types, todo later
-            QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").
-                arg(0).arg(m_currentVMLProperties.shapeColor);
-            QString name = QString("%1").arg(1);
-            m_currentGradientStyle.addChildElement(name, contents);
-            contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").
-                arg(1.0).arg(m_currentVMLProperties.shapeSecondaryColor);
-            name = QString("%1").arg(2);
-            m_currentGradientStyle.addChildElement(name, contents);
-            m_currentVMLProperties.gradientStyle = mainStyles->insert(m_currentGradientStyle);
+            if (angle.isEmpty()) { // default
+                m_currentGradientStyle.addAttribute("svg:x1", "0%");
+                m_currentGradientStyle.addAttribute("svg:y1", "50%");
+                m_currentGradientStyle.addAttribute("svg:x2", "100%");
+                m_currentGradientStyle.addAttribute("svg:y2", "50%");
+            }
+            else {
+                qreal angleReal = angle.toDouble() * M_PI / 180.0;
+                m_currentGradientStyle.addAttribute("svg:x1", QString("%1%").arg(50 - 50 * cos(angleReal)));
+                m_currentGradientStyle.addAttribute("svg:y1", QString("%1%").arg(50 + 50 * sin(angleReal)));
+                m_currentGradientStyle.addAttribute("svg:x2", QString("%1%").arg(50 + 50 * cos(angleReal)));
+                m_currentGradientStyle.addAttribute("svg:y2", QString("%1%").arg(50 - 50 * sin(angleReal)));
+            }
+        }
+        else if (type == "gradientRadial") {
+            m_currentGradientStyle = KoGenStyle(KoGenStyle::RadialGradientStyle);
+            if (focusposition.isEmpty()) {
+                m_currentGradientStyle.addAttribute("svg:fx", QString("%1%").arg(0)); // default
+                m_currentGradientStyle.addAttribute("svg:fy", QString("%1%").arg(0)); // default
+            }
+            else {
+                int index = focusposition.indexOf(',');
+                if (index > 0) {
+                    QString first = focusposition.left(index);
+                    doPrependCheck(first);
+                    focusposition = focusposition.mid(index + 1);
+                    doPrependCheck(focusposition);
+                    qreal fx = first.toDouble() * 100;
+                    qreal fy = focusposition.toDouble() * 100;
+                    m_currentGradientStyle.addAttribute("svg:fx", QString("%1%").arg(fx));
+                    m_currentGradientStyle.addAttribute("svg:fy", QString("%1%").arg(fy));
+                }
+            }
+            // defaulting so that gradient is always towards the center
+            m_currentGradientStyle.addAttribute("svg:cx", QString("%1%").arg(50));
+            m_currentGradientStyle.addAttribute("svg:cy", QString("%1%").arg(50));
+            m_currentGradientStyle.addAttribute("svg:r", "80%"); ; // fix me if possible
         }
         else {
             m_currentVMLProperties.fillType = "solid"; // defaulting
+        }
+        if (type == "gradientRadial" || type == "gradient") {
+            if (colors.isEmpty()) {
+                QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").
+                    arg(0).arg(m_currentVMLProperties.shapeColor);
+                QString name = QString("%1").arg(1);
+                m_currentGradientStyle.addChildElement(name, contents);
+                contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").
+                    arg(1.0).arg(m_currentVMLProperties.shapeSecondaryColor);
+                name = QString("%1").arg(2);
+                m_currentGradientStyle.addChildElement(name, contents);
+            }
+            else {
+                QList<QString> gradientColors;
+                QList<qreal> gradientPositions;
+                int index = colors.indexOf(';');
+                bool lastRound = false;
+                while (index > 0 || lastRound) {
+                    QString gradientString = colors.left(index);
+                    colors = colors.mid(index + 1);
+                    int spaceLocation = gradientString.indexOf(' ');
+                    QString pos = gradientString.left(spaceLocation);
+                    if (pos.right(1) == "f") {
+                        pos = pos.left(pos.length() - 1);
+                        gradientPositions.push_back(pos.toDouble() / 65536.0);
+                    }
+                    else {
+                        doPrependCheck(pos);
+                        gradientPositions.push_back(pos.toDouble());
+                    }
+                    gradientColors.push_back(rgbColor(gradientString.mid(spaceLocation + 1)));
+                    if (lastRound) {
+                        break;
+                    }
+                    index = colors.indexOf(';');
+                    if (index < 0 ) {
+                        lastRound = true;
+                    }
+                }
+                index = 0;
+                while (index < gradientPositions.size()) {
+                    QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").
+                         arg(gradientPositions.at(index)).arg(gradientColors.at(index));
+                    QString name = QString("%1").arg(index);
+                    m_currentGradientStyle.addChildElement(name, contents);
+                    ++index;
+                }
+            }
+            m_currentVMLProperties.gradientStyle = mainStyles->insert(m_currentGradientStyle);
         }
     }
     // frame (Stretch Image to Fit) - The image is stretched to fill the shape.
