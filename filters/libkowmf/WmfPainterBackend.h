@@ -133,7 +133,7 @@ private:
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented in KWinMetaFile
     void  drawText(WmfDeviceContext &context, int x, int y, int w, int h,
-                   int flags, const QString &s, double rotation);
+                   int flags, const QString &s);
 
     // matrix transformation : only used in some bitmap manipulation
     void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false);

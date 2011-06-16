@@ -718,10 +718,10 @@ void WmfPainterBackend::patBlt(WmfDeviceContext &context, int x, int y, int widt
 
 
 void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, int w, int h,
-                                 int textAlign, const QString& text, double textRotation)
+                                 int textAlign, const QString& text)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text << textRotation;
+    kDebug(31000) << x << y << w << h << hex << textAlign << dec << text;
 #endif
 
     // The TA_UPDATECP flag tells us to use the current position

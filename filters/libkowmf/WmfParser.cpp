@@ -105,7 +105,7 @@ bool WmfParser::load(const QByteArray& array)
     mStackOverflow = false;
     mLayout = LAYOUT_LTR;
     mTextAlign = 0;
-    mTextRotation = 0;
+    //mTextRotation = 0;
     mTextColor = Qt::black;
     mWinding = false;
     mMapMode = MM_ANISOTROPIC;
@@ -711,8 +711,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // FIXME: If we ever want to support vertical text (e.g. japanese),
                     //        we need to send the vertical text align as well.
-                    m_backend->drawText(mDeviceContext, x, y, -1, -1, mTextAlign, text,
-                                        static_cast<double>(mTextRotation));
+                    m_backend->drawText(mDeviceContext, x, y, -1, -1, mTextAlign, text);
                 }
                 break;
             case (META_BITBLT & 0xff):
@@ -823,8 +822,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // FIXME: If we ever want to support vertical text (e.g. japanese),
                     //        we need to send the vertical text align as well.
-                    m_backend->drawText(mDeviceContext, x, y, -1, -1, mTextAlign, text,
-                                        static_cast<double>(mTextRotation));
+                    m_backend->drawText(mDeviceContext, x, y, -1, -1, mTextAlign, text);
                 }
                 break;
             case (META_SETDIBTODEV & 0xff):
@@ -1074,13 +1072,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                         //kDebug(31000) << height << width << weight << property;
                         // text rotation (in 1/10 degree)
-                        // TODO: memorisation of rotation in object Font
-                        mTextRotation = -rotation / 10;
                         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
+                        handle->rotation = rotation;
 
-                        // A negative width means to use device units.
+                        // A negative height means to use device units.
                         //kDebug(31000) << "Font height:" << height;
                         handle->height = height;
+
                         // FIXME: For some reason this value needs to be multiplied by
                         //        a factor.  0.6 seems to give a good result, but why??
                         // ANSWER(?): The doc says the height is the height of the character cell.

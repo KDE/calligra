@@ -32,6 +32,8 @@
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 
+#include <WmfDeviceContext.h>
+
 #include <pathshapes/rectangle/RectangleShape.h>
 #include <pathshapes/ellipse/EllipseShape.h>
 #include <artistictextshape/ArtisticTextShape.h>
@@ -464,7 +466,7 @@ void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &context, int x, int y, in
 
 
 
-void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, int , int , int flags, const QString& text, double rotation)
+void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, int , int , int flags, const QString& text)
 {
     enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
 
@@ -499,12 +501,12 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
         xOffset = -0.5 * textShape->size().width();
     }
 
-    if (rotation) {
+    if (context.rotation) {
         // we rotate around the anchor point
         QPointF anchor(-xOffset, -yOffset);
         QTransform matrix;
         matrix.translate(anchor.x(), anchor.y());
-        matrix.rotate(rotation);
+        matrix.rotate(qreal(context.rotation) * M_PI / qreal(1800.0));  // rotation is in 1/10th of a degree
         matrix.translate(-anchor.x(), -anchor.y());
         textShape->applyTransformation(matrix);
     }

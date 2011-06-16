@@ -54,6 +54,7 @@ void KoWmfFontHandle::apply(WmfAbstractBackend *p, WmfDeviceContext *dc)
 {
     p->setFont(font, rotation, height);
     dc->font = font;
+    dc->rotation = rotation;
     dc->changedItems |= DCFont;
 }
 

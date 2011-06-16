@@ -90,7 +90,7 @@ public:
     QBrush    brush;            // Brush
     QImage    image;            //   - extra image
     QFont     font;             // Font
-    int       rotation;         //   - rotation of characters
+    int       rotation;         //   - rotation of characters   FIXME: Rename to textRotation
     int       height;           //   - original font height; can be negative
     //Palette                   // Palette not supported yet
     QPen      pen;              // Pen
