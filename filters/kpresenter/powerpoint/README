@@ -12,7 +12,7 @@ PPT files are OLE containers with a number of streams. Five streams are common:
  - "DocumentSummaryInformation"
  - "SummaryInformation"
 
-This discussion focusses on "PowerPoint Document". This stream contains all the slides information except for most of the embedded picture files. These pictures are stored in the pictures style.
+This discussion focusses on "PowerPoint Document". This stream contains all the slides information except for most of the embedded picture files. These pictures are stored in the Pictures stream.
 
 A newly generated ODP should contain content.xml and styles.xml as well as all embedded pictures and a list of all embedded files in manifest.xml and a mimetype file.
 The file content.xml contains all the content specific for the file and styles.xml contains all information specific for the style of presentation. That includes definitions of all the masters and the styles used in the master slides.
