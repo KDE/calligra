@@ -89,7 +89,6 @@ private:
     // the pen : the width of the pen is in logical coordinate
     void  setPen(const QPen& pen);
     void  setTextPen(const QPen& pen);
-    const QPen& pen() const;
     void  setBrush(const QBrush& brush);
 
     // Drawing attributes/modes

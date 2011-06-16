@@ -116,7 +116,6 @@ public:
     // the pen : the width of the pen is in logical coordinate
     virtual void  setPen(const QPen &p) = 0;
     virtual void  setTextPen(const QPen &p) = 0;
-    virtual const QPen &pen() const = 0;
     virtual void  setBrush(const QBrush &) = 0;
 
     // Drawing attributes/modes

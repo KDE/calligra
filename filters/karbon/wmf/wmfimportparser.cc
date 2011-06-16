@@ -145,12 +145,6 @@ void WMFImportParser::setTextPen(const QPen &pen)
 }
 
 
-const QPen &WMFImportParser::pen() const
-{
-    return mPen;
-}
-
-
 void WMFImportParser::setBrush(const QBrush &brush)
 {
     mBrush = brush;

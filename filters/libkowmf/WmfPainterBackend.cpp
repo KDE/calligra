@@ -234,12 +234,6 @@ void WmfPainterBackend::setPen(const QPen &pen)
 }
 
 
-const QPen &WmfPainterBackend::pen() const
-{
-    return mPainter->pen();
-}
-
-
 void WmfPainterBackend::setBrush(const QBrush &brush)
 {
 #if DEBUG_WMFPAINT
