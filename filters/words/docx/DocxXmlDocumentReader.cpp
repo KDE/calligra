@@ -380,12 +380,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     applyPageBorders(m_currentPageStyle, m_pageMargins, m_pageBorderStyles, m_pageBorderPaddings, m_pageBorderOffsetFrom);
 
     // Currently if there are 3 header/footer styles, the one with 'first' is ignored
+    bool useEvenAndOddHeaders = false;
+    if (m_context->import->documentSettings().contains("evenAndOddHeaders")) {
+        QString val = m_context->import->documentSettings()["evenAndOddHeaders"].toString();
+        useEvenAndOddHeaders = (val != "off" && val != "0" && val != "false");
+    }
     if (!m_headers.isEmpty()) {
-        bool useEvenAndOddHeaders = false;
-        if (m_context->import->documentSettings().contains("evenAndOddHeaders")) {
-            QString val = m_context->import->documentSettings()["evenAndOddHeaders"].toString();
-            useEvenAndOddHeaders = (val != "off" && val != "0" && val != "false");
-        }
         bool odd = false;
         if (useEvenAndOddHeaders && m_headers["even"] != "") {
             m_masterPageStyle.addChildElement("style:header-left", m_headers["even"]);
@@ -401,7 +401,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 
     if (!m_footers.isEmpty()) {
         bool odd = false;
-        if (m_footers["even"] != "") {
+        if (useEvenAndOddHeaders && m_footers["even"] != "") {
             m_masterPageStyle.addChildElement("style:footer-left", m_footers["even"]);
         }
         if (m_footers["default"] != "") {
@@ -1315,8 +1315,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF_NS(v, shapetype)
-            ELSE_TRY_READ_IF_NS(v, shape)
+            else if (name() == "shape") {
+                m_outputFrames = false;
+                TRY_READ(shape)
+                m_outputFrames = true;
+            }
             ELSE_TRY_READ_IF_NS(o, OLEObject)
+            ELSE_TRY_READ_IF(control)
             SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
@@ -2899,70 +2904,92 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
     }
     else {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
-        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
-        // Note that many of these don't seem to have a good odf counterpart,
-        // and are thus just guesses
+        if (m_alignH.isEmpty()) {
+            m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        } else {
+            m_currentDrawStyle->addProperty("style:horizontal-pos", m_alignH);
+        }
+        if (m_alignV.isEmpty()) {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
+        } else if (m_alignV == "center") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "middle");
+        } else if (m_alignV == "bottom") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        } else if (m_alignV == "top") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "top");
+        } else if (m_alignV == "outside") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
+        } else if (m_alignV == "inside") {
+            m_currentDrawStyle->addProperty("style:vertical-pos", "top");
+        }
+
         if (m_relativeFromV == "column") {
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
         }
         else  if (m_relativeFromV == "bottomMargin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
+            // Not supported propery by ODF, making a best guess
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
         else  if (m_relativeFromV == "insideMargin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
+            // Not supported propery by ODF, making a best guess
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentDrawStyle->addProperty("style:vertical-pos", "top");
         }
         else  if (m_relativeFromV == "line") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "line");
-            body->addAttribute("text:anchor-type", "as-char");
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
         }
         else  if (m_relativeFromV == "margin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
         }
         else  if (m_relativeFromV == "outsideMargin") {
-             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-             body->addAttribute("text:anchor-type", "paragraph");
+             // Not supported propery by ODF, making a best guess
+             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+             m_currentDrawStyle->addProperty("style:vertical-pos", "bottom");
         }
         else  if (m_relativeFromV == "page") {
             m_currentDrawStyle->addProperty("style:vertical-rel", "page");
-            body->addAttribute("text:anchor-type", "page");
         }
         else  if (m_relativeFromV == "paragraph") {
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
         }
         else  if (m_relativeFromV == "topMargin") {
-            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            body->addAttribute("text:anchor-type", "paragraph");
+            // Not supported propery by ODF, making a best guess
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            m_currentDrawStyle->addProperty("style:vertical-pos", "top");
         }
 
         if (m_relativeFromH == "character") {
             m_currentDrawStyle->addProperty("style:horizontal-rel", "char");
+            body->addAttribute("text:anchor-type", "char");
         }
         else if (m_relativeFromH == "column") {
             m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "insideMargin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-start-margin");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "leftMargin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-start-margin");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "margin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "outsideMargin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-end-margin");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "page") {
             m_currentDrawStyle->addProperty("style:horizontal-rel", "page");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
         else if (m_relativeFromH == "rightMargin") {
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-end-margin");
+            body->addAttribute("text:anchor-type", "paragraph");
         }
     }
 
@@ -5302,6 +5329,48 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridSpan()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL control
+//! Reads a activeX control object
+/*
+ Parent elements:
+ - [done] object (§17.3.3.19)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_control()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    body->startElement("draw:frame");
+    body->addAttribute("svg:width", m_currentVMLProperties.currentObjectWidthCm);
+    body->addAttribute("svg:height", m_currentVMLProperties.currentObjectHeightCm);
+    body->addAttribute("text:anchor-type", "as-char"); // default for these
+
+    // Do we even want to try anything with activeX controls?
+    /*
+    TRY_READ_ATTR_WITH_NS(r, id)
+    const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
+    kDebug() << "oleName:" << oleName;
+    */
+
+    // Replacement image
+    body->startElement("draw:image");
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:show", "embed");
+    body->addAttribute("xlink:actuate", "onLoad");
+    body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
+    body->endElement(); // draw:image
+
+    body->endElement(); // draw:frame
+
+    readNext();
+
+    READ_EPILOGUE
+}
+
 // ---------------------------------------------------------------------------
 
 #define blipFill_NS "pic"
@@ -5323,22 +5392,38 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 // <o:OLEObject Type="Embed" ProgID="Visio.Drawing.11" ShapeID="_x0000_i1025"
 //              DrawAspect="Content" ObjectID="_1240488905" r:id="rId10"/>
 
+    body->startElement("draw:frame");
+    body->addAttribute("svg:width", m_currentVMLProperties.currentObjectWidthCm);
+    body->addAttribute("svg:height", m_currentVMLProperties.currentObjectHeightCm);
+    body->addAttribute("text:anchor-type", "as-char"); // default for these
+
     TRY_READ_ATTR_WITH_NS(r, id)
     const QString oleName(m_context->relationships->target(m_context->path, m_context->file, r_id));
     kDebug() << "oleName:" << oleName;
 
-//! @todo ooo saves binaries to the root dir; should we?
-
-    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);;
+    QString destinationName = QLatin1String("") + oleName.mid(oleName.lastIndexOf('/') + 1);
     KoFilter::ConversionStatus stat = m_context->import->copyFile(oleName, destinationName, false);
     if (stat == KoFilter::OK) {
+        body->startElement("draw:object-ole");
         addManifestEntryForFile(destinationName);
+        body->addAttribute("xlink:href", destinationName);
+        body->endElement(); // draw:object-ole
     }
+
+    // Replacement image
+    body->startElement("draw:image");
+    body->addAttribute("xlink:type", "simple");
+    body->addAttribute("xlink:show", "embed");
+    body->addAttribute("xlink:actuate", "onLoad");
+    body->addAttribute("xlink:href", m_currentVMLProperties.imagedataPath);
+    body->endElement(); // draw:image
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
     }
+
+    body->endElement(); // draw:frame
 
     READ_EPILOGUE
 }
@@ -5407,6 +5492,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     m_drawing_anchor = true; // for pic:pic
     bool behindDoc = false;
     bool allowOverlap = false;
+    m_alignH.clear();
+    m_alignV.clear();
 
     const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
@@ -5861,28 +5948,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
 {
     READ_PROLOGUE
-    switch (caller) {
-    case align_positionH:
-//! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
-        /*center
-        inside
-        left
-        outside
-        right*/
-        m_alignH = text().toString();
-        break;
-    case align_positionV:
-//! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
-        /*bottom
-        center
-        inside
-        outside
-        top*/
-        m_alignV = text().toString();
-    break;
-    }
-
     readNext();
+
+    if (!isEndElement()) {// was text
+       switch (caller) {
+       case align_positionH:
+//! 20.4.3.1 ST_AlignH (Relative Horizontal Alignment Positions), p. 3508.
+            /*center
+            inside
+            left
+            outside
+            right*/
+            m_alignH = text().toString();
+            break;
+        case align_positionV:
+//! 20.4.3.2 ST_AlignV (Vertical Alignment Definition), p. 3509.
+            /*bottom
+            center
+            inside
+            outside
+            top*/
+            m_alignV = text().toString();
+        break;
+        }
+        readNext();
+    }
 
     READ_EPILOGUE
 }

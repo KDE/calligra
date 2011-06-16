@@ -66,7 +66,6 @@ protected:
     enum FrameStartElement {FrameStart, RectStart, LineStart, CustomStart, GroupStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
-    KoFilter::ConversionStatus createFrameEnd();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
@@ -94,7 +93,6 @@ protected:
         bool wrapRead;
         QString currentShapeId; //!< set in read_shape()
         QString imagedataPath; //!< set in read_shape()
-        QString imagedataFile; //!< set in read_shape()
         QString shapeAltText; //!< set in read_shape()
         QString shapeTitle; //!< set in read_shape()
 

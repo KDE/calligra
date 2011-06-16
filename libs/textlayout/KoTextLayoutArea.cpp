@@ -85,7 +85,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_maximumAllowedWidth(0.0)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
- , m_endOfArea()
+ , m_endOfArea(0)
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
  , m_verticalAlignOffset(0)
@@ -454,9 +454,15 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
             if (acceptsPageBreak()
                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
-                m_endOfArea = new FrameIterator(cursor);
                 Q_ASSERT(!cursor->it.atEnd());
-                ++(cursor->it);
+                QTextFrame::iterator nextIt = cursor->it;
+                ++nextIt;
+                bool wasIncremented = !nextIt.currentFrame();
+                if (wasIncremented)
+                    cursor->it = nextIt;
+                m_endOfArea = new FrameIterator(cursor);
+                if (!wasIncremented)
+                    ++(cursor->it);
                 setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);
                 return false;
@@ -899,12 +905,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
 
-        if (!runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y))) {
-            cursor->lineTextStart = -1;
-            layout->endLayout();
-            clearPreregisteredFootNotes();
-            return false;
-        }
+        runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
 
         qreal bottomOfText = line.y() + line.height();
 

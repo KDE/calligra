@@ -255,9 +255,9 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             kDebug(31000) << "Standard :" << mBBoxLeft << ""  << mBBoxTop << ""  << mBBoxRight - mBBoxLeft << ""  << mBBoxBottom - mBBoxTop;
         } else {
             kDebug(31000) << "DPI :" << mDpi;
-            kDebug(31000) << "inch :" << (mBBoxRight - mBBoxLeft) / mDpi
+            kDebug(31000) << "size (inch):" << (mBBoxRight - mBBoxLeft) / mDpi
                           << "" << (mBBoxBottom - mBBoxTop) / mDpi;
-            kDebug(31000) << "mm :" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
+            kDebug(31000) << "size (mm):" << (mBBoxRight - mBBoxLeft) * 25.4 / mDpi
                           << "" << (mBBoxBottom - mBBoxTop) * 25.4 / mDpi;
         }
         kDebug(31000) << mValid << "" << mStandard << "" << mPlaceable;
@@ -280,7 +280,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     QDataStream stream(mBuffer);
     stream.setByteOrder(QDataStream::LittleEndian);
 
-    // Set the output strategy.
+    // Set the output backend.
     m_backend = backend;
 
     // Set some initial values.
@@ -626,7 +626,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     qint16 top, left, right, bottom;
 
                     stream >> bottom >> right >> top >> left;
-                    kDebug(31000) << left << top << right << bottom;
+                    //kDebug(31000) << left << top << right << bottom;
                     m_backend->drawRect(left, top, right - left, bottom - top);
                 }
                 break;
@@ -1073,13 +1073,13 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                         handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
 
                         // A negative width means to use device units.
-                        kDebug(31000) << "Font height:" << height;
+                        //kDebug(31000) << "Font height:" << height;
                         handle->height = height;
                         // FIXME: For some reason this value needs to be multiplied by
                         //        a factor.  0.6 seems to give a good result, but why??
                         // ANSWER(?): The doc says the height is the height of the character cell.
-                        //            But normally the font height is only the height above the baseline,
-                        //            isn't it?
+                        //            But normally the font height is only the height above the
+                        //            baseline, isn't it?
                         handle->font.setPointSize(qAbs(height) * 6 / 10);
                         if (weight == 0)
                             weight = QFont::Normal;
