@@ -104,8 +104,6 @@ bool WmfParser::load(const QByteArray& array)
 
     mStackOverflow = false;
     mLayout = LAYOUT_LTR;
-    mTextAlign = 0;
-    //mTextRotation = 0;
     mTextColor = Qt::black;
     mWinding = false;
     mMapMode = MM_ANISOTROPIC;
@@ -711,7 +709,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
                     // FIXME: If we ever want to support vertical text (e.g. japanese),
                     //        we need to send the vertical text align as well.
-                    m_backend->drawText(mDeviceContext, x, y, mTextAlign, text);
+                    m_backend->drawText(mDeviceContext, x, y, text);
                 }
                 break;
             case (META_BITBLT & 0xff):
@@ -769,7 +767,8 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 }
                 break;
             case (META_SETTEXTALIGN & 0xff):
-                stream >> mTextAlign;
+                stream >> mDeviceContext.textAlign;
+                mDeviceContext.changedItems |= DCTextAlignMode;
                 break;
             case (META_CHORD & 0xff):
                 {
@@ -820,9 +819,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     }
                     stream.readRawData(text.data(), stringLength);
 
-                    // FIXME: If we ever want to support vertical text (e.g. japanese),
-                    //        we need to send the vertical text align as well.
-                    m_backend->drawText(mDeviceContext, x, y, mTextAlign, text);
+                    m_backend->drawText(mDeviceContext, x, y, text);
                 }
                 break;
             case (META_SETDIBTODEV & 0xff):

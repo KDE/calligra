@@ -466,11 +466,11 @@ void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &context, int x, int y, in
 
 
 
-void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, int flags, const QString& text)
+void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, const QString& text)
 {
     enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
 
-    if (flags & CurrentPosition) {
+    if (context.textAlign & CurrentPosition) {
         // (left, top) position = current logical position
         x = mCurrentPoint.x();
         y = mCurrentPoint.y();
@@ -489,14 +489,14 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
 
     // determine y-offset from given baseline position
     qreal yOffset = 0.0;
-    if (flags & AlignBottom)
+    if (context.textAlign & AlignBottom)
         yOffset -= textShape->baselineOffset();
 
     textShape->setPosition(QPointF(coordX(x), coordY(y) + yOffset));
 
     // set text anchor
     qreal xOffset = 0.0;
-    if (flags & AlignHCenter) {
+    if (context.textAlign & AlignHCenter) {
         textShape->setTextAnchor(ArtisticTextShape::AnchorMiddle);
         xOffset = -0.5 * textShape->size().width();
     }

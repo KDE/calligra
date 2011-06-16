@@ -153,7 +153,7 @@ public:
     // Text drawing functions
     // rotation = the degrees of rotation in counterclockwise
     // not yet implemented in KWinMetaFile
-    virtual void  drawText(WmfDeviceContext &context, int x, int y, int flags, const QString &s) = 0;
+    virtual void  drawText(WmfDeviceContext &context, int x, int y, const QString &s) = 0;
 
     // matrix transformation : only used for bitmap manipulation
     virtual void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false) = 0;

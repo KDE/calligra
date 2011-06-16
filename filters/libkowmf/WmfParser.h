@@ -149,7 +149,6 @@ private:
 
     WmfLayout   mLayout;
     QColor      mTextColor;
-    quint16     mTextAlign;
     bool        mWinding;
     quint16     mMapMode;
 

@@ -717,14 +717,14 @@ void WmfPainterBackend::patBlt(WmfDeviceContext &context, int x, int y, int widt
 }
 
 
-void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, int textAlign, const QString& text)
+void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, const QString& text)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << x << y << hex << textAlign << dec << text;
+    kDebug(31000) << x << y << hex << dec << text;
 #endif
 
     // The TA_UPDATECP flag tells us to use the current position
-    if (textAlign & TA_UPDATECP) {
+    if (context.textAlign & TA_UPDATECP) {
         // (left, top) position = current logical position
         x = mLastPos.x();
         y = mLastPos.y();
@@ -738,15 +738,15 @@ void WmfPainterBackend::drawText(WmfDeviceContext &context, int x, int y, int te
     int height = fm.height();
 
     // Horizontal align.  These flags are supposed to be mutually exclusive.
-    if ((textAlign & TA_CENTER) == TA_CENTER)
+    if ((context.textAlign & TA_CENTER) == TA_CENTER)
         x -= (width / 2);
-    else if ((textAlign & TA_RIGHT) == TA_RIGHT)
+    else if ((context.textAlign & TA_RIGHT) == TA_RIGHT)
         x -= width;
 
     // Vertical align. 
-    if ((textAlign & TA_BASELINE) == TA_BASELINE)
+    if ((context.textAlign & TA_BASELINE) == TA_BASELINE)
         y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
-    else if ((textAlign & TA_BOTTOM) == TA_BOTTOM) {
+    else if ((context.textAlign & TA_BOTTOM) == TA_BOTTOM) {
         y -= height;
     }
 
