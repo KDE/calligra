@@ -98,12 +98,12 @@ private:
     void  drawPie(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
     void  drawChord(Libwmf::WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
     void  drawPolyline(Libwmf::WmfDeviceContext &context, const QPolygon &pa);
-    void  drawPolygon(Libwmf::WmfDeviceContext &context, const QPolygon &pa, bool winding = false);
+    void  drawPolygon(Libwmf::WmfDeviceContext &context, const QPolygon &pa);
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa, bool winding = false);
+    void  drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa);
     void  drawImage(Libwmf::WmfDeviceContext &context, int x, int y, const QImage &,
                     int sx = 0, int sy = 0, int sw = -1, int sh = -1);
     void  patBlt(Libwmf::WmfDeviceContext &context, int x, int y, int width, int height,

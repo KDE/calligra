@@ -142,10 +142,10 @@ public:
     virtual void  drawPie(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen) = 0;
     virtual void  drawChord(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen) = 0;
     virtual void  drawPolyline(WmfDeviceContext &context, const QPolygon &pa) = 0;
-    virtual void  drawPolygon(WmfDeviceContext &context, const QPolygon &pa, bool winding = false) = 0;
+    virtual void  drawPolygon(WmfDeviceContext &context, const QPolygon &pa) = 0;
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    virtual void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa, bool winding = false) = 0;
+    virtual void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa) = 0;
     virtual void  drawImage(WmfDeviceContext &context, int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1) = 0;
     virtual void  patBlt(WmfDeviceContext &context, int x, int y, int width, int height,
                          quint32 rasterOperation) = 0;

@@ -105,7 +105,6 @@ bool WmfParser::load(const QByteArray& array)
     mStackOverflow = false;
     mLayout = LAYOUT_LTR;
     mTextColor = Qt::black;
-    mWinding = false;
     mMapMode = MM_ANISOTROPIC;
 
     mValid = false;
@@ -293,7 +292,6 @@ bool WmfParser::play(WmfAbstractBackend* backend)
         // Play WMF functions.
         mBuffer->seek(mOffsetFirstRecord);
         recordType = 1;
-        mWinding = false;
 
         while ((recordType) && (!mStackOverflow)) {
             int j = 1;
@@ -391,12 +389,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                 break;
             case (META_SETPOLYFILLMODE & 0xff):
                 {
-                    quint16 winding;
-
-                    stream >> winding;
-                    mWinding = (winding != 0);
-
-                    mDeviceContext.polyFillMode = winding;
+                    stream >> mDeviceContext.polyFillMode;
                     mDeviceContext.changedItems |= DCPolyFillMode;
                 }
                 break;
@@ -724,7 +717,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     QPolygon pa(num);
 
                     pointArray(stream, pa);
-                    m_backend->drawPolygon(mDeviceContext, pa, mWinding);
+                    m_backend->drawPolygon(mDeviceContext, pa);
                 }
                 break;
             case (META_POLYLINE & 0xff):
@@ -847,7 +840,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     }
 
                     // draw polygon's
-                    m_backend->drawPolyPolygon(mDeviceContext, listPa, mWinding);
+                    m_backend->drawPolyPolygon(mDeviceContext, listPa);
                     listPa.clear();
                 }
                 break;

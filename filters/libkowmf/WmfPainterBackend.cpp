@@ -630,22 +630,21 @@ void WmfPainterBackend::drawPolyline(WmfDeviceContext &context, const QPolygon &
 }
 
 
-void WmfPainterBackend::drawPolygon(WmfDeviceContext &context, const QPolygon &pa, bool winding)
+void WmfPainterBackend::drawPolygon(WmfDeviceContext &context, const QPolygon &pa)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << pa << winding;
+    kDebug(31000) << pa;
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush();
 #endif
 
-    if (winding)
+    if (context.polyFillMode)
         mPainter->drawPolygon(pa, Qt::WindingFill);
     else
         mPainter->drawPolygon(pa, Qt::OddEvenFill);
 }
 
 
-void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa,
-                                        bool winding)
+void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000);
@@ -675,7 +674,7 @@ void WmfPainterBackend::drawPolyPolygon(WmfDeviceContext &context, QList<QPolygo
 #if DEBUG_WMFPAINT
             kDebug(31000) << pa;
 #endif
-            if (winding)
+            if (context.polyFillMode == WINDING)
                 mPainter->drawPolygon(pa, Qt::WindingFill);
             else
                 mPainter->drawPolygon(pa, Qt::OddEvenFill);

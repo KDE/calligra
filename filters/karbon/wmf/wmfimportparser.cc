@@ -32,6 +32,7 @@
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 
+#include <WmfEnums.h>
 #include <WmfDeviceContext.h>
 
 #include <pathshapes/rectangle/RectangleShape.h>
@@ -384,7 +385,7 @@ void WMFImportParser::drawPolyline(Libwmf::WmfDeviceContext &context, const QPol
 }
 
 
-void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPolygon &pa, bool winding)
+void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPolygon &pa)
 {
     KoPathShape *polygon = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! polygon)
@@ -395,12 +396,12 @@ void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPoly
     appendPoints(*polygon, pa);
 
     polygon->close();
-    polygon->setFillRule(winding ? Qt::WindingFill : Qt::OddEvenFill);
+    polygon->setFillRule((context.polyFillMode == Libwmf::WINDING) ? Qt::WindingFill : Qt::OddEvenFill);
     mDoc->add(polygon);
 }
 
 
-void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa, bool winding)
+void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa)
 {
     KoPathShape *path = static_cast<KoPathShape*>(createShape(KoPathShapeId));
     if (! path)
@@ -411,7 +412,7 @@ void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<Q
         appendBrush(*path);
         appendPoints(*path, listPa.first());
         path->close();
-        path->setFillRule(winding ? Qt::WindingFill : Qt::OddEvenFill);
+        path->setFillRule(context.polyFillMode ? Qt::WindingFill : Qt::OddEvenFill);
         foreach(const QPolygon & pa, listPa) {
             KoPathShape *newPath = static_cast<KoPathShape*>(createShape(KoPathShapeId));
             if (! newPath)
