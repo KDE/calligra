@@ -465,7 +465,7 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
         newColor = "#ffff00";
     }
     else if (color == "window") {
-        newColor = "#ffffff";
+        newColor = "#ffffff"; // should ask from system
     }
     else if (color == "white") {
         newColor = "#ffffff";
@@ -504,7 +504,10 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
         newColor = "#00ffff";
     }
     else if (color == "windowText") {
-        newColor = "#000000";
+        newColor = "#000000"; // should ask from system
+    }
+    else if (color == "buttonFace") {
+        newColor = "#808080"; // should ask from system
     }
     else if (color == "fill") { // referencing the other color
         newColor = m_currentVMLProperties.shapeColor;

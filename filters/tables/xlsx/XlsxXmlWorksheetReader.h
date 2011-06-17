@@ -81,6 +81,8 @@ protected:
     KoFilter::ConversionStatus read_customFilter();
     KoFilter::ConversionStatus read_oleObjects();
     KoFilter::ConversionStatus read_oleObject();
+    KoFilter::ConversionStatus read_controls();
+    KoFilter::ConversionStatus read_control();
     KoFilter::ConversionStatus read_tableParts();
     KoFilter::ConversionStatus read_tablePart();
 
