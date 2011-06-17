@@ -136,12 +136,10 @@ void KWRootAreaProvider::handleDependentProviders(int pageNumber)
     }
 }
 
-KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
+KWTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *documentLayout)
 {
     KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
     Q_ASSERT(pageManager);
-    if (pageManager->pageCount() == 0) // not ready yet (may happen e.g. on loading a document)
-        return 0;
 
     KWDocument *kwdoc = const_cast<KWDocument*>(m_textFrameSet->wordsDocument());
     Q_ASSERT(kwdoc);
@@ -237,13 +235,28 @@ KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *document
         //Q_ASSERT_X(pageNumber == pageManager->page(shape).pageNumber(), __FUNCTION__, QString("KWPageManager is out-of-sync, pageNumber=%1 vs pageNumber=%2 with offset=%3 vs offset=%4 on frameSetType=%5").arg(pageNumber).arg(pageManager->page(shape).pageNumber()).arg(shape->absolutePosition().y()).arg(pageManager->page(shape).offsetInDocument()).arg(Words::frameSetTypeName(m_textFrameSet->textFrameSetType())).toLocal8Bit());
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
         Q_ASSERT(data);
-        area->setAssociatedShape(shape);
         data->setRootArea(area);
+        area->setAssociatedShape(shape);
     }
     area->setPage(new KWPage(rootAreaPage->page));
 
     m_pageHash[area] = rootAreaPage;
     rootAreaPage->rootAreas.append(area);
+
+    return area;
+}
+
+KoTextLayoutRootArea *KWRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
+{
+    KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
+    Q_ASSERT(pageManager);
+    if (pageManager->pageCount() == 0) // not ready yet (may happen e.g. on loading a document)
+        return 0;
+
+    KWTextLayoutRootArea *area = 0;
+    do {
+        area = provideNext(documentLayout);
+    } while(m_textFrameSet->textFrameSetType() != Words::MainTextFrameSet && area && !area->associatedShape());
 
     return area;
 }
