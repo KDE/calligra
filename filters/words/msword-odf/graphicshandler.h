@@ -68,8 +68,8 @@ public:
     qreal hOffset();
 
     void setRectangle(wvWare::Word97::FSPA& spa);
-    void setGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
-    void setChildRectangle(MSO::OfficeArtChildAnchor& anchor);
+    void setGroupRectangle(const MSO::OfficeArtFSPGR& fspgr);
+    void setChildRectangle(const MSO::OfficeArtChildAnchor& anchor);
 };
 
 /*
@@ -283,7 +283,7 @@ private:
     const wvWare::Drawings* m_drawings;
     const wvWare::Word97::FIB& m_fib;
 
-    MSO::OfficeArtDggContainer m_officeArtDggContainer;
+    MSO::OfficeArtDggContainer* m_officeArtDggContainer;
     MSO::OfficeArtDgContainer* m_pOfficeArtHeaderDgContainer;
     MSO::OfficeArtDgContainer* m_pOfficeArtBodyDgContainer;
 

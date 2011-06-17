@@ -122,7 +122,7 @@ void DrawingWriter::setRectangle(wvWare::Word97::FSPA& spa)
 //FIXME: It doesn't make sense with current initialization, because when first
 //time called, scaleX and scaleY are both set to zero!  Both xOffset and
 //yOffset doesn't change!
-void DrawingWriter::setGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
+void DrawingWriter::setGroupRectangle(const MSO::OfficeArtFSPGR& fspgr)
 {
     if (fspgr.xRight == fspgr.xLeft) {
         return;
@@ -142,7 +142,7 @@ void DrawingWriter::setGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
     yOffset = yOffset - fspgr.yTop * scaleY;
 }
 
-void DrawingWriter::setChildRectangle(MSO::OfficeArtChildAnchor& anchor)
+void DrawingWriter::setChildRectangle(const MSO::OfficeArtChildAnchor& anchor)
 {
     xLeft = anchor.xLeft;
     xRight = anchor.xRight;
@@ -212,7 +212,7 @@ void KWordGraphicsHandler::init()
     }
 
     const OfficeArtBStoreContainer* blipStore = 0;
-    blipStore = m_officeArtDggContainer.blipStore.data();
+    blipStore = m_officeArtDggContainer->blipStore.data();
 
     if (!blipStore) {
 #ifdef DEBUG_GHANDLER
@@ -239,7 +239,7 @@ DrawStyle KWordGraphicsHandler::getBgDrawStyle()
     if (m_pOfficeArtBodyDgContainer) {
         shape = (m_pOfficeArtBodyDgContainer->shape).data();
     }
-    return DrawStyle(&m_officeArtDggContainer, 0, shape);
+    return DrawStyle(m_officeArtDggContainer, 0, shape);
 }
 
 void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
@@ -434,14 +434,14 @@ void KWordGraphicsHandler::processGroupShape(const MSO::OfficeArtSpgrContainer& 
     if (o.rgfb.size() < 2) {
         return;
     }
-    OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    const OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
 
     //create graphic style for the group shape
     QString styleName;
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
 
-    DrawStyle ds(&m_officeArtDggContainer, sp);
+    DrawStyle ds(m_officeArtDggContainer, sp);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
     odrawtoodf.defineGraphicProperties(style, ds, out.styles);
@@ -553,7 +553,7 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
         return;
     }
 
-    m_officeArtDggContainer(array.constData(), array.size());
+    m_officeArtDggContainer = new MSO::OfficeArtDggContainer(array.constData(), array.size());
     if (!m_officeArtDggContainer) {
         kDebug(30513) << "Could not parse OfficeArtDggContainer.";
         return;
@@ -561,7 +561,7 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
 #ifdef DEBUG_GHANDLER
     kDebug(30513) << "OfficeArtDggContainer [ OK ]" ;
 #endif
-    pos = m_officeArtDggContainer._size;
+    pos = m_officeArtDggContainer->_size;
 
     // parse drawingsVariable from msdoc
     // 0 - next OfficeArtDgContainer belongs to Main document;
@@ -624,10 +624,11 @@ void KWordGraphicsHandler::parseOfficeArtContainer()
     kDebug(30513) << "OfficeArtDgContainer (" << (drawingsVariable ? "Headers" : "Body") << ") [ OK ]";
 #endif
 
-    quint32 r = buffer.size() - pos;
+    quint32 r = array.size() - pos;
     if (r > 0) {
         kError(30513) << "Error:" << r << "bytes left to parse from the OfficeArtContent!";
     }
+
 }
 
 int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* blipStore)
@@ -647,7 +648,7 @@ int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
         //OfficeArtFBSE happen to be out-dated, which complicates the pib to
         //picture path association.
         if (block.anon.is<OfficeArtFBSE>()) {
-            OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
+            const OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
             if (!fbse->embeddedBlip) {
 
                 //NOTE: An foDelay value of 0xffffffff specifies that the file
@@ -706,6 +707,7 @@ int KWordGraphicsHandler::parseFloatingPictures(const OfficeArtBStoreContainer* 
             }
         }
     }
+
     return(0);
 }
 
