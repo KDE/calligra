@@ -1305,10 +1305,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(dxaOrig)
-    m_currentVMLProperties.currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
-    kDebug() << "m_currentObjectWidthCm" << m_currentVMLProperties.currentObjectWidthCm;
+    m_currentObjectWidthCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dxaOrig);
     TRY_READ_ATTR(dyaOrig)
-    m_currentVMLProperties.currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
+    m_currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
 
     while (!atEnd()) {
         readNext();
@@ -1573,7 +1572,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
         m_currentParagraphStyle.addProperty("fo:break-before", "column");
     }
     else if (type == "page") {
-        m_currentParagraphStyle.addProperty("fo:break-after", "page");
+        m_currentParagraphStyle.addProperty("fo:break-before", "page");
     }
     else {
         body->startElement("text:line-break");
@@ -5345,8 +5344,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_control()
     const QXmlStreamAttributes attrs(attributes());
 
     body->startElement("draw:frame");
-    body->addAttribute("svg:width", m_currentVMLProperties.currentObjectWidthCm);
-    body->addAttribute("svg:height", m_currentVMLProperties.currentObjectHeightCm);
+    body->addAttribute("svg:width", m_currentObjectWidthCm);
+    body->addAttribute("svg:height", m_currentObjectHeightCm);
     body->addAttribute("text:anchor-type", "as-char"); // default for these
 
     // Do we even want to try anything with activeX controls?
@@ -5393,8 +5392,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 //              DrawAspect="Content" ObjectID="_1240488905" r:id="rId10"/>
 
     body->startElement("draw:frame");
-    body->addAttribute("svg:width", m_currentVMLProperties.currentObjectWidthCm);
-    body->addAttribute("svg:height", m_currentVMLProperties.currentObjectHeightCm);
+    body->addAttribute("svg:width", m_currentObjectWidthCm);
+    body->addAttribute("svg:height", m_currentObjectHeightCm);
     body->addAttribute("text:anchor-type", "as-char"); // default for these
 
     TRY_READ_ATTR_WITH_NS(r, id)

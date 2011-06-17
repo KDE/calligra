@@ -315,6 +315,10 @@ private:
 
     QMap<QString, QString> m_bookmarks; //!< Bookmarks
 
+    //!< Width of the object
+    QString m_currentObjectWidthCm;
+    QString m_currentObjectHeightCm;
+
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
     uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
