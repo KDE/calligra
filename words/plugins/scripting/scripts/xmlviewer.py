@@ -7,7 +7,7 @@ import os, sys, traceback, tempfile, zipfile
 # import the kross module.
 import Kross
 
-CalligraAppName="KWord"
+CalligraAppName="Words"
 CalligraAppExt="odt"
 
 try:

@@ -20,7 +20,7 @@
 #ifndef KWPAGESTYLEPROPERTIESCOMMAND_H
 #define KWPAGESTYLEPROPERTIESCOMMAND_H
 
-#include "../kword_export.h"
+#include "../words_export.h"
 #include "../KWPage.h"
 
 #include <KoPageLayout.h>
@@ -36,7 +36,7 @@ class KWPage;
  * When altering the size of a page this command will also reposition all required
  * frames to account for the changes.
  */
-class KWORD_TEST_EXPORT KWPageStylePropertiesCommand : public QUndoCommand
+class WORDS_TEST_EXPORT KWPageStylePropertiesCommand : public QUndoCommand
 {
 public:
     /**

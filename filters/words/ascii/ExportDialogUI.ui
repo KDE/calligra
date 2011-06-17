@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
- <comment>Export dialog for KWord's plain text export filter</comment>
+ <comment>Export dialog for Words's plain text export filter</comment>
  <class>ExportDialogUI</class>
  <widget class="QWidget" name="ExportDialogUI">
   <property name="geometry">

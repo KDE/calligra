@@ -45,7 +45,7 @@ K_EXPORT_PLUGIN(DCMImportFactory("calligrafilters"))
 
 KoFilter::ConversionStatus DCMImport::convert(QByteArray const& from, QByteArray const& to)
 {
-    if (to != "application/x-kword" || from != "application/dicom") {
+    if (to != "application/x-words" || from != "application/dicom") {
         return KoFilter::NotImplemented;
     }
 

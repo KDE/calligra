@@ -23,28 +23,28 @@
 
 #include <qdom.h>
 
-class KWEFKWordLeader;
+class KWEFWordsLeader;
 
 /**
  * @internal
  */
-void ProcessLayoutTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader);
+void ProcessLayoutTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader);
 /**
  * @internal
  */
-void ProcessFormatsTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader);
+void ProcessFormatsTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader);
 /**
  * @internal
  */
-void ProcessTextTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader);
+void ProcessTextTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader);
 /**
  * @internal
  */
-void ProcessDocumentInfoTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader);
+void ProcessDocumentInfoTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader);
 /**
  * @internal
  */
-void ProcessImageTag(QDomNode myNode, void *tagData, KWEFKWordLeader *leader);
+void ProcessImageTag(QDomNode myNode, void *tagData, KWEFWordsLeader *leader);
 
 #endif /* PROCESS_DOCUMENT_H */
 

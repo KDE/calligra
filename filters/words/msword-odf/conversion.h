@@ -172,27 +172,27 @@ namespace Conversion
     QString borderCalligraAttributes(const wvWare::Word97::BRC& brc);
 
     /**
-     * Convert wv2's Header Type to a KWord frameInfo value.
+     * Convert wv2's Header Type to a Words frameInfo value.
      */
     int headerTypeToFrameInfo(unsigned char type);
 
     /**
-     * Convert wv2's Header Type to a KWord frameset name.
+     * Convert wv2's Header Type to a Words frameset name.
      */
     QString headerTypeToFramesetName(unsigned char type);
 
     /**
-     * Convert a mask of Header Types to the hType value for KWord.
+     * Convert a mask of Header Types to the hType value for Words.
      */
     int headerMaskToHType(unsigned char mask);
 
     /**
-     * Convert a mask of Header Types to the fType value for KWord
+     * Convert a mask of Header Types to the fType value for Words
      */
     int headerMaskToFType(unsigned char mask);
 
     /**
-     * Convert wv2's FLD to KWord FIELD.subtype (or -1 if can't be handled)
+     * Convert wv2's FLD to Words FIELD.subtype (or -1 if can't be handled)
      */
     int fldToFieldType(const wvWare::FLD* fld);
 

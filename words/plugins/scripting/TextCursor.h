@@ -105,8 +105,8 @@ public slots:
     *
     * Python sample code;
     * \code
-    * import KWord
-    * doc = KWord.mainFrameSet().document()
+    * import Words
+    * doc = Words.mainFrameSet().document()
     * cursor = doc.rootFrame().firstCursorPosition()
     * cursor.movePosition(cursor.NextBlock, true)
     * cursor.movePosition(cursor.End)

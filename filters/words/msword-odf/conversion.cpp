@@ -639,7 +639,7 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 
     switch (brc.brcType) {
     case 0: // none
-        //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
+        //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise words will show a border!
         style = "none";
         break;
     case 11: // thin-thick small gap
@@ -669,7 +669,7 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
 
     case 7: // dash large gap
     case 22: // dash small gap
-        style = "dashed"; // KWord: dashes //FIXME
+        style = "dashed"; // Words: dashes //FIXME
         break;
     case 6: // dot
         style = "dotted";
@@ -784,9 +784,9 @@ QString Conversion::numberFormatCode(int nfc)
         value = 'a';
         break;
     case 5: // arabic with a trailing dot (added by writeCounter)
-    case 6: // numbered (one, two, three) - not supported by KWord
-    case 7: // ordinal (first, second, third) - not supported by KWord
-    case 22: // leading zero (01-09, 10-99, 100-...) - not supported by KWord
+    case 6: // numbered (one, two, three) - not supported by Words
+    case 7: // ordinal (first, second, third) - not supported by Words
+    case 22: // leading zero (01-09, 10-99, 100-...) - not supported by Words
     case 0: // arabic
         value = '1';
         break;
@@ -887,8 +887,8 @@ int Conversion::fldToFieldType(const wvWare::FLD* fld)
     case 25:    m_fieldType = -1; break;  // edittime (unhandled)
     case 29:    m_fieldType =  0; break;  // filename (unhandled)
     case 32:    m_fieldType = -1; break;  // time (unhandled)
-    case 60:    m_fieldType =  2; break;  // username <-> KWord's author name
-    case 61:    m_fieldType = 16; break;  // userinitials <-> KWord's author initial)
+    case 60:    m_fieldType =  2; break;  // username <-> Words's author name
+    case 61:    m_fieldType = 16; break;  // userinitials <-> Words's author initial)
     case 62:    m_fieldType = -1; break;  // useraddress (unhandled)
     default:    m_fieldType = -1; break;
     }

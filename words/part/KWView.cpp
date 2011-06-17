@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA
  */
 
-// kword includes
+// words includes
 #include "KWView.h"
 #include "KWGui.h"
 #include "KWDocument.h"
@@ -277,7 +277,7 @@ void KWView::setupActions()
     m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
     m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in Words.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
-        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != Words::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(toggleHeader()));
 
     m_actionViewFooter = new KToggleAction(i18n("Enable Document Footers"), this);
@@ -286,7 +286,7 @@ void KWView::setupActions()
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
     m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in Words. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
     if (m_currentPage.isValid())
-        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
@@ -983,7 +983,7 @@ KoPrintJob *KWView::createPrintJob()
 {
     KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
-    dia->printer().setCreator(QString("KWord %1.%2.%3").arg(Calligra::versionMajor())
+    dia->printer().setCreator(QString("Words %1.%2.%3").arg(Calligra::versionMajor())
                               .arg(Calligra::versionMinor()).arg(Calligra::versionRelease()));
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
@@ -1110,7 +1110,7 @@ void KWView::editDeleteFrame()
         KWFrame *frame = frameForShape(shape);
         if (frame) {
             KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-            if (fs && fs->textFrameSetType() != KWord::OtherTextFrameSet)
+            if (fs && fs->textFrameSetType() != Words::OtherTextFrameSet)
                 continue; // can't delete auto-generated frames
         }
         frames.append(shape);
@@ -1124,7 +1124,7 @@ void KWView::toggleHeader()
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    m_currentPage.pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? Words::HFTypeEvenOdd : Words::HFTypeNone);
     m_document->relayout();
 }
 
@@ -1133,7 +1133,7 @@ void KWView::toggleFooter()
     if (!m_currentPage.isValid())
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
-    m_currentPage.pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    m_currentPage.pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? Words::HFTypeEvenOdd : Words::HFTypeNone);
     m_document->relayout();
 }
 
@@ -1481,9 +1481,9 @@ void KWView::selectionChanged()
         Q_ASSERT(frame);
         QVariant variant;
         variant.setValue<void*>(frame);
-        m_canvas->resourceManager()->setResource(KWord::CurrentFrame, variant);
+        m_canvas->resourceManager()->setResource(Words::CurrentFrame, variant);
         variant.setValue<void*>(frame->frameSet());
-        m_canvas->resourceManager()->setResource(KWord::CurrentFrameSet, variant);
+        m_canvas->resourceManager()->setResource(Words::CurrentFrameSet, variant);
         break;
     }
 }
@@ -1503,8 +1503,8 @@ void KWView::setCurrentPage(const KWPage &currentPage)
             m_zoomController->setPageSize(m_maxPageSize);
         }
 
-        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
-        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != Words::HFTypeNone);
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != Words::HFTypeNone);
     }
 }
 

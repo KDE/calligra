@@ -185,7 +185,7 @@ So here are the main classes for KChart 2:
 
 Boudewijn Rempt summed it all up this way:
 
- - "Look at KWord: It's a KPart that contains a view and a document.
+ - "Look at Words: It's a KPart that contains a view and a document.
     The document contains the shape and the shape draws itself on the
     view and also contains the data."
 

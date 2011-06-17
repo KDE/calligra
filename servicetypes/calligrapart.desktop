@@ -62,7 +62,7 @@ Comment[x-test]=xxCalligra Componentxx
 Comment[zh_CN]=Calligra 组件
 Comment[zh_TW]=Calligra 元件
 
-# Name of the native mimetype (mandatory) - currently still the Calligra-1.3 one, e.g. application/x-kword
+# Name of the native mimetype (mandatory) - currently still the Calligra-1.3 one, e.g. application/x-words
 [PropertyDef::X-KDE-NativeMimeType]
 Type=QString
 

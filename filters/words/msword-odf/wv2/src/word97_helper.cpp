@@ -1594,8 +1594,8 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             break;
         // All the BiDi flags below aren't documented. The question is whether we should
         // add some BiDi versions of e.g. fBold and interpret these sprms here like plain
-        // sprmCFBold. For now I just ignore them, as the only user of wv2 is KWord, and
-        // KWord is intelligent enough to support BiDi "the right way." (Werner)
+        // sprmCFBold. For now I just ignore them, as the only user of wv2 is Words, and
+        // Words is intelligent enough to support BiDi "the right way." (Werner)
         case SPRM::sprmCFBiDi:
             // ###### Undocumented
             //wvlog << "Warning: sprmCFBiDi not implemented" << endl;

@@ -26,7 +26,7 @@
 #include <QDebug>
 
 #include "KWDocument.h"
-#include "kword_export.h"
+#include "words_export.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 
@@ -45,7 +45,7 @@ class KoShape;
 class KoViewConverter;
 class KWPageCacheManager;
 
-class KWORD_EXPORT KWCanvasBase : public KoCanvasBase
+class WORDS_EXPORT KWCanvasBase : public KoCanvasBase
 {
 public:
     KWCanvasBase(KWDocument *document, QObject *parent = 0);

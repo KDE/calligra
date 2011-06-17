@@ -5,11 +5,11 @@ project(wordspart)
 
 include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
-########### KWordPrivate library ###############
+########### WordsPrivate library ###############
 
 set(wordsprivate_LIB_SRCS
     KWFactory.cpp
-    KWord.cpp
+    Words.cpp
     KWApplicationConfig.cpp
     KWCanvasBase.cpp
     KWCanvas.cpp
@@ -107,7 +107,7 @@ set_target_properties(wordsprivate
 )
 install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-########### KWordPart Library ###############
+########### WordsPart Library ###############
 
 set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
@@ -121,7 +121,7 @@ target_link_libraries(wordspart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} wordspr
 install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
-########### KWord exe ###############
+########### Words exe ###############
 
 set(words_KDEINIT_SRCS main.cpp )
 
@@ -150,11 +150,11 @@ install( PROGRAMS words.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
-kword_export.h
+words_export.h
 KWPage.h
 KWPageManager.h
 KWPageStyle.h
-KWord.h
+Words.h
 KWCanvasBase.h
 KWCanvas.h
 KWCanvasItem.h

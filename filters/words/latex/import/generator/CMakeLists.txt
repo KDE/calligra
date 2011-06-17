@@ -8,7 +8,7 @@
 set(latexgenerator_PART_SRCS 
    body.cc 
    document.cc 
-   kwordgenerator.cc 
+   wordsgenerator.cc 
    latex.cc 
    paragraph.cc )
 
@@ -40,7 +40,7 @@ install(TARGETS latexgenerator  DESTINATION ${PLUGIN_INSTALL_DIR})
 #
 #kde_module_LTLIBRARIES = liblatexgenerator.la
 #
-#liblatexgenerator_la_SOURCES = body.cc document.cc kwordgenerator.cc latex.cc paragraph.cc
+#liblatexgenerator_la_SOURCES = body.cc document.cc wordsgenerator.cc latex.cc paragraph.cc
 #
-#noinst_HEADERS = body.h document.h kwordgenerator.h latex.h paragraph.h
+#noinst_HEADERS = body.h document.h wordsgenerator.h latex.h paragraph.h
 #

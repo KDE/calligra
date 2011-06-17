@@ -33,7 +33,7 @@ KWFactory::KWFactory(QObject *parent)
         : KPluginFactory(*aboutData(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
-    // main app is KWord.
+    // main app is Words.
     (void) componentData();
 }
 
@@ -62,7 +62,7 @@ QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *pa
 KAboutData *KWFactory::aboutData()
 {
     if (!s_aboutData) {
-        s_aboutData = newKWordAboutData();
+        s_aboutData = newWordsAboutData();
     }
     return s_aboutData;
 }

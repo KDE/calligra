@@ -43,14 +43,14 @@ namespace Scripting
 *
 * The following python sample script does use the FrameSet class;
 * \code
-* import KWord
+* import Words
 * # Print the name of the main frameset.
-* fs = KWord.mainFrameSesettextaroundt()
+* fs = Words.mainFrameSesettextaroundt()
 * if fs:
 *     print fs.name()
 * # Iterate over all framesets.
-* for i in range( KWord.frameSetCount() ):
-*     fs = KWord.frameSet(i)
+* for i in range( Words.frameSetCount() ):
+*     fs = Words.frameSet(i)
 *     # iterate over all frames of the frameset.
 *     for k in fs.frameCount():
 *         print fs.frame(k).shapeId()

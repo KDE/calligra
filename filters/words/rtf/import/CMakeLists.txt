@@ -12,11 +12,11 @@ kde4_add_plugin(rtfimport ${rtfimport_PART_SRCS})
 
 
 
-target_link_libraries(rtfimport kwordexportfilters komain)
+target_link_libraries(rtfimport wordsexportfilters komain)
 
 install(TARGETS rtfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kword_rtf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_rtf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

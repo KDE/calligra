@@ -57,7 +57,7 @@ void Conversion::convert(const QString& inputFileName, QFile* outputFile)
 
     contall.append("</office:document>");
 
-    QFile temp1(KStandardDirs::locate("data","kword/html-odf/converter.xsl"));
+    QFile temp1(KStandardDirs::locate("data","words/html-odf/converter.xsl"));
     temp1.open(QIODevice::ReadOnly);
 
 

@@ -38,7 +38,7 @@ namespace Scripting
 
 /**
 * The TextDocument object represents a QTextDocument within the Scribe
-* text-engine KWord uses to enable editing of text content.
+* text-engine Words uses to enable editing of text content.
 */
 class TextDocument : public QObject
 {

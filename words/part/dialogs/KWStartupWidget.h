@@ -31,7 +31,7 @@ class KoPageLayoutWidget;
 class KWDocumentColumns;
 
 /**
- * The 'Custom Document' widget in the KWord startup widget.
+ * The 'Custom Document' widget in the Words startup widget.
  * This class embeds the page size/columns tabs to allow the user to select the document
  * markup for his new empty document.
  */

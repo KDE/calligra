@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_1_3_FORMAT_ONE
-#define KWORD_1_3_FORMAT_ONE
+#ifndef WORDS_1_3_FORMAT_ONE
+#define WORDS_1_3_FORMAT_ONE
 
 class QTextStream;
 
@@ -34,11 +34,11 @@ class QTextStream;
  * Contains the data of the \<FORMAT id="1"\> children
  * also the grand-children of \<STYLE\> and \<LAYOUT\>
  */
-class KWord13FormatOneData
+class Words13FormatOneData
 {
 public:
-    explicit KWord13FormatOneData(void);
-    ~KWord13FormatOneData(void);
+    explicit Words13FormatOneData(void);
+    ~Words13FormatOneData(void);
 
 public:
     void xmldump(QTextStream& iostream);
@@ -61,11 +61,11 @@ public: // OASIS-specific
 /**
  * \brief class for \<FORMAT id="1"\>
  */
-class KWord13FormatOne : public KWord13Format
+class Words13FormatOne : public Words13Format
 {
 public:
-    KWord13FormatOne(void);
-    virtual ~KWord13FormatOne(void);
+    Words13FormatOne(void);
+    virtual ~Words13FormatOne(void);
 public:
     /// Get length of format
     virtual int length(void);
@@ -74,10 +74,10 @@ public:
      *
      * \note The returned pointer MUST NOT be deleted!
      */
-    virtual KWord13FormatOneData* getFormatOneData(void);
+    virtual Words13FormatOneData* getFormatOneData(void);
 public:
     int m_length; ///< Length of format
-    KWord13FormatOneData m_formatOne; ///< Data of children of \<FORMAT id="1"\>
+    Words13FormatOneData m_formatOne; ///< Data of children of \<FORMAT id="1"\>
 };
 
-#endif // KWORD_1_3_FORMAT_ONE
+#endif // WORDS_1_3_FORMAT_ONE

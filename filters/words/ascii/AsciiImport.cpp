@@ -43,7 +43,7 @@
 #define MAXLINES 10000
 
 K_PLUGIN_FACTORY(AsciiImportFactory, registerPlugin<AsciiImport>();)
-K_EXPORT_PLUGIN(AsciiImportFactory("kwordasciiimportng", "calligrafilters"))
+K_EXPORT_PLUGIN(AsciiImportFactory("wordsasciiimportng", "calligrafilters"))
 
 bool checkEncoding(QTextCodec *codec, QByteArray &data)
 {

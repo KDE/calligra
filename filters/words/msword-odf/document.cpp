@@ -62,7 +62,7 @@ Document::Document(const std::string& fileName,
                    QBuffer& wordDocumentBuffer, POLE::Stream& table, QBuffer& data)
         : m_textHandler(0)
         , m_tableHandler(0)
-        , m_replacementHandler(new KWordReplacementHandler)
+        , m_replacementHandler(new WordsReplacementHandler)
         , m_graphicsHandler(0)
         , m_filter(filter)
         , m_parser(wvWare::ParserFactory::createParser(fileName))
@@ -99,11 +99,11 @@ Document::Document(const std::string& fileName,
         m_bufferEven = 0;
         m_headerWriter = 0;
 
-        m_textHandler  = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
+        m_textHandler  = new WordsTextHandler(m_parser, bodyWriter, mainStyles);
         m_textHandler->setDocument(this);
-        m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
+        m_tableHandler = new WordsTableHandler(bodyWriter, mainStyles);
         m_tableHandler->setDocument(this);
-        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles,
+        m_graphicsHandler = new WordsGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles,
                                                      m_parser->getDrawings(), m_parser->fib());
 
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
@@ -114,8 +114,8 @@ Document::Document(const std::string& fileName,
                 this, SLOT(slotAnnotationFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(headersFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
-        connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
-                this, SLOT(slotTableFound(KWord::Table*)));
+        connect(m_textHandler, SIGNAL(tableFound(Words::Table*)),
+                this, SLOT(slotTableFound(Words::Table*)));
         connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)),
                 this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
         connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter*)),
@@ -527,7 +527,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     KoGenStyle* masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle);
     QString masterStyleName;
 
-    //NOTE: The first master-page-name has to be "Standard", kword has hard
+    //NOTE: The first master-page-name has to be "Standard", words has hard
     //coded that the value of fo:backgroud-color from this style is used for
     //the entire frameset.
     if (m_textHandler->sectionNumber() > 1) {
@@ -899,15 +899,15 @@ void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
     delete subdoc.functorPtr;
 }
 
-//add KWord::Table object to the table queue
-void Document::slotTableFound(KWord::Table* table)
+//add Words::Table object to the table queue
+void Document::slotTableFound(Words::Table* table)
 {
     kDebug(30513);
 
     m_tableHandler->tableStart(table);
-    QList<KWord::Row> &rows = table->rows;
-    for (QList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it) {
-        KWord::TableRowFunctorPtr f = (*it).functorPtr;
+    QList<Words::Row> &rows = table->rows;
+    for (QList<Words::Row>::Iterator it = rows.begin(); it != rows.end(); ++it) {
+        Words::TableRowFunctorPtr f = (*it).functorPtr;
         Q_ASSERT(f);
         (*f)(); // call it
         delete f; // delete it
@@ -961,11 +961,11 @@ void Document::processSubDocQueue()
         }
         /*while ( !m_tableQueue.empty() )
         {
-            KWord::Table& table = m_tableQueue.front();
+            Words::Table& table = m_tableQueue.front();
             m_tableHandler->tableStart( &table );
-            QList<KWord::Row> &rows = table.rows;
-            for( QList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
-                KWord::TableRowFunctorPtr f = (*it).functorPtr;
+            QList<Words::Row> &rows = table.rows;
+            for( QList<Words::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+                Words::TableRowFunctorPtr f = (*it).functorPtr;
                 Q_ASSERT( f );
                 (*f)(); // call it
                 delete f; // delete it

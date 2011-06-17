@@ -229,10 +229,10 @@ void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& s
             case '.':
                 filling = 1; break;
             case '-':
-            case '_':  // TODO in KWord: differentiate --- and ___
+            case '_':  // TODO in Words: differentiate --- and ___
                 filling = 2; break;
             default:
-                // KWord doesn't have support for "any char" as filling.
+                // Words doesn't have support for "any char" as filling.
                 // Instead it has dash-dot and dash-dot-dot - but who uses that in a tabstop?
                 break;
             }
@@ -356,7 +356,7 @@ void OoUtils::importTextPosition(const QString& text_position, QString& value, Q
 {
     //OO: <vertical position (% or sub or super)> [<size as %>]
     //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
-    // TODO in kword: vertical positions other than sub/super
+    // TODO in words: vertical positions other than sub/super
     QStringList lst = text_position.split(' ');
     if (!lst.isEmpty()) {
         QString textPos = lst.front().trimmed();

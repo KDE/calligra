@@ -38,7 +38,7 @@
 
 using Conversion::twipsToPt;
 
-KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles) :
+WordsTableHandler::WordsTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles) :
     m_floatingTable(false)
 {
     // This strange value (-2), is used to create a check that e.g.  a
@@ -50,13 +50,13 @@ KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainS
     m_mainStyles = mainStyles; //for formatting styles
 }
 
-KoXmlWriter * KWordTableHandler::currentWriter() const
+KoXmlWriter * WordsTableHandler::currentWriter() const
 {
     return document()->textHandler()->currentWriter();
 }
 
 // Called by Document before invoking the table-row-functors
-void KWordTableHandler::tableStart(KWord::Table* table)
+void WordsTableHandler::tableStart(Words::Table* table)
 {
     kDebug(30513);
 
@@ -278,7 +278,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     }
 }
 
-void KWordTableHandler::tableEnd()
+void WordsTableHandler::tableEnd()
 {
     kDebug(30513) ;
     m_currentTable = 0L; // we don't own it, Document does
@@ -297,7 +297,7 @@ void KWordTableHandler::tableEnd()
     }
 }
 
-void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
+void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
     kDebug(30513) ;
     if (m_row == -2) {
@@ -350,7 +350,7 @@ void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     writer->addAttribute("table:style-name", rowStyleName.toUtf8());
 }
 
-void KWordTableHandler::tableRowEnd()
+void WordsTableHandler::tableRowEnd()
 {
     kDebug(30513);
     m_currentY += rowHeight();
@@ -374,7 +374,7 @@ static const wvWare::Word97::BRC& brcWinner(const wvWare::Word97::BRC& brc1, con
     }
 }
 
-void KWordTableHandler::tableCellStart()
+void WordsTableHandler::tableCellStart()
 {
     kDebug(30513) ;
 
@@ -422,10 +422,10 @@ void KWordTableHandler::tableCellStart()
 //         kDebug(30513) <<"fVertRestart is set!";
         // This cell is the first one of a series of vertically merged cells ->
         // we want to find out its size.
-        QList<KWord::Row>::Iterator it = m_currentTable->rows.begin() +  m_row + 1;
+        QList<Words::Row>::Iterator it = m_currentTable->rows.begin() +  m_row + 1;
         for (; it != m_currentTable->rows.end(); ++it)  {
             // Find cell right below us in row (*it), if any
-            KWord::TAPptr tapBelow = (*it).tap;
+            Words::TAPptr tapBelow = (*it).tap;
             const wvWare::Word97::TC* tcBelow = 0L;
             for (int c = 0; !tcBelow && c < tapBelow->itcMac ; ++c) {
                 if (qAbs(tapBelow->rgdxaCenter[ c ] - leftEdgePos) <= 3
@@ -493,7 +493,7 @@ void KWordTableHandler::tableCellStart()
     kDebug(30513) << " tableCellStart row=" << m_row << " WordColumn="
                   << m_column << " colSpan="
                   << colSpan << " (from" << leftCellNumber
-                  << " to" << rightCellNumber << " for KWord) rowSpan="
+                  << " to" << rightCellNumber << " for Words) rowSpan="
                   << rowSpan << " cellRect=" << cellRect;
 #endif
 
@@ -677,7 +677,7 @@ void KWordTableHandler::tableCellStart()
     m_cellStyleName = cellStyleName;
 }
 
-void KWordTableHandler::tableCellEnd()
+void WordsTableHandler::tableCellEnd()
 {
     kDebug(30513);
 
@@ -727,7 +727,7 @@ void KWordTableHandler::tableCellEnd()
     }
 }
 
-void KWord::Table::cacheCellEdge(int cellEdge)
+void Words::Table::cacheCellEdge(int cellEdge)
 {
     kDebug(30513) ;
     uint size = m_cellEdges.size();
@@ -749,7 +749,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     kDebug(30513) << cellEdge << " -> added. Size=" << size + 1;
 }
 
-int KWord::Table::columnNumber(int cellEdge) const
+int Words::Table::columnNumber(int cellEdge) const
 {
     kDebug(30513) ;
     for (unsigned int i = 0; i < (unsigned int)m_cellEdges.size(); i++) {
@@ -762,7 +762,7 @@ int KWord::Table::columnNumber(int cellEdge) const
     return 0;
 }
 
-double KWordTableHandler::rowHeight() const
+double WordsTableHandler::rowHeight() const
 {
     kDebug(30513) ;
     return qMax(m_tap->dyaRowHeight / 20.0, 20.0);

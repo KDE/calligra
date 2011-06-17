@@ -21,7 +21,7 @@
 #ifndef KW_PAGEMANAGER_H
 #define KW_PAGEMANAGER_H
 
-#include "kword_export.h"
+#include "words_export.h"
 #include "KWPageStyle.h"
 
 #include <KoPageLayout.h>
@@ -39,7 +39,7 @@ class KWPageManagerPrivate;
  * The Page Manager manages all the pages a document contains and separates all the frames
  * the document contains into actual printed pages.
  */
-class KWORD_EXPORT KWPageManager
+class WORDS_EXPORT KWPageManager
 {
 public:
     explicit KWPageManager();

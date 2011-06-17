@@ -9,7 +9,7 @@
 * Application's environment.
 ;:Typical Calligra application is built upon the fact that there is a main document (that also can act as KPart) for the application view, and most application logic is built around this single native format/mime type and the KPart class that uses data in this single format.
 
-;:Kexi has more distributed nature, there is more than just one mode (or two) for editing a document or viewing it as read-only (both modes for e.g. KWord uses mostly the same KPart widget(s), only with certain actions disabled/enabled). Some Kexi KParts have editors that are built as strictly different components that are used for viewing (as an example, "table altering" dialog versus table/query data view).
+;:Kexi has more distributed nature, there is more than just one mode (or two) for editing a document or viewing it as read-only (both modes for e.g. Words uses mostly the same KPart widget(s), only with certain actions disabled/enabled). Some Kexi KParts have editors that are built as strictly different components that are used for viewing (as an example, "table altering" dialog versus table/query data view).
 
 * Storage differences
 ;: Calligra depends on storing its native format in single file (in some cases, it can be non-xml but still it is self-contained file)
@@ -23,7 +23,7 @@
 
 ;:Similarly, Kexi does not download all data from SQL server and converts that format to "common" internal data representation and then operates on this representation. The "filter chains" from Calligra framework could force Kexi to do so (otherwise wrapping should be added), while in most cases the only thing that is converted (on demand) in Kexi projects are the database schemas.
 
-;: Above notes do not mean that Kexi is designed to lack filters functionality. Kexi filters functionality is designed with a knowledge that importing database schemas is not fully automatic, because there is not always enough database schema information (e.g. when migrating database from raw MySQL format to Firebird-driven Kexi project). The same applies for export: after exporting, much of project's information can disappear. You can say it is quite like exporting e.g. KWord document to, say, RTF. Yes, but Kexi often has to offer additional dialogs to ask user for additional hints -- summing up, KO filter chains are not so usable in Kexi, since we are not performing just "convert-file-to-file" task.
+;: Above notes do not mean that Kexi is designed to lack filters functionality. Kexi filters functionality is designed with a knowledge that importing database schemas is not fully automatic, because there is not always enough database schema information (e.g. when migrating database from raw MySQL format to Firebird-driven Kexi project). The same applies for export: after exporting, much of project's information can disappear. You can say it is quite like exporting e.g. Words document to, say, RTF. Yes, but Kexi often has to offer additional dialogs to ask user for additional hints -- summing up, KO filter chains are not so usable in Kexi, since we are not performing just "convert-file-to-file" task.
 
 
 !Why kexi is still a member of Calligra suite?
@@ -32,7 +32,7 @@
 
 * Kexi is a missing application for Free platforms like Linux, *BSD
 
-* It (will be) still properly integrated with other Calligra compontents (KWord mailmerge, KChart graphs, Kugar reports, KSpread tables ...) and/or reuse them
+* It (will be) still properly integrated with other Calligra compontents (Words mailmerge, KChart graphs, Kugar reports, KSpread tables ...) and/or reuse them
 
 * Work on moving Kexi-as-KoMainWindow/KoDocument-driven application to Kexi-as-KXmlGuiWindow/KexiDB-driven application is stared by Kexi Team
 
