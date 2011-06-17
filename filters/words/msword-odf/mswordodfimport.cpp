@@ -88,25 +88,29 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     LEInputStream wdstm(&buff1);
 
-    MSO::FibBase fb;
+    MSO::FibBase fibBase;
     LEInputStream::Mark m = wdstm.setMark();
     try {
-        parseFibBase(wdstm, fb);
+        parseFibBase(wdstm, fibBase);
     } catch (IOException _e) {
         kError(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::InvalidFormat;
     }
     wdstm.rewind(m);
 
     //document is encrypted or obfuscated
-    if (fb.fEncrypted) {
+    if (fibBase.fEncrypted) {
         return KoFilter::PasswordProtected;
     }
 
     //1Table Stream or 0Table Stream
-    const char* tblstm_name = fb.fWhichTblStm ? "1Table" : "0Table";
+    const char* tblstm_name = fibBase.fWhichTblStm ? "1Table" : "0Table";
     POLE::Stream tblstm_pole(&storage, tblstm_name);
     if (tblstm_pole.fail()) {
-        if (fb.nFib >= Word8nFib) {
+        if (fibBase.nFib >= Word8nFib) {
             kDebug(30513) << "Either the 1Table stream or the 0Table stream MUST be present in the file!";
             return KoFilter::InvalidFormat;
         }
@@ -195,10 +199,21 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    Document *document = new Document(QFile::encodeName(inputFile).data(), this,
-                                      bodyWriter, &metaWriter, &manifestWriter,
-                                      storeout, mainStyles,
-                                      wdstm, tblstm_pole, datastm);
+    Document *document = 0;
+
+    try {
+        document = new Document(QFile::encodeName(inputFile).data(), this,
+                                bodyWriter, &metaWriter, &manifestWriter,
+                                storeout, mainStyles,
+                                wdstm, tblstm_pole, datastm);
+    } catch (InvalidFormatException _e) {
+        kDebug(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::StupidError;
+    }
+
     finalizer.m_document = document;
 
     //check that we can parse the document?
@@ -207,13 +222,21 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     //actual parsing & action
     try {
-        if (!document->parse()) {
+        quint8 ret = document->parse();
+        switch (ret) {
+        case 1:
             return KoFilter::CreationError;
+        case 2:
+            return KoFilter::StupidError;
         }
     } catch (InvalidFormatException _e) {
         kDebug(30513) << _e.msg;
         return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::StupidError;
     }
+
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
 
@@ -253,6 +276,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     storeout->open("settings.xml");
     KoStoreDevice settingsDev(storeout);
     KoXmlWriter *settingsWriter = oasisStore.createOasisXmlWriter(&settingsDev, "office:document-settings");
+    settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
     settingsWriter->startElement("config:config-item");
@@ -267,6 +291,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     settingsWriter->endElement();
     settingsWriter->endElement(); // config-item-set
 
+    settingsWriter->endElement(); // settings
     settingsWriter->endElement(); // document-settings
     settingsWriter->endDocument();
     delete settingsWriter;

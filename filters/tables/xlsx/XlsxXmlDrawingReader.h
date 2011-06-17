@@ -112,7 +112,10 @@ public:
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
 protected:
-    KoFilter::ConversionStatus read_anchor(const QStringRef &name);
+    KoFilter::ConversionStatus read_oneCellAnchor();
+    KoFilter::ConversionStatus read_twoCellAnchor();
+    KoFilter::ConversionStatus read_absoluteAnchor();
+    KoFilter::ConversionStatus read_anchor(const QString& reference);
     KoFilter::ConversionStatus read_from();
     KoFilter::ConversionStatus read_to();
     KoFilter::ConversionStatus read_col();

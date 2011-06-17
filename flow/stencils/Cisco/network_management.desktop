@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Network Management
+Name[el]=Διαχείριση δικτύου
 Name[es]=Gestión de red
 Name[et]=Võrguhaldus
 Name[nl]=Netwerkbeheer
@@ -10,3 +11,4 @@ Name[ug]=تور باشقۇرۇش
 Name[uk]=Керування мережею
 Name[x-test]=xxNetwork Managementxx
 Name[zh_CN]=网络管理
+Name[zh_TW]=網路管理

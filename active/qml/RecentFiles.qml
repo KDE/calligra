@@ -20,6 +20,7 @@
  */
 
 import QtQuick 1.0
+import CalligraActive 1.0
 
 ListView {
     id: recentFilesListView
@@ -33,13 +34,25 @@ ListView {
     delegate: Button {
         textPosition: "right"
 
-        imageSource: "qrc:///images/words.png"
-        text: modelData
+        text: modelData.name
         width: buttonWidth; height: buttonHeight;
+        imageSource: {
+            switch(modelData.type) {
+                case CADocumentInfo.TextDocument:
+                    "qrc:///images/words.png"
+                    break;
+                case CADocumentInfo.Spreadsheet:
+                    "qrc:///images/tables.png"
+                    break;
+                case CADocumentInfo.Presentation:
+                    "qrc:///images/stage.png"
+                    break;
+            }
+        }
 
         MouseArea {
             anchors.fill: parent
-            onClicked: homeScreen.openDocument(modelData);
+            onClicked: homeScreen.openDocument(modelData.path);
         }
     }
 }

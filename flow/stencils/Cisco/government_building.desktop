@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Government Building
+Name[de]=Regierungsgebäude
+Name[el]=Κυβερνητικό κτήριο
 Name[et]=Valitsushoone
 Name[nl]=Overheidsgebouw
 Name[pt]=Edifício Governamental
@@ -7,3 +9,4 @@ Name[pt_BR]=Edifício governamental
 Name[sv]=Statlig byggnad
 Name[uk]=Урядова будівля
 Name[x-test]=xxGovernment Buildingxx
+Name[zh_TW]=政府建築

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Terminal
+Name[el]=Τερματικό
 Name[es]=Terminal
 Name[et]=Terminal
 Name[nl]=Terminal
@@ -10,3 +11,4 @@ Name[ug]=تېرمىنال
 Name[uk]=Термінал
 Name[x-test]=xxTerminalxx
 Name[zh_CN]=终端
+Name[zh_TW]=終端機

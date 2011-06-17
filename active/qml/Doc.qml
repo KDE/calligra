@@ -20,7 +20,7 @@
  */
 
 import QtQuick 1.0
-import CalligraMobile 1.0
+import CalligraActive 1.0
 
 Item {
     id: docRootRect
@@ -33,11 +33,11 @@ Item {
     }
 
     function initToolbar() {
-        if (canvas.documentType == CanvasController.Spreadsheet) {
+        if (canvas.documentType == CADocumentInfo.Spreadsheet) {
             toolbarLoader.source = "SpreadsheetToolbar.qml"
-        } else if (canvas.documentType == CanvasController.TextDocument) {
+        } else if (canvas.documentType == CADocumentInfo.TextDocument) {
             toolbarLoader.source = "WordsToolbar.qml"
-        } else if (canvas.documentType == CanvasController.Presentation) {
+        } else if (canvas.documentType == CADocumentInfo.Presentation) {
             toolbarLoader.source = "PresentationToolbar.qml"
         }
     }

@@ -84,16 +84,22 @@ TODO: implement KexiUtils::BoolBloker like QBoolBloker (http://www.koders.com/cp
 
 ===================== Kexi 2.4  =====================
 
-~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
-
 Tabbed toolbar TODOS:
 *add tab hiding to the API
 **can be used e.g. when there's no project opened in Kexi to hide Create, Data, External Data tabs
 *should we remove the accelerators from the tabs?
 
+~~~~~~~~~~~~~~~~ 2.4 Alpha 2 (2.3.72) ~~~~~~~~~~~~~~~~
+
+2011-06-08
+Core
+*Fix regression added with the delayed loading of plugins: "Create" toolbar works now
+
 2011-05-11
 Core
 *Delayed loading of plugins, improves startup times
+
+~~~~~~~~~~~~~~~~ 2.4 Alpha 1 (2.3.71) ~~~~~~~~~~~~~~~~
 
 2011-05-09
 Forms

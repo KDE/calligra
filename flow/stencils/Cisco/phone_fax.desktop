@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Phone/Fax
+Name[el]=Τηλέφωνο/Φαξ
 Name[et]=Telefon/faks
 Name[nl]=Telefoon/fax
 Name[pt]=Telefone/Fax
@@ -7,3 +8,4 @@ Name[pt_BR]=Telefone/Fax
 Name[sv]=Telefon/telefax
 Name[uk]=Телефакс
 Name[x-test]=xxPhone/Faxxx
+Name[zh_TW]=電話/傳真

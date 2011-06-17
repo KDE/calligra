@@ -339,7 +339,7 @@ namespace wvWare {
          * runOfText (that it doesn't get lost if someone doesn't override this method) and
          * invokes the functor.
          */
-        virtual void footnoteFound( FootnoteData::Type type, UString characters,
+        virtual void footnoteFound( FootnoteData data, UString characters,
                                     SharedPtr<const Word97::SEP> sep,
                                     SharedPtr<const Word97::CHP> chp,
                                     const FootnoteFunctor& parseFootnote);

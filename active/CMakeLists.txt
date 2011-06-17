@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-project(calligra-mobile)
+project(calligra-active)
 
 find_package(Qt4 4.7.0 REQUIRED)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
@@ -15,24 +15,25 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
 
-set (calligra-mobile_RCCS CalligraMobile.qrc)
-qt4_add_resources(calligra-mobile_RCC_SRCS ${calligra-mobile_RCCS})
+set (calligra-active_RCCS CalligraActive.qrc)
+qt4_add_resources(calligra-active_RCC_SRCS ${calligra-active_RCCS})
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_mobile_global.h.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_mobile_global.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_active_global.h.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_active_global.h)
 
-set(calligra-mobile_SRCS
+set(calligra-active_SRCS
+    src/CADocumentInfo.cpp
     src/PAView.cpp
     src/CanvasController.cpp
     src/MainWindow.cpp
     main.cpp
-    ${calligra-mobile_RCC_SRCS}
+    ${calligra-active_RCC_SRCS}
 )
 
-qt4_automoc(${calligra-mobile_SRCS})
+qt4_automoc(${calligra-active_SRCS})
 
-add_executable(calligra-mobile ${calligra-mobile_SRCS})
+add_executable(calligraactive ${calligra-active_SRCS})
 
-target_link_libraries(calligra-mobile
+target_link_libraries(calligraactive
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
     komain
@@ -41,6 +42,7 @@ target_link_libraries(calligra-mobile
     kopageapp
 )
 
-install(TARGETS calligra-mobile RUNTIME DESTINATION bin)
-install(DIRECTORY qml DESTINATION share/calligra-mobile)
-install(DIRECTORY templates DESTINATION share/calligra-mobile)
+install(TARGETS calligraactive RUNTIME DESTINATION bin)
+install(FILES calligraactive.desktop DESTINATION share/applications)
+install(DIRECTORY qml DESTINATION share/calligraactive)
+install(DIRECTORY templates DESTINATION share/calligraactive)

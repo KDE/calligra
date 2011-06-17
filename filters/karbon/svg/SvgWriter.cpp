@@ -117,6 +117,10 @@ bool SvgWriter::save(const QString &filename, bool writeInlineImages)
 
 bool SvgWriter::save(QIODevice &outputDevice)
 {
+    // reset data for generating unique names
+    m_uniqueNames.clear();
+    m_shapeIds.clear();
+
     m_stream = new QTextStream(&outputDevice);
     QString body;
     m_body = new QTextStream(&body, QIODevice::ReadWrite);
@@ -295,28 +299,48 @@ void SvgWriter::saveRectangle(RectangleShape * rectangle)
     *m_body << "/>" << endl;
 }
 
-static QString createUID()
+QString SvgWriter::createUID(const QString &base)
 {
-    static unsigned int nr = 0;
+    QString idBase = base.isEmpty() ? "defitem" : base;
+    int counter = m_uniqueNames.value(idBase);
+    m_uniqueNames.insert(idBase, counter+1);
 
-    return "defitem" + QString().setNum(nr++);
-}
-
-QString SvgWriter::createID(const KoShape * obj)
-{
-    QString id;
-    if (! m_shapeIds.contains(obj)) {
-        id = obj->name().isEmpty() ? createUID() : obj->name();
-        m_shapeIds.insert(obj, id);
-    } else {
-        id = m_shapeIds[obj];
-    }
-    return id;
+    return idBase + QString("%1").arg(counter);
 }
 
 QString SvgWriter::getID(const KoShape *obj)
 {
-    return QString(" id=\"%1\"").arg(createID(obj));
+    QString id;
+    // do we have already an id for this object ?
+    if (m_shapeIds.contains(obj)) {
+        // use existing id
+        id = m_shapeIds[obj];
+    } else {
+        // initialize from object name
+        id = obj->name();
+        // if object name is not empty and was not used already
+        // we can use it as is
+        if (!id.isEmpty() && !m_uniqueNames.contains(id)) {
+            // add to unique names so it does not get reused
+            m_uniqueNames.insert(id, 1);
+        } else {
+            if (id.isEmpty()) {
+                // differentiate a little between shape types
+                if (dynamic_cast<const KoShapeGroup*>(obj))
+                    id = "group";
+                else if (dynamic_cast<const KoShapeLayer*>(obj))
+                    id = "layer";
+                else
+                    id = "shape";
+            }
+            // create a compeletely new id based on object name
+            // or a generic name
+            id = createUID(id);
+        }
+        // record id for this shape
+        m_shapeIds.insert(obj, id);
+    }
+    return QString(" id=\"%1\"").arg(id);
 }
 
 QString SvgWriter::getTransform(const QTransform &matrix, const QString &attributeName)
@@ -370,7 +394,7 @@ void SvgWriter::getGradient(const QGradient * gradient, const QTransform &gradie
         QString("spreadMethod=\"repeat\" ")
     };
 
-    QString uid = createUID();
+    QString uid = createUID("gradient");
     if (gradient->type() == QGradient::LinearGradient) {
         const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
         // do linear grad
@@ -442,7 +466,7 @@ void SvgWriter::getGradient(const QGradient * gradient, const QTransform &gradie
 // better than nothing
 void SvgWriter::getPattern(KoPatternBackground * pattern, KoShape * shape)
 {
-    QString uid = createUID();
+    QString uid = createUID("pattern");
 
     QSizeF shapeSize = shape->size();
     QSizeF patternSize = pattern->patternDisplaySize();
@@ -638,7 +662,7 @@ void SvgWriter::getEffects(KoShape *shape, QTextStream *stream)
     if (!filterEffects.count())
         return;
 
-    QString uid = createUID();
+    QString uid = createUID("filter");
 
     printIndentation(m_defs, m_indent2);
 
@@ -668,7 +692,7 @@ void SvgWriter::getClipping(KoShape *shape, QTextStream *stream)
 
     path->close();
 
-    QString uid = createUID();
+    QString uid = createUID("clippath");
 
     printIndentation(m_defs, m_indent2);
 
@@ -735,7 +759,29 @@ void SvgWriter::saveTextRange(const ArtisticTextRange &range, QTextStream *strea
         }
         *stream << "\"";
     }
-    if (!saveRangeFont)
+    if (range.baselineShift() != ArtisticTextRange::None) {
+        switch(range.baselineShift()) {
+        case ArtisticTextRange::Sub:
+            *stream << " baseline-shift=\"sub\"";
+            break;
+        case ArtisticTextRange::Super:
+            *stream << " baseline-shift=\"super\"";
+            break;
+        case ArtisticTextRange::Percent:
+            *stream << " baseline-shift=\"";
+            *stream << QString("%1%").arg(range.baselineShiftValue()*100);
+            *stream << "\"";
+            break;
+        case ArtisticTextRange::Length:
+            *stream << " baseline-shift=\"";
+            *stream << QString("%1%").arg(SvgUtil::toUserSpace(range.baselineShiftValue()));
+            *stream << "\"";
+            break;
+        default:
+            break;
+        }
+    }
+    if (saveRangeFont)
         saveFont(range.font(), stream);
     *stream << ">";
     *stream << range.text();
@@ -791,7 +837,7 @@ void SvgWriter::saveText(ArtisticTextShape * text)
 
         printIndentation(m_defs, m_indent);
 
-        id = createUID();
+        id = createUID("baseline");
         *m_defs << "<path id=\"" << id << "\"";
         *m_defs << " d=\"" << baseline->toString(baseline->absoluteTransformation(0) * m_userSpaceMatrix) << "\" ";
         *m_defs << " />" << endl;
@@ -856,7 +902,7 @@ void SvgWriter::saveImage(KoShape *picture)
             QString dstBaseFilename = QFileInfo(url.fileName()).baseName();
             url.setDirectory(url.directory());
             // create a filename for the image file at the destination directory
-            QString fname = dstBaseFilename + '_' + createID(picture);
+            QString fname = dstBaseFilename + '_' + createUID("picture");
             // get extension from mimetype
             QString ext = "";
             QStringList patterns = mimeType->patterns();

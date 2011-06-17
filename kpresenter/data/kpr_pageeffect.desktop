@@ -2,7 +2,9 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraStage/PageEffect
 Comment=Page effect plugin for Calligra Stage
+Comment[el]=Πρόσθετο εφέ σελίδας για το Calligra Stage
 Comment[et]=Calligra Stage'i leheküljeefektide plugin
+Comment[nb]=Calligra Stage programtillegg for sideeffekter
 Comment[pt]='Plugin' de efeitos das páginas do Calligra Stage
 Comment[pt_BR]=Plugin de efeitos das páginas do Calligra Stage
 Comment[sv]=Insticksprogram med sideffekter för Calligra Stage

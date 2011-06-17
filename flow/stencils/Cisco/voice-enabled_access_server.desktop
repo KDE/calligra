@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Voice commserver
+Name[el]=Εξυπηρετητής φωνητικής επικοινωνίας
 Name[et]=Häälsuhtluse server
 Name[pt]=Servidor com. voz
 Name[pt_BR]=Servidor de comunicações de voz
 Name[sv]=Röstkommunikationsserver
 Name[uk]=Сервер голосового зв'язку
 Name[x-test]=xxVoice commserverxx
+Name[zh_TW]=聲音傳輸伺服器

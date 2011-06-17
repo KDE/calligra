@@ -54,7 +54,7 @@ private slots:
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
-
+    virtual void unsetCanvas() { m_canvas = 0; m_view = 0; }
 private:
     KoPAViewBase *m_view;
     KPrSoundCollection *m_soundCollection;

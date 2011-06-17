@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Stage
+Name[el]=Calligra Stage
 Name[et]=Calligra Stage
+Name[nb]=Calligra Stage
 Name[pt]=Calligra Stage
 Name[pt_BR]=Calligra Stage
 Name[sv]=Calligra Stage
@@ -55,7 +57,7 @@ Comment[ca]=Escriu documents de presentació
 Comment[ca@valencia]=Escriu documents de presentació
 Comment[da]=Skriv præsentationsdokumenter
 Comment[de]=Präsentationsdokumente verfassen
-Comment[el]=Γράψτε αρχεία παρουσιάσεων
+Comment[el]=Γράψτε έγγραφα παρουσιάσεων
 Comment[en_GB]=Write presentation documents
 Comment[es]=Escribir documentos de presentación
 Comment[et]=Esitlusdokumentide kirjutamine

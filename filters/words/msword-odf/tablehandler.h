@@ -38,49 +38,62 @@ class Document;
 
 namespace wvWare
 {
-namespace Word97 {
-class TC;
-class SHD;
-}
+    namespace Word97 {
+        class TC;
+        class SHD;
+    }
 }
 class KoRect;
 
 namespace KWord
 {
-typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
-typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
+    typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
+    typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
 
-// Data for a given row table. This struct is used by the Table struct.
-struct Row {
-    Row() : functorPtr(0L), tap(0L)  {}     // QValueList wants that one
-    Row(TableRowFunctorPtr ptr, TAPptr _tap) : functorPtr(ptr), tap(_tap) {}
-    ~Row() {}
+    /**
+     * Data for a given table row.  This struct is used by the Table struct.
+     */
+    struct Row
+    {
+        Row() : functorPtr(0L), tap(0L)  {}     // QValueList wants that one
+        Row(TableRowFunctorPtr ptr, TAPptr _tap) : functorPtr(ptr), tap(_tap) {}
+        ~Row() {}
 
-    // Each row has: a functor to call to parse it and a TAP (table row properties)
-    TableRowFunctorPtr functorPtr;
-    TAPptr tap;
-};
+        TableRowFunctorPtr functorPtr; //a functor called to parse the content
+        TAPptr tap; //Table Properties
+    };
 
-// Data for a given table, stored between the 'tableRowFound' callback
-// during text parsing and the final generation of table cells.
-struct Table {
-    QString name; // kword's grpMgr attribute
-    QList<Row> rows; // need to use QValueList to benefit from implicit sharing
+    /**
+     * Data for a given table, stored between the 'tableRowFound' callback
+     * during text parsing and the final generation of table cells.
+     */
+    struct Table {
 
-    // Word has a very flexible concept of columns: each row can vary the
-    // edges of each column. We must map this onto a set of fixed-width columns
-    // by defining columns on each edge, and then using joined cells to model
-    // the original Word cells. We accumulate all the known edges for a given
-    // table in an array.
-    // Important: don't use unsigned int. Value can be negative (relative to margin...).
-    QList<int> m_cellEdges;
+	/**
+	 * Add cell edge position into the cache for a given table.  Keep them
+	 * sorted.
+	 */
+        void cacheCellEdge(int cellEdge);
 
-    // table properties
-    TAPptr tap;
+        /**
+         * Lookup a cell edge from the cache of cell edges.
+         * @return the column number
+         */
+        int columnNumber(int cellEdge) const;
 
-    void cacheCellEdge(int cellEdge);
-    int columnNumber(int cellEdge) const;
-};
+        QString name;    // kword's grpMgr attribute
+        QList<Row> rows; // need to use QValueList to benefit from implicit sharing
+        TAPptr tap;      // table properties
+
+        // Word has a very flexible concept of columns: each row can vary the
+        // edges of each column.  We must map this onto a set of fixed-width
+        // columns by defining columns on each edge, and then using joined
+        // cells to model the original Word cells.  We accumulate all the known
+        // edges for a given table in an array.
+        // NOTE: don't use unsigned int.  Value can be negative (relative to
+        // margin...).
+        QList<int> m_cellEdges;
+    };
 }
 
 class KWordTableHandler : public QObject, public wvWare::TableHandler
@@ -99,7 +112,7 @@ public:
     Document* document() const {
         return m_document;
     }
-    void setDocument(Document * document) {
+    void setDocument(Document* document) {
         m_document = document;
     }
 
@@ -110,17 +123,21 @@ protected:
     double rowHeight() const;
 
 private:
-    // Table can be present in {header, footer, footnote, endnote, body}.
-    // @return the correct writer.
+
+    /**
+     * Table can be present in {header, footer, footnote, endnote, body}.  Ask
+     * texthandler for the current writer.
+     * @return current writer.
+     */
     KoXmlWriter* currentWriter() const;
 
     // The document owning this table handler.
-    Document*     m_document;
+    Document* m_document;
 
     KWord::Table* m_currentTable;
 
-    KoXmlWriter*  m_bodyWriter;
-    KoGenStyles*  m_mainStyles;
+    KoXmlWriter* m_bodyWriter;
+    KoGenStyles* m_mainStyles;
 
     int m_row;
     int m_column;
@@ -133,6 +150,8 @@ private:
     QString m_margin[6];
 
     bool m_floatingTable; //true - table is floatin table; false - table is not floating table
+
+    QString m_cellStyleName;
 };
 
 #endif // TABLEHANDLER_H

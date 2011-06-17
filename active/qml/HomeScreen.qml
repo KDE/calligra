@@ -20,7 +20,7 @@
  */
 
 import QtQuick 1.0
-import CalligraMobile 1.0
+import CalligraActive 1.0
 
 Rectangle {
     id: homeScreen
@@ -98,6 +98,18 @@ Rectangle {
                 target: doc
                 anchors.left: parent.left
             }
+        },
+        State {
+            name: "showTextDocs"
+            PropertyChanges { target: recentFiles; model: recentTextDocsModel }
+        },
+        State {
+            name: "showSpreadsheets"
+            PropertyChanges { target: recentFiles; model: recentSpreadsheetsModel }
+        },
+        State {
+            name: "showPresentations"
+            PropertyChanges { target: recentFiles; model: recentPresentationsModel }
         }
     ]
 }

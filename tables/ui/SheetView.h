@@ -121,12 +121,14 @@ public:
     QRect obscuredArea(const QPoint& cell) const;
     bool isObscured(const QPoint& cell) const;
     bool obscuresCells(const QPoint& cell) const;
+    QSize totalObscuredRange() const;
 
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
 
 Q_SIGNALS:
     void visibleSizeChanged(const QSizeF&);
+    void obscuredRangeChanged(const QSize&);
 
 protected:
     virtual CellView* createDefaultCellView();

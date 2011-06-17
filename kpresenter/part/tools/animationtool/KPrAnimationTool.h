@@ -55,7 +55,7 @@ public: // Events
 //    virtual void keyPressEvent(QKeyEvent *event);
 
 protected:
-    QMap<QString, QWidget *> createOptionWidgets();
+    QList<QWidget *> createOptionWidgets();
 
 private:
 };

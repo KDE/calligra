@@ -68,6 +68,9 @@ set( calligrastageprivate_LIB_SRCS
      KPrPicturesImport.cpp
      KPrPdfPrintJob.cpp
      KPrSlidesSorterDocumentModel.cpp
+     KPrSlidesManagerView.cpp
+     KPrSelectionManager.cpp
+     KPrSelectionToggle.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
@@ -188,7 +191,11 @@ install( FILES
         KPrAnimationDirector.h
         KPrCustomSlideShows.h
         KPrDocument.h  
+        KPrPage.h
+        KPrPageData.h
+        KPrDeclarations.h
         KPrPresentationTool.h
+        KPrNotes.h
         KPrShapeAnimations.h
         KPrView.h
         KPrViewModePresentation.h
@@ -200,3 +207,6 @@ install( FILES
          animations/KPrShapeAnimation.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/animations)
 
+install( FILES
+         pagelayout/KPrPlaceholders.h
+         DESTINATION ${INCLUDE_INSTALL_DIR}/stage/part/pagelayout)

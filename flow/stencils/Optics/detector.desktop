@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Detector
+Name[el]=Ανιχνευτής
 Name[et]=Detektor
 Name[nl]=Detector
 Name[pt]=Detector
@@ -7,3 +8,4 @@ Name[pt_BR]=Detector
 Name[sv]=Detektor
 Name[uk]=Індикатор
 Name[x-test]=xxDetectorxx
+Name[zh_TW]=偵測器

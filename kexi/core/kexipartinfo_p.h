@@ -22,7 +22,9 @@
 #define KEXIPROJECTPARTITEM_P_H
 
 #include "kexipartinfo.h"
-#include <kservice.h>
+
+#include <KAction>
+#include <KService>
 
 namespace KexiPart
 {
@@ -68,5 +70,24 @@ public:
     bool isPropertyEditorAlwaysVisibleInDesignMode;
 };
 }
+
+//! Helper for creating new objects.
+//! On triggering, the request is passed to part manager
+//! @internal
+class KexiNewObjectAction : public KAction
+{
+    Q_OBJECT
+public:
+    KexiNewObjectAction(KexiPart::Info* info, QObject *parent);
+
+signals:
+    void newObjectRequested(KexiPart::Info* info);
+
+private slots:
+    void slotTriggered();
+
+private:
+    KexiPart::Info* m_info;
+};
 
 #endif

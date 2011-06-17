@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Generic gateway
+Name[de]=Generisches Gateway
+Name[el]=Πύλη γενικής χρήσης
 Name[et]=Tavaline lüüs
 Name[nl]=Generieke gateway
 Name[pt]='Gateway' genérica
@@ -7,3 +9,4 @@ Name[pt_BR]=Gateway genérico
 Name[sv]=Generell förmedlingsnod
 Name[uk]=Узагальнений шлюз
 Name[x-test]=xxGeneric gatewayxx
+Name[zh_TW]=一般閘道

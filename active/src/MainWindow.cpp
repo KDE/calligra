@@ -21,7 +21,8 @@
 
 #include "MainWindow.h"
 #include "CanvasController.h"
-#include "calligra_mobile_global.h"
+#include "CADocumentInfo.h"
+#include "calligra_active_global.h"
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
@@ -29,16 +30,41 @@
 
 MainWindow::MainWindow(QWidget *parent)
 {
-    qmlRegisterType<CanvasController>("CalligraMobile", 1, 0, "CanvasController");
+    qmlRegisterType<CanvasController>("CalligraActive", 1, 0, "CanvasController");
+    qmlRegisterType<CADocumentInfo>("CalligraActive", 1, 0, "CADocumentInfo");
+
     m_view = new QDeclarativeView(this);
 
+    QList<QObject*> recentFiles;
+    QList<QObject*> recentTextDocs;
+    QList<QObject*> recentSpreadsheets;
+    QList<QObject*> recentPresentations;
     QSettings settings;
-    QStringList recentFilesList = settings.value("recentFiles").toStringList();
-    qDebug() << recentFilesList;
-    m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFilesList));
-    m_view->setSource(QUrl::fromLocalFile(CalligraMobile::Global::installPrefix()
-                        + "/share/calligra-mobile/qml/HomeScreen.qml"));
+    foreach(QString string, settings.value("recentFiles").toStringList()) {
+        CADocumentInfo *docInfo = CADocumentInfo::fromStringList(string.split(";"));
+        recentFiles.append(docInfo);
+        switch (docInfo->type()) {
+            case CADocumentInfo::TextDocument:
+                recentTextDocs.append(docInfo);
+                break;
+            case CADocumentInfo::Spreadsheet:
+                recentSpreadsheets.append(docInfo);
+                break;
+            case CADocumentInfo::Presentation:
+                recentPresentations.append(docInfo);
+                break;
+        }
+    }
+
+    m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFiles));
+    m_view->rootContext()->setContextProperty("recentTextDocsModel", QVariant::fromValue(recentTextDocs));
+    m_view->rootContext()->setContextProperty("recentSpreadsheetsModel", QVariant::fromValue(recentSpreadsheets));
+    m_view->rootContext()->setContextProperty("recentPresentationsModel", QVariant::fromValue(recentPresentations));
+
+    m_view->setSource(QUrl::fromLocalFile(CalligraActive::Global::installPrefix()
+                        + "/share/calligraactive/qml/HomeScreen.qml"));
     m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+
     setCentralWidget(m_view);
     connect(m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
     resize(800, 600);
