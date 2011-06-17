@@ -115,20 +115,20 @@ QVariant KPrSlidesSorterDocumentModel::data(const QModelIndex &index, int role) 
 
 bool KPrSlidesSorterDocumentModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if( ! index.isValid() || !m_document )
+    if(! index.isValid() || !m_document)
         return false;
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
-    KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
+    KoShape *shape = static_cast<KoShape*>(index.internalPointer());
     switch (role)
     {
         case Qt::EditRole:
         {
-            QUndoCommand * cmd = new KoShapeRenameCommand(shape, value.toString());
+            QUndoCommand *cmd = new KoShapeRenameCommand(shape, value.toString());
             // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
-            m_document->addCommand( cmd );
+            m_document->addCommand(cmd);
         }   break;
         default:
             return false;
