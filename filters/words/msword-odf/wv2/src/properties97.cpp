@@ -175,9 +175,9 @@ ParagraphProperties* Properties97::fullSavedPap( U32 fc, OLEStreamReader* dataSt
 {
     // Step 1: Search the correct FKP entry in the PLCFBTE
     PLCFIterator<Word97::BTE> it( *m_plcfbtePapx );
-    while ( it.current() && it.currentLim() <= fc )
+    while ( it.current() && it.currentLim() <= fc ) {
         ++it;
-
+    }
     if ( !it.current() ) {
         wvlog << "Bug: PAPX BTE screwed" << endl;
         return new ParagraphProperties;
@@ -196,17 +196,19 @@ ParagraphProperties* Properties97::fullSavedPap( U32 fc, OLEStreamReader* dataSt
     if ( !m_papxFkp ) {
         m_wordDocument->push();
         m_wordDocument->seek( it.current()->pn << 9, G_SEEK_SET );  // 512 byte pages ( << 9 )
-        if ( m_version == Word8 )
+        if ( m_version == Word8 ) {
             m_papxFkp = new PAPXFKP_t( m_wordDocument, false );
-        else
+        } else {
             m_papxFkp = convertFKP( PAPXFKP95_t( m_wordDocument, false ) );
+        }
         m_wordDocument->pop();
     }
 
     // Step 4: Get the right entry within our FKP
     PAPXFKPIterator fkpit( *m_papxFkp );
-    while ( !fkpit.atEnd() && fkpit.currentLim() <= fc )
+    while ( !fkpit.atEnd() && fkpit.currentLim() <= fc ) {
         ++fkpit;
+    }
 
     // Step 5: Now that we are at the correct place let's apply the PAPX grpprl
     ParagraphProperties *properties = Word97::initPAPFromStyle( fkpit.current(), m_stylesheet, dataStream, m_version );
@@ -275,22 +277,24 @@ void Properties97::applyClxGrpprl( const Word97::PCD* pcd, U32 fcClx, Word97::TA
 
 U32 Properties97::fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* paragraphStyle )
 {
-    // Before we start with the plain FKP algorithm like above we have to apply any
-    // CHPX found in the style entry for the CHP, unless it's istdNormalChar (10)
+    // Step 0: Before we start with the plain FKP algorithm like above we have
+    // to apply any CHPX found in the style entry for the CHP, unless it's
+    // istdNormalChar (10)
     if ( chp->istd != 10 ) {
         const Style* style = m_stylesheet->styleByIndex( chp->istd );
         if ( style && style->type() == sgcChp ) {
             const UPECHPX& upechpx( style->upechpx() );
             chp->apply( upechpx.grpprl, upechpx.cb, paragraphStyle, m_stylesheet, 0, m_version );
-        }
-        else
+        } else {
             wvlog << "Couldn't find the character style with istd " << chp->istd << endl;
+        }
     }
 
     // Step 1: Search the correct FKP entry in the PLCFBTE
     PLCFIterator<Word97::BTE> it( *m_plcfbteChpx );
-    while ( it.current() && it.currentLim() <= fc )
+    while ( it.current() && it.currentLim() <= fc ) {
         ++it;
+    }
 
     if ( !it.current() ) {
         wvlog << "Bug: CHPX BTE screwed (backing out by faking properties)" << endl;
@@ -316,10 +320,19 @@ U32 Properties97::fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* par
 
     // Step 4: Get the right entry within our FKP
     CHPXFKPIterator fkpit( *m_chpxFkp );
-    while ( !fkpit.atEnd() && fkpit.currentLim() <= fc )
+    while ( !fkpit.atEnd() && fkpit.currentLim() <= fc ) {
         ++fkpit;
+    }
 
-    // Step 5: Now that we are at the correct place let's apply the CHPX grpprl
+    // Step 5: Now that we are at the correct place let's apply the CHPX
+    // grpprl.  The built-in character style referred to by istd provided by
+    // sprmCIstd will be applied recursively.
+    //
+    // FIXME: It's NOT correct to compare the built-in character style and CHPX
+    // against paragraphStyle->chp().  The CHPS which are beeing prepared
+    // (started as a snapshot of paragraphStyle->chp()) might have been
+    // modified in Step 0 and will be modified by application of the built-in
+    // character style.  We MUST compare agains the CHPS.
     chp->applyExceptions( fkpit.current(), paragraphStyle, m_stylesheet, 0, m_version );
     return fkpit.currentLim() - fc;
 }
